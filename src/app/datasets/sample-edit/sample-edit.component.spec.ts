@@ -4,11 +4,18 @@ import {
   TestBed,
   waitForAsync,
 } from "@angular/core/testing";
+import { MatButtonModule } from "@angular/material/button";
 import {
   MatDialogModule,
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatTableModule } from "@angular/material/table";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Store } from "@ngrx/store";
 import { MockStore } from "shared/MockStubs";
 import {
@@ -31,17 +38,28 @@ describe("SampleEditComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [SampleEditComponent],
-      imports: [MatDialogModule],
-      providers: [
-        { provide: MatDialogRef, useValue: { close: () => {} } },
-        { provide: MAT_DIALOG_DATA, useValue: {} },
-        { provide: Store, useClass: MockStore },
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [SampleEditComponent],
+        imports: [
+          BrowserAnimationsModule,
+          MatButtonModule,
+          MatDialogModule,
+          MatFormFieldModule,
+          MatIconModule,
+          MatInputModule,
+          MatPaginatorModule,
+          MatTableModule,
+        ],
+        providers: [
+          { provide: MatDialogRef, useValue: { close: () => {} } },
+          { provide: MAT_DIALOG_DATA, useValue: {} },
+          { provide: Store, useClass: MockStore },
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SampleEditComponent);

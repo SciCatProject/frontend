@@ -1,12 +1,10 @@
-@import "../../../../theme.scss";
-
 .m8 {
   margin: 8px;
 }
 .padding-right-1em{
   padding-right: 1em;
 }
-::ng-deep .toolbar{
+::ng-deep .table-toolbar{
   .mat-paginator-range-label{
     // Hide range label on small screen
     @media only screen and (max-width: 1279px) {
@@ -22,16 +20,13 @@
   overflow-x: scroll;
 }
 
-::ng-deep .toolbar mat-form-field.mat-form-field-appearance-standard .mat-form-field-flex {
+::ng-deep .table-toolbar mat-form-field.mat-form-field-appearance-standard .mat-form-field-flex {
   padding-top:0;
 }
 
 // Align search icon with placeholder
-::ng-deep .toolbar mat-form-field .mat-form-field-prefix, .mat-form-field-suffix {
+::ng-deep .table-toolbar mat-form-field .mat-form-field-prefix, .mat-form-field-suffix {
   align-self: flex-end;
-}
-::ng-deep .mat-sort-header-arrow {
-  color: mat-color($primary,default-contrast)
 }
 
 .expanded {
@@ -95,15 +90,6 @@ div.shared-table-title {
   text-align: center;
   font-weight: 500;
   font-size: 20px;
-  line-height: 32px;
-}
-
-.first-header-row {
-  background-color: mat-color($primary);
-}
-
-.first-header-cell {
-  color: mat-color($primary,default-contrast);
 }
 
 .trigger-column{
@@ -127,12 +113,6 @@ div.shared-table-title {
     }
     .mat-form-field-infix {
       padding: 0.5em 0 0.5em 0;
-    }
-    .mat-form-field-outline {
-      background: mat-color($primary,default-contrast);
-    }
-    .mat-form-field-outline-thick {
-      color: mat-color($primary);
     }
   }
   .mat-form-field-wrapper {

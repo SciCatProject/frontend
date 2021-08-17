@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewEncapsulation } from "@angular/core";
 import { Logbook } from "state-management/models";
 import {
   PageChangeEvent,
@@ -8,13 +8,14 @@ import {
 @Component({
   selector: "app-logbooks-detail",
   templateUrl: "./logbooks-detail.component.html",
-  styleUrls: ["./logbooks-detail.component.scss"]
+  styleUrls: ["./logbooks-detail.component.scss"],
+  encapsulation: ViewEncapsulation.None,
 })
 export class LogbooksDetailComponent {
-  @Input() logbook: Logbook;
-  @Input() entriesCount: number;
-  @Input() entriesPerPage: number;
-  @Input() currentPage: number;
+  @Input() logbook: Logbook = new Logbook();
+  @Input() entriesCount: number | null = 0;
+  @Input() entriesPerPage: number | null = 0;
+  @Input() currentPage: number | null = 0;
 
   @Output() pageChange = new EventEmitter<PageChangeEvent>();
   @Output() sortChange = new EventEmitter<SortChangeEvent>();

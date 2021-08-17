@@ -5,19 +5,19 @@ import { Store, select } from "@ngrx/store";
 import * as fromActions from "state-management/actions/proposals.actions";
 import {
   getFullqueryParams,
-  getDatasetsQueryParams
+  getDatasetsQueryParams,
 } from "state-management/selectors/proposals.selectors";
 import {
   withLatestFrom,
   map,
   mergeMap,
   catchError,
-  switchMap
+  switchMap,
 } from "rxjs/operators";
 import { of } from "rxjs";
 import {
   loadingAction,
-  loadingCompleteAction
+  loadingCompleteAction,
 } from "state-management/actions/user.actions";
 
 @Injectable()
@@ -37,9 +37,9 @@ export class ProposalEffects {
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
         this.proposalApi.fullquery(query, limits).pipe(
-          mergeMap(proposals => [
+          mergeMap((proposals) => [
             fromActions.fetchProposalsCompleteAction({ proposals }),
-            fromActions.fetchCountAction()
+            fromActions.fetchCountAction(),
           ]),
           catchError(() => of(fromActions.fetchProposalsFailedAction()))
         )
@@ -54,7 +54,7 @@ export class ProposalEffects {
       map(([action, params]) => params),
       switchMap(({ query }) =>
         this.proposalApi.fullquery(query).pipe(
-          map(proposals =>
+          map((proposals) =>
             fromActions.fetchCountCompleteAction({ count: proposals.length })
           ),
           catchError(() => of(fromActions.fetchCountFailedAction()))
@@ -67,12 +67,14 @@ export class ProposalEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchProposalAction),
       switchMap(({ proposalId }) =>
-        this.proposalApi.findById(encodeURIComponent(proposalId)).pipe(
-          map((proposal: Proposal) =>
-            fromActions.fetchProposalCompleteAction({ proposal })
-          ),
-          catchError(() => of(fromActions.fetchProposalFailedAction()))
-        )
+        this.proposalApi
+          .findById<Proposal>(encodeURIComponent(proposalId))
+          .pipe(
+            map((proposal: Proposal) =>
+              fromActions.fetchProposalCompleteAction({ proposal })
+            ),
+            catchError(() => of(fromActions.fetchProposalFailedAction()))
+          )
       )
     )
   );
@@ -83,16 +85,16 @@ export class ProposalEffects {
       withLatestFrom(this.datasetQueryParams$),
       switchMap(([{ proposalId }, { limits }]) =>
         this.datasetApi
-          .find({
+          .find<Dataset>({
             where: { proposalId },
             skip: limits.skip,
             limit: limits.limit,
-            order: limits.order
+            order: limits.order,
           })
           .pipe(
             mergeMap((datasets: Dataset[]) => [
               fromActions.fetchProposalDatasetsCompleteAction({ datasets }),
-              fromActions.fetchProposalDatasetsCountAction({ proposalId })
+              fromActions.fetchProposalDatasetsCountAction({ proposalId }),
             ]),
             catchError(() =>
               of(fromActions.fetchProposalDatasetsFailedAction())
@@ -107,9 +109,9 @@ export class ProposalEffects {
       ofType(fromActions.fetchProposalDatasetsCountAction),
       switchMap(({ proposalId }) =>
         this.datasetApi.find({ where: { proposalId } }).pipe(
-          map(datasets =>
+          map((datasets) =>
             fromActions.fetchProposalDatasetsCountCompleteAction({
-              count: datasets.length
+              count: datasets.length,
             })
           ),
           catchError(() =>
@@ -124,17 +126,17 @@ export class ProposalEffects {
     this.actions$.pipe(
       ofType(fromActions.addAttachmentAction),
       switchMap(({ attachment }) => {
-        delete attachment.id;
-        delete attachment.rawDatasetId;
-        delete attachment.derivedDatasetId;
-        delete attachment.sampleId;
+        const {
+          id,
+          rawDatasetId,
+          derivedDatasetId,
+          sampleId,
+          ...theRest
+        } = attachment;
         return this.proposalApi
-          .createAttachments(
-            encodeURIComponent(attachment.proposalId),
-            attachment
-          )
+          .createAttachments(encodeURIComponent(theRest.proposalId), theRest)
           .pipe(
-            map(res =>
+            map((res) =>
               fromActions.addAttachmentCompleteAction({ attachment: res })
             ),
             catchError(() => of(fromActions.addAttachmentFailedAction()))
@@ -155,9 +157,9 @@ export class ProposalEffects {
             newCaption
           )
           .pipe(
-            map(attachment =>
+            map((attachment) =>
               fromActions.updateAttachmentCaptionCompleteAction({
-                attachment
+                attachment,
               })
             ),
             catchError(() =>
@@ -178,7 +180,7 @@ export class ProposalEffects {
             encodeURIComponent(attachmentId)
           )
           .pipe(
-            map(res =>
+            map((res) =>
               fromActions.removeAttachmentCompleteAction({ attachmentId: res })
             ),
             catchError(() => of(fromActions.removeAttachmentFailedAction()))

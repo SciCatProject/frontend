@@ -1,0 +1,25 @@
+@use "sass:map";
+@use "~@angular/material" as mat;
+
+@mixin color($theme) {
+  $color-config: mat.get-color-config($theme);
+  $hover: map.get($color-config, "hover");
+
+  .breadcrumb {
+    .container {
+      border-top-color: mat.get-color-from-palette($hover, "default");
+      border-bottom-color: mat.get-color-from-palette($hover, "default");
+
+      .delimiter {
+        color: mat.get-color-from-palette($hover, "darker");
+      }
+    }
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}

@@ -2,7 +2,7 @@ import {
   ComponentFixture,
   TestBed,
   inject,
-  waitForAsync
+  waitForAsync,
 } from "@angular/core/testing";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -30,42 +30,44 @@ describe("LoginComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [LoginComponent],
-      imports: [
-        AppConfigModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        MatButtonModule,
-        MatCardModule,
-        MatDialogModule,
-        MatCheckboxModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        ReactiveFormsModule,
-        StoreModule.forRoot({})
-      ]
-    });
-    TestBed.overrideComponent(LoginComponent, {
-      set: {
-        // These should sync up with what is in the constructor, they do NOT need to be provided in the config for the testing module
-        providers: [
-          {
-            provide: APP_CONFIG,
-            useValue: {
-              disabledDatasetColumns: [],
-              archiveWorkflowEnabled: true
-            }
-          },
-          { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          { provide: Router, useClass: MockRouter }
-        ]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [LoginComponent],
+        imports: [
+          AppConfigModule,
+          BrowserAnimationsModule,
+          FormsModule,
+          MatButtonModule,
+          MatCardModule,
+          MatDialogModule,
+          MatCheckboxModule,
+          MatFormFieldModule,
+          MatIconModule,
+          MatInputModule,
+          ReactiveFormsModule,
+          StoreModule.forRoot({}),
+        ],
+      });
+      TestBed.overrideComponent(LoginComponent, {
+        set: {
+          // These should sync up with what is in the constructor, they do NOT need to be provided in the config for the testing module
+          providers: [
+            {
+              provide: APP_CONFIG,
+              useValue: {
+                disabledDatasetColumns: [],
+                archiveWorkflowEnabled: true,
+              },
+            },
+            { provide: ActivatedRoute, useClass: MockActivatedRoute },
+            { provide: Router, useClass: MockRouter },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);

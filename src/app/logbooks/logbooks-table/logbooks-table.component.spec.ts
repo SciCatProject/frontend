@@ -7,31 +7,35 @@ import { LogbooksTableComponent } from "./logbooks-table.component";
 import { MockStore } from "shared/MockStubs";
 import { Logbook } from "shared/sdk";
 import { MatTableModule } from "@angular/material/table";
+import { MatIconModule } from "@angular/material/icon";
+import { MatCardModule } from "@angular/material/card";
 
 describe("LogbooksTableComponent", () => {
   let component: LogbooksTableComponent;
   let fixture: ComponentFixture<LogbooksTableComponent>;
 
   const router = {
-    navigateByUrl: jasmine.createSpy("navigateByUrl")
+    navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      imports: [MatTableModule],
-      declarations: [LogbooksTableComponent]
-    });
-    TestBed.overrideComponent(LogbooksTableComponent, {
-      set: {
-        providers: [
-          { provide: Router, useValue: router },
-          { provide: Store, useClass: MockStore }
-        ]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        imports: [MatCardModule, MatIconModule, MatTableModule],
+        declarations: [LogbooksTableComponent],
+      });
+      TestBed.overrideComponent(LogbooksTableComponent, {
+        set: {
+          providers: [
+            { provide: Router, useValue: router },
+            { provide: Store, useClass: MockStore },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LogbooksTableComponent);

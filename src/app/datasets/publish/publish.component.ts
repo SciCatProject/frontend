@@ -8,7 +8,7 @@ import { getDatasetsInBatch } from "state-management/selectors/datasets.selector
 import { prefillBatchAction } from "state-management/actions/datasets.actions";
 import {
   publishDatasetAction,
-  fetchPublishedDataCompleteAction
+  fetchPublishedDataCompleteAction,
 } from "state-management/actions/published-data.actions";
 import { APP_CONFIG } from "app-config.module";
 
@@ -23,7 +23,7 @@ import { getCurrentUserName } from "state-management/selectors/user.selectors";
 @Component({
   selector: "publish",
   templateUrl: "./publish.component.html",
-  styleUrls: ["./publish.component.scss"]
+  styleUrls: ["./publish.component.scss"],
 })
 export class PublishComponent implements OnInit, OnDestroy {
   private datasets$ = this.store.pipe(select(getDatasetsInBatch));
@@ -99,7 +99,6 @@ export class PublishComponent implements OnInit, OnDestroy {
     }
   }
 
-
   public formIsValid() {
     if (!Object.values(this.form).includes(undefined)) {
       return (
@@ -121,20 +120,25 @@ export class PublishComponent implements OnInit, OnDestroy {
     this.datasets$
       .pipe(
         first(),
-        tap(datasets => {
+        tap((datasets) => {
           if (datasets) {
-            const creator = datasets.map(dataset => dataset.owner);
+            const creator = datasets.map((dataset) => dataset.owner);
             const unique = creator.filter(
               (item, i) => creator.indexOf(item) === i
             );
             this.form.creators = unique;
-            this.form.pidArray = datasets.map(dataset => dataset.pid);
+            this.form.pidArray = datasets.map((dataset) => dataset.pid);
+            let size = 0;
+            datasets.forEach((dataset) => {
+              size += dataset.size;
+            });
+            this.form.sizeOfArchive = size;
           }
         })
       )
       .subscribe();
 
-    this.countSubscription = this.datasets$.subscribe(datasets => {
+    this.countSubscription = this.datasets$.subscribe((datasets) => {
       if (datasets) {
         this.datasetCount = datasets.length;
       }
@@ -142,7 +146,7 @@ export class PublishComponent implements OnInit, OnDestroy {
 
     this.publishedDataApi
       .formPopulate(this.form.pidArray[0])
-      .subscribe(result => {
+      .subscribe((result) => {
         this.form.abstract = result.abstract;
         this.form.title = result.title;
         this.form.description = result.description;
@@ -150,11 +154,11 @@ export class PublishComponent implements OnInit, OnDestroy {
         this.form.thumbnail = result.thumbnail;
       });
 
-    this.actionSubjectSubscription = this.actionsSubj.subscribe(data => {
+    this.actionSubjectSubscription = this.actionsSubj.subscribe((data) => {
       if (data.type === fetchPublishedDataCompleteAction.type) {
         this.store
           .pipe(select(getCurrentPublishedData))
-          .subscribe(publishedData => {
+          .subscribe((publishedData) => {
             const doi = encodeURIComponent(publishedData.doi);
             this.router.navigateByUrl("/publishedDatasets/" + doi);
           })

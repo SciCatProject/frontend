@@ -11,7 +11,7 @@ export class LoginHeaderComponent {
   status: string;
 
   constructor(@Inject(APP_CONFIG) public appConfig: AppConfig) {
-    this.facility = appConfig.facility;
+    this.facility = appConfig.facility ?? "";
     if (appConfig.production === true) {
       this.status = "";
     } else {

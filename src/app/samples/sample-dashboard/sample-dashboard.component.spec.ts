@@ -9,57 +9,67 @@ import {
   ComponentFixture,
   TestBed,
   inject,
-  waitForAsync
+  waitForAsync,
 } from "@angular/core/testing";
 import {
   setTextFilterAction,
   changePageAction,
-  sortByColumnAction
+  sortByColumnAction,
 } from "state-management/actions/samples.actions";
 import { Sample } from "shared/sdk";
 import {
   PageChangeEvent,
-  SortChangeEvent
+  SortChangeEvent,
 } from "shared/modules/table/table.component";
 import { DatePipe } from "@angular/common";
 import { SampleDialogComponent } from "samples/sample-dialog/sample-dialog.component";
 import { MatCardModule } from "@angular/material/card";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatTableModule } from "@angular/material/table";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatChipsModule } from "@angular/material/chips";
 
 describe("SampleDashboardComponent", () => {
   let component: SampleDashboardComponent;
   let fixture: ComponentFixture<SampleDashboardComponent>;
 
   const router = {
-    navigateByUrl: jasmine.createSpy("navigateByUrl")
+    navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        MatCardModule,
-        MatDialogModule,
-        MatTableModule,
-        StoreModule.forRoot({})
-      ],
-      declarations: [SampleDashboardComponent],
-      providers: [DatePipe]
-    });
-    TestBed.overrideComponent(SampleDashboardComponent, {
-      set: {
-        providers: [
-          { provide: APP_CONFIG, useValue: { editSampleEnabled: true } },
-          { provide: Router, useValue: router },
-          { provide: ActivatedRoute, useClass: MockActivatedRoute }
-        ]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        imports: [
+          FlexLayoutModule,
+          MatButtonModule,
+          MatCardModule,
+          MatChipsModule,
+          MatDialogModule,
+          MatIconModule,
+          MatTableModule,
+          StoreModule.forRoot({}),
+        ],
+        declarations: [SampleDashboardComponent],
+        providers: [DatePipe],
+      });
+      TestBed.overrideComponent(SampleDashboardComponent, {
+        set: {
+          providers: [
+            { provide: APP_CONFIG, useValue: { editSampleEnabled: true } },
+            { provide: Router, useValue: router },
+            { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SampleDashboardComponent);
@@ -103,7 +113,7 @@ describe("SampleDashboardComponent", () => {
         SampleDialogComponent,
         {
           width: "250px",
-          data: { name: component.name, description: component.description }
+          data: { name: component.name, description: component.description },
         }
       );
     });
@@ -130,7 +140,7 @@ describe("SampleDashboardComponent", () => {
       const event: PageChangeEvent = {
         pageIndex: 0,
         pageSize: 25,
-        length: 25
+        length: 25,
       };
       component.onPageChange(event);
 
@@ -147,7 +157,7 @@ describe("SampleDashboardComponent", () => {
 
       const event: SortChangeEvent = {
         active: "test",
-        direction: "asc"
+        direction: "asc",
       };
       component.onSortChange(event);
 

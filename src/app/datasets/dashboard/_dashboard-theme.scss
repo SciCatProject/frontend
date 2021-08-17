@@ -1,0 +1,24 @@
+@use "sass:map";
+@use "~@angular/material" as mat;
+
+@mixin color($theme) {
+  $color-config: mat.get-color-config($theme);
+  $accent: map.get($color-config, "accent");
+
+  mat-sidenav-container {
+    mat-sidenav-content {
+      .add-card {
+        mat-icon {
+          color: mat.get-color-from-palette($accent, "default");
+        }
+      }
+    }
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}

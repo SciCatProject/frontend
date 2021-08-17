@@ -5,18 +5,31 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { AppConfigModule } from "app-config.module";
 import { LinkyPipe } from "ngx-linky";
 import { SharedCatanieModule } from "shared/shared.module";
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
+import { MatChipsModule } from "@angular/material/chips";
+import { NgxJsonViewerModule } from "ngx-json-viewer";
 
 describe("AnonymousDetailsComponent", () => {
   let component: AnonymousDetailsComponent;
   let fixture: ComponentFixture<AnonymousDetailsComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [AnonymousDetailsComponent, LinkyPipe],
-      imports: [AppConfigModule, SharedCatanieModule]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [AnonymousDetailsComponent, LinkyPipe],
+        imports: [
+          AppConfigModule,
+          MatCardModule,
+          MatChipsModule,
+          MatIconModule,
+          NgxJsonViewerModule,
+          SharedCatanieModule,
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AnonymousDetailsComponent);

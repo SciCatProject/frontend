@@ -4,7 +4,7 @@ import { DatasetApi, SampleApi, Sample, Dataset } from "shared/sdk";
 import { Store, select } from "@ngrx/store";
 import {
   getFullqueryParams,
-  getDatasetsQueryParams
+  getDatasetsQueryParams,
 } from "state-management/selectors/samples.selectors";
 import * as fromActions from "state-management/actions/samples.actions";
 import {
@@ -12,12 +12,12 @@ import {
   mergeMap,
   map,
   catchError,
-  switchMap
+  switchMap,
 } from "rxjs/operators";
 import { of } from "rxjs";
 import {
   loadingAction,
-  loadingCompleteAction
+  loadingCompleteAction,
 } from "state-management/actions/user.actions";
 
 @Injectable()
@@ -95,7 +95,7 @@ export class SampleEffects {
           },
           include: [{ relation: "attachments" }],
         };
-        return this.sampleApi.findOne(sampleFilter).pipe(
+        return this.sampleApi.findOne<Sample>(sampleFilter).pipe(
           map((sample: Sample) =>
             fromActions.fetchSampleCompleteAction({ sample })
           ),
@@ -110,13 +110,15 @@ export class SampleEffects {
       ofType(fromActions.fetchSampleDatasetsAction),
       withLatestFrom(this.datasetsQueryParams$),
       mergeMap(([{ sampleId }, { order, skip, limit }]) =>
-        this.datasetApi.find({ where: { sampleId }, order, skip, limit }).pipe(
-          mergeMap((datasets: Dataset[]) => [
-            fromActions.fetchSampleDatasetsCompleteAction({ datasets }),
-            fromActions.fetchSampleDatasetsCountAction({ sampleId }),
-          ]),
-          catchError(() => of(fromActions.fetchSampleDatasetsFailedAction()))
-        )
+        this.datasetApi
+          .find<Dataset>({ where: { sampleId }, order, skip, limit })
+          .pipe(
+            mergeMap((datasets: Dataset[]) => [
+              fromActions.fetchSampleDatasetsCompleteAction({ datasets }),
+              fromActions.fetchSampleDatasetsCountAction({ sampleId }),
+            ]),
+            catchError(() => of(fromActions.fetchSampleDatasetsFailedAction()))
+          )
       )
     )
   );
@@ -176,16 +178,16 @@ export class SampleEffects {
     this.actions$.pipe(
       ofType(fromActions.addAttachmentAction),
       switchMap(({ attachment }) => {
-        delete attachment.id;
-        delete attachment.datasetId;
-        delete attachment.rawDatasetId;
-        delete attachment.derivedDatasetId;
-        delete attachment.proposalId;
+        const {
+          id,
+          datasetId,
+          rawDatasetId,
+          derivedDatasetId,
+          proposalId,
+          ...theRest
+        } = attachment;
         return this.sampleApi
-          .createAttachments(
-            encodeURIComponent(attachment.sampleId),
-            attachment
-          )
+          .createAttachments(encodeURIComponent(theRest.sampleId!), theRest)
           .pipe(
             map((res) =>
               fromActions.addAttachmentCompleteAction({ attachment: res })

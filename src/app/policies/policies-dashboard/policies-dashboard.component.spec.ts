@@ -2,7 +2,7 @@ import {
   ComponentFixture,
   TestBed,
   inject,
-  waitForAsync
+  waitForAsync,
 } from "@angular/core/testing";
 
 import { PoliciesDashboardComponent } from "./policies-dashboard.component";
@@ -14,7 +14,7 @@ import { StoreModule, Store } from "@ngrx/store";
 import {
   PageChangeEvent,
   SortChangeEvent,
-  CheckboxEvent
+  CheckboxEvent,
 } from "shared/modules/table/table.component";
 import {
   changePageAction,
@@ -25,7 +25,7 @@ import {
   clearSelectionAction,
   selectAllPoliciesAction,
   changeEditablePageAction,
-  sortEditableByColumnAction
+  sortEditableByColumnAction,
 } from "state-management/actions/policies.actions";
 
 import { Router } from "@angular/router";
@@ -35,10 +35,18 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { provideMockStore } from "@ngrx/store/testing";
 import {
   getFilters,
-  getEditableFilters
+  getEditableFilters,
 } from "state-management/selectors/policies.selectors";
-import { MatTabChangeEvent, MatTab } from "@angular/material/tabs";
+import {
+  MatTabChangeEvent,
+  MatTab,
+  MatTabsModule,
+} from "@angular/material/tabs";
 import { MatCheckboxChange } from "@angular/material/checkbox";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("PoliciesDashboardComponent", () => {
   let component: PoliciesDashboardComponent;
@@ -50,31 +58,41 @@ describe("PoliciesDashboardComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [PoliciesDashboardComponent],
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        SharedCatanieModule,
-        StoreModule.forRoot({})
-      ],
-      providers: [
-        provideMockStore({
-          selectors: [
-            { selector: getFilters, value: {} },
-            { selector: getEditableFilters, value: {} }
-          ]
-        })
-      ]
-    });
-    TestBed.overrideComponent(PoliciesDashboardComponent, {
-      set: {
-        providers: [{ provide: DatasetApi, useClass: MockDatasetApi }, {provide: Router, useValue: router}]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [PoliciesDashboardComponent],
+        imports: [
+          BrowserAnimationsModule,
+          FlexLayoutModule,
+          MatButtonModule,
+          MatIconModule,
+          MatTabsModule,
+          RouterTestingModule.withRoutes([]),
+          SharedCatanieModule,
+          StoreModule.forRoot({}),
+        ],
+        providers: [
+          provideMockStore({
+            selectors: [
+              { selector: getFilters, value: {} },
+              { selector: getEditableFilters, value: {} },
+            ],
+          }),
+        ],
+      });
+      TestBed.overrideComponent(PoliciesDashboardComponent, {
+        set: {
+          providers: [
+            { provide: DatasetApi, useClass: MockDatasetApi },
+            { provide: Router, useValue: router },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoliciesDashboardComponent);
@@ -100,7 +118,7 @@ describe("PoliciesDashboardComponent", () => {
 
       const event: MatTabChangeEvent = {
         index: 0,
-        tab: {} as MatTab
+        tab: {} as MatTab,
       };
       component.onTabChange(event);
 
@@ -112,7 +130,7 @@ describe("PoliciesDashboardComponent", () => {
 
       const event: MatTabChangeEvent = {
         index: 1,
-        tab: {} as MatTab
+        tab: {} as MatTab,
       };
       component.onTabChange(event);
 
@@ -145,13 +163,13 @@ describe("PoliciesDashboardComponent", () => {
       const filters: GenericFilters = {
         sortField: "test asc",
         skip: 0,
-        limit: 25
+        limit: 25,
       };
       component.addToQueryParams(filters);
 
       // expect(router.navigate).toHaveBeenCalledTimes(1);
       expect(router.navigate).toHaveBeenCalledWith(["/policies"], {
-        queryParams: { args: JSON.stringify(filters) }
+        queryParams: { args: JSON.stringify(filters) },
       });
     });
   });
@@ -163,7 +181,7 @@ describe("PoliciesDashboardComponent", () => {
       const event: PageChangeEvent = {
         pageIndex: 0,
         pageSize: 25,
-        length: 25
+        length: 25,
       };
       component.onPoliciesPageChange(event);
 
@@ -181,7 +199,7 @@ describe("PoliciesDashboardComponent", () => {
       const event: PageChangeEvent = {
         pageIndex: 0,
         pageSize: 25,
-        length: 25
+        length: 25,
       };
       component.onEditablePoliciesPageChange(event);
 
@@ -189,7 +207,7 @@ describe("PoliciesDashboardComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         changeEditablePageAction({
           page: event.pageIndex,
-          limit: event.pageSize
+          limit: event.pageSize,
         })
       );
     });
@@ -201,7 +219,7 @@ describe("PoliciesDashboardComponent", () => {
 
       const event: SortChangeEvent = {
         active: "test",
-        direction: "asc"
+        direction: "asc",
       };
       component.onPoliciesSortChange(event);
 
@@ -218,7 +236,7 @@ describe("PoliciesDashboardComponent", () => {
 
       const event: SortChangeEvent = {
         active: "test",
-        direction: "asc"
+        direction: "asc",
       };
       component.onEditablePoliciesSortChange(event);
 
@@ -226,7 +244,7 @@ describe("PoliciesDashboardComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         sortEditableByColumnAction({
           column: event.active,
-          direction: event.direction
+          direction: event.direction,
         })
       );
     });
@@ -262,7 +280,7 @@ describe("PoliciesDashboardComponent", () => {
 
       const checkboxEvent: CheckboxEvent = {
         event: new MatCheckboxChange(),
-        row: new Policy()
+        row: new Policy(),
       };
       checkboxEvent.event.checked = true;
       component.onSelectOne(checkboxEvent);
@@ -278,7 +296,7 @@ describe("PoliciesDashboardComponent", () => {
 
       const checkboxEvent: CheckboxEvent = {
         event: new MatCheckboxChange(),
-        row: new Policy()
+        row: new Policy(),
       };
       checkboxEvent.event.checked = false;
       component.onSelectOne(checkboxEvent);
@@ -314,7 +332,7 @@ describe("PoliciesDashboardComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         submitPolicyAction({
           ownerList: component.selectedGroups,
-          policy: result
+          policy: result,
         })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());

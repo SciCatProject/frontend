@@ -14,12 +14,12 @@ export class ObjKeysPipe implements PipeTransform {
   /**
    * Takes an object and returns an array containing a key and a value
    * for all items
-   * @param {any} value - the object to iterate over
+   * @param {Record<string, unknown>} value - the object to iterate over
    * @param {string[]} args -arguments
    * @returns {*} - array with key value
    * @memberof ObjKeysPipe
    */
-  transform(value, args: string[]): any {
+  transform(value: Record<string, unknown>, args: string[]): any {
     if (!value) {
       return value;
     }

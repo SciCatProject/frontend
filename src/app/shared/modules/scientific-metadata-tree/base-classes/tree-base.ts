@@ -160,7 +160,7 @@ export class TreeBaseComponent {
     return (node.level * indentPixel).toString();
   }
 
-  insertNode(parentNode: TreeNode, node: TreeNode, index: number = -1) {
+  insertNode(parentNode: TreeNode, node: TreeNode, index = -1) {
     if (parentNode) {
       index = index === -1 ? parentNode.children.length : index;
       parentNode.children.splice(index, 0, node);

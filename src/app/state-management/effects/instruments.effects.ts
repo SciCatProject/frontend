@@ -31,7 +31,7 @@ export class InstrumentEffects {
       withLatestFrom(this.filters$),
       map(([action, filters]) => filters),
       switchMap(({ sortField: order, skip, limit }) =>
-        this.instrumentApi.find({ order, limit, skip }).pipe(
+        this.instrumentApi.find<Instrument>({ order, limit, skip }).pipe(
           mergeMap((instruments: Instrument[]) => [
             fromActions.fetchInstrumentsCompleteAction({ instruments }),
             fromActions.fetchCountAction()
@@ -60,7 +60,7 @@ export class InstrumentEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchInstrumentAction),
       switchMap(({ pid }) =>
-        this.instrumentApi.findById(encodeURIComponent(pid)).pipe(
+        this.instrumentApi.findById<Instrument>(encodeURIComponent(pid)).pipe(
           map((instrument: Instrument) =>
             fromActions.fetchInstrumentCompleteAction({ instrument })
           ),

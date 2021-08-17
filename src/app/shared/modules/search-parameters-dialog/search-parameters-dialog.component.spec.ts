@@ -1,7 +1,17 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatButtonModule } from "@angular/material/button";
+import { MatOptionModule } from "@angular/material/core";
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { APP_CONFIG } from "app-config.module";
 
 import { SearchParametersDialogComponent } from "./search-parameters-dialog.component";
@@ -10,26 +20,37 @@ describe("SearchParametersDialogComponent", () => {
   let component: SearchParametersDialogComponent;
   let fixture: ComponentFixture<SearchParametersDialogComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [SearchParametersDialogComponent],
-      imports: [MatAutocompleteModule],
-    });
-    TestBed.overrideComponent(SearchParametersDialogComponent, {
-      set: {
-        providers: [
-          {
-            provide: APP_CONFIG,
-            useValue: { scienceSearchUnitsEnabled: true },
-          },
-          { provide: MAT_DIALOG_DATA, useValue: { parameterKeys: [] } },
-          { provide: MatDialogRef, useValue: { close: () => {} } },
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        imports: [
+          BrowserAnimationsModule,
+          MatAutocompleteModule,
+          MatButtonModule,
+          MatDialogModule,
+          MatFormFieldModule,
+          MatInputModule,
+          MatOptionModule,
+          MatSelectModule,
         ],
-      },
-    });
-    TestBed.compileComponents();
-  }));
+        declarations: [SearchParametersDialogComponent],
+      });
+      TestBed.overrideComponent(SearchParametersDialogComponent, {
+        set: {
+          providers: [
+            {
+              provide: APP_CONFIG,
+              useValue: { scienceSearchUnitsEnabled: true },
+            },
+            { provide: MAT_DIALOG_DATA, useValue: { parameterKeys: [] } },
+            { provide: MatDialogRef, useValue: { close: () => {} } },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SearchParametersDialogComponent);

@@ -24,12 +24,12 @@ const reducer = createReducer(
   }),
   on(fromActions.fetchLogbookFailedAction, (state) => ({
     ...state,
-    currentLogbook: null,
+    currentLogbook: undefined,
   })),
 
   on(fromActions.clearLogbookAction, (state) => ({
     ...state,
-    currentLogbook: null,
+    currentLogbook: undefined,
   })),
 
   on(fromActions.fetchCountCompleteAction, (state, { count }) => ({

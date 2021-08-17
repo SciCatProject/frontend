@@ -1,4 +1,4 @@
-import { Message, User, Settings, UserIdentity } from "../models";
+import { Message, User, Settings, UserIdentity, MessageType } from "../models";
 import * as fromActions from "./user.actions";
 import { AccessToken, UserSetting } from "shared/sdk";
 import { HttpErrorResponse } from "@angular/common/http";
@@ -397,7 +397,7 @@ describe("User Actions", () => {
 
   describe("showMessageAction", () => {
     it("should create an action", () => {
-      const message = new Message();
+      const message = new Message("Test", MessageType.Success, 5000);
       const action = fromActions.showMessageAction({ message });
       expect({ ...action }).toEqual({ type: "[User] Show Message", message });
     });

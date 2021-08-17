@@ -19,13 +19,13 @@ describe("SharedTableComponent", () => {
   } as SciCatDataSource;
 
   // const dataTable = jasmine.createSpyObj("MatTable", ["_elementRef"]);
-  const dataTable = ({
+  const dataTable = {
     _elementRef: {
       nativeElement: {
         clientWidth: 0,
       },
     },
-  } as unknown) as MatTable<Element>;
+  } as unknown as MatTable<Element>;
 
   const columnsDef = [];
 

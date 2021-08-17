@@ -33,7 +33,7 @@ export class PublishedDataEffects {
       withLatestFrom(this.queryParams$),
       map(([action, params]) => params),
       mergeMap((params) =>
-        this.publishedDataApi.find(params).pipe(
+        this.publishedDataApi.find<PublishedData>(params).pipe(
           mergeMap((publishedData: PublishedData[]) => [
             fromActions.fetchAllPublishedDataCompleteAction({ publishedData }),
             fromActions.fetchCountAction(),
@@ -60,7 +60,7 @@ export class PublishedDataEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchPublishedDataAction),
       switchMap(({ id }) =>
-        this.publishedDataApi.findById(encodeURIComponent(id)).pipe(
+        this.publishedDataApi.findById<PublishedData>(encodeURIComponent(id)).pipe(
           map((publishedData: PublishedData) =>
             fromActions.fetchPublishedDataCompleteAction({ publishedData })
           ),

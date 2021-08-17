@@ -1,19 +1,17 @@
-@use '~@angular/material' as mat;
-@import "../../../../theme.scss";
-.center{
+.center {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   height: 30%;
 }
-h1{
+
+h1 {
   font-size: 50px;
   text-align: center;
-  color: mat.get-color-from-palette($primary);
 }
-h3{
+
+h3 {
   font-size: 20px;
   text-align: center;
-  color: mat.get-color-from-palette($primary);
 }

@@ -58,7 +58,7 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
 
   doiBaseUrl = "https://doi.org/";
   selectedDOIs: string[] = [];
-  filtersSubscription: Subscription;
+  filtersSubscription: Subscription = new Subscription();
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -79,10 +79,11 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     this.document.execCommand("copy");
     this.document.body.removeChild(selectionBox);
 
-    const message = new Message();
-    message.content = "The selected DOI's have been copied to your clipboard";
-    message.type = MessageType.Success;
-    message.duration = 5000;
+    const message = new Message(
+      "The selected DOI's have been copied to your clipboard",
+      MessageType.Success,
+      5000
+    );
     this.store.dispatch(showMessageAction({ message }));
   }
 

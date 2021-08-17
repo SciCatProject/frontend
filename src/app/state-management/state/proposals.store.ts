@@ -1,14 +1,16 @@
 import { Proposal, Dataset } from "../models";
 
+export interface DateRange {
+  begin: string;
+  end: string;
+}
+
 export interface ProposalFilters {
   text: string;
   skip: number;
   limit: number;
   sortField: string;
-  dateRange: {
-    begin: string;
-    end: string;
-  };
+  dateRange: DateRange;
 }
 
 export interface ProposalDatesetFilters {
@@ -20,7 +22,7 @@ export interface ProposalDatesetFilters {
 
 export interface ProposalsState {
   proposals: Proposal[];
-  currentProposal: Proposal;
+  currentProposal: Proposal | undefined;
   datasets: Dataset[];
 
   proposalsCount: number;
@@ -33,11 +35,11 @@ export interface ProposalsState {
 
 export const initialProposalsState: ProposalsState = {
   proposals: [],
-  currentProposal: null,
+  currentProposal: undefined,
   datasets: [],
 
-  proposalsCount: null,
-  datasetsCount: null,
+  proposalsCount: 0,
+  datasetsCount: 0,
 
   hasPrefilledFilters: false,
 
@@ -46,13 +48,16 @@ export const initialProposalsState: ProposalsState = {
     skip: 0,
     limit: 25,
     sortField: "createdAt:desc",
-    dateRange: null
+    dateRange: {
+      begin: "",
+      end: "",
+    },
   },
 
   datasetFilters: {
     text: "",
     skip: 0,
     limit: 25,
-    sortField: "creationTime:desc"
-  }
+    sortField: "creationTime:desc",
+  },
 };

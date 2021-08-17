@@ -7,23 +7,23 @@ import { AppConfig, APP_CONFIG } from "app-config.module";
   styleUrls: ["./about.component.scss"]
 })
 export class AboutComponent implements OnInit {
-  SciCatGitIO: string;
-  SciCatGitHub: string;
-  SciCatDevopsDocIO: string;
-  aboutText: string;
-  accessText: string;
-  termsTextContinued: string;
-  termsText: string;
-  SNFLink: string;
-  PSIDataPolicy: string;
-  facility: string;
+  SciCatGitIO = "";
+  SciCatGitHub = "";
+  SciCatDevopsDocIO = "";
+  aboutText = "";
+  accessText = "";
+  termsTextContinued = "";
+  termsText = "";
+  SNFLink = "";
+  PSIDataPolicy = "";
+  facility = "";
   constructor(@Inject(APP_CONFIG) public appConfig: AppConfig) {}
 
   ngOnInit() {
     this.SciCatDevopsDocIO = "https://scicatproject.github.io/documentation/Devops/Documentation/";
     this.SciCatGitIO = "https://scicatproject.github.io/";
     this.SciCatGitHub = "https://github.com/SciCatProject";
-    this.facility = this.appConfig["facility"];
+    this.facility = this.appConfig["facility"] ?? "";
     this.SNFLink = "http://www.snf.ch/en/theSNSF/research-policies/open_research_data/Pages/default.aspx#Guidelines%20and%20Regulations";
     this.PSIDataPolicy = "https://www.psi.ch/en/science/psi-data-policy";
     this.aboutText =

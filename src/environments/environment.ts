@@ -23,8 +23,11 @@ export const environment = {
   editPublishedData: true,
   facility: "ESS",
   fileColorEnabled: true,
+  gettingStarted: null,
+  ingestManual: null,
   jobsEnabled: true,
   policiesEnabled: true,
+  disabledDatasetColumns: [],
   localColumns: [
     { name: "select", order: 0, type: "standard", enabled: true },
     { name: "datasetName", order: 1, type: "standard", enabled: true },

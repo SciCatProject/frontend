@@ -1,7 +1,7 @@
 import { APP_CONFIG, AppConfigModule } from "app-config.module";
 import {
   DatasetTableComponent,
-  SortChangeEvent
+  SortChangeEvent,
 } from "./dataset-table.component";
 import { MockStore, MockDatasetApi } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
@@ -9,7 +9,7 @@ import {
   ComponentFixture,
   TestBed,
   inject,
-  waitForAsync
+  waitForAsync,
 } from "@angular/core/testing";
 import { StoreModule, Store } from "@ngrx/store";
 import { Dataset, DatasetApi } from "shared/sdk";
@@ -20,17 +20,24 @@ import {
   selectAllDatasetsAction,
   clearSelectionAction,
   changePageAction,
-  sortByColumnAction
+  sortByColumnAction,
 } from "state-management/actions/datasets.actions";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { provideMockStore } from "@ngrx/store/testing";
 import { getDatasets } from "state-management/selectors/datasets.selectors";
 import {
   selectColumnAction,
-  deselectColumnAction
+  deselectColumnAction,
 } from "state-management/actions/user.actions";
 import { MatTableModule } from "@angular/material/table";
-import { MatCheckboxChange } from "@angular/material/checkbox";
+import {
+  MatCheckboxChange,
+  MatCheckboxModule,
+} from "@angular/material/checkbox";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("DatasetTableComponent", () => {
   let component: DatasetTableComponent;
@@ -39,35 +46,42 @@ describe("DatasetTableComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        AppConfigModule,
-        MatTableModule,
-        SharedCatanieModule,
-        StoreModule.forRoot({})
-      ],
-      providers: [
-        provideMockStore({
-          selectors: [{ selector: getDatasets, value: [] }]
-        })
-      ],
-      declarations: [DatasetTableComponent]
-    });
-    TestBed.overrideComponent(DatasetTableComponent, {
-      set: {
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        imports: [
+          AppConfigModule,
+          BrowserAnimationsModule,
+          MatButtonModule,
+          MatCheckboxModule,
+          MatIconModule,
+          MatPaginatorModule,
+          MatTableModule,
+          SharedCatanieModule,
+          StoreModule.forRoot({}),
+        ],
         providers: [
-          {
-            provide: APP_CONFIG,
-            useValue: {}
-          },
-          { provide: DatasetApi, useClass: MockDatasetApi }
-        ]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+          provideMockStore({
+            selectors: [{ selector: getDatasets, value: [] }],
+          }),
+        ],
+        declarations: [DatasetTableComponent],
+      });
+      TestBed.overrideComponent(DatasetTableComponent, {
+        set: {
+          providers: [
+            {
+              provide: APP_CONFIG,
+              useValue: {},
+            },
+            { provide: DatasetApi, useClass: MockDatasetApi },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetTableComponent);
@@ -124,7 +138,7 @@ describe("DatasetTableComponent", () => {
     it("should return true if dataset has missingFilesError", () => {
       const dataset = new Dataset();
       dataset.datasetlifecycle = {
-        archiveStatusMessage: "missingFilesError"
+        archiveStatusMessage: "missingFilesError",
       };
 
       const userError = component.userErrorCondition(dataset);
@@ -135,7 +149,7 @@ describe("DatasetTableComponent", () => {
     it("should return false if dataset has no missingFilesError", () => {
       const dataset = new Dataset();
       dataset.datasetlifecycle = {
-        archiveStatusMessage: ""
+        archiveStatusMessage: "",
       };
 
       const userError = component.userErrorCondition(dataset);
@@ -150,7 +164,7 @@ describe("DatasetTableComponent", () => {
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: true,
-        archiveStatusMessage: ""
+        archiveStatusMessage: "",
       };
 
       const archivable = component.archivableCondition(dataset);
@@ -163,7 +177,7 @@ describe("DatasetTableComponent", () => {
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: true,
-        archiveStatusMessage: "missingFilesError"
+        archiveStatusMessage: "missingFilesError",
       };
 
       const archivable = component.archivableCondition(dataset);
@@ -176,7 +190,7 @@ describe("DatasetTableComponent", () => {
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: false,
-        archiveStatusMessage: ""
+        archiveStatusMessage: "",
       };
 
       const archivable = component.archivableCondition(dataset);
@@ -189,7 +203,7 @@ describe("DatasetTableComponent", () => {
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: false,
-        archiveStatusMessage: "missingFilesError"
+        archiveStatusMessage: "missingFilesError",
       };
 
       const archivable = component.archivableCondition(dataset);
@@ -202,7 +216,7 @@ describe("DatasetTableComponent", () => {
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: true,
-        archiveStatusMessage: ""
+        archiveStatusMessage: "",
       };
 
       const archivable = component.archivableCondition(dataset);
@@ -215,7 +229,7 @@ describe("DatasetTableComponent", () => {
       dataset.datasetlifecycle = {
         archivable: true,
         retrievable: true,
-        archiveStatusMessage: ""
+        archiveStatusMessage: "",
       };
 
       const archivable = component.archivableCondition(dataset);
@@ -228,7 +242,7 @@ describe("DatasetTableComponent", () => {
       dataset.datasetlifecycle = {
         archivable: true,
         retrievable: true,
-        archiveStatusMessage: "missingFilesError"
+        archiveStatusMessage: "missingFilesError",
       };
 
       const archivable = component.archivableCondition(dataset);
@@ -241,7 +255,7 @@ describe("DatasetTableComponent", () => {
       dataset.datasetlifecycle = {
         archivable: true,
         retrievable: false,
-        archiveStatusMessage: ""
+        archiveStatusMessage: "",
       };
 
       const archivable = component.archivableCondition(dataset);
@@ -255,7 +269,7 @@ describe("DatasetTableComponent", () => {
       const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archivable: true,
-        retrievable: false
+        retrievable: false,
       };
 
       const retrievable = component.retrievableCondition(dataset);
@@ -267,7 +281,7 @@ describe("DatasetTableComponent", () => {
       const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archivable: false,
-        retrievable: false
+        retrievable: false,
       };
 
       const retrievable = component.retrievableCondition(dataset);
@@ -279,7 +293,7 @@ describe("DatasetTableComponent", () => {
       const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archivable: true,
-        retrievable: true
+        retrievable: true,
       };
 
       const retrievable = component.retrievableCondition(dataset);
@@ -291,7 +305,7 @@ describe("DatasetTableComponent", () => {
       const dataset = new Dataset();
       dataset.datasetlifecycle = {
         archivable: false,
-        retrievable: true
+        retrievable: true,
       };
 
       const retrievable = component.retrievableCondition(dataset);
@@ -398,7 +412,7 @@ describe("DatasetTableComponent", () => {
       const event: PageChangeEvent = {
         pageIndex: 0,
         pageSize: 25,
-        length: 25
+        length: 25,
       };
       component.onPageChange(event);
 
@@ -417,7 +431,7 @@ describe("DatasetTableComponent", () => {
       const event: PageChangeEvent = {
         pageIndex: 0,
         pageSize: 50,
-        length: 25
+        length: 25,
       };
       component.onPageChange(event);
 
@@ -437,7 +451,7 @@ describe("DatasetTableComponent", () => {
 
       const event: SortChangeEvent = {
         active: "standard_datasetName",
-        direction: "asc"
+        direction: "asc",
       };
       const column = event.active.split("_")[1];
       component.onSortChange(event);
@@ -453,7 +467,6 @@ describe("DatasetTableComponent", () => {
     xit("should return the number of derived datasets for a dataset", () => {
       // const dataset = new Dataset();
       // const numberOfDerivedDataset = component.countDerivedDatasets(dataset);
-
       // expect(numberOfDerivedDataset).toEqual(0);
     });
   });

@@ -1,13 +1,32 @@
 import {
-  Component, Input, ChangeDetectionStrategy, AfterContentInit, QueryList,
-  EventEmitter, Output, ElementRef, OnDestroy, ViewChild, ViewChildren, ChangeDetectorRef, NgZone, OnInit, AfterViewInit, AfterViewChecked
+  Component,
+  Input,
+  ChangeDetectionStrategy,
+  AfterContentInit,
+  QueryList,
+  EventEmitter,
+  Output,
+  ElementRef,
+  OnDestroy,
+  ViewChild,
+  ViewChildren,
+  ChangeDetectorRef,
+  NgZone,
+  AfterViewInit,
+  AfterViewChecked,
 } from "@angular/core";
 import { ViewportRuler } from "@angular/cdk/scrolling";
 import { FormControl } from "@angular/forms";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTable } from "@angular/material/table";
-import { trigger, state, style, animate, transition } from "@angular/animations";
+import {
+  trigger,
+  state,
+  style,
+  animate,
+  transition,
+} from "@angular/animations";
 import { fromEvent, merge, Subscription } from "rxjs";
 
 import { SciCatDataSource } from "../../services/scicat.datasource";
@@ -25,13 +44,24 @@ import { Column } from "./shared-table.module";
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger("detailExpand", [
-      state("collapsed", style({ height: "0px", minHeight: "0", visibility: "hidden" })),
+      state(
+        "collapsed",
+        style({ height: "0px", minHeight: "0", visibility: "hidden" })
+      ),
       state("expanded", style({ height: "*", visibility: "visible" })),
-      transition("expanded <=> collapsed", animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")),
+      transition(
+        "expanded <=> collapsed",
+        animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")
+      ),
     ]),
   ],
 })
-export class SharedTableComponent implements AfterViewChecked, AfterViewInit, AfterContentInit, OnDestroy, OnInit {
+export class SharedTableComponent
+  implements
+    AfterViewChecked,
+    AfterViewInit,
+    AfterContentInit,
+    OnDestroy {
   private rulerSubscription: Subscription;
   public MIN_COLUMN_WIDTH = 200;
 
@@ -70,18 +100,14 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
     public ete: ExportExcelService,
     private ruler: ViewportRuler,
     private _changeDetectorRef: ChangeDetectorRef,
-    private zone: NgZone) {
+    private zone: NgZone
+  ) {
     // react to viewport width changes with column restructuring
-    this.rulerSubscription = this.ruler.change(100).subscribe(data => {
-      this.toggleColumns(this.dataTable["_elementRef"].nativeElement.clientWidth);
+    this.rulerSubscription = this.ruler.change(100).subscribe((data) => {
+      this.toggleColumns(
+        this.dataTable["_elementRef"].nativeElement.clientWidth
+      );
     });
-  }
-
-  /**
-   * Lifecycle Hook Start
-   */
-
-  ngOnInit() {
   }
 
   ngAfterViewChecked() {
@@ -92,7 +118,7 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
 
   ngAfterViewInit() {
     // reset the paginator after sorting
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     // global search handler
     fromEvent(this.globalFilter.nativeElement, "keyup")
@@ -108,11 +134,12 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
           }
           this.router.navigate([], {
             queryParams: { globalSearch, pageIndex: 0 },
-            queryParamsHandling: "merge"
+            queryParamsHandling: "merge",
           });
           this.loadDataPage();
         })
-      ).subscribe();
+      )
+      .subscribe();
 
     this.setDefaultFilters();
     this.activateColumnFilters();
@@ -125,26 +152,35 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
               sortActive: this.sort.active,
               sortDirection: this.sort.direction,
               pageIndex: this.paginator.pageIndex,
-              pageSize: this.paginator.pageSize
+              pageSize: this.paginator.pageSize,
             },
-            queryParamsHandling: "merge"
+            queryParamsHandling: "merge",
           });
           this.loadDataPage();
-        }
-        )
-      ).subscribe();
+        })
+      )
+      .subscribe();
 
     // copy changes in URL parameters to corresponding GUI fields
-    this.route.queryParams.subscribe(queryParams => {
+    this.route.queryParams.subscribe((queryParams) => {
       this.sort.active = queryParams.sortActive ? queryParams.sortActive : null;
-      this.sort.direction = queryParams.sortDirection ? queryParams.sortDirection : "asc";
-      this.paginator.pageIndex = queryParams.pageIndex ? Number(queryParams.pageIndex) : 0;
-      this.paginator.pageSize = queryParams.pageSize ? Number(queryParams.pageSize) : this.pageSize;
-      this.globalFilter.nativeElement.value = queryParams.globalSearch ? queryParams.globalSearch : "";
-      this.allFilters.toArray().forEach(filter => {
+      this.sort.direction = queryParams.sortDirection
+        ? queryParams.sortDirection
+        : "asc";
+      this.paginator.pageIndex = queryParams.pageIndex
+        ? Number(queryParams.pageIndex)
+        : 0;
+      this.paginator.pageSize = queryParams.pageSize
+        ? Number(queryParams.pageSize)
+        : this.pageSize;
+      this.globalFilter.nativeElement.value = queryParams.globalSearch
+        ? queryParams.globalSearch
+        : "";
+      this.allFilters.toArray().forEach((filter) => {
         if (filter.nativeElement.name in queryParams) {
           filter.nativeElement.value = queryParams[filter.nativeElement.name];
-          this.filterExpressions[filter.nativeElement.name] = filter.nativeElement.value;
+          this.filterExpressions[filter.nativeElement.name] =
+            filter.nativeElement.value;
         } else {
           filter.nativeElement.value = null;
           delete this.filterExpressions[filter.nativeElement.name];
@@ -170,7 +206,8 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
       this.sort.active,
       this.sort.direction,
       this.paginator.pageIndex,
-      this.paginator.pageSize);
+      this.paginator.pageSize
+    );
   }
 
   ngAfterContentInit() {
@@ -188,17 +225,22 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
   }
 
   get visibleColumnsIds() {
-    const visibleColumnsIds = this.visibleColumns.map(column => column.id);
+    const visibleColumnsIds = this.visibleColumns.map((column) => column.id);
 
-    return this.hiddenColumns.length ? ["trigger", ...visibleColumnsIds] : visibleColumnsIds;
+    return this.hiddenColumns.length
+      ? ["trigger", ...visibleColumnsIds]
+      : visibleColumnsIds;
   }
 
   get hiddenColumnsIds() {
-    return this.hiddenColumns.map(column => column.id);
+    return this.hiddenColumns.map((column) => column.id);
   }
 
   getExpandFlag(i) {
-    const ex = Object.keys(this.expandedElement).length > 0 && this.expandedElement[i] ? "expanded" : "collapsed";
+    const ex =
+      Object.keys(this.expandedElement).length > 0 && this.expandedElement[i]
+        ? "expanded"
+        : "collapsed";
     return ex;
   }
 
@@ -213,7 +255,7 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
   }
 
   unsubscribeColumnFilters() {
-    this.columnFilterSubscriptions.forEach(sub => {
+    this.columnFilterSubscriptions.forEach((sub) => {
       // console.log("Unsubscribing subscription sub:", sub)
       sub.unsubscribe();
     });
@@ -222,13 +264,16 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
   // fill default filters from table definition
   setDefaultFilters() {
     // copy default filters from column definitions to URL (which should trigger the filling of the GUI)
-    this.columnsdef.forEach(col => {
+    this.columnsdef.forEach((col) => {
       if ("sortDefault" in col) {
         this.sort.active = col.id;
         this.sort.direction = col.sortDefault;
         this.router.navigate([], {
-          queryParams: { sortActive: this.sort.active, sortDirection: this.sort.direction },
-          queryParamsHandling: "merge"
+          queryParams: {
+            sortActive: this.sort.active,
+            sortDirection: this.sort.direction,
+          },
+          queryParamsHandling: "merge",
         });
       }
       // set default filter only if no other filters defined in query parameters
@@ -242,13 +287,16 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
       if ("filterDefault" in col && Object.keys(qp).length === 0) {
         if (typeof col.filterDefault === "object") {
           this.router.navigate([], {
-            queryParams: { [col.id + ".start"]: col.filterDefault.start, [col.id + ".end"]: col.filterDefault.end },
-            queryParamsHandling: "merge"
+            queryParams: {
+              [col.id + ".start"]: col.filterDefault.start,
+              [col.id + ".end"]: col.filterDefault.end,
+            },
+            queryParamsHandling: "merge",
           });
         } else {
           this.router.navigate([], {
             queryParams: { [col.id]: col.filterDefault },
-            queryParamsHandling: "merge"
+            queryParamsHandling: "merge",
           });
         }
       }
@@ -259,12 +307,13 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
   activateColumnFilters() {
     // define key handler in all filter input fields
     let i = 0;
-    this.allFilters.toArray().forEach(filter => {
+    this.allFilters.toArray().forEach((filter) => {
       // console.log("Defining subscription for column :", i);
-      this.columnFilterSubscriptions[i] = fromEvent(filter.nativeElement, "keyup").pipe(
-        debounceTime(650),
-        distinctUntilChanged()
+      this.columnFilterSubscriptions[i] = fromEvent(
+        filter.nativeElement,
+        "keyup"
       )
+        .pipe(debounceTime(650), distinctUntilChanged())
         .subscribe(() => {
           // console.log("key typed from id,value:", filter.nativeElement.name,filter.nativeElement.value)
           this.paginator.pageIndex = 0;
@@ -273,13 +322,13 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
             this.filterExpressions[columnId] = filter.nativeElement.value;
             this.router.navigate([], {
               queryParams: { [columnId]: this.filterExpressions[columnId] },
-              queryParamsHandling: "merge"
+              queryParamsHandling: "merge",
             });
           } else {
             delete this.filterExpressions[columnId];
             this.router.navigate([], {
               queryParams: { [columnId]: null },
-              queryParamsHandling: "merge"
+              queryParamsHandling: "merge",
             });
           }
           this.loadDataPage();
@@ -291,7 +340,7 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
   // fill input fields with current filter conditions
   reloadFilterExpressions() {
     // console.log("=== Reloading filter expressions from filterExpression array to GUI elements");
-    this.allFilters.toArray().forEach(filter => {
+    this.allFilters.toArray().forEach((filter) => {
       const columnId = filter.nativeElement.name;
       if (this.filterExpressions[columnId]) {
         // console.log(" ====== Reloading filter expressions:", columnId, this.filterExpressions[columnId]);
@@ -325,7 +374,8 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
 
   toggleColumns(tableWidth: number) {
     this.zone.runOutsideAngular(() => {
-      const sortedColumns = this.columnsdef.slice()
+      const sortedColumns = this.columnsdef
+        .slice()
         .map((column, index) => ({ ...column, order: index }))
         .sort((a, b) => a.hideOrder - b.hideOrder);
 
@@ -343,15 +393,14 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
       }
 
       this.columnsdef = sortedColumns.sort((a, b) => a.order - b.order);
-      this.visibleColumns = this.columnsdef.filter(column => column.visible);
-      this.hiddenColumns = this.columnsdef.filter(column => !column.visible);
+      this.visibleColumns = this.columnsdef.filter((column) => column.visible);
+      this.hiddenColumns = this.columnsdef.filter((column) => !column.visible);
       this.zone.run(() => {
         this._changeDetectorRef.detectChanges();
         this.reloadFilterExpressions();
         this.activateColumnFilters();
       });
     });
-
   }
 
   exportToExcel() {
@@ -369,7 +418,7 @@ export class SharedTableComponent implements AfterViewChecked, AfterViewInit, Af
       this.filterExpressions[columnId] = event.value.toISODate();
       this.router.navigate([], {
         queryParams: { [columnId]: this.filterExpressions[columnId] },
-        queryParamsHandling: "merge"
+        queryParamsHandling: "merge",
       });
       this.loadDataPage();
     }

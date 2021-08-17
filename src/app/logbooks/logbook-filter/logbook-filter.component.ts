@@ -5,16 +5,27 @@ import { LogbookFilters } from "state-management/models";
 @Component({
   selector: "logbook-filter",
   templateUrl: "./logbook-filter.component.html",
-  styleUrls: ["./logbook-filter.component.scss"]
+  styleUrls: ["./logbook-filter.component.scss"],
 })
 export class LogbookFilterComponent {
-  @Input() filters: LogbookFilters;
+  @Input() filters: LogbookFilters | null = {
+    textSearch: "",
+    showBotMessages: true,
+    showImages: true,
+    showUserMessages: true,
+    sortField: "",
+    skip: 0,
+    limit: 25,
+  };
 
   @Output() filterSelect = new EventEmitter<LogbookFilters>();
 
   public entries = ["Bot Messages", "User Messages", "Images"];
 
   isSelected(entry: string): boolean {
+    if (!this.filters) {
+      return true;
+    }
     switch (entry) {
       case "Bot Messages": {
         return this.filters.showBotMessages;
@@ -32,43 +43,45 @@ export class LogbookFilterComponent {
   }
 
   doSelect(event: MatCheckboxChange, entry: string): void {
-    if (event.checked) {
-      switch (entry) {
-        case "Bot Messages": {
-          this.filters.showBotMessages = true;
-          break;
+    if (this.filters) {
+      if (event.checked) {
+        switch (entry) {
+          case "Bot Messages": {
+            this.filters.showBotMessages = true;
+            break;
+          }
+          case "User Messages": {
+            this.filters.showUserMessages = true;
+            break;
+          }
+          case "Images": {
+            this.filters.showImages = true;
+            break;
+          }
+          default: {
+            break;
+          }
         }
-        case "User Messages": {
-          this.filters.showUserMessages = true;
-          break;
-        }
-        case "Images": {
-          this.filters.showImages = true;
-          break;
-        }
-        default: {
-          break;
+      } else {
+        switch (entry) {
+          case "Bot Messages": {
+            this.filters.showBotMessages = false;
+            break;
+          }
+          case "User Messages": {
+            this.filters.showUserMessages = false;
+            break;
+          }
+          case "Images": {
+            this.filters.showImages = false;
+            break;
+          }
+          default: {
+            break;
+          }
         }
       }
-    } else {
-      switch (entry) {
-        case "Bot Messages": {
-          this.filters.showBotMessages = false;
-          break;
-        }
-        case "User Messages": {
-          this.filters.showUserMessages = false;
-          break;
-        }
-        case "Images": {
-          this.filters.showImages = false;
-          break;
-        }
-        default: {
-          break;
-        }
-      }
+      this.filterSelect.emit(this.filters);
     }
-    this.filterSelect.emit(this.filters);
   }
 }

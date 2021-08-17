@@ -2,7 +2,7 @@ import {
   ComponentFixture,
   TestBed,
   inject,
-  waitForAsync
+  waitForAsync,
 } from "@angular/core/testing";
 
 import { InstrumentsDashboardComponent } from "./instruments-dashboard.component";
@@ -13,56 +13,59 @@ import {
   getInstruments,
   getPage,
   getInstrumentsCount,
-  getInstrumentsPerPage
+  getInstrumentsPerPage,
 } from "state-management/selectors/instruments.selectors";
 import { Store } from "@ngrx/store";
 import { SharedCatanieModule } from "shared/shared.module";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import {
   PageChangeEvent,
-  SortChangeEvent
+  SortChangeEvent,
 } from "shared/modules/table/table.component";
 import {
   changePageAction,
-  sortByColumnAction
+  sortByColumnAction,
 } from "state-management/actions/instruments.actions";
 import { Router } from "@angular/router";
 import { Instrument } from "shared/sdk";
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 describe("InstrumentsDashboardComponent", () => {
   let component: InstrumentsDashboardComponent;
   let fixture: ComponentFixture<InstrumentsDashboardComponent>;
 
   const router = {
-    navigateByUrl: jasmine.createSpy("navigateByUrl")
+    navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [InstrumentsDashboardComponent],
-      imports: [SharedCatanieModule],
-      providers: [
-        JsonHeadPipe,
-        provideMockStore({
-          selectors: [
-            { selector: getInstruments, value: [] },
-            { selector: getPage, value: 0 },
-            { selector: getInstrumentsCount, value: 100 },
-            { selector: getInstrumentsPerPage, value: 25 }
-          ]
-        })
-      ]
-    });
-    TestBed.overrideComponent(InstrumentsDashboardComponent, {
-      set: {
-        providers: [{ provide: Router, useValue: router }]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [InstrumentsDashboardComponent],
+        imports: [FlexLayoutModule, SharedCatanieModule],
+        providers: [
+          JsonHeadPipe,
+          provideMockStore({
+            selectors: [
+              { selector: getInstruments, value: [] },
+              { selector: getPage, value: 0 },
+              { selector: getInstrumentsCount, value: 100 },
+              { selector: getInstrumentsPerPage, value: 25 },
+            ],
+          }),
+        ],
+      });
+      TestBed.overrideComponent(InstrumentsDashboardComponent, {
+        set: {
+          providers: [{ provide: Router, useValue: router }],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(InstrumentsDashboardComponent);
@@ -89,7 +92,7 @@ describe("InstrumentsDashboardComponent", () => {
       const event: PageChangeEvent = {
         pageIndex: 0,
         pageSize: 25,
-        length: 100
+        length: 100,
       };
 
       const { pageIndex: page, pageSize: limit } = event;
@@ -109,7 +112,7 @@ describe("InstrumentsDashboardComponent", () => {
 
       const event: SortChangeEvent = {
         active: "test",
-        direction: "asc"
+        direction: "asc",
       };
 
       const { active: column, direction } = event;

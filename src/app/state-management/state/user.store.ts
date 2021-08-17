@@ -4,15 +4,15 @@ import { APP_DI_CONFIG } from "app-config.module";
 
 // NOTE It IS ok to make up a state of other sub states
 export interface UserState {
-  currentUser: User;
+  currentUser: User | undefined;
   accountType?: string;
   profile?: any;
 
-  catamelToken: AccessToken;
+  catamelToken: AccessToken | undefined;
 
   settings: Settings;
 
-  message: Message;
+  message: Message | undefined;
 
   isLoggingIn: boolean;
   isLoggedIn: boolean;
@@ -23,10 +23,10 @@ export interface UserState {
 }
 
 export const initialUserState: UserState = {
-  currentUser: null,
+  currentUser: undefined,
   profile: null,
 
-  catamelToken: null,
+  catamelToken: undefined,
 
   settings: {
     tapeCopies: "one",
@@ -35,7 +35,7 @@ export const initialUserState: UserState = {
     darkTheme: false
   }, // TODO sync with server settings?
 
-  message: { content: undefined, type: undefined, duration: undefined },
+  message: undefined,
 
   isLoggingIn: false,
   isLoggedIn: false,

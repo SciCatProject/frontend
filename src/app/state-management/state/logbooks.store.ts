@@ -2,7 +2,7 @@ import { Logbook, LogbookFilters } from "state-management/models";
 
 export interface LogbookState {
   logbooks: Logbook[];
-  currentLogbook: Logbook;
+  currentLogbook: Logbook | undefined;
 
   totalCount: number;
 
@@ -12,7 +12,7 @@ export interface LogbookState {
 
 export const initialLogbookState: LogbookState = {
   logbooks: [],
-  currentLogbook: null,
+  currentLogbook: undefined,
 
   totalCount: 0,
 

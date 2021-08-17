@@ -5,57 +5,57 @@ const getProposalsState = createFeatureSelector<ProposalsState>("proposals");
 
 export const getProposals = createSelector(
   getProposalsState,
-  state => state.proposals
+  (state) => state.proposals
 );
 
 export const getCurrentProposal = createSelector(
   getProposalsState,
-  state => state.currentProposal
+  (state) => state.currentProposal
 );
 
 export const getCurrentAttachments = createSelector(
   getCurrentProposal,
-  proposal => proposal.attachments
+  (proposal) => (proposal ? proposal.attachments : [])
 );
 
 export const getProposalDatasets = createSelector(
   getProposalsState,
-  state => state.datasets
+  (state) => state.datasets
 );
 
 export const getProposalsCount = createSelector(
   getProposalsState,
-  state => state.proposalsCount
+  (state) => state.proposalsCount
 );
 
 export const getDatasetsCount = createSelector(
   getProposalsState,
-  state => state.datasetsCount
+  (state) => state.datasetsCount
 );
 
 export const getHasPrefilledFilters = createSelector(
   getProposalsState,
-  state => state.hasPrefilledFilters
+  (state) => state.hasPrefilledFilters
 );
 
 export const getFilters = createSelector(
   getProposalsState,
-  state => state.proposalFilters
+  (state) => state.proposalFilters
 );
 
 export const getTextFilter = createSelector(
   getFilters,
-  filters => filters.text
+  (filters) => filters.text
 );
 
 export const getDateRangeFilter = createSelector(
   getFilters,
-  filters => filters.dateRange
+  (filters) => filters.dateRange
 );
 
 export const getHasAppliedFilters = createSelector(
   getFilters,
-  filters =>
+  (filters) =>
     filters.text !== "" ||
     (filters.dateRange &&
       (filters.dateRange.begin !== null || filters.dateRange.end !== null))
@@ -63,27 +63,27 @@ export const getHasAppliedFilters = createSelector(
 
 export const getDatasetFilters = createSelector(
   getProposalsState,
-  state => state.datasetFilters
+  (state) => state.datasetFilters
 );
 
-export const getPage = createSelector(getFilters, filters => {
+export const getPage = createSelector(getFilters, (filters) => {
   const { skip, limit } = filters;
   return skip / limit;
 });
 
-export const getDatasetsPage = createSelector(getDatasetFilters, filters => {
+export const getDatasetsPage = createSelector(getDatasetFilters, (filters) => {
   const { skip, limit } = filters;
   return skip / limit;
 });
 
 export const getProposalsPerPage = createSelector(
   getFilters,
-  filters => filters.limit
+  (filters) => filters.limit
 );
 
 export const getDatasetsPerPage = createSelector(
   getDatasetFilters,
-  filters => filters.limit
+  (filters) => filters.limit
 );
 
 const restrictFilter = (filter: any, allowedKeys?: string[]) => {
@@ -99,7 +99,7 @@ const restrictFilter = (filter: any, allowedKeys?: string[]) => {
   }, {});
 };
 
-export const getFullqueryParams = createSelector(getFilters, filters => {
+export const getFullqueryParams = createSelector(getFilters, (filters) => {
   const { skip, limit, sortField, ...theRest } = filters;
   const limits = { order: sortField, skip, limit };
   const query = restrictFilter(theRest);
@@ -108,7 +108,7 @@ export const getFullqueryParams = createSelector(getFilters, filters => {
 
 export const getDatasetsQueryParams = createSelector(
   getDatasetFilters,
-  filters => {
+  (filters) => {
     const { text, skip, limit, sortField } = filters;
     const limits = { order: sortField, skip, limit };
     return { query: JSON.stringify({ text }), limits };

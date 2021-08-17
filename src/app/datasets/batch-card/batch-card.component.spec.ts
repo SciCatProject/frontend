@@ -1,6 +1,8 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { DatasetState } from "state-management/state/datasets.store";
@@ -18,7 +20,7 @@ describe("BatchCardComponent", () => {
       TestBed.configureTestingModule({
         schemas: [NO_ERRORS_SCHEMA],
         declarations: [BatchCardComponent],
-        imports: [MatCardModule],
+        imports: [MatButtonModule, MatCardModule, MatIconModule],
         providers: [
           provideMockStore({
             selectors: [{ selector: getDatasetsInBatch, value: [] }],
