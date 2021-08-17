@@ -1,4 +1,4 @@
-import { MatTreeModule} from "@angular/material/tree";
+import { MatTreeModule } from "@angular/material/tree";
 import { NgModule } from "@angular/core";
 import { MatIconModule } from "@angular/material/icon";
 import { PipesModule } from "shared/pipes/pipes.module";
@@ -14,18 +14,29 @@ import { FlexLayoutModule, FlexModule } from "@angular/flex-layout";
 import { MatDividerModule } from "@angular/material/divider";
 import { TreeViewComponent } from "./tree-view/tree-view.component";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
-import { MatOptionModule } from "@angular/material/core";
+import { MatOptionModule, MAT_DATE_LOCALE } from "@angular/material/core";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MetadataInputComponent } from "./metadata-input/metadata-input.component";
 import { MatTableModule } from "@angular/material/table";
 import { MetadataInputModalComponent } from "./metadata-input-modal/metadata-input-modal.component";
-import {MatDialogModule} from "@angular/material/dialog";
+import { MatDialogModule } from "@angular/material/dialog";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import {
+  NgxMatDatetimePickerModule,
+  NgxMatNativeDateModule,
+  NgxMatTimepickerModule,
+} from "@angular-material-components/datetime-picker";
 @NgModule({
-  declarations: [TreeEditComponent, TreeViewComponent, MetadataInputComponent, MetadataInputModalComponent],
+  declarations: [
+    TreeEditComponent,
+    TreeViewComponent,
+    MetadataInputComponent,
+    MetadataInputModalComponent,
+  ],
   imports: [
     MatFormFieldModule,
     MatTreeModule,
@@ -48,9 +59,18 @@ import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
     MatTabsModule,
     MatDividerModule,
     MatMenuModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDatepickerModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    NgxMatNativeDateModule,
   ],
   exports: [TreeEditComponent, TreeViewComponent],
-  providers:[DatePipe, PrettyUnitPipe, FormatNumberPipe]
+  providers: [
+    DatePipe,
+    PrettyUnitPipe,
+    FormatNumberPipe,
+    { provide: MAT_DATE_LOCALE, useValue: "sv-SE" },
+  ],
 })
 export class ScientificMetadataTreeModule {}

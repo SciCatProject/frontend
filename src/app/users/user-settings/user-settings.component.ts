@@ -6,7 +6,7 @@ import {
   fetchCurrentUserAction,
   fetchCatamelTokenAction,
 } from "state-management/actions/user.actions";
-import { Message, MessageType } from "state-management/models";
+import { Message, MessageType, Settings } from "state-management/models";
 import {
   getSettings,
   getProfile,
@@ -39,7 +39,7 @@ export class UserSettingsComponent implements OnInit {
   );
   catamelToken$ = this.store.pipe(
     select(getCatamelToken),
-    map((token) => token.id)
+    map((token) => (token ? token.id : ""))
   );
   settings$ = this.store.pipe(select(getSettings));
 
@@ -55,15 +55,16 @@ export class UserSettingsComponent implements OnInit {
     this.store.dispatch(fetchCatamelTokenAction());
   }
 
-  onSubmit(values) {
+  onSubmit(values: Settings) {
     // TODO validate here
     console.log(values);
     // values['darkTheme'] = (values['darkTheme'].toLowerCase() === 'true')
     this.store.dispatch(saveSettingsAction({ settings: values }));
-    const message = new Message();
-    message.content = "Settings saved locally";
-    message.type = MessageType.Success;
-    message.duration = 5000;
+    const message = new Message(
+      "Settings saved locally",
+      MessageType.Success,
+      5000
+    );
     this.store.dispatch(showMessageAction({ message }));
   }
 
@@ -80,10 +81,11 @@ export class UserSettingsComponent implements OnInit {
     this.document.execCommand("copy");
     this.document.body.removeChild(selectionBox);
 
-    const message = new Message();
-    message.content = "Catamel token has been copied to your clipboard";
-    message.type = MessageType.Success;
-    message.duration = 5000;
+    const message = new Message(
+      "Catamel token has been copied to your clipboard",
+      MessageType.Success,
+      5000
+    );
     this.store.dispatch(showMessageAction({ message }));
   }
 }

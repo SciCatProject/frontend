@@ -1,6 +1,3 @@
-@use '~@angular/material' as mat;
-@import "../../../theme.scss";
-
 @media only screen and (min-width: 1280px) {
   .big-search {
     margin: 4em 1em 1em 0;
@@ -26,7 +23,6 @@
 
     mat-icon {
       vertical-align: middle;
-      color: mat.get-color-from-palette($accent);
     }
   }
 
@@ -58,7 +54,6 @@
 
     mat-icon {
       vertical-align: middle;
-      color: mat.get-color-from-palette($accent);
     }
   }
 }

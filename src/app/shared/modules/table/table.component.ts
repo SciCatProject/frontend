@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } from "@angular/core";
 import { SelectionModel } from "@angular/cdk/collections";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 
@@ -31,12 +31,13 @@ export interface CheckboxEvent {
   selector: "app-table",
   templateUrl: "./table.component.html",
   styleUrls: ["./table.component.scss"],
+  encapsulation: ViewEncapsulation.None,
 })
 export class TableComponent implements OnInit {
-  @Input() data: any[];
-  @Input() columns: TableColumn[];
-  displayedColumns: string[];
-  listItems: string[];
+  @Input() data: any[] | null = [];
+  @Input() columns: TableColumn[] = [];
+  displayedColumns: string[] = [];
+  listItems: string[] = [];
 
   @Input() select?: boolean;
   @Input() allChecked?: boolean;
@@ -44,9 +45,9 @@ export class TableComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
 
   @Input() paginate?: boolean;
-  @Input() currentPage?: number;
-  @Input() dataCount?: number;
-  @Input() dataPerPage?: number;
+  @Input() currentPage: number | null = null;
+  @Input() dataCount: number | null = null;
+  @Input() dataPerPage: number | null = null;
   pageSizeOptions = [10, 25, 50, 100, 500, 1000];
 
   @Output() pageChange = new EventEmitter<PageChangeEvent>();
@@ -63,7 +64,7 @@ export class TableComponent implements OnInit {
     this.sortChange.emit(event);
   }
 
-  onRowClick(event: any) {
+  onRowClick(event: unknown) {
     this.rowClick.emit(event);
   }
 
@@ -71,12 +72,12 @@ export class TableComponent implements OnInit {
     if (this.isAllSelected()) {
       this.selection.clear();
     } else {
-      this.data.forEach((row) => this.selection.select(row));
+      this.data?.forEach((row) => this.selection.select(row));
     }
     this.selectAll.emit(event);
   }
 
-  onSelectOne(event: MatCheckboxChange, row: any) {
+  onSelectOne(event: MatCheckboxChange, row: unknown) {
     this.selection.toggle(row);
     const selectEvent: CheckboxEvent = {
       event,

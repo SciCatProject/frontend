@@ -34,7 +34,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { MatDialogConfig, MatDialog } from "@angular/material/dialog";
 import { SampleDialogComponent } from "samples/sample-dialog/sample-dialog.component";
 
-import * as deepEqual from "deep-equal";
+import deepEqual from "deep-equal";
 import {
   filter,
   map,
@@ -62,8 +62,8 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   subscriptions: Subscription[] = [];
 
-  metadataKeys: string[];
-  tableData: any[];
+  metadataKeys: string[] = [];
+  tableData: any[] = [];
   tableColumns: TableColumn[] = [
     { name: "sampleId", icon: "fingerprint", sort: true, inList: false },
     { name: "description", icon: "description", sort: false, inList: true },
@@ -73,9 +73,9 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   ];
   tablePaginate = true;
 
-  dialogConfig: MatDialogConfig;
-  name: string;
-  description: string;
+  dialogConfig: MatDialogConfig = new MatDialogConfig();
+  name = "";
+  description = "";
 
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
@@ -102,14 +102,13 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   }
 
   openDialog() {
-    this.dialogConfig = new MatDialogConfig();
     this.dialog.open(SampleDialogComponent, {
       width: "250px",
       data: { name: this.name, description: this.description },
     });
   }
 
-  onTextSearchChange(query) {
+  onTextSearchChange(query: string) {
     this.store.dispatch(setTextFilterAction({ text: query }));
   }
 

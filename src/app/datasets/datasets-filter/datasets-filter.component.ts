@@ -6,7 +6,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   skipWhile,
-  map
+  map,
 } from "rxjs/operators";
 
 import { FacetCount } from "state-management/state/datasets.store";
@@ -41,19 +41,24 @@ import {
   setDateRangeFilterAction,
   clearFacetsAction,
   addScientificConditionAction,
-  removeScientificConditionAction
+  removeScientificConditionAction,
 } from "state-management/actions/datasets.actions";
 import { combineLatest, BehaviorSubject, Observable, Subscription } from "rxjs";
 import {
   selectColumnAction,
   deselectColumnAction,
-  deselectAllCustomColumnsAction
+  deselectAllCustomColumnsAction,
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
 import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AsyncPipe } from "@angular/common";
+import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { DateTime } from "luxon";
-import { SatDatepickerRangeValue } from "saturn-datepicker";
+
+interface DateRange {
+  begin: string;
+  end: string;
+}
 @Component({
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
@@ -109,6 +114,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
 
+  dateRange: DateRange = {
+    begin: "",
+    end: "",
+  };
+
   constructor(
     private asyncPipe: AsyncPipe,
     public dialog: MatDialog,
@@ -136,7 +146,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     );
   }
 
-  getFacetId(facetCount: FacetCount, fallback: string = null): string {
+  getFacetId(facetCount: FacetCount, fallback = ""): string {
     const id = facetCount._id;
     return id ? String(id) : fallback;
   }
@@ -148,6 +158,26 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   textSearchChanged(terms: string) {
     this.clearSearchBar = false;
     this.store.dispatch(setSearchTermsAction({ terms }));
+  }
+
+  onLocationInput(event: any) {
+    const value = (<HTMLInputElement>event.target).value;
+    this.locationInput$.next(value);
+  }
+
+  onGroupInput(event: any) {
+    const value = (<HTMLInputElement>event.target).value;
+    this.groupInput$.next(value);
+  }
+
+  onKeywordInput(event: any) {
+    const value = (<HTMLInputElement>event.target).value;
+    this.keywordsInput$.next(value);
+  }
+
+  onTypeInput(event: any) {
+    const value = (<HTMLInputElement>event.target).value;
+    this.typeInput$.next(value);
   }
 
   locationSelected(location: string | null) {
@@ -187,22 +217,30 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.store.dispatch(removeTypeFilterAction({ datasetType: type }));
   }
 
-  dateChanged(values: SatDatepickerRangeValue<DateTime>) {
-    if (values) {
-      const { begin, end } = values;
-      this.store.dispatch(
-        setDateRangeFilterAction({
-          begin: begin.toUTC().toISO(),
-          end: end.toUTC().plus({days: 1}).toISO(),
-        })
-      );
+  dateChanged(event: MatDatepickerInputEvent<DateTime>) {
+    if (event.value) {
+      const name = event.targetElement.getAttribute("name");
+      if (name === "begin") {
+        this.dateRange.begin = event.value.toUTC().toISO();
+        this.dateRange.end = "";
+      }
+      if (name === "end") {
+        this.dateRange.end = event.value.toUTC().plus({ days: 1 }).toISO();
+      }
+      if (this.dateRange.begin.length > 0 && this.dateRange.end.length > 0) {
+        this.store.dispatch(setDateRangeFilterAction(this.dateRange));
+      }
     } else {
-      this.store.dispatch(setDateRangeFilterAction(null));
+      this.store.dispatch(setDateRangeFilterAction({ begin: "", end: "" }));
     }
   }
 
   clearFacets() {
     this.clearSearchBar = true;
+    this.dateRange = {
+      begin: "",
+      end: "",
+    };
     this.store.dispatch(clearFacetsAction());
     this.store.dispatch(deselectAllCustomColumnsAction());
   }

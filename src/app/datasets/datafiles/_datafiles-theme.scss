@@ -1,0 +1,18 @@
+@use "sass:map";
+@use "~@angular/material" as mat;
+
+@mixin color($theme) {
+  $color-config: mat.get-color-config($theme);
+  $warn-2: map.get($color-config, "warn-2");
+
+  .warning-icon {
+    color: mat.get-color-from-palette($warn-2, "default");
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}

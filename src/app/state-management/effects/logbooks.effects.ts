@@ -20,7 +20,7 @@ export class LogbookEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchLogbooksAction),
       mergeMap(() =>
-        this.logbookApi.find().pipe(
+        this.logbookApi.find<Logbook>().pipe(
           map((logbooks: Logbook[]) =>
             fromActions.fetchLogbooksCompleteAction({ logbooks })
           ),

@@ -10,7 +10,9 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
 import { APP_CONFIG } from "app-config.module";
-import { PageEvent } from "@angular/material/paginator";
+import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
+import { MatButtonModule } from "@angular/material/button";
+import { NgxJsonViewerModule } from "ngx-json-viewer";
 
 const historyItems = [
   {
@@ -37,17 +39,27 @@ describe("DatasetLifecycleComponent", () => {
   let component: DatasetLifecycleComponent;
   let fixture: ComponentFixture<DatasetLifecycleComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [DatasetLifecycleComponent],
-      imports: [MatCardModule, MatIconModule, MatTableModule, PipesModule],
-      providers: [
-        DatePipe,
-        { provide: APP_CONFIG, useValue: { archiveWorkflowEnabled: true } },
-      ],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [DatasetLifecycleComponent],
+        imports: [
+          MatButtonModule,
+          MatCardModule,
+          MatIconModule,
+          MatPaginatorModule,
+          MatTableModule,
+          NgxJsonViewerModule,
+          PipesModule,
+        ],
+        providers: [
+          DatePipe,
+          { provide: APP_CONFIG, useValue: { archiveWorkflowEnabled: true } },
+        ],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetLifecycleComponent);
@@ -111,7 +123,9 @@ describe("DatasetLifecycleComponent", () => {
   describe("#downloadCsv()", () => {
     it("should create and download a csv file", () => {
       const spyObj = jasmine.createSpyObj("a", ["click", "remove"]);
-      const createElementSpy = spyOn(document, "createElement").and.returnValue(spyObj);
+      const createElementSpy = spyOn(document, "createElement").and.returnValue(
+        spyObj
+      );
       const url = "testUrl";
       spyOn(window.URL, "createObjectURL").and.returnValue(url);
       spyOn(window.URL, "revokeObjectURL").and.callThrough();

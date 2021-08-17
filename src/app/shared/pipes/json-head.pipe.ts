@@ -4,11 +4,11 @@ import { Pipe, PipeTransform } from "@angular/core";
   name: "jsonHead"
 })
 export class JsonHeadPipe implements PipeTransform {
-  transform(value: any, args?: any): any {
+  transform(value: Record<string, any>, args?: any): any {
     if (!value) {
       return null;
     }
-    const newvalue = {};
+    const newvalue: Record<string, unknown> = {};
     let count = 0;
     let outputString = "";
     for (const key of Object.keys(value)) {
@@ -22,7 +22,7 @@ export class JsonHeadPipe implements PipeTransform {
     const key1 = Object.keys(value).sort()[0];
     let key2 = Object.keys(value).sort()[1];
     let val1 = value[key1];
-    if (val1 !== undefined && val1.hasOwnProperty("unit")) {
+    if (val1?.unit) {
       val1 = val1.value.toString() + " " + val1.unit;
     }
     let val2 = " ";

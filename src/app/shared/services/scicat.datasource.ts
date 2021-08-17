@@ -5,17 +5,18 @@ import { catchError, finalize } from "rxjs/operators";
 import { ExportExcelService } from "./export-excel.service";
 import { environment } from "../../../environments/environment";
 import { LoopBackConfig } from "shared/sdk";
+import { Column } from "shared/modules/shared-table/shared-table.module";
 
 // For each different table type one instance of this class should be created
 
-const resolvePath = (object, path, defaultValue) => path
+const resolvePath = (object: any, path: string, defaultValue: unknown) => path
   .split(".")
   .reduce((o, p) => o ? o[p] : defaultValue, object);
 
 export class SciCatDataSource implements DataSource<any> {
   private exportSubscription: Subscription;
-  private dataForExcel = [];
-  private columnsdef = [];
+  private dataForExcel: unknown[] = [];
+  private columnsdef: Column[] = [];
   private url = "";
   private dataSubject = new BehaviorSubject<any[]>([]);
   private dataExportSubject = new BehaviorSubject<any[]>([]);
@@ -95,8 +96,8 @@ export class SciCatDataSource implements DataSource<any> {
       )
       .subscribe((data) => {
         // extend with unique field per row
-        const rows = [];
-        data.forEach((element: any, index: number) => {
+        const rows: Record<string, unknown>[] = [];
+        data.forEach((element: Record<string, unknown>, index: number) => {
           element["uniqueId"] = index + 1;
           rows.push(element);
         });

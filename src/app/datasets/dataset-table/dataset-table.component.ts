@@ -8,7 +8,8 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  SimpleChange
+  SimpleChange,
+  ViewEncapsulation,
 } from "@angular/core";
 import { Dataset, TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
@@ -20,7 +21,7 @@ import {
   deselectDatasetAction,
   selectAllDatasetsAction,
   changePageAction,
-  sortByColumnAction
+  sortByColumnAction,
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -28,12 +29,12 @@ import {
   getDatasetsPerPage,
   getPage,
   getTotalSets,
-  getDatasetsInBatch
+  getDatasetsInBatch,
 } from "state-management/selectors/datasets.selectors";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import {
   selectColumnAction,
-  deselectColumnAction
+  deselectColumnAction,
 } from "state-management/actions/user.actions";
 import {get} from "lodash";
 export interface SortChangeEvent {
@@ -49,7 +50,8 @@ export interface SortChangeEvent {
 @Component({
   selector: "dataset-table",
   templateUrl: "dataset-table.component.html",
-  styleUrls: ["dataset-table.component.scss"]
+  styleUrls: ["dataset-table.component.scss"],
+  encapsulation: ViewEncapsulation.None,
 })
 export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   private inBatchPids: string[] = [];
@@ -60,11 +62,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
   datasetCount$ = this.store.select(getTotalSets);
 
-  @Input() tableColumns: TableColumn[];
-  displayedColumns: string[];
-  @Input() selectedSets: Dataset[] = [];
+  @Input() tableColumns: TableColumn[] | null = null;
+  displayedColumns: string[] = [];
+  @Input() selectedSets: Dataset[] | null = null;
 
-  datasets: Dataset[];
+  datasets: Dataset[] = [];
   // datasetDerivationsMaps: DatasetDerivationsMap[] = [];
   // derivationMapPids: string[] = [];
 
@@ -142,7 +144,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   isSelected(dataset: Dataset): boolean {
-    return this.selectedSets.map(set => set.pid).indexOf(dataset.pid) !== -1;
+    if (!this.selectedSets) {
+      return false;
+    }
+    return this.selectedSets.map((set) => set.pid).indexOf(dataset.pid) !== -1;
   }
 
   isAllSelected(): boolean {
@@ -209,19 +214,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.pipe(select(getDatasetsInBatch)).subscribe(datasets => {
-        this.inBatchPids = datasets.map(dataset => dataset.pid);
+      this.store.pipe(select(getDatasetsInBatch)).subscribe((datasets) => {
+        this.inBatchPids = datasets.map((dataset) => dataset.pid);
       })
     );
 
     if (this.tableColumns) {
       this.displayedColumns = this.tableColumns
-        .filter(column => column.enabled)
-        .map(column => column.type + "_" + column.name);
+        .filter((column) => column.enabled)
+        .map((column) => column.type + "_" + column.name);
     }
 
     this.subscriptions.push(
-      this.store.pipe(select(getDatasets)).subscribe(datasets => {
+      this.store.pipe(select(getDatasets)).subscribe((datasets) => {
         this.datasets = datasets;
 
         // this.derivationMapPids = this.datasetDerivationsMaps.map(
@@ -242,13 +247,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
       if (propName === "tableColumns") {
         this.tableColumns = changes[propName].currentValue;
         this.displayedColumns = changes[propName].currentValue
-          .filter(column => column.enabled)
-          .map(column => column.type + "_" + column.name);
+          .filter((column: TableColumn) => column.enabled)
+          .map((column: TableColumn) => column.type + "_" + column.name);
       }
     }
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

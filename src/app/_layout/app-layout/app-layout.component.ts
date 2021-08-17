@@ -9,7 +9,7 @@ import { Observable } from "rxjs";
   styleUrls: ["./app-layout.component.scss"]
 })
 export class AppLayoutComponent implements OnInit {
-  darkTheme$: Observable<any>;
+  darkTheme$: Observable<any> = new Observable<any>();
 
   constructor(private store: Store<any>) {}
 

@@ -17,7 +17,6 @@ import {
 } from "state-management/actions/user.actions";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Meta, Title } from "@angular/platform-browser";
-import { environment } from "../environments/environment";
 import { Subscription } from "rxjs";
 import {
   getIsLoading,
@@ -36,7 +35,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
   title: string;
   facility: string;
   status: string;
-  userMessageSubscription: Subscription;
+  userMessageSubscription: Subscription = new Subscription();
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -46,7 +45,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private store: Store<any>
   ) {
-    this.facility = this.appConfig.facility;
+    this.facility = this.appConfig.facility ?? "";
     if (appConfig.production === true) {
       this.status = "";
     } else {
@@ -67,12 +66,8 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
    */
   ngOnInit() {
     this.store.dispatch(fetchCurrentUserAction());
-    LoopBackConfig.setBaseURL(environment.lbBaseURL);
+    LoopBackConfig.setBaseURL(this.appConfig.lbBaseURL);
     console.log(LoopBackConfig.getPath());
-    if ("lbApiVersion" in environment) {
-      const lbApiVersion = environment["lbApiVersion"];
-      LoopBackConfig.setApiVersion(lbApiVersion);
-    }
 
     if (window.location.pathname.indexOf("logout") !== -1) {
       this.logout();
@@ -81,7 +76,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     this.userMessageSubscription = this.store
       .pipe(select(getUserMessage))
       .subscribe(current => {
-        if (current.content !== undefined) {
+        if (current && current.content !== undefined) {
           this.snackBar.open(current.content, undefined, {
             duration: current.duration
           });

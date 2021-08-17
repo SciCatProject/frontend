@@ -5,7 +5,7 @@ import {
   MockStore,
   MockPublishedDataApi,
   MockRouter,
-  MockActivatedRoute
+  MockActivatedRoute,
 } from "shared/MockStubs";
 import { Store } from "@ngrx/store";
 import { PublishedDataApi } from "shared/sdk";
@@ -15,46 +15,49 @@ import { LinkyModule } from "ngx-linky";
 import { SharedCatanieModule } from "shared/shared.module";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 
 describe("PublisheddataDetailsComponent", () => {
   let component: PublisheddataDetailsComponent;
   let fixture: ComponentFixture<PublisheddataDetailsComponent>;
 
-  const appConfig =  {
+  const appConfig = {
     editMetadataEnabled: true,
     editPublishedData: true,
-    jsonMetadataEnabled: true
+    jsonMetadataEnabled: true,
   };
 
-
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [PublisheddataDetailsComponent],
-      imports: [
-        AppConfigModule,
-        MatCardModule,
-        MatIconModule,
-        NgxJsonViewerModule,
-        LinkyModule,
-        SharedCatanieModule
-      ]
-    });
-    TestBed.overrideComponent(PublisheddataDetailsComponent, {
-      set: {
-        providers: [
-          { provide: Store, useClass: MockStore },
-          { provide: Router, useClass: MockRouter },
-          { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          { provide: PublishedDataApi, useClass: MockPublishedDataApi },
-          {
-            provide: APP_CONFIG,
-            useValue: appConfig
-          }
-        ]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [PublisheddataDetailsComponent],
+        imports: [
+          AppConfigModule,
+          MatButtonModule,
+          MatCardModule,
+          MatIconModule,
+          NgxJsonViewerModule,
+          LinkyModule,
+          SharedCatanieModule,
+        ],
+      });
+      TestBed.overrideComponent(PublisheddataDetailsComponent, {
+        set: {
+          providers: [
+            { provide: Store, useClass: MockStore },
+            { provide: Router, useClass: MockRouter },
+            { provide: ActivatedRoute, useClass: MockActivatedRoute },
+            { provide: PublishedDataApi, useClass: MockPublishedDataApi },
+            {
+              provide: APP_CONFIG,
+              useValue: appConfig,
+            },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PublisheddataDetailsComponent);
@@ -80,6 +83,5 @@ describe("PublisheddataDetailsComponent", () => {
       expect(compiled.querySelector("#editBtn")).toBeNull();
       expect(compiled.querySelector("#jsonMetadataContainer")).toBeNull();
     });
-
   });
 });

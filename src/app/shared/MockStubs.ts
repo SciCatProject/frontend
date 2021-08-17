@@ -72,14 +72,14 @@ export class MockRouter {
     observer.next();
     observer.complete();
   });
-  navigate = (url, params) => {};
+  navigate = () => {};
 
   // jasmine.createSpy('navigate');
   navigateByUrl(url: string) {
     return url;
   }
 
-  createUrlTree = (commands, navExtras = {}) => {};
+  createUrlTree = () => {};
   serializeUrl = (url: UrlTree) => "";
 }
 
@@ -92,21 +92,21 @@ export class MockConfigService {
 }
 
 export class MockStore {
-  public dispatch(obj) {}
+  public dispatch() {}
 
-  public select(obj) {
+  public select() {
     return of([]);
   }
 
-  public pipe(obj) {
+  public pipe() {
     return of(null);
   }
 }
 
 export class MockArchivingService {
-  public dispatch(obj) {}
+  public dispatch() {}
 
-  public select(obj) {
+  public select() {
     return of([]);
   }
 }
@@ -142,7 +142,7 @@ export class MockPublishedDataApi {
 }
 
 export class MockShareGroupApi {
-  upsert(obj) {
+  upsert() {
     return of({});
   }
 }

@@ -1,6 +1,3 @@
-@use '~@angular/material' as mat;
-@import "src/theme.scss";
-
 .header {
   position: sticky;
   position: -webkit-sticky;
@@ -9,10 +6,6 @@
 
   mat-toolbar {
     height: 7vh;
-
-    a {
-      color: mat.get-color-from-palette($primary, default-contrast);
-    }
 
     .logo {
       height: 4vh;

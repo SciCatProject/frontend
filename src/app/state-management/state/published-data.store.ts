@@ -2,7 +2,7 @@ import { PublishedData, GenericFilters } from "state-management/models";
 
 export interface PublishedDataState {
   publishedData: PublishedData[];
-  currentPublishedData: PublishedData;
+  currentPublishedData: PublishedData | undefined;
 
   totalCount: number;
 
@@ -11,7 +11,7 @@ export interface PublishedDataState {
 
 export const initialPublishedDataState: PublishedDataState = {
   publishedData: [],
-  currentPublishedData: null,
+  currentPublishedData: undefined,
 
   totalCount: 0,
 

@@ -5,9 +5,7 @@
         New Action
       </mat-card-header>
 
-      <ng-template
-        [ngIf]="(result$ | async) || (derivedDatasets$ | async).length > 0"
-      >
+      <ng-template [ngIf]="(result$ | async) || derivedDatasets.length > 0">
         <div class="details">
           <table>
             <tr>
@@ -18,11 +16,11 @@
                 </ng-container>
 
                 <ng-container *ngIf="result['errno'] && result['code']">
-                  Error reducing dataset: {{ result['code'] }}
+                  Error reducing dataset: {{ result["code"] }}
                 </ng-container>
               </td>
               <ng-template #noResult>
-                <td *ngIf="(derivedDatasets$ | async).length > 0">
+                <td *ngIf="derivedDatasets.length > 0">
                   Previously derived dataset available.
                 </td>
               </ng-template>
@@ -61,7 +59,7 @@
                 <div fxFlex="50">
                   <mat-form-field
                     *ngIf="
-                      selectedAction.value === 'Reduce';
+                      selectedAction?.value === 'Reduce';
                       else analyzeSelector
                     "
                   >
@@ -95,12 +93,12 @@
                   <h4>Description</h4>
                   <ng-container
                     *ngIf="
-                      selectedAction.value === 'Reduce';
+                      selectedAction?.value === 'Reduce';
                       else analyzeDescription
                     "
                   >
                     <div *ngFor="let script of reduceScripts">
-                      <p *ngIf="script.value === selectedScript.value">
+                      <p *ngIf="script.value === selectedScript?.value">
                         {{ script.description }}
                       </p>
                     </div>
@@ -108,13 +106,13 @@
 
                   <ng-template #analyzeDescription>
                     <div *ngFor="let script of analyzeScripts">
-                      <p *ngIf="script.value === selectedScript.value">
+                      <p *ngIf="script.value === selectedScript?.value">
                         {{ script.description }}
                       </p>
                     </div>
                   </ng-template>
 
-                  <ng-container *ngIf="!selectedScript.value">
+                  <ng-container *ngIf="!selectedScript?.value">
                     Select a script to view description.
                   </ng-container>
                 </div>
@@ -129,7 +127,12 @@
                 >
                   Back
                 </button>
-                <button mat-stroked-button matStepperNext type="button" id="ScriptNext">
+                <button
+                  mat-stroked-button
+                  matStepperNext
+                  type="button"
+                  id="ScriptNext"
+                >
                   Next
                 </button>
               </div>
@@ -141,11 +144,11 @@
                 <table>
                   <tr>
                     <th>Action</th>
-                    <td>{{ selectedAction.value }}</td>
+                    <td>{{ selectedAction?.value }}</td>
                   </tr>
                   <tr>
                     <th>Script</th>
-                    <td>{{ selectedScript.value }}</td>
+                    <td>{{ selectedScript?.value }}</td>
                   </tr>
                 </table>
               </div>
@@ -171,7 +174,7 @@
       </div>
     </mat-card>
 
-    <mat-card *ngIf="derivedDatasets$ | async as derivedDatasets">
+    <mat-card *ngIf="derivedDatasets">
       <mat-card-header class="derived-header">
         Derived Datasets
       </mat-card-header>
@@ -182,7 +185,7 @@
         <!-- Timestamp Column -->
         <ng-container matColumnDef="timestamp">
           <mat-header-cell *matHeaderCellDef>
-            <div fxLayout="column" style="align-items: center">
+            <div fxLayout="column" style="align-items: center;">
               <div>
                 <mat-icon>calendar_today</mat-icon>
               </div>
@@ -197,7 +200,7 @@
         <!-- Name Column -->
         <ng-container matColumnDef="name">
           <mat-header-cell *matHeaderCellDef>
-            <div fxLayout="column" style="align-items: center">
+            <div fxLayout="column" style="align-items: center;">
               <div>
                 <mat-icon>fingerprint</mat-icon>
               </div>
@@ -212,7 +215,7 @@
         <!-- Pid Column -->
         <ng-container matColumnDef="pid">
           <mat-header-cell *matHeaderCellDef>
-            <div fxLayout="column" style="align-items: center">
+            <div fxLayout="column" style="align-items: center;">
               <div>
                 <mat-icon> perm_contact_calendar </mat-icon>
               </div>
@@ -227,7 +230,7 @@
         <!-- Software Column -->
         <ng-container matColumnDef="software">
           <mat-header-cell *matHeaderCellDef>
-            <div fxLayout="column" style="align-items: center">
+            <div fxLayout="column" style="align-items: center;">
               <div>
                 <mat-icon> screen_share</mat-icon>
               </div>

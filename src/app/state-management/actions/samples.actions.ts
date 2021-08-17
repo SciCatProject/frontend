@@ -93,7 +93,7 @@ export const saveCharacteristicsFailedAction = createAction(
 
 export const addAttachmentAction = createAction(
   "[Sample] Add Attachment",
-  props<{ attachment: Attachment }>()
+  props<{ attachment: Partial<Attachment> }>()
 );
 export const addAttachmentCompleteAction = createAction(
   "[Sample] Add Attachment Complete",

@@ -2,7 +2,7 @@ import {
   ComponentFixture,
   TestBed,
   inject,
-  waitForAsync
+  waitForAsync,
 } from "@angular/core/testing";
 
 import { AnonymousDetailsDashboardComponent } from "./anonymous-details-dashboard.component";
@@ -14,36 +14,48 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MockActivatedRoute, MockStore } from "shared/MockStubs";
 import {
   clearFacetsAction,
-  addKeywordFilterAction
+  addKeywordFilterAction,
 } from "state-management/actions/datasets.actions";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 
 describe("AnonymousDetailsDashboardComponent", () => {
   let component: AnonymousDetailsDashboardComponent;
   let fixture: ComponentFixture<AnonymousDetailsDashboardComponent>;
 
   const router = {
-    navigateByUrl: jasmine.createSpy("navigateByUrl")
+    navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      declarations: [AnonymousDetailsDashboardComponent],
-      imports: [AppConfigModule, SharedCatanieModule, StoreModule.forRoot({})]
-    });
-    TestBed.overrideComponent(AnonymousDetailsDashboardComponent, {
-      set: {
-        providers: [
-          { provide: Router, useValue: router },
-          { provide: APP_CONFIG, useValue: { editMetadataEnabled: true } },
-          { provide: ActivatedRoute, useClass: MockActivatedRoute }
-        ]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        declarations: [AnonymousDetailsDashboardComponent],
+        imports: [
+          AppConfigModule,
+          MatButtonModule,
+          MatIconModule,
+          MatTabsModule,
+          SharedCatanieModule,
+          StoreModule.forRoot({}),
+        ],
+      });
+      TestBed.overrideComponent(AnonymousDetailsDashboardComponent, {
+        set: {
+          providers: [
+            { provide: Router, useValue: router },
+            { provide: APP_CONFIG, useValue: { editMetadataEnabled: true } },
+            { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AnonymousDetailsDashboardComponent);

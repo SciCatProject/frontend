@@ -8,7 +8,7 @@ import { APP_CONFIG, AppConfig } from "app-config.module";
   styleUrls: ["proposal-detail.component.scss"],
 })
 export class ProposalDetailComponent {
-  @Input() proposal: Proposal;
+  @Input() proposal: Proposal = new Proposal();
 
   show = false;
 

@@ -22,6 +22,9 @@ import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { DatasetState } from "state-management/state/datasets.store";
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { removeFromBatchAction } from "state-management/actions/datasets.actions";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatInputModule } from "@angular/material/input";
 
 describe("BatchViewComponent", () => {
   let component: BatchViewComponent;
@@ -41,8 +44,11 @@ describe("BatchViewComponent", () => {
         declarations: [BatchViewComponent],
         imports: [
           MatButtonModule,
+          MatChipsModule,
           MatDialogModule,
+          MatFormFieldModule,
           MatIconModule,
+          MatInputModule,
           MatTableModule,
           SharedCatanieModule,
         ],

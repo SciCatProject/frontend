@@ -7,10 +7,10 @@ import { APP_CONFIG, AppConfig } from "app-config.module";
   styleUrls: ["./help.component.scss"]
 })
 export class HelpComponent implements OnInit {
-  facility: string;
-  ingestManual: string;
-  gettingStarted: string;
-  shoppingCartEnabled: boolean;
+  facility: string | null = null;
+  ingestManual: string | null = null;
+  gettingStarted: string | null = null;
+  shoppingCartEnabled = false;
   constructor(@Inject(APP_CONFIG) public appConfig: AppConfig) {}
 
   ngOnInit() {

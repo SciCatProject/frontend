@@ -5,6 +5,12 @@ import { LoopBackAuth } from "shared/sdk";
 import { DateTime } from "luxon";
 import { Column } from "shared/modules/shared-table/shared-table.module";
 
+export interface FilterLimits {
+  limit: number;
+  skip: number;
+  order?: string;
+}
+
 @Injectable({
   providedIn: "root",
 })
@@ -22,7 +28,7 @@ export class ScicatDataService {
 
   // TODO when do I need to use "mode" syntax (may be for nested keys ?)
   createColumnFilterMongoExpression = (columns: Column[], filterExpressions: any) => {
-    const result = {};
+    const result: Record<string, any> = {};
     if (filterExpressions) {
       let blocal: DateTime;
       let elocal: DateTime;
@@ -133,7 +139,7 @@ export class ScicatDataService {
       filterFields["text"] = globalFilter;
     }
 
-    const limits = { limit: pageSize, skip: pageSize * pageNumber };
+    const limits: FilterLimits = { limit: pageSize, skip: pageSize * pageNumber };
     if (sortField) {
       limits["order"] = sortField + ":" + sortOrder;
     }

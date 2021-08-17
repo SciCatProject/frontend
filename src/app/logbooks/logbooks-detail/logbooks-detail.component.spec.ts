@@ -4,21 +4,36 @@ import { LogbooksDetailComponent } from "./logbooks-detail.component";
 import { LinkyModule } from "ngx-linky";
 import {
   PageChangeEvent,
-  SortChangeEvent
+  SortChangeEvent,
 } from "shared/modules/table/table.component";
 import { MatTableModule } from "@angular/material/table";
+import { MatIconModule } from "@angular/material/icon";
+import { MatCardModule } from "@angular/material/card";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatPaginatorModule } from "@angular/material/paginator";
 
 describe("LogbooksDetailComponent", () => {
   let component: LogbooksDetailComponent;
   let fixture: ComponentFixture<LogbooksDetailComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
-      imports: [MatTableModule, LinkyModule],
-      declarations: [LogbooksDetailComponent]
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        schemas: [NO_ERRORS_SCHEMA],
+        imports: [
+          MatCardModule,
+          MatDividerModule,
+          MatExpansionModule,
+          MatIconModule,
+          MatPaginatorModule,
+          MatTableModule,
+          LinkyModule,
+        ],
+        declarations: [LogbooksDetailComponent],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LogbooksDetailComponent);
@@ -41,7 +56,7 @@ describe("LogbooksDetailComponent", () => {
       const event: PageChangeEvent = {
         pageIndex: 1,
         pageSize: 25,
-        length: 100
+        length: 100,
       };
 
       component.doPageChange(event);
@@ -57,7 +72,7 @@ describe("LogbooksDetailComponent", () => {
 
       const event: SortChangeEvent = {
         active: "test",
-        direction: "asc"
+        direction: "asc",
       };
 
       component.doSortChange(event);
