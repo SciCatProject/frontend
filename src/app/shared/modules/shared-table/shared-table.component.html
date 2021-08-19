@@ -11,9 +11,9 @@
 
 <!-- Top ToolBar Start-->
 <div class="table-toolbar" fxLayout="row" fxLayoutAlign="space-between center">
-  <mat-form-field appearance="standard">
+  <mat-form-field [formGroup]="filterFormControl" appearance="standard">
     <mat-icon matPrefix>search</mat-icon>
-    <input type="text" matInput placeholder="global word-search" #globalFilter>
+    <input type="text" matInput placeholder="global word-search" formControlName="globalFilter">
   </mat-form-field>
 
   <mat-paginator [length]="dataSource.count$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
@@ -45,7 +45,7 @@
 <mat-table #dataTable class="mat-elevation-z2" [dataSource]="dataSource" matSort matSortStart="desc" multiTemplateDataRows>
 
   <!-- Toggle Button For Hidden Filters Start -->
-  <ng-container matColumnDef="hidden-filter-trigger" >
+  <ng-container matColumnDef="hidden-filter-trigger">
     <mat-header-cell  *matHeaderCellDef="let row" class="trigger-column">
       <span class="btnToggleExpand" (click)="toggleExpandFlag($event,'filters')" [ngClass]="[expandedElement['filters'] ?  'active' : 'inActive']"></span>
     </mat-header-cell>
@@ -54,7 +54,7 @@
 
   <!-- Toggle Button For Hidden Columns Start -->
   <ng-container matColumnDef="trigger">
-    <mat-header-cell *matHeaderCellDef class="trigger-column first-header-cell" >
+    <mat-header-cell *matHeaderCellDef class="trigger-column first-header-cell">
       <mat-icon>menu</mat-icon>
     </mat-header-cell>
     <mat-cell *matCellDef="let row; let i = dataIndex;" class="trigger-column">
@@ -80,7 +80,8 @@
             [routerLink]="['/datasets/',getPropertyByPath(row,column.id)]">{{ getPropertyByPath(row,column.id) }}</a>
         </ng-container>
         <ng-container *ngSwitchDefault class="ellipsis">
-          {{ getPropertyByPath(row,column.id)  | newDynamicPipe: column.format }}</ng-container>
+          {{ getPropertyByPath(row,column.id) | newDynamicPipe: column.format }}
+        </ng-container>
       </ng-container>
     </mat-cell>
   </ng-container>
@@ -111,49 +112,47 @@
   <!-- Cell Definition For Visible Filter Start -->
   <ng-container matColumnDef="{{column.id}}-filter" *ngFor="let column of visibleColumns">
     <mat-header-cell *matHeaderCellDef="let row">
-      <mat-form-field appearance="outline" *ngIf="column.matchMode === 'between'" class="max-width">
-          <mat-date-range-input [rangePicker]="rangePicker">
-            <input #allFilters name="{{ column.id + '.start' }}"  matStartDate placeholder="Start date"
-              (dateChange)="dateChanged($event,column.id+'.start')">
-            <input #allFilters name="{{ column.id + '.end'}}" matEndDate placeholder="End date"
-              (dateChange)="dateChanged($event,column.id+'.end')">
-          </mat-date-range-input>
-          <mat-datepicker-toggle matSuffix [for]="rangePicker" ></mat-datepicker-toggle>
+      <mat-form-field [formGroup]="filterFormControl" appearance="outline" *ngIf="column.matchMode === 'between'" class="max-width">
+        <mat-date-range-input [rangePicker]="rangePicker">
+          <input [formControlName]="column.id + '.start'" name="{{ column.id + '.start' }}" matStartDate placeholder="Start date"
+            (dateChange)="dateChanged($event,column.id+'.start')">
+          <input [formControlName]="column.id + '.end'" name="{{ column.id + '.end'}}" matEndDate placeholder="End date"
+            (dateChange)="dateChanged($event,column.id+'.end')">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
         <mat-date-range-picker #rangePicker>
         </mat-date-range-picker>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" *ngIf="column.matchMode !== 'between'">
-        <input #allFilters matInput autocomplete="off" name="{{ column.id }}" placeholder="{{ column.matchMode }}" />
+      <mat-form-field [formGroup]="filterFormControl" appearance="outline" *ngIf="column.matchMode !== 'between'">
+        <input [formControlName]="column.id" matInput autocomplete="off" name="{{ column.id }}" placeholder="{{ column.matchMode }}" />
       </mat-form-field>
     </mat-header-cell>
   </ng-container>
   <!-- Cell Definition For Visible Filter End -->
 
   <!-- Cell Definition For Hidden Filter Start -->
-  <ng-container matColumnDef="hidden-filter" >
+  <ng-container matColumnDef="hidden-filter">
     <mat-header-cell *matHeaderCellDef="let row" fxLayout="row" fxLayoutAlign="start" class="over-flow-scroll">
-      <div *ngFor="let hiddenColumn of hiddenColumns" fxLayout="column" class="padding-right-1em" >
+      <div *ngFor="let hiddenColumn of hiddenColumns" fxLayout="column" class="padding-right-1em">
         <p>
           <strong>{{hiddenColumn.label}}</strong>
         <span>
-          <mat-form-field appearance="outline" *ngIf="hiddenColumn.matchMode==='between'" class="max-width">
+          <mat-form-field [formGroup]="filterFormControl" appearance="outline" *ngIf="hiddenColumn.matchMode==='between'" class="max-width">
             <mat-date-range-input [rangePicker]="rangePicker">
-              <input #allFilters   matStartDate placeholder="Start date"
+              <input [formControlName]="hiddenColumn.id + '.start'"   matStartDate placeholder="Start date"
                 (dateChange)="dateChanged($event,hiddenColumn.id+'.start')">
-              <input #allFilters  matEndDate placeholder="End date"
+              <input [formControlName]="hiddenColumn.id+'.end'" matEndDate placeholder="End date"
                 (dateChange)="dateChanged($event,hiddenColumn.id+'.end')">
             </mat-date-range-input>
-            <mat-datepicker-toggle matSuffix [for]="rangePicker" ></mat-datepicker-toggle>
-          <mat-date-range-picker #rangePicker>
-          </mat-date-range-picker>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" *ngIf="hiddenColumn.matchMode !== 'between'">
-          <input #allFilters matInput autocomplete="off" name="{{ hiddenColumn.id }}" placeholder="{{ hiddenColumn.matchMode }}" />
-        </mat-form-field>
-        </span>
-      </p>
+            <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+              <mat-date-range-picker #rangePicker></mat-date-range-picker>
+            </mat-form-field>
+            <mat-form-field [formGroup]="filterFormControl" appearance="outline" *ngIf="hiddenColumn.matchMode !== 'between'">
+              <input [formControlName]="hiddenColumn.id" matInput autocomplete="off" name="{{ hiddenColumn.id }}" placeholder="{{ hiddenColumn.matchMode }}" />
+            </mat-form-field>
+          </span>
+        </p>
       </div>
     </mat-header-cell>
   </ng-container>
@@ -162,17 +161,16 @@
   <mat-header-row *matHeaderRowDef="visibleColumnsIds; sticky: true" class="matHeaderRow first-header-row"></mat-header-row>
 
   <!-- Row definition for filter columns -->
-  <mat-header-row  *matHeaderRowDef="getFilterColumns(); sticky: true" [class.hidden]="hideFilterFlag"></mat-header-row>
+  <mat-header-row *matHeaderRowDef="getFilterColumns(); sticky: true" [class.hidden]="hideFilterFlag"></mat-header-row>
 
   <!-- Row definition for hidden filter columns on small screen -->
-  <mat-header-row  *matHeaderRowDef="['hidden-filter']; sticky: true" [@detailExpand]="getExpandFlag('filters')"></mat-header-row>
+  <mat-header-row *matHeaderRowDef="['hidden-filter']; sticky: true" [@detailExpand]="getExpandFlag('filters')"></mat-header-row>
 
-  <mat-row *matRowDef="let row; let i = dataIndex; columns: visibleColumnsIds;"
-    class="matRowVisible visible-row-{{row.uniqueId}}" (click)="onRowClick(row)"></mat-row>
+  <mat-row *matRowDef="let row; let i = dataIndex; columns: visibleColumnsIds;" class="matRowVisible visible-row-{{row.uniqueId}}" (click)="onRowClick(row)"></mat-row>
 
   <!-- Body row definition for hidden columns -->
-  <mat-row *matRowDef="let row; let i = dataIndex; columns: ['hidden'];" [@detailExpand]="getExpandFlag(row.uniqueId)"
-    style="overflow: hidden;"
+  <mat-row *matRowDef="let row; let i = dataIndex; columns: ['hidden'];"
+    [@detailExpand]="getExpandFlag(row.uniqueId)" style="overflow: hidden;"
     class="matRowHidden hidden-row-{{row.uniqueId}} hidColLength-{{hiddenColumns.length}}"
     [class.hidden]="getExpandFlag(row.uniqueId) === 'collapsed'"
     [ngClass]="expandedElement[row.uniqueId] ? 'expanded' : 'collapsed'">

@@ -28,15 +28,6 @@
       }
     }
 
-    .btnToggleExpand.active:before {
-      background-color: red;
-    }
-
-    .btnToggleExpand:before {
-      color: white;
-      border-color: white;
-      background-color: green;
-    }
 
     mat-row:hover {
       background-color: mat.get-color-from-palette($hover, "lighter");
