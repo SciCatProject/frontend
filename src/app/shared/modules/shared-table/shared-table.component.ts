@@ -63,8 +63,8 @@ export class SharedTableComponent
   private subscriptions : Subscription[] = [];
   public MIN_COLUMN_WIDTH = 200;
 
-  filterFormControl: FormGroup;
-  filterExpressions = {};
+  filterFormControl = new FormGroup({});
+  filterExpressions : {[key: string]: string} = {};
   hideFilterFlag = false;
   // Visible Hidden Columns
   visibleColumns: Column[];
@@ -103,6 +103,7 @@ export class SharedTableComponent
           this.dataTable["_elementRef"].nativeElement.clientWidth
         );
     }));
+
   }
   ngOnInit(){
     this.filterFormControl = this.initilizeFormControl();
@@ -119,17 +120,22 @@ export class SharedTableComponent
       }
       return acc;
     }, {});
-    formControls["globalFilter"] = [""];
+    formControls["globalSearch"] = [""];
     return this.formBuilder.group(formControls);
   }
 
   activeColumnFilters(){
     return this.filterFormControl.valueChanges
     .pipe(debounceTime(650))
-    .subscribe( (values : {[key: string]: string | DateTime}) => {
-      const queryParams = {};
+    .subscribe( (values : {[key: string]: any }) => {
+      const queryParams: {[key: string]: string | null} = {};
       for (let [columnId, value] of Object.entries(values)){
-        if (value) {
+        // handle date filters
+        if ((columnId.endsWith('.start') || columnId.endsWith('.end')) && value){
+          const date = DateTime.fromISO(value).toISODate();
+          this.filterExpressions[columnId] = date;
+          queryParams[columnId] = date;
+        } else if (value) {
           this.filterExpressions[columnId] = value;
           queryParams[columnId] = value;
         } else {
@@ -197,7 +203,6 @@ export class SharedTableComponent
 
   loadAllExportData() {
     this.dataSource.loadExportData(
-      this.filterFormControl.get("globalFilter").value,
       this.filterExpressions,
       this.sort.active,
       this.sort.direction
@@ -206,7 +211,6 @@ export class SharedTableComponent
 
   loadDataPage() {
     this.dataSource.loadAllData(
-      this.filterFormControl.get("globalFilter").value,
       this.filterExpressions,
       this.sort.active,
       this.sort.direction,
@@ -296,24 +300,10 @@ export class SharedTableComponent
   }
 
   resetFilters(){
-    const queryParams = this.route.snapshot.queryParamMap;
-    const { globalSearch, ...defaultFilters } =  queryParams.keys.reduce((acc:{[key:string]: string} , filter: string) => {
-      if(!this.filterExpressions[filter]){
-        acc[filter] = queryParams.get(filter);
-      }
-      return acc;
-    }, {});
-
     Object.keys(this.filterFormControl.controls).forEach((filter => {
       this.filterFormControl.get([filter]).setValue("");
     }));
-
     this.filterExpressions = {};
-
-    this.router.navigate([], {
-      queryParams: defaultFilters,
-    });
-    this.loadDataPage();
   }
 
   toggleColumns(tableWidth: number) {
@@ -328,10 +318,8 @@ export class SharedTableComponent
 
         if (column.hideOrder && tableWidth < columnWidth) {
           column.visible = false;
-
           continue;
         }
-
         tableWidth -= columnWidth;
         column.visible = true;
       }
@@ -339,6 +327,7 @@ export class SharedTableComponent
       this.columnsdef = sortedColumns.sort((a, b) => a.order - b.order);
       this.visibleColumns = this.columnsdef.filter((column) => column.visible);
       this.hiddenColumns = this.columnsdef.filter((column) => !column.visible);
+      this.expandedElement = {filters: false}; // reset expandElement to get ride of empty row when browser increases size
       this.zone.run(() => {
         this._changeDetectorRef.detectChanges();
       });
@@ -354,17 +343,6 @@ export class SharedTableComponent
     return pathString.split(".").reduce((o, i) => o[i], obj);
   }
 
-  // both start and end trigger their own event on change
-  dateChanged(event: MatDatepickerInputEvent<DateTime>, columnId: string) {
-    if (event.value) {
-      this.filterExpressions[columnId] = event.value.toISODate();
-      this.router.navigate([], {
-        queryParams: { [columnId]: this.filterExpressions[columnId] },
-        queryParamsHandling: "merge",
-      });
-      this.loadDataPage();
-    }
-  }
   getFilterColumns(){
     const filterColumns = this.visibleColumns.map((column) => (`${column.id}-filter`));
     return this.hiddenColumns.length? [`hidden-filter-trigger`, ...filterColumns] : filterColumns;

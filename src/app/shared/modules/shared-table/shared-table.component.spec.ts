@@ -8,11 +8,20 @@ import { SciCatDataSource } from "shared/services/scicat.datasource";
 import { SharedTableComponent } from "./shared-table.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { MatMenuModule } from "@angular/material/menu";
+import { FormBuilder } from "@angular/forms";
 
 describe("SharedTableComponent", () => {
   let component: SharedTableComponent;
   let fixture: ComponentFixture<SharedTableComponent>;
-
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [],
+        imports: [],
+        providers: [FormBuilder],
+      }).compileComponents();
+    })
+  );
   const dataSource = {
     loadAllData: () => {},
     loadExportData: () => {},
@@ -64,7 +73,6 @@ describe("SharedTableComponent", () => {
       component.loadAllExportData();
 
       expect(loadSpy).toHaveBeenCalledOnceWith(
-        component.globalFilter.nativeElement.value,
         component.filterExpressions,
         component.sort.active,
         component.sort.direction
@@ -79,7 +87,6 @@ describe("SharedTableComponent", () => {
       component.loadDataPage();
 
       expect(loadSpy).toHaveBeenCalledOnceWith(
-        component.globalFilter.nativeElement.value,
         component.filterExpressions,
         component.sort.active,
         component.sort.direction,

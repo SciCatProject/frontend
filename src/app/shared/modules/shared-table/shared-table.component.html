@@ -13,7 +13,7 @@
 <div class="table-toolbar" fxLayout="row" fxLayoutAlign="space-between center">
   <mat-form-field [formGroup]="filterFormControl" appearance="standard">
     <mat-icon matPrefix>search</mat-icon>
-    <input type="text" matInput placeholder="global word-search" formControlName="globalFilter">
+    <input type="text" matInput placeholder="global word-search" formControlName="globalSearch">
   </mat-form-field>
 
   <mat-paginator [length]="dataSource.count$ | async" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
@@ -114,10 +114,9 @@
     <mat-header-cell *matHeaderCellDef="let row">
       <mat-form-field [formGroup]="filterFormControl" appearance="outline" *ngIf="column.matchMode === 'between'" class="max-width">
         <mat-date-range-input [rangePicker]="rangePicker">
-          <input [formControlName]="column.id + '.start'" name="{{ column.id + '.start' }}" matStartDate placeholder="Start date"
-            (dateChange)="dateChanged($event,column.id+'.start')">
-          <input [formControlName]="column.id + '.end'" name="{{ column.id + '.end'}}" matEndDate placeholder="End date"
-            (dateChange)="dateChanged($event,column.id+'.end')">
+          <input name="{{ column.id + '.start' }}" matStartDate placeholder="Start date" [formControlName]="column.id + '.start'"
+            >
+          <input name="{{ column.id + '.end'}}" matEndDate placeholder="End date" [formControlName]="column.id + '.end'">
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
         <mat-date-range-picker #rangePicker>
@@ -140,10 +139,8 @@
         <span>
           <mat-form-field [formGroup]="filterFormControl" appearance="outline" *ngIf="hiddenColumn.matchMode==='between'" class="max-width">
             <mat-date-range-input [rangePicker]="rangePicker">
-              <input [formControlName]="hiddenColumn.id + '.start'"   matStartDate placeholder="Start date"
-                (dateChange)="dateChanged($event,hiddenColumn.id+'.start')">
-              <input [formControlName]="hiddenColumn.id+'.end'" matEndDate placeholder="End date"
-                (dateChange)="dateChanged($event,hiddenColumn.id+'.end')">
+              <input  matStartDate placeholder="Start date" [formControlName]="hiddenColumn.id + '.start'">
+              <input matEndDate placeholder="End date" [formControlName]="hiddenColumn.id + '.end'">
             </mat-date-range-input>
             <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
               <mat-date-range-picker #rangePicker></mat-date-range-picker>
