@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import { loginAction } from "state-management/actions/user.actions";
+import {fetchCurrentUserAction, loginAction} from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
 import {
@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private store: Store<any>,
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {
-    this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
+    this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "";
   }
 
   openPrivacyDialog() {
@@ -78,8 +78,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.proceedSubscription = this.hasUser$.subscribe(() => {
+      this.store.dispatch(fetchCurrentUserAction());
       console.log(this.returnUrl);
-      this.router.navigateByUrl("/datasets");
+      this.router.navigateByUrl(this.returnUrl || "/datasets");
     });
   }
 

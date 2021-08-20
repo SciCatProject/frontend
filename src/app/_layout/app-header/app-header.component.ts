@@ -9,7 +9,8 @@ import { Subscription } from "rxjs";
 import {
   getCurrentUserAccountType,
   getCurrentUser,
-  getProfile
+  getProfile,
+  getIsLoggedIn, getIsLoggingIn, getCurrentUserName
 } from "state-management/selectors/user.selectors";
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 
@@ -22,6 +23,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   facility: string;
   status: string;
+  loggedIn: boolean;
 
   username = "";
   profileImage: string;
@@ -50,6 +52,10 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.dispatch(fetchCurrentUserAction());
 
+    this.store.pipe(select(getIsLoggedIn)).subscribe(status => {
+      this.loggedIn = status;
+    });
+
     this.subscriptions.push(
       this.batch$.subscribe(datasets => {
         if (datasets) {
@@ -75,6 +81,9 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
         if (current) {
           this.username = current.username.replace("ms-ad.", "");
           if (!current.realm && current.id) {
+            this.store.pipe(select(getCurrentUserName)).subscribe(profile => {
+              console.log("TEST");
+            });
             this.store.pipe(select(getProfile)).subscribe(profile => {
               if (profile) {
                 this.username = profile.username;
