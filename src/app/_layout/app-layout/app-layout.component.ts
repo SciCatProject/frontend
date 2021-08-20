@@ -10,7 +10,8 @@ import { Observable } from "rxjs";
 })
 export class AppLayoutComponent implements OnInit {
   darkTheme$: Observable<any> = new Observable<any>();
-  loggedIn: boolean;
+
+  loggedIn = false;
 
   constructor(private store: Store<any>) {}
 

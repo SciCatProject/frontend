@@ -23,7 +23,6 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   facility: string;
   status: string;
-  loggedIn: boolean;
 
   username = "";
   profileImage: string;
@@ -31,6 +30,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   inBatchPids: string[] = [];
   inBatchCount = 0;
   inBatchIndicator = "";
+  loggedIn = false;
 
   constructor(
     private store: Store<any>,

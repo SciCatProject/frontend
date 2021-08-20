@@ -391,7 +391,7 @@ describe("UserEffects", () => {
 
       expect(effects.logoutNavigate$).toBeObservable(actions);
       expect(router.navigate).toHaveBeenCalledTimes(1);
-      expect(router.navigate).toHaveBeenCalledWith([""]);
+      expect(router.navigate).toHaveBeenCalledWith(["anonymous"]);
     });
   });
 
