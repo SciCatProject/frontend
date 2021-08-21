@@ -37,10 +37,10 @@ export class ScicatDataService {
         if (filterExpressions[key] !== "") {
           columnkey = key;
           if (key.endsWith(".start")) {
-            columnkey = key.replace('.start', '');
+            columnkey = key.replace(".start", "");
           }
           if (key.endsWith(".end")) {
-            columnkey = key.replace('.end', '');
+            columnkey = key.replace(".end", "");
           }
           const column = columns.find((c) => c.id === columnkey);
           // All non-column conditions are ignored here
@@ -88,8 +88,8 @@ export class ScicatDataService {
               }
             }
           }
-          if (columnkey === 'globalSearch'){
-            result['text'] = filterExpressions['globalSearch']
+          if (columnkey === "globalSearch"){
+            result["text"] = filterExpressions["globalSearch"];
           }
         }
       });

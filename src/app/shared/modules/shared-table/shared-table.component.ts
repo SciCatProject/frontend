@@ -31,7 +31,6 @@ import { SciCatDataSource } from "../../services/scicat.datasource";
 import { debounceTime, tap } from "rxjs/operators";
 import { ExportExcelService } from "../../services/export-excel.service";
 import { DateTime } from "luxon";
-import { MatDatepickerInputEvent } from "@angular/material/datepicker/datepicker-input-base";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Column } from "./shared-table.module";
 
@@ -111,7 +110,7 @@ export class SharedTableComponent
   }
 
   initilizeFormControl() {
-    const formControls = this.columnsdef.reduce((acc, column) => {
+    const formControls = this.columnsdef.reduce((acc: {[key: string]: string[]}, column: Column) => {
       if(column.matchMode === "between"){
         acc[column.id + ".start"] = [""];
         acc[column.id + ".end"] = [""];
@@ -131,7 +130,7 @@ export class SharedTableComponent
       const queryParams: {[key: string]: string | null} = {};
       for (let [columnId, value] of Object.entries(values)){
         // handle date filters
-        if ((columnId.endsWith('.start') || columnId.endsWith('.end')) && value){
+        if ((columnId.endsWith(".start") || columnId.endsWith(".end")) && value){
           const date = DateTime.fromISO(value).toISODate();
           this.filterExpressions[columnId] = date;
           queryParams[columnId] = date;
@@ -188,16 +187,16 @@ export class SharedTableComponent
     this.sort.direction = queryParams.sortDirection || "asc";
     this.paginator.pageIndex = Number(queryParams.pageIndex) || 0;
     this.paginator.pageSize =  Number(queryParams.pageSize) || this.pageSize;
-    Object.keys(this.filterFormControl.controls).forEach( filterInput => {
-      if (filterInput in queryParams){
-        const value = queryParams[filterInput];
-        this.filterFormControl.get([filterInput]).setValue(value);
-        this.filterExpressions[filterInput] = value;
+    for (let [filter, control] of Object.entries(this.filterFormControl.controls)){
+      if (filter in queryParams){
+        const value = queryParams[filter];
+        control.setValue(value);
+        this.filterExpressions[filter] = value;
       } else {
-        this.filterFormControl.get([filterInput]).setValue("");
-        delete this.filterExpressions[filterInput];
+        control.setValue("");
+        delete this.filterExpressions[filter];
       }
-    });
+    }
     this.loadDataPage();
   }
 
@@ -300,8 +299,8 @@ export class SharedTableComponent
   }
 
   resetFilters(){
-    Object.keys(this.filterFormControl.controls).forEach((filter => {
-      this.filterFormControl.get([filter]).setValue("");
+    Object.values(this.filterFormControl.controls).forEach((control => {
+      control.setValue("");
     }));
     this.filterExpressions = {};
   }

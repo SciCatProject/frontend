@@ -82,8 +82,7 @@ export class FilesDashboardComponent implements OnDestroy {
 
   constructor(
     private dataService: ScicatDataService,
-    private exportService: ExportExcelService,
-    private router: Router
+    private exportService: ExportExcelService
   ) {
     this.dataSource = new SciCatDataSource(
       this.dataService,
