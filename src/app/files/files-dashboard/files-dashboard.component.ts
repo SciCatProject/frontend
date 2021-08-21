@@ -2,7 +2,6 @@ import { Component, OnDestroy } from "@angular/core";
 import { SciCatDataSource } from "../../shared/services/scicat.datasource";
 import { ScicatDataService } from "../../shared/services/scicat-data-service";
 import { ExportExcelService } from "../../shared/services/export-excel.service";
-import { Router } from "@angular/router";
 import { Column } from "shared/modules/shared-table/shared-table.module";
 
 @Component({
