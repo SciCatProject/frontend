@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { BatchViewComponent, Share } from "./batch-view.component";
+import { BatchViewComponent } from "./batch-view.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router } from "@angular/router";
 import {
