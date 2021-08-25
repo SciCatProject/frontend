@@ -1,8 +1,6 @@
 import {
   Component,
   OnInit,
-  ViewChild,
-  TemplateRef,
   Inject,
   OnDestroy,
 } from "@angular/core";

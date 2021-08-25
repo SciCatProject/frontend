@@ -93,55 +93,7 @@ describe("BatchViewComponent", () => {
     });
   });
 
-  // describe("#add()", () => {
-  //   it("should not push event value to shareEmails if value does not exist and clear input value", () => {
-  //     const event = {
-  //       input: { value: "test" } as HTMLInputElement,
-  //       value: undefined,
-  //     };
-
-  //     component.add(event);
-
-  //     expect(component.shareEmails.length).toEqual(0);
-  //     expect(event.input.value).toEqual("");
-  //   });
-
-  //   it("should push event value to shareEmails if value exists and clear input value", () => {
-  //     const event = {
-  //       input: { value: "test" } as HTMLInputElement,
-  //       value: "test",
-  //     };
-
-  //     component.add(event);
-
-  //     expect(component.shareEmails.length).toEqual(1);
-  //     expect(event.input.value).toEqual("");
-  //   });
-  // });
-
-  // describe("#remove()", () => {
-  //   it("should remove value from shareEmails", () => {
-  //     const share: Share = {
-  //       name: "test",
-  //     };
-  //     component.shareEmails = [share];
-
-  //     component.remove(share);
-
-  //     expect(component.shareEmails.length).toEqual(0);
-  //   });
-  // });
-
-  // describe("#openDialogWithoutRef()", () => {
-  //   it("should open secondDialog", () => {
-  //     const dialogOpenSpy = spyOn(component["dialog"], "open");
-
-  //     component.openDialogWithoutRef();
-
-  //     expect(dialogOpenSpy).toHaveBeenCalledOnceWith(component.secondDialog);
-  //   });
-  // });
-
+ 
   describe("#onEmpty()", () => {
     xit("should ...", () => {});
   });
