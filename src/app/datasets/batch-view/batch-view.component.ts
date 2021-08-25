@@ -7,7 +7,7 @@ import {
   OnDestroy,
 } from "@angular/core";
 import { select, Store } from "@ngrx/store";
-import { first, switchMap, mergeMap } from "rxjs/operators";
+import { first, switchMap } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import {
@@ -37,7 +37,6 @@ export interface Share {
   styleUrls: ["./batch-view.component.scss"],
 })
 export class BatchViewComponent implements OnInit, OnDestroy {
-  // @ViewChild("secondDialog", { static: true }) secondDialog!: TemplateRef<any>;
 
   selectable = true;
   removable = true;
