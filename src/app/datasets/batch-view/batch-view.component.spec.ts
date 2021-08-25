@@ -6,7 +6,6 @@ import { Router } from "@angular/router";
 import {
   MockArchivingService,
   MockDatasetApi,
-  MockShareGroupApi,
 } from "shared/MockStubs";
 import { ArchivingService } from "../archiving.service";
 import { MatIconModule } from "@angular/material/icon";
