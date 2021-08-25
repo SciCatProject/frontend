@@ -53,40 +53,13 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private store: Store<any>,
     private archivingSrv: ArchivingService,
-    private router: Router,
-    private datasetApi: DatasetApi,
-    private dialog: MatDialog
+    private router: Router
   ) {}
 
   private clearBatch() {
     this.store.dispatch(clearBatchAction());
   }
 
-  add(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    if ((value || "").trim()) {
-      this.shareEmails.push({ name: value.trim() });
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = "";
-    }
-  }
-
-  remove(value: Share): void {
-    const index = this.shareEmails.indexOf(value);
-
-    if (index >= 0) {
-      this.shareEmails.splice(index, 1);
-    }
-  }
-
-  // openDialogWithoutRef() {
-  //   this.dialog.open(this.secondDialog);
-  // }
 
   onEmpty() {
     const msg =
