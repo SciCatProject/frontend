@@ -15,15 +15,6 @@
         <mat-icon> school </mat-icon>
         Publish
       </button>
-      <button
-        mat-button
-        (click)="openDialogWithoutRef()"
-        class="button"
-        color="primary"
-      >
-        <mat-icon> group_add </mat-icon>
-        Share
-      </button>
       <ng-container *ngIf="appConfig.archiveWorkflowEnabled">
         <button mat-button (click)="onArchive()" class="button" color="primary">
           <mat-icon> archive </mat-icon>
@@ -140,35 +131,3 @@
     </mat-card>
   </ng-template>
 </div>
-
-<ng-template #secondDialog>
-  <h2 matDialogTitle>Share Datasets</h2>
-  <mat-dialog-content>
-    <p><em>*insert user emails to share datasets with*</em></p>
-  </mat-dialog-content>
-  <mat-form-field class="chip-list">
-    <mat-chip-list #chipList>
-      <mat-chip
-        *ngFor="let share of shareEmails"
-        [selectable]="selectable"
-        [removable]="removable"
-        (removed)="remove(share)"
-      >
-        {{ share.name }}
-        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-      </mat-chip>
-      <input
-        placeholder="New share..."
-        [matChipInputFor]="chipList"
-        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-        [matChipInputAddOnBlur]="addOnBlur"
-        (matChipInputTokenEnd)="add($event)"
-      />
-    </mat-chip-list>
-  </mat-form-field>
-  <mat-dialog-actions align="end">
-    <button mat-button matDialogClose (click)="onShare()" color="primary">
-      Share Datasets
-    </button>
-  </mat-dialog-actions>
-</ng-template>
