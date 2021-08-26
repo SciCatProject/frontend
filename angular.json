@@ -418,6 +418,13 @@
                   "with": "src/environments/environment.als.prod.ts"
                 }
               ],
+              "optimization": false,
+              "sourceMap": true,
+              "namedChunks": false,
+              "aot": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false,
               "assets": [
                 "src/assets/",
                 "src/robots.txt",
@@ -657,6 +664,9 @@
             },
             "qa": {
               "browserTarget": "catanie:build:qa"
+            },
+            "alsdev": {
+              "browserTarget": "catanie:build:als-dev"
             },
             "production": {
               "browserTarget": "catanie:build:production"
