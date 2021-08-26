@@ -24,7 +24,6 @@ export const environment = {
   synapseBaseUrl: "",
   riotBaseUrl: "",
   editDatasetSampleEnabled: false,
-
   jsonMetadataEnabled: true,
   localColumns: [
     { name: "select", order: 0, type: "standard", enabled: true },

@@ -63,4 +63,6 @@ export const environment = {
   userNamePromptEnabled: true,
   userProfileImageEnabled: true,
   fileDownloadEnabled: true,
+  loginFormEnabled: true,
+  oAuth2Endpoints: []
 };
