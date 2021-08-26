@@ -1,13 +1,11 @@
 import {
   Component,
   OnInit,
-  ViewChild,
-  TemplateRef,
   Inject,
   OnDestroy,
 } from "@angular/core";
 import { select, Store } from "@ngrx/store";
-import { first, switchMap, mergeMap } from "rxjs/operators";
+import { first, switchMap } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import {
@@ -21,13 +19,7 @@ import { showMessageAction } from "state-management/actions/user.actions";
 import { Router } from "@angular/router";
 import { ArchivingService } from "../archiving.service";
 import { Observable, Subscription } from "rxjs";
-import { ShareGroupApi } from "shared/sdk/services/custom/ShareGroup";
-import { DatasetApi } from "shared/sdk/services/custom/Dataset";
-import { ShareGroup } from "shared/sdk/models/ShareGroup";
-
-import { MatDialog } from "@angular/material/dialog";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { MatChipInputEvent } from "@angular/material/chips";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 
 export interface Share {
@@ -39,7 +31,6 @@ export interface Share {
   styleUrls: ["./batch-view.component.scss"],
 })
 export class BatchViewComponent implements OnInit, OnDestroy {
-  @ViewChild("secondDialog", { static: true }) secondDialog!: TemplateRef<any>;
 
   selectable = true;
   removable = true;
@@ -58,41 +49,13 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private store: Store<any>,
     private archivingSrv: ArchivingService,
-    private router: Router,
-    private shareGroupApi: ShareGroupApi,
-    private datasetApi: DatasetApi,
-    private dialog: MatDialog
+    private router: Router
   ) {}
 
   private clearBatch() {
     this.store.dispatch(clearBatchAction());
   }
 
-  add(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    if ((value || "").trim()) {
-      this.shareEmails.push({ name: value.trim() });
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = "";
-    }
-  }
-
-  remove(value: Share): void {
-    const index = this.shareEmails.indexOf(value);
-
-    if (index >= 0) {
-      this.shareEmails.splice(index, 1);
-    }
-  }
-
-  openDialogWithoutRef() {
-    this.dialog.open(this.secondDialog);
-  }
 
   onEmpty() {
     const msg =
@@ -108,49 +71,6 @@ export class BatchViewComponent implements OnInit, OnDestroy {
 
   onPublish() {
     this.router.navigate(["datasets", "batch", "publish"]);
-  }
-
-  onShare() {
-    // add new share group to model and update datasets access groups
-    const myShare = new ShareGroup();
-    myShare.datasets = this.datasetList.map((dataset) => dataset.pid);
-    myShare.members = this.shareEmails.map((share) => share.name);
-    this.shareGroupApi
-      .upsert(myShare)
-      .pipe(
-        mergeMap((result: any) => {
-          const newShare = result as ShareGroup;
-          const datasetId: string = myShare.datasets[0];
-          return this.datasetApi.appendToArrayField(
-            encodeURIComponent(datasetId),
-            "accessGroups",
-            newShare.id
-          );
-        })
-      )
-      .subscribe(
-        (success) => {
-          this.store.dispatch(
-            showMessageAction({
-              message: {
-                type: MessageType.Success,
-                content: "Share Successful",
-                duration: 5000,
-              },
-            })
-          );
-        },
-        (err) =>
-          this.store.dispatch(
-            showMessageAction({
-              message: {
-                type: MessageType.Error,
-                content: "Share Failed",
-                duration: 5000,
-              },
-            })
-          )
-      );
   }
 
   onArchive() {
