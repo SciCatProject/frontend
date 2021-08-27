@@ -5,6 +5,7 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  min-height: calc(100vh - 3.5rem);
 
   .login-container {
     padding-top: 10em;
