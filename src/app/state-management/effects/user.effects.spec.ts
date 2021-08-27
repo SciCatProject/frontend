@@ -212,6 +212,43 @@ describe("UserEffects", () => {
     });
   });
 
+  describe("oidcFetchUser$", () => {
+    const oidcLoginResponse = {};
+    const token = new SDKToken({
+      id: "testId",
+      userId: "testId",
+    });
+
+    it("should result in a fetchUserCompleteAction and a loginCompleteAction", () => {
+      const user = new User();
+      const accountType = "external";
+      const action = fromActions.loginOIDCAction({ oidcLoginResponse });
+      const outcome1 = fromActions.fetchUserCompleteAction();
+      const outcome2 = fromActions.loginCompleteAction({ user, accountType });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: user });
+      loopBackAuth.setToken(token);
+      userApi.findById.and.returnValue(response);
+
+      const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
+      expect(effects.oidcFetchUser$).toBeObservable(expected);
+    });
+
+    it("should result in a fetchUserFailedAction", () => {
+      const action = fromActions.loginOIDCAction({ oidcLoginResponse });
+      const outcome = fromActions.fetchUserFailedAction({error});
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {}, error);
+      loopBackAuth.setToken(token);
+      userApi.findById.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.oidcFetchUser$).toBeObservable(expected);
+    });
+  });
+
   describe("loginRedirect$", () => {
     it("it should redirect activeDirLoginFailedAction to funcLoginAction", () => {
       const username = "test";

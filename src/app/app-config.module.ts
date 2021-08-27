@@ -4,6 +4,12 @@ import { TableColumn } from "state-management/models";
 
 export const APP_CONFIG = new InjectionToken<AppConfig>("app.config");
 
+export class OAuth2Endpoint {
+  displayText = "";
+  displayImage?: string | null = null;
+  authURL= "";
+}
+
 export class AppConfig {
   lbBaseURL = "";
   externalAuthEndpoint: string | null = null;
@@ -48,6 +54,8 @@ export class AppConfig {
   metadataStructure = "";
   userProfileImageEnabled = false;
   userNamePromptEnabled = false;
+  loginFormEnabled = true;
+  oAuth2Endpoints: OAuth2Endpoint[] = [];
 }
 
 export const APP_DI_CONFIG: AppConfig = {
@@ -107,7 +115,9 @@ export const APP_DI_CONFIG: AppConfig = {
   userProfileImageEnabled: environment.userProfileImageEnabled ?? false,
   userNamePromptEnabled: environment.userNamePromptEnabled ?? false,
   landingPage: environment.landingPage ?? null,
-  editPublishedData: (environment.editPublishedData === undefined) ? true: environment.editPublishedData
+  editPublishedData: (environment.editPublishedData === undefined) ? true: environment.editPublishedData,
+  oAuth2Endpoints: environment.oAuth2Endpoints ?? [],
+  loginFormEnabled: (environment.loginFormEnabled == undefined) ? true: environment.loginFormEnabled
 };
 
 @NgModule({
