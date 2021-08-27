@@ -140,9 +140,3 @@ export class MockPublishedDataApi {
     return of({});
   }
 }
-
-export class MockShareGroupApi {
-  upsert() {
-    return of({});
-  }
-}

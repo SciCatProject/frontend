@@ -47,7 +47,7 @@ export const environment = {
   fileDownloadEnabled: true,
   multipleDownloadEnabled: true,
   maxDirectDownloadSize: 22000000000,
-  multipleDownloadAction: "http://localhost:3011/zip_in_place",
+  multipleDownloadAction: "/zip_in_place",
   scienceSearchEnabled: false,
   searchProposals: false,
   searchPublicDataEnabled: false,

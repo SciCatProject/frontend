@@ -63,4 +63,6 @@ export const environment = {
   metadataStructure: "tree",
   userNamePromptEnabled: true,
   userProfileImageEnabled: true,
+  oAuth2Endpoints: [],
+  loginFormEnabled: true
 };

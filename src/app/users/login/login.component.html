@@ -8,7 +8,24 @@
       <div fxFlex="auto"></div>
     </div>
     <mat-card-content>
-      <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <div *ngFor="let endpoint of appConfig.oAuth2Endpoints">
+        <button
+          class="oauth-login-button"
+          mat-raised-button
+          type="submit"
+          [ngClass]="{ loading: loading$ | async }"
+          (click) = "redirectOIDC(endpoint.authURL)"
+        >
+          <img class="oauth-login-image" *ngIf="endpoint.displayImage" [src]="endpoint.displayImage">
+          Login with {{endpoint.displayText}}
+
+        </button> 
+        <br/>
+    
+
+      </div>
+      <br/>
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()" *ngIf="appConfig.loginFormEnabled">
         <mat-form-field hintLabel="{{appConfig.facility}} account username">
           <mat-label> <b> Username</b> </mat-label>
           <span matPrefix> <mat-icon>person</mat-icon> &nbsp; </span>
