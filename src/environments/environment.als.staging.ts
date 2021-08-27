@@ -7,7 +7,7 @@ import { TableColumn } from "state-management/models";
 
 export const environment = {
   production: false,
-  lbBaseURL: "http://localhost:3000",
+  lbBaseURL: "https://dataportal-staging.als.lbl.gov",
   // fileserverBaseURL: "http://127.0.0.1:8889",
   // synapseBaseUrl: "https://scitest.esss.lu.se",
   // riotBaseUrl: "http://scitest.esss.lu.se/riot",
@@ -44,8 +44,8 @@ export const environment = {
   metadataPreviewEnabled: true,
   fileDownloadEnabled: true,
   multipleDownloadEnabled: true,
-  maxDirectDownloadSize: 5000000000,
-  multipleDownloadAction: "/zip",
+  maxDirectDownloadSize: 10000000000,
+  multipleDownloadAction: "https://dataportal.als.lbl.gov/zip_in_place",
   scienceSearchEnabled: false,
   searchProposals: false,
   searchPublicDataEnabled: false,
@@ -60,4 +60,8 @@ export const environment = {
   // gettingStarted: "http://melanie.gitpages.psi.ch/SciCatPages/SciCatGettingStartedSLSSummary.pdf",
   jobsEnabled: false,
   policiesEnabled: false,
+  loginFormEnabled: true,
+  oAuth2Endpoints: [
+    {displayText: "Google", displayImage: "../../../assets/images/btn_google_light_normal_ios.svg", authURL: "auth/google"},
+    {displayText: "ORCID", displayImage: "../../../assets/images/ORCIDiD_iconvector.svg", authURL: "auth/orcid"}]
 };

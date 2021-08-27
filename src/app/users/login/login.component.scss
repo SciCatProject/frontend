@@ -41,7 +41,28 @@
         mat-checkbox {
           margin-left: 1em;
         }
+
+        .oauth-login-button {
+          height: 40px;
+          width: 200px;
+          margin-top: 1em;
+          cursor: pointer;
+          display: inline-block;
+
+        }
+
+        .oauth-login-image {
+          height: 24px;
+          width: 24px;
+          float: left;
+          padding: 6px;
+        }
+
+        mat-checkbox {
+          margin-left: 1em;
+        }
       }
     }
+
   }
 }
