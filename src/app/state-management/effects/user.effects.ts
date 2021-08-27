@@ -195,7 +195,7 @@ export class UserEffects {
     () =>
       this.actions$.pipe(
         ofType(fromActions.logoutCompleteAction),
-        tap(() => this.router.navigate(["anonymous"]))
+        tap(() => this.router.navigate([""]))
       ),
     { dispatch: false }
   );

@@ -11,14 +11,11 @@ import { Observable } from "rxjs";
 export class AppLayoutComponent implements OnInit {
   darkTheme$: Observable<any> = new Observable<any>();
 
-  loggedIn = false;
+  loggedIn$ = this.store.pipe(select(getIsLoggedIn));
 
   constructor(private store: Store<any>) {}
 
   ngOnInit() {
     this.darkTheme$ = this.store.pipe(select(getTheme));
-    this.store.pipe(select(getIsLoggedIn)).subscribe(status => {
-      this.loggedIn = status;
-    });
   }
 }

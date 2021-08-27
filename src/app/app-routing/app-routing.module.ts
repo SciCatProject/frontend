@@ -40,8 +40,6 @@ import { AppMainLayoutComponent } from "_layout/app-main-layout/app-main-layout.
 import { PoliciesDashboardComponent } from "policies/policies-dashboard/policies-dashboard.component";
 import { InstrumentsDashboardComponent } from "instruments/instruments-dashboard/instruments-dashboard.component";
 import { InstrumentDetailsComponent } from "instruments/instrument-details/instrument-details.component";
-import { AnonymousDashboardComponent } from "datasets/anonymous-dashboard/anonymous-dashboard.component";
-import { AnonymousDetailsDashboardComponent } from "datasets/anonymous-details-dashboard/anonymous-details-dashboard.component";
 import { JobsGuard } from "app-routing/jobs.guard";
 import { PoliciesGuard } from "app-routing/policies.guard";
 import { LogbookGuard } from "app-routing/logbook.guard";
@@ -69,19 +67,6 @@ export const routes: Routes = [
         component: AppMainLayoutComponent,
         children: [
           {
-            path: "anonymous",
-            redirectTo: "anonymous/datasets",
-            pathMatch: "full"
-          },
-          {
-            path: "anonymous/datasets",
-            component: AnonymousDashboardComponent
-          },
-          {
-            path: "anonymous/datasets/:id",
-            component: AnonymousDetailsDashboardComponent,
-          },
-          {
             path: "datasets/batch/publish",
             component: PublishComponent,
             canActivate: [AuthGuard],
@@ -89,7 +74,6 @@ export const routes: Routes = [
           {
             path: "datasets",
             component: DashboardComponent,
-            canActivate: [DatasetsGuard],
           },
           {
             path: "datasets/batch",
@@ -99,18 +83,17 @@ export const routes: Routes = [
           {
             path: "datasets/:id",
             component: DatasetDetailsDashboardComponent,
-            canActivate: [DatasetsGuard],
             canDeactivate: [LeavingPageGuard]
           },
           {
             path: "datasets/:id/datablocks",
             component: DatablocksComponent,
-            canActivate: [DatasetsGuard],
+            canActivate: [AuthGuard],
           },
           {
             path: "datasets/:id/datafiles",
             component: DatafilesComponent,
-            canActivate: [DatasetsGuard],
+            canActivate: [AuthGuard],
           },
           {
             path: "files",

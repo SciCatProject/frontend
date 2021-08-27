@@ -30,7 +30,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   inBatchPids: string[] = [];
   inBatchCount = 0;
   inBatchIndicator = "";
-  loggedIn = false;
+  loggedIn$ = this.store.pipe(select(getIsLoggedIn));
 
   constructor(
     private store: Store<any>,
@@ -51,10 +51,6 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(fetchCurrentUserAction());
-
-    this.store.pipe(select(getIsLoggedIn)).subscribe(status => {
-      this.loggedIn = status;
-    });
 
     this.subscriptions.push(
       this.batch$.subscribe(datasets => {
