@@ -7,7 +7,7 @@ import { TableColumn } from "state-management/models";
 
 export const environment = {
   production: false,
-  lbBaseURL: "https://dataportal.als.lbl.go",
+  lbBaseURL: "https://dataportal.als.lbl.gov",
   jupyterHubUrl: "https://jupyter.nersc.gov",
   externalAuthEndpoint: "/auth/msad",
   addDatasetEnabled: false,
