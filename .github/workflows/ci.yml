@@ -69,6 +69,7 @@ jobs:
       REGISTRY: ghcr.io
       IMAGE_NAME: ${{ github.repository }}
     name: Build docker image and publish to ghrc.io
+    needs: [unittest, e2etests]
     runs-on: ubuntu-latest
     permissions:
       contents: read
