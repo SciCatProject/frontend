@@ -44,7 +44,6 @@ import { JobsGuard } from "app-routing/jobs.guard";
 import { PoliciesGuard } from "app-routing/policies.guard";
 import { LogbookGuard } from "app-routing/logbook.guard";
 import { FilesDashboardComponent } from "files/files-dashboard/files-dashboard.component";
-import { DatasetsGuard } from "./datasets.guard";
 import { LeavingPageGuard } from "./pending-changes.guard";
 import { ProposalDashboardNewComponent } from "proposals/proposal-dashboard-new/proposal-dashboard-new.component";
 
