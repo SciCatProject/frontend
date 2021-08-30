@@ -152,21 +152,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  updateColumnSubscription(): void {
+    this.subscriptions.push(
+      this.loggedIn$.subscribe(status => {
+          if (!status) {
+            this.tableColumns$ = this.store.pipe(select(getColumns)).pipe(
+              map((columns) => columns.filter((column) => column.name !== "select"))
+            );
+          } else {
+            this.tableColumns$ = this.store.pipe(select(getColumns));
+          }
+        }
+      ));
+  }
+
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());
     this.store.dispatch(fetchMetadataKeysAction());
 
-    this.subscriptions.push(
-      this.loggedIn$.subscribe(status => {
-        if (!status) {
-          this.tableColumns$ = this.store.pipe(select(getColumns)).pipe(
-            map((columns) => columns.filter((column) => column.name !== "select"))
-          );
-        } else {
-          this.tableColumns$ = this.store.pipe(select(getColumns));
-        }
-      }
-    ));
+    this.updateColumnSubscription();
 
     this.subscriptions.push(
       combineLatest([this.filters$, this.readyToFetch$, this.loggedIn$])
