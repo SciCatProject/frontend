@@ -1,21 +1,18 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { BatchViewComponent, Share } from "./batch-view.component";
+import { BatchViewComponent } from "./batch-view.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router } from "@angular/router";
 import {
   MockArchivingService,
   MockDatasetApi,
-  MockShareGroupApi,
 } from "shared/MockStubs";
 import { ArchivingService } from "../archiving.service";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 
 import { MatDialogModule } from "@angular/material/dialog";
-
-import { ShareGroupApi, DatasetApi, Dataset } from "shared/sdk";
-import { SharedCatanieModule } from "shared/shared.module";
+import { DatasetApi, Dataset } from "shared/sdk";import { SharedCatanieModule } from "shared/shared.module";
 import { MatTableModule } from "@angular/material/table";
 import { APP_CONFIG } from "app-config.module";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
@@ -64,7 +61,6 @@ describe("BatchViewComponent", () => {
           providers: [
             { provide: ArchivingService, useClass: MockArchivingService },
             { provide: Router, useValue: router },
-            { provide: ShareGroupApi, useClass: MockShareGroupApi },
             { provide: DatasetApi, useClass: MockDatasetApi },
             { provide: APP_CONFIG, useValue: { archiveWorkflowEnabled: true } },
           ],
@@ -96,55 +92,7 @@ describe("BatchViewComponent", () => {
     });
   });
 
-  describe("#add()", () => {
-    it("should not push event value to shareEmails if value does not exist and clear input value", () => {
-      const event = {
-        input: { value: "test" } as HTMLInputElement,
-        value: undefined,
-      };
-
-      component.add(event);
-
-      expect(component.shareEmails.length).toEqual(0);
-      expect(event.input.value).toEqual("");
-    });
-
-    it("should push event value to shareEmails if value exists and clear input value", () => {
-      const event = {
-        input: { value: "test" } as HTMLInputElement,
-        value: "test",
-      };
-
-      component.add(event);
-
-      expect(component.shareEmails.length).toEqual(1);
-      expect(event.input.value).toEqual("");
-    });
-  });
-
-  describe("#remove()", () => {
-    it("should remove value from shareEmails", () => {
-      const share: Share = {
-        name: "test",
-      };
-      component.shareEmails = [share];
-
-      component.remove(share);
-
-      expect(component.shareEmails.length).toEqual(0);
-    });
-  });
-
-  describe("#openDialogWithoutRef()", () => {
-    it("should open secondDialog", () => {
-      const dialogOpenSpy = spyOn(component["dialog"], "open");
-
-      component.openDialogWithoutRef();
-
-      expect(dialogOpenSpy).toHaveBeenCalledOnceWith(component.secondDialog);
-    });
-  });
-
+ 
   describe("#onEmpty()", () => {
     xit("should ...", () => {});
   });

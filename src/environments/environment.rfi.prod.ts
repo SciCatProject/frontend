@@ -63,4 +63,6 @@ export const environment = {
   jobsEnabled: true,
   jsonMetadataEnabled: true,
   policiesEnabled: true,
+  loginFormEnabled: true,
+  oAuth2Endpoints: []
 };
