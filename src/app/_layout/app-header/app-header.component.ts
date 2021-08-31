@@ -10,8 +10,7 @@ import {
   getCurrentUserAccountType,
   getCurrentUser,
   getProfile,
-  getIsLoggedIn,
-  getCurrentUserName
+  getIsLoggedIn
 } from "state-management/selectors/user.selectors";
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 
