@@ -9,6 +9,7 @@ import { SharedTableComponent } from "./shared-table.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { MatMenuModule } from "@angular/material/menu";
 import { FormBuilder } from "@angular/forms";
+import { Column } from "./shared-table.module";
 
 describe("SharedTableComponent", () => {
   let component: SharedTableComponent;
@@ -36,7 +37,34 @@ describe("SharedTableComponent", () => {
     },
   } as unknown as MatTable<Element>;
 
-  const columnsDef = [];
+  const columnsDef: Column[] = [
+    {
+      id: "id",
+      label: "ID",
+      canSort: true,
+      icon: "perm_device_information",
+      matchMode: "contains",
+      hideOrder: 0,
+    },
+    {
+      id: "creationTime",
+      icon: "schedule",
+      label: "Created at local time",
+      format: "date medium ",
+      canSort: true,
+      matchMode: "between",
+      hideOrder: 3,
+      sortDefault: "desc",
+    },
+    {
+      id: "jobResultObject",
+      icon: "work_outline",
+      label: "Result",
+      format: "json",
+      canSort: true,
+      hideOrder: 7,
+    },
+  ];;
 
   const paginator = {
     page: of({}),
@@ -109,8 +137,12 @@ describe("SharedTableComponent", () => {
     });
   });
 
-  describe("#getExpandFlag()", () => {
-    xit("should ...", () => {});
+  describe("#initilizeFormControl()", () => {
+    it("should initialize form control", () => {
+      const formControls = Object.keys(component.filterForm.controls);
+      expect(formControls).toHaveSize(5);
+      expect(formControls).toEqual(["id", "creationTime.start", "creationTime.end", "jobResultObject", "globalSearch"]);
+    });
   });
 
   describe("#toggleExpandFlag()", () => {
@@ -121,13 +153,39 @@ describe("SharedTableComponent", () => {
     xit("should ...", () => {});
   });
 
-  describe("#reloadFilterExpressions()", () => {
+  describe("#getExpandFlag()", () => {
     xit("should ...", () => {});
+  });
+
+  describe("#toggleExpandFlag()", () => {
+    xit("should ...", () => {});
+  });
+
+  describe("#toggleHideFilterFlag()", () => {
+    xit("should ...", () => {});
+  });
+
+  describe("#setDefaultFilters()", () => {
+    xit("should ...", () => {});
+  });
+
+  describe("#resetFilters()", () => {
+    it("should empty all filter inputs", () => {
+      Object.values(component.filterForm.controls).forEach((control) => {
+        control.setValue("test");
+      })
+      component.resetFilters();
+      Object.values(component.filterForm.controls).forEach((control) => {
+        expect(control.value).toEqual("");
+      })
+      expect(component.filterExpressions).toEqual({});
+    });
   });
 
   describe("#toggleColumns()", () => {
     xit("should ...", () => {});
   });
+
 
   describe("#exportToExcel()", () => {
     xit("should ...", () => {});
@@ -136,8 +194,8 @@ describe("SharedTableComponent", () => {
   describe("#getPropertyByPath()", () => {
     xit("should ...", () => {});
   });
-
-  describe("#dateChanged()", () => {
+  describe("#getFilterColumns()", () => {
     xit("should ...", () => {});
   });
+
 });

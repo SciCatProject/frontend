@@ -11,7 +11,7 @@
 
 <!-- Top ToolBar Start-->
 <div class="table-toolbar" fxLayout="row" fxLayoutAlign="space-between center">
-  <mat-form-field [formGroup]="filterFormControl" appearance="standard">
+  <mat-form-field [formGroup]="filterForm" appearance="standard">
     <mat-icon matPrefix>search</mat-icon>
     <input type="text" matInput placeholder="global word-search" formControlName="globalSearch">
   </mat-form-field>
@@ -112,7 +112,7 @@
   <!-- Cell Definition For Visible Filter Start -->
   <ng-container matColumnDef="{{column.id}}-filter" *ngFor="let column of visibleColumns">
     <mat-header-cell *matHeaderCellDef="let row">
-      <mat-form-field [formGroup]="filterFormControl" appearance="outline" *ngIf="column.matchMode === 'between'" class="max-width">
+      <mat-form-field [formGroup]="filterForm" appearance="outline" *ngIf="column.matchMode === 'between'" class="max-width">
         <mat-date-range-input [rangePicker]="rangePicker">
           <input name="{{ column.id + '.start' }}" matStartDate placeholder="Start date" [formControlName]="column.id + '.start'"
             >
@@ -123,7 +123,7 @@
         </mat-date-range-picker>
       </mat-form-field>
 
-      <mat-form-field [formGroup]="filterFormControl" appearance="outline" *ngIf="column.matchMode !== 'between'">
+      <mat-form-field [formGroup]="filterForm" appearance="outline" *ngIf="column.matchMode !== 'between'">
         <input [formControlName]="column.id" matInput autocomplete="off" name="{{ column.id }}" placeholder="{{ column.matchMode }}" />
       </mat-form-field>
     </mat-header-cell>
@@ -137,7 +137,7 @@
         <p>
           <strong>{{hiddenColumn.label}}</strong>
         <span>
-          <mat-form-field [formGroup]="filterFormControl" appearance="outline" *ngIf="hiddenColumn.matchMode==='between'" class="max-width">
+          <mat-form-field [formGroup]="filterForm" appearance="outline" *ngIf="hiddenColumn.matchMode==='between'" class="max-width">
             <mat-date-range-input [rangePicker]="rangePicker">
               <input  matStartDate placeholder="Start date" [formControlName]="hiddenColumn.id + '.start'">
               <input matEndDate placeholder="End date" [formControlName]="hiddenColumn.id + '.end'">
@@ -145,7 +145,7 @@
             <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
               <mat-date-range-picker #rangePicker></mat-date-range-picker>
             </mat-form-field>
-            <mat-form-field [formGroup]="filterFormControl" appearance="outline" *ngIf="hiddenColumn.matchMode !== 'between'">
+            <mat-form-field [formGroup]="filterForm" appearance="outline" *ngIf="hiddenColumn.matchMode !== 'between'">
               <input [formControlName]="hiddenColumn.id" matInput autocomplete="off" name="{{ hiddenColumn.id }}" placeholder="{{ hiddenColumn.matchMode }}" />
             </mat-form-field>
           </span>

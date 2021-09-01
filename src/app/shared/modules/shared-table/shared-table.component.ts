@@ -62,7 +62,7 @@ export class SharedTableComponent
   private subscriptions : Subscription[] = [];
   public MIN_COLUMN_WIDTH = 200;
 
-  filterFormControl = new FormGroup({});
+  filterForm = new FormGroup({});
   filterExpressions : {[key: string]: string} = {};
   hideFilterFlag = false;
   // Visible Hidden Columns
@@ -105,8 +105,8 @@ export class SharedTableComponent
 
   }
   ngOnInit(){
-    this.filterFormControl = this.initilizeFormControl();
-    this.subscriptions.push(this.activeColumnFilters());
+    this.filterForm = this.initilizeFormControl();
+    this.subscriptions.push(this.activateColumnFilters());
   }
 
   initilizeFormControl() {
@@ -123,8 +123,8 @@ export class SharedTableComponent
     return this.formBuilder.group(formControls);
   }
 
-  activeColumnFilters(){
-    return this.filterFormControl.valueChanges
+  activateColumnFilters(){
+    return this.filterForm.valueChanges
     .pipe(debounceTime(650))
     .subscribe( (values : {[key: string]: any }) => {
       const queryParams: {[key: string]: string | null} = {};
@@ -187,7 +187,7 @@ export class SharedTableComponent
     this.sort.direction = queryParams.sortDirection || "asc";
     this.paginator.pageIndex = Number(queryParams.pageIndex) || 0;
     this.paginator.pageSize =  Number(queryParams.pageSize) || this.pageSize;
-    for (let [filter, control] of Object.entries(this.filterFormControl.controls)){
+    for (let [filter, control] of Object.entries(this.filterForm.controls)){
       if (filter in queryParams){
         const value = queryParams[filter];
         control.setValue(value);
@@ -299,7 +299,7 @@ export class SharedTableComponent
   }
 
   resetFilters(){
-    Object.values(this.filterFormControl.controls).forEach((control => {
+    Object.values(this.filterForm.controls).forEach((control => {
       control.setValue("");
     }));
     this.filterExpressions = {};
