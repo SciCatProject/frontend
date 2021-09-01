@@ -148,20 +148,8 @@
                   "with": "src/environments/environment.maxiv.prod.ts"
                 },
                 {
-                  "replace": "src/assets/images/ess-site.png",
-                  "with": "CI/MAXIV/site.png"
-                },
-                {
-                  "replace": "src/assets/images/esslogo.png",
-                  "with": "CI/MAXIV/logo.png"
-                },
-                {
                   "replace": "src/favicon.ico",
                   "with": "CI/MAXIV/favicon.ico"
-                },
-                {
-                  "replace": "src/theme.scss",
-                  "with": "CI/MAXIV/theme.scss"
                 }
               ]
             },
