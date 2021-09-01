@@ -173,11 +173,11 @@ describe("SharedTableComponent", () => {
     it("should empty all filter inputs", () => {
       Object.values(component.filterForm.controls).forEach((control) => {
         control.setValue("test");
-      })
+      });
       component.resetFilters();
       Object.values(component.filterForm.controls).forEach((control) => {
         expect(control.value).toEqual("");
-      })
+      });
       expect(component.filterExpressions).toEqual({});
     });
   });
