@@ -5,7 +5,7 @@ import {DateTime} from "luxon";
   providedIn: "root"
 })
 export class DateTimeService {
-  isValidDateTime(input: string | Date){
+  isValidDateTime(input: string | Date | null){
     if (!input) {
       return false;
     }
@@ -19,7 +19,7 @@ export class DateTimeService {
     }
     return DateTime.fromJSDate(input).isValid;
   }
-  isISODateTime(input: string){
+  isISODateTime(input: string | null){
     if (!input) {
       return false;
     }
