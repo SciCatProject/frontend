@@ -11,12 +11,6 @@ const routes: Routes = [
     component: ProposalDashboardNewComponent,
     canActivate: [AuthGuard],
   },
-  // Can we remove this?
-  // {
-  //   path: "old",
-  //   component: ProposalDashboardComponent,
-  //   canActivate: [AuthGuard],
-  // },
   {
     path: ":id",
     component: ViewProposalPageComponent,

@@ -37,12 +37,6 @@ const routes: Routes = [
     component: DatablocksComponent,
     canActivate: [DatasetsGuard],
   },
-  // Do we need this path? seems like one could go to datafile in dataset detail
-  // {
-  //   path: ":id/datafiles",
-  //   component: DatafilesComponent,
-  //   canActivate: [DatasetsGuard],
-  // },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

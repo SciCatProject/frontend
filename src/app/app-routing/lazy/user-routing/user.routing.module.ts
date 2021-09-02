@@ -18,12 +18,6 @@ const routes: Routes = [
       component: UserSettingsComponent,
       canActivate: [AuthGuard],
     },
-    // Can we remove this?
-    // {
-    //   path: "old",
-    //   component: JobsDashboardComponent,
-    //   canActivate: [AuthGuard, JobsGuard],
-    // },
     {
       path: "jobs",
       component: JobsDashboardNewComponent,
