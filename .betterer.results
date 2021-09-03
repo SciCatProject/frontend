@@ -19,9 +19,6 @@ exports[`stricter compilation`] = {
       [73, 12, 8, "Variable \'datasets\' implicitly has type \'any[]\' in some locations where its type cannot be determined.", "805288804"],
       [76, 35, 8, "Variable \'datasets\' implicitly has an \'any[]\' type.", "805288804"]
     ],
-    "src/app/datasets/batch-view/batch-view.component.spec.ts:469965346": [
-      [105, 20, 5, "Argument of type \'{ input: HTMLInputElement; value: undefined; }\' is not assignable to parameter of type \'MatChipInputEvent\'.\\n  Types of property \'value\' are incompatible.\\n    Type \'undefined\' is not assignable to type \'string\'.", "165702089"]
-    ],
     "src/app/datasets/dashboard/dashboard.component.spec.ts:1153933419": [
       [156, 8, 66, "Expected 0 arguments, but got 1.", "1240398008"],
       [176, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"],
@@ -524,36 +521,20 @@ exports[`stricter compilation`] = {
       [129, 13, 36, "Object is possibly \'null\'.", "1010399159"],
       [142, 13, 36, "Object is possibly \'null\'.", "1010399159"]
     ],
-    "src/app/shared/modules/shared-table/shared-table.component.spec.ts:2023831950": [
-      [28, 8, 10, "Variable \'columnsDef\' implicitly has type \'any[]\' in some locations where its type cannot be determined.", "459426407"],
-      [48, 27, 10, "Variable \'columnsDef\' implicitly has an \'any[]\' type.", "459426407"]
-    ],
-    "src/app/shared/modules/shared-table/shared-table.component.ts:3204953284": [
-      [73, 2, 14, "Property \'visibleColumns\' has no initializer and is not definitely assigned in the constructor.", "1769051438"],
-      [74, 2, 13, "Property \'hiddenColumns\' has no initializer and is not definitely assigned in the constructor.", "3008049162"],
-      [82, 11, 10, "Property \'dataSource\' has no initializer and is not definitely assigned in the constructor.", "1967398792"],
-      [83, 11, 10, "Property \'columnsdef\' has no initializer and is not definitely assigned in the constructor.", "459458951"],
-      [91, 41, 9, "Property \'dataTable\' has no initializer and is not definitely assigned in the constructor.", "836725899"],
-      [92, 40, 4, "Property \'sort\' has no initializer and is not definitely assigned in the constructor.", "2088345023"],
-      [93, 45, 9, "Property \'paginator\' has no initializer and is not definitely assigned in the constructor.", "2483840092"],
-      [94, 47, 12, "Property \'globalFilter\' has no initializer and is not definitely assigned in the constructor.", "2218235630"],
-      [95, 30, 10, "Property \'allFilters\' has no initializer and is not definitely assigned in the constructor.", "3302591543"],
-      [182, 10, 49, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2898691922"],
-      [186, 17, 49, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2898691922"],
-      [239, 16, 1, "Parameter \'i\' implicitly has an \'any\' type.", "177612"],
-      [241, 54, 23, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2890101915"],
-      [247, 19, 1, "Parameter \'i\' implicitly has an \'any\' type.", "177612"],
-      [248, 4, 23, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2890101915"],
-      [248, 31, 23, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2890101915"],
-      [265, 8, 19, "Type \'SortDirection | undefined\' is not assignable to type \'SortDirection\'.\\n  Type \'undefined\' is not assignable to type \'SortDirection\'.", "3393242684"],
-      [317, 12, 32, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2145228977"],
-      [319, 41, 32, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2145228977"],
-      [323, 19, 32, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2145228977"],
-      [340, 10, 32, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2145228977"],
-      [342, 37, 32, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2145228977"],
-      [384, 50, 4, "No overload matches this call.\\n  Overload 1 of 3, \'(callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'string\'.\\n  Overload 2 of 3, \'(callbackfn: (previousValue: Record<string, unknown>, currentValue: string, currentIndex: number, array: string[]) => Record<string, unknown>, initialValue: Record<string, unknown>): Record<...>\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'Record<string, unknown>\'.", "2087877701"],
-      [390, 6, 32, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'{}\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{}\'.", "2145228977"],
-      [392, 35, 32, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'{}\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{}\'.", "2145228977"]
+    "src/app/shared/modules/shared-table/shared-table.component.ts:1451762685": [
+      [68, 2, 14, "Property \'visibleColumns\' has no initializer and is not definitely assigned in the constructor.", "1769051438"],
+      [69, 2, 13, "Property \'hiddenColumns\' has no initializer and is not definitely assigned in the constructor.", "3008049162"],
+      [76, 11, 10, "Property \'dataSource\' has no initializer and is not definitely assigned in the constructor.", "1967398792"],
+      [77, 11, 10, "Property \'columnsdef\' has no initializer and is not definitely assigned in the constructor.", "459458951"],
+      [84, 41, 9, "Property \'dataTable\' has no initializer and is not definitely assigned in the constructor.", "836725899"],
+      [85, 40, 4, "Property \'sort\' has no initializer and is not definitely assigned in the constructor.", "2088345023"],
+      [86, 45, 9, "Property \'paginator\' has no initializer and is not definitely assigned in the constructor.", "2483840092"],
+      [244, 16, 1, "Parameter \'i\' implicitly has an \'any\' type.", "177612"],
+      [246, 54, 23, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{ filters: boolean; }\'.", "2890101915"],
+      [253, 4, 23, "Element implicitly has an \'any\' type because expression of type \'string | number\' can\'t be used to index type \'{ filters: boolean; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ filters: boolean; }\'.", "2890101915"],
+      [253, 31, 23, "Element implicitly has an \'any\' type because expression of type \'string | number\' can\'t be used to index type \'{ filters: boolean; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ filters: boolean; }\'.", "2890101915"],
+      [268, 8, 19, "Type \'SortDirection | undefined\' is not assignable to type \'SortDirection\'.\\n  Type \'undefined\' is not assignable to type \'SortDirection\'.", "3393242684"],
+      [341, 50, 4, "No overload matches this call.\\n  Overload 1 of 3, \'(callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'string\'.\\n  Overload 2 of 3, \'(callbackfn: (previousValue: Record<string, unknown>, currentValue: string, currentIndex: number, array: string[]) => Record<string, unknown>, initialValue: Record<string, unknown>): Record<...>\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'Record<string, unknown>\'.", "2087877701"]
     ],
     "src/app/shared/sdk/models/Attachment.ts:3362633067": [
       [43, 2, 7, "Property \'dataset\' has no initializer and is not definitely assigned in the constructor.", "2497262647"],
@@ -1101,8 +1082,8 @@ exports[`stricter compilation`] = {
       [154, 58, 4, "Type \'null\' is not assignable to type \'Record<string, string> | undefined\'.", "2087698470"],
       [167, 58, 4, "Type \'null\' is not assignable to type \'Record<string, string> | undefined\'.", "2087698470"]
     ],
-    "src/app/state-management/effects/user.effects.spec.ts:133571840": [
-      [501, 27, 93, "Conversion of type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' to type \'UserSetting\' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to \'unknown\' first.\\n  Type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' is missing the following properties from type \'UserSetting\': \\"id\\", \\"createdBy\\", \\"updatedBy\\", \\"userId\\", and 3 more.", "1258454294"]
+    "src/app/state-management/effects/user.effects.spec.ts:3527283907": [
+      [538, 27, 93, "Conversion of type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' to type \'UserSetting\' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to \'unknown\' first.\\n  Type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' is missing the following properties from type \'UserSetting\': \\"id\\", \\"createdBy\\", \\"updatedBy\\", \\"userId\\", and 3 more.", "1258454294"]
     ],
     "src/app/state-management/reducers/jobs.reducer.spec.ts:2620026082": [
       [65, 56, 4, "Type \'null\' is not assignable to type \'Record<string, string> | undefined\'.", "2087698470"],
@@ -1134,8 +1115,8 @@ exports[`stricter compilation`] = {
       [72, 16, 4, "Argument of type \'null\' is not assignable to parameter of type \'Expected<Record<string, string> | undefined>\'.", "2087897566"],
       [106, 16, 6, "Argument of type \'{ where: null; order: string; skip: number; limit: number; } | { order: string; skip: number; limit: number; }\' is not assignable to parameter of type \'Expected<{ where: Record<string, string>; order: string; skip: number; limit: number; } | { order: string; skip: number; limit: number; where?: undefined; }>\'.\\n  Type \'{ where: null; order: string; skip: number; limit: number; }\' is not assignable to type \'Expected<{ where: Record<string, string>; order: string; skip: number; limit: number; } | { order: string; skip: number; limit: number; where?: undefined; }>\'.\\n    Types of property \'where\' are incompatible.\\n      Type \'null\' is not assignable to type \'Record<string, string> | AsymmetricMatcher<any> | ObjectContaining<Record<string, string>> | { [x: string]: Any | ExpectedRecursive<string>; } | ObjectContaining<...> | undefined\'.", "1898504825"]
     ],
-    "src/app/users/login/login.component.spec.ts:1596191075": [
-      [117, 8, 71, "Expected 0 arguments, but got 1.", "3870196511"]
+    "src/app/users/login/login.component.spec.ts:590365834": [
+      [154, 8, 71, "Expected 0 arguments, but got 1.", "3870196511"]
     ],
     "src/app/users/user-settings/user-settings.component.spec.ts:2325442996": [
       [95, 8, 32, "Expected 0 arguments, but got 1.", "1341113725"],

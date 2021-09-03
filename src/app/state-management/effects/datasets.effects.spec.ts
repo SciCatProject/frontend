@@ -86,6 +86,7 @@ describe("DatasetEffects", () => {
             "updateByIdAttachments",
             "destroyByIdAttachments",
             "reduceDataset",
+            "appendToArrayField",
           ]),
         },
       ],
@@ -506,6 +507,42 @@ describe("DatasetEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.reduceDataset$).toBeObservable(expected);
+    });
+  });
+
+  describe("updateDatasetAccessGroups$", () => {
+    it("should result in a updateDatasetAccessGroupsCompleteAction", () => {
+      const pid = "string";
+      const accessGroups = ["string"];
+      const action = fromActions.updateDatasetAccessGroupsAction({
+        pid,
+        accessGroups,
+      });
+      const outcome = fromActions.updateDatasetAccessGroupsCompleteAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", {});
+      datasetApi.appendToArrayField.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.updateDatasetAccessGroups$).toBeObservable(expected);
+    });
+
+    it("should result in a updateDatasetAccessGroupsFailedAction", () => {
+      const pid = "string";
+      const accessGroups = ["string"];
+      const action = fromActions.updateDatasetAccessGroupsAction({
+        pid,
+        accessGroups,
+      });
+      const outcome = fromActions.updateDatasetAccessGroupsFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      datasetApi.appendToArrayField.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.updateDatasetAccessGroups$).toBeObservable(expected);
     });
   });
 
