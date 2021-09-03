@@ -137,7 +137,7 @@ export const reduceDatasetFailedAction = createAction(
 
 export const updateDatasetAccessGroupsAction = createAction(
   "[Dataset] Update Access Groups",
-  props<{ accessGroups: string[] }>()
+  props<{ pid: string; accessGroups: string[] }>()
 );
 export const updateDatasetAccessGroupsCompleteAction = createAction(
   "[Dataset] Update Access Groups Complete"

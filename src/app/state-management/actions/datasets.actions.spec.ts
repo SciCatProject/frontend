@@ -369,12 +369,15 @@ describe("Dataset Actions", () => {
 
   describe("updateDatasetAccessGroupsAction", () => {
     it("should create an action", () => {
+      const pid = "string";
       const accessGroups: string[] = ["string"];
       const action = fromActions.updateDatasetAccessGroupsAction({
+        pid,
         accessGroups,
       });
       expect({ ...action }).toEqual({
         type: "[Dataset] Update Access Groups",
+        pid,
         accessGroups,
       });
     });
