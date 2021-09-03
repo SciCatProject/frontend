@@ -135,6 +135,17 @@ export const reduceDatasetFailedAction = createAction(
   "[Dataset] Reduce Dataset Failed"
 );
 
+export const updateDatasetAccessGroupsAction = createAction(
+  "[Dataset] Update Access Groups",
+  props<{ accessGroups: string[] }>()
+);
+export const updateDatasetAccessGroupsCompleteAction = createAction(
+  "[Dataset] Update Access Groups Complete"
+);
+export const updateDatasetAccessGroupsFailedAction = createAction(
+  "[Dataset] Update Access Groups Failed"
+);
+
 // === Dataset Table Selection ===
 
 export const selectDatasetAction = createAction(

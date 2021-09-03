@@ -71,7 +71,7 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchMetadataKeysAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Fetch Metadata Keys"
+        type: "[Dataset] Fetch Metadata Keys",
       });
     });
   });
@@ -363,6 +363,35 @@ describe("Dataset Actions", () => {
       const action = fromActions.reduceDatasetFailedAction();
       expect({ ...action }).toEqual({
         type: "[Dataset] Reduce Dataset Failed",
+      });
+    });
+  });
+
+  describe("updateDatasetAccessGroupsAction", () => {
+    it("should create an action", () => {
+      const accessGroups: string[] = ["string"];
+      const action = fromActions.updateDatasetAccessGroupsAction({
+        accessGroups,
+      });
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Update Access Groups",
+        accessGroups,
+      });
+    });
+  });
+  describe("updateDatasetAccessGroupsCompleteAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.updateDatasetAccessGroupsCompleteAction();
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Update Access Groups Complete",
+      });
+    });
+  });
+  describe("updateDatasetAccessGroupsFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.updateDatasetAccessGroupsFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Update Access Groups Failed",
       });
     });
   });
