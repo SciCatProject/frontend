@@ -28,6 +28,7 @@ export class DatasetDetailComponent {
   @Output() clickKeyword = new EventEmitter<string>();
   @Output() addKeyword = new EventEmitter<string>();
   @Output() removeKeyword = new EventEmitter<string>();
+  @Output() removeShare = new EventEmitter<string>();
   @Output() clickProposal = new EventEmitter<string>();
   @Output() clickSample = new EventEmitter<string>();
   @Output() saveMetadata = new EventEmitter<Record<string, unknown>>();
@@ -64,6 +65,10 @@ export class DatasetDetailComponent {
     this.removeKeyword.emit(keyword);
   }
 
+  onRemoveShare(share: string): void {
+    this.removeShare.emit(share);
+  }
+
   onClickProposal(proposalId: string): void {
     this.clickProposal.emit(proposalId);
   }
@@ -94,7 +99,7 @@ export class DatasetDetailComponent {
   onSaveMetadata(metadata: Record<string, any>) {
     this.saveMetadata.emit(metadata);
   }
-  onHasUnsavedChanges($event: boolean){
+  onHasUnsavedChanges($event: boolean) {
     this.hasUnsavedChanges.emit($event);
   }
 }

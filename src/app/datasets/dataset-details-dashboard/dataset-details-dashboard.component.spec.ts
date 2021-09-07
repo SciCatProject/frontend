@@ -281,6 +281,47 @@ describe("DetailsDashboardComponent", () => {
     });
   });
 
+  describe("#onRemoveShare()", () => {
+    it("should do nothing if dataset is undefined", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.dataset = undefined;
+      const share = "test";
+      component.onRemoveShare(share);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(0);
+    });
+
+    it("should do nothing if dataset is defined and group does not exist", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.dataset = new Dataset();
+      component.dataset.sharedWith = [];
+      const share = "test";
+      component.onRemoveShare(share);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(0);
+    });
+
+    it("should dispatch an updatePropertyAction if dataset is defined and group exists", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const pid = "testPid";
+      const share = "test";
+      component.dataset = new Dataset();
+      component.dataset.pid = pid;
+      component.dataset.sharedWith = [share];
+      component.onRemoveShare(share);
+
+      const property = { sharedWith: [] };
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        updatePropertyAction({ pid, property })
+      );
+    });
+  });
+
   describe("#onClickProposal()", () => {
     it("should navigate to a proposal", () => {
       const proposalId = "ABC123";

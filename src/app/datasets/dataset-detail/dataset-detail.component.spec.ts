@@ -117,6 +117,18 @@ describe("DatasetDetailComponent", () => {
     });
   });
 
+  describe("#onRemoveShare()", () => {
+    it("should emit an event", () => {
+      spyOn(component.removeShare, "emit");
+
+      const share = "test";
+      component.onRemoveShare(share);
+
+      expect(component.removeShare.emit).toHaveBeenCalledTimes(1);
+      expect(component.removeShare.emit).toHaveBeenCalledWith(share);
+    });
+  });
+
   describe("#onClickProposal()", () => {
     it("should emit an event", () => {
       spyOn(component.clickProposal, "emit");

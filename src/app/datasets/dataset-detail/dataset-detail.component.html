@@ -78,6 +78,21 @@
             </button>
           </td>
         </tr>
+        <tr *ngIf="dataset.sharedWith as sharedWith">
+          <th>Shared With</th>
+          <td>
+            <mat-chip-list>
+              <mat-chip
+                *ngFor="let share of sharedWith"
+                [removable]="true"
+                (removed)="onRemoveShare(share)"
+              >
+                {{ share }}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+            </mat-chip-list>
+          </td>
+        </tr>
       </table>
     </mat-card>
 
@@ -253,10 +268,14 @@
               <mat-icon> list </mat-icon> View
             </ng-template>
             <div [ngSwitch]="appConfig.metadataStructure">
-              <tree-view *ngSwitchCase="'tree'"
-                [metadata]="dataset['scientificMetadata']"></tree-view>
-              <metadata-view *ngSwitchDefault
-                [metadata]="dataset['scientificMetadata']"></metadata-view>
+              <tree-view
+                *ngSwitchCase="'tree'"
+                [metadata]="dataset['scientificMetadata']"
+              ></tree-view>
+              <metadata-view
+                *ngSwitchDefault
+                [metadata]="dataset['scientificMetadata']"
+              ></metadata-view>
             </div>
           </mat-tab>
           <mat-tab class="editTab" [hidden]="!appConfig.editMetadataEnabled">
@@ -268,10 +287,13 @@
                 *ngSwitchCase="'tree'"
                 [metadata]="dataset['scientificMetadata']"
                 (save)="onSaveMetadata($event)"
-                (hasUnsavedChanges)="onHasUnsavedChanges($event)"></tree-edit>
+                (hasUnsavedChanges)="onHasUnsavedChanges($event)"
+              ></tree-edit>
               <metadata-edit
-                *ngSwitchDefault [metadata]="dataset['scientificMetadata']"
-                (save)="onSaveMetadata($event)">
+                *ngSwitchDefault
+                [metadata]="dataset['scientificMetadata']"
+                (save)="onSaveMetadata($event)"
+              >
               </metadata-edit>
             </div>
           </mat-tab>
