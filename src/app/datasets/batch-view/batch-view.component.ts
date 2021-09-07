@@ -73,6 +73,10 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     this.router.navigate(["datasets", "batch", "publish"]);
   }
 
+  onShare() {
+    console.log("Share!");
+  }
+
   onArchive() {
     this.batch$
       .pipe(

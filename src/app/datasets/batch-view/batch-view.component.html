@@ -15,6 +15,10 @@
         <mat-icon> school </mat-icon>
         Publish
       </button>
+      <button mat-button (click)="onShare()" class="button" color="primary">
+        <mat-icon> share </mat-icon>
+        Share
+      </button>
       <ng-container *ngIf="appConfig.archiveWorkflowEnabled">
         <button mat-button (click)="onArchive()" class="button" color="primary">
           <mat-icon> archive </mat-icon>
