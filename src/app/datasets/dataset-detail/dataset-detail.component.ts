@@ -5,6 +5,7 @@ import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { MatDialog } from "@angular/material/dialog";
 import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
+import { DialogComponent } from "shared/modules/dialog/dialog.component";
 
 /**
  * Component to show details for a data set, using the
@@ -66,7 +67,18 @@ export class DatasetDetailComponent {
   }
 
   onRemoveShare(share: string): void {
-    this.removeShare.emit(share);
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: "auto",
+      data: {
+        title: `Really remove ${share}?`,
+        question: `If you click 'Ok', ${share} will no longer be able to access this Dataset.`,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.removeShare.emit(share);
+      }
+    });
   }
 
   onClickProposal(proposalId: string): void {
