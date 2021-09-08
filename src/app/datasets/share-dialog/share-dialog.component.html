@@ -12,6 +12,7 @@
     >
       Add
     </button>
+    <mat-error *ngIf="isInvalid()">Email address is not valid</mat-error>
   </mat-form-field>
   <mat-chip-list>
     <mat-chip
