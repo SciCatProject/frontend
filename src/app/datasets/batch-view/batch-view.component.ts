@@ -1,9 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Inject,
-  OnDestroy,
-} from "@angular/core";
+import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { first, switchMap } from "rxjs/operators";
 
@@ -21,6 +16,8 @@ import { ArchivingService } from "../archiving.service";
 import { Observable, Subscription } from "rxjs";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { APP_CONFIG, AppConfig } from "app-config.module";
+import { MatDialog } from "@angular/material/dialog";
+import { ShareDialogComponent } from "datasets/share-dialog/share-dialog.component";
 
 export interface Share {
   name: string;
@@ -31,7 +28,6 @@ export interface Share {
   styleUrls: ["./batch-view.component.scss"],
 })
 export class BatchViewComponent implements OnInit, OnDestroy {
-
   selectable = true;
   removable = true;
   addOnBlur = true;
@@ -47,6 +43,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private dialog: MatDialog,
     private store: Store<any>,
     private archivingSrv: ArchivingService,
     private router: Router
@@ -55,7 +52,6 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   private clearBatch() {
     this.store.dispatch(clearBatchAction());
   }
-
 
   onEmpty() {
     const msg =
@@ -74,7 +70,14 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   }
 
   onShare() {
-    console.log("Share!");
+    const dialogRef = this.dialog.open(ShareDialogComponent, {
+      width: "500px",
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log(result);
+      }
+    });
   }
 
   onArchive() {

@@ -65,6 +65,7 @@ import { AnonymousDetailsComponent } from "./anonymous-details/anonymous-details
 import { SampleEditComponent } from "./sample-edit/sample-edit.component";
 import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from "ngx-material-luxon";
 import { MatDatepickerModule } from "@angular/material/datepicker";
+import { ShareDialogComponent } from "./share-dialog/share-dialog.component";
 
 @NgModule({
   imports: [
@@ -127,6 +128,7 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
     AnonymousDetailsDashboardComponent,
     AnonymousDetailsComponent,
     SampleEditComponent,
+    ShareDialogComponent,
   ],
   providers: [
     ArchivingService,
