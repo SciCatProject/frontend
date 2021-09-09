@@ -4,6 +4,7 @@ import { first, switchMap } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import {
+  appendToDatasetArrayFieldAction,
   clearBatchAction,
   prefillBatchAction,
   removeFromBatchAction,
@@ -17,7 +18,10 @@ import { Observable, Subscription } from "rxjs";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { MatDialog } from "@angular/material/dialog";
-import { ShareDialogComponent } from "datasets/share-dialog/share-dialog.component";
+import {
+  ShareDialogComponent,
+  ShareUser,
+} from "datasets/share-dialog/share-dialog.component";
 
 export interface Share {
   name: string;
@@ -73,9 +77,18 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ShareDialogComponent, {
       width: "500px",
     });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        console.log(result);
+    dialogRef.afterClosed().subscribe((result: Record<string, ShareUser[]>) => {
+      if (result && result.users && result.users.length > 0) {
+        const data = result.users.map((user) => user.username);
+        this.datasetList.forEach((dataset) => {
+          this.store.dispatch(
+            appendToDatasetArrayFieldAction({
+              pid: encodeURIComponent(dataset.pid),
+              fieldName: "sharedWith",
+              data,
+            })
+          );
+        });
       }
     });
   }
