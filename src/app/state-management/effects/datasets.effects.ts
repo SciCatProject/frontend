@@ -255,18 +255,16 @@ export class DatasetEffects {
     )
   );
 
-  updateDatasetAccessGroups$ = createEffect(() =>
+  appendToArrayField$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromActions.updateDatasetAccessGroupsAction),
-      mergeMap((pid, accessGroups) =>
-        this.datasetApi
-          .appendToArrayField(pid, "accessGroups", accessGroups)
-          .pipe(
-            map(() => fromActions.updateDatasetAccessGroupsCompleteAction()),
-            catchError(() =>
-              of(fromActions.updateDatasetAccessGroupsFailedAction())
-            )
+      ofType(fromActions.appendToDatasetArrayFieldAction),
+      mergeMap(({ pid, fieldName, data }) =>
+        this.datasetApi.appendToArrayField(pid, fieldName, data).pipe(
+          map(() => fromActions.appendToDatasetArrayFieldCompleteAction()),
+          catchError(() =>
+            of(fromActions.appendToDatasetArrayFieldFailedAction())
           )
+        )
       )
     )
   );

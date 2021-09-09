@@ -367,34 +367,37 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("updateDatasetAccessGroupsAction", () => {
+  describe("appendToDatasetArrayFieldAction", () => {
     it("should create an action", () => {
       const pid = "string";
-      const accessGroups: string[] = ["string"];
-      const action = fromActions.updateDatasetAccessGroupsAction({
+      const fieldName = "test";
+      const data: string[] = ["string"];
+      const action = fromActions.appendToDatasetArrayFieldAction({
         pid,
-        accessGroups,
+        fieldName,
+        data,
       });
       expect({ ...action }).toEqual({
-        type: "[Dataset] Update Access Groups",
+        type: "[Dataset] Append To Array Field",
         pid,
-        accessGroups,
+        fieldName,
+        data,
       });
     });
   });
-  describe("updateDatasetAccessGroupsCompleteAction", () => {
+  describe("updateDatasetAccessGrappendToDatasetArrayFieldCompleteActionoupsCompleteAction", () => {
     it("should create an action", () => {
-      const action = fromActions.updateDatasetAccessGroupsCompleteAction();
+      const action = fromActions.appendToDatasetArrayFieldCompleteAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Update Access Groups Complete",
+        type: "[Dataset] Append To Array Field Complete",
       });
     });
   });
-  describe("updateDatasetAccessGroupsFailedAction", () => {
+  describe("appendToDatasetArrayFieldFailedAction", () => {
     it("should create an action", () => {
-      const action = fromActions.updateDatasetAccessGroupsFailedAction();
+      const action = fromActions.appendToDatasetArrayFieldFailedAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Update Access Groups Failed",
+        type: "[Dataset] Append To Array Field Failed",
       });
     });
   });

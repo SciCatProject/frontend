@@ -510,39 +510,43 @@ describe("DatasetEffects", () => {
     });
   });
 
-  describe("updateDatasetAccessGroups$", () => {
-    it("should result in a updateDatasetAccessGroupsCompleteAction", () => {
+  describe("appendToArrayField$", () => {
+    it("should result in a appendToDatasetArrayFieldCompleteAction", () => {
       const pid = "string";
-      const accessGroups = ["string"];
-      const action = fromActions.updateDatasetAccessGroupsAction({
+      const fieldName = "test";
+      const data = ["string"];
+      const action = fromActions.appendToDatasetArrayFieldAction({
         pid,
-        accessGroups,
+        fieldName,
+        data,
       });
-      const outcome = fromActions.updateDatasetAccessGroupsCompleteAction();
+      const outcome = fromActions.appendToDatasetArrayFieldCompleteAction();
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", {});
       datasetApi.appendToArrayField.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
-      expect(effects.updateDatasetAccessGroups$).toBeObservable(expected);
+      expect(effects.appendToArrayField$).toBeObservable(expected);
     });
 
-    it("should result in a updateDatasetAccessGroupsFailedAction", () => {
+    it("should result in a appendToDatasetArrayFieldFailedAction", () => {
       const pid = "string";
-      const accessGroups = ["string"];
-      const action = fromActions.updateDatasetAccessGroupsAction({
+      const fieldName = "test";
+      const data = ["string"];
+      const action = fromActions.appendToDatasetArrayFieldAction({
         pid,
-        accessGroups,
+        fieldName,
+        data,
       });
-      const outcome = fromActions.updateDatasetAccessGroupsFailedAction();
+      const outcome = fromActions.appendToDatasetArrayFieldFailedAction();
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
       datasetApi.appendToArrayField.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
-      expect(effects.updateDatasetAccessGroups$).toBeObservable(expected);
+      expect(effects.appendToArrayField$).toBeObservable(expected);
     });
   });
 

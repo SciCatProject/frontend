@@ -135,15 +135,15 @@ export const reduceDatasetFailedAction = createAction(
   "[Dataset] Reduce Dataset Failed"
 );
 
-export const updateDatasetAccessGroupsAction = createAction(
-  "[Dataset] Update Access Groups",
-  props<{ pid: string; accessGroups: string[] }>()
+export const appendToDatasetArrayFieldAction = createAction(
+  "[Dataset] Append To Array Field",
+  props<{ pid: string; fieldName: string; data: any[] }>()
 );
-export const updateDatasetAccessGroupsCompleteAction = createAction(
-  "[Dataset] Update Access Groups Complete"
+export const appendToDatasetArrayFieldCompleteAction = createAction(
+  "[Dataset] Append To Array Field Complete"
 );
-export const updateDatasetAccessGroupsFailedAction = createAction(
-  "[Dataset] Update Access Groups Failed"
+export const appendToDatasetArrayFieldFailedAction = createAction(
+  "[Dataset] Append To Array Field Failed"
 );
 
 // === Dataset Table Selection ===
