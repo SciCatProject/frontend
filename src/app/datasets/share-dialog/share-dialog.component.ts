@@ -37,7 +37,6 @@ export class ShareDialogComponent implements OnDestroy {
       .pipe(first())
       .subscribe((userIdentities) => {
         if (userIdentities.length > 0) {
-          console.log(userIdentities);
           this.emails.push(email);
           this.emailFormControl.reset();
         } else {
