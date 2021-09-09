@@ -9,7 +9,7 @@ import {
   prefillBatchAction,
   removeFromBatchAction,
 } from "state-management/actions/datasets.actions";
-import { Dataset, MessageType } from "state-management/models";
+import { Dataset, Message, MessageType } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
 
 import { Router } from "@angular/router";
@@ -88,6 +88,12 @@ export class BatchViewComponent implements OnInit, OnDestroy {
               data,
             })
           );
+          const message = new Message(
+            "Datasets successfully shared!",
+            MessageType.Success,
+            5000
+          );
+          this.store.dispatch(showMessageAction({ message }));
         });
       }
     });
