@@ -16,11 +16,11 @@
   </mat-form-field>
   <mat-chip-list>
     <mat-chip
-      *ngFor="let email of emails"
+      *ngFor="let user of users"
       [removable]="true"
-      (removed)="remove(email)"
+      (removed)="remove(user)"
     >
-      {{ email }}
+      {{ user.email }}
       <mat-icon matChipRemove>cancel</mat-icon>
     </mat-chip>
   </mat-chip-list>

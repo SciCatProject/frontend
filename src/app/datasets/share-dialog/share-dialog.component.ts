@@ -8,6 +8,11 @@ import { UserIdentity, UserIdentityApi } from "shared/sdk";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
 
+export interface ShareUser {
+  email: string;
+  username: string;
+}
+
 @Component({
   selector: "app-share-dialog",
   templateUrl: "./share-dialog.component.html",
@@ -18,7 +23,7 @@ export class ShareDialogComponent implements OnDestroy {
     Validators.required,
     Validators.email,
   ]);
-  emails: string[] = [];
+  users: ShareUser[] = [];
   userIdentitySubsription: Subscription = new Subscription();
 
   constructor(
@@ -33,13 +38,18 @@ export class ShareDialogComponent implements OnDestroy {
 
   add = (email: string): void => {
     this.userIdentitySubsription = this.userIdentityApi
-      .find<UserIdentity>({ where: { "profile.email": email.trim() } })
+      .findOne<UserIdentity>({ where: { "profile.email": email.trim() } })
       .pipe(first())
-      .subscribe((userIdentities) => {
-        if (userIdentities.length > 0) {
-          this.emails.push(email);
-          this.emailFormControl.reset();
-        } else {
+      .subscribe(
+        (userIdentity) => {
+          if (userIdentity) {
+            console.log(userIdentity);
+            const user = { email, username: userIdentity.externalId };
+            this.users.push(user);
+            this.emailFormControl.reset();
+          }
+        },
+        () => {
           const message = new Message(
             "The email address is not connected to a SciCat user",
             MessageType.Error,
@@ -47,19 +57,19 @@ export class ShareDialogComponent implements OnDestroy {
           );
           this.store.dispatch(showMessageAction({ message }));
         }
-      });
+      );
   };
 
-  remove = (email: string): void => {
-    const index = this.emails.indexOf(email);
+  remove = (user: ShareUser): void => {
+    const index = this.users.indexOf(user);
     if (index >= 0) {
-      this.emails.splice(index, 1);
+      this.users.splice(index, 1);
     }
   };
 
-  isEmpty = (): boolean => this.emails.length === 0;
+  isEmpty = (): boolean => this.users.length === 0;
 
-  share = (): void => this.dialogRef.close({ users: this.emails });
+  share = (): void => this.dialogRef.close({ users: this.users });
 
   cancel = (): void => this.dialogRef.close();
 
