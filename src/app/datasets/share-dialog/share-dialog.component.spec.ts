@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from "@angular/core/testing";
 import { MatButtonModule } from "@angular/material/button";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
@@ -6,8 +11,14 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { Store } from "@ngrx/store";
+import { of } from "rxjs";
+import { MockStore, MockUserIdentityApi } from "shared/MockStubs";
+import { UserIdentityApi } from "shared/sdk";
+import { showMessageAction } from "state-management/actions/user.actions";
+import { Message, MessageType } from "state-management/models";
 
-import { ShareDialogComponent } from "./share-dialog.component";
+import { ShareDialogComponent, ShareUser } from "./share-dialog.component";
 
 describe("ShareDialogComponent", () => {
   let component: ShareDialogComponent;
@@ -25,7 +36,11 @@ describe("ShareDialogComponent", () => {
         MatIconModule,
         MatInputModule,
       ],
-      providers: [{ provide: MatDialogRef, useValue: { close: () => {} } }],
+      providers: [
+        { provide: MatDialogRef, useValue: { close: () => {} } },
+        { provide: Store, useClass: MockStore },
+        { provide: UserIdentityApi, useClass: MockUserIdentityApi },
+      ],
     }).compileComponents();
   });
 
@@ -69,45 +84,91 @@ describe("ShareDialogComponent", () => {
   });
 
   describe("#add()", () => {
-    it("should add the email to the emails array and reset the form field", () => {
+    it("should dispatch a showMessageAction with type `error` if user does not exist", fakeAsync(() => {
+      spyOn(component.userIdentityApi, "findOne").and.throwError("Not found");
+      const dispatchSpy = spyOn(component.store, "dispatch");
       const email = "test@email.com";
+
+      component.add(email);
+      tick();
+
+      const message = new Message(
+        "The email address is not connected to a SciCat user",
+        MessageType.Error,
+        5000
+      );
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(showMessageAction({ message }));
+    }));
+
+    it("should add the user to the users array and reset the form field if user exists", fakeAsync(() => {
+      const email = "test@email.com";
+      const userIdentity = {
+        externalId: "username",
+        profile: {
+          email,
+        },
+      };
+      spyOn(component.userIdentityApi, "findOne").and.returnValue(
+        of(userIdentity)
+      );
       component.emailFormControl.setValue(email);
       expect(component.emailFormControl.value).toEqual(email);
 
       component.add(email);
+      tick();
 
-      expect(component.emails).toContain(email);
+      const user: ShareUser = {
+        username: userIdentity.externalId,
+        email,
+      };
+
+      expect(component.users).toContain(user);
       expect(component.emailFormControl.value).toEqual(null);
-    });
+    }));
   });
 
   describe("#remove()", () => {
-    it("should do nothing if trying to remove an email not in the array", () => {
-      const email = "test@email.com";
-      component.emails.push(email);
-      expect(component.emails).toContain(email);
-      const emails = component.emails;
+    it("should do nothing if trying to remove a user not in the array", () => {
+      const user: ShareUser = {
+        username: "test",
+        email: "test@email.com",
+      };
+      component.users.push(user);
+      expect(component.users).toContain(user);
+      const users = component.users;
 
-      component.remove("noInArray@email.com");
+      const notUser: ShareUser = {
+        username: "notUser",
+        email: "notInArray@email.com",
+      };
+      component.remove(notUser);
 
-      expect(component.emails).toEqual(emails);
+      expect(component.users).toEqual(users);
     });
 
     it("should remove the email from the emails array if the array contains the email", () => {
-      const email = "test@email.com";
-      component.emails.push(email);
-      expect(component.emails).toContain(email);
+      const user: ShareUser = {
+        username: "test",
+        email: "test@email.com",
+      };
+      component.users.push(user);
+      expect(component.users).toContain(user);
 
-      component.remove(email);
+      component.remove(user);
 
-      expect(component.emails).not.toContain(email);
+      expect(component.users).not.toContain(user);
     });
   });
 
   describe("#isEmpty()", () => {
     it("should return false if emails array is not empty", () => {
-      const email = "test@gmail.com";
-      component.emails.push(email);
+      const user: ShareUser = {
+        username: "test",
+        email: "test@email.com",
+      };
+      component.users.push(user);
 
       const isEmpty = component.isEmpty();
 
@@ -125,9 +186,12 @@ describe("ShareDialogComponent", () => {
     it("should close the dialog and emit data", () => {
       const dialogCloseSpy = spyOn(component.dialogRef, "close");
 
-      const email = "test@email.com";
-      component.emails.push(email);
-      const users = component.emails;
+      const user: ShareUser = {
+        username: "test",
+        email: "test@email.com",
+      };
+      component.users.push(user);
+      const users = component.users;
 
       component.share();
 
