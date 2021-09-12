@@ -37,7 +37,7 @@
     "@ngrx/store-devtools": "^12.4.0",
     "autolinker": "^3.14.3",
     "deep-equal": "^2.0.5",
-    "exceljs": "^4.2.1",
+    "exceljs": "^4.3.0",
     "file-saver": "^2.0.5",
     "filesize": "^6.0.1",
     "luxon": "^1.27.0",
