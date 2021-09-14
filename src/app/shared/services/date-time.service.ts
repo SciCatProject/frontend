@@ -5,7 +5,7 @@ import {DateTime} from "luxon";
   providedIn: "root"
 })
 export class DateTimeService {
-  isValidDateTime(input: string | Date){
+  isValidDateTime(input: string | Date | null){
     if (!input) {
       return false;
     }
@@ -19,7 +19,10 @@ export class DateTimeService {
     }
     return DateTime.fromJSDate(input).isValid;
   }
-  isISODateTime(input: string){
+  isISODateTime(input: string | null){
+    if (!input) {
+      return false;
+    }
     const regex = /^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)$/g;
     if(input.match(regex) && DateTime.fromISO(input).isValid){
       return true;
