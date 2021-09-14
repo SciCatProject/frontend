@@ -3,7 +3,6 @@ import { EffectsModule } from "@ngrx/effects";
 import { AppConfigModule } from "app-config.module";
 import { LinkyModule } from "ngx-linky";
 import { ArchivingService } from "./archiving.service";
-import { BatchCardComponent } from "./batch-card/batch-card.component";
 import { BatchViewComponent } from "./batch-view/batch-view.component";
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -66,6 +65,16 @@ import { SampleEditComponent } from "./sample-edit/sample-edit.component";
 import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from "ngx-material-luxon";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { ShareDialogComponent } from "./share-dialog/share-dialog.component";
+import { UserEffects } from "state-management/effects/user.effects";
+import { ADAuthService } from "users/adauth.service";
+import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { ProposalEffects } from "state-management/effects/proposals.effects";
+import { proposalsReducer } from "state-management/reducers/proposals.reducer";
+import { SampleEffects } from "state-management/effects/samples.effects";
+import { samplesReducer } from "state-management/reducers/samples.reducer";
+import { PublishedDataEffects } from "state-management/effects/published-data.effects";
+import { publishedDataReducer } from "state-management/reducers/published-data.reducer";
+import { BatchCardModule } from "./batch-card/batch-card.module";
 
 @NgModule({
   imports: [
@@ -104,12 +113,19 @@ import { ShareDialogComponent } from "./share-dialog/share-dialog.component";
     ReactiveFormsModule,
     RouterModule,
     SharedCatanieModule,
+    BatchCardModule,
     StoreModule.forFeature("datasets", datasetsReducer),
     StoreModule.forFeature("jobs", jobsReducer),
-    LogbooksModule,
+    EffectsModule.forFeature([UserEffects]),
+    EffectsModule.forFeature([ProposalEffects]),
+    StoreModule.forFeature("proposals", proposalsReducer),
+    EffectsModule.forFeature([SampleEffects]),
+    StoreModule.forFeature("samples", samplesReducer),
+    EffectsModule.forFeature([PublishedDataEffects]),
+    StoreModule.forFeature("publishedData", publishedDataReducer),
+        LogbooksModule,
   ],
   declarations: [
-    BatchCardComponent,
     BatchViewComponent,
     DashboardComponent,
     DatablocksComponent,
@@ -133,6 +149,8 @@ import { ShareDialogComponent } from "./share-dialog/share-dialog.component";
   providers: [
     ArchivingService,
     AsyncPipe,
+    ADAuthService,
+    FileSizePipe,
     {
       provide: DateAdapter,
       useClass: LuxonDateAdapter,
@@ -148,7 +166,6 @@ import { ShareDialogComponent } from "./share-dialog/share-dialog.component";
     DatasetDetailComponent,
     DatasetTableComponent,
     DatasetsFilterComponent,
-    BatchCardComponent,
   ],
 })
 export class DatasetsModule {}
