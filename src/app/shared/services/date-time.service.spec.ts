@@ -57,4 +57,9 @@ describe("DateTimeService", () => {
     expect(service.isValidDateTime(input3)).toBeFalse();
     expect(service.isValidDateTime(input4)).toBeFalse();
   });
+
+  it("should return false when input is null", () => {
+    expect(service.isISODateTime(null)).toBeFalse();
+    expect(service.isValidDateTime(null)).toBeFalse();
+  });
 });

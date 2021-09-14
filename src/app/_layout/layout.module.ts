@@ -7,10 +7,10 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { RouterModule } from "@angular/router";
-import { DatasetsModule } from "datasets/datasets.module";
 import { AppLayoutComponent } from "./app-layout/app-layout.component";
 import { AppMainLayoutComponent } from "./app-main-layout/app-main-layout.component";
-import { SharedCatanieModule } from "shared/shared.module";
+import { BatchCardModule } from "datasets/batch-card/batch-card.module";
+import { BreadcrumbModule } from "shared/modules/breadcrumb/breadcrumb.module";
 
 @NgModule({
   declarations: [
@@ -20,14 +20,14 @@ import { SharedCatanieModule } from "shared/shared.module";
   ],
   imports: [
     CommonModule,
-    DatasetsModule,
+    BatchCardModule,
     MatBadgeModule,
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
     MatToolbarModule,
     RouterModule,
-    SharedCatanieModule
+    BreadcrumbModule
   ],
   exports: []
 })
