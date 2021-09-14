@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AuthGuard } from "app-routing/auth.guard";
-import { DatasetsGuard } from "app-routing/datasets.guard";
 import { LeavingPageGuard } from "app-routing/pending-changes.guard";
 import { BatchViewComponent } from "datasets/batch-view/batch-view.component";
 import { DashboardComponent } from "datasets/dashboard/dashboard.component";
