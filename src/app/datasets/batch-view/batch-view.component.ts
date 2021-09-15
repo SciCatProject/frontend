@@ -32,18 +32,11 @@ export interface Share {
   styleUrls: ["./batch-view.component.scss"],
 })
 export class BatchViewComponent implements OnInit, OnDestroy {
-  selectable = true;
-  removable = true;
-  addOnBlur = true;
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  shareEmails: Share[] = [];
-  datasetList: Dataset[] = [];
-
-  visibleColumns: string[] = ["remove", "pid", "sourceFolder", "creationTime"];
-
   batch$: Observable<Dataset[]> = this.store.pipe(select(getDatasetsInBatch));
   subscriptions: Subscription[] = [];
+  datasetList: Dataset[] = [];
   public hasBatch = false;
+  visibleColumns: string[] = ["remove", "pid", "sourceFolder", "creationTime"];
   shareEnabled = this.appConfig.shareEnabled;
 
   constructor(
