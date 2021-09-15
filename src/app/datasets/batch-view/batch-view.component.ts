@@ -15,7 +15,6 @@ import { showMessageAction } from "state-management/actions/user.actions";
 import { Router } from "@angular/router";
 import { ArchivingService } from "../archiving.service";
 import { Observable, Subscription } from "rxjs";
-import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { MatDialog } from "@angular/material/dialog";
 import {
