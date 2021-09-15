@@ -359,8 +359,9 @@
             </div>
           </mat-header-cell>
           <mat-cell *matCellDef="let dataset">
-            <div *ngIf="lodashGet(dataset.scientificMetadata, column.name)">
-              {{ lodashGet(dataset.scientificMetadata, column.name + ".value") }}&nbsp;{{
+            <div *ngIf="lodashGet(dataset.scientificMetadata, column.name) as value">
+              <!-- This can show both value like this {value: v, unit: u} or just value dont remove "|| value"  -->
+              {{ lodashGet(dataset.scientificMetadata, column.name + ".value") || value }}&nbsp;{{
                 lodashGet(dataset.scientificMetadata, column.name + ".unit") | prettyUnit
               }}
             </div>

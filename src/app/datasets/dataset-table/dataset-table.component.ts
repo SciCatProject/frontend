@@ -215,14 +215,18 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   ngOnInit() {
     this.subscriptions.push(
       this.store.pipe(select(getDatasetsInBatch)).subscribe((datasets) => {
-        this.inBatchPids = datasets.map((dataset) => dataset.pid);
+        this.inBatchPids = datasets.map((dataset) => {
+          return dataset.pid;
+        });
       })
     );
 
     if (this.tableColumns) {
       this.displayedColumns = this.tableColumns
         .filter((column) => column.enabled)
-        .map((column) => column.type + "_" + column.name);
+        .map((column) => {
+          return column.type + "_" + column.name;
+        });
     }
 
     this.subscriptions.push(
