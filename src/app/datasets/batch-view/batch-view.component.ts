@@ -22,9 +22,6 @@ import {
   ShareUser,
 } from "datasets/share-dialog/share-dialog.component";
 
-export interface Share {
-  name: string;
-}
 @Component({
   selector: "batch-view",
   templateUrl: "./batch-view.component.html",
