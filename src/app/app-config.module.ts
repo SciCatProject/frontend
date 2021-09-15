@@ -48,6 +48,7 @@ export class AppConfig {
   searchPublicDataEnabled = false;
   searchSamples = false;
   sftpHost: string | null = null;
+  shareEnabled = false;
   shoppingCartEnabled = false;
   shoppingCartOnHeader = false;
   tableSciDataEnabled = false;
@@ -108,6 +109,7 @@ export const APP_DI_CONFIG: AppConfig = {
   searchPublicDataEnabled: environment.searchPublicDataEnabled ?? false,
   searchSamples: environment.searchSamples ?? false,
   sftpHost: environment.sftpHost ?? null,
+  shareEnabled: environment.shareEnabled ?? false,
   shoppingCartEnabled: environment.shoppingCartEnabled ?? false,
   shoppingCartOnHeader: environment.shoppingCartOnHeader ?? false,
   tableSciDataEnabled: environment.tableSciDataEnabled ?? false,

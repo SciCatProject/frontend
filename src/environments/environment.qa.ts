@@ -54,6 +54,7 @@ export const environment = {
   searchPublicDataEnabled: true,
   searchSamples: true,
   sftpHost: null,
+  shareEnabled: false,
   shoppingCartEnabled: true,
   shoppingCartOnHeader: true,
   tableSciDataEnabled: false,

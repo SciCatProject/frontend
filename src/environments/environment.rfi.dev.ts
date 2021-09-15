@@ -55,6 +55,7 @@ export const environment = {
   searchPublicDataEnabled: false,
   searchSamples: true,
   sftpHost: "login.esss.dk",
+  shareEnabled: false,
   shoppingCartEnabled: true,
   shoppingCartOnHeader: true,
   tableSciDataEnabled: true,

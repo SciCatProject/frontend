@@ -44,6 +44,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   batch$: Observable<Dataset[]> = this.store.pipe(select(getDatasetsInBatch));
   subscriptions: Subscription[] = [];
   public hasBatch = false;
+  shareEnabled = this.appConfig.shareEnabled;
 
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,

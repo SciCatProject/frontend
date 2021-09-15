@@ -1,6 +1,6 @@
-<div style="margin-top: 1em;">
+<div style="margin-top: 1em">
   <div *ngIf="hasBatch; else empty_batch">
-    <div style="text-align: right; margin-bottom: 1em;">
+    <div style="text-align: right; margin-bottom: 1em">
       <button (click)="onEmpty()" mat-button class="button" color="primary">
         <mat-icon> remove_shopping_cart </mat-icon>
         Empty Cart
@@ -15,10 +15,12 @@
         <mat-icon> school </mat-icon>
         Publish
       </button>
-      <button mat-button (click)="onShare()" class="button" color="primary">
-        <mat-icon> share </mat-icon>
-        Share
-      </button>
+      <ng-container *ngIf="shareEnabled">
+        <button mat-button (click)="onShare()" class="button" color="primary">
+          <mat-icon> share </mat-icon>
+          Share
+        </button>
+      </ng-container>
       <ng-container *ngIf="appConfig.archiveWorkflowEnabled">
         <button mat-button (click)="onArchive()" class="button" color="primary">
           <mat-icon> archive </mat-icon>
@@ -39,17 +41,15 @@
     <mat-table
       [dataSource]="batch$"
       class="mat-elevation-z2"
-      style="margin-left: 1em;"
+      style="margin-left: 1em"
     >
       <ng-container matColumnDef="remove">
         <mat-header-cell *matHeaderCellDef>
-          <div fxLayout="column" style="align-items: center;">
+          <div fxLayout="column" style="align-items: center">
             <div>
               <mat-icon> remove_circle </mat-icon>
             </div>
-            <div>
-              Remove
-            </div>
+            <div>Remove</div>
           </div>
         </mat-header-cell>
 
@@ -62,13 +62,11 @@
 
       <ng-container matColumnDef="pid">
         <mat-header-cell *matHeaderCellDef>
-          <div fxLayout="column" style="align-items: center;">
+          <div fxLayout="column" style="align-items: center">
             <div>
               <mat-icon> perm_contact_calendar </mat-icon>
             </div>
-            <div>
-              PID
-            </div>
+            <div>PID</div>
           </div>
         </mat-header-cell>
         <mat-cell *matCellDef="let dataset">{{ dataset.pid }}</mat-cell>
@@ -76,13 +74,11 @@
 
       <ng-container matColumnDef="sourceFolder">
         <mat-header-cell *matHeaderCellDef>
-          <div fxLayout="column" style="align-items: center;">
+          <div fxLayout="column" style="align-items: center">
             <div>
               <mat-icon> folder </mat-icon>
             </div>
-            <div>
-              Source Folder
-            </div>
+            <div>Source Folder</div>
           </div>
         </mat-header-cell>
         <mat-cell *matCellDef="let dataset">{{
@@ -92,13 +88,11 @@
 
       <ng-container matColumnDef="size">
         <mat-header-cell *matHeaderCellDef>
-          <div fxLayout="column" style="align-items: center;">
+          <div fxLayout="column" style="align-items: center">
             <div>
               <mat-icon> save </mat-icon>
             </div>
-            <div>
-              Size
-            </div>
+            <div>Size</div>
           </div>
         </mat-header-cell>
         <mat-cell *matCellDef="let dataset">
@@ -108,13 +102,11 @@
 
       <ng-container matColumnDef="creationTime">
         <mat-header-cell *matHeaderCellDef>
-          <div fxLayout="column" style="align-items: center;">
+          <div fxLayout="column" style="align-items: center">
             <div>
               <mat-icon> calendar_today </mat-icon>
             </div>
-            <div>
-              Creation Time
-            </div>
+            <div>Creation Time</div>
           </div>
         </mat-header-cell>
         <mat-cell *matCellDef="let dataset">
