@@ -360,10 +360,9 @@
           </mat-header-cell>
           <mat-cell *matCellDef="let dataset">
             <div *ngIf="lodashGet(dataset.scientificMetadata, column.name) as value">
-              <!-- This can show both value like this {value: v, unit: u} or just value dont remove "|| value"  -->
-              {{ lodashGet(dataset.scientificMetadata, column.name + ".value") || value }}&nbsp;{{
-                lodashGet(dataset.scientificMetadata, column.name + ".unit") | prettyUnit
-              }}
+              <!-- This can show 3 type of value like this {value: 2, unit: mm} || {v: 2, u: mm} || 2
+                First match rule-->
+              {{ value.value || value.v || value }}&nbsp;{{ value.unit || value.u | prettyUnit}}
             </div>
           </mat-cell>
         </ng-container>
