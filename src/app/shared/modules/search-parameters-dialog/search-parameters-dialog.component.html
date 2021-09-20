@@ -16,7 +16,7 @@
         (focus)="toggleUnitField()"
       />
       <mat-autocomplete #parameterKeys="matAutocomplete">
-        <mat-option *ngFor="let key of filteredKeys$ | async" [value]="key">
+        <mat-option *ngFor="let key of filteredKeys$ | async" [value]="key" [matTooltip]="key">
           {{ key }}
         </mat-option>
       </mat-autocomplete>
