@@ -33,11 +33,13 @@ import { LogbooksModule } from "logbooks/logbooks.module";
 import { ProposalDashboardNewComponent } from "./proposal-dashboard-new/proposal-dashboard-new.component";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
+import { LogbookEffects } from "state-management/effects/logbooks.effects";
+import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
 
 @NgModule({
   imports: [
     CommonModule,
-    EffectsModule.forFeature([ProposalEffects]),
+    EffectsModule.forFeature([ProposalEffects, LogbookEffects]),
     FlexLayoutModule,
     LogbooksModule,
     MatButtonModule,
@@ -56,7 +58,8 @@ import { MatNativeDateModule } from "@angular/material/core";
     NgxJsonViewerModule,
     RouterModule,
     SharedCatanieModule,
-    StoreModule.forFeature("proposals", proposalsReducer)
+    StoreModule.forFeature("proposals", proposalsReducer),
+    StoreModule.forFeature("logbooks", logbooksReducer)
   ],
   declarations: [
     ViewProposalPageComponent,
