@@ -74,7 +74,6 @@ import { samplesReducer } from "state-management/reducers/samples.reducer";
 import { PublishedDataEffects } from "state-management/effects/published-data.effects";
 import { publishedDataReducer } from "state-management/reducers/published-data.reducer";
 import { BatchCardModule } from "./batch-card/batch-card.module";
-import { userReducer } from "state-management/reducers/user.reducer";
 import { JobEffects } from "state-management/effects/jobs.effects";
 import { LogbookEffects } from "state-management/effects/logbooks.effects";
 import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
