@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { AppConfigModule } from "app-config.module";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [SearchParametersDialogComponent],
@@ -25,6 +26,7 @@ import { AppConfigModule } from "app-config.module";
     MatOptionModule,
     MatSelectModule,
     ReactiveFormsModule,
+    MatTooltipModule
   ],
 })
 export class SearchParametersDialogModule {}

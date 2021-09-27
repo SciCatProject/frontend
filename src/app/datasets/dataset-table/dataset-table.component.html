@@ -359,10 +359,10 @@
             </div>
           </mat-header-cell>
           <mat-cell *matCellDef="let dataset">
-            <div *ngIf="dataset.scientificMetadata[column.name]">
-              {{ dataset.scientificMetadata[column.name].value }}&nbsp;{{
-                dataset.scientificMetadata[column.name].unit | prettyUnit
-              }}
+            <div *ngIf="lodashGet(dataset.scientificMetadata, column.name) as value">
+              <!-- This can show 3 type of value like this {value: 2, unit: mm} || {v: 2, u: mm} || 2
+                First match rule-->
+              {{ value.value || value.v || value }}&nbsp;{{ value.unit || value.u | prettyUnit}}
             </div>
           </mat-cell>
         </ng-container>
@@ -385,3 +385,5 @@
     </mat-row>
   </mat-table>
 </div>
+
+
