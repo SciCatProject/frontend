@@ -11,6 +11,7 @@ import { AppLayoutComponent } from "./app-layout/app-layout.component";
 import { AppMainLayoutComponent } from "./app-main-layout/app-main-layout.component";
 import { BatchCardModule } from "datasets/batch-card/batch-card.module";
 import { BreadcrumbModule } from "shared/modules/breadcrumb/breadcrumb.module";
+import {UsersModule} from "../users/users.module";
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { BreadcrumbModule } from "shared/modules/breadcrumb/breadcrumb.module";
     MatMenuModule,
     MatToolbarModule,
     RouterModule,
-    BreadcrumbModule
+    BreadcrumbModule,
+    UsersModule,
   ],
   exports: []
 })
