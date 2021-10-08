@@ -74,6 +74,9 @@ import { samplesReducer } from "state-management/reducers/samples.reducer";
 import { PublishedDataEffects } from "state-management/effects/published-data.effects";
 import { publishedDataReducer } from "state-management/reducers/published-data.reducer";
 import { BatchCardModule } from "./batch-card/batch-card.module";
+import { JobEffects } from "state-management/effects/jobs.effects";
+import { LogbookEffects } from "state-management/effects/logbooks.effects";
+import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
 
 @NgModule({
   imports: [
@@ -113,16 +116,14 @@ import { BatchCardModule } from "./batch-card/batch-card.module";
     RouterModule,
     SharedCatanieModule,
     BatchCardModule,
+    EffectsModule.forFeature([UserEffects, JobEffects, ProposalEffects, SampleEffects, PublishedDataEffects, LogbookEffects]),
     StoreModule.forFeature("datasets", datasetsReducer),
     StoreModule.forFeature("jobs", jobsReducer),
-    EffectsModule.forFeature([UserEffects]),
-    EffectsModule.forFeature([ProposalEffects]),
     StoreModule.forFeature("proposals", proposalsReducer),
-    EffectsModule.forFeature([SampleEffects]),
     StoreModule.forFeature("samples", samplesReducer),
-    EffectsModule.forFeature([PublishedDataEffects]),
     StoreModule.forFeature("publishedData", publishedDataReducer),
-        LogbooksModule,
+    StoreModule.forFeature("logbooks", logbooksReducer),
+    LogbooksModule,
   ],
   declarations: [
     BatchViewComponent,
