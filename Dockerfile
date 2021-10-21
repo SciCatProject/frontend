@@ -5,9 +5,9 @@ WORKDIR /usr/src/app
 
 #npm ci
 COPY . /usr/src/app
-RUN apk update && apk upgrade && \
-    apk add --update nodejs npm
-RUN npm ci
+RUN apk -v update && apk upgrade -v && \
+    apk -v add --update nodejs && apk -v add --update npm
+RUN npm ci --only=prod
 
 #nginx config
 COPY ./scripts/nginx.conf /etc/nginx/
