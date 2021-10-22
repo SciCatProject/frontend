@@ -5,8 +5,8 @@ WORKDIR /catanie
 
 #npm ci
 COPY . /catanie
-RUN apk -v update && apk upgrade -v && \
-    apk -v add --update nodejs && apk -v add --update npm
+RUN apk update && apk upgrade && \
+    apk add --update nodejs && apk add --update npm
 RUN npm ci --only=prod
 
 #nginx config
