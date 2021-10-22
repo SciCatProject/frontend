@@ -1,6 +1,6 @@
 FROM nginx:1.19-alpine
 
-ENV env=production
+ENV env=development
 WORKDIR /catanie
 
 #npm ci
