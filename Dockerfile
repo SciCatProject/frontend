@@ -1,10 +1,10 @@
 FROM nginx:1.19-alpine
 
-ENV env=development
-WORKDIR /usr/src/app
+ENV env=production
+WORKDIR /catanie
 
 #npm ci
-COPY . /usr/src/app
+COPY . /catanie
 RUN apk -v update && apk upgrade -v && \
     apk -v add --update nodejs && apk -v add --update npm
 RUN npm ci --only=prod
