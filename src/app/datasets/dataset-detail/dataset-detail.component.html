@@ -78,12 +78,12 @@
             </button>
           </td>
         </tr>
-        <tr *ngIf="dataset.sharedWith as sharedWith">
+        <tr *ngIf="dataset.sharedWith && dataset.sharedWith.length > 0">
           <th>Shared With</th>
           <td>
             <mat-chip-list>
               <mat-chip
-                *ngFor="let share of sharedWith"
+                *ngFor="let share of dataset.sharedWith"
                 [removable]="true"
                 (removed)="onRemoveShare(share)"
               >

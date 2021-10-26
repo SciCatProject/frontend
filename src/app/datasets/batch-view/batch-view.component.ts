@@ -17,10 +17,7 @@ import { ArchivingService } from "../archiving.service";
 import { Observable, Subscription } from "rxjs";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { MatDialog } from "@angular/material/dialog";
-import {
-  ShareDialogComponent,
-  ShareUser,
-} from "datasets/share-dialog/share-dialog.component";
+import { ShareDialogComponent } from "datasets/share-dialog/share-dialog.component";
 
 @Component({
   selector: "batch-view",
@@ -67,15 +64,14 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ShareDialogComponent, {
       width: "500px",
     });
-    dialogRef.afterClosed().subscribe((result: Record<string, ShareUser[]>) => {
+    dialogRef.afterClosed().subscribe((result: Record<string, string[]>) => {
       if (result && result.users && result.users.length > 0) {
-        const data = result.users.map((user) => user.username);
         this.datasetList.forEach((dataset) => {
           this.store.dispatch(
             appendToDatasetArrayFieldAction({
               pid: encodeURIComponent(dataset.pid),
               fieldName: "sharedWith",
-              data,
+              data: result.users,
             })
           );
           const message = new Message(

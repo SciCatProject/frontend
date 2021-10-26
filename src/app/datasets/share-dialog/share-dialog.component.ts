@@ -6,11 +6,6 @@ import { UserIdentity, UserIdentityApi } from "shared/sdk";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
 
-export interface ShareUser {
-  email: string;
-  username: string;
-}
-
 @Component({
   selector: "app-share-dialog",
   templateUrl: "./share-dialog.component.html",
@@ -21,7 +16,7 @@ export class ShareDialogComponent {
     Validators.required,
     Validators.email,
   ]);
-  users: ShareUser[] = [];
+  users: string[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<ShareDialogComponent>,
@@ -35,15 +30,10 @@ export class ShareDialogComponent {
 
   add = async (email: string): Promise<void> => {
     try {
-      const userIdentity = await this.userIdentityApi
+      await this.userIdentityApi
         .findOne<UserIdentity>({ where: { "profile.email": email.trim() } })
         .toPromise();
-      console.log(userIdentity);
-      const user: ShareUser = {
-        email,
-        username: userIdentity.externalId,
-      };
-      this.users.push(user);
+      this.users.push(email.trim());
       this.emailFormControl.reset();
     } catch (error) {
       const message = new Message(
@@ -55,8 +45,8 @@ export class ShareDialogComponent {
     }
   };
 
-  remove = (user: ShareUser): void => {
-    const index = this.users.indexOf(user);
+  remove = (email: string): void => {
+    const index = this.users.indexOf(email);
     if (index >= 0) {
       this.users.splice(index, 1);
     }
