@@ -18,7 +18,7 @@ import { UserIdentityApi } from "shared/sdk";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
 
-import { ShareDialogComponent, ShareUser } from "./share-dialog.component";
+import { ShareDialogComponent } from "./share-dialog.component";
 
 describe("ShareDialogComponent", () => {
   let component: ShareDialogComponent;
@@ -119,56 +119,39 @@ describe("ShareDialogComponent", () => {
       component.add(email);
       tick();
 
-      const user: ShareUser = {
-        username: userIdentity.externalId,
-        email,
-      };
-
-      expect(component.users).toContain(user);
+      expect(component.users).toContain(email);
       expect(component.emailFormControl.value).toEqual(null);
     }));
   });
 
   describe("#remove()", () => {
     it("should do nothing if trying to remove a user not in the array", () => {
-      const user: ShareUser = {
-        username: "test",
-        email: "test@email.com",
-      };
-      component.users.push(user);
-      expect(component.users).toContain(user);
+      const email = "test@email.com";
+      component.users.push(email);
+      expect(component.users).toContain(email);
       const users = component.users;
 
-      const notUser: ShareUser = {
-        username: "notUser",
-        email: "notInArray@email.com",
-      };
-      component.remove(notUser);
+      const notEmail = "notInArray@email.com";
+      component.remove(notEmail);
 
       expect(component.users).toEqual(users);
     });
 
     it("should remove the email from the emails array if the array contains the email", () => {
-      const user: ShareUser = {
-        username: "test",
-        email: "test@email.com",
-      };
-      component.users.push(user);
-      expect(component.users).toContain(user);
+      const email = "test@email.com";
+      component.users.push(email);
+      expect(component.users).toContain(email);
 
-      component.remove(user);
+      component.remove(email);
 
-      expect(component.users).not.toContain(user);
+      expect(component.users).not.toContain(email);
     });
   });
 
   describe("#isEmpty()", () => {
     it("should return false if emails array is not empty", () => {
-      const user: ShareUser = {
-        username: "test",
-        email: "test@email.com",
-      };
-      component.users.push(user);
+      const email = "test@email.com";
+      component.users.push(email);
 
       const isEmpty = component.isEmpty();
 
@@ -186,11 +169,8 @@ describe("ShareDialogComponent", () => {
     it("should close the dialog and emit data", () => {
       const dialogCloseSpy = spyOn(component.dialogRef, "close");
 
-      const user: ShareUser = {
-        username: "test",
-        email: "test@email.com",
-      };
-      component.users.push(user);
+      const email = "test@email.com";
+      component.users.push(email);
       const users = component.users;
 
       component.share();
