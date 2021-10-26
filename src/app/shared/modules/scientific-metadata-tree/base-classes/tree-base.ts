@@ -50,9 +50,10 @@ export class TreeBaseComponent {
       const value = obj[key];
       const node = new TreeNode();
       node.key = key;
-      if (value?.unit || value?.unit === "") {
-        node.unit = value.unit || undefined;
-        node.value = value.value;
+      // suport both {value: any, unit: string} and {v: any , u: string}
+      if (value?.unit || value?.unit === "" || value?.u || value?.u === "") {
+        node.unit = value.unit || value.u || undefined;
+        node.value = value.value || value.v;
       } else {
         node.value = value;
       }
