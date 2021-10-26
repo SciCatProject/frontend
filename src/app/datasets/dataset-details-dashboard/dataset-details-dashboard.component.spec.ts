@@ -96,6 +96,17 @@ describe("DetailsDashboardComponent", () => {
   });
 
   describe("#isPI()", () => {
+    it("should return true if user username is admin", () => {
+      component.user = new User({
+        username: "admin",
+        email: "test@email.com"
+      });
+
+      const isPI = component.isPI();
+
+      expect(isPI).toEqual(true);
+    });
+
     it("should return true if user email equals principalInvestigator of a raw dataset", () => {
       component.user = new User({ email: "test@email.com" });
       component.dataset = new Dataset({
@@ -187,6 +198,14 @@ describe("DetailsDashboardComponent", () => {
 
       expect(isPI).toEqual(false);
     });
+
+    it("should return false if no user is provided", () => {
+      component.user = undefined;
+
+      const isPI = component.isPI();
+
+      expect(isPI).toEqual(false);
+    });
   });
 
   describe("#onSlidePublic()", () => {
@@ -222,6 +241,18 @@ describe("DetailsDashboardComponent", () => {
   });
 
   describe("#onAddKeyword()", () => {
+    it("should add property keywords if it does not exist already", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const keyword = "test";
+      const pid = "testPid";
+      component.dataset = new Dataset();
+      component.dataset.pid = pid;
+      component.onAddKeyword(keyword);
+
+      expect(component.dataset.keywords).toBeTruthy();
+    });
+
     it("should do nothing if keyword already exists", () => {
       dispatchSpy = spyOn(store, "dispatch");
 

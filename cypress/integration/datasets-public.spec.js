@@ -27,8 +27,9 @@ describe("Datasets", () => {
 
       cy.wait("@fetch");
 
-      cy.get(".mat-row")
-        .contains("Cypress Dataset")
+      cy.wait(5000);
+
+      cy.contains(".mat-row", "Cypress Dataset")
         .click();
 
       cy.wait("@fetch");

@@ -7,20 +7,17 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { RouterModule } from "@angular/router";
-import { AnonymousLayoutComponent } from "./anonymous-layout/anonymous-layout.component";
 import { AppLayoutComponent } from "./app-layout/app-layout.component";
-import { LoginHeaderComponent } from "./login-header/login-header.component";
-import { LoginLayoutComponent } from "./login-layout/login-layout.component";
+import { AppMainLayoutComponent } from "./app-main-layout/app-main-layout.component";
 import { BatchCardModule } from "datasets/batch-card/batch-card.module";
 import { BreadcrumbModule } from "shared/modules/breadcrumb/breadcrumb.module";
+import {UsersModule} from "../users/users.module";
 
 @NgModule({
   declarations: [
-    AnonymousLayoutComponent,
-    AppHeaderComponent,
     AppLayoutComponent,
-    LoginHeaderComponent,
-    LoginLayoutComponent
+    AppHeaderComponent,
+    AppMainLayoutComponent,
   ],
   imports: [
     CommonModule,
@@ -31,7 +28,8 @@ import { BreadcrumbModule } from "shared/modules/breadcrumb/breadcrumb.module";
     MatMenuModule,
     MatToolbarModule,
     RouterModule,
-    BreadcrumbModule
+    BreadcrumbModule,
+    UsersModule,
   ],
   exports: []
 })

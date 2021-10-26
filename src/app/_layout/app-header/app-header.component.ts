@@ -9,7 +9,8 @@ import { Subscription } from "rxjs";
 import {
   getCurrentUserAccountType,
   getCurrentUser,
-  getProfile
+  getProfile,
+  getIsLoggedIn
 } from "state-management/selectors/user.selectors";
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 
@@ -29,6 +30,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   inBatchPids: string[] = [];
   inBatchCount = 0;
   inBatchIndicator = "";
+  loggedIn$ = this.store.pipe(select(getIsLoggedIn));
 
   constructor(
     private store: Store<any>,

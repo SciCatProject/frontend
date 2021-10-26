@@ -33,6 +33,7 @@ import {
   getProfile,
   getCurrentUser,
   getColumns,
+  getIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 import { Dataset, DerivedDataset } from "shared/sdk";
 import {
@@ -52,11 +53,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
     select(getHasPrefilledFilters),
     filter((has) => has)
   );
+  loggedIn$ = this.store.pipe(select(getIsLoggedIn));
   selectedSets$ = this.store.pipe(select(getSelectedDatasets));
-  tableColumns$ = this.store.pipe(select(getColumns));
-  selectableColumns$ = this.tableColumns$.pipe(
-    map((columns) => columns.filter((column) => column.name !== "select"))
-  );
+  tableColumns$ = this.store.pipe(select(getColumns)).pipe(
+        map((columns) => columns.filter((column) => column.name !== "select"))
+      );
+  selectableColumns$ = this.store.pipe(select(getColumns))
+    .pipe(map((columns) => columns.filter((column) => column.name !== "select")));
   public nonEmpty$ = this.store.pipe(
     select(getDatasetsInBatch),
     map((batch) => batch.length > 0)
@@ -149,21 +152,37 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  updateColumnSubscription(): void {
+    this.subscriptions.push(
+      this.loggedIn$.subscribe(status => {
+          if (!status) {
+            this.tableColumns$ = this.store.pipe(select(getColumns)).pipe(
+              map((columns) => columns.filter((column) => column.name !== "select"))
+            );
+          } else {
+            this.tableColumns$ = this.store.pipe(select(getColumns));
+          }
+        }
+      ));
+  }
+
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());
     this.store.dispatch(fetchMetadataKeysAction());
 
+    this.updateColumnSubscription();
+
     this.subscriptions.push(
-      combineLatest([this.filters$, this.readyToFetch$])
+      combineLatest([this.filters$, this.readyToFetch$, this.loggedIn$])
         .pipe(
-          map(([filters, _]) => filters),
+          map(([filters, _, loggedIn]) => [filters, loggedIn]),
           distinctUntilChanged(deepEqual)
         )
-        .subscribe((filters) => {
+        .subscribe((obj) => {
           this.store.dispatch(fetchDatasetsAction());
           this.store.dispatch(fetchFacetCountsAction());
           this.router.navigate(["/datasets"], {
-            queryParams: { args: JSON.stringify(filters) },
+            queryParams: { args: JSON.stringify(obj[0]) },
           });
         })
     );
