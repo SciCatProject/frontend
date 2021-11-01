@@ -52,7 +52,8 @@
       [name]="'files[' + i + ']'"
       [value]="file"
     />
-    <button
+    <ng-template [ngIf]="multipleDownloadAction">
+      <button
       mat-raised-button
       class="download-button"
       type="submit"
@@ -61,6 +62,8 @@
     >
       Download All
     </button>
+    </ng-template>
+
   </form>
 
   <form
@@ -78,7 +81,8 @@
       [name]="'files[' + i + ']'"
       [value]="file"
     />
-    <button
+    <ng-template [ngIf]="multipleDownloadAction">
+      <button
       mat-raised-button
       class="download-button"
       type="submit"
@@ -89,10 +93,37 @@
     >
       Download Selected
     </button>
+    </ng-template>
   </form>
+
+  <form
+  #globusForm="ngForm"
+  (ngSubmit)="globusDownloadAction(globusForm)"
+  style="display: inline;"
+>
+  <input type="hidden" name="directory" [value]="sourcefolder" ngModel />
+  <input
+    *ngFor="let file of getSelectedFiles(); index as i"
+    type="hidden"
+    [name]="'files[' + i + ']'"
+    [value]="file"
+    ngModel
+  />
+  <ng-template [ngIf]="globusDownloadEnabled">
+    <button
+    mat-raised-button
+    class="download-button"
+    type="submit"
+    color="accent"
+    [disabled]="isNoneSelected"
+  >
+    Download with Globus
+  </button>
+  </ng-template>
+</form>
+
   <div style="clear: both;"></div>
 </div>
-
 <app-table
   [data]="tableData"
   [columns]="tableColumns"

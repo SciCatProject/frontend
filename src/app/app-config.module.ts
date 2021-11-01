@@ -56,6 +56,7 @@ export class AppConfig {
   userNamePromptEnabled = false;
   loginFormEnabled = true;
   oAuth2Endpoints: OAuth2Endpoint[] = [];
+  globusDownloadEnabled: boolean
 }
 
 export const APP_DI_CONFIG: AppConfig = {
@@ -117,7 +118,8 @@ export const APP_DI_CONFIG: AppConfig = {
   landingPage: environment.landingPage ?? null,
   editPublishedData: (environment.editPublishedData === undefined) ? true: environment.editPublishedData,
   oAuth2Endpoints: environment.oAuth2Endpoints ?? [],
-  loginFormEnabled: (environment.loginFormEnabled == undefined) ? true: environment.loginFormEnabled
+  loginFormEnabled: (environment.loginFormEnabled == undefined) ? true: environment.loginFormEnabled,
+  globusDownloadEnabled: environment.globusDownloadEnabled ?? false
 };
 
 @NgModule({

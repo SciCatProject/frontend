@@ -27,6 +27,8 @@ import { fetchDatasetAction } from "state-management/actions/datasets.actions";
 import { UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
+import { NgForm } from "@angular/forms";
+import { datasets } from "state-management/selectors";
 
 export interface File {
   path: string;
@@ -68,6 +70,7 @@ export class DatafilesComponent
 
   fileDownloadEnabled: boolean = this.appConfig.fileDownloadEnabled;
   multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
+  globusDownloadEnabled: boolean = this.appConfig.globusDownloadEnabled;
   multipleDownloadAction: string | null = this.appConfig
     .multipleDownloadAction;
   maxFileSize: number | null = this.appConfig.maxDirectDownloadSize;
@@ -234,5 +237,10 @@ export class DatafilesComponent
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+  globusDownloadAction(form: NgForm){
+    console.log(this.getSelectedFiles());
+    console.log(this.sourcefolder);
+    console.log(this.userApi.isAuthenticated(), "isAuthenticated");
   }
 }
