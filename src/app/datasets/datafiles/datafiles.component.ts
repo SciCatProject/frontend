@@ -24,11 +24,12 @@ import { getIsLoading } from "state-management/selectors/user.selectors";
 import { ActivatedRoute } from "@angular/router";
 import { pluck } from "rxjs/operators";
 import { fetchDatasetAction } from "state-management/actions/datasets.actions";
-import { UserApi } from "shared/sdk";
+import { Job, UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
-import { NgForm } from "@angular/forms";
-import { datasets } from "state-management/selectors";
+import { MatDialog } from "@angular/material/dialog";
+import { PublicDownloadDialogComponent } from "datasets/public-download-dialog/public-download-dialog.component";
+import { submitJobAction } from "state-management/actions/jobs.actions";
 
 export interface File {
   path: string;
@@ -63,6 +64,7 @@ export class DatafilesComponent
 
   files: Array<any> = [];
   sourcefolder = "";
+  datasetPid = "";
 
   count = 0;
   pageSize = 25;
@@ -107,6 +109,7 @@ export class DatafilesComponent
     private store: Store<Dataset>,
     private cdRef: ChangeDetectorRef,
     private userApi: UserApi,
+    private dialog: MatDialog,
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {}
 
@@ -197,9 +200,8 @@ export class DatafilesComponent
   }
 
   ngAfterViewInit() {
-    let datasetPid: string;
     this.route.params.pipe(pluck("id")).subscribe((id: string) => {
-      datasetPid = id;
+      this.datasetPid = id;
       this.store.dispatch(fetchDatasetAction({ pid: id }));
     });
 
@@ -215,7 +217,7 @@ export class DatafilesComponent
       this.datablocks$.subscribe((datablocks) => {
         const files: File[] = [];
         datablocks.forEach((block) => {
-          if (block.datasetId === datasetPid) {
+          if (block.datasetId === this.datasetPid) {
             block.dataFileList.map((file) => {
               this.totalFileSize += file.size;
               file.selected = false;
@@ -238,9 +240,26 @@ export class DatafilesComponent
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
-  globusDownloadAction(form: NgForm){
-    console.log(this.getSelectedFiles());
-    console.log(this.sourcefolder);
-    console.log(this.userApi.isAuthenticated(), "isAuthenticated");
+  openDialog(): void {
+    const dialogRef = this.dialog.open(PublicDownloadDialogComponent, {
+      width: "500px",
+      data: {email: ""}
+    });
+    dialogRef.afterClosed().subscribe((email) => {
+      if (email) {
+        this.getSelectedFiles();
+        const data = {
+          emailJobInitiator: email,
+          creationTime: new Date(),
+          type: "public",
+          datasetList: [{
+            pid: this.datasetPid,
+            files: this.getSelectedFiles()
+          }]
+        };
+        const job = new Job(data);
+         this.store.dispatch(submitJobAction({ job }));
+      }
+    });
   }
 }

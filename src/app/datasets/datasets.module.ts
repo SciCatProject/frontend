@@ -77,6 +77,7 @@ import { BatchCardModule } from "./batch-card/batch-card.module";
 import { JobEffects } from "state-management/effects/jobs.effects";
 import { LogbookEffects } from "state-management/effects/logbooks.effects";
 import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
+import { PublicDownloadDialogComponent } from "./public-download-dialog/public-download-dialog.component";
 
 @NgModule({
   imports: [
@@ -144,6 +145,7 @@ import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
     AnonymousDetailsDashboardComponent,
     AnonymousDetailsComponent,
     SampleEditComponent,
+    PublicDownloadDialogComponent,
   ],
   providers: [
     ArchivingService,

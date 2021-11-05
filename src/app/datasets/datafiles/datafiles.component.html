@@ -96,19 +96,6 @@
     </ng-template>
   </form>
 
-  <form
-  #globusForm="ngForm"
-  (ngSubmit)="globusDownloadAction(globusForm)"
-  style="display: inline;"
->
-  <input type="hidden" name="directory" [value]="sourcefolder" ngModel />
-  <input
-    *ngFor="let file of getSelectedFiles(); index as i"
-    type="hidden"
-    [name]="'files[' + i + ']'"
-    [value]="file"
-    ngModel
-  />
   <ng-template [ngIf]="globusDownloadEnabled">
     <button
     mat-raised-button
@@ -116,11 +103,11 @@
     type="submit"
     color="accent"
     [disabled]="isNoneSelected"
+    (click)="openDialog()"
   >
     Download with Globus
   </button>
   </ng-template>
-</form>
 
   <div style="clear: both;"></div>
 </div>

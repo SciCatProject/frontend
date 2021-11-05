@@ -56,7 +56,7 @@ export class AppConfig {
   userNamePromptEnabled = false;
   loginFormEnabled = true;
   oAuth2Endpoints: OAuth2Endpoint[] = [];
-  globusDownloadEnabled: boolean
+  globusDownloadEnabled: boolean;
 }
 
 export const APP_DI_CONFIG: AppConfig = {
