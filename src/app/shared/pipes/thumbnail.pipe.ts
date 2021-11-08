@@ -1,16 +1,31 @@
 import { Pipe, PipeTransform } from "@angular/core";
+import { RESET } from "@ngrx/store-devtools/src/actions";
 
 import { DatasetApi } from "shared/sdk";
 
 @Pipe({
-  name: "thumbnail"
+  name: "thumbnail",
 })
 export class ThumbnailPipe implements PipeTransform {
   constructor(private datasetApi: DatasetApi) {}
 
-  transform(value: any, args?: any): any {
-    const encoded = encodeURIComponent(value);
+  async transform(pid: string, args?: any): Promise<string | null> {
+    const encodedPid = encodeURIComponent(pid);
 
-    return this.datasetApi.thumbnail(encoded);
+    const res = await this.datasetApi.thumbnail(encodedPid).toPromise();
+
+    if (!res) {
+      return null;
+    }
+
+    if (typeof res === "string") {
+      return res;
+    }
+
+    if (!res.thumbnail) {
+      return null;
+    }
+
+    return res.thumbnail;
   }
 }

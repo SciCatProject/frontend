@@ -7,78 +7,64 @@ exports[`stricter compilation`] = {
     "src/app/app-routing/redirect.guard.ts:1233518172": [
       [18, 27, 43, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'AppConfig\'.", "1916593973"]
     ],
-    "src/app/datasets/anonymous-dashboard/anonymous-dashboard.component.spec.ts:374002320": [
-      [125, 8, 66, "Expected 0 arguments, but got 1.", "1240398008"],
-      [145, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"]
-    ],
-    "src/app/datasets/anonymous-details-dashboard/anonymous-details-dashboard.component.spec.ts:1843756080": [
-      [84, 47, 19, "Expected 0 arguments, but got 1.", "302414085"],
-      [86, 8, 35, "Expected 0 arguments, but got 1.", "2922510941"]
-    ],
     "src/app/datasets/archiving.service.spec.ts:33874901": [
       [73, 12, 8, "Variable \'datasets\' implicitly has type \'any[]\' in some locations where its type cannot be determined.", "805288804"],
       [76, 35, 8, "Variable \'datasets\' implicitly has an \'any[]\' type.", "805288804"]
     ],
-    "src/app/datasets/batch-view/batch-view.component.spec.ts:469965346": [
-      [105, 20, 5, "Argument of type \'{ input: HTMLInputElement; value: undefined; }\' is not assignable to parameter of type \'MatChipInputEvent\'.\\n  Types of property \'value\' are incompatible.\\n    Type \'undefined\' is not assignable to type \'string\'.", "165702089"]
+    "src/app/datasets/dashboard/dashboard.component.spec.ts:249866239": [
+      [173, 8, 66, "Expected 0 arguments, but got 1.", "1240398008"],
+      [193, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"],
+      [257, 47, 29, "Expected 0 arguments, but got 1.", "2503700957"]
     ],
-    "src/app/datasets/dashboard/dashboard.component.spec.ts:1153933419": [
-      [156, 8, 66, "Expected 0 arguments, but got 1.", "1240398008"],
-      [176, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"],
-      [240, 47, 29, "Expected 0 arguments, but got 1.", "2503700957"]
+    "src/app/datasets/dataset-detail/dataset-detail.component.ts:3691260058": [
+      [80, 22, 12, "Object is possibly \'null\'.", "1944648223"]
     ],
-    "src/app/datasets/dataset-detail/dataset-detail.component.ts:1081646072": [
-      [79, 22, 12, "Object is possibly \'null\'.", "1944648223"]
+    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.spec.ts:791153726": [
+      [119, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
+      [120, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
+      [137, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
+      [138, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
+      [155, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"investigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'investigator\' does not exist on type \'Dataset\'.", "3830977733"],
+      [156, 6, 34, "Element implicitly has an \'any\' type because expression of type \'\\"inputDatasets\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'inputDatasets\' does not exist on type \'Dataset\'.", "3801541895"],
+      [157, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"usedSoftware\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'usedSoftware\' does not exist on type \'Dataset\'.", "2755406360"],
+      [174, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"investigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'investigator\' does not exist on type \'Dataset\'.", "3830977733"],
+      [175, 6, 34, "Element implicitly has an \'any\' type because expression of type \'\\"inputDatasets\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'inputDatasets\' does not exist on type \'Dataset\'.", "3801541895"],
+      [176, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"usedSoftware\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'usedSoftware\' does not exist on type \'Dataset\'.", "2755406360"],
+      [193, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
+      [194, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
+      [222, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [234, 47, 19, "Expected 0 arguments, but got 1.", "302414085"],
+      [236, 8, 35, "Expected 0 arguments, but got 1.", "2922510941"],
+      [279, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [309, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [352, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [370, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [449, 8, 57, "Expected 0 arguments, but got 1.", "2548844095"],
+      [467, 8, 164, "Expected 0 arguments, but got 1.", "3577138323"],
+      [486, 8, 103, "Expected 0 arguments, but got 1.", "2385541400"]
     ],
-    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.spec.ts:3847885859": [
-      [108, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
-      [109, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
-      [126, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
-      [127, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
-      [144, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"investigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'investigator\' does not exist on type \'Dataset\'.", "3830977733"],
-      [145, 6, 34, "Element implicitly has an \'any\' type because expression of type \'\\"inputDatasets\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'inputDatasets\' does not exist on type \'Dataset\'.", "3801541895"],
-      [146, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"usedSoftware\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'usedSoftware\' does not exist on type \'Dataset\'.", "2755406360"],
-      [163, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"investigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'investigator\' does not exist on type \'Dataset\'.", "3830977733"],
-      [164, 6, 34, "Element implicitly has an \'any\' type because expression of type \'\\"inputDatasets\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'inputDatasets\' does not exist on type \'Dataset\'.", "3801541895"],
-      [165, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"usedSoftware\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'usedSoftware\' does not exist on type \'Dataset\'.", "2755406360"],
-      [182, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
-      [183, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
-      [203, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [215, 47, 19, "Expected 0 arguments, but got 1.", "302414085"],
-      [217, 8, 35, "Expected 0 arguments, but got 1.", "2922510941"],
-      [248, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [278, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [321, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [339, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [418, 8, 57, "Expected 0 arguments, but got 1.", "2548844095"],
-      [436, 8, 164, "Expected 0 arguments, but got 1.", "3577138323"],
-      [455, 8, 103, "Expected 0 arguments, but got 1.", "2385541400"]
-    ],
-    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:2693308775": [
-      [115, 8, 9, "Object is possibly \'undefined\'.", "1162801532"],
-      [118, 8, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [120, 8, 9, "Object is possibly \'undefined\'.", "1162801532"],
-      [126, 8, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [128, 8, 9, "Object is possibly \'undefined\'.", "1162801532"],
-      [138, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [150, 9, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [152, 6, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [154, 8, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [155, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [156, 27, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [163, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [165, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [166, 27, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [184, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [190, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [234, 20, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [235, 22, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [236, 19, 9, "Object is possibly \'undefined\'.", "1162801532"],
-      [237, 19, 9, "Object is possibly \'undefined\'.", "1162801532"],
-      [241, 19, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [250, 19, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [259, 42, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [293, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
+    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:270668896": [
+      [121, 10, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [129, 10, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [142, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [154, 9, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [156, 6, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [158, 8, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [159, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [160, 27, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [167, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [169, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [170, 27, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [188, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [194, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [238, 20, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [239, 22, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [240, 19, 9, "Object is possibly \'undefined\'.", "1162801532"],
+      [241, 19, 9, "Object is possibly \'undefined\'.", "1162801532"],
+      [245, 19, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [254, 19, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [263, 42, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [297, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
     ],
     "src/app/datasets/dataset-lifecycle/dataset-lifecycle.component.spec.ts:1858539517": [
       [155, 20, 3, "Parameter \'key\' implicitly has an \'any\' type.", "193424690"],
@@ -325,7 +311,7 @@ exports[`stricter compilation`] = {
       [281, 27, 4, "Argument of type \'null\' is not assignable to parameter of type \'TreeNode\'.", "2087897566"],
       [291, 39, 4, "Argument of type \'null\' is not assignable to parameter of type \'TreeNode\'.", "2087897566"]
     ],
-    "src/app/shared/modules/scientific-metadata-tree/base-classes/tree-base.ts:1113001576": [
+    "src/app/shared/modules/scientific-metadata-tree/base-classes/tree-base.ts:1928180855": [
       [10, 2, 8, "Property \'children\' has no initializer and is not definitely assigned in the constructor.", "1925793782"],
       [11, 2, 3, "Property \'key\' has no initializer and is not definitely assigned in the constructor.", "193424690"],
       [13, 2, 4, "Property \'unit\' has no initializer and is not definitely assigned in the constructor.", "2087995779"],
@@ -341,10 +327,10 @@ exports[`stricter compilation`] = {
       [32, 2, 11, "Property \'nestNodeMap\' has no initializer and is not definitely assigned in the constructor.", "3653747733"],
       [34, 2, 8, "Property \'dataTree\' has no initializer and is not definitely assigned in the constructor.", "806281235"],
       [36, 2, 8, "Property \'datePipe\' has no initializer and is not definitely assigned in the constructor.", "801667837"],
-      [97, 32, 10, "Object is possibly \'undefined\'.", "3877177832"],
-      [113, 6, 11, "Type \'FlatNode | null\' is not assignable to type \'FlatNode\'.\\n  Type \'null\' is not assignable to type \'FlatNode\'.", "973876812"],
-      [119, 6, 8, "Object is possibly \'undefined\'.", "3061659290"],
-      [143, 32, 14, "Argument of type \'FlatNode | null\' is not assignable to parameter of type \'FlatNode\'.\\n  Type \'null\' is not assignable to type \'FlatNode\'.", "3757201702"]
+      [98, 32, 10, "Object is possibly \'undefined\'.", "3877177832"],
+      [114, 6, 11, "Type \'FlatNode | null\' is not assignable to type \'FlatNode\'.\\n  Type \'null\' is not assignable to type \'FlatNode\'.", "973876812"],
+      [120, 6, 8, "Object is possibly \'undefined\'.", "3061659290"],
+      [144, 32, 14, "Argument of type \'FlatNode | null\' is not assignable to parameter of type \'FlatNode\'.\\n  Type \'null\' is not assignable to type \'FlatNode\'.", "3757201702"]
     ],
     "src/app/shared/modules/scientific-metadata-tree/metadata-input-modal/metadata-input-modal.component.spec.ts:1912785648": [
       [50, 13, 25, "Object is possibly \'null\'.", "853089681"],
@@ -524,36 +510,20 @@ exports[`stricter compilation`] = {
       [129, 13, 36, "Object is possibly \'null\'.", "1010399159"],
       [142, 13, 36, "Object is possibly \'null\'.", "1010399159"]
     ],
-    "src/app/shared/modules/shared-table/shared-table.component.spec.ts:2023831950": [
-      [28, 8, 10, "Variable \'columnsDef\' implicitly has type \'any[]\' in some locations where its type cannot be determined.", "459426407"],
-      [48, 27, 10, "Variable \'columnsDef\' implicitly has an \'any[]\' type.", "459426407"]
-    ],
-    "src/app/shared/modules/shared-table/shared-table.component.ts:3204953284": [
-      [73, 2, 14, "Property \'visibleColumns\' has no initializer and is not definitely assigned in the constructor.", "1769051438"],
-      [74, 2, 13, "Property \'hiddenColumns\' has no initializer and is not definitely assigned in the constructor.", "3008049162"],
-      [82, 11, 10, "Property \'dataSource\' has no initializer and is not definitely assigned in the constructor.", "1967398792"],
-      [83, 11, 10, "Property \'columnsdef\' has no initializer and is not definitely assigned in the constructor.", "459458951"],
-      [91, 41, 9, "Property \'dataTable\' has no initializer and is not definitely assigned in the constructor.", "836725899"],
-      [92, 40, 4, "Property \'sort\' has no initializer and is not definitely assigned in the constructor.", "2088345023"],
-      [93, 45, 9, "Property \'paginator\' has no initializer and is not definitely assigned in the constructor.", "2483840092"],
-      [94, 47, 12, "Property \'globalFilter\' has no initializer and is not definitely assigned in the constructor.", "2218235630"],
-      [95, 30, 10, "Property \'allFilters\' has no initializer and is not definitely assigned in the constructor.", "3302591543"],
-      [182, 10, 49, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2898691922"],
-      [186, 17, 49, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2898691922"],
-      [239, 16, 1, "Parameter \'i\' implicitly has an \'any\' type.", "177612"],
-      [241, 54, 23, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2890101915"],
-      [247, 19, 1, "Parameter \'i\' implicitly has an \'any\' type.", "177612"],
-      [248, 4, 23, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2890101915"],
-      [248, 31, 23, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2890101915"],
-      [265, 8, 19, "Type \'SortDirection | undefined\' is not assignable to type \'SortDirection\'.\\n  Type \'undefined\' is not assignable to type \'SortDirection\'.", "3393242684"],
-      [317, 12, 32, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2145228977"],
-      [319, 41, 32, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2145228977"],
-      [323, 19, 32, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2145228977"],
-      [340, 10, 32, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2145228977"],
-      [342, 37, 32, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2145228977"],
-      [384, 50, 4, "No overload matches this call.\\n  Overload 1 of 3, \'(callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'string\'.\\n  Overload 2 of 3, \'(callbackfn: (previousValue: Record<string, unknown>, currentValue: string, currentIndex: number, array: string[]) => Record<string, unknown>, initialValue: Record<string, unknown>): Record<...>\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'Record<string, unknown>\'.", "2087877701"],
-      [390, 6, 32, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'{}\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{}\'.", "2145228977"],
-      [392, 35, 32, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'{}\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{}\'.", "2145228977"]
+    "src/app/shared/modules/shared-table/shared-table.component.ts:1451762685": [
+      [68, 2, 14, "Property \'visibleColumns\' has no initializer and is not definitely assigned in the constructor.", "1769051438"],
+      [69, 2, 13, "Property \'hiddenColumns\' has no initializer and is not definitely assigned in the constructor.", "3008049162"],
+      [76, 11, 10, "Property \'dataSource\' has no initializer and is not definitely assigned in the constructor.", "1967398792"],
+      [77, 11, 10, "Property \'columnsdef\' has no initializer and is not definitely assigned in the constructor.", "459458951"],
+      [84, 41, 9, "Property \'dataTable\' has no initializer and is not definitely assigned in the constructor.", "836725899"],
+      [85, 40, 4, "Property \'sort\' has no initializer and is not definitely assigned in the constructor.", "2088345023"],
+      [86, 45, 9, "Property \'paginator\' has no initializer and is not definitely assigned in the constructor.", "2483840092"],
+      [244, 16, 1, "Parameter \'i\' implicitly has an \'any\' type.", "177612"],
+      [246, 54, 23, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{ filters: boolean; }\'.", "2890101915"],
+      [253, 4, 23, "Element implicitly has an \'any\' type because expression of type \'string | number\' can\'t be used to index type \'{ filters: boolean; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ filters: boolean; }\'.", "2890101915"],
+      [253, 31, 23, "Element implicitly has an \'any\' type because expression of type \'string | number\' can\'t be used to index type \'{ filters: boolean; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ filters: boolean; }\'.", "2890101915"],
+      [268, 8, 19, "Type \'SortDirection | undefined\' is not assignable to type \'SortDirection\'.\\n  Type \'undefined\' is not assignable to type \'SortDirection\'.", "3393242684"],
+      [341, 50, 4, "No overload matches this call.\\n  Overload 1 of 3, \'(callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'string\'.\\n  Overload 2 of 3, \'(callbackfn: (previousValue: Record<string, unknown>, currentValue: string, currentIndex: number, array: string[]) => Record<string, unknown>, initialValue: Record<string, unknown>): Record<...>\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'Record<string, unknown>\'.", "2087877701"]
     ],
     "src/app/shared/sdk/models/Attachment.ts:3362633067": [
       [43, 2, 7, "Property \'dataset\' has no initializer and is not definitely assigned in the constructor.", "2497262647"],
@@ -694,7 +664,7 @@ exports[`stricter compilation`] = {
       [186, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [215, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"]
     ],
-    "src/app/shared/sdk/services/custom/Dataset.ts:2918985484": [
+    "src/app/shared/sdk/services/custom/Dataset.ts:2645484163": [
       [67, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [94, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [130, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
@@ -749,20 +719,19 @@ exports[`stricter compilation`] = {
       [1595, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1624, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1652, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1683, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1709, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1678, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1713, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1744, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1775, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1804, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1837, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1870, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1903, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1936, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1969, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [2002, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [2035, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"]
+      [1773, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1806, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1839, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1872, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1905, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1938, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1971, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [2004, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"]
     ],
-    "src/app/shared/sdk/services/custom/DerivedDataset.ts:154274790": [
+    "src/app/shared/sdk/services/custom/DerivedDataset.ts:1884624969": [
       [67, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [94, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [130, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
@@ -817,18 +786,17 @@ exports[`stricter compilation`] = {
       [1595, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1624, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1652, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1683, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1709, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1678, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1713, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1744, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1775, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1804, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1837, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1870, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1903, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1936, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1969, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [2002, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [2035, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"]
+      [1773, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1806, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1839, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1872, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1905, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1938, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1971, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [2004, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"]
     ],
     "src/app/shared/sdk/services/custom/Instrument.ts:296249052": [
       [62, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
@@ -922,7 +890,7 @@ exports[`stricter compilation`] = {
       [454, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [487, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"]
     ],
-    "src/app/shared/sdk/services/custom/RawDataset.ts:1164385838": [
+    "src/app/shared/sdk/services/custom/RawDataset.ts:2324433025": [
       [68, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [95, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [131, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
@@ -979,18 +947,17 @@ exports[`stricter compilation`] = {
       [1656, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1685, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1713, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1744, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1770, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1739, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1774, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1805, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1836, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1865, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1898, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1931, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1964, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1997, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [2030, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [2063, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [2096, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"]
+      [1834, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1867, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1900, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1933, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1966, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1999, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [2032, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [2065, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"]
     ],
     "src/app/shared/sdk/services/custom/Sample.ts:3090674186": [
       [63, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
@@ -1101,8 +1068,8 @@ exports[`stricter compilation`] = {
       [154, 58, 4, "Type \'null\' is not assignable to type \'Record<string, string> | undefined\'.", "2087698470"],
       [167, 58, 4, "Type \'null\' is not assignable to type \'Record<string, string> | undefined\'.", "2087698470"]
     ],
-    "src/app/state-management/effects/user.effects.spec.ts:133571840": [
-      [501, 27, 93, "Conversion of type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' to type \'UserSetting\' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to \'unknown\' first.\\n  Type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' is missing the following properties from type \'UserSetting\': \\"id\\", \\"createdBy\\", \\"updatedBy\\", \\"userId\\", and 3 more.", "1258454294"]
+    "src/app/state-management/effects/user.effects.spec.ts:3527283907": [
+      [538, 27, 93, "Conversion of type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' to type \'UserSetting\' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to \'unknown\' first.\\n  Type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' is missing the following properties from type \'UserSetting\': \\"id\\", \\"createdBy\\", \\"updatedBy\\", \\"userId\\", and 3 more.", "1258454294"]
     ],
     "src/app/state-management/reducers/jobs.reducer.spec.ts:2620026082": [
       [65, 56, 4, "Type \'null\' is not assignable to type \'Record<string, string> | undefined\'.", "2087698470"],
@@ -1134,8 +1101,8 @@ exports[`stricter compilation`] = {
       [72, 16, 4, "Argument of type \'null\' is not assignable to parameter of type \'Expected<Record<string, string> | undefined>\'.", "2087897566"],
       [106, 16, 6, "Argument of type \'{ where: null; order: string; skip: number; limit: number; } | { order: string; skip: number; limit: number; }\' is not assignable to parameter of type \'Expected<{ where: Record<string, string>; order: string; skip: number; limit: number; } | { order: string; skip: number; limit: number; where?: undefined; }>\'.\\n  Type \'{ where: null; order: string; skip: number; limit: number; }\' is not assignable to type \'Expected<{ where: Record<string, string>; order: string; skip: number; limit: number; } | { order: string; skip: number; limit: number; where?: undefined; }>\'.\\n    Types of property \'where\' are incompatible.\\n      Type \'null\' is not assignable to type \'Record<string, string> | AsymmetricMatcher<any> | ObjectContaining<Record<string, string>> | { [x: string]: Any | ExpectedRecursive<string>; } | ObjectContaining<...> | undefined\'.", "1898504825"]
     ],
-    "src/app/users/login/login.component.spec.ts:1596191075": [
-      [117, 8, 71, "Expected 0 arguments, but got 1.", "3870196511"]
+    "src/app/users/login/login.component.spec.ts:590365834": [
+      [154, 8, 71, "Expected 0 arguments, but got 1.", "3870196511"]
     ],
     "src/app/users/user-settings/user-settings.component.spec.ts:2325442996": [
       [95, 8, 32, "Expected 0 arguments, but got 1.", "1341113725"],
