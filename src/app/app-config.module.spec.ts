@@ -76,6 +76,7 @@ describe("AppConfigModule", () =>{
         searchPublicDataEnabled: false,
         searchSamples: false,
         sftpHost: "sftpHpst",
+        shareEnabled: false,
         shoppingCartEnabled: false,
         shoppingCartOnHeader: false,
         tableSciDataEnabled: false,

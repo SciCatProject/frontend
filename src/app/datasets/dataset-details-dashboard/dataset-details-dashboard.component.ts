@@ -175,6 +175,19 @@ export class DatasetDetailsDashboardComponent
     }
   }
 
+  onRemoveShare(share: string) {
+    if (this.dataset) {
+      const index = this.dataset.sharedWith.indexOf(share);
+      if (index >= 0) {
+        const pid = this.dataset.pid;
+        const sharedWith: string[] = [...this.dataset.sharedWith];
+        sharedWith.splice(index, 1);
+        const property = { sharedWith };
+        this.store.dispatch(updatePropertyAction({pid, property}));
+      }
+    }
+  }
+
   onClickProposal(proposalId: string) {
     const id = encodeURIComponent(proposalId);
     this.router.navigateByUrl("/proposals/" + id);

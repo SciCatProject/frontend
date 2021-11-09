@@ -52,6 +52,7 @@ export const environment = {
   searchSamples: true,
   sftpHost: "login.esss.dk",
   tableSciDataEnabled: true,
+  shareEnabled: false,
   userProfileImageEnabled: true,
   searchPublicDataEnabled: true,
   landingPage: "doi2.psi.ch/detail/",

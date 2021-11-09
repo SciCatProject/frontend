@@ -18,6 +18,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTabsModule } from "@angular/material/tabs";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("DatasetDetailComponent", () => {
   let component: DatasetDetailComponent;
@@ -29,6 +30,7 @@ describe("DatasetDetailComponent", () => {
         schemas: [NO_ERRORS_SCHEMA],
         imports: [
           AppConfigModule,
+          BrowserAnimationsModule,
           MatButtonModule,
           MatCardModule,
           MatChipsModule,
@@ -114,6 +116,17 @@ describe("DatasetDetailComponent", () => {
 
       expect(component.removeKeyword.emit).toHaveBeenCalledTimes(1);
       expect(component.removeKeyword.emit).toHaveBeenCalledWith(keyword);
+    });
+  });
+
+  describe("#onRemoveShare()", () => {
+    it("should open a confirmation dialog", () => {
+      spyOn(component.dialog, "open").and.callThrough();
+
+      const share = "test";
+      component.onRemoveShare(share);
+
+      expect(component.dialog.open).toHaveBeenCalledTimes(1);
     });
   });
 

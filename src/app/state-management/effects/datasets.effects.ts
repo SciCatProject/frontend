@@ -255,6 +255,20 @@ export class DatasetEffects {
     )
   );
 
+  appendToArrayField$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.appendToDatasetArrayFieldAction),
+      mergeMap(({ pid, fieldName, data }) =>
+        this.datasetApi.appendToArrayField(pid, fieldName, data).pipe(
+          map(() => fromActions.appendToDatasetArrayFieldCompleteAction()),
+          catchError(() =>
+            of(fromActions.appendToDatasetArrayFieldFailedAction())
+          )
+        )
+      )
+    )
+  );
+
   loading$ = createEffect(() =>
     this.actions$.pipe(
       ofType(

@@ -19,18 +19,15 @@ exports[`stricter compilation`] = {
       [73, 12, 8, "Variable \'datasets\' implicitly has type \'any[]\' in some locations where its type cannot be determined.", "805288804"],
       [76, 35, 8, "Variable \'datasets\' implicitly has an \'any[]\' type.", "805288804"]
     ],
-    "src/app/datasets/batch-view/batch-view.component.spec.ts:469965346": [
-      [105, 20, 5, "Argument of type \'{ input: HTMLInputElement; value: undefined; }\' is not assignable to parameter of type \'MatChipInputEvent\'.\\n  Types of property \'value\' are incompatible.\\n    Type \'undefined\' is not assignable to type \'string\'.", "165702089"]
-    ],
     "src/app/datasets/dashboard/dashboard.component.spec.ts:1153933419": [
       [156, 8, 66, "Expected 0 arguments, but got 1.", "1240398008"],
       [176, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"],
       [240, 47, 29, "Expected 0 arguments, but got 1.", "2503700957"]
     ],
-    "src/app/datasets/dataset-detail/dataset-detail.component.ts:1081646072": [
-      [79, 22, 12, "Object is possibly \'null\'.", "1944648223"]
+    "src/app/datasets/dataset-detail/dataset-detail.component.ts:1022198235": [
+      [96, 22, 12, "Object is possibly \'null\'.", "1944648223"]
     ],
-    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.spec.ts:3847885859": [
+    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.spec.ts:1941642285": [
       [108, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
       [109, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
       [126, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
@@ -48,13 +45,14 @@ exports[`stricter compilation`] = {
       [217, 8, 35, "Expected 0 arguments, but got 1.", "2922510941"],
       [248, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
       [278, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [321, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [339, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [418, 8, 57, "Expected 0 arguments, but got 1.", "2548844095"],
-      [436, 8, 164, "Expected 0 arguments, but got 1.", "3577138323"],
-      [455, 8, 103, "Expected 0 arguments, but got 1.", "2385541400"]
+      [319, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [362, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [380, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [459, 8, 57, "Expected 0 arguments, but got 1.", "2548844095"],
+      [477, 8, 164, "Expected 0 arguments, but got 1.", "3577138323"],
+      [496, 8, 103, "Expected 0 arguments, but got 1.", "2385541400"]
     ],
-    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:2693308775": [
+    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:2185766780": [
       [115, 8, 9, "Object is possibly \'undefined\'.", "1162801532"],
       [118, 8, 12, "Object is possibly \'undefined\'.", "1944648223"],
       [120, 8, 9, "Object is possibly \'undefined\'.", "1162801532"],
@@ -69,16 +67,16 @@ exports[`stricter compilation`] = {
       [163, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
       [165, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
       [166, 27, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [184, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [190, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [234, 20, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [235, 22, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [236, 19, 9, "Object is possibly \'undefined\'.", "1162801532"],
-      [237, 19, 9, "Object is possibly \'undefined\'.", "1162801532"],
-      [241, 19, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [250, 19, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [259, 42, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [293, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
+      [197, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [203, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [247, 20, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [248, 22, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [249, 19, 9, "Object is possibly \'undefined\'.", "1162801532"],
+      [250, 19, 9, "Object is possibly \'undefined\'.", "1162801532"],
+      [254, 19, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [263, 19, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [272, 42, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [306, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
     ],
     "src/app/datasets/dataset-lifecycle/dataset-lifecycle.component.spec.ts:1858539517": [
       [155, 20, 3, "Parameter \'key\' implicitly has an \'any\' type.", "193424690"],
@@ -524,36 +522,20 @@ exports[`stricter compilation`] = {
       [129, 13, 36, "Object is possibly \'null\'.", "1010399159"],
       [142, 13, 36, "Object is possibly \'null\'.", "1010399159"]
     ],
-    "src/app/shared/modules/shared-table/shared-table.component.spec.ts:2023831950": [
-      [28, 8, 10, "Variable \'columnsDef\' implicitly has type \'any[]\' in some locations where its type cannot be determined.", "459426407"],
-      [48, 27, 10, "Variable \'columnsDef\' implicitly has an \'any[]\' type.", "459426407"]
-    ],
-    "src/app/shared/modules/shared-table/shared-table.component.ts:3204953284": [
-      [73, 2, 14, "Property \'visibleColumns\' has no initializer and is not definitely assigned in the constructor.", "1769051438"],
-      [74, 2, 13, "Property \'hiddenColumns\' has no initializer and is not definitely assigned in the constructor.", "3008049162"],
-      [82, 11, 10, "Property \'dataSource\' has no initializer and is not definitely assigned in the constructor.", "1967398792"],
-      [83, 11, 10, "Property \'columnsdef\' has no initializer and is not definitely assigned in the constructor.", "459458951"],
-      [91, 41, 9, "Property \'dataTable\' has no initializer and is not definitely assigned in the constructor.", "836725899"],
-      [92, 40, 4, "Property \'sort\' has no initializer and is not definitely assigned in the constructor.", "2088345023"],
-      [93, 45, 9, "Property \'paginator\' has no initializer and is not definitely assigned in the constructor.", "2483840092"],
-      [94, 47, 12, "Property \'globalFilter\' has no initializer and is not definitely assigned in the constructor.", "2218235630"],
-      [95, 30, 10, "Property \'allFilters\' has no initializer and is not definitely assigned in the constructor.", "3302591543"],
-      [182, 10, 49, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2898691922"],
-      [186, 17, 49, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2898691922"],
-      [239, 16, 1, "Parameter \'i\' implicitly has an \'any\' type.", "177612"],
-      [241, 54, 23, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2890101915"],
-      [247, 19, 1, "Parameter \'i\' implicitly has an \'any\' type.", "177612"],
-      [248, 4, 23, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2890101915"],
-      [248, 31, 23, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2890101915"],
-      [265, 8, 19, "Type \'SortDirection | undefined\' is not assignable to type \'SortDirection\'.\\n  Type \'undefined\' is not assignable to type \'SortDirection\'.", "3393242684"],
-      [317, 12, 32, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2145228977"],
-      [319, 41, 32, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2145228977"],
-      [323, 19, 32, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2145228977"],
-      [340, 10, 32, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2145228977"],
-      [342, 37, 32, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{}\'.", "2145228977"],
-      [384, 50, 4, "No overload matches this call.\\n  Overload 1 of 3, \'(callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'string\'.\\n  Overload 2 of 3, \'(callbackfn: (previousValue: Record<string, unknown>, currentValue: string, currentIndex: number, array: string[]) => Record<string, unknown>, initialValue: Record<string, unknown>): Record<...>\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'Record<string, unknown>\'.", "2087877701"],
-      [390, 6, 32, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'{}\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{}\'.", "2145228977"],
-      [392, 35, 32, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'{}\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{}\'.", "2145228977"]
+    "src/app/shared/modules/shared-table/shared-table.component.ts:1451762685": [
+      [68, 2, 14, "Property \'visibleColumns\' has no initializer and is not definitely assigned in the constructor.", "1769051438"],
+      [69, 2, 13, "Property \'hiddenColumns\' has no initializer and is not definitely assigned in the constructor.", "3008049162"],
+      [76, 11, 10, "Property \'dataSource\' has no initializer and is not definitely assigned in the constructor.", "1967398792"],
+      [77, 11, 10, "Property \'columnsdef\' has no initializer and is not definitely assigned in the constructor.", "459458951"],
+      [84, 41, 9, "Property \'dataTable\' has no initializer and is not definitely assigned in the constructor.", "836725899"],
+      [85, 40, 4, "Property \'sort\' has no initializer and is not definitely assigned in the constructor.", "2088345023"],
+      [86, 45, 9, "Property \'paginator\' has no initializer and is not definitely assigned in the constructor.", "2483840092"],
+      [244, 16, 1, "Parameter \'i\' implicitly has an \'any\' type.", "177612"],
+      [246, 54, 23, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{ filters: boolean; }\'.", "2890101915"],
+      [253, 4, 23, "Element implicitly has an \'any\' type because expression of type \'string | number\' can\'t be used to index type \'{ filters: boolean; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ filters: boolean; }\'.", "2890101915"],
+      [253, 31, 23, "Element implicitly has an \'any\' type because expression of type \'string | number\' can\'t be used to index type \'{ filters: boolean; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ filters: boolean; }\'.", "2890101915"],
+      [268, 8, 19, "Type \'SortDirection | undefined\' is not assignable to type \'SortDirection\'.\\n  Type \'undefined\' is not assignable to type \'SortDirection\'.", "3393242684"],
+      [341, 50, 4, "No overload matches this call.\\n  Overload 1 of 3, \'(callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'string\'.\\n  Overload 2 of 3, \'(callbackfn: (previousValue: Record<string, unknown>, currentValue: string, currentIndex: number, array: string[]) => Record<string, unknown>, initialValue: Record<string, unknown>): Record<...>\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'Record<string, unknown>\'.", "2087877701"]
     ],
     "src/app/shared/sdk/models/Attachment.ts:3362633067": [
       [43, 2, 7, "Property \'dataset\' has no initializer and is not definitely assigned in the constructor.", "2497262647"],
@@ -567,27 +549,27 @@ exports[`stricter compilation`] = {
     "src/app/shared/sdk/models/Datablock.ts:187911297": [
       [43, 2, 7, "Property \'dataset\' has no initializer and is not definitely assigned in the constructor.", "2497262647"]
     ],
-    "src/app/shared/sdk/models/Dataset.ts:2123239399": [
-      [90, 2, 11, "Property \'historyList\' has no initializer and is not definitely assigned in the constructor.", "1225464293"],
-      [91, 2, 16, "Property \'datasetLifecycle\' has no initializer and is not definitely assigned in the constructor.", "3675453217"],
-      [92, 2, 13, "Property \'publisheddata\' has no initializer and is not definitely assigned in the constructor.", "1487420333"],
-      [93, 2, 14, "Property \'techniquesList\' has no initializer and is not definitely assigned in the constructor.", "2365225192"],
-      [94, 2, 7, "Property \'samples\' has no initializer and is not definitely assigned in the constructor.", "2677984272"],
-      [95, 2, 10, "Property \'datablocks\' has no initializer and is not definitely assigned in the constructor.", "1385100815"],
-      [96, 2, 14, "Property \'origdatablocks\' has no initializer and is not definitely assigned in the constructor.", "1614831452"],
-      [97, 2, 11, "Property \'attachments\' has no initializer and is not definitely assigned in the constructor.", "472504655"],
-      [98, 2, 10, "Property \'instrument\' has no initializer and is not definitely assigned in the constructor.", "995580976"]
+    "src/app/shared/sdk/models/Dataset.ts:686676863": [
+      [92, 2, 11, "Property \'historyList\' has no initializer and is not definitely assigned in the constructor.", "1225464293"],
+      [93, 2, 16, "Property \'datasetLifecycle\' has no initializer and is not definitely assigned in the constructor.", "3675453217"],
+      [94, 2, 13, "Property \'publisheddata\' has no initializer and is not definitely assigned in the constructor.", "1487420333"],
+      [95, 2, 14, "Property \'techniquesList\' has no initializer and is not definitely assigned in the constructor.", "2365225192"],
+      [96, 2, 7, "Property \'samples\' has no initializer and is not definitely assigned in the constructor.", "2677984272"],
+      [97, 2, 10, "Property \'datablocks\' has no initializer and is not definitely assigned in the constructor.", "1385100815"],
+      [98, 2, 14, "Property \'origdatablocks\' has no initializer and is not definitely assigned in the constructor.", "1614831452"],
+      [99, 2, 11, "Property \'attachments\' has no initializer and is not definitely assigned in the constructor.", "472504655"],
+      [100, 2, 10, "Property \'instrument\' has no initializer and is not definitely assigned in the constructor.", "995580976"]
     ],
-    "src/app/shared/sdk/models/DerivedDataset.ts:1209287004": [
-      [100, 2, 11, "Property \'historyList\' has no initializer and is not definitely assigned in the constructor.", "1225464293"],
-      [101, 2, 16, "Property \'datasetLifecycle\' has no initializer and is not definitely assigned in the constructor.", "3675453217"],
-      [102, 2, 13, "Property \'publisheddata\' has no initializer and is not definitely assigned in the constructor.", "1487420333"],
-      [103, 2, 14, "Property \'techniquesList\' has no initializer and is not definitely assigned in the constructor.", "2365225192"],
-      [104, 2, 7, "Property \'samples\' has no initializer and is not definitely assigned in the constructor.", "2677984272"],
-      [105, 2, 10, "Property \'datablocks\' has no initializer and is not definitely assigned in the constructor.", "1385100815"],
-      [106, 2, 14, "Property \'origdatablocks\' has no initializer and is not definitely assigned in the constructor.", "1614831452"],
-      [107, 2, 11, "Property \'attachments\' has no initializer and is not definitely assigned in the constructor.", "472504655"],
-      [108, 2, 10, "Property \'instrument\' has no initializer and is not definitely assigned in the constructor.", "995580976"]
+    "src/app/shared/sdk/models/DerivedDataset.ts:3261831076": [
+      [102, 2, 11, "Property \'historyList\' has no initializer and is not definitely assigned in the constructor.", "1225464293"],
+      [103, 2, 16, "Property \'datasetLifecycle\' has no initializer and is not definitely assigned in the constructor.", "3675453217"],
+      [104, 2, 13, "Property \'publisheddata\' has no initializer and is not definitely assigned in the constructor.", "1487420333"],
+      [105, 2, 14, "Property \'techniquesList\' has no initializer and is not definitely assigned in the constructor.", "2365225192"],
+      [106, 2, 7, "Property \'samples\' has no initializer and is not definitely assigned in the constructor.", "2677984272"],
+      [107, 2, 10, "Property \'datablocks\' has no initializer and is not definitely assigned in the constructor.", "1385100815"],
+      [108, 2, 14, "Property \'origdatablocks\' has no initializer and is not definitely assigned in the constructor.", "1614831452"],
+      [109, 2, 11, "Property \'attachments\' has no initializer and is not definitely assigned in the constructor.", "472504655"],
+      [110, 2, 10, "Property \'instrument\' has no initializer and is not definitely assigned in the constructor.", "995580976"]
     ],
     "src/app/shared/sdk/models/FireLoopRef.ts:2008034576": [
       [38, 4, 39, "Type \'null\' is not assignable to type \'FireLoopRef<any>\'.", "2528779017"],
@@ -608,18 +590,18 @@ exports[`stricter compilation`] = {
     "src/app/shared/sdk/models/PublishedData.ts:1464333616": [
       [59, 2, 8, "Property \'datasets\' has no initializer and is not definitely assigned in the constructor.", "805288804"]
     ],
-    "src/app/shared/sdk/models/RawDataset.ts:476494923": [
-      [105, 2, 11, "Property \'historyList\' has no initializer and is not definitely assigned in the constructor.", "1225464293"],
-      [106, 2, 16, "Property \'datasetLifecycle\' has no initializer and is not definitely assigned in the constructor.", "3675453217"],
-      [107, 2, 13, "Property \'publisheddata\' has no initializer and is not definitely assigned in the constructor.", "1487420333"],
-      [108, 2, 14, "Property \'techniquesList\' has no initializer and is not definitely assigned in the constructor.", "2365225192"],
-      [109, 2, 7, "Property \'samples\' has no initializer and is not definitely assigned in the constructor.", "2677984272"],
-      [110, 2, 6, "Property \'sample\' has no initializer and is not definitely assigned in the constructor.", "2163559427"],
-      [111, 2, 8, "Property \'proposal\' has no initializer and is not definitely assigned in the constructor.", "3734941929"],
-      [112, 2, 10, "Property \'datablocks\' has no initializer and is not definitely assigned in the constructor.", "1385100815"],
-      [113, 2, 14, "Property \'origdatablocks\' has no initializer and is not definitely assigned in the constructor.", "1614831452"],
-      [114, 2, 11, "Property \'attachments\' has no initializer and is not definitely assigned in the constructor.", "472504655"],
-      [115, 2, 10, "Property \'instrument\' has no initializer and is not definitely assigned in the constructor.", "995580976"]
+    "src/app/shared/sdk/models/RawDataset.ts:2592095539": [
+      [107, 2, 11, "Property \'historyList\' has no initializer and is not definitely assigned in the constructor.", "1225464293"],
+      [108, 2, 16, "Property \'datasetLifecycle\' has no initializer and is not definitely assigned in the constructor.", "3675453217"],
+      [109, 2, 13, "Property \'publisheddata\' has no initializer and is not definitely assigned in the constructor.", "1487420333"],
+      [110, 2, 14, "Property \'techniquesList\' has no initializer and is not definitely assigned in the constructor.", "2365225192"],
+      [111, 2, 7, "Property \'samples\' has no initializer and is not definitely assigned in the constructor.", "2677984272"],
+      [112, 2, 6, "Property \'sample\' has no initializer and is not definitely assigned in the constructor.", "2163559427"],
+      [113, 2, 8, "Property \'proposal\' has no initializer and is not definitely assigned in the constructor.", "3734941929"],
+      [114, 2, 10, "Property \'datablocks\' has no initializer and is not definitely assigned in the constructor.", "1385100815"],
+      [115, 2, 14, "Property \'origdatablocks\' has no initializer and is not definitely assigned in the constructor.", "1614831452"],
+      [116, 2, 11, "Property \'attachments\' has no initializer and is not definitely assigned in the constructor.", "472504655"],
+      [117, 2, 10, "Property \'instrument\' has no initializer and is not definitely assigned in the constructor.", "995580976"]
     ],
     "src/app/shared/sdk/models/Sample.ts:1672924089": [
       [43, 2, 8, "Property \'datasets\' has no initializer and is not definitely assigned in the constructor.", "805288804"],
@@ -1101,8 +1083,8 @@ exports[`stricter compilation`] = {
       [154, 58, 4, "Type \'null\' is not assignable to type \'Record<string, string> | undefined\'.", "2087698470"],
       [167, 58, 4, "Type \'null\' is not assignable to type \'Record<string, string> | undefined\'.", "2087698470"]
     ],
-    "src/app/state-management/effects/user.effects.spec.ts:133571840": [
-      [501, 27, 93, "Conversion of type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' to type \'UserSetting\' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to \'unknown\' first.\\n  Type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' is missing the following properties from type \'UserSetting\': \\"id\\", \\"createdBy\\", \\"updatedBy\\", \\"userId\\", and 3 more.", "1258454294"]
+    "src/app/state-management/effects/user.effects.spec.ts:3527283907": [
+      [538, 27, 93, "Conversion of type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' to type \'UserSetting\' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to \'unknown\' first.\\n  Type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' is missing the following properties from type \'UserSetting\': \\"id\\", \\"createdBy\\", \\"updatedBy\\", \\"userId\\", and 3 more.", "1258454294"]
     ],
     "src/app/state-management/reducers/jobs.reducer.spec.ts:2620026082": [
       [65, 56, 4, "Type \'null\' is not assignable to type \'Record<string, string> | undefined\'.", "2087698470"],
@@ -1134,8 +1116,8 @@ exports[`stricter compilation`] = {
       [72, 16, 4, "Argument of type \'null\' is not assignable to parameter of type \'Expected<Record<string, string> | undefined>\'.", "2087897566"],
       [106, 16, 6, "Argument of type \'{ where: null; order: string; skip: number; limit: number; } | { order: string; skip: number; limit: number; }\' is not assignable to parameter of type \'Expected<{ where: Record<string, string>; order: string; skip: number; limit: number; } | { order: string; skip: number; limit: number; where?: undefined; }>\'.\\n  Type \'{ where: null; order: string; skip: number; limit: number; }\' is not assignable to type \'Expected<{ where: Record<string, string>; order: string; skip: number; limit: number; } | { order: string; skip: number; limit: number; where?: undefined; }>\'.\\n    Types of property \'where\' are incompatible.\\n      Type \'null\' is not assignable to type \'Record<string, string> | AsymmetricMatcher<any> | ObjectContaining<Record<string, string>> | { [x: string]: Any | ExpectedRecursive<string>; } | ObjectContaining<...> | undefined\'.", "1898504825"]
     ],
-    "src/app/users/login/login.component.spec.ts:1596191075": [
-      [117, 8, 71, "Expected 0 arguments, but got 1.", "3870196511"]
+    "src/app/users/login/login.component.spec.ts:590365834": [
+      [154, 8, 71, "Expected 0 arguments, but got 1.", "3870196511"]
     ],
     "src/app/users/user-settings/user-settings.component.spec.ts:2325442996": [
       [95, 8, 32, "Expected 0 arguments, but got 1.", "1341113725"],

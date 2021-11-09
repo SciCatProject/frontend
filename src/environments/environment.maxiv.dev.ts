@@ -56,6 +56,7 @@ export const environment = {
   sftpHost: null,
   shoppingCartEnabled: true,
   shoppingCartOnHeader: true,
+  shareEnabled: false,
   tableSciDataEnabled: true,
   metadataStructure: "tree",
   userNamePromptEnabled: true,
