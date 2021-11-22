@@ -20,6 +20,18 @@ as well as the option to carry out actions (i.e. archiving and publishing) and a
 
 For the full documentation please go to the [SciCat home page](https://scicatproject.github.io/) and follow the [documentation link](https://scicatproject.github.io/documentation)
 
+## IMPORTANT!!!
+
+This repository is due to be renamed.  
+The new name will be *frontend*. Full URL will be: https://github.com/SciCatProject/frontend.
+The current URL will still be active and point to the new one. We kindly suggest to migrate as soon as possible.
+
+The rename is scheduled to happen on **friday November 26th, 2021.**
+
+In case you have questions, please contact the SciCat team at ESS:
+- Max Novelli
+- Henrik Johansson
+
 ## License
 
 This project is licensed under the GPL License - see the [LICENSE](LICENSE) file for details
