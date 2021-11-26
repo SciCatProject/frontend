@@ -21,12 +21,11 @@ as well as the option to carry out actions (i.e. archiving and publishing) and a
 For the full documentation please go to the [SciCat home page](https://scicatproject.github.io/) and follow the [documentation link](https://scicatproject.github.io/documentation)
 
 ## IMPORTANT!!!
+On 2021/11/26, this repository has been renamed to the current name: https://github.com/SciCatProject/frontend.   
+The previous URL https://github.com/SciCatProject/catanie will still be active and point to the current one.   
+We kindly suggest to migrate as soon as possible.
 
-This repository is due to be renamed.  
-The new name will be *frontend*. Full URL will be: https://github.com/SciCatProject/frontend.
-The current URL will still be active and point to the new one. We kindly suggest to migrate as soon as possible.
-
-The rename is scheduled to happen on **friday November 26th, 2021.**
+Naming within the project will be updated in future releases. More info will be posted as soon as we finalize the details.
 
 In case you have questions, please contact the SciCat team at ESS:
 - Max Novelli
