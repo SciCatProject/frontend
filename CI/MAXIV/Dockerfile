@@ -15,7 +15,7 @@ COPY CI/MAXIV/maxiv-site.png /frontend/src/assets/images/site.png
 COPY CI/MAXIV/maxiv-logo.png /frontend/src/assets/images/site-logo.png
 COPY CI/MAXIV/scicat-logo.png /frontend/src/assets/images/scicat-logo-white.png
 COPY CI/MAXIV/maxiv-theme.scss src/styles.scss
-COPY CI/MAXIV/index.html /frontend/index.html
+COPY CI/MAXIV/index.html src/index.html
 # Google fonts (Store Google fonts locally since blue network can't connect to internet)
 COPY CI/MAXIV/google-fonts/css /frontend/src/assets/css
 COPY CI/MAXIV/google-fonts/fonts /frontend/src/assets/fonts
