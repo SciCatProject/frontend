@@ -7,14 +7,6 @@ exports[`stricter compilation`] = {
     "src/app/app-routing/redirect.guard.ts:1233518172": [
       [18, 27, 43, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'AppConfig\'.", "1916593973"]
     ],
-    "src/app/datasets/anonymous-dashboard/anonymous-dashboard.component.spec.ts:374002320": [
-      [125, 8, 66, "Expected 0 arguments, but got 1.", "1240398008"],
-      [145, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"]
-    ],
-    "src/app/datasets/anonymous-details-dashboard/anonymous-details-dashboard.component.spec.ts:1843756080": [
-      [84, 47, 19, "Expected 0 arguments, but got 1.", "302414085"],
-      [86, 8, 35, "Expected 0 arguments, but got 1.", "2922510941"]
-    ],
     "src/app/datasets/archiving.service.spec.ts:33874901": [
       [73, 12, 8, "Variable \'datasets\' implicitly has type \'any[]\' in some locations where its type cannot be determined.", "805288804"],
       [76, 35, 8, "Variable \'datasets\' implicitly has an \'any[]\' type.", "805288804"]
@@ -323,7 +315,7 @@ exports[`stricter compilation`] = {
       [281, 27, 4, "Argument of type \'null\' is not assignable to parameter of type \'TreeNode\'.", "2087897566"],
       [291, 39, 4, "Argument of type \'null\' is not assignable to parameter of type \'TreeNode\'.", "2087897566"]
     ],
-    "src/app/shared/modules/scientific-metadata-tree/base-classes/tree-base.ts:1113001576": [
+    "src/app/shared/modules/scientific-metadata-tree/base-classes/tree-base.ts:1928180855": [
       [10, 2, 8, "Property \'children\' has no initializer and is not definitely assigned in the constructor.", "1925793782"],
       [11, 2, 3, "Property \'key\' has no initializer and is not definitely assigned in the constructor.", "193424690"],
       [13, 2, 4, "Property \'unit\' has no initializer and is not definitely assigned in the constructor.", "2087995779"],
@@ -339,10 +331,10 @@ exports[`stricter compilation`] = {
       [32, 2, 11, "Property \'nestNodeMap\' has no initializer and is not definitely assigned in the constructor.", "3653747733"],
       [34, 2, 8, "Property \'dataTree\' has no initializer and is not definitely assigned in the constructor.", "806281235"],
       [36, 2, 8, "Property \'datePipe\' has no initializer and is not definitely assigned in the constructor.", "801667837"],
-      [97, 32, 10, "Object is possibly \'undefined\'.", "3877177832"],
-      [113, 6, 11, "Type \'FlatNode | null\' is not assignable to type \'FlatNode\'.\\n  Type \'null\' is not assignable to type \'FlatNode\'.", "973876812"],
-      [119, 6, 8, "Object is possibly \'undefined\'.", "3061659290"],
-      [143, 32, 14, "Argument of type \'FlatNode | null\' is not assignable to parameter of type \'FlatNode\'.\\n  Type \'null\' is not assignable to type \'FlatNode\'.", "3757201702"]
+      [98, 32, 10, "Object is possibly \'undefined\'.", "3877177832"],
+      [114, 6, 11, "Type \'FlatNode | null\' is not assignable to type \'FlatNode\'.\\n  Type \'null\' is not assignable to type \'FlatNode\'.", "973876812"],
+      [120, 6, 8, "Object is possibly \'undefined\'.", "3061659290"],
+      [144, 32, 14, "Argument of type \'FlatNode | null\' is not assignable to parameter of type \'FlatNode\'.\\n  Type \'null\' is not assignable to type \'FlatNode\'.", "3757201702"]
     ],
     "src/app/shared/modules/scientific-metadata-tree/metadata-input-modal/metadata-input-modal.component.spec.ts:1912785648": [
       [50, 13, 25, "Object is possibly \'null\'.", "853089681"],
@@ -676,7 +668,7 @@ exports[`stricter compilation`] = {
       [186, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [215, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"]
     ],
-    "src/app/shared/sdk/services/custom/Dataset.ts:2918985484": [
+    "src/app/shared/sdk/services/custom/Dataset.ts:2645484163": [
       [67, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [94, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [130, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
@@ -731,20 +723,19 @@ exports[`stricter compilation`] = {
       [1595, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1624, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1652, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1683, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1709, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1678, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1713, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1744, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1775, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1804, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1837, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1870, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1903, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1936, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1969, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [2002, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [2035, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"]
+      [1773, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1806, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1839, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1872, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1905, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1938, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1971, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [2004, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"]
     ],
-    "src/app/shared/sdk/services/custom/DerivedDataset.ts:154274790": [
+    "src/app/shared/sdk/services/custom/DerivedDataset.ts:1884624969": [
       [67, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [94, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [130, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
@@ -799,18 +790,17 @@ exports[`stricter compilation`] = {
       [1595, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1624, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1652, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1683, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1709, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1678, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1713, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1744, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1775, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1804, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1837, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1870, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1903, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1936, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1969, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [2002, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [2035, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"]
+      [1773, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1806, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1839, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1872, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1905, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1938, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1971, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [2004, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"]
     ],
     "src/app/shared/sdk/services/custom/Instrument.ts:296249052": [
       [62, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
@@ -904,7 +894,7 @@ exports[`stricter compilation`] = {
       [454, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [487, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"]
     ],
-    "src/app/shared/sdk/services/custom/RawDataset.ts:1164385838": [
+    "src/app/shared/sdk/services/custom/RawDataset.ts:2324433025": [
       [68, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [95, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [131, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
@@ -961,18 +951,17 @@ exports[`stricter compilation`] = {
       [1656, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1685, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1713, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1744, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1770, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1739, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1774, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
       [1805, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1836, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1865, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1898, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1931, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1964, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [1997, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [2030, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [2063, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
-      [2096, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"]
+      [1834, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1867, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1900, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1933, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1966, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [1999, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [2032, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
+      [2065, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"]
     ],
     "src/app/shared/sdk/services/custom/Sample.ts:3090674186": [
       [63, 82, 4, "Argument of type \'null\' is not assignable to parameter of type \'boolean | undefined\'.", "2087897566"],
