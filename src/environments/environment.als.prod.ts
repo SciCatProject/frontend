@@ -54,6 +54,7 @@ export const environment = {
   metadataStructure: "",
   scienceSearchUnitsEnabled: false,
   sftpHost: "",
+  shareEnabled: false,
   shoppingCartEnabled: true,
   shoppingCartOnHeader: true,
   tableSciDataEnabled: false,

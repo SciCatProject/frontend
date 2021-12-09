@@ -1,52 +1,40 @@
-import {
-  Component,
-  OnInit,
-  Inject,
-  OnDestroy,
-} from "@angular/core";
+import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { first, switchMap } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import {
+  appendToDatasetArrayFieldAction,
   clearBatchAction,
   prefillBatchAction,
   removeFromBatchAction,
 } from "state-management/actions/datasets.actions";
-import { Dataset, MessageType } from "state-management/models";
+import { Dataset, Message, MessageType } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
 
 import { Router } from "@angular/router";
 import { ArchivingService } from "../archiving.service";
 import { Observable, Subscription } from "rxjs";
-import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { APP_CONFIG, AppConfig } from "app-config.module";
+import { MatDialog } from "@angular/material/dialog";
+import { ShareDialogComponent } from "datasets/share-dialog/share-dialog.component";
 
-export interface Share {
-  name: string;
-}
 @Component({
   selector: "batch-view",
   templateUrl: "./batch-view.component.html",
   styleUrls: ["./batch-view.component.scss"],
 })
 export class BatchViewComponent implements OnInit, OnDestroy {
-
-  selectable = true;
-  removable = true;
-  addOnBlur = true;
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  shareEmails: Share[] = [];
-  datasetList: Dataset[] = [];
-
-  visibleColumns: string[] = ["remove", "pid", "sourceFolder", "creationTime"];
-
   batch$: Observable<Dataset[]> = this.store.pipe(select(getDatasetsInBatch));
   subscriptions: Subscription[] = [];
+  datasetList: Dataset[] = [];
   public hasBatch = false;
+  visibleColumns: string[] = ["remove", "pid", "sourceFolder", "creationTime"];
+  shareEnabled = this.appConfig.shareEnabled;
 
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private dialog: MatDialog,
     private store: Store<any>,
     private archivingSrv: ArchivingService,
     private router: Router
@@ -55,7 +43,6 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   private clearBatch() {
     this.store.dispatch(clearBatchAction());
   }
-
 
   onEmpty() {
     const msg =
@@ -71,6 +58,31 @@ export class BatchViewComponent implements OnInit, OnDestroy {
 
   onPublish() {
     this.router.navigate(["datasets", "batch", "publish"]);
+  }
+
+  onShare() {
+    const dialogRef = this.dialog.open(ShareDialogComponent, {
+      width: "500px",
+    });
+    dialogRef.afterClosed().subscribe((result: Record<string, string[]>) => {
+      if (result && result.users && result.users.length > 0) {
+        this.datasetList.forEach((dataset) => {
+          this.store.dispatch(
+            appendToDatasetArrayFieldAction({
+              pid: encodeURIComponent(dataset.pid),
+              fieldName: "sharedWith",
+              data: result.users,
+            })
+          );
+          const message = new Message(
+            "Datasets successfully shared!",
+            MessageType.Success,
+            5000
+          );
+          this.store.dispatch(showMessageAction({ message }));
+        });
+      }
+    });
   }
 
   onArchive() {

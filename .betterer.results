@@ -11,60 +11,64 @@ exports[`stricter compilation`] = {
       [73, 12, 8, "Variable \'datasets\' implicitly has type \'any[]\' in some locations where its type cannot be determined.", "805288804"],
       [76, 35, 8, "Variable \'datasets\' implicitly has an \'any[]\' type.", "805288804"]
     ],
-    "src/app/datasets/dashboard/dashboard.component.spec.ts:249866239": [
-      [173, 8, 66, "Expected 0 arguments, but got 1.", "1240398008"],
-      [193, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"],
-      [257, 47, 29, "Expected 0 arguments, but got 1.", "2503700957"]
+    "src/app/datasets/dashboard/dashboard.component.spec.ts:1153933419": [
+      [156, 8, 66, "Expected 0 arguments, but got 1.", "1240398008"],
+      [176, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"],
+      [240, 47, 29, "Expected 0 arguments, but got 1.", "2503700957"]
     ],
-    "src/app/datasets/dataset-detail/dataset-detail.component.ts:3691260058": [
-      [80, 22, 12, "Object is possibly \'null\'.", "1944648223"]
+    "src/app/datasets/dataset-detail/dataset-detail.component.ts:1022198235": [
+      [96, 22, 12, "Object is possibly \'null\'.", "1944648223"]
     ],
-    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.spec.ts:791153726": [
-      [119, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
-      [120, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
-      [137, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
-      [138, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
-      [155, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"investigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'investigator\' does not exist on type \'Dataset\'.", "3830977733"],
-      [156, 6, 34, "Element implicitly has an \'any\' type because expression of type \'\\"inputDatasets\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'inputDatasets\' does not exist on type \'Dataset\'.", "3801541895"],
-      [157, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"usedSoftware\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'usedSoftware\' does not exist on type \'Dataset\'.", "2755406360"],
-      [174, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"investigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'investigator\' does not exist on type \'Dataset\'.", "3830977733"],
-      [175, 6, 34, "Element implicitly has an \'any\' type because expression of type \'\\"inputDatasets\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'inputDatasets\' does not exist on type \'Dataset\'.", "3801541895"],
-      [176, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"usedSoftware\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'usedSoftware\' does not exist on type \'Dataset\'.", "2755406360"],
-      [193, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
-      [194, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
-      [222, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [234, 47, 19, "Expected 0 arguments, but got 1.", "302414085"],
-      [236, 8, 35, "Expected 0 arguments, but got 1.", "2922510941"],
-      [279, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [309, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [352, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [370, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [449, 8, 57, "Expected 0 arguments, but got 1.", "2548844095"],
-      [467, 8, 164, "Expected 0 arguments, but got 1.", "3577138323"],
-      [486, 8, 103, "Expected 0 arguments, but got 1.", "2385541400"]
+    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.spec.ts:1941642285": [
+      [108, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
+      [109, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
+      [126, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
+      [127, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
+      [144, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"investigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'investigator\' does not exist on type \'Dataset\'.", "3830977733"],
+      [145, 6, 34, "Element implicitly has an \'any\' type because expression of type \'\\"inputDatasets\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'inputDatasets\' does not exist on type \'Dataset\'.", "3801541895"],
+      [146, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"usedSoftware\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'usedSoftware\' does not exist on type \'Dataset\'.", "2755406360"],
+      [163, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"investigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'investigator\' does not exist on type \'Dataset\'.", "3830977733"],
+      [164, 6, 34, "Element implicitly has an \'any\' type because expression of type \'\\"inputDatasets\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'inputDatasets\' does not exist on type \'Dataset\'.", "3801541895"],
+      [165, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"usedSoftware\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'usedSoftware\' does not exist on type \'Dataset\'.", "2755406360"],
+      [182, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
+      [183, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
+      [203, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [215, 47, 19, "Expected 0 arguments, but got 1.", "302414085"],
+      [217, 8, 35, "Expected 0 arguments, but got 1.", "2922510941"],
+      [248, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [278, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [319, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [362, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [380, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [459, 8, 57, "Expected 0 arguments, but got 1.", "2548844095"],
+      [477, 8, 164, "Expected 0 arguments, but got 1.", "3577138323"],
+      [496, 8, 103, "Expected 0 arguments, but got 1.", "2385541400"]
     ],
-    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:270668896": [
-      [121, 10, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [129, 10, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [142, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [154, 9, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [156, 6, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [158, 8, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [159, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [160, 27, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [167, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [169, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [170, 27, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [188, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [194, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [238, 20, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [239, 22, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [240, 19, 9, "Object is possibly \'undefined\'.", "1162801532"],
-      [241, 19, 9, "Object is possibly \'undefined\'.", "1162801532"],
-      [245, 19, 12, "Object is possibly \'undefined\'.", "1944648223"],
+    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:2185766780": [
+      [115, 8, 9, "Object is possibly \'undefined\'.", "1162801532"],
+      [118, 8, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [120, 8, 9, "Object is possibly \'undefined\'.", "1162801532"],
+      [126, 8, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [128, 8, 9, "Object is possibly \'undefined\'.", "1162801532"],
+      [138, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [150, 9, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [152, 6, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [154, 8, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [155, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [156, 27, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [163, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [165, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [166, 27, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [197, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [203, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [247, 20, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [248, 22, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [249, 19, 9, "Object is possibly \'undefined\'.", "1162801532"],
+      [250, 19, 9, "Object is possibly \'undefined\'.", "1162801532"],
       [254, 19, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [263, 42, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [297, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
+      [263, 19, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [272, 42, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [306, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
     ],
     "src/app/datasets/dataset-lifecycle/dataset-lifecycle.component.spec.ts:1858539517": [
       [155, 20, 3, "Parameter \'key\' implicitly has an \'any\' type.", "193424690"],
@@ -537,27 +541,27 @@ exports[`stricter compilation`] = {
     "src/app/shared/sdk/models/Datablock.ts:187911297": [
       [43, 2, 7, "Property \'dataset\' has no initializer and is not definitely assigned in the constructor.", "2497262647"]
     ],
-    "src/app/shared/sdk/models/Dataset.ts:2123239399": [
-      [90, 2, 11, "Property \'historyList\' has no initializer and is not definitely assigned in the constructor.", "1225464293"],
-      [91, 2, 16, "Property \'datasetLifecycle\' has no initializer and is not definitely assigned in the constructor.", "3675453217"],
-      [92, 2, 13, "Property \'publisheddata\' has no initializer and is not definitely assigned in the constructor.", "1487420333"],
-      [93, 2, 14, "Property \'techniquesList\' has no initializer and is not definitely assigned in the constructor.", "2365225192"],
-      [94, 2, 7, "Property \'samples\' has no initializer and is not definitely assigned in the constructor.", "2677984272"],
-      [95, 2, 10, "Property \'datablocks\' has no initializer and is not definitely assigned in the constructor.", "1385100815"],
-      [96, 2, 14, "Property \'origdatablocks\' has no initializer and is not definitely assigned in the constructor.", "1614831452"],
-      [97, 2, 11, "Property \'attachments\' has no initializer and is not definitely assigned in the constructor.", "472504655"],
-      [98, 2, 10, "Property \'instrument\' has no initializer and is not definitely assigned in the constructor.", "995580976"]
+    "src/app/shared/sdk/models/Dataset.ts:686676863": [
+      [92, 2, 11, "Property \'historyList\' has no initializer and is not definitely assigned in the constructor.", "1225464293"],
+      [93, 2, 16, "Property \'datasetLifecycle\' has no initializer and is not definitely assigned in the constructor.", "3675453217"],
+      [94, 2, 13, "Property \'publisheddata\' has no initializer and is not definitely assigned in the constructor.", "1487420333"],
+      [95, 2, 14, "Property \'techniquesList\' has no initializer and is not definitely assigned in the constructor.", "2365225192"],
+      [96, 2, 7, "Property \'samples\' has no initializer and is not definitely assigned in the constructor.", "2677984272"],
+      [97, 2, 10, "Property \'datablocks\' has no initializer and is not definitely assigned in the constructor.", "1385100815"],
+      [98, 2, 14, "Property \'origdatablocks\' has no initializer and is not definitely assigned in the constructor.", "1614831452"],
+      [99, 2, 11, "Property \'attachments\' has no initializer and is not definitely assigned in the constructor.", "472504655"],
+      [100, 2, 10, "Property \'instrument\' has no initializer and is not definitely assigned in the constructor.", "995580976"]
     ],
-    "src/app/shared/sdk/models/DerivedDataset.ts:1209287004": [
-      [100, 2, 11, "Property \'historyList\' has no initializer and is not definitely assigned in the constructor.", "1225464293"],
-      [101, 2, 16, "Property \'datasetLifecycle\' has no initializer and is not definitely assigned in the constructor.", "3675453217"],
-      [102, 2, 13, "Property \'publisheddata\' has no initializer and is not definitely assigned in the constructor.", "1487420333"],
-      [103, 2, 14, "Property \'techniquesList\' has no initializer and is not definitely assigned in the constructor.", "2365225192"],
-      [104, 2, 7, "Property \'samples\' has no initializer and is not definitely assigned in the constructor.", "2677984272"],
-      [105, 2, 10, "Property \'datablocks\' has no initializer and is not definitely assigned in the constructor.", "1385100815"],
-      [106, 2, 14, "Property \'origdatablocks\' has no initializer and is not definitely assigned in the constructor.", "1614831452"],
-      [107, 2, 11, "Property \'attachments\' has no initializer and is not definitely assigned in the constructor.", "472504655"],
-      [108, 2, 10, "Property \'instrument\' has no initializer and is not definitely assigned in the constructor.", "995580976"]
+    "src/app/shared/sdk/models/DerivedDataset.ts:3261831076": [
+      [102, 2, 11, "Property \'historyList\' has no initializer and is not definitely assigned in the constructor.", "1225464293"],
+      [103, 2, 16, "Property \'datasetLifecycle\' has no initializer and is not definitely assigned in the constructor.", "3675453217"],
+      [104, 2, 13, "Property \'publisheddata\' has no initializer and is not definitely assigned in the constructor.", "1487420333"],
+      [105, 2, 14, "Property \'techniquesList\' has no initializer and is not definitely assigned in the constructor.", "2365225192"],
+      [106, 2, 7, "Property \'samples\' has no initializer and is not definitely assigned in the constructor.", "2677984272"],
+      [107, 2, 10, "Property \'datablocks\' has no initializer and is not definitely assigned in the constructor.", "1385100815"],
+      [108, 2, 14, "Property \'origdatablocks\' has no initializer and is not definitely assigned in the constructor.", "1614831452"],
+      [109, 2, 11, "Property \'attachments\' has no initializer and is not definitely assigned in the constructor.", "472504655"],
+      [110, 2, 10, "Property \'instrument\' has no initializer and is not definitely assigned in the constructor.", "995580976"]
     ],
     "src/app/shared/sdk/models/FireLoopRef.ts:2008034576": [
       [38, 4, 39, "Type \'null\' is not assignable to type \'FireLoopRef<any>\'.", "2528779017"],
@@ -578,18 +582,18 @@ exports[`stricter compilation`] = {
     "src/app/shared/sdk/models/PublishedData.ts:1464333616": [
       [59, 2, 8, "Property \'datasets\' has no initializer and is not definitely assigned in the constructor.", "805288804"]
     ],
-    "src/app/shared/sdk/models/RawDataset.ts:476494923": [
-      [105, 2, 11, "Property \'historyList\' has no initializer and is not definitely assigned in the constructor.", "1225464293"],
-      [106, 2, 16, "Property \'datasetLifecycle\' has no initializer and is not definitely assigned in the constructor.", "3675453217"],
-      [107, 2, 13, "Property \'publisheddata\' has no initializer and is not definitely assigned in the constructor.", "1487420333"],
-      [108, 2, 14, "Property \'techniquesList\' has no initializer and is not definitely assigned in the constructor.", "2365225192"],
-      [109, 2, 7, "Property \'samples\' has no initializer and is not definitely assigned in the constructor.", "2677984272"],
-      [110, 2, 6, "Property \'sample\' has no initializer and is not definitely assigned in the constructor.", "2163559427"],
-      [111, 2, 8, "Property \'proposal\' has no initializer and is not definitely assigned in the constructor.", "3734941929"],
-      [112, 2, 10, "Property \'datablocks\' has no initializer and is not definitely assigned in the constructor.", "1385100815"],
-      [113, 2, 14, "Property \'origdatablocks\' has no initializer and is not definitely assigned in the constructor.", "1614831452"],
-      [114, 2, 11, "Property \'attachments\' has no initializer and is not definitely assigned in the constructor.", "472504655"],
-      [115, 2, 10, "Property \'instrument\' has no initializer and is not definitely assigned in the constructor.", "995580976"]
+    "src/app/shared/sdk/models/RawDataset.ts:2592095539": [
+      [107, 2, 11, "Property \'historyList\' has no initializer and is not definitely assigned in the constructor.", "1225464293"],
+      [108, 2, 16, "Property \'datasetLifecycle\' has no initializer and is not definitely assigned in the constructor.", "3675453217"],
+      [109, 2, 13, "Property \'publisheddata\' has no initializer and is not definitely assigned in the constructor.", "1487420333"],
+      [110, 2, 14, "Property \'techniquesList\' has no initializer and is not definitely assigned in the constructor.", "2365225192"],
+      [111, 2, 7, "Property \'samples\' has no initializer and is not definitely assigned in the constructor.", "2677984272"],
+      [112, 2, 6, "Property \'sample\' has no initializer and is not definitely assigned in the constructor.", "2163559427"],
+      [113, 2, 8, "Property \'proposal\' has no initializer and is not definitely assigned in the constructor.", "3734941929"],
+      [114, 2, 10, "Property \'datablocks\' has no initializer and is not definitely assigned in the constructor.", "1385100815"],
+      [115, 2, 14, "Property \'origdatablocks\' has no initializer and is not definitely assigned in the constructor.", "1614831452"],
+      [116, 2, 11, "Property \'attachments\' has no initializer and is not definitely assigned in the constructor.", "472504655"],
+      [117, 2, 10, "Property \'instrument\' has no initializer and is not definitely assigned in the constructor.", "995580976"]
     ],
     "src/app/shared/sdk/models/Sample.ts:1672924089": [
       [43, 2, 8, "Property \'datasets\' has no initializer and is not definitely assigned in the constructor.", "805288804"],

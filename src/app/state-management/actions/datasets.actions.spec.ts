@@ -71,7 +71,7 @@ describe("Dataset Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchMetadataKeysAction();
       expect({ ...action }).toEqual({
-        type: "[Dataset] Fetch Metadata Keys"
+        type: "[Dataset] Fetch Metadata Keys",
       });
     });
   });
@@ -363,6 +363,41 @@ describe("Dataset Actions", () => {
       const action = fromActions.reduceDatasetFailedAction();
       expect({ ...action }).toEqual({
         type: "[Dataset] Reduce Dataset Failed",
+      });
+    });
+  });
+
+  describe("appendToDatasetArrayFieldAction", () => {
+    it("should create an action", () => {
+      const pid = "string";
+      const fieldName = "test";
+      const data: string[] = ["string"];
+      const action = fromActions.appendToDatasetArrayFieldAction({
+        pid,
+        fieldName,
+        data,
+      });
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Append To Array Field",
+        pid,
+        fieldName,
+        data,
+      });
+    });
+  });
+  describe("updateDatasetAccessGrappendToDatasetArrayFieldCompleteActionoupsCompleteAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.appendToDatasetArrayFieldCompleteAction();
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Append To Array Field Complete",
+      });
+    });
+  });
+  describe("appendToDatasetArrayFieldFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.appendToDatasetArrayFieldFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Append To Array Field Failed",
       });
     });
   });

@@ -61,6 +61,7 @@ import { DatasetLifecycleComponent } from "./dataset-lifecycle/dataset-lifecycle
 import { SampleEditComponent } from "./sample-edit/sample-edit.component";
 import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from "ngx-material-luxon";
 import { MatDatepickerModule } from "@angular/material/datepicker";
+import { ShareDialogComponent } from "./share-dialog/share-dialog.component";
 import { UserEffects } from "state-management/effects/user.effects";
 import { ADAuthService } from "users/adauth.service";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
@@ -138,6 +139,7 @@ import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
     DatasetTableActionsComponent,
     DatasetLifecycleComponent,
     SampleEditComponent,
+    ShareDialogComponent,
   ],
   providers: [
     ArchivingService,

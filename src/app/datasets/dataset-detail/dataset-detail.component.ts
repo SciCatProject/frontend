@@ -5,6 +5,7 @@ import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { MatDialog } from "@angular/material/dialog";
 import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
+import { DialogComponent } from "shared/modules/dialog/dialog.component";
 
 /**
  * Component to show details for a data set, using the
@@ -29,6 +30,7 @@ export class DatasetDetailComponent {
   @Output() clickKeyword = new EventEmitter<string>();
   @Output() addKeyword = new EventEmitter<string>();
   @Output() removeKeyword = new EventEmitter<string>();
+  @Output() removeShare = new EventEmitter<string>();
   @Output() clickProposal = new EventEmitter<string>();
   @Output() clickSample = new EventEmitter<string>();
   @Output() saveMetadata = new EventEmitter<Record<string, unknown>>();
@@ -65,6 +67,21 @@ export class DatasetDetailComponent {
     this.removeKeyword.emit(keyword);
   }
 
+  onRemoveShare(share: string): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: "auto",
+      data: {
+        title: `Really remove ${share}?`,
+        question: `If you click 'Ok', ${share} will no longer be able to access this Dataset.`,
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.removeShare.emit(share);
+      }
+    });
+  }
+
   onClickProposal(proposalId: string): void {
     this.clickProposal.emit(proposalId);
   }
@@ -95,7 +112,7 @@ export class DatasetDetailComponent {
   onSaveMetadata(metadata: Record<string, any>) {
     this.saveMetadata.emit(metadata);
   }
-  onHasUnsavedChanges($event: boolean){
+  onHasUnsavedChanges($event: boolean) {
     this.hasUnsavedChanges.emit($event);
   }
 }

@@ -1,5 +1,6 @@
 import { Observable, of } from "rxjs";
 import { convertToParamMap, UrlTree } from "@angular/router";
+import { User, UserIdentity } from "state-management/models";
 
 export class MockUserApi {
   getCurrentId() {
@@ -20,6 +21,23 @@ export class MockUserApi {
 
   jwt() {
     return of("");
+  }
+}
+
+export class MockUserIdentityApi {
+  findOne(): Observable<UserIdentity> {
+    return of({
+      id: "",
+      userId: "",
+      user: new User(),
+      externalId: "name",
+      provider: "ldap",
+      authScheme: "",
+      credentials: "",
+      created: new Date(),
+      modified: new Date(),
+      profile: { email: "test@email.com" },
+    });
   }
 }
 
@@ -59,7 +77,7 @@ export class MockActivatedRoute {
     queryParams: { returnUrl: "/" },
     paramMap: convertToParamMap({ name: "string" }),
     params: { id: "string" },
-    url: [{ path: "logbooks" }]
+    url: [{ path: "logbooks" }],
   };
   params = of([{ id: 1 }]);
   queryParams = of([{ limit: 10 }]);
@@ -68,7 +86,7 @@ export class MockActivatedRoute {
 }
 
 export class MockRouter {
-  events = new Observable(observer => {
+  events = new Observable((observer) => {
     observer.next();
     observer.complete();
   });
@@ -119,7 +137,7 @@ export class MockPublishedDataApi {
       doi: "string",
       affiliation: "string",
       publisher: "string",
-      authorList: "string"
+      authorList: "string",
     });
   }
 
@@ -131,8 +149,8 @@ export class MockPublishedDataApi {
         doi: "string",
         affiliation: "string",
         publisher: "string",
-        authorList: "string"
-      }
+        authorList: "string",
+      },
     ]);
   }
 

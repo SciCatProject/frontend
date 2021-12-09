@@ -1,0 +1,38 @@
+<h1>Share datasets with users</h1>
+<mat-dialog-content>
+  <mat-form-field class="email-field">
+    <mat-label>User email</mat-label>
+    <input matInput type="email" [formControl]="emailFormControl" />
+    <button
+      mat-button
+      matSuffix
+      type="button"
+      [disabled]="isInvalid()"
+      (click)="add(emailFormControl.value)"
+    >
+      Add
+    </button>
+    <mat-error *ngIf="isInvalid()">Email address is not valid</mat-error>
+  </mat-form-field>
+  <mat-chip-list>
+    <mat-chip
+      *ngFor="let user of users"
+      [removable]="true"
+      (removed)="remove(user)"
+    >
+      {{ user }}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+  </mat-chip-list>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="isEmpty()"
+    (click)="share()"
+  >
+    Share
+  </button>
+  <button mat-button (click)="cancel()">Cancel</button>
+</mat-dialog-actions>
