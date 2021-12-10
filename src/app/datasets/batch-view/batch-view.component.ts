@@ -110,10 +110,12 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   onRetrieve() {
     let dialogOptions = this.archivingSrv.retriveDialogOptions(this.appConfig.retrieveDestinations);
     const dialogRef = this.dialog.open(DialogComponent, dialogOptions);
+    const destPath = {destinationPath: "/archive/retrieve"};
     dialogRef.afterClosed().subscribe(result => {
       if (result && this.datasetList) {
-        const destPath = this.archivingSrv.generateDestPath(result, this.appConfig.retrieveDestinations);
-        this.archivingSrv.retrieve(this.datasetList, destPath).subscribe(
+        const locationOption = this.archivingSrv.generateOptionLocation(result, this.appConfig.retrieveDestinations);
+        const extra = {...destPath, ...locationOption};
+        this.archivingSrv.retrieve(this.datasetList, extra).subscribe(
           () => this.clearBatch(),
           err =>
             this.store.dispatch(

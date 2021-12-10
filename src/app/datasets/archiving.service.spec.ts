@@ -53,7 +53,7 @@ describe("ArchivingService", () => {
         files: [],
       }));
       const archive = true;
-      const destinationPath = "/test/path/";
+      const destinationPath = {destinationPath: "/test/path/"};
 
       const job = service["createJob"](
         user,
@@ -135,7 +135,7 @@ describe("ArchivingService", () => {
         "archiveOrRetrieve"
       );
       const datasets = [new Dataset()];
-      const destinationPath = "/test/path/";
+      const destinationPath = {location: "/test/path/"};
 
       service.retrieve(datasets, destinationPath);
 
@@ -147,12 +147,12 @@ describe("ArchivingService", () => {
     });
   });
 
-  describe("#generateDestPath()", () => {
+  describe("#generateOptionLocation()", () => {
     it("should return the generated path", () => {
       const result = { option: "option", location: "relative" };
       const destinations = [{ option: "option", location: "/root/" }, { option: "option2" }];
-      expect(service.generateDestPath(result, destinations)).toEqual(
-        "option:/root/relative"
+      expect(service.generateOptionLocation(result, destinations)).toEqual(
+        {option: "option", location: "/root/relative"}
       );
     });
   });

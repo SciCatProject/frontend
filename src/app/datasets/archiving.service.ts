@@ -18,16 +18,16 @@ export class ArchivingService {
   private currentUser$ = this.store.pipe(select(getCurrentUser));
   private tapeCopies$ = this.store.pipe(select(getTapeCopies));
 
-  constructor(private store: Store<any>) {}
+  constructor(private store: Store<any>) { }
 
   private createJob(
     user: User,
     datasets: Dataset[],
     archive: boolean,
-    destinationPath?: string
+    destinationPath?: Record<string, string>
     // Do not specify tape copies here
   ): Job {
-    const extra = archive ? {} : { destinationPath };
+    const extra = archive ? {} : destinationPath ;
     const jobParams = {
       username: user.username,
       ...extra
@@ -55,7 +55,7 @@ export class ArchivingService {
   private archiveOrRetrieve(
     datasets: Dataset[],
     archive: boolean,
-    destPath?: string
+    destPath?: Record<string, string>
   ): Observable<void> {
     return combineLatest([this.currentUser$, this.tapeCopies$]).pipe(
       first(),
@@ -86,27 +86,29 @@ export class ArchivingService {
 
   public retrieve(
     datasets: Dataset[],
-    destinationPath: string
+    destinationPath: Record<string, string>
   ): Observable<void> {
     return this.archiveOrRetrieve(datasets, false, destinationPath);
   }
 
-  public generateDestPath(
+  public generateOptionLocation(
     result: RetrieveDestinations,
     retrieveDestinations: RetrieveDestinations[] = []
-  ): string {
-    const prefix = retrieveDestinations.filter(
-      element => element.option == result.option
-    );
-    let location = prefix.length > 0 ? ":" + prefix[0].location + result.location : "";
-    let destPath = result.option + location || "/archive/retrieve";
-    if (!result.option &&
-      typeof retrieveDestinations !== "undefined" &&
+  ): {} | { option: string } | { location: string; option: string } {
+    if (typeof retrieveDestinations !== "undefined" &&
       retrieveDestinations.length > 0) {
-      location = retrieveDestinations[0].location ? ":" + retrieveDestinations[0].location : "";
-      destPath = retrieveDestinations[0].option + location;
+      const prefix = retrieveDestinations.filter(
+          element => element.option == result.option
+        );
+      let location = prefix.length > 0 ? (prefix[0].location || "") + (result.location || "") : "";
+      let option = result.option;
+      if (!result.option) {
+        location = retrieveDestinations[0].location || "";
+        option = retrieveDestinations[0].option;  
+      }
+    return { option: option, ...(location != ""? {location: location}: {}) };
     }
-    return destPath;
+    return {};
   }
 
   public retriveDialogOptions(

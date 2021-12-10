@@ -107,12 +107,14 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
    * @memberof DashboardComponent
    */
   retrieveClickHandle(): void {
+    const destPath = {destinationPath: "/archive/retrieve"};
     let dialogOptions = this.archivingSrv.retriveDialogOptions(this.appConfig.retrieveDestinations);
     const dialogRef = this.dialog.open(DialogComponent, dialogOptions);
     dialogRef.afterClosed().subscribe(result => {
       if (result && this.selectedSets) {
-        const destPath = this.archivingSrv.generateDestPath(result, this.appConfig.retrieveDestinations);
-        this.archivingSrv.retrieve(this.selectedSets, destPath).subscribe(
+        const locationOption = this.archivingSrv.generateOptionLocation(result, this.appConfig.retrieveDestinations);
+        const extra = {...destPath, ...locationOption};
+        this.archivingSrv.retrieve(this.selectedSets, extra).subscribe(
           () => this.store.dispatch(clearSelectionAction()),
           err =>
             this.store.dispatch(
