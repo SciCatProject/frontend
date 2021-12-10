@@ -1,0 +1,7 @@
+<app-file-uploader
+  [attachments]="attachments"
+  (filePicked)="onFileUploaderFilePicked($event)"
+  (readEnd)="onFileUploaderReadEnd($event)"
+  (submitCaption)="updateCaption($event)"
+  (deleteAttachment)="deleteAttachment($event)"
+></app-file-uploader>

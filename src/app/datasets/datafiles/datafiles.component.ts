@@ -194,11 +194,6 @@ export class DatafilesComponent
   }
 
   ngAfterViewInit() {
-    let datasetPid: string;
-    this.route.params.pipe(pluck("id")).subscribe((id: string) => {
-      datasetPid = id;
-      this.store.dispatch(fetchDatasetAction({ pid: id }));
-    });
 
     this.subscriptions.push(
       this.dataset$.subscribe((dataset) => {
@@ -212,13 +207,11 @@ export class DatafilesComponent
       this.datablocks$.subscribe((datablocks) => {
         const files: File[] = [];
         datablocks.forEach((block) => {
-          if (block.datasetId === datasetPid) {
             block.dataFileList.map((file) => {
               this.totalFileSize += file.size;
               file.selected = false;
               files.push(file);
             });
-          }
         });
         this.count = files.length;
         this.tableData = files.slice(0, this.pageSize);

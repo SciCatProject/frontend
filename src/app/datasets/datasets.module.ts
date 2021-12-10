@@ -75,6 +75,7 @@ import { BatchCardModule } from "./batch-card/batch-card.module";
 import { JobEffects } from "state-management/effects/jobs.effects";
 import { LogbookEffects } from "state-management/effects/logbooks.effects";
 import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
+import { DatasetFileUploaderComponent } from "./dataset-file-uploader/dataset-file-uploader.component";
 
 @NgModule({
   imports: [
@@ -140,6 +141,7 @@ import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
     DatasetLifecycleComponent,
     SampleEditComponent,
     ShareDialogComponent,
+    DatasetFileUploaderComponent,
   ],
   providers: [
     ArchivingService,

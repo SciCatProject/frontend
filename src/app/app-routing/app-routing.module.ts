@@ -26,7 +26,7 @@ export const routes: Routes = [
 
           {
             path: "datasets",
-            loadChildren: () => import("./lazy/private-datasets-routing/private-datasets.feature.module").then(m => m.PrivateDatasetsFeatureModule)
+            loadChildren: () => import("./lazy/datasets-routing/datasets.feature.module").then(m => m.DatasetsFeatureModule)
           },
           {
             path: "files",
