@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AuthGuard } from "app-routing/auth.guard";
 import { LeavingPageGuard } from "app-routing/pending-changes.guard";
+import { AdminTabComponent } from "datasets/admin-tab/admin-tab.component";
 import { DatafilesComponent } from "datasets/datafiles/datafiles.component";
 import { DatasetDetailComponent } from "datasets/dataset-detail/dataset-detail.component";
 import { DatasetFileUploaderComponent } from "datasets/dataset-file-uploader/dataset-file-uploader.component";
@@ -37,6 +38,10 @@ const routes: Routes = [
   {
     path: "lifecycle",
     component: DatasetLifecycleComponent,
+  },
+  {
+    path: "admin",
+    component: AdminTabComponent,
   }
 ];
 @NgModule({

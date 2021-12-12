@@ -97,8 +97,8 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
     // Prevent user from reloading page if there are unsave changes
     this.subscriptions.push(
       fromEvent(window, "beforeunload").subscribe((event) => {
-        if (this.hasUnsavedChanges) {
-          event.returnValue = false;
+        if (this.hasUnsavedChanges()) {
+          event.preventDefault();
         }
       })
     );

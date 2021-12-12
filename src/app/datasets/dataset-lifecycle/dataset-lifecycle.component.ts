@@ -44,7 +44,7 @@ export interface HistoryItem {
   ],
 })
 export class DatasetLifecycleComponent implements OnInit, OnChanges {
-  @Input() dataset: Dataset | undefined;
+  dataset: Dataset | undefined;
   historyItems: HistoryItem[] = [];
 
   pageSizeOptions = [10, 25, 50, 100, 500, 1000];

@@ -76,6 +76,7 @@ import { JobEffects } from "state-management/effects/jobs.effects";
 import { LogbookEffects } from "state-management/effects/logbooks.effects";
 import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
 import { DatasetFileUploaderComponent } from "./dataset-file-uploader/dataset-file-uploader.component";
+import { AdminTabComponent } from './admin-tab/admin-tab.component';
 
 @NgModule({
   imports: [
@@ -142,6 +143,7 @@ import { DatasetFileUploaderComponent } from "./dataset-file-uploader/dataset-fi
     SampleEditComponent,
     ShareDialogComponent,
     DatasetFileUploaderComponent,
+    AdminTabComponent,
   ],
   providers: [
     ArchivingService,

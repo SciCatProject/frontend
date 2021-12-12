@@ -10,14 +10,12 @@ import { Store, select } from "@ngrx/store";
 import {
   Dataset,
   UserApi,
-  Job,
 } from "shared/sdk";
 import {
   getCurrentDataset,
   getPublicViewMode,
 } from "state-management/selectors/datasets.selectors";
 import {
-  getCurrentUser,
   getIsAdmin,
   getIsLoading,
   getIsLoggedIn,
@@ -25,12 +23,11 @@ import {
 } from "state-management/selectors/user.selectors";
 import { ActivatedRoute } from "@angular/router";
 import { Subscription, Observable, combineLatest } from "rxjs";
-import { map, pluck, take } from "rxjs/operators";
+import { map, pluck } from "rxjs/operators";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import {
   fetchDatasetAction,
 } from "state-management/actions/datasets.actions";
-import { submitJobAction } from "state-management/actions/jobs.actions";
 import {
   clearLogbookAction,
   fetchLogbookAction,
@@ -78,35 +75,6 @@ export class DatasetDetailsDashboardComponent
 
 
 
-  resetDataset(dataset: Dataset) {
-    if (confirm("Reset datablocks?")) {
-      this.store.pipe(select(getCurrentUser), take(1)).subscribe((user) => {
-        if (user) {
-          const job = new Job();
-          job.emailJobInitiator = user.email;
-          job.jobParams = {};
-          job.jobParams["username"] = user.username;
-          job.creationTime = new Date();
-          job.type = "reset";
-          const fileObj: FileObject = {
-            pid: "",
-            files: [],
-          };
-          const fileList: string[] = [];
-          fileObj.pid = dataset["pid"];
-          if (dataset["datablocks"]) {
-            dataset["datablocks"].map((d) => {
-              fileList.push(d["archiveId"]);
-            });
-          }
-          fileObj.files = fileList;
-          job.datasetList = [fileObj];
-          console.log(job);
-          this.store.dispatch(submitJobAction({ job }));
-        }
-      });
-    }
-  }
 
   ngOnInit() {
     this.subscriptions.push(
@@ -135,6 +103,22 @@ export class DatasetDetailsDashboardComponent
       this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
+          this.subscriptions.push(
+            combineLatest([this.accessGroups$, this.isAdmin$, this.loggedIn$]).subscribe(
+              ([groups, isAdmin, isLoggedIn]) => {
+                const isInOwnerGroup = groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
+                this.navLinks = [
+                  { location: "./", label: "Details", icon: "menu", enabled: true },
+                  { location: "./datafiles", label: "Datafiles", icon: "cloud_download", enabled: true },
+                  { location: "./reduce", label: "Reduce", icon: "tune", enabled: this.appConfig.datasetReduceEnabled && isLoggedIn && isInOwnerGroup},
+                  { location: "./logbook", label: "Logbook", icon: "book", enabled: this.appConfig.logbookEnabled && isLoggedIn && isInOwnerGroup},
+                  { location: "./attachments", label: "Attachments", icon: "insert_photo", enabled: isLoggedIn && isInOwnerGroup},
+                  { location: "./lifecycle", label: "Lifecycle", icon: "loop", enabled: true},
+                  { location: "./admin", label: "Admin", icon: "settings", enabled: isLoggedIn && isAdmin}
+                ];
+              }
+            ))
+
           if ("proposalId" in dataset) {
             this.store.dispatch(
               fetchProposalAction({ proposalId: dataset["proposalId"] })
@@ -153,26 +137,6 @@ export class DatasetDetailsDashboardComponent
         }
       })
     );
-    this.subscriptions.push(
-      this.loggedIn$.subscribe((loggedIn) => {
-        const isLoggedIn = loggedIn;
-        let isInOwnerGroup = false;
-        combineLatest([this.accessGroups$, this.isAdmin$]).subscribe(
-          ([groups, isAdmin]) => {
-            isInOwnerGroup = groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
-          }
-        );
-        this.navLinks = [
-          { location: "./", label: "Details", icon: "menu", enabled: true },
-          { location: "./datafiles", label: "Datafiles", icon: "cloud_download", enabled: true },
-          { location: "./reduce", label: "Reduce", icon: "tune", enabled: this.appConfig.datasetReduceEnabled && isLoggedIn && isInOwnerGroup},
-          { location: "./logbook", label: "Logbook", icon: "book", enabled: this.appConfig.logbookEnabled && isLoggedIn && isInOwnerGroup},
-          { location: "./attachments", label: "Attachments", icon: "insert_photo", enabled: isLoggedIn && isInOwnerGroup},
-          { location: "./lifecycle", label: "Lifecycle", icon: "loop", enabled: true}
-        ];
-      })
-    );
-
     this.jwt$ = this.userApi.jwt();
   }
 

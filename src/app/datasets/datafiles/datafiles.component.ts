@@ -22,8 +22,6 @@ import {
 } from "shared/modules/table/table.component";
 import { getIsLoading } from "state-management/selectors/user.selectors";
 import { ActivatedRoute } from "@angular/router";
-import { pluck } from "rxjs/operators";
-import { fetchDatasetAction } from "state-management/actions/datasets.actions";
 import { UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
@@ -205,6 +203,7 @@ export class DatafilesComponent
 
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
+        console.log(datablocks);
         const files: File[] = [];
         datablocks.forEach((block) => {
             block.dataFileList.map((file) => {

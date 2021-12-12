@@ -36,7 +36,13 @@
     <ng-template ngPluralCase="=1">1 datafile.</ng-template>
     <ng-template ngPluralCase="other">{{ count }} datafiles.</ng-template>
   </span>
-
+  <div
+    *ngIf="
+      (datablocks$ | async) && (datablocks$ | async)?.length === 0
+    "
+  >
+    <h3>No datafiles linked to this dataset</h3>
+  </div>
   <form
     ngNoForm
     method="POST"
