@@ -1,14 +1,18 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed } from "@angular/core/testing";
+import { Store, StoreModule } from "@ngrx/store";
+import { MockStore } from "@ngrx/store/testing";
+import { AdminTabComponent } from "./admin-tab.component";
 
-import { AdminTabComponent } from './admin-tab.component';
-
-describe('AdminTabComponent', () => {
+describe("AdminTabComponent", () => {
   let component: AdminTabComponent;
   let fixture: ComponentFixture<AdminTabComponent>;
-
+  let store: MockStore;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AdminTabComponent ]
+      declarations: [ AdminTabComponent ],
+      imports: [
+        StoreModule.forRoot({}),
+      ]
     })
     .compileComponents();
   });
@@ -18,8 +22,25 @@ describe('AdminTabComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
-  it('should create', () => {
+  beforeEach(inject([Store], (mockStore: MockStore) => {
+    store = mockStore;
+  }));
+  afterEach(() => {
+    fixture.destroy();
+  });
+  it("should create", () => {
     expect(component).toBeTruthy();
+  });
+  describe("#resetDataset()", () => {
+    it("should return 'undefined' without confirmation", () => {
+      const dispatchSpy = spyOn(store, "dispatch");
+      const pipeSpy = spyOn(store, "pipe");
+      component.dataset = undefined;
+      const res = component.resetDataset();
+
+      expect(res).toBeUndefined();
+      expect(dispatchSpy).toHaveBeenCalledTimes(0);
+      expect(pipeSpy).toHaveBeenCalledTimes(0);
+    });
   });
 });

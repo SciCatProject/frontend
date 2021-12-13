@@ -12,6 +12,7 @@ import { Dataset, DerivedDataset } from "shared/sdk/models";
 import {
   getOpenwhiskResult,
   getDatasets,
+  getCurrentDataset,
 } from "state-management/selectors/datasets.selectors";
 import {
   reduceDatasetAction,
@@ -27,8 +28,7 @@ import { Subscription } from "rxjs";
   styleUrls: ["./reduce.component.scss"],
 })
 export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() dataset: Dataset = new Dataset();
-
+  dataset: Dataset | undefined;
   derivedDatasets$ = this.store.pipe(
     select(getDatasets),
     map((datasets) =>
@@ -36,7 +36,7 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
         .filter((dataset) => dataset.type === "derived")
         .map((dataset: unknown) => dataset as DerivedDataset)
         .filter((dataset) =>
-          dataset["inputDatasets"].includes(this.dataset.pid)
+          dataset["inputDatasets"].includes(this.dataset?.pid)
         )
     )
   );
@@ -104,7 +104,9 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(fetchDatasetsAction());
-
+    this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
+      this.dataset = dataset;
+    });
     this.derivedDatsetsSubscription = this.derivedDatasets$.subscribe(
       (datasets) => {
         if (datasets) {
@@ -125,7 +127,7 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
               .filter((dataset) => dataset.type === "derived")
               .map((dataset: unknown) => dataset as DerivedDataset)
               .filter((dataset) =>
-                dataset["inputDatasets"].includes(this.dataset.pid)
+                dataset["inputDatasets"].includes(this.dataset?.pid)
               )
           )
         );

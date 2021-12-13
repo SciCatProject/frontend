@@ -1,7 +1,6 @@
 import {
   Component,
   OnInit,
-  Input,
   OnChanges,
   SimpleChange,
   Inject,
@@ -139,9 +138,8 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
-      if (dataset) {
         this.dataset = dataset;
-    }});
+    });
     this.historyItems = this.parseHistoryItems();
     this.dataSource = this.historyItems.slice(
       this.currentPage,

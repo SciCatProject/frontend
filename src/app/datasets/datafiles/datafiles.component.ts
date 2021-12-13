@@ -203,7 +203,6 @@ export class DatafilesComponent
 
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
-        console.log(datablocks);
         const files: File[] = [];
         datablocks.forEach((block) => {
             block.dataFileList.map((file) => {

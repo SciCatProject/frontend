@@ -43,11 +43,11 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
   accessGroups$: Observable<string[]> = this.userProfile$.pipe(
     map((profile) => (profile ? profile.accessGroups : []))
   );
-  dataset: Dataset | null = null;
+  dataset: Dataset | undefined;
   datasetWithout: Partial<Dataset> | null = null;
   attachments: Attachment[] | null = null;
   proposal$ = this.store.pipe(select(getCurrentProposal));
-  proposal: Proposal | null;
+  proposal: Proposal | undefined;
   sample: Sample | null = null;
   user: User | undefined;
   editingAllowed = false;
@@ -63,27 +63,27 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
   ngOnInit(){
     this.subscriptions.push(
       this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
-        if (dataset) {
-          this.dataset = dataset;
+        this.dataset = dataset;
+        if (this.dataset) {
           combineLatest([this.accessGroups$, this.isAdmin$]).subscribe(
             ([groups, isAdmin]) => {
               this.editingAllowed =
                 groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
             }
           );
-          if ("proposalId" in dataset) {
+          if ("proposalId" in this.dataset) {
             this.store.dispatch(
-              fetchProposalAction({ proposalId: dataset["proposalId"] })
+              fetchProposalAction({ proposalId: this.dataset["proposalId"] })
             );
             this.store.dispatch(
-              fetchLogbookAction({ name: dataset["proposalId"] })
+              fetchLogbookAction({ name: this.dataset["proposalId"] })
             );
           } else {
             this.store.dispatch(clearLogbookAction());
           }
-          if ("sampleId" in dataset) {
+          if ("sampleId" in this.dataset) {
             this.store.dispatch(
-              fetchSampleAction({ sampleId: dataset["sampleId"] })
+              fetchSampleAction({ sampleId: this.dataset["sampleId"] })
             );
           }
         }
@@ -114,7 +114,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
     return this._hasUnsavedChanges;
   }
   isPI(): boolean {
-    if (this.user) {
+    if (this.user && this.dataset) {
       if (this.user.username === "admin") {
         return true;
       }
@@ -147,7 +147,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
     const input = event.input;
     const value = event.value;
 
-    if ((value || "").trim()) {
+    if ((value || "").trim() && this.dataset) {
       const keyword = value.trim().toLowerCase();
       if (!this.dataset.keywords) {
         const keywords: Array<string> = [];
@@ -167,13 +167,15 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
   }
 
   onRemoveKeyword(keyword: string): void {
-    const index = this.dataset.keywords.indexOf(keyword);
-    if (index >= 0) {
-      const pid = this.dataset.pid;
-      const keywords = [...this.dataset.keywords];
-      keywords.splice(index, 1);
-      const property = { keywords };
-      this.store.dispatch(updatePropertyAction({ pid, property }));
+    if (this.dataset) {
+      const index = this.dataset.keywords.indexOf(keyword);
+      if (index >= 0) {
+        const pid = this.dataset.pid;
+        const keywords = [...this.dataset.keywords];
+        keywords.splice(index, 1);
+        const property = { keywords };
+        this.store.dispatch(updatePropertyAction({ pid, property }));
+      }
     }
   }
 
@@ -210,7 +212,8 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
   }
 
   openSampleEditDialog() {
-    this.dialog
+    if (this.dataset){
+      this.dialog
       .open(SampleEditComponent, {
         width: "1000px",
         data: {
@@ -220,7 +223,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
       })
       .afterClosed()
       .subscribe((res) => {
-        if (res) {
+        if (res && this.dataset) {
           const { sample } = res;
           this.sample = sample;
           const pid = this.dataset.pid;
@@ -228,17 +231,22 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
           this.store.dispatch(updatePropertyAction({ pid, property }));
         }
       });
+    }
   }
   onSlidePublic(event: MatSlideToggleChange) {
-    const pid = this.dataset.pid;
-    const property = { isPublished: event.checked };
-    this.store.dispatch(updatePropertyAction({ pid, property }));
+    if (this.dataset) {
+      const pid = this.dataset.pid;
+      const property = { isPublished: event.checked };
+      this.store.dispatch(updatePropertyAction({ pid, property }));
+    }
   }
 
   onSaveMetadata(metadata: Record<string, any>) {
-    const pid = this.dataset.pid;
-    const property = { scientificMetadata: metadata };
-    this.store.dispatch(updatePropertyAction({ pid, property }));
+    if (this.dataset) {
+      const pid = this.dataset.pid;
+      const property = { scientificMetadata: metadata };
+      this.store.dispatch(updatePropertyAction({ pid, property }));
+    }
   }
   onHasUnsavedChanges($event: boolean) {
     this._hasUnsavedChanges = $event;

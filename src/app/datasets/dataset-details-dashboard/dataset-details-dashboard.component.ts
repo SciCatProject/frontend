@@ -57,7 +57,12 @@ export class DatasetDetailsDashboardComponent
   loggedIn$ = this.store.pipe(select(getIsLoggedIn));
   jwt$: Observable<JWT> = new Observable<JWT>();
   dataset: Dataset | undefined;
-  navLinks = [];
+  navLinks :{
+    location: string;
+    label: string;
+    icon: string;
+    enabled: boolean;
+  }[] = [];
   userProfile$ = this.store.pipe(select(getProfile));
   isAdmin$ = this.store.pipe(select(getIsAdmin));
   accessGroups$: Observable<string[]> = this.userProfile$.pipe(
@@ -72,9 +77,6 @@ export class DatasetDetailsDashboardComponent
     private userApi: UserApi,
     public dialog: MatDialog,
   ) {}
-
-
-
 
   ngOnInit() {
     this.subscriptions.push(
@@ -117,7 +119,7 @@ export class DatasetDetailsDashboardComponent
                   { location: "./admin", label: "Admin", icon: "settings", enabled: isLoggedIn && isAdmin}
                 ];
               }
-            ))
+            ));
 
           if ("proposalId" in dataset) {
             this.store.dispatch(

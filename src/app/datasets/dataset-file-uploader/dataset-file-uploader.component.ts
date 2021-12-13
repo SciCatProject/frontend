@@ -17,7 +17,7 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
   attachments: Attachment[] = [];
   subscriptions: Subscription[] = [];
   attachment: Partial<Attachment> = {};
-  pickedFile: ReadFile;
+  pickedFile: ReadFile | undefined;
   dataset: Dataset | undefined;
   user: User | undefined;
   constructor(private store: Store<Dataset>) { }
@@ -45,8 +45,8 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
   }
 
   onFileUploaderReadEnd(fileCount: number) {
-    if (fileCount > 0) {
-      const attachment = {
+    if (fileCount > 0 && this.dataset && this.user && this.pickedFile) {
+      this.attachment = {
         thumbnail: this.pickedFile.content,
         caption: this.pickedFile.name,
         ownerGroup: this.dataset.ownerGroup,
@@ -58,22 +58,26 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
         dataset: this.dataset,
         datasetId: this.dataset.pid,
       };
-      this.store.dispatch(addAttachmentAction({ attachment}));
+      this.store.dispatch(addAttachmentAction({ attachment: this.attachment}));
     }
   }
   updateCaption(event: SubmitCaptionEvent) {
-    this.store.dispatch(
-      updateAttachmentCaptionAction({
-        datasetId: this.dataset.pid,
-        attachmentId: event.attachmentId,
-        caption: event.caption,
-      })
-    );
+    if (this.dataset) {
+      this.store.dispatch(
+        updateAttachmentCaptionAction({
+          datasetId: this.dataset.pid,
+          attachmentId: event.attachmentId,
+          caption: event.caption,
+        })
+      );
+    }
   }
   deleteAttachment(attachmentId: string) {
-    this.store.dispatch(
-      removeAttachmentAction({ datasetId: this.dataset.pid, attachmentId })
-    );
+    if (this.dataset) {
+      this.store.dispatch(
+          removeAttachmentAction({ datasetId: this.dataset?.pid, attachmentId })
+      );
+    }
   }
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => {
