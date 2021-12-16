@@ -1,12 +1,10 @@
-import {
-  Component,
-  Output,
-  EventEmitter,
-  ViewChild,
-  Input
-} from "@angular/core";
-import { ReadFile, ReadMode, FilePickerDirective } from "ngx-file-helpers";
+import { Component, Output, EventEmitter, Input } from "@angular/core";
 import { Attachment } from "shared/sdk";
+
+export interface PickedFile {
+  name: string;
+  content: string;
+}
 
 export interface SubmitCaptionEvent {
   attachmentId: string;
@@ -16,45 +14,46 @@ export interface SubmitCaptionEvent {
 @Component({
   selector: "app-file-uploader",
   templateUrl: "./file-uploader.component.html",
-  styleUrls: ["./file-uploader.component.scss"]
+  styleUrls: ["./file-uploader.component.scss"],
 })
 export class FileUploaderComponent {
-  @ViewChild(FilePickerDirective, { static: false })
-  private filePicker!: FilePickerDirective;
-
   @Input() attachments: Attachment[] = [];
 
-  @Output() filePicked = new EventEmitter<ReadFile>();
-  @Output() readEnd = new EventEmitter<number>();
+  @Output() filePicked = new EventEmitter<PickedFile>();
   @Output() submitCaption = new EventEmitter<SubmitCaptionEvent>();
   @Output() deleteAttachment = new EventEmitter<string>();
 
-  public readMode = ReadMode.dataURL;
-  public status = "";
+  async onFileDropped(event: unknown) {
+    const fileList = event as FileList;
 
-  onReadStart(event: number) {
-    this.status = `Started reading ${event} file(s) on ${new Date().toLocaleTimeString()}.`;
-    console.log("File Uploader:", this.status);
-  }
+    if (fileList.length > 0) {
+      for (let i = 0; i < fileList.length; i++) {
+        let file: File = (event as FileList)[i];
 
-  onFilePicked(event: ReadFile) {
-    this.filePicked.emit(event);
-  }
-
-  onReadEnd(event: number) {
-    this.status = `Finished reading ${event} file(s) on ${new Date().toLocaleTimeString()}.`;
-    console.log("File Uploader:", this.status);
-
-    this.readEnd.emit(event);
-    if (this.filePicker) {
-      this.filePicker.reset();
+        const buffer = await file.arrayBuffer();
+        let binary = "";
+        const bytes = new Uint8Array(buffer);
+        const bytesLength = bytes.byteLength;
+        for (let i = 0; i < bytesLength; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        const pickedFile: PickedFile = {
+          name: file.name,
+          content: "data:image/png;base64," + btoa(binary),
+        };
+        this.filePicked.emit(pickedFile);
+      }
     }
+  }
+
+  onFilePicked(files: FileList) {
+    this.onFileDropped(files);
   }
 
   onSubmitCaption(attachmentId: string, caption: string) {
     const event: SubmitCaptionEvent = {
       attachmentId,
-      caption
+      caption,
     };
     this.submitCaption.emit(event);
   }
