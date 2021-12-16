@@ -4,12 +4,12 @@ import {
   FileUploaderComponent,
   SubmitCaptionEvent,
 } from "./file-uploader.component";
-import { NgxFileHelpersModule, ReadFile, ReadMode } from "ngx-file-helpers";
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatIconModule } from "@angular/material/icon";
+import { DragAndDropDirective } from "./directives/drag-and-drop.directive";
 
 describe("FileUploaderComponent", () => {
   let component: FileUploaderComponent;
@@ -25,8 +25,8 @@ describe("FileUploaderComponent", () => {
           MatFormFieldModule,
           MatIconModule,
           MatInputModule,
-          NgxFileHelpersModule,
         ],
+        providers: [DragAndDropDirective],
         declarations: [FileUploaderComponent],
       });
       TestBed.compileComponents();
@@ -47,54 +47,30 @@ describe("FileUploaderComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("#onReadStart()", () => {
-    it("should set the status", () => {
-      expect(component.status).toEqual("");
+  describe("#onFileDropped()", () => {
+    it("should emit the picked file", () => {
+      spyOn(component.filePicked, "emit");
 
-      component.onReadStart(1);
+      const file = {
+        name: "test",
+        size: 100,
+        type: "image/png",
+        content: "abc123",
+      };
+      component.onFileDropped(file);
 
-      expect(component.status).toBeDefined();
+      expect(component.filePicked.emit).toHaveBeenCalledOnceWith(file);
     });
   });
 
   describe("#onFilePicked()", () => {
-    it("should emit the picked file", () => {
-      spyOn(component.filePicked, "emit");
+    it("should call #onFileDropped()", () => {
+      spyOn(component, "onFileDropped");
 
-      const file: ReadFile = {
-        name: "test",
-        size: 100,
-        type: "image/png",
-        readMode: ReadMode.dataURL,
-        content: "abc123",
-        underlyingFile: {
-          lastModified: 123,
-          name: "test",
-          size: 100,
-          type: "image/png",
-          arrayBuffer: () => new Blob().arrayBuffer(),
-          slice: () => new Blob().slice(),
-          stream: () => new Blob().stream(),
-          text: () => new Blob().text(),
-        },
-      };
-      component.onFilePicked(file);
+      const fileList = new FileList();
+      component.onFilePicked(fileList);
 
-      expect(component.filePicked.emit).toHaveBeenCalledTimes(1);
-      expect(component.filePicked.emit).toHaveBeenCalledWith(file);
-    });
-  });
-
-  describe("#onReadEnd()", () => {
-    it("should set the status and emit the number of files read", () => {
-      expect(component.status).toEqual("");
-      spyOn(component.readEnd, "emit");
-
-      component.onReadEnd(1);
-
-      expect(component.status).toBeDefined();
-      expect(component.readEnd.emit).toHaveBeenCalledTimes(1);
-      expect(component.readEnd.emit).toHaveBeenCalledWith(1);
+      expect(component.onFileDropped).toHaveBeenCalledOnceWith(fileList);
     });
   });
 
