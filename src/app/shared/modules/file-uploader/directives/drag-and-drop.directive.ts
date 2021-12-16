@@ -23,6 +23,7 @@ export class DragAndDropDirective {
   // Dragleave listener
   @HostListener("dragleave", ["$event"]) public onDragLeave(event: DragEvent) {
     event.preventDefault();
+    event.stopPropagation();
     this.fileOver = false;
   }
 
@@ -31,7 +32,9 @@ export class DragAndDropDirective {
     event.preventDefault();
     event.stopPropagation();
     this.fileOver = false;
-    const files = event.dataTransfer.files;
+    const files = event.dataTransfer
+      ? event.dataTransfer.files
+      : new FileList();
 
     if (files.length > 0) {
       this.fileDropped.emit(files);
