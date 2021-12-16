@@ -1,31 +1,18 @@
-<mat-card
-  class="dropzone"
-  ngxFileDropzone
-  [readMode]="readMode"
-  multiple
-  accept="image/*"
-  (readStart)="onReadStart($event)"
-  (fileDrop)="onFilePicked($event)"
-  (readEnd)="onReadEnd($event)"
->
+<mat-card class="dropzone" appDragAndDrop (fileDropped)="onFileDropped($event)">
+  <input
+    class="instructions"
+    type="file"
+    #fileDropRef
+    id="fileDropRef"
+    accept="image/*,application/pdf"
+    multiple
+    (change)="onFilePicked($event.target['files'])"
+  />
   <div fxLayout="column" style="align-items: center">
-    <div class="instructions">
-      Drop a file here
-    </div>
+    <div class="instructions">Drop a file here</div>
     <div class="instructions">or</div>
     <div class="instructions">
-      <button
-        mat-raised-button
-        type="button"
-        color="accent"
-        ngxFilePicker
-        [readMode]="readMode"
-        [multiple]="true"
-        accept="image/*,application/pdf"
-        (readStart)="onReadStart($event)"
-        (filePick)="onFilePicked($event)"
-        (readEnd)="onReadEnd($event)"
-      >
+      <button mat-raised-button color="accent" (click)="fileDropRef.click()">
         Browse
       </button>
     </div>
@@ -35,18 +22,7 @@
 <mat-card class="file-picker">
   <div class="mat-title">Choose an image to upload</div>
 
-  <button
-    mat-raised-button
-    type="button"
-    color="accent"
-    ngxFilePicker
-    [readMode]="readMode"
-    [multiple]="true"
-    accept="image/*,application/pdf"
-    (readStart)="onReadStart($event)"
-    (filePick)="onFilePicked($event)"
-    (readEnd)="onReadEnd($event)"
-  >
+  <button mat-raised-button color="accent" (click)="fileDropRef.click()">
     Browse
   </button>
 </mat-card>
