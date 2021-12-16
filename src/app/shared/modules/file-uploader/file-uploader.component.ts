@@ -2,8 +2,10 @@ import { Component, Output, EventEmitter, Input } from "@angular/core";
 import { Attachment } from "shared/sdk";
 
 export interface PickedFile {
-  name: string;
   content: string;
+  name: string;
+  size: number;
+  type: string;
 }
 
 export interface SubmitCaptionEvent {
@@ -38,8 +40,10 @@ export class FileUploaderComponent {
           binary += String.fromCharCode(bytes[i]);
         }
         const pickedFile: PickedFile = {
+          content: "data:" + file.type + ";base64," + btoa(binary),
           name: file.name,
-          content: "data:image/png;base64," + btoa(binary),
+          size: file.size,
+          type: file.type,
         };
         this.filePicked.emit(pickedFile);
       }
