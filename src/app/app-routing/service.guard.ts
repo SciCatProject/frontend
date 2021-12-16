@@ -19,7 +19,7 @@ export class ServiceGuard implements CanActivate {
         shouldActivate = this.appConfig.logbookEnabled;
         break;
       case "reduce":
-        shouldActivate = this.appConfig.datasetReduceEnabled
+        shouldActivate = this.appConfig.datasetReduceEnabled;
         break;
     }
     if (!shouldActivate) {

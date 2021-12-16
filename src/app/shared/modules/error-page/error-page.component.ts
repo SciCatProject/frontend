@@ -16,7 +16,7 @@ export class ErrorPageComponent implements OnInit {
 
   ngOnInit() {
     // Keep the requested url unchanged
-    const replaceUrl = this.route.snapshot.queryParams['url'];
+    const replaceUrl = this.route.snapshot.queryParams["url"];
     if (replaceUrl) {
       this.location.replaceState(replaceUrl);
     }
