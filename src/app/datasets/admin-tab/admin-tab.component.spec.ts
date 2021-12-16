@@ -1,6 +1,7 @@
 import { ComponentFixture, inject, TestBed } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
 import { MockStore } from "@ngrx/store/testing";
+import { Dataset } from "shared/sdk";
 import { AdminTabComponent } from "./admin-tab.component";
 
 describe("AdminTabComponent", () => {
@@ -35,7 +36,7 @@ describe("AdminTabComponent", () => {
     it("should return 'undefined' without confirmation", () => {
       const dispatchSpy = spyOn(store, "dispatch");
       const pipeSpy = spyOn(store, "pipe");
-      component.dataset = undefined;
+      component.dataset = new Dataset();
       const res = component.resetDataset();
 
       expect(res).toBeUndefined();

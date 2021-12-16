@@ -11,11 +11,10 @@
       Jupyter Hub
     </a>
   </div>
-  <div fxFlex="auto">
+  <div fxFlex="auto" *ngIf="isPI()">
     <mat-slide-toggle
       class="public-toggle"
       [checked]="dataset.isPublished"
-      [disabled]="!isPI()"
       (change)="onSlidePublic($event)"
     >
       Public
