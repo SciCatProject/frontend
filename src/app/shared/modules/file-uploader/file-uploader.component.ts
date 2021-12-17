@@ -26,27 +26,27 @@ export class FileUploaderComponent {
   @Output() deleteAttachment = new EventEmitter<string>();
 
   async onFileDropped(event: unknown) {
-    const fileList = event as FileList;
+    const files = Array.from(event as FileList);
 
-    if (fileList.length > 0) {
-      for (let i = 0; i < fileList.length; i++) {
-        let file: File = (event as FileList)[i];
-
-        const buffer = await file.arrayBuffer();
-        let binary = "";
-        const bytes = new Uint8Array(buffer);
-        const bytesLength = bytes.byteLength;
-        for (let i = 0; i < bytesLength; i++) {
-          binary += String.fromCharCode(bytes[i]);
-        }
-        const pickedFile: PickedFile = {
-          content: "data:" + file.type + ";base64," + btoa(binary),
-          name: file.name,
-          size: file.size,
-          type: file.type,
-        };
-        this.filePicked.emit(pickedFile);
-      }
+    if (files.length > 0) {
+      await Promise.all(
+        files.map(async (file) => {
+          const buffer = await file.arrayBuffer();
+          let binary = "";
+          const bytes = new Uint8Array(buffer);
+          const bytesLength = bytes.byteLength;
+          for (let i = 0; i < bytesLength; i++) {
+            binary += String.fromCharCode(bytes[i]);
+          }
+          const pickedFile: PickedFile = {
+            content: "data:" + file.type + ";base64," + btoa(binary),
+            name: file.name,
+            size: file.size,
+            type: file.type,
+          };
+          this.filePicked.emit(pickedFile);
+        })
+      );
     }
   }
 
