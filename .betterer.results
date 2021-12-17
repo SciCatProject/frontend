@@ -11,64 +11,61 @@ exports[`stricter compilation`] = {
       [73, 12, 8, "Variable \'datasets\' implicitly has type \'any[]\' in some locations where its type cannot be determined.", "805288804"],
       [76, 35, 8, "Variable \'datasets\' implicitly has an \'any[]\' type.", "805288804"]
     ],
-    "src/app/datasets/dashboard/dashboard.component.spec.ts:1153933419": [
-      [156, 8, 66, "Expected 0 arguments, but got 1.", "1240398008"],
-      [176, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"],
-      [240, 47, 29, "Expected 0 arguments, but got 1.", "2503700957"]
+    "src/app/datasets/dashboard/dashboard.component.spec.ts:249866239": [
+      [173, 8, 66, "Expected 0 arguments, but got 1.", "1240398008"],
+      [193, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"],
+      [257, 47, 29, "Expected 0 arguments, but got 1.", "2503700957"]
     ],
-    "src/app/datasets/dataset-detail/dataset-detail.component.ts:1022198235": [
-      [96, 22, 12, "Object is possibly \'null\'.", "1944648223"]
+    "src/app/datasets/dataset-detail/dataset-detail.component.ts:3370116313": [
+      [97, 22, 12, "Object is possibly \'null\'.", "1944648223"]
     ],
-    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.spec.ts:1941642285": [
-      [108, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
-      [109, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
-      [126, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
-      [127, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
-      [144, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"investigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'investigator\' does not exist on type \'Dataset\'.", "3830977733"],
-      [145, 6, 34, "Element implicitly has an \'any\' type because expression of type \'\\"inputDatasets\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'inputDatasets\' does not exist on type \'Dataset\'.", "3801541895"],
-      [146, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"usedSoftware\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'usedSoftware\' does not exist on type \'Dataset\'.", "2755406360"],
-      [163, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"investigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'investigator\' does not exist on type \'Dataset\'.", "3830977733"],
-      [164, 6, 34, "Element implicitly has an \'any\' type because expression of type \'\\"inputDatasets\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'inputDatasets\' does not exist on type \'Dataset\'.", "3801541895"],
-      [165, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"usedSoftware\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'usedSoftware\' does not exist on type \'Dataset\'.", "2755406360"],
-      [182, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
-      [183, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
-      [203, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [215, 47, 19, "Expected 0 arguments, but got 1.", "302414085"],
-      [217, 8, 35, "Expected 0 arguments, but got 1.", "2922510941"],
-      [248, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.spec.ts:1860387049": [
+      [118, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
+      [119, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
+      [136, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
+      [137, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
+      [154, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"investigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'investigator\' does not exist on type \'Dataset\'.", "3830977733"],
+      [155, 6, 34, "Element implicitly has an \'any\' type because expression of type \'\\"inputDatasets\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'inputDatasets\' does not exist on type \'Dataset\'.", "3801541895"],
+      [156, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"usedSoftware\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'usedSoftware\' does not exist on type \'Dataset\'.", "2755406360"],
+      [173, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"investigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'investigator\' does not exist on type \'Dataset\'.", "3830977733"],
+      [174, 6, 34, "Element implicitly has an \'any\' type because expression of type \'\\"inputDatasets\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'inputDatasets\' does not exist on type \'Dataset\'.", "3801541895"],
+      [175, 6, 33, "Element implicitly has an \'any\' type because expression of type \'\\"usedSoftware\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'usedSoftware\' does not exist on type \'Dataset\'.", "2755406360"],
+      [192, 6, 42, "Element implicitly has an \'any\' type because expression of type \'\\"principalInvestigator\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'principalInvestigator\' does not exist on type \'Dataset\'.", "2318838391"],
+      [193, 6, 37, "Element implicitly has an \'any\' type because expression of type \'\\"creationLocation\\"\' can\'t be used to index type \'Dataset\'.\\n  Property \'creationLocation\' does not exist on type \'Dataset\'.", "1247893412"],
+      [221, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [233, 47, 19, "Expected 0 arguments, but got 1.", "302414085"],
+      [235, 8, 35, "Expected 0 arguments, but got 1.", "2922510941"],
       [278, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [319, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [362, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [380, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
-      [459, 8, 57, "Expected 0 arguments, but got 1.", "2548844095"],
-      [477, 8, 164, "Expected 0 arguments, but got 1.", "3577138323"],
-      [496, 8, 103, "Expected 0 arguments, but got 1.", "2385541400"]
+      [308, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [349, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [392, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [410, 8, 39, "Expected 0 arguments, but got 1.", "1529811676"],
+      [444, 8, 57, "Expected 0 arguments, but got 1.", "2548844095"],
+      [462, 8, 164, "Expected 0 arguments, but got 1.", "3577138323"],
+      [481, 8, 103, "Expected 0 arguments, but got 1.", "2385541400"]
     ],
-    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:2185766780": [
-      [115, 8, 9, "Object is possibly \'undefined\'.", "1162801532"],
-      [118, 8, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [120, 8, 9, "Object is possibly \'undefined\'.", "1162801532"],
-      [126, 8, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [128, 8, 9, "Object is possibly \'undefined\'.", "1162801532"],
-      [138, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [150, 9, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [152, 6, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [154, 8, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [155, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [156, 27, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [163, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [165, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [166, 27, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [197, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [203, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [247, 20, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [248, 22, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [249, 19, 9, "Object is possibly \'undefined\'.", "1162801532"],
-      [250, 19, 9, "Object is possibly \'undefined\'.", "1162801532"],
-      [254, 19, 12, "Object is possibly \'undefined\'.", "1944648223"],
+    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:1949155331": [
+      [122, 10, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [130, 10, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [143, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [155, 9, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [157, 6, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [159, 8, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [160, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [161, 27, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [168, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [170, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [171, 27, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [202, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [208, 16, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [247, 18, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [248, 20, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [249, 17, 9, "Object is possibly \'undefined\'.", "1162801532"],
+      [250, 17, 9, "Object is possibly \'undefined\'.", "1162801532"],
+      [254, 17, 12, "Object is possibly \'undefined\'.", "1944648223"],
       [263, 19, 12, "Object is possibly \'undefined\'.", "1944648223"],
       [272, 42, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [306, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
+      [307, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
     ],
     "src/app/datasets/dataset-lifecycle/dataset-lifecycle.component.spec.ts:1858539517": [
       [155, 20, 3, "Parameter \'key\' implicitly has an \'any\' type.", "193424690"],
@@ -213,27 +210,27 @@ exports[`stricter compilation`] = {
     "src/app/publisheddata/publisheddata-edit/publisheddata-edit.component.spec.ts:3368931753": [
       [105, 6, 22, "Object is possibly \'undefined\'.", "1831967872"]
     ],
-    "src/app/publisheddata/publisheddata-edit/publisheddata-edit.component.ts:4218519865": [
-      [101, 6, 15, "Object is possibly \'undefined\'.", "3349509077"],
-      [102, 6, 22, "Object is possibly \'undefined\'.", "3285646375"],
-      [103, 6, 17, "Object is possibly \'undefined\'.", "3404589737"],
-      [104, 6, 19, "Object is possibly \'undefined\'.", "3176390683"],
-      [105, 6, 25, "Object is possibly \'undefined\'.", "1661641219"],
-      [106, 6, 18, "Object is possibly \'undefined\'.", "2976519893"]
+    "src/app/publisheddata/publisheddata-edit/publisheddata-edit.component.ts:3993729135": [
+      [100, 6, 15, "Object is possibly \'undefined\'.", "3349509077"],
+      [101, 6, 22, "Object is possibly \'undefined\'.", "3285646375"],
+      [102, 6, 17, "Object is possibly \'undefined\'.", "3404589737"],
+      [103, 6, 19, "Object is possibly \'undefined\'.", "3176390683"],
+      [104, 6, 25, "Object is possibly \'undefined\'.", "1661641219"],
+      [105, 6, 18, "Object is possibly \'undefined\'.", "2976519893"]
     ],
     "src/app/samples/sample-dashboard/sample-dashboard.component.spec.ts:4131572326": [
       [130, 8, 36, "Expected 0 arguments, but got 1.", "518980590"],
       [148, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
       [165, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"]
     ],
-    "src/app/samples/sample-detail/sample-detail.component.spec.ts:1883275546": [
-      [100, 45, 4, "Argument of type \'null\' is not assignable to parameter of type \'Dataset[]\'.", "2087897566"],
-      [126, 8, 102, "Expected 0 arguments, but got 1.", "1018110629"],
-      [195, 8, 57, "Expected 0 arguments, but got 1.", "2548844095"],
-      [215, 8, 140, "Expected 0 arguments, but got 1.", "1862035901"],
-      [236, 8, 50, "Expected 0 arguments, but got 1.", "1055337712"],
-      [258, 8, 103, "Expected 0 arguments, but got 1.", "2904401119"],
-      [264, 8, 56, "Expected 0 arguments, but got 1.", "3736816853"]
+    "src/app/samples/sample-detail/sample-detail.component.spec.ts:2000776203": [
+      [99, 45, 4, "Argument of type \'null\' is not assignable to parameter of type \'Dataset[]\'.", "2087897566"],
+      [125, 8, 102, "Expected 0 arguments, but got 1.", "1018110629"],
+      [149, 8, 57, "Expected 0 arguments, but got 1.", "2548844095"],
+      [169, 8, 140, "Expected 0 arguments, but got 1.", "1862035901"],
+      [190, 8, 50, "Expected 0 arguments, but got 1.", "1055337712"],
+      [212, 8, 103, "Expected 0 arguments, but got 1.", "2904401119"],
+      [218, 8, 56, "Expected 0 arguments, but got 1.", "3736816853"]
     ],
     "src/app/shared/modules/scientific-metadata-tree/base-classes/history-manager.ts:3039073087": [
       [11, 4, 19, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'Actions\'.\\n  No index signature with a parameter of type \'string\' was found on type \'Actions\'.", "1696402461"]
