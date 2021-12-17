@@ -48,18 +48,41 @@ describe("FileUploaderComponent", () => {
   });
 
   describe("#onFileDropped()", () => {
-    it("should emit the picked file", () => {
+    it("should emit the picked file", async () => {
       spyOn(component.filePicked, "emit");
 
-      const file = {
-        name: "test",
-        size: 100,
+      const imageBlob = new Blob([""], { type: "image/png" });
+      const imageFile = {
+        ...imageBlob,
+        name: "image.png",
+        size: 3000,
         type: "image/png",
-        content: "abc123",
-      };
-      component.onFileDropped(file);
+        lastModified: 0,
+        arrayBuffer: (): Promise<ArrayBuffer> =>
+          new Promise((resolve, reject) => resolve(new ArrayBuffer(10))),
+      } as File;
 
-      expect(component.filePicked.emit).toHaveBeenCalledOnceWith(file);
+      const pdfBlob = new Blob([""], { type: "application/pdf" });
+      const pdfFile = {
+        ...pdfBlob,
+        name: "application.pdf",
+        size: 3000,
+        type: "application/pdf",
+        lastModified: 0,
+        arrayBuffer: (): Promise<ArrayBuffer> =>
+          new Promise((resolve, reject) => resolve(new ArrayBuffer(10))),
+      } as File;
+
+      const fileList = {
+        0: imageFile,
+        1: pdfFile,
+        length: 2,
+        item: (index: number): File => imageFile,
+      } as FileList;
+
+      await component.onFileDropped(fileList);
+
+      expect(component.filePicked.emit).toHaveBeenCalledTimes(2);
     });
   });
 
@@ -67,7 +90,27 @@ describe("FileUploaderComponent", () => {
     it("should call #onFileDropped()", () => {
       spyOn(component, "onFileDropped");
 
-      const fileList = new FileList();
+      const imageBlob = new Blob([""], { type: "image/png" });
+      const imageFile = {
+        ...imageBlob,
+        name: "image.png",
+        lastModified: 0,
+      } as File;
+
+      const pdfBlob = new Blob([""], { type: "application/pdf" });
+      const pdfFile = {
+        ...pdfBlob,
+        name: "application.pdf",
+        lastModified: 0,
+      } as File;
+
+      const fileList = {
+        0: imageFile,
+        1: pdfFile,
+        length: 2,
+        item: (index: number): File => imageFile,
+      };
+
       component.onFilePicked(fileList);
 
       expect(component.onFileDropped).toHaveBeenCalledOnceWith(fileList);
