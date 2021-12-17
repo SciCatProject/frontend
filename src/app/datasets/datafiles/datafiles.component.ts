@@ -211,6 +211,7 @@ export class DatafilesComponent
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
         const files: File[] = [];
+        if (datablocks) {
         datablocks.forEach((block) => {
           if (block.datasetId === datasetPid) {
             block.dataFileList.map((file) => {
@@ -220,6 +221,7 @@ export class DatafilesComponent
             });
           }
         });
+      }
         this.count = files.length;
         this.tableData = files.slice(0, this.pageSize);
         this.files = files;
