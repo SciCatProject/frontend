@@ -26,7 +26,6 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { APP_CONFIG } from "app-config.module";
 import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
-import { ReadMode, ReadFile } from "ngx-file-helpers";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
@@ -133,63 +132,18 @@ describe("SampleDetailComponent", () => {
   });
 
   describe("#onFilePicked()", () => {
-    it("should set the value of pickedFile", () => {
-      expect(component.pickedFile).toBeUndefined();
-      const file: ReadFile = {
-        name: "test",
-        size: 100,
-        type: "image/png",
-        readMode: ReadMode.dataURL,
-        content: "abc123",
-        underlyingFile: {
-          lastModified: 123,
-          name: "test",
-          size: 100,
-          type: "image/png",
-          arrayBuffer: () => new Blob().arrayBuffer(),
-          slice: () => new Blob().slice(),
-          stream: () => new Blob().stream(),
-          text: () => new Blob().text(),
-        },
-      };
-      component.onFilePicked(file);
-
-      expect(component.pickedFile).toEqual(file);
-    });
-  });
-
-  describe("#onReadEnd()", () => {
-    it("should do nothing if filecount = 0", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      component.onReadEnd(0);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(0);
-    });
-
-    it("should dispatch an addAttachmentAction if filecount > 0", () => {
+    it("should dispatch an addAttachmentAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       component.user = new User();
       component.sample = new Sample();
-      component.pickedFile = {
+      const file = {
         name: "test",
         size: 100,
         type: "image/png",
-        readMode: ReadMode.dataURL,
         content: "abc123",
-        underlyingFile: {
-          lastModified: 123,
-          name: "test",
-          size: 100,
-          type: "image/png",
-          arrayBuffer: () => new Blob().arrayBuffer(),
-          slice: () => new Blob().slice(),
-          stream: () => new Blob().stream(),
-          text: () => new Blob().text(),
-        },
       };
-      component.onReadEnd(1);
+      component.onFilePicked(file);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(

@@ -27,8 +27,7 @@ import {
   PageChangeEvent,
 } from "shared/modules/table/table.component";
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { ReadFile } from "ngx-file-helpers";
-import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
+import { PickedFile, SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
 import { getCurrentUser } from "state-management/selectors/user.selectors";
 
 export interface TableData {
@@ -54,7 +53,6 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
 
   sample: Sample = new Sample();
   user: User = new User();
-  pickedFile!: ReadFile;
   attachment: Partial<Attachment> = new Attachment();
   show = false;
   subscriptions: Subscription[] = [];
@@ -109,32 +107,26 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     );
   }
 
-  onFilePicked(file: ReadFile) {
-    this.pickedFile = file;
-  }
-
-  onReadEnd(filecount: number) {
-    if (filecount > 0) {
-      this.attachment = {
-        thumbnail: this.pickedFile.content,
-        caption: this.pickedFile.name,
-        ownerGroup: this.sample.ownerGroup,
-        accessGroups: this.sample.accessGroups,
-        createdBy: this.user.username,
-        updatedBy: this.user.username,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        sample: this.sample,
-        sampleId: this.sample.sampleId,
-        dataset: undefined,
-        datasetId: undefined,
-        rawDatasetId: undefined,
-        derivedDatasetId: undefined,
-        proposal: undefined,
-        proposalId: undefined,
-      };
-      this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));
-    }
+  onFilePicked(file: PickedFile) {
+    this.attachment = {
+      thumbnail: file.content,
+      caption: file.name,
+      ownerGroup: this.sample.ownerGroup,
+      accessGroups: this.sample.accessGroups,
+      createdBy: this.user.username,
+      updatedBy: this.user.username,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      sample: this.sample,
+      sampleId: this.sample.sampleId,
+      dataset: undefined,
+      datasetId: undefined,
+      rawDatasetId: undefined,
+      derivedDatasetId: undefined,
+      proposal: undefined,
+      proposalId: undefined,
+    };
+    this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));
   }
 
   updateCaption(event: SubmitCaptionEvent) {

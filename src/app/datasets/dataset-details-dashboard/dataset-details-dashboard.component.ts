@@ -46,8 +46,10 @@ import {
   addAttachmentAction,
 } from "state-management/actions/datasets.actions";
 import { submitJobAction } from "state-management/actions/jobs.actions";
-import { ReadFile } from "ngx-file-helpers";
-import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
+import {
+  PickedFile,
+  SubmitCaptionEvent,
+} from "shared/modules/file-uploader/file-uploader.component";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import {
   clearLogbookAction,
@@ -96,7 +98,6 @@ export class DatasetDetailsDashboardComponent
   dataset: Dataset | undefined;
   user: User | undefined;
   editingAllowed = false;
-  pickedFile!: ReadFile;
   attachment: Partial<Attachment> = {};
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
@@ -122,17 +123,17 @@ export class DatasetDetailsDashboardComponent
       if (this.dataset.type === "raw") {
         return (
           this.user.email.toLowerCase() ===
-          ((this.dataset as unknown) as RawDataset)[
+          (this.dataset as unknown as RawDataset)[
             "principalInvestigator"
-            ].toLowerCase()
+          ].toLowerCase()
         );
       }
       if (this.dataset.type === "derived") {
         return (
           this.user.email.toLowerCase() ===
-          ((this.dataset as unknown) as DerivedDataset)[
+          (this.dataset as unknown as DerivedDataset)[
             "investigator"
-            ].toLowerCase()
+          ].toLowerCase()
         );
       }
     }
@@ -183,7 +184,7 @@ export class DatasetDetailsDashboardComponent
         const sharedWith: string[] = [...this.dataset.sharedWith];
         sharedWith.splice(index, 1);
         const property = { sharedWith };
-        this.store.dispatch(updatePropertyAction({pid, property}));
+        this.store.dispatch(updatePropertyAction({ pid, property }));
       }
     }
   }
@@ -240,27 +241,23 @@ export class DatasetDetailsDashboardComponent
     }
   }
 
-  onFileUploaderFilePicked(file: ReadFile) {
-    this.pickedFile = file;
+  onFileUploaderFilePicked(file: PickedFile) {
+    console.log({ file });
+    this.attachment = {
+      thumbnail: file.content,
+      caption: file.name,
+      ownerGroup: this.dataset.ownerGroup,
+      accessGroups: this.dataset.accessGroups,
+      createdBy: this.user.username,
+      updatedBy: this.user.username,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      dataset: this.dataset,
+      datasetId: this.dataset.pid,
+    };
+    this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));
   }
 
-  onFileUploaderReadEnd(fileCount: number) {
-    if (fileCount > 0) {
-      this.attachment = {
-        thumbnail: this.pickedFile.content,
-        caption: this.pickedFile.name,
-        ownerGroup: this.dataset.ownerGroup,
-        accessGroups: this.dataset.accessGroups,
-        createdBy: this.user.username,
-        updatedBy: this.user.username,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        dataset: this.dataset,
-        datasetId: this.dataset.pid,
-      };
-      this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));
-    }
-  }
 
   updateCaption(event: SubmitCaptionEvent) {
     this.store.dispatch(
@@ -282,6 +279,7 @@ export class DatasetDetailsDashboardComponent
     this.subscriptions.push(
       this.route.params.pipe(pluck("id")).subscribe((id: string) => {
         if (id) {
+          console.log({ id });
           this.store
             .pipe(select(getPublicViewMode))
             .subscribe((viewPublic) => {

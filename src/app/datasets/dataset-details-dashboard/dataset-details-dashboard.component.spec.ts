@@ -17,7 +17,6 @@ import {
   updatePropertyAction,
 } from "../../state-management/actions/datasets.actions";
 import { Dataset, UserApi, User, Sample } from "shared/sdk";
-import { ReadFile, ReadMode } from "ngx-file-helpers";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { AppConfigModule, APP_CONFIG } from "app-config.module";
 import { SharedCatanieModule } from "shared/shared.module";
@@ -99,7 +98,7 @@ describe("DetailsDashboardComponent", () => {
     it("should return true if user username is admin", () => {
       component.user = new User({
         username: "admin",
-        email: "test@email.com"
+        email: "test@email.com",
       });
 
       const isPI = component.isPI();
@@ -428,63 +427,18 @@ describe("DetailsDashboardComponent", () => {
   });
 
   describe("#onFileUploaderFilePicked()", () => {
-    it("should set the value of pickedFile", () => {
-      expect(component.pickedFile).toBeUndefined();
-      const file: ReadFile = {
-        name: "test",
-        size: 100,
-        type: "image/png",
-        readMode: ReadMode.dataURL,
-        content: "abc123",
-        underlyingFile: {
-          lastModified: 123,
-          name: "test",
-          size: 100,
-          type: "image/png",
-          arrayBuffer: () => new Blob().arrayBuffer(),
-          slice: () => new Blob().slice(),
-          stream: () => new Blob().stream(),
-          text: () => new Blob().text(),
-        },
-      };
-      component.onFileUploaderFilePicked(file);
-
-      expect(component.pickedFile).toEqual(file);
-    });
-  });
-
-  describe("#onFileUploaderReadEnd()", () => {
-    it("should do nothing if fileCount is not larger than zero", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      component.onFileUploaderReadEnd(0);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(0);
-    });
-
-    it("should dispatch an AddAttchment action if fileCount is larger than zero", () => {
+    it("should dispatch an AddAttchment action", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       component.user = new User();
       component.dataset = new Dataset();
-      component.pickedFile = {
+      const file = {
         name: "test",
         size: 100,
         type: "image/png",
-        readMode: ReadMode.dataURL,
         content: "abc123",
-        underlyingFile: {
-          lastModified: 123,
-          name: "test",
-          size: 100,
-          type: "image/png",
-          arrayBuffer: () => new Blob().arrayBuffer(),
-          slice: () => new Blob().slice(),
-          stream: () => new Blob().stream(),
-          text: () => new Blob().text(),
-        },
       };
-      component.onFileUploaderReadEnd(1);
+      component.onFileUploaderFilePicked(file);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
