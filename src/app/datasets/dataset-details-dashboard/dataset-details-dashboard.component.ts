@@ -242,7 +242,6 @@ export class DatasetDetailsDashboardComponent
   }
 
   onFileUploaderFilePicked(file: PickedFile) {
-    console.log({ file });
     this.attachment = {
       thumbnail: file.content,
       caption: file.name,
