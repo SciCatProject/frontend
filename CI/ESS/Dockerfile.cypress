@@ -7,8 +7,8 @@ ARG env=dmscdev
 
 WORKDIR /e2e
 
-COPY package*.json  .
+COPY package*.json  ./
 RUN npm ci
 RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
 RUN chmod +x wait-for-it.sh
-COPY . .
+COPY . ./
