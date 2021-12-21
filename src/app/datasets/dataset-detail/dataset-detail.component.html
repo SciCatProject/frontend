@@ -1,3 +1,27 @@
+<div fxLayout="row">
+  <div fxFlex="auto">
+    <a
+      mat-raised-button
+      href="{{ appConfig.jupyterHubUrl }}"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="jupyter-button"
+      *ngIf="appConfig.jupyterHubUrl"
+    >
+      Jupyter Hub
+    </a>
+  </div>
+  <div fxFlex="auto" *ngIf="isPI()">
+    <mat-slide-toggle
+      class="public-toggle"
+      [checked]="dataset.isPublished"
+      (change)="onSlidePublic($event)"
+    >
+      Public
+    </mat-slide-toggle>
+  </div>
+</div>
+<div style="clear: both;"></div>
 <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
   <div fxFlex="80%">
     <mat-card>

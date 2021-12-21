@@ -22,8 +22,6 @@ import {
 } from "shared/modules/table/table.component";
 import { getIsLoading } from "state-management/selectors/user.selectors";
 import { ActivatedRoute } from "@angular/router";
-import { pluck } from "rxjs/operators";
-import { fetchDatasetAction } from "state-management/actions/datasets.actions";
 import { UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
@@ -194,11 +192,6 @@ export class DatafilesComponent
   }
 
   ngAfterViewInit() {
-    let datasetPid: string;
-    this.route.params.pipe(pluck("id")).subscribe((id: string) => {
-      datasetPid = id;
-      this.store.dispatch(fetchDatasetAction({ pid: id }));
-    });
 
     this.subscriptions.push(
       this.dataset$.subscribe((dataset) => {
@@ -213,13 +206,11 @@ export class DatafilesComponent
         const files: File[] = [];
         if (datablocks) {
         datablocks.forEach((block) => {
-          if (block.datasetId === datasetPid) {
             block.dataFileList.map((file) => {
               this.totalFileSize += file.size;
               file.selected = false;
               files.push(file);
             });
-          }
         });
       }
         this.count = files.length;

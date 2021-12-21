@@ -1,5 +1,6 @@
 import { TestBed, waitForAsync } from "@angular/core/testing";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
+import { RetrieveDestinations } from "app-config.module";
 import { Dataset, Job, User } from "shared/sdk";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import {
@@ -52,7 +53,7 @@ describe("ArchivingService", () => {
         files: [],
       }));
       const archive = true;
-      const destinationPath = "/test/path/";
+      const destinationPath = {destinationPath: "/test/path/"};
 
       const job = service["createJob"](
         user,
@@ -134,7 +135,7 @@ describe("ArchivingService", () => {
         "archiveOrRetrieve"
       );
       const datasets = [new Dataset()];
-      const destinationPath = "/test/path/";
+      const destinationPath = {location: "/test/path/"};
 
       service.retrieve(datasets, destinationPath);
 
@@ -145,4 +146,31 @@ describe("ArchivingService", () => {
       );
     });
   });
+
+  describe("#generateOptionLocation()", () => {
+    it("should return the generated path", () => {
+      const result = { option: "option", location: "relative" };
+      const destinations = [{ option: "option", location: "/root/" }, { option: "option2" }];
+      expect(service.generateOptionLocation(result, destinations)).toEqual(
+        {option: "option", location: "/root/relative"}
+      );
+    });
+  });
+
+  describe("#retriveDialogOptions()", () => {
+    it("should return the dialog options when retrieving", () => {
+      const destinations = [new RetrieveDestinations(), new RetrieveDestinations()];
+      expect(service.retriveDialogOptions(destinations)).toEqual(
+        {
+          width: "auto",
+          data: {
+            title: "Really retrieve?",
+            question: "",
+            choice: { title: "Optionally select destination", options: destinations }
+          }
+        }
+      );
+    });
+  });
+
 });

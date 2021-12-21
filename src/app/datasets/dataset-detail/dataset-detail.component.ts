@@ -1,4 +1,4 @@
-import { Component, Inject, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { Attachment, Dataset, Proposal, Sample } from "shared/sdk/models";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
@@ -6,7 +6,24 @@ import { MatChipInputEvent } from "@angular/material/chips";
 import { MatDialog } from "@angular/material/dialog";
 import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
-
+import { combineLatest, fromEvent, Observable, Subscription } from "rxjs";
+import { select, Store } from "@ngrx/store";
+import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
+import { getCurrentUser, getIsAdmin, getProfile } from "state-management/selectors/user.selectors";
+import { map } from "rxjs/operators";
+import { addKeywordFilterAction, clearFacetsAction, updatePropertyAction } from "state-management/actions/datasets.actions";
+import { Router } from "@angular/router";
+import { fetchProposalAction } from "state-management/actions/proposals.actions";
+import { clearLogbookAction, fetchLogbookAction } from "state-management/actions/logbooks.actions";
+import { fetchSampleAction } from "state-management/actions/samples.actions";
+import { getCurrentProposal } from "state-management/selectors/proposals.selectors";
+import {
+  DerivedDataset,
+  RawDataset,
+  User
+} from "shared/sdk";
+import { MatSlideToggleChange } from "@angular/material/slide-toggle";
+import { EditableComponent } from "app-routing/pending-changes.guard";
 /**
  * Component to show details for a data set, using the
  * form component
@@ -18,44 +35,130 @@ import { DialogComponent } from "shared/modules/dialog/dialog.component";
   templateUrl: "./dataset-detail.component.html",
   styleUrls: ["./dataset-detail.component.scss"],
 })
-export class DatasetDetailComponent {
-  @Input() dataset: Dataset | null = null;
-  @Input() datasetWithout: Partial<Dataset> | null = null;
-  @Input() attachments: Attachment[] | null = null;
-  @Input() proposal: Proposal | null = null;
-  @Input() sample: Sample | null = null;
-  @Input() isPI = false;
-  @Input() editingAllowed = false;
-
-  @Output() clickKeyword = new EventEmitter<string>();
-  @Output() addKeyword = new EventEmitter<string>();
-  @Output() removeKeyword = new EventEmitter<string>();
-  @Output() removeShare = new EventEmitter<string>();
-  @Output() clickProposal = new EventEmitter<string>();
-  @Output() clickSample = new EventEmitter<string>();
-  @Output() saveMetadata = new EventEmitter<Record<string, unknown>>();
-  @Output() sampleChange = new EventEmitter<Sample>();
-  @Output() hasUnsavedChanges = new EventEmitter<boolean>();
-
+export class DatasetDetailComponent implements OnInit, OnDestroy, EditableComponent {
+  private subscriptions: Subscription[] = [];
+  private _hasUnsavedChanges = false;
+  userProfile$ = this.store.pipe(select(getProfile));
+  isAdmin$ = this.store.pipe(select(getIsAdmin));
+  accessGroups$: Observable<string[]> = this.userProfile$.pipe(
+    map((profile) => (profile ? profile.accessGroups : []))
+  );
+  dataset: Dataset | undefined;
+  datasetWithout: Partial<Dataset> | null = null;
+  attachments: Attachment[] | null = null;
+  proposal$ = this.store.pipe(select(getCurrentProposal));
+  proposal: Proposal | undefined;
+  sample: Sample | null = null;
+  user: User | undefined;
+  editingAllowed = false;
   editEnabled = false;
   show = false;
   readonly separatorKeyCodes: number[] = [ENTER, COMMA, SPACE];
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private store: Store<Dataset>,
+    private router: Router,
   ) {}
-
-  onClickKeyword(keyword: string): void {
-    this.clickKeyword.emit(keyword);
+  ngOnInit(){
+    this.subscriptions.push(
+      this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
+        this.dataset = dataset;
+        if (this.dataset) {
+          combineLatest([this.accessGroups$, this.isAdmin$]).subscribe(
+            ([groups, isAdmin]) => {
+              this.editingAllowed =
+                groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
+            }
+          );
+          if ("proposalId" in this.dataset) {
+            this.store.dispatch(
+              fetchProposalAction({ proposalId: this.dataset["proposalId"] })
+            );
+            this.store.dispatch(
+              fetchLogbookAction({ name: this.dataset["proposalId"] })
+            );
+          } else {
+            this.store.dispatch(clearLogbookAction());
+          }
+          if ("sampleId" in this.dataset) {
+            this.store.dispatch(
+              fetchSampleAction({ sampleId: this.dataset["sampleId"] })
+            );
+          }
+        }
+      })
+    );
+    this.subscriptions.push(
+      this.store.pipe(select(getCurrentProposal)).subscribe((proposal) =>{
+        this.proposal = proposal;
+      })
+    );
+    // Prevent user from reloading page if there are unsave changes
+    this.subscriptions.push(
+      fromEvent(window, "beforeunload").subscribe((event) => {
+        if (this.hasUnsavedChanges()) {
+          event.preventDefault();
+        }
+      })
+    );
+    this.subscriptions.push(
+      this.store.pipe(select(getCurrentUser)).subscribe((user) => {
+        if (user) {
+          this.user = user;
+        }
+      })
+    );
+  }
+  hasUnsavedChanges() {
+    return this._hasUnsavedChanges;
+  }
+  isPI(): boolean {
+    if (this.user && this.dataset) {
+      if (this.user.username === "admin") {
+        return true;
+      }
+      if (this.dataset.type === "raw") {
+        return (
+          this.user.email.toLowerCase() ===
+          ((this.dataset as unknown) as RawDataset)[
+            "principalInvestigator"
+            ].toLowerCase()
+        );
+      }
+      if (this.dataset.type === "derived") {
+        return (
+          this.user.email.toLowerCase() ===
+          ((this.dataset as unknown) as DerivedDataset)[
+            "investigator"
+            ].toLowerCase()
+        );
+      }
+    }
+    return false;
+  }
+  onClickKeyword(keyword: string) {
+    this.store.dispatch(clearFacetsAction());
+    this.store.dispatch(addKeywordFilterAction({ keyword }));
+    this.router.navigateByUrl("/datasets");
   }
 
   onAddKeyword(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
 
-    if ((value || "").trim()) {
+    if ((value || "").trim() && this.dataset) {
       const keyword = value.trim().toLowerCase();
-      this.addKeyword.emit(keyword);
+      if (!this.dataset.keywords) {
+        const keywords: Array<string> = [];
+        this.dataset.keywords = keywords;
+      }
+      if (this.dataset.keywords.indexOf(keyword) === -1) {
+        const pid = this.dataset.pid;
+        const keywords = [...this.dataset.keywords, keyword];
+        const property = { keywords };
+        this.store.dispatch(updatePropertyAction({ pid, property }));
+      }
     }
 
     if (input) {
@@ -64,7 +167,16 @@ export class DatasetDetailComponent {
   }
 
   onRemoveKeyword(keyword: string): void {
-    this.removeKeyword.emit(keyword);
+    if (this.dataset) {
+      const index = this.dataset.keywords.indexOf(keyword);
+      if (index >= 0) {
+        const pid = this.dataset.pid;
+        const keywords = [...this.dataset.keywords];
+        keywords.splice(index, 1);
+        const property = { keywords };
+        this.store.dispatch(updatePropertyAction({ pid, property }));
+      }
+    }
   }
 
   onRemoveShare(share: string): void {
@@ -76,22 +188,32 @@ export class DatasetDetailComponent {
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.removeShare.emit(share);
-      }
+      if (result && this.dataset) {
+          const index = this.dataset.sharedWith.indexOf(share);
+          if (index >= 0) {
+            const pid = this.dataset.pid;
+            const sharedWith: string[] = [...this.dataset.sharedWith];
+            sharedWith.splice(index, 1);
+            const property = { sharedWith };
+            this.store.dispatch(updatePropertyAction({pid, property}));
+          }
+        }
     });
   }
 
   onClickProposal(proposalId: string): void {
-    this.clickProposal.emit(proposalId);
+    const id = encodeURIComponent(proposalId);
+    this.router.navigateByUrl("/proposals/" + id);
   }
 
   onClickSample(sampleId: string): void {
-    this.clickSample.emit(sampleId);
+    const id = encodeURIComponent(sampleId);
+    this.router.navigateByUrl("/samples/" + id);
   }
 
   openSampleEditDialog() {
-    this.dialog
+    if (this.dataset){
+      this.dialog
       .open(SampleEditComponent, {
         width: "1000px",
         data: {
@@ -101,18 +223,37 @@ export class DatasetDetailComponent {
       })
       .afterClosed()
       .subscribe((res) => {
-        if (res) {
+        if (res && this.dataset) {
           const { sample } = res;
           this.sample = sample;
-          this.sampleChange.emit(sample);
+          const pid = this.dataset.pid;
+          const property = { sampleId: sample.sampleId };
+          this.store.dispatch(updatePropertyAction({ pid, property }));
         }
       });
+    }
+  }
+  onSlidePublic(event: MatSlideToggleChange) {
+    if (this.dataset) {
+      const pid = this.dataset.pid;
+      const property = { isPublished: event.checked };
+      this.store.dispatch(updatePropertyAction({ pid, property }));
+    }
   }
 
   onSaveMetadata(metadata: Record<string, any>) {
-    this.saveMetadata.emit(metadata);
+    if (this.dataset) {
+      const pid = this.dataset.pid;
+      const property = { scientificMetadata: metadata };
+      this.store.dispatch(updatePropertyAction({ pid, property }));
+    }
   }
   onHasUnsavedChanges($event: boolean) {
-    this.hasUnsavedChanges.emit($event);
+    this._hasUnsavedChanges = $event;
+  }
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    });
   }
 }
