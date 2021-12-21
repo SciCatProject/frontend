@@ -32,7 +32,7 @@ describe("Datasets", () => {
 
       cy.wait(5000);
 
-      cy.get(".mat-tab-label")
+      cy.get(".mat-tab-link")
         .contains("Attachments")
         .click();
 

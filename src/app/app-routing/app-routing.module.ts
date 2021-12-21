@@ -4,6 +4,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { ErrorPageComponent } from "shared/modules/error-page/error-page.component";
 import { AppLayoutComponent } from "_layout/app-layout/app-layout.component";
 import { AppMainLayoutComponent } from "_layout/app-main-layout/app-main-layout.component";
+import { ServiceGuard } from "./service.guard";
 
 export const routes: Routes = [
   {
@@ -26,7 +27,7 @@ export const routes: Routes = [
 
           {
             path: "datasets",
-            loadChildren: () => import("./lazy/private-datasets-routing/private-datasets.feature.module").then(m => m.PrivateDatasetsFeatureModule)
+            loadChildren: () => import("./lazy/datasets-routing/datasets.feature.module").then(m => m.DatasetsFeatureModule)
           },
           {
             path: "files",
@@ -67,7 +68,9 @@ export const routes: Routes = [
           },
           {
             path: "logbooks",
-            loadChildren: () => import("./lazy/logbooks-routing/logbooks.feature.module").then(m => m.LogbooksFeatureModule)
+            loadChildren: () => import("./lazy/logbooks-routing/logbooks.feature.module").then(m => m.LogbooksFeatureModule),
+            canActivate:[ServiceGuard],
+            data: { service: "logbook"}
           },
           {
             path: "error",
@@ -79,15 +82,17 @@ export const routes: Routes = [
             component: ErrorPageComponent,
             data: {errorTitle: "404 Page not found", message: "Sorry, the page you are trying to view doesn't exist"}
           },
+          {
+            path: "**",
+            pathMatch: "full",
+            component: ErrorPageComponent,
+            data: {errorTitle: "404 Page not found", message: "Sorry, the page you are trying to view doesn't exist"}
+          }
         ],
       },
     ],
   },
-  {
-    path: "**",
-    pathMatch: "full",
-    redirectTo: "/404",
-  }
+
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes, { relativeLinkResolution: "legacy" })],
