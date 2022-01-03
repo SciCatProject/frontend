@@ -35,8 +35,8 @@ export const getCurrentDatasetWithoutFileInfo = createSelector(
 );
 
 export const getCurrentOrigDatablocks = createSelector(
-  getCurrentDataset,
-  (dataset) => (dataset ? dataset.origdatablocks : [])
+  getDatasetState,
+  (state) => (state.currentSet.origdatablocks)
 );
 
 export const getCurrentDatablocks = createSelector(

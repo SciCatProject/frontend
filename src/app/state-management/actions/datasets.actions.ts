@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Dataset, Attachment, DerivedDataset } from "shared/sdk";
+import { Dataset, Attachment, DerivedDataset, OrigDatablock } from "shared/sdk";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
@@ -50,6 +50,17 @@ export const fetchDatasetCompleteAction = createAction(
 );
 export const fetchDatasetFailedAction = createAction(
   "[Dataset] Fetch Dataset Failed"
+);
+export const fetchOrigDatablocksAction = createAction(
+  "[Dataset] Fetch Origin Datablocks",
+  props<{ pid: string; filters?: any }>()
+);
+export const fetchOrigDatablocksCompleteAction = createAction(
+  "[Dataset] Fetch Origin Datablocks Complete",
+  props<{ origDatablocks: OrigDatablock[] }>()
+);
+export const fetchOrigDatablocksFailedAction = createAction(
+  "[Dataset] Fetch Origin Datablocks Failed"
 );
 
 export const prefillBatchAction = createAction("[Dataset] Prefill Batch");

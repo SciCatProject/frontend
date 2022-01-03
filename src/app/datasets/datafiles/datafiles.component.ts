@@ -25,6 +25,7 @@ import { ActivatedRoute } from "@angular/router";
 import { UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
+import { fetchOrigDatablocksAction } from "state-management/actions/datasets.actions";
 
 export interface File {
   path: string;
@@ -189,6 +190,11 @@ export class DatafilesComponent
         this.jwt = jwt;
       })
     );
+    this.route.parent.params.subscribe((params) => {
+      if (params.id) {
+        this.store.dispatch(fetchOrigDatablocksAction({ pid: params.id }));
+      }
+    }).unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -200,21 +206,22 @@ export class DatafilesComponent
         }
       })
     );
-
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
-        const files: File[] = [];
-        datablocks.forEach((block) => {
-            block.dataFileList.map((file) => {
-              this.totalFileSize += file.size;
-              file.selected = false;
-              files.push(file);
-            });
-        });
-        this.count = files.length;
-        this.tableData = files.slice(0, this.pageSize);
-        this.files = files;
-        this.tooLargeFile = this.hasTooLargeFiles(this.files);
+        if (datablocks) {
+          const files: File[] = [];
+          datablocks.forEach((block) => {
+              block.dataFileList.map((file) => {
+                this.totalFileSize += file.size;
+                file.selected = false;
+                files.push(file);
+              });
+          });
+          this.count = files.length;
+          this.tableData = files.slice(0, this.pageSize);
+          this.files = files;
+          this.tooLargeFile = this.hasTooLargeFiles(this.files);
+        }
       })
     );
   }

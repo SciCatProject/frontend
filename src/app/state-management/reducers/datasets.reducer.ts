@@ -32,6 +32,15 @@ const reducer = createReducer(
     currentSet: dataset,
   })),
 
+  on(fromActions.fetchOrigDatablocksCompleteAction, (state, { origDatablocks }) =>{
+    return {
+    ...state,
+    currentSet: {
+      ...state.currentSet,
+      origdatablocks: origDatablocks
+    }}
+  }),
+
   on(fromActions.prefillBatchCompleteAction, (state, { batch }) => ({
     ...state,
     batch,

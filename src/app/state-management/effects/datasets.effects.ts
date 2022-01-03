@@ -125,7 +125,6 @@ export class DatasetEffects {
         const datasetFilter: LoopBackFilter = {
           where: { pid },
           include: [
-            { relation: "origdatablocks" },
             { relation: "datablocks" },
             { relation: "attachments" },
           ],
@@ -146,7 +145,36 @@ export class DatasetEffects {
       })
     )
   );
+  fetchOrigDatablocksOfDataset$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchOrigDatablocksAction),
+      switchMap(({ pid, filters }) => {
+        const datasetFilter: LoopBackFilter = {
+          where: { pid },
+          include: [
+            { relation: "origdatablocks" }
+          ],
+          fields: {
+            pid: true,
+            datasetId: true,
+            dataFileList:[]
+          },
+        };
 
+        if (filters) {
+          Object.keys(filters).forEach((key) => {
+            datasetFilter.where[key] = filters[key];
+          });
+        }
+        return this.datasetApi.findOne<Partial<Dataset>>(datasetFilter).pipe(
+          map((dataset: Dataset) =>
+            fromActions.fetchOrigDatablocksCompleteAction({ origDatablocks: dataset.origdatablocks })
+          ),
+          catchError(() => of(fromActions.fetchOrigDatablocksFailedAction()))
+        );
+      })
+    )
+  );
   addDataset$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromActions.addDatasetAction),
@@ -276,6 +304,7 @@ export class DatasetEffects {
         fromActions.fetchFacetCountsAction,
         fromActions.fetchMetadataKeysAction,
         fromActions.fetchDatasetAction,
+        fromActions.fetchOrigDatablocksAction,
         fromActions.addDatasetAction,
         fromActions.updatePropertyAction,
         fromActions.addAttachmentAction,
@@ -297,6 +326,8 @@ export class DatasetEffects {
         fromActions.fetchMetadataKeysFailedAction,
         fromActions.fetchDatasetCompleteAction,
         fromActions.fetchDatasetFailedAction,
+        fromActions.fetchOrigDatablocksCompleteAction,
+        fromActions.fetchOrigDatablocksFailedAction,
         fromActions.addDatasetCompleteAction,
         fromActions.addDatasetFailedAction,
         fromActions.updatePropertyCompleteAction,
