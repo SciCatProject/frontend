@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { select, Store } from "@ngrx/store";
-import { ReadFile } from "ngx-file-helpers";
 import { Subscription } from "rxjs";
-import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
+import { PickedFile, SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
 import { Attachment, Dataset, User } from "shared/sdk";
 import { addAttachmentAction, removeAttachmentAction, updateAttachmentCaptionAction } from "state-management/actions/datasets.actions";
 import { getCurrentAttachments, getCurrentDataset } from "state-management/selectors/datasets.selectors";
@@ -17,7 +16,6 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
   attachments: Attachment[] = [];
   subscriptions: Subscription[] = [];
   attachment: Partial<Attachment> = {};
-  pickedFile: ReadFile | undefined;
   dataset: Dataset | undefined;
   user: User | undefined;
   constructor(private store: Store<Dataset>) { }
@@ -40,15 +38,11 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
       this.attachments = attachments;
     }));
   }
-  onFileUploaderFilePicked(file: ReadFile) {
-    this.pickedFile = file;
-  }
-
-  onFileUploaderReadEnd(fileCount: number) {
-    if (fileCount > 0 && this.dataset && this.user && this.pickedFile) {
+  onFileUploaderFilePicked(file: PickedFile) {
+    if (this.dataset && this.user) {
       this.attachment = {
-        thumbnail: this.pickedFile.content,
-        caption: this.pickedFile.name,
+        thumbnail: file.content,
+        caption: file.name,
         ownerGroup: this.dataset.ownerGroup,
         accessGroups: this.dataset.accessGroups,
         createdBy: this.user.username,
@@ -61,6 +55,7 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
       this.store.dispatch(addAttachmentAction({ attachment: this.attachment}));
     }
   }
+
   updateCaption(event: SubmitCaptionEvent) {
     if (this.dataset) {
       this.store.dispatch(

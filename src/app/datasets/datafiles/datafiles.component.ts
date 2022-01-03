@@ -204,6 +204,7 @@ export class DatafilesComponent
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
         const files: File[] = [];
+        if (datablocks) {
         datablocks.forEach((block) => {
             block.dataFileList.map((file) => {
               this.totalFileSize += file.size;
@@ -211,6 +212,7 @@ export class DatafilesComponent
               files.push(file);
             });
         });
+      }
         this.count = files.length;
         this.tableData = files.slice(0, this.pageSize);
         this.files = files;

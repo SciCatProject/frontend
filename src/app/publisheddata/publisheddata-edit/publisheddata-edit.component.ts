@@ -15,9 +15,9 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { Subscription } from "rxjs";
 
-import { ReadFile } from "ngx-file-helpers";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { PublishedData } from "shared/sdk";
+import { PickedFile } from "shared/modules/file-uploader/file-uploader.component";
 
 @Component({
   selector: "publisheddata-edit",
@@ -48,7 +48,6 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
     downloadLink: "",
     relatedPublications: [],
   };
-  pickedFile: any;
   attachment: any;
 
   constructor(
@@ -167,14 +166,8 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  onFileUploaderFilePicked(file: ReadFile) {
-    this.pickedFile = file;
-  }
-
-  public onFileUploaderReadEnd(fileCount: number) {
-    if (fileCount > 0) {
-      this.form.thumbnail = this.pickedFile.content;
-    }
+  onFileUploaderFilePicked(file: PickedFile) {
+    this.form.thumbnail = file.content;
   }
 
   deleteAttachment(attachmentId: string) {

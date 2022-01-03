@@ -82,6 +82,7 @@ export class DatasetDetailsDashboardComponent
     this.subscriptions.push(
       this.route.params.pipe(pluck("id")).subscribe((id: string) => {
         if (id) {
+          console.log({ id });
           this.store
             .pipe(select(getPublicViewMode))
             .subscribe((viewPublic) => {

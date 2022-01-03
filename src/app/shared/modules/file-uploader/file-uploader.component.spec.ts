@@ -4,12 +4,12 @@ import {
   FileUploaderComponent,
   SubmitCaptionEvent,
 } from "./file-uploader.component";
-import { NgxFileHelpersModule, ReadFile, ReadMode } from "ngx-file-helpers";
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatIconModule } from "@angular/material/icon";
+import { DragAndDropDirective } from "./directives/drag-and-drop.directive";
 
 describe("FileUploaderComponent", () => {
   let component: FileUploaderComponent;
@@ -25,8 +25,8 @@ describe("FileUploaderComponent", () => {
           MatFormFieldModule,
           MatIconModule,
           MatInputModule,
-          NgxFileHelpersModule,
         ],
+        providers: [DragAndDropDirective],
         declarations: [FileUploaderComponent],
       });
       TestBed.compileComponents();
@@ -47,54 +47,73 @@ describe("FileUploaderComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("#onReadStart()", () => {
-    it("should set the status", () => {
-      expect(component.status).toEqual("");
+  describe("#onFileDropped()", () => {
+    it("should emit the picked file", async () => {
+      spyOn(component.filePicked, "emit");
 
-      component.onReadStart(1);
+      const imageBlob = new Blob([""], { type: "image/png" });
+      const imageFile = {
+        ...imageBlob,
+        name: "image.png",
+        size: 3000,
+        type: "image/png",
+        lastModified: 0,
+        arrayBuffer: (): Promise<ArrayBuffer> =>
+          new Promise((resolve, reject) => resolve(new ArrayBuffer(10))),
+      } as File;
 
-      expect(component.status).toBeDefined();
+      const pdfBlob = new Blob([""], { type: "application/pdf" });
+      const pdfFile = {
+        ...pdfBlob,
+        name: "application.pdf",
+        size: 3000,
+        type: "application/pdf",
+        lastModified: 0,
+        arrayBuffer: (): Promise<ArrayBuffer> =>
+          new Promise((resolve, reject) => resolve(new ArrayBuffer(10))),
+      } as File;
+
+      const fileList = {
+        0: imageFile,
+        1: pdfFile,
+        length: 2,
+        item: (index: number): File => imageFile,
+      } as FileList;
+
+      await component.onFileDropped(fileList);
+
+      expect(component.filePicked.emit).toHaveBeenCalledTimes(2);
     });
   });
 
   describe("#onFilePicked()", () => {
-    it("should emit the picked file", () => {
-      spyOn(component.filePicked, "emit");
+    it("should call #onFileDropped()", () => {
+      spyOn(component, "onFileDropped");
 
-      const file: ReadFile = {
-        name: "test",
-        size: 100,
-        type: "image/png",
-        readMode: ReadMode.dataURL,
-        content: "abc123",
-        underlyingFile: {
-          lastModified: 123,
-          name: "test",
-          size: 100,
-          type: "image/png",
-          arrayBuffer: () => new Blob().arrayBuffer(),
-          slice: () => new Blob().slice(),
-          stream: () => new Blob().stream(),
-          text: () => new Blob().text(),
-        },
+      const imageBlob = new Blob([""], { type: "image/png" });
+      const imageFile = {
+        ...imageBlob,
+        name: "image.png",
+        lastModified: 0,
+      } as File;
+
+      const pdfBlob = new Blob([""], { type: "application/pdf" });
+      const pdfFile = {
+        ...pdfBlob,
+        name: "application.pdf",
+        lastModified: 0,
+      } as File;
+
+      const fileList = {
+        0: imageFile,
+        1: pdfFile,
+        length: 2,
+        item: (index: number): File => imageFile,
       };
-      component.onFilePicked(file);
 
-      expect(component.filePicked.emit).toHaveBeenCalledTimes(1);
-      expect(component.filePicked.emit).toHaveBeenCalledWith(file);
-    });
-  });
+      component.onFilePicked(fileList);
 
-  describe("#onReadEnd()", () => {
-    it("should set the status and emit the number of files read", () => {
-      expect(component.status).toEqual("");
-      spyOn(component.readEnd, "emit");
-
-      component.onReadEnd(1);
-
-      expect(component.status).toBeDefined();
-      expect(component.readEnd.emit).toHaveBeenCalledTimes(1);
-      expect(component.readEnd.emit).toHaveBeenCalledWith(1);
+      expect(component.onFileDropped).toHaveBeenCalledOnceWith(fileList);
     });
   });
 

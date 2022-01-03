@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { NgxFileHelpersModule } from "ngx-file-helpers";
 import { PipesModule } from "shared/pipes/pipes.module";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -9,9 +8,10 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { FileUploaderComponent } from "./file-uploader.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { DragAndDropDirective } from "./directives/drag-and-drop.directive";
 
 @NgModule({
-  declarations: [FileUploaderComponent],
+  declarations: [FileUploaderComponent, DragAndDropDirective],
   imports: [
     CommonModule,
     FormsModule,
@@ -20,10 +20,9 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    NgxFileHelpersModule,
     PipesModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-  exports: [FileUploaderComponent]
+  exports: [FileUploaderComponent],
 })
 export class FileUploaderModule {}
