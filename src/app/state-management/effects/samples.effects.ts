@@ -27,8 +27,8 @@ export class SampleEffects {
     select(getDatasetsQueryParams)
   );
 
-  fetchSamples$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchSamples$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.fetchSamplesAction,
         fromActions.changePageAction,
@@ -46,11 +46,11 @@ export class SampleEffects {
           catchError(() => of(fromActions.fetchSamplesFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  fetchCount$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchCount$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchSamplesCountAction),
       withLatestFrom(this.fullqueryParams$),
       map(([action, params]) => params),
@@ -64,11 +64,11 @@ export class SampleEffects {
           catchError(() => of(fromActions.fetchSamplesCountFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  fetchMetadataKeys$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchMetadataKeys$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchMetadataKeysAction),
       withLatestFrom(this.fullqueryParams$),
       map(([action, params]) => params),
@@ -82,11 +82,11 @@ export class SampleEffects {
           catchError(() => of(fromActions.fetchMetadataKeysFailedAction()))
         );
       })
-    )
-  );
+    );
+  });
 
-  fetchSample$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchSample$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchSampleAction),
       switchMap(({ sampleId }) => {
         const sampleFilter = {
@@ -102,11 +102,11 @@ export class SampleEffects {
           catchError(() => of(fromActions.fetchSampleFailedAction()))
         );
       })
-    )
-  );
+    );
+  });
 
-  fetchSampleDatasets$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchSampleDatasets$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchSampleDatasetsAction),
       withLatestFrom(this.datasetsQueryParams$),
       mergeMap(([{ sampleId }, { order, skip, limit }]) =>
@@ -120,11 +120,11 @@ export class SampleEffects {
             catchError(() => of(fromActions.fetchSampleDatasetsFailedAction()))
           )
       )
-    )
-  );
+    );
+  });
 
-  fetchSampleDatasetsCount$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchSampleDatasetsCount$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchSampleDatasetsCountAction),
       switchMap(({ sampleId }) =>
         this.datasetApi.find({ where: { sampleId } }).pipe(
@@ -138,11 +138,11 @@ export class SampleEffects {
           )
         )
       )
-    )
-  );
+    );
+  });
 
-  saveCharacteristics$ = createEffect(() =>
-    this.actions$.pipe(
+  saveCharacteristics$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.saveCharacteristicsAction),
       switchMap(({ sampleId, characteristics }) =>
         this.sampleApi
@@ -156,11 +156,11 @@ export class SampleEffects {
             catchError(() => of(fromActions.saveCharacteristicsFailedAction()))
           )
       )
-    )
-  );
+    );
+  });
 
-  addSample$ = createEffect(() =>
-    this.actions$.pipe(
+  addSample$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.addSampleAction),
       mergeMap(({ sample }) =>
         this.sampleApi.create(sample).pipe(
@@ -171,11 +171,11 @@ export class SampleEffects {
           catchError(() => of(fromActions.addSampleFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  addAttachment$ = createEffect(() =>
-    this.actions$.pipe(
+  addAttachment$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.addAttachmentAction),
       switchMap(({ attachment }) => {
         const {
@@ -195,11 +195,11 @@ export class SampleEffects {
             catchError(() => of(fromActions.addAttachmentFailedAction()))
           );
       })
-    )
-  );
+    );
+  });
 
-  updateAttachmentCaption$ = createEffect(() =>
-    this.actions$.pipe(
+  updateAttachmentCaption$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.updateAttachmentCaptionAction),
       switchMap(({ sampleId, attachmentId, caption }) => {
         const newCaption = { caption };
@@ -220,11 +220,11 @@ export class SampleEffects {
             )
           );
       })
-    )
-  );
+    );
+  });
 
-  removeAttachment$ = createEffect(() =>
-    this.actions$.pipe(
+  removeAttachment$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.removeAttachmentAction),
       switchMap(({ sampleId, attachmentId }) =>
         this.sampleApi
@@ -239,11 +239,11 @@ export class SampleEffects {
             catchError(() => of(fromActions.removeAttachmentFailedAction()))
           )
       )
-    )
-  );
+    );
+  });
 
-  loading$ = createEffect(() =>
-    this.actions$.pipe(
+  loading$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.fetchSamplesAction,
         fromActions.fetchSamplesCountAction,
@@ -257,11 +257,11 @@ export class SampleEffects {
         fromActions.removeAttachmentAction
       ),
       switchMap(() => of(loadingAction()))
-    )
-  );
+    );
+  });
 
-  loadingComplete$ = createEffect(() =>
-    this.actions$.pipe(
+  loadingComplete$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.fetchSamplesCompleteAction,
         fromActions.fetchSamplesFailedAction,
@@ -285,8 +285,8 @@ export class SampleEffects {
         fromActions.removeAttachmentFailedAction
       ),
       switchMap(() => of(loadingCompleteAction()))
-    )
-  );
+    );
+  });
 
   constructor(
     private actions$: Actions,

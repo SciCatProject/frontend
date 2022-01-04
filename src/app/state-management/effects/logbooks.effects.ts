@@ -7,7 +7,7 @@ import { of } from "rxjs";
 
 import {
   loadingAction,
-  loadingCompleteAction
+  loadingCompleteAction,
 } from "state-management/actions/user.actions";
 import { Store, select } from "@ngrx/store";
 import { getFilters } from "state-management/selectors/logbooks.selectors";
@@ -16,8 +16,8 @@ import { getFilters } from "state-management/selectors/logbooks.selectors";
 export class LogbookEffects {
   filters$ = this.store.pipe(select(getFilters));
 
-  fetchLogbooks$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchLogbooks$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchLogbooksAction),
       mergeMap(() =>
         this.logbookApi.find<Logbook>().pipe(
@@ -27,29 +27,29 @@ export class LogbookEffects {
           catchError(() => of(fromActions.fetchLogbooksFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  fetchLogbook$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchLogbook$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchLogbookAction),
       withLatestFrom(this.filters$),
       mergeMap(([{ name }, filters]) =>
         this.logbookApi
           .findByName(encodeURIComponent(name), JSON.stringify(filters))
           .pipe(
-            mergeMap(logbook => [
+            mergeMap((logbook) => [
               fromActions.fetchLogbookCompleteAction({ logbook }),
-              fromActions.fetchCountAction({ name })
+              fromActions.fetchCountAction({ name }),
             ]),
             catchError(() => of(fromActions.fetchLogbookFailedAction()))
           )
       )
-    )
-  );
+    );
+  });
 
-  fetchCount$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchCount$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
       withLatestFrom(this.filters$),
       mergeMap(([{ name }, filters]) => {
@@ -59,28 +59,28 @@ export class LogbookEffects {
           .pipe(
             map((logbook: Logbook) =>
               fromActions.fetchCountCompleteAction({
-                count: logbook.messages.length
+                count: logbook.messages.length,
               })
             ),
             catchError(() => of(fromActions.fetchCountFailedAction()))
           );
       })
-    )
-  );
+    );
+  });
 
-  loading$ = createEffect(() =>
-    this.actions$.pipe(
+  loading$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.fetchLogbooksAction,
         fromActions.fetchLogbookAction,
         fromActions.fetchCountAction
       ),
       mergeMap(() => of(loadingAction()))
-    )
-  );
+    );
+  });
 
-  loadingComplete$ = createEffect(() =>
-    this.actions$.pipe(
+  loadingComplete$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.fetchLogbooksCompleteAction,
         fromActions.fetchLogbooksFailedAction,
@@ -90,8 +90,8 @@ export class LogbookEffects {
         fromActions.fetchCountFailedAction
       ),
       mergeMap(() => of(loadingCompleteAction()))
-    )
-  );
+    );
+  });
 
   constructor(
     private actions$: Actions,

@@ -23,8 +23,8 @@ import {
 export class PublishedDataEffects {
   private queryParams$ = this.store.pipe(select(getQueryParams));
 
-  fetchAllPublishedData$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchAllPublishedData$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.fetchAllPublishedDataAction,
         fromActions.sortByColumnAction,
@@ -41,11 +41,11 @@ export class PublishedDataEffects {
           catchError(() => of(fromActions.fetchAllPublishedDataFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  fetchCount$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchCount$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
       switchMap(() =>
         this.publishedDataApi.count().pipe(
@@ -53,25 +53,27 @@ export class PublishedDataEffects {
           catchError(() => of(fromActions.fetchCountFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  fetchPublishedData$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchPublishedData$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchPublishedDataAction),
       switchMap(({ id }) =>
-        this.publishedDataApi.findById<PublishedData>(encodeURIComponent(id)).pipe(
-          map((publishedData: PublishedData) =>
-            fromActions.fetchPublishedDataCompleteAction({ publishedData })
-          ),
-          catchError(() => of(fromActions.fetchPublishedDataFailedAction()))
-        )
+        this.publishedDataApi
+          .findById<PublishedData>(encodeURIComponent(id))
+          .pipe(
+            map((publishedData: PublishedData) =>
+              fromActions.fetchPublishedDataCompleteAction({ publishedData })
+            ),
+            catchError(() => of(fromActions.fetchPublishedDataFailedAction()))
+          )
       )
-    )
-  );
+    );
+  });
 
-  publishDataset$ = createEffect(() =>
-    this.actions$.pipe(
+  publishDataset$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.publishDatasetAction),
       switchMap(({ data }) =>
         this.publishedDataApi.create(data).pipe(
@@ -82,11 +84,11 @@ export class PublishedDataEffects {
           catchError(() => of(fromActions.publishDatasetFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  publishDatasetCompleteMessage$ = createEffect(() =>
-    this.actions$.pipe(
+  publishDatasetCompleteMessage$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.publishDatasetCompleteAction),
       switchMap(() => {
         const message = {
@@ -96,11 +98,11 @@ export class PublishedDataEffects {
         };
         return of(showMessageAction({ message }));
       })
-    )
-  );
+    );
+  });
 
-  publishDatasetFailedMessage$ = createEffect(() =>
-    this.actions$.pipe(
+  publishDatasetFailedMessage$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.publishDatasetFailedAction),
       switchMap(() => {
         const message = {
@@ -110,11 +112,11 @@ export class PublishedDataEffects {
         };
         return of(showMessageAction({ message }));
       })
-    )
-  );
+    );
+  });
 
-  registerPublishedData$ = createEffect(() =>
-    this.actions$.pipe(
+  registerPublishedData$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.registerPublishedDataAction),
       switchMap(({ doi }) =>
         this.publishedDataApi.register(encodeURIComponent(doi)).pipe(
@@ -125,13 +127,13 @@ export class PublishedDataEffects {
           catchError(() => of(fromActions.registerPublishedDataFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  resyncPublishedData$ = createEffect(() =>
-    this.actions$.pipe(
+  resyncPublishedData$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.resyncPublishedDataAction),
-      switchMap(( {doi, data }) =>
+      switchMap(({ doi, data }) =>
         this.publishedDataApi.resync(encodeURIComponent(doi), data).pipe(
           mergeMap((publishedData) => [
             fromActions.resyncPublishedDataCompleteAction(publishedData),
@@ -140,11 +142,11 @@ export class PublishedDataEffects {
           catchError(() => of(fromActions.resyncPublishedDataFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  registerPublishedDataFailedMessage$ = createEffect(() =>
-    this.actions$.pipe(
+  registerPublishedDataFailedMessage$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.registerPublishedDataFailedAction),
       switchMap(() => {
         const message = {
@@ -154,11 +156,11 @@ export class PublishedDataEffects {
         };
         return of(showMessageAction({ message }));
       })
-    )
-  );
+    );
+  });
 
-  loading$ = createEffect(() =>
-    this.actions$.pipe(
+  loading$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.fetchAllPublishedDataAction,
         fromActions.fetchCountAction,
@@ -169,11 +171,11 @@ export class PublishedDataEffects {
         fromActions.resyncPublishedDataCompleteAction
       ),
       switchMap(() => of(loadingAction()))
-    )
-  );
+    );
+  });
 
-  loadingComplete$ = createEffect(() =>
-    this.actions$.pipe(
+  loadingComplete$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.fetchAllPublishedDataCompleteAction,
         fromActions.fetchAllPublishedDataFailedAction,
@@ -185,11 +187,11 @@ export class PublishedDataEffects {
         fromActions.publishDatasetFailedAction,
         fromActions.registerPublishedDataCompleteAction,
         fromActions.registerPublishedDataFailedAction,
-        fromActions.resyncPublishedDataCompleteAction,
+        fromActions.resyncPublishedDataCompleteAction
       ),
       switchMap(() => of(loadingCompleteAction()))
-    )
-  );
+    );
+  });
 
   constructor(
     private actions$: Actions,
