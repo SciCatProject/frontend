@@ -6,7 +6,7 @@ import {
   selectArchiveViewMode,
   selectFilters,
 } from "state-management/selectors/datasets.selectors";
-import { take, filter, map } from "rxjs/operators";
+import { take, filter } from "rxjs/operators";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 import { ArchViewMode } from "state-management/models";
 
@@ -34,21 +34,8 @@ export class BreadcrumbComponent implements OnInit {
   // partially based on: http://brianflove.com/2016/10/23/angular2-breadcrumb-using-router/
   breadcrumbs: Breadcrumb[] = [];
 
-  // TODO: make a proper selector from this.
-  // TODO: first, figure out how the NgRX connected router state works.
-  // the below selection makes sure a string reaches the last map() by providing fallback values
-  // all along the way.
-  public shouldDisplay$ = this.store
-    .select((state) => state["router"] || {})
-    .pipe(
-      select((router) => router["state"] || {}),
-      select((state) => state["url"] || ""),
-      select((url) => url.split("?")[0]),
-      map((path) => path !== "/datasets")
-    );
-
   constructor(
-    private store: Store<any>,
+    private store: Store,
     private route: ActivatedRoute,
     private router: Router
   ) {}
