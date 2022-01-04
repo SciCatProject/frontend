@@ -7,41 +7,62 @@ import * as fromActions from "state-management/actions/instruments.actions";
 
 const reducer = createReducer(
   initialInstrumentState,
-  on(fromActions.fetchInstrumentsCompleteAction, (state, { instruments }) => ({
-    ...state,
-    instruments,
-  })),
+  on(
+    fromActions.fetchInstrumentsCompleteAction,
+    (state, { instruments }): InstrumentState => ({
+      ...state,
+      instruments,
+    })
+  ),
 
-  on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
-    ...state,
-    totalCount: count,
-  })),
+  on(
+    fromActions.fetchCountCompleteAction,
+    (state, { count }): InstrumentState => ({
+      ...state,
+      totalCount: count,
+    })
+  ),
 
-  on(fromActions.fetchInstrumentCompleteAction, (state, { instrument }) => ({
-    ...state,
-    currentInstrument: instrument,
-  })),
+  on(
+    fromActions.fetchInstrumentCompleteAction,
+    (state, { instrument }): InstrumentState => ({
+      ...state,
+      currentInstrument: instrument,
+    })
+  ),
 
-  on(fromActions.saveCustomMetadataCompleteAction, (state, { instrument }) => ({
-    ...state,
-    currentInstrument: instrument,
-  })),
+  on(
+    fromActions.saveCustomMetadataCompleteAction,
+    (state, { instrument }): InstrumentState => ({
+      ...state,
+      currentInstrument: instrument,
+    })
+  ),
 
-  on(fromActions.changePageAction, (state, { page, limit }) => {
-    const skip = page * limit;
-    const filters = { ...state.filters, skip, limit };
-    return { ...state, filters };
-  }),
+  on(
+    fromActions.changePageAction,
+    (state, { page, limit }): InstrumentState => {
+      const skip = page * limit;
+      const filters = { ...state.filters, skip, limit };
+      return { ...state, filters };
+    }
+  ),
 
-  on(fromActions.sortByColumnAction, (state, { column, direction }) => {
-    const sortField = column + (direction ? " " + direction : "");
-    const filters = { ...state.filters, sortField, skip: 0 };
-    return { ...state, filters };
-  }),
+  on(
+    fromActions.sortByColumnAction,
+    (state, { column, direction }): InstrumentState => {
+      const sortField = column + (direction ? " " + direction : "");
+      const filters = { ...state.filters, sortField, skip: 0 };
+      return { ...state, filters };
+    }
+  ),
 
-  on(fromActions.clearInstrumentsStateAction, () => ({
-    ...initialInstrumentState,
-  }))
+  on(
+    fromActions.clearInstrumentsStateAction,
+    (): InstrumentState => ({
+      ...initialInstrumentState,
+    })
+  )
 );
 
 export const instrumentsReducer = (
