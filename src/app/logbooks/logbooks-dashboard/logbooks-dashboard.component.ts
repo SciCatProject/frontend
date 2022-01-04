@@ -6,7 +6,7 @@ import {
   ChangeDetectorRef,
   AfterViewChecked,
 } from "@angular/core";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { Logbook } from "shared/sdk";
 import { combineLatest, Subscription } from "rxjs";
 import {
@@ -43,12 +43,12 @@ import {
 })
 export class LogbooksDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
-  entriesCount$ = this.store.pipe(select(getEntriesCount));
-  entriesPerPage$ = this.store.pipe(select(getEntriesPerPage));
-  currentPage$ = this.store.pipe(select(getPage));
-  filters$ = this.store.pipe(select(getFilters));
-  readyToFetch$ = this.store.pipe(
-    select(getHasPrefilledFilters),
+  entriesCount$ = this.store.select((getEntriesCount));
+  entriesPerPage$ = this.store.select((getEntriesPerPage));
+  currentPage$ = this.store.select((getPage));
+  filters$ = this.store.select((getFilters));
+  readyToFetch$ = this.store.select(getHasPrefilledFilters).pipe(
+    
     filter((has) => has)
   );
 
@@ -114,7 +114,7 @@ export class LogbooksDashboardComponent
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentLogbook)).subscribe((logbook) => {
+      this.store.select((getCurrentLogbook)).subscribe((logbook) => {
         if (logbook) {
           this.logbook = logbook;
         }

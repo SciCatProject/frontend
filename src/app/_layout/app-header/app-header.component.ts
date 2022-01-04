@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
   fetchCurrentUserAction,
   logoutAction
@@ -26,11 +26,11 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
   username = "";
   profileImage: string;
-  batch$ = this.store.pipe(select(getDatasetsInBatch));
+  batch$ = this.store.select((getDatasetsInBatch));
   inBatchPids: string[] = [];
   inBatchCount = 0;
   inBatchIndicator = "";
-  loggedIn$ = this.store.pipe(select(getIsLoggedIn));
+  loggedIn$ = this.store.select((getIsLoggedIn));
 
   constructor(
     private store: Store<any>,
@@ -64,7 +64,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentUserAccountType)).subscribe(type => {
+      this.store.select((getCurrentUserAccountType)).subscribe(type => {
         if (type === "functional") {
           this.profileImage = "assets/images/user.png";
         }
@@ -72,12 +72,12 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentUser)).subscribe(current => {
+      this.store.select((getCurrentUser)).subscribe(current => {
         console.log("current: ", current);
         if (current) {
           this.username = current.username.replace("ms-ad.", "");
           if (!current.realm && current.id) {
-            this.store.pipe(select(getProfile)).subscribe(profile => {
+            this.store.select((getProfile)).subscribe(profile => {
               if (profile) {
                 this.username = profile.username;
                 if (profile.thumbnailPhoto.startsWith("data")) {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { Instrument } from "shared/sdk";
 import {
   fetchInstrumentAction,
@@ -14,7 +14,7 @@ import { getCurrentInstrument } from "state-management/selectors/instruments.sel
   styleUrls: ["./instrument-details.component.scss"]
 })
 export class InstrumentDetailsComponent implements OnInit {
-  instrument$ = this.store.pipe(select(getCurrentInstrument));
+  instrument$ = this.store.select((getCurrentInstrument));
 
   constructor(
     private route: ActivatedRoute,

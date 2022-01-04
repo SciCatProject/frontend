@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { select, Store } from "@ngrx/store";
+import {  Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 import { PickedFile, SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
 import { Attachment, Dataset, User } from "shared/sdk";
@@ -22,19 +22,19 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
+      this.store.select((getCurrentDataset)).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
         }
     }));
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentUser)).subscribe((user) => {
+      this.store.select((getCurrentUser)).subscribe((user) => {
         if (user) {
           this.user = user;
         }
       })
     );
-    this.subscriptions.push(this.store.pipe(select(getCurrentAttachments)).subscribe((attachments)=>{
+    this.subscriptions.push(this.store.select((getCurrentAttachments)).subscribe((attachments)=>{
       this.attachments = attachments;
     }));
   }

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { Job } from "shared/sdk";
 import { Subscription } from "rxjs";
 import {
@@ -42,9 +42,9 @@ export interface JobsTableData {
   styleUrls: ["./jobs-dashboard.component.scss"],
 })
 export class JobsDashboardComponent implements OnInit, OnDestroy {
-  jobsCount$ = this.store.pipe(select(getJobsCount));
-  jobsPerPage$ = this.store.pipe(select(getJobsPerPage));
-  currentPage$ = this.store.pipe(select(getPage));
+  jobsCount$ = this.store.select((getJobsCount));
+  jobsPerPage$ = this.store.select((getJobsPerPage));
+  currentPage$ = this.store.select((getPage));
 
   jobs: JobsTableData[] = [];
   profile: any;
@@ -173,18 +173,18 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchJobsAction());
 
     this.subscriptions.push(
-      this.store.pipe(select(getJobs)).subscribe((jobs) => {
+      this.store.select((getJobs)).subscribe((jobs) => {
         this.jobs = this.formatTableData(jobs);
       })
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentUser)).subscribe((current) => {
+      this.store.select((getCurrentUser)).subscribe((current) => {
         if (current) {
           this.email = current.email;
 
           if (!current.realm) {
-            this.store.pipe(select(getProfile)).subscribe((profile) => {
+            this.store.select((getProfile)).subscribe((profile) => {
               if (profile) {
                 this.profile = profile;
                 this.email = profile.email;
@@ -199,7 +199,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getFilters)).subscribe((filters) => {
+      this.store.select((getFilters)).subscribe((filters) => {
         this.router.navigate(["/user/jobs"], {
           queryParams: { args: JSON.stringify(filters) },
         });

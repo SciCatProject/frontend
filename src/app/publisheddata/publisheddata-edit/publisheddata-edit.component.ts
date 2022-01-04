@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 
-import { select, Store, ActionsSubject } from "@ngrx/store";
+import {  Store, ActionsSubject } from "@ngrx/store";
 import { pluck } from "rxjs/operators";
 
 import {
@@ -27,7 +27,7 @@ import { PickedFile } from "shared/modules/file-uploader/file-uploader.component
 export class PublisheddataEditComponent implements OnInit, OnDestroy {
   public separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  currentData$ = this.store.pipe(select(getCurrentPublishedData));
+  currentData$ = this.store.select((getCurrentPublishedData));
   routeSubscription: Subscription = new Subscription();
   actionSubjectSubscription: Subscription = new Subscription();
 
@@ -135,7 +135,7 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
     this.actionSubjectSubscription = this.actionsSubj.subscribe((sub) => {
       if (sub.type === fetchPublishedDataCompleteAction.type) {
         this.store
-          .pipe(select(getCurrentPublishedData))
+          .select((getCurrentPublishedData))
           .subscribe((publishedData) => {
             if (publishedData) {
               const doi = encodeURIComponent(publishedData.doi);

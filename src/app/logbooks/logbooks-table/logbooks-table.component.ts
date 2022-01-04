@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { select, Store } from "@ngrx/store";
+import {  Store } from "@ngrx/store";
 
 import { fetchLogbooksAction } from "state-management/actions/logbooks.actions";
 import { getLogbooks } from "state-management/selectors/logbooks.selectors";
@@ -13,7 +13,7 @@ import { Subscription } from "rxjs";
   styleUrls: ["./logbooks-table.component.scss"],
 })
 export class LogbooksTableComponent implements OnInit, OnDestroy {
-  logbooks$ = this.store.pipe(select(getLogbooks));
+  logbooks$ = this.store.select((getLogbooks));
 
   logbooksSubscription: Subscription = new Subscription();
   logbooks: Logbook[] = [];

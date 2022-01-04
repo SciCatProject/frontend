@@ -2,7 +2,7 @@ import { DOCUMENT } from "@angular/common";
 import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { select, Store } from "@ngrx/store";
+import {  Store } from "@ngrx/store";
 import { fetchCurrentUserAction, fetchUserAction, loginAction, loginOIDCAction } from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
@@ -34,8 +34,8 @@ interface LoginForm {
 })
 export class LoginComponent implements OnInit, OnDestroy {
   private proceedSubscription = new Subscription();
-  private hasUser$ = this.store.pipe(
-    select(getIsLoggedIn),
+  private hasUser$ = this.store.select(getIsLoggedIn).pipe(
+    
     filter(is => is)
   );
 
@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     rememberMe: true
   });
 
-  loading$ = this.store.pipe(select(getIsLoggingIn));
+  loading$ = this.store.select((getIsLoggingIn));
 
   constructor(
     public dialog: MatDialog,

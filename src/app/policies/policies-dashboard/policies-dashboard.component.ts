@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { Policy, DatasetApi } from "shared/sdk";
 import { Observable, Subscription } from "rxjs";
 import {
@@ -48,24 +48,24 @@ import { GenericFilters } from "state-management/models";
   styleUrls: ["./policies-dashboard.component.scss"]
 })
 export class PoliciesDashboardComponent implements OnInit, OnDestroy {
-  policies$: Observable<Policy[]> = this.store.pipe(select(getPolicies));
-  policiesPerPage$: Observable<number> = this.store.pipe(
-    select(getPoliciesPerPage)
+  policies$: Observable<Policy[]> = this.store.select((getPolicies));
+  policiesPerPage$: Observable<number> = this.store.
+    select((getPoliciesPerPage)
   );
-  currentPage$: Observable<number> = this.store.pipe(select(getPage));
-  policyCount$: Observable<number> = this.store.pipe(select(getPoliciesCount));
+  currentPage$: Observable<number> = this.store.select((getPage));
+  policyCount$: Observable<number> = this.store.select((getPoliciesCount));
 
-  editablePolicies$: Observable<Policy[]> = this.store.pipe(
-    select(getEditablePolicies)
+  editablePolicies$: Observable<Policy[]> = this.store.
+    select((getEditablePolicies)
   );
-  editablePoliciesPerPage$: Observable<number> = this.store.pipe(
-    select(getEditablePoliciesPerPage)
+  editablePoliciesPerPage$: Observable<number> = this.store.
+    select((getEditablePoliciesPerPage)
   );
-  currentEditablePage$: Observable<number> = this.store.pipe(
-    select(getEditablePage)
+  currentEditablePage$: Observable<number> = this.store.
+    select((getEditablePage)
   );
-  editableCount$: Observable<number> = this.store.pipe(
-    select(getEditablePoliciesCount)
+  editableCount$: Observable<number> = this.store.
+    select((getEditablePoliciesCount)
   );
 
   multiSelect = false;
@@ -136,7 +136,7 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
 
   updatePoliciesRouterState() {
     this.store
-      .pipe(select(getFilters))
+      .select((getFilters))
       .subscribe(filters => {
         if (filters) {
           this.addToQueryParams(filters);
@@ -147,7 +147,7 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
 
   updateEditableRouterState() {
     this.store
-      .pipe(select(getEditableFilters))
+      .select((getEditableFilters))
       .subscribe(filters => {
         if (filters) {
           this.addToQueryParams(filters);
@@ -262,7 +262,7 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchPoliciesAction());
 
     this.selectedPoliciesSubscription = this.store
-      .pipe(select(getSelectedPolicies))
+      .select((getSelectedPolicies))
       .subscribe(selectedPolicies => {
         if (selectedPolicies) {
           this.selectedPolicies = selectedPolicies;

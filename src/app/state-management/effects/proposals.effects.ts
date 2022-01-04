@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
 import { DatasetApi, ProposalApi, Proposal, Dataset } from "shared/sdk";
 import { Store } from "@ngrx/store";
 import * as fromActions from "state-management/actions/proposals.actions";
@@ -33,7 +33,7 @@ export class ProposalEffects {
         fromActions.sortByColumnAction,
         fromActions.clearFacetsAction
       ),
-      withLatestFrom(this.fullqueryParams$),
+      concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
         this.proposalApi.fullquery(query, limits).pipe(
@@ -50,7 +50,7 @@ export class ProposalEffects {
   fetchCount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
-      withLatestFrom(this.fullqueryParams$),
+      concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       switchMap(({ query }) =>
         this.proposalApi.fullquery(query).pipe(
@@ -82,7 +82,7 @@ export class ProposalEffects {
   fetchProposalDatasets$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchProposalDatasetsAction),
-      withLatestFrom(this.datasetQueryParams$),
+      concatLatestFrom(() => this.datasetQueryParams$),
       switchMap(([{ proposalId }, { limits }]) =>
         this.datasetApi
           .find<Dataset>({

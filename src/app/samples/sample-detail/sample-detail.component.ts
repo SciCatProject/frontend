@@ -10,7 +10,7 @@ import {
   getDatasetsCount,
   getCurrentAttachments,
 } from "../../state-management/selectors/samples.selectors";
-import { select, Store } from "@ngrx/store";
+import {  Store } from "@ngrx/store";
 import {
   fetchSampleAction,
   fetchSampleDatasetsAction,
@@ -46,10 +46,10 @@ export interface TableData {
   styleUrls: ["./sample-detail.component.scss"],
 })
 export class SampleDetailComponent implements OnInit, OnDestroy {
-  attachments$ = this.store.pipe(select(getCurrentAttachments));
-  datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
-  datasetsPage$ = this.store.pipe(select(getDatasetsPage));
-  datasetsCount$ = this.store.pipe(select(getDatasetsCount));
+  attachments$ = this.store.select((getCurrentAttachments));
+  datasetsPerPage$ = this.store.select((getDatasetsPerPage));
+  datasetsPage$ = this.store.select((getDatasetsPage));
+  datasetsCount$ = this.store.select((getDatasetsCount));
 
   sample: Sample = new Sample();
   user: User = new User();
@@ -162,7 +162,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentSample)).subscribe((sample) => {
+      this.store.select((getCurrentSample)).subscribe((sample) => {
         if (sample) {
           this.sample = sample;
         }
@@ -170,13 +170,13 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getDatasets)).subscribe((datasets) => {
+      this.store.select((getDatasets)).subscribe((datasets) => {
         this.tableData = this.formatTableData(datasets);
       })
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentUser)).subscribe((user) => {
+      this.store.select((getCurrentUser)).subscribe((user) => {
         if (user) {
           this.user = user;
         }

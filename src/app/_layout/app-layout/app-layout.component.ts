@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {getIsLoggedIn, getTheme} from "state-management/selectors/user.selectors";
 import { Observable } from "rxjs";
 
@@ -11,11 +11,11 @@ import { Observable } from "rxjs";
 export class AppLayoutComponent implements OnInit {
   darkTheme$: Observable<any> = new Observable<any>();
 
-  loggedIn$ = this.store.pipe(select(getIsLoggedIn));
+  loggedIn$ = this.store.select((getIsLoggedIn));
 
   constructor(private store: Store<any>) {}
 
   ngOnInit() {
-    this.darkTheme$ = this.store.pipe(select(getTheme));
+    this.darkTheme$ = this.store.select((getTheme));
   }
 }

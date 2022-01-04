@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { Sample } from "shared/sdk";
 import {
   changePageAction,
@@ -50,13 +50,13 @@ import { SearchParametersDialogComponent } from "shared/modules/search-parameter
   styleUrls: ["./sample-dashboard.component.scss"],
 })
 export class SampleDashboardComponent implements OnInit, OnDestroy {
-  sampleCount$ = this.store.pipe(select(getSamplesCount));
-  samplesPerPage$ = this.store.pipe(select(getSamplesPerPage));
-  currentPage$ = this.store.pipe(select(getPage));
-  textFilter$ = this.store.pipe(select(getTextFilter));
-  characteristics$ = this.store.pipe(select(getCharacteristicsFilter));
-  readyToFetch$ = this.store.pipe(
-    select(getHasPrefilledFilters),
+  sampleCount$ = this.store.select((getSamplesCount));
+  samplesPerPage$ = this.store.select((getSamplesPerPage));
+  currentPage$ = this.store.select((getPage));
+  textFilter$ = this.store.select((getTextFilter));
+  characteristics$ = this.store.select((getCharacteristicsFilter));
+  readyToFetch$ = this.store.select(getHasPrefilledFilters).pipe(
+    
     filter((has) => has)
   );
 
@@ -157,13 +157,13 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchMetadataKeysAction());
 
     this.subscriptions.push(
-      this.store.pipe(select(getSamples)).subscribe((samples) => {
+      this.store.select((getSamples)).subscribe((samples) => {
         this.tableData = this.formatTableData(samples);
       })
     );
 
     this.subscriptions.push(
-      combineLatest([this.store.pipe(select(getFilters)), this.readyToFetch$])
+      combineLatest([this.store.select((getFilters)), this.readyToFetch$])
         .pipe(
           map(([filters, _]) => filters),
           distinctUntilChanged(deepEqual)
@@ -177,7 +177,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getMetadataKeys)).subscribe((metadataKeys) => {
+      this.store.select((getMetadataKeys)).subscribe((metadataKeys) => {
         this.metadataKeys = metadataKeys;
       })
     );

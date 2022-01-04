@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Actions, ofType, createEffect } from "@ngrx/effects";
+import { Actions, ofType, createEffect, concatLatestFrom } from "@ngrx/effects";
 import { ADAuthService } from "users/adauth.service";
 import {
   LoopBackAuth,
@@ -287,7 +287,7 @@ export class UserEffects {
   addCustomColumns$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.addCustomColumnsAction),
-      withLatestFrom(this.columns$),
+      concatLatestFrom(() => this.columns$),
       distinctUntilChanged(),
       map(() => fromActions.addCustomColumnsCompleteAction())
     );
@@ -301,7 +301,7 @@ export class UserEffects {
         fromActions.deselectAllCustomColumnsAction,
         fromActions.addCustomColumnsCompleteAction
       ),
-      withLatestFrom(this.columns$),
+      concatLatestFrom(() => this.columns$),
       map(([action, columns]) => columns),
       map((columns) =>
         fromActions.updateUserSettingsAction({ property: { columns } })
@@ -312,7 +312,7 @@ export class UserEffects {
   updateUserSettings$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.updateUserSettingsAction),
-      withLatestFrom(this.user$),
+      concatLatestFrom(() => this.user$),
       takeWhile(([action, user]) => !!user),
       switchMap(([{ property }, user]) =>
         this.userApi.updateSettings(user?.id, property).pipe(

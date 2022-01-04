@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
 import { PolicyApi, Policy } from "shared/sdk";
 import { Store } from "@ngrx/store";
 import {
@@ -34,7 +34,7 @@ export class PolicyEffects {
         fromActions.changePageAction,
         fromActions.sortByColumnAction
       ),
-      withLatestFrom(this.queryParams$),
+      concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
       switchMap((params) =>
         this.policyApi.find<Policy>(params).pipe(
@@ -93,7 +93,7 @@ export class PolicyEffects {
   fetchEditableCount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchEditableCountAction),
-      withLatestFrom(this.userProfile$),
+      concatLatestFrom(() => this.userProfile$),
       switchMap(([action, profile]) => {
         let filter;
         if (!profile) {

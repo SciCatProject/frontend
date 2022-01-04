@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { createEffect, Actions, ofType } from "@ngrx/effects";
+import { createEffect, Actions, ofType, concatLatestFrom } from "@ngrx/effects";
 import { LogbookApi, Logbook } from "shared/sdk";
 import * as fromActions from "state-management/actions/logbooks.actions";
 import { mergeMap, catchError, map, withLatestFrom } from "rxjs/operators";
@@ -33,7 +33,7 @@ export class LogbookEffects {
   fetchLogbook$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchLogbookAction),
-      withLatestFrom(this.filters$),
+      concatLatestFrom(() => this.filters$),
       mergeMap(([{ name }, filters]) =>
         this.logbookApi
           .findByName(encodeURIComponent(name), JSON.stringify(filters))
@@ -51,7 +51,7 @@ export class LogbookEffects {
   fetchCount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
-      withLatestFrom(this.filters$),
+      concatLatestFrom(() => this.filters$),
       mergeMap(([{ name }, filters]) => {
         const { skip, limit, sortField, ...theRest } = filters;
         return this.logbookApi

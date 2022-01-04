@@ -7,7 +7,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { combineLatest, fromEvent, Observable, Subscription } from "rxjs";
-import { select, Store } from "@ngrx/store";
+import {  Store } from "@ngrx/store";
 import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { getCurrentUser, getIsAdmin, getProfile } from "state-management/selectors/user.selectors";
 import { map } from "rxjs/operators";
@@ -38,15 +38,15 @@ import { EditableComponent } from "app-routing/pending-changes.guard";
 export class DatasetDetailComponent implements OnInit, OnDestroy, EditableComponent {
   private subscriptions: Subscription[] = [];
   private _hasUnsavedChanges = false;
-  userProfile$ = this.store.pipe(select(getProfile));
-  isAdmin$ = this.store.pipe(select(getIsAdmin));
+  userProfile$ = this.store.select((getProfile));
+  isAdmin$ = this.store.select((getIsAdmin));
   accessGroups$: Observable<string[]> = this.userProfile$.pipe(
     map((profile) => (profile ? profile.accessGroups : []))
   );
   dataset: Dataset | undefined;
   datasetWithout: Partial<Dataset> | null = null;
   attachments: Attachment[] | null = null;
-  proposal$ = this.store.pipe(select(getCurrentProposal));
+  proposal$ = this.store.select((getCurrentProposal));
   proposal: Proposal | undefined;
   sample: Sample | null = null;
   user: User | undefined;
@@ -62,7 +62,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
   ) {}
   ngOnInit(){
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
+      this.store.select((getCurrentDataset)).subscribe((dataset) => {
         this.dataset = dataset;
         if (this.dataset) {
           combineLatest([this.accessGroups$, this.isAdmin$]).subscribe(
@@ -90,7 +90,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
       })
     );
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentProposal)).subscribe((proposal) =>{
+      this.store.select((getCurrentProposal)).subscribe((proposal) =>{
         this.proposal = proposal;
       })
     );
@@ -103,7 +103,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
       })
     );
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentUser)).subscribe((user) => {
+      this.store.select((getCurrentUser)).subscribe((user) => {
         if (user) {
           this.user = user;
         }

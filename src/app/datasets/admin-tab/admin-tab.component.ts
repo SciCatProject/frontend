@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { select, Store } from "@ngrx/store";
+import {  Store } from "@ngrx/store";
 import { FileObject } from "datasets/dataset-details-dashboard/dataset-details-dashboard.component";
 import { Subscription } from "rxjs";
 import { take } from "rxjs/operators";
@@ -16,12 +16,12 @@ import { getCurrentUser } from "state-management/selectors/user.selectors";
 export class AdminTabComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   dataset: Dataset | undefined;
-  datablocks$ = this.store.pipe(select(getCurrentDatablocks));
+  datablocks$ = this.store.select((getCurrentDatablocks));
   constructor(private store: Store<Dataset>) { }
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
+      this.store.select((getCurrentDataset)).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
         }
@@ -30,7 +30,7 @@ export class AdminTabComponent implements OnInit, OnDestroy {
   }
   resetDataset() {
     if (confirm("Reset datablocks?")) {
-      this.store.pipe(select(getCurrentUser), take(1)).subscribe((user) => {
+      this.store.select(getCurrentUser).pipe( take(1)).subscribe((user) => {
         if (user && this.dataset) {
           const job = new Job();
           job.emailJobInitiator = user.email;

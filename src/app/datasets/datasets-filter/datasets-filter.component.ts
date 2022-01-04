@@ -1,7 +1,7 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { select, Store } from "@ngrx/store";
+import {  Store } from "@ngrx/store";
 import {
   debounceTime,
   distinctUntilChanged,
@@ -67,20 +67,20 @@ interface DateRange {
 export class DatasetsFilterComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
-  locationFacetCounts$ = this.store.pipe(select(getLocationFacetCounts));
-  groupFacetCounts$ = this.store.pipe(select(getGroupFacetCounts));
-  typeFacetCounts$ = this.store.pipe(select(getTypeFacetCounts));
-  keywordFacetCounts$ = this.store.pipe(select(getKeywordFacetCounts));
+  locationFacetCounts$ = this.store.select((getLocationFacetCounts));
+  groupFacetCounts$ = this.store.select((getGroupFacetCounts));
+  typeFacetCounts$ = this.store.select((getTypeFacetCounts));
+  keywordFacetCounts$ = this.store.select((getKeywordFacetCounts));
 
-  searchTerms$ = this.store.pipe(select(getSearchTerms));
-  keywordsTerms$ = this.store.pipe(select(getKeywordsTerms));
-  locationFilter$ = this.store.pipe(select(getLocationFilter));
-  groupFilter$ = this.store.pipe(select(getGroupFilter));
-  typeFilter$ = this.store.pipe(select(getTypeFilter));
-  keywordsFilter$ = this.store.pipe(select(getKeywordsFilter));
-  creationTimeFilter$ = this.store.pipe(select(getCreationTimeFilter));
-  scientificConditions$ = this.store.pipe(select(getScientificConditions));
-  metadataKeys$ = this.store.pipe(select(getMetadataKeys));
+  searchTerms$ = this.store.select((getSearchTerms));
+  keywordsTerms$ = this.store.select((getKeywordsTerms));
+  locationFilter$ = this.store.select((getLocationFilter));
+  groupFilter$ = this.store.select((getGroupFilter));
+  typeFilter$ = this.store.select((getTypeFilter));
+  keywordsFilter$ = this.store.select((getKeywordsFilter));
+  creationTimeFilter$ = this.store.select((getCreationTimeFilter));
+  scientificConditions$ = this.store.select((getScientificConditions));
+  metadataKeys$ = this.store.select((getMetadataKeys));
 
   locationInput$ = new BehaviorSubject<string>("");
   groupInput$ = new BehaviorSubject<string>("");
@@ -112,7 +112,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.keywordsFilter$
   );
 
-  hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
+  hasAppliedFilters$ = this.store.select((getHasAppliedFilters));
 
   dateRange: DateRange = {
     begin: "",

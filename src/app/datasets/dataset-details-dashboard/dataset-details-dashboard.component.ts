@@ -6,7 +6,7 @@ import {
   ChangeDetectorRef,
   AfterViewChecked,
 } from "@angular/core";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
   Dataset,
   UserApi,
@@ -53,8 +53,8 @@ export interface FileObject {
 export class DatasetDetailsDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
   private subscriptions: Subscription[] = [];
-  loading$ = this.store.pipe(select(getIsLoading));
-  loggedIn$ = this.store.pipe(select(getIsLoggedIn));
+  loading$ = this.store.select((getIsLoading));
+  loggedIn$ = this.store.select((getIsLoggedIn));
   jwt$: Observable<JWT> = new Observable<JWT>();
   dataset: Dataset | undefined;
   navLinks :{
@@ -63,8 +63,8 @@ export class DatasetDetailsDashboardComponent
     icon: string;
     enabled: boolean;
   }[] = [];
-  userProfile$ = this.store.pipe(select(getProfile));
-  isAdmin$ = this.store.pipe(select(getIsAdmin));
+  userProfile$ = this.store.select((getProfile));
+  isAdmin$ = this.store.select((getIsAdmin));
   accessGroups$: Observable<string[]> = this.userProfile$.pipe(
     map((profile) => (profile ? profile.accessGroups : []))
   );
@@ -84,7 +84,7 @@ export class DatasetDetailsDashboardComponent
         if (id) {
           console.log({ id });
           this.store
-            .pipe(select(getPublicViewMode))
+            .select((getPublicViewMode))
             .subscribe((viewPublic) => {
               if (viewPublic) {
                 this.store.dispatch(
@@ -103,7 +103,7 @@ export class DatasetDetailsDashboardComponent
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
+      this.store.select((getCurrentDataset)).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
           this.subscriptions.push(

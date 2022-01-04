@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from "@angular/core";
-import { select, Store } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
   saveSettingsAction,
   showMessageAction,
@@ -8,10 +8,10 @@ import {
 } from "state-management/actions/user.actions";
 import { Message, MessageType, Settings } from "state-management/models";
 import {
-  getSettings,
-  getProfile,
-  getCurrentUser,
-  getCatamelToken,
+  selectSettings,
+  selectProfile,
+  selectCurrentUser,
+  selectCatamelToken,
 } from "state-management/selectors/user.selectors";
 import { DOCUMENT } from "@angular/common";
 import { map } from "rxjs/operators";
@@ -22,8 +22,8 @@ import { map } from "rxjs/operators";
   styleUrls: ["./user-settings.component.scss"],
 })
 export class UserSettingsComponent implements OnInit {
-  user$ = this.store.pipe(select(getCurrentUser));
-  profile$ = this.store.pipe(select(getProfile));
+  user$ = this.store.select(selectCurrentUser);
+  profile$ = this.store.select(selectProfile);
   displayName$ = this.profile$.pipe(
     map((profile) => (profile ? profile.displayName : undefined))
   );
@@ -37,15 +37,12 @@ export class UserSettingsComponent implements OnInit {
         : "assets/images/user.png"
     )
   );
-  catamelToken$ = this.store.pipe(
-    select(getCatamelToken),
-    map((token) => (token ? token.id : ""))
-  );
-  settings$ = this.store.pipe(select(getSettings));
+  catamelToken$ = this.store.select(selectCatamelToken);
+  settings$ = this.store.select(selectSettings);
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    private store: Store<any>
+    private store: Store
   ) {
     // TODO handle service and endpoint for user settings
   }

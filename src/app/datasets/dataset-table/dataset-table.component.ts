@@ -14,7 +14,7 @@ import {
 import { Dataset, TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { Subscription } from "rxjs";
-import { select, Store } from "@ngrx/store";
+import {  Store } from "@ngrx/store";
 import {
   clearSelectionAction,
   selectDatasetAction,
@@ -58,8 +58,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   private subscriptions: Subscription[] = [];
 
   lodashGet = get;
-  currentPage$ = this.store.pipe(select(getPage));
-  datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
+  currentPage$ = this.store.select((getPage));
+  datasetsPerPage$ = this.store.select((getDatasetsPerPage));
   datasetCount$ = this.store.select(getTotalSets);
 
   @Input() tableColumns: TableColumn[] | null = null;
@@ -214,7 +214,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.pipe(select(getDatasetsInBatch)).subscribe((datasets) => {
+      this.store.select((getDatasetsInBatch)).subscribe((datasets) => {
         this.inBatchPids = datasets.map((dataset) => {
           return dataset.pid;
         });
@@ -230,7 +230,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.subscriptions.push(
-      this.store.pipe(select(getDatasets)).subscribe((datasets) => {
+      this.store.select((getDatasets)).subscribe((datasets) => {
         this.datasets = datasets;
 
         // this.derivationMapPids = this.datasetDerivationsMaps.map(

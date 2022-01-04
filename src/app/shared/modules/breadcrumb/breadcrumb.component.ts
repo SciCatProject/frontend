@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute, NavigationEnd, Params } from "@angular/router";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 
 import {
   getArchiveViewMode,
@@ -38,8 +38,8 @@ export class BreadcrumbComponent implements OnInit {
   // TODO: first, figure out how the NgRX connected router state works.
   // the below selection makes sure a string reaches the last map() by providing fallback values
   // all along the way.
-  public shouldDisplay$ = this.store.pipe(
-    select((state) => state["router"] || {}),
+  public shouldDisplay$ = this.store.select((state) => state["router"] || {}).pipe(
+    
     select((router) => router["state"] || {}),
     select((state) => state["url"] || ""),
     select((url) => url.split("?")[0]),
@@ -121,9 +121,9 @@ export class BreadcrumbComponent implements OnInit {
     }
     // this catches errors and redirects to the fallback, this could/should be set in the routing module?
     if (crumb.fallback === "/datasets") {
-      this.store.pipe(select(getFilters), take(1)).subscribe((filters) => {
-        this.store
-          .pipe(select(getArchiveViewMode), take(1))
+      this.store.select(getFilters).pipe( take(1)).subscribe((filters) => {
+        this.store.select(getArchiveViewMode)
+          .pipe( take(1))
           .subscribe((currentMode) => {
             filters["mode"] = setMode(currentMode);
             this.router.navigate(["/datasets"], {

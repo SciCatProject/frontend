@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
 import { InstrumentApi, Instrument } from "shared/sdk";
 import * as fromActions from "state-management/actions/instruments.actions";
 import {
@@ -28,7 +28,7 @@ export class InstrumentEffects {
         fromActions.changePageAction,
         fromActions.sortByColumnAction
       ),
-      withLatestFrom(this.filters$),
+      concatLatestFrom(() => this.filters$),
       map(([action, filters]) => filters),
       switchMap(({ sortField: order, skip, limit }) =>
         this.instrumentApi.find<Instrument>({ order, limit, skip }).pipe(

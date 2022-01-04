@@ -8,7 +8,7 @@ import {
   AfterViewChecked,
   ChangeDetectorRef,
 } from "@angular/core";
-import { select, Store } from "@ngrx/store";
+import {  Store } from "@ngrx/store";
 import { LoopBackConfig } from "shared/sdk";
 import {
   clearMessageAction,
@@ -31,7 +31,7 @@ import { MessageType } from "state-management/models";
   encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
-  loading$ = this.store.pipe(select(getIsLoading));
+  loading$ = this.store.select((getIsLoading));
 
   title: string;
   facility: string;
@@ -74,7 +74,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     }
 
     this.userMessageSubscription = this.store
-      .pipe(select(getUserMessage))
+      .select((getUserMessage))
       .subscribe((current) => {
         if (current && current.content !== undefined) {
           let panelClass = "";

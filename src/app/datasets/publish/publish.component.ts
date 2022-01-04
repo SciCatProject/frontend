@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 
-import { select, Store, ActionsSubject } from "@ngrx/store";
+import {  Store, ActionsSubject } from "@ngrx/store";
 import { first, tap } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
@@ -26,8 +26,8 @@ import { getCurrentUserName } from "state-management/selectors/user.selectors";
   styleUrls: ["./publish.component.scss"],
 })
 export class PublishComponent implements OnInit, OnDestroy {
-  private datasets$ = this.store.pipe(select(getDatasetsInBatch));
-  private userName$ = this.store.pipe(select(getCurrentUserName));
+  private datasets$ = this.store.select((getDatasetsInBatch));
+  private userName$ = this.store.select((getCurrentUserName));
   private countSubscription: Subscription;
 
   public separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -157,7 +157,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     this.actionSubjectSubscription = this.actionsSubj.subscribe((data) => {
       if (data.type === fetchPublishedDataCompleteAction.type) {
         this.store
-          .pipe(select(getCurrentPublishedData))
+          .select((getCurrentPublishedData))
           .subscribe((publishedData) => {
             const doi = encodeURIComponent(publishedData.doi);
             this.router.navigateByUrl("/publishedDatasets/" + doi);

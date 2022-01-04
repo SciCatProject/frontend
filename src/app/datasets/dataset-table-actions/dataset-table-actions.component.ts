@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, Input, OnDestroy } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { ArchViewMode, MessageType, Dataset } from "state-management/models";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
   setPublicViewModeAction,
   setArchiveViewModeAction,
@@ -26,7 +26,7 @@ import { getSubmitError } from "state-management/selectors/jobs.selectors";
   styleUrls: ["./dataset-table-actions.component.scss"]
 })
 export class DatasetTableActionsComponent implements OnInit, OnDestroy {
-  loading$ = this.store.pipe(select(getIsLoading));
+  loading$ = this.store.select((getIsLoading));
 
   @Input() selectedSets: Dataset[] | null = [];
 
@@ -139,20 +139,20 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.store
-        .pipe(select(getArchiveViewMode))
+        .select((getArchiveViewMode))
         .subscribe((mode: ArchViewMode) => {
           this.currentArchViewMode = mode;
         })
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getPublicViewMode)).subscribe(publicViewMode => {
+      this.store.select((getPublicViewMode)).subscribe(publicViewMode => {
         this.currentPublicViewMode = publicViewMode;
       })
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getSubmitError)).subscribe(err => {
+      this.store.select((getSubmitError)).subscribe(err => {
         if (!err) {
           this.store.dispatch(clearSelectionAction());
         }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
-import { select, Store } from "@ngrx/store";
+import {  Store } from "@ngrx/store";
 import { first, switchMap } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
@@ -26,7 +26,7 @@ import { ShareDialogComponent } from "datasets/share-dialog/share-dialog.compone
   styleUrls: ["./batch-view.component.scss"],
 })
 export class BatchViewComponent implements OnInit, OnDestroy {
-  batch$: Observable<Dataset[]> = this.store.pipe(select(getDatasetsInBatch));
+  batch$: Observable<Dataset[]> = this.store.select((getDatasetsInBatch));
   subscriptions: Subscription[] = [];
   datasetList: Dataset[] = [];
   public hasBatch = false;

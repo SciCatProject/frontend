@@ -17,7 +17,7 @@ import { DatePipe } from "@angular/common";
 import { PageEvent } from "@angular/material/paginator";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
-import { select, Store } from "@ngrx/store";
+import {  Store } from "@ngrx/store";
 
 export interface HistoryItem {
   property: string;
@@ -137,7 +137,7 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
+    this.store.select((getCurrentDataset)).subscribe((dataset) => {
         this.dataset = dataset;
     });
     this.historyItems = this.parseHistoryItems();

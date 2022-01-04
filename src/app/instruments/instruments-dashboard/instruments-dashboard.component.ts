@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { Instrument } from "shared/sdk";
 import {
   fetchInstrumentsAction,
@@ -27,8 +27,8 @@ import { Router } from "@angular/router";
   styleUrls: ["./instruments-dashboard.component.scss"]
 })
 export class InstrumentsDashboardComponent implements OnInit {
-  instruments$ = this.store.pipe(
-    select(getInstruments),
+  instruments$ = this.store.select(getInstruments).pipe(
+    
     map(instruments =>
       instruments.map(instrument => ({
         ...instrument,
@@ -36,9 +36,9 @@ export class InstrumentsDashboardComponent implements OnInit {
       }))
     )
   );
-  currentPage$ = this.store.pipe(select(getPage));
-  instrumentsCount$ = this.store.pipe(select(getInstrumentsCount));
-  instrumentsPerPage$ = this.store.pipe(select(getInstrumentsPerPage));
+  currentPage$ = this.store.select((getPage));
+  instrumentsCount$ = this.store.select((getInstrumentsCount));
+  instrumentsPerPage$ = this.store.select((getInstrumentsPerPage));
 
   tablePaginate = true;
   tableColumns: TableColumn[] = [

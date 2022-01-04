@@ -10,7 +10,7 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Subscription } from "rxjs";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
   getCurrentOrigDatablocks,
   getCurrentDataset,
@@ -44,9 +44,9 @@ export interface File {
 })
 export class DatafilesComponent
   implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
-  datablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
-  dataset$ = this.store.pipe(select(getCurrentDataset));
-  loading$ = this.store.pipe(select(getIsLoading));
+  datablocks$ = this.store.select((getCurrentOrigDatablocks));
+  dataset$ = this.store.select((getCurrentDataset));
+  loading$ = this.store.select((getIsLoading));
 
   tooLargeFile = false;
   totalFileSize = 0;

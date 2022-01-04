@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
 import { PublishedDataApi, PublishedData } from "shared/sdk";
 import { Store } from "@ngrx/store";
 import { selectQueryParams } from "state-management/selectors/published-data.selectors";
@@ -30,7 +30,7 @@ export class PublishedDataEffects {
         fromActions.sortByColumnAction,
         fromActions.changePageAction
       ),
-      withLatestFrom(this.queryParams$),
+      concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
       mergeMap((params) =>
         this.publishedDataApi.find<PublishedData>(params).pipe(

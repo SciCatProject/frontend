@@ -14,7 +14,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { select, Store } from "@ngrx/store";
+import {  Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 import {
@@ -44,12 +44,12 @@ import {
 export class SampleEditComponent implements OnInit, OnDestroy {
   @ViewChild("searchBar", { static: true }) searchBar!: ElementRef;
 
-  textFilter$ = this.store.pipe(select(getTextFilter));
-  sampleCount$ = this.store.pipe(select(getSamplesCount));
-  samplesPerPage$ = this.store.pipe(select(getSamplesPerPage));
-  currentPage$ = this.store.pipe(select(getPage));
-  samples$ = this.store.pipe(
-    select(getSamples),
+  textFilter$ = this.store.select((getTextFilter));
+  sampleCount$ = this.store.select((getSamplesCount));
+  samplesPerPage$ = this.store.select((getSamplesPerPage));
+  currentPage$ = this.store.select((getPage));
+  samples$ = this.store.select(getSamples).pipe(
+    
     map((samples) =>
       samples.filter((sample) => sample.ownerGroup === this.data.ownerGroup)
     )

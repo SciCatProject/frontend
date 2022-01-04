@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
 import { JobApi, Job } from "shared/sdk";
 import { Store } from "@ngrx/store";
 import { selectQueryParams } from "state-management/selectors/jobs.selectors";
@@ -26,7 +26,7 @@ export class JobEffects {
         fromActions.sortByColumnAction,
         fromActions.setJobViewModeAction
       ),
-      withLatestFrom(this.queryParams$),
+      concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
       switchMap((params) =>
         this.jobApi.find<Job>(params).pipe(
@@ -43,7 +43,7 @@ export class JobEffects {
   fetchCount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
-      withLatestFrom(this.queryParams$),
+      concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
       switchMap(({ where }) =>
         this.jobApi.count(where).pipe(

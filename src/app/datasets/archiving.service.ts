@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { select, Store } from "@ngrx/store";
+import {  Store } from "@ngrx/store";
 import { RetrieveDestinations } from "app-config.module";
 
 import { combineLatest, Observable } from "rxjs";
@@ -15,8 +15,8 @@ import {
 
 @Injectable()
 export class ArchivingService {
-  private currentUser$ = this.store.pipe(select(getCurrentUser));
-  private tapeCopies$ = this.store.pipe(select(getTapeCopies));
+  private currentUser$ = this.store.select((getCurrentUser));
+  private tapeCopies$ = this.store.select((getTapeCopies));
 
   constructor(private store: Store<any>) { }
 
@@ -33,7 +33,7 @@ export class ArchivingService {
       ...extra
     };
 
-    this.store.pipe(select(getProfile)).subscribe(profile => {
+    this.store.select((getProfile)).subscribe(profile => {
       user.email = profile.email;
     });
 

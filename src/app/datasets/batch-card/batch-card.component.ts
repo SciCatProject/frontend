@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { select, Store } from "@ngrx/store";
+import {  Store } from "@ngrx/store";
 import { map } from "rxjs/operators";
 
 import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
@@ -12,7 +12,7 @@ import { Subscription } from "rxjs";
   styleUrls: ["./batch-card.component.scss"],
 })
 export class BatchCardComponent implements OnInit, OnDestroy {
-  private batch$ = this.store.pipe(select(getDatasetsInBatch));
+  private batch$ = this.store.select((getDatasetsInBatch));
   public batchSize$ = this.batch$.pipe(map((batch) => batch.length));
   public nonEmpty$ = this.batchSize$.pipe(map((size) => size > 0));
 

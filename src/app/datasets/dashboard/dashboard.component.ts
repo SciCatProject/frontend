@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, Inject, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { select, Store, ActionsSubject } from "@ngrx/store";
+import {  Store, ActionsSubject } from "@ngrx/store";
 
 import deepEqual from "deep-equal";
 
@@ -48,20 +48,20 @@ import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table
   styleUrls: ["dashboard.component.scss"],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  private filters$ = this.store.pipe(select(getFilters));
-  private readyToFetch$ = this.store.pipe(
-    select(getHasPrefilledFilters),
+  private filters$ = this.store.select((getFilters));
+  private readyToFetch$ = this.store.select(getHasPrefilledFilters).pipe(
+    
     filter((has) => has)
   );
-  loggedIn$ = this.store.pipe(select(getIsLoggedIn));
-  selectedSets$ = this.store.pipe(select(getSelectedDatasets));
-  tableColumns$ = this.store.pipe(select(getColumns)).pipe(
+  loggedIn$ = this.store.select((getIsLoggedIn));
+  selectedSets$ = this.store.select((getSelectedDatasets));
+  tableColumns$ = this.store.select((getColumns)).pipe(
         map((columns) => columns.filter((column) => column.name !== "select"))
       );
-  selectableColumns$ = this.store.pipe(select(getColumns))
+  selectableColumns$ = this.store.select((getColumns))
     .pipe(map((columns) => columns.filter((column) => column.name !== "select")));
-  public nonEmpty$ = this.store.pipe(
-    select(getDatasetsInBatch),
+  public nonEmpty$ = this.store.select(getDatasetsInBatch).pipe(
+    
     map((batch) => batch.length > 0)
   );
 
@@ -156,11 +156,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.loggedIn$.subscribe(status => {
           if (!status) {
-            this.tableColumns$ = this.store.pipe(select(getColumns)).pipe(
+            this.tableColumns$ = this.store.select((getColumns)).pipe(
               map((columns) => columns.filter((column) => column.name !== "select"))
             );
           } else {
-            this.tableColumns$ = this.store.pipe(select(getColumns));
+            this.tableColumns$ = this.store.select((getColumns));
           }
         }
       ));
@@ -200,7 +200,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentUser)).subscribe((user) => {
+      this.store.select((getCurrentUser)).subscribe((user) => {
         if (user) {
           this.currentUser = user;
         }
@@ -208,7 +208,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getProfile)).subscribe((profile) => {
+      this.store.select((getProfile)).subscribe((profile) => {
         if (profile) {
           this.userGroups = profile.accessGroups;
         }
@@ -219,7 +219,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.actionsSubj.subscribe((data) => {
         if (data.type === fetchDatasetCompleteAction.type) {
           this.store
-            .pipe(select(getCurrentDataset))
+            .select((getCurrentDataset))
             .subscribe((dataset) => {
               if (dataset) {
                 const pid = encodeURIComponent(dataset.pid);

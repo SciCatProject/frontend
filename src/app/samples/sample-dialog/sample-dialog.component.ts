@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Sample } from "shared/sdk";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
   addSampleAction,
   fetchSamplesAction
@@ -80,7 +80,7 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentUser)).subscribe(user => {
+      this.store.select((getCurrentUser)).subscribe(user => {
         if (user) {
           this.username = user.username;
         }
@@ -88,7 +88,7 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getProfile)).subscribe(profile => {
+      this.store.select((getProfile)).subscribe(profile => {
         if (profile) {
           this.userGroups = profile.accessGroups;
         }

@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { DatePipe } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { Proposal } from "shared/sdk";
 import { combineLatest, Subscription } from "rxjs";
 import {
@@ -55,16 +55,16 @@ interface DateRange {
   styleUrls: ["./proposal-dashboard.component.scss"],
 })
 export class ProposalDashboardComponent implements OnInit, OnDestroy {
-  hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
-  textFilter$ = this.store.pipe(select(getTextFilter));
-  dateRangeFilter$ = this.store.pipe(select(getDateRangeFilter));
-  readyToFetch$ = this.store.pipe(
-    select(getHasPrefilledFilters),
+  hasAppliedFilters$ = this.store.select((getHasAppliedFilters));
+  textFilter$ = this.store.select((getTextFilter));
+  dateRangeFilter$ = this.store.select((getDateRangeFilter));
+  readyToFetch$ = this.store.select(getHasPrefilledFilters).pipe(
+    
     filter((has) => has)
   );
-  currentPage$ = this.store.pipe(select(getPage));
-  proposalsCount$ = this.store.pipe(select(getProposalsCount));
-  proposalsPerPage$ = this.store.pipe(select(getProposalsPerPage));
+  currentPage$ = this.store.select((getPage));
+  proposalsCount$ = this.store.select((getProposalsCount));
+  proposalsPerPage$ = this.store.select((getProposalsPerPage));
 
   clearSearchBar = false;
   dateRange: DateRange = {
@@ -199,13 +199,13 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.pipe(select(getProposals)).subscribe((proposals) => {
+      this.store.select((getProposals)).subscribe((proposals) => {
         this.tableData = this.formatTableData(proposals);
       })
     );
 
     this.subscriptions.push(
-      combineLatest([this.store.pipe(select(getFilters)), this.readyToFetch$])
+      combineLatest([this.store.select((getFilters)), this.readyToFetch$])
         .pipe(
           map(([filters, _]) => filters),
           distinctUntilChanged(deepEqual)

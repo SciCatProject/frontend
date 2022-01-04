@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { PublishedData } from "shared/sdk";
 import { Router } from "@angular/router";
 import {
@@ -34,10 +34,10 @@ import { showMessageAction } from "state-management/actions/user.actions";
   styleUrls: ["./publisheddata-dashboard.component.scss"],
 })
 export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
-  public publishedData$ = this.store.pipe(select(getAllPublishedData));
-  public count$ = this.store.pipe(select(getPublishedDataCount));
-  public currentPage$ = this.store.pipe(select(getPage));
-  public itemsPerPage$ = this.store.pipe(select(getPublishedDataPerPage));
+  public publishedData$ = this.store.select((getAllPublishedData));
+  public count$ = this.store.select((getPublishedDataCount));
+  public currentPage$ = this.store.select((getPage));
+  public itemsPerPage$ = this.store.select((getPublishedDataPerPage));
 
   columns: TableColumn[] = [
     { name: "doi", icon: "fingerprint", sort: true, inList: false },
@@ -129,7 +129,7 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchAllPublishedDataAction());
 
     this.filtersSubscription = this.store
-      .pipe(select(getFilters))
+      .select((getFilters))
       .subscribe((filters) => {
         this.router.navigate(["/publishedDatasets"], {
           queryParams: { args: JSON.stringify(filters) },

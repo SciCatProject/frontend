@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
 import { DatasetApi, Dataset, LoopBackFilter } from "shared/sdk";
 import { Store } from "@ngrx/store";
 import {
@@ -37,7 +37,7 @@ export class DatasetEffects {
   fetchDatasets$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchDatasetsAction),
-      withLatestFrom(this.fullqueryParams$),
+      concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
         this.datasetApi.fullquery(query, limits).pipe(
@@ -53,7 +53,7 @@ export class DatasetEffects {
   fetchFacetCounts$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchFacetCountsAction),
-      withLatestFrom(this.fullfacetParams$),
+      concatLatestFrom(() => this.fullfacetParams$),
       map(([action, params]) => params),
       mergeMap(({ fields, facets }) =>
         this.datasetApi.fullfacet(fields, facets).pipe(
@@ -74,7 +74,7 @@ export class DatasetEffects {
   fetchMetadataKeys$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchMetadataKeysAction),
-      withLatestFrom(this.fullqueryParams$),
+      concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query }) => {
         const parsedQuery = JSON.parse(query);
@@ -315,7 +315,7 @@ export class DatasetEffects {
   prefillBatch$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.prefillBatchAction),
-      withLatestFrom(this.currentUser$),
+      concatLatestFrom(() => this.currentUser$),
       filter(([, user]) => user != null),
       map(([, user]) => this.retrieveBatch(user?.id)),
       map((batch) => fromActions.prefillBatchCompleteAction({ batch }))

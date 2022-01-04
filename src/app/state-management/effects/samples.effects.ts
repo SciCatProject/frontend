@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
 import { DatasetApi, SampleApi, Sample, Dataset } from "shared/sdk";
 import { Store } from "@ngrx/store";
 import {
@@ -33,7 +33,7 @@ export class SampleEffects {
         fromActions.sortByColumnAction,
         fromActions.setTextFilterAction
       ),
-      withLatestFrom(this.fullqueryParams$),
+      concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
         this.sampleApi.fullquery(query, limits).pipe(
@@ -50,7 +50,7 @@ export class SampleEffects {
   fetchCount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchSamplesCountAction),
-      withLatestFrom(this.fullqueryParams$),
+      concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query }) =>
         this.sampleApi.fullquery(query).pipe(
@@ -68,7 +68,7 @@ export class SampleEffects {
   fetchMetadataKeys$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchMetadataKeysAction),
-      withLatestFrom(this.fullqueryParams$),
+      concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query }) => {
         const parsedQuery = JSON.parse(query);
@@ -106,7 +106,7 @@ export class SampleEffects {
   fetchSampleDatasets$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchSampleDatasetsAction),
-      withLatestFrom(this.datasetsQueryParams$),
+      concatLatestFrom(() => this.datasetsQueryParams$),
       mergeMap(([{ sampleId }, { order, skip, limit }]) =>
         this.datasetApi
           .find<Dataset>({ where: { sampleId }, order, skip, limit })
