@@ -5,13 +5,13 @@ import { GenericFilters } from "state-management/models";
 const policiesFilters: GenericFilters = {
   sortField: "test desc",
   skip: 0,
-  limit: 25
+  limit: 25,
 };
 
 const editableFilters: GenericFilters = {
   sortField: "test desc",
   skip: 0,
-  limit: 25
+  limit: 25,
 };
 
 const initialPolicyState: PolicyState = {
@@ -24,128 +24,128 @@ const initialPolicyState: PolicyState = {
 
   policiesFilters,
 
-  editableFilters
+  editableFilters,
 };
 
 describe("Policies Selectors", () => {
-  describe("getPolicies", () => {
-    it("should get policies", () => {
-      expect(fromSelectors.getPolicies.projector(initialPolicyState)).toEqual(
-        []
-      );
-    });
-  });
-
-  describe("getEditablePolicies", () => {
-    it("should get editablePolicies", () => {
+  describe("selectPolicies", () => {
+    it("should select policies", () => {
       expect(
-        fromSelectors.getEditablePolicies.projector(initialPolicyState)
+        fromSelectors.selectPolicies.projector(initialPolicyState)
       ).toEqual([]);
     });
   });
 
-  describe("getSelectedPolicies", () => {
-    it("should get selectedPolicies", () => {
+  describe("selectEditablePolicies", () => {
+    it("should select editablePolicies", () => {
       expect(
-        fromSelectors.getSelectedPolicies.projector(initialPolicyState)
+        fromSelectors.selectEditablePolicies.projector(initialPolicyState)
       ).toEqual([]);
     });
   });
 
-  describe("getPoliciesCount", () => {
-    it("should get totalCount", () => {
+  describe("selectSelectedPolicies", () => {
+    it("should select selectedPolicies", () => {
       expect(
-        fromSelectors.getPoliciesCount.projector(initialPolicyState)
+        fromSelectors.selectSelectedPolicies.projector(initialPolicyState)
+      ).toEqual([]);
+    });
+  });
+
+  describe("selectPoliciesCount", () => {
+    it("should select totalCount", () => {
+      expect(
+        fromSelectors.selectPoliciesCount.projector(initialPolicyState)
       ).toEqual(0);
     });
   });
 
-  describe("getEditablePoliciesCount", () => {
-    it("should get editableCount", () => {
+  describe("selectEditablePoliciesCount", () => {
+    it("should select editableCount", () => {
       expect(
-        fromSelectors.getEditablePoliciesCount.projector(initialPolicyState)
+        fromSelectors.selectEditablePoliciesCount.projector(initialPolicyState)
       ).toEqual(0);
     });
   });
 
-  describe("getFilters", () => {
-    it("should get policiesFilters", () => {
-      expect(fromSelectors.getFilters.projector(initialPolicyState)).toEqual(
+  describe("selectFilters", () => {
+    it("should select policiesFilters", () => {
+      expect(fromSelectors.selectFilters.projector(initialPolicyState)).toEqual(
         policiesFilters
       );
     });
   });
 
-  describe("getEditableFilters", () => {
-    it("should get editableFilters", () => {
+  describe("selectEditableFilters", () => {
+    it("should select editableFilters", () => {
       expect(
-        fromSelectors.getEditableFilters.projector(initialPolicyState)
+        fromSelectors.selectEditableFilters.projector(initialPolicyState)
       ).toEqual(editableFilters);
     });
   });
 
-  describe("getPage", () => {
-    it("should get page from policiesFilters", () => {
+  describe("selectPage", () => {
+    it("should select page from policiesFilters", () => {
       const { skip, limit } = policiesFilters;
       const page = skip / limit;
       expect(
-        fromSelectors.getPage.projector(initialPolicyState.policiesFilters)
+        fromSelectors.selectPage.projector(initialPolicyState.policiesFilters)
       ).toEqual(page);
     });
   });
 
-  describe("getEditablePage", () => {
-    it("should get page from editableFilters", () => {
+  describe("selectEditablePage", () => {
+    it("should select page from editableFilters", () => {
       const { skip, limit } = editableFilters;
       const page = skip / limit;
       expect(
-        fromSelectors.getEditablePage.projector(
+        fromSelectors.selectEditablePage.projector(
           initialPolicyState.editableFilters
         )
       ).toEqual(page);
     });
   });
 
-  describe("getPoliciesPerPage", () => {
-    it("should get limit from policiesFilters", () => {
+  describe("selectPoliciesPerPage", () => {
+    it("should select limit from policiesFilters", () => {
       const { limit } = policiesFilters;
       expect(
-        fromSelectors.getPoliciesPerPage.projector(
+        fromSelectors.selectPoliciesPerPage.projector(
           initialPolicyState.policiesFilters
         )
       ).toEqual(limit);
     });
   });
 
-  describe("getEditablePoliciesPerPage", () => {
-    it("should get limit from editableFilters", () => {
+  describe("selectEditablePoliciesPerPage", () => {
+    it("should select limit from editableFilters", () => {
       const { limit } = editableFilters;
       expect(
-        fromSelectors.getEditablePoliciesPerPage.projector(
+        fromSelectors.selectEditablePoliciesPerPage.projector(
           initialPolicyState.editableFilters
         )
       ).toEqual(limit);
     });
   });
 
-  describe("getQueryParams", () => {
-    it("should get query params from policiesFilters", () => {
+  describe("selectQueryParams", () => {
+    it("should select query params from policiesFilters", () => {
       const { skip, limit, sortField } = policiesFilters;
       const params = { order: sortField, skip, limit };
       expect(
-        fromSelectors.getQueryParams.projector(
+        fromSelectors.selectQueryParams.projector(
           initialPolicyState.policiesFilters
         )
       ).toEqual(params);
     });
   });
 
-  describe("getEditableQueryParams", () => {
-    it("should get query params from editableFilters", () => {
+  describe("selectEditableQueryParams", () => {
+    it("should select query params from editableFilters", () => {
       const { skip, limit, sortField } = editableFilters;
       const params = { order: sortField, skip, limit };
       expect(
-        fromSelectors.getEditableQueryParams.projector(
+        fromSelectors.selectEditableQueryParams.projector(
           initialPolicyState.editableFilters
         )
       ).toEqual(params);

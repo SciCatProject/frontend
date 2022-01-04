@@ -71,42 +71,44 @@ const initialUserState: UserState = {
 };
 
 describe("User Selectors", () => {
-  describe("getCurrentUser", () => {
-    it("should get currentUser", () => {
-      expect(fromSelectors.getCurrentUser.projector(initialUserState)).toEqual(
-        user
-      );
+  describe("selectCurrentUser", () => {
+    it("should select currentUser", () => {
+      expect(
+        fromSelectors.selectCurrentUser.projector(initialUserState)
+      ).toEqual(user);
     });
   });
 
-  describe("getCurrentUserId", () => {
-    it("should get the id from currentUser", () => {
+  describe("selectCurrentUserId", () => {
+    it("should select the id from currentUser", () => {
       expect(
-        fromSelectors.getCurrentUserId.projector(initialUserState.currentUser)
+        fromSelectors.selectCurrentUserId.projector(
+          initialUserState.currentUser
+        )
       ).toEqual("testId");
     });
   });
 
-  describe("getCurrentUserAccountType", () => {
-    it("should get accountType", () => {
+  describe("selectCurrentUserAccountType", () => {
+    it("should select accountType", () => {
       expect(
-        fromSelectors.getCurrentUserAccountType.projector(initialUserState)
+        fromSelectors.selectCurrentUserAccountType.projector(initialUserState)
       ).toEqual("testType");
     });
   });
 
-  describe("getProfile", () => {
-    it("should get profile", () => {
-      expect(fromSelectors.getProfile.projector(initialUserState)).toEqual(
+  describe("selectProfile", () => {
+    it("should select profile", () => {
+      expect(fromSelectors.selectProfile.projector(initialUserState)).toEqual(
         userIdentity.profile
       );
     });
   });
 
-  describe("getCurrentUserName", () => {
-    it("should get the username either from profile or currentUser", () => {
+  describe("selectCurrentUserName", () => {
+    it("should select the username either from profile or currentUser", () => {
       expect(
-        fromSelectors.getCurrentUserName.projector(
+        fromSelectors.selectCurrentUserName.projector(
           initialUserState.profile,
           initialUserState.currentUser
         )
@@ -114,13 +116,13 @@ describe("User Selectors", () => {
     });
   });
 
-  describe("getIsAdmin", () => {
+  describe("selectIsAdmin", () => {
     it("should return false if currentUser is not a functional account", () => {
       const username = initialUserState.currentUser
         ? initialUserState.currentUser.username
         : "";
       expect(
-        fromSelectors.getIsAdmin.projector(
+        fromSelectors.selectIsAdmin.projector(
           username,
           initialUserState.accountType
         )
@@ -128,73 +130,73 @@ describe("User Selectors", () => {
     });
   });
 
-  describe("getCatamelToken", () => {
-    it("should get catamelToken", () => {
-      expect(fromSelectors.getCatamelToken.projector(initialUserState)).toEqual(
-        catamelToken
-      );
+  describe("selectCatamelToken", () => {
+    it("should select catamelToken", () => {
+      expect(
+        fromSelectors.selectCatamelToken.projector(initialUserState)
+      ).toEqual(catamelToken.id);
     });
   });
 
-  describe("getUserMessage", () => {
-    it("should get message", () => {
-      expect(fromSelectors.getUserMessage.projector(initialUserState)).toBe(
+  describe("selectUserMessage", () => {
+    it("should select message", () => {
+      expect(fromSelectors.selectUserMessage.projector(initialUserState)).toBe(
         undefined
       );
     });
   });
 
-  describe("getSettings", () => {
-    it("should get settings", () => {
-      expect(fromSelectors.getSettings.projector(initialUserState)).toEqual(
+  describe("selectSettings", () => {
+    it("should select settings", () => {
+      expect(fromSelectors.selectSettings.projector(initialUserState)).toEqual(
         settings
       );
     });
   });
 
-  describe("getTapeCopies", () => {
-    it("should get tapeCopies from settings", () => {
+  describe("selectTapeCopies", () => {
+    it("should select tapeCopies from settings", () => {
       expect(
-        fromSelectors.getTapeCopies.projector(initialUserState.settings)
+        fromSelectors.selectTapeCopies.projector(initialUserState.settings)
       ).toEqual("one");
     });
   });
 
-  describe("getTheme", () => {
-    it("it should get darkTheme from settings", () => {
+  describe("selectTheme", () => {
+    it("it should select darkTheme from settings", () => {
       expect(
-        fromSelectors.getTheme.projector(initialUserState.settings)
+        fromSelectors.selectTheme.projector(initialUserState.settings)
       ).toEqual(false);
     });
   });
 
-  describe("getIsLoggingIn", () => {
-    it("should get isLoggingIn", () => {
-      expect(fromSelectors.getIsLoggingIn.projector(initialUserState)).toEqual(
+  describe("selectIsLoggingIn", () => {
+    it("should select isLoggingIn", () => {
+      expect(
+        fromSelectors.selectIsLoggingIn.projector(initialUserState)
+      ).toEqual(false);
+    });
+  });
+
+  describe("selectIsLoggedIn", () => {
+    it("should select isLoggedIn", () => {
+      expect(
+        fromSelectors.selectIsLoggedIn.projector(initialUserState)
+      ).toEqual(false);
+    });
+  });
+
+  describe("selectIsLoading", () => {
+    it("should select isLoading", () => {
+      expect(fromSelectors.selectIsLoading.projector(initialUserState)).toEqual(
         false
       );
     });
   });
 
-  describe("getIsLoggedIn", () => {
-    it("should get isLoggedIn", () => {
-      expect(fromSelectors.getIsLoggedIn.projector(initialUserState)).toEqual(
-        false
-      );
-    });
-  });
-
-  describe("getIsLoading", () => {
-    it("should get isLoading", () => {
-      expect(fromSelectors.getIsLoading.projector(initialUserState)).toEqual(
-        false
-      );
-    });
-  });
-
-  describe("getColumns", () => {
-    it("should get columns", () => {
-      expect(fromSelectors.getColumns.projector(initialUserState)).toEqual([
+  describe("selectColumns", () => {
+    it("should select columns", () => {
+      expect(fromSelectors.selectColumns.projector(initialUserState)).toEqual([
         { name: "datasetName", order: 1, type: "standard", enabled: true },
       ]);
     });

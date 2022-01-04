@@ -11,7 +11,7 @@ const logbookFilters: LogbookFilters = {
   showImages: true,
   sortField: "timestamp:desc",
   skip: 0,
-  limit: 25
+  limit: 25,
 };
 
 const initialLogbookState: LogbookState = {
@@ -21,65 +21,67 @@ const initialLogbookState: LogbookState = {
   totalCount: 0,
 
   hasPrefilledFilters: false,
-  filters: logbookFilters
+  filters: logbookFilters,
 };
 
 describe("Logbook Selectors", () => {
-  describe("getLogbooks", () => {
-    it("should get logbooks", () => {
-      expect(fromSelectors.getLogbooks.projector(initialLogbookState)).toEqual(
-        []
-      );
+  describe("selectLogbooks", () => {
+    it("should select logbooks", () => {
+      expect(
+        fromSelectors.selectLogbooks.projector(initialLogbookState)
+      ).toEqual([]);
     });
   });
 
-  describe("getCurrentLogbook", () => {
-    it("should get the current logbook", () => {
+  describe("selectCurrentLogbook", () => {
+    it("should select the current logbook", () => {
       expect(
-        fromSelectors.getCurrentLogbook.projector(initialLogbookState)
+        fromSelectors.selectCurrentLogbook.projector(initialLogbookState)
       ).toEqual(logbook);
     });
   });
 
-  describe("getEntriesCount", () => {
-    it("should get totalCount", () => {
+  describe("selectEntriesCount", () => {
+    it("should select totalCount", () => {
       expect(
-        fromSelectors.getEntriesCount.projector(initialLogbookState)
+        fromSelectors.selectEntriesCount.projector(initialLogbookState)
       ).toEqual(0);
     });
   });
 
-  describe("getHasPrefilledFilters", () => {
+  describe("selectHasPrefilledFilters", () => {
     it("should return hasPrefilledFilters", () => {
       expect(
-        fromSelectors.getHasPrefilledFilters.projector(initialLogbookState)
+        fromSelectors.selectHasPrefilledFilters.projector(initialLogbookState)
       ).toEqual(false);
     });
   });
 
-  describe("getFilters", () => {
-    it("should get filters", () => {
-      expect(fromSelectors.getFilters.projector(initialLogbookState)).toEqual(
-        logbookFilters
-      );
+  describe("selectFilters", () => {
+    it("should select filters", () => {
+      expect(
+        fromSelectors.selectFilters.projector(initialLogbookState)
+      ).toEqual(logbookFilters);
     });
   });
 
-  describe("getEntriesPerPage", () => {
-    it("should get limit filter", () => {
+  describe("selectEntriesPerPage", () => {
+    it("should select limit filter", () => {
       expect(
-        fromSelectors.getEntriesPerPage.projector(initialLogbookState.filters)
+        fromSelectors.selectEntriesPerPage.projector(
+          initialLogbookState.filters
+        )
       ).toEqual(25);
     });
   });
 
-  describe("getPage", () => {
-    it("should get page from skip and limit filters", () => {
+  describe("selectPage", () => {
+    it("should select page from skip and limit filters", () => {
       const { skip, limit } = initialLogbookState.filters;
       const page = skip / limit;
 
       expect(
-        fromSelectors.getPage.projector(initialLogbookState.filters)
+        fromSelectors.selectPage.projector(initialLogbookState.filters)
       ).toEqual(page);
     });
   });

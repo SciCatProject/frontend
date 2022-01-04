@@ -7,7 +7,7 @@ const data: JobInterface = {
   id: "testId",
   emailJobInitiator: "test@email.com",
   type: "archive",
-  datasetList: {}
+  datasetList: {},
 };
 const job = new Job(data);
 
@@ -15,7 +15,7 @@ const jobFilters = {
   mode: null,
   sortField: "creationTime:desc",
   skip: 0,
-  limit: 50
+  limit: 50,
 };
 
 const initialJobsState: JobsState = {
@@ -26,74 +26,76 @@ const initialJobsState: JobsState = {
 
   submitError: undefined,
 
-  filters: jobFilters
+  filters: jobFilters,
 };
 
 describe("Job Selectors", () => {
-  describe("getJobs", () => {
-    it("should get jobs", () => {
-      expect(fromSelectors.getJobs.projector(initialJobsState)).toEqual([]);
+  describe("selectJobs", () => {
+    it("should select jobs", () => {
+      expect(fromSelectors.selectJobs.projector(initialJobsState)).toEqual([]);
     });
   });
 
-  describe("getCurrentJob", () => {
-    it("should get the current job", () => {
-      expect(fromSelectors.getCurrentJob.projector(initialJobsState)).toEqual(
-        job
+  describe("selectCurrentJob", () => {
+    it("should select the current job", () => {
+      expect(
+        fromSelectors.selectCurrentJob.projector(initialJobsState)
+      ).toEqual(job);
+    });
+  });
+
+  describe("selectJobsCount", () => {
+    it("should select the total jobs count", () => {
+      expect(fromSelectors.selectJobsCount.projector(initialJobsState)).toEqual(
+        0
       );
     });
   });
 
-  describe("getJobsCount", () => {
-    it("should get the total jobs count", () => {
-      expect(fromSelectors.getJobsCount.projector(initialJobsState)).toEqual(0);
-    });
-  });
-
-  describe("getSubmitError", () => {
-    it("should get submitError", () => {
+  describe("selectSubmitError", () => {
+    it("should select submitError", () => {
       expect(
-        fromSelectors.getSubmitError.projector(initialJobsState)
+        fromSelectors.selectSubmitError.projector(initialJobsState)
       ).toBeUndefined();
     });
   });
 
-  describe("getFilters", () => {
-    it("should get the filters", () => {
-      expect(fromSelectors.getFilters.projector(initialJobsState)).toEqual(
+  describe("selectFilters", () => {
+    it("should select the filters", () => {
+      expect(fromSelectors.selectFilters.projector(initialJobsState)).toEqual(
         jobFilters
       );
     });
   });
 
-  describe("getJobViewMode", () => {
-    it("should get the mode from filters", () => {
+  describe("selectJobViewMode", () => {
+    it("should select the mode from filters", () => {
       expect(
-        fromSelectors.getJobViewMode.projector(initialJobsState.filters)
+        fromSelectors.selectJobViewMode.projector(initialJobsState.filters)
       ).toEqual(null);
     });
   });
 
-  describe("getPage", () => {
-    it("should get the current page from filters", () => {
+  describe("selectPage", () => {
+    it("should select the current page from filters", () => {
       const { skip, limit } = jobFilters;
       const page = skip / limit;
-      expect(fromSelectors.getPage.projector(initialJobsState.filters)).toEqual(
-        page
-      );
+      expect(
+        fromSelectors.selectPage.projector(initialJobsState.filters)
+      ).toEqual(page);
     });
   });
 
-  describe("getJobsPerPage", () => {
-    it("should get the limit from filters", () => {
+  describe("selectJobsPerPage", () => {
+    it("should select the limit from filters", () => {
       const { limit } = jobFilters;
       expect(
-        fromSelectors.getJobsPerPage.projector(initialJobsState.filters)
+        fromSelectors.selectJobsPerPage.projector(initialJobsState.filters)
       ).toEqual(limit);
     });
   });
 
-  describe("getQueryParams", () => {
+  describe("selectQueryParams", () => {
     it("should query params from filters", () => {
       const { mode, sortField, skip, limit } = jobFilters;
       let params;
@@ -103,7 +105,7 @@ describe("Job Selectors", () => {
         params = { order: sortField, skip, limit };
       }
       expect(
-        fromSelectors.getQueryParams.projector(initialJobsState.filters)
+        fromSelectors.selectQueryParams.projector(initialJobsState.filters)
       ).toEqual(params);
     });
   });
