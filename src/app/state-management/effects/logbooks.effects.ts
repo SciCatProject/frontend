@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { createEffect, Actions, ofType, concatLatestFrom } from "@ngrx/effects";
 import { LogbookApi, Logbook } from "shared/sdk";
 import * as fromActions from "state-management/actions/logbooks.actions";
-import { mergeMap, catchError, map, withLatestFrom } from "rxjs/operators";
+import { mergeMap, catchError, map } from "rxjs/operators";
 import { of } from "rxjs";
 
 import {

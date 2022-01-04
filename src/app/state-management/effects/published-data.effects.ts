@@ -4,13 +4,7 @@ import { PublishedDataApi, PublishedData } from "shared/sdk";
 import { Store } from "@ngrx/store";
 import { selectQueryParams } from "state-management/selectors/published-data.selectors";
 import * as fromActions from "state-management/actions/published-data.actions";
-import {
-  withLatestFrom,
-  mergeMap,
-  map,
-  catchError,
-  switchMap,
-} from "rxjs/operators";
+import { mergeMap, map, catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
 import {

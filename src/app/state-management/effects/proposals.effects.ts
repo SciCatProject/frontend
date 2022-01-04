@@ -7,13 +7,7 @@ import {
   selectFullqueryParams,
   selectDatasetsQueryParams,
 } from "state-management/selectors/proposals.selectors";
-import {
-  withLatestFrom,
-  map,
-  mergeMap,
-  catchError,
-  switchMap,
-} from "rxjs/operators";
+import { map, mergeMap, catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 import {
   loadingAction,

@@ -7,13 +7,7 @@ import {
   selectDatasetsQueryParams,
 } from "state-management/selectors/samples.selectors";
 import * as fromActions from "state-management/actions/samples.actions";
-import {
-  withLatestFrom,
-  mergeMap,
-  map,
-  catchError,
-  switchMap,
-} from "rxjs/operators";
+import { mergeMap, map, catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 import {
   loadingAction,

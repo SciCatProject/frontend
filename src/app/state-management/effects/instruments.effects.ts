@@ -2,13 +2,7 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
 import { InstrumentApi, Instrument } from "shared/sdk";
 import * as fromActions from "state-management/actions/instruments.actions";
-import {
-  switchMap,
-  map,
-  catchError,
-  mergeMap,
-  withLatestFrom,
-} from "rxjs/operators";
+import { switchMap, map, catchError, mergeMap } from "rxjs/operators";
 import { of } from "rxjs";
 import { Store } from "@ngrx/store";
 import { selectFilters } from "state-management/selectors/instruments.selectors";

@@ -4,7 +4,7 @@ import { JobApi, Job } from "shared/sdk";
 import { Store } from "@ngrx/store";
 import { selectQueryParams } from "state-management/selectors/jobs.selectors";
 import * as fromActions from "state-management/actions/jobs.actions";
-import { withLatestFrom, map, switchMap, catchError } from "rxjs/operators";
+import { map, switchMap, catchError } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
 import {
