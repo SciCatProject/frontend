@@ -6,27 +6,27 @@ import {
   setPublicViewModeAction,
   setArchiveViewModeAction,
   clearSelectionAction,
-  addToBatchAction
+  addToBatchAction,
 } from "state-management/actions/datasets.actions";
 import { Subscription } from "rxjs";
 import {
-  getArchiveViewMode,
-  getPublicViewMode
+  selectArchiveViewMode,
+  selectPublicViewMode,
 } from "state-management/selectors/datasets.selectors";
-import { getIsLoading } from "state-management/selectors/user.selectors";
+import { selectIsLoading } from "state-management/selectors/user.selectors";
 import { ArchivingService } from "datasets/archiving.service";
 import { MatDialog } from "@angular/material/dialog";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { showMessageAction } from "state-management/actions/user.actions";
-import { getSubmitError } from "state-management/selectors/jobs.selectors";
+import { selectSubmitError } from "state-management/selectors/jobs.selectors";
 
 @Component({
   selector: "dataset-table-actions",
   templateUrl: "./dataset-table-actions.component.html",
-  styleUrls: ["./dataset-table-actions.component.scss"]
+  styleUrls: ["./dataset-table-actions.component.scss"],
 })
 export class DatasetTableActionsComponent implements OnInit, OnDestroy {
-  loading$ = this.store.select((getIsLoading));
+  loading$ = this.store.select(selectIsLoading);
 
   @Input() selectedSets: Dataset[] | null = [];
 
@@ -38,7 +38,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     ArchViewMode.retrievable,
     ArchViewMode.work_in_progress,
     ArchViewMode.system_error,
-    ArchViewMode.user_error
+    ArchViewMode.user_error,
   ];
 
   searchPublicDataEnabled = this.appConfig.searchPublicDataEnabled;
@@ -50,7 +50,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private archivingSrv: ArchivingService,
     public dialog: MatDialog,
-    private store: Store<any>
+    private store: Store
   ) {}
 
   /**
@@ -80,21 +80,21 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   archiveClickHandle(): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: "auto",
-      data: { title: "Really archive?", question: "" }
+      data: { title: "Really archive?", question: "" },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result && this.selectedSets) {
         this.archivingSrv.archive(this.selectedSets).subscribe(
           () => this.store.dispatch(clearSelectionAction()),
-          err =>
+          (err) =>
             this.store.dispatch(
               showMessageAction({
                 message: {
                   type: MessageType.Error,
                   content: err.message,
-                  duration: 5000
-                }
+                  duration: 5000,
+                },
               })
             )
         );
@@ -107,23 +107,28 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
    * @memberof DashboardComponent
    */
   retrieveClickHandle(): void {
-    const destPath = {destinationPath: "/archive/retrieve"};
-    let dialogOptions = this.archivingSrv.retriveDialogOptions(this.appConfig.retrieveDestinations);
+    const destPath = { destinationPath: "/archive/retrieve" };
+    let dialogOptions = this.archivingSrv.retriveDialogOptions(
+      this.appConfig.retrieveDestinations
+    );
     const dialogRef = this.dialog.open(DialogComponent, dialogOptions);
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result && this.selectedSets) {
-        const locationOption = this.archivingSrv.generateOptionLocation(result, this.appConfig.retrieveDestinations);
-        const extra = {...destPath, ...locationOption};
+        const locationOption = this.archivingSrv.generateOptionLocation(
+          result,
+          this.appConfig.retrieveDestinations
+        );
+        const extra = { ...destPath, ...locationOption };
         this.archivingSrv.retrieve(this.selectedSets, extra).subscribe(
           () => this.store.dispatch(clearSelectionAction()),
-          err =>
+          (err) =>
             this.store.dispatch(
               showMessageAction({
                 message: {
                   type: MessageType.Error,
                   content: err.message,
-                  duration: 5000
-                }
+                  duration: 5000,
+                },
               })
             )
         );
@@ -139,20 +144,20 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscriptions.push(
       this.store
-        .select((getArchiveViewMode))
+        .select(selectArchiveViewMode)
         .subscribe((mode: ArchViewMode) => {
           this.currentArchViewMode = mode;
         })
     );
 
     this.subscriptions.push(
-      this.store.select((getPublicViewMode)).subscribe(publicViewMode => {
+      this.store.select(selectPublicViewMode).subscribe((publicViewMode) => {
         this.currentPublicViewMode = publicViewMode;
       })
     );
 
     this.subscriptions.push(
-      this.store.select((getSubmitError)).subscribe(err => {
+      this.store.select(selectSubmitError).subscribe((err) => {
         if (!err) {
           this.store.dispatch(clearSelectionAction());
         }
@@ -161,6 +166,6 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

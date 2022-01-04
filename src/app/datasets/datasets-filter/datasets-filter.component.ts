@@ -1,7 +1,7 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import {  Store } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
   debounceTime,
   distinctUntilChanged,
@@ -11,20 +11,20 @@ import {
 
 import { FacetCount } from "state-management/state/datasets.store";
 import {
-  getCreationTimeFilter,
-  getGroupFacetCounts,
-  getGroupFilter,
-  getHasAppliedFilters,
-  getKeywordFacetCounts,
-  getKeywordsFilter,
-  getLocationFacetCounts,
-  getLocationFilter,
-  getScientificConditions,
-  getSearchTerms,
-  getTypeFacetCounts,
-  getTypeFilter,
-  getKeywordsTerms,
-  getMetadataKeys,
+  selectCreationTimeFilter,
+  selectGroupFacetCounts,
+  selectGroupFilter,
+  selectHasAppliedFilters,
+  selectKeywordFacetCounts,
+  selectKeywordsFilter,
+  selectLocationFacetCounts,
+  selectLocationFilter,
+  selectScientificConditions,
+  selectSearchTerms,
+  selectTypeFacetCounts,
+  selectTypeFilter,
+  selectKeywordsTerms,
+  selectMetadataKeys,
 } from "state-management/selectors/datasets.selectors";
 
 import {
@@ -67,20 +67,20 @@ interface DateRange {
 export class DatasetsFilterComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
-  locationFacetCounts$ = this.store.select((getLocationFacetCounts));
-  groupFacetCounts$ = this.store.select((getGroupFacetCounts));
-  typeFacetCounts$ = this.store.select((getTypeFacetCounts));
-  keywordFacetCounts$ = this.store.select((getKeywordFacetCounts));
+  locationFacetCounts$ = this.store.select(selectLocationFacetCounts);
+  groupFacetCounts$ = this.store.select(selectGroupFacetCounts);
+  typeFacetCounts$ = this.store.select(selectTypeFacetCounts);
+  keywordFacetCounts$ = this.store.select(selectKeywordFacetCounts);
 
-  searchTerms$ = this.store.select((getSearchTerms));
-  keywordsTerms$ = this.store.select((getKeywordsTerms));
-  locationFilter$ = this.store.select((getLocationFilter));
-  groupFilter$ = this.store.select((getGroupFilter));
-  typeFilter$ = this.store.select((getTypeFilter));
-  keywordsFilter$ = this.store.select((getKeywordsFilter));
-  creationTimeFilter$ = this.store.select((getCreationTimeFilter));
-  scientificConditions$ = this.store.select((getScientificConditions));
-  metadataKeys$ = this.store.select((getMetadataKeys));
+  searchTerms$ = this.store.select(selectSearchTerms);
+  keywordsTerms$ = this.store.select(selectKeywordsTerms);
+  locationFilter$ = this.store.select(selectLocationFilter);
+  groupFilter$ = this.store.select(selectGroupFilter);
+  typeFilter$ = this.store.select(selectTypeFilter);
+  keywordsFilter$ = this.store.select(selectKeywordsFilter);
+  creationTimeFilter$ = this.store.select(selectCreationTimeFilter);
+  scientificConditions$ = this.store.select(selectScientificConditions);
+  metadataKeys$ = this.store.select(selectMetadataKeys);
 
   locationInput$ = new BehaviorSubject<string>("");
   groupInput$ = new BehaviorSubject<string>("");
@@ -112,7 +112,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.keywordsFilter$
   );
 
-  hasAppliedFilters$ = this.store.select((getHasAppliedFilters));
+  hasAppliedFilters$ = this.store.select(selectHasAppliedFilters);
 
   dateRange: DateRange = {
     begin: "",
@@ -122,7 +122,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   constructor(
     private asyncPipe: AsyncPipe,
     public dialog: MatDialog,
-    private store: Store<any>,
+    private store: Store,
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {}
 

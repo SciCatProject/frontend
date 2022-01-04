@@ -6,20 +6,20 @@ import {
   TableColumn,
   PageChangeEvent,
   SortChangeEvent,
-  CheckboxEvent
+  CheckboxEvent,
 } from "shared/modules/table/table.component";
 import {
-  getPoliciesPerPage,
-  getPage,
-  getPoliciesCount,
-  getPolicies,
-  getEditablePolicies,
-  getSelectedPolicies,
-  getEditablePoliciesCount,
-  getEditablePoliciesPerPage,
-  getEditablePage,
-  getFilters,
-  getEditableFilters
+  selectPoliciesPerPage,
+  selectPage,
+  selectPoliciesCount,
+  selectPolicies,
+  selectEditablePolicies,
+  selectSelectedPolicies,
+  selectEditablePoliciesCount,
+  selectEditablePoliciesPerPage,
+  selectEditablePage,
+  selectFilters,
+  selectEditableFilters,
 } from "state-management/selectors/policies.selectors";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialogConfig, MatDialog } from "@angular/material/dialog";
@@ -34,7 +34,7 @@ import {
   fetchPoliciesAction,
   selectAllPoliciesAction,
   changeEditablePageAction,
-  sortEditableByColumnAction
+  sortEditableByColumnAction,
 } from "state-management/actions/policies.actions";
 import { EditDialogComponent } from "policies/edit-dialog/edit-dialog.component";
 import { map } from "rxjs/operators";
@@ -45,27 +45,25 @@ import { GenericFilters } from "state-management/models";
 @Component({
   selector: "app-policies-dashboard",
   templateUrl: "./policies-dashboard.component.html",
-  styleUrls: ["./policies-dashboard.component.scss"]
+  styleUrls: ["./policies-dashboard.component.scss"],
 })
 export class PoliciesDashboardComponent implements OnInit, OnDestroy {
-  policies$: Observable<Policy[]> = this.store.select((getPolicies));
-  policiesPerPage$: Observable<number> = this.store.
-    select((getPoliciesPerPage)
+  policies$: Observable<Policy[]> = this.store.select(selectPolicies);
+  policiesPerPage$: Observable<number> = this.store.select(
+    selectPoliciesPerPage
   );
-  currentPage$: Observable<number> = this.store.select((getPage));
-  policyCount$: Observable<number> = this.store.select((getPoliciesCount));
-
-  editablePolicies$: Observable<Policy[]> = this.store.
-    select((getEditablePolicies)
+  currentPage$: Observable<number> = this.store.select(selectPage);
+  policyCount$: Observable<number> = this.store.select(selectPoliciesCount);
+  editablePolicies$: Observable<Policy[]> = this.store.select(
+    selectEditablePolicies
   );
-  editablePoliciesPerPage$: Observable<number> = this.store.
-    select((getEditablePoliciesPerPage)
+  editablePoliciesPerPage$: Observable<number> = this.store.select(
+    selectEditablePoliciesPerPage
   );
-  currentEditablePage$: Observable<number> = this.store.
-    select((getEditablePage)
-  );
-  editableCount$: Observable<number> = this.store.
-    select((getEditablePoliciesCount)
+  currentEditablePage$: Observable<number> =
+    this.store.select(selectEditablePage);
+  editableCount$: Observable<number> = this.store.select(
+    selectEditablePoliciesCount
   );
 
   multiSelect = false;
@@ -88,33 +86,33 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
       name: "archiveEmailNotification",
       icon: "email",
       sort: true,
-      inList: true
+      inList: true,
     },
     {
       name: "archiveEmailsToBeNotified",
       icon: "playlist_add",
       sort: true,
-      inList: true
+      inList: true,
     },
     {
       name: "retrieveEmailNotification",
       icon: "email",
       sort: true,
-      inList: true
+      inList: true,
     },
     {
       name: "retrieveEmailsToBeNotified",
       icon: "playlist_add",
       sort: true,
-      inList: true
-    }
+      inList: true,
+    },
   ];
 
   constructor(
     private datasetApi: DatasetApi,
     public dialog: MatDialog,
     private router: Router,
-    private store: Store<Policy>
+    private store: Store
   ) {}
 
   onTabChange(event: MatTabChangeEvent) {
@@ -136,8 +134,8 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
 
   updatePoliciesRouterState() {
     this.store
-      .select((getFilters))
-      .subscribe(filters => {
+      .select(selectFilters)
+      .subscribe((filters) => {
         if (filters) {
           this.addToQueryParams(filters);
         }
@@ -147,8 +145,8 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
 
   updateEditableRouterState() {
     this.store
-      .select((getEditableFilters))
-      .subscribe(filters => {
+      .select(selectEditableFilters)
+      .subscribe((filters) => {
         if (filters) {
           this.addToQueryParams(filters);
         }
@@ -158,7 +156,7 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
 
   addToQueryParams(filters: GenericFilters) {
     this.router.navigate(["/policies"], {
-      queryParams: { args: JSON.stringify(filters) }
+      queryParams: { args: JSON.stringify(filters) },
     });
   }
 
@@ -187,7 +185,7 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       sortEditableByColumnAction({
         column: event.active,
-        direction: event.direction
+        direction: event.direction,
       })
     );
     this.updateEditableRouterState();
@@ -217,10 +215,10 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
     this.dialogConfig.data = {
       selectedPolicy: this.selectedPolicies[0],
       selectedGroups: this.selectedGroups,
-      multiSelect: this.multiSelect
+      multiSelect: this.multiSelect,
     };
     const dialogRef = this.dialog.open(EditDialogComponent, this.dialogConfig);
-    dialogRef.afterClosed().subscribe(val => this.onDialogClose(val));
+    dialogRef.afterClosed().subscribe((val) => this.onDialogClose(val));
   }
 
   onDialogClose(result: any) {
@@ -229,11 +227,11 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
         submitPolicyAction({ ownerList: this.selectedGroups, policy: result })
       );
       // if datasets already exist
-      this.selectedGroups.forEach(group => {
+      this.selectedGroups.forEach((group) => {
         this.datasetApi
           .count({ ownerGroup: group })
           .pipe(
-            map(count => {
+            map((count) => {
               if (count) {
                 // if theres already some datasets for this ask to do stuff. It doesnt matter if they have alredy
                 // been archived, the archiving job creator should check that
@@ -262,15 +260,15 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchPoliciesAction());
 
     this.selectedPoliciesSubscription = this.store
-      .select((getSelectedPolicies))
-      .subscribe(selectedPolicies => {
+      .select(selectSelectedPolicies)
+      .subscribe((selectedPolicies) => {
         if (selectedPolicies) {
           this.selectedPolicies = selectedPolicies;
           this.multiSelect = this.selectedPolicies.length > 1;
           this.selectedGroups = [];
           this.selectedIds = [];
 
-          selectedPolicies.forEach(policy => {
+          selectedPolicies.forEach((policy) => {
             this.selectedGroups.push(policy.ownerGroup);
             this.selectedIds.push(policy.id);
           });

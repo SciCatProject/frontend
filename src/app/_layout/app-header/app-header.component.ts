@@ -3,21 +3,21 @@ import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Store } from "@ngrx/store";
 import {
   fetchCurrentUserAction,
-  logoutAction
+  logoutAction,
 } from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
 import {
-  getCurrentUserAccountType,
-  getCurrentUser,
-  getProfile,
-  getIsLoggedIn
+  selectCurrentUserAccountType,
+  selectCurrentUser,
+  selectProfile,
+  selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
-import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
+import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 
 @Component({
   selector: "app-app-header",
   templateUrl: "./app-header.component.html",
-  styleUrls: ["./app-header.component.scss"]
+  styleUrls: ["./app-header.component.scss"],
 })
 export class AppHeaderComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
@@ -26,14 +26,14 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
   username = "";
   profileImage: string;
-  batch$ = this.store.select((getDatasetsInBatch));
+  batch$ = this.store.select(selectDatasetsInBatch);
   inBatchPids: string[] = [];
   inBatchCount = 0;
   inBatchIndicator = "";
-  loggedIn$ = this.store.select((getIsLoggedIn));
+  loggedIn$ = this.store.select(selectIsLoggedIn);
 
   constructor(
-    private store: Store<any>,
+    private store: Store,
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {
     this.facility = appConfig.facility ?? "";
@@ -53,9 +53,9 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchCurrentUserAction());
 
     this.subscriptions.push(
-      this.batch$.subscribe(datasets => {
+      this.batch$.subscribe((datasets) => {
         if (datasets) {
-          this.inBatchPids = datasets.map(dataset => dataset.pid);
+          this.inBatchPids = datasets.map((dataset) => dataset.pid);
           this.inBatchCount = this.inBatchPids.length;
           this.inBatchIndicator =
             this.inBatchCount > 99 ? "99+" : this.inBatchCount + "";
@@ -64,7 +64,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.select((getCurrentUserAccountType)).subscribe(type => {
+      this.store.select(selectCurrentUserAccountType).subscribe((type) => {
         if (type === "functional") {
           this.profileImage = "assets/images/user.png";
         }
@@ -72,12 +72,12 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.select((getCurrentUser)).subscribe(current => {
+      this.store.select(selectCurrentUser).subscribe((current) => {
         console.log("current: ", current);
         if (current) {
           this.username = current.username.replace("ms-ad.", "");
           if (!current.realm && current.id) {
-            this.store.select((getProfile)).subscribe(profile => {
+            this.store.select(selectProfile).subscribe((profile) => {
               if (profile) {
                 this.username = profile.username;
                 if (profile.thumbnailPhoto.startsWith("data")) {
@@ -92,6 +92,6 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

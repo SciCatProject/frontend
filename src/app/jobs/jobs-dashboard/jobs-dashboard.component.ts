@@ -4,11 +4,11 @@ import { Store } from "@ngrx/store";
 import { Job } from "shared/sdk";
 import { Subscription } from "rxjs";
 import {
-  getJobs,
-  getJobsCount,
-  getJobsPerPage,
-  getPage,
-  getFilters,
+  selectJobs,
+  selectJobsCount,
+  selectJobsPerPage,
+  selectPage,
+  selectFilters,
 } from "state-management/selectors/jobs.selectors";
 import { DatePipe } from "@angular/common";
 import {
@@ -24,8 +24,8 @@ import {
   sortByColumnAction,
 } from "state-management/actions/jobs.actions";
 import {
-  getCurrentUser,
-  getProfile,
+  selectCurrentUser,
+  selectProfile,
 } from "state-management/selectors/user.selectors";
 
 export interface JobsTableData {
@@ -42,9 +42,9 @@ export interface JobsTableData {
   styleUrls: ["./jobs-dashboard.component.scss"],
 })
 export class JobsDashboardComponent implements OnInit, OnDestroy {
-  jobsCount$ = this.store.select((getJobsCount));
-  jobsPerPage$ = this.store.select((getJobsPerPage));
-  currentPage$ = this.store.select((getPage));
+  jobsCount$ = this.store.select(selectJobsCount);
+  jobsPerPage$ = this.store.select(selectJobsPerPage);
+  currentPage$ = this.store.select(selectPage);
 
   jobs: JobsTableData[] = [];
   profile: any;
@@ -82,7 +82,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
   constructor(
     private datePipe: DatePipe,
     private router: Router,
-    private store: Store<Job>
+    private store: Store
   ) {}
 
   private enumKeys<T>(enumType: T): (keyof T)[] {
@@ -173,18 +173,18 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchJobsAction());
 
     this.subscriptions.push(
-      this.store.select((getJobs)).subscribe((jobs) => {
+      this.store.select(selectJobs).subscribe((jobs) => {
         this.jobs = this.formatTableData(jobs);
       })
     );
 
     this.subscriptions.push(
-      this.store.select((getCurrentUser)).subscribe((current) => {
+      this.store.select(selectCurrentUser).subscribe((current) => {
         if (current) {
           this.email = current.email;
 
           if (!current.realm) {
-            this.store.select((getProfile)).subscribe((profile) => {
+            this.store.select(selectProfile).subscribe((profile) => {
               if (profile) {
                 this.profile = profile;
                 this.email = profile.email;
@@ -199,7 +199,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.select((getFilters)).subscribe((filters) => {
+      this.store.select(selectFilters).subscribe((filters) => {
         this.router.navigate(["/user/jobs"], {
           queryParams: { args: JSON.stringify(filters) },
         });

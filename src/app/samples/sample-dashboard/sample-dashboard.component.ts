@@ -19,15 +19,15 @@ import {
 } from "shared/modules/table/table.component";
 import { combineLatest, Subscription } from "rxjs";
 import {
-  getSamples,
-  getSamplesCount,
-  getSamplesPerPage,
-  getPage,
-  getFilters,
-  getHasPrefilledFilters,
-  getTextFilter,
-  getMetadataKeys,
-  getCharacteristicsFilter,
+  selectSamples,
+  selectSamplesCount,
+  selectSamplesPerPage,
+  selectPage,
+  selectFilters,
+  selectHasPrefilledFilters,
+  selectTextFilter,
+  selectMetadataKeys,
+  selectCharacteristicsFilter,
 } from "state-management/selectors/samples.selectors";
 import { DatePipe } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -35,12 +35,7 @@ import { MatDialogConfig, MatDialog } from "@angular/material/dialog";
 import { SampleDialogComponent } from "samples/sample-dialog/sample-dialog.component";
 
 import deepEqual from "deep-equal";
-import {
-  filter,
-  map,
-  distinctUntilChanged,
-  take,
-} from "rxjs/operators";
+import { filter, map, distinctUntilChanged, take } from "rxjs/operators";
 import { SampleFilters } from "state-management/models";
 import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 
@@ -50,15 +45,14 @@ import { SearchParametersDialogComponent } from "shared/modules/search-parameter
   styleUrls: ["./sample-dashboard.component.scss"],
 })
 export class SampleDashboardComponent implements OnInit, OnDestroy {
-  sampleCount$ = this.store.select((getSamplesCount));
-  samplesPerPage$ = this.store.select((getSamplesPerPage));
-  currentPage$ = this.store.select((getPage));
-  textFilter$ = this.store.select((getTextFilter));
-  characteristics$ = this.store.select((getCharacteristicsFilter));
-  readyToFetch$ = this.store.select(getHasPrefilledFilters).pipe(
-    
-    filter((has) => has)
-  );
+  sampleCount$ = this.store.select(selectSamplesCount);
+  samplesPerPage$ = this.store.select(selectSamplesPerPage);
+  currentPage$ = this.store.select(selectPage);
+  textFilter$ = this.store.select(selectTextFilter);
+  characteristics$ = this.store.select(selectCharacteristicsFilter);
+  readyToFetch$ = this.store
+    .select(selectHasPrefilledFilters)
+    .pipe(filter((has) => has));
 
   subscriptions: Subscription[] = [];
 
@@ -83,7 +77,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store<Sample>
+    private store: Store
   ) {}
 
   formatTableData(samples: Sample[]): any {
@@ -157,13 +151,13 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchMetadataKeysAction());
 
     this.subscriptions.push(
-      this.store.select((getSamples)).subscribe((samples) => {
+      this.store.select(selectSamples).subscribe((samples) => {
         this.tableData = this.formatTableData(samples);
       })
     );
 
     this.subscriptions.push(
-      combineLatest([this.store.select((getFilters)), this.readyToFetch$])
+      combineLatest([this.store.select(selectFilters), this.readyToFetch$])
         .pipe(
           map(([filters, _]) => filters),
           distinctUntilChanged(deepEqual)
@@ -177,7 +171,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.select((getMetadataKeys)).subscribe((metadataKeys) => {
+      this.store.select(selectMetadataKeys).subscribe((metadataKeys) => {
         this.metadataKeys = metadataKeys;
       })
     );
@@ -187,7 +181,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
         .pipe(
           map((params) => params.args as string),
           take(1),
-          map((args) => (args ? JSON.parse(args) as SampleFilters: {}))
+          map((args) => (args ? (JSON.parse(args) as SampleFilters) : {}))
         )
         .subscribe((filters) =>
           this.store.dispatch(prefillFiltersAction({ values: filters }))

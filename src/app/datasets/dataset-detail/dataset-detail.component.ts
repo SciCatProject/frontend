@@ -7,21 +7,28 @@ import { MatDialog } from "@angular/material/dialog";
 import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { combineLatest, fromEvent, Observable, Subscription } from "rxjs";
-import {  Store } from "@ngrx/store";
-import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
-import { getCurrentUser, getIsAdmin, getProfile } from "state-management/selectors/user.selectors";
+import { Store } from "@ngrx/store";
+import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
+import {
+  selectCurrentUser,
+  selectIsAdmin,
+  selectProfile,
+} from "state-management/selectors/user.selectors";
 import { map } from "rxjs/operators";
-import { addKeywordFilterAction, clearFacetsAction, updatePropertyAction } from "state-management/actions/datasets.actions";
+import {
+  addKeywordFilterAction,
+  clearFacetsAction,
+  updatePropertyAction,
+} from "state-management/actions/datasets.actions";
 import { Router } from "@angular/router";
 import { fetchProposalAction } from "state-management/actions/proposals.actions";
-import { clearLogbookAction, fetchLogbookAction } from "state-management/actions/logbooks.actions";
-import { fetchSampleAction } from "state-management/actions/samples.actions";
-import { getCurrentProposal } from "state-management/selectors/proposals.selectors";
 import {
-  DerivedDataset,
-  RawDataset,
-  User
-} from "shared/sdk";
+  clearLogbookAction,
+  fetchLogbookAction,
+} from "state-management/actions/logbooks.actions";
+import { fetchSampleAction } from "state-management/actions/samples.actions";
+import { selectCurrentProposal } from "state-management/selectors/proposals.selectors";
+import { DerivedDataset, RawDataset, User } from "shared/sdk";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import { EditableComponent } from "app-routing/pending-changes.guard";
 /**
@@ -35,18 +42,19 @@ import { EditableComponent } from "app-routing/pending-changes.guard";
   templateUrl: "./dataset-detail.component.html",
   styleUrls: ["./dataset-detail.component.scss"],
 })
-export class DatasetDetailComponent implements OnInit, OnDestroy, EditableComponent {
+export class DatasetDetailComponent
+  implements OnInit, OnDestroy, EditableComponent {
   private subscriptions: Subscription[] = [];
   private _hasUnsavedChanges = false;
-  userProfile$ = this.store.select((getProfile));
-  isAdmin$ = this.store.select((getIsAdmin));
+  userProfile$ = this.store.select(selectProfile);
+  isAdmin$ = this.store.select(selectIsAdmin);
   accessGroups$: Observable<string[]> = this.userProfile$.pipe(
     map((profile) => (profile ? profile.accessGroups : []))
   );
   dataset: Dataset | undefined;
   datasetWithout: Partial<Dataset> | null = null;
   attachments: Attachment[] | null = null;
-  proposal$ = this.store.select((getCurrentProposal));
+  proposal$ = this.store.select(selectCurrentProposal);
   proposal: Proposal | undefined;
   sample: Sample | null = null;
   user: User | undefined;
@@ -57,12 +65,12 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     public dialog: MatDialog,
-    private store: Store<Dataset>,
-    private router: Router,
+    private store: Store,
+    private router: Router
   ) {}
-  ngOnInit(){
+  ngOnInit() {
     this.subscriptions.push(
-      this.store.select((getCurrentDataset)).subscribe((dataset) => {
+      this.store.select(selectCurrentDataset).subscribe((dataset) => {
         this.dataset = dataset;
         if (this.dataset) {
           combineLatest([this.accessGroups$, this.isAdmin$]).subscribe(
@@ -90,7 +98,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
       })
     );
     this.subscriptions.push(
-      this.store.select((getCurrentProposal)).subscribe((proposal) =>{
+      this.store.select(selectCurrentProposal).subscribe((proposal) => {
         this.proposal = proposal;
       })
     );
@@ -103,7 +111,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
       })
     );
     this.subscriptions.push(
-      this.store.select((getCurrentUser)).subscribe((user) => {
+      this.store.select(selectCurrentUser).subscribe((user) => {
         if (user) {
           this.user = user;
         }
@@ -121,17 +129,17 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
       if (this.dataset.type === "raw") {
         return (
           this.user.email.toLowerCase() ===
-          ((this.dataset as unknown) as RawDataset)[
+          (this.dataset as unknown as RawDataset)[
             "principalInvestigator"
-            ].toLowerCase()
+          ].toLowerCase()
         );
       }
       if (this.dataset.type === "derived") {
         return (
           this.user.email.toLowerCase() ===
-          ((this.dataset as unknown) as DerivedDataset)[
+          (this.dataset as unknown as DerivedDataset)[
             "investigator"
-            ].toLowerCase()
+          ].toLowerCase()
         );
       }
     }
@@ -189,15 +197,15 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result && this.dataset) {
-          const index = this.dataset.sharedWith.indexOf(share);
-          if (index >= 0) {
-            const pid = this.dataset.pid;
-            const sharedWith: string[] = [...this.dataset.sharedWith];
-            sharedWith.splice(index, 1);
-            const property = { sharedWith };
-            this.store.dispatch(updatePropertyAction({pid, property}));
-          }
+        const index = this.dataset.sharedWith.indexOf(share);
+        if (index >= 0) {
+          const pid = this.dataset.pid;
+          const sharedWith: string[] = [...this.dataset.sharedWith];
+          sharedWith.splice(index, 1);
+          const property = { sharedWith };
+          this.store.dispatch(updatePropertyAction({ pid, property }));
         }
+      }
     });
   }
 
@@ -212,25 +220,25 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
   }
 
   openSampleEditDialog() {
-    if (this.dataset){
+    if (this.dataset) {
       this.dialog
-      .open(SampleEditComponent, {
-        width: "1000px",
-        data: {
-          ownerGroup: this.dataset.ownerGroup,
-          sampleId: this.sample?.sampleId,
-        },
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res && this.dataset) {
-          const { sample } = res;
-          this.sample = sample;
-          const pid = this.dataset.pid;
-          const property = { sampleId: sample.sampleId };
-          this.store.dispatch(updatePropertyAction({ pid, property }));
-        }
-      });
+        .open(SampleEditComponent, {
+          width: "1000px",
+          data: {
+            ownerGroup: this.dataset.ownerGroup,
+            sampleId: this.sample?.sampleId,
+          },
+        })
+        .afterClosed()
+        .subscribe((res) => {
+          if (res && this.dataset) {
+            const { sample } = res;
+            this.sample = sample;
+            const pid = this.dataset.pid;
+            const property = { sampleId: sample.sampleId };
+            this.store.dispatch(updatePropertyAction({ pid, property }));
+          }
+        });
     }
   }
   onSlidePublic(event: MatSlideToggleChange) {

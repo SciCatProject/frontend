@@ -3,8 +3,8 @@ import { Router, ActivatedRoute, NavigationEnd, Params } from "@angular/router";
 import { Store } from "@ngrx/store";
 
 import {
-  getArchiveViewMode,
-  getFilters,
+  selectArchiveViewMode,
+  selectFilters,
 } from "state-management/selectors/datasets.selectors";
 import { take, filter, map } from "rxjs/operators";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
@@ -38,13 +38,14 @@ export class BreadcrumbComponent implements OnInit {
   // TODO: first, figure out how the NgRX connected router state works.
   // the below selection makes sure a string reaches the last map() by providing fallback values
   // all along the way.
-  public shouldDisplay$ = this.store.select((state) => state["router"] || {}).pipe(
-    
-    select((router) => router["state"] || {}),
-    select((state) => state["url"] || ""),
-    select((url) => url.split("?")[0]),
-    map((path) => path !== "/datasets")
-  );
+  public shouldDisplay$ = this.store
+    .select((state) => state["router"] || {})
+    .pipe(
+      select((router) => router["state"] || {}),
+      select((state) => state["url"] || ""),
+      select((url) => url.split("?")[0]),
+      map((path) => path !== "/datasets")
+    );
 
   constructor(
     private store: Store<any>,
@@ -69,10 +70,13 @@ export class BreadcrumbComponent implements OnInit {
    */
   setBreadcrumbs(): void {
     this.breadcrumbs = [];
-    const children = this.route.children.reduce<ActivatedRoute[]>((accumulator, child) => {
-      accumulator.push(child, ...child.children);
-      return accumulator;
-    }, []);
+    const children = this.route.children.reduce<ActivatedRoute[]>(
+      (accumulator, child) => {
+        accumulator.push(child, ...child.children);
+        return accumulator;
+      },
+      []
+    );
     children.forEach((root) => {
       let param: string;
       Object.keys(root.snapshot.params).forEach((key) => {
@@ -121,16 +125,20 @@ export class BreadcrumbComponent implements OnInit {
     }
     // this catches errors and redirects to the fallback, this could/should be set in the routing module?
     if (crumb.fallback === "/datasets") {
-      this.store.select(getFilters).pipe( take(1)).subscribe((filters) => {
-        this.store.select(getArchiveViewMode)
-          .pipe( take(1))
-          .subscribe((currentMode) => {
-            filters["mode"] = setMode(currentMode);
-            this.router.navigate(["/datasets"], {
-              queryParams: { args: JSON.stringify(filters) },
+      this.store
+        .select(selectFilters)
+        .pipe(take(1))
+        .subscribe((filters) => {
+          this.store
+            .select(selectArchiveViewMode)
+            .pipe(take(1))
+            .subscribe((currentMode) => {
+              filters["mode"] = setMode(currentMode);
+              this.router.navigate(["/datasets"], {
+                queryParams: { args: JSON.stringify(filters) },
+              });
             });
-          });
-      });
+        });
     } else {
       this.router
         .navigateByUrl(url + crumb.url)

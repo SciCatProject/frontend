@@ -8,7 +8,7 @@ import {
   AfterViewChecked,
   ChangeDetectorRef,
 } from "@angular/core";
-import {  Store } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { LoopBackConfig } from "shared/sdk";
 import {
   clearMessageAction,
@@ -19,8 +19,8 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Meta, Title } from "@angular/platform-browser";
 import { Subscription } from "rxjs";
 import {
-  getIsLoading,
-  getUserMessage,
+  selectIsLoading,
+  selectUserMessage,
 } from "state-management/selectors/user.selectors";
 import { MessageType } from "state-management/models";
 
@@ -31,7 +31,7 @@ import { MessageType } from "state-management/models";
   encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
-  loading$ = this.store.select((getIsLoading));
+  loading$ = this.store.select(selectIsLoading);
 
   title: string;
   facility: string;
@@ -44,7 +44,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     public snackBar: MatSnackBar,
     private titleService: Title,
     @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private store: Store<any>
+    private store: Store
   ) {
     this.facility = this.appConfig.facility ?? "";
     if (appConfig.production === true) {
@@ -74,7 +74,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     }
 
     this.userMessageSubscription = this.store
-      .select((getUserMessage))
+      .select(selectUserMessage)
       .subscribe((current) => {
         if (current && current.content !== undefined) {
           let panelClass = "";

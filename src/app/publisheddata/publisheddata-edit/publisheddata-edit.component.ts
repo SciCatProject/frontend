@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 
-import {  Store, ActionsSubject } from "@ngrx/store";
+import { Store, ActionsSubject } from "@ngrx/store";
 import { pluck } from "rxjs/operators";
 
 import {
@@ -12,7 +12,7 @@ import {
 import { AppConfig, APP_CONFIG } from "app-config.module";
 
 import { Router, ActivatedRoute } from "@angular/router";
-import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
+import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { Subscription } from "rxjs";
 
 import { MatChipInputEvent } from "@angular/material/chips";
@@ -27,7 +27,7 @@ import { PickedFile } from "shared/modules/file-uploader/file-uploader.component
 export class PublisheddataEditComponent implements OnInit, OnDestroy {
   public separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  currentData$ = this.store.select((getCurrentPublishedData));
+  currentData$ = this.store.select(selectCurrentPublishedData);
   routeSubscription: Subscription = new Subscription();
   actionSubjectSubscription: Subscription = new Subscription();
 
@@ -53,7 +53,7 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store<any>,
+    private store: Store,
     @Inject(APP_CONFIG) private appConfig: AppConfig,
     private actionsSubj: ActionsSubject
   ) {}
@@ -135,7 +135,7 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
     this.actionSubjectSubscription = this.actionsSubj.subscribe((sub) => {
       if (sub.type === fetchPublishedDataCompleteAction.type) {
         this.store
-          .select((getCurrentPublishedData))
+          .select(selectCurrentPublishedData)
           .subscribe((publishedData) => {
             if (publishedData) {
               const doi = encodeURIComponent(publishedData.doi);

@@ -14,7 +14,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import {  Store } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 import { map } from "rxjs/operators";
 import {
@@ -29,11 +29,11 @@ import {
   sortByColumnAction,
 } from "state-management/actions/samples.actions";
 import {
-  getPage,
-  getSamples,
-  getSamplesCount,
-  getSamplesPerPage,
-  getTextFilter,
+  selectPage,
+  selectSamples,
+  selectSamplesCount,
+  selectSamplesPerPage,
+  selectTextFilter,
 } from "state-management/selectors/samples.selectors";
 
 @Component({
@@ -44,16 +44,17 @@ import {
 export class SampleEditComponent implements OnInit, OnDestroy {
   @ViewChild("searchBar", { static: true }) searchBar!: ElementRef;
 
-  textFilter$ = this.store.select((getTextFilter));
-  sampleCount$ = this.store.select((getSamplesCount));
-  samplesPerPage$ = this.store.select((getSamplesPerPage));
-  currentPage$ = this.store.select((getPage));
-  samples$ = this.store.select(getSamples).pipe(
-    
-    map((samples) =>
-      samples.filter((sample) => sample.ownerGroup === this.data.ownerGroup)
-    )
-  );
+  textFilter$ = this.store.select(selectTextFilter);
+  sampleCount$ = this.store.select(selectSamplesCount);
+  samplesPerPage$ = this.store.select(selectSamplesPerPage);
+  currentPage$ = this.store.select(selectPage);
+  samples$ = this.store
+    .select(selectSamples)
+    .pipe(
+      map((samples) =>
+        samples.filter((sample) => sample.ownerGroup === this.data.ownerGroup)
+      )
+    );
 
   samplesSubscription: Subscription = new Subscription();
   samples: Sample[] = [];

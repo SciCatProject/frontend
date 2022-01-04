@@ -6,11 +6,11 @@ import { Sample } from "shared/sdk";
 import { Store } from "@ngrx/store";
 import {
   addSampleAction,
-  fetchSamplesAction
+  fetchSamplesAction,
 } from "state-management/actions/samples.actions";
 import {
-  getCurrentUser,
-  getProfile
+  selectCurrentUser,
+  selectProfile,
 } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
 
@@ -19,7 +19,7 @@ import * as shortid from "shortid";
 @Component({
   selector: "app-sample-dialog",
   templateUrl: "./sample-dialog.component.html",
-  styleUrls: ["./sample-dialog.component.scss"]
+  styleUrls: ["./sample-dialog.component.scss"],
 })
 export class SampleDialogComponent implements OnInit, OnDestroy {
   public form: FormGroup;
@@ -31,7 +31,7 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
 
   constructor(
-    private store: Store<any>,
+    private store: Store,
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<SampleDialogComponent>,
     @Inject(MAT_DIALOG_DATA)
@@ -42,7 +42,7 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       description: [description, Validators.required],
       sampleCharacteristics: [sampleCharacteristics],
-      ownerGroup: [ownerGroup, Validators.required]
+      ownerGroup: [ownerGroup, Validators.required],
     });
   }
 
@@ -51,14 +51,14 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
     console.log("gmnov", this.form.value);
     this.sample = new Sample();
     this.sample.sampleCharacteristics = {
-      characteristics: this.form.value.sampleCharacteristics
+      characteristics: this.form.value.sampleCharacteristics,
     };
     try {
       const parsed = JSON.parse(this.form.value.sampleCharacteristics);
       this.sample.sampleCharacteristics = parsed;
     } catch (e) {
       this.sample.sampleCharacteristics = {
-        characteristics: this.form.value.sampleCharacteristics
+        characteristics: this.form.value.sampleCharacteristics,
       };
     }
     if (!this.sample.sampleCharacteristics) {
@@ -80,7 +80,7 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.select((getCurrentUser)).subscribe(user => {
+      this.store.select(selectCurrentUser).subscribe((user) => {
         if (user) {
           this.username = user.username;
         }
@@ -88,7 +88,7 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.select((getProfile)).subscribe(profile => {
+      this.store.select(selectProfile).subscribe((profile) => {
         if (profile) {
           this.userGroups = profile.accessGroups;
         }
@@ -97,6 +97,6 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }
