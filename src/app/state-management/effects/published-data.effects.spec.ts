@@ -8,7 +8,7 @@ import {
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";
-import { getQueryParams } from "state-management/selectors/published-data.selectors";
+import { selectQueryParams } from "state-management/selectors/published-data.selectors";
 import * as fromActions from "state-management/actions/published-data.actions";
 import { hot, cold } from "jasmine-marbles";
 import { MessageType } from "state-management/models";
@@ -44,7 +44,7 @@ describe("PublishedDataEffects", () => {
         PublishedDataEffects,
         provideMockActions(() => actions),
         provideMockStore({
-          selectors: [{ selector: getQueryParams, value: {} }],
+          selectors: [{ selector: selectQueryParams, value: {} }],
         }),
         {
           provide: PublishedDataApi,

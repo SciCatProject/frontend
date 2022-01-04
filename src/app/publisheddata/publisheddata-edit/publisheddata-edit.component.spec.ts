@@ -15,8 +15,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { of } from "rxjs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { provideMockStore } from "@ngrx/store/testing";
-import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
-import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
+import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
+import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatCardModule } from "@angular/material/card";
 import { MatChipInputEvent, MatChipsModule } from "@angular/material/chips";
@@ -54,8 +54,8 @@ describe("PublisheddataEditComponent", () => {
         providers: [
           provideMockStore({
             selectors: [
-              { selector: getDatasetsInBatch, value: [] },
-              { selector: getCurrentPublishedData, value: {} },
+              { selector: selectDatasetsInBatch, value: [] },
+              { selector: selectCurrentPublishedData, value: {} },
             ],
           }),
         ],

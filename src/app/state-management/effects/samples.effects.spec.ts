@@ -12,8 +12,8 @@ import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";
 import {
-  getFullqueryParams,
-  getDatasetsQueryParams,
+  selectFullqueryParams,
+  selectDatasetsQueryParams,
 } from "state-management/selectors/samples.selectors";
 import * as fromActions from "state-management/actions/samples.actions";
 import { hot, cold } from "jasmine-marbles";
@@ -43,10 +43,10 @@ describe("SampleEffects", () => {
         provideMockStore({
           selectors: [
             {
-              selector: getFullqueryParams,
+              selector: selectFullqueryParams,
               value: { query: JSON.stringify({ text: "" }) },
             },
-            { selector: getDatasetsQueryParams, value: {} },
+            { selector: selectDatasetsQueryParams, value: {} },
           ],
         }),
         {

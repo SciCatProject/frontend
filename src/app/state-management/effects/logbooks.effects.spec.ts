@@ -10,7 +10,7 @@ import {
   loadingCompleteAction,
 } from "state-management/actions/user.actions";
 import { provideMockStore } from "@ngrx/store/testing";
-import { getFilters } from "state-management/selectors/logbooks.selectors";
+import { selectFilters } from "state-management/selectors/logbooks.selectors";
 import { Type } from "@angular/core";
 
 const logbook: Logbook = {
@@ -32,7 +32,7 @@ describe("LogbookEffects", () => {
         provideMockStore({
           selectors: [
             {
-              selector: getFilters,
+              selector: selectFilters,
               value: {
                 textSearch: "",
                 showBotMessages: true,
