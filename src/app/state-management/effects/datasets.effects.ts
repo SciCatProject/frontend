@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { DatasetApi, Dataset, LoopBackFilter } from "shared/sdk";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
-  getFullqueryParams,
-  getFullfacetParams,
-  getDatasetsInBatch,
+  selectFullqueryParams,
+  selectFullfacetParams,
+  selectDatasetsInBatch,
 } from "state-management/selectors/datasets.selectors";
 import * as fromActions from "state-management/actions/datasets.actions";
 import {
@@ -18,7 +18,7 @@ import {
   filter,
 } from "rxjs/operators";
 import { of } from "rxjs";
-import { getCurrentUser } from "state-management/selectors/user.selectors";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import {
   logoutCompleteAction,
   loadingAction,
@@ -29,10 +29,10 @@ import {
 
 @Injectable()
 export class DatasetEffects {
-  fullqueryParams$ = this.store.pipe(select(getFullqueryParams));
-  fullfacetParams$ = this.store.pipe(select(getFullfacetParams));
-  datasetsInBatch$ = this.store.pipe(select(getDatasetsInBatch));
-  currentUser$ = this.store.pipe(select(getCurrentUser));
+  fullqueryParams$ = this.store.select(selectFullqueryParams);
+  fullfacetParams$ = this.store.select(selectFullfacetParams);
+  datasetsInBatch$ = this.store.select(selectDatasetsInBatch);
+  currentUser$ = this.store.select(selectCurrentUser);
 
   fetchDatasets$ = createEffect(() => {
     return this.actions$.pipe(
@@ -350,7 +350,7 @@ export class DatasetEffects {
   constructor(
     private actions$: Actions,
     private datasetApi: DatasetApi,
-    private store: Store<any>
+    private store: Store
   ) {}
 
   private storeBatch(batch: Dataset[], userId: string) {

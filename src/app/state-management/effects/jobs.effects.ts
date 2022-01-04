@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { JobApi, Job } from "shared/sdk";
-import { Store, select } from "@ngrx/store";
-import { getQueryParams } from "state-management/selectors/jobs.selectors";
+import { Store } from "@ngrx/store";
+import { selectQueryParams } from "state-management/selectors/jobs.selectors";
 import * as fromActions from "state-management/actions/jobs.actions";
 import { withLatestFrom, map, switchMap, catchError } from "rxjs/operators";
 import { of } from "rxjs";
@@ -16,7 +16,7 @@ import {
 
 @Injectable()
 export class JobEffects {
-  private queryParams$ = this.store.pipe(select(getQueryParams));
+  private queryParams$ = this.store.select(selectQueryParams);
 
   fetchJobs$ = createEffect(() => {
     return this.actions$.pipe(
@@ -147,6 +147,6 @@ export class JobEffects {
   constructor(
     private actions$: Actions,
     private jobApi: JobApi,
-    private store: Store<Job>
+    private store: Store
   ) {}
 }

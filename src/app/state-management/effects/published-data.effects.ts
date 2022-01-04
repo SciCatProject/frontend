@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { PublishedDataApi, PublishedData } from "shared/sdk";
-import { Store, select } from "@ngrx/store";
-import { getQueryParams } from "state-management/selectors/published-data.selectors";
+import { Store } from "@ngrx/store";
+import { selectQueryParams } from "state-management/selectors/published-data.selectors";
 import * as fromActions from "state-management/actions/published-data.actions";
 import {
   withLatestFrom,
@@ -21,7 +21,7 @@ import {
 
 @Injectable()
 export class PublishedDataEffects {
-  private queryParams$ = this.store.pipe(select(getQueryParams));
+  private queryParams$ = this.store.select(selectQueryParams);
 
   fetchAllPublishedData$ = createEffect(() => {
     return this.actions$.pipe(
@@ -196,6 +196,6 @@ export class PublishedDataEffects {
   constructor(
     private actions$: Actions,
     private publishedDataApi: PublishedDataApi,
-    private store: Store<PublishedData>
+    private store: Store
   ) {}
 }

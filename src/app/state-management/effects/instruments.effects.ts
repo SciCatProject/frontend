@@ -10,8 +10,8 @@ import {
   withLatestFrom,
 } from "rxjs/operators";
 import { of } from "rxjs";
-import { Store, select } from "@ngrx/store";
-import { getFilters } from "state-management/selectors/instruments.selectors";
+import { Store } from "@ngrx/store";
+import { selectFilters } from "state-management/selectors/instruments.selectors";
 import {
   loadingAction,
   loadingCompleteAction,
@@ -19,7 +19,7 @@ import {
 
 @Injectable()
 export class InstrumentEffects {
-  filters$ = this.store.pipe(select(getFilters));
+  filters$ = this.store.select(selectFilters);
 
   fetchInstruments$ = createEffect(() => {
     return this.actions$.pipe(
@@ -117,6 +117,6 @@ export class InstrumentEffects {
   constructor(
     private actions$: Actions,
     private instrumentApi: InstrumentApi,
-    private store: Store<Instrument>
+    private store: Store
   ) {}
 }

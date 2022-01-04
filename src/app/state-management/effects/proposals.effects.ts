@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { DatasetApi, ProposalApi, Proposal, Dataset } from "shared/sdk";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import * as fromActions from "state-management/actions/proposals.actions";
 import {
-  getFullqueryParams,
-  getDatasetsQueryParams,
+  selectFullqueryParams,
+  selectDatasetsQueryParams,
 } from "state-management/selectors/proposals.selectors";
 import {
   withLatestFrom,
@@ -22,8 +22,8 @@ import {
 
 @Injectable()
 export class ProposalEffects {
-  fullqueryParams$ = this.store.pipe(select(getFullqueryParams));
-  datasetQueryParams$ = this.store.pipe(select(getDatasetsQueryParams));
+  fullqueryParams$ = this.store.select(selectFullqueryParams);
+  datasetQueryParams$ = this.store.select(selectDatasetsQueryParams);
 
   fetchProposals$ = createEffect(() => {
     return this.actions$.pipe(
@@ -228,6 +228,6 @@ export class ProposalEffects {
     private actions$: Actions,
     private datasetApi: DatasetApi,
     private proposalApi: ProposalApi,
-    private store: Store<any>
+    private store: Store
   ) {}
 }

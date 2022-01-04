@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { DatasetApi, SampleApi, Sample, Dataset } from "shared/sdk";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
-  getFullqueryParams,
-  getDatasetsQueryParams,
+  selectFullqueryParams,
+  selectDatasetsQueryParams,
 } from "state-management/selectors/samples.selectors";
 import * as fromActions from "state-management/actions/samples.actions";
 import {
@@ -22,10 +22,8 @@ import {
 
 @Injectable()
 export class SampleEffects {
-  private fullqueryParams$ = this.store.pipe(select(getFullqueryParams));
-  private datasetsQueryParams$ = this.store.pipe(
-    select(getDatasetsQueryParams)
-  );
+  private fullqueryParams$ = this.store.select(selectFullqueryParams);
+  private datasetsQueryParams$ = this.store.select(selectDatasetsQueryParams);
 
   fetchSamples$ = createEffect(() => {
     return this.actions$.pipe(
@@ -292,6 +290,6 @@ export class SampleEffects {
     private actions$: Actions,
     private datasetApi: DatasetApi,
     private sampleApi: SampleApi,
-    private store: Store<any>
+    private store: Store
   ) {}
 }

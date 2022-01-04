@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { PolicyApi, Policy } from "shared/sdk";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
-  getQueryParams,
-  getEditableQueryParams,
+  selectQueryParams,
+  selectEditableQueryParams,
 } from "state-management/selectors/policies.selectors";
 import * as fromActions from "state-management/actions/policies.actions";
 import {
@@ -15,7 +15,7 @@ import {
   mergeMap,
 } from "rxjs/operators";
 import { of } from "rxjs";
-import { getProfile } from "state-management/selectors/user.selectors";
+import { selectProfile } from "state-management/selectors/user.selectors";
 import {
   loadingAction,
   loadingCompleteAction,
@@ -23,11 +23,9 @@ import {
 
 @Injectable()
 export class PolicyEffects {
-  private queryParams$ = this.store.pipe(select(getQueryParams));
-  private editableQueryParams$ = this.store.pipe(
-    select(getEditableQueryParams)
-  );
-  private userProfile$ = this.store.pipe(select(getProfile));
+  private queryParams$ = this.store.select(selectQueryParams);
+  private editableQueryParams$ = this.store.select(selectEditableQueryParams);
+  private userProfile$ = this.store.select(selectProfile);
 
   fetchPolicies$ = createEffect(() => {
     return this.actions$.pipe(
@@ -163,6 +161,6 @@ export class PolicyEffects {
   constructor(
     private actions$: Actions,
     private policyApi: PolicyApi,
-    private store: Store<Policy>
+    private store: Store
   ) {}
 }

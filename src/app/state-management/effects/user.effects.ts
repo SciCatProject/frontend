@@ -24,10 +24,10 @@ import {
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
-  getColumns,
-  getCurrentUser,
+  selectColumns,
+  selectCurrentUser,
 } from "state-management/selectors/user.selectors";
 import {
   clearDatasetsStateAction,
@@ -47,8 +47,8 @@ import { HttpErrorResponse } from "@angular/common/http";
 
 @Injectable()
 export class UserEffects {
-  user$ = this.store.pipe(select(getCurrentUser));
-  columns$ = this.store.pipe(select(getColumns));
+  user$ = this.store.select(selectCurrentUser);
+  columns$ = this.store.select(selectColumns);
 
   login$ = createEffect(() => {
     return this.actions$.pipe(
@@ -344,7 +344,7 @@ export class UserEffects {
     private activeDirAuthService: ADAuthService,
     private loopBackAuth: LoopBackAuth,
     private router: Router,
-    private store: Store<User>,
+    private store: Store,
     private userApi: UserApi,
     private userIdentityApi: UserIdentityApi
   ) {}

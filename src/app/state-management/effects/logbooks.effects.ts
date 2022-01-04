@@ -9,12 +9,12 @@ import {
   loadingAction,
   loadingCompleteAction,
 } from "state-management/actions/user.actions";
-import { Store, select } from "@ngrx/store";
-import { getFilters } from "state-management/selectors/logbooks.selectors";
+import { Store } from "@ngrx/store";
+import { selectFilters } from "state-management/selectors/logbooks.selectors";
 
 @Injectable()
 export class LogbookEffects {
-  filters$ = this.store.pipe(select(getFilters));
+  filters$ = this.store.select(selectFilters);
 
   fetchLogbooks$ = createEffect(() => {
     return this.actions$.pipe(
@@ -96,6 +96,6 @@ export class LogbookEffects {
   constructor(
     private actions$: Actions,
     private logbookApi: LogbookApi,
-    private store: Store<Logbook>
+    private store: Store
   ) {}
 }
