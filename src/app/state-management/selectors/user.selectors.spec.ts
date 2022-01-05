@@ -31,7 +31,7 @@ const userIdentity: UserIdentity = {
     displayName: "testName",
     email: "test@email.com",
     username: "testName",
-    thumbnailPhoto: "",
+    thumbnailPhoto: "data",
   },
 };
 
@@ -89,14 +89,6 @@ describe("User Selectors", () => {
     });
   });
 
-  describe("selectCurrentUserAccountType", () => {
-    it("should select accountType", () => {
-      expect(
-        fromSelectors.selectCurrentUserAccountType.projector(initialUserState)
-      ).toEqual("testType");
-    });
-  });
-
   describe("selectProfile", () => {
     it("should select profile", () => {
       expect(fromSelectors.selectProfile.projector(initialUserState)).toEqual(
@@ -113,6 +105,14 @@ describe("User Selectors", () => {
           initialUserState.currentUser
         )
       ).toEqual("testName");
+    });
+  });
+
+  describe("selectThumbnailPhoto", () => {
+    it("should return a thumbnail photo string if it exists", () => {
+      expect(
+        fromSelectors.selectThumbnailPhoto.projector(initialUserState.profile)
+      ).toEqual("data");
     });
   });
 

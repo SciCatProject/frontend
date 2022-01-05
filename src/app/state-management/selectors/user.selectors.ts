@@ -12,11 +12,6 @@ export const selectCurrentUserId = createSelector(selectCurrentUser, (user) =>
   user ? user.id : ""
 );
 
-export const selectCurrentUserAccountType = createSelector(
-  selectUserState,
-  (state) => state.accountType
-);
-
 export const selectProfile = createSelector(
   selectUserState,
   (state) => state.profile
@@ -27,20 +22,30 @@ export const selectCurrentUserName = createSelector(
   selectCurrentUser,
   (profile, user) => {
     if (profile) {
-      return profile.username;
+      return profile.username.replace("ms-ad.", "");
     } else if (user) {
-      return user.username;
+      return user.username.replace("ms-ad.", "");
     } else {
       return null;
     }
   }
 );
 
+export const selectThumbnailPhoto = createSelector(selectProfile, (profile) => {
+  if (
+    profile &&
+    profile.thumbnailPhoto &&
+    profile.thumbnailPhoto.startsWith("data")
+  ) {
+    return profile.thumbnailPhoto;
+  }
+
+  return "assets/images/user.png";
+});
+
 export const selectIsAdmin = createSelector(
   selectCurrentUserName,
-  selectCurrentUserAccountType,
-  (name, type) =>
-    name && ["admin", "archiveManager", "ingestor"].indexOf(name) !== -1
+  (name) => name && ["admin", "archiveManager", "ingestor"].indexOf(name) !== -1
 );
 
 export const selectCatamelToken = createSelector(

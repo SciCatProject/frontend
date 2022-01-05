@@ -216,6 +216,23 @@ export const selectDatasetsInBatch = createSelector(
   (state) => state.batch
 );
 
+export const selectDatasetsInBatchIndicator = createSelector(
+  selectDatasetsInBatch,
+  (datasets) => {
+    const inBatchCount = datasets.length;
+
+    if (inBatchCount === 0) {
+      return null;
+    }
+
+    if (inBatchCount > 99) {
+      return "99+";
+    }
+
+    return String(inBatchCount);
+  }
+);
+
 export const selectOpenwhiskResult = createSelector(
   selectDatasetState,
   (state) => state.openwhiskResult

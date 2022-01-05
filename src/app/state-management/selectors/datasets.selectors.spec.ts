@@ -344,6 +344,30 @@ describe("test dataset selectors", () => {
     });
   });
 
+  describe("selectDatasetsInBatchIndicator", () => {
+    it("should return null if there are zero datasets in batch", () => {
+      expect(
+        fromDatasetSelectors.selectDatasetsInBatchIndicator.projector([])
+      ).toBeNull();
+    });
+
+    it("should return the string '99+' if there are more than 99 datasets in batch", () => {
+      expect(
+        fromDatasetSelectors.selectDatasetsInBatchIndicator.projector(
+          new Array(100)
+        )
+      ).toEqual("99+");
+    });
+
+    it("should return the stringified array length if the length is between 0 and 100", () => {
+      expect(
+        fromDatasetSelectors.selectDatasetsInBatchIndicator.projector(
+          new Array(5)
+        )
+      ).toEqual("5");
+    });
+  });
+
   describe("selectOpenwhiskResults", () => {
     it("should return the current openwhisk result", () => {
       expect(
