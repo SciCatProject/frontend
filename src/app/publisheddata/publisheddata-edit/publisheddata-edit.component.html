@@ -3,7 +3,11 @@
     <mat-card>
       <p>You are editing Published Data record.</p>
 
-      <form>
+      <form
+        *ngIf="publishedData$ | async"
+        [formGroup]="form"
+        (ngSubmit)="onUpdate()"
+      >
         <mat-form-field>
           <input
             id="titleInput"
@@ -11,7 +15,7 @@
             matInput
             placeholder="Title"
             autocomplete="off"
-            [(ngModel)]="form.title"
+            formControlName="title"
             name="title"
           />
         </mat-form-field>
@@ -19,10 +23,11 @@
         <mat-form-field>
           <mat-chip-list required #chipList>
             <mat-chip
-              *ngFor="let name of form.creator"
-              (removed)="removeCreator(name)"
+              formArrayName="creator"
+              *ngFor="let item of creator.value; let i = index"
+              (removed)="removeCreator(i)"
             >
-              {{ name }}
+              {{ item }}
               <mat-icon matChipRemove>cancel</mat-icon>
             </mat-chip>
             <input
@@ -42,7 +47,7 @@
             matInput
             placeholder="Publisher"
             autocomplete="off"
-            [(ngModel)]="form.publisher"
+            formControlName="publisher"
             name="publisher"
           />
         </mat-form-field>
@@ -53,14 +58,10 @@
             matInput
             placeholder="Resource Type"
             name="resourceType"
-            [(ngModel)]="form.resourceType"
+            formControlName="resourceType"
           >
-            <mat-option value="raw">
-              raw
-            </mat-option>
-            <mat-option value="derived">
-              derived
-            </mat-option>
+            <mat-option value="raw"> raw </mat-option>
+            <mat-option value="derived"> derived </mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -70,7 +71,7 @@
             matInput
             placeholder="Description"
             autocomplete="off"
-            [(ngModel)]="form.dataDescription"
+            formControlName="dataDescription"
             name="Description"
             rows="5"
           ></textarea>
@@ -83,7 +84,7 @@
             matInput
             placeholder="Abstract"
             autocomplete="off"
-            [(ngModel)]="form.abstract"
+            formControlName="abstract"
             name="abstract"
             rows="5"
           ></textarea>
@@ -94,7 +95,7 @@
             matInput
             placeholder="download link"
             autocomplete="off"
-            [(ngModel)]="form.downloadLink"
+            formControlName="downloadLink"
             name="downloadLink"
           />
         </mat-form-field>
@@ -102,10 +103,11 @@
         <mat-form-field>
           <mat-chip-list #chipListRelatedPub>
             <mat-chip
-              *ngFor="let relatedPublication of form.relatedPublications"
-              (removed)="removeRelatedPublication(relatedPublication)"
+              formArrayName="relatedPublications"
+              *ngFor="let item of relatedPublications.value; let i = index"
+              (removed)="removeRelatedPublication(i)"
             >
-              {{ relatedPublication }}
+              {{ item }}
               <mat-icon matChipRemove>cancel</mat-icon>
             </mat-chip>
             <input
@@ -119,19 +121,10 @@
           </mat-chip-list>
         </mat-form-field>
 
-        <button
-          (click)="onUpdate()"
-          mat-raised-button
-          color="primary"
-          [disabled]="!formIsValid()"
-        >
+        <button mat-raised-button color="primary" [disabled]="!form.valid">
           Update Published Data
         </button>
-        <button
-          (click)="onCancel()"
-          mat-raised-button
-          color="white"
-        >
+        <button (click)="onCancel()" mat-raised-button color="white">
           Cancel
         </button>
       </form>
@@ -140,13 +133,13 @@
   <div fxFlex="30">
     <div class="file-uploader">
       <app-file-uploader
-        [attachments]="attachment"
+        [attachments]="attachments"
         (filePicked)="onFileUploaderFilePicked($event)"
         (deleteAttachment)="deleteAttachment($event)"
       ></app-file-uploader>
     </div>
-    <mat-card *ngIf="form.thumbnail">
-      <img mat-card-image src="{{ form.thumbnail }}" />
+    <mat-card *ngIf="thumbnail">
+      <img mat-card-image src="{{ thumbnail.value }}" />
     </mat-card>
   </div>
 </div>

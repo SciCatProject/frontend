@@ -18,6 +18,8 @@ import {
   loadingCompleteAction,
 } from "state-management/actions/user.actions";
 import { Type } from "@angular/core";
+import { Router } from "@angular/router";
+import { MockRouter } from "shared/MockStubs";
 
 const data: PublishedDataInterface = {
   doi: "testDOI",
@@ -56,6 +58,7 @@ describe("PublishedDataEffects", () => {
             "register",
           ]),
         },
+        { provide: Router, useClass: MockRouter },
       ],
     });
 

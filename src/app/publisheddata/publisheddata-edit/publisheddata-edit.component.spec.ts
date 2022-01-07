@@ -15,7 +15,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { of } from "rxjs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { provideMockStore } from "@ngrx/store/testing";
-import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatCardModule } from "@angular/material/card";
@@ -53,10 +52,7 @@ describe("PublisheddataEditComponent", () => {
         ],
         providers: [
           provideMockStore({
-            selectors: [
-              { selector: selectDatasetsInBatch, value: [] },
-              { selector: selectCurrentPublishedData, value: {} },
-            ],
+            selectors: [{ selector: selectCurrentPublishedData, value: {} }],
           }),
         ],
       });
@@ -89,57 +85,61 @@ describe("PublisheddataEditComponent", () => {
   describe("#addCreator()", () => {
     it("should push a creator to the creator property in the form", () => {
       const event = {
-        input: {
-          value: "",
+        chipInput: {
+          inputElement: {
+            value: "testCreator",
+          },
         },
         value: "testCreator",
       } as MatChipInputEvent;
       component.addCreator(event);
 
-      expect(component.form.creator).toContain(event.value);
+      expect(component.creator.value).toContain(event.value);
     });
   });
 
   describe("#removeCreator()", () => {
     it("should remove a creator from the creator property in the form", () => {
       const creator = "testCreator";
-      component.form.creator.push("firstCreator", creator);
+      component.creator.setValue([]);
+      component.creator.value.push("firstCreator", creator);
 
-      component.removeCreator(creator);
+      component.removeCreator(1);
 
-      expect(component.form.creator).not.toContain(creator);
+      expect(component.creator.value).not.toContain(creator);
     });
   });
 
-  describe("#formIsValid()", () => {
-    it("should return false if form is not valid", () => {
-      const isValid = component.formIsValid();
+  describe("#addRelatedPublication()", () => {
+    it("should push a related publication to the relatedPublications property in the form", () => {
+      const event = {
+        chipInput: {
+          inputElement: {
+            value: "testRelatedPublication",
+          },
+        },
+        value: "testRelatedPublication",
+      } as MatChipInputEvent;
+      component.addRelatedPublication(event);
 
-      expect(isValid).toEqual(false);
+      expect(component.relatedPublications.value).toContain(event.value);
     });
+  });
 
-    it("should return true if form has no undefined properties and their lengths > 0", () => {
-      component.form = {
-        doi: "abc123",
-        title: "testTitle",
-        creator: ["testCreator"],
-        publisher: "testPublisher",
-        resourceType: "testType",
-        abstract: "testAbstract",
-        publicationYear: 2019,
-        url: "testUrl",
-        dataDescription: "testDataDescription",
-        thumbnail: "testThumbnail",
-        relatedPublications: ["testpub"],
-        downloadLink: "link",
-        pidArray: ["abc123"],
-        numberOfFiles: undefined,
-        sizeOfArchive: undefined,
-      };
+  describe("#removeRelatedPublication()", () => {
+    it("should remove a related publication from the relatedPublications property in the form", () => {
+      const relatedPublication = "testRelatedPublication";
+      component.creator.setValue([]);
+      component.creator.value.push(
+        "firstRelatedPublication",
+        relatedPublication
+      );
 
-      const isValid = component.formIsValid();
+      component.removeRelatedPublication(1);
 
-      expect(isValid).toEqual(true);
+      expect(component.relatedPublications.value).not.toContain(
+        relatedPublication
+      );
     });
   });
 });

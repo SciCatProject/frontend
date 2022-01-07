@@ -2,9 +2,18 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
 import { PublishedDataApi, PublishedData } from "shared/sdk";
 import { Store } from "@ngrx/store";
-import { selectQueryParams } from "state-management/selectors/published-data.selectors";
+import {
+  selectCurrentPublishedData,
+  selectQueryParams,
+} from "state-management/selectors/published-data.selectors";
 import * as fromActions from "state-management/actions/published-data.actions";
-import { mergeMap, map, catchError, switchMap } from "rxjs/operators";
+import {
+  mergeMap,
+  map,
+  catchError,
+  switchMap,
+  exhaustMap,
+} from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
 import {
@@ -12,6 +21,7 @@ import {
   loadingAction,
   loadingCompleteAction,
 } from "state-management/actions/user.actions";
+import { Router } from "@angular/router";
 
 @Injectable()
 export class PublishedDataEffects {
@@ -65,6 +75,21 @@ export class PublishedDataEffects {
       )
     );
   });
+
+  navigateToResyncedPublishedData$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(fromActions.resyncPublishedDataCompleteAction),
+        concatLatestFrom(() => this.store.select(selectCurrentPublishedData)),
+        exhaustMap(([_, publishedData]) =>
+          this.router.navigateByUrl(
+            "/publishedDatasets/" + encodeURIComponent(publishedData.doi)
+          )
+        )
+      );
+    },
+    { dispatch: false }
+  );
 
   publishDataset$ = createEffect(() => {
     return this.actions$.pipe(
@@ -190,6 +215,7 @@ export class PublishedDataEffects {
   constructor(
     private actions$: Actions,
     private publishedDataApi: PublishedDataApi,
+    private router: Router,
     private store: Store
   ) {}
 }
