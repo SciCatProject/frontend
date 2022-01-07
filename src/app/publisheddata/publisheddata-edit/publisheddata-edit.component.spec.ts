@@ -94,19 +94,19 @@ describe("PublisheddataEditComponent", () => {
       } as MatChipInputEvent;
       component.addCreator(event);
 
-      expect(component.creator.value).toContain(event.value);
+      expect(component.creator!.value).toContain(event.value);
     });
   });
 
   describe("#removeCreator()", () => {
     it("should remove a creator from the creator property in the form", () => {
       const creator = "testCreator";
-      component.creator.setValue([]);
-      component.creator.value.push("firstCreator", creator);
+      component.creator!.setValue([]);
+      component.creator!.value.push("firstCreator", creator);
 
       component.removeCreator(1);
 
-      expect(component.creator.value).not.toContain(creator);
+      expect(component.creator!.value).not.toContain(creator);
     });
   });
 
@@ -122,22 +122,22 @@ describe("PublisheddataEditComponent", () => {
       } as MatChipInputEvent;
       component.addRelatedPublication(event);
 
-      expect(component.relatedPublications.value).toContain(event.value);
+      expect(component.relatedPublications!.value).toContain(event.value);
     });
   });
 
   describe("#removeRelatedPublication()", () => {
     it("should remove a related publication from the relatedPublications property in the form", () => {
       const relatedPublication = "testRelatedPublication";
-      component.creator.setValue([]);
-      component.creator.value.push(
+      component.relatedPublications!.setValue([]);
+      component.relatedPublications!.value.push(
         "firstRelatedPublication",
         relatedPublication
       );
 
       component.removeRelatedPublication(1);
 
-      expect(component.relatedPublications.value).not.toContain(
+      expect(component.relatedPublications!.value).not.toContain(
         relatedPublication
       );
     });

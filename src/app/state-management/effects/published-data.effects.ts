@@ -13,6 +13,7 @@ import {
   catchError,
   switchMap,
   exhaustMap,
+  filter,
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
@@ -81,9 +82,10 @@ export class PublishedDataEffects {
       return this.actions$.pipe(
         ofType(fromActions.resyncPublishedDataCompleteAction),
         concatLatestFrom(() => this.store.select(selectCurrentPublishedData)),
+        filter(([_, publishedData]) => !!publishedData),
         exhaustMap(([_, publishedData]) =>
           this.router.navigateByUrl(
-            "/publishedDatasets/" + encodeURIComponent(publishedData.doi)
+            "/publishedDatasets/" + encodeURIComponent(publishedData!.doi)
           )
         )
       );
