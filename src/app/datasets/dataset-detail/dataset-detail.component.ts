@@ -8,7 +8,7 @@ import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component"
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { combineLatest, fromEvent, Observable, Subscription } from "rxjs";
 import { select, Store } from "@ngrx/store";
-import { getCurrentDataset } from "state-management/selectors/datasets.selectors";
+import { getCurrentAttachments, getCurrentDataset, getCurrentDatasetWithoutFileInfo } from "state-management/selectors/datasets.selectors";
 import { getCurrentUser, getIsAdmin, getProfile } from "state-management/selectors/user.selectors";
 import { map } from "rxjs/operators";
 import { addKeywordFilterAction, clearFacetsAction, updatePropertyAction } from "state-management/actions/datasets.actions";
@@ -44,8 +44,8 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
     map((profile) => (profile ? profile.accessGroups : []))
   );
   dataset: Dataset | undefined;
-  datasetWithout: Partial<Dataset> | null = null;
-  attachments: Attachment[] | null = null;
+  datasetWithout$ = this.store.pipe(select(getCurrentDatasetWithoutFileInfo));
+  attachments$ = this.store.pipe(select(getCurrentAttachments));
   proposal$ = this.store.pipe(select(getCurrentProposal));
   proposal: Proposal | undefined;
   sample: Sample | null = null;
