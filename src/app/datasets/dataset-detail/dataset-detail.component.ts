@@ -8,7 +8,11 @@ import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component"
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { combineLatest, fromEvent, Observable, Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
-import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
+import {
+  selectCurrentAttachments,
+  selectCurrentDataset,
+  selectCurrentDatasetWithoutFileInfo
+} from "state-management/selectors/datasets.selectors";
 import {
   selectCurrentUser,
   selectIsAdmin,
@@ -52,8 +56,8 @@ export class DatasetDetailComponent
     map((profile) => (profile ? profile.accessGroups : []))
   );
   dataset: Dataset | undefined;
-  datasetWithout: Partial<Dataset> | null = null;
-  attachments: Attachment[] | null = null;
+  datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
+  attachments$ = this.store.select(selectCurrentAttachments);
   proposal$ = this.store.select(selectCurrentProposal);
   proposal: Proposal | undefined;
   sample: Sample | null = null;
