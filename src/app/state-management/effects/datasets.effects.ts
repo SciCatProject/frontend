@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { DatasetApi, Dataset, LoopBackFilter } from "shared/sdk";
+import { DatasetApi, Dataset, LoopBackFilter, OrigDatablock, Attachment } from "shared/sdk";
 import { Store, select } from "@ngrx/store";
 import {
   getFullqueryParams,
@@ -123,11 +123,7 @@ export class DatasetEffects {
       ofType(fromActions.fetchDatasetAction),
       switchMap(({ pid, filters }) => {
         const datasetFilter: LoopBackFilter = {
-          where: { pid },
-          include: [
-            { relation: "datablocks" },
-            { relation: "attachments" },
-          ],
+          where: { pid }
         };
 
         if (filters) {
@@ -145,14 +141,14 @@ export class DatasetEffects {
       })
     )
   );
-  fetchOrigDatablocksOfDataset$ = createEffect(() =>
+  fetchDatablocksOfDataset$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromActions.fetchOrigDatablocksAction),
+      ofType(fromActions.fetchDatablocksAction),
       switchMap(({ pid, filters }) => {
         const datasetFilter: LoopBackFilter = {
           where: { pid },
           include: [
-            { relation: "origdatablocks" }
+            { relation: "datablocks" }
           ],
           fields: {
             pid: true,
@@ -168,9 +164,36 @@ export class DatasetEffects {
         }
         return this.datasetApi.findOne<Partial<Dataset>>(datasetFilter).pipe(
           map((dataset: Dataset) =>
-            fromActions.fetchOrigDatablocksCompleteAction({ origDatablocks: dataset.origdatablocks })
+            fromActions.fetchDatablocksCompleteAction({ datablocks: dataset.datablocks })
+          ),
+          catchError(() => of(fromActions.fetchDatablocksFailedAction()))
+        );
+      })
+    )
+  );
+
+  fetchOrigDatablocksOfDataset$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchOrigDatablocksAction),
+      switchMap(({ pid, filters }) => {
+        return this.datasetApi.findByIdOrigdatablocks(pid, filters).pipe(
+          map((origdatablocks: OrigDatablock[]) =>
+            fromActions.fetchOrigDatablocksCompleteAction({ origdatablocks })
           ),
           catchError(() => of(fromActions.fetchOrigDatablocksFailedAction()))
+        );
+      })
+    )
+  );
+  fetchAttachmentsOfDataset$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.fetchAttachmentsAction),
+      switchMap(({ pid, filters }) => {
+        return this.datasetApi.findByIdAttachments(pid, filters).pipe(
+          map((attachments: Attachment[]) =>
+            fromActions.fetchAttachmentsCompleteAction({ attachments })
+          ),
+          catchError(() => of(fromActions.fetchAttachmentsFailedAction()))
         );
       })
     )
@@ -305,6 +328,8 @@ export class DatasetEffects {
         fromActions.fetchMetadataKeysAction,
         fromActions.fetchDatasetAction,
         fromActions.fetchOrigDatablocksAction,
+        fromActions.fetchDatablocksAction,
+        fromActions.fetchAttachmentsAction,
         fromActions.addDatasetAction,
         fromActions.updatePropertyAction,
         fromActions.addAttachmentAction,
@@ -328,6 +353,12 @@ export class DatasetEffects {
         fromActions.fetchDatasetFailedAction,
         fromActions.fetchOrigDatablocksCompleteAction,
         fromActions.fetchOrigDatablocksFailedAction,
+        fromActions.fetchDatablocksCompleteAction,
+        fromActions.fetchDatablocksFailedAction,
+        fromActions.fetchOrigDatablocksCompleteAction,
+        fromActions.fetchOrigDatablocksFailedAction,
+        fromActions.fetchAttachmentsCompleteAction,
+        fromActions.fetchAttachmentsFailedAction,
         fromActions.addDatasetCompleteAction,
         fromActions.addDatasetFailedAction,
         fromActions.updatePropertyCompleteAction,

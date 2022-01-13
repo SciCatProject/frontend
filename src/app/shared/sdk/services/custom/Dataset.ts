@@ -562,11 +562,11 @@ export class DatasetApi extends BaseLoopBackApi {
   }
 
   /**
-   * Find a related item by id for origdatablocks.
+   * Queries origdatablocks of dataset
    *
    * @param {any} id Dataset id
    *
-   * @param {any} fk Foreign key for origdatablocks
+   * @param {any} filters filters
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -577,13 +577,13 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public findByIdOrigdatablocks(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public findByIdOrigdatablocks(id: any, filters?: any, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Datasets/:id/origdatablocks/:fk";
+    "/Datasets/:id/origdatablocks";
     let _routeParams: any = {
-      id: id,
-      fk: fk
+      id: encodeURIComponent(id),
+      filters
     };
     let _postBody: any = {};
     let _urlParams: any = {};
@@ -655,6 +655,36 @@ export class DatasetApi extends BaseLoopBackApi {
   }
 
   /**
+   * Queries attachments of dataset
+   *
+   * @param {any} id Dataset id
+   *
+   * @param {any} filter filters for attachments
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `Dataset` object.)
+   * </em>
+   */
+   public findByIdAttachments(id: any, filters: any, customHeaders?: Function): Observable<any> {
+    let _method: string = "GET";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/Datasets/:id/attachments";
+    let _routeParams: any = {
+      id: encodeURIComponent(id),
+      filters: filters
+    };
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
    * Find a related item by id for attachments.
    *
    * @param {any} id Dataset id
@@ -670,7 +700,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public findByIdAttachments(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public findByIdAttachmentsWithFK(id: any, fk: any, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/attachments/:fk";

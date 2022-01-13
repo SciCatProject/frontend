@@ -71,21 +71,6 @@ export class DatasetDetailComponent implements OnInit, OnDestroy, EditableCompon
                 groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
             }
           );
-          if ("proposalId" in this.dataset) {
-            this.store.dispatch(
-              fetchProposalAction({ proposalId: this.dataset["proposalId"] })
-            );
-            this.store.dispatch(
-              fetchLogbookAction({ name: this.dataset["proposalId"] })
-            );
-          } else {
-            this.store.dispatch(clearLogbookAction());
-          }
-          if ("sampleId" in this.dataset) {
-            this.store.dispatch(
-              fetchSampleAction({ sampleId: this.dataset["sampleId"] })
-            );
-          }
         }
       })
     );

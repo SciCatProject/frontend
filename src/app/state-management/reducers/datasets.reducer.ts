@@ -32,12 +32,30 @@ const reducer = createReducer(
     currentSet: dataset,
   })),
 
-  on(fromActions.fetchOrigDatablocksCompleteAction, (state, { origDatablocks }) =>{
+  on(fromActions.fetchDatablocksCompleteAction, (state, { datablocks }) =>{
     return {
     ...state,
     currentSet: {
       ...state.currentSet,
-      origdatablocks: origDatablocks
+      datablocks
+    }}
+  }),
+
+  on(fromActions.fetchOrigDatablocksCompleteAction, (state, { origdatablocks }) =>{
+    return {
+    ...state,
+    currentSet: {
+      ...state.currentSet,
+      origdatablocks
+    }}
+  }),
+
+  on(fromActions.fetchAttachmentsCompleteAction, (state, { attachments }) =>{
+    return {
+    ...state,
+    currentSet: {
+      ...state.currentSet,
+      attachments
     }}
   }),
 

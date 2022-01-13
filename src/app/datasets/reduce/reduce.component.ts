@@ -103,7 +103,6 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.dispatch(fetchDatasetsAction());
     this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
       this.dataset = dataset;
     });

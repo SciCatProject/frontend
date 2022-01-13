@@ -25,7 +25,6 @@ import { ActivatedRoute } from "@angular/router";
 import { UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
-import { fetchOrigDatablocksAction } from "state-management/actions/datasets.actions";
 
 export interface File {
   path: string;
@@ -99,7 +98,6 @@ export class DatafilesComponent
   tableData: File[] = [];
 
   constructor(
-    private route: ActivatedRoute,
     private store: Store<Dataset>,
     private cdRef: ChangeDetectorRef,
     private userApi: UserApi,
@@ -190,11 +188,6 @@ export class DatafilesComponent
         this.jwt = jwt;
       })
     );
-    this.route.parent.params.subscribe((params) => {
-      if (params.id) {
-        this.store.dispatch(fetchOrigDatablocksAction({ pid: params.id }));
-      }
-    }).unsubscribe();
   }
 
   ngAfterViewInit() {

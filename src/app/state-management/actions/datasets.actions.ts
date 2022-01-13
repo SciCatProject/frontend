@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Dataset, Attachment, DerivedDataset, OrigDatablock } from "shared/sdk";
+import { Dataset, Attachment, DerivedDataset, OrigDatablock, Datablock } from "shared/sdk";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
@@ -51,16 +51,39 @@ export const fetchDatasetCompleteAction = createAction(
 export const fetchDatasetFailedAction = createAction(
   "[Dataset] Fetch Dataset Failed"
 );
+export const fetchDatablocksAction = createAction(
+  "[Dataset] Fetch Origin Datablocks",
+  props<{ pid: string; filters?: any }>()
+);
+export const fetchDatablocksCompleteAction = createAction(
+  "[Dataset] Fetch Origin Datablocks Complete",
+  props<{ datablocks: Datablock[] }>()
+);
+export const fetchDatablocksFailedAction = createAction(
+  "[Dataset] Fetch Origin Datablocks Failed"
+);
+
 export const fetchOrigDatablocksAction = createAction(
   "[Dataset] Fetch Origin Datablocks",
   props<{ pid: string; filters?: any }>()
 );
 export const fetchOrigDatablocksCompleteAction = createAction(
   "[Dataset] Fetch Origin Datablocks Complete",
-  props<{ origDatablocks: OrigDatablock[] }>()
+  props<{ origdatablocks: OrigDatablock[] }>()
 );
 export const fetchOrigDatablocksFailedAction = createAction(
   "[Dataset] Fetch Origin Datablocks Failed"
+);
+export const fetchAttachmentsAction = createAction(
+  "[Dataset] Fetch Attachments",
+  props<{ pid: string; filters?: any }>()
+);
+export const fetchAttachmentsCompleteAction = createAction(
+  "[Dataset] Fetch Attachments Complete",
+  props<{ attachments: Attachment[] }>()
+);
+export const fetchAttachmentsFailedAction = createAction(
+  "[Dataset] Fetch Attachments Failed"
 );
 
 export const prefillBatchAction = createAction("[Dataset] Prefill Batch");
