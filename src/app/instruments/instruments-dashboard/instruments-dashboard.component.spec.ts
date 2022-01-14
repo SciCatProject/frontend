@@ -10,10 +10,10 @@ import { MockStore } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { provideMockStore } from "@ngrx/store/testing";
 import {
-  getInstruments,
-  getPage,
-  getInstrumentsCount,
-  getInstrumentsPerPage,
+  selectInstruments,
+  selectPage,
+  selectInstrumentsCount,
+  selectInstrumentsPerPage,
 } from "state-management/selectors/instruments.selectors";
 import { Store } from "@ngrx/store";
 import { SharedCatanieModule } from "shared/shared.module";
@@ -50,10 +50,10 @@ describe("InstrumentsDashboardComponent", () => {
           JsonHeadPipe,
           provideMockStore({
             selectors: [
-              { selector: getInstruments, value: [] },
-              { selector: getPage, value: 0 },
-              { selector: getInstrumentsCount, value: 100 },
-              { selector: getInstrumentsPerPage, value: 25 },
+              { selector: selectInstruments, value: [] },
+              { selector: selectPage, value: 0 },
+              { selector: selectInstrumentsCount, value: 100 },
+              { selector: selectInstrumentsPerPage, value: 25 },
             ],
           }),
         ],

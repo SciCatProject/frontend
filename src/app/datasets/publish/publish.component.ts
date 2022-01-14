@@ -1,10 +1,10 @@
 import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 
-import { select, Store, ActionsSubject } from "@ngrx/store";
+import { Store, ActionsSubject } from "@ngrx/store";
 import { first, tap } from "rxjs/operators";
 
-import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
+import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { prefillBatchAction } from "state-management/actions/datasets.actions";
 import {
   publishDatasetAction,
@@ -16,9 +16,9 @@ import { PublishedDataApi } from "shared/sdk/services/custom";
 import { PublishedData } from "shared/sdk/models";
 import { formatDate } from "@angular/common";
 import { Router } from "@angular/router";
-import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
+import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { Subscription } from "rxjs";
-import { getCurrentUserName } from "state-management/selectors/user.selectors";
+import { selectCurrentUserName } from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "publish",
@@ -26,8 +26,8 @@ import { getCurrentUserName } from "state-management/selectors/user.selectors";
   styleUrls: ["./publish.component.scss"],
 })
 export class PublishComponent implements OnInit, OnDestroy {
-  private datasets$ = this.store.pipe(select(getDatasetsInBatch));
-  private userName$ = this.store.pipe(select(getCurrentUserName));
+  private datasets$ = this.store.select(selectDatasetsInBatch);
+  private userName$ = this.store.select(selectCurrentUserName);
   private countSubscription: Subscription;
 
   public separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -56,7 +56,7 @@ export class PublishComponent implements OnInit, OnDestroy {
   actionSubjectSubscription: Subscription;
 
   constructor(
-    private store: Store<any>,
+    private store: Store,
     @Inject(APP_CONFIG) private appConfig,
     private publishedDataApi: PublishedDataApi,
     private actionsSubj: ActionsSubject,
@@ -157,7 +157,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     this.actionSubjectSubscription = this.actionsSubj.subscribe((data) => {
       if (data.type === fetchPublishedDataCompleteAction.type) {
         this.store
-          .pipe(select(getCurrentPublishedData))
+          .select(selectCurrentPublishedData)
           .subscribe((publishedData) => {
             const doi = encodeURIComponent(publishedData.doi);
             this.router.navigateByUrl("/publishedDatasets/" + doi);

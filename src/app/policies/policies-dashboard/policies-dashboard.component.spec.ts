@@ -34,8 +34,8 @@ import { GenericFilters } from "state-management/models";
 import { RouterTestingModule } from "@angular/router/testing";
 import { provideMockStore } from "@ngrx/store/testing";
 import {
-  getFilters,
-  getEditableFilters,
+  selectFilters,
+  selectEditableFilters,
 } from "state-management/selectors/policies.selectors";
 import {
   MatTabChangeEvent,
@@ -76,8 +76,8 @@ describe("PoliciesDashboardComponent", () => {
         providers: [
           provideMockStore({
             selectors: [
-              { selector: getFilters, value: {} },
-              { selector: getEditableFilters, value: {} },
+              { selector: selectFilters, value: {} },
+              { selector: selectEditableFilters, value: {} },
             ],
           }),
         ],

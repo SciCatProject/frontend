@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { select, Store } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 
 import { fetchLogbooksAction } from "state-management/actions/logbooks.actions";
-import { getLogbooks } from "state-management/selectors/logbooks.selectors";
+import { selectLogbooks } from "state-management/selectors/logbooks.selectors";
 import { Logbook } from "state-management/models";
 import { Subscription } from "rxjs";
 
@@ -13,14 +13,14 @@ import { Subscription } from "rxjs";
   styleUrls: ["./logbooks-table.component.scss"],
 })
 export class LogbooksTableComponent implements OnInit, OnDestroy {
-  logbooks$ = this.store.pipe(select(getLogbooks));
+  logbooks$ = this.store.select(selectLogbooks);
 
   logbooksSubscription: Subscription = new Subscription();
   logbooks: Logbook[] = [];
 
   columnsToDisplay: string[] = ["name", "latestEntry", "sender", "entry"];
 
-  constructor(private router: Router, private store: Store<Logbook>) {}
+  constructor(private router: Router, private store: Store) {}
 
   onClick(logbook: Logbook): void {
     this.router.navigateByUrl("/logbooks/" + logbook.name);

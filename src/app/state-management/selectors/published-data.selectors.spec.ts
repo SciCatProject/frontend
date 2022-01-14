@@ -20,7 +20,7 @@ const publishedData = new PublishedData(data);
 const filters: GenericFilters = {
   sortField: "publicationYear desc",
   skip: 0,
-  limit: 25
+  limit: 25,
 };
 
 const initialPublishedDataState: PublishedDataState = {
@@ -29,71 +29,75 @@ const initialPublishedDataState: PublishedDataState = {
 
   totalCount: 0,
 
-  filters
+  filters,
 };
 
 describe("Published Data Selectors", () => {
-  describe("getAllPublishedData", () => {
-    it("should get publishedData", () => {
+  describe("selectAllPublishedData", () => {
+    it("should select publishedData", () => {
       expect(
-        fromSelectors.getAllPublishedData.projector(initialPublishedDataState)
+        fromSelectors.selectAllPublishedData.projector(
+          initialPublishedDataState
+        )
       ).toEqual([]);
     });
   });
 
-  describe("getCurrentPublishedData", () => {
-    it("should get currentPublishedData", () => {
+  describe("selectCurrentPublishedData", () => {
+    it("should select currentPublishedData", () => {
       expect(
-        fromSelectors.getCurrentPublishedData.projector(
+        fromSelectors.selectCurrentPublishedData.projector(
           initialPublishedDataState
         )
       ).toEqual(publishedData);
     });
   });
 
-  describe("getPublishedDataCount", () => {
-    it("should get totalCount", () => {
+  describe("selectPublishedDataCount", () => {
+    it("should select totalCount", () => {
       expect(
-        fromSelectors.getPublishedDataCount.projector(initialPublishedDataState)
+        fromSelectors.selectPublishedDataCount.projector(
+          initialPublishedDataState
+        )
       ).toEqual(0);
     });
   });
 
-  describe("getFilters", () => {
-    it("should get filters", () => {
+  describe("selectFilters", () => {
+    it("should select filters", () => {
       expect(
-        fromSelectors.getFilters.projector(initialPublishedDataState)
+        fromSelectors.selectFilters.projector(initialPublishedDataState)
       ).toEqual(filters);
     });
   });
 
-  describe("getPage", () => {
-    it("should get current page from filters", () => {
+  describe("selectPage", () => {
+    it("should select current page from filters", () => {
       const { skip, limit } = filters;
       const page = skip / limit;
       expect(
-        fromSelectors.getPage.projector(initialPublishedDataState.filters)
+        fromSelectors.selectPage.projector(initialPublishedDataState.filters)
       ).toEqual(page);
     });
   });
 
-  describe("getPublishedDataPerPage", () => {
-    it("should get limit from filters", () => {
+  describe("selectPublishedDataPerPage", () => {
+    it("should select limit from filters", () => {
       const { limit } = filters;
       expect(
-        fromSelectors.getPublishedDataPerPage.projector(
+        fromSelectors.selectPublishedDataPerPage.projector(
           initialPublishedDataState.filters
         )
       ).toEqual(limit);
     });
   });
 
-  describe("getQueryParams", () => {
-    it("should get query params from filters", () => {
+  describe("selectQueryParams", () => {
+    it("should select query params from filters", () => {
       const { sortField, skip, limit } = filters;
       const params = { order: sortField, skip, limit };
       expect(
-        fromSelectors.getQueryParams.projector(
+        fromSelectors.selectQueryParams.projector(
           initialPublishedDataState.filters
         )
       ).toEqual(params);

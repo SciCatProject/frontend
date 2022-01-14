@@ -1,36 +1,35 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { InstrumentState } from "state-management/state/instruments.store";
 
-const getInstrumentState = createFeatureSelector<InstrumentState>(
-  "instruments"
+const selectInstrumentState =
+  createFeatureSelector<InstrumentState>("instruments");
+
+export const selectInstruments = createSelector(
+  selectInstrumentState,
+  (state) => state.instruments
 );
 
-export const getInstruments = createSelector(
-  getInstrumentState,
-  state => state.instruments
+export const selectCurrentInstrument = createSelector(
+  selectInstrumentState,
+  (state) => state.currentInstrument
 );
 
-export const getCurrentInstrument = createSelector(
-  getInstrumentState,
-  state => state.currentInstrument
+export const selectInstrumentsCount = createSelector(
+  selectInstrumentState,
+  (state) => state.totalCount
 );
 
-export const getInstrumentsCount = createSelector(
-  getInstrumentState,
-  state => state.totalCount
+export const selectFilters = createSelector(
+  selectInstrumentState,
+  (state) => state.filters
 );
 
-export const getFilters = createSelector(
-  getInstrumentState,
-  state => state.filters
-);
-
-export const getPage = createSelector(getFilters, filters => {
+export const selectPage = createSelector(selectFilters, (filters) => {
   const { skip, limit } = filters;
   return skip / limit;
 });
 
-export const getInstrumentsPerPage = createSelector(
-  getFilters,
-  filters => filters.limit
+export const selectInstrumentsPerPage = createSelector(
+  selectFilters,
+  (filters) => filters.limit
 );

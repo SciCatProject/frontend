@@ -24,7 +24,7 @@ import {
 } from "state-management/actions/datasets.actions";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { provideMockStore } from "@ngrx/store/testing";
-import { getDatasets } from "state-management/selectors/datasets.selectors";
+import { selectDatasets } from "state-management/selectors/datasets.selectors";
 import {
   selectColumnAction,
   deselectColumnAction,
@@ -63,7 +63,7 @@ describe("DatasetTableComponent", () => {
         ],
         providers: [
           provideMockStore({
-            selectors: [{ selector: getDatasets, value: [] }],
+            selectors: [{ selector: selectDatasets, value: [] }],
           }),
         ],
         declarations: [DatasetTableComponent],

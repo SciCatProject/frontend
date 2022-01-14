@@ -1,30 +1,30 @@
 import { DatasetState } from "state-management/state/datasets.store";
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 
-const getDatasetState = createFeatureSelector<DatasetState>("datasets");
+const selectDatasetState = createFeatureSelector<DatasetState>("datasets");
 
-export const getDatasets = createSelector(
-  getDatasetState,
-  (state: DatasetState) => state.datasets
+export const selectDatasets = createSelector(
+  selectDatasetState,
+  (state) => state.datasets
 );
 
-export const getSelectedDatasets = createSelector(
-  getDatasetState,
+export const selectSelectedDatasets = createSelector(
+  selectDatasetState,
   (state) => state.selectedSets
 );
 
-export const getMetadataKeys = createSelector(
-  getDatasetState,
+export const selectMetadataKeys = createSelector(
+  selectDatasetState,
   (state) => state.metadataKeys
 );
 
-export const getCurrentDataset = createSelector(
-  getDatasetState,
+export const selectCurrentDataset = createSelector(
+  selectDatasetState,
   (state) => state.currentSet
 );
 
-export const getCurrentDatasetWithoutFileInfo = createSelector(
-  getCurrentDataset,
+export const selectCurrentDatasetWithoutFileInfo = createSelector(
+  selectCurrentDataset,
   (currentSet) => {
     if (currentSet) {
       const { origdatablocks, datablocks, ...theRest } = currentSet;
@@ -34,70 +34,70 @@ export const getCurrentDatasetWithoutFileInfo = createSelector(
   }
 );
 
-export const getCurrentOrigDatablocks = createSelector(
-  getCurrentDataset,
+export const selectCurrentOrigDatablocks = createSelector(
+  selectCurrentDataset,
   (dataset) => (dataset ? dataset.origdatablocks : [])
 );
 
-export const getCurrentDatablocks = createSelector(
-  getCurrentDataset,
+export const selectCurrentDatablocks = createSelector(
+  selectCurrentDataset,
   (dataset) => (dataset ? dataset.datablocks : [])
 );
 
-export const getCurrentAttachments = createSelector(
-  getCurrentDataset,
+export const selectCurrentAttachments = createSelector(
+  selectCurrentDataset,
   (dataset) => (dataset ? dataset.attachments : [])
 );
 
 // === Filters ===
 
-export const getFilters = createSelector(
-  getDatasetState,
-  (state: DatasetState) => state.filters
+export const selectFilters = createSelector(
+  selectDatasetState,
+  (state) => state.filters
 );
 
-export const getTextFilter = createSelector(
-  getFilters,
+export const selectTextFilter = createSelector(
+  selectFilters,
   (filters) => filters.text || ""
 );
 
-export const getLocationFilter = createSelector(
-  getFilters,
+export const selectLocationFilter = createSelector(
+  selectFilters,
   (filters) => filters.creationLocation
 );
 
-export const getGroupFilter = createSelector(
-  getFilters,
+export const selectGroupFilter = createSelector(
+  selectFilters,
   (filters) => filters.ownerGroup
 );
 
-export const getTypeFilter = createSelector(
-  getFilters,
+export const selectTypeFilter = createSelector(
+  selectFilters,
   (filters) => filters.type
 );
 
-export const getKeywordsFilter = createSelector(
-  getFilters,
+export const selectKeywordsFilter = createSelector(
+  selectFilters,
   (filters) => filters.keywords
 );
 
-export const getCreationTimeFilter = createSelector(
-  getFilters,
+export const selectCreationTimeFilter = createSelector(
+  selectFilters,
   (filters) => filters.creationTime
 );
 
-export const getArchiveViewMode = createSelector(
-  getFilters,
+export const selectArchiveViewMode = createSelector(
+  selectFilters,
   (filters) => filters.modeToggle
 );
 
-export const getPublicViewMode = createSelector(
-  getFilters,
+export const selectPublicViewMode = createSelector(
+  selectFilters,
   (filters) => filters.isPublished
 );
 
-export const getHasAppliedFilters = createSelector(
-  getFilters,
+export const selectHasAppliedFilters = createSelector(
+  selectFilters,
   (filters) =>
     filters.text !== "" ||
     filters.creationLocation.length > 0 ||
@@ -110,35 +110,35 @@ export const getHasAppliedFilters = createSelector(
         filters.creationTime.end !== null))
 );
 
-export const getScientificConditions = createSelector(
-  getFilters,
+export const selectScientificConditions = createSelector(
+  selectFilters,
   (filters) => filters.scientific
 );
 
 // === Facet Counts ===
 
-const getFacetCounts = createSelector(
-  getDatasetState,
+const selectFacetCounts = createSelector(
+  selectDatasetState,
   (state) => state.facetCounts || {}
 );
 
-export const getLocationFacetCounts = createSelector(
-  getFacetCounts,
+export const selectLocationFacetCounts = createSelector(
+  selectFacetCounts,
   (counts) => counts.creationLocation || []
 );
 
-export const getGroupFacetCounts = createSelector(
-  getFacetCounts,
+export const selectGroupFacetCounts = createSelector(
+  selectFacetCounts,
   (counts) => counts.ownerGroup || []
 );
 
-export const getTypeFacetCounts = createSelector(
-  getFacetCounts,
+export const selectTypeFacetCounts = createSelector(
+  selectFacetCounts,
   (counts) => counts.type || []
 );
 
-export const getKeywordFacetCounts = createSelector(
-  getFacetCounts,
+export const selectKeywordFacetCounts = createSelector(
+  selectFacetCounts,
   (counts) => counts.keywords || []
 );
 
@@ -158,28 +158,16 @@ const restrictFilter = (filter: any, allowedKeys?: string[]) => {
   }, {});
 };
 
-export const getFullqueryParams = createSelector(getFilters, (filter) => {
+export const selectFullqueryParams = createSelector(selectFilters, (filter) => {
   // don't query with modeToggle, it's only in filters for persistent routing
-  const {
-    skip,
-    limit,
-    sortField,
-    modeToggle,
-    ...theRest
-  } = filter;
+  const { skip, limit, sortField, modeToggle, ...theRest } = filter;
   const limits = { skip, limit, order: sortField };
   const query = restrictFilter(theRest);
   return { query: JSON.stringify(query), limits };
 });
 
-export const getFullfacetParams = createSelector(getFilters, (filter) => {
-  const {
-    skip,
-    limit,
-    sortField,
-    modeToggle,
-    ...theRest
-  } = filter;
+export const selectFullfacetParams = createSelector(selectFilters, (filter) => {
+  const { skip, limit, sortField, modeToggle, ...theRest } = filter;
   const fields = restrictFilter(theRest);
   const facets = [
     "type",
@@ -193,42 +181,59 @@ export const getFullfacetParams = createSelector(getFilters, (filter) => {
 
 // === Misc. ===
 
-export const getTotalSets = createSelector(
-  getDatasetState,
+export const selectTotalSets = createSelector(
+  selectDatasetState,
   (state) => state.totalCount
 );
 
-export const getPage = createSelector(getFilters, (filters) => {
+export const selectPage = createSelector(selectFilters, (filters) => {
   const { skip, limit } = filters;
   return skip / limit;
 });
 
-export const getDatasetsPerPage = createSelector(
-  getFilters,
+export const selectDatasetsPerPage = createSelector(
+  selectFilters,
   (filters) => filters.limit
 );
 
-export const getSearchTerms = createSelector(
-  getDatasetState,
+export const selectSearchTerms = createSelector(
+  selectDatasetState,
   (state) => state.searchTerms
 );
 
-export const getKeywordsTerms = createSelector(
-  getDatasetState,
+export const selectKeywordsTerms = createSelector(
+  selectDatasetState,
   (state) => state.keywordsTerms
 );
 
-export const getHasPrefilledFilters = createSelector(
-  getDatasetState,
+export const selectHasPrefilledFilters = createSelector(
+  selectDatasetState,
   (state) => state.hasPrefilledFilters
 );
 
-export const getDatasetsInBatch = createSelector(
-  getDatasetState,
+export const selectDatasetsInBatch = createSelector(
+  selectDatasetState,
   (state) => state.batch
 );
 
-export const getOpenwhiskResult = createSelector(
-  getDatasetState,
+export const selectDatasetsInBatchIndicator = createSelector(
+  selectDatasetsInBatch,
+  (datasets) => {
+    const inBatchCount = datasets.length;
+
+    if (inBatchCount === 0) {
+      return null;
+    }
+
+    if (inBatchCount > 99) {
+      return "99+";
+    }
+
+    return String(inBatchCount);
+  }
+);
+
+export const selectOpenwhiskResult = createSelector(
+  selectDatasetState,
   (state) => state.openwhiskResult
 );

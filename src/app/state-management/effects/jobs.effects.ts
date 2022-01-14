@@ -1,72 +1,72 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
 import { JobApi, Job } from "shared/sdk";
-import { Store, select } from "@ngrx/store";
-import { getQueryParams } from "state-management/selectors/jobs.selectors";
+import { Store } from "@ngrx/store";
+import { selectQueryParams } from "state-management/selectors/jobs.selectors";
 import * as fromActions from "state-management/actions/jobs.actions";
-import { withLatestFrom, map, switchMap, catchError } from "rxjs/operators";
+import { map, switchMap, catchError } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
 import {
   showMessageAction,
   loadingAction,
   loadingCompleteAction,
-  updateUserSettingsAction
+  updateUserSettingsAction,
 } from "state-management/actions/user.actions";
 
 @Injectable()
 export class JobEffects {
-  private queryParams$ = this.store.pipe(select(getQueryParams));
+  private queryParams$ = this.store.select(selectQueryParams);
 
-  fetchJobs$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchJobs$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.fetchJobsAction,
         fromActions.changePageAction,
         fromActions.sortByColumnAction,
         fromActions.setJobViewModeAction
       ),
-      withLatestFrom(this.queryParams$),
+      concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
-      switchMap(params =>
+      switchMap((params) =>
         this.jobApi.find<Job>(params).pipe(
           switchMap((jobs: Job[]) => [
             fromActions.fetchJobsCompleteAction({ jobs }),
-            fromActions.fetchCountAction()
+            fromActions.fetchCountAction(),
           ]),
           catchError(() => of(fromActions.fetchJobsFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  fetchCount$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchCount$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
-      withLatestFrom(this.queryParams$),
+      concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
       switchMap(({ where }) =>
         this.jobApi.count(where).pipe(
-          map(res =>
+          map((res) =>
             fromActions.fetchCountCompleteAction({ count: res.count })
           ),
           catchError(() => of(fromActions.fetchCountFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  updateUserJobsLimit$ = createEffect(() =>
-    this.actions$.pipe(
+  updateUserJobsLimit$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.changePageAction),
       map(({ limit }) =>
         updateUserSettingsAction({ property: { jobCount: limit } })
       )
-    )
-  );
+    );
+  });
 
-  fetchJob$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchJob$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchJobAction),
       switchMap(({ jobId }) =>
         this.jobApi.findById<Job>(jobId).pipe(
@@ -74,51 +74,51 @@ export class JobEffects {
           catchError(() => of(fromActions.fetchJobFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  submitJob$ = createEffect(() =>
-    this.actions$.pipe(
+  submitJob$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.submitJobAction),
       switchMap(({ job }) =>
         this.jobApi.create(job).pipe(
-          map(res => fromActions.submitJobCompleteAction({ job: res })),
-          catchError(err => of(fromActions.submitJobFailedAction({ err })))
+          map((res) => fromActions.submitJobCompleteAction({ job: res })),
+          catchError((err) => of(fromActions.submitJobFailedAction({ err })))
         )
       )
-    )
-  );
+    );
+  });
 
-  submitJobCompleteMessage$ = createEffect(() =>
-    this.actions$.pipe(
+  submitJobCompleteMessage$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.submitJobCompleteAction),
       switchMap(() => {
         const message = {
           type: MessageType.Success,
           content: "Job Created Successfully",
-          duration: 5000
+          duration: 5000,
         };
         return of(showMessageAction({ message }));
       })
-    )
-  );
+    );
+  });
 
-  submitJobFailedMessage$ = createEffect(() =>
-    this.actions$.pipe(
+  submitJobFailedMessage$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.submitJobFailedAction),
       switchMap(({ err }) => {
         const message = {
           type: MessageType.Error,
           content: "Job Not Submitted: " + err.message,
-          duration: 5000
+          duration: 5000,
         };
         return of(showMessageAction({ message }));
       })
-    )
-  );
+    );
+  });
 
-  loading$ = createEffect(() =>
-    this.actions$.pipe(
+  loading$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.fetchJobsAction,
         fromActions.fetchCountAction,
@@ -126,11 +126,11 @@ export class JobEffects {
         fromActions.submitJobAction
       ),
       switchMap(() => of(loadingAction()))
-    )
-  );
+    );
+  });
 
-  loadingComplete$ = createEffect(() =>
-    this.actions$.pipe(
+  loadingComplete$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.fetchJobsFailedAction,
         fromActions.fetchCountCompleteAction,
@@ -141,12 +141,12 @@ export class JobEffects {
         fromActions.submitJobFailedAction
       ),
       switchMap(() => of(loadingCompleteAction()))
-    )
-  );
+    );
+  });
 
   constructor(
     private actions$: Actions,
     private jobApi: JobApi,
-    private store: Store<Job>
+    private store: Store
   ) {}
 }

@@ -1,81 +1,94 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { UserState } from "state-management/state/user.store";
 
-const getUserState = createFeatureSelector<UserState>("users");
+const selectUserState = createFeatureSelector<UserState>("users");
 
-export const getCurrentUser = createSelector(
-  getUserState,
-  state => state.currentUser
+export const selectCurrentUser = createSelector(
+  selectUserState,
+  (state) => state.currentUser
 );
 
-export const getCurrentUserId = createSelector(getCurrentUser, user => user ? user.id : "");
-
-export const getCurrentUserAccountType = createSelector(
-  getUserState,
-  state => state.accountType
+export const selectCurrentUserId = createSelector(selectCurrentUser, (user) =>
+  user ? user.id : ""
 );
 
-export const getProfile = createSelector(getUserState, state => state.profile);
+export const selectProfile = createSelector(
+  selectUserState,
+  (state) => state.profile
+);
 
-export const getCurrentUserName = createSelector(
-  getProfile,
-  getCurrentUser,
+export const selectCurrentUserName = createSelector(
+  selectProfile,
+  selectCurrentUser,
   (profile, user) => {
     if (profile) {
-      return profile.username;
+      return profile.username.replace("ms-ad.", "");
     } else if (user) {
-      return user.username;
+      return user.username.replace("ms-ad.", "");
     } else {
       return null;
     }
   }
 );
 
-export const getIsAdmin = createSelector(
-  getCurrentUserName,
-  getCurrentUserAccountType,
-  (name, type) =>
-    (name && ["admin", "archiveManager", "ingestor"].indexOf(name) !== -1)
+export const selectThumbnailPhoto = createSelector(selectProfile, (profile) => {
+  if (
+    profile &&
+    profile.thumbnailPhoto &&
+    profile.thumbnailPhoto.startsWith("data")
+  ) {
+    return profile.thumbnailPhoto;
+  }
+
+  return "assets/images/user.png";
+});
+
+export const selectIsAdmin = createSelector(
+  selectCurrentUserName,
+  (name) => name && ["admin", "archiveManager", "ingestor"].indexOf(name) !== -1
 );
 
-export const getCatamelToken = createSelector(
-  getUserState,
-  state => state.catamelToken
+export const selectCatamelToken = createSelector(
+  selectUserState,
+  (state) => state.catamelToken.id
 );
 
-export const getUserMessage = createSelector(
-  getUserState,
-  state => state.message
+export const selectUserMessage = createSelector(
+  selectUserState,
+  (state) => state.message
 );
 
-export const getSettings = createSelector(
-  getUserState,
-  state => state.settings
+export const selectSettings = createSelector(
+  selectUserState,
+  (state) => state.settings
 );
 
-export const getTapeCopies = createSelector(
-  getSettings,
-  settings => settings.tapeCopies
+export const selectTapeCopies = createSelector(
+  selectSettings,
+  (settings) => settings.tapeCopies
 );
 
-export const getTheme = createSelector(
-  getSettings,
-  settings => settings.darkTheme
+export const selectTheme = createSelector(
+  selectSettings,
+  (settings) => settings.darkTheme
 );
 
-export const getIsLoggingIn = createSelector(
-  getUserState,
-  state => state.isLoggingIn
+export const selectIsLoggingIn = createSelector(
+  selectUserState,
+  (state) => state.isLoggingIn
 );
 
-export const getIsLoggedIn = createSelector(
-  getUserState,
-  state => state.isLoggedIn
+export const selectIsLoggedIn = createSelector(
+  selectUserState,
+  (state) => state.isLoggedIn
 );
 
-export const getIsLoading = createSelector(
-  getUserState,
-  state => state.isLoading
+export const selectIsLoading = createSelector(
+  selectUserState,
+  (state) => state.isLoading
 );
 
-export const getColumns = createSelector(getUserState, state => state.columns);
+export const selectColumns = createSelector(
+  selectUserState,
+  (state) => state.columns
+);

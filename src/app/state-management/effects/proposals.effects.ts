@@ -1,19 +1,13 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
 import { DatasetApi, ProposalApi, Proposal, Dataset } from "shared/sdk";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import * as fromActions from "state-management/actions/proposals.actions";
 import {
-  getFullqueryParams,
-  getDatasetsQueryParams,
+  selectFullqueryParams,
+  selectDatasetsQueryParams,
 } from "state-management/selectors/proposals.selectors";
-import {
-  withLatestFrom,
-  map,
-  mergeMap,
-  catchError,
-  switchMap,
-} from "rxjs/operators";
+import { map, mergeMap, catchError, switchMap } from "rxjs/operators";
 import { of } from "rxjs";
 import {
   loadingAction,
@@ -22,18 +16,18 @@ import {
 
 @Injectable()
 export class ProposalEffects {
-  fullqueryParams$ = this.store.pipe(select(getFullqueryParams));
-  datasetQueryParams$ = this.store.pipe(select(getDatasetsQueryParams));
+  fullqueryParams$ = this.store.select(selectFullqueryParams);
+  datasetQueryParams$ = this.store.select(selectDatasetsQueryParams);
 
-  fetchProposals$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchProposals$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.fetchProposalsAction,
         fromActions.changePageAction,
         fromActions.sortByColumnAction,
         fromActions.clearFacetsAction
       ),
-      withLatestFrom(this.fullqueryParams$),
+      concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
         this.proposalApi.fullquery(query, limits).pipe(
@@ -44,13 +38,13 @@ export class ProposalEffects {
           catchError(() => of(fromActions.fetchProposalsFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  fetchCount$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchCount$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
-      withLatestFrom(this.fullqueryParams$),
+      concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       switchMap(({ query }) =>
         this.proposalApi.fullquery(query).pipe(
@@ -60,11 +54,11 @@ export class ProposalEffects {
           catchError(() => of(fromActions.fetchCountFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  fetchProposal$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchProposal$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchProposalAction),
       switchMap(({ proposalId }) =>
         this.proposalApi
@@ -76,13 +70,13 @@ export class ProposalEffects {
             catchError(() => of(fromActions.fetchProposalFailedAction()))
           )
       )
-    )
-  );
+    );
+  });
 
-  fetchProposalDatasets$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchProposalDatasets$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchProposalDatasetsAction),
-      withLatestFrom(this.datasetQueryParams$),
+      concatLatestFrom(() => this.datasetQueryParams$),
       switchMap(([{ proposalId }, { limits }]) =>
         this.datasetApi
           .find<Dataset>({
@@ -101,11 +95,11 @@ export class ProposalEffects {
             )
           )
       )
-    )
-  );
+    );
+  });
 
-  fetchProposalDatasetsCount$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchProposalDatasetsCount$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchProposalDatasetsCountAction),
       switchMap(({ proposalId }) =>
         this.datasetApi.find({ where: { proposalId } }).pipe(
@@ -119,20 +113,15 @@ export class ProposalEffects {
           )
         )
       )
-    )
-  );
+    );
+  });
 
-  addAttachment$ = createEffect(() =>
-    this.actions$.pipe(
+  addAttachment$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.addAttachmentAction),
       switchMap(({ attachment }) => {
-        const {
-          id,
-          rawDatasetId,
-          derivedDatasetId,
-          sampleId,
-          ...theRest
-        } = attachment;
+        const { id, rawDatasetId, derivedDatasetId, sampleId, ...theRest } =
+          attachment;
         return this.proposalApi
           .createAttachments(encodeURIComponent(theRest.proposalId), theRest)
           .pipe(
@@ -142,11 +131,11 @@ export class ProposalEffects {
             catchError(() => of(fromActions.addAttachmentFailedAction()))
           );
       })
-    )
-  );
+    );
+  });
 
-  updateAttachmentCaption$ = createEffect(() =>
-    this.actions$.pipe(
+  updateAttachmentCaption$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.updateAttachmentCaptionAction),
       switchMap(({ proposalId, attachmentId, caption }) => {
         const newCaption = { caption };
@@ -167,11 +156,11 @@ export class ProposalEffects {
             )
           );
       })
-    )
-  );
+    );
+  });
 
-  removeAttachment$ = createEffect(() =>
-    this.actions$.pipe(
+  removeAttachment$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.removeAttachmentAction),
       switchMap(({ proposalId, attachmentId }) =>
         this.proposalApi
@@ -186,11 +175,11 @@ export class ProposalEffects {
             catchError(() => of(fromActions.removeAttachmentFailedAction()))
           )
       )
-    )
-  );
+    );
+  });
 
-  loading$ = createEffect(() =>
-    this.actions$.pipe(
+  loading$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.fetchProposalsAction,
         fromActions.fetchCountAction,
@@ -202,11 +191,11 @@ export class ProposalEffects {
         fromActions.removeAttachmentAction
       ),
       switchMap(() => of(loadingAction()))
-    )
-  );
+    );
+  });
 
-  loadingComplete$ = createEffect(() =>
-    this.actions$.pipe(
+  loadingComplete$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.fetchProposalsCompleteAction,
         fromActions.fetchProposalsFailedAction,
@@ -226,13 +215,13 @@ export class ProposalEffects {
         fromActions.removeAttachmentFailedAction
       ),
       switchMap(() => of(loadingCompleteAction()))
-    )
-  );
+    );
+  });
 
   constructor(
     private actions$: Actions,
     private datasetApi: DatasetApi,
     private proposalApi: ProposalApi,
-    private store: Store<any>
+    private store: Store
   ) {}
 }

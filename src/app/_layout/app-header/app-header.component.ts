@@ -1,49 +1,35 @@
-import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
+import { Component, OnInit, Inject } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
   fetchCurrentUserAction,
-  logoutAction
+  logoutAction,
 } from "state-management/actions/user.actions";
-import { Subscription } from "rxjs";
 import {
-  getCurrentUserAccountType,
-  getCurrentUser,
-  getProfile,
-  getIsLoggedIn
+  selectIsLoggedIn,
+  selectCurrentUserName,
+  selectThumbnailPhoto,
 } from "state-management/selectors/user.selectors";
-import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
+import { selectDatasetsInBatchIndicator } from "state-management/selectors/datasets.selectors";
 
 @Component({
   selector: "app-app-header",
   templateUrl: "./app-header.component.html",
-  styleUrls: ["./app-header.component.scss"]
+  styleUrls: ["./app-header.component.scss"],
 })
-export class AppHeaderComponent implements OnInit, OnDestroy {
-  private subscriptions: Subscription[] = [];
-  facility: string;
-  status: string;
+export class AppHeaderComponent implements OnInit {
+  facility = this.appConfig.facility ?? "";
+  status = this.appConfig.production ? "" : "test";
 
-  username = "";
-  profileImage: string;
-  batch$ = this.store.pipe(select(getDatasetsInBatch));
-  inBatchPids: string[] = [];
-  inBatchCount = 0;
-  inBatchIndicator = "";
-  loggedIn$ = this.store.pipe(select(getIsLoggedIn));
+  username$ = this.store.select(selectCurrentUserName);
+  profileImage$ = this.store.select(selectThumbnailPhoto);
+  inBatchIndicator$ = this.store.select(selectDatasetsInBatchIndicator);
+  loggedIn$ = this.store.select(selectIsLoggedIn);
 
   constructor(
-    private store: Store<any>,
+    private store: Store,
     @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {
-    this.facility = appConfig.facility ?? "";
-    if (appConfig.production === true) {
-      this.status = "";
-    } else {
-      this.status = "test";
-    }
-    this.profileImage = "assets/images/user.png";
-  }
+  ) {}
 
   logout(): void {
     this.store.dispatch(logoutAction());
@@ -51,47 +37,5 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(fetchCurrentUserAction());
-
-    this.subscriptions.push(
-      this.batch$.subscribe(datasets => {
-        if (datasets) {
-          this.inBatchPids = datasets.map(dataset => dataset.pid);
-          this.inBatchCount = this.inBatchPids.length;
-          this.inBatchIndicator =
-            this.inBatchCount > 99 ? "99+" : this.inBatchCount + "";
-        }
-      })
-    );
-
-    this.subscriptions.push(
-      this.store.pipe(select(getCurrentUserAccountType)).subscribe(type => {
-        if (type === "functional") {
-          this.profileImage = "assets/images/user.png";
-        }
-      })
-    );
-
-    this.subscriptions.push(
-      this.store.pipe(select(getCurrentUser)).subscribe(current => {
-        console.log("current: ", current);
-        if (current) {
-          this.username = current.username.replace("ms-ad.", "");
-          if (!current.realm && current.id) {
-            this.store.pipe(select(getProfile)).subscribe(profile => {
-              if (profile) {
-                this.username = profile.username;
-                if (profile.thumbnailPhoto.startsWith("data")) {
-                  this.profileImage = profile.thumbnailPhoto;
-                }
-              }
-            });
-          }
-        }
-      })
-    );
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

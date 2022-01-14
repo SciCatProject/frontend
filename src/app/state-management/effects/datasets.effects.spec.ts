@@ -15,8 +15,8 @@ import { Observable } from "rxjs";
 import { DatasetEffects } from "./datasets.effects";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
-  getFullqueryParams,
-  getFullfacetParams,
+  selectFullqueryParams,
+  selectFullfacetParams,
 } from "state-management/selectors/datasets.selectors";
 import {
   loadingAction,
@@ -64,13 +64,13 @@ describe("DatasetEffects", () => {
         provideMockStore({
           selectors: [
             {
-              selector: getFullqueryParams,
+              selector: selectFullqueryParams,
               value: {
                 query: JSON.stringify({ isPublished: false }),
                 limits: { skip: 0, limit: 25, order: "test asc" },
               },
             },
-            { selector: getFullfacetParams, value: {} },
+            { selector: selectFullfacetParams, value: {} },
           ],
         }),
         {

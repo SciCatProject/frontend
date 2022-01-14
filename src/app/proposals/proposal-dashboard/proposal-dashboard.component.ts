@@ -2,19 +2,19 @@ import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { DatePipe } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { Proposal } from "shared/sdk";
 import { combineLatest, Subscription } from "rxjs";
 import {
-  getPage,
-  getProposalsCount,
-  getProposalsPerPage,
-  getProposals,
-  getDateRangeFilter,
-  getHasAppliedFilters,
-  getFilters,
-  getHasPrefilledFilters,
-  getTextFilter,
+  selectPage,
+  selectProposalsCount,
+  selectProposalsPerPage,
+  selectProposals,
+  selectDateRangeFilter,
+  selectHasAppliedFilters,
+  selectFilters,
+  selectHasPrefilledFilters,
+  selectTextFilter,
 } from "state-management/selectors/proposals.selectors";
 import {
   TableColumn,
@@ -55,16 +55,15 @@ interface DateRange {
   styleUrls: ["./proposal-dashboard.component.scss"],
 })
 export class ProposalDashboardComponent implements OnInit, OnDestroy {
-  hasAppliedFilters$ = this.store.pipe(select(getHasAppliedFilters));
-  textFilter$ = this.store.pipe(select(getTextFilter));
-  dateRangeFilter$ = this.store.pipe(select(getDateRangeFilter));
-  readyToFetch$ = this.store.pipe(
-    select(getHasPrefilledFilters),
-    filter((has) => has)
-  );
-  currentPage$ = this.store.pipe(select(getPage));
-  proposalsCount$ = this.store.pipe(select(getProposalsCount));
-  proposalsPerPage$ = this.store.pipe(select(getProposalsPerPage));
+  hasAppliedFilters$ = this.store.select(selectHasAppliedFilters);
+  textFilter$ = this.store.select(selectTextFilter);
+  dateRangeFilter$ = this.store.select(selectDateRangeFilter);
+  readyToFetch$ = this.store
+    .select(selectHasPrefilledFilters)
+    .pipe(filter((has) => has));
+  currentPage$ = this.store.select(selectPage);
+  proposalsCount$ = this.store.select(selectProposalsCount);
+  proposalsPerPage$ = this.store.select(selectProposalsPerPage);
 
   clearSearchBar = false;
   dateRange: DateRange = {
@@ -93,7 +92,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store<Proposal>
+    private store: Store
   ) {}
 
   formatTableData(proposals: Proposal[]): ProposalTableData[] {
@@ -199,13 +198,13 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.pipe(select(getProposals)).subscribe((proposals) => {
+      this.store.select(selectProposals).subscribe((proposals) => {
         this.tableData = this.formatTableData(proposals);
       })
     );
 
     this.subscriptions.push(
-      combineLatest([this.store.pipe(select(getFilters)), this.readyToFetch$])
+      combineLatest([this.store.select(selectFilters), this.readyToFetch$])
         .pipe(
           map(([filters, _]) => filters),
           distinctUntilChanged(deepEqual)

@@ -20,7 +20,7 @@ export class ShareDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<ShareDialogComponent>,
-    public store: Store<any>,
+    public store: Store,
     public userIdentityApi: UserIdentityApi
   ) {}
 

@@ -1,39 +1,39 @@
 import { createSelector, createFeatureSelector } from "@ngrx/store";
 import { LogbookState } from "../state/logbooks.store";
 
-const getLogbookState = createFeatureSelector<LogbookState>("logbooks");
+const selectLogbookState = createFeatureSelector<LogbookState>("logbooks");
 
-export const getLogbooks = createSelector(
-  getLogbookState,
-  state => state.logbooks
+export const selectLogbooks = createSelector(
+  selectLogbookState,
+  (state) => state.logbooks
 );
 
-export const getCurrentLogbook = createSelector(
-  getLogbookState,
-  state => state.currentLogbook
+export const selectCurrentLogbook = createSelector(
+  selectLogbookState,
+  (state) => state.currentLogbook
 );
 
-export const getEntriesCount = createSelector(
-  getLogbookState,
-  state => state.totalCount
+export const selectEntriesCount = createSelector(
+  selectLogbookState,
+  (state) => state.totalCount
 );
 
-export const getHasPrefilledFilters = createSelector(
-  getLogbookState,
-  state => state.hasPrefilledFilters
+export const selectHasPrefilledFilters = createSelector(
+  selectLogbookState,
+  (state) => state.hasPrefilledFilters
 );
 
-export const getFilters = createSelector(
-  getLogbookState,
-  state => state.filters
+export const selectFilters = createSelector(
+  selectLogbookState,
+  (state) => state.filters
 );
 
-export const getEntriesPerPage = createSelector(
-  getFilters,
-  filters => filters.limit
+export const selectEntriesPerPage = createSelector(
+  selectFilters,
+  (filters) => filters.limit
 );
 
-export const getPage = createSelector(getFilters, filters => {
+export const selectPage = createSelector(selectFilters, (filters) => {
   const { skip, limit } = filters;
   return skip / limit;
 });

@@ -4,7 +4,7 @@ import { JobEffects } from "./jobs.effects";
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";
-import { getQueryParams } from "state-management/selectors/jobs.selectors";
+import { selectQueryParams } from "state-management/selectors/jobs.selectors";
 import * as fromActions from "state-management/actions/jobs.actions";
 import { hot, cold } from "jasmine-marbles";
 import {
@@ -35,7 +35,7 @@ describe("JobEffects", () => {
         JobEffects,
         provideMockActions(() => actions),
         provideMockStore({
-          selectors: [{ selector: getQueryParams, value: {} }],
+          selectors: [{ selector: selectQueryParams, value: {} }],
         }),
         {
           provide: JobApi,
