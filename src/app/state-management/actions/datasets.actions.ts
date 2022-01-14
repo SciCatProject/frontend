@@ -287,3 +287,5 @@ export const removeScientificConditionAction = createAction(
 );
 
 export const clearDatasetsStateAction = createAction("[Dataset] Clear State");
+
+export const clearCurrentDatasetStateAction = createAction("[Dataset] Clear Current Dataset State");

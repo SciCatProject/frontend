@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { DatasetApi, Dataset, LoopBackFilter, OrigDatablock, Attachment } from "shared/sdk";
+import { DatasetApi, Dataset, LoopBackFilter, OrigDatablock, Attachment, Datablock } from "shared/sdk";
 import { Store, select } from "@ngrx/store";
 import {
   getFullqueryParams,
@@ -134,7 +134,7 @@ export class DatasetEffects {
 
         return this.datasetApi.findOne<Dataset>(datasetFilter).pipe(
           map((dataset: Dataset) =>
-            fromActions.fetchDatasetCompleteAction({ dataset })
+              fromActions.fetchDatasetCompleteAction({ dataset })
           ),
           catchError(() => of(fromActions.fetchDatasetFailedAction()))
         );
@@ -145,26 +145,9 @@ export class DatasetEffects {
     this.actions$.pipe(
       ofType(fromActions.fetchDatablocksAction),
       switchMap(({ pid, filters }) => {
-        const datasetFilter: LoopBackFilter = {
-          where: { pid },
-          include: [
-            { relation: "datablocks" }
-          ],
-          fields: {
-            pid: true,
-            datasetId: true,
-            dataFileList:[]
-          },
-        };
-
-        if (filters) {
-          Object.keys(filters).forEach((key) => {
-            datasetFilter.where[key] = filters[key];
-          });
-        }
-        return this.datasetApi.findOne<Partial<Dataset>>(datasetFilter).pipe(
-          map((dataset: Dataset) =>
-            fromActions.fetchDatablocksCompleteAction({ datablocks: dataset.datablocks })
+        return this.datasetApi.findByIdDatablocks(pid, filters).pipe(
+          map((datablocks: Datablock[]) =>
+            fromActions.fetchDatablocksCompleteAction({ datablocks })
           ),
           catchError(() => of(fromActions.fetchDatablocksFailedAction()))
         );

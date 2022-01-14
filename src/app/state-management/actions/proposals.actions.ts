@@ -123,3 +123,4 @@ export const sortByColumnAction = createAction(
 );
 
 export const clearProposalsStateAction = createAction("[Proposal] Clear State");
+export const clearCurrentProposalStateAction = createAction("[Proposal] Clear Current Proposal State")

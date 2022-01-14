@@ -21,7 +21,6 @@ import {
   CheckboxEvent,
 } from "shared/modules/table/table.component";
 import { getIsLoading } from "state-management/selectors/user.selectors";
-import { ActivatedRoute } from "@angular/router";
 import { UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";

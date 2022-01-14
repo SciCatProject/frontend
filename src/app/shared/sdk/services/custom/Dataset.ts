@@ -469,6 +469,36 @@ export class DatasetApi extends BaseLoopBackApi {
   }
 
   /**
+   * Queries datablocks of the dataset.
+   *
+   * @param {any} id Dataset id
+   *
+   * @param {any} filters filters for datablocks
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `Dataset` object.)
+   * </em>
+   */
+   public findByIdDatablocks(id: any, filters: any, customHeaders?: Function): Observable<any> {
+    let _method: string = "GET";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/Datasets/:id/datablocks";
+    let _routeParams: any = {
+      id: encodeURIComponent(id),
+      filters
+    };
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
    * Find a related item by id for datablocks.
    *
    * @param {any} id Dataset id
@@ -484,7 +514,7 @@ export class DatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `Dataset` object.)
    * </em>
    */
-  public findByIdDatablocks(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public findByIdDatablocksWithFK(id: any, fk: any, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Datasets/:id/datablocks/:fk";

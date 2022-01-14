@@ -25,6 +25,7 @@ import { Subscription, Observable, combineLatest } from "rxjs";
 import { map, pluck, takeWhile } from "rxjs/operators";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import {
+  clearCurrentDatasetStateAction,
   fetchAttachmentsAction,
   fetchDatablocksAction,
   fetchDatasetAction, fetchOrigDatablocksAction,
@@ -33,9 +34,10 @@ import {
   clearLogbookAction,
   fetchLogbookAction,
 } from "state-management/actions/logbooks.actions";
-import { fetchProposalAction } from "state-management/actions/proposals.actions";
-import { fetchSampleAction } from "state-management/actions/samples.actions";
+import { clearCurrentProposalStateAction, fetchProposalAction } from "state-management/actions/proposals.actions";
+import { clearCurrentSampleStateAction, fetchSampleAction } from "state-management/actions/samples.actions";
 import { MatDialog } from "@angular/material/dialog";
+
 
 export interface JWT {
   jwt: string;
@@ -99,41 +101,38 @@ export class DatasetDetailsDashboardComponent
   ) {}
 
   ngOnInit() {
-    this.subscriptions.push(
-      this.route.params.pipe(pluck("id")).subscribe((id: string) => {
-        if (id) {
-          this.pid = id;
-          this.route.firstChild.url.subscribe((childUrl) => {
-            // Fetch required data for the selected tab at start
-            // Fetch dataset details and data for the selected tab
-            // if selected tab is Details then also fetch attachments
-            this.store.dispatch(fetchDatasetAction({pid: this.pid}));
-            // fetch data for the selected tab
-            const tab = childUrl.length === 1? childUrl[0].path : "details";
-            this.fetchDataForTab(TAB[tab]);
-          })
-          .unsubscribe();
-        }
-      })
-    );
+    this.route.params.pipe(pluck("id")).subscribe((id: string) => {
+      if (id) {
+        this.pid = id;
+        this.route.firstChild.url.subscribe((childUrl) => {
+          // Fetch dataset details
+          this.store.dispatch(fetchDatasetAction({pid: this.pid}));
+          this.fetchDataActions[TAB.details].loaded = true;
+          // fetch data for the selected tab
+          const tab = childUrl.length === 1? childUrl[0].path : "details";
+          this.fetchDataForTab(TAB[tab]);
+        })
+        .unsubscribe();
+      }
+    }).unsubscribe();
 
     this.store.pipe(select(getCurrentDataset), takeWhile(dataset => !dataset, true)).subscribe((dataset: Dataset) => {
       if (dataset) {
         this.dataset = dataset;
-          combineLatest([this.accessGroups$, this.isAdmin$, this.loggedIn$]).subscribe(
-            ([groups, isAdmin, isLoggedIn]) => {
-              const isInOwnerGroup = groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
-              this.navLinks = [
-                { location: "./", label: TAB.details, icon: "menu", enabled: true },
-                { location: "./datafiles", label: TAB.datafiles, icon: "cloud_download", enabled: true },
-                { location: "./reduce", label: TAB.reduce, icon: "tune", enabled: this.appConfig.datasetReduceEnabled && isLoggedIn && isInOwnerGroup},
-                { location: "./logbook", label: TAB.logbook, icon: "book", enabled: this.appConfig.logbookEnabled && isLoggedIn && isInOwnerGroup},
-                { location: "./attachments", label: TAB.attachments, icon: "insert_photo", enabled: isLoggedIn && isInOwnerGroup},
-                { location: "./lifecycle", label: TAB.lifecycle, icon: "loop", enabled: true},
-                { location: "./admin", label: TAB.admin, icon: "settings", enabled: isLoggedIn && isAdmin}
-              ];
-            }
-          ).unsubscribe();
+        combineLatest([this.accessGroups$, this.isAdmin$, this.loggedIn$]).subscribe(
+          ([groups, isAdmin, isLoggedIn]) => {
+            const isInOwnerGroup = groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
+            this.navLinks = [
+              { location: "./", label: TAB.details, icon: "menu", enabled: true },
+              { location: "./datafiles", label: TAB.datafiles, icon: "cloud_download", enabled: true },
+              { location: "./reduce", label: TAB.reduce, icon: "tune", enabled: this.appConfig.datasetReduceEnabled && isLoggedIn && isInOwnerGroup},
+              { location: "./logbook", label: TAB.logbook, icon: "book", enabled: this.appConfig.logbookEnabled && isLoggedIn && isInOwnerGroup},
+              { location: "./attachments", label: TAB.attachments, icon: "insert_photo", enabled: isLoggedIn && isInOwnerGroup},
+              { location: "./lifecycle", label: TAB.lifecycle, icon: "loop", enabled: true},
+              { location: "./admin", label: TAB.admin, icon: "settings", enabled: isLoggedIn && isAdmin}
+            ];
+          }
+        ).unsubscribe();
 
         if ("proposalId" in dataset) {
           this.store.dispatch(
@@ -170,7 +169,8 @@ export class DatasetDetailsDashboardComponent
             this.store.dispatch(action(args));
             this.fetchDataActions[TAB.attachments].loaded = true;
           }
-          break;}
+        }
+        break;
         default: {
           const {action, loaded} = this.fetchDataActions[tab];
           if (!loaded) {
@@ -186,6 +186,9 @@ export class DatasetDetailsDashboardComponent
   }
 
   ngOnDestroy() {
+    this.store.dispatch(clearCurrentDatasetStateAction());
+    this.store.dispatch(clearCurrentProposalStateAction());
+    this.store.dispatch(clearCurrentSampleStateAction());
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });

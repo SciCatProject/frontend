@@ -126,6 +126,11 @@ const reducer = createReducer(
     ...initialDatasetState,
   })),
 
+  on(fromActions.clearCurrentDatasetStateAction, (state) => ({
+    ...state,
+    currentSet: undefined
+  })),
+
   on(fromActions.selectDatasetAction, (state, { dataset }) => {
     const alreadySelected = state.selectedSets.find(
       (existing) => dataset.pid === existing.pid
