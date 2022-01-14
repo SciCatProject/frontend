@@ -1,8 +1,8 @@
 import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
-import { select, Store } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { first, switchMap } from "rxjs/operators";
 
-import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
+import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import {
   appendToDatasetArrayFieldAction,
   clearBatchAction,
@@ -26,7 +26,7 @@ import { ShareDialogComponent } from "datasets/share-dialog/share-dialog.compone
   styleUrls: ["./batch-view.component.scss"],
 })
 export class BatchViewComponent implements OnInit, OnDestroy {
-  batch$: Observable<Dataset[]> = this.store.pipe(select(getDatasetsInBatch));
+  batch$: Observable<Dataset[]> = this.store.select(selectDatasetsInBatch);
   subscriptions: Subscription[] = [];
   datasetList: Dataset[] = [];
   public hasBatch = false;
@@ -36,9 +36,9 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private dialog: MatDialog,
-    private store: Store<any>,
+    private store: Store,
     private archivingSrv: ArchivingService,
-    private router: Router,
+    private router: Router
   ) {}
 
   private clearBatch() {
@@ -108,23 +108,28 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   }
 
   onRetrieve() {
-    let dialogOptions = this.archivingSrv.retriveDialogOptions(this.appConfig.retrieveDestinations);
+    let dialogOptions = this.archivingSrv.retriveDialogOptions(
+      this.appConfig.retrieveDestinations
+    );
     const dialogRef = this.dialog.open(DialogComponent, dialogOptions);
-    const destPath = {destinationPath: "/archive/retrieve"};
-    dialogRef.afterClosed().subscribe(result => {
+    const destPath = { destinationPath: "/archive/retrieve" };
+    dialogRef.afterClosed().subscribe((result) => {
       if (result && this.datasetList) {
-        const locationOption = this.archivingSrv.generateOptionLocation(result, this.appConfig.retrieveDestinations);
-        const extra = {...destPath, ...locationOption};
+        const locationOption = this.archivingSrv.generateOptionLocation(
+          result,
+          this.appConfig.retrieveDestinations
+        );
+        const extra = { ...destPath, ...locationOption };
         this.archivingSrv.retrieve(this.datasetList, extra).subscribe(
           () => this.clearBatch(),
-          err =>
+          (err) =>
             this.store.dispatch(
               showMessageAction({
                 message: {
                   type: MessageType.Error,
                   content: err.message,
-                  duration: 5000
-                }
+                  duration: 5000,
+                },
               })
             )
         );

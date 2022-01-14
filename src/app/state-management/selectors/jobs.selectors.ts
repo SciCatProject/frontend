@@ -1,43 +1,46 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { JobsState } from "state-management/state/jobs.store";
 
-const getJobState = createFeatureSelector<JobsState>("jobs");
+const selectJobState = createFeatureSelector<JobsState>("jobs");
 
-export const getJobs = createSelector(getJobState, state => state.jobs);
+export const selectJobs = createSelector(selectJobState, (state) => state.jobs);
 
-export const getCurrentJob = createSelector(
-  getJobState,
-  state => state.currentJob
+export const selectCurrentJob = createSelector(
+  selectJobState,
+  (state) => state.currentJob
 );
 
-export const getJobsCount = createSelector(
-  getJobState,
-  state => state.totalCount
+export const selectJobsCount = createSelector(
+  selectJobState,
+  (state) => state.totalCount
 );
 
-export const getSubmitError = createSelector(
-  getJobState,
-  state => state.submitError
+export const selectSubmitError = createSelector(
+  selectJobState,
+  (state) => state.submitError
 );
 
-export const getFilters = createSelector(getJobState, state => state.filters);
-
-export const getJobViewMode = createSelector(
-  getFilters,
-  filters => filters.mode
+export const selectFilters = createSelector(
+  selectJobState,
+  (state) => state.filters
 );
 
-export const getPage = createSelector(getFilters, filters => {
+export const selectJobViewMode = createSelector(
+  selectFilters,
+  (filters) => filters.mode
+);
+
+export const selectPage = createSelector(selectFilters, (filters) => {
   const { skip, limit } = filters;
   return skip / limit;
 });
 
-export const getJobsPerPage = createSelector(
-  getFilters,
-  filters => filters.limit
+export const selectJobsPerPage = createSelector(
+  selectFilters,
+  (filters) => filters.limit
 );
 
-export const getQueryParams = createSelector(getFilters, filters => {
+export const selectQueryParams = createSelector(selectFilters, (filters) => {
   const { mode, sortField, skip, limit } = filters;
   if (mode) {
     return { where: mode, order: sortField, skip, limit };

@@ -2,13 +2,18 @@ import { DOCUMENT } from "@angular/common";
 import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { select, Store } from "@ngrx/store";
-import { fetchCurrentUserAction, fetchUserAction, loginAction, loginOIDCAction } from "state-management/actions/user.actions";
+import { Store } from "@ngrx/store";
+import {
+  fetchCurrentUserAction,
+  fetchUserAction,
+  loginAction,
+  loginOIDCAction,
+} from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
 import {
-  getIsLoggedIn,
-  getIsLoggingIn
+  selectIsLoggedIn,
+  selectIsLoggingIn,
 } from "state-management/selectors/user.selectors";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { MatDialog } from "@angular/material/dialog";
@@ -30,31 +35,30 @@ interface LoginForm {
 @Component({
   selector: "login-form",
   templateUrl: "./login.component.html",
-  styleUrls: ["login.component.scss"]
+  styleUrls: ["login.component.scss"],
 })
 export class LoginComponent implements OnInit, OnDestroy {
   private proceedSubscription = new Subscription();
-  private hasUser$ = this.store.pipe(
-    select(getIsLoggedIn),
-    filter(is => is)
-  );
+  private hasUser$ = this.store
+    .select(selectIsLoggedIn)
+    .pipe(filter((is) => is));
 
   returnUrl: string;
   hide = true;
   public loginForm = this.fb.group({
     username: ["", Validators.required],
     password: ["", Validators.required],
-    rememberMe: true
+    rememberMe: true,
   });
 
-  loading$ = this.store.pipe(select(getIsLoggingIn));
+  loading$ = this.store.select(selectIsLoggingIn);
 
   constructor(
     public dialog: MatDialog,
     public fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private store: Store<any>,
+    private store: Store,
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     @Inject(DOCUMENT) public document: Document
   ) {
@@ -67,7 +71,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   openPrivacyDialog() {
     this.dialog.open(PrivacyDialogComponent, {
-      width: "auto"
+      width: "auto",
     });
   }
 
@@ -81,7 +85,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.store.dispatch(loginAction({ form }));
   }
 
-
   ngOnInit() {
     this.proceedSubscription = this.hasUser$.subscribe(() => {
       this.store.dispatch(fetchCurrentUserAction());
@@ -89,18 +92,24 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl(this.returnUrl || "/datasets");
     });
 
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       // OIDC logins eventually redirect to this componenet, adding information about user
       // which are parsed here.
-      if (!!params.returnUrl){
+      if (!!params.returnUrl) {
         const urlqp = new URLSearchParams(params.returnUrl.split("?")[1]);
         // dispatching to the loginOIDCAction passes information to eventually be added to Loopback AccessToken
         const accessToken = urlqp.get("access-token");
         const userId = urlqp.get("user-id");
-        this.store.dispatch(loginOIDCAction({ oidcLoginResponse: {accessToken, userId }}));
-        this.store.dispatch(fetchUserAction({ adLoginResponse: {access_token: accessToken, userId }}));
+        this.store.dispatch(
+          loginOIDCAction({ oidcLoginResponse: { accessToken, userId } })
+        );
+        this.store.dispatch(
+          fetchUserAction({
+            adLoginResponse: { access_token: accessToken, userId },
+          })
+        );
       }
-});
+    });
   }
 
   ngOnDestroy() {

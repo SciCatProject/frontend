@@ -19,8 +19,8 @@ import { MessageType } from "state-management/models";
 import { Router } from "@angular/router";
 import { provideMockStore } from "@ngrx/store/testing";
 import {
-  getColumns,
-  getCurrentUser,
+  selectColumns,
+  selectCurrentUser,
 } from "state-management/selectors/user.selectors";
 import {
   clearDatasetsStateAction,
@@ -55,8 +55,8 @@ describe("UserEffects", () => {
         provideMockActions(() => actions),
         provideMockStore({
           selectors: [
-            { selector: getCurrentUser, value: {} },
-            { selector: getColumns, value: [] },
+            { selector: selectCurrentUser, value: {} },
+            { selector: selectColumns, value: [] },
           ],
         }),
         {

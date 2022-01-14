@@ -1,7 +1,7 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { PublishedData } from "shared/sdk";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   fetchPublishedDataAction,
@@ -9,7 +9,7 @@ import {
 } from "state-management/actions/published-data.actions";
 import { Subscription } from "rxjs";
 import { pluck } from "rxjs/operators";
-import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
+import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 
 @Component({
   selector: "publisheddata-details",
@@ -17,7 +17,7 @@ import { getCurrentPublishedData } from "state-management/selectors/published-da
   styleUrls: ["./publisheddata-details.component.scss"],
 })
 export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
-  currentData$ = this.store.pipe(select(getCurrentPublishedData));
+  currentData$ = this.store.select(selectCurrentPublishedData);
   publishedData: PublishedData = new PublishedData();
   subscriptions: Subscription[] = [];
   show = false;
@@ -27,7 +27,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store<PublishedData>,
+    private store: Store,
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {}
 

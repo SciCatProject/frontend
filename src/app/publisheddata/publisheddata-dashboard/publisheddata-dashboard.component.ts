@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { PublishedData } from "shared/sdk";
 import { Router } from "@angular/router";
 import {
-  getAllPublishedData,
-  getPublishedDataCount,
-  getPage,
-  getPublishedDataPerPage,
-  getFilters,
+  selectAllPublishedData,
+  selectPublishedDataCount,
+  selectPage,
+  selectPublishedDataPerPage,
+  selectFilters,
 } from "state-management/selectors/published-data.selectors";
 import {
   fetchAllPublishedDataAction,
@@ -34,10 +34,10 @@ import { showMessageAction } from "state-management/actions/user.actions";
   styleUrls: ["./publisheddata-dashboard.component.scss"],
 })
 export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
-  public publishedData$ = this.store.pipe(select(getAllPublishedData));
-  public count$ = this.store.pipe(select(getPublishedDataCount));
-  public currentPage$ = this.store.pipe(select(getPage));
-  public itemsPerPage$ = this.store.pipe(select(getPublishedDataPerPage));
+  public publishedData$ = this.store.select(selectAllPublishedData);
+  public count$ = this.store.select(selectPublishedDataCount);
+  public currentPage$ = this.store.select(selectPage);
+  public itemsPerPage$ = this.store.select(selectPublishedDataPerPage);
 
   columns: TableColumn[] = [
     { name: "doi", icon: "fingerprint", sort: true, inList: false },
@@ -63,7 +63,7 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private router: Router,
-    private store: Store<PublishedData>
+    private store: Store
   ) {}
 
   onShareClick() {
@@ -129,7 +129,7 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchAllPublishedDataAction());
 
     this.filtersSubscription = this.store
-      .pipe(select(getFilters))
+      .select(selectFilters)
       .subscribe((filters) => {
         this.router.navigate(["/publishedDatasets"], {
           queryParams: { args: JSON.stringify(filters) },

@@ -1,15 +1,11 @@
 import * as fromSelectors from "./proposals.selectors";
-import {
-  Proposal,
-  ProposalInterface,
-  Attachment
-} from "shared/sdk/models";
+import { Proposal, ProposalInterface, Attachment } from "shared/sdk/models";
 import { ProposalsState } from "state-management/state/proposals.store";
 
 const data: ProposalInterface = {
   proposalId: "testId",
   email: "testEmail",
-  ownerGroup: "testGroup"
+  ownerGroup: "testGroup",
 };
 const proposal = new Proposal(data);
 const attachments = [new Attachment()];
@@ -29,176 +25,178 @@ const initialProposalsState: ProposalsState = {
     text: "test",
     dateRange: {
       begin: new Date(2019, 11, 1).toISOString(),
-      end: new Date(2019, 11, 2).toISOString()
+      end: new Date(2019, 11, 2).toISOString(),
     },
     sortField: "test asc",
     skip: 0,
-    limit: 25
+    limit: 25,
   },
   datasetFilters: {
     text: "test",
     sortField: "test asc",
     skip: 0,
-    limit: 25
-  }
+    limit: 25,
+  },
 };
 
 describe("Proposal Selectors", () => {
-  describe("getProposals", () => {
-    it("should get proposals", () => {
+  describe("selectProposals", () => {
+    it("should select proposals", () => {
       expect(
-        fromSelectors.getProposals.projector(initialProposalsState)
+        fromSelectors.selectProposals.projector(initialProposalsState)
       ).toEqual([]);
     });
   });
 
-  describe("getCurrentProposal", () => {
-    it("should get current proposal", () => {
+  describe("selectCurrentProposal", () => {
+    it("should select current proposal", () => {
       expect(
-        fromSelectors.getCurrentProposal.projector(initialProposalsState)
+        fromSelectors.selectCurrentProposal.projector(initialProposalsState)
       ).toEqual(proposal);
     });
   });
 
-  describe("getCurrentAttachments", () => {
-    it("should get attachments from current proposal", () => {
+  describe("selectCurrentAttachments", () => {
+    it("should select attachments from current proposal", () => {
       expect(
-        fromSelectors.getCurrentAttachments.projector(
+        fromSelectors.selectCurrentAttachments.projector(
           initialProposalsState.currentProposal
         )
       ).toEqual(attachments);
     });
   });
 
-  describe("getProposalDatasets", () => {
-    it("should get datasets belonging to current proposal", () => {
+  describe("selectProposalDatasets", () => {
+    it("should select datasets belonging to current proposal", () => {
       expect(
-        fromSelectors.getProposalDatasets.projector(initialProposalsState)
+        fromSelectors.selectProposalDatasets.projector(initialProposalsState)
       ).toEqual([]);
     });
   });
 
-  describe("getProposalsCount", () => {
-    it("should get the number of proposals", () => {
+  describe("selectProposalsCount", () => {
+    it("should select the number of proposals", () => {
       expect(
-        fromSelectors.getProposalsCount.projector(initialProposalsState)
+        fromSelectors.selectProposalsCount.projector(initialProposalsState)
       ).toEqual(0);
     });
   });
 
-  describe("getDatasetsCount", () => {
-    it("should get the number of datasets", () => {
+  describe("selectDatasetsCount", () => {
+    it("should select the number of datasets", () => {
       expect(
-        fromSelectors.getDatasetsCount.projector(initialProposalsState)
+        fromSelectors.selectDatasetsCount.projector(initialProposalsState)
       ).toEqual(0);
     });
   });
 
-  describe("getHasPrefilledFilters", () => {
-    it("should get hasPrefilledFilters", () => {
+  describe("selectHasPrefilledFilters", () => {
+    it("should select hasPrefilledFilters", () => {
       expect(
-        fromSelectors.getHasPrefilledFilters.projector(initialProposalsState)
+        fromSelectors.selectHasPrefilledFilters.projector(initialProposalsState)
       ).toEqual(true);
     });
   });
 
-  describe("getFilters", () => {
-    it("should get the proposal filters", () => {
-      expect(fromSelectors.getFilters.projector(initialProposalsState)).toEqual(
-        initialProposalsState.proposalFilters
-      );
+  describe("selectFilters", () => {
+    it("should select the proposal filters", () => {
+      expect(
+        fromSelectors.selectFilters.projector(initialProposalsState)
+      ).toEqual(initialProposalsState.proposalFilters);
     });
   });
 
-  describe("getTextFilter", () => {
-    it("should get the proposal text filter", () => {
+  describe("selectTextFilter", () => {
+    it("should select the proposal text filter", () => {
       expect(
-        fromSelectors.getTextFilter.projector(
+        fromSelectors.selectTextFilter.projector(
           initialProposalsState.proposalFilters
         )
       ).toEqual("test");
     });
   });
 
-  describe("getDateRangeFilter", () => {
-    it("should get dateRange from proposalFilters", () => {
+  describe("selectDateRangeFilter", () => {
+    it("should select dateRange from proposalFilters", () => {
       expect(
-        fromSelectors.getDateRangeFilter.projector(
+        fromSelectors.selectDateRangeFilter.projector(
           initialProposalsState.proposalFilters
         )
       ).toEqual({
         begin: new Date(2019, 11, 1).toISOString(),
-        end: new Date(2019, 11, 2).toISOString()
+        end: new Date(2019, 11, 2).toISOString(),
       });
     });
   });
 
-  describe("getHasAppliedFilters", () => {
+  describe("selectHasAppliedFilters", () => {
     it("should return true if text or dateRange filter has value", () => {
       expect(
-        fromSelectors.getHasAppliedFilters.projector(
+        fromSelectors.selectHasAppliedFilters.projector(
           initialProposalsState.proposalFilters
         )
       ).toEqual(true);
     });
   });
 
-  describe("getDatasetFilters", () => {
-    it("should get the dataset filters", () => {
+  describe("selectDatasetFilters", () => {
+    it("should select the dataset filters", () => {
       expect(
-        fromSelectors.getDatasetFilters.projector(initialProposalsState)
+        fromSelectors.selectDatasetFilters.projector(initialProposalsState)
       ).toEqual(initialProposalsState.datasetFilters);
     });
   });
 
-  describe("getPage", () => {
-    it("should get the current proposals page", () => {
+  describe("selectPage", () => {
+    it("should select the current proposals page", () => {
       const { skip, limit } = initialProposalsState.proposalFilters;
       const page = skip / limit;
       expect(
-        fromSelectors.getPage.projector(initialProposalsState.proposalFilters)
+        fromSelectors.selectPage.projector(
+          initialProposalsState.proposalFilters
+        )
       ).toEqual(page);
     });
   });
 
-  describe("getDatasetsPage", () => {
-    it("should get the current datasets page", () => {
+  describe("selectDatasetsPage", () => {
+    it("should select the current datasets page", () => {
       const { skip, limit } = initialProposalsState.datasetFilters;
       const page = skip / limit;
       expect(
-        fromSelectors.getDatasetsPage.projector(
+        fromSelectors.selectDatasetsPage.projector(
           initialProposalsState.datasetFilters
         )
       ).toEqual(page);
     });
   });
 
-  describe("getProposalsPerPage", () => {
-    it("should get limit from proposal filters", () => {
+  describe("selectProposalsPerPage", () => {
+    it("should select limit from proposal filters", () => {
       const { limit } = initialProposalsState.proposalFilters;
       expect(
-        fromSelectors.getProposalsPerPage.projector(
+        fromSelectors.selectProposalsPerPage.projector(
           initialProposalsState.proposalFilters
         )
       ).toEqual(limit);
     });
   });
 
-  describe("getDatasetsPerPage", () => {
-    it("should get limit from datasets filters", () => {
+  describe("selectDatasetsPerPage", () => {
+    it("should select limit from datasets filters", () => {
       const { limit } = initialProposalsState.datasetFilters;
       expect(
-        fromSelectors.getDatasetsPerPage.projector(
+        fromSelectors.selectDatasetsPerPage.projector(
           initialProposalsState.datasetFilters
         )
       ).toEqual(limit);
     });
   });
 
-  describe("getFullqueryParams", () => {
-    it("should get query params for proposals", () => {
+  describe("selectFullqueryParams", () => {
+    it("should select query params for proposals", () => {
       const fullqueryKeys = Object.keys(
-        fromSelectors.getFullqueryParams.projector(
+        fromSelectors.selectFullqueryParams.projector(
           initialProposalsState.proposalFilters
         )
       );
@@ -206,18 +204,14 @@ describe("Proposal Selectors", () => {
     });
   });
 
-  describe("getDatasetsQueryParams", () => {
-    it("should get query params for datasets", () => {
-      const {
-        text,
-        skip,
-        limit,
-        sortField
-      } = initialProposalsState.datasetFilters;
+  describe("selectDatasetsQueryParams", () => {
+    it("should select query params for datasets", () => {
+      const { text, skip, limit, sortField } =
+        initialProposalsState.datasetFilters;
       const limits = { order: sortField, skip, limit };
       const params = { query: JSON.stringify({ text }), limits };
       expect(
-        fromSelectors.getDatasetsQueryParams.projector(
+        fromSelectors.selectDatasetsQueryParams.projector(
           initialProposalsState.datasetFilters
         )
       ).toEqual(params);

@@ -6,7 +6,7 @@ import { provideMockActions } from "@ngrx/effects/testing";
 import * as fromActions from "state-management/actions/instruments.actions";
 import { hot, cold } from "jasmine-marbles";
 import { provideMockStore } from "@ngrx/store/testing";
-import { getFilters } from "state-management/selectors/instruments.selectors";
+import { selectFilters } from "state-management/selectors/instruments.selectors";
 import {
   loadingAction,
   loadingCompleteAction,
@@ -26,7 +26,7 @@ describe("InstrumentEffects", () => {
         provideMockStore({
           selectors: [
             {
-              selector: getFilters,
+              selector: selectFilters,
               value: { sortField: "test asc", skip: 0, limit: 25 },
             },
           ],

@@ -4,9 +4,9 @@ import { RetrieveDestinations } from "app-config.module";
 import { Dataset, Job, User } from "shared/sdk";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import {
-  getCurrentUser,
-  getProfile,
-  getTapeCopies,
+  selectCurrentUser,
+  selectProfile,
+  selectTapeCopies,
 } from "state-management/selectors/user.selectors";
 import { JobsState } from "state-management/state/jobs.store";
 import { ArchivingService } from "./archiving.service";
@@ -23,14 +23,14 @@ describe("ArchivingService", () => {
         provideMockStore({
           selectors: [
             {
-              selector: getCurrentUser,
+              selector: selectCurrentUser,
               value: new User({
                 email: "test@email.com",
                 username: "testName",
               }),
             },
-            { selector: getTapeCopies, value: "test" },
-            { selector: getProfile, value: { email: "test@email.com" } },
+            { selector: selectTapeCopies, value: "test" },
+            { selector: selectProfile, value: { email: "test@email.com" } },
           ],
         }),
       ],

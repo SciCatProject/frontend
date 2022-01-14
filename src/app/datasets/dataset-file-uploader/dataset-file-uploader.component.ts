@@ -1,16 +1,26 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { select, Store } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
-import { PickedFile, SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
+import {
+  PickedFile,
+  SubmitCaptionEvent,
+} from "shared/modules/file-uploader/file-uploader.component";
 import { Attachment, Dataset, User } from "shared/sdk";
-import { addAttachmentAction, removeAttachmentAction, updateAttachmentCaptionAction } from "state-management/actions/datasets.actions";
-import { getCurrentAttachments, getCurrentDataset } from "state-management/selectors/datasets.selectors";
-import { getCurrentUser } from "state-management/selectors/user.selectors";
+import {
+  addAttachmentAction,
+  removeAttachmentAction,
+  updateAttachmentCaptionAction,
+} from "state-management/actions/datasets.actions";
+import {
+  selectCurrentAttachments,
+  selectCurrentDataset,
+} from "state-management/selectors/datasets.selectors";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "app-dataset-file-uploader",
   templateUrl: "./dataset-file-uploader.component.html",
-  styleUrls: ["./dataset-file-uploader.component.scss"]
+  styleUrls: ["./dataset-file-uploader.component.scss"],
 })
 export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
   attachments: Attachment[] = [];
@@ -18,25 +28,28 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
   attachment: Partial<Attachment> = {};
   dataset: Dataset | undefined;
   user: User | undefined;
-  constructor(private store: Store<Dataset>) { }
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentDataset)).subscribe((dataset) => {
+      this.store.select(selectCurrentDataset).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
         }
-    }));
+      })
+    );
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentUser)).subscribe((user) => {
+      this.store.select(selectCurrentUser).subscribe((user) => {
         if (user) {
           this.user = user;
         }
       })
     );
-    this.subscriptions.push(this.store.pipe(select(getCurrentAttachments)).subscribe((attachments)=>{
-      this.attachments = attachments;
-    }));
+    this.subscriptions.push(
+      this.store.select(selectCurrentAttachments).subscribe((attachments) => {
+        this.attachments = attachments;
+      })
+    );
   }
   onFileUploaderFilePicked(file: PickedFile) {
     if (this.dataset && this.user) {
@@ -52,7 +65,7 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
         dataset: this.dataset,
         datasetId: this.dataset.pid,
       };
-      this.store.dispatch(addAttachmentAction({ attachment: this.attachment}));
+      this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));
     }
   }
 
@@ -70,7 +83,7 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
   deleteAttachment(attachmentId: string) {
     if (this.dataset) {
       this.store.dispatch(
-          removeAttachmentAction({ datasetId: this.dataset?.pid, attachmentId })
+        removeAttachmentAction({ datasetId: this.dataset?.pid, attachmentId })
       );
     }
   }

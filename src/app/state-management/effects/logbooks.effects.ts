@@ -1,23 +1,23 @@
 import { Injectable } from "@angular/core";
-import { createEffect, Actions, ofType } from "@ngrx/effects";
+import { createEffect, Actions, ofType, concatLatestFrom } from "@ngrx/effects";
 import { LogbookApi, Logbook } from "shared/sdk";
 import * as fromActions from "state-management/actions/logbooks.actions";
-import { mergeMap, catchError, map, withLatestFrom } from "rxjs/operators";
+import { mergeMap, catchError, map } from "rxjs/operators";
 import { of } from "rxjs";
 
 import {
   loadingAction,
-  loadingCompleteAction
+  loadingCompleteAction,
 } from "state-management/actions/user.actions";
-import { Store, select } from "@ngrx/store";
-import { getFilters } from "state-management/selectors/logbooks.selectors";
+import { Store } from "@ngrx/store";
+import { selectFilters } from "state-management/selectors/logbooks.selectors";
 
 @Injectable()
 export class LogbookEffects {
-  filters$ = this.store.pipe(select(getFilters));
+  filters$ = this.store.select(selectFilters);
 
-  fetchLogbooks$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchLogbooks$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchLogbooksAction),
       mergeMap(() =>
         this.logbookApi.find<Logbook>().pipe(
@@ -27,31 +27,31 @@ export class LogbookEffects {
           catchError(() => of(fromActions.fetchLogbooksFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  fetchLogbook$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchLogbook$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchLogbookAction),
-      withLatestFrom(this.filters$),
+      concatLatestFrom(() => this.filters$),
       mergeMap(([{ name }, filters]) =>
         this.logbookApi
           .findByName(encodeURIComponent(name), JSON.stringify(filters))
           .pipe(
-            mergeMap(logbook => [
+            mergeMap((logbook) => [
               fromActions.fetchLogbookCompleteAction({ logbook }),
-              fromActions.fetchCountAction({ name })
+              fromActions.fetchCountAction({ name }),
             ]),
             catchError(() => of(fromActions.fetchLogbookFailedAction()))
           )
       )
-    )
-  );
+    );
+  });
 
-  fetchCount$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchCount$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
-      withLatestFrom(this.filters$),
+      concatLatestFrom(() => this.filters$),
       mergeMap(([{ name }, filters]) => {
         const { skip, limit, sortField, ...theRest } = filters;
         return this.logbookApi
@@ -59,28 +59,28 @@ export class LogbookEffects {
           .pipe(
             map((logbook: Logbook) =>
               fromActions.fetchCountCompleteAction({
-                count: logbook.messages.length
+                count: logbook.messages.length,
               })
             ),
             catchError(() => of(fromActions.fetchCountFailedAction()))
           );
       })
-    )
-  );
+    );
+  });
 
-  loading$ = createEffect(() =>
-    this.actions$.pipe(
+  loading$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.fetchLogbooksAction,
         fromActions.fetchLogbookAction,
         fromActions.fetchCountAction
       ),
       mergeMap(() => of(loadingAction()))
-    )
-  );
+    );
+  });
 
-  loadingComplete$ = createEffect(() =>
-    this.actions$.pipe(
+  loadingComplete$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.fetchLogbooksCompleteAction,
         fromActions.fetchLogbooksFailedAction,
@@ -90,12 +90,12 @@ export class LogbookEffects {
         fromActions.fetchCountFailedAction
       ),
       mergeMap(() => of(loadingCompleteAction()))
-    )
-  );
+    );
+  });
 
   constructor(
     private actions$: Actions,
     private logbookApi: LogbookApi,
-    private store: Store<Logbook>
+    private store: Store
   ) {}
 }

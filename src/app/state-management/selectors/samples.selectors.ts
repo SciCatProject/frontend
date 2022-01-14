@@ -1,97 +1,103 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { SampleState } from "state-management/state/samples.store";
 
-const getSampleState = createFeatureSelector<SampleState>("samples");
+const selectSampleState = createFeatureSelector<SampleState>("samples");
 
-export const getSamples = createSelector(
-  getSampleState,
+export const selectSamples = createSelector(
+  selectSampleState,
   (state) => state.samples
 );
 
-export const getMetadataKeys = createSelector(
-  getSampleState,
+export const selectMetadataKeys = createSelector(
+  selectSampleState,
   (state) => state.metadataKeys
 );
 
-export const getCurrentSample = createSelector(
-  getSampleState,
+export const selectCurrentSample = createSelector(
+  selectSampleState,
   (state) => state.currentSample
 );
 
-export const getCurrentAttachments = createSelector(
-  getCurrentSample,
+export const selectCurrentAttachments = createSelector(
+  selectCurrentSample,
   (sample) => (sample ? sample.attachments : [])
 );
 
-export const getDatasets = createSelector(
-  getSampleState,
+export const selectDatasets = createSelector(
+  selectSampleState,
   (state) => state.datasets
 );
 
-export const getSamplesCount = createSelector(
-  getSampleState,
+export const selectSamplesCount = createSelector(
+  selectSampleState,
   (state) => state.samplesCount
 );
 
-export const getDatasetsCount = createSelector(
-  getSampleState,
+export const selectDatasetsCount = createSelector(
+  selectSampleState,
   (state) => state.datasetsCount
 );
 
-export const getHasPrefilledFilters = createSelector(
-  getSampleState,
+export const selectHasPrefilledFilters = createSelector(
+  selectSampleState,
   (state) => state.hasPrefilledFilters
 );
 
-export const getFilters = createSelector(
-  getSampleState,
+export const selectFilters = createSelector(
+  selectSampleState,
   (state) => state.sampleFilters
 );
 
-export const getTextFilter = createSelector(
-  getFilters,
+export const selectTextFilter = createSelector(
+  selectFilters,
   (filters) => filters.text
 );
 
-export const getDatasetFilters = createSelector(
-  getSampleState,
+export const selectDatasetFilters = createSelector(
+  selectSampleState,
   (state) => state.datasetFilters
 );
 
-export const getPage = createSelector(getFilters, (filters) => {
+export const selectPage = createSelector(selectFilters, (filters) => {
   const { skip, limit } = filters;
   return skip / limit;
 });
 
-export const getDatasetsPage = createSelector(getDatasetFilters, (filters) => {
-  const { skip, limit } = filters;
-  return skip / limit;
-});
+export const selectDatasetsPage = createSelector(
+  selectDatasetFilters,
+  (filters) => {
+    const { skip, limit } = filters;
+    return skip / limit;
+  }
+);
 
-export const getSamplesPerPage = createSelector(
-  getFilters,
+export const selectSamplesPerPage = createSelector(
+  selectFilters,
   (filters) => filters.limit
 );
 
-export const getCharacteristicsFilter = createSelector(
-  getFilters,
+export const selectCharacteristicsFilter = createSelector(
+  selectFilters,
   (filters) => filters.characteristics
 );
 
-export const getDatasetsPerPage = createSelector(
-  getDatasetFilters,
+export const selectDatasetsPerPage = createSelector(
+  selectDatasetFilters,
   (filters) => filters.limit
 );
 
-export const getFullqueryParams = createSelector(getFilters, (filters) => {
-  const { sortField, skip, limit, ...theRest } = filters;
-  const limits = { order: sortField, skip, limit };
-  const query = restrictFilter(theRest);
-  return { query: JSON.stringify(query), limits };
-});
+export const selectFullqueryParams = createSelector(
+  selectFilters,
+  (filters) => {
+    const { sortField, skip, limit, ...theRest } = filters;
+    const limits = { order: sortField, skip, limit };
+    const query = restrictFilter(theRest);
+    return { query: JSON.stringify(query), limits };
+  }
+);
 
-export const getDatasetsQueryParams = createSelector(
-  getDatasetFilters,
+export const selectDatasetsQueryParams = createSelector(
+  selectDatasetFilters,
   (filters) => {
     const { sortField, skip, limit } = filters;
     return { order: sortField, skip, limit };

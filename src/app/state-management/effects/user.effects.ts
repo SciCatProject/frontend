@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Actions, ofType, createEffect } from "@ngrx/effects";
+import { Actions, ofType, createEffect, concatLatestFrom } from "@ngrx/effects";
 import { ADAuthService } from "users/adauth.service";
 import {
   LoopBackAuth,
@@ -17,17 +17,16 @@ import {
   catchError,
   filter,
   tap,
-  withLatestFrom,
   distinctUntilChanged,
   mergeMap,
   takeWhile,
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
-  getColumns,
-  getCurrentUser,
+  selectColumns,
+  selectCurrentUser,
 } from "state-management/selectors/user.selectors";
 import {
   clearDatasetsStateAction,
@@ -47,21 +46,21 @@ import { HttpErrorResponse } from "@angular/common/http";
 
 @Injectable()
 export class UserEffects {
-  user$ = this.store.pipe(select(getCurrentUser));
-  columns$ = this.store.pipe(select(getColumns));
+  user$ = this.store.select(selectCurrentUser);
+  columns$ = this.store.select(selectColumns);
 
-  login$ = createEffect(() =>
-    this.actions$.pipe(
+  login$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.loginAction),
       map((action) => action.form),
       map(({ username, password, rememberMe }) =>
         fromActions.activeDirLoginAction({ username, password, rememberMe })
       )
-    )
-  );
+    );
+  });
 
-  adLogin$ = createEffect(() =>
-    this.actions$.pipe(
+  adLogin$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.activeDirLoginAction),
       switchMap(({ username, password, rememberMe }) =>
         this.activeDirAuthService.login(username, password).pipe(
@@ -75,17 +74,17 @@ export class UserEffects {
                 username,
                 password,
                 rememberMe,
-                error
+                error,
               })
             )
           )
         )
       )
-    )
-  );
+    );
+  });
 
-  oidcFetchUser$ = createEffect(() =>
-    this.actions$.pipe(
+  oidcFetchUser$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.loginOIDCAction),
       switchMap(({ oidcLoginResponse }) => {
         const token = new SDKToken({
@@ -101,13 +100,15 @@ export class UserEffects {
               accountType: "external",
             }),
           ]),
-          catchError((error: HttpErrorResponse) => of(fromActions.fetchUserFailedAction({error})))
+          catchError((error: HttpErrorResponse) =>
+            of(fromActions.fetchUserFailedAction({ error }))
+          )
         );
       })
-    )
-  );
-  fetchUser$ = createEffect(() =>
-    this.actions$.pipe(
+    );
+  });
+  fetchUser$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchUserAction),
       switchMap(({ adLoginResponse }) => {
         const token = new SDKToken({
@@ -123,23 +124,25 @@ export class UserEffects {
               accountType: "external",
             }),
           ]),
-          catchError((error: HttpErrorResponse) => of(fromActions.fetchUserFailedAction({error})))
+          catchError((error: HttpErrorResponse) =>
+            of(fromActions.fetchUserFailedAction({ error }))
+          )
         );
       })
-    )
-  );
+    );
+  });
 
-  loginRedirect$ = createEffect(() =>
-    this.actions$.pipe(
+  loginRedirect$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.activeDirLoginFailedAction),
       map(({ username, password, rememberMe, error }) =>
-        fromActions.funcLoginAction({ username, password, rememberMe, error})
+        fromActions.funcLoginAction({ username, password, rememberMe, error })
       )
-    )
-  );
+    );
+  });
 
-  funcLogin$ = createEffect(() =>
-    this.actions$.pipe(
+  funcLogin$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.funcLoginAction),
       switchMap(({ username, password, rememberMe, error }) =>
         this.userApi.login({ username, password, rememberMe }).pipe(
@@ -150,30 +153,31 @@ export class UserEffects {
               accountType: "functional",
             }),
           ]),
-          catchError(() => of(fromActions.funcLoginFailedAction({error})))
+          catchError(() => of(fromActions.funcLoginFailedAction({ error })))
         )
       )
-    )
-  );
+    );
+  });
 
-  loginFailed$ = createEffect(() =>
-    this.actions$.pipe(
+  loginFailed$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.fetchUserFailedAction,
         fromActions.funcLoginFailedAction
       ),
-      map(({ error }) => fromActions.loginFailedAction({error}))
-    )
-  );
+      map(({ error }) => fromActions.loginFailedAction({ error }))
+    );
+  });
 
-  loginFailedMessage$ = createEffect(() =>
-    this.actions$.pipe(
+  loginFailedMessage$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.loginFailedAction),
       map(({ error }) => {
         if (error.status === 500) {
           return fromActions.showMessageAction({
             message: {
-              content: "Unable to connect to the authentication service. Please try again later or contact website maintainer.",
+              content:
+                "Unable to connect to the authentication service. Please try again later or contact website maintainer.",
               type: MessageType.Error,
               duration: 5000,
             },
@@ -187,11 +191,11 @@ export class UserEffects {
           },
         });
       })
-    )
-  );
+    );
+  });
 
-  logout$ = createEffect(() =>
-    this.actions$.pipe(
+  logout$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.logoutAction),
       filter(() => this.userApi.isAuthenticated()),
       switchMap(() =>
@@ -210,20 +214,21 @@ export class UserEffects {
           catchError(() => of(fromActions.logoutFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
   logoutNavigate$ = createEffect(
-    () =>
-      this.actions$.pipe(
+    () => {
+      return this.actions$.pipe(
         ofType(fromActions.logoutCompleteAction),
         tap(() => this.router.navigate([""]))
-      ),
+      );
+    },
     { dispatch: false }
   );
 
-  fetchCurrentUser$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchCurrentUser$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchCurrentUserAction),
       switchMap(() =>
         this.userApi.getCurrent().pipe(
@@ -235,25 +240,27 @@ export class UserEffects {
           catchError(() => of(fromActions.fetchCurrentUserFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  fetchUserIdentity$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchUserIdentity$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchUserIdentityAction),
       switchMap(({ id }) =>
-        this.userIdentityApi.findOne<UserIdentity>({ where: { userId: id } }).pipe(
-          map((userIdentity: UserIdentity) =>
-            fromActions.fetchUserIdentityCompleteAction({ userIdentity })
-          ),
-          catchError(() => of(fromActions.fetchUserIdentityFailedAction()))
-        )
+        this.userIdentityApi
+          .findOne<UserIdentity>({ where: { userId: id } })
+          .pipe(
+            map((userIdentity: UserIdentity) =>
+              fromActions.fetchUserIdentityCompleteAction({ userIdentity })
+            ),
+            catchError(() => of(fromActions.fetchUserIdentityFailedAction()))
+          )
       )
-    )
-  );
+    );
+  });
 
-  fetchUserSettings$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchUserSettings$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchUserSettingsAction),
       switchMap(({ id }) =>
         this.userApi.getSettings(id, null).pipe(
@@ -263,48 +270,48 @@ export class UserEffects {
           catchError(() => of(fromActions.fetchUserSettingsFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  setLimitFilters$ = createEffect(() =>
-    this.actions$.pipe(
+  setLimitFilters$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchUserSettingsCompleteAction),
       mergeMap(({ userSettings }) => [
         setDatasetsLimitFilterAction({ limit: userSettings.datasetCount }),
         setJobsLimitFilterAction({ limit: userSettings.jobCount }),
       ])
-    )
-  );
+    );
+  });
 
-  addCustomColumns$ = createEffect(() =>
-    this.actions$.pipe(
+  addCustomColumns$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.addCustomColumnsAction),
-      withLatestFrom(this.columns$),
+      concatLatestFrom(() => this.columns$),
       distinctUntilChanged(),
       map(() => fromActions.addCustomColumnsCompleteAction())
-    )
-  );
+    );
+  });
 
-  updateUserColumns$ = createEffect(() =>
-    this.actions$.pipe(
+  updateUserColumns$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(
         fromActions.selectColumnAction,
         fromActions.deselectColumnAction,
         fromActions.deselectAllCustomColumnsAction,
         fromActions.addCustomColumnsCompleteAction
       ),
-      withLatestFrom(this.columns$),
+      concatLatestFrom(() => this.columns$),
       map(([action, columns]) => columns),
       map((columns) =>
         fromActions.updateUserSettingsAction({ property: { columns } })
       )
-    )
-  );
+    );
+  });
 
-  updateUserSettings$ = createEffect(() =>
-    this.actions$.pipe(
+  updateUserSettings$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.updateUserSettingsAction),
-      withLatestFrom(this.user$),
+      concatLatestFrom(() => this.user$),
       takeWhile(([action, user]) => !!user),
       switchMap(([{ property }, user]) =>
         this.userApi.updateSettings(user?.id, property).pipe(
@@ -314,11 +321,11 @@ export class UserEffects {
           catchError(() => of(fromActions.updateUserSettingsFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
-  fetchCatamelToken$ = createEffect(() =>
-    this.actions$.pipe(
+  fetchCatamelToken$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.fetchCatamelTokenAction),
       switchMap(() =>
         of(this.userApi.getCurrentToken()).pipe(
@@ -328,15 +335,15 @@ export class UserEffects {
           catchError(() => of(fromActions.fetchCatamelTokenFailedAction()))
         )
       )
-    )
-  );
+    );
+  });
 
   constructor(
     private actions$: Actions,
     private activeDirAuthService: ADAuthService,
     private loopBackAuth: LoopBackAuth,
     private router: Router,
-    private store: Store<User>,
+    private store: Store,
     private userApi: UserApi,
     private userIdentityApi: UserIdentityApi
   ) {}

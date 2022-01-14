@@ -16,6 +16,12 @@ import { logoutAction } from "state-management/actions/user.actions";
 import { MockStore } from "shared/MockStubs";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
+import { provideMockStore } from "@ngrx/store/testing";
+import {
+  selectIsLoggedIn,
+  selectCurrentUserName,
+  selectThumbnailPhoto,
+} from "state-management/selectors/user.selectors";
 
 describe("AppHeaderComponent", () => {
   let component: AppHeaderComponent;
@@ -35,6 +41,18 @@ describe("AppHeaderComponent", () => {
           MatMenuModule,
           MatToolbarModule,
           StoreModule.forRoot({}),
+        ],
+        providers: [
+          provideMockStore({
+            selectors: [
+              {
+                selector: selectCurrentUserName,
+                value: "ms-ad.User Name",
+              },
+              { selector: selectThumbnailPhoto, value: "assets/images/user.png" },
+              { selector: selectIsLoggedIn, value: true },
+            ],
+          }),
         ],
       });
       TestBed.overrideComponent(AppHeaderComponent, {

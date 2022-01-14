@@ -10,40 +10,52 @@ const reducer = createReducer(
 
   on(
     fromActions.fetchAllPublishedDataCompleteAction,
-    (state, { publishedData }) => ({
+    (state, { publishedData }): PublishedDataState => ({
       ...state,
       publishedData,
     })
   ),
 
-  on(fromActions.fetchCountCompleteAction, (state, { count }) => ({
-    ...state,
-    totalCount: count,
-  })),
+  on(
+    fromActions.fetchCountCompleteAction,
+    (state, { count }): PublishedDataState => ({
+      ...state,
+      totalCount: count,
+    })
+  ),
 
   on(
     fromActions.fetchPublishedDataCompleteAction,
-    (state, { publishedData }) => ({
+    (state, { publishedData }): PublishedDataState => ({
       ...state,
       currentPublishedData: publishedData,
     })
   ),
 
-  on(fromActions.changePageAction, (state, { page, limit }) => {
-    const skip = page * limit;
-    const filters = { ...state.filters, skip, limit };
-    return { ...state, filters };
-  }),
+  on(
+    fromActions.changePageAction,
+    (state, { page, limit }): PublishedDataState => {
+      const skip = page * limit;
+      const filters = { ...state.filters, skip, limit };
+      return { ...state, filters };
+    }
+  ),
 
-  on(fromActions.sortByColumnAction, (state, { column, direction }) => {
-    const sortField = column + (direction ? " " + direction : "");
-    const filters = { ...state.filters, sortField, skip: 0 };
-    return { ...state, filters };
-  }),
+  on(
+    fromActions.sortByColumnAction,
+    (state, { column, direction }): PublishedDataState => {
+      const sortField = column + (direction ? " " + direction : "");
+      const filters = { ...state.filters, sortField, skip: 0 };
+      return { ...state, filters };
+    }
+  ),
 
-  on(fromActions.clearPublishedDataStateAction, () => ({
-    ...initialPublishedDataState,
-  }))
+  on(
+    fromActions.clearPublishedDataStateAction,
+    (): PublishedDataState => ({
+      ...initialPublishedDataState,
+    })
+  )
 );
 
 export const publishedDataReducer = (

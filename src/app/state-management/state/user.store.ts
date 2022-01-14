@@ -8,7 +8,7 @@ export interface UserState {
   accountType?: string;
   profile?: any;
 
-  catamelToken: AccessToken | undefined;
+  catamelToken: AccessToken;
 
   settings: Settings;
 
@@ -26,7 +26,14 @@ export const initialUserState: UserState = {
   currentUser: undefined,
   profile: null,
 
-  catamelToken: undefined,
+  catamelToken: {
+    id: "",
+    ttl: 0,
+    scopes: ["string"],
+    created: new Date(),
+    userId: "",
+    user: {}
+  },
 
   settings: {
     tapeCopies: "one",

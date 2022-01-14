@@ -10,18 +10,18 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Subscription } from "rxjs";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
-  getCurrentOrigDatablocks,
-  getCurrentDataset,
+  selectCurrentOrigDatablocks,
+  selectCurrentDataset,
 } from "state-management/selectors/datasets.selectors";
 import {
   TableColumn,
   PageChangeEvent,
   CheckboxEvent,
 } from "shared/modules/table/table.component";
-import { getIsLoading } from "state-management/selectors/user.selectors";
-import { UserApi } from "shared/sdk";
+import { selectIsLoading } from "state-management/selectors/user.selectors";
+import { Datablock, UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 
@@ -43,9 +43,9 @@ export interface File {
 })
 export class DatafilesComponent
   implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
-  datablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
-  dataset$ = this.store.pipe(select(getCurrentDataset));
-  loading$ = this.store.pipe(select(getIsLoading));
+  datablocks$ = this.store.select(selectCurrentOrigDatablocks);
+  dataset$ = this.store.select(selectCurrentDataset);
+  loading$ = this.store.select(selectIsLoading);
 
   tooLargeFile = false;
   totalFileSize = 0;
@@ -65,8 +65,7 @@ export class DatafilesComponent
 
   fileDownloadEnabled: boolean = this.appConfig.fileDownloadEnabled;
   multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
-  multipleDownloadAction: string | null = this.appConfig
-    .multipleDownloadAction;
+  multipleDownloadAction: string | null = this.appConfig.multipleDownloadAction;
   maxFileSize: number | null = this.appConfig.maxDirectDownloadSize;
   sftpHost: string | null = this.appConfig.sftpHost;
   jwt: any;
@@ -190,7 +189,6 @@ export class DatafilesComponent
   }
 
   ngAfterViewInit() {
-
     this.subscriptions.push(
       this.dataset$.subscribe((dataset) => {
         if (dataset) {
@@ -199,7 +197,7 @@ export class DatafilesComponent
       })
     );
     this.subscriptions.push(
-      this.datablocks$.subscribe((datablocks) => {
+      this.datablocks$.subscribe((datablocks: Datablock[]) => {
         if (datablocks) {
           const files: File[] = [];
           datablocks.forEach((block) => {

@@ -1,26 +1,23 @@
 // BETTERER RESULTS V2.
 exports[`stricter compilation`] = {
   value: `{
-    "src/app/_layout/app-header/app-header.component.spec.ts:3440350499": [
-      [73, 47, 14, "Expected 0 arguments, but got 1.", "2057156272"]
+    "src/app/_layout/app-header/app-header.component.spec.ts:273969745": [
+      [91, 47, 14, "Expected 0 arguments, but got 1.", "2057156272"]
     ],
-    "src/app/app-routing/redirect.guard.ts:1233518172": [
-      [18, 27, 43, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'AppConfig\'.", "1916593973"]
+    "src/app/datasets/archiving.service.spec.ts:2623728705": [
+      [74, 12, 8, "Variable \'datasets\' implicitly has type \'any[]\' in some locations where its type cannot be determined.", "805288804"],
+      [77, 35, 8, "Variable \'datasets\' implicitly has an \'any[]\' type.", "805288804"]
     ],
-    "src/app/datasets/archiving.service.spec.ts:33874901": [
-      [73, 12, 8, "Variable \'datasets\' implicitly has type \'any[]\' in some locations where its type cannot be determined.", "805288804"],
-      [76, 35, 8, "Variable \'datasets\' implicitly has an \'any[]\' type.", "805288804"]
-    ],
-    "src/app/datasets/dashboard/dashboard.component.spec.ts:249866239": [
+    "src/app/datasets/dashboard/dashboard.component.spec.ts:1682207969": [
       [173, 8, 66, "Expected 0 arguments, but got 1.", "1240398008"],
       [193, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"],
       [257, 47, 29, "Expected 0 arguments, but got 1.", "2503700957"]
     ],
-    "src/app/datasets/dataset-detail/dataset-detail.component.ts:1141482021": [
-      [70, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
+    "src/app/datasets/dataset-detail/dataset-detail.component.ts:3563027205": [
+      [78, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
     ],
-    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:3657279228": [
-      [110, 54, 12, "Object is possibly \'undefined\'.", "1944648223"]
+    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:345107662": [
+      [110, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
     ],
     "src/app/datasets/dataset-lifecycle/dataset-lifecycle.component.spec.ts:2836481081": [
       [164, 20, 3, "Parameter \'key\' implicitly has an \'any\' type.", "193424690"],
@@ -33,7 +30,7 @@ exports[`stricter compilation`] = {
       [151, 47, 18, "Expected 0 arguments, but got 1.", "1806099068"],
       [152, 47, 22, "Expected 0 arguments, but got 1.", "3206069091"]
     ],
-    "src/app/datasets/dataset-table/dataset-table.component.spec.ts:2362048603": [
+    "src/app/datasets/dataset-table/dataset-table.component.spec.ts:1609545883": [
       [361, 8, 32, "Expected 0 arguments, but got 1.", "412674260"],
       [375, 8, 34, "Expected 0 arguments, but got 1.", "1772911765"],
       [389, 47, 25, "Expected 0 arguments, but got 1.", "2168012498"],
@@ -63,7 +60,7 @@ exports[`stricter compilation`] = {
       [536, 8, 42, "Expected 0 arguments, but got 1.", "2041630164"],
       [539, 8, 67, "Expected 0 arguments, but got 1.", "1085666719"]
     ],
-    "src/app/datasets/publish/publish.component.spec.ts:2975394641": [
+    "src/app/datasets/publish/publish.component.spec.ts:1866725969": [
       [94, 48, 11, "Argument of type \'string\' is not assignable to parameter of type \'Expected<never>\'.", "3099199564"],
       [101, 33, 7, "Type \'string\' is not assignable to type \'never\'.", "3920213849"],
       [105, 52, 7, "Argument of type \'string\' is not assignable to parameter of type \'Expected<never>\'.", "3920213849"],
@@ -75,7 +72,7 @@ exports[`stricter compilation`] = {
       [132, 8, 13, "Type \'number\' is not assignable to type \'null\'.", "1181870603"],
       [133, 30, 9, "Type \'string\' is not assignable to type \'never\'.", "1530145460"]
     ],
-    "src/app/datasets/publish/publish.component.ts:2499045216": [
+    "src/app/datasets/publish/publish.component.ts:3410496573": [
       [30, 10, 17, "Property \'countSubscription\' has no initializer and is not definitely assigned in the constructor.", "3730692549"],
       [33, 9, 12, "Property \'datasetCount\' has no initializer and is not definitely assigned in the constructor.", "1430844212"],
       [55, 2, 25, "Property \'actionSubjectSubscription\' has no initializer and is not definitely assigned in the constructor.", "102418692"],
@@ -95,7 +92,7 @@ exports[`stricter compilation`] = {
       [190, 4, 27, "Type \'null\' is not assignable to type \'number\'.", "3726698428"],
       [191, 4, 27, "Type \'null\' is not assignable to type \'number\'.", "337764493"]
     ],
-    "src/app/datasets/reduce/reduce.component.spec.ts:3581674307": [
+    "src/app/datasets/reduce/reduce.component.spec.ts:1487119299": [
       [105, 8, 32, "Expected 0 arguments, but got 1.", "1957057788"]
     ],
     "src/app/datasets/sample-edit/sample-edit.component.spec.ts:3968274595": [
@@ -106,10 +103,10 @@ exports[`stricter compilation`] = {
       [209, 6, 16, "Object is possibly \'null\'.", "3061959426"],
       [249, 6, 16, "Object is possibly \'null\'.", "3061959426"]
     ],
-    "src/app/instruments/instrument-details/instrument-details.component.spec.ts:3965817486": [
+    "src/app/instruments/instrument-details/instrument-details.component.spec.ts:1086544078": [
       [84, 8, 49, "Expected 0 arguments, but got 1.", "1785026316"]
     ],
-    "src/app/instruments/instruments-dashboard/instruments-dashboard.component.spec.ts:2591123656": [
+    "src/app/instruments/instruments-dashboard/instruments-dashboard.component.spec.ts:4286555304": [
       [103, 8, 33, "Expected 0 arguments, but got 1.", "1984542627"],
       [123, 8, 41, "Expected 0 arguments, but got 1.", "2251019380"]
     ],
@@ -128,7 +125,7 @@ exports[`stricter compilation`] = {
       [212, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"],
       [215, 8, 42, "Expected 0 arguments, but got 1.", "3485696116"]
     ],
-    "src/app/policies/policies-dashboard/policies-dashboard.component.spec.ts:2604129015": [
+    "src/app/policies/policies-dashboard/policies-dashboard.component.spec.ts:4210154999": [
       [189, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
       [207, 8, 103, "Expected 0 arguments, but got 1.", "1292591848"],
       [227, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"],
@@ -162,16 +159,8 @@ exports[`stricter compilation`] = {
       [112, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
       [129, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"]
     ],
-    "src/app/publisheddata/publisheddata-edit/publisheddata-edit.component.spec.ts:3368931753": [
-      [105, 6, 22, "Object is possibly \'undefined\'.", "1831967872"]
-    ],
-    "src/app/publisheddata/publisheddata-edit/publisheddata-edit.component.ts:3993729135": [
-      [100, 6, 15, "Object is possibly \'undefined\'.", "3349509077"],
-      [101, 6, 22, "Object is possibly \'undefined\'.", "3285646375"],
-      [102, 6, 17, "Object is possibly \'undefined\'.", "3404589737"],
-      [103, 6, 19, "Object is possibly \'undefined\'.", "3176390683"],
-      [104, 6, 25, "Object is possibly \'undefined\'.", "1661641219"],
-      [105, 6, 18, "Object is possibly \'undefined\'.", "2976519893"]
+    "src/app/publisheddata/publisheddata-edit/publisheddata-edit.component.ts:1221262435": [
+      [132, 12, 59, "Argument of type \'MonoTypeOperatorFunction<PublishedData>\' is not assignable to parameter of type \'OperatorFunction<PublishedData | undefined, PublishedData>\'.\\n  Types of parameters \'source\' and \'source\' are incompatible.\\n    Type \'Observable<PublishedData | undefined>\' is not assignable to type \'Observable<PublishedData>\'.\\n      Type \'PublishedData | undefined\' is not assignable to type \'PublishedData\'.\\n        Type \'undefined\' is not assignable to type \'PublishedData\'.", "1325536151"]
     ],
     "src/app/samples/sample-dashboard/sample-dashboard.component.spec.ts:4131572326": [
       [130, 8, 36, "Expected 0 arguments, but got 1.", "518980590"],
@@ -1020,11 +1009,11 @@ exports[`stricter compilation`] = {
       [68, 8, 12, "Variable \'metadataKeys\' implicitly has an \'any[]\' type.", "263619468"],
       [72, 8, 12, "Variable \'metadataKeys\' implicitly has an \'any[]\' type.", "263619468"]
     ],
-    "src/app/state-management/effects/jobs.effects.spec.ts:250915889": [
+    "src/app/state-management/effects/jobs.effects.spec.ts:1690549105": [
       [154, 58, 4, "Type \'null\' is not assignable to type \'Record<string, string> | undefined\'.", "2087698470"],
       [167, 58, 4, "Type \'null\' is not assignable to type \'Record<string, string> | undefined\'.", "2087698470"]
     ],
-    "src/app/state-management/effects/user.effects.spec.ts:3527283907": [
+    "src/app/state-management/effects/user.effects.spec.ts:2144824867": [
       [538, 27, 93, "Conversion of type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' to type \'UserSetting\' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to \'unknown\' first.\\n  Type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' is missing the following properties from type \'UserSetting\': \\"id\\", \\"createdBy\\", \\"updatedBy\\", \\"userId\\", and 3 more.", "1258454294"]
     ],
     "src/app/state-management/reducers/jobs.reducer.spec.ts:2620026082": [
@@ -1051,11 +1040,10 @@ exports[`stricter compilation`] = {
       [138, 13, 19, "Object is possibly \'undefined\'.", "1511317011"],
       [189, 47, 11, "Argument of type \'string | undefined\' is not assignable to parameter of type \'Expected<ArrayLike<string>> | ArrayContaining<string>\'.", "235919534"]
     ],
-    "src/app/state-management/selectors/jobs.selectors.spec.ts:1605502844": [
+    "src/app/state-management/selectors/jobs.selectors.spec.ts:911293296": [
       [28, 2, 7, "Type \'{ mode: null; sortField: string; skip: number; limit: number; }\' is not assignable to type \'JobFilters\'.\\n  Types of property \'mode\' are incompatible.\\n    Type \'null\' is not assignable to type \'Record<string, string> | undefined\'.", "1789297334"],
-      [63, 8, 10, "Argument of type \'{ mode: null; sortField: string; skip: number; limit: number; }\' is not assignable to parameter of type \'Expected<JobFilters>\'.\\n  Type \'{ mode: null; sortField: string; skip: number; limit: number; }\' is not assignable to type \'{ mode: ExpectedRecursive<Record<string, string> | undefined>; sortField: ExpectedRecursive<string>; skip: ExpectedRecursive<number>; limit: ExpectedRecursive<...>; }\'.\\n    Types of property \'mode\' are incompatible.\\n      Type \'null\' is not assignable to type \'ExpectedRecursive<Record<string, string> | undefined>\'.", "2675413713"],
-      [72, 16, 4, "Argument of type \'null\' is not assignable to parameter of type \'Expected<Record<string, string> | undefined>\'.", "2087897566"],
-      [106, 16, 6, "Argument of type \'{ where: null; order: string; skip: number; limit: number; } | { order: string; skip: number; limit: number; }\' is not assignable to parameter of type \'Expected<{ where: Record<string, string>; order: string; skip: number; limit: number; } | { order: string; skip: number; limit: number; where?: undefined; }>\'.\\n  Type \'{ where: null; order: string; skip: number; limit: number; }\' is not assignable to type \'Expected<{ where: Record<string, string>; order: string; skip: number; limit: number; } | { order: string; skip: number; limit: number; where?: undefined; }>\'.\\n    Types of property \'where\' are incompatible.\\n      Type \'null\' is not assignable to type \'Record<string, string> | AsymmetricMatcher<any> | ObjectContaining<Record<string, string>> | { [x: string]: Any | ExpectedRecursive<string>; } | ObjectContaining<...> | undefined\'.", "1898504825"]
+      [65, 8, 10, "Argument of type \'{ mode: null; sortField: string; skip: number; limit: number; }\' is not assignable to parameter of type \'Expected<JobFilters>\'.\\n  Type \'{ mode: null; sortField: string; skip: number; limit: number; }\' is not assignable to type \'{ mode: ExpectedRecursive<Record<string, string> | undefined>; sortField: ExpectedRecursive<string>; skip: ExpectedRecursive<number>; limit: ExpectedRecursive<...>; }\'.\\n    Types of property \'mode\' are incompatible.\\n      Type \'null\' is not assignable to type \'ExpectedRecursive<Record<string, string> | undefined>\'.", "2675413713"],
+      [74, 16, 4, "Argument of type \'null\' is not assignable to parameter of type \'Expected<Record<string, string> | undefined>\'.", "2087897566"]
     ],
     "src/app/users/login/login.component.spec.ts:590365834": [
       [154, 8, 71, "Expected 0 arguments, but got 1.", "3870196511"]

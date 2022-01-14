@@ -14,8 +14,8 @@ import { Router } from "@angular/router";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { provideMockStore } from "@ngrx/store/testing";
 import {
-  getOpenwhiskResult,
-  getDatasets
+  selectOpenwhiskResult,
+  selectDatasets
 } from "state-management/selectors/datasets.selectors";
 import { Dataset } from "shared/sdk";
 import { reduceDatasetAction } from "state-management/actions/datasets.actions";
@@ -60,8 +60,8 @@ describe("ReduceComponent", () => {
         FormBuilder,
         provideMockStore({
           selectors: [
-            { selector: getOpenwhiskResult, value: {} },
-            { selector: getDatasets, value: [] }
+            { selector: selectOpenwhiskResult, value: {} },
+            { selector: selectDatasets, value: [] }
           ]
         })
       ],

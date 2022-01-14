@@ -6,19 +6,17 @@ import {
   ChangeDetectorRef,
   AfterViewChecked,
 } from "@angular/core";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
+import { Dataset, UserApi } from "shared/sdk";
 import {
-  Dataset,
-  UserApi,
-} from "shared/sdk";
-import {
-  getCurrentDataset,
+  selectCurrentDataset,
+  selectPublicViewMode,
 } from "state-management/selectors/datasets.selectors";
 import {
-  getIsAdmin,
-  getIsLoading,
-  getIsLoggedIn,
-  getProfile,
+  selectIsAdmin,
+  selectIsLoading,
+  selectIsLoggedIn,
+  selectProfile,
 } from "state-management/selectors/user.selectors";
 import { ActivatedRoute } from "@angular/router";
 import { Subscription, Observable, combineLatest } from "rxjs";
@@ -66,12 +64,12 @@ enum TAB {
 export class DatasetDetailsDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
   private subscriptions: Subscription[] = [];
-  loading$ = this.store.pipe(select(getIsLoading));
-  loggedIn$ = this.store.pipe(select(getIsLoggedIn));
-  dataset$ = this.store.pipe(select(getCurrentDataset));
+  loading$ = this.store.select(selectIsLoading);
+  loggedIn$ = this.store.select(selectIsLoggedIn);
+  dataset$ = this.store.select(selectCurrentDataset);
   jwt$: Observable<JWT> = new Observable<JWT>();
   dataset: Dataset | undefined;
-  navLinks :{
+  navLinks: {
     location: string;
     label: string;
     icon: string;
@@ -85,8 +83,8 @@ export class DatasetDetailsDashboardComponent
     [TAB.attachments]: {action: fetchAttachmentsAction, loaded: false },
     [TAB.admin]: {action: fetchDatablocksAction, loaded: false },
   }
-  userProfile$ = this.store.pipe(select(getProfile));
-  isAdmin$ = this.store.pipe(select(getIsAdmin));
+  userProfile$ = this.store.select(selectProfile);
+  isAdmin$ = this.store.select(selectIsAdmin);
   accessGroups$: Observable<string[]> = this.userProfile$.pipe(
     map((profile) => (profile ? profile.accessGroups : []))
   );
@@ -95,7 +93,7 @@ export class DatasetDetailsDashboardComponent
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private store: Store<Dataset>,
+    private store: Store,
     private userApi: UserApi,
     public dialog: MatDialog
   ) {}
@@ -116,7 +114,7 @@ export class DatasetDetailsDashboardComponent
       }
     }).unsubscribe();
 
-    this.store.pipe(select(getCurrentDataset), takeWhile(dataset => !dataset, true)).subscribe((dataset: Dataset) => {
+    this.dataset$.pipe(takeWhile(dataset => !dataset, true)).subscribe((dataset: Dataset) => {
       if (dataset) {
         this.dataset = dataset;
         combineLatest([this.accessGroups$, this.isAdmin$, this.loggedIn$]).subscribe(

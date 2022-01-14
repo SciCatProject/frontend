@@ -1,27 +1,27 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { Instrument } from "shared/sdk";
 import {
   fetchInstrumentAction,
-  saveCustomMetadataAction
+  saveCustomMetadataAction,
 } from "state-management/actions/instruments.actions";
-import { getCurrentInstrument } from "state-management/selectors/instruments.selectors";
+import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
 
 @Component({
   selector: "app-instrument-details",
   templateUrl: "./instrument-details.component.html",
-  styleUrls: ["./instrument-details.component.scss"]
+  styleUrls: ["./instrument-details.component.scss"],
 })
 export class InstrumentDetailsComponent implements OnInit {
-  instrument$ = this.store.pipe(select(getCurrentInstrument));
+  instrument$ = this.store.select(selectCurrentInstrument);
 
-  constructor(
-    private route: ActivatedRoute,
-    private store: Store<Instrument>
-  ) {}
+  constructor(private route: ActivatedRoute, private store: Store) {}
 
-  onSaveCustomMetadata(pid: string, customMetadata: Record<string, unknown>): void {
+  onSaveCustomMetadata(
+    pid: string,
+    customMetadata: Record<string, unknown>
+  ): void {
     this.store.dispatch(saveCustomMetadataAction({ pid, customMetadata }));
   }
 

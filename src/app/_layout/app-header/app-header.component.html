@@ -109,7 +109,7 @@
         <button
           id="cartOnHeaderButton"
           mat-icon-button
-          matBadge="{{ inBatchIndicator === '0' ? null : inBatchIndicator }}"
+          matBadge="{{ inBatchIndicator$ | async }}"
           matBadgePosition="after"
           matBadgeColor="accent"
           matBadgeSize="medium"
@@ -124,8 +124,8 @@
 
         <span>
         <button mat-button class="user-button" [matMenuTriggerFor]="userMenu">
-          <img class="user-image" src="{{ profileImage }}"/>
-          <div class="large-screen-text">{{ username }}</div>
+          <img class="user-image" src="{{ profileImage$ | async }}"/>
+          <div class="large-screen-text">{{ username$ | async }}</div>
         </button>
       </span>
     </ng-template>
