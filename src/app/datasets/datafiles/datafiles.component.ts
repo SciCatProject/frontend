@@ -197,7 +197,7 @@ export class DatafilesComponent
       })
     );
     this.subscriptions.push(
-      this.datablocks$.subscribe((datablocks: Datablock[]) => {
+      this.datablocks$.subscribe((datablocks) => {
         if (datablocks) {
           const files: File[] = [];
           datablocks.forEach((block) => {
