@@ -6,9 +6,8 @@ describe("Policies", () => {
 
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
-    cy.server();
-    cy.route("POST", "/api/v3/Policies/**/*").as("update");
-    cy.route("GET", "*").as("fetch");
+    cy.intercept("POST", "/api/v3/Policies/**/*").as("update");
+    cy.intercept("GET", "*").as("fetch");
   });
 
   after(() => {

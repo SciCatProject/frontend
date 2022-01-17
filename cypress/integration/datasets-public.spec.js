@@ -8,9 +8,8 @@ describe("Datasets", () => {
 
     cy.createDataset("raw");
 
-    cy.server();
-    cy.route("PUT", "/api/v3/Datasets/**/*").as("change");
-    cy.route("GET", "*").as("fetch");
+    cy.intercept("PUT", "/api/v3/Datasets/**/*").as("change");
+    cy.intercept("GET", "*").as("fetch");
   });
 
   after(() => {

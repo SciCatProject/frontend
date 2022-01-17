@@ -6,9 +6,8 @@ describe("Samples", function() {
 
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
-    cy.server();
-    cy.route("POST", "/api/v3/Samples").as("create");
-    cy.route("GET", "*").as("fetch");
+    cy.intercept("POST", "/api/v3/Samples").as("create");
+    cy.intercept("GET", "*").as("fetch");
   });
 
   after(function() {

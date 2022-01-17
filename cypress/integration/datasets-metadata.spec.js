@@ -6,9 +6,8 @@ describe("Datasets", () => {
 
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
-    cy.server();
-    cy.route("PUT", "/api/v3/Datasets/**/*").as("metadata");
-    cy.route("GET", "*").as("fetch");
+    cy.intercept("PUT", "/api/v3/Datasets/**/*").as("metadata");
+    cy.intercept("GET", "*").as("fetch");
   });
 
   after(() => {

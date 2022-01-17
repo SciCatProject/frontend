@@ -8,8 +8,7 @@ describe("Datasets", () => {
 
     cy.createDataset("raw");
 
-    cy.server();
-    cy.route("POST", "/api/v3/Datasets/**/*").as("upload");
+    cy.intercept("POST", "/api/v3/Datasets/**/*").as("upload");
   });
 
   afterEach(() => {
