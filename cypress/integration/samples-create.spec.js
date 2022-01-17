@@ -33,8 +33,8 @@ describe("Samples", function () {
         .contains("Save")
         .click();
 
-      cy.wait("@create").then(({ response }) => {
-        expect(response.method).to.eq("POST");
+      cy.wait("@create").then(({ request, response }) => {
+        expect(request.method).to.eq("POST");
         expect(response.statusCode).to.eq(200);
       });
 

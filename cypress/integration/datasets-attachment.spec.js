@@ -48,8 +48,8 @@ describe("Datasets", () => {
         );
       });
 
-      cy.wait("@upload").then(({ response }) => {
-        expect(response.method).to.eq("POST");
+      cy.wait("@upload").then(({ request, response }) => {
+        expect(request.method).to.eq("POST");
         expect(response.statusCode).to.eq(200);
       });
 

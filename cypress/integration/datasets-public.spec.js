@@ -41,8 +41,8 @@ describe("Datasets", () => {
 
       cy.get("@publicToggle").click();
 
-      cy.wait("@change").then(({ response }) => {
-        expect(response.method).to.eq("PUT");
+      cy.wait("@change").then(({ request, response }) => {
+        expect(request.method).to.eq("PUT");
         expect(response.statusCode).to.eq(200);
       });
 

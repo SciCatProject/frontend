@@ -55,8 +55,8 @@ describe("Datasets", () => {
 
       cy.contains("Save changes").click();
 
-      cy.wait("@metadata").then(({ response }) => {
-        expect(response.method).to.eq("PUT");
+      cy.wait("@metadata").then(({ request, response }) => {
+        expect(request.method).to.eq("PUT");
         expect(response.statusCode).to.eq(200);
       });
 
@@ -87,8 +87,8 @@ describe("Datasets", () => {
 
       cy.contains("Save changes").click();
 
-      cy.wait("@metadata").then(({ response }) => {
-        expect(response.method).to.eq("PUT");
+      cy.wait("@metadata").then(({ request, response }) => {
+        expect(request.method).to.eq("PUT");
         expect(response.statusCode).to.eq(200);
       });
 
