@@ -17,7 +17,7 @@ import { MatTableModule } from "@angular/material/table";
 import { APP_CONFIG } from "app-config.module";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { DatasetState } from "state-management/state/datasets.store";
-import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
+import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { removeFromBatchAction } from "state-management/actions/datasets.actions";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatChipsModule } from "@angular/material/chips";
@@ -51,7 +51,7 @@ describe("BatchViewComponent", () => {
         ],
         providers: [
           provideMockStore({
-            selectors: [{ selector: getDatasetsInBatch, value: [] }],
+            selectors: [{ selector: selectDatasetsInBatch, value: [] }],
           }),
         ],
       });

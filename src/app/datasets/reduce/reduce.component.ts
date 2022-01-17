@@ -7,11 +7,12 @@ import {
   OnDestroy,
 } from "@angular/core";
 import { Router } from "@angular/router";
-import { select, Store } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { Dataset, DerivedDataset } from "shared/sdk/models";
 import {
-  getOpenwhiskResult,
-  getDatasets,
+  selectOpenwhiskResult,
+  selectDatasets,
+  selectCurrentDataset,
 } from "state-management/selectors/datasets.selectors";
 import {
   reduceDatasetAction,
@@ -27,16 +28,14 @@ import { Subscription } from "rxjs";
   styleUrls: ["./reduce.component.scss"],
 })
 export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() dataset: Dataset = new Dataset();
-
-  derivedDatasets$ = this.store.pipe(
-    select(getDatasets),
+  dataset: Dataset | undefined;
+  derivedDatasets$ = this.store.select(selectDatasets).pipe(
     map((datasets) =>
       datasets
         .filter((dataset) => dataset.type === "derived")
         .map((dataset: unknown) => dataset as DerivedDataset)
         .filter((dataset) =>
-          dataset["inputDatasets"].includes(this.dataset.pid)
+          dataset["inputDatasets"].includes(this.dataset?.pid)
         )
     )
   );
@@ -44,7 +43,7 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
   derivedDatsetsSubscription: Subscription = new Subscription();
   derivedDatasets: DerivedDataset[] = [];
 
-  result$ = this.store.pipe(select(getOpenwhiskResult));
+  result$ = this.store.select(selectOpenwhiskResult);
 
   actionsForm = this.formBuilder.group({
     formArray: this.formBuilder.array([
@@ -78,7 +77,7 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private store: Store<any>
+    private store: Store
   ) {}
 
   reduceDataset(dataset: Dataset): void {
@@ -104,7 +103,9 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(fetchDatasetsAction());
-
+    this.store.select(selectCurrentDataset).subscribe((dataset) => {
+      this.dataset = dataset;
+    });
     this.derivedDatsetsSubscription = this.derivedDatasets$.subscribe(
       (datasets) => {
         if (datasets) {
@@ -118,14 +119,13 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
     for (const propName in changes) {
       if (propName === "dataset") {
         this.dataset = changes[propName].currentValue;
-        this.derivedDatasets$ = this.store.pipe(
-          select(getDatasets),
+        this.derivedDatasets$ = this.store.select(selectDatasets).pipe(
           map((datasets) =>
             datasets
               .filter((dataset) => dataset.type === "derived")
               .map((dataset: unknown) => dataset as DerivedDataset)
               .filter((dataset) =>
-                dataset["inputDatasets"].includes(this.dataset.pid)
+                dataset["inputDatasets"].includes(this.dataset?.pid)
               )
           )
         );

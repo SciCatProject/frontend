@@ -58,12 +58,10 @@ import { AddDatasetDialogComponent } from "./add-dataset-dialog/add-dataset-dial
 import { DatasetTableSettingsComponent } from "./dataset-table-settings/dataset-table-settings.component";
 import { DatasetTableActionsComponent } from "./dataset-table-actions/dataset-table-actions.component";
 import { DatasetLifecycleComponent } from "./dataset-lifecycle/dataset-lifecycle.component";
-import { AnonymousDashboardComponent } from "./anonymous-dashboard/anonymous-dashboard.component";
-import { AnonymousDetailsDashboardComponent } from "./anonymous-details-dashboard/anonymous-details-dashboard.component";
-import { AnonymousDetailsComponent } from "./anonymous-details/anonymous-details.component";
 import { SampleEditComponent } from "./sample-edit/sample-edit.component";
 import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from "ngx-material-luxon";
 import { MatDatepickerModule } from "@angular/material/datepicker";
+import { ShareDialogComponent } from "./share-dialog/share-dialog.component";
 import { UserEffects } from "state-management/effects/user.effects";
 import { ADAuthService } from "users/adauth.service";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
@@ -78,6 +76,8 @@ import { JobEffects } from "state-management/effects/jobs.effects";
 import { LogbookEffects } from "state-management/effects/logbooks.effects";
 import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
 import { PublicDownloadDialogComponent } from "./public-download-dialog/public-download-dialog.component";
+import { DatasetFileUploaderComponent } from "./dataset-file-uploader/dataset-file-uploader.component";
+import { AdminTabComponent } from "./admin-tab/admin-tab.component";
 
 @NgModule({
   imports: [
@@ -141,11 +141,11 @@ import { PublicDownloadDialogComponent } from "./public-download-dialog/public-d
     DatasetTableSettingsComponent,
     DatasetTableActionsComponent,
     DatasetLifecycleComponent,
-    AnonymousDashboardComponent,
-    AnonymousDetailsDashboardComponent,
-    AnonymousDetailsComponent,
     SampleEditComponent,
     PublicDownloadDialogComponent,
+    ShareDialogComponent,
+    DatasetFileUploaderComponent,
+    AdminTabComponent,
   ],
   providers: [
     ArchivingService,

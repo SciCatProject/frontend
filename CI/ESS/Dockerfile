@@ -1,4 +1,4 @@
-FROM node:14-alpine as builder
+FROM node:16-alpine as builder
 LABEL maintainer="henrik.johansson@ess.eu"
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 RUN apk update && apk upgrade && \

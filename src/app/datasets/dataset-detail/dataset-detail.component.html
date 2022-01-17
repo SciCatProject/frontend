@@ -1,3 +1,27 @@
+<div fxLayout="row">
+  <div fxFlex="auto">
+    <a
+      mat-raised-button
+      href="{{ appConfig.jupyterHubUrl }}"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="jupyter-button"
+      *ngIf="appConfig.jupyterHubUrl"
+    >
+      Jupyter Hub
+    </a>
+  </div>
+  <div fxFlex="auto" *ngIf="isPI()">
+    <mat-slide-toggle
+      class="public-toggle"
+      [checked]="dataset.isPublished"
+      (change)="onSlidePublic($event)"
+    >
+      Public
+    </mat-slide-toggle>
+  </div>
+</div>
+<div style="clear: both;"></div>
 <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
   <div fxFlex="80%">
     <mat-card>
@@ -35,14 +59,14 @@
             <mat-chip-list #keywordChips>
               <mat-chip
                 *ngFor="let keyword of dataset.keywords"
-                [removable]="true"
+                [removable]="editingAllowed"
                 (removed)="onRemoveKeyword(keyword)"
                 (click)="onClickKeyword(keyword)"
               >
                 {{ keyword }}
-                <mat-icon matChipRemove>cancel</mat-icon>
+                <mat-icon *ngIf="editingAllowed" matChipRemove>cancel</mat-icon>
               </mat-chip>
-              <mat-chip class="add-keyword-chip" (click)="editEnabled = true">
+              <mat-chip *ngIf="editingAllowed" class="add-keyword-chip" (click)="editEnabled = true">
                 Add Keyword <mat-icon>add</mat-icon>
               </mat-chip>
             </mat-chip-list>
@@ -76,6 +100,21 @@
             >
               Done
             </button>
+          </td>
+        </tr>
+        <tr *ngIf="dataset.sharedWith && dataset.sharedWith.length > 0">
+          <th>Shared With</th>
+          <td>
+            <mat-chip-list>
+              <mat-chip
+                *ngFor="let share of dataset.sharedWith"
+                [removable]="true"
+                (removed)="onRemoveShare(share)"
+              >
+                {{ share }}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+            </mat-chip-list>
           </td>
         </tr>
       </table>
@@ -156,20 +195,22 @@
       <table>
         <tr *ngIf="dataset['proposalId'] && proposal">
           <th>Proposal</th>
-          <td (click)="onClickProposal(proposal.proposalId)">
-            <a>{{ proposal.title }}</a>
+          <td [ngSwitch]="editingAllowed">
+            <a *ngSwitchCase="true" (click)="editingAllowed? onClickProposal(proposal.proposalId) : ''">{{ proposal.title }}</a>
+            <span *ngSwitchDefault>{{ proposal.title }}</span>
           </td>
         </tr>
         <tr *ngIf="dataset['sampleId'] && sample">
           <th>Sample</th>
-          <td>
-            <a (click)="onClickSample(sample.sampleId)">{{
-              sample.description
-            }}</a>
+          <td [ngSwitch]="editingAllowed">
+            <a *ngSwitchCase="true" (click)="editingAllowed? onClickSample(sample.sampleId) : ''">
+              <span>{{ sample.description}}</span>
+            </a>
+            <span *ngSwitchDefault>{{ sample.description}}</span>
             <span
               class="sample-edit"
               (click)="openSampleEditDialog()"
-              *ngIf="appConfig.editDatasetSampleEnabled && isPI"
+              *ngIf="appConfig.editDatasetSampleEnabled && editingAllowed && isPI"
             >
               <mat-icon>edit</mat-icon>
             </span>
@@ -247,19 +288,23 @@
       </mat-card-header>
 
       <ng-template [ngIf]="appConfig.tableSciDataEnabled" [ngIfElse]="jsonView">
-        <mat-tab-group class="metadataGroup">
+        <ng-template #metadataView>
+          <div [ngSwitch]="appConfig.metadataStructure">
+            <tree-view *ngSwitchCase="'tree'"
+                       [metadata]="dataset['scientificMetadata']"></tree-view>
+            <metadata-view *ngSwitchDefault
+                           [metadata]="dataset['scientificMetadata']"></metadata-view>
+          </div>
+        </ng-template>
+        <mat-tab-group class="metadataGroup" *ngIf="editingAllowed;else metadataView">
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-icon> list </mat-icon> View
             </ng-template>
-            <div [ngSwitch]="appConfig.metadataStructure">
-              <tree-view *ngSwitchCase="'tree'"
-                [metadata]="dataset['scientificMetadata']"></tree-view>
-              <metadata-view *ngSwitchDefault
-                [metadata]="dataset['scientificMetadata']"></metadata-view>
-            </div>
+            <ng-container *ngTemplateOutlet="metadataView">
+            </ng-container>
           </mat-tab>
-          <mat-tab class="editTab" [hidden]="!appConfig.editMetadataEnabled">
+          <mat-tab class="editTab" *ngIf="editingAllowed" [hidden]="!appConfig.editMetadataEnabled">
             <ng-template mat-tab-label>
               <mat-icon> edit </mat-icon> Edit
             </ng-template>
@@ -268,10 +313,13 @@
                 *ngSwitchCase="'tree'"
                 [metadata]="dataset['scientificMetadata']"
                 (save)="onSaveMetadata($event)"
-                (hasUnsavedChanges)="onHasUnsavedChanges($event)"></tree-edit>
+                (hasUnsavedChanges)="onHasUnsavedChanges($event)"
+              ></tree-edit>
               <metadata-edit
-                *ngSwitchDefault [metadata]="dataset['scientificMetadata']"
-                (save)="onSaveMetadata($event)">
+                *ngSwitchDefault
+                [metadata]="dataset['scientificMetadata']"
+                (save)="onSaveMetadata($event)"
+              >
               </metadata-edit>
             </div>
           </mat-tab>
@@ -285,8 +333,7 @@
         ></ngx-json-viewer>
       </ng-template>
     </mat-card>
-
-    <mat-card *ngIf="appConfig.jsonMetadataEnabled">
+    <mat-card *ngIf="editingAllowed && appConfig.jsonMetadataEnabled">
       <button mat-stroked-button (click)="show = !show">
         {{ show ? "Hide MetaData" : "Show Metadata" }}
       </button>
@@ -295,14 +342,14 @@
 
       <div *ngIf="show">
         <ngx-json-viewer
-          [json]="datasetWithout"
+          [json]="datasetWithout$ | async"
           [expanded]="false"
         ></ngx-json-viewer>
       </div>
     </mat-card>
   </div>
 
-  <div fxFlex="30%" *ngIf="attachments">
+  <div fxFlex="30%" *ngIf="attachments$ | async as attachments">
     <ng-container *ngFor="let da of attachments">
       <mat-card>
         <img mat-card-image src="{{ da.thumbnail }}" />

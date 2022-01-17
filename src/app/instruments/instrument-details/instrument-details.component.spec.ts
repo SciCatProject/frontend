@@ -9,7 +9,7 @@ import { InstrumentDetailsComponent } from "./instrument-details.component";
 import { MockStore, MockActivatedRoute } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { provideMockStore } from "@ngrx/store/testing";
-import { getCurrentInstrument } from "state-management/selectors/instruments.selectors";
+import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
 import { saveCustomMetadataAction } from "state-management/actions/instruments.actions";
@@ -38,7 +38,7 @@ describe("InstrumentDetailsComponent", () => {
         ],
         providers: [
           provideMockStore({
-            selectors: [{ selector: getCurrentInstrument, value: {} }],
+            selectors: [{ selector: selectCurrentInstrument, value: {} }],
           }),
         ],
       });

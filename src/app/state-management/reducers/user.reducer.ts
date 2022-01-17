@@ -5,52 +5,54 @@ import { TableColumn } from "state-management/models";
 
 const reducer = createReducer(
   initialUserState,
-  on(fromActions.loginAction, state => ({
-    ...state,
-    isLoggingIn: true,
-    isLoggedIn: false
-  })),
-
-  on(fromActions.loginCompleteAction, (state, { user, accountType }) => ({
-    ...state,
-    currentUser: user,
-    accountType,
-    isLoggingIn: false,
-    isLoggedIn: true
-  })),
-  on(fromActions.loginFailedAction, state => ({
-    ...state,
-    isLoggingIn: false,
-    isLoggedIn: false
-  })),
-
-  on(fromActions.fetchCurrentUserCompleteAction, (state, { user }) => ({
-    ...state,
-    currentUser: user,
-    isLoggedIn: true
-  })),
-
   on(
-    fromActions.fetchUserIdentityCompleteAction,
-    (state, { userIdentity }) => ({
+    fromActions.loginAction,
+    (state): UserState => ({
       ...state,
-      profile: userIdentity.profile
+      isLoggingIn: true,
+      isLoggedIn: false,
     })
   ),
 
-  on(fromActions.fetchUserSettingsCompleteAction, (state, { userSettings }) => {
-    const { datasetCount, jobCount, columns } = userSettings;
-    const settings = { ...state.settings, datasetCount, jobCount };
-    if (columns.length > 0) {
-      return { ...state, settings, columns };
-    } else {
-      return { ...state, settings };
-    }
-  }),
+  on(
+    fromActions.loginCompleteAction,
+    (state, { user, accountType }): UserState => ({
+      ...state,
+      currentUser: user,
+      accountType,
+      isLoggingIn: false,
+      isLoggedIn: true,
+    })
+  ),
+  on(
+    fromActions.loginFailedAction,
+    (state): UserState => ({
+      ...state,
+      isLoggingIn: false,
+      isLoggedIn: false,
+    })
+  ),
 
   on(
-    fromActions.updateUserSettingsCompleteAction,
-    (state, { userSettings }) => {
+    fromActions.fetchCurrentUserCompleteAction,
+    (state, { user }): UserState => ({
+      ...state,
+      currentUser: user,
+      isLoggedIn: true,
+    })
+  ),
+
+  on(
+    fromActions.fetchUserIdentityCompleteAction,
+    (state, { userIdentity }): UserState => ({
+      ...state,
+      profile: userIdentity.profile,
+    })
+  ),
+
+  on(
+    fromActions.fetchUserSettingsCompleteAction,
+    (state, { userSettings }): UserState => {
       const { datasetCount, jobCount, columns } = userSettings;
       const settings = { ...state.settings, datasetCount, jobCount };
       if (columns.length > 0) {
@@ -61,45 +63,64 @@ const reducer = createReducer(
     }
   ),
 
-  on(fromActions.fetchCatamelTokenCompleteAction, (state, { token }) => ({
-    ...state,
-    catamelToken: token
-  })),
+  on(
+    fromActions.updateUserSettingsCompleteAction,
+    (state, { userSettings }): UserState => {
+      const { datasetCount, jobCount, columns } = userSettings;
+      const settings = { ...state.settings, datasetCount, jobCount };
+      if (columns.length > 0) {
+        return { ...state, settings, columns };
+      } else {
+        return { ...state, settings };
+      }
+    }
+  ),
 
-  on(fromActions.logoutCompleteAction, () => ({
-    ...initialUserState
-  })),
+  on(
+    fromActions.fetchCatamelTokenCompleteAction,
+    (state, { token }): UserState => ({
+      ...state,
+      catamelToken: token,
+    })
+  ),
 
-  on(fromActions.addCustomColumnsAction, (state, { names }) => {
+  on(
+    fromActions.logoutCompleteAction,
+    (): UserState => ({
+      ...initialUserState,
+    })
+  ),
+
+  on(fromActions.addCustomColumnsAction, (state, { names }): UserState => {
     const existingColumns = [...state.columns];
 
     const standardColumns = existingColumns.filter(
-      column => column.type === "standard"
+      (column) => column.type === "standard"
     );
 
     let order = standardColumns.length;
 
     const enabledCustomColumns = existingColumns.filter(
-      column => column.type === "custom" && column.enabled
+      (column) => column.type === "custom" && column.enabled
     );
 
-    enabledCustomColumns.forEach(column => {
+    enabledCustomColumns.forEach((column) => {
       column.order = order;
       order++;
     });
 
     const enabledCustomColumnNames = enabledCustomColumns.map(
-      column => column.name
+      (column) => column.name
     );
 
     const newColumns = names
-      .filter(name => !enabledCustomColumnNames.includes(name))
-      .map(name => {
+      .filter((name) => !enabledCustomColumnNames.includes(name))
+      .map((name) => {
         const column: TableColumn = {
           name,
           order,
           type: "custom",
-          enabled: false
+          enabled: false,
         };
         order++;
         return column;
@@ -112,62 +133,83 @@ const reducer = createReducer(
     return { ...state, columns };
   }),
 
-  on(fromActions.selectColumnAction, (state, { name, columnType }) => {
-    const columns = [...state.columns];
-    columns.forEach(item => {
-      if (item.name === name && item.type === columnType) {
-        item.enabled = true;
-      }
-    });
-    return { ...state, columns };
-  }),
-  on(fromActions.deselectColumnAction, (state, { name, columnType }) => {
-    const columns = [...state.columns];
-    columns.forEach(item => {
-      if (item.name === name && item.type === columnType) {
-        item.enabled = false;
-      }
-    });
-    return { ...state, columns };
-  }),
-  on(fromActions.deselectAllCustomColumnsAction, state => {
+  on(
+    fromActions.selectColumnAction,
+    (state, { name, columnType }): UserState => {
+      const columns = [...state.columns];
+      columns.forEach((item) => {
+        if (item.name === name && item.type === columnType) {
+          item.enabled = true;
+        }
+      });
+      return { ...state, columns };
+    }
+  ),
+  on(
+    fromActions.deselectColumnAction,
+    (state, { name, columnType }): UserState => {
+      const columns = [...state.columns];
+      columns.forEach((item) => {
+        if (item.name === name && item.type === columnType) {
+          item.enabled = false;
+        }
+      });
+      return { ...state, columns };
+    }
+  ),
+  on(fromActions.deselectAllCustomColumnsAction, (state): UserState => {
     const initialColumnNames = [...initialUserState.columns].map(
-      column => column.name
+      (column) => column.name
     );
     const customColumns = [...state.columns].filter(
-      column => !initialColumnNames.includes(column.name)
+      (column) => !initialColumnNames.includes(column.name)
     );
-    customColumns.forEach(column => (column.enabled = false));
-    const customColumnNames = customColumns.map(column => column.name);
+    customColumns.forEach((column) => (column.enabled = false));
+    const customColumnNames = customColumns.map((column) => column.name);
 
     const columns = [...state.columns]
-      .filter(column => !customColumnNames.includes(column.name))
+      .filter((column) => !customColumnNames.includes(column.name))
       .concat(customColumns);
     return { ...state, columns };
   }),
 
-  on(fromActions.showMessageAction, (state, { message }) => ({
-    ...state,
-    message
-  })),
-  on(fromActions.clearMessageAction, state => ({
-    ...state,
-    message: initialUserState.message
-  })),
+  on(
+    fromActions.showMessageAction,
+    (state, { message }): UserState => ({
+      ...state,
+      message,
+    })
+  ),
+  on(
+    fromActions.clearMessageAction,
+    (state): UserState => ({
+      ...state,
+      message: initialUserState.message,
+    })
+  ),
 
-  on(fromActions.saveSettingsAction, (state, { settings }) => ({
-    ...state,
-    settings
-  })),
+  on(
+    fromActions.saveSettingsAction,
+    (state, { settings }): UserState => ({
+      ...state,
+      settings,
+    })
+  ),
 
-  on(fromActions.loadingAction, state => ({
-    ...state,
-    isLoading: true
-  })),
-  on(fromActions.loadingCompleteAction, state => ({
-    ...state,
-    isLoading: false
-  }))
+  on(
+    fromActions.loadingAction,
+    (state): UserState => ({
+      ...state,
+      isLoading: true,
+    })
+  ),
+  on(
+    fromActions.loadingCompleteAction,
+    (state): UserState => ({
+      ...state,
+      isLoading: false,
+    })
+  )
 );
 
 export const userReducer = (state: UserState | undefined, action: Action) => {

@@ -1,6 +1,6 @@
 <div
   class="breadcrumb"
-  *ngIf="(shouldDisplay$ | async) && breadcrumbs && breadcrumbs.length > 0"
+  *ngIf="breadcrumbs && breadcrumbs.length > 0"
 >
   <span class="container" *ngFor="let breadcrumb of breadcrumbs; let i = index">
     <a

@@ -15,7 +15,7 @@ import { publishedDataReducer } from "state-management/reducers/published-data.r
 import { PublisheddataDashboardComponent } from "./publisheddata-dashboard/publisheddata-dashboard.component";
 import { PublisheddataEditComponent } from "./publisheddata-edit/publisheddata-edit.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatOptionModule } from "@angular/material/core";
@@ -41,6 +41,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     MatSelectModule,
     MatTooltipModule,
     NgxJsonViewerModule,
+    ReactiveFormsModule,
     SharedCatanieModule,
     StoreModule.forFeature("publishedData", publishedDataReducer),
     FormsModule,

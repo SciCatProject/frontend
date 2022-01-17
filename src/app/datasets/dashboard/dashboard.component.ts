@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, Inject, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { select, Store, ActionsSubject } from "@ngrx/store";
+import { Store, ActionsSubject } from "@ngrx/store";
 
 import deepEqual from "deep-equal";
 
@@ -18,11 +18,11 @@ import {
 } from "state-management/actions/datasets.actions";
 
 import {
-  getFilters,
-  getHasPrefilledFilters,
-  getDatasetsInBatch,
-  getCurrentDataset,
-  getSelectedDatasets,
+  selectFilters,
+  selectHasPrefilledFilters,
+  selectDatasetsInBatch,
+  selectCurrentDataset,
+  selectSelectedDatasets,
 } from "state-management/selectors/datasets.selectors";
 import { distinctUntilChanged, filter, map, take } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
@@ -30,9 +30,10 @@ import { MatSidenav } from "@angular/material/sidenav";
 import { AddDatasetDialogComponent } from "datasets/add-dataset-dialog/add-dataset-dialog.component";
 import { combineLatest, Subscription } from "rxjs";
 import {
-  getProfile,
-  getCurrentUser,
-  getColumns,
+  selectProfile,
+  selectCurrentUser,
+  selectColumns,
+  selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 import { Dataset, DerivedDataset } from "shared/sdk";
 import {
@@ -47,20 +48,25 @@ import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table
   styleUrls: ["dashboard.component.scss"],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  private filters$ = this.store.pipe(select(getFilters));
-  private readyToFetch$ = this.store.pipe(
-    select(getHasPrefilledFilters),
-    filter((has) => has)
-  );
-  selectedSets$ = this.store.pipe(select(getSelectedDatasets));
-  tableColumns$ = this.store.pipe(select(getColumns));
-  selectableColumns$ = this.tableColumns$.pipe(
-    map((columns) => columns.filter((column) => column.name !== "select"))
-  );
-  public nonEmpty$ = this.store.pipe(
-    select(getDatasetsInBatch),
-    map((batch) => batch.length > 0)
-  );
+  private filters$ = this.store.select(selectFilters);
+  private readyToFetch$ = this.store
+    .select(selectHasPrefilledFilters)
+    .pipe(filter((has) => has));
+  loggedIn$ = this.store.select(selectIsLoggedIn);
+  selectedSets$ = this.store.select(selectSelectedDatasets);
+  tableColumns$ = this.store
+    .select(selectColumns)
+    .pipe(
+      map((columns) => columns.filter((column) => column.name !== "select"))
+    );
+  selectableColumns$ = this.store
+    .select(selectColumns)
+    .pipe(
+      map((columns) => columns.filter((column) => column.name !== "select"))
+    );
+  public nonEmpty$ = this.store
+    .select(selectDatasetsInBatch)
+    .pipe(map((batch) => batch.length > 0));
 
   subscriptions: Subscription[] = [];
 
@@ -74,7 +80,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private actionsSubj: ActionsSubject,
     public dialog: MatDialog,
-    private store: Store<any>,
+    private store: Store,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -149,21 +155,41 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  updateColumnSubscription(): void {
+    this.subscriptions.push(
+      this.loggedIn$.subscribe((status) => {
+        if (!status) {
+          this.tableColumns$ = this.store
+            .select(selectColumns)
+            .pipe(
+              map((columns) =>
+                columns.filter((column) => column.name !== "select")
+              )
+            );
+        } else {
+          this.tableColumns$ = this.store.select(selectColumns);
+        }
+      })
+    );
+  }
+
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());
     this.store.dispatch(fetchMetadataKeysAction());
 
+    this.updateColumnSubscription();
+
     this.subscriptions.push(
-      combineLatest([this.filters$, this.readyToFetch$])
+      combineLatest([this.filters$, this.readyToFetch$, this.loggedIn$])
         .pipe(
-          map(([filters, _]) => filters),
+          map(([filters, _, loggedIn]) => [filters, loggedIn]),
           distinctUntilChanged(deepEqual)
         )
-        .subscribe((filters) => {
+        .subscribe((obj) => {
           this.store.dispatch(fetchDatasetsAction());
           this.store.dispatch(fetchFacetCountsAction());
           this.router.navigate(["/datasets"], {
-            queryParams: { args: JSON.stringify(filters) },
+            queryParams: { args: JSON.stringify(obj[0]) },
           });
         })
     );
@@ -181,7 +207,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentUser)).subscribe((user) => {
+      this.store.select(selectCurrentUser).subscribe((user) => {
         if (user) {
           this.currentUser = user;
         }
@@ -189,7 +215,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getProfile)).subscribe((profile) => {
+      this.store.select(selectProfile).subscribe((profile) => {
         if (profile) {
           this.userGroups = profile.accessGroups;
         }
@@ -200,7 +226,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.actionsSubj.subscribe((data) => {
         if (data.type === fetchDatasetCompleteAction.type) {
           this.store
-            .pipe(select(getCurrentDataset))
+            .select(selectCurrentDataset)
             .subscribe((dataset) => {
               if (dataset) {
                 const pid = encodeURIComponent(dataset.pid);

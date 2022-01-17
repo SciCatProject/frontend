@@ -15,8 +15,8 @@ import { Observable } from "rxjs";
 import { DatasetEffects } from "./datasets.effects";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
-  getFullqueryParams,
-  getFullfacetParams,
+  selectFullqueryParams,
+  selectFullfacetParams,
 } from "state-management/selectors/datasets.selectors";
 import {
   loadingAction,
@@ -64,13 +64,13 @@ describe("DatasetEffects", () => {
         provideMockStore({
           selectors: [
             {
-              selector: getFullqueryParams,
+              selector: selectFullqueryParams,
               value: {
                 query: JSON.stringify({ isPublished: false }),
                 limits: { skip: 0, limit: 25, order: "test asc" },
               },
             },
-            { selector: getFullfacetParams, value: {} },
+            { selector: selectFullfacetParams, value: {} },
           ],
         }),
         {
@@ -86,6 +86,7 @@ describe("DatasetEffects", () => {
             "updateByIdAttachments",
             "destroyByIdAttachments",
             "reduceDataset",
+            "appendToArrayField",
           ]),
         },
       ],
@@ -506,6 +507,46 @@ describe("DatasetEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.reduceDataset$).toBeObservable(expected);
+    });
+  });
+
+  describe("appendToArrayField$", () => {
+    it("should result in a appendToDatasetArrayFieldCompleteAction", () => {
+      const pid = "string";
+      const fieldName = "test";
+      const data = ["string"];
+      const action = fromActions.appendToDatasetArrayFieldAction({
+        pid,
+        fieldName,
+        data,
+      });
+      const outcome = fromActions.appendToDatasetArrayFieldCompleteAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", {});
+      datasetApi.appendToArrayField.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.appendToArrayField$).toBeObservable(expected);
+    });
+
+    it("should result in a appendToDatasetArrayFieldFailedAction", () => {
+      const pid = "string";
+      const fieldName = "test";
+      const data = ["string"];
+      const action = fromActions.appendToDatasetArrayFieldAction({
+        pid,
+        fieldName,
+        data,
+      });
+      const outcome = fromActions.appendToDatasetArrayFieldFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      datasetApi.appendToArrayField.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.appendToArrayField$).toBeObservable(expected);
     });
   });
 

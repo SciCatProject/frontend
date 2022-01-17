@@ -6,16 +6,16 @@ import {
   ChangeDetectorRef,
   AfterViewChecked,
 } from "@angular/core";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { Logbook } from "shared/sdk";
 import { combineLatest, Subscription } from "rxjs";
 import {
-  getCurrentLogbook,
-  getFilters,
-  getHasPrefilledFilters,
-  getEntriesCount,
-  getEntriesPerPage,
-  getPage,
+  selectCurrentLogbook,
+  selectFilters,
+  selectHasPrefilledFilters,
+  selectEntriesCount,
+  selectEntriesPerPage,
+  selectPage,
 } from "state-management/selectors/logbooks.selectors";
 import {
   fetchLogbookAction,
@@ -43,14 +43,13 @@ import {
 })
 export class LogbooksDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
-  entriesCount$ = this.store.pipe(select(getEntriesCount));
-  entriesPerPage$ = this.store.pipe(select(getEntriesPerPage));
-  currentPage$ = this.store.pipe(select(getPage));
-  filters$ = this.store.pipe(select(getFilters));
-  readyToFetch$ = this.store.pipe(
-    select(getHasPrefilledFilters),
-    filter((has) => has)
-  );
+  entriesCount$ = this.store.select(selectEntriesCount);
+  entriesPerPage$ = this.store.select(selectEntriesPerPage);
+  currentPage$ = this.store.select(selectPage);
+  filters$ = this.store.select(selectFilters);
+  readyToFetch$ = this.store
+    .select(selectHasPrefilledFilters)
+    .pipe(filter((has) => has));
 
   logbook: Logbook = new Logbook();
   filters: LogbookFilters = {
@@ -69,7 +68,7 @@ export class LogbooksDashboardComponent
     private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store<Logbook>,
+    private store: Store,
     @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {}
 
@@ -114,7 +113,7 @@ export class LogbooksDashboardComponent
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentLogbook)).subscribe((logbook) => {
+      this.store.select(selectCurrentLogbook).subscribe((logbook) => {
         if (logbook) {
           this.logbook = logbook;
         }

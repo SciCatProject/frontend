@@ -12,9 +12,9 @@ import { TestBed } from "@angular/core/testing";
 import { provideMockStore } from "@ngrx/store/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import {
-  getFullqueryParams,
-  getDatasetsQueryParams,
-  getCurrentProposal,
+  selectFullqueryParams,
+  selectDatasetsQueryParams,
+  selectCurrentProposal,
 } from "state-management/selectors/proposals.selectors";
 import * as fromActions from "state-management/actions/proposals.actions";
 import { hot, cold } from "jasmine-marbles";
@@ -45,15 +45,15 @@ describe("ProposalEffects", () => {
         provideMockActions(() => actions),
         provideMockStore({
           selectors: [
-            { selector: getFullqueryParams, value: {} },
+            { selector: selectFullqueryParams, value: {} },
             {
-              selector: getDatasetsQueryParams,
+              selector: selectDatasetsQueryParams,
               value: {
                 query: JSON.stringify({ text: "" }),
                 limits: { order: "", skip: 0, limit: 25 },
               },
             },
-            { selector: getCurrentProposal, value: {} },
+            { selector: selectCurrentProposal, value: {} },
           ],
         }),
         {

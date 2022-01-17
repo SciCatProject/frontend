@@ -40,236 +40,230 @@ const initialDatasetState: DatasetState = {
 };
 
 describe("test dataset selectors", () => {
-  describe("getDatasets", () => {
-    it("should get all datasets", () => {
+  describe("selectDatasets", () => {
+    it("should select all datasets", () => {
       expect(
-        fromDatasetSelectors.getDatasets.projector(initialDatasetState)
+        fromDatasetSelectors.selectDatasets.projector(initialDatasetState)
       ).toEqual([]);
     });
   });
 
-  describe("getSelectedDatasets", () => {
-    it("should get all selected datasets", () => {
+  describe("selectSelectedDatasets", () => {
+    it("should select all selected datasets", () => {
       expect(
-        fromDatasetSelectors.getSelectedDatasets.projector(initialDatasetState)
+        fromDatasetSelectors.selectSelectedDatasets.projector(
+          initialDatasetState
+        )
       ).toEqual([]);
     });
   });
 
-  describe("getMetadataKeys", () => {
-    it("should get the array of metadata keys", () => {
+  describe("selectMetadataKeys", () => {
+    it("should select the array of metadata keys", () => {
       expect(
-        fromDatasetSelectors.getMetadataKeys.projector(initialDatasetState)
+        fromDatasetSelectors.selectMetadataKeys.projector(initialDatasetState)
       ).toEqual(["test"]);
     });
   });
 
-  describe("getCurrentDataset", () => {
-    it("should get the current dataset", () => {
+  describe("selectCurrentDataset", () => {
+    it("should select the current dataset", () => {
       expect(
-        fromDatasetSelectors.getCurrentDataset.projector(initialDatasetState)
+        fromDatasetSelectors.selectCurrentDataset.projector(initialDatasetState)
       ).toEqual(dataset);
     });
   });
 
-  describe("getCurrentDatasetWithoutFileInfo", () => {
-    it("should get the current dataset without origDatablocks", () => {
+  describe("selectCurrentDatasetWithoutFileInfo", () => {
+    it("should select the current dataset without origDatablocks", () => {
       const { origdatablocks, ...datasetWithout } = dataset;
 
       expect(
-        fromDatasetSelectors.getCurrentDatasetWithoutFileInfo.projector(dataset)
+        fromDatasetSelectors.selectCurrentDatasetWithoutFileInfo.projector(
+          dataset
+        )
       ).toEqual(datasetWithout);
     });
   });
 
-  describe("getCurrentOrigDatablocks", () => {
-    it("should get the origDatablocks from the current dataset", () => {
+  describe("selectCurrentOrigDatablocks", () => {
+    it("should select the origDatablocks from the current dataset", () => {
       expect(
-        fromDatasetSelectors.getCurrentOrigDatablocks.projector(dataset)
+        fromDatasetSelectors.selectCurrentOrigDatablocks.projector(dataset)
       ).toEqual(dataset.origdatablocks);
     });
   });
 
-  describe("getCurrentDatablocks", () => {
-    it("should get the datablocks from the current dataset", () => {
+  describe("selectCurrentDatablocks", () => {
+    it("should select the datablocks from the current dataset", () => {
       expect(
-        fromDatasetSelectors.getCurrentDatablocks.projector(dataset)
+        fromDatasetSelectors.selectCurrentDatablocks.projector(dataset)
       ).toEqual(dataset.datablocks);
     });
   });
 
-  describe("getCurrentAttachments", () => {
-    it("should get the attachments from the current dataset", () => {
+  describe("selectCurrentAttachments", () => {
+    it("should select the attachments from the current dataset", () => {
       expect(
-        fromDatasetSelectors.getCurrentAttachments.projector(dataset)
+        fromDatasetSelectors.selectCurrentAttachments.projector(dataset)
       ).toEqual(dataset.attachments);
     });
   });
 
-  describe("getFilters", () => {
-    it("should get the dataset filters", () => {
+  describe("selectFilters", () => {
+    it("should select the dataset filters", () => {
       const filters = initialDatasetState.filters;
 
       expect(
-        fromDatasetSelectors.getFilters.projector(initialDatasetState)
+        fromDatasetSelectors.selectFilters.projector(initialDatasetState)
       ).toEqual(filters);
     });
   });
 
-  describe("getAnonymousFilters", () => {
-    it("should get the dataset filters, isPublished excluded", () => {
-      const { isPublished, ...anonymousFilters } = initialDatasetState.filters;
-
+  describe("selectTextFilter", () => {
+    it("should select the text filter", () => {
       expect(
-        fromDatasetSelectors.getAnonymousFilters.projector(initialDatasetState)
-      ).toEqual(anonymousFilters);
-    });
-  });
-
-  describe("getTextFilter", () => {
-    it("should get the text filter", () => {
-      expect(
-        fromDatasetSelectors.getTextFilter.projector(
+        fromDatasetSelectors.selectTextFilter.projector(
           initialDatasetState.filters
         )
       ).toEqual("");
     });
   });
 
-  describe("getLocationFilter", () => {
-    it("should get the creationLocation filter", () => {
+  describe("selectLocationFilter", () => {
+    it("should select the creationLocation filter", () => {
       expect(
-        fromDatasetSelectors.getLocationFilter.projector(
+        fromDatasetSelectors.selectLocationFilter.projector(
           initialDatasetState.filters
         )
       ).toEqual([]);
     });
   });
 
-  describe("getGroupFilter", () => {
-    it("should get the ownerGroup filter", () => {
+  describe("selectGroupFilter", () => {
+    it("should select the ownerGroup filter", () => {
       expect(
-        fromDatasetSelectors.getGroupFilter.projector(
+        fromDatasetSelectors.selectGroupFilter.projector(
           initialDatasetState.filters
         )
       ).toEqual([]);
     });
   });
 
-  describe("getTypeFilter", () => {
-    it("should get the type filter", () => {
+  describe("selectTypeFilter", () => {
+    it("should select the type filter", () => {
       expect(
-        fromDatasetSelectors.getTypeFilter.projector(
+        fromDatasetSelectors.selectTypeFilter.projector(
           initialDatasetState.filters
         )
       ).toEqual([]);
     });
   });
 
-  describe("getKeywordsFilter", () => {
-    it("should get the keywords filter", () => {
+  describe("selectKeywordsFilter", () => {
+    it("should select the keywords filter", () => {
       expect(
-        fromDatasetSelectors.getKeywordsFilter.projector(
+        fromDatasetSelectors.selectKeywordsFilter.projector(
           initialDatasetState.filters
         )
       ).toEqual([]);
     });
   });
 
-  describe("getCreationTimeFilter", () => {
-    it("should get the creationTime filter", () => {
+  describe("selectCreationTimeFilter", () => {
+    it("should select the creationTime filter", () => {
       expect(
-        fromDatasetSelectors.getCreationTimeFilter.projector(
+        fromDatasetSelectors.selectCreationTimeFilter.projector(
           initialDatasetState.filters
         )
       ).toEqual({ begin: "2019-10-03", end: "2019-10-04" });
     });
   });
 
-  describe("getArchiveViewMode", () => {
-    it("should get the modeToggle filter", () => {
+  describe("selectArchiveViewMode", () => {
+    it("should select the modeToggle filter", () => {
       expect(
-        fromDatasetSelectors.getArchiveViewMode.projector(
+        fromDatasetSelectors.selectArchiveViewMode.projector(
           initialDatasetState.filters
         )
       ).toEqual(ArchViewMode.all);
     });
   });
 
-  describe("getPublicViewMode", () => {
-    it("should get the isPublic filter", () => {
+  describe("selectPublicViewMode", () => {
+    it("should select the isPublic filter", () => {
       expect(
-        fromDatasetSelectors.getPublicViewMode.projector(
+        fromDatasetSelectors.selectPublicViewMode.projector(
           initialDatasetState.filters
         )
       ).toEqual(false);
     });
   });
 
-  describe("getHasAppliedFilters", () => {
+  describe("selectHasAppliedFilters", () => {
     it("should return true if filters are applied", () => {
       expect(
-        fromDatasetSelectors.getHasAppliedFilters.projector(
+        fromDatasetSelectors.selectHasAppliedFilters.projector(
           initialDatasetState.filters
         )
       ).toEqual(true);
     });
   });
 
-  describe("getScientificConditions", () => {
+  describe("selectScientificConditions", () => {
     it("should return the scientific filter", () => {
       expect(
-        fromDatasetSelectors.getScientificConditions.projector(
+        fromDatasetSelectors.selectScientificConditions.projector(
           initialDatasetState.filters
         )
       ).toEqual([]);
     });
   });
 
-  describe("getLocationFacetCounts", () => {
+  describe("selectLocationFacetCounts", () => {
     it("should return the location facetCounts", () => {
       expect(
-        fromDatasetSelectors.getLocationFacetCounts.projector(
+        fromDatasetSelectors.selectLocationFacetCounts.projector(
           initialDatasetState.facetCounts
         )
       ).toEqual([]);
     });
   });
 
-  describe("getGroupFacetCounts", () => {
+  describe("selectGroupFacetCounts", () => {
     it("should return the ownerGroup facetCounts", () => {
       expect(
-        fromDatasetSelectors.getGroupFacetCounts.projector(
+        fromDatasetSelectors.selectGroupFacetCounts.projector(
           initialDatasetState.facetCounts
         )
       ).toEqual([]);
     });
   });
 
-  describe("getTypeFacetCounts", () => {
+  describe("selectTypeFacetCounts", () => {
     it("should return the type facetCounts", () => {
       expect(
-        fromDatasetSelectors.getTypeFacetCounts.projector(
+        fromDatasetSelectors.selectTypeFacetCounts.projector(
           initialDatasetState.facetCounts
         )
       ).toEqual([]);
     });
   });
 
-  describe("getKeywordFacetCounts", () => {
+  describe("selectKeywordFacetCounts", () => {
     it("should return the keywords facetCounts", () => {
       expect(
-        fromDatasetSelectors.getKeywordFacetCounts.projector(
+        fromDatasetSelectors.selectKeywordFacetCounts.projector(
           initialDatasetState.facetCounts
         )
       ).toEqual([]);
     });
   });
 
-  describe("getFullqueryParams", () => {
+  describe("selectFullqueryParams", () => {
     it("should return the fullquery params", () => {
       const fullqueryKeys = Object.keys(
-        fromDatasetSelectors.getFullqueryParams.projector(
+        fromDatasetSelectors.selectFullqueryParams.projector(
           initialDatasetState.filters
         )
       );
@@ -277,10 +271,10 @@ describe("test dataset selectors", () => {
     });
   });
 
-  describe("getFullfacetParams", () => {
+  describe("selectFullfacetParams", () => {
     it("should return the fullfacet params", () => {
       const fullfacetKeys = Object.keys(
-        fromDatasetSelectors.getFullfacetParams.projector(
+        fromDatasetSelectors.selectFullfacetParams.projector(
           initialDatasetState.filters
         )
       );
@@ -288,70 +282,98 @@ describe("test dataset selectors", () => {
     });
   });
 
-  describe("getTotalSets", () => {
-    it("should get total set number", () => {
+  describe("selectTotalSets", () => {
+    it("should select total set number", () => {
       expect(
-        fromDatasetSelectors.getTotalSets.projector(initialDatasetState)
+        fromDatasetSelectors.selectTotalSets.projector(initialDatasetState)
       ).toEqual(0);
     });
   });
 
-  describe("getPage", () => {
-    it("should get the current page", () => {
+  describe("selectPage", () => {
+    it("should select the current page", () => {
       expect(
-        fromDatasetSelectors.getPage.projector(initialDatasetState.filters)
+        fromDatasetSelectors.selectPage.projector(initialDatasetState.filters)
       ).toEqual(0);
     });
   });
 
-  describe("getDatasetsPerPage", () => {
-    it("should get the limit filter", () => {
+  describe("selectDatasetsPerPage", () => {
+    it("should select the limit filter", () => {
       expect(
-        fromDatasetSelectors.getDatasetsPerPage.projector(
+        fromDatasetSelectors.selectDatasetsPerPage.projector(
           initialDatasetState.filters
         )
       ).toEqual(30);
     });
   });
 
-  describe("getSearchTerms", () => {
-    it("should get the current search terms", () => {
+  describe("selectSearchTerms", () => {
+    it("should select the current search terms", () => {
       expect(
-        fromDatasetSelectors.getSearchTerms.projector(initialDatasetState)
+        fromDatasetSelectors.selectSearchTerms.projector(initialDatasetState)
       ).toEqual("run");
     });
   });
 
-  describe("getKeywordsTerms", () => {
-    it("should get the current keywords terms", () => {
+  describe("selectKeywordsTerms", () => {
+    it("should select the current keywords terms", () => {
       expect(
-        fromDatasetSelectors.getKeywordsTerms.projector(initialDatasetState)
+        fromDatasetSelectors.selectKeywordsTerms.projector(initialDatasetState)
       ).toEqual("");
     });
   });
 
-  describe("getHasPrefilledFilters", () => {
+  describe("selectHasPrefilledFilters", () => {
     it("should return the current state of hasPrefilledFilters", () => {
       expect(
-        fromDatasetSelectors.getHasPrefilledFilters.projector(
+        fromDatasetSelectors.selectHasPrefilledFilters.projector(
           initialDatasetState
         )
       ).toEqual(false);
     });
   });
 
-  describe("getDatasetsInBatch", () => {
+  describe("selectDatasetsInBatch", () => {
     it("should return the current batch", () => {
       expect(
-        fromDatasetSelectors.getDatasetsInBatch.projector(initialDatasetState)
+        fromDatasetSelectors.selectDatasetsInBatch.projector(
+          initialDatasetState
+        )
       ).toEqual([]);
     });
   });
 
-  describe("getOpenwhiskResults", () => {
+  describe("selectDatasetsInBatchIndicator", () => {
+    it("should return null if there are zero datasets in batch", () => {
+      expect(
+        fromDatasetSelectors.selectDatasetsInBatchIndicator.projector([])
+      ).toBeNull();
+    });
+
+    it("should return the string '99+' if there are more than 99 datasets in batch", () => {
+      expect(
+        fromDatasetSelectors.selectDatasetsInBatchIndicator.projector(
+          new Array(100)
+        )
+      ).toEqual("99+");
+    });
+
+    it("should return the stringified array length if the length is between 0 and 100", () => {
+      expect(
+        fromDatasetSelectors.selectDatasetsInBatchIndicator.projector(
+          new Array(5)
+        )
+      ).toEqual("5");
+    });
+  });
+
+  describe("selectOpenwhiskResults", () => {
     it("should return the current openwhisk result", () => {
       expect(
-        fromDatasetSelectors.getOpenwhiskResult.projector(initialDatasetState)
+        fromDatasetSelectors.selectOpenwhiskResult.projector(
+          initialDatasetState
+        )
       ).toEqual({});
     });
   });

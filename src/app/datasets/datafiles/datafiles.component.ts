@@ -1,5 +1,4 @@
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { Dataset } from "shared/sdk/models";
 import {
   Component,
   OnInit,
@@ -10,20 +9,18 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Subscription } from "rxjs";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
-  getCurrentOrigDatablocks,
-  getCurrentDataset,
+  selectCurrentOrigDatablocks,
+  selectCurrentDataset,
 } from "state-management/selectors/datasets.selectors";
 import {
   TableColumn,
   PageChangeEvent,
   CheckboxEvent,
 } from "shared/modules/table/table.component";
-import { getIsLoading } from "state-management/selectors/user.selectors";
+import { selectIsLoading } from "state-management/selectors/user.selectors";
 import { ActivatedRoute } from "@angular/router";
-import { pluck } from "rxjs/operators";
-import { fetchDatasetAction } from "state-management/actions/datasets.actions";
 import { Job, UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
@@ -49,9 +46,9 @@ export interface File {
 })
 export class DatafilesComponent
   implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
-  datablocks$ = this.store.pipe(select(getCurrentOrigDatablocks));
-  dataset$ = this.store.pipe(select(getCurrentDataset));
-  loading$ = this.store.pipe(select(getIsLoading));
+  datablocks$ = this.store.select(selectCurrentOrigDatablocks);
+  dataset$ = this.store.select(selectCurrentDataset);
+  loading$ = this.store.select(selectIsLoading);
 
   tooLargeFile = false;
   totalFileSize = 0;
@@ -106,7 +103,7 @@ export class DatafilesComponent
 
   constructor(
     private route: ActivatedRoute,
-    private store: Store<Dataset>,
+    private store: Store,
     private cdRef: ChangeDetectorRef,
     private userApi: UserApi,
     private dialog: MatDialog,
@@ -200,11 +197,6 @@ export class DatafilesComponent
   }
 
   ngAfterViewInit() {
-    this.route.params.pipe(pluck("id")).subscribe((id: string) => {
-      this.datasetPid = id;
-      this.store.dispatch(fetchDatasetAction({ pid: id }));
-    });
-
     this.subscriptions.push(
       this.dataset$.subscribe((dataset) => {
         if (dataset) {
@@ -216,15 +208,15 @@ export class DatafilesComponent
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
         const files: File[] = [];
-        datablocks.forEach((block) => {
-          if (block.datasetId === this.datasetPid) {
+        if (datablocks) {
+          datablocks.forEach((block) => {
             block.dataFileList.map((file) => {
               this.totalFileSize += file.size;
               file.selected = false;
               files.push(file);
             });
-          }
-        });
+          });
+        }
         this.count = files.length;
         this.tableData = files.slice(0, this.pageSize);
         this.files = files;

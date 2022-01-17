@@ -5,7 +5,7 @@ import { SampleInterface, Sample } from "shared/sdk";
 const data: SampleInterface = {
   sampleId: "testId",
   ownerGroup: "testGroup",
-  attachments: []
+  attachments: [],
 };
 const sample = new Sample(data);
 
@@ -25,153 +25,155 @@ const initialSampleState: SampleState = {
     sortField: "creationTime:desc",
     skip: 0,
     limit: 25,
-    characteristics: []
+    characteristics: [],
   },
 
   datasetFilters: {
     sortField: "createdAt:desc",
     skip: 0,
-    limit: 25
-  }
+    limit: 25,
+  },
 };
 
 describe("Sample Selectors", () => {
-  describe("getSamples", () => {
-    it("should get samples", () => {
-      expect(fromSelectors.getSamples.projector(initialSampleState)).toEqual(
+  describe("selectSamples", () => {
+    it("should select samples", () => {
+      expect(fromSelectors.selectSamples.projector(initialSampleState)).toEqual(
         []
       );
     });
   });
 
-  describe("getMetadataKeys", () => {
-    it("should get metadataKeys", () => {
+  describe("selectMetadataKeys", () => {
+    it("should select metadataKeys", () => {
       expect(
-        fromSelectors.getMetadataKeys.projector(initialSampleState)
+        fromSelectors.selectMetadataKeys.projector(initialSampleState)
       ).toEqual([]);
     });
   });
 
-  describe("getCurrentSample", () => {
-    it("should get the current sample", () => {
+  describe("selectCurrentSample", () => {
+    it("should select the current sample", () => {
       expect(
-        fromSelectors.getCurrentSample.projector(initialSampleState)
+        fromSelectors.selectCurrentSample.projector(initialSampleState)
       ).toEqual(sample);
     });
   });
 
-  describe("getCurrentSample", () => {
-    it("should get the attachments from the current sample", () => {
+  describe("selectCurrentSample", () => {
+    it("should select the attachments from the current sample", () => {
       expect(
-        fromSelectors.getCurrentAttachments.projector(
+        fromSelectors.selectCurrentAttachments.projector(
           initialSampleState.currentSample
         )
       ).toEqual([]);
     });
   });
 
-  describe("getDatasets", () => {
-    it("should get the datasets related to the current sample", () => {
-      expect(fromSelectors.getDatasets.projector(initialSampleState)).toEqual(
-        []
-      );
+  describe("selectDatasets", () => {
+    it("should select the datasets related to the current sample", () => {
+      expect(
+        fromSelectors.selectDatasets.projector(initialSampleState)
+      ).toEqual([]);
     });
   });
 
-  describe("getSamplesCount", () => {
-    it("should get samplesCount", () => {
+  describe("selectSamplesCount", () => {
+    it("should select samplesCount", () => {
       expect(
-        fromSelectors.getSamplesCount.projector(initialSampleState)
+        fromSelectors.selectSamplesCount.projector(initialSampleState)
       ).toEqual(0);
     });
   });
 
-  describe("getDatasetsCount", () => {
-    it("should get datasetsCount", () => {
+  describe("selectDatasetsCount", () => {
+    it("should select datasetsCount", () => {
       expect(
-        fromSelectors.getDatasetsCount.projector(initialSampleState)
+        fromSelectors.selectDatasetsCount.projector(initialSampleState)
       ).toEqual(0);
     });
   });
 
-  describe("getHasPrefilledFilters", () => {
-    it("should get hasPrefilledFilters", () => {
+  describe("selectHasPrefilledFilters", () => {
+    it("should select hasPrefilledFilters", () => {
       expect(
-        fromSelectors.getHasPrefilledFilters.projector(initialSampleState)
+        fromSelectors.selectHasPrefilledFilters.projector(initialSampleState)
       ).toEqual(false);
     });
   });
 
-  describe("getFilters", () => {
-    it("should get sampleFilters", () => {
-      expect(fromSelectors.getFilters.projector(initialSampleState)).toEqual(
+  describe("selectFilters", () => {
+    it("should select sampleFilters", () => {
+      expect(fromSelectors.selectFilters.projector(initialSampleState)).toEqual(
         initialSampleState.sampleFilters
       );
     });
   });
 
-  describe("getTextFilter", () => {
-    it("should get text filter from sampleFilters", () => {
+  describe("selectTextFilter", () => {
+    it("should select text filter from sampleFilters", () => {
       expect(
-        fromSelectors.getTextFilter.projector(initialSampleState.sampleFilters)
+        fromSelectors.selectTextFilter.projector(
+          initialSampleState.sampleFilters
+        )
       ).toEqual("test");
     });
   });
 
-  describe("getDatasetFilters", () => {
-    it("should get datasetFilters", () => {
+  describe("selectDatasetFilters", () => {
+    it("should select datasetFilters", () => {
       expect(
-        fromSelectors.getDatasetFilters.projector(initialSampleState)
+        fromSelectors.selectDatasetFilters.projector(initialSampleState)
       ).toEqual(initialSampleState.datasetFilters);
     });
   });
 
-  describe("getPage", () => {
-    it("should get the current samples page", () => {
+  describe("selectPage", () => {
+    it("should select the current samples page", () => {
       const { skip, limit } = initialSampleState.sampleFilters;
       const page = skip / limit;
       expect(
-        fromSelectors.getPage.projector(initialSampleState.sampleFilters)
+        fromSelectors.selectPage.projector(initialSampleState.sampleFilters)
       ).toEqual(page);
     });
   });
 
-  describe("getDatasetsPage", () => {
-    it("should get the current datasets page", () => {
+  describe("selectDatasetsPage", () => {
+    it("should select the current datasets page", () => {
       const { skip, limit } = initialSampleState.datasetFilters;
       const page = skip / limit;
       expect(
-        fromSelectors.getDatasetsPage.projector(
+        fromSelectors.selectDatasetsPage.projector(
           initialSampleState.datasetFilters
         )
       ).toEqual(page);
     });
   });
 
-  describe("getSamplesPerPage", () => {
-    it("should get limit from sampleFilters", () => {
+  describe("selectSamplesPerPage", () => {
+    it("should select limit from sampleFilters", () => {
       expect(
-        fromSelectors.getSamplesPerPage.projector(
+        fromSelectors.selectSamplesPerPage.projector(
           initialSampleState.sampleFilters
         )
       ).toEqual(25);
     });
   });
 
-  describe("getDatasetsPerPage", () => {
-    it("should get limit from datasetFilters", () => {
+  describe("selectDatasetsPerPage", () => {
+    it("should select limit from datasetFilters", () => {
       expect(
-        fromSelectors.getDatasetsPerPage.projector(
+        fromSelectors.selectDatasetsPerPage.projector(
           initialSampleState.datasetFilters
         )
       ).toEqual(25);
     });
   });
 
-  describe("getFullqueryParams", () => {
-    it("should get the fullquery params", () => {
+  describe("selectFullqueryParams", () => {
+    it("should select the fullquery params", () => {
       const fullqueryKeys = Object.keys(
-        fromSelectors.getFullqueryParams.projector(
+        fromSelectors.selectFullqueryParams.projector(
           initialSampleState.sampleFilters
         )
       );
@@ -179,12 +181,12 @@ describe("Sample Selectors", () => {
     });
   });
 
-  describe("getDatasetsQueryParams", () => {
-    it("should get the datasets query params", () => {
+  describe("selectDatasetsQueryParams", () => {
+    it("should select the datasets query params", () => {
       const { sortField, skip, limit } = initialSampleState.datasetFilters;
       const params = { order: sortField, skip, limit };
       expect(
-        fromSelectors.getDatasetsQueryParams.projector(
+        fromSelectors.selectDatasetsQueryParams.projector(
           initialSampleState.datasetFilters
         )
       ).toEqual(params);

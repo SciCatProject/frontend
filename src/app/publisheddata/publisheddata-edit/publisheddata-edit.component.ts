@@ -1,23 +1,18 @@
-import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
-
-import { select, Store, ActionsSubject } from "@ngrx/store";
-import { pluck } from "rxjs/operators";
-
+import { Store } from "@ngrx/store";
 import {
-  fetchPublishedDataCompleteAction,
   fetchPublishedDataAction,
   resyncPublishedDataAction,
 } from "state-management/actions/published-data.actions";
-import { AppConfig, APP_CONFIG } from "app-config.module";
-
-import { Router, ActivatedRoute } from "@angular/router";
-import { getCurrentPublishedData } from "state-management/selectors/published-data.selectors";
-import { Subscription } from "rxjs";
-
-import { ReadFile } from "ngx-file-helpers";
+import { ActivatedRoute, Router } from "@angular/router";
+import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { MatChipInputEvent } from "@angular/material/chips";
-import { PublishedData } from "shared/sdk";
+import { Attachment, PublishedData } from "shared/sdk";
+import { PickedFile } from "shared/modules/file-uploader/file-uploader.component";
+import { tap } from "rxjs/operators";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Observable, Subscription } from "rxjs";
 
 @Component({
   selector: "publisheddata-edit",
@@ -25,159 +20,120 @@ import { PublishedData } from "shared/sdk";
   styleUrls: ["./publisheddata-edit.component.scss"],
 })
 export class PublisheddataEditComponent implements OnInit, OnDestroy {
+  routeSubscription = new Subscription();
+  publishedData$: Observable<PublishedData> = new Observable();
+  attachments: Attachment[] = [];
+  form: FormGroup = this.formBuilder.group({
+    doi: [""],
+    title: ["", Validators.required],
+    creator: [[""], Validators.minLength(1)],
+    publisher: ["", Validators.required],
+    resourceType: ["", Validators.required],
+    abstract: ["", Validators.required],
+    pidArray: [[""], Validators.minLength(1)],
+    publicationYear: [0, Validators.required],
+    url: [""],
+    dataDescription: ["", Validators.required],
+    thumbnail: [""],
+    numberOfFiles: [0],
+    sizeOfArchive: [0],
+    downloadLink: [""],
+    relatedPublications: [[]],
+  });
+
   public separatorKeysCodes: number[] = [ENTER, COMMA];
 
-  currentData$ = this.store.pipe(select(getCurrentPublishedData));
-  routeSubscription: Subscription = new Subscription();
-  actionSubjectSubscription: Subscription = new Subscription();
-
-  public form: Partial<PublishedData> = {
-    doi: "",
-    title: "",
-    creator: [],
-    publisher: this.appConfig.facility ?? "",
-    resourceType: "",
-    abstract: "",
-    pidArray: [],
-    publicationYear: undefined,
-    url: "",
-    dataDescription: "",
-    thumbnail: "",
-    numberOfFiles: undefined,
-    sizeOfArchive: undefined,
-    downloadLink: "",
-    relatedPublications: [],
-  };
-  pickedFile: any;
-  attachment: any;
-
   constructor(
+    private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store<any>,
-    @Inject(APP_CONFIG) private appConfig: AppConfig,
-    private actionsSubj: ActionsSubject
+    private store: Store
   ) {}
 
   addCreator(event: MatChipInputEvent) {
     const value = (event.value || "").trim();
     if (value) {
-      this.form.creator?.push(value);
+      this.creator!.value.push(value);
     }
 
-    if (event.input) {
-      event.input.value = "";
+    if (event.chipInput && event.chipInput.inputElement.value) {
+      event.chipInput.inputElement.value = "";
     }
   }
 
-  removeCreator(creator: string) {
-    const index = this.form.creator?.indexOf(creator);
-
-    if (index && index >= 0) {
-      this.form.creator?.splice(index, 1);
+  removeCreator(index: number) {
+    if (index >= 0) {
+      this.creator!.value.splice(index, 1);
     }
   }
 
   addRelatedPublication(event: MatChipInputEvent) {
     const value = (event.value || "").trim();
     if (value) {
-      this.form.relatedPublications?.push(value);
+      this.relatedPublications!.value.push(value);
     }
 
-    if (event.input) {
-      event.input.value = "";
-    }
-  }
-
-  removeRelatedPublication(relatedPublication: string) {
-    const index = this.form.relatedPublications?.indexOf(relatedPublication);
-
-    if (index && index >= 0) {
-      this.form.relatedPublications?.splice(index, 1);
+    if (event.chipInput && event.chipInput.inputElement.value) {
+      event.chipInput.inputElement.value = "";
     }
   }
 
-  public formIsValid() {
-    return (
-      this.form.title.length > 0 &&
-      this.form.resourceType.length > 0 &&
-      this.form.creator.length > 0 &&
-      this.form.publisher.length > 0 &&
-      this.form.dataDescription.length > 0 &&
-      this.form.abstract.length > 0
-    );
-  }
-
-  ngOnInit() {
-    this.currentData$.subscribe((data) => {
-      this.routeSubscription = this.route.params
-        .pipe(pluck("id"))
-        .subscribe((id: string) => {
-          if (!data) {
-            this.store.dispatch(fetchPublishedDataAction({ id }));
-          }
-        });
-      if (data) {
-        this.form.doi = data.doi;
-        this.form.abstract = data.abstract;
-        this.form.dataDescription = data.dataDescription;
-        this.form.creator = data.creator;
-        this.form.title = data.title;
-        this.form.resourceType = data.resourceType;
-        this.form.thumbnail = data.thumbnail;
-        this.form.publicationYear = data.publicationYear;
-        this.form.downloadLink = data.downloadLink || undefined;
-        this.form.relatedPublications = data.relatedPublications || [];
-        this.form.pidArray = data.pidArray;
-      }
-    });
-
-    // navigate away after completion
-    this.actionSubjectSubscription = this.actionsSubj.subscribe((sub) => {
-      if (sub.type === fetchPublishedDataCompleteAction.type) {
-        this.store
-          .pipe(select(getCurrentPublishedData))
-          .subscribe((publishedData) => {
-            if (publishedData) {
-              const doi = encodeURIComponent(publishedData.doi);
-              this.router.navigateByUrl("/publishedDatasets/" + doi);
-            }
-          })
-          .unsubscribe();
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    this.routeSubscription.unsubscribe();
-    this.actionSubjectSubscription.unsubscribe();
+  removeRelatedPublication(index: number) {
+    if (index >= 0) {
+      this.relatedPublications!.value.splice(index, 1);
+    }
   }
 
   public onUpdate() {
-    const doi = this.form.doi;
-    if (doi) {
-      this.store.dispatch(resyncPublishedDataAction({ doi, data: this.form }));
+    if (this.form.valid) {
+      const doi = this.form.get("doi")!.value;
+      if (doi) {
+        this.store.dispatch(
+          resyncPublishedDataAction({ doi, data: this.form.value })
+        );
+      }
     }
   }
 
   public onCancel() {
-    if (this.form.doi) {
-      const doi = encodeURIComponent(this.form.doi);
-      this.router.navigateByUrl("/publishedDatasets/" + doi);
+    const doi = this.form.get("doi")!.value;
+    if (doi) {
+      const encodedDoi = encodeURIComponent(doi);
+      this.router.navigateByUrl("/publishedDatasets/" + encodedDoi);
     }
   }
 
-  onFileUploaderFilePicked(file: ReadFile) {
-    this.pickedFile = file;
-  }
-
-  public onFileUploaderReadEnd(fileCount: number) {
-    if (fileCount > 0) {
-      this.form.thumbnail = this.pickedFile.content;
-    }
+  onFileUploaderFilePicked(file: PickedFile) {
+    this.form.get("thumbnail")!.setValue(file.content);
   }
 
   deleteAttachment(attachmentId: string) {
-    this.form.thumbnail = "";
+    this.form.get("thumbnail")!.setValue("");
+  }
+
+  get creator() {
+    return this.form.get("creator");
+  }
+
+  get relatedPublications() {
+    return this.form.get("relatedPublications");
+  }
+
+  get thumbnail() {
+    return this.form.get("thumbail");
+  }
+
+  ngOnInit() {
+    this.routeSubscription = this.route.params.subscribe(({ id }) =>
+      this.store.dispatch(fetchPublishedDataAction({ id }))
+    );
+
+    this.publishedData$ = this.store
+      .select(selectCurrentPublishedData)
+      .pipe(tap((publishedData) => this.form.patchValue(publishedData)));
+  }
+
+  ngOnDestroy() {
+    this.routeSubscription.unsubscribe();
   }
 }

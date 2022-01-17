@@ -6,31 +6,32 @@ import {
   OnInit,
   ViewEncapsulation,
   AfterViewChecked,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from "@angular/core";
-import { select, Store } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { LoopBackConfig } from "shared/sdk";
 import {
   clearMessageAction,
   fetchCurrentUserAction,
-  logoutAction
+  logoutAction,
 } from "state-management/actions/user.actions";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Meta, Title } from "@angular/platform-browser";
 import { Subscription } from "rxjs";
 import {
-  getIsLoading,
-  getUserMessage
+  selectIsLoading,
+  selectUserMessage,
 } from "state-management/selectors/user.selectors";
+import { MessageType } from "state-management/models";
 
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
-  loading$ = this.store.pipe(select(getIsLoading));
+  loading$ = this.store.select(selectIsLoading);
 
   title: string;
   facility: string;
@@ -43,7 +44,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     public snackBar: MatSnackBar,
     private titleService: Title,
     @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private store: Store<any>
+    private store: Store
   ) {
     this.facility = this.appConfig.facility ?? "";
     if (appConfig.production === true) {
@@ -55,7 +56,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     this.titleService.setTitle(this.title);
     this.metaService.addTag({
       name: "description",
-      content: "SciCat metadata catalogue at" + this.facility
+      content: "SciCat metadata catalogue at" + this.facility,
     });
   }
 
@@ -73,11 +74,23 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     }
 
     this.userMessageSubscription = this.store
-      .pipe(select(getUserMessage))
-      .subscribe(current => {
+      .select(selectUserMessage)
+      .subscribe((current) => {
         if (current && current.content !== undefined) {
+          let panelClass = "";
+          switch (current.type) {
+            case MessageType.Success: {
+              panelClass = "snackbar-success";
+              break;
+            }
+            case MessageType.Error: {
+              panelClass = "snackbar-error";
+              break;
+            }
+          }
           this.snackBar.open(current.content, undefined, {
-            duration: current.duration
+            duration: current.duration,
+            panelClass,
           });
           this.store.dispatch(clearMessageAction());
         }

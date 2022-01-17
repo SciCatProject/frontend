@@ -37,6 +37,7 @@ export const environment = {
   searchPublicDataEnabled: false,
   searchSamples: false,
   sftpHost: null,
+  shareEnabled: false,
   shoppingCartEnabled: false,
   shoppingCartOnHeader: false,
   tableSciDataEnabled: false,

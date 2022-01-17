@@ -13,8 +13,8 @@ services:
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-  catanie-test:
-    image: "docker.maxiv.lu.se/catanie-test"
+  scicat-frontend-test:
+    image: "docker.maxiv.lu.se/scicat-frontend-test"
     networks:
       - proxy
     restart: always
@@ -24,8 +24,8 @@ services:
       - "traefik.frontend.rule=Host:scicat-test.maxiv.lu.se"
       - "traefik.docker.network=proxy"
       - "traefik.port=80"
-  catamel-test:
-    image: "docker.maxiv.lu.se/catamel-test"
+  scicat-backend-test:
+    image: "docker.maxiv.lu.se/scicat-backend-test"
     networks:
       - proxy
     restart: always

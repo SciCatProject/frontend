@@ -5,10 +5,10 @@ import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";
 import {
-  getQueryParams,
-  getEditableQueryParams,
+  selectQueryParams,
+  selectEditableQueryParams,
 } from "state-management/selectors/policies.selectors";
-import { getProfile } from "state-management/selectors/user.selectors";
+import { selectProfile } from "state-management/selectors/user.selectors";
 import * as fromActions from "state-management/actions/policies.actions";
 import { hot, cold } from "jasmine-marbles";
 import {
@@ -35,9 +35,9 @@ describe("PolicyEffects", () => {
         provideMockActions(() => actions),
         provideMockStore({
           selectors: [
-            { selector: getQueryParams, value: {} },
-            { selector: getEditableQueryParams, value: {} },
-            { selector: getProfile, value: { email: "test@email.com" } },
+            { selector: selectQueryParams, value: {} },
+            { selector: selectEditableQueryParams, value: {} },
+            { selector: selectProfile, value: { email: "test@email.com" } },
           ],
         }),
         {

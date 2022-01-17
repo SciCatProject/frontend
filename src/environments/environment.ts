@@ -57,6 +57,7 @@ export const environment = {
   searchPublicDataEnabled: true,
   searchSamples: true,
   sftpHost: "login.esss.dk",
+  shareEnabled: true,
   shoppingCartEnabled: true,
   shoppingCartOnHeader: true,
   tableSciDataEnabled: true,
@@ -64,5 +65,6 @@ export const environment = {
   userNamePromptEnabled: true,
   userProfileImageEnabled: true,
   oAuth2Endpoints: [],
-  loginFormEnabled: true
+  loginFormEnabled: true,
+  retrieveDestinations: []
 };

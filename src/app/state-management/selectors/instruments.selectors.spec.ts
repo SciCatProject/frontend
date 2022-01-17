@@ -7,7 +7,7 @@ const instrument = new Instrument();
 const instrumentFilters: GenericFilters = {
   sortField: "name desc",
   skip: 0,
-  limit: 25
+  limit: 25,
 };
 
 const initialInstrumentState: InstrumentState = {
@@ -15,57 +15,57 @@ const initialInstrumentState: InstrumentState = {
   currentInstrument: instrument,
   totalCount: 0,
 
-  filters: instrumentFilters
+  filters: instrumentFilters,
 };
 
 describe("Instrument Selectors", () => {
-  describe("getInstruments", () => {
-    it("should get instruments", () => {
+  describe("selectInstruments", () => {
+    it("should select instruments", () => {
       expect(
-        fromSelectors.getInstruments.projector(initialInstrumentState)
+        fromSelectors.selectInstruments.projector(initialInstrumentState)
       ).toEqual([]);
     });
   });
 
-  describe("getCurrentInstrument", () => {
-    it("should get current instrument", () => {
+  describe("selectCurrentInstrument", () => {
+    it("should select current instrument", () => {
       expect(
-        fromSelectors.getCurrentInstrument.projector(initialInstrumentState)
+        fromSelectors.selectCurrentInstrument.projector(initialInstrumentState)
       ).toEqual(instrument);
     });
   });
 
-  describe("getInstrumentsCount", () => {
-    it("should get the total instruments count", () => {
+  describe("selectInstrumentsCount", () => {
+    it("should select the total instruments count", () => {
       expect(
-        fromSelectors.getInstrumentsCount.projector(initialInstrumentState)
+        fromSelectors.selectInstrumentsCount.projector(initialInstrumentState)
       ).toEqual(0);
     });
   });
 
-  describe("getFilters", () => {
-    it("should get the filters", () => {
+  describe("selectFilters", () => {
+    it("should select the filters", () => {
       expect(
-        fromSelectors.getFilters.projector(initialInstrumentState)
+        fromSelectors.selectFilters.projector(initialInstrumentState)
       ).toEqual(instrumentFilters);
     });
   });
 
-  describe("getPage", () => {
-    it("should get the current page from filters", () => {
+  describe("selectPage", () => {
+    it("should select the current page from filters", () => {
       const { skip, limit } = instrumentFilters;
       const page = skip / limit;
       expect(
-        fromSelectors.getPage.projector(initialInstrumentState.filters)
+        fromSelectors.selectPage.projector(initialInstrumentState.filters)
       ).toEqual(page);
     });
   });
 
-  describe("getInstrumentsPerPage", () => {
-    it("should get the limit from filters", () => {
+  describe("selectInstrumentsPerPage", () => {
+    it("should select the limit from filters", () => {
       const { limit } = instrumentFilters;
       expect(
-        fromSelectors.getInstrumentsPerPage.projector(
+        fromSelectors.selectInstrumentsPerPage.projector(
           initialInstrumentState.filters
         )
       ).toEqual(limit);

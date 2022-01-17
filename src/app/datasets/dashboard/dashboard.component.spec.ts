@@ -21,9 +21,9 @@ import {
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
 import { provideMockStore } from "@ngrx/store/testing";
-import { getSelectedDatasets } from "state-management/selectors/datasets.selectors";
+import { selectSelectedDatasets } from "state-management/selectors/datasets.selectors";
 import { TableColumn } from "state-management/models";
-import { getColumns } from "state-management/selectors/user.selectors";
+import { selectColumns, selectIsLoggedIn } from "state-management/selectors/user.selectors";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatSidenav, MatSidenavModule } from "@angular/material/sidenav";
 import { MatCheckboxChange } from "@angular/material/checkbox";
@@ -71,8 +71,9 @@ describe("DashboardComponent", () => {
         providers: [
           provideMockStore({
             selectors: [
-              { selector: getSelectedDatasets, value: [] },
-              { selector: getColumns, value: [] },
+              { selector: selectSelectedDatasets, value: [] },
+              { selector: selectColumns, value: [] },
+              { selector: selectIsLoggedIn, value: false },
             ],
           }),
         ],
@@ -117,6 +118,22 @@ describe("DashboardComponent", () => {
       component.onSettingsClick();
 
       expect(toggleSpy).toHaveBeenCalled();
+    });
+
+    it("should not clear the search column if sidenav is open", () => {
+      component.sideNav.opened = false;
+      // The opened status is toggled when onSettingsClick is called
+      component.onSettingsClick();
+
+      expect(component.clearColumnSearch).toEqual(false);
+    });
+
+    it("should clear the search column if sidenav is closed", () => {
+      component.sideNav.opened = true;
+      // The opened status is toggled when onSettingsClick is called
+      component.onSettingsClick();
+
+      expect(component.clearColumnSearch).toEqual(true);
     });
   });
 
@@ -239,6 +256,32 @@ describe("DashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(addDatasetAction({ dataset }));
+    });
+  });
+
+  describe("#updateColumnSubscription()", () => {
+    it("should navigate to a dataset", () => {
+      const testColumn: TableColumn = {
+        name: "test",
+        order: 0,
+        type: "standard",
+        enabled: false,
+      };
+      const selectColumn: TableColumn = {
+        name: "select",
+        order: 1,
+        type: "standard",
+        enabled: false,
+      };
+      selectColumns.setResult([testColumn, selectColumn]);
+      selectIsLoggedIn.setResult(true);
+      component.updateColumnSubscription();
+
+      component.tableColumns$.subscribe(result => expect(result.length).toEqual(2));
+
+      selectIsLoggedIn.setResult(false);
+      component.updateColumnSubscription();
+      component.tableColumns$.subscribe(result => expect(result).toEqual([testColumn]));
     });
   });
 });

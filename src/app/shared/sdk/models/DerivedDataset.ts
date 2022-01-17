@@ -37,6 +37,7 @@ export interface DerivedDatasetInterface {
   "license"?: string;
   "version"?: string;
   "isPublished"?: boolean;
+  "sharedWith"?: Array<any>;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
@@ -87,6 +88,7 @@ export class DerivedDataset implements DerivedDatasetInterface {
   "license": string;
   "version": string;
   "isPublished": boolean;
+  "sharedWith": Array<any>;
   "ownerGroup": string;
   "accessGroups": Array<any>;
   "createdBy": string;
@@ -247,6 +249,10 @@ export class DerivedDataset implements DerivedDatasetInterface {
         "isPublished": {
           name: 'isPublished',
           type: 'boolean'
+        },
+        "sharedWith": {
+          name: 'sharedWith',
+          type: 'Array&lt;any&gt;'
         },
         "ownerGroup": {
           name: 'ownerGroup',

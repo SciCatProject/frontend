@@ -3,14 +3,14 @@ import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Sample, Attachment, User, Dataset } from "shared/sdk/models";
 import {
-  getCurrentSample,
-  getDatasets,
-  getDatasetsPerPage,
-  getDatasetsPage,
-  getDatasetsCount,
-  getCurrentAttachments,
+  selectCurrentSample,
+  selectDatasets,
+  selectDatasetsPerPage,
+  selectDatasetsPage,
+  selectDatasetsCount,
+  selectCurrentAttachments,
 } from "../../state-management/selectors/samples.selectors";
-import { select, Store } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import {
   fetchSampleAction,
   fetchSampleDatasetsAction,
@@ -27,9 +27,11 @@ import {
   PageChangeEvent,
 } from "shared/modules/table/table.component";
 import { APP_CONFIG, AppConfig } from "app-config.module";
-import { ReadFile } from "ngx-file-helpers";
-import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
-import { getCurrentUser } from "state-management/selectors/user.selectors";
+import {
+  PickedFile,
+  SubmitCaptionEvent,
+} from "shared/modules/file-uploader/file-uploader.component";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 
 export interface TableData {
   pid: string;
@@ -47,14 +49,13 @@ export interface TableData {
   styleUrls: ["./sample-detail.component.scss"],
 })
 export class SampleDetailComponent implements OnInit, OnDestroy {
-  attachments$ = this.store.pipe(select(getCurrentAttachments));
-  datasetsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
-  datasetsPage$ = this.store.pipe(select(getDatasetsPage));
-  datasetsCount$ = this.store.pipe(select(getDatasetsCount));
+  attachments$ = this.store.select(selectCurrentAttachments);
+  datasetsPerPage$ = this.store.select(selectDatasetsPerPage);
+  datasetsPage$ = this.store.select(selectDatasetsPage);
+  datasetsCount$ = this.store.select(selectDatasetsCount);
 
   sample: Sample = new Sample();
   user: User = new User();
-  pickedFile!: ReadFile;
   attachment: Partial<Attachment> = new Attachment();
   show = false;
   subscriptions: Subscription[] = [];
@@ -77,7 +78,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private slicePipe: SlicePipe,
-    private store: Store<Sample>
+    private store: Store
   ) {}
 
   formatTableData(datasets: Dataset[]): TableData[] {
@@ -109,32 +110,26 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     );
   }
 
-  onFilePicked(file: ReadFile) {
-    this.pickedFile = file;
-  }
-
-  onReadEnd(filecount: number) {
-    if (filecount > 0) {
-      this.attachment = {
-        thumbnail: this.pickedFile.content,
-        caption: this.pickedFile.name,
-        ownerGroup: this.sample.ownerGroup,
-        accessGroups: this.sample.accessGroups,
-        createdBy: this.user.username,
-        updatedBy: this.user.username,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        sample: this.sample,
-        sampleId: this.sample.sampleId,
-        dataset: undefined,
-        datasetId: undefined,
-        rawDatasetId: undefined,
-        derivedDatasetId: undefined,
-        proposal: undefined,
-        proposalId: undefined,
-      };
-      this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));
-    }
+  onFilePicked(file: PickedFile) {
+    this.attachment = {
+      thumbnail: file.content,
+      caption: file.name,
+      ownerGroup: this.sample.ownerGroup,
+      accessGroups: this.sample.accessGroups,
+      createdBy: this.user.username,
+      updatedBy: this.user.username,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      sample: this.sample,
+      sampleId: this.sample.sampleId,
+      dataset: undefined,
+      datasetId: undefined,
+      rawDatasetId: undefined,
+      derivedDatasetId: undefined,
+      proposal: undefined,
+      proposalId: undefined,
+    };
+    this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));
   }
 
   updateCaption(event: SubmitCaptionEvent) {
@@ -170,7 +165,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentSample)).subscribe((sample) => {
+      this.store.select(selectCurrentSample).subscribe((sample) => {
         if (sample) {
           this.sample = sample;
         }
@@ -178,13 +173,13 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getDatasets)).subscribe((datasets) => {
+      this.store.select(selectDatasets).subscribe((datasets) => {
         this.tableData = this.formatTableData(datasets);
       })
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentUser)).subscribe((user) => {
+      this.store.select(selectCurrentUser).subscribe((user) => {
         if (user) {
           this.user = user;
         }

@@ -37,6 +37,7 @@ export interface RawDatasetInterface {
   "license"?: string;
   "version"?: string;
   "isPublished"?: boolean;
+  "sharedWith"?: Array<any>;
   "ownerGroup": string;
   "accessGroups"?: Array<any>;
   "createdBy"?: string;
@@ -90,6 +91,7 @@ export class RawDataset implements RawDatasetInterface {
   "license": string;
   "version": string;
   "isPublished": boolean;
+  "sharedWith": Array<any>;
   "ownerGroup": string;
   "accessGroups": Array<any>;
   "createdBy": string;
@@ -250,6 +252,10 @@ export class RawDataset implements RawDatasetInterface {
         "isPublished": {
           name: 'isPublished',
           type: 'boolean'
+        },
+        "sharedWith": {
+          name: 'sharedWith',
+          type: 'Array&lt;any&gt;'
         },
         "ownerGroup": {
           name: 'ownerGroup',

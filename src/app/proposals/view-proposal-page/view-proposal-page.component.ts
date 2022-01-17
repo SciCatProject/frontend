@@ -1,23 +1,23 @@
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 import {
   fetchProposalAction,
   fetchProposalDatasetsAction,
-  changeDatasetsPageAction
+  changeDatasetsPageAction,
 } from "state-management/actions/proposals.actions";
 import {
-  getCurrentProposal,
-  getProposalDatasets,
-  getDatasetsPage,
-  getDatasetsCount,
-  getDatasetsPerPage
+  selectCurrentProposal,
+  selectProposalDatasets,
+  selectDatasetsPage,
+  selectDatasetsCount,
+  selectDatasetsPerPage,
 } from "state-management/selectors/proposals.selectors";
 import { Dataset, Proposal } from "state-management/models";
 import {
   TableColumn,
-  PageChangeEvent
+  PageChangeEvent,
 } from "shared/modules/table/table.component";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
@@ -40,9 +40,9 @@ export interface TableData {
   styleUrls: ["view-proposal-page.component.scss"],
 })
 export class ViewProposalPageComponent implements OnInit, OnDestroy {
-  currentPage$ = this.store.pipe(select(getDatasetsPage));
-  datasetCount$ = this.store.pipe(select(getDatasetsCount));
-  itemsPerPage$ = this.store.pipe(select(getDatasetsPerPage));
+  currentPage$ = this.store.select(selectDatasetsPage);
+  datasetCount$ = this.store.select(selectDatasetsCount);
+  itemsPerPage$ = this.store.select(selectDatasetsPerPage);
 
   proposal: Proposal = new Proposal();
 
@@ -66,7 +66,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private slicePipe: SlicePipe,
-    private store: Store<any>
+    private store: Store
   ) {}
 
   formatTableData(datasets: Dataset[]): TableData[] {
@@ -105,7 +105,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.pipe(select(getCurrentProposal)).subscribe((proposal) => {
+      this.store.select(selectCurrentProposal).subscribe((proposal) => {
         if (proposal) {
           this.proposal = proposal;
           if (this.appConfig.logbookEnabled) {
@@ -127,7 +127,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.pipe(select(getProposalDatasets)).subscribe((datasets) => {
+      this.store.select(selectProposalDatasets).subscribe((datasets) => {
         this.tableData = this.formatTableData(datasets);
       })
     );

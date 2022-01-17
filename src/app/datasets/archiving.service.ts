@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { select, Store } from "@ngrx/store";
+import { Store } from "@ngrx/store";
+import { RetrieveDestinations } from "app-config.module";
 
 import { combineLatest, Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
@@ -7,32 +8,32 @@ import { first, map } from "rxjs/operators";
 import { Dataset, Job, User } from "state-management/models";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import {
-  getCurrentUser,
-  getTapeCopies,
-  getProfile
+  selectCurrentUser,
+  selectTapeCopies,
+  selectProfile,
 } from "state-management/selectors/user.selectors";
 
 @Injectable()
 export class ArchivingService {
-  private currentUser$ = this.store.pipe(select(getCurrentUser));
-  private tapeCopies$ = this.store.pipe(select(getTapeCopies));
+  private currentUser$ = this.store.select(selectCurrentUser);
+  private tapeCopies$ = this.store.select(selectTapeCopies);
 
-  constructor(private store: Store<any>) {}
+  constructor(private store: Store) {}
 
   private createJob(
     user: User,
     datasets: Dataset[],
     archive: boolean,
-    destinationPath?: string
+    destinationPath?: Record<string, string>
     // Do not specify tape copies here
   ): Job {
-    const extra = archive ? {} : { destinationPath };
+    const extra = archive ? {} : destinationPath;
     const jobParams = {
       username: user.username,
-      ...extra
+      ...extra,
     };
 
-    this.store.pipe(select(getProfile)).subscribe(profile => {
+    this.store.select(selectProfile).subscribe((profile) => {
       user.email = profile.email;
     });
 
@@ -41,11 +42,11 @@ export class ArchivingService {
       emailJobInitiator: user.email,
       creationTime: new Date(),
       // Revise this, files == []...? See earlier version of this method in dataset-table component for context
-      datasetList: datasets.map(dataset => ({
+      datasetList: datasets.map((dataset) => ({
         pid: dataset.pid,
-        files: []
+        files: [],
       })),
-      type: archive ? "archive" : "retrieve"
+      type: archive ? "archive" : "retrieve",
     };
 
     return new Job(data);
@@ -54,7 +55,7 @@ export class ArchivingService {
   private archiveOrRetrieve(
     datasets: Dataset[],
     archive: boolean,
-    destPath?: string
+    destPath?: Record<string, string>
   ): Observable<void> {
     return combineLatest([this.currentUser$, this.tapeCopies$]).pipe(
       first(),
@@ -66,13 +67,13 @@ export class ArchivingService {
               "No email for this user could be found, the job will not be submitted"
             );
           }
-  
+
           if (datasets.length === 0) {
             throw new Error("No datasets selected");
           }
-  
+
           const job = this.createJob(user, datasets, archive, destPath);
-  
+
           this.store.dispatch(submitJobAction({ job }));
         }
       })
@@ -85,8 +86,52 @@ export class ArchivingService {
 
   public retrieve(
     datasets: Dataset[],
-    destinationPath: string
+    destinationPath: Record<string, string>
   ): Observable<void> {
     return this.archiveOrRetrieve(datasets, false, destinationPath);
+  }
+
+  public generateOptionLocation(
+    result: RetrieveDestinations,
+    retrieveDestinations: RetrieveDestinations[] = []
+  ): {} | { option: string } | { location: string; option: string } {
+    if (
+      typeof retrieveDestinations !== "undefined" &&
+      retrieveDestinations.length > 0
+    ) {
+      const prefix = retrieveDestinations.filter(
+        (element) => element.option == result.option
+      );
+      let location =
+        prefix.length > 0
+          ? (prefix[0].location || "") + (result.location || "")
+          : "";
+      let option = result.option;
+      if (!result.option) {
+        location = retrieveDestinations[0].location || "";
+        option = retrieveDestinations[0].option;
+      }
+      return {
+        option: option,
+        ...(location != "" ? { location: location } : {}),
+      };
+    }
+    return {};
+  }
+
+  public retriveDialogOptions(
+    retrieveDestinations: RetrieveDestinations[] = []
+  ): object {
+    return {
+      width: "auto",
+      data: {
+        title: "Really retrieve?",
+        question: "",
+        choice: {
+          title: "Optionally select destination",
+          options: retrieveDestinations,
+        },
+      },
+    };
   }
 }

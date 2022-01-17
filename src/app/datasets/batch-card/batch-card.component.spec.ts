@@ -4,7 +4,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
-import { getDatasetsInBatch } from "state-management/selectors/datasets.selectors";
+import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { DatasetState } from "state-management/state/datasets.store";
 import { BatchCardComponent } from "./batch-card.component";
 
@@ -23,7 +23,7 @@ describe("BatchCardComponent", () => {
         imports: [MatButtonModule, MatCardModule, MatIconModule],
         providers: [
           provideMockStore({
-            selectors: [{ selector: getDatasetsInBatch, value: [] }],
+            selectors: [{ selector: selectDatasetsInBatch, value: [] }],
           }),
         ],
       }).compileComponents();

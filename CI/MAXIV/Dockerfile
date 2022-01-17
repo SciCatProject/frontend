@@ -6,20 +6,24 @@ RUN apk update && apk upgrade && \
 RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set strict-ssl false
 ARG env=maxiv-prod
-WORKDIR /catanie
-COPY package*.json  /catanie/
+WORKDIR /frontend
+COPY package*.json  /frontend/
 RUN npm ci
-COPY . /catanie/
+COPY . /frontend/
 # Site image needs to be copied to assets before building
-COPY CI/MAXIV/maxiv-site.png /catanie/src/assets/images/site.png
-COPY CI/MAXIV/maxiv-logo.png /catanie/src/assets/images/site-logo.png
-COPY CI/MAXIV/scicat-logo.png /catanie/src/assets/images/scicat-logo-white.png
+COPY CI/MAXIV/maxiv-site.png /frontend/src/assets/images/site.png
+COPY CI/MAXIV/maxiv-logo.png /frontend/src/assets/images/site-logo.png
+COPY CI/MAXIV/scicat-logo.png /frontend/src/assets/images/scicat-logo-white.png
 COPY CI/MAXIV/maxiv-theme.scss src/styles.scss
+COPY CI/MAXIV/index.html src/index.html
+# Google fonts (Store Google fonts locally since blue network can't connect to internet)
+COPY CI/MAXIV/google-fonts/css /frontend/src/assets/css
+COPY CI/MAXIV/google-fonts/fonts /frontend/src/assets/fonts
 RUN npx ng build --configuration=${env}
 
 FROM nginx:alpine
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 RUN rm -rf /usr/share/nginx/html/*
-COPY --from=builder /catanie/dist/ /usr/share/nginx/html
+COPY --from=builder /frontend/dist/ /usr/share/nginx/html
 COPY scripts/nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80

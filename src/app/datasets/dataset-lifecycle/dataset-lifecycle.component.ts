@@ -1,7 +1,6 @@
 import {
   Component,
   OnInit,
-  Input,
   OnChanges,
   SimpleChange,
   Inject,
@@ -17,6 +16,8 @@ import {
 import { DatePipe } from "@angular/common";
 import { PageEvent } from "@angular/material/paginator";
 import { APP_CONFIG, AppConfig } from "app-config.module";
+import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
+import { Store } from "@ngrx/store";
 
 export interface HistoryItem {
   property: string;
@@ -42,7 +43,7 @@ export interface HistoryItem {
   ],
 })
 export class DatasetLifecycleComponent implements OnInit, OnChanges {
-  @Input() dataset: Dataset | undefined;
+  dataset: Dataset | undefined;
   historyItems: HistoryItem[] = [];
 
   pageSizeOptions = [10, 25, 50, 100, 500, 1000];
@@ -56,7 +57,8 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
 
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private store: Store
   ) {}
 
   private parseHistoryItems(): HistoryItem[] {
@@ -135,6 +137,9 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.store.select(selectCurrentDataset).subscribe((dataset) => {
+      this.dataset = dataset;
+    });
     this.historyItems = this.parseHistoryItems();
     this.dataSource = this.historyItems.slice(
       this.currentPage,

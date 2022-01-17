@@ -16,6 +16,9 @@
     margin-top: 0.5em;
   }
 }
+.file-uploader {
+  margin: 1em;
+}
 
 @media only screen and (min-width: 1280px) {
   .dropzone {
@@ -26,6 +29,10 @@
     justify-content: center;
     height: 350px;
     width: 500px;
+
+    input {
+      display: none;
+    }
 
     .instructions {
       margin: 0.5em;

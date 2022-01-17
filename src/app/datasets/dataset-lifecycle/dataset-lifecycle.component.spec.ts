@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ComponentFixture, inject, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { DatasetLifecycleComponent } from "./dataset-lifecycle.component";
 
@@ -13,6 +13,8 @@ import { APP_CONFIG } from "app-config.module";
 import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 import { MatButtonModule } from "@angular/material/button";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
+import { Store, StoreModule } from "@ngrx/store";
+import { MockStore } from "@ngrx/store/testing";
 
 const historyItems = [
   {
@@ -38,7 +40,7 @@ const historyItems = [
 describe("DatasetLifecycleComponent", () => {
   let component: DatasetLifecycleComponent;
   let fixture: ComponentFixture<DatasetLifecycleComponent>;
-
+  let store: MockStore;
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
@@ -52,6 +54,7 @@ describe("DatasetLifecycleComponent", () => {
           MatTableModule,
           NgxJsonViewerModule,
           PipesModule,
+          StoreModule.forRoot({})
         ],
         providers: [
           DatePipe,
@@ -64,9 +67,15 @@ describe("DatasetLifecycleComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetLifecycleComponent);
     component = fixture.componentInstance;
+    component.dataset = {pid: "testPid", history: []} as unknown as Dataset;
     fixture.detectChanges();
   });
-
+  beforeEach(inject([Store], (mockStore: MockStore) => {
+    store = mockStore;
+  }));
+  afterEach(() => {
+    fixture.destroy();
+  });
   it("should create", () => {
     expect(component).toBeTruthy();
   });
