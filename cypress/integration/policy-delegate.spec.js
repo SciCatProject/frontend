@@ -48,9 +48,9 @@ describe("Policies", () => {
         .should("contain", "cypress@manager.com");
       cy.get("[data-cy=saveButton]").click({ force: true });
 
-      cy.wait("@update").then(response =>{
+      cy.wait("@update").then(({ response }) => {
         expect(response.method).to.eq("POST");
-        expect(response.status).to.eq(200);
+        expect(response.statusCode).to.eq(200);
       });
 
       cy.wait("@fetch");

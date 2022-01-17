@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
-describe("Samples", function() {
-  beforeEach(function() {
+describe("Samples", function () {
+  beforeEach(function () {
     cy.wait(5000);
 
     cy.login(Cypress.config("username"), Cypress.config("password"));
@@ -10,12 +10,12 @@ describe("Samples", function() {
     cy.intercept("GET", "*").as("fetch");
   });
 
-  after(function() {
+  after(function () {
     cy.removeSamples();
   });
 
-  describe("Create sample", function() {
-    it("should create a new sample", function() {
+  describe("Create sample", function () {
+    it("should create a new sample", function () {
       cy.visit("/samples");
 
       cy.wait("@fetch");
@@ -33,9 +33,9 @@ describe("Samples", function() {
         .contains("Save")
         .click();
 
-      cy.wait("@create").then(response => {
+      cy.wait("@create").then(({ response }) => {
         expect(response.method).to.eq("POST");
-        expect(response.status).to.eq(200);
+        expect(response.statusCode).to.eq(200);
       });
 
       cy.get(".mat-table")

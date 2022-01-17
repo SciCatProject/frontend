@@ -36,9 +36,9 @@ describe("Datasets", () => {
 
       cy.get("#keywordInput").type("cypresskey{enter}");
 
-      cy.wait("@keyword").then(response => {
+      cy.wait("@keyword").then(({ response }) => {
         expect(response.method).to.eq("PUT");
-        expect(response.status).to.eq(200);
+        expect(response.statusCode).to.eq(200);
       });
 
       cy.wait(5000);
@@ -67,9 +67,9 @@ describe("Datasets", () => {
         .children(".mat-chip-remove")
         .click();
 
-      cy.wait("@keyword").then(response => {
+      cy.wait("@keyword").then(({ response }) => {
         expect(response.method).to.eq("PUT");
-        expect(response.status).to.eq(200);
+        expect(response.statusCode).to.eq(200);
       });
 
       cy.get(".mat-chip-list")

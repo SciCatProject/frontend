@@ -41,9 +41,9 @@ describe("Datasets", () => {
 
       cy.get("@publicToggle").click();
 
-      cy.wait("@change").then(response => {
+      cy.wait("@change").then(({ response }) => {
         expect(response.method).to.eq("PUT");
-        expect(response.status).to.eq(200);
+        expect(response.statusCode).to.eq(200);
       });
 
       cy.get("mat-slide-toggle").should("have.class", "mat-checked");
