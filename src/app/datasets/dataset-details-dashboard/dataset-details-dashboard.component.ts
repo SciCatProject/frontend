@@ -102,12 +102,6 @@ export class DatasetDetailsDashboardComponent
         // Fetch dataset details
         this.store.dispatch(fetchDatasetAction({pid: id}));
         this.fetchDataActions[TAB.details].loaded = true;
-        // fetch data for the selected tab
-        this.route.firstChild?.url.subscribe((childUrl) => {
-          const tab = childUrl.length === 1? childUrl[0].path : "details";
-          this.fetchDataForTab(TAB[tab]);
-        })
-        .unsubscribe();
       }
     }).unsubscribe();
     this.dataset$.pipe(takeWhile(dataset => !dataset, true)).subscribe((dataset) => {
@@ -127,6 +121,12 @@ export class DatasetDetailsDashboardComponent
             ];
           }
         ).unsubscribe();
+        // fetch data for the selected tab
+        this.route.firstChild?.url.subscribe((childUrl) => {
+          const tab = childUrl.length === 1? childUrl[0].path : "details";
+          this.fetchDataForTab(TAB[tab]);
+        })
+        .unsubscribe();
 
         if ("proposalId" in dataset) {
           this.store.dispatch(
