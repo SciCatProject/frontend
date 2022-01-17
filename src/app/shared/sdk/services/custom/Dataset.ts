@@ -1,22 +1,14 @@
 /* eslint-disable */
 import { Injectable, Inject, Optional } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { SDKModels } from './SDKModels';
 import { BaseLoopBackApi } from '../core/base.service';
 import { LoopBackConfig } from '../../lb.config';
 import { LoopBackAuth } from '../core/auth.service';
 import { LoopBackFilter,  } from '../../models/BaseModels';
 import { ErrorHandler } from '../core/error.service';
-import { Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Dataset } from '../../models/Dataset';
+import { Observable } from 'rxjs';
 import { SocketConnection } from '../../sockets/socket.connections';
-import { PublishedData } from '../../models/PublishedData';
-import { Sample } from '../../models/Sample';
-import { Datablock } from '../../models/Datablock';
-import { OrigDatablock } from '../../models/OrigDatablock';
-import { Attachment } from '../../models/Attachment';
-import { Instrument } from '../../models/Instrument';
 
 
 /**
@@ -65,7 +57,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -92,7 +84,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -128,7 +120,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -158,7 +150,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof refresh !== 'undefined' && refresh !== null) _urlParams.refresh = refresh;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -191,7 +183,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -224,7 +216,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -248,7 +240,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -278,7 +270,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof refresh !== 'undefined' && refresh !== null) _urlParams.refresh = refresh;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -308,7 +300,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -335,7 +327,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -371,7 +363,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -401,7 +393,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -428,7 +420,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -464,7 +456,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -494,7 +486,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -524,7 +516,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -551,7 +543,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -587,7 +579,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -617,7 +609,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -644,7 +636,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -680,7 +672,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -710,7 +702,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -740,7 +732,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -767,7 +759,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -803,7 +795,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -833,7 +825,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof refresh !== 'undefined' && refresh !== null) _urlParams.refresh = refresh;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -863,7 +855,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -896,7 +888,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -920,7 +912,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -949,7 +941,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -979,7 +971,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1012,7 +1004,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1036,7 +1028,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1065,7 +1057,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1095,7 +1087,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1128,7 +1120,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1152,7 +1144,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1181,7 +1173,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1211,7 +1203,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1244,7 +1236,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1268,7 +1260,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1297,7 +1289,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1327,7 +1319,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1360,7 +1352,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1384,7 +1376,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1413,7 +1405,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1443,7 +1435,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1476,7 +1468,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1500,7 +1492,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1529,7 +1521,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1558,7 +1550,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1591,7 +1583,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1622,7 +1614,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _urlParams: any = {};
     if (typeof fields !== 'undefined' && fields !== null) _urlParams.fields = fields;
     if (typeof facets !== 'undefined' && facets !== null) _urlParams.facets = facets;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1653,7 +1645,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _urlParams: any = {};
     if (typeof fields !== 'undefined' && fields !== null) _urlParams.fields = fields;
     if (typeof limits !== 'undefined' && limits !== null) _urlParams.limits = limits;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1682,7 +1674,7 @@ export class DatasetApi extends BaseLoopBackApi {
       ownableItem: ownableItem
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1710,7 +1702,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof datasetId !== 'undefined' && datasetId !== null) _urlParams.datasetId = datasetId;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1736,7 +1728,7 @@ export class DatasetApi extends BaseLoopBackApi {
       dataset: dataset
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1771,7 +1763,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _urlParams: any = {};
     if (typeof fieldName !== 'undefined' && fieldName !== null) _urlParams.fieldName = fieldName;
     if (typeof data !== 'undefined' && data !== null) _urlParams.data = data;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1802,7 +1794,7 @@ export class DatasetApi extends BaseLoopBackApi {
     let _urlParams: any = {};
     if (typeof fields !== 'undefined' && fields !== null) _urlParams.fields = fields;
     if (typeof limits !== 'undefined' && limits !== null) _urlParams.limits = limits;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1831,7 +1823,7 @@ export class DatasetApi extends BaseLoopBackApi {
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1864,7 +1856,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1897,7 +1889,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1930,7 +1922,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1963,7 +1955,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -1996,7 +1988,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -2029,7 +2021,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 
@@ -2062,7 +2054,7 @@ export class DatasetApi extends BaseLoopBackApi {
       data: data
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, undefined, customHeaders);
     return result;
   }
 

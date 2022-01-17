@@ -10,7 +10,6 @@ import { Store } from "@ngrx/store";
 import { Dataset, UserApi } from "shared/sdk";
 import {
   selectCurrentDataset,
-  selectPublicViewMode,
 } from "state-management/selectors/datasets.selectors";
 import {
   selectIsAdmin,
@@ -75,7 +74,6 @@ export class DatasetDetailsDashboardComponent
     icon: string;
     enabled: boolean;
   }[] = [];
-  pid: string;
   fetchDataActions: {[tab: string] : {action: any; loaded: boolean;}} = {
     [TAB.details] : {action: fetchDatasetAction, loaded: false},
     [TAB.datafiles]: {action: fetchOrigDatablocksAction, loaded: false },
@@ -101,20 +99,18 @@ export class DatasetDetailsDashboardComponent
   ngOnInit() {
     this.route.params.pipe(pluck("id")).subscribe((id: string) => {
       if (id) {
-        this.pid = id;
-        this.route.firstChild.url.subscribe((childUrl) => {
-          // Fetch dataset details
-          this.store.dispatch(fetchDatasetAction({pid: this.pid}));
-          this.fetchDataActions[TAB.details].loaded = true;
-          // fetch data for the selected tab
+        // Fetch dataset details
+        this.store.dispatch(fetchDatasetAction({pid: id}));
+        this.fetchDataActions[TAB.details].loaded = true;
+        // fetch data for the selected tab
+        this.route.firstChild?.url.subscribe((childUrl) => {
           const tab = childUrl.length === 1? childUrl[0].path : "details";
           this.fetchDataForTab(TAB[tab]);
         })
         .unsubscribe();
       }
     }).unsubscribe();
-
-    this.dataset$.pipe(takeWhile(dataset => !dataset, true)).subscribe((dataset: Dataset) => {
+    this.dataset$.pipe(takeWhile(dataset => !dataset, true)).subscribe((dataset) => {
       if (dataset) {
         this.dataset = dataset;
         combineLatest([this.accessGroups$, this.isAdmin$, this.loggedIn$]).subscribe(
@@ -155,9 +151,13 @@ export class DatasetDetailsDashboardComponent
     if (tab in this.fetchDataActions) {
       let args: {[key: string]: any};
       if (tab === TAB.logbook) {
-        args = { name: this.dataset["proposalId"] }
+        if (this.dataset && "proposalId" in this.dataset) {
+          args = { name: this.dataset["proposalId"] }
+        } else {
+          return;
+        }
       } else {
-        args = {pid: this.pid}
+        args = {pid: this.dataset?.pid}
       }
       // load related data for selected tab
       switch(tab) {
