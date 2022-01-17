@@ -74,13 +74,13 @@ export class DatasetDetailsDashboardComponent
     icon: string;
     enabled: boolean;
   }[] = [];
-  fetchDataActions: {[tab: string] : {action: any; loaded: boolean;}} = {
+  fetchDataActions: {[tab: string] : {action: any; loaded: boolean}} = {
     [TAB.details] : {action: fetchDatasetAction, loaded: false},
     [TAB.datafiles]: {action: fetchOrigDatablocksAction, loaded: false },
     [TAB.logbook]: {action: fetchLogbookAction, loaded: false },
     [TAB.attachments]: {action: fetchAttachmentsAction, loaded: false },
     [TAB.admin]: {action: fetchDatablocksAction, loaded: false },
-  }
+  };
   userProfile$ = this.store.select(selectProfile);
   isAdmin$ = this.store.select(selectIsAdmin);
   accessGroups$: Observable<string[]> = this.userProfile$.pipe(
@@ -152,12 +152,12 @@ export class DatasetDetailsDashboardComponent
       let args: {[key: string]: any};
       if (tab === TAB.logbook) {
         if (this.dataset && "proposalId" in this.dataset) {
-          args = { name: this.dataset["proposalId"] }
+          args = { name: this.dataset["proposalId"] };
         } else {
           return;
         }
       } else {
-        args = {pid: this.dataset?.pid}
+        args = {pid: this.dataset?.pid};
       }
       // load related data for selected tab
       switch(tab) {

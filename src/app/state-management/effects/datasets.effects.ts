@@ -139,7 +139,7 @@ export class DatasetEffects {
           catchError(() => of(fromActions.fetchDatasetFailedAction()))
         );
       })
-    )
+    );
   });
   fetchDatablocksOfDataset$ = createEffect(() => {
     return this.actions$.pipe(
@@ -152,7 +152,7 @@ export class DatasetEffects {
           catchError(() => of(fromActions.fetchDatablocksFailedAction()))
         );
       })
-    )
+    );
   });
 
   fetchOrigDatablocksOfDataset$ = createEffect(() => {
@@ -166,7 +166,7 @@ export class DatasetEffects {
           catchError(() => of(fromActions.fetchOrigDatablocksFailedAction()))
         );
       })
-    )
+    );
   });
 
   fetchAttachmentsOfDataset$ = createEffect(() => {
@@ -180,7 +180,7 @@ export class DatasetEffects {
           catchError(() => of(fromActions.fetchAttachmentsFailedAction()))
         );
       })
-    )
+    );
   });
 
   addDataset$ = createEffect(() => {

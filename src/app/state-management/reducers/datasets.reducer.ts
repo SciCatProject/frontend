@@ -44,7 +44,7 @@ const reducer = createReducer(
     currentSet: {
       ...state.currentSet,
       datablocks
-    }}
+    }};
   }),
 
   on(fromActions.fetchOrigDatablocksCompleteAction, (state, { origdatablocks }) =>{
@@ -53,7 +53,7 @@ const reducer = createReducer(
     currentSet: {
       ...state.currentSet,
       origdatablocks
-    }}
+    }};
   }),
 
   on(fromActions.fetchAttachmentsCompleteAction, (state, { attachments }) =>{
@@ -62,7 +62,7 @@ const reducer = createReducer(
     currentSet: {
       ...state.currentSet,
       attachments
-    }}
+    }};
   }),
 
   on(fromActions.prefillBatchCompleteAction, (state, { batch }) => ({
