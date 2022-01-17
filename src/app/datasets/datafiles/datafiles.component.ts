@@ -201,6 +201,7 @@ export class DatafilesComponent
       this.dataset$.subscribe((dataset) => {
         if (dataset) {
           this.sourcefolder = dataset.sourceFolder;
+          this.datasetPid = dataset.pid;
         }
       })
     );
