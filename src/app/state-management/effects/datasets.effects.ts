@@ -145,7 +145,7 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchDatablocksAction),
       switchMap(({ pid, filters }) => {
-        return this.datasetApi.findByIdDatablocks(pid, filters).pipe(
+        return this.datasetApi.getDatablocks(encodeURIComponent(pid), filters).pipe(
           map((datablocks: Datablock[]) =>
             fromActions.fetchDatablocksCompleteAction({ datablocks })
           ),
@@ -159,7 +159,7 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchOrigDatablocksAction),
       switchMap(({ pid, filters }) => {
-        return this.datasetApi.findByIdOrigdatablocks(pid, filters).pipe(
+        return this.datasetApi.getOrigdatablocks(encodeURIComponent(pid), {}).pipe(
           map((origdatablocks: OrigDatablock[]) =>
             fromActions.fetchOrigDatablocksCompleteAction({ origdatablocks })
           ),
@@ -173,7 +173,7 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchAttachmentsAction),
       switchMap(({ pid, filters }) => {
-        return this.datasetApi.findByIdAttachments(pid, filters).pipe(
+        return this.datasetApi.getAttachments(encodeURIComponent(pid), filters).pipe(
           map((attachments: Attachment[]) =>
             fromActions.fetchAttachmentsCompleteAction({ attachments })
           ),
