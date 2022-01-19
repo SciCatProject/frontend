@@ -10,6 +10,7 @@
         [routerLinkActiveOptions]="{exact:true}"
         [active]="rla.isActive"
         [replaceUrl]="true"
+        (click)="onTabSelected(link.label)"
     >
       <mat-icon>{{link.icon}}</mat-icon>
       <span>{{ link.label}}</span>

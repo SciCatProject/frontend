@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import { DatasetApi, Dataset, LoopBackFilter } from "shared/sdk";
+import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
+import { DatasetApi, Dataset, LoopBackFilter, OrigDatablock, Attachment, Datablock } from "shared/sdk";
 import { Store } from "@ngrx/store";
 import {
   selectFullqueryParams,
@@ -123,12 +123,7 @@ export class DatasetEffects {
       ofType(fromActions.fetchDatasetAction),
       switchMap(({ pid, filters }) => {
         const datasetFilter: LoopBackFilter = {
-          where: { pid },
-          include: [
-            { relation: "origdatablocks" },
-            { relation: "datablocks" },
-            { relation: "attachments" },
-          ],
+          where: { pid }
         };
 
         if (filters) {
@@ -139,9 +134,50 @@ export class DatasetEffects {
 
         return this.datasetApi.findOne<Dataset>(datasetFilter).pipe(
           map((dataset: Dataset) =>
-            fromActions.fetchDatasetCompleteAction({ dataset })
+              fromActions.fetchDatasetCompleteAction({ dataset })
           ),
           catchError(() => of(fromActions.fetchDatasetFailedAction()))
+        );
+      })
+    );
+  });
+  fetchDatablocksOfDataset$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchDatablocksAction),
+      switchMap(({ pid, filters }) => {
+        return this.datasetApi.getDatablocks(encodeURIComponent(pid), filters).pipe(
+          map((datablocks: Datablock[]) =>
+            fromActions.fetchDatablocksCompleteAction({ datablocks })
+          ),
+          catchError(() => of(fromActions.fetchDatablocksFailedAction()))
+        );
+      })
+    );
+  });
+
+  fetchOrigDatablocksOfDataset$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchOrigDatablocksAction),
+      switchMap(({ pid, filters }) => {
+        return this.datasetApi.getOrigdatablocks(encodeURIComponent(pid), {}).pipe(
+          map((origdatablocks: OrigDatablock[]) =>
+            fromActions.fetchOrigDatablocksCompleteAction({ origdatablocks })
+          ),
+          catchError(() => of(fromActions.fetchOrigDatablocksFailedAction()))
+        );
+      })
+    );
+  });
+
+  fetchAttachmentsOfDataset$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchAttachmentsAction),
+      switchMap(({ pid, filters }) => {
+        return this.datasetApi.getAttachments(encodeURIComponent(pid), filters).pipe(
+          map((attachments: Attachment[]) =>
+            fromActions.fetchAttachmentsCompleteAction({ attachments })
+          ),
+          catchError(() => of(fromActions.fetchAttachmentsFailedAction()))
         );
       })
     );
@@ -276,6 +312,9 @@ export class DatasetEffects {
         fromActions.fetchFacetCountsAction,
         fromActions.fetchMetadataKeysAction,
         fromActions.fetchDatasetAction,
+        fromActions.fetchOrigDatablocksAction,
+        fromActions.fetchDatablocksAction,
+        fromActions.fetchAttachmentsAction,
         fromActions.addDatasetAction,
         fromActions.updatePropertyAction,
         fromActions.addAttachmentAction,
@@ -297,6 +336,14 @@ export class DatasetEffects {
         fromActions.fetchMetadataKeysFailedAction,
         fromActions.fetchDatasetCompleteAction,
         fromActions.fetchDatasetFailedAction,
+        fromActions.fetchOrigDatablocksCompleteAction,
+        fromActions.fetchOrigDatablocksFailedAction,
+        fromActions.fetchDatablocksCompleteAction,
+        fromActions.fetchDatablocksFailedAction,
+        fromActions.fetchOrigDatablocksCompleteAction,
+        fromActions.fetchOrigDatablocksFailedAction,
+        fromActions.fetchAttachmentsCompleteAction,
+        fromActions.fetchAttachmentsFailedAction,
         fromActions.addDatasetCompleteAction,
         fromActions.addDatasetFailedAction,
         fromActions.updatePropertyCompleteAction,

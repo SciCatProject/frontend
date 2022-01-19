@@ -13,11 +13,12 @@ exports[`stricter compilation`] = {
       [193, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"],
       [257, 47, 29, "Expected 0 arguments, but got 1.", "2503700957"]
     ],
-    "src/app/datasets/dataset-detail/dataset-detail.component.ts:3563027205": [
-      [78, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
+    "src/app/datasets/dataset-detail/dataset-detail.component.ts:1706076617": [
+      [82, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
     ],
-    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:345107662": [
-      [110, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
+    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:901536949": [
+      [111, 50, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [126, 31, 8, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'typeof TAB\'.\\n  No index signature with a parameter of type \'string\' was found on type \'typeof TAB\'.", "4213543011"]
     ],
     "src/app/datasets/dataset-lifecycle/dataset-lifecycle.component.spec.ts:2836481081": [
       [164, 20, 3, "Parameter \'key\' implicitly has an \'any\' type.", "193424690"],
@@ -1015,6 +1016,11 @@ exports[`stricter compilation`] = {
     ],
     "src/app/state-management/effects/user.effects.spec.ts:2144824867": [
       [538, 27, 93, "Conversion of type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' to type \'UserSetting\' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to \'unknown\' first.\\n  Type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' is missing the following properties from type \'UserSetting\': \\"id\\", \\"createdBy\\", \\"updatedBy\\", \\"userId\\", and 3 more.", "1258454294"]
+    ],
+    "src/app/state-management/reducers/datasets.reducer.ts:1798379755": [
+      [40, 48, 27, "Argument of type \'(state: DatasetState, { datablocks }: { datablocks: Datablock[]; } & TypedAction<\\"[Dataset] Fetch Origin Datablocks Complete\\"> & { type: \\"[Dataset] Fetch Origin Datablocks Complete\\"; }) => { ...; }\' is not assignable to parameter of type \'OnReducer<DatasetState, [ActionCreator<\\"[Dataset] Fetch Origin Datablocks Complete\\", (props: { datablocks: Datablock[]; }) => { datablocks: Datablock[]; } & TypedAction<...>>]>\'.\\n  Call signature return types \'{ currentSet: { datablocks: Datablock[]; pid?: string | undefined; owner?: string | undefined; ownerEmail?: string | undefined; orcidOfOwner?: string | undefined; contactEmail?: string | undefined; ... 36 more ...; instrument?: Instrument | undefined; }; ... 10 more ...; openwhiskResult: Record<...> | undefined; }\' and \'DatasetState\' are incompatible.\\n    The types of \'currentSet[\\"pid\\"]\' are incompatible between these types.\\n      Type \'string | undefined\' is not assignable to type \'string\'.\\n        Type \'undefined\' is not assignable to type \'string\'.", "261574027"],
+      [49, 52, 31, "Argument of type \'(state: DatasetState, { origdatablocks }: { origdatablocks: OrigDatablock[]; } & TypedAction<\\"[Dataset] Fetch Origin Datablocks Complete\\"> & { type: \\"[Dataset] Fetch Origin Datablocks Complete\\"; }) => { ...; }\' is not assignable to parameter of type \'OnReducer<DatasetState, [ActionCreator<\\"[Dataset] Fetch Origin Datablocks Complete\\", (props: { origdatablocks: OrigDatablock[]; }) => { origdatablocks: OrigDatablock[]; } & TypedAction<...>>]>\'.\\n  Call signature return types \'{ currentSet: { origdatablocks: OrigDatablock[]; pid?: string | undefined; owner?: string | undefined; ownerEmail?: string | undefined; orcidOfOwner?: string | undefined; ... 37 more ...; instrument?: Instrument | undefined; }; ... 10 more ...; openwhiskResult: Record<...> | undefined; }\' and \'DatasetState\' are incompatible.\\n    The types of \'currentSet[\\"pid\\"]\' are incompatible between these types.\\n      Type \'string | undefined\' is not assignable to type \'string\'.\\n        Type \'undefined\' is not assignable to type \'string\'.", "1169278968"],
+      [58, 49, 28, "Argument of type \'(state: DatasetState, { attachments }: { attachments: Attachment[]; } & TypedAction<\\"[Dataset] Fetch Attachments Complete\\"> & { type: \\"[Dataset] Fetch Attachments Complete\\"; }) => { ...; }\' is not assignable to parameter of type \'OnReducer<DatasetState, [ActionCreator<\\"[Dataset] Fetch Attachments Complete\\", (props: { attachments: Attachment[]; }) => { attachments: Attachment[]; } & TypedAction<...>>]>\'.\\n  Call signature return types \'{ currentSet: { attachments: Attachment[]; pid?: string | undefined; owner?: string | undefined; ownerEmail?: string | undefined; orcidOfOwner?: string | undefined; contactEmail?: string | undefined; ... 36 more ...; instrument?: Instrument | undefined; }; ... 10 more ...; openwhiskResult: Record<...> | undefined; }\' and \'DatasetState\' are incompatible.\\n    The types of \'currentSet[\\"pid\\"]\' are incompatible between these types.\\n      Type \'string | undefined\' is not assignable to type \'string\'.\\n        Type \'undefined\' is not assignable to type \'string\'.", "2148823691"]
     ],
     "src/app/state-management/reducers/jobs.reducer.spec.ts:2620026082": [
       [65, 56, 4, "Type \'null\' is not assignable to type \'Record<string, string> | undefined\'.", "2087698470"],

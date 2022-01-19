@@ -16,7 +16,6 @@ import {
 } from "state-management/selectors/datasets.selectors";
 import {
   reduceDatasetAction,
-  fetchDatasetsAction,
 } from "state-management/actions/datasets.actions";
 import { FormControl, Validators, FormBuilder } from "@angular/forms";
 import { map } from "rxjs/operators";
@@ -102,7 +101,6 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.dispatch(fetchDatasetsAction());
     this.store.select(selectCurrentDataset).subscribe((dataset) => {
       this.dataset = dataset;
     });

@@ -168,10 +168,11 @@ const reducer = createReducer(
     }
   ),
 
-  on(
-    fromActions.clearSamplesStateAction,
-    (): SampleState => ({ ...initialSampleState })
-  )
+  on(fromActions.clearSamplesStateAction, () => ({ ...initialSampleState })),
+
+  on(fromActions.clearCurrentSampleStateAction, (state) => ({
+    ...state,
+    currentSample: undefined }))
 );
 
 export const samplesReducer = (

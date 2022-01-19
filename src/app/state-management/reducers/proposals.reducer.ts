@@ -135,12 +135,14 @@ const reducer = createReducer(
     }
   ),
 
-  on(
-    fromActions.clearProposalsStateAction,
-    (): ProposalsState => ({
-      ...initialProposalsState,
-    })
-  )
+  on(fromActions.clearProposalsStateAction, () => ({
+    ...initialProposalsState,
+  })),
+
+  on(fromActions.clearCurrentProposalStateAction, (state) => ({
+    ...state,
+    currentProposal: undefined
+  }))
 );
 
 export const proposalsReducer = (
