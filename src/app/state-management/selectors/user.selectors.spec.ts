@@ -35,7 +35,7 @@ const userIdentity: UserIdentity = {
   },
 };
 
-const catamelToken: AccessToken = {
+const scicatToken: AccessToken = {
   id: "testId",
   ttl: 100,
   scopes: ["string"],
@@ -56,7 +56,7 @@ const initialUserState: UserState = {
   profile: userIdentity.profile,
   accountType: "testType",
 
-  catamelToken,
+  scicatToken,
 
   settings,
 
@@ -130,11 +130,11 @@ describe("User Selectors", () => {
     });
   });
 
-  describe("selectCatamelToken", () => {
-    it("should select catamelToken", () => {
+  describe("selectScicatToken", () => {
+    it("should select scicatToken", () => {
       expect(
-        fromSelectors.selectCatamelToken.projector(initialUserState)
-      ).toEqual(catamelToken.id);
+        fromSelectors.selectScicatToken.projector(initialUserState)
+      ).toEqual(scicatToken.id);
     });
   });
 

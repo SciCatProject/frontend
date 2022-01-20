@@ -11,27 +11,27 @@ services:
       - "./CI/ESS/.env:/home/node/app/.env"
     depends_on:
       - mongodb
-  catamel:
-    image: "dacat/catamel:latest"
+  backend:
+    image: "scicat/backend:latest"
     environment: 
       - SCICHAT_URL
     depends_on:
       - mongodb
       - scichat-loopback
-  catanie:
+  frontend:
     build:
       context: .
       dockerfile: CI/ESS/Dockerfile.e2e
-    command: ["./wait-for-it.sh", "catamel:3000", "--", "nginx", "-g", "daemon off;"]
+    command: ["./wait-for-it.sh", "scicatbackend:3000", "--", "nginx", "-g", "daemon off;"]
     depends_on:
-      - catamel
+      - backend
   cypress:
     build:
       context: .
       dockerfile: CI/ESS/Dockerfile.cypress
-    command: ["./wait-for-it.sh", "catanie:80", "--", "npx", "cypress", "run"]
+    command: ["./wait-for-it.sh", "scicatfrontend:80", "--", "npx", "cypress", "run"]
     depends_on:
-      - catanie
+      - frontend
 volumes:
   mongodb_data:
     driver: local

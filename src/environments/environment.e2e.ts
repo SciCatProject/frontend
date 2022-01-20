@@ -7,7 +7,7 @@ import { TableColumn } from "state-management/models";
 
 export const environment = {
   production: true,
-  lbBaseURL: "http://catamel:3000",
+  lbBaseURL: "http://scicatbackend:3000",
   fileserverBaseURL: "/fileserver",
   synapseBaseUrl: "https://scitest.esss.lu.se",
   riotBaseUrl: "http://scitest.esss.lu.se/riot",

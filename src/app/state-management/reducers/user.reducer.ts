@@ -77,10 +77,10 @@ const reducer = createReducer(
   ),
 
   on(
-    fromActions.fetchCatamelTokenCompleteAction,
+    fromActions.fetchScicatTokenCompleteAction,
     (state, { token }): UserState => ({
       ...state,
-      catamelToken: token,
+      scicatToken: token,
     })
   ),
 

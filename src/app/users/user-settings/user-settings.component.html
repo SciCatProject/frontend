@@ -32,8 +32,8 @@
           <th>Groups</th>
           <td>{{ value }}</td>
         </tr>
-        <tr *ngIf="catamelToken$ | async as value">
-          <th>Catamel Token</th>
+        <tr *ngIf="scicatToken$ | async as value">
+          <th>Scicat Token</th>
           <td>
             {{ value }}
             <span class="copy-button" (click)="onCopy(value)">

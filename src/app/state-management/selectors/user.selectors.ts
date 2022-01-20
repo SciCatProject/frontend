@@ -48,9 +48,9 @@ export const selectIsAdmin = createSelector(
   (name) => name && ["admin", "archiveManager", "ingestor"].indexOf(name) !== -1
 );
 
-export const selectCatamelToken = createSelector(
+export const selectScicatToken = createSelector(
   selectUserState,
-  (state) => state.catamelToken.id
+  (state) => state.scicatToken.id
 );
 
 export const selectUserMessage = createSelector(

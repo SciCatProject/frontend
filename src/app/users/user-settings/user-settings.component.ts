@@ -37,7 +37,7 @@ export class UserSettingsComponent implements OnInit {
         : "assets/images/user.png"
     )
   );
-  catamelToken$ = this.store.select(selectCatamelToken);
+  scicatToken$ = this.store.select(selectScicatToken);
   settings$ = this.store.select(selectSettings);
 
   constructor(
@@ -49,7 +49,7 @@ export class UserSettingsComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(fetchCurrentUserAction());
-    this.store.dispatch(fetchCatamelTokenAction());
+    this.store.dispatch(fetchScicatTokenAction());
   }
 
   onSubmit(values: Settings) {
