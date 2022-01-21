@@ -7,12 +7,7 @@ import {
   fetchCatamelTokenAction,
 } from "state-management/actions/user.actions";
 import { Message, MessageType, Settings } from "state-management/models";
-import {
-  selectSettings,
-  selectProfile,
-  selectCurrentUser,
-  selectCatamelToken,
-} from "state-management/selectors/user.selectors";
+import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
 import { DOCUMENT } from "@angular/common";
 import { map } from "rxjs/operators";
 
@@ -22,23 +17,7 @@ import { map } from "rxjs/operators";
   styleUrls: ["./user-settings.component.scss"],
 })
 export class UserSettingsComponent implements OnInit {
-  user$ = this.store.select(selectCurrentUser);
-  profile$ = this.store.select(selectProfile);
-  displayName$ = this.profile$.pipe(
-    map((profile) => (profile ? profile.displayName : undefined))
-  );
-  accessGroups$ = this.profile$.pipe(
-    map((profile) => (profile ? profile.accessGroups : undefined))
-  );
-  profileImage$ = this.profile$.pipe(
-    map((profile) =>
-      profile && profile.thumbnailPhoto.startsWith("data")
-        ? profile.thumbnailPhoto
-        : "assets/images/user.png"
-    )
-  );
-  catamelToken$ = this.store.select(selectCatamelToken);
-  settings$ = this.store.select(selectSettings);
+  vm$ = this.store.select(selectUserSettingsPageViewModel);
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
