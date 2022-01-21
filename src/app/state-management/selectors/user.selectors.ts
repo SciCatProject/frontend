@@ -98,3 +98,16 @@ export const selectLoginPageViewModel = createSelector(
   selectIsLoggingIn,
   (isLoggedIn, isLoggingIn) => ({ isLoggedIn, isLoggingIn })
 );
+
+export const selectUserSettingsPageViewModel = createSelector(
+  selectCurrentUser,
+  selectProfile,
+  selectCatamelToken,
+  selectSettings,
+  (user, profile, catamelToken, settings) => ({
+    user,
+    profile,
+    catamelToken,
+    settings,
+  })
+);

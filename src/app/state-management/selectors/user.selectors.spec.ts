@@ -212,4 +212,22 @@ describe("User Selectors", () => {
       ).toEqual({ isLoggedIn: false, isLoggingIn: false });
     });
   });
+
+  describe("selectUserSettingsPageViewModel", () => {
+    it("should select the user settings page view model state", () => {
+      expect(
+        fromSelectors.selectUserSettingsPageViewModel.projector(
+          initialUserState.currentUser,
+          initialUserState.profile,
+          initialUserState.catamelToken.id,
+          initialUserState.settings
+        )
+      ).toEqual({
+        user,
+        profile: userIdentity.profile,
+        catamelToken: catamelToken.id,
+        settings,
+      });
+    });
+  });
 });
