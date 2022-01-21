@@ -6,6 +6,7 @@ import { AppComponent } from "./app.component";
 import { MockStore } from "./shared/MockStubs";
 import { APP_CONFIG } from "./app-config.module";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { AppConfigService } from "app-config.service";
 
 describe("AppComponent", () => {
   beforeEach(() => {
@@ -22,6 +23,7 @@ describe("AppComponent", () => {
       set: {
         providers: [
           { provide: Store, useClass: MockStore },
+          { provide: AppConfigService, useValue: { myKey: "myValue" } },
           {
             provide: APP_CONFIG,
             useValue: {
