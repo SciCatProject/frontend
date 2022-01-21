@@ -23,6 +23,7 @@ import {
   selectUserMessage,
 } from "state-management/selectors/user.selectors";
 import { MessageType } from "state-management/models";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "app-root",
@@ -44,7 +45,8 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     public snackBar: MatSnackBar,
     private titleService: Title,
     @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private store: Store
+    private store: Store,
+    private appConfigService: AppConfigService
   ) {
     this.facility = this.appConfig.facility ?? "";
     if (appConfig.production === true) {
@@ -68,6 +70,8 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
   ngOnInit() {
     LoopBackConfig.setBaseURL(this.appConfig.lbBaseURL);
     console.log(LoopBackConfig.getPath());
+    const config = this.appConfigService.getConfig();
+    console.log({ config });
     this.store.dispatch(fetchCurrentUserAction());
     if (window.location.pathname.indexOf("logout") !== -1) {
       this.logout();

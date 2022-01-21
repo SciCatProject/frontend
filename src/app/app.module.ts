@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule, Title } from "@angular/platform-browser";
 import { EffectsModule } from "@ngrx/effects";
 import { HttpClientModule } from "@angular/common/http";
-import { NgModule } from "@angular/core";
+import { APP_INITIALIZER, NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { SampleApi, SDKBrowserModule } from "shared/sdk/index";
 import { StoreModule } from "@ngrx/store";
@@ -19,6 +19,14 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { environment } from "../environments/environment";
 import { LayoutModule } from "_layout/layout.module";
+import { AppConfigService } from "app-config.service";
+
+const appInitializerFn = (appConfig: AppConfigService) => {
+  return () => {
+    return appConfig.loadAppConfig();
+  };
+};
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -53,7 +61,19 @@ import { LayoutModule } from "_layout/layout.module";
     }),
   ],
   exports: [MatNativeDateModule],
-  providers: [UserApi, SampleApi, Title, MatNativeDateModule],
+  providers: [
+    AppConfigService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitializerFn,
+      multi: true,
+      deps: [AppConfigService],
+    },
+    UserApi,
+    SampleApi,
+    Title,
+    MatNativeDateModule,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
