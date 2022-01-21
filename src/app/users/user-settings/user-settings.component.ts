@@ -1,15 +1,13 @@
 import { Component, OnInit, Inject } from "@angular/core";
 import { Store } from "@ngrx/store";
 import {
-  saveSettingsAction,
   showMessageAction,
   fetchCurrentUserAction,
   fetchCatamelTokenAction,
 } from "state-management/actions/user.actions";
-import { Message, MessageType, Settings } from "state-management/models";
+import { Message, MessageType } from "state-management/models";
 import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
 import { DOCUMENT } from "@angular/common";
-import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-user-settings",
@@ -29,19 +27,6 @@ export class UserSettingsComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(fetchCurrentUserAction());
     this.store.dispatch(fetchCatamelTokenAction());
-  }
-
-  onSubmit(values: Settings) {
-    // TODO validate here
-    console.log(values);
-    // values['darkTheme'] = (values['darkTheme'].toLowerCase() === 'true')
-    this.store.dispatch(saveSettingsAction({ settings: values }));
-    const message = new Message(
-      "Settings saved locally",
-      MessageType.Success,
-      5000
-    );
-    this.store.dispatch(showMessageAction({ message }));
   }
 
   onCopy(token: string) {

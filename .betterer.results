@@ -1054,10 +1054,8 @@ exports[`stricter compilation`] = {
     "src/app/users/login/login.component.spec.ts:87531066": [
       [160, 8, 71, "Expected 0 arguments, but got 1.", "3870196511"]
     ],
-    "src/app/users/user-settings/user-settings.component.spec.ts:2325442996": [
-      [95, 8, 32, "Expected 0 arguments, but got 1.", "1341113725"],
-      [97, 47, 30, "Expected 0 arguments, but got 1.", "2329020575"],
-      [117, 47, 30, "Expected 0 arguments, but got 1.", "2329020575"]
+    "src/app/users/user-settings/user-settings.component.spec.ts:235762097": [
+      [87, 47, 30, "Expected 0 arguments, but got 1.", "2329020575"]
     ]
   }`
 };
