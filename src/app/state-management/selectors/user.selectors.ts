@@ -92,3 +92,9 @@ export const selectColumns = createSelector(
   selectUserState,
   (state) => state.columns
 );
+
+export const selectLoginPageViewModel = createSelector(
+  selectIsLoggedIn,
+  selectIsLoggingIn,
+  (isLoggedIn, isLoggingIn) => ({ isLoggedIn, isLoggingIn })
+);

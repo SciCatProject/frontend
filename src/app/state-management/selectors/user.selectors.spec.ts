@@ -201,4 +201,15 @@ describe("User Selectors", () => {
       ]);
     });
   });
+
+  describe("selectLoginPageViewModel", () => {
+    it("should select the login page view model state", () => {
+      expect(
+        fromSelectors.selectLoginPageViewModel.projector(
+          initialUserState.isLoggedIn,
+          initialUserState.isLoggingIn
+        )
+      ).toEqual({ isLoggedIn: false, isLoggingIn: false });
+    });
+  });
 });
