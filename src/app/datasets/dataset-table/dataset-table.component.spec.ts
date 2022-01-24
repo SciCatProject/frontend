@@ -13,7 +13,7 @@ import {
 } from "@angular/core/testing";
 import { StoreModule, Store } from "@ngrx/store";
 import { Dataset, DatasetApi } from "shared/sdk";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import {
   selectDatasetAction,
   deselectDatasetAction,
@@ -58,7 +58,7 @@ describe("DatasetTableComponent", () => {
           MatIconModule,
           MatPaginatorModule,
           MatTableModule,
-          SharedCatanieModule,
+          SharedScicatFrontendModule,
           StoreModule.forRoot({}),
         ],
         providers: [

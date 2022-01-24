@@ -14,7 +14,7 @@ import { AppConfigModule } from "app-config.module";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { LinkyModule } from "ngx-linky";
 import { RouterModule } from "@angular/router";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { LogbookFilterComponent } from "./logbook-filter/logbook-filter.component";
 import { LogbooksDashboardComponent } from "./logbooks-dashboard/logbooks-dashboard.component";
 import { EffectsModule } from "@ngrx/effects";
@@ -44,7 +44,7 @@ import { StoreModule } from "@ngrx/store";
     MatSortModule,
     MatTableModule,
     RouterModule,
-    SharedCatanieModule,
+    SharedScicatFrontendModule,
     StoreModule.forFeature("logbooks", logbooksReducer)
   ],
   providers: [],

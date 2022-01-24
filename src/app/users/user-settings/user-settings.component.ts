@@ -4,14 +4,14 @@ import {
   saveSettingsAction,
   showMessageAction,
   fetchCurrentUserAction,
-  fetchCatamelTokenAction,
+  fetchSciCatTokenAction,
 } from "state-management/actions/user.actions";
 import { Message, MessageType, Settings } from "state-management/models";
 import {
   selectSettings,
   selectProfile,
   selectCurrentUser,
-  selectCatamelToken,
+  selectSciCatToken,
 } from "state-management/selectors/user.selectors";
 import { DOCUMENT } from "@angular/common";
 import { map } from "rxjs/operators";
@@ -79,7 +79,7 @@ export class UserSettingsComponent implements OnInit {
     this.document.body.removeChild(selectionBox);
 
     const message = new Message(
-      "Catamel token has been copied to your clipboard",
+      "SciCat token has been copied to your clipboard",
       MessageType.Success,
       5000
     );

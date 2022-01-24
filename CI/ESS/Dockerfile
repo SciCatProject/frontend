@@ -7,18 +7,18 @@ RUN apk update && apk upgrade && \
 RUN npm config set registry http://registry.npmjs.org/
 RUN npm config set strict-ssl false
 ARG env=dmscdev
-WORKDIR /catanie
-COPY package*.json  /catanie/
+WORKDIR /scicat_frontend
+COPY package*.json  /scicat_frontend/
 RUN npm ci
-COPY . /catanie/
+COPY . /scicat_frontend/
 # Site image needs to be copied to assets before building
-COPY CI/ESS/site.png /catanie/src/assets/images/site.png
+COPY CI/ESS/site.png /scicat_frontend/src/assets/images/site.png
 RUN npx ng build --configuration=${env}
 
 FROM nginx:1.21-alpine
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 RUN rm -rf /usr/share/nginx/html/*
-COPY --from=builder /catanie/dist/ /usr/share/nginx/html
+COPY --from=builder /scicat_frontend/dist/ /usr/share/nginx/html
 COPY scripts/nginx.conf /etc/nginx/nginx.conf
 COPY CI/ESS/google43e14584df796f63.html   /usr/share/nginx/html
 EXPOSE 80

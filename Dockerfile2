@@ -4,8 +4,8 @@ EXPOSE 80
 RUN apt-get update && apt-get install -y nginx
 
 RUN mkdir /usr/html
-RUN mkdir /catanie
-WORKDIR /catanie
+RUN mkdir /scicat-frontend
+WORKDIR /scicat-frontend
 
 
 COPY package.json .

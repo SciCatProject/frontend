@@ -18,7 +18,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SampleDashboardComponent } from "./sample-dashboard/sample-dashboard.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatChipsModule } from "@angular/material/chips";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 
@@ -39,7 +39,7 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
     MatTabsModule,
     NgxJsonViewerModule,
     ReactiveFormsModule,
-    SharedCatanieModule,
+    SharedScicatFrontendModule,
     StoreModule.forFeature("samples", samplesReducer),
   ],
   exports: [SampleDetailComponent, SampleDialogComponent],

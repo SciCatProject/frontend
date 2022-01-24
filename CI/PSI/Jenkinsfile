@@ -34,10 +34,10 @@ podTemplate(label: 'docker',
      sh 'npm install --upgrade -g npm'
      sh "npm ci"
     }
-    stage('Unit Test Catanie ') {
+    stage('Unit Test SciCat Frontend ') {
      sh 'npm run test'
     }
-    stage('e2e Test Catanie ') {
+    stage('e2e Test SciCat Frontend ') {
      sh 'npm run e2e -- -e qa'
     }
     stage('build') {
@@ -49,21 +49,21 @@ podTemplate(label: 'docker',
      withCredentials([usernamePassword(credentialsId: 'dockerpsi', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
       sh "docker login registry.psi.ch:5000 -u $USERNAME -p $PASSWORD"
       def tag = sh(script: 'git rev-parse HEAD', returnStdout: true)
-      sh "docker build --build-arg env=development . -t registry.psi.ch:5000/egli/catanie:$tag"
-      sh "docker push registry.psi.ch:5000/egli/catanie:$tag"
+      sh "docker build --build-arg env=development . -t registry.psi.ch:5000/egli/scicat-frontend:$tag"
+      sh "docker push registry.psi.ch:5000/egli/scicat-frontend:$tag"
      }
     }
    }
    container('helm') {
     stage('Release') {
      withCredentials([usernamePassword(credentialsId: 'git', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-      sh "git clone https://$USERNAME:$PASSWORD@git.psi.ch/MELANIE/catamel-psiconfig.git"
-      sh "export KUBECONFIG=${workspace}@catamel-psisecrets/server/kubernetes/admin.conf"
+      sh "git clone https://$USERNAME:$PASSWORD@git.psi.ch/MELANIE/scicat-backend-psiconfig.git"
+      sh "export KUBECONFIG=${workspace}@scicat-backend-psisecrets/server/kubernetes/admin.conf"
       def workspace = pwd()
       sh 'kubectl version'
       sh 'helm version'
       def tag = sh(script: 'git rev-parse HEAD', returnStdout: true)
-      sh "helm upgrade -i catanie-development catamel-psiconfig/server/kubernetes/helm/dacat-gui --namespace=development --set image.tag=$tag"
+      sh "helm upgrade -i scicat-frontend-development scicat-backend-psiconfig/server/kubernetes/helm/scicat-gui --namespace=development --set image.tag=$tag"
      }
     }
    }

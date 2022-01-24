@@ -663,8 +663,8 @@ describe("UserEffects", () => {
     });
   });
 
-  describe("fetchCatamelToken$", () => {
-    it("should result in a fetchCatamelTokenCompleteAction", () => {
+  describe("fetchScicatToken$", () => {
+    it("should result in a fetchScicatTokenCompleteAction", () => {
       const token: AccessToken = {
         id: "testId",
         ttl: 100,
@@ -673,14 +673,14 @@ describe("UserEffects", () => {
         userId: "testId",
         user: "testUser",
       };
-      const action = fromActions.fetchCatamelTokenAction();
-      const outcome = fromActions.fetchCatamelTokenCompleteAction({ token });
+      const action = fromActions.fetchScicatTokenAction();
+      const outcome = fromActions.fetchScicatTokenCompleteAction({ token });
 
       actions = hot("-a", { a: action });
       userApi.getCurrentToken.and.returnValue(token);
 
       const expected = cold("-b", { b: outcome });
-      expect(effects.fetchCatamelToken$).toBeObservable(expected);
+      expect(effects.fetchScicatToken$).toBeObservable(expected);
     });
   });
 });

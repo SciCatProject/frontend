@@ -35,7 +35,7 @@ import {
   deselectAllCustomColumnsAction,
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatDialogModule, MatDialog } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -92,7 +92,7 @@ describe("DatasetsFilterComponent", () => {
           MatSelectModule,
           MatNativeDateModule,
           ReactiveFormsModule,
-          SharedCatanieModule,
+          SharedScicatFrontendModule,
           StoreModule.forRoot({}),
         ],
         declarations: [

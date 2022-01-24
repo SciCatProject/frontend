@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "catanie": {
+    "scicat-frontend": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -641,31 +641,31 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "alsdev": {
-              "browserTarget": "catanie:build:als-dev"
+              "browserTarget": "scicat-frontend:build:als-dev"
             },
             "dmscdev": {
-              "browserTarget": "catanie:build:dmscdev"
+              "browserTarget": "scicat-frontend:build:dmscdev"
             },
             "e2e": {
-              "browserTarget": "catanie:build:e2e"
+              "browserTarget": "scicat-frontend:build:e2e"
             },
             "maxiv-prod": {
-              "browserTarget": "catanie:build:maxiv-prod"
+              "browserTarget": "scicat-frontend:build:maxiv-prod"
             },
             "staging": {
-              "browserTarget": "catanie:build:staging"
+              "browserTarget": "scicat-frontend:build:staging"
             },
             "qa": {
-              "browserTarget": "catanie:build:qa"
+              "browserTarget": "scicat-frontend:build:qa"
             },
             "production": {
-              "browserTarget": "catanie:build:production"
+              "browserTarget": "scicat-frontend:build:production"
             },
             "development": {
-              "browserTarget": "catanie:build:development"
+              "browserTarget": "scicat-frontend:build:development"
             },
             "default": {
-              "browserTarget": "catanie:build:default"
+              "browserTarget": "scicat-frontend:build:default"
             }
           },
           "defaultConfiguration": "default"
@@ -673,7 +673,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "catanie:build"
+            "browserTarget": "scicat-frontend:build"
           }
         },
         "test": {
@@ -727,7 +727,7 @@
       }
     }
   },
-  "defaultProject": "catanie",
+  "defaultProject": "scicat-frontend",
   "cli": {
     "defaultCollection": "@angular-eslint/schematics"
   }

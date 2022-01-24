@@ -8,7 +8,7 @@ envarray=(development qa production)
 kubectl config use-context kubernetes-admin@kubernetes
 
 for ((i=0;i<${#envarray[@]};i++)); do 
-   cd $SCICAT_HOME/catanie 
+   cd $SCICAT_HOME/frontend 
    export FRONTEND_IMAGE_VERSION=$(git rev-parse HEAD)
    export LOCAL_ENV="${envarray[i]}"
    read -r -p "Deploy to $LOCAL_ENV? [y/N] " response

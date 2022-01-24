@@ -11,7 +11,7 @@ import { Store, StoreModule } from "@ngrx/store";
 import { UserApi } from "shared/sdk";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { AppConfigModule, APP_CONFIG } from "app-config.module";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { Router, ActivatedRoute } from "@angular/router";
 import {
   MatSlideToggleModule,
@@ -41,7 +41,7 @@ describe("DetailsDashboardComponent", () => {
           MatIconModule,
           MatSlideToggleModule,
           MatTabsModule,
-          SharedCatanieModule,
+          SharedScicatFrontendModule,
           StoreModule.forRoot({}),
         ],
       });

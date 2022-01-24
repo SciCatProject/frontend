@@ -9,7 +9,7 @@ import {
   inject,
   waitForAsync,
 } from "@angular/core/testing";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { DatePipe } from "@angular/common";
 import { Proposal } from "shared/sdk";
 import {
@@ -50,7 +50,7 @@ describe("ProposalDashboardComponent", () => {
           FlexLayoutModule,
           MatCardModule,
           MatIconModule,
-          SharedCatanieModule,
+          SharedScicatFrontendModule,
           StoreModule.forRoot({}),
         ],
         providers: [DatePipe],

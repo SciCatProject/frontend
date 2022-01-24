@@ -6,7 +6,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { LoginComponent } from "users/login/login.component";
 import { NgModule } from "@angular/core";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { StoreModule } from "@ngrx/store";
 import { UserSettingsComponent } from "users/user-settings/user-settings.component";
 import { userReducer } from "state-management/reducers/user.reducer";
@@ -37,7 +37,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     MatInputModule,
     MatTooltipModule,
     ReactiveFormsModule,
-    SharedCatanieModule,
+    SharedScicatFrontendModule,
     StoreModule.forFeature("users", userReducer),
   ],
   declarations: [LoginComponent, UserSettingsComponent, PrivacyDialogComponent],

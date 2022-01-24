@@ -22,7 +22,7 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { StoreModule } from "@ngrx/store";
 import { policiesReducer } from "state-management/reducers/policies.reducer";
 import { PoliciesDashboardComponent } from "./policies-dashboard/policies-dashboard.component";
@@ -53,7 +53,7 @@ import { FlexModule } from "@angular/flex-layout";
     MatTabsModule,
     MatTooltipModule,
     ReactiveFormsModule,
-    SharedCatanieModule,
+    SharedScicatFrontendModule,
     MatSelectModule,
     MatOptionModule,
     MatNativeDateModule,

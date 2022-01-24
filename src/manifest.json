@@ -1,6 +1,6 @@
 {
-  "name": "catanie",
-  "short_name": "catanie",
+  "name": "scicat-frontend",
+  "short_name": "frontend",
   "description": "SciCat metadata catalogue for scientific research data",
   "theme_color": "#ffffff",
   "background_color": "#ffffff",

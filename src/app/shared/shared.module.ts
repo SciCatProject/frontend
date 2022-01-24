@@ -50,4 +50,4 @@ import { ScientificMetadataTreeModule } from "./modules/scientific-metadata-tree
     ScientificMetadataTreeModule
   ],
 })
-export class SharedCatanieModule {}
+export class SharedScicatFrontendModule {}

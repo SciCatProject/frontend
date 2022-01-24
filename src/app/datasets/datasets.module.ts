@@ -12,7 +12,7 @@ import { MatChipsModule } from "@angular/material/chips";
 import { NgModule } from "@angular/core";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { RouterModule } from "@angular/router";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { StoreModule } from "@ngrx/store";
 import { datasetsReducer } from "state-management/reducers/datasets.reducer";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
@@ -114,7 +114,7 @@ import { AdminTabComponent } from "./admin-tab/admin-tab.component";
     NgxJsonViewerModule,
     ReactiveFormsModule,
     RouterModule,
-    SharedCatanieModule,
+    SharedScicatFrontendModule,
     BatchCardModule,
     EffectsModule.forFeature([UserEffects, JobEffects, ProposalEffects, SampleEffects, PublishedDataEffects, LogbookEffects]),
     StoreModule.forFeature("datasets", datasetsReducer),

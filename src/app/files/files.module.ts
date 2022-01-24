@@ -4,7 +4,7 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { FlexLayoutModule } from "@angular/flex-layout";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { FilesDashboardComponent } from "./files-dashboard/files-dashboard.component";
 
 // TODO remove unneeded "store" structures in new componnets
@@ -17,7 +17,7 @@ import { FilesDashboardComponent } from "./files-dashboard/files-dashboard.compo
     MatButtonToggleModule,
     MatCardModule,
     MatIconModule,
-    SharedCatanieModule,
+    SharedScicatFrontendModule,
   ],
   exports: [FilesDashboardComponent]
 })
