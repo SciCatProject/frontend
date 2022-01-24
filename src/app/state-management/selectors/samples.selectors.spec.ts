@@ -170,6 +170,50 @@ describe("Sample Selectors", () => {
     });
   });
 
+  describe("selectSamplesPagination", () => {
+    it("should select pagination state", () => {
+      expect(
+        fromSelectors.selectSamplesPagination.projector(
+          initialSampleState.samplesCount,
+          initialSampleState.sampleFilters.limit,
+          fromSelectors.selectPage.projector(initialSampleState.sampleFilters)
+        )
+      ).toEqual({ samplesCount: 0, samplesPerPage: 25, currentPage: 0 });
+    });
+  });
+
+  describe("selectSampleDashboardPageViewModel", () => {
+    it("should select sample dashboard page view model state", () => {
+      expect(
+        fromSelectors.selectSampleDashboardPageViewModel.projector(
+          initialSampleState.samples,
+          fromSelectors.selectSamplesPagination.projector(
+            initialSampleState.samplesCount,
+            initialSampleState.sampleFilters.limit,
+            fromSelectors.selectPage.projector(initialSampleState.sampleFilters)
+          ),
+          initialSampleState.sampleFilters,
+          initialSampleState.hasPrefilledFilters,
+          initialSampleState.sampleFilters.text,
+          initialSampleState.metadataKeys,
+          initialSampleState.sampleFilters.characteristics
+        )
+      ).toEqual({
+        samples: [],
+        samplesPagination: {
+          samplesCount: 0,
+          samplesPerPage: 25,
+          currentPage: 0,
+        },
+        filters: initialSampleState.sampleFilters,
+        hasPrefilledFilters: false,
+        textFilter: "test",
+        metadataKeys: [],
+        characteristicsFilter: [],
+      });
+    });
+  });
+
   describe("selectFullqueryParams", () => {
     it("should select the fullquery params", () => {
       const fullqueryKeys = Object.keys(

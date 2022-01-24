@@ -86,6 +86,44 @@ export const selectDatasetsPerPage = createSelector(
   (filters) => filters.limit
 );
 
+export const selectSamplesPagination = createSelector(
+  selectSamplesCount,
+  selectSamplesPerPage,
+  selectPage,
+  (samplesCount, samplesPerPage, currentPage) => ({
+    samplesCount,
+    samplesPerPage,
+    currentPage,
+  })
+);
+
+export const selectSampleDashboardPageViewModel = createSelector(
+  selectSamples,
+  selectSamplesPagination,
+  selectFilters,
+  selectHasPrefilledFilters,
+  selectTextFilter,
+  selectMetadataKeys,
+  selectCharacteristicsFilter,
+  (
+    samples,
+    samplesPagination,
+    filters,
+    hasPrefilledFilters,
+    textFilter,
+    metadataKeys,
+    characteristicsFilter
+  ) => ({
+    samples,
+    samplesPagination,
+    filters,
+    hasPrefilledFilters,
+    textFilter,
+    metadataKeys,
+    characteristicsFilter,
+  })
+);
+
 export const selectFullqueryParams = createSelector(
   selectFilters,
   (filters) => {
