@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { SampleState } from "state-management/state/samples.store";
+import { selectCurrentUser } from "./user.selectors";
 
 const selectSampleState = createFeatureSelector<SampleState>("samples");
 
@@ -121,6 +122,33 @@ export const selectSampleDashboardPageViewModel = createSelector(
     textFilter,
     metadataKeys,
     characteristicsFilter,
+  })
+);
+
+export const selectSampleDetailPageViewModel = createSelector(
+  selectCurrentSample,
+  selectDatasets,
+  selectDatasetsPerPage,
+  selectDatasetsPage,
+  selectDatasetsCount,
+  selectCurrentAttachments,
+  selectCurrentUser,
+  (
+    sample,
+    datasets,
+    datasetsPerPage,
+    datasetsPage,
+    datasetsCount,
+    attachments,
+    user
+  ) => ({
+    sample,
+    datasets,
+    datasetsPerPage,
+    datasetsPage,
+    datasetsCount,
+    attachments,
+    user,
   })
 );
 

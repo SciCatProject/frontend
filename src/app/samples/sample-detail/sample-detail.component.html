@@ -1,4 +1,4 @@
-<mat-tab-group *ngIf="sample">
+<mat-tab-group *ngIf="vm$ | async as vm">
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon> details </mat-icon> Details
@@ -108,7 +108,7 @@
         </mat-card>
       </div>
 
-      <div fxFlex="30%" *ngIf="attachments$ | async as attachments">
+      <div fxFlex="30%" *ngIf="vm.attachments as attachments">
         <ng-container *ngFor="let attachment of attachments">
           <mat-card>
             <img mat-card-image src="{{ attachment.thumbnail }}" />
@@ -119,7 +119,7 @@
     </div>
   </mat-tab>
 
-  <mat-tab *ngIf="attachments$ | async as attachments">
+  <mat-tab *ngIf="vm.attachments as attachments">
     <ng-template mat-tab-label>
       <mat-icon> insert_photo </mat-icon> Attachments
     </ng-template>
@@ -144,9 +144,9 @@
         [data]="tableData"
         [columns]="tableColumns"
         [paginate]="tablePaginate"
-        [currentPage]="datasetsPage$ | async"
-        [dataCount]="datasetsCount$ | async"
-        [dataPerPage]="datasetsPerPage$ | async"
+        [currentPage]="vm.datasetsPage"
+        [dataCount]="vm.datasetsCount"
+        [dataPerPage]="vm.datasetsPerPage"
         (pageChange)="onPageChange($event)"
         (rowClick)="onRowClick($event)"
       ></app-table>
