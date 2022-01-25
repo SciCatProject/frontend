@@ -11,27 +11,27 @@ services:
       - "./CI/ESS/.env:/home/node/app/.env"
     depends_on:
       - mongodb
-  backend:
-    image: "scicat/backend:latest"
+  scicat-backend:
+    image: "scicatproject/backend:latest"
     environment: 
       - SCICHAT_URL
     depends_on:
       - mongodb
       - scichat-loopback
-  frontend:
+  scicat-frontend:
     build:
       context: .
       dockerfile: CI/ESS/Dockerfile.e2e
     command: ["./wait-for-it.sh", "scicatbackend:3000", "--", "nginx", "-g", "daemon off;"]
     depends_on:
-      - backend
+      - scicat-backend
   cypress:
     build:
       context: .
       dockerfile: CI/ESS/Dockerfile.cypress
     command: ["./wait-for-it.sh", "scicatfrontend:80", "--", "npx", "cypress", "run"]
     depends_on:
-      - frontend
+      - scicat-frontend
 volumes:
   mongodb_data:
     driver: local

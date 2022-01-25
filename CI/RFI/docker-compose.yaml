@@ -41,13 +41,13 @@ services:
     depends_on:
       - openldap
   scicat-backend:
-    image: "scicat/frontend:latest"
+    image: "scicatproject/frontend:latest"
     labels:
       - "traefik.http.routers.scicat.frontend.rule=Host(`scicat.com`)"
       - "traefik.http.routers.scicat.frontend.rule=PathPrefix(`/`)"
       - "traefik.http.routers.scicat.frontend.entrypoints=web"
   scicat-frontend-cypress:
-    image: "scicat/frontend:cypress"
+    image: "scicatproject/frontend:cypress"
     command: ["npx", "cypress", "run"]
     depends_on:
       - mongodb
@@ -60,7 +60,7 @@ services:
       - scicat-frontend
       - openldap
   scicat-backend:
-    image: "scicat/backend"
+    image: "scicatproject/backend"
     depends_on:
       - mongodb
       - openldap-seed
