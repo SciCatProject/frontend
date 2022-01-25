@@ -59,7 +59,7 @@ services:
       - scicat-backend
       - scicat-frontend
       - openldap
-  scicate-backend:
+  scicat-backend:
     image: "scicatproject/backend"
     depends_on:
       - mongodb
