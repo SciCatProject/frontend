@@ -8,7 +8,7 @@ import {
   addSampleAction,
   fetchSamplesAction,
 } from "state-management/actions/samples.actions";
-import { selectSampleDialogViewModel } from "state-management/selectors/user.selectors";
+import { selectSampleDialogPageViewModel } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
 
 import * as shortid from "shortid";
@@ -19,7 +19,7 @@ import * as shortid from "shortid";
   styleUrls: ["./sample-dialog.component.scss"],
 })
 export class SampleDialogComponent implements OnInit, OnDestroy {
-  private vm$ = this.store.select(selectSampleDialogViewModel);
+  private vm$ = this.store.select(selectSampleDialogPageViewModel);
   public form: FormGroup;
   description: string;
   sample: Sample = new Sample();

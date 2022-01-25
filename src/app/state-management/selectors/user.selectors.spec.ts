@@ -202,10 +202,10 @@ describe("User Selectors", () => {
     });
   });
 
-  describe("selectSampleDialogViewModel", () => {
+  describe("selectSampleDialogPageViewModel", () => {
     it("should select sample dialog page view model state", () => {
       expect(
-        fromSelectors.selectSampleDialogViewModel.projector(
+        fromSelectors.selectSampleDialogPageViewModel.projector(
           initialUserState.currentUser,
           initialUserState.profile
         )
