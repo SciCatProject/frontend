@@ -4,14 +4,14 @@ import {
   saveSettingsAction,
   showMessageAction,
   fetchCurrentUserAction,
-  fetchSciCatTokenAction,
+  fetchScicatTokenAction,
 } from "state-management/actions/user.actions";
 import { Message, MessageType, Settings } from "state-management/models";
 import {
   selectSettings,
   selectProfile,
   selectCurrentUser,
-  selectSciCatToken,
+  selectScicatToken,
 } from "state-management/selectors/user.selectors";
 import { DOCUMENT } from "@angular/common";
 import { map } from "rxjs/operators";
