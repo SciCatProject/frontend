@@ -12,7 +12,7 @@ services:
     depends_on:
       - mongodb
   scicat-backend:
-    image: "scicatproject/backend:latest"
+    image: "scicatproject/backend:e2e-test"
     environment: 
       - SCICHAT_URL
     depends_on:
