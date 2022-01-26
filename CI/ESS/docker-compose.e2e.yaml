@@ -22,14 +22,14 @@ services:
     build:
       context: .
       dockerfile: CI/ESS/Dockerfile.e2e
-    command: ["./wait-for-it.sh", "scicatbackend:3000", "--", "nginx", "-g", "daemon off;"]
+    command: ["./wait-for-it.sh", "scicat-backend:3000", "--", "nginx", "-g", "daemon off;"]
     depends_on:
       - scicat-backend
   cypress:
     build:
       context: .
       dockerfile: CI/ESS/Dockerfile.cypress
-    command: ["./wait-for-it.sh", "scicatfrontend:80", "--", "npx", "cypress", "run"]
+    command: ["./wait-for-it.sh", "scicat-frontend:80", "--", "npx", "cypress", "run"]
     depends_on:
       - scicat-frontend
 volumes:
