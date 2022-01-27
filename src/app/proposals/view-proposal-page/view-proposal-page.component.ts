@@ -7,13 +7,7 @@ import {
   fetchProposalDatasetsAction,
   changeDatasetsPageAction,
 } from "state-management/actions/proposals.actions";
-import {
-  selectCurrentProposal,
-  selectProposalDatasets,
-  selectDatasetsPage,
-  selectDatasetsCount,
-  selectDatasetsPerPage,
-} from "state-management/selectors/proposals.selectors";
+import { selectViewProposalPageViewModel } from "state-management/selectors/proposals.selectors";
 import { Dataset, Proposal } from "state-management/models";
 import {
   TableColumn,
@@ -40,9 +34,7 @@ export interface TableData {
   styleUrls: ["view-proposal-page.component.scss"],
 })
 export class ViewProposalPageComponent implements OnInit, OnDestroy {
-  currentPage$ = this.store.select(selectDatasetsPage);
-  datasetCount$ = this.store.select(selectDatasetsCount);
-  itemsPerPage$ = this.store.select(selectDatasetsPerPage);
+  vm$ = this.store.select(selectViewProposalPageViewModel);
 
   proposal: Proposal = new Proposal();
 
@@ -105,9 +97,9 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.select(selectCurrentProposal).subscribe((proposal) => {
-        if (proposal) {
-          this.proposal = proposal;
+      this.vm$.subscribe((vm) => {
+        if (vm.proposal) {
+          this.proposal = vm.proposal;
           if (this.appConfig.logbookEnabled) {
             this.store.dispatch(
               fetchLogbookAction({ name: this.proposal.proposalId })
@@ -127,8 +119,8 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.select(selectProposalDatasets).subscribe((datasets) => {
-        this.tableData = this.formatTableData(datasets);
+      this.vm$.subscribe((vm) => {
+        this.tableData = this.formatTableData(vm.datasets);
       })
     );
   }
