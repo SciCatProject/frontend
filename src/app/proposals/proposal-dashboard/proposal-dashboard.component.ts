@@ -4,18 +4,8 @@ import { DatePipe } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { Proposal } from "shared/sdk";
-import { combineLatest, Subscription } from "rxjs";
-import {
-  selectPage,
-  selectProposalsCount,
-  selectProposalsPerPage,
-  selectProposals,
-  selectDateRangeFilter,
-  selectHasAppliedFilters,
-  selectFilters,
-  selectHasPrefilledFilters,
-  selectTextFilter,
-} from "state-management/selectors/proposals.selectors";
+import { Subscription } from "rxjs";
+import { selectProposalDashboardPageViewModel } from "state-management/selectors/proposals.selectors";
 import {
   TableColumn,
   PageChangeEvent,
@@ -30,7 +20,7 @@ import {
   clearFacetsAction,
   prefillFiltersAction,
 } from "state-management/actions/proposals.actions";
-import { filter, map, distinctUntilChanged, take } from "rxjs/operators";
+import { map, distinctUntilChanged, take } from "rxjs/operators";
 import deepEqual from "deep-equal";
 import { ProposalFilters } from "state-management/state/proposals.store";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
@@ -55,15 +45,7 @@ interface DateRange {
   styleUrls: ["./proposal-dashboard.component.scss"],
 })
 export class ProposalDashboardComponent implements OnInit, OnDestroy {
-  hasAppliedFilters$ = this.store.select(selectHasAppliedFilters);
-  textFilter$ = this.store.select(selectTextFilter);
-  dateRangeFilter$ = this.store.select(selectDateRangeFilter);
-  readyToFetch$ = this.store
-    .select(selectHasPrefilledFilters)
-    .pipe(filter((has) => has));
-  currentPage$ = this.store.select(selectPage);
-  proposalsCount$ = this.store.select(selectProposalsCount);
-  proposalsPerPage$ = this.store.select(selectProposalsPerPage);
+  vm$ = this.store.select(selectProposalDashboardPageViewModel);
 
   clearSearchBar = false;
   dateRange: DateRange = {
@@ -198,15 +180,15 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.select(selectProposals).subscribe((proposals) => {
-        this.tableData = this.formatTableData(proposals);
+      this.vm$.subscribe((vm) => {
+        this.tableData = this.formatTableData(vm.proposals);
       })
     );
 
     this.subscriptions.push(
-      combineLatest([this.store.select(selectFilters), this.readyToFetch$])
+      this.vm$
         .pipe(
-          map(([filters, _]) => filters),
+          map((vm) => vm.filters),
           distinctUntilChanged(deepEqual)
         )
         .subscribe((filters) => {

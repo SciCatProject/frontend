@@ -193,6 +193,72 @@ describe("Proposal Selectors", () => {
     });
   });
 
+  describe("selectProposalsPagination", () => {
+    it("should select proposals pagination state", () => {
+      expect(
+        fromSelectors.selectProposalsPagination.projector(
+          fromSelectors.selectPage.projector(
+            initialProposalsState.proposalFilters
+          ),
+          initialProposalsState.proposalsCount,
+          initialProposalsState.proposalFilters.limit
+        )
+      ).toEqual({
+        currentPage: 0,
+        proposalsCount: 0,
+        proposalsPerPage: 25,
+      });
+    });
+  });
+
+  describe("selectProposalDashboardPageViewModel", () => {
+    it("should select proposal dashboard page view model state", () => {
+      expect(
+        fromSelectors.selectProposalDashboardPageViewModel.projector(
+          fromSelectors.selectProposalsPagination.projector(
+            fromSelectors.selectPage.projector(
+              initialProposalsState.proposalFilters
+            ),
+            initialProposalsState.proposalsCount,
+            initialProposalsState.proposalFilters.limit
+          ),
+          initialProposalsState.proposals,
+          initialProposalsState.proposalFilters.dateRange,
+          fromSelectors.selectHasAppliedFilters.projector(
+            initialProposalsState.proposalFilters
+          ),
+          initialProposalsState.proposalFilters,
+          initialProposalsState.hasPrefilledFilters,
+          initialProposalsState.proposalFilters.text
+        )
+      ).toEqual({
+        proposalsPagination: {
+          currentPage: 0,
+          proposalsCount: 0,
+          proposalsPerPage: 25,
+        },
+        proposals: [],
+        dateRangeFilter: {
+          begin: new Date(2019, 11, 1).toISOString(),
+          end: new Date(2019, 11, 2).toISOString(),
+        },
+        hasAppliedFilters: true,
+        filters: {
+          text: "test",
+          dateRange: {
+            begin: new Date(2019, 11, 1).toISOString(),
+            end: new Date(2019, 11, 2).toISOString(),
+          },
+          sortField: "test asc",
+          skip: 0,
+          limit: 25,
+        },
+        hasPrefilledFilters: true,
+        textFilter: "test",
+      });
+    });
+  });
+
   describe("selectFullqueryParams", () => {
     it("should select query params for proposals", () => {
       const fullqueryKeys = Object.keys(
