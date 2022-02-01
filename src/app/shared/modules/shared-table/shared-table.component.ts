@@ -105,11 +105,11 @@ export class SharedTableComponent
 
   }
   ngOnInit(){
-    this.filterForm = this.initilizeFormControl();
+    this.filterForm = this.initializeFormControl();
     this.subscriptions.push(this.activateColumnFilters());
   }
 
-  initilizeFormControl() {
+  initializeFormControl() {
     const formControls = this.columnsdef.reduce((acc: {[key: string]: string[]}, column: Column) => {
       if(column.matchMode === "between"){
         acc[column.id + ".start"] = [""];
