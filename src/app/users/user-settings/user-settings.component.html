@@ -9,7 +9,12 @@
       </mat-card-header>
 
       <ng-container
-        *ngIf="vm.profile && vm.profile.thumbnailPhoto; else noPhoto"
+        *ngIf="
+          vm.profile &&
+            vm.profile.thumbnailPhoto &&
+            vm.profile.thumbnailPhoto.startsWith('data:image/');
+          else noPhoto
+        "
       >
         <img
           class="profile-image"
