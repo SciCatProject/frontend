@@ -89,44 +89,6 @@ export const selectDatasetsPerPage = createSelector(
   (filters) => filters.limit
 );
 
-export const selectProposalsPagination = createSelector(
-  selectPage,
-  selectProposalsCount,
-  selectProposalsPerPage,
-  (currentPage, proposalsCount, proposalsPerPage) => ({
-    currentPage,
-    proposalsCount,
-    proposalsPerPage,
-  })
-);
-
-export const selectProposalDashboardPageViewModel = createSelector(
-  selectProposalsPagination,
-  selectProposals,
-  selectDateRangeFilter,
-  selectHasAppliedFilters,
-  selectFilters,
-  selectHasPrefilledFilters,
-  selectTextFilter,
-  (
-    proposalsPagination,
-    proposals,
-    dateRangeFilter,
-    hasAppliedFilters,
-    filters,
-    hasPrefilledFilters,
-    textFilter
-  ) => ({
-    proposalsPagination,
-    proposals,
-    dateRangeFilter,
-    hasAppliedFilters,
-    filters,
-    hasPrefilledFilters,
-    textFilter,
-  })
-);
-
 export const selectViewProposalPageViewModel = createSelector(
   selectCurrentProposal,
   selectProposalDatasets,
