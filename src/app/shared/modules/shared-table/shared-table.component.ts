@@ -131,7 +131,9 @@ export class SharedTableComponent
       for (let [columnId, value] of Object.entries(values)){
         // handle date filters
         if ((columnId.endsWith(".start") || columnId.endsWith(".end")) && value){
-          const date = DateTime.fromISO(value).toISODate();
+          // make sure that date is an ISO string
+          const valueISO = new Date(value).toISOString();
+          const date = DateTime.fromISO(valueISO).toISODate();
           this.filterExpressions[columnId] = date;
           queryParams[columnId] = date;
         } else if (value) {
