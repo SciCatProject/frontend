@@ -16,9 +16,9 @@ exports[`stricter compilation`] = {
     "src/app/datasets/dataset-detail/dataset-detail.component.ts:1706076617": [
       [82, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
     ],
-    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:901536949": [
-      [111, 50, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [126, 31, 8, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'typeof TAB\'.\\n  No index signature with a parameter of type \'string\' was found on type \'typeof TAB\'.", "4213543011"]
+    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:1898272901": [
+      [121, 31, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [178, 35, 8, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'typeof TAB\'.\\n  No index signature with a parameter of type \'string\' was found on type \'typeof TAB\'.", "4213543011"]
     ],
     "src/app/datasets/dataset-lifecycle/dataset-lifecycle.component.spec.ts:2353190436": [
       [174, 20, 3, "Parameter \'key\' implicitly has an \'any\' type.", "193424690"],
