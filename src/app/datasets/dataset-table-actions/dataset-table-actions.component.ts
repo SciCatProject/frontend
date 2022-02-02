@@ -26,7 +26,7 @@ import { AppConfigService, AppConfig } from "app-config.service";
   styleUrls: ["./dataset-table-actions.component.scss"],
 })
 export class DatasetTableActionsComponent implements OnInit, OnDestroy {
-  config: AppConfig = this.appConfigService.getConfig();
+  appConfig: AppConfig = this.appConfigService.getConfig();
   loading$ = this.store.select(selectIsLoading);
 
   @Input() selectedSets: Dataset[] | null = [];
@@ -42,7 +42,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     ArchViewMode.user_error,
   ];
 
-  searchPublicDataEnabled = this.config.searchPublicDataEnabled;
+  searchPublicDataEnabled = this.appConfig.searchPublicDataEnabled;
   currentPublicViewMode: boolean | "" = "";
 
   subscriptions: Subscription[] = [];
@@ -110,14 +110,14 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   retrieveClickHandle(): void {
     const destPath = { destinationPath: "/archive/retrieve" };
     let dialogOptions = this.archivingSrv.retriveDialogOptions(
-      this.config.retrieveDestinations
+      this.appConfig.retrieveDestinations
     );
     const dialogRef = this.dialog.open(DialogComponent, dialogOptions);
     dialogRef.afterClosed().subscribe((result) => {
       if (result && this.selectedSets) {
         const locationOption = this.archivingSrv.generateOptionLocation(
           result,
-          this.config.retrieveDestinations
+          this.appConfig.retrieveDestinations
         );
         const extra = { ...destPath, ...locationOption };
         this.archivingSrv.retrieve(this.selectedSets, extra).subscribe(
