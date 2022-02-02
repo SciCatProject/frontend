@@ -25,11 +25,11 @@ exports[`stricter compilation`] = {
       [164, 25, 5, "Parameter \'value\' implicitly has an \'any\' type.", "189936718"],
       [187, 34, 14, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'{ property: string; value: { currentValue: string; previousValue: string; }; updatedBy: string; updatedAt: string; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ property: string; value: { currentValue: string; previousValue: string; }; updatedBy: string; updatedAt: string; }\'.", "3956278380"]
     ],
-    "src/app/datasets/dataset-table-actions/dataset-table-actions.component.spec.ts:3227366407": [
-      [101, 8, 40, "Expected 0 arguments, but got 1.", "2746222275"],
-      [115, 8, 52, "Expected 0 arguments, but got 1.", "2551830053"],
-      [151, 47, 18, "Expected 0 arguments, but got 1.", "1806099068"],
-      [152, 47, 22, "Expected 0 arguments, but got 1.", "3206069091"]
+    "src/app/datasets/dataset-table-actions/dataset-table-actions.component.spec.ts:3329408856": [
+      [107, 8, 40, "Expected 0 arguments, but got 1.", "2746222275"],
+      [121, 8, 52, "Expected 0 arguments, but got 1.", "2551830053"],
+      [157, 47, 18, "Expected 0 arguments, but got 1.", "1806099068"],
+      [158, 47, 22, "Expected 0 arguments, but got 1.", "3206069091"]
     ],
     "src/app/datasets/dataset-table/dataset-table.component.spec.ts:1609545883": [
       [361, 8, 32, "Expected 0 arguments, but got 1.", "412674260"],
@@ -456,7 +456,7 @@ exports[`stricter compilation`] = {
       [129, 13, 36, "Object is possibly \'null\'.", "1010399159"],
       [142, 13, 36, "Object is possibly \'null\'.", "1010399159"]
     ],
-    "src/app/shared/modules/shared-table/shared-table.component.ts:1451762685": [
+    "src/app/shared/modules/shared-table/shared-table.component.ts:3460739224": [
       [68, 2, 14, "Property \'visibleColumns\' has no initializer and is not definitely assigned in the constructor.", "1769051438"],
       [69, 2, 13, "Property \'hiddenColumns\' has no initializer and is not definitely assigned in the constructor.", "3008049162"],
       [76, 11, 10, "Property \'dataSource\' has no initializer and is not definitely assigned in the constructor.", "1967398792"],
@@ -464,12 +464,12 @@ exports[`stricter compilation`] = {
       [84, 41, 9, "Property \'dataTable\' has no initializer and is not definitely assigned in the constructor.", "836725899"],
       [85, 40, 4, "Property \'sort\' has no initializer and is not definitely assigned in the constructor.", "2088345023"],
       [86, 45, 9, "Property \'paginator\' has no initializer and is not definitely assigned in the constructor.", "2483840092"],
-      [244, 16, 1, "Parameter \'i\' implicitly has an \'any\' type.", "177612"],
-      [246, 54, 23, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{ filters: boolean; }\'.", "2890101915"],
-      [253, 4, 23, "Element implicitly has an \'any\' type because expression of type \'string | number\' can\'t be used to index type \'{ filters: boolean; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ filters: boolean; }\'.", "2890101915"],
-      [253, 31, 23, "Element implicitly has an \'any\' type because expression of type \'string | number\' can\'t be used to index type \'{ filters: boolean; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ filters: boolean; }\'.", "2890101915"],
-      [268, 8, 19, "Type \'SortDirection | undefined\' is not assignable to type \'SortDirection\'.\\n  Type \'undefined\' is not assignable to type \'SortDirection\'.", "3393242684"],
-      [341, 50, 4, "No overload matches this call.\\n  Overload 1 of 3, \'(callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'string\'.\\n  Overload 2 of 3, \'(callbackfn: (previousValue: Record<string, unknown>, currentValue: string, currentIndex: number, array: string[]) => Record<string, unknown>, initialValue: Record<string, unknown>): Record<...>\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'Record<string, unknown>\'.", "2087877701"]
+      [246, 16, 1, "Parameter \'i\' implicitly has an \'any\' type.", "177612"],
+      [248, 54, 23, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{ filters: boolean; }\'.", "2890101915"],
+      [255, 4, 23, "Element implicitly has an \'any\' type because expression of type \'string | number\' can\'t be used to index type \'{ filters: boolean; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ filters: boolean; }\'.", "2890101915"],
+      [255, 31, 23, "Element implicitly has an \'any\' type because expression of type \'string | number\' can\'t be used to index type \'{ filters: boolean; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ filters: boolean; }\'.", "2890101915"],
+      [270, 8, 19, "Type \'SortDirection | undefined\' is not assignable to type \'SortDirection\'.\\n  Type \'undefined\' is not assignable to type \'SortDirection\'.", "3393242684"],
+      [343, 50, 4, "No overload matches this call.\\n  Overload 1 of 3, \'(callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'string\'.\\n  Overload 2 of 3, \'(callbackfn: (previousValue: Record<string, unknown>, currentValue: string, currentIndex: number, array: string[]) => Record<string, unknown>, initialValue: Record<string, unknown>): Record<...>\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'Record<string, unknown>\'.", "2087877701"]
     ],
     "src/app/shared/sdk/models/Attachment.ts:3362633067": [
       [43, 2, 7, "Property \'dataset\' has no initializer and is not definitely assigned in the constructor.", "2497262647"],
