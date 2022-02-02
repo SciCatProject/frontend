@@ -32,6 +32,7 @@ import {
   SubmitCaptionEvent,
 } from "shared/modules/file-uploader/file-uploader.component";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
+import { AppConfigService } from "app-config.service";
 
 export interface TableData {
   pid: string;
@@ -54,6 +55,8 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
   datasetsPage$ = this.store.select(selectDatasetsPage);
   datasetsCount$ = this.store.select(selectDatasetsCount);
 
+  appConfig = this.appConfigService.getConfig();
+
   sample: Sample = new Sample();
   user: User = new User();
   attachment: Partial<Attachment> = new Attachment();
@@ -72,7 +75,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private appConfigService: AppConfigService,
     private datePipe: DatePipe,
     private filesizePipe: FileSizePipe,
     private router: Router,

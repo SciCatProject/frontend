@@ -168,14 +168,14 @@ exports[`stricter compilation`] = {
       [148, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
       [165, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"]
     ],
-    "src/app/samples/sample-detail/sample-detail.component.spec.ts:2000776203": [
-      [99, 45, 4, "Argument of type \'null\' is not assignable to parameter of type \'Dataset[]\'.", "2087897566"],
-      [125, 8, 102, "Expected 0 arguments, but got 1.", "1018110629"],
-      [149, 8, 57, "Expected 0 arguments, but got 1.", "2548844095"],
-      [169, 8, 140, "Expected 0 arguments, but got 1.", "1862035901"],
-      [190, 8, 50, "Expected 0 arguments, but got 1.", "1055337712"],
-      [212, 8, 103, "Expected 0 arguments, but got 1.", "2904401119"],
-      [218, 8, 56, "Expected 0 arguments, but got 1.", "3736816853"]
+    "src/app/samples/sample-detail/sample-detail.component.spec.ts:3811053382": [
+      [103, 45, 4, "Argument of type \'null\' is not assignable to parameter of type \'Dataset[]\'.", "2087897566"],
+      [129, 8, 102, "Expected 0 arguments, but got 1.", "1018110629"],
+      [153, 8, 57, "Expected 0 arguments, but got 1.", "2548844095"],
+      [173, 8, 140, "Expected 0 arguments, but got 1.", "1862035901"],
+      [194, 8, 50, "Expected 0 arguments, but got 1.", "1055337712"],
+      [216, 8, 103, "Expected 0 arguments, but got 1.", "2904401119"],
+      [222, 8, 56, "Expected 0 arguments, but got 1.", "3736816853"]
     ],
     "src/app/shared/modules/scientific-metadata-tree/base-classes/history-manager.ts:3039073087": [
       [11, 4, 19, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'Actions\'.\\n  No index signature with a parameter of type \'string\' was found on type \'Actions\'.", "1696402461"]
