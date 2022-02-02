@@ -3,47 +3,50 @@ import { Injectable } from "@angular/core";
 import { TableColumn } from "state-management/models";
 
 interface OAuth2Endpoint {
-  displayText: string;
-  displayImage?: string | null;
   authURL: string;
+  displayImage?: string | null;
+  displayText: string;
 }
 
 interface RetrieveDestinations {
-  option: string;
   location?: string | null;
+  option: string;
 }
 
 export interface AppConfig {
-  lbBaseURL: string;
-  externalAuthEndpoint: string | null;
-  fileserverBaseURL: string | null;
-  synapseBaseUrl: string | null;
-  riotBaseUrl: string | null;
-  jupyterHubUrl: string | null;
-  disabledDatasetColumns: string[];
   addDatasetEnabled: boolean;
   archiveWorkflowEnabled: boolean;
   columnSelectEnabled: boolean;
   datasetReduceEnabled: boolean;
+  disabledDatasetColumns: string[];
   editDatasetSampleEnabled: boolean;
   editMetadataEnabled: boolean;
   editPublishedData: boolean;
   editSampleEnabled: boolean;
+  externalAuthEndpoint: string | null;
   facility: string | null;
   fileColorEnabled: boolean;
+  fileDownloadEnabled: boolean;
+  fileserverBaseURL: string | null;
   gettingStarted: string | null;
   ingestManual: string | null;
   jobsEnabled: boolean;
   jsonMetadataEnabled: boolean;
+  jupyterHubUrl: string | null;
   landingPage: string | null;
+  lbBaseURL: string;
   localColumns: TableColumn[];
   logbookEnabled: boolean;
-  fileDownloadEnabled: boolean;
+  loginFormEnabled: boolean;
   maxDirectDownloadSize: number | null;
   metadataPreviewEnabled: boolean;
+  metadataStructure: string;
   multipleDownloadAction: string | null;
   multipleDownloadEnabled: boolean;
+  oAuth2Endpoints: OAuth2Endpoint[];
   policiesEnabled: boolean;
+  retrieveDestinations?: RetrieveDestinations[];
+  riotBaseUrl: string | null;
   scienceSearchEnabled: boolean;
   scienceSearchUnitsEnabled: boolean;
   searchProposals: boolean;
@@ -53,13 +56,10 @@ export interface AppConfig {
   shareEnabled: boolean;
   shoppingCartEnabled: boolean;
   shoppingCartOnHeader: boolean;
+  synapseBaseUrl: string | null;
   tableSciDataEnabled: boolean;
-  metadataStructure: string;
-  userProfileImageEnabled: boolean;
   userNamePromptEnabled: boolean;
-  loginFormEnabled: boolean;
-  oAuth2Endpoints: OAuth2Endpoint[];
-  retrieveDestinations?: RetrieveDestinations[];
+  userProfileImageEnabled: boolean;
 }
 
 @Injectable()
