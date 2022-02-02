@@ -41,6 +41,7 @@ import {
   deselectColumnAction,
 } from "state-management/actions/user.actions";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "dashboard",
@@ -70,6 +71,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   subscriptions: Subscription[] = [];
 
+  appConfig = this.appConfigService.getConfig();
+
   currentUser: User = new User();
   userGroups: string[] = [];
   clearColumnSearch = false;
@@ -77,7 +80,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild(MatSidenav, { static: false }) sideNav!: MatSidenav;
 
   constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    public appConfigService: AppConfigService,
     private actionsSubj: ActionsSubject,
     public dialog: MatDialog,
     private store: Store,
