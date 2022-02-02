@@ -25,7 +25,7 @@ exports[`stricter compilation`] = {
       [164, 25, 5, "Parameter \'value\' implicitly has an \'any\' type.", "189936718"],
       [187, 34, 14, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'{ property: string; value: { currentValue: string; previousValue: string; }; updatedBy: string; updatedAt: string; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ property: string; value: { currentValue: string; previousValue: string; }; updatedBy: string; updatedAt: string; }\'.", "3956278380"]
     ],
-    "src/app/datasets/dataset-table-actions/dataset-table-actions.component.spec.ts:3329408856": [
+    "src/app/datasets/dataset-table-actions/dataset-table-actions.component.spec.ts:4012306392": [
       [107, 8, 40, "Expected 0 arguments, but got 1.", "2746222275"],
       [121, 8, 52, "Expected 0 arguments, but got 1.", "2551830053"],
       [157, 47, 18, "Expected 0 arguments, but got 1.", "1806099068"],
@@ -1051,8 +1051,8 @@ exports[`stricter compilation`] = {
       [65, 8, 10, "Argument of type \'{ mode: null; sortField: string; skip: number; limit: number; }\' is not assignable to parameter of type \'Expected<JobFilters>\'.\\n  Type \'{ mode: null; sortField: string; skip: number; limit: number; }\' is not assignable to type \'{ mode: ExpectedRecursive<Record<string, string> | undefined>; sortField: ExpectedRecursive<string>; skip: ExpectedRecursive<number>; limit: ExpectedRecursive<...>; }\'.\\n    Types of property \'mode\' are incompatible.\\n      Type \'null\' is not assignable to type \'ExpectedRecursive<Record<string, string> | undefined>\'.", "2675413713"],
       [74, 16, 4, "Argument of type \'null\' is not assignable to parameter of type \'Expected<Record<string, string> | undefined>\'.", "2087897566"]
     ],
-    "src/app/users/login/login.component.spec.ts:590365834": [
-      [154, 8, 71, "Expected 0 arguments, but got 1.", "3870196511"]
+    "src/app/users/login/login.component.spec.ts:688646479": [
+      [147, 8, 71, "Expected 0 arguments, but got 1.", "3870196511"]
     ],
     "src/app/users/user-settings/user-settings.component.spec.ts:2325442996": [
       [95, 8, 32, "Expected 0 arguments, but got 1.", "1341113725"],

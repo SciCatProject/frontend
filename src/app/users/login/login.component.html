@@ -9,7 +9,7 @@
         <div fxFlex="auto"></div>
       </div>
     <mat-card-content>
-      <div *ngFor="let endpoint of appConfig.oAuth2Endpoints">
+      <div *ngFor="let endpoint of oAuth2Endpoints">
         <button
           class="oauth-login-button"
           mat-raised-button
@@ -26,14 +26,14 @@
 
       </div>
       <br/>
-      <form [formGroup]="loginForm" (ngSubmit)="onLogin()" *ngIf="appConfig.loginFormEnabled">
-        <mat-form-field hintLabel="{{appConfig.facility}} account username">
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()" *ngIf="loginFormEnabled">
+        <mat-form-field hintLabel="{{facility}} account username">
           <mat-label> <b> Username</b> </mat-label>
           <span matPrefix> <mat-icon>person</mat-icon> &nbsp; </span>
           <input matInput id="usernameInput" formControlName="username" />
         </mat-form-field>
 
-          <mat-form-field hintLabel="{{appConfig.facility}} account password">
+          <mat-form-field hintLabel="{{facility}} account password">
             <mat-label> <b> Password</b> </mat-label>
             <span matPrefix> <mat-icon>vpn_key</mat-icon> &nbsp; </span>
             <input
@@ -53,7 +53,7 @@
               <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
             </button>
           </mat-form-field>
-          <p class="privacy-notice" *ngIf="appConfig.facility === 'ESS'">
+          <p class="privacy-notice" *ngIf="facility === 'ESS'">
             <small>
               <a (click)="openPrivacyDialog()">SciCat Privacy Notice</a>
             </small>
