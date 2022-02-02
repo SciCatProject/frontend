@@ -163,10 +163,10 @@ exports[`stricter compilation`] = {
     "src/app/publisheddata/publisheddata-edit/publisheddata-edit.component.ts:1221262435": [
       [132, 12, 59, "Argument of type \'MonoTypeOperatorFunction<PublishedData>\' is not assignable to parameter of type \'OperatorFunction<PublishedData | undefined, PublishedData>\'.\\n  Types of parameters \'source\' and \'source\' are incompatible.\\n    Type \'Observable<PublishedData | undefined>\' is not assignable to type \'Observable<PublishedData>\'.\\n      Type \'PublishedData | undefined\' is not assignable to type \'PublishedData\'.\\n        Type \'undefined\' is not assignable to type \'PublishedData\'.", "1325536151"]
     ],
-    "src/app/samples/sample-dashboard/sample-dashboard.component.spec.ts:4131572326": [
-      [130, 8, 36, "Expected 0 arguments, but got 1.", "518980590"],
-      [148, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
-      [165, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"]
+    "src/app/samples/sample-dashboard/sample-dashboard.component.spec.ts:1822699661": [
+      [133, 8, 36, "Expected 0 arguments, but got 1.", "518980590"],
+      [151, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
+      [168, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"]
     ],
     "src/app/samples/sample-detail/sample-detail.component.spec.ts:3811053382": [
       [103, 45, 4, "Argument of type \'null\' is not assignable to parameter of type \'Dataset[]\'.", "2087897566"],
