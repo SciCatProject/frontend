@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
@@ -22,7 +22,7 @@ import {
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { fetchLogbookAction } from "state-management/actions/logbooks.actions";
-import { APP_CONFIG, AppConfig } from "app-config.module";
+import { AppConfigService } from "app-config.service";
 
 export interface TableData {
   pid: string;
@@ -44,6 +44,8 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   datasetCount$ = this.store.select(selectDatasetsCount);
   itemsPerPage$ = this.store.select(selectDatasetsPerPage);
 
+  appConfig = this.appConfigService.getConfig();
+
   proposal: Proposal = new Proposal();
 
   subscriptions: Subscription[] = [];
@@ -60,7 +62,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    public appConfigService: AppConfigService,
     private datePipe: DatePipe,
     private filesizePipe: FileSizePipe,
     private route: ActivatedRoute,

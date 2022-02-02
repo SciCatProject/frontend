@@ -150,10 +150,10 @@ exports[`stricter compilation`] = {
       [217, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
       [235, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"]
     ],
-    "src/app/proposals/view-proposal-page/view-proposal-page.component.spec.ts:4159537335": [
-      [80, 45, 4, "Argument of type \'null\' is not assignable to parameter of type \'Dataset[]\'.", "2087897566"],
-      [109, 8, 103, "Expected 0 arguments, but got 1.", "2904401119"],
-      [115, 8, 64, "Expected 0 arguments, but got 1.", "1010980181"]
+    "src/app/proposals/view-proposal-page/view-proposal-page.component.spec.ts:773841882": [
+      [84, 45, 4, "Argument of type \'null\' is not assignable to parameter of type \'Dataset[]\'.", "2087897566"],
+      [113, 8, 103, "Expected 0 arguments, but got 1.", "2904401119"],
+      [119, 8, 64, "Expected 0 arguments, but got 1.", "1010980181"]
     ],
     "src/app/publisheddata/publisheddata-dashboard/publisheddata-dashboard.component.spec.ts:1768541835": [
       [95, 47, 30, "Expected 0 arguments, but got 1.", "2329020575"],
