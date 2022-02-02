@@ -1,11 +1,15 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ProposalDetailComponent } from "./proposal-detail.component";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
-import { APP_CONFIG } from "app-config.module";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
+import { AppConfigService } from "app-config.service";
+
+const getConfig = () => ({
+  jsonMetadataEnabled: true,
+});
 
 describe("ProposalsDetailComponent", () => {
   let component: ProposalDetailComponent;
@@ -25,7 +29,7 @@ describe("ProposalsDetailComponent", () => {
       });
       TestBed.overrideComponent(ProposalDetailComponent, {
         set: {
-          providers: [{ provide: APP_CONFIG, useValue: { production: false } }],
+          providers: [{ provide: AppConfigService, useValue: { getConfig } }],
         },
       });
       TestBed.compileComponents();
