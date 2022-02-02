@@ -8,10 +8,10 @@ exports[`stricter compilation`] = {
       [74, 12, 8, "Variable \'datasets\' implicitly has type \'any[]\' in some locations where its type cannot be determined.", "805288804"],
       [77, 35, 8, "Variable \'datasets\' implicitly has an \'any[]\' type.", "805288804"]
     ],
-    "src/app/datasets/dashboard/dashboard.component.spec.ts:1682207969": [
-      [173, 8, 66, "Expected 0 arguments, but got 1.", "1240398008"],
-      [193, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"],
-      [257, 47, 29, "Expected 0 arguments, but got 1.", "2503700957"]
+    "src/app/datasets/dashboard/dashboard.component.spec.ts:2658716390": [
+      [178, 8, 66, "Expected 0 arguments, but got 1.", "1240398008"],
+      [198, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"],
+      [262, 47, 29, "Expected 0 arguments, but got 1.", "2503700957"]
     ],
     "src/app/datasets/dataset-detail/dataset-detail.component.ts:232264613": [
       [82, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
