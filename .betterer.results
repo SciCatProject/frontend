@@ -451,10 +451,10 @@ exports[`stricter compilation`] = {
       [125, 25, 13, "Object is possibly \'undefined\'.", "1985302592"],
       [132, 39, 13, "Object is possibly \'undefined\'.", "1985302592"]
     ],
-    "src/app/shared/modules/search-parameters-dialog/search-parameters-dialog.component.spec.ts:4206976677": [
-      [116, 13, 36, "Object is possibly \'null\'.", "1010399159"],
-      [129, 13, 36, "Object is possibly \'null\'.", "1010399159"],
-      [142, 13, 36, "Object is possibly \'null\'.", "1010399159"]
+    "src/app/shared/modules/search-parameters-dialog/search-parameters-dialog.component.spec.ts:910648228": [
+      [120, 13, 36, "Object is possibly \'null\'.", "1010399159"],
+      [133, 13, 36, "Object is possibly \'null\'.", "1010399159"],
+      [146, 13, 36, "Object is possibly \'null\'.", "1010399159"]
     ],
     "src/app/shared/modules/shared-table/shared-table.component.ts:3460739224": [
       [68, 2, 14, "Property \'visibleColumns\' has no initializer and is not definitely assigned in the constructor.", "1769051438"],

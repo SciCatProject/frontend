@@ -12,9 +12,13 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { APP_CONFIG } from "app-config.module";
+import { AppConfigService } from "app-config.service";
 
 import { SearchParametersDialogComponent } from "./search-parameters-dialog.component";
+
+const getConfig = () => ({
+  scienceSearchUnitsEnabled: true
+});
 
 describe("SearchParametersDialogComponent", () => {
   let component: SearchParametersDialogComponent;
@@ -40,8 +44,8 @@ describe("SearchParametersDialogComponent", () => {
         set: {
           providers: [
             {
-              provide: APP_CONFIG,
-              useValue: { scienceSearchUnitsEnabled: true },
+              provide: AppConfigService,
+              useValue: { getConfig },
             },
             { provide: MAT_DIALOG_DATA, useValue: { parameterKeys: [] } },
             { provide: MatDialogRef, useValue: { close: () => {} } },
