@@ -1,8 +1,8 @@
 // BETTERER RESULTS V2.
 exports[`stricter compilation`] = {
   value: `{
-    "src/app/_layout/app-header/app-header.component.spec.ts:273969745": [
-      [91, 47, 14, "Expected 0 arguments, but got 1.", "2057156272"]
+    "src/app/_layout/app-header/app-header.component.spec.ts:1874756813": [
+      [102, 47, 14, "Expected 0 arguments, but got 1.", "2057156272"]
     ],
     "src/app/datasets/archiving.service.spec.ts:2623728705": [
       [74, 12, 8, "Variable \'datasets\' implicitly has type \'any[]\' in some locations where its type cannot be determined.", "805288804"],
