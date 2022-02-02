@@ -1,33 +1,39 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { AboutComponent } from "./about.component";
-import { APP_CONFIG } from "app-config.module";
 import { MatCardModule } from "@angular/material/card";
 import { LinkyModule } from "ngx-linky";
+import { AppConfigService } from "app-config.service";
 
 describe("AboutComponent", () => {
   let component: AboutComponent;
   let fixture: ComponentFixture<AboutComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [AboutComponent],
-      imports: [MatCardModule, LinkyModule]
-    });
-    TestBed.overrideComponent(AboutComponent, {
-      set: {
-        providers: [
-          {
-            provide: APP_CONFIG,
-            useValue: {
-              facility: ""
-            }
-          }
-        ]
-      }
-    });
-    TestBed.compileComponents();
-  }));
+  const getConfig = () => ({
+    facility: "",
+  });
+
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [AboutComponent],
+        imports: [MatCardModule, LinkyModule],
+      });
+      TestBed.overrideComponent(AboutComponent, {
+        set: {
+          providers: [
+            {
+              provide: AppConfigService,
+              useValue: {
+                getConfig,
+              },
+            },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AboutComponent);
