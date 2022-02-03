@@ -210,6 +210,8 @@ describe("User Selectors", () => {
           initialUserState.profile
         )
       ).toEqual({ user, profile: userIdentity.profile });
+    });
+  });
 
   describe("selectLoginPageViewModel", () => {
     it("should select the login page view model state", () => {
