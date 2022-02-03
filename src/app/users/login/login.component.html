@@ -1,4 +1,4 @@
-<div class="main-login">
+<div class="main-login" *ngIf="vm$ | async as vm">
   <div class="login-container" fxLayoutAlign="center center">
     <mat-card>
       <div fxLayout="row" class="facility-logo">
@@ -14,7 +14,7 @@
           class="oauth-login-button"
           mat-raised-button
           type="submit"
-          [ngClass]="{ loading: loading$ | async }"
+          [ngClass]="{ loading: vm.isLoggingIn }"
           (click) = "redirectOIDC(endpoint.authURL)"
         >
           <img class="oauth-login-image" *ngIf="endpoint.displayImage" [src]="endpoint.displayImage">
@@ -63,7 +63,7 @@
             class="login-button"
             type="submit"
             color="primary"
-            [ngClass]="{ loading: loading$ | async }"
+            [ngClass]="{ loading: vm.isLoggingIn }"
           >
             Log in
           </button>

@@ -23,6 +23,8 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { AppConfigService } from "app-config.service";
+import { provideMockStore } from "@ngrx/store/testing";
+import { selectLoginPageViewModel } from "state-management/selectors/user.selectors";
 
 const getConfig = () => ({
   disabledDatasetColumns: [],
@@ -56,6 +58,16 @@ describe("LoginComponent", () => {
           MatInputModule,
           ReactiveFormsModule,
           StoreModule.forRoot({}),
+        ],
+        providers: [
+          provideMockStore({
+            selectors: [
+              {
+                selector: selectLoginPageViewModel,
+                value: { isLoggedIn: false, isLoggingIn: false },
+              },
+            ],
+          }),
         ],
       });
       TestBed.overrideComponent(LoginComponent, {
