@@ -8,10 +8,7 @@ import {
   addSampleAction,
   fetchSamplesAction,
 } from "state-management/actions/samples.actions";
-import {
-  selectCurrentUser,
-  selectProfile,
-} from "state-management/selectors/user.selectors";
+import { selectSampleDialogPageViewModel } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
 
 import * as shortid from "shortid";
@@ -22,6 +19,7 @@ import * as shortid from "shortid";
   styleUrls: ["./sample-dialog.component.scss"],
 })
 export class SampleDialogComponent implements OnInit, OnDestroy {
+  private vm$ = this.store.select(selectSampleDialogPageViewModel);
   public form: FormGroup;
   description: string;
   sample: Sample = new Sample();
@@ -80,17 +78,17 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.select(selectCurrentUser).subscribe((user) => {
-        if (user) {
-          this.username = user.username;
+      this.vm$.subscribe((vm) => {
+        if (vm.user) {
+          this.username = vm.user.username;
         }
       })
     );
 
     this.subscriptions.push(
-      this.store.select(selectProfile).subscribe((profile) => {
-        if (profile) {
-          this.userGroups = profile.accessGroups;
+      this.vm$.subscribe((vm) => {
+        if (vm.profile) {
+          this.userGroups = vm.profile.accessGroups;
         }
       })
     );

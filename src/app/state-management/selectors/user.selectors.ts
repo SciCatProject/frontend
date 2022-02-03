@@ -93,6 +93,12 @@ export const selectColumns = createSelector(
   (state) => state.columns
 );
 
+export const selectSampleDialogPageViewModel = createSelector(
+  selectCurrentUser,
+  selectProfile,
+  (user, profile) => ({ user, profile })
+);
+
 export const selectLoginPageViewModel = createSelector(
   selectIsLoggedIn,
   selectIsLoggingIn,
