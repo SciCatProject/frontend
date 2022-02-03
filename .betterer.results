@@ -1051,13 +1051,11 @@ exports[`stricter compilation`] = {
       [65, 8, 10, "Argument of type \'{ mode: null; sortField: string; skip: number; limit: number; }\' is not assignable to parameter of type \'Expected<JobFilters>\'.\\n  Type \'{ mode: null; sortField: string; skip: number; limit: number; }\' is not assignable to type \'{ mode: ExpectedRecursive<Record<string, string> | undefined>; sortField: ExpectedRecursive<string>; skip: ExpectedRecursive<number>; limit: ExpectedRecursive<...>; }\'.\\n    Types of property \'mode\' are incompatible.\\n      Type \'null\' is not assignable to type \'ExpectedRecursive<Record<string, string> | undefined>\'.", "2675413713"],
       [74, 16, 4, "Argument of type \'null\' is not assignable to parameter of type \'Expected<Record<string, string> | undefined>\'.", "2087897566"]
     ],
-    "src/app/users/login/login.component.spec.ts:590365834": [
-      [154, 8, 71, "Expected 0 arguments, but got 1.", "3870196511"]
+    "src/app/users/login/login.component.spec.ts:87531066": [
+      [160, 8, 71, "Expected 0 arguments, but got 1.", "3870196511"]
     ],
-    "src/app/users/user-settings/user-settings.component.spec.ts:2325442996": [
-      [95, 8, 32, "Expected 0 arguments, but got 1.", "1341113725"],
-      [97, 47, 30, "Expected 0 arguments, but got 1.", "2329020575"],
-      [117, 47, 30, "Expected 0 arguments, but got 1.", "2329020575"]
+    "src/app/users/user-settings/user-settings.component.spec.ts:235762097": [
+      [87, 47, 30, "Expected 0 arguments, but got 1.", "2329020575"]
     ]
   }`
 };

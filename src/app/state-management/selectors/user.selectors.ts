@@ -92,3 +92,22 @@ export const selectColumns = createSelector(
   selectUserState,
   (state) => state.columns
 );
+
+export const selectLoginPageViewModel = createSelector(
+  selectIsLoggedIn,
+  selectIsLoggingIn,
+  (isLoggedIn, isLoggingIn) => ({ isLoggedIn, isLoggingIn })
+);
+
+export const selectUserSettingsPageViewModel = createSelector(
+  selectCurrentUser,
+  selectProfile,
+  selectCatamelToken,
+  selectSettings,
+  (user, profile, catamelToken, settings) => ({
+    user,
+    profile,
+    catamelToken,
+    settings,
+  })
+);
