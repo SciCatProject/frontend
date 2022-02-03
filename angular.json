@@ -64,7 +64,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dmscdev.ts"
+                  "with": "src/environments/environment.production.ts"
                 }
               ],
               "assets": [
@@ -106,7 +106,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dmsc.ldpc.ts"
+                  "with": "src/environments/environment.production.ts"
                 }
               ],
               "assets": [
@@ -148,7 +148,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.e2e.ts"
+                  "with": "src/environments/environment.production.ts"
                 }
               ],
               "assets": [
@@ -194,7 +194,7 @@
                 },
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.rfi.prod.ts"
+                  "with": "src/environments/environment.production.ts"
                 }
               ],
               "assets": [
@@ -239,7 +239,7 @@
                 },
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.rfi.dev.ts"
+                  "with": "src/environments/environment.production.ts"
                 }
               ],
               "assets": [
@@ -284,7 +284,7 @@
                 },
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.maxiv.prod.ts"
+                  "with": "src/environments/environment.production.ts"
                 }
               ],
               "assets": [
@@ -329,7 +329,7 @@
                 },
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.maxiv.dev.ts"
+                  "with": "src/environments/environment.production.ts"
                 }
               ],
               "assets": [
@@ -355,12 +355,7 @@
               "outputHashing": "all"
             },
             "als-dev": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.als.dev.ts"
-                }
-              ],
+              "fileReplacements": [],
               "assets": [
                 "src/assets/",
                 "src/robots.txt",
@@ -409,10 +404,6 @@
                 {
                   "replace": "src/app/build-specifics/index.ts",
                   "with": "src/app/build-specifics/index.prod.ts"
-                },
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.als.prod.ts"
                 }
               ],
               "assets": [
@@ -450,12 +441,7 @@
                   "maximumError": "4kb"
                 }
               ],
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.als.staging.ts"
-                }
-              ],
+              "fileReplacements": [],
               "assets": [
                 "src/assets/",
                 "src/robots.txt",
@@ -494,7 +480,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.staging.ts"
+                  "with": "src/environments/environment.production.ts"
                 }
               ],
               "assets": [
@@ -530,7 +516,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.qa.ts"
+                  "with": "src/environments/environment.production.ts"
                 }
               ],
               "assets": [
@@ -570,7 +556,7 @@
                 },
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "with": "src/environments/environment.production.ts"
                 }
               ],
               "assets": [
@@ -603,12 +589,7 @@
                   "maximumError": "4kb"
                 }
               ],
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.development.ts"
-                }
-              ],
+              "fileReplacements": [],
               "assets": [
                 "src/assets/",
                 "src/robots.txt",
