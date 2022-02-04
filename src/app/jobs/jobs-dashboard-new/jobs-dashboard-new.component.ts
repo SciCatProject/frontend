@@ -9,6 +9,7 @@ import { ScicatDataService } from "../../shared/services/scicat-data-service";
 import { ExportExcelService } from "../../shared/services/export-excel.service";
 import { Job } from "shared/sdk";
 import { Column } from "shared/modules/shared-table/shared-table.module";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "app-jobs-new-dashboard",
@@ -97,11 +98,13 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
   dataSource: SciCatDataSource;
 
   constructor(
+    private appConfigService: AppConfigService,
     private cdRef: ChangeDetectorRef,
     private dataService: ScicatDataService,
     private exportService: ExportExcelService
   ) {
     this.dataSource = new SciCatDataSource(
+      this.appConfigService,
       this.dataService,
       this.exportService,
       this.tableDefinition
