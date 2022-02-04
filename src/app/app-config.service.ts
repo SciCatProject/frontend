@@ -2,13 +2,13 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { TableColumn } from "state-management/models";
 
-interface OAuth2Endpoint {
+export interface OAuth2Endpoint {
   authURL: string;
   displayImage?: string | null;
   displayText: string;
 }
 
-interface RetrieveDestinations {
+export interface RetrieveDestinations {
   location?: string | null;
   option: string;
 }
