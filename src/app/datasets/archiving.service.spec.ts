@@ -1,6 +1,6 @@
 import { TestBed, waitForAsync } from "@angular/core/testing";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
-import { RetrieveDestinations } from "app-config.module";
+import { RetrieveDestinations } from "app-config.service";
 import { Dataset, Job, User } from "shared/sdk";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import {

@@ -8,7 +8,7 @@ export interface OAuth2Endpoint {
   displayText: string;
 }
 
-export interface RetrieveDestinations {
+export class RetrieveDestinations {
   location?: string | null;
   option: string;
 }
