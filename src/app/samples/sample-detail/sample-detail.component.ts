@@ -26,7 +26,6 @@ import {
   TableColumn,
   PageChangeEvent,
 } from "shared/modules/table/table.component";
-import { APP_CONFIG, AppConfig } from "app-config.module";
 import {
   PickedFile,
   SubmitCaptionEvent,

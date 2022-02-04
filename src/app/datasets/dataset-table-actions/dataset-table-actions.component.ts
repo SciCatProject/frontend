@@ -18,7 +18,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { selectSubmitError } from "state-management/selectors/jobs.selectors";
-import { AppConfigService, AppConfig } from "app-config.service";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "dataset-table-actions",
@@ -26,7 +26,7 @@ import { AppConfigService, AppConfig } from "app-config.service";
   styleUrls: ["./dataset-table-actions.component.scss"],
 })
 export class DatasetTableActionsComponent implements OnInit, OnDestroy {
-  appConfig: AppConfig = this.appConfigService.getConfig();
+  appConfig = this.appConfigService.getConfig();
   loading$ = this.store.select(selectIsLoading);
 
   @Input() selectedSets: Dataset[] | null = [];

@@ -1,7 +1,6 @@
 import { Component, Inject } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { AppConfig, APP_CONFIG } from "app-config.module";
 import { AppConfigService } from "app-config.service";
 import { map, startWith } from "rxjs/operators";
 import { UnitsService } from "shared/services/units.service";
