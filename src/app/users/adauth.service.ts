@@ -1,9 +1,9 @@
-import { Injectable, Inject } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { HttpClient, HttpResponse, HttpHeaders } from "@angular/common/http";
 import { LoopBackConfig } from "shared/sdk/lb.config";
 import { Observable } from "rxjs";
-import { APP_CONFIG, AppConfig } from "../app-config.module";
 import { timeout } from "rxjs/operators";
+import { AppConfigService } from "app-config.service";
 
 export interface Credentials {
   username: string;
@@ -22,9 +22,11 @@ export interface AccessToken {
  */
 @Injectable()
 export class ADAuthService {
+  appConfig = this.appConfigService.getConfig();
+
   constructor(
+    private appConfigService: AppConfigService,
     private http: HttpClient,
-    @Inject(APP_CONFIG) private config: AppConfig
   ) {}
 
   /**
@@ -45,7 +47,7 @@ export class ADAuthService {
       password: password,
     };
     const headers = new HttpHeaders();
-    const url = LoopBackConfig.getPath() + this.config.externalAuthEndpoint;
+    const url = LoopBackConfig.getPath() + this.appConfig.externalAuthEndpoint;
     headers.append("Content-Type", "application/x-www-form-urlencoded");
     return this.http
       .post<AccessToken>(url, creds, { observe: "response" })
