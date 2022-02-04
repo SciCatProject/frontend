@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit, Inject, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Store, ActionsSubject } from "@ngrx/store";
 
 import deepEqual from "deep-equal";
