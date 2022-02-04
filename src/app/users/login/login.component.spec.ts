@@ -8,10 +8,7 @@ import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 import { MockActivatedRoute, MockRouter, MockStore } from "shared/MockStubs";
-
 import { LoginComponent } from "./login.component";
-
-import { OAuth2Endpoint } from "app-config.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { loginAction } from "state-management/actions/user.actions";
 import { PrivacyDialogComponent } from "users/privacy-dialog/privacy-dialog.component";
@@ -22,7 +19,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
-import { AppConfigService } from "app-config.service";
+import { AppConfigService, OAuth2Endpoint } from "app-config.service";
 import { provideMockStore } from "@ngrx/store/testing";
 import { selectLoginPageViewModel } from "state-management/selectors/user.selectors";
 

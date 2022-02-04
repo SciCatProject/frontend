@@ -14,8 +14,7 @@ import { filter } from "rxjs/operators";
 import { selectLoginPageViewModel } from "state-management/selectors/user.selectors";
 import { MatDialog } from "@angular/material/dialog";
 import { PrivacyDialogComponent } from "users/privacy-dialog/privacy-dialog.component";
-import { AppConfig, AppConfigService } from "app-config.service";
-import { OAuth2Endpoint } from "app-config.module";
+import { AppConfig, AppConfigService, OAuth2Endpoint } from "app-config.service";
 
 interface LoginForm {
   username: string;
