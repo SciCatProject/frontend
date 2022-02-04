@@ -1,4 +1,3 @@
-import { APP_CONFIG, AppConfigModule } from "app-config.module";
 import {
   DatasetTableComponent,
   SortChangeEvent,
@@ -54,7 +53,6 @@ describe("DatasetTableComponent", () => {
       TestBed.configureTestingModule({
         schemas: [NO_ERRORS_SCHEMA],
         imports: [
-          AppConfigModule,
           BrowserAnimationsModule,
           MatButtonModule,
           MatCheckboxModule,

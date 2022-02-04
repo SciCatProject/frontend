@@ -14,7 +14,6 @@ import { Dataset } from "shared/sdk";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
-import { APP_CONFIG } from "app-config.module";
 import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 import { MatButtonModule } from "@angular/material/button";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
