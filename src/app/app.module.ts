@@ -22,9 +22,7 @@ import { LayoutModule } from "_layout/layout.module";
 import { AppConfigService } from "app-config.service";
 
 const appInitializerFn = (appConfig: AppConfigService) => {
-  return () => {
-    return appConfig.loadAppConfig();
-  };
+  return () => appConfig.loadAppConfig();
 };
 
 @NgModule({
