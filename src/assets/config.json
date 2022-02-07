@@ -1,6 +1,6 @@
 {
   "addDatasetEnabled": true,
-  "archiveWorkflowEnabled": false,
+  "archiveWorkflowEnabled": true,
   "columnSelectEnabled": true,
   "datasetReduceEnabled": true,
   "disabledDatasetColumns": [],
@@ -112,7 +112,7 @@
   "searchSamples": true,
   "sftpHost": "login.esss.dk",
   "shareEnabled": true,
-  "shoppingCartEnabled": false,
+  "shoppingCartEnabled": true,
   "shoppingCartOnHeader": true,
   "synapseBaseUrl": "https://scitest.esss.lu.se",
   "tableSciDataEnabled": true,
