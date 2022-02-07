@@ -2,14 +2,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Sample, Attachment, User, Dataset } from "shared/sdk/models";
-import {
-  selectCurrentSample,
-  selectDatasets,
-  selectDatasetsPerPage,
-  selectDatasetsPage,
-  selectDatasetsCount,
-  selectCurrentAttachments,
-} from "../../state-management/selectors/samples.selectors";
+import { selectSampleDetailPageViewModel } from "../../state-management/selectors/samples.selectors";
 import { Store } from "@ngrx/store";
 import {
   fetchSampleAction,
@@ -30,7 +23,6 @@ import {
   PickedFile,
   SubmitCaptionEvent,
 } from "shared/modules/file-uploader/file-uploader.component";
-import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import { AppConfigService } from "app-config.service";
 
 export interface TableData {
@@ -49,10 +41,7 @@ export interface TableData {
   styleUrls: ["./sample-detail.component.scss"],
 })
 export class SampleDetailComponent implements OnInit, OnDestroy {
-  attachments$ = this.store.select(selectCurrentAttachments);
-  datasetsPerPage$ = this.store.select(selectDatasetsPerPage);
-  datasetsPage$ = this.store.select(selectDatasetsPage);
-  datasetsCount$ = this.store.select(selectDatasetsCount);
+  vm$ = this.store.select(selectSampleDetailPageViewModel);
 
   appConfig = this.appConfigService.getConfig();
 
@@ -167,23 +156,23 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.select(selectCurrentSample).subscribe((sample) => {
-        if (sample) {
-          this.sample = sample;
+      this.vm$.subscribe((vm) => {
+        if (vm.sample) {
+          this.sample = vm.sample;
         }
       })
     );
 
     this.subscriptions.push(
-      this.store.select(selectDatasets).subscribe((datasets) => {
-        this.tableData = this.formatTableData(datasets);
+      this.vm$.subscribe((vm) => {
+        this.tableData = this.formatTableData(vm.datasets);
       })
     );
 
     this.subscriptions.push(
-      this.store.select(selectCurrentUser).subscribe((user) => {
-        if (user) {
-          this.user = user;
+      this.vm$.subscribe((vm) => {
+        if (vm.user) {
+          this.user = vm.user;
         }
       })
     );

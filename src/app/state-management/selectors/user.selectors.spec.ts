@@ -202,6 +202,17 @@ describe("User Selectors", () => {
     });
   });
 
+  describe("selectSampleDialogPageViewModel", () => {
+    it("should select sample dialog page view model state", () => {
+      expect(
+        fromSelectors.selectSampleDialogPageViewModel.projector(
+          initialUserState.currentUser,
+          initialUserState.profile
+        )
+      ).toEqual({ user, profile: userIdentity.profile });
+    });
+  });
+
   describe("selectLoginPageViewModel", () => {
     it("should select the login page view model state", () => {
       expect(
