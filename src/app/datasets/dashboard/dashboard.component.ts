@@ -38,6 +38,7 @@ import { Dataset, DerivedDataset } from "shared/sdk";
 import {
   selectColumnAction,
   deselectColumnAction,
+  setDatasetTableColumnsAction,
 } from "state-management/actions/user.actions";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
 import { AppConfigService } from "app-config.service";
@@ -161,6 +162,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.loggedIn$.subscribe((status) => {
         if (!status) {
+          const columns = this.appConfig.localColumns;
+          this.store.dispatch(setDatasetTableColumnsAction({columns}));
           this.tableColumns$ = this.store
             .select(selectColumns)
             .pipe(
