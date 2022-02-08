@@ -4,7 +4,7 @@ exports[`stricter compilation`] = {
     "src/app/_layout/app-header/app-header.component.spec.ts:1874756813": [
       [102, 47, 14, "Expected 0 arguments, but got 1.", "2057156272"]
     ],
-    "src/app/datasets/archiving.service.spec.ts:2623728705": [
+    "src/app/datasets/archiving.service.spec.ts:202524358": [
       [74, 12, 8, "Variable \'datasets\' implicitly has type \'any[]\' in some locations where its type cannot be determined.", "805288804"],
       [77, 35, 8, "Variable \'datasets\' implicitly has an \'any[]\' type.", "805288804"]
     ],
@@ -13,17 +13,17 @@ exports[`stricter compilation`] = {
       [198, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"],
       [262, 47, 29, "Expected 0 arguments, but got 1.", "2503700957"]
     ],
-    "src/app/datasets/dataset-detail/dataset-detail.component.ts:232264613": [
-      [82, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
+    "src/app/datasets/dataset-detail/dataset-detail.component.ts:1688806200": [
+      [81, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
     ],
     "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:1898272901": [
       [121, 31, 12, "Object is possibly \'undefined\'.", "1944648223"],
       [178, 35, 8, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'typeof TAB\'.\\n  No index signature with a parameter of type \'string\' was found on type \'typeof TAB\'.", "4213543011"]
     ],
-    "src/app/datasets/dataset-lifecycle/dataset-lifecycle.component.spec.ts:2353190436": [
-      [174, 20, 3, "Parameter \'key\' implicitly has an \'any\' type.", "193424690"],
-      [174, 25, 5, "Parameter \'value\' implicitly has an \'any\' type.", "189936718"],
-      [197, 34, 14, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'{ property: string; value: { currentValue: string; previousValue: string; }; updatedBy: string; updatedAt: string; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ property: string; value: { currentValue: string; previousValue: string; }; updatedBy: string; updatedAt: string; }\'.", "3956278380"]
+    "src/app/datasets/dataset-lifecycle/dataset-lifecycle.component.spec.ts:2957427070": [
+      [173, 20, 3, "Parameter \'key\' implicitly has an \'any\' type.", "193424690"],
+      [173, 25, 5, "Parameter \'value\' implicitly has an \'any\' type.", "189936718"],
+      [196, 34, 14, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'{ property: string; value: { currentValue: string; previousValue: string; }; updatedBy: string; updatedAt: string; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ property: string; value: { currentValue: string; previousValue: string; }; updatedBy: string; updatedAt: string; }\'.", "3956278380"]
     ],
     "src/app/datasets/dataset-table-actions/dataset-table-actions.component.spec.ts:4012306392": [
       [107, 8, 40, "Expected 0 arguments, but got 1.", "2746222275"],
@@ -31,16 +31,16 @@ exports[`stricter compilation`] = {
       [157, 47, 18, "Expected 0 arguments, but got 1.", "1806099068"],
       [158, 47, 22, "Expected 0 arguments, but got 1.", "3206069091"]
     ],
-    "src/app/datasets/dataset-table/dataset-table.component.spec.ts:4047386304": [
-      [364, 8, 32, "Expected 0 arguments, but got 1.", "412674260"],
-      [378, 8, 34, "Expected 0 arguments, but got 1.", "1772911765"],
-      [392, 47, 25, "Expected 0 arguments, but got 1.", "2168012498"],
-      [403, 47, 22, "Expected 0 arguments, but got 1.", "3206069091"],
-      [423, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
-      [426, 8, 40, "Expected 0 arguments, but got 1.", "4073691911"],
-      [442, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
-      [445, 8, 42, "Expected 0 arguments, but got 1.", "2058477638"],
-      [463, 8, 58, "Expected 0 arguments, but got 1.", "3490410057"]
+    "src/app/datasets/dataset-table/dataset-table.component.spec.ts:2640500208": [
+      [362, 8, 32, "Expected 0 arguments, but got 1.", "412674260"],
+      [376, 8, 34, "Expected 0 arguments, but got 1.", "1772911765"],
+      [390, 47, 25, "Expected 0 arguments, but got 1.", "2168012498"],
+      [401, 47, 22, "Expected 0 arguments, but got 1.", "3206069091"],
+      [421, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
+      [424, 8, 40, "Expected 0 arguments, but got 1.", "4073691911"],
+      [440, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
+      [443, 8, 42, "Expected 0 arguments, but got 1.", "2058477638"],
+      [461, 8, 58, "Expected 0 arguments, but got 1.", "3490410057"]
     ],
     "src/app/datasets/datasets-filter/datasets-filter.component.spec.ts:1196792479": [
       [217, 47, 31, "Expected 0 arguments, but got 1.", "726980144"],
@@ -140,11 +140,10 @@ exports[`stricter compilation`] = {
       [332, 8, 104, "Expected 0 arguments, but got 1.", "2940355500"],
       [337, 47, 22, "Expected 0 arguments, but got 1.", "3206069091"]
     ],
-
-    "src/app/proposals/view-proposal-page/view-proposal-page.component.spec.ts:4159537335": [
-      [80, 45, 4, "Argument of type \'null\' is not assignable to parameter of type \'Dataset[]\'.", "2087897566"],
-      [109, 8, 103, "Expected 0 arguments, but got 1.", "2904401119"],
-      [115, 8, 64, "Expected 0 arguments, but got 1.", "1010980181"]
+    "src/app/proposals/view-proposal-page/view-proposal-page.component.spec.ts:773841882": [
+      [84, 45, 4, "Argument of type \'null\' is not assignable to parameter of type \'Dataset[]\'.", "2087897566"],
+      [113, 8, 103, "Expected 0 arguments, but got 1.", "2904401119"],
+      [119, 8, 64, "Expected 0 arguments, but got 1.", "1010980181"]
     ],
     "src/app/publisheddata/publisheddata-dashboard/publisheddata-dashboard.component.spec.ts:1768541835": [
       [95, 47, 30, "Expected 0 arguments, but got 1.", "2329020575"],
@@ -1017,13 +1016,10 @@ exports[`stricter compilation`] = {
       [65, 56, 4, "Type \'null\' is not assignable to type \'Record<string, string> | undefined\'.", "2087698470"],
       [68, 41, 4, "Argument of type \'null\' is not assignable to parameter of type \'Expected<Record<string, string> | undefined>\'.", "2087698470"]
     ],
-    "src/app/state-management/reducers/logbooks.reducer.spec.ts:4183784696": [
-      [30, 12, 8, "Variable \'logbooks\' implicitly has type \'any[]\' in some locations where its type cannot be determined.", "2549728891"],
-      [31, 63, 8, "Variable \'logbooks\' implicitly has an \'any[]\' type.", "2549728891"],
-      [84, 47, 17, "Argument of type \'string | undefined\' is not assignable to parameter of type \'Expected<ArrayLike<string>> | ArrayContaining<string>\'.", "499976672"],
-      [172, 47, 7, "Argument of type \'undefined\' is not assignable to parameter of type \'Logbook\'.", "3981780232"],
-      [174, 36, 9, "Argument of type \'undefined\' is not assignable to parameter of type \'Expected<Logbook>\'.", "2620553983"],
-      [181, 45, 9, "Argument of type \'undefined\' is not assignable to parameter of type \'Expected<ArrayLike<any>> | ArrayContaining<any>\'.", "2620553983"]
+    "src/app/state-management/reducers/logbooks.reducer.spec.ts:3643353152": [
+      [29, 12, 8, "Variable \'logbooks\' implicitly has type \'any[]\' in some locations where its type cannot be determined.", "2549728891"],
+      [30, 63, 8, "Variable \'logbooks\' implicitly has an \'any[]\' type.", "2549728891"],
+      [83, 47, 17, "Argument of type \'string | undefined\' is not assignable to parameter of type \'Expected<ArrayLike<string>> | ArrayContaining<string>\'.", "499976672"]
     ],
     "src/app/state-management/reducers/proposals.reducer.spec.ts:856778633": [
       [86, 13, 21, "Object is possibly \'undefined\'.", "413992697"],
@@ -1042,8 +1038,8 @@ exports[`stricter compilation`] = {
       [65, 8, 10, "Argument of type \'{ mode: null; sortField: string; skip: number; limit: number; }\' is not assignable to parameter of type \'Expected<JobFilters>\'.\\n  Type \'{ mode: null; sortField: string; skip: number; limit: number; }\' is not assignable to type \'{ mode: ExpectedRecursive<Record<string, string> | undefined>; sortField: ExpectedRecursive<string>; skip: ExpectedRecursive<number>; limit: ExpectedRecursive<...>; }\'.\\n    Types of property \'mode\' are incompatible.\\n      Type \'null\' is not assignable to type \'ExpectedRecursive<Record<string, string> | undefined>\'.", "2675413713"],
       [74, 16, 4, "Argument of type \'null\' is not assignable to parameter of type \'Expected<Record<string, string> | undefined>\'.", "2087897566"]
     ],
-    "src/app/users/login/login.component.spec.ts:87531066": [
-      [160, 8, 71, "Expected 0 arguments, but got 1.", "3870196511"]
+    "src/app/users/login/login.component.spec.ts:2557971985": [
+      [156, 8, 71, "Expected 0 arguments, but got 1.", "3870196511"]
     ],
     "src/app/users/user-settings/user-settings.component.spec.ts:235762097": [
       [87, 47, 30, "Expected 0 arguments, but got 1.", "2329020575"]
