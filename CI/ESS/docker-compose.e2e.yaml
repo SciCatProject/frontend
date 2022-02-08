@@ -23,6 +23,8 @@ services:
       context: .
       dockerfile: CI/ESS/Dockerfile.e2e
     command: ["./wait-for-it.sh", "catamel:3000", "--", "nginx", "-g", "daemon off;"]
+    volumes:
+      - "./CI/ESS/config.e2e.json:/usr/share/nginx/html/assets/config.json"
     depends_on:
       - catamel
   cypress:
