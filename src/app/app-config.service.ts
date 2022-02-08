@@ -10,7 +10,7 @@ export interface OAuth2Endpoint {
 
 export class RetrieveDestinations {
   location?: string | null;
-  option: string;
+  option = "";
 }
 
 export interface AppConfig {
