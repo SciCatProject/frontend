@@ -98,7 +98,7 @@
   "loginFormEnabled": true,
   "maxDirectDownloadSize": 5000000000,
   "metadataPreviewEnabled": true,
-  "metadataStructure": "",
+  "metadataStructure": "tree",
   "multipleDownloadAction": "http://localhost:3012/zip",
   "multipleDownloadEnabled": true,
   "oAuth2Endpoints": [],
