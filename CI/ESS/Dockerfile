@@ -2,18 +2,13 @@ FROM node:16-alpine as builder
 LABEL maintainer="henrik.johansson@ess.eu"
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh
+  apk add --no-cache bash git openssh
 
-RUN npm config set registry http://registry.npmjs.org/
-RUN npm config set strict-ssl false
-ARG env=dmscdev
 WORKDIR /catanie
 COPY package*.json  /catanie/
 RUN npm ci
 COPY . /catanie/
-# Site image needs to be copied to assets before building
-COPY CI/ESS/site.png /catanie/src/assets/images/site.png
-RUN npx ng build --configuration=${env}
+RUN npx ng build
 
 FROM nginx:1.21-alpine
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
