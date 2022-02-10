@@ -10,8 +10,6 @@ RUN npm ci
 RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
 RUN chmod +x wait-for-it.sh
 COPY . /catanie/
-# Site image needs to be copied to assets before building
-COPY CI/ESS/site.png /catanie/src/assets/images/site.png
 RUN npx ng build
 
 FROM nginx:1.21-alpine
