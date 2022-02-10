@@ -44,8 +44,9 @@ describe("AppLayoutComponent", () => {
       TestBed.overrideComponent(AppLayoutComponent, {
         set: {
           providers: [
-            { provide: Store, useClass: MockStore },
+            { provide: AppConfigService, useValue: { getConfig } },
             { provide: ActivatedRoute, useClass: MockActivatedRoute },
+            { provide: Store, useClass: MockStore },
             { provide: Router, useClass: MockRouter },
           ],
         },
