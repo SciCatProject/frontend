@@ -34,8 +34,8 @@ jobs:
 
       - name: Run docker-compose
         run: |
-          cp CI/ESS/cypress.json cypress.json
-          cp CI/ESS/docker-compose.e2e.yaml docker-compose.yaml
+          cp CI/ESS/e2e/cypress.json cypress.json
+          cp CI/ESS/e2e/docker-compose.e2e.yaml docker-compose.yaml
           docker-compose pull
           docker-compose build --no-cache --parallel
           docker-compose up --exit-code-from cypress

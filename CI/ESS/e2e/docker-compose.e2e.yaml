@@ -21,10 +21,10 @@ services:
   catanie:
     build:
       context: .
-      dockerfile: CI/ESS/Dockerfile.e2e
+      dockerfile: CI/ESS/e2e/Dockerfile.e2e
     command: ["./wait-for-it.sh", "catamel:3000", "--", "nginx", "-g", "daemon off;"]
     volumes:
-      - "./CI/ESS/config.e2e.json:/usr/share/nginx/html/assets/config.json"
+      - "./CI/ESS/e2e/config.e2e.json:/usr/share/nginx/html/assets/config.json"
       - "./CI/ESS/site.png:/usr/share/nginx/html/assets/images/site.png"
       - "./CI/ESS/site-logo.png:/usr/share/nginx/html/assets/images/site-logo.png"
       - "./CI/ESS/favicon.ico:/usr/share/nginx/html/favicon.ico"
