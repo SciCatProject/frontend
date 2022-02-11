@@ -1,10 +1,4 @@
 {
-  "lbBaseURL": "",
-  "fileserverBaseURL": "/fileserver",
-  "synapseBaseUrl": "https://scitest.esss.lu.se",
-  "riotBaseUrl": "http://scichat.esss.lu.se",
-  "jupyterHubUrl": null,
-  "externalAuthEndpoint": "/auth/msad",
   "addDatasetEnabled": true,
   "archiveWorkflowEnabled": false,
   "columnSelectEnabled": true,
@@ -16,13 +10,18 @@
   "editMetadataEnabled": true,
   "editPublishedData": false,
   "editSampleEnabled": true,
+  "externalAuthEndpoint": "/auth/msad",
   "facility": "ESS",
   "fileColorEnabled": true,
+  "fileDownloadEnabled": true,
+  "fileserverBaseURL": "/fileserver",
   "gettingStarted": null,
   "ingestManual": null,
   "jobsEnabled": false,
   "jsonMetadataEnabled": false,
-  "policiesEnabled": false,
+  "jupyterHubUrl": null,
+  "landingPage": "doi.esss.se/detail/",
+  "lbBaseURL": "",
   "localColumns": [
     {
       "name": "select",
@@ -97,13 +96,17 @@
       "enabled": false
     }
   ],
-  "landingPage": "doi.esss.se/detail/",
   "logbookEnabled": true,
+  "loginFormEnabled": true,
   "maxDirectDownloadSize": 5000000000,
   "metadataPreviewEnabled": true,
   "metadataStructure": "",
-  "multipleDownloadEnabled": true,
   "multipleDownloadAction": "https://scicatfileserver.esss.dk/zip",
+  "multipleDownloadEnabled": true,
+  "oAuth2Endpoints": [],
+  "policiesEnabled": false,
+  "retrieveDestinations": [],
+  "riotBaseUrl": "http://scichat.esss.lu.se",
   "scienceSearchEnabled": true,
   "scienceSearchUnitsEnabled": true,
   "searchProposals": true,
@@ -113,10 +116,8 @@
   "shareEnabled": true,
   "shoppingCartEnabled": true,
   "shoppingCartOnHeader": true,
+  "synapseBaseUrl": "https://scitest.esss.lu.se",
   "tableSciDataEnabled": true,
   "userNamePromptEnabled": true,
-  "userProfileImageEnabled": true,
-  "fileDownloadEnabled": true,
-  "loginFormEnabled": true,
-  "oAuth2Endpoints": []
+  "userProfileImageEnabled": true
 }
