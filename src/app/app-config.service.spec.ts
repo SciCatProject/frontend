@@ -7,9 +7,7 @@ import { MockHttp } from "shared/MockStubs";
 const appConfig: AppConfig = {
   addDatasetEnabled: true,
   archiveWorkflowEnabled: true,
-  columnSelectEnabled: true,
   datasetReduceEnabled: true,
-  disabledDatasetColumns: [],
   editDatasetSampleEnabled: true,
   editMetadataEnabled: true,
   editPublishedData: true,
@@ -18,7 +16,6 @@ const appConfig: AppConfig = {
   facility: "ESS",
   fileColorEnabled: true,
   fileDownloadEnabled: true,
-  fileserverBaseURL: "http://127.0.0.1:8889",
   gettingStarted: null,
   ingestManual: null,
   jobsEnabled: true,
@@ -113,17 +110,13 @@ const appConfig: AppConfig = {
   riotBaseUrl: "http://scitest.esss.lu.se/riot",
   scienceSearchEnabled: true,
   scienceSearchUnitsEnabled: true,
-  searchProposals: true,
   searchPublicDataEnabled: true,
   searchSamples: true,
   sftpHost: "login.esss.dk",
   shareEnabled: true,
   shoppingCartEnabled: true,
   shoppingCartOnHeader: true,
-  synapseBaseUrl: "https://scitest.esss.lu.se",
   tableSciDataEnabled: true,
-  userNamePromptEnabled: true,
-  userProfileImageEnabled: true,
 };
 
 describe("AppConfigService", () => {

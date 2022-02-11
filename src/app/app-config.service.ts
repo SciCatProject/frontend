@@ -16,9 +16,7 @@ export class RetrieveDestinations {
 export interface AppConfig {
   addDatasetEnabled: boolean;
   archiveWorkflowEnabled: boolean;
-  columnSelectEnabled: boolean;
   datasetReduceEnabled: boolean;
-  disabledDatasetColumns: string[];
   editDatasetSampleEnabled: boolean;
   editMetadataEnabled: boolean;
   editPublishedData: boolean;
@@ -27,7 +25,6 @@ export interface AppConfig {
   facility: string | null;
   fileColorEnabled: boolean;
   fileDownloadEnabled: boolean;
-  fileserverBaseURL: string | null;
   gettingStarted: string | null;
   ingestManual: string | null;
   jobsEnabled: boolean;
@@ -49,17 +46,13 @@ export interface AppConfig {
   riotBaseUrl: string | null;
   scienceSearchEnabled: boolean;
   scienceSearchUnitsEnabled: boolean;
-  searchProposals: boolean;
   searchPublicDataEnabled: boolean;
   searchSamples: boolean;
   sftpHost: string | null;
   shareEnabled: boolean;
   shoppingCartEnabled: boolean;
   shoppingCartOnHeader: boolean;
-  synapseBaseUrl: string | null;
   tableSciDataEnabled: boolean;
-  userNamePromptEnabled: boolean;
-  userProfileImageEnabled: boolean;
 }
 
 @Injectable()

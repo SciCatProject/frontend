@@ -24,7 +24,6 @@ import { provideMockStore } from "@ngrx/store/testing";
 import { selectLoginPageViewModel } from "state-management/selectors/user.selectors";
 
 const getConfig = () => ({
-  disabledDatasetColumns: [],
   archiveWorkflowEnabled: true,
   facility: "not-ESS",
   loginFormEnabled: true,

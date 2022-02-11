@@ -1,11 +1,7 @@
 {
   "addDatasetEnabled": true,
   "archiveWorkflowEnabled": false,
-  "columnSelectEnabled": true,
   "datasetReduceEnabled": false,
-  "disabledDatasetColumns": [
-    "dataStatus"
-  ],
   "editDatasetSampleEnabled": true,
   "editMetadataEnabled": true,
   "editPublishedData": false,
@@ -14,7 +10,6 @@
   "facility": "ESS",
   "fileColorEnabled": true,
   "fileDownloadEnabled": true,
-  "fileserverBaseURL": "/fileserver",
   "gettingStarted": null,
   "ingestManual": null,
   "jobsEnabled": false,
@@ -109,15 +104,11 @@
   "riotBaseUrl": "http://scichat.esss.lu.se",
   "scienceSearchEnabled": true,
   "scienceSearchUnitsEnabled": true,
-  "searchProposals": true,
   "searchPublicDataEnabled": true,
   "searchSamples": true,
   "sftpHost": "login.esss.dk",
   "shareEnabled": true,
   "shoppingCartEnabled": true,
   "shoppingCartOnHeader": true,
-  "synapseBaseUrl": "https://scitest.esss.lu.se",
-  "tableSciDataEnabled": true,
-  "userNamePromptEnabled": true,
-  "userProfileImageEnabled": true
+  "tableSciDataEnabled": true
 }

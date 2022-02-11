@@ -1,7 +1,5 @@
 {
   "lbBaseURL": "https://dacat-qa.psi.ch",
-  "fileserverBaseURL": null,
-  "synapseBaseUrl": null,
   "riotBaseUrl": null,
   "jupyterHubUrl": "https://jupyterhub.apps.ocp4a.psi.ch/hub/login",
   "externalAuthEndpoint": "/auth/msad",
@@ -16,9 +14,7 @@
       "option": "CSCS (Testphase)"
     }
   ],
-  "columnSelectEnabled": true,
   "datasetReduceEnabled": false,
-  "disabledDatasetColumns": [],
   "editDatasetSampleEnabled": false,
   "editMetadataEnabled": false,
   "editPublishedData": false,
@@ -110,7 +106,6 @@
   "multipleDownloadAction": null,
   "scienceSearchEnabled": false,
   "scienceSearchUnitsEnabled": false,
-  "searchProposals": true,
   "searchPublicDataEnabled": true,
   "searchSamples": true,
   "sftpHost": null,
@@ -118,8 +113,6 @@
   "shoppingCartEnabled": true,
   "shoppingCartOnHeader": true,
   "tableSciDataEnabled": false,
-  "userNamePromptEnabled": true,
-  "userProfileImageEnabled": true,
   "ingestManual": "http://melanie.gitpages.psi.ch/SciCatPages/",
   "gettingStarted": "http://melanie.gitpages.psi.ch/SciCatPages/SciCatGettingStartedSLSSummary.pdf",
   "jobsEnabled": true,
