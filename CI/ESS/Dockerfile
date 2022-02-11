@@ -15,5 +15,4 @@ RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /catanie/dist/ /usr/share/nginx/html
 COPY scripts/nginx.conf /etc/nginx/nginx.conf
-COPY CI/ESS/google43e14584df796f63.html   /usr/share/nginx/html
 EXPOSE 80
