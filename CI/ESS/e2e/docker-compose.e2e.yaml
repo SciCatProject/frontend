@@ -33,7 +33,7 @@ services:
   cypress:
     build:
       context: .
-      dockerfile: CI/ESS/Dockerfile.cypress
+      dockerfile: CI/ESS/e2e/Dockerfile.cypress
     command: ["./wait-for-it.sh", "catanie:80", "--", "npx", "cypress", "run"]
     depends_on:
       - catanie
