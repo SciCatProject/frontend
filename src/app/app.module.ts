@@ -16,8 +16,6 @@ import { extModules } from "./build-specifics";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { ServiceWorkerModule } from "@angular/service-worker";
-import { environment } from "../environments/environment";
 import { LayoutModule } from "_layout/layout.module";
 import { AppConfigService } from "app-config.service";
 
@@ -54,9 +52,6 @@ const appInitializerFn = (appConfig: AppConfigService) => {
       relativeLinkResolution: "legacy",
     }),
     EffectsModule.forRoot([]),
-    ServiceWorkerModule.register("ngsw-worker.js", {
-      enabled: environment.production,
-    }),
   ],
   exports: [MatNativeDateModule],
   providers: [
