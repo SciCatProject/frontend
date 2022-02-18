@@ -34,6 +34,21 @@ export const selectPublishedDataPerPage = createSelector(
   (filters) => filters.limit
 );
 
+export const selectPublishedDataDashboardPageViewModel = createSelector(
+  selectAllPublishedData,
+  selectPublishedDataCount,
+  selectPage,
+  selectPublishedDataPerPage,
+  selectFilters,
+  (publishedData, count, currentPage, publishedDataPerPage, filters) => ({
+    publishedData,
+    count,
+    currentPage,
+    publishedDataPerPage,
+    filters,
+  })
+);
+
 export const selectQueryParams = createSelector(selectFilters, (filters) => {
   const { sortField, skip, limit } = filters;
   return { order: sortField, skip, limit };

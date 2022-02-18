@@ -92,6 +92,30 @@ describe("Published Data Selectors", () => {
     });
   });
 
+  describe("selectPublishedDataDashboardPageViewModel", () => {
+    it("should select published data dashboard page view model state", () => {
+      expect(
+        fromSelectors.selectPublishedDataDashboardPageViewModel.projector(
+          initialPublishedDataState.publishedData,
+          initialPublishedDataState.totalCount,
+          fromSelectors.selectPage.projector(initialPublishedDataState.filters),
+          initialPublishedDataState.filters.limit,
+          initialPublishedDataState.filters
+        )
+      ).toEqual({
+        publishedData: [],
+        count: 0,
+        currentPage: 0,
+        publishedDataPerPage: 25,
+        filters: {
+          sortField: "publicationYear desc",
+          skip: 0,
+          limit: 25,
+        },
+      });
+    });
+  });
+
   describe("selectQueryParams", () => {
     it("should select query params from filters", () => {
       const { sortField, skip, limit } = filters;
