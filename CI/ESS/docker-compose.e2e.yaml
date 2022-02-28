@@ -29,7 +29,7 @@ services:
     build:
       context: .
       dockerfile: CI/ESS/Dockerfile.cypress
-    command: ["./wait-for-it.sh", "scicat-frontend:80", "--", "npx", "cypress", "run"]
+    command: ["./wait-for-it.sh", "scicat-frontend:80", "--", "npx", "cypress", "run", "--browser", "chrome"]
     depends_on:
       - scicat-frontend
 volumes:
