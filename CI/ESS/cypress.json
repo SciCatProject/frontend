@@ -1,9 +1,14 @@
 {
   "baseUrl": "http://scicat-frontend:80",
   "lbBaseUrl": "http://scicat-backend:3000/api/v3",
-  "viewportWidth": 1280,
   "username": "admin",
   "password": "2jf70TPNZsS",
   "secondaryUsername": "archiveManager",
-  "secondaryPassword": "aman"
+  "secondaryPassword": "aman",
+  "video": false,
+  "screenshotsFolder": "/tmp/screenshots",
+  "viewportWidth": 1920,
+  "viewportHeight": 1080,
+  "retries": 1,
+  "defaultCommandTimeout": 15000
 }
