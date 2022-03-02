@@ -2,13 +2,7 @@ import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { PublishedData } from "shared/sdk";
 import { Router } from "@angular/router";
-import {
-  selectAllPublishedData,
-  selectPublishedDataCount,
-  selectPage,
-  selectPublishedDataPerPage,
-  selectFilters,
-} from "state-management/selectors/published-data.selectors";
+import { selectPublishedDataDashboardPageViewModel } from "state-management/selectors/published-data.selectors";
 import {
   fetchAllPublishedDataAction,
   changePageAction,
@@ -34,10 +28,7 @@ import { showMessageAction } from "state-management/actions/user.actions";
   styleUrls: ["./publisheddata-dashboard.component.scss"],
 })
 export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
-  public publishedData$ = this.store.select(selectAllPublishedData);
-  public count$ = this.store.select(selectPublishedDataCount);
-  public currentPage$ = this.store.select(selectPage);
-  public itemsPerPage$ = this.store.select(selectPublishedDataPerPage);
+  public vm$ = this.store.select(selectPublishedDataDashboardPageViewModel);
 
   columns: TableColumn[] = [
     { name: "doi", icon: "fingerprint", sort: true, inList: false },
@@ -105,8 +96,8 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
 
   onSelectAll(event: MatCheckboxChange) {
     if (event.checked) {
-      this.publishedData$.pipe(take(1)).subscribe((published) => {
-        this.selectedDOIs = published.map(
+      this.vm$.pipe(take(1)).subscribe((vm) => {
+        this.selectedDOIs = vm.publishedData.map(
           ({ doi }) => this.doiBaseUrl + encodeURIComponent(doi)
         );
       });
@@ -128,13 +119,11 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.dispatch(fetchAllPublishedDataAction());
 
-    this.filtersSubscription = this.store
-      .select(selectFilters)
-      .subscribe((filters) => {
-        this.router.navigate(["/publishedDatasets"], {
-          queryParams: { args: JSON.stringify(filters) },
-        });
+    this.filtersSubscription = this.vm$.subscribe((vm) => {
+      this.router.navigate(["/publishedDatasets"], {
+        queryParams: { args: JSON.stringify(vm.filters) },
       });
+    });
   }
 
   ngOnDestroy() {
