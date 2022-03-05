@@ -156,6 +156,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   textSearchChanged(terms: string) {
+    if ('string' != typeof terms) return;
     this.clearSearchBar = false;
     this.store.dispatch(setSearchTermsAction({ terms }));
   }
