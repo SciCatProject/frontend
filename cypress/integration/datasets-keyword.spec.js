@@ -6,9 +6,8 @@ describe("Datasets", () => {
 
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
-    cy.server();
-    cy.route("PUT", "/api/v3/Datasets/**/*").as("keyword");
-    cy.route("GET", "*").as("fetch");
+    cy.intercept("PUT", "/api/v3/Datasets/**/*").as("keyword");
+    cy.intercept("GET", "*").as("fetch");
   });
 
   after(() => {
@@ -37,9 +36,9 @@ describe("Datasets", () => {
 
       cy.get("#keywordInput").type("cypresskey{enter}");
 
-      cy.wait("@keyword").then(response => {
-        expect(response.method).to.eq("PUT");
-        expect(response.status).to.eq(200);
+      cy.wait("@keyword").then(({ request, response }) => {
+        expect(request.method).to.eq("PUT");
+        expect(response.statusCode).to.eq(200);
       });
 
       cy.wait(5000);
@@ -68,9 +67,9 @@ describe("Datasets", () => {
         .children(".mat-chip-remove")
         .click();
 
-      cy.wait("@keyword").then(response => {
-        expect(response.method).to.eq("PUT");
-        expect(response.status).to.eq(200);
+      cy.wait("@keyword").then(({ request, response }) => {
+        expect(request.method).to.eq("PUT");
+        expect(response.statusCode).to.eq(200);
       });
 
       cy.get(".mat-chip-list")

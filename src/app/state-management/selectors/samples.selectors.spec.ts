@@ -1,6 +1,7 @@
 import * as fromSelectors from "./samples.selectors";
 import { SampleState } from "state-management/state/samples.store";
 import { SampleInterface, Sample } from "shared/sdk";
+import { initialUserState } from "state-management/state/user.store";
 
 const data: SampleInterface = {
   sampleId: "testId",
@@ -167,6 +168,78 @@ describe("Sample Selectors", () => {
           initialSampleState.datasetFilters
         )
       ).toEqual(25);
+    });
+  });
+
+  describe("selectSamplesPagination", () => {
+    it("should select pagination state", () => {
+      expect(
+        fromSelectors.selectSamplesPagination.projector(
+          initialSampleState.samplesCount,
+          initialSampleState.sampleFilters.limit,
+          fromSelectors.selectPage.projector(initialSampleState.sampleFilters)
+        )
+      ).toEqual({ samplesCount: 0, samplesPerPage: 25, currentPage: 0 });
+    });
+  });
+
+  describe("selectSampleDashboardPageViewModel", () => {
+    it("should select sample dashboard page view model state", () => {
+      expect(
+        fromSelectors.selectSampleDashboardPageViewModel.projector(
+          initialSampleState.samples,
+          fromSelectors.selectSamplesPagination.projector(
+            initialSampleState.samplesCount,
+            initialSampleState.sampleFilters.limit,
+            fromSelectors.selectPage.projector(initialSampleState.sampleFilters)
+          ),
+          initialSampleState.sampleFilters,
+          initialSampleState.hasPrefilledFilters,
+          initialSampleState.sampleFilters.text,
+          initialSampleState.metadataKeys,
+          initialSampleState.sampleFilters.characteristics
+        )
+      ).toEqual({
+        samples: [],
+        samplesPagination: {
+          samplesCount: 0,
+          samplesPerPage: 25,
+          currentPage: 0,
+        },
+        filters: initialSampleState.sampleFilters,
+        hasPrefilledFilters: false,
+        textFilter: "test",
+        metadataKeys: [],
+        characteristicsFilter: [],
+      });
+    });
+  });
+
+  describe("selectSampleDetailPageViewModel", () => {
+    it("should select sample detail page view model state", () => {
+      expect(
+        fromSelectors.selectSampleDetailPageViewModel.projector(
+          initialSampleState.currentSample,
+          initialSampleState.datasets,
+          initialSampleState.datasetFilters.limit,
+          fromSelectors.selectDatasetsPage.projector(
+            initialSampleState.datasetFilters
+          ),
+          initialSampleState.datasetsCount,
+          fromSelectors.selectCurrentAttachments.projector(
+            initialSampleState.currentSample
+          ),
+          initialUserState.currentUser
+        )
+      ).toEqual({
+        sample,
+        datasets: [],
+        datasetsPerPage: 25,
+        datasetsPage: 0,
+        datasetsCount: 0,
+        attachments: [],
+        user: undefined,
+      });
     });
   });
 

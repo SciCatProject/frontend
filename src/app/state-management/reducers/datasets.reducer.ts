@@ -38,14 +38,38 @@ const reducer = createReducer(
     })
   ),
 
-  on(
-    fromActions.prefillBatchCompleteAction,
-    (state, { batch }): DatasetState => ({
-      ...state,
-      batch,
-    })
-  ),
-  on(fromActions.addToBatchAction, (state): DatasetState => {
+  on(fromActions.fetchDatablocksCompleteAction, (state, { datablocks }) =>{
+    return {
+    ...state,
+    currentSet: {
+      ...state.currentSet,
+      datablocks
+    }};
+  }),
+
+  on(fromActions.fetchOrigDatablocksCompleteAction, (state, { origdatablocks }) =>{
+    return {
+    ...state,
+    currentSet: {
+      ...state.currentSet,
+      origdatablocks
+    }};
+  }),
+
+  on(fromActions.fetchAttachmentsCompleteAction, (state, { attachments }) =>{
+    return {
+    ...state,
+    currentSet: {
+      ...state.currentSet,
+      attachments
+    }};
+  }),
+
+  on(fromActions.prefillBatchCompleteAction, (state, { batch }) => ({
+    ...state,
+    batch,
+  })),
+  on(fromActions.addToBatchAction, (state) => {
     const batchedPids = state.batch.map((dataset) => dataset.pid);
     const addition = state.selectedSets.filter(
       (dataset) => batchedPids.indexOf(dataset.pid) === -1
@@ -123,7 +147,12 @@ const reducer = createReducer(
     })
   ),
 
-  on(fromActions.selectDatasetAction, (state, { dataset }): DatasetState => {
+  on(fromActions.clearCurrentDatasetStateAction, (state) => ({
+    ...state,
+    currentSet: undefined
+  })),
+
+  on(fromActions.selectDatasetAction, (state, { dataset }) => {
     const alreadySelected = state.selectedSets.find(
       (existing) => dataset.pid === existing.pid
     );

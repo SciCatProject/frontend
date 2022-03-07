@@ -8,8 +8,7 @@ describe("Datasets", () => {
 
     cy.createDataset("raw");
 
-    cy.server();
-    cy.route("POST", "/api/v3/Datasets/**/*").as("upload");
+    cy.intercept("POST", "/api/v3/Datasets/**/*").as("upload");
   });
 
   afterEach(() => {
@@ -39,7 +38,7 @@ describe("Datasets", () => {
       cy.wait(5000);
 
       cy.fixture("attachment-image").then(file => {
-        cy.get(".dropzone").upload(
+        cy.get(".dropzone").attachFile(
           {
             fileContent: file.content,
             fileName: file.name,
@@ -49,9 +48,9 @@ describe("Datasets", () => {
         );
       });
 
-      cy.wait("@upload").then(response => {
-        expect(response.method).to.eq("POST");
-        expect(response.status).to.eq(200);
+      cy.wait("@upload").then(({ request, response }) => {
+        expect(request.method).to.eq("POST");
+        expect(response.statusCode).to.eq(200);
       });
 
       cy.get(".attachment-card #caption").should(

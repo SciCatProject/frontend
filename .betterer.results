@@ -13,11 +13,12 @@ exports[`stricter compilation`] = {
       [193, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"],
       [257, 47, 29, "Expected 0 arguments, but got 1.", "2503700957"]
     ],
-    "src/app/datasets/dataset-detail/dataset-detail.component.ts:3563027205": [
-      [78, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
+    "src/app/datasets/dataset-detail/dataset-detail.component.ts:1706076617": [
+      [82, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
     ],
-    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:345107662": [
-      [110, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
+    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:901536949": [
+      [111, 50, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [126, 31, 8, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'typeof TAB\'.\\n  No index signature with a parameter of type \'string\' was found on type \'typeof TAB\'.", "4213543011"]
     ],
     "src/app/datasets/dataset-lifecycle/dataset-lifecycle.component.spec.ts:2836481081": [
       [164, 20, 3, "Parameter \'key\' implicitly has an \'any\' type.", "193424690"],
@@ -137,24 +138,12 @@ exports[`stricter compilation`] = {
       [332, 8, 104, "Expected 0 arguments, but got 1.", "2940355500"],
       [337, 47, 22, "Expected 0 arguments, but got 1.", "3206069091"]
     ],
-    "src/app/proposals/proposal-dashboard/proposal-dashboard.component.spec.ts:3966869114": [
-      [110, 47, 19, "Expected 0 arguments, but got 1.", "302414085"],
-      [123, 8, 36, "Expected 0 arguments, but got 1.", "518980590"],
-      [125, 47, 22, "Expected 0 arguments, but got 1.", "3926927225"],
-      [137, 51, 22, "Expected 0 arguments, but got 1.", "3926927225"],
-      [155, 51, 22, "Expected 0 arguments, but got 1.", "3926927225"],
-      [173, 51, 22, "Expected 0 arguments, but got 1.", "3926927225"],
-      [197, 8, 34, "Expected 0 arguments, but got 1.", "3088928813"],
-      [199, 47, 22, "Expected 0 arguments, but got 1.", "3926927225"],
-      [217, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
-      [235, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"]
-    ],
     "src/app/proposals/view-proposal-page/view-proposal-page.component.spec.ts:4159537335": [
       [80, 45, 4, "Argument of type \'null\' is not assignable to parameter of type \'Dataset[]\'.", "2087897566"],
       [109, 8, 103, "Expected 0 arguments, but got 1.", "2904401119"],
       [115, 8, 64, "Expected 0 arguments, but got 1.", "1010980181"]
     ],
-    "src/app/publisheddata/publisheddata-dashboard/publisheddata-dashboard.component.spec.ts:1768541835": [
+    "src/app/publisheddata/publisheddata-dashboard/publisheddata-dashboard.component.spec.ts:1231294284": [
       [95, 47, 30, "Expected 0 arguments, but got 1.", "2329020575"],
       [112, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
       [129, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"]
@@ -455,7 +444,7 @@ exports[`stricter compilation`] = {
       [129, 13, 36, "Object is possibly \'null\'.", "1010399159"],
       [142, 13, 36, "Object is possibly \'null\'.", "1010399159"]
     ],
-    "src/app/shared/modules/shared-table/shared-table.component.ts:1451762685": [
+    "src/app/shared/modules/shared-table/shared-table.component.ts:3460739224": [
       [68, 2, 14, "Property \'visibleColumns\' has no initializer and is not definitely assigned in the constructor.", "1769051438"],
       [69, 2, 13, "Property \'hiddenColumns\' has no initializer and is not definitely assigned in the constructor.", "3008049162"],
       [76, 11, 10, "Property \'dataSource\' has no initializer and is not definitely assigned in the constructor.", "1967398792"],
@@ -463,12 +452,12 @@ exports[`stricter compilation`] = {
       [84, 41, 9, "Property \'dataTable\' has no initializer and is not definitely assigned in the constructor.", "836725899"],
       [85, 40, 4, "Property \'sort\' has no initializer and is not definitely assigned in the constructor.", "2088345023"],
       [86, 45, 9, "Property \'paginator\' has no initializer and is not definitely assigned in the constructor.", "2483840092"],
-      [244, 16, 1, "Parameter \'i\' implicitly has an \'any\' type.", "177612"],
-      [246, 54, 23, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{ filters: boolean; }\'.", "2890101915"],
-      [253, 4, 23, "Element implicitly has an \'any\' type because expression of type \'string | number\' can\'t be used to index type \'{ filters: boolean; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ filters: boolean; }\'.", "2890101915"],
-      [253, 31, 23, "Element implicitly has an \'any\' type because expression of type \'string | number\' can\'t be used to index type \'{ filters: boolean; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ filters: boolean; }\'.", "2890101915"],
-      [268, 8, 19, "Type \'SortDirection | undefined\' is not assignable to type \'SortDirection\'.\\n  Type \'undefined\' is not assignable to type \'SortDirection\'.", "3393242684"],
-      [341, 50, 4, "No overload matches this call.\\n  Overload 1 of 3, \'(callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'string\'.\\n  Overload 2 of 3, \'(callbackfn: (previousValue: Record<string, unknown>, currentValue: string, currentIndex: number, array: string[]) => Record<string, unknown>, initialValue: Record<string, unknown>): Record<...>\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'Record<string, unknown>\'.", "2087877701"]
+      [246, 16, 1, "Parameter \'i\' implicitly has an \'any\' type.", "177612"],
+      [248, 54, 23, "Element implicitly has an \'any\' type because expression of type \'any\' can\'t be used to index type \'{ filters: boolean; }\'.", "2890101915"],
+      [255, 4, 23, "Element implicitly has an \'any\' type because expression of type \'string | number\' can\'t be used to index type \'{ filters: boolean; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ filters: boolean; }\'.", "2890101915"],
+      [255, 31, 23, "Element implicitly has an \'any\' type because expression of type \'string | number\' can\'t be used to index type \'{ filters: boolean; }\'.\\n  No index signature with a parameter of type \'string\' was found on type \'{ filters: boolean; }\'.", "2890101915"],
+      [270, 8, 19, "Type \'SortDirection | undefined\' is not assignable to type \'SortDirection\'.\\n  Type \'undefined\' is not assignable to type \'SortDirection\'.", "3393242684"],
+      [343, 50, 4, "No overload matches this call.\\n  Overload 1 of 3, \'(callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'string\'.\\n  Overload 2 of 3, \'(callbackfn: (previousValue: Record<string, unknown>, currentValue: string, currentIndex: number, array: string[]) => Record<string, unknown>, initialValue: Record<string, unknown>): Record<...>\', gave the following error.\\n    Type \'unknown\' is not assignable to type \'Record<string, unknown>\'.", "2087877701"]
     ],
     "src/app/shared/sdk/models/Attachment.ts:3362633067": [
       [43, 2, 7, "Property \'dataset\' has no initializer and is not definitely assigned in the constructor.", "2497262647"],
@@ -1016,6 +1005,11 @@ exports[`stricter compilation`] = {
     "src/app/state-management/effects/user.effects.spec.ts:2144824867": [
       [538, 27, 93, "Conversion of type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' to type \'UserSetting\' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to \'unknown\' first.\\n  Type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' is missing the following properties from type \'UserSetting\': \\"id\\", \\"createdBy\\", \\"updatedBy\\", \\"userId\\", and 3 more.", "1258454294"]
     ],
+    "src/app/state-management/reducers/datasets.reducer.ts:1798379755": [
+      [40, 48, 27, "Argument of type \'(state: DatasetState, { datablocks }: { datablocks: Datablock[]; } & TypedAction<\\"[Dataset] Fetch Origin Datablocks Complete\\"> & { type: \\"[Dataset] Fetch Origin Datablocks Complete\\"; }) => { ...; }\' is not assignable to parameter of type \'OnReducer<DatasetState, [ActionCreator<\\"[Dataset] Fetch Origin Datablocks Complete\\", (props: { datablocks: Datablock[]; }) => { datablocks: Datablock[]; } & TypedAction<...>>]>\'.\\n  Call signature return types \'{ currentSet: { datablocks: Datablock[]; pid?: string | undefined; owner?: string | undefined; ownerEmail?: string | undefined; orcidOfOwner?: string | undefined; contactEmail?: string | undefined; ... 36 more ...; instrument?: Instrument | undefined; }; ... 10 more ...; openwhiskResult: Record<...> | undefined; }\' and \'DatasetState\' are incompatible.\\n    The types of \'currentSet[\\"pid\\"]\' are incompatible between these types.\\n      Type \'string | undefined\' is not assignable to type \'string\'.\\n        Type \'undefined\' is not assignable to type \'string\'.", "261574027"],
+      [49, 52, 31, "Argument of type \'(state: DatasetState, { origdatablocks }: { origdatablocks: OrigDatablock[]; } & TypedAction<\\"[Dataset] Fetch Origin Datablocks Complete\\"> & { type: \\"[Dataset] Fetch Origin Datablocks Complete\\"; }) => { ...; }\' is not assignable to parameter of type \'OnReducer<DatasetState, [ActionCreator<\\"[Dataset] Fetch Origin Datablocks Complete\\", (props: { origdatablocks: OrigDatablock[]; }) => { origdatablocks: OrigDatablock[]; } & TypedAction<...>>]>\'.\\n  Call signature return types \'{ currentSet: { origdatablocks: OrigDatablock[]; pid?: string | undefined; owner?: string | undefined; ownerEmail?: string | undefined; orcidOfOwner?: string | undefined; ... 37 more ...; instrument?: Instrument | undefined; }; ... 10 more ...; openwhiskResult: Record<...> | undefined; }\' and \'DatasetState\' are incompatible.\\n    The types of \'currentSet[\\"pid\\"]\' are incompatible between these types.\\n      Type \'string | undefined\' is not assignable to type \'string\'.\\n        Type \'undefined\' is not assignable to type \'string\'.", "1169278968"],
+      [58, 49, 28, "Argument of type \'(state: DatasetState, { attachments }: { attachments: Attachment[]; } & TypedAction<\\"[Dataset] Fetch Attachments Complete\\"> & { type: \\"[Dataset] Fetch Attachments Complete\\"; }) => { ...; }\' is not assignable to parameter of type \'OnReducer<DatasetState, [ActionCreator<\\"[Dataset] Fetch Attachments Complete\\", (props: { attachments: Attachment[]; }) => { attachments: Attachment[]; } & TypedAction<...>>]>\'.\\n  Call signature return types \'{ currentSet: { attachments: Attachment[]; pid?: string | undefined; owner?: string | undefined; ownerEmail?: string | undefined; orcidOfOwner?: string | undefined; contactEmail?: string | undefined; ... 36 more ...; instrument?: Instrument | undefined; }; ... 10 more ...; openwhiskResult: Record<...> | undefined; }\' and \'DatasetState\' are incompatible.\\n    The types of \'currentSet[\\"pid\\"]\' are incompatible between these types.\\n      Type \'string | undefined\' is not assignable to type \'string\'.\\n        Type \'undefined\' is not assignable to type \'string\'.", "2148823691"]
+    ],
     "src/app/state-management/reducers/jobs.reducer.spec.ts:2620026082": [
       [65, 56, 4, "Type \'null\' is not assignable to type \'Record<string, string> | undefined\'.", "2087698470"],
       [68, 41, 4, "Argument of type \'null\' is not assignable to parameter of type \'Expected<Record<string, string> | undefined>\'.", "2087698470"]
@@ -1045,13 +1039,11 @@ exports[`stricter compilation`] = {
       [65, 8, 10, "Argument of type \'{ mode: null; sortField: string; skip: number; limit: number; }\' is not assignable to parameter of type \'Expected<JobFilters>\'.\\n  Type \'{ mode: null; sortField: string; skip: number; limit: number; }\' is not assignable to type \'{ mode: ExpectedRecursive<Record<string, string> | undefined>; sortField: ExpectedRecursive<string>; skip: ExpectedRecursive<number>; limit: ExpectedRecursive<...>; }\'.\\n    Types of property \'mode\' are incompatible.\\n      Type \'null\' is not assignable to type \'ExpectedRecursive<Record<string, string> | undefined>\'.", "2675413713"],
       [74, 16, 4, "Argument of type \'null\' is not assignable to parameter of type \'Expected<Record<string, string> | undefined>\'.", "2087897566"]
     ],
-    "src/app/users/login/login.component.spec.ts:590365834": [
-      [154, 8, 71, "Expected 0 arguments, but got 1.", "3870196511"]
+    "src/app/users/login/login.component.spec.ts:87531066": [
+      [160, 8, 71, "Expected 0 arguments, but got 1.", "3870196511"]
     ],
-    "src/app/users/user-settings/user-settings.component.spec.ts:2325442996": [
-      [95, 8, 32, "Expected 0 arguments, but got 1.", "1341113725"],
-      [97, 47, 30, "Expected 0 arguments, but got 1.", "2329020575"],
-      [117, 47, 30, "Expected 0 arguments, but got 1.", "2329020575"]
+    "src/app/users/user-settings/user-settings.component.spec.ts:235762097": [
+      [87, 47, 30, "Expected 0 arguments, but got 1.", "2329020575"]
     ]
   }`
 };

@@ -5,8 +5,6 @@ describe("Datasets", () => {
     cy.wait(5000);
 
     cy.login(Cypress.config("username"), Cypress.config("password"));
-
-    cy.server();
   });
 
   after(() => {

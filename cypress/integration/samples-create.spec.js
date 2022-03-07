@@ -1,22 +1,21 @@
 /// <reference types="Cypress" />
 
-describe("Samples", function() {
-  beforeEach(function() {
+describe("Samples", function () {
+  beforeEach(function () {
     cy.wait(5000);
 
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
-    cy.server();
-    cy.route("POST", "/api/v3/Samples").as("create");
-    cy.route("GET", "*").as("fetch");
+    cy.intercept("POST", "/api/v3/Samples").as("create");
+    cy.intercept("GET", "*").as("fetch");
   });
 
-  after(function() {
+  after(function () {
     cy.removeSamples();
   });
 
-  describe("Create sample", function() {
-    it("should create a new sample", function() {
+  describe("Create sample", function () {
+    it("should create a new sample", function () {
       cy.visit("/samples");
 
       cy.wait("@fetch");
@@ -34,9 +33,9 @@ describe("Samples", function() {
         .contains("Save")
         .click();
 
-      cy.wait("@create").then(response => {
-        expect(response.method).to.eq("POST");
-        expect(response.status).to.eq(200);
+      cy.wait("@create").then(({ request, response }) => {
+        expect(request.method).to.eq("POST");
+        expect(response.statusCode).to.eq(200);
       });
 
       cy.get(".mat-table")

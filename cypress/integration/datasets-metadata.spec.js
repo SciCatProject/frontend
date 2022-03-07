@@ -6,9 +6,8 @@ describe("Datasets", () => {
 
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
-    cy.server();
-    cy.route("PUT", "/api/v3/Datasets/**/*").as("metadata");
-    cy.route("GET", "*").as("fetch");
+    cy.intercept("PUT", "/api/v3/Datasets/**/*").as("metadata");
+    cy.intercept("GET", "*").as("fetch");
   });
 
   after(() => {
@@ -56,9 +55,9 @@ describe("Datasets", () => {
 
       cy.contains("Save changes").click();
 
-      cy.wait("@metadata").then(response => {
-        expect(response.method).to.eq("PUT");
-        expect(response.status).to.eq(200);
+      cy.wait("@metadata").then(({ request, response }) => {
+        expect(request.method).to.eq("PUT");
+        expect(response.statusCode).to.eq(200);
       });
 
       cy.wait(5000);
@@ -88,9 +87,9 @@ describe("Datasets", () => {
 
       cy.contains("Save changes").click();
 
-      cy.wait("@metadata").then(response => {
-        expect(response.method).to.eq("PUT");
-        expect(response.status).to.eq(200);
+      cy.wait("@metadata").then(({ request, response }) => {
+        expect(request.method).to.eq("PUT");
+        expect(response.statusCode).to.eq(200);
       });
 
       cy.contains("View").click();

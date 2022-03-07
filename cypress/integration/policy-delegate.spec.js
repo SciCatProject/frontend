@@ -6,9 +6,8 @@ describe("Policies", () => {
 
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
-    cy.server();
-    cy.route("POST", "/api/v3/Policies/**/*").as("update");
-    cy.route("GET", "*").as("fetch");
+    cy.intercept("POST", "/api/v3/Policies/**/*").as("update");
+    cy.intercept("GET", "*").as("fetch");
   });
 
   after(() => {
@@ -49,9 +48,9 @@ describe("Policies", () => {
         .should("contain", "cypress@manager.com");
       cy.get("[data-cy=saveButton]").click({ force: true });
 
-      cy.wait("@update").then(response =>{
-        expect(response.method).to.eq("POST");
-        expect(response.status).to.eq(200);
+      cy.wait("@update").then(({ request, response }) => {
+        expect(request.method).to.eq("POST");
+        expect(response.statusCode).to.eq(200);
       });
 
       cy.wait("@fetch");

@@ -11,10 +11,7 @@ import {
 } from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
-import {
-  selectIsLoggedIn,
-  selectIsLoggingIn,
-} from "state-management/selectors/user.selectors";
+import { selectLoginPageViewModel } from "state-management/selectors/user.selectors";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { MatDialog } from "@angular/material/dialog";
 import { PrivacyDialogComponent } from "users/privacy-dialog/privacy-dialog.component";
@@ -39,9 +36,7 @@ interface LoginForm {
 })
 export class LoginComponent implements OnInit, OnDestroy {
   private proceedSubscription = new Subscription();
-  private hasUser$ = this.store
-    .select(selectIsLoggedIn)
-    .pipe(filter((is) => is));
+  vm$ = this.store.select(selectLoginPageViewModel);
 
   returnUrl: string;
   hide = true;
@@ -50,8 +45,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     password: ["", Validators.required],
     rememberMe: true,
   });
-
-  loading$ = this.store.select(selectIsLoggingIn);
 
   constructor(
     public dialog: MatDialog,
@@ -86,11 +79,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.proceedSubscription = this.hasUser$.subscribe(() => {
-      this.store.dispatch(fetchCurrentUserAction());
-      console.log(this.returnUrl);
-      this.router.navigateByUrl(this.returnUrl || "/datasets");
-    });
+    this.proceedSubscription = this.vm$
+      .pipe(filter((vm) => vm.isLoggedIn))
+      .subscribe(() => {
+        this.store.dispatch(fetchCurrentUserAction());
+        console.log(this.returnUrl);
+        this.router.navigateByUrl(this.returnUrl || "/datasets");
+      });
 
     this.route.queryParams.subscribe((params) => {
       // OIDC logins eventually redirect to this componenet, adding information about user

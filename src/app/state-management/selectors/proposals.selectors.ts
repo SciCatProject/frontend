@@ -89,6 +89,21 @@ export const selectDatasetsPerPage = createSelector(
   (filters) => filters.limit
 );
 
+export const selectViewProposalPageViewModel = createSelector(
+  selectCurrentProposal,
+  selectProposalDatasets,
+  selectDatasetsPage,
+  selectDatasetsCount,
+  selectDatasetsPerPage,
+  (proposal, datasets, currentPage, datasetCount, datasetsPerPage) => ({
+    proposal,
+    datasets,
+    currentPage,
+    datasetCount,
+    datasetsPerPage,
+  })
+);
+
 const restrictFilter = (filter: any, allowedKeys?: string[]) => {
   const isNully = (value: any) => {
     const hasLength = typeof value === "string" || Array.isArray(value);

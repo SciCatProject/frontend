@@ -20,8 +20,7 @@ import {
   CheckboxEvent,
 } from "shared/modules/table/table.component";
 import { selectIsLoading } from "state-management/selectors/user.selectors";
-import { ActivatedRoute } from "@angular/router";
-import { Job, UserApi } from "shared/sdk";
+import { Dataset, Job, UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";
@@ -102,8 +101,7 @@ export class DatafilesComponent
   tableData: File[] = [];
 
   constructor(
-    private route: ActivatedRoute,
-    private store: Store,
+    private store: Store<Dataset>,
     private cdRef: ChangeDetectorRef,
     private userApi: UserApi,
     private dialog: MatDialog,
@@ -205,23 +203,22 @@ export class DatafilesComponent
         }
       })
     );
-
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
-        const files: File[] = [];
         if (datablocks) {
+          const files: File[] = [];
           datablocks.forEach((block) => {
-            block.dataFileList.map((file) => {
-              this.totalFileSize += file.size;
-              file.selected = false;
-              files.push(file);
-            });
+              block.dataFileList.map((file) => {
+                this.totalFileSize += file.size;
+                file.selected = false;
+                files.push(file);
+              });
           });
+          this.count = files.length;
+          this.tableData = files.slice(0, this.pageSize);
+          this.files = files;
+          this.tooLargeFile = this.hasTooLargeFiles(this.files);
         }
-        this.count = files.length;
-        this.tableData = files.slice(0, this.pageSize);
-        this.files = files;
-        this.tooLargeFile = this.hasTooLargeFiles(this.files);
       })
     );
   }

@@ -201,4 +201,44 @@ describe("User Selectors", () => {
       ]);
     });
   });
+
+  describe("selectSampleDialogPageViewModel", () => {
+    it("should select sample dialog page view model state", () => {
+      expect(
+        fromSelectors.selectSampleDialogPageViewModel.projector(
+          initialUserState.currentUser,
+          initialUserState.profile
+        )
+      ).toEqual({ user, profile: userIdentity.profile });
+    });
+  });
+
+  describe("selectLoginPageViewModel", () => {
+    it("should select the login page view model state", () => {
+      expect(
+        fromSelectors.selectLoginPageViewModel.projector(
+          initialUserState.isLoggedIn,
+          initialUserState.isLoggingIn
+        )
+      ).toEqual({ isLoggedIn: false, isLoggingIn: false });
+    });
+  });
+
+  describe("selectUserSettingsPageViewModel", () => {
+    it("should select the user settings page view model state", () => {
+      expect(
+        fromSelectors.selectUserSettingsPageViewModel.projector(
+          initialUserState.currentUser,
+          initialUserState.profile,
+          initialUserState.catamelToken.id,
+          initialUserState.settings
+        )
+      ).toEqual({
+        user,
+        profile: userIdentity.profile,
+        catamelToken: catamelToken.id,
+        settings,
+      });
+    });
+  });
 });
