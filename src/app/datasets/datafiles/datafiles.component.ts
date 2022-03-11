@@ -19,7 +19,7 @@ import {
   PageChangeEvent,
   CheckboxEvent,
 } from "shared/modules/table/table.component";
-import { selectIsLoading } from "state-management/selectors/user.selectors";
+import { selectIsLoading, selectIsLoggedIn } from "state-management/selectors/user.selectors";
 import { Dataset, Job, UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
@@ -48,7 +48,7 @@ export class DatafilesComponent
   datablocks$ = this.store.select(selectCurrentOrigDatablocks);
   dataset$ = this.store.select(selectCurrentDataset);
   loading$ = this.store.select(selectIsLoading);
-
+  isLoggedIn$ = this.store.select(selectIsLoggedIn);
   tooLargeFile = false;
   totalFileSize = 0;
   selectedFileSize = 0;
@@ -68,7 +68,8 @@ export class DatafilesComponent
 
   fileDownloadEnabled: boolean = this.appConfig.fileDownloadEnabled;
   multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
-  globusDownloadEnabled: boolean = this.appConfig.globusDownloadEnabled;
+  fileserverBaseURL: string = this.appConfig.fileserverBaseURL;
+  fileserverButtonLabel: string = this.appConfig.fileserverButtonLabel;
   multipleDownloadAction: string | null = this.appConfig
     .multipleDownloadAction;
   maxFileSize: number | null = this.appConfig.maxDirectDownloadSize;
@@ -251,5 +252,8 @@ export class DatafilesComponent
          this.store.dispatch(submitJobAction({ job }));
       }
     });
+  }
+  getFileTransferLink() {
+    return this.fileserverBaseURL + "&origin_path=" + encodeURIComponent(this.sourcefolder);
   }
 }

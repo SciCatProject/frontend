@@ -21,7 +21,7 @@
   </div>
 </ng-template>
 
-<ng-template [ngIf]="tableData && maxFileSize">
+<ng-template [ngIf]="tableData">
   <div class="selected" fxLayout="row" fxLayoutAlign="space-evenly end">
     <div fxFlex="auto" style="margin-bottom: 0.5em;">
       Selected: {{ selectedFileSize | filesize
@@ -102,7 +102,7 @@
     </ng-template>
   </form>
 
-  <ng-template [ngIf]="globusDownloadEnabled">
+  <ng-template [ngIf]="(isLoggedIn$ | async) === false && fileserverBaseURL">
     <button
     mat-raised-button
     class="download-button"
@@ -111,9 +111,20 @@
     [disabled]="isNoneSelected"
     (click)="openDialog()"
   >
-    Download with Globus
+    {{ fileserverButtonLabel}}
   </button>
   </ng-template>
+  <ng-template [ngIf]="(isLoggedIn$ | async) && fileserverBaseURL">
+    <a
+      mat-raised-button
+      class="download-button"
+      color="accent"
+      [href]="getFileTransferLink()" target="_blank"
+    >
+    {{ fileserverButtonLabel}}
+    </a>
+  </ng-template>
+
 
   <div style="clear: both;"></div>
 </div>

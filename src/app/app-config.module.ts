@@ -19,6 +19,7 @@ export class AppConfig {
   lbBaseURL = "";
   externalAuthEndpoint: string | null = null;
   fileserverBaseURL: string | null = null;
+  fileserverButtonLabel: string | null = null;
   synapseBaseUrl: string | null = null;
   riotBaseUrl: string | null = null;
   jupyterHubUrl: string | null = null;
@@ -62,7 +63,6 @@ export class AppConfig {
   userNamePromptEnabled = false;
   loginFormEnabled = true;
   oAuth2Endpoints: OAuth2Endpoint[] = [];
-  globusDownloadEnabled: boolean;
   retrieveDestinations?: RetrieveDestinations[] = [];
 }
 
@@ -70,6 +70,7 @@ export const APP_DI_CONFIG: AppConfig = {
   lbBaseURL: environment.lbBaseURL ?? "http://localhost:3000",
   externalAuthEndpoint: environment.externalAuthEndpoint ?? null,
   fileserverBaseURL: environment.fileserverBaseURL ?? null,
+  fileserverButtonLabel: environment.fileserverButtonLabel ?? "Download",
   synapseBaseUrl: environment.synapseBaseUrl ?? null,
   riotBaseUrl: environment.riotBaseUrl ?? null,
   jupyterHubUrl: environment.jupyterHubUrl ?? null,
@@ -128,7 +129,6 @@ export const APP_DI_CONFIG: AppConfig = {
   editPublishedData: (environment.editPublishedData === undefined) ? true: environment.editPublishedData,
   oAuth2Endpoints: environment.oAuth2Endpoints ?? [],
   loginFormEnabled: (environment.loginFormEnabled == undefined) ? true: environment.loginFormEnabled,
-  globusDownloadEnabled: environment.globusDownloadEnabled ?? false
 };
 
 @NgModule({
