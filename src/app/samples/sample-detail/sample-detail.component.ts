@@ -42,6 +42,7 @@ export interface TableData {
   styleUrls: ["./sample-detail.component.scss"],
 })
 export class SampleDetailComponent implements OnInit, OnDestroy, EditableComponent {
+  private _hasUnsavedChanges = false;
   vm$ = this.store.select(selectSampleDetailPageViewModel);
 
   sample: Sample = new Sample();
@@ -49,7 +50,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy, EditableCompone
   attachment: Partial<Attachment> = new Attachment();
   show = false;
   subscriptions: Subscription[] = [];
-  private _hasUnsavedChanges = false;
+
   tableData: TableData[] = [];
   tablePaginate = true;
   tableColumns: TableColumn[] = [
