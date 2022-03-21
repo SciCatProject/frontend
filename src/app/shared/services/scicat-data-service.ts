@@ -15,12 +15,8 @@ export interface FilterLimits {
   providedIn: "root",
 })
 export class ScicatDataService {
-  private accessToken: string;
 
-  constructor(private http: HttpClient, private auth: LoopBackAuth) {
-    this.accessToken = auth.getToken().id;
-    // console.log("Got token:", this.accessToken);
-  }
+  constructor(private http: HttpClient, private auth: LoopBackAuth){}
 
   findDataById(url: string, dataId: number): Observable<any> {
     return this.http.get<any>(`${url}/${dataId}`);
@@ -143,7 +139,7 @@ export class ScicatDataService {
     const params = new HttpParams()
       .set("fields", JSON.stringify(filterFields))
       .set("limits", JSON.stringify(limits))
-      .append("access_token", this.accessToken);
+      .append("access_token", this.auth.getToken().id);
     return this.http.get<any[]>(`${url}/fullquery`, { params });
   }
 
@@ -160,7 +156,7 @@ export class ScicatDataService {
     const params = new HttpParams()
       .set("fields", JSON.stringify(filterFields))
       .set("facets", JSON.stringify([]))
-      .append("access_token", this.accessToken);
+      .append("access_token", this.auth.getToken().id);
 
     return this.http.get<any>(`${url}/fullfacet`, { params });
   }
