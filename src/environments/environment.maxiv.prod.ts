@@ -4,6 +4,7 @@ export const environment = {
   production: true,
   lbBaseURL: "https://scicat.maxiv.lu.se",
   fileserverBaseURL: null,
+  fileserverButtonLabel: null,
   synapseBaseUrl: null,
   riotBaseUrl: null,
   jupyterHubUrl: "https://jupyterhub.maxiv.lu.se",

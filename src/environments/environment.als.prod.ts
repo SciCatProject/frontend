@@ -10,6 +10,7 @@ export const environment = {
   lbBaseURL: "https://dataportal.als.lbl.gov",
   jupyterHubUrl: "https://jupyter.nersc.gov",
   externalAuthEndpoint: "/auth/msad",
+  fileserverButtonLabel: null,
   addDatasetEnabled: false,
   archiveWorkflowEnabled: false,
   columnSelectEnabled: true,

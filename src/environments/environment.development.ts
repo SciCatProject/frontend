@@ -8,6 +8,7 @@ import { TableColumn } from "state-management/models";
 export const environment = {
   production: true,
   lbBaseURL: "https://dacat-development.psi.ch",
+  fileserverButtonLabel: null,
   archiveWorkflowEnabled: true,
   retrieveDestinations: [{option: "PSI", location: "/home/out"}, {option:"CSCS (Testphase)"}],
   externalAuthEndpoint: "/auth/msad",

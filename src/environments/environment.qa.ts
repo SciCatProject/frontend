@@ -9,6 +9,7 @@ export const environment = {
   production: true,
   lbBaseURL: "https://dacat-qa.psi.ch",
   fileserverBaseURL: null,
+  fileserverButtonLabel: null,
   synapseBaseUrl: null,
   riotBaseUrl: null,
   jupyterHubUrl: "https://jupyterhub.apps.ocp4a.psi.ch/hub/login",

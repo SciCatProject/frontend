@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   lbBaseURL: "https://dacat-staging.psi.ch",
+  fileserverButtonLabel: null,
   fileserverBaseURL: null,
   synapseBaseUrl: null,
   riotBaseUrl: null,

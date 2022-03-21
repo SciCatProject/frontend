@@ -9,6 +9,7 @@ export const environment = {
   production: true,
   lbBaseURL: "http://catamel:3000",
   fileserverBaseURL: "/fileserver",
+  fileserverButtonLabel: null,
   synapseBaseUrl: "https://scitest.esss.lu.se",
   riotBaseUrl: "http://scitest.esss.lu.se/riot",
   jupyterHubUrl: "https://jupyterhub.esss.lu.se/",
