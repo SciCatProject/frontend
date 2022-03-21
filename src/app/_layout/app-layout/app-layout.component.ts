@@ -1,24 +1,19 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { Store } from "@ngrx/store";
-import {
-  selectIsLoggedIn,
-  selectTheme,
-} from "state-management/selectors/user.selectors";
-import { Observable } from "rxjs";
+import { selectIsLoggedIn } from "state-management/selectors/user.selectors";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "app-app-layout",
   templateUrl: "./app-layout.component.html",
   styleUrls: ["./app-layout.component.scss"],
 })
-export class AppLayoutComponent implements OnInit {
-  darkTheme$: Observable<any> = new Observable<any>();
-
+export class AppLayoutComponent {
+  appConfig = this.appConfigService.getConfig();
   loggedIn$ = this.store.select(selectIsLoggedIn);
 
-  constructor(private store: Store) {}
-
-  ngOnInit() {
-    this.darkTheme$ = this.store.select(selectTheme);
-  }
+  constructor(
+    private appConfigService: AppConfigService,
+    private store: Store
+  ) {}
 }

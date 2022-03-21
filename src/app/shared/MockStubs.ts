@@ -101,7 +101,11 @@ export class MockRouter {
   serializeUrl = (url: UrlTree) => "";
 }
 
-export class MockHttp {}
+export class MockHttp {
+  public get(url: string) {
+    return of({});
+  }
+}
 
 export class MockConfigService {
   getConfigFile() {

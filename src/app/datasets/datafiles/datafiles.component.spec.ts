@@ -2,7 +2,6 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { DatafilesComponent } from "./datafiles.component";
-import { AppConfigModule } from "app-config.module";
 import { UserApi } from "shared/sdk";
 import { MatTableModule } from "@angular/material/table";
 import { PipesModule } from "shared/pipes/pipes.module";
@@ -13,17 +12,19 @@ import { MockUserApi } from "shared/MockStubs";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
+import { AppConfigService } from "app-config.service";
 
 describe("DatafilesComponent", () => {
   let component: DatafilesComponent;
   let fixture: ComponentFixture<DatafilesComponent>;
+
+  const getConfig = () => ({});
 
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
         schemas: [NO_ERRORS_SCHEMA],
         imports: [
-          AppConfigModule,
           MatButtonModule,
           MatIconModule,
           MatTableModule,
@@ -37,7 +38,10 @@ describe("DatafilesComponent", () => {
       });
       TestBed.overrideComponent(DatafilesComponent, {
         set: {
-          providers: [{ provide: UserApi, useClass: MockUserApi }],
+          providers: [
+            { provide: AppConfigService, useValue: { getConfig } },
+            { provide: UserApi, useClass: MockUserApi },
+          ],
         },
       });
       TestBed.compileComponents();

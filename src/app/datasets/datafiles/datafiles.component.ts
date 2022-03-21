@@ -1,9 +1,6 @@
-import { APP_CONFIG, AppConfig } from "app-config.module";
-import { Dataset } from "shared/sdk/models";
 import {
   Component,
   OnInit,
-  Inject,
   ChangeDetectorRef,
   OnDestroy,
   AfterViewInit,
@@ -21,9 +18,10 @@ import {
   CheckboxEvent,
 } from "shared/modules/table/table.component";
 import { selectIsLoading } from "state-management/selectors/user.selectors";
-import { Datablock, UserApi } from "shared/sdk";
+import { UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
+import { AppConfigService } from "app-config.service";
 
 export interface File {
   path: string;
@@ -46,6 +44,8 @@ export class DatafilesComponent
   datablocks$ = this.store.select(selectCurrentOrigDatablocks);
   dataset$ = this.store.select(selectCurrentDataset);
   loading$ = this.store.select(selectIsLoading);
+
+  appConfig = this.appConfigService.getConfig();
 
   tooLargeFile = false;
   totalFileSize = 0;
@@ -96,10 +96,10 @@ export class DatafilesComponent
   tableData: File[] = [];
 
   constructor(
-    private store: Store<Dataset>,
+    public appConfigService: AppConfigService,
+    private store: Store,
     private cdRef: ChangeDetectorRef,
-    private userApi: UserApi,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
+    private userApi: UserApi
   ) {}
 
   onPageChange(event: PageChangeEvent) {
@@ -201,11 +201,11 @@ export class DatafilesComponent
         if (datablocks) {
           const files: File[] = [];
           datablocks.forEach((block) => {
-              block.dataFileList.map((file) => {
-                this.totalFileSize += file.size;
-                file.selected = false;
-                files.push(file);
-              });
+            block.dataFileList.map((file) => {
+              this.totalFileSize += file.size;
+              file.selected = false;
+              files.push(file);
+            });
           });
           this.count = files.length;
           this.tableData = files.slice(0, this.pageSize);

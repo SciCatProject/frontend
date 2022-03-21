@@ -2,7 +2,6 @@ import {
   Component,
   OnInit,
   OnDestroy,
-  Inject,
   ChangeDetectorRef,
   AfterViewChecked,
 } from "@angular/core";
@@ -26,7 +25,6 @@ import {
   sortByColumnAction,
 } from "state-management/actions/logbooks.actions";
 import { ActivatedRoute, Router } from "@angular/router";
-import { APP_CONFIG, AppConfig } from "app-config.module";
 import { LogbookFilters } from "state-management/models";
 
 import { map, take, filter, distinctUntilChanged } from "rxjs/operators";
@@ -35,6 +33,7 @@ import {
   PageChangeEvent,
   SortChangeEvent,
 } from "shared/modules/table/table.component";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "app-logbooks-dashboard",
@@ -51,6 +50,8 @@ export class LogbooksDashboardComponent
     .select(selectHasPrefilledFilters)
     .pipe(filter((has) => has));
 
+  appConfig = this.appConfigService.getConfig();
+
   logbook: Logbook = new Logbook();
   filters: LogbookFilters = {
     textSearch: "",
@@ -65,11 +66,11 @@ export class LogbooksDashboardComponent
   subscriptions: Subscription[] = [];
 
   constructor(
+    public appConfigService: AppConfigService,
     private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
+    private store: Store
   ) {}
 
   applyRouterState(name: string, filters: LogbookFilters) {

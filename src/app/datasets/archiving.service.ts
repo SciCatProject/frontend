@@ -1,10 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { RetrieveDestinations } from "app-config.module";
-
 import { combineLatest, Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
-
 import { Dataset, Job, User } from "state-management/models";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import {
@@ -12,6 +9,7 @@ import {
   selectTapeCopies,
   selectProfile,
 } from "state-management/selectors/user.selectors";
+import { RetrieveDestinations } from "app-config.service";
 
 @Injectable()
 export class ArchivingService {

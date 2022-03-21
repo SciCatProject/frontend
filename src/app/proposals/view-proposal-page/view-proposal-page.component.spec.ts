@@ -17,10 +17,14 @@ import {
   fetchProposalDatasetsAction,
 } from "state-management/actions/proposals.actions";
 import { PageChangeEvent } from "shared/modules/table/table.component";
-import { APP_CONFIG } from "app-config.module";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatIconModule } from "@angular/material/icon";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { AppConfigService } from "app-config.service";
+
+const getConfig = () => ({
+  logbookEnabled: true,
+});
 
 describe("ViewProposalPageComponent", () => {
   let component: ViewProposalPageComponent;
@@ -50,7 +54,7 @@ describe("ViewProposalPageComponent", () => {
           providers: [
             { provide: Router, useValue: router },
             { provide: ActivatedRoute, useClass: MockActivatedRoute },
-            { provide: APP_CONFIG, useValue: { logbookEnabled: true } },
+            { provide: AppConfigService, useValue: { getConfig } },
           ],
         },
       });

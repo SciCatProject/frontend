@@ -1,5 +1,4 @@
-import { Component, OnInit, Inject, Input, OnDestroy } from "@angular/core";
-import { APP_CONFIG, AppConfig } from "app-config.module";
+import { Component, OnInit, Input, OnDestroy } from "@angular/core";
 import { ArchViewMode, MessageType, Dataset } from "state-management/models";
 import { Store } from "@ngrx/store";
 import {
@@ -19,6 +18,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { selectSubmitError } from "state-management/selectors/jobs.selectors";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "dataset-table-actions",
@@ -26,6 +26,7 @@ import { selectSubmitError } from "state-management/selectors/jobs.selectors";
   styleUrls: ["./dataset-table-actions.component.scss"],
 })
 export class DatasetTableActionsComponent implements OnInit, OnDestroy {
+  appConfig = this.appConfigService.getConfig();
   loading$ = this.store.select(selectIsLoading);
 
   @Input() selectedSets: Dataset[] | null = [];
@@ -47,7 +48,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
 
   constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private appConfigService: AppConfigService,
     private archivingSrv: ArchivingService,
     public dialog: MatDialog,
     private store: Store

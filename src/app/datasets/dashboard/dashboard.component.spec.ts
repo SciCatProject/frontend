@@ -1,4 +1,3 @@
-import { APP_CONFIG } from "app-config.module";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import {
   ComponentFixture,
@@ -29,6 +28,7 @@ import { MatSidenav, MatSidenavModule } from "@angular/material/sidenav";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
+import { AppConfigService } from "app-config.service";
 
 class MockMatDialog {
   open() {
@@ -52,6 +52,11 @@ describe("DashboardComponent", () => {
   const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
+
+  const getConfig = () => ({
+    shoppingCartOnHeader: true,
+  });
+
   let store: MockStore;
   let dispatchSpy;
 
@@ -81,7 +86,7 @@ describe("DashboardComponent", () => {
       TestBed.overrideComponent(DashboardComponent, {
         set: {
           providers: [
-            { provide: APP_CONFIG, useValue: { shoppingCartOnHeader: "true" } },
+            { provide: AppConfigService, useValue: { getConfig } },
             { provide: ActivatedRoute, useClass: MockActivatedRoute },
             { provide: MatDialog, useClass: MockMatDialog },
             { provide: Router, useValue: router },

@@ -8,10 +8,7 @@ import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 import { MockActivatedRoute, MockRouter, MockStore } from "shared/MockStubs";
-
 import { LoginComponent } from "./login.component";
-
-import { APP_CONFIG, AppConfigModule, OAuth2Endpoint } from "app-config.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { loginAction } from "state-management/actions/user.actions";
 import { PrivacyDialogComponent } from "users/privacy-dialog/privacy-dialog.component";
@@ -22,8 +19,17 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
+import { AppConfigService, OAuth2Endpoint } from "app-config.service";
 import { provideMockStore } from "@ngrx/store/testing";
 import { selectLoginPageViewModel } from "state-management/selectors/user.selectors";
+
+const getConfig = () => ({
+  archiveWorkflowEnabled: true,
+  facility: "not-ESS",
+  loginFormEnabled: true,
+  oAuth2Endpoints: [],
+  lbBaseURL: "http://foo",
+});
 
 describe("LoginComponent", () => {
   let component: LoginComponent;
@@ -32,22 +38,11 @@ describe("LoginComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  const endpoints: OAuth2Endpoint[] = [];
-  const appConfig = {
-    disabledDatasetColumns: [],
-    archiveWorkflowEnabled: true,
-    facility: "not-ESS",
-    loginFormEnabled: true,
-    oAuth2Endpoints: endpoints,
-    lbBaseURL: "http://foo",
-  };
-
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [LoginComponent],
         imports: [
-          AppConfigModule,
           BrowserAnimationsModule,
           FormsModule,
           MatButtonModule,
@@ -76,8 +71,8 @@ describe("LoginComponent", () => {
           // These should sync up with what is in the constructor, they do NOT need to be provided in the config for the testing module
           providers: [
             {
-              provide: APP_CONFIG,
-              useValue: appConfig,
+              provide: AppConfigService,
+              useValue: { getConfig },
             },
             { provide: ActivatedRoute, useClass: MockActivatedRoute },
             { provide: Router, useClass: MockRouter },
@@ -98,9 +93,9 @@ describe("LoginComponent", () => {
 
   describe("component construction", () => {
     beforeEach(() => {
-      appConfig.loginFormEnabled = false;
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
+      component.appConfig.loginFormEnabled = false;
       fixture.detectChanges();
       TestBed.compileComponents();
     });
@@ -111,10 +106,10 @@ describe("LoginComponent", () => {
 
   describe("#openPrivacyDialog()", () => {
     beforeEach(() => {
-      appConfig.loginFormEnabled = false;
-      appConfig.facility = "ESS";
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
+      component.appConfig.loginFormEnabled = false;
+      component.appConfig.facility = "ESS";
       fixture.detectChanges();
     });
     it("should open the privacy dialog", () => {
@@ -132,10 +127,10 @@ describe("LoginComponent", () => {
 
   describe("not ESS", () => {
     beforeEach(() => {
-      appConfig.facility = "not-ESS";
-      appConfig.loginFormEnabled = true;
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
+      component.appConfig.facility = "not-ESS";
+      component.appConfig.loginFormEnabled = true;
       fixture.detectChanges();
     });
     it("should should not appear", () => {
@@ -165,9 +160,9 @@ describe("LoginComponent", () => {
 
   describe("form not configured", () => {
     beforeEach(() => {
-      appConfig.loginFormEnabled = false;
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
+      component.appConfig.loginFormEnabled = false;
       fixture.detectChanges();
     });
 
@@ -179,9 +174,9 @@ describe("LoginComponent", () => {
 
   describe("form configured", () => {
     beforeEach(() => {
-      appConfig.loginFormEnabled = true;
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
+      component.appConfig.loginFormEnabled = true;
       fixture.detectChanges();
     });
 
@@ -207,12 +202,12 @@ describe("LoginComponent", () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
-      fixture.detectChanges();
       const endpoint: OAuth2Endpoint = {
         displayText: "oauth provider",
         authURL: "/auth/foo",
       };
-      appConfig.oAuth2Endpoints = [endpoint];
+      component.appConfig.oAuth2Endpoints = [endpoint];
+      fixture.detectChanges();
     });
     it("should display OAuth2 provider", () => {
       dispatchSpy = spyOn(component, "redirectOIDC");
