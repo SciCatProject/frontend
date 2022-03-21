@@ -13,15 +13,15 @@ describe("AppConfigModule", () =>{
       imports: [AppConfigModule],
     });
   });
-  
+
   it("initializes", () => {
     const module = TestBed.inject(AppConfigModule);
     expect(module).toBeTruthy();
   });
 
-  
+
   describe("initial environment", () =>{
-    
+
     it("initialized", () => {
       expect(environment.loginFormEnabled).toBeTruthy();
       expect(environment.oAuth2Endpoints.length).toEqual(0);
@@ -40,6 +40,7 @@ describe("AppConfigModule", () =>{
     it ("constructs", () => {
       const appConfig: AppConfig = {
         lbBaseURL: "lbBaseURL",
+        fileserverButtonLabel: "Download",
         externalAuthEndpoint: "externalAuthEndpoint",
         fileserverBaseURL: "fileserverBaseURL",
         synapseBaseUrl:  "synapseBaseUrl",
@@ -97,10 +98,10 @@ describe("AppConfigModule", () =>{
       expect(appConfig.disabledDatasetColumns[0]).toEqual("disabledDatasetColumns");
     });
   });
-  
+
   describe("OAuth2Endpoint", () => {
 
-  
+
 
     it("has initial values", () => {
       const endpoint2: OAuth2Endpoint = new OAuth2Endpoint();
@@ -114,7 +115,7 @@ describe("AppConfigModule", () =>{
         displayText: "test",
         authURL: "foo/bar"
       };
-  
+
       expect(endpoint.displayText).toEqual("test");
       expect(endpoint.authURL).toEqual("foo/bar");
       expect(endpoint.displayImage).toBeUndefined();
