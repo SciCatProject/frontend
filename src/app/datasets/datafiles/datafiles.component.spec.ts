@@ -9,10 +9,11 @@ import { PipesModule } from "shared/pipes/pipes.module";
 import { RouterModule } from "@angular/router";
 import { StoreModule } from "@ngrx/store";
 import { CheckboxEvent } from "shared/modules/table/table.component";
-import { MockUserApi } from "shared/MockStubs";
+import { MockMatDialogRef, MockUserApi } from "shared/MockStubs";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
+import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 
 describe("DatafilesComponent", () => {
   let component: DatafilesComponent;
@@ -29,6 +30,7 @@ describe("DatafilesComponent", () => {
           MatTableModule,
           PipesModule,
           ReactiveFormsModule,
+          MatDialogModule,
           RouterModule,
           RouterModule.forRoot([], { relativeLinkResolution: "legacy" }),
           StoreModule.forRoot({}),
@@ -37,7 +39,9 @@ describe("DatafilesComponent", () => {
       });
       TestBed.overrideComponent(DatafilesComponent, {
         set: {
-          providers: [{ provide: UserApi, useClass: MockUserApi }],
+          providers: [
+            { provide: UserApi, useClass: MockUserApi },
+            { provide: MatDialogRef, useClass: MockMatDialogRef }]
         },
       });
       TestBed.compileComponents();

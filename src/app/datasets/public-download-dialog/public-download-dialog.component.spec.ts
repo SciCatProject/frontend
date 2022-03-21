@@ -1,4 +1,6 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MockMatDialogRef } from "shared/MockStubs";
 
 import { PublicDownloadDialogComponent } from "./public-download-dialog.component";
 
@@ -6,12 +8,24 @@ describe("PublicDownloadDialogComponent", () => {
   let component: PublicDownloadDialogComponent;
   let fixture: ComponentFixture<PublicDownloadDialogComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ PublicDownloadDialogComponent ]
+  beforeEach(
+    waitForAsync(() =>{
+      TestBed.configureTestingModule({
+        declarations: [ PublicDownloadDialogComponent ],
+        imports:[
+          MatDialogModule
+        ]
+      });
+      TestBed.overrideComponent(PublicDownloadDialogComponent, {
+        set: {
+          providers: [
+            { provide: MatDialogRef, useClass: MockMatDialogRef },
+            { provide: MAT_DIALOG_DATA, useClass: MockMatDialogRef },],
+        },
+      });
+      TestBed.compileComponents();
     })
-    .compileComponents();
-  });
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PublicDownloadDialogComponent);
