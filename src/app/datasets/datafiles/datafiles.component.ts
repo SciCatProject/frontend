@@ -68,7 +68,7 @@ export class DatafilesComponent
 
   fileDownloadEnabled: boolean = this.appConfig.fileDownloadEnabled;
   multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
-  fileserverBaseURL: string = this.appConfig.fileserverBaseURL;
+  fileserverBaseURL: string | null = this.appConfig.fileserverBaseURL;
   fileserverButtonLabel: string | null = this.appConfig.fileserverButtonLabel;
   multipleDownloadAction: string | null = this.appConfig
     .multipleDownloadAction;
