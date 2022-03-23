@@ -25,6 +25,8 @@
 @use "./app/shared/modules/table/table-theme" as table;
 @use "./app/users/user-settings/user-settings-theme" as user-settings;
 
+@import "./assets/theme.css";
+
 $custom-typography: mat.define-typography-config(
   $font-family: '"Titillium Web", Calibri, sans-serif;',
 );
@@ -37,222 +39,114 @@ $custom-typography: mat.define-typography-config(
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 
-$cyan: (
-  50: #f2f9fc,
-  100: #e5f4f9,
-  200: #cceaf4,
-  300: #b2e0ee,
-  400: #99d5e9,
-  500: #7fcbe3,
-  600: #66c1de,
-  700: #4cb6d8,
-  800: #32acd3,
-  900: #19a2cd,
-  1000: #0099c8,
+$theme-primary: (
+  default: var(--theme-primary-default),
+  lighter: var(--theme-primary-lighter),
+  darker: var(--theme-primary-darker),
   contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    300: #000000,
-    400: #000000,
-    500: #000000,
-    600: #ffffff,
-    700: #ffffff,
-    800: #ffffff,
-    900: #ffffff,
-    1000: #ffffff,
-  ),
+    default: var(--theme-primary-default-contrast),
+    lighter: var(--theme-primary-lighter-contrast),
+    darker: var(--theme-primary-darker-contrast)
+  )
 );
 
-$navy: (
-  50: #f2f4f7,
-  100: #e5eaef,
-  200: #ccd6e0,
-  400: #99adc1,
-  600: #6684a3,
-  800: #325b84,
-  1000: #003366,
+$theme-accent: (
+  default: var(--theme-accent-default),
+  lighter: var(--theme-accent-lighter),
+  darker: var(--theme-accent-darker),
   contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    400: #000000,
-    600: #ffffff,
-    800: #ffffff,
-    1000: #ffffff,
-  ),
+    default: var(--theme-accent-default-contrast),
+    lighter: var(--theme-accent-lighter-contrast),
+    darker: var (--theme-accent-darker-contrast)
+  )
 );
 
-$grass: (
-  50: #f9fbf2,
-  100: #f4f8e5,
-  200: #eaf2cc,
-  400: #d6e599,
-  600: #c1d866,
-  800: #adcb32,
-  1000: #99be00,
+$theme-warn: (
+  default: var(--theme-warn-default),
+  lighter: var(--theme-warn-lighter),
+  darker: var(--theme-warn-darker),
   contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    400: #000000,
-    600: #ffffff,
-    800: #ffffff,
-    1000: #ffffff,
-  ),
+    default: var(--theme-warn-default-contrast),
+    lighter: var(--theme-warn-lighter-contrast),
+    darker: var(--theme-warn-darker-contrast)
+  )
 );
 
-$forest: (
-  50: #f2f7f5,
-  100: #e5efec,
-  200: #cce0da,
-  400: #99c1b5,
-  600: #66a390,
-  800: #32846a,
-  1000: #006646,
+$theme-warn-2: (
+  default: var(--theme-warn-2-default),
+  lighter: var(--theme-warn-2-lighter),
+  darker: var(--theme-warn-2-darker),
   contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    400: #000000,
-    600: #ffffff,
-    800: #ffffff,
-    1000: #ffffff,
-  ),
+    default: var(--theme-warn-2-default-contrast),
+    lighter: var(--theme-warn-2-lighter-contrast),
+    darker: var(--theme-warn-2-darker-contrast)
+  )
 );
 
-$orange: (
-  50: #fff8f2,
-  100: #fff2e5,
-  200: #ffe5cc,
-  400: #ffcb99,
-  600: #ffb166,
-  800: #ff9732,
-  1000: #ff7d00,
+$theme-header-1: (
+  default: var(--theme-header-1-default),
+  lighter: var(--theme-header-1-lighter),
+  darker: var(--theme-header-1-darker),
   contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    400: #000000,
-    600: #ffffff,
-    800: #ffffff,
-    1000: #ffffff,
-  ),
+    default: var(--theme-header-1-default-contrast),
+    lighter: var(--theme-header-1-lighter-contrast),
+    darker: var(--theme-header-1-darker-contrast)
+  )
 );
 
-$purple: (
-  50: #f8f3f8,
-  100: #f2e7f2,
-  200: #e6d0e6,
-  400: #cda1cd,
-  600: #b472b4,
-  800: #9b429b,
-  1000: #821482,
+$theme-header-2: (
+  default: var(--theme-header-2-default),
+  lighter: var(--theme-header-2-lighter),
+  darker: var(--theme-header-2-darker),
   contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    400: #000000,
-    600: #ffffff,
-    800: #ffffff,
-    1000: #ffffff,
-  ),
+    default: var(--theme-header-2-default-contrast),
+    lighter: var(--theme-header-2-lighter-contrast),
+    darker: var(--theme-header-2-darker-contrast)
+  )
 );
 
-$grey: (
-  50: #f2f2f2,
-  100: #e5e5e5,
-  200: #cccccc,
-  300: #b2b2b2,
-  400: #999999,
-  500: #7f7f7f,
+$theme-header-3: (
+  default: var(--theme-header-3-default),
+  lighter: var(--theme-header-3-lighter),
+  darker: var(--theme-header-3-darker),
   contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    300: #000000,
-    400: #000000,
-    500: #000000,
-  ),
+    default: var(--theme-header-3-default-contrast),
+    lighter: var(--theme-header-3-lighter-contrast),
+    darker: var(--theme-header-3-darker-contrast)
+  )
 );
 
-$yellow: (
-  50: #e1dc7d,
-  100: #ffbe00,
-  200: #d28c14,
+$theme-header-4: (
+  default: var(--theme-header-4-default),
+  lighter: var(--theme-header-4-lighter),
+  darker: var(--theme-header-4-darker),
   contrast: (
-    50: #000000,
-    100: #ffffff,
-    200: #ffffff,
-  ),
+    default: var(--theme-header-4-default-contrast),
+    lighter: var(--theme-header-4-lighter-contrast),
+    darker: var(--theme-header-4-darker-contrast)
+  )
 );
 
-$red: (
-  50: #ff6e6e,
-  100: #c81919,
-  200: #820019,
+$theme-hover: (
+  default: var(--theme-hover-default),
+  lighter: var(--theme-hover-lighter),
+  darker: var(--theme-hover-darker),
   contrast: (
-    50: #000000,
-    100: #ffffff,
-    200: #ffffff,
-  ),
+    default: var(--theme-hover-default-contrast),
+    lighter: var(--theme-hover-lighter-contrast),
+    darker: var(--theme-hover-darker-contrast)
+  )
 );
 
-// The Max IV green palette contains the standard green used on the maxiv.lu.se website
-// It can be set changing $primary to mat.define-palette($max-iv-green-palette, 500)
-$max-iv-green-palette: (
-  50: #f0f7e0,
-  100: #daecb3,
-  200: #c1df80,
-  300: #a8d24d,
-  400: #95c826,
-  500: #82be00,
-  600: #7ab800,
-  700: #6faf00,
-  800: #65a700,
-  900: #529900,
-  A100: #e0ffc4,
-  A200: #c5ff91,
-  A400: #aaff5e,
-  A700: #9cff45,
-  contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    300: #000000,
-    400: #000000,
-    500: #ffffff,
-    600: #ffffff,
-    700: #ffffff,
-    800: #ffffff,
-    900: #ffffff,
-    A100: #000000,
-    A200: #000000,
-    A400: #000000,
-    A700: #000000,
-  ),
-);
-
-$max-iv-orange-palette: (
-  300: #fec34d,
-  500: #fea901,
-  700: #fe9801,
-  contrast: (
-    300: #000000,
-    500: #000000,
-    700: #000000,
-  ),
-);
-
-$primary: mat.define-palette($cyan, 1000, 400, 800);
-$accent: mat.define-palette($grass, 1000, 400, 800);
-$warn: mat.define-palette($red, 100, 50, 200);
-$warn-2: mat.define-palette($yellow, 100, 50, 200);
-$header-1: mat.define-palette($navy, 1000, 400, 800);
-$header-2: mat.define-palette($forest, 1000, 400, 800);
-$header-3: mat.define-palette($orange, 1000, 400, 800);
-$header-4: mat.define-palette($purple, 1000, 400, 800);
-$hover: mat.define-palette($grey, 500, 100, 300);
+$primary: mat.define-palette($theme-primary, "default", "lighter", "darker");
+$accent: mat.define-palette($theme-accent, "default", "lighter", "darker");
+$warn: mat.define-palette($theme-warn, "default", "lighter", "darker");
+$warn-2: mat.define-palette($theme-warn-2, "default", "lighter", "darker");
+$header-1: mat.define-palette($theme-header-1, "default", "lighter", "darker");
+$header-2: mat.define-palette($theme-header-2, "default", "lighter", "darker");
+$header-3: mat.define-palette($theme-header-3, "default", "lighter", "darker");
+$header-4: mat.define-palette($theme-header-4, "default", "lighter", "darker");
+$hover: mat.define-palette($theme-hover, "default", "lighter", "darker");
 
 @function custom-light-theme(
   $primary,
@@ -280,7 +174,7 @@ $hover: mat.define-palette($grey, 500, 100, 300);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$ess-theme: custom-light-theme(
+$theme: custom-light-theme(
   $primary,
   $accent,
   $warn,
@@ -295,108 +189,30 @@ $ess-theme: custom-light-theme(
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include mat.all-component-themes($ess-theme);
-@include app.theme($ess-theme);
-@include app-header.theme($ess-theme);
-@include batch-view.theme($ess-theme);
-@include dashboard.theme($ess-theme);
-@include datafiles.theme($ess-theme);
-@include dataset-detail.theme($ess-theme);
-@include dataset-details-dashboard.theme($ess-theme);
-@include dataset-lifecycle.theme($ess-theme);
-@include dataset-table.theme($ess-theme);
-@include dataset-table-settings.theme($ess-theme);
-@include reduce.theme($ess-theme);
-@include instrument-details.theme($ess-theme);
-@include logbooks-detail.theme($ess-theme);
-@include logbooks-table.theme($ess-theme);
-@include proposal-detail.theme($ess-theme);
-@include publisheddata-details.theme($ess-theme);
-@include sample-dashboard.theme($ess-theme);
-@include sample-detail.theme($ess-theme);
-@include breadcrumb.theme($ess-theme);
-@include error-page.theme($ess-theme);
-@include shared-table.theme($ess-theme);
-@include table.theme($ess-theme);
-@include user-settings.theme($ess-theme);
-
-.maxiv-theme {
-  $primary: mat.define-palette($max-iv-green-palette, 700);
-  $accent: mat.define-palette($max-iv-orange-palette, 500, 300, 700);
-  $warn: mat.define-palette($red, 100, 50, 200);
-  $warn-2: mat.define-palette($yellow, 100, 50, 200);
-  $header-1: mat.define-palette($navy, 1000, 400, 800);
-  $header-2: mat.define-palette($forest, 1000, 400, 800);
-  $header-3: mat.define-palette($orange, 1000, 400, 800);
-  $header-4: mat.define-palette($purple, 1000, 400, 800);
-  $hover: mat.define-palette($grey, 500, 100, 300);
-
-  @function custom-light-theme(
-    $primary,
-    $accent,
-    $warn,
-    $warn-2,
-    $header-1,
-    $header-2,
-    $header-3,
-    $header-4,
-    $hover
-  ) {
-    @return map-merge(
-      mat.define-light-theme($primary, $accent, $warn),
-      (
-        warn-2: $warn-2,
-        header-1: $header-1,
-        header-2: $header-2,
-        header-3: $header-4,
-        header-4: $header-4,
-        hover: $hover,
-      )
-    );
-  }
-
-  // Create the theme object. A theme consists of configurations for individual
-  // theming systems such as "color" or "typography".
-  $theme: custom-light-theme(
-    $primary,
-    $accent,
-    $warn,
-    $warn-2,
-    $header-1,
-    $header-2,
-    $header-3,
-    $header-4,
-    $hover
-  );
-
-  // Include theme styles for core and each component used in your app.
-  // Alternatively, you can import and @include the theme mixins for each component
-  // that you are using.
-  @include mat.all-component-themes($theme);
-  @include app.theme($theme);
-  @include app-header.theme($theme);
-  @include batch-view.theme($theme);
-  @include dashboard.theme($theme);
-  @include datafiles.theme($theme);
-  @include dataset-detail.theme($theme);
-  @include dataset-details-dashboard.theme($theme);
-  @include dataset-lifecycle.theme($theme);
-  @include dataset-table.theme($theme);
-  @include dataset-table-settings.theme($theme);
-  @include reduce.theme($theme);
-  @include instrument-details.theme($theme);
-  @include logbooks-detail.theme($theme);
-  @include logbooks-table.theme($theme);
-  @include proposal-detail.theme($theme);
-  @include publisheddata-details.theme($theme);
-  @include sample-dashboard.theme($theme);
-  @include sample-detail.theme($theme);
-  @include breadcrumb.theme($theme);
-  @include error-page.theme($theme);
-  @include shared-table.theme($theme);
-  @include table.theme($theme);
-  @include user-settings.theme($theme);
-}
+@include mat.all-component-themes($theme);
+@include app.theme($theme);
+@include app-header.theme($theme);
+@include batch-view.theme($theme);
+@include dashboard.theme($theme);
+@include datafiles.theme($theme);
+@include dataset-detail.theme($theme);
+@include dataset-details-dashboard.theme($theme);
+@include dataset-lifecycle.theme($theme);
+@include dataset-table.theme($theme);
+@include dataset-table-settings.theme($theme);
+@include reduce.theme($theme);
+@include instrument-details.theme($theme);
+@include logbooks-detail.theme($theme);
+@include logbooks-table.theme($theme);
+@include proposal-detail.theme($theme);
+@include publisheddata-details.theme($theme);
+@include sample-dashboard.theme($theme);
+@include sample-detail.theme($theme);
+@include breadcrumb.theme($theme);
+@include error-page.theme($theme);
+@include shared-table.theme($theme);
+@include table.theme($theme);
+@include user-settings.theme($theme);
 
 /* You can add global styles to this file, and also import other style files */
 
