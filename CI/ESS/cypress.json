@@ -10,5 +10,6 @@
   "viewportWidth": 1920,
   "viewportHeight": 1080,
   "retries": 1,
-  "defaultCommandTimeout": 15000
+  "defaultCommandTimeout": 15000,
+  "chromeWebSecurity": false
 }
