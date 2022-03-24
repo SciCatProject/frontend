@@ -63,7 +63,7 @@ export class AppConfigService {
 
   async loadAppConfig(): Promise<void> {
     try {
-      this.appConfig = await this.http.get("/api/v3/config").toPromise();
+      this.appConfig = await this.http.get("/client/config.json").toPromise();
     } catch (err) {
       console.log("No config available in backend, trying with local config.");
       try {
