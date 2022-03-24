@@ -9,7 +9,6 @@ import {
   MockActivatedRoute,
 } from "shared/MockStubs";
 import { Store, ActionsSubject } from "@ngrx/store";
-import { APP_CONFIG } from "app-config.module";
 import { PublishedDataApi } from "shared/sdk";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { of } from "rxjs";
@@ -61,7 +60,6 @@ describe("PublisheddataEditComponent", () => {
           providers: [
             { provide: ActivatedRoute, useClass: MockActivatedRoute },
             { provide: ActionsSubject, useValue: of({}) },
-            { provide: APP_CONFIG, useValue: { facility: "test" } },
             { provide: PublishedDataApi, useClass: MockPublishedDataApi },
             { provide: Router, useClass: MockRouter },
             { provide: Store, useClass: MockStore },

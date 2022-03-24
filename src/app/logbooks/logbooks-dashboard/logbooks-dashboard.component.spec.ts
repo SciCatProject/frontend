@@ -10,7 +10,6 @@ import { LogbooksDashboardComponent } from "./logbooks-dashboard.component";
 import { Store, StoreModule } from "@ngrx/store";
 import { MockStore, MockActivatedRoute } from "shared/MockStubs";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AppConfigModule } from "app-config.module";
 import {
   setTextFilterAction,
   fetchLogbookAction,
@@ -30,6 +29,11 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { AppConfigService } from "app-config.service";
+
+const getConfig = () => ({
+  riotBaseUrl: "https://riot.base.com",
+});
 
 describe("DashboardComponent", () => {
   let component: LogbooksDashboardComponent;
@@ -52,7 +56,6 @@ describe("DashboardComponent", () => {
         schemas: [NO_ERRORS_SCHEMA],
         declarations: [LogbooksDashboardComponent],
         imports: [
-          AppConfigModule,
           BrowserAnimationsModule,
           MatCardModule,
           MatExpansionModule,
@@ -65,6 +68,7 @@ describe("DashboardComponent", () => {
         set: {
           providers: [
             { provide: ActivatedRoute, useClass: MockActivatedRoute },
+            { provide: AppConfigService, useValue: { getConfig } },
           ],
         },
       }).compileComponents();

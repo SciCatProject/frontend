@@ -1,5 +1,4 @@
 import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
-import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Store } from "@ngrx/store";
 import { Sample } from "shared/sdk";
 import {
@@ -28,6 +27,7 @@ import deepEqual from "deep-equal";
 import { filter, map, distinctUntilChanged, take } from "rxjs/operators";
 import { SampleFilters } from "state-management/models";
 import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "sample-dashboard",
@@ -38,6 +38,8 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectSampleDashboardPageViewModel);
 
   subscriptions: Subscription[] = [];
+
+  appConfig = this.appConfigService.getConfig();
 
   metadataKeys: string[] = [];
   tableData: any[] = [];
@@ -55,7 +57,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   description = "";
 
   constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private appConfigService: AppConfigService,
     private datePipe: DatePipe,
     public dialog: MatDialog,
     private route: ActivatedRoute,

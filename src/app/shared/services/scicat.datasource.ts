@@ -3,17 +3,17 @@ import { Observable, BehaviorSubject, of, Subscription } from "rxjs";
 import { ScicatDataService } from "./scicat-data-service";
 import { catchError, finalize } from "rxjs/operators";
 import { ExportExcelService } from "./export-excel.service";
-import { environment } from "../../../environments/environment";
 import { LoopBackConfig } from "shared/sdk";
 import { Column } from "shared/modules/shared-table/shared-table.module";
+import { AppConfig, AppConfigService } from "app-config.service";
 
 // For each different table type one instance of this class should be created
 
-const resolvePath = (object: any, path: string, defaultValue: unknown) => path
-  .split(".")
-  .reduce((o, p) => o ? o[p] : defaultValue, object);
+const resolvePath = (object: any, path: string, defaultValue: unknown) =>
+  path.split(".").reduce((o, p) => (o ? o[p] : defaultValue), object);
 
 export class SciCatDataSource implements DataSource<any> {
+  private appConfig: AppConfig;
   private exportSubscription: Subscription;
   private dataForExcel: unknown[] = [];
   private columnsdef: Column[] = [];
@@ -26,14 +26,15 @@ export class SciCatDataSource implements DataSource<any> {
   public count$ = this.countSubject.asObservable();
   public collection = "";
 
-
   constructor(
+    private appConfigService: AppConfigService,
     private scicatdataService: ScicatDataService,
     private ete: ExportExcelService,
     private tableDefinition: any
   ) {
+    this.appConfig = this.appConfigService.getConfig();
     this.url =
-      environment.lbBaseURL +
+      this.appConfig.lbBaseURL +
       "/" +
       LoopBackConfig.getApiVersion() +
       "/" +
@@ -46,7 +47,9 @@ export class SciCatDataSource implements DataSource<any> {
       this.dataForExcel = [];
       if (data.length > 0) {
         data.forEach((row: any) => {
-          const rowSorted = this.columnsdef.map((col) => resolvePath(row, col.id, null));
+          const rowSorted = this.columnsdef.map((col) =>
+            resolvePath(row, col.id, null)
+          );
           this.dataForExcel.push(Object.values(rowSorted));
         });
         const reportData = {

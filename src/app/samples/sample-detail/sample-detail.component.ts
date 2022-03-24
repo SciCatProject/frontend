@@ -19,12 +19,12 @@ import {
   TableColumn,
   PageChangeEvent,
 } from "shared/modules/table/table.component";
-import { APP_CONFIG, AppConfig } from "app-config.module";
 import {
   PickedFile,
   SubmitCaptionEvent,
 } from "shared/modules/file-uploader/file-uploader.component";
 import { EditableComponent } from "app-routing/pending-changes.guard";
+import { AppConfigService } from "app-config.service";
 
 export interface TableData {
   pid: string;
@@ -45,6 +45,8 @@ export class SampleDetailComponent implements OnInit, OnDestroy, EditableCompone
   private _hasUnsavedChanges = false;
   vm$ = this.store.select(selectSampleDetailPageViewModel);
 
+  appConfig = this.appConfigService.getConfig();
+
   sample: Sample = new Sample();
   user: User = new User();
   attachment: Partial<Attachment> = new Attachment();
@@ -63,7 +65,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy, EditableCompone
   ];
 
   constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private appConfigService: AppConfigService,
     private datePipe: DatePipe,
     private filesizePipe: FileSizePipe,
     private router: Router,

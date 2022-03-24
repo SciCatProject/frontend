@@ -5,6 +5,7 @@ import {
   OnDestroy,
 } from "@angular/core";
 import { Router } from "@angular/router";
+import { AppConfigService } from "app-config.service";
 import { Column } from "shared/modules/shared-table/shared-table.module";
 import { Proposal } from "shared/sdk";
 import { ExportExcelService } from "shared/services/export-excel.service";
@@ -77,12 +78,14 @@ export class ProposalDashboardComponent
   };
   dataSource: SciCatDataSource;
   constructor(
+    private appConfigService: AppConfigService,
     private cdRef: ChangeDetectorRef,
     private dataService: ScicatDataService,
     private exportService: ExportExcelService,
     private router: Router
   ) {
     this.dataSource = new SciCatDataSource(
+      this.appConfigService,
       this.dataService,
       this.exportService,
       this.tableDefinition

@@ -1,5 +1,4 @@
-import { APP_CONFIG, AppConfig } from "app-config.module";
-import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { PublishedData } from "shared/sdk";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -10,6 +9,7 @@ import {
 import { Subscription } from "rxjs";
 import { pluck } from "rxjs/operators";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "publisheddata-details",
@@ -20,15 +20,16 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   currentData$ = this.store.select(selectCurrentPublishedData);
   publishedData: PublishedData = new PublishedData();
   subscriptions: Subscription[] = [];
+  appConfig = this.appConfigService.getConfig();
   show = false;
   landingPageUrl = "";
   doi = "";
 
   constructor(
+    private appConfigService: AppConfigService,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
   ) {}
 
   ngOnInit() {
