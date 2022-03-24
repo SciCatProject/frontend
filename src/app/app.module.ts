@@ -18,9 +18,14 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { LayoutModule } from "_layout/layout.module";
 import { AppConfigService } from "app-config.service";
+import { AppThemeService } from "app-theme.service";
 
-const appInitializerFn = (appConfig: AppConfigService) => {
+const appConfigInitializerFn = (appConfig: AppConfigService) => {
   return () => appConfig.loadAppConfig();
+};
+
+const appThemeInitializerFn = (appTheme: AppThemeService) => {
+  return () => appTheme.loadTheme();
 };
 
 @NgModule({
@@ -58,10 +63,17 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     AppConfigService,
     {
       provide: APP_INITIALIZER,
-      useFactory: appInitializerFn,
+      useFactory: appConfigInitializerFn,
       multi: true,
       deps: [AppConfigService],
     },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appThemeInitializerFn,
+      multi: true,
+      deps: [AppThemeService],
+    },
+    AppThemeService,
     UserApi,
     SampleApi,
     Title,
