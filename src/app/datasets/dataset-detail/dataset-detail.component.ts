@@ -96,7 +96,6 @@ export class DatasetDetailComponent
     this.subscriptions.push(
       this.store.select(selectCurrentSample).subscribe((sample) => {
         this.sample = sample;
-        console.log({ sample });
       })
     );
 
