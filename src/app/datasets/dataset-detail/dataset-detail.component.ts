@@ -56,7 +56,6 @@ export class DatasetDetailComponent
   dataset: Dataset | undefined;
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
-  proposal$ = this.store.select(selectCurrentProposal);
   proposal: Proposal | undefined;
   sample: Sample | undefined;
   user: User | undefined;
