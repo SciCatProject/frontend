@@ -25,11 +25,12 @@ import {
 } from "state-management/actions/datasets.actions";
 import { Router } from "@angular/router";
 import { selectCurrentProposal } from "state-management/selectors/proposals.selectors";
-import { DerivedDataset, RawDataset, User } from "shared/sdk";
+import { DerivedDataset, Instrument, RawDataset, User } from "shared/sdk";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import { EditableComponent } from "app-routing/pending-changes.guard";
 import { AppConfigService } from "app-config.service";
 import { selectCurrentSample } from "state-management/selectors/samples.selectors";
+import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
 /**
  * Component to show details for a data set, using the
  * form component
@@ -56,6 +57,7 @@ export class DatasetDetailComponent
   dataset: Dataset | undefined;
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
+  instrument: Instrument | undefined;
   proposal: Proposal | undefined;
   sample: Sample | undefined;
   user: User | undefined;
@@ -83,6 +85,12 @@ export class DatasetDetailComponent
             }
           );
         }
+      })
+    );
+
+    this.subscriptions.push(
+      this.store.select(selectCurrentInstrument).subscribe((instrument) => {
+        this.instrument = instrument;
       })
     );
 
@@ -207,6 +215,11 @@ export class DatasetDetailComponent
         }
       }
     });
+  }
+
+  onClickInstrument(instrumentId: string): void {
+    const pid = encodeURIComponent(instrumentId);
+    this.router.navigateByUrl("/instruments/" + pid);
   }
 
   onClickProposal(proposalId: string): void {
