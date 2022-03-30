@@ -231,6 +231,18 @@
             </span>
           </td>
         </tr>
+        <tr *ngIf="dataset['instrumentId'] && instrument">
+          <th>Instrument</th>
+          <td [ngSwitch]="editingAllowed">
+            <a
+              *ngSwitchCase="true"
+              (click)="editingAllowed && onClickInstrument(instrument.pid)"
+            >
+              {{ instrument.name }}
+            </a>
+            <span *ngSwitchDefault>{{ instrument.name }}</span>
+          </td>
+        </tr>
         <tr *ngIf="dataset['creationLocation'] as value">
           <th>Creation Location</th>
           <td>{{ value }}</td>
