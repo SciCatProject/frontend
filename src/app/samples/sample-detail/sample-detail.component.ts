@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
-import { Subscription } from "rxjs";
+import { fromEvent, Subscription } from "rxjs";
 import { Sample, Attachment, User, Dataset } from "shared/sdk/models";
 import { selectSampleDetailPageViewModel } from "../../state-management/selectors/samples.selectors";
 import { Store } from "@ngrx/store";
@@ -23,6 +23,7 @@ import {
   PickedFile,
   SubmitCaptionEvent,
 } from "shared/modules/file-uploader/file-uploader.component";
+import { EditableComponent } from "app-routing/pending-changes.guard";
 import { AppConfigService } from "app-config.service";
 
 export interface TableData {
@@ -40,7 +41,8 @@ export interface TableData {
   templateUrl: "./sample-detail.component.html",
   styleUrls: ["./sample-detail.component.scss"],
 })
-export class SampleDetailComponent implements OnInit, OnDestroy {
+export class SampleDetailComponent implements OnInit, OnDestroy, EditableComponent {
+  private _hasUnsavedChanges = false;
   vm$ = this.store.select(selectSampleDetailPageViewModel);
 
   appConfig = this.appConfigService.getConfig();
@@ -162,7 +164,14 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
         }
       })
     );
-
+    // Prevent user from reloading page if there are unsave changes
+    this.subscriptions.push(
+      fromEvent(window, "beforeunload").subscribe((event) => {
+        if (this.hasUnsavedChanges()) {
+          event.preventDefault();
+        }
+      })
+    );
     this.subscriptions.push(
       this.vm$.subscribe((vm) => {
         this.tableData = this.formatTableData(vm.datasets);
@@ -184,7 +193,12 @@ export class SampleDetailComponent implements OnInit, OnDestroy {
       })
     );
   }
-
+  hasUnsavedChanges() {
+    return this._hasUnsavedChanges;
+  }
+  onHasUnsavedChanges($event: boolean) {
+    this._hasUnsavedChanges = $event;
+  }
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
