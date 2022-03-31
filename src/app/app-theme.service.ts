@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { timeout } from "rxjs/operators";
 import { light, Theme } from "theme";
 
 @Injectable()
@@ -12,6 +13,7 @@ export class AppThemeService {
     try {
       this.activeTheme = (await this.http
         .get("/client/theme.json")
+        .pipe(timeout(2000))
         .toPromise()) as Theme;
     } catch (err) {
       console.log("No theme available in backend, using local theme.");
