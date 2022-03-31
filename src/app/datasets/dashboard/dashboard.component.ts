@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit, Inject, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Store, ActionsSubject } from "@ngrx/store";
 
 import deepEqual from "deep-equal";
@@ -39,8 +38,10 @@ import { Dataset, DerivedDataset } from "shared/sdk";
 import {
   selectColumnAction,
   deselectColumnAction,
+  setDatasetTableColumnsAction,
 } from "state-management/actions/user.actions";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "dashboard",
@@ -70,6 +71,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   subscriptions: Subscription[] = [];
 
+  appConfig = this.appConfigService.getConfig();
+
   currentUser: User = new User();
   userGroups: string[] = [];
   clearColumnSearch = false;
@@ -77,7 +80,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild(MatSidenav, { static: false }) sideNav!: MatSidenav;
 
   constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    public appConfigService: AppConfigService,
     private actionsSubj: ActionsSubject,
     public dialog: MatDialog,
     private store: Store,
@@ -159,6 +162,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.loggedIn$.subscribe((status) => {
         if (!status) {
+          const columns = this.appConfig.localColumns;
+          this.store.dispatch(setDatasetTableColumnsAction({columns}));
           this.tableColumns$ = this.store
             .select(selectColumns)
             .pipe(

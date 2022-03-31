@@ -12,9 +12,9 @@ import {
 import { Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
 import { selectLoginPageViewModel } from "state-management/selectors/user.selectors";
-import { APP_CONFIG, AppConfig } from "app-config.module";
 import { MatDialog } from "@angular/material/dialog";
 import { PrivacyDialogComponent } from "users/privacy-dialog/privacy-dialog.component";
+import { AppConfig, AppConfigService, OAuth2Endpoint } from "app-config.service";
 
 interface LoginForm {
   username: string;
@@ -38,6 +38,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   private proceedSubscription = new Subscription();
   vm$ = this.store.select(selectLoginPageViewModel);
 
+  appConfig: AppConfig = this.appConfigService.getConfig();
+  facility: string | null = null;
+  loginFormEnabled = false;
+  oAuth2Endpoints: OAuth2Endpoint[] = [];
+
   returnUrl: string;
   hide = true;
   public loginForm = this.fb.group({
@@ -47,12 +52,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   });
 
   constructor(
+    private appConfigService: AppConfigService,
     public dialog: MatDialog,
     public fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     private store: Store,
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
     @Inject(DOCUMENT) public document: Document
   ) {
     this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "";
@@ -79,6 +84,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.facility = this.appConfig.facility;
+    this.loginFormEnabled = this.appConfig.loginFormEnabled;
+    this.oAuth2Endpoints = this.appConfig.oAuth2Endpoints;
+
     this.proceedSubscription = this.vm$
       .pipe(filter((vm) => vm.isLoggedIn))
       .subscribe(() => {

@@ -1,6 +1,5 @@
 import { DatasetEffects } from "./../state-management/effects/datasets.effects";
 import { EffectsModule } from "@ngrx/effects";
-import { AppConfigModule } from "app-config.module";
 import { LinkyModule } from "ngx-linky";
 import { ArchivingService } from "./archiving.service";
 import { BatchViewComponent } from "./batch-view/batch-view.component";
@@ -81,7 +80,6 @@ import { AdminTabComponent } from "./admin-tab/admin-tab.component";
 
 @NgModule({
   imports: [
-    AppConfigModule,
     CommonModule,
     EffectsModule.forFeature([DatasetEffects]),
     FlexLayoutModule,
@@ -117,7 +115,14 @@ import { AdminTabComponent } from "./admin-tab/admin-tab.component";
     RouterModule,
     SharedCatanieModule,
     BatchCardModule,
-    EffectsModule.forFeature([UserEffects, JobEffects, ProposalEffects, SampleEffects, PublishedDataEffects, LogbookEffects]),
+    EffectsModule.forFeature([
+      UserEffects,
+      JobEffects,
+      ProposalEffects,
+      SampleEffects,
+      PublishedDataEffects,
+      LogbookEffects,
+    ]),
     StoreModule.forFeature("datasets", datasetsReducer),
     StoreModule.forFeature("jobs", jobsReducer),
     StoreModule.forFeature("proposals", proposalsReducer),

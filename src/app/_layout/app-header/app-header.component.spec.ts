@@ -22,6 +22,7 @@ import {
   selectCurrentUserName,
   selectThumbnailPhoto,
 } from "state-management/selectors/user.selectors";
+import { AppConfigService } from "app-config.service";
 
 describe("AppHeaderComponent", () => {
   let component: AppHeaderComponent;
@@ -29,6 +30,10 @@ describe("AppHeaderComponent", () => {
 
   let store: MockStore;
   let dispatchSpy;
+
+  const getConfig = () => ({
+    facility: "ESS",
+  });
 
   beforeEach(
     waitForAsync(() => {
@@ -49,7 +54,10 @@ describe("AppHeaderComponent", () => {
                 selector: selectCurrentUserName,
                 value: "ms-ad.User Name",
               },
-              { selector: selectThumbnailPhoto, value: "assets/images/user.png" },
+              {
+                selector: selectThumbnailPhoto,
+                value: "assets/images/user.png",
+              },
               { selector: selectIsLoggedIn, value: true },
             ],
           }),
@@ -57,7 +65,10 @@ describe("AppHeaderComponent", () => {
       });
       TestBed.overrideComponent(AppHeaderComponent, {
         set: {
-          providers: [{ provide: APP_CONFIG, useValue: { facility: "ESS" } }],
+          providers: [
+            { provide: APP_CONFIG, useValue: { production: false } },
+            { provide: AppConfigService, useValue: { getConfig } },
+          ],
         },
       });
       TestBed.compileComponents();

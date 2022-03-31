@@ -1,6 +1,7 @@
 import { NO_ERRORS_SCHEMA } from "@angular/compiler";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { ActivatedRoute, Router } from "@angular/router";
+import { AppConfigService } from "app-config.service";
 import { MockActivatedRoute, MockRouter } from "shared/MockStubs";
 import { ExportExcelService } from "shared/services/export-excel.service";
 import { ScicatDataService } from "shared/services/scicat-data-service";
@@ -10,6 +11,8 @@ describe("JobsDashboardNewComponent", () => {
   let component: JobsDashboardNewComponent;
   let fixture: ComponentFixture<JobsDashboardNewComponent>;
 
+  const getConfig = () => ({});
+
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
@@ -17,6 +20,7 @@ describe("JobsDashboardNewComponent", () => {
         declarations: [JobsDashboardNewComponent],
         providers: [
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: AppConfigService, useValue: { getConfig } },
           { provide: ExportExcelService, useValue: {} },
           { provide: Router, useClass: MockRouter },
           { provide: ScicatDataService, useValue: {} },

@@ -1,8 +1,6 @@
-import { APP_CONFIG, AppConfig } from "app-config.module";
 import {
   Component,
   OnInit,
-  Inject,
   ChangeDetectorRef,
   OnDestroy,
   AfterViewInit,
@@ -26,6 +24,7 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";
 import { PublicDownloadDialogComponent } from "datasets/public-download-dialog/public-download-dialog.component";
 import { submitJobAction } from "state-management/actions/jobs.actions";
+import { AppConfigService } from "app-config.service";
 
 export interface File {
   path: string;
@@ -49,6 +48,9 @@ export class DatafilesComponent
   dataset$ = this.store.select(selectCurrentDataset);
   loading$ = this.store.select(selectIsLoading);
   isLoggedIn$ = this.store.select(selectIsLoggedIn);
+
+  appConfig = this.appConfigService.getConfig();
+
   tooLargeFile = false;
   totalFileSize = 0;
   selectedFileSize = 0;
@@ -65,11 +67,10 @@ export class DatafilesComponent
   count = 0;
   pageSize = 25;
   currentPage = 0;
-
   fileDownloadEnabled: boolean = this.appConfig.fileDownloadEnabled;
   multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
-  fileserverBaseURL: string | null = this.appConfig.fileserverBaseURL;
-  fileserverButtonLabel: string | null = this.appConfig.fileserverButtonLabel;
+  fileserverBaseURL: string | undefined = this.appConfig.fileserverBaseURL;
+  fileserverButtonLabel: string = this.appConfig.fileserverButtonLabel || "Download";
   multipleDownloadAction: string | null = this.appConfig
     .multipleDownloadAction;
   maxFileSize: number | null = this.appConfig.maxDirectDownloadSize;
@@ -102,11 +103,11 @@ export class DatafilesComponent
   tableData: File[] = [];
 
   constructor(
-    private store: Store<Dataset>,
+    public appConfigService: AppConfigService,
+    private store: Store,
     private cdRef: ChangeDetectorRef,
-    private userApi: UserApi,
     private dialog: MatDialog,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
+    private userApi: UserApi
   ) {}
 
   onPageChange(event: PageChangeEvent) {
@@ -209,11 +210,11 @@ export class DatafilesComponent
         if (datablocks) {
           const files: File[] = [];
           datablocks.forEach((block) => {
-              block.dataFileList.map((file) => {
-                this.totalFileSize += file.size;
-                file.selected = false;
-                files.push(file);
-              });
+            block.dataFileList.map((file) => {
+              this.totalFileSize += file.size;
+              file.selected = false;
+              files.push(file);
+            });
           });
           this.count = files.length;
           this.tableData = files.slice(0, this.pageSize);

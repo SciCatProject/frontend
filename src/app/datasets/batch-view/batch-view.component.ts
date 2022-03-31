@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { first, switchMap } from "rxjs/operators";
 
@@ -16,9 +16,9 @@ import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { Router } from "@angular/router";
 import { ArchivingService } from "../archiving.service";
 import { Observable, Subscription } from "rxjs";
-import { APP_CONFIG, AppConfig } from "app-config.module";
 import { MatDialog } from "@angular/material/dialog";
 import { ShareDialogComponent } from "datasets/share-dialog/share-dialog.component";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "batch-view",
@@ -28,13 +28,16 @@ import { ShareDialogComponent } from "datasets/share-dialog/share-dialog.compone
 export class BatchViewComponent implements OnInit, OnDestroy {
   batch$: Observable<Dataset[]> = this.store.select(selectDatasetsInBatch);
   subscriptions: Subscription[] = [];
+
+  appConfig = this.appConfigService.getConfig();
+  shareEnabled = this.appConfig.shareEnabled;
+
   datasetList: Dataset[] = [];
   public hasBatch = false;
   visibleColumns: string[] = ["remove", "pid", "sourceFolder", "creationTime"];
-  shareEnabled = this.appConfig.shareEnabled;
 
   constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    public appConfigService: AppConfigService,
     private dialog: MatDialog,
     private store: Store,
     private archivingSrv: ArchivingService,

@@ -9,7 +9,6 @@ import {
   MockActivatedRoute,
 } from "shared/MockStubs";
 import { Store, ActionsSubject } from "@ngrx/store";
-import { APP_CONFIG } from "app-config.module";
 import { PublishedDataApi } from "shared/sdk";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { of } from "rxjs";
@@ -25,6 +24,11 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatButtonModule } from "@angular/material/button";
+import { AppConfigService } from "app-config.service";
+
+const getConfig = () => ({
+  facility: "test",
+});
 
 describe("PublishComponent", () => {
   let component: PublishComponent;
@@ -61,7 +65,7 @@ describe("PublishComponent", () => {
           providers: [
             { provide: ActivatedRoute, useClass: MockActivatedRoute },
             { provide: ActionsSubject, useValue: of({}) },
-            { provide: APP_CONFIG, useValue: { facility: "test" } },
+            { provide: AppConfigService, useValue: { getConfig } },
             { provide: PublishedDataApi, useClass: MockPublishedDataApi },
             { provide: Router, useClass: MockRouter },
             { provide: Store, useClass: MockStore },

@@ -3,18 +3,22 @@ import { HttpClient } from "@angular/common/http";
 import { ADAuthService } from "./adauth.service";
 
 import { MockHttp } from "shared/MockStubs";
-import { APP_CONFIG } from "app-config.module";
+import { AppConfigService } from "app-config.service";
 
 describe("ADAuthService", () => {
   let service: ADAuthService;
+
+  const getConfig = () => ({
+    externalAuthEndpoint: "/auth/msad",
+  });
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         ADAuthService,
         {
-          provide: APP_CONFIG,
-          useValue: { externalAuthEndpoint: "/auth/msad" },
+          provide: AppConfigService,
+          useValue: { getConfig },
         },
         { provide: HttpClient, useClass: MockHttp },
       ],
