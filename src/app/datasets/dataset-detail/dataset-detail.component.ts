@@ -15,6 +15,7 @@ import {
 import {
   selectCurrentUser,
   selectIsAdmin,
+  selectIsLoading,
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { map } from "rxjs/operators";
@@ -56,6 +57,7 @@ export class DatasetDetailComponent
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
   proposal$ = this.store.select(selectCurrentProposal);
+  loading$ = this.store.select(selectIsLoading);
   proposal: Proposal | undefined;
   sample: Sample | null = null;
   user: User | undefined;

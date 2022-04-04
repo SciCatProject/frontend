@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+import { AdminGuard } from "app-routing/admin.guard";
 import { AuthGuard } from "app-routing/auth.guard";
 import { LeavingPageGuard } from "app-routing/pending-changes.guard";
 import { ServiceGuard } from "app-routing/service.guard";
@@ -57,6 +58,7 @@ const routes: Routes = [
   {
     path: "admin",
     component: AdminTabComponent,
+    canActivate: [AuthGuard, AdminGuard]
   }
 ];
 @NgModule({
