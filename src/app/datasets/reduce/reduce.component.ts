@@ -19,7 +19,8 @@ import {
 } from "state-management/actions/datasets.actions";
 import { FormControl, Validators, FormBuilder } from "@angular/forms";
 import { map } from "rxjs/operators";
-import { Subscription } from "rxjs";
+import { combineLatest, Observable, Subscription } from "rxjs";
+import { selectIsAdmin, selectIsLoading, selectIsLoggedIn, selectProfile } from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "reduce",
@@ -41,7 +42,14 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
 
   derivedDatsetsSubscription: Subscription = new Subscription();
   derivedDatasets: DerivedDataset[] = [];
-
+  loading$ = this.store.select(selectIsLoading);
+  loggedIn$ = this.store.select(selectIsLoggedIn);
+  userProfile$ = this.store.select(selectProfile);
+  isAdmin$ = this.store.select(selectIsAdmin);
+  dataset$ = this.store.select(selectCurrentDataset);
+  accessGroups$: Observable<string[]> = this.userProfile$.pipe(
+    map((profile) => (profile ? profile.accessGroups : []))
+  );
   result$ = this.store.select(selectOpenwhiskResult);
 
   actionsForm = this.formBuilder.group({
@@ -103,6 +111,20 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit() {
     this.store.select(selectCurrentDataset).subscribe((dataset) => {
       this.dataset = dataset;
+      if (dataset) {
+        combineLatest([this.accessGroups$, this.isAdmin$]).subscribe(([groups, isAdmin]) =>{
+          const isInOwnerGroup =
+              groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
+            if(!isInOwnerGroup) {
+              this.router.navigate(["/401"], {
+                skipLocationChange: true,
+                queryParams: {
+                  url: this.router.routerState.snapshot.url,
+                },
+            });
+          }
+        })
+      }
     });
     this.derivedDatsetsSubscription = this.derivedDatasets$.subscribe(
       (datasets) => {

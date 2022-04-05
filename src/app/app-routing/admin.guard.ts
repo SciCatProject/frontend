@@ -30,7 +30,6 @@ export class AdminGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean>{
-    let isAdmin = false;
     return this.store.select(selectIsAdmin).pipe<boolean>(map((isAdmin: boolean) => {
       if(!isAdmin) {
         this.router.navigate(["/401"], {
