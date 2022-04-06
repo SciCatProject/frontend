@@ -117,6 +117,8 @@ const appConfig: AppConfig = {
   shoppingCartEnabled: true,
   shoppingCartOnHeader: true,
   tableSciDataEnabled: true,
+  fileserverBaseURL: "",
+  fileserverButtonLabel: ""
 };
 
 describe("AppConfigService", () => {

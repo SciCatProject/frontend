@@ -74,6 +74,7 @@ import { BatchCardModule } from "./batch-card/batch-card.module";
 import { JobEffects } from "state-management/effects/jobs.effects";
 import { LogbookEffects } from "state-management/effects/logbooks.effects";
 import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
+import { PublicDownloadDialogComponent } from "./public-download-dialog/public-download-dialog.component";
 import { DatasetFileUploaderComponent } from "./dataset-file-uploader/dataset-file-uploader.component";
 import { AdminTabComponent } from "./admin-tab/admin-tab.component";
 
@@ -146,6 +147,7 @@ import { AdminTabComponent } from "./admin-tab/admin-tab.component";
     DatasetTableActionsComponent,
     DatasetLifecycleComponent,
     SampleEditComponent,
+    PublicDownloadDialogComponent,
     ShareDialogComponent,
     DatasetFileUploaderComponent,
     AdminTabComponent,

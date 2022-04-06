@@ -53,6 +53,8 @@ export interface AppConfig {
   shoppingCartEnabled: boolean;
   shoppingCartOnHeader: boolean;
   tableSciDataEnabled: boolean;
+  fileserverBaseURL: string;
+  fileserverButtonLabel: string | undefined;
 }
 
 @Injectable()
