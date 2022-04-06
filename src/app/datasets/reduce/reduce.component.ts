@@ -145,6 +145,6 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
-    })
+    });
   }
 }
