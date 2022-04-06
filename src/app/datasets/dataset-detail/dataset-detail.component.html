@@ -21,7 +21,7 @@
     </mat-slide-toggle>
   </div>
 </div>
-<div style="clear: both;"></div>
+<div style="clear: both"></div>
 <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
   <div fxFlex="80%">
     <mat-card>
@@ -66,7 +66,11 @@
                 {{ keyword }}
                 <mat-icon *ngIf="editingAllowed" matChipRemove>cancel</mat-icon>
               </mat-chip>
-              <mat-chip *ngIf="editingAllowed" class="add-keyword-chip" (click)="editEnabled = true">
+              <mat-chip
+                *ngIf="editingAllowed"
+                class="add-keyword-chip"
+                (click)="editEnabled = true"
+              >
                 Add Keyword <mat-icon>add</mat-icon>
               </mat-chip>
             </mat-chip-list>
@@ -196,24 +200,47 @@
         <tr *ngIf="dataset['proposalId'] && proposal">
           <th>Proposal</th>
           <td [ngSwitch]="editingAllowed">
-            <a *ngSwitchCase="true" (click)="editingAllowed? onClickProposal(proposal.proposalId) : ''">{{ proposal.title }}</a>
+            <a
+              *ngSwitchCase="true"
+              (click)="
+                editingAllowed ? onClickProposal(proposal.proposalId) : ''
+              "
+              >{{ proposal.title }}</a
+            >
             <span *ngSwitchDefault>{{ proposal.title }}</span>
           </td>
         </tr>
         <tr *ngIf="dataset['sampleId'] && sample">
           <th>Sample</th>
           <td [ngSwitch]="editingAllowed">
-            <a *ngSwitchCase="true" (click)="editingAllowed? onClickSample(sample.sampleId) : ''">
-              <span>{{ sample.description}}</span>
+            <a
+              *ngSwitchCase="true"
+              (click)="editingAllowed ? onClickSample(sample.sampleId) : ''"
+            >
+              <span>{{ sample.description }}</span>
             </a>
-            <span *ngSwitchDefault>{{ sample.description}}</span>
+            <span *ngSwitchDefault>{{ sample.description }}</span>
             <span
               class="sample-edit"
               (click)="openSampleEditDialog()"
-              *ngIf="appConfig.editDatasetSampleEnabled && editingAllowed && isPI"
+              *ngIf="
+                appConfig.editDatasetSampleEnabled && editingAllowed && isPI
+              "
             >
               <mat-icon>edit</mat-icon>
             </span>
+          </td>
+        </tr>
+        <tr *ngIf="dataset['instrumentId'] && instrument">
+          <th>Instrument</th>
+          <td [ngSwitch]="editingAllowed">
+            <a
+              *ngSwitchCase="true"
+              (click)="editingAllowed && onClickInstrument(instrument.pid)"
+            >
+              {{ instrument.name }}
+            </a>
+            <span *ngSwitchDefault>{{ instrument.name }}</span>
           </td>
         </tr>
         <tr *ngIf="dataset['creationLocation'] as value">
@@ -290,21 +317,31 @@
       <ng-template [ngIf]="appConfig.tableSciDataEnabled" [ngIfElse]="jsonView">
         <ng-template #metadataView>
           <div [ngSwitch]="appConfig.metadataStructure">
-            <tree-view *ngSwitchCase="'tree'"
-                       [metadata]="dataset['scientificMetadata']"></tree-view>
-            <metadata-view *ngSwitchDefault
-                           [metadata]="dataset['scientificMetadata']"></metadata-view>
+            <tree-view
+              *ngSwitchCase="'tree'"
+              [metadata]="dataset['scientificMetadata']"
+            ></tree-view>
+            <metadata-view
+              *ngSwitchDefault
+              [metadata]="dataset['scientificMetadata']"
+            ></metadata-view>
           </div>
         </ng-template>
-        <mat-tab-group class="metadataGroup" *ngIf="editingAllowed;else metadataView">
+        <mat-tab-group
+          class="metadataGroup"
+          *ngIf="editingAllowed; else metadataView"
+        >
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-icon> list </mat-icon> View
             </ng-template>
-            <ng-container *ngTemplateOutlet="metadataView">
-            </ng-container>
+            <ng-container *ngTemplateOutlet="metadataView"> </ng-container>
           </mat-tab>
-          <mat-tab class="editTab" *ngIf="editingAllowed" [hidden]="!appConfig.editMetadataEnabled">
+          <mat-tab
+            class="editTab"
+            *ngIf="editingAllowed"
+            [hidden]="!appConfig.editMetadataEnabled"
+          >
             <ng-template mat-tab-label>
               <mat-icon> edit </mat-icon> Edit
             </ng-template>
