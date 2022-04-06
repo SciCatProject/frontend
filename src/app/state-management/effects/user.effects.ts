@@ -43,6 +43,7 @@ import { clearProposalsStateAction } from "state-management/actions/proposals.ac
 import { clearPublishedDataStateAction } from "state-management/actions/published-data.actions";
 import { clearSamplesStateAction } from "state-management/actions/samples.actions";
 import { HttpErrorResponse } from "@angular/common/http";
+import { AppConfigService } from "app-config.service";
 
 @Injectable()
 export class UserEffects {
@@ -87,8 +88,10 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(fromActions.loginOIDCAction),
       switchMap(({ oidcLoginResponse }) => {
+        const accessTokenPrefix =
+          this.configService.getConfig().accessTokenPrefix;
         const token = new SDKToken({
-          id: oidcLoginResponse.accessToken,
+          id: accessTokenPrefix + oidcLoginResponse.accessToken,
           userId: oidcLoginResponse.userId,
         });
         this.loopBackAuth.setToken(token);
@@ -111,8 +114,10 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchUserAction),
       switchMap(({ adLoginResponse }) => {
+        const accessTokenPrefix =
+          this.configService.getConfig().accessTokenPrefix;
         const token = new SDKToken({
-          id: adLoginResponse.access_token,
+          id: accessTokenPrefix + adLoginResponse.access_token,
           userId: adLoginResponse.userId,
         });
         this.loopBackAuth.setToken(token);
@@ -341,6 +346,7 @@ export class UserEffects {
   constructor(
     private actions$: Actions,
     private activeDirAuthService: ADAuthService,
+    private configService: AppConfigService,
     private loopBackAuth: LoopBackAuth,
     private router: Router,
     private store: Store,
