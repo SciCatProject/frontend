@@ -6,7 +6,7 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Logbook } from "shared/sdk";
+import { Dataset, Logbook } from "shared/sdk";
 import { combineLatest, Subscription } from "rxjs";
 import {
   selectCurrentLogbook,
@@ -34,6 +34,8 @@ import {
   SortChangeEvent,
 } from "shared/modules/table/table.component";
 import { AppConfigService } from "app-config.service";
+import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
+import { OwnershipService } from "shared/services/ownership.service";
 
 @Component({
   selector: "app-logbooks-dashboard",
@@ -46,6 +48,7 @@ export class LogbooksDashboardComponent
   entriesPerPage$ = this.store.select(selectEntriesPerPage);
   currentPage$ = this.store.select(selectPage);
   filters$ = this.store.select(selectFilters);
+  dataset: Dataset | undefined = undefined;
   readyToFetch$ = this.store
     .select(selectHasPrefilledFilters)
     .pipe(filter((has) => has));
@@ -70,7 +73,8 @@ export class LogbooksDashboardComponent
     private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store
+    private store: Store,
+    private ownershipService: OwnershipService
   ) {}
 
   applyRouterState(name: string, filters: LogbookFilters) {
@@ -120,7 +124,16 @@ export class LogbooksDashboardComponent
         }
       })
     );
-
+    this.subscriptions.push(
+      this.store.select(selectCurrentDataset).subscribe((dataset) => {
+        if (dataset) {
+          this.dataset = dataset;
+          if(dataset) {
+            this.ownershipService.checkPermission(dataset, this.store, this.router);
+          }
+        }
+      })
+    );
     this.subscriptions.push(
       this.filters$.subscribe((filters) => {
         if (filters) {

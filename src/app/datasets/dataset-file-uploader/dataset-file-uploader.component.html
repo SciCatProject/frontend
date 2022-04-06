@@ -1,4 +1,5 @@
 <app-file-uploader
+  *ngIf="dataset"
   [attachments]="attachments"
   (filePicked)="onFileUploaderFilePicked($event)"
   (submitCaption)="updateCaption($event)"

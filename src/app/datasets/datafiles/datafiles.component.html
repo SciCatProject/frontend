@@ -113,11 +113,3 @@
     (selectOne)="onSelectOne($event)"
   ></app-table>
 </ng-template>
-<ng-template [ngIf]="!(dataset$ | async)">
-  <error-page
-    *ngIf="(loading$ | async) === false"
-    [errorTitle]="'Dataset not found'"
-    [message]="'The dataset you are trying to view either doesn\'t exist or you don\'t have permission to view it.'"
-  >
-  </error-page>
-</ng-template>
