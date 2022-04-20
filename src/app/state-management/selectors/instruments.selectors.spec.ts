@@ -71,4 +71,26 @@ describe("Instrument Selectors", () => {
       ).toEqual(limit);
     });
   });
+
+  describe("selectInstrumentsDashboardPageViewModel", () => {
+    it("should select the instruments dashboard page view model", () => {
+      expect(
+        fromSelectors.selectInstrumentsDashboardPageViewModel.projector(
+          fromSelectors.selectInstruments.projector(initialInstrumentState),
+          fromSelectors.selectPage.projector(initialInstrumentState.filters),
+          fromSelectors.selectInstrumentsCount.projector(
+            initialInstrumentState
+          ),
+          fromSelectors.selectInstrumentsPerPage.projector(
+            initialInstrumentState.filters
+          )
+        )
+      ).toEqual({
+        instruments: [],
+        currentPage: 0,
+        instrumentsCount: 0,
+        instrumentsPerPage: 25,
+      });
+    });
+  });
 });

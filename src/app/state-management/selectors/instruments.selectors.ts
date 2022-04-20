@@ -33,3 +33,16 @@ export const selectInstrumentsPerPage = createSelector(
   selectFilters,
   (filters) => filters.limit
 );
+
+export const selectInstrumentsDashboardPageViewModel = createSelector(
+  selectInstruments,
+  selectPage,
+  selectInstrumentsCount,
+  selectInstrumentsPerPage,
+  (instruments, currentPage, instrumentsCount, instrumentsPerPage) => ({
+    instruments,
+    currentPage,
+    instrumentsCount,
+    instrumentsPerPage,
+  })
+);
