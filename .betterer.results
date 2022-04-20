@@ -13,12 +13,12 @@ exports[`stricter compilation`] = {
       [198, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"],
       [262, 47, 29, "Expected 0 arguments, but got 1.", "2503700957"]
     ],
-    "src/app/datasets/dataset-detail/dataset-detail.component.ts:1688806200": [
-      [81, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
+    "src/app/datasets/dataset-detail/dataset-detail.component.ts:3260648166": [
+      [83, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
     ],
-    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:1898272901": [
-      [121, 31, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [178, 35, 8, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'typeof TAB\'.\\n  No index signature with a parameter of type \'string\' was found on type \'typeof TAB\'.", "4213543011"]
+    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:3875342984": [
+      [122, 31, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [179, 35, 8, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'typeof TAB\'.\\n  No index signature with a parameter of type \'string\' was found on type \'typeof TAB\'.", "4213543011"]
     ],
     "src/app/datasets/dataset-lifecycle/dataset-lifecycle.component.spec.ts:2957427070": [
       [173, 20, 3, "Parameter \'key\' implicitly has an \'any\' type.", "193424690"],
@@ -109,7 +109,7 @@ exports[`stricter compilation`] = {
     "src/app/instruments/instrument-details/instrument-details.component.spec.ts:1086544078": [
       [84, 8, 49, "Expected 0 arguments, but got 1.", "1785026316"]
     ],
-    "src/app/instruments/instruments-dashboard/instruments-dashboard.component.spec.ts:4286555304": [
+    "src/app/instruments/instruments-dashboard/instruments-dashboard.component.spec.ts:2844596657": [
       [103, 8, 33, "Expected 0 arguments, but got 1.", "1984542627"],
       [123, 8, 41, "Expected 0 arguments, but got 1.", "2251019380"]
     ],
