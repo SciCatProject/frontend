@@ -1,22 +1,18 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 
 import { fetchLogbooksAction } from "state-management/actions/logbooks.actions";
 import { selectLogbooks } from "state-management/selectors/logbooks.selectors";
 import { Logbook } from "state-management/models";
-import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-logbooks-table",
   templateUrl: "./logbooks-table.component.html",
   styleUrls: ["./logbooks-table.component.scss"],
 })
-export class LogbooksTableComponent implements OnInit, OnDestroy {
+export class LogbooksTableComponent implements OnInit {
   logbooks$ = this.store.select(selectLogbooks);
-
-  logbooksSubscription: Subscription = new Subscription();
-  logbooks: Logbook[] = [];
 
   columnsToDisplay: string[] = ["name", "latestEntry", "sender", "entry"];
 
@@ -28,14 +24,5 @@ export class LogbooksTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(fetchLogbooksAction());
-    this.logbooks$.subscribe((logbooks) => {
-      if (logbooks) {
-        this.logbooks = logbooks;
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    this.logbooksSubscription.unsubscribe();
   }
 }

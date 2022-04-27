@@ -99,7 +99,6 @@ describe("DashboardComponent", () => {
     it("should call router.navigate if url path contains `logbook`", () => {
       const navigateSpy = spyOn(router, "navigate");
 
-      component.logbook = logbook;
       const filters: LogbookFilters = {
         textSearch: "",
         showBotMessages: true,
@@ -112,12 +111,9 @@ describe("DashboardComponent", () => {
       component.applyRouterState(logbook.name, filters);
 
       expect(navigateSpy).toHaveBeenCalledTimes(1);
-      expect(navigateSpy).toHaveBeenCalledWith(
-        ["/logbooks", component.logbook.name],
-        {
-          queryParams: { args: JSON.stringify(filters) },
-        }
-      );
+      expect(navigateSpy).toHaveBeenCalledWith(["/logbooks", logbook.name], {
+        queryParams: { args: JSON.stringify(filters) },
+      });
     });
   });
 
@@ -125,9 +121,8 @@ describe("DashboardComponent", () => {
     it("should dispatch a setTextFilterAction and a fetchLogbookAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      component.logbook = logbook;
       const textSearch = "test";
-      component.onTextSearchChange(textSearch);
+      component.onTextSearchChange(logbook.name, textSearch);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
@@ -135,7 +130,7 @@ describe("DashboardComponent", () => {
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
         fetchLogbookAction({
-          name: component.logbook.name,
+          name: logbook.name,
         })
       );
     });
@@ -146,7 +141,6 @@ describe("DashboardComponent", () => {
       dispatchSpy = spyOn(store, "dispatch");
       const methodSpy = spyOn(component, "applyRouterState");
 
-      component.logbook = logbook;
       const filters: LogbookFilters = {
         textSearch: "",
         showBotMessages: false,
@@ -158,7 +152,7 @@ describe("DashboardComponent", () => {
       };
       const { showBotMessages, showImages, showUserMessages } = filters;
 
-      component.onFilterSelect(filters);
+      component.onFilterSelect(logbook.name, filters);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
@@ -170,7 +164,7 @@ describe("DashboardComponent", () => {
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
         fetchLogbookAction({
-          name: component.logbook.name,
+          name: logbook.name,
         })
       );
       expect(methodSpy).toHaveBeenCalled();
@@ -181,14 +175,13 @@ describe("DashboardComponent", () => {
     it("should dispatch a changePageAction and a fetchLogbookAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      component.logbook = logbook;
       const event: PageChangeEvent = {
         pageIndex: 1,
         pageSize: 25,
         length: 100,
       };
 
-      component.onPageChange(event);
+      component.onPageChange(logbook.name, event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
@@ -204,13 +197,12 @@ describe("DashboardComponent", () => {
     it("should dispatch a sortByColumnAction and a fetchLogbookAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      component.logbook = logbook;
       const event: SortChangeEvent = {
         active: "test",
         direction: "asc",
       };
 
-      component.onSortChange(event);
+      component.onSortChange(logbook.name, event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
@@ -219,17 +211,6 @@ describe("DashboardComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         fetchLogbookAction({ name: logbook.name })
       );
-    });
-  });
-
-  describe("#reverseTimeline()", () => {
-    it("should reverse the logbook messages array", () => {
-      component.logbook = logbook;
-      component.logbook.messages = [{ message: "test1" }, { message: "test2" }];
-
-      component.reverseTimeline();
-
-      expect(component.logbook.messages[0].message).toEqual("test2");
     });
   });
 });

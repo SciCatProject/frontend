@@ -6,16 +6,8 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Logbook } from "shared/sdk";
 import { combineLatest, Subscription } from "rxjs";
-import {
-  selectCurrentLogbook,
-  selectFilters,
-  selectHasPrefilledFilters,
-  selectEntriesCount,
-  selectEntriesPerPage,
-  selectPage,
-} from "state-management/selectors/logbooks.selectors";
+import { selectLogbooksDashboardPageViewModel } from "state-management/selectors/logbooks.selectors";
 import {
   fetchLogbookAction,
   prefillFiltersAction,
@@ -23,11 +15,12 @@ import {
   setDisplayFiltersAction,
   changePageAction,
   sortByColumnAction,
+  clearLogbookAction,
 } from "state-management/actions/logbooks.actions";
 import { ActivatedRoute, Router } from "@angular/router";
 import { LogbookFilters } from "state-management/models";
 
-import { map, take, filter, distinctUntilChanged } from "rxjs/operators";
+import { map, take, distinctUntilChanged } from "rxjs/operators";
 import deepEqual from "deep-equal";
 import {
   PageChangeEvent,
@@ -42,26 +35,9 @@ import { AppConfigService } from "app-config.service";
 })
 export class LogbooksDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
-  entriesCount$ = this.store.select(selectEntriesCount);
-  entriesPerPage$ = this.store.select(selectEntriesPerPage);
-  currentPage$ = this.store.select(selectPage);
-  filters$ = this.store.select(selectFilters);
-  readyToFetch$ = this.store
-    .select(selectHasPrefilledFilters)
-    .pipe(filter((has) => has));
+  vm$ = this.store.select(selectLogbooksDashboardPageViewModel);
 
   appConfig = this.appConfigService.getConfig();
-
-  logbook: Logbook = new Logbook();
-  filters: LogbookFilters = {
-    textSearch: "",
-    showBotMessages: true,
-    showImages: true,
-    showUserMessages: true,
-    sortField: "timestamp:desc",
-    skip: 0,
-    limit: 25,
-  };
 
   subscriptions: Subscription[] = [];
 
@@ -81,58 +57,38 @@ export class LogbooksDashboardComponent
     }
   }
 
-  onTextSearchChange(query: string) {
+  onTextSearchChange(name: string, query: string) {
     this.store.dispatch(setTextFilterAction({ textSearch: query }));
-    this.store.dispatch(fetchLogbookAction({ name: this.logbook.name }));
+    this.store.dispatch(fetchLogbookAction({ name }));
   }
 
-  onFilterSelect(filters: LogbookFilters) {
+  onFilterSelect(name: string, filters: LogbookFilters) {
     const { showBotMessages, showImages, showUserMessages } = filters;
     this.store.dispatch(
       setDisplayFiltersAction({ showBotMessages, showImages, showUserMessages })
     );
-    this.store.dispatch(fetchLogbookAction({ name: this.logbook.name }));
-    this.applyRouterState(this.logbook.name, filters);
+    this.store.dispatch(fetchLogbookAction({ name }));
+    this.applyRouterState(name, filters);
   }
 
-  onPageChange(event: PageChangeEvent) {
+  onPageChange(name: string, event: PageChangeEvent) {
     this.store.dispatch(
       changePageAction({ page: event.pageIndex, limit: event.pageSize })
     );
-    this.store.dispatch(fetchLogbookAction({ name: this.logbook.name }));
+    this.store.dispatch(fetchLogbookAction({ name }));
   }
 
-  onSortChange(event: SortChangeEvent) {
+  onSortChange(name: string, event: SortChangeEvent) {
     const { active: column, direction } = event;
     this.store.dispatch(sortByColumnAction({ column, direction }));
-    this.store.dispatch(fetchLogbookAction({ name: this.logbook.name }));
-  }
-
-  reverseTimeline(): void {
-    this.logbook.messages.reverse();
+    this.store.dispatch(fetchLogbookAction({ name }));
   }
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.select(selectCurrentLogbook).subscribe((logbook) => {
-        if (logbook) {
-          this.logbook = logbook;
-        }
-      })
-    );
-
-    this.subscriptions.push(
-      this.filters$.subscribe((filters) => {
-        if (filters) {
-          this.filters = filters;
-        }
-      })
-    );
-
-    this.subscriptions.push(
-      combineLatest([this.route.params, this.filters$, this.readyToFetch$])
+      combineLatest([this.route.params, this.vm$])
         .pipe(
-          map(([params, filters, _]) => [params, filters]),
+          map(([params, vm]) => [params, vm.filters]),
           distinctUntilChanged(deepEqual)
         )
         .subscribe(([{ name }, filters]) => {
@@ -161,6 +117,7 @@ export class LogbooksDashboardComponent
   }
 
   ngOnDestroy() {
+    this.store.dispatch(clearLogbookAction());
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

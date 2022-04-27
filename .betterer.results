@@ -118,27 +118,27 @@ exports[`stricter compilation`] = {
       [121, 8, 40, "Expected 0 arguments, but got 1.", "1274561088"],
       [139, 8, 66, "Expected 0 arguments, but got 1.", "829953720"]
     ],
-    "src/app/logbooks/logbooks-dashboard/logbooks-dashboard.component.spec.ts:3358789684": [
-      [133, 8, 35, "Expected 0 arguments, but got 1.", "2974114096"],
-      [136, 8, 71, "Expected 0 arguments, but got 1.", "3615920665"],
-      [164, 8, 113, "Expected 0 arguments, but got 1.", "4108647108"],
-      [171, 8, 71, "Expected 0 arguments, but got 1.", "3615920665"],
-      [194, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
-      [197, 8, 42, "Expected 0 arguments, but got 1.", "3485696116"],
-      [216, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"],
-      [219, 8, 42, "Expected 0 arguments, but got 1.", "3485696116"]
+    "src/app/logbooks/logbooks-dashboard/logbooks-dashboard.component.spec.ts:2042065583": [
+      [128, 8, 35, "Expected 0 arguments, but got 1.", "2974114096"],
+      [131, 8, 61, "Expected 0 arguments, but got 1.", "180037720"],
+      [158, 8, 113, "Expected 0 arguments, but got 1.", "4108647108"],
+      [165, 8, 61, "Expected 0 arguments, but got 1.", "180037720"],
+      [187, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
+      [190, 8, 42, "Expected 0 arguments, but got 1.", "3485696116"],
+      [208, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"],
+      [211, 8, 42, "Expected 0 arguments, but got 1.", "3485696116"]
     ],
-    "src/app/policies/policies-dashboard/policies-dashboard.component.spec.ts:4210154999": [
-      [189, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
-      [207, 8, 103, "Expected 0 arguments, but got 1.", "1292591848"],
-      [227, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"],
-      [244, 8, 109, "Expected 0 arguments, but got 1.", "1426938445"],
-      [261, 47, 25, "Expected 0 arguments, but got 1.", "45720501"],
-      [272, 47, 22, "Expected 0 arguments, but got 1.", "3206069091"],
-      [289, 8, 49, "Expected 0 arguments, but got 1.", "1596683029"],
-      [305, 8, 51, "Expected 0 arguments, but got 1.", "1809416436"],
-      [332, 8, 104, "Expected 0 arguments, but got 1.", "2940355500"],
-      [337, 47, 22, "Expected 0 arguments, but got 1.", "3206069091"]
+    "src/app/policies/policies-dashboard/policies-dashboard.component.spec.ts:132889990": [
+      [200, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
+      [218, 8, 103, "Expected 0 arguments, but got 1.", "1292591848"],
+      [238, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"],
+      [255, 8, 109, "Expected 0 arguments, but got 1.", "1426938445"],
+      [272, 47, 25, "Expected 0 arguments, but got 1.", "45720501"],
+      [283, 47, 22, "Expected 0 arguments, but got 1.", "3206069091"],
+      [300, 8, 49, "Expected 0 arguments, but got 1.", "1596683029"],
+      [316, 8, 51, "Expected 0 arguments, but got 1.", "1809416436"],
+      [343, 8, 104, "Expected 0 arguments, but got 1.", "2940355500"],
+      [348, 47, 22, "Expected 0 arguments, but got 1.", "3206069091"]
     ],
     "src/app/proposals/view-proposal-page/view-proposal-page.component.spec.ts:773841882": [
       [84, 45, 4, "Argument of type \'null\' is not assignable to parameter of type \'Dataset[]\'.", "2087897566"],
