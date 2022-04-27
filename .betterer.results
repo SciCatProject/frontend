@@ -118,15 +118,15 @@ exports[`stricter compilation`] = {
       [121, 8, 40, "Expected 0 arguments, but got 1.", "1274561088"],
       [139, 8, 66, "Expected 0 arguments, but got 1.", "829953720"]
     ],
-    "src/app/logbooks/logbooks-dashboard/logbooks-dashboard.component.spec.ts:3358789684": [
-      [133, 8, 35, "Expected 0 arguments, but got 1.", "2974114096"],
-      [136, 8, 71, "Expected 0 arguments, but got 1.", "3615920665"],
-      [164, 8, 113, "Expected 0 arguments, but got 1.", "4108647108"],
-      [171, 8, 71, "Expected 0 arguments, but got 1.", "3615920665"],
-      [194, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
-      [197, 8, 42, "Expected 0 arguments, but got 1.", "3485696116"],
-      [216, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"],
-      [219, 8, 42, "Expected 0 arguments, but got 1.", "3485696116"]
+    "src/app/logbooks/logbooks-dashboard/logbooks-dashboard.component.spec.ts:2042065583": [
+      [128, 8, 35, "Expected 0 arguments, but got 1.", "2974114096"],
+      [131, 8, 61, "Expected 0 arguments, but got 1.", "180037720"],
+      [158, 8, 113, "Expected 0 arguments, but got 1.", "4108647108"],
+      [165, 8, 61, "Expected 0 arguments, but got 1.", "180037720"],
+      [187, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
+      [190, 8, 42, "Expected 0 arguments, but got 1.", "3485696116"],
+      [208, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"],
+      [211, 8, 42, "Expected 0 arguments, but got 1.", "3485696116"]
     ],
     "src/app/policies/policies-dashboard/policies-dashboard.component.spec.ts:132889990": [
       [200, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
