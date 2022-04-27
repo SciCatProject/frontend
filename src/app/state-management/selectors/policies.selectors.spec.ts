@@ -128,6 +128,44 @@ describe("Policies Selectors", () => {
     });
   });
 
+  describe("selectPoliciesPagination", () => {
+    it("should select policies pagination state", () => {
+      expect(
+        fromSelectors.selectPoliciesPagination.projector(
+          fromSelectors.selectPoliciesPerPage.projector(
+            initialPolicyState.policiesFilters
+          ),
+          fromSelectors.selectPage.projector(
+            initialPolicyState.policiesFilters
+          ),
+          fromSelectors.selectPoliciesCount.projector(initialPolicyState)
+        )
+      ).toEqual({ policiesPerPage: 25, currentPage: 0, policyCount: 0 });
+    });
+  });
+
+  describe("selectEditablePoliciesPagination", () => {
+    it("should select editable policies pagination state", () => {
+      expect(
+        fromSelectors.selectEditablePoliciesPagination.projector(
+          fromSelectors.selectEditablePoliciesPerPage.projector(
+            initialPolicyState.editableFilters
+          ),
+          fromSelectors.selectEditablePage.projector(
+            initialPolicyState.editableFilters
+          ),
+          fromSelectors.selectEditablePoliciesCount.projector(
+            initialPolicyState
+          )
+        )
+      ).toEqual({
+        editablePoliciesPerPage: 25,
+        currentEditablePage: 0,
+        editableCount: 0,
+      });
+    });
+  });
+
   describe("selectQueryParams", () => {
     it("should select query params from policiesFilters", () => {
       const { skip, limit, sortField } = policiesFilters;
@@ -149,6 +187,52 @@ describe("Policies Selectors", () => {
           initialPolicyState.editableFilters
         )
       ).toEqual(params);
+    });
+  });
+
+  describe("selectPoliciesDashboardPageViewModel", () => {
+    it("should select policies dashboard page view model state", () => {
+      expect(
+        fromSelectors.selectPoliciesDashboardPageViewModel.projector(
+          fromSelectors.selectPolicies.projector(initialPolicyState),
+          fromSelectors.selectPoliciesPagination.projector(
+            fromSelectors.selectPoliciesPerPage.projector(
+              initialPolicyState.policiesFilters
+            ),
+            fromSelectors.selectPage.projector(
+              initialPolicyState.policiesFilters
+            ),
+            fromSelectors.selectPoliciesCount.projector(initialPolicyState)
+          ),
+          fromSelectors.selectFilters.projector(initialPolicyState),
+          initialPolicyState.editablePolicies,
+          fromSelectors.selectEditablePoliciesPagination.projector(
+            fromSelectors.selectEditablePoliciesPerPage.projector(
+              initialPolicyState.editableFilters
+            ),
+            fromSelectors.selectEditablePage.projector(
+              initialPolicyState.editableFilters
+            ),
+            fromSelectors.selectEditablePoliciesCount.projector(
+              initialPolicyState
+            )
+          ),
+          fromSelectors.selectEditableFilters.projector(initialPolicyState),
+          fromSelectors.selectSelectedPolicies.projector(initialPolicyState)
+        )
+      ).toEqual({
+        policies: [],
+        policiesPerPage: 25,
+        currentPage: 0,
+        policyCount: 0,
+        filters: policiesFilters,
+        editablePolicies: [],
+        editablePoliciesPerPage: 25,
+        currentEditablePage: 0,
+        editableCount: 0,
+        editableFilters,
+        selectedPolicies: [],
+      });
     });
   });
 });

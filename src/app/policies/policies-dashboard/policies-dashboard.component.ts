@@ -1,26 +1,13 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { Policy, DatasetApi } from "shared/sdk";
-import { Observable, Subscription } from "rxjs";
 import {
   TableColumn,
   PageChangeEvent,
   SortChangeEvent,
   CheckboxEvent,
 } from "shared/modules/table/table.component";
-import {
-  selectPoliciesPerPage,
-  selectPage,
-  selectPoliciesCount,
-  selectPolicies,
-  selectEditablePolicies,
-  selectSelectedPolicies,
-  selectEditablePoliciesCount,
-  selectEditablePoliciesPerPage,
-  selectEditablePage,
-  selectFilters,
-  selectEditableFilters,
-} from "state-management/selectors/policies.selectors";
+import { selectPoliciesDashboardPageViewModel } from "state-management/selectors/policies.selectors";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialogConfig, MatDialog } from "@angular/material/dialog";
 import { MatTabChangeEvent } from "@angular/material/tabs";
@@ -47,31 +34,10 @@ import { GenericFilters } from "state-management/models";
   templateUrl: "./policies-dashboard.component.html",
   styleUrls: ["./policies-dashboard.component.scss"],
 })
-export class PoliciesDashboardComponent implements OnInit, OnDestroy {
-  policies$: Observable<Policy[]> = this.store.select(selectPolicies);
-  policiesPerPage$: Observable<number> = this.store.select(
-    selectPoliciesPerPage
-  );
-  currentPage$: Observable<number> = this.store.select(selectPage);
-  policyCount$: Observable<number> = this.store.select(selectPoliciesCount);
-  editablePolicies$: Observable<Policy[]> = this.store.select(
-    selectEditablePolicies
-  );
-  editablePoliciesPerPage$: Observable<number> = this.store.select(
-    selectEditablePoliciesPerPage
-  );
-  currentEditablePage$: Observable<number> =
-    this.store.select(selectEditablePage);
-  editableCount$: Observable<number> = this.store.select(
-    selectEditablePoliciesCount
-  );
+export class PoliciesDashboardComponent implements OnInit {
+  vm$ = this.store.select(selectPoliciesDashboardPageViewModel);
 
-  multiSelect = false;
-  selectedIds: string[] = [];
   selectedGroups: string[] = [];
-  selectedPolicies: Policy[] = [];
-  selectedPoliciesSubscription: Subscription = new Subscription();
-
   dialogConfig: MatDialogConfig = new MatDialogConfig();
 
   editEnabled = true;
@@ -116,7 +82,6 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   onTabChange(event: MatTabChangeEvent) {
-    console.log("Click!", event);
     switch (event.index) {
       case 0: {
         this.updatePoliciesRouterState();
@@ -133,22 +98,20 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
   }
 
   updatePoliciesRouterState() {
-    this.store
-      .select(selectFilters)
-      .subscribe((filters) => {
-        if (filters) {
-          this.addToQueryParams(filters);
+    this.vm$
+      .subscribe((vm) => {
+        if (vm.filters) {
+          this.addToQueryParams(vm.filters);
         }
       })
       .unsubscribe();
   }
 
   updateEditableRouterState() {
-    this.store
-      .select(selectEditableFilters)
-      .subscribe((filters) => {
-        if (filters) {
-          this.addToQueryParams(filters);
+    this.vm$
+      .subscribe((vm) => {
+        if (vm.editableFilters) {
+          this.addToQueryParams(vm.editableFilters);
         }
       })
       .unsubscribe();
@@ -208,14 +171,15 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  openDialog() {
+  openDialog(selectedPolicies: Policy[]) {
+    this.selectedGroups = selectedPolicies.map((policy) => policy.ownerGroup);
     this.dialogConfig.disableClose = true;
     this.dialogConfig.autoFocus = true;
     this.dialogConfig.direction = "ltr";
     this.dialogConfig.data = {
-      selectedPolicy: this.selectedPolicies[0],
+      selectedPolicy: selectedPolicies[0],
       selectedGroups: this.selectedGroups,
-      multiSelect: this.multiSelect,
+      multiSelect: selectedPolicies.length > 1,
     };
     const dialogRef = this.dialog.open(EditDialogComponent, this.dialogConfig);
     dialogRef.afterClosed().subscribe((val) => this.onDialogClose(val));
@@ -259,26 +223,6 @@ export class PoliciesDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(clearSelectionAction());
     this.store.dispatch(fetchPoliciesAction());
 
-    this.selectedPoliciesSubscription = this.store
-      .select(selectSelectedPolicies)
-      .subscribe((selectedPolicies) => {
-        if (selectedPolicies) {
-          this.selectedPolicies = selectedPolicies;
-          this.multiSelect = this.selectedPolicies.length > 1;
-          this.selectedGroups = [];
-          this.selectedIds = [];
-
-          selectedPolicies.forEach((policy) => {
-            this.selectedGroups.push(policy.ownerGroup);
-            this.selectedIds.push(policy.id);
-          });
-        }
-      });
-
     this.updatePoliciesRouterState();
-  }
-
-  ngOnDestroy() {
-    this.selectedPoliciesSubscription.unsubscribe();
   }
 }
