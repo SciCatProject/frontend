@@ -1,16 +1,18 @@
-<div fxLayout="row" fxLayout.lt-lg="column">
-  <div fxFlex="20" fxFlex.lt-xl="10"></div>
-  <div fxFlex="63" fxFlex.lt-xl="80">
-    <app-table
-      [data]="instruments$ | async"
-      [columns]="tableColumns"
-      [paginate]="tablePaginate"
-      [currentPage]="currentPage$ | async"
-      [dataCount]="instrumentsCount$ | async"
-      [dataPerPage]="instrumentsPerPage$ | async"
-      (pageChange)="onPageChange($event)"
-      (sortChange)="onSortChange($event)"
-      (rowClick)="onRowClick($event)"
-    ></app-table>
+<ng-container *ngIf="vm$ | async as vm">
+  <div fxLayout="row" fxLayout.lt-lg="column">
+    <div fxFlex="20" fxFlex.lt-xl="10"></div>
+    <div fxFlex="63" fxFlex.lt-xl="80">
+      <app-table
+        [data]="vm.instruments"
+        [columns]="tableColumns"
+        [paginate]="tablePaginate"
+        [currentPage]="vm.currentPage"
+        [dataCount]="vm.instrumentsCount"
+        [dataPerPage]="vm.instrumentsPerPage"
+        (pageChange)="onPageChange($event)"
+        (sortChange)="onSortChange($event)"
+        (rowClick)="onRowClick($event)"
+      ></app-table>
+    </div>
   </div>
-</div>
+</ng-container>
