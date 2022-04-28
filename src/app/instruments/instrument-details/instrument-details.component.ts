@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { Instrument } from "shared/sdk";
 import {
   fetchInstrumentAction,
   saveCustomMetadataAction,

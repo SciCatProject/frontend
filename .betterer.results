@@ -109,7 +109,7 @@ exports[`stricter compilation`] = {
     "src/app/instruments/instrument-details/instrument-details.component.spec.ts:1086544078": [
       [84, 8, 49, "Expected 0 arguments, but got 1.", "1785026316"]
     ],
-    "src/app/instruments/instruments-dashboard/instruments-dashboard.component.spec.ts:4286555304": [
+    "src/app/instruments/instruments-dashboard/instruments-dashboard.component.spec.ts:2844596657": [
       [103, 8, 33, "Expected 0 arguments, but got 1.", "1984542627"],
       [123, 8, 41, "Expected 0 arguments, but got 1.", "2251019380"]
     ],
