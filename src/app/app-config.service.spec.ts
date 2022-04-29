@@ -5,6 +5,7 @@ import { of } from "rxjs";
 import { MockHttp } from "shared/MockStubs";
 
 const appConfig: AppConfig = {
+  accessTokenPrefix: "",
   addDatasetEnabled: true,
   archiveWorkflowEnabled: true,
   datasetReduceEnabled: true,

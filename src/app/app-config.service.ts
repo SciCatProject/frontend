@@ -15,6 +15,7 @@ export class RetrieveDestinations {
 }
 
 export interface AppConfig {
+  accessTokenPrefix: string;
   addDatasetEnabled: boolean;
   archiveWorkflowEnabled: boolean;
   datasetReduceEnabled: boolean;
