@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { timeout } from "rxjs/operators";
 import { TableColumn } from "state-management/models";
 
 export interface OAuth2Endpoint {
@@ -65,7 +66,10 @@ export class AppConfigService {
 
   async loadAppConfig(): Promise<void> {
     try {
-      this.appConfig = await this.http.get("/api/v3/config").toPromise();
+      this.appConfig = await this.http
+        .get("/client/config.json")
+        .pipe(timeout(2000))
+        .toPromise();
     } catch (err) {
       console.log("No config available in backend, trying with local config.");
       try {

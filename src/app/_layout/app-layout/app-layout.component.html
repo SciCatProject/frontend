@@ -1,8 +1,4 @@
-<div
-  [class.ess-theme]="appConfig.facility !== 'MAX IV'"
-  [class.maxiv-theme]="appConfig.facility === 'MAX IV'"
-  [ngClass]="{ 'anonymous-site': (loggedIn$ | async) === false }"
->
+<div [ngClass]="{ 'anonymous-site': (loggedIn$ | async) === false }">
   <app-app-header></app-app-header>
   <div class="main">
     <router-outlet></router-outlet>
