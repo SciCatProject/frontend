@@ -1,7 +1,6 @@
 import {
   Component,
   OnInit,
-  Input,
   OnChanges,
   SimpleChange,
   OnDestroy,
@@ -19,8 +18,8 @@ import {
 } from "state-management/actions/datasets.actions";
 import { FormControl, Validators, FormBuilder } from "@angular/forms";
 import { map } from "rxjs/operators";
-import { combineLatest, Observable, Subscription } from "rxjs";
-import { selectIsAdmin, selectIsLoading, selectIsLoggedIn, selectProfile } from "state-management/selectors/user.selectors";
+import { Subscription } from "rxjs";
+import { selectIsLoading, selectIsLoggedIn } from "state-management/selectors/user.selectors";
 import { OwnershipService } from "shared/services/ownership.service";
 
 @Component({
@@ -81,7 +80,7 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
     private router: Router,
     private store: Store,
     private ownershipService: OwnershipService
-  ) {}
+  ) { }
 
   reduceDataset(dataset: Dataset): void {
     this.store.dispatch(reduceDatasetAction({ dataset }));

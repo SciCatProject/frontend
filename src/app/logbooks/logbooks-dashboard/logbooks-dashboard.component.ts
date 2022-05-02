@@ -6,7 +6,7 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Dataset, Logbook } from "shared/sdk";
+import { Dataset } from "shared/sdk";
 import { combineLatest, Subscription } from "rxjs";
 import { selectLogbooksDashboardPageViewModel } from "state-management/selectors/logbooks.selectors";
 import {
@@ -106,9 +106,7 @@ export class LogbooksDashboardComponent
       this.store.select(selectCurrentDataset).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
-          if (dataset) {
-            this.ownershipService.checkPermission(dataset, this.store, this.router);
-          }
+          this.ownershipService.checkPermission(dataset, this.store, this.router);
         }
       })
     );

@@ -18,7 +18,7 @@ import {
   CheckboxEvent,
 } from "shared/modules/table/table.component";
 import { selectIsLoading, selectIsLoggedIn } from "state-management/selectors/user.selectors";
-import { Dataset, Job, UserApi } from "shared/sdk";
+import { Job, UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";
