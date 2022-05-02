@@ -1,25 +1,43 @@
 <ng-template [ngIf]="dataset">
   <div fxLayout="row">
     <div fxFlex="auto">
-      <a mat-raised-button href="{{ appConfig.jupyterHubUrl }}" target="_blank"
-        rel="noopener noreferrer" class="jupyter-button"
-        *ngIf="appConfig.jupyterHubUrl">
+      <a
+        mat-raised-button
+        href="{{ appConfig.jupyterHubUrl }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="jupyter-button"
+        *ngIf="appConfig.jupyterHubUrl"
+      >
         Jupyter Hub
       </a>
     </div>
-    <div fxFlex="auto" *ngIf="isPI()">
-      <mat-slide-toggle class="public-toggle" [checked]="dataset.isPublished"
-        (change)="onSlidePublic($event)">
+    <div
+      fxFlex="auto"
+      *ngIf="isPI()"
+    >
+      <mat-slide-toggle
+        class="public-toggle"
+        [checked]="dataset.isPublished"
+        (change)="onSlidePublic($event)"
+      >
         Public
       </mat-slide-toggle>
     </div>
   </div>
   <div style="clear: both;"></div>
-  <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
+  <div
+    fxLayout="row"
+    fxLayout.xs="column"
+    *ngIf="dataset"
+  >
     <div fxFlex="80%">
       <mat-card>
         <mat-card-header class="general-header">
-          <div mat-card-avatar class="section-icon">
+          <div
+            mat-card-avatar
+            class="section-icon"
+          >
             <mat-icon> description </mat-icon>
           </div>
           General Information
@@ -50,16 +68,24 @@
             <th>Keywords</th>
             <td *ngIf="!editEnabled">
               <mat-chip-list #keywordChips>
-                <mat-chip *ngFor="let keyword of dataset.keywords"
+                <mat-chip
+                  *ngFor="let keyword of dataset.keywords"
                   [removable]="editingAllowed"
                   (removed)="onRemoveKeyword(keyword)"
-                  (click)="onClickKeyword(keyword)">
+                  (click)="onClickKeyword(keyword)"
+                >
                   {{ keyword }}
-                  <mat-icon *ngIf="editingAllowed" matChipRemove>cancel
+                  <mat-icon
+                    *ngIf="editingAllowed"
+                    matChipRemove
+                  >cancel
                   </mat-icon>
                 </mat-chip>
-                <mat-chip *ngIf="editingAllowed" class="add-keyword-chip"
-                  (click)="editEnabled = true">
+                <mat-chip
+                  *ngIf="editingAllowed"
+                  class="add-keyword-chip"
+                  (click)="editEnabled = true"
+                >
                   Add Keyword <mat-icon>add</mat-icon>
                 </mat-chip>
               </mat-chip-list>
@@ -67,20 +93,30 @@
             <td *ngIf="editEnabled">
               <mat-form-field>
                 <mat-chip-list #keywordChips>
-                  <mat-chip *ngFor="let keyword of dataset.keywords"
-                    [removable]="true" (removed)="onRemoveKeyword(keyword)"
-                    (click)="onClickKeyword(keyword)">
+                  <mat-chip
+                    *ngFor="let keyword of dataset.keywords"
+                    [removable]="true"
+                    (removed)="onRemoveKeyword(keyword)"
+                    (click)="onClickKeyword(keyword)"
+                  >
                     {{ keyword }}
                     <mat-icon matChipRemove>cancel</mat-icon>
                   </mat-chip>
-                  <input id="keywordInput" [matChipInputFor]="keywordChips"
+                  <input
+                    id="keywordInput"
+                    [matChipInputFor]="keywordChips"
                     [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
                     [matChipInputAddOnBlur]="true"
-                    (matChipInputTokenEnd)="onAddKeyword($event)" />
+                    (matChipInputTokenEnd)="onAddKeyword($event)"
+                  />
                 </mat-chip-list>
               </mat-form-field>
-              <button mat-raised-button class="done-edit-button" color="accent"
-                (click)="editEnabled = false">
+              <button
+                mat-raised-button
+                class="done-edit-button"
+                color="accent"
+                (click)="editEnabled = false"
+              >
                 Done
               </button>
             </td>
@@ -89,8 +125,11 @@
             <th>Shared With</th>
             <td>
               <mat-chip-list>
-                <mat-chip *ngFor="let share of dataset.sharedWith"
-                  [removable]="true" (removed)="onRemoveShare(share)">
+                <mat-chip
+                  *ngFor="let share of dataset.sharedWith"
+                  [removable]="true"
+                  (removed)="onRemoveShare(share)"
+                >
                   {{ share }}
                   <mat-icon matChipRemove>cancel</mat-icon>
                 </mat-chip>
@@ -102,7 +141,10 @@
 
       <mat-card>
         <mat-card-header class="creator-header">
-          <div mat-card-avatar class="section-icon">
+          <div
+            mat-card-avatar
+            class="section-icon"
+          >
             <mat-icon> person </mat-icon>
           </div>
           Creator Information
@@ -142,7 +184,10 @@
 
       <mat-card>
         <mat-card-header class="file-header">
-          <div mat-card-avatar class="section-icon">
+          <div
+            mat-card-avatar
+            class="section-icon"
+          >
             <mat-icon> folder </mat-icon>
           </div>
           File Information
@@ -166,7 +211,10 @@
 
       <mat-card>
         <mat-card-header class="related-header">
-          <div mat-card-avatar class="section-icon">
+          <div
+            mat-card-avatar
+            class="section-icon"
+          >
             <mat-icon> library_books </mat-icon>
           </div>
           Related Documents
@@ -176,22 +224,32 @@
           <tr *ngIf="dataset['proposalId'] && proposal">
             <th>Proposal</th>
             <td [ngSwitch]="editingAllowed">
-              <a *ngSwitchCase="true"
-                (click)="editingAllowed? onClickProposal(proposal.proposalId) : ''">{{
-                proposal.title }}</a>
+              <a
+                *ngSwitchCase="true"
+                (click)="
+                editingAllowed ? onClickProposal(proposal.proposalId) : ''
+              "
+              >{{ proposal.title }}</a>
               <span *ngSwitchDefault>{{ proposal.title }}</span>
             </td>
           </tr>
           <tr *ngIf="dataset['sampleId'] && sample">
             <th>Sample</th>
             <td [ngSwitch]="editingAllowed">
-              <a *ngSwitchCase="true"
-                (click)="editingAllowed? onClickSample(sample.sampleId) : ''">
+              <a
+                *ngSwitchCase="true"
+                (click)="editingAllowed ? onClickSample(sample.sampleId) : ''"
+              >
                 <span>{{ sample.description }}</span>
               </a>
               <span *ngSwitchDefault>{{ sample.description }}</span>
-              <span class="sample-edit" (click)="openSampleEditDialog()"
-                *ngIf="appConfig.editDatasetSampleEnabled && editingAllowed && isPI">
+              <span
+                class="sample-edit"
+                (click)="openSampleEditDialog()"
+                *ngIf="
+                appConfig.editDatasetSampleEnabled && editingAllowed && isPI
+              "
+              >
                 <mat-icon>edit</mat-icon>
               </span>
             </td>
@@ -199,8 +257,10 @@
           <tr *ngIf="dataset['instrumentId'] && instrument">
             <th>Instrument</th>
             <td [ngSwitch]="editingAllowed">
-              <a *ngSwitchCase="true"
-                (click)="editingAllowed && onClickInstrument(instrument.pid)">
+              <a
+                *ngSwitchCase="true"
+                (click)="editingAllowed && onClickInstrument(instrument.pid)"
+              >
                 {{ instrument.name }}
               </a>
               <span *ngSwitchDefault>{{ instrument.name }}</span>
@@ -218,9 +278,9 @@
                   {{ technique.name }}
                 </span>
                 <span *ngIf="
-                    dataset.techniques.indexOf(technique) <
-                    dataset.techniques.length - 1
-                  ">,
+                  dataset.techniques.indexOf(technique) <
+                  dataset.techniques.length - 1
+                ">,
                 </span>
               </div>
             </td>
@@ -244,7 +304,10 @@
 
       <mat-card *ngIf="dataset.type === 'derived'">
         <mat-card-header class="derived-header">
-          <div mat-card-avatar class="section-icon">
+          <div
+            mat-card-avatar
+            class="section-icon"
+          >
             <mat-icon> analytics </mat-icon>
           </div>
           Derived Data
@@ -268,43 +331,62 @@
 
       <mat-card>
         <mat-card-header class="scientific-header">
-          <div mat-card-avatar class="section-icon">
+          <div
+            mat-card-avatar
+            class="section-icon"
+          >
             <mat-icon> science </mat-icon>
           </div>
           Scientific Metadata
         </mat-card-header>
-
-        <ng-template [ngIf]="appConfig.tableSciDataEnabled"
-          [ngIfElse]="jsonView">
+        <ng-template
+          [ngIf]="appConfig.tableSciDataEnabled"
+          [ngIfElse]="jsonView"
+        >
           <ng-template #metadataView>
             <div [ngSwitch]="appConfig.metadataStructure">
-              <tree-view *ngSwitchCase="'tree'"
-                [metadata]="dataset['scientificMetadata']"></tree-view>
-              <metadata-view *ngSwitchDefault
-                [metadata]="dataset['scientificMetadata']"></metadata-view>
+              <tree-view
+                *ngSwitchCase="'tree'"
+                [metadata]="dataset['scientificMetadata']"
+              ></tree-view>
+              <metadata-view
+                *ngSwitchDefault
+                [metadata]="dataset['scientificMetadata']"
+              >
+              </metadata-view>
             </div>
           </ng-template>
-          <mat-tab-group class="metadataGroup"
-            *ngIf="editingAllowed;else metadataView">
+          <mat-tab-group
+            class="metadataGroup"
+            *ngIf="editingAllowed; else metadataView"
+          >
             <mat-tab>
               <ng-template mat-tab-label>
                 <mat-icon> list </mat-icon> View
               </ng-template>
               <ng-container *ngTemplateOutlet="metadataView"> </ng-container>
             </mat-tab>
-            <mat-tab class="editTab" *ngIf="editingAllowed"
-              [hidden]="!appConfig.editMetadataEnabled">
+            <mat-tab
+              class="editTab"
+              *ngIf="editingAllowed"
+              [hidden]="!appConfig.editMetadataEnabled"
+            >
               <ng-template mat-tab-label>
                 <mat-icon> edit </mat-icon> Edit
               </ng-template>
               <div [ngSwitch]="appConfig.metadataStructure">
-                <tree-edit *ngSwitchCase="'tree'"
+                <tree-edit
+                  *ngSwitchCase="'tree'"
                   [metadata]="dataset['scientificMetadata']"
                   (save)="onSaveMetadata($event)"
-                  (hasUnsavedChanges)="onHasUnsavedChanges($event)"></tree-edit>
-                <metadata-edit *ngSwitchDefault
+                  (hasUnsavedChanges)="onHasUnsavedChanges($event)"
+                >
+                </tree-edit>
+                <metadata-edit
+                  *ngSwitchDefault
                   [metadata]="dataset['scientificMetadata']"
-                  (save)="onSaveMetadata($event)">
+                  (save)="onSaveMetadata($event)"
+                >
                 </metadata-edit>
               </div>
             </mat-tab>
@@ -312,28 +394,42 @@
         </ng-template>
 
         <ng-template #jsonView>
-          <ngx-json-viewer [json]="dataset['scientificMetadata']"
-            [expanded]="false"></ngx-json-viewer>
+          <ngx-json-viewer
+            [json]="dataset['scientificMetadata']"
+            [expanded]="false"
+          ></ngx-json-viewer>
         </ng-template>
       </mat-card>
       <mat-card *ngIf="editingAllowed && appConfig.jsonMetadataEnabled">
-        <button mat-stroked-button (click)="show = !show">
+        <button
+          mat-stroked-button
+          (click)="show = !show"
+        >
           {{ show ? "Hide MetaData" : "Show Metadata" }}
         </button>
 
         <br />
 
         <div *ngIf="show">
-          <ngx-json-viewer [json]="datasetWithout$ | async" [expanded]="false">
+          <ngx-json-viewer
+            [json]="datasetWithout$ | async"
+            [expanded]="false"
+          >
           </ngx-json-viewer>
         </div>
       </mat-card>
     </div>
 
-    <div fxFlex="30%" *ngIf="attachments$ | async as attachments">
+    <div
+      fxFlex="30%"
+      *ngIf="attachments$ | async as attachments"
+    >
       <ng-container *ngFor="let da of attachments">
         <mat-card>
-          <img mat-card-image src="{{ da.thumbnail }}" />
+          <img
+            mat-card-image
+            src="{{ da.thumbnail }}"
+          />
           <p>{{ da.caption }}</p>
         </mat-card>
       </ng-container>
