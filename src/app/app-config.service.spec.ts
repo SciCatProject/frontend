@@ -5,6 +5,7 @@ import { of } from "rxjs";
 import { MockHttp } from "shared/MockStubs";
 
 const appConfig: AppConfig = {
+  accessTokenPrefix: "",
   addDatasetEnabled: true,
   archiveWorkflowEnabled: true,
   datasetReduceEnabled: true,
@@ -117,6 +118,8 @@ const appConfig: AppConfig = {
   shoppingCartEnabled: true,
   shoppingCartOnHeader: true,
   tableSciDataEnabled: true,
+  fileserverBaseURL: "",
+  fileserverButtonLabel: ""
 };
 
 describe("AppConfigService", () => {

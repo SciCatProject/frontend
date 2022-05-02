@@ -265,6 +265,18 @@ describe("DatasetDetailComponent", () => {
     });
   });
 
+  describe("#onClickInstrument()", () => {
+    it("should navigate to an instrument", () => {
+      const instrumentId = "testId";
+
+      component.onClickInstrument(instrumentId);
+
+      expect(router.navigateByUrl).toHaveBeenCalledWith(
+        "/instruments/" + instrumentId
+      );
+    });
+  });
+
   describe("#onClickProposal()", () => {
     it("should navigate to a proposal", () => {
       const proposalId = "ABC123";

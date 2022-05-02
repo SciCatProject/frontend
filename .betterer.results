@@ -13,12 +13,12 @@ exports[`stricter compilation`] = {
       [198, 8, 68, "Expected 0 arguments, but got 1.", "2820193145"],
       [262, 47, 29, "Expected 0 arguments, but got 1.", "2503700957"]
     ],
-    "src/app/datasets/dataset-detail/dataset-detail.component.ts:1629409600": [
+    "src/app/datasets/dataset-detail/dataset-detail.component.ts:3260648166": [
       [83, 31, 12, "Object is possibly \'undefined\'.", "1944648223"]
     ],
-    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:1188047646": [
-      [121, 31, 12, "Object is possibly \'undefined\'.", "1944648223"],
-      [178, 35, 8, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'typeof TAB\'.\\n  No index signature with a parameter of type \'string\' was found on type \'typeof TAB\'.", "4213543011"]
+    "src/app/datasets/dataset-details-dashboard/dataset-details-dashboard.component.ts:3875342984": [
+      [122, 31, 12, "Object is possibly \'undefined\'.", "1944648223"],
+      [179, 35, 8, "Element implicitly has an \'any\' type because expression of type \'string\' can\'t be used to index type \'typeof TAB\'.\\n  No index signature with a parameter of type \'string\' was found on type \'typeof TAB\'.", "4213543011"]
     ],
     "src/app/datasets/dataset-lifecycle/dataset-lifecycle.component.spec.ts:2957427070": [
       [173, 20, 3, "Parameter \'key\' implicitly has an \'any\' type.", "193424690"],
@@ -109,7 +109,7 @@ exports[`stricter compilation`] = {
     "src/app/instruments/instrument-details/instrument-details.component.spec.ts:1086544078": [
       [84, 8, 49, "Expected 0 arguments, but got 1.", "1785026316"]
     ],
-    "src/app/instruments/instruments-dashboard/instruments-dashboard.component.spec.ts:4286555304": [
+    "src/app/instruments/instruments-dashboard/instruments-dashboard.component.spec.ts:2844596657": [
       [103, 8, 33, "Expected 0 arguments, but got 1.", "1984542627"],
       [123, 8, 41, "Expected 0 arguments, but got 1.", "2251019380"]
     ],
@@ -118,27 +118,27 @@ exports[`stricter compilation`] = {
       [121, 8, 40, "Expected 0 arguments, but got 1.", "1274561088"],
       [139, 8, 66, "Expected 0 arguments, but got 1.", "829953720"]
     ],
-    "src/app/logbooks/logbooks-dashboard/logbooks-dashboard.component.spec.ts:3358789684": [
-      [133, 8, 35, "Expected 0 arguments, but got 1.", "2974114096"],
-      [136, 8, 71, "Expected 0 arguments, but got 1.", "3615920665"],
-      [164, 8, 113, "Expected 0 arguments, but got 1.", "4108647108"],
-      [171, 8, 71, "Expected 0 arguments, but got 1.", "3615920665"],
-      [194, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
-      [197, 8, 42, "Expected 0 arguments, but got 1.", "3485696116"],
-      [216, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"],
-      [219, 8, 42, "Expected 0 arguments, but got 1.", "3485696116"]
+    "src/app/logbooks/logbooks-dashboard/logbooks-dashboard.component.spec.ts:2042065583": [
+      [128, 8, 35, "Expected 0 arguments, but got 1.", "2974114096"],
+      [131, 8, 61, "Expected 0 arguments, but got 1.", "180037720"],
+      [158, 8, 113, "Expected 0 arguments, but got 1.", "4108647108"],
+      [165, 8, 61, "Expected 0 arguments, but got 1.", "180037720"],
+      [187, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
+      [190, 8, 42, "Expected 0 arguments, but got 1.", "3485696116"],
+      [208, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"],
+      [211, 8, 42, "Expected 0 arguments, but got 1.", "3485696116"]
     ],
-    "src/app/policies/policies-dashboard/policies-dashboard.component.spec.ts:4210154999": [
-      [189, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
-      [207, 8, 103, "Expected 0 arguments, but got 1.", "1292591848"],
-      [227, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"],
-      [244, 8, 109, "Expected 0 arguments, but got 1.", "1426938445"],
-      [261, 47, 25, "Expected 0 arguments, but got 1.", "45720501"],
-      [272, 47, 22, "Expected 0 arguments, but got 1.", "3206069091"],
-      [289, 8, 49, "Expected 0 arguments, but got 1.", "1596683029"],
-      [305, 8, 51, "Expected 0 arguments, but got 1.", "1809416436"],
-      [332, 8, 104, "Expected 0 arguments, but got 1.", "2940355500"],
-      [337, 47, 22, "Expected 0 arguments, but got 1.", "3206069091"]
+    "src/app/policies/policies-dashboard/policies-dashboard.component.spec.ts:132889990": [
+      [200, 8, 66, "Expected 0 arguments, but got 1.", "829953720"],
+      [218, 8, 103, "Expected 0 arguments, but got 1.", "1292591848"],
+      [238, 8, 72, "Expected 0 arguments, but got 1.", "2723127549"],
+      [255, 8, 109, "Expected 0 arguments, but got 1.", "1426938445"],
+      [272, 47, 25, "Expected 0 arguments, but got 1.", "45720501"],
+      [283, 47, 22, "Expected 0 arguments, but got 1.", "3206069091"],
+      [300, 8, 49, "Expected 0 arguments, but got 1.", "1596683029"],
+      [316, 8, 51, "Expected 0 arguments, but got 1.", "1809416436"],
+      [343, 8, 104, "Expected 0 arguments, but got 1.", "2940355500"],
+      [348, 47, 22, "Expected 0 arguments, but got 1.", "3206069091"]
     ],
     "src/app/proposals/view-proposal-page/view-proposal-page.component.spec.ts:773841882": [
       [84, 45, 4, "Argument of type \'null\' is not assignable to parameter of type \'Dataset[]\'.", "2087897566"],
@@ -1004,8 +1004,8 @@ exports[`stricter compilation`] = {
       [154, 58, 4, "Type \'null\' is not assignable to type \'Record<string, string> | undefined\'.", "2087698470"],
       [167, 58, 4, "Type \'null\' is not assignable to type \'Record<string, string> | undefined\'.", "2087698470"]
     ],
-    "src/app/state-management/effects/user.effects.spec.ts:2144824867": [
-      [538, 27, 93, "Conversion of type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' to type \'UserSetting\' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to \'unknown\' first.\\n  Type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' is missing the following properties from type \'UserSetting\': \\"id\\", \\"createdBy\\", \\"updatedBy\\", \\"userId\\", and 3 more.", "1258454294"]
+    "src/app/state-management/effects/user.effects.spec.ts:290906162": [
+      [554, 27, 93, "Conversion of type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' to type \'UserSetting\' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to \'unknown\' first.\\n  Type \'{ columns: never[]; datasetCount: number; jobCount: number; }\' is missing the following properties from type \'UserSetting\': \\"id\\", \\"createdBy\\", \\"updatedBy\\", \\"userId\\", and 3 more.", "1258454294"]
     ],
     "src/app/state-management/reducers/datasets.reducer.ts:1798379755": [
       [40, 48, 27, "Argument of type \'(state: DatasetState, { datablocks }: { datablocks: Datablock[]; } & TypedAction<\\"[Dataset] Fetch Origin Datablocks Complete\\"> & { type: \\"[Dataset] Fetch Origin Datablocks Complete\\"; }) => { ...; }\' is not assignable to parameter of type \'OnReducer<DatasetState, [ActionCreator<\\"[Dataset] Fetch Origin Datablocks Complete\\", (props: { datablocks: Datablock[]; }) => { datablocks: Datablock[]; } & TypedAction<...>>]>\'.\\n  Call signature return types \'{ currentSet: { datablocks: Datablock[]; pid?: string | undefined; owner?: string | undefined; ownerEmail?: string | undefined; orcidOfOwner?: string | undefined; contactEmail?: string | undefined; ... 36 more ...; instrument?: Instrument | undefined; }; ... 10 more ...; openwhiskResult: Record<...> | undefined; }\' and \'DatasetState\' are incompatible.\\n    The types of \'currentSet[\\"pid\\"]\' are incompatible between these types.\\n      Type \'string | undefined\' is not assignable to type \'string\'.\\n        Type \'undefined\' is not assignable to type \'string\'.", "261574027"],

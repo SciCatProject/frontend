@@ -74,8 +74,11 @@ import { BatchCardModule } from "./batch-card/batch-card.module";
 import { JobEffects } from "state-management/effects/jobs.effects";
 import { LogbookEffects } from "state-management/effects/logbooks.effects";
 import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
+import { PublicDownloadDialogComponent } from "./public-download-dialog/public-download-dialog.component";
 import { DatasetFileUploaderComponent } from "./dataset-file-uploader/dataset-file-uploader.component";
 import { AdminTabComponent } from "./admin-tab/admin-tab.component";
+import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
+import { InstrumentEffects } from "state-management/effects/instruments.effects";
 
 @NgModule({
   imports: [
@@ -116,6 +119,7 @@ import { AdminTabComponent } from "./admin-tab/admin-tab.component";
     BatchCardModule,
     EffectsModule.forFeature([
       UserEffects,
+      InstrumentEffects,
       JobEffects,
       ProposalEffects,
       SampleEffects,
@@ -123,6 +127,7 @@ import { AdminTabComponent } from "./admin-tab/admin-tab.component";
       LogbookEffects,
     ]),
     StoreModule.forFeature("datasets", datasetsReducer),
+    StoreModule.forFeature("instruments", instrumentsReducer),
     StoreModule.forFeature("jobs", jobsReducer),
     StoreModule.forFeature("proposals", proposalsReducer),
     StoreModule.forFeature("samples", samplesReducer),
@@ -146,6 +151,7 @@ import { AdminTabComponent } from "./admin-tab/admin-tab.component";
     DatasetTableActionsComponent,
     DatasetLifecycleComponent,
     SampleEditComponent,
+    PublicDownloadDialogComponent,
     ShareDialogComponent,
     DatasetFileUploaderComponent,
     AdminTabComponent,

@@ -1,4 +1,5 @@
 {
+  "accessTokenPrefix": "",
   "addDatasetEnabled": true,
   "archiveWorkflowEnabled": true,
   "datasetReduceEnabled": true,
@@ -110,5 +111,7 @@
   "shareEnabled": true,
   "shoppingCartEnabled": true,
   "shoppingCartOnHeader": true,
-  "tableSciDataEnabled": true
+  "tableSciDataEnabled": true,
+  "fileserverButtonLabel": "Download with Globus",
+  "fileserverBaseURL": ""
 }

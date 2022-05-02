@@ -6,12 +6,7 @@ import {
   changePageAction,
   sortByColumnAction,
 } from "state-management/actions/instruments.actions";
-import {
-  selectInstruments,
-  selectPage,
-  selectInstrumentsCount,
-  selectInstrumentsPerPage,
-} from "state-management/selectors/instruments.selectors";
+import { selectInstrumentsDashboardPageViewModel } from "state-management/selectors/instruments.selectors";
 import {
   TableColumn,
   PageChangeEvent,
@@ -27,17 +22,15 @@ import { Router } from "@angular/router";
   styleUrls: ["./instruments-dashboard.component.scss"],
 })
 export class InstrumentsDashboardComponent implements OnInit {
-  instruments$ = this.store.select(selectInstruments).pipe(
-    map((instruments) =>
-      instruments.map((instrument) => ({
+  vm$ = this.store.select(selectInstrumentsDashboardPageViewModel).pipe(
+    map((vm) => ({
+      ...vm,
+      instruments: vm.instruments.map((instrument) => ({
         ...instrument,
         customMetadata: this.jsonHeadPipe.transform(instrument.customMetadata),
-      }))
-    )
+      })),
+    }))
   );
-  currentPage$ = this.store.select(selectPage);
-  instrumentsCount$ = this.store.select(selectInstrumentsCount);
-  instrumentsPerPage$ = this.store.select(selectInstrumentsPerPage);
 
   tablePaginate = true;
   tableColumns: TableColumn[] = [

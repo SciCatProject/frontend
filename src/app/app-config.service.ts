@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { timeout } from "rxjs/operators";
 import { TableColumn } from "state-management/models";
 
 export interface OAuth2Endpoint {
@@ -14,6 +15,7 @@ export class RetrieveDestinations {
 }
 
 export interface AppConfig {
+  accessTokenPrefix: string;
   addDatasetEnabled: boolean;
   archiveWorkflowEnabled: boolean;
   datasetReduceEnabled: boolean;
@@ -53,6 +55,8 @@ export interface AppConfig {
   shoppingCartEnabled: boolean;
   shoppingCartOnHeader: boolean;
   tableSciDataEnabled: boolean;
+  fileserverBaseURL: string;
+  fileserverButtonLabel: string | undefined;
 }
 
 @Injectable()
@@ -63,7 +67,10 @@ export class AppConfigService {
 
   async loadAppConfig(): Promise<void> {
     try {
-      this.appConfig = await this.http.get("/api/v3/config").toPromise();
+      this.appConfig = await this.http
+        .get("/client/config.json")
+        .pipe(timeout(2000))
+        .toPromise();
     } catch (err) {
       console.log("No config available in backend, trying with local config.");
       try {

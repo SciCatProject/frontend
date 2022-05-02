@@ -38,6 +38,7 @@ import {
 } from "state-management/actions/samples.actions";
 import { MatDialog } from "@angular/material/dialog";
 import { AppConfigService } from "app-config.service";
+import { fetchInstrumentAction } from "state-management/actions/instruments.actions";
 
 export interface JWT {
   jwt: string;
@@ -190,6 +191,11 @@ export class DatasetDetailsDashboardComponent
           if ("sampleId" in dataset) {
             this.store.dispatch(
               fetchSampleAction({ sampleId: dataset["sampleId"] })
+            );
+          }
+          if ("instrumentId" in dataset) {
+            this.store.dispatch(
+              fetchInstrumentAction({ pid: dataset["instrumentId"] })
             );
           }
         }
