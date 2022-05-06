@@ -14,6 +14,7 @@ import { SocketConnection } from '../../sockets/socket.connections';
 import { UserSetting } from '../../models/UserSetting';
 import { UserIdentity } from '../../models/UserIdentity';
 import { UserCredential } from '../../models/UserCredential';
+import { AppConfigService } from 'app-config.service';
 
 
 /**
@@ -27,6 +28,7 @@ export class UserApi extends BaseLoopBackApi {
     @Inject(SocketConnection) protected connection: SocketConnection,
     @Inject(SDKModels) protected models: SDKModels,
     @Inject(LoopBackAuth) protected auth: LoopBackAuth,
+    private configService: AppConfigService,
     @Optional() @Inject(ErrorHandler) protected errorHandler: ErrorHandler
   ) {
     super(http,  connection,  models, auth, errorHandler);
@@ -880,6 +882,8 @@ export class UserApi extends BaseLoopBackApi {
       .pipe(
         map(
         (response: any) => {
+          const accessTokenPrefix = this.configService.getConfig().accessTokenPrefix;
+          response.id = accessTokenPrefix + response.id;
           response.ttl = parseInt(response.ttl);
           response.rememberMe = rememberMe;
           this.auth.setToken(response);
