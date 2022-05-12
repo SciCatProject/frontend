@@ -153,14 +153,25 @@
           <th>Related Publications</th>
           <td>{{ publishedData.relatedPublications }}</td>
         </tr>
-        <tr *ngIf="publishedData.pidArray as value">
+        <tr *ngIf="publishedData.pidArray as pidArray">
           <th>Dataset IDs</th>
-          <td>{{ value }}</td>
+          <td>
+            <ng-container *ngFor="let pid of pidArray">
+              <a [routerLink]="['/datasets/', pid]">
+                {{ pid }}
+              </a>
+              <span *ngIf="pidArray.indexOf(pid) < pidArray.length - 1"
+                >,
+              </span>
+            </ng-container>
+          </td>
         </tr>
       </table>
     </mat-card>
 
-    <mat-card>
+    <mat-card
+      *ngIf="appConfig.editPublishedData && appConfig.jsonMetadataEnabled"
+    >
       <button
         mat-raised-button
         id="editBtn"
