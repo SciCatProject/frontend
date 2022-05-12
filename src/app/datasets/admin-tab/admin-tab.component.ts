@@ -9,7 +9,7 @@ import {
   selectCurrentDatablocks,
   selectCurrentDataset,
 } from "state-management/selectors/datasets.selectors";
-import { selectCurrentUser } from "state-management/selectors/user.selectors";
+import { selectCurrentUser, selectIsAdmin, selectIsLoading } from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "app-admin-tab",
@@ -20,6 +20,8 @@ export class AdminTabComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   dataset: Dataset | undefined;
   datablocks$ = this.store.select(selectCurrentDatablocks);
+  isAdmin$ = this.store.select(selectIsAdmin);
+  loading$  = this.store.select(selectIsLoading);
   constructor(private store: Store) {}
 
   ngOnInit(): void {

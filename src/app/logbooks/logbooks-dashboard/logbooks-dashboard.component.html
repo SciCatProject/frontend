@@ -1,26 +1,23 @@
 <ng-container *ngIf="vm$ | async as vm">
-  <div *ngIf="vm.logbook">
+  <div *ngIf="vm.logbook && dataset">
     <div fxLayout="row" fxLayout.lt-lg="column">
       <div fxFlex="14">
         <mat-card class="big-filter">
           <div class="title">Filter</div>
-          <app-search-bar
-            [prefilledValue]="vm.filters.textSearch"
+          <app-search-bar [prefilledValue]="vm.filters.textSearch"
             (search)="onTextSearchChange(vm.logbook.name, $event)"
-            (searchBarFocus)="onTextSearchChange(vm.logbook.name, $event)"
-          ></app-search-bar>
-          <logbook-filter
-            [filters]="vm.filters"
-            (filterSelect)="onFilterSelect(vm.logbook.name, $event)"
-          ></logbook-filter>
+            (searchBarFocus)="onTextSearchChange(vm.logbook.name, $event)">
+          </app-search-bar>
+          <logbook-filter [filters]="vm.filters"
+            (filterSelect)="onFilterSelect(vm.logbook.name, $event)">
+          </logbook-filter>
         </mat-card>
 
         <div class="small-filter">
-          <app-search-bar
-            [prefilledValue]="vm.filters.textSearch"
+          <app-search-bar [prefilledValue]="vm.filters.textSearch"
             (search)="onTextSearchChange(vm.logbook.name, $event)"
-            (searchBarFocus)="onTextSearchChange(vm.logbook.name, $event)"
-          ></app-search-bar>
+            (searchBarFocus)="onTextSearchChange(vm.logbook.name, $event)">
+          </app-search-bar>
 
           <mat-expansion-panel>
             <mat-expansion-panel-header>
@@ -28,19 +25,15 @@
                 <div class="title">Filter</div>
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <logbook-filter
-              [filters]="vm.filters"
-              (filterSelect)="onFilterSelect(vm.logbook.name, $event)"
-            ></logbook-filter>
+            <logbook-filter [filters]="vm.filters"
+              (filterSelect)="onFilterSelect(vm.logbook.name, $event)">
+            </logbook-filter>
           </mat-expansion-panel>
         </div>
         <div fxLayout="column" fxLayout.lt-lg="row">
           <div fxFlex="49">
-            <a
-              href="{{ appConfig.riotBaseUrl }}/#/room/{{ vm.logbook.roomId }}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="{{ appConfig.riotBaseUrl }}/#/room/{{ vm.logbook.roomId }}"
+              target="_blank" rel="noopener noreferrer">
               <mat-card class="card-button">
                 <mat-icon> chat_bubble_outline </mat-icon> Go to chat
               </mat-card>
@@ -48,24 +41,20 @@
           </div>
           <div fxFlex="auto"></div>
           <div class="reverse-card" fxFlex="49">
-            <mat-card
-              class="card-button"
-              (click)="vm.logbook.messages.reverse()"
-            >
+            <mat-card class="card-button"
+              (click)="vm.logbook.messages.reverse()">
               <mat-icon> swap_vert </mat-icon> Reverse
             </mat-card>
           </div>
         </div>
       </div>
       <div fxFlex="85" class="details-container">
-        <app-logbooks-detail
-          [logbook]="vm.logbook"
-          [entriesCount]="vm.entriesCount"
-          [entriesPerPage]="vm.entriesPerPage"
+        <app-logbooks-detail [logbook]="vm.logbook"
+          [entriesCount]="vm.entriesCount" [entriesPerPage]="vm.entriesPerPage"
           [currentPage]="vm.currentPage"
           (pageChange)="onPageChange(vm.logbook.name, $event)"
-          (sortChange)="onSortChange(vm.logbook.name, $event)"
-        ></app-logbooks-detail>
+          (sortChange)="onSortChange(vm.logbook.name, $event)">
+        </app-logbooks-detail>
       </div>
     </div>
   </div>

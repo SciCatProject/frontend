@@ -12,6 +12,7 @@ import { PageEvent } from "@angular/material/paginator";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
+import { selectIsLoading } from "state-management/selectors/user.selectors";
 
 export interface HistoryItem {
   property: string;
@@ -50,7 +51,7 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
   dataSource: HistoryItem[] = [];
   displayedColumns = ["property", "updatedBy", "updatedAt"];
   expandedItem: any | null;
-
+  loading$ = this.store.select(selectIsLoading);
   constructor(
     public appConfigService: AppConfigService,
     private datePipe: DatePipe,

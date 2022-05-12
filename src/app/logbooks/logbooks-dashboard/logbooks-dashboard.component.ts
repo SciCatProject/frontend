@@ -6,6 +6,7 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
+import { Dataset } from "shared/sdk";
 import { combineLatest, Subscription } from "rxjs";
 import { selectLogbooksDashboardPageViewModel } from "state-management/selectors/logbooks.selectors";
 import {
@@ -27,6 +28,8 @@ import {
   SortChangeEvent,
 } from "shared/modules/table/table.component";
 import { AppConfigService } from "app-config.service";
+import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
+import { OwnershipService } from "shared/services/ownership.service";
 
 @Component({
   selector: "app-logbooks-dashboard",
@@ -36,7 +39,7 @@ import { AppConfigService } from "app-config.service";
 export class LogbooksDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
   vm$ = this.store.select(selectLogbooksDashboardPageViewModel);
-
+  dataset: Dataset | undefined = undefined;
   appConfig = this.appConfigService.getConfig();
 
   subscriptions: Subscription[] = [];
@@ -46,8 +49,9 @@ export class LogbooksDashboardComponent
     private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store
-  ) {}
+    private store: Store,
+    private ownershipService: OwnershipService
+  ) { }
 
   applyRouterState(name: string, filters: LogbookFilters) {
     if (this.route.snapshot.url[0].path === "logbooks") {
@@ -98,7 +102,14 @@ export class LogbooksDashboardComponent
           }
         })
     );
-
+    this.subscriptions.push(
+      this.store.select(selectCurrentDataset).subscribe((dataset) => {
+        if (dataset) {
+          this.dataset = dataset;
+          this.ownershipService.checkPermission(dataset, this.store, this.router);
+        }
+      })
+    );
     this.subscriptions.push(
       this.route.queryParams
         .pipe(

@@ -18,7 +18,7 @@ import {
   CheckboxEvent,
 } from "shared/modules/table/table.component";
 import { selectIsLoading, selectIsLoggedIn } from "state-management/selectors/user.selectors";
-import { Dataset, Job, UserApi } from "shared/sdk";
+import { Job, UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";
@@ -108,7 +108,7 @@ export class DatafilesComponent
     private cdRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private userApi: UserApi
-  ) {}
+  ) { }
 
   onPageChange(event: PageChangeEvent) {
     const { pageIndex, pageSize } = event;
@@ -235,7 +235,7 @@ export class DatafilesComponent
   openDialog(): void {
     const dialogRef = this.dialog.open(PublicDownloadDialogComponent, {
       width: "500px",
-      data: {email: ""}
+      data: { email: "" }
     });
     dialogRef.afterClosed().subscribe((email) => {
       if (email) {
@@ -250,7 +250,7 @@ export class DatafilesComponent
           }]
         };
         const job = new Job(data);
-         this.store.dispatch(submitJobAction({ job }));
+        this.store.dispatch(submitJobAction({ job }));
       }
     });
   }

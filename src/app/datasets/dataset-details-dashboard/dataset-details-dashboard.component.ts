@@ -112,7 +112,7 @@ export class DatasetDetailsDashboardComponent
         }
       })
       .unsubscribe();
-    this.dataset$
+    const datasetSub = this.dataset$
       .pipe(takeWhile((dataset) => !dataset, true))
       .subscribe((dataset) => {
         if (dataset) {
@@ -200,8 +200,9 @@ export class DatasetDetailsDashboardComponent
           }
         }
       });
+    this.subscriptions.push(datasetSub);
     this.jwt$ = this.userApi.jwt();
-  }
+  };
   onTabSelected(tab: string) {
     this.fetchDataForTab(tab);
   }

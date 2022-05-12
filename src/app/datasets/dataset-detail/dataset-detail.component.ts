@@ -15,6 +15,7 @@ import {
 import {
   selectCurrentUser,
   selectIsAdmin,
+  selectIsLoading,
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { map } from "rxjs/operators";
@@ -57,6 +58,8 @@ export class DatasetDetailComponent
   dataset: Dataset | undefined;
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
+  proposal$ = this.store.select(selectCurrentProposal);
+  loading$ = this.store.select(selectIsLoading);
   instrument: Instrument | undefined;
   proposal: Proposal | undefined;
   sample: Sample | undefined;
@@ -71,7 +74,7 @@ export class DatasetDetailComponent
     public dialog: MatDialog,
     private store: Store,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.subscriptions.push(
