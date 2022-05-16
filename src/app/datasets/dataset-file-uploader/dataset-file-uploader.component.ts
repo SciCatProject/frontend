@@ -83,7 +83,7 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
   deleteAttachment(attachmentId: string) {
     if (this.dataset) {
       this.store.dispatch(
-        removeAttachmentAction({ datasetId: this.dataset?.pid, attachmentId })
+        removeAttachmentAction({ datasetId: this.dataset.pid, attachmentId })
       );
     }
   }
