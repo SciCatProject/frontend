@@ -1,7 +1,7 @@
 {
   "name": "catanie",
   "version": "3.1.0",
-  "license": "GPL-3.0",
+  "license": "BSD-3-Clause",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
