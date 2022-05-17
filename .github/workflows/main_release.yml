@@ -63,6 +63,12 @@ jobs:
       - name: Report selected tag 2
         run: git rev-list --tags --max-count=1
 
+      - name: Find latest tag
+        run: echo "LATEST_TAG=`git rev-list --tags --max-count=1`" >> ${GITHUB_ENV}
+
+      - name: Report selected tag 3
+        run: echo "${{ env.LATEST_TAG }}"
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
