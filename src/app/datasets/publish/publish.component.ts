@@ -153,7 +153,7 @@ export class PublishComponent implements OnInit, OnDestroy {
         this.form.title = result.title;
         this.form.description = result.description;
         this.form.resourceType = "raw";
-        this.form.thumbnail = result.thumbnail;
+        this.form.thumbnail = result.thumbnail ?? "";
       });
 
     this.actionSubjectSubscription = this.actionsSubj.subscribe((data) => {
