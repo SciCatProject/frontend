@@ -47,7 +47,7 @@ jobs:
     name: New main release on the main branch and docker image
     runs-on: ubuntu-latest
     #needs: [unittest, e2etests]
-    if: github.ref == 'refs/heads/master'
+    #if: github.ref == 'refs/heads/master'
     steps:
       - name: Dump github context
         env: 
