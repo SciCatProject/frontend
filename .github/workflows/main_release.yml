@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - master
-    tags:
-      - v**
+#    tags:
+#     - v**
 #      - v[1-9][0-9]*.[0-9]+.0
 
 jobs:
@@ -50,12 +50,18 @@ jobs:
     name: New main release on the main branch and docker image
     runs-on: ubuntu-latest
     #needs: [unittest, e2etests]
-    #if: github.ref == 'refs/heads/master'
+    if: github.ref_type == 'tag'
     steps:
       - name: Dump github context
         env: 
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
+
+      - name: Find tag
+        run: echo "LATEST_TAG=${{ github.ref_name }}" >> ${GITHUB_ENV}
+
+      - name: Report selected tag 0
+        run: echo "${{ env.LATEST_TAG }}"
 
       - name: Checkout
         uses: actions/checkout@v2
