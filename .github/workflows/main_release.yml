@@ -59,6 +59,9 @@ jobs:
       - name: Report selected tag
         run: echo "New release will be tagged as ${{env.NEW_TAG}}"
 
+      - name: Report selected tag 2
+        run: echo `git describe --tags`
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
