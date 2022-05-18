@@ -30,15 +30,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Run docker-compose
         run: |
-          cp CI/ESS/e2e/cypress.json cypress.json
           cp CI/ESS/e2e/docker-compose.e2e.yaml docker-compose.yaml
           docker-compose pull
-          docker-compose build --no-cache --parallel
-          docker-compose up --exit-code-from cypress
+          docker-compose build --no-cache
+          docker-compose up &
+
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v2
+        with:
+          config-file: CI/ESS/e2e/cypress.json
+          install-command: npm install --omit peer
+          browser: chrome
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-videos
+          path: cypress/videos
 
   build:
     name: Build Docker Image
