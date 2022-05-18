@@ -75,5 +75,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: scicatproject/frontend:${{igithub.ref_name}},scicatproject/frontend:stable
+          tags: scicatproject/frontend:${{ github.ref_name }},scicatproject/frontend:stable
 
