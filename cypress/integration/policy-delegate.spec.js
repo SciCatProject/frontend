@@ -27,7 +27,7 @@ describe("Policies", () => {
       // cy.wait(3000);
 
       cy.contains("Editable").click();
-      // cy.wait(3000);
+      cy.wait(3000);
 
       cy.contains("Manager").click();
 
