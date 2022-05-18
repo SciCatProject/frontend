@@ -1,5 +1,13 @@
 version: "3.2"
 services:
+  reverse-proxy:
+    image: traefik:2.5
+    command: --api.insecure=true --providers.docker=true --entrypoints.web.address=:80
+    ports:
+      - 80:80
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   mongodb:
     image: "bitnami/mongodb:latest"
     volumes:
@@ -20,6 +28,9 @@ services:
     depends_on:
       - mongodb
       - scichat-loopback
+    labels:
+      - "traefik.http.routers.catamel.rule=PathPrefix(`/api/v3`, `/auth/msad`)"
+      - "traefik.http.routers.catamel.entrypoints=web"
   catanie:
     build:
       context: .
@@ -34,6 +45,9 @@ services:
       - "./CI/ESS/favicon.ico:/usr/share/nginx/html/favicon.ico"
     depends_on:
       - catamel
+    labels:
+      - "traefik.http.routers.catanie.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.catanie.entrypoints=web"
   # cypress:
   #   build:
   #     context: .
