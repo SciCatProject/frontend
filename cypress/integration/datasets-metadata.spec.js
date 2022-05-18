@@ -2,7 +2,7 @@
 
 describe("Datasets", () => {
   beforeEach(() => {
-    cy.wait(5000);
+    // cy.wait(3000);
 
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
@@ -24,7 +24,7 @@ describe("Datasets", () => {
 
       cy.visit("/datasets");
 
-      cy.wait(5000);
+      // cy.wait(3000);
 
       cy.get(".mat-row")
         .contains("Cypress Dataset")
@@ -33,10 +33,10 @@ describe("Datasets", () => {
       cy.wait("@fetch");
 
       cy.contains("Edit").click();
-      cy.wait(1000);
+      // cy.wait(1000);
 
       cy.contains("Add row").click();
-      cy.wait(1000);
+      // cy.wait(1000);
 
       // simulate click event on the drop down
       cy.get("mat-select[formControlName=fieldType]")
@@ -60,7 +60,7 @@ describe("Datasets", () => {
         expect(response.statusCode).to.eq(200);
       });
 
-      cy.wait(5000);
+      // cy.wait(3000);
 
       cy.get("mat-select[formControlName=fieldType]")
         .first()
@@ -72,13 +72,13 @@ describe("Datasets", () => {
     it("should go to dataset details and remove a metadata entry", () => {
       cy.visit("/datasets");
 
-      cy.wait(5000);
+      // cy.wait(3000);
 
       cy.get(".mat-row")
         .contains("Cypress Dataset")
         .click();
 
-      cy.wait(5000);
+      // cy.wait(3000);
       cy.contains("Edit").click();
 
       cy.get("button.deleteButton")
@@ -93,7 +93,7 @@ describe("Datasets", () => {
       });
 
       cy.contains("View").click();
-      cy.wait(1000);
+      // cy.wait(1000);
       //cy.get("metadata-view").debug();
       /*cy.get("metadata-view.ng-star-inserted")
         .first()

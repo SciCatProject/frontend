@@ -2,7 +2,7 @@
 
 describe("Datasets", () => {
   beforeEach(() => {
-    cy.wait(5000);
+    // cy.wait(3000);
 
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
@@ -23,19 +23,19 @@ describe("Datasets", () => {
     it("should go to dataset details and add an attachment using the dropzone", () => {
       cy.visit("/datasets");
 
-      cy.wait(5000);
+      // cy.wait(3000);
 
       cy.get(".mat-row")
         .contains("Cypress Dataset")
         .click();
 
-      cy.wait(5000);
+      // cy.wait(3000);
 
       cy.get(".mat-tab-link")
         .contains("Attachments")
         .click();
 
-      cy.wait(5000);
+      // cy.wait(3000);
 
       cy.fixture("attachment-image").then(file => {
         cy.get(".dropzone").attachFile(

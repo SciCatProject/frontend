@@ -2,7 +2,7 @@
 
 describe("Samples", function () {
   beforeEach(function () {
-    cy.wait(5000);
+    // cy.wait(3000);
 
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
