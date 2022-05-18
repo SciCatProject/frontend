@@ -48,13 +48,7 @@ services:
     labels:
       - "traefik.http.routers.catanie.rule=PathPrefix(`/`)"
       - "traefik.http.routers.catanie.entrypoints=web"
-  # cypress:
-  #   build:
-  #     context: .
-  #     dockerfile: CI/ESS/e2e/Dockerfile.cypress
-  #   command: ["./wait-for-it.sh", "catanie:80", "--", "npx", "cypress", "run"]
-  #   depends_on:
-  #     - catanie
+
 volumes:
   mongodb_data:
     driver: local
