@@ -23,8 +23,6 @@ services:
     image: "dacat/catamel:latest"
     environment: 
       - SCICHAT_URL
-    ports:
-      - 3000:3000
     depends_on:
       - mongodb
       - scichat-loopback
@@ -36,8 +34,6 @@ services:
       context: .
       dockerfile: CI/ESS/e2e/Dockerfile.e2e
     command: ["./wait-for-it.sh", "catamel:3000", "--", "nginx", "-g", "daemon off;"]
-    ports:
-      - 4200:80
     volumes:
       - "./CI/ESS/e2e/config.e2e.json:/usr/share/nginx/html/assets/config.json"
       - "./CI/ESS/site.png:/usr/share/nginx/html/assets/images/site.png"
