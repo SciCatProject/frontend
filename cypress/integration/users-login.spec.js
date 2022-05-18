@@ -11,17 +11,17 @@ describe("Users Login", () => {
   });
 
   it("visits login page and tries to log in with the wrong password", () => {
-    // cy.wait(3000);
+    cy.wait(5000);
 
     cy.visit("/");
 
     cy.url().should("include", "/datasets");
 
-    // cy.wait(3000);
+    cy.wait(5000);
 
     cy.get("[data-cy=login-button]").click();
 
-    // cy.wait(3000);
+    cy.wait(5000);
 
     cy.url().should("include", "/login");
 
@@ -52,17 +52,17 @@ describe("Users Login", () => {
   });
 
   it("visits login page and logs in with a functional account", () => {
-    // cy.wait(3000);
+    cy.wait(5000);
 
     cy.visit("/");
 
     cy.url().should("include", "/datasets");
 
-    // cy.wait(3000);
+    cy.wait(5000);
 
     cy.get("[data-cy=login-button]").click();
 
-    // cy.wait(3000);
+    cy.wait(5000);
 
     cy.url().should("include", "/login");
 

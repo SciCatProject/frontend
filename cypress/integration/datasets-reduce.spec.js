@@ -2,7 +2,7 @@
 
 describe("Datasets", () => {
   beforeEach(() => {
-    // cy.wait(3000);
+    cy.wait(5000);
 
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
@@ -24,7 +24,7 @@ describe("Datasets", () => {
 
       cy.visit("/datasets");
 
-      // cy.wait(3000);
+      cy.wait(5000);
 
       cy.get(".mat-row")
         .contains("Cypress Dataset")
@@ -33,7 +33,7 @@ describe("Datasets", () => {
       cy.wait("@fetch");
 
       cy.contains("Reduce").click();
-      // cy.wait(1000);
+      cy.wait(1000);
 
       cy.contains("Analyze").click();
       cy.contains("Next").click();

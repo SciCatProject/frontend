@@ -2,7 +2,7 @@
 
 describe("Datasets", () => {
   beforeEach(() => {
-    // cy.wait(3000);
+    cy.wait(5000);
 
     cy.login(Cypress.config("username"), Cypress.config("password"));
   });
@@ -21,7 +21,7 @@ describe("Datasets", () => {
 
       cy.visit("/datasets");
 
-      // cy.wait(3000);
+      cy.wait(5000);
 
       cy.get("[data-cy=checkboxInput]")
         .first()
