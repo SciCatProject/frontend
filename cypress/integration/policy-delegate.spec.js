@@ -24,7 +24,7 @@ describe("Policies", () => {
 
       cy.visit("/policies");
 
-      // cy.wait(3000);
+      cy.wait(3000);
 
       cy.contains("Editable").click();
       cy.wait(3000);
