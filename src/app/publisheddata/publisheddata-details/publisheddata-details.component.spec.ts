@@ -11,7 +11,7 @@ import { PublishedDataApi } from "shared/sdk";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { Router, ActivatedRoute } from "@angular/router";
 import { LinkyModule } from "ngx-linky";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
@@ -37,7 +37,7 @@ describe("PublisheddataDetailsComponent", () => {
           MatIconModule,
           NgxJsonViewerModule,
           LinkyModule,
-          SharedCatanieModule,
+          SharedScicatFrontendModule,
         ],
       });
       TestBed.overrideComponent(PublisheddataDetailsComponent, {

@@ -3,7 +3,7 @@ import { Store } from "@ngrx/store";
 import {
   showMessageAction,
   fetchCurrentUserAction,
-  fetchCatamelTokenAction,
+  fetchScicatTokenAction,
 } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
 import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
@@ -26,7 +26,7 @@ export class UserSettingsComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(fetchCurrentUserAction());
-    this.store.dispatch(fetchCatamelTokenAction());
+    this.store.dispatch(fetchScicatTokenAction());
   }
 
   onCopy(token: string) {
@@ -43,7 +43,7 @@ export class UserSettingsComponent implements OnInit {
     this.document.body.removeChild(selectionBox);
 
     const message = new Message(
-      "Catamel token has been copied to your clipboard",
+      "SciCat token has been copied to your clipboard",
       MessageType.Success,
       5000
     );

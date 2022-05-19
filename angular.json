@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "catanie": {
+    "scicat-frontend": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -90,10 +90,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "catanie:build:production"
+              "browserTarget": "scicat-frontend:build:production"
             },
             "default": {
-              "browserTarget": "catanie:build:default"
+              "browserTarget": "scicat-frontend:build:default"
             }
           },
           "defaultConfiguration": "default"
@@ -101,7 +101,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "catanie:build"
+            "browserTarget": "scicat-frontend:build"
           }
         },
         "test": {
@@ -155,7 +155,7 @@
       }
     }
   },
-  "defaultProject": "catanie",
+  "defaultProject": "scicat-frontend",
   "cli": {
     "defaultCollection": "@angular-eslint/schematics"
   }

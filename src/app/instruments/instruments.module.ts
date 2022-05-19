@@ -6,7 +6,7 @@ import { StoreModule } from "@ngrx/store";
 import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
 import { EffectsModule } from "@ngrx/effects";
 import { InstrumentEffects } from "state-management/effects/instruments.effects";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { InstrumentDetailsComponent } from "./instrument-details/instrument-details.component";
 import { MatCardModule } from "@angular/material/card";
@@ -22,7 +22,7 @@ import { MatTabsModule } from "@angular/material/tabs";
     MatCardModule,
     MatIconModule,
     MatTabsModule,
-    SharedCatanieModule,
+    SharedScicatFrontendModule,
     StoreModule.forFeature("instruments", instrumentsReducer)
   ],
   providers: [JsonHeadPipe]

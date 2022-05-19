@@ -11,7 +11,7 @@ import { MockConfigService, MockStore } from "shared/MockStubs";
 import { ConfigService } from "shared/services";
 
 import { UserSettingsComponent } from "./user-settings.component";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { Message, MessageType, Settings } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -34,7 +34,7 @@ describe("UserSettingsComponent", () => {
           MatCardModule,
           MatIconModule,
           ReactiveFormsModule,
-          SharedCatanieModule,
+          SharedScicatFrontendModule,
           StoreModule.forRoot({}),
         ],
         declarations: [UserSettingsComponent],
@@ -75,7 +75,7 @@ describe("UserSettingsComponent", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const message = new Message(
-        "Catamel token has been copied to your clipboard",
+        "SciCat token has been copied to your clipboard",
         MessageType.Success,
         5000
       );

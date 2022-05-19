@@ -329,15 +329,15 @@ export class UserEffects {
     );
   });
 
-  fetchCatamelToken$ = createEffect(() => {
+  fetchScicatToken$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.fetchCatamelTokenAction),
+      ofType(fromActions.fetchScicatTokenAction),
       switchMap(() =>
         of(this.userApi.getCurrentToken()).pipe(
           map((token) =>
-            fromActions.fetchCatamelTokenCompleteAction({ token })
+            fromActions.fetchScicatTokenCompleteAction({ token })
           ),
-          catchError(() => of(fromActions.fetchCatamelTokenFailedAction()))
+          catchError(() => of(fromActions.fetchScicatTokenFailedAction()))
         )
       )
     );

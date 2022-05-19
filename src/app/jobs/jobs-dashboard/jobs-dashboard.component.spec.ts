@@ -11,7 +11,7 @@ import { Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 import { Job } from "shared/sdk";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { DatePipe } from "@angular/common";
 import { JobViewMode } from "state-management/models";
 import {
@@ -44,7 +44,7 @@ describe("JobsDashboardComponent", () => {
           MatButtonToggleModule,
           MatCardModule,
           MatIconModule,
-          SharedCatanieModule,
+          SharedScicatFrontendModule,
           StoreModule.forRoot({}),
         ],
         providers: [DatePipe],

@@ -7,7 +7,7 @@ import {
 
 import { PoliciesDashboardComponent } from "./policies-dashboard.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { DatasetApi, Policy } from "shared/sdk";
 import { MockDatasetApi, MockStore } from "shared/MockStubs";
 import { StoreModule, Store } from "@ngrx/store";
@@ -67,7 +67,7 @@ describe("PoliciesDashboardComponent", () => {
           MatIconModule,
           MatTabsModule,
           RouterTestingModule.withRoutes([]),
-          SharedCatanieModule,
+          SharedScicatFrontendModule,
           StoreModule.forRoot({}),
         ],
         providers: [
