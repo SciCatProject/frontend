@@ -11,7 +11,6 @@ import { MockStore } from "shared/MockStubs";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { APP_CONFIG } from "app-config.module";
 import { FacetCount } from "state-management/state/datasets.store";
 import {
   setSearchTermsAction,
@@ -53,6 +52,7 @@ import { MatNativeDateModule, MatOptionModule } from "@angular/material/core";
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
+import { AppConfigService } from "app-config.service";
 
 export class MockMatDialog {
   open() {
@@ -64,6 +64,10 @@ export class MockMatDialog {
     };
   }
 }
+
+const getConfig = () => ({
+  scienceSearchEnabled: false,
+});
 
 describe("DatasetsFilterComponent", () => {
   let component: DatasetsFilterComponent;
@@ -105,9 +109,9 @@ describe("DatasetsFilterComponent", () => {
         set: {
           providers: [
             {
-              provide: APP_CONFIG,
+              provide: AppConfigService,
               useValue: {
-                scienceSearchEnabled: false,
+                getConfig,
               },
             },
             { provide: MatDialog, useClass: MockMatDialog },

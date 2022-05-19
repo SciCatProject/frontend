@@ -85,4 +85,26 @@ describe("Logbook Selectors", () => {
       ).toEqual(page);
     });
   });
+
+  describe("selectLogbooksDashboardPageViewModel", () => {
+    it("should select the logbooks dashboard page view model", () => {
+      expect(
+        fromSelectors.selectLogbooksDashboardPageViewModel.projector(
+          fromSelectors.selectCurrentLogbook.projector(initialLogbookState),
+          fromSelectors.selectEntriesCount.projector(initialLogbookState),
+          fromSelectors.selectEntriesPerPage.projector(
+            initialLogbookState.filters
+          ),
+          fromSelectors.selectPage.projector(initialLogbookState.filters),
+          fromSelectors.selectFilters.projector(initialLogbookState)
+        )
+      ).toEqual({
+        logbook,
+        entriesCount: 0,
+        entriesPerPage: 25,
+        currentPage: 0,
+        filters: logbookFilters,
+      });
+    });
+  });
 });

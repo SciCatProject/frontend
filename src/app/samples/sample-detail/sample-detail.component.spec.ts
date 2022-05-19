@@ -24,13 +24,17 @@ import { SharedScicatFrontendModule } from "shared/shared.module";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { APP_CONFIG } from "app-config.module";
 import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTabsModule } from "@angular/material/tabs";
 import { FlexLayoutModule } from "@angular/flex-layout";
+import { AppConfigService } from "app-config.service";
+
+const getConfig = () => ({
+  editMetadataEnabled: true,
+});
 
 describe("SampleDetailComponent", () => {
   let component: SampleDetailComponent;
@@ -63,9 +67,9 @@ describe("SampleDetailComponent", () => {
         set: {
           providers: [
             {
-              provide: APP_CONFIG,
+              provide: AppConfigService,
               useValue: {
-                editMetadataEnabled: true,
+                getConfig,
               },
             },
             { provide: Router, useValue: router },

@@ -9,12 +9,7 @@ import { InstrumentsDashboardComponent } from "./instruments-dashboard.component
 import { MockStore } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { provideMockStore } from "@ngrx/store/testing";
-import {
-  selectInstruments,
-  selectPage,
-  selectInstrumentsCount,
-  selectInstrumentsPerPage,
-} from "state-management/selectors/instruments.selectors";
+import { selectInstrumentsDashboardPageViewModel } from "state-management/selectors/instruments.selectors";
 import { Store } from "@ngrx/store";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
@@ -50,10 +45,15 @@ describe("InstrumentsDashboardComponent", () => {
           JsonHeadPipe,
           provideMockStore({
             selectors: [
-              { selector: selectInstruments, value: [] },
-              { selector: selectPage, value: 0 },
-              { selector: selectInstrumentsCount, value: 100 },
-              { selector: selectInstrumentsPerPage, value: 25 },
+              {
+                selector: selectInstrumentsDashboardPageViewModel,
+                value: {
+                  instruments: [],
+                  currentPage: 0,
+                  instrumentsCount: 100,
+                  instrumentsPerPage: 25,
+                },
+              },
             ],
           }),
         ],

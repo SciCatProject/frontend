@@ -1,6 +1,6 @@
-import { Component, Input, Inject } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Proposal } from "state-management/models";
-import { APP_CONFIG, AppConfig } from "app-config.module";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "proposal-detail",
@@ -10,7 +10,9 @@ import { APP_CONFIG, AppConfig } from "app-config.module";
 export class ProposalDetailComponent {
   @Input() proposal: Proposal = new Proposal();
 
+  appConfig = this.appConfigService.getConfig();
+
   show = false;
 
-  constructor(@Inject(APP_CONFIG) public appConfig: AppConfig) {}
+  constructor(public appConfigService: AppConfigService) {}
 }

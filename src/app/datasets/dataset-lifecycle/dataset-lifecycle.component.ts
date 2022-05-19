@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnChanges,
-  SimpleChange,
-  Inject,
-} from "@angular/core";
+import { Component, OnInit, OnChanges, SimpleChange } from "@angular/core";
 import { Dataset } from "shared/sdk";
 import {
   trigger,
@@ -15,9 +9,10 @@ import {
 } from "@angular/animations";
 import { DatePipe } from "@angular/common";
 import { PageEvent } from "@angular/material/paginator";
-import { APP_CONFIG, AppConfig } from "app-config.module";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { Store } from "@ngrx/store";
+import { AppConfigService } from "app-config.service";
+import { selectIsLoading } from "state-management/selectors/user.selectors";
 
 export interface HistoryItem {
   property: string;
@@ -43,6 +38,8 @@ export interface HistoryItem {
   ],
 })
 export class DatasetLifecycleComponent implements OnInit, OnChanges {
+  appConfig = this.appConfigService.getConfig();
+
   dataset: Dataset | undefined;
   historyItems: HistoryItem[] = [];
 
@@ -54,9 +51,9 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
   dataSource: HistoryItem[] = [];
   displayedColumns = ["property", "updatedBy", "updatedAt"];
   expandedItem: any | null;
-
+  loading$ = this.store.select(selectIsLoading);
   constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    public appConfigService: AppConfigService,
     private datePipe: DatePipe,
     private store: Store
   ) {}

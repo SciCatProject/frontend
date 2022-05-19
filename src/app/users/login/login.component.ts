@@ -11,13 +11,10 @@ import {
 } from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
-import {
-  selectIsLoggedIn,
-  selectIsLoggingIn,
-} from "state-management/selectors/user.selectors";
-import { APP_CONFIG, AppConfig } from "app-config.module";
+import { selectLoginPageViewModel } from "state-management/selectors/user.selectors";
 import { MatDialog } from "@angular/material/dialog";
 import { PrivacyDialogComponent } from "users/privacy-dialog/privacy-dialog.component";
+import { AppConfig, AppConfigService, OAuth2Endpoint } from "app-config.service";
 
 interface LoginForm {
   username: string;
@@ -39,9 +36,12 @@ interface LoginForm {
 })
 export class LoginComponent implements OnInit, OnDestroy {
   private proceedSubscription = new Subscription();
-  private hasUser$ = this.store
-    .select(selectIsLoggedIn)
-    .pipe(filter((is) => is));
+  vm$ = this.store.select(selectLoginPageViewModel);
+
+  appConfig: AppConfig = this.appConfigService.getConfig();
+  facility: string | null = null;
+  loginFormEnabled = false;
+  oAuth2Endpoints: OAuth2Endpoint[] = [];
 
   returnUrl: string;
   hide = true;
@@ -51,15 +51,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     rememberMe: true,
   });
 
-  loading$ = this.store.select(selectIsLoggingIn);
-
   constructor(
+    private appConfigService: AppConfigService,
     public dialog: MatDialog,
     public fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     private store: Store,
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
     @Inject(DOCUMENT) public document: Document
   ) {
     this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "";
@@ -86,11 +84,17 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.proceedSubscription = this.hasUser$.subscribe(() => {
-      this.store.dispatch(fetchCurrentUserAction());
-      console.log(this.returnUrl);
-      this.router.navigateByUrl(this.returnUrl || "/datasets");
-    });
+    this.facility = this.appConfig.facility;
+    this.loginFormEnabled = this.appConfig.loginFormEnabled;
+    this.oAuth2Endpoints = this.appConfig.oAuth2Endpoints;
+
+    this.proceedSubscription = this.vm$
+      .pipe(filter((vm) => vm.isLoggedIn))
+      .subscribe(() => {
+        this.store.dispatch(fetchCurrentUserAction());
+        console.log(this.returnUrl);
+        this.router.navigateByUrl(this.returnUrl || "/datasets");
+      });
 
     this.route.queryParams.subscribe((params) => {
       // OIDC logins eventually redirect to this componenet, adding information about user

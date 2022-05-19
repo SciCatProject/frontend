@@ -16,12 +16,16 @@ import {
   addToBatchAction,
   clearSelectionAction,
 } from "state-management/actions/datasets.actions";
-import { AppConfigModule, APP_CONFIG } from "app-config.module";
 import { ArchivingService } from "datasets/archiving.service";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
+import { AppConfigService } from "app-config.service";
+
+class MockAppConfigService {
+  getConfig = () => ({ archiveWorkflowEnabled: true });
+}
 
 describe("DatasetTableActionsComponent", () => {
   let component: DatasetTableActionsComponent;
@@ -36,7 +40,6 @@ describe("DatasetTableActionsComponent", () => {
         schemas: [NO_ERRORS_SCHEMA],
         declarations: [DatasetTableActionsComponent],
         imports: [
-          AppConfigModule,
           MatButtonModule,
           MatButtonToggleModule,
           MatDialogModule,
@@ -47,7 +50,10 @@ describe("DatasetTableActionsComponent", () => {
       TestBed.overrideComponent(DatasetTableActionsComponent, {
         set: {
           providers: [
-            { provide: APP_CONFIG, useValue: { archiveWorkflowEnabled: true } },
+            {
+              provide: AppConfigService,
+              useClass: MockAppConfigService,
+            },
             { provide: ArchivingService, useClass: MockArchivingService },
           ],
         },

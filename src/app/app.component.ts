@@ -14,6 +14,7 @@ import {
   clearMessageAction,
   fetchCurrentUserAction,
   logoutAction,
+  setDatasetTableColumnsAction,
 } from "state-management/actions/user.actions";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Meta, Title } from "@angular/platform-browser";
@@ -23,6 +24,7 @@ import {
   selectUserMessage,
 } from "state-management/selectors/user.selectors";
 import { MessageType } from "state-management/models";
+import { AppConfigService, AppConfig as Config } from "app-config.service";
 
 @Component({
   selector: "app-root",
@@ -33,25 +35,25 @@ import { MessageType } from "state-management/models";
 export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
   loading$ = this.store.select(selectIsLoading);
 
+  config: Config;
+
   title: string;
   facility: string;
   status: string;
   userMessageSubscription: Subscription = new Subscription();
 
   constructor(
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private appConfigService: AppConfigService,
     private cdRef: ChangeDetectorRef,
     private metaService: Meta,
     public snackBar: MatSnackBar,
     private titleService: Title,
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
     private store: Store
   ) {
-    this.facility = this.appConfig.facility ?? "";
-    if (appConfig.production === true) {
-      this.status = "";
-    } else {
-      this.status = "test";
-    }
+    this.config = this.appConfigService.getConfig();
+    this.facility = this.config.facility ?? "";
+    this.status = this.appConfig.production ? "" : "test";
     this.title = "SciCat " + this.facility + " " + this.status;
     this.titleService.setTitle(this.title);
     this.metaService.addTag({
@@ -66,8 +68,13 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
    * @memberof AppComponent
    */
   ngOnInit() {
-    LoopBackConfig.setBaseURL(this.appConfig.lbBaseURL);
+    LoopBackConfig.setBaseURL(this.config.lbBaseURL);
     console.log(LoopBackConfig.getPath());
+
+    this.store.dispatch(
+      setDatasetTableColumnsAction({ columns: this.config.localColumns })
+    );
+
     this.store.dispatch(fetchCurrentUserAction());
     if (window.location.pathname.indexOf("logout") !== -1) {
       this.logout();

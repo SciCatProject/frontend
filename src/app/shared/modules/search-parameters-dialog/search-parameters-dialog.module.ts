@@ -9,13 +9,11 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
-import { AppConfigModule } from "app-config.module";
 import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [SearchParametersDialogComponent],
   imports: [
-    AppConfigModule,
     CommonModule,
     FormsModule,
     MatAutocompleteModule,
@@ -26,7 +24,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     MatOptionModule,
     MatSelectModule,
     ReactiveFormsModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
 })
 export class SearchParametersDialogModule {}

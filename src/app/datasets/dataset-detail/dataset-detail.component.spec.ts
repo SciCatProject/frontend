@@ -1,4 +1,3 @@
-import { APP_CONFIG, AppConfigModule } from "../../app-config.module";
 import { DatafilesComponent } from "../../datasets/datafiles/datafiles.component";
 import { DatasetDetailComponent } from "./dataset-detail.component";
 import { LinkyPipe } from "ngx-linky";
@@ -21,25 +20,39 @@ import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MockStore } from "@ngrx/store/testing";
 import { Store, StoreModule } from "@ngrx/store";
-import { addKeywordFilterAction, clearFacetsAction, updatePropertyAction } from "state-management/actions/datasets.actions";
-import { MatSlideToggle, MatSlideToggleChange } from "@angular/material/slide-toggle";
+import {
+  addKeywordFilterAction,
+  clearFacetsAction,
+  updatePropertyAction,
+} from "state-management/actions/datasets.actions";
+import {
+  MatSlideToggle,
+  MatSlideToggleChange,
+} from "@angular/material/slide-toggle";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MockActivatedRoute } from "shared/MockStubs";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
+import { AppConfigService } from "app-config.service";
 
 describe("DatasetDetailComponent", () => {
   let component: DatasetDetailComponent;
   let fixture: ComponentFixture<DatasetDetailComponent>;
+
   const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
+
+  const getConfig = () => ({
+    editMetadataEnabled: true,
+  });
+
   let store: MockStore;
+
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
         schemas: [NO_ERRORS_SCHEMA],
         imports: [
-          AppConfigModule,
           BrowserAnimationsModule,
           MatButtonModule,
           MatCardModule,
@@ -58,11 +71,11 @@ describe("DatasetDetailComponent", () => {
       TestBed.overrideComponent(DatasetDetailComponent, {
         set: {
           providers: [
-            { provide: Router, useValue: router},
+            { provide: Router, useValue: router },
             {
-              provide: APP_CONFIG,
+              provide: AppConfigService,
               useValue: {
-                editMetadataEnabled: true,
+                getConfig,
               },
             },
             { provide: ActivatedRoute, useClass: MockActivatedRoute },
@@ -76,7 +89,10 @@ describe("DatasetDetailComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetDetailComponent);
     component = fixture.componentInstance;
-    component.dataset = {pid: "testPid", isPublished: false} as unknown as Dataset;
+    component.dataset = {
+      pid: "testPid",
+      isPublished: false,
+    } as unknown as Dataset;
     fixture.detectChanges();
   });
   beforeEach(inject([Store], (mockStore: MockStore) => {
@@ -110,7 +126,7 @@ describe("DatasetDetailComponent", () => {
     it("should add property keywords if it does not exist already", () => {
       const dispatchSpy = spyOn(store, "dispatch");
       const event = {
-        value: "test"
+        value: "test",
       };
       const pid = "testPid";
       component.dataset = new Dataset();
@@ -123,7 +139,7 @@ describe("DatasetDetailComponent", () => {
     it("should do nothing if keyword already exists", () => {
       const dispatchSpy = spyOn(store, "dispatch");
       const event = {
-        value: "test"
+        value: "test",
       };
       component.dataset = new Dataset();
       component.dataset.keywords = ["test"];
@@ -135,7 +151,7 @@ describe("DatasetDetailComponent", () => {
     it("should dispatch an updatePropertyAction if the keyword does not exist", () => {
       const dispatchSpy = spyOn(store, "dispatch");
       const event = {
-        value: "test"
+        value: "test",
       };
       const pid = "testPid";
       component.dataset = new Dataset();
@@ -225,7 +241,11 @@ describe("DatasetDetailComponent", () => {
 
       const pid = "testPid";
       const share = "test";
-      component.dataset = {pid, isPublished: false, sharedWith :[share]} as unknown as Dataset;
+      component.dataset = {
+        pid,
+        isPublished: false,
+        sharedWith: [share],
+      } as unknown as Dataset;
       const dialogOpenSpy = spyOn(component.dialog, "open").and.returnValue({
         afterClosed: () => of("ok"),
       } as MatDialogRef<DialogComponent>);
@@ -240,6 +260,17 @@ describe("DatasetDetailComponent", () => {
     });
   });
 
+  describe("#onClickInstrument()", () => {
+    it("should navigate to an instrument", () => {
+      const instrumentId = "testId";
+
+      component.onClickInstrument(instrumentId);
+
+      expect(router.navigateByUrl).toHaveBeenCalledWith(
+        "/instruments/" + instrumentId
+      );
+    });
+  });
 
   describe("#onClickProposal()", () => {
     it("should navigate to a proposal", () => {
@@ -271,9 +302,9 @@ describe("DatasetDetailComponent", () => {
       component.sample.sampleId = sampleId;
       const pid = "testPid";
       component.dataset.pid = pid;
-      const property = { sampleId  };
+      const property = { sampleId };
       const dialogOpenSpy = spyOn(component.dialog, "open").and.returnValue({
-        afterClosed: () => of({sample: {sampleId : "testId"}}),
+        afterClosed: () => of({ sample: { sampleId: "testId" } }),
       } as MatDialogRef<SampleEditComponent>);
       component.openSampleEditDialog();
 
@@ -311,7 +342,7 @@ describe("DatasetDetailComponent", () => {
     it("should return true if user username is admin", () => {
       component.user = new User({
         username: "admin",
-        email: "test@email.com"
+        email: "test@email.com",
       });
 
       const isPI = component.isPI();
@@ -329,9 +360,8 @@ describe("DatasetDetailComponent", () => {
         type: "raw",
         ownerGroup: "test",
         principalInvestigator: "test@email.com",
-        creationLocation: "test"
+        creationLocation: "test",
       } as unknown as Dataset;
-
 
       const isPI = component.isPI();
 
@@ -348,7 +378,7 @@ describe("DatasetDetailComponent", () => {
         type: "raw",
         ownerGroup: "test",
         principalInvestigator: "test@email.com",
-        creationLocation: "test"
+        creationLocation: "test",
       } as unknown as Dataset;
       const isPI = component.isPI();
 
@@ -364,11 +394,10 @@ describe("DatasetDetailComponent", () => {
         creationTime: new Date(),
         type: "derived",
         ownerGroup: "test",
-        investigator : "test@email.com",
-        inputDatasets : ["test"],
-        usedSoftware:  ["test"]
+        investigator: "test@email.com",
+        inputDatasets: ["test"],
+        usedSoftware: ["test"],
       } as unknown as Dataset;
-
 
       const isPI = component.isPI();
 
@@ -386,7 +415,7 @@ describe("DatasetDetailComponent", () => {
         ownerGroup: "test",
         investigator: "test@email.com",
         inputDatasets: ["test"],
-        usedSoftware: ["test"]
+        usedSoftware: ["test"],
       } as unknown as Dataset;
       const isPI = component.isPI();
 
@@ -403,7 +432,7 @@ describe("DatasetDetailComponent", () => {
         type: "failTest",
         ownerGroup: "test",
         principalInvestigator: "test@email.com",
-        creationLocation: "test"
+        creationLocation: "test",
       } as unknown as Dataset;
       const isPI = component.isPI();
 

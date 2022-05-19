@@ -14,7 +14,6 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule } from "@angular/material/dialog";
 import { DatasetApi, Dataset } from "shared/sdk";import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatTableModule } from "@angular/material/table";
-import { APP_CONFIG } from "app-config.module";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { DatasetState } from "state-management/state/datasets.store";
 import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
@@ -22,6 +21,7 @@ import { removeFromBatchAction } from "state-management/actions/datasets.actions
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatInputModule } from "@angular/material/input";
+import { AppConfigService } from "app-config.service";
 
 describe("BatchViewComponent", () => {
   let component: BatchViewComponent;
@@ -33,6 +33,10 @@ describe("BatchViewComponent", () => {
   const router = {
     navigate: jasmine.createSpy("navigate"),
   };
+
+  const getConfig = () => ({
+    archiveWorkflowEnabled: true,
+  });
 
   beforeEach(
     waitForAsync(() => {
@@ -62,7 +66,7 @@ describe("BatchViewComponent", () => {
             { provide: ArchivingService, useClass: MockArchivingService },
             { provide: Router, useValue: router },
             { provide: DatasetApi, useClass: MockDatasetApi },
-            { provide: APP_CONFIG, useValue: { archiveWorkflowEnabled: true } },
+            { provide: AppConfigService, useValue: { getConfig } },
           ],
         },
       });

@@ -1,14 +1,13 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AuthGuard } from "app-routing/auth.guard";
-import { ProposalDashboardNewComponent } from "proposals/proposal-dashboard-new/proposal-dashboard-new.component";
+import { ProposalDashboardComponent } from "proposals/proposal-dashboard/proposal-dashboard.component";
 import { ViewProposalPageComponent } from "proposals/view-proposal-page/view-proposal-page.component";
 
 const routes: Routes = [
-
   {
     path: "",
-    component: ProposalDashboardNewComponent,
+    component: ProposalDashboardComponent,
     canActivate: [AuthGuard],
   },
   {
@@ -19,6 +18,6 @@ const routes: Routes = [
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class ProposalsRoutingModule {}

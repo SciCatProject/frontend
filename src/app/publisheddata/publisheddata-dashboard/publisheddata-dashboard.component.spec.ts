@@ -159,7 +159,9 @@ describe("PublisheddataDashboardComponent", () => {
         pidArray: [],
       });
 
-      spyOn(component.publishedData$, "pipe").and.returnValue(of([published]));
+      spyOn(component.vm$, "pipe").and.returnValue(
+        of({ publishedData: [published] })
+      );
 
       const event = {
         checked: true,

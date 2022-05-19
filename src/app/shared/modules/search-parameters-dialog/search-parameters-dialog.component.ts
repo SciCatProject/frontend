@@ -1,7 +1,7 @@
 import { Component, Inject } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { AppConfig, APP_CONFIG } from "app-config.module";
+import { AppConfigService } from "app-config.service";
 import { map, startWith } from "rxjs/operators";
 import { UnitsService } from "shared/services/units.service";
 
@@ -10,8 +10,10 @@ import { UnitsService } from "shared/services/units.service";
   templateUrl: "./search-parameters-dialog.component.html",
 })
 export class SearchParametersDialogComponent {
-  parameterKeys = this.data.parameterKeys;
+  appConfig = this.appConfigService.getConfig();
   unitsEnabled = this.appConfig.scienceSearchUnitsEnabled;
+  
+  parameterKeys = this.data.parameterKeys;
   units: string[] = [];
 
   parametersForm = new FormGroup({
@@ -43,7 +45,7 @@ export class SearchParametersDialogComponent {
   );
 
   constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    public appConfigService: AppConfigService,
     @Inject(MAT_DIALOG_DATA) public data: { parameterKeys: string[] },
     public dialogRef: MatDialogRef<SearchParametersDialogComponent>,
     private unitsService: UnitsService

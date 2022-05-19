@@ -1,6 +1,5 @@
 import { DatasetEffects } from "./../state-management/effects/datasets.effects";
 import { EffectsModule } from "@ngrx/effects";
-import { AppConfigModule } from "app-config.module";
 import { LinkyModule } from "ngx-linky";
 import { ArchivingService } from "./archiving.service";
 import { BatchViewComponent } from "./batch-view/batch-view.component";
@@ -75,12 +74,14 @@ import { BatchCardModule } from "./batch-card/batch-card.module";
 import { JobEffects } from "state-management/effects/jobs.effects";
 import { LogbookEffects } from "state-management/effects/logbooks.effects";
 import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
+import { PublicDownloadDialogComponent } from "./public-download-dialog/public-download-dialog.component";
 import { DatasetFileUploaderComponent } from "./dataset-file-uploader/dataset-file-uploader.component";
 import { AdminTabComponent } from "./admin-tab/admin-tab.component";
+import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
+import { InstrumentEffects } from "state-management/effects/instruments.effects";
 
 @NgModule({
   imports: [
-    AppConfigModule,
     CommonModule,
     EffectsModule.forFeature([DatasetEffects]),
     FlexLayoutModule,
@@ -116,8 +117,17 @@ import { AdminTabComponent } from "./admin-tab/admin-tab.component";
     RouterModule,
     SharedScicatFrontendModule,
     BatchCardModule,
-    EffectsModule.forFeature([UserEffects, JobEffects, ProposalEffects, SampleEffects, PublishedDataEffects, LogbookEffects]),
+    EffectsModule.forFeature([
+      UserEffects,
+      InstrumentEffects,
+      JobEffects,
+      ProposalEffects,
+      SampleEffects,
+      PublishedDataEffects,
+      LogbookEffects,
+    ]),
     StoreModule.forFeature("datasets", datasetsReducer),
+    StoreModule.forFeature("instruments", instrumentsReducer),
     StoreModule.forFeature("jobs", jobsReducer),
     StoreModule.forFeature("proposals", proposalsReducer),
     StoreModule.forFeature("samples", samplesReducer),
@@ -141,6 +151,7 @@ import { AdminTabComponent } from "./admin-tab/admin-tab.component";
     DatasetTableActionsComponent,
     DatasetLifecycleComponent,
     SampleEditComponent,
+    PublicDownloadDialogComponent,
     ShareDialogComponent,
     DatasetFileUploaderComponent,
     AdminTabComponent,

@@ -37,3 +37,18 @@ export const selectPage = createSelector(selectFilters, (filters) => {
   const { skip, limit } = filters;
   return skip / limit;
 });
+
+export const selectLogbooksDashboardPageViewModel = createSelector(
+  selectCurrentLogbook,
+  selectEntriesCount,
+  selectEntriesPerPage,
+  selectPage,
+  selectFilters,
+  (logbook, entriesCount, entriesPerPage, currentPage, filters) => ({
+    logbook,
+    entriesCount,
+    entriesPerPage,
+    currentPage,
+    filters,
+  })
+);

@@ -1,6 +1,5 @@
 import { Settings, Message, User, TableColumn } from "../models";
 import { AccessToken } from "shared/sdk";
-import { APP_DI_CONFIG } from "app-config.module";
 
 // NOTE It IS ok to make up a state of other sub states
 export interface UserState {
@@ -32,14 +31,14 @@ export const initialUserState: UserState = {
     scopes: ["string"],
     created: new Date(),
     userId: "",
-    user: {}
+    user: {},
   },
 
   settings: {
     tapeCopies: "one",
     datasetCount: 25,
     jobCount: 25,
-    darkTheme: false
+    darkTheme: false,
   }, // TODO sync with server settings?
 
   message: undefined,
@@ -49,5 +48,5 @@ export const initialUserState: UserState = {
 
   isLoading: false,
 
-  columns: APP_DI_CONFIG.localColumns
+  columns: [],
 };

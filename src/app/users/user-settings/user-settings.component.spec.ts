@@ -13,10 +13,7 @@ import { ConfigService } from "shared/services";
 import { UserSettingsComponent } from "./user-settings.component";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { Message, MessageType, Settings } from "state-management/models";
-import {
-  saveSettingsAction,
-  showMessageAction,
-} from "state-management/actions/user.actions";
+import { showMessageAction } from "state-management/actions/user.actions";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
@@ -70,33 +67,6 @@ describe("UserSettingsComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
-  });
-
-  describe("#onSubmit()", () => {
-    it("should dispatch a saveSettingsAction and a showMessageAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const message = new Message(
-        "Settings saved locally",
-        MessageType.Success,
-        5000
-      );
-
-      const settings: Settings = {
-        tapeCopies: "one",
-        datasetCount: 25,
-        jobCount: 25,
-        darkTheme: false,
-      };
-
-      component.onSubmit(settings);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        saveSettingsAction({ settings })
-      );
-      expect(dispatchSpy).toHaveBeenCalledWith(showMessageAction({ message }));
-    });
   });
 
   describe("#onCopy()", () => {

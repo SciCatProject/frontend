@@ -1,12 +1,14 @@
-import { Component, OnInit, Inject } from "@angular/core";
-import { AppConfig, APP_CONFIG } from "app-config.module";
+import { Component, OnInit } from "@angular/core";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "about",
   templateUrl: "./about.component.html",
-  styleUrls: ["./about.component.scss"]
+  styleUrls: ["./about.component.scss"],
 })
 export class AboutComponent implements OnInit {
+  appConfig = this.appConfigService.getConfig();
+
   SciCatGitIO = "";
   SciCatGitHub = "";
   SciCatDevopsDocIO = "";
@@ -17,14 +19,17 @@ export class AboutComponent implements OnInit {
   SNFLink = "";
   PSIDataPolicy = "";
   facility = "";
-  constructor(@Inject(APP_CONFIG) public appConfig: AppConfig) {}
+
+  constructor(public appConfigService: AppConfigService) {}
 
   ngOnInit() {
-    this.SciCatDevopsDocIO = "https://scicatproject.github.io/documentation/Devops/Documentation/";
+    this.SciCatDevopsDocIO =
+      "https://scicatproject.github.io/documentation/Devops/Documentation/";
     this.SciCatGitIO = "https://scicatproject.github.io/";
     this.SciCatGitHub = "https://github.com/SciCatProject";
-    this.facility = this.appConfig["facility"] ?? "";
-    this.SNFLink = "http://www.snf.ch/en/theSNSF/research-policies/open_research_data/Pages/default.aspx#Guidelines%20and%20Regulations";
+    this.facility = this.appConfig.facility ?? "";
+    this.SNFLink =
+      "http://www.snf.ch/en/theSNSF/research-policies/open_research_data/Pages/default.aspx#Guidelines%20and%20Regulations";
     this.PSIDataPolicy = "https://www.psi.ch/en/science/psi-data-policy";
     this.aboutText =
       "Scicat allows users to access data and metadata from experiments";
@@ -48,13 +53,15 @@ export class AboutComponent implements OnInit {
         "All scientific datasets are licensed under the CC-BY-4.0 license ";
     } else if (this.facility === "PSI") {
       this.aboutText =
-        "SciCat is a metadata catalog. At PSI, SciCat works in conjunction with a PetaByte archive and remote accesss system."
-        + " Together these components provide users with the ability to store, search and access their data."
-        + " SciCat is an open source project in collaboration with ESS and Max IV";
+        "SciCat is a metadata catalog. At PSI, SciCat works in conjunction with a PetaByte archive and remote accesss system." +
+        " Together these components provide users with the ability to store, search and access their data." +
+        " SciCat is an open source project in collaboration with ESS and Max IV";
 
-      this.accessText = "Access to SciCat is granted to users by the Digital User Office.";
+      this.accessText =
+        "Access to SciCat is granted to users by the Digital User Office.";
       this.termsTextContinued = "Additionally, PSI defines it's own ";
-      this.termsText = "The Swiss National Science Foundation describes policy and guidelines on ";
+      this.termsText =
+        "The Swiss National Science Foundation describes policy and guidelines on ";
     } else if (this.facility === "MAX IV") {
       this.aboutText =
         "Scicat allows users to access data and metadata from experiments at MAX IV.";

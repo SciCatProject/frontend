@@ -1,7 +1,6 @@
 import {
   Component,
   OnInit,
-  Input,
   OnChanges,
   SimpleChange,
   OnDestroy,
@@ -20,6 +19,8 @@ import {
 import { FormControl, Validators, FormBuilder } from "@angular/forms";
 import { map } from "rxjs/operators";
 import { Subscription } from "rxjs";
+import { selectIsLoading, selectIsLoggedIn } from "state-management/selectors/user.selectors";
+import { OwnershipService } from "shared/services/ownership.service";
 
 @Component({
   selector: "reduce",
@@ -28,6 +29,7 @@ import { Subscription } from "rxjs";
 })
 export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
   dataset: Dataset | undefined;
+  subscriptions: Subscription[] = [];
   derivedDatasets$ = this.store.select(selectDatasets).pipe(
     map((datasets) =>
       datasets
@@ -39,9 +41,9 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
     )
   );
 
-  derivedDatsetsSubscription: Subscription = new Subscription();
   derivedDatasets: DerivedDataset[] = [];
-
+  loading$ = this.store.select(selectIsLoading);
+  loggedIn$ = this.store.select(selectIsLoggedIn);
   result$ = this.store.select(selectOpenwhiskResult);
 
   actionsForm = this.formBuilder.group({
@@ -76,8 +78,9 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private store: Store
-  ) {}
+    private store: Store,
+    private ownershipService: OwnershipService
+  ) { }
 
   reduceDataset(dataset: Dataset): void {
     this.store.dispatch(reduceDatasetAction({ dataset }));
@@ -101,15 +104,22 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.select(selectCurrentDataset).subscribe((dataset) => {
-      this.dataset = dataset;
-    });
-    this.derivedDatsetsSubscription = this.derivedDatasets$.subscribe(
-      (datasets) => {
-        if (datasets) {
-          this.derivedDatasets = datasets;
+    this.subscriptions.push(
+      this.store.select(selectCurrentDataset).subscribe((dataset) => {
+        this.dataset = dataset;
+        if (dataset) {
+          this.ownershipService.checkPermission(dataset, this.store, this.router);
         }
-      }
+      })
+    );
+    this.subscriptions.push(
+      this.derivedDatasets$.subscribe(
+        (datasets) => {
+          if (datasets) {
+            this.derivedDatasets = datasets;
+          }
+        }
+      )
     );
   }
 
@@ -132,6 +142,8 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.derivedDatsetsSubscription.unsubscribe();
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    });
   }
 }

@@ -83,6 +83,11 @@ export const routes: Routes = [
             data: {errorTitle: "404 Page not found", message: "Sorry, the page you are trying to view doesn't exist"}
           },
           {
+            path: "401",
+            component: ErrorPageComponent,
+            data: {errorTitle: "401 Unauthorized", message: "Sorry, you don't have permission to view this page"}
+          },
+          {
             path: "**",
             pathMatch: "full",
             component: ErrorPageComponent,

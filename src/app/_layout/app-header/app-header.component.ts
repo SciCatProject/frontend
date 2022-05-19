@@ -11,6 +11,7 @@ import {
   selectThumbnailPhoto,
 } from "state-management/selectors/user.selectors";
 import { selectDatasetsInBatchIndicator } from "state-management/selectors/datasets.selectors";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "app-app-header",
@@ -18,7 +19,8 @@ import { selectDatasetsInBatchIndicator } from "state-management/selectors/datas
   styleUrls: ["./app-header.component.scss"],
 })
 export class AppHeaderComponent implements OnInit {
-  facility = this.appConfig.facility ?? "";
+  config = this.appConfigService.getConfig();
+  facility = this.config.facility ?? "";
   status = this.appConfig.production ? "" : "test";
 
   username$ = this.store.select(selectCurrentUserName);
@@ -27,8 +29,9 @@ export class AppHeaderComponent implements OnInit {
   loggedIn$ = this.store.select(selectIsLoggedIn);
 
   constructor(
-    private store: Store,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
+    public appConfigService: AppConfigService,
+    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private store: Store
   ) {}
 
   logout(): void {

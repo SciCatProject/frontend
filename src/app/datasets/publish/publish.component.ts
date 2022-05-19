@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 
 import { Store, ActionsSubject } from "@ngrx/store";
@@ -10,7 +10,6 @@ import {
   publishDatasetAction,
   fetchPublishedDataCompleteAction,
 } from "state-management/actions/published-data.actions";
-import { APP_CONFIG } from "app-config.module";
 
 import { PublishedDataApi } from "shared/sdk/services/custom";
 import { PublishedData } from "shared/sdk/models";
@@ -19,6 +18,7 @@ import { Router } from "@angular/router";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { Subscription } from "rxjs";
 import { selectCurrentUserName } from "state-management/selectors/user.selectors";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "publish",
@@ -29,6 +29,8 @@ export class PublishComponent implements OnInit, OnDestroy {
   private datasets$ = this.store.select(selectDatasetsInBatch);
   private userName$ = this.store.select(selectCurrentUserName);
   private countSubscription: Subscription;
+
+  appConfig = this.appConfigService.getConfig();
 
   public separatorKeysCodes: number[] = [ENTER, COMMA];
   public datasetCount: number;
@@ -56,8 +58,8 @@ export class PublishComponent implements OnInit, OnDestroy {
   actionSubjectSubscription: Subscription;
 
   constructor(
+    private appConfigService: AppConfigService,
     private store: Store,
-    @Inject(APP_CONFIG) private appConfig,
     private publishedDataApi: PublishedDataApi,
     private actionsSubj: ActionsSubject,
     private router: Router
@@ -151,7 +153,7 @@ export class PublishComponent implements OnInit, OnDestroy {
         this.form.title = result.title;
         this.form.description = result.description;
         this.form.resourceType = "raw";
-        this.form.thumbnail = result.thumbnail;
+        this.form.thumbnail = result.thumbnail ?? "";
       });
 
     this.actionSubjectSubscription = this.actionsSubj.subscribe((data) => {

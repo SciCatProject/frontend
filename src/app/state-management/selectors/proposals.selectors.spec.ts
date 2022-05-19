@@ -193,6 +193,28 @@ describe("Proposal Selectors", () => {
     });
   });
 
+  describe("selectViewProposalPageViewModel", () => {
+    it("should select view proposal page view model state", () => {
+      expect(
+        fromSelectors.selectViewProposalPageViewModel.projector(
+          initialProposalsState.currentProposal,
+          initialProposalsState.datasets,
+          fromSelectors.selectDatasetsPage.projector(
+            initialProposalsState.datasetFilters
+          ),
+          initialProposalsState.datasetsCount,
+          initialProposalsState.datasetFilters.limit
+        )
+      ).toEqual({
+        proposal,
+        datasets: [],
+        currentPage: 0,
+        datasetCount: 0,
+        datasetsPerPage: 25,
+      });
+    });
+  });
+
   describe("selectFullqueryParams", () => {
     it("should select query params for proposals", () => {
       const fullqueryKeys = Object.keys(

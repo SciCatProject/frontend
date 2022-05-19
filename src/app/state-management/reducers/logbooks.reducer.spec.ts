@@ -1,8 +1,7 @@
-import { logbooksReducer, formatImageUrls } from "./logbooks.reducer";
+import { logbooksReducer } from "./logbooks.reducer";
 import { initialLogbookState } from "../state/logbooks.store";
 import * as fromActions from "../actions/logbooks.actions";
 import { Logbook, LogbookFilters } from "../models";
-import { APP_DI_CONFIG } from "app-config.module";
 
 describe("LogbooksReducer", () => {
   describe("on fetchLogbooksComplete", () => {
@@ -140,124 +139,6 @@ describe("LogbooksReducer", () => {
 
       expect(state.filters.sortField).toEqual(sortField);
       expect(state.filters.skip).toEqual(0);
-    });
-  });
-
-  describe("#formatImageUrls", () => {
-    it("should reformat 'mxc://' urls to 'http(s)://' urls", () => {
-      const logbook = new Logbook();
-      const inputMessage = {
-        content: {
-          info: {
-            thumbnail_url: "mxc://",
-          },
-          msgtype: "m.image",
-          url: "mxc://",
-        },
-      };
-      logbook.messages = [inputMessage];
-      const formattedLogbook = formatImageUrls(logbook);
-
-      formattedLogbook.messages.forEach((message) => {
-        expect(message.content.url).toEqual(
-          APP_DI_CONFIG.synapseBaseUrl + "/_matrix/media/r0/download/"
-        );
-        expect(message.content.info.thumbnail_url).toEqual(
-          APP_DI_CONFIG.synapseBaseUrl + "/_matrix/media/r0/download/"
-        );
-      });
-    });
-
-    it("should do nothing if logbook is undefined", () => {
-      const logbook = undefined;
-      const formattedLogbook = formatImageUrls(logbook);
-
-      expect(formattedLogbook).toBe(undefined);
-    });
-
-    it("should do nothing if there are no messages", () => {
-      const logbook = new Logbook();
-      const formattedLogbook = formatImageUrls(logbook);
-
-      expect(formattedLogbook.messages).toBe(undefined);
-    });
-
-    it("should do nothing if msgtype is not 'm.image'", () => {
-      const logbook = new Logbook();
-      const inputMessage = {
-        content: {
-          info: {
-            thumbnail_url: "mxc://",
-          },
-          msgtype: "m.text",
-          url: "mxc://",
-        },
-      };
-      logbook.messages = [inputMessage];
-      const formattedLogbook = formatImageUrls(logbook);
-
-      formattedLogbook.messages.forEach((message) => {
-        expect(message.content.url).toEqual("mxc://");
-        expect(message.content.info.thumbnail_url).toEqual("mxc://");
-      });
-    });
-
-    it("should only format 'url' if there is no 'thumbnail_url' property", () => {
-      const logbook = new Logbook();
-      const inputMessage = {
-        content: {
-          info: {},
-          msgtype: "m.image",
-          url: "mxc://",
-        },
-      };
-      logbook.messages = [inputMessage];
-      const formattedLogbook = formatImageUrls(logbook);
-
-      formattedLogbook.messages.forEach((message) => {
-        expect(message.content.url).toEqual(
-          APP_DI_CONFIG.synapseBaseUrl + "/_matrix/media/r0/download/"
-        );
-        expect(message.content.info.thumbnail_url).toBe(undefined);
-      });
-    });
-
-    it("should only format 'thumbnail_url' if there is no 'url' property", () => {
-      const logbook = new Logbook();
-      const inputMessage = {
-        content: {
-          info: {
-            thumbnail_url: "mxc://",
-          },
-          msgtype: "m.image",
-        },
-      };
-      logbook.messages = [inputMessage];
-      const formattedLogbook = formatImageUrls(logbook);
-
-      formattedLogbook.messages.forEach((message) => {
-        expect(message.content.url).toEqual(undefined);
-        expect(message.content.info.thumbnail_url).toBe(
-          APP_DI_CONFIG.synapseBaseUrl + "/_matrix/media/r0/download/"
-        );
-      });
-    });
-
-    it("should do nothing if there are no properties 'thumbnail_url' and 'url'", () => {
-      const logbook = new Logbook();
-      const inputMessage = {
-        content: {
-          info: {},
-          msgtype: "m.image",
-        },
-      };
-      logbook.messages = [inputMessage];
-      const formattedLogbook = formatImageUrls(logbook);
-
-      formattedLogbook.messages.forEach((message) => {
-        expect(message.content.url).toEqual(undefined);
-        expect(message.content.info.thumbnail_url).toBe(undefined);
-      });
     });
   });
 

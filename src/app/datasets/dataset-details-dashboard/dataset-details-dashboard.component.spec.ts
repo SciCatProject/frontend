@@ -10,16 +10,14 @@ import { MockActivatedRoute, MockUserApi } from "shared/MockStubs";
 import { Store, StoreModule } from "@ngrx/store";
 import { UserApi } from "shared/sdk";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { AppConfigModule, APP_CONFIG } from "app-config.module";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { Router, ActivatedRoute } from "@angular/router";
-import {
-  MatSlideToggleModule,
-} from "@angular/material/slide-toggle";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { MockStore } from "@ngrx/store/testing";
+import { AppConfigService } from "app-config.service";
 
 describe("DetailsDashboardComponent", () => {
   let component: DatasetDetailsDashboardComponent;
@@ -30,13 +28,16 @@ describe("DetailsDashboardComponent", () => {
     navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
 
+  const getConfig = () => ({
+    editMetadataEnabled: true,
+  });
+
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
         schemas: [NO_ERRORS_SCHEMA],
         declarations: [DatasetDetailsDashboardComponent],
         imports: [
-          AppConfigModule,
           MatButtonModule,
           MatIconModule,
           MatSlideToggleModule,
@@ -50,9 +51,9 @@ describe("DetailsDashboardComponent", () => {
           providers: [
             { provide: Router, useValue: router },
             {
-              provide: APP_CONFIG,
+              provide: AppConfigService,
               useValue: {
-                editMetadataEnabled: true,
+                getConfig,
               },
             },
             { provide: ActivatedRoute, useClass: MockActivatedRoute },

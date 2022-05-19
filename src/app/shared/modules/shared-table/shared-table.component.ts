@@ -105,11 +105,11 @@ export class SharedTableComponent
 
   }
   ngOnInit(){
-    this.filterForm = this.initilizeFormControl();
+    this.filterForm = this.initializeFormControl();
     this.subscriptions.push(this.activateColumnFilters());
   }
 
-  initilizeFormControl() {
+  initializeFormControl() {
     const formControls = this.columnsdef.reduce((acc: {[key: string]: string[]}, column: Column) => {
       if(column.matchMode === "between"){
         acc[column.id + ".start"] = [""];
@@ -131,7 +131,9 @@ export class SharedTableComponent
       for (let [columnId, value] of Object.entries(values)){
         // handle date filters
         if ((columnId.endsWith(".start") || columnId.endsWith(".end")) && value){
-          const date = DateTime.fromISO(value).toISODate();
+          // make sure that date is an ISO string
+          const valueISO = new Date(value).toISOString();
+          const date = DateTime.fromISO(valueISO).toISODate();
           this.filterExpressions[columnId] = date;
           queryParams[columnId] = date;
         } else if (value) {

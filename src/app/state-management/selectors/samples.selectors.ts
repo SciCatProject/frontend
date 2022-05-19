@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { SampleState } from "state-management/state/samples.store";
+import { selectCurrentUser } from "./user.selectors";
 
 const selectSampleState = createFeatureSelector<SampleState>("samples");
 
@@ -84,6 +85,71 @@ export const selectCharacteristicsFilter = createSelector(
 export const selectDatasetsPerPage = createSelector(
   selectDatasetFilters,
   (filters) => filters.limit
+);
+
+export const selectSamplesPagination = createSelector(
+  selectSamplesCount,
+  selectSamplesPerPage,
+  selectPage,
+  (samplesCount, samplesPerPage, currentPage) => ({
+    samplesCount,
+    samplesPerPage,
+    currentPage,
+  })
+);
+
+export const selectSampleDashboardPageViewModel = createSelector(
+  selectSamples,
+  selectSamplesPagination,
+  selectFilters,
+  selectHasPrefilledFilters,
+  selectTextFilter,
+  selectMetadataKeys,
+  selectCharacteristicsFilter,
+  (
+    samples,
+    samplesPagination,
+    filters,
+    hasPrefilledFilters,
+    textFilter,
+    metadataKeys,
+    characteristicsFilter
+  ) => ({
+    samples,
+    samplesPagination,
+    filters,
+    hasPrefilledFilters,
+    textFilter,
+    metadataKeys,
+    characteristicsFilter,
+  })
+);
+
+export const selectSampleDetailPageViewModel = createSelector(
+  selectCurrentSample,
+  selectDatasets,
+  selectDatasetsPerPage,
+  selectDatasetsPage,
+  selectDatasetsCount,
+  selectCurrentAttachments,
+  selectCurrentUser,
+  (
+    sample,
+    datasets,
+    datasetsPerPage,
+    datasetsPage,
+    datasetsCount,
+    attachments,
+    user
+  ) => ({
+    sample,
+    datasets,
+    datasetsPerPage,
+    datasetsPage,
+    datasetsCount,
+    attachments,
+    user,
+  })
 );
 
 export const selectFullqueryParams = createSelector(

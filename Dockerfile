@@ -1,15 +1,13 @@
-FROM nginx:1.19-alpine
+FROM node:16-alpine AS builder
 
-ENV env=development
-WORKDIR /usr/src/app
-
-#npm ci
-COPY . /usr/src/app
-RUN apk update && apk upgrade && \
-    apk add --update nodejs npm
+WORKDIR /frontend
+COPY package*.json /frontend/
 RUN npm ci
+COPY . /frontend/
+RUN npx ng build
 
-#nginx config
-COPY ./scripts/nginx.conf /etc/nginx/
-RUN echo "npx ng build --configuration=\${env} --output-path /usr/share/nginx/html" > /docker-entrypoint.d/npx_ng_build.sh && \
-    chmod +x /docker-entrypoint.d/npx_ng_build.sh
+FROM nginx:1.12-alpine
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=builder /frontend/dist/ /usr/share/nginx/html/
+COPY scripts/nginx.conf /etc/nginx/nginx.conf
+EXPOSE 80

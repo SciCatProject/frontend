@@ -1,20 +1,30 @@
-import { Location } from "@angular/common";
-import { Injectable, Inject } from "@angular/core";
-import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
-import { APP_CONFIG, AppConfig } from "app-config.module";
+import { Injectable } from "@angular/core";
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  Router,
+  RouterStateSnapshot,
+  UrlTree,
+} from "@angular/router";
+import { AppConfigService } from "app-config.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class ServiceGuard implements CanActivate {
+  appConfig = this.appConfigService.getConfig();
+
   constructor(
-    @Inject(APP_CONFIG) private appConfig: AppConfig,
-    private router: Router,
+    private appConfigService: AppConfigService,
+    private router: Router
   ) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree{
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): boolean | UrlTree {
     let shouldActivate = false;
-    switch(route.data.service) {
+    switch (route.data.service) {
       case "logbook":
         shouldActivate = this.appConfig.logbookEnabled;
         break;
@@ -23,9 +33,12 @@ export class ServiceGuard implements CanActivate {
         break;
     }
     if (!shouldActivate) {
-      this.router.navigate(["/404"], {skipLocationChange: true, queryParams: {
-        url: state.url
-      }});
+      this.router.navigate(["/404"], {
+        skipLocationChange: true,
+        queryParams: {
+          url: state.url,
+        },
+      });
       return false;
     }
     return true;

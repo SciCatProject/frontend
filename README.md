@@ -7,7 +7,7 @@
 
 
 [![Build Status](https://github.com/SciCatProject/frontend/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/SciCatProject/frontend/actions)
-[![DeepScan grade](https://deepscan.io/api/projects/887/branches/19862/badge/grade.svg)](https://deepscan.io/dashboard#view=project&pid=887&bid=19862)
+[![DeepScan grade](https://deepscan.io/api/teams/8394/projects/20870/branches/581450/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=8394&pid=20870&bid=581450)
 [![Known Vulnerabilities](https://snyk.io/test/github/SciCatProject/frontend/develop/badge.svg?targetFile=package.json)](https://snyk.io/test/github/SciCatProject/frontend/develop?targetFile=package.json)
 [![DOI](https://zenodo.org/badge/106383330.svg)](https://zenodo.org/badge/latestdoi/106383330)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)

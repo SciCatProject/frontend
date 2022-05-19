@@ -6,6 +6,14 @@ import { TableColumn } from "state-management/models";
 const reducer = createReducer(
   initialUserState,
   on(
+    fromActions.setDatasetTableColumnsAction,
+    (state, { columns }): UserState => ({
+      ...state,
+      columns,
+    })
+  ),
+
+  on(
     fromActions.loginAction,
     (state): UserState => ({
       ...state,
@@ -158,11 +166,8 @@ const reducer = createReducer(
     }
   ),
   on(fromActions.deselectAllCustomColumnsAction, (state): UserState => {
-    const initialColumnNames = [...initialUserState.columns].map(
-      (column) => column.name
-    );
     const customColumns = [...state.columns].filter(
-      (column) => !initialColumnNames.includes(column.name)
+      (column) => column.type !== "standard"
     );
     customColumns.forEach((column) => (column.enabled = false));
     const customColumnNames = customColumns.map((column) => column.name);

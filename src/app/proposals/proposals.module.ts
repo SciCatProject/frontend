@@ -25,12 +25,11 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { SharedScicatFrontendModule } from "shared/shared.module";
-import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { ProposalFilterComponent } from "./proposal-filter/proposal-filter.component";
 import { LogbooksModule } from "logbooks/logbooks.module";
-import { ProposalDashboardNewComponent } from "./proposal-dashboard-new/proposal-dashboard-new.component";
+import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { LogbookEffects } from "state-management/effects/logbooks.effects";
@@ -59,16 +58,15 @@ import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
     RouterModule,
     SharedScicatFrontendModule,
     StoreModule.forFeature("proposals", proposalsReducer),
-    StoreModule.forFeature("logbooks", logbooksReducer)
+    StoreModule.forFeature("logbooks", logbooksReducer),
   ],
   declarations: [
     ViewProposalPageComponent,
     ProposalDetailComponent,
-    ProposalDashboardComponent,
     ProposalFilterComponent,
-    ProposalDashboardNewComponent
+    ProposalDashboardComponent,
   ],
   exports: [],
-  providers: [DatePipe, FileSizePipe, SlicePipe]
+  providers: [DatePipe, FileSizePipe, SlicePipe],
 })
 export class ProposalsModule {}

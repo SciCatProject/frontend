@@ -1,4 +1,9 @@
-import { ComponentFixture, inject, TestBed, waitForAsync } from "@angular/core/testing";
+import {
+  ComponentFixture,
+  inject,
+  TestBed,
+  waitForAsync,
+} from "@angular/core/testing";
 
 import { DatasetLifecycleComponent } from "./dataset-lifecycle.component";
 
@@ -9,12 +14,12 @@ import { Dataset } from "shared/sdk";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
-import { APP_CONFIG } from "app-config.module";
 import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 import { MatButtonModule } from "@angular/material/button";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { Store, StoreModule } from "@ngrx/store";
 import { MockStore } from "@ngrx/store/testing";
+import { AppConfigService } from "app-config.service";
 
 const historyItems = [
   {
@@ -37,6 +42,10 @@ const historyItems = [
   },
 ];
 
+const getConfig = () => ({
+  archiveWorkflowEnabled: true,
+});
+
 describe("DatasetLifecycleComponent", () => {
   let component: DatasetLifecycleComponent;
   let fixture: ComponentFixture<DatasetLifecycleComponent>;
@@ -54,11 +63,11 @@ describe("DatasetLifecycleComponent", () => {
           MatTableModule,
           NgxJsonViewerModule,
           PipesModule,
-          StoreModule.forRoot({})
+          StoreModule.forRoot({}),
         ],
         providers: [
           DatePipe,
-          { provide: APP_CONFIG, useValue: { archiveWorkflowEnabled: true } },
+          { provide: AppConfigService, useValue: { getConfig } },
         ],
       }).compileComponents();
     })
@@ -67,7 +76,7 @@ describe("DatasetLifecycleComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetLifecycleComponent);
     component = fixture.componentInstance;
-    component.dataset = {pid: "testPid", history: []} as unknown as Dataset;
+    component.dataset = { pid: "testPid", history: [] } as unknown as Dataset;
     fixture.detectChanges();
   });
   beforeEach(inject([Store], (mockStore: MockStore) => {

@@ -1,5 +1,4 @@
 import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
-import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Store } from "@ngrx/store";
 import { Sample } from "shared/sdk";
 import {
@@ -18,17 +17,7 @@ import {
   SortChangeEvent,
 } from "shared/modules/table/table.component";
 import { combineLatest, Subscription } from "rxjs";
-import {
-  selectSamples,
-  selectSamplesCount,
-  selectSamplesPerPage,
-  selectPage,
-  selectFilters,
-  selectHasPrefilledFilters,
-  selectTextFilter,
-  selectMetadataKeys,
-  selectCharacteristicsFilter,
-} from "state-management/selectors/samples.selectors";
+import { selectSampleDashboardPageViewModel } from "state-management/selectors/samples.selectors";
 import { DatePipe } from "@angular/common";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatDialogConfig, MatDialog } from "@angular/material/dialog";
@@ -38,6 +27,7 @@ import deepEqual from "deep-equal";
 import { filter, map, distinctUntilChanged, take } from "rxjs/operators";
 import { SampleFilters } from "state-management/models";
 import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "sample-dashboard",
@@ -45,16 +35,11 @@ import { SearchParametersDialogComponent } from "shared/modules/search-parameter
   styleUrls: ["./sample-dashboard.component.scss"],
 })
 export class SampleDashboardComponent implements OnInit, OnDestroy {
-  sampleCount$ = this.store.select(selectSamplesCount);
-  samplesPerPage$ = this.store.select(selectSamplesPerPage);
-  currentPage$ = this.store.select(selectPage);
-  textFilter$ = this.store.select(selectTextFilter);
-  characteristics$ = this.store.select(selectCharacteristicsFilter);
-  readyToFetch$ = this.store
-    .select(selectHasPrefilledFilters)
-    .pipe(filter((has) => has));
+  vm$ = this.store.select(selectSampleDashboardPageViewModel);
 
   subscriptions: Subscription[] = [];
+
+  appConfig = this.appConfigService.getConfig();
 
   metadataKeys: string[] = [];
   tableData: any[] = [];
@@ -72,7 +57,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
   description = "";
 
   constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    private appConfigService: AppConfigService,
     private datePipe: DatePipe,
     public dialog: MatDialog,
     private route: ActivatedRoute,
@@ -151,13 +136,16 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchMetadataKeysAction());
 
     this.subscriptions.push(
-      this.store.select(selectSamples).subscribe((samples) => {
-        this.tableData = this.formatTableData(samples);
+      this.vm$.subscribe((vm) => {
+        this.tableData = this.formatTableData(vm.samples);
       })
     );
 
     this.subscriptions.push(
-      combineLatest([this.store.select(selectFilters), this.readyToFetch$])
+      combineLatest([
+        this.vm$.pipe(map((vm) => vm.filters)),
+        this.vm$.pipe(filter((vm) => vm.hasPrefilledFilters)),
+      ])
         .pipe(
           map(([filters, _]) => filters),
           distinctUntilChanged(deepEqual)
@@ -171,8 +159,8 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.select(selectMetadataKeys).subscribe((metadataKeys) => {
-        this.metadataKeys = metadataKeys;
+      this.vm$.subscribe((vm) => {
+        this.metadataKeys = vm.metadataKeys;
       })
     );
 

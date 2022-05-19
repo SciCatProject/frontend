@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
@@ -7,13 +7,7 @@ import {
   fetchProposalDatasetsAction,
   changeDatasetsPageAction,
 } from "state-management/actions/proposals.actions";
-import {
-  selectCurrentProposal,
-  selectProposalDatasets,
-  selectDatasetsPage,
-  selectDatasetsCount,
-  selectDatasetsPerPage,
-} from "state-management/selectors/proposals.selectors";
+import { selectViewProposalPageViewModel } from "state-management/selectors/proposals.selectors";
 import { Dataset, Proposal } from "state-management/models";
 import {
   TableColumn,
@@ -22,7 +16,7 @@ import {
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { fetchLogbookAction } from "state-management/actions/logbooks.actions";
-import { APP_CONFIG, AppConfig } from "app-config.module";
+import { AppConfigService } from "app-config.service";
 
 export interface TableData {
   pid: string;
@@ -40,9 +34,9 @@ export interface TableData {
   styleUrls: ["view-proposal-page.component.scss"],
 })
 export class ViewProposalPageComponent implements OnInit, OnDestroy {
-  currentPage$ = this.store.select(selectDatasetsPage);
-  datasetCount$ = this.store.select(selectDatasetsCount);
-  itemsPerPage$ = this.store.select(selectDatasetsPerPage);
+  vm$ = this.store.select(selectViewProposalPageViewModel);
+
+  appConfig = this.appConfigService.getConfig();
 
   proposal: Proposal = new Proposal();
 
@@ -60,7 +54,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    public appConfigService: AppConfigService,
     private datePipe: DatePipe,
     private filesizePipe: FileSizePipe,
     private route: ActivatedRoute,
@@ -105,9 +99,9 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.select(selectCurrentProposal).subscribe((proposal) => {
-        if (proposal) {
-          this.proposal = proposal;
+      this.vm$.subscribe((vm) => {
+        if (vm.proposal) {
+          this.proposal = vm.proposal;
           if (this.appConfig.logbookEnabled) {
             this.store.dispatch(
               fetchLogbookAction({ name: this.proposal.proposalId })
@@ -127,8 +121,8 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.select(selectProposalDatasets).subscribe((datasets) => {
-        this.tableData = this.formatTableData(datasets);
+      this.vm$.subscribe((vm) => {
+        this.tableData = this.formatTableData(vm.datasets);
       })
     );
   }

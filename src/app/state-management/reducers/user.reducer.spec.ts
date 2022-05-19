@@ -1,17 +1,36 @@
 import { userReducer } from "./user.reducer";
 import { initialUserState } from "../state/user.store";
 import * as fromActions from "../actions/user.actions";
-import { User, MessageType, Message, Settings, UserIdentity } from "../models";
+import {
+  User,
+  MessageType,
+  Message,
+  Settings,
+  UserIdentity,
+  TableColumn,
+} from "../models";
 import { AccessToken, UserSetting } from "shared/sdk";
 import { HttpErrorResponse } from "@angular/common/http";
 
 describe("UserReducer", () => {
+  describe("on setDatasetTableColumnsAction", () => {
+    it("should set the columns", () => {
+      const columns: TableColumn[] = [
+        { name: "testColumn", order: 0, type: "standard", enabled: true },
+      ];
+      const action = fromActions.setDatasetTableColumnsAction({ columns });
+      const state = userReducer(initialUserState, action);
+
+      expect(state.columns.length).toEqual(1);
+    });
+  });
+
   describe("on loginAction", () => {
     it("should set isLoggingIn to true and isLoggedIn to false", () => {
       const form = {
         username: "test",
         password: "test",
-        rememberMe: true
+        rememberMe: true,
       };
       const action = fromActions.loginAction({ form });
       const state = userReducer(initialUserState, action);
@@ -61,7 +80,7 @@ describe("UserReducer", () => {
     it("should set profile", () => {
       const userIdentity = new UserIdentity();
       const action = fromActions.fetchUserIdentityCompleteAction({
-        userIdentity
+        userIdentity,
       });
       const state = userReducer(initialUserState, action);
 
@@ -76,10 +95,10 @@ describe("UserReducer", () => {
         datasetCount: 50,
         jobCount: 50,
         userId: "testId",
-        id: "testId"
+        id: "testId",
       });
       const action = fromActions.fetchUserSettingsCompleteAction({
-        userSettings
+        userSettings,
       });
       const state = userReducer(initialUserState, action);
 
@@ -94,10 +113,10 @@ describe("UserReducer", () => {
         datasetCount: 50,
         jobCount: 50,
         userId: "testId",
-        id: "testId"
+        id: "testId",
       });
       const action = fromActions.fetchUserSettingsCompleteAction({
-        userSettings
+        userSettings,
       });
       const state = userReducer(initialUserState, action);
 
@@ -114,10 +133,10 @@ describe("UserReducer", () => {
         datasetCount: 50,
         jobCount: 50,
         userId: "testId",
-        id: "testId"
+        id: "testId",
       });
       const action = fromActions.updateUserSettingsCompleteAction({
-        userSettings
+        userSettings,
       });
       const state = userReducer(initialUserState, action);
 
@@ -132,10 +151,10 @@ describe("UserReducer", () => {
         datasetCount: 50,
         jobCount: 50,
         userId: "testId",
-        id: "testId"
+        id: "testId",
       });
       const action = fromActions.updateUserSettingsCompleteAction({
-        userSettings
+        userSettings,
       });
       const state = userReducer(initialUserState, action);
 
@@ -186,7 +205,7 @@ describe("UserReducer", () => {
       const action = fromActions.selectColumnAction({ name, columnType });
       const state = userReducer(initialUserState, action);
 
-      state.columns.forEach(column => {
+      state.columns.forEach((column) => {
         if (column.name === name && column.type === columnType) {
           expect(column.enabled).toEqual(true);
         }
@@ -202,7 +221,7 @@ describe("UserReducer", () => {
       const action = fromActions.deselectColumnAction({ name, columnType });
       const state = userReducer(initialUserState, action);
 
-      state.columns.forEach(column => {
+      state.columns.forEach((column) => {
         if (column.name === name && column.type === columnType) {
           expect(column.enabled).toEqual(false);
         }
@@ -217,10 +236,10 @@ describe("UserReducer", () => {
       const firstState = userReducer(initialUserState, addColumnsAction);
       const selectColumnAction = fromActions.selectColumnAction({
         name: "test",
-        columnType: "custom"
+        columnType: "custom",
       });
       const secondState = userReducer(firstState, selectColumnAction);
-      secondState.columns.forEach(column => {
+      secondState.columns.forEach((column) => {
         if (column.name === "test") {
           expect(column.enabled).toEqual(true);
         }
@@ -229,7 +248,7 @@ describe("UserReducer", () => {
       const action = fromActions.deselectAllCustomColumnsAction();
       const state = userReducer(secondState, action);
 
-      state.columns.forEach(column => {
+      state.columns.forEach((column) => {
         if (column.name === "test") {
           expect(column.enabled).toEqual(false);
         }
@@ -242,7 +261,7 @@ describe("UserReducer", () => {
       const message: Message = {
         content: "",
         type: MessageType.Success,
-        duration: 500000
+        duration: 500000,
       };
       const action = fromActions.showMessageAction({ message });
       const state = userReducer(initialUserState, action);
@@ -266,7 +285,7 @@ describe("UserReducer", () => {
         tapeCopies: "",
         datasetCount: 0,
         jobCount: 0,
-        darkTheme: false
+        darkTheme: false,
       };
       const action = fromActions.saveSettingsAction({ settings });
       const state = userReducer(initialUserState, action);

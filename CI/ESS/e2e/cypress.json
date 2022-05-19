@@ -1,0 +1,11 @@
+{
+  "baseUrl": "http://localhost:80",
+  "lbBaseUrl": "http://localhost:80/api/v3",
+  "lbLoginEndpoint": "/Users/login?include=user",
+  "lbTokenPrefix": "",
+  "viewportWidth": 1280,
+  "username": "admin",
+  "password": "2jf70TPNZsS",
+  "secondaryUsername": "archiveManager",
+  "secondaryPassword": "aman"
+}

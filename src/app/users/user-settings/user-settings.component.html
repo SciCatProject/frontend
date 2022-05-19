@@ -1,4 +1,4 @@
-<div fxLayout="row" fxLayout.xs="column" *ngIf="user$ | async as user">
+<div fxLayout="row" fxLayout.xs="column" *ngIf="vm$ | async as vm">
   <div fxFlex="80">
     <mat-card>
       <mat-card-header class="general-header">
@@ -8,32 +8,49 @@
         User Information
       </mat-card-header>
 
-      <img
-        class="profile-image"
-        src="{{ profileImage$ | async }}"
-        height="65px"
-        alt="profile photo"
-      />
+      <ng-container
+        *ngIf="
+          vm.profile &&
+            vm.profile.thumbnailPhoto &&
+            vm.profile.thumbnailPhoto.startsWith('data:image/');
+          else noPhoto
+        "
+      >
+        <img
+          class="profile-image"
+          src="{{ vm.profile.thumbnailPhoto }}"
+          height="65px"
+          alt="profile photo"
+        />
+      </ng-container>
+      <ng-template #noPhoto>
+        <img
+          class="profile-image"
+          src="assets/images/user.png"
+          height="65px"
+          alt="profile photo"
+        />
+      </ng-template>
 
       <table>
-        <tr *ngIf="displayName$ | async as value">
+        <tr *ngIf="vm.profile && vm.profile.displayName">
           <th>Name</th>
-          <td>{{ value }}</td>
+          <td>{{ vm.profile.displayName }}</td>
         </tr>
-        <tr *ngIf="user['email'] as value">
+        <tr *ngIf="vm.user && vm.user.email">
           <th>Email</th>
-          <td>{{ value }}</td>
+          <td>{{ vm.user.email }}</td>
         </tr>
-        <tr *ngIf="user.id as value">
+        <tr *ngIf="vm.user && vm.user.id">
           <th>Id</th>
-          <td>{{ value }}</td>
+          <td>{{ vm.user.id }}</td>
         </tr>
-        <tr *ngIf="accessGroups$ | async as value">
+        <tr *ngIf="vm.profile && vm.profile.accessGroups">
           <th>Groups</th>
-          <td>{{ value }}</td>
+          <td>{{ vm.profile.accessGroups }}</td>
         </tr>
-        <tr *ngIf="scicatToken$ | async as value">
-          <th>Scicat Token</th>
+        <tr *ngIf="vm.catamelToken as value">
+          <th>SciCat Token</th>
           <td>
             {{ value }}
             <span class="copy-button" (click)="onCopy(value)">
@@ -44,7 +61,7 @@
       </table>
     </mat-card>
 
-    <mat-card *ngIf="settings$ | async as settings">
+    <mat-card *ngIf="vm.settings as settings">
       <mat-card-header class="settings-header">
         <div mat-card-avatar class="section-icon">
           <mat-icon> settings </mat-icon>

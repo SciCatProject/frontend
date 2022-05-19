@@ -1,4 +1,8 @@
-<div class="main-login">
+<div
+  class="main-login"
+  style="background-image: url('../../../assets/images/site.png')"
+  *ngIf="vm$ | async as vm"
+>
   <div class="login-container" fxLayoutAlign="center center">
     <mat-card>
       <div fxLayout="row" class="facility-logo">
@@ -8,32 +12,37 @@
         </div>
         <div fxFlex="auto"></div>
       </div>
-    <mat-card-content>
-      <div *ngFor="let endpoint of appConfig.oAuth2Endpoints">
-        <button
-          class="oauth-login-button"
-          mat-raised-button
-          type="submit"
-          [ngClass]="{ loading: loading$ | async }"
-          (click) = "redirectOIDC(endpoint.authURL)"
+      <mat-card-content>
+        <div *ngFor="let endpoint of oAuth2Endpoints">
+          <button
+            class="oauth-login-button"
+            mat-raised-button
+            type="submit"
+            [ngClass]="{ loading: vm.isLoggingIn }"
+            (click)="redirectOIDC(endpoint.authURL)"
+          >
+            <img
+              class="oauth-login-image"
+              *ngIf="endpoint.displayImage"
+              [src]="endpoint.displayImage"
+            />
+            Login with {{ endpoint.displayText }}
+          </button>
+          <br />
+        </div>
+        <br />
+        <form
+          [formGroup]="loginForm"
+          (ngSubmit)="onLogin()"
+          *ngIf="loginFormEnabled"
         >
-          <img class="oauth-login-image" *ngIf="endpoint.displayImage" [src]="endpoint.displayImage">
-          Login with {{endpoint.displayText}}
+          <mat-form-field hintLabel="{{ facility }} account username">
+            <mat-label> <b> Username</b> </mat-label>
+            <span matPrefix> <mat-icon>person</mat-icon> &nbsp; </span>
+            <input matInput id="usernameInput" formControlName="username" />
+          </mat-form-field>
 
-        </button>
-        <br/>
-
-
-      </div>
-      <br/>
-      <form [formGroup]="loginForm" (ngSubmit)="onLogin()" *ngIf="appConfig.loginFormEnabled">
-        <mat-form-field hintLabel="{{appConfig.facility}} account username">
-          <mat-label> <b> Username</b> </mat-label>
-          <span matPrefix> <mat-icon>person</mat-icon> &nbsp; </span>
-          <input matInput id="usernameInput" formControlName="username" />
-        </mat-form-field>
-
-          <mat-form-field hintLabel="{{appConfig.facility}} account password">
+          <mat-form-field hintLabel="{{ facility }} account password">
             <mat-label> <b> Password</b> </mat-label>
             <span matPrefix> <mat-icon>vpn_key</mat-icon> &nbsp; </span>
             <input
@@ -53,7 +62,7 @@
               <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
             </button>
           </mat-form-field>
-          <p class="privacy-notice" *ngIf="appConfig.facility === 'ESS'">
+          <p class="privacy-notice" *ngIf="facility === 'ESS'">
             <small>
               <a (click)="openPrivacyDialog()">SciCat Privacy Notice</a>
             </small>
@@ -63,7 +72,7 @@
             class="login-button"
             type="submit"
             color="primary"
-            [ngClass]="{ loading: loading$ | async }"
+            [ngClass]="{ loading: vm.isLoggingIn }"
           >
             Log in
           </button>

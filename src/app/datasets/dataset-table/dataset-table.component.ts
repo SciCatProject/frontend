@@ -1,7 +1,5 @@
-import { APP_CONFIG, AppConfig } from "app-config.module";
 import {
   Component,
-  Inject,
   OnDestroy,
   OnInit,
   Output,
@@ -37,6 +35,7 @@ import {
   deselectColumnAction,
 } from "state-management/actions/user.actions";
 import { get } from "lodash";
+import { AppConfigService } from "app-config.service";
 export interface SortChangeEvent {
   active: string;
   direction: "asc" | "desc" | "";
@@ -57,6 +56,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   private inBatchPids: string[] = [];
   private subscriptions: Subscription[] = [];
 
+  appConfig = this.appConfigService.getConfig();
+
   lodashGet = get;
   currentPage$ = this.store.select(selectPage);
   datasetsPerPage$ = this.store.select(selectDatasetsPerPage);
@@ -74,7 +75,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   @Output() rowClick = new EventEmitter<Dataset>();
 
   constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    public appConfigService: AppConfigService,
     private store: Store
   ) {}
   doSettingsClick(event: MouseEvent) {

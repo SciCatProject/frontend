@@ -1,17 +1,18 @@
-import { Component, OnInit, Inject } from "@angular/core";
-import { APP_CONFIG, AppConfig } from "app-config.module";
+import { Component, OnInit } from "@angular/core";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "help",
   templateUrl: "./help.component.html",
-  styleUrls: ["./help.component.scss"]
+  styleUrls: ["./help.component.scss"],
 })
 export class HelpComponent implements OnInit {
+  appConfig = this.appConfigService.getConfig();
   facility: string | null = null;
   ingestManual: string | null = null;
   gettingStarted: string | null = null;
   shoppingCartEnabled = false;
-  constructor(@Inject(APP_CONFIG) public appConfig: AppConfig) {}
+  constructor(public appConfigService: AppConfigService) {}
 
   ngOnInit() {
     this.facility = this.appConfig.facility;

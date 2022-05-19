@@ -1,0 +1,122 @@
+{
+  "lbBaseURL": "https://dacat.psi.ch",
+  "riotBaseUrl": null,
+  "jupyterHubUrl": "https://jupyterhub.apps.ocp4a.psi.ch/hub/login",
+  "externalAuthEndpoint": "/auth/msad",
+  "addDatasetEnabled": false,
+  "archiveWorkflowEnabled": true,
+  "retrieveDestinations": [
+    {
+      "option": "PSI",
+      "location": "/home/out"
+    },
+    {
+      "option": "CSCS (Testphase)"
+    }
+  ],
+  "datasetReduceEnabled": false,
+  "editDatasetSampleEnabled": false,
+  "editMetadataEnabled": false,
+  "editSampleEnabled": true,
+  "editPublishedData": true,
+  "facility": "PSI",
+  "fileColorEnabled": false,
+  "jsonMetadataEnabled": true,
+  "localColumns": [
+    {
+      "name": "select",
+      "order": 0,
+      "type": "standard",
+      "enabled": true
+    },
+    {
+      "name": "datasetName",
+      "order": 1,
+      "type": "standard",
+      "enabled": true
+    },
+    {
+      "name": "runNumber",
+      "order": 2,
+      "type": "standard",
+      "enabled": false
+    },
+    {
+      "name": "sourceFolder",
+      "order": 3,
+      "type": "standard",
+      "enabled": true
+    },
+    {
+      "name": "size",
+      "order": 4,
+      "type": "standard",
+      "enabled": true
+    },
+    {
+      "name": "creationTime",
+      "order": 5,
+      "type": "standard",
+      "enabled": true
+    },
+    {
+      "name": "type",
+      "order": 6,
+      "type": "standard",
+      "enabled": true
+    },
+    {
+      "name": "image",
+      "order": 7,
+      "type": "standard",
+      "enabled": false
+    },
+    {
+      "name": "metadata",
+      "order": 8,
+      "type": "standard",
+      "enabled": false
+    },
+    {
+      "name": "proposalId",
+      "order": 9,
+      "type": "standard",
+      "enabled": true
+    },
+    {
+      "name": "ownerGroup",
+      "order": 10,
+      "type": "standard",
+      "enabled": true
+    },
+    {
+      "name": "dataStatus",
+      "order": 11,
+      "type": "standard",
+      "enabled": true
+    }
+  ],
+  "landingPage": "doi.psi.ch/detail/",
+  "logbookEnabled": false,
+  "metadataPreviewEnabled": true,
+  "metadataStructure": "",
+  "fileDownloadEnabled": false,
+  "multipleDownloadEnabled": false,
+  "maxDirectDownloadSize": 5000000000,
+  "multipleDownloadAction": null,
+  "scienceSearchEnabled": false,
+  "scienceSearchUnitsEnabled": false,
+  "searchPublicDataEnabled": true,
+  "searchSamples": true,
+  "sftpHost": null,
+  "shareEnabled": false,
+  "shoppingCartEnabled": true,
+  "shoppingCartOnHeader": true,
+  "tableSciDataEnabled": false,
+  "ingestManual": "http://melanie.gitpages.psi.ch/SciCatPages/",
+  "gettingStarted": "http://melanie.gitpages.psi.ch/SciCatPages/SciCatGettingStartedSLSSummary.pdf",
+  "jobsEnabled": true,
+  "policiesEnabled": true,
+  "loginFormEnabled": true,
+  "oAuth2Endpoints": []
+}

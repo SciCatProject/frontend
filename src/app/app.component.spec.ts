@@ -6,8 +6,14 @@ import { AppComponent } from "./app.component";
 import { MockStore } from "./shared/MockStubs";
 import { APP_CONFIG } from "./app-config.module";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { AppConfigService } from "app-config.service";
 
 describe("AppComponent", () => {
+  const getConfig = () => ({
+    facility: "ESS",
+    lbBaseUrl: "https://backend.com",
+  });
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
@@ -22,6 +28,7 @@ describe("AppComponent", () => {
       set: {
         providers: [
           { provide: Store, useClass: MockStore },
+          { provide: AppConfigService, useValue: { getConfig } },
           {
             provide: APP_CONFIG,
             useValue: {

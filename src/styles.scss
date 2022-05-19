@@ -37,176 +37,114 @@ $custom-typography: mat.define-typography-config(
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 
-$cyan: (
-  50: #f2f9fc,
-  100: #e5f4f9,
-  200: #cceaf4,
-  300: #b2e0ee,
-  400: #99d5e9,
-  500: #7fcbe3,
-  600: #66c1de,
-  700: #4cb6d8,
-  800: #32acd3,
-  900: #19a2cd,
-  1000: #0099c8,
+$theme-primary: (
+  default: var(--theme-primary-default),
+  lighter: var(--theme-primary-lighter),
+  darker: var(--theme-primary-darker),
   contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    300: #000000,
-    400: #000000,
-    500: #000000,
-    600: #ffffff,
-    700: #ffffff,
-    800: #ffffff,
-    900: #ffffff,
-    1000: #ffffff,
-  ),
+    default: var(--theme-primary-default-contrast),
+    lighter: var(--theme-primary-lighter-contrast),
+    darker: var(--theme-primary-darker-contrast)
+  )
 );
 
-$navy: (
-  50: #f2f4f7,
-  100: #e5eaef,
-  200: #ccd6e0,
-  400: #99adc1,
-  600: #6684a3,
-  800: #325b84,
-  1000: #003366,
+$theme-accent: (
+  default: var(--theme-accent-default),
+  lighter: var(--theme-accent-lighter),
+  darker: var(--theme-accent-darker),
   contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    400: #000000,
-    600: #ffffff,
-    800: #ffffff,
-    1000: #ffffff,
-  ),
+    default: var(--theme-accent-default-contrast),
+    lighter: var(--theme-accent-lighter-contrast),
+    darker: var (--theme-accent-darker-contrast)
+  )
 );
 
-$grass: (
-  50: #f9fbf2,
-  100: #f4f8e5,
-  200: #eaf2cc,
-  400: #d6e599,
-  600: #c1d866,
-  800: #adcb32,
-  1000: #99be00,
+$theme-warn: (
+  default: var(--theme-warn-default),
+  lighter: var(--theme-warn-lighter),
+  darker: var(--theme-warn-darker),
   contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    400: #000000,
-    600: #ffffff,
-    800: #ffffff,
-    1000: #ffffff,
-  ),
+    default: var(--theme-warn-default-contrast),
+    lighter: var(--theme-warn-lighter-contrast),
+    darker: var(--theme-warn-darker-contrast)
+  )
 );
 
-$forest: (
-  50: #f2f7f5,
-  100: #e5efec,
-  200: #cce0da,
-  400: #99c1b5,
-  600: #66a390,
-  800: #32846a,
-  1000: #006646,
+$theme-warn-2: (
+  default: var(--theme-warn-2-default),
+  lighter: var(--theme-warn-2-lighter),
+  darker: var(--theme-warn-2-darker),
   contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    400: #000000,
-    600: #ffffff,
-    800: #ffffff,
-    1000: #ffffff,
-  ),
+    default: var(--theme-warn-2-default-contrast),
+    lighter: var(--theme-warn-2-lighter-contrast),
+    darker: var(--theme-warn-2-darker-contrast)
+  )
 );
 
-$orange: (
-  50: #fff8f2,
-  100: #fff2e5,
-  200: #ffe5cc,
-  400: #ffcb99,
-  600: #ffb166,
-  800: #ff9732,
-  1000: #ff7d00,
+$theme-header-1: (
+  default: var(--theme-header-1-default),
+  lighter: var(--theme-header-1-lighter),
+  darker: var(--theme-header-1-darker),
   contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    400: #000000,
-    600: #ffffff,
-    800: #ffffff,
-    1000: #ffffff,
-  ),
+    default: var(--theme-header-1-default-contrast),
+    lighter: var(--theme-header-1-lighter-contrast),
+    darker: var(--theme-header-1-darker-contrast)
+  )
 );
 
-$purple: (
-  50: #f8f3f8,
-  100: #f2e7f2,
-  200: #e6d0e6,
-  400: #cda1cd,
-  600: #b472b4,
-  800: #9b429b,
-  1000: #821482,
+$theme-header-2: (
+  default: var(--theme-header-2-default),
+  lighter: var(--theme-header-2-lighter),
+  darker: var(--theme-header-2-darker),
   contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    400: #000000,
-    600: #ffffff,
-    800: #ffffff,
-    1000: #ffffff,
-  ),
+    default: var(--theme-header-2-default-contrast),
+    lighter: var(--theme-header-2-lighter-contrast),
+    darker: var(--theme-header-2-darker-contrast)
+  )
 );
 
-$grey: (
-  50: #f2f2f2,
-  100: #e5e5e5,
-  200: #cccccc,
-  300: #b2b2b2,
-  400: #999999,
-  500: #7f7f7f,
+$theme-header-3: (
+  default: var(--theme-header-3-default),
+  lighter: var(--theme-header-3-lighter),
+  darker: var(--theme-header-3-darker),
   contrast: (
-    50: #000000,
-    100: #000000,
-    200: #000000,
-    300: #000000,
-    400: #000000,
-    500: #000000,
-  ),
+    default: var(--theme-header-3-default-contrast),
+    lighter: var(--theme-header-3-lighter-contrast),
+    darker: var(--theme-header-3-darker-contrast)
+  )
 );
 
-$yellow: (
-  50: #e1dc7d,
-  100: #ffbe00,
-  200: #d28c14,
+$theme-header-4: (
+  default: var(--theme-header-4-default),
+  lighter: var(--theme-header-4-lighter),
+  darker: var(--theme-header-4-darker),
   contrast: (
-    50: #000000,
-    100: #ffffff,
-    200: #ffffff,
-  ),
+    default: var(--theme-header-4-default-contrast),
+    lighter: var(--theme-header-4-lighter-contrast),
+    darker: var(--theme-header-4-darker-contrast)
+  )
 );
 
-$red: (
-  50: #ff6e6e,
-  100: #c81919,
-  200: #820019,
+$theme-hover: (
+  default: var(--theme-hover-default),
+  lighter: var(--theme-hover-lighter),
+  darker: var(--theme-hover-darker),
   contrast: (
-    50: #000000,
-    100: #ffffff,
-    200: #ffffff,
-  ),
+    default: var(--theme-hover-default-contrast),
+    lighter: var(--theme-hover-lighter-contrast),
+    darker: var(--theme-hover-darker-contrast)
+  )
 );
 
-$primary: mat.define-palette($cyan, 1000, 400, 800);
-$accent: mat.define-palette($grass, 1000, 400, 800);
-$warn: mat.define-palette($red, 100, 50, 200);
-$warn-2: mat.define-palette($yellow, 100, 50, 200);
-$header-1: mat.define-palette($navy, 1000, 400, 800);
-$header-2: mat.define-palette($forest, 1000, 400, 800);
-$header-3: mat.define-palette($orange, 1000, 400, 800);
-$header-4: mat.define-palette($purple, 1000, 400, 800);
-$hover: mat.define-palette($grey, 500, 100, 300);
+$primary: mat.define-palette($theme-primary, "default", "lighter", "darker");
+$accent: mat.define-palette($theme-accent, "default", "lighter", "darker");
+$warn: mat.define-palette($theme-warn, "default", "lighter", "darker");
+$warn-2: mat.define-palette($theme-warn-2, "default", "lighter", "darker");
+$header-1: mat.define-palette($theme-header-1, "default", "lighter", "darker");
+$header-2: mat.define-palette($theme-header-2, "default", "lighter", "darker");
+$header-3: mat.define-palette($theme-header-3, "default", "lighter", "darker");
+$header-4: mat.define-palette($theme-header-4, "default", "lighter", "darker");
+$hover: mat.define-palette($theme-hover, "default", "lighter", "darker");
 
 @function custom-light-theme(
   $primary,
@@ -290,10 +228,6 @@ a {
 
 a:hover {
   cursor: pointer;
-}
-
-.mat-form-field {
-  background-color: mat.get-color-from-palette($primary, "default-contrast");
 }
 
 .no-hover-effect.mat-button .mat-button-focus-overlay {

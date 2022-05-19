@@ -1,5 +1,3 @@
-import { APP_CONFIG } from "app-config.module";
-
 import { MockStore, MockActivatedRoute } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -30,6 +28,11 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatChipsModule } from "@angular/material/chips";
+import { AppConfigService } from "app-config.service";
+
+const getConfig = () => ({
+  editSampleEnabled: true
+});
 
 describe("SampleDashboardComponent", () => {
   let component: SampleDashboardComponent;
@@ -61,7 +64,7 @@ describe("SampleDashboardComponent", () => {
       TestBed.overrideComponent(SampleDashboardComponent, {
         set: {
           providers: [
-            { provide: APP_CONFIG, useValue: { editSampleEnabled: true } },
+            { provide: AppConfigService, useValue: { getConfig } },
             { provide: Router, useValue: router },
             { provide: ActivatedRoute, useClass: MockActivatedRoute },
           ],

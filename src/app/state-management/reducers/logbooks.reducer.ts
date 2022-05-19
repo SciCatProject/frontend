@@ -4,8 +4,6 @@ import {
   LogbookState,
 } from "state-management/state/logbooks.store";
 import * as fromActions from "state-management/actions/logbooks.actions";
-import { Logbook } from "shared/sdk";
-import { APP_DI_CONFIG } from "app-config.module";
 
 const reducer = createReducer(
   initialLogbookState,
@@ -15,7 +13,7 @@ const reducer = createReducer(
       const formattedLogbooks = logbooks.map((logbook) => {
         const descendingMessages = logbook.messages.reverse();
         logbook.messages = descendingMessages;
-        return formatImageUrls(logbook);
+        return logbook;
       });
       return { ...state, logbooks: formattedLogbooks };
     }
@@ -24,7 +22,7 @@ const reducer = createReducer(
   on(
     fromActions.fetchLogbookCompleteAction,
     (state, { logbook }): LogbookState => {
-      const currentLogbook = formatImageUrls(logbook);
+      const currentLogbook = logbook;
       return { ...state, currentLogbook };
     }
   ),
@@ -108,32 +106,4 @@ export const logbooksReducer = (
     console.log("Action came in! " + action.type);
   }
   return reducer(state, action);
-};
-
-export const formatImageUrls = (logbook: Logbook): Logbook => {
-  if (logbook && logbook.messages) {
-    logbook.messages.forEach((message) => {
-      if (message.content.msgtype === "m.image") {
-        if (
-          message.content.info &&
-          message.content.info.hasOwnProperty("thumbnail_url")
-        ) {
-          const externalThumbnailUrl =
-            message.content.info.thumbnail_url.replace(
-              "mxc://",
-              `${APP_DI_CONFIG.synapseBaseUrl}/_matrix/media/r0/download/`
-            );
-          message.content.info.thumbnail_url = externalThumbnailUrl;
-        }
-        if (message.content.hasOwnProperty("url")) {
-          const externalFullsizeUrl = message.content.url.replace(
-            "mxc://",
-            `${APP_DI_CONFIG.synapseBaseUrl}/_matrix/media/r0/download/`
-          );
-          message.content.url = externalFullsizeUrl;
-        }
-      }
-    });
-  }
-  return logbook;
 };

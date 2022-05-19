@@ -1,82 +1,96 @@
-<div fxLayout="row" fxLayout.lt-lg="column">
-  <div fxFlex="14" fxFlex.lt-xl="20">
-    <ng-template [ngIf]="appConfig.editSampleEnabled">
-      <button
-        mat-stroked-button
-        class="small-edit-sample"
-        (click)="openDialog()"
-      >
-        <mat-icon>add_circle</mat-icon> Create Sample
-      </button>
-    </ng-template>
-    <ng-template [ngIf]="appConfig.searchSamples">
-      <mat-card class="big-search">
-        <div class="title">Search</div>
-        <app-search-bar
-          [prefilledValue]="textFilter$ | async"
-          (search)="onTextSearchChange($event)"
-          (searchBarFocus)="onTextSearchChange($event)"
-        ></app-search-bar>
-        <div *ngIf="appConfig.scienceSearchEnabled">
-          <button mat-button color="primary" (click)="openSearchParametersDialog()">
-            <mat-icon>add</mat-icon> Add Characteristic
-          </button>
+<ng-container *ngIf="vm$ | async as vm">
+  <div fxLayout="row" fxLayout.lt-lg="column">
+    <div fxFlex="14" fxFlex.lt-xl="20">
+      <ng-template [ngIf]="appConfig.editSampleEnabled">
+        <button
+          mat-stroked-button
+          class="small-edit-sample"
+          (click)="openDialog()"
+        >
+          <mat-icon>add_circle</mat-icon> Create Sample
+        </button>
+      </ng-template>
+      <ng-template [ngIf]="appConfig.searchSamples">
+        <mat-card class="big-search">
+          <div class="title">Search</div>
+          <app-search-bar
+            [prefilledValue]="vm.textFilter"
+            (search)="onTextSearchChange($event)"
+            (searchBarFocus)="onTextSearchChange($event)"
+          ></app-search-bar>
+          <div *ngIf="appConfig.scienceSearchEnabled">
+            <button
+              mat-button
+              color="primary"
+              (click)="openSearchParametersDialog()"
+            >
+              <mat-icon>add</mat-icon> Add Characteristic
+            </button>
 
-          <mat-chip-list class="characteristic-chips" aria-orientation="vertical">
-            <mat-chip *ngFor="let characteristic of characteristics$ | async; index as i">
-              {{characteristic.lhs}}
-              <ng-container [ngSwitch]="characteristic.relation">
-                <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">
-                  &nbsp;=&nbsp;
+            <mat-chip-list
+              class="characteristic-chips"
+              aria-orientation="vertical"
+            >
+              <mat-chip
+                *ngFor="
+                  let characteristic of vm.characteristicsFilter;
+                  index as i
+                "
+              >
+                {{ characteristic.lhs }}
+                <ng-container [ngSwitch]="characteristic.relation">
+                  <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">
+                    &nbsp;=&nbsp;
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">
+                    &nbsp;=&nbsp;
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'LESS_THAN'">
+                    &nbsp;&lt;&nbsp;
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'GREATER_THAN'">
+                    &nbsp;&gt;&nbsp;
+                  </ng-container>
                 </ng-container>
-                <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">
-                  &nbsp;=&nbsp;
-                </ng-container>
-                <ng-container *ngSwitchCase="'LESS_THAN'">
-                  &nbsp;&lt;&nbsp;
-                </ng-container>
-                <ng-container *ngSwitchCase="'GREATER_THAN'">
-                  &nbsp;&gt;&nbsp;
-                </ng-container>
-              </ng-container>
-              {{
-                characteristic.relation === "EQUAL_TO_STRING"
-                  ? '"' + characteristic.rhs + '"'
-                  : characteristic.rhs
-              }}
-              {{ characteristic.unit | prettyUnit }}
-              <mat-icon matChipRemove (click)="removeCharacteristic(i)">
-                cancel
-              </mat-icon>
-            </mat-chip>
-          </mat-chip-list>
+                {{
+                  characteristic.relation === "EQUAL_TO_STRING"
+                    ? '"' + characteristic.rhs + '"'
+                    : characteristic.rhs
+                }}
+                {{ characteristic.unit | prettyUnit }}
+                <mat-icon matChipRemove (click)="removeCharacteristic(i)">
+                  cancel
+                </mat-icon>
+              </mat-chip>
+            </mat-chip-list>
+          </div>
+        </mat-card>
+        <div class="small-search" fxFlexOrder="2">
+          <app-search-bar
+            [prefilledValue]="vm.textFilter"
+            (search)="onTextSearchChange($event)"
+            (searchBarFocus)="onTextSearchChange($event)"
+          ></app-search-bar>
         </div>
-      </mat-card>
-      <div class="small-search" fxFlexOrder="2">
-        <app-search-bar
-          [prefilledValue]="textFilter$ | async"
-          (search)="onTextSearchChange($event)"
-          (searchBarFocus)="onTextSearchChange($event)"
-        ></app-search-bar>
-      </div>
-    </ng-template>
-    <ng-template [ngIf]="appConfig.editSampleEnabled">
-      <mat-card class="big-edit-sample" (click)="openDialog()">
-        <mat-icon>add_circle</mat-icon> Create Sample
-      </mat-card>
-    </ng-template>
+      </ng-template>
+      <ng-template [ngIf]="appConfig.editSampleEnabled">
+        <mat-card class="big-edit-sample" (click)="openDialog()">
+          <mat-icon>add_circle</mat-icon> Create Sample
+        </mat-card>
+      </ng-template>
+    </div>
+    <div fxFlex="63" fxFlex.lt-xl="80">
+      <app-table
+        [data]="tableData"
+        [columns]="tableColumns"
+        [paginate]="tablePaginate"
+        [currentPage]="vm.samplesPagination.currentPage"
+        [dataCount]="vm.samplesPagination.samplesCount"
+        [dataPerPage]="vm.samplesPagination.samplesPerPage"
+        (pageChange)="onPageChange($event)"
+        (sortChange)="onSortChange($event)"
+        (rowClick)="onRowClick($event)"
+      ></app-table>
+    </div>
   </div>
-  <div fxFlex="63" fxFlex.lt-xl="80">
-    <app-table
-      [data]="tableData"
-      [columns]="tableColumns"
-      [paginate]="tablePaginate"
-      [currentPage]="currentPage$ | async"
-      [dataCount]="sampleCount$ | async"
-      [dataPerPage]="samplesPerPage$ | async"
-      (pageChange)="onPageChange($event)"
-      (sortChange)="onSortChange($event)"
-      (rowClick)="onRowClick($event)"
-    ></app-table>
-  </div>
-</div>
+</ng-container>

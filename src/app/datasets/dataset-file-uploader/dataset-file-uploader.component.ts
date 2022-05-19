@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 import {
@@ -6,6 +7,7 @@ import {
   SubmitCaptionEvent,
 } from "shared/modules/file-uploader/file-uploader.component";
 import { Attachment, Dataset, User } from "shared/sdk";
+import { OwnershipService } from "shared/services/ownership.service";
 import {
   addAttachmentAction,
   removeAttachmentAction,
@@ -28,13 +30,17 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
   attachment: Partial<Attachment> = {};
   dataset: Dataset | undefined;
   user: User | undefined;
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    private ownershipService: OwnershipService,
+    private router: Router) {}
 
   ngOnInit(): void {
     this.subscriptions.push(
       this.store.select(selectCurrentDataset).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
+          this.ownershipService.checkPermission(dataset, this.store, this.router);
         }
       })
     );
@@ -83,7 +89,7 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
   deleteAttachment(attachmentId: string) {
     if (this.dataset) {
       this.store.dispatch(
-        removeAttachmentAction({ datasetId: this.dataset?.pid, attachmentId })
+        removeAttachmentAction({ datasetId: this.dataset.pid, attachmentId })
       );
     }
   }

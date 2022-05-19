@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
-import { APP_CONFIG, AppConfigModule } from "app-config.module";
 import { PublisheddataDetailsComponent } from "./publisheddata-details.component";
 import {
   MockStore,
@@ -16,23 +15,23 @@ import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
+import { AppConfigService } from "app-config.service";
+
+const getConfig = () => ({
+  editMetadataEnabled: true,
+  editPublishedData: true,
+  jsonMetadataEnabled: true,
+});
 
 describe("PublisheddataDetailsComponent", () => {
   let component: PublisheddataDetailsComponent;
   let fixture: ComponentFixture<PublisheddataDetailsComponent>;
-
-  const appConfig = {
-    editMetadataEnabled: true,
-    editPublishedData: true,
-    jsonMetadataEnabled: true,
-  };
 
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [PublisheddataDetailsComponent],
         imports: [
-          AppConfigModule,
           MatButtonModule,
           MatCardModule,
           MatIconModule,
@@ -49,8 +48,8 @@ describe("PublisheddataDetailsComponent", () => {
             { provide: ActivatedRoute, useClass: MockActivatedRoute },
             { provide: PublishedDataApi, useClass: MockPublishedDataApi },
             {
-              provide: APP_CONFIG,
-              useValue: appConfig,
+              provide: AppConfigService,
+              useValue: { getConfig },
             },
           ],
         },
@@ -71,10 +70,10 @@ describe("PublisheddataDetailsComponent", () => {
 
   describe("appconfig settings", () => {
     beforeEach(() => {
-      appConfig.editPublishedData = false;
-      appConfig.jsonMetadataEnabled = false;
       fixture = TestBed.createComponent(PublisheddataDetailsComponent);
       component = fixture.componentInstance;
+      component.appConfig.editPublishedData = false;
+      component.appConfig.jsonMetadataEnabled = false;
       fixture.detectChanges();
       TestBed.compileComponents();
     });

@@ -61,6 +61,28 @@ export const selectEditablePoliciesPerPage = createSelector(
   (filters) => filters.limit
 );
 
+export const selectPoliciesPagination = createSelector(
+  selectPoliciesPerPage,
+  selectPage,
+  selectPoliciesCount,
+  (policiesPerPage, currentPage, policyCount) => ({
+    policiesPerPage,
+    currentPage,
+    policyCount,
+  })
+);
+
+export const selectEditablePoliciesPagination = createSelector(
+  selectEditablePoliciesPerPage,
+  selectEditablePage,
+  selectEditablePoliciesCount,
+  (editablePoliciesPerPage, currentEditablePage, editableCount) => ({
+    editablePoliciesPerPage,
+    currentEditablePage,
+    editableCount,
+  })
+);
+
 export const selectQueryParams = createSelector(selectFilters, (filters) => {
   const { skip, limit, sortField } = filters;
   return { order: sortField, skip, limit };
@@ -72,4 +94,35 @@ export const selectEditableQueryParams = createSelector(
     const { skip, limit, sortField } = filters;
     return { order: sortField, skip, limit };
   }
+);
+
+export const selectPoliciesDashboardPageViewModel = createSelector(
+  selectPolicies,
+  selectPoliciesPagination,
+  selectFilters,
+  selectEditablePolicies,
+  selectEditablePoliciesPagination,
+  selectEditableFilters,
+  selectSelectedPolicies,
+  (
+    policies,
+    policiesPagination,
+    filters,
+    editablePolicies,
+    editablePoliciesPagination,
+    editableFilters,
+    selectedPolicies
+  ) => ({
+    policies,
+    policiesPerPage: policiesPagination.policiesPerPage,
+    currentPage: policiesPagination.currentPage,
+    policyCount: policiesPagination.policyCount,
+    filters,
+    editablePolicies,
+    editablePoliciesPerPage: editablePoliciesPagination.editablePoliciesPerPage,
+    currentEditablePage: editablePoliciesPagination.currentEditablePage,
+    editableCount: editablePoliciesPagination.editableCount,
+    editableFilters,
+    selectedPolicies,
+  })
 );

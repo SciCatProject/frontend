@@ -2,16 +2,13 @@ import {
   ComponentFixture,
   TestBed,
   inject,
-  waitForAsync
+  waitForAsync,
 } from "@angular/core/testing";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 import { MockActivatedRoute, MockRouter, MockStore } from "shared/MockStubs";
-
 import { LoginComponent } from "./login.component";
-
-import { APP_CONFIG, AppConfigModule, OAuth2Endpoint } from "app-config.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { loginAction } from "state-management/actions/user.actions";
 import { PrivacyDialogComponent } from "users/privacy-dialog/privacy-dialog.component";
@@ -22,6 +19,17 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
+import { AppConfigService, OAuth2Endpoint } from "app-config.service";
+import { provideMockStore } from "@ngrx/store/testing";
+import { selectLoginPageViewModel } from "state-management/selectors/user.selectors";
+
+const getConfig = () => ({
+  archiveWorkflowEnabled: true,
+  facility: "not-ESS",
+  loginFormEnabled: true,
+  oAuth2Endpoints: [],
+  lbBaseURL: "http://foo",
+});
 
 describe("LoginComponent", () => {
   let component: LoginComponent;
@@ -30,51 +38,50 @@ describe("LoginComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  const endpoints: OAuth2Endpoint[] = [];
-  const appConfig =  {
-    disabledDatasetColumns: [],
-    archiveWorkflowEnabled: true,
-    facility: "not-ESS",
-    loginFormEnabled: true,
-    oAuth2Endpoints: endpoints,
-    lbBaseURL: "http://foo"
-  };
-
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [LoginComponent],
-      imports: [
-        AppConfigModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        MatButtonModule,
-        MatCardModule,
-        MatDialogModule,
-        MatCheckboxModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
-        ReactiveFormsModule,
-        StoreModule.forRoot({})
-      ]
-    });
-    TestBed.overrideComponent(LoginComponent, {
-      set: {
-        // These should sync up with what is in the constructor, they do NOT need to be provided in the config for the testing module
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [LoginComponent],
+        imports: [
+          BrowserAnimationsModule,
+          FormsModule,
+          MatButtonModule,
+          MatCardModule,
+          MatDialogModule,
+          MatCheckboxModule,
+          MatFormFieldModule,
+          MatIconModule,
+          MatInputModule,
+          ReactiveFormsModule,
+          StoreModule.forRoot({}),
+        ],
         providers: [
-          {
-            provide: APP_CONFIG,
-            useValue: appConfig
-          },
-          { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          { provide: Router, useClass: MockRouter }
-        ]
-      }
-    });
-    TestBed.compileComponents();
-
-  }));
-
+          provideMockStore({
+            selectors: [
+              {
+                selector: selectLoginPageViewModel,
+                value: { isLoggedIn: false, isLoggingIn: false },
+              },
+            ],
+          }),
+        ],
+      });
+      TestBed.overrideComponent(LoginComponent, {
+        set: {
+          // These should sync up with what is in the constructor, they do NOT need to be provided in the config for the testing module
+          providers: [
+            {
+              provide: AppConfigService,
+              useValue: { getConfig },
+            },
+            { provide: ActivatedRoute, useClass: MockActivatedRoute },
+            { provide: Router, useClass: MockRouter },
+          ],
+        },
+      });
+      TestBed.compileComponents();
+    })
+  );
 
   beforeEach(inject([Store], (mockStore: MockStore) => {
     store = mockStore;
@@ -84,29 +91,25 @@ describe("LoginComponent", () => {
     fixture.destroy();
   });
 
-
-
-
   describe("component construction", () => {
     beforeEach(() => {
-      appConfig.loginFormEnabled = false;
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
+      component.appConfig.loginFormEnabled = false;
       fixture.detectChanges();
       TestBed.compileComponents();
     });
     it("should have a Document instance injected", () => {
       expect(component.document).toBeTruthy();
     });
-
   });
 
   describe("#openPrivacyDialog()", () => {
     beforeEach(() => {
-      appConfig.loginFormEnabled = false;
-      appConfig.facility = "ESS";
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
+      component.appConfig.loginFormEnabled = false;
+      component.appConfig.facility = "ESS";
       fixture.detectChanges();
     });
     it("should open the privacy dialog", () => {
@@ -122,21 +125,19 @@ describe("LoginComponent", () => {
     });
   });
 
-  describe("not ESS", ()=> {
+  describe("not ESS", () => {
     beforeEach(() => {
-      appConfig.facility = "not-ESS";
-      appConfig.loginFormEnabled = true;
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
+      component.appConfig.facility = "not-ESS";
+      component.appConfig.loginFormEnabled = true;
       fixture.detectChanges();
-
     });
     it("should should not appear", () => {
-      const compiled = fixture.debugElement.nativeElement;  
+      const compiled = fixture.debugElement.nativeElement;
       expect(compiled.querySelector("privacy-notice")).toBeFalsy();
     });
   });
-
 
   describe("#onLogin()", () => {
     beforeEach(() => {
@@ -157,12 +158,11 @@ describe("LoginComponent", () => {
     });
   });
 
-
   describe("form not configured", () => {
     beforeEach(() => {
-      appConfig.loginFormEnabled = false;
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
+      component.appConfig.loginFormEnabled = false;
       fixture.detectChanges();
     });
 
@@ -170,14 +170,13 @@ describe("LoginComponent", () => {
       const compiled = fixture.debugElement.nativeElement;
       expect(compiled.querySelector("form")).toBeNull();
     });
-
   });
 
   describe("form configured", () => {
     beforeEach(() => {
-      appConfig.loginFormEnabled = true;
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
+      component.appConfig.loginFormEnabled = true;
       fixture.detectChanges();
     });
 
@@ -185,7 +184,6 @@ describe("LoginComponent", () => {
       const compiled = fixture.debugElement.nativeElement;
       expect(compiled.querySelector("form")).toBeTruthy();
     });
-
   });
 
   describe("oauth2 not configurated", () => {
@@ -198,16 +196,18 @@ describe("LoginComponent", () => {
       const compiled = fixture.debugElement.nativeElement;
       expect(compiled.querySelector("oauth-login-button")).toBeFalsy();
     });
-
   });
 
   describe("oauth2 configurated", () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(LoginComponent);
       component = fixture.componentInstance;
+      const endpoint: OAuth2Endpoint = {
+        displayText: "oauth provider",
+        authURL: "/auth/foo",
+      };
+      component.appConfig.oAuth2Endpoints = [endpoint];
       fixture.detectChanges();
-      const endpoint: OAuth2Endpoint = {displayText: "oauth provider", authURL: "/auth/foo"};
-      appConfig.oAuth2Endpoints = [endpoint];
     });
     it("should display OAuth2 provider", () => {
       dispatchSpy = spyOn(component, "redirectOIDC");
@@ -219,6 +219,5 @@ describe("LoginComponent", () => {
       console.log(`!!!!!     ${component.document.location.href}`);
       // expect(component.document.location.href).toEqual(`${appConfig.lbBaseURL}/auth/foo`);
     });
-
   });
 });

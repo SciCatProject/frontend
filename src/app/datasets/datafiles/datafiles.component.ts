@@ -1,9 +1,6 @@
-import { APP_CONFIG, AppConfig } from "app-config.module";
-import { Dataset } from "shared/sdk/models";
 import {
   Component,
   OnInit,
-  Inject,
   ChangeDetectorRef,
   OnDestroy,
   AfterViewInit,
@@ -20,10 +17,14 @@ import {
   PageChangeEvent,
   CheckboxEvent,
 } from "shared/modules/table/table.component";
-import { selectIsLoading } from "state-management/selectors/user.selectors";
-import { Datablock, UserApi } from "shared/sdk";
+import { selectIsLoading, selectIsLoggedIn } from "state-management/selectors/user.selectors";
+import { Job, UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
+import { MatDialog } from "@angular/material/dialog";
+import { PublicDownloadDialogComponent } from "datasets/public-download-dialog/public-download-dialog.component";
+import { submitJobAction } from "state-management/actions/jobs.actions";
+import { AppConfigService } from "app-config.service";
 
 export interface File {
   path: string;
@@ -46,6 +47,9 @@ export class DatafilesComponent
   datablocks$ = this.store.select(selectCurrentOrigDatablocks);
   dataset$ = this.store.select(selectCurrentDataset);
   loading$ = this.store.select(selectIsLoading);
+  isLoggedIn$ = this.store.select(selectIsLoggedIn);
+
+  appConfig = this.appConfigService.getConfig();
 
   tooLargeFile = false;
   totalFileSize = 0;
@@ -58,14 +62,17 @@ export class DatafilesComponent
 
   files: Array<any> = [];
   sourcefolder = "";
+  datasetPid = "";
 
   count = 0;
   pageSize = 25;
   currentPage = 0;
-
   fileDownloadEnabled: boolean = this.appConfig.fileDownloadEnabled;
   multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
-  multipleDownloadAction: string | null = this.appConfig.multipleDownloadAction;
+  fileserverBaseURL: string | undefined = this.appConfig.fileserverBaseURL;
+  fileserverButtonLabel: string = this.appConfig.fileserverButtonLabel || "Download";
+  multipleDownloadAction: string | null = this.appConfig
+    .multipleDownloadAction;
   maxFileSize: number | null = this.appConfig.maxDirectDownloadSize;
   sftpHost: string | null = this.appConfig.sftpHost;
   jwt: any;
@@ -96,11 +103,12 @@ export class DatafilesComponent
   tableData: File[] = [];
 
   constructor(
-    private store: Store<Dataset>,
+    public appConfigService: AppConfigService,
+    private store: Store,
     private cdRef: ChangeDetectorRef,
-    private userApi: UserApi,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
-  ) {}
+    private dialog: MatDialog,
+    private userApi: UserApi
+  ) { }
 
   onPageChange(event: PageChangeEvent) {
     const { pageIndex, pageSize } = event;
@@ -193,6 +201,7 @@ export class DatafilesComponent
       this.dataset$.subscribe((dataset) => {
         if (dataset) {
           this.sourcefolder = dataset.sourceFolder;
+          this.datasetPid = dataset.pid;
         }
       })
     );
@@ -201,11 +210,11 @@ export class DatafilesComponent
         if (datablocks) {
           const files: File[] = [];
           datablocks.forEach((block) => {
-              block.dataFileList.map((file) => {
-                this.totalFileSize += file.size;
-                file.selected = false;
-                files.push(file);
-              });
+            block.dataFileList.map((file) => {
+              this.totalFileSize += file.size;
+              file.selected = false;
+              files.push(file);
+            });
           });
           this.count = files.length;
           this.tableData = files.slice(0, this.pageSize);
@@ -222,5 +231,30 @@ export class DatafilesComponent
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+  openDialog(): void {
+    const dialogRef = this.dialog.open(PublicDownloadDialogComponent, {
+      width: "500px",
+      data: { email: "" }
+    });
+    dialogRef.afterClosed().subscribe((email) => {
+      if (email) {
+        this.getSelectedFiles();
+        const data = {
+          emailJobInitiator: email,
+          creationTime: new Date(),
+          type: "public",
+          datasetList: [{
+            pid: this.datasetPid,
+            files: this.getSelectedFiles()
+          }]
+        };
+        const job = new Job(data);
+        this.store.dispatch(submitJobAction({ job }));
+      }
+    });
+  }
+  getFileTransferLink() {
+    return this.fileserverBaseURL + "&origin_path=" + encodeURIComponent(this.sourcefolder);
   }
 }

@@ -1,5 +1,4 @@
-import { APP_CONFIG, AppConfig } from "app-config.module";
-import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
 import {
@@ -54,6 +53,7 @@ import { SearchParametersDialogComponent } from "shared/modules/search-parameter
 import { AsyncPipe } from "@angular/common";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { DateTime } from "luxon";
+import { AppConfigService } from "app-config.service";
 
 interface DateRange {
   begin: string;
@@ -86,6 +86,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   groupInput$ = new BehaviorSubject<string>("");
   typeInput$ = new BehaviorSubject<string>("");
   keywordsInput$ = new BehaviorSubject<string>("");
+
+  appConfig = this.appConfigService.getConfig();
 
   clearSearchBar = false;
   groupSuggestions$ = this.createSuggestionObserver(
@@ -120,10 +122,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   };
 
   constructor(
+    public appConfigService: AppConfigService,
     private asyncPipe: AsyncPipe,
     public dialog: MatDialog,
-    private store: Store,
-    @Inject(APP_CONFIG) public appConfig: AppConfig
+    private store: Store
   ) {}
 
   createSuggestionObserver(
@@ -156,6 +158,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   textSearchChanged(terms: string) {
+    if ("string" != typeof terms) return;
     this.clearSearchBar = false;
     this.store.dispatch(setSearchTermsAction({ terms }));
   }

@@ -1,12 +1,16 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { createAction, props } from "@ngrx/store";
 import { User, AccessToken, UserIdentity, UserSetting } from "shared/sdk";
-import { Message, Settings } from "state-management/models";
+import { Message, Settings, TableColumn } from "state-management/models";
 
+export const setDatasetTableColumnsAction = createAction(
+  "[User] Set Dataset Table Columns",
+  props<{ columns: TableColumn[] }>()
+);
 
 export const loginOIDCAction = createAction(
   "[User] OIDC Login",
-  props <{oidcLoginResponse: any }>()
+  props<{ oidcLoginResponse: any }>()
 );
 
 export const loginAction = createAction(
@@ -31,12 +35,22 @@ export const activeDirLoginSuccessAction = createAction(
 );
 export const activeDirLoginFailedAction = createAction(
   "[User] Active Directory Login Failed",
-  props<{ username: string; password: string; rememberMe: boolean; error: HttpErrorResponse }>()
+  props<{
+    username: string;
+    password: string;
+    rememberMe: boolean;
+    error: HttpErrorResponse;
+  }>()
 );
 
 export const funcLoginAction = createAction(
   "[User] Functional Login",
-  props<{ username: string; password: string; rememberMe: boolean; error: HttpErrorResponse }>()
+  props<{
+    username: string;
+    password: string;
+    rememberMe: boolean;
+    error: HttpErrorResponse;
+  }>()
 );
 export const funcLoginSuccessAction = createAction(
   "[User] Functional Login Success"

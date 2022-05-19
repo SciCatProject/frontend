@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
-import { Attachment, Dataset, Proposal, Sample } from "shared/sdk/models";
-import { APP_CONFIG, AppConfig } from "app-config.module";
+import { Dataset, Proposal, Sample } from "shared/sdk/models";
 import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { MatDialog } from "@angular/material/dialog";
@@ -11,11 +10,12 @@ import { Store } from "@ngrx/store";
 import {
   selectCurrentAttachments,
   selectCurrentDataset,
-  selectCurrentDatasetWithoutFileInfo
+  selectCurrentDatasetWithoutFileInfo,
 } from "state-management/selectors/datasets.selectors";
 import {
   selectCurrentUser,
   selectIsAdmin,
+  selectIsLoading,
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { map } from "rxjs/operators";
@@ -25,16 +25,13 @@ import {
   updatePropertyAction,
 } from "state-management/actions/datasets.actions";
 import { Router } from "@angular/router";
-import { fetchProposalAction } from "state-management/actions/proposals.actions";
-import {
-  clearLogbookAction,
-  fetchLogbookAction,
-} from "state-management/actions/logbooks.actions";
-import { fetchSampleAction } from "state-management/actions/samples.actions";
 import { selectCurrentProposal } from "state-management/selectors/proposals.selectors";
-import { DerivedDataset, RawDataset, User } from "shared/sdk";
+import { DerivedDataset, Instrument, RawDataset, User } from "shared/sdk";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import { EditableComponent } from "app-routing/pending-changes.guard";
+import { AppConfigService } from "app-config.service";
+import { selectCurrentSample } from "state-management/selectors/samples.selectors";
+import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
 /**
  * Component to show details for a data set, using the
  * form component
@@ -55,23 +52,30 @@ export class DatasetDetailComponent
   accessGroups$: Observable<string[]> = this.userProfile$.pipe(
     map((profile) => (profile ? profile.accessGroups : []))
   );
+
+  appConfig = this.appConfigService.getConfig();
+
   dataset: Dataset | undefined;
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
   proposal$ = this.store.select(selectCurrentProposal);
+  loading$ = this.store.select(selectIsLoading);
+  instrument: Instrument | undefined;
   proposal: Proposal | undefined;
-  sample: Sample | null = null;
+  sample: Sample | undefined;
   user: User | undefined;
   editingAllowed = false;
   editEnabled = false;
   show = false;
   readonly separatorKeyCodes: number[] = [ENTER, COMMA, SPACE];
+
   constructor(
-    @Inject(APP_CONFIG) public appConfig: AppConfig,
+    public appConfigService: AppConfigService,
     public dialog: MatDialog,
     private store: Store,
     private router: Router
-  ) {}
+  ) { }
+
   ngOnInit() {
     this.subscriptions.push(
       this.store.select(selectCurrentDataset).subscribe((dataset) => {
@@ -86,11 +90,25 @@ export class DatasetDetailComponent
         }
       })
     );
+
+    this.subscriptions.push(
+      this.store.select(selectCurrentInstrument).subscribe((instrument) => {
+        this.instrument = instrument;
+      })
+    );
+
     this.subscriptions.push(
       this.store.select(selectCurrentProposal).subscribe((proposal) => {
         this.proposal = proposal;
       })
     );
+
+    this.subscriptions.push(
+      this.store.select(selectCurrentSample).subscribe((sample) => {
+        this.sample = sample;
+      })
+    );
+
     // Prevent user from reloading page if there are unsave changes
     this.subscriptions.push(
       fromEvent(window, "beforeunload").subscribe((event) => {
@@ -99,6 +117,7 @@ export class DatasetDetailComponent
         }
       })
     );
+
     this.subscriptions.push(
       this.store.select(selectCurrentUser).subscribe((user) => {
         if (user) {
@@ -107,9 +126,11 @@ export class DatasetDetailComponent
       })
     );
   }
+
   hasUnsavedChanges() {
     return this._hasUnsavedChanges;
   }
+
   isPI(): boolean {
     if (this.user && this.dataset) {
       if (this.user.username === "admin") {
@@ -134,6 +155,7 @@ export class DatasetDetailComponent
     }
     return false;
   }
+
   onClickKeyword(keyword: string) {
     this.store.dispatch(clearFacetsAction());
     this.store.dispatch(addKeywordFilterAction({ keyword }));
@@ -198,6 +220,11 @@ export class DatasetDetailComponent
     });
   }
 
+  onClickInstrument(instrumentId: string): void {
+    const pid = encodeURIComponent(instrumentId);
+    this.router.navigateByUrl("/instruments/" + pid);
+  }
+
   onClickProposal(proposalId: string): void {
     const id = encodeURIComponent(proposalId);
     this.router.navigateByUrl("/proposals/" + id);
@@ -230,6 +257,7 @@ export class DatasetDetailComponent
         });
     }
   }
+
   onSlidePublic(event: MatSlideToggleChange) {
     if (this.dataset) {
       const pid = this.dataset.pid;
@@ -245,9 +273,11 @@ export class DatasetDetailComponent
       this.store.dispatch(updatePropertyAction({ pid, property }));
     }
   }
+
   onHasUnsavedChanges($event: boolean) {
     this._hasUnsavedChanges = $event;
   }
+
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();

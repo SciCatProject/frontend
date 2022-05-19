@@ -1,4 +1,5 @@
 import { ComponentFixture, inject, TestBed } from "@angular/core/testing";
+import { Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 import { MockStore } from "@ngrx/store/testing";
 import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
@@ -10,7 +11,9 @@ import {
 } from "state-management/actions/datasets.actions";
 
 import { DatasetFileUploaderComponent } from "./dataset-file-uploader.component";
-
+const router = {
+  navigateByUrl: jasmine.createSpy("navigateByUrl"),
+};
 describe("DatasetFileUploaderComponent", () => {
   let component: DatasetFileUploaderComponent;
   let fixture: ComponentFixture<DatasetFileUploaderComponent>;
@@ -22,6 +25,13 @@ describe("DatasetFileUploaderComponent", () => {
       declarations: [DatasetFileUploaderComponent],
       imports: [StoreModule.forRoot({})],
     }).compileComponents();
+    TestBed.overrideComponent(DatasetFileUploaderComponent, {
+      set: {
+        providers: [
+          { provide: Router, useValue: router },
+        ],
+      },
+    });
   });
 
   beforeEach(() => {
