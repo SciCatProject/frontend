@@ -230,13 +230,13 @@ describe("User Selectors", () => {
         fromSelectors.selectUserSettingsPageViewModel.projector(
           initialUserState.currentUser,
           initialUserState.profile,
-          initialUserState.catamelToken.id,
+          initialUserState.scicatToken.id,
           initialUserState.settings
         )
       ).toEqual({
         user,
         profile: userIdentity.profile,
-        catamelToken: catamelToken.id,
+        scicatToken: scicatToken.id,
         settings,
       });
     });

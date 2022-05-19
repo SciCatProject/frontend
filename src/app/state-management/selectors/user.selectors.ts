@@ -108,12 +108,12 @@ export const selectLoginPageViewModel = createSelector(
 export const selectUserSettingsPageViewModel = createSelector(
   selectCurrentUser,
   selectProfile,
-  selectCatamelToken,
+  selectScicatToken,
   selectSettings,
-  (user, profile, catamelToken, settings) => ({
+  (user, profile, scicatToken, settings) => ({
     user,
     profile,
-    catamelToken,
+    scicatToken,
     settings,
   })
 );
