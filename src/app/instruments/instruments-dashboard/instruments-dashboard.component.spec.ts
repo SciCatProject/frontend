@@ -11,7 +11,7 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { provideMockStore } from "@ngrx/store/testing";
 import { selectInstrumentsDashboardPageViewModel } from "state-management/selectors/instruments.selectors";
 import { Store } from "@ngrx/store";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import {
   PageChangeEvent,
@@ -40,7 +40,7 @@ describe("InstrumentsDashboardComponent", () => {
       TestBed.configureTestingModule({
         schemas: [NO_ERRORS_SCHEMA],
         declarations: [InstrumentsDashboardComponent],
-        imports: [FlexLayoutModule, SharedCatanieModule],
+        imports: [FlexLayoutModule, SharedScicatFrontendModule],
         providers: [
           JsonHeadPipe,
           provideMockStore({

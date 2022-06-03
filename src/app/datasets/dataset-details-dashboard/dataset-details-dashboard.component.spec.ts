@@ -10,7 +10,7 @@ import { MockActivatedRoute, MockUserApi } from "shared/MockStubs";
 import { Store, StoreModule } from "@ngrx/store";
 import { UserApi } from "shared/sdk";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { Router, ActivatedRoute } from "@angular/router";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatTabsModule } from "@angular/material/tabs";
@@ -42,7 +42,7 @@ describe("DetailsDashboardComponent", () => {
           MatIconModule,
           MatSlideToggleModule,
           MatTabsModule,
-          SharedCatanieModule,
+          SharedScicatFrontendModule,
           StoreModule.forRoot({}),
         ],
       });

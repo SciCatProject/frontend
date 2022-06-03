@@ -49,8 +49,8 @@
           <th>Groups</th>
           <td>{{ vm.profile.accessGroups }}</td>
         </tr>
-        <tr *ngIf="vm.catamelToken as value">
-          <th>Catamel Token</th>
+        <tr *ngIf="vm.scicatToken as value">
+          <th>SciCat Token</th>
           <td>
             {{ value }}
             <span class="copy-button" (click)="onCopy(value)">

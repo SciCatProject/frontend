@@ -2,13 +2,13 @@
 FROM node
 
 # create local user to avoid running as root
-# RUN addgroup angular && adduser -D -G angular catanie && mkdir -p /usr && chown -R catanie /usr
+# RUN addgroup angular && adduser -D -G angular scicat && mkdir -p /usr && chown -R scicat /usr
 
 # Prepare app directory
 # WORKDIR /usr/src/app
 COPY package.json .
 
-# USER catanie
+# USER scicat
 # Install our packages
 RUN npm install
 

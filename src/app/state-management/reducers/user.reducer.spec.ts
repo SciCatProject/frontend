@@ -164,13 +164,13 @@ describe("UserReducer", () => {
     });
   });
 
-  describe("on fetchCatamelTokenCompleteAction", () => {
-    it("should set catamelToken", () => {
+  describe("on fetchScicatTokenCompleteAction", () => {
+    it("should set scicatToken", () => {
       const token = new AccessToken();
-      const action = fromActions.fetchCatamelTokenCompleteAction({ token });
+      const action = fromActions.fetchScicatTokenCompleteAction({ token });
       const state = userReducer(initialUserState, action);
 
-      expect(state.catamelToken).toEqual(token);
+      expect(state.scicatToken).toEqual(token);
     });
   });
 

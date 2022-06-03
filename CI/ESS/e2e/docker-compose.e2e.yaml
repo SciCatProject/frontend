@@ -1,5 +1,13 @@
 version: "3.2"
 services:
+  reverse-proxy:
+    image: traefik:2.5
+    command: --api.insecure=true --providers.docker=true --entrypoints.web.address=:80
+    ports:
+      - 80:80
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   mongodb:
     image: "bitnami/mongodb:latest"
     volumes:
@@ -11,32 +19,32 @@ services:
       - "./CI/ESS/e2e/.env:/home/node/app/.env"
     depends_on:
       - mongodb
-  catamel:
+  backend:
     image: "dacat/catamel:latest"
     environment: 
       - SCICHAT_URL
     depends_on:
       - mongodb
       - scichat-loopback
-  catanie:
+    labels:
+      - "traefik.http.routers.backend.rule=PathPrefix(`/api/v3`, `/auth/msad`)"
+      - "traefik.http.routers.backend.entrypoints=web"
+  frontend:
     build:
       context: .
       dockerfile: CI/ESS/e2e/Dockerfile.e2e
-    command: ["./wait-for-it.sh", "catamel:3000", "--", "nginx", "-g", "daemon off;"]
+    command: ["./wait-for-it.sh", "backend:3000", "--", "nginx", "-g", "daemon off;"]
     volumes:
       - "./CI/ESS/e2e/config.e2e.json:/usr/share/nginx/html/assets/config.json"
       - "./CI/ESS/site.png:/usr/share/nginx/html/assets/images/site.png"
       - "./CI/ESS/site-logo.png:/usr/share/nginx/html/assets/images/site-logo.png"
       - "./CI/ESS/favicon.ico:/usr/share/nginx/html/favicon.ico"
     depends_on:
-      - catamel
-  cypress:
-    build:
-      context: .
-      dockerfile: CI/ESS/e2e/Dockerfile.cypress
-    command: ["./wait-for-it.sh", "catanie:80", "--", "npx", "cypress", "run"]
-    depends_on:
-      - catanie
+      - backend
+    labels:
+      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frontend.entrypoints=web"
+
 volumes:
   mongodb_data:
     driver: local

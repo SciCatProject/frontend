@@ -1,17 +1,17 @@
-# Catanie: SciCat GUI
+# Frontend: SciCat GUI
 
 
 
-<img src="https://github.com/SciCatProject/catanie/blob/develop/src/assets/images/site-logo.png" alt="sci-cat-logo" width="100">
+<img src="https://github.com/SciCatProject/frontend/blob/develop/src/assets/images/site-logo.png" alt="sci-cat-logo" width="100">
 
 
 
-[![Build Status](https://github.com/SciCatProject/catanie/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/SciCatProject/catanie/actions)
+[![Build Status](https://github.com/SciCatProject/frontend/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/SciCatProject/frontend/actions)
 [![DeepScan grade](https://deepscan.io/api/teams/8394/projects/20870/branches/581450/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=8394&pid=20870&bid=581450)
-[![Known Vulnerabilities](https://snyk.io/test/github/SciCatProject/catanie/develop/badge.svg?targetFile=package.json)](https://snyk.io/test/github/SciCatProject/catanie/develop?targetFile=package.json)
+[![Known Vulnerabilities](https://snyk.io/test/github/SciCatProject/frontend/develop/badge.svg?targetFile=package.json)](https://snyk.io/test/github/SciCatProject/frontend/develop?targetFile=package.json)
 [![DOI](https://zenodo.org/badge/106383330.svg)](https://zenodo.org/badge/latestdoi/106383330)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-[![Coverage Status](https://coveralls.io/repos/github/SciCatProject/catanie/badge.svg?branch=develop)](https://coveralls.io/github/SciCatProject/catanie?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/SciCatProject/frontend/badge.svg?branch=develop)](https://coveralls.io/github/SciCatProject/frontend?branch=develop)
 
 ## Summary
 
@@ -22,7 +22,7 @@ For the full documentation please go to the [SciCat home page](https://scicatpro
 
 ## IMPORTANT!!!
 On 2021/11/26, this repository has been renamed to the current name: https://github.com/SciCatProject/frontend.   
-The previous URL https://github.com/SciCatProject/catanie will still be active and point to the current one.   
+The previous URL https://github.com/SciCatProject/frontend will still be active and point to the current one.   
 We kindly suggest to migrate as soon as possible.
 
 Naming within the project will be updated in future releases. More info will be posted as soon as we finalize the details.
@@ -38,3 +38,5 @@ This project is licensed under the GPL License - see the [LICENSE](LICENSE) file
 ## Acknowledgments
 
 Scicat is developed at PSI, ESS and MAXIV with in-kind funding from ESS and from the European Union Framework Programme for Research and Innovation Horizon 2020, under grant agreement 676548, “BrightnESS”.
+
+

@@ -131,7 +131,7 @@ export class LoopBackAuth {
    * This method will load either from local storage or cookies the provided property.
    **/
   protected load(prop: string): any {
-    return this.storage.get(`${this.prefix}${prop}`);
+    return decodeURIComponent(this.storage.get(`${this.prefix}${prop}`));
   }
   /**
    * @method clear

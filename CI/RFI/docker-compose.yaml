@@ -17,7 +17,7 @@ services:
     container_name: openldap
     hostname: openldap
     environment:
-      LDAP_ORGANISATION: "LDAP Catamel Auth"
+      LDAP_ORGANISATION: "LDAP SciCat Backend Auth"
       LDAP_SSL_HELPER_PREFIX: "ldap"
       LDAP_TLS_VERIFY_CLIENT: "never"
       LDAP_LOG_LEVEL: 256
@@ -40,27 +40,27 @@ services:
       - "openldap:openldap"
     depends_on:
       - openldap
-  catanie:
-    image: "dacat/catanie:latest"
+  scicat-backend:
+    image: "scicatproject/frontend:latest"
     labels:
-      - "traefik.http.routers.catanie.rule=Host(`scicat.com`)"
-      - "traefik.http.routers.catanie.rule=PathPrefix(`/`)"
-      - "traefik.http.routers.catanie.entrypoints=web"
-  cataniecypress:
-    image: "dacat/catanie:cypress"
+      - "traefik.http.routers.scicat.frontend.rule=Host(`scicat.com`)"
+      - "traefik.http.routers.scicat.frontend.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.scicat.frontend.entrypoints=web"
+  scicat-frontend-cypress:
+    image: "scicatproject/frontend:cypress"
     command: ["npx", "cypress", "run"]
     depends_on:
       - mongodb
-      - catamel
-      - catanie
+      - scicat-backend
+      - scicat-frontend
       - openldap-seed
     links:
       - mongodb
-      - catamel
-      - catanie
+      - scicat-backend
+      - scicat-frontend
       - openldap
-  catamel:
-    image: "dacat/catamel"
+  scicat-backend:
+    image: "scicatproject/backend"
     depends_on:
       - mongodb
       - openldap-seed
@@ -69,9 +69,9 @@ services:
       - openldap
       - openldap-seed
     labels:
-      - "traefik.http.routers.catamel.rule=Host(`scicat.com`)"
-      - "traefik.http.routers.catamel.rule=PathPrefix(`/api`, `/auth`)"
-      - "traefik.http.routers.catamel.entrypoints=web"
+      - "traefik.http.routers.scicat.backend.rule=Host(`scicat.com`)"
+      - "traefik.http.routers.scicat.backend.rule=PathPrefix(`/api`, `/auth`)"
+      - "traefik.http.routers.scicat.backend.entrypoints=web"
 volumes:
   mongodb_data:
     driver: local

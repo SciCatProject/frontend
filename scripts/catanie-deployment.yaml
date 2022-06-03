@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: catanie
+  name: scicat-frontend
   labels:
-    name: catanie
+    name: scicat-frontend
   namespace: $LOCAL_ENV
 spec:
   type: NodePort
@@ -13,12 +13,12 @@ spec:
     targetPort: 80
     nodePort: $PORTOFFSET
   selector:
-    name: catanie
+    name: scicat-frontend
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: catanie
+  name: scicat-frontend
   namespace: $LOCAL_ENV
 spec:
   tls:
@@ -31,24 +31,24 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: catanie
+          serviceName: scicat-frontend
           servicePort: 80
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: catanie
+  name: scicat-frontend
   namespace: $LOCAL_ENV
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        name: catanie
+        name: scicat-frontend
     spec:
       containers:
-      - name: catanie
-        image: registry.psi.ch:5000/egli/catanie:$CATANIE_IMAGE_VERSION$LOCAL_ENV
+      - name: scicat-frontend
+        image: registry.psi.ch:5000/egli/scicat_frontend:$SCICAT-FRONTEND_IMAGE_VERSION$LOCAL_ENV
         # command: ["/bin/sh","-c","./node_modules/@angular/cli/bin/ng serve --host 129.129.160.105"]
         ports:
         - containerPort: 80

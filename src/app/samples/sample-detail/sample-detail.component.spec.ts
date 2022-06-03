@@ -20,7 +20,7 @@ import {
   addAttachmentAction,
 } from "state-management/actions/samples.actions";
 import { Dataset, Sample, User } from "shared/sdk";
-import { SharedCatanieModule } from "shared/shared.module";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -58,7 +58,7 @@ describe("SampleDetailComponent", () => {
           MatIconModule,
           MatTabsModule,
           NgxJsonViewerModule,
-          SharedCatanieModule,
+          SharedScicatFrontendModule,
           StoreModule.forRoot({}),
         ],
         providers: [DatePipe, FileSizePipe, SlicePipe],

@@ -117,15 +117,15 @@ export const updateUserSettingsFailedAction = createAction(
   "[User] Update User Settings Failed"
 );
 
-export const fetchCatamelTokenAction = createAction(
-  "[User] Fetch Catamel Token"
+export const fetchScicatTokenAction = createAction(
+  "[User] Fetch Scicat Token"
 );
-export const fetchCatamelTokenCompleteAction = createAction(
-  "[User] Fetch Catamel Token Complete",
+export const fetchScicatTokenCompleteAction = createAction(
+  "[User] Fetch Scicat Token Complete",
   props<{ token: AccessToken }>()
 );
-export const fetchCatamelTokenFailedAction = createAction(
-  "[User] Fetch Catamel Token Failed"
+export const fetchScicatTokenFailedAction = createAction(
+  "[User] Fetch Scicat Token Failed"
 );
 
 export const logoutAction = createAction("[User] Logout");

@@ -292,29 +292,29 @@ describe("User Actions", () => {
     });
   });
 
-  describe("fetchCatamelTokenAction", () => {
+  describe("fetchScicatTokenAction", () => {
     it("should create an action", () => {
-      const action = fromActions.fetchCatamelTokenAction();
-      expect({ ...action }).toEqual({ type: "[User] Fetch Catamel Token" });
+      const action = fromActions.fetchScicatTokenAction();
+      expect({ ...action }).toEqual({ type: "[User] Fetch Scicat Token" });
     });
   });
 
-  describe("fetchCatamelTokenCompleteAction", () => {
+  describe("fetchScicatTokenCompleteAction", () => {
     it("should create an action", () => {
       const token = new AccessToken();
-      const action = fromActions.fetchCatamelTokenCompleteAction({ token });
+      const action = fromActions.fetchScicatTokenCompleteAction({ token });
       expect({ ...action }).toEqual({
-        type: "[User] Fetch Catamel Token Complete",
+        type: "[User] Fetch Scicat Token Complete",
         token
       });
     });
   });
 
-  describe("fetchCatamelTokenFailedAction", () => {
+  describe("fetchScicatTokenFailedAction", () => {
     it("should create an action", () => {
-      const action = fromActions.fetchCatamelTokenFailedAction();
+      const action = fromActions.fetchScicatTokenFailedAction();
       expect({ ...action }).toEqual({
-        type: "[User] Fetch Catamel Token Failed"
+        type: "[User] Fetch Scicat Token Failed"
       });
     });
   });

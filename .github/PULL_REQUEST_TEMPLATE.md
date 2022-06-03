@@ -21,5 +21,5 @@ Background on use case, changes needed
 - [ ] Docs updated?
 - [ ] New packages used/requires npm install? 
 - [ ] Toggle added for new features?
-- [ ] Requires update of catamel API?
+- [ ] Requires update of SciCat backend API?
 

@@ -67,7 +67,8 @@ export class MetadataEditComponent implements OnInit, OnChanges {
       this.items.at(index).get("fieldUnit")?.enable();
       this.items
         .at(index)
-        .get("fieldUnit")?.setValidators([Validators.required, this.unitValidator()]);
+        .get("fieldUnit")
+        ?.setValidators([Validators.required, this.unitValidator()]);
       this.items.at(index).get("fieldUnit")?.updateValueAndValidity();
     } else {
       this.items.at(index).get("fieldUnit")?.clearValidators();
@@ -145,7 +146,10 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     this.items.controls.forEach((control) => {
       const { fieldName, fieldType, fieldValue, fieldUnit } = control.value;
       metadata[fieldName] = {
-        value: fieldValue,
+        value:
+          fieldType === "number" || fieldType === "quantity"
+            ? Number(fieldValue)
+            : fieldValue,
         unit: fieldType === "quantity" ? fieldUnit : "",
       };
     });
@@ -162,7 +166,8 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     this.units = this.unitsService.getUnits(name);
     this.filteredUnits$ = this.items
       .at(index)
-      .get("fieldUnit")?.valueChanges.pipe(
+      .get("fieldUnit")
+      ?.valueChanges.pipe(
         startWith(""),
         map((value: string) => {
           const filterValue = value.toLowerCase();

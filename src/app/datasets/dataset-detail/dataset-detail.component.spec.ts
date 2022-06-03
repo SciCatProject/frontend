@@ -2,13 +2,8 @@ import { DatafilesComponent } from "../../datasets/datafiles/datafiles.component
 import { DatasetDetailComponent } from "./dataset-detail.component";
 import { LinkyPipe } from "ngx-linky";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import {
-  ComponentFixture,
-  inject,
-  TestBed,
-  waitForAsync,
-} from "@angular/core/testing";
-import { SharedCatanieModule } from "shared/shared.module";
+import { ComponentFixture, inject, TestBed, waitForAsync } from "@angular/core/testing";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatTableModule } from "@angular/material/table";
 import { MatChipInputEvent, MatChipsModule } from "@angular/material/chips";
 import { of } from "rxjs";
@@ -68,7 +63,7 @@ describe("DatasetDetailComponent", () => {
           MatTableModule,
           MatTabsModule,
           NgxJsonViewerModule,
-          SharedCatanieModule,
+          SharedScicatFrontendModule,
           StoreModule.forRoot({}),
         ],
         declarations: [DatasetDetailComponent, DatafilesComponent, LinkyPipe],

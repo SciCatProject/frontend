@@ -1,4 +1,5 @@
 {
+  "accessTokenPrefix": "",
   "addDatasetEnabled": true,
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
@@ -15,8 +16,8 @@
   "jobsEnabled": true,
   "jsonMetadataEnabled": true,
   "jupyterHubUrl": "https://jupyterhub.esss.lu.se/",
-  "landingPage": "doi.esss.se/detail/",
-  "lbBaseURL": "http://catamel:3000",
+  "landingPage": "doi.ess.eu/detail/",
+  "lbBaseURL": "http://localhost:80",
   "localColumns": [
     {
       "name": "select",
