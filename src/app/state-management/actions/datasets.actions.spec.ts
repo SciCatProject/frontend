@@ -126,6 +126,39 @@ describe("Dataset Actions", () => {
     });
   });
 
+  describe("fetchRelatedDatasetsAction", () => {
+    it("should create an action", () => {
+      const dataset = new Dataset();
+      const action = fromActions.fetchRelatedDatasetsAction({ dataset });
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Fetch Related Datasets",
+        dataset,
+      });
+    });
+  });
+
+  describe("fetchRelatedDatasetsCompleteAction", () => {
+    it("should create an action", () => {
+      const datasets = [new Dataset()];
+      const action = fromActions.fetchRelatedDatasetsCompleteAction({
+        datasets,
+      });
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Fetch Related Datasets Completed",
+        datasets,
+      });
+    });
+  });
+
+  describe("fetchRelatedDatasetsFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchRelatedDatasetsFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Datasets] Fetch Related Datasets Failed",
+      });
+    });
+  });
+
   describe("prefillBatchAction", () => {
     it("should create an action", () => {
       const action = fromActions.prefillBatchAction();

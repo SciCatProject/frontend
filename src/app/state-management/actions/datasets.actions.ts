@@ -1,5 +1,11 @@
 import { createAction, props } from "@ngrx/store";
-import { Dataset, Attachment, DerivedDataset, OrigDatablock, Datablock } from "shared/sdk";
+import {
+  Dataset,
+  Attachment,
+  DerivedDataset,
+  OrigDatablock,
+  Datablock,
+} from "shared/sdk";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
@@ -84,6 +90,18 @@ export const fetchAttachmentsCompleteAction = createAction(
 );
 export const fetchAttachmentsFailedAction = createAction(
   "[Dataset] Fetch Attachments Failed"
+);
+
+export const fetchRelatedDatasetsAction = createAction(
+  "[Dataset] Fetch Related Datasets",
+  props<{ dataset: Dataset }>()
+);
+export const fetchRelatedDatasetsCompleteAction = createAction(
+  "[Dataset] Fetch Related Datasets Completed",
+  props<{ datasets: Dataset[] }>()
+);
+export const fetchRelatedDatasetsFailedAction = createAction(
+  "[Datasets] Fetch Related Datasets Failed"
 );
 
 export const prefillBatchAction = createAction("[Dataset] Prefill Batch");
@@ -222,7 +240,7 @@ export const setArchiveViewModeAction = createAction(
 );
 export const setPublicViewModeAction = createAction(
   "[Dataset] Set Public View Mode",
-  props<{ isPublished: boolean | ""}>()
+  props<{ isPublished: boolean | "" }>()
 );
 
 export const prefillFiltersAction = createAction(
@@ -288,4 +306,6 @@ export const removeScientificConditionAction = createAction(
 
 export const clearDatasetsStateAction = createAction("[Dataset] Clear State");
 
-export const clearCurrentDatasetStateAction = createAction("[Dataset] Clear Current Dataset State");
+export const clearCurrentDatasetStateAction = createAction(
+  "[Dataset] Clear Current Dataset State"
+);
