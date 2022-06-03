@@ -2,16 +2,16 @@
 
 
 
-<img src="https://github.com/SciCatProject/frontend/blob/develop/src/assets/images/site-logo.png" alt="sci-cat-logo" width="100">
+<img src="https://github.com/SciCatProject/frontend/blob/master/src/assets/images/site-logo.png" alt="sci-cat-logo" width="100">
 
 
 
-[![Build Status](https://github.com/SciCatProject/frontend/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/SciCatProject/frontend/actions)
+[![Build Status](https://github.com/SciCatProject/frontend/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SciCatProject/frontend/actions)
 [![DeepScan grade](https://deepscan.io/api/teams/8394/projects/20870/branches/581450/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=8394&pid=20870&bid=581450)
-[![Known Vulnerabilities](https://snyk.io/test/github/SciCatProject/frontend/develop/badge.svg?targetFile=package.json)](https://snyk.io/test/github/SciCatProject/frontend/develop?targetFile=package.json)
+[![Known Vulnerabilities](https://snyk.io/test/github/SciCatProject/frontend/master/badge.svg?targetFile=package.json)](https://snyk.io/test/github/SciCatProject/frontend/master?targetFile=package.json)
 [![DOI](https://zenodo.org/badge/106383330.svg)](https://zenodo.org/badge/latestdoi/106383330)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-[![Coverage Status](https://coveralls.io/repos/github/SciCatProject/frontend/badge.svg?branch=develop)](https://coveralls.io/github/SciCatProject/frontend?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/SciCatProject/frontend/badge.svg?branch=master)](https://coveralls.io/github/SciCatProject/frontend?branch=master)
 
 ## Summary
 
