@@ -79,6 +79,7 @@ import { DatasetFileUploaderComponent } from "./dataset-file-uploader/dataset-fi
 import { AdminTabComponent } from "./admin-tab/admin-tab.component";
 import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
 import { InstrumentEffects } from "state-management/effects/instruments.effects";
+import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.component";
 
 @NgModule({
   imports: [
@@ -155,6 +156,7 @@ import { InstrumentEffects } from "state-management/effects/instruments.effects"
     ShareDialogComponent,
     DatasetFileUploaderComponent,
     AdminTabComponent,
+    RelatedDatasetsComponent,
   ],
   providers: [
     ArchivingService,
