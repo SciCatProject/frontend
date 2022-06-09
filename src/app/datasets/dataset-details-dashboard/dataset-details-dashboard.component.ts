@@ -23,6 +23,7 @@ import {
   fetchDatablocksAction,
   fetchDatasetAction,
   fetchOrigDatablocksAction,
+  fetchRelatedDatasetsAction,
 } from "state-management/actions/datasets.actions";
 import {
   clearLogbookAction,
@@ -51,6 +52,7 @@ export interface FileObject {
 enum TAB {
   details = "Details",
   datafiles = "Datafiles",
+  related = "Related",
   reduce = "Reduce",
   logbook = "Logbook",
   attachments = "Attachments",
@@ -81,6 +83,7 @@ export class DatasetDetailsDashboardComponent
   }[] = [];
   fetchDataActions: { [tab: string]: { action: any; loaded: boolean } } = {
     [TAB.details]: { action: fetchDatasetAction, loaded: false },
+    // [TAB.related]: {action: fetchRelatedDatasetsAction, loaded: false},
     [TAB.datafiles]: { action: fetchOrigDatablocksAction, loaded: false },
     [TAB.logbook]: { action: fetchLogbookAction, loaded: false },
     [TAB.attachments]: { action: fetchAttachmentsAction, loaded: false },
@@ -133,6 +136,12 @@ export class DatasetDetailsDashboardComponent
                   label: TAB.datafiles,
                   icon: "cloud_download",
                   enabled: true,
+                },
+                {
+                  location: "./related",
+                  label: TAB.related,
+                  icon: "tune",
+                  enabled: true
                 },
                 {
                   location: "./reduce",
