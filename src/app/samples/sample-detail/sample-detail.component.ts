@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router } from "@angular/router";
-import { Component, OnDestroy, OnInit, Inject } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { fromEvent, Subscription } from "rxjs";
 import { Sample, Attachment, User, Dataset } from "shared/sdk/models";
 import { selectSampleDetailPageViewModel } from "../../state-management/selectors/samples.selectors";

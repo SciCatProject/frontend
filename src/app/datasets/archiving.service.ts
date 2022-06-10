@@ -93,10 +93,7 @@ export class ArchivingService {
     result: RetrieveDestinations,
     retrieveDestinations: RetrieveDestinations[] = []
   ): {} | { option: string } | { location: string; option: string } {
-    if (
-      typeof retrieveDestinations !== "undefined" &&
-      retrieveDestinations.length > 0
-    ) {
+    if (retrieveDestinations.length > 0) {
       const prefix = retrieveDestinations.filter(
         (element) => element.option == result.option
       );

@@ -12,7 +12,7 @@ import { ConfigService } from "shared/services";
 
 import { UserSettingsComponent } from "./user-settings.component";
 import { SharedScicatFrontendModule } from "shared/shared.module";
-import { Message, MessageType, Settings } from "state-management/models";
+import { Message, MessageType } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatCardModule } from "@angular/material/card";
