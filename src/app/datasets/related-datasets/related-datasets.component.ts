@@ -60,14 +60,17 @@ export class RelatedDatasetsComponent
       icon: "perm_device_information",
       matchMode: "contains",
       hideOrder: 3,
+      filterDefault: "derived"
     },
     {
       id: "createdAt",
       label: "Creation Time",
+      format: "date",
       canSort: true,
       icon: "perm_device_information",
-      matchMode: "contains",
+      matchMode: "between",
       hideOrder: 4,
+      sortDefault: "desc",
     },
     {
       id: "owner",
@@ -111,10 +114,8 @@ export class RelatedDatasetsComponent
 
     if (this.dataset && this.dataset.type === "raw") {
       this.router.navigate([], {
-        relativeTo: this.route,
         queryParams: { fields: JSON.stringify({type: "derived"}) },
         queryParamsHandling: "merge",
-        skipLocationChange: true
       });
     }
   }
