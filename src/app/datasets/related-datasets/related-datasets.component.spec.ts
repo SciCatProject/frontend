@@ -1,6 +1,5 @@
 import { DatePipe } from "@angular/common";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { FlexLayoutModule } from "@angular/flex-layout";
 import { Router } from "@angular/router";
 import { provideMockStore } from "@ngrx/store/testing";
 import { Dataset } from "shared/sdk";
@@ -19,7 +18,6 @@ describe("RelatedDatasetsComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RelatedDatasetsComponent],
-      imports: [FlexLayoutModule],
       providers: [
         DatePipe,
         provideMockStore({

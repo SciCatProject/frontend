@@ -1,10 +1,8 @@
-<div class="container" fxLayout="row" fxLayout.lt-lg="column">
-  <div fxFlex="14" fxFlex.lt-xl="20"></div>
-  <div fxFlex="63" fxFlex.lt-xl="80">
-    <app-table
-      [data]="tableData$ | async"
-      [columns]="tableColumns"
-      (rowClick)="onRowClick($event)"
-    ></app-table>
-  </div>
+<div class="dataset-table">
+  <app-table
+    [data]="tableData$ | async"
+    [columns]="tableColumns"
+    [paginate]="tablePaginate"
+    (rowClick)="onRowClick($event)"
+  ></app-table>
 </div>
