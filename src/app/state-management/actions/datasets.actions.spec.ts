@@ -128,24 +128,22 @@ describe("Dataset Actions", () => {
 
   describe("fetchRelatedDatasetsAction", () => {
     it("should create an action", () => {
-      const dataset = new Dataset();
-      const action = fromActions.fetchRelatedDatasetsAction({ dataset });
+      const action = fromActions.fetchRelatedDatasetsAction();
       expect({ ...action }).toEqual({
         type: "[Dataset] Fetch Related Datasets",
-        dataset,
       });
     });
   });
 
   describe("fetchRelatedDatasetsCompleteAction", () => {
     it("should create an action", () => {
-      const datasets = [new Dataset()];
+      const relatedDatasets = [new Dataset()];
       const action = fromActions.fetchRelatedDatasetsCompleteAction({
-        datasets,
+        relatedDatasets,
       });
       expect({ ...action }).toEqual({
         type: "[Dataset] Fetch Related Datasets Completed",
-        datasets,
+        relatedDatasets,
       });
     });
   });

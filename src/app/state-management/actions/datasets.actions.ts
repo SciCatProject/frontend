@@ -93,12 +93,11 @@ export const fetchAttachmentsFailedAction = createAction(
 );
 
 export const fetchRelatedDatasetsAction = createAction(
-  "[Dataset] Fetch Related Datasets",
-  props<{ dataset: Dataset }>()
+  "[Dataset] Fetch Related Datasets"
 );
 export const fetchRelatedDatasetsCompleteAction = createAction(
   "[Dataset] Fetch Related Datasets Completed",
-  props<{ datasets: Dataset[] }>()
+  props<{ relatedDatasets: Dataset[] }>()
 );
 export const fetchRelatedDatasetsFailedAction = createAction(
   "[Datasets] Fetch Related Datasets Failed"
