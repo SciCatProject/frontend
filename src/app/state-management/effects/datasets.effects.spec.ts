@@ -17,6 +17,7 @@ import { FacetCounts } from "state-management/state/datasets.store";
 import {
   selectFullqueryParams,
   selectFullfacetParams,
+  selectCurrentDataset,
 } from "state-management/selectors/datasets.selectors";
 import {
   loadingAction,
@@ -63,6 +64,7 @@ describe("DatasetEffects", () => {
         provideMockActions(() => actions),
         provideMockStore({
           selectors: [
+            { selector: selectCurrentDataset, value: dataset },
             {
               selector: selectFullqueryParams,
               value: {
@@ -80,6 +82,7 @@ describe("DatasetEffects", () => {
             "fullquery",
             "fullfacet",
             "metadataKeys",
+            "find",
             "findOne",
             "updateAttributes",
             "createAttachments",
@@ -303,6 +306,34 @@ describe("DatasetEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchDataset$).toBeObservable(expected);
+    });
+  });
+
+  describe("fetchRelatedDatasets$", () => {
+    it("should result in a fetchRelatedDatasetsCompleteAction", () => {
+      const relatedDatasets = [dataset];
+      const action = fromActions.fetchRelatedDatasetsAction();
+      const outcome = fromActions.fetchRelatedDatasetsCompleteAction({
+        relatedDatasets,
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: relatedDatasets });
+      datasetApi.find.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchRelatedDatasets$).toBeObservable(expected);
+    });
+    it("should result in a fetchRelatedDatasetsFailedAction", () => {
+      const action = fromActions.fetchRelatedDatasetsAction();
+      const outcome = fromActions.fetchRelatedDatasetsFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      datasetApi.find.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchRelatedDatasets$).toBeObservable(expected);
     });
   });
 
