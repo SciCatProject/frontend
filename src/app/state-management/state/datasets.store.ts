@@ -19,6 +19,7 @@ export interface DatasetState {
   datasets: Dataset[];
   selectedSets: Dataset[];
   currentSet: Dataset | undefined;
+  relatedDatasets: Dataset[];
   totalCount: number;
 
   facetCounts: FacetCounts;
@@ -37,6 +38,7 @@ export const initialDatasetState: DatasetState = {
   datasets: [],
   selectedSets: [],
   currentSet: undefined,
+  relatedDatasets: [],
   totalCount: 0,
 
   facetCounts: {},
