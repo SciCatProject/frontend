@@ -19,40 +19,41 @@ export class RelatedDatasetsComponent implements OnInit {
     .select(selectRelatedDatasets)
     .pipe(map((relatedDatasets) => this.formatTableData(relatedDatasets)));
 
+  tablePaginate = true;
   tableColumns: TableColumn[] = [
     {
-      name: "datasetName",
-      icon: "fingerprint",
+      name: "name",
+      icon: "portrait",
       sort: true,
       inList: true,
     },
     {
       name: "sourceFolder",
-      icon: "description",
+      icon: "explore",
       sort: true,
       inList: true,
     },
     {
       name: "size",
-      icon: "face",
+      icon: "save",
       sort: true,
       inList: true,
     },
     {
       name: "type",
-      icon: "date_range",
+      icon: "bubble_chart",
       sort: true,
       inList: true,
     },
     {
-      name: "createdAt",
-      icon: "group",
+      name: "creationTime",
+      icon: "calendar_today",
       sort: true,
       inList: true,
     },
     {
       name: "owner",
-      icon: "group",
+      icon: "face",
       sort: true,
       inList: true,
     },
@@ -64,21 +65,23 @@ export class RelatedDatasetsComponent implements OnInit {
     private store: Store
   ) {}
 
-  formatTableData(datasets: Dataset[]): any {
-    if (datasets) {
-      return datasets.map((dataset) => ({
-        pid: dataset.pid,
-        datasetName: dataset.datasetName,
-        sourceFolder: dataset.sourceFolder,
-        size: dataset.size,
-        type: dataset.type,
-        createdAt: this.datePipe.transform(
-          dataset.createdAt,
-          "yyyy-MM-dd, hh:mm"
-        ),
-        owner: dataset.owner,
-      }));
+  formatTableData(datasets: Dataset[]): Record<string, unknown>[] {
+    if (!datasets) {
+      return [];
     }
+
+    return datasets.map((dataset) => ({
+      pid: dataset.pid,
+      name: dataset.datasetName,
+      sourceFolder: dataset.sourceFolder,
+      size: dataset.size,
+      type: dataset.type,
+      creationTime: this.datePipe.transform(
+        dataset.creationTime,
+        "yyyy-MM-dd, hh:mm"
+      ),
+      owner: dataset.owner,
+    }));
   }
 
   onRowClick(dataset: Dataset): void {
