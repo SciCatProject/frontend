@@ -78,6 +78,16 @@ describe("DatasetsReducer", () => {
     });
   });
 
+  describe("on fetchRelatedDatasetsCompleteAction", () => {
+    it("should set relatedDatasets property", () => {
+      const relatedDatasets = [dataset];
+      const action = fromActions.fetchRelatedDatasetsCompleteAction({ relatedDatasets });
+      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+
+      expect(state.relatedDatasets).toEqual(relatedDatasets);
+    });
+  });
+
   describe("on prefillBatchCompleteAction", () => {
     it("should set batch property", () => {
       const batch: Dataset[] = [];

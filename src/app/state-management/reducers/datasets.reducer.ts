@@ -65,6 +65,11 @@ const reducer = createReducer(
     }};
   }),
 
+  on(fromActions.fetchRelatedDatasetsCompleteAction, (state, { relatedDatasets }): DatasetState => ({
+    ...state,
+    relatedDatasets
+  })),
+
   on(fromActions.prefillBatchCompleteAction, (state, { batch }) => ({
     ...state,
     batch,
