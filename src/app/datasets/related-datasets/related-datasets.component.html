@@ -1,7 +1,10 @@
-<shared-table
-  [dataSource]="dataSource"
-  [columnsdef]="columns"
-  [pageSize]="5"
-  (rowClick)="onRowClick($event)"
->
-</shared-table>
+<div class="container" fxLayout="row" fxLayout.lt-lg="column">
+  <div fxFlex="14" fxFlex.lt-xl="20"></div>
+  <div fxFlex="63" fxFlex.lt-xl="80">
+    <app-table
+      [data]="tableData$ | async"
+      [columns]="tableColumns"
+      (rowClick)="onRowClick($event)"
+    ></app-table>
+  </div>
+</div>
