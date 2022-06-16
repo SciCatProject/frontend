@@ -52,7 +52,7 @@ export interface FileObject {
 enum TAB {
   details = "Details",
   datafiles = "Datafiles",
-  related = "Related",
+  relatedDatasets = "Related Datasets",
   reduce = "Reduce",
   logbook = "Logbook",
   attachments = "Attachments",
@@ -83,7 +83,7 @@ export class DatasetDetailsDashboardComponent
   }[] = [];
   fetchDataActions: { [tab: string]: { action: any; loaded: boolean } } = {
     [TAB.details]: { action: fetchDatasetAction, loaded: false },
-    [TAB.related]: {action: fetchRelatedDatasetsAction, loaded: false},
+    [TAB.relatedDatasets]: {action: fetchRelatedDatasetsAction, loaded: false},
     [TAB.datafiles]: { action: fetchOrigDatablocksAction, loaded: false },
     [TAB.logbook]: { action: fetchLogbookAction, loaded: false },
     [TAB.attachments]: { action: fetchAttachmentsAction, loaded: false },
@@ -138,9 +138,9 @@ export class DatasetDetailsDashboardComponent
                   enabled: true,
                 },
                 {
-                  location: "./related",
-                  label: TAB.related,
-                  icon: "tune",
+                  location: "./related-datasets",
+                  label: TAB.relatedDatasets,
+                  icon: "folder",
                   enabled: true
                 },
                 {
