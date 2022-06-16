@@ -2,12 +2,17 @@ import { DatePipe } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { TableColumn } from "shared/modules/table/table.component";
+import {
+  PageChangeEvent,
+  TableColumn,
+} from "shared/modules/table/table.component";
 import { Dataset } from "shared/sdk";
-import { fetchRelatedDatasetsAction } from "state-management/actions/datasets.actions";
-import { selectRelatedDatasets } from "state-management/selectors/datasets.selectors";
+import {
+  changeRelatedDatasetsPageAction,
+  fetchRelatedDatasetsAction,
+} from "state-management/actions/datasets.actions";
+import { selectRelatedDatasetsPageViewModel } from "state-management/selectors/datasets.selectors";
 
 @Component({
   selector: "app-related-datasets",
@@ -15,9 +20,12 @@ import { selectRelatedDatasets } from "state-management/selectors/datasets.selec
   styleUrls: ["./related-datasets.component.scss"],
 })
 export class RelatedDatasetsComponent implements OnInit {
-  tableData$: Observable<Partial<Dataset>[]> = this.store
-    .select(selectRelatedDatasets)
-    .pipe(map((relatedDatasets) => this.formatTableData(relatedDatasets)));
+  vm$ = this.store.select(selectRelatedDatasetsPageViewModel).pipe(
+    map((vm) => ({
+      ...vm,
+      relatedDatasets: this.formatTableData(vm.relatedDatasets),
+    }))
+  );
 
   tablePaginate = true;
   tableColumns: TableColumn[] = [
@@ -82,6 +90,16 @@ export class RelatedDatasetsComponent implements OnInit {
       ),
       owner: dataset.owner,
     }));
+  }
+
+  onPageChange(event: PageChangeEvent): void {
+    this.store.dispatch(
+      changeRelatedDatasetsPageAction({
+        page: event.pageIndex,
+        limit: event.pageSize,
+      })
+    );
+    this.store.dispatch(fetchRelatedDatasetsAction());
   }
 
   onRowClick(dataset: Dataset): void {

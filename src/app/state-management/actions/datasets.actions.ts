@@ -96,11 +96,24 @@ export const fetchRelatedDatasetsAction = createAction(
   "[Dataset] Fetch Related Datasets"
 );
 export const fetchRelatedDatasetsCompleteAction = createAction(
-  "[Dataset] Fetch Related Datasets Completed",
+  "[Dataset] Fetch Related Datasets Complete",
   props<{ relatedDatasets: Dataset[] }>()
 );
 export const fetchRelatedDatasetsFailedAction = createAction(
   "[Datasets] Fetch Related Datasets Failed"
+);
+
+export const fetchRelatedDatasetsCountCompleteAction = createAction(
+  "[Dataset] Fetch Related Datasets Count Complete",
+  props<{ count: number }>()
+);
+export const fetchRelatedDatasetsCountFailedAction = createAction(
+  "[Datasets] Fetch Related Datasets Count Failed"
+);
+
+export const changeRelatedDatasetsPageAction = createAction(
+  "[Dataset] Change Related Datasets Page",
+  props<{ page: number; limit: number }>()
 );
 
 export const prefillBatchAction = createAction("[Dataset] Prefill Batch");

@@ -15,6 +15,7 @@ import {
   selectFullfacetParams,
   selectDatasetsInBatch,
   selectCurrentDataset,
+  selectRelatedDatasetsFilters,
 } from "state-management/selectors/datasets.selectors";
 import * as fromActions from "state-management/actions/datasets.actions";
 import {
@@ -39,6 +40,7 @@ import {
 @Injectable()
 export class DatasetEffects {
   currentDataset$ = this.store.select(selectCurrentDataset);
+  relatedDatasetsFilters$ = this.store.select(selectRelatedDatasetsFilters);
   fullqueryParams$ = this.store.select(selectFullqueryParams);
   fullfacetParams$ = this.store.select(selectFullfacetParams);
   datasetsInBatch$ = this.store.select(selectDatasetsInBatch);
@@ -202,11 +204,16 @@ export class DatasetEffects {
   fetchRelatedDatasets$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchRelatedDatasetsAction),
-      concatLatestFrom(() => this.currentDataset$),
-      map(([action, dataset]) => dataset),
-      switchMap((dataset) => {
+      concatLatestFrom(() => [
+        this.currentDataset$,
+        this.relatedDatasetsFilters$,
+      ]),
+      switchMap(([_, dataset, filters]) => {
         const queryFilter: LoopBackFilter = {
           where: {},
+          skip: filters.skip,
+          limit: filters.limit,
+          order: filters.sortField,
         };
         if (dataset.type === "raw") {
           queryFilter.where = {
@@ -224,6 +231,39 @@ export class DatasetEffects {
             fromActions.fetchRelatedDatasetsCompleteAction({ relatedDatasets })
           ),
           catchError(() => of(fromActions.fetchRelatedDatasetsFailedAction()))
+        );
+      })
+    );
+  });
+
+  fetchRelatedDatasetsCount$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchRelatedDatasetsAction),
+      concatLatestFrom(() => [this.currentDataset$]),
+      switchMap(([_, dataset]) => {
+        const queryFilter: LoopBackFilter = {
+          where: {},
+        };
+        if (dataset.type === "raw") {
+          queryFilter.where = {
+            type: "derived",
+            inputDatasets: dataset.pid,
+          };
+        }
+        if (dataset.type === "derived") {
+          queryFilter.where = {
+            pid: { $in: (dataset as unknown as DerivedDataset).inputDatasets },
+          };
+        }
+        return this.datasetApi.find(queryFilter).pipe(
+          map((datasets) =>
+            fromActions.fetchRelatedDatasetsCountCompleteAction({
+              count: datasets.length,
+            })
+          ),
+          catchError(() =>
+            of(fromActions.fetchRelatedDatasetsCountFailedAction())
+          )
         );
       })
     );

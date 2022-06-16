@@ -20,6 +20,7 @@ export interface DatasetState {
   selectedSets: Dataset[];
   currentSet: Dataset | undefined;
   relatedDatasets: Dataset[];
+  relatedDatasetsCount: number;
   totalCount: number;
 
   facetCounts: FacetCounts;
@@ -28,6 +29,12 @@ export interface DatasetState {
   searchTerms: string;
   keywordsTerms: string;
   filters: DatasetFilters;
+
+  relatedDatasetsFilters: {
+    skip: number;
+    limit: number;
+    sortField: string;
+  };
 
   batch: Dataset[];
 
@@ -39,6 +46,7 @@ export const initialDatasetState: DatasetState = {
   selectedSets: [],
   currentSet: undefined,
   relatedDatasets: [],
+  relatedDatasetsCount: 0,
   totalCount: 0,
 
   facetCounts: {},
@@ -59,10 +67,15 @@ export const initialDatasetState: DatasetState = {
     sortField: "creationTime:desc",
     keywords: [],
     scientific: [],
-    isPublished: ""
+    isPublished: "",
+  },
+  relatedDatasetsFilters: {
+    skip: 0,
+    limit: 25,
+    sortField: "creationTime:desc",
   },
 
   batch: [],
 
-  openwhiskResult: undefined
+  openwhiskResult: undefined,
 };

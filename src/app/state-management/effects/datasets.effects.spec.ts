@@ -18,6 +18,7 @@ import {
   selectFullqueryParams,
   selectFullfacetParams,
   selectCurrentDataset,
+  selectRelatedDatasetsFilters,
 } from "state-management/selectors/datasets.selectors";
 import {
   loadingAction,
@@ -65,6 +66,10 @@ describe("DatasetEffects", () => {
         provideMockStore({
           selectors: [
             { selector: selectCurrentDataset, value: dataset },
+            {
+              selector: selectRelatedDatasetsFilters,
+              value: { skip: 0, limit: 25, sortField: "creationTime:desc" },
+            },
             {
               selector: selectFullqueryParams,
               value: {
@@ -334,6 +339,34 @@ describe("DatasetEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchRelatedDatasets$).toBeObservable(expected);
+    });
+  });
+
+  describe("fetchRelatedDatasetsCount$", () => {
+    it("should result in a fetchRelatedDatasetsCountCompleteAction", () => {
+      const relatedDatasets = [dataset];
+      const action = fromActions.fetchRelatedDatasetsAction();
+      const outcome = fromActions.fetchRelatedDatasetsCountCompleteAction({
+        count: relatedDatasets.length,
+      });
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", { a: relatedDatasets });
+      datasetApi.find.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchRelatedDatasetsCount$).toBeObservable(expected);
+    });
+    it("should result in a fetchRelatedDatasetsCountFailedAction", () => {
+      const action = fromActions.fetchRelatedDatasetsAction();
+      const outcome = fromActions.fetchRelatedDatasetsCountFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      datasetApi.find.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.fetchRelatedDatasetsCount$).toBeObservable(expected);
     });
   });
 

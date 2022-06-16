@@ -9,6 +9,7 @@ const initialDatasetState: DatasetState = {
   selectedSets: [],
   currentSet: dataset,
   relatedDatasets: [],
+  relatedDatasetsCount: 0,
   totalCount: 0,
 
   facetCounts: {},
@@ -37,6 +38,11 @@ const initialDatasetState: DatasetState = {
     keywords: [],
     scientific: [],
     isPublished: false,
+  },
+  relatedDatasetsFilters: {
+    skip: 0,
+    limit: 25,
+    sortField: "creationTime:desc",
   },
 };
 
@@ -382,10 +388,18 @@ describe("test dataset selectors", () => {
   describe("selectRelatedDatasets", () => {
     it("should return the current related datasets", () => {
       expect(
-        fromDatasetSelectors.selectRelatedDatasets.projector(
+        fromDatasetSelectors.selectRelatedDatasetsPageViewModel.projector(
           initialDatasetState
         )
-      ).toEqual([]);
+      ).toEqual({
+        relatedDatasets: [],
+        relatedDatasetsCount: 0,
+        relatedDatasetsFilters: {
+          skip: 0,
+          limit: 25,
+          sortField: "creationTime:desc",
+        },
+      });
     });
   });
 });
