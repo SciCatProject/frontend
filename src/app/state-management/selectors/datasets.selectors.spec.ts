@@ -8,6 +8,7 @@ const initialDatasetState: DatasetState = {
   datasets: [],
   selectedSets: [],
   currentSet: dataset,
+  relatedDatasets: [],
   totalCount: 0,
 
   facetCounts: {},
@@ -375,6 +376,16 @@ describe("test dataset selectors", () => {
           initialDatasetState
         )
       ).toEqual({});
+    });
+  });
+
+  describe("selectRelatedDatasets", () => {
+    it("should return the current related datasets", () => {
+      expect(
+        fromDatasetSelectors.selectRelatedDatasets.projector(
+          initialDatasetState
+        )
+      ).toEqual([]);
     });
   });
 });
