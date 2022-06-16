@@ -83,7 +83,7 @@ export class DatasetDetailsDashboardComponent
   }[] = [];
   fetchDataActions: { [tab: string]: { action: any; loaded: boolean } } = {
     [TAB.details]: { action: fetchDatasetAction, loaded: false },
-    // [TAB.related]: {action: fetchRelatedDatasetsAction, loaded: false},
+    [TAB.related]: {action: fetchRelatedDatasetsAction, loaded: false},
     [TAB.datafiles]: { action: fetchOrigDatablocksAction, loaded: false },
     [TAB.logbook]: { action: fetchLogbookAction, loaded: false },
     [TAB.attachments]: { action: fetchAttachmentsAction, loaded: false },
