@@ -1,9 +1,8 @@
 import { DatePipe } from "@angular/common";
-import { ComponentFixture, inject, TestBed } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { Router } from "@angular/router";
-import { Store, StoreModule } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { provideMockStore } from "@ngrx/store/testing";
-import { MockStore } from "shared/MockStubs";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { Dataset } from "shared/sdk";
 import {
