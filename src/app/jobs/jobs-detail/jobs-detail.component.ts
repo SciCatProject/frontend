@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { fetchJobAction } from "state-management/actions/jobs.actions";
-import { Job } from "shared/sdk/models";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
 import { selectCurrentJob } from "state-management/selectors/jobs.selectors";

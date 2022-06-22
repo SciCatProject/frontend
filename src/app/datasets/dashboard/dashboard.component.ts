@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Inject, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, ActionsSubject } from "@ngrx/store";
 
