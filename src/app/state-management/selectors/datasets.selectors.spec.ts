@@ -1,6 +1,7 @@
 import * as fromDatasetSelectors from "./datasets.selectors";
 import { ArchViewMode, Dataset } from "../models";
 import { DatasetState } from "../state/datasets.store";
+import { initialUserState } from "state-management/state/user.store";
 
 const dataset = new Dataset();
 
@@ -375,6 +376,24 @@ describe("test dataset selectors", () => {
           initialDatasetState
         )
       ).toEqual({});
+    });
+  });
+
+  describe("selectAdminTabPageViewModel", () => {
+    it("should select the admin tab page view model state", () => {
+      expect(
+        fromDatasetSelectors.selectAdminTabPageViewModel.projector(
+          fromDatasetSelectors.selectCurrentDatablocks.projector(
+            initialDatasetState.currentSet
+          ),
+          initialDatasetState.currentSet,
+          initialUserState.currentUser
+        )
+      ).toEqual({
+        datablocks: undefined,
+        dataset,
+        user: undefined,
+      });
     });
   });
 });

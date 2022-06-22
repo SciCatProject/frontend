@@ -1,5 +1,6 @@
 import { DatasetState } from "state-management/state/datasets.store";
 import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { selectCurrentUser } from "./user.selectors";
 
 const selectDatasetState = createFeatureSelector<DatasetState>("datasets");
 
@@ -236,4 +237,15 @@ export const selectDatasetsInBatchIndicator = createSelector(
 export const selectOpenwhiskResult = createSelector(
   selectDatasetState,
   (state) => state.openwhiskResult
+);
+
+export const selectAdminTabPageViewModel = createSelector(
+  selectCurrentDatablocks,
+  selectCurrentDataset,
+  selectCurrentUser,
+  (datablocks, dataset, user) => ({
+    datablocks,
+    dataset,
+    user,
+  })
 );
