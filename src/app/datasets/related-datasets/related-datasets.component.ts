@@ -1,5 +1,5 @@
 import { DatePipe } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { map } from "rxjs/operators";
@@ -10,8 +10,11 @@ import {
 import { Dataset } from "shared/sdk";
 import {
   changeRelatedDatasetsPageAction,
+  clearCurrentDatasetStateAction,
   fetchRelatedDatasetsAction,
 } from "state-management/actions/datasets.actions";
+import { clearCurrentProposalStateAction } from "state-management/actions/proposals.actions";
+import { clearCurrentSampleStateAction } from "state-management/actions/samples.actions";
 import { selectRelatedDatasetsPageViewModel } from "state-management/selectors/datasets.selectors";
 
 @Component({
@@ -19,7 +22,7 @@ import { selectRelatedDatasetsPageViewModel } from "state-management/selectors/d
   templateUrl: "./related-datasets.component.html",
   styleUrls: ["./related-datasets.component.scss"],
 })
-export class RelatedDatasetsComponent implements OnInit {
+export class RelatedDatasetsComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectRelatedDatasetsPageViewModel).pipe(
     map((vm) => ({
       ...vm,
@@ -109,5 +112,11 @@ export class RelatedDatasetsComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(fetchRelatedDatasetsAction());
+  }
+
+  ngOnDestroy(): void {
+    this.store.dispatch(clearCurrentDatasetStateAction());
+    this.store.dispatch(clearCurrentProposalStateAction());
+    this.store.dispatch(clearCurrentSampleStateAction());
   }
 }
