@@ -181,9 +181,10 @@ const reducer = createReducer(
     })
   ),
 
-  on(fromActions.clearCurrentDatasetStateAction, (state) => ({
+  on(fromActions.clearCurrentDatasetStateAction, (state): DatasetState => ({
     ...state,
     currentSet: undefined,
+    relatedDatasets: [],
   })),
 
   on(fromActions.selectDatasetAction, (state, { dataset }) => {
