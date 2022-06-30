@@ -40,6 +40,7 @@ import {
 import { MatDialog } from "@angular/material/dialog";
 import { AppConfigService } from "app-config.service";
 import { fetchInstrumentAction } from "state-management/actions/instruments.actions";
+import { LazyChildService } from "lazy-child.service";
 
 export interface JWT {
   jwt: string;
@@ -83,7 +84,10 @@ export class DatasetDetailsDashboardComponent
   }[] = [];
   fetchDataActions: { [tab: string]: { action: any; loaded: boolean } } = {
     [TAB.details]: { action: fetchDatasetAction, loaded: false },
-    [TAB.relatedDatasets]: {action: fetchRelatedDatasetsAction, loaded: false},
+    [TAB.relatedDatasets]: {
+      action: fetchRelatedDatasetsAction,
+      loaded: false,
+    },
     [TAB.datafiles]: { action: fetchOrigDatablocksAction, loaded: false },
     [TAB.logbook]: { action: fetchLogbookAction, loaded: false },
     [TAB.attachments]: { action: fetchAttachmentsAction, loaded: false },
@@ -98,6 +102,7 @@ export class DatasetDetailsDashboardComponent
   constructor(
     public appConfigService: AppConfigService,
     private cdRef: ChangeDetectorRef,
+    private lazyChildService: LazyChildService,
     private route: ActivatedRoute,
     private store: Store,
     private userApi: UserApi,
@@ -105,16 +110,16 @@ export class DatasetDetailsDashboardComponent
   ) {}
 
   ngOnInit() {
-    this.route.params
-      .pipe(pluck("id"))
-      .subscribe((id: string) => {
+    this.subscriptions.push(
+      this.route.params.pipe(pluck("id")).subscribe((id: string) => {
         if (id) {
           // Fetch dataset details
           this.store.dispatch(fetchDatasetAction({ pid: id }));
           this.fetchDataActions[TAB.details].loaded = true;
         }
       })
-      .unsubscribe();
+    );
+
     const datasetSub = this.dataset$
       .pipe(takeWhile((dataset) => !dataset, true))
       .subscribe((dataset) => {
@@ -141,7 +146,7 @@ export class DatasetDetailsDashboardComponent
                   location: "./related-datasets",
                   label: TAB.relatedDatasets,
                   icon: "folder",
-                  enabled: true
+                  enabled: true,
                 },
                 {
                   location: "./reduce",
@@ -190,28 +195,19 @@ export class DatasetDetailsDashboardComponent
             })
             .unsubscribe();
 
-          if ("proposalId" in dataset) {
-            this.store.dispatch(
-              fetchProposalAction({ proposalId: dataset["proposalId"] })
-            );
-          } else {
-            this.store.dispatch(clearLogbookAction());
-          }
-          if ("sampleId" in dataset) {
-            this.store.dispatch(
-              fetchSampleAction({ sampleId: dataset["sampleId"] })
-            );
-          }
-          if ("instrumentId" in dataset) {
-            this.store.dispatch(
-              fetchInstrumentAction({ pid: dataset["instrumentId"] })
-            );
-          }
+         this.fetchDatasetRelatedDocuments();
         }
       });
     this.subscriptions.push(datasetSub);
     this.jwt$ = this.userApi.jwt();
-  };
+
+    this.lazyChildService.childChanges().subscribe((tabName) => {
+      console.log({ tabName });
+
+      this.fetchDataActions[tabName].loaded = false;
+      this.fetchDatasetRelatedDocuments();
+    });
+  }
   onTabSelected(tab: string) {
     this.fetchDataForTab(tab);
   }
@@ -248,6 +244,29 @@ export class DatasetDetailsDashboardComponent
       }
     }
   }
+
+  fetchDatasetRelatedDocuments(): void {
+    if (this.dataset) {
+      if ("proposalId" in this.dataset) {
+        this.store.dispatch(
+          fetchProposalAction({ proposalId: this.dataset["proposalId"] })
+        );
+      } else {
+        this.store.dispatch(clearLogbookAction());
+      }
+      if ("sampleId" in this.dataset) {
+        this.store.dispatch(
+          fetchSampleAction({ sampleId: this.dataset["sampleId"] })
+        );
+      }
+      if ("instrumentId" in this.dataset) {
+        this.store.dispatch(
+          fetchInstrumentAction({ pid: this.dataset["instrumentId"] })
+        );
+      }
+    }
+  }
+
   ngAfterViewChecked() {
     this.cdRef.detectChanges();
   }
