@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Dataset, Proposal, Sample } from "shared/sdk/models";
 import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
@@ -18,14 +18,13 @@ import {
   selectIsLoading,
   selectProfile,
 } from "state-management/selectors/user.selectors";
-import { map, pluck } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import {
   addKeywordFilterAction,
   clearFacetsAction,
-  fetchDatasetAction,
   updatePropertyAction,
 } from "state-management/actions/datasets.actions";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { selectCurrentProposal } from "state-management/selectors/proposals.selectors";
 import { DerivedDataset, Instrument, RawDataset, User } from "shared/sdk";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
@@ -74,21 +73,10 @@ export class DatasetDetailComponent
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
     private store: Store,
-    private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit() {
-    this.route.params
-      .pipe(pluck("id"))
-      .subscribe((id: string) => {
-        if (id) {
-          // Fetch dataset details
-          this.store.dispatch(fetchDatasetAction({ pid: id }));
-        }
-      })
-      .unsubscribe();
-
     this.subscriptions.push(
       this.store.select(selectCurrentDataset).subscribe((dataset) => {
         this.dataset = dataset;
