@@ -19,6 +19,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { LayoutModule } from "_layout/layout.module";
 import { AppConfigService } from "app-config.service";
 import { AppThemeService } from "app-theme.service";
+import { LazyChildService } from "lazy-child.service";
 
 const appConfigInitializerFn = (appConfig: AppConfigService) => {
   return () => appConfig.loadAppConfig();
@@ -74,6 +75,7 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
       deps: [AppThemeService],
     },
     AppThemeService,
+    LazyChildService,
     UserApi,
     SampleApi,
     Title,
