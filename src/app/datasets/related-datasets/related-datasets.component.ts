@@ -1,7 +1,8 @@
 import { DatePipe } from "@angular/common";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
+import { LazyChildService } from "lazy-child.service";
 import { map } from "rxjs/operators";
 import {
   PageChangeEvent,
@@ -22,7 +23,7 @@ import { selectRelatedDatasetsPageViewModel } from "state-management/selectors/d
   templateUrl: "./related-datasets.component.html",
   styleUrls: ["./related-datasets.component.scss"],
 })
-export class RelatedDatasetsComponent implements OnInit, OnDestroy {
+export class RelatedDatasetsComponent {
   vm$ = this.store.select(selectRelatedDatasetsPageViewModel).pipe(
     map((vm) => ({
       ...vm,
@@ -72,6 +73,7 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
 
   constructor(
     private datePipe: DatePipe,
+    private lazyChildService: LazyChildService,
     private router: Router,
     private store: Store
   ) {}
@@ -106,17 +108,11 @@ export class RelatedDatasetsComponent implements OnInit, OnDestroy {
   }
 
   onRowClick(dataset: Dataset): void {
-    const pid = encodeURIComponent(dataset.pid);
-    this.router.navigateByUrl("/datasets/" + pid);
-  }
-
-  ngOnInit(): void {
-    this.store.dispatch(fetchRelatedDatasetsAction());
-  }
-
-  ngOnDestroy(): void {
     this.store.dispatch(clearCurrentDatasetStateAction());
     this.store.dispatch(clearCurrentProposalStateAction());
     this.store.dispatch(clearCurrentSampleStateAction());
+    this.lazyChildService.updateChildComponentState("Related Datasets");
+    const pid = encodeURIComponent(dataset.pid);
+    this.router.navigateByUrl("/datasets/" + pid);
   }
 }
