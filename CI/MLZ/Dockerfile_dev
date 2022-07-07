@@ -1,0 +1,23 @@
+# gives a docker image below 200 MB
+FROM node
+
+# create local user to avoid running as root
+# RUN addgroup angular && adduser -D -G angular scicat && mkdir -p /usr && chown -R scicat /usr
+
+# Prepare app directory
+# WORKDIR /usr/src/app
+COPY package.json .
+
+# USER scicat
+# Install our packages
+RUN npm install
+
+# Copy the rest of our application, node_modules is ignored via .dockerignore
+COPY . /usr/
+
+EXPOSE 4200
+
+# Start the app
+#CMD HOST=`hostname -i` npm start
+CMD ./app/node_modules/@angular/cli/bin ng serve --host 0.0.0.0 --env=dev
+
