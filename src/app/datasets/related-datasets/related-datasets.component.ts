@@ -11,11 +11,8 @@ import {
 import { Dataset } from "shared/sdk";
 import {
   changeRelatedDatasetsPageAction,
-  clearCurrentDatasetStateAction,
   fetchRelatedDatasetsAction,
 } from "state-management/actions/datasets.actions";
-import { clearCurrentProposalStateAction } from "state-management/actions/proposals.actions";
-import { clearCurrentSampleStateAction } from "state-management/actions/samples.actions";
 import { selectRelatedDatasetsPageViewModel } from "state-management/selectors/datasets.selectors";
 
 @Component({
@@ -108,9 +105,6 @@ export class RelatedDatasetsComponent {
   }
 
   onRowClick(dataset: Dataset): void {
-    this.store.dispatch(clearCurrentDatasetStateAction());
-    this.store.dispatch(clearCurrentProposalStateAction());
-    this.store.dispatch(clearCurrentSampleStateAction());
     this.lazyChildService.updateChildComponentState("Related Datasets");
     const pid = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl("/datasets/" + pid);

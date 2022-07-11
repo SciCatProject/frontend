@@ -202,7 +202,9 @@ export class DatasetDetailsDashboardComponent
     this.jwt$ = this.userApi.jwt();
 
     this.lazyChildService.childChanges().subscribe((tabName) => {
-      console.log({ tabName });
+      this.store.dispatch(clearCurrentDatasetStateAction());
+      this.store.dispatch(clearCurrentProposalStateAction());
+      this.store.dispatch(clearCurrentSampleStateAction());
 
       this.fetchDataActions[tabName].loaded = false;
       this.fetchDatasetRelatedDocuments();
