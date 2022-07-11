@@ -195,18 +195,23 @@ export class DatasetDetailsDashboardComponent
             })
             .unsubscribe();
 
-         this.fetchDatasetRelatedDocuments();
+          this.fetchDatasetRelatedDocuments();
         }
       });
     this.subscriptions.push(datasetSub);
     this.jwt$ = this.userApi.jwt();
 
-    this.lazyChildService.childChanges().subscribe((tabName) => {
+    this.lazyChildService.childChanges().subscribe(() => {
       this.store.dispatch(clearCurrentDatasetStateAction());
       this.store.dispatch(clearCurrentProposalStateAction());
       this.store.dispatch(clearCurrentSampleStateAction());
 
-      this.fetchDataActions[tabName].loaded = false;
+      const tabs = Object.values(TAB);
+      tabs.forEach((tab) => {
+        if (this.fetchDataActions[tab] && this.fetchDataActions[tab].loaded) {
+          this.fetchDataActions[tab].loaded = false;
+        }
+      });
       this.fetchDatasetRelatedDocuments();
     });
   }
