@@ -1,5 +1,4 @@
 FROM node:16-alpine as builder
-LABEL maintainer="henrik.johansson@ess.eu"
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 RUN apk update && apk upgrade && \
   apk add --no-cache bash git openssh

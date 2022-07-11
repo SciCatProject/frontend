@@ -1,5 +1,4 @@
 FROM node:9.1
-LABEL maintainer="gareth.murphy@esss.se"
 
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" \
