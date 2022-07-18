@@ -40,7 +40,6 @@ import {
 import { MatDialog } from "@angular/material/dialog";
 import { AppConfigService } from "app-config.service";
 import { fetchInstrumentAction } from "state-management/actions/instruments.actions";
-import { LazyChildService } from "lazy-child.service";
 
 export interface JWT {
   jwt: string;
@@ -102,17 +101,17 @@ export class DatasetDetailsDashboardComponent
   constructor(
     public appConfigService: AppConfigService,
     private cdRef: ChangeDetectorRef,
-    private lazyChildService: LazyChildService,
     private route: ActivatedRoute,
     private store: Store,
     private userApi: UserApi,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.subscriptions.push(
       this.route.params.pipe(pluck("id")).subscribe((id: string) => {
         if (id) {
+          this.resetTabs();
           // Fetch dataset details
           this.store.dispatch(fetchDatasetAction({ pid: id }));
           this.fetchDataActions[TAB.details].loaded = true;
@@ -121,9 +120,9 @@ export class DatasetDetailsDashboardComponent
     );
 
     const datasetSub = this.dataset$
-      .pipe(takeWhile((dataset) => !dataset, true))
       .subscribe((dataset) => {
-        if (dataset) {
+        // Only run this code when dataset.pid is different from this.dataset.pid or this.dataset = null
+        if (dataset && (!this.dataset || this.dataset && (dataset.pid != this.dataset.pid))) {
           this.dataset = dataset;
           combineLatest([this.accessGroups$, this.isAdmin$, this.loggedIn$])
             .subscribe(([groups, isAdmin, isLoggedIn]) => {
@@ -200,20 +199,11 @@ export class DatasetDetailsDashboardComponent
       });
     this.subscriptions.push(datasetSub);
     this.jwt$ = this.userApi.jwt();
-
-    this.lazyChildService.childChanges().subscribe(() => {
-      this.store.dispatch(clearCurrentDatasetStateAction());
-      this.store.dispatch(clearCurrentProposalStateAction());
-      this.store.dispatch(clearCurrentSampleStateAction());
-
-      const tabs = Object.values(TAB);
-      tabs.forEach((tab) => {
-        if (this.fetchDataActions[tab] && this.fetchDataActions[tab].loaded) {
-          this.fetchDataActions[tab].loaded = false;
-        }
-      });
-      this.fetchDatasetRelatedDocuments();
-    });
+  }
+  resetTabs() {
+    Object.values(this.fetchDataActions).forEach(tab => {
+      tab.loaded = false;
+    })
   }
   onTabSelected(tab: string) {
     this.fetchDataForTab(tab);

@@ -2,7 +2,6 @@ import { DatePipe } from "@angular/common";
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { LazyChildService } from "lazy-child.service";
 import { map } from "rxjs/operators";
 import {
   PageChangeEvent,
@@ -70,10 +69,9 @@ export class RelatedDatasetsComponent {
 
   constructor(
     private datePipe: DatePipe,
-    private lazyChildService: LazyChildService,
     private router: Router,
     private store: Store
-  ) {}
+  ) { }
 
   formatTableData(datasets: Dataset[]): Record<string, unknown>[] {
     if (!datasets) {
@@ -105,7 +103,6 @@ export class RelatedDatasetsComponent {
   }
 
   onRowClick(dataset: Dataset): void {
-    this.lazyChildService.updateChildComponentState("Related Datasets");
     const pid = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl("/datasets/" + pid);
   }
