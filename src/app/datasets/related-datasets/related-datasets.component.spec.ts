@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { provideMockStore } from "@ngrx/store/testing";
-import { LazyChildService } from "lazy-child.service";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { Dataset } from "shared/sdk";
 import {
@@ -29,7 +28,6 @@ describe("RelatedDatasetsComponent", () => {
       declarations: [RelatedDatasetsComponent],
       providers: [
         DatePipe,
-        LazyChildService,
         provideMockStore({
           selectors: [
             {

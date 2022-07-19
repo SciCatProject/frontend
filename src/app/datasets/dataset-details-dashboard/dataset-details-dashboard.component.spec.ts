@@ -18,7 +18,6 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { MockStore } from "@ngrx/store/testing";
 import { AppConfigService } from "app-config.service";
-import { LazyChildService } from "lazy-child.service";
 
 describe("DetailsDashboardComponent", () => {
   let component: DatasetDetailsDashboardComponent;
@@ -45,7 +44,7 @@ describe("DetailsDashboardComponent", () => {
         SharedScicatFrontendModule,
         StoreModule.forRoot({}),
       ],
-      providers: [LazyChildService],
+      providers: [],
     });
     TestBed.overrideComponent(DatasetDetailsDashboardComponent, {
       set: {
