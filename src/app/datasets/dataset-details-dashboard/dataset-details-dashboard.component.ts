@@ -16,7 +16,7 @@ import {
 } from "state-management/selectors/user.selectors";
 import { ActivatedRoute } from "@angular/router";
 import { Subscription, Observable, combineLatest } from "rxjs";
-import { map, pluck, takeWhile } from "rxjs/operators";
+import { map, pluck } from "rxjs/operators";
 import {
   clearCurrentDatasetStateAction,
   fetchAttachmentsAction,
