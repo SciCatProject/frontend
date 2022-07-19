@@ -203,7 +203,7 @@ export class DatasetDetailsDashboardComponent
   resetTabs() {
     Object.values(this.fetchDataActions).forEach(tab => {
       tab.loaded = false;
-    })
+    });
   }
   onTabSelected(tab: string) {
     this.fetchDataForTab(tab);
