@@ -1,11 +1,13 @@
 {
-  "viewportWidth": 1280,
   "baseUrl": "http://localhost:4200",
   "lbBaseUrl": "http://localhost:3000/api/v3",
   "lbLoginEndpoint": "/Users/login",
-  "lbTokenPrefix": "",
+  "lbTokenPrefix": "Bearer ",
+  "viewportWidth": 1280,
   "username": "admin",
-  "password": "2jf70TPNZsS",
+  "password": "am2jf70TPNZsSan",
   "secondaryUsername": "archiveManager",
-  "secondaryPassword": "aman"
+  "secondaryPassword": "aman",
+  "defaultCommandTimeout": 10000,
+  "retries": 1
 }

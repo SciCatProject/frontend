@@ -1,229 +1,261 @@
-<div class='tool-bar'>
+<div class="tool-bar">
   <!-- Search field -->
   <mat-form-field class="search-field">
     <mat-icon matPrefix>search</mat-icon>
     <mat-label>Search</mat-label>
-    <input matInput
-      type="text"
-      [(ngModel)]="filterText">
-    <button mat-button
+    <input matInput type="text" [(ngModel)]="filterText" />
+    <button
+      mat-button
       matSuffix
       mat-icon-button
       aria-label="Clear"
-      (click)="filterText=''">
+      (click)="filterText = ''"
+    >
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
   <!-- Button Group, Showed on large screen -->
   <mat-button-toggle-group fxShow="true" fxHide.lt-md="true">
-    <button mat-icon-button
+    <button
+      mat-icon-button
       [matMenuTriggerFor]="actionMenu"
       color="primary"
+      data-cy="add-new-row-or-object"
       title="Add new row or object on the top level"
-      [disabled]="isEditing()">
+      [disabled]="isEditing()"
+    >
       <mat-icon>add</mat-icon>
     </button>
     <mat-menu #actionMenu="matMenu">
-      <button mat-menu-item
-        (click)="addNewNode(null);">
+      <button mat-menu-item (click)="addNewNode(null)">
         <span>Add new row</span>
       </button>
-      <button mat-menu-item
-        (click)="openObjectCreationDialog(null)">
+      <button mat-menu-item (click)="openObjectCreationDialog(null)">
         <span>Add new object</span>
       </button>
     </mat-menu>
-    <button mat-icon-button
+    <button
+      mat-icon-button
       type="button"
       color="primary"
       title="Save changes to database"
+      data-cy="save-changes-to-database"
       (click)="doSave()"
-      [disabled]="isEditing() || lastSavedChanges === historyManager.currentIdx">
+      [disabled]="isEditing() || lastSavedChanges === historyManager.currentIdx"
+    >
       <mat-icon>save</mat-icon>
     </button>
-    <button mat-button
+    <button
+      mat-button
       type="button"
       color="primary"
       title="undo"
       [disabled]="!historyManager.hasUndo() || isEditing()"
-      (click)="historyManager.undo()">
+      (click)="historyManager.undo()"
+    >
       <mat-icon>undo</mat-icon>
     </button>
-    <button mat-button
+    <button
+      mat-button
       type="button"
       color="primary"
       title="redo"
       [disabled]="!historyManager.hasRedo() || isEditing()"
-      (click)="historyManager.redo()">
+      (click)="historyManager.redo()"
+    >
       <mat-icon>redo</mat-icon>
     </button>
-    <button mat-button
+    <button
+      mat-button
       type="button"
       color="primary"
       (click)="toggleExpand()"
-      [title]="expand? 'Collapse all': 'Expand all'">
-      <mat-icon>{{expand? 'expand_less' : 'expand_more'}}</mat-icon>
+      [title]="expand ? 'Collapse all' : 'Expand all'"
+    >
+      <mat-icon>{{ expand ? "expand_less" : "expand_more" }}</mat-icon>
     </button>
   </mat-button-toggle-group>
   <!-- Button Group showed on medium and small screen -->
-  <mat-button-toggle-group fxShow="true"
-    fxHide.gt-md="true">
-    <button mat-icon-button
-      [matMenuTriggerFor]="buttonMenu"
-      color="primary">
+  <mat-button-toggle-group fxShow="true" fxHide.gt-md="true">
+    <button mat-icon-button [matMenuTriggerFor]="buttonMenu" color="primary">
       <mat-icon>more_horiz</mat-icon>
     </button>
   </mat-button-toggle-group>
   <mat-menu #buttonMenu>
-    <button mat-menu-item
+    <button
+      mat-menu-item
       [matMenuTriggerFor]="actionMenu"
       title="Add new row or object on the top level"
-      [disabled]="isEditing()">
+      [disabled]="isEditing()"
+    >
       Add
     </button>
-    <button mat-menu-item
+    <button
+      mat-menu-item
       title="Save changes to database"
       (click)="doSave()"
-      [disabled]="isEditing() || lastSavedChanges === historyManager.currentIdx">
+      [disabled]="isEditing() || lastSavedChanges === historyManager.currentIdx"
+    >
       Save
     </button>
-    <button mat-menu-item
+    <button
+      mat-menu-item
       [disabled]="!historyManager.hasUndo() || isEditing()"
-      (click)="historyManager.undo()">
+      (click)="historyManager.undo()"
+    >
       Undo
     </button>
-    <button mat-menu-item
+    <button
+      mat-menu-item
       [disabled]="!historyManager.hasRedo() || isEditing()"
-      (click)="historyManager.redo()">
+      (click)="historyManager.redo()"
+    >
       Redo
     </button>
-    <button mat-menu-item
+    <button
+      mat-menu-item
       (click)="toggleExpand()"
-      [title]="expand? 'Collapse all': 'Expand all'">
-      {{expand? 'Collapse' : 'Expand'}}
+      [title]="expand ? 'Collapse all' : 'Expand all'"
+    >
+      {{ expand ? "Collapse" : "Expand" }}
     </button>
   </mat-menu>
 </div>
 <!-- Metadata Tree -->
-<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+<mat-tree
+  [dataSource]="dataSource"
+  [treeControl]="treeControl"
+  data-cy="metadata-edit-tree"
+>
   <!-- Key - Value -->
-  <mat-tree-node *matTreeNodeDef="let node"
-    [style.display]="isVisible(0,node)?'flex':'none' ">
+  <mat-tree-node
+    *matTreeNodeDef="let node"
+    [style.display]="isVisible(0, node) ? 'flex' : 'none'"
+  >
     <section *ngIf="node.editing === false">
-      <div class="key-cell"
-        [style.padding-left.px]="getPadding(node)">
-        <button mat-icon-button
-          disabled>
-          <mat-icon class="mat-icon-rtl-mirror"
-            class="mat-icon-rtl-mirror">
+      <div class="key-cell" [style.padding-left.px]="getPadding(node)">
+        <button mat-icon-button disabled>
+          <mat-icon class="mat-icon-rtl-mirror" class="mat-icon-rtl-mirror">
           </mat-icon>
         </button>
-        <label class="clickable"
-          (click)="enableEditing(node)">
-          {{node.key}}
+        <label class="clickable" (click)="enableEditing(node)">
+          {{ node.key }}
         </label>
       </div>
       <div class="value-cell">
-        <label class="clickable"
-          (click)="enableEditing(node)">
-          {{getValueRepresentation(node)}}
+        <label class="clickable" (click)="enableEditing(node)">
+          {{ getValueRepresentation(node) }}
         </label>
       </div>
       <div class="button-cell">
         <div class="display-flex" *ngIf="node.editable">
-          <button mat-icon-button
+          <button
+            mat-icon-button
             class="deleteButton"
             color="warn"
             title="Delete row"
             (click)="deleteNode(node)"
-            [disabled]="isEditing()">
+            [disabled]="isEditing()"
+          >
             <mat-icon>cancel</mat-icon>
           </button>
         </div>
       </div>
     </section>
-    <div *ngIf="node.editing === true"
-      style="display: flex; align-items: center;">
-      <button mat-icon-button
-        disabled>
-        <mat-icon class="mat-icon-rtl-mirror"
-          class="mat-icon-rtl-mirror">
+    <div
+      *ngIf="node.editing === true"
+      style="display: flex; align-items: center"
+    >
+      <button mat-icon-button disabled>
+        <mat-icon class="mat-icon-rtl-mirror" class="mat-icon-rtl-mirror">
         </mat-icon>
       </button>
-      <metadata-input [style.padding-left.px]="getPadding(node)"
-        style="width: 100%;"
+      <metadata-input
+        [style.padding-left.px]="getPadding(node)"
+        style="width: 100%"
         *ngIf="node.editing === true"
         (save)="onSave($event)"
         (cancel)="onCancel()"
         (changed)="onChange()"
-        [data]="node">
+        [data]="node"
+      >
       </metadata-input>
     </div>
   </mat-tree-node>
   <!-- Only Key -->
-  <mat-tree-node *matTreeNodeDef="let node; when: hasChild"
-    [style.display]="isVisible(0,node)?'flex':'none' ">
+  <mat-tree-node
+    *matTreeNodeDef="let node; when: hasChild"
+    [style.display]="isVisible(0, node) ? 'flex' : 'none'"
+  >
     <section *ngIf="node.editing === false">
-      <div class='key-cell'
-        [style.padding-left.px]="getPadding(node)">
-        <button mat-icon-button
+      <div class="key-cell" [style.padding-left.px]="getPadding(node)">
+        <button
+          mat-icon-button
           matTreeNodeToggle
-          [attr.aria-label]="'Toggle ' + node.key">
+          [attr.aria-label]="'Toggle ' + node.key"
+        >
           <mat-icon class="mat-icon-rtl-mirror">
-            {{treeControl.isExpanded(node) ?
-            'arrow_drop_down': 'arrow_right'}}
+            {{
+              treeControl.isExpanded(node) ? "arrow_drop_down" : "arrow_right"
+            }}
           </mat-icon>
         </button>
-        <label class="clickable"
-          (click)="enableEditing(node)">
-          {{node.key}}
+        <label class="clickable" (click)="enableEditing(node)">
+          {{ node.key }}
         </label>
       </div>
       <div class="value-cell"></div>
       <div class="button-cell">
         <div class="display-flex" *ngIf="node.editable">
-          <button mat-icon-button
+          <button
+            mat-icon-button
             [matMenuTriggerFor]="menu"
             title="Add new row or object"
-            [disabled]="isEditing()">
+            [disabled]="isEditing()"
+          >
             <mat-icon>add</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item
-              (click)="addNewNode(node);">
+            <button mat-menu-item (click)="addNewNode(node)">
               <span>Add new row</span>
             </button>
-            <button mat-menu-item
-              (click)="openObjectCreationDialog(node)">
+            <button mat-menu-item (click)="openObjectCreationDialog(node)">
               <span>Add new object</span>
             </button>
           </mat-menu>
-          <button mat-icon-button
+          <button
+            mat-icon-button
             class="deleteButton"
             color="warn"
             title="Delete row"
             [disabled]="node.expandable || isEditing()"
-            (click)="deleteNode(node)">
+            (click)="deleteNode(node)"
+          >
             <mat-icon>cancel</mat-icon>
           </button>
         </div>
       </div>
     </section>
-    <div *ngIf="node.editing === true"
-      style="display: flex; align-items: center;">
-      <button mat-icon-button
+    <div
+      *ngIf="node.editing === true"
+      style="display: flex; align-items: center"
+    >
+      <button
+        mat-icon-button
         matTreeNodeToggle
-        [attr.aria-label]="'Toggle ' + node.key">
+        [attr.aria-label]="'Toggle ' + node.key"
+      >
         <mat-icon class="mat-icon-rtl-mirror">
-          {{treeControl.isExpanded(node) ?
-          'arrow_drop_down': 'arrow_right'}}
+          {{ treeControl.isExpanded(node) ? "arrow_drop_down" : "arrow_right" }}
         </mat-icon>
       </button>
-      <metadata-input [style.padding-left.px]="getPadding(node)"
+      <metadata-input
+        [style.padding-left.px]="getPadding(node)"
         (save)="onSave($event)"
         (cancel)="onCancel()"
         (changed)="onChange()"
-        [data]="node">
+        [data]="node"
+      >
       </metadata-input>
     </div>
   </mat-tree-node>

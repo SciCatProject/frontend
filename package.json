@@ -13,7 +13,8 @@
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
     "betterer": "betterer",
-    "cypress:open": "./node_modules/.bin/cypress open"
+    "cypress:open": "./node_modules/.bin/cypress open",
+    "cypress:run": "cypress run"
   },
   "private": true,
   "dependencies": {
