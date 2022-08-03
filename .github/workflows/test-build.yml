@@ -74,11 +74,25 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
+      - name: Extract branch name
+        id: extract_branch
+        shell: bash
+        run: |
+          # Extract branch name
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+
+          # set output variable accessible in the action
+          echo ::set-output name=branch::${BRANCH_NAME}
+
+      # For debugging capture the selected branch
+      - name: Extracted branch
+        run: echo "Extracted branch ${{ steps.extract_branch.outputs.branch }}"
+
       - name: Build and push
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
           registry: ghcr.io
+          tags: ${{ steps.extract_branch.outputs.branch }}
           image: scicatproject/frontend
-          addLatest: true
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
