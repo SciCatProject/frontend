@@ -76,13 +76,13 @@ jobs:
 
       # For debugging capture the selected branch
       - name: Branch
-        run: echo "Branch ${{ github.head_ref/////_ }}"
+        run: echo "Branch ${{ github.head_ref }}"
 
       - name: Build and push
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
           registry: ghcr.io
-          tags: ${{ github.head_ref/////_ }}
+          tags: ${{ github.head_ref }}
           image: scicatproject/frontend
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
