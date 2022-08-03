@@ -82,7 +82,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
           registry: ghcr.io
-          tags: ${{ github.head_ref }}
+          tags: ${{ github.head_ref/////_ }}
           image: scicatproject/frontend
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
