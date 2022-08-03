@@ -78,12 +78,22 @@ jobs:
       - name: Branch
         run: echo "Branch ${{ github.head_ref }}"
 
+      # Replace all slashes with underscore because github container registry does't accept slashes as valid tag names
+      - name: Extract branch name without slashes
+        id: extract_branch
+        shell: bash
+        run: |
+          # Extract branch name
+          BRANCH_NAME=${github.head_ref/\//_}
+
+          # set output variable accessible in the action
+          echo ::set-output name=branch::${BRANCH_NAME}
+
       - name: Build and push
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
           registry: ghcr.io
-          # Replace all slashes with underscore because github container registry does't accept slashes as valid tag names
-          tags: ${{ github.head_ref/\//_ }}
+          tags: ${{ steps.extract_branch.outputs.branch }}
           image: scicatproject/frontend
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
