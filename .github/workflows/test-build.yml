@@ -80,11 +80,10 @@ jobs:
 
       - name: Build and push
         uses: mr-smithers-excellent/docker-build-push@v5
-        substitutions:
-          _NEW_BRANCH_NAME: ${github.head_ref/////-}
         with:
           registry: ghcr.io
-          tags: ${_NEW_BRANCH_NAME}
+          # Replace all slashes with underscore because github container registry does't accept slashes as valid tag names
+          tags: ${{ github.head_ref/\//_ }}
           image: scicatproject/frontend
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
