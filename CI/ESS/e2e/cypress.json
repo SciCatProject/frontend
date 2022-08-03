@@ -2,7 +2,7 @@
   "baseUrl": "http://localhost:80",
   "lbBaseUrl": "http://localhost:80/api/v3",
   "lbLoginEndpoint": "/Users/login",
-  "lbTokenPrefix": "Bearer ",
+  "lbTokenPrefix": "",
   "viewportWidth": 1280,
   "username": "admin",
   "password": "2jf70TPNZsS",
