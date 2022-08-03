@@ -39,12 +39,10 @@ describe("Datasets", () => {
 
       cy.contains("Edit").click();
 
-      cy.get('[data-cy="add-new-row-or-object"]').click();
-
-      cy.contains("Add new row").click();
+      cy.get('[data-cy="add-new-row"]').click();
 
       // simulate click event on the drop down
-      cy.get("mat-select[formcontrolname=type]").first().click(); // opens the drop down
+      cy.get("mat-select[data-cy=field-type-input]").first().click(); // opens the drop down
 
       // simulate click event on the drop down item (mat-option)
       cy.get(".mat-option-text")
@@ -53,11 +51,10 @@ describe("Datasets", () => {
           option[0].click();
         });
 
-      cy.get("[data-cy=metadata-name]").type(`${metadataName}{enter}`);
-      cy.get("[data-cy=metadata-value]").type(`${metadataValue}{enter}`);
+      cy.get("[data-cy=metadata-name-input]").type(`${metadataName}{enter}`);
+      cy.get("[data-cy=metadata-value-input]").type(`${metadataValue}{enter}`);
 
-      cy.get("button[data-cy=save-metadata]").click();
-      cy.get("button[data-cy=save-changes-to-database]").click();
+      cy.get("button[data-cy=save-changes-button]").click();
 
       cy.wait("@metadata").then(({ request, response }) => {
         expect(request.method).to.eq("PUT");
@@ -65,10 +62,15 @@ describe("Datasets", () => {
 
         cy.finishedLoading();
 
-        cy.get("[data-cy=metadata-edit-tree]").contains(metadataName).click();
-        cy.get("mat-select[formcontrolname=type]")
+        cy.get("mat-select[data-cy=field-type-input]")
           .first()
           .should("contain.text", "string");
+        cy.get(
+          "[data-cy=metadata-edit-form] [data-cy=metadata-name-input]"
+        ).should("have.value", metadataName);
+        cy.get(
+          "[data-cy=metadata-edit-form] [data-cy=metadata-value-input]"
+        ).should("have.value", metadataValue);
       });
     });
   });
@@ -86,13 +88,14 @@ describe("Datasets", () => {
 
       cy.get("button.deleteButton").first().click();
 
-      cy.get("button[data-cy=save-changes-to-database]").click();
-
-      cy.wait("@metadata").then(({ request, response }) => {
+      cy.get("button[data-cy=save-changes-button]").click();
+      -cy.wait("@metadata").then(({ request, response }) => {
         expect(request.method).to.eq("PUT");
         expect(response.statusCode).to.eq(200);
 
-        cy.get("[data-cy=metadata-edit-tree]").should(
+        cy.finishedLoading();
+
+        cy.get("[data-cy=metadata-edit-form]").should(
           "not.contain",
           metadataName
         );

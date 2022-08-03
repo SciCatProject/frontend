@@ -1,11 +1,11 @@
 {
   "accessTokenPrefix": "",
   "addDatasetEnabled": true,
-  "archiveWorkflowEnabled": true,
+  "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
   "editDatasetSampleEnabled": true,
   "editMetadataEnabled": true,
-  "editPublishedData": true,
+  "editPublishedData": false,
   "editSampleEnabled": true,
   "externalAuthEndpoint": "/auth/msad",
   "facility": "ESS",
@@ -16,7 +16,7 @@
   "jobsEnabled": true,
   "jsonMetadataEnabled": true,
   "jupyterHubUrl": "https://jupyterhub.esss.lu.se/",
-  "landingPage": "doi2.psi.ch/detail/",
+  "landingPage": "doi.ess.eu/detail/",
   "lbBaseURL": "http://127.0.0.1:3000",
   "localColumns": [
     {
@@ -96,14 +96,14 @@
   "loginFormEnabled": true,
   "maxDirectDownloadSize": 5000000000,
   "metadataPreviewEnabled": true,
-  "metadataStructure": "tree",
+  "metadataStructure": "",
   "multipleDownloadAction": "http://localhost:3012/zip",
   "multipleDownloadEnabled": true,
   "oAuth2Endpoints": [],
   "policiesEnabled": true,
   "retrieveDestinations": [],
   "riotBaseUrl": "http://scitest.esss.lu.se/riot",
-  "scienceSearchEnabled": true,
+  "scienceSearchEnabled": false,
   "scienceSearchUnitsEnabled": true,
   "searchPublicDataEnabled": true,
   "searchSamples": true,
@@ -111,7 +111,5 @@
   "shareEnabled": true,
   "shoppingCartEnabled": true,
   "shoppingCartOnHeader": true,
-  "tableSciDataEnabled": true,
-  "fileserverButtonLabel": "Download with Globus",
-  "fileserverBaseURL": ""
+  "tableSciDataEnabled": true
 }
