@@ -84,11 +84,10 @@ jobs:
         shell: bash
         run: |
           # Extract branch name
-          echo ${BRANCH_NAME/\//_}
-          BRANCH_NAME=${github.head_ref//\///_}
+          BRANCH_NAME=${github.head_ref}
 
           # set output variable accessible in the action
-          echo ::set-output name=branch::${BRANCH_NAME}
+          echo ::set-output name=branch::${BRANCH_NAME} | sed 's/\//\_/g'
 
       - name: Build and push
         uses: mr-smithers-excellent/docker-build-push@v5
