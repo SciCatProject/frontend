@@ -76,7 +76,7 @@ jobs:
 
       # For debugging capture the selected branch
       - name: Branch
-        run: echo "Branch ${{ github.head_ref }}"
+        run: echo "Branch ${{ github.head_ref/////_ }}"
 
       - name: Build and push
         uses: mr-smithers-excellent/docker-build-push@v5
