@@ -89,7 +89,7 @@ describe("Datasets", () => {
       cy.get("button.deleteButton").first().click();
 
       cy.get("button[data-cy=save-changes-button]").click();
-      -cy.wait("@metadata").then(({ request, response }) => {
+      cy.wait("@metadata").then(({ request, response }) => {
         expect(request.method).to.eq("PUT");
         expect(response.statusCode).to.eq(200);
 
