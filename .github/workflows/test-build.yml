@@ -89,11 +89,25 @@ jobs:
           # set output variable accessible in the action
           echo ::set-output name=branch::${BRANCH_NAME} | sed 's/\//\_/g'
 
-      - name: Build and push
-        uses: mr-smithers-excellent/docker-build-push@v5
+      # - name: Build and push
+      #   uses: mr-smithers-excellent/docker-build-push@v5
+      #   with:
+      #     registry: ghcr.io
+      #     tags: ${{ steps.extract_branch.outputs.branch }}
+      #     image: scicatproject/frontend
+      #     username: ${{ github.actor }}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to GHCR
+        uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          tags: ${{ steps.extract_branch.outputs.branch }}
-          image: scicatproject/frontend
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/scicatproject/frontend:${{ steps.extract_branch.outputs.branch }}
