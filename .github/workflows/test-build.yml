@@ -84,6 +84,7 @@ jobs:
         shell: bash
         run: |
           # Extract branch name
+          echo ${BRANCH_NAME/\//_}
           BRANCH_NAME=${github.head_ref//\///_}
 
           # set output variable accessible in the action
