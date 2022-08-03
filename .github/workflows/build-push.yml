@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    name: Build and Push Docker Image
+    name: Build and push Docker image with latest tag
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

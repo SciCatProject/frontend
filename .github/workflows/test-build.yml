@@ -61,7 +61,7 @@ jobs:
           path: cypress/videos
 
   build:
-    name: Build and Push Docker Image With Branch Tag
+    name: Build and push Docker image with branch tag
     runs-on: ubuntu-latest
     needs: [unittest, e2etests]
     steps:
