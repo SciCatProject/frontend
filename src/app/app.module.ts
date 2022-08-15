@@ -81,4 +81,4 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

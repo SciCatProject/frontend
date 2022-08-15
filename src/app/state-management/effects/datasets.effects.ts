@@ -1,11 +1,21 @@
 import { Injectable } from "@angular/core";
 import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
-import { DatasetApi, Dataset, LoopBackFilter, OrigDatablock, Attachment, Datablock } from "shared/sdk";
+import {
+  DatasetApi,
+  Dataset,
+  LoopBackFilter,
+  OrigDatablock,
+  Attachment,
+  Datablock,
+  DerivedDataset,
+} from "shared/sdk";
 import { Store } from "@ngrx/store";
 import {
   selectFullqueryParams,
   selectFullfacetParams,
   selectDatasetsInBatch,
+  selectCurrentDataset,
+  selectRelatedDatasetsFilters,
 } from "state-management/selectors/datasets.selectors";
 import * as fromActions from "state-management/actions/datasets.actions";
 import {
@@ -29,6 +39,8 @@ import {
 
 @Injectable()
 export class DatasetEffects {
+  currentDataset$ = this.store.select(selectCurrentDataset);
+  relatedDatasetsFilters$ = this.store.select(selectRelatedDatasetsFilters);
   fullqueryParams$ = this.store.select(selectFullqueryParams);
   fullfacetParams$ = this.store.select(selectFullfacetParams);
   datasetsInBatch$ = this.store.select(selectDatasetsInBatch);
@@ -123,7 +135,7 @@ export class DatasetEffects {
       ofType(fromActions.fetchDatasetAction),
       switchMap(({ pid, filters }) => {
         const datasetFilter: LoopBackFilter = {
-          where: { pid }
+          where: { pid },
         };
 
         if (filters) {
@@ -134,7 +146,7 @@ export class DatasetEffects {
 
         return this.datasetApi.findOne<Dataset>(datasetFilter).pipe(
           map((dataset: Dataset) =>
-              fromActions.fetchDatasetCompleteAction({ dataset })
+            fromActions.fetchDatasetCompleteAction({ dataset })
           ),
           catchError(() => of(fromActions.fetchDatasetFailedAction()))
         );
@@ -145,12 +157,14 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchDatablocksAction),
       switchMap(({ pid, filters }) => {
-        return this.datasetApi.getDatablocks(encodeURIComponent(pid), filters).pipe(
-          map((datablocks: Datablock[]) =>
-            fromActions.fetchDatablocksCompleteAction({ datablocks })
-          ),
-          catchError(() => of(fromActions.fetchDatablocksFailedAction()))
-        );
+        return this.datasetApi
+          .getDatablocks(encodeURIComponent(pid), filters)
+          .pipe(
+            map((datablocks: Datablock[]) =>
+              fromActions.fetchDatablocksCompleteAction({ datablocks })
+            ),
+            catchError(() => of(fromActions.fetchDatablocksFailedAction()))
+          );
       })
     );
   });
@@ -159,12 +173,14 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchOrigDatablocksAction),
       switchMap(({ pid, filters }) => {
-        return this.datasetApi.getOrigdatablocks(encodeURIComponent(pid), {}).pipe(
-          map((origdatablocks: OrigDatablock[]) =>
-            fromActions.fetchOrigDatablocksCompleteAction({ origdatablocks })
-          ),
-          catchError(() => of(fromActions.fetchOrigDatablocksFailedAction()))
-        );
+        return this.datasetApi
+          .getOrigdatablocks(encodeURIComponent(pid), {})
+          .pipe(
+            map((origdatablocks: OrigDatablock[]) =>
+              fromActions.fetchOrigDatablocksCompleteAction({ origdatablocks })
+            ),
+            catchError(() => of(fromActions.fetchOrigDatablocksFailedAction()))
+          );
       })
     );
   });
@@ -173,11 +189,81 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchAttachmentsAction),
       switchMap(({ pid, filters }) => {
-        return this.datasetApi.getAttachments(encodeURIComponent(pid), filters).pipe(
-          map((attachments: Attachment[]) =>
-            fromActions.fetchAttachmentsCompleteAction({ attachments })
+        return this.datasetApi
+          .getAttachments(encodeURIComponent(pid), filters)
+          .pipe(
+            map((attachments: Attachment[]) =>
+              fromActions.fetchAttachmentsCompleteAction({ attachments })
+            ),
+            catchError(() => of(fromActions.fetchAttachmentsFailedAction()))
+          );
+      })
+    );
+  });
+
+  fetchRelatedDatasets$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchRelatedDatasetsAction),
+      concatLatestFrom(() => [
+        this.currentDataset$,
+        this.relatedDatasetsFilters$,
+      ]),
+      switchMap(([_, dataset, filters]) => {
+        const queryFilter: LoopBackFilter = {
+          where: {},
+          skip: filters.skip,
+          limit: filters.limit,
+          order: filters.sortField,
+        };
+        if (dataset.type === "raw") {
+          queryFilter.where = {
+            type: "derived",
+            inputDatasets: dataset.pid,
+          };
+        }
+        if (dataset.type === "derived") {
+          queryFilter.where = {
+            pid: { $in: (dataset as unknown as DerivedDataset).inputDatasets },
+          };
+        }
+        return this.datasetApi.find<Dataset>(queryFilter).pipe(
+          map((relatedDatasets: Dataset[]) =>
+            fromActions.fetchRelatedDatasetsCompleteAction({ relatedDatasets })
           ),
-          catchError(() => of(fromActions.fetchAttachmentsFailedAction()))
+          catchError(() => of(fromActions.fetchRelatedDatasetsFailedAction()))
+        );
+      })
+    );
+  });
+
+  fetchRelatedDatasetsCount$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchRelatedDatasetsAction),
+      concatLatestFrom(() => [this.currentDataset$]),
+      switchMap(([_, dataset]) => {
+        const queryFilter: LoopBackFilter = {
+          where: {},
+        };
+        if (dataset.type === "raw") {
+          queryFilter.where = {
+            type: "derived",
+            inputDatasets: dataset.pid,
+          };
+        }
+        if (dataset.type === "derived") {
+          queryFilter.where = {
+            pid: { $in: (dataset as unknown as DerivedDataset).inputDatasets },
+          };
+        }
+        return this.datasetApi.find(queryFilter).pipe(
+          map((datasets) =>
+            fromActions.fetchRelatedDatasetsCountCompleteAction({
+              count: datasets.length,
+            })
+          ),
+          catchError(() =>
+            of(fromActions.fetchRelatedDatasetsCountFailedAction())
+          )
         );
       })
     );
