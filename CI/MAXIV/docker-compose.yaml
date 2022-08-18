@@ -1,37 +1,23 @@
 version: "3.2"
 
-networks:
-  proxy:
-    external: true
-
 services:
-  reverse-proxy:
-    image: traefik:v2.0
-    command: --api.insecure=true --providers.docker=true --entrypoints.web.address=:80
-    ports:
-      - "80:80"
-      - "8080:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
   scicat-frontend-test:
-    image: "docker.maxiv.lu.se/scicat-frontend-test"
-    networks:
-      - proxy
+    image: frontend-local
     restart: always
     ports:
-      - "3002:80"
-    labels:
-      - "traefik.frontend.rule=Host:scicat-test.maxiv.lu.se"
-      - "traefik.docker.network=proxy"
-      - "traefik.port=80"
+      - "3001:80"
   scicat-backend-test:
-    image: "docker.maxiv.lu.se/scicat-backend-test"
-    networks:
-      - proxy
-    restart: always
+    image: backend-local
+    volumes:
+      - ./datasources.json:/usr/src/app/server/datasources.json
+      - ./providers.json:/usr/src/app/server/providers.json
+      - ./config.local.js:/usr/src/app/server/config.local.js
     ports:
-      - "3001:3000"
-    labels:
-      - "traefik.frontend.rule=Host:scicat-test.maxiv.lu.se; PathPrefix: /explorer, /api, /auth"
-      - "traefik.docker.network=proxy"
-      - "traefik.port=3000"
+      - "3000:3000"
+  mongodb:
+      container_name: scicat-db
+      image: "bitnami/mongodb:latest"
+      ports:
+        - "27017:27017"
+      volumes:
+        - "./mongodb_data:/bitnami"
