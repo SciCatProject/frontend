@@ -126,6 +126,75 @@ describe("Dataset Actions", () => {
     });
   });
 
+  describe("fetchRelatedDatasetsAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchRelatedDatasetsAction();
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Fetch Related Datasets",
+      });
+    });
+  });
+
+  describe("fetchRelatedDatasetsCompleteAction", () => {
+    it("should create an action", () => {
+      const relatedDatasets = [new Dataset()];
+      const action = fromActions.fetchRelatedDatasetsCompleteAction({
+        relatedDatasets,
+      });
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Fetch Related Datasets Complete",
+        relatedDatasets,
+      });
+    });
+  });
+
+  describe("fetchRelatedDatasetsFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchRelatedDatasetsFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Datasets] Fetch Related Datasets Failed",
+      });
+    });
+  });
+
+  describe("fetchRelatedDatasetsCountCompleteAction", () => {
+    it("should create an action", () => {
+      const count = 0;
+      const action = fromActions.fetchRelatedDatasetsCountCompleteAction({
+        count,
+      });
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Fetch Related Datasets Count Complete",
+        count,
+      });
+    });
+  });
+
+  describe("fetchRelatedDatasetsCountFailedAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.fetchRelatedDatasetsCountFailedAction();
+      expect({ ...action }).toEqual({
+        type: "[Datasets] Fetch Related Datasets Count Failed",
+      });
+    });
+  });
+
+  describe("changeRelatedDatasetsPageAction", () => {
+    it("should create an action", () => {
+      const page = 0;
+      const limit = 25;
+      const action = fromActions.changeRelatedDatasetsPageAction({
+        page,
+        limit,
+      });
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Change Related Datasets Page",
+        page,
+        limit,
+      });
+    });
+  });
+
   describe("prefillBatchAction", () => {
     it("should create an action", () => {
       const action = fromActions.prefillBatchAction();

@@ -74,7 +74,7 @@ export class DatasetDetailComponent
     public dialog: MatDialog,
     private store: Store,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(

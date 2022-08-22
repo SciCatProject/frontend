@@ -59,7 +59,7 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
   ) {}
 
   private parseHistoryItems(): HistoryItem[] {
-    if (this.dataset) {
+    if (this.dataset && this.dataset.history) {
       const history = this.dataset.history.map(
         ({ updatedAt, updatedBy, id, ...properties }) =>
           Object.keys(properties).map(

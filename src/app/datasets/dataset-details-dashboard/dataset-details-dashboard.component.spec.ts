@@ -32,38 +32,37 @@ describe("DetailsDashboardComponent", () => {
     editMetadataEnabled: true,
   });
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [DatasetDetailsDashboardComponent],
-        imports: [
-          MatButtonModule,
-          MatIconModule,
-          MatSlideToggleModule,
-          MatTabsModule,
-          SharedScicatFrontendModule,
-          StoreModule.forRoot({}),
-        ],
-      });
-      TestBed.overrideComponent(DatasetDetailsDashboardComponent, {
-        set: {
-          providers: [
-            { provide: Router, useValue: router },
-            {
-              provide: AppConfigService,
-              useValue: {
-                getConfig,
-              },
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [DatasetDetailsDashboardComponent],
+      imports: [
+        MatButtonModule,
+        MatIconModule,
+        MatSlideToggleModule,
+        MatTabsModule,
+        SharedScicatFrontendModule,
+        StoreModule.forRoot({}),
+      ],
+      providers: [],
+    });
+    TestBed.overrideComponent(DatasetDetailsDashboardComponent, {
+      set: {
+        providers: [
+          { provide: Router, useValue: router },
+          {
+            provide: AppConfigService,
+            useValue: {
+              getConfig,
             },
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-            { provide: UserApi, useClass: MockUserApi },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+          },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: UserApi, useClass: MockUserApi },
+        ],
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetDetailsDashboardComponent);

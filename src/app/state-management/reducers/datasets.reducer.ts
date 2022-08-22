@@ -38,32 +38,66 @@ const reducer = createReducer(
     })
   ),
 
-  on(fromActions.fetchDatablocksCompleteAction, (state, { datablocks }) =>{
+  on(fromActions.fetchDatablocksCompleteAction, (state, { datablocks }) => {
     return {
-    ...state,
-    currentSet: {
-      ...state.currentSet,
-      datablocks
-    }};
+      ...state,
+      currentSet: {
+        ...state.currentSet,
+        datablocks,
+      },
+    };
   }),
 
-  on(fromActions.fetchOrigDatablocksCompleteAction, (state, { origdatablocks }) =>{
+  on(
+    fromActions.fetchOrigDatablocksCompleteAction,
+    (state, { origdatablocks }) => {
+      return {
+        ...state,
+        currentSet: {
+          ...state.currentSet,
+          origdatablocks,
+        },
+      };
+    }
+  ),
+
+  on(fromActions.fetchAttachmentsCompleteAction, (state, { attachments }) => {
     return {
-    ...state,
-    currentSet: {
-      ...state.currentSet,
-      origdatablocks
-    }};
+      ...state,
+      currentSet: {
+        ...state.currentSet,
+        attachments,
+      },
+    };
   }),
 
-  on(fromActions.fetchAttachmentsCompleteAction, (state, { attachments }) =>{
-    return {
-    ...state,
-    currentSet: {
-      ...state.currentSet,
-      attachments
-    }};
-  }),
+  on(
+    fromActions.fetchRelatedDatasetsCompleteAction,
+    (state, { relatedDatasets }): DatasetState => ({
+      ...state,
+      relatedDatasets,
+    })
+  ),
+  on(
+    fromActions.fetchRelatedDatasetsCountCompleteAction,
+    (state, { count }): DatasetState => ({
+      ...state,
+      relatedDatasetsCount: count,
+    })
+  ),
+
+  on(
+    fromActions.changeRelatedDatasetsPageAction,
+    (state, { page, limit }): DatasetState => {
+      const skip = page * limit;
+      const relatedDatasetsFilters = {
+        ...state.relatedDatasetsFilters,
+        skip,
+        limit,
+      };
+      return { ...state, relatedDatasetsFilters };
+    }
+  ),
 
   on(fromActions.prefillBatchCompleteAction, (state, { batch }) => ({
     ...state,
@@ -147,9 +181,10 @@ const reducer = createReducer(
     })
   ),
 
-  on(fromActions.clearCurrentDatasetStateAction, (state) => ({
+  on(fromActions.clearCurrentDatasetStateAction, (state): DatasetState => ({
     ...state,
-    currentSet: undefined
+    currentSet: undefined,
+    relatedDatasets: [],
   })),
 
   on(fromActions.selectDatasetAction, (state, { dataset }) => {

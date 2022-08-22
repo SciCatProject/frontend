@@ -10,6 +10,7 @@ import { DatasetDetailComponent } from "datasets/dataset-detail/dataset-detail.c
 import { DatasetFileUploaderComponent } from "datasets/dataset-file-uploader/dataset-file-uploader.component";
 import { DatasetLifecycleComponent } from "datasets/dataset-lifecycle/dataset-lifecycle.component";
 import { ReduceComponent } from "datasets/reduce/reduce.component";
+import { RelatedDatasetsComponent } from "datasets/related-datasets/related-datasets.component";
 import { LogbooksDashboardComponent } from "logbooks/logbooks-dashboard/logbooks-dashboard.component";
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
     path: "datafiles",
     component: DatafilesComponent,
 
+  },
+  {
+    path: "related-datasets",
+    component: RelatedDatasetsComponent,
   },
   // For reduce && logbook this is a work around because guard priority somehow doesn't work and this work around make guards excuted sequencial
   // Expected behavior should be that ServiceGuard return false should have higher priority than AuthGuard therefore it shoulds navigate to /404 instead of /login
