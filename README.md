@@ -6,7 +6,7 @@
 
 
 
-[![Build Status](https://github.com/SciCatProject/frontend/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/SciCatProject/frontend/actions)
+[![Build Status](https://github.com/SciCatProject/frontend/actions/workflows/test-build.yml/badge.svg?branch=master)](https://github.com/SciCatProject/frontend/actions)
 [![DeepScan grade](https://deepscan.io/api/teams/8394/projects/21314/branches/609376/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=8394&pid=21314&bid=609376)
 [![Known Vulnerabilities](https://snyk.io/test/github/SciCatProject/frontend/master/badge.svg?targetFile=package.json)](https://snyk.io/test/github/SciCatProject/frontend/master?targetFile=package.json)
 [![DOI](https://zenodo.org/badge/106383330.svg)](https://zenodo.org/badge/latestdoi/106383330)

@@ -7,5 +7,7 @@
   "username": "admin",
   "password": "2jf70TPNZsS",
   "secondaryUsername": "archiveManager",
-  "secondaryPassword": "aman"
+  "secondaryPassword": "aman",
+  "defaultCommandTimeout": 10000,
+  "retries": 1
 }

@@ -4,7 +4,7 @@
       formArrayName="items"
       *ngFor="let item of items.controls; let i = index"
     >
-      <div [formGroupName]="i">
+      <div [formGroupName]="i" data-cy="metadata-edit-form">
         <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
           <div class="formColumn">
             <mat-form-field class="selectField">
@@ -12,6 +12,7 @@
               <mat-select
                 formControlName="fieldType"
                 (selectionChange)="detectType(i)"
+                data-cy="field-type-input"
               >
                 <mat-option *ngFor="let type of typeValues" [value]="type">{{
                   type
@@ -25,7 +26,7 @@
           <div class="formColumn">
             <mat-form-field class="inputField">
               <input
-                id="nameInput{{i}}"
+                id="nameInput{{ i }}"
                 matInput
                 autocomplete="off"
                 autocorrect="off"
@@ -33,6 +34,7 @@
                 spellcheck="false"
                 formControlName="fieldName"
                 placeholder="Name"
+                data-cy="metadata-name-input"
                 (blur)="getUnits(i)"
               />
               <mat-error *ngIf="fieldHasError(i, 'fieldName')">
@@ -43,7 +45,7 @@
           <div class="formColumn">
             <mat-form-field class="inputField">
               <input
-                id="valueInput{{i}}"
+                id="valueInput{{ i }}"
                 matInput
                 [type]="setValueInputType(i)"
                 autocomplete="off"
@@ -52,7 +54,8 @@
                 spellcheck="false"
                 formControlName="fieldValue"
                 placeholder="Value"
-                step=1
+                data-cy="metadata-value-input"
+                step="1"
               />
               <mat-error *ngIf="fieldHasError(i, 'fieldValue')">
                 Value is required
@@ -62,7 +65,7 @@
           <div class="formColumn">
             <mat-form-field class="inputField">
               <input
-                id="unitsInput{{i}}"
+                id="unitsInput{{ i }}"
                 matInput
                 autocomplete="off"
                 autocorrect="off"
@@ -107,6 +110,7 @@
       type="button"
       color="accent"
       (click)="addMetadata()"
+      data-cy="add-new-row"
     >
       <mat-icon> add_circle </mat-icon>
       Add row
@@ -118,6 +122,7 @@
       color="primary"
       [disabled]="isInvalid()"
       (click)="doSave()"
+      data-cy="save-changes-button"
     >
       <mat-icon> save </mat-icon>
       Save changes

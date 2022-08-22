@@ -7,38 +7,37 @@ describe("Users Login", () => {
 
   beforeEach(() => {
     cy.intercept("POST", "**/auth/msad").as("adLogin");
-    cy.intercept("POST", "/api/v3" + loginEndpoint).as("funcLogin");
+    cy.intercept("POST", "/api/v3" + loginEndpoint + "*").as("funcLogin");
+    cy.intercept("GET", "*").as("fetch");
   });
 
   it("visits login page and tries to log in with the wrong password", () => {
-    cy.wait(5000);
-
     cy.visit("/");
 
     cy.url().should("include", "/datasets");
 
-    cy.wait(5000);
+    cy.wait("@fetch");
+
+    cy.finishedLoading();
 
     cy.get("[data-cy=login-button]").click();
 
-    cy.wait(5000);
+    cy.finishedLoading();
 
     cy.url().should("include", "/login");
 
-    cy.get("#usernameInput")
-      .type(username)
-      .should("have.value", username);
+    cy.get("#usernameInput").type(username).should("have.value", username);
 
-    cy.get("#passwordInput")
-      .type("invalid")
-      .should("have.value", "invalid");
+    cy.get("#passwordInput").type("invalid").should("have.value", "invalid");
 
     cy.get("button[type=submit]").click();
 
     cy.wait("@adLogin").then(({ request, response }) => {
       expect(request.method).to.eq("POST");
       if (response.statusCode === 500) {
-        cy.contains("Unable to connect to the authentication service. Please try again later or contact website maintainer.");
+        cy.contains(
+          "Unable to connect to the authentication service. Please try again later or contact website maintainer."
+        );
       } else {
         cy.wait("@funcLogin").then(({ request, response }) => {
           expect(request.method).to.eq("POST");
@@ -46,33 +45,28 @@ describe("Users Login", () => {
 
           cy.contains("Could not log in. Check your username and password.");
         });
-
       }
     });
   });
 
   it("visits login page and logs in with a functional account", () => {
-    cy.wait(5000);
-
     cy.visit("/");
 
     cy.url().should("include", "/datasets");
 
-    cy.wait(5000);
+    cy.wait("@fetch");
+
+    cy.finishedLoading();
 
     cy.get("[data-cy=login-button]").click();
 
-    cy.wait(5000);
+    cy.finishedLoading();
 
     cy.url().should("include", "/login");
 
-    cy.get("#usernameInput")
-      .type(username)
-      .should("have.value", username);
+    cy.get("#usernameInput").type(username).should("have.value", username);
 
-    cy.get("#passwordInput")
-      .type(password)
-      .should("have.value", password);
+    cy.get("#passwordInput").type(password).should("have.value", password);
 
     cy.contains("Remember me").click();
 

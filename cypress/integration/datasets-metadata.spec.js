@@ -1,9 +1,10 @@
 /// <reference types="Cypress" />
 
 describe("Datasets", () => {
-  beforeEach(() => {
-    cy.wait(5000);
+  const metadataName = "some name";
+  const metadataValue = "some value";
 
+  beforeEach(() => {
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
     cy.intercept("PUT", "/api/v3/Datasets/**/*").as("metadata");
@@ -24,47 +25,53 @@ describe("Datasets", () => {
 
       cy.visit("/datasets");
 
-      cy.wait(5000);
+      cy.wait("@fetch");
 
-      cy.get(".mat-row")
-        .contains("Cypress Dataset")
-        .click();
+      cy.finishedLoading();
+
+      cy.get(".mat-row").contains("Cypress Dataset").click();
 
       cy.wait("@fetch");
 
-      cy.contains("Edit").click();
-      cy.wait(1000);
+      cy.finishedLoading();
 
-      cy.contains("Add row").click();
-      cy.wait(1000);
+      cy.scrollTo("bottom");
+
+      cy.contains("Edit").click();
+
+      cy.get('[data-cy="add-new-row"]').click();
 
       // simulate click event on the drop down
-      cy.get("mat-select[formControlName=fieldType]")
-        .first()
-        .click(); // opens the drop down
+      cy.get("mat-select[data-cy=field-type-input]").first().click(); // opens the drop down
 
       // simulate click event on the drop down item (mat-option)
       cy.get(".mat-option-text")
         .contains("string")
-        .then(option => {
+        .then((option) => {
           option[0].click();
         });
 
-      cy.get("#nameInput0").type("some name{enter}");
-      cy.get("#valueInput0").type("some value{enter}");
+      cy.get("[data-cy=metadata-name-input]").type(`${metadataName}{enter}`);
+      cy.get("[data-cy=metadata-value-input]").type(`${metadataValue}{enter}`);
 
-      cy.contains("Save changes").click();
+      cy.get("button[data-cy=save-changes-button]").click();
 
       cy.wait("@metadata").then(({ request, response }) => {
         expect(request.method).to.eq("PUT");
         expect(response.statusCode).to.eq(200);
+
+        cy.finishedLoading();
+
+        cy.get("mat-select[data-cy=field-type-input]")
+          .first()
+          .should("contain.text", "string");
+        cy.get(
+          "[data-cy=metadata-edit-form] [data-cy=metadata-name-input]"
+        ).should("have.value", metadataName);
+        cy.get(
+          "[data-cy=metadata-edit-form] [data-cy=metadata-value-input]"
+        ).should("have.value", metadataValue);
       });
-
-      cy.wait(5000);
-
-      cy.get("mat-select[formControlName=fieldType]")
-        .first()
-        .should("contain.text", "string");
     });
   });
 
@@ -72,32 +79,27 @@ describe("Datasets", () => {
     it("should go to dataset details and remove a metadata entry", () => {
       cy.visit("/datasets");
 
-      cy.wait(5000);
+      cy.finishedLoading();
 
-      cy.get(".mat-row")
-        .contains("Cypress Dataset")
-        .click();
+      cy.get(".mat-row").contains("Cypress Dataset").click();
 
-      cy.wait(5000);
+      cy.finishedLoading();
       cy.contains("Edit").click();
 
-      cy.get("button.deleteButton")
-        .first()
-        .click();
+      cy.get("button.deleteButton").first().click();
 
-      cy.contains("Save changes").click();
-
+      cy.get("button[data-cy=save-changes-button]").click();
       cy.wait("@metadata").then(({ request, response }) => {
         expect(request.method).to.eq("PUT");
         expect(response.statusCode).to.eq(200);
-      });
 
-      cy.contains("View").click();
-      cy.wait(1000);
-      //cy.get("metadata-view").debug();
-      /*cy.get("metadata-view.ng-star-inserted")
-        .first()
-        .should("not.contain", "string");*/
+        cy.finishedLoading();
+
+        cy.get("[data-cy=metadata-edit-form]").should(
+          "not.contain",
+          metadataName
+        );
+      });
     });
   });
 });

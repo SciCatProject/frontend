@@ -1,13 +1,20 @@
 <div class="container">
   <form [formGroup]="metadataForm">
-    <div class="formRow" fxLayout="row" fxLayout.lt-lg="column" fxFlexAlign="center" fxLayoutAlign="flex-start end">
+    <div
+      class="formRow"
+      fxLayout="row"
+      fxLayout.lt-lg="column"
+      fxFlexAlign="center"
+      fxLayoutAlign="flex-start end"
+    >
       <!-- Type Column -->
-      <div class="formColumn" >
+      <div class="formColumn">
         <mat-form-field class="selectField">
           <mat-label>Type</mat-label>
           <mat-select formControlName="type" (selectionChange)="detectType()">
             <mat-option *ngFor="let type of typeValues" [value]="type">
-              {{type}}</mat-option>
+              {{ type }}</mat-option
+            >
           </mat-select>
           <mat-error *ngIf="fieldHasError('type')">
             Type is required
@@ -17,66 +24,93 @@
       <!-- Name Column -->
       <div class="formColumn">
         <mat-form-field class="inputField">
-          <input matInput autocomplete="off" autocorrect="off"
-            autocapitalize="off" spellcheck="false" formControlName="key"
-            placeholder="Name" (blur)="getUnits('key')" />
-          <mat-error *ngIf="fieldHasError('key')">
-            Name is required
-          </mat-error>
+          <input
+            matInput
+            autocomplete="off"
+            autocorrect="off"
+            data-cy="metadata-name"
+            autocapitalize="off"
+            spellcheck="false"
+            formControlName="key"
+            placeholder="Name"
+            (blur)="getUnits('key')"
+          />
+          <mat-error *ngIf="fieldHasError('key')"> Name is required </mat-error>
         </mat-form-field>
       </div>
       <!-- Value Column -->
       <div class="formColumn" *ngIf="getType() !== 'date'; else dateInput">
-          <mat-form-field class="inputField">
-            <input
-              matInput
-              autocomplete="off"
-              autocorrect="off"
-              autocapitalize="off"
-              spellcheck="false"
-              formControlName="value"
-              placeholder="Value"
-            />
-            <mat-error *ngIf="fieldHasError('value')">
-              {{getErrorMessage('value')}}
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <ng-template #dateInput>
-          <mat-form-field class="inputField">
-            <input matInput
-              formControlName="date"
-              placeholder="Value"
-              [ngxMatDatetimePicker]="picker"
-            />
-            <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
-            <ngx-mat-datetime-picker #picker [showSeconds]="true"></ngx-mat-datetime-picker>
-            <mat-error *ngIf="fieldHasError('date')">
-              {{getErrorMessage('date')}}
-            </mat-error>
-          </mat-form-field>
-        </ng-template>
+        <mat-form-field class="inputField">
+          <input
+            matInput
+            data-cy="metadata-value"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            formControlName="value"
+            placeholder="Value"
+          />
+          <mat-error *ngIf="fieldHasError('value')">
+            {{ getErrorMessage("value") }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <ng-template #dateInput>
+        <mat-form-field class="inputField">
+          <input
+            matInput
+            formControlName="date"
+            placeholder="Value"
+            [ngxMatDatetimePicker]="picker"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="$any(picker)"
+          ></mat-datepicker-toggle>
+          <ngx-mat-datetime-picker
+            #picker
+            [showSeconds]="true"
+          ></ngx-mat-datetime-picker>
+          <mat-error *ngIf="fieldHasError('date')">
+            {{ getErrorMessage("date") }}
+          </mat-error>
+        </mat-form-field>
+      </ng-template>
       <!-- Unit Column -->
       <div class="formColumn">
         <mat-form-field class="inputField">
-          <input matInput autocomplete="off" autocorrect="off"
-            autocapitalize="off" spellcheck="false" formControlName="unit"
-            placeholder="Unit" [matAutocomplete]="metadataUnits"
-            (focus)="getUnits('key')" />
+          <input
+            matInput
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            formControlName="unit"
+            placeholder="Unit"
+            [matAutocomplete]="metadataUnits"
+            (focus)="getUnits('key')"
+          />
           <mat-autocomplete #metadataUnits="matAutocomplete">
-            <mat-option *ngFor="let unit of filteredUnits$ | async"
-              [value]="unit">
-
+            <mat-option
+              *ngFor="let unit of filteredUnits$ | async"
+              [value]="unit"
+            >
               {{ unit }}
             </mat-option>
           </mat-autocomplete>
           <mat-error *ngIf="fieldHasError('unit')">
-            {{getErrorMessage('unit')}}
+            {{ getErrorMessage("unit") }}
           </mat-error>
         </mat-form-field>
       </div>
       <!-- Buttons Column -->
-      <div class="buttonColumn" fxLayout="row" fxFlexAlign="center" fxLayoutAlign="flex-end">
+      <div
+        class="buttonColumn"
+        fxLayout="row"
+        fxFlexAlign="center"
+        fxLayoutAlign="flex-end"
+      >
         <button
           mat-icon-button
           [disabled]="this.metadataForm.invalid"
@@ -84,6 +118,7 @@
           color="primary"
           title="Done"
           (click)="onSave()"
+          data-cy="save-metadata"
         >
           <mat-icon>done</mat-icon>
         </button>
@@ -93,7 +128,7 @@
           title="Cancel"
           (click)="onCancel()"
         >
-           <mat-icon>close</mat-icon>
+          <mat-icon>close</mat-icon>
         </button>
       </div>
     </div>
