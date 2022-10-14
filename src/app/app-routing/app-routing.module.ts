@@ -18,7 +18,11 @@ export const routes: Routes = [
       },
       {
         path: "login",
-        loadChildren: () => import("./lazy/login-routing/login.feature.module").then(m => m.LoginFeatureModule)
+        loadChildren: () => import("./lazy/login-routing/login.feature.module").then( (m) => m.LoginFeatureModule),
+      },
+      {
+        path: "auth-callback",
+        loadChildren: () => import("./lazy/auth-callback-routing/auth-callback.feature.module").then((m) => m.AuthCallbackFeatureModule),
       },
       {
         path: "",

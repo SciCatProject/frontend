@@ -13,6 +13,7 @@
         <div fxFlex="auto"></div>
       </div>
       <mat-card-content>
+        {{ oAuth2Endpoints }}
         <div *ngFor="let endpoint of oAuth2Endpoints">
           <button
             class="oauth-login-button"

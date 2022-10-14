@@ -57,7 +57,6 @@ export interface Column {
     MatCheckboxModule,
     MatIconModule,
     MatPaginatorModule,
-    MatProgressSpinnerModule,
     MatSortModule,
     MatProgressSpinnerModule,
     MatTableModule,

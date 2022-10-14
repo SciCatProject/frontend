@@ -20,6 +20,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { PrivacyDialogComponent } from "./privacy-dialog/privacy-dialog.component";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { AuthCallbackComponent } from "./auth-callback/auth-callback.component";
 
 @NgModule({
   imports: [
@@ -40,7 +41,12 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     SharedScicatFrontendModule,
     StoreModule.forFeature("users", userReducer),
   ],
-  declarations: [LoginComponent, UserSettingsComponent, PrivacyDialogComponent],
+  declarations: [
+    LoginComponent,
+    UserSettingsComponent,
+    PrivacyDialogComponent,
+    AuthCallbackComponent,
+  ],
   providers: [ADAuthService],
 })
 export class UsersModule {}
