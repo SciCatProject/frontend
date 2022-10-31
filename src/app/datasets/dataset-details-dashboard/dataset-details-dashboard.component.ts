@@ -27,7 +27,7 @@ import {
 } from "state-management/actions/datasets.actions";
 import {
   clearLogbookAction,
-  fetchLogbookAction,
+  //fetchLogbookAction,
   fetchDatasetLogbookAction,
 } from "state-management/actions/logbooks.actions";
 import {
