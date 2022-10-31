@@ -40,7 +40,7 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
       this.store.select(selectCurrentDataset).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
-          this.ownershipService.checkPermission(dataset, this.store, this.router);
+          this.ownershipService.checkDatasetAccess(dataset, this.store, this.router);
         }
       })
     );

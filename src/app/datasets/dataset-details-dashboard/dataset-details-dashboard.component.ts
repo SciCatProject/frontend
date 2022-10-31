@@ -28,6 +28,7 @@ import {
 import {
   clearLogbookAction,
   fetchLogbookAction,
+  fetchDatasetLogbookAction,
 } from "state-management/actions/logbooks.actions";
 import {
   clearCurrentProposalStateAction,
@@ -88,7 +89,7 @@ export class DatasetDetailsDashboardComponent
       loaded: false,
     },
     [TAB.datafiles]: { action: fetchOrigDatablocksAction, loaded: false },
-    [TAB.logbook]: { action: fetchLogbookAction, loaded: false },
+    [TAB.logbook]: { action: fetchDatasetLogbookAction, loaded: false },
     [TAB.attachments]: { action: fetchAttachmentsAction, loaded: false },
     [TAB.admin]: { action: fetchDatablocksAction, loaded: false },
   };
@@ -128,6 +129,8 @@ export class DatasetDetailsDashboardComponent
             .subscribe(([groups, isAdmin, isLoggedIn]) => {
               const isInOwnerGroup =
                 groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
+              const hasAccessToLogbook = 
+                isInOwnerGroup || this.dataset.accessGroups.some(g => groups.includes(g));
               this.navLinks = [
                 {
                   location: "./",
@@ -163,7 +166,8 @@ export class DatasetDetailsDashboardComponent
                   enabled:
                     this.appConfig.logbookEnabled &&
                     isLoggedIn &&
-                    isInOwnerGroup,
+                    hasAccessToLogbook,
+                    //isInOwnerGroup,
                 },
                 {
                   location: "./attachments",
@@ -211,6 +215,7 @@ export class DatasetDetailsDashboardComponent
   fetchDataForTab(tab: string) {
     if (tab in this.fetchDataActions) {
       let args: { [key: string]: any };
+      /*
       if (tab === TAB.logbook) {
         if (this.dataset && "proposalId" in this.dataset) {
           args = { name: this.dataset["proposalId"] };
@@ -220,6 +225,8 @@ export class DatasetDetailsDashboardComponent
       } else {
         args = { pid: this.dataset?.pid };
       }
+      */
+      args = { pid: this.dataset?.pid };
       // load related data for selected tab
       switch (tab) {
         case TAB.details:
