@@ -53,13 +53,11 @@ export class LogbooksDashboardComponent
     private ownershipService: OwnershipService
   ) { }
 
-  applyRouterState(name: string, filters: LogbookFilters) {
-    if (this.route.snapshot.url[0].path === "logbooks") {
-      console.log("Rerouting to Logbooks")
-      this.router.navigate(["/logbooks", name], {
-        queryParams: { args: JSON.stringify(filters) },
-      });
-    }
+  applyRouterState(pid: string, filters: LogbookFilters) {
+    console.log("Rerouting to Dataset Logbook");
+    this.router.navigate(["/datasets", pid, "logbook"], {
+      queryParams: { args: JSON.stringify(filters) },
+    });
   }
 
   onTextSearchChange(pid: string, query: string) {
