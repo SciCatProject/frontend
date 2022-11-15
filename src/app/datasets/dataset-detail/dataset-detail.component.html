@@ -12,10 +12,7 @@
         Jupyter Hub
       </a>
     </div>
-    <div
-      fxFlex="auto"
-      *ngIf="isPI()"
-    >
+    <div fxFlex="auto" *ngIf="isPI()">
       <mat-slide-toggle
         class="public-toggle"
         [checked]="dataset.isPublished"
@@ -25,126 +22,146 @@
       </mat-slide-toggle>
     </div>
   </div>
-  <div style="clear: both;"></div>
-  <div
-    fxLayout="row"
-    fxLayout.xs="column"
-    *ngIf="dataset"
-  >
+  <div style="clear: both"></div>
+  <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
     <div fxFlex="80%">
-      <mat-card>
+      <mat-card [formGroup]="form">
         <mat-card-header class="general-header">
-          <div
-            mat-card-avatar
-            class="section-icon"
-          >
+          <div mat-card-avatar class="section-icon">
             <mat-icon> description </mat-icon>
           </div>
           General Information
         </mat-card-header>
-
-        <table>
-          <tr *ngIf="dataset.datasetName as value">
-            <th>Name</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="dataset.description as value">
-            <th>Description</th>
-            <td><span [innerHTML]="value | linky"></span></td>
-          </tr>
-          <tr>
-            <th>PID</th>
-            <td>{{ dataset.pid }}</td>
-          </tr>
-          <tr *ngIf="dataset.type as value">
-            <th>Type</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="dataset.creationTime as value">
-            <th>Creation Time</th>
-            <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
-          </tr>
-          <tr class="keywords-row">
-            <th>Keywords</th>
-            <td *ngIf="!editEnabled">
-              <mat-chip-list #keywordChips>
-                <mat-chip
-                  *ngFor="let keyword of dataset.keywords"
-                  [removable]="editingAllowed"
-                  (removed)="onRemoveKeyword(keyword)"
-                  (click)="onClickKeyword(keyword)"
-                >
-                  {{ keyword }}
-                  <mat-icon
-                    *ngIf="editingAllowed"
-                    matChipRemove
-                  >cancel
-                  </mat-icon>
-                </mat-chip>
-                <mat-chip
-                  *ngIf="editingAllowed"
-                  class="add-keyword-chip"
-                  (click)="editEnabled = true"
-                >
-                  Add Keyword <mat-icon>add</mat-icon>
-                </mat-chip>
-              </mat-chip-list>
-            </td>
-            <td *ngIf="editEnabled">
-              <mat-form-field>
+        <mat-card-content>
+          <table>
+            <tr *ngIf="dataset.datasetName as value">
+              <th>Name</th>
+              <td *ngIf="!editEnabled">{{ value }}</td>
+              <td *ngIf="editEnabled && editingAllowed">
+                <mat-form-field class="full-width">
+                  <input
+                    matInput
+                    type="text"
+                    placeholder="Name"
+                    formControlName="datasetName"
+                  />
+                </mat-form-field>
+              </td>
+            </tr>
+            <tr *ngIf="dataset.description as value">
+              <th>Description</th>
+              <td *ngIf="!editEnabled">
+                <span [innerHTML]="value | linky"></span>
+              </td>
+              <td *ngIf="editEnabled && editingAllowed">
+                <mat-form-field class="full-width">
+                  <textarea
+                    matInput
+                    placeholder="Description"
+                    rows="5"
+                    formControlName="description"
+                  ></textarea>
+                </mat-form-field>
+              </td>
+            </tr>
+            <tr>
+              <th>PID</th>
+              <td>{{ dataset.pid }}</td>
+            </tr>
+            <tr *ngIf="dataset.type as value">
+              <th>Type</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="dataset.creationTime as value">
+              <th>Creation Time</th>
+              <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+            </tr>
+            <tr class="keywords-row">
+              <th>Keywords</th>
+              <td *ngIf="!editEnabled">
                 <mat-chip-list #keywordChips>
                   <mat-chip
                     *ngFor="let keyword of dataset.keywords"
-                    [removable]="true"
                     (removed)="onRemoveKeyword(keyword)"
                     (click)="onClickKeyword(keyword)"
                   >
                     {{ keyword }}
+                  </mat-chip>
+                </mat-chip-list>
+              </td>
+              <td *ngIf="editEnabled && editingAllowed">
+                <mat-form-field class="full-width">
+                  <mat-chip-list #keywordChips formArrayName="keywords">
+                    <mat-chip
+                      *ngFor="let keyword of keywords.value"
+                      [removable]="true"
+                      (removed)="onRemoveKeyword(keyword)"
+                      (click)="onClickKeyword(keyword)"
+                    >
+                      {{ keyword }}
+                      <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip>
+                    <input
+                      [matChipInputFor]="keywordChips"
+                      [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+                      [matChipInputAddOnBlur]="true"
+                      (matChipInputTokenEnd)="onAddKeyword($event)"
+                    />
+                  </mat-chip-list>
+                </mat-form-field>
+              </td>
+            </tr>
+            <tr *ngIf="dataset.sharedWith && dataset.sharedWith.length > 0">
+              <th>Shared With</th>
+              <td>
+                <mat-chip-list>
+                  <mat-chip
+                    *ngFor="let share of dataset.sharedWith"
+                    [removable]="true"
+                    (removed)="onRemoveShare(share)"
+                  >
+                    {{ share }}
                     <mat-icon matChipRemove>cancel</mat-icon>
                   </mat-chip>
-                  <input
-                    id="keywordInput"
-                    [matChipInputFor]="keywordChips"
-                    [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
-                    [matChipInputAddOnBlur]="true"
-                    (matChipInputTokenEnd)="onAddKeyword($event)"
-                  />
                 </mat-chip-list>
-              </mat-form-field>
-              <button
-                mat-raised-button
-                class="done-edit-button"
-                color="accent"
-                (click)="editEnabled = false"
-              >
-                Done
-              </button>
-            </td>
-          </tr>
-          <tr *ngIf="dataset.sharedWith && dataset.sharedWith.length > 0">
-            <th>Shared With</th>
-            <td>
-              <mat-chip-list>
-                <mat-chip
-                  *ngFor="let share of dataset.sharedWith"
-                  [removable]="true"
-                  (removed)="onRemoveShare(share)"
-                >
-                  {{ share }}
-                  <mat-icon matChipRemove>cancel</mat-icon>
-                </mat-chip>
-              </mat-chip-list>
-            </td>
-          </tr>
-        </table>
+              </td>
+            </tr>
+          </table>
+        </mat-card-content>
+        <mat-card-actions align="end" *ngIf="editingAllowed">
+          <button
+            mat-raised-button
+            class="done-edit-button"
+            color="primary"
+            (click)="onEditModeEnable()"
+            *ngIf="!editEnabled"
+          >
+            <mat-icon> edit </mat-icon> Edit
+          </button>
+          <button
+            *ngIf="editEnabled"
+            mat-raised-button
+            color="warn"
+            class="done-edit-button"
+            (click)="editEnabled = false"
+          >
+            Close
+          </button>
+          <button
+            *ngIf="editEnabled"
+            mat-raised-button
+            class="done-edit-button"
+            color="primary"
+            (click)="onSaveGeneralInformationChanges()"
+          >
+            <mat-icon> save </mat-icon> Save changes
+          </button>
+        </mat-card-actions>
       </mat-card>
 
       <mat-card>
         <mat-card-header class="creator-header">
-          <div
-            mat-card-avatar
-            class="section-icon"
-          >
+          <div mat-card-avatar class="section-icon">
             <mat-icon> person </mat-icon>
           </div>
           Creator Information
@@ -184,10 +201,7 @@
 
       <mat-card>
         <mat-card-header class="file-header">
-          <div
-            mat-card-avatar
-            class="section-icon"
-          >
+          <div mat-card-avatar class="section-icon">
             <mat-icon> folder </mat-icon>
           </div>
           File Information
@@ -211,10 +225,7 @@
 
       <mat-card>
         <mat-card-header class="related-header">
-          <div
-            mat-card-avatar
-            class="section-icon"
-          >
+          <div mat-card-avatar class="section-icon">
             <mat-icon> library_books </mat-icon>
           </div>
           Related Documents
@@ -227,9 +238,10 @@
               <a
                 *ngSwitchCase="true"
                 (click)="
-                editingAllowed ? onClickProposal(proposal.proposalId) : ''
-              "
-              >{{ proposal.title }}</a>
+                  editingAllowed ? onClickProposal(proposal.proposalId) : ''
+                "
+                >{{ proposal.title }}</a
+              >
               <span *ngSwitchDefault>{{ proposal.title }}</span>
             </td>
           </tr>
@@ -247,8 +259,8 @@
                 class="sample-edit"
                 (click)="openSampleEditDialog()"
                 *ngIf="
-                appConfig.editDatasetSampleEnabled && editingAllowed && isPI
-              "
+                  appConfig.editDatasetSampleEnabled && editingAllowed && isPI
+                "
               >
                 <mat-icon>edit</mat-icon>
               </span>
@@ -277,10 +289,12 @@
                 <span>
                   {{ technique.name }}
                 </span>
-                <span *ngIf="
-                  dataset.techniques.indexOf(technique) <
-                  dataset.techniques.length - 1
-                ">,
+                <span
+                  *ngIf="
+                    dataset.techniques.indexOf(technique) <
+                    dataset.techniques.length - 1
+                  "
+                  >,
                 </span>
               </div>
             </td>
@@ -294,7 +308,8 @@
                     {{ datasetPid }}
                   </a>
                 </span>
-                <span *ngIf="value.indexOf(datasetPid) < value.length - 1">,
+                <span *ngIf="value.indexOf(datasetPid) < value.length - 1"
+                  >,
                 </span>
               </div>
             </td>
@@ -304,10 +319,7 @@
 
       <mat-card *ngIf="dataset.type === 'derived'">
         <mat-card-header class="derived-header">
-          <div
-            mat-card-avatar
-            class="section-icon"
-          >
+          <div mat-card-avatar class="section-icon">
             <mat-icon> analytics </mat-icon>
           </div>
           Derived Data
@@ -331,10 +343,7 @@
 
       <mat-card>
         <mat-card-header class="scientific-header">
-          <div
-            mat-card-avatar
-            class="section-icon"
-          >
+          <div mat-card-avatar class="section-icon">
             <mat-icon> science </mat-icon>
           </div>
           Scientific Metadata
@@ -401,35 +410,23 @@
         </ng-template>
       </mat-card>
       <mat-card *ngIf="editingAllowed && appConfig.jsonMetadataEnabled">
-        <button
-          mat-stroked-button
-          (click)="show = !show"
-        >
+        <button mat-stroked-button (click)="show = !show">
           {{ show ? "Hide MetaData" : "Show Metadata" }}
         </button>
 
         <br />
 
         <div *ngIf="show">
-          <ngx-json-viewer
-            [json]="datasetWithout$ | async"
-            [expanded]="false"
-          >
+          <ngx-json-viewer [json]="datasetWithout$ | async" [expanded]="false">
           </ngx-json-viewer>
         </div>
       </mat-card>
     </div>
 
-    <div
-      fxFlex="30%"
-      *ngIf="attachments$ | async as attachments"
-    >
+    <div fxFlex="30%" *ngIf="attachments$ | async as attachments">
       <ng-container *ngFor="let da of attachments">
         <mat-card>
-          <img
-            mat-card-image
-            src="{{ da.thumbnail }}"
-          />
+          <img mat-card-image src="{{ da.thumbnail }}" />
           <p>{{ da.caption }}</p>
         </mat-card>
       </ng-container>
