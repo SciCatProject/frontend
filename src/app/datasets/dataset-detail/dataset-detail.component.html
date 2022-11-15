@@ -34,9 +34,9 @@
         </mat-card-header>
         <mat-card-content>
           <table>
-            <tr *ngIf="dataset.datasetName as value">
+            <tr>
               <th>Name</th>
-              <td *ngIf="!editEnabled">{{ value }}</td>
+              <td *ngIf="!editEnabled">{{ dataset.datasetName || "-" }}</td>
               <td *ngIf="editEnabled && editingAllowed">
                 <mat-form-field class="full-width">
                   <input
@@ -48,10 +48,10 @@
                 </mat-form-field>
               </td>
             </tr>
-            <tr *ngIf="dataset.description as value">
+            <tr>
               <th>Description</th>
               <td *ngIf="!editEnabled">
-                <span [innerHTML]="value | linky"></span>
+                <span [innerHTML]="(dataset.description || '-') | linky"></span>
               </td>
               <td *ngIf="editEnabled && editingAllowed">
                 <mat-form-field class="full-width">

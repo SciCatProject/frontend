@@ -144,9 +144,9 @@ export class DatasetDetailComponent
 
   onEditModeEnable() {
     this.form = this.fb.group({
-      datasetName: this.dataset.datasetName,
-      description: this.dataset.description,
-      keywords: this.fb.array(this.dataset.keywords),
+      datasetName: this.dataset.datasetName || "",
+      description: this.dataset.description || "",
+      keywords: this.fb.array(this.dataset.keywords || []),
     });
     this.editEnabled = true;
   }
@@ -217,13 +217,15 @@ export class DatasetDetailComponent
   onSaveGeneralInformationChanges() {
     const pid = this.dataset.pid;
 
-    const property = {
-      datasetName: this.form.value.datasetName,
-      description: this.form.value.description,
-      keywords: this.keywords.value,
-    };
+    if (pid) {
+      const property = {
+        datasetName: this.form.value.datasetName,
+        description: this.form.value.description,
+        keywords: this.keywords.value,
+      };
 
-    this.store.dispatch(updatePropertyAction({ pid, property }));
+      this.store.dispatch(updatePropertyAction({ pid, property }));
+    }
 
     this.editEnabled = false;
   }
