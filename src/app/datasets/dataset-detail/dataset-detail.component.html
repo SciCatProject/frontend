@@ -25,7 +25,7 @@
   <div style="clear: both"></div>
   <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
     <div fxFlex="80%">
-      <mat-card [formGroup]="form">
+      <mat-card [formGroup]="form" data-cy="general-info">
         <mat-card-header class="general-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> description </mat-icon>
@@ -134,6 +134,7 @@
             color="primary"
             (click)="onEditModeEnable()"
             *ngIf="!editEnabled"
+            data-cy="edit-general-information"
           >
             <mat-icon> edit </mat-icon> Edit
           </button>
@@ -150,6 +151,7 @@
             mat-raised-button
             color="primary"
             (click)="onSaveGeneralInformationChanges()"
+            data-cy="save-general-information"
           >
             <mat-icon> save </mat-icon> Save changes
           </button>
