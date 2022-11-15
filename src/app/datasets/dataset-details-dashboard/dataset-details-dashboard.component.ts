@@ -27,7 +27,6 @@ import {
 } from "state-management/actions/datasets.actions";
 import {
   clearLogbookAction,
-  //fetchLogbookAction,
   fetchDatasetLogbookAction,
 } from "state-management/actions/logbooks.actions";
 import {
@@ -167,7 +166,6 @@ export class DatasetDetailsDashboardComponent
                     this.appConfig.logbookEnabled &&
                     isLoggedIn &&
                     hasAccessToLogbook,
-                    //isInOwnerGroup,
                 },
                 {
                   location: "./attachments",
@@ -215,17 +213,6 @@ export class DatasetDetailsDashboardComponent
   fetchDataForTab(tab: string) {
     if (tab in this.fetchDataActions) {
       let args: { [key: string]: any };
-      /*
-      if (tab === TAB.logbook) {
-        if (this.dataset && "proposalId" in this.dataset) {
-          args = { name: this.dataset["proposalId"] };
-        } else {
-          return;
-        }
-      } else {
-        args = { pid: this.dataset?.pid };
-      }
-      */
       args = { pid: this.dataset?.pid };
       // load related data for selected tab
       switch (tab) {
