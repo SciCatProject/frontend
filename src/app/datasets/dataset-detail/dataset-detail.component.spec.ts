@@ -38,7 +38,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MockActivatedRoute } from "shared/MockStubs";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { AppConfigService } from "app-config.service";
-import { FormBuilder } from "@angular/forms";
 
 describe("DatasetDetailComponent", () => {
   let component: DatasetDetailComponent;
