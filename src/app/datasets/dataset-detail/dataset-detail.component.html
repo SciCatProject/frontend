@@ -131,7 +131,6 @@
         <mat-card-actions align="end" *ngIf="editingAllowed">
           <button
             mat-raised-button
-            class="done-edit-button"
             color="primary"
             (click)="onEditModeEnable()"
             *ngIf="!editEnabled"
@@ -142,7 +141,6 @@
             *ngIf="editEnabled"
             mat-raised-button
             color="warn"
-            class="done-edit-button"
             (click)="editEnabled = false"
           >
             Close
@@ -150,7 +148,6 @@
           <button
             *ngIf="editEnabled"
             mat-raised-button
-            class="done-edit-button"
             color="primary"
             (click)="onSaveGeneralInformationChanges()"
           >
