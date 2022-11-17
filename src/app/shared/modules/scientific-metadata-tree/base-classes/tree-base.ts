@@ -53,7 +53,7 @@ export class TreeBaseComponent {
       // suport both {value: any, unit: string} and {v: any , u: string}
       if (value?.unit || value?.unit === "" || value?.u || value?.u === "") {
         node.unit = value.unit || value.u || undefined;
-        node.value = value.value || value.v;
+        node.value = value.value ?? value.v;
       } else {
         node.value = value;
       }
