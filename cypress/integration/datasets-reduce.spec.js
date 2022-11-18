@@ -2,8 +2,6 @@
 
 describe("Datasets", () => {
   beforeEach(() => {
-    cy.wait(5000);
-
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
     cy.intercept("PUT", "/api/v3/Datasets/**/*").as("metadata");
@@ -24,11 +22,9 @@ describe("Datasets", () => {
 
       cy.visit("/datasets");
 
-      cy.wait(5000);
+      cy.wait(1000);
 
-      cy.get(".mat-row")
-        .contains("Cypress Dataset")
-        .click();
+      cy.get(".mat-row").contains("Cypress Dataset").click();
 
       cy.wait("@fetch");
 
@@ -38,14 +34,11 @@ describe("Datasets", () => {
       cy.contains("Analyze").click();
       cy.contains("Next").click();
 
-
-      cy.get("mat-select[formControlName=scriptForm]")
-        .first()
-        .click();
+      cy.get("mat-select[formControlName=scriptForm]").first().click();
 
       cy.get(".mat-option-text")
         .contains("Plot")
-        .then(option => {
+        .then((option) => {
           option[0].click();
         });
 
@@ -53,6 +46,4 @@ describe("Datasets", () => {
       cy.get("#runAction").click();
     });
   });
-
-
 });

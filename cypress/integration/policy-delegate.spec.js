@@ -2,8 +2,6 @@
 
 describe("Policies", () => {
   beforeEach(() => {
-    cy.wait(5000);
-
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
     cy.intercept("POST", "/api/v3/Policies/**/*").as("update");
@@ -24,23 +22,21 @@ describe("Policies", () => {
 
       cy.visit("/policies");
 
-      cy.wait(5000);
+      cy.wait(1000);
 
       cy.contains("Editable").click();
-      cy.wait(3000);
+      cy.wait(1000);
 
       cy.contains("Manager").click();
 
       cy.wait(1000);
 
       //get second instance
-      cy.get(".mat-checkbox")
-        .eq(1)
-        .click();
+      cy.get(".mat-checkbox").eq(1).click();
 
       cy.get("[data-cy=editSelection]").click({ force: true });
       cy.get("[data-cy=managerInput]").click({ force: true });
-      cy.wait(3000);
+      cy.wait(1000);
       cy.get("[data-cy=managerInput]").type("cypress@manager.com{enter}");
       cy.get("[data-cy=managerChipList]")
         .children()
@@ -54,7 +50,7 @@ describe("Policies", () => {
       });
 
       cy.wait("@fetch");
-      cy.wait(3000);
+      cy.wait(1000);
       cy.get("mat-cell.mat-column-manager")
         .first()
         .should("contain.text", "cypress@manager.com");
