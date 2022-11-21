@@ -220,4 +220,35 @@ describe("LoginComponent", () => {
       // expect(component.document.location.href).toEqual(`${appConfig.lbBaseURL}/auth/foo`);
     });
   });
+
+  describe("should contain service account hint", () => {
+    beforeEach(() => {
+      fixture = TestBed.createComponent(LoginComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+    it("should contain service account hint", () => {
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.innerHTML).toContain("Service account username");
+      expect(compiled.innerHTML).toContain("Service account password");
+    });
+  });
+
+
+  describe("should contain facility hint", () => {
+    let externalAuthEndpoint: string;
+    beforeEach(() => {
+      fixture = TestBed.createComponent(LoginComponent);
+      component = fixture.componentInstance;
+      externalAuthEndpoint = "some/ext";
+      component.appConfig.externalAuthEndpoint = externalAuthEndpoint;
+      fixture.detectChanges();
+    });
+    it("should contain facility hint", () => {
+      const compiled = fixture.debugElement.nativeElement;
+      expect(compiled.innerHTML).toContain("not-ESS account username");
+      expect(compiled.innerHTML).toContain("not-ESS account password");
+    });
+  });
+
 });

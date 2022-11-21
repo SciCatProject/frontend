@@ -42,6 +42,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   facility: string | null = null;
   loginFormEnabled = false;
   oAuth2Endpoints: OAuth2Endpoint[] = [];
+  loginFormPrefix: string;
 
   returnUrl: string;
   hide = true;
@@ -85,6 +86,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.facility = this.appConfig.facility;
+    this.loginFormPrefix = this.appConfig.externalAuthEndpoint ? this.facility: "Service";
     this.loginFormEnabled = this.appConfig.loginFormEnabled;
     this.oAuth2Endpoints = this.appConfig.oAuth2Endpoints;
 

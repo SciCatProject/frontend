@@ -36,13 +36,13 @@
           (ngSubmit)="onLogin()"
           *ngIf="loginFormEnabled"
         >
-          <mat-form-field hintLabel="{{ facility }} account username">
+          <mat-form-field hintLabel="{{ loginFormPrefix }} account username">
             <mat-label> <b> Username</b> </mat-label>
             <span matPrefix> <mat-icon>person</mat-icon> &nbsp; </span>
             <input matInput id="usernameInput" formControlName="username" />
           </mat-form-field>
 
-          <mat-form-field hintLabel="{{ facility }} account password">
+          <mat-form-field hintLabel="{{ loginFormPrefix }} account password">
             <mat-label> <b> Password</b> </mat-label>
             <span matPrefix> <mat-icon>vpn_key</mat-icon> &nbsp; </span>
             <input
