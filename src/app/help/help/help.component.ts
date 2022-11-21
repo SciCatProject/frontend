@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { AppConfigService } from "app-config.service";
+import { AppConfigService, HelpMessages } from "app-config.service";
 
 @Component({
   selector: "help",
@@ -12,11 +12,16 @@ export class HelpComponent implements OnInit {
   ingestManual: string | null = null;
   gettingStarted: string | null = null;
   shoppingCartEnabled = false;
+  helpMessages: HelpMessages;
   constructor(public appConfigService: AppConfigService) {}
 
   ngOnInit() {
     this.facility = this.appConfig.facility;
     this.ingestManual = this.appConfig.ingestManual;
+    this.helpMessages = new HelpMessages(
+      this.appConfig.helpMessages?.gettingStarted, 
+      this.appConfig.helpMessages?.ingestManual
+      );
     this.gettingStarted = this.appConfig.gettingStarted;
     this.shoppingCartEnabled = this.appConfig.shoppingCartEnabled;
   }
