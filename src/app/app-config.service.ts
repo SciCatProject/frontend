@@ -14,6 +14,20 @@ export class RetrieveDestinations {
   option = "";
 }
 
+export class HelpMessages {
+  ingestManual: string;
+  gettingStarted: string;
+
+  constructor(
+    gettingStarted = "gives a brief description on how to get started using the data catalog.",
+    ingestManual = `provides detailed information on how to make your data available to the
+    catalog as well as archiving and retrieval of datasets.`
+  ) {
+    this.gettingStarted = gettingStarted;
+    this.ingestManual = ingestManual;
+  }
+}
+
 export interface AppConfig {
   accessTokenPrefix: string;
   addDatasetEnabled: boolean;
@@ -58,6 +72,7 @@ export interface AppConfig {
   fileserverBaseURL: string;
   fileserverButtonLabel: string | undefined;
   datasetDetailsShowMissingProposalId: boolean;
+  helpMessages?: HelpMessages;
 }
 
 @Injectable()
