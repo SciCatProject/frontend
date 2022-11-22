@@ -10,8 +10,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
   mongodb:
     image: "bitnami/mongodb:latest"
-    ports:
-      - "27017:27017"
     volumes:
       - "mongodb_data:/bitnami"
   openldap:
