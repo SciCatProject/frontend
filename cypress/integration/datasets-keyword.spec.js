@@ -16,7 +16,39 @@ describe("Datasets", () => {
     cy.removeDatasets();
   });
 
-  describe("Add keyword", () => {
+  describe("Edit datasets", () => {
+    it("should be able to edit dataset details", () => {
+      const newName = "Test changing dataset name";
+      const newDescription = "Test changing dataset description";
+      cy.createDataset("raw");
+
+      cy.visit("/datasets");
+
+      cy.get(".mat-row").contains("Cypress Dataset").click();
+
+      cy.wait("@fetch");
+
+      cy.get('[data-cy="edit-general-information"]').click();
+
+      cy.get("input[formcontrolname='datasetName']").clear().type(newName);
+      cy.get("textarea[formcontrolname='description']")
+        .clear()
+        .type(newDescription);
+
+      cy.get('[data-cy="save-general-information"]').click();
+
+      cy.wait("@keyword").then(({ request, response }) => {
+        expect(request.method).to.eq("PUT");
+        expect(response.statusCode).to.eq(200);
+      });
+
+      cy.get("[data-cy='general-info']")
+        .children()
+        .should("contain.text", newName);
+      cy.get("[data-cy='general-info']")
+        .children()
+        .should("contain.text", newDescription);
+    });
     it("should go to dataset details and add a keyword", () => {
       cy.createDataset("raw");
 
@@ -28,34 +60,30 @@ describe("Datasets", () => {
 
       cy.wait("@fetch");
 
-      cy.get(".add-keyword-chip").click();
+      cy.get('[data-cy="edit-general-information"]').click();
 
-      cy.get("#keywordInput").type("cypresskey{enter}");
+      cy.get("input.mat-chip-input").type("cypresskey{enter}");
+
+      cy.get('[data-cy="save-general-information"]').click();
 
       cy.wait("@keyword").then(({ request, response }) => {
         expect(request.method).to.eq("PUT");
         expect(response.statusCode).to.eq(200);
       });
 
-      cy.wait(1000);
-
-      cy.get(".done-edit-button").click({ force: true });
-
       cy.get(".mat-chip-list").children().should("contain.text", "cypresskey");
     });
-  });
 
-  describe("Remove keyword", () => {
     it("should go to dataset details and remove the added keyword", () => {
       cy.visit("/datasets");
 
-      cy.wait(1000);
-
       cy.get(".mat-row").contains("Cypress Dataset").click();
 
-      cy.wait(1000);
+      cy.get('[data-cy="edit-general-information"]').click();
 
       cy.contains("cypresskey").children(".mat-chip-remove").click();
+
+      cy.get('[data-cy="save-general-information"]').click();
 
       cy.wait("@keyword").then(({ request, response }) => {
         expect(request.method).to.eq("PUT");

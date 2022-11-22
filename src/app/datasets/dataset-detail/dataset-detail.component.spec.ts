@@ -2,7 +2,12 @@ import { DatafilesComponent } from "../../datasets/datafiles/datafiles.component
 import { DatasetDetailComponent } from "./dataset-detail.component";
 import { LinkyPipe } from "ngx-linky";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { ComponentFixture, inject, TestBed, waitForAsync } from "@angular/core/testing";
+import {
+  ComponentFixture,
+  inject,
+  TestBed,
+  waitForAsync,
+} from "@angular/core/testing";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatTableModule } from "@angular/material/table";
 import { MatChipInputEvent, MatChipsModule } from "@angular/material/chips";
@@ -48,43 +53,41 @@ describe("DatasetDetailComponent", () => {
 
   let store: MockStore;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        imports: [
-          BrowserAnimationsModule,
-          MatButtonModule,
-          MatCardModule,
-          MatChipsModule,
-          MatFormFieldModule,
-          MatIconModule,
-          MatInputModule,
-          MatTableModule,
-          MatTabsModule,
-          NgxJsonViewerModule,
-          SharedScicatFrontendModule,
-          StoreModule.forRoot({}),
-        ],
-        declarations: [DatasetDetailComponent, DatafilesComponent, LinkyPipe],
-      });
-      TestBed.overrideComponent(DatasetDetailComponent, {
-        set: {
-          providers: [
-            { provide: Router, useValue: router },
-            {
-              provide: AppConfigService,
-              useValue: {
-                getConfig,
-              },
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [
+        BrowserAnimationsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatChipsModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatTableModule,
+        MatTabsModule,
+        NgxJsonViewerModule,
+        SharedScicatFrontendModule,
+        StoreModule.forRoot({}),
+      ],
+      declarations: [DatasetDetailComponent, DatafilesComponent, LinkyPipe],
+    });
+    TestBed.overrideComponent(DatasetDetailComponent, {
+      set: {
+        providers: [
+          { provide: Router, useValue: router },
+          {
+            provide: AppConfigService,
+            useValue: {
+              getConfig,
             },
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+          },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+        ],
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetDetailComponent);
@@ -124,46 +127,65 @@ describe("DatasetDetailComponent", () => {
 
   describe("#onAddKeyword()", () => {
     it("should add property keywords if it does not exist already", () => {
-      const dispatchSpy = spyOn(store, "dispatch");
       const event = {
+        chipInput: {
+          inputElement: {
+            value: "test",
+          },
+        },
         value: "test",
       };
       const pid = "testPid";
       component.dataset = new Dataset();
       component.dataset.pid = pid;
+      component.onEditModeEnable();
       component.onAddKeyword(event as MatChipInputEvent);
 
-      expect(component.dataset.keywords).toBeTruthy();
+      expect(component.keywords).toBeTruthy();
+      expect(component.keywords.length).toBe(1);
+      expect(component.form.value.keywords.length).toBe(1);
     });
 
     it("should do nothing if keyword already exists", () => {
-      const dispatchSpy = spyOn(store, "dispatch");
       const event = {
+        chipInput: {
+          inputElement: {
+            value: "test",
+          },
+        },
         value: "test",
       };
       component.dataset = new Dataset();
       component.dataset.keywords = ["test"];
+      component.onEditModeEnable();
+      expect(component.keywords.value.length).toBe(1);
+      expect(component.form.value.keywords.length).toBe(1);
       component.onAddKeyword(event as MatChipInputEvent);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(0);
+      expect(component.keywords.value.length).toBe(1);
+      expect(component.form.value.keywords.length).toBe(1);
     });
 
-    it("should dispatch an updatePropertyAction if the keyword does not exist", () => {
-      const dispatchSpy = spyOn(store, "dispatch");
+    it("should add a keyword if the keyword does not exist", () => {
       const event = {
+        chipInput: {
+          inputElement: {
+            value: "test",
+          },
+        },
         value: "test",
       };
       const pid = "testPid";
       component.dataset = new Dataset();
       component.dataset.pid = pid;
       component.dataset.keywords = [];
-      const property = { keywords: ["test"] };
+      component.onEditModeEnable();
+      expect(component.keywords.value.length).toBe(0);
+      expect(component.form.value.keywords.length).toBe(0);
       component.onAddKeyword(event as MatChipInputEvent);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        updatePropertyAction({ pid, property })
-      );
+      expect(component.keywords.value.length).toBe(1);
+      expect(component.form.value.keywords.length).toBe(1);
     });
   });
 
@@ -180,6 +202,23 @@ describe("DatasetDetailComponent", () => {
     });
 
     it("should dispatch an updatePropertyAction if the keyword does exist", () => {
+      const keyword = "test";
+      const pid = "testPid";
+      component.dataset = new Dataset();
+      component.dataset.pid = pid;
+      component.dataset.keywords = [keyword];
+      component.onEditModeEnable();
+      expect(component.keywords.value.length).toBe(1);
+      expect(component.form.value.keywords.length).toBe(1);
+      component.onRemoveKeyword(keyword);
+
+      expect(component.keywords.value.length).toBe(0);
+      expect(component.form.value.keywords.length).toBe(0);
+    });
+  });
+
+  describe("#onSaveGeneralInformationChanges()", () => {
+    it("should dispatch an updatePropertyAction", () => {
       const dispatchSpy = spyOn(store, "dispatch");
 
       const keyword = "test";
@@ -187,8 +226,18 @@ describe("DatasetDetailComponent", () => {
       component.dataset = new Dataset();
       component.dataset.pid = pid;
       component.dataset.keywords = [keyword];
-      const property = { keywords: [] };
-      component.onRemoveKeyword(keyword);
+      component.dataset.datasetName = "Test dataset name";
+      component.dataset.description = "Test dataset description";
+      component.onEditModeEnable();
+      expect(component.keywords.value.length).toBe(1);
+      expect(component.form.value.keywords.length).toBe(1);
+      component.onSaveGeneralInformationChanges();
+
+      const property = {
+        keywords: component.dataset.keywords,
+        datasetName: component.dataset.datasetName,
+        description: component.dataset.description,
+      };
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(

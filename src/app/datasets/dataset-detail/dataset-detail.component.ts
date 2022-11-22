@@ -32,6 +32,13 @@ import { EditableComponent } from "app-routing/pending-changes.guard";
 import { AppConfigService } from "app-config.service";
 import { selectCurrentSample } from "state-management/selectors/samples.selectors";
 import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 /**
  * Component to show details for a data set, using the
  * form component
@@ -47,6 +54,7 @@ export class DatasetDetailComponent
   implements OnInit, OnDestroy, EditableComponent {
   private subscriptions: Subscription[] = [];
   private _hasUnsavedChanges = false;
+  form: FormGroup;
   userProfile$ = this.store.select(selectProfile);
   isAdmin$ = this.store.select(selectIsAdmin);
   accessGroups$: Observable<string[]> = this.userProfile$.pipe(
@@ -73,10 +81,17 @@ export class DatasetDetailComponent
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
     private store: Store,
-    private router: Router
+    private router: Router,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit() {
+    this.form = this.fb.group({
+      datasetName: new FormControl("", [Validators.required]),
+      description: new FormControl("", [Validators.required]),
+      keywords: this.fb.array([]),
+    });
+
     this.subscriptions.push(
       this.store.select(selectCurrentDataset).subscribe((dataset) => {
         this.dataset = dataset;
@@ -127,6 +142,15 @@ export class DatasetDetailComponent
     );
   }
 
+  onEditModeEnable() {
+    this.form = this.fb.group({
+      datasetName: this.dataset.datasetName || "",
+      description: this.dataset.description || "",
+      keywords: this.fb.array(this.dataset.keywords || []),
+    });
+    this.editEnabled = true;
+  }
+
   hasUnsavedChanges() {
     return this._hasUnsavedChanges;
   }
@@ -162,40 +186,48 @@ export class DatasetDetailComponent
     this.router.navigateByUrl("/datasets");
   }
 
+  get keywords(): FormArray {
+    return this.form.controls.keywords as FormArray;
+  }
+
   onAddKeyword(event: MatChipInputEvent): void {
-    const input = event.input;
+    const input = event.chipInput.inputElement;
     const value = event.value;
 
     if ((value || "").trim() && this.dataset) {
       const keyword = value.trim().toLowerCase();
-      if (!this.dataset.keywords) {
-        const keywords: Array<string> = [];
-        this.dataset.keywords = keywords;
-      }
-      if (this.dataset.keywords.indexOf(keyword) === -1) {
-        const pid = this.dataset.pid;
-        const keywords = [...this.dataset.keywords, keyword];
-        const property = { keywords };
-        this.store.dispatch(updatePropertyAction({ pid, property }));
-      }
-    }
+      if (this.keywords.value.indexOf(keyword) === -1) {
+        this.keywords.push(this.fb.control(keyword));
 
-    if (input) {
-      input.value = "";
+        // Reset the input value
+        if (input) {
+          input.value = "";
+        }
+      }
     }
   }
 
   onRemoveKeyword(keyword: string): void {
-    if (this.dataset) {
-      const index = this.dataset.keywords.indexOf(keyword);
-      if (index >= 0) {
-        const pid = this.dataset.pid;
-        const keywords = [...this.dataset.keywords];
-        keywords.splice(index, 1);
-        const property = { keywords };
-        this.store.dispatch(updatePropertyAction({ pid, property }));
-      }
+    const index = this.keywords.value.indexOf(keyword);
+    if (index >= 0) {
+      this.keywords.removeAt(index);
     }
+  }
+
+  onSaveGeneralInformationChanges() {
+    const pid = this.dataset.pid;
+
+    if (pid) {
+      const property = {
+        datasetName: this.form.value.datasetName,
+        description: this.form.value.description,
+        keywords: this.keywords.value,
+      };
+
+      this.store.dispatch(updatePropertyAction({ pid, property }));
+    }
+
+    this.editEnabled = false;
   }
 
   onRemoveShare(share: string): void {

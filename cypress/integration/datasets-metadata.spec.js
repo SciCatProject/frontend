@@ -39,7 +39,7 @@ describe("Datasets", () => {
 
       cy.scrollTo("bottom");
 
-      cy.contains("Edit").click();
+      cy.get('[role="tab"]').contains("Edit").click();
 
       cy.get('[data-cy="add-new-row"]').click();
 
@@ -86,7 +86,7 @@ describe("Datasets", () => {
       cy.get(".mat-row").contains("Cypress Dataset").click();
 
       cy.finishedLoading();
-      cy.contains("Edit").click();
+      cy.get('[role="tab"]').contains("Edit").click();
 
       cy.get("button.deleteButton").first().click();
 
