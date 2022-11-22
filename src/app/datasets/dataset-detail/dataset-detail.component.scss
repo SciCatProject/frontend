@@ -24,7 +24,7 @@ mat-card {
 
     td {
       width: 100%;
-      padding: 0.5rem;
+      padding: 0.5rem 0;
 
       .sample-edit {
         padding-left: 0.5rem;
@@ -39,17 +39,13 @@ mat-card {
       }
     }
 
+    .full-width {
+      width: 100%;
+    }
+
     .keywords-row {
       .add-keyword-chip:hover {
         cursor: pointer;
-      }
-
-      mat-form-field {
-        width: 92%;
-      }
-
-      .done-edit-button {
-        margin-left: 1rem;
       }
     }
   }
