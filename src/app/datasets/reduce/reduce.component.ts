@@ -108,7 +108,7 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
       this.store.select(selectCurrentDataset).subscribe((dataset) => {
         this.dataset = dataset;
         if (dataset) {
-          this.ownershipService.checkPermission(dataset, this.store, this.router);
+          this.ownershipService.checkDatasetAccess(dataset, this.store, this.router);
         }
       })
     );

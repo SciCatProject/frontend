@@ -10,7 +10,7 @@ import { Dataset } from "shared/sdk";
 import { combineLatest, Subscription } from "rxjs";
 import { selectLogbooksDashboardPageViewModel } from "state-management/selectors/logbooks.selectors";
 import {
-  fetchLogbookAction,
+  fetchDatasetLogbookAction,
   prefillFiltersAction,
   setTextFilterAction,
   setDisplayFiltersAction,
@@ -53,52 +53,52 @@ export class LogbooksDashboardComponent
     private ownershipService: OwnershipService
   ) { }
 
-  applyRouterState(name: string, filters: LogbookFilters) {
-    if (this.route.snapshot.url[0].path === "logbooks") {
-      this.router.navigate(["/logbooks", name], {
-        queryParams: { args: JSON.stringify(filters) },
-      });
-    }
+  applyRouterState(pid: string, filters: LogbookFilters) {
+    console.log("Rerouting to Dataset Logbook");
+    this.router.navigate(["/datasets", pid, "logbook"], {
+      queryParams: { args: JSON.stringify(filters) },
+    });
   }
 
-  onTextSearchChange(name: string, query: string) {
+  onTextSearchChange(pid: string, query: string) {
     this.store.dispatch(setTextFilterAction({ textSearch: query }));
-    this.store.dispatch(fetchLogbookAction({ name }));
+    this.store.dispatch(fetchDatasetLogbookAction({ pid }));
   }
 
-  onFilterSelect(name: string, filters: LogbookFilters) {
+  onFilterSelect(pid: string, filters: LogbookFilters) {
     const { showBotMessages, showImages, showUserMessages } = filters;
     this.store.dispatch(
       setDisplayFiltersAction({ showBotMessages, showImages, showUserMessages })
     );
-    this.store.dispatch(fetchLogbookAction({ name }));
-    this.applyRouterState(name, filters);
+    this.store.dispatch(fetchDatasetLogbookAction({ pid }));
+    this.applyRouterState(pid, filters);
   }
 
-  onPageChange(name: string, event: PageChangeEvent) {
+  onPageChange(pid: string, event: PageChangeEvent) {
     this.store.dispatch(
       changePageAction({ page: event.pageIndex, limit: event.pageSize })
     );
-    this.store.dispatch(fetchLogbookAction({ name }));
+    this.store.dispatch(fetchDatasetLogbookAction({ pid }));
   }
 
-  onSortChange(name: string, event: SortChangeEvent) {
+  onSortChange(pid: string, event: SortChangeEvent) {
     const { active: column, direction } = event;
     this.store.dispatch(sortByColumnAction({ column, direction }));
-    this.store.dispatch(fetchLogbookAction({ name }));
+    this.store.dispatch(fetchDatasetLogbookAction({ pid }));
   }
 
   ngOnInit() {
+  
     this.subscriptions.push(
       combineLatest([this.route.params, this.vm$])
         .pipe(
           map(([params, vm]) => [params, vm.filters]),
           distinctUntilChanged(deepEqual)
         )
-        .subscribe(([{ name }, filters]) => {
-          if (name) {
-            this.store.dispatch(fetchLogbookAction({ name }));
-            this.applyRouterState(name, filters as LogbookFilters);
+        .subscribe(([{ pid }, filters]) => {
+          if (pid) {
+            this.store.dispatch(fetchDatasetLogbookAction({ pid }));
+            this.applyRouterState(pid, filters as LogbookFilters);
           }
         })
     );
@@ -106,7 +106,7 @@ export class LogbooksDashboardComponent
       this.store.select(selectCurrentDataset).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
-          this.ownershipService.checkPermission(dataset, this.store, this.router);
+          this.ownershipService.checkDatasetAccess(dataset, this.store, this.router);
         }
       })
     );

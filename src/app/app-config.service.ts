@@ -57,6 +57,7 @@ export interface AppConfig {
   tableSciDataEnabled: boolean;
   fileserverBaseURL: string;
   fileserverButtonLabel: string | undefined;
+  datasetDetailsShowMissingProposalId: boolean;
 }
 
 @Injectable()
