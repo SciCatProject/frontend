@@ -30,8 +30,8 @@ services:
       - mongodb
   backend:
     image: "ghcr.io/scicatproject/backend-next:latest"
-    environment:
-      - SCICHAT_URL
+    volumes:
+      - "./.env.backend-next:/home/node/app/.env"
     depends_on:
       - mongodb
       - scichat-loopback
