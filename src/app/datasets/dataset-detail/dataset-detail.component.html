@@ -233,6 +233,10 @@
               <span *ngSwitchDefault>{{ proposal.title }}</span>
             </td>
           </tr>
+          <tr *ngIf="dataset['proposalId'] && !proposal && appConfig.datasetDetailsShowMissingProposalId">
+            <th>Proposal Id</th>
+            <td>{{ dataset['proposalId'] }}</td>
+          </tr>
           <tr *ngIf="dataset['sampleId'] && sample">
             <th>Sample</th>
             <td [ngSwitch]="editingAllowed">

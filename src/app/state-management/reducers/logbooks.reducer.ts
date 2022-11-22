@@ -103,7 +103,7 @@ export const logbooksReducer = (
   action: Action
 ) => {
   if (action.type.indexOf("[Logbook]") !== -1) {
-    console.log("Action came in! " + action.type);
+    console.log("Logbook reducer Action came in! " + action.type);
   }
   return reducer(state, action);
 };

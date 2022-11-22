@@ -49,6 +49,24 @@ export class LogbookEffects {
     );
   });
 
+  fetchDatasetLogbook$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchDatasetLogbookAction),
+      concatLatestFrom(() => this.filters$),
+      mergeMap(([{ pid }, filters]) =>
+        this.logbookApi
+          .findDatasetLogbook(encodeURIComponent(pid), JSON.stringify(filters))
+          .pipe(
+            timeout(3000),
+            mergeMap((logbook) => [
+              fromActions.fetchLogbookCompleteAction({ logbook })
+            ]),
+            catchError(() => of(fromActions.fetchDatasetLogbookFailedAction()))
+          )
+      )
+    );
+  });
+
   fetchCount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),

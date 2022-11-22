@@ -119,7 +119,8 @@ const appConfig: AppConfig = {
   shoppingCartOnHeader: true,
   tableSciDataEnabled: true,
   fileserverBaseURL: "",
-  fileserverButtonLabel: ""
+  fileserverButtonLabel: "",
+  datasetDetailsShowMissingProposalId: true
 };
 
 describe("AppConfigService", () => {

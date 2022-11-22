@@ -23,6 +23,18 @@ export const fetchLogbookFailedAction = createAction(
   "[Logbook] Fetch Logbook Failed"
 );
 
+export const fetchDatasetLogbookAction = createAction(
+  "[Logbook] Fetch Dataset Logbook",
+  props<{ pid: string }>()
+);
+export const fetchDatasetLogbookCompleteAction = createAction(
+  "[Logbook] Fetch Dataset Logbook Complete",
+  props<{ logbook: Logbook }>()
+);
+export const fetchDatasetLogbookFailedAction = createAction(
+  "[Logbook] Fetch Dataset Logbook Failed"
+);
+
 export const clearLogbookAction = createAction("[Logbook] Clear Logbook");
 
 export const fetchCountAction = createAction(

@@ -12,12 +12,12 @@ import { MockStore, MockActivatedRoute } from "shared/MockStubs";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   setTextFilterAction,
-  fetchLogbookAction,
+  fetchDatasetLogbookAction,
   setDisplayFiltersAction,
   changePageAction,
   sortByColumnAction,
 } from "state-management/actions/logbooks.actions";
-import { Logbook, LogbookInterface } from "shared/sdk";
+import { RawDataset, RawDatasetInterface, Logbook, LogbookInterface } from "shared/sdk";
 import { LogbookFilters } from "state-management/models";
 import { RouterTestingModule } from "@angular/router/testing";
 
@@ -44,11 +44,25 @@ describe("DashboardComponent", () => {
   let dispatchSpy;
 
   const logbookData: LogbookInterface = {
-    name: "tesName",
+    name: "testLogbook",
     roomId: "testId",
     messages: [{ message: "test1" }, { message: "test2" }],
   };
   const logbook = new Logbook(logbookData);
+
+  const rawDatasetData: RawDatasetInterface = {
+    pid: "67ac46e4-5e87-11ed-9634-fba3f42127ef",
+    ownerGroup: "testLogbook",
+    proposalId: "testLogbook",
+    principalInvestigator: "somebody",
+    creationLocation: "somewhere",
+    owner: "somebody else",
+    contactEmail: "somebody@somewhere.here",
+    sourceFolder: "some/folders/on/some/server",
+    creationTime: undefined,
+    type: "raw"
+  };
+  const dataset = new RawDataset(rawDatasetData);
 
   beforeEach(
     waitForAsync(() => {
@@ -108,10 +122,10 @@ describe("DashboardComponent", () => {
         skip: 0,
         limit: 25,
       };
-      component.applyRouterState(logbook.name, filters);
+      component.applyRouterState(dataset.pid, filters);
 
       expect(navigateSpy).toHaveBeenCalledTimes(1);
-      expect(navigateSpy).toHaveBeenCalledWith(["/logbooks", logbook.name], {
+      expect(navigateSpy).toHaveBeenCalledWith(["/datasets", dataset.pid, "logbook"], {
         queryParams: { args: JSON.stringify(filters) },
       });
     });
@@ -122,15 +136,15 @@ describe("DashboardComponent", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const textSearch = "test";
-      component.onTextSearchChange(logbook.name, textSearch);
+      component.onTextSearchChange(dataset.pid, textSearch);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
         setTextFilterAction({ textSearch })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchLogbookAction({
-          name: logbook.name,
+        fetchDatasetLogbookAction({
+          pid: dataset.pid,
         })
       );
     });
@@ -152,7 +166,7 @@ describe("DashboardComponent", () => {
       };
       const { showBotMessages, showImages, showUserMessages } = filters;
 
-      component.onFilterSelect(logbook.name, filters);
+      component.onFilterSelect(dataset.pid, filters);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
@@ -163,8 +177,8 @@ describe("DashboardComponent", () => {
         })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchLogbookAction({
-          name: logbook.name,
+        fetchDatasetLogbookAction({
+          pid: dataset.pid,
         })
       );
       expect(methodSpy).toHaveBeenCalled();
@@ -181,14 +195,14 @@ describe("DashboardComponent", () => {
         length: 100,
       };
 
-      component.onPageChange(logbook.name, event);
+      component.onPageChange(dataset.pid, event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
         changePageAction({ page: event.pageIndex, limit: event.pageSize })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchLogbookAction({ name: logbook.name })
+        fetchDatasetLogbookAction({ pid: dataset.pid })
       );
     });
   });
@@ -202,14 +216,14 @@ describe("DashboardComponent", () => {
         direction: "asc",
       };
 
-      component.onSortChange(logbook.name, event);
+      component.onSortChange(dataset.pid, event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
         sortByColumnAction({ column: event.active, direction: event.direction })
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchLogbookAction({ name: logbook.name })
+        fetchDatasetLogbookAction({ pid: dataset.pid })
       );
     });
   });

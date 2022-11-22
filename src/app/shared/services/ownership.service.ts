@@ -10,7 +10,8 @@ import { selectIsAdmin, selectProfile } from "state-management/selectors/user.se
   providedIn: "root"
 })
 export class OwnershipService {
-  checkPermission(dataset: Dataset | undefined, store: Store, router: Router) {
+
+  checkDatasetAccess(dataset: Dataset | undefined, store: Store, router: Router) {
     if (dataset) {
       const userProfile$: Observable<any> = store.select(selectProfile);
       const isAdmin$ = store.select(selectIsAdmin);
@@ -20,7 +21,9 @@ export class OwnershipService {
       combineLatest([accessGroups$, isAdmin$]).subscribe(([groups, isAdmin]) => {
         const isInOwnerGroup =
           groups.indexOf(dataset.ownerGroup) !== -1 || isAdmin;
-        if (!isInOwnerGroup) {
+        const hasAccessToDataset = 
+          isInOwnerGroup || dataset.accessGroups.some(g => groups.includes(g));
+        if (!isInOwnerGroup && !hasAccessToDataset) {
           router.navigate(["/401"], {
             skipLocationChange: true,
             queryParams: {

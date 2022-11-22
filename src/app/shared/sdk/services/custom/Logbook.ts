@@ -56,6 +56,33 @@ export class LogbookApi extends BaseLoopBackApi {
     return result.pipe(map((instance: Logbook) => new Logbook(instance)));
   }
 
+    /**
+   * Find Logbook model instance associated to the dataset passed
+   *
+   * @param {string} pid Dataset pid
+   *
+   * @param {string} filters Filter json object, keys: textSearch, showBotMessages, showUserMessages, showImages, skip, limit, sortField
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * Logbook model instance
+   */
+  public findDatasetLogbook(pid: any, filters: any = {}, customHeaders?: Function): Observable<Logbook> {
+    let _method: string = "GET";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/Datasets/:pid/Logbook";
+    let _routeParams: any = {
+      pid: pid
+    };
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    if (typeof filters !== 'undefined' && filters !== null) _urlParams.filters = filters;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result.pipe(map((instance: Logbook) => new Logbook(instance)));
+  }
+
   /**
    * Send message to a Logbook
    *
