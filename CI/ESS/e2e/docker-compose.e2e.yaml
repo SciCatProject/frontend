@@ -32,14 +32,9 @@ services:
       - mongodb
   backend:
     image: "ghcr.io/scicatproject/backend-next:latest"
-    command:
-      [
-        "./wait-for-it.sh",
-        "mongodb:27017",
-        "--",
-        "node",
-        "dist/main",
-      ]
+    command: sh -c "
+      sleep 10 &&
+      node dist/main"
     volumes:
       - "./CI/ESS/e2e/.env.backend-next:/home/node/app/.env"
       - "./wait-for-it.sh:/home/node/app/wait-for-it.sh"
