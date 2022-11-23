@@ -280,11 +280,11 @@ describe("test dataset selectors", () => {
 
   describe("selectFullfacetParams", () => {
     it("should return the fullfacet params", () => {
-      const fullfacetKeys = Object.keys(
-        fromDatasetSelectors.selectFullfacetParams.projector(
-          initialDatasetState.filters
-        )
+      const fullfacet = fromDatasetSelectors.selectFullfacetParams.projector(
+        initialDatasetState.filters
       );
+      const fullfacetKeys = Object.keys(fullfacet);
+      expect(fullfacet.facets).toEqual(["type", "creationLocation", "ownerGroup", "keywords"]);
       expect(fullfacetKeys).toContain("facets");
     });
   });

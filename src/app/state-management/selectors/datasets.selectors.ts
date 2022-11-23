@@ -171,7 +171,6 @@ export const selectFullfacetParams = createSelector(selectFilters, (filter) => {
   const fields = restrictFilter(theRest);
   const facets = [
     "type",
-    "creationTime",
     "creationLocation",
     "ownerGroup",
     "keywords",
