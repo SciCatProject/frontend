@@ -174,9 +174,8 @@ export class BatchViewComponent implements OnInit, OnDestroy {
         form.appendChild(input);
       }
     }
+    
     document.body.appendChild(form);
-    window.open(this.appConfig.jupyterIntegrationUrl, "SciCat Jupyter Notebook Integration", '_blank');
-
     form.submit();
     document.body.removeChild(form);
  }
