@@ -1,5 +1,5 @@
 {
-  "accessTokenPrefix": "Bearer ",
+  "accessTokenPrefix": "",
   "addDatasetEnabled": true,
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
@@ -7,7 +7,7 @@
   "editMetadataEnabled": true,
   "editPublishedData": false,
   "editSampleEnabled": true,
-  "externalAuthEndpoint": "/api/v3/auth/msad",
+  "externalAuthEndpoint": "/auth/msad",
   "facility": "ESS",
   "fileColorEnabled": true,
   "fileDownloadEnabled": true,
@@ -17,7 +17,7 @@
   "jsonMetadataEnabled": true,
   "jupyterHubUrl": "https://jupyterhub.esss.lu.se/",
   "landingPage": "doi.ess.eu/detail/",
-  "lbBaseURL": "http://localhost:3000",
+  "lbBaseURL": "http://127.0.0.1:3000",
   "localColumns": [
     {
       "name": "select",
@@ -99,9 +99,7 @@
   "metadataStructure": "",
   "multipleDownloadAction": "http://localhost:3012/zip",
   "multipleDownloadEnabled": true,
-  "oAuth2Endpoints": [
-    { "authURL": "api/v3/auth/oidc", "displayText": "ESS" }
-  ],
+  "oAuth2Endpoints": [],
   "policiesEnabled": true,
   "retrieveDestinations": [],
   "riotBaseUrl": "http://scitest.esss.lu.se/riot",

@@ -105,9 +105,7 @@ const appConfig: AppConfig = {
   metadataStructure: "",
   multipleDownloadAction: "http://localhost:3012/zip",
   multipleDownloadEnabled: true,
-  oAuth2Endpoints: [
-    { authURL: "https://identity.esss.dk/auth/", displayText: "ESS" },
-  ],
+  oAuth2Endpoints: [],
   policiesEnabled: true,
   retrieveDestinations: [],
   riotBaseUrl: "http://scitest.esss.lu.se/riot",

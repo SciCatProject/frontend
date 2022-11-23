@@ -98,7 +98,7 @@
   "metadataStructure": "",
   "multipleDownloadAction": "https://scicatfileserver.esss.dk/zip",
   "multipleDownloadEnabled": true,
-  "oAuth2Endpoints": ["http://localhost:3000/api/v3/oidc"],
+  "oAuth2Endpoints": [],
   "policiesEnabled": false,
   "retrieveDestinations": [],
   "riotBaseUrl": "http://scichat.esss.lu.se",
