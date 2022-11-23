@@ -13,11 +13,12 @@
         <div fxFlex="auto"></div>
       </div>
       <mat-card-content>
-        {{ oAuth2Endpoints }}
+        <!-- oauth endpoints -->
         <div *ngFor="let endpoint of oAuth2Endpoints">
           <button
             class="oauth-login-button"
             mat-raised-button
+            fullWidth
             type="submit"
             [ngClass]="{ loading: vm.isLoggingIn }"
             (click)="redirectOIDC(endpoint.authURL)"

@@ -8,7 +8,7 @@
     "postinstall": "ngcc",
     "build": "ng build",
     "watch": "ng build --watch --configuration default",
-    "test": "ng test --watch=false --source-map=false",
+    "test": "ng test --watch=false --source-map=false --include='**/auth-callback.component.spec.ts'",
     "posttest": "betterer && ng lint",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",

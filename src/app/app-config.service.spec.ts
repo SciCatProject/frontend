@@ -105,7 +105,9 @@ const appConfig: AppConfig = {
   metadataStructure: "",
   multipleDownloadAction: "http://localhost:3012/zip",
   multipleDownloadEnabled: true,
-  oAuth2Endpoints: [],
+  oAuth2Endpoints: [
+    { authURL: "https://identity.esss.dk/auth/", displayText: "ESS" },
+  ],
   policiesEnabled: true,
   retrieveDestinations: [],
   riotBaseUrl: "http://scitest.esss.lu.se/riot",
@@ -120,7 +122,7 @@ const appConfig: AppConfig = {
   tableSciDataEnabled: true,
   fileserverBaseURL: "",
   fileserverButtonLabel: "",
-  datasetDetailsShowMissingProposalId: true
+  datasetDetailsShowMissingProposalId: true,
 };
 
 describe("AppConfigService", () => {
