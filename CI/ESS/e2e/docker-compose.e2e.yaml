@@ -41,7 +41,8 @@ services:
         "dist/main",
       ]
     volumes:
-      - "./.env.backend-next:/home/node/app/.env"
+      - "./CI/ESS/e2e/.env.backend-next:/home/node/app/.env"
+      - "./wait-for-it.sh:/home/node/app/wait-for-it.sh"
     depends_on:
       - mongodb
       - scichat-loopback
