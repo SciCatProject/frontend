@@ -17,7 +17,7 @@ import {
   setDatasetTableColumnsAction,
 } from "state-management/actions/user.actions";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { Meta, Title } from "@angular/platform-browser";
+import { DomSanitizer, Meta, Title } from "@angular/platform-browser";
 import { Subscription } from "rxjs";
 import {
   selectIsLoading,
@@ -25,6 +25,7 @@ import {
 } from "state-management/selectors/user.selectors";
 import { MessageType } from "state-management/models";
 import { AppConfigService, AppConfig as Config } from "app-config.service";
+import { MatIconRegistry } from "@angular/material/icon";
 
 @Component({
   selector: "app-root",
@@ -49,7 +50,9 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     private metaService: Meta,
     public snackBar: MatSnackBar,
     private titleService: Title,
-    private store: Store
+    private store: Store,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer
   ) {
     this.config = this.appConfigService.getConfig();
     this.facility = this.config.facility ?? "";
@@ -60,6 +63,10 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
       name: "description",
       content: "SciCat metadata catalogue at" + this.facility,
     });
+    this.matIconRegistry.addSvgIcon(
+      "jupyter",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/images/jupyter.svg")
+    );
   }
 
   /**

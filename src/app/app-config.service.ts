@@ -32,6 +32,7 @@ export interface AppConfig {
   jobsEnabled: boolean;
   jsonMetadataEnabled: boolean;
   jupyterHubUrl: string | null;
+  jupyterIntegrationUrl: string | null;
   landingPage: string | null;
   lbBaseURL: string;
   localColumns: TableColumn[];

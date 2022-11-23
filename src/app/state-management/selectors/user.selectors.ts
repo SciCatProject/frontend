@@ -1,4 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { User } from "shared/sdk";
+import { Settings } from "state-management/models";
 import { UserState } from "state-management/state/user.store";
 
 const selectUserState = createFeatureSelector<UserState>("users");
@@ -117,3 +119,10 @@ export const selectUserSettingsPageViewModel = createSelector(
     settings,
   })
 );
+
+export interface selectUserSettings {
+  user: User,
+  profile: any,
+  scicatToken: string,
+  settings: Settings
+}

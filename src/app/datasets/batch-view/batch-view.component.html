@@ -36,6 +36,12 @@
           Retrieve
         </button>
       </ng-container>
+      <ng-container *ngIf="appConfig.jupyterIntegrationUrl">
+        <button mat-button (click)="onJupyterIntegration()" class="button" color="primary">
+          <mat-icon svgIcon="jupyter"></mat-icon>
+          Jupyter
+        </button>
+      </ng-container>
     </div>
 
     <mat-table

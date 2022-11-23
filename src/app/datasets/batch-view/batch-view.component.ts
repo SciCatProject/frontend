@@ -9,8 +9,8 @@ import {
   prefillBatchAction,
   removeFromBatchAction,
 } from "state-management/actions/datasets.actions";
-import { Dataset, Message, MessageType } from "state-management/models";
-import { showMessageAction } from "state-management/actions/user.actions";
+import { Dataset, Message, MessageType, User } from "state-management/models";
+import { fetchCurrentUserAction, fetchScicatTokenAction, showMessageAction } from "state-management/actions/user.actions";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 
 import { Router } from "@angular/router";
@@ -19,6 +19,8 @@ import { Observable, Subscription } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { ShareDialogComponent } from "datasets/share-dialog/share-dialog.component";
 import { AppConfigService } from "app-config.service";
+import { selectCurrentUser, selectUserSettings, selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
+import { v4 as uuidv4 } from "uuid";
 
 @Component({
   selector: "batch-view",
@@ -26,7 +28,9 @@ import { AppConfigService } from "app-config.service";
   styleUrls: ["./batch-view.component.scss"],
 })
 export class BatchViewComponent implements OnInit, OnDestroy {
+  //vm$ = this.store.select(selectUserSettingsPageViewModel);
   batch$: Observable<Dataset[]> = this.store.select(selectDatasetsInBatch);
+  //user$: Observable<User> = this.store.select(selectCurrentUser);
   subscriptions: Subscription[] = [];
 
   appConfig = this.appConfigService.getConfig();
@@ -35,6 +39,8 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   datasetList: Dataset[] = [];
   public hasBatch = false;
   visibleColumns: string[] = ["remove", "pid", "sourceFolder", "creationTime"];
+
+  user: selectUserSettings;
 
   constructor(
     public appConfigService: AppConfigService,
@@ -140,7 +146,44 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     });
   }
 
+  onJupyterIntegration() {
+    const instance_id = uuidv4();
+
+    const data = {
+      user : this.user.user.username.replace("ldap.","").replace(" ","").toLowerCase(),
+      request_id : instance_id,
+      scicat_instance_url : this.appConfig.lbBaseURL,
+      scicat_token : this.user.scicatToken,
+      datasets : this.datasetList.map(d => d.pid ),
+    };
+    
+    console.log("Data posted to open Jupyter Notebook");
+    console.log(data);
+
+    var form = document.createElement("form");
+    form.setAttribute("method", "post");
+    form.setAttribute("action", this.appConfig.jupyterIntegrationUrl);
+    form.setAttribute("target", "SciCatJupyterIntegration");
+
+    for (var i in data) {
+      if (data.hasOwnProperty(i)) {
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = i;
+        input.value = data[i];
+        form.appendChild(input);
+      }
+    }
+    document.body.appendChild(form);
+    window.open(this.appConfig.jupyterIntegrationUrl, "SciCat Jupyter Notebook Integration", '_blank');
+
+    form.submit();
+    document.body.removeChild(form);
+ }
+
   ngOnInit() {
+    this.store.dispatch(fetchCurrentUserAction());
+    this.store.dispatch(fetchScicatTokenAction());
     this.store.dispatch(prefillBatchAction());
     this.subscriptions.push(
       this.batch$.subscribe((result) => {
@@ -148,6 +191,11 @@ export class BatchViewComponent implements OnInit, OnDestroy {
           this.datasetList = result;
           this.hasBatch = result.length > 0;
         }
+      })
+    );
+    this.subscriptions.push(
+      this.store.select(selectUserSettingsPageViewModel).subscribe((user) => {
+        this.user = user;
       })
     );
   }
