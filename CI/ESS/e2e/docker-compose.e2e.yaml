@@ -32,12 +32,12 @@ services:
       - mongodb
   backend:
     image: "ghcr.io/scicatproject/backend-next:latest"
+    # NOTE: This sleep is waiting for mongodb to start. Not the nisest solution but it works for now. Improvemet will be to include the wait-for-it.sh script while building the backend container so we can execute it here. Something similar like this one: https://github.com/SciCatProject/scichat-loopback/blob/master/CI/ESS/Dockerfile.e2e#L11
     command: sh -c "
-      sleep 10 &&
+      sleep 5 &&
       node dist/main"
     volumes:
       - "./CI/ESS/e2e/.env.backend-next:/home/node/app/.env"
-      - "./wait-for-it.sh:/home/node/app/wait-for-it.sh"
     depends_on:
       - mongodb
       - scichat-loopback

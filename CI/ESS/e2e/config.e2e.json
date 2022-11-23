@@ -1,6 +1,5 @@
 {
   "accessTokenPrefix": "Bearer ",
-  "lbTokenPrefix": "Bearer ",
   "addDatasetEnabled": true,
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
