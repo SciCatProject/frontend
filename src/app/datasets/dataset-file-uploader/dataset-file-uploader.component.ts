@@ -33,14 +33,19 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private ownershipService: OwnershipService,
-    private router: Router) {}
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.subscriptions.push(
       this.store.select(selectCurrentDataset).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
-          this.ownershipService.checkDatasetAccess(dataset, this.store, this.router);
+          this.ownershipService.checkDatasetAccess(
+            dataset,
+            this.store,
+            this.router
+          );
         }
       })
     );
@@ -64,11 +69,6 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
         caption: file.name,
         ownerGroup: this.dataset.ownerGroup,
         accessGroups: this.dataset.accessGroups,
-        createdBy: this.user.username,
-        updatedBy: this.user.username,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        dataset: this.dataset,
         datasetId: this.dataset.pid,
       };
       this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));

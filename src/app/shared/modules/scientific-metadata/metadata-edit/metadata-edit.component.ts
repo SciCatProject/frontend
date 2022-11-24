@@ -212,6 +212,10 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    if (changes.metadata.firstChange) {
+      return;
+    }
+
     for (const propName in changes) {
       if (propName === "metadata") {
         this.metadata = changes[propName].currentValue;

@@ -54,6 +54,8 @@ describe("Datasets", () => {
 
       cy.visit("/datasets");
 
+      cy.wait(1000);
+
       cy.get(".mat-row").contains("Cypress Dataset").click();
 
       cy.wait("@fetch");

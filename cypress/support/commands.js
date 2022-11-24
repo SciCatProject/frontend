@@ -35,8 +35,6 @@ Cypress.Commands.add("createPolicy", (type) => {
       cy.fixture("policy").then((policy) => {
         policy.manager = ["_cypress", user.email];
         policy.ownerGroup = "cypress";
-        policy.createdBy = user.username;
-        policy.updatedBy = user.username;
 
         cy.request({
           method: "POST",
@@ -115,15 +113,6 @@ Cypress.Commands.add("createDataset", (type) => {
         cy.fixture("rawDataset").then((dataset) => {
           cy.log("Raw Dataset 1: " + JSON.stringify(dataset, null, 2));
           cy.log("User: " + JSON.stringify(user, null, 2));
-
-          // dataset.principalInvestigator = user.email;
-          // dataset.owner = user.username;
-          // dataset.ownerEmail = user.email;
-          // dataset.contactEmail = user.email;
-          // dataset.createdBy = user.username;
-          // dataset.updatedBy = user.username;
-
-          cy.log("Raw Dataset 2: " + JSON.stringify(dataset, null, 2));
 
           cy.request({
             method: "POST",

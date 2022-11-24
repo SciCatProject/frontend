@@ -2,8 +2,6 @@
 
 describe("Datasets", () => {
   beforeEach(() => {
-    cy.wait(5000);
-
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
     cy.createDataset("raw");
@@ -26,16 +24,13 @@ describe("Datasets", () => {
 
       cy.wait("@fetch");
 
-      cy.wait(5000);
+      cy.wait(1000);
 
-      cy.contains(".mat-row", "Cypress Dataset")
-        .click();
+      cy.contains(".mat-row", "Cypress Dataset").click();
 
       cy.wait("@fetch");
 
-      cy.get(".mat-slide-toggle-label")
-        .contains("Public")
-        .as("publicToggle");
+      cy.get(".mat-slide-toggle-label").contains("Public").as("publicToggle");
 
       cy.get("mat-slide-toggle").should("not.have.class", "mat-checked");
 

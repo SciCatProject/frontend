@@ -29,7 +29,9 @@ describe("Datasets", () => {
 
       cy.finishedLoading();
 
-      cy.get(".mat-row").contains("Cypress Dataset").click();
+      cy.wait(1000);
+
+      cy.get(".mat-row").contains("Cypress Dataset").first().click();
 
       cy.wait("@fetch");
 

@@ -2,8 +2,6 @@
 
 describe("Datasets", () => {
   beforeEach(() => {
-    cy.wait(5000);
-
     cy.login(Cypress.config("username"), Cypress.config("password"));
   });
 
@@ -21,11 +19,9 @@ describe("Datasets", () => {
 
       cy.visit("/datasets");
 
-      cy.wait(5000);
+      cy.wait(1000);
 
-      cy.get("[data-cy=checkboxInput]")
-        .first()
-        .click();
+      cy.get("[data-cy=checkboxInput]").first().click();
 
       cy.get("#addToBatchButton").click();
 
@@ -42,7 +38,6 @@ describe("Datasets", () => {
       cy.get("#publishButton").click();
 
       cy.get("#doiRow").should("exist");
-
     });
   });
 });

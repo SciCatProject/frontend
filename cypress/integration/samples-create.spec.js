@@ -2,8 +2,6 @@
 
 describe("Samples", function () {
   beforeEach(function () {
-    cy.wait(5000);
-
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
     cy.intercept("POST", "/api/v3/Samples").as("create");
