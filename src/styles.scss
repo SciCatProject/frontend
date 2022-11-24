@@ -213,6 +213,8 @@ $theme: custom-light-theme(
 @include user-settings.theme($theme);
 
 /* You can add global styles to this file, and also import other style files */
+@import 'assets/styles/titillium-web.scss';
+@import 'assets/styles/material-icons.scss';
 
 html,
 body {
