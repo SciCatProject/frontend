@@ -24,10 +24,6 @@
   "isPublished": false,
   "ownerGroup": "ess",
   "accessGroups": [],
-  "createdBy": "string",
-  "updatedBy": "string",
-  "createdAt": "2019-10-31T14:44:45.092Z",
-  "updatedAt": "2019-10-31T14:44:45.092Z",
   "datasetlifecycle": {
     "archivable": true,
     "retrievable": false,
@@ -42,6 +38,5 @@
     "retrieveReturnMessage": {},
     "exportedTo": "string",
     "retrieveIntegrityCheck": true
-  },
-  "history": []
+  }
 }

@@ -23,10 +23,6 @@
   "isPublished": false,
   "ownerGroup": "ess",
   "accessGroups": [],
-  "createdBy": "string",
-  "updatedBy": "string",
-  "createdAt": "2019-10-31T14:44:46.144Z",
-  "updatedAt": "2019-10-31T14:44:46.144Z",
   "sampleId": "string",
   "proposalId": "string",
   "datasetlifecycle": {
@@ -43,6 +39,5 @@
     "retrieveReturnMessage": {},
     "exportedTo": "string",
     "retrieveIntegrityCheck": true
-  },
-  "history": []
+  }
 }
