@@ -211,8 +211,8 @@ export class PolicyApi extends BaseLoopBackApi {
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof ownerGroupList !== 'undefined' && ownerGroupList !== null) _urlParams.ownerGroupList = ownerGroupList;
-    if (typeof data !== 'undefined' && data !== null) _urlParams.data = data;
+    if (typeof ownerGroupList !== 'undefined' && ownerGroupList !== null) _postBody.ownerGroupList = ownerGroupList;
+    if (typeof data !== 'undefined' && data !== null) _postBody.data = data;
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
