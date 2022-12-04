@@ -58,11 +58,11 @@ jobs:
           gh-token: ${{ secrets.GITLAB_TRIGGER_TOKEN }}
           image-tag: ${{ github.sha }}
 
-      - name: Trigger MAXIV pipeline
-        uses: appleboy/gitlab-ci-action@master
-        with:
-          token: ${{ secrets.MAXIV_TOKEN }}
-          project_id: 21902377
-          ref: "develop"
-          host: "https://gitlab.com"
-          debug: true
+#       - name: Trigger MAXIV pipeline
+#         uses: appleboy/gitlab-ci-action@master
+#         with:
+#           token: ${{ secrets.MAXIV_TOKEN }}
+#           project_id: 21902377
+#           ref: "develop"
+#           host: "https://gitlab.com"
+#           debug: true
