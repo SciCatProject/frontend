@@ -5,28 +5,37 @@ on:
     branches: 
       - master
 jobs:
-  test:
-    name: Run tests
+  install-and-cache:
+    name: Run install and cache
     runs-on: ubuntu-latest
-    steps:  
-      - name: Checkout code
+
+    steps:
+      - name: Check out
         uses: actions/checkout@v3
-        
-      - name: Use Node.js 14.x
-        uses: actions/setup-node@v1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: 14.x
-          
+
       - name: Cache node_modules
-        id: cache-node-modules
+        id: cached-node-modules
         uses: actions/cache@v3
         with:
           path: node_modules
           key: node-modules-${{ hashFiles('package-lock.json') }}
-          
+
       - name: Install dependencies
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        if: steps.cached-node-modules.outputs.cache-hit != 'true'
         run: npm ci
+        
+  test:
+    name: Run tests
+    needs: [install-and-cache]
+    runs-on: ubuntu-latest
+    steps:  
+      - name: Check out
+        uses: actions/checkout@v3
 
       - name: Test
         run: |
