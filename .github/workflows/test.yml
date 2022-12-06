@@ -5,14 +5,13 @@ on:
     branches: 
       - master
 jobs:
-  install-and-cache:
-    name: Run install and cache
+  test:
+    name: Run tests
     runs-on: ubuntu-latest
-
-    steps:
+    steps:  
       - name: Check out
         uses: actions/checkout@v3
-
+        
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -28,14 +27,6 @@ jobs:
       - name: Install dependencies
         if: steps.cached-node-modules.outputs.cache-hit != 'true'
         run: npm ci
-        
-  test:
-    name: Run tests
-    needs: [install-and-cache]
-    runs-on: ubuntu-latest
-    steps:  
-      - name: Check out
-        uses: actions/checkout@v3
 
       - name: Test
         run: |
