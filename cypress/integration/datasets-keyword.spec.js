@@ -24,6 +24,18 @@ describe("Datasets", () => {
 
       cy.visit("/datasets");
 
+      cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+      cy.finishedLoading();
+
+      cy.get('input[type="search"][data-placeholder="Text Search"]')
+        .clear()
+        .type("Cypress");
+
+      cy.isLoading();
+
+      cy.finishedLoading();
+
       cy.get(".mat-row").contains("Cypress Dataset").click();
 
       cy.wait("@fetch");
@@ -54,7 +66,17 @@ describe("Datasets", () => {
 
       cy.visit("/datasets");
 
-      cy.wait(1000);
+      cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+      cy.finishedLoading();
+
+      cy.get('input[type="search"][data-placeholder="Text Search"]')
+        .clear()
+        .type("Cypress");
+
+      cy.isLoading();
+
+      cy.finishedLoading();
 
       cy.get(".mat-row").contains("Cypress Dataset").click();
 
@@ -76,6 +98,18 @@ describe("Datasets", () => {
 
     it("should go to dataset details and remove the added keyword", () => {
       cy.visit("/datasets");
+
+      cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+      cy.finishedLoading();
+
+      cy.get('input[type="search"][data-placeholder="Text Search"]')
+        .clear()
+        .type("Cypress");
+
+      cy.isLoading();
+
+      cy.finishedLoading();
 
       cy.get(".mat-row").contains("Cypress Dataset").click();
 

@@ -19,7 +19,17 @@ describe("Datasets", () => {
 
       cy.visit("/datasets");
 
-      cy.wait(1000);
+      cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+      cy.finishedLoading();
+
+      cy.get('input[type="search"][data-placeholder="Text Search"]')
+        .clear()
+        .type("Cypress");
+
+      cy.isLoading();
+
+      cy.finishedLoading();
 
       cy.get("[data-cy=checkboxInput]").first().click();
 
