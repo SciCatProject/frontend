@@ -1,0 +1,73 @@
+name: Test
+
+on:
+  pull_request:
+    branches: 
+      - master
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:  
+      - name: Check out
+        uses: actions/checkout@v3
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+
+      - name: Cache node_modules
+        id: cached-node-modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cached-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Test
+        run: |
+          npm run lint
+          npm run test
+          npm run build
+      
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          
+  e2etests:
+    name: Run E2E Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run docker-compose
+        run: |
+          cp CI/ESS/e2e/docker-compose.e2e.yaml docker-compose.yaml
+          docker-compose pull
+          docker-compose build --no-cache
+          docker-compose up &
+
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v2
+        with:
+          config-file: CI/ESS/e2e/cypress.json
+          install-command: npm install --omit peer
+          browser: chrome
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress-videos
+          path: cypress/videos
