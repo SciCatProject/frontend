@@ -6,7 +6,7 @@ describe("Datasets", () => {
 
     cy.createDataset("raw");
 
-    cy.intercept("PUT", "/api/v3/Datasets/**/*").as("change");
+    cy.intercept("PATCH", "/api/v3/Datasets/**/*").as("change");
     cy.intercept("GET", "*").as("fetch");
   });
 
@@ -45,7 +45,7 @@ describe("Datasets", () => {
       cy.get("@publicToggle").click();
 
       cy.wait("@change").then(({ request, response }) => {
-        expect(request.method).to.eq("PUT");
+        expect(request.method).to.eq("PATCH");
         expect(response.statusCode).to.eq(200);
       });
 

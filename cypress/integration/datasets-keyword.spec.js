@@ -4,7 +4,7 @@ describe("Datasets", () => {
   beforeEach(() => {
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
-    cy.intercept("PUT", "/api/v3/Datasets/**/*").as("keyword");
+    cy.intercept("PATCH", "/api/v3/Datasets/**/*").as("keyword");
     cy.intercept("GET", "*").as("fetch");
   });
 
@@ -50,7 +50,7 @@ describe("Datasets", () => {
       cy.get('[data-cy="save-general-information"]').click();
 
       cy.wait("@keyword").then(({ request, response }) => {
-        expect(request.method).to.eq("PUT");
+        expect(request.method).to.eq("PATCH");
         expect(response.statusCode).to.eq(200);
       });
 
@@ -89,7 +89,7 @@ describe("Datasets", () => {
       cy.get('[data-cy="save-general-information"]').click();
 
       cy.wait("@keyword").then(({ request, response }) => {
-        expect(request.method).to.eq("PUT");
+        expect(request.method).to.eq("PATCH");
         expect(response.statusCode).to.eq(200);
       });
 
@@ -120,7 +120,7 @@ describe("Datasets", () => {
       cy.get('[data-cy="save-general-information"]').click();
 
       cy.wait("@keyword").then(({ request, response }) => {
-        expect(request.method).to.eq("PUT");
+        expect(request.method).to.eq("PATCH");
         expect(response.statusCode).to.eq(200);
       });
 

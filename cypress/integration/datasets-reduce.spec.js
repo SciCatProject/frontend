@@ -4,7 +4,7 @@ describe("Datasets", () => {
   beforeEach(() => {
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
-    cy.intercept("PUT", "/api/v3/Datasets/**/*").as("metadata");
+    cy.intercept("PATCH", "/api/v3/Datasets/**/*").as("metadata");
     cy.intercept("GET", "*").as("fetch");
   });
 

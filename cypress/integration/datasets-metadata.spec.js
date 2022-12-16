@@ -7,7 +7,7 @@ describe("Datasets", () => {
   beforeEach(() => {
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
-    cy.intercept("PUT", "/api/v3/Datasets/**/*").as("metadata");
+    cy.intercept("PATCH", "/api/v3/Datasets/**/*").as("metadata");
     cy.intercept("GET", "*").as("fetch");
   });
 
@@ -50,7 +50,7 @@ describe("Datasets", () => {
       cy.get('[data-cy="add-new-row"]').click();
 
       // simulate click event on the drop down
-      cy.get("mat-select[data-cy=field-type-input]").first().click(); // opens the drop down
+      cy.get("mat-select[data-cy=field-type-input]").last().click(); // opens the drop down
 
       // simulate click event on the drop down item (mat-option)
       cy.get(".mat-option-text")
@@ -59,13 +59,17 @@ describe("Datasets", () => {
           option[0].click();
         });
 
-      cy.get("[data-cy=metadata-name-input]").type(`${metadataName}{enter}`);
-      cy.get("[data-cy=metadata-value-input]").type(`${metadataValue}{enter}`);
+      cy.get("[data-cy=metadata-name-input]")
+        .last()
+        .type(`${metadataName}{enter}`);
+      cy.get("[data-cy=metadata-value-input]")
+        .last()
+        .type(`${metadataValue}{enter}`);
 
       cy.get("button[data-cy=save-changes-button]").click();
 
       cy.wait("@metadata").then(({ request, response }) => {
-        expect(request.method).to.eq("PUT");
+        expect(request.method).to.eq("PATCH");
         expect(response.statusCode).to.eq(200);
 
         cy.finishedLoading();
@@ -104,11 +108,11 @@ describe("Datasets", () => {
       cy.finishedLoading();
       cy.get('[role="tab"]').contains("Edit").click();
 
-      cy.get("button.deleteButton").first().click();
+      cy.get("button.deleteButton").last().click();
 
       cy.get("button[data-cy=save-changes-button]").click();
       cy.wait("@metadata").then(({ request, response }) => {
-        expect(request.method).to.eq("PUT");
+        expect(request.method).to.eq("PATCH");
         expect(response.statusCode).to.eq(200);
 
         cy.finishedLoading();
