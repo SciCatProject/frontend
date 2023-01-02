@@ -6,7 +6,7 @@ describe("Datasets", () => {
 
     cy.createDataset("raw");
 
-    cy.intercept("PUT", "/api/v3/Datasets/**/*").as("change");
+    cy.intercept("PATCH", "/api/v3/Datasets/**/*").as("change");
     cy.intercept("GET", "*").as("fetch");
   });
 
@@ -22,11 +22,19 @@ describe("Datasets", () => {
     it("should go to dataset details and toggle public", () => {
       cy.visit("/datasets");
 
-      cy.wait("@fetch");
+      cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
-      cy.wait(1000);
+      cy.finishedLoading();
 
-      cy.contains(".mat-row", "Cypress Dataset").click();
+      cy.get('input[type="search"][data-placeholder="Text Search"]')
+        .clear()
+        .type("Cypress");
+
+      cy.isLoading();
+
+      cy.finishedLoading();
+
+      cy.contains(".mat-row", "Cypress Dataset").first().click();
 
       cy.wait("@fetch");
 
@@ -37,7 +45,7 @@ describe("Datasets", () => {
       cy.get("@publicToggle").click();
 
       cy.wait("@change").then(({ request, response }) => {
-        expect(request.method).to.eq("PUT");
+        expect(request.method).to.eq("PATCH");
         expect(response.statusCode).to.eq(200);
       });
 

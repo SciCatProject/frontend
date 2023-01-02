@@ -102,6 +102,10 @@ Cypress.Commands.add("finishedLoading", (type) => {
     .should("not.exist");
 });
 
+Cypress.Commands.add("isLoading", (type) => {
+  cy.get('[data-cy="spinner"]').should("exist");
+});
+
 Cypress.Commands.add("createDataset", (type) => {
   cy.getCookie("$LoopBackSDK$user").then((userCookie) => {
     const user = JSON.parse(decodeURIComponent(userCookie.value));

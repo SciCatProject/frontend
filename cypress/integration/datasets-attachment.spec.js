@@ -21,15 +21,25 @@ describe("Datasets", () => {
     it("should go to dataset details and add an attachment using the dropzone", () => {
       cy.visit("/datasets");
 
-      cy.wait(1000);
+      cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
-      cy.get(".mat-row").contains("Cypress Dataset").click();
+      cy.finishedLoading();
 
-      cy.wait(1000);
+      cy.get('input[type="search"][data-placeholder="Text Search"]')
+        .clear()
+        .type("Cypress");
+
+      cy.isLoading();
+
+      cy.finishedLoading();
+
+      cy.get(".mat-row").contains("Cypress Dataset").first().click();
+
+      cy.isLoading();
+
+      cy.finishedLoading();
 
       cy.get(".mat-tab-link").contains("Attachments").click();
-
-      cy.wait(1000);
 
       cy.fixture("attachment-image").then((file) => {
         cy.get(".dropzone").attachFile(
