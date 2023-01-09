@@ -42,7 +42,7 @@
     "file-saver": "^2.0.5",
     "filesize": "^6.0.1",
     "lodash-es": "^4.17.21",
-    "luxon": "^1.27.0",
+    "luxon": "^2.5.2",
     "ngx-json-viewer": "^2.4.0",
     "ngx-linky": "^3.0.0",
     "ngx-material-luxon": "^1.1.1",
