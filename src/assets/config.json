@@ -1,5 +1,5 @@
 {
-  "accessTokenPrefix": "",
+  "accessTokenPrefix": "Bearer ",
   "addDatasetEnabled": true,
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
@@ -7,7 +7,7 @@
   "editMetadataEnabled": true,
   "editPublishedData": false,
   "editSampleEnabled": true,
-  "externalAuthEndpoint": "/auth/msad",
+  "externalAuthEndpoint": "/api/v3/auth/msad",
   "facility": "ESS",
   "fileColorEnabled": true,
   "fileDownloadEnabled": true,

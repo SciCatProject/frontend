@@ -93,6 +93,13 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.logoutAction,
+    (): UserState => ({
+      ...initialUserState,
+    })
+  ),
+
+  on(
     fromActions.logoutCompleteAction,
     (): UserState => ({
       ...initialUserState,
