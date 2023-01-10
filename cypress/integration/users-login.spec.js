@@ -49,7 +49,7 @@ describe("Users Login", () => {
     });
   });
 
-  it("visits login page and logs in with a functional account", () => {
+  it("visits login page and logs in with a functional account, then logout successfully", () => {
     cy.visit("/");
 
     cy.url().should("include", "/datasets");
@@ -74,6 +74,13 @@ describe("Users Login", () => {
 
     cy.url().should("include", "/datasets");
 
-    cy.get(".user-button").should("contain.text", username);
+    cy.get(".user-button").should("contain.text", username).click();
+
+    cy.get("[data-cy=logout-button]").click();
+
+    cy.finishedLoading();
+
+    cy.url().should("include", "/login");
   });
+
 });
