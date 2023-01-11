@@ -13,7 +13,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { Store, StoreModule } from "@ngrx/store";
 import { APP_CONFIG } from "app-config.module";
 import { logoutAction } from "state-management/actions/user.actions";
-import { MockStore } from "shared/MockStubs";
+import { MockRouter, MockStore } from "shared/MockStubs";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { provideMockStore } from "@ngrx/store/testing";
@@ -23,6 +23,7 @@ import {
   selectThumbnailPhoto,
 } from "state-management/selectors/user.selectors";
 import { AppConfigService } from "app-config.service";
+import { Router } from "@angular/router";
 
 describe("AppHeaderComponent", () => {
   let component: AppHeaderComponent;
@@ -35,45 +36,44 @@ describe("AppHeaderComponent", () => {
     facility: "ESS",
   });
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [AppHeaderComponent],
-        imports: [
-          MatButtonModule,
-          MatIconModule,
-          MatMenuModule,
-          MatToolbarModule,
-          StoreModule.forRoot({}),
-        ],
-        providers: [
-          provideMockStore({
-            selectors: [
-              {
-                selector: selectCurrentUserName,
-                value: "ms-ad.User Name",
-              },
-              {
-                selector: selectThumbnailPhoto,
-                value: "assets/images/user.png",
-              },
-              { selector: selectIsLoggedIn, value: true },
-            ],
-          }),
-        ],
-      });
-      TestBed.overrideComponent(AppHeaderComponent, {
-        set: {
-          providers: [
-            { provide: APP_CONFIG, useValue: { production: false } },
-            { provide: AppConfigService, useValue: { getConfig } },
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [AppHeaderComponent],
+      imports: [
+        MatButtonModule,
+        MatIconModule,
+        MatMenuModule,
+        MatToolbarModule,
+        StoreModule.forRoot({}),
+      ],
+      providers: [
+        provideMockStore({
+          selectors: [
+            {
+              selector: selectCurrentUserName,
+              value: "ms-ad.User Name",
+            },
+            {
+              selector: selectThumbnailPhoto,
+              value: "assets/images/user.png",
+            },
+            { selector: selectIsLoggedIn, value: true },
           ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+        }),
+      ],
+    });
+    TestBed.overrideComponent(AppHeaderComponent, {
+      set: {
+        providers: [
+          { provide: APP_CONFIG, useValue: { production: false } },
+          { provide: AppConfigService, useValue: { getConfig } },
+          { provide: Router, useClass: MockRouter },
+        ],
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AppHeaderComponent);
