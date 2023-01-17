@@ -12,6 +12,7 @@ import {
 } from "state-management/selectors/user.selectors";
 import { selectDatasetsInBatchIndicator } from "state-management/selectors/datasets.selectors";
 import { AppConfigService } from "app-config.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-app-header",
@@ -30,12 +31,15 @@ export class AppHeaderComponent implements OnInit {
 
   constructor(
     public appConfigService: AppConfigService,
+    private router: Router,
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private store: Store
   ) {}
 
   logout(): void {
     this.store.dispatch(logoutAction());
+
+    this.router.navigateByUrl("/login");
   }
 
   ngOnInit() {

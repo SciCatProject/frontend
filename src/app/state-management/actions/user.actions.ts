@@ -117,9 +117,7 @@ export const updateUserSettingsFailedAction = createAction(
   "[User] Update User Settings Failed"
 );
 
-export const fetchScicatTokenAction = createAction(
-  "[User] Fetch Scicat Token"
-);
+export const fetchScicatTokenAction = createAction("[User] Fetch Scicat Token");
 export const fetchScicatTokenCompleteAction = createAction(
   "[User] Fetch Scicat Token Complete",
   props<{ token: AccessToken }>()
