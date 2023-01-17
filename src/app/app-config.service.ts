@@ -12,6 +12,7 @@ export interface OAuth2Endpoint {
 export class RetrieveDestinations {
   location?: string | null;
   option = "";
+  tooltip?: string | null;
 }
 
 export class HelpMessages {

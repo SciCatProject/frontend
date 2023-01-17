@@ -1,4 +1,10 @@
-.mat-input-element {    
+.mat-input-element {
     margin: -6px 0px -3px 0px;
     vertical-align: middle;
+}
+
+::ng-deep .mat-tooltip {
+    min-width: 100% !important;
+    max-width: 100% !important;
+    margin: 0px;
 }
