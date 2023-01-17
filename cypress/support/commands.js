@@ -25,7 +25,7 @@ Cypress.Commands.add("login", (username, password) => {
   });
 });
 
-Cypress.Commands.add("createPolicy", (type) => {
+Cypress.Commands.add("createPolicy", (ownerGroup) => {
   cy.getCookie("$LoopBackSDK$user").then((userCookie) => {
     const user = JSON.parse(decodeURIComponent(userCookie.value));
 
@@ -34,7 +34,7 @@ Cypress.Commands.add("createPolicy", (type) => {
 
       cy.fixture("policy").then((policy) => {
         policy.manager = ["_cypress", user.email];
-        policy.ownerGroup = "cypress";
+        policy.ownerGroup = ownerGroup;
 
         cy.request({
           method: "POST",

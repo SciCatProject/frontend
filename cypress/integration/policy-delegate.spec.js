@@ -18,7 +18,8 @@ describe("Policies", () => {
 
   describe("Add manager to policy", () => {
     it("should go to policy and add manager", () => {
-      cy.createPolicy();
+      const ownerGroup = "cypress";
+      cy.createPolicy(ownerGroup);
 
       cy.visit("/policies");
 
@@ -31,8 +32,11 @@ describe("Policies", () => {
 
       cy.wait(1000);
 
-      //get second instance
-      cy.get(".mat-checkbox").eq(1).click();
+      cy.get(".mat-column-ownerGroup")
+        .contains(ownerGroup)
+        .parent()
+        .find(".mat-checkbox")
+        .click();
 
       cy.get("[data-cy=editSelection]").click({ force: true });
       cy.get("[data-cy=managerInput]").click({ force: true });
@@ -51,8 +55,10 @@ describe("Policies", () => {
 
       cy.wait("@fetch");
       cy.wait(1000);
-      cy.get("mat-cell.mat-column-manager")
-        .first()
+      cy.get(".mat-column-ownerGroup")
+        .contains(ownerGroup)
+        .parent()
+        .find("mat-cell.mat-column-manager")
         .should("contain.text", "cypress@manager.com");
     });
   });
