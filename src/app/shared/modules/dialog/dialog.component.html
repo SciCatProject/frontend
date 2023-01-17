@@ -11,7 +11,7 @@
     <mat-label>{{data.choice.title}}</mat-label>
     <mat-select [(ngModel)]="data.option">
       <mat-option *ngFor="let choice of data.choice.options"
-        [value]="choice.option">{{choice.option}}</mat-option>
+        [value]="choice.option" [matTooltip]="choice.tooltip">{{choice.option}}</mat-option>
     </mat-select>
   </mat-form-field>
 
