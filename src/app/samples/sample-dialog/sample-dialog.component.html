@@ -21,7 +21,7 @@
   </mat-form-field>
   <mat-form-field *ngIf="userGroups">
     <mat-label>Owner Group</mat-label>
-    <mat-select formControlName="ownerGroup">
+    <mat-select formControlName="ownerGroup" data-cy="groupSelect">
       <mat-option *ngFor="let group of userGroups" [value]="group">
         {{ group }}
       </mat-option>

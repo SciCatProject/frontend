@@ -89,7 +89,7 @@ describe("DatasetEffects", () => {
             "metadataKeys",
             "find",
             "findOne",
-            "updateAttributes",
+            "patchAttributes",
             "createAttachments",
             "updateByIdAttachments",
             "destroyByIdAttachments",
@@ -419,7 +419,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: dataset });
-      datasetApi.updateAttributes.and.returnValue(response);
+      datasetApi.patchAttributes.and.returnValue(response);
 
       const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
       expect(effects.updateProperty$).toBeObservable(expected);
@@ -434,7 +434,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.updateAttributes.and.returnValue(response);
+      datasetApi.patchAttributes.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.updateProperty$).toBeObservable(expected);

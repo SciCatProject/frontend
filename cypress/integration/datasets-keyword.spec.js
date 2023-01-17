@@ -4,7 +4,7 @@ describe("Datasets", () => {
   beforeEach(() => {
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
-    cy.intercept("PUT", "/api/v3/Datasets/**/*").as("keyword");
+    cy.intercept("PATCH", "/api/v3/Datasets/**/*").as("keyword");
     cy.intercept("GET", "*").as("fetch");
   });
 
@@ -24,6 +24,18 @@ describe("Datasets", () => {
 
       cy.visit("/datasets");
 
+      cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+      cy.finishedLoading();
+
+      cy.get('input[type="search"][data-placeholder="Text Search"]')
+        .clear()
+        .type("Cypress");
+
+      cy.isLoading();
+
+      cy.finishedLoading();
+
       cy.get(".mat-row").contains("Cypress Dataset").click();
 
       cy.wait("@fetch");
@@ -38,7 +50,7 @@ describe("Datasets", () => {
       cy.get('[data-cy="save-general-information"]').click();
 
       cy.wait("@keyword").then(({ request, response }) => {
-        expect(request.method).to.eq("PUT");
+        expect(request.method).to.eq("PATCH");
         expect(response.statusCode).to.eq(200);
       });
 
@@ -54,7 +66,17 @@ describe("Datasets", () => {
 
       cy.visit("/datasets");
 
-      cy.wait(1000);
+      cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+      cy.finishedLoading();
+
+      cy.get('input[type="search"][data-placeholder="Text Search"]')
+        .clear()
+        .type("Cypress");
+
+      cy.isLoading();
+
+      cy.finishedLoading();
 
       cy.get(".mat-row").contains("Cypress Dataset").click();
 
@@ -67,7 +89,7 @@ describe("Datasets", () => {
       cy.get('[data-cy="save-general-information"]').click();
 
       cy.wait("@keyword").then(({ request, response }) => {
-        expect(request.method).to.eq("PUT");
+        expect(request.method).to.eq("PATCH");
         expect(response.statusCode).to.eq(200);
       });
 
@@ -76,6 +98,18 @@ describe("Datasets", () => {
 
     it("should go to dataset details and remove the added keyword", () => {
       cy.visit("/datasets");
+
+      cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+      cy.finishedLoading();
+
+      cy.get('input[type="search"][data-placeholder="Text Search"]')
+        .clear()
+        .type("Cypress");
+
+      cy.isLoading();
+
+      cy.finishedLoading();
 
       cy.get(".mat-row").contains("Cypress Dataset").click();
 
@@ -86,7 +120,7 @@ describe("Datasets", () => {
       cy.get('[data-cy="save-general-information"]').click();
 
       cy.wait("@keyword").then(({ request, response }) => {
-        expect(request.method).to.eq("PUT");
+        expect(request.method).to.eq("PATCH");
         expect(response.statusCode).to.eq(200);
       });
 

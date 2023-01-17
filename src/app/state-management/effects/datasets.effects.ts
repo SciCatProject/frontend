@@ -290,7 +290,7 @@ export class DatasetEffects {
       ofType(fromActions.updatePropertyAction),
       switchMap(({ pid, property }) =>
         this.datasetApi
-          .updateAttributes(encodeURIComponent(pid), property)
+          .patchAttributes(encodeURIComponent(pid), property)
           .pipe(
             switchMap(() => [
               fromActions.updatePropertyCompleteAction(),
