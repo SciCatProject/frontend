@@ -17,6 +17,11 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTabsModule } from "@angular/material/tabs";
 import { FlexLayoutModule } from "@angular/flex-layout";
+import {AppConfigService} from "app-config.service";
+
+const getConfig = () => ({
+  editMetadataEnabled: true,
+});
 
 describe("InstrumentDetailsComponent", () => {
   let component: InstrumentDetailsComponent;
@@ -45,6 +50,12 @@ describe("InstrumentDetailsComponent", () => {
       TestBed.overrideComponent(InstrumentDetailsComponent, {
         set: {
           providers: [
+            {
+              provide: AppConfigService,
+              useValue: {
+                getConfig,
+              },
+            },
             { provide: ActivatedRoute, useClass: MockActivatedRoute },
           ],
         },
