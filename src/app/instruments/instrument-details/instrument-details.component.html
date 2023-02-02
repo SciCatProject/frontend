@@ -36,7 +36,12 @@
               <mat-icon>list</mat-icon> View
             </ng-template>
 
-            <metadata-view [metadata]="value"></metadata-view>
+            <div [ngSwitch]="appConfig.metadataStructure">
+              <tree-view *ngSwitchCase="'tree'"
+                         [metadata]="value"></tree-view>
+              <metadata-view *ngSwitchDefault
+                             [metadata]="value"></metadata-view>
+            </div>
           </mat-tab>
 
           <mat-tab>
@@ -44,10 +49,19 @@
               <mat-icon>edit</mat-icon> Edit
             </ng-template>
 
-            <metadata-edit
-              [metadata]="value"
-              (save)="onSaveCustomMetadata(instrument.pid, $event)"
-            ></metadata-edit>
+            <div [ngSwitch]="appConfig.metadataStructure">
+              <tree-edit
+                *ngSwitchCase="'tree'"
+                [metadata]="value"
+                (save)="onSaveCustomMetadata(instrument.pid, $event)"
+                (hasUnsavedChanges)="onHasUnsavedChanges($event)"
+              ></tree-edit>
+              <metadata-edit
+                *ngSwitchDefault
+                [metadata]="value"
+                (save)="onSaveCustomMetadata(instrument.pid, $event)"
+              ></metadata-edit>
+            </div>
           </mat-tab>
         </mat-tab-group>
       </mat-card>
