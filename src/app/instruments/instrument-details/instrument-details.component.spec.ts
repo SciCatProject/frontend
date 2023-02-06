@@ -17,7 +17,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTabsModule } from "@angular/material/tabs";
 import { FlexLayoutModule } from "@angular/flex-layout";
-import {AppConfigService} from "app-config.service";
+import { AppConfigService } from "app-config.service";
 
 const getConfig = () => ({
   editMetadataEnabled: true,
@@ -96,5 +96,11 @@ describe("InstrumentDetailsComponent", () => {
         saveCustomMetadataAction({ pid, customMetadata })
       );
     });
+  });
+
+  it("should track unsaved changes", () => {
+    expect(component.hasUnsavedChanges()).toBeFalse();
+    component.onHasUnsavedChanges(true);
+    expect(component.hasUnsavedChanges()).toBeTrue();
   });
 });

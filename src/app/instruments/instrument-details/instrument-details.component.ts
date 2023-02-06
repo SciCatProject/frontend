@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Store } from "@ngrx/store";
-import {fromEvent, Subscription} from "rxjs";
+import { fromEvent, Subscription } from "rxjs";
 import {
   fetchInstrumentAction,
   saveCustomMetadataAction,
 } from "state-management/actions/instruments.actions";
 import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
-import {EditableComponent} from "app-routing/pending-changes.guard";
-import {AppConfigService} from "app-config.service";
+import { EditableComponent } from "app-routing/pending-changes.guard";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "app-instrument-details",
