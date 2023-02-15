@@ -132,7 +132,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const dataset = new DerivedDataset({
           accessGroups: [],
           contactEmail: email, // Required
-          createdBy: username,
           creationTime: new Date(), // Required
           datasetName: res.datasetName,
           description: res.description,
@@ -163,7 +162,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.loggedIn$.subscribe((status) => {
         if (!status) {
           const columns = this.appConfig.localColumns;
-          this.store.dispatch(setDatasetTableColumnsAction({columns}));
+          this.store.dispatch(setDatasetTableColumnsAction({ columns }));
           this.tableColumns$ = this.store
             .select(selectColumns)
             .pipe(
