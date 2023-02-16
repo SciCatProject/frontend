@@ -235,7 +235,6 @@ describe("DashboardComponent", () => {
       const dataset = new DerivedDataset({
         accessGroups: [],
         contactEmail: currentUser.email,
-        createdBy: currentUser.username,
         creationTime: new Date(),
         datasetName: "Test Name",
         description: "Test description",
