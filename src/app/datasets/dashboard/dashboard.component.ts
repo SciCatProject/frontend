@@ -160,9 +160,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   updateColumnSubscription(): void {
     this.subscriptions.push(
       this.loggedIn$.subscribe((status) => {
+        const columns = this.appConfig.localColumns;
+        this.store.dispatch(setDatasetTableColumnsAction({ columns }));
         if (!status) {
-          const columns = this.appConfig.localColumns;
-          this.store.dispatch(setDatasetTableColumnsAction({ columns }));
           this.tableColumns$ = this.store
             .select(selectColumns)
             .pipe(
