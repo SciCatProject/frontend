@@ -24,7 +24,7 @@
   "ownerGroup": "ess",
   "accessGroups": [],
   "sampleId": "string",
-  "proposalId": "string",
+  "proposalId": "20170266",
   "datasetlifecycle": {
     "archivable": true,
     "retrievable": false,

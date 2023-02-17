@@ -133,18 +133,8 @@ export class DatasetEffects {
   fetchDataset$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchDatasetAction),
-      switchMap(({ pid, filters }) => {
-        const datasetFilter: LoopBackFilter = {
-          where: { pid },
-        };
-
-        if (filters) {
-          Object.keys(filters).forEach((key) => {
-            datasetFilter.where[key] = filters[key];
-          });
-        }
-
-        return this.datasetApi.findOne<Dataset>(datasetFilter).pipe(
+      switchMap(({ pid }) => {
+        return this.datasetApi.findById<Dataset>(encodeURIComponent(pid)).pipe(
           map((dataset: Dataset) =>
             fromActions.fetchDatasetCompleteAction({ dataset })
           ),
@@ -289,15 +279,13 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.updatePropertyAction),
       switchMap(({ pid, property }) =>
-        this.datasetApi
-          .patchAttributes(encodeURIComponent(pid), property)
-          .pipe(
-            switchMap(() => [
-              fromActions.updatePropertyCompleteAction(),
-              fromActions.fetchDatasetAction({ pid }),
-            ]),
-            catchError(() => of(fromActions.updatePropertyFailedAction()))
-          )
+        this.datasetApi.patchAttributes(encodeURIComponent(pid), property).pipe(
+          switchMap(() => [
+            fromActions.updatePropertyCompleteAction(),
+            fromActions.fetchDatasetAction({ pid }),
+          ]),
+          catchError(() => of(fromActions.updatePropertyFailedAction()))
+        )
       )
     );
   });

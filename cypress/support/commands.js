@@ -153,6 +153,49 @@ Cypress.Commands.add("createDataset", (type) => {
     });
   });
 });
+Cypress.Commands.add("createProposal", () => {
+  cy.getCookie("$LoopBackSDK$user").then((userCookie) => {
+    const user = JSON.parse(decodeURIComponent(userCookie.value));
+
+    cy.getCookie("$LoopBackSDK$id").then((idCookie) => {
+      const token = idCookie.value;
+      cy.fixture("proposal").then((proposal) => {
+        cy.log("Proposal: " + JSON.stringify(proposal, null, 2));
+        cy.log("User: " + JSON.stringify(user, null, 2));
+
+        cy.request({
+          method: "POST",
+          url: lbBaseUrl + "/Proposals?access_token=" + token,
+          headers: {
+            Authorization: token,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: proposal,
+        });
+      });
+    });
+  });
+});
+
+Cypress.Commands.add("deleteProposal", (id) => {
+  cy.getCookie("$LoopBackSDK$id").then((idCookie) => {
+    const token = idCookie.value;
+
+    cy.request({
+      method: "DELETE",
+      url:
+        lbBaseUrl +
+        `/Proposals/${encodeURIComponent(id)}?access_token=` +
+        token,
+      headers: {
+        Authorization: token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+  });
+});
 
 Cypress.Commands.add("removeDatasets", () => {
   cy.getCookie("$LoopBackSDK$id").then((cookie) => {
