@@ -16,6 +16,7 @@ import { DOCUMENT } from "@angular/common";
 })
 export class UserSettingsComponent implements OnInit {
   vm$ = this.store.select(selectUserSettingsPageViewModel);
+  tokenValue: string;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -25,6 +26,10 @@ export class UserSettingsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.vm$.subscribe(
+      (settings) =>
+        (this.tokenValue = settings.scicatToken.replace("Bearer ", ""))
+    );
     this.store.dispatch(fetchCurrentUserAction());
     this.store.dispatch(fetchScicatTokenAction());
   }

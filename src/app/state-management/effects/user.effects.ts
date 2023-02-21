@@ -128,6 +128,8 @@ export class UserEffects {
               user,
               accountType: "external",
             }),
+            fromActions.fetchUserIdentityAction({ id: user.id }),
+            fromActions.fetchUserSettingsAction({ id: user.id }),
           ]),
           catchError((error: HttpErrorResponse) =>
             of(fromActions.fetchUserFailedAction({ error }))
@@ -334,9 +336,7 @@ export class UserEffects {
       ofType(fromActions.fetchScicatTokenAction),
       switchMap(() =>
         of(this.userApi.getCurrentToken()).pipe(
-          map((token) =>
-            fromActions.fetchScicatTokenCompleteAction({ token })
-          ),
+          map((token) => fromActions.fetchScicatTokenCompleteAction({ token })),
           catchError(() => of(fromActions.fetchScicatTokenFailedAction()))
         )
       )
