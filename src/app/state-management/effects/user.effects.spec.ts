@@ -193,19 +193,27 @@ describe("UserEffects", () => {
       userId: "testId",
     });
 
-    it("should result in a fetchUserCompleteAction and a loginCompleteAction", () => {
+    it("should result in a fetchUserCompleteAction, loginCompleteAction, fetchUserIdentityAction and a fetchUserSettingsAction", () => {
       const user = new User();
+      user.id = "testId";
       const accountType = "external";
       const action = fromActions.fetchUserAction({ adLoginResponse });
       const outcome1 = fromActions.fetchUserCompleteAction();
       const outcome2 = fromActions.loginCompleteAction({ user, accountType });
+      const outcome3 = fromActions.fetchUserIdentityAction({ id: user.id });
+      const outcome4 = fromActions.fetchUserSettingsAction({ id: user.id });
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: user });
       loopBackAuth.setToken(token);
       userApi.findById.and.returnValue(response);
 
-      const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
+      const expected = cold("--(bcde)", {
+        b: outcome1,
+        c: outcome2,
+        d: outcome3,
+        e: outcome4,
+      });
       expect(effects.fetchUser$).toBeObservable(expected);
     });
 
