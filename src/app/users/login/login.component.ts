@@ -14,7 +14,11 @@ import { filter } from "rxjs/operators";
 import { selectLoginPageViewModel } from "state-management/selectors/user.selectors";
 import { MatDialog } from "@angular/material/dialog";
 import { PrivacyDialogComponent } from "users/privacy-dialog/privacy-dialog.component";
-import { AppConfig, AppConfigService, OAuth2Endpoint } from "app-config.service";
+import {
+  AppConfig,
+  AppConfigService,
+  OAuth2Endpoint,
+} from "app-config.service";
 
 interface LoginForm {
   username: string;
@@ -86,7 +90,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.facility = this.appConfig.facility;
-    this.loginFormPrefix = this.appConfig.externalAuthEndpoint ? this.facility: "Service";
+    this.loginFormPrefix = this.appConfig.externalAuthEndpoint
+      ? this.facility
+      : "Service";
     this.loginFormEnabled = this.appConfig.loginFormEnabled;
     this.oAuth2Endpoints = this.appConfig.oAuth2Endpoints;
 
