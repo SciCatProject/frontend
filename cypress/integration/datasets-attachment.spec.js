@@ -54,7 +54,7 @@ describe("Datasets", () => {
 
       cy.wait("@upload").then(({ request, response }) => {
         expect(request.method).to.eq("POST");
-        expect(response.statusCode).to.eq(200);
+        expect(response.statusCode).to.eq(201);
       });
 
       cy.get(".attachment-card #caption").should(
