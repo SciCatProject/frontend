@@ -13,71 +13,91 @@
         <div fxFlex="auto"></div>
       </div>
       <mat-card-content>
-        <div *ngFor="let endpoint of oAuth2Endpoints">
-          <button
-            class="oauth-login-button"
-            mat-raised-button
-            type="submit"
-            [ngClass]="{ loading: vm.isLoggingIn }"
-            (click)="redirectOIDC(endpoint.authURL)"
-          >
-            <img
-              class="oauth-login-image"
-              *ngIf="endpoint.displayImage"
-              [src]="endpoint.displayImage"
-            />
-            Login with {{ endpoint.displayText }}
-          </button>
-          <br />
-        </div>
-        <br />
-        <form
-          [formGroup]="loginForm"
-          (ngSubmit)="onLogin()"
-          *ngIf="loginFormEnabled"
-        >
-          <mat-form-field hintLabel="{{ loginFormPrefix }} account username">
-            <mat-label> <b> Username</b> </mat-label>
-            <span matPrefix> <mat-icon>person</mat-icon> &nbsp; </span>
-            <input matInput id="usernameInput" formControlName="username" />
-          </mat-form-field>
-
-          <mat-form-field hintLabel="{{ loginFormPrefix }} account password">
-            <mat-label> <b> Password</b> </mat-label>
-            <span matPrefix> <mat-icon>vpn_key</mat-icon> &nbsp; </span>
-            <input
-              matInput
-              id="passwordInput"
-              formControlName="password"
-              [type]="hide ? 'password' : 'text'"
-            />
-            <button
-              mat-icon-button
-              matSuffix
-              type="button"
-              (click)="hide = !hide"
-              [attr.aria-label]="'Hide password'"
-              [attr.aria-pressed]="hide"
+        <mat-tab-group>
+          <mat-tab [label]="facilityLoginLabel" *ngIf="oAuth2Endpoints.length">
+            <div
+              class="external-login"
+              *ngFor="let endpoint of oAuth2Endpoints"
             >
-              <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
-            </button>
-          </mat-form-field>
-          <p class="privacy-notice" *ngIf="facility === 'ESS'">
-            <small>
-              <a (click)="openPrivacyDialog()">SciCat Privacy Notice</a>
-            </small>
-          </p>
-          <button
-            mat-raised-button
-            class="login-button"
-            type="submit"
-            color="primary"
-            [ngClass]="{ loading: vm.isLoggingIn }"
-          >
-            Log in
-          </button>
-          <mat-checkbox name="rememberMe">Remember me</mat-checkbox>
-        </form>
+              <button
+                class="oauth-login-button"
+                mat-raised-button
+                type="submit"
+                [ngClass]="{ loading: vm.isLoggingIn }"
+                (click)="redirectOIDC(endpoint.authURL)"
+              >
+                <img
+                  class="oauth-login-image"
+                  *ngIf="endpoint.displayImage"
+                  [src]="endpoint.displayImage"
+                />
+                Login with {{ endpoint.displayText }}
+              </button>
+              <br />
+            </div>
+          </mat-tab>
+          <mat-tab [label]="localLoginLabel">
+            <div class="internal-login">
+              <form
+                [formGroup]="loginForm"
+                (ngSubmit)="onLogin()"
+                *ngIf="loginFormEnabled"
+              >
+                <mat-form-field
+                  hintLabel="{{ loginFormPrefix }} account username"
+                >
+                  <mat-label> <b> Username</b> </mat-label>
+                  <span matPrefix> <mat-icon>person</mat-icon> &nbsp; </span>
+                  <input
+                    matInput
+                    id="usernameInput"
+                    formControlName="username"
+                  />
+                </mat-form-field>
+
+                <mat-form-field
+                  hintLabel="{{ loginFormPrefix }} account password"
+                >
+                  <mat-label> <b> Password</b> </mat-label>
+                  <span matPrefix> <mat-icon>vpn_key</mat-icon> &nbsp; </span>
+                  <input
+                    matInput
+                    id="passwordInput"
+                    formControlName="password"
+                    [type]="hide ? 'password' : 'text'"
+                  />
+                  <button
+                    mat-icon-button
+                    matSuffix
+                    type="button"
+                    (click)="hide = !hide"
+                    [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide"
+                  >
+                    <mat-icon>{{
+                      hide ? "visibility_off" : "visibility"
+                    }}</mat-icon>
+                  </button>
+                </mat-form-field>
+                <p class="privacy-notice" *ngIf="facility === 'ESS'">
+                  <small>
+                    <a (click)="openPrivacyDialog()">SciCat Privacy Notice</a>
+                  </small>
+                </p>
+                <button
+                  mat-raised-button
+                  class="login-button"
+                  type="submit"
+                  color="primary"
+                  [ngClass]="{ loading: vm.isLoggingIn }"
+                >
+                  Log in
+                </button>
+                <mat-checkbox name="rememberMe">Remember me</mat-checkbox>
+              </form>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
       </mat-card-content>
     </mat-card>
   </div>

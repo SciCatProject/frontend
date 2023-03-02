@@ -47,6 +47,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   loginFormEnabled = false;
   oAuth2Endpoints: OAuth2Endpoint[] = [];
   loginFormPrefix: string;
+  facilityLoginLabel: string;
+  localLoginLabel: string;
 
   returnUrl: string;
   hide = true;
@@ -90,6 +92,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.facility = this.appConfig.facility;
+    this.facilityLoginLabel = this.appConfig.facilityLoginLabel || "External";
+    this.localLoginLabel = this.appConfig.localLoginLabel || "Local";
     this.loginFormPrefix = this.appConfig.externalAuthEndpoint
       ? this.facility
       : "Service";
