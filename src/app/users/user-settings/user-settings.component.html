@@ -49,11 +49,11 @@
           <th>Groups</th>
           <td>{{ vm.profile.accessGroups }}</td>
         </tr>
-        <tr *ngIf="vm.scicatToken as value">
+        <tr *ngIf="tokenValue">
           <th>SciCat Token</th>
           <td>
-            {{ value }}
-            <span class="copy-button" (click)="onCopy(value)">
+            {{ tokenValue }}
+            <span class="copy-button" (click)="onCopy(tokenValue)">
               <mat-icon matTooltip="Copy token to clipboard">post_add</mat-icon>
             </span>
           </td>

@@ -233,31 +233,28 @@
         <table>
           <tr *ngIf="dataset['proposalId'] && proposal">
             <th>Proposal</th>
-            <td [ngSwitch]="editingAllowed">
-              <a
-                *ngSwitchCase="true"
-                (click)="
-                  editingAllowed ? onClickProposal(proposal.proposalId) : ''
-                "
-                >{{ proposal.title }}</a
-              >
-              <span *ngSwitchDefault>{{ proposal.title }}</span>
+            <td>
+              <a (click)="onClickProposal(proposal.proposalId)">{{
+                proposal.title
+              }}</a>
             </td>
           </tr>
-          <tr *ngIf="dataset['proposalId'] && !proposal && appConfig.datasetDetailsShowMissingProposalId">
+          <tr
+            *ngIf="
+              dataset['proposalId'] &&
+              !proposal &&
+              appConfig.datasetDetailsShowMissingProposalId
+            "
+          >
             <th>Proposal Id</th>
-            <td>{{ dataset['proposalId'] }}</td>
+            <td>{{ dataset["proposalId"] }}</td>
           </tr>
           <tr *ngIf="dataset['sampleId'] && sample">
             <th>Sample</th>
-            <td [ngSwitch]="editingAllowed">
-              <a
-                *ngSwitchCase="true"
-                (click)="editingAllowed ? onClickSample(sample.sampleId) : ''"
-              >
+            <td>
+              <a (click)="onClickSample(sample.sampleId)">
                 <span>{{ sample.description }}</span>
               </a>
-              <span *ngSwitchDefault>{{ sample.description }}</span>
               <span
                 class="sample-edit"
                 (click)="openSampleEditDialog()"
@@ -271,14 +268,10 @@
           </tr>
           <tr *ngIf="dataset['instrumentId'] && instrument">
             <th>Instrument</th>
-            <td [ngSwitch]="editingAllowed">
-              <a
-                *ngSwitchCase="true"
-                (click)="editingAllowed && onClickInstrument(instrument.pid)"
-              >
+            <td>
+              <a (click)="onClickInstrument(instrument.pid)">
                 {{ instrument.name }}
               </a>
-              <span *ngSwitchDefault>{{ instrument.name }}</span>
             </td>
           </tr>
           <tr *ngIf="dataset['creationLocation'] as value">
