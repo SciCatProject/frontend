@@ -117,17 +117,15 @@ export class ArchivingService {
   public retriveDialogOptions(
     retrieveDestinations: RetrieveDestinations[] = []
   ): object {
-    const firstRetrieveOption = retrieveDestinations?.[0]?.option;
     return {
       width: "auto",
       data: {
         title: "Retrieve to",
         question: "",
         choice: {
-          title: firstRetrieveOption,
           options: retrieveDestinations,
         },
-        option: firstRetrieveOption
+        option: retrieveDestinations?.[0]?.option
       },
     };
   }

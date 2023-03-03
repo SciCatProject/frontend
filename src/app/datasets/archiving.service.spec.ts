@@ -168,7 +168,6 @@ describe("ArchivingService", () => {
             title: "Retrieve to",
             question: "",
             choice: { 
-              title: "", 
               options: destinations 
             },
             option: destinations[0].option
