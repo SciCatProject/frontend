@@ -124,10 +124,10 @@ export class ArchivingService {
         title: "Retrieve to",
         question: "",
         choice: {
-          title: firstRetrieveOption? "": "Optionally select destination",
+          title: firstRetrieveOption,
           options: retrieveDestinations,
         },
-        ...(firstRetrieveOption? {option: firstRetrieveOption}: {})
+        option: firstRetrieveOption
       },
     };
   }
