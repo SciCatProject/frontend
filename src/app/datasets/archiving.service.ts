@@ -117,15 +117,17 @@ export class ArchivingService {
   public retriveDialogOptions(
     retrieveDestinations: RetrieveDestinations[] = []
   ): object {
+    const firstRetrieveOption = retrieveDestinations?.[0]?.option;
     return {
       width: "auto",
       data: {
-        title: "Really retrieve?",
+        title: "Retrieve to",
         question: "",
         choice: {
-          title: "Optionally select destination",
+          title: firstRetrieveOption? "": "Optionally select destination",
           options: retrieveDestinations,
         },
+        ...(firstRetrieveOption? {option: firstRetrieveOption}: {})
       },
     };
   }
