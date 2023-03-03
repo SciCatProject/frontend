@@ -159,25 +159,6 @@ describe("ArchivingService", () => {
 
   describe("#retriveDialogOptions()", () => {
     it("should return the dialog options when retrieving", () => {
-      const destinations = [new RetrieveDestinations(), new RetrieveDestinations()];
-      expect(service.retriveDialogOptions(destinations)).toEqual(
-        {
-          width: "auto",
-          data: {
-            title: "Retrieve to",
-            question: "",
-            choice: { 
-              title: "Optionally select destination", 
-              options: destinations 
-            },
-          },
-        }
-      );
-    });
-  });
-
-  describe("#retriveDialogOptions() with non empty retrieveDestinations", () => {
-    it("should return the dialog options when retrieving", () => {
       let destinations: RetrieveDestinations[];
       destinations = [{option: 'option1'}, {option: 'option2'}];
       expect(service.retriveDialogOptions(destinations)).toEqual(
