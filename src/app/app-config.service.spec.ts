@@ -15,6 +15,8 @@ const appConfig: AppConfig = {
   editSampleEnabled: true,
   externalAuthEndpoint: "/auth/msad",
   facility: "ESS",
+  facilityLoginLabel: "ESS",
+  localLoginLabel: "Local",
   fileColorEnabled: true,
   fileDownloadEnabled: true,
   gettingStarted: null,
@@ -161,5 +163,4 @@ describe("AppConfigService", () => {
       expect(config).toEqual(appConfig);
     });
   });
-
 });

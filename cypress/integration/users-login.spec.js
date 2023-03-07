@@ -26,6 +26,8 @@ describe("Users Login", () => {
 
     cy.url().should("include", "/login");
 
+    cy.get('mat-tab-group [role="tab"]').contains("Local").click();
+
     cy.get("#usernameInput").type(username).should("have.value", username);
 
     cy.get("#passwordInput").type("invalid").should("have.value", "invalid");
@@ -64,6 +66,8 @@ describe("Users Login", () => {
 
     cy.url().should("include", "/login");
 
+    cy.get('mat-tab-group [role="tab"]').contains("Local").click();
+
     cy.get("#usernameInput").type(username).should("have.value", username);
 
     cy.get("#passwordInput").type(password).should("have.value", password);
@@ -82,5 +86,4 @@ describe("Users Login", () => {
 
     cy.url().should("include", "/login");
   });
-
 });

@@ -40,6 +40,8 @@ export interface AppConfig {
   editSampleEnabled: boolean;
   externalAuthEndpoint: string | null;
   facility: string | null;
+  facilityLoginLabel: string | null;
+  localLoginLabel: string | null;
   fileColorEnabled: boolean;
   fileDownloadEnabled: boolean;
   gettingStarted: string | null;

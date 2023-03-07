@@ -21,6 +21,7 @@ import { MatInputModule } from "@angular/material/input";
 import { PrivacyDialogComponent } from "./privacy-dialog/privacy-dialog.component";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { AuthCallbackComponent } from "./auth-callback/auth-callback.component";
+import { MatTabsModule } from "@angular/material/tabs";
 
 @NgModule({
   imports: [
@@ -36,6 +37,7 @@ import { AuthCallbackComponent } from "./auth-callback/auth-callback.component";
     MatGridListModule,
     MatIconModule,
     MatInputModule,
+    MatTabsModule,
     MatTooltipModule,
     ReactiveFormsModule,
     SharedScicatFrontendModule,
