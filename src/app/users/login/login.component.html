@@ -36,12 +36,14 @@
               <br />
             </div>
           </mat-tab>
-          <mat-tab [label]="localLoginLabel">
+          <mat-tab
+            [label]="localLoginLabel"
+            *ngIf="loginFormEnabled"
+	  >
             <div class="internal-login">
               <form
                 [formGroup]="loginForm"
                 (ngSubmit)="onLogin()"
-                *ngIf="loginFormEnabled"
               >
                 <mat-form-field
                   hintLabel="{{ loginFormPrefix }} account username"
