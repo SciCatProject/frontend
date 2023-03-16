@@ -9,15 +9,13 @@ describe("MetadataViewComponent", () => {
   let component: MetadataViewComponent;
   let fixture: ComponentFixture<MetadataViewComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        imports: [MatTableModule, PipesModule],
-        declarations: [MetadataViewComponent],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [MatTableModule, PipesModule],
+      declarations: [MetadataViewComponent],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MetadataViewComponent);
@@ -97,6 +95,19 @@ describe("MetadataViewComponent", () => {
 
       expect(isDate).toEqual(false);
     });
+
+    it("should return false if scientificMetadata value is a string of numbers", () => {
+      const metadata = {
+        name: "test",
+        value: "123",
+        unit: "",
+      };
+
+      const isDate = component.isDate(metadata);
+
+      expect(isDate).toEqual(false);
+    });
+
     it("should return true if scientificMetadata item is a date string", () => {
       const metadata = {
         name: "today",

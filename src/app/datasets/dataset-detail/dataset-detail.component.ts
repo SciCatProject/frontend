@@ -51,7 +51,8 @@ import {
   styleUrls: ["./dataset-detail.component.scss"],
 })
 export class DatasetDetailComponent
-  implements OnInit, OnDestroy, EditableComponent {
+  implements OnInit, OnDestroy, EditableComponent
+{
   private subscriptions: Subscription[] = [];
   private _hasUnsavedChanges = false;
   form: FormGroup;

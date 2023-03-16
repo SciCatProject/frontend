@@ -3,14 +3,18 @@ import {
   OnInit,
   Input,
   OnChanges,
-  SimpleChange
+  SimpleChange,
 } from "@angular/core";
-import { ScientificMetadataTableData, ScientificMetadata } from "../scientific-metadata.module";
+import { DateTime } from "luxon";
+import {
+  ScientificMetadataTableData,
+  ScientificMetadata,
+} from "../scientific-metadata.module";
 
 @Component({
   selector: "metadata-view",
   templateUrl: "./metadata-view.component.html",
-  styleUrls: ["./metadata-view.component.scss"]
+  styleUrls: ["./metadata-view.component.scss"],
 })
 export class MetadataViewComponent implements OnInit, OnChanges {
   @Input() metadata: Record<string, unknown> = {};
@@ -18,21 +22,23 @@ export class MetadataViewComponent implements OnInit, OnChanges {
   tableData: ScientificMetadataTableData[] = [];
   columnsToDisplay: string[] = ["name", "value", "unit"];
 
-  createMetadataArray(metadata: Record<string, any>): ScientificMetadataTableData[] {
+  createMetadataArray(
+    metadata: Record<string, any>
+  ): ScientificMetadataTableData[] {
     const metadataArray: ScientificMetadataTableData[] = [];
-    Object.keys(metadata).forEach(key => {
+    Object.keys(metadata).forEach((key) => {
       let metadataObject: ScientificMetadataTableData;
       if ("value" in (metadata[key] as ScientificMetadata)) {
         metadataObject = {
           name: key,
           value: metadata[key]["value"],
-          unit: metadata[key]["unit"]
+          unit: metadata[key]["unit"],
         };
       } else {
         metadataObject = {
           name: key,
           value: JSON.stringify(metadata[key]),
-          unit: ""
+          unit: "",
         };
       }
       metadataArray.push(metadataObject);
@@ -47,7 +53,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     if (typeof scientificMetadata.value === "number") {
       return false;
     }
-    if (isNaN(Date.parse(scientificMetadata.value))) {
+    if (!DateTime.fromISO(scientificMetadata.value).isValid) {
       return false;
     }
     return true;
