@@ -76,10 +76,10 @@ export class LogbooksDashboardComponent
   }
 
   onTextSearchChange(pid: string, query: string) {
-    const queryTxt = query.trim();
+    const queryText = query.trim();
     
-    if(queryTxt.length > 0){
-      this.store.dispatch(setTextFilterAction({ textSearch: queryTxt }));
+    if(queryText.length > 0){
+      this.store.dispatch(setTextFilterAction({ textSearch: queryText }));
       this.store.dispatch(fetchDatasetLogbookAction({ pid }));
     }
   }
