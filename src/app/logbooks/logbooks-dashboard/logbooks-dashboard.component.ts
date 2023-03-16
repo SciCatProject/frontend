@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { Dataset, Logbook } from "shared/sdk";
-import { combineLatest, Observable, Subscription } from "rxjs";
+import { combineLatest, Subscription } from "rxjs";
 import { selectLogbooksDashboardPageViewModel } from "state-management/selectors/logbooks.selectors";
 import {
   fetchDatasetLogbookAction,
