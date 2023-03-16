@@ -8,7 +8,6 @@
 
 <div *ngIf="data.choice?.options?.length > 0">
   <mat-form-field>
-    <mat-label>{{data.choice.title}}</mat-label>
     <mat-select [(ngModel)]="data.option">
       <mat-option *ngFor="let choice of data.choice.options"
         [value]="choice.option" [matTooltip]="choice.tooltip">{{choice.option}}</mat-option>

@@ -120,12 +120,12 @@ export class ArchivingService {
     return {
       width: "auto",
       data: {
-        title: "Really retrieve?",
+        title: "Retrieve to",
         question: "",
         choice: {
-          title: "Optionally select destination",
           options: retrieveDestinations,
         },
+        option: retrieveDestinations?.[0]?.option
       },
     };
   }

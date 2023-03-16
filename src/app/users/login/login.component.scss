@@ -10,7 +10,7 @@
     padding-top: 10em;
 
     mat-card {
-      max-width: 300px;
+      max-width: 350px;
       background-color: rgba(255, 255, 255, 0.8);
 
       .facility-logo {
@@ -22,6 +22,18 @@
       }
 
       mat-card-content {
+        ::ng-deep .mat-tab-labels .mat-tab-label {
+          width: 100%;
+        }
+
+        .external-login {
+          text-align: center;
+        }
+
+        .internal-login {
+          padding: 1em;
+        }
+
         mat-form-field {
           width: 100%;
 
@@ -48,7 +60,6 @@
           margin-top: 1em;
           cursor: pointer;
           display: inline-block;
-
         }
 
         .oauth-login-image {
@@ -63,6 +74,5 @@
         }
       }
     }
-
   }
 }
