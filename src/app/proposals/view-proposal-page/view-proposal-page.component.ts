@@ -103,11 +103,9 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
       this.vm$.subscribe((vm) => {
         if (vm.proposal) {
           this.proposal = vm.proposal;
-          if (this.appConfig.logbookEnabled) {
-            this.store.dispatch(
-              fetchLogbookAction({ name: this.proposal.proposalId  })
-            );
-          }
+          this.store.dispatch(
+            fetchLogbookAction({ name: this.proposal.proposalId  })
+          );
         }
       })
     );
