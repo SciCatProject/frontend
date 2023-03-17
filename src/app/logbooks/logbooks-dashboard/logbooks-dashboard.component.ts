@@ -2,11 +2,12 @@ import {
   Component,
   OnInit,
   OnDestroy,
+  Input,
   ChangeDetectorRef,
   AfterViewChecked,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Dataset } from "shared/sdk";
+import { Dataset, Logbook } from "shared/sdk";
 import { combineLatest, Subscription } from "rxjs";
 import { selectLogbooksDashboardPageViewModel } from "state-management/selectors/logbooks.selectors";
 import {
@@ -30,7 +31,15 @@ import {
 import { AppConfigService } from "app-config.service";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { OwnershipService } from "shared/services/ownership.service";
+import { TableData } from "proposals/view-proposal-page/view-proposal-page.component";
 
+export interface LogbookData {
+  logbook: Logbook;
+  entriesCount: number;
+  entriesPerPage: number;
+  currentPage: number;
+  filters: LogbookFilters;
+}
 @Component({
   selector: "app-logbooks-dashboard",
   templateUrl: "./logbooks-dashboard.component.html",
@@ -39,6 +48,10 @@ import { OwnershipService } from "shared/services/ownership.service";
 export class LogbooksDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
   vm$ = this.store.select(selectLogbooksDashboardPageViewModel);
+
+  @Input() proposal_logbook: LogbookData;
+  @Input() proposal_dataset: TableData;
+
   dataset: Dataset | undefined = undefined;
   appConfig = this.appConfigService.getConfig();
 
@@ -51,22 +64,29 @@ export class LogbooksDashboardComponent
     private router: Router,
     private store: Store,
     private ownershipService: OwnershipService
-  ) { }
+  ) {}
 
   applyRouterState(pid: string, filters: LogbookFilters) {
     console.log("Rerouting to Dataset Logbook");
+    if (this.proposal_logbook) return;
+
     this.router.navigate(["/datasets", pid, "logbook"], {
       queryParams: { args: JSON.stringify(filters) },
     });
   }
 
   onTextSearchChange(pid: string, query: string) {
-    this.store.dispatch(setTextFilterAction({ textSearch: query }));
-    this.store.dispatch(fetchDatasetLogbookAction({ pid }));
+    const queryText = query.trim();
+    
+    if(queryText.length > 0){
+      this.store.dispatch(setTextFilterAction({ textSearch: queryText }));
+      this.store.dispatch(fetchDatasetLogbookAction({ pid }));
+    }
   }
 
   onFilterSelect(pid: string, filters: LogbookFilters) {
     const { showBotMessages, showImages, showUserMessages } = filters;
+
     this.store.dispatch(
       setDisplayFiltersAction({ showBotMessages, showImages, showUserMessages })
     );
@@ -88,7 +108,7 @@ export class LogbooksDashboardComponent
   }
 
   ngOnInit() {
-  
+
     this.subscriptions.push(
       combineLatest([this.route.params, this.vm$])
         .pipe(
@@ -97,7 +117,6 @@ export class LogbooksDashboardComponent
         )
         .subscribe(([{ pid }, filters]) => {
           if (pid) {
-            this.store.dispatch(fetchDatasetLogbookAction({ pid }));
             this.applyRouterState(pid, filters as LogbookFilters);
           }
         })
@@ -106,7 +125,12 @@ export class LogbooksDashboardComponent
       this.store.select(selectCurrentDataset).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
-          this.ownershipService.checkDatasetAccess(dataset, this.store, this.router);
+          this.store.dispatch(fetchDatasetLogbookAction({ pid: dataset.pid }));
+          this.ownershipService.checkDatasetAccess(
+            dataset,
+            this.store,
+            this.router
+          );
         }
       })
     );

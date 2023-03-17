@@ -7,7 +7,7 @@
         routerLink="{{ link.location}}"
         routerLinkActive
         #rla="routerLinkActive"
-        [routerLinkActiveOptions]="{exact:true}"
+        [routerLinkActiveOptions]="routerLinkActiveOptions"
         [active]="rla.isActive"
         [replaceUrl]="true"
         (click)="onTabSelected(link.label)"

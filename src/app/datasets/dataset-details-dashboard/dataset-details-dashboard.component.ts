@@ -14,7 +14,7 @@ import {
   selectIsLoggedIn,
   selectProfile,
 } from "state-management/selectors/user.selectors";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, IsActiveMatchOptions } from "@angular/router";
 import { Subscription, Observable, combineLatest } from "rxjs";
 import { map, pluck } from "rxjs/operators";
 import {
@@ -71,7 +71,6 @@ export class DatasetDetailsDashboardComponent
   loggedIn$ = this.store.select(selectIsLoggedIn);
   dataset$ = this.store.select(selectCurrentDataset);
   jwt$: Observable<JWT> = new Observable<JWT>();
-
   appConfig = this.appConfigService.getConfig();
 
   dataset: Dataset | undefined;
@@ -81,6 +80,14 @@ export class DatasetDetailsDashboardComponent
     icon: string;
     enabled: boolean;
   }[] = [];
+
+  routerLinkActiveOptions: IsActiveMatchOptions = {
+    matrixParams: "ignored",
+    queryParams: "ignored",
+    fragment: "ignored",
+    paths: "exact"
+    };
+
   fetchDataActions: { [tab: string]: { action: any; loaded: boolean } } = {
     [TAB.details]: { action: fetchDatasetAction, loaded: false },
     [TAB.relatedDatasets]: {

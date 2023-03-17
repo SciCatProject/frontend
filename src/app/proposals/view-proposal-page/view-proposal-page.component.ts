@@ -17,6 +17,7 @@ import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { fetchLogbookAction } from "state-management/actions/logbooks.actions";
 import { AppConfigService } from "app-config.service";
+import { selectLogbooksDashboardPageViewModel } from "state-management/selectors/logbooks.selectors";
 
 export interface TableData {
   pid: string;
@@ -35,7 +36,7 @@ export interface TableData {
 })
 export class ViewProposalPageComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectViewProposalPageViewModel);
-
+  proposal_logbook$ = this.store.select(selectLogbooksDashboardPageViewModel);
   appConfig = this.appConfigService.getConfig();
 
   proposal: Proposal = new Proposal();
@@ -102,11 +103,9 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
       this.vm$.subscribe((vm) => {
         if (vm.proposal) {
           this.proposal = vm.proposal;
-          if (this.appConfig.logbookEnabled) {
-            this.store.dispatch(
-              fetchLogbookAction({ name: this.proposal.proposalId })
-            );
-          }
+          this.store.dispatch(
+            fetchLogbookAction({ name: this.proposal.proposalId  })
+          );
         }
       })
     );

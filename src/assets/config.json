@@ -1,5 +1,5 @@
 {
-  "accessTokenPrefix": "",
+  "accessTokenPrefix": "Bearer ",
   "addDatasetEnabled": true,
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
@@ -102,7 +102,7 @@
   "oAuth2Endpoints": [],
   "policiesEnabled": true,
   "retrieveDestinations": [],
-  "riotBaseUrl": "http://scitest.esss.lu.se/riot",
+  "riotBaseUrl": "http://scichat.swap.ess.eu",
   "scienceSearchEnabled": false,
   "scienceSearchUnitsEnabled": true,
   "searchPublicDataEnabled": true,
