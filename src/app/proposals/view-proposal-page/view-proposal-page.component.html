@@ -33,6 +33,6 @@
       Logbook
     </ng-template>
 
-    <app-logbooks-dashboard></app-logbooks-dashboard>
+    <app-logbooks-dashboard [proposal_logbook]="proposal_logbook$ | async" [proposal_dataset]="tableData[0]"></app-logbooks-dashboard>
   </mat-tab>
 </mat-tab-group>
