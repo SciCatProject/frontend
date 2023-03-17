@@ -20,6 +20,7 @@ import { UnitsService } from "shared/services/units.service";
 import { startWith, map } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { ScientificMetadata } from "../scientific-metadata.module";
+import { DateTime } from "luxon";
 
 @Component({
   selector: "metadata-edit",
@@ -112,17 +113,17 @@ export class MetadataEditComponent implements OnInit, OnChanges {
               fieldValue: Number(this.metadata[key]["value"]),
               fieldUnit: this.metadata[key]["unit"],
             });
-          } else if (isNaN(Date.parse(this.metadata[key]["value"]))) {
+          } else if (DateTime.fromISO(this.metadata[key]["value"]).isValid) {
             field = this.formBuilder.group({
               fieldName: key,
-              fieldType: "string",
+              fieldType: "date",
               fieldValue: this.metadata[key]["value"],
               fieldUnit: this.metadata[key]["unit"],
             });
           } else {
             field = this.formBuilder.group({
               fieldName: key,
-              fieldType: "date",
+              fieldType: "string",
               fieldValue: this.metadata[key]["value"],
               fieldUnit: this.metadata[key]["unit"],
             });
