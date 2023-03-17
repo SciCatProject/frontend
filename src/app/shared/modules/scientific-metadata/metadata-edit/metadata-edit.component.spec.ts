@@ -145,6 +145,25 @@ describe("MetadataEditComponent", () => {
       expect(component.items.at(0).get("fieldUnit").status).toEqual("DISABLED");
     });
 
+    it("should add typed metadata from the provided metadata object to the FormGroup array", () => {
+      expect(component.items.length).toEqual(0);
+
+      component.metadata = {
+        testName: {
+          value: "123",
+          unit: "",
+        },
+      };
+
+      component.addCurrentMetadata();
+
+      expect(component.items.length).toEqual(1);
+      expect(component.items.at(0).get("fieldName").value).toEqual("testName");
+      expect(component.items.at(0).get("fieldType").value).toEqual("string");
+      expect(component.items.at(0).get("fieldValue").value).toEqual("123");
+      expect(component.items.at(0).get("fieldUnit").value).toEqual("");
+    });
+
     it("should do nothing if the metadata object is undefined", () => {
       expect(component.items.length).toEqual(0);
       expect(component.metadata).toBeUndefined();
