@@ -9,7 +9,7 @@ import {
 import { Store } from "@ngrx/store";
 import { Logbook } from "shared/sdk";
 import { Subscription } from "rxjs";
-import { selectCurrentLogbook, selectLogbooksDashboardPageViewModel } from "state-management/selectors/logbooks.selectors";
+import { selectCurrentLogbook } from "state-management/selectors/logbooks.selectors";
 import {
   fetchLogbookAction,
   setTextFilterAction,

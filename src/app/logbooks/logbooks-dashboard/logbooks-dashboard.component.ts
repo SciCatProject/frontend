@@ -31,7 +31,6 @@ import {
 import { AppConfigService } from "app-config.service";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { OwnershipService } from "shared/services/ownership.service";
-import { TableData } from "proposals/view-proposal-page/view-proposal-page.component";
 
 export interface LogbookData {
   logbook: Logbook;
