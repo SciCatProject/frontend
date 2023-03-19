@@ -49,9 +49,6 @@ export class LogbooksDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked {
   vm$ = this.store.select(selectLogbooksDashboardPageViewModel);
 
-  @Input() proposal_logbook: LogbookData;
-  @Input() proposal_dataset: TableData;
-
   dataset: Dataset | undefined = undefined;
   appConfig = this.appConfigService.getConfig();
 
@@ -68,7 +65,6 @@ export class LogbooksDashboardComponent
 
   applyRouterState(pid: string, filters: LogbookFilters) {
     console.log("Rerouting to Dataset Logbook");
-    if (this.proposal_logbook) return;
 
     this.router.navigate(["/datasets", pid, "logbook"], {
       queryParams: { args: JSON.stringify(filters) },
@@ -76,12 +72,10 @@ export class LogbooksDashboardComponent
   }
 
   onTextSearchChange(pid: string, query: string) {
-    const queryText = query.trim();
-    
-    if(queryText.length > 0){
-      this.store.dispatch(setTextFilterAction({ textSearch: queryText }));
-      this.store.dispatch(fetchDatasetLogbookAction({ pid }));
-    }
+    // TODO: query.length return undefined when it is empty
+    const queryText = query.length ? query : "";
+    this.store.dispatch(setTextFilterAction({ textSearch: queryText }));
+    this.store.dispatch(fetchDatasetLogbookAction({ pid }));
   }
 
   onFilterSelect(pid: string, filters: LogbookFilters) {
