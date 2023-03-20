@@ -1,4 +1,5 @@
 import { Component, Output, EventEmitter, Input } from "@angular/core";
+import saveAs from "file-saver";
 import { Attachment } from "shared/sdk";
 
 export interface PickedFile {
@@ -64,5 +65,44 @@ export class FileUploaderComponent {
 
   onDeleteAttachment(attachmentId: string) {
     this.deleteAttachment.emit(attachmentId);
+  }
+
+  base64MimeType(encoded: string): string {
+    var result = null;
+
+    if (typeof encoded !== "string") {
+      return result;
+    }
+
+    var mime = encoded.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/);
+
+    if (mime && mime.length) {
+      result = mime[1];
+    }
+
+    return result;
+  }
+
+  onDownloadAttachment(attachment: Attachment) {
+    const mimeType = this.base64MimeType(attachment.thumbnail);
+    if (!mimeType) {
+      throw new Error(
+        "File type of the downloading file can not be determined"
+      );
+    }
+
+    const splitMimeType = mimeType.split("/");
+    const fileType = splitMimeType[splitMimeType.length - 1];
+
+    if (!fileType) {
+      throw new Error(
+        "File type of the downloading file can not be determined"
+      );
+    }
+
+    saveAs(
+      attachment.thumbnail,
+      attachment.caption || `${attachment.id}.${fileType}`
+    );
   }
 }

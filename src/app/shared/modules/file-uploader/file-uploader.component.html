@@ -16,11 +16,19 @@
         Browse
       </button>
     </div>
+    <div class="instructions font-small">
+      Accepted file formats: image/*, application/pdf
+    </div>
   </div>
 </mat-card>
 
 <mat-card class="file-picker">
-  <div class="mat-title">Choose an image to upload</div>
+  <div class="mat-title">
+    Choose an image to upload
+    <div class="font-small">
+      Accepted file formats: image/*, application/pdf
+    </div>
+  </div>
 
   <button mat-raised-button color="accent" (click)="fileDropRef.click()">
     Browse
@@ -45,7 +53,18 @@
           Submit
         </button>
       </form>
-      <button mat-button (click)="onDeleteAttachment(attachment.id)">
+      <button
+        mat-button
+        class="download-button"
+        (click)="onDownloadAttachment(attachment)"
+      >
+        <mat-icon>download</mat-icon>
+      </button>
+      <button
+        mat-button
+        class="delete-button"
+        (click)="onDeleteAttachment(attachment.id)"
+      >
         <mat-icon>delete</mat-icon>
       </button>
     </mat-card-actions>
