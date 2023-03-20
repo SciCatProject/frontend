@@ -36,7 +36,7 @@ export interface TableData {
 })
 export class ViewProposalPageComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectViewProposalPageViewModel);
-  proposal_logbook$ = this.store.select(selectLogbooksDashboardPageViewModel);
+  logbook$ = this.store.select(selectLogbooksDashboardPageViewModel);
   appConfig = this.appConfigService.getConfig();
 
   proposal: Proposal = new Proposal();
