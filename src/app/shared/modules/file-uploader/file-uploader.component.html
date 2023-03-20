@@ -53,7 +53,18 @@
           Submit
         </button>
       </form>
-      <button mat-button (click)="onDeleteAttachment(attachment.id)">
+      <button
+        mat-button
+        class="download-button"
+        (click)="onDownloadAttachment(attachment)"
+      >
+        <mat-icon>download</mat-icon>
+      </button>
+      <button
+        mat-button
+        class="delete-button"
+        (click)="onDeleteAttachment(attachment.id)"
+      >
         <mat-icon>delete</mat-icon>
       </button>
     </mat-card-actions>
