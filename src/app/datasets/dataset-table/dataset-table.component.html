@@ -59,6 +59,24 @@
       </mat-cell>
     </ng-container>
 
+    <!-- Pid Column -->
+    <ng-container
+      matColumnDef="standard_pid"
+      style="align-content: center;"
+    >
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="column" style="align-items: center;">
+          <div>
+            <mat-icon>perm_identity</mat-icon>
+          </div>
+          <div>Pid</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell class="datasetName" *matCellDef="let dataset">
+        {{ dataset.pid }}
+      </mat-cell>
+    </ng-container>
+  
     <!-- Name Column -->
     <ng-container
       matColumnDef="standard_datasetName"
