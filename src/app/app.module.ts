@@ -5,7 +5,7 @@ import { AppRoutingModule, routes } from "app-routing/app-routing.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule, Title } from "@angular/platform-browser";
 import { EffectsModule } from "@ngrx/effects";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { APP_INITIALIZER, NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { SampleApi, SDKBrowserModule } from "shared/sdk/index";
@@ -19,6 +19,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { LayoutModule } from "_layout/layout.module";
 import { AppConfigService } from "app-config.service";
 import { AppThemeService } from "app-theme.service";
+import { SnackbarInterceptor } from "shared/interceptors/snackbar.interceptor";
 
 const appConfigInitializerFn = (appConfig: AppConfigService) => {
   return () => appConfig.loadAppConfig();
@@ -73,6 +74,11 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
       multi: true,
       deps: [AppThemeService],
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: SnackbarInterceptor,
+      multi: true,
+    },
     AppThemeService,
     UserApi,
     SampleApi,
@@ -81,4 +87,4 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
