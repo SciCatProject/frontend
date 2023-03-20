@@ -26,68 +26,74 @@
       "enabled": true
     },
     {
-      "name": "datasetName",
+      "name": "pid",
       "order": 1,
       "type": "standard",
       "enabled": true
     },
     {
-      "name": "runNumber",
+      "name": "datasetName",
       "order": 2,
       "type": "standard",
       "enabled": true
     },
     {
-      "name": "sourceFolder",
+      "name": "runNumber",
       "order": 3,
       "type": "standard",
       "enabled": true
     },
     {
-      "name": "size",
+      "name": "sourceFolder",
       "order": 4,
       "type": "standard",
       "enabled": true
     },
     {
-      "name": "creationTime",
+      "name": "size",
       "order": 5,
       "type": "standard",
       "enabled": true
     },
     {
-      "name": "type",
+      "name": "creationTime",
       "order": 6,
       "type": "standard",
       "enabled": true
     },
     {
-      "name": "image",
+      "name": "type",
       "order": 7,
       "type": "standard",
       "enabled": true
     },
     {
-      "name": "metadata",
+      "name": "image",
       "order": 8,
       "type": "standard",
       "enabled": true
     },
     {
-      "name": "proposalId",
+      "name": "metadata",
       "order": 9,
       "type": "standard",
       "enabled": true
     },
     {
-      "name": "ownerGroup",
+      "name": "proposalId",
       "order": 10,
+      "type": "standard",
+      "enabled": true
+    },
+    {
+      "name": "ownerGroup",
+      "order": 11,
       "type": "standard",
       "enabled": false
     },
     {
       "name": "dataStatus",
-      "order": 11,
+      "order": 12,
       "type": "standard",
       "enabled": false
     }
