@@ -52,8 +52,7 @@
         <mat-cell *matCellDef="let logbook">
           <div fxLayout="column" *ngIf="logbook.messages.length > 0">
             {{
-              logbook.messages[0].sender
-                | slice: 1:logbook.messages[0].sender.indexOf(":")
+              logbook.messages[0].senderName
             }}
           </div>
           <div fxLayout="column" *ngIf="logbook.messages.length === 0">--</div>
