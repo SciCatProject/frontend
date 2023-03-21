@@ -44,7 +44,7 @@
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let message">
-        {{ message.sender | slice: 1:message.sender.indexOf(":") }}
+        {{ message.senderName }}
       </mat-cell>
     </ng-container>
 
@@ -113,7 +113,7 @@
           </mat-expansion-panel-header>
           <div>
             <div class="sender">
-              {{ message.sender | slice: 1:message.sender.indexOf(":") }},
+              {{ message.senderName }},
               {{ message.origin_server_ts | date: "HH:mm" }}:
             </div>
             <div>
@@ -162,7 +162,7 @@
               "
             >
               <div class="sender">
-                {{ value.sender | slice: 1:value.sender.indexOf(":") }},
+                {{ value.senderName }},
                 {{ value.origin_server_ts | date: "HH:mm" }}:
               </div>
               <div>
