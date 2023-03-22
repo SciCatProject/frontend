@@ -12,6 +12,7 @@ import {
   addAttachmentAction,
   updateAttachmentCaptionAction,
   removeAttachmentAction,
+  fetchSampleAttachmentsAction,
 } from "../../state-management/actions/samples.actions";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
@@ -41,7 +42,8 @@ export interface TableData {
   templateUrl: "./sample-detail.component.html",
   styleUrls: ["./sample-detail.component.scss"],
 })
-export class SampleDetailComponent implements OnInit, OnDestroy, EditableComponent {
+export class SampleDetailComponent
+  implements OnInit, OnDestroy, EditableComponent {
   private _hasUnsavedChanges = false;
   vm$ = this.store.select(selectSampleDetailPageViewModel);
 
@@ -50,6 +52,7 @@ export class SampleDetailComponent implements OnInit, OnDestroy, EditableCompone
   sample: Sample = new Sample();
   user: User = new User();
   attachment: Partial<Attachment> = new Attachment();
+  attachments: Attachment[] = [new Attachment()];
   show = false;
   subscriptions: Subscription[] = [];
 
@@ -109,11 +112,6 @@ export class SampleDetailComponent implements OnInit, OnDestroy, EditableCompone
       caption: file.name,
       ownerGroup: this.sample.ownerGroup,
       accessGroups: this.sample.accessGroups,
-      createdBy: this.user.username,
-      updatedBy: this.user.username,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      sample: this.sample,
       sampleId: this.sample.sampleId,
       dataset: undefined,
       datasetId: undefined,
@@ -162,6 +160,10 @@ export class SampleDetailComponent implements OnInit, OnDestroy, EditableCompone
         if (vm.sample) {
           this.sample = vm.sample;
         }
+
+        if (vm.attachments) {
+          this.attachments = vm.attachments;
+        }
       })
     );
     // Prevent user from reloading page if there are unsave changes
@@ -189,6 +191,9 @@ export class SampleDetailComponent implements OnInit, OnDestroy, EditableCompone
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
         this.store.dispatch(fetchSampleAction({ sampleId: params.id }));
+        this.store.dispatch(
+          fetchSampleAttachmentsAction({ sampleId: params.id })
+        );
         this.store.dispatch(fetchSampleDatasetsAction({ sampleId: params.id }));
       })
     );

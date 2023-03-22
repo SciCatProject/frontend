@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import { DatasetApi, SampleApi, Sample, Dataset } from "shared/sdk";
+import { DatasetApi, SampleApi, Sample, Dataset, Attachment } from "shared/sdk";
 import { Store } from "@ngrx/store";
 import {
   selectFullqueryParams,
@@ -81,17 +81,25 @@ export class SampleEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchSampleAction),
       switchMap(({ sampleId }) => {
-        const sampleFilter = {
-          where: {
-            sampleId,
-          },
-          include: [{ relation: "attachments" }],
-        };
-        return this.sampleApi.findOne<Sample>(sampleFilter).pipe(
+        return this.sampleApi.findById<Sample>(sampleId).pipe(
           map((sample: Sample) =>
             fromActions.fetchSampleCompleteAction({ sample })
           ),
           catchError(() => of(fromActions.fetchSampleFailedAction()))
+        );
+      })
+    );
+  });
+
+  fetchSampleAttachments$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchSampleAttachmentsAction),
+      switchMap(({ sampleId }) => {
+        return this.sampleApi.getAttachments(sampleId).pipe(
+          map((attachments: Attachment[]) =>
+            fromActions.fetchSampleAttachmentsCompleteAction({ attachments })
+          ),
+          catchError(() => of(fromActions.fetchSampleAttachmentsFailedAction()))
         );
       })
     );
