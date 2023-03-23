@@ -106,7 +106,7 @@ Cypress.Commands.add("isLoading", (type) => {
   cy.get('[data-cy="spinner"]').should("exist");
 });
 
-Cypress.Commands.add("createDataset", (type) => {
+Cypress.Commands.add("createDataset", (type, proposalId = "20170266") => {
   cy.getCookie("$LoopBackSDK$user").then((userCookie) => {
     const user = JSON.parse(decodeURIComponent(userCookie.value));
 
@@ -115,6 +115,7 @@ Cypress.Commands.add("createDataset", (type) => {
 
       if (type === "raw") {
         cy.fixture("rawDataset").then((dataset) => {
+          dataset.proposalId = proposalId;
           cy.log("Raw Dataset 1: " + JSON.stringify(dataset, null, 2));
           cy.log("User: " + JSON.stringify(user, null, 2));
 
@@ -153,13 +154,14 @@ Cypress.Commands.add("createDataset", (type) => {
     });
   });
 });
-Cypress.Commands.add("createProposal", () => {
-  cy.getCookie("$LoopBackSDK$user").then((userCookie) => {
+Cypress.Commands.add("createProposal", (proposalId = "20170266") => {
+  return cy.getCookie("$LoopBackSDK$user").then((userCookie) => {
     const user = JSON.parse(decodeURIComponent(userCookie.value));
 
     cy.getCookie("$LoopBackSDK$id").then((idCookie) => {
       const token = idCookie.value;
       cy.fixture("proposal").then((proposal) => {
+        proposal.proposalId = proposalId;
         cy.log("Proposal: " + JSON.stringify(proposal, null, 2));
         cy.log("User: " + JSON.stringify(user, null, 2));
 
