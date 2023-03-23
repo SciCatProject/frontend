@@ -159,6 +159,10 @@ export class SampleDetailComponent
       this.vm$.subscribe((vm) => {
         if (vm.sample) {
           this.sample = vm.sample;
+
+          if (!this.sample.sampleCharacteristics) {
+            this.sample.sampleCharacteristics = {};
+          }
         }
 
         if (vm.attachments) {
