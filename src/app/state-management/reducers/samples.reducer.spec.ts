@@ -105,7 +105,7 @@ describe("SamplesReducer", () => {
       });
       const state = samplesReducer(initialSampleState, action);
 
-      expect(state.currentSample.attachments).toContain(attachment);
+      expect(state.attachments).toContain(attachment);
     });
   });
 
@@ -119,7 +119,7 @@ describe("SamplesReducer", () => {
       });
       const state = samplesReducer(initialSampleState, action);
 
-      expect(state.currentSample.attachments).toContain(attachment);
+      expect(state.attachments).toContain(attachment);
     });
   });
 
@@ -129,14 +129,14 @@ describe("SamplesReducer", () => {
       const attachment = new Attachment();
       const attachmentId = "testId";
       attachment.id = attachmentId;
-      initialSampleState.currentSample.attachments = [attachment];
+      initialSampleState.attachments = [attachment];
 
       const action = fromActions.removeAttachmentCompleteAction({
         attachmentId,
       });
       const state = samplesReducer(initialSampleState, action);
 
-      expect(state.currentSample.attachments).toEqual([]);
+      expect(state.attachments).toEqual([]);
     });
   });
 

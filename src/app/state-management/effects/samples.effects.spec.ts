@@ -53,7 +53,7 @@ describe("SampleEffects", () => {
           provide: SampleApi,
           useValue: jasmine.createSpyObj("sampleApi", [
             "fullquery",
-            "findOne",
+            "findById",
             "metadataKeys",
             "patchAttributes",
             "create",
@@ -266,7 +266,7 @@ describe("SampleEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: sample });
-      sampleApi.findOne.and.returnValue(response);
+      sampleApi.findById.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchSample$).toBeObservable(expected);
@@ -278,7 +278,7 @@ describe("SampleEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      sampleApi.findOne.and.returnValue(response);
+      sampleApi.findById.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchSample$).toBeObservable(expected);
