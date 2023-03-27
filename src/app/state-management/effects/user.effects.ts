@@ -305,7 +305,6 @@ export class UserEffects {
         fromActions.selectColumnAction,
         fromActions.deselectColumnAction,
         fromActions.deselectAllCustomColumnsAction,
-        fromActions.addCustomColumnsCompleteAction
       ),
       concatLatestFrom(() => this.columns$),
       map(([action, columns]) => columns),

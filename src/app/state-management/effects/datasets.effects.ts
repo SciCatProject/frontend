@@ -33,7 +33,6 @@ import {
   logoutCompleteAction,
   loadingAction,
   loadingCompleteAction,
-  addCustomColumnsAction,
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
 
@@ -121,14 +120,14 @@ export class DatasetEffects {
     );
   });
 
-  addMetadataColumns$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.fetchMetadataKeysCompleteAction),
-      switchMap(({ metadataKeys }) =>
-        of(addCustomColumnsAction({ names: metadataKeys }))
-      )
-    );
-  });
+  // addMetadataColumns$ = createEffect(() => {
+  //   return this.actions$.pipe(
+  //     ofType(fromActions.fetchMetadataKeysCompleteAction),
+  //     switchMap(({ metadataKeys }) =>
+  //       of(addCustomColumnsAction({ names: metadataKeys }))
+  //     )
+  //   );
+  // });
 
   fetchDataset$ = createEffect(() => {
     return this.actions$.pipe(
