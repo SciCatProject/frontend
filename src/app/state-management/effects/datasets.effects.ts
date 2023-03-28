@@ -33,7 +33,6 @@ import {
   logoutCompleteAction,
   loadingAction,
   loadingCompleteAction,
-  addCustomColumnsAction,
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
 
@@ -118,15 +117,6 @@ export class DatasetEffects {
         fromActions.clearFacetsAction
       ),
       map(() => fromActions.fetchMetadataKeysAction())
-    );
-  });
-
-  addMetadataColumns$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.fetchMetadataKeysCompleteAction),
-      switchMap(({ metadataKeys }) =>
-        of(addCustomColumnsAction({ names: metadataKeys }))
-      )
     );
   });
 

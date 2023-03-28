@@ -23,7 +23,6 @@ import {
 import {
   loadingAction,
   loadingCompleteAction,
-  addCustomColumnsAction,
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
@@ -269,21 +268,6 @@ describe("DatasetEffects", () => {
         const expected = cold("-b", { b: outcome });
         expect(effects.updateMetadataKeys$).toBeObservable(expected);
       });
-    });
-  });
-
-  describe("addMetadataColumns$", () => {
-    it("should dispatch an addColumnAction", () => {
-      const metadataKeys = ["test"];
-      const action = fromActions.fetchMetadataKeysCompleteAction({
-        metadataKeys,
-      });
-      const outcome = addCustomColumnsAction({ names: ["test"] });
-
-      actions = hot("-a", { a: action });
-
-      const expected = cold("-b", { b: outcome });
-      expect(effects.addMetadataColumns$).toBeObservable(expected);
     });
   });
 
