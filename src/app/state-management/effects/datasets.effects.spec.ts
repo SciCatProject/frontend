@@ -23,7 +23,6 @@ import {
 import {
   loadingAction,
   loadingCompleteAction,
-  addCustomColumnsAction,
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
