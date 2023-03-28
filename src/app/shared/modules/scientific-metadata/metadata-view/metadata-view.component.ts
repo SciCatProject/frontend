@@ -28,7 +28,10 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     const metadataArray: ScientificMetadataTableData[] = [];
     Object.keys(metadata).forEach((key) => {
       let metadataObject: ScientificMetadataTableData;
-      if ("value" in (metadata[key] as ScientificMetadata)) {
+      if (
+        typeof metadata[key] === "object" &&
+        "value" in (metadata[key] as ScientificMetadata)
+      ) {
         metadataObject = {
           name: key,
           value: metadata[key]["value"],

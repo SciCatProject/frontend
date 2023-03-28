@@ -5,6 +5,7 @@ import {
   HttpEvent,
   HttpInterceptor,
   HttpResponse,
+  HttpErrorResponse,
 } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
@@ -26,7 +27,10 @@ export class SnackbarInterceptor implements HttpInterceptor {
           request.method == "PATCH" ||
           request.method == "DELETE"
         ) {
-          if (e instanceof HttpResponse && (e.status == 200 || e.status == 201)) {
+          if (
+            e instanceof HttpResponse &&
+            (e.status == 200 || e.status == 201)
+          ) {
             this.snackBar.open("Success", "close", {
               duration: 3000,
               panelClass: "snackbar-success",
@@ -34,11 +38,15 @@ export class SnackbarInterceptor implements HttpInterceptor {
           }
         }
       }),
-      catchError((error) => {
-        this.snackBar.open("Error occurred", "close", {
-          duration: 3000,
-          panelClass: "snackbar-error",
-        });
+      catchError((error: HttpErrorResponse) => {
+        this.snackBar.open(
+          `Error occurred: ${error.status} ${error.statusText}`,
+          "close",
+          {
+            duration: 3000,
+            panelClass: "snackbar-error",
+          }
+        );
         return throwError(error);
       })
     );

@@ -27,7 +27,7 @@ export const fetchMetadataKeysAction = createAction(
 );
 export const fetchMetadataKeysCompleteAction = createAction(
   "[Sample] Fetch Metadata Keys Complete",
-  props<{metadataKeys: string[]}>()
+  props<{ metadataKeys: string[] }>()
 );
 export const fetchMetadataKeysFailedAction = createAction(
   "[Sample] Fetch Metadata Keys Failed"
@@ -43,6 +43,17 @@ export const fetchSampleCompleteAction = createAction(
 );
 export const fetchSampleFailedAction = createAction(
   "[Sample] Fetch Sample Failed"
+);
+export const fetchSampleAttachmentsAction = createAction(
+  "[Sample] Fetch Sample Attachments",
+  props<{ sampleId: string }>()
+);
+export const fetchSampleAttachmentsCompleteAction = createAction(
+  "[Sample] Fetch Sample Attachments Complete",
+  props<{ attachments: Attachment[] }>()
+);
+export const fetchSampleAttachmentsFailedAction = createAction(
+  "[Sample] Fetch Sample Attachments Failed"
 );
 
 export const fetchSampleDatasetsAction = createAction(
@@ -154,13 +165,15 @@ export const setTextFilterAction = createAction(
 
 export const addCharacteristicsFilterAction = createAction(
   "[Sample] Add Characteristics Filter",
-  props<{characteristic: ScientificCondition}>()
+  props<{ characteristic: ScientificCondition }>()
 );
 
 export const removeCharacteristicsFilterAction = createAction(
   "[Sample] Remove Characteristics Filter",
-  props<{index: number}>()
+  props<{ index: number }>()
 );
 
 export const clearSamplesStateAction = createAction("[Sample] Clear State");
-export const clearCurrentSampleStateAction = createAction("[Sample] Clear Current Sample State");
+export const clearCurrentSampleStateAction = createAction(
+  "[Sample] Clear Current Sample State"
+);
