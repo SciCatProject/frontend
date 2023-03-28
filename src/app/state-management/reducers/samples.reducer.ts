@@ -16,6 +16,14 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.fetchSampleAttachmentsCompleteAction,
+    (state, { attachments }): SampleState => ({
+      ...state,
+      attachments,
+    })
+  ),
+
+  on(
     fromActions.fetchSamplesCountCompleteAction,
     (state, { count }): SampleState => ({
       ...state,
@@ -67,12 +75,11 @@ const reducer = createReducer(
     fromActions.addAttachmentCompleteAction,
     (state, { attachment }): SampleState => {
       if (state.currentSample) {
-        const attachments = state.currentSample.attachments.filter(
+        const attachments = state.attachments.filter(
           (existingAttachment) => existingAttachment.id !== attachment.id
         );
         attachments.push(attachment);
-        const currentSample = { ...state.currentSample, attachments };
-        return { ...state, currentSample };
+        return { ...state, attachments };
       }
       return { ...state };
     }
@@ -82,12 +89,11 @@ const reducer = createReducer(
     fromActions.updateAttachmentCaptionCompleteAction,
     (state, { attachment }): SampleState => {
       if (state.currentSample) {
-        const attachments = state.currentSample.attachments.filter(
+        const attachments = state.attachments.filter(
           (existingAttachment) => existingAttachment.id !== attachment.id
         );
         attachments.push(attachment);
-        const currentSample = { ...state.currentSample, attachments };
-        return { ...state, currentSample };
+        return { ...state, attachments };
       }
       return { ...state };
     }
@@ -97,11 +103,10 @@ const reducer = createReducer(
     fromActions.removeAttachmentCompleteAction,
     (state, { attachmentId }): SampleState => {
       if (state.currentSample) {
-        const attachments = state.currentSample.attachments.filter(
+        const attachments = state.attachments.filter(
           (attachment) => attachment.id !== attachmentId
         );
-        const currentSample = { ...state.currentSample, attachments };
-        return { ...state, currentSample };
+        return { ...state, attachments };
       }
       return { ...state };
     }
@@ -172,7 +177,8 @@ const reducer = createReducer(
 
   on(fromActions.clearCurrentSampleStateAction, (state) => ({
     ...state,
-    currentSample: undefined }))
+    currentSample: undefined,
+  }))
 );
 
 export const samplesReducer = (

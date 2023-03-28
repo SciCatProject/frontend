@@ -1,7 +1,14 @@
-import { Sample, SampleFilters, Dataset, GenericFilters } from "state-management/models";
+import {
+  Sample,
+  SampleFilters,
+  Dataset,
+  GenericFilters,
+  Attachment,
+} from "state-management/models";
 
 export interface SampleState {
   samples: Sample[];
+  attachments: Attachment[];
   currentSample: Sample | undefined;
   datasets: Dataset[];
   metadataKeys: string[];
@@ -17,6 +24,7 @@ export interface SampleState {
 
 export const initialSampleState: SampleState = {
   samples: [],
+  attachments: [],
   currentSample: undefined,
   datasets: [],
   metadataKeys: [],
@@ -31,12 +39,12 @@ export const initialSampleState: SampleState = {
     sortField: "createdAt:desc",
     skip: 0,
     limit: 25,
-    characteristics: []
+    characteristics: [],
   },
 
   datasetFilters: {
     sortField: "createdAt:desc",
     skip: 0,
-    limit: 25
-  }
+    limit: 25,
+  },
 };

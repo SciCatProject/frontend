@@ -20,8 +20,8 @@ export const selectCurrentSample = createSelector(
 );
 
 export const selectCurrentAttachments = createSelector(
-  selectCurrentSample,
-  (sample) => (sample ? sample.attachments : [])
+  selectSampleState,
+  (state) => state.attachments
 );
 
 export const selectDatasets = createSelector(
