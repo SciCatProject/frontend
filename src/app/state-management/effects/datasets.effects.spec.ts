@@ -272,21 +272,6 @@ describe("DatasetEffects", () => {
     });
   });
 
-  describe("addMetadataColumns$", () => {
-    it("should dispatch an addColumnAction", () => {
-      const metadataKeys = ["test"];
-      const action = fromActions.fetchMetadataKeysCompleteAction({
-        metadataKeys,
-      });
-      const outcome = addCustomColumnsAction({ names: ["test"] });
-
-      actions = hot("-a", { a: action });
-
-      const expected = cold("-b", { b: outcome });
-      expect(effects.addMetadataColumns$).toBeObservable(expected);
-    });
-  });
-
   describe("fetchDataset$", () => {
     const pid = "testPid";
 

@@ -120,15 +120,6 @@ export class DatasetEffects {
     );
   });
 
-  // addMetadataColumns$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(fromActions.fetchMetadataKeysCompleteAction),
-  //     switchMap(({ metadataKeys }) =>
-  //       of(addCustomColumnsAction({ names: metadataKeys }))
-  //     )
-  //   );
-  // });
-
   fetchDataset$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchDatasetAction),
