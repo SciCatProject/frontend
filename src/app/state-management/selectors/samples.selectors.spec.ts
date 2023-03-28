@@ -12,6 +12,7 @@ const sample = new Sample(data);
 
 const initialSampleState: SampleState = {
   samples: [],
+  attachments: [],
   currentSample: sample,
   datasets: [],
   metadataKeys: [],
