@@ -6,7 +6,7 @@
 
 
 
-[![Build Status](https://github.com/SciCatProject/frontend/actions/workflows/test-build.yml/badge.svg?branch=master)](https://github.com/SciCatProject/frontend/actions)
+[![Test Status](https://github.com/SciCatProject/frontend/actions/workflows/deploy.yml/badge.svg?branch=master)](https://github.com/SciCatProject/frontend/actions)
 [![DeepScan grade](https://deepscan.io/api/teams/8394/projects/21314/branches/609376/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=8394&pid=21314&bid=609376)
 [![Known Vulnerabilities](https://snyk.io/test/github/SciCatProject/frontend/master/badge.svg?targetFile=package.json)](https://snyk.io/test/github/SciCatProject/frontend/master?targetFile=package.json)
 [![DOI](https://zenodo.org/badge/106383330.svg)](https://zenodo.org/badge/latestdoi/106383330)
@@ -15,14 +15,14 @@
 
 ## Summary
 
-SciCat is a data catalogue web application to provide a searchable interface for datasets, publish DOIs, 
+SciCat is a data catalogue web application to provide a searchable interface for datasets, publish DOIs,
 as well as the option to carry out actions (i.e. archiving and publishing) and acts as a place to reference datasets used in publications.
 
 For the full documentation please go to the [SciCat home page](https://scicatproject.github.io/) and follow the [documentation link](https://scicatproject.github.io/documentation)
 
 ## IMPORTANT!!!
-On 2021/11/26, this repository has been renamed to the current name: https://github.com/SciCatProject/frontend.   
-The previous URL https://github.com/SciCatProject/frontend will still be active and point to the current one.   
+On 2021/11/26, this repository has been renamed to the current name: https://github.com/SciCatProject/frontend.
+The previous URL https://github.com/SciCatProject/catanie will still be active and point to the current one.
 We kindly suggest to migrate as soon as possible.
 
 Naming within the project will be updated in future releases. More info will be posted as soon as we finalize the details.
@@ -38,5 +38,3 @@ This project is licensed under the GPL License - see the [LICENSE](LICENSE) file
 ## Acknowledgments
 
 Scicat is developed at PSI, ESS and MAXIV with in-kind funding from ESS and from the European Union Framework Programme for Research and Innovation Horizon 2020, under grant agreement 676548, “BrightnESS”.
-
-
