@@ -1,10 +1,11 @@
 import {
   Component,
-  OnInit,
   ChangeDetectorRef,
   OnDestroy,
   AfterViewInit,
   AfterViewChecked,
+  ViewChild,
+  ElementRef,
 } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
@@ -17,7 +18,10 @@ import {
   PageChangeEvent,
   CheckboxEvent,
 } from "shared/modules/table/table.component";
-import { selectIsLoading, selectIsLoggedIn } from "state-management/selectors/user.selectors";
+import {
+  selectIsLoading,
+  selectIsLoggedIn,
+} from "state-management/selectors/user.selectors";
 import { Job, UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
@@ -25,6 +29,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { PublicDownloadDialogComponent } from "datasets/public-download-dialog/public-download-dialog.component";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import { AppConfigService } from "app-config.service";
+import { NgForm } from "@angular/forms";
 
 export interface File {
   path: string;
@@ -43,11 +48,15 @@ export interface File {
   styleUrls: ["./datafiles.component.scss"],
 })
 export class DatafilesComponent
-  implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
+  implements OnDestroy, AfterViewInit, AfterViewChecked {
+  @ViewChild("downloadAllForm") downloadAllFormElement: ElementRef<NgForm>;
+  @ViewChild("downloadSelectedForm") downloadSelectedFormElement;
   datablocks$ = this.store.select(selectCurrentOrigDatablocks);
   dataset$ = this.store.select(selectCurrentDataset);
   loading$ = this.store.select(selectIsLoading);
   isLoggedIn$ = this.store.select(selectIsLoggedIn);
+  downloadAllForm: NgForm;
+  downloadSelectedForm: NgForm;
 
   appConfig = this.appConfigService.getConfig();
 
@@ -70,9 +79,9 @@ export class DatafilesComponent
   fileDownloadEnabled: boolean = this.appConfig.fileDownloadEnabled;
   multipleDownloadEnabled: boolean = this.appConfig.multipleDownloadEnabled;
   fileserverBaseURL: string | undefined = this.appConfig.fileserverBaseURL;
-  fileserverButtonLabel: string = this.appConfig.fileserverButtonLabel || "Download";
-  multipleDownloadAction: string | null = this.appConfig
-    .multipleDownloadAction;
+  fileserverButtonLabel: string =
+    this.appConfig.fileserverButtonLabel || "Download";
+  multipleDownloadAction: string | null = this.appConfig.multipleDownloadAction;
   maxFileSize: number | null = this.appConfig.maxDirectDownloadSize;
   sftpHost: string | null = this.appConfig.sftpHost;
   jwt: any;
@@ -108,7 +117,7 @@ export class DatafilesComponent
     private cdRef: ChangeDetectorRef,
     private dialog: MatDialog,
     private userApi: UserApi
-  ) { }
+  ) {}
 
   onPageChange(event: PageChangeEvent) {
     const { pageIndex, pageSize } = event;
@@ -188,14 +197,6 @@ export class DatafilesComponent
     }
   }
 
-  ngOnInit() {
-    this.subscriptions.push(
-      this.userApi.jwt().subscribe((jwt) => {
-        this.jwt = jwt;
-      })
-    );
-  }
-
   ngAfterViewInit() {
     this.subscriptions.push(
       this.dataset$.subscribe((dataset) => {
@@ -229,13 +230,27 @@ export class DatafilesComponent
     this.cdRef.detectChanges();
   }
 
+  downloadFiles(form: "downloadAllForm" | "downloadSelectedForm") {
+    if (!this.jwt) {
+      this.subscriptions.push(
+        this.userApi.jwt().subscribe((jwt) => {
+          this.jwt = jwt;
+          this[`${form}Element`].nativeElement.jwt.value = jwt.jwt;
+          this[`${form}Element`].nativeElement.submit();
+        })
+      );
+    } else {
+      this[`${form}Element`].nativeElement.submit();
+    }
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
   openDialog(): void {
     const dialogRef = this.dialog.open(PublicDownloadDialogComponent, {
       width: "500px",
-      data: { email: "" }
+      data: { email: "" },
     });
     dialogRef.afterClosed().subscribe((email) => {
       if (email) {
@@ -244,10 +259,12 @@ export class DatafilesComponent
           emailJobInitiator: email,
           creationTime: new Date(),
           type: "public",
-          datasetList: [{
-            pid: this.datasetPid,
-            files: this.getSelectedFiles()
-          }]
+          datasetList: [
+            {
+              pid: this.datasetPid,
+              files: this.getSelectedFiles(),
+            },
+          ],
         };
         const job = new Job(data);
         this.store.dispatch(submitJobAction({ job }));
@@ -255,6 +272,10 @@ export class DatafilesComponent
     });
   }
   getFileTransferLink() {
-    return this.fileserverBaseURL + "&origin_path=" + encodeURIComponent(this.sourcefolder);
+    return (
+      this.fileserverBaseURL +
+      "&origin_path=" +
+      encodeURIComponent(this.sourcefolder)
+    );
   }
 }

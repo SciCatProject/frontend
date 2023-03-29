@@ -1,16 +1,16 @@
-<ng-template [ngIf]="(dataset$ |async)">
+<ng-template [ngIf]="dataset$ | async">
   <ng-template [ngIf]="maxFileSize && tooLargeFile">
     <span>
       <mat-icon class="warning-icon"> warning </mat-icon>
       One or more files are too large to be downloaded directly.
       {{
-      sftpHost
-      ? "These files are available via sftp host " +
-      sftpHost +
-      " in directory " +
-      sourcefolder +
-      "."
-      : ""
+        sftpHost
+          ? "These files are available via sftp host " +
+            sftpHost +
+            " in directory " +
+            sourcefolder +
+            "."
+          : ""
       }}
     </span>
   </ng-template>
@@ -24,7 +24,7 @@
 
   <ng-template [ngIf]="tableData && maxFileSize">
     <div class="selected" fxLayout="row" fxLayoutAlign="space-evenly end">
-      <div fxFlex="auto" style="margin-bottom: 0.5em;">
+      <div fxFlex="auto" style="margin-bottom: 0.5em">
         Selected: {{ selectedFileSize | filesize
         }}{{ maxFileSize ? " / " + (maxFileSize | filesize) : "" }}
       </div>
@@ -37,58 +37,108 @@
       <ng-template ngPluralCase="=1">1 datafile.</ng-template>
       <ng-template ngPluralCase="other">{{ count }} datafiles.</ng-template>
     </span>
-    <div *ngIf="
-        (datablocks$ | async) && (datablocks$ | async)?.length === 0">
+    <div *ngIf="(datablocks$ | async) && (datablocks$ | async)?.length === 0">
       <h3>No datafiles linked to this dataset</h3>
     </div>
-    <form ngNoForm method="POST" [action]="multipleDownloadAction"
-      target="_blank" style="display: inline;">
+    <form
+      ngNoForm
+      method="POST"
+      [action]="multipleDownloadAction"
+      target="_blank"
+      style="display: inline"
+      #downloadAllForm
+    >
       <input type="hidden" name="jwt" [value]="jwt?.jwt" />
       <input type="hidden" name="directory" [value]="sourcefolder" />
-      <input *ngFor="let file of getAllFiles(); index as i" type="hidden"
-        [name]="'files[' + i + ']'" [value]="file" />
+      <input
+        *ngFor="let file of getAllFiles(); index as i"
+        type="hidden"
+        [name]="'files[' + i + ']'"
+        [value]="file"
+      />
       <ng-template [ngIf]="multipleDownloadAction">
-        <button mat-raised-button class="download-button" type="submit"
+        <button
+          mat-raised-button
+          class="download-button"
+          type="button"
+          (click)="downloadFiles('downloadAllForm')"
           color="accent"
-          [disabled]="!!maxFileSize && (totalFileSize > maxFileSize)">
+          [disabled]="!!maxFileSize && totalFileSize > maxFileSize"
+        >
           Download All
         </button>
       </ng-template>
-
     </form>
 
-    <form ngNoForm method="POST" [action]="multipleDownloadAction"
-      target="_blank" style="display: inline;">
+    <form
+      ngNoForm
+      method="POST"
+      [action]="multipleDownloadAction"
+      target="_blank"
+      style="display: inline"
+      #downloadSelectedForm
+    >
       <input type="hidden" name="jwt" [value]="jwt?.jwt" />
       <input type="hidden" name="directory" [value]="sourcefolder" />
-      <input *ngFor="let file of getSelectedFiles(); index as i" type="hidden"
-        [name]="'files[' + i + ']'" [value]="file" />
+      <input
+        *ngFor="let file of getSelectedFiles(); index as i"
+        type="hidden"
+        [name]="'files[' + i + ']'"
+        [value]="file"
+      />
       <ng-template [ngIf]="multipleDownloadAction">
-        <button mat-raised-button class="download-button" type="submit"
+        <button
+          mat-raised-button
+          class="download-button"
+          type="button"
+          (click)="downloadFiles('downloadSelectedForm')"
           color="accent"
-          [disabled]="isNoneSelected || (!!maxFileSize && !!(selectedFileSize > maxFileSize))">
+          [disabled]="
+            isNoneSelected ||
+            (!!maxFileSize && !!(selectedFileSize > maxFileSize))
+          "
+        >
           Download Selected
         </button>
       </ng-template>
     </form>
     <ng-template [ngIf]="(isLoggedIn$ | async) === false && fileserverBaseURL">
-      <button mat-raised-button class="download-button" type="submit"
-        color="accent" [disabled]="isNoneSelected" (click)="openDialog()">
-        {{ fileserverButtonLabel}}
+      <button
+        mat-raised-button
+        class="download-button"
+        type="submit"
+        color="accent"
+        [disabled]="isNoneSelected"
+        (click)="openDialog()"
+      >
+        {{ fileserverButtonLabel }}
       </button>
     </ng-template>
     <ng-template [ngIf]="(isLoggedIn$ | async) && fileserverBaseURL">
-      <a mat-raised-button class="download-button" color="accent"
-        [href]="getFileTransferLink()" target="_blank">
-        {{ fileserverButtonLabel}}
+      <a
+        mat-raised-button
+        class="download-button"
+        color="accent"
+        [href]="getFileTransferLink()"
+        target="_blank"
+      >
+        {{ fileserverButtonLabel }}
       </a>
     </ng-template>
-    <div style="clear: both;"></div>
+    <div style="clear: both"></div>
   </div>
 
-  <app-table [data]="tableData" [columns]="tableColumns" [paginate]="true"
-    [currentPage]="currentPage" [dataCount]="count" [dataPerPage]="pageSize"
-    (pageChange)="onPageChange($event)" [select]="fileDownloadEnabled"
-    (selectAll)="onSelectAll($event)" (selectOne)="onSelectOne($event)">
+  <app-table
+    [data]="tableData"
+    [columns]="tableColumns"
+    [paginate]="true"
+    [currentPage]="currentPage"
+    [dataCount]="count"
+    [dataPerPage]="pageSize"
+    (pageChange)="onPageChange($event)"
+    [select]="fileDownloadEnabled"
+    (selectAll)="onSelectAll($event)"
+    (selectOne)="onSelectOne($event)"
+  >
   </app-table>
 </ng-template>
