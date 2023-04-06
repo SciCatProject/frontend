@@ -161,6 +161,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
     return this.inBatchPids.indexOf(dataset.pid) !== -1;
   }
 
+  hasRunNumber(scientificMetadata: {runNumber?: {value: string, unit?: string} | number}){
+    return (
+      scientificMetadata &&
+      scientificMetadata.runNumber &&
+      (
+        typeof scientificMetadata.runNumber === "number" 
+        || scientificMetadata.runNumber.value
+      )
+    )
+  }
+
   onSelect(event: MatCheckboxChange, dataset: Dataset): void {
     if (event.checked) {
       this.store.dispatch(selectDatasetAction({ dataset }));
