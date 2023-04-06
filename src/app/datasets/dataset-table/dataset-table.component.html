@@ -107,11 +107,7 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         <div
-          *ngIf="
-            dataset.scientificMetadata &&
-            dataset.scientificMetadata.runNumber &&
-            dataset.scientificMetadata.runNumber.value
-          "
+          *ngIf="hasRunNumber(dataset.scientificMetadata)"
         >
           {{ dataset.scientificMetadata.runNumber.value }}
         </div>
