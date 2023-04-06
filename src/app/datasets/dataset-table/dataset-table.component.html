@@ -128,10 +128,11 @@
           *ngIf="
             dataset.scientificMetadata &&
             dataset.scientificMetadata.runNumber &&
-            dataset.scientificMetadata.runNumber.value
+            (typeof dataset.scientificMetadata.runNumber === 'number' 
+            || dataset.scientificMetadata.runNumber.value)
           "
         >
-          {{ dataset.scientificMetadata.runNumber.value }}
+          {{ dataset.scientificMetadata.runNumber.value ?? dataset.scientificMetadata.runNumber }}
         </div>
       </mat-cell>
     </ng-container>
