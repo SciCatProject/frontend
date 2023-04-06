@@ -109,7 +109,7 @@
         <div
           *ngIf="hasRunNumber(dataset.scientificMetadata)"
         >
-          {{ dataset.scientificMetadata.runNumber.value }}
+          {{ dataset.scientificMetadata.runNumber.value ?? dataset.scientificMetadata.runNumber }}
         </div>
       </mat-cell>
     </ng-container>
