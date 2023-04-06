@@ -161,15 +161,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
     return this.inBatchPids.indexOf(dataset.pid) !== -1;
   }
 
-  hasRunNumber(scientificMetadata: {runNumber?: {value: string, unit?: string} | number}){
-    return (
-      scientificMetadata &&
-      scientificMetadata.runNumber &&
-      (
-        typeof scientificMetadata.runNumber === "number" 
-        || scientificMetadata.runNumber.value
-      )
-    )
+  runNumber(scientificMetadata: {runNumber: {value: string, unit?: string | number}}){
+    if (!(typeof scientificMetadata?.runNumber === "number") || !scientificMetadata?.runNumber?.value)
+      return ""
+    return scientificMetadata?.runNumber?.value ?? scientificMetadata?.runNumber
   }
 
   onSelect(event: MatCheckboxChange, dataset: Dataset): void {
