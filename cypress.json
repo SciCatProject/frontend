@@ -6,8 +6,8 @@
   "viewportWidth": 1280,
   "username": "admin",
   "password": "am2jf70TPNZsSan",
-  "secondaryUsername": "ingestor",
-  "secondaryPassword": "aman",
+  "secondaryUsername": "admin",
+  "secondaryPassword": "am2jf70TPNZsSan",
   "defaultCommandTimeout": 10000,
   "retries": 1
 }
