@@ -39,7 +39,7 @@ export const clearLogbookAction = createAction("[Logbook] Clear Logbook");
 
 export const fetchCountAction = createAction(
   "[Logbook] Fetch Count",
-  props<{ name: string }>()
+  props<{ name?: string; pid?: string }>()
 );
 export const fetchCountCompleteAction = createAction(
   "[Logbook] Fetch Count Complete",
