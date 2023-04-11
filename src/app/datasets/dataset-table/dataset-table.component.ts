@@ -169,6 +169,21 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  runNumber(scientificMetadata: {runNumber?: {value?: number}}) {
+    if (!scientificMetadata?.runNumber)
+      return null;
+    const runNumber = scientificMetadata.runNumber;
+    if (
+      typeof runNumber === 'object' &&
+      !Array.isArray(runNumber) &&
+      runNumber !== null && 
+      runNumber.value
+    ) 
+    return runNumber.value
+  else 
+    return runNumber
+  }
+
   onSelectAll(event: MatCheckboxChange): void {
     if (event.checked) {
       this.store.dispatch(selectAllDatasetsAction());
