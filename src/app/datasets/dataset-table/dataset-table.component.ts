@@ -21,9 +21,6 @@ import {
   changePageAction,
   sortByColumnAction,
 } from "state-management/actions/datasets.actions";
-type rNumber = {
-    
-}
 
 import {
   selectDatasets,
@@ -162,15 +159,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
 
   isInBatch(dataset: Dataset): boolean {
     return this.inBatchPids.indexOf(dataset.pid) !== -1;
-  }
-
-  runNumber(scientificMetadata: {runNumber: {value: number} | number}){
-    if (typeof scientificMetadata?.runNumber === "number")
-      return scientificMetadata?.runNumber
-    else if (scientificMetadata?.runNumber?.value)
-      return scientificMetadata.runNumber.value
-    else
-      return ""
   }
 
   onSelect(event: MatCheckboxChange, dataset: Dataset): void {

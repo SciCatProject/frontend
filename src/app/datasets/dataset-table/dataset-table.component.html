@@ -106,7 +106,7 @@
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
-          {{ runNumber(dataset.scientificMetadata) }}
+        {{ dataset.scientificMetadata.runNumber.value ?? dataset.scientificMetadata.runNumber }}
       </mat-cell>
     </ng-container>
 
