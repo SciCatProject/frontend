@@ -6,8 +6,8 @@
   "viewportWidth": 1280,
   "username": "admin",
   "password": "am2jf70TPNZsSan",
-  "secondaryUsername": "admin",
-  "secondaryPassword": "am2jf70TPNZsSan",
+  "secondaryUsername": "archiveManager",
+  "secondaryPassword": "aman",
   "defaultCommandTimeout": 10000,
   "retries": 1
 }
