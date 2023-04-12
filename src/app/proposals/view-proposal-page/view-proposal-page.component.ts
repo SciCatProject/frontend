@@ -103,9 +103,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
       this.vm$.subscribe((vm) => {
         if (vm.proposal) {
           this.proposal = vm.proposal;
-          this.store.dispatch(
-            fetchLogbookAction({ name: this.proposal.proposalId  })
-          );
+
         }
       })
     );
@@ -115,6 +113,9 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
         this.store.dispatch(fetchProposalAction({ proposalId: params.id }));
         this.store.dispatch(
           fetchProposalDatasetsAction({ proposalId: params.id })
+        );
+        this.store.dispatch(
+          fetchLogbookAction({ name: params.id  })
         );
       })
     );

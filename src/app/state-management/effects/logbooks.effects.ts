@@ -34,8 +34,8 @@ export class LogbookEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchLogbookAction),
       concatLatestFrom(() => this.filters$),
-      mergeMap(([{ name }, filters]) =>
-        this.logbookApi
+      mergeMap(([{ name }, filters]) =>{
+        return this.logbookApi
           .findByName(encodeURIComponent(name), JSON.stringify(filters))
           .pipe(
             timeout(3000),
@@ -44,7 +44,9 @@ export class LogbookEffects {
               fromActions.fetchCountAction({ name }),
             ]),
             catchError(() => of(fromActions.fetchLogbookFailedAction()))
-          )
+          );
+      }
+        
       )
     );
   });
@@ -59,7 +61,8 @@ export class LogbookEffects {
           .pipe(
             timeout(3000),
             mergeMap((logbook) => [
-              fromActions.fetchLogbookCompleteAction({ logbook })
+              fromActions.fetchLogbookCompleteAction({ logbook }),
+              fromActions.fetchCountAction({ pid })
             ]),
             catchError(() => of(fromActions.fetchDatasetLogbookFailedAction()))
           )
@@ -71,15 +74,18 @@ export class LogbookEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
       concatLatestFrom(() => this.filters$),
-      mergeMap(([{ name }, filters]) => {
+      mergeMap(([{ name,pid }, filters]) => {
         const { skip, limit, sortField, ...theRest } = filters;
-        return this.logbookApi
-          .findByName(encodeURIComponent(name), JSON.stringify(theRest))
+        return (name ? this.logbookApi
+          .findByName(encodeURIComponent(name), JSON.stringify(theRest)) : this.logbookApi
+          .findDatasetLogbook(encodeURIComponent(pid), JSON.stringify(theRest)))
           .pipe(
-            map((logbook: Logbook) =>
-              fromActions.fetchCountCompleteAction({
+            map((logbook: Logbook) => {
+              return fromActions.fetchCountCompleteAction({
                 count: logbook.messages.length,
-              })
+              });
+            }
+              
             ),
             catchError(() => of(fromActions.fetchCountFailedAction()))
           );
