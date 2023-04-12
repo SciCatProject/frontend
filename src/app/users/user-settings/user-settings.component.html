@@ -33,23 +33,23 @@
       </ng-template>
 
       <table>
-        <tr *ngIf="vm.profile && vm.profile.displayName">
+        <tr *ngIf="vm.profile && vm.profile.displayName" data-cy="user-name">
           <th>Name</th>
           <td>{{ vm.profile.displayName }}</td>
         </tr>
-        <tr *ngIf="vm.user && vm.user.email">
+        <tr *ngIf="vm.user && vm.user.email" data-cy="user-email">
           <th>Email</th>
           <td>{{ vm.user.email }}</td>
         </tr>
-        <tr *ngIf="vm.user && vm.user.id">
+        <tr *ngIf="vm.user && vm.user.id" data-cy="user-id">
           <th>Id</th>
           <td>{{ vm.user.id }}</td>
         </tr>
-        <tr *ngIf="vm.profile && vm.profile.accessGroups">
+        <tr *ngIf="vm.profile && vm.profile.accessGroups" data-cy="user-accessGroup">
           <th>Groups</th>
           <td>{{ vm.profile.accessGroups }}</td>
         </tr>
-        <tr *ngIf="tokenValue">
+        <tr *ngIf="tokenValue" data-cy="user-token">
           <th>SciCat Token</th>
           <td>
             {{ tokenValue }}
