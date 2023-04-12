@@ -194,7 +194,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
 
   onSortChange(event: SortChangeEvent): void {
     const { active, direction } = event;
-    const column = active.split("_")[1];
+    let column = active.split("_")[1];
+    if (column === "runNumber")
+      column = "scientificMetadata.runNumber.value"
     this.store.dispatch(sortByColumnAction({ column, direction }));
   }
 
