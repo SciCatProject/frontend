@@ -381,6 +381,26 @@ const reducer = createReducer(
     const filters = { ...state.filters, ownerGroup, skip: 0 };
     return { ...state, filters };
   }),
+  on(
+    fromActions.addPidFilterAction,
+    (state, { pid }): DatasetState => {
+      const pidF = state.filters.pid
+        .concat(pid)
+        .filter((val, i, self) => self.indexOf(val) === i); // Unique
+      const filters = { ...state.filters, pidF, skip: 0 };
+      return { ...state, filters };
+    }
+  ),
+  on(
+    fromActions.removePidFilterAction,
+    (state, { pid }): DatasetState => {
+      const type = state.filters.pid.filter(
+        (existingType) => existingType !== pid
+      );
+      const filters = { ...state.filters, type, skip: 0 };
+      return { ...state, filters };
+    }
+  ),
 
   on(
     fromActions.addTypeFilterAction,
