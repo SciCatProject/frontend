@@ -76,6 +76,11 @@ export const selectTypeFilter = createSelector(
   (filters) => filters.type
 );
 
+export const selectPIDFilter = createSelector(
+  selectFilters,
+  (filters) => filters.pid
+);
+
 export const selectKeywordsFilter = createSelector(
   selectFilters,
   (filters) => filters.keywords
@@ -103,6 +108,7 @@ export const selectHasAppliedFilters = createSelector(
     filters.creationLocation.length > 0 ||
     filters.ownerGroup.length > 0 ||
     filters.type.length > 0 ||
+    filters.pid.length > 0 ||
     filters.keywords.length > 0 ||
     filters.scientific.length > 0 ||
     (filters.creationTime &&
@@ -136,6 +142,11 @@ export const selectTypeFacetCounts = createSelector(
   selectFacetCounts,
   (counts) => counts.type || []
 );
+export const selectPidFacetCounts = createSelector(
+  selectFacetCounts,
+  (counts) => counts.pid || []
+);
+
 
 export const selectKeywordFacetCounts = createSelector(
   selectFacetCounts,
