@@ -102,6 +102,7 @@ export interface DatasetFilters extends GenericFilters {
   text: string;
   ownerGroup: string[];
   type: string[];
+  pid: string[];
   creationTime: { begin: string; end: string } | null;
   creationLocation: string[];
   keywords: string[];
