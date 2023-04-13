@@ -62,6 +62,7 @@ export const initialDatasetState: DatasetState = {
     type: [],
     creationLocation: [],
     ownerGroup: [],
+    pid: [],
     skip: 0,
     limit: 25,
     sortField: "creationTime:desc",
