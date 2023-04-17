@@ -86,8 +86,10 @@ export class AppConfigService {
 
   async loadAppConfig(): Promise<void> {
     try {
+      // FIXME: The backend url should be in a env variable and read if from there initially
+      // Also mention that the previous(old way) was just using the url: /client/config.json 
       this.appConfig = await this.http
-        .get("/client/config.json")
+        .get("http://localhost:3000/api/v3/admin/config")
         .pipe(timeout(2000))
         .toPromise();
     } catch (err) {
