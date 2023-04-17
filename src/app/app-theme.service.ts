@@ -12,6 +12,7 @@ export class AppThemeService {
   async loadTheme(): Promise<void> {
     try {
       // FIXME: The backend url should be in a env variable and read if from there initially
+      // Also mention that the previous(old way) was just using the url: /client/theme.json 
       this.activeTheme = (await this.http
         .get("http://localhost:3000/api/v3/admin/theme")
         .pipe(timeout(2000))
