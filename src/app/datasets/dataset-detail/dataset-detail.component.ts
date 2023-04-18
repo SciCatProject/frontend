@@ -39,6 +39,8 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
+import {Clipboard} from "@angular/cdk/clipboard";
+
 /**
  * Component to show details for a data set, using the
  * form component
@@ -318,6 +320,6 @@ export class DatasetDetailComponent
   }
 
   copyIntoClipboard(pid: string) {
-    this.clipboard.writeText(pid);
+    this.clipboard.copy(pid);
   }
 }
