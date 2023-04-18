@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { DatasetPidSelectionComponent } from './dataset-pid-selection.component';
+import { DatasetPidSelectionComponent } from "./dataset-pid-selection.component";
 
-describe('DatasetPidSelectionComponent', () => {
+describe("DatasetPidSelectionComponent", () => {
   let component: DatasetPidSelectionComponent;
   let fixture: ComponentFixture<DatasetPidSelectionComponent>;
 
@@ -19,7 +19,7 @@ describe('DatasetPidSelectionComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

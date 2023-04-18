@@ -80,7 +80,7 @@ import { AdminTabComponent } from "./admin-tab/admin-tab.component";
 import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
 import { InstrumentEffects } from "state-management/effects/instruments.effects";
 import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.component";
-import { DatasetPidSelectionComponent } from './dataset-pid-selection/dataset-pid-selection.component';
+import { DatasetPidSelectionComponent } from "./dataset-pid-selection/dataset-pid-selection.component";
 
 @NgModule({
   imports: [
