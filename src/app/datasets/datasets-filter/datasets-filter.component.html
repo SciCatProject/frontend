@@ -167,35 +167,6 @@
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-date-range-picker #picker></mat-date-range-picker>
   </mat-form-field>
-  <mat-form-field>
-    <mat-chip-list #pidChipList>
-      <mat-chip
-        *ngFor="let pid of pidFilter$ | async"
-        [removable]="true"
-        (removed)="pidRemoved(pid)"
-      >{{ pid || "No PID" }}<mat-icon matChipRemove>cancel</mat-icon>
-      </mat-chip>
-    </mat-chip-list>
-    <input
-      (input)="onPIDInput($event)"
-      [value]="pidInput$ | async"
-      matInput
-      class="pid-input"
-      [matChipInputFor]="pidChipList"
-      placeholder="PID"
-      aria-label="PID"
-      [matAutocomplete]="pid"
-    />
-
-    <mat-autocomplete #pid="matAutocomplete">
-      <mat-option
-        (onSelectionChange)="pidSelected(getFacetId(fc))"
-        *ngFor="let fc of PIDSuggestions$ | async"
-      >
-        <span>{{ fc }} </span>
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
 
   <div class="section-container" *ngIf="appConfig.scienceSearchEnabled">
     <button mat-button color="primary" (click)="showAddConditionDialog()">

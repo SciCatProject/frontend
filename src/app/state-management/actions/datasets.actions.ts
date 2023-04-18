@@ -288,14 +288,6 @@ export const addTypeFilterAction = createAction(
   "[Dataset] Add Type Filter",
   props<{ datasetType: string }>()
 );
-export const addPidFilterAction = createAction(
-  "[Dataset] Add Pid Filter",
-  props<{ pid: string }>()
-);
-export const removePidFilterAction = createAction(
-  "[Dataset] Remove Pid Filter",
-  props<{ pid: string }>()
-);
 
 export const removeTypeFilterAction = createAction(
   "[Dataset] Remove Type Filter",

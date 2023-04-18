@@ -23,7 +23,7 @@ import {
   selectTypeFacetCounts,
   selectTypeFilter,
   selectKeywordsTerms,
-  selectMetadataKeys, selectPIDFilter, selectPidFacetCounts
+  selectMetadataKeys
 } from "state-management/selectors/datasets.selectors";
 
 import {
@@ -40,7 +40,7 @@ import {
   setDateRangeFilterAction,
   clearFacetsAction,
   addScientificConditionAction,
-  removeScientificConditionAction, addPidFilterAction, removePidFilterAction
+  removeScientificConditionAction
 } from "state-management/actions/datasets.actions";
 import { combineLatest, BehaviorSubject, Observable, Subscription } from "rxjs";
 import {
@@ -70,7 +70,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   locationFacetCounts$ = this.store.select(selectLocationFacetCounts);
   groupFacetCounts$ = this.store.select(selectGroupFacetCounts);
   typeFacetCounts$ = this.store.select(selectTypeFacetCounts);
-  pidFacetCounts$ = this.store.select(selectPidFacetCounts);
   keywordFacetCounts$ = this.store.select(selectKeywordFacetCounts);
 
   searchTerms$ = this.store.select(selectSearchTerms);
@@ -78,7 +77,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   locationFilter$ = this.store.select(selectLocationFilter);
   groupFilter$ = this.store.select(selectGroupFilter);
   typeFilter$ = this.store.select(selectTypeFilter);
-  pidFilter$ = this.store.select(selectPIDFilter);
   keywordsFilter$ = this.store.select(selectKeywordsFilter);
   creationTimeFilter$ = this.store.select(selectCreationTimeFilter);
   scientificConditions$ = this.store.select(selectScientificConditions);
@@ -88,7 +86,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   groupInput$ = new BehaviorSubject<string>("");
   typeInput$ = new BehaviorSubject<string>("");
   keywordsInput$ = new BehaviorSubject<string>("");
-  pidInput$ = new BehaviorSubject<string>("");
 
   appConfig = this.appConfigService.getConfig();
 
@@ -97,12 +94,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.groupFacetCounts$,
     this.groupInput$,
     this.groupFilter$
-  );
-
-  PIDSuggestions$ = this.createSuggestionObserver(
-    this.pidFacetCounts$,
-    this.pidInput$,
-    this.pidFilter$
   );
 
   locationSuggestions$ = this.createSuggestionObserver(
@@ -187,11 +178,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.keywordsInput$.next(value);
   }
 
-  onPIDInput(event: any) {
-    const value = (<HTMLInputElement>event.target).value;
-    this.pidInput$.next(value);
-  }
-
   onTypeInput(event: any) {
     const value = (<HTMLInputElement>event.target).value;
     this.typeInput$.next(value);
@@ -231,17 +217,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   typeRemoved(type: string) {
     this.store.dispatch(removeTypeFilterAction({ datasetType: type }));
-  }
-
-  pidSelected(pid: string | null) {
-    const pidF = pid || "";
-    this.store.dispatch(addPidFilterAction({ pid: pidF }));
-    this.pidInput$.next("");
-  }
-
-
-  pidRemoved(pid: string) {
-    this.store.dispatch(removePidFilterAction({ pid: pid }));
   }
 
   dateChanged(event: MatDatepickerInputEvent<DateTime>) {
