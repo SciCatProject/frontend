@@ -116,7 +116,8 @@ export class ScicatDataService {
     sortField?: string,
     sortOrder = "asc",
     pageNumber = 0,
-    pageSize = 10
+    pageSize = 10,
+    isFilesDashboard = false
   ): Observable<any[]> {
     // Dataset filter syntax (not used here)
     // {"limit":3,"skip":11,"where":{"ownerGroup":"p16633"},"order":"size ASC"}
@@ -150,6 +151,14 @@ export class ScicatDataService {
       .set("fields", JSON.stringify(filterFields))
       .set("limits", JSON.stringify(limits))
       .append("access_token", this.auth.getToken().id);
+
+    if(isFilesDashboard){
+      return this.http.get<any[]>(`${url}/fullquery/files`, {
+        params,
+        headers: { Authorization: this.auth.getAccessTokenId() },
+      });
+    }
+
     return this.http.get<any[]>(`${url}/fullquery`, {
       params,
       headers: { Authorization: this.auth.getAccessTokenId() },
