@@ -152,14 +152,9 @@ export class ScicatDataService {
       .set("limits", JSON.stringify(limits))
       .append("access_token", this.auth.getToken().id);
 
-    if(isFilesDashboard){
-      return this.http.get<any[]>(`${url}/fullquery/files`, {
-        params,
-        headers: { Authorization: this.auth.getAccessTokenId() },
-      });
-    }
 
-    return this.http.get<any[]>(`${url}/fullquery`, {
+
+    return this.http.get<any[]>(`${url}/fullquery${isFilesDashboard ? "/files" : ""}`, {
       params,
       headers: { Authorization: this.auth.getAccessTokenId() },
     });
