@@ -70,7 +70,7 @@ export class SciCatDataSource implements DataSource<any> {
     sortDirection = "asc",
     pageIndex = 0,
     pageSize = 10,
-    isFilesDashboard?
+    isFilesDashboard?: boolean,
   ) {
     this.loadingSubject.next(true);
 
