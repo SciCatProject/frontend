@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { Router } from "@angular/router";
+import { AppConfigService } from "../../app-config.service";
 
 @Component({
   selector: "dataset-pid-selection",
@@ -10,7 +11,8 @@ import { Router } from "@angular/router";
 export class DatasetPidSelectionComponent  {
 
   pidInput$ = new BehaviorSubject<string>("");
-  constructor(private router: Router) { }
+  appConfig = this.appConfigService.getConfig();
+  constructor(private router: Router,public appConfigService: AppConfigService) { }
 
 
 
@@ -21,7 +23,18 @@ export class DatasetPidSelectionComponent  {
 
 
   openPID() {
-    const pid = encodeURIComponent(this.pidInput$.value);
-    this.router.navigateByUrl(`/datasets/${pid}`);
+    const value = this.pidInput$.value;
+    if (!this.appConfig.prefix) {
+      const pid = encodeURIComponent(value);
+      this.router.navigateByUrl(`/datasets/${pid}`);
+      return;
+    }
+    if (value.startsWith(this.appConfig.prefix)) {
+      const pid = encodeURIComponent(value);
+      this.router.navigateByUrl(`/datasets/${pid}`);
+    } else {
+      const pid = encodeURIComponent(`${this.appConfig.prefix}/${value}`);
+      this.router.navigateByUrl(`/datasets/${pid}`);
+    }
   }
 }
