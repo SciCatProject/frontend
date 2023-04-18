@@ -1,0 +1,20 @@
+<mat-card>
+  <div class="section-container">
+    <span class="title">PID Selection</span>
+  </div>
+  <mat-form-field>
+    <input
+      (input)="onPIDInput($event)"
+      [value]="pidInput$ | async"
+      (keydown.enter)="openPID()"
+      matInput
+      class="pid-input"
+      placeholder="PID"
+      aria-label="PID"
+
+    />
+    <button matSuffix mat-icon-button aria-label="select" >
+      <mat-icon>search</mat-icon>
+    </button>
+  </mat-form-field>
+</mat-card>
