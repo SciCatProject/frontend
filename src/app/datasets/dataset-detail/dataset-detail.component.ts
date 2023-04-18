@@ -82,7 +82,8 @@ export class DatasetDetailComponent
     public dialog: MatDialog,
     private store: Store,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private clipboard: Clipboard
   ) {}
 
   ngOnInit() {
@@ -314,5 +315,9 @@ export class DatasetDetailComponent
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });
+  }
+
+  copyIntoClipboard(pid: string) {
+    this.clipboard.writeText(pid);
   }
 }
