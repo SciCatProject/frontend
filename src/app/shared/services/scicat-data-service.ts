@@ -153,9 +153,9 @@ export class ScicatDataService {
       .append("access_token", this.auth.getToken().id);
 
 
-    const isOriginalDatablocks = url.includes("Origdatablocks");
+    const origDatablocksFiles = url.includes("Origdatablocks") && isFilesDashboard ? "/files" : "";
 
-    return this.http.get<any[]>(`${url}/fullquery${isOriginalDatablocks && isFilesDashboard ? "/files" : ""}`, {
+    return this.http.get<any[]>(`${url}/fullquery${origDatablocksFiles}`, {
       params,
       headers: { Authorization: this.auth.getAccessTokenId() },
     });
