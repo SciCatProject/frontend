@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { DatasetPidSelectionComponent } from "./dataset-pid-selection.component";
-import { SharedScicatFrontendModule } from "../../shared/shared.module";
+//import { SharedScicatFrontendModule } from "../../shared/shared.module";
 import { RouterModule } from "@angular/router";
 import { AppConfigService } from "../../app-config.service";
 import { DatasetApi } from "../../shared/sdk";
