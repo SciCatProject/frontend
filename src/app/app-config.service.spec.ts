@@ -5,6 +5,7 @@ import { of } from "rxjs";
 import { MockHttp } from "shared/MockStubs";
 
 const appConfig: AppConfig = {
+  prefix: "20.500.11935",
   accessTokenPrefix: "",
   addDatasetEnabled: true,
   archiveWorkflowEnabled: true,
