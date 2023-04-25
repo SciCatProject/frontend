@@ -92,12 +92,8 @@ export class LoginComponent implements OnInit, OnDestroy {
    * @memberof LoginComponent
    */
   onLogin() {
-    const error = new HttpErrorResponse({
-      status: 400,
-      statusText: "Bad Request",
-    });
     const form: LoginForm = this.loginForm.value;
-    this.store.dispatch(funcLoginAction({form:{...form, error}}));
+    this.store.dispatch(funcLoginAction({form}));
   }
 
   onLdapLogin() {

@@ -1286,7 +1286,7 @@ export class UserApi extends BaseLoopBackApi {
     return this.auth.getCurrentUserData();
   }
   /**
-   * Get data of the currently logged access token that was returned by the last
+   * Get data of the currently logged access tokern that was returned by the last
    * call to {@link sdk.User#login}
    *
    * @returns object An AccessToken instance.

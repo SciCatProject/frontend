@@ -92,7 +92,6 @@ describe("User Actions", () => {
           username,
           password,
           rememberMe,
-          error
         }
       });
       expect({ ...action }).toEqual({
@@ -101,7 +100,6 @@ describe("User Actions", () => {
             username,
             password,
             rememberMe,
-            error
           }
       });
     });

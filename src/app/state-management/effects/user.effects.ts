@@ -76,7 +76,6 @@ export class UserEffects {
               fromActions.activeDirLoginFailedAction({error})
             );
           }
-            
           )
         )
       )
@@ -151,7 +150,7 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(fromActions.funcLoginAction),
       map((action) => action.form),
-      switchMap(({ username, password, rememberMe, error}) =>
+      switchMap(({ username, password, rememberMe}) =>
         this.userApi.login({ username, password, rememberMe, }).pipe(
           switchMap(({ user }) => [
             fromActions.funcLoginSuccessAction(),
@@ -160,7 +159,7 @@ export class UserEffects {
               accountType: "functional",
             }),
           ]),
-          catchError(() => {
+          catchError((error: HttpErrorResponse) => {
             return  of(fromActions.funcLoginFailedAction({error}));
           })
         )
@@ -175,7 +174,9 @@ export class UserEffects {
         fromActions.funcLoginFailedAction,
         fromActions.activeDirLoginFailedAction
       ),
-      map(( error ) => fromActions.loginFailedAction(error))
+      map(( error ) => {
+        return fromActions.loginFailedAction(error);
+      })
     );
   });
 

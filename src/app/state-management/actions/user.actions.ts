@@ -44,7 +44,6 @@ export const funcLoginAction = createAction(
     form : {username: string;
     password: string;
     rememberMe: boolean;
-    error: HttpErrorResponse;
   };
   }>()
 );

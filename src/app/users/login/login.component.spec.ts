@@ -158,7 +158,7 @@ describe("LoginComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        funcLoginAction({ form: {username: "", password: "", rememberMe: true, error: error } })
+        funcLoginAction({ form: {username: "", password: "", rememberMe: true } })
       );
     });
   });

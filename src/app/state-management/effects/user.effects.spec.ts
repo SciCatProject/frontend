@@ -171,8 +171,7 @@ describe("UserEffects", () => {
         password,
         rememberMe,
       });
-      const outcome = fromActions.activeDirLoginFailedAction(error);
-
+      const outcome = fromActions.activeDirLoginFailedAction({error});
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {}, error);
@@ -319,10 +318,10 @@ describe("UserEffects", () => {
 
     it("should result in a funcLoginFailedAction", () => {
       const action = fromActions.funcLoginAction({form});
-      const outcome = fromActions.funcLoginFailedAction(error);
+      const outcome = fromActions.funcLoginFailedAction({error});
 
       actions = hot("-a", { a: action });
-      const response = cold("-#", {});
+      const response = cold("-#", {}, error);
       userApi.login.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
