@@ -137,15 +137,6 @@ export class UserEffects {
     );
   });
 
-  // loginRedirect$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(fromActions.activeDirLoginFailedAction),
-  //     map(({ username, password, rememberMe, error }) =>
-  //       fromActions.funcLoginAction({ username, password, rememberMe, error })
-  //     )
-  //   );
-  // });
-
   funcLogin$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.funcLoginAction),
