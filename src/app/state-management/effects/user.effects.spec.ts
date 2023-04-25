@@ -265,31 +265,6 @@ describe("UserEffects", () => {
     });
   });
 
-  // describe("loginRedirect$", () => {
-  //   it("it should redirect activeDirLoginFailedAction to funcLoginAction", () => {
-  //     const username = "test";
-  //     const password = "test";
-  //     const rememberMe = true;
-  //     const action = fromActions.activeDirLoginFailedAction({
-  //       username,
-  //       password,
-  //       rememberMe,
-  //       error,
-  //     });
-  //     const outcome = fromActions.funcLoginAction({
-  //       username,
-  //       password,
-  //       rememberMe,
-  //       error,
-  //     });
-
-  //     actions = hot("-a", { a: action });
-
-  //     const expected = cold("-b", { b: outcome });
-  //     expect(effects.loginRedirect$).toBeObservable(expected);
-  //   });
-  // });
-
   describe("funcLogin$", () => {
     const form = {
       username : "test",
