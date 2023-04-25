@@ -40,8 +40,12 @@ export interface AppConfig {
   editSampleEnabled: boolean;
   externalAuthEndpoint: string | null;
   facility: string | null;
-  facilityLoginLabel: string | null;
-  localLoginLabel: string | null;
+  loginFacilityLabel: string | null;
+  loginLdapLabel: string | null;
+  loginLocalLabel: string | null;
+  loginFacilityEnabled: boolean;
+  loginLdapEnabled: boolean;
+  loginLocalEnabled: boolean;
   fileColorEnabled: boolean;
   fileDownloadEnabled: boolean;
   gettingStarted: string | null;
@@ -87,7 +91,7 @@ export class AppConfigService {
   async loadAppConfig(): Promise<void> {
     try {
       this.appConfig = await this.http
-        .get("/client/config.json")
+        .get("http://localhost:3000/api/v3/admin/config")
         .pipe(timeout(2000))
         .toPromise();
     } catch (err) {

@@ -35,21 +35,17 @@ export const activeDirLoginSuccessAction = createAction(
 );
 export const activeDirLoginFailedAction = createAction(
   "[User] Active Directory Login Failed",
-  props<{
-    username: string;
-    password: string;
-    rememberMe: boolean;
-    error: HttpErrorResponse;
-  }>()
+  props<{ error: HttpErrorResponse }>()
 );
 
 export const funcLoginAction = createAction(
   "[User] Functional Login",
   props<{
-    username: string;
+    form : {username: string;
     password: string;
     rememberMe: boolean;
     error: HttpErrorResponse;
+  };
   }>()
 );
 export const funcLoginSuccessAction = createAction(
@@ -57,7 +53,7 @@ export const funcLoginSuccessAction = createAction(
 );
 export const funcLoginFailedAction = createAction(
   "[User] Functional Login Failed",
-  props<{ error: HttpErrorResponse }>()
+  props< {error: HttpErrorResponse}>()
 );
 
 export const fetchUserAction = createAction(

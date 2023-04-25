@@ -50,6 +50,8 @@ export class UserEffects {
   user$ = this.store.select(selectCurrentUser);
   columns$ = this.store.select(selectColumns);
 
+
+
   login$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.loginAction),
@@ -69,15 +71,12 @@ export class UserEffects {
             fromActions.activeDirLoginSuccessAction(),
             fromActions.fetchUserAction({ adLoginResponse: body }),
           ]),
-          catchError((error: HttpErrorResponse) =>
-            of(
-              fromActions.activeDirLoginFailedAction({
-                username,
-                password,
-                rememberMe,
-                error,
-              })
-            )
+          catchError((error: HttpErrorResponse) => {
+            return of(
+              fromActions.activeDirLoginFailedAction({error})
+            );
+          }
+            
           )
         )
       )
@@ -139,20 +138,21 @@ export class UserEffects {
     );
   });
 
-  loginRedirect$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.activeDirLoginFailedAction),
-      map(({ username, password, rememberMe, error }) =>
-        fromActions.funcLoginAction({ username, password, rememberMe, error })
-      )
-    );
-  });
+  // loginRedirect$ = createEffect(() => {
+  //   return this.actions$.pipe(
+  //     ofType(fromActions.activeDirLoginFailedAction),
+  //     map(({ username, password, rememberMe, error }) =>
+  //       fromActions.funcLoginAction({ username, password, rememberMe, error })
+  //     )
+  //   );
+  // });
 
   funcLogin$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.funcLoginAction),
-      switchMap(({ username, password, rememberMe, error }) =>
-        this.userApi.login({ username, password, rememberMe }).pipe(
+      map((action) => action.form),
+      switchMap(({ username, password, rememberMe, error}) =>
+        this.userApi.login({ username, password, rememberMe, }).pipe(
           switchMap(({ user }) => [
             fromActions.funcLoginSuccessAction(),
             fromActions.loginCompleteAction({
@@ -160,7 +160,9 @@ export class UserEffects {
               accountType: "functional",
             }),
           ]),
-          catchError(() => of(fromActions.funcLoginFailedAction({ error })))
+          catchError(() => {
+            return  of(fromActions.funcLoginFailedAction({error}));
+          })
         )
       )
     );
@@ -170,16 +172,17 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(
         fromActions.fetchUserFailedAction,
-        fromActions.funcLoginFailedAction
+        fromActions.funcLoginFailedAction,
+        fromActions.activeDirLoginFailedAction
       ),
-      map(({ error }) => fromActions.loginFailedAction({ error }))
+      map(( error ) => fromActions.loginFailedAction(error))
     );
   });
 
   loginFailedMessage$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.loginFailedAction),
-      map(({ error }) => {
+      map(({error} ) => {
         if (error.status === 500) {
           return fromActions.showMessageAction({
             message: {
@@ -237,6 +240,9 @@ export class UserEffects {
   fetchCurrentUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchCurrentUserAction),
+      filter(()=> {
+        return this.userApi.getCurrentId() !== "null";
+      }),
       switchMap(() =>
         this.userApi.getCurrent().pipe(
           switchMap((user) => [

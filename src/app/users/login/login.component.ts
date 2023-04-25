@@ -7,6 +7,7 @@ import {
   fetchCurrentUserAction,
   fetchUserAction,
   loginAction,
+  funcLoginAction,
   loginOIDCAction,
 } from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
@@ -19,6 +20,7 @@ import {
   AppConfigService,
   OAuth2Endpoint,
 } from "app-config.service";
+import { HttpErrorResponse } from "@angular/common/http";
 
 interface LoginForm {
   username: string;
@@ -45,17 +47,21 @@ export class LoginComponent implements OnInit, OnDestroy {
   appConfig: AppConfig = this.appConfigService.getConfig();
   facility: string | null = null;
   loginFormEnabled = false;
+  loginFacilityEnabled = false;
+  loginLdapEnabled = false;
+  loginLocalEnabled = false;
   oAuth2Endpoints: OAuth2Endpoint[] = [];
   loginFormPrefix: string;
-  facilityLoginLabel: string;
-  localLoginLabel: string;
+  loginFacilityLabel: string;
+  loginLocalLabel: string;
+  loginLdapLabel: string;
 
   returnUrl: string;
   hide = true;
   public loginForm = this.fb.group({
     username: ["", Validators.required],
     password: ["", Validators.required],
-    rememberMe: true,
+    rememberMe: true
   });
 
   constructor(
@@ -86,18 +92,31 @@ export class LoginComponent implements OnInit, OnDestroy {
    * @memberof LoginComponent
    */
   onLogin() {
+    const error = new HttpErrorResponse({
+      status: 400,
+      statusText: "Bad Request",
+    });
+    const form: LoginForm = this.loginForm.value;
+    this.store.dispatch(funcLoginAction({form:{...form, error}}));
+  }
+
+  onLdapLogin() {
     const form: LoginForm = this.loginForm.value;
     this.store.dispatch(loginAction({ form }));
   }
 
   ngOnInit() {
     this.facility = this.appConfig.facility;
-    this.facilityLoginLabel = this.appConfig.facilityLoginLabel || "External";
-    this.localLoginLabel = this.appConfig.localLoginLabel || "Local";
+    this.loginFacilityLabel = this.appConfig.loginFacilityLabel || "External";
+    this.loginLdapLabel = this.appConfig.loginLdapLabel || "Ldap";
+    this.loginLocalLabel = this.appConfig.loginLocalLabel || "Local";
     this.loginFormPrefix = this.appConfig.externalAuthEndpoint
       ? this.facility
       : "Service";
     this.loginFormEnabled = this.appConfig.loginFormEnabled;
+    this.loginFacilityEnabled = this.appConfig.loginFacilityEnabled;
+    this.loginLdapEnabled = this.appConfig.loginLdapEnabled;
+    this.loginLocalEnabled = this.appConfig.loginLocalEnabled;
     this.oAuth2Endpoints = this.appConfig.oAuth2Endpoints;
 
     this.proceedSubscription = this.vm$
