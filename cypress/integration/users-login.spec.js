@@ -30,11 +30,11 @@ describe("Users Login", () => {
 
     cy.url().should("include", "/login");
 
-    cy.get('mat-tab-group [role="tab"]').contains("Local").click();
+    cy.get('mat-tab-group [role="tab"]').contains("Ldap").click();
 
-    cy.get("#usernameInput").type(username).should("have.value", username);
+    cy.get("#usernameInput-ldap").type(username).should("have.value", username);
 
-    cy.get("#passwordInput").type("invalid").should("have.value", "invalid");
+    cy.get("#passwordInput-ldap").type("invalid").should("have.value", "invalid");
 
     cy.get("button[type=submit]").click();
 
@@ -44,14 +44,24 @@ describe("Users Login", () => {
         cy.contains(
           "Unable to connect to the authentication service. Please try again later or contact website maintainer."
         );
-      } else {
-        cy.wait("@funcLogin").then(({ request, response }) => {
-          expect(request.method).to.eq("POST");
-          expect(response.statusCode).to.eq(401);
+      } 
+    });
 
-          cy.contains("Could not log in. Check your username and password.");
-        });
-      }
+    cy.get('mat-tab-group [role="tab"]').contains("Local").click();
+
+    cy.get("#usernameInput").type(username).should("have.value", username);
+
+    cy.get("#passwordInput").type("invalid").should("have.value", "invalid");
+
+    cy.get('.mat-snack-bar-container').should('not.exist');
+
+    cy.get("button[type=submit]").click();
+
+    cy.wait("@funcLogin").then(({ request, response }) => {
+      expect(request.method).to.eq("POST");
+      expect(response.statusCode).to.eq(401);
+
+      cy.contains("Could not log in. Check your username and password.");
     });
   });
 
