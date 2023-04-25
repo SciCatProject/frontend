@@ -92,7 +92,7 @@ export class AppConfigService {
   async loadAppConfig(): Promise<void> {
     try {
       this.appConfig = await this.http
-        .get("http://localhost:3000/api/v3/admin/config")
+        .get("/client/config.json")
         .pipe(timeout(2000))
         .toPromise();
     } catch (err) {
