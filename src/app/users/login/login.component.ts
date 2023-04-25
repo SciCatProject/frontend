@@ -20,7 +20,6 @@ import {
   AppConfigService,
   OAuth2Endpoint,
 } from "app-config.service";
-import { HttpErrorResponse } from "@angular/common/http";
 
 interface LoginForm {
   username: string;
