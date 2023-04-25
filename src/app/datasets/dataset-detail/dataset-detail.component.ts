@@ -39,6 +39,8 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
+import {Clipboard} from "@angular/cdk/clipboard";
+
 /**
  * Component to show details for a data set, using the
  * form component
@@ -82,7 +84,8 @@ export class DatasetDetailComponent
     public dialog: MatDialog,
     private store: Store,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private clipboard: Clipboard
   ) {}
 
   ngOnInit() {
@@ -314,5 +317,9 @@ export class DatasetDetailComponent
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });
+  }
+
+  copyIntoClipboard(pid: string) {
+    this.clipboard.copy(pid);
   }
 }

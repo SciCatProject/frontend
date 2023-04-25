@@ -80,6 +80,7 @@ export interface AppConfig {
   fileserverButtonLabel: string | undefined;
   datasetDetailsShowMissingProposalId: boolean;
   helpMessages?: HelpMessages;
+  prefix: string | undefined;
 }
 
 @Injectable()
