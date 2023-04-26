@@ -10,7 +10,7 @@ import { Store, StoreModule } from "@ngrx/store";
 import { MockActivatedRoute, MockRouter, MockStore } from "shared/MockStubs";
 import { LoginComponent } from "./login.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { loginAction } from "state-management/actions/user.actions";
+import { funcLoginAction, loginAction } from "state-management/actions/user.actions";
 import { PrivacyDialogComponent } from "users/privacy-dialog/privacy-dialog.component";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -22,6 +22,7 @@ import { MatInputModule } from "@angular/material/input";
 import { AppConfigService, OAuth2Endpoint } from "app-config.service";
 import { provideMockStore } from "@ngrx/store/testing";
 import { selectLoginPageViewModel } from "state-management/selectors/user.selectors";
+import { HttpErrorResponse } from "@angular/common/http";
 
 const getConfig = () => ({
   archiveWorkflowEnabled: true,
@@ -147,13 +148,36 @@ describe("LoginComponent", () => {
     });
 
     it("should dispatch a loginAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
+      const error = new HttpErrorResponse({
+        status: 400,
+        statusText: "Bad Request",
+      });
 
+      dispatchSpy = spyOn(store, "dispatch");
       component.onLogin();
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        loginAction({ form: { username: "", password: "", rememberMe: true } })
+        funcLoginAction({ form: {username: "", password: "", rememberMe: true } })
+      );
+    });
+  });
+
+  describe("#onLdapLogin()", () => {
+    beforeEach(() => {
+      fixture = TestBed.createComponent(LoginComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+
+    it("should dispatch a ldapLoginAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      component.onLdapLogin();
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        loginAction({ form: { username: "", password: "", rememberMe: true} })
       );
     });
   });

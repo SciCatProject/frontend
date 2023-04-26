@@ -73,16 +73,10 @@ describe("User Actions", () => {
       const password = "test";
       const rememberMe = true;
       const action = fromActions.activeDirLoginFailedAction({
-        username,
-        password,
-        rememberMe,
         error
       });
       expect({ ...action }).toEqual({
         type: "[User] Active Directory Login Failed",
-        username,
-        password,
-        rememberMe,
         error
       });
     });
@@ -94,17 +88,19 @@ describe("User Actions", () => {
       const password = "test";
       const rememberMe = true;
       const action = fromActions.funcLoginAction({
-        username,
-        password,
-        rememberMe,
-        error
+        form: {
+          username,
+          password,
+          rememberMe,
+        }
       });
       expect({ ...action }).toEqual({
         type: "[User] Functional Login",
-        username,
-        password,
-        rememberMe,
-        error
+          form: {
+            username,
+            password,
+            rememberMe,
+          }
       });
     });
   });
