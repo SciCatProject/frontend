@@ -10,6 +10,10 @@
         </mat-card-header>
         <div class="details">
           <table>
+            <tr *ngIf="instrument.uniqueName as value">
+              <th>Unique Name</th>
+              <td>{{ value }}</td>
+            </tr>
             <tr *ngIf="instrument.name as value">
               <th>Name</th>
               <td>{{ value }}</td>

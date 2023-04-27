@@ -6,6 +6,7 @@ import {
 declare var Object: any;
 export interface InstrumentInterface {
   "pid"?: string;
+  "uniqueName": string;
   "name": string;
   "customMetadata"?: any;
   "createdBy"?: string;
@@ -17,6 +18,7 @@ export interface InstrumentInterface {
 
 export class Instrument implements InstrumentInterface {
   "pid": string;
+  "uniqueName": string;
   "name": string;
   "customMetadata": any;
   "createdBy": string;
