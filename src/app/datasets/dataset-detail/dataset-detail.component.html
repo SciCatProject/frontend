@@ -276,9 +276,10 @@
           <tr *ngIf="dataset['instrumentId'] && instrument">
             <th>Instrument</th>
             <td>
-              <a (click)="onClickInstrument(instrument.pid)">
-                {{ instrument.name }}
-              </a>
+                <a (click)="onClickInstrument(instrument.pid)">
+                  {{ instrument.name }} 
+                </a>
+                <span *ngIf="instrument.uniqueName"> ( Unique Name: {{instrument.uniqueName}} )</span>
             </td>
           </tr>
           <tr *ngIf="dataset['creationLocation'] as value">
