@@ -10,11 +10,15 @@ export class AppThemeService {
   constructor(private http: HttpClient) {}
 
   async loadTheme(): Promise<void> {
+    const apiUrl = process.env.API_URL;
+
+    if (!apiUrl) {
+      throw new Error("Environment variable API_URL not set");
+    }
+
     try {
-      // FIXME: The backend url should be in a env variable and read if from there initially
-      // Also mention that the previous(old way) was just using the url: /client/theme.json 
       this.activeTheme = (await this.http
-        .get("http://localhost:3000/api/v3/admin/theme")
+        .get(`${apiUrl}/admin/theme`)
         .pipe(timeout(2000))
         .toPromise()) as Theme;
     } catch (err) {

@@ -85,11 +85,15 @@ export class AppConfigService {
   constructor(private http: HttpClient) {}
 
   async loadAppConfig(): Promise<void> {
+    const apiUrl = process.env.API_URL;
+
+    if (!apiUrl) {
+      throw new Error("Environment variable API_URL not set");
+    }
+
     try {
-      // FIXME: The backend url should be in a env variable and read if from there initially
-      // Also mention that the previous(old way) was just using the url: /client/config.json 
       this.appConfig = await this.http
-        .get("http://localhost:3000/api/v3/admin/config")
+        .get(`${apiUrl}/admin/config`)
         .pipe(timeout(2000))
         .toPromise();
     } catch (err) {

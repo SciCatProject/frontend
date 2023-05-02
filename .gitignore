@@ -52,3 +52,4 @@ Thumbs.db
 /cypress/videos/*
 *.mp4
 .angular
+.env
