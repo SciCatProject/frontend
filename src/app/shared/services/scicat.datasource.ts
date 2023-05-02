@@ -69,7 +69,8 @@ export class SciCatDataSource implements DataSource<any> {
     sortField?: string,
     sortDirection = "asc",
     pageIndex = 0,
-    pageSize = 10
+    pageSize = 10,
+    isFilesDashboard?: boolean,
   ) {
     this.loadingSubject.next(true);
 
@@ -89,7 +90,8 @@ export class SciCatDataSource implements DataSource<any> {
         sortField,
         sortDirection,
         pageIndex,
-        pageSize
+        pageSize,
+        isFilesDashboard
       )
       .pipe(
         catchError(() => of([])),

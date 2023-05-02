@@ -89,6 +89,7 @@ describe("UserEffects", () => {
             "getSettings",
             "updateSettings",
             "getCurrentToken",
+            "getCurrentId"
           ]),
         },
         {
@@ -170,18 +171,14 @@ describe("UserEffects", () => {
         password,
         rememberMe,
       });
-      const outcome = fromActions.activeDirLoginFailedAction({
-        username,
-        password,
-        rememberMe,
-        error,
-      });
+      const outcome = fromActions.activeDirLoginFailedAction({error});
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {}, error);
       activeDirAuthService.login.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
+
       expect(effects.adLogin$).toBeObservable(expected);
     });
   });
@@ -268,45 +265,21 @@ describe("UserEffects", () => {
     });
   });
 
-  describe("loginRedirect$", () => {
-    it("it should redirect activeDirLoginFailedAction to funcLoginAction", () => {
-      const username = "test";
-      const password = "test";
-      const rememberMe = true;
-      const action = fromActions.activeDirLoginFailedAction({
-        username,
-        password,
-        rememberMe,
-        error,
-      });
-      const outcome = fromActions.funcLoginAction({
-        username,
-        password,
-        rememberMe,
-        error,
-      });
-
-      actions = hot("-a", { a: action });
-
-      const expected = cold("-b", { b: outcome });
-      expect(effects.loginRedirect$).toBeObservable(expected);
-    });
-  });
-
   describe("funcLogin$", () => {
-    const username = "test";
-    const password = "test";
-    const rememberMe = true;
+    const form = {
+      username : "test",
+      password : "test",
+      rememberMe : true,
+      error: new HttpErrorResponse({
+        status: 400,
+        statusText: "Bad Request",
+      })
+    };
 
     it("should result in a funcLoginSuccessAction and a loginCompleteAction", () => {
       const user = new User();
       const accountType = "functional";
-      const action = fromActions.funcLoginAction({
-        username,
-        password,
-        rememberMe,
-        error,
-      });
+      const action = fromActions.funcLoginAction({form});
       const outcome1 = fromActions.funcLoginSuccessAction();
       const outcome2 = fromActions.loginCompleteAction({ user, accountType });
 
@@ -319,16 +292,11 @@ describe("UserEffects", () => {
     });
 
     it("should result in a funcLoginFailedAction", () => {
-      const action = fromActions.funcLoginAction({
-        username,
-        password,
-        rememberMe,
-        error,
-      });
-      const outcome = fromActions.funcLoginFailedAction({ error });
+      const action = fromActions.funcLoginAction({form});
+      const outcome = fromActions.funcLoginFailedAction({error});
 
       actions = hot("-a", { a: action });
-      const response = cold("-#", {});
+      const response = cold("-#", {}, error);
       userApi.login.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
@@ -442,6 +410,8 @@ describe("UserEffects", () => {
       const expected = cold("--b", { b: outcome });
       expect(effects.logout$).toBeObservable(expected);
     });
+
+
   });
 
   describe("logoutNavigate$", () => {
@@ -467,6 +437,7 @@ describe("UserEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: user });
+      userApi.getCurrentId.and.returnValue(user.id);
       userApi.getCurrent.and.returnValue(response);
 
       const expected = cold("--(bcd)", {
@@ -478,15 +449,20 @@ describe("UserEffects", () => {
     });
 
     it("should result in a fetchCurrentUserFailedAction", () => {
+      const user = new User();
+      user.id = "testId";
       const action = fromActions.fetchCurrentUserAction();
       const outcome = fromActions.fetchCurrentUserFailedAction();
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
+      userApi.getCurrentId.and.returnValue(user.id);
       userApi.getCurrent.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCurrentUser$).toBeObservable(expected);
+
+
     });
   });
 

@@ -75,6 +75,7 @@ export class SharedTableComponent
 
   // Shared Variables
   @Input() dataSource: SciCatDataSource;
+  @Input() isFilesDashboard: boolean;
   @Input() columnsdef: Column[];
   @Input() pageSize = 10;
   @Input() pageSizeOptions: number[] = [5, 10, 25, 100];
@@ -216,7 +217,8 @@ export class SharedTableComponent
       this.sort.active,
       this.sort.direction,
       this.paginator.pageIndex,
-      this.paginator.pageSize
+      this.paginator.pageSize,
+      this.isFilesDashboard
     );
   }
 

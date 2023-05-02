@@ -119,7 +119,8 @@ describe("SharedTableComponent", () => {
         component.sort.active,
         component.sort.direction,
         component.paginator.pageIndex,
-        component.paginator.pageSize
+        component.paginator.pageSize,
+        component.isFilesDashboard
       );
     });
   });
