@@ -34,8 +34,8 @@ export class InstrumentsDashboardComponent implements OnInit {
 
   tablePaginate = true;
   tableColumns: TableColumn[] = [
-    { name: "name", icon: "scanner", sort: true, inList: true },
-    { name: "customMetadata", icon: "insert_chart", sort: false, inList: true },
+    { name: "uniqueName", icon: "scanner", sort: true, inList: true },
+    { name: "name", icon: "fingerprint", sort: true, inList: true },
   ];
 
   constructor(
