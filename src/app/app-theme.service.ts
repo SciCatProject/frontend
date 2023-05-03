@@ -10,15 +10,9 @@ export class AppThemeService {
   constructor(private http: HttpClient) {}
 
   async loadTheme(): Promise<void> {
-    const apiUrl = process.env.API_URL;
-
-    if (!apiUrl) {
-      throw new Error("Environment variable API_URL not set");
-    }
-
     try {
       this.activeTheme = (await this.http
-        .get(`${apiUrl}/admin/theme`)
+        .get("/api/v3/admin/theme")
         .pipe(timeout(2000))
         .toPromise()) as Theme;
     } catch (err) {

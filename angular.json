@@ -22,7 +22,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-builders/custom-webpack:browser",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "allowedCommonJsDependencies": [
               "deep-equal",
@@ -43,10 +43,7 @@
               "src/manifest.json"
             ],
             "styles": ["src/styles.scss"],
-            "scripts": [],
-            "customWebpackConfig": {
-              "path": "./custom-webpack.config.ts"
-            }
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -88,7 +85,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-builders/custom-webpack:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
               "browserTarget": "scicat-frontend:build:production"
@@ -96,6 +93,9 @@
             "default": {
               "browserTarget": "scicat-frontend:build:default"
             }
+          },
+          "options": {
+            "proxyConfig": "scripts/local.proxy.config.json"
           },
           "defaultConfiguration": "default"
         },
@@ -106,7 +106,7 @@
           }
         },
         "test": {
-          "builder": "@angular-builders/custom-webpack:karma",
+          "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
             "polyfills": "src/polyfills.ts",
@@ -139,10 +139,7 @@
               "src/test.ts"
             ],
             "styles": ["src/styles.scss"],
-            "scripts": [],
-            "customWebpackConfig": {
-              "path": "./custom-webpack.config.ts"
-            }
+            "scripts": []
           }
         },
         "lint": {

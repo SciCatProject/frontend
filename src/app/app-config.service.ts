@@ -85,15 +85,9 @@ export class AppConfigService {
   constructor(private http: HttpClient) {}
 
   async loadAppConfig(): Promise<void> {
-    const apiUrl = process.env.API_URL;
-
-    if (!apiUrl) {
-      throw new Error("Environment variable API_URL not set");
-    }
-
     try {
       this.appConfig = await this.http
-        .get(`${apiUrl}/admin/config`)
+        .get("/api/v3/admin/config")
         .pipe(timeout(2000))
         .toPromise();
     } catch (err) {
