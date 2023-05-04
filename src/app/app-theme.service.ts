@@ -12,7 +12,7 @@ export class AppThemeService {
   async loadTheme(): Promise<void> {
     try {
       this.activeTheme = (await this.http
-        .get("/client/theme.json")
+        .get("/api/v3/admin/theme")
         .pipe(timeout(2000))
         .toPromise()) as Theme;
     } catch (err) {

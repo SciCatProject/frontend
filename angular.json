@@ -42,9 +42,7 @@
               "src/robots.txt",
               "src/manifest.json"
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "styles": ["src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -96,6 +94,9 @@
               "browserTarget": "scicat-frontend:build:default"
             }
           },
+          "options": {
+            "proxyConfig": "scripts/local.proxy.config.json"
+          },
           "defaultConfiguration": "default"
         },
         "extract-i18n": {
@@ -137,19 +138,14 @@
               "src/polyfills.ts",
               "src/test.ts"
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
         }
       }

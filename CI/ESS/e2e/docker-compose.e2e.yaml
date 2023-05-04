@@ -4,7 +4,6 @@ services:
     image: traefik:2.5
     command: --api.insecure=true --providers.docker=true --entrypoints.web.address=:80
     ports:
-      - 80:80
       - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -36,6 +35,8 @@ services:
     command: sh -c "
       sleep 5 &&
       node dist/main"
+    ports:
+      - 3000:3000
     volumes:
       - "./CI/ESS/e2e/.env.backend-next:/home/node/app/.env"
     depends_on:
@@ -50,6 +51,8 @@ services:
       dockerfile: CI/ESS/e2e/Dockerfile.e2e
     command:
       ["./wait-for-it.sh", "backend:3000", "--", "nginx", "-g", "daemon off;"]
+    ports:
+      - 4200:80
     volumes:
       - "./CI/ESS/e2e/config.e2e.json:/usr/share/nginx/html/assets/config.json"
       - "./CI/ESS/site.png:/usr/share/nginx/html/assets/images/site.png"

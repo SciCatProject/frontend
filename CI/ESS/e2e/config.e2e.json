@@ -23,7 +23,7 @@
   "jsonMetadataEnabled": true,
   "jupyterHubUrl": "https://jupyterhub.esss.lu.se/",
   "landingPage": "doi.ess.eu/detail/",
-  "lbBaseURL": "http://localhost:80",
+  "lbBaseURL": "http://localhost:3000",
   "localColumns": [
     {
       "name": "select",
