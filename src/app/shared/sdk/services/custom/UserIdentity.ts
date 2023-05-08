@@ -131,7 +131,14 @@ export class UserIdentityApi extends BaseLoopBackApi {
   }
 
   // NOTE: Checks if an email is connected with valid scicat user.
-  public isValidEmail<T>(filter: LoopBackFilter = {}, customHeaders?: Function): Observable<boolean> {
+  /**
+   * @method isValidEmail
+   * @license MIT
+   * @return {boolean}
+   * @description
+   * Created isValidEmail method
+   */
+  public isValidEmail(filter: LoopBackFilter = {}, customHeaders?: Function): Observable<boolean> {
     return this.request('GET', [
       LoopBackConfig.getPath(),
       LoopBackConfig.getApiVersion(),

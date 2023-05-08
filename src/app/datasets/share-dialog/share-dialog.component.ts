@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import { FormControl, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
@@ -39,7 +39,7 @@ export class ShareDialogComponent {
   add = async (email: string): Promise<void> => {
     try {
       const isValidEmail = await this.userIdentityApi
-        .isValidEmail<boolean>({
+        .isValidEmail({
           where: { "profile.email": email.trim() },
         })
         .toPromise();

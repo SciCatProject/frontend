@@ -6,7 +6,11 @@ import {
 } from "@angular/core/testing";
 import { MatButtonModule } from "@angular/material/button";
 import { MatChipsModule } from "@angular/material/chips";
-import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
@@ -19,6 +23,10 @@ import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
 
 import { ShareDialogComponent } from "./share-dialog.component";
+
+const data = {
+  infoMessage: "",
+};
 
 describe("ShareDialogComponent", () => {
   let component: ShareDialogComponent;
@@ -40,6 +48,7 @@ describe("ShareDialogComponent", () => {
         { provide: MatDialogRef, useValue: { close: () => {} } },
         { provide: Store, useClass: MockStore },
         { provide: UserIdentityApi, useClass: MockUserIdentityApi },
+        { provide: MAT_DIALOG_DATA, useValue: data },
       ],
     }).compileComponents();
   });
@@ -85,7 +94,7 @@ describe("ShareDialogComponent", () => {
 
   describe("#add()", () => {
     it("should dispatch a showMessageAction with type `error` if user does not exist", fakeAsync(() => {
-      spyOn(component.userIdentityApi, "findOne").and.throwError("Not found");
+      spyOn(component.userIdentityApi, "isValidEmail").and.throwError("Not found");
       const dispatchSpy = spyOn(component.store, "dispatch");
       const email = "test@email.com";
 
@@ -110,8 +119,8 @@ describe("ShareDialogComponent", () => {
           email,
         },
       };
-      spyOn(component.userIdentityApi, "findOne").and.returnValue(
-        of(userIdentity)
+      spyOn(component.userIdentityApi, "isValidEmail").and.returnValue(
+        of(true)
       );
       component.emailFormControl.setValue(email);
       expect(component.emailFormControl.value).toEqual(email);
