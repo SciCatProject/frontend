@@ -1,8 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import { FormControl, Validators } from "@angular/forms";
-import { MatDialogRef } from "@angular/material/dialog";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
-import { UserIdentity, UserIdentityApi } from "shared/sdk";
+import { UserIdentityApi } from "shared/sdk";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
 
@@ -12,17 +12,25 @@ import { Message, MessageType } from "state-management/models";
   styleUrls: ["./share-dialog.component.scss"],
 })
 export class ShareDialogComponent {
+  data: any;
   emailFormControl = new FormControl("", [
     Validators.required,
     Validators.email,
   ]);
   users: string[] = [];
+  infoMessage = "";
 
   constructor(
     public dialogRef: MatDialogRef<ShareDialogComponent>,
     public store: Store,
-    public userIdentityApi: UserIdentityApi
-  ) {}
+    public userIdentityApi: UserIdentityApi,
+    @Inject(MAT_DIALOG_DATA)
+    data: {
+      infoMessage: string;
+    }
+  ) {
+    this.data = JSON.parse(JSON.stringify(data));
+  }
 
   isInvalid = (): boolean =>
     this.emailFormControl.hasError("email") ||
@@ -30,9 +38,23 @@ export class ShareDialogComponent {
 
   add = async (email: string): Promise<void> => {
     try {
-      await this.userIdentityApi
-        .findOne<UserIdentity>({ where: { "profile.email": email.trim() } })
+      const isValidEmail = await this.userIdentityApi
+        .isValidEmail<boolean>({
+          where: { "profile.email": email.trim() },
+        })
         .toPromise();
+
+      if (!isValidEmail) {
+        const message = new Message(
+          "The email address is not connected to a SciCat user",
+          MessageType.Error,
+          5000
+        );
+        this.store.dispatch(showMessageAction({ message }));
+
+        return;
+      }
+
       this.users.push(email.trim());
       this.emailFormControl.reset();
     } catch (error) {
