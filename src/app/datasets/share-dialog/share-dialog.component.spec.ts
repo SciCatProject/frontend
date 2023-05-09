@@ -26,6 +26,7 @@ import { ShareDialogComponent } from "./share-dialog.component";
 
 const data = {
   infoMessage: "",
+  disableShareButton: false,
 };
 
 describe("ShareDialogComponent", () => {
@@ -94,7 +95,9 @@ describe("ShareDialogComponent", () => {
 
   describe("#add()", () => {
     it("should dispatch a showMessageAction with type `error` if user does not exist", fakeAsync(() => {
-      spyOn(component.userIdentityApi, "isValidEmail").and.throwError("Not found");
+      spyOn(component.userIdentityApi, "isValidEmail").and.throwError(
+        "Not found"
+      );
       const dispatchSpy = spyOn(component.store, "dispatch");
       const email = "test@email.com";
 
