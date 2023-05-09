@@ -1,6 +1,5 @@
 import { Observable, of } from "rxjs";
 import { convertToParamMap, UrlTree } from "@angular/router";
-import { User, UserIdentity } from "state-management/models";
 
 export class MockUserApi {
   getCurrentId() {
