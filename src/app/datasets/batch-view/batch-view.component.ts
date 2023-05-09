@@ -78,12 +78,24 @@ export class BatchViewComponent implements OnInit, OnDestroy {
       this.datasetList.some(
         (item) => item.ownerEmail !== this.userProfile.email
       );
+
+    const disableShareButton =
+      !this.isAdmin &&
+      this.datasetList.every(
+        (item) => item.ownerEmail !== this.userProfile.email
+      );
+
+    const infoMessage = shouldHaveInfoMessage
+      ? disableShareButton
+        ? "You haven't selected any dataset that you own to share."
+        : "Only datasets that you own can be shared with other people."
+      : "";
+
     const dialogRef = this.dialog.open(ShareDialogComponent, {
       width: "500px",
       data: {
-        infoMessage: shouldHaveInfoMessage
-          ? "Only datasets owned by you can be shared with other people."
-          : "",
+        infoMessage,
+        disableShareButton,
       },
     });
     dialogRef.afterClosed().subscribe((result: Record<string, string[]>) => {

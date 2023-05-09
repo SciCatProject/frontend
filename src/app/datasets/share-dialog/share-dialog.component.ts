@@ -27,6 +27,7 @@ export class ShareDialogComponent {
     @Inject(MAT_DIALOG_DATA)
     data: {
       infoMessage: string;
+      disableShareButton: boolean;
     }
   ) {
     this.data = JSON.parse(JSON.stringify(data));
@@ -74,7 +75,8 @@ export class ShareDialogComponent {
     }
   };
 
-  isEmpty = (): boolean => this.users.length === 0;
+  isEmpty = (): boolean =>
+    this.users.length === 0 || this.data.disableShareButton;
 
   share = (): void => this.dialogRef.close({ users: this.users });
 
