@@ -45,7 +45,10 @@
           <th>Id</th>
           <td>{{ vm.user.id }}</td>
         </tr>
-        <tr *ngIf="vm.profile && vm.profile.accessGroups" data-cy="user-accessGroup">
+        <tr
+          *ngIf="vm.profile && vm.profile.accessGroups"
+          data-cy="user-accessGroup"
+        >
           <th>Groups</th>
           <td>{{ vm.profile.accessGroups }}</td>
         </tr>
@@ -57,6 +60,10 @@
               <mat-icon matTooltip="Copy token to clipboard">post_add</mat-icon>
             </span>
           </td>
+        </tr>
+        <tr *ngIf="vm.user && vm.user.authStrategy" data-cy="auth-strategy">
+          <th>Auth strategy</th>
+          <td>{{ vm.user.authStrategy }}</td>
         </tr>
       </table>
     </mat-card>

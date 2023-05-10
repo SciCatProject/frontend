@@ -26,6 +26,7 @@ export class User implements UserInterface {
   "emailVerified": boolean;
   "id": any;
   "password": string;
+  "authStrategy"?: string;
   accessTokens: any[];
   settings: UserSetting;
   identities: UserIdentity[];
