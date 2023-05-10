@@ -1,5 +1,8 @@
 <h1>Share datasets with users</h1>
 <mat-dialog-content>
+  <div *ngIf="data.infoMessage" class="alert alert-warn" role="alert">
+    <strong>Warning!</strong> {{ data.infoMessage }}
+  </div>
   <mat-form-field class="email-field">
     <mat-label>User email</mat-label>
     <input matInput type="email" [formControl]="emailFormControl" />

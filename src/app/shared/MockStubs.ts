@@ -1,6 +1,5 @@
 import { Observable, of } from "rxjs";
 import { convertToParamMap, UrlTree } from "@angular/router";
-import { User, UserIdentity } from "state-management/models";
 
 export class MockUserApi {
   getCurrentId() {
@@ -25,19 +24,8 @@ export class MockUserApi {
 }
 
 export class MockUserIdentityApi {
-  findOne(): Observable<UserIdentity> {
-    return of({
-      id: "",
-      userId: "",
-      user: new User(),
-      externalId: "name",
-      provider: "ldap",
-      authScheme: "",
-      credentials: "",
-      created: new Date(),
-      modified: new Date(),
-      profile: { email: "test@email.com" },
-    });
+  isValidEmail(): Observable<boolean> {
+    return of(true);
   }
 }
 
