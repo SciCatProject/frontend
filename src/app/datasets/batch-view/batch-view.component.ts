@@ -76,13 +76,17 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     const shouldHaveInfoMessage =
       !this.isAdmin &&
       this.datasetList.some(
-        (item) => item.ownerEmail !== this.userProfile.email
+        (item) =>
+          item.ownerEmail !== this.userProfile.email &&
+          !this.userProfile.accessGroups.includes(item.ownerGroup)
       );
 
     const disableShareButton =
       !this.isAdmin &&
       this.datasetList.every(
-        (item) => item.ownerEmail !== this.userProfile.email
+        (item) =>
+          item.ownerEmail !== this.userProfile.email &&
+          !this.userProfile.accessGroups.includes(item.ownerGroup)
       );
 
     const infoMessage = shouldHaveInfoMessage
@@ -102,7 +106,11 @@ export class BatchViewComponent implements OnInit, OnDestroy {
       if (result && result.users && result.users.length > 0) {
         this.datasetList.forEach((dataset) => {
           // NOTE: If the logged in user is not an owner of the dataset or and not admin then skip sharing.
-          if (!this.isAdmin && dataset.ownerEmail !== this.userProfile.email) {
+          if (
+            (!this.isAdmin && dataset.ownerEmail !== this.userProfile.email) ||
+            (!this.isAdmin &&
+              !this.userProfile.accessGroups.includes(dataset.ownerGroup))
+          ) {
             return;
           }
 
