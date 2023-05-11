@@ -81,6 +81,7 @@ export interface AppConfig {
   datasetDetailsShowMissingProposalId: boolean;
   helpMessages?: HelpMessages;
   prefix: string | undefined;
+  notificationInterceptorEnabled: boolean;
 }
 
 @Injectable()

@@ -129,6 +129,7 @@ const appConfig: AppConfig = {
   fileserverButtonLabel: "",
   datasetDetailsShowMissingProposalId: true,
   helpMessages: new HelpMessages(),
+  notificationInterceptorEnabled: true,
 };
 
 describe("AppConfigService", () => {
