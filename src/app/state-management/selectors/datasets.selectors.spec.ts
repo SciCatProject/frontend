@@ -17,7 +17,7 @@ const initialDatasetState: DatasetState = {
   hasPrefilledFilters: false,
   searchTerms: "run",
   keywordsTerms: "",
-  pidTerms: "",
+  pidTerms: "pid",
   batch: [],
 
   openwhiskResult: {},
@@ -39,6 +39,7 @@ const initialDatasetState: DatasetState = {
     keywords: [],
     scientific: [],
     isPublished: false,
+    pid: "",
   },
   relatedDatasetsFilters: {
     skip: 0,
@@ -403,4 +404,14 @@ describe("test dataset selectors", () => {
       });
     });
   });
+
+  describe("selectPidTerms", () => {
+    it("should select the current pid terms", () => {
+      expect(
+        fromDatasetSelectors.selectPidTerms.projector(initialDatasetState)
+      ).toEqual("pid");
+    });
+  });
+
+
 });

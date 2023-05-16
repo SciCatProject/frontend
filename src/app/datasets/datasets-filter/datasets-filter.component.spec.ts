@@ -26,6 +26,7 @@ import {
   removeScientificConditionAction,
   setDateRangeFilterAction,
   addScientificConditionAction,
+  setPidTermsAction,
 } from "state-management/actions/datasets.actions";
 import { of } from "rxjs";
 import {
@@ -479,8 +480,9 @@ describe("DatasetsFilterComponent", () => {
 
       component.clearFacets();
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledTimes(3);
       expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
+      expect(dispatchSpy).toHaveBeenCalledWith(setPidTermsAction({ pid: "" }));
       expect(dispatchSpy).toHaveBeenCalledWith(
         deselectAllCustomColumnsAction()
       );
@@ -545,4 +547,34 @@ describe("DatasetsFilterComponent", () => {
       );
     });
   });
+
+  describe("#pidSearchChanged()", () => {
+    it("should dispatch a SetSearchTermsAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const pid = "1";
+      component.pidSearchChanged(pid);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(setPidTermsAction({ pid }));
+    });
+  });
+
+  describe("#buildPidTermsCondition()", () => {
+    const tests = [
+      ["", "", ""], 
+      ["1", "startsWith", {"$regex": "^1"}], 
+      ["1", "contains", {"$regex": "1"}], 
+      ["1", "equals", "1"],
+      ["1", "", "1"]
+    ];
+    tests.forEach((t, i) => {
+      it(`should return buildPidTermsCondition ${i}`, () => {
+        component.appConfig.pidSearchMethod = t[1] as string;
+        const condition = component["buildPidTermsCondition"](t[0] as string);
+        expect(condition).toEqual(t[2]);
+      });
+  });
+  });
+
 });
