@@ -288,7 +288,6 @@ export const addTypeFilterAction = createAction(
   "[Dataset] Add Type Filter",
   props<{ datasetType: string }>()
 );
-
 export const removeTypeFilterAction = createAction(
   "[Dataset] Remove Type Filter",
   props<{ datasetType: string }>()

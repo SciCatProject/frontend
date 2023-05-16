@@ -137,7 +137,6 @@ export const selectTypeFacetCounts = createSelector(
   (counts) => counts.type || []
 );
 
-
 export const selectKeywordFacetCounts = createSelector(
   selectFacetCounts,
   (counts) => counts.keywords || []

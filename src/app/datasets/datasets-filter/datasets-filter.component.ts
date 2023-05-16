@@ -23,7 +23,7 @@ import {
   selectTypeFacetCounts,
   selectTypeFilter,
   selectKeywordsTerms,
-  selectMetadataKeys
+  selectMetadataKeys,
 } from "state-management/selectors/datasets.selectors";
 
 import {
@@ -40,7 +40,7 @@ import {
   setDateRangeFilterAction,
   clearFacetsAction,
   addScientificConditionAction,
-  removeScientificConditionAction
+  removeScientificConditionAction,
 } from "state-management/actions/datasets.actions";
 import { combineLatest, BehaviorSubject, Observable, Subscription } from "rxjs";
 import {
@@ -188,6 +188,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.store.dispatch(addLocationFilterAction({ location: loc }));
     this.locationInput$.next("");
   }
+
   locationRemoved(location: string) {
     this.store.dispatch(removeLocationFilterAction({ location }));
   }
