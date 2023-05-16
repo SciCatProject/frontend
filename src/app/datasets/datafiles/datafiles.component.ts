@@ -85,6 +85,7 @@ export class DatafilesComponent
   maxFileSize: number | null = this.appConfig.maxDirectDownloadSize;
   sftpHost: string | null = this.appConfig.sftpHost;
   jwt: any;
+  auth_token:any;
 
   tableColumns: TableColumn[] = [
     {
@@ -116,7 +117,7 @@ export class DatafilesComponent
     private store: Store,
     private cdRef: ChangeDetectorRef,
     private dialog: MatDialog,
-    private userApi: UserApi
+    private userApi: UserApi,
   ) {}
 
   onPageChange(event: PageChangeEvent) {
@@ -231,6 +232,8 @@ export class DatafilesComponent
   }
 
   downloadFiles(form: "downloadAllForm" | "downloadSelectedForm") {
+    this.auth_token = this.userApi.getCurrentToken().id;
+    this[`${form}Element`].nativeElement.auth_token.value= this.auth_token;
     if (!this.jwt) {
       this.subscriptions.push(
         this.userApi.jwt().subscribe((jwt) => {
