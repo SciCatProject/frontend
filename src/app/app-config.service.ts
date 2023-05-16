@@ -81,13 +81,14 @@ export interface AppConfig {
   datasetDetailsShowMissingProposalId: boolean;
   helpMessages?: HelpMessages;
   notificationInterceptorEnabled: boolean;
+  pidSearchMethod?: string;
 }
 
 @Injectable()
 export class AppConfigService {
   private appConfig: Object = {};
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   async loadAppConfig(): Promise<void> {
     try {

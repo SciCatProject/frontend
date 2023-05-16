@@ -245,7 +245,10 @@ export const setSearchTermsAction = createAction(
   "[Dataset] Set Search Terms",
   props<{ terms: string }>()
 );
-
+export const setPidTermsAction = createAction(
+  "[Dataset] Set Pid Terms",
+  props<{ pid: string }>()
+);
 export const setArchiveViewModeAction = createAction(
   "[Dataset] Set Archive View Mode",
   props<{ modeToggle: ArchViewMode }>()
@@ -266,6 +269,10 @@ export const setTextFilterAction = createAction(
   props<{ text: string }>()
 );
 
+export const setPidTermsFilterAction = createAction(
+  "[Dataset] Set Text Filter",
+  props<{ pid: string | {"$regex": string} }>()
+);
 export const addLocationFilterAction = createAction(
   "[Dataset] Add Location Filter",
   props<{ location: string }>()

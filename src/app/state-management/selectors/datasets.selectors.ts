@@ -200,6 +200,11 @@ export const selectSearchTerms = createSelector(
   (state) => state.searchTerms
 );
 
+export const selectPidTerms = createSelector(
+  selectDatasetState,
+  (state) => state.pidTerms
+);
+
 export const selectKeywordsTerms = createSelector(
   selectDatasetState,
   (state) => state.keywordsTerms

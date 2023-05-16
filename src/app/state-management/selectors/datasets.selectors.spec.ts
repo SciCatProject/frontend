@@ -17,6 +17,7 @@ const initialDatasetState: DatasetState = {
   hasPrefilledFilters: false,
   searchTerms: "run",
   keywordsTerms: "",
+  pidTerms: "",
   batch: [],
 
   openwhiskResult: {},
