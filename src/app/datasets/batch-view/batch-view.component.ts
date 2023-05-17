@@ -15,10 +15,14 @@ import { DialogComponent } from "shared/modules/dialog/dialog.component";
 
 import { Router } from "@angular/router";
 import { ArchivingService } from "../archiving.service";
-import { Observable, Subscription } from "rxjs";
+import { Observable, Subscription, combineLatest } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { ShareDialogComponent } from "datasets/share-dialog/share-dialog.component";
 import { AppConfigService } from "app-config.service";
+import {
+  selectIsAdmin,
+  selectProfile,
+} from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "batch-view",
@@ -27,6 +31,10 @@ import { AppConfigService } from "app-config.service";
 })
 export class BatchViewComponent implements OnInit, OnDestroy {
   batch$: Observable<Dataset[]> = this.store.select(selectDatasetsInBatch);
+  userProfile$ = this.store.select(selectProfile);
+  isAdmin$ = this.store.select(selectIsAdmin);
+  isAdmin = false;
+  userProfile: any = {};
   subscriptions: Subscription[] = [];
 
   appConfig = this.appConfigService.getConfig();
@@ -65,12 +73,47 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   }
 
   onShare() {
+    const shouldHaveInfoMessage =
+      !this.isAdmin &&
+      this.datasetList.some(
+        (item) =>
+          item.ownerEmail !== this.userProfile.email &&
+          !this.userProfile.accessGroups.includes(item.ownerGroup)
+      );
+
+    const disableShareButton =
+      !this.isAdmin &&
+      this.datasetList.every(
+        (item) =>
+          item.ownerEmail !== this.userProfile.email &&
+          !this.userProfile.accessGroups.includes(item.ownerGroup)
+      );
+
+    const infoMessage = shouldHaveInfoMessage
+      ? disableShareButton
+        ? "You haven't selected any dataset that you own to share."
+        : "Only datasets that you own can be shared with other people."
+      : "";
+
     const dialogRef = this.dialog.open(ShareDialogComponent, {
       width: "500px",
+      data: {
+        infoMessage,
+        disableShareButton,
+      },
     });
     dialogRef.afterClosed().subscribe((result: Record<string, string[]>) => {
       if (result && result.users && result.users.length > 0) {
         this.datasetList.forEach((dataset) => {
+          // NOTE: If the logged in user is not an owner of the dataset or and not admin then skip sharing.
+          if (
+            (!this.isAdmin && dataset.ownerEmail !== this.userProfile.email) ||
+            (!this.isAdmin &&
+              !this.userProfile.accessGroups.includes(dataset.ownerGroup))
+          ) {
+            return;
+          }
+
           this.store.dispatch(
             appendToDatasetArrayFieldAction({
               pid: encodeURIComponent(dataset.pid),
@@ -141,6 +184,12 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    combineLatest([this.isAdmin$, this.userProfile$])
+      .subscribe(([isAdmin, userProfile]) => {
+        this.isAdmin = isAdmin;
+        this.userProfile = userProfile;
+      })
+      .unsubscribe();
     this.store.dispatch(prefillBatchAction());
     this.subscriptions.push(
       this.batch$.subscribe((result) => {

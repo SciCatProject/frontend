@@ -10,10 +10,11 @@ import {
 import { Observable, throwError } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { AppConfigService } from "app-config.service";
 
 @Injectable()
 export class SnackbarInterceptor implements HttpInterceptor {
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private snackBar: MatSnackBar, public config: AppConfigService) {}
 
   intercept(
     request: HttpRequest<unknown>,
@@ -22,10 +23,11 @@ export class SnackbarInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       tap((e) => {
         if (
-          request.method == "POST" ||
-          request.method == "PUT" ||
-          request.method == "PATCH" ||
-          request.method == "DELETE"
+          this.config.getConfig().notificationInterceptorEnabled &&
+          (request.method == "POST" ||
+            request.method == "PUT" ||
+            request.method == "PATCH" ||
+            request.method == "DELETE")
         ) {
           if (
             e instanceof HttpResponse &&
@@ -39,14 +41,16 @@ export class SnackbarInterceptor implements HttpInterceptor {
         }
       }),
       catchError((error: HttpErrorResponse) => {
-        this.snackBar.open(
-          `Error occurred: ${error.status} ${error.statusText}`,
-          "close",
-          {
-            duration: 3000,
-            panelClass: "snackbar-error",
-          }
-        );
+        if (this.config.getConfig().notificationInterceptorEnabled) {
+          this.snackBar.open(
+            `Error occurred: ${error.status} ${error.statusText}`,
+            "close",
+            {
+              duration: 3000,
+              panelClass: "snackbar-error",
+            }
+          );
+        }
         return throwError(error);
       })
     );
