@@ -543,4 +543,24 @@ describe("DatasetsReducer", () => {
       expect(state).toEqual(initialDatasetState);
     });
   });
+
+  describe("on setPidTermsAction", () => {
+    it("should set dataset state to initialDatasetStata", () => {
+      const pid = "1";
+      const action = fromActions.setPidTermsAction({ pid });
+      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+
+      expect(state.pidTerms).toEqual(pid);
+    });
+  });
+
+  describe("on setPidTermsFilterAction", () => {
+    it("should set dataset state to initialDatasetStata", () => {
+      const pid = {"$regex": "1"};
+      const action = fromActions.setPidTermsFilterAction({ pid });
+      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
+
+      expect(state.filters.pid).toEqual(pid);
+    });
+  });
 });

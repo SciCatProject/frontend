@@ -23,7 +23,8 @@ import {
   selectTypeFacetCounts,
   selectTypeFilter,
   selectKeywordsTerms,
-  selectMetadataKeys
+  selectMetadataKeys,
+  selectPidTerms,
 } from "state-management/selectors/datasets.selectors";
 
 import {
@@ -40,7 +41,9 @@ import {
   setDateRangeFilterAction,
   clearFacetsAction,
   addScientificConditionAction,
-  removeScientificConditionAction
+  removeScientificConditionAction,
+  setPidTermsAction,
+  setPidTermsFilterAction,
 } from "state-management/actions/datasets.actions";
 import { combineLatest, BehaviorSubject, Observable, Subscription } from "rxjs";
 import {
@@ -59,6 +62,12 @@ interface DateRange {
   begin: string;
   end: string;
 }
+enum PidTermsSearchCondition {
+  startsWith = "startsWith",
+  contains = "contains",
+  equals = "equals",
+}
+
 @Component({
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
@@ -73,6 +82,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   keywordFacetCounts$ = this.store.select(selectKeywordFacetCounts);
 
   searchTerms$ = this.store.select(selectSearchTerms);
+  pidTerms$ = this.store.select(selectPidTerms);
   keywordsTerms$ = this.store.select(selectKeywordsTerms);
   locationFilter$ = this.store.select(selectLocationFilter);
   groupFilter$ = this.store.select(selectGroupFilter);
@@ -128,6 +138,21 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private store: Store
   ) {}
 
+  private buildPidTermsCondition(terms: string) {
+    if (!terms) return "";
+    switch(this.appConfig.pidSearchMethod) {
+      case PidTermsSearchCondition.startsWith: {
+        return {"$regex": `^${terms}`};
+      }
+      case PidTermsSearchCondition.contains: {
+        return {"$regex": terms};
+      }
+      default: {
+        return terms;
+      }
+    }
+  }
+
   createSuggestionObserver(
     facetCounts$: Observable<FacetCount[]>,
     input$: BehaviorSubject<string>,
@@ -163,6 +188,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.store.dispatch(setSearchTermsAction({ terms }));
   }
 
+  pidSearchChanged(pid: string) {
+    if ("string" != typeof pid) return;
+    this.clearSearchBar = false;
+    this.store.dispatch(setPidTermsAction({ pid }));
+  }
+
   onLocationInput(event: any) {
     const value = (<HTMLInputElement>event.target).value;
     this.locationInput$.next(value);
@@ -188,6 +219,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.store.dispatch(addLocationFilterAction({ location: loc }));
     this.locationInput$.next("");
   }
+
   locationRemoved(location: string) {
     this.store.dispatch(removeLocationFilterAction({ location }));
   }
@@ -244,6 +276,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       end: "",
     };
     this.store.dispatch(clearFacetsAction());
+    this.store.dispatch(setPidTermsAction({ pid: "" }));
     this.store.dispatch(deselectAllCustomColumnsAction());
   }
 
@@ -295,6 +328,21 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         )
         .subscribe((terms) => {
           this.store.dispatch(addKeywordFilterAction({ keyword: terms }));
+        })
+    );
+
+    this.subscriptions.push(
+      this.pidTerms$
+        .pipe(
+          skipWhile((terms) => terms.length < 5),
+          debounceTime(500),
+          distinctUntilChanged()
+        )
+        .subscribe((terms) => {
+          const condition = this.buildPidTermsCondition(terms);
+          this.store.dispatch(setPidTermsFilterAction(
+            { pid: condition }
+          ));
         })
     );
   }

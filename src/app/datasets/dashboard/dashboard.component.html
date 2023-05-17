@@ -3,7 +3,6 @@
   <mat-sidenav-content>
     <div fxLayout="row" fxLayout.xs="column">
       <div class="action-column" fxFlex="14" fxFlex.lt-xl="20">
-        <dataset-pid-selection></dataset-pid-selection>
         <datasets-filter></datasets-filter>
         <ng-template [ngIf]="this.loggedIn$ | async">
           <mat-card
