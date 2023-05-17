@@ -118,6 +118,5 @@
   "scienceSearchUnitsEnabled": false,
   "metadataStructure": "",
   "loginFormEnabled": true,
-  "oAuth2Endpoints": [],
-  "prefix": "20.500.11935"
+  "oAuth2Endpoints": []
 }

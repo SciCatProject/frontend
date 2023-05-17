@@ -137,7 +137,6 @@ export const selectTypeFacetCounts = createSelector(
   (counts) => counts.type || []
 );
 
-
 export const selectKeywordFacetCounts = createSelector(
   selectFacetCounts,
   (counts) => counts.keywords || []
@@ -199,6 +198,11 @@ export const selectDatasetsPerPage = createSelector(
 export const selectSearchTerms = createSelector(
   selectDatasetState,
   (state) => state.searchTerms
+);
+
+export const selectPidTerms = createSelector(
+  selectDatasetState,
+  (state) => state.pidTerms
 );
 
 export const selectKeywordsTerms = createSelector(

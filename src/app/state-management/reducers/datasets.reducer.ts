@@ -248,6 +248,13 @@ const reducer = createReducer(
       searchTerms: terms,
     })
   ),
+  on(
+    fromActions.setPidTermsAction,
+    (state, { pid }): DatasetState => ({
+      ...state,
+      pidTerms: pid,
+    })
+  ),
 
   on(
     fromActions.setArchiveViewModeAction,
@@ -343,6 +350,11 @@ const reducer = createReducer(
 
   on(fromActions.setTextFilterAction, (state, { text }): DatasetState => {
     const filters = { ...state.filters, text, skip: 0 };
+    return { ...state, filters };
+  }),
+
+  on(fromActions.setPidTermsFilterAction, (state, { pid }): DatasetState => {
+    const filters = { ...state.filters, pid, skip: 0 };
     return { ...state, filters };
   }),
 

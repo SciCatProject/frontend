@@ -13,6 +13,17 @@
     <div style="clear: both;"></div>
   </div>
 
+
+  <app-search-bar
+    #pidBar
+    [prefilledValue]="pidTerms$ | async"
+    [placeholder]="'PID'"
+    [clear]="clearSearchBar"
+    (search)="pidSearchChanged($event)"
+    (searchBarFocus)="pidSearchChanged($event)"
+  >
+  </app-search-bar>
+
   <app-search-bar
     #searchBar
     [prefilledValue]="searchTerms$ | async"

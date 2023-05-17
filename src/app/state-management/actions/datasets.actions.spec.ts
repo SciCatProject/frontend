@@ -746,4 +746,20 @@ describe("Dataset Actions", () => {
       expect({ ...action }).toEqual({ type: "[Dataset] Clear State" });
     });
   });
+
+  describe("setPidTermsAction", () => {
+    it("should create an action", () => {
+      const pid = "1";
+      const action = fromActions.setPidTermsAction({ pid });
+      expect({ ...action }).toEqual({ type: "[Dataset] Set Pid Terms", pid });
+    });
+  });
+
+  describe("setPidTermsFilterAction", () => {
+    it("should create an action", () => {
+      const pid = {"$regex": "1"};
+      const action = fromActions.setPidTermsFilterAction({ pid });
+      expect({ ...action }).toEqual({ type: "[Dataset] Set Text Filter", pid });
+    });
+  });
 });

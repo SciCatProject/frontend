@@ -28,6 +28,7 @@ export interface DatasetState {
   hasPrefilledFilters: boolean;
   searchTerms: string;
   keywordsTerms: string;
+  pidTerms: string;
   filters: DatasetFilters;
 
   relatedDatasetsFilters: {
@@ -54,6 +55,7 @@ export const initialDatasetState: DatasetState = {
   hasPrefilledFilters: false,
   searchTerms: "",
   keywordsTerms: "",
+  pidTerms: "",
   filters: {
     modeToggle: ArchViewMode.all,
     mode: {},
@@ -68,6 +70,7 @@ export const initialDatasetState: DatasetState = {
     keywords: [],
     scientific: [],
     isPublished: "",
+    pid: "",
   },
   relatedDatasetsFilters: {
     skip: 0,
