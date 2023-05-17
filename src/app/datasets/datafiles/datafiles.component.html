@@ -49,6 +49,7 @@
       #downloadAllForm
     >
       <input type="hidden" name="jwt" [value]="jwt?.jwt" />
+      <input type="hidden" name="dataset" [value]="datasetPid"/>
       <input type="hidden" name="directory" [value]="sourcefolder" />
       <input
         *ngFor="let file of getAllFiles(); index as i"
@@ -79,6 +80,7 @@
       #downloadSelectedForm
     >
       <input type="hidden" name="jwt" [value]="jwt?.jwt" />
+      <input type="hidden" name="dataset" [value]="datasetPid"/>
       <input type="hidden" name="directory" [value]="sourcefolder" />
       <input
         *ngFor="let file of getSelectedFiles(); index as i"

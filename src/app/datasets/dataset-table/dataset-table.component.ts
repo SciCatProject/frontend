@@ -36,6 +36,7 @@ import {
 } from "state-management/actions/user.actions";
 import { get } from "lodash";
 import { AppConfigService } from "app-config.service";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 export interface SortChangeEvent {
   active: string;
   direction: "asc" | "desc" | "";
@@ -232,7 +233,12 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
 
     this.subscriptions.push(
       this.store.select(selectDatasets).subscribe((datasets) => {
-        this.datasets = datasets;
+        this.store.select(selectCurrentUser).subscribe((currentUser) => {
+          const publishedDatasets = datasets.filter(
+            (dataset) => dataset.isPublished
+          );
+          this.datasets = !!currentUser ? datasets : publishedDatasets;
+        });
 
         // this.derivationMapPids = this.datasetDerivationsMaps.map(
         //   datasetderivationMap => datasetderivationMap.datasetPid
