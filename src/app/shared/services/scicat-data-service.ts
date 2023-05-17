@@ -152,8 +152,8 @@ export class ScicatDataService {
       .set("limits", JSON.stringify(limits))
       .append("access_token", this.auth.getToken().id);
 
-
-    const origDatablocksFiles = url.includes("Origdatablocks") && isFilesDashboard ? "/files" : "";
+    const origDatablocksFiles =
+      url.includes("Origdatablocks") && isFilesDashboard ? "/files" : "";
 
     return this.http.get<any[]>(`${url}/fullquery${origDatablocksFiles}`, {
       params,
@@ -167,7 +167,8 @@ export class ScicatDataService {
   getCount(
     url: string,
     columns: Column[],
-    filterExpressions?: any
+    filterExpressions?: any,
+    isFilesDashboard = false
   ): Observable<any> {
     const filterFields = this.createColumnFilterMongoExpression(
       columns,
@@ -178,7 +179,10 @@ export class ScicatDataService {
       .set("facets", JSON.stringify([]))
       .append("access_token", this.auth.getToken().id);
 
-    return this.http.get<any>(`${url}/fullfacet`, {
+    const origDatablocksFiles =
+      url.includes("Origdatablocks") && isFilesDashboard ? "/files" : "";
+
+    return this.http.get<any>(`${url}/fullfacet${origDatablocksFiles}`, {
       params,
       headers: { Authorization: this.auth.getAccessTokenId() },
     });
