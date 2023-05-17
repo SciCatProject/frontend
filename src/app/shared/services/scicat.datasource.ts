@@ -70,12 +70,12 @@ export class SciCatDataSource implements DataSource<any> {
     sortDirection = "asc",
     pageIndex = 0,
     pageSize = 10,
-    isFilesDashboard?: boolean,
+    isFilesDashboard?: boolean
   ) {
     this.loadingSubject.next(true);
 
     this.scicatdataService
-      .getCount(this.url, this.columnsdef, filterExpressions)
+      .getCount(this.url, this.columnsdef, filterExpressions, isFilesDashboard)
       .subscribe((numData) =>
         numData[0] && numData[0].all[0]
           ? this.countSubject.next(numData[0].all[0].totalSets)

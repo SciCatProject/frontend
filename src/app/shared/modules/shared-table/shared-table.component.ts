@@ -55,21 +55,22 @@ import { Column } from "./shared-table.module";
 })
 export class SharedTableComponent
   implements
-    AfterViewChecked,
-    AfterViewInit,
-    AfterContentInit,
-    OnDestroy, OnInit {
-  private subscriptions : Subscription[] = [];
+  AfterViewChecked,
+  AfterViewInit,
+  AfterContentInit,
+  OnDestroy,
+  OnInit {
+  private subscriptions: Subscription[] = [];
   public MIN_COLUMN_WIDTH = 200;
 
   filterForm = new FormGroup({});
-  filterExpressions : {[key: string]: string} = {};
+  filterExpressions: { [key: string]: string } = {};
   hideFilterFlag = false;
   // Visible Hidden Columns
   visibleColumns: Column[];
   hiddenColumns: Column[];
   // unitialized values are effectively treated as false
-  expandedElement = {filters: false};
+  expandedElement = { filters: false };
   // MatPaginator Inputs
   length = 100;
 
@@ -102,55 +103,61 @@ export class SharedTableComponent
         this.toggleColumns(
           this.dataTable["_elementRef"].nativeElement.clientWidth
         );
-    }));
-
+      })
+    );
   }
-  ngOnInit(){
+  ngOnInit() {
     this.filterForm = this.initializeFormControl();
     this.subscriptions.push(this.activateColumnFilters());
   }
 
   initializeFormControl() {
-    const formControls = this.columnsdef.reduce((acc: {[key: string]: string[]}, column: Column) => {
-      if(column.matchMode === "between"){
-        acc[column.id + ".start"] = [""];
-        acc[column.id + ".end"] = [""];
-      } else {
-        acc[column.id] = [""];
-      }
-      return acc;
-    }, {});
+    const formControls = this.columnsdef.reduce(
+      (acc: { [key: string]: string[] }, column: Column) => {
+        if (column.matchMode === "between") {
+          acc[column.id + ".start"] = [""];
+          acc[column.id + ".end"] = [""];
+        } else {
+          acc[column.id] = [""];
+        }
+        return acc;
+      },
+      {}
+    );
     formControls["globalSearch"] = [""];
     return this.formBuilder.group(formControls);
   }
 
-  activateColumnFilters(){
+  activateColumnFilters() {
     return this.filterForm.valueChanges
-    .pipe(debounceTime(650))
-    .subscribe( (values : {[key: string]: any }) => {
-      const queryParams: {[key: string]: string | null} = {};
-      for (let [columnId, value] of Object.entries(values)){
-        // handle date filters
-        if ((columnId.endsWith(".start") || columnId.endsWith(".end")) && value){
-          // make sure that date is an ISO string
-          const valueISO = new Date(value).toISOString();
-          const date = DateTime.fromISO(valueISO).toISODate();
-          this.filterExpressions[columnId] = date;
-          queryParams[columnId] = date;
-        } else if (value) {
-          this.filterExpressions[columnId] = value;
-          queryParams[columnId] = value;
-        } else {
-          delete this.filterExpressions[columnId];
-          queryParams[columnId] = null;
+      .pipe(debounceTime(650))
+      .subscribe((values: { [key: string]: any }) => {
+        const queryParams: { [key: string]: string | null } = {};
+        for (let [columnId, value] of Object.entries(values)) {
+          // handle date filters
+          if (
+            (columnId.endsWith(".start") || columnId.endsWith(".end")) &&
+            value
+          ) {
+            // make sure that date is an ISO string
+            const valueISO = new Date(value).toISOString();
+            const date = DateTime.fromISO(valueISO).toISODate();
+            this.filterExpressions[columnId] = date;
+            queryParams[columnId] = date;
+          } else if (value) {
+            this.filterExpressions[columnId] = value;
+            queryParams[columnId] = value;
+          } else {
+            delete this.filterExpressions[columnId];
+            queryParams[columnId] = null;
+          }
         }
-      }
-      this.router.navigate([], {
-        queryParams,
-        queryParamsHandling: "merge",
+        this.router.navigate([], {
+          queryParams,
+          queryParamsHandling: "merge",
+        });
+        this.loadDataPage();
       });
-      this.loadDataPage();
-    });
   }
 
   ngAfterViewChecked() {
@@ -189,9 +196,9 @@ export class SharedTableComponent
     this.sort.active = queryParams.sortActive || null;
     this.sort.direction = queryParams.sortDirection || "asc";
     this.paginator.pageIndex = Number(queryParams.pageIndex) || 0;
-    this.paginator.pageSize =  Number(queryParams.pageSize) || this.pageSize;
-    for (let [filter, control] of Object.entries(this.filterForm.controls)){
-      if (filter in queryParams){
+    this.paginator.pageSize = Number(queryParams.pageSize) || this.pageSize;
+    for (let [filter, control] of Object.entries(this.filterForm.controls)) {
+      if (filter in queryParams) {
         const value = queryParams[filter];
         control.setValue(value);
         this.filterExpressions[filter] = value;
@@ -212,6 +219,7 @@ export class SharedTableComponent
   }
 
   loadDataPage() {
+
     this.dataSource.loadAllData(
       this.filterExpressions,
       this.sort.active,
@@ -227,7 +235,7 @@ export class SharedTableComponent
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach(sub => sub.unsubscribe);
+    this.subscriptions.forEach((sub) => sub.unsubscribe);
   }
 
   onRowClick(event: any) {
@@ -259,7 +267,7 @@ export class SharedTableComponent
     this._changeDetectorRef.detectChanges();
     event.stopPropagation(); // prevent propagation in case there is a onRowClick function
   }
-  toggleHideFilterFlag(){
+  toggleHideFilterFlag() {
     this.expandedElement["filters"] = false;
     this.hideFilterFlag = !this.hideFilterFlag;
   }
@@ -282,7 +290,8 @@ export class SharedTableComponent
       // set default filter only if no other filters defined in query parameters
       // TODO replace by newer queryParamMap
       // ignore non-filtering parameters
-      const {sortActive, sortDirection, pageIndex, pageSize, ...qp} = this.route.snapshot.queryParams;
+      const { sortActive, sortDirection, pageIndex, pageSize, ...qp } =
+        this.route.snapshot.queryParams;
       if ("filterDefault" in col && Object.keys(qp).length === 0) {
         if (typeof col.filterDefault === "object") {
           this.router.navigate([], {
@@ -302,10 +311,10 @@ export class SharedTableComponent
     });
   }
 
-  resetFilters(){
-    Object.values(this.filterForm.controls).forEach((control => {
+  resetFilters() {
+    Object.values(this.filterForm.controls).forEach((control) => {
       control.setValue("");
-    }));
+    });
     this.filterExpressions = {};
   }
 
@@ -330,7 +339,7 @@ export class SharedTableComponent
       this.columnsdef = sortedColumns.sort((a, b) => a.order - b.order);
       this.visibleColumns = this.columnsdef.filter((column) => column.visible);
       this.hiddenColumns = this.columnsdef.filter((column) => !column.visible);
-      this.expandedElement = {filters: false}; // reset expandElement to get ride of empty row when browser increases size
+      this.expandedElement = { filters: false }; // reset expandElement to get ride of empty row when browser increases size
       this.zone.run(() => {
         this._changeDetectorRef.detectChanges();
       });
@@ -346,8 +355,12 @@ export class SharedTableComponent
     return pathString.split(".").reduce((o, i) => o[i], obj);
   }
 
-  getFilterColumns(){
-    const filterColumns = this.visibleColumns.map((column) => (`${column.id}-filter`));
-    return this.hiddenColumns.length? [`hidden-filter-trigger`, ...filterColumns] : filterColumns;
+  getFilterColumns() {
+    const filterColumns = this.visibleColumns.map(
+      (column) => `${column.id}-filter`
+    );
+    return this.hiddenColumns.length
+      ? [`hidden-filter-trigger`, ...filterColumns]
+      : filterColumns;
   }
 }
