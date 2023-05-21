@@ -113,7 +113,7 @@
           ><a
             [ngClass]="{ disabled: !row.datasetExist }"
             [routerLink]="['/datasets/', getPropertyByPath(row, column.id)]"
-            >{{ row.datasetExist ? getPropertyByPath(row, column.id) : "-" }}</a
+            >{{ getPropertyByPath(row, column.id) }}</a
           >
         </ng-container>
         <ng-container *ngSwitchDefault class="ellipsis">
