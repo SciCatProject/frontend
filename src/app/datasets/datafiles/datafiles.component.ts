@@ -232,8 +232,10 @@ export class DatafilesComponent
   }
 
   downloadFiles(form: "downloadAllForm" | "downloadSelectedForm") {
-    this.auth_token = this.userApi.getCurrentToken().id;
-    this[`${form}Element`].nativeElement.auth_token.value= this.auth_token;
+    if (this.appConfig.multipleDownloadUseAuthToken) {
+        this.auth_token = this.userApi.getCurrentToken().id;
+        this[`${form}Element`].nativeElement.auth_token.value= this.auth_token;
+    }
     if (!this.jwt) {
       this.subscriptions.push(
         this.userApi.jwt().subscribe((jwt) => {

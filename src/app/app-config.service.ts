@@ -63,6 +63,7 @@ export interface AppConfig {
   metadataStructure: string;
   multipleDownloadAction: string | null;
   multipleDownloadEnabled: boolean;
+  multipleDownloadUseAuthToken: boolean;
   oAuth2Endpoints: OAuth2Endpoint[];
   policiesEnabled: boolean;
   retrieveDestinations?: RetrieveDestinations[];
