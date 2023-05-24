@@ -223,7 +223,7 @@ export class UserEffects {
     () => {
       return this.actions$.pipe(
         ofType(fromActions.logoutCompleteAction),
-        tap(() => this.router.navigate([""]))
+        tap(() => this.router.navigate(["/login"]))
       );
     },
     { dispatch: false }

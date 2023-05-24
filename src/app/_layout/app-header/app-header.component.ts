@@ -38,8 +38,6 @@ export class AppHeaderComponent implements OnInit {
 
   logout(): void {
     this.store.dispatch(logoutAction());
-
-    this.router.navigateByUrl("/login");
   }
 
   ngOnInit() {
