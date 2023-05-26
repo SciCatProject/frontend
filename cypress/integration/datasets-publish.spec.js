@@ -29,8 +29,6 @@ describe("Datasets", () => {
 
       cy.isLoading();
 
-      cy.finishedLoading();
-
       cy.get("[data-cy=checkboxInput]").first().click();
 
       cy.get("#addToBatchButton").click();

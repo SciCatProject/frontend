@@ -64,8 +64,6 @@ describe("Datasets general", () => {
 
       cy.isLoading();
 
-      cy.finishedLoading();
-
       cy.get(".mat-row").contains("Cypress Dataset").click();
 
       cy.get('[data-cy="edit-general-information"]').should("exist");
@@ -112,8 +110,6 @@ describe("Datasets general", () => {
         .type("Cypress");
 
       cy.isLoading();
-
-      cy.finishedLoading();
 
       cy.get(".mat-row").contains("Cypress Dataset").click();
 
