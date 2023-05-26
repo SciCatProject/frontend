@@ -32,8 +32,6 @@ describe("Datasets", () => {
 
       cy.isLoading();
 
-      cy.finishedLoading();
-
       cy.contains(".mat-row", "Cypress Dataset").first().click();
 
       cy.wait("@fetch");

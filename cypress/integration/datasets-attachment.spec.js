@@ -27,13 +27,9 @@ describe("Dataset attachments", () => {
 
       cy.isLoading();
 
-      cy.finishedLoading();
-
       cy.get(".mat-row").contains("Cypress Dataset").first().click();
 
       cy.isLoading();
-
-      cy.finishedLoading();
 
       cy.get(".mat-tab-link").contains("Attachments").click();
 
@@ -74,13 +70,9 @@ describe("Dataset attachments", () => {
 
       cy.isLoading();
 
-      cy.finishedLoading();
-
       cy.get(".mat-row").contains("Cypress Dataset").first().click();
 
       cy.isLoading();
-
-      cy.finishedLoading();
 
       cy.get(".mat-tab-link").contains("Attachments").click();
 
@@ -103,13 +95,9 @@ describe("Dataset attachments", () => {
 
       cy.isLoading();
 
-      cy.finishedLoading();
-
       cy.get(".mat-row").contains("Cypress Dataset").first().click();
 
       cy.isLoading();
-
-      cy.finishedLoading();
 
       cy.get(".mat-tab-link").contains("Attachments").click();
 
