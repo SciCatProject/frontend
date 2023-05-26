@@ -111,6 +111,7 @@ const appConfig: AppConfig = {
   metadataStructure: "",
   multipleDownloadAction: "http://localhost:3012/zip",
   multipleDownloadEnabled: true,
+  multipleDownloadUseAuthToken: false,
   oAuth2Endpoints: [],
   policiesEnabled: true,
   retrieveDestinations: [],
