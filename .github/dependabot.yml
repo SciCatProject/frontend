@@ -5,7 +5,18 @@
 
 version: 2
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
       interval: "weekly"
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    # Increase the version requirements
+    # only when required
+    versioning-strategy: increase-if-necessary
+    labels:
+      - "dependencies"
+      - "npm"
