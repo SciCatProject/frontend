@@ -90,7 +90,7 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
     "karma-source-map-support": "^1.4.0",
-    "karma-spec-reporter": "0.0.32",
+    "karma-spec-reporter": "0.0.36",
     "prettier": "^2.0.4",
     "source-map-support": "^0.5.16",
     "ts-node": "^8.4.1",
