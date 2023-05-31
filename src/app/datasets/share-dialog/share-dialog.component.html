@@ -37,5 +37,13 @@
   >
     Share
   </button>
+  <button
+    mat-raised-button
+    color="warn"
+    [disabled]="!data.sharedUsersList.length"
+    (click)="removeAll()"
+  >
+    Remove all
+  </button>
   <button mat-button (click)="cancel()">Cancel</button>
 </mat-dialog-actions>

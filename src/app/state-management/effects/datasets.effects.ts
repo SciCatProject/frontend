@@ -438,6 +438,7 @@ export class DatasetEffects {
       return this.actions$.pipe(
         ofType(
           fromActions.addToBatchAction,
+          fromActions.storeBatchAction,
           fromActions.removeFromBatchAction,
           fromActions.clearBatchAction
         ),
