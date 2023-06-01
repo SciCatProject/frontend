@@ -38,7 +38,6 @@ export class ArchivingService {
     const data = {
       jobParams,
       emailJobInitiator: user.email,
-      creationTime: new Date(),
       // Revise this, files == []...? See earlier version of this method in dataset-table component for context
       datasetList: datasets.map((dataset) => ({
         pid: dataset.pid,
