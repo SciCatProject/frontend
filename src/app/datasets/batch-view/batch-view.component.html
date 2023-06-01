@@ -16,7 +16,13 @@
         Publish
       </button>
       <ng-container *ngIf="shareEnabled">
-        <button mat-button (click)="onShare()" class="button" color="primary">
+        <button
+          mat-button
+          (click)="onShare()"
+          id="shareButton"
+          class="button"
+          color="primary"
+        >
           <mat-icon> share </mat-icon>
           Share
         </button>

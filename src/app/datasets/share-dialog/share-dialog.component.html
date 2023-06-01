@@ -5,13 +5,14 @@
   </div>
   <mat-form-field class="email-field">
     <mat-label>User email</mat-label>
-    <input matInput type="email" [formControl]="emailFormControl" />
+    <input matInput type="email" [formControl]="emailFormControl" id="userEmailField" />
     <button
       mat-button
       matSuffix
       type="button"
       [disabled]="isInvalid()"
       (click)="add(emailFormControl.value)"
+      id="addUserButton"
     >
       Add
     </button>
@@ -34,8 +35,18 @@
     color="primary"
     [disabled]="isEmpty()"
     (click)="share()"
+    id="shareListButton"
   >
     Share
+  </button>
+  <button
+    mat-raised-button
+    color="warn"
+    [disabled]="!data.sharedUsersList.length"
+    (click)="removeAll()"
+    id="removeAllButton"
+  >
+    Remove all
   </button>
   <button mat-button (click)="cancel()">Cancel</button>
 </mat-dialog-actions>

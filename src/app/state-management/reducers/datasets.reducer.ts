@@ -100,8 +100,8 @@ const reducer = createReducer(
   ),
 
   on(fromActions.prefillBatchCompleteAction, (state, { batch }) => ({
-    ...state,
-    batch,
+      ...state,
+      batch,
   })),
   on(fromActions.addToBatchAction, (state) => {
     const batchedPids = state.batch.map((dataset) => dataset.pid);
@@ -111,6 +111,7 @@ const reducer = createReducer(
     const batch = [...state.batch, ...addition];
     return { ...state, batch };
   }),
+  on(fromActions.storeBatchAction, (state, { batch }) => ({ ...state, batch })),
   on(fromActions.removeFromBatchAction, (state, { dataset }): DatasetState => {
     const batch = state.batch.filter(
       (datasetInBatch) => datasetInBatch.pid !== dataset.pid
@@ -181,11 +182,14 @@ const reducer = createReducer(
     })
   ),
 
-  on(fromActions.clearCurrentDatasetStateAction, (state): DatasetState => ({
-    ...state,
-    currentSet: undefined,
-    relatedDatasets: [],
-  })),
+  on(
+    fromActions.clearCurrentDatasetStateAction,
+    (state): DatasetState => ({
+      ...state,
+      currentSet: undefined,
+      relatedDatasets: [],
+    })
+  ),
 
   on(fromActions.selectDatasetAction, (state, { dataset }) => {
     const alreadySelected = state.selectedSets.find(

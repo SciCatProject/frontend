@@ -8,6 +8,7 @@ import {
   clearBatchAction,
   prefillBatchAction,
   removeFromBatchAction,
+  storeBatchAction,
 } from "state-management/actions/datasets.actions";
 import { Dataset, Message, MessageType } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
@@ -56,6 +57,10 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     this.store.dispatch(clearBatchAction());
   }
 
+  private storeBatch(datasetUpdatedBatch: Dataset[]) {
+    this.store.dispatch(storeBatchAction({ batch: datasetUpdatedBatch }));
+  }
+
   onEmpty() {
     const msg =
       "Are you sure that you want to remove all datasets from the batch?";
@@ -89,6 +94,11 @@ export class BatchViewComponent implements OnInit, OnDestroy {
           !this.userProfile.accessGroups.includes(item.ownerGroup)
       );
 
+    const sharedUsersList = this.datasetList
+      .map((item) => item.sharedWith)
+      .flat()
+      .filter((x, i, a) => a.indexOf(x) === i);
+
     const infoMessage = shouldHaveInfoMessage
       ? disableShareButton
         ? "You haven't selected any dataset that you own to share."
@@ -100,10 +110,11 @@ export class BatchViewComponent implements OnInit, OnDestroy {
       data: {
         infoMessage,
         disableShareButton,
+        sharedUsersList,
       },
     });
     dialogRef.afterClosed().subscribe((result: Record<string, string[]>) => {
-      if (result && result.users && result.users.length > 0) {
+      if (result && result.users) {
         this.datasetList.forEach((dataset) => {
           // NOTE: If the logged in user is not an owner of the dataset or and not admin then skip sharing.
           if (
@@ -121,13 +132,24 @@ export class BatchViewComponent implements OnInit, OnDestroy {
               data: result.users,
             })
           );
-          const message = new Message(
-            "Datasets successfully shared!",
-            MessageType.Success,
-            5000
-          );
-          this.store.dispatch(showMessageAction({ message }));
         });
+
+        const datasetUpdatedBatch = this.datasetList.map((item) => ({
+          ...item,
+          sharedWith: result.users,
+        }));
+
+        this.clearBatch();
+        this.storeBatch(datasetUpdatedBatch);
+
+        const message = new Message(
+          result.users.length
+            ? "Datasets successfully shared!"
+            : "Shared users successfully removed!",
+          MessageType.Success,
+          5000
+        );
+        this.store.dispatch(showMessageAction({ message }));
       }
     });
   }

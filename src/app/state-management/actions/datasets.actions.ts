@@ -122,6 +122,10 @@ export const prefillBatchCompleteAction = createAction(
   props<{ batch: Dataset[] }>()
 );
 export const addToBatchAction = createAction("[Dataset] Add To Batch");
+export const storeBatchAction = createAction(
+  "[Dataset] Store To Batch",
+  props<{ batch: Dataset[] }>()
+);
 export const removeFromBatchAction = createAction(
   "[Dataset] Remove From Batch",
   props<{ dataset: Dataset }>()
@@ -271,7 +275,7 @@ export const setTextFilterAction = createAction(
 
 export const setPidTermsFilterAction = createAction(
   "[Dataset] Set Text Filter",
-  props<{ pid: string | {"$regex": string} }>()
+  props<{ pid: string | { $regex: string } }>()
 );
 export const addLocationFilterAction = createAction(
   "[Dataset] Add Location Filter",

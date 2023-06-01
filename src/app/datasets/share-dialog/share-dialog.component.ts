@@ -28,9 +28,11 @@ export class ShareDialogComponent {
     data: {
       infoMessage: string;
       disableShareButton: boolean;
+      sharedUsersList: string[];
     }
   ) {
     this.data = JSON.parse(JSON.stringify(data));
+    this.users = this.data.sharedUsersList;
   }
 
   isInvalid = (): boolean =>
@@ -79,6 +81,8 @@ export class ShareDialogComponent {
     this.users.length === 0 || this.data.disableShareButton;
 
   share = (): void => this.dialogRef.close({ users: this.users });
+
+  removeAll = (): void => this.dialogRef.close({ users: [] });
 
   cancel = (): void => this.dialogRef.close();
 }
