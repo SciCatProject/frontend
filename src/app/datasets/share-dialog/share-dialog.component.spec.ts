@@ -27,6 +27,7 @@ import { ShareDialogComponent } from "./share-dialog.component";
 const data = {
   infoMessage: "",
   disableShareButton: false,
+  sharedUsersList: [],
 };
 
 describe("ShareDialogComponent", () => {
