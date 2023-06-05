@@ -20,7 +20,7 @@
   "dependencies": {
     "@angular-material-components/datetime-picker": "^7.0.1",
     "@angular/animations": "^13.3.5",
-    "@angular/cdk": "^13.3.4",
+    "@angular/cdk": "^16.0.3",
     "@angular/common": "^13.3.5",
     "@angular/compiler": "^13.3.5",
     "@angular/core": "^13.3.5",
