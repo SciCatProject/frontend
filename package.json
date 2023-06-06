@@ -80,7 +80,7 @@
     "cypress-file-upload": "^5.0.8",
     "eslint": "^8.2.0",
     "eslint-plugin-ngrx": "^2.0.3",
-    "jasmine": "^3.8.0",
+    "jasmine": "^5.0.0",
     "jasmine-core": "^5.0.0",
     "jasmine-marbles": "^0.6.0",
     "jasmine-spec-reporter": "^7.0.0",
