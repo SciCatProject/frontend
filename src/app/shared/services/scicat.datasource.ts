@@ -76,11 +76,18 @@ export class SciCatDataSource implements DataSource<any> {
 
     this.scicatdataService
       .getCount(this.url, this.columnsdef, filterExpressions, isFilesDashboard)
-      .subscribe((numData) =>
-        numData[0] && numData[0].all[0]
+      .subscribe((numData) => {
+        // NOTE: For published data endpoint we don't have fullquery and fullfacet and that's why it is a bit special case.
+        if (this.url.includes("publishedData")) {
+          return numData && numData.count
+            ? this.countSubject.next(numData.count)
+            : this.countSubject.next(0);
+        }
+
+        return numData[0] && numData[0].all[0]
           ? this.countSubject.next(numData[0].all[0].totalSets)
-          : this.countSubject.next(0)
-      );
+          : this.countSubject.next(0);
+      });
 
     this.scicatdataService
       .findAllData(
@@ -140,7 +147,7 @@ export class SciCatDataSource implements DataSource<any> {
       });
   }
 
-  connect(collectionViewer: CollectionViewer): Observable<any[]> {
+  connect(): Observable<any[]> {
     return this.dataSubject.asObservable();
   }
 
