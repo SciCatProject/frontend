@@ -41,14 +41,15 @@
             </ng-template>
 
             <div [ngSwitch]="appConfig.metadataStructure">
-              <tree-view *ngSwitchCase="'tree'"
-                         [metadata]="value"></tree-view>
-              <metadata-view *ngSwitchDefault
-                             [metadata]="value"></metadata-view>
+              <tree-view *ngSwitchCase="'tree'" [metadata]="value"></tree-view>
+              <metadata-view
+                *ngSwitchDefault
+                [metadata]="value"
+              ></metadata-view>
             </div>
           </mat-tab>
 
-          <mat-tab>
+          <mat-tab *ngIf="isAdmin$ | async">
             <ng-template mat-tab-label>
               <mat-icon>edit</mat-icon> Edit
             </ng-template>
