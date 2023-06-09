@@ -9,16 +9,19 @@ import {
 import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
 import { EditableComponent } from "app-routing/pending-changes.guard";
 import { AppConfigService } from "app-config.service";
+import { selectIsAdmin } from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "app-instrument-details",
   templateUrl: "./instrument-details.component.html",
   styleUrls: ["./instrument-details.component.scss"],
 })
-export class InstrumentDetailsComponent implements OnInit, OnDestroy, EditableComponent {
+export class InstrumentDetailsComponent
+  implements OnInit, OnDestroy, EditableComponent {
   private _hasUnsavedChanges = false;
 
   instrument$ = this.store.select(selectCurrentInstrument);
+  isAdmin$ = this.store.select(selectIsAdmin);
   appConfig = this.appConfigService.getConfig();
   subscriptions: Subscription[] = [];
 
@@ -26,7 +29,7 @@ export class InstrumentDetailsComponent implements OnInit, OnDestroy, EditableCo
     private appConfigService: AppConfigService,
     private route: ActivatedRoute,
     private store: Store
-  ) {}
+  ) { }
 
   onSaveCustomMetadata(
     pid: string,
