@@ -1,36 +1,11 @@
-<ng-container *ngIf="vm$ | async as vm">
-  <div fxLayout="row" fxLayout.lt-lt="column">
-    <div fxFlex="14" fxFlex.lt-xl="10"></div>
-    <div fxFlex="60" fxFlex.lt-xl="80">
-      <div style="float: right">
-        <button
-          mat-icon-button
-          [disabled]="selectedDOIs.length === 0"
-          (click)="onShareClick()"
-        >
-          <mat-icon matTooltip="Copy selected DOI's to clipboard">
-            share
-          </mat-icon>
-        </button>
-      </div>
-
-      <div style="clear: both"></div>
-
-      <app-table
-        [data]="vm.publishedData"
-        [columns]="columns"
-        [paginate]="paginate"
-        [select]="select"
-        [currentPage]="vm.currentPage"
-        [dataCount]="vm.count"
-        [dataPerPage]="vm.publishedDataPerPage"
-        (pageChange)="onPageChange($event)"
-        (sortChange)="onSortChange($event)"
-        (rowClick)="onRowClick($event)"
-        (selectAll)="onSelectAll($event)"
-        (selectOne)="onSelectOne($event)"
-      ></app-table>
-    </div>
-    <div fxFlex="26" fxFlex.lt-xl="10"></div>
-  </div>
-</ng-container>
+<shared-table
+  [dataSource]="dataSource"
+  [columnsdef]="columns"
+  [pageSize]="5"
+  (rowClick)="onRowClick($event)"
+  (selectAll)="onSelectAll($event)"
+  (selectOne)="onSelectOne($event)"
+  (shareClick)="onShareClick()"
+  [select]="select"
+>
+</shared-table>
