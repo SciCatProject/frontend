@@ -39,7 +39,7 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
-import {Clipboard} from "@angular/cdk/clipboard";
+import { Clipboard } from "@angular/cdk/clipboard";
 
 /**
  * Component to show details for a data set, using the
@@ -86,7 +86,7 @@ export class DatasetDetailComponent
     private router: Router,
     private fb: FormBuilder,
     private clipboard: Clipboard
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.form = this.fb.group({
