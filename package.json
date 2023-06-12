@@ -44,7 +44,7 @@
     "lodash-es": "^4.17.21",
     "luxon": "^3.3.0",
     "ngx-json-viewer": "^2.4.0",
-    "ngx-linky": "^3.0.0",
+    "ngx-linky": "^4.0.0",
     "ngx-material-luxon": "^1.1.1",
     "rxjs": "^6.6.6",
     "shortid": "^2.2.16",
