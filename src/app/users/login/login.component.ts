@@ -126,10 +126,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       // OIDC logins eventually redirect to this componenet, adding information about user
       // which are parsed here.
       if (!!params.returnUrl) {
-        const urlqp = new URLSearchParams(params.returnUrl.split("?")[1]);
         // dispatching to the loginOIDCAction passes information to eventually be added to Loopback AccessToken
-        const accessToken = urlqp.get("access-token");
-        const userId = urlqp.get("user-id");
+        const accessToken = params["access-token"]
+        const userId = params["user-id"]
         this.store.dispatch(
           loginOIDCAction({ oidcLoginResponse: { accessToken, userId } })
         );
