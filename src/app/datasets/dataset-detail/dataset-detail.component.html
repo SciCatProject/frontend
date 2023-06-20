@@ -67,17 +67,14 @@
             <tr>
               <th>PID</th>
               <td>
-                <mat-form-field class="full-width">
-                  <input matInput type="text" [value]="dataset.pid" disabled />
-                  <button
-                    matSuffix
-                    mat-icon-button
-                    aria-label="copy"
-                    (click)="copyIntoClipboard(dataset.pid)"
-                  >
-                    <mat-icon>content_copy</mat-icon>
-                  </button>
-                </mat-form-field>
+                {{ dataset.pid }}
+                <button
+                  mat-icon-button
+                  aria-label="copy"
+                  (click)="onCopy(dataset.pid)"
+                >
+                  <mat-icon class="copy-button">content_copy</mat-icon>
+                </button>
               </td>
             </tr>
             <tr *ngIf="dataset.type as value">

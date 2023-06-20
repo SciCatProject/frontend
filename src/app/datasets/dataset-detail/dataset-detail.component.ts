@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { Dataset, Proposal, Sample } from "shared/sdk/models";
 import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
@@ -7,6 +7,10 @@ import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component"
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { combineLatest, fromEvent, Observable, Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
+
+import {
+  showMessageAction,
+} from "state-management/actions/user.actions";
 import {
   selectCurrentAttachments,
   selectCurrentDataset,
@@ -39,7 +43,8 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
-import { Clipboard } from "@angular/cdk/clipboard";
+import { Message, MessageType } from "state-management/models";
+import { DOCUMENT } from "@angular/common";
 
 /**
  * Component to show details for a data set, using the
@@ -80,12 +85,12 @@ export class DatasetDetailComponent
   readonly separatorKeyCodes: number[] = [ENTER, COMMA, SPACE];
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
     private store: Store,
     private router: Router,
     private fb: FormBuilder,
-    private clipboard: Clipboard
   ) { }
 
   ngOnInit() {
@@ -319,7 +324,24 @@ export class DatasetDetailComponent
     });
   }
 
-  copyIntoClipboard(pid: string) {
-    this.clipboard.copy(pid);
+  onCopy(pid: string) {
+    const selectionBox = this.document.createElement("textarea");
+    selectionBox.style.position = "fixed";
+    selectionBox.style.left = "0";
+    selectionBox.style.top = "0";
+    selectionBox.style.opacity = "0";
+    selectionBox.value = pid;
+    this.document.body.appendChild(selectionBox);
+    selectionBox.focus();
+    selectionBox.select();
+    this.document.execCommand("copy");
+    this.document.body.removeChild(selectionBox);
+
+    const message = new Message(
+      "Dataset PID has been copied to your clipboard",
+      MessageType.Success,
+      5000
+    );
+    this.store.dispatch(showMessageAction({ message }));
   }
 }
