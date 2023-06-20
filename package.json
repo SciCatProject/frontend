@@ -64,7 +64,7 @@
     "@angular/compiler-cli": "^13.1.1",
     "@betterer/cli": "^5.3.6",
     "@betterer/typescript": "^5.3.6",
-    "@ngrx/schematics": "^12.1.0",
+    "@ngrx/schematics": "^16.0.1",
     "@types/deep-equal": "^1.0.1",
     "@types/file-saver": "^2.0.2",
     "@types/jasmine": "^3.7.8",
