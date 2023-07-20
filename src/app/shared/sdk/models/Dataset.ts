@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { ScientificMetadata } from 'shared/modules/scientific-metadata/scientific-metadata.module';
 import {
   PublishedData,
   Sample,
@@ -99,6 +100,7 @@ export class Dataset implements DatasetInterface {
   origdatablocks: OrigDatablock[];
   attachments: Attachment[];
   instrument: Instrument;
+  scientificMetadata?: ScientificMetadata;
   constructor(data?: DatasetInterface) {
     Object.assign(this, data);
   }

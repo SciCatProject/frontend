@@ -17,7 +17,7 @@ import {
   styleUrls: ["./metadata-view.component.scss"],
 })
 export class MetadataViewComponent implements OnInit, OnChanges {
-  @Input() metadata: Record<string, unknown> = {};
+  @Input() metadata: ScientificMetadata | {} = {};
 
   tableData: ScientificMetadataTableData[] = [];
   columnsToDisplay: string[] = ["name", "value", "unit"];

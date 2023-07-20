@@ -22,6 +22,7 @@ import {
   selectDatasetsInBatch,
   selectCurrentDataset,
   selectSelectedDatasets,
+  selectDatasets,
 } from "state-management/selectors/datasets.selectors";
 import { distinctUntilChanged, filter, map, take } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
@@ -39,9 +40,11 @@ import {
   selectColumnAction,
   deselectColumnAction,
   setDatasetTableColumnsAction,
+  addCustomColumnsAction,
 } from "state-management/actions/user.actions";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
 import { AppConfigService } from "app-config.service";
+import { TableColumn } from "exceljs";
 
 @Component({
   selector: "dashboard",
@@ -181,12 +184,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(prefillBatchAction());
     this.store.dispatch(fetchMetadataKeysAction());
 
+    this.addScientificMetadataColumns();
+
     this.updateColumnSubscription();
 
     this.subscriptions.push(
-      combineLatest([this.filters$, this.readyToFetch$, this.loggedIn$])
+      combineLatest([this.filters$, this.readyToFetch$, this.loggedIn$, this.selectableColumns$])
         .pipe(
-          map(([filters, _, loggedIn]) => [filters, loggedIn]),
+          map(([filters, _, loggedIn, selectableColumns]) => [filters, loggedIn, selectableColumns]),
           distinctUntilChanged(deepEqual)
         )
         .subscribe((obj) => {
@@ -241,6 +246,35 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       })
     );
+  }
+
+  private addScientificMetadataColumns() {
+    this.subscriptions.push(
+      this.store.select(selectDatasets).subscribe((data) => {
+        if (data) {
+          const names = this.extractScientificMetadataFromVisible(data);
+          this.store.dispatch(addCustomColumnsAction({ names }));
+        }
+      })
+    );
+  }
+
+  private extractScientificMetadataFromVisible(data: Dataset[]) {
+    let colSet = new Set<string>();
+    const columns = data.reduce(
+      (previousValue, currentValue) => previousValue.concat(
+        this.appendColumnsFromScientific(currentValue, colSet)), []);
+    return columns;
+  }
+
+  private appendColumnsFromScientific(currentValue: Dataset, colSet: Set<string>): TableColumn[] {
+    return Object.keys(currentValue.scientificMetadata).reduce(
+      (previousMeta, currentMeta) => {
+        if (colSet.has(currentMeta)) return previousMeta;
+        colSet.add(currentMeta);
+        return previousMeta.concat(currentMeta);
+      },
+      []);
   }
 
   ngOnDestroy() {
