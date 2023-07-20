@@ -33,6 +33,13 @@ import { ExportExcelService } from "../../services/export-excel.service";
 import { DateTime } from "luxon";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Column } from "./shared-table.module";
+import { SelectionModel } from "@angular/cdk/collections";
+import { MatCheckboxChange } from "@angular/material/checkbox";
+
+export interface CheckboxEvent {
+  event: MatCheckboxChange;
+  row: any;
+}
 
 @Component({
   selector: "shared-table",
@@ -55,17 +62,18 @@ import { Column } from "./shared-table.module";
 })
 export class SharedTableComponent
   implements
-  AfterViewChecked,
-  AfterViewInit,
-  AfterContentInit,
-  OnDestroy,
-  OnInit {
+    AfterViewChecked,
+    AfterViewInit,
+    AfterContentInit,
+    OnDestroy,
+    OnInit {
   private subscriptions: Subscription[] = [];
   public MIN_COLUMN_WIDTH = 200;
 
   filterForm = new FormGroup({});
   filterExpressions: { [key: string]: string } = {};
   hideFilterFlag = false;
+  withoutSelectColumns: Column[];
   // Visible Hidden Columns
   visibleColumns: Column[];
   hiddenColumns: Column[];
@@ -74,6 +82,11 @@ export class SharedTableComponent
   // MatPaginator Inputs
   length = 100;
 
+  @Input() select?: boolean;
+  @Input() allChecked?: boolean;
+  @Input() oneChecked?: boolean;
+  selection = new SelectionModel<any>(true, []);
+
   // Shared Variables
   @Input() dataSource: SciCatDataSource;
   @Input() isFilesDashboard: boolean;
@@ -81,7 +94,14 @@ export class SharedTableComponent
   @Input() pageSize = 10;
   @Input() pageSizeOptions: number[] = [5, 10, 25, 100];
   @Input() title = "";
+
   @Output() rowClick = new EventEmitter<any>();
+  @Output() shareClick = new EventEmitter<any>();
+  @Output() selectAll = new EventEmitter<{
+    event: MatCheckboxChange;
+    selection: SelectionModel<any>;
+  }>();
+  @Output() selectOne = new EventEmitter<CheckboxEvent>();
 
   // MatTable
   @ViewChild(MatTable, { static: true }) dataTable: MatTable<Element>;
@@ -109,6 +129,18 @@ export class SharedTableComponent
   ngOnInit() {
     this.filterForm = this.initializeFormControl();
     this.subscriptions.push(this.activateColumnFilters());
+
+    if (this.select) {
+      this.columnsdef.splice(0, 0, {
+        id: "select",
+        label: "Select",
+        canSort: false,
+        icon: "checkbox",
+        hideFilter: true,
+        hideOrder: 0,
+        width: 50,
+      });
+    }
   }
 
   initializeFormControl() {
@@ -219,7 +251,6 @@ export class SharedTableComponent
   }
 
   loadDataPage() {
-
     this.dataSource.loadAllData(
       this.filterExpressions,
       this.sort.active,
@@ -240,6 +271,42 @@ export class SharedTableComponent
 
   onRowClick(event: any) {
     this.rowClick.emit(event);
+  }
+
+  onSelectAll(event: MatCheckboxChange) {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+    } else {
+      this.dataSource.connect().subscribe((rows) => {
+        rows.forEach((row) => this.selection.select(row));
+      });
+    }
+    this.selectAll.emit({ event, selection: this.selection });
+  }
+
+  onSelectOne(event: MatCheckboxChange, row: unknown) {
+    this.selection.toggle(row);
+    const selectEvent: CheckboxEvent = {
+      event,
+      row,
+    };
+    this.selectOne.emit(selectEvent);
+  }
+
+  onShare() {
+    this.shareClick.emit();
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected
+      ? this.selection.selected.length
+      : 0;
+    let numRows = 0;
+    this.dataSource.connect().subscribe((rows) => {
+      numRows = rows.length || 0;
+    });
+
+    return numSelected === numRows;
   }
 
   get visibleColumnsIds() {
@@ -338,6 +405,9 @@ export class SharedTableComponent
 
       this.columnsdef = sortedColumns.sort((a, b) => a.order - b.order);
       this.visibleColumns = this.columnsdef.filter((column) => column.visible);
+      this.withoutSelectColumns = this.select
+        ? this.columnsdef.filter((column) => column.visible).slice(1)
+        : this.columnsdef.filter((column) => column.visible);
       this.hiddenColumns = this.columnsdef.filter((column) => !column.visible);
       this.expandedElement = { filters: false }; // reset expandElement to get ride of empty row when browser increases size
       this.zone.run(() => {

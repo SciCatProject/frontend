@@ -28,6 +28,9 @@
     showFirstLastButtons
   >
   </mat-paginator>
+  <button mat-icon-button (click)="onShare()">
+    <mat-icon>share</mat-icon>
+  </button>
   <button mat-icon-button (click)="exportToExcel()">
     <mat-icon>cloud_download</mat-icon>
   </button>
@@ -87,10 +90,31 @@
   </ng-container>
   <!-- Toggle Button Button For Hidden Columns End -->
 
+  <ng-template [ngIf]="select">
+    <ng-container matColumnDef="select">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox
+          [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()"
+          (change)="$event ? onSelectAll($event) : null"
+        >
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox
+          [checked]="selection.isSelected(row)"
+          (change)="$event ? onSelectOne($event, row) : null"
+          (click)="$event.stopPropagation()"
+        >
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+  </ng-template>
+
   <!-- Cell Definition For Visible Columns Start -->
   <ng-container
     [matColumnDef]="column.id"
-    *ngFor="let column of visibleColumns"
+    *ngFor="let column of withoutSelectColumns"
   >
     <mat-header-cell
       *matHeaderCellDef
@@ -199,7 +223,7 @@
       <mat-form-field
         [formGroup]="filterForm"
         appearance="outline"
-        *ngIf="column.matchMode !== 'between'"
+        *ngIf="column.matchMode !== 'between' && !column.hideFilter"
       >
         <input
           [formControlName]="column.id"

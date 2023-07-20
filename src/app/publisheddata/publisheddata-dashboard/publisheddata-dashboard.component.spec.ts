@@ -10,15 +10,7 @@ import { MockStore } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { StoreModule, Store } from "@ngrx/store";
 import { Router } from "@angular/router";
-import {
-  CheckboxEvent,
-  PageChangeEvent,
-  SortChangeEvent,
-} from "shared/modules/table/table.component";
-import {
-  changePageAction,
-  sortByColumnAction,
-} from "state-management/actions/published-data.actions";
+import { CheckboxEvent } from "shared/modules/table/table.component";
 import { PublishedData } from "shared/sdk";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { of } from "rxjs";
@@ -27,6 +19,11 @@ import { showMessageAction } from "state-management/actions/user.actions";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
+import { AppConfigService } from "app-config.service";
+import { ScicatDataService } from "shared/services/scicat-data-service";
+import { ExportExcelService } from "shared/services/export-excel.service";
+
+const getConfig = () => ({});
 
 describe("PublisheddataDashboardComponent", () => {
   let component: PublisheddataDashboardComponent;
@@ -38,26 +35,35 @@ describe("PublisheddataDashboardComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        imports: [
-          FlexLayoutModule,
-          MatButtonModule,
-          MatIconModule,
-          StoreModule.forRoot({}),
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [
+        FlexLayoutModule,
+        MatButtonModule,
+        MatIconModule,
+        StoreModule.forRoot({}),
+      ],
+      declarations: [PublisheddataDashboardComponent],
+    });
+    TestBed.overrideComponent(PublisheddataDashboardComponent, {
+      set: {
+        providers: [
+          {
+            provide: Router,
+            useValue: router,
+          },
+          {
+            provide: AppConfigService,
+            useValue: { getConfig },
+          },
+          { provide: ScicatDataService, useValue: {} },
+          { provide: ExportExcelService, useValue: {} },
         ],
-        declarations: [PublisheddataDashboardComponent],
-      });
-      TestBed.overrideComponent(PublisheddataDashboardComponent, {
-        set: {
-          providers: [{ provide: Router, useValue: router }],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PublisheddataDashboardComponent);
@@ -97,41 +103,6 @@ describe("PublisheddataDashboardComponent", () => {
     });
   });
 
-  describe("#onPageChange()", () => {
-    it("should dispatch a changePageAction action", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const event: PageChangeEvent = {
-        pageIndex: 0,
-        pageSize: 25,
-        length: 25,
-      };
-      component.onPageChange(event);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        changePageAction({ page: event.pageIndex, limit: event.pageSize })
-      );
-    });
-  });
-
-  describe("#onSortChange()", () => {
-    it("should dispatch a sortByColumnAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const event: SortChangeEvent = {
-        active: "title",
-        direction: "asc",
-      };
-      component.onSortChange(event);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        sortByColumnAction({ column: event.active, direction: event.direction })
-      );
-    });
-  });
-
   describe("#onRowClick", () => {
     it("should navigate to a Published Dataset", () => {
       const published = new PublishedData();
@@ -164,10 +135,13 @@ describe("PublisheddataDashboardComponent", () => {
       );
 
       const event = {
-        checked: true,
-      } as MatCheckboxChange;
+        event: {
+          checked: true,
+        },
+        selection: { selected: [published] },
+      };
 
-      component.onSelectAll(event);
+      component.onSelectAll(event as any);
 
       expect(component.selectedDOIs.length).toEqual(1);
     });
@@ -179,10 +153,13 @@ describe("PublisheddataDashboardComponent", () => {
       );
 
       const event = {
-        checked: false,
-      } as MatCheckboxChange;
+        event: {
+          checked: false,
+        },
+        selection: [],
+      };
 
-      component.onSelectAll(event);
+      component.onSelectAll(event as any);
 
       expect(component.selectedDOIs.length).toEqual(0);
     });

@@ -51,7 +51,7 @@
             <tr>
               <th>Description</th>
               <td *ngIf="!editEnabled">
-                <span [innerHTML]="(dataset.description || '-') | linky"></span>
+                <span [innerHTML]="dataset.description || '-' | linky"></span>
               </td>
               <td *ngIf="editEnabled && editingAllowed">
                 <mat-form-field class="full-width">
@@ -67,12 +67,14 @@
             <tr>
               <th>PID</th>
               <td>
-                <mat-form-field class="full-width">
-                  <input matInput type="text" [value]="dataset.pid" disabled>
-                  <button matSuffix mat-icon-button aria-label="copy" (click)="copyIntoClipboard(dataset.pid)">
-                    <mat-icon>content_copy</mat-icon>
-                  </button>
-                </mat-form-field>
+                {{ dataset.pid }}
+                <button
+                  mat-icon-button
+                  aria-label="copy"
+                  (click)="onCopy(dataset.pid)"
+                >
+                  <mat-icon class="copy-button">content_copy</mat-icon>
+                </button>
               </td>
             </tr>
             <tr *ngIf="dataset.type as value">
@@ -276,10 +278,9 @@
           <tr *ngIf="dataset['instrumentId'] && instrument">
             <th>Instrument</th>
             <td>
-                <a (click)="onClickInstrument(instrument.pid)">
-                  {{ instrument.name }} 
-                </a>
-                <span *ngIf="instrument.uniqueName"> ( Unique Name: {{instrument.uniqueName}} )</span>
+              <a (click)="onClickInstrument(instrument.pid)">
+                {{ instrument.name }}
+              </a>
             </td>
           </tr>
           <tr *ngIf="dataset['creationLocation'] as value">

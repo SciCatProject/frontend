@@ -152,6 +152,14 @@ export class ScicatDataService {
       .set("limits", JSON.stringify(limits))
       .append("access_token", this.auth.getToken().id);
 
+    // NOTE: For published data endpoint we don't have fullquery and fullfacet and that's why it is a bit special case.
+    if (url.includes("publishedData")) {
+      return this.http.get<any[]>(url, {
+        params,
+        headers: { Authorization: this.auth.getAccessTokenId() },
+      });
+    }
+
     const origDatablocksFiles =
       url.includes("Origdatablocks") && isFilesDashboard ? "/files" : "";
 
@@ -178,6 +186,14 @@ export class ScicatDataService {
       .set("fields", JSON.stringify(filterFields))
       .set("facets", JSON.stringify([]))
       .append("access_token", this.auth.getToken().id);
+
+    // NOTE: For published data endpoint we don't have fullquery and fullfacet and that's why it is a bit special case.
+    if (url.includes("publishedData")) {
+      return this.http.get<any>(`${url}/count`, {
+        params,
+        headers: { Authorization: this.auth.getAccessTokenId() },
+      });
+    }
 
     const origDatablocksFiles =
       url.includes("Origdatablocks") && isFilesDashboard ? "/files" : "";
