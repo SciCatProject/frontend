@@ -9,6 +9,7 @@
   "editSampleEnabled": true,
   "externalAuthEndpoint": "/auth/msad",
   "facility": "ESS",
+  "siteIcon": "esslogo-white.png",
   "loginFacilityLabel": "ESS",
   "loginLdapLabel" : "Ldap",
   "loginLocalLabel" : "Local",

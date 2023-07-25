@@ -16,6 +16,7 @@ const appConfig: AppConfig = {
   externalAuthEndpoint: "/auth/msad",
   facility: "ESS",
   loginFacilityLabel: "ESS",
+  siteIcon: "esslogo-white.png",
   loginLdapLabel: "Ldap",
   loginLocalLabel: "Local",
   loginFacilityEnabled: true,
