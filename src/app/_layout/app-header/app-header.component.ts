@@ -23,6 +23,7 @@ export class AppHeaderComponent implements OnInit {
   config = this.appConfigService.getConfig();
   facility = this.config.facility ?? "";
   status = this.appConfig.production ? "" : "test";
+  siteIcon = this.config.siteIcon ?? "site-logo.png";
 
   username$ = this.store.select(selectCurrentUserName);
   profileImage$ = this.store.select(selectThumbnailPhoto);
