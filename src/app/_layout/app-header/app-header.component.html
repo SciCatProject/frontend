@@ -60,12 +60,7 @@
       <img class="logo" src="../../../assets/images/scicat-logo-white.png" />
     </a>
     <a [routerLink]="['/datasets']">
-      <ng-template [ngIf]="facility === 'ESS'" [ngIfElse]="otherFacility">
-        <img class="logo" src="../../../assets/images/esslogo-white.png" />
-      </ng-template>
-      <ng-template #otherFacility>
-        <img class="logo" src="../../../assets/images/site-logo.png" />
-      </ng-template>
+        <img class="logo" src='../../../assets/images/{{siteIcon}}' />
     </a>
     <a class="toplink" [routerLink]="['/datasets']">
       <h3>{{ status }}</h3>
