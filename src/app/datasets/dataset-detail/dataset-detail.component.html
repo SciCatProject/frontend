@@ -12,7 +12,7 @@
         Jupyter Hub
       </a>
     </div>
-    <div fxFlex="auto" *ngIf="isPI()">
+    <div fxFlex="auto" *ngIf="editingAllowed">
       <mat-slide-toggle
         class="public-toggle"
         [checked]="dataset.isPublished"
@@ -268,7 +268,7 @@
                 class="sample-edit"
                 (click)="openSampleEditDialog()"
                 *ngIf="
-                  appConfig.editDatasetSampleEnabled && editingAllowed && isPI
+                  appConfig.editDatasetSampleEnabled && editingAllowed
                 "
               >
                 <mat-icon>edit</mat-icon>
