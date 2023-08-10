@@ -163,7 +163,6 @@ export class DatasetDetailComponent
     return this._hasUnsavedChanges;
   }
 
-  /*
   isPI(): boolean {
     if (this.user && this.dataset) {
       if (this.user.username === "admin") {
@@ -188,7 +187,6 @@ export class DatasetDetailComponent
     }
     return false;
   }
-  */
 
   onClickKeyword(keyword: string) {
     this.store.dispatch(clearFacetsAction());
