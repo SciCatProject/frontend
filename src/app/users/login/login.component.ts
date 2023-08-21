@@ -91,12 +91,12 @@ export class LoginComponent implements OnInit, OnDestroy {
    * @memberof LoginComponent
    */
   onLogin() {
-    const form: LoginForm = this.loginForm.value;
+    const form: LoginForm = this.loginForm.value as LoginForm;
     this.store.dispatch(funcLoginAction({form}));
   }
 
   onLdapLogin() {
-    const form: LoginForm = this.loginForm.value;
+    const form: LoginForm = this.loginForm.value as LoginForm;
     this.store.dispatch(loginAction({ form }));
   }
 

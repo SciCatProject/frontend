@@ -14,7 +14,7 @@ import {
   OnInit,
 } from "@angular/core";
 import { ViewportRuler } from "@angular/cdk/scrolling";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTable } from "@angular/material/table";
@@ -379,7 +379,7 @@ export class SharedTableComponent
   }
 
   resetFilters() {
-    Object.values(this.filterForm.controls).forEach((control) => {
+    Object.values(this.filterForm.controls).forEach((control: FormControl) => {
       control.setValue("");
     });
     this.filterExpressions = {};
