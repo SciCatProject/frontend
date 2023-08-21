@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Sample, Dataset, Attachment } from "shared/sdk";
+import { Sample, Dataset, Attachment } from "shared/sdk/models";
 import { SampleFilters, ScientificCondition } from "state-management/models";
 
 export const fetchSamplesAction = createAction("[Sample] Fetch Samples");

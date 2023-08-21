@@ -6,7 +6,8 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Dataset, UserApi } from "shared/sdk";
+import { Dataset  } from "shared/sdk/models";
+import { UserApi } from "shared/sdk";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import {
   selectIsAdmin,
