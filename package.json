@@ -76,7 +76,7 @@
     "@typescript-eslint/eslint-plugin": "5.60.1",
     "@typescript-eslint/parser": "5.62.0",
     "coveralls": "^3.0.7",
-    "cypress": "^9.2.1",
+    "cypress": "^12.17.4",
     "cypress-file-upload": "^5.0.8",
     "eslint": "^8.2.0",
     "eslint-plugin-ngrx": "^2.0.3",
