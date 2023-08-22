@@ -69,7 +69,7 @@ export class SampleEditComponent implements OnInit, OnDestroy {
   ];
 
   form = new FormGroup({
-    sample: new FormControl("", [Validators.required, this.sampleValidator()]),
+    sample: new FormControl<Sample>(null, [Validators.required, this.sampleValidator()]),
   });
 
   constructor(
@@ -127,7 +127,7 @@ export class SampleEditComponent implements OnInit, OnDestroy {
 
   onRowClick = (sample: Sample): void => {
     this.selectedSampleId = sample.sampleId;
-    this.sample?.setValue(sample as unknown as string);
+    this.sample?.setValue(sample);
   };
 
   isInvalid = (): boolean => this.form.invalid;
