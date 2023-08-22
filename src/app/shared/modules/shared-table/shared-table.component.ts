@@ -229,7 +229,8 @@ export class SharedTableComponent
     this.sort.direction = queryParams.sortDirection || "asc";
     this.paginator.pageIndex = Number(queryParams.pageIndex) || 0;
     this.paginator.pageSize = Number(queryParams.pageSize) || this.pageSize;
-    for (let [filter, control] of Object.entries(this.filterForm.controls)) {
+    for (let [filter, xcontrol] of Object.entries(this.filterForm.controls)) {
+      const control = xcontrol as FormControl<string>;
       if (filter in queryParams) {
         const value = queryParams[filter];
         control.setValue(value);

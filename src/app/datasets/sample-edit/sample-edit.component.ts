@@ -127,7 +127,7 @@ export class SampleEditComponent implements OnInit, OnDestroy {
 
   onRowClick = (sample: Sample): void => {
     this.selectedSampleId = sample.sampleId;
-    this.sample?.setValue(sample);
+    this.sample?.setValue(sample as unknown as string);
   };
 
   isInvalid = (): boolean => this.form.invalid;
