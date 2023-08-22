@@ -88,15 +88,13 @@
             <tr class="keywords-row">
               <th>Keywords</th>
               <td *ngIf="!editEnabled">
-                <mat-chip-grid #keywordChips>
-                  <mat-chip-row
+                <mat-chip-set role="list" #keywordChips>
+                  <mat-chip role="listitem"
                     *ngFor="let keyword of dataset.keywords"
-                    (removed)="onRemoveKeyword(keyword)"
-                    (click)="onClickKeyword(keyword)"
                   >
                     {{ keyword }}
-                  </mat-chip-row>
-                </mat-chip-grid>
+                  </mat-chip>
+                </mat-chip-set>
               </td>
               <td *ngIf="editEnabled && editingAllowed">
                 <mat-form-field class="full-width">
@@ -108,7 +106,9 @@
                       (click)="onClickKeyword(keyword)"
                     >
                       {{ keyword }}
-                      <mat-icon matChipRemove>cancel</mat-icon>
+                      <button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                      </button>
                     </mat-chip-row>
                     <input
                       [matChipInputFor]="keywordChips"
@@ -130,7 +130,9 @@
                     (removed)="onRemoveShare(share)"
                   >
                     {{ share }}
-                    <mat-icon matChipRemove>cancel</mat-icon>
+                    <button matChipRemove>
+                      <mat-icon>cancel</mat-icon>
+                    </button>
                   </mat-chip-option>
                 </mat-chip-listbox>
               </td>

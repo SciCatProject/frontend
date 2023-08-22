@@ -16,6 +16,9 @@ import { extModules } from "./build-specifics";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatTabsModule } from "@angular/material/tabs";
+import {MatChipsModule} from '@angular/material/chips';
+
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { LayoutModule } from "_layout/layout.module";
 import { AppConfigService } from "app-config.service";
@@ -41,6 +44,8 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
     LayoutModule,
     MatProgressSpinnerModule,
     MatFormFieldModule,
+    MatTabsModule,
+    MatChipsModule,
     MatSnackBarModule,
     SDKBrowserModule.forRoot(),
     StoreModule.forRoot(
