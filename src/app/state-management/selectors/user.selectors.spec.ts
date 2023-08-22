@@ -123,8 +123,7 @@ describe("User Selectors", () => {
         : "";
       expect(
         fromSelectors.selectIsAdmin.projector(
-          username,
-          initialUserState.accountType
+          username
         )
       ).toEqual(false);
     });
