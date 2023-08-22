@@ -22,7 +22,7 @@ export class SearchParametersDialogComponent {
       Validators.required,
       Validators.minLength(9),
     ]),
-    rhs: new FormControl("", [Validators.required, Validators.minLength(1)]),
+    rhs: new FormControl<string|Number>("", [Validators.required, Validators.minLength(1)]),
     unit: new FormControl(""),
   });
 
@@ -56,7 +56,7 @@ export class SearchParametersDialogComponent {
     const rawRhs = this.parametersForm.get("rhs")?.value;
     const rhs =
       relation === "EQUAL_TO_STRING" ? String(rawRhs) : Number(rawRhs);
-    this.parametersForm.patchValue({ rhs } as unknown as Partial<{ lhs: string; relation: string; rhs: string; unit: string; }>);
+    this.parametersForm.patchValue({ rhs });
     this.dialogRef.close({ data: { lhs, relation, rhs, unit } });
   };
 
