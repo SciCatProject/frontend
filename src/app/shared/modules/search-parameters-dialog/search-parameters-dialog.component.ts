@@ -88,7 +88,7 @@ export class SearchParametersDialogComponent {
     if (relation !== "EQUAL_TO_STRING" && isNaN(Number(rhs))) {
       return true;
     }
-    return lhs.length * rhs.length === 0;
+    return lhs.length * (rhs as string).length === 0;
   };
 
   get lhs(): string {
