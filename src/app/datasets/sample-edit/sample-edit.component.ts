@@ -97,7 +97,8 @@ export class SampleEditComponent implements OnInit, OnDestroy {
 
   sampleValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
-      const isCurrentSample = control.value.sampleId === this.data.sampleId;
+
+      const isCurrentSample = control.value?.sampleId === this.data.sampleId;
       return isCurrentSample
         ? { isCurrentSample: { value: control.value } }
         : null;
