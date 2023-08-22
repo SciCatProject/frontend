@@ -8,7 +8,7 @@ import { SciCatDataSource } from "shared/services/scicat.datasource";
 import { SharedTableComponent } from "./shared-table.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { MatMenuModule } from "@angular/material/menu";
-import { FormBuilder } from "@angular/forms";
+import { FormBuilder, FormControl } from "@angular/forms";
 import { Column } from "./shared-table.module";
 
 describe("SharedTableComponent", () => {
@@ -172,11 +172,13 @@ describe("SharedTableComponent", () => {
 
   describe("#resetFilters()", () => {
     it("should empty all filter inputs", () => {
-      Object.values(component.filterForm.controls).forEach((control) => {
+      Object.values(component.filterForm.controls).forEach((xcontrol) => {
+        const control = xcontrol as FormControl<string>;
         control.setValue("test");
       });
       component.resetFilters();
-      Object.values(component.filterForm.controls).forEach((control) => {
+      Object.values(component.filterForm.controls).forEach((xcontrol) => {
+        const control = xcontrol as FormControl<string>;
         expect(control.value).toEqual("");
       });
       expect(component.filterExpressions).toEqual({});
