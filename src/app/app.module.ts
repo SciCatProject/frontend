@@ -15,6 +15,7 @@ import { routerReducer } from "@ngrx/router-store";
 import { extModules } from "./build-specifics";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { LayoutModule } from "_layout/layout.module";
 import { AppConfigService } from "app-config.service";
@@ -39,6 +40,7 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
     HttpClientModule,
     LayoutModule,
     MatProgressSpinnerModule,
+    MatFormFieldModule,
     MatSnackBarModule,
     SDKBrowserModule.forRoot(),
     StoreModule.forRoot(
