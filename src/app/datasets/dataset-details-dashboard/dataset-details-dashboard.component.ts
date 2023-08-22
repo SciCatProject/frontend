@@ -136,7 +136,7 @@ export class DatasetDetailsDashboardComponent
             .subscribe(([groups, isAdmin, isLoggedIn]) => {
               const isInOwnerGroup =
                 groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
-              const hasAccessToLogbook = 
+              const hasAccessToLogbook =
                 isInOwnerGroup || this.dataset.accessGroups.some(g => groups.includes(g));
               this.navLinks = [
                 {
@@ -248,19 +248,19 @@ export class DatasetDetailsDashboardComponent
     if (this.dataset) {
       if ("proposalId" in this.dataset) {
         this.store.dispatch(
-          fetchProposalAction({ proposalId: this.dataset["proposalId"] })
+          fetchProposalAction({ proposalId: this.dataset["proposalId"] as string })
         );
       } else {
         this.store.dispatch(clearLogbookAction());
       }
       if ("sampleId" in this.dataset) {
         this.store.dispatch(
-          fetchSampleAction({ sampleId: this.dataset["sampleId"] })
+          fetchSampleAction({ sampleId: this.dataset["sampleId"] as string })
         );
       }
       if ("instrumentId" in this.dataset) {
         this.store.dispatch(
-          fetchInstrumentAction({ pid: this.dataset["instrumentId"] })
+          fetchInstrumentAction({ pid: this.dataset["instrumentId"] as string})
         );
       }
     }

@@ -12,7 +12,7 @@ import { UnitsService } from "shared/services/units.service";
 export class SearchParametersDialogComponent {
   appConfig = this.appConfigService.getConfig();
   unitsEnabled = this.appConfig.scienceSearchUnitsEnabled;
-  
+
   parameterKeys = this.data.parameterKeys;
   units: string[] = [];
 
@@ -56,7 +56,7 @@ export class SearchParametersDialogComponent {
     const rawRhs = this.parametersForm.get("rhs")?.value;
     const rhs =
       relation === "EQUAL_TO_STRING" ? String(rawRhs) : Number(rawRhs);
-    this.parametersForm.patchValue({ rhs });
+    this.parametersForm.patchValue({ rhs } as unknown as Partial<{ lhs: string; relation: string; rhs: string; unit: string; }>);
     this.dialogRef.close({ data: { lhs, relation, rhs, unit } });
   };
 
