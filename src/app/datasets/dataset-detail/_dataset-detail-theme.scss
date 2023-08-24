@@ -2,7 +2,7 @@
 @use "@angular/material" as mat;
 
 @mixin color($theme) {
-  $color-config: mat.get-color-config($theme);
+  $color-config: map.get($theme,"color");
   $primary: map.get($color-config, "primary");
   $header-1: map.get($color-config, "header-1");
   $accent: map.get($color-config, "accent");

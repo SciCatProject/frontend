@@ -1,10 +1,9 @@
-@use "sass:map";
 @use "@angular/material" as mat;
 
 @mixin color($theme) {
-  $color-config: mat.get-color-config($theme);
-  $primary: map.get($color-config, "primary");
-  $hover: map.get($color-config, "hover");
+  $color-config: map-get($theme,"color");
+  $primary: map-get($color-config, "primary");
+  $hover: map-get($color-config, "hover");
 
   .table-toolbar {
     background: mat.get-color-from-palette(

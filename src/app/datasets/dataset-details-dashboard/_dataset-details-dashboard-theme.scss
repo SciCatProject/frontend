@@ -1,10 +1,9 @@
-@use "sass:map";
 @use "@angular/material" as mat;
 
 @mixin color($theme) {
-  $color-config: mat.get-color-config($theme);
-  $warn: map.get($color-config, "warn");
-  $header-3: map.get($color-config, "header-3");
+  $color-config: map-get($theme,"color");
+  $warn: map-get($color-config, "warn");
+  $header-3: map-get($color-config, "header-3");
 
   .jupyter-button {
     background-color: mat.get-color-from-palette($header-3, "default");
