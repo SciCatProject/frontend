@@ -25,7 +25,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { SharedScicatFrontendModule } from "shared/shared.module";
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { ProposalFilterComponent } from "./proposal-filter/proposal-filter.component";
 import { LogbooksModule } from "logbooks/logbooks.module";

@@ -26,7 +26,7 @@ import { SharedScicatFrontendModule } from "shared/shared.module";
 import { StoreModule } from "@ngrx/store";
 import { policiesReducer } from "state-management/reducers/policies.reducer";
 import { PoliciesDashboardComponent } from "./policies-dashboard/policies-dashboard.component";
-import { FlexModule } from "@angular/flex-layout";
+import { FlexModule } from "@ngbracket/ngx-layout";
 
 @NgModule({
   imports: [

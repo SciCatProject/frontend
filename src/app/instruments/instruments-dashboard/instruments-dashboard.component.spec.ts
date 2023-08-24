@@ -23,7 +23,7 @@ import {
 } from "state-management/actions/instruments.actions";
 import { Router } from "@angular/router";
 import { Instrument } from "shared/sdk";
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 
 describe("InstrumentsDashboardComponent", () => {
   let component: InstrumentsDashboardComponent;

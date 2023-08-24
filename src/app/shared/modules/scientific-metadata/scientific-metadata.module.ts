@@ -13,7 +13,7 @@ import { MetadataViewComponent } from "./metadata-view/metadata-view.component";
 import { MetadataEditComponent } from "./metadata-edit/metadata-edit.component";
 import { PipesModule } from "shared/pipes/pipes.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { FlexModule } from "@angular/flex-layout";
+import { FlexModule } from "@ngbracket/ngx-layout";
 
 @NgModule({
   declarations: [MetadataViewComponent, MetadataEditComponent],

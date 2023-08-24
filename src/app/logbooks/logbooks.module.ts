@@ -10,7 +10,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { LinkyModule } from "ngx-linky";
 import { RouterModule } from "@angular/router";
 import { SharedScicatFrontendModule } from "shared/shared.module";

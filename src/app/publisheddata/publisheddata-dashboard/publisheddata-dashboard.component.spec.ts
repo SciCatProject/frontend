@@ -16,7 +16,7 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { of } from "rxjs";
 import { Message, MessageType } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
