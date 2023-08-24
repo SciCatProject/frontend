@@ -91,7 +91,7 @@ export class ArchivingService {
   public generateOptionLocation(
     result: RetrieveDestinations,
     retrieveDestinations: RetrieveDestinations[] = []
-  ): {} | { option: string } | { location: string; option: string } {
+  ): object | { option: string } | { location: string; option: string } {
     if (retrieveDestinations.length > 0) {
       const prefix = retrieveDestinations.filter(
         (element) => element.option == result.option

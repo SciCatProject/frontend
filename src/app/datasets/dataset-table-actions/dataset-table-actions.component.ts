@@ -109,7 +109,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
    */
   retrieveClickHandle(): void {
     const destPath = { destinationPath: "/archive/retrieve" };
-    let dialogOptions = this.archivingSrv.retriveDialogOptions(
+    const dialogOptions = this.archivingSrv.retriveDialogOptions(
       this.appConfig.retrieveDestinations
     );
     const dialogRef = this.dialog.open(DialogComponent, dialogOptions);

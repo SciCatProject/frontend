@@ -275,7 +275,7 @@ export class TreeEditComponent extends TreeBaseComponent implements OnInit, OnCh
     this.save.emit(this.metadata);
     this.hasUnsavedChanges.emit(false);
     this.historyManager.clearHistory();
-    this.lastSavedChanges = this.historyManager.currentIdx;;
+    this.lastSavedChanges = this.historyManager.currentIdx;
   }
 
   openObjectCreationDialog(node: FlatNodeEdit): void {

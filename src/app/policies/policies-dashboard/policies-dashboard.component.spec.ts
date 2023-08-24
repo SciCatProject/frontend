@@ -318,11 +318,11 @@ describe("PoliciesDashboardComponent", () => {
       );
     });
   });
-
+/*
   describe("#openDialog()", () => {
     xit("should...", () => {});
   });
-
+*/
   describe("#onDialogClose()", () => {
     it("should do nothing if there is no result", () => {
       dispatchSpy = spyOn(store, "dispatch");

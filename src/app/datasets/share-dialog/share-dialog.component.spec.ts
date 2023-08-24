@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-empty-function:0 */
+
 import {
   ComponentFixture,
   fakeAsync,

@@ -165,7 +165,7 @@ export class SharedTableComponent
       .pipe(debounceTime(650))
       .subscribe((values: { [key: string]: any }) => {
         const queryParams: { [key: string]: string | null } = {};
-        for (let [columnId, value] of Object.entries(values)) {
+        for (const [columnId, value] of Object.entries(values)) {
           // handle date filters
           if (
             (columnId.endsWith(".start") || columnId.endsWith(".end")) &&
@@ -229,7 +229,7 @@ export class SharedTableComponent
     this.sort.direction = queryParams.sortDirection || "asc";
     this.paginator.pageIndex = Number(queryParams.pageIndex) || 0;
     this.paginator.pageSize = Number(queryParams.pageSize) || this.pageSize;
-    for (let [filter, xcontrol] of Object.entries(this.filterForm.controls)) {
+    for (const [filter, xcontrol] of Object.entries(this.filterForm.controls)) {
       const control = xcontrol as FormControl<string>;
       if (filter in queryParams) {
         const value = queryParams[filter];
