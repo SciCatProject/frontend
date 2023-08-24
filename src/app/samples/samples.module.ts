@@ -16,7 +16,7 @@ import { samplesReducer } from "../state-management/reducers/samples.reducer";
 import { SampleDialogComponent } from "./sample-dialog/sample-dialog.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SampleDashboardComponent } from "./sample-dashboard/sample-dashboard.component";
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatChipsModule } from "@angular/material/chips";

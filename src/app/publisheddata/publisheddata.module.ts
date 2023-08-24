@@ -14,7 +14,7 @@ import { StoreModule } from "@ngrx/store";
 import { publishedDataReducer } from "state-management/reducers/published-data.reducer";
 import { PublisheddataDashboardComponent } from "./publisheddata-dashboard/publisheddata-dashboard.component";
 import { PublisheddataEditComponent } from "./publisheddata-edit/publisheddata-edit.component";
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatChipsModule } from "@angular/material/chips";

@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { InstrumentsDashboardComponent } from "./instruments-dashboard/instruments-dashboard.component";
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { StoreModule } from "@ngrx/store";
 import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
 import { EffectsModule } from "@ngrx/effects";

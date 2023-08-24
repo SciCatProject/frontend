@@ -10,7 +10,7 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { CommonModule, DatePipe } from "@angular/common";
 import { MatInputModule } from "@angular/material/input";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { FlexLayoutModule, FlexModule } from "@angular/flex-layout";
+import { FlexLayoutModule, FlexModule } from "@ngbracket/ngx-layout";
 import { MatDividerModule } from "@angular/material/divider";
 import { TreeViewComponent } from "./tree-view/tree-view.component";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";

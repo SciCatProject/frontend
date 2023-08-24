@@ -9,7 +9,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { StoreModule } from "@ngrx/store";
 import { jobsReducer } from "state-management/reducers/jobs.reducer";
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { JobsDashboardNewComponent } from "./jobs-dashboard-new/jobs-dashboard-new.component";
 

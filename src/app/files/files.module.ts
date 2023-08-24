@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { FilesDashboardComponent } from "./files-dashboard/files-dashboard.component";
 
