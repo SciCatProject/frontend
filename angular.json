@@ -151,7 +151,6 @@
       }
     }
   },
-  "defaultProject": "scicat-frontend",
   "cli": {
     "defaultCollection": "@angular-eslint/schematics",
     "analytics": false
