@@ -33,7 +33,7 @@ describe("DatafilesComponent", () => {
           ReactiveFormsModule,
           MatDialogModule,
           RouterModule,
-          RouterModule.forRoot([], { relativeLinkResolution: "legacy" }),
+          RouterModule.forRoot([]),
           StoreModule.forRoot({}),
         ],
         declarations: [DatafilesComponent],
