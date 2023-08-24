@@ -1,10 +1,9 @@
-@use "sass:map";
 @use "@angular/material" as mat;
 
 @mixin color($theme) {
-  $color-config: mat.get-color-config($theme);
-  $primary: map.get($color-config, "primary");
-  $header-1: map.get($color-config, "header-1");
+  $color-config: map-get($theme,"color");
+  $primary: map-get($color-config, "primary");
+  $header-1: map-get($color-config, "header-1");
 
   .tab-content {
     .general-header {

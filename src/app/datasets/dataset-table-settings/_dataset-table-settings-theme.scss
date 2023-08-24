@@ -1,9 +1,8 @@
-@use "sass:map";
 @use "@angular/material" as mat;
 
 @mixin color($theme) {
-  $color-config: mat.get-color-config($theme);
-  $hover: map.get($color-config, "hover");
+  $color-config: map-get($theme,"color");
+  $hover: map-get($color-config, "hover");
 
   .close-button {
     color: mat.get-color-from-palette($hover, "default");
