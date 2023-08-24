@@ -4,7 +4,9 @@
 @mixin color($theme) {
   $color-config: mat.get-color-config($theme);
   $primary: map.get($color-config, "primary");
-
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   mat-table {
     mat-header-row {
       background: mat.get-color-from-palette($primary, "default");
@@ -16,8 +18,8 @@
 
     mat-header-cell {
       color: mat.get-color-from-palette($primary, "default-contrast");
-
-      .mat-checkbox .mat-checkbox-frame {
+      /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
+      .mat-mdc-checkbox .mat-checkbox-frame {
         border-color: mat.get-color-from-palette($primary, "default-contrast");
       }
     }

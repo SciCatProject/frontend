@@ -1,5 +1,5 @@
 <div *ngIf="proposal" class="tab-content">
-  <mat-card>
+  <mat-card appearance="outlined">
     <mat-card-header class="general-header">
       <div mat-card-avatar class="section-icon">
         <mat-icon> description </mat-icon>
@@ -56,7 +56,7 @@
     </table>
   </mat-card>
 
-  <mat-card>
+  <mat-card appearance="outlined">
     <mat-card-header class="creator-header">
       <div mat-card-avatar class="section-icon">
         <mat-icon> person </mat-icon>
@@ -92,7 +92,7 @@
     </table>
   </mat-card>
 
-  <mat-card *ngIf="appConfig.jsonMetadataEnabled">
+  <mat-card appearance="outlined" *ngIf="appConfig.jsonMetadataEnabled">
     <button mat-stroked-button (click)="show = !show">
       {{ show ? "Hide MetaData" : "Show Metadata" }}
     </button>

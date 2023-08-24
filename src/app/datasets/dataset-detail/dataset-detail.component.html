@@ -25,7 +25,7 @@
   <div style="clear: both"></div>
   <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
     <div fxFlex="80%">
-      <mat-card [formGroup]="form" data-cy="general-info">
+      <mat-card appearance="outlined" [formGroup]="form" data-cy="general-info">
         <mat-card-header class="general-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> description </mat-icon>
@@ -88,20 +88,20 @@
             <tr class="keywords-row">
               <th>Keywords</th>
               <td *ngIf="!editEnabled">
-                <mat-chip-list #keywordChips>
-                  <mat-chip
+                <mat-chip-grid #keywordChips>
+                  <mat-chip-row
                     *ngFor="let keyword of dataset.keywords"
                     (removed)="onRemoveKeyword(keyword)"
                     (click)="onClickKeyword(keyword)"
                   >
                     {{ keyword }}
-                  </mat-chip>
-                </mat-chip-list>
+                  </mat-chip-row>
+                </mat-chip-grid>
               </td>
               <td *ngIf="editEnabled && editingAllowed">
                 <mat-form-field class="full-width">
-                  <mat-chip-list #keywordChips formArrayName="keywords">
-                    <mat-chip
+                  <mat-chip-grid #keywordChips formArrayName="keywords">
+                    <mat-chip-row
                       *ngFor="let keyword of keywords.value"
                       [removable]="true"
                       (removed)="onRemoveKeyword(keyword)"
@@ -109,30 +109,30 @@
                     >
                       {{ keyword }}
                       <mat-icon matChipRemove>cancel</mat-icon>
-                    </mat-chip>
+                    </mat-chip-row>
                     <input
                       [matChipInputFor]="keywordChips"
                       [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
                       [matChipInputAddOnBlur]="true"
                       (matChipInputTokenEnd)="onAddKeyword($event)"
                     />
-                  </mat-chip-list>
+                  </mat-chip-grid>
                 </mat-form-field>
               </td>
             </tr>
             <tr *ngIf="dataset.sharedWith && dataset.sharedWith.length > 0">
               <th>Shared With</th>
               <td>
-                <mat-chip-list>
-                  <mat-chip
+                <mat-chip-listbox>
+                  <mat-chip-option
                     *ngFor="let share of dataset.sharedWith"
                     [removable]="true"
                     (removed)="onRemoveShare(share)"
                   >
                     {{ share }}
                     <mat-icon matChipRemove>cancel</mat-icon>
-                  </mat-chip>
-                </mat-chip-list>
+                  </mat-chip-option>
+                </mat-chip-listbox>
               </td>
             </tr>
           </table>
@@ -167,7 +167,7 @@
         </mat-card-actions>
       </mat-card>
 
-      <mat-card>
+      <mat-card appearance="outlined">
         <mat-card-header class="creator-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> person </mat-icon>
@@ -207,7 +207,7 @@
         </table>
       </mat-card>
 
-      <mat-card>
+      <mat-card appearance="outlined">
         <mat-card-header class="file-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> folder </mat-icon>
@@ -231,7 +231,7 @@
         </table>
       </mat-card>
 
-      <mat-card>
+      <mat-card appearance="outlined">
         <mat-card-header class="related-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> library_books </mat-icon>
@@ -322,7 +322,7 @@
         </table>
       </mat-card>
 
-      <mat-card *ngIf="dataset.type === 'derived'">
+      <mat-card appearance="outlined" *ngIf="dataset.type === 'derived'">
         <mat-card-header class="derived-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> analytics </mat-icon>
@@ -346,7 +346,7 @@
         </table>
       </mat-card>
 
-      <mat-card>
+      <mat-card appearance="outlined">
         <mat-card-header class="scientific-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> science </mat-icon>
@@ -414,7 +414,7 @@
           ></ngx-json-viewer>
         </ng-template>
       </mat-card>
-      <mat-card *ngIf="editingAllowed && appConfig.jsonMetadataEnabled">
+      <mat-card appearance="outlined" *ngIf="editingAllowed && appConfig.jsonMetadataEnabled">
         <button mat-stroked-button (click)="show = !show">
           {{ show ? "Hide MetaData" : "Show Metadata" }}
         </button>
@@ -430,7 +430,7 @@
 
     <div fxFlex="30%" *ngIf="attachments$ | async as attachments">
       <ng-container *ngFor="let da of attachments">
-        <mat-card>
+        <mat-card appearance="outlined">
           <img mat-card-image src="{{ da.thumbnail }}" />
           <p>{{ da.caption }}</p>
         </mat-card>

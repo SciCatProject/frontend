@@ -1,7 +1,7 @@
 <ng-template [ngIf]="dataset">
   <div fxLayout="row" fxLayout.xs="column">
     <div fxFlex="70">
-      <mat-card>
+      <mat-card appearance="outlined">
         <mat-card-header class="action-header">
           New Action
         </mat-card-header>
@@ -175,7 +175,7 @@
         </div>
       </mat-card>
 
-      <mat-card *ngIf="derivedDatasets">
+      <mat-card appearance="outlined" *ngIf="derivedDatasets">
         <mat-card-header class="derived-header">
           Derived Datasets
         </mat-card-header>

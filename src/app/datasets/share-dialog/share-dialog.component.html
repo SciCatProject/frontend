@@ -18,16 +18,16 @@
     </button>
     <mat-error *ngIf="isInvalid()">Email address is not valid</mat-error>
   </mat-form-field>
-  <mat-chip-list>
-    <mat-chip
+  <mat-chip-listbox>
+    <mat-chip-option
       *ngFor="let user of users"
       [removable]="true"
       (removed)="remove(user)"
     >
       {{ user }}
       <mat-icon matChipRemove>cancel</mat-icon>
-    </mat-chip>
-  </mat-chip-list>
+    </mat-chip-option>
+  </mat-chip-listbox>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button

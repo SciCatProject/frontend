@@ -92,7 +92,7 @@
     <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
   </mat-table>
 
-  <mat-card class="smallDetails" *ngIf="logbook && logbook.messages.length > 0">
+  <mat-card appearance="outlined" class="smallDetails" *ngIf="logbook && logbook.messages.length > 0">
     <div
       *ngFor="let message of logbook.messages; let i = index; let first = first"
     >
@@ -210,7 +210,7 @@
 </div>
 
 <ng-template #noEntries>
-  <mat-card class="no-entries-message">
+  <mat-card appearance="outlined" class="no-entries-message">
     <mat-icon>info</mat-icon> No entries available.
   </mat-card>
 </ng-template>

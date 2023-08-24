@@ -2,7 +2,7 @@
   .settings-button {
     margin-bottom: 0.5em;
   }
-
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   mat-table {
     overflow-x: scroll;
 

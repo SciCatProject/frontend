@@ -1,4 +1,4 @@
-.mat-form-field {
+.mat-mdc-form-field {
   width: 100%;
 
   .clear-button {
@@ -6,6 +6,7 @@
   }
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
 mat-table {
   mat-header-cell:first-child {
     justify-content: left;

@@ -6,7 +6,7 @@
 
     <div fxLayout="row" fxLayout.xs="column">
       <div fxFlex="80%">
-        <mat-card>
+        <mat-card appearance="outlined">
           <mat-card-header class="general-header">
             <div mat-card-avatar class="section-icon">
               <mat-icon> description </mat-icon>
@@ -29,7 +29,7 @@
           </table>
         </mat-card>
 
-        <mat-card>
+        <mat-card appearance="outlined">
           <mat-card-header class="creator-header">
             <div mat-card-avatar class="section-icon">
               <mat-icon> person </mat-icon>
@@ -53,7 +53,7 @@
           </table>
         </mat-card>
 
-        <mat-card *ngIf="sample.sampleCharacteristics as value">
+        <mat-card appearance="outlined" *ngIf="sample.sampleCharacteristics as value">
           <mat-card-header class="characteristics-header">
             <div mat-card-avatar class="section-icon">
               <mat-icon> science </mat-icon>
@@ -107,7 +107,7 @@
           </ng-template>
         </mat-card>
 
-        <mat-card *ngIf="appConfig.jsonMetadataEnabled">
+        <mat-card appearance="outlined" *ngIf="appConfig.jsonMetadataEnabled">
           <button mat-stroked-button (click)="show = !show">
             {{ show ? "Hide MetaData" : "Show Metadata" }}
           </button>
@@ -123,7 +123,7 @@
 
       <div fxFlex="30%" *ngIf="vm.attachments as attachments">
         <ng-container *ngFor="let attachment of attachments">
-          <mat-card>
+          <mat-card appearance="outlined">
             <img mat-card-image src="{{ attachment.thumbnail }}" />
             <p>{{ attachment.caption }}</p>
           </mat-card>

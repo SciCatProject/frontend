@@ -1,6 +1,6 @@
 <div fxLayout="row" fxLayout.xs="column" *ngIf="publishedData">
   <div fxFlex="60">
-    <mat-card>
+    <mat-card appearance="outlined">
       <mat-card-header class="status-header">
         <div mat-card-avatar class="section-icon">
           <mat-icon> info </mat-icon>
@@ -36,7 +36,7 @@
       </button>
     </mat-card>
 
-    <mat-card>
+    <mat-card appearance="outlined">
       <mat-card-header class="general-header">
         <div mat-card-avatar class="section-icon">
           <mat-icon> description </mat-icon>
@@ -68,7 +68,7 @@
       </table>
     </mat-card>
 
-    <mat-card>
+    <mat-card appearance="outlined">
       <mat-card-header class="creator-header">
         <div mat-card-avatar class="section-icon">
           <mat-icon> person </mat-icon>
@@ -96,7 +96,7 @@
       </table>
     </mat-card>
 
-    <mat-card>
+    <mat-card appearance="outlined">
       <mat-card-header class="file-header">
         <div mat-card-avatar class="section-icon">
           <mat-icon> folder </mat-icon>
@@ -135,7 +135,7 @@
       </table>
     </mat-card>
 
-    <mat-card>
+    <mat-card appearance="outlined">
       <mat-card-header class="related-header">
         <div mat-card-avatar class="section-icon">
           <mat-icon> library_books </mat-icon>
@@ -170,6 +170,7 @@
     </mat-card>
 
     <mat-card
+      appearance="outlined"
       *ngIf="appConfig.editPublishedData && appConfig.jsonMetadataEnabled"
     >
       <button
@@ -202,7 +203,7 @@
 
   <div fxFlex="40">
     <ng-container *ngIf="publishedData.thumbnail as thumbnail">
-      <mat-card>
+      <mat-card appearance="outlined">
         <img mat-card-image src="{{ thumbnail }}" />
       </mat-card>
     </ng-container>

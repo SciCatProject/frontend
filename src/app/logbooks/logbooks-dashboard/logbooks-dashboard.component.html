@@ -2,7 +2,7 @@
   <div *ngIf="(vm.logbook | keyvalue)?.length !== 0 && dataset && vm.logbook?.roomId">
     <div fxLayout="row" fxLayout.lt-lg="column">
       <div fxFlex="14">
-        <mat-card class="big-filter">
+        <mat-card appearance="outlined" class="big-filter">
           <div class="title">Filter</div>
           <app-search-bar [prefilledValue]="vm.filters.textSearch"
             (search)="onTextSearchChange(dataset.pid, $event)"
@@ -34,14 +34,14 @@
           <div fxFlex="49">
             <a href="{{ appConfig.riotBaseUrl }}/#/room/{{ vm.logbook?.roomId }}"
               target="_blank" rel="noopener noreferrer">
-              <mat-card class="card-button">
+              <mat-card appearance="outlined" class="card-button">
                 <mat-icon> chat_bubble_outline </mat-icon> Go to chat
               </mat-card>
             </a>
           </div>
           <div fxFlex="auto"></div>
           <div class="reverse-card" fxFlex="49">
-            <mat-card class="card-button"
+            <mat-card appearance="outlined" class="card-button"
               (click)="vm.logbook.messages.reverse()">
               <mat-icon> swap_vert </mat-icon> Reverse
             </mat-card>
@@ -60,7 +60,7 @@
   </div>
 
   <ng-template [ngIf]="!(vm.logbook | keyvalue)?.length">
-    <mat-card class="no-logbook-message">
+    <mat-card appearance="outlined" class="no-logbook-message">
       <mat-icon>info</mat-icon> No logbook available. 
     </mat-card>
   </ng-template>

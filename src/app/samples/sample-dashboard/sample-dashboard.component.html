@@ -11,7 +11,7 @@
         </button>
       </ng-template>
       <ng-template [ngIf]="appConfig.searchSamples">
-        <mat-card class="big-search">
+        <mat-card appearance="outlined" class="big-search">
           <div class="title">Search</div>
           <app-search-bar
             [prefilledValue]="vm.textFilter"
@@ -27,11 +27,11 @@
               <mat-icon>add</mat-icon> Add Characteristic
             </button>
 
-            <mat-chip-list
+            <mat-chip-listbox
               class="characteristic-chips"
               aria-orientation="vertical"
             >
-              <mat-chip
+              <mat-chip-option
                 *ngFor="
                   let characteristic of vm.characteristicsFilter;
                   index as i
@@ -61,8 +61,8 @@
                 <mat-icon matChipRemove (click)="removeCharacteristic(i)">
                   cancel
                 </mat-icon>
-              </mat-chip>
-            </mat-chip-list>
+              </mat-chip-option>
+            </mat-chip-listbox>
           </div>
         </mat-card>
         <div class="small-search" fxFlexOrder="2">
@@ -74,7 +74,7 @@
         </div>
       </ng-template>
       <ng-template [ngIf]="appConfig.editSampleEnabled">
-        <mat-card class="big-edit-sample" (click)="openDialog()">
+        <mat-card appearance="outlined" class="big-edit-sample" (click)="openDialog()">
           <mat-icon>add_circle</mat-icon> Create Sample
         </mat-card>
       </ng-template>

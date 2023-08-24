@@ -8,7 +8,9 @@
 
   .login-container {
     padding-top: 10em;
-
+    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+    /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
     mat-card {
       width: 100%;
       max-width: 350px;
@@ -21,8 +23,10 @@
           max-width: 200px;
         }
       }
-
+      /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+      /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
       mat-card-content {
+        /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
         ::ng-deep .mat-tab-labels .mat-tab-label {
           min-width: 4rem;
           width: 100%;
@@ -52,7 +56,7 @@
         .login-button {
           margin-top: 1em;
         }
-
+        /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
         mat-checkbox {
           margin-left: 1em;
         }
@@ -71,7 +75,7 @@
           float: left;
           padding: 6px;
         }
-
+        /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version. */
         mat-checkbox {
           margin-left: 1em;
         }

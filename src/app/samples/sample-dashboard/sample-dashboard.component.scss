@@ -7,6 +7,7 @@
     }
 
     .characteristic-chips {
+      /* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version. */
       ::ng-deep .mat-chip-list-wrapper {
         margin: 0;
       }
