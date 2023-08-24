@@ -220,8 +220,7 @@ export class DatasetDetailsDashboardComponent
   }
   fetchDataForTab(tab: string) {
     if (tab in this.fetchDataActions) {
-      let args: { [key: string]: any };
-      args = { pid: this.dataset?.pid };
+      const  args: { [key: string]: any }= { pid: this.dataset?.pid };
       // load related data for selected tab
       switch (tab) {
         case TAB.details:

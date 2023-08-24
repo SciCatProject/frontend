@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-empty-function:0 */
+
 import { Observable, of } from "rxjs";
 import { convertToParamMap, UrlTree } from "@angular/router";
 

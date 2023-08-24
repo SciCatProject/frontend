@@ -239,7 +239,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
           const publishedDatasets = datasets.filter(
             (dataset) => dataset.isPublished
           );
-          this.datasets = !!currentUser ? datasets : publishedDatasets;
+          this.datasets = currentUser ? datasets : publishedDatasets;
         });
 
         // this.derivationMapPids = this.datasetDerivationsMaps.map(

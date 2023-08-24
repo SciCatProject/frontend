@@ -207,8 +207,8 @@ export class PoliciesDashboardComponent implements OnInit {
                       " policy settings to existing datasets?"
                   )
                 ) {
+                  console.log("count", count);
                 }
-                console.log("count", count);
               }
               return null;
             })

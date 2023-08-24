@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-empty-function:0 */
+
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { BatchViewComponent } from "./batch-view.component";
@@ -96,7 +98,7 @@ describe("BatchViewComponent", () => {
     });
   });
 
- 
+
   describe("#onEmpty()", () => {
     xit("should ...", () => {});
   });

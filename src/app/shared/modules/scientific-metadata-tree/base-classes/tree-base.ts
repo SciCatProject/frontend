@@ -113,7 +113,7 @@ export class TreeBaseComponent {
         this.treeControl.expand(parentNode);
       }
       currentNode = parentNode;
-    };
+    }
   }
   setChildrenVisible(children: TreeNode[]) {
     children.forEach((node: TreeNode) => {

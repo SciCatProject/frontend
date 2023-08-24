@@ -88,7 +88,7 @@ export interface AppConfig {
 
 @Injectable()
 export class AppConfigService {
-  private appConfig: Object = {};
+  private appConfig: object = {};
 
   constructor(private http: HttpClient) { }
 

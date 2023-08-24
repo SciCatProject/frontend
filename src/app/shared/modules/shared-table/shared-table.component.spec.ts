@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-empty-function:0 */
+
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
@@ -64,7 +66,7 @@ describe("SharedTableComponent", () => {
       canSort: true,
       hideOrder: 7,
     },
-  ];;
+  ];
 
   const paginator = {
     page: of({}),
