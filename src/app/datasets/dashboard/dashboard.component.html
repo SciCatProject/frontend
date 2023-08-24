@@ -6,6 +6,7 @@
         <datasets-filter></datasets-filter>
         <ng-template [ngIf]="this.loggedIn$ | async">
           <mat-card
+            appearance="outlined"
             *ngIf="appConfig.addDatasetEnabled"
             class="add-card"
             (click)="openDialog()"

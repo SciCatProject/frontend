@@ -1,4 +1,4 @@
-<mat-card class="dropzone" appDragAndDrop (fileDropped)="onFileDropped($event)">
+<mat-card appearance="outlined" class="dropzone" appDragAndDrop (fileDropped)="onFileDropped($event)">
   <input
     class="instructions"
     type="file"
@@ -22,8 +22,8 @@
   </div>
 </mat-card>
 
-<mat-card class="file-picker">
-  <div class="mat-title">
+<mat-card appearance="outlined" class="file-picker">
+  <div class="mat-headline-6">
     Choose an image to upload
     <div class="font-small">
       Accepted file formats: image/*, application/pdf
@@ -36,7 +36,7 @@
 </mat-card>
 
 <ng-template ngFor let-attachment [ngForOf]="attachments">
-  <mat-card class="attachment-card">
+  <mat-card appearance="outlined" class="attachment-card">
     <img src="{{ attachment.thumbnail }}" />
     <mat-card-actions>
       <form (submit)="onSubmitCaption(attachment.id, caption.value)">

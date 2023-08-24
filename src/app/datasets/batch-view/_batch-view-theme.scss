@@ -4,7 +4,7 @@
 @mixin color($theme) {
   $color-config: mat.get-color-config($theme);
   $primary: map.get($color-config, "primary");
-
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   mat-table {
     mat-header-row {
       background: mat.get-color-from-palette($primary, "default");
