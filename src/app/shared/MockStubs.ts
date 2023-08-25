@@ -2,6 +2,8 @@
 
 import { Observable, of } from "rxjs";
 import { convertToParamMap, UrlTree } from "@angular/router";
+import { AppConfig } from "app-config.module";
+import { SciCatDataSource } from "./services/scicat.datasource";
 
 export class MockUserApi {
   getCurrentId() {
@@ -103,6 +105,17 @@ export class MockConfigService {
   }
 }
 
+export class MockAppConfigService {
+    private appConfig: object = {};
+    constructor(private http: null) {}
+
+    async loadAppConfig(): Promise<void> {}
+    getConfig(): AppConfig {
+      return this.appConfig as AppConfig;
+    }
+  }
+
+
 export class MockStore {
   public dispatch() {}
 
@@ -152,3 +165,22 @@ export class MockPublishedDataApi {
     return of({});
   }
 }
+export class MockScicatDataSource extends SciCatDataSource {
+   loadAllData(
+      filterExpressions?: any,
+      sortField?: string,
+      sortDirection = "asc",
+      pageIndex = 0,
+      pageSize = 10,
+      isFilesDashboard?: boolean
+    ) {
+      return {};
+    }
+    loadExportData(
+      filterExpressions?: any,
+      sortField?: string,
+      sortDirection = "asc"
+    ) {
+      return {};
+    }
+  };
