@@ -2,14 +2,9 @@ import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { MetadataInputModalComponent } from "./metadata-input-modal.component";
 import { FormBuilder } from "@angular/forms";
-import { MatAutocompleteModule } from "@angular/material/autocomplete";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatOptionModule } from "@angular/material/core";
-import { MatSelectModule } from "@angular/material/select";
-import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { MatDialogRef } from "@angular/material/dialog";
 import { MockMatDialogRef } from "shared/MockStubs";
-import { MatInputModule } from "@angular/material/input";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.modules";
 
 describe("MetadataInputModalComponent", () => {
   let component: MetadataInputModalComponent;
@@ -20,13 +15,7 @@ describe("MetadataInputModalComponent", () => {
       TestBed.configureTestingModule({
         declarations: [MetadataInputModalComponent],
         imports: [
-          MatAutocompleteModule,
-          MatFormFieldModule,
-          MatOptionModule,
-          MatSelectModule,
-          MatDialogModule,
-          MatInputModule,
-          BrowserAnimationsModule,
+          ScientificMetadataTreeModule
         ],
         providers: [
           FormBuilder,

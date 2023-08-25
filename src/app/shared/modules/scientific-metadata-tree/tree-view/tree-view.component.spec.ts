@@ -2,6 +2,7 @@ import { DatePipe } from "@angular/common";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
+import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.modules";
 
 import { TreeViewComponent } from "./tree-view.component";
 
@@ -12,6 +13,9 @@ describe("TreeViewComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ TreeViewComponent ],
+      imports: [
+        ScientificMetadataTreeModule
+      ],
       providers:[
         DatePipe,
         PrettyUnitPipe,

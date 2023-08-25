@@ -4,13 +4,7 @@ import { MetadataEditComponent } from "./metadata-edit.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 
 import { FormBuilder } from "@angular/forms";
-import { MatAutocompleteModule } from "@angular/material/autocomplete";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatOptionModule } from "@angular/material/core";
-import { MatSelectModule } from "@angular/material/select";
-import { MatInputModule } from "@angular/material/input";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
+import { ScientificMetadataModule } from "../scientific-metadata.module";
 
 describe("MetadataEditComponent", () => {
   let component: MetadataEditComponent;
@@ -22,13 +16,7 @@ describe("MetadataEditComponent", () => {
         schemas: [NO_ERRORS_SCHEMA],
         declarations: [MetadataEditComponent],
         imports: [
-          MatAutocompleteModule,
-          MatButtonModule,
-          MatFormFieldModule,
-          MatIconModule,
-          MatInputModule,
-          MatOptionModule,
-          MatSelectModule,
+          ScientificMetadataModule
         ],
         providers: [FormBuilder],
       }).compileComponents();
