@@ -183,4 +183,4 @@ export class MockScicatDataSource extends SciCatDataSource {
     ) {
       return {};
     }
-  };
+  }
