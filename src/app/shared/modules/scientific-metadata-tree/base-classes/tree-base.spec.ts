@@ -1,12 +1,11 @@
 import { DatePipe } from "@angular/common";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
-import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { MatMenuModule } from "@angular/material/menu";
-import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { DateTime } from "luxon";
 import { FlatNode, TreeNode } from "../base-classes/tree-base";
 import { TreeEditComponent } from "../tree-edit/tree-edit.component";
+import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.modules";
 
 describe("TreeBaseComponent", () => {
   let component: TreeEditComponent;
@@ -16,10 +15,7 @@ describe("TreeBaseComponent", () => {
     TestBed.configureTestingModule({
       declarations: [TreeEditComponent],
       imports: [
-        MatDialogModule,
-        MatSnackBarModule,
-        MatMenuModule,
-        BrowserAnimationsModule
+        ScientificMetadataTreeModule
       ],
       providers: [
         MatDialog,
