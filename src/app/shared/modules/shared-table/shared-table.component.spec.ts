@@ -11,7 +11,9 @@ import { SharedTableComponent } from "./shared-table.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { MatMenuModule } from "@angular/material/menu";
 import { FormBuilder, FormControl } from "@angular/forms";
-import { Column } from "./shared-table.module";
+import { Column, SharedTableModule } from "./shared-table.module";
+import { MockAppConfigService, MockScicatDataSource } from "shared/MockStubs";
+import { AppConfigService } from "app-config.service";
 
 describe("SharedTableComponent", () => {
   let component: SharedTableComponent;
@@ -20,15 +22,20 @@ describe("SharedTableComponent", () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [],
-        imports: [],
+        imports: [
+          SharedTableModule, RouterTestingModule
+        ],
         providers: [FormBuilder],
       }).compileComponents();
     })
   );
-  const dataSource = {
-    loadAllData: () => {},
-    loadExportData: () => {},
-  } as SciCatDataSource;
+
+  const dataSource = new MockScicatDataSource(
+        (new MockAppConfigService(null) as unknown) as AppConfigService,
+        null,
+        null,
+        { collections: null, columns: null }
+  );
 
   // const dataTable = jasmine.createSpyObj("MatTable", ["_elementRef"]);
   const dataTable = {
@@ -75,8 +82,11 @@ describe("SharedTableComponent", () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [RouterTestingModule, MatMenuModule],
+        imports: [
+          SharedTableModule, RouterTestingModule
+        ],
         declarations: [SharedTableComponent],
+        providers: [FormBuilder]
       }).compileComponents();
     })
   );
