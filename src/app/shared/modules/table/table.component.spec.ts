@@ -8,18 +8,10 @@ import {
 } from "./table.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 
-import { PipesModule } from "../../pipes/pipes.module";
-import { MatListModule } from "@angular/material/list";
-import { MatPaginatorModule } from "@angular/material/paginator";
-import { MatTableModule } from "@angular/material/table";
 import {
   MatCheckboxChange,
-  MatCheckboxModule,
 } from "@angular/material/checkbox";
-import { MatIconModule } from "@angular/material/icon";
-import { MatCardModule } from "@angular/material/card";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatLineModule } from "@angular/material/core";
+import { TableModule } from "./table.module";
 
 describe("TableComponent", () => {
   let component: TableComponent;
@@ -31,15 +23,7 @@ describe("TableComponent", () => {
         schemas: [NO_ERRORS_SCHEMA],
         declarations: [TableComponent],
         imports: [
-          MatCardModule,
-          MatCheckboxModule,
-          MatDividerModule,
-          MatIconModule,
-          MatLineModule,
-          MatListModule,
-          MatPaginatorModule,
-          MatTableModule,
-          PipesModule,
+          TableModule
         ],
         providers: [DatePipe],
       });
