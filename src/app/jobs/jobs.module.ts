@@ -12,6 +12,7 @@ import { jobsReducer } from "state-management/reducers/jobs.reducer";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { JobsDashboardNewComponent } from "./jobs-dashboard-new/jobs-dashboard-new.component";
+import { SharedTableModule } from "shared/modules/shared-table/shared-table.module";
 
 @NgModule({
   declarations: [JobsDetailComponent, JobsDashboardComponent, JobsDashboardNewComponent],
@@ -23,6 +24,7 @@ import { JobsDashboardNewComponent } from "./jobs-dashboard-new/jobs-dashboard-n
     MatCardModule,
     MatIconModule,
     SharedScicatFrontendModule,
+    SharedTableModule,
     StoreModule.forFeature("jobs", jobsReducer)
   ],
   exports: [JobsDetailComponent, JobsDashboardComponent, JobsDashboardNewComponent]
