@@ -192,5 +192,5 @@ export class MockScicatDataSource extends SciCatDataSource {
     getToken = () => ({ id: "test", ttl: null, scopes:null, created: null, user: null, userId: null, rememberMe: false } );
     getAccessToken = () => ({ id: "test" });
     getAccessTokenId = () => ( "test" );
-  };
+  }
 
