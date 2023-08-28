@@ -4,6 +4,8 @@ import { Observable, of } from "rxjs";
 import { convertToParamMap, UrlTree } from "@angular/router";
 import { AppConfig } from "app-config.module";
 import { SciCatDataSource } from "./services/scicat.datasource";
+import { LoopBackAuth, SDKToken } from "./sdk";
+import { Injectable } from "@angular/core";
 
 export class MockUserApi {
   getCurrentId() {
@@ -184,3 +186,11 @@ export class MockScicatDataSource extends SciCatDataSource {
       return {};
     }
   }
+
+  @Injectable()
+  export class MockLoopBackAuth  extends LoopBackAuth {
+    getToken = () => ({ id: "test", ttl: null, scopes:null, created: null, user: null, userId: null, rememberMe: false } );
+    getAccessToken = () => ({ id: "test" });
+    getAccessTokenId = () => ( "test" );
+  };
+
