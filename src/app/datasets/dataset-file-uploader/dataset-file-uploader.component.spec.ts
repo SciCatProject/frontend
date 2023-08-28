@@ -11,6 +11,7 @@ import {
 } from "state-management/actions/datasets.actions";
 
 import { DatasetFileUploaderComponent } from "./dataset-file-uploader.component";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 const router = {
   navigateByUrl: jasmine.createSpy("navigateByUrl"),
 };
@@ -23,7 +24,8 @@ describe("DatasetFileUploaderComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DatasetFileUploaderComponent],
-      imports: [StoreModule.forRoot({})],
+      imports: [SharedScicatFrontendModule,
+        StoreModule.forRoot({})],
     }).compileComponents();
     TestBed.overrideComponent(DatasetFileUploaderComponent, {
       set: {
