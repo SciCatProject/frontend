@@ -18,7 +18,7 @@ export class SciCatDataSource implements DataSource<any> {
   private dataForExcel: unknown[] = [];
   private columnsdef: Column[] = [];
   private url = "";
-  private dataSubject = new BehaviorSubject<any[]>([]);
+  private dataSubject = new BehaviorSubject<any>(null);
   private dataExportSubject = new BehaviorSubject<any[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
   private countSubject = new BehaviorSubject<number>(0);
@@ -106,12 +106,13 @@ export class SciCatDataSource implements DataSource<any> {
       )
       .subscribe((data) => {
         // extend with unique field per row
-        const rows: Record<string, unknown>[] = [];
+        //const rows: Record<string, unknown>[] = [];
         data.forEach((element: Record<string, unknown>, index: number) => {
           element["uniqueId"] = index + 1;
-          rows.push(element);
+          this.dataSubject.next(element);
+          //rows.push(element);
         });
-        this.dataSubject.next(rows);
+        //this.dataSubject.next(rows);
       });
   }
 
