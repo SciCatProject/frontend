@@ -3,6 +3,10 @@ import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from "@angular/materia
 import { MockMatDialogRef } from "shared/MockStubs";
 
 import { PublicDownloadDialogComponent } from "./public-download-dialog.component";
+import { MatFormFieldControl, MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { ReactiveFormsModule } from "@angular/forms";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("PublicDownloadDialogComponent", () => {
   let component: PublicDownloadDialogComponent;
@@ -13,7 +17,8 @@ describe("PublicDownloadDialogComponent", () => {
       TestBed.configureTestingModule({
         declarations: [ PublicDownloadDialogComponent ],
         imports:[
-          MatDialogModule
+          MatDialogModule,
+          MatFormFieldModule, MatInputModule,ReactiveFormsModule, BrowserAnimationsModule
         ]
       });
       TestBed.overrideComponent(PublicDownloadDialogComponent, {
