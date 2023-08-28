@@ -40,9 +40,6 @@ const data = {
 describe("ShareDialogComponent", () => {
   let component: ShareDialogComponent;
   let fixture: ComponentFixture<ShareDialogComponent>;
-  const MockLogbookApi = {
-
-  };
   const appconfig = (new MockAppConfigService(null) as unknown) as AppConfigService;
 
   beforeEach(async () => {
@@ -57,7 +54,7 @@ describe("ShareDialogComponent", () => {
         { provide: MatDialogRef, useValue: { close: () => {} } },
         { provide: Store, useClass: MockStore },
         { provide: UserIdentityApi, useClass: MockUserIdentityApi },
-        { provide: LogbookApi, useValue: MockLogbookApi},
+        { provide: LogbookApi, useValue: {}},
         { provide: DatasetApi, useClass: MockDatasetApi},
         { provide: AppConfigService, useValue: appconfig},
         { provide: HttpClient, useClass: MockHttp},
