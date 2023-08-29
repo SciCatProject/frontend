@@ -46,7 +46,7 @@ describe("ShareDialogComponent", () => {
     await TestBed.configureTestingModule({
       declarations: [ShareDialogComponent],
       imports: [
-        DatasetsModule,
+        DatasetsModule,BrowserAnimationsModule,
         EffectsModule.forRoot([]),
         StoreModule.forRoot({}),
       ],

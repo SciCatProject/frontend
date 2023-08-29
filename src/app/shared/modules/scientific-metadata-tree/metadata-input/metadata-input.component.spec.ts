@@ -9,6 +9,8 @@ import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.module
 
 import { MetadataInputComponent } from "./metadata-input.component";
 
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+
 describe("MetadataInputComponent", () => {
   let component: MetadataInputComponent;
   let fixture: ComponentFixture<MetadataInputComponent>;
@@ -17,7 +19,7 @@ describe("MetadataInputComponent", () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [MetadataInputComponent],
-        imports: [ScientificMetadataTreeModule],
+        imports: [ScientificMetadataTreeModule, BrowserAnimationsModule],
         providers: [FormBuilder, FormatNumberPipe],
       }).compileComponents();
     })

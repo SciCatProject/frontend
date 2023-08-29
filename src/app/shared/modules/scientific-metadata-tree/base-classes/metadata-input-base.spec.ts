@@ -5,6 +5,7 @@ import { FlatNodeEdit } from "../tree-edit/tree-edit.component";
 import { MetadataInputComponent} from "../metadata-input/metadata-input.component";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.modules";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("MetadataInputBase", () => {
   let component: MetadataInputComponent;
@@ -14,7 +15,7 @@ describe("MetadataInputBase", () => {
     TestBed.configureTestingModule({
       declarations: [MetadataInputComponent],
       imports: [
-        ScientificMetadataTreeModule,
+        ScientificMetadataTreeModule, BrowserAnimationsModule
       ],
       providers: [FormBuilder, FormatNumberPipe]
     })

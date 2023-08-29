@@ -6,6 +6,7 @@ import { DateTime } from "luxon";
 import { FlatNode, TreeNode } from "../base-classes/tree-base";
 import { TreeEditComponent } from "../tree-edit/tree-edit.component";
 import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.modules";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("TreeBaseComponent", () => {
   let component: TreeEditComponent;
@@ -15,7 +16,7 @@ describe("TreeBaseComponent", () => {
     TestBed.configureTestingModule({
       declarations: [TreeEditComponent],
       imports: [
-        ScientificMetadataTreeModule
+        ScientificMetadataTreeModule, BrowserAnimationsModule
       ],
       providers: [
         MatDialog,

@@ -9,6 +9,7 @@ import { InputData } from "../metadata-input/metadata-input.component";
 import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.modules";
 
 import { FlatNodeEdit, TreeEditComponent } from "./tree-edit.component";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("TreeEditComponent", () => {
   let component: TreeEditComponent;
@@ -18,7 +19,9 @@ describe("TreeEditComponent", () => {
     TestBed.configureTestingModule({
       declarations: [TreeEditComponent],
       imports: [
-        ScientificMetadataTreeModule],
+        ScientificMetadataTreeModule,
+        BrowserAnimationsModule
+      ],
       providers: [
         MatDialog,
         MatSnackBar,

@@ -16,6 +16,7 @@ import { SharedTableModule } from "shared/modules/shared-table/shared-table.modu
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { HttpClient } from "@angular/common/http";
 import { InternalStorage, LoopBackAuth } from "shared/sdk";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("JobsDashboardNewComponent", () => {
   let component: JobsDashboardNewComponent;
@@ -32,7 +33,7 @@ describe("JobsDashboardNewComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [JobsDashboardNewComponent],
-      imports: [SharedTableModule, SharedScicatFrontendModule],
+      imports: [SharedTableModule, SharedScicatFrontendModule, BrowserAnimationsModule],
       providers: [
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: AppConfigService, useValue: { getConfig } },

@@ -17,6 +17,7 @@ import { EffectsModule } from "@ngrx/effects";
 import { DatasetApi, LogbookApi, ProposalApi } from "shared/sdk";
 import { HttpClient } from "@angular/common/http";
 import { ScicatDataService } from "shared/services/scicat-data-service";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("ProposalDashboardComponent", () => {
   let component: ProposalDashboardComponent;
@@ -36,7 +37,7 @@ describe("ProposalDashboardComponent", () => {
       imports: [
         ProposalsModule,
         EffectsModule.forRoot([]),
-        StoreModule.forRoot({}),
+        StoreModule.forRoot({}),BrowserAnimationsModule
       ],
       providers: [
         {provide: HttpClient, useClass: MockHttp},

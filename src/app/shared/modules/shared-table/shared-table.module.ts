@@ -38,7 +38,6 @@ import {
 } from "@angular/material/core";
 import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from "ngx-material-luxon";
 import { MatMenuModule } from "@angular/material/menu";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 export interface Column {
   id: string;
   type?: string;
@@ -77,7 +76,6 @@ export interface Column {
     RouterModule,
     MatDatepickerModule,
     MatMenuModule,
-    BrowserAnimationsModule,
   ],
   exports: [SharedTableComponent],
   providers: [
