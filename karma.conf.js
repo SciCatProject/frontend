@@ -10,6 +10,8 @@ module.exports = function (config) {
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-coverage'),
+      require('karma-junit-reporter'),
+      require('karma-spec-reporter'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
     proxies: {
@@ -31,6 +33,11 @@ module.exports = function (config) {
     jasmineHtmlReporter: {
       suppressAll: true // removes the duplicated traces
     },
+    junitReporter: {
+	    outputFile: 'karma-junit.xml',
+	    useBrowserName: false,
+	    outputDir: '.'
+    },
     coverageReporter: {
       dir: require('path').join(__dirname, './coverage'),
       reporters: [
@@ -51,7 +58,7 @@ module.exports = function (config) {
         ]
       }
     },
-    reporters: ['progress', 'coverage'],
+    reporters: ['progress', 'coverage','junit','spec'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_DEBUG,
