@@ -30,7 +30,6 @@ import {
   NgxMatNativeDateModule,
   NgxMatTimepickerModule,
 } from "@angular-material-components/datetime-picker";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 @NgModule({
   declarations: [
     TreeEditComponent,
@@ -65,7 +64,6 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
-    BrowserAnimationsModule,
   ],
   exports: [TreeEditComponent, TreeViewComponent],
   providers: [

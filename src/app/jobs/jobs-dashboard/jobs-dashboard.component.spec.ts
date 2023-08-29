@@ -23,6 +23,7 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("JobsDashboardComponent", () => {
   let component: JobsDashboardComponent;
@@ -45,6 +46,7 @@ describe("JobsDashboardComponent", () => {
           MatCardModule,
           MatIconModule,
           SharedScicatFrontendModule,
+          BrowserAnimationsModule,
           StoreModule.forRoot({}),
         ],
         providers: [DatePipe],

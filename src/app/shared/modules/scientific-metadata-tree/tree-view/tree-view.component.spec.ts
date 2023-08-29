@@ -5,6 +5,7 @@ import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
 import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.modules";
 
 import { TreeViewComponent } from "./tree-view.component";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("TreeViewComponent", () => {
   let component: TreeViewComponent;
@@ -14,7 +15,8 @@ describe("TreeViewComponent", () => {
     TestBed.configureTestingModule({
       declarations: [ TreeViewComponent ],
       imports: [
-        ScientificMetadataTreeModule
+        ScientificMetadataTreeModule,
+        BrowserAnimationsModule
       ],
       providers:[
         DatePipe,

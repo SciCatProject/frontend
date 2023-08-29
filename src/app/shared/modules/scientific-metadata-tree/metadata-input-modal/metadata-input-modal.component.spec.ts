@@ -5,6 +5,7 @@ import { FormBuilder } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
 import { MockMatDialogRef } from "shared/MockStubs";
 import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.modules";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("MetadataInputModalComponent", () => {
   let component: MetadataInputModalComponent;
@@ -15,7 +16,7 @@ describe("MetadataInputModalComponent", () => {
       TestBed.configureTestingModule({
         declarations: [MetadataInputModalComponent],
         imports: [
-          ScientificMetadataTreeModule
+          ScientificMetadataTreeModule, BrowserAnimationsModule
         ],
         providers: [
           FormBuilder,

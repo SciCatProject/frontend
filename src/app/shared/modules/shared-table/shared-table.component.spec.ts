@@ -14,6 +14,7 @@ import { FormBuilder, FormControl } from "@angular/forms";
 import { Column, SharedTableModule } from "./shared-table.module";
 import { MockAppConfigService, MockScicatDataSource } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("SharedTableComponent", () => {
   let component: SharedTableComponent;
@@ -83,7 +84,7 @@ describe("SharedTableComponent", () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         imports: [
-          SharedTableModule, RouterTestingModule
+          SharedTableModule, RouterTestingModule,BrowserAnimationsModule
         ],
         declarations: [SharedTableComponent],
         providers: [FormBuilder]
