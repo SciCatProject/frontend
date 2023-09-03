@@ -4,6 +4,10 @@ on:
   pull_request:
     branches:
       - master
+
+env:
+  NODE_VERSION: 18.x
+
 jobs:
   test:
     name: Run tests
@@ -15,14 +19,14 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Cache node_modules
         id: cached-node-modules
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: node-modules-${{ hashFiles('package-lock.json') }}
+          key: node-modules-${{ hashFiles('package-lock.json') }}-${{ env.NODE_VERSION }}
 
       - name: Install dependencies
         if: steps.cached-node-modules.outputs.cache-hit != 'true'
