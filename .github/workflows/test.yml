@@ -2,20 +2,20 @@ name: Test
 
 on:
   pull_request:
-    branches: 
+    branches:
       - master
 jobs:
   test:
     name: Run tests
     runs-on: ubuntu-latest
-    steps:  
+    steps:
       - name: Check out
         uses: actions/checkout@v3
-        
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
 
       - name: Cache node_modules
         id: cached-node-modules
@@ -33,12 +33,12 @@ jobs:
           npm run lint
           npm run test
           npm run build
-      
+
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          
+
   e2etests:
     name: Run E2E Tests
     runs-on: ubuntu-latest
