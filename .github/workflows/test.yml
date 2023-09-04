@@ -15,7 +15,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
 
       - name: Cache node_modules
         id: cached-node-modules
@@ -46,6 +46,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
       - name: Run docker-compose
         run: |
           cp CI/ESS/e2e/docker-compose.e2e.yaml docker-compose.yaml
@@ -56,7 +61,7 @@ jobs:
       - name: Run Cypress tests
         uses: cypress-io/github-action@v5
         with:
-          config-file: CI/ESS/e2e/cypress.json
+          config-file: CI/ESS/e2e/cypress.github.json
           install-command: npm install --omit peer
           browser: chrome
 

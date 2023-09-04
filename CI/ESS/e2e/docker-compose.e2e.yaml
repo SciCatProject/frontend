@@ -4,7 +4,7 @@ services:
     image: traefik:2.5
     command: --api.insecure=true --providers.docker=true --entrypoints.web.address=:80
     ports:
-      - 8080:8080
+      - 8080:80
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   mongodb:
