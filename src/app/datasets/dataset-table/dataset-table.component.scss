@@ -11,28 +11,12 @@
     }
 
     mat-header-cell {
-      justify-content: left;
+      justify-content: center; // default is centered
 
       mat-icon {
         display: flex;
         padding-top: 0.25rem;
       }
-    }
-
-    mat-header-cell:nth-child(-n + 2) {
-      justify-content: left;
-    }
-
-    mat-header-cell:nth-child(n + 3) {
-      justify-content: center;
-    }
-
-    mat-cell:nth-child(-n + 2) {
-      justify-content: left;
-    }
-
-    mat-cell:nth-child(n + 3) {
-      justify-content: center;
     }
 
     mat-row {
@@ -43,6 +27,15 @@
       background-color: rgba(0, 0, 0, 0.1);
       cursor: pointer;
     }
+    mat-cell {
+      justify-content: center; // default is centered, use named columns below to override
+
+
+      mat-icon {
+        display: inline-table;
+      }
+
+    }
 
     .mat-column-standard_select {
       flex: 0 0 40px;
@@ -50,6 +43,7 @@
 
     .mat-column-standard_datasetName {
       flex: 1 0 200px;
+      justify-content: left;
     }
 
     .mat-column-standard_runNumber {
@@ -57,7 +51,7 @@
     }
 
     .mat-column-standard_sourceFolder {
-      flex: 0 1 90px;
+      flex: 0 1 100px;
     }
 
     .mat-column-standard_size {
@@ -81,7 +75,7 @@
     }
 
     .mat-column-standard_proposalId {
-      flex: 0 1 80px;
+      flex: 0 1 90px;
     }
 
     .mat-column-standard_ownerGroup {
