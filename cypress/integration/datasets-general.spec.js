@@ -58,13 +58,13 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[type="search"][data-placeholder="Text Search"]')
+      cy.get('input[type="search"][placeholder="Text Search"]')
         .clear()
         .type("Cypress");
 
       cy.isLoading();
 
-      cy.get(".mat-row").contains("Cypress Dataset").click();
+      cy.get("mat-row").contains("Cypress Dataset").click();
 
       cy.get('[data-cy="edit-general-information"]').should("exist");
 
@@ -89,7 +89,7 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get(".mat-row").contains("Cypress Dataset").click();
+      cy.get("mat-row").contains("Cypress Dataset").click();
     });
   });
 
@@ -105,13 +105,13 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[type="search"][data-placeholder="Text Search"]')
+      cy.get('input[type="search"][placeholder="Text Search"]')
         .clear()
         .type("Cypress");
 
       cy.isLoading();
 
-      cy.get(".mat-row").contains("Cypress Dataset").click();
+      cy.get("mat-row").contains("Cypress Dataset").click();
 
       cy.get('[data-cy="edit-general-information"]').should("exist");
 

@@ -29,13 +29,13 @@ describe("Datasets", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[type="search"][data-placeholder="Text Search"]')
+      cy.get('input[type="search"][placeholder="Text Search"]')
         .clear()
         .type("Cypress");
 
       cy.isLoading();
 
-      cy.get(".mat-row").contains("Cypress Dataset").first().click();
+      cy.get("mat-row").contains("Cypress Dataset").first().click();
 
       cy.wait("@fetch");
 
@@ -51,7 +51,7 @@ describe("Datasets", () => {
       cy.get("mat-select[data-cy=field-type-input]").last().click(); // opens the drop down
 
       // simulate click event on the drop down item (mat-option)
-      cy.get(".mat-option-text")
+      cy.get("mat-option")
         .contains("string")
         .then((option) => {
           option[0].click();
@@ -93,13 +93,13 @@ describe("Datasets", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[type="search"][data-placeholder="Text Search"]')
+      cy.get('input[type="search"][placeholder="Text Search"]')
         .clear()
         .type("Cypress");
 
       cy.isLoading();
 
-      cy.get(".mat-row").contains("Cypress Dataset").click();
+      cy.get("mat-row").contains("Cypress Dataset").click();
 
       cy.finishedLoading();
       cy.get('[role="tab"]').contains("Edit").click();

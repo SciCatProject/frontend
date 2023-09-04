@@ -26,13 +26,13 @@ describe("Datasets", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[type="search"][data-placeholder="Text Search"]')
+      cy.get('input[type="search"][placeholder="Text Search"]')
         .clear()
         .type("Cypress");
 
       cy.isLoading();
 
-      cy.get(".mat-row").contains("Cypress Dataset").click();
+      cy.get("mat-row").contains("Cypress Dataset").click();
 
       cy.wait("@fetch");
 
@@ -44,7 +44,7 @@ describe("Datasets", () => {
 
       cy.get("mat-select[formControlName=scriptForm]").first().click();
 
-      cy.get(".mat-option-text")
+      cy.get("mat-option")
         .contains("Plot")
         .then((option) => {
           option[0].click();

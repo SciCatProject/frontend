@@ -23,7 +23,7 @@ describe("Datasets", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[type="search"][data-placeholder="Text Search"]')
+      cy.get('input[type="search"][placeholder="Text Search"]')
         .clear()
         .type("Cypress");
 
@@ -43,25 +43,25 @@ describe("Datasets", () => {
 
       cy.get("#addUserButton").click();
 
-      cy.get(".mat-dialog-container .mat-chip-list .mat-chip")
+      cy.get("mat-dialog-content mat-chip-listbox mat-chip-option")
         .first()
         .should("contain.text", Cypress.config("guestUserEmail"));
 
       cy.get("#shareListButton").should("not.be.disabled");
       cy.get("#shareListButton").click();
 
-      cy.get(".mat-snack-bar-container.snackbar-success").should("exist");
+      cy.get(".snackbar-success").should("exist");
 
       cy.get("#shareButton").click();
 
-      cy.get(".mat-dialog-container .mat-chip-list .mat-chip")
+      cy.get("mat-dialog-content mat-chip-listbox mat-chip-option")
         .first()
         .should("contain.text", Cypress.config("guestUserEmail"));
 
       cy.get("#removeAllButton").should("not.be.disabled");
       cy.get("#removeAllButton").click();
 
-      cy.get(".mat-snack-bar-container.snackbar-success").should("exist");
+      cy.get(".snackbar-success").should("exist");
     });
   });
 });

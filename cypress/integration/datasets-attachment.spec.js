@@ -21,17 +21,17 @@ describe("Dataset attachments", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[type="search"][data-placeholder="Text Search"]')
+      cy.get('input[type="search"][placeholder="Text Search"]')
         .clear()
         .type("Cypress");
 
       cy.isLoading();
 
-      cy.get(".mat-row").contains("Cypress Dataset").first().click();
+      cy.get("mat-row").contains("Cypress Dataset").first().click();
 
       cy.isLoading();
 
-      cy.get(".mat-tab-link").contains("Attachments").click();
+      cy.get(".mat-mdc-tab-link").contains("Attachments").click();
 
       cy.fixture("attachment-image").then((file) => {
         cy.get(".dropzone").attachFile(
@@ -64,17 +64,17 @@ describe("Dataset attachments", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[type="search"][data-placeholder="Text Search"]')
+      cy.get('input[type="search"][placeholder="Text Search"]')
         .clear()
         .type("Cypress");
 
       cy.isLoading();
 
-      cy.get(".mat-row").contains("Cypress Dataset").first().click();
+      cy.get("mat-row").contains("Cypress Dataset").first().click();
 
       cy.isLoading();
 
-      cy.get(".mat-tab-link").contains("Attachments").click();
+      cy.get(".mat-mdc-tab-link").contains("Attachments").click();
 
       cy.get(".download-button").click();
 
@@ -89,17 +89,17 @@ describe("Dataset attachments", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[type="search"][data-placeholder="Text Search"]')
+      cy.get('input[type="search"][placeholder="Text Search"]')
         .clear()
         .type("Cypress");
 
       cy.isLoading();
 
-      cy.get(".mat-row").contains("Cypress Dataset").first().click();
+      cy.get("mat-row").contains("Cypress Dataset").first().click();
 
       cy.isLoading();
 
-      cy.get(".mat-tab-link").contains("Attachments").click();
+      cy.get(".mat-mdc-tab-link").contains("Attachments").click();
 
       cy.get(".delete-button").click();
 
