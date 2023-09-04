@@ -3,8 +3,9 @@
   mat-table {
     margin-bottom: 5em;
 
-    .mat-column-select {
+    .mat-column-standard_select, .mat-column-select {
       max-width: 75px;
+      justify-content: center;
     }
 
     mat-header-cell:first-child {
@@ -15,7 +16,7 @@
     }
 
     mat-cell:first-child {
-      justify-content: left;
+      justify-content: center;
     }
     mat-cell:nth-child(n + 2) {
       justify-content: left;
