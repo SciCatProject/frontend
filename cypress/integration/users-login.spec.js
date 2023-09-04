@@ -38,7 +38,7 @@ describe("Users Login", () => {
       .type("invalid")
       .should("have.value", "invalid");
 
-    cy.get("button[type=submit]").click();
+    cy.get("button[type=submit]").contains("Log in").click();
 
     cy.wait("@adLogin").then(({ request, response }) => {
       expect(request.method).to.eq("POST");
@@ -57,7 +57,7 @@ describe("Users Login", () => {
 
     cy.get(".mat-snack-bar-container").should("not.exist");
 
-    cy.get("button[type=submit]").click();
+    cy.get("button[type=submit]").contains("Log in").click();
 
     cy.wait("@funcLogin").then(({ request, response }) => {
       expect(request.method).to.eq("POST");
@@ -112,7 +112,7 @@ describe("Users Login", () => {
 
     cy.get("#passwordInput").type(password).should("have.value", password);
 
-    cy.get("button[type=submit]").click();
+    cy.get("button[type=submit]").contains("Log in").click();
 
     cy.get(".user-button").should("contain.text", username).click();
 
@@ -154,7 +154,7 @@ describe("Users Login", () => {
       .type(guestPassword)
       .should("have.value", guestPassword);
 
-    cy.get("button[type=submit]").click();
+    cy.get("button[type=submit]").contains("Log in").click();
 
     cy.get(".user-button").should("contain.text", guestUsername).click();
 
