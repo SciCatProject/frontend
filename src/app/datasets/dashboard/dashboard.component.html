@@ -11,8 +11,10 @@
             class="add-card"
             (click)="openDialog()"
           >
+          <mat-card-content>
             <mat-icon> add_circle </mat-icon>
             Create Dataset
+          </mat-card-content>
           </mat-card>
 
           <div *ngIf="!appConfig.shoppingCartOnHeader && (nonEmpty$ | async)">
