@@ -1,4 +1,8 @@
-{
+
+import { defineConfig } from 'cypress'
+
+export default defineConfig({
+  e2e: {
   "baseUrl": "http://localhost:4200",
   "lbBaseUrl": "http://localhost:8080/api/v3",
   "lbLoginEndpoint": "/Users/login",
@@ -13,4 +17,5 @@
   "guestPassword":"a609316768619f154ef58db4d847b75e",
   "defaultCommandTimeout": 10000,
   "retries": 1
-}
+},
+});
