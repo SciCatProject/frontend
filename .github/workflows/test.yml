@@ -59,7 +59,7 @@ jobs:
           docker-compose up &
 
       - name: Run Cypress tests
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with:
           config-file: CI/ESS/e2e/cypress.github.ts
           install-command: npm install --omit peer
