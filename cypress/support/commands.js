@@ -1,5 +1,3 @@
-import "cypress-file-upload";
-
 const lbBaseUrl = Cypress.config("lbBaseUrl");
 const loginEndpoint = Cypress.config("lbLoginEndpoint");
 const accessTokenPrefix = Cypress.config("lbTokenPrefix");
