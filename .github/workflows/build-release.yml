@@ -4,7 +4,7 @@ on:
   release:
     tags:
       - 'v*'
-    types: 
+    types:
       - created
 
 jobs:
@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
@@ -27,12 +27,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Create image tags
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: | 
+          images: |
             ghcr.io/${{ github.repository }}
             scicatproject/frontend
           flavor: latest=false
