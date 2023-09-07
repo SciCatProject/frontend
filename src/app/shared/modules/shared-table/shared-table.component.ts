@@ -14,7 +14,7 @@ import {
   OnInit,
 } from "@angular/core";
 import { ViewportRuler } from "@angular/cdk/scrolling";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTable } from "@angular/material/table";
@@ -165,7 +165,7 @@ export class SharedTableComponent
       .pipe(debounceTime(650))
       .subscribe((values: { [key: string]: any }) => {
         const queryParams: { [key: string]: string | null } = {};
-        for (let [columnId, value] of Object.entries(values)) {
+        for (const [columnId, value] of Object.entries(values)) {
           // handle date filters
           if (
             (columnId.endsWith(".start") || columnId.endsWith(".end")) &&
@@ -229,7 +229,8 @@ export class SharedTableComponent
     this.sort.direction = queryParams.sortDirection || "asc";
     this.paginator.pageIndex = Number(queryParams.pageIndex) || 0;
     this.paginator.pageSize = Number(queryParams.pageSize) || this.pageSize;
-    for (let [filter, control] of Object.entries(this.filterForm.controls)) {
+    for (const [filter, xcontrol] of Object.entries(this.filterForm.controls)) {
+      const control = xcontrol as FormControl<string>;
       if (filter in queryParams) {
         const value = queryParams[filter];
         control.setValue(value);
@@ -379,7 +380,7 @@ export class SharedTableComponent
   }
 
   resetFilters() {
-    Object.values(this.filterForm.controls).forEach((control) => {
+    Object.values(this.filterForm.controls).forEach((control: FormControl) => {
       control.setValue("");
     });
     this.filterExpressions = {};

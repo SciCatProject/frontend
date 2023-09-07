@@ -1,4 +1,4 @@
-FROM node:9.1
+FROM node:18
 
 RUN apt-get update && \
     DEBIAN_FRONTEND="noninteractive" \

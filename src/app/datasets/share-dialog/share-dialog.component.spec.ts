@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-empty-function:0 */
+
 import {
   ComponentFixture,
   fakeAsync,
@@ -15,14 +17,18 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { Store } from "@ngrx/store";
+import { Store, StoreModule } from "@ngrx/store";
 import { of } from "rxjs";
-import { MockStore, MockUserIdentityApi } from "shared/MockStubs";
-import { UserIdentityApi } from "shared/sdk";
+import { MockAppConfigService, MockDatasetApi, MockHttp, MockLoopBackAuth, MockPublishedDataApi, MockStore, MockUserApi, MockUserIdentityApi } from "shared/MockStubs";
+import { DatasetApi, InstrumentApi, InternalStorage, JobApi, LogbookApi, LoopBackAuth, ProposalApi, PublishedDataApi, SampleApi, UserApi, UserIdentityApi } from "shared/sdk";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
 
 import { ShareDialogComponent } from "./share-dialog.component";
+import { DatasetsModule } from "datasets/datasets.module";
+import { EffectsModule } from "@ngrx/effects";
+import { AppConfigService } from "app-config.service";
+import { HttpClient } from "@angular/common/http";
 
 const data = {
   infoMessage: "",
@@ -30,27 +36,38 @@ const data = {
   sharedUsersList: [],
 };
 
+
 describe("ShareDialogComponent", () => {
   let component: ShareDialogComponent;
   let fixture: ComponentFixture<ShareDialogComponent>;
+  const appconfig = (new MockAppConfigService(null) as unknown) as AppConfigService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ShareDialogComponent],
       imports: [
-        BrowserAnimationsModule,
-        MatButtonModule,
-        MatChipsModule,
-        MatDialogModule,
-        MatFormFieldModule,
-        MatIconModule,
-        MatInputModule,
+        DatasetsModule,BrowserAnimationsModule,
+        EffectsModule.forRoot([]),
+        StoreModule.forRoot({}),
       ],
       providers: [
         { provide: MatDialogRef, useValue: { close: () => {} } },
         { provide: Store, useClass: MockStore },
         { provide: UserIdentityApi, useClass: MockUserIdentityApi },
+        { provide: LogbookApi, useValue: {}},
+        { provide: DatasetApi, useClass: MockDatasetApi},
+        { provide: AppConfigService, useValue: appconfig},
+        { provide: HttpClient, useClass: MockHttp},
+        { provide: LoopBackAuth, useClass: MockLoopBackAuth},
+        { provide: UserApi, useClass: MockUserApi},
+        { provide: InstrumentApi , useValue: {}},
+        { provide: JobApi, useValue: {}},
+        { provide: ProposalApi, useValue: {}},
+        { provide: SampleApi, useValue: {}},
+        { provide: PublishedDataApi, useClass: MockPublishedDataApi},
         { provide: MAT_DIALOG_DATA, useValue: data },
+        InternalStorage
+
       ],
     }).compileComponents();
   });

@@ -6,7 +6,8 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Dataset, UserApi } from "shared/sdk";
+import { Dataset  } from "shared/sdk/models";
+import { UserApi } from "shared/sdk";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import {
   selectIsAdmin,
@@ -135,7 +136,7 @@ export class DatasetDetailsDashboardComponent
             .subscribe(([groups, isAdmin, isLoggedIn]) => {
               const isInOwnerGroup =
                 groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
-              const hasAccessToLogbook = 
+              const hasAccessToLogbook =
                 isInOwnerGroup || this.dataset.accessGroups.some(g => groups.includes(g));
               this.navLinks = [
                 {
@@ -219,8 +220,7 @@ export class DatasetDetailsDashboardComponent
   }
   fetchDataForTab(tab: string) {
     if (tab in this.fetchDataActions) {
-      let args: { [key: string]: any };
-      args = { pid: this.dataset?.pid };
+      const  args: { [key: string]: any }= { pid: this.dataset?.pid };
       // load related data for selected tab
       switch (tab) {
         case TAB.details:
@@ -247,19 +247,19 @@ export class DatasetDetailsDashboardComponent
     if (this.dataset) {
       if ("proposalId" in this.dataset) {
         this.store.dispatch(
-          fetchProposalAction({ proposalId: this.dataset["proposalId"] })
+          fetchProposalAction({ proposalId: this.dataset["proposalId"] as string })
         );
       } else {
         this.store.dispatch(clearLogbookAction());
       }
       if ("sampleId" in this.dataset) {
         this.store.dispatch(
-          fetchSampleAction({ sampleId: this.dataset["sampleId"] })
+          fetchSampleAction({ sampleId: this.dataset["sampleId"] as string })
         );
       }
       if ("instrumentId" in this.dataset) {
         this.store.dispatch(
-          fetchInstrumentAction({ pid: this.dataset["instrumentId"] })
+          fetchInstrumentAction({ pid: this.dataset["instrumentId"] as string})
         );
       }
     }

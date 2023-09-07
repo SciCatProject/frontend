@@ -1,6 +1,6 @@
 <div fxLayout="row">
   <div fxFlex="140">
-    <mat-card>
+    <mat-card appearance="outlined">
       <p>You are about to publish {{ datasetCount }} datasets.</p>
 
       <form>
@@ -17,14 +17,14 @@
         </mat-form-field>
 
         <mat-form-field>
-          <mat-chip-list required #chipListCreators>
-            <mat-chip
+          <mat-chip-grid required #chipListCreators>
+            <mat-chip-row
               *ngFor="let name of form.creators"
               (removed)="removeCreator(name)"
             >
               {{ name }}
               <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip>
+            </mat-chip-row>
             <input
               matInput
               placeholder="Creators"
@@ -33,7 +33,7 @@
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               (matChipInputTokenEnd)="addCreator($event)"
             />
-          </mat-chip-list>
+          </mat-chip-grid>
         </mat-form-field>
 
         <mat-form-field>
@@ -96,14 +96,14 @@
         </mat-form-field>
 
         <mat-form-field>
-          <mat-chip-list #chipListRelatedPub>
-            <mat-chip
+          <mat-chip-grid #chipListRelatedPub>
+            <mat-chip-row
               *ngFor="let relatedPublication of form.relatedPublications"
               (removed)="removeRelatedPublication(relatedPublication)"
             >
               {{ relatedPublication }}
               <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip>
+            </mat-chip-row>
             <input
               matInput
               placeholder="related publications"
@@ -112,7 +112,7 @@
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               (matChipInputTokenEnd)="addRelatedPublication($event)"
             />
-          </mat-chip-list>
+          </mat-chip-grid>
         </mat-form-field>
 
         <button
@@ -128,7 +128,7 @@
     </mat-card>
   </div>
   <div fxFlex="30">
-    <mat-card *ngIf="form.thumbnail">
+    <mat-card appearance="outlined" *ngIf="form.thumbnail">
       <img mat-card-image src="{{ form.thumbnail }}" />
     </mat-card>
   </div>

@@ -23,6 +23,7 @@ import { AppConfigService, OAuth2Endpoint } from "app-config.service";
 import { provideMockStore } from "@ngrx/store/testing";
 import { selectLoginPageViewModel } from "state-management/selectors/user.selectors";
 import { HttpErrorResponse } from "@angular/common/http";
+import { MatTabsModule } from "@angular/material/tabs";
 
 const getConfig = () => ({
   archiveWorkflowEnabled: true,
@@ -53,6 +54,7 @@ describe("LoginComponent", () => {
           MatFormFieldModule,
           MatIconModule,
           MatInputModule,
+          MatTabsModule,
           ReactiveFormsModule,
           StoreModule.forRoot({}),
         ],

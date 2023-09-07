@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
+import { RouterModule, Routes, ExtraOptions} from "@angular/router";
 
 import { ErrorPageComponent } from "shared/modules/error-page/error-page.component";
 import { AppLayoutComponent } from "_layout/app-layout/app-layout.component";
@@ -104,10 +104,9 @@ export const routes: Routes = [
 
 ];
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: "legacy" })],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
   providers: [],
 })
 export class AppRoutingModule {
-  constructor() {}
 }

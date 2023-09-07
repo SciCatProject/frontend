@@ -1,9 +1,11 @@
 @media only screen and (min-width: 1280px) {
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   mat-table {
     margin-bottom: 5em;
 
-    .mat-column-select {
+    .mat-column-standard_select, .mat-column-select {
       max-width: 75px;
+      justify-content: center;
     }
 
     mat-header-cell:first-child {
@@ -14,7 +16,7 @@
     }
 
     mat-cell:first-child {
-      justify-content: left;
+      justify-content: center;
     }
     mat-cell:nth-child(n + 2) {
       justify-content: left;
@@ -25,7 +27,7 @@
       cursor: pointer;
     }
   }
-
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
   mat-card.smallData {
     display: none;
   }
@@ -35,14 +37,15 @@
   .largeData {
     display: none;
   }
-
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
+  /* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
   mat-card.smallData {
     margin: 1em 0;
 
     .title {
       font-size: 1.1em;
     }
-
+    /* TODO(mdc-migration): The following rule targets internal classes of list that may no longer apply for the MDC version. */
     mat-list-item:hover {
       background-color: rgba(0, 0, 0, 0.1);
       cursor: pointer;

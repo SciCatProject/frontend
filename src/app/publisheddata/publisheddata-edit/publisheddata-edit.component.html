@@ -1,6 +1,6 @@
 <div fxLayout="row">
   <div fxFlex="140">
-    <mat-card>
+    <mat-card appearance="outlined">
       <p>You are editing Published Data record.</p>
 
       <form
@@ -21,15 +21,15 @@
         </mat-form-field>
 
         <mat-form-field>
-          <mat-chip-list required #chipList>
-            <mat-chip
+          <mat-chip-grid required #chipList>
+            <mat-chip-row
               formArrayName="creator"
               *ngFor="let item of creator.value; let i = index"
               (removed)="removeCreator(i)"
             >
               {{ item }}
               <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip>
+            </mat-chip-row>
             <input
               matInput
               placeholder="Creators"
@@ -38,7 +38,7 @@
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               (matChipInputTokenEnd)="addCreator($event)"
             />
-          </mat-chip-list>
+          </mat-chip-grid>
         </mat-form-field>
 
         <mat-form-field>
@@ -101,15 +101,15 @@
         </mat-form-field>
 
         <mat-form-field>
-          <mat-chip-list #chipListRelatedPub>
-            <mat-chip
+          <mat-chip-grid #chipListRelatedPub>
+            <mat-chip-row
               formArrayName="relatedPublications"
               *ngFor="let item of relatedPublications.value; let i = index"
               (removed)="removeRelatedPublication(i)"
             >
               {{ item }}
               <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip>
+            </mat-chip-row>
             <input
               matInput
               placeholder="related publications"
@@ -118,7 +118,7 @@
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               (matChipInputTokenEnd)="addRelatedPublication($event)"
             />
-          </mat-chip-list>
+          </mat-chip-grid>
         </mat-form-field>
 
         <button mat-raised-button color="primary" [disabled]="!form.valid">
@@ -138,7 +138,7 @@
         (deleteAttachment)="deleteAttachment($event)"
       ></app-file-uploader>
     </div>
-    <mat-card *ngIf="thumbnail">
+    <mat-card appearance="outlined" *ngIf="thumbnail">
       <img mat-card-image src="{{ thumbnail.value }}" />
     </mat-card>
   </div>

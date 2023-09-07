@@ -2,27 +2,30 @@ name: Test
 
 on:
   pull_request:
-    branches: 
+    branches:
       - master
+env:
+  NODE_VERSION: 18.x
+
 jobs:
   test:
     name: Run tests
     runs-on: ubuntu-latest
-    steps:  
+    steps:
       - name: Check out
-        uses: actions/checkout@v3
-        
+        uses: actions/checkout@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Cache node_modules
         id: cached-node-modules
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: node-modules-${{ hashFiles('package-lock.json') }}
+          key: node-modules-${{ hashFiles('package-lock.json') }}-${{ env.NODE_VERSION }}
 
       - name: Install dependencies
         if: steps.cached-node-modules.outputs.cache-hit != 'true'
@@ -33,18 +36,23 @@ jobs:
           npm run lint
           npm run test
           npm run build
-      
+
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          
+
   e2etests:
     name: Run E2E Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Run docker-compose
         run: |
@@ -54,9 +62,9 @@ jobs:
           docker-compose up &
 
       - name: Run Cypress tests
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with:
-          config-file: CI/ESS/e2e/cypress.json
+          config-file: CI/ESS/e2e/cypress.github.ts
           install-command: npm install --omit peer
           browser: chrome
 

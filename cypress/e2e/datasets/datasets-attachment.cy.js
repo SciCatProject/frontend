@@ -21,28 +21,22 @@ describe("Dataset attachments", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[type="search"][data-placeholder="Text Search"]')
+      cy.get('input[type="search"][placeholder="Text Search"]')
         .clear()
         .type("Cypress");
 
       cy.isLoading();
 
-      cy.get(".mat-row").contains("Cypress Dataset").first().click();
+      cy.get("mat-row").contains("Cypress Dataset").first().click();
 
       cy.isLoading();
 
-      cy.get(".mat-tab-link").contains("Attachments").click();
+      cy.get(".mat-mdc-tab-link").contains("Attachments").click();
 
-      cy.fixture("attachment-image").then((file) => {
-        cy.get(".dropzone").attachFile(
-          {
-            fileContent: file.content,
-            fileName: file.name,
-            mimeType: file.mimeType,
-          },
-          { subjectType: "drag-n-drop", force: true }
-        );
-      });
+      cy.get(".dropzone").selectFile(
+        "cypress/fixtures/scicat-logo.png",	
+        { action: "drag-drop", force: true }
+      );
 
       cy.wait("@upload").then(({ request, response }) => {
         expect(request.method).to.eq("POST");
@@ -53,7 +47,7 @@ describe("Dataset attachments", () => {
 
       cy.get(".attachment-card #caption").should(
         "have.value",
-        "SciCatLogo.png"
+        "scicat-logo.png"
       );
     });
 
@@ -64,22 +58,22 @@ describe("Dataset attachments", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[type="search"][data-placeholder="Text Search"]')
+      cy.get('input[type="search"][placeholder="Text Search"]')
         .clear()
         .type("Cypress");
 
       cy.isLoading();
 
-      cy.get(".mat-row").contains("Cypress Dataset").first().click();
+      cy.get("mat-row").contains("Cypress Dataset").first().click();
 
       cy.isLoading();
 
-      cy.get(".mat-tab-link").contains("Attachments").click();
+      cy.get(".mat-mdc-tab-link").contains("Attachments").click();
 
       cy.get(".download-button").click();
 
       const downloadsFolder = Cypress.config("downloadsFolder");
-      cy.readFile(path.join(downloadsFolder, "SciCatLogo.png")).should("exist");
+      cy.readFile(path.join(downloadsFolder, "scicat-logo.png")).should("exist");
     });
 
     it("should be able to delete dataset attachment", () => {
@@ -89,17 +83,17 @@ describe("Dataset attachments", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[type="search"][data-placeholder="Text Search"]')
+      cy.get('input[type="search"][placeholder="Text Search"]')
         .clear()
         .type("Cypress");
 
       cy.isLoading();
 
-      cy.get(".mat-row").contains("Cypress Dataset").first().click();
+      cy.get("mat-row").contains("Cypress Dataset").first().click();
 
       cy.isLoading();
 
-      cy.get(".mat-tab-link").contains("Attachments").click();
+      cy.get(".mat-mdc-tab-link").contains("Attachments").click();
 
       cy.get(".delete-button").click();
 

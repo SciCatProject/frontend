@@ -12,6 +12,7 @@ import {
 import { selectRelatedDatasetsPageViewModel } from "state-management/selectors/datasets.selectors";
 
 import { RelatedDatasetsComponent } from "./related-datasets.component";
+import { TableModule } from "shared/modules/table/table.module";
 
 describe("RelatedDatasetsComponent", () => {
   let component: RelatedDatasetsComponent;
@@ -26,6 +27,9 @@ describe("RelatedDatasetsComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RelatedDatasetsComponent],
+      imports: [
+        TableModule
+      ],
       providers: [
         DatePipe,
         provideMockStore({

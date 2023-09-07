@@ -23,7 +23,7 @@
       (rowClick)="onRowClick($event)"
     ></app-table>
     <div class="no-jobs-message" *ngIf="jobs.length === 0">
-      <mat-card> <mat-icon>info</mat-icon> You have no jobs yet. </mat-card>
+      <mat-card appearance="outlined"> <mat-icon>info</mat-icon> You have no jobs yet. </mat-card>
     </div>
   </div>
   <div fxFlex="26" fxFlex.lt-xl="10"></div>

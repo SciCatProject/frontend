@@ -176,7 +176,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   }
 
   onRetrieve() {
-    let dialogOptions = this.archivingSrv.retriveDialogOptions(
+    const dialogOptions = this.archivingSrv.retriveDialogOptions(
       this.appConfig.retrieveDestinations
     );
     const dialogRef = this.dialog.open(DialogComponent, dialogOptions);

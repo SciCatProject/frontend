@@ -1,27 +1,25 @@
 import { DatePipe } from "@angular/common";
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { MatMenuModule } from "@angular/material/menu";
-import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { async, ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar} from "@angular/material/snack-bar";
 import { DateTime } from "luxon";
 import { Type } from "../base-classes/metadata-input-base";
 import { TreeNode } from "../base-classes/tree-base";
 import { InputData } from "../metadata-input/metadata-input.component";
+import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.modules";
 
 import { FlatNodeEdit, TreeEditComponent } from "./tree-edit.component";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("TreeEditComponent", () => {
   let component: TreeEditComponent;
   let fixture: ComponentFixture<TreeEditComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [TreeEditComponent],
       imports: [
-        MatDialogModule,
-        MatSnackBarModule,
-        MatMenuModule,
+        ScientificMetadataTreeModule,
         BrowserAnimationsModule
       ],
       providers: [

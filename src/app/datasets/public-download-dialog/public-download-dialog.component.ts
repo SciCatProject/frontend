@@ -11,7 +11,6 @@ export class PublicDownloadDialogComponent {
   emailFormControl = new FormControl("", [Validators.required, Validators.email]);
   constructor(
     public dialogRef: MatDialogRef<PublicDownloadDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {email: string}
   ) { }
   hasError(): boolean {
     return this.emailFormControl.hasError("required") || this.emailFormControl.hasError("email");
@@ -25,6 +24,7 @@ export class PublicDownloadDialogComponent {
     }
     return "";
   }
+
   onCancel(): void {
     this.dialogRef.close();
     this.emailFormControl.errors;

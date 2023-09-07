@@ -12,7 +12,7 @@ import { UnitsService } from "shared/services/units.service";
 export class SearchParametersDialogComponent {
   appConfig = this.appConfigService.getConfig();
   unitsEnabled = this.appConfig.scienceSearchUnitsEnabled;
-  
+
   parameterKeys = this.data.parameterKeys;
   units: string[] = [];
 
@@ -22,7 +22,7 @@ export class SearchParametersDialogComponent {
       Validators.required,
       Validators.minLength(9),
     ]),
-    rhs: new FormControl("", [Validators.required, Validators.minLength(1)]),
+    rhs: new FormControl<string|number>("", [Validators.required, Validators.minLength(1)]),
     unit: new FormControl(""),
   });
 
@@ -88,7 +88,7 @@ export class SearchParametersDialogComponent {
     if (relation !== "EQUAL_TO_STRING" && isNaN(Number(rhs))) {
       return true;
     }
-    return lhs.length * rhs.length === 0;
+    return lhs.length * (rhs as string).length === 0;
   };
 
   get lhs(): string {

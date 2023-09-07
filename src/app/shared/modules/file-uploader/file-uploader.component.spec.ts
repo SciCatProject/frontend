@@ -4,12 +4,8 @@ import {
   FileUploaderComponent,
   SubmitCaptionEvent,
 } from "./file-uploader.component";
-import { MatCardModule } from "@angular/material/card";
-import { MatButtonModule } from "@angular/material/button";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
-import { MatIconModule } from "@angular/material/icon";
 import { DragAndDropDirective } from "./directives/drag-and-drop.directive";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 
 describe("FileUploaderComponent", () => {
   let component: FileUploaderComponent;
@@ -20,11 +16,7 @@ describe("FileUploaderComponent", () => {
       TestBed.configureTestingModule({
         schemas: [NO_ERRORS_SCHEMA],
         imports: [
-          MatButtonModule,
-          MatCardModule,
-          MatFormFieldModule,
-          MatIconModule,
-          MatInputModule,
+          SharedScicatFrontendModule,
         ],
         providers: [DragAndDropDirective],
         declarations: [FileUploaderComponent],

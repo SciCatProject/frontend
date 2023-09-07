@@ -21,7 +21,6 @@ export class LeavingPageGuard implements CanDeactivate<EditableComponent> {
   /**
    * Needs to return either a boolean or an observable that maps to a boolean
    */
-  constructor(){}
   canDeactivate(component: EditableComponent): Observable<boolean> | boolean {
     return component.hasUnsavedChanges()?
       confirm("You have unsaved changes. Press Cancel to go back and save these changes, or OK to leave without saving")

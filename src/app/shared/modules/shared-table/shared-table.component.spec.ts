@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-empty-function:0 */
+
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
@@ -8,8 +10,11 @@ import { SciCatDataSource } from "shared/services/scicat.datasource";
 import { SharedTableComponent } from "./shared-table.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { MatMenuModule } from "@angular/material/menu";
-import { FormBuilder } from "@angular/forms";
-import { Column } from "./shared-table.module";
+import { FormBuilder, FormControl } from "@angular/forms";
+import { Column, SharedTableModule } from "./shared-table.module";
+import { MockAppConfigService, MockScicatDataSource } from "shared/MockStubs";
+import { AppConfigService } from "app-config.service";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("SharedTableComponent", () => {
   let component: SharedTableComponent;
@@ -18,15 +23,20 @@ describe("SharedTableComponent", () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [],
-        imports: [],
+        imports: [
+          SharedTableModule, RouterTestingModule
+        ],
         providers: [FormBuilder],
       }).compileComponents();
     })
   );
-  const dataSource = {
-    loadAllData: () => {},
-    loadExportData: () => {},
-  } as SciCatDataSource;
+
+  const dataSource = new MockScicatDataSource(
+        (new MockAppConfigService(null) as unknown) as AppConfigService,
+        null,
+        null,
+        { collections: null, columns: null }
+  );
 
   // const dataTable = jasmine.createSpyObj("MatTable", ["_elementRef"]);
   const dataTable = {
@@ -64,7 +74,7 @@ describe("SharedTableComponent", () => {
       canSort: true,
       hideOrder: 7,
     },
-  ];;
+  ];
 
   const paginator = {
     page: of({}),
@@ -73,8 +83,11 @@ describe("SharedTableComponent", () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [RouterTestingModule, MatMenuModule],
+        imports: [
+          SharedTableModule, RouterTestingModule,BrowserAnimationsModule
+        ],
         declarations: [SharedTableComponent],
+        providers: [FormBuilder]
       }).compileComponents();
     })
   );
@@ -172,11 +185,13 @@ describe("SharedTableComponent", () => {
 
   describe("#resetFilters()", () => {
     it("should empty all filter inputs", () => {
-      Object.values(component.filterForm.controls).forEach((control) => {
+      Object.values(component.filterForm.controls).forEach((xcontrol) => {
+        const control = xcontrol as FormControl<string>;
         control.setValue("test");
       });
       component.resetFilters();
-      Object.values(component.filterForm.controls).forEach((control) => {
+      Object.values(component.filterForm.controls).forEach((xcontrol) => {
+        const control = xcontrol as FormControl<string>;
         expect(control.value).toEqual("");
       });
       expect(component.filterExpressions).toEqual({});

@@ -40,7 +40,7 @@ describe("Samples", function () {
         expect(response.statusCode).to.eq(200);
       });
 
-      cy.get(".mat-table").children().should("contain.text", "Cypress Sample");
+      cy.get("mat-table").children().should("contain.text", "Cypress Sample");
     });
   });
 });

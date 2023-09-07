@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Proposal, Dataset, Attachment } from "shared/sdk";
+import { Proposal, Dataset, Attachment } from "shared/sdk/models";
 import { ProposalFilters } from "state-management/state/proposals.store";
 
 export const fetchProposalsAction = createAction("[Proposal] Fetch Proposals");

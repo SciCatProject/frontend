@@ -20,9 +20,10 @@ import {
 } from "state-management/actions/jobs.actions";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("JobsDashboardComponent", () => {
   let component: JobsDashboardComponent;
@@ -45,6 +46,7 @@ describe("JobsDashboardComponent", () => {
           MatCardModule,
           MatIconModule,
           SharedScicatFrontendModule,
+          BrowserAnimationsModule,
           StoreModule.forRoot({}),
         ],
         providers: [DatePipe],

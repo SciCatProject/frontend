@@ -66,7 +66,7 @@ describe("Sample Selectors", () => {
     it("should select the attachments from the current sample", () => {
       expect(
         fromSelectors.selectCurrentAttachments.projector(
-          initialSampleState.currentSample
+          initialSampleState
         )
       ).toEqual([]);
     });
@@ -228,7 +228,7 @@ describe("Sample Selectors", () => {
           ),
           initialSampleState.datasetsCount,
           fromSelectors.selectCurrentAttachments.projector(
-            initialSampleState.currentSample
+            initialSampleState
           ),
           initialUserState.currentUser
         )

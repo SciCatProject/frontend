@@ -91,12 +91,12 @@ export class LoginComponent implements OnInit, OnDestroy {
    * @memberof LoginComponent
    */
   onLogin() {
-    const form: LoginForm = this.loginForm.value;
+    const form: LoginForm = this.loginForm.value as LoginForm;
     this.store.dispatch(funcLoginAction({form}));
   }
 
   onLdapLogin() {
-    const form: LoginForm = this.loginForm.value;
+    const form: LoginForm = this.loginForm.value as LoginForm;
     this.store.dispatch(loginAction({ form }));
   }
 
@@ -125,7 +125,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe((params) => {
       // OIDC logins eventually redirect to this componenet, adding information about user
       // which are parsed here.
-      if (!!params.returnUrl) {
+      if (params.returnUrl) {
         // dispatching to the loginOIDCAction passes information to eventually be added to Loopback AccessToken
         const accessToken = params["access-token"];
         const userId = params["user-id"];

@@ -28,13 +28,13 @@ describe("Datasets", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[type="search"][data-placeholder="Text Search"]')
+      cy.get('input[type="search"][placeholder="Text Search"]')
         .clear()
         .type("Cypress");
 
       cy.isLoading();
 
-      cy.get(".mat-row").contains("Cypress Dataset").click();
+      cy.get("mat-row").contains("Cypress Dataset").click();
 
       cy.wait("@fetch");
 
@@ -68,19 +68,19 @@ describe("Datasets", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[type="search"][data-placeholder="Text Search"]')
+      cy.get('input[type="search"][placeholder="Text Search"]')
         .clear()
         .type("Cypress");
 
       cy.isLoading();
 
-      cy.get(".mat-row").contains("Cypress Dataset").click();
+      cy.get("mat-row").contains("Cypress Dataset").click();
 
       cy.wait("@fetch");
 
       cy.get('[data-cy="edit-general-information"]').click();
 
-      cy.get("input.mat-chip-input").type("cypresskey{enter}");
+      cy.get("input.mat-mdc-chip-input").type("cypresskey{enter}");
 
       cy.get('[data-cy="save-general-information"]').click();
 
@@ -89,7 +89,7 @@ describe("Datasets", () => {
         expect(response.statusCode).to.eq(200);
       });
 
-      cy.get(".mat-chip-list").children().should("contain.text", "cypresskey");
+      cy.get("mat-chip-set").children().should("contain.text", "cypresskey");
     });
 
     it("should go to dataset details and remove the added keyword", () => {
@@ -99,17 +99,17 @@ describe("Datasets", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[type="search"][data-placeholder="Text Search"]')
+      cy.get('input[type="search"][placeholder="Text Search"]')
         .clear()
         .type("Cypress");
 
       cy.isLoading();
 
-      cy.get(".mat-row").contains("Cypress Dataset").click();
+      cy.get("mat-row").contains("Cypress Dataset").click();
 
       cy.get('[data-cy="edit-general-information"]').click();
 
-      cy.contains("cypresskey").children(".mat-chip-remove").click();
+      cy.contains("cypresskey").parents('mat-chip-row').find(".mat-mdc-chip-remove").first().click();
 
       cy.get('[data-cy="save-general-information"]').click();
 
@@ -118,7 +118,7 @@ describe("Datasets", () => {
         expect(response.statusCode).to.eq(200);
       });
 
-      cy.get(".mat-chip-list").children().should("not.contain", "cypresskey");
+      cy.get("mat-chip-set").children().should("not.contain", "cypresskey");
     });
   });
 });

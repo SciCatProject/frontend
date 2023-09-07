@@ -5,8 +5,11 @@ import { DateTime } from "luxon";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { Type } from "../base-classes/metadata-input-base";
 import { FlatNodeEdit } from "../tree-edit/tree-edit.component";
+import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.modules";
 
 import { MetadataInputComponent } from "./metadata-input.component";
+
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("MetadataInputComponent", () => {
   let component: MetadataInputComponent;
@@ -16,7 +19,7 @@ describe("MetadataInputComponent", () => {
     waitForAsync(() => {
       TestBed.configureTestingModule({
         declarations: [MetadataInputComponent],
-        imports: [MatAutocompleteModule],
+        imports: [ScientificMetadataTreeModule, BrowserAnimationsModule],
         providers: [FormBuilder, FormatNumberPipe],
       }).compileComponents();
     })

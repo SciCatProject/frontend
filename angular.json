@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "schematics": {
+    "@schematics/angular": "scss"
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -108,8 +111,11 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "src/polyfills.ts",
+              "zone.js",
+              "zone.js/testing"
+            ],
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",
@@ -151,8 +157,7 @@
       }
     }
   },
-  "defaultProject": "scicat-frontend",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "analytics": false
   }
 }

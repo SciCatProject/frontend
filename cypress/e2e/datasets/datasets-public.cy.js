@@ -26,19 +26,19 @@ describe("Datasets", () => {
 
       cy.finishedLoading();
 
-      cy.get('input[type="search"][data-placeholder="Text Search"]')
+      cy.get('input[type="search"][placeholder="Text Search"]')
         .clear()
         .type("Cypress");
 
       cy.isLoading();
 
-      cy.contains(".mat-row", "Cypress Dataset").first().click();
+      cy.contains("mat-row", "Cypress Dataset").first().click();
 
       cy.wait("@fetch");
 
-      cy.get(".mat-slide-toggle-label").contains("Public").as("publicToggle");
+      cy.get("mat-slide-toggle").as("publicToggle");
 
-      cy.get("mat-slide-toggle").should("not.have.class", "mat-checked");
+      cy.get("@publicToggle").should("not.have.class", "mat-mdc-slide-toggle-checked");
 
       cy.get("@publicToggle").click();
 
@@ -47,7 +47,7 @@ describe("Datasets", () => {
         expect(response.statusCode).to.eq(200);
       });
 
-      cy.get("mat-slide-toggle").should("have.class", "mat-checked");
+      cy.get("@publicToggle").should("have.class", "mat-mdc-slide-toggle-checked");
     });
   });
 });

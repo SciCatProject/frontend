@@ -69,7 +69,7 @@ export class SampleEditComponent implements OnInit, OnDestroy {
   ];
 
   form = new FormGroup({
-    sample: new FormControl("", [Validators.required, this.sampleValidator()]),
+    sample: new FormControl<Sample>(null, [Validators.required, this.sampleValidator()]),
   });
 
   constructor(
@@ -97,7 +97,8 @@ export class SampleEditComponent implements OnInit, OnDestroy {
 
   sampleValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
-      const isCurrentSample = control.value.sampleId === this.data.sampleId;
+
+      const isCurrentSample = control.value?.sampleId === this.data.sampleId;
       return isCurrentSample
         ? { isCurrentSample: { value: control.value } }
         : null;

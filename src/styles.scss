@@ -36,7 +36,7 @@ $custom-typography: mat.define-typography-config(
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat.core($custom-typography);
+@include mat.core();
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
@@ -154,42 +154,32 @@ $header-3: mat.define-palette($theme-header-3, "default", "lighter", "darker");
 $header-4: mat.define-palette($theme-header-4, "default", "lighter", "darker");
 $hover: mat.define-palette($theme-hover, "default", "lighter", "darker");
 
-@function custom-light-theme(
-  $primary,
-  $accent,
-  $warn,
-  $warn-2,
-  $header-1,
-  $header-2,
-  $header-3,
-  $header-4,
-  $hover
-) {
-  @return map-merge(
-    mat.define-light-theme($primary, $accent, $warn),
-    (
-      warn-2: $warn-2,
-      header-1: $header-1,
-      header-2: $header-2,
-      header-3: $header-4,
-      header-4: $header-4,
-      hover: $hover,
-    )
-  );
-}
+$basetheme: mat.define-light-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn,
+    ),
+    typography: $custom-typography,
+    density: -1,
+  )
+);
 
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$theme: custom-light-theme(
-  $primary,
-  $accent,
-  $warn,
-  $warn-2,
-  $header-1,
-  $header-2,
-  $header-3,
-  $header-4,
-  $hover
+$newcolor: map-merge(map-get($basetheme, "color"),(
+  warn-2: $warn-2,
+  header-1: $header-1,
+  header-2: $header-2,
+  header-3: $header-4,
+  header-4: $header-4,
+  hover: $hover,
+));
+
+$theme: map-merge(
+  $basetheme,
+  (
+    color: $newcolor
+  )
 );
 
 // Include theme styles for core and each component used in your app.
@@ -240,7 +230,8 @@ a:hover {
   cursor: pointer;
 }
 
-.no-hover-effect.mat-button .mat-button-focus-overlay {
+/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
+.no-hover-effect.mat-mdc-button .mat-button-focus-overlay {
   background-color: transparent;
 }
 
@@ -258,4 +249,11 @@ a:hover {
   button {
     color: white;
   }
+}
+
+mat-card {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  padding-top: 0.5ex;
+  padding-bottom: 0.5ex;
 }

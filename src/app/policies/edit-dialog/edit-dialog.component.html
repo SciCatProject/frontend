@@ -12,20 +12,19 @@
     }}</mat-list-item>
   </mat-expansion-panel>
 
-  <mat-card>
+  <mat-card appearance="outlined">
     <form [formGroup]="form" class="edit-dialog">
       <mat-dialog-content [formGroup]="form">
         <mat-form-field (click)="controlClick(manager)">
-          <mat-chip-list #manager formControlName="manager" data-cy="managerChipList">
-            <mat-chip
+          <mat-chip-grid #manager formControlName="manager" data-cy="managerChipList">
+            <mat-chip-row
               *ngFor="let manager of data.selectedPolicy.manager"
               (removed)="removeManager(manager)"
-              [selectable]="selectable"
               [removable]="true"
             >
               {{ manager }}
               <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip>
+            </mat-chip-row>
             <input
               data-cy="managerInput"
               matInput
@@ -35,7 +34,7 @@
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               (matChipInputTokenEnd)="addManager($event)"
             />
-          </mat-chip-list>
+          </mat-chip-grid>
         </mat-form-field>
 
         <mat-form-field (click)="controlClick(autoArchive)">
@@ -89,21 +88,20 @@
         </mat-form-field>
 
         <mat-form-field (click)="controlClick(archiveEmailsToBeNotified)">
-          <mat-chip-list
+          <mat-chip-grid
             #archiveEmailsToBeNotified
             formControlName="archiveEmailsToBeNotified"
           >
-            <mat-chip
+            <mat-chip-row
               *ngFor="
                 let email of data.selectedPolicy.archiveEmailsToBeNotified
               "
               (removed)="removeArchiveEmail(email)"
-              [selectable]="selectable"
               [removable]="true"
             >
               {{ email }}
               <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip>
+            </mat-chip-row>
             <input
               placeholder="Archive Emails to be Notified"
               formControlName="archiveEmailsToBeNotified"
@@ -112,7 +110,7 @@
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               (matChipInputTokenEnd)="addArchiveEmails($event)"
             />
-          </mat-chip-list>
+          </mat-chip-grid>
         </mat-form-field>
 
         <mat-form-field (click)="controlClick(retrieveEmailNotification)">
@@ -128,21 +126,20 @@
         </mat-form-field>
 
         <mat-form-field (click)="controlClick(retrieveEmailsToBeNotified)">
-          <mat-chip-list
+          <mat-chip-grid
             #retrieveEmailsToBeNotified
             formControlName="retrieveEmailsToBeNotified"
           >
-            <mat-chip
+            <mat-chip-row
               *ngFor="
                 let email of data.selectedPolicy.retrieveEmailsToBeNotified
               "
               (removed)="removeRetrieveEmail(email)"
-              [selectable]="selectable"
               [removable]="true"
             >
               {{ email }}
               <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip>
+            </mat-chip-row>
             <input
               placeholder="Retrieve Emails to be Notified"
               formControlName="retrieveEmailsToBeNotified"
@@ -151,7 +148,7 @@
               [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
               (matChipInputTokenEnd)="addRetrieveEmails($event)"
             />
-          </mat-chip-list>
+          </mat-chip-grid>
         </mat-form-field>
       </mat-dialog-content>
     </form>

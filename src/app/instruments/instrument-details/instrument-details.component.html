@@ -1,7 +1,7 @@
 <ng-container *ngIf="instrument$ | async as instrument">
   <div fxLayout="row" fxLayout.xs="column">
     <div fxFlex="80">
-      <mat-card>
+      <mat-card appearance="outlined">
         <mat-card-header class="general-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> description </mat-icon>
@@ -26,7 +26,7 @@
         </div>
       </mat-card>
 
-      <mat-card *ngIf="instrument.customMetadata as value">
+      <mat-card appearance="outlined" *ngIf="instrument.customMetadata as value">
         <mat-card-header class="customMetadata-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> science </mat-icon>

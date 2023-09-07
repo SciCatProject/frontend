@@ -42,7 +42,7 @@ import {
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("PoliciesDashboardComponent", () => {
@@ -318,11 +318,11 @@ describe("PoliciesDashboardComponent", () => {
       );
     });
   });
-
+/*
   describe("#openDialog()", () => {
     xit("should...", () => {});
   });
-
+*/
   describe("#onDialogClose()", () => {
     it("should do nothing if there is no result", () => {
       dispatchSpy = spyOn(store, "dispatch");

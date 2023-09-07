@@ -2,7 +2,7 @@ import { UserEffects } from "./../state-management/effects/user.effects";
 import { EffectsModule } from "@ngrx/effects";
 import { ADAuthService } from "./adauth.service";
 import { CommonModule } from "@angular/common";
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { LoginComponent } from "users/login/login.component";
 import { NgModule } from "@angular/core";

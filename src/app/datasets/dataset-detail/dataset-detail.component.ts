@@ -1,7 +1,11 @@
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { Dataset, Proposal, Sample } from "shared/sdk/models";
 import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
-import { MatChipInputEvent } from "@angular/material/chips";
+import {MatChipEditedEvent, MatChipInputEvent} from "@angular/material/chips";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import {NgFor} from "@angular/common";
+import {MatIconModule} from "@angular/material/icon";
+
 import { MatDialog } from "@angular/material/dialog";
 import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
@@ -56,6 +60,7 @@ import { DOCUMENT } from "@angular/common";
   selector: "dataset-detail",
   templateUrl: "./dataset-detail.component.html",
   styleUrls: ["./dataset-detail.component.scss"],
+  standalone: false,
 })
 export class DatasetDetailComponent
   implements OnInit, OnDestroy, EditableComponent {

@@ -8,6 +8,7 @@ import { JobsDetailComponent } from "./jobs-detail.component";
 import { ActivatedRoute } from "@angular/router";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
+import { SharedTableModule } from "shared/modules/shared-table/shared-table.module";
 
 describe("JobsDetailComponent", () => {
   let component: JobsDetailComponent;
@@ -21,6 +22,7 @@ describe("JobsDetailComponent", () => {
           MatCardModule,
           MatIconModule,
           ReactiveFormsModule,
+          SharedTableModule,
           StoreModule.forRoot({}),
         ],
         declarations: [JobsDetailComponent],

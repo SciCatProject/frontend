@@ -5,7 +5,7 @@
   padding-right: 1em;
 }
 ::ng-deep .table-toolbar {
-  .mat-paginator-range-label {
+  .mat-mdc-paginator-range-label {
     // Hide range label on small screen
     @media only screen and (max-width: 1279px) {
       display: none;
@@ -22,13 +22,13 @@
 
 ::ng-deep
   .table-toolbar
-  mat-form-field.mat-form-field-appearance-standard
+  mat-form-field.mat-mdc-form-field-appearance-standard
   .mat-form-field-flex {
   padding-top: 0;
 }
 
 // Align search icon with placeholder
-::ng-deep .table-toolbar mat-form-field .mat-form-field-prefix,
+::ng-deep .table-toolbar mat-form-field .mat-mdc-form-field-prefix,
 .mat-form-field-suffix {
   align-self: flex-end;
 }
@@ -108,7 +108,7 @@ div.shared-table-title {
 }
 
 //Styling for filter columns and row
-::ng-deep .mat-table {
+::ng-deep .mat-mdc-table {
   mat-header-cell,
   mat-cell {
     padding-right: 1em;
@@ -116,17 +116,20 @@ div.shared-table-title {
   mat-form-field {
     width: 100%;
   }
-  .mat-cell {
+  .mat-mdc-cell {
     word-break: break-word;
   }
   .mat-form-field-appearance-outline {
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-wrapper {
       margin: 0.25em 0;
     }
+    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
     .mat-form-field-infix {
       padding: 0.5em 0 0.5em 0;
     }
   }
+  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
   .mat-form-field-wrapper {
     padding-bottom: 0em;
   }

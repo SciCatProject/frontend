@@ -3,6 +3,8 @@ import { Store, StoreModule } from "@ngrx/store";
 import { MockStore } from "@ngrx/store/testing";
 import { Dataset } from "shared/sdk";
 import { AdminTabComponent } from "./admin-tab.component";
+import { MatCardModule } from "@angular/material/card";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("AdminTabComponent", () => {
   let component: AdminTabComponent;
@@ -11,7 +13,9 @@ describe("AdminTabComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ AdminTabComponent ],
+
       imports: [
+        MatCardModule,
         StoreModule.forRoot({}),
       ]
     })

@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { FormBuilder } from "@angular/forms";
-import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { Type } from "../base-classes/metadata-input-base";
 import { FlatNodeEdit } from "../tree-edit/tree-edit.component";
 import { MetadataInputComponent} from "../metadata-input/metadata-input.component";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
+import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.modules";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("MetadataInputBase", () => {
   let component: MetadataInputComponent;
@@ -14,7 +15,7 @@ describe("MetadataInputBase", () => {
     TestBed.configureTestingModule({
       declarations: [MetadataInputComponent],
       imports: [
-        MatAutocompleteModule,
+        ScientificMetadataTreeModule, BrowserAnimationsModule
       ],
       providers: [FormBuilder, FormatNumberPipe]
     })

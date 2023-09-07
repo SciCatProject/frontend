@@ -7,7 +7,7 @@ import { BrowserModule, Title } from "@angular/platform-browser";
 import { EffectsModule } from "@ngrx/effects";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { APP_INITIALIZER, NgModule } from "@angular/core";
-import { RouterModule } from "@angular/router";
+import { ExtraOptions, RouterModule } from "@angular/router";
 import { SampleApi, SDKBrowserModule } from "shared/sdk/index";
 import { StoreModule } from "@ngrx/store";
 import { UserApi } from "shared/sdk/services";
@@ -15,6 +15,9 @@ import { routerReducer } from "@ngrx/router-store";
 import { extModules } from "./build-specifics";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import { MatTabsModule } from "@angular/material/tabs";
+import {MatChipsModule} from "@angular/material/chips";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { LayoutModule } from "_layout/layout.module";
 import { AppConfigService } from "app-config.service";
@@ -39,6 +42,9 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
     HttpClientModule,
     LayoutModule,
     MatProgressSpinnerModule,
+    MatFormFieldModule,
+    MatTabsModule,
+    MatChipsModule,
     MatSnackBarModule,
     SDKBrowserModule.forRoot(),
     StoreModule.forRoot(
@@ -55,8 +61,7 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
     extModules,
     RouterModule.forRoot(routes, {
       useHash: false,
-      relativeLinkResolution: "legacy",
-    }),
+    } as ExtraOptions),
     EffectsModule.forRoot([]),
   ],
   exports: [MatNativeDateModule],

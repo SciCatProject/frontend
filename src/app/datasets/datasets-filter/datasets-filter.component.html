@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card appearance="outlined">
   <div class="section-container">
     <span class="title">Search</span>
     <button
@@ -35,15 +35,15 @@
   </app-search-bar>
 
   <mat-form-field>
-    <mat-chip-list #locationChipList>
-      <mat-chip
+    <mat-chip-grid #locationChipList>
+      <mat-chip-row
         *ngFor="let location of locationFilter$ | async"
         [removable]="true"
         (removed)="locationRemoved(location)"
         >{{ location || "No Location" }}
         <mat-icon matChipRemove>cancel</mat-icon>
-      </mat-chip>
-    </mat-chip-list>
+      </mat-chip-row>
+    </mat-chip-grid>
     <input
       (input)="onLocationInput($event)"
       [value]="locationInput$ | async"
@@ -67,14 +67,14 @@
   </mat-form-field>
 
   <mat-form-field>
-    <mat-chip-list #groupChipList>
-      <mat-chip
+    <mat-chip-grid #groupChipList>
+      <mat-chip-row
         *ngFor="let group of groupFilter$ | async"
         [removable]="true"
         (removed)="groupRemoved(group)"
         >{{ group }}<mat-icon matChipRemove>cancel</mat-icon>
-      </mat-chip>
-    </mat-chip-list>
+      </mat-chip-row>
+    </mat-chip-grid>
     <input
       (input)="onGroupInput($event)"
       [value]="groupInput$ | async"
@@ -98,14 +98,14 @@
   </mat-form-field>
 
   <mat-form-field>
-    <mat-chip-list #typeChipList>
-      <mat-chip
+    <mat-chip-grid #typeChipList>
+      <mat-chip-row
         *ngFor="let type of typeFilter$ | async"
         [removable]="true"
         (removed)="typeRemoved(type)"
         >{{ type }}<mat-icon matChipRemove>cancel</mat-icon>
-      </mat-chip>
-    </mat-chip-list>
+      </mat-chip-row>
+    </mat-chip-grid>
     <input
       (input)="onKeywordInput($event)"
       [value]="typeInput$ | async"
@@ -129,14 +129,14 @@
   </mat-form-field>
 
   <mat-form-field>
-    <mat-chip-list #keywordChipList>
-      <mat-chip
+    <mat-chip-grid #keywordChipList>
+      <mat-chip-row
         *ngFor="let keyword of keywordsFilter$ | async"
         [removable]="true"
         (removed)="keywordRemoved(keyword)"
         >{{ keyword }}<mat-icon matChipRemove>cancel</mat-icon>
-      </mat-chip>
-    </mat-chip-list>
+      </mat-chip-row>
+    </mat-chip-grid>
     <input
       (input)="onKeywordInput($event)"
       [value]="keywordsInput$ | async"
@@ -184,8 +184,8 @@
       <mat-icon>add</mat-icon> Add Condition
     </button>
 
-    <mat-chip-list class="scientific-chips" aria-orientation="vertical">
-      <mat-chip
+    <mat-chip-listbox class="scientific-chips" aria-orientation="vertical">
+      <mat-chip-option
         *ngFor="let condition of scientificConditions$ | async; index as i"
       >
         {{ condition.lhs }}
@@ -212,7 +212,7 @@
         <mat-icon matChipRemove (click)="removeCondition(condition, i)"
           >cancel</mat-icon
         >
-      </mat-chip>
-    </mat-chip-list>
+      </mat-chip-option>
+    </mat-chip-listbox>
   </div>
 </mat-card>

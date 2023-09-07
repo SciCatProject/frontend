@@ -35,7 +35,7 @@ describe("Policies", () => {
       cy.get(".mat-column-ownerGroup")
         .contains(ownerGroup)
         .parent()
-        .find(".mat-checkbox")
+        .find(".mdc-checkbox")
         .click();
 
       cy.get("[data-cy=editSelection]").click({ force: true });
