@@ -51,7 +51,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
     private appConfigService: AppConfigService,
     private archivingSrv: ArchivingService,
     public dialog: MatDialog,
-    private store: Store
+    private store: Store,
   ) {}
 
   /**
@@ -65,7 +65,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   onViewPublicChange(value: boolean): void {
     this.currentPublicViewMode = value;
     this.store.dispatch(
-      setPublicViewModeAction({ isPublished: this.currentPublicViewMode })
+      setPublicViewModeAction({ isPublished: this.currentPublicViewMode }),
     );
   }
 
@@ -96,8 +96,8 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
                   content: err.message,
                   duration: 5000,
                 },
-              })
-            )
+              }),
+            ),
         );
       }
     });
@@ -110,14 +110,14 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   retrieveClickHandle(): void {
     const destPath = { destinationPath: "/archive/retrieve" };
     const dialogOptions = this.archivingSrv.retriveDialogOptions(
-      this.appConfig.retrieveDestinations
+      this.appConfig.retrieveDestinations,
     );
     const dialogRef = this.dialog.open(DialogComponent, dialogOptions);
     dialogRef.afterClosed().subscribe((result) => {
       if (result && this.selectedSets) {
         const locationOption = this.archivingSrv.generateOptionLocation(
           result,
-          this.appConfig.retrieveDestinations
+          this.appConfig.retrieveDestinations,
         );
         const extra = { ...destPath, ...locationOption };
         this.archivingSrv.retrieve(this.selectedSets, extra).subscribe(
@@ -130,8 +130,8 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
                   content: err.message,
                   duration: 5000,
                 },
-              })
-            )
+              }),
+            ),
         );
       }
     });
@@ -148,13 +148,13 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
         .select(selectArchiveViewMode)
         .subscribe((mode: ArchViewMode) => {
           this.currentArchViewMode = mode;
-        })
+        }),
     );
 
     this.subscriptions.push(
       this.store.select(selectPublicViewMode).subscribe((publicViewMode) => {
         this.currentPublicViewMode = publicViewMode;
-      })
+      }),
     );
 
     this.subscriptions.push(
@@ -162,7 +162,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
         if (!err) {
           this.store.dispatch(clearSelectionAction());
         }
-      })
+      }),
     );
   }
 

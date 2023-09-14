@@ -85,13 +85,13 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     private store: Store,
     private appConfigService: AppConfigService,
     private dataService: ScicatDataService,
-    private exportService: ExportExcelService
+    private exportService: ExportExcelService,
   ) {
     this.dataSource = new SciCatDataSource(
       this.appConfigService,
       this.dataService,
       this.exportService,
-      this.tableDefinition
+      this.tableDefinition,
     );
   }
 
@@ -111,7 +111,7 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
     const message = new Message(
       "The selected DOI's have been copied to your clipboard",
       MessageType.Success,
-      5000
+      5000,
     );
     this.store.dispatch(showMessageAction({ message }));
   }
@@ -127,7 +127,7 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   }) {
     if (event.event.checked) {
       this.selectedDOIs = event.selection.selected.map(
-        ({ doi }) => this.doiBaseUrl + encodeURIComponent(doi)
+        ({ doi }) => this.doiBaseUrl + encodeURIComponent(doi),
       );
     } else {
       this.selectedDOIs = [];

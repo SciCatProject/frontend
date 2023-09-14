@@ -11,33 +11,34 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { DateTime } from "luxon";
-import { MatDatepickerInputEvent, MatDatepickerModule } from "@angular/material/datepicker";
+import {
+  MatDatepickerInputEvent,
+  MatDatepickerModule,
+} from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 
 describe("ProposalFilterComponent", () => {
   let component: ProposalFilterComponent;
   let fixture: ComponentFixture<ProposalFilterComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [ProposalFilterComponent],
-        imports: [
-          BrowserAnimationsModule,
-          MatButtonModule,
-          MatCardModule,
-          MatDatepickerModule,
-          MatExpansionModule,
-          MatFormFieldModule,
-          MatIconModule,
-          MatInputModule,
-          MatNativeDateModule,
-          SharedScicatFrontendModule,
-        ],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [ProposalFilterComponent],
+      imports: [
+        BrowserAnimationsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatDatepickerModule,
+        MatExpansionModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatNativeDateModule,
+        SharedScicatFrontendModule,
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ProposalFilterComponent);

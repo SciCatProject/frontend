@@ -29,7 +29,7 @@ export class InstrumentsDashboardComponent implements OnInit {
         ...instrument,
         customMetadata: this.jsonHeadPipe.transform(instrument.customMetadata),
       })),
-    }))
+    })),
   );
 
   tablePaginate = true;
@@ -41,7 +41,7 @@ export class InstrumentsDashboardComponent implements OnInit {
   constructor(
     private jsonHeadPipe: JsonHeadPipe,
     private router: Router,
-    private store: Store
+    private store: Store,
   ) {}
 
   onPageChange(event: PageChangeEvent): void {

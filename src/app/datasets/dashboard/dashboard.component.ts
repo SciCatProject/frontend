@@ -58,12 +58,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   tableColumns$ = this.store
     .select(selectColumns)
     .pipe(
-      map((columns) => columns.filter((column) => column.name !== "select"))
+      map((columns) => columns.filter((column) => column.name !== "select")),
     );
   selectableColumns$ = this.store
     .select(selectColumns)
     .pipe(
-      map((columns) => columns.filter((column) => column.name !== "select"))
+      map((columns) => columns.filter((column) => column.name !== "select")),
     );
   public nonEmpty$ = this.store
     .select(selectDatasetsInBatch)
@@ -85,7 +85,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private store: Store,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   onSettingsClick(): void {
@@ -106,11 +106,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const { checkBoxChange, column } = event;
     if (checkBoxChange.checked) {
       this.store.dispatch(
-        selectColumnAction({ name: column.name, columnType: column.type })
+        selectColumnAction({ name: column.name, columnType: column.type }),
       );
     } else if (!checkBoxChange.checked) {
       this.store.dispatch(
-        deselectColumnAction({ name: column.name, columnType: column.type })
+        deselectColumnAction({ name: column.name, columnType: column.type }),
       );
     }
   }
@@ -167,13 +167,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
             .select(selectColumns)
             .pipe(
               map((columns) =>
-                columns.filter((column) => column.name !== "select")
-              )
+                columns.filter((column) => column.name !== "select"),
+              ),
             );
         } else {
           this.tableColumns$ = this.store.select(selectColumns);
         }
-      })
+      }),
     );
   }
 
@@ -187,7 +187,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       combineLatest([this.filters$, this.readyToFetch$, this.loggedIn$])
         .pipe(
           map(([filters, _, loggedIn]) => [filters, loggedIn]),
-          distinctUntilChanged(deepEqual)
+          distinctUntilChanged(deepEqual),
         )
         .subscribe((obj) => {
           this.store.dispatch(fetchDatasetsAction());
@@ -195,7 +195,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.router.navigate(["/datasets"], {
             queryParams: { args: JSON.stringify(obj[0]) },
           });
-        })
+        }),
     );
 
     this.subscriptions.push(
@@ -203,11 +203,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
         .pipe(
           map((params) => params.args as string),
           take(1),
-          map((args) => (args ? (JSON.parse(args) as DatasetFilters) : {}))
+          map((args) => (args ? (JSON.parse(args) as DatasetFilters) : {})),
         )
         .subscribe((filters) =>
-          this.store.dispatch(prefillFiltersAction({ values: filters }))
-        )
+          this.store.dispatch(prefillFiltersAction({ values: filters })),
+        ),
     );
 
     this.subscriptions.push(
@@ -215,7 +215,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         if (user) {
           this.currentUser = user;
         }
-      })
+      }),
     );
 
     this.subscriptions.push(
@@ -223,7 +223,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         if (profile) {
           this.userGroups = profile.accessGroups;
         }
-      })
+      }),
     );
 
     this.subscriptions.push(
@@ -239,7 +239,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             })
             .unsubscribe();
         }
-      })
+      }),
     );
   }
 

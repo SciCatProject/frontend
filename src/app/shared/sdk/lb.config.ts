@@ -1,51 +1,51 @@
 /* eslint-disable */
 /**
-* @module LoopBackConfig
-* @description
-*
-* The LoopBackConfig module help developers to externally 
-* configure the base url and api version for loopback.io
-*
-* Example
-*
-* import { LoopBackConfig } from './sdk';
-* 
-* @Component() // No metadata needed for this module
-*
-* export class MyApp {
-*   constructor() {
-*     LoopBackConfig.setBaseURL('http://localhost:3000');
-*     LoopBackConfig.setApiVersion('api');
-*   }
-* }
-**/
+ * @module LoopBackConfig
+ * @description
+ *
+ * The LoopBackConfig module help developers to externally
+ * configure the base url and api version for loopback.io
+ *
+ * Example
+ *
+ * import { LoopBackConfig } from './sdk';
+ *
+ * @Component() // No metadata needed for this module
+ *
+ * export class MyApp {
+ *   constructor() {
+ *     LoopBackConfig.setBaseURL('http://localhost:3000');
+ *     LoopBackConfig.setApiVersion('api');
+ *   }
+ * }
+ **/
 export class LoopBackConfig {
-  private static path: string = '//0.0.0.0:3000';
-  private static version: string | number = 'api/v3';
-  private static authPrefix: string = '';
+  private static path: string = "//0.0.0.0:3000";
+  private static version: string | number = "api/v3";
+  private static authPrefix: string = "";
   private static debug: boolean = true;
-  private static filterOn: string = 'headers';
-  private static whereOn: string = 'headers';
+  private static filterOn: string = "headers";
+  private static whereOn: string = "headers";
   private static secure: boolean = false;
   private static withCredentials: boolean = false;
 
-  public static setApiVersion(version: string = 'api'): void {
+  public static setApiVersion(version: string = "api"): void {
     LoopBackConfig.version = version;
   }
-  
+
   public static getApiVersion(): string | number {
     return LoopBackConfig.version;
   }
 
-  public static setBaseURL(url: string = '/'): void {
+  public static setBaseURL(url: string = "/"): void {
     LoopBackConfig.path = url;
   }
-  
+
   public static getPath(): string {
     return LoopBackConfig.path;
   }
 
-  public static setAuthPrefix(authPrefix: string = ''): void {
+  public static setAuthPrefix(authPrefix: string = ""): void {
     LoopBackConfig.authPrefix = authPrefix;
   }
 
@@ -62,27 +62,27 @@ export class LoopBackConfig {
   }
 
   public static filterOnUrl(): void {
-    LoopBackConfig.filterOn = 'url';
+    LoopBackConfig.filterOn = "url";
   }
 
   public static filterOnHeaders(): void {
-    LoopBackConfig.filterOn = 'headers';
+    LoopBackConfig.filterOn = "headers";
   }
 
   public static whereOnUrl(): void {
-    LoopBackConfig.whereOn = 'url';
+    LoopBackConfig.whereOn = "url";
   }
 
   public static whereOnHeaders(): void {
-    LoopBackConfig.whereOn = 'headers';
+    LoopBackConfig.whereOn = "headers";
   }
 
   public static isHeadersFilteringSet(): boolean {
-    return (LoopBackConfig.filterOn === 'headers');
+    return LoopBackConfig.filterOn === "headers";
   }
 
   public static isHeadersWhereSet(): boolean {
-    return (LoopBackConfig.whereOn === 'headers');
+    return LoopBackConfig.whereOn === "headers";
   }
 
   public static setSecureWebSockets(): void {
@@ -97,7 +97,9 @@ export class LoopBackConfig {
     return LoopBackConfig.secure;
   }
 
-  public static setRequestOptionsCredentials(withCredentials: boolean = false): void {
+  public static setRequestOptionsCredentials(
+    withCredentials: boolean = false,
+  ): void {
     LoopBackConfig.withCredentials = withCredentials;
   }
 

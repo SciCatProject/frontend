@@ -1,4 +1,10 @@
-import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
+import {
+  AbstractControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from "@angular/forms";
 import { Observable } from "rxjs";
 import { UnitsService } from "shared/services/units.service";
 import { startWith, map } from "rxjs/operators";
@@ -9,7 +15,7 @@ export enum Type {
   date = "date",
   number = "number",
   string = "string",
-  boolean = "boolean"
+  boolean = "boolean",
 }
 export class MetadataInputBase {
   unitsService: UnitsService;
@@ -38,14 +44,16 @@ export class MetadataInputBase {
   booleanValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = String(control.value).toLowerCase();
-      const valid = (value === "true" || value === "false");
-      return valid? null : {invalidBoolean: "Boolean must be \"true\" or \"false\""};
+      const valid = value === "true" || value === "false";
+      return valid
+        ? null
+        : { invalidBoolean: 'Boolean must be "true" or "false"' }; // eslint-disable-line @typescript-eslint/quotes
     };
   }
   numberValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const invalid = control.value === "" || isNaN(Number(control.value));
-      return invalid? {invalidNumber: "Invalid number"} : null;
+      return invalid ? { invalidNumber: "Invalid number" } : null;
     };
   }
   detectType() {
@@ -55,39 +63,34 @@ export class MetadataInputBase {
     switch (type) {
       case Type.quantity:
         this.metadataForm.get("unit").enable();
-        this.metadataForm.get("value").setValidators([
-          Validators.required,
-          this.numberValidator()
-        ]);
+        this.metadataForm
+          .get("value")
+          .setValidators([Validators.required, this.numberValidator()]);
         break;
       case Type.date:
         this.metadataForm.get("unit").disable();
         this.metadataForm.get("date").enable();
-        this.metadataForm.get("date").setValidators([
-          Validators.required,
-          this.dateValidator(),
-        ]);
+        this.metadataForm
+          .get("date")
+          .setValidators([Validators.required, this.dateValidator()]);
         break;
       case Type.boolean:
-      this.metadataForm.get("unit").disable();
-      this.metadataForm.get("value").setValidators([
-        Validators.required,
-        this.booleanValidator(),
-      ]);
-      break;
+        this.metadataForm.get("unit").disable();
+        this.metadataForm
+          .get("value")
+          .setValidators([Validators.required, this.booleanValidator()]);
+        break;
       case Type.number:
         this.metadataForm.get("unit").disable();
-        this.metadataForm.get("value").setValidators([
-          Validators.required,
-          this.numberValidator()
-        ]);
+        this.metadataForm
+          .get("value")
+          .setValidators([Validators.required, this.numberValidator()]);
         break;
       default:
         this.metadataForm.get("unit").disable();
-        this.metadataForm.get("value").setValidators([
-          Validators.required,
-          Validators.minLength(1),
-        ]);
+        this.metadataForm
+          .get("value")
+          .setValidators([Validators.required, Validators.minLength(1)]);
     }
     this.metadataForm.get("unit").updateValueAndValidity();
     this.metadataForm.get("value").updateValueAndValidity();
@@ -103,9 +106,9 @@ export class MetadataInputBase {
       map((value: string) => {
         const filterValue = value.toLowerCase();
         return this.units.filter((unit) =>
-          unit.toLowerCase().includes(filterValue)
+          unit.toLowerCase().includes(filterValue),
         );
-      })
+      }),
     );
   }
   fieldHasError(field: string): boolean {

@@ -27,9 +27,7 @@ describe("RelatedDatasetsComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RelatedDatasetsComponent],
-      imports: [
-        TableModule
-      ],
+      imports: [TableModule],
       providers: [
         DatePipe,
         provideMockStore({
@@ -82,7 +80,7 @@ describe("RelatedDatasetsComponent", () => {
         changeRelatedDatasetsPageAction({
           page: event.pageIndex,
           limit: event.pageSize,
-        })
+        }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(fetchRelatedDatasetsAction());
     });
@@ -95,7 +93,7 @@ describe("RelatedDatasetsComponent", () => {
       component.onRowClick(dataset);
 
       expect(router.navigateByUrl).toHaveBeenCalledOnceWith(
-        "/datasets/" + encodeURIComponent(dataset.pid)
+        "/datasets/" + encodeURIComponent(dataset.pid),
       );
     });
   });

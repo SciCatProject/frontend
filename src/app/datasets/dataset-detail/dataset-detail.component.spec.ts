@@ -119,7 +119,7 @@ describe("DatasetDetailComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
       expect(dispatchSpy).toHaveBeenCalledWith(
-        addKeywordFilterAction({ keyword })
+        addKeywordFilterAction({ keyword }),
       );
       expect(router.navigateByUrl).toHaveBeenCalledWith("/datasets");
     });
@@ -241,7 +241,7 @@ describe("DatasetDetailComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        updatePropertyAction({ pid, property })
+        updatePropertyAction({ pid, property }),
       );
     });
   });
@@ -258,7 +258,7 @@ describe("DatasetDetailComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        updatePropertyAction({ pid, property })
+        updatePropertyAction({ pid, property }),
       );
     });
   });
@@ -304,7 +304,7 @@ describe("DatasetDetailComponent", () => {
       expect(dialogOpenSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        updatePropertyAction({ pid, property })
+        updatePropertyAction({ pid, property }),
       );
     });
   });
@@ -316,7 +316,7 @@ describe("DatasetDetailComponent", () => {
       component.onClickInstrument(instrumentId);
 
       expect(router.navigateByUrl).toHaveBeenCalledWith(
-        "/instruments/" + instrumentId
+        "/instruments/" + instrumentId,
       );
     });
   });
@@ -327,7 +327,7 @@ describe("DatasetDetailComponent", () => {
       component.onClickProposal(proposalId);
 
       expect(router.navigateByUrl).toHaveBeenCalledWith(
-        "/proposals/" + proposalId
+        "/proposals/" + proposalId,
       );
     });
   });
@@ -364,7 +364,7 @@ describe("DatasetDetailComponent", () => {
       });
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        updatePropertyAction({ pid, property })
+        updatePropertyAction({ pid, property }),
       );
     });
   });
@@ -382,7 +382,7 @@ describe("DatasetDetailComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        updatePropertyAction({ pid, property })
+        updatePropertyAction({ pid, property }),
       );
     });
   });

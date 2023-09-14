@@ -15,22 +15,20 @@ describe("BatchCardComponent", () => {
   let store: MockStore<DatasetState>;
   let dispatchSpy: jasmine.Spy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [BatchCardComponent],
-        imports: [MatButtonModule, MatCardModule, MatIconModule],
-        providers: [
-          provideMockStore({
-            selectors: [{ selector: selectDatasetsInBatch, value: [] }],
-          }),
-        ],
-      }).compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [BatchCardComponent],
+      imports: [MatButtonModule, MatCardModule, MatIconModule],
+      providers: [
+        provideMockStore({
+          selectors: [{ selector: selectDatasetsInBatch, value: [] }],
+        }),
+      ],
+    }).compileComponents();
 
-      store = TestBed.inject(MockStore);
-    })
-  );
+    store = TestBed.inject(MockStore);
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BatchCardComponent);

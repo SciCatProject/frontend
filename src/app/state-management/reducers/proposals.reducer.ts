@@ -13,7 +13,7 @@ const reducer = createReducer(
     (state, { proposals }): ProposalsState => ({
       ...state,
       proposals,
-    })
+    }),
   ),
 
   on(
@@ -21,7 +21,7 @@ const reducer = createReducer(
     (state, { count }): ProposalsState => ({
       ...state,
       proposalsCount: count,
-    })
+    }),
   ),
 
   on(
@@ -29,17 +29,17 @@ const reducer = createReducer(
     (state, { proposal }): ProposalsState => ({
       ...state,
       currentProposal: proposal,
-    })
+    }),
   ),
 
   on(
     fromActions.fetchProposalDatasetsCompleteAction,
-    (state, { datasets }): ProposalsState => ({ ...state, datasets })
+    (state, { datasets }): ProposalsState => ({ ...state, datasets }),
   ),
 
   on(
     fromActions.fetchProposalDatasetsCountCompleteAction,
-    (state, { count }): ProposalsState => ({ ...state, datasetsCount: count })
+    (state, { count }): ProposalsState => ({ ...state, datasetsCount: count }),
   ),
 
   on(
@@ -52,7 +52,7 @@ const reducer = createReducer(
         return { ...state, currentProposal };
       }
       return { ...state };
-    }
+    },
   ),
 
   on(
@@ -60,14 +60,14 @@ const reducer = createReducer(
     (state, { attachment }): ProposalsState => {
       if (state.currentProposal) {
         const attachments = state.currentProposal.attachments.filter(
-          (existingAttachment) => existingAttachment.id !== attachment.id
+          (existingAttachment) => existingAttachment.id !== attachment.id,
         );
         attachments.push(attachment);
         const currentProposal = { ...state.currentProposal, attachments };
         return { ...state, currentProposal };
       }
       return { ...state };
-    }
+    },
   ),
 
   on(
@@ -75,13 +75,13 @@ const reducer = createReducer(
     (state, { attachmentId }): ProposalsState => {
       if (state.currentProposal) {
         const attachments = state.currentProposal.attachments.filter(
-          (attachment) => attachment.id !== attachmentId
+          (attachment) => attachment.id !== attachmentId,
         );
         const currentProposal = { ...state.currentProposal, attachments };
         return { ...state, currentProposal };
       }
       return { ...state };
-    }
+    },
   ),
 
   on(fromActions.prefillFiltersAction, (state, { values }): ProposalsState => {
@@ -99,7 +99,7 @@ const reducer = createReducer(
       const dateRange = { begin, end };
       const proposalFilters = { ...state.proposalFilters, dateRange };
       return { ...state, proposalFilters };
-    }
+    },
   ),
 
   on(fromActions.clearFacetsAction, (state): ProposalsState => {
@@ -123,7 +123,7 @@ const reducer = createReducer(
       const skip = page * limit;
       const datasetFilters = { ...state.datasetFilters, skip, limit };
       return { ...state, datasetFilters };
-    }
+    },
   ),
 
   on(
@@ -132,7 +132,7 @@ const reducer = createReducer(
       const sortField = column + (direction ? ":" + direction : "");
       const proposalFilters = { ...state.proposalFilters, sortField, skip: 0 };
       return { ...state, proposalFilters };
-    }
+    },
   ),
 
   on(fromActions.clearProposalsStateAction, () => ({
@@ -141,13 +141,13 @@ const reducer = createReducer(
 
   on(fromActions.clearCurrentProposalStateAction, (state) => ({
     ...state,
-    currentProposal: undefined
-  }))
+    currentProposal: undefined,
+  })),
 );
 
 export const proposalsReducer = (
   state: ProposalsState | undefined,
-  action: Action
+  action: Action,
 ) => {
   if (action.type.indexOf("[Proposal]") !== -1) {
     console.log("Action came in! " + action.type);

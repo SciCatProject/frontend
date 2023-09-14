@@ -74,7 +74,7 @@ describe("PoliciesReducer", () => {
       });
       const intermediateState = policiesReducer(
         initialPolicyState,
-        firstSelectAction
+        firstSelectAction,
       );
       const secondPolicy = new Policy();
       secondPolicy.id = "2";

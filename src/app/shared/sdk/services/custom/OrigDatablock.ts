@@ -1,18 +1,17 @@
 /* eslint-disable */
-import { Injectable, Inject, Optional } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { SDKModels } from './SDKModels';
-import { BaseLoopBackApi } from '../core/base.service';
-import { LoopBackConfig } from '../../lb.config';
-import { LoopBackAuth } from '../core/auth.service';
-import { LoopBackFilter,  } from '../../models/BaseModels';
-import { ErrorHandler } from '../core/error.service';
-import { Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { OrigDatablock } from '../../models/OrigDatablock';
-import { SocketConnection } from '../../sockets/socket.connections';
-import { Dataset } from '../../models/Dataset';
-
+import { Injectable, Inject, Optional } from "@angular/core";
+import { HttpClient, HttpResponse } from "@angular/common/http";
+import { SDKModels } from "./SDKModels";
+import { BaseLoopBackApi } from "../core/base.service";
+import { LoopBackConfig } from "../../lb.config";
+import { LoopBackAuth } from "../core/auth.service";
+import { LoopBackFilter } from "../../models/BaseModels";
+import { ErrorHandler } from "../core/error.service";
+import { Observable, Subject } from "rxjs";
+import { map } from "rxjs/operators";
+import { OrigDatablock } from "../../models/OrigDatablock";
+import { SocketConnection } from "../../sockets/socket.connections";
+import { Dataset } from "../../models/Dataset";
 
 /**
  * Api services for the `OrigDatablock` model.
@@ -23,15 +22,14 @@ import { Dataset } from '../../models/Dataset';
  */
 @Injectable()
 export class OrigDatablockApi extends BaseLoopBackApi {
-
   constructor(
     @Inject(HttpClient) protected http: HttpClient,
     @Inject(SocketConnection) protected connection: SocketConnection,
     @Inject(SDKModels) protected models: SDKModels,
     @Inject(LoopBackAuth) protected auth: LoopBackAuth,
-    @Optional() @Inject(ErrorHandler) protected errorHandler: ErrorHandler
+    @Optional() @Inject(ErrorHandler) protected errorHandler: ErrorHandler,
   ) {
-    super(http,  connection,  models, auth, errorHandler);
+    super(http, connection, models, auth, errorHandler);
   }
 
   /**
@@ -39,7 +37,7 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    *
    * @param {any} id OrigDatablock id
    *
-   * @param {boolean} refresh 
+   * @param {boolean} refresh
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -50,17 +48,33 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    * This usually means the response is a `OrigDatablock` object.)
    * </em>
    */
-  public getDataset(id: any, refresh: any = {}, customHeaders?: Function): Observable<any> {
+  public getDataset(
+    id: any,
+    refresh: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/OrigDatablocks/:id/dataset";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/OrigDatablocks/:id/dataset";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof refresh !== 'undefined' && refresh !== null) _urlParams.refresh = refresh;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof refresh !== "undefined" && refresh !== null)
+      _urlParams.refresh = refresh;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -80,17 +94,32 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    * This usually means the response is a `OrigDatablock` object.)
    * </em>
    */
-  public findByIdFiles(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public findByIdFiles(
+    id: any,
+    fk: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/OrigDatablocks/:id/files/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/OrigDatablocks/:id/files/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -107,17 +136,32 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public destroyByIdFiles(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public destroyByIdFiles(
+    id: any,
+    fk: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/OrigDatablocks/:id/files/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/OrigDatablocks/:id/files/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -141,19 +185,35 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    * This usually means the response is a `OrigDatablock` object.)
    * </em>
    */
-  public updateByIdFiles(id: any, fk: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public updateByIdFiles(
+    id: any,
+    fk: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "PUT";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/OrigDatablocks/:id/files/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/OrigDatablocks/:id/files/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -162,7 +222,7 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    *
    * @param {any} id OrigDatablock id
    *
-   * @param {object} filter 
+   * @param {object} filter
    *
    * @returns {object[]} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -173,17 +233,33 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    * This usually means the response is a `OrigDatablock` object.)
    * </em>
    */
-  public getFiles(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<any> {
+  public getFiles(
+    id: any,
+    filter: LoopBackFilter = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/OrigDatablocks/:id/files";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/OrigDatablocks/:id/files";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof filter !== "undefined" && filter !== null)
+      _urlParams.filter = filter;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -205,18 +281,33 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    * This usually means the response is a `OrigDatablock` object.)
    * </em>
    */
-  public createFiles(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public createFiles(
+    id: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/OrigDatablocks/:id/files";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/OrigDatablocks/:id/files";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -233,14 +324,25 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    */
   public deleteFiles(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/OrigDatablocks/:id/files";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/OrigDatablocks/:id/files";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -257,19 +359,35 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    *
    * Data properties:
    *
-   *  - `count` – `{number}` - 
+   *  - `count` – `{number}` -
    */
-  public countFiles(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
+  public countFiles(
+    id: any,
+    where: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/OrigDatablocks/:id/files/count";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/OrigDatablocks/:id/files/count";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof where !== "undefined" && where !== null)
+      _urlParams.where = where;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -289,16 +407,30 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    * This usually means the response is a `OrigDatablock` object.)
    * </em>
    */
-  public patchOrCreate(data: any = {}, customHeaders?: Function): Observable<any> {
+  public patchOrCreate(
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "PATCH";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/OrigDatablocks";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/OrigDatablocks";
     let _routeParams: any = {};
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -320,29 +452,44 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    * This usually means the response is a `OrigDatablock` object.)
    * </em>
    */
-  public patchAttributes(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public patchAttributes(
+    id: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "PATCH";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/OrigDatablocks/:id";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/OrigDatablocks/:id";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
   /**
-   * Return facet counts relevant for the given selected subset of datasets. 
+   * Return facet counts relevant for the given selected subset of datasets.
    *
    * @param {object} fields Define the filter conditions by specifying the name and values of fields. There ia also support for a `text` search to look for strngs anywhere in the dataset.
    *
    * @param {any} facets Defines list of field names, for which facet counts should be calculated
    *
-   * @param {object} options 
+   * @param {object} options
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -353,16 +500,33 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    * This usually means the response is a `OrigDatablock` object.)
    * </em>
    */
-  public fullfacet(fields: any = {}, facets: any = {}, customHeaders?: Function): Observable<any> {
+  public fullfacet(
+    fields: any = {},
+    facets: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/OrigDatablocks/fullfacet";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/OrigDatablocks/fullfacet";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof fields !== 'undefined' && fields !== null) _urlParams.fields = fields;
-    if (typeof facets !== 'undefined' && facets !== null) _urlParams.facets = facets;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof fields !== "undefined" && fields !== null)
+      _urlParams.fields = fields;
+    if (typeof facets !== "undefined" && facets !== null)
+      _urlParams.facets = facets;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -373,7 +537,7 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    *
    * @param {object} limits Define further query parameters like skip, limit, order
    *
-   * @param {object} options 
+   * @param {object} options
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -384,16 +548,33 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    * This usually means the response is a `OrigDatablock` object.)
    * </em>
    */
-  public fullquery(fields: any = {}, limits: any = {}, customHeaders?: Function): Observable<any> {
+  public fullquery(
+    fields: any = {},
+    limits: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/OrigDatablocks/fullquery";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/OrigDatablocks/fullquery";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof fields !== 'undefined' && fields !== null) _urlParams.fields = fields;
-    if (typeof limits !== 'undefined' && limits !== null) _urlParams.limits = limits;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof fields !== "undefined" && fields !== null)
+      _urlParams.fields = fields;
+    if (typeof limits !== "undefined" && limits !== null)
+      _urlParams.limits = limits;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -413,16 +594,30 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    * This usually means the response is a `OrigDatablock` object.)
    * </em>
    */
-  public isValid(ownableItem: any = {}, customHeaders?: Function): Observable<any> {
+  public isValid(
+    ownableItem: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/OrigDatablocks/isValid";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/OrigDatablocks/isValid";
     let _routeParams: any = {};
     let _postBody: any = {
-      ownableItem: ownableItem
+      ownableItem: ownableItem,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -433,7 +628,7 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    *
    * @param {object} limits Define further query parameters like skip, limit, order
    *
-   * @param {object} options 
+   * @param {object} options
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -444,19 +639,38 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    * This usually means the response is a `OrigDatablock` object.)
    * </em>
    */
-  public findFilesByName(fields: any = {}, limits: any = {}, customHeaders?: Function): Observable<OrigDatablock[]> {
+  public findFilesByName(
+    fields: any = {},
+    limits: any = {},
+    customHeaders?: Function,
+  ): Observable<OrigDatablock[]> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/OrigDatablocks/findFilesByName";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/OrigDatablocks/findFilesByName";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof fields !== 'undefined' && fields !== null) _urlParams.fields = fields;
-    if (typeof limits !== 'undefined' && limits !== null) _urlParams.limits = limits;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
-    return result.pipe(map((instances: Array<OrigDatablock>) =>
-        instances.map((instance: OrigDatablock) => new OrigDatablock(instance))
-    ));
+    if (typeof fields !== "undefined" && fields !== null)
+      _urlParams.fields = fields;
+    if (typeof limits !== "undefined" && limits !== null)
+      _urlParams.limits = limits;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
+    return result.pipe(
+      map((instances: Array<OrigDatablock>) =>
+        instances.map((instance: OrigDatablock) => new OrigDatablock(instance)),
+      ),
+    );
   }
 
   /**
@@ -477,18 +691,33 @@ export class OrigDatablockApi extends BaseLoopBackApi {
    * This usually means the response is a `OrigDatablock` object.)
    * </em>
    */
-  public createManyFiles(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
+  public createManyFiles(
+    id: any,
+    data: any[] = [],
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/OrigDatablocks/:id/files";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/OrigDatablocks/:id/files";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 

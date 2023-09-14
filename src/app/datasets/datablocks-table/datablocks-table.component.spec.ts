@@ -10,7 +10,7 @@ describe("DatablocksComponent", () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [MatTableModule, SharedScicatFrontendModule],
-      declarations: [DatablocksComponent]
+      declarations: [DatablocksComponent],
     });
     TestBed.compileComponents();
   }));

@@ -15,7 +15,7 @@ export class AuthCallbackComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private store: Store,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -27,14 +27,14 @@ export class AuthCallbackComponent implements OnInit {
       if (accessToken && userId) {
         // If the user is authenticated, we will store the access token and user id in the store
         this.store.dispatch(
-          loginOIDCAction({ oidcLoginResponse: { accessToken, userId } })
+          loginOIDCAction({ oidcLoginResponse: { accessToken, userId } }),
         );
 
         // We will also fetch the user from the backend
         this.store.dispatch(
           fetchUserAction({
             adLoginResponse: { access_token: accessToken, userId: userId },
-          })
+          }),
         );
 
         // After the user is authenticated, we will redirect to the home page

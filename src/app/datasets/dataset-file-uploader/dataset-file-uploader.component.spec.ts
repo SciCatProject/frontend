@@ -24,14 +24,11 @@ describe("DatasetFileUploaderComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DatasetFileUploaderComponent],
-      imports: [SharedScicatFrontendModule,
-        StoreModule.forRoot({})],
+      imports: [SharedScicatFrontendModule, StoreModule.forRoot({})],
     }).compileComponents();
     TestBed.overrideComponent(DatasetFileUploaderComponent, {
       set: {
-        providers: [
-          { provide: Router, useValue: router },
-        ],
+        providers: [{ provide: Router, useValue: router }],
       },
     });
   });
@@ -70,7 +67,7 @@ describe("DatasetFileUploaderComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        addAttachmentAction({ attachment: component.attachment })
+        addAttachmentAction({ attachment: component.attachment }),
       );
     });
   });
@@ -92,7 +89,7 @@ describe("DatasetFileUploaderComponent", () => {
           datasetId: component.dataset.pid,
           attachmentId: event.attachmentId,
           caption: event.caption,
-        })
+        }),
       );
     });
   });
@@ -110,7 +107,7 @@ describe("DatasetFileUploaderComponent", () => {
         removeAttachmentAction({
           datasetId: component.dataset.pid,
           attachmentId,
-        })
+        }),
       );
     });
   });

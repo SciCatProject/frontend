@@ -11,20 +11,16 @@ describe("MetadataInputModalComponent", () => {
   let component: MetadataInputModalComponent;
   let fixture: ComponentFixture<MetadataInputModalComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [MetadataInputModalComponent],
-        imports: [
-          ScientificMetadataTreeModule, BrowserAnimationsModule
-        ],
-        providers: [
-          FormBuilder,
-          { provide: MatDialogRef, useClass: MockMatDialogRef },
-        ],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [MetadataInputModalComponent],
+      imports: [ScientificMetadataTreeModule, BrowserAnimationsModule],
+      providers: [
+        FormBuilder,
+        { provide: MatDialogRef, useClass: MockMatDialogRef },
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MetadataInputModalComponent);

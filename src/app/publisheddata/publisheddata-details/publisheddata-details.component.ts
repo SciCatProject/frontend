@@ -37,7 +37,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
       this.route.params.pipe(pluck("id")).subscribe((id: string) => {
         this.doi = id;
         this.store.dispatch(fetchPublishedDataAction({ id }));
-      })
+      }),
     );
 
     this.subscriptions.push(
@@ -50,7 +50,7 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
               this.appConfig.landingPage + encodeURIComponent(data.doi);
           }
         }
-      })
+      }),
     );
   }
 

@@ -20,7 +20,7 @@ export class InstrumentEffects {
       ofType(
         fromActions.fetchInstrumentsAction,
         fromActions.changePageAction,
-        fromActions.sortByColumnAction
+        fromActions.sortByColumnAction,
       ),
       concatLatestFrom(() => this.filters$),
       map(([action, filters]) => filters),
@@ -30,9 +30,9 @@ export class InstrumentEffects {
             fromActions.fetchInstrumentsCompleteAction({ instruments }),
             fromActions.fetchCountAction(),
           ]),
-          catchError(() => of(fromActions.fetchInstrumentsFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.fetchInstrumentsFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -42,11 +42,11 @@ export class InstrumentEffects {
       switchMap(() =>
         this.instrumentApi.find().pipe(
           map((instruments) =>
-            fromActions.fetchCountCompleteAction({ count: instruments.length })
+            fromActions.fetchCountCompleteAction({ count: instruments.length }),
           ),
-          catchError(() => of(fromActions.fetchCountFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.fetchCountFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -56,11 +56,11 @@ export class InstrumentEffects {
       switchMap(({ pid }) =>
         this.instrumentApi.findById<Instrument>(encodeURIComponent(pid)).pipe(
           map((instrument: Instrument) =>
-            fromActions.fetchInstrumentCompleteAction({ instrument })
+            fromActions.fetchInstrumentCompleteAction({ instrument }),
           ),
-          catchError(() => of(fromActions.fetchInstrumentFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.fetchInstrumentFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -72,11 +72,11 @@ export class InstrumentEffects {
           .patchAttributes(encodeURIComponent(pid), { customMetadata })
           .pipe(
             map((instrument: Instrument) =>
-              fromActions.saveCustomMetadataCompleteAction({ instrument })
+              fromActions.saveCustomMetadataCompleteAction({ instrument }),
             ),
-            catchError(() => of(fromActions.saveCustomMetadataFailedAction()))
-          )
-      )
+            catchError(() => of(fromActions.saveCustomMetadataFailedAction())),
+          ),
+      ),
     );
   });
 
@@ -86,9 +86,9 @@ export class InstrumentEffects {
         fromActions.fetchInstrumentsAction,
         fromActions.fetchCountAction,
         fromActions.fetchInstrumentAction,
-        fromActions.saveCustomMetadataAction
+        fromActions.saveCustomMetadataAction,
       ),
-      switchMap(() => of(loadingAction()))
+      switchMap(() => of(loadingAction())),
     );
   });
 
@@ -102,15 +102,15 @@ export class InstrumentEffects {
         fromActions.fetchInstrumentCompleteAction,
         fromActions.fetchInstrumentFailedAction,
         fromActions.saveCustomMetadataCompleteAction,
-        fromActions.saveCustomMetadataFailedAction
+        fromActions.saveCustomMetadataFailedAction,
       ),
-      switchMap(() => of(loadingCompleteAction()))
+      switchMap(() => of(loadingCompleteAction())),
     );
   });
 
   constructor(
     private actions$: Actions,
     private instrumentApi: InstrumentApi,
-    private store: Store
+    private store: Store,
   ) {}
 }

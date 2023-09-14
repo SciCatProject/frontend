@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-  name: "StripProposalPrefix"
+  name: "StripProposalPrefix",
 })
 export class StripProposalPrefixPipe implements PipeTransform {
   transform(value: string): string {

@@ -5,16 +5,14 @@ import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { BatchViewComponent } from "./batch-view.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router } from "@angular/router";
-import {
-  MockArchivingService,
-  MockDatasetApi,
-} from "shared/MockStubs";
+import { MockArchivingService, MockDatasetApi } from "shared/MockStubs";
 import { ArchivingService } from "../archiving.service";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 
 import { MatDialogModule } from "@angular/material/dialog";
-import { DatasetApi, Dataset } from "shared/sdk";import { SharedScicatFrontendModule } from "shared/shared.module";
+import { DatasetApi, Dataset } from "shared/sdk";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatTableModule } from "@angular/material/table";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { DatasetState } from "state-management/state/datasets.store";
@@ -40,43 +38,41 @@ describe("BatchViewComponent", () => {
     archiveWorkflowEnabled: true,
   });
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [BatchViewComponent],
-        imports: [
-          MatButtonModule,
-          MatChipsModule,
-          MatDialogModule,
-          MatFormFieldModule,
-          MatIconModule,
-          MatInputModule,
-          MatTableModule,
-          SharedScicatFrontendModule,
-        ],
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [BatchViewComponent],
+      imports: [
+        MatButtonModule,
+        MatChipsModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatTableModule,
+        SharedScicatFrontendModule,
+      ],
+      providers: [
+        provideMockStore({
+          selectors: [{ selector: selectDatasetsInBatch, value: [] }],
+        }),
+      ],
+    });
+
+    TestBed.overrideComponent(BatchViewComponent, {
+      set: {
         providers: [
-          provideMockStore({
-            selectors: [{ selector: selectDatasetsInBatch, value: [] }],
-          }),
+          { provide: ArchivingService, useClass: MockArchivingService },
+          { provide: Router, useValue: router },
+          { provide: DatasetApi, useClass: MockDatasetApi },
+          { provide: AppConfigService, useValue: { getConfig } },
         ],
-      });
+      },
+    });
+    TestBed.compileComponents();
 
-      TestBed.overrideComponent(BatchViewComponent, {
-        set: {
-          providers: [
-            { provide: ArchivingService, useClass: MockArchivingService },
-            { provide: Router, useValue: router },
-            { provide: DatasetApi, useClass: MockDatasetApi },
-            { provide: AppConfigService, useValue: { getConfig } },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-
-      store = TestBed.inject(MockStore);
-    })
-  );
+    store = TestBed.inject(MockStore);
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BatchViewComponent);
@@ -98,7 +94,6 @@ describe("BatchViewComponent", () => {
     });
   });
 
-
   describe("#onEmpty()", () => {
     xit("should ...", () => {});
   });
@@ -111,7 +106,7 @@ describe("BatchViewComponent", () => {
       component.onRemove(dataset);
 
       expect(dispatchSpy).toHaveBeenCalledOnceWith(
-        removeFromBatchAction({ dataset })
+        removeFromBatchAction({ dataset }),
       );
     });
   });

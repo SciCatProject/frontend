@@ -1,8 +1,14 @@
-import { Component, Input, Output, EventEmitter, ViewEncapsulation } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ViewEncapsulation,
+} from "@angular/core";
 import { Logbook } from "state-management/models";
 import {
   PageChangeEvent,
-  SortChangeEvent
+  SortChangeEvent,
 } from "shared/modules/table/table.component";
 
 @Component({

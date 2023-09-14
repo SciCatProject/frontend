@@ -55,55 +55,53 @@ describe("PoliciesDashboardComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [PoliciesDashboardComponent],
-        imports: [
-          BrowserAnimationsModule,
-          FlexLayoutModule,
-          MatButtonModule,
-          MatIconModule,
-          MatTabsModule,
-          RouterTestingModule.withRoutes([]),
-          SharedScicatFrontendModule,
-          StoreModule.forRoot({}),
-        ],
-        providers: [
-          provideMockStore({
-            selectors: [
-              {
-                selector: selectPoliciesDashboardPageViewModel,
-                value: {
-                  policies: [],
-                  policiesPerPage: 25,
-                  currentPage: 0,
-                  policyCount: 0,
-                  filters: {},
-                  editablePolicies: [],
-                  editablePoliciesPerPage: 25,
-                  currentEditablePage: 0,
-                  editableCount: 0,
-                  editableFilters: {},
-                  selectedPolicies: [],
-                },
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [PoliciesDashboardComponent],
+      imports: [
+        BrowserAnimationsModule,
+        FlexLayoutModule,
+        MatButtonModule,
+        MatIconModule,
+        MatTabsModule,
+        RouterTestingModule.withRoutes([]),
+        SharedScicatFrontendModule,
+        StoreModule.forRoot({}),
+      ],
+      providers: [
+        provideMockStore({
+          selectors: [
+            {
+              selector: selectPoliciesDashboardPageViewModel,
+              value: {
+                policies: [],
+                policiesPerPage: 25,
+                currentPage: 0,
+                policyCount: 0,
+                filters: {},
+                editablePolicies: [],
+                editablePoliciesPerPage: 25,
+                currentEditablePage: 0,
+                editableCount: 0,
+                editableFilters: {},
+                selectedPolicies: [],
               },
-            ],
-          }),
-        ],
-      });
-      TestBed.overrideComponent(PoliciesDashboardComponent, {
-        set: {
-          providers: [
-            { provide: DatasetApi, useClass: MockDatasetApi },
-            { provide: Router, useValue: router },
+            },
           ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+        }),
+      ],
+    });
+    TestBed.overrideComponent(PoliciesDashboardComponent, {
+      set: {
+        providers: [
+          { provide: DatasetApi, useClass: MockDatasetApi },
+          { provide: Router, useValue: router },
+        ],
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PoliciesDashboardComponent);
@@ -198,7 +196,7 @@ describe("PoliciesDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        changePageAction({ page: event.pageIndex, limit: event.pageSize })
+        changePageAction({ page: event.pageIndex, limit: event.pageSize }),
       );
     });
   });
@@ -219,7 +217,7 @@ describe("PoliciesDashboardComponent", () => {
         changeEditablePageAction({
           page: event.pageIndex,
           limit: event.pageSize,
-        })
+        }),
       );
     });
   });
@@ -236,7 +234,10 @@ describe("PoliciesDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        sortByColumnAction({ column: event.active, direction: event.direction })
+        sortByColumnAction({
+          column: event.active,
+          direction: event.direction,
+        }),
       );
     });
   });
@@ -256,7 +257,7 @@ describe("PoliciesDashboardComponent", () => {
         sortEditableByColumnAction({
           column: event.active,
           direction: event.direction,
-        })
+        }),
       );
     });
   });
@@ -298,7 +299,7 @@ describe("PoliciesDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        selectPolicyAction({ policy: checkboxEvent.row })
+        selectPolicyAction({ policy: checkboxEvent.row }),
       );
     });
 
@@ -314,11 +315,11 @@ describe("PoliciesDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        deselectPolicyAction({ policy: checkboxEvent.row })
+        deselectPolicyAction({ policy: checkboxEvent.row }),
       );
     });
   });
-/*
+  /*
   describe("#openDialog()", () => {
     xit("should...", () => {});
   });
@@ -344,7 +345,7 @@ describe("PoliciesDashboardComponent", () => {
         submitPolicyAction({
           ownerList: component.selectedGroups,
           policy: result,
-        })
+        }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(clearSelectionAction());
     });

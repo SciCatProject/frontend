@@ -41,23 +41,17 @@ describe("AppComponent", () => {
     TestBed.compileComponents();
   });
 
-  it(
-    "should create the app",
-    waitForAsync(() => {
-      const fixture = TestBed.createComponent(AppComponent);
-      const app = fixture.debugElement.componentInstance;
-      app.store = TestBed.inject(Store);
-      expect(app).toBeTruthy();
-    })
-  );
+  it("should create the app", waitForAsync(() => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
+    app.store = TestBed.inject(Store);
+    expect(app).toBeTruthy();
+  }));
 
-  it(
-    `should have as title 'SciCat'`,
-    waitForAsync(() => {
-      const fixture = TestBed.createComponent(AppComponent);
-      const app = fixture.debugElement.componentInstance;
-      app.store = TestBed.inject(Store);
-      expect(app.title).toContain("SciCat");
-    })
-  );
+  it(`should have as title 'SciCat'`, waitForAsync(() => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
+    app.store = TestBed.inject(Store);
+    expect(app.title).toContain("SciCat");
+  }));
 });

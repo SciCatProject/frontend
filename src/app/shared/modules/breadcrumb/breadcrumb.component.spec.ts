@@ -13,7 +13,7 @@ describe("BreadcrumbComponent", () => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientModule],
       declarations: [BreadcrumbComponent],
-      providers: [{ provide: Store, useClass: MockStore }]
+      providers: [{ provide: Store, useClass: MockStore }],
     }).compileComponents();
   }));
 

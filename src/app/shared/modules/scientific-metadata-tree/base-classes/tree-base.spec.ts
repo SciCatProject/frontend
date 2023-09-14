@@ -15,16 +15,9 @@ describe("TreeBaseComponent", () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [TreeEditComponent],
-      imports: [
-        ScientificMetadataTreeModule, BrowserAnimationsModule
-      ],
-      providers: [
-        MatDialog,
-        MatSnackBar,
-        DatePipe
-      ]
-    })
-      .compileComponents();
+      imports: [ScientificMetadataTreeModule, BrowserAnimationsModule],
+      providers: [MatDialog, MatSnackBar, DatePipe],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -34,13 +27,13 @@ describe("TreeBaseComponent", () => {
       motors: {
         sampx: {
           value: -0.03949844939218141,
-          unit: "mm"
+          unit: "mm",
         },
         sampy: {
           value: 0.003037629787175808,
-          unit: "mm"
-        }
-      }
+          unit: "mm",
+        },
+      },
     };
     fixture.detectChanges();
   });
@@ -49,47 +42,50 @@ describe("TreeBaseComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe(("#buildDataTree()"), () => {
+  describe("#buildDataTree()", () => {
     it("should build dataTree initial metadata", () => {
       component.metadata = {
         motors: {
           sampx: {
             value: -0.03949844939218141,
-            unit: "mm"
+            unit: "mm",
           },
           sampy: {
             value: 0.003037629787175808,
-            unit: "mm"
-          }
+            unit: "mm",
+          },
         },
         take_snapshots: 1,
         shape: "2DP1",
         in_interleave: false,
         wavelength: {
           value: 0.9789504111255567,
-          unit: "angstrom"
+          unit: "angstrom",
         },
         cell: [0, 0, 0, 0, 0, 0],
         creationTime: "2020-10-01 18:01:30",
-        comment: "Bad run"
+        comment: "Bad run",
       };
       component.dataTree = component.buildDataTree(component.metadata, 0);
       expect(component.dataTree.length).toEqual(8);
       expect(component.dataTree[0]).toBeInstanceOf(TreeNode);
     });
     it("should build dataTree with two child nodes", () => {
-      component.dataTree = component.buildDataTree({
-        motors: {
-          sampx: {
-            value: -0.03949844939218141,
-            unit: "mm"
+      component.dataTree = component.buildDataTree(
+        {
+          motors: {
+            sampx: {
+              value: -0.03949844939218141,
+              unit: "mm",
+            },
+            sampy: {
+              value: 0.003037629787175808,
+              unit: "mm",
+            },
           },
-          sampy: {
-            value: 0.003037629787175808,
-            unit: "mm"
-          }
-        }
-      }, 0);
+        },
+        0,
+      );
       expect(component.dataTree.length).toEqual(1);
       expect(component.dataTree[0].key).toEqual("motors");
       expect(component.dataTree[0].value).toEqual(undefined);
@@ -97,9 +93,12 @@ describe("TreeBaseComponent", () => {
       expect(component.dataTree[0].unit).toEqual(undefined);
     });
     it("should build dataTree with one node without child", () => {
-      component.dataTree = component.buildDataTree({
-        in_interleave: false
-      }, 0);
+      component.dataTree = component.buildDataTree(
+        {
+          in_interleave: false,
+        },
+        0,
+      );
       expect(component.dataTree.length).toEqual(1);
       expect(component.dataTree[0].key).toEqual("in_interleave");
       expect(component.dataTree[0].value).toEqual(false);
@@ -107,9 +106,12 @@ describe("TreeBaseComponent", () => {
       expect(component.dataTree[0].unit).toEqual(undefined);
     });
     it("should build dataTree with one node and value is null", () => {
-      component.dataTree = component.buildDataTree({
-        in_interleave: null
-      }, 0);
+      component.dataTree = component.buildDataTree(
+        {
+          in_interleave: null,
+        },
+        0,
+      );
       expect(component.dataTree.length).toEqual(1);
       expect(component.dataTree[0].key).toEqual("in_interleave");
       expect(component.dataTree[0].value).toEqual(null);
@@ -117,9 +119,12 @@ describe("TreeBaseComponent", () => {
       expect(component.dataTree[0].unit).toEqual(undefined);
     });
     it("should build dataTree with two child nodes and value is array", () => {
-      component.dataTree = component.buildDataTree({
-        array: [0, 1]
-      }, 0);
+      component.dataTree = component.buildDataTree(
+        {
+          array: [0, 1],
+        },
+        0,
+      );
       expect(component.dataTree.length).toEqual(1);
       expect(component.dataTree[0].key).toEqual("array");
       expect(component.dataTree[0].value).toBeInstanceOf(Array);
@@ -127,12 +132,15 @@ describe("TreeBaseComponent", () => {
       expect(component.dataTree[0].unit).toEqual(undefined);
     });
     it("should build dataTree with node that value and unit", () => {
-      component.dataTree = component.buildDataTree({
-        angle: {
-          value: 1,
-          unit: "deg"
-        }
-      }, 0);
+      component.dataTree = component.buildDataTree(
+        {
+          angle: {
+            value: 1,
+            unit: "deg",
+          },
+        },
+        0,
+      );
       expect(component.dataTree.length).toEqual(1);
       expect(component.dataTree[0].key).toEqual("angle");
       expect(component.dataTree[0].value).toEqual(1);
@@ -147,19 +155,18 @@ describe("TreeBaseComponent", () => {
         motors: {
           sampx: {
             value: -0.03949844939218141,
-            unit: "mm"
+            unit: "mm",
           },
           sampy: {
             value: 0.003037629787175808,
-            unit: "mm"
+            unit: "mm",
           },
-        }
-
+        },
       };
       component.ngOnInit();
       component.performFilter("samp");
       component.treeControl.dataNodes.forEach((node: FlatNode) => {
-        if (node.key === "comment"){
+        if (node.key === "comment") {
           expect(node.visible).toBeFalse();
         } else {
           expect(node.visible).toBeTrue();
@@ -174,35 +181,41 @@ describe("TreeBaseComponent", () => {
           motor1: {
             sampx: {
               value: -0.03949844939218141,
-              unit: "mm"
+              unit: "mm",
             },
             sampy: {
               value: 0.003037629787175808,
-              unit: "mm"
+              unit: "mm",
             },
           },
           motor2: {
             sampx: {
               value: -0.03949844939218141,
-              unit: "mm"
+              unit: "mm",
             },
             sampy: {
               value: 0.003037629787175808,
-              unit: "mm"
+              unit: "mm",
             },
-          }
-        }
+          },
+        },
       };
       component.ngOnInit();
       component.hideAllNodes();
-      component.setParentVisible(component.treeControl.dataNodes[component.treeControl.dataNodes.length - 1]);
-      component.treeControl.dataNodes.forEach((node: FlatNode, index: number) => {
-        if (node.key === "motor2" || node.key === "motors") {
-          expect(node.visible).toBeTrue();
-        } else {
-          expect(node.visible).toBeFalse();
-        }
-      });
+      component.setParentVisible(
+        component.treeControl.dataNodes[
+          component.treeControl.dataNodes.length - 1
+        ],
+      );
+      component.treeControl.dataNodes.forEach(
+        (node: FlatNode, index: number) => {
+          if (node.key === "motor2" || node.key === "motors") {
+            expect(node.visible).toBeTrue();
+          } else {
+            expect(node.visible).toBeFalse();
+          }
+        },
+      );
     });
   });
   describe("#setChildrenVisible()", () => {
@@ -212,54 +225,64 @@ describe("TreeBaseComponent", () => {
           motor1: {
             sampx: {
               value: -0.03949844939218141,
-              unit: "mm"
+              unit: "mm",
             },
             sampy: {
               value: 0.003037629787175808,
-              unit: "mm"
+              unit: "mm",
             },
           },
           motor2: {
             sampx: {
               value: -0.03949844939218141,
-              unit: "mm"
+              unit: "mm",
             },
             sampy: {
               value: 0.003037629787175808,
-              unit: "mm"
+              unit: "mm",
             },
-          }
-        }
+          },
+        },
       };
       component.ngOnInit();
       component.hideAllNodes();
       component.setChildrenVisible(component.dataTree[0].children);
-      component.treeControl.dataNodes.forEach((node: FlatNode, index: number) => {
-        if (index === 0) {
-          expect(node.visible).toBeFalse();
-        } else {
-          expect(node.visible).toBeTrue();
-        }
-      });
+      component.treeControl.dataNodes.forEach(
+        (node: FlatNode, index: number) => {
+          if (index === 0) {
+            expect(node.visible).toBeFalse();
+          } else {
+            expect(node.visible).toBeTrue();
+          }
+        },
+      );
     });
   });
   describe("#getFlatParentNode()", () => {
     it("should return null", () => {
-      const result = component.getFlatParentNode(component.treeControl.dataNodes[0]);
+      const result = component.getFlatParentNode(
+        component.treeControl.dataNodes[0],
+      );
       expect(result).toBeNull();
     });
     it("should return parent node", () => {
-      const result = component.getFlatParentNode(component.treeControl.dataNodes[1]);
+      const result = component.getFlatParentNode(
+        component.treeControl.dataNodes[1],
+      );
       expect(result).toEqual(component.treeControl.dataNodes[0]);
     });
   });
   describe("#getNestedParent()", () => {
     it("should return undefined", () => {
-      const result = component.getNestedParent(component.treeControl.dataNodes[0]);
+      const result = component.getNestedParent(
+        component.treeControl.dataNodes[0],
+      );
       expect(result).toBeUndefined();
     });
     it("should return a parent node", () => {
-      const result = component.getNestedParent(component.treeControl.dataNodes[1]);
+      const result = component.getNestedParent(
+        component.treeControl.dataNodes[1],
+      );
       expect(result).toEqual(component.dataTree[0]);
     });
   });
@@ -280,7 +303,10 @@ describe("TreeBaseComponent", () => {
       expect(component.dataTree.length).toEqual(0);
     });
     it("Should remove  child node", () => {
-      component.removeNode(component.dataTree[0], component.dataTree[0].children[0]);
+      component.removeNode(
+        component.dataTree[0],
+        component.dataTree[0].children[0],
+      );
       expect(component.dataTree[0].children.length).toEqual(1);
     });
   });
@@ -290,60 +316,78 @@ describe("TreeBaseComponent", () => {
       expect(index).toEqual(0);
     });
     it("Should get current index of the child node", () => {
-      const index = component.getIndex(component.dataTree[0], component.dataTree[0].children[1]);
+      const index = component.getIndex(
+        component.dataTree[0],
+        component.dataTree[0].children[1],
+      );
       expect(index).toEqual(1);
     });
   });
   describe("#getValueRepresentation()", () => {
     it("Should get string null", () => {
       component.metadata = {
-        barCode: null
+        barCode: null,
       };
       component.ngOnInit();
-      const result = component.getValueRepresentation(component.treeControl.dataNodes[0]);
+      const result = component.getValueRepresentation(
+        component.treeControl.dataNodes[0],
+      );
       expect(result).toEqual("null");
     });
     it("Should get string undefined", () => {
       component.metadata = {
-        barCode: undefined
+        barCode: undefined,
       };
       component.ngOnInit();
-      const result = component.getValueRepresentation(component.treeControl.dataNodes[0]);
+      const result = component.getValueRepresentation(
+        component.treeControl.dataNodes[0],
+      );
       expect(result).toEqual("undefined");
     });
     it("Should get string []", () => {
       component.metadata = {
-        barCode: []
+        barCode: [],
       };
       component.ngOnInit();
-      const result = component.getValueRepresentation(component.treeControl.dataNodes[0]);
+      const result = component.getValueRepresentation(
+        component.treeControl.dataNodes[0],
+      );
       expect(result).toEqual("[ ]");
     });
-    it("Should get string \"\" ", () => {
+    // eslint-disable-next-line @typescript-eslint/quotes
+    it('Should get string "" ', () => {
       component.metadata = {
-        barCode: ""
+        barCode: "",
       };
       component.ngOnInit();
-      const result = component.getValueRepresentation(component.treeControl.dataNodes[0]);
-      expect(result).toEqual("\"\"");
+      const result = component.getValueRepresentation(
+        component.treeControl.dataNodes[0],
+      );
+      expect(result).toEqual('""'); // eslint-disable-line @typescript-eslint/quotes
     });
     it("Should get value and symbol Å ", () => {
       component.metadata = {
         wavelength: {
           value: 1,
-          unit: "angstrom"
-        }
+          unit: "angstrom",
+        },
       };
       component.ngOnInit();
-      const result = component.getValueRepresentation(component.treeControl.dataNodes[0]);
+      const result = component.getValueRepresentation(
+        component.treeControl.dataNodes[0],
+      );
       expect(result).toEqual("1 (Å)");
     });
     it("Should get date string ", () => {
       component.metadata = {
-        creationTime: DateTime.fromISO("2016-05-25T00:00:00.000").toUTC().toISO()
+        creationTime: DateTime.fromISO("2016-05-25T00:00:00.000")
+          .toUTC()
+          .toISO(),
       };
       component.ngOnInit();
-      const result = component.getValueRepresentation(component.treeControl.dataNodes[0]);
+      const result = component.getValueRepresentation(
+        component.treeControl.dataNodes[0],
+      );
       //Difficult to verify the whole string at once due to timezone
       expect(result).toContain("2016-05-25,");
       expect(result).toContain("00:00:00");

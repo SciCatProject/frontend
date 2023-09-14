@@ -12,14 +12,10 @@ describe("AdminTabComponent", () => {
   let store: MockStore;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AdminTabComponent ],
+      declarations: [AdminTabComponent],
 
-      imports: [
-        MatCardModule,
-        StoreModule.forRoot({}),
-      ]
-    })
-    .compileComponents();
+      imports: [MatCardModule, StoreModule.forRoot({})],
+    }).compileComponents();
   });
 
   beforeEach(() => {

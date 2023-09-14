@@ -1,7 +1,5 @@
 /* eslint-disable */
 
-
-
 declare var Object: any;
 export interface LoopBackFilter {
   fields?: any;
@@ -14,12 +12,12 @@ export interface LoopBackFilter {
 }
 
 export interface AccessTokenInterface {
-  "id"?: string;
-  "ttl"?: number;
-  "scopes"?: ["string"];
-  "created"?: Date;
-  "userId"?: string;
-  "user"?: any;
+  id?: string;
+  ttl?: number;
+  scopes?: ["string"];
+  created?: Date;
+  userId?: string;
+  user?: any;
 }
 
 export class AccessToken implements AccessTokenInterface {
@@ -40,56 +38,56 @@ export class AccessToken implements AccessTokenInterface {
     return "AccessToken";
   }
   /**
-  * @method factory
-  * @author Jonathan Casarrubias
-  * @license MIT
-  * This method creates an instance of AccessToken for dynamic purposes.
-  **/
-  public static factory(data: AccessTokenInterface): AccessToken{
+   * @method factory
+   * @author Jonathan Casarrubias
+   * @license MIT
+   * This method creates an instance of AccessToken for dynamic purposes.
+   **/
+  public static factory(data: AccessTokenInterface): AccessToken {
     return new AccessToken(data);
-  }  
+  }
   /**
-  * @method getModelDefinition
-  * @author Julien Ledun
-  * @license MIT
-  * This method returns an object that represents some of the model
-  * definitions.
-  **/
+   * @method getModelDefinition
+   * @author Julien Ledun
+   * @license MIT
+   * This method returns an object that represents some of the model
+   * definitions.
+   **/
   public static getModelDefinition() {
     return {
-      name: 'AccessToken',
-      plural: 'AccessTokens',
+      name: "AccessToken",
+      plural: "AccessTokens",
       properties: {
-        "id": {
-          name: 'id',
-          type: 'string'
+        id: {
+          name: "id",
+          type: "string",
         },
-        "ttl": {
-          name: 'ttl',
-          type: 'number',
-          default: 1209600
+        ttl: {
+          name: "ttl",
+          type: "number",
+          default: 1209600,
         },
-        "scopes": {
-          name: 'scopes',
-          type: '["string"]'
+        scopes: {
+          name: "scopes",
+          type: '["string"]',
         },
-        "created": {
-          name: 'created',
-          type: 'Date'
+        created: {
+          name: "created",
+          type: "Date",
         },
-        "userId": {
-          name: 'userId',
-          type: 'string'
+        userId: {
+          name: "userId",
+          type: "string",
         },
       },
       relations: {
         user: {
-          name: 'user',
-          type: 'User',
-          model: 'User'
+          name: "user",
+          type: "User",
+          model: "User",
         },
-      }
-    }
+      },
+    };
   }
 }
 
@@ -106,21 +104,21 @@ export class SDKToken implements AccessTokenInterface {
   }
 }
 /**
-* This GeoPoint represents both, LoopBack and MongoDB GeoPoint
-**/
-export interface GeoPoint  {
-    lat?: number;
-    lng?: number;
-    type?: string;
-    coordinates?: number[];
+ * This GeoPoint represents both, LoopBack and MongoDB GeoPoint
+ **/
+export interface GeoPoint {
+  lat?: number;
+  lng?: number;
+  type?: string;
+  coordinates?: number[];
 }
 
 export interface StatFilter {
-    range: string,
-    custom?: {
-      start: string,
-      end: string
-    },
-    where?: {},
-    groupBy?: string
+  range: string;
+  custom?: {
+    start: string;
+    end: string;
+  };
+  where?: {};
+  groupBy?: string;
 }

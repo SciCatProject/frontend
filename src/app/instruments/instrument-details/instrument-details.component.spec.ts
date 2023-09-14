@@ -30,39 +30,32 @@ describe("InstrumentDetailsComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [InstrumentDetailsComponent],
-        imports: [
-          FlexLayoutModule,
-          MatCardModule,
-          MatIconModule,
-          MatTabsModule,
-        ],
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [InstrumentDetailsComponent],
+      imports: [FlexLayoutModule, MatCardModule, MatIconModule, MatTabsModule],
+      providers: [
+        provideMockStore({
+          selectors: [{ selector: selectCurrentInstrument, value: {} }],
+        }),
+      ],
+    });
+    TestBed.overrideComponent(InstrumentDetailsComponent, {
+      set: {
         providers: [
-          provideMockStore({
-            selectors: [{ selector: selectCurrentInstrument, value: {} }],
-          }),
-        ],
-      });
-      TestBed.overrideComponent(InstrumentDetailsComponent, {
-        set: {
-          providers: [
-            {
-              provide: AppConfigService,
-              useValue: {
-                getConfig,
-              },
+          {
+            provide: AppConfigService,
+            useValue: {
+              getConfig,
             },
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+          },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+        ],
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(InstrumentDetailsComponent);
@@ -93,7 +86,7 @@ describe("InstrumentDetailsComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        saveCustomMetadataAction({ pid, customMetadata })
+        saveCustomMetadataAction({ pid, customMetadata }),
       );
     });
   });

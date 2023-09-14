@@ -52,7 +52,7 @@ describe("test dataset selectors", () => {
   describe("selectDatasets", () => {
     it("should select all datasets", () => {
       expect(
-        fromDatasetSelectors.selectDatasets.projector(initialDatasetState)
+        fromDatasetSelectors.selectDatasets.projector(initialDatasetState),
       ).toEqual([]);
     });
   });
@@ -61,8 +61,8 @@ describe("test dataset selectors", () => {
     it("should select all selected datasets", () => {
       expect(
         fromDatasetSelectors.selectSelectedDatasets.projector(
-          initialDatasetState
-        )
+          initialDatasetState,
+        ),
       ).toEqual([]);
     });
   });
@@ -70,7 +70,7 @@ describe("test dataset selectors", () => {
   describe("selectMetadataKeys", () => {
     it("should select the array of metadata keys", () => {
       expect(
-        fromDatasetSelectors.selectMetadataKeys.projector(initialDatasetState)
+        fromDatasetSelectors.selectMetadataKeys.projector(initialDatasetState),
       ).toEqual(["test"]);
     });
   });
@@ -78,7 +78,9 @@ describe("test dataset selectors", () => {
   describe("selectCurrentDataset", () => {
     it("should select the current dataset", () => {
       expect(
-        fromDatasetSelectors.selectCurrentDataset.projector(initialDatasetState)
+        fromDatasetSelectors.selectCurrentDataset.projector(
+          initialDatasetState,
+        ),
       ).toEqual(dataset);
     });
   });
@@ -89,8 +91,8 @@ describe("test dataset selectors", () => {
 
       expect(
         fromDatasetSelectors.selectCurrentDatasetWithoutFileInfo.projector(
-          dataset
-        )
+          dataset,
+        ),
       ).toEqual(datasetWithout);
     });
   });
@@ -98,7 +100,7 @@ describe("test dataset selectors", () => {
   describe("selectCurrentOrigDatablocks", () => {
     it("should select the origDatablocks from the current dataset", () => {
       expect(
-        fromDatasetSelectors.selectCurrentOrigDatablocks.projector(dataset)
+        fromDatasetSelectors.selectCurrentOrigDatablocks.projector(dataset),
       ).toEqual(dataset.origdatablocks);
     });
   });
@@ -106,7 +108,7 @@ describe("test dataset selectors", () => {
   describe("selectCurrentDatablocks", () => {
     it("should select the datablocks from the current dataset", () => {
       expect(
-        fromDatasetSelectors.selectCurrentDatablocks.projector(dataset)
+        fromDatasetSelectors.selectCurrentDatablocks.projector(dataset),
       ).toEqual(dataset.datablocks);
     });
   });
@@ -114,7 +116,7 @@ describe("test dataset selectors", () => {
   describe("selectCurrentAttachments", () => {
     it("should select the attachments from the current dataset", () => {
       expect(
-        fromDatasetSelectors.selectCurrentAttachments.projector(dataset)
+        fromDatasetSelectors.selectCurrentAttachments.projector(dataset),
       ).toEqual(dataset.attachments);
     });
   });
@@ -124,7 +126,7 @@ describe("test dataset selectors", () => {
       const filters = initialDatasetState.filters;
 
       expect(
-        fromDatasetSelectors.selectFilters.projector(initialDatasetState)
+        fromDatasetSelectors.selectFilters.projector(initialDatasetState),
       ).toEqual(filters);
     });
   });
@@ -133,8 +135,8 @@ describe("test dataset selectors", () => {
     it("should select the text filter", () => {
       expect(
         fromDatasetSelectors.selectTextFilter.projector(
-          initialDatasetState.filters
-        )
+          initialDatasetState.filters,
+        ),
       ).toEqual("");
     });
   });
@@ -143,8 +145,8 @@ describe("test dataset selectors", () => {
     it("should select the creationLocation filter", () => {
       expect(
         fromDatasetSelectors.selectLocationFilter.projector(
-          initialDatasetState.filters
-        )
+          initialDatasetState.filters,
+        ),
       ).toEqual([]);
     });
   });
@@ -153,8 +155,8 @@ describe("test dataset selectors", () => {
     it("should select the ownerGroup filter", () => {
       expect(
         fromDatasetSelectors.selectGroupFilter.projector(
-          initialDatasetState.filters
-        )
+          initialDatasetState.filters,
+        ),
       ).toEqual([]);
     });
   });
@@ -163,8 +165,8 @@ describe("test dataset selectors", () => {
     it("should select the type filter", () => {
       expect(
         fromDatasetSelectors.selectTypeFilter.projector(
-          initialDatasetState.filters
-        )
+          initialDatasetState.filters,
+        ),
       ).toEqual([]);
     });
   });
@@ -173,8 +175,8 @@ describe("test dataset selectors", () => {
     it("should select the keywords filter", () => {
       expect(
         fromDatasetSelectors.selectKeywordsFilter.projector(
-          initialDatasetState.filters
-        )
+          initialDatasetState.filters,
+        ),
       ).toEqual([]);
     });
   });
@@ -183,8 +185,8 @@ describe("test dataset selectors", () => {
     it("should select the creationTime filter", () => {
       expect(
         fromDatasetSelectors.selectCreationTimeFilter.projector(
-          initialDatasetState.filters
-        )
+          initialDatasetState.filters,
+        ),
       ).toEqual({ begin: "2019-10-03", end: "2019-10-04" });
     });
   });
@@ -193,8 +195,8 @@ describe("test dataset selectors", () => {
     it("should select the modeToggle filter", () => {
       expect(
         fromDatasetSelectors.selectArchiveViewMode.projector(
-          initialDatasetState.filters
-        )
+          initialDatasetState.filters,
+        ),
       ).toEqual(ArchViewMode.all);
     });
   });
@@ -203,8 +205,8 @@ describe("test dataset selectors", () => {
     it("should select the isPublic filter", () => {
       expect(
         fromDatasetSelectors.selectPublicViewMode.projector(
-          initialDatasetState.filters
-        )
+          initialDatasetState.filters,
+        ),
       ).toEqual(false);
     });
   });
@@ -213,8 +215,8 @@ describe("test dataset selectors", () => {
     it("should return true if filters are applied", () => {
       expect(
         fromDatasetSelectors.selectHasAppliedFilters.projector(
-          initialDatasetState.filters
-        )
+          initialDatasetState.filters,
+        ),
       ).toEqual(true);
     });
   });
@@ -223,8 +225,8 @@ describe("test dataset selectors", () => {
     it("should return the scientific filter", () => {
       expect(
         fromDatasetSelectors.selectScientificConditions.projector(
-          initialDatasetState.filters
-        )
+          initialDatasetState.filters,
+        ),
       ).toEqual([]);
     });
   });
@@ -233,8 +235,8 @@ describe("test dataset selectors", () => {
     it("should return the location facetCounts", () => {
       expect(
         fromDatasetSelectors.selectLocationFacetCounts.projector(
-          initialDatasetState.facetCounts
-        )
+          initialDatasetState.facetCounts,
+        ),
       ).toEqual([]);
     });
   });
@@ -243,8 +245,8 @@ describe("test dataset selectors", () => {
     it("should return the ownerGroup facetCounts", () => {
       expect(
         fromDatasetSelectors.selectGroupFacetCounts.projector(
-          initialDatasetState.facetCounts
-        )
+          initialDatasetState.facetCounts,
+        ),
       ).toEqual([]);
     });
   });
@@ -253,8 +255,8 @@ describe("test dataset selectors", () => {
     it("should return the type facetCounts", () => {
       expect(
         fromDatasetSelectors.selectTypeFacetCounts.projector(
-          initialDatasetState.facetCounts
-        )
+          initialDatasetState.facetCounts,
+        ),
       ).toEqual([]);
     });
   });
@@ -263,8 +265,8 @@ describe("test dataset selectors", () => {
     it("should return the keywords facetCounts", () => {
       expect(
         fromDatasetSelectors.selectKeywordFacetCounts.projector(
-          initialDatasetState.facetCounts
-        )
+          initialDatasetState.facetCounts,
+        ),
       ).toEqual([]);
     });
   });
@@ -273,8 +275,8 @@ describe("test dataset selectors", () => {
     it("should return the fullquery params", () => {
       const fullqueryKeys = Object.keys(
         fromDatasetSelectors.selectFullqueryParams.projector(
-          initialDatasetState.filters
-        )
+          initialDatasetState.filters,
+        ),
       );
       expect(fullqueryKeys).toContain("query");
     });
@@ -283,10 +285,15 @@ describe("test dataset selectors", () => {
   describe("selectFullfacetParams", () => {
     it("should return the fullfacet params", () => {
       const fullfacet = fromDatasetSelectors.selectFullfacetParams.projector(
-        initialDatasetState.filters
+        initialDatasetState.filters,
       );
       const fullfacetKeys = Object.keys(fullfacet);
-      expect(fullfacet.facets).toEqual(["type", "creationLocation", "ownerGroup", "keywords"]);
+      expect(fullfacet.facets).toEqual([
+        "type",
+        "creationLocation",
+        "ownerGroup",
+        "keywords",
+      ]);
       expect(fullfacetKeys).toContain("facets");
     });
   });
@@ -294,7 +301,7 @@ describe("test dataset selectors", () => {
   describe("selectTotalSets", () => {
     it("should select total set number", () => {
       expect(
-        fromDatasetSelectors.selectTotalSets.projector(initialDatasetState)
+        fromDatasetSelectors.selectTotalSets.projector(initialDatasetState),
       ).toEqual(0);
     });
   });
@@ -302,7 +309,7 @@ describe("test dataset selectors", () => {
   describe("selectPage", () => {
     it("should select the current page", () => {
       expect(
-        fromDatasetSelectors.selectPage.projector(initialDatasetState.filters)
+        fromDatasetSelectors.selectPage.projector(initialDatasetState.filters),
       ).toEqual(0);
     });
   });
@@ -311,8 +318,8 @@ describe("test dataset selectors", () => {
     it("should select the limit filter", () => {
       expect(
         fromDatasetSelectors.selectDatasetsPerPage.projector(
-          initialDatasetState.filters
-        )
+          initialDatasetState.filters,
+        ),
       ).toEqual(30);
     });
   });
@@ -320,7 +327,7 @@ describe("test dataset selectors", () => {
   describe("selectSearchTerms", () => {
     it("should select the current search terms", () => {
       expect(
-        fromDatasetSelectors.selectSearchTerms.projector(initialDatasetState)
+        fromDatasetSelectors.selectSearchTerms.projector(initialDatasetState),
       ).toEqual("run");
     });
   });
@@ -328,7 +335,7 @@ describe("test dataset selectors", () => {
   describe("selectKeywordsTerms", () => {
     it("should select the current keywords terms", () => {
       expect(
-        fromDatasetSelectors.selectKeywordsTerms.projector(initialDatasetState)
+        fromDatasetSelectors.selectKeywordsTerms.projector(initialDatasetState),
       ).toEqual("");
     });
   });
@@ -337,8 +344,8 @@ describe("test dataset selectors", () => {
     it("should return the current state of hasPrefilledFilters", () => {
       expect(
         fromDatasetSelectors.selectHasPrefilledFilters.projector(
-          initialDatasetState
-        )
+          initialDatasetState,
+        ),
       ).toEqual(false);
     });
   });
@@ -347,8 +354,8 @@ describe("test dataset selectors", () => {
     it("should return the current batch", () => {
       expect(
         fromDatasetSelectors.selectDatasetsInBatch.projector(
-          initialDatasetState
-        )
+          initialDatasetState,
+        ),
       ).toEqual([]);
     });
   });
@@ -356,23 +363,23 @@ describe("test dataset selectors", () => {
   describe("selectDatasetsInBatchIndicator", () => {
     it("should return null if there are zero datasets in batch", () => {
       expect(
-        fromDatasetSelectors.selectDatasetsInBatchIndicator.projector([])
+        fromDatasetSelectors.selectDatasetsInBatchIndicator.projector([]),
       ).toBeNull();
     });
 
     it("should return the string '99+' if there are more than 99 datasets in batch", () => {
       expect(
         fromDatasetSelectors.selectDatasetsInBatchIndicator.projector(
-          new Array(100)
-        )
+          new Array(100),
+        ),
       ).toEqual("99+");
     });
 
     it("should return the stringified array length if the length is between 0 and 100", () => {
       expect(
         fromDatasetSelectors.selectDatasetsInBatchIndicator.projector(
-          new Array(5)
-        )
+          new Array(5),
+        ),
       ).toEqual("5");
     });
   });
@@ -381,8 +388,8 @@ describe("test dataset selectors", () => {
     it("should return the current openwhisk result", () => {
       expect(
         fromDatasetSelectors.selectOpenwhiskResult.projector(
-          initialDatasetState
-        )
+          initialDatasetState,
+        ),
       ).toEqual({});
     });
   });
@@ -391,8 +398,8 @@ describe("test dataset selectors", () => {
     it("should return the current related datasets", () => {
       expect(
         fromDatasetSelectors.selectRelatedDatasetsPageViewModel.projector(
-          initialDatasetState
-        )
+          initialDatasetState,
+        ),
       ).toEqual({
         relatedDatasets: [],
         relatedDatasetsCount: 0,
@@ -408,10 +415,8 @@ describe("test dataset selectors", () => {
   describe("selectPidTerms", () => {
     it("should select the current pid terms", () => {
       expect(
-        fromDatasetSelectors.selectPidTerms.projector(initialDatasetState)
+        fromDatasetSelectors.selectPidTerms.projector(initialDatasetState),
       ).toEqual("pid");
     });
   });
-
-
 });

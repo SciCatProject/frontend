@@ -18,15 +18,18 @@ import { UserApi } from "shared/sdk/services";
   providedIn: "root",
 })
 export class AuthGuard implements CanActivate {
-  constructor(private us: UserApi, private router: Router) {}
+  constructor(
+    private us: UserApi,
+    private router: Router,
+  ) {}
 
   /**
    * Needs to return either a boolean or an observable that maps to a boolean
    */
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Promise<boolean>  {
+    state: RouterStateSnapshot,
+  ): Promise<boolean> {
     return this.us
       .getCurrent()
       .toPromise()

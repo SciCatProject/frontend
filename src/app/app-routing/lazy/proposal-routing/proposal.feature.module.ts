@@ -3,9 +3,6 @@ import { ProposalsModule } from "proposals/proposals.module";
 import { ProposalsRoutingModule } from "./proposal.routing.module";
 
 @NgModule({
-  imports: [
-    ProposalsModule,
-    ProposalsRoutingModule
-  ]
+  imports: [ProposalsModule, ProposalsRoutingModule],
 })
 export class ProposalFeatureModule {}

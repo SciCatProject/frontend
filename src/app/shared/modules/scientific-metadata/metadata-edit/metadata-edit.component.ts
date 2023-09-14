@@ -39,7 +39,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
   constructor(
     private formBuilder: FormBuilder,
-    private unitsService: UnitsService
+    private unitsService: UnitsService,
   ) {}
 
   addMetadata() {
@@ -168,9 +168,9 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         map((value: string) => {
           const filterValue = value.toLowerCase();
           return this.units.filter((unit) =>
-            unit.toLowerCase().includes(filterValue)
+            unit.toLowerCase().includes(filterValue),
           );
-        })
+        }),
       );
   }
 

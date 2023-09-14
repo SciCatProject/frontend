@@ -34,47 +34,45 @@ describe("PublishComponent", () => {
   let component: PublishComponent;
   let fixture: ComponentFixture<PublishComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [PublishComponent],
-        imports: [
-          BrowserAnimationsModule,
-          FormsModule,
-          MatButtonModule,
-          MatCardModule,
-          MatChipsModule,
-          MatFormFieldModule,
-          MatIconModule,
-          MatInputModule,
-          MatSelectModule,
-          ReactiveFormsModule,
-        ],
-        providers: [
-          provideMockStore({
-            selectors: [
-              { selector: selectDatasetsInBatch, value: [] },
-              { selector: selectCurrentPublishedData, value: {} },
-            ],
-          }),
-        ],
-      });
-      TestBed.overrideComponent(PublishComponent, {
-        set: {
-          providers: [
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-            { provide: ActionsSubject, useValue: of({}) },
-            { provide: AppConfigService, useValue: { getConfig } },
-            { provide: PublishedDataApi, useClass: MockPublishedDataApi },
-            { provide: Router, useClass: MockRouter },
-            { provide: Store, useClass: MockStore },
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [PublishComponent],
+      imports: [
+        BrowserAnimationsModule,
+        FormsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatChipsModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatSelectModule,
+        ReactiveFormsModule,
+      ],
+      providers: [
+        provideMockStore({
+          selectors: [
+            { selector: selectDatasetsInBatch, value: [] },
+            { selector: selectCurrentPublishedData, value: {} },
           ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+        }),
+      ],
+    });
+    TestBed.overrideComponent(PublishComponent, {
+      set: {
+        providers: [
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: ActionsSubject, useValue: of({}) },
+          { provide: AppConfigService, useValue: { getConfig } },
+          { provide: PublishedDataApi, useClass: MockPublishedDataApi },
+          { provide: Router, useClass: MockRouter },
+          { provide: Store, useClass: MockStore },
+        ],
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PublishComponent);

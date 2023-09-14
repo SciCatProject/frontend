@@ -53,11 +53,11 @@ export class DatasetEffects {
       mergeMap(({ query, limits }) =>
         this.datasetApi.fullquery(query, limits).pipe(
           map((datasets) =>
-            fromActions.fetchDatasetsCompleteAction({ datasets })
+            fromActions.fetchDatasetsCompleteAction({ datasets }),
           ),
-          catchError(() => of(fromActions.fetchDatasetsFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.fetchDatasetsFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -76,9 +76,9 @@ export class DatasetEffects {
               allCounts,
             });
           }),
-          catchError(() => of(fromActions.fetchFacetCountsFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.fetchFacetCountsFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -92,11 +92,11 @@ export class DatasetEffects {
         parsedQuery.metadataKey = "";
         return this.datasetApi.metadataKeys(JSON.stringify(parsedQuery)).pipe(
           map((metadataKeys) =>
-            fromActions.fetchMetadataKeysCompleteAction({ metadataKeys })
+            fromActions.fetchMetadataKeysCompleteAction({ metadataKeys }),
           ),
-          catchError(() => of(fromActions.fetchMetadataKeysFailedAction()))
+          catchError(() => of(fromActions.fetchMetadataKeysFailedAction())),
         );
-      })
+      }),
     );
   });
 
@@ -104,8 +104,8 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.changePageAction),
       map(({ limit }) =>
-        updateUserSettingsAction({ property: { datasetCount: limit } })
-      )
+        updateUserSettingsAction({ property: { datasetCount: limit } }),
+      ),
     );
   });
 
@@ -114,9 +114,9 @@ export class DatasetEffects {
       ofType(
         fromActions.addScientificConditionAction,
         fromActions.removeScientificConditionAction,
-        fromActions.clearFacetsAction
+        fromActions.clearFacetsAction,
       ),
-      map(() => fromActions.fetchMetadataKeysAction())
+      map(() => fromActions.fetchMetadataKeysAction()),
     );
   });
 
@@ -126,11 +126,11 @@ export class DatasetEffects {
       switchMap(({ pid }) => {
         return this.datasetApi.findById<Dataset>(encodeURIComponent(pid)).pipe(
           map((dataset: Dataset) =>
-            fromActions.fetchDatasetCompleteAction({ dataset })
+            fromActions.fetchDatasetCompleteAction({ dataset }),
           ),
-          catchError(() => of(fromActions.fetchDatasetFailedAction()))
+          catchError(() => of(fromActions.fetchDatasetFailedAction())),
         );
-      })
+      }),
     );
   });
   fetchDatablocksOfDataset$ = createEffect(() => {
@@ -141,11 +141,11 @@ export class DatasetEffects {
           .getDatablocks(encodeURIComponent(pid), filters)
           .pipe(
             map((datablocks: Datablock[]) =>
-              fromActions.fetchDatablocksCompleteAction({ datablocks })
+              fromActions.fetchDatablocksCompleteAction({ datablocks }),
             ),
-            catchError(() => of(fromActions.fetchDatablocksFailedAction()))
+            catchError(() => of(fromActions.fetchDatablocksFailedAction())),
           );
-      })
+      }),
     );
   });
 
@@ -157,11 +157,11 @@ export class DatasetEffects {
           .getOrigdatablocks(encodeURIComponent(pid), {})
           .pipe(
             map((origdatablocks: OrigDatablock[]) =>
-              fromActions.fetchOrigDatablocksCompleteAction({ origdatablocks })
+              fromActions.fetchOrigDatablocksCompleteAction({ origdatablocks }),
             ),
-            catchError(() => of(fromActions.fetchOrigDatablocksFailedAction()))
+            catchError(() => of(fromActions.fetchOrigDatablocksFailedAction())),
           );
-      })
+      }),
     );
   });
 
@@ -173,11 +173,11 @@ export class DatasetEffects {
           .getAttachments(encodeURIComponent(pid), filters)
           .pipe(
             map((attachments: Attachment[]) =>
-              fromActions.fetchAttachmentsCompleteAction({ attachments })
+              fromActions.fetchAttachmentsCompleteAction({ attachments }),
             ),
-            catchError(() => of(fromActions.fetchAttachmentsFailedAction()))
+            catchError(() => of(fromActions.fetchAttachmentsFailedAction())),
           );
-      })
+      }),
     );
   });
 
@@ -208,11 +208,11 @@ export class DatasetEffects {
         }
         return this.datasetApi.find<Dataset>(queryFilter).pipe(
           map((relatedDatasets: Dataset[]) =>
-            fromActions.fetchRelatedDatasetsCompleteAction({ relatedDatasets })
+            fromActions.fetchRelatedDatasetsCompleteAction({ relatedDatasets }),
           ),
-          catchError(() => of(fromActions.fetchRelatedDatasetsFailedAction()))
+          catchError(() => of(fromActions.fetchRelatedDatasetsFailedAction())),
         );
-      })
+      }),
     );
   });
 
@@ -239,13 +239,13 @@ export class DatasetEffects {
           map((datasets) =>
             fromActions.fetchRelatedDatasetsCountCompleteAction({
               count: datasets.length,
-            })
+            }),
           ),
           catchError(() =>
-            of(fromActions.fetchRelatedDatasetsCountFailedAction())
-          )
+            of(fromActions.fetchRelatedDatasetsCountFailedAction()),
+          ),
         );
-      })
+      }),
     );
   });
 
@@ -259,9 +259,9 @@ export class DatasetEffects {
             fromActions.fetchDatasetsAction(),
             fromActions.fetchDatasetAction({ pid: res.pid }),
           ]),
-          catchError(() => of(fromActions.addDatasetFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.addDatasetFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -274,9 +274,9 @@ export class DatasetEffects {
             fromActions.updatePropertyCompleteAction(),
             fromActions.fetchDatasetAction({ pid }),
           ]),
-          catchError(() => of(fromActions.updatePropertyFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.updatePropertyFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -296,11 +296,11 @@ export class DatasetEffects {
           .createAttachments(encodeURIComponent(theRest.datasetId!), theRest)
           .pipe(
             map((res) =>
-              fromActions.addAttachmentCompleteAction({ attachment: res })
+              fromActions.addAttachmentCompleteAction({ attachment: res }),
             ),
-            catchError(() => of(fromActions.addAttachmentFailedAction()))
+            catchError(() => of(fromActions.addAttachmentFailedAction())),
           );
-      })
+      }),
     );
   });
 
@@ -313,17 +313,17 @@ export class DatasetEffects {
           .updateByIdAttachments(
             encodeURIComponent(datasetId),
             encodeURIComponent(attachmentId),
-            data
+            data,
           )
           .pipe(
             map((attachment) =>
-              fromActions.updateAttachmentCaptionCompleteAction({ attachment })
+              fromActions.updateAttachmentCaptionCompleteAction({ attachment }),
             ),
             catchError(() =>
-              of(fromActions.updateAttachmentCaptionFailedAction())
-            )
+              of(fromActions.updateAttachmentCaptionFailedAction()),
+            ),
           );
-      })
+      }),
     );
   });
 
@@ -335,11 +335,11 @@ export class DatasetEffects {
           .destroyByIdAttachments(encodeURIComponent(datasetId), attachmentId)
           .pipe(
             map(() =>
-              fromActions.removeAttachmentCompleteAction({ attachmentId })
+              fromActions.removeAttachmentCompleteAction({ attachmentId }),
             ),
-            catchError(() => of(fromActions.removeAttachmentFailedAction()))
-          )
-      )
+            catchError(() => of(fromActions.removeAttachmentFailedAction())),
+          ),
+      ),
     );
   });
 
@@ -349,9 +349,9 @@ export class DatasetEffects {
       mergeMap(({ dataset }) =>
         this.datasetApi.reduceDataset(dataset).pipe(
           map((result) => fromActions.reduceDatasetCompleteAction({ result })),
-          catchError(() => of(fromActions.reduceDatasetFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.reduceDatasetFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -362,10 +362,10 @@ export class DatasetEffects {
         this.datasetApi.appendToArrayField(pid, fieldName, data).pipe(
           map(() => fromActions.appendToDatasetArrayFieldCompleteAction()),
           catchError(() =>
-            of(fromActions.appendToDatasetArrayFieldFailedAction())
-          )
-        )
-      )
+            of(fromActions.appendToDatasetArrayFieldFailedAction()),
+          ),
+        ),
+      ),
     );
   });
 
@@ -383,9 +383,9 @@ export class DatasetEffects {
         fromActions.updatePropertyAction,
         fromActions.addAttachmentAction,
         fromActions.updateAttachmentCaptionAction,
-        fromActions.removeAttachmentAction
+        fromActions.removeAttachmentAction,
       ),
-      switchMap(() => of(loadingAction()))
+      switchMap(() => of(loadingAction())),
     );
   });
 
@@ -417,9 +417,9 @@ export class DatasetEffects {
         fromActions.updateAttachmentCaptionCompleteAction,
         fromActions.updateAttachmentCaptionFailedAction,
         fromActions.removeAttachmentCompleteAction,
-        fromActions.removeAttachmentFailedAction
+        fromActions.removeAttachmentFailedAction,
       ),
-      switchMap(() => of(loadingCompleteAction()))
+      switchMap(() => of(loadingCompleteAction())),
     );
   });
 
@@ -429,7 +429,7 @@ export class DatasetEffects {
       concatLatestFrom(() => this.currentUser$),
       filter(([, user]) => user != null),
       map(([, user]) => this.retrieveBatch(user?.id)),
-      map((batch) => fromActions.prefillBatchCompleteAction({ batch }))
+      map((batch) => fromActions.prefillBatchCompleteAction({ batch })),
     );
   });
 
@@ -440,29 +440,29 @@ export class DatasetEffects {
           fromActions.addToBatchAction,
           fromActions.storeBatchAction,
           fromActions.removeFromBatchAction,
-          fromActions.clearBatchAction
+          fromActions.clearBatchAction,
         ),
         withLatestFrom(this.datasetsInBatch$, this.currentUser$),
-        tap(([, batch, user]) => this.storeBatch(batch, user?.id))
+        tap(([, batch, user]) => this.storeBatch(batch, user?.id)),
       );
     },
-    { dispatch: false }
+    { dispatch: false },
   );
 
   clearBatchOnLogout$ = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(logoutCompleteAction),
-        tap(() => this.storeBatch([], ""))
+        tap(() => this.storeBatch([], "")),
       );
     },
-    { dispatch: false }
+    { dispatch: false },
   );
 
   constructor(
     private actions$: Actions,
     private datasetApi: DatasetApi,
-    private store: Store
+    private store: Store,
   ) {}
 
   private storeBatch(batch: Dataset[], userId: string) {

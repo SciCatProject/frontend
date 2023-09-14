@@ -33,7 +33,7 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<SampleDialogComponent>,
     @Inject(MAT_DIALOG_DATA)
-    { description, sampleCharacteristics, ownerGroup }: Sample
+    { description, sampleCharacteristics, ownerGroup }: Sample,
   ) {
     this.description = description;
 
@@ -82,7 +82,7 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
         if (vm.user) {
           this.username = vm.user.username;
         }
-      })
+      }),
     );
 
     this.subscriptions.push(
@@ -90,7 +90,7 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
         if (vm.profile) {
           this.userGroups = vm.profile.accessGroups;
         }
-      })
+      }),
     );
   }
 

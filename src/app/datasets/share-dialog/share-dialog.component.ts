@@ -29,7 +29,7 @@ export class ShareDialogComponent {
       infoMessage: string;
       disableShareButton: boolean;
       sharedUsersList: string[];
-    }
+    },
   ) {
     this.data = JSON.parse(JSON.stringify(data));
     this.users = this.data.sharedUsersList;
@@ -51,7 +51,7 @@ export class ShareDialogComponent {
         const message = new Message(
           "The email address is not connected to a SciCat user",
           MessageType.Error,
-          5000
+          5000,
         );
         this.store.dispatch(showMessageAction({ message }));
 
@@ -64,7 +64,7 @@ export class ShareDialogComponent {
       const message = new Message(
         "The email address is not connected to a SciCat user",
         MessageType.Error,
-        5000
+        5000,
       );
       this.store.dispatch(showMessageAction({ message }));
     }

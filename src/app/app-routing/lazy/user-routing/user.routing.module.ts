@@ -9,28 +9,28 @@ import { UserSettingsComponent } from "users/user-settings/user-settings.compone
 const routes: Routes = [
   {
     path: "",
-      component: UserSettingsComponent,
-      pathMatch: "full",
-      canActivate: [AuthGuard],
-    },
-    {
-      path: "settings",
-      component: UserSettingsComponent,
-      canActivate: [AuthGuard],
-    },
-    {
-      path: "jobs",
-      component: JobsDashboardNewComponent,
-      canActivate: [AuthGuard, JobsGuard],
-    },
-    {
-      path: "jobs/:id",
-      component: JobsDetailComponent,
-      canActivate: [AuthGuard, JobsGuard],
-    },
+    component: UserSettingsComponent,
+    pathMatch: "full",
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "settings",
+    component: UserSettingsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: "jobs",
+    component: JobsDashboardNewComponent,
+    canActivate: [AuthGuard, JobsGuard],
+  },
+  {
+    path: "jobs/:id",
+    component: JobsDetailComponent,
+    canActivate: [AuthGuard, JobsGuard],
+  },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class UsersRoutingModule {}

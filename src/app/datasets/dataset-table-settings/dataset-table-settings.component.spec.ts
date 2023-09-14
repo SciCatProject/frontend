@@ -22,21 +22,19 @@ describe("DatasetTableSettingsComponent", () => {
 
   let emitSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [DatasetTableSettingsComponent],
-        imports: [
-          BrowserAnimationsModule,
-          MatButtonModule,
-          MatCheckboxModule,
-          MatIconModule,
-          SearchBarModule,
-        ],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [DatasetTableSettingsComponent],
+      imports: [
+        BrowserAnimationsModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatIconModule,
+        SearchBarModule,
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetTableSettingsComponent);

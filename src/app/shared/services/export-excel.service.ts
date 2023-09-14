@@ -15,7 +15,7 @@ export interface ExcelData {
   providedIn: "root",
 })
 export class ExportExcelService {
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   exportExcel(excelData: ExcelData) {
     // Title, Header & Data
@@ -67,7 +67,6 @@ export class ExportExcelService {
         worksheet.mergeCells("A1:B4");
         worksheet.addImage(myLogoImage, "A1:B4"); */
 
-
     // URL
     worksheet.mergeCells("C5", "H6");
     const urlRow = worksheet.getCell("C5");
@@ -80,7 +79,6 @@ export class ExportExcelService {
       color: { argb: "0085A3" },
     };
     urlRow.alignment = { vertical: "middle", horizontal: "center" };
-
 
     // Blank Row
     worksheet.addRow([]);
@@ -124,7 +122,6 @@ export class ExportExcelService {
       //   };
     });
 
-
     worksheet.addRow([]);
 
     // Footer Row
@@ -141,8 +138,7 @@ export class ExportExcelService {
     // Generate & Save Excel File
     workbook.xlsx.writeBuffer().then((writeData) => {
       const blob = new Blob([writeData], {
-        type:
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
       fs.saveAs(blob, title + ".xlsx");
     });

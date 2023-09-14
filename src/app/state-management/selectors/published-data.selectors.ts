@@ -6,22 +6,22 @@ const selectPublishedDataState =
 
 export const selectAllPublishedData = createSelector(
   selectPublishedDataState,
-  (state) => state.publishedData
+  (state) => state.publishedData,
 );
 
 export const selectCurrentPublishedData = createSelector(
   selectPublishedDataState,
-  (state) => state.currentPublishedData
+  (state) => state.currentPublishedData,
 );
 
 export const selectPublishedDataCount = createSelector(
   selectPublishedDataState,
-  (state) => state.totalCount
+  (state) => state.totalCount,
 );
 
 export const selectFilters = createSelector(
   selectPublishedDataState,
-  (state) => state.filters
+  (state) => state.filters,
 );
 
 export const selectPage = createSelector(selectFilters, (filters) => {
@@ -31,7 +31,7 @@ export const selectPage = createSelector(selectFilters, (filters) => {
 
 export const selectPublishedDataPerPage = createSelector(
   selectFilters,
-  (filters) => filters.limit
+  (filters) => filters.limit,
 );
 
 export const selectPublishedDataDashboardPageViewModel = createSelector(
@@ -46,7 +46,7 @@ export const selectPublishedDataDashboardPageViewModel = createSelector(
     currentPage,
     publishedDataPerPage,
     filters,
-  })
+  }),
 );
 
 export const selectQueryParams = createSelector(selectFilters, (filters) => {

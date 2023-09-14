@@ -52,8 +52,8 @@ export class SampleEditComponent implements OnInit, OnDestroy {
     .select(selectSamples)
     .pipe(
       map((samples) =>
-        samples.filter((sample) => sample.ownerGroup === this.data.ownerGroup)
-      )
+        samples.filter((sample) => sample.ownerGroup === this.data.ownerGroup),
+      ),
     );
 
   samplesSubscription: Subscription = new Subscription();
@@ -69,14 +69,17 @@ export class SampleEditComponent implements OnInit, OnDestroy {
   ];
 
   form = new FormGroup({
-    sample: new FormControl<Sample>(null, [Validators.required, this.sampleValidator()]),
+    sample: new FormControl<Sample>(null, [
+      Validators.required,
+      this.sampleValidator(),
+    ]),
   });
 
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: { ownerGroup: string; sampleId: string },
     public dialogRef: MatDialogRef<SampleEditComponent>,
-    private store: Store<Sample>
+    private store: Store<Sample>,
   ) {
     this.store.dispatch(setTextFilterAction({ text: "" }));
     this.store.dispatch(changePageAction({ page: 0, limit: 10 }));
@@ -97,7 +100,6 @@ export class SampleEditComponent implements OnInit, OnDestroy {
 
   sampleValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
-
       const isCurrentSample = control.value?.sampleId === this.data.sampleId;
       return isCurrentSample
         ? { isCurrentSample: { value: control.value } }
@@ -118,12 +120,12 @@ export class SampleEditComponent implements OnInit, OnDestroy {
 
   onPageChange = (event: PageChangeEvent): void =>
     this.store.dispatch(
-      changePageAction({ page: event.pageIndex, limit: event.pageSize })
+      changePageAction({ page: event.pageIndex, limit: event.pageSize }),
     );
 
   onSortChange = (event: SortChangeEvent): void =>
     this.store.dispatch(
-      sortByColumnAction({ column: event.active, direction: event.direction })
+      sortByColumnAction({ column: event.active, direction: event.direction }),
     );
 
   onRowClick = (sample: Sample): void => {

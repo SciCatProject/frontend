@@ -46,40 +46,38 @@ describe("SampleDetailComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [SampleDetailComponent],
-        imports: [
-          BrowserAnimationsModule,
-          FlexLayoutModule,
-          MatButtonModule,
-          MatCardModule,
-          MatIconModule,
-          MatTabsModule,
-          NgxJsonViewerModule,
-          SharedScicatFrontendModule,
-          StoreModule.forRoot({}),
-        ],
-        providers: [DatePipe, FileSizePipe, SlicePipe],
-      });
-      TestBed.overrideComponent(SampleDetailComponent, {
-        set: {
-          providers: [
-            {
-              provide: AppConfigService,
-              useValue: {
-                getConfig,
-              },
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [SampleDetailComponent],
+      imports: [
+        BrowserAnimationsModule,
+        FlexLayoutModule,
+        MatButtonModule,
+        MatCardModule,
+        MatIconModule,
+        MatTabsModule,
+        NgxJsonViewerModule,
+        SharedScicatFrontendModule,
+        StoreModule.forRoot({}),
+      ],
+      providers: [DatePipe, FileSizePipe, SlicePipe],
+    });
+    TestBed.overrideComponent(SampleDetailComponent, {
+      set: {
+        providers: [
+          {
+            provide: AppConfigService,
+            useValue: {
+              getConfig,
             },
-            { provide: Router, useValue: router },
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+          },
+          { provide: Router, useValue: router },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+        ],
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SampleDetailComponent);
@@ -130,7 +128,7 @@ describe("SampleDetailComponent", () => {
         saveCharacteristicsAction({
           sampleId: sample.sampleId,
           characteristics,
-        })
+        }),
       );
     });
   });
@@ -151,7 +149,7 @@ describe("SampleDetailComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        addAttachmentAction({ attachment: component.attachment })
+        addAttachmentAction({ attachment: component.attachment }),
       );
     });
   });
@@ -175,7 +173,7 @@ describe("SampleDetailComponent", () => {
           sampleId,
           attachmentId: event.attachmentId,
           caption: event.caption,
-        })
+        }),
       );
     });
   });
@@ -192,7 +190,7 @@ describe("SampleDetailComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        removeAttachmentAction({ sampleId, attachmentId })
+        removeAttachmentAction({ sampleId, attachmentId }),
       );
     });
   });
@@ -217,10 +215,10 @@ describe("SampleDetailComponent", () => {
         changeDatasetsPageAction({
           page: event.pageIndex,
           limit: event.pageSize,
-        })
+        }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchSampleDatasetsAction({ sampleId: sample.sampleId })
+        fetchSampleDatasetsAction({ sampleId: sample.sampleId }),
       );
     });
   });
@@ -234,7 +232,7 @@ describe("SampleDetailComponent", () => {
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
       expect(router.navigateByUrl).toHaveBeenCalledWith(
-        "/datasets/" + dataset.pid
+        "/datasets/" + dataset.pid,
       );
     });
   });

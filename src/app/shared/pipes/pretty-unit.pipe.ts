@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from "@angular/core";
 import { UnitsService } from "shared/services/units.service";
 
 @Pipe({
-  name: "prettyUnit"
+  name: "prettyUnit",
 })
 export class PrettyUnitPipe implements PipeTransform {
   constructor(private unitsService: UnitsService) {}

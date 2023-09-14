@@ -25,7 +25,7 @@ export class SampleEffects {
         fromActions.fetchSamplesAction,
         fromActions.changePageAction,
         fromActions.sortByColumnAction,
-        fromActions.setTextFilterAction
+        fromActions.setTextFilterAction,
       ),
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
@@ -35,9 +35,9 @@ export class SampleEffects {
             fromActions.fetchSamplesCompleteAction({ samples }),
             fromActions.fetchSamplesCountAction(),
           ]),
-          catchError(() => of(fromActions.fetchSamplesFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.fetchSamplesFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -51,11 +51,11 @@ export class SampleEffects {
           map((samples) =>
             fromActions.fetchSamplesCountCompleteAction({
               count: samples.length,
-            })
+            }),
           ),
-          catchError(() => of(fromActions.fetchSamplesCountFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.fetchSamplesCountFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -69,11 +69,11 @@ export class SampleEffects {
         parsedQuery.metadataKey = "";
         return this.sampleApi.metadataKeys(JSON.stringify(parsedQuery)).pipe(
           map((metadataKeys) =>
-            fromActions.fetchMetadataKeysCompleteAction({ metadataKeys })
+            fromActions.fetchMetadataKeysCompleteAction({ metadataKeys }),
           ),
-          catchError(() => of(fromActions.fetchMetadataKeysFailedAction()))
+          catchError(() => of(fromActions.fetchMetadataKeysFailedAction())),
         );
-      })
+      }),
     );
   });
 
@@ -83,11 +83,11 @@ export class SampleEffects {
       switchMap(({ sampleId }) => {
         return this.sampleApi.findById<Sample>(sampleId).pipe(
           map((sample: Sample) =>
-            fromActions.fetchSampleCompleteAction({ sample })
+            fromActions.fetchSampleCompleteAction({ sample }),
           ),
-          catchError(() => of(fromActions.fetchSampleFailedAction()))
+          catchError(() => of(fromActions.fetchSampleFailedAction())),
         );
-      })
+      }),
     );
   });
 
@@ -97,11 +97,13 @@ export class SampleEffects {
       switchMap(({ sampleId }) => {
         return this.sampleApi.getAttachments(sampleId).pipe(
           map((attachments: Attachment[]) =>
-            fromActions.fetchSampleAttachmentsCompleteAction({ attachments })
+            fromActions.fetchSampleAttachmentsCompleteAction({ attachments }),
           ),
-          catchError(() => of(fromActions.fetchSampleAttachmentsFailedAction()))
+          catchError(() =>
+            of(fromActions.fetchSampleAttachmentsFailedAction()),
+          ),
         );
-      })
+      }),
     );
   });
 
@@ -117,9 +119,9 @@ export class SampleEffects {
               fromActions.fetchSampleDatasetsCompleteAction({ datasets }),
               fromActions.fetchSampleDatasetsCountAction({ sampleId }),
             ]),
-            catchError(() => of(fromActions.fetchSampleDatasetsFailedAction()))
-          )
-      )
+            catchError(() => of(fromActions.fetchSampleDatasetsFailedAction())),
+          ),
+      ),
     );
   });
 
@@ -131,13 +133,13 @@ export class SampleEffects {
           map((datasets) =>
             fromActions.fetchSampleDatasetsCountCompleteAction({
               count: datasets.length,
-            })
+            }),
           ),
           catchError(() =>
-            of(fromActions.fetchSampleDatasetsCountFailedAction())
-          )
-        )
-      )
+            of(fromActions.fetchSampleDatasetsCountFailedAction()),
+          ),
+        ),
+      ),
     );
   });
 
@@ -151,11 +153,11 @@ export class SampleEffects {
           })
           .pipe(
             map((sample: Sample) =>
-              fromActions.saveCharacteristicsCompleteAction({ sample })
+              fromActions.saveCharacteristicsCompleteAction({ sample }),
             ),
-            catchError(() => of(fromActions.saveCharacteristicsFailedAction()))
-          )
-      )
+            catchError(() => of(fromActions.saveCharacteristicsFailedAction())),
+          ),
+      ),
     );
   });
 
@@ -168,9 +170,9 @@ export class SampleEffects {
             fromActions.addSampleCompleteAction({ sample: res }),
             fromActions.fetchSamplesAction(),
           ]),
-          catchError(() => of(fromActions.addSampleFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.addSampleFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -190,11 +192,11 @@ export class SampleEffects {
           .createAttachments(encodeURIComponent(theRest.sampleId!), theRest)
           .pipe(
             map((res) =>
-              fromActions.addAttachmentCompleteAction({ attachment: res })
+              fromActions.addAttachmentCompleteAction({ attachment: res }),
             ),
-            catchError(() => of(fromActions.addAttachmentFailedAction()))
+            catchError(() => of(fromActions.addAttachmentFailedAction())),
           );
-      })
+      }),
     );
   });
 
@@ -207,19 +209,19 @@ export class SampleEffects {
           .updateByIdAttachments(
             encodeURIComponent(sampleId),
             encodeURIComponent(attachmentId),
-            newCaption
+            newCaption,
           )
           .pipe(
             map((res) =>
               fromActions.updateAttachmentCaptionCompleteAction({
                 attachment: res,
-              })
+              }),
             ),
             catchError(() =>
-              of(fromActions.updateAttachmentCaptionFailedAction())
-            )
+              of(fromActions.updateAttachmentCaptionFailedAction()),
+            ),
           );
-      })
+      }),
     );
   });
 
@@ -230,15 +232,15 @@ export class SampleEffects {
         this.sampleApi
           .destroyByIdAttachments(
             encodeURIComponent(sampleId),
-            encodeURIComponent(attachmentId)
+            encodeURIComponent(attachmentId),
           )
           .pipe(
             map(() =>
-              fromActions.removeAttachmentCompleteAction({ attachmentId })
+              fromActions.removeAttachmentCompleteAction({ attachmentId }),
             ),
-            catchError(() => of(fromActions.removeAttachmentFailedAction()))
-          )
-      )
+            catchError(() => of(fromActions.removeAttachmentFailedAction())),
+          ),
+      ),
     );
   });
 
@@ -254,9 +256,9 @@ export class SampleEffects {
         fromActions.saveCharacteristicsAction,
         fromActions.addAttachmentAction,
         fromActions.updateAttachmentCaptionAction,
-        fromActions.removeAttachmentAction
+        fromActions.removeAttachmentAction,
       ),
-      switchMap(() => of(loadingAction()))
+      switchMap(() => of(loadingAction())),
     );
   });
 
@@ -282,9 +284,9 @@ export class SampleEffects {
         fromActions.updateAttachmentCaptionCompleteAction,
         fromActions.updateAttachmentCaptionFailedAction,
         fromActions.removeAttachmentCompleteAction,
-        fromActions.removeAttachmentFailedAction
+        fromActions.removeAttachmentFailedAction,
       ),
-      switchMap(() => of(loadingCompleteAction()))
+      switchMap(() => of(loadingCompleteAction())),
     );
   });
 
@@ -292,6 +294,6 @@ export class SampleEffects {
     private actions$: Actions,
     private datasetApi: DatasetApi,
     private sampleApi: SampleApi,
-    private store: Store
+    private store: Store,
   ) {}
 }

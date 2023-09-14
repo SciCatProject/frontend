@@ -49,7 +49,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     private metaService: Meta,
     public snackBar: MatSnackBar,
     private titleService: Title,
-    private store: Store
+    private store: Store,
   ) {
     this.config = this.appConfigService.getConfig();
     this.facility = this.config.facility ?? "";
@@ -72,7 +72,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     console.log(LoopBackConfig.getPath());
 
     this.store.dispatch(
-      setDatasetTableColumnsAction({ columns: this.config.localColumns })
+      setDatasetTableColumnsAction({ columns: this.config.localColumns }),
     );
 
     this.store.dispatch(fetchCurrentUserAction());

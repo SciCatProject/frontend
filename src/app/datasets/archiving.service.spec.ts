@@ -53,13 +53,13 @@ describe("ArchivingService", () => {
         files: [],
       }));
       const archive = true;
-      const destinationPath = {destinationPath: "/test/path/"};
+      const destinationPath = { destinationPath: "/test/path/" };
 
       const job = service["createJob"](
         user,
         datasets,
         archive,
-        destinationPath
+        destinationPath,
       );
 
       expect(job).toBeInstanceOf(Job);
@@ -99,7 +99,7 @@ describe("ArchivingService", () => {
       });
       const createJobSpy = spyOn<any, string>(
         service,
-        "createJob"
+        "createJob",
       ).and.returnValue(job);
 
       service["archiveOrRetrieve"](datasets, archive).subscribe(() => {
@@ -107,7 +107,7 @@ describe("ArchivingService", () => {
           user,
           datasets,
           archive,
-          undefined
+          undefined,
         );
         expect(dispatchSpy).toHaveBeenCalledOnceWith(submitJobAction({ job }));
       });
@@ -118,7 +118,7 @@ describe("ArchivingService", () => {
     it("should call #archiveOrRetrieve() with archive set to `true`", () => {
       const archiveOrRetrieveSpy = spyOn<any, string>(
         service,
-        "archiveOrRetrieve"
+        "archiveOrRetrieve",
       );
       const datasets = [new Dataset()];
 
@@ -132,17 +132,17 @@ describe("ArchivingService", () => {
     it("should call #archiveOrRetrieve() with archive set to `false`", () => {
       const archiveOrRetrieveSpy = spyOn<any, string>(
         service,
-        "archiveOrRetrieve"
+        "archiveOrRetrieve",
       );
       const datasets = [new Dataset()];
-      const destinationPath = {location: "/test/path/"};
+      const destinationPath = { location: "/test/path/" };
 
       service.retrieve(datasets, destinationPath);
 
       expect(archiveOrRetrieveSpy).toHaveBeenCalledOnceWith(
         datasets,
         false,
-        destinationPath
+        destinationPath,
       );
     });
   });
@@ -150,30 +150,34 @@ describe("ArchivingService", () => {
   describe("#generateOptionLocation()", () => {
     it("should return the generated path", () => {
       const result = { option: "option", location: "relative" };
-      const destinations = [{ option: "option", location: "/root/" }, { option: "option2" }];
-      expect(service.generateOptionLocation(result, destinations)).toEqual(
-        {option: "option", location: "/root/relative"}
-      );
+      const destinations = [
+        { option: "option", location: "/root/" },
+        { option: "option2" },
+      ];
+      expect(service.generateOptionLocation(result, destinations)).toEqual({
+        option: "option",
+        location: "/root/relative",
+      });
     });
   });
 
   describe("#retriveDialogOptions()", () => {
     it("should return the dialog options when retrieving", () => {
-      const destinations: RetrieveDestinations[] = [{option: "option1"}, {option: "option2"}];
-      expect(service.retriveDialogOptions(destinations)).toEqual(
-        {
-          width: "auto",
-          data: {
-            title: "Retrieve to",
-            question: "",
-            choice: {
-              options: destinations
-            },
-            option: destinations[0].option
+      const destinations: RetrieveDestinations[] = [
+        { option: "option1" },
+        { option: "option2" },
+      ];
+      expect(service.retriveDialogOptions(destinations)).toEqual({
+        width: "auto",
+        data: {
+          title: "Retrieve to",
+          question: "",
+          choice: {
+            options: destinations,
           },
-        }
-      );
+          option: destinations[0].option,
+        },
+      });
     });
   });
-
 });

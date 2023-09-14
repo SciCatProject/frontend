@@ -20,7 +20,7 @@ export class UserSettingsComponent implements OnInit {
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    private store: Store
+    private store: Store,
   ) {
     // TODO handle service and endpoint for user settings
   }
@@ -28,7 +28,7 @@ export class UserSettingsComponent implements OnInit {
   ngOnInit() {
     this.vm$.subscribe(
       (settings) =>
-        (this.tokenValue = settings.scicatToken.replace("Bearer ", ""))
+        (this.tokenValue = settings.scicatToken.replace("Bearer ", "")),
     );
     this.store.dispatch(fetchCurrentUserAction());
     this.store.dispatch(fetchScicatTokenAction());
@@ -50,7 +50,7 @@ export class UserSettingsComponent implements OnInit {
     const message = new Message(
       "SciCat token has been copied to your clipboard",
       MessageType.Success,
-      5000
+      5000,
     );
     this.store.dispatch(showMessageAction({ message }));
   }

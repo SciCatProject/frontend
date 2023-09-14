@@ -50,12 +50,12 @@ export interface CheckboxEvent {
     trigger("detailExpand", [
       state(
         "collapsed",
-        style({ height: "0px", minHeight: "0", visibility: "hidden" })
+        style({ height: "0px", minHeight: "0", visibility: "hidden" }),
       ),
       state("expanded", style({ height: "*", visibility: "visible" })),
       transition(
         "expanded <=> collapsed",
-        animate("300ms cubic-bezier(0.4, 0.0, 0.2, 1)")
+        animate("300ms cubic-bezier(0.4, 0.0, 0.2, 1)"),
       ),
     ]),
   ],
@@ -66,7 +66,8 @@ export class SharedTableComponent
     AfterViewInit,
     AfterContentInit,
     OnDestroy,
-    OnInit {
+    OnInit
+{
   private subscriptions: Subscription[] = [];
   public MIN_COLUMN_WIDTH = 200;
 
@@ -115,15 +116,15 @@ export class SharedTableComponent
     private ruler: ViewportRuler,
     private _changeDetectorRef: ChangeDetectorRef,
     private zone: NgZone,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
   ) {
     // react to viewport width changes with column restructuring
     this.subscriptions.push(
       this.ruler.change(100).subscribe((data) => {
         this.toggleColumns(
-          this.dataTable["_elementRef"].nativeElement.clientWidth
+          this.dataTable["_elementRef"].nativeElement.clientWidth,
         );
-      })
+      }),
     );
   }
   ngOnInit() {
@@ -154,7 +155,7 @@ export class SharedTableComponent
         }
         return acc;
       },
-      {}
+      {},
     );
     formControls["globalSearch"] = [""];
     return this.formBuilder.group(formControls);
@@ -201,7 +202,7 @@ export class SharedTableComponent
   ngAfterViewInit() {
     // reset the paginator after sorting
     this.subscriptions.push(
-      this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0))
+      this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0)),
     );
 
     this.setDefaultFilters();
@@ -218,7 +219,7 @@ export class SharedTableComponent
             queryParamsHandling: "merge",
           });
           this.loadDataPage();
-        })
+        }),
       )
       .subscribe();
 
@@ -247,7 +248,7 @@ export class SharedTableComponent
     this.dataSource.loadExportData(
       this.filterExpressions,
       this.sort.active,
-      this.sort.direction
+      this.sort.direction,
     );
   }
 
@@ -258,7 +259,7 @@ export class SharedTableComponent
       this.sort.direction,
       this.paginator.pageIndex,
       this.paginator.pageSize,
-      this.isFilesDashboard
+      this.isFilesDashboard,
     );
   }
 
@@ -428,7 +429,7 @@ export class SharedTableComponent
 
   getFilterColumns() {
     const filterColumns = this.visibleColumns.map(
-      (column) => `${column.id}-filter`
+      (column) => `${column.id}-filter`,
     );
     return this.hiddenColumns.length
       ? [`hidden-filter-trigger`, ...filterColumns]

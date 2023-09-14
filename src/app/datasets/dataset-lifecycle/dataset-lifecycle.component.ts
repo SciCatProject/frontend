@@ -32,7 +32,7 @@ export interface HistoryItem {
       state("expanded", style({ height: "*" })),
       transition(
         "expanded <=> collapsed",
-        animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")
+        animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)"),
       ),
     ]),
   ],
@@ -55,7 +55,7 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
   constructor(
     public appConfigService: AppConfigService,
     private datePipe: DatePipe,
-    private store: Store
+    private store: Store,
   ) {}
 
   private parseHistoryItems(): HistoryItem[] {
@@ -70,10 +70,10 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
                 updatedBy: updatedBy.replace("ldap.", ""),
                 updatedAt: this.datePipe.transform(
                   updatedAt,
-                  "yyyy-MM-dd HH:mm"
+                  "yyyy-MM-dd HH:mm",
                 ),
-              } as HistoryItem)
-          )
+              }) as HistoryItem,
+          ),
       );
       // flatten and reverse array before return
       return ([] as HistoryItem[]).concat(...history).reverse();
@@ -117,7 +117,7 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
             }
           }
         })
-        .join(";")
+        .join(";"),
     );
     csv.unshift(header.join(";"));
     const csvArray = csv.join("\r\n");
@@ -140,7 +140,7 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
     this.historyItems = this.parseHistoryItems();
     this.dataSource = this.historyItems.slice(
       this.currentPage,
-      this.itemsPerPage
+      this.itemsPerPage,
     );
     this.historyItemsCount = this.historyItems.length;
   }
@@ -152,7 +152,7 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
         this.historyItems = this.parseHistoryItems();
         this.dataSource = this.historyItems.slice(
           this.currentPage,
-          this.itemsPerPage
+          this.itemsPerPage,
         );
         this.historyItemsCount = this.historyItems.length;
       }

@@ -15,9 +15,12 @@ export interface InputData {
 @Component({
   selector: "metadata-input",
   templateUrl: "./metadata-input.component.html",
-  styleUrls: ["./metadata-input.component.scss"]
+  styleUrls: ["./metadata-input.component.scss"],
 })
-export class MetadataInputComponent extends MetadataInputBase implements OnInit {
+export class MetadataInputComponent
+  extends MetadataInputBase
+  implements OnInit
+{
   changeDetection: Subscription;
   types: string[];
   @Input() data: FlatNodeEdit;
@@ -25,7 +28,10 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
   @Output() cancel = new EventEmitter();
   @Output() changed = new EventEmitter();
 
-  constructor(private formBuilder: FormBuilder, private formatNumberPipe: FormatNumberPipe) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private formatNumberPipe: FormatNumberPipe,
+  ) {
     super();
   }
   ngOnInit() {
@@ -40,22 +46,13 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
   initilizeFormControl() {
     const field = this.formBuilder.group({
       type: new FormControl("", [Validators.required]),
-      key: new FormControl("", [
-        Validators.required,
-        Validators.minLength(2),
-      ]),
+      key: new FormControl("", [Validators.required, Validators.minLength(2)]),
       value: new FormControl("", [
         Validators.required,
         Validators.minLength(1),
       ]),
-      date: new FormControl("", [
-        Validators.required,
-        this.dateValidator()
-      ]),
-      unit: new FormControl("", [
-        Validators.required,
-        this.unitValidator(),
-      ]),
+      date: new FormControl("", [Validators.required, this.dateValidator()]),
+      unit: new FormControl("", [Validators.required, this.unitValidator()]),
     });
     return field;
   }
@@ -76,14 +73,16 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
         this.metadataForm.get("type").setValue(Type.number);
         this.metadataForm.get("key").setValue(node.key);
         this.metadataForm.get("value").setValue(node.value);
-      } else if (typeof node.value === Type.boolean){
+      } else if (typeof node.value === Type.boolean) {
         this.metadataForm.get("type").setValue(Type.boolean);
         this.metadataForm.get("key").setValue(node.key);
         this.metadataForm.get("value").setValue(String(node.value));
       } else if (this.dateTimeService.isISODateTime(node.value)) {
         this.metadataForm.get("type").setValue(Type.date);
         this.metadataForm.get("key").setValue(node.key);
-        this.metadataForm.get("date").setValue(DateTime.fromISO(node.value).toLocal().toISO());
+        this.metadataForm
+          .get("date")
+          .setValue(DateTime.fromISO(node.value).toLocal().toISO());
       } else {
         this.metadataForm.get("type").setValue(Type.string);
         this.metadataForm.get("key").setValue(node.key);
@@ -94,12 +93,12 @@ export class MetadataInputComponent extends MetadataInputBase implements OnInit 
   }
   onSave() {
     if (this.metadataForm.dirty) {
-      const {type, key, value, date, unit} = this.metadataForm.value;
+      const { type, key, value, date, unit } = this.metadataForm.value;
       const data: InputData = {
         type,
         key,
-        value: type === Type.date? new Date(date).toISOString(): value, // Date input could be string or Date
-        unit
+        value: type === Type.date ? new Date(date).toISOString() : value, // Date input could be string or Date
+        unit,
       };
       this.save.emit(data);
     } else {

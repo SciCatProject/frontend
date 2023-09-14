@@ -50,28 +50,26 @@ describe("DatasetLifecycleComponent", () => {
   let component: DatasetLifecycleComponent;
   let fixture: ComponentFixture<DatasetLifecycleComponent>;
   let store: MockStore;
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [DatasetLifecycleComponent],
-        imports: [
-          MatButtonModule,
-          MatCardModule,
-          MatIconModule,
-          MatPaginatorModule,
-          MatTableModule,
-          NgxJsonViewerModule,
-          PipesModule,
-          StoreModule.forRoot({}),
-        ],
-        providers: [
-          DatePipe,
-          { provide: AppConfigService, useValue: { getConfig } },
-        ],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [DatasetLifecycleComponent],
+      imports: [
+        MatButtonModule,
+        MatCardModule,
+        MatIconModule,
+        MatPaginatorModule,
+        MatTableModule,
+        NgxJsonViewerModule,
+        PipesModule,
+        StoreModule.forRoot({}),
+      ],
+      providers: [
+        DatePipe,
+        { provide: AppConfigService, useValue: { getConfig } },
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetLifecycleComponent);
@@ -142,7 +140,7 @@ describe("DatasetLifecycleComponent", () => {
     it("should create and download a csv file", () => {
       const spyObj = jasmine.createSpyObj("a", ["click", "remove"]);
       const createElementSpy = spyOn(document, "createElement").and.returnValue(
-        spyObj
+        spyObj,
       );
       const url = "testUrl";
       spyOn(window.URL, "createObjectURL").and.returnValue(url);
@@ -198,7 +196,7 @@ const createCsvBlob = () => {
           }
         }
       })
-      .join(";")
+      .join(";"),
   );
   csv.unshift(header.join(";"));
   const csvArray = csv.join("\r\n");

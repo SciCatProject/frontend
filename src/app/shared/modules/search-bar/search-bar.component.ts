@@ -6,7 +6,7 @@ import {
   ViewChild,
   ElementRef,
   OnChanges,
-  SimpleChange
+  SimpleChange,
 } from "@angular/core";
 import { Subject } from "rxjs";
 import { distinctUntilChanged, debounceTime } from "rxjs/operators";
@@ -14,7 +14,7 @@ import { distinctUntilChanged, debounceTime } from "rxjs/operators";
 @Component({
   selector: "app-search-bar",
   templateUrl: "./search-bar.component.html",
-  styleUrls: ["./search-bar.component.scss"]
+  styleUrls: ["./search-bar.component.scss"],
 })
 export class SearchBarComponent implements OnChanges {
   private searchDebounce = 300;
@@ -28,7 +28,7 @@ export class SearchBarComponent implements OnChanges {
 
   @Output() search = this.searchSubject.pipe(
     distinctUntilChanged(),
-    debounceTime(this.searchDebounce)
+    debounceTime(this.searchDebounce),
   );
   @Output() searchBarFocus = new EventEmitter<string>();
 

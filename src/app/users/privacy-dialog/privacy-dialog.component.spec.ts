@@ -8,14 +8,12 @@ describe("PrivacyDialogComponent", () => {
   let component: PrivacyDialogComponent;
   let fixture: ComponentFixture<PrivacyDialogComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [PrivacyDialogComponent],
-        imports: [MatButtonModule, MatDialogModule],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [PrivacyDialogComponent],
+      imports: [MatButtonModule, MatDialogModule],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PrivacyDialogComponent);

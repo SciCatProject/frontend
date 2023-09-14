@@ -8,7 +8,7 @@ describe("PrettyUnitPipe", () => {
     (unitsService: UnitsService) => {
       const pipe = new PrettyUnitPipe(unitsService);
       expect(pipe).toBeTruthy();
-    }
+    },
   ));
 
   it("returns the symbol of the provided unit if present in dictionary", inject(
@@ -20,7 +20,7 @@ describe("PrettyUnitPipe", () => {
       const symbol = pipe.transform(unit);
 
       expect(symbol).toEqual("Hz");
-    }
+    },
   ));
 
   it("returns the provided unit if not present in dictionary", inject(
@@ -32,6 +32,6 @@ describe("PrettyUnitPipe", () => {
       const symbol = pipe.transform(unit);
 
       expect(symbol).toEqual(unit);
-    }
+    },
   ));
 });

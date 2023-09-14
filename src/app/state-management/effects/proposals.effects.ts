@@ -25,7 +25,7 @@ export class ProposalEffects {
         fromActions.fetchProposalsAction,
         fromActions.changePageAction,
         fromActions.sortByColumnAction,
-        fromActions.clearFacetsAction
+        fromActions.clearFacetsAction,
       ),
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
@@ -35,9 +35,9 @@ export class ProposalEffects {
             fromActions.fetchProposalsCompleteAction({ proposals }),
             fromActions.fetchCountAction(),
           ]),
-          catchError(() => of(fromActions.fetchProposalsFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.fetchProposalsFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -49,11 +49,11 @@ export class ProposalEffects {
       switchMap(({ query }) =>
         this.proposalApi.fullquery(query).pipe(
           map((proposals) =>
-            fromActions.fetchCountCompleteAction({ count: proposals.length })
+            fromActions.fetchCountCompleteAction({ count: proposals.length }),
           ),
-          catchError(() => of(fromActions.fetchCountFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.fetchCountFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -65,11 +65,11 @@ export class ProposalEffects {
           .findById<Proposal>(encodeURIComponent(proposalId))
           .pipe(
             map((proposal: Proposal) =>
-              fromActions.fetchProposalCompleteAction({ proposal })
+              fromActions.fetchProposalCompleteAction({ proposal }),
             ),
-            catchError(() => of(fromActions.fetchProposalFailedAction()))
-          )
-      )
+            catchError(() => of(fromActions.fetchProposalFailedAction())),
+          ),
+      ),
     );
   });
 
@@ -91,10 +91,10 @@ export class ProposalEffects {
               fromActions.fetchProposalDatasetsCountAction({ proposalId }),
             ]),
             catchError(() =>
-              of(fromActions.fetchProposalDatasetsFailedAction())
-            )
-          )
-      )
+              of(fromActions.fetchProposalDatasetsFailedAction()),
+            ),
+          ),
+      ),
     );
   });
 
@@ -106,13 +106,13 @@ export class ProposalEffects {
           map((datasets) =>
             fromActions.fetchProposalDatasetsCountCompleteAction({
               count: datasets.length,
-            })
+            }),
           ),
           catchError(() =>
-            of(fromActions.fetchProposalDatasetsCountFailedAction())
-          )
-        )
-      )
+            of(fromActions.fetchProposalDatasetsCountFailedAction()),
+          ),
+        ),
+      ),
     );
   });
 
@@ -126,11 +126,11 @@ export class ProposalEffects {
           .createAttachments(encodeURIComponent(theRest.proposalId), theRest)
           .pipe(
             map((res) =>
-              fromActions.addAttachmentCompleteAction({ attachment: res })
+              fromActions.addAttachmentCompleteAction({ attachment: res }),
             ),
-            catchError(() => of(fromActions.addAttachmentFailedAction()))
+            catchError(() => of(fromActions.addAttachmentFailedAction())),
           );
-      })
+      }),
     );
   });
 
@@ -143,19 +143,19 @@ export class ProposalEffects {
           .updateByIdAttachments(
             encodeURIComponent(proposalId),
             encodeURIComponent(attachmentId),
-            newCaption
+            newCaption,
           )
           .pipe(
             map((attachment) =>
               fromActions.updateAttachmentCaptionCompleteAction({
                 attachment,
-              })
+              }),
             ),
             catchError(() =>
-              of(fromActions.updateAttachmentCaptionFailedAction())
-            )
+              of(fromActions.updateAttachmentCaptionFailedAction()),
+            ),
           );
-      })
+      }),
     );
   });
 
@@ -166,15 +166,15 @@ export class ProposalEffects {
         this.proposalApi
           .destroyByIdAttachments(
             encodeURIComponent(proposalId),
-            encodeURIComponent(attachmentId)
+            encodeURIComponent(attachmentId),
           )
           .pipe(
             map((res) =>
-              fromActions.removeAttachmentCompleteAction({ attachmentId: res })
+              fromActions.removeAttachmentCompleteAction({ attachmentId: res }),
             ),
-            catchError(() => of(fromActions.removeAttachmentFailedAction()))
-          )
-      )
+            catchError(() => of(fromActions.removeAttachmentFailedAction())),
+          ),
+      ),
     );
   });
 
@@ -188,9 +188,9 @@ export class ProposalEffects {
         fromActions.fetchProposalDatasetsCountAction,
         fromActions.addAttachmentAction,
         fromActions.updateAttachmentCaptionAction,
-        fromActions.removeAttachmentAction
+        fromActions.removeAttachmentAction,
       ),
-      switchMap(() => of(loadingAction()))
+      switchMap(() => of(loadingAction())),
     );
   });
 
@@ -212,9 +212,9 @@ export class ProposalEffects {
         fromActions.updateAttachmentCaptionCompleteAction,
         fromActions.updateAttachmentCaptionFailedAction,
         fromActions.removeAttachmentCompleteAction,
-        fromActions.removeAttachmentFailedAction
+        fromActions.removeAttachmentFailedAction,
       ),
-      switchMap(() => of(loadingCompleteAction()))
+      switchMap(() => of(loadingCompleteAction())),
     );
   });
 
@@ -222,6 +222,6 @@ export class ProposalEffects {
     private actions$: Actions,
     private datasetApi: DatasetApi,
     private proposalApi: ProposalApi,
-    private store: Store
+    private store: Store,
   ) {}
 }

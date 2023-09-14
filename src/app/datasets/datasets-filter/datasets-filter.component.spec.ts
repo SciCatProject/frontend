@@ -77,51 +77,46 @@ describe("DatasetsFilterComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        imports: [
-          BrowserAnimationsModule,
-          FormsModule,
-          MatAutocompleteModule,
-          MatButtonModule,
-          MatCardModule,
-          MatChipsModule,
-          MatDatepickerModule,
-          MatDialogModule,
-          MatFormFieldModule,
-          MatIconModule,
-          MatInputModule,
-          MatOptionModule,
-          MatSelectModule,
-          MatNativeDateModule,
-          ReactiveFormsModule,
-          SharedScicatFrontendModule,
-          StoreModule.forRoot({}),
-        ],
-        declarations: [
-          DatasetsFilterComponent,
-          SearchParametersDialogComponent,
-        ],
-        providers: [AsyncPipe],
-      });
-      TestBed.overrideComponent(DatasetsFilterComponent, {
-        set: {
-          providers: [
-            {
-              provide: AppConfigService,
-              useValue: {
-                getConfig,
-              },
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [
+        BrowserAnimationsModule,
+        FormsModule,
+        MatAutocompleteModule,
+        MatButtonModule,
+        MatCardModule,
+        MatChipsModule,
+        MatDatepickerModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatOptionModule,
+        MatSelectModule,
+        MatNativeDateModule,
+        ReactiveFormsModule,
+        SharedScicatFrontendModule,
+        StoreModule.forRoot({}),
+      ],
+      declarations: [DatasetsFilterComponent, SearchParametersDialogComponent],
+      providers: [AsyncPipe],
+    });
+    TestBed.overrideComponent(DatasetsFilterComponent, {
+      set: {
+        providers: [
+          {
+            provide: AppConfigService,
+            useValue: {
+              getConfig,
             },
-            { provide: MatDialog, useClass: MockMatDialog },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+          },
+          { provide: MatDialog, useClass: MockMatDialog },
+        ],
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetsFilterComponent);
@@ -293,7 +288,7 @@ describe("DatasetsFilterComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        addLocationFilterAction({ location })
+        addLocationFilterAction({ location }),
       );
     });
   });
@@ -307,7 +302,7 @@ describe("DatasetsFilterComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        removeLocationFilterAction({ location })
+        removeLocationFilterAction({ location }),
       );
     });
   });
@@ -333,7 +328,7 @@ describe("DatasetsFilterComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        removeGroupFilterAction({ group })
+        removeGroupFilterAction({ group }),
       );
     });
   });
@@ -347,7 +342,7 @@ describe("DatasetsFilterComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        addKeywordFilterAction({ keyword })
+        addKeywordFilterAction({ keyword }),
       );
     });
   });
@@ -361,7 +356,7 @@ describe("DatasetsFilterComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        removeKeywordFilterAction({ keyword })
+        removeKeywordFilterAction({ keyword }),
       );
     });
   });
@@ -375,7 +370,7 @@ describe("DatasetsFilterComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        addTypeFilterAction({ datasetType })
+        addTypeFilterAction({ datasetType }),
       );
     });
   });
@@ -389,7 +384,7 @@ describe("DatasetsFilterComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        removeTypeFilterAction({ datasetType })
+        removeTypeFilterAction({ datasetType }),
       );
     });
   });
@@ -409,7 +404,7 @@ describe("DatasetsFilterComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setDateRangeFilterAction({ begin: "", end: "" })
+        setDateRangeFilterAction({ begin: "", end: "" }),
       );
     });
 
@@ -469,7 +464,7 @@ describe("DatasetsFilterComponent", () => {
         end: endDate.toUTC().plus({ days: 1 }).toISO(),
       };
       expect(dispatchSpy).toHaveBeenCalledOnceWith(
-        setDateRangeFilterAction(expected)
+        setDateRangeFilterAction(expected),
       );
     });
   });
@@ -484,7 +479,7 @@ describe("DatasetsFilterComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
       expect(dispatchSpy).toHaveBeenCalledWith(setPidTermsAction({ pid: "" }));
       expect(dispatchSpy).toHaveBeenCalledWith(
-        deselectAllCustomColumnsAction()
+        deselectAllCustomColumnsAction(),
       );
     });
   });
@@ -503,10 +498,10 @@ describe("DatasetsFilterComponent", () => {
         {
           data: {
             parameterKeys: component["asyncPipe"].transform(
-              component.metadataKeys$
+              component.metadataKeys$,
             ),
           },
-        }
+        },
       );
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
@@ -517,10 +512,10 @@ describe("DatasetsFilterComponent", () => {
             relation: "EQUAL_TO_STRING",
             unit: "",
           },
-        })
+        }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        selectColumnAction({ name: "", columnType: "custom" })
+        selectColumnAction({ name: "", columnType: "custom" }),
       );
     });
   });
@@ -540,10 +535,10 @@ describe("DatasetsFilterComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        removeScientificConditionAction({ index })
+        removeScientificConditionAction({ index }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        deselectColumnAction({ name: condition.lhs, columnType: "custom" })
+        deselectColumnAction({ name: condition.lhs, columnType: "custom" }),
       );
     });
   });
@@ -562,11 +557,11 @@ describe("DatasetsFilterComponent", () => {
 
   describe("#buildPidTermsCondition()", () => {
     const tests = [
-      ["", "", ""], 
-      ["1", "startsWith", {"$regex": "^1"}], 
-      ["1", "contains", {"$regex": "1"}], 
+      ["", "", ""],
+      ["1", "startsWith", { $regex: "^1" }],
+      ["1", "contains", { $regex: "1" }],
       ["1", "equals", "1"],
-      ["1", "", "1"]
+      ["1", "", "1"],
     ];
     tests.forEach((t, i) => {
       it(`should return buildPidTermsCondition ${i}`, () => {
@@ -574,7 +569,6 @@ describe("DatasetsFilterComponent", () => {
         const condition = component["buildPidTermsCondition"](t[0] as string);
         expect(condition).toEqual(t[2]);
       });
+    });
   });
-  });
-
 });

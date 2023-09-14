@@ -14,6 +14,6 @@ export class AppLayoutComponent {
 
   constructor(
     private appConfigService: AppConfigService,
-    private store: Store
+    private store: Store,
   ) {}
 }

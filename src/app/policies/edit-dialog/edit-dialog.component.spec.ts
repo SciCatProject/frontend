@@ -31,34 +31,32 @@ describe("EditDialogComponent", () => {
   let component: EditDialogComponent;
   let fixture: ComponentFixture<EditDialogComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [EditDialogComponent],
-        imports: [
-          BrowserAnimationsModule,
-          CommonModule,
-          FormsModule,
-          MatButtonModule,
-          MatCardModule,
-          MatChipsModule,
-          MatDialogModule,
-          MatExpansionModule,
-          MatFormFieldModule,
-          MatIconModule,
-          MatInputModule,
-          MatListModule,
-          MatOptionModule,
-          MatSelectModule,
-          ReactiveFormsModule,
-        ],
-        providers: [
-          { provide: MatDialogRef, useClass: MockMatDialogRef },
-          { provide: MAT_DIALOG_DATA, useValue: data },
-        ],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [EditDialogComponent],
+      imports: [
+        BrowserAnimationsModule,
+        CommonModule,
+        FormsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatChipsModule,
+        MatDialogModule,
+        MatExpansionModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatListModule,
+        MatOptionModule,
+        MatSelectModule,
+        ReactiveFormsModule,
+      ],
+      providers: [
+        { provide: MatDialogRef, useClass: MockMatDialogRef },
+        { provide: MAT_DIALOG_DATA, useValue: data },
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EditDialogComponent);

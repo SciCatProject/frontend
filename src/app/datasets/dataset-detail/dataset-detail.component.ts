@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { Dataset, Proposal, Sample } from "shared/sdk/models";
 import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
-import {MatChipEditedEvent, MatChipInputEvent} from "@angular/material/chips";
+import { MatChipEditedEvent, MatChipInputEvent } from "@angular/material/chips";
 import { MatFormFieldModule } from "@angular/material/form-field";
-import {NgFor} from "@angular/common";
-import {MatIconModule} from "@angular/material/icon";
+import { NgFor } from "@angular/common";
+import { MatIconModule } from "@angular/material/icon";
 
 import { MatDialog } from "@angular/material/dialog";
 import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
@@ -12,9 +12,7 @@ import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { combineLatest, fromEvent, Observable, Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
 
-import {
-  showMessageAction,
-} from "state-management/actions/user.actions";
+import { showMessageAction } from "state-management/actions/user.actions";
 import {
   selectCurrentAttachments,
   selectCurrentDataset,
@@ -63,14 +61,15 @@ import { DOCUMENT } from "@angular/common";
   standalone: false,
 })
 export class DatasetDetailComponent
-  implements OnInit, OnDestroy, EditableComponent {
+  implements OnInit, OnDestroy, EditableComponent
+{
   private subscriptions: Subscription[] = [];
   private _hasUnsavedChanges = false;
   form: FormGroup;
   userProfile$ = this.store.select(selectProfile);
   isAdmin$ = this.store.select(selectIsAdmin);
   accessGroups$: Observable<string[]> = this.userProfile$.pipe(
-    map((profile) => (profile ? profile.accessGroups : []))
+    map((profile) => (profile ? profile.accessGroups : [])),
   );
 
   appConfig = this.appConfigService.getConfig();
@@ -96,7 +95,7 @@ export class DatasetDetailComponent
     private store: Store,
     private router: Router,
     private fb: FormBuilder,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -113,28 +112,28 @@ export class DatasetDetailComponent
             ([groups, isAdmin]) => {
               this.editingAllowed =
                 groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
-            }
+            },
           );
         }
-      })
+      }),
     );
 
     this.subscriptions.push(
       this.store.select(selectCurrentInstrument).subscribe((instrument) => {
         this.instrument = instrument;
-      })
+      }),
     );
 
     this.subscriptions.push(
       this.store.select(selectCurrentProposal).subscribe((proposal) => {
         this.proposal = proposal;
-      })
+      }),
     );
 
     this.subscriptions.push(
       this.store.select(selectCurrentSample).subscribe((sample) => {
         this.sample = sample;
-      })
+      }),
     );
 
     // Prevent user from reloading page if there are unsave changes
@@ -143,7 +142,7 @@ export class DatasetDetailComponent
         if (this.hasUnsavedChanges()) {
           event.preventDefault();
         }
-      })
+      }),
     );
 
     this.subscriptions.push(
@@ -151,7 +150,7 @@ export class DatasetDetailComponent
         if (user) {
           this.user = user;
         }
-      })
+      }),
     );
   }
 
@@ -345,7 +344,7 @@ export class DatasetDetailComponent
     const message = new Message(
       "Dataset PID has been copied to your clipboard",
       MessageType.Success,
-      5000
+      5000,
     );
     this.store.dispatch(showMessageAction({ message }));
   }

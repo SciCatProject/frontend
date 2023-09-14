@@ -19,23 +19,19 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 describe("SharedTableComponent", () => {
   let component: SharedTableComponent;
   let fixture: ComponentFixture<SharedTableComponent>;
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [],
-        imports: [
-          SharedTableModule, RouterTestingModule
-        ],
-        providers: [FormBuilder],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [],
+      imports: [SharedTableModule, RouterTestingModule],
+      providers: [FormBuilder],
+    }).compileComponents();
+  }));
 
   const dataSource = new MockScicatDataSource(
-        (new MockAppConfigService(null) as unknown) as AppConfigService,
-        null,
-        null,
-        { collections: null, columns: null }
+    new MockAppConfigService(null) as unknown as AppConfigService,
+    null,
+    null,
+    { collections: null, columns: null },
   );
 
   // const dataTable = jasmine.createSpyObj("MatTable", ["_elementRef"]);
@@ -80,17 +76,17 @@ describe("SharedTableComponent", () => {
     page: of({}),
   } as MatPaginator;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          SharedTableModule, RouterTestingModule,BrowserAnimationsModule
-        ],
-        declarations: [SharedTableComponent],
-        providers: [FormBuilder]
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        SharedTableModule,
+        RouterTestingModule,
+        BrowserAnimationsModule,
+      ],
+      declarations: [SharedTableComponent],
+      providers: [FormBuilder],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SharedTableComponent);
@@ -116,7 +112,7 @@ describe("SharedTableComponent", () => {
       expect(loadSpy).toHaveBeenCalledOnceWith(
         component.filterExpressions,
         component.sort.active,
-        component.sort.direction
+        component.sort.direction,
       );
     });
   });
@@ -133,7 +129,7 @@ describe("SharedTableComponent", () => {
         component.sort.direction,
         component.paginator.pageIndex,
         component.paginator.pageSize,
-        component.isFilesDashboard
+        component.isFilesDashboard,
       );
     });
   });
@@ -155,7 +151,13 @@ describe("SharedTableComponent", () => {
     it("should initialize form control", () => {
       const formControls = Object.keys(component.filterForm.controls);
       expect(formControls).toHaveSize(5);
-      expect(formControls).toEqual(["id", "creationTime.start", "creationTime.end", "jobResultObject", "globalSearch"]);
+      expect(formControls).toEqual([
+        "id",
+        "creationTime.start",
+        "creationTime.end",
+        "jobResultObject",
+        "globalSearch",
+      ]);
     });
   });
 
@@ -202,7 +204,6 @@ describe("SharedTableComponent", () => {
     xit("should ...", () => {});
   });
 
-
   describe("#exportToExcel()", () => {
     xit("should ...", () => {});
   });
@@ -213,5 +214,4 @@ describe("SharedTableComponent", () => {
   describe("#getFilterColumns()", () => {
     xit("should ...", () => {});
   });
-
 });

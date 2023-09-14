@@ -22,8 +22,8 @@ import { MatTableModule } from "@angular/material/table";
     MatPaginatorModule,
     MatSortModule,
     MatTableModule,
-    PipesModule
+    PipesModule,
   ],
-  exports: [TableComponent]
+  exports: [TableComponent],
 })
 export class TableModule {}

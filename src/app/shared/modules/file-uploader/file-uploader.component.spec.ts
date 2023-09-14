@@ -11,19 +11,15 @@ describe("FileUploaderComponent", () => {
   let component: FileUploaderComponent;
   let fixture: ComponentFixture<FileUploaderComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        imports: [
-          SharedScicatFrontendModule,
-        ],
-        providers: [DragAndDropDirective],
-        declarations: [FileUploaderComponent],
-      });
-      TestBed.compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [SharedScicatFrontendModule],
+      providers: [DragAndDropDirective],
+      declarations: [FileUploaderComponent],
+    });
+    TestBed.compileComponents();
+  }));
 
   afterEach(() => {
     fixture.destroy();
@@ -133,7 +129,7 @@ describe("FileUploaderComponent", () => {
 
       expect(component.deleteAttachment.emit).toHaveBeenCalledTimes(1);
       expect(component.deleteAttachment.emit).toHaveBeenCalledWith(
-        attachmentId
+        attachmentId,
       );
     });
   });

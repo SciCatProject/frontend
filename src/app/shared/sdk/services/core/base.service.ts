@@ -1,48 +1,54 @@
 /* eslint-disable */
-import { Injectable, Inject, Optional } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpRequest, HttpParams, HttpResponse, HttpParameterCodec } from '@angular/common/http';
-import { NgModule, ModuleWithProviders } from '@angular/core';
-import { ErrorHandler } from './error.service';
-import { LoopBackAuth } from './auth.service';
-import { LoopBackConfig } from '../../lb.config';
-import { LoopBackFilter, AccessToken } from '../../models/BaseModels';
-import { SDKModels } from '../custom/SDKModels';
-import { Observable, Subject } from 'rxjs';
-import { catchError, map, filter } from 'rxjs/operators';
-import { SocketConnection } from '../../sockets/socket.connections';
+import { Injectable, Inject, Optional } from "@angular/core";
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpRequest,
+  HttpParams,
+  HttpResponse,
+  HttpParameterCodec,
+} from "@angular/common/http";
+import { NgModule, ModuleWithProviders } from "@angular/core";
+import { ErrorHandler } from "./error.service";
+import { LoopBackAuth } from "./auth.service";
+import { LoopBackConfig } from "../../lb.config";
+import { LoopBackFilter, AccessToken } from "../../models/BaseModels";
+import { SDKModels } from "../custom/SDKModels";
+import { Observable, Subject } from "rxjs";
+import { catchError, map, filter } from "rxjs/operators";
+import { SocketConnection } from "../../sockets/socket.connections";
 // Making Sure EventSource Type is available to avoid compilation issues.
 declare var EventSource: any;
 class CustomQueryEncoderHelper implements HttpParameterCodec {
   encodeKey(k: string): string {
-      return encodeURIComponent(k);
+    return encodeURIComponent(k);
   }
 
   encodeValue(v: string): string {
-      return encodeURIComponent(v);
+    return encodeURIComponent(v);
   }
 
   decodeKey(k: string): string {
-      return decodeURIComponent(k);
+    return decodeURIComponent(k);
   }
 
   decodeValue(v: string): string {
-      return decodeURIComponent(v);
+    return decodeURIComponent(v);
   }
 }
 /**
-* @module BaseLoopBackApi
-* @author Jonathan Casarrubias <@johncasarrubias> <github:jonathan-casarrubias>
-* @author Nikolay Matiushenkov <https://github.com/mnvx>
-* @license MIT
-* @description
-* Abstract class that will be implemented in every custom service automatically built
-* by the sdk builder.
-* It provides the core functionallity for every API call, either by HTTP Calls or by
-* WebSockets.
-**/
+ * @module BaseLoopBackApi
+ * @author Jonathan Casarrubias <@johncasarrubias> <github:jonathan-casarrubias>
+ * @author Nikolay Matiushenkov <https://github.com/mnvx>
+ * @license MIT
+ * @description
+ * Abstract class that will be implemented in every custom service automatically built
+ * by the sdk builder.
+ * It provides the core functionallity for every API call, either by HTTP Calls or by
+ * WebSockets.
+ **/
 @Injectable()
 export abstract class BaseLoopBackApi {
-
   protected path: string;
   protected model: any;
 
@@ -51,7 +57,7 @@ export abstract class BaseLoopBackApi {
     @Inject(SocketConnection) protected connection: SocketConnection,
     @Inject(SDKModels) protected models: SDKModels,
     @Inject(LoopBackAuth) protected auth: LoopBackAuth,
-    @Optional() @Inject(ErrorHandler) protected errorHandler: ErrorHandler
+    @Optional() @Inject(ErrorHandler) protected errorHandler: ErrorHandler,
   ) {
     this.model = this.models.get(this.getModelName());
   }
@@ -68,53 +74,62 @@ export abstract class BaseLoopBackApi {
    * extend this class and use this method to get RESTful communication.
    **/
   public request(
-    method         : string,
-    url            : string,
-    routeParams    : any = {},
-    urlParams      : any = {},
-    postBody       : any = {},
-    pubsub         : boolean = false,
-    customHeaders? : Function
+    method: string,
+    url: string,
+    routeParams: any = {},
+    urlParams: any = {},
+    postBody: any = {},
+    pubsub: boolean = false,
+    customHeaders?: Function,
   ): Observable<any> {
     // Transpile route variables to the actual request Values
     Object.keys(routeParams).forEach((key: string) => {
-      url = url.replace(new RegExp(":" + key + "(\/|$)", "g"), routeParams[key] + "$1")
+      url = url.replace(
+        new RegExp(":" + key + "(/|$)", "g"),
+        routeParams[key] + "$1",
+      );
     });
     if (pubsub) {
       if (url.match(/fk/)) {
-        let arr = url.split('/'); arr.pop();
-        url = arr.join('/');
+        let arr = url.split("/");
+        arr.pop();
+        url = arr.join("/");
       }
-      let event: string = (`[${method}]${url}`).replace(/\?/, '');
+      let event: string = `[${method}]${url}`.replace(/\?/, "");
       let subject: Subject<any> = new Subject<any>();
       this.connection.on(event, (res: any) => subject.next(res));
       return subject.asObservable();
     } else {
-      let httpParams = new HttpParams({ encoder: new CustomQueryEncoderHelper() });
+      let httpParams = new HttpParams({
+        encoder: new CustomQueryEncoderHelper(),
+      });
       // Headers to be sent
       let headers: HttpHeaders = new HttpHeaders();
-      headers = headers.append('Content-Type', 'application/json');
+      headers = headers.append("Content-Type", "application/json");
       // Authenticate request
       headers = this.authenticate(url, headers);
       // Body fix for built in remote methods using "data", "options" or "credentials
       // that are the actual body, Custom remote method properties are different and need
       // to be wrapped into a body object
       let body: any;
-      let postBodyKeys = typeof postBody === 'object' ? Object.keys(postBody) : []
+      let postBodyKeys =
+        typeof postBody === "object" ? Object.keys(postBody) : [];
       if (postBodyKeys.length === 1) {
         body = postBody[postBodyKeys.shift()];
       } else {
         body = postBody;
       }
-      
-      let queryString: string = '';
+
+      let queryString: string = "";
 
       // Separate filter object from url params and add to search query
       if (urlParams.filter) {
         if (LoopBackConfig.isHeadersFilteringSet()) {
-          headers = headers.append('filter', JSON.stringify(urlParams.filter));
+          headers = headers.append("filter", JSON.stringify(urlParams.filter));
         } else {
-          queryString = `?filter=${encodeURIComponent(JSON.stringify(urlParams.filter))}`;
+          queryString = `?filter=${encodeURIComponent(
+            JSON.stringify(urlParams.filter),
+          )}`;
         }
         delete urlParams.filter;
       }
@@ -127,17 +142,19 @@ export abstract class BaseLoopBackApi {
           - https://github.com/mean-expert-official/loopback-sdk-builder/issues/356
           - https://github.com/mean-expert-official/loopback-sdk-builder/issues/328 
           **/
-          headers = headers.append('where', JSON.stringify(urlParams.where));
+          headers = headers.append("where", JSON.stringify(urlParams.where));
         } else {
-          queryString = `?where=${encodeURIComponent(JSON.stringify(urlParams.where))}`;
+          queryString = `?where=${encodeURIComponent(
+            JSON.stringify(urlParams.where),
+          )}`;
         }
         delete urlParams.where;
       }
-    
-      if (typeof customHeaders === 'function') {
+
+      if (typeof customHeaders === "function") {
         headers = customHeaders(headers);
       }
-/* enhancement/configure-where-headers
+      /* enhancement/configure-where-headers
       this.searchParams.setJSON(urlParams);
       let request: Request = new Request(
         new RequestOptions({
@@ -150,20 +167,23 @@ export abstract class BaseLoopBackApi {
         })
       );
 TODO Fix Merge Conflict */
-      Object.keys(urlParams).forEach(paramKey => {
+      Object.keys(urlParams).forEach((paramKey) => {
         let paramValue = urlParams[paramKey];
-        paramValue = typeof paramValue === 'object' ? JSON.stringify(paramValue) : paramValue;
+        paramValue =
+          typeof paramValue === "object"
+            ? JSON.stringify(paramValue)
+            : paramValue;
         httpParams = httpParams.append(paramKey, paramValue);
       });
       let request = new HttpRequest(method, `${url}${queryString}`, body, {
-        headers        : headers,
-        params         : httpParams,
-        withCredentials: LoopBackConfig.getRequestOptionsCredentials()
+        headers: headers,
+        params: httpParams,
+        withCredentials: LoopBackConfig.getRequestOptionsCredentials(),
       });
       return this.http.request(request).pipe(
-        filter(event => event instanceof HttpResponse),
+        filter((event) => event instanceof HttpResponse),
         map((res: HttpResponse<any>) => res.body),
-        catchError((e) => this.errorHandler.handleError(e))
+        catchError((e) => this.errorHandler.handleError(e)),
       );
     }
   }
@@ -180,8 +200,8 @@ TODO Fix Merge Conflict */
   public authenticate<T>(url: string, headers: HttpHeaders): HttpHeaders {
     if (this.auth.getAccessTokenId()) {
       headers = headers.append(
-        'Authorization',
-        LoopBackConfig.getAuthPrefix() + this.auth.getAccessTokenId()
+        "Authorization",
+        LoopBackConfig.getAuthPrefix() + this.auth.getAccessTokenId(),
       );
     }
 
@@ -197,12 +217,19 @@ TODO Fix Merge Conflict */
    * Generic create method
    */
   public create<T>(data: T, customHeaders?: Function): Observable<T> {
-    return this.request('POST', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path
-    ].join('/'), undefined, undefined, { data }, null, customHeaders)
-    .pipe(map((data: T) => this.model.factory(data)));
+    return this.request(
+      "POST",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+      ].join("/"),
+      undefined,
+      undefined,
+      { data },
+      null,
+      customHeaders,
+    ).pipe(map((data: T) => this.model.factory(data)));
   }
   /**
    * @method onCreate
@@ -214,12 +241,20 @@ TODO Fix Merge Conflict */
    * Generic pubsub oncreate many method
    */
   public onCreate<T>(data: T[]): Observable<T[]> {
-    return this.request('POST', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path
-    ].join('/'), undefined, undefined, { data }, true)
-    .pipe(map((datum: T[]) => datum.map((data: T) => this.model.factory(data))));
+    return this.request(
+      "POST",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+      ].join("/"),
+      undefined,
+      undefined,
+      { data },
+      true,
+    ).pipe(
+      map((datum: T[]) => datum.map((data: T) => this.model.factory(data))),
+    );
   }
   /**
    * @method createMany
@@ -231,12 +266,21 @@ TODO Fix Merge Conflict */
    * Generic create many method
    */
   public createMany<T>(data: T[], customHeaders?: Function): Observable<T[]> {
-    return this.request('POST', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path
-    ].join('/'), undefined, undefined, { data }, null, customHeaders)
-    .pipe(map((datum: T[]) => datum.map((data: T) => this.model.factory(data))));
+    return this.request(
+      "POST",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+      ].join("/"),
+      undefined,
+      undefined,
+      { data },
+      null,
+      customHeaders,
+    ).pipe(
+      map((datum: T[]) => datum.map((data: T) => this.model.factory(data))),
+    );
   }
   /**
    * @method onCreateMany
@@ -248,12 +292,20 @@ TODO Fix Merge Conflict */
    * Generic create many method
    */
   public onCreateMany<T>(data: T[]): Observable<T[]> {
-    return this.request('POST', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path
-    ].join('/'), undefined, undefined, { data }, true)
-    .pipe(map((datum: T[]) => datum.map((data: T) => this.model.factory(data))));
+    return this.request(
+      "POST",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+      ].join("/"),
+      undefined,
+      undefined,
+      { data },
+      true,
+    ).pipe(
+      map((datum: T[]) => datum.map((data: T) => this.model.factory(data))),
+    );
   }
   /**
    * @method findById
@@ -264,16 +316,27 @@ TODO Fix Merge Conflict */
    * @description
    * Generic findById method
    */
-  public findById<T>(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<T> {
+  public findById<T>(
+    id: any,
+    filter: LoopBackFilter = {},
+    customHeaders?: Function,
+  ): Observable<T> {
     let _urlParams: any = {};
     if (filter) _urlParams.filter = filter;
-    return this.request('GET', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-      ':id'
-    ].join('/'), { id }, _urlParams, undefined, null, customHeaders)
-    .pipe(map((data: T) => this.model.factory(data)));
+    return this.request(
+      "GET",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+        ":id",
+      ].join("/"),
+      { id },
+      _urlParams,
+      undefined,
+      null,
+      customHeaders,
+    ).pipe(map((data: T) => this.model.factory(data)));
   }
   /**
    * @method find
@@ -283,13 +346,25 @@ TODO Fix Merge Conflict */
    * @description
    * Generic find method
    */
-  public find<T>(filter: LoopBackFilter = {}, customHeaders?: Function): Observable<T[]> {
-    return this.request('GET', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path
-    ].join('/'), undefined, { filter }, undefined, null, customHeaders)
-    .pipe(map((datum: T[]) => datum.map((data: T) => this.model.factory(data))));
+  public find<T>(
+    filter: LoopBackFilter = {},
+    customHeaders?: Function,
+  ): Observable<T[]> {
+    return this.request(
+      "GET",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+      ].join("/"),
+      undefined,
+      { filter },
+      undefined,
+      null,
+      customHeaders,
+    ).pipe(
+      map((datum: T[]) => datum.map((data: T) => this.model.factory(data))),
+    );
   }
   /**
    * @method exists
@@ -300,12 +375,20 @@ TODO Fix Merge Conflict */
    * Generic exists method
    */
   public exists<T>(id: any, customHeaders?: Function): Observable<T> {
-    return this.request('GET', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-      ':id/exists'
-    ].join('/'), { id }, undefined, undefined, null, customHeaders);
+    return this.request(
+      "GET",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+        ":id/exists",
+      ].join("/"),
+      { id },
+      undefined,
+      undefined,
+      null,
+      customHeaders,
+    );
   }
   /**
    * @method findOne
@@ -315,14 +398,24 @@ TODO Fix Merge Conflict */
    * @description
    * Generic findOne method
    */
-  public findOne<T>(filter: LoopBackFilter = {}, customHeaders?: Function): Observable<T> {
-    return this.request('GET', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-      'findOne'
-    ].join('/'), undefined, { filter }, undefined, null, customHeaders)
-    .pipe(map((data: T) => this.model.factory(data)));
+  public findOne<T>(
+    filter: LoopBackFilter = {},
+    customHeaders?: Function,
+  ): Observable<T> {
+    return this.request(
+      "GET",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+        "findOne",
+      ].join("/"),
+      undefined,
+      { filter },
+      undefined,
+      null,
+      customHeaders,
+    ).pipe(map((data: T) => this.model.factory(data)));
   }
   /**
    * @method updateAll
@@ -332,15 +425,27 @@ TODO Fix Merge Conflict */
    * @description
    * Generic updateAll method
    */
-  public updateAll<T>(where: any = {}, data: T, customHeaders?: Function): Observable<{ count: 'number' }> {
+  public updateAll<T>(
+    where: any = {},
+    data: T,
+    customHeaders?: Function,
+  ): Observable<{ count: "number" }> {
     let _urlParams: any = {};
     if (where) _urlParams.where = where;
-    return this.request('POST', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-      'update'
-    ].join('/'), undefined, _urlParams, { data }, null, customHeaders);
+    return this.request(
+      "POST",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+        "update",
+      ].join("/"),
+      undefined,
+      _urlParams,
+      { data },
+      null,
+      customHeaders,
+    );
   }
   /**
    * @method onUpdateAll
@@ -350,15 +455,25 @@ TODO Fix Merge Conflict */
    * @description
    * Generic pubsub onUpdateAll method
    */
-  public onUpdateAll<T>(where: any = {}, data: T): Observable<{ count: 'number' }> {
+  public onUpdateAll<T>(
+    where: any = {},
+    data: T,
+  ): Observable<{ count: "number" }> {
     let _urlParams: any = {};
     if (where) _urlParams.where = where;
-    return this.request('POST', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-      'update'
-    ].join('/'), undefined, _urlParams, { data }, true);
+    return this.request(
+      "POST",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+        "update",
+      ].join("/"),
+      undefined,
+      _urlParams,
+      { data },
+      true,
+    );
   }
   /**
    * @method deleteById
@@ -369,13 +484,20 @@ TODO Fix Merge Conflict */
    * Generic deleteById method
    */
   public deleteById<T>(id: any, customHeaders?: Function): Observable<T> {
-    return this.request('DELETE', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-      ':id'
-    ].join('/'), { id }, undefined, undefined, null, customHeaders)
-    .pipe(map((data: T) => this.model.factory(data)));
+    return this.request(
+      "DELETE",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+        ":id",
+      ].join("/"),
+      { id },
+      undefined,
+      undefined,
+      null,
+      customHeaders,
+    ).pipe(map((data: T) => this.model.factory(data)));
   }
   /**
    * @method onDeleteById
@@ -386,13 +508,19 @@ TODO Fix Merge Conflict */
    * Generic pubsub onDeleteById method
    */
   public onDeleteById<T>(id: any): Observable<T> {
-    return this.request('DELETE', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-      ':id'
-    ].join('/'), { id }, undefined, undefined, true)
-    .pipe(map((data: T) => this.model.factory(data)));
+    return this.request(
+      "DELETE",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+        ":id",
+      ].join("/"),
+      { id },
+      undefined,
+      undefined,
+      true,
+    ).pipe(map((data: T) => this.model.factory(data)));
   }
   /**
    * @method count
@@ -402,15 +530,26 @@ TODO Fix Merge Conflict */
    * @description
    * Generic count method
    */
-  public count(where: any = {}, customHeaders?: Function): Observable<{ count: number }> {
+  public count(
+    where: any = {},
+    customHeaders?: Function,
+  ): Observable<{ count: number }> {
     let _urlParams: any = {};
     if (where) _urlParams.where = where;
-    return this.request('GET', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-      'count'
-    ].join('/'), undefined, _urlParams, undefined, null, customHeaders);
+    return this.request(
+      "GET",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+        "count",
+      ].join("/"),
+      undefined,
+      _urlParams,
+      undefined,
+      null,
+      customHeaders,
+    );
   }
   /**
    * @method updateAttributes
@@ -420,14 +559,25 @@ TODO Fix Merge Conflict */
    * @description
    * Generic updateAttributes method
    */
-  public updateAttributes<T>(id: any, data: T, customHeaders?: Function): Observable<T> {
-    return this.request('PUT', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-      ':id'
-    ].join('/'), { id }, undefined, { data }, null, customHeaders)
-    .pipe(map((data: T) => this.model.factory(data)));
+  public updateAttributes<T>(
+    id: any,
+    data: T,
+    customHeaders?: Function,
+  ): Observable<T> {
+    return this.request(
+      "PUT",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+        ":id",
+      ].join("/"),
+      { id },
+      undefined,
+      { data },
+      null,
+      customHeaders,
+    ).pipe(map((data: T) => this.model.factory(data)));
   }
   /**
    * @method onUpdateAttributes
@@ -438,13 +588,19 @@ TODO Fix Merge Conflict */
    * Generic onUpdateAttributes method
    */
   public onUpdateAttributes<T>(id: any, data: T): Observable<T> {
-    return this.request('PUT', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-      ':id'
-    ].join('/'), { id }, undefined, { data }, true)
-    .pipe(map((data: T) => this.model.factory(data)));
+    return this.request(
+      "PUT",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+        ":id",
+      ].join("/"),
+      { id },
+      undefined,
+      { data },
+      true,
+    ).pipe(map((data: T) => this.model.factory(data)));
   }
   /**
    * @method upsert
@@ -455,12 +611,19 @@ TODO Fix Merge Conflict */
    * Generic upsert method
    */
   public upsert<T>(data: any = {}, customHeaders?: Function): Observable<T> {
-    return this.request('PUT', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-    ].join('/'), undefined, undefined, { data }, null, customHeaders)
-    .pipe(map((data: T) => this.model.factory(data)));
+    return this.request(
+      "PUT",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+      ].join("/"),
+      undefined,
+      undefined,
+      { data },
+      null,
+      customHeaders,
+    ).pipe(map((data: T) => this.model.factory(data)));
   }
   /**
    * @method onUpsert
@@ -471,12 +634,18 @@ TODO Fix Merge Conflict */
    * Generic pubsub onUpsert method
    */
   public onUpsert<T>(data: any = {}): Observable<T> {
-    return this.request('PUT', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-    ].join('/'), undefined, undefined, { data }, true)
-    .pipe(map((data: T) => this.model.factory(data)));
+    return this.request(
+      "PUT",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+      ].join("/"),
+      undefined,
+      undefined,
+      { data },
+      true,
+    ).pipe(map((data: T) => this.model.factory(data)));
   }
   /**
    * @method upsertPatch
@@ -486,13 +655,23 @@ TODO Fix Merge Conflict */
    * @description
    * Generic upsert method using patch http method
    */
-  public upsertPatch<T>(data: any = {}, customHeaders?: Function): Observable<T> {
-    return this.request('PATCH', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-    ].join('/'), undefined, undefined, { data }, null, customHeaders)
-    .pipe(map((data: T) => this.model.factory(data)));
+  public upsertPatch<T>(
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<T> {
+    return this.request(
+      "PATCH",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+      ].join("/"),
+      undefined,
+      undefined,
+      { data },
+      null,
+      customHeaders,
+    ).pipe(map((data: T) => this.model.factory(data)));
   }
   /**
    * @method onUpsertPatch
@@ -503,12 +682,18 @@ TODO Fix Merge Conflict */
    * Generic pubsub onUpsertPatch method using patch http method
    */
   public onUpsertPatch<T>(data: any = {}): Observable<T> {
-    return this.request('PATCH', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-    ].join('/'), undefined, undefined, { data }, true)
-    .pipe(map((data: T) => this.model.factory(data)));
+    return this.request(
+      "PATCH",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+      ].join("/"),
+      undefined,
+      undefined,
+      { data },
+      true,
+    ).pipe(map((data: T) => this.model.factory(data)));
   }
   /**
    * @method upsertWithWhere
@@ -518,16 +703,27 @@ TODO Fix Merge Conflict */
    * @description
    * Generic upsertWithWhere method
    */
-  public upsertWithWhere<T>(where: any = {}, data: any = {}, customHeaders?: Function): Observable<T> {
+  public upsertWithWhere<T>(
+    where: any = {},
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<T> {
     let _urlParams: any = {};
     if (where) _urlParams.where = where;
-    return this.request('POST', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-      'upsertWithWhere'
-    ].join('/'), undefined, _urlParams, { data }, null, customHeaders)
-    .pipe(map((data: T) => this.model.factory(data)));
+    return this.request(
+      "POST",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+        "upsertWithWhere",
+      ].join("/"),
+      undefined,
+      _urlParams,
+      { data },
+      null,
+      customHeaders,
+    ).pipe(map((data: T) => this.model.factory(data)));
   }
   /**
    * @method onUpsertWithWhere
@@ -540,13 +736,19 @@ TODO Fix Merge Conflict */
   public onUpsertWithWhere<T>(where: any = {}, data: any = {}): Observable<T> {
     let _urlParams: any = {};
     if (where) _urlParams.where = where;
-    return this.request('POST', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-      'upsertWithWhere'
-    ].join('/'), undefined, _urlParams, { data }, true)
-    .pipe(map((data: T) => this.model.factory(data)));
+    return this.request(
+      "POST",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+        "upsertWithWhere",
+      ].join("/"),
+      undefined,
+      _urlParams,
+      { data },
+      true,
+    ).pipe(map((data: T) => this.model.factory(data)));
   }
   /**
    * @method replaceOrCreate
@@ -556,14 +758,24 @@ TODO Fix Merge Conflict */
    * @description
    * Generic replaceOrCreate method
    */
-  public replaceOrCreate<T>(data: any = {}, customHeaders?: Function): Observable<T> {
-    return this.request('POST', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-      'replaceOrCreate'
-    ].join('/'), undefined, undefined, { data }, null, customHeaders)
-    .pipe(map((data: T) => this.model.factory(data)));
+  public replaceOrCreate<T>(
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<T> {
+    return this.request(
+      "POST",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+        "replaceOrCreate",
+      ].join("/"),
+      undefined,
+      undefined,
+      { data },
+      null,
+      customHeaders,
+    ).pipe(map((data: T) => this.model.factory(data)));
   }
   /**
    * @method onReplaceOrCreate
@@ -574,13 +786,19 @@ TODO Fix Merge Conflict */
    * Generic onReplaceOrCreate method
    */
   public onReplaceOrCreate<T>(data: any = {}): Observable<T> {
-    return this.request('POST', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-      'replaceOrCreate'
-    ].join('/'), undefined, undefined, { data }, true)
-    .pipe(map((data: T) => this.model.factory(data)));
+    return this.request(
+      "POST",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+        "replaceOrCreate",
+      ].join("/"),
+      undefined,
+      undefined,
+      { data },
+      true,
+    ).pipe(map((data: T) => this.model.factory(data)));
   }
   /**
    * @method replaceById
@@ -590,14 +808,26 @@ TODO Fix Merge Conflict */
    * @description
    * Generic replaceById method
    */
-  public replaceById<T>(id: any, data: any = {}, customHeaders?: Function): Observable<T> {
-    return this.request('POST', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-      ':id', 'replace'
-    ].join('/'), { id }, undefined, { data }, null, customHeaders)
-    .pipe(map((data: T) => this.model.factory(data)));
+  public replaceById<T>(
+    id: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<T> {
+    return this.request(
+      "POST",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+        ":id",
+        "replace",
+      ].join("/"),
+      { id },
+      undefined,
+      { data },
+      null,
+      customHeaders,
+    ).pipe(map((data: T) => this.model.factory(data)));
   }
   /**
    * @method onReplaceById
@@ -608,13 +838,20 @@ TODO Fix Merge Conflict */
    * Generic onReplaceById method
    */
   public onReplaceById<T>(id: any, data: any = {}): Observable<T> {
-    return this.request('POST', [
-      LoopBackConfig.getPath(),
-      LoopBackConfig.getApiVersion(),
-      this.model.getModelDefinition().path,
-      ':id', 'replace'
-    ].join('/'), { id }, undefined, { data }, true)
-    .pipe(map((data: T) => this.model.factory(data)));
+    return this.request(
+      "POST",
+      [
+        LoopBackConfig.getPath(),
+        LoopBackConfig.getApiVersion(),
+        this.model.getModelDefinition().path,
+        ":id",
+        "replace",
+      ].join("/"),
+      { id },
+      undefined,
+      { data },
+      true,
+    ).pipe(map((data: T) => this.model.factory(data)));
   }
   /**
    * @method createChangeStream
@@ -626,18 +863,20 @@ TODO Fix Merge Conflict */
    */
   public createChangeStream(): Observable<any> {
     let subject = new Subject();
-    if (typeof EventSource !== 'undefined') {
-      let emit   = (msg: any) => subject.next(JSON.parse(msg.data));
-      var source = new EventSource([
-        LoopBackConfig.getPath(),
-        LoopBackConfig.getApiVersion(),
-        this.model.getModelDefinition().path,
-        'change-stream'
-      ].join('/'));
-      source.addEventListener('data', emit);
+    if (typeof EventSource !== "undefined") {
+      let emit = (msg: any) => subject.next(JSON.parse(msg.data));
+      var source = new EventSource(
+        [
+          LoopBackConfig.getPath(),
+          LoopBackConfig.getApiVersion(),
+          this.model.getModelDefinition().path,
+          "change-stream",
+        ].join("/"),
+      );
+      source.addEventListener("data", emit);
       source.onerror = emit;
     } else {
-      console.warn('SDK Builder: EventSource is not supported'); 
+      console.warn("SDK Builder: EventSource is not supported");
     }
     return subject.asObservable();
   }

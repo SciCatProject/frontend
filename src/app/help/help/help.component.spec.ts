@@ -6,7 +6,7 @@ import { AppConfigService, HelpMessages } from "app-config.service";
 const getConfig = () => ({
   facility: "ESS",
   gettingStarted: true,
-  ingestManual: true
+  ingestManual: true,
 });
 
 const helpMessages = new HelpMessages();
@@ -15,27 +15,25 @@ describe("HelpComponent", () => {
   let component: HelpComponent;
   let fixture: ComponentFixture<HelpComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [HelpComponent],
-        imports: [MatCardModule],
-      });
-      TestBed.overrideComponent(HelpComponent, {
-        set: {
-          providers: [
-            {
-              provide: AppConfigService,
-              useValue: {
-                getConfig,
-              },
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [HelpComponent],
+      imports: [MatCardModule],
+    });
+    TestBed.overrideComponent(HelpComponent, {
+      set: {
+        providers: [
+          {
+            provide: AppConfigService,
+            useValue: {
+              getConfig,
             },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+          },
+        ],
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HelpComponent);
@@ -58,7 +56,10 @@ describe("HelpComponent", () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(HelpComponent);
       component = fixture.componentInstance;
-      customHelpMessages = { gettingStarted: "someGettingStart", ingestManual: "someOtherIngest" };
+      customHelpMessages = {
+        gettingStarted: "someGettingStart",
+        ingestManual: "someOtherIngest",
+      };
       component.appConfig.helpMessages = customHelpMessages;
       fixture.detectChanges();
     });
@@ -86,5 +87,4 @@ describe("HelpComponent", () => {
       expect(compiled.innerHTML).toContain(helpMessages.ingestManual);
     });
   });
-
 });

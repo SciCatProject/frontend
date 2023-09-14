@@ -8,9 +8,59 @@ env:
   NODE_VERSION: 18.x
 
 jobs:
+
+  install-and-cache:
+    name: Run install and cache
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Cache node_modules
+        id: cached-node-modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}-${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        if: steps.cached-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+  eslint:
+    name: eslint
+    needs: [install-and-cache]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Cache node_modules
+        id: cached-node-modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node-modules-${{ hashFiles('package-lock.json') }}-${{ env.NODE_VERSION }}
+
+      - name: run eslint
+        run: npm run lint
+
   test:
     name: Run tests
     runs-on: ubuntu-latest
+    needs: [install-and-cache]
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -33,7 +83,6 @@ jobs:
 
       - name: Test
         run: |
-          npm run lint
           npm run test
           npm run build
 

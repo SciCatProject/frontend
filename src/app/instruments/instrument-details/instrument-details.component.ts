@@ -17,7 +17,8 @@ import { selectIsAdmin } from "state-management/selectors/user.selectors";
   styleUrls: ["./instrument-details.component.scss"],
 })
 export class InstrumentDetailsComponent
-  implements OnInit, OnDestroy, EditableComponent {
+  implements OnInit, OnDestroy, EditableComponent
+{
   private _hasUnsavedChanges = false;
 
   instrument$ = this.store.select(selectCurrentInstrument);
@@ -28,12 +29,12 @@ export class InstrumentDetailsComponent
   constructor(
     private appConfigService: AppConfigService,
     private route: ActivatedRoute,
-    private store: Store
-  ) { }
+    private store: Store,
+  ) {}
 
   onSaveCustomMetadata(
     pid: string,
-    customMetadata: Record<string, unknown>
+    customMetadata: Record<string, unknown>,
   ): void {
     this.store.dispatch(saveCustomMetadataAction({ pid, customMetadata }));
   }
@@ -48,7 +49,7 @@ export class InstrumentDetailsComponent
         if (this.hasUnsavedChanges()) {
           event.preventDefault();
         }
-      })
+      }),
     );
   }
 

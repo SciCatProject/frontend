@@ -15,23 +15,21 @@ describe("SearchBarComponent", () => {
   let component: SearchBarComponent;
   let fixture: ComponentFixture<SearchBarComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [SearchBarComponent],
-        imports: [
-          BrowserAnimationsModule,
-          FormsModule,
-          MatAutocompleteModule,
-          MatFormFieldModule,
-          MatIconModule,
-          MatInputModule,
-          MatOptionModule,
-        ],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [SearchBarComponent],
+      imports: [
+        BrowserAnimationsModule,
+        FormsModule,
+        MatAutocompleteModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatOptionModule,
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SearchBarComponent);
@@ -52,7 +50,7 @@ describe("SearchBarComponent", () => {
 
       expect(component.searchBarFocus.emit).toHaveBeenCalledTimes(1);
       expect(component.searchBarFocus.emit).toHaveBeenCalledWith(
-        component.query
+        component.query,
       );
     });
   });
@@ -66,7 +64,7 @@ describe("SearchBarComponent", () => {
 
       expect(component.searchSubject.next).toHaveBeenCalledTimes(1);
       expect(component.searchSubject.next).toHaveBeenCalledWith(
-        component.query
+        component.query,
       );
     });
   });

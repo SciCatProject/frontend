@@ -15,8 +15,8 @@ import { FormsModule } from "@angular/forms";
     MatAutocompleteModule,
     MatFormFieldModule,
     MatIconModule,
-    MatInputModule
+    MatInputModule,
   ],
-  exports: [SearchBarComponent]
+  exports: [SearchBarComponent],
 })
 export class SearchBarModule {}

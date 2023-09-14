@@ -23,7 +23,7 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
   constructor(
     private dialogRef: MatDialogRef<EditDialogComponent>,
     @Inject(MAT_DIALOG_DATA)
-    data: { multiSelect: boolean; selectedPolicy: Policy }
+    data: { multiSelect: boolean; selectedPolicy: Policy },
   ) {
     this.multiEdit = data.multiSelect;
     // clone input, do not mutate
@@ -47,21 +47,21 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
       tapeRedundancy: new FormControl({
         value: this.getPreFill(
           data.selectedPolicy.tapeRedundancy,
-          this.multiEdit
+          this.multiEdit,
         ),
         disabled: true,
       }),
       autoArchiveDelay: new FormControl({
         value: this.getPreFill(
           data.selectedPolicy.autoArchiveDelay,
-          this.multiEdit
+          this.multiEdit,
         ),
         disabled: true,
       }),
       archiveEmailNotification: new FormControl({
         value: this.getPreFill(
           data.selectedPolicy.archiveEmailNotification,
-          this.multiEdit
+          this.multiEdit,
         ),
         disabled: true,
       }),
@@ -72,7 +72,7 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
       retrieveEmailNotification: new FormControl({
         value: this.getPreFill(
           data.selectedPolicy.retrieveEmailNotification,
-          this.multiEdit
+          this.multiEdit,
         ),
         disabled: true,
       }),
@@ -134,9 +134,8 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
   }
 
   removeRetrieveEmail(chip: any): void {
-    const index = this.data.selectedPolicy.retrieveEmailsToBeNotified.indexOf(
-      chip
-    );
+    const index =
+      this.data.selectedPolicy.retrieveEmailsToBeNotified.indexOf(chip);
 
     if (index >= 0) {
       this.data.selectedPolicy.retrieveEmailsToBeNotified.splice(index, 1);
@@ -144,9 +143,8 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
   }
 
   removeArchiveEmail(chip: any): void {
-    const index = this.data.selectedPolicy.archiveEmailsToBeNotified.indexOf(
-      chip
-    );
+    const index =
+      this.data.selectedPolicy.archiveEmailsToBeNotified.indexOf(chip);
 
     if (index >= 0) {
       this.data.selectedPolicy.archiveEmailsToBeNotified.splice(index, 1);
@@ -174,12 +172,12 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
     // handle chip lists
     if (this.form.controls.archiveEmailsToBeNotified.enabled) {
       this.form.controls.archiveEmailsToBeNotified.setValue(
-        this.data.selectedPolicy.archiveEmailsToBeNotified
+        this.data.selectedPolicy.archiveEmailsToBeNotified,
       );
     }
     if (this.form.controls.retrieveEmailsToBeNotified.enabled) {
       this.form.controls.retrieveEmailsToBeNotified.setValue(
-        this.data.selectedPolicy.retrieveEmailsToBeNotified
+        this.data.selectedPolicy.retrieveEmailsToBeNotified,
       );
     }
     if (this.form.controls.manager.enabled) {

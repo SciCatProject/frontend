@@ -28,7 +28,7 @@ export class AppThemeService {
     Object.keys(this.activeTheme.properties).forEach((property) => {
       document.documentElement.style.setProperty(
         property,
-        this.activeTheme.properties[property]
+        this.activeTheme.properties[property],
       );
     });
   }

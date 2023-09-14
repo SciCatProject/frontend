@@ -2,14 +2,14 @@
 
 declare var Object: any;
 export interface ShareGroupInterface {
-  "groupID"?: string;
-  "members"?: Array<any>;
-  "datasets"?: Array<any>;
-  "createdBy"?: string;
-  "updatedBy"?: string;
-  "id"?: any;
-  "createdAt"?: Date;
-  "updatedAt"?: Date;
+  groupID?: string;
+  members?: Array<any>;
+  datasets?: Array<any>;
+  createdBy?: string;
+  updatedBy?: string;
+  id?: any;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export class ShareGroup implements ShareGroupInterface {
@@ -32,63 +32,62 @@ export class ShareGroup implements ShareGroupInterface {
     return "ShareGroup";
   }
   /**
-  * @method factory
-  * @author Jonathan Casarrubias
-  * @license MIT
-  * This method creates an instance of ShareGroup for dynamic purposes.
-  **/
-  public static factory(data: ShareGroupInterface): ShareGroup{
+   * @method factory
+   * @author Jonathan Casarrubias
+   * @license MIT
+   * This method creates an instance of ShareGroup for dynamic purposes.
+   **/
+  public static factory(data: ShareGroupInterface): ShareGroup {
     return new ShareGroup(data);
   }
   /**
-  * @method getModelDefinition
-  * @author Julien Ledun
-  * @license MIT
-  * This method returns an object that represents some of the model
-  * definitions.
-  **/
+   * @method getModelDefinition
+   * @author Julien Ledun
+   * @license MIT
+   * This method returns an object that represents some of the model
+   * definitions.
+   **/
   public static getModelDefinition() {
     return {
-      name: 'ShareGroup',
-      plural: 'ShareGroups',
-      path: 'ShareGroups',
-      idName: 'id',
+      name: "ShareGroup",
+      plural: "ShareGroups",
+      path: "ShareGroups",
+      idName: "id",
       properties: {
-        "groupID": {
-          name: 'groupID',
-          type: 'string'
+        groupID: {
+          name: "groupID",
+          type: "string",
         },
-        "members": {
-          name: 'members',
-          type: 'Array&lt;any&gt;'
+        members: {
+          name: "members",
+          type: "Array&lt;any&gt;",
         },
-        "datasets": {
-          name: 'datasets',
-          type: 'Array&lt;any&gt;'
+        datasets: {
+          name: "datasets",
+          type: "Array&lt;any&gt;",
         },
-        "createdBy": {
-          name: 'createdBy',
-          type: 'string'
+        createdBy: {
+          name: "createdBy",
+          type: "string",
         },
-        "updatedBy": {
-          name: 'updatedBy',
-          type: 'string'
+        updatedBy: {
+          name: "updatedBy",
+          type: "string",
         },
-        "id": {
-          name: 'id',
-          type: 'any'
+        id: {
+          name: "id",
+          type: "any",
         },
-        "createdAt": {
-          name: 'createdAt',
-          type: 'Date'
+        createdAt: {
+          name: "createdAt",
+          type: "Date",
         },
-        "updatedAt": {
-          name: 'updatedAt',
-          type: 'Date'
+        updatedAt: {
+          name: "updatedAt",
+          type: "Date",
         },
       },
-      relations: {
-      }
-    }
+      relations: {},
+    };
   }
 }

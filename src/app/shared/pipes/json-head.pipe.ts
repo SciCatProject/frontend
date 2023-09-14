@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-  name: "jsonHead"
+  name: "jsonHead",
 })
 export class JsonHeadPipe implements PipeTransform {
   transform(value: Record<string, any>, args?: any): any {
@@ -35,7 +35,8 @@ export class JsonHeadPipe implements PipeTransform {
       key2 = " ";
       val2 = " ";
     }
-    outputString = key1 + ":" + (val1?.value.toString() || val1)+ "\n" + key2 + ":" + val2;
+    outputString =
+      key1 + ":" + (val1?.value.toString() || val1) + "\n" + key2 + ":" + val2;
     if (key1 === undefined) {
       outputString = "No metadata found";
     }

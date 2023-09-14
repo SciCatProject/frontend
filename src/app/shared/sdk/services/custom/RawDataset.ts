@@ -1,24 +1,23 @@
 /* eslint-disable */
-import { Injectable, Inject, Optional } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { SDKModels } from './SDKModels';
-import { BaseLoopBackApi } from '../core/base.service';
-import { LoopBackConfig } from '../../lb.config';
-import { LoopBackAuth } from '../core/auth.service';
-import { LoopBackFilter,  } from '../../models/BaseModels';
-import { ErrorHandler } from '../core/error.service';
-import { Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { RawDataset } from '../../models/RawDataset';
-import { SocketConnection } from '../../sockets/socket.connections';
-import { PublishedData } from '../../models/PublishedData';
-import { Sample } from '../../models/Sample';
-import { Proposal } from '../../models/Proposal';
-import { Datablock } from '../../models/Datablock';
-import { OrigDatablock } from '../../models/OrigDatablock';
-import { Attachment } from '../../models/Attachment';
-import { Instrument } from '../../models/Instrument';
-
+import { Injectable, Inject, Optional } from "@angular/core";
+import { HttpClient, HttpResponse } from "@angular/common/http";
+import { SDKModels } from "./SDKModels";
+import { BaseLoopBackApi } from "../core/base.service";
+import { LoopBackConfig } from "../../lb.config";
+import { LoopBackAuth } from "../core/auth.service";
+import { LoopBackFilter } from "../../models/BaseModels";
+import { ErrorHandler } from "../core/error.service";
+import { Observable, Subject } from "rxjs";
+import { map } from "rxjs/operators";
+import { RawDataset } from "../../models/RawDataset";
+import { SocketConnection } from "../../sockets/socket.connections";
+import { PublishedData } from "../../models/PublishedData";
+import { Sample } from "../../models/Sample";
+import { Proposal } from "../../models/Proposal";
+import { Datablock } from "../../models/Datablock";
+import { OrigDatablock } from "../../models/OrigDatablock";
+import { Attachment } from "../../models/Attachment";
+import { Instrument } from "../../models/Instrument";
 
 /**
  * Api services for the `RawDataset` model.
@@ -29,15 +28,14 @@ import { Instrument } from '../../models/Instrument';
  */
 @Injectable()
 export class RawDatasetApi extends BaseLoopBackApi {
-
   constructor(
     @Inject(HttpClient) protected http: HttpClient,
     @Inject(SocketConnection) protected connection: SocketConnection,
     @Inject(SDKModels) protected models: SDKModels,
     @Inject(LoopBackAuth) protected auth: LoopBackAuth,
-    @Optional() @Inject(ErrorHandler) protected errorHandler: ErrorHandler
+    @Optional() @Inject(ErrorHandler) protected errorHandler: ErrorHandler,
   ) {
-    super(http,  connection,  models, auth, errorHandler);
+    super(http, connection, models, auth, errorHandler);
   }
 
   /**
@@ -56,17 +54,32 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public findByIdHistoryList(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public findByIdHistoryList(
+    id: any,
+    fk: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/historyList/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/historyList/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -83,17 +96,32 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public destroyByIdHistoryList(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public destroyByIdHistoryList(
+    id: any,
+    fk: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/historyList/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/historyList/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -117,19 +145,35 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public updateByIdHistoryList(id: any, fk: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public updateByIdHistoryList(
+    id: any,
+    fk: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "PUT";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/historyList/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/historyList/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -149,17 +193,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public getDatasetLifecycle(id: any, refresh: any = {}, customHeaders?: Function): Observable<any> {
+  public getDatasetLifecycle(
+    id: any,
+    refresh: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetLifecycle";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/datasetLifecycle";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof refresh !== 'undefined' && refresh !== null) _urlParams.refresh = refresh;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof refresh !== "undefined" && refresh !== null)
+      _urlParams.refresh = refresh;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -181,18 +241,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createDatasetLifecycle(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public createDatasetLifecycle(
+    id: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetLifecycle";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/datasetLifecycle";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -214,18 +289,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public updateDatasetLifecycle(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public updateDatasetLifecycle(
+    id: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "PUT";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetLifecycle";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/datasetLifecycle";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -240,16 +330,30 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public destroyDatasetLifecycle(id: any, customHeaders?: Function): Observable<any> {
+  public destroyDatasetLifecycle(
+    id: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetLifecycle";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/datasetLifecycle";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -269,17 +373,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public getPublisheddata(id: any, refresh: any = {}, customHeaders?: Function): Observable<any> {
+  public getPublisheddata(
+    id: any,
+    refresh: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/publisheddata";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/publisheddata";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof refresh !== 'undefined' && refresh !== null) _urlParams.refresh = refresh;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof refresh !== "undefined" && refresh !== null)
+      _urlParams.refresh = refresh;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -299,17 +419,32 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public findByIdTechniquesList(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public findByIdTechniquesList(
+    id: any,
+    fk: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/techniquesList/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/techniquesList/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -326,17 +461,32 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public destroyByIdTechniquesList(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public destroyByIdTechniquesList(
+    id: any,
+    fk: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/techniquesList/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/techniquesList/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -360,19 +510,35 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public updateByIdTechniquesList(id: any, fk: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public updateByIdTechniquesList(
+    id: any,
+    fk: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "PUT";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/techniquesList/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/techniquesList/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -392,17 +558,32 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public findByIdSamples(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public findByIdSamples(
+    id: any,
+    fk: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/samples/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/samples/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -419,17 +600,32 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public destroyByIdSamples(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public destroyByIdSamples(
+    id: any,
+    fk: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/samples/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/samples/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -453,19 +649,35 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public updateByIdSamples(id: any, fk: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public updateByIdSamples(
+    id: any,
+    fk: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "PUT";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/samples/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/samples/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -485,17 +697,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public getSample(id: any, refresh: any = {}, customHeaders?: Function): Observable<any> {
+  public getSample(
+    id: any,
+    refresh: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/sample";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/sample";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof refresh !== 'undefined' && refresh !== null) _urlParams.refresh = refresh;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof refresh !== "undefined" && refresh !== null)
+      _urlParams.refresh = refresh;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -515,17 +743,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public getProposal(id: any, refresh: any = {}, customHeaders?: Function): Observable<any> {
+  public getProposal(
+    id: any,
+    refresh: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/proposal";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/proposal";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof refresh !== 'undefined' && refresh !== null) _urlParams.refresh = refresh;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof refresh !== "undefined" && refresh !== null)
+      _urlParams.refresh = refresh;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -545,17 +789,32 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public findByIdDatablocks(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public findByIdDatablocks(
+    id: any,
+    fk: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datablocks/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/datablocks/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -572,17 +831,32 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public destroyByIdDatablocks(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public destroyByIdDatablocks(
+    id: any,
+    fk: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datablocks/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/datablocks/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -606,19 +880,35 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public updateByIdDatablocks(id: any, fk: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public updateByIdDatablocks(
+    id: any,
+    fk: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "PUT";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datablocks/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/datablocks/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -638,17 +928,32 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public findByIdOrigdatablocks(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public findByIdOrigdatablocks(
+    id: any,
+    fk: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/origdatablocks/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/origdatablocks/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -665,17 +970,32 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public destroyByIdOrigdatablocks(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public destroyByIdOrigdatablocks(
+    id: any,
+    fk: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/origdatablocks/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/origdatablocks/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -699,19 +1019,35 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public updateByIdOrigdatablocks(id: any, fk: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public updateByIdOrigdatablocks(
+    id: any,
+    fk: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "PUT";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/origdatablocks/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/origdatablocks/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -731,17 +1067,32 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public findByIdAttachments(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public findByIdAttachments(
+    id: any,
+    fk: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/attachments/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/attachments/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -758,17 +1109,32 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public destroyByIdAttachments(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public destroyByIdAttachments(
+    id: any,
+    fk: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/attachments/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/attachments/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -792,19 +1158,35 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public updateByIdAttachments(id: any, fk: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public updateByIdAttachments(
+    id: any,
+    fk: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "PUT";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/attachments/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/attachments/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -824,17 +1206,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public getInstrument(id: any, refresh: any = {}, customHeaders?: Function): Observable<any> {
+  public getInstrument(
+    id: any,
+    refresh: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/instrument";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/instrument";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof refresh !== 'undefined' && refresh !== null) _urlParams.refresh = refresh;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof refresh !== "undefined" && refresh !== null)
+      _urlParams.refresh = refresh;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -854,17 +1252,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public getHistoryList(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<any> {
+  public getHistoryList(
+    id: any,
+    filter: LoopBackFilter = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/historyList";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/historyList";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof filter !== "undefined" && filter !== null)
+      _urlParams.filter = filter;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -886,18 +1300,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createHistoryList(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public createHistoryList(
+    id: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/historyList";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/historyList";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -914,14 +1343,25 @@ export class RawDatasetApi extends BaseLoopBackApi {
    */
   public deleteHistoryList(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/historyList";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/historyList";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -940,17 +1380,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    *  - `count` – `{number}` -
    */
-  public countHistoryList(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
+  public countHistoryList(
+    id: any,
+    where: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/historyList/count";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/historyList/count";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof where !== "undefined" && where !== null)
+      _urlParams.where = where;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -970,17 +1426,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public getTechniquesList(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<any> {
+  public getTechniquesList(
+    id: any,
+    filter: LoopBackFilter = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/techniquesList";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/techniquesList";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof filter !== "undefined" && filter !== null)
+      _urlParams.filter = filter;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1002,18 +1474,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createTechniquesList(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public createTechniquesList(
+    id: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/techniquesList";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/techniquesList";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1028,16 +1515,30 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public deleteTechniquesList(id: any, customHeaders?: Function): Observable<any> {
+  public deleteTechniquesList(
+    id: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/techniquesList";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/techniquesList";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1056,17 +1557,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    *  - `count` – `{number}` -
    */
-  public countTechniquesList(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
+  public countTechniquesList(
+    id: any,
+    where: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/techniquesList/count";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/techniquesList/count";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof where !== "undefined" && where !== null)
+      _urlParams.where = where;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1086,17 +1603,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public getSamples(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<any> {
+  public getSamples(
+    id: any,
+    filter: LoopBackFilter = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/samples";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/samples";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof filter !== "undefined" && filter !== null)
+      _urlParams.filter = filter;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1118,18 +1651,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createSamples(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public createSamples(
+    id: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/samples";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/samples";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1146,14 +1694,25 @@ export class RawDatasetApi extends BaseLoopBackApi {
    */
   public deleteSamples(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/samples";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/samples";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1172,17 +1731,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    *  - `count` – `{number}` -
    */
-  public countSamples(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
+  public countSamples(
+    id: any,
+    where: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/samples/count";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/samples/count";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof where !== "undefined" && where !== null)
+      _urlParams.where = where;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1202,17 +1777,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public getDatablocks(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<any> {
+  public getDatablocks(
+    id: any,
+    filter: LoopBackFilter = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datablocks";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/datablocks";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof filter !== "undefined" && filter !== null)
+      _urlParams.filter = filter;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1234,18 +1825,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createDatablocks(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public createDatablocks(
+    id: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datablocks";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/datablocks";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1262,14 +1868,25 @@ export class RawDatasetApi extends BaseLoopBackApi {
    */
   public deleteDatablocks(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datablocks";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/datablocks";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1288,17 +1905,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    *  - `count` – `{number}` -
    */
-  public countDatablocks(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
+  public countDatablocks(
+    id: any,
+    where: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datablocks/count";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/datablocks/count";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof where !== "undefined" && where !== null)
+      _urlParams.where = where;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1318,17 +1951,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public getOrigdatablocks(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<any> {
+  public getOrigdatablocks(
+    id: any,
+    filter: LoopBackFilter = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/origdatablocks";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/origdatablocks";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof filter !== "undefined" && filter !== null)
+      _urlParams.filter = filter;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1350,18 +1999,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createOrigdatablocks(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public createOrigdatablocks(
+    id: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/origdatablocks";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/origdatablocks";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1376,16 +2040,30 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public deleteOrigdatablocks(id: any, customHeaders?: Function): Observable<any> {
+  public deleteOrigdatablocks(
+    id: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/origdatablocks";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/origdatablocks";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1404,17 +2082,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    *  - `count` – `{number}` -
    */
-  public countOrigdatablocks(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
+  public countOrigdatablocks(
+    id: any,
+    where: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/origdatablocks/count";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/origdatablocks/count";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof where !== "undefined" && where !== null)
+      _urlParams.where = where;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1434,17 +2128,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public getAttachments(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<any> {
+  public getAttachments(
+    id: any,
+    filter: LoopBackFilter = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/attachments";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/attachments";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof filter !== "undefined" && filter !== null)
+      _urlParams.filter = filter;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1466,18 +2176,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createAttachments(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public createAttachments(
+    id: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/attachments";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/attachments";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1494,14 +2219,25 @@ export class RawDatasetApi extends BaseLoopBackApi {
    */
   public deleteAttachments(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/attachments";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/attachments";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1520,17 +2256,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    *  - `count` – `{number}` -
    */
-  public countAttachments(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
+  public countAttachments(
+    id: any,
+    where: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/attachments/count";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/attachments/count";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof where !== "undefined" && where !== null)
+      _urlParams.where = where;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1550,16 +2302,30 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public patchOrCreate(data: any = {}, customHeaders?: Function): Observable<any> {
+  public patchOrCreate(
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "PUT";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets";
     let _routeParams: any = {};
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1581,18 +2347,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public patchAttributes(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public patchAttributes(
+    id: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "PUT";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1614,16 +2395,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public fullfacet(fields: any = {}, facets: any = {}, customHeaders?: Function): Observable<any> {
+  public fullfacet(
+    fields: any = {},
+    facets: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/fullfacet";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/fullfacet";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof fields !== 'undefined' && fields !== null) _urlParams.fields = fields;
-    if (typeof facets !== 'undefined' && facets !== null) _urlParams.facets = facets;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof fields !== "undefined" && fields !== null)
+      _urlParams.fields = fields;
+    if (typeof facets !== "undefined" && facets !== null)
+      _urlParams.facets = facets;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1645,16 +2443,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public fullquery(fields: any = {}, limits: any = {}, customHeaders?: Function): Observable<any> {
+  public fullquery(
+    fields: any = {},
+    limits: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/fullquery";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/fullquery";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof fields !== 'undefined' && fields !== null) _urlParams.fields = fields;
-    if (typeof limits !== 'undefined' && limits !== null) _urlParams.limits = limits;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof fields !== "undefined" && fields !== null)
+      _urlParams.fields = fields;
+    if (typeof limits !== "undefined" && limits !== null)
+      _urlParams.limits = limits;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1674,16 +2489,30 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public isValid(ownableItem: any = {}, customHeaders?: Function): Observable<any> {
+  public isValid(
+    ownableItem: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/isValid";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/isValid";
     let _routeParams: any = {};
     let _postBody: any = {
-      ownableItem: ownableItem
+      ownableItem: ownableItem,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1705,13 +2534,25 @@ export class RawDatasetApi extends BaseLoopBackApi {
    */
   public reset(datasetId: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PUT";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/resetArchiveStatus";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/resetArchiveStatus";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof datasetId !== 'undefined' && datasetId !== null) _urlParams.datasetId = datasetId;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof datasetId !== "undefined" && datasetId !== null)
+      _urlParams.datasetId = datasetId;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1728,16 +2569,30 @@ export class RawDatasetApi extends BaseLoopBackApi {
    *
    * The response from the OpenWhisk reduce action
    */
-  public reduceDataset(dataset: any, customHeaders?: Function): Observable<any> {
+  public reduceDataset(
+    dataset: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/reduce";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/reduce";
     let _routeParams: any = {};
     let _postBody: any = {
-      dataset: dataset
+      dataset: dataset,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1761,18 +2616,35 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public appendToArrayField(id: any, fieldName: any, data: any, customHeaders?: Function): Observable<any> {
+  public appendToArrayField(
+    id: any,
+    fieldName: any,
+    data: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/appendToArrayField";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/appendToArrayField";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof fieldName !== 'undefined' && fieldName !== null) _urlParams.fieldName = fieldName;
-    if (typeof data !== 'undefined' && data !== null) _urlParams.data = data;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof fieldName !== "undefined" && fieldName !== null)
+      _urlParams.fieldName = fieldName;
+    if (typeof data !== "undefined" && data !== null) _urlParams.data = data;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1794,23 +2666,40 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public metadataKeys(fields: any = {}, limits: any = {}, customHeaders?: Function): Observable<any> {
+  public metadataKeys(
+    fields: any = {},
+    limits: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/metadataKeys";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/metadataKeys";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof fields !== 'undefined' && fields !== null) _urlParams.fields = fields;
-    if (typeof limits !== 'undefined' && limits !== null) _urlParams.limits = limits;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof fields !== "undefined" && fields !== null)
+      _urlParams.fields = fields;
+    if (typeof limits !== "undefined" && limits !== null)
+      _urlParams.limits = limits;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
   /**
    * <em>
-         * (The remote method definition does not provide any description.)
-         * </em>
+   * (The remote method definition does not provide any description.)
+   * </em>
    *
    * @param {string} id
    *
@@ -1825,14 +2714,25 @@ export class RawDatasetApi extends BaseLoopBackApi {
    */
   public thumbnail(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/thumbnail";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/thumbnail";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1854,18 +2754,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createManyDatasetLifecycle(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
+  public createManyDatasetLifecycle(
+    id: any,
+    data: any[] = [],
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datasetLifecycle";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/datasetLifecycle";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1887,18 +2802,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createManyHistoryList(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
+  public createManyHistoryList(
+    id: any,
+    data: any[] = [],
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/historyList";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/historyList";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1920,18 +2850,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createManyTechniquesList(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
+  public createManyTechniquesList(
+    id: any,
+    data: any[] = [],
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/techniquesList";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/techniquesList";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1953,18 +2898,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createManySamples(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
+  public createManySamples(
+    id: any,
+    data: any[] = [],
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/samples";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/samples";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -1986,18 +2946,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createManyDatablocks(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
+  public createManyDatablocks(
+    id: any,
+    data: any[] = [],
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/datablocks";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/datablocks";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -2019,18 +2994,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createManyOrigdatablocks(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
+  public createManyOrigdatablocks(
+    id: any,
+    data: any[] = [],
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/origdatablocks";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/origdatablocks";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -2052,18 +3042,33 @@ export class RawDatasetApi extends BaseLoopBackApi {
    * This usually means the response is a `RawDataset` object.)
    * </em>
    */
-  public createManyAttachments(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
+  public createManyAttachments(
+    id: any,
+    data: any[] = [],
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/RawDatasets/:id/attachments";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/RawDatasets/:id/attachments";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 

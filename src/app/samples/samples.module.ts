@@ -48,8 +48,6 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
     SampleDialogComponent,
     SampleDashboardComponent,
   ],
-  providers: [
-    FileSizePipe
-  ],
+  providers: [FileSizePipe],
 })
 export class SamplesModule {}

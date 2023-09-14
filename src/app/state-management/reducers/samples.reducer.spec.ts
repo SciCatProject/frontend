@@ -1,7 +1,13 @@
 import { samplesReducer } from "./samples.reducer";
 import { initialSampleState } from "../state/samples.store";
 import * as fromActions from "../actions/samples.actions";
-import { Attachment, Sample, Dataset, SampleFilters, ScientificCondition } from "../models";
+import {
+  Attachment,
+  Sample,
+  Dataset,
+  SampleFilters,
+  ScientificCondition,
+} from "../models";
 import { SampleInterface } from "shared/sdk";
 
 const data: SampleInterface = {
@@ -232,7 +238,7 @@ describe("SamplesReducer", () => {
       initialSampleState.sampleFilters.characteristics.push(characteristic);
 
       expect(initialSampleState.sampleFilters.characteristics).toContain(
-        characteristic
+        characteristic,
       );
 
       const index = 0;

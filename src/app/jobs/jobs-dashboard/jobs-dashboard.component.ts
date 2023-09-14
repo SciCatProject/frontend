@@ -82,12 +82,12 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
   constructor(
     private datePipe: DatePipe,
     private router: Router,
-    private store: Store
+    private store: Store,
   ) {}
 
   private enumKeys<T>(enumType: T): (keyof T)[] {
     return (Object.keys(enumType) as Array<keyof T>).filter(
-      (value) => isNaN(Number(value)) !== false
+      (value) => isNaN(Number(value)) !== false,
     );
   }
 
@@ -100,7 +100,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
         type: job.type,
         createdAt: this.datePipe.transform(
           job.creationTime,
-          "yyyy-MM-dd HH:mm"
+          "yyyy-MM-dd HH:mm",
         ),
         statusMessage: job.jobStatusMessage,
       }));
@@ -141,7 +141,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
 
   onPageChange(event: PageChangeEvent) {
     this.store.dispatch(
-      changePageAction({ page: event.pageIndex, limit: event.pageSize })
+      changePageAction({ page: event.pageIndex, limit: event.pageSize }),
     );
   }
 
@@ -175,7 +175,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.store.select(selectJobs).subscribe((jobs) => {
         this.jobs = this.formatTableData(jobs);
-      })
+      }),
     );
 
     this.subscriptions.push(
@@ -195,7 +195,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
             this.onModeChange(JobViewMode.myJobs);
           }
         }
-      })
+      }),
     );
 
     this.subscriptions.push(
@@ -203,7 +203,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
         this.router.navigate(["/user/jobs"], {
           queryParams: { args: JSON.stringify(filters) },
         });
-      })
+      }),
     );
   }
 

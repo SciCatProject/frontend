@@ -18,6 +18,6 @@ export const initialPublishedDataState: PublishedDataState = {
   filters: {
     sortField: "createdAt desc",
     skip: 0,
-    limit: 25
-  }
+    limit: 25,
+  },
 };

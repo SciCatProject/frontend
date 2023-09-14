@@ -1,14 +1,16 @@
 /* eslint-disable */
-import { Injectable } from '@angular/core';
-export interface CookieInterface { [key: string]: any }
+import { Injectable } from "@angular/core";
+export interface CookieInterface {
+  [key: string]: any;
+}
 /**
-* @author Jonathan Casarrubias <twitter:@johncasarrubias> <github:@mean-expert-official>
-* @module CookieBrowser
-* @license MIT
-* @description
-* This module handle cookies, it will be provided using DI Swapping according the
-* SDK Socket Driver Available currently supporting Angular 2 for web and NativeScript 2.
-**/
+ * @author Jonathan Casarrubias <twitter:@johncasarrubias> <github:@mean-expert-official>
+ * @module CookieBrowser
+ * @license MIT
+ * @description
+ * This module handle cookies, it will be provided using DI Swapping according the
+ * SDK Socket Driver Available currently supporting Angular 2 for web and NativeScript 2.
+ **/
 @Injectable()
 export class CookieBrowser {
   /**
@@ -24,14 +26,15 @@ export class CookieBrowser {
    **/
   get(key: string): any {
     if (!this.cookies[key]) {
-      let cookie = window.document
-                         .cookie.split('; ')
-                         .filter((item: any) => item.split('=')[0] === key).pop();
+      let cookie = window.document.cookie
+        .split("; ")
+        .filter((item: any) => item.split("=")[0] === key)
+        .pop();
       if (!cookie) {
         return null;
       }
 
-      this.cookies[key] = this.parse(cookie.split('=').slice(1).join('='));
+      this.cookies[key] = this.parse(cookie.split("=").slice(1).join("="));
     }
 
     return this.cookies[key];
@@ -47,7 +50,9 @@ export class CookieBrowser {
    **/
   set(key: string, value: any, expires?: Date): void {
     this.cookies[key] = value;
-    let cookie = `${key}=${encodeURI(value)}; path=/${expires ? `; expires=${ expires.toUTCString() }` : ''}`;
+    let cookie = `${key}=${encodeURI(value)}; path=/${
+      expires ? `; expires=${expires.toUTCString()}` : ""
+    }`;
     window.document.cookie = cookie;
   }
   /**
@@ -58,7 +63,7 @@ export class CookieBrowser {
    * This method will remove a cookie from the client.
    **/
   remove(key: string) {
-    document.cookie = key + '=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    document.cookie = key + "=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
     delete this.cookies[key];
   }
   /**
@@ -71,9 +76,9 @@ export class CookieBrowser {
    **/
   private parse(value: any) {
     try {
-        return JSON.parse(decodeURI(value));
+      return JSON.parse(decodeURI(value));
     } catch (e) {
-        return value;
+      return value;
     }
   }
 }

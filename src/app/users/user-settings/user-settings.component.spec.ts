@@ -25,31 +25,29 @@ describe("UserSettingsComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        imports: [
-          FlexLayoutModule,
-          MatCardModule,
-          MatIconModule,
-          ReactiveFormsModule,
-          SharedScicatFrontendModule,
-          StoreModule.forRoot({}),
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [
+        FlexLayoutModule,
+        MatCardModule,
+        MatIconModule,
+        ReactiveFormsModule,
+        SharedScicatFrontendModule,
+        StoreModule.forRoot({}),
+      ],
+      declarations: [UserSettingsComponent],
+    });
+    TestBed.overrideComponent(UserSettingsComponent, {
+      set: {
+        providers: [
+          // needed for config form sub component
+          { provide: ConfigService, useClass: MockConfigService },
         ],
-        declarations: [UserSettingsComponent],
-      });
-      TestBed.overrideComponent(UserSettingsComponent, {
-        set: {
-          providers: [
-            // needed for config form sub component
-            { provide: ConfigService, useClass: MockConfigService },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UserSettingsComponent);
@@ -77,7 +75,7 @@ describe("UserSettingsComponent", () => {
       const message = new Message(
         "SciCat token has been copied to your clipboard",
         MessageType.Success,
-        5000
+        5000,
       );
 
       component.onCopy("test");

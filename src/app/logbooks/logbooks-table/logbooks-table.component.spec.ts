@@ -18,24 +18,22 @@ describe("LogbooksTableComponent", () => {
     navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        imports: [MatCardModule, MatIconModule, MatTableModule],
-        declarations: [LogbooksTableComponent],
-      });
-      TestBed.overrideComponent(LogbooksTableComponent, {
-        set: {
-          providers: [
-            { provide: Router, useValue: router },
-            { provide: Store, useClass: MockStore },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [MatCardModule, MatIconModule, MatTableModule],
+      declarations: [LogbooksTableComponent],
+    });
+    TestBed.overrideComponent(LogbooksTableComponent, {
+      set: {
+        providers: [
+          { provide: Router, useValue: router },
+          { provide: Store, useClass: MockStore },
+        ],
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LogbooksTableComponent);

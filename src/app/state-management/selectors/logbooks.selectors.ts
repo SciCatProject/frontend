@@ -5,32 +5,32 @@ const selectLogbookState = createFeatureSelector<LogbookState>("logbooks");
 
 export const selectLogbooks = createSelector(
   selectLogbookState,
-  (state) => state.logbooks
+  (state) => state.logbooks,
 );
 
 export const selectCurrentLogbook = createSelector(
   selectLogbookState,
-  (state) => state.currentLogbook
+  (state) => state.currentLogbook,
 );
 
 export const selectEntriesCount = createSelector(
   selectLogbookState,
-  (state) => state.totalCount
+  (state) => state.totalCount,
 );
 
 export const selectHasPrefilledFilters = createSelector(
   selectLogbookState,
-  (state) => state.hasPrefilledFilters
+  (state) => state.hasPrefilledFilters,
 );
 
 export const selectFilters = createSelector(
   selectLogbookState,
-  (state) => state.filters
+  (state) => state.filters,
 );
 
 export const selectEntriesPerPage = createSelector(
   selectFilters,
-  (filters) => filters.limit
+  (filters) => filters.limit,
 );
 
 export const selectPage = createSelector(selectFilters, (filters) => {
@@ -50,5 +50,5 @@ export const selectLogbooksDashboardPageViewModel = createSelector(
     entriesPerPage,
     currentPage,
     filters,
-  })
+  }),
 );

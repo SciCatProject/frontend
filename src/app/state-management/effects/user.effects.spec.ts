@@ -89,7 +89,7 @@ describe("UserEffects", () => {
             "getSettings",
             "updateSettings",
             "getCurrentToken",
-            "getCurrentId"
+            "getCurrentId",
           ]),
         },
         {
@@ -171,7 +171,7 @@ describe("UserEffects", () => {
         password,
         rememberMe,
       });
-      const outcome = fromActions.activeDirLoginFailedAction({error});
+      const outcome = fromActions.activeDirLoginFailedAction({ error });
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {}, error);
@@ -267,19 +267,19 @@ describe("UserEffects", () => {
 
   describe("funcLogin$", () => {
     const form = {
-      username : "test",
-      password : "test",
-      rememberMe : true,
+      username: "test",
+      password: "test",
+      rememberMe: true,
       error: new HttpErrorResponse({
         status: 400,
         statusText: "Bad Request",
-      })
+      }),
     };
 
     it("should result in a funcLoginSuccessAction and a loginCompleteAction", () => {
       const user = new User();
       const accountType = "functional";
-      const action = fromActions.funcLoginAction({form});
+      const action = fromActions.funcLoginAction({ form });
       const outcome1 = fromActions.funcLoginSuccessAction();
       const outcome2 = fromActions.loginCompleteAction({ user, accountType });
 
@@ -292,8 +292,8 @@ describe("UserEffects", () => {
     });
 
     it("should result in a funcLoginFailedAction", () => {
-      const action = fromActions.funcLoginAction({form});
-      const outcome = fromActions.funcLoginFailedAction({error});
+      const action = fromActions.funcLoginAction({ form });
+      const outcome = fromActions.funcLoginFailedAction({ error });
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {}, error);
@@ -410,8 +410,6 @@ describe("UserEffects", () => {
       const expected = cold("--b", { b: outcome });
       expect(effects.logout$).toBeObservable(expected);
     });
-
-
   });
 
   describe("logoutNavigate$", () => {
@@ -461,8 +459,6 @@ describe("UserEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCurrentUser$).toBeObservable(expected);
-
-
     });
   });
 

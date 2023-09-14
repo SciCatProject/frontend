@@ -1,7 +1,10 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { LogbookFilterComponent } from "./logbook-filter.component";
-import { MatCheckboxModule, MatCheckboxChange } from "@angular/material/checkbox";
+import {
+  MatCheckboxModule,
+  MatCheckboxChange,
+} from "@angular/material/checkbox";
 
 describe("LogbookFilterComponent", () => {
   let component: LogbookFilterComponent;
@@ -13,7 +16,7 @@ describe("LogbookFilterComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [MatCheckboxModule],
-      declarations: [LogbookFilterComponent]
+      declarations: [LogbookFilterComponent],
     }).compileComponents();
   }));
 
@@ -27,7 +30,7 @@ describe("LogbookFilterComponent", () => {
       showUserMessages: true,
       sortField: "timestamp:desc",
       skip: 0,
-      limit: 25
+      limit: 25,
     };
 
     fixture.detectChanges();
@@ -50,7 +53,7 @@ describe("LogbookFilterComponent", () => {
         showUserMessages: false,
         sortField: "timestamp:desc",
         skip: 0,
-        limit: 25
+        limit: 25,
       };
 
       const entry = "Bot Messages";
@@ -67,7 +70,7 @@ describe("LogbookFilterComponent", () => {
         showUserMessages: false,
         sortField: "timestamp:desc",
         skip: 0,
-        limit: 25
+        limit: 25,
       };
 
       const entry = "Images";
@@ -84,7 +87,7 @@ describe("LogbookFilterComponent", () => {
         showUserMessages: false,
         sortField: "timestamp:desc",
         skip: 0,
-        limit: 25
+        limit: 25,
       };
 
       const entry = "User Messages";
@@ -101,7 +104,7 @@ describe("LogbookFilterComponent", () => {
         showUserMessages: false,
         sortField: "timestamp:desc",
         skip: 0,
-        limit: 25
+        limit: 25,
       };
 
       const entry = "Test";
@@ -122,7 +125,7 @@ describe("LogbookFilterComponent", () => {
         showUserMessages: true,
         sortField: "timestamp:desc",
         skip: 0,
-        limit: 25
+        limit: 25,
       };
 
       const entry = "Bot Messages";
@@ -133,7 +136,9 @@ describe("LogbookFilterComponent", () => {
       component.filters.showBotMessages = false;
 
       expect(component.filterSelect.emit).toHaveBeenCalledTimes(1);
-      expect(component.filterSelect.emit).toHaveBeenCalledWith(component.filters);
+      expect(component.filterSelect.emit).toHaveBeenCalledWith(
+        component.filters,
+      );
     });
 
     it("should emit the new filter", () => {
@@ -146,7 +151,7 @@ describe("LogbookFilterComponent", () => {
         showUserMessages: true,
         sortField: "timestamp:desc",
         skip: 0,
-        limit: 25
+        limit: 25,
       };
 
       const entry = "Images";
@@ -157,7 +162,9 @@ describe("LogbookFilterComponent", () => {
       component.filters.showBotMessages = false;
 
       expect(component.filterSelect.emit).toHaveBeenCalledTimes(1);
-      expect(component.filterSelect.emit).toHaveBeenCalledWith(component.filters);
+      expect(component.filterSelect.emit).toHaveBeenCalledWith(
+        component.filters,
+      );
     });
 
     it("should emit the new filter", () => {
@@ -170,7 +177,7 @@ describe("LogbookFilterComponent", () => {
         showUserMessages: true,
         sortField: "timestamp:desc",
         skip: 0,
-        limit: 25
+        limit: 25,
       };
 
       const entry = "User Messages";
@@ -181,7 +188,9 @@ describe("LogbookFilterComponent", () => {
       component.filters.showBotMessages = false;
 
       expect(component.filterSelect.emit).toHaveBeenCalledTimes(1);
-      expect(component.filterSelect.emit).toHaveBeenCalledWith(component.filters);
+      expect(component.filterSelect.emit).toHaveBeenCalledWith(
+        component.filters,
+      );
     });
 
     it("should emit the new filter", () => {
@@ -194,7 +203,7 @@ describe("LogbookFilterComponent", () => {
         showUserMessages: false,
         sortField: "timestamp:desc",
         skip: 0,
-        limit: 25
+        limit: 25,
       };
 
       const entry = "Bot Messages";
@@ -205,7 +214,9 @@ describe("LogbookFilterComponent", () => {
       component.filters.showBotMessages = false;
 
       expect(component.filterSelect.emit).toHaveBeenCalledTimes(1);
-      expect(component.filterSelect.emit).toHaveBeenCalledWith(component.filters);
+      expect(component.filterSelect.emit).toHaveBeenCalledWith(
+        component.filters,
+      );
     });
 
     it("should emit the new filter", () => {
@@ -218,7 +229,7 @@ describe("LogbookFilterComponent", () => {
         showUserMessages: false,
         sortField: "timestamp:desc",
         skip: 0,
-        limit: 25
+        limit: 25,
       };
 
       const entry = "Images";
@@ -229,7 +240,9 @@ describe("LogbookFilterComponent", () => {
       component.filters.showBotMessages = false;
 
       expect(component.filterSelect.emit).toHaveBeenCalledTimes(1);
-      expect(component.filterSelect.emit).toHaveBeenCalledWith(component.filters);
+      expect(component.filterSelect.emit).toHaveBeenCalledWith(
+        component.filters,
+      );
     });
 
     it("should emit the new filter", () => {
@@ -242,7 +255,7 @@ describe("LogbookFilterComponent", () => {
         showUserMessages: false,
         sortField: "timestamp:desc",
         skip: 0,
-        limit: 25
+        limit: 25,
       };
 
       const entry = "User Messages";
@@ -253,7 +266,9 @@ describe("LogbookFilterComponent", () => {
       component.filters.showBotMessages = false;
 
       expect(component.filterSelect.emit).toHaveBeenCalledTimes(1);
-      expect(component.filterSelect.emit).toHaveBeenCalledWith(component.filters);
+      expect(component.filterSelect.emit).toHaveBeenCalledWith(
+        component.filters,
+      );
     });
   });
 });

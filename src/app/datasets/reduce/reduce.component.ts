@@ -13,13 +13,14 @@ import {
   selectDatasets,
   selectCurrentDataset,
 } from "state-management/selectors/datasets.selectors";
-import {
-  reduceDatasetAction,
-} from "state-management/actions/datasets.actions";
+import { reduceDatasetAction } from "state-management/actions/datasets.actions";
 import { FormControl, Validators, FormBuilder } from "@angular/forms";
 import { map } from "rxjs/operators";
 import { Subscription } from "rxjs";
-import { selectIsLoading, selectIsLoggedIn } from "state-management/selectors/user.selectors";
+import {
+  selectIsLoading,
+  selectIsLoggedIn,
+} from "state-management/selectors/user.selectors";
 import { OwnershipService } from "shared/services/ownership.service";
 
 @Component({
@@ -36,9 +37,9 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
         .filter((dataset) => dataset.type === "derived")
         .map((dataset: unknown) => dataset as DerivedDataset)
         .filter((dataset) =>
-          dataset["inputDatasets"].includes(this.dataset?.pid)
-        )
-    )
+          dataset["inputDatasets"].includes(this.dataset?.pid),
+        ),
+    ),
   );
 
   derivedDatasets: DerivedDataset[] = [];
@@ -79,8 +80,8 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
     private formBuilder: FormBuilder,
     private router: Router,
     private store: Store,
-    private ownershipService: OwnershipService
-  ) { }
+    private ownershipService: OwnershipService,
+  ) {}
 
   reduceDataset(dataset: Dataset): void {
     this.store.dispatch(reduceDatasetAction({ dataset }));
@@ -108,18 +109,20 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
       this.store.select(selectCurrentDataset).subscribe((dataset) => {
         this.dataset = dataset;
         if (dataset) {
-          this.ownershipService.checkDatasetAccess(dataset, this.store, this.router);
+          this.ownershipService.checkDatasetAccess(
+            dataset,
+            this.store,
+            this.router,
+          );
         }
-      })
+      }),
     );
     this.subscriptions.push(
-      this.derivedDatasets$.subscribe(
-        (datasets) => {
-          if (datasets) {
-            this.derivedDatasets = datasets;
-          }
+      this.derivedDatasets$.subscribe((datasets) => {
+        if (datasets) {
+          this.derivedDatasets = datasets;
         }
-      )
+      }),
     );
   }
 
@@ -133,9 +136,9 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
               .filter((dataset) => dataset.type === "derived")
               .map((dataset: unknown) => dataset as DerivedDataset)
               .filter((dataset) =>
-                dataset["inputDatasets"].includes(this.dataset?.pid)
-              )
-          )
+                dataset["inputDatasets"].includes(this.dataset?.pid),
+              ),
+          ),
         );
       }
     }

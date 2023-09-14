@@ -32,7 +32,7 @@ import { ScientificMetadataTreeModule } from "./modules/scientific-metadata-tree
     CommonModule,
     FormsModule,
     SharedTableModule,
-    ScientificMetadataTreeModule
+    ScientificMetadataTreeModule,
   ],
   providers: [ConfigService, UnitsService, FilePathTruncate, ScicatDataService],
   exports: [
@@ -47,7 +47,7 @@ import { ScientificMetadataTreeModule } from "./modules/scientific-metadata-tree
     CommonModule,
     FormsModule,
     SharedTableModule,
-    ScientificMetadataTreeModule
+    ScientificMetadataTreeModule,
   ],
 })
 export class SharedScicatFrontendModule {}

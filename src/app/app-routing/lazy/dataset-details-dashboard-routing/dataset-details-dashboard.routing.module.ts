@@ -16,12 +16,11 @@ const routes: Routes = [
   {
     path: "",
     component: DatasetDetailComponent,
-    canDeactivate:[LeavingPageGuard]
+    canDeactivate: [LeavingPageGuard],
   },
   {
     path: "datafiles",
     component: DatafilesComponent,
-
   },
   {
     path: "related-datasets",
@@ -36,25 +35,27 @@ const routes: Routes = [
       {
         path: "",
         component: ReduceComponent,
-        canActivate: [AuthGuard]
-      }
+        canActivate: [AuthGuard],
+      },
     ],
-    data: { service: "reduce"},
+    data: { service: "reduce" },
   },
   {
     path: "logbook",
     canActivate: [ServiceGuard],
-    children: [{
-      path: "",
-      component: LogbooksDashboardComponent,
-      canActivate: [AuthGuard]
-    }],
-    data: { service: "logbook"},
+    children: [
+      {
+        path: "",
+        component: LogbooksDashboardComponent,
+        canActivate: [AuthGuard],
+      },
+    ],
+    data: { service: "logbook" },
   },
   {
     path: "attachments",
     component: DatasetFileUploaderComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: "lifecycle",
@@ -63,11 +64,11 @@ const routes: Routes = [
   {
     path: "admin",
     component: AdminTabComponent,
-    canActivate: [AuthGuard, AdminGuard]
-  }
+    canActivate: [AuthGuard, AdminGuard],
+  },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class DatasetDetailsDashboardRoutingModule {}

@@ -23,6 +23,6 @@ export const initialJobsState: JobsState = {
     mode: undefined,
     sortField: "creationTime:desc",
     skip: 0,
-    limit: 25
-  }
+    limit: 25,
+  },
 };

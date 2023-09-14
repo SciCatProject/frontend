@@ -13,7 +13,7 @@ const reducer = createReducer(
     (state, { datasets }): DatasetState => ({
       ...state,
       datasets,
-    })
+    }),
   ),
 
   on(
@@ -22,12 +22,12 @@ const reducer = createReducer(
       ...state,
       facetCounts,
       totalCount: allCounts,
-    })
+    }),
   ),
 
   on(
     fromActions.fetchMetadataKeysCompleteAction,
-    (state, { metadataKeys }): DatasetState => ({ ...state, metadataKeys })
+    (state, { metadataKeys }): DatasetState => ({ ...state, metadataKeys }),
   ),
 
   on(
@@ -35,7 +35,7 @@ const reducer = createReducer(
     (state, { dataset }): DatasetState => ({
       ...state,
       currentSet: dataset,
-    })
+    }),
   ),
 
   on(fromActions.fetchDatablocksCompleteAction, (state, { datablocks }) => {
@@ -58,7 +58,7 @@ const reducer = createReducer(
           origdatablocks,
         },
       };
-    }
+    },
   ),
 
   on(fromActions.fetchAttachmentsCompleteAction, (state, { attachments }) => {
@@ -76,14 +76,14 @@ const reducer = createReducer(
     (state, { relatedDatasets }): DatasetState => ({
       ...state,
       relatedDatasets,
-    })
+    }),
   ),
   on(
     fromActions.fetchRelatedDatasetsCountCompleteAction,
     (state, { count }): DatasetState => ({
       ...state,
       relatedDatasetsCount: count,
-    })
+    }),
   ),
 
   on(
@@ -96,17 +96,17 @@ const reducer = createReducer(
         limit,
       };
       return { ...state, relatedDatasetsFilters };
-    }
+    },
   ),
 
   on(fromActions.prefillBatchCompleteAction, (state, { batch }) => ({
-      ...state,
-      batch,
+    ...state,
+    batch,
   })),
   on(fromActions.addToBatchAction, (state) => {
     const batchedPids = state.batch.map((dataset) => dataset.pid);
     const addition = state.selectedSets.filter(
-      (dataset) => batchedPids.indexOf(dataset.pid) === -1
+      (dataset) => batchedPids.indexOf(dataset.pid) === -1,
     );
     const batch = [...state.batch, ...addition];
     return { ...state, batch };
@@ -114,13 +114,13 @@ const reducer = createReducer(
   on(fromActions.storeBatchAction, (state, { batch }) => ({ ...state, batch })),
   on(fromActions.removeFromBatchAction, (state, { dataset }): DatasetState => {
     const batch = state.batch.filter(
-      (datasetInBatch) => datasetInBatch.pid !== dataset.pid
+      (datasetInBatch) => datasetInBatch.pid !== dataset.pid,
     );
     return { ...state, batch };
   }),
   on(
     fromActions.clearBatchAction,
-    (state): DatasetState => ({ ...state, batch: [] })
+    (state): DatasetState => ({ ...state, batch: [] }),
   ),
 
   on(
@@ -128,7 +128,7 @@ const reducer = createReducer(
     (state, { dataset }): DatasetState => ({
       ...state,
       currentSet: dataset as unknown as Dataset,
-    })
+    }),
   ),
 
   on(
@@ -136,14 +136,14 @@ const reducer = createReducer(
     (state, { attachment }): DatasetState => {
       if (state.currentSet) {
         const attachments = state.currentSet.attachments.filter(
-          (existingAttachment) => existingAttachment.id !== attachment.id
+          (existingAttachment) => existingAttachment.id !== attachment.id,
         );
         attachments.push(attachment);
         const currentSet = { ...state.currentSet, attachments };
         return { ...state, currentSet };
       }
       return { ...state };
-    }
+    },
   ),
 
   on(
@@ -151,14 +151,14 @@ const reducer = createReducer(
     (state, { attachment }): DatasetState => {
       if (state.currentSet) {
         const attachments = state.currentSet.attachments.filter(
-          (existingAttachment) => existingAttachment.id !== attachment.id
+          (existingAttachment) => existingAttachment.id !== attachment.id,
         );
         attachments.push(attachment);
         const currentSet = { ...state.currentSet, attachments };
         return { ...state, currentSet };
       }
       return { ...state };
-    }
+    },
   ),
 
   on(
@@ -166,20 +166,20 @@ const reducer = createReducer(
     (state, { attachmentId }): DatasetState => {
       if (state.currentSet) {
         const attachments = state.currentSet.attachments.filter(
-          (attachment) => attachment.id !== attachmentId
+          (attachment) => attachment.id !== attachmentId,
         );
         const currentSet = { ...state.currentSet, attachments };
         return { ...state, currentSet };
       }
       return { ...state };
-    }
+    },
   ),
 
   on(
     fromActions.clearDatasetsStateAction,
     (): DatasetState => ({
       ...initialDatasetState,
-    })
+    }),
   ),
 
   on(
@@ -188,12 +188,12 @@ const reducer = createReducer(
       ...state,
       currentSet: undefined,
       relatedDatasets: [],
-    })
+    }),
   ),
 
   on(fromActions.selectDatasetAction, (state, { dataset }) => {
     const alreadySelected = state.selectedSets.find(
-      (existing) => dataset.pid === existing.pid
+      (existing) => dataset.pid === existing.pid,
     );
     if (alreadySelected) {
       return state;
@@ -204,7 +204,7 @@ const reducer = createReducer(
   }),
   on(fromActions.deselectDatasetAction, (state, { dataset }): DatasetState => {
     const selectedSets = state.selectedSets.filter(
-      (selectedSet) => selectedSet.pid !== dataset.pid
+      (selectedSet) => selectedSet.pid !== dataset.pid,
     );
     return { ...state, selectedSets };
   }),
@@ -214,14 +214,14 @@ const reducer = createReducer(
     (state): DatasetState => ({
       ...state,
       selectedSets: [...state.datasets],
-    })
+    }),
   ),
   on(
     fromActions.clearSelectionAction,
     (state): DatasetState => ({
       ...state,
       selectedSets: [],
-    })
+    }),
   ),
 
   on(
@@ -229,7 +229,7 @@ const reducer = createReducer(
     (state, { limit }): DatasetState => {
       const filters = { ...state.filters, limit, skip: 0 };
       return { ...state, filters };
-    }
+    },
   ),
 
   on(fromActions.changePageAction, (state, { page, limit }): DatasetState => {
@@ -243,21 +243,21 @@ const reducer = createReducer(
       const sortField = column + (direction ? ":" + direction : "");
       const filters = { ...state.filters, sortField, skip: 0 };
       return { ...state, filters };
-    }
+    },
   ),
   on(
     fromActions.setSearchTermsAction,
     (state, { terms }): DatasetState => ({
       ...state,
       searchTerms: terms,
-    })
+    }),
   ),
   on(
     fromActions.setPidTermsAction,
     (state, { pid }): DatasetState => ({
       ...state,
       pidTerms: pid,
-    })
+    }),
   ),
 
   on(
@@ -330,14 +330,14 @@ const reducer = createReducer(
       }
       const filters = { ...state.filters, skip: 0, mode, modeToggle };
       return { ...state, filters };
-    }
+    },
   ),
   on(
     fromActions.setPublicViewModeAction,
     (state, { isPublished }): DatasetState => ({
       ...state,
       filters: { ...state.filters, isPublished },
-    })
+    }),
   ),
 
   on(fromActions.prefillFiltersAction, (state, { values }): DatasetState => {
@@ -370,17 +370,17 @@ const reducer = createReducer(
         .filter((val, i, self) => self.indexOf(val) === i); // Unique
       const filters = { ...state.filters, creationLocation, skip: 0 };
       return { ...state, filters };
-    }
+    },
   ),
   on(
     fromActions.removeLocationFilterAction,
     (state, { location }): DatasetState => {
       const creationLocation = state.filters.creationLocation.filter(
-        (existingLocation) => existingLocation !== location
+        (existingLocation) => existingLocation !== location,
       );
       const filters = { ...state.filters, creationLocation, skip: 0 };
       return { ...state, filters };
-    }
+    },
   ),
 
   on(fromActions.addGroupFilterAction, (state, { group }): DatasetState => {
@@ -392,7 +392,7 @@ const reducer = createReducer(
   }),
   on(fromActions.removeGroupFilterAction, (state, { group }): DatasetState => {
     const ownerGroup = state.filters.ownerGroup.filter(
-      (existingGroup) => existingGroup !== group
+      (existingGroup) => existingGroup !== group,
     );
     const filters = { ...state.filters, ownerGroup, skip: 0 };
     return { ...state, filters };
@@ -406,17 +406,17 @@ const reducer = createReducer(
         .filter((val, i, self) => self.indexOf(val) === i); // Unique
       const filters = { ...state.filters, type, skip: 0 };
       return { ...state, filters };
-    }
+    },
   ),
   on(
     fromActions.removeTypeFilterAction,
     (state, { datasetType }): DatasetState => {
       const type = state.filters.type.filter(
-        (existingType) => existingType !== datasetType
+        (existingType) => existingType !== datasetType,
       );
       const filters = { ...state.filters, type, skip: 0 };
       return { ...state, filters };
-    }
+    },
   ),
 
   on(fromActions.addKeywordFilterAction, (state, { keyword }): DatasetState => {
@@ -430,11 +430,11 @@ const reducer = createReducer(
     fromActions.removeKeywordFilterAction,
     (state, { keyword }): DatasetState => {
       const keywords = state.filters.keywords.filter(
-        (existingKeyword) => existingKeyword !== keyword
+        (existingKeyword) => existingKeyword !== keyword,
       );
       const filters = { ...state.filters, keywords, skip: 0 };
       return { ...state, filters };
-    }
+    },
   ),
 
   on(
@@ -444,7 +444,7 @@ const reducer = createReducer(
       const creationTime = begin && end ? { ...oldTime, begin, end } : null;
       const filters = { ...state.filters, creationTime };
       return { ...state, filters };
-    }
+    },
   ),
 
   on(
@@ -457,7 +457,7 @@ const reducer = createReducer(
         scientific: [...currentScientific, condition],
       };
       return { ...state, filters };
-    }
+    },
   ),
   on(
     fromActions.removeScientificConditionAction,
@@ -467,13 +467,13 @@ const reducer = createReducer(
       scientific.splice(index, 1);
       const filters = { ...currentFilters, scientific };
       return { ...state, filters };
-    }
-  )
+    },
+  ),
 );
 
 export const datasetsReducer = (
   state: DatasetState | undefined,
-  action: Action
+  action: Action,
 ) => {
   if (action.type.indexOf("[Dataset]") !== -1) {
     console.log("Action came in! " + action.type);

@@ -29,7 +29,7 @@ export class AddDatasetDialogComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { userGroups: string[] },
     public dialogRef: MatDialogRef<AddDatasetDialogComponent>,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     this.form = this.fb.group({
       datasetName: this.datasetName,

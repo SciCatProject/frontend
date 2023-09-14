@@ -62,7 +62,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store
+    private store: Store,
   ) {}
 
   formatTableData(samples: Sample[]): any {
@@ -72,7 +72,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
         owner: sample.owner,
         creationTime: this.datePipe.transform(
           sample.createdAt,
-          "yyyy-MM-dd, hh:mm"
+          "yyyy-MM-dd, hh:mm",
         ),
         description: sample.description,
         ownerGroup: sample.ownerGroup,
@@ -102,7 +102,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
           const { data } = res;
           console.log({ data });
           this.store.dispatch(
-            addCharacteristicsFilterAction({ characteristic: data })
+            addCharacteristicsFilterAction({ characteristic: data }),
           );
         }
       });
@@ -114,7 +114,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   onPageChange(event: PageChangeEvent) {
     this.store.dispatch(
-      changePageAction({ page: event.pageIndex, limit: event.pageSize })
+      changePageAction({ page: event.pageIndex, limit: event.pageSize }),
     );
   }
 
@@ -123,7 +123,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
       event.active = "createdAt";
     }
     this.store.dispatch(
-      sortByColumnAction({ column: event.active, direction: event.direction })
+      sortByColumnAction({ column: event.active, direction: event.direction }),
     );
   }
 
@@ -138,7 +138,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.vm$.subscribe((vm) => {
         this.tableData = this.formatTableData(vm.samples);
-      })
+      }),
     );
 
     this.subscriptions.push(
@@ -148,20 +148,20 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
       ])
         .pipe(
           map(([filters, _]) => filters),
-          distinctUntilChanged(deepEqual)
+          distinctUntilChanged(deepEqual),
         )
         .subscribe((filters) => {
           this.store.dispatch(fetchSamplesAction());
           this.router.navigate(["/samples"], {
             queryParams: { args: JSON.stringify(filters) },
           });
-        })
+        }),
     );
 
     this.subscriptions.push(
       this.vm$.subscribe((vm) => {
         this.metadataKeys = vm.metadataKeys;
-      })
+      }),
     );
 
     this.subscriptions.push(
@@ -169,11 +169,11 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
         .pipe(
           map((params) => params.args as string),
           take(1),
-          map((args) => (args ? (JSON.parse(args) as SampleFilters) : {}))
+          map((args) => (args ? (JSON.parse(args) as SampleFilters) : {})),
         )
         .subscribe((filters) =>
-          this.store.dispatch(prefillFiltersAction({ values: filters }))
-        )
+          this.store.dispatch(prefillFiltersAction({ values: filters })),
+        ),
     );
   }
 

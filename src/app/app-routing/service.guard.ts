@@ -16,12 +16,12 @@ export class ServiceGuard implements CanActivate {
 
   constructor(
     private appConfigService: AppConfigService,
-    private router: Router
+    private router: Router,
   ) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    state: RouterStateSnapshot,
   ): boolean | UrlTree {
     let shouldActivate = false;
     switch (route.data.service) {

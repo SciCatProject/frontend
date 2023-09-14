@@ -4,10 +4,6 @@ import { UsersModule } from "users/users.module";
 import { UsersRoutingModule } from "./user.routing.module";
 
 @NgModule({
-  imports: [
-    UsersModule,
-    JobsModule,
-    UsersRoutingModule
-  ]
+  imports: [UsersModule, JobsModule, UsersRoutingModule],
 })
 export class UsersFeatureModule {}

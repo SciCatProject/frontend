@@ -33,7 +33,11 @@ describe("JobsDashboardNewComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [JobsDashboardNewComponent],
-      imports: [SharedTableModule, SharedScicatFrontendModule, BrowserAnimationsModule],
+      imports: [
+        SharedTableModule,
+        SharedScicatFrontendModule,
+        BrowserAnimationsModule,
+      ],
       providers: [
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: AppConfigService, useValue: { getConfig } },

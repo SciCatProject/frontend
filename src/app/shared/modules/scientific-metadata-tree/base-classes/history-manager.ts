@@ -1,5 +1,5 @@
 import { EventEmitter } from "@angular/core";
-interface Actions{
+interface Actions {
   undo: () => void;
   redo: () => void;
 }
@@ -8,41 +8,44 @@ export class HistoryManager {
   indexChanged = new EventEmitter<number>();
   currentIdx = -1;
   limit = 0;
-  private execute(command: Actions , actionName: string){
+  private execute(command: Actions, actionName: string) {
     command[actionName]();
   }
-  add(command: Actions){
-   this.commands.splice(this.currentIdx + 1, this.commands.length - this.currentIdx);
-   this.commands.push(command);
-   this.currentIdx = this.commands.length -1;
-   this.indexChanged.emit(this.currentIdx);
+  add(command: Actions) {
+    this.commands.splice(
+      this.currentIdx + 1,
+      this.commands.length - this.currentIdx,
+    );
+    this.commands.push(command);
+    this.currentIdx = this.commands.length - 1;
+    this.indexChanged.emit(this.currentIdx);
   }
-  undo(){
+  undo() {
     const command = this.commands[this.currentIdx];
-    if (command){
+    if (command) {
       this.execute(command, "undo");
     }
     this.currentIdx -= 1;
     this.indexChanged.emit(this.currentIdx);
   }
-  redo(){
-    const command = this.commands[this.currentIdx+1];
-    if (command){
+  redo() {
+    const command = this.commands[this.currentIdx + 1];
+    if (command) {
       this.execute(command, "redo");
     }
     this.currentIdx += 1;
     this.indexChanged.emit(this.currentIdx);
   }
-  hasUndo(){
+  hasUndo() {
     return this.currentIdx > -1;
   }
-  hasRedo(){
-    return this.currentIdx < (this.commands.length - 1);
+  hasRedo() {
+    return this.currentIdx < this.commands.length - 1;
   }
-  setLimit(limit: number): void{
+  setLimit(limit: number): void {
     this.limit = limit;
   }
-  clearHistory(){
+  clearHistory() {
     this.commands = [];
     this.currentIdx = -1;
   }

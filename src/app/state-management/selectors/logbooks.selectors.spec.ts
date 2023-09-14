@@ -28,7 +28,7 @@ describe("Logbook Selectors", () => {
   describe("selectLogbooks", () => {
     it("should select logbooks", () => {
       expect(
-        fromSelectors.selectLogbooks.projector(initialLogbookState)
+        fromSelectors.selectLogbooks.projector(initialLogbookState),
       ).toEqual([]);
     });
   });
@@ -36,7 +36,7 @@ describe("Logbook Selectors", () => {
   describe("selectCurrentLogbook", () => {
     it("should select the current logbook", () => {
       expect(
-        fromSelectors.selectCurrentLogbook.projector(initialLogbookState)
+        fromSelectors.selectCurrentLogbook.projector(initialLogbookState),
       ).toEqual(logbook);
     });
   });
@@ -44,7 +44,7 @@ describe("Logbook Selectors", () => {
   describe("selectEntriesCount", () => {
     it("should select totalCount", () => {
       expect(
-        fromSelectors.selectEntriesCount.projector(initialLogbookState)
+        fromSelectors.selectEntriesCount.projector(initialLogbookState),
       ).toEqual(0);
     });
   });
@@ -52,7 +52,7 @@ describe("Logbook Selectors", () => {
   describe("selectHasPrefilledFilters", () => {
     it("should return hasPrefilledFilters", () => {
       expect(
-        fromSelectors.selectHasPrefilledFilters.projector(initialLogbookState)
+        fromSelectors.selectHasPrefilledFilters.projector(initialLogbookState),
       ).toEqual(false);
     });
   });
@@ -60,7 +60,7 @@ describe("Logbook Selectors", () => {
   describe("selectFilters", () => {
     it("should select filters", () => {
       expect(
-        fromSelectors.selectFilters.projector(initialLogbookState)
+        fromSelectors.selectFilters.projector(initialLogbookState),
       ).toEqual(logbookFilters);
     });
   });
@@ -69,8 +69,8 @@ describe("Logbook Selectors", () => {
     it("should select limit filter", () => {
       expect(
         fromSelectors.selectEntriesPerPage.projector(
-          initialLogbookState.filters
-        )
+          initialLogbookState.filters,
+        ),
       ).toEqual(25);
     });
   });
@@ -81,7 +81,7 @@ describe("Logbook Selectors", () => {
       const page = skip / limit;
 
       expect(
-        fromSelectors.selectPage.projector(initialLogbookState.filters)
+        fromSelectors.selectPage.projector(initialLogbookState.filters),
       ).toEqual(page);
     });
   });
@@ -93,11 +93,11 @@ describe("Logbook Selectors", () => {
           fromSelectors.selectCurrentLogbook.projector(initialLogbookState),
           fromSelectors.selectEntriesCount.projector(initialLogbookState),
           fromSelectors.selectEntriesPerPage.projector(
-            initialLogbookState.filters
+            initialLogbookState.filters,
           ),
           fromSelectors.selectPage.projector(initialLogbookState.filters),
-          fromSelectors.selectFilters.projector(initialLogbookState)
-        )
+          fromSelectors.selectFilters.projector(initialLogbookState),
+        ),
       ).toEqual({
         logbook,
         entriesCount: 0,

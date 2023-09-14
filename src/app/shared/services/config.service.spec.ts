@@ -8,8 +8,8 @@ describe("ConfigService", () => {
     TestBed.configureTestingModule({
       providers: [
         ConfigService,
-        { provide: HttpClient, useClass: HttpClientModule }
-      ]
+        { provide: HttpClient, useClass: HttpClientModule },
+      ],
     });
   });
 

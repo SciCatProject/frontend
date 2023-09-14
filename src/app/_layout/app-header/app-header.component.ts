@@ -34,7 +34,7 @@ export class AppHeaderComponent implements OnInit {
     public appConfigService: AppConfigService,
     private router: Router,
     @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private store: Store
+    private store: Store,
   ) {}
 
   logout(): void {

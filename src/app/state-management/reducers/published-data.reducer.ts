@@ -13,7 +13,7 @@ const reducer = createReducer(
     (state, { publishedData }): PublishedDataState => ({
       ...state,
       publishedData,
-    })
+    }),
   ),
 
   on(
@@ -21,7 +21,7 @@ const reducer = createReducer(
     (state, { count }): PublishedDataState => ({
       ...state,
       totalCount: count,
-    })
+    }),
   ),
 
   on(
@@ -29,7 +29,7 @@ const reducer = createReducer(
     (state, { publishedData }): PublishedDataState => ({
       ...state,
       currentPublishedData: publishedData,
-    })
+    }),
   ),
 
   on(
@@ -38,7 +38,7 @@ const reducer = createReducer(
       const skip = page * limit;
       const filters = { ...state.filters, skip, limit };
       return { ...state, filters };
-    }
+    },
   ),
 
   on(
@@ -47,20 +47,20 @@ const reducer = createReducer(
       const sortField = column + (direction ? " " + direction : "");
       const filters = { ...state.filters, sortField, skip: 0 };
       return { ...state, filters };
-    }
+    },
   ),
 
   on(
     fromActions.clearPublishedDataStateAction,
     (): PublishedDataState => ({
       ...initialPublishedDataState,
-    })
-  )
+    }),
+  ),
 );
 
 export const publishedDataReducer = (
   state: PublishedDataState | undefined,
-  action: Action
+  action: Action,
 ) => {
   if (action.type.indexOf("[PublishedData]") !== -1) {
     console.log("Action came in! " + action.type);

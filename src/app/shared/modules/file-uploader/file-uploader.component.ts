@@ -46,7 +46,7 @@ export class FileUploaderComponent {
             type: file.type,
           };
           this.filePicked.emit(pickedFile);
-        })
+        }),
       );
     }
   }
@@ -87,7 +87,7 @@ export class FileUploaderComponent {
     const mimeType = this.base64MimeType(attachment.thumbnail);
     if (!mimeType) {
       throw new Error(
-        "File type of the downloading file can not be determined"
+        "File type of the downloading file can not be determined",
       );
     }
 
@@ -96,13 +96,13 @@ export class FileUploaderComponent {
 
     if (!fileType) {
       throw new Error(
-        "File type of the downloading file can not be determined"
+        "File type of the downloading file can not be determined",
       );
     }
 
     saveAs(
       attachment.thumbnail,
-      attachment.caption || `${attachment.id}.${fileType}`
+      attachment.caption || `${attachment.id}.${fileType}`,
     );
   }
 }

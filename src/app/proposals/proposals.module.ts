@@ -66,7 +66,7 @@ import { ProposalLogbookComponent } from "./proposal-logbook/proposal-logbook.co
     ProposalDetailComponent,
     ProposalFilterComponent,
     ProposalDashboardComponent,
-    ProposalLogbookComponent
+    ProposalLogbookComponent,
   ],
   exports: [],
   providers: [DatePipe, FileSizePipe, SlicePipe],

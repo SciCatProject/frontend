@@ -3,9 +3,6 @@ import { PublisheddataModule } from "publisheddata/publisheddata.module";
 import { PublisheddataRoutingModule } from "./publisheddata.routing.module";
 
 @NgModule({
-  imports: [
-    PublisheddataModule,
-    PublisheddataRoutingModule
-  ]
+  imports: [PublisheddataModule, PublisheddataRoutingModule],
 })
 export class PublisheddataFeatureModule {}

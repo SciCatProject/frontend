@@ -24,7 +24,7 @@ export class RelatedDatasetsComponent {
     map((vm) => ({
       ...vm,
       relatedDatasets: this.formatTableData(vm.relatedDatasets),
-    }))
+    })),
   );
 
   tablePaginate = true;
@@ -70,8 +70,8 @@ export class RelatedDatasetsComponent {
   constructor(
     private datePipe: DatePipe,
     private router: Router,
-    private store: Store
-  ) { }
+    private store: Store,
+  ) {}
 
   formatTableData(datasets: Dataset[]): Record<string, unknown>[] {
     if (!datasets) {
@@ -86,7 +86,7 @@ export class RelatedDatasetsComponent {
       type: dataset.type,
       creationTime: this.datePipe.transform(
         dataset.creationTime,
-        "yyyy-MM-dd, hh:mm"
+        "yyyy-MM-dd, hh:mm",
       ),
       owner: dataset.owner,
     }));
@@ -97,7 +97,7 @@ export class RelatedDatasetsComponent {
       changeRelatedDatasetsPageAction({
         page: event.pageIndex,
         limit: event.pageSize,
-      })
+      }),
     );
     this.store.dispatch(fetchRelatedDatasetsAction());
   }

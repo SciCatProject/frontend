@@ -3,9 +3,6 @@ import { SamplesModule } from "samples/samples.module";
 import { SamplesRoutingModule } from "./samples.routing.module";
 
 @NgModule({
-  imports: [
-    SamplesModule,
-    SamplesRoutingModule
-  ]
+  imports: [SamplesModule, SamplesRoutingModule],
 })
 export class SamplesFeatureModule {}

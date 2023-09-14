@@ -13,21 +13,19 @@ describe("FilesDashboardComponent", () => {
 
   const getConfig = () => ({});
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [FilesDashboardComponent],
-        providers: [
-          { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          { provide: AppConfigService, useValue: { getConfig } },
-          { provide: ExportExcelService, useValue: {} },
-          { provide: Router, useClass: MockRouter },
-          { provide: ScicatDataService, useValue: {} },
-        ],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [FilesDashboardComponent],
+      providers: [
+        { provide: ActivatedRoute, useClass: MockActivatedRoute },
+        { provide: AppConfigService, useValue: { getConfig } },
+        { provide: ExportExcelService, useValue: {} },
+        { provide: Router, useClass: MockRouter },
+        { provide: ScicatDataService, useValue: {} },
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FilesDashboardComponent);

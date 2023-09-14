@@ -12,20 +12,16 @@ describe("DialogComponent", () => {
   let component: DialogComponent;
   let fixture: ComponentFixture<DialogComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [DialogComponent],
-        imports: [
-          SharedScicatFrontendModule
-        ],
-        providers: [
-          { provide: MatDialogRef, useClass: MockMatDialogRef },
-          { provide: MAT_DIALOG_DATA, useClass: MockMatDialogData },
-        ],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [DialogComponent],
+      imports: [SharedScicatFrontendModule],
+      providers: [
+        { provide: MatDialogRef, useClass: MockMatDialogRef },
+        { provide: MAT_DIALOG_DATA, useClass: MockMatDialogData },
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DialogComponent);

@@ -3,7 +3,7 @@ import {
   ComponentFixture,
   TestBed,
   inject,
-  waitForAsync
+  waitForAsync,
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
 
@@ -15,7 +15,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { provideMockStore } from "@ngrx/store/testing";
 import {
   selectOpenwhiskResult,
-  selectDatasets
+  selectDatasets,
 } from "state-management/selectors/datasets.selectors";
 import { Dataset } from "shared/sdk";
 import { reduceDatasetAction } from "state-management/actions/datasets.actions";
@@ -35,7 +35,7 @@ describe("ReduceComponent", () => {
   let fixture: ComponentFixture<ReduceComponent>;
 
   const router = {
-    navigateByUrl: jasmine.createSpy("navigateByUrl")
+    navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
   let store: MockStore;
   let dispatchSpy;
@@ -54,23 +54,23 @@ describe("ReduceComponent", () => {
         MatSelectModule,
         MatStepperModule,
         MatTableModule,
-        StoreModule.forRoot({})
+        StoreModule.forRoot({}),
       ],
       providers: [
         FormBuilder,
         provideMockStore({
           selectors: [
             { selector: selectOpenwhiskResult, value: {} },
-            { selector: selectDatasets, value: [] }
-          ]
-        })
+            { selector: selectDatasets, value: [] },
+          ],
+        }),
       ],
-      declarations: [ReduceComponent]
+      declarations: [ReduceComponent],
     });
     TestBed.overrideComponent(ReduceComponent, {
       set: {
-        providers: [{ provide: Router, useValue: router }]
-      }
+        providers: [{ provide: Router, useValue: router }],
+      },
     });
     TestBed.compileComponents();
   }));
@@ -103,7 +103,7 @@ describe("ReduceComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        reduceDatasetAction({ dataset })
+        reduceDatasetAction({ dataset }),
       );
     });
   });
@@ -115,7 +115,7 @@ describe("ReduceComponent", () => {
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
       expect(router.navigateByUrl).toHaveBeenCalledWith(
-        "/datasets/" + encodeURIComponent(dataset.pid)
+        "/datasets/" + encodeURIComponent(dataset.pid),
       );
     });
   });

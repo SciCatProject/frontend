@@ -26,7 +26,7 @@ export class ConfigService {
       this.http
         .get(this.url + filename + ".json", { observe: "response" })
         .subscribe(
-          res => {
+          (res) => {
             if (res["status"] === 200) {
               observer.next(res);
               observer.complete();
@@ -35,11 +35,11 @@ export class ConfigService {
               observableThrowError(new Error("No config file found"));
             }
           },
-          error => {
+          (error) => {
             // observer.next(error);
             // observer.complete();
             observableThrowError(new Error("No config file found"));
-          }
+          },
         );
     });
   }

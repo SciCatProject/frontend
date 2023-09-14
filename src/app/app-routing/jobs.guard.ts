@@ -10,7 +10,7 @@ export class JobsGuard implements CanActivate {
 
   constructor(
     private appConfigService: AppConfigService,
-    private router: Router
+    private router: Router,
   ) {}
 
   canActivate(): boolean {

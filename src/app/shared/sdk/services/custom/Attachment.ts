@@ -1,14 +1,13 @@
 /* eslint-disable */
-import { Injectable, Inject, Optional } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { SDKModels } from './SDKModels';
-import { BaseLoopBackApi } from '../core/base.service';
-import { LoopBackConfig } from '../../lb.config';
-import { LoopBackAuth } from '../core/auth.service';
-import { ErrorHandler } from '../core/error.service';
-import { Observable } from 'rxjs';
-import { SocketConnection } from '../../sockets/socket.connections';
-
+import { Injectable, Inject, Optional } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { SDKModels } from "./SDKModels";
+import { BaseLoopBackApi } from "../core/base.service";
+import { LoopBackConfig } from "../../lb.config";
+import { LoopBackAuth } from "../core/auth.service";
+import { ErrorHandler } from "../core/error.service";
+import { Observable } from "rxjs";
+import { SocketConnection } from "../../sockets/socket.connections";
 
 /**
  * Api services for the `Attachment` model.
@@ -19,15 +18,14 @@ import { SocketConnection } from '../../sockets/socket.connections';
  */
 @Injectable()
 export class AttachmentApi extends BaseLoopBackApi {
-
   constructor(
     @Inject(HttpClient) protected http: HttpClient,
     @Inject(SocketConnection) protected connection: SocketConnection,
     @Inject(SDKModels) protected models: SDKModels,
     @Inject(LoopBackAuth) protected auth: LoopBackAuth,
-    @Optional() @Inject(ErrorHandler) protected errorHandler: ErrorHandler
+    @Optional() @Inject(ErrorHandler) protected errorHandler: ErrorHandler,
   ) {
-    super(http,  connection,  models, auth, errorHandler);
+    super(http, connection, models, auth, errorHandler);
   }
 
   /**
@@ -46,17 +44,33 @@ export class AttachmentApi extends BaseLoopBackApi {
    * This usually means the response is a `Attachment` object.)
    * </em>
    */
-  public getDataset(id: any, refresh: any = {}, customHeaders?: Function): Observable<any> {
+  public getDataset(
+    id: any,
+    refresh: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Attachments/:id/dataset";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/Attachments/:id/dataset";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof refresh !== 'undefined' && refresh !== null) _urlParams.refresh = refresh;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof refresh !== "undefined" && refresh !== null)
+      _urlParams.refresh = refresh;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -76,17 +90,33 @@ export class AttachmentApi extends BaseLoopBackApi {
    * This usually means the response is a `Attachment` object.)
    * </em>
    */
-  public getSample(id: any, refresh: any = {}, customHeaders?: Function): Observable<any> {
+  public getSample(
+    id: any,
+    refresh: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Attachments/:id/sample";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/Attachments/:id/sample";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof refresh !== 'undefined' && refresh !== null) _urlParams.refresh = refresh;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof refresh !== "undefined" && refresh !== null)
+      _urlParams.refresh = refresh;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -106,17 +136,33 @@ export class AttachmentApi extends BaseLoopBackApi {
    * This usually means the response is a `Attachment` object.)
    * </em>
    */
-  public getProposal(id: any, refresh: any = {}, customHeaders?: Function): Observable<any> {
+  public getProposal(
+    id: any,
+    refresh: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Attachments/:id/proposal";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/Attachments/:id/proposal";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof refresh !== 'undefined' && refresh !== null) _urlParams.refresh = refresh;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof refresh !== "undefined" && refresh !== null)
+      _urlParams.refresh = refresh;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -136,16 +182,30 @@ export class AttachmentApi extends BaseLoopBackApi {
    * This usually means the response is a `Attachment` object.)
    * </em>
    */
-  public patchOrCreate(data: any = {}, customHeaders?: Function): Observable<any> {
+  public patchOrCreate(
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "PATCH";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Attachments";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/Attachments";
     let _routeParams: any = {};
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -167,18 +227,33 @@ export class AttachmentApi extends BaseLoopBackApi {
    * This usually means the response is a `Attachment` object.)
    * </em>
    */
-  public patchAttributes(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public patchAttributes(
+    id: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "PATCH";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Attachments/:id";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/Attachments/:id";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -200,16 +275,33 @@ export class AttachmentApi extends BaseLoopBackApi {
    * This usually means the response is a `Attachment` object.)
    * </em>
    */
-  public fullfacet(fields: any = {}, facets: any = {}, customHeaders?: Function): Observable<any> {
+  public fullfacet(
+    fields: any = {},
+    facets: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Attachments/fullfacet";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/Attachments/fullfacet";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof fields !== 'undefined' && fields !== null) _urlParams.fields = fields;
-    if (typeof facets !== 'undefined' && facets !== null) _urlParams.facets = facets;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof fields !== "undefined" && fields !== null)
+      _urlParams.fields = fields;
+    if (typeof facets !== "undefined" && facets !== null)
+      _urlParams.facets = facets;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -231,16 +323,33 @@ export class AttachmentApi extends BaseLoopBackApi {
    * This usually means the response is a `Attachment` object.)
    * </em>
    */
-  public fullquery(fields: any = {}, limits: any = {}, customHeaders?: Function): Observable<any> {
+  public fullquery(
+    fields: any = {},
+    limits: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Attachments/fullquery";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/Attachments/fullquery";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof fields !== 'undefined' && fields !== null) _urlParams.fields = fields;
-    if (typeof limits !== 'undefined' && limits !== null) _urlParams.limits = limits;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof fields !== "undefined" && fields !== null)
+      _urlParams.fields = fields;
+    if (typeof limits !== "undefined" && limits !== null)
+      _urlParams.limits = limits;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -260,16 +369,30 @@ export class AttachmentApi extends BaseLoopBackApi {
    * This usually means the response is a `Attachment` object.)
    * </em>
    */
-  public isValid(ownableItem: any = {}, customHeaders?: Function): Observable<any> {
+  public isValid(
+    ownableItem: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Attachments/isValid";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/Attachments/isValid";
     let _routeParams: any = {};
     let _postBody: any = {
-      ownableItem: ownableItem
+      ownableItem: ownableItem,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 

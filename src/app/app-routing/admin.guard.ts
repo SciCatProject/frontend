@@ -21,25 +21,30 @@ import { selectIsAdmin } from "state-management/selectors/user.selectors";
   providedIn: "root",
 })
 export class AdminGuard implements CanActivate {
-  constructor(private store: Store, private router: Router) {}
+  constructor(
+    private store: Store,
+    private router: Router,
+  ) {}
 
   /**
    * Needs to return either a boolean or an observable that maps to a boolean
    */
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean>{
-    return this.store.select(selectIsAdmin).pipe<boolean>(map((isAdmin: boolean) => {
-      if(!isAdmin) {
-        this.router.navigate(["/401"], {
-          skipLocationChange: true,
-          queryParams: {
-            url: state.url,
-          },
-        });
-      }
-      return isAdmin;
-    }));
+    state: RouterStateSnapshot,
+  ): Observable<boolean> {
+    return this.store.select(selectIsAdmin).pipe<boolean>(
+      map((isAdmin: boolean) => {
+        if (!isAdmin) {
+          this.router.navigate(["/401"], {
+            skipLocationChange: true,
+            queryParams: {
+              url: state.url,
+            },
+          });
+        }
+        return isAdmin;
+      }),
+    );
   }
 }
