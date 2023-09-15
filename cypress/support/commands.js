@@ -289,3 +289,116 @@ Cypress.Commands.add("removeSamples", () => {
     });
   });
 });
+
+Cypress.Commands.add("initializeElasticSearch", (index = "test") => {
+  cy.getCookie("$LoopBackSDK$id").then((idCookie) => {
+    const token = idCookie.value;
+
+    cy.request({
+      method: "POST",
+      url: lbBaseUrl + "/elastic-search" + "/create-index" + "?index=" + index,
+      headers: {
+        Authorization: token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    }).then(() => {
+      cy.request({
+        method: "POST",
+        url:
+          lbBaseUrl + "/elastic-search" + "/sync-database" + "?index=" + index,
+        headers: {
+          Authorization: token,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+    });
+  });
+});
+
+Cypress.Commands.add("createDatasetForElasticSearch", (datasetName) => {
+  cy.getCookie("$LoopBackSDK$user").then((userCookie) => {
+    const user = JSON.parse(decodeURIComponent(userCookie.value));
+
+    cy.getCookie("$LoopBackSDK$id").then((idCookie) => {
+      const token = idCookie.value;
+
+      cy.fixture("rawDataset").then((dataset) => {
+        dataset.datasetName = datasetName;
+        cy.log("Raw Dataset 1: " + JSON.stringify(dataset, null, 2));
+        cy.log("User: " + JSON.stringify(user, null, 2));
+
+        cy.request({
+          method: "POST",
+          url: lbBaseUrl + "/Datasets?access_token=" + token,
+          headers: {
+            Authorization: token,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: dataset,
+        });
+      });
+    });
+  });
+});
+
+Cypress.Commands.add("removeElasticSearchIndex", (index = "test") => {
+  cy.getCookie("$LoopBackSDK$id").then((idCookie) => {
+    const token = idCookie.value;
+    cy.request({
+      method: "POST",
+      url: lbBaseUrl + "/elastic-search" + "/delete-index" + "?index=" + index,
+      headers: {
+        Authorization: token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+  });
+});
+
+Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {
+  cy.getCookie("$LoopBackSDK$id").then((cookie) => {
+    const token = cookie.value;
+
+    const filter = { where: { datasetName } };
+
+    cy.request({
+      method: "GET",
+      url:
+        lbBaseUrl +
+        "/Datasets?filter=" +
+        encodeURIComponent(JSON.stringify(filter)) +
+        "&access_token=" +
+        token,
+      headers: {
+        Authorization: token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .its("body")
+      .as("datasets");
+
+    cy.get("@datasets").then((datasets) => {
+      datasets.forEach((dataset) => {
+        cy.request({
+          method: "DELETE",
+          url:
+            lbBaseUrl +
+            "/Datasets/" +
+            encodeURIComponent(dataset.pid) +
+            "?access_token=" +
+            token,
+          headers: {
+            Authorization: token,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
+      });
+    });
+  });
+});
