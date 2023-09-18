@@ -1,10 +1,5 @@
 import { DatePipe } from "@angular/common";
-import {
-  async,
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { DateTime } from "luxon";

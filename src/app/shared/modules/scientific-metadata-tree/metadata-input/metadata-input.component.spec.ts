@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { FormBuilder } from "@angular/forms";
-import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { DateTime } from "luxon";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { Type } from "../base-classes/metadata-input-base";

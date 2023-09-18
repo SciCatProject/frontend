@@ -7,10 +7,8 @@ import {
   MockHttp,
   MockLoopBackAuth,
   MockRouter,
-  MockScicatDataSource,
 } from "shared/MockStubs";
 import { ExportExcelService } from "shared/services/export-excel.service";
-import { ScicatDataService } from "shared/services/scicat-data-service";
 import { JobsDashboardNewComponent } from "./jobs-dashboard-new.component";
 import { SharedTableModule } from "shared/modules/shared-table/shared-table.module";
 import { SharedScicatFrontendModule } from "shared/shared.module";

@@ -8,7 +8,6 @@ import { Subscription } from "rxjs";
 
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { DOCUMENT } from "@angular/common";
-import { take } from "rxjs/operators";
 import { Message, MessageType } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Column } from "shared/modules/shared-table/shared-table.module";

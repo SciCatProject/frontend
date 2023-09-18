@@ -7,10 +7,7 @@ import {
 import { MockMatDialogRef } from "shared/MockStubs";
 
 import { PublicDownloadDialogComponent } from "./public-download-dialog.component";
-import {
-  MatFormFieldControl,
-  MatFormFieldModule,
-} from "@angular/material/form-field";
+import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";

@@ -6,16 +6,7 @@ import {
   TestBed,
   tick,
 } from "@angular/core/testing";
-import { MatButtonModule } from "@angular/material/button";
-import { MatChipsModule } from "@angular/material/chips";
-import {
-  MAT_DIALOG_DATA,
-  MatDialogModule,
-  MatDialogRef,
-} from "@angular/material/dialog";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatIconModule } from "@angular/material/icon";
-import { MatInputModule } from "@angular/material/input";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Store, StoreModule } from "@ngrx/store";
 import { of } from "rxjs";

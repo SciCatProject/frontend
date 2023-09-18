@@ -1,10 +1,7 @@
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { Dataset, Proposal, Sample } from "shared/sdk/models";
 import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
-import { MatChipEditedEvent, MatChipInputEvent } from "@angular/material/chips";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { NgFor } from "@angular/common";
-import { MatIconModule } from "@angular/material/icon";
+import { MatChipInputEvent } from "@angular/material/chips";
 
 import { MatDialog } from "@angular/material/dialog";
 import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";

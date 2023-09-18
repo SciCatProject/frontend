@@ -5,11 +5,9 @@ import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTable } from "@angular/material/table";
 import { of } from "rxjs";
-import { SciCatDataSource } from "shared/services/scicat.datasource";
 
 import { SharedTableComponent } from "./shared-table.component";
 import { RouterTestingModule } from "@angular/router/testing";
-import { MatMenuModule } from "@angular/material/menu";
 import { FormBuilder, FormControl } from "@angular/forms";
 import { Column, SharedTableModule } from "./shared-table.module";
 import { MockAppConfigService, MockScicatDataSource } from "shared/MockStubs";
