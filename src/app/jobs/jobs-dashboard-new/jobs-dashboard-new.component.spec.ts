@@ -21,11 +21,6 @@ describe("JobsDashboardNewComponent", () => {
   let fixture: ComponentFixture<JobsDashboardNewComponent>;
 
   const getConfig = () => ({});
-  const loopBackAuth = {
-    getToken: () => ({ id: "test" }),
-    getAccessToken: () => ({ id: "test" }),
-    getAccessTokenId: () => ({ id: "test" }),
-  };
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
