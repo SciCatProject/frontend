@@ -33,12 +33,12 @@ export class AuthGuard implements CanActivate {
     return this.us
       .getCurrent()
       .toPromise()
-      .catch((error) => {
+      .catch(() => {
         this.router.navigate(["/login"], {
           queryParams: { returnUrl: state.url },
         });
         return false;
       })
-      .then((res) => true);
+      .then(() => true);
   }
 }
