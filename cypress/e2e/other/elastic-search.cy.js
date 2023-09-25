@@ -18,10 +18,7 @@ describe("Elastic search", () => {
   });
 
   afterEach(() => {
-    cy.login(
-      Cypress.config("secondaryUsername"),
-      Cypress.config("secondaryPassword")
-    );
+    cy.login(Cypress.config("username"), Cypress.config("password"));
     cy.removeDatasetsForElasticSearch(randomText1);
     cy.removeDatasetsForElasticSearch(randomText2);
     cy.removeElasticSearchIndex();
