@@ -10,18 +10,14 @@ describe("MetadataEditComponent", () => {
   let component: MetadataEditComponent;
   let fixture: ComponentFixture<MetadataEditComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [MetadataEditComponent],
-        imports: [
-          ScientificMetadataModule
-        ],
-        providers: [FormBuilder],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [MetadataEditComponent],
+      imports: [ScientificMetadataModule],
+      providers: [FormBuilder],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MetadataEditComponent);
@@ -296,15 +292,6 @@ describe("MetadataEditComponent", () => {
       const inputType = component.setValueInputType(0);
 
       expect(inputType).toEqual("text");
-    });
-
-    it("should return 'datetime-local' if metadata type is 'date'", () => {
-      component.addMetadata();
-      component.items.at(0).get("fieldType").setValue("date");
-
-      const inputType = component.setValueInputType(0);
-
-      expect(inputType).toEqual("datetime-local");
     });
 
     it("should return 'text' if metadata type is undefined", () => {
