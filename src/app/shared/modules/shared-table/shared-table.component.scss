@@ -120,17 +120,15 @@ div.shared-table-title {
     word-break: break-word;
   }
   .mat-form-field-appearance-outline {
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-form-field-wrapper {
+    .mat-mdc-text-field-wrapper {
       margin: 0.25em 0;
     }
-    /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-    .mat-form-field-infix {
-      padding: 0.5em 0 0.5em 0;
+    .mat-mdc-form-field-infix {
+      padding: 0.5em 0 !important;
+      min-height: 13px !important;
     }
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
-  .mat-form-field-wrapper {
+  .mat-mdc-text-field-wrapper {
     padding-bottom: 0em;
   }
   // Align Start date and End date
