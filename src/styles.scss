@@ -256,3 +256,21 @@ a:hover {
     color: white;
   }
 }
+
+.mat-mdc-unelevated-button.mat-primary {
+  --mdc-filled-button-label-text-color: var(--theme-primary-default-contrast);
+}
+
+.mat-mdc-unelevated-button.mat-accent {
+  --mdc-filled-button-label-text-color: var(--theme-accent-default-contrast);
+}
+
+.mat-mdc-raised-button.mat-primary {
+  --mdc-protected-button-label-text-color: var(
+    --theme-primary-default-contrast
+  );
+}
+
+.mat-mdc-raised-button.mat-accent {
+  --mdc-protected-button-label-text-color: var(--theme-accent-default-contrast);
+}

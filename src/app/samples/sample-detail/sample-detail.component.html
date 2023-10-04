@@ -6,30 +6,32 @@
 
     <div fxLayout="row" fxLayout.xs="column">
       <div fxFlex="80%">
-        <mat-card appearance="outlined">
+        <mat-card>
           <mat-card-header class="general-header">
             <div mat-card-avatar class="section-icon">
               <mat-icon> description </mat-icon>
             </div>
             General Information
           </mat-card-header>
-          <table>
-            <tr *ngIf="sample.description as value">
-              <th>Description</th>
-              <td>{{ value }}</td>
-            </tr>
-            <tr *ngIf="sample.sampleId as value">
-              <th>Sample ID</th>
-              <td>{{ value }}</td>
-            </tr>
-            <tr *ngIf="sample.createdAt as value">
-              <th>Creation Time</th>
-              <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
-            </tr>
-          </table>
+          <mat-card-content>
+            <table>
+              <tr *ngIf="sample.description as value">
+                <th>Description</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="sample.sampleId as value">
+                <th>Sample ID</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="sample.createdAt as value">
+                <th>Creation Time</th>
+                <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+              </tr>
+            </table>
+          </mat-card-content>
         </mat-card>
 
-        <mat-card appearance="outlined">
+        <mat-card>
           <mat-card-header class="creator-header">
             <div mat-card-avatar class="section-icon">
               <mat-icon> person </mat-icon>
@@ -37,23 +39,25 @@
             </div>
           </mat-card-header>
 
-          <table>
-            <tr *ngIf="sample.owner as value">
-              <th>Sample Owner</th>
-              <td>{{ value }}</td>
-            </tr>
-            <tr *ngIf="sample.ownerGroup as value">
-              <th>Owner Group</th>
-              <td>{{ value }}</td>
-            </tr>
-            <tr *ngIf="sample.accessGroups as value">
-              <th>Access Groups</th>
-              <td>{{ value }}</td>
-            </tr>
-          </table>
+          <mat-card-content>
+            <table>
+              <tr *ngIf="sample.owner as value">
+                <th>Sample Owner</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="sample.ownerGroup as value">
+                <th>Owner Group</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="sample.accessGroups as value">
+                <th>Access Groups</th>
+                <td>{{ value }}</td>
+              </tr>
+            </table>
+          </mat-card-content>
         </mat-card>
 
-        <mat-card appearance="outlined" *ngIf="sample.sampleCharacteristics as value">
+        <mat-card *ngIf="sample.sampleCharacteristics as value">
           <mat-card-header class="characteristics-header">
             <div mat-card-avatar class="section-icon">
               <mat-icon> science </mat-icon>
@@ -61,71 +65,81 @@
             Characteristics
           </mat-card-header>
 
-          <ng-template
-            [ngIf]="appConfig.tableSciDataEnabled"
-            [ngIfElse]="jsonView"
-          >
-            <mat-tab-group>
-              <mat-tab>
-                <ng-template mat-tab-label>
-                  <mat-icon> list </mat-icon> View
-                </ng-template>
-                <div [ngSwitch]="appConfig.metadataStructure">
-                  <tree-view *ngSwitchCase="'tree'"
-                             [metadata]="value"></tree-view>
-                  <metadata-view *ngSwitchDefault
-                                 [metadata]="value"></metadata-view>
-                </div>
-              </mat-tab>
-              <mat-tab>
-                <ng-template mat-tab-label>
-                  <mat-icon> edit </mat-icon> Edit
-                </ng-template>
-                <div [ngSwitch]="appConfig.metadataStructure">
-                  <tree-edit
-                    *ngSwitchCase="'tree'"
-                    [metadata]="value"
-                    (save)="onSaveCharacteristics($event)"
-                    (hasUnsavedChanges)="onHasUnsavedChanges($event)"
-                  ></tree-edit>
-                  <metadata-edit
-                    *ngSwitchDefault
-                    [metadata]="value"
-                    (save)="onSaveCharacteristics($event)"
-                  >
-                  </metadata-edit>
-                </div>
-              </mat-tab>
-            </mat-tab-group>
-          </ng-template>
+          <mat-card-content>
+            <ng-template
+              [ngIf]="appConfig.tableSciDataEnabled"
+              [ngIfElse]="jsonView"
+            >
+              <mat-tab-group>
+                <mat-tab>
+                  <ng-template mat-tab-label>
+                    <mat-icon> list </mat-icon> View
+                  </ng-template>
+                  <div [ngSwitch]="appConfig.metadataStructure">
+                    <tree-view
+                      *ngSwitchCase="'tree'"
+                      [metadata]="value"
+                    ></tree-view>
+                    <metadata-view
+                      *ngSwitchDefault
+                      [metadata]="value"
+                    ></metadata-view>
+                  </div>
+                </mat-tab>
+                <mat-tab>
+                  <ng-template mat-tab-label>
+                    <mat-icon> edit </mat-icon> Edit
+                  </ng-template>
+                  <div [ngSwitch]="appConfig.metadataStructure">
+                    <tree-edit
+                      *ngSwitchCase="'tree'"
+                      [metadata]="value"
+                      (save)="onSaveCharacteristics($event)"
+                      (hasUnsavedChanges)="onHasUnsavedChanges($event)"
+                    ></tree-edit>
+                    <metadata-edit
+                      *ngSwitchDefault
+                      [metadata]="value"
+                      (save)="onSaveCharacteristics($event)"
+                    >
+                    </metadata-edit>
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+            </ng-template>
 
-          <ng-template #jsonView>
-            <ngx-json-viewer
-              [json]="value"
-              [expanded]="false"
-            ></ngx-json-viewer>
-          </ng-template>
+            <ng-template #jsonView>
+              <ngx-json-viewer
+                [json]="value"
+                [expanded]="false"
+              ></ngx-json-viewer>
+            </ng-template>
+          </mat-card-content>
         </mat-card>
 
-        <mat-card appearance="outlined" *ngIf="appConfig.jsonMetadataEnabled">
-          <button mat-stroked-button (click)="show = !show">
-            {{ show ? "Hide MetaData" : "Show Metadata" }}
-          </button>
-          <br />
-          <div *ngIf="show">
-            <ngx-json-viewer
-              [json]="sample"
-              [expanded]="false"
-            ></ngx-json-viewer>
-          </div>
+        <mat-card *ngIf="appConfig.jsonMetadataEnabled">
+          <mat-card-content>
+            <button mat-stroked-button (click)="show = !show">
+              {{ show ? "Hide MetaData" : "Show Metadata" }}
+            </button>
+            <br />
+            <div *ngIf="show">
+              <ngx-json-viewer
+                [json]="sample"
+                [expanded]="false"
+              ></ngx-json-viewer>
+            </div>
+          </mat-card-content>
         </mat-card>
       </div>
 
       <div fxFlex="30%" *ngIf="vm.attachments as attachments">
         <ng-container *ngFor="let attachment of attachments">
-          <mat-card appearance="outlined">
-            <img mat-card-image src="{{ attachment.thumbnail }}" />
-            <p>{{ attachment.caption }}</p>
+          <mat-card>
+            <mat-card-content>
+              <img mat-card-image src="{{ attachment.thumbnail }}" />
+              <p>{{ attachment.caption }}</p>
+            </mat-card-content>
           </mat-card>
         </ng-container>
       </div>

@@ -3,7 +3,8 @@
   mat-table {
     margin-bottom: 5em;
 
-    .mat-column-standard_select, .mat-column-select {
+    .mat-mdc-column-standard_select,
+    .mat-mdc-column-select {
       max-width: 75px;
       justify-content: center;
     }
@@ -50,5 +51,11 @@
       background-color: rgba(0, 0, 0, 0.1);
       cursor: pointer;
     }
+  }
+}
+
+mat-card {
+  mat-list-item.mdc-list-item.mdc-list-item--with-one-line {
+    height: auto;
   }
 }

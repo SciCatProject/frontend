@@ -4,15 +4,16 @@
   *ngIf="vm$ | async as vm"
 >
   <div class="login-container" fxLayoutAlign="center center">
-    <mat-card appearance="outlined">
-      <div fxLayout="row" class="facility-logo">
-        <div fxFlex="auto"></div>
-        <div fxFlex="200px">
-          <img src="assets/images/site-logo.png" />
-        </div>
-        <div fxFlex="auto"></div>
-      </div>
+    <mat-card>
       <mat-card-content>
+        <div fxLayout="row" class="facility-logo">
+          <div fxFlex="auto"></div>
+          <div fxFlex="200px">
+            <img src="assets/images/site-logo.png" />
+          </div>
+          <div fxFlex="auto"></div>
+        </div>
+
         <mat-tab-group>
           <mat-tab [label]="loginFacilityLabel" *ngIf="oAuth2Endpoints.length">
             <div
@@ -37,14 +38,11 @@
             </div>
           </mat-tab>
           <mat-tab
-          [label]="loginLdapLabel"
-          *ngIf="loginFormEnabled && loginLdapEnabled"
-  >
+            [label]="loginLdapLabel"
+            *ngIf="loginFormEnabled && loginLdapEnabled"
+          >
             <div class="internal-login">
-              <form
-                [formGroup]="loginForm"
-                (ngSubmit)="onLdapLogin()"
-              >
+              <form [formGroup]="loginForm" (ngSubmit)="onLdapLogin()">
                 <mat-form-field
                   hintLabel="{{ loginFormPrefix }} account username"
                 >
@@ -99,15 +97,9 @@
               </form>
             </div>
           </mat-tab>
-          <mat-tab
-            [label]="loginLocalLabel"
-            *ngIf="loginFormEnabled"
-	  >
+          <mat-tab [label]="loginLocalLabel" *ngIf="loginFormEnabled">
             <div class="internal-login">
-              <form
-                [formGroup]="loginForm"
-                (ngSubmit)="onLogin()"
-              >
+              <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
                 <mat-form-field
                   hintLabel="{{ loginFormPrefix }} account username"
                 >

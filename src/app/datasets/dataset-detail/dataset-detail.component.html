@@ -25,7 +25,7 @@
   <div style="clear: both"></div>
   <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
     <div fxFlex="80%">
-      <mat-card appearance="outlined" [formGroup]="form" data-cy="general-info">
+      <mat-card [formGroup]="form" data-cy="general-info">
         <mat-card-header class="general-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> description </mat-icon>
@@ -89,7 +89,8 @@
               <th>Keywords</th>
               <td *ngIf="!editEnabled">
                 <mat-chip-set role="list" #keywordChips>
-                  <mat-chip role="listitem"
+                  <mat-chip
+                    role="listitem"
                     *ngFor="let keyword of dataset.keywords"
                   >
                     {{ keyword }}
@@ -169,7 +170,7 @@
         </mat-card-actions>
       </mat-card>
 
-      <mat-card appearance="outlined">
+      <mat-card>
         <mat-card-header class="creator-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> person </mat-icon>
@@ -177,39 +178,41 @@
           Creator Information
         </mat-card-header>
 
-        <table>
-          <tr *ngIf="dataset.owner as value">
-            <th>Owner</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="dataset['principalInvestigator'] as value">
-            <th>Principal Investigator</th>
-            <td><span [innerHTML]="value | linky"></span></td>
-          </tr>
-          <tr *ngIf="dataset['investigator'] as value">
-            <th>Investigator</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="dataset.orcidOfOwner as value">
-            <th>Orcid</th>
-            <td><span [innerHTML]="value | linky"></span></td>
-          </tr>
-          <tr *ngIf="dataset.contactEmail as value">
-            <th>Contact Email</th>
-            <td><span [innerHTML]="value | linky"></span></td>
-          </tr>
-          <tr *ngIf="dataset.ownerGroup as value">
-            <th>Owner Group</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="dataset.accessGroups as value">
-            <th>Access Groups</th>
-            <td>{{ value }}</td>
-          </tr>
-        </table>
+        <mat-card-content>
+          <table>
+            <tr *ngIf="dataset.owner as value">
+              <th>Owner</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="dataset['principalInvestigator'] as value">
+              <th>Principal Investigator</th>
+              <td><span [innerHTML]="value | linky"></span></td>
+            </tr>
+            <tr *ngIf="dataset['investigator'] as value">
+              <th>Investigator</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="dataset.orcidOfOwner as value">
+              <th>Orcid</th>
+              <td><span [innerHTML]="value | linky"></span></td>
+            </tr>
+            <tr *ngIf="dataset.contactEmail as value">
+              <th>Contact Email</th>
+              <td><span [innerHTML]="value | linky"></span></td>
+            </tr>
+            <tr *ngIf="dataset.ownerGroup as value">
+              <th>Owner Group</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="dataset.accessGroups as value">
+              <th>Access Groups</th>
+              <td>{{ value }}</td>
+            </tr>
+          </table>
+        </mat-card-content>
       </mat-card>
 
-      <mat-card appearance="outlined">
+      <mat-card>
         <mat-card-header class="file-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> folder </mat-icon>
@@ -217,23 +220,25 @@
           File Information
         </mat-card-header>
 
-        <table>
-          <tr *ngIf="dataset.sourceFolder as value">
-            <th>Source Folder</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="dataset.size as value">
-            <th>Size</th>
-            <td>{{ value | filesize }}</td>
-          </tr>
-          <tr *ngIf="dataset['dataFormat'] as value">
-            <th>Data Format</th>
-            <td>{{ value }}</td>
-          </tr>
-        </table>
+        <mat-card-content>
+          <table>
+            <tr *ngIf="dataset.sourceFolder as value">
+              <th>Source Folder</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="dataset.size as value">
+              <th>Size</th>
+              <td>{{ value | filesize }}</td>
+            </tr>
+            <tr *ngIf="dataset['dataFormat'] as value">
+              <th>Data Format</th>
+              <td>{{ value }}</td>
+            </tr>
+          </table>
+        </mat-card-content>
       </mat-card>
 
-      <mat-card appearance="outlined">
+      <mat-card>
         <mat-card-header class="related-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> library_books </mat-icon>
@@ -241,90 +246,90 @@
           Related Documents
         </mat-card-header>
 
-        <table>
-          <tr *ngIf="dataset['proposalId'] && proposal">
-            <th>Proposal</th>
-            <td>
-              <a (click)="onClickProposal(proposal.proposalId)">{{
-                proposal.title
-              }}</a>
-            </td>
-          </tr>
-          <tr
-            *ngIf="
-              dataset['proposalId'] &&
-              !proposal &&
-              appConfig.datasetDetailsShowMissingProposalId
-            "
-          >
-            <th>Proposal Id</th>
-            <td>{{ dataset["proposalId"] }}</td>
-          </tr>
-          <tr *ngIf="dataset['sampleId'] && sample">
-            <th>Sample</th>
-            <td>
-              <a (click)="onClickSample(sample.sampleId)">
-                <span>{{ sample.description }}</span>
-              </a>
-              <span
-                class="sample-edit"
-                (click)="openSampleEditDialog()"
-                *ngIf="
-                  appConfig.editDatasetSampleEnabled && editingAllowed
-                "
-              >
-                <mat-icon>edit</mat-icon>
-              </span>
-            </td>
-          </tr>
-          <tr *ngIf="dataset['instrumentId'] && instrument">
-            <th>Instrument</th>
-            <td>
-              <a (click)="onClickInstrument(instrument.pid)">
-                {{ instrument.name }}
-              </a>
-            </td>
-          </tr>
-          <tr *ngIf="dataset['creationLocation'] as value">
-            <th>Creation Location</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="dataset.techniques && dataset.techniques.length > 0">
-            <th>Techniques</th>
-            <td>
-              <div *ngFor="let technique of dataset.techniques">
-                <span>
-                  {{ technique.name }}
-                </span>
+        <mat-card-content>
+          <table>
+            <tr *ngIf="dataset['proposalId'] && proposal">
+              <th>Proposal</th>
+              <td>
+                <a (click)="onClickProposal(proposal.proposalId)">{{
+                  proposal.title
+                }}</a>
+              </td>
+            </tr>
+            <tr
+              *ngIf="
+                dataset['proposalId'] &&
+                !proposal &&
+                appConfig.datasetDetailsShowMissingProposalId
+              "
+            >
+              <th>Proposal Id</th>
+              <td>{{ dataset["proposalId"] }}</td>
+            </tr>
+            <tr *ngIf="dataset['sampleId'] && sample">
+              <th>Sample</th>
+              <td>
+                <a (click)="onClickSample(sample.sampleId)">
+                  <span>{{ sample.description }}</span>
+                </a>
                 <span
-                  *ngIf="
-                    dataset.techniques.indexOf(technique) <
-                    dataset.techniques.length - 1
-                  "
-                  >,
+                  class="sample-edit"
+                  (click)="openSampleEditDialog()"
+                  *ngIf="appConfig.editDatasetSampleEnabled && editingAllowed"
+                >
+                  <mat-icon>edit</mat-icon>
                 </span>
-              </div>
-            </td>
-          </tr>
-          <tr *ngIf="dataset['inputDatasets'] as value">
-            <th>Input Datasets</th>
-            <td>
-              <div *ngFor="let datasetPid of value">
-                <span>
-                  <a [routerLink]="['/datasets/', datasetPid]">
-                    {{ datasetPid }}
-                  </a>
-                </span>
-                <span *ngIf="value.indexOf(datasetPid) < value.length - 1"
-                  >,
-                </span>
-              </div>
-            </td>
-          </tr>
-        </table>
+              </td>
+            </tr>
+            <tr *ngIf="dataset['instrumentId'] && instrument">
+              <th>Instrument</th>
+              <td>
+                <a (click)="onClickInstrument(instrument.pid)">
+                  {{ instrument.name }}
+                </a>
+              </td>
+            </tr>
+            <tr *ngIf="dataset['creationLocation'] as value">
+              <th>Creation Location</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="dataset.techniques && dataset.techniques.length > 0">
+              <th>Techniques</th>
+              <td>
+                <div *ngFor="let technique of dataset.techniques">
+                  <span>
+                    {{ technique.name }}
+                  </span>
+                  <span
+                    *ngIf="
+                      dataset.techniques.indexOf(technique) <
+                      dataset.techniques.length - 1
+                    "
+                    >,
+                  </span>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="dataset['inputDatasets'] as value">
+              <th>Input Datasets</th>
+              <td>
+                <div *ngFor="let datasetPid of value">
+                  <span>
+                    <a [routerLink]="['/datasets/', datasetPid]">
+                      {{ datasetPid }}
+                    </a>
+                  </span>
+                  <span *ngIf="value.indexOf(datasetPid) < value.length - 1"
+                    >,
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </mat-card-content>
       </mat-card>
 
-      <mat-card appearance="outlined" *ngIf="dataset.type === 'derived'">
+      <mat-card *ngIf="dataset.type === 'derived'">
         <mat-card-header class="derived-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> analytics </mat-icon>
@@ -332,107 +337,116 @@
           Derived Data
         </mat-card-header>
 
-        <table>
-          <tr *ngIf="dataset['usedSoftware'] as value">
-            <th>Software Used</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="dataset['jobParameters'] as value">
-            <th>Job Parameters</th>
-            <td>{{ value | json }}</td>
-          </tr>
-          <tr *ngIf="dataset['jobLogData'] as value">
-            <th>Job Log Data</th>
-            <td>{{ value }}</td>
-          </tr>
-        </table>
+        <mat-card-content>
+          <table>
+            <tr *ngIf="dataset['usedSoftware'] as value">
+              <th>Software Used</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="dataset['jobParameters'] as value">
+              <th>Job Parameters</th>
+              <td>{{ value | json }}</td>
+            </tr>
+            <tr *ngIf="dataset['jobLogData'] as value">
+              <th>Job Log Data</th>
+              <td>{{ value }}</td>
+            </tr>
+          </table>
+        </mat-card-content>
       </mat-card>
 
-      <mat-card appearance="outlined">
+      <mat-card>
         <mat-card-header class="scientific-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> science </mat-icon>
           </div>
           Scientific Metadata
         </mat-card-header>
-        <ng-template
-          [ngIf]="appConfig.tableSciDataEnabled"
-          [ngIfElse]="jsonView"
-        >
-          <ng-template #metadataView>
-            <div [ngSwitch]="appConfig.metadataStructure">
-              <tree-view
-                *ngSwitchCase="'tree'"
-                [metadata]="dataset['scientificMetadata']"
-              ></tree-view>
-              <metadata-view
-                *ngSwitchDefault
-                [metadata]="dataset['scientificMetadata']"
-              >
-              </metadata-view>
-            </div>
-          </ng-template>
-          <mat-tab-group
-            class="metadataGroup"
-            *ngIf="editingAllowed; else metadataView"
+        <mat-card-content>
+          <ng-template
+            [ngIf]="appConfig.tableSciDataEnabled"
+            [ngIfElse]="jsonView"
           >
-            <mat-tab>
-              <ng-template mat-tab-label>
-                <mat-icon> list </mat-icon> View
-              </ng-template>
-              <ng-container *ngTemplateOutlet="metadataView"> </ng-container>
-            </mat-tab>
-            <mat-tab
-              class="editTab"
-              *ngIf="editingAllowed"
-              [hidden]="!appConfig.editMetadataEnabled"
-            >
-              <ng-template mat-tab-label>
-                <mat-icon> edit </mat-icon> Edit
-              </ng-template>
+            <ng-template #metadataView>
               <div [ngSwitch]="appConfig.metadataStructure">
-                <tree-edit
+                <tree-view
                   *ngSwitchCase="'tree'"
                   [metadata]="dataset['scientificMetadata']"
-                  (save)="onSaveMetadata($event)"
-                  (hasUnsavedChanges)="onHasUnsavedChanges($event)"
-                >
-                </tree-edit>
-                <metadata-edit
+                ></tree-view>
+                <metadata-view
                   *ngSwitchDefault
                   [metadata]="dataset['scientificMetadata']"
-                  (save)="onSaveMetadata($event)"
                 >
-                </metadata-edit>
+                </metadata-view>
               </div>
-            </mat-tab>
-          </mat-tab-group>
-        </ng-template>
+            </ng-template>
+            <mat-tab-group
+              class="metadataGroup"
+              *ngIf="editingAllowed; else metadataView"
+            >
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <mat-icon> list </mat-icon> View
+                </ng-template>
+                <ng-container *ngTemplateOutlet="metadataView"> </ng-container>
+              </mat-tab>
+              <mat-tab
+                class="editTab"
+                *ngIf="editingAllowed"
+                [hidden]="!appConfig.editMetadataEnabled"
+              >
+                <ng-template mat-tab-label>
+                  <mat-icon> edit </mat-icon> Edit
+                </ng-template>
+                <div [ngSwitch]="appConfig.metadataStructure">
+                  <tree-edit
+                    *ngSwitchCase="'tree'"
+                    [metadata]="dataset['scientificMetadata']"
+                    (save)="onSaveMetadata($event)"
+                    (hasUnsavedChanges)="onHasUnsavedChanges($event)"
+                  >
+                  </tree-edit>
+                  <metadata-edit
+                    *ngSwitchDefault
+                    [metadata]="dataset['scientificMetadata']"
+                    (save)="onSaveMetadata($event)"
+                  >
+                  </metadata-edit>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </ng-template>
 
-        <ng-template #jsonView>
-          <ngx-json-viewer
-            [json]="dataset['scientificMetadata']"
-            [expanded]="false"
-          ></ngx-json-viewer>
-        </ng-template>
+          <ng-template #jsonView>
+            <ngx-json-viewer
+              [json]="dataset['scientificMetadata']"
+              [expanded]="false"
+            ></ngx-json-viewer>
+          </ng-template>
+        </mat-card-content>
       </mat-card>
-      <mat-card appearance="outlined" *ngIf="editingAllowed && appConfig.jsonMetadataEnabled">
-        <button mat-stroked-button (click)="show = !show">
-          {{ show ? "Hide MetaData" : "Show Metadata" }}
-        </button>
+      <mat-card *ngIf="editingAllowed && appConfig.jsonMetadataEnabled">
+        <mat-card-content>
+          <button mat-stroked-button (click)="show = !show">
+            {{ show ? "Hide MetaData" : "Show Metadata" }}
+          </button>
 
-        <br />
+          <br />
 
-        <div *ngIf="show">
-          <ngx-json-viewer [json]="datasetWithout$ | async" [expanded]="false">
-          </ngx-json-viewer>
-        </div>
+          <div *ngIf="show">
+            <ngx-json-viewer
+              [json]="datasetWithout$ | async"
+              [expanded]="false"
+            >
+            </ngx-json-viewer>
+          </div>
+        </mat-card-content>
       </mat-card>
     </div>
 
     <div fxFlex="30%" *ngIf="attachments$ | async as attachments">
       <ng-container *ngFor="let da of attachments">
-        <mat-card appearance="outlined">
+        <mat-card>
           <img mat-card-image src="{{ da.thumbnail }}" />
           <p>{{ da.caption }}</p>
         </mat-card>
