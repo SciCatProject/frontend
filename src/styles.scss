@@ -31,7 +31,7 @@
 @use "./app/users/user-settings/user-settings-theme" as user-settings;
 
 $custom-typography: mat.define-typography-config(
-  $font-family: '"Titillium Web", Calibri, sans-serif;',
+  $font-family: '"Titillium Web", Calibri, sans-serif',
 );
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -163,7 +163,7 @@ $basetheme: mat.define-light-theme(
       warn: $warn,
     ),
     typography: $custom-typography,
-    density: -2,
+    density: -1,
   )
 );
 

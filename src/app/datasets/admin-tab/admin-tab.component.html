@@ -1,9 +1,5 @@
-<mat-card appearance="outlined">
-  <button
-    mat-raised-button
-    class="reset-button"
-    (click)="resetDataset()"
-  >
+<mat-card>
+  <button mat-raised-button class="reset-button" (click)="resetDataset()">
     Reset Status
   </button>
   <ng-container *ngIf="datablocks$ | async as datablocks">
