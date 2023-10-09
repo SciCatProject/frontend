@@ -1,7 +1,7 @@
 @use "@angular/material" as mat;
 
 @mixin color($theme) {
-  $color-config: map-get($theme,"color");
+  $color-config: map-get($theme, "color");
   $primary: map-get($color-config, "primary");
   $hover: map-get($color-config, "hover");
 
@@ -11,11 +11,12 @@
       "default-contrast"
     ) !important;
   }
-  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
-  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   mat-table {
     .first-header-row {
-      background-color: mat.get-color-from-palette($primary, "default");
+      background-color: mat.get-color-from-palette(
+        $primary,
+        "default"
+      ) !important;
     }
 
     mat-header-cell {
@@ -28,7 +29,6 @@
       }
     }
 
-
     mat-row:hover {
       background-color: mat.get-color-from-palette($hover, "lighter");
     }
@@ -36,15 +36,14 @@
     .mat-form-field-appearance-outline {
       /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       .mat-form-field-outline {
-      background: mat.get-color-from-palette($primary, "default-contrast");
+        background: mat.get-color-from-palette($primary, "default-contrast");
       }
       /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version. */
       .mat-form-field-outline-thick {
-        color: mat.get-color-from-palette($primary, "default");;
+        color: mat.get-color-from-palette($primary, "default");
       }
     }
   }
-
 }
 
 @mixin theme($theme) {

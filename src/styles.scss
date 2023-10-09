@@ -30,8 +30,16 @@
 @use "./app/shared/modules/table/table-theme" as table;
 @use "./app/users/user-settings/user-settings-theme" as user-settings;
 
+$my-custom-button-level: mat.define-typography-level(
+  $font-weight: 400,
+  $font-size: 14px,
+  $line-height: 36px,
+  $letter-spacing: normal,
+);
+
 $custom-typography: mat.define-typography-config(
   $font-family: '"Titillium Web", Calibri, sans-serif',
+  $button: $my-custom-button-level,
 );
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -213,8 +221,8 @@ $theme: map-merge(
 @include shared-table.theme($theme);
 @include table.theme($theme);
 @include user-settings.theme($theme);
-@include mat.button-density(-2);
-@include mat.icon-button-density(-2);
+@include mat.button-density(0);
+@include mat.icon-button-density(0);
 
 /* You can add global styles to this file, and also import other style files */
 @import "assets/styles/titillium-web.scss";
@@ -271,6 +279,55 @@ a:hover {
   );
 }
 
+.mat-mdc-raised-button.mat-warn {
+  --mdc-protected-button-label-text-color: var(
+    --theme-primary-default-contrast
+  );
+}
+
 .mat-mdc-raised-button.mat-accent {
   --mdc-protected-button-label-text-color: var(--theme-accent-default-contrast);
+}
+
+// Manipulate initial background color
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: white !important;
+}
+
+// Manipulate background color on hover and focus
+.mat-mdc-form-field-focus-overlay {
+  background-color: transparent !important;
+}
+
+.mdc-text-field--filled {
+  padding: 0 !important;
+
+  input.mat-mdc-chip-input {
+    margin-left: 0;
+  }
+}
+
+.mat-mdc-form-field {
+  font-size: 14px !important;
+}
+
+.mat-datepicker-toggle {
+  [mat-icon-button] {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0px !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .mat-mdc-button-touch-target {
+      width: 32px !important;
+      height: 32px !important;
+    }
+  }
 }

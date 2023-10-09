@@ -63,8 +63,8 @@
 }
 
 .btnToggleExpand:before {
-  top: 9px;
-  left: 4px;
+  top: 0;
+  left: -9px;
   height: 14px;
   width: 14px;
   display: block;
@@ -89,6 +89,12 @@
   -moz-transform: translateX(-50%) translateY(-50%);
   -webkit-transform: translateX(-50%) translateY(-50%);
   transform: translateX(-50%) translateY(-50%);
+}
+
+mat-table {
+  mat-header-cell.mat-column-select {
+    justify-content: center;
+  }
 }
 
 mat-cell > span.ellipsis {

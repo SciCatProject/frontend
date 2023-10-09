@@ -1,16 +1,17 @@
 <h1 mat-dialog-title>Sample Entry</h1>
 <mat-dialog-content [formGroup]="form">
   <mat-form-field>
+    <mat-label>Sample Description</mat-label>
     <input
       matInput
       id="descriptionInput"
       data-cy="descriptionInput"
-      placeholder="Sample Description"
       formControlName="description"
       required="required"
     />
   </mat-form-field>
   <mat-form-field>
+    <mat-label>Sample Characteristics</mat-label>
     <input
       matInput
       id="characteristicsInput"

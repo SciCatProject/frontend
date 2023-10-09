@@ -39,12 +39,8 @@
               <td *ngIf="!editEnabled">{{ dataset.datasetName || "-" }}</td>
               <td *ngIf="editEnabled && editingAllowed">
                 <mat-form-field class="full-width">
-                  <input
-                    matInput
-                    type="text"
-                    placeholder="Name"
-                    formControlName="datasetName"
-                  />
+                  <mat-label>Name</mat-label>
+                  <input matInput type="text" formControlName="datasetName" />
                 </mat-form-field>
               </td>
             </tr>
@@ -55,9 +51,9 @@
               </td>
               <td *ngIf="editEnabled && editingAllowed">
                 <mat-form-field class="full-width">
+                  <mat-label>Description</mat-label>
                   <textarea
                     matInput
-                    placeholder="Description"
                     rows="5"
                     formControlName="description"
                   ></textarea>
@@ -83,7 +79,7 @@
             </tr>
             <tr *ngIf="dataset.creationTime as value">
               <th>Creation Time</th>
-              <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+              <td>{{ value | date : "yyyy-MM-dd HH:mm" }}</td>
             </tr>
             <tr class="keywords-row">
               <th>Keywords</th>
