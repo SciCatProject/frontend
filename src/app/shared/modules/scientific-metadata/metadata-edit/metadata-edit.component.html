@@ -7,7 +7,7 @@
       <div [formGroupName]="i">
         <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
           <div class="formColumn">
-            <mat-form-field class="selectField">
+            <mat-form-field class="selectField" fxFlex="100">
               <mat-label>Type</mat-label>
               <mat-select
                 formControlName="fieldType"
@@ -24,7 +24,8 @@
             </mat-form-field>
           </div>
           <div class="formColumn">
-            <mat-form-field class="inputField">
+            <mat-form-field class="inputField" fxFlex="100">
+              <mat-label>Name</mat-label>
               <input
                 id="nameInput{{ i }}"
                 matInput
@@ -33,7 +34,6 @@
                 autocapitalize="off"
                 spellcheck="false"
                 formControlName="fieldName"
-                placeholder="Name"
                 data-cy="metadata-name-input"
                 (blur)="getUnits(i)"
               />
@@ -43,7 +43,8 @@
             </mat-form-field>
           </div>
           <div class="formColumn">
-            <mat-form-field class="inputField">
+            <mat-form-field class="inputField" fxFlex="100">
+              <mat-label>Value</mat-label>
               <input
                 id="valueInput{{ i }}"
                 matInput
@@ -53,7 +54,6 @@
                 autocapitalize="off"
                 spellcheck="false"
                 formControlName="fieldValue"
-                placeholder="Value"
                 data-cy="metadata-value-input"
                 step="1"
               />
@@ -63,7 +63,8 @@
             </mat-form-field>
           </div>
           <div class="formColumn">
-            <mat-form-field class="inputField">
+            <mat-form-field class="inputField" fxFlex="100">
+              <mat-label>Unit</mat-label>
               <input
                 id="unitsInput{{ i }}"
                 matInput
@@ -72,7 +73,6 @@
                 autocapitalize="off"
                 spellcheck="false"
                 formControlName="fieldUnit"
-                placeholder="Unit"
                 [matAutocomplete]="metadataUnits"
                 (focus)="getUnits(i)"
               />
@@ -120,6 +120,7 @@
       mat-flat-button
       type="submit"
       color="primary"
+      class="save-button"
       [disabled]="isInvalid()"
       (click)="doSave()"
       data-cy="save-changes-button"

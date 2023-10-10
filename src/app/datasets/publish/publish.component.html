@@ -8,11 +8,11 @@
       <mat-card-content>
         <form>
           <mat-form-field>
+            <mat-label>Title</mat-label>
             <input
               id="titleInput"
               required
               matInput
-              placeholder="Title"
               autocomplete="off"
               [(ngModel)]="form.title"
               name="title"
@@ -20,6 +20,7 @@
           </mat-form-field>
 
           <mat-form-field>
+            <mat-label>Creators</mat-label>
             <mat-chip-grid required #chipListCreators>
               <mat-chip-row
                 *ngFor="let name of form.creators"
@@ -30,7 +31,6 @@
               </mat-chip-row>
               <input
                 matInput
-                placeholder="Creators"
                 [matChipInputFor]="chipListCreators"
                 [matChipInputAddOnBlur]="true"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
@@ -40,10 +40,10 @@
           </mat-form-field>
 
           <mat-form-field>
+            <mat-label>Publisher</mat-label>
             <input
               required
               matInput
-              placeholder="Publisher"
               autocomplete="off"
               [(ngModel)]="form.publisher"
               name="publisher"
@@ -51,10 +51,10 @@
           </mat-form-field>
 
           <mat-form-field>
+            <mat-label>Resource Type</mat-label>
             <mat-select
               required
               matInput
-              placeholder="Resource Type"
               name="resourceType"
               [(ngModel)]="form.resourceType"
             >
@@ -64,10 +64,10 @@
           </mat-form-field>
 
           <mat-form-field>
+            <mat-label>Description</mat-label>
             <textarea
               required
               matInput
-              placeholder="Description"
               autocomplete="off"
               [(ngModel)]="form.description"
               name="Description"
@@ -76,11 +76,11 @@
           </mat-form-field>
 
           <mat-form-field>
+            <mat-label>Abstract</mat-label>
             <textarea
               id="abstractInput"
               required
               matInput
-              placeholder="Abstract"
               autocomplete="off"
               [(ngModel)]="form.abstract"
               name="abstract"
@@ -89,9 +89,9 @@
           </mat-form-field>
 
           <mat-form-field>
+            <mat-label>Download link</mat-label>
             <input
               matInput
-              placeholder="download link"
               autocomplete="off"
               [(ngModel)]="form.downloadLink"
               name="downloadLink"
@@ -99,6 +99,7 @@
           </mat-form-field>
 
           <mat-form-field>
+            <mat-label>Related publications</mat-label>
             <mat-chip-grid #chipListRelatedPub>
               <mat-chip-row
                 *ngFor="let relatedPublication of form.relatedPublications"
@@ -109,7 +110,6 @@
               </mat-chip-row>
               <input
                 matInput
-                placeholder="related publications"
                 [matChipInputFor]="chipListRelatedPub"
                 [matChipInputAddOnBlur]="true"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"

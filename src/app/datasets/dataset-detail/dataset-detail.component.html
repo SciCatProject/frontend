@@ -444,7 +444,7 @@
       <ng-container *ngFor="let da of attachments">
         <mat-card>
           <img mat-card-image src="{{ da.thumbnail }}" />
-          <p>{{ da.caption }}</p>
+          <mat-card-actions>{{ da.caption }}</mat-card-actions>
         </mat-card>
       </ng-container>
     </div>

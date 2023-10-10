@@ -19,6 +19,17 @@
     }
   }
 }
+@media only screen and (max-width: 400px) {
+  .save-button {
+    margin-top: 1em;
+  }
+}
+
+@media only screen and (min-width: 400px) {
+  .save-button {
+    margin-left: 1em;
+  }
+}
 
 @media only screen and (max-width: 1279px) {
   .container {

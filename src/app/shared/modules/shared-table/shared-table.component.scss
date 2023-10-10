@@ -95,6 +95,10 @@ mat-table {
   mat-header-cell.mat-column-select {
     justify-content: center;
   }
+
+  mat-cell.mat-column-select {
+    justify-content: center;
+  }
 }
 
 mat-cell > span.ellipsis {

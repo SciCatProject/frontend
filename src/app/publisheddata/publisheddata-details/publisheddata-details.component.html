@@ -20,20 +20,22 @@
           >
             <tr *ngIf="publishedData.registeredTime as value">
               <th>Registered Time</th>
-              <td>{{ value | date: "yyyy-MM-dd, HH:mm" }}</td>
+              <td>{{ value | date : "yyyy-MM-dd, HH:mm" }}</td>
             </tr>
           </ng-template>
         </table>
       </mat-card-content>
 
-      <button
-        mat-raised-button
-        color="primary"
-        *ngIf="publishedData.status !== 'registered'"
-        (click)="onRegisterClick(publishedData.doi)"
-      >
-        Register
-      </button>
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="primary"
+          *ngIf="publishedData.status !== 'registered'"
+          (click)="onRegisterClick(publishedData.doi)"
+        >
+          Register
+        </button>
+      </mat-card-actions>
     </mat-card>
 
     <mat-card>
@@ -212,9 +214,7 @@
   <div fxFlex="40">
     <ng-container *ngIf="publishedData.thumbnail as thumbnail">
       <mat-card>
-        <mat-card-content>
-          <img mat-card-image src="{{ thumbnail }}" />
-        </mat-card-content>
+        <img mat-card-image src="{{ thumbnail }}" />
       </mat-card>
     </ng-container>
   </div>

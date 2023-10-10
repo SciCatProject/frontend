@@ -11,8 +11,8 @@
   }
   mat-card {
     .reset-button {
-      background-color: mat.get-color-from-palette($warn, "default");
-      color: mat.get-color-from-palette($warn, "default-contrast");
+      background-color: mat.get-color-from-palette($warn, "default") !important;
+      color: mat.get-color-from-palette($warn, "default-contrast") !important;
     }
   }
 }

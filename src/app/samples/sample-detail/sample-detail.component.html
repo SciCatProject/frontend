@@ -25,7 +25,7 @@
               </tr>
               <tr *ngIf="sample.createdAt as value">
                 <th>Creation Time</th>
-                <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+                <td>{{ value | date : "yyyy-MM-dd HH:mm" }}</td>
               </tr>
             </table>
           </mat-card-content>
@@ -136,10 +136,9 @@
       <div fxFlex="30%" *ngIf="vm.attachments as attachments">
         <ng-container *ngFor="let attachment of attachments">
           <mat-card>
-            <mat-card-content>
-              <img mat-card-image src="{{ attachment.thumbnail }}" />
-              <p>{{ attachment.caption }}</p>
-            </mat-card-content>
+            <img mat-card-image src="{{ attachment.thumbnail }}" />
+
+            <mat-card-actions>{{ attachment.caption }}</mat-card-actions>
           </mat-card>
         </ng-container>
       </div>

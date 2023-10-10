@@ -348,3 +348,8 @@ a:hover {
   --mdc-switch-selected-hover-track-color: var(--theme-accent-default);
   --mdc-switch-selected-focus-track-color: var(--theme-accent-default);
 }
+
+.mat-mdc-tab-nav-bar,
+.mat-mdc-tab-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
