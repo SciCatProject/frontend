@@ -334,3 +334,17 @@ a:hover {
     }
   }
 }
+
+.mat-mdc-slide-toggle {
+  --mdc-switch-selected-handle-color: var(--theme-accent-default);
+  --mdc-switch-selected-pressed-handle-color: var(--theme-accent-default);
+  --mdc-switch-selected-pressed-state-layer-color: var(--theme-accent-default);
+  --mdc-switch-selected-hover-state-layer-color: var(--theme-accent-default);
+  --mdc-switch-selected-hover-handle-color: var(--theme-accent-default);
+  --mdc-switch-selected-focus-state-layer-color: var(--theme-accent-default);
+  --mdc-switch-selected-focus-handle-color: var(--theme-accent-default);
+  --mdc-switch-selected-track-color: var(--theme-accent-default);
+  --mdc-switch-selected-pressed-track-color: var(--theme-accent-default);
+  --mdc-switch-selected-hover-track-color: var(--theme-accent-default);
+  --mdc-switch-selected-focus-track-color: var(--theme-accent-default);
+}

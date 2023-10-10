@@ -43,14 +43,13 @@
   <mat-card class="attachment-card">
     <mat-card-content>
       <img src="{{ attachment.thumbnail }}" />
-    </mat-card-content>
-    <mat-card-actions>
+
       <form (submit)="onSubmitCaption(attachment.id, caption.value)">
         <mat-form-field>
+          <mat-label>Caption</mat-label>
           <input
             matInput
             id="caption"
-            placeholder="Edit caption"
             value="{{ attachment.caption }}"
             #caption
           />
@@ -59,12 +58,15 @@
           Submit
         </button>
       </form>
+    </mat-card-content>
+    <mat-card-actions align="end">
       <button
         mat-button
         class="download-button"
         (click)="onDownloadAttachment(attachment)"
       >
         <mat-icon>download</mat-icon>
+        Download
       </button>
       <button
         mat-button
@@ -72,6 +74,7 @@
         (click)="onDeleteAttachment(attachment.id)"
       >
         <mat-icon>delete</mat-icon>
+        Remove
       </button>
     </mat-card-actions>
   </mat-card>
