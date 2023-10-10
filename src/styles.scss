@@ -244,7 +244,6 @@ a:hover {
   cursor: pointer;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
 .no-hover-effect.mat-mdc-button .mat-button-focus-overlay {
   background-color: transparent;
 }
@@ -309,6 +308,10 @@ a:hover {
 
 .mat-mdc-form-field {
   font-size: 14px !important;
+
+  .mat-mdc-form-field-subscript-dynamic-size {
+    min-height: 0.6666666667em;
+  }
 }
 
 .mat-datepicker-toggle {
