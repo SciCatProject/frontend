@@ -26,7 +26,7 @@
     <app-search-bar
       #searchBar
       [prefilledValue]="searchTerms$ | async"
-      [placeholder]="'Text Search'"
+      data-cy="text-search"
       [clear]="clearSearchBar"
       (search)="textSearchChanged($event)"
       (searchBarFocus)="textSearchChanged($event)"
