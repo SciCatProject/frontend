@@ -5,7 +5,6 @@ import {
   OnChanges,
   SimpleChange,
 } from "@angular/core";
-import { DateTime } from "luxon";
 import {
   ScientificMetadataTableData,
   ScientificMetadata,
@@ -47,19 +46,6 @@ export class MetadataViewComponent implements OnInit, OnChanges {
       metadataArray.push(metadataObject);
     });
     return metadataArray;
-  }
-
-  isDate(scientificMetadata: ScientificMetadataTableData): boolean {
-    if (scientificMetadata.unit.length > 0) {
-      return false;
-    }
-    if (typeof scientificMetadata.value === "number") {
-      return false;
-    }
-    if (!DateTime.fromISO(scientificMetadata.value).isValid) {
-      return false;
-    }
-    return true;
   }
 
   ngOnInit() {

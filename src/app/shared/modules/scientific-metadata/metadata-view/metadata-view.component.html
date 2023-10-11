@@ -18,19 +18,7 @@
         Value
       </mat-header-cell>
       <mat-cell *matCellDef="let metadata">
-        <ng-template [ngIf]="isDate(metadata)" [ngIfElse]="stringValue">
-          <div fxLayout="column">
-            <div>
-              {{ metadata.value | date: "yyyy-MM-dd," }}
-            </div>
-            <div>
-              {{ metadata.value | date: "HH:mm:ss zzzz" }}
-            </div>
-          </div>
-        </ng-template>
-        <ng-template #stringValue>
           {{ metadata.value }}
-        </ng-template>
       </mat-cell>
     </ng-container>
 
