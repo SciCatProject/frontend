@@ -20,7 +20,6 @@ import { UnitsService } from "shared/services/units.service";
 import { startWith, map } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { ScientificMetadata } from "../scientific-metadata.module";
-import { DateTime } from "luxon";
 
 @Component({
   selector: "metadata-edit",
@@ -31,7 +30,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   metadataForm: FormGroup = this.formBuilder.group({
     items: this.formBuilder.array([]),
   });
-  typeValues: string[] = ["date", "quantity", "number", "string"];
+  typeValues: string[] = ["quantity", "number", "string"];
   units: string[] = [];
   filteredUnits$: Observable<string[]> | undefined = new Observable<string[]>();
 
@@ -116,13 +115,6 @@ export class MetadataEditComponent implements OnInit, OnChanges {
               fieldValue: Number(this.metadata[key]["value"]),
               fieldUnit: this.metadata[key]["unit"],
             });
-          } else if (DateTime.fromISO(this.metadata[key]["value"]).isValid) {
-            field = this.formBuilder.group({
-              fieldName: key,
-              fieldType: "date",
-              fieldValue: this.metadata[key]["value"],
-              fieldUnit: this.metadata[key]["unit"],
-            });
           } else {
             field = this.formBuilder.group({
               fieldName: key,
@@ -191,9 +183,6 @@ export class MetadataEditComponent implements OnInit, OnChanges {
       }
       case "string": {
         return "text";
-      }
-      case "date": {
-        return "datetime-local";
       }
       default: {
         return "text";

@@ -1,0 +1,88 @@
+podTemplate(
+cloud: 'kubernetes-resi1',
+yaml: '''
+    apiVersion: v1
+    kind: Pod
+    spec:
+      containers:
+      - name: node
+        image: node:18-alpine
+        env:
+        - name: CYPRESS_CACHE_FOLDER
+          value: /tmp
+        - name: CHROME_BIN
+          value: /usr/bin/chromium-browser
+        - name: CHROME_PATH
+          value: /usr/lib/chromium/
+
+        command:
+        - sleep
+        args:
+        - 99d
+      - name: kaniko
+        image: gcr.io/kaniko-project/executor:debug
+        command:
+        - sleep
+        args:
+        - 9999999
+        volumeMounts:
+        - name: kaniko-secret
+          mountPath: /kaniko/.docker
+      restartPolicy: Never
+      volumes:
+      - name: kaniko-secret
+        secret:
+            secretName: registry-secret
+            items:
+            - key: .dockerconfigjson
+              path: config.json
+''') {
+  node(POD_LABEL) {
+    def tag = 'testing'
+    stage('Checkout') {
+     git url: 'ssh://forge.frm2.tum.de:29418/frm2/k8s/scicat/frontend', branch: 'master', credentialsId: 'jenkinsforge'
+     tag = sh(script: 'git rev-parse HEAD', returnStdout: true)
+    }
+    container('node') {
+        stage( 'Prepare') {
+        sh """
+            apk add --no-cache \
+                chromium \
+                ttf-freefont \
+                font-noto-emoji \
+                git
+             git config --global --add safe.directory   /home/jenkins/agent/workspace/scicat/frontendcontainer 
+        """
+        sh 'npm install --upgrade -g npm'
+        sh "npm ci"
+
+        }
+        stage('Unit Test SciCat Frontend ') {
+        sh 'npm run test'
+        }
+        stage('e2e Test SciCat Frontend ') {
+        //sh 'npm run e2e -- -e qa'
+        }
+        stage('MLZ setup') {
+            sh '''
+            CI/MLZ/copyimages.sh
+            '''
+            sh '''
+            cp CI/MLZ/config.development.json src/assets/config.json
+            '''
+        }
+        stage('build') {
+        sh "npx ng build --output-path dist/development --progress"
+        }
+    }
+    container('kaniko') {
+        stage('Build release') {
+            ansiColor('xterm') {
+                sh '''
+                /kaniko/executor --context `pwd` --dockerfile CI/MLZ/Dockerfile --destination docker.ictrl.frm2.tum.de:5443/mlz/scicat-frontend:${tag}
+                '''
+            }
+        }
+    }
+   }
+}
