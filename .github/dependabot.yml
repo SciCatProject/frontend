@@ -17,6 +17,16 @@ updates:
     # Increase the version requirements
     # only when required
     versioning-strategy: increase-if-necessary
+    groups:
+      angular:
+        patterns:
+        - "@angular*"
+        update-types:
+        - "minor"
+        - "patch"
+    ignore:
+      - dependency-name: "@angular*"
+        update-types: ["version-update:semver-major"]
     labels:
       - "dependencies"
       - "npm"
