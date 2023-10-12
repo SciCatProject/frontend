@@ -1,32 +1,34 @@
 <ng-container *ngIf="instrument$ | async as instrument">
   <div fxLayout="row" fxLayout.xs="column">
     <div fxFlex="80">
-      <mat-card appearance="outlined">
+      <mat-card>
         <mat-card-header class="general-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> description </mat-icon>
           </div>
           General Information
         </mat-card-header>
-        <div class="details">
-          <table>
-            <tr *ngIf="instrument.uniqueName as value">
-              <th>Unique Name</th>
-              <td>{{ value }}</td>
-            </tr>
-            <tr *ngIf="instrument.name as value">
-              <th>Name</th>
-              <td>{{ value }}</td>
-            </tr>
-            <tr *ngIf="instrument.pid as value">
-              <th>PID</th>
-              <td>{{ value }}</td>
-            </tr>
-          </table>
-        </div>
+        <mat-card-content>
+          <div class="details">
+            <table>
+              <tr *ngIf="instrument.uniqueName as value">
+                <th>Unique Name</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="instrument.name as value">
+                <th>Name</th>
+                <td>{{ value }}</td>
+              </tr>
+              <tr *ngIf="instrument.pid as value">
+                <th>PID</th>
+                <td>{{ value }}</td>
+              </tr>
+            </table>
+          </div>
+        </mat-card-content>
       </mat-card>
 
-      <mat-card appearance="outlined" *ngIf="instrument.customMetadata as value">
+      <mat-card *ngIf="instrument.customMetadata as value">
         <mat-card-header class="customMetadata-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> science </mat-icon>
@@ -34,41 +36,46 @@
           Custom Metadata
         </mat-card-header>
 
-        <mat-tab-group>
-          <mat-tab>
-            <ng-template mat-tab-label>
-              <mat-icon>list</mat-icon> View
-            </ng-template>
+        <mat-card-content>
+          <mat-tab-group>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon>list</mat-icon> View
+              </ng-template>
 
-            <div [ngSwitch]="appConfig.metadataStructure">
-              <tree-view *ngSwitchCase="'tree'" [metadata]="value"></tree-view>
-              <metadata-view
-                *ngSwitchDefault
-                [metadata]="value"
-              ></metadata-view>
-            </div>
-          </mat-tab>
+              <div [ngSwitch]="appConfig.metadataStructure">
+                <tree-view
+                  *ngSwitchCase="'tree'"
+                  [metadata]="value"
+                ></tree-view>
+                <metadata-view
+                  *ngSwitchDefault
+                  [metadata]="value"
+                ></metadata-view>
+              </div>
+            </mat-tab>
 
-          <mat-tab *ngIf="isAdmin$ | async">
-            <ng-template mat-tab-label>
-              <mat-icon>edit</mat-icon> Edit
-            </ng-template>
+            <mat-tab *ngIf="isAdmin$ | async">
+              <ng-template mat-tab-label>
+                <mat-icon>edit</mat-icon> Edit
+              </ng-template>
 
-            <div [ngSwitch]="appConfig.metadataStructure">
-              <tree-edit
-                *ngSwitchCase="'tree'"
-                [metadata]="value"
-                (save)="onSaveCustomMetadata(instrument.pid, $event)"
-                (hasUnsavedChanges)="onHasUnsavedChanges($event)"
-              ></tree-edit>
-              <metadata-edit
-                *ngSwitchDefault
-                [metadata]="value"
-                (save)="onSaveCustomMetadata(instrument.pid, $event)"
-              ></metadata-edit>
-            </div>
-          </mat-tab>
-        </mat-tab-group>
+              <div [ngSwitch]="appConfig.metadataStructure">
+                <tree-edit
+                  *ngSwitchCase="'tree'"
+                  [metadata]="value"
+                  (save)="onSaveCustomMetadata(instrument.pid, $event)"
+                  (hasUnsavedChanges)="onHasUnsavedChanges($event)"
+                ></tree-edit>
+                <metadata-edit
+                  *ngSwitchDefault
+                  [metadata]="value"
+                  (save)="onSaveCustomMetadata(instrument.pid, $event)"
+                ></metadata-edit>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card-content>
       </mat-card>
     </div>
   </div>

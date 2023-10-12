@@ -1,12 +1,11 @@
 <mat-form-field>
+  <mat-label>{{ placeholder }}</mat-label>
   <input
     #searchBar
     matInput
     class="search-input"
     type="search"
-    aria-label="Search"
     [value]="prefilledValue"
-    [placeholder]="placeholder"
     [matAutocomplete]="options"
     (click)="doSearch()"
     (input)="doSearch()"

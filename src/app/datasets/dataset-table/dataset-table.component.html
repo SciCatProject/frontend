@@ -1,7 +1,7 @@
 <div class="dataset-table">
   <!--https://tburleson-layouts-demos.firebaseapp.com/#/docs-->
   <div fxLayout="row" fxLayoutAlign="space-evenly end">
-    <div style="flex: 1;"></div>
+    <div style="flex: 1"></div>
 
     <mat-paginator
       [pageSizeOptions]="[10, 25, 50, 100, 500, 1000]"
@@ -35,7 +35,9 @@
     <ng-container matColumnDef="standard_select">
       <mat-header-cell *matHeaderCellDef>
         <mat-checkbox
-          [checked]="!!selectedSets && selectedSets.length > 0 && isAllSelected()"
+          [checked]="
+            !!selectedSets && selectedSets.length > 0 && isAllSelected()
+          "
           [indeterminate]="
             selectedSets && selectedSets.length > 0 && !isAllSelected()
           "
@@ -60,12 +62,9 @@
     </ng-container>
 
     <!-- Pid Column -->
-    <ng-container
-      matColumnDef="standard_pid"
-      style="align-content: center;"
-    >
+    <ng-container matColumnDef="standard_pid" style="align-content: center">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div fxLayout="column" style="align-items: center;">
+        <div fxLayout="column" style="align-items: center">
           <div>
             <mat-icon>perm_identity</mat-icon>
           </div>
@@ -76,14 +75,14 @@
         {{ dataset.pid }}
       </mat-cell>
     </ng-container>
-  
+
     <!-- Name Column -->
     <ng-container
       matColumnDef="standard_datasetName"
-      style="align-content: center;"
+      style="align-content: center"
     >
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div fxLayout="column" style="align-items: center;">
+        <div fxLayout="column" style="align-items: center">
           <div>
             <mat-icon>fingerprint</mat-icon>
           </div>
@@ -98,7 +97,7 @@
     <!-- Source Folder Column -->
     <ng-container matColumnDef="standard_sourceFolder">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div fxLayout="column" style="align-items: center;">
+        <div fxLayout="column" style="align-items: center">
           <div>
             <mat-icon>explore</mat-icon>
           </div>
@@ -109,14 +108,14 @@
         *matCellDef="let dataset"
         matTooltip="{{ dataset.sourceFolder }}"
       >
-        ...{{ dataset.sourceFolder | slice: -10 }}
+        ...{{ dataset.sourceFolder | slice : -10 }}
       </mat-cell>
     </ng-container>
 
     <!-- Run Number Column -->
     <ng-container matColumnDef="standard_runNumber">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div fxLayout="column" style="align-items: center;">
+        <div fxLayout="column" style="align-items: center">
           <div>
             <mat-icon>directions_run</mat-icon>
           </div>
@@ -139,7 +138,7 @@
     <!-- Size Column -->
     <ng-container matColumnDef="standard_size">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div fxLayout="column" style="align-items: center;">
+        <div fxLayout="column" style="align-items: center">
           <div>
             <mat-icon>save</mat-icon>
           </div>
@@ -169,7 +168,7 @@
     <!-- Start Time Column -->
     <ng-container matColumnDef="standard_creationTime">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div fxLayout="column" style="align-items: center;">
+        <div fxLayout="column" style="align-items: center">
           <div>
             <mat-icon>calendar_today</mat-icon>
           </div>
@@ -178,8 +177,8 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         <div fxLayout="column">
-          <div>{{ dataset.creationTime | date: "yyyy-MM-dd" }}</div>
-          <div>{{ dataset.creationTime | date: "EEE HH:mm" }}</div>
+          <div>{{ dataset.creationTime | date : "yyyy-MM-dd" }}</div>
+          <div>{{ dataset.creationTime | date : "EEE HH:mm" }}</div>
         </div>
       </mat-cell>
     </ng-container>
@@ -187,7 +186,7 @@
     <!-- Type Column -->
     <ng-container matColumnDef="standard_type">
       <mat-header-cell *matHeaderCellDef>
-        <div fxLayout="column" style="align-items: center;">
+        <div fxLayout="column" style="align-items: center">
           <div>
             <mat-icon>bubble_chart</mat-icon>
           </div>
@@ -200,7 +199,7 @@
     <!-- Image Column -->
     <ng-container matColumnDef="standard_image">
       <mat-header-cell *matHeaderCellDef>
-        <div fxLayout="column" style="align-items: center;">
+        <div fxLayout="column" style="align-items: center">
           <div>
             <mat-icon>camera_alt</mat-icon>
           </div>
@@ -221,7 +220,7 @@
     <!-- Metadata Column -->
     <ng-container matColumnDef="standard_metadata">
       <mat-header-cell *matHeaderCellDef>
-        <div fxLayout="column" style="align-items: center;">
+        <div fxLayout="column" style="align-items: center">
           <div>
             <mat-icon>assessment</mat-icon>
           </div>
@@ -244,7 +243,7 @@
         }}</ng-template>
         <ng-template #elseBlock
           >{{
-            dataset.scientificMetadata | json | slice: 0:100
+            dataset.scientificMetadata | json | slice : 0 : 100
           }}...</ng-template
         >
       </mat-cell>
@@ -253,7 +252,7 @@
     <!-- Proposal ID Column -->
     <ng-container matColumnDef="standard_proposalId">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div fxLayout="column" style="align-items: center;">
+        <div fxLayout="column" style="align-items: center">
           <div>
             <mat-icon>spa</mat-icon>
           </div>
@@ -268,7 +267,7 @@
     <!-- Group Column -->
     <ng-container matColumnDef="standard_ownerGroup">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
-        <div fxLayout="column" style="align-items: center;">
+        <div fxLayout="column" style="align-items: center">
           <div>
             <mat-icon>group</mat-icon>
           </div>
@@ -281,7 +280,7 @@
     <!-- Data Status Column -->
     <ng-container matColumnDef="standard_dataStatus">
       <mat-header-cell *matHeaderCellDef>
-        <div fxLayout="column" style="align-items: center;">
+        <div fxLayout="column" style="align-items: center">
           <div>
             <mat-icon>archive&#47;&nbsp;cloud_upload</mat-icon>
           </div>
@@ -369,7 +368,7 @@
       <ng-template [ngIf]="column.type === 'custom'">
         <ng-container matColumnDef="{{ column.type + '_' + column.name }}">
           <mat-header-cell *matHeaderCellDef>
-            <div fxLayout="column" style="align-items: center;">
+            <div fxLayout="column" style="align-items: center">
               <div>
                 <mat-icon>star</mat-icon>
               </div>
@@ -377,10 +376,16 @@
             </div>
           </mat-header-cell>
           <mat-cell *matCellDef="let dataset">
-            <div *ngIf="lodashGet(dataset.scientificMetadata, column.name) as value">
+            <div
+              *ngIf="
+                lodashGet(dataset.scientificMetadata, column.name) as value
+              "
+            >
               <!-- This can show 3 type of value like this {value: 2, unit: mm} || {v: 2, u: mm} || 2
                 First match rule-->
-              {{ value.value || value.v || value }}&nbsp;{{ value.unit || value.u | prettyUnit}}
+              {{ value.value || value.v || value }}&nbsp;{{
+                value.unit || value.u | prettyUnit
+              }}
             </div>
           </mat-cell>
         </ng-container>
@@ -403,5 +408,3 @@
     </mat-row>
   </mat-table>
 </div>
-
-

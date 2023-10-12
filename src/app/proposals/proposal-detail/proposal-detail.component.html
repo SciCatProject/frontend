@@ -1,5 +1,5 @@
 <div *ngIf="proposal" class="tab-content">
-  <mat-card appearance="outlined">
+  <mat-card>
     <mat-card-header class="general-header">
       <div mat-card-avatar class="section-icon">
         <mat-icon> description </mat-icon>
@@ -7,56 +7,58 @@
       General Information
     </mat-card-header>
 
-    <table>
-      <tr>
-        <th>Title</th>
-        <td>{{ proposal.title }}</td>
-      </tr>
-      <tr>
-        <th>Abstract</th>
-        <td>{{ proposal.abstract }}</td>
-      </tr>
-      <tr>
-        <th>Identifier</th>
-        <td>{{ proposal.proposalId }}</td>
-      </tr>
-      <ng-template
-        [ngIf]="
-          proposal.MeasurementPeriodList &&
-          proposal.MeasurementPeriodList.length > 0
-        "
-      >
+    <mat-card-content>
+      <table>
+        <tr>
+          <th>Title</th>
+          <td>{{ proposal.title }}</td>
+        </tr>
+        <tr>
+          <th>Abstract</th>
+          <td>{{ proposal.abstract }}</td>
+        </tr>
+        <tr>
+          <th>Identifier</th>
+          <td>{{ proposal.proposalId }}</td>
+        </tr>
         <ng-template
-          ngFor
-          let-period
-          [ngForOf]="proposal.MeasurementPeriodList"
-          let-i="index"
-          let-first="first"
+          [ngIf]="
+            proposal.MeasurementPeriodList &&
+            proposal.MeasurementPeriodList.length > 0
+          "
         >
-          <tr *ngIf="first">
-            <th>Start Time</th>
-            <td>
-              {{ period.start | date }}
-            </td>
-          </tr>
+          <ng-template
+            ngFor
+            let-period
+            [ngForOf]="proposal.MeasurementPeriodList"
+            let-i="index"
+            let-first="first"
+          >
+            <tr *ngIf="first">
+              <th>Start Time</th>
+              <td>
+                {{ period.start | date }}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template
+            ngFor
+            let-period
+            [ngForOf]="proposal.MeasurementPeriodList"
+            let-i="index"
+            let-last="last"
+          >
+            <tr *ngIf="last">
+              <th>End Time</th>
+              <td>{{ period.end | date }}</td>
+            </tr>
+          </ng-template>
         </ng-template>
-        <ng-template
-          ngFor
-          let-period
-          [ngForOf]="proposal.MeasurementPeriodList"
-          let-i="index"
-          let-last="last"
-        >
-          <tr *ngIf="last">
-            <th>End Time</th>
-            <td>{{ period.end | date }}</td>
-          </tr>
-        </ng-template>
-      </ng-template>
-    </table>
+      </table>
+    </mat-card-content>
   </mat-card>
 
-  <mat-card appearance="outlined">
+  <mat-card>
     <mat-card-header class="creator-header">
       <div mat-card-avatar class="section-icon">
         <mat-icon> person </mat-icon>
@@ -64,41 +66,45 @@
       Creator Information
     </mat-card-header>
 
-    <table>
-      <tr>
-        <th>Main proposer</th>
-        <td *ngIf="proposal.firstname && proposal.lastname; else noName">
-          <a href="mailto:{{ proposal.email }}"
-            >{{ proposal.firstname }} {{ proposal.lastname }}</a
-          >
-        </td>
-        <ng-template #noName>
-          <td>
-            <a href="mailto:{{ proposal.email }}">{{ proposal.email }}</a>
+    <mat-card-content>
+      <table>
+        <tr>
+          <th>Main proposer</th>
+          <td *ngIf="proposal.firstname && proposal.lastname; else noName">
+            <a href="mailto:{{ proposal.email }}"
+              >{{ proposal.firstname }} {{ proposal.lastname }}</a
+            >
           </td>
-        </ng-template>
-      </tr>
-      <tr *ngIf="proposal.pi_firstname && proposal.pi_lastname">
-        <th>Principal investigator</th>
-        <td *ngIf="proposal.pi_email; else withoutEmail">
-          <a href="mailto:{{ proposal.pi_email }}"
-            >{{ proposal.pi_firstname }} {{ proposal.pi_lastname }}</a
-          >
-        </td>
-        <ng-template #withoutEmail>
-          <td>{{ proposal.pi_firstname }} {{ proposal.pi_lastname }}</td>
-        </ng-template>
-      </tr>
-    </table>
+          <ng-template #noName>
+            <td>
+              <a href="mailto:{{ proposal.email }}">{{ proposal.email }}</a>
+            </td>
+          </ng-template>
+        </tr>
+        <tr *ngIf="proposal.pi_firstname && proposal.pi_lastname">
+          <th>Principal investigator</th>
+          <td *ngIf="proposal.pi_email; else withoutEmail">
+            <a href="mailto:{{ proposal.pi_email }}"
+              >{{ proposal.pi_firstname }} {{ proposal.pi_lastname }}</a
+            >
+          </td>
+          <ng-template #withoutEmail>
+            <td>{{ proposal.pi_firstname }} {{ proposal.pi_lastname }}</td>
+          </ng-template>
+        </tr>
+      </table>
+    </mat-card-content>
   </mat-card>
 
-  <mat-card appearance="outlined" *ngIf="appConfig.jsonMetadataEnabled">
-    <button mat-stroked-button (click)="show = !show">
-      {{ show ? "Hide MetaData" : "Show Metadata" }}
-    </button>
-    <br />
-    <div *ngIf="show">
-      <ngx-json-viewer [json]="proposal" [expanded]="false"></ngx-json-viewer>
-    </div>
+  <mat-card *ngIf="appConfig.jsonMetadataEnabled">
+    <mat-card-content>
+      <button mat-stroked-button (click)="show = !show">
+        {{ show ? "Hide MetaData" : "Show Metadata" }}
+      </button>
+      <br />
+      <div *ngIf="show">
+        <ngx-json-viewer [json]="proposal" [expanded]="false"></ngx-json-viewer>
+      </div>
+    </mat-card-content>
   </mat-card>
 </div>

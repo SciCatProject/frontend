@@ -1,141 +1,146 @@
 <div fxLayout="row">
   <div fxFlex="80">
     <ng-container *ngIf="dataset">
-      <mat-card appearance="outlined">
+      <mat-card>
         <mat-card-header class="lifecycle-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> update </mat-icon>
           </div>
           Lifecycle
         </mat-card-header>
-        <div class="details">
-          <table class="lifecycle-table" *ngIf="dataset.datasetlifecycle">
-            <tr *ngIf="dataset.creationTime as value">
-              <th>Creation Date</th>
-              <td>{{ value | date: "yyyy-MM-dd" }}</td>
-            </tr>
-            <tr
-              *ngIf="
-                !dataset.isPublished &&
-                dataset.datasetlifecycle.dateOfPublishing as value
-              "
-            >
-              <th>End of Embargo Period</th>
-              <td>{{ value | date: "yyyy-MM-dd" }}</td>
-            </tr>
-            <tr
-              *ngIf="
-                dataset.isPublished &&
-                dataset.datasetlifecycle.publishedOn as value
-              "
-            >
-              <th>Publication Date</th>
-              <td>{{ value | date: "yyyy-MM-dd" }}</td>
-            </tr>
-            <tr
-              *ngIf="
-                appConfig.archiveWorkflowEnabled &&
-                dataset.datasetlifecycle.dateOfDiskPurging as value
-              "
-            >
-              <th>Data Deletion Date</th>
-              <td>{{ value | date: "yyyy-MM-dd" }}</td>
-            </tr>
-            <tr
-              *ngIf="
-                appConfig.archiveWorkflowEnabled &&
-                dataset.datasetlifecycle.archiveRetentionTime as value
-              "
-            >
-              <th>Archive Retention Date</th>
-              <td>{{ value | date: "yyyy-MM-dd" }}</td>
-            </tr>
-          </table>
-        </div>
+        <mat-card-content>
+          <div class="details">
+            <table class="lifecycle-table" *ngIf="dataset.datasetlifecycle">
+              <tr *ngIf="dataset.creationTime as value">
+                <th>Creation Date</th>
+                <td>{{ value | date: "yyyy-MM-dd" }}</td>
+              </tr>
+              <tr
+                *ngIf="
+                  !dataset.isPublished &&
+                  dataset.datasetlifecycle.dateOfPublishing as value
+                "
+              >
+                <th>End of Embargo Period</th>
+                <td>{{ value | date: "yyyy-MM-dd" }}</td>
+              </tr>
+              <tr
+                *ngIf="
+                  dataset.isPublished &&
+                  dataset.datasetlifecycle.publishedOn as value
+                "
+              >
+                <th>Publication Date</th>
+                <td>{{ value | date: "yyyy-MM-dd" }}</td>
+              </tr>
+              <tr
+                *ngIf="
+                  appConfig.archiveWorkflowEnabled &&
+                  dataset.datasetlifecycle.dateOfDiskPurging as value
+                "
+              >
+                <th>Data Deletion Date</th>
+                <td>{{ value | date: "yyyy-MM-dd" }}</td>
+              </tr>
+              <tr
+                *ngIf="
+                  appConfig.archiveWorkflowEnabled &&
+                  dataset.datasetlifecycle.archiveRetentionTime as value
+                "
+              >
+                <th>Archive Retention Date</th>
+                <td>{{ value | date: "yyyy-MM-dd" }}</td>
+              </tr>
+            </table>
+          </div>
+        </mat-card-content>
       </mat-card>
 
-      <mat-card appearance="outlined" *ngIf="historyItemsCount > 0">
+      <mat-card *ngIf="historyItemsCount > 0">
         <mat-card-header class="history-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> history </mat-icon>
           </div>
           History
         </mat-card-header>
-
-        <div fxLayout="row" fxLayoutAlign="space-evenly end">
-          <button
-            mat-stroked-button
-            class="download-button"
-            (click)="downloadCsv()"
-          >
-            <mat-icon>text_snippet</mat-icon> CSV
-          </button>
-
-          <div style="flex: 1;"></div>
-
-          <mat-paginator
-            [length]="historyItemsCount"
-            [pageIndex]="currentPage"
-            [pageSize]="itemsPerPage"
-            [pageSizeOptions]="pageSizeOptions"
-            (page)="onPageChange($event)"
-            showFirstLastButtons
-          ></mat-paginator>
-        </div>
-
-        <table
-          mat-table
-          [dataSource]="dataSource"
-          class="history-table"
-          multiTemplateDataRows
-        >
-          <ng-container
-            matColumnDef="{{ column }}"
-            *ngFor="let column of displayedColumns"
-          >
-            <th mat-header-cell *matHeaderCellDef>{{ column | titleCase }}</th>
-            <td mat-cell *matCellDef="let item">
-              {{ item[column] }}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="expandedDetail">
-            <td
-              mat-cell
-              *matCellDef="let item"
-              [attr.colspan]="displayedColumns.length"
+        <mat-card-content>
+          <div fxLayout="row" fxLayoutAlign="space-evenly end">
+            <button
+              mat-stroked-button
+              class="download-button"
+              (click)="downloadCsv()"
             >
-              <div
-                class="item-detail"
-                [@detailExpand]="
-                  item === expandedItem ? 'expanded' : 'collapsed'
-                "
+              <mat-icon>text_snippet</mat-icon> CSV
+            </button>
+
+            <div style="flex: 1"></div>
+
+            <mat-paginator
+              [length]="historyItemsCount"
+              [pageIndex]="currentPage"
+              [pageSize]="itemsPerPage"
+              [pageSizeOptions]="pageSizeOptions"
+              (page)="onPageChange($event)"
+              showFirstLastButtons
+            ></mat-paginator>
+          </div>
+
+          <table
+            mat-table
+            [dataSource]="dataSource"
+            class="history-table"
+            multiTemplateDataRows
+          >
+            <ng-container
+              matColumnDef="{{ column }}"
+              *ngFor="let column of displayedColumns"
+            >
+              <th mat-header-cell *matHeaderCellDef>
+                {{ column | titleCase }}
+              </th>
+              <td mat-cell *matCellDef="let item">
+                {{ item[column] }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="expandedDetail">
+              <td
+                mat-cell
+                *matCellDef="let item"
+                [attr.colspan]="displayedColumns.length"
               >
-                <div class="history-value">
-                  <ngx-json-viewer
-                    [json]="item.value"
-                    [expanded]="false"
-                  ></ngx-json-viewer>
+                <div
+                  class="item-detail"
+                  [@detailExpand]="
+                    item === expandedItem ? 'expanded' : 'collapsed'
+                  "
+                >
+                  <div class="history-value">
+                    <ngx-json-viewer
+                      [json]="item.value"
+                      [expanded]="false"
+                    ></ngx-json-viewer>
+                  </div>
                 </div>
-              </div>
-            </td>
-          </ng-container>
+              </td>
+            </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr
-            mat-row
-            *matRowDef="let item; columns: displayedColumns"
-            class="item-row"
-            [class.expanded-row]="expandedItem === item"
-            (click)="expandedItem = expandedItem === item ? null : item"
-          ></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              mat-row
+              *matRowDef="let item; columns: displayedColumns"
+              class="item-row"
+              [class.expanded-row]="expandedItem === item"
+              (click)="expandedItem = expandedItem === item ? null : item"
+            ></tr>
 
-          <tr
-            mat-row
-            *matRowDef="let row; columns: ['expandedDetail']"
-            class="detail-row"
-          ></tr>
-        </table>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: ['expandedDetail']"
+              class="detail-row"
+            ></tr>
+          </table>
+        </mat-card-content>
       </mat-card>
     </ng-container>
   </div>

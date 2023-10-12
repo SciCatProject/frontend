@@ -1,6 +1,6 @@
 <ng-container *ngIf="vm$ | async as vm">
   <div fxLayout="row" fxLayout.lt-lg="column">
-    <div fxFlex="100" fxFlex.lt-xl="80">
+    <div fxFlex="100">
       <app-table
         [data]="vm.instruments"
         [columns]="tableColumns"
