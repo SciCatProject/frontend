@@ -20,10 +20,10 @@ const routes: Routes = [
     path: ":id/edit",
     component: PublisheddataEditComponent,
     canActivate: [AuthGuard],
-  }
+  },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class PublisheddataRoutingModule {}

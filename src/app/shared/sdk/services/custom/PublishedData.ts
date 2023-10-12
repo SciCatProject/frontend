@@ -1,15 +1,14 @@
 /* eslint-disable */
-import { Injectable, Inject, Optional } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { SDKModels } from './SDKModels';
-import { BaseLoopBackApi } from '../core/base.service';
-import { LoopBackConfig } from '../../lb.config';
-import { LoopBackAuth } from '../core/auth.service';
-import { LoopBackFilter,  } from '../../models/BaseModels';
-import { ErrorHandler } from '../core/error.service';
-import { Observable} from 'rxjs';
-import { SocketConnection } from '../../sockets/socket.connections';
-
+import { Injectable, Inject, Optional } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { SDKModels } from "./SDKModels";
+import { BaseLoopBackApi } from "../core/base.service";
+import { LoopBackConfig } from "../../lb.config";
+import { LoopBackAuth } from "../core/auth.service";
+import { LoopBackFilter } from "../../models/BaseModels";
+import { ErrorHandler } from "../core/error.service";
+import { Observable } from "rxjs";
+import { SocketConnection } from "../../sockets/socket.connections";
 
 /**
  * Api services for the `PublishedData` model.
@@ -20,15 +19,14 @@ import { SocketConnection } from '../../sockets/socket.connections';
  */
 @Injectable()
 export class PublishedDataApi extends BaseLoopBackApi {
-
   constructor(
     @Inject(HttpClient) protected http: HttpClient,
     @Inject(SocketConnection) protected connection: SocketConnection,
     @Inject(SDKModels) protected models: SDKModels,
     @Inject(LoopBackAuth) protected auth: LoopBackAuth,
-    @Optional() @Inject(ErrorHandler) protected errorHandler: ErrorHandler
+    @Optional() @Inject(ErrorHandler) protected errorHandler: ErrorHandler,
   ) {
-    super(http,  connection,  models, auth, errorHandler);
+    super(http, connection, models, auth, errorHandler);
   }
 
   /**
@@ -47,17 +45,32 @@ export class PublishedDataApi extends BaseLoopBackApi {
    * This usually means the response is a `PublishedData` object.)
    * </em>
    */
-  public findByIdDatasets(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public findByIdDatasets(
+    id: any,
+    fk: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/datasets/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/PublishedData/:id/datasets/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -74,17 +87,32 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    * This method returns no data.
    */
-  public destroyByIdDatasets(id: any, fk: any, customHeaders?: Function): Observable<any> {
+  public destroyByIdDatasets(
+    id: any,
+    fk: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/datasets/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/PublishedData/:id/datasets/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -108,19 +136,35 @@ export class PublishedDataApi extends BaseLoopBackApi {
    * This usually means the response is a `PublishedData` object.)
    * </em>
    */
-  public updateByIdDatasets(id: any, fk: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public updateByIdDatasets(
+    id: any,
+    fk: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "PUT";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/datasets/:fk";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/PublishedData/:id/datasets/:fk";
     let _routeParams: any = {
       id: id,
-      fk: fk
+      fk: fk,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -140,17 +184,33 @@ export class PublishedDataApi extends BaseLoopBackApi {
    * This usually means the response is a `PublishedData` object.)
    * </em>
    */
-  public getDatasets(id: any, filter: LoopBackFilter = {}, customHeaders?: Function): Observable<any> {
+  public getDatasets(
+    id: any,
+    filter: LoopBackFilter = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/datasets";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/PublishedData/:id/datasets";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof filter !== 'undefined' && filter !== null) _urlParams.filter = filter;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof filter !== "undefined" && filter !== null)
+      _urlParams.filter = filter;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -172,18 +232,33 @@ export class PublishedDataApi extends BaseLoopBackApi {
    * This usually means the response is a `PublishedData` object.)
    * </em>
    */
-  public createDatasets(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public createDatasets(
+    id: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/datasets";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/PublishedData/:id/datasets";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -200,14 +275,25 @@ export class PublishedDataApi extends BaseLoopBackApi {
    */
   public deleteDatasets(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/datasets";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/PublishedData/:id/datasets";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -226,17 +312,33 @@ export class PublishedDataApi extends BaseLoopBackApi {
    *
    *  - `count` – `{number}` -
    */
-  public countDatasets(id: any, where: any = {}, customHeaders?: Function): Observable<any> {
+  public countDatasets(
+    id: any,
+    where: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/datasets/count";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/PublishedData/:id/datasets/count";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof where !== "undefined" && where !== null)
+      _urlParams.where = where;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -256,16 +358,30 @@ export class PublishedDataApi extends BaseLoopBackApi {
    * This usually means the response is a `PublishedData` object.)
    * </em>
    */
-  public patchOrCreate(data: any = {}, customHeaders?: Function): Observable<any> {
+  public patchOrCreate(
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "PATCH";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/PublishedData";
     let _routeParams: any = {};
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -287,18 +403,33 @@ export class PublishedDataApi extends BaseLoopBackApi {
    * This usually means the response is a `PublishedData` object.)
    * </em>
    */
-  public patchAttributes(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
+  public patchAttributes(
+    id: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "PATCH";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/PublishedData/:id";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -320,16 +451,33 @@ export class PublishedDataApi extends BaseLoopBackApi {
    * This usually means the response is a `PublishedData` object.)
    * </em>
    */
-  public fullfacet(fields: any = {}, facets: any = {}, customHeaders?: Function): Observable<any> {
+  public fullfacet(
+    fields: any = {},
+    facets: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/fullfacet";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/PublishedData/fullfacet";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof fields !== 'undefined' && fields !== null) _urlParams.fields = fields;
-    if (typeof facets !== 'undefined' && facets !== null) _urlParams.facets = facets;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof fields !== "undefined" && fields !== null)
+      _urlParams.fields = fields;
+    if (typeof facets !== "undefined" && facets !== null)
+      _urlParams.facets = facets;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -351,23 +499,40 @@ export class PublishedDataApi extends BaseLoopBackApi {
    * This usually means the response is a `PublishedData` object.)
    * </em>
    */
-  public fullquery(fields: any = {}, limits: any = {}, customHeaders?: Function): Observable<any> {
+  public fullquery(
+    fields: any = {},
+    limits: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/fullquery";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/PublishedData/fullquery";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof fields !== 'undefined' && fields !== null) _urlParams.fields = fields;
-    if (typeof limits !== 'undefined' && limits !== null) _urlParams.limits = limits;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof fields !== "undefined" && fields !== null)
+      _urlParams.fields = fields;
+    if (typeof limits !== "undefined" && limits !== null)
+      _urlParams.limits = limits;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
   /**
    * <em>
-         * (The remote method definition does not provide any description.)
-         * </em>
+   * (The remote method definition does not provide any description.)
+   * </em>
    *
    * @param {string} pid
    *
@@ -382,20 +547,31 @@ export class PublishedDataApi extends BaseLoopBackApi {
    */
   public formPopulate(pid: any, customHeaders?: Function): Observable<any> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/formPopulate";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/PublishedData/formPopulate";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof pid !== 'undefined' && pid !== null) _urlParams.pid = pid;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof pid !== "undefined" && pid !== null) _urlParams.pid = pid;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
   /**
    * <em>
-         * (The remote method definition does not provide any description.)
-         * </em>
+   * (The remote method definition does not provide any description.)
+   * </em>
    *
    * @param {object} data Request data.
    *
@@ -411,21 +587,32 @@ export class PublishedDataApi extends BaseLoopBackApi {
    */
   public register(id: any, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/register";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/PublishedData/:id/register";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
   /**
    * <em>
-         * (The remote method definition does not provide any description.)
-         * </em>
+   * (The remote method definition does not provide any description.)
+   * </em>
    *
    * @param {object} data Request data.
    *
@@ -443,16 +630,27 @@ export class PublishedDataApi extends BaseLoopBackApi {
    */
   public resync(id: any, data: any, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/resync";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/PublishedData/:id/resync";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 
@@ -474,18 +672,33 @@ export class PublishedDataApi extends BaseLoopBackApi {
    * This usually means the response is a `PublishedData` object.)
    * </em>
    */
-  public createManyDatasets(id: any, data: any[] = [], customHeaders?: Function): Observable<any> {
+  public createManyDatasets(
+    id: any,
+    data: any[] = [],
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/PublishedData/:id/datasets";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/PublishedData/:id/datasets";
     let _routeParams: any = {
-      id: id
+      id: id,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 

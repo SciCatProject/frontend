@@ -17,23 +17,21 @@ describe("LogbooksDetailComponent", () => {
   let component: LogbooksDetailComponent;
   let fixture: ComponentFixture<LogbooksDetailComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        imports: [
-          MatCardModule,
-          MatDividerModule,
-          MatExpansionModule,
-          MatIconModule,
-          MatPaginatorModule,
-          MatTableModule,
-          LinkyModule,
-        ],
-        declarations: [LogbooksDetailComponent],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [
+        MatCardModule,
+        MatDividerModule,
+        MatExpansionModule,
+        MatIconModule,
+        MatPaginatorModule,
+        MatTableModule,
+        LinkyModule,
+      ],
+      declarations: [LogbooksDetailComponent],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LogbooksDetailComponent);

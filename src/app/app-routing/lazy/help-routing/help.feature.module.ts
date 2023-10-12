@@ -3,9 +3,6 @@ import { HelpRoutingModule } from "./help.routing.module";
 import { HelpModule } from "help/help.module";
 
 @NgModule({
-  imports: [
-    HelpModule,
-    HelpRoutingModule
-  ]
+  imports: [HelpModule, HelpRoutingModule],
 })
 export class HelpFeatureModule {}

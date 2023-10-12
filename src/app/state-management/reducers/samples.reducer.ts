@@ -12,7 +12,7 @@ const reducer = createReducer(
     (state, { samples }): SampleState => ({
       ...state,
       samples,
-    })
+    }),
   ),
 
   on(
@@ -20,7 +20,7 @@ const reducer = createReducer(
     (state, { attachments }): SampleState => ({
       ...state,
       attachments,
-    })
+    }),
   ),
 
   on(
@@ -28,12 +28,12 @@ const reducer = createReducer(
     (state, { count }): SampleState => ({
       ...state,
       samplesCount: count,
-    })
+    }),
   ),
 
   on(
     fromActions.fetchMetadataKeysCompleteAction,
-    (state, { metadataKeys }): SampleState => ({ ...state, metadataKeys })
+    (state, { metadataKeys }): SampleState => ({ ...state, metadataKeys }),
   ),
 
   on(
@@ -41,7 +41,7 @@ const reducer = createReducer(
     (state, { sample }): SampleState => ({
       ...state,
       currentSample: sample,
-    })
+    }),
   ),
 
   on(
@@ -49,12 +49,12 @@ const reducer = createReducer(
     (state, { datasets }): SampleState => ({
       ...state,
       datasets,
-    })
+    }),
   ),
 
   on(
     fromActions.fetchSampleDatasetsCountCompleteAction,
-    (state, { count }): SampleState => ({ ...state, datasetsCount: count })
+    (state, { count }): SampleState => ({ ...state, datasetsCount: count }),
   ),
 
   on(fromActions.addSampleCompleteAction, (state, { sample }): SampleState => {
@@ -68,7 +68,7 @@ const reducer = createReducer(
     (state, { sample }): SampleState => ({
       ...state,
       currentSample: sample,
-    })
+    }),
   ),
 
   on(
@@ -76,13 +76,13 @@ const reducer = createReducer(
     (state, { attachment }): SampleState => {
       if (state.currentSample) {
         const attachments = state.attachments.filter(
-          (existingAttachment) => existingAttachment.id !== attachment.id
+          (existingAttachment) => existingAttachment.id !== attachment.id,
         );
         attachments.push(attachment);
         return { ...state, attachments };
       }
       return { ...state };
-    }
+    },
   ),
 
   on(
@@ -90,13 +90,13 @@ const reducer = createReducer(
     (state, { attachment }): SampleState => {
       if (state.currentSample) {
         const attachments = state.attachments.filter(
-          (existingAttachment) => existingAttachment.id !== attachment.id
+          (existingAttachment) => existingAttachment.id !== attachment.id,
         );
         attachments.push(attachment);
         return { ...state, attachments };
       }
       return { ...state };
-    }
+    },
   ),
 
   on(
@@ -104,12 +104,12 @@ const reducer = createReducer(
     (state, { attachmentId }): SampleState => {
       if (state.currentSample) {
         const attachments = state.attachments.filter(
-          (attachment) => attachment.id !== attachmentId
+          (attachment) => attachment.id !== attachmentId,
         );
         return { ...state, attachments };
       }
       return { ...state };
-    }
+    },
   ),
 
   on(fromActions.changePageAction, (state, { page, limit }): SampleState => {
@@ -124,7 +124,7 @@ const reducer = createReducer(
       const skip = page * limit;
       const datasetFilters = { ...state.datasetFilters, skip, limit };
       return { ...state, datasetFilters };
-    }
+    },
   ),
 
   on(
@@ -133,7 +133,7 @@ const reducer = createReducer(
       const sortField = column + (direction ? ":" + direction : "");
       const sampleFilters = { ...state.sampleFilters, sortField, skip: 0 };
       return { ...state, sampleFilters };
-    }
+    },
   ),
 
   on(fromActions.prefillFiltersAction, (state, { values }): SampleState => {
@@ -146,7 +146,7 @@ const reducer = createReducer(
     (state, { text }): SampleState => ({
       ...state,
       sampleFilters: { ...state.sampleFilters, text },
-    })
+    }),
   ),
 
   on(
@@ -159,7 +159,7 @@ const reducer = createReducer(
         characteristics: [...currentCharacteristics, characteristic],
       };
       return { ...state, sampleFilters };
-    }
+    },
   ),
 
   on(
@@ -170,7 +170,7 @@ const reducer = createReducer(
       characteristics.splice(index, 1);
       const sampleFilters = { ...currentFilters, characteristics };
       return { ...state, sampleFilters };
-    }
+    },
   ),
 
   on(fromActions.clearSamplesStateAction, () => ({ ...initialSampleState })),
@@ -178,12 +178,12 @@ const reducer = createReducer(
   on(fromActions.clearCurrentSampleStateAction, (state) => ({
     ...state,
     currentSample: undefined,
-  }))
+  })),
 );
 
 export const samplesReducer = (
   state: SampleState | undefined,
-  action: Action
+  action: Action,
 ) => {
   if (action.type.indexOf("[Sample]") !== -1) {
     console.log("Action came in! " + action.type);

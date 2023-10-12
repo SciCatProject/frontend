@@ -17,8 +17,7 @@ import { SciCatDataSource } from "shared/services/scicat.datasource";
   templateUrl: "./proposal-dashboard.component.html",
   styleUrls: ["./proposal-dashboard.component.scss"],
 })
-export class ProposalDashboardComponent
-  implements OnDestroy, AfterViewChecked {
+export class ProposalDashboardComponent implements OnDestroy, AfterViewChecked {
   columns: Column[] = [
     {
       id: "proposalId",
@@ -82,13 +81,13 @@ export class ProposalDashboardComponent
     private cdRef: ChangeDetectorRef,
     private dataService: ScicatDataService,
     private exportService: ExportExcelService,
-    private router: Router
+    private router: Router,
   ) {
     this.dataSource = new SciCatDataSource(
       this.appConfigService,
       this.dataService,
       this.exportService,
-      this.tableDefinition
+      this.tableDefinition,
     );
   }
 

@@ -8,28 +8,22 @@ import {
 } from "./table.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 
-import {
-  MatCheckboxChange,
-} from "@angular/material/checkbox";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 import { TableModule } from "./table.module";
 
 describe("TableComponent", () => {
   let component: TableComponent;
   let fixture: ComponentFixture<TableComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [TableComponent],
-        imports: [
-          TableModule
-        ],
-        providers: [DatePipe],
-      });
-      TestBed.compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [TableComponent],
+      imports: [TableModule],
+      providers: [DatePipe],
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TableComponent);

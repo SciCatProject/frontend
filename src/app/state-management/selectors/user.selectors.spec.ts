@@ -74,7 +74,7 @@ describe("User Selectors", () => {
   describe("selectCurrentUser", () => {
     it("should select currentUser", () => {
       expect(
-        fromSelectors.selectCurrentUser.projector(initialUserState)
+        fromSelectors.selectCurrentUser.projector(initialUserState),
       ).toEqual(user);
     });
   });
@@ -83,8 +83,8 @@ describe("User Selectors", () => {
     it("should select the id from currentUser", () => {
       expect(
         fromSelectors.selectCurrentUserId.projector(
-          initialUserState.currentUser
-        )
+          initialUserState.currentUser,
+        ),
       ).toEqual("testId");
     });
   });
@@ -92,7 +92,7 @@ describe("User Selectors", () => {
   describe("selectProfile", () => {
     it("should select profile", () => {
       expect(fromSelectors.selectProfile.projector(initialUserState)).toEqual(
-        userIdentity.profile
+        userIdentity.profile,
       );
     });
   });
@@ -102,8 +102,8 @@ describe("User Selectors", () => {
       expect(
         fromSelectors.selectCurrentUserName.projector(
           initialUserState.profile,
-          initialUserState.currentUser
-        )
+          initialUserState.currentUser,
+        ),
       ).toEqual("testName");
     });
   });
@@ -111,7 +111,7 @@ describe("User Selectors", () => {
   describe("selectThumbnailPhoto", () => {
     it("should return a thumbnail photo string if it exists", () => {
       expect(
-        fromSelectors.selectThumbnailPhoto.projector(initialUserState.profile)
+        fromSelectors.selectThumbnailPhoto.projector(initialUserState.profile),
       ).toEqual("data");
     });
   });
@@ -121,18 +121,14 @@ describe("User Selectors", () => {
       const username = initialUserState.currentUser
         ? initialUserState.currentUser.username
         : "";
-      expect(
-        fromSelectors.selectIsAdmin.projector(
-          username
-        )
-      ).toEqual(false);
+      expect(fromSelectors.selectIsAdmin.projector(username)).toEqual(false);
     });
   });
 
   describe("selectScicatToken", () => {
     it("should select scicatToken", () => {
       expect(
-        fromSelectors.selectScicatToken.projector(initialUserState)
+        fromSelectors.selectScicatToken.projector(initialUserState),
       ).toEqual(scicatToken.id);
     });
   });
@@ -140,7 +136,7 @@ describe("User Selectors", () => {
   describe("selectUserMessage", () => {
     it("should select message", () => {
       expect(fromSelectors.selectUserMessage.projector(initialUserState)).toBe(
-        undefined
+        undefined,
       );
     });
   });
@@ -148,7 +144,7 @@ describe("User Selectors", () => {
   describe("selectSettings", () => {
     it("should select settings", () => {
       expect(fromSelectors.selectSettings.projector(initialUserState)).toEqual(
-        settings
+        settings,
       );
     });
   });
@@ -156,7 +152,7 @@ describe("User Selectors", () => {
   describe("selectTapeCopies", () => {
     it("should select tapeCopies from settings", () => {
       expect(
-        fromSelectors.selectTapeCopies.projector(initialUserState.settings)
+        fromSelectors.selectTapeCopies.projector(initialUserState.settings),
       ).toEqual("one");
     });
   });
@@ -164,7 +160,7 @@ describe("User Selectors", () => {
   describe("selectTheme", () => {
     it("it should select darkTheme from settings", () => {
       expect(
-        fromSelectors.selectTheme.projector(initialUserState.settings)
+        fromSelectors.selectTheme.projector(initialUserState.settings),
       ).toEqual(false);
     });
   });
@@ -172,7 +168,7 @@ describe("User Selectors", () => {
   describe("selectIsLoggingIn", () => {
     it("should select isLoggingIn", () => {
       expect(
-        fromSelectors.selectIsLoggingIn.projector(initialUserState)
+        fromSelectors.selectIsLoggingIn.projector(initialUserState),
       ).toEqual(false);
     });
   });
@@ -180,7 +176,7 @@ describe("User Selectors", () => {
   describe("selectIsLoggedIn", () => {
     it("should select isLoggedIn", () => {
       expect(
-        fromSelectors.selectIsLoggedIn.projector(initialUserState)
+        fromSelectors.selectIsLoggedIn.projector(initialUserState),
       ).toEqual(false);
     });
   });
@@ -188,7 +184,7 @@ describe("User Selectors", () => {
   describe("selectIsLoading", () => {
     it("should select isLoading", () => {
       expect(fromSelectors.selectIsLoading.projector(initialUserState)).toEqual(
-        false
+        false,
       );
     });
   });
@@ -206,8 +202,8 @@ describe("User Selectors", () => {
       expect(
         fromSelectors.selectSampleDialogPageViewModel.projector(
           initialUserState.currentUser,
-          initialUserState.profile
-        )
+          initialUserState.profile,
+        ),
       ).toEqual({ user, profile: userIdentity.profile });
     });
   });
@@ -217,8 +213,8 @@ describe("User Selectors", () => {
       expect(
         fromSelectors.selectLoginPageViewModel.projector(
           initialUserState.isLoggedIn,
-          initialUserState.isLoggingIn
-        )
+          initialUserState.isLoggingIn,
+        ),
       ).toEqual({ isLoggedIn: false, isLoggingIn: false });
     });
   });
@@ -230,8 +226,8 @@ describe("User Selectors", () => {
           initialUserState.currentUser,
           initialUserState.profile,
           initialUserState.scicatToken.id,
-          initialUserState.settings
-        )
+          initialUserState.settings,
+        ),
       ).toEqual({
         user,
         profile: userIdentity.profile,

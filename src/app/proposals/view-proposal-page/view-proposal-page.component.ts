@@ -61,7 +61,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private slicePipe: SlicePipe,
-    private store: Store
+    private store: Store,
   ) {}
 
   formatTableData(datasets: Dataset[]): TableData[] {
@@ -75,7 +75,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
         size: this.filesizePipe.transform(dataset.size),
         creationTime: this.datePipe.transform(
           dataset.creationTime,
-          "yyyy-MM-dd HH:mm"
+          "yyyy-MM-dd HH:mm",
         ),
         owner: dataset.owner,
         location: dataset.creationLocation,
@@ -86,10 +86,13 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
 
   onPageChange(event: PageChangeEvent) {
     this.store.dispatch(
-      changeDatasetsPageAction({ page: event.pageIndex, limit: event.pageSize })
+      changeDatasetsPageAction({
+        page: event.pageIndex,
+        limit: event.pageSize,
+      }),
     );
     this.store.dispatch(
-      fetchProposalDatasetsAction({ proposalId: this.proposal.proposalId })
+      fetchProposalDatasetsAction({ proposalId: this.proposal.proposalId }),
     );
   }
 
@@ -103,27 +106,24 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
       this.vm$.subscribe((vm) => {
         if (vm.proposal) {
           this.proposal = vm.proposal;
-
         }
-      })
+      }),
     );
 
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
         this.store.dispatch(fetchProposalAction({ proposalId: params.id }));
         this.store.dispatch(
-          fetchProposalDatasetsAction({ proposalId: params.id })
+          fetchProposalDatasetsAction({ proposalId: params.id }),
         );
-        this.store.dispatch(
-          fetchLogbookAction({ name: params.id  })
-        );
-      })
+        this.store.dispatch(fetchLogbookAction({ name: params.id }));
+      }),
     );
 
     this.subscriptions.push(
       this.vm$.subscribe((vm) => {
         this.tableData = this.formatTableData(vm.datasets);
-      })
+      }),
     );
   }
 

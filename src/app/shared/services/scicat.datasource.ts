@@ -30,7 +30,7 @@ export class SciCatDataSource implements DataSource<any> {
     private appConfigService: AppConfigService,
     private scicatdataService: ScicatDataService,
     private ete: ExportExcelService,
-    private tableDefinition: any
+    private tableDefinition: any,
   ) {
     this.appConfig = this.appConfigService.getConfig();
     this.url =
@@ -48,7 +48,7 @@ export class SciCatDataSource implements DataSource<any> {
       if (data.length > 0) {
         data.forEach((row: any) => {
           const rowSorted = this.columnsdef.map((col) =>
-            resolvePath(row, col.id, null)
+            resolvePath(row, col.id, null),
           );
           this.dataForExcel.push(Object.values(rowSorted));
         });
@@ -70,7 +70,7 @@ export class SciCatDataSource implements DataSource<any> {
     sortDirection = "asc",
     pageIndex = 0,
     pageSize = 10,
-    isFilesDashboard?: boolean
+    isFilesDashboard?: boolean,
   ) {
     this.loadingSubject.next(true);
 
@@ -98,11 +98,11 @@ export class SciCatDataSource implements DataSource<any> {
         sortDirection,
         pageIndex,
         pageSize,
-        isFilesDashboard
+        isFilesDashboard,
       )
       .pipe(
         catchError(() => of([])),
-        finalize(() => this.loadingSubject.next(false))
+        finalize(() => this.loadingSubject.next(false)),
       )
       .subscribe((data) => {
         // extend with unique field per row
@@ -118,7 +118,7 @@ export class SciCatDataSource implements DataSource<any> {
   loadExportData(
     filterExpressions?: any,
     sortField?: string,
-    sortDirection = "asc"
+    sortDirection = "asc",
   ) {
     this.loadingSubject.next(true);
     this.scicatdataService
@@ -135,11 +135,11 @@ export class SciCatDataSource implements DataSource<any> {
             sortField,
             sortDirection,
             0,
-            count
+            count,
           )
           .pipe(
             catchError(() => of([])),
-            finalize(() => this.loadingSubject.next(false))
+            finalize(() => this.loadingSubject.next(false)),
           )
           .subscribe((data) => {
             this.dataExportSubject.next(data);

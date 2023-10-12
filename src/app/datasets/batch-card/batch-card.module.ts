@@ -16,16 +16,10 @@ import { BatchCardComponent } from "./batch-card.component";
     MatCardModule,
     MatIconModule,
     RouterModule,
-    StoreModule.forFeature("datasets", datasetsReducer)
+    StoreModule.forFeature("datasets", datasetsReducer),
   ],
-  declarations: [
-    BatchCardComponent
-  ],
-  providers: [
-    ADAuthService,
-  ],
-  exports: [
-    BatchCardComponent,
-  ],
+  declarations: [BatchCardComponent],
+  providers: [ADAuthService],
+  exports: [BatchCardComponent],
 })
 export class BatchCardModule {}

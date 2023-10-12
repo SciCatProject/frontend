@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { FormBuilder } from "@angular/forms";
-import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { DateTime } from "luxon";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { Type } from "../base-classes/metadata-input-base";
@@ -15,15 +14,13 @@ describe("MetadataInputComponent", () => {
   let component: MetadataInputComponent;
   let fixture: ComponentFixture<MetadataInputComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [MetadataInputComponent],
-        imports: [ScientificMetadataTreeModule, BrowserAnimationsModule],
-        providers: [FormBuilder, FormatNumberPipe],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [MetadataInputComponent],
+      imports: [ScientificMetadataTreeModule, BrowserAnimationsModule],
+      providers: [FormBuilder, FormatNumberPipe],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MetadataInputComponent);
@@ -125,7 +122,7 @@ describe("MetadataInputComponent", () => {
       expect(component.metadataForm.get("type").value).toEqual(Type.date);
       expect(component.metadataForm.get("key").value).toEqual("date");
       expect(component.metadataForm.get("date").value).toEqual(
-        DateTime.fromISO(data.value).toLocal().toISO()
+        DateTime.fromISO(data.value).toLocal().toISO(),
       );
       expect(component.metadataForm.get("unit").disabled).toEqual(true);
     });

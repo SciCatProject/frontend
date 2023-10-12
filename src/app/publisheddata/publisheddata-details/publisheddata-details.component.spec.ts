@@ -27,36 +27,34 @@ describe("PublisheddataDetailsComponent", () => {
   let component: PublisheddataDetailsComponent;
   let fixture: ComponentFixture<PublisheddataDetailsComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [PublisheddataDetailsComponent],
-        imports: [
-          MatButtonModule,
-          MatCardModule,
-          MatIconModule,
-          NgxJsonViewerModule,
-          LinkyModule,
-          SharedScicatFrontendModule,
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [PublisheddataDetailsComponent],
+      imports: [
+        MatButtonModule,
+        MatCardModule,
+        MatIconModule,
+        NgxJsonViewerModule,
+        LinkyModule,
+        SharedScicatFrontendModule,
+      ],
+    });
+    TestBed.overrideComponent(PublisheddataDetailsComponent, {
+      set: {
+        providers: [
+          { provide: Store, useClass: MockStore },
+          { provide: Router, useClass: MockRouter },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: PublishedDataApi, useClass: MockPublishedDataApi },
+          {
+            provide: AppConfigService,
+            useValue: { getConfig },
+          },
         ],
-      });
-      TestBed.overrideComponent(PublisheddataDetailsComponent, {
-        set: {
-          providers: [
-            { provide: Store, useClass: MockStore },
-            { provide: Router, useClass: MockRouter },
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-            { provide: PublishedDataApi, useClass: MockPublishedDataApi },
-            {
-              provide: AppConfigService,
-              useValue: { getConfig },
-            },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PublisheddataDetailsComponent);

@@ -10,7 +10,7 @@ const reducer = createReducer(
     (state, { columns }): UserState => ({
       ...state,
       columns,
-    })
+    }),
   ),
 
   on(
@@ -19,7 +19,7 @@ const reducer = createReducer(
       ...state,
       isLoggingIn: true,
       isLoggedIn: false,
-    })
+    }),
   ),
 
   on(
@@ -30,7 +30,7 @@ const reducer = createReducer(
       accountType,
       isLoggingIn: false,
       isLoggedIn: true,
-    })
+    }),
   ),
   on(
     fromActions.loginFailedAction,
@@ -38,7 +38,7 @@ const reducer = createReducer(
       ...state,
       isLoggingIn: false,
       isLoggedIn: false,
-    })
+    }),
   ),
 
   on(
@@ -47,7 +47,7 @@ const reducer = createReducer(
       ...state,
       currentUser: user,
       isLoggedIn: true,
-    })
+    }),
   ),
 
   on(
@@ -55,7 +55,7 @@ const reducer = createReducer(
     (state, { userIdentity }): UserState => ({
       ...state,
       profile: userIdentity.profile,
-    })
+    }),
   ),
 
   on(
@@ -68,7 +68,7 @@ const reducer = createReducer(
       } else {
         return { ...state, settings };
       }
-    }
+    },
   ),
 
   on(
@@ -81,7 +81,7 @@ const reducer = createReducer(
       } else {
         return { ...state, settings };
       }
-    }
+    },
   ),
 
   on(
@@ -89,34 +89,34 @@ const reducer = createReducer(
     (state, { token }): UserState => ({
       ...state,
       scicatToken: token,
-    })
+    }),
   ),
 
   on(
     fromActions.logoutAction,
     (): UserState => ({
       ...initialUserState,
-    })
+    }),
   ),
 
   on(
     fromActions.logoutCompleteAction,
     (): UserState => ({
       ...initialUserState,
-    })
+    }),
   ),
 
   on(fromActions.addCustomColumnsAction, (state, { names }): UserState => {
     const existingColumns = [...state.columns];
 
     const standardColumns = existingColumns.filter(
-      (column) => column.type === "standard"
+      (column) => column.type === "standard",
     );
 
     let order = standardColumns.length;
 
     const enabledCustomColumns = existingColumns.filter(
-      (column) => column.type === "custom" && column.enabled
+      (column) => column.type === "custom" && column.enabled,
     );
 
     enabledCustomColumns.forEach((column) => {
@@ -125,7 +125,7 @@ const reducer = createReducer(
     });
 
     const enabledCustomColumnNames = enabledCustomColumns.map(
-      (column) => column.name
+      (column) => column.name,
     );
 
     const newColumns = names
@@ -158,7 +158,7 @@ const reducer = createReducer(
         }
       });
       return { ...state, columns };
-    }
+    },
   ),
   on(
     fromActions.deselectColumnAction,
@@ -170,11 +170,11 @@ const reducer = createReducer(
         }
       });
       return { ...state, columns };
-    }
+    },
   ),
   on(fromActions.deselectAllCustomColumnsAction, (state): UserState => {
     const customColumns = [...state.columns].filter(
-      (column) => column.type !== "standard"
+      (column) => column.type !== "standard",
     );
     customColumns.forEach((column) => (column.enabled = false));
     const customColumnNames = customColumns.map((column) => column.name);
@@ -190,14 +190,14 @@ const reducer = createReducer(
     (state, { message }): UserState => ({
       ...state,
       message,
-    })
+    }),
   ),
   on(
     fromActions.clearMessageAction,
     (state): UserState => ({
       ...state,
       message: initialUserState.message,
-    })
+    }),
   ),
 
   on(
@@ -205,7 +205,7 @@ const reducer = createReducer(
     (state, { settings }): UserState => ({
       ...state,
       settings,
-    })
+    }),
   ),
 
   on(
@@ -213,15 +213,15 @@ const reducer = createReducer(
     (state): UserState => ({
       ...state,
       isLoading: true,
-    })
+    }),
   ),
   on(
     fromActions.loadingCompleteAction,
     (state): UserState => ({
       ...state,
       isLoading: false,
-    })
-  )
+    }),
+  ),
 );
 
 export const userReducer = (state: UserState | undefined, action: Action) => {

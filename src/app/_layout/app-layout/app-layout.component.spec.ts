@@ -21,39 +21,37 @@ describe("AppLayoutComponent", () => {
     facility: "ESS",
   });
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [AppLayoutComponent, AppHeaderComponent],
-        imports: [
-          BreadcrumbModule,
-          MatMenuModule,
-          MatToolbarModule,
-          RouterTestingModule,
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [AppLayoutComponent, AppHeaderComponent],
+      imports: [
+        BreadcrumbModule,
+        MatMenuModule,
+        MatToolbarModule,
+        RouterTestingModule,
+      ],
+    });
+    TestBed.overrideComponent(AppHeaderComponent, {
+      set: {
+        providers: [
+          { provide: APP_CONFIG, useValue: { production: false } },
+          { provide: AppConfigService, useValue: { getConfig } },
         ],
-      });
-      TestBed.overrideComponent(AppHeaderComponent, {
-        set: {
-          providers: [
-            { provide: APP_CONFIG, useValue: { production: false } },
-            { provide: AppConfigService, useValue: { getConfig } },
-          ],
-        },
-      });
-      TestBed.overrideComponent(AppLayoutComponent, {
-        set: {
-          providers: [
-            { provide: AppConfigService, useValue: { getConfig } },
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-            { provide: Store, useClass: MockStore },
-            { provide: Router, useClass: MockRouter },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+      },
+    });
+    TestBed.overrideComponent(AppLayoutComponent, {
+      set: {
+        providers: [
+          { provide: AppConfigService, useValue: { getConfig } },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: Store, useClass: MockStore },
+          { provide: Router, useClass: MockRouter },
+        ],
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AppLayoutComponent);

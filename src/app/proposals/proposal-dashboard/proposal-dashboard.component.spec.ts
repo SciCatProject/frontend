@@ -6,7 +6,9 @@ import {
   MockAppConfigService,
   MockRouter,
   MockScicatDataSource,
-  MockStore,MockDatasetApi, MockHttp
+  MockStore,
+  MockDatasetApi,
+  MockHttp,
 } from "shared/MockStubs";
 import { ExportExcelService } from "shared/services/export-excel.service";
 import { Store, StoreModule } from "@ngrx/store";
@@ -28,7 +30,7 @@ describe("ProposalDashboardComponent", () => {
     new MockAppConfigService(null) as unknown as AppConfigService,
     null,
     null,
-    { collections: null, columns: null }
+    { collections: null, columns: null },
   );
 
   beforeEach(async () => {
@@ -37,16 +39,17 @@ describe("ProposalDashboardComponent", () => {
       imports: [
         ProposalsModule,
         EffectsModule.forRoot([]),
-        StoreModule.forRoot({}),BrowserAnimationsModule
+        StoreModule.forRoot({}),
+        BrowserAnimationsModule,
       ],
       providers: [
-        {provide: HttpClient, useClass: MockHttp},
+        { provide: HttpClient, useClass: MockHttp },
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
         { provide: AppConfigService, useValue: { getConfig } },
         { provide: ExportExcelService, useValue: {} },
         { provide: Router, useClass: MockRouter },
         { provide: Store, useClass: MockStore },
-        { provide: DatasetApi, useClass: MockDatasetApi},
+        { provide: DatasetApi, useClass: MockDatasetApi },
         {
           provide: LogbookApi,
           useValue: jasmine.createSpyObj("logbookApi", ["find", "findByName"]),

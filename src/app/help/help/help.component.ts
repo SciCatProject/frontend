@@ -19,9 +19,9 @@ export class HelpComponent implements OnInit {
     this.facility = this.appConfig.facility;
     this.ingestManual = this.appConfig.ingestManual;
     this.helpMessages = new HelpMessages(
-      this.appConfig.helpMessages?.gettingStarted, 
-      this.appConfig.helpMessages?.ingestManual
-      );
+      this.appConfig.helpMessages?.gettingStarted,
+      this.appConfig.helpMessages?.ingestManual,
+    );
     this.gettingStarted = this.appConfig.gettingStarted;
     this.shoppingCartEnabled = this.appConfig.shoppingCartEnabled;
   }

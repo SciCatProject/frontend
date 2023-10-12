@@ -31,7 +31,7 @@ import { MatChipsModule } from "@angular/material/chips";
 import { AppConfigService } from "app-config.service";
 
 const getConfig = () => ({
-  editSampleEnabled: true
+  editSampleEnabled: true,
 });
 
 describe("SampleDashboardComponent", () => {
@@ -44,35 +44,33 @@ describe("SampleDashboardComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        imports: [
-          FlexLayoutModule,
-          MatButtonModule,
-          MatCardModule,
-          MatChipsModule,
-          MatDialogModule,
-          MatIconModule,
-          MatTableModule,
-          StoreModule.forRoot({}),
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [
+        FlexLayoutModule,
+        MatButtonModule,
+        MatCardModule,
+        MatChipsModule,
+        MatDialogModule,
+        MatIconModule,
+        MatTableModule,
+        StoreModule.forRoot({}),
+      ],
+      declarations: [SampleDashboardComponent],
+      providers: [DatePipe],
+    });
+    TestBed.overrideComponent(SampleDashboardComponent, {
+      set: {
+        providers: [
+          { provide: AppConfigService, useValue: { getConfig } },
+          { provide: Router, useValue: router },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
         ],
-        declarations: [SampleDashboardComponent],
-        providers: [DatePipe],
-      });
-      TestBed.overrideComponent(SampleDashboardComponent, {
-        set: {
-          providers: [
-            { provide: AppConfigService, useValue: { getConfig } },
-            { provide: Router, useValue: router },
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SampleDashboardComponent);
@@ -117,7 +115,7 @@ describe("SampleDashboardComponent", () => {
         {
           width: "250px",
           data: { name: component.name, description: component.description },
-        }
+        },
       );
     });
   });
@@ -131,7 +129,7 @@ describe("SampleDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setTextFilterAction({ text: query })
+        setTextFilterAction({ text: query }),
       );
     });
   });
@@ -149,7 +147,7 @@ describe("SampleDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        changePageAction({ page: event.pageIndex, limit: event.pageSize })
+        changePageAction({ page: event.pageIndex, limit: event.pageSize }),
       );
     });
   });
@@ -166,7 +164,10 @@ describe("SampleDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        sortByColumnAction({ column: event.active, direction: event.direction })
+        sortByColumnAction({
+          column: event.active,
+          direction: event.direction,
+        }),
       );
     });
   });
@@ -179,7 +180,7 @@ describe("SampleDashboardComponent", () => {
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
       expect(router.navigateByUrl).toHaveBeenCalledWith(
-        "/samples/" + encodeURIComponent(sample.sampleId)
+        "/samples/" + encodeURIComponent(sample.sampleId),
       );
     });
   });

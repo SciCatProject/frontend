@@ -21,36 +21,34 @@ describe("DatafilesComponent", () => {
 
   const getConfig = () => ({});
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        imports: [
-          MatButtonModule,
-          MatIconModule,
-          MatTableModule,
-          PipesModule,
-          ReactiveFormsModule,
-          MatDialogModule,
-          RouterModule,
-          RouterModule.forRoot([]),
-          StoreModule.forRoot({}),
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [
+        MatButtonModule,
+        MatIconModule,
+        MatTableModule,
+        PipesModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        RouterModule,
+        RouterModule.forRoot([]),
+        StoreModule.forRoot({}),
+      ],
+      declarations: [DatafilesComponent],
+    });
+    TestBed.overrideComponent(DatafilesComponent, {
+      set: {
+        providers: [
+          { provide: UserApi, useClass: MockUserApi },
+          { provide: MatDialogRef, useClass: MockMatDialogRef },
+          { provide: AppConfigService, useValue: { getConfig } },
+          { provide: UserApi, useClass: MockUserApi },
         ],
-        declarations: [DatafilesComponent],
-      });
-      TestBed.overrideComponent(DatafilesComponent, {
-        set: {
-          providers: [
-            { provide: UserApi, useClass: MockUserApi },
-            { provide: MatDialogRef, useClass: MockMatDialogRef },
-            { provide: AppConfigService, useValue: { getConfig } },
-            { provide: UserApi, useClass: MockUserApi },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatafilesComponent);

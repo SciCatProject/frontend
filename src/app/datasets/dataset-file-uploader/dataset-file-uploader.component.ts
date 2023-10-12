@@ -33,7 +33,7 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private ownershipService: OwnershipService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -44,22 +44,22 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
           this.ownershipService.checkDatasetAccess(
             dataset,
             this.store,
-            this.router
+            this.router,
           );
         }
-      })
+      }),
     );
     this.subscriptions.push(
       this.store.select(selectCurrentUser).subscribe((user) => {
         if (user) {
           this.user = user;
         }
-      })
+      }),
     );
     this.subscriptions.push(
       this.store.select(selectCurrentAttachments).subscribe((attachments) => {
         this.attachments = attachments;
-      })
+      }),
     );
   }
   onFileUploaderFilePicked(file: PickedFile) {
@@ -82,14 +82,14 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
           datasetId: this.dataset.pid,
           attachmentId: event.attachmentId,
           caption: event.caption,
-        })
+        }),
       );
     }
   }
   deleteAttachment(attachmentId: string) {
     if (this.dataset) {
       this.store.dispatch(
-        removeAttachmentAction({ datasetId: this.dataset.pid, attachmentId })
+        removeAttachmentAction({ datasetId: this.dataset.pid, attachmentId }),
       );
     }
   }

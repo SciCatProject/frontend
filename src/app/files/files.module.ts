@@ -19,6 +19,6 @@ import { FilesDashboardComponent } from "./files-dashboard/files-dashboard.compo
     MatIconModule,
     SharedScicatFrontendModule,
   ],
-  exports: [FilesDashboardComponent]
+  exports: [FilesDashboardComponent],
 })
-export class FilesModule { }
+export class FilesModule {}

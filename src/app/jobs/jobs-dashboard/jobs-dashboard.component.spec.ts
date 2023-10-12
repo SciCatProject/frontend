@@ -35,30 +35,28 @@ describe("JobsDashboardComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [JobsDashboardComponent],
-        imports: [
-          FlexLayoutModule,
-          MatButtonToggleModule,
-          MatCardModule,
-          MatIconModule,
-          SharedScicatFrontendModule,
-          BrowserAnimationsModule,
-          StoreModule.forRoot({}),
-        ],
-        providers: [DatePipe],
-      });
-      TestBed.overrideComponent(JobsDashboardComponent, {
-        set: {
-          providers: [{ provide: Router, useValue: router }],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [JobsDashboardComponent],
+      imports: [
+        FlexLayoutModule,
+        MatButtonToggleModule,
+        MatCardModule,
+        MatIconModule,
+        SharedScicatFrontendModule,
+        BrowserAnimationsModule,
+        StoreModule.forRoot({}),
+      ],
+      providers: [DatePipe],
+    });
+    TestBed.overrideComponent(JobsDashboardComponent, {
+      set: {
+        providers: [{ provide: Router, useValue: router }],
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(JobsDashboardComponent);
@@ -108,7 +106,7 @@ describe("JobsDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setJobViewModeAction({ mode: viewMode })
+        setJobViewModeAction({ mode: viewMode }),
       );
     });
 
@@ -121,7 +119,7 @@ describe("JobsDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setJobViewModeAction({ mode: viewMode })
+        setJobViewModeAction({ mode: viewMode }),
       );
     });
   });
@@ -139,7 +137,7 @@ describe("JobsDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        changePageAction({ page: event.pageIndex, limit: event.pageSize })
+        changePageAction({ page: event.pageIndex, limit: event.pageSize }),
       );
     });
   });
@@ -152,7 +150,7 @@ describe("JobsDashboardComponent", () => {
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
       expect(router.navigateByUrl).toHaveBeenCalledWith(
-        "/user/jobs/" + encodeURIComponent(job.id)
+        "/user/jobs/" + encodeURIComponent(job.id),
       );
     });
   });

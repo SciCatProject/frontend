@@ -22,7 +22,10 @@ import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table
 import { provideMockStore } from "@ngrx/store/testing";
 import { selectSelectedDatasets } from "state-management/selectors/datasets.selectors";
 import { TableColumn } from "state-management/models";
-import { selectColumns, selectIsLoggedIn } from "state-management/selectors/user.selectors";
+import {
+  selectColumns,
+  selectIsLoggedIn,
+} from "state-management/selectors/user.selectors";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatSidenav, MatSidenavModule } from "@angular/material/sidenav";
 import { MatCheckboxChange } from "@angular/material/checkbox";
@@ -60,42 +63,40 @@ describe("DashboardComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        imports: [
-          BrowserAnimationsModule,
-          MatCardModule,
-          MatDialogModule,
-          MatIconModule,
-          MatSidenavModule,
-          StoreModule.forRoot({}),
-        ],
-        declarations: [DashboardComponent, MatSidenav],
-        providers: [
-          provideMockStore({
-            selectors: [
-              { selector: selectSelectedDatasets, value: [] },
-              { selector: selectColumns, value: [] },
-              { selector: selectIsLoggedIn, value: false },
-            ],
-          }),
-        ],
-      });
-      TestBed.overrideComponent(DashboardComponent, {
-        set: {
-          providers: [
-            { provide: AppConfigService, useValue: { getConfig } },
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-            { provide: MatDialog, useClass: MockMatDialog },
-            { provide: Router, useValue: router },
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [
+        BrowserAnimationsModule,
+        MatCardModule,
+        MatDialogModule,
+        MatIconModule,
+        MatSidenavModule,
+        StoreModule.forRoot({}),
+      ],
+      declarations: [DashboardComponent, MatSidenav],
+      providers: [
+        provideMockStore({
+          selectors: [
+            { selector: selectSelectedDatasets, value: [] },
+            { selector: selectColumns, value: [] },
+            { selector: selectIsLoggedIn, value: false },
           ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+        }),
+      ],
+    });
+    TestBed.overrideComponent(DashboardComponent, {
+      set: {
+        providers: [
+          { provide: AppConfigService, useValue: { getConfig } },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: MatDialog, useClass: MockMatDialog },
+          { provide: Router, useValue: router },
+        ],
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DashboardComponent);
@@ -176,7 +177,7 @@ describe("DashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        selectColumnAction({ name: column.name, columnType: column.type })
+        selectColumnAction({ name: column.name, columnType: column.type }),
       );
     });
 
@@ -196,7 +197,7 @@ describe("DashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        deselectColumnAction({ name: column.name, columnType: column.type })
+        deselectColumnAction({ name: column.name, columnType: column.type }),
       );
     });
   });
@@ -208,7 +209,7 @@ describe("DashboardComponent", () => {
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
       expect(router.navigateByUrl).toHaveBeenCalledWith(
-        "/datasets/" + encodeURIComponent(dataset.pid)
+        "/datasets/" + encodeURIComponent(dataset.pid),
       );
     });
   });
@@ -281,11 +282,15 @@ describe("DashboardComponent", () => {
       selectIsLoggedIn.setResult(true);
       component.updateColumnSubscription();
 
-      component.tableColumns$.subscribe(result => expect(result.length).toEqual(2));
+      component.tableColumns$.subscribe((result) =>
+        expect(result.length).toEqual(2),
+      );
 
       selectIsLoggedIn.setResult(false);
       component.updateColumnSubscription();
-      component.tableColumns$.subscribe(result => expect(result).toEqual([testColumn]));
+      component.tableColumns$.subscribe((result) =>
+        expect(result).toEqual([testColumn]),
+      );
     });
   });
 });

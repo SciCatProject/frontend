@@ -4,6 +4,6 @@ import { ErrorPageComponent } from "./error-page.component";
 @NgModule({
   imports: [],
   declarations: [ErrorPageComponent],
-  exports: [ErrorPageComponent]
+  exports: [ErrorPageComponent],
 })
 export class ErrorPageModule {}

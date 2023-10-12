@@ -1,19 +1,17 @@
 /* eslint-disable */
-import {
-  User
-} from '../index';
+import { User } from "../index";
 
 declare var Object: any;
 export interface UserCredentialInterface {
-  "provider"?: string;
-  "authScheme"?: string;
-  "externalId"?: string;
-  "profile"?: any;
-  "credentials"?: any;
-  "created"?: Date;
-  "modified"?: Date;
-  "id"?: any;
-  "userId"?: any;
+  provider?: string;
+  authScheme?: string;
+  externalId?: string;
+  profile?: any;
+  credentials?: any;
+  created?: Date;
+  modified?: Date;
+  id?: any;
+  userId?: any;
   user?: User;
 }
 
@@ -39,75 +37,75 @@ export class UserCredential implements UserCredentialInterface {
     return "UserCredential";
   }
   /**
-  * @method factory
-  * @author Jonathan Casarrubias
-  * @license MIT
-  * This method creates an instance of UserCredential for dynamic purposes.
-  **/
-  public static factory(data: UserCredentialInterface): UserCredential{
+   * @method factory
+   * @author Jonathan Casarrubias
+   * @license MIT
+   * This method creates an instance of UserCredential for dynamic purposes.
+   **/
+  public static factory(data: UserCredentialInterface): UserCredential {
     return new UserCredential(data);
   }
   /**
-  * @method getModelDefinition
-  * @author Julien Ledun
-  * @license MIT
-  * This method returns an object that represents some of the model
-  * definitions.
-  **/
+   * @method getModelDefinition
+   * @author Julien Ledun
+   * @license MIT
+   * This method returns an object that represents some of the model
+   * definitions.
+   **/
   public static getModelDefinition() {
     return {
-      name: 'UserCredential',
-      plural: 'UserCredentials',
-      path: 'UserCredentials',
-      idName: 'id',
+      name: "UserCredential",
+      plural: "UserCredentials",
+      path: "UserCredentials",
+      idName: "id",
       properties: {
-        "provider": {
-          name: 'provider',
-          type: 'string'
+        provider: {
+          name: "provider",
+          type: "string",
         },
-        "authScheme": {
-          name: 'authScheme',
-          type: 'string'
+        authScheme: {
+          name: "authScheme",
+          type: "string",
         },
-        "externalId": {
-          name: 'externalId',
-          type: 'string'
+        externalId: {
+          name: "externalId",
+          type: "string",
         },
-        "profile": {
-          name: 'profile',
-          type: 'any'
+        profile: {
+          name: "profile",
+          type: "any",
         },
-        "credentials": {
-          name: 'credentials',
-          type: 'any'
+        credentials: {
+          name: "credentials",
+          type: "any",
         },
-        "created": {
-          name: 'created',
-          type: 'Date'
+        created: {
+          name: "created",
+          type: "Date",
         },
-        "modified": {
-          name: 'modified',
-          type: 'Date'
+        modified: {
+          name: "modified",
+          type: "Date",
         },
-        "id": {
-          name: 'id',
-          type: 'any'
+        id: {
+          name: "id",
+          type: "any",
         },
-        "userId": {
-          name: 'userId',
-          type: 'any'
+        userId: {
+          name: "userId",
+          type: "any",
         },
       },
       relations: {
         user: {
-          name: 'user',
-          type: 'User',
-          model: 'User',
-          relationType: 'belongsTo',
-                  keyFrom: 'userId',
-          keyTo: 'id'
+          name: "user",
+          type: "User",
+          model: "User",
+          relationType: "belongsTo",
+          keyFrom: "userId",
+          keyTo: "id",
         },
-      }
-    }
+      },
+    };
   }
 }

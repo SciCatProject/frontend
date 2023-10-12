@@ -59,7 +59,7 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
           strictStateSerializability: false,
           strictActionSerializability: false,
         },
-      }
+      },
     ),
     extModules,
     RouterModule.forRoot(routes, {

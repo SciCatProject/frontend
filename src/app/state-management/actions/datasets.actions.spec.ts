@@ -757,7 +757,7 @@ describe("Dataset Actions", () => {
 
   describe("setPidTermsFilterAction", () => {
     it("should create an action", () => {
-      const pid = {"$regex": "1"};
+      const pid = { $regex: "1" };
       const action = fromActions.setPidTermsFilterAction({ pid });
       expect({ ...action }).toEqual({ type: "[Dataset] Set Text Filter", pid });
     });

@@ -1,20 +1,20 @@
 import {
   DatasetState,
-  initialDatasetState
+  initialDatasetState,
 } from "state-management/state/datasets.store";
 import { initialUserState, UserState } from "state-management/state/user.store";
 import { initialJobsState, JobsState } from "state-management/state/jobs.store";
 import {
   initialPolicyState,
-  PolicyState
+  PolicyState,
 } from "state-management/state/policies.store";
 import {
   initialSampleState,
-  SampleState
+  SampleState,
 } from "state-management/state/samples.store";
 import {
   PublishedDataState,
-  initialPublishedDataState
+  initialPublishedDataState,
 } from "./published-data.store";
 import { InstrumentState, initialInstrumentState } from "./instruments.store";
 
@@ -35,5 +35,5 @@ export const initialState: AppState = {
   policies: initialPolicyState,
   samples: initialSampleState,
   publishedData: initialPublishedDataState,
-  instruments: initialInstrumentState
+  instruments: initialInstrumentState,
 };

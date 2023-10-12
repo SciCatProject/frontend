@@ -15,26 +15,24 @@ describe("ProposalsDetailComponent", () => {
   let component: ProposalDetailComponent;
   let fixture: ComponentFixture<ProposalDetailComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        imports: [
-          MatButtonModule,
-          MatCardModule,
-          MatIconModule,
-          NgxJsonViewerModule,
-        ],
-        declarations: [ProposalDetailComponent],
-      });
-      TestBed.overrideComponent(ProposalDetailComponent, {
-        set: {
-          providers: [{ provide: AppConfigService, useValue: { getConfig } }],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [
+        MatButtonModule,
+        MatCardModule,
+        MatIconModule,
+        NgxJsonViewerModule,
+      ],
+      declarations: [ProposalDetailComponent],
+    });
+    TestBed.overrideComponent(ProposalDetailComponent, {
+      set: {
+        providers: [{ provide: AppConfigService, useValue: { getConfig } }],
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ProposalDetailComponent);

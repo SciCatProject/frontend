@@ -1,7 +1,10 @@
 import { FlatTreeControl } from "@angular/cdk/tree";
 import { DatePipe } from "@angular/common";
 import { Component } from "@angular/core";
-import { MatTreeFlatDataSource, MatTreeFlattener } from "@angular/material/tree";
+import {
+  MatTreeFlatDataSource,
+  MatTreeFlattener,
+} from "@angular/material/tree";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
 import { DateTimeService } from "shared/services/date-time.service";
@@ -23,7 +26,7 @@ export class FlatNode {
 }
 @Component({
   template: "",
-  providers: [DatePipe]
+  providers: [DatePipe],
 })
 export class TreeBaseComponent {
   treeControl: FlatTreeControl<FlatNode>;
@@ -83,14 +86,20 @@ export class TreeBaseComponent {
     return node.visible;
   }
   showAllNodes() {
-    this.treeControl.dataNodes.forEach((node: FlatNode) => node.visible = true);
+    this.treeControl.dataNodes.forEach(
+      (node: FlatNode) => (node.visible = true),
+    );
   }
   hideAllNodes() {
-    this.treeControl.dataNodes.forEach((node: FlatNode) => node.visible = false);
+    this.treeControl.dataNodes.forEach(
+      (node: FlatNode) => (node.visible = false),
+    );
   }
   performFilter(filterText: string) {
     filterText = filterText.toLowerCase();
-    const filteredNodes = this.treeControl.dataNodes.filter((node: FlatNode) => node.key.toLowerCase().indexOf(filterText) !== -1);
+    const filteredNodes = this.treeControl.dataNodes.filter(
+      (node: FlatNode) => node.key.toLowerCase().indexOf(filterText) !== -1,
+    );
     this.hideAllNodes();
     filteredNodes.forEach((node: FlatNode) => {
       node.visible = true;
@@ -174,13 +183,13 @@ export class TreeBaseComponent {
   removeNode(parentNode: TreeNode, nestedNode: TreeNode) {
     if (parentNode) {
       // remove node from list of children
-      parentNode.children = parentNode.children.filter(e => e !== nestedNode);
+      parentNode.children = parentNode.children.filter((e) => e !== nestedNode);
       if (parentNode.children.length === 0) {
         parentNode.value = "";
       }
     } else {
       // node is on the root level
-      this.dataTree = this.dataTree.filter(e => e !== nestedNode);
+      this.dataTree = this.dataTree.filter((e) => e !== nestedNode);
     }
     this.dataSource.data = this.dataTree;
   }
@@ -192,7 +201,6 @@ export class TreeBaseComponent {
     }
   }
   getValueRepresentation(node: FlatNode) {
-
     if (node.value === null) {
       return "null";
     }
@@ -203,12 +211,17 @@ export class TreeBaseComponent {
       return "[ ]";
     }
     if (node.value === "") {
-      return "\"\"";
+      return '""'; // eslint-disable-line @typescript-eslint/quotes
     }
     if (node.unit) {
-      return `${this.formatNumberPipe.transform(node.value)} (${this.prettyUnitPipe.transform(node.unit)})`;
+      return `${this.formatNumberPipe.transform(
+        node.value,
+      )} (${this.prettyUnitPipe.transform(node.unit)})`;
     }
-    if (typeof node.value === "string" && this.dateTimeService.isISODateTime(node.value)) {
+    if (
+      typeof node.value === "string" &&
+      this.dateTimeService.isISODateTime(node.value)
+    ) {
       return this.datePipe.transform(node.value, "yyyy-MM-dd, HH:mm:ss zzzz");
     }
     return node.value;

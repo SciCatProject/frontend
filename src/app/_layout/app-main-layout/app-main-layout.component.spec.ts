@@ -15,30 +15,28 @@ describe("AppMainLayoutComponent", () => {
   let component: AppMainLayoutComponent;
   let fixture: ComponentFixture<AppMainLayoutComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [AppMainLayoutComponent, AppHeaderComponent],
-        imports: [
-          BreadcrumbModule,
-          MatMenuModule,
-          MatToolbarModule,
-          RouterTestingModule,
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [AppMainLayoutComponent, AppHeaderComponent],
+      imports: [
+        BreadcrumbModule,
+        MatMenuModule,
+        MatToolbarModule,
+        RouterTestingModule,
+      ],
+    });
+    TestBed.overrideComponent(AppMainLayoutComponent, {
+      set: {
+        providers: [
+          { provide: Store, useClass: MockStore },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: Router, useClass: MockRouter },
         ],
-      });
-      TestBed.overrideComponent(AppMainLayoutComponent, {
-        set: {
-          providers: [
-            { provide: Store, useClass: MockStore },
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-            { provide: Router, useClass: MockRouter },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AppMainLayoutComponent);

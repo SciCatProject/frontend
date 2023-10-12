@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import {filesize} from "filesize";
+import { filesize } from "filesize";
 
-@Pipe({name: "filesize"})
+@Pipe({ name: "filesize" })
 export class FileSizePipe implements PipeTransform {
   transform(value: number): any {
-    return filesize(value || 0, {round: 0, base: 2});
+    return filesize(value || 0, { round: 0, base: 2 });
   }
 }

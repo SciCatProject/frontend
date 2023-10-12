@@ -44,7 +44,8 @@ export interface LogbookData {
   styleUrls: ["./logbooks-dashboard.component.scss"],
 })
 export class LogbooksDashboardComponent
-  implements OnInit, OnDestroy, AfterViewChecked {
+  implements OnInit, OnDestroy, AfterViewChecked
+{
   vm$ = this.store.select(selectLogbooksDashboardPageViewModel);
 
   dataset: Dataset | undefined = undefined;
@@ -58,7 +59,7 @@ export class LogbooksDashboardComponent
     private route: ActivatedRoute,
     private router: Router,
     private store: Store,
-    private ownershipService: OwnershipService
+    private ownershipService: OwnershipService,
   ) {}
 
   applyRouterState(pid: string, filters: LogbookFilters) {
@@ -80,7 +81,11 @@ export class LogbooksDashboardComponent
     const { showBotMessages, showImages, showUserMessages } = filters;
 
     this.store.dispatch(
-      setDisplayFiltersAction({ showBotMessages, showImages, showUserMessages })
+      setDisplayFiltersAction({
+        showBotMessages,
+        showImages,
+        showUserMessages,
+      }),
     );
     this.store.dispatch(fetchDatasetLogbookAction({ pid }));
     this.applyRouterState(pid, filters);
@@ -88,7 +93,7 @@ export class LogbooksDashboardComponent
 
   onPageChange(pid: string, event: PageChangeEvent) {
     this.store.dispatch(
-      changePageAction({ page: event.pageIndex, limit: event.pageSize })
+      changePageAction({ page: event.pageIndex, limit: event.pageSize }),
     );
     this.store.dispatch(fetchDatasetLogbookAction({ pid }));
   }
@@ -100,18 +105,17 @@ export class LogbooksDashboardComponent
   }
 
   ngOnInit() {
-
     this.subscriptions.push(
       combineLatest([this.route.params, this.vm$])
         .pipe(
           map(([params, vm]) => [params, vm.filters]),
-          distinctUntilChanged(deepEqual)
+          distinctUntilChanged(deepEqual),
         )
         .subscribe(([{ pid }, filters]) => {
           if (pid) {
             this.applyRouterState(pid, filters as LogbookFilters);
           }
-        })
+        }),
     );
     this.subscriptions.push(
       this.store.select(selectCurrentDataset).subscribe((dataset) => {
@@ -121,21 +125,21 @@ export class LogbooksDashboardComponent
           this.ownershipService.checkDatasetAccess(
             dataset,
             this.store,
-            this.router
+            this.router,
           );
         }
-      })
+      }),
     );
     this.subscriptions.push(
       this.route.queryParams
         .pipe(
           map((params) => params.args as string),
           take(1),
-          map((args) => (args ? (JSON.parse(args) as LogbookFilters) : {}))
+          map((args) => (args ? (JSON.parse(args) as LogbookFilters) : {})),
         )
         .subscribe((filters) =>
-          this.store.dispatch(prefillFiltersAction({ values: filters }))
-        )
+          this.store.dispatch(prefillFiltersAction({ values: filters })),
+        ),
     );
   }
 

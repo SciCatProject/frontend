@@ -22,7 +22,10 @@ export class SearchParametersDialogComponent {
       Validators.required,
       Validators.minLength(9),
     ]),
-    rhs: new FormControl<string|number>("", [Validators.required, Validators.minLength(1)]),
+    rhs: new FormControl<string | number>("", [
+      Validators.required,
+      Validators.minLength(1),
+    ]),
     unit: new FormControl(""),
   });
 
@@ -30,25 +33,25 @@ export class SearchParametersDialogComponent {
     startWith(""),
     map((value: string) =>
       this.units.filter((unit) =>
-        unit.toLowerCase().includes(value.toLowerCase())
-      )
-    )
+        unit.toLowerCase().includes(value.toLowerCase()),
+      ),
+    ),
   );
 
   filteredKeys$ = this.parametersForm.get("lhs")?.valueChanges.pipe(
     startWith(""),
     map((value: string) =>
       this.parameterKeys.filter((key) =>
-        key.toLowerCase().includes(value.toLowerCase())
-      )
-    )
+        key.toLowerCase().includes(value.toLowerCase()),
+      ),
+    ),
   );
 
   constructor(
     public appConfigService: AppConfigService,
     @Inject(MAT_DIALOG_DATA) public data: { parameterKeys: string[] },
     public dialogRef: MatDialogRef<SearchParametersDialogComponent>,
-    private unitsService: UnitsService
+    private unitsService: UnitsService,
   ) {}
 
   add = (): void => {

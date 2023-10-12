@@ -76,7 +76,7 @@ export class UnitsService {
   private getKind(variable: string): string {
     const kinds = Object.keys(this.UNITS);
     return this.parse(variable).filter((suggestion) =>
-      kinds.includes(suggestion)
+      kinds.includes(suggestion),
     )[0];
   }
 
@@ -99,7 +99,7 @@ export class UnitsService {
     return ([] as string[])
       .concat(...nestedUnits)
       .sort((a: string, b: string) =>
-        a.toLowerCase().localeCompare(b.toLowerCase())
+        a.toLowerCase().localeCompare(b.toLowerCase()),
       );
   }
 

@@ -13,11 +13,11 @@ describe("ErrorPageComponent", () => {
   beforeEach(waitForAsync(() => {
     TestBed.overrideComponent(ErrorPageComponent, {
       set: {
-        providers: [{ provide: ActivatedRoute, useClass: MockActivatedRoute }]
-      }
+        providers: [{ provide: ActivatedRoute, useClass: MockActivatedRoute }],
+      },
     });
     TestBed.configureTestingModule({
-      declarations: [ErrorPageComponent]
+      declarations: [ErrorPageComponent],
     }).compileComponents();
   }));
 
@@ -28,7 +28,6 @@ describe("ErrorPageComponent", () => {
     component.message = "Message";
     fixture.detectChanges();
   });
-
 
   afterEach(() => {
     fixture.destroy();

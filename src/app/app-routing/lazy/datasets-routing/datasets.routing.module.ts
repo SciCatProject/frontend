@@ -7,7 +7,6 @@ import { DatablocksComponent } from "datasets/datablocks-table/datablocks-table.
 import { DatasetDetailsDashboardComponent } from "datasets/dataset-details-dashboard/dataset-details-dashboard.component";
 import { PublishComponent } from "datasets/publish/publish.component";
 
-
 const routes: Routes = [
   {
     path: "",
@@ -26,7 +25,10 @@ const routes: Routes = [
   {
     path: ":id",
     component: DatasetDetailsDashboardComponent,
-    loadChildren: () => import("../dataset-details-dashboard-routing/dataset-details-dashboard.feature.module").then(m => m.DatasetDetailsDashboardFeatureModule),
+    loadChildren: () =>
+      import(
+        "../dataset-details-dashboard-routing/dataset-details-dashboard.feature.module"
+      ).then((m) => m.DatasetDetailsDashboardFeatureModule),
   },
   {
     path: ":id/datablocks",

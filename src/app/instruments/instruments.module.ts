@@ -23,8 +23,8 @@ import { MatTabsModule } from "@angular/material/tabs";
     MatIconModule,
     MatTabsModule,
     SharedScicatFrontendModule,
-    StoreModule.forFeature("instruments", instrumentsReducer)
+    StoreModule.forFeature("instruments", instrumentsReducer),
   ],
-  providers: [JsonHeadPipe]
+  providers: [JsonHeadPipe],
 })
 export class InstrumentsModule {}

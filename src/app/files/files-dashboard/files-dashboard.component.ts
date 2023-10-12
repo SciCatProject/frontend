@@ -83,13 +83,13 @@ export class FilesDashboardComponent implements OnDestroy {
   constructor(
     private appConfigService: AppConfigService,
     private dataService: ScicatDataService,
-    private exportService: ExportExcelService
+    private exportService: ExportExcelService,
   ) {
     this.dataSource = new SciCatDataSource(
       this.appConfigService,
       this.dataService,
       this.exportService,
-      this.tableDefinition
+      this.tableDefinition,
     );
   }
 

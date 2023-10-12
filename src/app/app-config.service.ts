@@ -22,7 +22,7 @@ export class HelpMessages {
   constructor(
     gettingStarted = "gives a brief description on how to get started using the data catalog.",
     ingestManual = `provides detailed information on how to make your data available to the
-    catalog as well as archiving and retrieval of datasets.`
+    catalog as well as archiving and retrieval of datasets.`,
   ) {
     this.gettingStarted = gettingStarted;
     this.ingestManual = ingestManual;
@@ -90,7 +90,7 @@ export interface AppConfig {
 export class AppConfigService {
   private appConfig: object = {};
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   async loadAppConfig(): Promise<void> {
     try {

@@ -24,6 +24,6 @@ export const initialLogbookState: LogbookState = {
     showImages: true,
     sortField: "timestamp:desc",
     skip: 0,
-    limit: 25
-  }
+    limit: 25,
+  },
 };

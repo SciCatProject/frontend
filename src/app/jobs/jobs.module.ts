@@ -15,7 +15,11 @@ import { JobsDashboardNewComponent } from "./jobs-dashboard-new/jobs-dashboard-n
 import { SharedTableModule } from "shared/modules/shared-table/shared-table.module";
 
 @NgModule({
-  declarations: [JobsDetailComponent, JobsDashboardComponent, JobsDashboardNewComponent],
+  declarations: [
+    JobsDetailComponent,
+    JobsDashboardComponent,
+    JobsDashboardNewComponent,
+  ],
   imports: [
     CommonModule,
     EffectsModule.forFeature([JobEffects]),
@@ -25,8 +29,12 @@ import { SharedTableModule } from "shared/modules/shared-table/shared-table.modu
     MatIconModule,
     SharedScicatFrontendModule,
     SharedTableModule,
-    StoreModule.forFeature("jobs", jobsReducer)
+    StoreModule.forFeature("jobs", jobsReducer),
   ],
-  exports: [JobsDetailComponent, JobsDashboardComponent, JobsDashboardNewComponent]
+  exports: [
+    JobsDetailComponent,
+    JobsDashboardComponent,
+    JobsDashboardNewComponent,
+  ],
 })
-export class JobsModule { }
+export class JobsModule {}

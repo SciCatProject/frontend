@@ -18,7 +18,7 @@ describe("NewDynamicPipe", () => {
       const res = pipe.transform(value, pipeDef);
 
       expect(res).toEqual(value);
-    }
+    },
   ));
 
   it("should return the value if pipeDef length equals 0", inject(
@@ -31,7 +31,7 @@ describe("NewDynamicPipe", () => {
       const res = pipe.transform(value, pipeDef);
 
       expect(res).toEqual(value);
-    }
+    },
   ));
 
   it("should return the value if the pipe does not exist", inject(
@@ -44,6 +44,6 @@ describe("NewDynamicPipe", () => {
       const res = pipe.transform(value, pipeDef);
 
       expect(res).toEqual(value);
-    }
+    },
   ));
 });

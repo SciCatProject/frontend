@@ -137,10 +137,10 @@ describe("DatasetsReducer", () => {
   describe("on addToBatchAction", () => {
     it("should update batch property with selectedSets", () => {
       const batchedPids = initialDatasetState.batch.map(
-        (batchSet) => batchSet.pid
+        (batchSet) => batchSet.pid,
       );
       const addition = initialDatasetState.selectedSets.filter(
-        (selectedSet) => batchedPids.indexOf(selectedSet.pid) === -1
+        (selectedSet) => batchedPids.indexOf(selectedSet.pid) === -1,
       );
       const batch = [...initialDatasetState.batch, ...addition];
 
@@ -556,7 +556,7 @@ describe("DatasetsReducer", () => {
 
   describe("on setPidTermsFilterAction", () => {
     it("should set dataset state to initialDatasetStata", () => {
-      const pid = {"$regex": "1"};
+      const pid = { $regex: "1" };
       const action = fromActions.setPidTermsFilterAction({ pid });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 

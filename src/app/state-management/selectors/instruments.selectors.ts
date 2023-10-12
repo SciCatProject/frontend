@@ -6,22 +6,22 @@ const selectInstrumentState =
 
 export const selectInstruments = createSelector(
   selectInstrumentState,
-  (state) => state.instruments
+  (state) => state.instruments,
 );
 
 export const selectCurrentInstrument = createSelector(
   selectInstrumentState,
-  (state) => state.currentInstrument
+  (state) => state.currentInstrument,
 );
 
 export const selectInstrumentsCount = createSelector(
   selectInstrumentState,
-  (state) => state.totalCount
+  (state) => state.totalCount,
 );
 
 export const selectFilters = createSelector(
   selectInstrumentState,
-  (state) => state.filters
+  (state) => state.filters,
 );
 
 export const selectPage = createSelector(selectFilters, (filters) => {
@@ -31,7 +31,7 @@ export const selectPage = createSelector(selectFilters, (filters) => {
 
 export const selectInstrumentsPerPage = createSelector(
   selectFilters,
-  (filters) => filters.limit
+  (filters) => filters.limit,
 );
 
 export const selectInstrumentsDashboardPageViewModel = createSelector(
@@ -44,5 +44,5 @@ export const selectInstrumentsDashboardPageViewModel = createSelector(
     currentPage,
     instrumentsCount,
     instrumentsPerPage,
-  })
+  }),
 );

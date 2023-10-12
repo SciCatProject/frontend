@@ -16,7 +16,7 @@ const reducer = createReducer(
         return logbook;
       });
       return { ...state, logbooks: formattedLogbooks };
-    }
+    },
   ),
 
   on(
@@ -24,14 +24,14 @@ const reducer = createReducer(
     (state, { logbook }): LogbookState => {
       const currentLogbook = logbook;
       return { ...state, currentLogbook };
-    }
+    },
   ),
   on(
     fromActions.fetchLogbookFailedAction,
     (state): LogbookState => ({
       ...state,
       currentLogbook: undefined,
-    })
+    }),
   ),
 
   on(
@@ -39,7 +39,7 @@ const reducer = createReducer(
     (state): LogbookState => ({
       ...state,
       currentLogbook: undefined,
-    })
+    }),
   ),
 
   on(
@@ -47,7 +47,7 @@ const reducer = createReducer(
     (state, { count }): LogbookState => ({
       ...state,
       totalCount: count,
-    })
+    }),
   ),
 
   on(fromActions.prefillFiltersAction, (state, { values }): LogbookState => {
@@ -64,7 +64,7 @@ const reducer = createReducer(
     fromActions.setDisplayFiltersAction,
     (
       state,
-      { showBotMessages, showImages, showUserMessages }
+      { showBotMessages, showImages, showUserMessages },
     ): LogbookState => {
       const filters = {
         ...state.filters,
@@ -74,7 +74,7 @@ const reducer = createReducer(
         skip: 0,
       };
       return { ...state, filters };
-    }
+    },
   ),
 
   on(fromActions.changePageAction, (state, { page, limit }): LogbookState => {
@@ -89,18 +89,18 @@ const reducer = createReducer(
       const sortField = column + (direction ? ":" + direction : "");
       const filters = { ...state.filters, sortField, skip: 0 };
       return { ...state, filters };
-    }
+    },
   ),
 
   on(
     fromActions.clearLogbooksStateAction,
-    (): LogbookState => ({ ...initialLogbookState })
-  )
+    (): LogbookState => ({ ...initialLogbookState }),
+  ),
 );
 
 export const logbooksReducer = (
   state: LogbookState | undefined,
-  action: Action
+  action: Action,
 ) => {
   if (action.type.indexOf("[Logbook]") !== -1) {
     console.log("Logbook reducer Action came in! " + action.type);

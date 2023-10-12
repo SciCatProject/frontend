@@ -191,7 +191,7 @@ describe("UserReducer", () => {
 
       expect(state.columns[state.columns.length - 1].name).toEqual("test");
       expect(state.columns[state.columns.length - 1].order).toEqual(
-        state.columns.length - 1
+        state.columns.length - 1,
       );
       expect(state.columns[state.columns.length - 1].enabled).toEqual(false);
     });

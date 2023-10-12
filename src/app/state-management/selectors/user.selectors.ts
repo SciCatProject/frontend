@@ -5,16 +5,16 @@ const selectUserState = createFeatureSelector<UserState>("users");
 
 export const selectCurrentUser = createSelector(
   selectUserState,
-  (state) => state.currentUser
+  (state) => state.currentUser,
 );
 
 export const selectCurrentUserId = createSelector(selectCurrentUser, (user) =>
-  user ? user.id : ""
+  user ? user.id : "",
 );
 
 export const selectProfile = createSelector(
   selectUserState,
-  (state) => state.profile
+  (state) => state.profile,
 );
 
 export const selectCurrentUserName = createSelector(
@@ -28,7 +28,7 @@ export const selectCurrentUserName = createSelector(
     } else {
       return null;
     }
-  }
+  },
 );
 
 export const selectThumbnailPhoto = createSelector(selectProfile, (profile) => {
@@ -45,64 +45,65 @@ export const selectThumbnailPhoto = createSelector(selectProfile, (profile) => {
 
 export const selectIsAdmin = createSelector(
   selectCurrentUserName,
-  (name) => name && ["admin", "archiveManager", "ingestor"].indexOf(name) !== -1
+  (name) =>
+    name && ["admin", "archiveManager", "ingestor"].indexOf(name) !== -1,
 );
 
 export const selectScicatToken = createSelector(
   selectUserState,
-  (state) => state.scicatToken.id
+  (state) => state.scicatToken.id,
 );
 
 export const selectUserMessage = createSelector(
   selectUserState,
-  (state) => state.message
+  (state) => state.message,
 );
 
 export const selectSettings = createSelector(
   selectUserState,
-  (state) => state.settings
+  (state) => state.settings,
 );
 
 export const selectTapeCopies = createSelector(
   selectSettings,
-  (settings) => settings.tapeCopies
+  (settings) => settings.tapeCopies,
 );
 
 export const selectTheme = createSelector(
   selectSettings,
-  (settings) => settings.darkTheme
+  (settings) => settings.darkTheme,
 );
 
 export const selectIsLoggingIn = createSelector(
   selectUserState,
-  (state) => state.isLoggingIn
+  (state) => state.isLoggingIn,
 );
 
 export const selectIsLoggedIn = createSelector(
   selectUserState,
-  (state) => state.isLoggedIn
+  (state) => state.isLoggedIn,
 );
 
 export const selectIsLoading = createSelector(
   selectUserState,
-  (state) => state.isLoading
+  (state) => state.isLoading,
 );
 
 export const selectColumns = createSelector(
   selectUserState,
-  (state) => state.columns
+  (state) => state.columns,
 );
 
 export const selectSampleDialogPageViewModel = createSelector(
   selectCurrentUser,
   selectProfile,
-  (user, profile) => ({ user, profile })
+  (user, profile) => ({ user, profile }),
 );
 
 export const selectLoginPageViewModel = createSelector(
   selectIsLoggedIn,
   selectIsLoggingIn,
-  (isLoggedIn, isLoggingIn) => ({ isLoggedIn, isLoggingIn })
+  (isLoggedIn, isLoggingIn) => ({ isLoggedIn, isLoggingIn }),
 );
 
 export const selectUserSettingsPageViewModel = createSelector(
@@ -115,5 +116,5 @@ export const selectUserSettingsPageViewModel = createSelector(
     profile,
     scicatToken,
     settings,
-  })
+  }),
 );

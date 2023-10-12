@@ -108,7 +108,7 @@ export interface DatasetFilters extends GenericFilters {
   mode: Record<string, unknown>;
   scientific: ScientificCondition[];
   isPublished: boolean | "";
-  pid: string | {"$regex": string};
+  pid: string | { $regex: string };
 }
 
 export interface SampleFilters extends GenericFilters {

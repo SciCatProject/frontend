@@ -22,7 +22,7 @@ export class ArchivingService {
     user: User,
     datasets: Dataset[],
     archive: boolean,
-    destinationPath?: Record<string, string>
+    destinationPath?: Record<string, string>,
     // Do not specify tape copies here
   ): Job {
     const extra = archive ? {} : destinationPath;
@@ -52,7 +52,7 @@ export class ArchivingService {
   private archiveOrRetrieve(
     datasets: Dataset[],
     archive: boolean,
-    destPath?: Record<string, string>
+    destPath?: Record<string, string>,
   ): Observable<void> {
     return combineLatest([this.currentUser$, this.tapeCopies$]).pipe(
       first(),
@@ -61,7 +61,7 @@ export class ArchivingService {
           const email = user.email;
           if (email == null || email.length === 0) {
             throw new Error(
-              "No email for this user could be found, the job will not be submitted"
+              "No email for this user could be found, the job will not be submitted",
             );
           }
 
@@ -73,7 +73,7 @@ export class ArchivingService {
 
           this.store.dispatch(submitJobAction({ job }));
         }
-      })
+      }),
     );
   }
 
@@ -83,18 +83,18 @@ export class ArchivingService {
 
   public retrieve(
     datasets: Dataset[],
-    destinationPath: Record<string, string>
+    destinationPath: Record<string, string>,
   ): Observable<void> {
     return this.archiveOrRetrieve(datasets, false, destinationPath);
   }
 
   public generateOptionLocation(
     result: RetrieveDestinations,
-    retrieveDestinations: RetrieveDestinations[] = []
+    retrieveDestinations: RetrieveDestinations[] = [],
   ): object | { option: string } | { location: string; option: string } {
     if (retrieveDestinations.length > 0) {
       const prefix = retrieveDestinations.filter(
-        (element) => element.option == result.option
+        (element) => element.option == result.option,
       );
       let location =
         prefix.length > 0
@@ -114,7 +114,7 @@ export class ArchivingService {
   }
 
   public retriveDialogOptions(
-    retrieveDestinations: RetrieveDestinations[] = []
+    retrieveDestinations: RetrieveDestinations[] = [],
   ): object {
     return {
       width: "auto",
@@ -124,7 +124,7 @@ export class ArchivingService {
         choice: {
           options: retrieveDestinations,
         },
-        option: retrieveDestinations?.[0]?.option
+        option: retrieveDestinations?.[0]?.option,
       },
     };
   }

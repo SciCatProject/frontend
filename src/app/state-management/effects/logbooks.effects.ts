@@ -22,11 +22,11 @@ export class LogbookEffects {
       mergeMap(() =>
         this.logbookApi.find<Logbook>().pipe(
           map((logbooks: Logbook[]) =>
-            fromActions.fetchLogbooksCompleteAction({ logbooks })
+            fromActions.fetchLogbooksCompleteAction({ logbooks }),
           ),
-          catchError(() => of(fromActions.fetchLogbooksFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.fetchLogbooksFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -34,7 +34,7 @@ export class LogbookEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchLogbookAction),
       concatLatestFrom(() => this.filters$),
-      mergeMap(([{ name }, filters]) =>{
+      mergeMap(([{ name }, filters]) => {
         return this.logbookApi
           .findByName(encodeURIComponent(name), JSON.stringify(filters))
           .pipe(
@@ -43,11 +43,9 @@ export class LogbookEffects {
               fromActions.fetchLogbookCompleteAction({ logbook }),
               fromActions.fetchCountAction({ name }),
             ]),
-            catchError(() => of(fromActions.fetchLogbookFailedAction()))
+            catchError(() => of(fromActions.fetchLogbookFailedAction())),
           );
-      }
-        
-      )
+      }),
     );
   });
 
@@ -62,11 +60,11 @@ export class LogbookEffects {
             timeout(3000),
             mergeMap((logbook) => [
               fromActions.fetchLogbookCompleteAction({ logbook }),
-              fromActions.fetchCountAction({ pid })
+              fromActions.fetchCountAction({ pid }),
             ]),
-            catchError(() => of(fromActions.fetchDatasetLogbookFailedAction()))
-          )
-      )
+            catchError(() => of(fromActions.fetchDatasetLogbookFailedAction())),
+          ),
+      ),
     );
   });
 
@@ -74,22 +72,27 @@ export class LogbookEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
       concatLatestFrom(() => this.filters$),
-      mergeMap(([{ name,pid }, filters]) => {
+      mergeMap(([{ name, pid }, filters]) => {
         const { skip, limit, sortField, ...theRest } = filters;
-        return (name ? this.logbookApi
-          .findByName(encodeURIComponent(name), JSON.stringify(theRest)) : this.logbookApi
-          .findDatasetLogbook(encodeURIComponent(pid), JSON.stringify(theRest)))
-          .pipe(
-            map((logbook: Logbook) => {
-              return fromActions.fetchCountCompleteAction({
-                count: logbook.messages.length,
-              });
-            }
-              
-            ),
-            catchError(() => of(fromActions.fetchCountFailedAction()))
-          );
-      })
+        return (
+          name
+            ? this.logbookApi.findByName(
+                encodeURIComponent(name),
+                JSON.stringify(theRest),
+              )
+            : this.logbookApi.findDatasetLogbook(
+                encodeURIComponent(pid),
+                JSON.stringify(theRest),
+              )
+        ).pipe(
+          map((logbook: Logbook) => {
+            return fromActions.fetchCountCompleteAction({
+              count: logbook.messages.length,
+            });
+          }),
+          catchError(() => of(fromActions.fetchCountFailedAction())),
+        );
+      }),
     );
   });
 
@@ -98,9 +101,9 @@ export class LogbookEffects {
       ofType(
         fromActions.fetchLogbooksAction,
         fromActions.fetchLogbookAction,
-        fromActions.fetchCountAction
+        fromActions.fetchCountAction,
       ),
-      mergeMap(() => of(loadingAction()))
+      mergeMap(() => of(loadingAction())),
     );
   });
 
@@ -112,15 +115,15 @@ export class LogbookEffects {
         fromActions.fetchLogbookCompleteAction,
         fromActions.fetchLogbookFailedAction,
         fromActions.fetchCountCompleteAction,
-        fromActions.fetchCountFailedAction
+        fromActions.fetchCountFailedAction,
       ),
-      mergeMap(() => of(loadingCompleteAction()))
+      mergeMap(() => of(loadingCompleteAction())),
     );
   });
 
   constructor(
     private actions$: Actions,
     private logbookApi: LogbookApi,
-    private store: Store
+    private store: Store,
   ) {}
 }

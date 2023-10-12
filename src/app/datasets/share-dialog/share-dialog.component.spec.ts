@@ -6,21 +6,33 @@ import {
   TestBed,
   tick,
 } from "@angular/core/testing";
-import { MatButtonModule } from "@angular/material/button";
-import { MatChipsModule } from "@angular/material/chips";
-import {
-  MAT_DIALOG_DATA,
-  MatDialogModule,
-  MatDialogRef,
-} from "@angular/material/dialog";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatIconModule } from "@angular/material/icon";
-import { MatInputModule } from "@angular/material/input";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Store, StoreModule } from "@ngrx/store";
 import { of } from "rxjs";
-import { MockAppConfigService, MockDatasetApi, MockHttp, MockLoopBackAuth, MockPublishedDataApi, MockStore, MockUserApi, MockUserIdentityApi } from "shared/MockStubs";
-import { DatasetApi, InstrumentApi, InternalStorage, JobApi, LogbookApi, LoopBackAuth, ProposalApi, PublishedDataApi, SampleApi, UserApi, UserIdentityApi } from "shared/sdk";
+import {
+  MockAppConfigService,
+  MockDatasetApi,
+  MockHttp,
+  MockLoopBackAuth,
+  MockPublishedDataApi,
+  MockStore,
+  MockUserApi,
+  MockUserIdentityApi,
+} from "shared/MockStubs";
+import {
+  DatasetApi,
+  InstrumentApi,
+  InternalStorage,
+  JobApi,
+  LogbookApi,
+  LoopBackAuth,
+  ProposalApi,
+  PublishedDataApi,
+  SampleApi,
+  UserApi,
+  UserIdentityApi,
+} from "shared/sdk";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
 
@@ -36,17 +48,19 @@ const data = {
   sharedUsersList: [],
 };
 
-
 describe("ShareDialogComponent", () => {
   let component: ShareDialogComponent;
   let fixture: ComponentFixture<ShareDialogComponent>;
-  const appconfig = (new MockAppConfigService(null) as unknown) as AppConfigService;
+  const appconfig = new MockAppConfigService(
+    null,
+  ) as unknown as AppConfigService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ShareDialogComponent],
       imports: [
-        DatasetsModule,BrowserAnimationsModule,
+        DatasetsModule,
+        BrowserAnimationsModule,
         EffectsModule.forRoot([]),
         StoreModule.forRoot({}),
       ],
@@ -54,20 +68,19 @@ describe("ShareDialogComponent", () => {
         { provide: MatDialogRef, useValue: { close: () => {} } },
         { provide: Store, useClass: MockStore },
         { provide: UserIdentityApi, useClass: MockUserIdentityApi },
-        { provide: LogbookApi, useValue: {}},
-        { provide: DatasetApi, useClass: MockDatasetApi},
-        { provide: AppConfigService, useValue: appconfig},
-        { provide: HttpClient, useClass: MockHttp},
-        { provide: LoopBackAuth, useClass: MockLoopBackAuth},
-        { provide: UserApi, useClass: MockUserApi},
-        { provide: InstrumentApi , useValue: {}},
-        { provide: JobApi, useValue: {}},
-        { provide: ProposalApi, useValue: {}},
-        { provide: SampleApi, useValue: {}},
-        { provide: PublishedDataApi, useClass: MockPublishedDataApi},
+        { provide: LogbookApi, useValue: {} },
+        { provide: DatasetApi, useClass: MockDatasetApi },
+        { provide: AppConfigService, useValue: appconfig },
+        { provide: HttpClient, useClass: MockHttp },
+        { provide: LoopBackAuth, useClass: MockLoopBackAuth },
+        { provide: UserApi, useClass: MockUserApi },
+        { provide: InstrumentApi, useValue: {} },
+        { provide: JobApi, useValue: {} },
+        { provide: ProposalApi, useValue: {} },
+        { provide: SampleApi, useValue: {} },
+        { provide: PublishedDataApi, useClass: MockPublishedDataApi },
         { provide: MAT_DIALOG_DATA, useValue: data },
-        InternalStorage
-
+        InternalStorage,
       ],
     }).compileComponents();
   });
@@ -114,7 +127,7 @@ describe("ShareDialogComponent", () => {
   describe("#add()", () => {
     it("should dispatch a showMessageAction with type `error` if user does not exist", fakeAsync(() => {
       spyOn(component.userIdentityApi, "isValidEmail").and.throwError(
-        "Not found"
+        "Not found",
       );
       const dispatchSpy = spyOn(component.store, "dispatch");
       const email = "test@email.com";
@@ -125,7 +138,7 @@ describe("ShareDialogComponent", () => {
       const message = new Message(
         "The email address is not connected to a SciCat user",
         MessageType.Error,
-        5000
+        5000,
       );
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
@@ -141,7 +154,7 @@ describe("ShareDialogComponent", () => {
         },
       };
       spyOn(component.userIdentityApi, "isValidEmail").and.returnValue(
-        of(true)
+        of(true),
       );
       component.emailFormControl.setValue(email);
       expect(component.emailFormControl.value).toEqual(email);

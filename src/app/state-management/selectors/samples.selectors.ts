@@ -6,57 +6,57 @@ const selectSampleState = createFeatureSelector<SampleState>("samples");
 
 export const selectSamples = createSelector(
   selectSampleState,
-  (state) => state.samples
+  (state) => state.samples,
 );
 
 export const selectMetadataKeys = createSelector(
   selectSampleState,
-  (state) => state.metadataKeys
+  (state) => state.metadataKeys,
 );
 
 export const selectCurrentSample = createSelector(
   selectSampleState,
-  (state) => state.currentSample
+  (state) => state.currentSample,
 );
 
 export const selectCurrentAttachments = createSelector(
   selectSampleState,
-  (state) => state.attachments
+  (state) => state.attachments,
 );
 
 export const selectDatasets = createSelector(
   selectSampleState,
-  (state) => state.datasets
+  (state) => state.datasets,
 );
 
 export const selectSamplesCount = createSelector(
   selectSampleState,
-  (state) => state.samplesCount
+  (state) => state.samplesCount,
 );
 
 export const selectDatasetsCount = createSelector(
   selectSampleState,
-  (state) => state.datasetsCount
+  (state) => state.datasetsCount,
 );
 
 export const selectHasPrefilledFilters = createSelector(
   selectSampleState,
-  (state) => state.hasPrefilledFilters
+  (state) => state.hasPrefilledFilters,
 );
 
 export const selectFilters = createSelector(
   selectSampleState,
-  (state) => state.sampleFilters
+  (state) => state.sampleFilters,
 );
 
 export const selectTextFilter = createSelector(
   selectFilters,
-  (filters) => filters.text
+  (filters) => filters.text,
 );
 
 export const selectDatasetFilters = createSelector(
   selectSampleState,
-  (state) => state.datasetFilters
+  (state) => state.datasetFilters,
 );
 
 export const selectPage = createSelector(selectFilters, (filters) => {
@@ -69,22 +69,22 @@ export const selectDatasetsPage = createSelector(
   (filters) => {
     const { skip, limit } = filters;
     return skip / limit;
-  }
+  },
 );
 
 export const selectSamplesPerPage = createSelector(
   selectFilters,
-  (filters) => filters.limit
+  (filters) => filters.limit,
 );
 
 export const selectCharacteristicsFilter = createSelector(
   selectFilters,
-  (filters) => filters.characteristics
+  (filters) => filters.characteristics,
 );
 
 export const selectDatasetsPerPage = createSelector(
   selectDatasetFilters,
-  (filters) => filters.limit
+  (filters) => filters.limit,
 );
 
 export const selectSamplesPagination = createSelector(
@@ -95,7 +95,7 @@ export const selectSamplesPagination = createSelector(
     samplesCount,
     samplesPerPage,
     currentPage,
-  })
+  }),
 );
 
 export const selectSampleDashboardPageViewModel = createSelector(
@@ -113,7 +113,7 @@ export const selectSampleDashboardPageViewModel = createSelector(
     hasPrefilledFilters,
     textFilter,
     metadataKeys,
-    characteristicsFilter
+    characteristicsFilter,
   ) => ({
     samples,
     samplesPagination,
@@ -122,7 +122,7 @@ export const selectSampleDashboardPageViewModel = createSelector(
     textFilter,
     metadataKeys,
     characteristicsFilter,
-  })
+  }),
 );
 
 export const selectSampleDetailPageViewModel = createSelector(
@@ -140,7 +140,7 @@ export const selectSampleDetailPageViewModel = createSelector(
     datasetsPage,
     datasetsCount,
     attachments,
-    user
+    user,
   ) => ({
     sample,
     datasets,
@@ -149,7 +149,7 @@ export const selectSampleDetailPageViewModel = createSelector(
     datasetsCount,
     attachments,
     user,
-  })
+  }),
 );
 
 export const selectFullqueryParams = createSelector(
@@ -159,7 +159,7 @@ export const selectFullqueryParams = createSelector(
     const limits = { order: sortField, skip, limit };
     const query = restrictFilter(theRest);
     return { query: JSON.stringify(query), limits };
-  }
+  },
 );
 
 export const selectDatasetsQueryParams = createSelector(
@@ -167,7 +167,7 @@ export const selectDatasetsQueryParams = createSelector(
   (filters) => {
     const { sortField, skip, limit } = filters;
     return { order: sortField, skip, limit };
-  }
+  },
 );
 
 // Returns copy with null/undefined values and empty arrays removed

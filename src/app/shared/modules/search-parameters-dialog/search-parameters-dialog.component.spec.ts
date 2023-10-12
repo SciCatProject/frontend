@@ -19,44 +19,42 @@ import { AppConfigService } from "app-config.service";
 import { SearchParametersDialogComponent } from "./search-parameters-dialog.component";
 
 const getConfig = () => ({
-  scienceSearchUnitsEnabled: true
+  scienceSearchUnitsEnabled: true,
 });
 
 describe("SearchParametersDialogComponent", () => {
   let component: SearchParametersDialogComponent;
   let fixture: ComponentFixture<SearchParametersDialogComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        imports: [
-          BrowserAnimationsModule,
-          MatAutocompleteModule,
-          MatButtonModule,
-          MatDialogModule,
-          MatFormFieldModule,
-          MatInputModule,
-          MatOptionModule,
-          MatSelectModule,
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [
+        BrowserAnimationsModule,
+        MatAutocompleteModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatOptionModule,
+        MatSelectModule,
+      ],
+      declarations: [SearchParametersDialogComponent],
+    });
+    TestBed.overrideComponent(SearchParametersDialogComponent, {
+      set: {
+        providers: [
+          {
+            provide: AppConfigService,
+            useValue: { getConfig },
+          },
+          { provide: MAT_DIALOG_DATA, useValue: { parameterKeys: [] } },
+          { provide: MatDialogRef, useValue: { close: () => {} } },
         ],
-        declarations: [SearchParametersDialogComponent],
-      });
-      TestBed.overrideComponent(SearchParametersDialogComponent, {
-        set: {
-          providers: [
-            {
-              provide: AppConfigService,
-              useValue: { getConfig },
-            },
-            { provide: MAT_DIALOG_DATA, useValue: { parameterKeys: [] } },
-            { provide: MatDialogRef, useValue: { close: () => {} } },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SearchParametersDialogComponent);

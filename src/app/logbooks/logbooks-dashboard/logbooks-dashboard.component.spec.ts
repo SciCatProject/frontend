@@ -17,7 +17,12 @@ import {
   changePageAction,
   sortByColumnAction,
 } from "state-management/actions/logbooks.actions";
-import { RawDataset, RawDatasetInterface, Logbook, LogbookInterface } from "shared/sdk";
+import {
+  RawDataset,
+  RawDatasetInterface,
+  Logbook,
+  LogbookInterface,
+} from "shared/sdk";
 import { LogbookFilters } from "state-management/models";
 import { RouterTestingModule } from "@angular/router/testing";
 
@@ -60,36 +65,34 @@ describe("DashboardComponent", () => {
     contactEmail: "somebody@somewhere.here",
     sourceFolder: "some/folders/on/some/server",
     creationTime: undefined,
-    type: "raw"
+    type: "raw",
   };
   const dataset = new RawDataset(rawDatasetData);
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [LogbooksDashboardComponent],
-        imports: [
-          BrowserAnimationsModule,
-          MatCardModule,
-          MatExpansionModule,
-          MatIconModule,
-          RouterTestingModule.withRoutes([]),
-          StoreModule.forRoot({}),
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [LogbooksDashboardComponent],
+      imports: [
+        BrowserAnimationsModule,
+        MatCardModule,
+        MatExpansionModule,
+        MatIconModule,
+        RouterTestingModule.withRoutes([]),
+        StoreModule.forRoot({}),
+      ],
+    });
+    TestBed.overrideComponent(LogbooksDashboardComponent, {
+      set: {
+        providers: [
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: AppConfigService, useValue: { getConfig } },
         ],
-      });
-      TestBed.overrideComponent(LogbooksDashboardComponent, {
-        set: {
-          providers: [
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-            { provide: AppConfigService, useValue: { getConfig } },
-          ],
-        },
-      }).compileComponents();
+      },
+    }).compileComponents();
 
-      router = TestBed.inject(Router);
-    })
-  );
+    router = TestBed.inject(Router);
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LogbooksDashboardComponent);
@@ -125,9 +128,12 @@ describe("DashboardComponent", () => {
       component.applyRouterState(dataset.pid, filters);
 
       expect(navigateSpy).toHaveBeenCalledTimes(1);
-      expect(navigateSpy).toHaveBeenCalledWith(["/datasets", dataset.pid, "logbook"], {
-        queryParams: { args: JSON.stringify(filters) },
-      });
+      expect(navigateSpy).toHaveBeenCalledWith(
+        ["/datasets", dataset.pid, "logbook"],
+        {
+          queryParams: { args: JSON.stringify(filters) },
+        },
+      );
     });
   });
 
@@ -140,12 +146,12 @@ describe("DashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setTextFilterAction({ textSearch })
+        setTextFilterAction({ textSearch }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
         fetchDatasetLogbookAction({
           pid: dataset.pid,
-        })
+        }),
       );
     });
   });
@@ -174,12 +180,12 @@ describe("DashboardComponent", () => {
           showBotMessages,
           showImages,
           showUserMessages,
-        })
+        }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
         fetchDatasetLogbookAction({
           pid: dataset.pid,
-        })
+        }),
       );
       expect(methodSpy).toHaveBeenCalled();
     });
@@ -199,10 +205,10 @@ describe("DashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        changePageAction({ page: event.pageIndex, limit: event.pageSize })
+        changePageAction({ page: event.pageIndex, limit: event.pageSize }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchDatasetLogbookAction({ pid: dataset.pid })
+        fetchDatasetLogbookAction({ pid: dataset.pid }),
       );
     });
   });
@@ -220,10 +226,13 @@ describe("DashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        sortByColumnAction({ column: event.active, direction: event.direction })
+        sortByColumnAction({
+          column: event.active,
+          direction: event.direction,
+        }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchDatasetLogbookAction({ pid: dataset.pid })
+        fetchDatasetLogbookAction({ pid: dataset.pid }),
       );
     });
   });

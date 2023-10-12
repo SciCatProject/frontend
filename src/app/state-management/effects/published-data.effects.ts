@@ -33,7 +33,7 @@ export class PublishedDataEffects {
       ofType(
         fromActions.fetchAllPublishedDataAction,
         fromActions.sortByColumnAction,
-        fromActions.changePageAction
+        fromActions.changePageAction,
       ),
       concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
@@ -43,9 +43,9 @@ export class PublishedDataEffects {
             fromActions.fetchAllPublishedDataCompleteAction({ publishedData }),
             fromActions.fetchCountAction(),
           ]),
-          catchError(() => of(fromActions.fetchAllPublishedDataFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.fetchAllPublishedDataFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -55,9 +55,9 @@ export class PublishedDataEffects {
       switchMap(() =>
         this.publishedDataApi.count().pipe(
           map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
-          catchError(() => of(fromActions.fetchCountFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.fetchCountFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -69,11 +69,11 @@ export class PublishedDataEffects {
           .findById<PublishedData>(encodeURIComponent(id))
           .pipe(
             map((publishedData: PublishedData) =>
-              fromActions.fetchPublishedDataCompleteAction({ publishedData })
+              fromActions.fetchPublishedDataCompleteAction({ publishedData }),
             ),
-            catchError(() => of(fromActions.fetchPublishedDataFailedAction()))
-          )
-      )
+            catchError(() => of(fromActions.fetchPublishedDataFailedAction())),
+          ),
+      ),
     );
   });
 
@@ -85,12 +85,12 @@ export class PublishedDataEffects {
         filter(([_, publishedData]) => !!publishedData),
         exhaustMap(([_, publishedData]) =>
           this.router.navigateByUrl(
-            "/publishedDatasets/" + encodeURIComponent(publishedData!.doi)
-          )
-        )
+            "/publishedDatasets/" + encodeURIComponent(publishedData!.doi),
+          ),
+        ),
       );
     },
-    { dispatch: false }
+    { dispatch: false },
   );
 
   publishDataset$ = createEffect(() => {
@@ -102,9 +102,9 @@ export class PublishedDataEffects {
             fromActions.publishDatasetCompleteAction({ publishedData }),
             fromActions.fetchPublishedDataAction({ id: publishedData.doi }),
           ]),
-          catchError(() => of(fromActions.publishDatasetFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.publishDatasetFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -118,7 +118,7 @@ export class PublishedDataEffects {
           duration: 5000,
         };
         return of(showMessageAction({ message }));
-      })
+      }),
     );
   });
 
@@ -132,7 +132,7 @@ export class PublishedDataEffects {
           duration: 5000,
         };
         return of(showMessageAction({ message }));
-      })
+      }),
     );
   });
 
@@ -145,9 +145,9 @@ export class PublishedDataEffects {
             fromActions.registerPublishedDataCompleteAction({ publishedData }),
             fromActions.fetchPublishedDataAction({ id: doi }),
           ]),
-          catchError(() => of(fromActions.registerPublishedDataFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.registerPublishedDataFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -160,9 +160,9 @@ export class PublishedDataEffects {
             fromActions.resyncPublishedDataCompleteAction(publishedData),
             fromActions.fetchPublishedDataAction({ id: doi }),
           ]),
-          catchError(() => of(fromActions.resyncPublishedDataFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.resyncPublishedDataFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -176,7 +176,7 @@ export class PublishedDataEffects {
           duration: 5000,
         };
         return of(showMessageAction({ message }));
-      })
+      }),
     );
   });
 
@@ -189,9 +189,9 @@ export class PublishedDataEffects {
         fromActions.fetchPublishedDataAction,
         fromActions.publishDatasetAction,
         fromActions.registerPublishedDataAction,
-        fromActions.resyncPublishedDataCompleteAction
+        fromActions.resyncPublishedDataCompleteAction,
       ),
-      switchMap(() => of(loadingAction()))
+      switchMap(() => of(loadingAction())),
     );
   });
 
@@ -208,9 +208,9 @@ export class PublishedDataEffects {
         fromActions.publishDatasetFailedAction,
         fromActions.registerPublishedDataCompleteAction,
         fromActions.registerPublishedDataFailedAction,
-        fromActions.resyncPublishedDataCompleteAction
+        fromActions.resyncPublishedDataCompleteAction,
       ),
-      switchMap(() => of(loadingCompleteAction()))
+      switchMap(() => of(loadingCompleteAction())),
     );
   });
 
@@ -218,6 +218,6 @@ export class PublishedDataEffects {
     private actions$: Actions,
     private publishedDataApi: PublishedDataApi,
     private router: Router,
-    private store: Store
+    private store: Store,
   ) {}
 }

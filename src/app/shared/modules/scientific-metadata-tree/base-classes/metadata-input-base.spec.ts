@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { FormBuilder } from "@angular/forms";
 import { Type } from "../base-classes/metadata-input-base";
 import { FlatNodeEdit } from "../tree-edit/tree-edit.component";
-import { MetadataInputComponent} from "../metadata-input/metadata-input.component";
+import { MetadataInputComponent } from "../metadata-input/metadata-input.component";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.modules";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -14,12 +14,9 @@ describe("MetadataInputBase", () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [MetadataInputComponent],
-      imports: [
-        ScientificMetadataTreeModule, BrowserAnimationsModule
-      ],
-      providers: [FormBuilder, FormatNumberPipe]
-    })
-      .compileComponents();
+      imports: [ScientificMetadataTreeModule, BrowserAnimationsModule],
+      providers: [FormBuilder, FormatNumberPipe],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -77,7 +74,7 @@ describe("MetadataInputBase", () => {
       component.metadataForm.get("type").setValue(Type.boolean);
       component.detectType();
       const result = component.getErrorMessage("value");
-      expect(result).toEqual("Boolean must be \"true\" or \"false\"");
+      expect(result).toEqual('Boolean must be "true" or "false"'); // eslint-disable-line @typescript-eslint/quotes
     });
     it("#getErrorMessage() && #numberValidator() should not return any error", () => {
       component.metadataForm.get("type").setValue(Type.number);

@@ -26,7 +26,7 @@ import { StoreModule } from "@ngrx/store";
     LogbooksTableComponent,
     LogbooksDetailComponent,
     LogbookFilterComponent,
-    LogbooksDashboardComponent
+    LogbooksDashboardComponent,
   ],
   imports: [
     CommonModule,
@@ -43,14 +43,14 @@ import { StoreModule } from "@ngrx/store";
     MatTableModule,
     RouterModule,
     SharedScicatFrontendModule,
-    StoreModule.forFeature("logbooks", logbooksReducer)
+    StoreModule.forFeature("logbooks", logbooksReducer),
   ],
   providers: [],
   exports: [
     LogbooksTableComponent,
     LogbooksDetailComponent,
     LogbooksDashboardComponent,
-    LogbookFilterComponent
-  ]
+    LogbookFilterComponent,
+  ],
 })
 export class LogbooksModule {}

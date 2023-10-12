@@ -12,7 +12,7 @@ const reducer = createReducer(
     (state, { instruments }): InstrumentState => ({
       ...state,
       instruments,
-    })
+    }),
   ),
 
   on(
@@ -20,7 +20,7 @@ const reducer = createReducer(
     (state, { count }): InstrumentState => ({
       ...state,
       totalCount: count,
-    })
+    }),
   ),
 
   on(
@@ -28,7 +28,7 @@ const reducer = createReducer(
     (state, { instrument }): InstrumentState => ({
       ...state,
       currentInstrument: instrument,
-    })
+    }),
   ),
 
   on(
@@ -36,7 +36,7 @@ const reducer = createReducer(
     (state, { instrument }): InstrumentState => ({
       ...state,
       currentInstrument: instrument,
-    })
+    }),
   ),
 
   on(
@@ -45,7 +45,7 @@ const reducer = createReducer(
       const skip = page * limit;
       const filters = { ...state.filters, skip, limit };
       return { ...state, filters };
-    }
+    },
   ),
 
   on(
@@ -54,20 +54,20 @@ const reducer = createReducer(
       const sortField = column + (direction ? " " + direction : "");
       const filters = { ...state.filters, sortField, skip: 0 };
       return { ...state, filters };
-    }
+    },
   ),
 
   on(
     fromActions.clearInstrumentsStateAction,
     (): InstrumentState => ({
       ...initialInstrumentState,
-    })
-  )
+    }),
+  ),
 );
 
 export const instrumentsReducer = (
   state: InstrumentState | undefined,
-  action: Action
+  action: Action,
 ) => {
   if (action.type.indexOf("[Instrument]") !== -1) {
     console.log("Action came in! " + action.type);

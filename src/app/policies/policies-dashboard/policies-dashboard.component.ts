@@ -78,7 +78,7 @@ export class PoliciesDashboardComponent implements OnInit {
     private datasetApi: DatasetApi,
     public dialog: MatDialog,
     private router: Router,
-    private store: Store
+    private store: Store,
   ) {}
 
   onTabChange(event: MatTabChangeEvent) {
@@ -125,21 +125,24 @@ export class PoliciesDashboardComponent implements OnInit {
 
   onPoliciesPageChange(event: PageChangeEvent) {
     this.store.dispatch(
-      changePageAction({ page: event.pageIndex, limit: event.pageSize })
+      changePageAction({ page: event.pageIndex, limit: event.pageSize }),
     );
     this.updatePoliciesRouterState();
   }
 
   onEditablePoliciesPageChange(event: PageChangeEvent) {
     this.store.dispatch(
-      changeEditablePageAction({ page: event.pageIndex, limit: event.pageSize })
+      changeEditablePageAction({
+        page: event.pageIndex,
+        limit: event.pageSize,
+      }),
     );
     this.updateEditableRouterState();
   }
 
   onPoliciesSortChange(event: SortChangeEvent) {
     this.store.dispatch(
-      sortByColumnAction({ column: event.active, direction: event.direction })
+      sortByColumnAction({ column: event.active, direction: event.direction }),
     );
     this.updatePoliciesRouterState();
   }
@@ -149,7 +152,7 @@ export class PoliciesDashboardComponent implements OnInit {
       sortEditableByColumnAction({
         column: event.active,
         direction: event.direction,
-      })
+      }),
     );
     this.updateEditableRouterState();
   }
@@ -188,7 +191,7 @@ export class PoliciesDashboardComponent implements OnInit {
   onDialogClose(result: any) {
     if (result) {
       this.store.dispatch(
-        submitPolicyAction({ ownerList: this.selectedGroups, policy: result })
+        submitPolicyAction({ ownerList: this.selectedGroups, policy: result }),
       );
       // if datasets already exist
       this.selectedGroups.forEach((group) => {
@@ -204,14 +207,14 @@ export class PoliciesDashboardComponent implements OnInit {
                   confirm(
                     "Apply group " +
                       group +
-                      " policy settings to existing datasets?"
+                      " policy settings to existing datasets?",
                   )
                 ) {
                   console.log("count", count);
                 }
               }
               return null;
-            })
+            }),
           )
           .subscribe();
         this.store.dispatch(clearSelectionAction());

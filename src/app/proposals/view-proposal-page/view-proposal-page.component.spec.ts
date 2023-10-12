@@ -36,31 +36,29 @@ describe("ViewProposalPageComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [ViewProposalPageComponent],
-        imports: [
-          BrowserAnimationsModule,
-          MatIconModule,
-          MatTabsModule,
-          StoreModule.forRoot({}),
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [ViewProposalPageComponent],
+      imports: [
+        BrowserAnimationsModule,
+        MatIconModule,
+        MatTabsModule,
+        StoreModule.forRoot({}),
+      ],
+      providers: [DatePipe, FileSizePipe, SlicePipe],
+    });
+    TestBed.overrideComponent(ViewProposalPageComponent, {
+      set: {
+        providers: [
+          { provide: Router, useValue: router },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: AppConfigService, useValue: { getConfig } },
         ],
-        providers: [DatePipe, FileSizePipe, SlicePipe],
-      });
-      TestBed.overrideComponent(ViewProposalPageComponent, {
-        set: {
-          providers: [
-            { provide: Router, useValue: router },
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-            { provide: AppConfigService, useValue: { getConfig } },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ViewProposalPageComponent);
@@ -114,10 +112,10 @@ describe("ViewProposalPageComponent", () => {
         changeDatasetsPageAction({
           page: event.pageIndex,
           limit: event.pageSize,
-        })
+        }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchProposalDatasetsAction({ proposalId: proposal.proposalId })
+        fetchProposalDatasetsAction({ proposalId: proposal.proposalId }),
       );
     });
   });

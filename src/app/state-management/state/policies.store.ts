@@ -23,12 +23,12 @@ export const initialPolicyState: PolicyState = {
   policiesFilters: {
     skip: 0,
     limit: 25,
-    sortField: "ownerGroup:desc"
+    sortField: "ownerGroup:desc",
   },
 
   editableFilters: {
     skip: 0,
     limit: 25,
-    sortField: "ownerGroup:desc"
-  }
+    sortField: "ownerGroup:desc",
+  },
 };

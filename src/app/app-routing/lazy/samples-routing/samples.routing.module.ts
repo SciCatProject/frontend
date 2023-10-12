@@ -6,7 +6,6 @@ import { SampleDashboardComponent } from "samples/sample-dashboard/sample-dashbo
 import { SampleDetailComponent } from "samples/sample-detail/sample-detail.component";
 
 const routes: Routes = [
-
   {
     path: "",
     component: SampleDashboardComponent,
@@ -16,11 +15,11 @@ const routes: Routes = [
     path: ":id",
     component: SampleDetailComponent,
     canActivate: [AuthGuard],
-    canDeactivate: [LeavingPageGuard]
+    canDeactivate: [LeavingPageGuard],
   },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class SamplesRoutingModule { }
+export class SamplesRoutingModule {}

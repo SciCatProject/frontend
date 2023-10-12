@@ -7,27 +7,27 @@ export const selectJobs = createSelector(selectJobState, (state) => state.jobs);
 
 export const selectCurrentJob = createSelector(
   selectJobState,
-  (state) => state.currentJob
+  (state) => state.currentJob,
 );
 
 export const selectJobsCount = createSelector(
   selectJobState,
-  (state) => state.totalCount
+  (state) => state.totalCount,
 );
 
 export const selectSubmitError = createSelector(
   selectJobState,
-  (state) => state.submitError
+  (state) => state.submitError,
 );
 
 export const selectFilters = createSelector(
   selectJobState,
-  (state) => state.filters
+  (state) => state.filters,
 );
 
 export const selectJobViewMode = createSelector(
   selectFilters,
-  (filters) => filters.mode
+  (filters) => filters.mode,
 );
 
 export const selectPage = createSelector(selectFilters, (filters) => {
@@ -37,7 +37,7 @@ export const selectPage = createSelector(selectFilters, (filters) => {
 
 export const selectJobsPerPage = createSelector(
   selectFilters,
-  (filters) => filters.limit
+  (filters) => filters.limit,
 );
 
 export const selectQueryParams = createSelector(selectFilters, (filters) => {

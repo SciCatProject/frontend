@@ -24,7 +24,7 @@ export interface AccessToken {
 export class ADAuthService {
   constructor(
     private appConfigService: AppConfigService,
-    private http: HttpClient
+    private http: HttpClient,
   ) {}
 
   /**
@@ -38,7 +38,7 @@ export class ADAuthService {
    */
   login(
     username: string,
-    password: string
+    password: string,
   ): Observable<HttpResponse<AccessToken>> {
     const creds: Credentials = {
       username: username,

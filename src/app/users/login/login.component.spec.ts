@@ -10,7 +10,10 @@ import { Store, StoreModule } from "@ngrx/store";
 import { MockActivatedRoute, MockRouter, MockStore } from "shared/MockStubs";
 import { LoginComponent } from "./login.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { funcLoginAction, loginAction } from "state-management/actions/user.actions";
+import {
+  funcLoginAction,
+  loginAction,
+} from "state-management/actions/user.actions";
 import { PrivacyDialogComponent } from "users/privacy-dialog/privacy-dialog.component";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -40,51 +43,49 @@ describe("LoginComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [LoginComponent],
-        imports: [
-          BrowserAnimationsModule,
-          FormsModule,
-          MatButtonModule,
-          MatCardModule,
-          MatDialogModule,
-          MatCheckboxModule,
-          MatFormFieldModule,
-          MatIconModule,
-          MatInputModule,
-          MatTabsModule,
-          ReactiveFormsModule,
-          StoreModule.forRoot({}),
-        ],
-        providers: [
-          provideMockStore({
-            selectors: [
-              {
-                selector: selectLoginPageViewModel,
-                value: { isLoggedIn: false, isLoggingIn: false },
-              },
-            ],
-          }),
-        ],
-      });
-      TestBed.overrideComponent(LoginComponent, {
-        set: {
-          // These should sync up with what is in the constructor, they do NOT need to be provided in the config for the testing module
-          providers: [
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [LoginComponent],
+      imports: [
+        BrowserAnimationsModule,
+        FormsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatDialogModule,
+        MatCheckboxModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatTabsModule,
+        ReactiveFormsModule,
+        StoreModule.forRoot({}),
+      ],
+      providers: [
+        provideMockStore({
+          selectors: [
             {
-              provide: AppConfigService,
-              useValue: { getConfig },
+              selector: selectLoginPageViewModel,
+              value: { isLoggedIn: false, isLoggingIn: false },
             },
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-            { provide: Router, useClass: MockRouter },
           ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+        }),
+      ],
+    });
+    TestBed.overrideComponent(LoginComponent, {
+      set: {
+        // These should sync up with what is in the constructor, they do NOT need to be provided in the config for the testing module
+        providers: [
+          {
+            provide: AppConfigService,
+            useValue: { getConfig },
+          },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: Router, useClass: MockRouter },
+        ],
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(inject([Store], (mockStore: MockStore) => {
     store = mockStore;
@@ -123,7 +124,7 @@ describe("LoginComponent", () => {
       expect(component.dialog.open).toHaveBeenCalledTimes(1);
       expect(component.dialog.open).toHaveBeenCalledWith(
         PrivacyDialogComponent,
-        { width: "auto" }
+        { width: "auto" },
       );
     });
   });
@@ -160,7 +161,9 @@ describe("LoginComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        funcLoginAction({ form: {username: "", password: "", rememberMe: true } })
+        funcLoginAction({
+          form: { username: "", password: "", rememberMe: true },
+        }),
       );
     });
   });
@@ -179,7 +182,7 @@ describe("LoginComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        loginAction({ form: { username: "", password: "", rememberMe: true} })
+        loginAction({ form: { username: "", password: "", rememberMe: true } }),
       );
     });
   });
@@ -260,7 +263,6 @@ describe("LoginComponent", () => {
     });
   });
 
-
   describe("should contain facility hint", () => {
     let externalAuthEndpoint: string;
     beforeEach(() => {
@@ -276,5 +278,4 @@ describe("LoginComponent", () => {
       expect(compiled.innerHTML).toContain("not-ESS account password");
     });
   });
-
 });

@@ -31,9 +31,9 @@ import { FlexModule } from "@ngbracket/ngx-layout";
     MatTableModule,
     MatTabsModule,
     PipesModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-  exports: [MetadataEditComponent, MetadataViewComponent]
+  exports: [MetadataEditComponent, MetadataViewComponent],
 })
 export class ScientificMetadataModule {}
 

@@ -70,7 +70,7 @@ describe("UnitsService", () => {
   describe("#parse()", () => {
     it("should return an array with containing possible unit kinds", () => {
       const args = ["sample_temperature5_max", "Wavelength[A]", "elapsed_time"];
-      args.forEach(arg => {
+      args.forEach((arg) => {
         const suggestedKinds = service["parse"](arg);
 
         expect(Array.isArray(suggestedKinds)).toEqual(true);

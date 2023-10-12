@@ -32,7 +32,7 @@ export class PolicyEffects {
       ofType(
         fromActions.fetchPoliciesAction,
         fromActions.changePageAction,
-        fromActions.sortByColumnAction
+        fromActions.sortByColumnAction,
       ),
       concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
@@ -43,9 +43,9 @@ export class PolicyEffects {
             fromActions.fetchCountAction(),
             fromActions.fetchEditablePoliciesAction(),
           ]),
-          catchError(() => of(fromActions.fetchPoliciesFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.fetchPoliciesFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -55,9 +55,9 @@ export class PolicyEffects {
       switchMap(() =>
         this.policyApi.count().pipe(
           map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
-          catchError(() => of(fromActions.fetchCountFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.fetchCountFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -66,7 +66,7 @@ export class PolicyEffects {
       ofType(
         fromActions.fetchEditablePoliciesAction,
         fromActions.changeEditablePageAction,
-        fromActions.sortEditableByColumnAction
+        fromActions.sortEditableByColumnAction,
       ),
       withLatestFrom(this.userProfile$, this.editableQueryParams$),
       switchMap(([action, profile, params]) => {
@@ -84,9 +84,9 @@ export class PolicyEffects {
             fromActions.fetchEditablePoliciesCompleteAction({ policies }),
             fromActions.fetchEditableCountAction(),
           ]),
-          catchError(() => of(fromActions.fetchEditablePoliciesFailedAction()))
+          catchError(() => of(fromActions.fetchEditablePoliciesFailedAction())),
         );
-      })
+      }),
     );
   });
 
@@ -104,11 +104,11 @@ export class PolicyEffects {
         }
         return this.policyApi.count(filter).pipe(
           map(({ count }) =>
-            fromActions.fetchEditableCountCompleteAction({ count })
+            fromActions.fetchEditableCountCompleteAction({ count }),
           ),
-          catchError(() => of(fromActions.fetchEditableCountFailedAction()))
+          catchError(() => of(fromActions.fetchEditableCountFailedAction())),
         );
-      })
+      }),
     );
   });
 
@@ -123,9 +123,9 @@ export class PolicyEffects {
             }),
             fromActions.fetchPoliciesAction(),
           ]),
-          catchError(() => of(fromActions.submitPolicyFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.submitPolicyFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -136,9 +136,9 @@ export class PolicyEffects {
         fromActions.fetchCountAction,
         fromActions.fetchEditablePoliciesAction,
         fromActions.fetchEditableCountAction,
-        fromActions.submitPolicyAction
+        fromActions.submitPolicyAction,
       ),
-      switchMap(() => of(loadingAction()))
+      switchMap(() => of(loadingAction())),
     );
   });
 
@@ -152,15 +152,15 @@ export class PolicyEffects {
         fromActions.fetchEditableCountCompleteAction,
         fromActions.fetchEditableCountFailedAction,
         fromActions.submitPolicyCompleteAction,
-        fromActions.submitPolicyFailedAction
+        fromActions.submitPolicyFailedAction,
       ),
-      switchMap(() => of(loadingCompleteAction()))
+      switchMap(() => of(loadingCompleteAction())),
     );
   });
 
   constructor(
     private actions$: Actions,
     private policyApi: PolicyApi,
-    private store: Store
+    private store: Store,
   ) {}
 }

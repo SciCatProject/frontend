@@ -49,32 +49,28 @@ describe("DashboardComponent", () => {
   };
   const logbook = new Logbook(logbookData);
 
-
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [ProposalLogbookComponent],
-        imports: [
-          BrowserAnimationsModule,
-          MatCardModule,
-          MatExpansionModule,
-          MatIconModule,
-          RouterTestingModule.withRoutes([]),
-          StoreModule.forRoot({}),
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [ProposalLogbookComponent],
+      imports: [
+        BrowserAnimationsModule,
+        MatCardModule,
+        MatExpansionModule,
+        MatIconModule,
+        RouterTestingModule.withRoutes([]),
+        StoreModule.forRoot({}),
+      ],
+    });
+    TestBed.overrideComponent(ProposalLogbookComponent, {
+      set: {
+        providers: [
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: AppConfigService, useValue: { getConfig } },
         ],
-      });
-      TestBed.overrideComponent(ProposalLogbookComponent, {
-        set: {
-          providers: [
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-            { provide: AppConfigService, useValue: { getConfig } },
-          ],
-        },
-      }).compileComponents();
-
-    })
-  );
+      },
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ProposalLogbookComponent);
@@ -103,12 +99,12 @@ describe("DashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setTextFilterAction({ textSearch })
+        setTextFilterAction({ textSearch }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
         fetchLogbookAction({
           name: logbook.name,
-        })
+        }),
       );
     });
   });
@@ -136,12 +132,12 @@ describe("DashboardComponent", () => {
           showBotMessages,
           showImages,
           showUserMessages,
-        })
+        }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
         fetchLogbookAction({
           name: logbook.name,
-        })
+        }),
       );
     });
   });
@@ -160,10 +156,10 @@ describe("DashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        changePageAction({ page: event.pageIndex, limit: event.pageSize })
+        changePageAction({ page: event.pageIndex, limit: event.pageSize }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchLogbookAction({ name: logbook.name })
+        fetchLogbookAction({ name: logbook.name }),
       );
     });
   });
@@ -181,10 +177,13 @@ describe("DashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        sortByColumnAction({ column: event.active, direction: event.direction })
+        sortByColumnAction({
+          column: event.active,
+          direction: event.direction,
+        }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchLogbookAction({ name: logbook.name })
+        fetchLogbookAction({ name: logbook.name }),
       );
     });
   });

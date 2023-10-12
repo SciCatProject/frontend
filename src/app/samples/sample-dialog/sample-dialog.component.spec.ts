@@ -21,32 +21,30 @@ describe("SampleDialogComponent", () => {
   let component: SampleDialogComponent;
   let fixture: ComponentFixture<SampleDialogComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [SampleDialogComponent],
-        imports: [
-          BrowserAnimationsModule,
-          FormsModule,
-          MatButtonModule,
-          MatDialogModule,
-          MatFormFieldModule,
-          MatInputModule,
-          MatOptionModule,
-          MatSelectModule,
-          ReactiveFormsModule,
-          StoreModule.forRoot({}),
-        ],
-        providers: [
-          { provide: Store, useClass: MockStore },
-          { provide: MatDialogRef, useValue: {} },
-          FormBuilder,
-          { provide: MAT_DIALOG_DATA, useValue: {} },
-        ],
-      });
-      TestBed.compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [SampleDialogComponent],
+      imports: [
+        BrowserAnimationsModule,
+        FormsModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatOptionModule,
+        MatSelectModule,
+        ReactiveFormsModule,
+        StoreModule.forRoot({}),
+      ],
+      providers: [
+        { provide: Store, useClass: MockStore },
+        { provide: MatDialogRef, useValue: {} },
+        FormBuilder,
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+      ],
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SampleDialogComponent);

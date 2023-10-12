@@ -4,9 +4,7 @@ import { AuthGuard } from "app-routing/auth.guard";
 import { LogbooksDashboardComponent } from "logbooks/logbooks-dashboard/logbooks-dashboard.component";
 import { LogbooksTableComponent } from "logbooks/logbooks-table/logbooks-table.component";
 
-
 const routes: Routes = [
-
   {
     path: "",
     component: LogbooksTableComponent,
@@ -20,6 +18,6 @@ const routes: Routes = [
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class LogbooksRoutingModule {}

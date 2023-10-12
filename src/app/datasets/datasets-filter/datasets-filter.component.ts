@@ -103,25 +103,25 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   groupSuggestions$ = this.createSuggestionObserver(
     this.groupFacetCounts$,
     this.groupInput$,
-    this.groupFilter$
+    this.groupFilter$,
   );
 
   locationSuggestions$ = this.createSuggestionObserver(
     this.locationFacetCounts$,
     this.locationInput$,
-    this.locationFilter$
+    this.locationFilter$,
   );
 
   typeSuggestions$ = this.createSuggestionObserver(
     this.typeFacetCounts$,
     this.typeInput$,
-    this.typeFilter$
+    this.typeFilter$,
   );
 
   keywordsSuggestions$ = this.createSuggestionObserver(
     this.keywordFacetCounts$,
     this.keywordsInput$,
-    this.keywordsFilter$
+    this.keywordsFilter$,
   );
 
   hasAppliedFilters$ = this.store.select(selectHasAppliedFilters);
@@ -135,17 +135,17 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     public appConfigService: AppConfigService,
     private asyncPipe: AsyncPipe,
     public dialog: MatDialog,
-    private store: Store
+    private store: Store,
   ) {}
 
   private buildPidTermsCondition(terms: string) {
     if (!terms) return "";
-    switch(this.appConfig.pidSearchMethod) {
+    switch (this.appConfig.pidSearchMethod) {
       case PidTermsSearchCondition.startsWith: {
-        return {"$regex": `^${terms}`};
+        return { $regex: `^${terms}` };
       }
       case PidTermsSearchCondition.contains: {
-        return {"$regex": terms};
+        return { $regex: terms };
       }
       default: {
         return terms;
@@ -156,7 +156,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   createSuggestionObserver(
     facetCounts$: Observable<FacetCount[]>,
     input$: BehaviorSubject<string>,
-    currentFilters$: Observable<string[]>
+    currentFilters$: Observable<string[]>,
   ): Observable<FacetCount[]> {
     return combineLatest([facetCounts$, input$, currentFilters$]).pipe(
       map(([counts, filterString, currentFilters]) => {
@@ -167,9 +167,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           (count) =>
             typeof count._id === "string" &&
             count._id.toLowerCase().includes(filterString.toLowerCase()) &&
-            currentFilters.indexOf(count._id) < 0
+            currentFilters.indexOf(count._id) < 0,
         );
-      })
+      }),
     );
   }
 
@@ -290,10 +290,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         if (res) {
           const { data } = res;
           this.store.dispatch(
-            addScientificConditionAction({ condition: data })
+            addScientificConditionAction({ condition: data }),
           );
           this.store.dispatch(
-            selectColumnAction({ name: data.lhs, columnType: "custom" })
+            selectColumnAction({ name: data.lhs, columnType: "custom" }),
           );
         }
       });
@@ -302,7 +302,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   removeCondition(condition: ScientificCondition, index: number) {
     this.store.dispatch(removeScientificConditionAction({ index }));
     this.store.dispatch(
-      deselectColumnAction({ name: condition.lhs, columnType: "custom" })
+      deselectColumnAction({ name: condition.lhs, columnType: "custom" }),
     );
   }
 
@@ -312,11 +312,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         .pipe(
           skipWhile((terms) => terms === ""),
           debounceTime(500),
-          distinctUntilChanged()
+          distinctUntilChanged(),
         )
         .subscribe((terms) => {
           this.store.dispatch(setTextFilterAction({ text: terms }));
-        })
+        }),
     );
 
     this.subscriptions.push(
@@ -324,11 +324,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         .pipe(
           skipWhile((terms) => terms === ""),
           debounceTime(500),
-          distinctUntilChanged()
+          distinctUntilChanged(),
         )
         .subscribe((terms) => {
           this.store.dispatch(addKeywordFilterAction({ keyword: terms }));
-        })
+        }),
     );
 
     this.subscriptions.push(
@@ -336,14 +336,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         .pipe(
           skipWhile((terms) => terms.length < 5),
           debounceTime(500),
-          distinctUntilChanged()
+          distinctUntilChanged(),
         )
         .subscribe((terms) => {
           const condition = this.buildPidTermsCondition(terms);
-          this.store.dispatch(setPidTermsFilterAction(
-            { pid: condition }
-          ));
-        })
+          this.store.dispatch(setPidTermsFilterAction({ pid: condition }));
+        }),
     );
   }
 

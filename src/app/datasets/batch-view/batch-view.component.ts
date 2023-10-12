@@ -50,7 +50,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private store: Store,
     private archivingSrv: ArchivingService,
-    private router: Router
+    private router: Router,
   ) {}
 
   private clearBatch() {
@@ -83,7 +83,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
       this.datasetList.some(
         (item) =>
           item.ownerEmail !== this.userProfile.email &&
-          !this.userProfile.accessGroups.includes(item.ownerGroup)
+          !this.userProfile.accessGroups.includes(item.ownerGroup),
       );
 
     const disableShareButton =
@@ -91,7 +91,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
       this.datasetList.every(
         (item) =>
           item.ownerEmail !== this.userProfile.email &&
-          !this.userProfile.accessGroups.includes(item.ownerGroup)
+          !this.userProfile.accessGroups.includes(item.ownerGroup),
       );
 
     const sharedUsersList = this.datasetList
@@ -130,7 +130,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
               pid: encodeURIComponent(dataset.pid),
               fieldName: "sharedWith",
               data: result.users,
-            })
+            }),
           );
         });
 
@@ -147,7 +147,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
             ? "Datasets successfully shared!"
             : "Shared users successfully removed!",
           MessageType.Success,
-          5000
+          5000,
         );
         this.store.dispatch(showMessageAction({ message }));
       }
@@ -158,7 +158,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     this.batch$
       .pipe(
         first(),
-        switchMap((datasets) => this.archivingSrv.archive(datasets))
+        switchMap((datasets) => this.archivingSrv.archive(datasets)),
       )
       .subscribe(
         () => this.clearBatch(),
@@ -170,14 +170,14 @@ export class BatchViewComponent implements OnInit, OnDestroy {
                 content: err.message,
                 duration: 5000,
               },
-            })
-          )
+            }),
+          ),
       );
   }
 
   onRetrieve() {
     const dialogOptions = this.archivingSrv.retriveDialogOptions(
-      this.appConfig.retrieveDestinations
+      this.appConfig.retrieveDestinations,
     );
     const dialogRef = this.dialog.open(DialogComponent, dialogOptions);
     const destPath = { destinationPath: "/archive/retrieve" };
@@ -185,7 +185,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
       if (result && this.datasetList) {
         const locationOption = this.archivingSrv.generateOptionLocation(
           result,
-          this.appConfig.retrieveDestinations
+          this.appConfig.retrieveDestinations,
         );
         const extra = { ...destPath, ...locationOption };
         this.archivingSrv.retrieve(this.datasetList, extra).subscribe(
@@ -198,8 +198,8 @@ export class BatchViewComponent implements OnInit, OnDestroy {
                   content: err.message,
                   duration: 5000,
                 },
-              })
-            )
+              }),
+            ),
         );
       }
     });
@@ -219,7 +219,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
           this.datasetList = result;
           this.hasBatch = result.length > 0;
         }
-      })
+      }),
     );
   }
 

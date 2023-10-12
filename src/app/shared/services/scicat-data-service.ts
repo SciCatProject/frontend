@@ -15,7 +15,10 @@ export interface FilterLimits {
   providedIn: "root",
 })
 export class ScicatDataService {
-  constructor(private http: HttpClient, private auth: LoopBackAuth) {}
+  constructor(
+    private http: HttpClient,
+    private auth: LoopBackAuth,
+  ) {}
 
   findDataById(url: string, dataId: number): Observable<any> {
     return this.http.get<any>(`${url}/${dataId}`);
@@ -24,7 +27,7 @@ export class ScicatDataService {
   // TODO when do I need to use "mode" syntax (may be for nested keys ?)
   createColumnFilterMongoExpression = (
     columns: Column[],
-    filterExpressions: any
+    filterExpressions: any,
   ) => {
     const result: Record<string, any> = {};
     if (filterExpressions) {
@@ -117,7 +120,7 @@ export class ScicatDataService {
     sortOrder = "asc",
     pageNumber = 0,
     pageSize = 10,
-    isFilesDashboard = false
+    isFilesDashboard = false,
   ): Observable<any[]> {
     // Dataset filter syntax (not used here)
     // {"limit":3,"skip":11,"where":{"ownerGroup":"p16633"},"order":"size ASC"}
@@ -137,7 +140,7 @@ export class ScicatDataService {
     // ("findalldata:", filterExpressions)
     const filterFields = this.createColumnFilterMongoExpression(
       columns,
-      filterExpressions
+      filterExpressions,
     );
     const limits: FilterLimits = {
       limit: pageSize,
@@ -176,11 +179,11 @@ export class ScicatDataService {
     url: string,
     columns: Column[],
     filterExpressions?: any,
-    isFilesDashboard = false
+    isFilesDashboard = false,
   ): Observable<any> {
     const filterFields = this.createColumnFilterMongoExpression(
       columns,
-      filterExpressions
+      filterExpressions,
     );
     const params = new HttpParams()
       .set("fields", JSON.stringify(filterFields))

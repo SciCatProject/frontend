@@ -35,37 +35,35 @@ describe("InstrumentsDashboardComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [InstrumentsDashboardComponent],
-        imports: [FlexLayoutModule, SharedScicatFrontendModule],
-        providers: [
-          JsonHeadPipe,
-          provideMockStore({
-            selectors: [
-              {
-                selector: selectInstrumentsDashboardPageViewModel,
-                value: {
-                  instruments: [],
-                  currentPage: 0,
-                  instrumentsCount: 100,
-                  instrumentsPerPage: 25,
-                },
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [InstrumentsDashboardComponent],
+      imports: [FlexLayoutModule, SharedScicatFrontendModule],
+      providers: [
+        JsonHeadPipe,
+        provideMockStore({
+          selectors: [
+            {
+              selector: selectInstrumentsDashboardPageViewModel,
+              value: {
+                instruments: [],
+                currentPage: 0,
+                instrumentsCount: 100,
+                instrumentsPerPage: 25,
               },
-            ],
-          }),
-        ],
-      });
-      TestBed.overrideComponent(InstrumentsDashboardComponent, {
-        set: {
-          providers: [{ provide: Router, useValue: router }],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+            },
+          ],
+        }),
+      ],
+    });
+    TestBed.overrideComponent(InstrumentsDashboardComponent, {
+      set: {
+        providers: [{ provide: Router, useValue: router }],
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(InstrumentsDashboardComponent);
@@ -101,7 +99,7 @@ describe("InstrumentsDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        changePageAction({ page, limit })
+        changePageAction({ page, limit }),
       );
     });
   });
@@ -121,7 +119,7 @@ describe("InstrumentsDashboardComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        sortByColumnAction({ column, direction })
+        sortByColumnAction({ column, direction }),
       );
     });
   });

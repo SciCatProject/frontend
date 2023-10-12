@@ -5,22 +5,22 @@ const selectDatasetState = createFeatureSelector<DatasetState>("datasets");
 
 export const selectDatasets = createSelector(
   selectDatasetState,
-  (state) => state.datasets
+  (state) => state.datasets,
 );
 
 export const selectSelectedDatasets = createSelector(
   selectDatasetState,
-  (state) => state.selectedSets
+  (state) => state.selectedSets,
 );
 
 export const selectMetadataKeys = createSelector(
   selectDatasetState,
-  (state) => state.metadataKeys
+  (state) => state.metadataKeys,
 );
 
 export const selectCurrentDataset = createSelector(
   selectDatasetState,
-  (state) => state.currentSet
+  (state) => state.currentSet,
 );
 
 export const selectCurrentDatasetWithoutFileInfo = createSelector(
@@ -31,69 +31,69 @@ export const selectCurrentDatasetWithoutFileInfo = createSelector(
       return theRest;
     }
     return undefined;
-  }
+  },
 );
 
 export const selectCurrentOrigDatablocks = createSelector(
   selectCurrentDataset,
-  (dataset) => (dataset ? dataset.origdatablocks : [])
+  (dataset) => (dataset ? dataset.origdatablocks : []),
 );
 
 export const selectCurrentDatablocks = createSelector(
   selectCurrentDataset,
-  (dataset) => (dataset ? dataset.datablocks : [])
+  (dataset) => (dataset ? dataset.datablocks : []),
 );
 
 export const selectCurrentAttachments = createSelector(
   selectCurrentDataset,
-  (dataset) => (dataset ? dataset.attachments : [])
+  (dataset) => (dataset ? dataset.attachments : []),
 );
 
 // === Filters ===
 
 export const selectFilters = createSelector(
   selectDatasetState,
-  (state) => state.filters
+  (state) => state.filters,
 );
 
 export const selectTextFilter = createSelector(
   selectFilters,
-  (filters) => filters.text || ""
+  (filters) => filters.text || "",
 );
 
 export const selectLocationFilter = createSelector(
   selectFilters,
-  (filters) => filters.creationLocation
+  (filters) => filters.creationLocation,
 );
 
 export const selectGroupFilter = createSelector(
   selectFilters,
-  (filters) => filters.ownerGroup
+  (filters) => filters.ownerGroup,
 );
 
 export const selectTypeFilter = createSelector(
   selectFilters,
-  (filters) => filters.type
+  (filters) => filters.type,
 );
 
 export const selectKeywordsFilter = createSelector(
   selectFilters,
-  (filters) => filters.keywords
+  (filters) => filters.keywords,
 );
 
 export const selectCreationTimeFilter = createSelector(
   selectFilters,
-  (filters) => filters.creationTime
+  (filters) => filters.creationTime,
 );
 
 export const selectArchiveViewMode = createSelector(
   selectFilters,
-  (filters) => filters.modeToggle
+  (filters) => filters.modeToggle,
 );
 
 export const selectPublicViewMode = createSelector(
   selectFilters,
-  (filters) => filters.isPublished
+  (filters) => filters.isPublished,
 );
 
 export const selectHasAppliedFilters = createSelector(
@@ -107,39 +107,39 @@ export const selectHasAppliedFilters = createSelector(
     filters.scientific.length > 0 ||
     (filters.creationTime &&
       (filters.creationTime.begin !== null ||
-        filters.creationTime.end !== null))
+        filters.creationTime.end !== null)),
 );
 
 export const selectScientificConditions = createSelector(
   selectFilters,
-  (filters) => filters.scientific
+  (filters) => filters.scientific,
 );
 
 // === Facet Counts ===
 
 const selectFacetCounts = createSelector(
   selectDatasetState,
-  (state) => state.facetCounts || {}
+  (state) => state.facetCounts || {},
 );
 
 export const selectLocationFacetCounts = createSelector(
   selectFacetCounts,
-  (counts) => counts.creationLocation || []
+  (counts) => counts.creationLocation || [],
 );
 
 export const selectGroupFacetCounts = createSelector(
   selectFacetCounts,
-  (counts) => counts.ownerGroup || []
+  (counts) => counts.ownerGroup || [],
 );
 
 export const selectTypeFacetCounts = createSelector(
   selectFacetCounts,
-  (counts) => counts.type || []
+  (counts) => counts.type || [],
 );
 
 export const selectKeywordFacetCounts = createSelector(
   selectFacetCounts,
-  (counts) => counts.keywords || []
+  (counts) => counts.keywords || [],
 );
 
 // === Querying ===
@@ -169,12 +169,7 @@ export const selectFullqueryParams = createSelector(selectFilters, (filter) => {
 export const selectFullfacetParams = createSelector(selectFilters, (filter) => {
   const { skip, limit, sortField, modeToggle, ...theRest } = filter;
   const fields = restrictFilter(theRest);
-  const facets = [
-    "type",
-    "creationLocation",
-    "ownerGroup",
-    "keywords",
-  ];
+  const facets = ["type", "creationLocation", "ownerGroup", "keywords"];
   return { fields, facets };
 });
 
@@ -182,7 +177,7 @@ export const selectFullfacetParams = createSelector(selectFilters, (filter) => {
 
 export const selectTotalSets = createSelector(
   selectDatasetState,
-  (state) => state.totalCount
+  (state) => state.totalCount,
 );
 
 export const selectPage = createSelector(selectFilters, (filters) => {
@@ -192,32 +187,32 @@ export const selectPage = createSelector(selectFilters, (filters) => {
 
 export const selectDatasetsPerPage = createSelector(
   selectFilters,
-  (filters) => filters.limit
+  (filters) => filters.limit,
 );
 
 export const selectSearchTerms = createSelector(
   selectDatasetState,
-  (state) => state.searchTerms
+  (state) => state.searchTerms,
 );
 
 export const selectPidTerms = createSelector(
   selectDatasetState,
-  (state) => state.pidTerms
+  (state) => state.pidTerms,
 );
 
 export const selectKeywordsTerms = createSelector(
   selectDatasetState,
-  (state) => state.keywordsTerms
+  (state) => state.keywordsTerms,
 );
 
 export const selectHasPrefilledFilters = createSelector(
   selectDatasetState,
-  (state) => state.hasPrefilledFilters
+  (state) => state.hasPrefilledFilters,
 );
 
 export const selectDatasetsInBatch = createSelector(
   selectDatasetState,
-  (state) => state.batch
+  (state) => state.batch,
 );
 
 export const selectDatasetsInBatchIndicator = createSelector(
@@ -234,12 +229,12 @@ export const selectDatasetsInBatchIndicator = createSelector(
     }
 
     return String(inBatchCount);
-  }
+  },
 );
 
 export const selectOpenwhiskResult = createSelector(
   selectDatasetState,
-  (state) => state.openwhiskResult
+  (state) => state.openwhiskResult,
 );
 
 export const selectRelatedDatasetsPageViewModel = createSelector(
@@ -248,10 +243,10 @@ export const selectRelatedDatasetsPageViewModel = createSelector(
     relatedDatasets,
     relatedDatasetsCount,
     relatedDatasetsFilters,
-  })
+  }),
 );
 
 export const selectRelatedDatasetsFilters = createSelector(
   selectDatasetState,
-  (state) => state.relatedDatasetsFilters
+  (state) => state.relatedDatasetsFilters,
 );

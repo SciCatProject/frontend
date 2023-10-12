@@ -15,11 +15,11 @@ const routes: Routes = [
     path: ":id",
     component: InstrumentDetailsComponent,
     canActivate: [AuthGuard],
-    canDeactivate: [LeavingPageGuard]
+    canDeactivate: [LeavingPageGuard],
   },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class InstrumentsRoutingModule {}

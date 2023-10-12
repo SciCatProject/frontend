@@ -40,28 +40,26 @@ describe("SampleEditComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [SampleEditComponent],
-        imports: [
-          BrowserAnimationsModule,
-          MatButtonModule,
-          MatDialogModule,
-          MatFormFieldModule,
-          MatIconModule,
-          MatInputModule,
-          MatPaginatorModule,
-          MatTableModule,
-        ],
-        providers: [
-          { provide: MatDialogRef, useValue: { close: () => {} } },
-          { provide: MAT_DIALOG_DATA, useValue: {} },
-          { provide: Store, useClass: MockStore },
-        ],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [SampleEditComponent],
+      imports: [
+        BrowserAnimationsModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatPaginatorModule,
+        MatTableModule,
+      ],
+      providers: [
+        { provide: MatDialogRef, useValue: { close: () => {} } },
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+        { provide: Store, useClass: MockStore },
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SampleEditComponent);
@@ -89,7 +87,7 @@ describe("SampleEditComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setTextFilterAction({ text: "" })
+        setTextFilterAction({ text: "" }),
       );
     });
   });
@@ -128,7 +126,7 @@ describe("SampleEditComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        changePageAction({ page: event.pageIndex, limit: event.pageSize })
+        changePageAction({ page: event.pageIndex, limit: event.pageSize }),
       );
     });
   });
@@ -146,7 +144,10 @@ describe("SampleEditComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        sortByColumnAction({ column: event.active, direction: event.direction })
+        sortByColumnAction({
+          column: event.active,
+          direction: event.direction,
+        }),
       );
     });
   });

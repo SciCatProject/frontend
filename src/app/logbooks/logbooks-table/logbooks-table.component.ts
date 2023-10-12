@@ -16,7 +16,10 @@ export class LogbooksTableComponent implements OnInit {
 
   columnsToDisplay: string[] = ["name", "latestEntry", "sender", "entry"];
 
-  constructor(private router: Router, private store: Store) {}
+  constructor(
+    private router: Router,
+    private store: Store,
+  ) {}
 
   onClick(logbook: Logbook): void {
     this.router.navigateByUrl("/logbooks/" + logbook.name);

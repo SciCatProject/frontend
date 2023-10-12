@@ -9,7 +9,7 @@ const reducer = createReducer(
     (state, { jobs }): JobsState => ({
       ...state,
       jobs,
-    })
+    }),
   ),
 
   on(
@@ -17,7 +17,7 @@ const reducer = createReducer(
     (state, { count }): JobsState => ({
       ...state,
       totalCount: count,
-    })
+    }),
   ),
 
   on(
@@ -25,7 +25,7 @@ const reducer = createReducer(
     (state, { job }): JobsState => ({
       ...state,
       currentJob: job,
-    })
+    }),
   ),
 
   on(
@@ -33,14 +33,14 @@ const reducer = createReducer(
     (state): JobsState => ({
       ...state,
       submitError: undefined,
-    })
+    }),
   ),
   on(
     fromActions.submitJobFailedAction,
     (state, { err }): JobsState => ({
       ...state,
       submitError: err,
-    })
+    }),
   ),
 
   on(
@@ -48,7 +48,7 @@ const reducer = createReducer(
     (state, { mode }): JobsState => ({
       ...state,
       filters: { ...state.filters, mode, skip: 0 },
-    })
+    }),
   ),
 
   on(fromActions.setJobsLimitFilterAction, (state, { limit }): JobsState => {
@@ -68,13 +68,13 @@ const reducer = createReducer(
       const sortField = column + (direction ? " " + direction : "");
       const filters = { ...state.filters, sortField, skip: 0 };
       return { ...state, filters };
-    }
+    },
   ),
 
   on(
     fromActions.clearJobsStateAction,
-    (): JobsState => ({ ...initialJobsState })
-  )
+    (): JobsState => ({ ...initialJobsState }),
+  ),
 );
 
 export const jobsReducer = (state: JobsState | undefined, action: Action) => {

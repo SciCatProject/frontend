@@ -22,7 +22,7 @@ describe("Instrument Selectors", () => {
   describe("selectInstruments", () => {
     it("should select instruments", () => {
       expect(
-        fromSelectors.selectInstruments.projector(initialInstrumentState)
+        fromSelectors.selectInstruments.projector(initialInstrumentState),
       ).toEqual([]);
     });
   });
@@ -30,7 +30,7 @@ describe("Instrument Selectors", () => {
   describe("selectCurrentInstrument", () => {
     it("should select current instrument", () => {
       expect(
-        fromSelectors.selectCurrentInstrument.projector(initialInstrumentState)
+        fromSelectors.selectCurrentInstrument.projector(initialInstrumentState),
       ).toEqual(instrument);
     });
   });
@@ -38,7 +38,7 @@ describe("Instrument Selectors", () => {
   describe("selectInstrumentsCount", () => {
     it("should select the total instruments count", () => {
       expect(
-        fromSelectors.selectInstrumentsCount.projector(initialInstrumentState)
+        fromSelectors.selectInstrumentsCount.projector(initialInstrumentState),
       ).toEqual(0);
     });
   });
@@ -46,7 +46,7 @@ describe("Instrument Selectors", () => {
   describe("selectFilters", () => {
     it("should select the filters", () => {
       expect(
-        fromSelectors.selectFilters.projector(initialInstrumentState)
+        fromSelectors.selectFilters.projector(initialInstrumentState),
       ).toEqual(instrumentFilters);
     });
   });
@@ -56,7 +56,7 @@ describe("Instrument Selectors", () => {
       const { skip, limit } = instrumentFilters;
       const page = skip / limit;
       expect(
-        fromSelectors.selectPage.projector(initialInstrumentState.filters)
+        fromSelectors.selectPage.projector(initialInstrumentState.filters),
       ).toEqual(page);
     });
   });
@@ -66,8 +66,8 @@ describe("Instrument Selectors", () => {
       const { limit } = instrumentFilters;
       expect(
         fromSelectors.selectInstrumentsPerPage.projector(
-          initialInstrumentState.filters
-        )
+          initialInstrumentState.filters,
+        ),
       ).toEqual(limit);
     });
   });
@@ -79,12 +79,12 @@ describe("Instrument Selectors", () => {
           fromSelectors.selectInstruments.projector(initialInstrumentState),
           fromSelectors.selectPage.projector(initialInstrumentState.filters),
           fromSelectors.selectInstrumentsCount.projector(
-            initialInstrumentState
+            initialInstrumentState,
           ),
           fromSelectors.selectInstrumentsPerPage.projector(
-            initialInstrumentState.filters
-          )
-        )
+            initialInstrumentState.filters,
+          ),
+        ),
       ).toEqual({
         instruments: [],
         currentPage: 0,

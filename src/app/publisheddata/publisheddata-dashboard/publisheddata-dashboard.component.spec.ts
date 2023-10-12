@@ -91,7 +91,7 @@ describe("PublisheddataDashboardComponent", () => {
       const message = new Message(
         "The selected DOI's have been copied to your clipboard",
         MessageType.Success,
-        5000
+        5000,
       );
 
       component.onShareClick();
@@ -111,7 +111,7 @@ describe("PublisheddataDashboardComponent", () => {
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
       expect(router.navigateByUrl).toHaveBeenCalledWith(
-        "/publishedDatasets/" + id
+        "/publishedDatasets/" + id,
       );
     });
   });
@@ -131,7 +131,7 @@ describe("PublisheddataDashboardComponent", () => {
       });
 
       spyOn(component.vm$, "pipe").and.returnValue(
-        of({ publishedData: [published] })
+        of({ publishedData: [published] }),
       );
 
       const event = {
@@ -149,7 +149,7 @@ describe("PublisheddataDashboardComponent", () => {
     it("should remove all DOI's from selectedDOIs if checked is false", () => {
       component.selectedDOIs.push(
         component.doiBaseUrl + "test1",
-        component.doiBaseUrl + "test2"
+        component.doiBaseUrl + "test2",
       );
 
       const event = {
@@ -175,7 +175,7 @@ describe("PublisheddataDashboardComponent", () => {
       component.onSelectOne(checkboxEvent);
 
       expect(component.selectedDOIs).toContain(
-        component.doiBaseUrl + checkboxEvent.row.doi
+        component.doiBaseUrl + checkboxEvent.row.doi,
       );
     });
 

@@ -30,45 +30,43 @@ describe("PublisheddataEditComponent", () => {
   let component: PublisheddataEditComponent;
   let fixture: ComponentFixture<PublisheddataEditComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [PublisheddataEditComponent],
-        imports: [
-          BrowserAnimationsModule,
-          FlexLayoutModule,
-          FormsModule,
-          MatButtonModule,
-          MatCardModule,
-          MatChipsModule,
-          MatFormFieldModule,
-          MatIconModule,
-          MatInputModule,
-          MatOptionModule,
-          MatSelectModule,
-          ReactiveFormsModule,
-        ],
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [PublisheddataEditComponent],
+      imports: [
+        BrowserAnimationsModule,
+        FlexLayoutModule,
+        FormsModule,
+        MatButtonModule,
+        MatCardModule,
+        MatChipsModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatOptionModule,
+        MatSelectModule,
+        ReactiveFormsModule,
+      ],
+      providers: [
+        provideMockStore({
+          selectors: [{ selector: selectCurrentPublishedData, value: {} }],
+        }),
+      ],
+    });
+    TestBed.overrideComponent(PublisheddataEditComponent, {
+      set: {
         providers: [
-          provideMockStore({
-            selectors: [{ selector: selectCurrentPublishedData, value: {} }],
-          }),
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: ActionsSubject, useValue: of({}) },
+          { provide: PublishedDataApi, useClass: MockPublishedDataApi },
+          { provide: Router, useClass: MockRouter },
+          { provide: Store, useClass: MockStore },
         ],
-      });
-      TestBed.overrideComponent(PublisheddataEditComponent, {
-        set: {
-          providers: [
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-            { provide: ActionsSubject, useValue: of({}) },
-            { provide: PublishedDataApi, useClass: MockPublishedDataApi },
-            { provide: Router, useClass: MockRouter },
-            { provide: Store, useClass: MockStore },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PublisheddataEditComponent);
@@ -130,13 +128,13 @@ describe("PublisheddataEditComponent", () => {
       component.relatedPublications!.setValue([]);
       component.relatedPublications!.value.push(
         "firstRelatedPublication",
-        relatedPublication
+        relatedPublication,
       );
 
       component.removeRelatedPublication(1);
 
       expect(component.relatedPublications!.value).not.toContain(
-        relatedPublication
+        relatedPublication,
       );
     });
   });

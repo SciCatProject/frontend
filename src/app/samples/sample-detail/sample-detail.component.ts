@@ -43,7 +43,8 @@ export interface TableData {
   styleUrls: ["./sample-detail.component.scss"],
 })
 export class SampleDetailComponent
-  implements OnInit, OnDestroy, EditableComponent {
+  implements OnInit, OnDestroy, EditableComponent
+{
   private _hasUnsavedChanges = false;
   vm$ = this.store.select(selectSampleDetailPageViewModel);
 
@@ -74,7 +75,7 @@ export class SampleDetailComponent
     private router: Router,
     private route: ActivatedRoute,
     private slicePipe: SlicePipe,
-    private store: Store
+    private store: Store,
   ) {}
 
   formatTableData(datasets: Dataset[]): TableData[] {
@@ -88,7 +89,7 @@ export class SampleDetailComponent
         size: this.filesizePipe.transform(dataset.size),
         creationTime: this.datePipe.transform(
           dataset.creationTime,
-          "yyyy-MM-dd HH:mm"
+          "yyyy-MM-dd HH:mm",
         ),
         owner: dataset.owner,
         location: dataset.creationLocation,
@@ -102,7 +103,7 @@ export class SampleDetailComponent
       saveCharacteristicsAction({
         sampleId: this.sample.sampleId,
         characteristics,
-      })
+      }),
     );
   }
 
@@ -130,22 +131,25 @@ export class SampleDetailComponent
         sampleId: this.sample.sampleId,
         attachmentId,
         caption,
-      })
+      }),
     );
   }
 
   deleteAttachment(attachmentId: string) {
     this.store.dispatch(
-      removeAttachmentAction({ sampleId: this.sample.sampleId, attachmentId })
+      removeAttachmentAction({ sampleId: this.sample.sampleId, attachmentId }),
     );
   }
 
   onPageChange(event: PageChangeEvent) {
     this.store.dispatch(
-      changeDatasetsPageAction({ page: event.pageIndex, limit: event.pageSize })
+      changeDatasetsPageAction({
+        page: event.pageIndex,
+        limit: event.pageSize,
+      }),
     );
     this.store.dispatch(
-      fetchSampleDatasetsAction({ sampleId: this.sample.sampleId })
+      fetchSampleDatasetsAction({ sampleId: this.sample.sampleId }),
     );
   }
 
@@ -168,7 +172,7 @@ export class SampleDetailComponent
         if (vm.attachments) {
           this.attachments = vm.attachments;
         }
-      })
+      }),
     );
     // Prevent user from reloading page if there are unsave changes
     this.subscriptions.push(
@@ -176,12 +180,12 @@ export class SampleDetailComponent
         if (this.hasUnsavedChanges()) {
           event.preventDefault();
         }
-      })
+      }),
     );
     this.subscriptions.push(
       this.vm$.subscribe((vm) => {
         this.tableData = this.formatTableData(vm.datasets);
-      })
+      }),
     );
 
     this.subscriptions.push(
@@ -189,17 +193,17 @@ export class SampleDetailComponent
         if (vm.user) {
           this.user = vm.user;
         }
-      })
+      }),
     );
 
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
         this.store.dispatch(fetchSampleAction({ sampleId: params.id }));
         this.store.dispatch(
-          fetchSampleAttachmentsAction({ sampleId: params.id })
+          fetchSampleAttachmentsAction({ sampleId: params.id }),
         );
         this.store.dispatch(fetchSampleDatasetsAction({ sampleId: params.id }));
-      })
+      }),
     );
   }
   hasUnsavedChanges() {

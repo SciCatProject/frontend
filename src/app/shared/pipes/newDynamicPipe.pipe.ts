@@ -1,7 +1,15 @@
 import { Injector, Pipe, PipeTransform } from "@angular/core";
 import {
-  CurrencyPipe, DatePipe, DecimalPipe, JsonPipe, KeyValuePipe, LowerCasePipe,
-  PercentPipe, SlicePipe, TitleCasePipe, UpperCasePipe
+  CurrencyPipe,
+  DatePipe,
+  DecimalPipe,
+  JsonPipe,
+  KeyValuePipe,
+  LowerCasePipe,
+  PercentPipe,
+  SlicePipe,
+  TitleCasePipe,
+  UpperCasePipe,
 } from "@angular/common";
 import { FilePathTruncate } from "./file-path-truncate.pipe";
 import { FileSizePipe } from "./filesize.pipe";
@@ -12,13 +20,11 @@ import { ReplaceUnderscorePipe } from "./replace-underscore.pipe";
 import { StripProposalPrefixPipe } from "./stripProposalPrefix.pipe";
 import { ThumbnailPipe } from "./thumbnail.pipe";
 
-
-
 @Pipe({
   name: "newDynamicPipe",
 })
 export class NewDynamicPipe implements PipeTransform {
-  public constructor(private injector: Injector) { }
+  public constructor(private injector: Injector) {}
 
   transform(value: any, pipeDef: any): any {
     if (pipeDef) {

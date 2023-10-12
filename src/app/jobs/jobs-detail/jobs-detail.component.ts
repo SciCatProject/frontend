@@ -14,7 +14,10 @@ export class JobsDetailComponent implements OnInit, OnDestroy {
   job$ = this.store.select(selectCurrentJob);
   routeSubscription: Subscription = new Subscription();
 
-  constructor(private route: ActivatedRoute, private store: Store) {}
+  constructor(
+    private route: ActivatedRoute,
+    private store: Store,
+  ) {}
 
   ngOnInit() {
     this.routeSubscription = this.route.params.subscribe((params) => {

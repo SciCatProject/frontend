@@ -62,7 +62,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     private store: Store,
     private publishedDataApi: PublishedDataApi,
     private actionsSubj: ActionsSubject,
-    private router: Router
+    private router: Router,
   ) {}
 
   addCreator(event) {
@@ -126,7 +126,7 @@ export class PublishComponent implements OnInit, OnDestroy {
           if (datasets) {
             const creator = datasets.map((dataset) => dataset.owner);
             const unique = creator.filter(
-              (item, i) => creator.indexOf(item) === i
+              (item, i) => creator.indexOf(item) === i,
             );
             this.form.creators = unique;
             this.form.pidArray = datasets.map((dataset) => dataset.pid);
@@ -136,7 +136,7 @@ export class PublishComponent implements OnInit, OnDestroy {
             });
             this.form.sizeOfArchive = size;
           }
-        })
+        }),
       )
       .subscribe();
 
@@ -186,7 +186,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     publishedData.publisher = this.form.publisher;
     publishedData.publicationYear = parseInt(
       formatDate(this.today, "yyyy", "en_GB"),
-      10
+      10,
     );
     publishedData.url = this.form.url;
     publishedData.thumbnail = this.form.thumbnail;

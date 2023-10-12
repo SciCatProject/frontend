@@ -1,13 +1,13 @@
 /* eslint-disable */
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 /**
-* @author Jonathan Casarrubias <twitter:@johncasarrubias> <github:@mean-expert-official>
-* @module StorageBrowser
-* @license MIT
-* @description
-* This module handle localStorage, it will be provided using DI Swapping according the
-* SDK Socket Driver Available currently supporting Angular 2 for web and NativeScript 2.
-**/
+ * @author Jonathan Casarrubias <twitter:@johncasarrubias> <github:@mean-expert-official>
+ * @module StorageBrowser
+ * @license MIT
+ * @description
+ * This module handle localStorage, it will be provided using DI Swapping according the
+ * SDK Socket Driver Available currently supporting Angular 2 for web and NativeScript 2.
+ **/
 @Injectable()
 export class StorageBrowser {
   /**
@@ -32,7 +32,7 @@ export class StorageBrowser {
   set(key: string, value: any, expires?: Date): void {
     localStorage.setItem(
       key,
-      typeof value === 'object' ? JSON.stringify(value) : value
+      typeof value === "object" ? JSON.stringify(value) : value,
     );
   }
   /**
@@ -46,7 +46,7 @@ export class StorageBrowser {
     if (localStorage[key]) {
       localStorage.removeItem(key);
     } else {
-      console.log('Trying to remove unexisting key: ', key);
+      console.log("Trying to remove unexisting key: ", key);
     }
   }
   /**
@@ -59,9 +59,9 @@ export class StorageBrowser {
    **/
   private parse(value: any) {
     try {
-        return JSON.parse(value);
+      return JSON.parse(value);
     } catch (e) {
-        return value;
+      return value;
     }
   }
 }

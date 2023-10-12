@@ -42,7 +42,7 @@ describe("AppThemeService", () => {
       service.setActiveTheme();
 
       const color = document.documentElement.style.getPropertyValue(
-        "--theme-primary-default"
+        "--theme-primary-default",
       );
 
       expect(color).toEqual("#000000");

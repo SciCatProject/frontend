@@ -1,3 +1,3 @@
 /* eslint-disable */
-export * from './core/index';
-export * from './custom/index';
+export * from "./core/index";
+export * from "./custom/index";

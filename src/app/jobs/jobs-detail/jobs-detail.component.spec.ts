@@ -14,30 +14,28 @@ describe("JobsDetailComponent", () => {
   let component: JobsDetailComponent;
   let fixture: ComponentFixture<JobsDetailComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        imports: [
-          MatCardModule,
-          MatIconModule,
-          ReactiveFormsModule,
-          SharedTableModule,
-          StoreModule.forRoot({}),
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [
+        MatCardModule,
+        MatIconModule,
+        ReactiveFormsModule,
+        SharedTableModule,
+        StoreModule.forRoot({}),
+      ],
+      declarations: [JobsDetailComponent],
+    });
+    TestBed.overrideComponent(JobsDetailComponent, {
+      set: {
+        providers: [
+          { provide: Store, useClass: MockStore },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
         ],
-        declarations: [JobsDetailComponent],
-      });
-      TestBed.overrideComponent(JobsDetailComponent, {
-        set: {
-          providers: [
-            { provide: Store, useClass: MockStore },
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(JobsDetailComponent);

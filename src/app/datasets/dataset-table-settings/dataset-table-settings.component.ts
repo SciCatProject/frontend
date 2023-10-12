@@ -10,7 +10,7 @@ export interface SelectColumnEvent {
 @Component({
   selector: "dataset-table-settings",
   templateUrl: "./dataset-table-settings.component.html",
-  styleUrls: ["./dataset-table-settings.component.scss"]
+  styleUrls: ["./dataset-table-settings.component.scss"],
 })
 export class DatasetTableSettingsComponent {
   @Input() clearSearchBar = false;
@@ -27,7 +27,7 @@ export class DatasetTableSettingsComponent {
   doSelectColumn(event: MatCheckboxChange, column: TableColumn): void {
     const selectColumnEvent: SelectColumnEvent = {
       checkBoxChange: event,
-      column
+      column,
     };
     this.selectColumn.emit(selectColumnEvent);
   }
@@ -35,7 +35,7 @@ export class DatasetTableSettingsComponent {
   doSearch(value: string): void {
     const filterValue = value.toLowerCase();
     this.filteredColumns = this.selectableColumns!.filter(({ name }) =>
-      name.toLowerCase().includes(filterValue)
+      name.toLowerCase().includes(filterValue),
     );
   }
 }

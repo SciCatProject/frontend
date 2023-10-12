@@ -36,33 +36,31 @@ describe("DatasetTableActionsComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        declarations: [DatasetTableActionsComponent],
-        imports: [
-          MatButtonModule,
-          MatButtonToggleModule,
-          MatDialogModule,
-          MatIconModule,
-          StoreModule.forRoot({}),
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [DatasetTableActionsComponent],
+      imports: [
+        MatButtonModule,
+        MatButtonToggleModule,
+        MatDialogModule,
+        MatIconModule,
+        StoreModule.forRoot({}),
+      ],
+    });
+    TestBed.overrideComponent(DatasetTableActionsComponent, {
+      set: {
+        providers: [
+          {
+            provide: AppConfigService,
+            useClass: MockAppConfigService,
+          },
+          { provide: ArchivingService, useClass: MockArchivingService },
         ],
-      });
-      TestBed.overrideComponent(DatasetTableActionsComponent, {
-        set: {
-          providers: [
-            {
-              provide: AppConfigService,
-              useClass: MockAppConfigService,
-            },
-            { provide: ArchivingService, useClass: MockArchivingService },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetTableActionsComponent);
@@ -86,11 +84,11 @@ describe("DatasetTableActionsComponent", () => {
     const compiled = fixture.debugElement.nativeElement;
     expect(compiled.querySelector(".archivable")).toBeTruthy();
     expect(compiled.querySelector(".archivable").textContent).toContain(
-      "Archivable"
+      "Archivable",
     );
     expect(compiled.querySelector(".retrievable")).toBeTruthy();
     expect(compiled.querySelector(".retrievable").textContent).toContain(
-      "Retrievable"
+      "Retrievable",
     );
     expect(compiled.querySelector(".all")).toBeTruthy();
     expect(compiled.querySelector(".all").textContent).toContain("All");
@@ -107,7 +105,7 @@ describe("DatasetTableActionsComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setArchiveViewModeAction({ modeToggle })
+        setArchiveViewModeAction({ modeToggle }),
       );
     });
   });
@@ -121,7 +119,7 @@ describe("DatasetTableActionsComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setPublicViewModeAction({ isPublished: viewPublic })
+        setPublicViewModeAction({ isPublished: viewPublic }),
       );
     });
   });

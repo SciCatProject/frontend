@@ -11,7 +11,7 @@ describe("User Actions", () => {
       const action = fromActions.loginAction({ form });
       expect({ ...action }).toEqual({
         type: "[User] Login",
-        form
+        form,
       });
     });
   });
@@ -24,7 +24,7 @@ describe("User Actions", () => {
       expect({ ...action }).toEqual({
         type: "[User] Login Complete",
         user,
-        accountType
+        accountType,
       });
     });
   });
@@ -34,7 +34,7 @@ describe("User Actions", () => {
       const action = fromActions.loginFailedAction({ error });
       expect({ ...action }).toEqual({
         type: "[User] Login Failed",
-        error
+        error,
       });
     });
   });
@@ -47,13 +47,13 @@ describe("User Actions", () => {
       const action = fromActions.activeDirLoginAction({
         username,
         password,
-        rememberMe
+        rememberMe,
       });
       expect({ ...action }).toEqual({
         type: "[User] Active Directory Login",
         username,
         password,
-        rememberMe
+        rememberMe,
       });
     });
   });
@@ -62,7 +62,7 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const action = fromActions.activeDirLoginSuccessAction();
       expect({ ...action }).toEqual({
-        type: "[User] Active Directory Login Success"
+        type: "[User] Active Directory Login Success",
       });
     });
   });
@@ -73,11 +73,11 @@ describe("User Actions", () => {
       const password = "test";
       const rememberMe = true;
       const action = fromActions.activeDirLoginFailedAction({
-        error
+        error,
       });
       expect({ ...action }).toEqual({
         type: "[User] Active Directory Login Failed",
-        error
+        error,
       });
     });
   });
@@ -92,15 +92,15 @@ describe("User Actions", () => {
           username,
           password,
           rememberMe,
-        }
+        },
       });
       expect({ ...action }).toEqual({
         type: "[User] Functional Login",
-          form: {
-            username,
-            password,
-            rememberMe,
-          }
+        form: {
+          username,
+          password,
+          rememberMe,
+        },
       });
     });
   });
@@ -109,7 +109,7 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const action = fromActions.funcLoginSuccessAction();
       expect({ ...action }).toEqual({
-        type: "[User] Functional Login Success"
+        type: "[User] Functional Login Success",
       });
     });
   });
@@ -119,7 +119,7 @@ describe("User Actions", () => {
       const action = fromActions.funcLoginFailedAction({ error });
       expect({ ...action }).toEqual({
         type: "[User] Functional Login Failed",
-        error
+        error,
       });
     });
   });
@@ -130,7 +130,7 @@ describe("User Actions", () => {
       const action = fromActions.fetchUserAction({ adLoginResponse });
       expect({ ...action }).toEqual({
         type: "[User] Fetch User",
-        adLoginResponse
+        adLoginResponse,
       });
     });
   });
@@ -139,7 +139,7 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchUserCompleteAction();
       expect({ ...action }).toEqual({
-        type: "[User] Fetch User Complete"
+        type: "[User] Fetch User Complete",
       });
     });
   });
@@ -149,7 +149,7 @@ describe("User Actions", () => {
       const action = fromActions.fetchUserFailedAction({ error });
       expect({ ...action }).toEqual({
         type: "[User] Fetch User Failed",
-        error
+        error,
       });
     });
   });
@@ -158,7 +158,7 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchCurrentUserAction();
       expect({ ...action }).toEqual({
-        type: "[User] Fetch Current User"
+        type: "[User] Fetch Current User",
       });
     });
   });
@@ -169,7 +169,7 @@ describe("User Actions", () => {
       const action = fromActions.fetchCurrentUserCompleteAction({ user });
       expect({ ...action }).toEqual({
         type: "[User] Fetch Current User Complete",
-        user
+        user,
       });
     });
   });
@@ -178,7 +178,7 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchCurrentUserFailedAction();
       expect({ ...action }).toEqual({
-        type: "[User] Fetch Current User Failed"
+        type: "[User] Fetch Current User Failed",
       });
     });
   });
@@ -195,11 +195,11 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const userIdentity = new UserIdentity();
       const action = fromActions.fetchUserIdentityCompleteAction({
-        userIdentity
+        userIdentity,
       });
       expect({ ...action }).toEqual({
         type: "[User] Fetch User Identity Complete",
-        userIdentity
+        userIdentity,
       });
     });
   });
@@ -208,7 +208,7 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchUserIdentityFailedAction();
       expect({ ...action }).toEqual({
-        type: "[User] Fetch User Identity Failed"
+        type: "[User] Fetch User Identity Failed",
       });
     });
   });
@@ -228,14 +228,14 @@ describe("User Actions", () => {
         datasetCount: 25,
         jobCount: 25,
         userId: "testId",
-        id: "testId"
+        id: "testId",
       });
       const action = fromActions.fetchUserSettingsCompleteAction({
-        userSettings
+        userSettings,
       });
       expect({ ...action }).toEqual({
         type: "[User] Fetch User Settings Complete",
-        userSettings
+        userSettings,
       });
     });
   });
@@ -244,7 +244,7 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchUserSettingsFailedAction();
       expect({ ...action }).toEqual({
-        type: "[User] Fetch User Settings Failed"
+        type: "[User] Fetch User Settings Failed",
       });
     });
   });
@@ -255,7 +255,7 @@ describe("User Actions", () => {
       const action = fromActions.updateUserSettingsAction({ property });
       expect({ ...action }).toEqual({
         type: "[User] Update User Settings",
-        property
+        property,
       });
     });
   });
@@ -267,14 +267,14 @@ describe("User Actions", () => {
         datasetCount: 25,
         jobCount: 25,
         userId: "testId",
-        id: "testId"
+        id: "testId",
       });
       const action = fromActions.updateUserSettingsCompleteAction({
-        userSettings
+        userSettings,
       });
       expect({ ...action }).toEqual({
         type: "[User] Update User Settings Complete",
-        userSettings
+        userSettings,
       });
     });
   });
@@ -283,7 +283,7 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const action = fromActions.updateUserSettingsFailedAction();
       expect({ ...action }).toEqual({
-        type: "[User] Update User Settings Failed"
+        type: "[User] Update User Settings Failed",
       });
     });
   });
@@ -301,7 +301,7 @@ describe("User Actions", () => {
       const action = fromActions.fetchScicatTokenCompleteAction({ token });
       expect({ ...action }).toEqual({
         type: "[User] Fetch Scicat Token Complete",
-        token
+        token,
       });
     });
   });
@@ -310,7 +310,7 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const action = fromActions.fetchScicatTokenFailedAction();
       expect({ ...action }).toEqual({
-        type: "[User] Fetch Scicat Token Failed"
+        type: "[User] Fetch Scicat Token Failed",
       });
     });
   });
@@ -342,7 +342,7 @@ describe("User Actions", () => {
       const action = fromActions.addCustomColumnsAction({ names });
       expect({ ...action }).toEqual({
         type: "[User] Add Custom Columns",
-        names
+        names,
       });
     });
   });
@@ -351,7 +351,7 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const action = fromActions.addCustomColumnsCompleteAction();
       expect({ ...action }).toEqual({
-        type: "[User] Add Custom Columns Complete"
+        type: "[User] Add Custom Columns Complete",
       });
     });
   });
@@ -364,7 +364,7 @@ describe("User Actions", () => {
       expect({ ...action }).toEqual({
         type: "[User] Select Column",
         name,
-        columnType
+        columnType,
       });
     });
   });
@@ -377,7 +377,7 @@ describe("User Actions", () => {
       expect({ ...action }).toEqual({
         type: "[User] Deselect Column",
         name,
-        columnType
+        columnType,
       });
     });
   });
@@ -386,7 +386,7 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const action = fromActions.deselectAllCustomColumnsAction();
       expect({ ...action }).toEqual({
-        type: "[User] Deselect All Custom Columns"
+        type: "[User] Deselect All Custom Columns",
       });
     });
   });
@@ -412,7 +412,7 @@ describe("User Actions", () => {
         tapeCopies: "",
         datasetCount: 0,
         jobCount: 0,
-        darkTheme: false
+        darkTheme: false,
       };
       const action = fromActions.saveSettingsAction({ settings });
       expect({ ...action }).toEqual({ type: "[User] Save Settings", settings });
@@ -423,7 +423,7 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const action = fromActions.loadingAction();
       expect({ ...action }).toEqual({
-        type: "[User] Loading"
+        type: "[User] Loading",
       });
     });
   });
@@ -432,7 +432,7 @@ describe("User Actions", () => {
     it("should create an action", () => {
       const action = fromActions.loadingCompleteAction();
       expect({ ...action }).toEqual({
-        type: "[User] Loading Complete"
+        type: "[User] Loading Complete",
       });
     });
   });

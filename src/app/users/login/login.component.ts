@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public loginForm = this.fb.group({
     username: ["", Validators.required],
     password: ["", Validators.required],
-    rememberMe: true
+    rememberMe: true,
   });
 
   constructor(
@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private store: Store,
-    @Inject(DOCUMENT) public document: Document
+    @Inject(DOCUMENT) public document: Document,
   ) {
     this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "";
   }
@@ -92,7 +92,7 @@ export class LoginComponent implements OnInit, OnDestroy {
    */
   onLogin() {
     const form: LoginForm = this.loginForm.value as LoginForm;
-    this.store.dispatch(funcLoginAction({form}));
+    this.store.dispatch(funcLoginAction({ form }));
   }
 
   onLdapLogin() {
@@ -130,12 +130,12 @@ export class LoginComponent implements OnInit, OnDestroy {
         const accessToken = params["access-token"];
         const userId = params["user-id"];
         this.store.dispatch(
-          loginOIDCAction({ oidcLoginResponse: { accessToken, userId } })
+          loginOIDCAction({ oidcLoginResponse: { accessToken, userId } }),
         );
         this.store.dispatch(
           fetchUserAction({
             adLoginResponse: { access_token: accessToken, userId },
-          })
+          }),
         );
       }
     });

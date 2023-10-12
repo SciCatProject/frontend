@@ -16,6 +16,6 @@ export const initialInstrumentState: InstrumentState = {
   filters: {
     sortField: "name asc",
     skip: 0,
-    limit: 25
-  }
+    limit: 25,
+  },
 };

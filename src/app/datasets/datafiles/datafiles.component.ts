@@ -48,7 +48,8 @@ export interface File {
   styleUrls: ["./datafiles.component.scss"],
 })
 export class DatafilesComponent
-  implements OnDestroy, AfterViewInit, AfterViewChecked {
+  implements OnDestroy, AfterViewInit, AfterViewChecked
+{
   @ViewChild("downloadAllForm") downloadAllFormElement: ElementRef<NgForm>;
   @ViewChild("downloadSelectedForm") downloadSelectedFormElement;
   datablocks$ = this.store.select(selectCurrentOrigDatablocks);
@@ -85,7 +86,7 @@ export class DatafilesComponent
   maxFileSize: number | null = this.appConfig.maxDirectDownloadSize;
   sftpHost: string | null = this.appConfig.sftpHost;
   jwt: any;
-  auth_token:any;
+  auth_token: any;
 
   tableColumns: TableColumn[] = [
     {
@@ -136,7 +137,7 @@ export class DatafilesComponent
   getIsNoneSelected() {
     return this.tableData.reduce(
       (accum, curr) => accum && !curr.selected,
-      true
+      true,
     );
   }
 
@@ -205,7 +206,7 @@ export class DatafilesComponent
           this.sourcefolder = dataset.sourceFolder;
           this.datasetPid = dataset.pid;
         }
-      })
+      }),
     );
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
@@ -223,7 +224,7 @@ export class DatafilesComponent
           this.files = files;
           this.tooLargeFile = this.hasTooLargeFiles(this.files);
         }
-      })
+      }),
     );
   }
 
@@ -233,8 +234,8 @@ export class DatafilesComponent
 
   downloadFiles(form: "downloadAllForm" | "downloadSelectedForm") {
     if (this.appConfig.multipleDownloadUseAuthToken) {
-        this.auth_token = this.userApi.getCurrentToken().id;
-        this[`${form}Element`].nativeElement.auth_token.value= this.auth_token;
+      this.auth_token = this.userApi.getCurrentToken().id;
+      this[`${form}Element`].nativeElement.auth_token.value = this.auth_token;
     }
     if (!this.jwt) {
       this.subscriptions.push(
@@ -242,7 +243,7 @@ export class DatafilesComponent
           this.jwt = jwt;
           this[`${form}Element`].nativeElement.jwt.value = jwt.jwt;
           this[`${form}Element`].nativeElement.submit();
-        })
+        }),
       );
     } else {
       this[`${form}Element`].nativeElement.submit();

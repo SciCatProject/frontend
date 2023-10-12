@@ -13,27 +13,25 @@ describe("AboutComponent", () => {
     facility: "",
   });
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [AboutComponent],
-        imports: [MatCardModule, LinkyModule],
-      });
-      TestBed.overrideComponent(AboutComponent, {
-        set: {
-          providers: [
-            {
-              provide: AppConfigService,
-              useValue: {
-                getConfig,
-              },
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [AboutComponent],
+      imports: [MatCardModule, LinkyModule],
+    });
+    TestBed.overrideComponent(AboutComponent, {
+      set: {
+        providers: [
+          {
+            provide: AppConfigService,
+            useValue: {
+              getConfig,
             },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+          },
+        ],
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AboutComponent);

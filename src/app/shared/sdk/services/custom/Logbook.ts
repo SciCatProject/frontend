@@ -1,32 +1,30 @@
 /* eslint-disable */
-import { Injectable, Inject, Optional } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { SDKModels } from './SDKModels';
-import { BaseLoopBackApi } from '../core/base.service';
-import { LoopBackConfig } from '../../lb.config';
-import { LoopBackAuth } from '../core/auth.service';
-import { LoopBackFilter,  } from '../../models/BaseModels';
-import { ErrorHandler } from '../core/error.service';
-import { Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Logbook } from '../../models/Logbook';
-import { SocketConnection } from '../../sockets/socket.connections';
-
+import { Injectable, Inject, Optional } from "@angular/core";
+import { HttpClient, HttpResponse } from "@angular/common/http";
+import { SDKModels } from "./SDKModels";
+import { BaseLoopBackApi } from "../core/base.service";
+import { LoopBackConfig } from "../../lb.config";
+import { LoopBackAuth } from "../core/auth.service";
+import { LoopBackFilter } from "../../models/BaseModels";
+import { ErrorHandler } from "../core/error.service";
+import { Observable, Subject } from "rxjs";
+import { map } from "rxjs/operators";
+import { Logbook } from "../../models/Logbook";
+import { SocketConnection } from "../../sockets/socket.connections";
 
 /**
  * Api services for the `Logbook` model.
  */
 @Injectable()
 export class LogbookApi extends BaseLoopBackApi {
-
   constructor(
     @Inject(HttpClient) protected http: HttpClient,
     @Inject(SocketConnection) protected connection: SocketConnection,
     @Inject(SDKModels) protected models: SDKModels,
     @Inject(LoopBackAuth) protected auth: LoopBackAuth,
-    @Optional() @Inject(ErrorHandler) protected errorHandler: ErrorHandler
+    @Optional() @Inject(ErrorHandler) protected errorHandler: ErrorHandler,
   ) {
-    super(http,  connection,  models, auth, errorHandler);
+    super(http, connection, models, auth, errorHandler);
   }
 
   /**
@@ -42,21 +40,37 @@ export class LogbookApi extends BaseLoopBackApi {
    *
    * Logbook model instance
    */
-  public findByName(name: any, filters: any = {}, customHeaders?: Function): Observable<Logbook> {
+  public findByName(
+    name: any,
+    filters: any = {},
+    customHeaders?: Function,
+  ): Observable<Logbook> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Logbooks/:name";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/Logbooks/:name";
     let _routeParams: any = {
-      name: name
+      name: name,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof filters !== 'undefined' && filters !== null) _urlParams.filters = filters;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof filters !== "undefined" && filters !== null)
+      _urlParams.filters = filters;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result.pipe(map((instance: Logbook) => new Logbook(instance)));
   }
 
-    /**
+  /**
    * Find Logbook model instance associated to the dataset passed
    *
    * @param {string} pid Dataset pid
@@ -69,17 +83,33 @@ export class LogbookApi extends BaseLoopBackApi {
    *
    * Logbook model instance
    */
-  public findDatasetLogbook(pid: any, filters: any = {}, customHeaders?: Function): Observable<Logbook> {
+  public findDatasetLogbook(
+    pid: any,
+    filters: any = {},
+    customHeaders?: Function,
+  ): Observable<Logbook> {
     let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Datasets/:pid/Logbook";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/Datasets/:pid/Logbook";
     let _routeParams: any = {
-      pid: pid
+      pid: pid,
     };
     let _postBody: any = {};
     let _urlParams: any = {};
-    if (typeof filters !== 'undefined' && filters !== null) _urlParams.filters = filters;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    if (typeof filters !== "undefined" && filters !== null)
+      _urlParams.filters = filters;
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result.pipe(map((instance: Logbook) => new Logbook(instance)));
   }
 
@@ -98,18 +128,33 @@ export class LogbookApi extends BaseLoopBackApi {
    *
    * Object containing the event id of the message
    */
-  public sendMessage(name: any, data: any, customHeaders?: Function): Observable<any> {
+  public sendMessage(
+    name: any,
+    data: any,
+    customHeaders?: Function,
+  ): Observable<any> {
     let _method: string = "POST";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Logbooks/:name/message";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/Logbooks/:name/message";
     let _routeParams: any = {
-      name: name
+      name: name,
     };
     let _postBody: any = {
-      data: data
+      data: data,
     };
     let _urlParams: any = {};
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
     return result;
   }
 

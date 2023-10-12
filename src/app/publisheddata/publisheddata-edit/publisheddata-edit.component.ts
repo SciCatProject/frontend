@@ -47,7 +47,7 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store
+    private store: Store,
   ) {}
 
   addCreator(event: MatChipInputEvent) {
@@ -89,7 +89,7 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
       const doi = this.form.get("doi")!.value;
       if (doi) {
         this.store.dispatch(
-          resyncPublishedDataAction({ doi, data: this.form.value })
+          resyncPublishedDataAction({ doi, data: this.form.value }),
         );
       }
     }
@@ -125,7 +125,7 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.routeSubscription = this.route.params.subscribe(({ id }) =>
-      this.store.dispatch(fetchPublishedDataAction({ id }))
+      this.store.dispatch(fetchPublishedDataAction({ id })),
     );
 
     this.publishedData$ = this.store

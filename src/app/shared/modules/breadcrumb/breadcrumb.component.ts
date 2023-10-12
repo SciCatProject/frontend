@@ -37,7 +37,7 @@ export class BreadcrumbComponent implements OnInit {
   constructor(
     private store: Store,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -62,7 +62,7 @@ export class BreadcrumbComponent implements OnInit {
         accumulator.push(child, ...child.children);
         return accumulator;
       },
-      []
+      [],
     );
     children.forEach((root) => {
       let param: string;

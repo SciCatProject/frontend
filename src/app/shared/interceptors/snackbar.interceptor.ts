@@ -14,11 +14,14 @@ import { AppConfigService } from "app-config.service";
 
 @Injectable()
 export class SnackbarInterceptor implements HttpInterceptor {
-  constructor(private snackBar: MatSnackBar, public config: AppConfigService) {}
+  constructor(
+    private snackBar: MatSnackBar,
+    public config: AppConfigService,
+  ) {}
 
   intercept(
     request: HttpRequest<unknown>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       tap((e) => {
@@ -48,11 +51,11 @@ export class SnackbarInterceptor implements HttpInterceptor {
             {
               duration: 3000,
               panelClass: "snackbar-error",
-            }
+            },
           );
         }
         return throwError(error);
-      })
+      }),
     );
   }
 }

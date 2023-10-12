@@ -53,9 +53,71 @@ describe("MetadataViewComponent", () => {
 
       expect(metadataArray[0]["name"]).toEqual("untypedTestName");
       expect(metadataArray[0]["value"]).toEqual(
-        JSON.stringify({ v: "test", u: "" })
+        JSON.stringify({ v: "test", u: "" }),
       );
       expect(metadataArray[0]["unit"]).toEqual("");
+    });
+  });
+
+  describe("#isDate()", () => {
+    it("should return false if scientificMetadata item is a quantity", () => {
+      const metadata = {
+        name: "wavelength",
+        value: 1024,
+        unit: "nanometers",
+      };
+
+      const isDate = component.isDate(metadata);
+
+      expect(isDate).toEqual(false);
+    });
+
+    it("should return false if scientificMetadata value is a number", () => {
+      const metadata = {
+        name: "test",
+        value: 1024,
+        unit: "",
+      };
+
+      const isDate = component.isDate(metadata);
+
+      expect(isDate).toEqual(false);
+    });
+
+    it("should return false if scientificMetadata value is a string", () => {
+      const metadata = {
+        name: "test",
+        value: "test value",
+        unit: "",
+      };
+
+      const isDate = component.isDate(metadata);
+
+      expect(isDate).toEqual(false);
+    });
+
+    it("should return false if scientificMetadata value is a string of numbers", () => {
+      const metadata = {
+        name: "test",
+        value: "123",
+        unit: "",
+      };
+
+      const isDate = component.isDate(metadata);
+
+      expect(isDate).toEqual(false);
+    });
+
+    it("should return true if scientificMetadata item is a date string", () => {
+      const metadata = {
+        name: "today",
+        value: new Date().toISOString(),
+        unit: "",
+      };
+
+      const isDate = component.isDate(metadata);
+
+      expect(isDate).toEqual(true);
     });
   });
 });

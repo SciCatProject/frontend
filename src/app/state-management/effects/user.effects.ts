@@ -50,15 +50,13 @@ export class UserEffects {
   user$ = this.store.select(selectCurrentUser);
   columns$ = this.store.select(selectColumns);
 
-
-
   login$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.loginAction),
       map((action) => action.form),
       map(({ username, password, rememberMe }) =>
-        fromActions.activeDirLoginAction({ username, password, rememberMe })
-      )
+        fromActions.activeDirLoginAction({ username, password, rememberMe }),
+      ),
     );
   });
 
@@ -72,13 +70,10 @@ export class UserEffects {
             fromActions.fetchUserAction({ adLoginResponse: body }),
           ]),
           catchError((error: HttpErrorResponse) => {
-            return of(
-              fromActions.activeDirLoginFailedAction({error})
-            );
-          }
-          )
-        )
-      )
+            return of(fromActions.activeDirLoginFailedAction({ error }));
+          }),
+        ),
+      ),
     );
   });
 
@@ -102,10 +97,10 @@ export class UserEffects {
             }),
           ]),
           catchError((error: HttpErrorResponse) =>
-            of(fromActions.fetchUserFailedAction({ error }))
-          )
+            of(fromActions.fetchUserFailedAction({ error })),
+          ),
         );
-      })
+      }),
     );
   });
   fetchUser$ = createEffect(() => {
@@ -130,10 +125,10 @@ export class UserEffects {
             fromActions.fetchUserSettingsAction({ id: user.id }),
           ]),
           catchError((error: HttpErrorResponse) =>
-            of(fromActions.fetchUserFailedAction({ error }))
-          )
+            of(fromActions.fetchUserFailedAction({ error })),
+          ),
         );
-      })
+      }),
     );
   });
 
@@ -141,8 +136,8 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(fromActions.funcLoginAction),
       map((action) => action.form),
-      switchMap(({ username, password, rememberMe}) =>
-        this.userApi.login({ username, password, rememberMe, }).pipe(
+      switchMap(({ username, password, rememberMe }) =>
+        this.userApi.login({ username, password, rememberMe }).pipe(
           switchMap(({ user }) => [
             fromActions.funcLoginSuccessAction(),
             fromActions.loginCompleteAction({
@@ -151,10 +146,10 @@ export class UserEffects {
             }),
           ]),
           catchError((error: HttpErrorResponse) => {
-            return  of(fromActions.funcLoginFailedAction({error}));
-          })
-        )
-      )
+            return of(fromActions.funcLoginFailedAction({ error }));
+          }),
+        ),
+      ),
     );
   });
 
@@ -163,18 +158,18 @@ export class UserEffects {
       ofType(
         fromActions.fetchUserFailedAction,
         fromActions.funcLoginFailedAction,
-        fromActions.activeDirLoginFailedAction
+        fromActions.activeDirLoginFailedAction,
       ),
-      map(( error ) => {
+      map((error) => {
         return fromActions.loginFailedAction(error);
-      })
+      }),
     );
   });
 
   loginFailedMessage$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.loginFailedAction),
-      map(({error} ) => {
+      map(({ error }) => {
         if (error.status === 500) {
           return fromActions.showMessageAction({
             message: {
@@ -192,7 +187,7 @@ export class UserEffects {
             duration: 5000,
           },
         });
-      })
+      }),
     );
   });
 
@@ -213,9 +208,9 @@ export class UserEffects {
             clearSamplesStateAction(),
             fromActions.logoutCompleteAction(),
           ]),
-          catchError(() => of(fromActions.logoutFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.logoutFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -223,16 +218,16 @@ export class UserEffects {
     () => {
       return this.actions$.pipe(
         ofType(fromActions.logoutCompleteAction),
-        tap(() => this.router.navigate(["/login"]))
+        tap(() => this.router.navigate(["/login"])),
       );
     },
-    { dispatch: false }
+    { dispatch: false },
   );
 
   fetchCurrentUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchCurrentUserAction),
-      filter(()=> {
+      filter(() => {
         return this.userApi.getCurrentId() !== "null";
       }),
       switchMap(() =>
@@ -242,9 +237,9 @@ export class UserEffects {
             fromActions.fetchUserIdentityAction({ id: user.id }),
             fromActions.fetchUserSettingsAction({ id: user.id }),
           ]),
-          catchError(() => of(fromActions.fetchCurrentUserFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.fetchCurrentUserFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -256,11 +251,11 @@ export class UserEffects {
           .findOne<UserIdentity>({ where: { userId: id } })
           .pipe(
             map((userIdentity: UserIdentity) =>
-              fromActions.fetchUserIdentityCompleteAction({ userIdentity })
+              fromActions.fetchUserIdentityCompleteAction({ userIdentity }),
             ),
-            catchError(() => of(fromActions.fetchUserIdentityFailedAction()))
-          )
-      )
+            catchError(() => of(fromActions.fetchUserIdentityFailedAction())),
+          ),
+      ),
     );
   });
 
@@ -270,11 +265,11 @@ export class UserEffects {
       switchMap(({ id }) =>
         this.userApi.getSettings(id, null).pipe(
           map((userSettings) =>
-            fromActions.fetchUserSettingsCompleteAction({ userSettings })
+            fromActions.fetchUserSettingsCompleteAction({ userSettings }),
           ),
-          catchError(() => of(fromActions.fetchUserSettingsFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.fetchUserSettingsFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -284,7 +279,7 @@ export class UserEffects {
       mergeMap(({ userSettings }) => [
         setDatasetsLimitFilterAction({ limit: userSettings.datasetCount }),
         setJobsLimitFilterAction({ limit: userSettings.jobCount }),
-      ])
+      ]),
     );
   });
 
@@ -293,7 +288,7 @@ export class UserEffects {
       ofType(fromActions.addCustomColumnsAction),
       concatLatestFrom(() => this.columns$),
       distinctUntilChanged(),
-      map(() => fromActions.addCustomColumnsCompleteAction())
+      map(() => fromActions.addCustomColumnsCompleteAction()),
     );
   });
 
@@ -307,8 +302,8 @@ export class UserEffects {
       concatLatestFrom(() => this.columns$),
       map(([action, columns]) => columns),
       map((columns) =>
-        fromActions.updateUserSettingsAction({ property: { columns } })
-      )
+        fromActions.updateUserSettingsAction({ property: { columns } }),
+      ),
     );
   });
 
@@ -320,11 +315,11 @@ export class UserEffects {
       switchMap(([{ property }, user]) =>
         this.userApi.updateSettings(user?.id, property).pipe(
           map((userSettings) =>
-            fromActions.updateUserSettingsCompleteAction({ userSettings })
+            fromActions.updateUserSettingsCompleteAction({ userSettings }),
           ),
-          catchError(() => of(fromActions.updateUserSettingsFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.updateUserSettingsFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -334,9 +329,9 @@ export class UserEffects {
       switchMap(() =>
         of(this.userApi.getCurrentToken()).pipe(
           map((token) => fromActions.fetchScicatTokenCompleteAction({ token })),
-          catchError(() => of(fromActions.fetchScicatTokenFailedAction()))
-        )
-      )
+          catchError(() => of(fromActions.fetchScicatTokenFailedAction())),
+        ),
+      ),
     );
   });
 
@@ -348,6 +343,6 @@ export class UserEffects {
     private router: Router,
     private store: Store,
     private userApi: UserApi,
-    private userIdentityApi: UserIdentityApi
+    private userIdentityApi: UserIdentityApi,
   ) {}
 }

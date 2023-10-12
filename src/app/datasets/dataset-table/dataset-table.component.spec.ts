@@ -50,41 +50,39 @@ describe("DatasetTableComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        schemas: [NO_ERRORS_SCHEMA],
-        imports: [
-          BrowserAnimationsModule,
-          MatButtonModule,
-          MatCheckboxModule,
-          MatIconModule,
-          MatPaginatorModule,
-          MatTableModule,
-          SharedScicatFrontendModule,
-          StoreModule.forRoot({}),
-        ],
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [
+        BrowserAnimationsModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatIconModule,
+        MatPaginatorModule,
+        MatTableModule,
+        SharedScicatFrontendModule,
+        StoreModule.forRoot({}),
+      ],
+      providers: [
+        provideMockStore({
+          selectors: [{ selector: selectDatasets, value: [] }],
+        }),
+      ],
+      declarations: [DatasetTableComponent],
+    });
+    TestBed.overrideComponent(DatasetTableComponent, {
+      set: {
         providers: [
-          provideMockStore({
-            selectors: [{ selector: selectDatasets, value: [] }],
-          }),
+          {
+            provide: AppConfigService,
+            useValue: { getConfig },
+          },
+          { provide: DatasetApi, useClass: MockDatasetApi },
         ],
-        declarations: [DatasetTableComponent],
-      });
-      TestBed.overrideComponent(DatasetTableComponent, {
-        set: {
-          providers: [
-            {
-              provide: AppConfigService,
-              useValue: { getConfig },
-            },
-            { provide: DatasetApi, useClass: MockDatasetApi },
-          ],
-        },
-      });
-      TestBed.compileComponents();
-    })
-  );
+      },
+    });
+    TestBed.compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetTableComponent);
@@ -362,7 +360,7 @@ describe("DatasetTableComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        selectDatasetAction({ dataset })
+        selectDatasetAction({ dataset }),
       );
     });
 
@@ -376,7 +374,7 @@ describe("DatasetTableComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        deselectDatasetAction({ dataset })
+        deselectDatasetAction({ dataset }),
       );
     });
   });
@@ -421,10 +419,10 @@ describe("DatasetTableComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        changePageAction({ page: event.pageIndex, limit: event.pageSize })
+        changePageAction({ page: event.pageIndex, limit: event.pageSize }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        selectColumnAction({ name, columnType })
+        selectColumnAction({ name, columnType }),
       );
     });
 
@@ -440,10 +438,10 @@ describe("DatasetTableComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        changePageAction({ page: event.pageIndex, limit: event.pageSize })
+        changePageAction({ page: event.pageIndex, limit: event.pageSize }),
       );
       expect(dispatchSpy).toHaveBeenCalledWith(
-        deselectColumnAction({ name, columnType })
+        deselectColumnAction({ name, columnType }),
       );
     });
   });
@@ -461,7 +459,7 @@ describe("DatasetTableComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        sortByColumnAction({ column, direction: event.direction })
+        sortByColumnAction({ column, direction: event.direction }),
       );
     });
   });

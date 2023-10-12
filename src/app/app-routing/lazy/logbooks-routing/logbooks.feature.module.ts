@@ -3,9 +3,6 @@ import { LogbooksModule } from "logbooks/logbooks.module";
 import { LogbooksRoutingModule } from "./logbooks.routing.module";
 
 @NgModule({
-  imports: [
-    LogbooksModule,
-    LogbooksRoutingModule
-  ]
+  imports: [LogbooksModule, LogbooksRoutingModule],
 })
 export class LogbooksFeatureModule {}

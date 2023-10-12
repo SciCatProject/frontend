@@ -7,6 +7,6 @@ import { PipesModule } from "shared/pipes/pipes.module";
 @NgModule({
   imports: [CommonModule, PipesModule, RouterModule],
   declarations: [BreadcrumbComponent],
-  exports: [BreadcrumbComponent]
+  exports: [BreadcrumbComponent],
 })
 export class BreadcrumbModule {}

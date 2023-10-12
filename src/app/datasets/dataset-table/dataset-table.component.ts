@@ -77,7 +77,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(
     public appConfigService: AppConfigService,
-    private store: Store
+    private store: Store,
   ) {}
   doSettingsClick(event: MouseEvent) {
     this.settingsClick.emit(event);
@@ -180,15 +180,15 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
 
   onPageChange(event: PageChangeEvent): void {
     this.store.dispatch(
-      changePageAction({ page: event.pageIndex, limit: event.pageSize })
+      changePageAction({ page: event.pageIndex, limit: event.pageSize }),
     );
     if (event.pageSize < 50) {
       this.store.dispatch(
-        selectColumnAction({ name: "image", columnType: "standard" })
+        selectColumnAction({ name: "image", columnType: "standard" }),
       );
     } else {
       this.store.dispatch(
-        deselectColumnAction({ name: "image", columnType: "standard" })
+        deselectColumnAction({ name: "image", columnType: "standard" }),
       );
     }
   }
@@ -196,8 +196,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   onSortChange(event: SortChangeEvent): void {
     const { active, direction } = event;
     let column = active.split("_")[1];
-    if (column === "runNumber")
-      column = "scientificMetadata.runNumber.value";
+    if (column === "runNumber") column = "scientificMetadata.runNumber.value";
     this.store.dispatch(sortByColumnAction({ column, direction }));
   }
 
@@ -222,7 +221,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
         this.inBatchPids = datasets.map((dataset) => {
           return dataset.pid;
         });
-      })
+      }),
     );
 
     if (this.tableColumns) {
@@ -237,7 +236,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
       this.store.select(selectDatasets).subscribe((datasets) => {
         this.store.select(selectCurrentUser).subscribe((currentUser) => {
           const publishedDatasets = datasets.filter(
-            (dataset) => dataset.isPublished
+            (dataset) => dataset.isPublished,
           );
           this.datasets = currentUser ? datasets : publishedDatasets;
         });
@@ -251,7 +250,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
         //     datasetPid: dataset.pid,
         //     derivedDatasetsNum: this.countDerivedDatasets(dataset)
         //   }));
-      })
+      }),
     );
   }
 

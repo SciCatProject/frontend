@@ -32,7 +32,7 @@ import { RouterModule } from "@angular/router";
   ],
   imports: [
     CommonModule,
-    EffectsModule.forFeature([ PublishedDataEffects]),
+    EffectsModule.forFeature([PublishedDataEffects]),
     FlexLayoutModule,
     LinkyModule,
     MatButtonModule,
@@ -49,7 +49,7 @@ import { RouterModule } from "@angular/router";
     FormsModule,
     MatFormFieldModule,
     MatChipsModule,
-    MatOptionModule
-  ]
+    MatOptionModule,
+  ],
 })
 export class PublisheddataModule {}

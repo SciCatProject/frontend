@@ -11,7 +11,7 @@ describe("ObjKeysPipe", () => {
     const testObject = { name: "Gary", age: 57 };
     expect(pipe.transform(testObject, [])).toEqual([
       { key: "name", value: "Gary" },
-      { key: "age", value: 57 }
+      { key: "age", value: 57 },
     ]);
   });
 });

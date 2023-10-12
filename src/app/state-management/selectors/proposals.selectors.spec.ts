@@ -43,7 +43,7 @@ describe("Proposal Selectors", () => {
   describe("selectProposals", () => {
     it("should select proposals", () => {
       expect(
-        fromSelectors.selectProposals.projector(initialProposalsState)
+        fromSelectors.selectProposals.projector(initialProposalsState),
       ).toEqual([]);
     });
   });
@@ -51,7 +51,7 @@ describe("Proposal Selectors", () => {
   describe("selectCurrentProposal", () => {
     it("should select current proposal", () => {
       expect(
-        fromSelectors.selectCurrentProposal.projector(initialProposalsState)
+        fromSelectors.selectCurrentProposal.projector(initialProposalsState),
       ).toEqual(proposal);
     });
   });
@@ -60,8 +60,8 @@ describe("Proposal Selectors", () => {
     it("should select attachments from current proposal", () => {
       expect(
         fromSelectors.selectCurrentAttachments.projector(
-          initialProposalsState.currentProposal
-        )
+          initialProposalsState.currentProposal,
+        ),
       ).toEqual(attachments);
     });
   });
@@ -69,7 +69,7 @@ describe("Proposal Selectors", () => {
   describe("selectProposalDatasets", () => {
     it("should select datasets belonging to current proposal", () => {
       expect(
-        fromSelectors.selectProposalDatasets.projector(initialProposalsState)
+        fromSelectors.selectProposalDatasets.projector(initialProposalsState),
       ).toEqual([]);
     });
   });
@@ -77,7 +77,7 @@ describe("Proposal Selectors", () => {
   describe("selectProposalsCount", () => {
     it("should select the number of proposals", () => {
       expect(
-        fromSelectors.selectProposalsCount.projector(initialProposalsState)
+        fromSelectors.selectProposalsCount.projector(initialProposalsState),
       ).toEqual(0);
     });
   });
@@ -85,7 +85,7 @@ describe("Proposal Selectors", () => {
   describe("selectDatasetsCount", () => {
     it("should select the number of datasets", () => {
       expect(
-        fromSelectors.selectDatasetsCount.projector(initialProposalsState)
+        fromSelectors.selectDatasetsCount.projector(initialProposalsState),
       ).toEqual(0);
     });
   });
@@ -93,7 +93,9 @@ describe("Proposal Selectors", () => {
   describe("selectHasPrefilledFilters", () => {
     it("should select hasPrefilledFilters", () => {
       expect(
-        fromSelectors.selectHasPrefilledFilters.projector(initialProposalsState)
+        fromSelectors.selectHasPrefilledFilters.projector(
+          initialProposalsState,
+        ),
       ).toEqual(true);
     });
   });
@@ -101,7 +103,7 @@ describe("Proposal Selectors", () => {
   describe("selectFilters", () => {
     it("should select the proposal filters", () => {
       expect(
-        fromSelectors.selectFilters.projector(initialProposalsState)
+        fromSelectors.selectFilters.projector(initialProposalsState),
       ).toEqual(initialProposalsState.proposalFilters);
     });
   });
@@ -110,8 +112,8 @@ describe("Proposal Selectors", () => {
     it("should select the proposal text filter", () => {
       expect(
         fromSelectors.selectTextFilter.projector(
-          initialProposalsState.proposalFilters
-        )
+          initialProposalsState.proposalFilters,
+        ),
       ).toEqual("test");
     });
   });
@@ -120,8 +122,8 @@ describe("Proposal Selectors", () => {
     it("should select dateRange from proposalFilters", () => {
       expect(
         fromSelectors.selectDateRangeFilter.projector(
-          initialProposalsState.proposalFilters
-        )
+          initialProposalsState.proposalFilters,
+        ),
       ).toEqual({
         begin: new Date(2019, 11, 1).toISOString(),
         end: new Date(2019, 11, 2).toISOString(),
@@ -133,8 +135,8 @@ describe("Proposal Selectors", () => {
     it("should return true if text or dateRange filter has value", () => {
       expect(
         fromSelectors.selectHasAppliedFilters.projector(
-          initialProposalsState.proposalFilters
-        )
+          initialProposalsState.proposalFilters,
+        ),
       ).toEqual(true);
     });
   });
@@ -142,7 +144,7 @@ describe("Proposal Selectors", () => {
   describe("selectDatasetFilters", () => {
     it("should select the dataset filters", () => {
       expect(
-        fromSelectors.selectDatasetFilters.projector(initialProposalsState)
+        fromSelectors.selectDatasetFilters.projector(initialProposalsState),
       ).toEqual(initialProposalsState.datasetFilters);
     });
   });
@@ -153,8 +155,8 @@ describe("Proposal Selectors", () => {
       const page = skip / limit;
       expect(
         fromSelectors.selectPage.projector(
-          initialProposalsState.proposalFilters
-        )
+          initialProposalsState.proposalFilters,
+        ),
       ).toEqual(page);
     });
   });
@@ -165,8 +167,8 @@ describe("Proposal Selectors", () => {
       const page = skip / limit;
       expect(
         fromSelectors.selectDatasetsPage.projector(
-          initialProposalsState.datasetFilters
-        )
+          initialProposalsState.datasetFilters,
+        ),
       ).toEqual(page);
     });
   });
@@ -176,8 +178,8 @@ describe("Proposal Selectors", () => {
       const { limit } = initialProposalsState.proposalFilters;
       expect(
         fromSelectors.selectProposalsPerPage.projector(
-          initialProposalsState.proposalFilters
-        )
+          initialProposalsState.proposalFilters,
+        ),
       ).toEqual(limit);
     });
   });
@@ -187,8 +189,8 @@ describe("Proposal Selectors", () => {
       const { limit } = initialProposalsState.datasetFilters;
       expect(
         fromSelectors.selectDatasetsPerPage.projector(
-          initialProposalsState.datasetFilters
-        )
+          initialProposalsState.datasetFilters,
+        ),
       ).toEqual(limit);
     });
   });
@@ -200,11 +202,11 @@ describe("Proposal Selectors", () => {
           initialProposalsState.currentProposal,
           initialProposalsState.datasets,
           fromSelectors.selectDatasetsPage.projector(
-            initialProposalsState.datasetFilters
+            initialProposalsState.datasetFilters,
           ),
           initialProposalsState.datasetsCount,
-          initialProposalsState.datasetFilters.limit
-        )
+          initialProposalsState.datasetFilters.limit,
+        ),
       ).toEqual({
         proposal,
         datasets: [],
@@ -219,8 +221,8 @@ describe("Proposal Selectors", () => {
     it("should select query params for proposals", () => {
       const fullqueryKeys = Object.keys(
         fromSelectors.selectFullqueryParams.projector(
-          initialProposalsState.proposalFilters
-        )
+          initialProposalsState.proposalFilters,
+        ),
       );
       expect(fullqueryKeys).toContain("query");
     });
@@ -234,8 +236,8 @@ describe("Proposal Selectors", () => {
       const params = { query: JSON.stringify({ text }), limits };
       expect(
         fromSelectors.selectDatasetsQueryParams.projector(
-          initialProposalsState.datasetFilters
-        )
+          initialProposalsState.datasetFilters,
+        ),
       ).toEqual(params);
     });
   });

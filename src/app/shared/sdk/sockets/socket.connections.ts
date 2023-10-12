@@ -1,38 +1,38 @@
 /* eslint-disable */
-import { Injectable, Inject, NgZone } from '@angular/core';
-import { SocketDriver } from './socket.driver';
-import { AccessToken } from '../models';
-import { Observable, Subject } from 'rxjs';
-import { share } from 'rxjs/operators';
-import { LoopBackConfig } from '../lb.config';
+import { Injectable, Inject, NgZone } from "@angular/core";
+import { SocketDriver } from "./socket.driver";
+import { AccessToken } from "../models";
+import { Observable, Subject } from "rxjs";
+import { share } from "rxjs/operators";
+import { LoopBackConfig } from "../lb.config";
 /**
-* @author Jonathan Casarrubias <twitter:@johncasarrubias> <github:@mean-expert-official>
-* @module SocketConnection
-* @license MIT
-* @description
-* This module handle socket connections and return singleton instances for each
-* connection, it will use the SDK Socket Driver Available currently supporting
-* Angular 2 for web, NativeScript 2 and Angular Universal.
-**/
+ * @author Jonathan Casarrubias <twitter:@johncasarrubias> <github:@mean-expert-official>
+ * @module SocketConnection
+ * @license MIT
+ * @description
+ * This module handle socket connections and return singleton instances for each
+ * connection, it will use the SDK Socket Driver Available currently supporting
+ * Angular 2 for web, NativeScript 2 and Angular Universal.
+ **/
 @Injectable()
 export class SocketConnection {
   private socket: any;
   private subjects: {
-    onConnect: Subject<any>,
-    onDisconnect: Subject<any>,
-    onAuthenticated: Subject<any>,
-    onUnAuthorized: Subject<any>
+    onConnect: Subject<any>;
+    onDisconnect: Subject<any>;
+    onAuthenticated: Subject<any>;
+    onUnAuthorized: Subject<any>;
   } = {
     onConnect: new Subject(),
     onDisconnect: new Subject(),
     onAuthenticated: new Subject(),
-    onUnAuthorized: new Subject()
+    onUnAuthorized: new Subject(),
   };
   public sharedObservables: {
-    sharedOnConnect?: Observable<any>,
-    sharedOnDisconnect?: Observable<any>,
-    sharedOnAuthenticated?: Observable<any>,
-    sharedOnUnAuthorized?: Observable<any>
+    sharedOnConnect?: Observable<any>;
+    sharedOnDisconnect?: Observable<any>;
+    sharedOnAuthenticated?: Observable<any>;
+    sharedOnUnAuthorized?: Observable<any>;
   } = {};
   public authenticated: boolean = false;
   /**
@@ -46,13 +46,19 @@ export class SocketConnection {
    **/
   constructor(
     @Inject(SocketDriver) private driver: SocketDriver,
-    @Inject(NgZone) private zone: NgZone
+    @Inject(NgZone) private zone: NgZone,
   ) {
     this.sharedObservables = {
       sharedOnConnect: this.subjects.onConnect.asObservable().pipe(share()),
-      sharedOnDisconnect: this.subjects.onDisconnect.asObservable().pipe(share()),
-      sharedOnAuthenticated: this.subjects.onAuthenticated.asObservable().pipe(share()),
-      sharedOnUnAuthorized: this.subjects.onUnAuthorized.asObservable().pipe(share())
+      sharedOnDisconnect: this.subjects.onDisconnect
+        .asObservable()
+        .pipe(share()),
+      sharedOnAuthenticated: this.subjects.onAuthenticated
+        .asObservable()
+        .pipe(share()),
+      sharedOnUnAuthorized: this.subjects.onUnAuthorized
+        .asObservable()
+        .pipe(share()),
     };
     // This is needed to create the first channel, subsequents will share the connection
     // We are using Hot Observables to avoid duplicating connection status events.
@@ -71,39 +77,44 @@ export class SocketConnection {
    **/
   public connect(token: AccessToken = null): void {
     if (!this.socket) {
-      console.info('Creating a new connection with: ', LoopBackConfig.getPath());
+      console.info(
+        "Creating a new connection with: ",
+        LoopBackConfig.getPath(),
+      );
       // Create new socket connection
       this.socket = this.driver.connect(LoopBackConfig.getPath(), {
         log: false,
         secure: LoopBackConfig.isSecureWebSocketsSet(),
         forceNew: true,
         forceWebsockets: true,
-        transports: ['websocket']
+        transports: ["websocket"],
       });
       // Listen for connection
-      this.on('connect', () => {
-        this.subjects.onConnect.next('connected');
-        // Authenticate or start heartbeat now    
-        this.emit('authentication', token);
+      this.on("connect", () => {
+        this.subjects.onConnect.next("connected");
+        // Authenticate or start heartbeat now
+        this.emit("authentication", token);
       });
       // Listen for authentication
-      this.on('authenticated', () => {
+      this.on("authenticated", () => {
         this.authenticated = true;
         this.subjects.onAuthenticated.next();
         this.heartbeater();
-      })
+      });
       // Listen for authentication
-      this.on('unauthorized', (err: any) => {
+      this.on("unauthorized", (err: any) => {
         this.authenticated = false;
         this.subjects.onUnAuthorized.next(err);
-      })
+      });
       // Listen for disconnections
-      this.on('disconnect', (status: any) => this.subjects.onDisconnect.next(status));
-    } else if (this.socket && !this.socket.connected){
-      if (typeof this.socket.off === 'function') {
+      this.on("disconnect", (status: any) =>
+        this.subjects.onDisconnect.next(status),
+      );
+    } else if (this.socket && !this.socket.connected) {
+      if (typeof this.socket.off === "function") {
         this.socket.off();
       }
-      if (typeof this.socket.destroy === 'function') {
+      if (typeof this.socket.destroy === "function") {
         this.socket.destroy();
       }
       delete this.socket;
@@ -117,7 +128,7 @@ export class SocketConnection {
    * This method will return true or false depending on established connections
    **/
   public isConnected(): boolean {
-    return (this.socket && this.socket.connected);
+    return this.socket && this.socket.connected;
   }
   /**
    * @method on
@@ -158,7 +169,7 @@ export class SocketConnection {
    * removeListener method, but only provides with off which is provided in any platform.
    **/
   public removeListener(event: string, handler: Function): void {
-    if (typeof this.socket.off === 'function') {
+    if (typeof this.socket.off === "function") {
       this.socket.off(event, handler);
     }
   }
@@ -173,7 +184,7 @@ export class SocketConnection {
    * removeListener method, but only provides with off which is provided in any platform.
    **/
   public removeAllListeners(event: string): void {
-    if (typeof this.socket.removeAllListeners === 'function') {
+    if (typeof this.socket.removeAllListeners === "function") {
       this.socket.removeAllListeners(event);
     }
   }
@@ -196,12 +207,12 @@ export class SocketConnection {
   private heartbeater(): void {
     let heartbeater: any = setInterval(() => {
       if (this.isConnected()) {
-        this.socket.emit('lb-ping');
+        this.socket.emit("lb-ping");
       } else {
-        this.socket.removeAllListeners('lb-pong');
+        this.socket.removeAllListeners("lb-pong");
         clearInterval(heartbeater);
       }
     }, 15000);
-    this.socket.on('lb-pong', (data: any) => console.info('Heartbeat: ', data));
+    this.socket.on("lb-pong", (data: any) => console.info("Heartbeat: ", data));
   }
 }
