@@ -98,7 +98,9 @@
             }
           },
           "options": {
-            "proxyConfig": "scripts/local.proxy.config.json"
+            "proxyConfig": "scripts/local.proxy.config.json",
+            "host": "127.0.0.1",
+            "port": 4200
           },
           "defaultConfiguration": "default"
         },
@@ -111,11 +113,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "src/polyfills.ts",
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["src/polyfills.ts", "zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "inlineStyleLanguage": "scss",

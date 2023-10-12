@@ -1,20 +1,12 @@
 <h1 mat-dialog-title>Add Dataset</h1>
 <mat-dialog-content [formGroup]="form">
   <mat-form-field>
-    <input
-      matInput
-      formControlName="datasetName"
-      type="text"
-      placeholder="Name"
-    />
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="datasetName" type="text" />
   </mat-form-field>
   <mat-form-field>
-    <textarea
-      matInput
-      formControlName="description"
-      placeholder="Description"
-      rows="5"
-    ></textarea>
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="description" rows="5"></textarea>
   </mat-form-field>
   <mat-form-field *ngIf="data.userGroups">
     <mat-label>Owner Group</mat-label>
@@ -25,22 +17,12 @@
     </mat-select>
   </mat-form-field>
   <mat-form-field>
-    <input
-      matInput
-      formControlName="sourceFolder"
-      type="text"
-      placeholder="Source Folder"
-      required
-    />
+    <mat-label>Source Folder</mat-label>
+    <input matInput formControlName="sourceFolder" type="text" required />
   </mat-form-field>
   <mat-form-field>
-    <input
-      matInput
-      formControlName="usedSoftware"
-      type="text"
-      placeholder="Software Used"
-      required
-    />
+    <mat-label>Software Used</mat-label>
+    <input matInput formControlName="usedSoftware" type="text" required />
     <mat-hint align="end">Use comma to separate multiple entries</mat-hint>
   </mat-form-field>
 </mat-dialog-content>

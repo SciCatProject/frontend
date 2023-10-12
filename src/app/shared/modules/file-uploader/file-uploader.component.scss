@@ -61,10 +61,18 @@
   .file-picker {
     display: none;
   }
+
+  .dropzone {
+    margin-top: 1em;
+  }
 }
 
 @media only screen and (max-width: 1279px) {
   .dropzone {
     display: none;
+  }
+
+  .file-picker {
+    margin-top: 1em;
   }
 }

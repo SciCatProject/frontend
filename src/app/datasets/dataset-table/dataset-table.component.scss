@@ -1,8 +1,4 @@
 .dataset-table {
-  .settings-button {
-    margin-bottom: 0.5em;
-  }
-  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version. */
   mat-table {
     overflow-x: scroll;
 
@@ -11,7 +7,9 @@
     }
 
     mat-header-cell {
-      justify-content: center; // default is centered
+      &.mat-column-standard_select {
+        justify-content: center;
+      }
 
       mat-icon {
         display: flex;
@@ -28,13 +26,13 @@
       cursor: pointer;
     }
     mat-cell {
-      justify-content: center; // default is centered, use named columns below to override
-
+      &.mat-column-standard_select {
+        justify-content: center;
+      }
 
       mat-icon {
         display: inline-table;
       }
-
     }
 
     .mat-column-standard_select {
