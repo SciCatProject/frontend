@@ -1,13 +1,4 @@
-
-/* TODO(mdc-migration): The following rule targets internal classes of card that may no longer apply for the MDC version. */
 mat-card {
-  margin-top: 1em;
-
-  /* Duplicate class from filters */
-  .title {
-    font-size: 1.25em;
-  }
-
   .count {
     margin-top: 1em;
   }

@@ -1,133 +1,139 @@
 <div fxLayout="row">
   <div fxFlex="140">
-    <mat-card appearance="outlined">
-      <p>You are editing Published Data record.</p>
-
-      <form
-        *ngIf="publishedData$ | async"
-        [formGroup]="form"
-        (ngSubmit)="onUpdate()"
+    <mat-card>
+      <mat-card-header
+        ><mat-card-title
+          >You are editing Published Data record.</mat-card-title
+        ></mat-card-header
       >
-        <mat-form-field>
-          <input
-            id="titleInput"
-            required
-            matInput
-            placeholder="Title"
-            autocomplete="off"
-            formControlName="title"
-            name="title"
-          />
-        </mat-form-field>
 
-        <mat-form-field>
-          <mat-chip-grid required #chipList>
-            <mat-chip-row
-              formArrayName="creator"
-              *ngFor="let item of creator.value; let i = index"
-              (removed)="removeCreator(i)"
+      <mat-card-content>
+        <form
+          *ngIf="publishedData$ | async"
+          [formGroup]="form"
+          (ngSubmit)="onUpdate()"
+        >
+          <mat-form-field>
+            <input
+              id="titleInput"
+              required
+              matInput
+              placeholder="Title"
+              autocomplete="off"
+              formControlName="title"
+              name="title"
+            />
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-chip-grid required #chipList>
+              <mat-chip-row
+                formArrayName="creator"
+                *ngFor="let item of creator.value; let i = index"
+                (removed)="removeCreator(i)"
+              >
+                {{ item }}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip-row>
+              <input
+                matInput
+                placeholder="Creators"
+                [matChipInputFor]="chipList"
+                [matChipInputAddOnBlur]="true"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                (matChipInputTokenEnd)="addCreator($event)"
+              />
+            </mat-chip-grid>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input
+              required
+              matInput
+              placeholder="Publisher"
+              autocomplete="off"
+              formControlName="publisher"
+              name="publisher"
+            />
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-select
+              required
+              matInput
+              placeholder="Resource Type"
+              name="resourceType"
+              formControlName="resourceType"
             >
-              {{ item }}
-              <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip-row>
+              <mat-option value="raw"> raw </mat-option>
+              <mat-option value="derived"> derived </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <textarea
+              required
+              matInput
+              placeholder="Description"
+              autocomplete="off"
+              formControlName="dataDescription"
+              name="Description"
+              rows="5"
+            ></textarea>
+          </mat-form-field>
+
+          <mat-form-field>
+            <textarea
+              id="abstractInput"
+              required
+              matInput
+              placeholder="Abstract"
+              autocomplete="off"
+              formControlName="abstract"
+              name="abstract"
+              rows="5"
+            ></textarea>
+          </mat-form-field>
+
+          <mat-form-field>
             <input
               matInput
-              placeholder="Creators"
-              [matChipInputFor]="chipList"
-              [matChipInputAddOnBlur]="true"
-              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-              (matChipInputTokenEnd)="addCreator($event)"
+              placeholder="download link"
+              autocomplete="off"
+              formControlName="downloadLink"
+              name="downloadLink"
             />
-          </mat-chip-grid>
-        </mat-form-field>
+          </mat-form-field>
 
-        <mat-form-field>
-          <input
-            required
-            matInput
-            placeholder="Publisher"
-            autocomplete="off"
-            formControlName="publisher"
-            name="publisher"
-          />
-        </mat-form-field>
+          <mat-form-field>
+            <mat-chip-grid #chipListRelatedPub>
+              <mat-chip-row
+                formArrayName="relatedPublications"
+                *ngFor="let item of relatedPublications.value; let i = index"
+                (removed)="removeRelatedPublication(i)"
+              >
+                {{ item }}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip-row>
+              <input
+                matInput
+                placeholder="related publications"
+                [matChipInputFor]="chipListRelatedPub"
+                [matChipInputAddOnBlur]="true"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                (matChipInputTokenEnd)="addRelatedPublication($event)"
+              />
+            </mat-chip-grid>
+          </mat-form-field>
 
-        <mat-form-field>
-          <mat-select
-            required
-            matInput
-            placeholder="Resource Type"
-            name="resourceType"
-            formControlName="resourceType"
-          >
-            <mat-option value="raw"> raw </mat-option>
-            <mat-option value="derived"> derived </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field>
-          <textarea
-            required
-            matInput
-            placeholder="Description"
-            autocomplete="off"
-            formControlName="dataDescription"
-            name="Description"
-            rows="5"
-          ></textarea>
-        </mat-form-field>
-
-        <mat-form-field>
-          <textarea
-            id="abstractInput"
-            required
-            matInput
-            placeholder="Abstract"
-            autocomplete="off"
-            formControlName="abstract"
-            name="abstract"
-            rows="5"
-          ></textarea>
-        </mat-form-field>
-
-        <mat-form-field>
-          <input
-            matInput
-            placeholder="download link"
-            autocomplete="off"
-            formControlName="downloadLink"
-            name="downloadLink"
-          />
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-chip-grid #chipListRelatedPub>
-            <mat-chip-row
-              formArrayName="relatedPublications"
-              *ngFor="let item of relatedPublications.value; let i = index"
-              (removed)="removeRelatedPublication(i)"
-            >
-              {{ item }}
-              <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip-row>
-            <input
-              matInput
-              placeholder="related publications"
-              [matChipInputFor]="chipListRelatedPub"
-              [matChipInputAddOnBlur]="true"
-              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-              (matChipInputTokenEnd)="addRelatedPublication($event)"
-            />
-          </mat-chip-grid>
-        </mat-form-field>
-
-        <button mat-raised-button color="primary" [disabled]="!form.valid">
-          Update Published Data
-        </button>
-        <button (click)="onCancel()" mat-raised-button color="white">
-          Cancel
-        </button>
-      </form>
+          <button mat-raised-button color="primary" [disabled]="!form.valid">
+            Update Published Data
+          </button>
+          <button (click)="onCancel()" mat-raised-button color="white">
+            Cancel
+          </button>
+        </form>
+      </mat-card-content>
     </mat-card>
   </div>
   <div fxFlex="30">
@@ -138,7 +144,7 @@
         (deleteAttachment)="deleteAttachment($event)"
       ></app-file-uploader>
     </div>
-    <mat-card appearance="outlined" *ngIf="thumbnail">
+    <mat-card *ngIf="thumbnail">
       <img mat-card-image src="{{ thumbnail.value }}" />
     </mat-card>
   </div>
