@@ -1,22 +1,36 @@
 <ng-container *ngIf="logbook">
-  <div *ngIf="(logbook.logbook | keyvalue)?.length !== 0 && logbook.logbook?.name">
+  <div
+    *ngIf="(logbook.logbook | keyvalue)?.length !== 0 && logbook.logbook?.name"
+  >
     <div fxLayout="row" fxLayout.lt-lg="column">
       <div fxFlex="14">
-        <mat-card appearance="outlined" class="big-filter">
-          <div class="title">Filter</div>
-          <app-search-bar [prefilledValue]="logbook.filters.textSearch"
-            (search)="onTextSearchChange(logbook.logbook?.name, $event)"
-            (searchBarFocus)="onTextSearchChange(logbook.logbook?.name, $event)">
-          </app-search-bar>
-          <logbook-filter [filters]="logbook.filters"
-            (filterSelect)="onFilterSelect(logbook.logbook?.name, $event)">
-          </logbook-filter>
+        <mat-card class="big-filter">
+          <mat-card-header
+            ><mat-card-title>Filter</mat-card-title></mat-card-header
+          >
+          <mat-card-content>
+            <app-search-bar
+              [prefilledValue]="logbook.filters.textSearch"
+              (search)="onTextSearchChange(logbook.logbook?.name, $event)"
+              (searchBarFocus)="
+                onTextSearchChange(logbook.logbook?.name, $event)
+              "
+            >
+            </app-search-bar>
+            <logbook-filter
+              [filters]="logbook.filters"
+              (filterSelect)="onFilterSelect(logbook.logbook?.name, $event)"
+            >
+            </logbook-filter>
+          </mat-card-content>
         </mat-card>
 
         <div class="small-filter">
-          <app-search-bar [prefilledValue]="logbook.filters.textSearch"
+          <app-search-bar
+            [prefilledValue]="logbook.filters.textSearch"
             (search)="onTextSearchChange(logbook.logbook?.name, $event)"
-            (searchBarFocus)="onTextSearchChange(logbook.logbook?.name, $event)">
+            (searchBarFocus)="onTextSearchChange(logbook.logbook?.name, $event)"
+          >
           </app-search-bar>
 
           <mat-expansion-panel>
@@ -25,43 +39,61 @@
                 <div class="title">Filter</div>
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <logbook-filter [filters]="logbook.filters"
-              (filterSelect)="onFilterSelect(logbook.logbook?.name, $event)">
+            <logbook-filter
+              [filters]="logbook.filters"
+              (filterSelect)="onFilterSelect(logbook.logbook?.name, $event)"
+            >
             </logbook-filter>
           </mat-expansion-panel>
         </div>
         <div fxLayout="column" fxLayout.lt-lg="row">
           <div fxFlex="49">
-            <a href="{{ appConfig.riotBaseUrl }}/#/room/{{ logbook.logbook?.roomId }}"
-              target="_blank" rel="noopener noreferrer">
-              <mat-card appearance="outlined" class="card-button">
-                <mat-icon> chat_bubble_outline </mat-icon> Go to chat
+            <a
+              href="{{ appConfig.riotBaseUrl }}/#/room/{{
+                logbook.logbook?.roomId
+              }}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <mat-card class="card-button">
+                <mat-card-content>
+                  <mat-icon> chat_bubble_outline </mat-icon> Go to chat
+                </mat-card-content>
               </mat-card>
             </a>
           </div>
           <div fxFlex="auto"></div>
           <div class="reverse-card" fxFlex="49">
-            <mat-card appearance="outlined" class="card-button"
-              (click)="logbook.logbook.messages.reverse()">
-              <mat-icon> swap_vert </mat-icon> Reverse
+            <mat-card
+              class="card-button"
+              (click)="logbook.logbook.messages.reverse()"
+            >
+              <mat-card-content>
+                <mat-icon> swap_vert </mat-icon> Reverse
+              </mat-card-content>
             </mat-card>
           </div>
         </div>
       </div>
       <div fxFlex="85" class="details-container">
-        <app-logbooks-detail [logbook]="logbook.logbook"
-          [entriesCount]="logbook.entriesCount" [entriesPerPage]="logbook.entriesPerPage"
+        <app-logbooks-detail
+          [logbook]="logbook.logbook"
+          [entriesCount]="logbook.entriesCount"
+          [entriesPerPage]="logbook.entriesPerPage"
           [currentPage]="logbook.currentPage"
           (pageChange)="onPageChange(logbook.logbook?.name, $event)"
-          (sortChange)="onSortChange(logbook.logbook?.name, $event)">
+          (sortChange)="onSortChange(logbook.logbook?.name, $event)"
+        >
         </app-logbooks-detail>
       </div>
     </div>
   </div>
 
-  <ng-template [ngIf]="!(logbook.logbook | keyvalue)?.length ">
-    <mat-card appearance="outlined" class="no-logbook-message">
-      <mat-icon>info</mat-icon> No logbook available.
+  <ng-template [ngIf]="!(logbook.logbook | keyvalue)?.length">
+    <mat-card class="no-logbook-message">
+      <mat-card-content>
+        <mat-icon>info</mat-icon> No logbook available.
+      </mat-card-content>
     </mat-card>
   </ng-template>
 </ng-container>

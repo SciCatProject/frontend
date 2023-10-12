@@ -11,59 +11,63 @@
         </button>
       </ng-template>
       <ng-template [ngIf]="appConfig.searchSamples">
-        <mat-card appearance="outlined" class="big-search">
-          <div class="title">Search</div>
-          <app-search-bar
-            [prefilledValue]="vm.textFilter"
-            (search)="onTextSearchChange($event)"
-            (searchBarFocus)="onTextSearchChange($event)"
-          ></app-search-bar>
-          <div *ngIf="appConfig.scienceSearchEnabled">
-            <button
-              mat-button
-              color="primary"
-              (click)="openSearchParametersDialog()"
-            >
-              <mat-icon>add</mat-icon> Add Characteristic
-            </button>
-
-            <mat-chip-listbox
-              class="characteristic-chips"
-              aria-orientation="vertical"
-            >
-              <mat-chip-option
-                *ngFor="
-                  let characteristic of vm.characteristicsFilter;
-                  index as i
-                "
+        <mat-card class="big-search">
+          <mat-card-header>
+            <mat-card-title>Search</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <app-search-bar
+              [prefilledValue]="vm.textFilter"
+              (search)="onTextSearchChange($event)"
+              (searchBarFocus)="onTextSearchChange($event)"
+            ></app-search-bar>
+            <div *ngIf="appConfig.scienceSearchEnabled">
+              <button
+                mat-button
+                color="primary"
+                (click)="openSearchParametersDialog()"
               >
-                {{ characteristic.lhs }}
-                <ng-container [ngSwitch]="characteristic.relation">
-                  <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">
-                    &nbsp;=&nbsp;
+                <mat-icon>add</mat-icon> Add Characteristic
+              </button>
+
+              <mat-chip-listbox
+                class="characteristic-chips"
+                aria-orientation="vertical"
+              >
+                <mat-chip-option
+                  *ngFor="
+                    let characteristic of vm.characteristicsFilter;
+                    index as i
+                  "
+                >
+                  {{ characteristic.lhs }}
+                  <ng-container [ngSwitch]="characteristic.relation">
+                    <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">
+                      &nbsp;=&nbsp;
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">
+                      &nbsp;=&nbsp;
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'LESS_THAN'">
+                      &nbsp;&lt;&nbsp;
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'GREATER_THAN'">
+                      &nbsp;&gt;&nbsp;
+                    </ng-container>
                   </ng-container>
-                  <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">
-                    &nbsp;=&nbsp;
-                  </ng-container>
-                  <ng-container *ngSwitchCase="'LESS_THAN'">
-                    &nbsp;&lt;&nbsp;
-                  </ng-container>
-                  <ng-container *ngSwitchCase="'GREATER_THAN'">
-                    &nbsp;&gt;&nbsp;
-                  </ng-container>
-                </ng-container>
-                {{
-                  characteristic.relation === "EQUAL_TO_STRING"
-                    ? '"' + characteristic.rhs + '"'
-                    : characteristic.rhs
-                }}
-                {{ characteristic.unit | prettyUnit }}
-                <mat-icon matChipRemove (click)="removeCharacteristic(i)">
-                  cancel
-                </mat-icon>
-              </mat-chip-option>
-            </mat-chip-listbox>
-          </div>
+                  {{
+                    characteristic.relation === "EQUAL_TO_STRING"
+                      ? '"' + characteristic.rhs + '"'
+                      : characteristic.rhs
+                  }}
+                  {{ characteristic.unit | prettyUnit }}
+                  <mat-icon matChipRemove (click)="removeCharacteristic(i)">
+                    cancel
+                  </mat-icon>
+                </mat-chip-option>
+              </mat-chip-listbox>
+            </div>
+          </mat-card-content>
         </mat-card>
         <div class="small-search" fxFlexOrder="2">
           <app-search-bar
@@ -74,8 +78,10 @@
         </div>
       </ng-template>
       <ng-template [ngIf]="appConfig.editSampleEnabled">
-        <mat-card appearance="outlined" class="big-edit-sample" (click)="openDialog()">
-          <mat-icon>add_circle</mat-icon> Create Sample
+        <mat-card class="big-edit-sample" (click)="openDialog()">
+          <mat-card-content>
+            <mat-icon>add_circle</mat-icon> Create Sample
+          </mat-card-content>
         </mat-card>
       </ng-template>
     </div>

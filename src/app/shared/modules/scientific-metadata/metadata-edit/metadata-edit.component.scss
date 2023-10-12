@@ -1,10 +1,6 @@
 .container {
   margin: 1em;
 
-  button {
-    margin: 1em 1em 0 0;
-  }
-
   mat-icon {
     vertical-align: middle;
   }
@@ -21,6 +17,17 @@
         }
       }
     }
+  }
+}
+@media only screen and (max-width: 400px) {
+  .save-button {
+    margin-top: 1em;
+  }
+}
+
+@media only screen and (min-width: 400px) {
+  .save-button {
+    margin-left: 1em;
   }
 }
 

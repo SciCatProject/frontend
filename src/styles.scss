@@ -30,12 +30,21 @@
 @use "./app/shared/modules/table/table-theme" as table;
 @use "./app/users/user-settings/user-settings-theme" as user-settings;
 
+$my-custom-button-level: mat.define-typography-level(
+  $font-weight: 400,
+  $font-size: 14px,
+  $line-height: 36px,
+  $letter-spacing: normal,
+);
+
 $custom-typography: mat.define-typography-config(
-  $font-family: '"Titillium Web", Calibri, sans-serif;',
+  $font-family: '"Titillium Web", Calibri, sans-serif',
+  $button: $my-custom-button-level,
 );
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
+@include mat.typography-hierarchy($custom-typography);
 @include mat.core();
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
@@ -166,19 +175,22 @@ $basetheme: mat.define-light-theme(
   )
 );
 
-$newcolor: map-merge(map-get($basetheme, "color"),(
-  warn-2: $warn-2,
-  header-1: $header-1,
-  header-2: $header-2,
-  header-3: $header-4,
-  header-4: $header-4,
-  hover: $hover,
-));
+$newcolor: map-merge(
+  map-get($basetheme, "color"),
+  (
+    warn-2: $warn-2,
+    header-1: $header-1,
+    header-2: $header-2,
+    header-3: $header-4,
+    header-4: $header-4,
+    hover: $hover,
+  )
+);
 
 $theme: map-merge(
   $basetheme,
   (
-    color: $newcolor
+    color: $newcolor,
   )
 );
 
@@ -209,6 +221,8 @@ $theme: map-merge(
 @include shared-table.theme($theme);
 @include table.theme($theme);
 @include user-settings.theme($theme);
+@include mat.button-density(0);
+@include mat.icon-button-density(0);
 
 /* You can add global styles to this file, and also import other style files */
 @import "assets/styles/titillium-web.scss";
@@ -230,7 +244,6 @@ a:hover {
   cursor: pointer;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of button that may no longer apply for the MDC version.*/
 .no-hover-effect.mat-mdc-button .mat-button-focus-overlay {
   background-color: transparent;
 }
@@ -251,9 +264,92 @@ a:hover {
   }
 }
 
-mat-card {
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-  padding-top: 0.5ex;
-  padding-bottom: 0.5ex;
+.mat-mdc-unelevated-button.mat-primary {
+  --mdc-filled-button-label-text-color: var(--theme-primary-default-contrast);
+}
+
+.mat-mdc-unelevated-button.mat-accent {
+  --mdc-filled-button-label-text-color: var(--theme-accent-default-contrast);
+}
+
+.mat-mdc-raised-button.mat-primary {
+  --mdc-protected-button-label-text-color: var(
+    --theme-primary-default-contrast
+  );
+}
+
+.mat-mdc-raised-button.mat-warn {
+  --mdc-protected-button-label-text-color: var(
+    --theme-primary-default-contrast
+  );
+}
+
+.mat-mdc-raised-button.mat-accent {
+  --mdc-protected-button-label-text-color: var(--theme-accent-default-contrast);
+}
+
+// Manipulate initial background color
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: white !important;
+}
+
+// Manipulate background color on hover and focus
+.mat-mdc-form-field-focus-overlay {
+  background-color: transparent !important;
+}
+
+.mdc-text-field--filled {
+  padding: 0 !important;
+
+  input.mat-mdc-chip-input {
+    margin-left: 0;
+  }
+}
+
+.mat-mdc-form-field {
+  font-size: 14px !important;
+
+  .mat-mdc-form-field-subscript-dynamic-size {
+    min-height: 0.6666666667em;
+  }
+}
+
+.mat-datepicker-toggle {
+  [mat-icon-button] {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0px !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .mat-mdc-button-touch-target {
+      width: 32px !important;
+      height: 32px !important;
+    }
+  }
+}
+
+.mat-mdc-slide-toggle {
+  --mdc-switch-selected-handle-color: var(--theme-accent-default);
+  --mdc-switch-selected-pressed-handle-color: var(--theme-accent-default);
+  --mdc-switch-selected-pressed-state-layer-color: var(--theme-accent-default);
+  --mdc-switch-selected-hover-state-layer-color: var(--theme-accent-default);
+  --mdc-switch-selected-hover-handle-color: var(--theme-accent-default);
+  --mdc-switch-selected-focus-state-layer-color: var(--theme-accent-default);
+  --mdc-switch-selected-focus-handle-color: var(--theme-accent-default);
+  --mdc-switch-selected-track-color: var(--theme-accent-default);
+  --mdc-switch-selected-pressed-track-color: var(--theme-accent-default);
+  --mdc-switch-selected-hover-track-color: var(--theme-accent-default);
+  --mdc-switch-selected-focus-track-color: var(--theme-accent-default);
+}
+
+.mat-mdc-tab-nav-bar,
+.mat-mdc-tab-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
