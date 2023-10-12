@@ -8,7 +8,6 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration default",
     "test": "ng test --watch=false --source-map=false",
-    "posttest": "betterer && ng lint",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
     "betterer": "betterer",
