@@ -1,6 +1,7 @@
-<mat-card appearance="outlined" class="big-filters">
-  <span class="title">Search</span>
-  <button
+<mat-card class="big-filters">
+  <mat-card-header class="section-container">
+    <mat-card-title>Search</mat-card-title>
+    <button
     mat-button
     class="clear-button"
     color="primary"
@@ -9,24 +10,26 @@
   >
     <mat-icon>clear_all</mat-icon> Clear
   </button>
-  <div style="clear: both;"></div>
-  <app-search-bar
-    [prefilledValue]="searchBarValue"
-    [clear]="clearSearchBar"
-    (search)="doSearchChange($event)"
-    (searchBarFocus)="doSearchChange($event)"
-  ></app-search-bar>
-  <mat-form-field>
-    <mat-date-range-input [rangePicker]="largePicker">
-      <input matStartDate placeholder="Start Date" />
-      <input matEndDate placeholder="End Date" />
-    </mat-date-range-input>
-    <mat-datepicker-toggle
-      matPrefix
-      [for]="largePicker"
-    ></mat-datepicker-toggle>
-    <mat-date-range-picker #largePicker></mat-date-range-picker>
-  </mat-form-field>
+  </mat-card-header>
+  <mat-card-content>
+    <app-search-bar
+      [prefilledValue]="searchBarValue"
+      [clear]="clearSearchBar"
+      (search)="doSearchChange($event)"
+      (searchBarFocus)="doSearchChange($event)"
+    ></app-search-bar>
+    <mat-form-field>
+      <mat-date-range-input [rangePicker]="largePicker">
+        <input matStartDate placeholder="Start Date" />
+        <input matEndDate placeholder="End Date" />
+      </mat-date-range-input>
+      <mat-datepicker-toggle
+        matPrefix
+        [for]="largePicker"
+      ></mat-datepicker-toggle>
+      <mat-date-range-picker #largePicker></mat-date-range-picker>
+    </mat-form-field>
+  </mat-card-content>
 </mat-card>
 <div class="small-filters">
   <button
@@ -38,7 +41,7 @@
   >
     <mat-icon>clear_all</mat-icon> Clear
   </button>
-  <div style="clear: both;"></div>
+  <div style="clear: both"></div>
   <app-search-bar
     [prefilledValue]="searchBarValue"
     [clear]="clearSearchBar"
@@ -47,9 +50,7 @@
   ></app-search-bar>
   <mat-expansion-panel>
     <mat-expansion-panel-header>
-      <mat-panel-title>
-        Filters
-      </mat-panel-title>
+      <mat-panel-title> Filters </mat-panel-title>
     </mat-expansion-panel-header>
     <mat-form-field>
       <mat-date-range-input [rangePicker]="smallPicker">

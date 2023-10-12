@@ -6,15 +6,14 @@
         <datasets-filter></datasets-filter>
         <ng-template [ngIf]="this.loggedIn$ | async">
           <mat-card
-            appearance="outlined"
             *ngIf="appConfig.addDatasetEnabled"
             class="add-card"
             (click)="openDialog()"
           >
-          <mat-card-content>
-            <mat-icon> add_circle </mat-icon>
-            Create Dataset
-          </mat-card-content>
+            <mat-card-content>
+              <mat-icon> add_circle </mat-icon>
+              Create Dataset
+            </mat-card-content>
           </mat-card>
 
           <div *ngIf="!appConfig.shoppingCartOnHeader && (nonEmpty$ | async)">

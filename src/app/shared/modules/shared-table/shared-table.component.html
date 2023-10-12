@@ -142,7 +142,7 @@
         </ng-container>
         <ng-container *ngSwitchDefault class="ellipsis">
           {{
-            getPropertyByPath(row, column.id) | newDynamicPipe: column.format
+            getPropertyByPath(row, column.id) | newDynamicPipe : column.format
           }}
         </ng-container>
       </ng-container>
@@ -158,7 +158,7 @@
       fxLayout="column"
       fxLayoutAlign="center start"
     >
-      <p *ngFor="let hiddenColumn of hiddenColumns" fxLayout="row" class="m8">
+      <div *ngFor="let hiddenColumn of hiddenColumns" fxLayout="row" class="m8">
         <strong> {{ hiddenColumn.label }}: </strong>
         <span>
           <ng-container [ngSwitch]="hiddenColumn.type">
@@ -177,12 +177,12 @@
             <ng-container *ngSwitchDefault>
               {{
                 getPropertyByPath(row, hiddenColumn.id)
-                  | newDynamicPipe: hiddenColumn.format
+                  | newDynamicPipe : hiddenColumn.format
               }}</ng-container
             >
           </ng-container>
         </span>
-      </p>
+      </div>
     </mat-cell>
   </ng-container>
   <!-- Cell Definition For Visible Columns End -->
@@ -250,7 +250,7 @@
         fxLayout="column"
         class="padding-right-1em"
       >
-        <p>
+        <div>
           <strong>{{ hiddenColumn.label }}</strong>
           <span>
             <mat-form-field
@@ -291,7 +291,7 @@
               />
             </mat-form-field>
           </span>
-        </p>
+        </div>
       </div>
     </mat-header-cell>
   </ng-container>

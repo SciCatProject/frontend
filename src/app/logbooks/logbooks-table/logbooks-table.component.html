@@ -51,9 +51,7 @@
         </mat-header-cell>
         <mat-cell *matCellDef="let logbook">
           <div fxLayout="column" *ngIf="logbook.messages.length > 0">
-            {{
-              logbook.messages[0].senderName
-            }}
+            {{ logbook.messages[0].senderName }}
           </div>
           <div fxLayout="column" *ngIf="logbook.messages.length === 0">--</div>
         </mat-cell>
@@ -105,8 +103,10 @@
   </div>
 
   <ng-template #noLogbooks>
-    <mat-card appearance="outlined" class="no-logbooks-message">
-      <mat-icon>info</mat-icon> No logbooks available.
+    <mat-card class="no-logbooks-message">
+      <mat-card-content>
+        <mat-icon>info</mat-icon> No logbooks available.
+      </mat-card-content>
     </mat-card>
   </ng-template>
 </ng-container>

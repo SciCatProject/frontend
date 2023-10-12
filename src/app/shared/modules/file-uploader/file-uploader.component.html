@@ -1,50 +1,55 @@
-<mat-card appearance="outlined" class="dropzone" appDragAndDrop (fileDropped)="onFileDropped($event)">
-  <input
-    class="instructions"
-    type="file"
-    #fileDropRef
-    id="fileDropRef"
-    accept="image/*,application/pdf"
-    multiple
-    (change)="onFilePicked($event.target['files'])"
-  />
-  <div fxLayout="column" style="align-items: center">
-    <div class="instructions">Drop a file here</div>
-    <div class="instructions">or</div>
-    <div class="instructions">
-      <button mat-raised-button color="accent" (click)="fileDropRef.click()">
-        Browse
-      </button>
+<mat-card class="dropzone" appDragAndDrop (fileDropped)="onFileDropped($event)">
+  <mat-card-content>
+    <input
+      class="instructions"
+      type="file"
+      #fileDropRef
+      id="fileDropRef"
+      accept="image/*,application/pdf"
+      multiple
+      (change)="onFilePicked($event.target['files'])"
+    />
+    <div fxLayout="column" style="align-items: center">
+      <div class="instructions">Drop a file here</div>
+      <div class="instructions">or</div>
+      <div class="instructions">
+        <button mat-raised-button color="accent" (click)="fileDropRef.click()">
+          Browse
+        </button>
+      </div>
+      <div class="instructions font-small">
+        Accepted file formats: image/*, application/pdf
+      </div>
     </div>
-    <div class="instructions font-small">
-      Accepted file formats: image/*, application/pdf
-    </div>
-  </div>
+  </mat-card-content>
 </mat-card>
 
-<mat-card appearance="outlined" class="file-picker">
-  <div class="mat-headline-6">
-    Choose an image to upload
-    <div class="font-small">
-      Accepted file formats: image/*, application/pdf
+<mat-card class="file-picker">
+  <mat-card-content>
+    <div class="mat-headline-6">
+      Choose an image to upload
+      <div class="font-small">
+        Accepted file formats: image/*, application/pdf
+      </div>
     </div>
-  </div>
 
-  <button mat-raised-button color="accent" (click)="fileDropRef.click()">
-    Browse
-  </button>
+    <button mat-raised-button color="accent" (click)="fileDropRef.click()">
+      Browse
+    </button>
+  </mat-card-content>
 </mat-card>
 
 <ng-template ngFor let-attachment [ngForOf]="attachments">
-  <mat-card appearance="outlined" class="attachment-card">
-    <img src="{{ attachment.thumbnail }}" />
-    <mat-card-actions>
+  <mat-card class="attachment-card">
+    <mat-card-content>
+      <img src="{{ attachment.thumbnail }}" />
+
       <form (submit)="onSubmitCaption(attachment.id, caption.value)">
         <mat-form-field>
+          <mat-label>Caption</mat-label>
           <input
             matInput
             id="caption"
-            placeholder="Edit caption"
             value="{{ attachment.caption }}"
             #caption
           />
@@ -53,12 +58,15 @@
           Submit
         </button>
       </form>
+    </mat-card-content>
+    <mat-card-actions align="end">
       <button
         mat-button
         class="download-button"
         (click)="onDownloadAttachment(attachment)"
       >
         <mat-icon>download</mat-icon>
+        Download
       </button>
       <button
         mat-button
@@ -66,6 +74,7 @@
         (click)="onDeleteAttachment(attachment.id)"
       >
         <mat-icon>delete</mat-icon>
+        Remove
       </button>
     </mat-card-actions>
   </mat-card>

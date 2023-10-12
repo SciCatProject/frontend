@@ -15,9 +15,12 @@ import { routerReducer } from "@ngrx/router-store";
 import { extModules } from "./build-specifics";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import {MatFormFieldModule} from "@angular/material/form-field";
+import {
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MatFormFieldModule,
+} from "@angular/material/form-field";
 import { MatTabsModule } from "@angular/material/tabs";
-import {MatChipsModule} from "@angular/material/chips";
+import { MatChipsModule } from "@angular/material/chips";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { LayoutModule } from "_layout/layout.module";
 import { AppConfigService } from "app-config.service";
@@ -83,6 +86,12 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
       provide: HTTP_INTERCEPTORS,
       useClass: SnackbarInterceptor,
       multi: true,
+    },
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: {
+        subscriptSizing: "dynamic",
+      },
     },
     AppThemeService,
     UserApi,
