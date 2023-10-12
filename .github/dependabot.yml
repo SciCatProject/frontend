@@ -30,8 +30,22 @@ updates:
         update-types:
         - "minor"
         - "patch"
+      ngrx:
+        patterns:
+        - "@ngrx/*"
+        update-types:
+        - "minor"
+        - "patch"
+      types:
+        patterns:
+        - "types/*"
+        update-types:
+        - "minor"
+        - "patch"
     ignore:
       - dependency-name: "@angular*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@ngrx*"
         update-types: ["version-update:semver-major"]
     labels:
       - "dependencies"
