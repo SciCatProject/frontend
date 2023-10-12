@@ -1,6 +1,6 @@
 <div fxLayout="row" fxLayout.xs="column" *ngIf="vm$ | async as vm">
   <div fxFlex="80">
-    <mat-card appearance="outlined">
+    <mat-card>
       <mat-card-header class="general-header">
         <div mat-card-avatar class="section-icon">
           <mat-icon> person </mat-icon>
@@ -8,67 +8,71 @@
         User Information
       </mat-card-header>
 
-      <ng-container
-        *ngIf="
-          vm.profile &&
-            vm.profile.thumbnailPhoto &&
-            vm.profile.thumbnailPhoto.startsWith('data:image/');
-          else noPhoto
-        "
-      >
-        <img
-          class="profile-image"
-          src="{{ vm.profile.thumbnailPhoto }}"
-          height="65px"
-          alt="profile photo"
-        />
-      </ng-container>
-      <ng-template #noPhoto>
-        <img
-          class="profile-image"
-          src="assets/images/user.png"
-          height="65px"
-          alt="profile photo"
-        />
-      </ng-template>
-
-      <table>
-        <tr *ngIf="vm.profile && vm.profile.displayName" data-cy="user-name">
-          <th>Name</th>
-          <td>{{ vm.profile.displayName }}</td>
-        </tr>
-        <tr *ngIf="vm.user && vm.user.email" data-cy="user-email">
-          <th>Email</th>
-          <td>{{ vm.user.email }}</td>
-        </tr>
-        <tr *ngIf="vm.user && vm.user.id" data-cy="user-id">
-          <th>Id</th>
-          <td>{{ vm.user.id }}</td>
-        </tr>
-        <tr
-          *ngIf="vm.profile && vm.profile.accessGroups"
-          data-cy="user-accessGroup"
+      <mat-card-content>
+        <ng-container
+          *ngIf="
+            vm.profile &&
+              vm.profile.thumbnailPhoto &&
+              vm.profile.thumbnailPhoto.startsWith('data:image/');
+            else noPhoto
+          "
         >
-          <th>Groups</th>
-          <td>{{ vm.profile.accessGroups }}</td>
-        </tr>
-        <tr *ngIf="tokenValue" data-cy="user-token">
-          <th>SciCat Token</th>
-          <td>
-            {{ tokenValue }}
-            <span class="copy-button" (click)="onCopy(tokenValue)">
-              <mat-icon matTooltip="Copy token to clipboard">post_add</mat-icon>
-            </span>
-          </td>
-        </tr>
-        <tr *ngIf="vm.user && vm.user.authStrategy" data-cy="auth-strategy">
-          <th>Auth strategy</th>
-          <td>{{ vm.user.authStrategy }}</td>
-        </tr>
-      </table>
+          <img
+            class="profile-image"
+            src="{{ vm.profile.thumbnailPhoto }}"
+            height="65px"
+            alt="profile photo"
+          />
+        </ng-container>
+        <ng-template #noPhoto>
+          <img
+            class="profile-image"
+            src="assets/images/user.png"
+            height="65px"
+            alt="profile photo"
+          />
+        </ng-template>
+
+        <table>
+          <tr *ngIf="vm.profile && vm.profile.displayName" data-cy="user-name">
+            <th>Name</th>
+            <td>{{ vm.profile.displayName }}</td>
+          </tr>
+          <tr *ngIf="vm.user && vm.user.email" data-cy="user-email">
+            <th>Email</th>
+            <td>{{ vm.user.email }}</td>
+          </tr>
+          <tr *ngIf="vm.user && vm.user.id" data-cy="user-id">
+            <th>Id</th>
+            <td>{{ vm.user.id }}</td>
+          </tr>
+          <tr
+            *ngIf="vm.profile && vm.profile.accessGroups"
+            data-cy="user-accessGroup"
+          >
+            <th>Groups</th>
+            <td>{{ vm.profile.accessGroups }}</td>
+          </tr>
+          <tr *ngIf="tokenValue" data-cy="user-token">
+            <th>SciCat Token</th>
+            <td>
+              {{ tokenValue }}
+              <span class="copy-button" (click)="onCopy(tokenValue)">
+                <mat-icon matTooltip="Copy token to clipboard"
+                  >post_add</mat-icon
+                >
+              </span>
+            </td>
+          </tr>
+          <tr *ngIf="vm.user && vm.user.authStrategy" data-cy="auth-strategy">
+            <th>Auth strategy</th>
+            <td>{{ vm.user.authStrategy }}</td>
+          </tr>
+        </table>
+      </mat-card-content>
     </mat-card>
 
-    <mat-card appearance="outlined" *ngIf="vm.settings as settings">
+    <mat-card *ngIf="vm.settings as settings">
       <mat-card-header class="settings-header">
         <div mat-card-avatar class="section-icon">
           <mat-icon> settings </mat-icon>
@@ -76,16 +80,18 @@
         Settings
       </mat-card-header>
 
-      <table>
-        <tr *ngIf="settings.datasetCount as value">
-          <th>Dataset Count</th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="settings.jobCount as value">
-          <th>Job Count</th>
-          <td>{{ value }}</td>
-        </tr>
-      </table>
+      <mat-card-content>
+        <table>
+          <tr *ngIf="settings.datasetCount as value">
+            <th>Dataset Count</th>
+            <td>{{ value }}</td>
+          </tr>
+          <tr *ngIf="settings.jobCount as value">
+            <th>Job Count</th>
+            <td>{{ value }}</td>
+          </tr>
+        </table>
+      </mat-card-content>
     </mat-card>
   </div>
 </div>

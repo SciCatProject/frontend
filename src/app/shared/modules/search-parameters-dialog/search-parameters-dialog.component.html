@@ -2,6 +2,7 @@
 <form [formGroup]="parametersForm">
   <mat-dialog-content>
     <mat-form-field>
+      <mat-label>Field</mat-label>
       <input
         matInput
         autocomplete="off"
@@ -9,20 +10,24 @@
         autocapitalize="off"
         spellcheck="false"
         name="lhs"
-        placeholder="Field"
         formControlName="lhs"
         [matAutocomplete]="parameterKeys"
         (blur)="getUnits(lhs)"
         (focus)="toggleUnitField()"
       />
       <mat-autocomplete #parameterKeys="matAutocomplete">
-        <mat-option *ngFor="let key of filteredKeys$ | async" [value]="key" [matTooltip]="key">
+        <mat-option
+          *ngFor="let key of filteredKeys$ | async"
+          [value]="key"
+          [matTooltip]="key"
+        >
           {{ key }}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
 
     <mat-form-field>
+      <mat-label>Operator</mat-label>
       <mat-select
         name="operator"
         formControlName="relation"
@@ -37,6 +42,7 @@
     </mat-form-field>
 
     <mat-form-field>
+      <mat-label>Value</mat-label>
       <input
         matInput
         autocomplete="off"
@@ -44,13 +50,13 @@
         autocapitalize="off"
         spellcheck="false"
         name="rhs"
-        placeholder="Value"
         formControlName="rhs"
       />
     </mat-form-field>
 
     <ng-template [ngIf]="unitsEnabled">
       <mat-form-field>
+        <mat-label>Unit</mat-label>
         <input
           matInput
           autocomplete="off"
@@ -58,7 +64,6 @@
           autocapitalize="off"
           spellcheck="false"
           name="rhsUnit"
-          placeholder="Unit"
           formControlName="unit"
           [matAutocomplete]="rhsUnits"
         />

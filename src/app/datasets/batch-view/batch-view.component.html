@@ -116,11 +116,14 @@
           </div>
         </mat-header-cell>
         <mat-cell *matCellDef="let dataset">
-          {{ dataset.creationTime | date: "yyyy-MM-dd HH:mm" }}
+          {{ dataset.creationTime | date : "yyyy-MM-dd HH:mm" }}
         </mat-cell>
       </ng-container>
 
-      <mat-header-row class="datasets-header" *matHeaderRowDef="visibleColumns">
+      <mat-header-row
+        class="datasets-header first-header-row"
+        *matHeaderRowDef="visibleColumns"
+      >
       </mat-header-row>
 
       <mat-row *matRowDef="let dataset; columns: visibleColumns"> </mat-row>
@@ -128,7 +131,7 @@
   </div>
 
   <ng-template #empty_batch>
-    <mat-card appearance="outlined" class="empty-batch-message">
+    <mat-card class="empty-batch-message">
       <mat-icon>info</mat-icon> There are no datasets in the batch.
     </mat-card>
   </ng-template>
