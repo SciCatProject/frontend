@@ -218,7 +218,7 @@ export class UserEffects {
     () => {
       return this.actions$.pipe(
         ofType(fromActions.logoutCompleteAction),
-        switchMap(({ logoutURL }) => {
+        tap(({ logoutURL }) => {
           if (logoutURL) {
             window.location.href = logoutURL;
 

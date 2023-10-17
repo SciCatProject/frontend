@@ -377,10 +377,10 @@ describe("UserEffects", () => {
       const outcome6 = clearProposalsStateAction();
       const outcome7 = clearPublishedDataStateAction();
       const outcome8 = clearSamplesStateAction();
-      const outcome9 = fromActions.logoutCompleteAction({});
+      const outcome9 = fromActions.logoutCompleteAction({ logoutURL: "" });
 
       actions = hot("-a", { a: action });
-      const response = cold("-a|", {});
+      const response = cold("-a|", { a: { logoutURL: "" } });
       userApi.isAuthenticated.and.returnValue(true);
       userApi.logout.and.returnValue(response);
 
