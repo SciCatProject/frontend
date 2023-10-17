@@ -197,7 +197,7 @@ export class UserEffects {
       filter(() => this.userApi.isAuthenticated()),
       switchMap(() =>
         this.userApi.logout().pipe(
-          switchMap(() => [
+          switchMap(({ logoutURL }) => [
             clearDatasetsStateAction(),
             clearInstrumentsStateAction(),
             clearJobsStateAction(),
@@ -206,7 +206,7 @@ export class UserEffects {
             clearProposalsStateAction(),
             clearPublishedDataStateAction(),
             clearSamplesStateAction(),
-            fromActions.logoutCompleteAction(),
+            fromActions.logoutCompleteAction({ logoutURL }),
           ]),
           catchError(() => of(fromActions.logoutFailedAction())),
         ),
@@ -218,7 +218,15 @@ export class UserEffects {
     () => {
       return this.actions$.pipe(
         ofType(fromActions.logoutCompleteAction),
-        tap(() => this.router.navigate(["/login"])),
+        switchMap(({ logoutURL }) => {
+          if (logoutURL) {
+            window.location.href = logoutURL;
+
+            return null;
+          } else {
+            return this.router.navigate(["/login"]);
+          }
+        }),
       );
     },
     { dispatch: false },
