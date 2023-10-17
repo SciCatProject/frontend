@@ -123,7 +123,7 @@ export const fetchScicatTokenFailedAction = createAction(
 export const logoutAction = createAction("[User] Logout");
 export const logoutCompleteAction = createAction(
   "[User] Logout Complete",
-  props<{ logoutURL: string }>(),
+  props<{ logoutURL?: string }>(),
 );
 export const logoutFailedAction = createAction("[User] Logout Failed");
 

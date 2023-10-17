@@ -176,7 +176,7 @@ describe("UserReducer", () => {
 
   describe("on logoutCompleteAction", () => {
     it("should reset the state to initial state", () => {
-      const action = fromActions.logoutCompleteAction();
+      const action = fromActions.logoutCompleteAction({});
       const state = userReducer(initialUserState, action);
 
       expect(state).toEqual(initialUserState);

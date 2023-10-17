@@ -324,7 +324,7 @@ describe("User Actions", () => {
 
   describe("logoutCompleteAction", () => {
     it("should create an action", () => {
-      const action = fromActions.logoutCompleteAction();
+      const action = fromActions.logoutCompleteAction({});
       expect({ ...action }).toEqual({ type: "[User] Logout Complete" });
     });
   });

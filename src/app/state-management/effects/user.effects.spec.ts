@@ -377,7 +377,7 @@ describe("UserEffects", () => {
       const outcome6 = clearProposalsStateAction();
       const outcome7 = clearPublishedDataStateAction();
       const outcome8 = clearSamplesStateAction();
-      const outcome9 = fromActions.logoutCompleteAction();
+      const outcome9 = fromActions.logoutCompleteAction({});
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", {});
@@ -414,7 +414,7 @@ describe("UserEffects", () => {
 
   describe("logoutNavigate$", () => {
     it("should navigate to anonymous view", () => {
-      const action = fromActions.logoutCompleteAction();
+      const action = fromActions.logoutCompleteAction({});
 
       actions = hot("-a", { a: action });
 
