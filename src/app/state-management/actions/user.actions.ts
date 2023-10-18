@@ -121,7 +121,10 @@ export const fetchScicatTokenFailedAction = createAction(
 );
 
 export const logoutAction = createAction("[User] Logout");
-export const logoutCompleteAction = createAction("[User] Logout Complete");
+export const logoutCompleteAction = createAction(
+  "[User] Logout Complete",
+  props<{ logoutURL?: string }>(),
+);
 export const logoutFailedAction = createAction("[User] Logout Failed");
 
 export const addCustomColumnsAction = createAction(
