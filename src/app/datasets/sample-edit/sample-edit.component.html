@@ -16,7 +16,6 @@
         [length]="sampleCount$ | async"
         [pageSize]="samplesPerPage$ | async"
         (page)="onPageChange($event)"
-        showFirstLastButtons
       ></mat-paginator>
     </div>
   </div>
@@ -57,7 +56,7 @@
         Creation Time
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
-        {{ row.createdAt | date : "yyyy-MM-dd, hh:mm" }}
+        {{ row.createdAt | date: "yyyy-MM-dd, hh:mm" }}
       </mat-cell>
     </ng-container>
 

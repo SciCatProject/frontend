@@ -6,9 +6,8 @@
     [length]="dataCount"
     [pageSize]="dataPerPage"
     (page)="onPageChange($event)"
-    showFirstLastButtons
     *ngIf="paginate"
-      >
+  >
   </mat-paginator>
 
   <mat-table
@@ -56,12 +55,12 @@
         </mat-header-cell>
         <div *ngIf="column.dateFormat">
           <mat-cell *matCellDef="let data">
-            {{ data[column.name] | date : column.dateFormat }}</mat-cell
+            {{ data[column.name] | date: column.dateFormat }}</mat-cell
           >
         </div>
         <div *ngIf="!column.dateFormat && column.pipe">
           <mat-cell *matCellDef="let data">
-            {{ data[column.name] | dynamicPipe : column.pipe : [] }}</mat-cell
+            {{ data[column.name] | dynamicPipe: column.pipe : [] }}</mat-cell
           >
         </div>
         <div *ngIf="!column.dateFormat && !column.pipe">

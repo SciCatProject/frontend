@@ -5,7 +5,6 @@
     [length]="entriesCount"
     [pageSize]="entriesPerPage"
     (page)="doPageChange($event)"
-    showFirstLastButtons
   >
   </mat-paginator>
 
@@ -29,7 +28,7 @@
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let message">
-        {{ message.origin_server_ts | date : "yyyy-MM-dd, EEE HH:mm" }}
+        {{ message.origin_server_ts | date: "yyyy-MM-dd, EEE HH:mm" }}
       </mat-cell>
     </ng-container>
 
@@ -107,20 +106,20 @@
             *ngIf="
               first ||
               (!first &&
-                (message.origin_server_ts | date : 'yyyy-MM-dd') !==
+                (message.origin_server_ts | date: 'yyyy-MM-dd') !==
                   (logbook.messages[i - 1].origin_server_ts
-                    | date : 'yyyy-MM-dd'))
+                    | date: 'yyyy-MM-dd'))
             "
           >
             <mat-expansion-panel-header>
               <mat-panel-title>
-                {{ message.origin_server_ts | date : "MMM d, y" }}
+                {{ message.origin_server_ts | date: "MMM d, y" }}
               </mat-panel-title>
             </mat-expansion-panel-header>
             <div>
               <div class="sender">
                 {{ message.senderName }},
-                {{ message.origin_server_ts | date : "HH:mm" }}:
+                {{ message.origin_server_ts | date: "HH:mm" }}:
               </div>
               <div>
                 <div
@@ -163,13 +162,13 @@
               <div
                 *ngIf="
                   value !== message &&
-                  (value.origin_server_ts | date : 'yyyy-MM-dd') ===
-                    (message.origin_server_ts | date : 'yyyy-MM-dd')
+                  (value.origin_server_ts | date: 'yyyy-MM-dd') ===
+                    (message.origin_server_ts | date: 'yyyy-MM-dd')
                 "
               >
                 <div class="sender">
                   {{ value.senderName }},
-                  {{ value.origin_server_ts | date : "HH:mm" }}:
+                  {{ value.origin_server_ts | date: "HH:mm" }}:
                 </div>
                 <div>
                   <div
