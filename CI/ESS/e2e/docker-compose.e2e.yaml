@@ -72,7 +72,15 @@ services:
     depends_on:
       - mongodb
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
-
+    command:
+      [
+        "./wait-for-it.sh",
+        "backend:3000",
+        "--",
+        "nginx",
+        "-g",
+        "daemon off;"
+      ]
     environment:
       - node.name=es01
       - ES_JAVA_OPTS=-Xms2g -Xmx2g
