@@ -25,6 +25,15 @@ mat-card {
         margin: 0;
       }
     }
+
+    .scientific-chip {
+      height: auto;
+    }
+
+    .scientific-chip-text {
+      white-space: normal;
+      word-break: break-all;
+    }
   }
 
   .section-container:first-child {
