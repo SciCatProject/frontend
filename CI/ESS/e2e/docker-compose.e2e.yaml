@@ -76,7 +76,6 @@ services:
     ports:
       - 9200:9200
     environment:
-      - discovery.type=single-node
       - xpack.security.enabled=false
       - node.name=es01
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
