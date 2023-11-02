@@ -102,12 +102,27 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Configure sysctl limits
+        run: |
+          sudo swapoff -a
+          sudo sysctl -w vm.swappiness=1
+          sudo sysctl -w fs.file-max=262144
+          sudo sysctl -w vm.max_map_count=262144
+
       - name: Run docker-compose
         run: |
           cp CI/ESS/e2e/docker-compose.e2e.yaml docker-compose.yaml
           docker-compose pull
           docker-compose build --no-cache
           docker-compose up &
+
+      - name: Download wait-for-it.sh
+        run: |
+          wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+          chmod +x wait-for-it.sh
+
+      - name: Wait for backend to be ready
+        run: ./wait-for-it.sh backend:3000 --timeout=40
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
