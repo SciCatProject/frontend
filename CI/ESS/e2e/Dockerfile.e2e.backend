@@ -2,7 +2,7 @@ FROM ghcr.io/scicatproject/backend-next:latest
 
 USER root
 
-RUN apk add --no-cache wget
+RUN apk add --no-cache wget bash
 
 RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
     && chmod +x wait-for-it.sh \
