@@ -30,9 +30,11 @@ services:
     depends_on:
       - mongodb
   backend:
-    image: "ghcr.io/scicatproject/backend-next:latest"
+    build:
+      context: .
+      dockerfile: CI/ESS/e2e/Dockerfile.e2e.backend
     # NOTE: This sleep is waiting for mongodb to start. Not the nisest solution but it works for now. Improvemet will be to include the wait-for-it.sh script while building the backend container so we can execute it here. Something similar like this one: https://github.com/SciCatProject/scichat-loopback/blob/master/CI/ESS/Dockerfile.e2e#L11
-    command: sh -c " sleep 25 && node dist/main"
+    command: sh -c "wait-for-it.sh mongodb:27017 --timeout=30 && wait-for-it.sh es01:9200 --timeout=30 && node dist/main"
     ports:
       - 3000:3000
     volumes:
@@ -79,6 +81,7 @@ services:
       - xpack.security.enabled=false
       - node.name=es01
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - ES_PASSWORD=password
       - cluster.name=es-cluster
       - cluster.initial_master_nodes=es01
       - bootstrap.memory_lock=true
