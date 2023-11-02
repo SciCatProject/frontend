@@ -83,7 +83,7 @@ services:
       - ELASTIC_USERNAME=elastic
       - ELASTIC_PASSWORD=password
       - bootstrap.memory_lock=true
-    mem_limit: ${MEM_LIMIT}
+    mem_limit: 4g
     ulimits:
       memlock:
         soft: -1
