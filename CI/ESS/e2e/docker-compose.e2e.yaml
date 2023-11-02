@@ -72,17 +72,17 @@ services:
   es01:
     depends_on:
       - mongodb
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
     ports:
-      - 9200:9200
+      - ${ES_PORT}:9200
     environment:
       - node.name=es01
       - ES_JAVA_OPTS=-Xms2g -Xmx2g
-      - cluster.name=es-cluster
+      - cluster.name=${CLUSTER_NAME}
       - cluster.initial_master_nodes=es01
-      - ELASTIC_PASSWORD=password
+      - ELASTIC_PASSWORD=${ES_PASSWORD}
       - bootstrap.memory_lock=true
-    mem_limit: 4G
+    mem_limit: ${MEM_LIMIT}
     ulimits:
       memlock:
         soft: -1
