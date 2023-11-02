@@ -33,7 +33,6 @@ services:
     build:
       context: .
       dockerfile: CI/ESS/e2e/Dockerfile.e2e.backend
-    # NOTE: This sleep is waiting for mongodb to start. Not the nisest solution but it works for now. Improvemet will be to include the wait-for-it.sh script while building the backend container so we can execute it here. Something similar like this one: https://github.com/SciCatProject/scichat-loopback/blob/master/CI/ESS/Dockerfile.e2e#L11
     command: sh -c "wait-for-it.sh mongodb:27017 --timeout=30 && wait-for-it.sh es01:9200 --timeout=30 && node dist/main"
     ports:
       - 3000:3000
