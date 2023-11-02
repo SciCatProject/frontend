@@ -78,11 +78,11 @@ services:
     environment:
       - xpack.security.enabled=false
       - node.name=es01
-      - ES_JAVA_OPTS=-Xms2g -Xmx2g
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
       - cluster.name=es-cluster
       - cluster.initial_master_nodes=es01
       - bootstrap.memory_lock=true
-    mem_limit: 4g
+    mem_limit: 1g
     ulimits:
       memlock:
         soft: -1
