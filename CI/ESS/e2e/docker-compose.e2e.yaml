@@ -76,7 +76,7 @@ services:
     ports:
       - 9200:9200
     environment:
-      - xpack.security.enabled=false
+      # - xpack.security.enabled=false
       - node.name=es01
       - ES_JAVA_OPTS=-Xms2g -Xmx2g
       - cluster.name=${CLUSTER_NAME}
