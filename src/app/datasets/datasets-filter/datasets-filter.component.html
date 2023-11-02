@@ -181,29 +181,32 @@
 
       <mat-chip-listbox class="scientific-chips" aria-orientation="vertical">
         <mat-chip-option
+          class="scientific-chip"
           *ngFor="let condition of scientificConditions$ | async; index as i"
         >
-          {{ condition.lhs }}
-          <ng-container [ngSwitch]="condition.relation">
-            <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">
-              &nbsp;=&nbsp;
+          <span class="scientific-chip-text">
+            {{ condition.lhs }}
+            <ng-container [ngSwitch]="condition.relation">
+              <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">
+                &nbsp;=&nbsp;
+              </ng-container>
+              <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">
+                &nbsp;=&nbsp;
+              </ng-container>
+              <ng-container *ngSwitchCase="'LESS_THAN'">
+                &nbsp;&lt;&nbsp;
+              </ng-container>
+              <ng-container *ngSwitchCase="'GREATER_THAN'">
+                &nbsp;&gt;&nbsp;
+              </ng-container>
             </ng-container>
-            <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">
-              &nbsp;=&nbsp;
-            </ng-container>
-            <ng-container *ngSwitchCase="'LESS_THAN'">
-              &nbsp;&lt;&nbsp;
-            </ng-container>
-            <ng-container *ngSwitchCase="'GREATER_THAN'">
-              &nbsp;&gt;&nbsp;
-            </ng-container>
-          </ng-container>
-          {{
-            condition.relation === "EQUAL_TO_STRING"
-              ? '"' + condition.rhs + '"'
-              : condition.rhs
-          }}
-          {{ condition.unit | prettyUnit }}
+            {{
+              condition.relation === "EQUAL_TO_STRING"
+                ? '"' + condition.rhs + '"'
+                : condition.rhs
+            }}
+            {{ condition.unit | prettyUnit }}
+          </span>
           <mat-icon matChipRemove (click)="removeCondition(condition, i)"
             >cancel</mat-icon
           >
