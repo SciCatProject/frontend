@@ -76,12 +76,11 @@ services:
     ports:
       - 9200:9200
     environment:
+      - xpack.security.enabled=false
       - node.name=es01
       - ES_JAVA_OPTS=-Xms2g -Xmx2g
       - cluster.name=es-cluster
       - cluster.initial_master_nodes=es01
-      - ELASTIC_USERNAME=elastic
-      - ELASTIC_PASSWORD=password
       - bootstrap.memory_lock=true
     mem_limit: 4g
     ulimits:

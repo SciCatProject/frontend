@@ -103,12 +103,6 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Run docker-compose
-        env:
-          STACK_VERSION: 8.8.2
-          CLUSTER_NAME: es-cluster
-          MEM_LIMIT: 4G
-          ES_USERNAME: elastic
-          ES_PASSWORD: password
         run: |
           cp CI/ESS/e2e/docker-compose.e2e.yaml docker-compose.yaml
           docker-compose pull
