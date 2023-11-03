@@ -116,8 +116,8 @@ jobs:
           docker-compose build --no-cache
           docker-compose up &
 
-      - name: Make wait-for-it.sh executable and wait for backend
-        run: chmod +x ./wait-for-it.sh && ./wait-for-it.sh backend:3000 --timeout=40
+      # - name: Make wait-for-it.sh executable and wait for backend
+      #   run: chmod +x ./wait-for-it.sh && ./wait-for-it.sh backend:3000 --timeout=40
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
