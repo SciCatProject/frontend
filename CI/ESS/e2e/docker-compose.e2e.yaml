@@ -30,14 +30,13 @@ services:
     depends_on:
       - mongodb
   backend:
-    build:
-      context: .
-      dockerfile: CI/ESS/e2e/Dockerfile.e2e.backend
-    command: sh -c "wait-for-it.sh mongodb:27017 --timeout=30 && wait-for-it.sh es01:9200 --timeout=30 && node dist/main"
+    image: ghcr.io/scicatproject/backend-next:latest
+    command: sh -c "/wait-for-it.sh mongodb:27017 --timeout=30 && /wait-for-it.sh es01:9200 --timeout=30 && node dist/main"
     ports:
       - 3000:3000
     volumes:
       - "./CI/ESS/e2e/.env.backend-next:/home/node/app/.env"
+      - "./wait-for-it.sh:/home/node/app/wait-for-it.sh"
     depends_on:
       - mongodb
       - scichat-loopback
