@@ -93,10 +93,15 @@ services:
         soft: -1
         hard: -1
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://es01:9200" ]
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://es01:9200/_cluster/health?wait_for_status=yellow&timeout=50s || exit 1"
+        ]
       interval: 30s
-      timeout: 10s
-      retries: 5
+      timeout: 30s
+      start_period: 60s
+      retries: 20
 volumes:
   mongodb_data:
     driver: local
