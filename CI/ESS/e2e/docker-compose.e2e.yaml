@@ -13,11 +13,6 @@ services:
       - "27017:27017"
     volumes:
       - "mongodb_data:/bitnami"
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh --quiet
-      interval: 10s
-      timeout: 10s
-      retries: 5
   scichat-loopback:
     image: "dacat/scichat-loopback:e2e"
     command:
@@ -42,13 +37,9 @@ services:
     volumes:
       - "./CI/ESS/e2e/.env.backend-next:/home/node/app/.env"
     depends_on:
-      mongodb:
-        condition: service_healthy
-      scichat-loopback:
-        condition: service_started
-      es01:
-        condition: service_healthy
-
+      - mongodb
+      - scichat-loopback
+      - es01
     labels:
       - "traefik.http.routers.backend.rule=PathPrefix(`/api/v3`, `/auth/msad`)"
       - "traefik.http.routers.backend.entrypoints=web"
@@ -94,16 +85,16 @@ services:
       memlock:
         soft: -1
         hard: -1
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "curl -s -X GET http://localhost:9200/_cluster/health?pretty | grep status | grep -q '\\(green\\|yellow\\)'"
-        ]
-      interval: 30s
-      timeout: 10s
-      start_period: 60s
-      retries: 5
+    # healthcheck:
+    #   test:
+    #     [
+    #       "CMD-SHELL",
+    #       "curl -s -X GET http://localhost:9200/_cluster/health?pretty | grep status | grep -q '\\(green\\|yellow\\)'"
+    #     ]
+    #   interval: 30s
+    #   timeout: 10s
+    #   start_period: 60s
+    #   retries: 5
 volumes:
   mongodb_data:
     driver: local
