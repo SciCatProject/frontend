@@ -13,6 +13,11 @@ services:
       - "27017:27017"
     volumes:
       - "mongodb_data:/bitnami"
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
   scichat-loopback:
     image: "dacat/scichat-loopback:e2e"
     command:
