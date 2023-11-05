@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.2"
 services:
   reverse-proxy:
     image: traefik:2.5
@@ -13,11 +13,11 @@ services:
       - "27017:27017"
     volumes:
       - "mongodb_data:/bitnami"
-    healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongosh --quiet
-      interval: 10s
-      timeout: 10s
-      retries: 5
+    # healthcheck:
+    #   test: echo 'db.runCommand("ping").ok' | mongosh --quiet
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 5
   scichat-loopback:
     image: "dacat/scichat-loopback:e2e"
     command:
@@ -33,8 +33,7 @@ services:
     volumes:
       - "./CI/ESS/e2e/.env:/home/node/app/.env"
     depends_on:
-      mongodb:
-        condition: service_completed_successfully
+      - mongodb
   backend:
     image: ghcr.io/scicatproject/backend-next:latest
     command: sh -c " sleep 5 && node dist/main"
@@ -43,12 +42,9 @@ services:
     volumes:
       - "./CI/ESS/e2e/.env.backend-next:/home/node/app/.env"
     depends_on:
-      mongodb:
-        condition: service_completed_successfully
-      scichat-loopback:
-        condition: service_completed_successfully
-      es01:
-        condition: service_completed_successfully
+      - mongodb
+      - scichat-loopback
+      - es01
     labels:
       - "traefik.http.routers.backend.rule=PathPrefix(`/api/v3`, `/auth/msad`)"
       - "traefik.http.routers.backend.entrypoints=web"
@@ -73,15 +69,11 @@ services:
       - "./CI/ESS/site-logo.png:/usr/share/nginx/html/assets/images/site-logo.png"
       - "./CI/ESS/favicon.ico:/usr/share/nginx/html/favicon.ico"
     depends_on:
-      backend:
-        condition: service_completed_successfully
+      - backend
     labels:
       - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
       - "traefik.http.routers.frontend.entrypoints=web"
   es01:
-    depends_on:
-      mongodb:
-        condition: service_completed_successfully
     image: docker.elastic.co/elasticsearch/elasticsearch:8.8.2
     ports:
       - 9200:9200
@@ -102,10 +94,10 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl -f http://es01:9200/_cluster/health?wait_for_status=yellow&timeout=50s || exit 1"
+          "curl -s -X GET http://localhost:9200/_cluster/health?pretty | grep status | grep -q '\\(green\\|yellow\\)'"
         ]
       interval: 30s
-      timeout: 30s
+      timeout: 10s
       start_period: 60s
       retries: 5
 volumes:
