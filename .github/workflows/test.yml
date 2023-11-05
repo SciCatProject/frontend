@@ -109,9 +109,6 @@ jobs:
           sudo sysctl -w fs.file-max=262144
           sudo sysctl -w vm.max_map_count=262144
 
-      - name: Set permissions for the script
-        run: chmod +x ./wait-for-it.sh
-
       - name: Run docker-compose
         run: |
           cp CI/ESS/e2e/docker-compose.e2e.yaml docker-compose.yaml
