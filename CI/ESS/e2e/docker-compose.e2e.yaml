@@ -94,7 +94,7 @@ services:
       interval: 30s
       timeout: 10s
       start_period: 60s
-      retries: 5
+      retries: 4
 volumes:
   mongodb_data:
     driver: local
