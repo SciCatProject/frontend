@@ -92,6 +92,11 @@ services:
       memlock:
         soft: -1
         hard: -1
+    healthcheck:
+      test: curl -s -X GET http://es01:9200/_cluster/health?pretty | grep status | grep -q '\\(green\\|yellow\\)'
+      interval: 30s
+      timeout: 10s
+      retries: 5
 volumes:
   mongodb_data:
     driver: local
