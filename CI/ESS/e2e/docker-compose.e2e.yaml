@@ -1,4 +1,4 @@
-version: "3.2"
+version: "3.4"
 services:
   reverse-proxy:
     image: traefik:2.5
@@ -42,9 +42,12 @@ services:
     volumes:
       - "./CI/ESS/e2e/.env.backend-next:/home/node/app/.env"
     depends_on:
-      - mongodb
-      - scichat-loopback
-      - es01
+      mongodb:
+        condition: service_healthy
+      scichat-loopback:
+        condition: service_started
+      es01:
+        condition: service_healthy
     labels:
       - "traefik.http.routers.backend.rule=PathPrefix(`/api/v3`, `/auth/msad`)"
       - "traefik.http.routers.backend.entrypoints=web"
@@ -101,7 +104,7 @@ services:
       interval: 30s
       timeout: 30s
       start_period: 60s
-      retries: 20
+      retries: 5
 volumes:
   mongodb_data:
     driver: local
