@@ -1,4 +1,4 @@
-version: "3.2"
+version: "4.1"
 services:
   reverse-proxy:
     image: traefik:2.5
@@ -33,7 +33,8 @@ services:
     volumes:
       - "./CI/ESS/e2e/.env:/home/node/app/.env"
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_started
   backend:
     image: ghcr.io/scicatproject/backend-next:latest
     command: sh -c " sleep 5 && node dist/main"
@@ -72,13 +73,15 @@ services:
       - "./CI/ESS/site-logo.png:/usr/share/nginx/html/assets/images/site-logo.png"
       - "./CI/ESS/favicon.ico:/usr/share/nginx/html/favicon.ico"
     depends_on:
-      - backend
+      backend:
+        condition: service_started
     labels:
       - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
       - "traefik.http.routers.frontend.entrypoints=web"
   es01:
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     image: docker.elastic.co/elasticsearch/elasticsearch:8.8.2
     ports:
       - 9200:9200
