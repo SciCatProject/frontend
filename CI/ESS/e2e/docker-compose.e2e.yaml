@@ -34,7 +34,7 @@ services:
       - "./CI/ESS/e2e/.env:/home/node/app/.env"
     depends_on:
       mongodb:
-        condition: service_started
+        condition: service_completed_successfully
   backend:
     image: ghcr.io/scicatproject/backend-next:latest
     command: sh -c " sleep 5 && node dist/main"
@@ -44,11 +44,11 @@ services:
       - "./CI/ESS/e2e/.env.backend-next:/home/node/app/.env"
     depends_on:
       mongodb:
-        condition: service_healthy
+        condition: service_completed_successfully
       scichat-loopback:
-        condition: service_started
+        condition: service_completed_successfully
       es01:
-        condition: service_healthy
+        condition: service_completed_successfully
     labels:
       - "traefik.http.routers.backend.rule=PathPrefix(`/api/v3`, `/auth/msad`)"
       - "traefik.http.routers.backend.entrypoints=web"
@@ -74,14 +74,14 @@ services:
       - "./CI/ESS/favicon.ico:/usr/share/nginx/html/favicon.ico"
     depends_on:
       backend:
-        condition: service_started
+        condition: service_completed_successfully
     labels:
       - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
       - "traefik.http.routers.frontend.entrypoints=web"
   es01:
     depends_on:
       mongodb:
-        condition: service_healthy
+        condition: service_completed_successfully
     image: docker.elastic.co/elasticsearch/elasticsearch:8.8.2
     ports:
       - 9200:9200
