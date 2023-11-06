@@ -8,7 +8,6 @@ env:
   NODE_VERSION: 18.x
 
 jobs:
-
   install-and-cache:
     name: Run install and cache
     runs-on: ubuntu-latest
@@ -102,6 +101,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+
+      - name: Configure sysctl limits
+        run: |
+          sudo swapoff -a
+          sudo sysctl -w vm.swappiness=1
+          sudo sysctl -w fs.file-max=262144
+          sudo sysctl -w vm.max_map_count=262144
 
       - name: Run docker-compose
         run: |

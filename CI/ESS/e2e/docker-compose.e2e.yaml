@@ -23,18 +23,15 @@ services:
         "node",
         "-r",
         "dotenv/config",
-        ".",
+        "."
       ]
     volumes:
       - "./CI/ESS/e2e/.env:/home/node/app/.env"
     depends_on:
       - mongodb
   backend:
-    image: "ghcr.io/scicatproject/backend-next:latest"
-    # NOTE: This sleep is waiting for mongodb to start. Not the nisest solution but it works for now. Improvemet will be to include the wait-for-it.sh script while building the backend container so we can execute it here. Something similar like this one: https://github.com/SciCatProject/scichat-loopback/blob/master/CI/ESS/Dockerfile.e2e#L11
-    command: sh -c "
-      sleep 5 &&
-      node dist/main"
+    image: ghcr.io/scicatproject/backend-next:latest
+    command: sh -c " sleep 5 && node dist/main"
     ports:
       - 3000:3000
     volumes:
@@ -42,6 +39,7 @@ services:
     depends_on:
       - mongodb
       - scichat-loopback
+      - es01
     labels:
       - "traefik.http.routers.backend.rule=PathPrefix(`/api/v3`, `/auth/msad`)"
       - "traefik.http.routers.backend.entrypoints=web"
@@ -50,7 +48,14 @@ services:
       context: .
       dockerfile: CI/ESS/e2e/Dockerfile.e2e
     command:
-      ["./wait-for-it.sh", "backend:3000", "--", "nginx", "-g", "daemon off;"]
+      [
+        "./wait-for-it.sh",
+        "backend:3000",
+        "--",
+        "nginx",
+        "-g",
+        "daemon off;"
+      ]
     ports:
       - 4200:80
     volumes:
@@ -63,7 +68,33 @@ services:
     labels:
       - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
       - "traefik.http.routers.frontend.entrypoints=web"
-
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.2
+    ports:
+      - 9200:9200
+    environment:
+      - xpack.security.enabled=false
+      - node.name=es01
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - ES_PASSWORD=password
+      - cluster.name=es-cluster
+      - cluster.initial_master_nodes=es01
+      - bootstrap.memory_lock=true
+    mem_limit: 1g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -X GET http://localhost:9200/_cluster/health?pretty | grep status | grep -q '\\(green\\|yellow\\)'"
+        ]
+      interval: 30s
+      timeout: 10s
+      start_period: 60s
+      retries: 4
 volumes:
   mongodb_data:
     driver: local
