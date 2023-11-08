@@ -15,6 +15,7 @@ import {
   Validators,
   ValidatorFn,
   AbstractControl,
+  ValidationErrors,
 } from "@angular/forms";
 import { UnitsService } from "shared/services/units.service";
 import { startWith, map } from "rxjs/operators";
@@ -48,6 +49,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
       fieldName: new FormControl("", [
         Validators.required,
         Validators.minLength(2),
+        this.duplicateValidator(),
       ]),
       fieldValue: new FormControl("", [
         Validators.required,
@@ -81,6 +83,18 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const allowed = this.unitsService.getUnits().includes(control.value);
       return allowed ? null : { forbiddenUnit: { value: control.value } };
+    };
+  }
+
+  duplicateValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const duplicate = this.items.controls.filter(
+        (item: AbstractControl) =>
+          item.get("fieldName")?.value === control.value,
+      );
+      return duplicate.length > 1
+        ? { duplicateField: { value: control.value } }
+        : null;
     };
   }
 
@@ -193,6 +207,11 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   fieldHasError(index: number, field: string): boolean {
     const formField = this.items.at(index).get(field);
     return formField ? formField.hasError("required") : true;
+  }
+
+  fieldHasDuplicateError(index: number, field: string): boolean {
+    const formField = this.items.at(index).get(field);
+    return formField ? formField.hasError("duplicateField") : true;
   }
 
   get items() {

@@ -40,6 +40,9 @@
               <mat-error *ngIf="fieldHasError(i, 'fieldName')">
                 Name is required
               </mat-error>
+              <mat-error *ngIf="fieldHasDuplicateError(i, 'fieldName')">
+                Name is already taken
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="formColumn">
