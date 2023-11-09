@@ -248,7 +248,8 @@ export class DatasetDetailsDashboardComponent
   }
 
   fetchDatasetRelatedDocuments(): void {
-    if (this.dataset) {
+    const isAuthenticated = this.userApi.isAuthenticated();
+    if (this.dataset && isAuthenticated) {
       if ("proposalId" in this.dataset) {
         this.store.dispatch(
           fetchProposalAction({
