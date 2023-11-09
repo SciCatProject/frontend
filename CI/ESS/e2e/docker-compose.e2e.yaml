@@ -1,4 +1,4 @@
-version: "3.2"
+version: "3.4"
 services:
   reverse-proxy:
     image: traefik:2.5
@@ -13,6 +13,12 @@ services:
       - "27017:27017"
     volumes:
       - "mongodb_data:/bitnami"
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh mongodb:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
   scichat-loopback:
     image: "dacat/scichat-loopback:e2e"
     command:
@@ -28,18 +34,20 @@ services:
     volumes:
       - "./CI/ESS/e2e/.env:/home/node/app/.env"
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
   backend:
     image: ghcr.io/scicatproject/backend-next:latest
-    command: sh -c " sleep 5 && node dist/main"
+    command: sh -c "node dist/main"
     ports:
       - 3000:3000
     volumes:
       - "./CI/ESS/e2e/.env.backend-next:/home/node/app/.env"
     depends_on:
-      - mongodb
-      - scichat-loopback
-      - es01
+      mongodb:
+        condition: service_healthy
+      es01:
+        condition: service_healthy
     labels:
       - "traefik.http.routers.backend.rule=PathPrefix(`/api/v3`, `/auth/msad`)"
       - "traefik.http.routers.backend.entrypoints=web"
@@ -89,7 +97,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl -s -X GET http://localhost:9200/_cluster/health?pretty | grep status | grep -q '\\(green\\|yellow\\)'"
+          "curl -s -X GET http://es01:9200/_cluster/health?pretty | grep status | grep -q '\\(green\\|yellow\\)'"
         ]
       interval: 30s
       timeout: 10s
