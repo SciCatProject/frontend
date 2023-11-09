@@ -84,7 +84,7 @@ describe("Datasets", () => {
       });
     });
 
-    it.only("should not be able to create a dataset with duplicate name", () => {
+    it("should not be able to create a dataset with duplicate name", () => {
       cy.createDataset("raw");
 
       cy.visit("/datasets");
