@@ -39,6 +39,7 @@ updates:
       types:
         patterns:
         - "types/*"
+        - "@types/*
         update-types:
         - "minor"
         - "patch"
