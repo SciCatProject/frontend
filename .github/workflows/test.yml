@@ -114,7 +114,7 @@ jobs:
           cp CI/ESS/e2e/docker-compose.e2e.yaml docker-compose.yaml
           docker-compose pull
           docker-compose build --no-cache
-          docker-compose up &
+          docker-compose up -d
 
       - name: Wait for Backend
         run: |
@@ -128,14 +128,26 @@ jobs:
           install-command: npm install --omit peer
           browser: chrome
 
+      - name: docker logs
+        if: ${{ failure() }}
+        run: |
+          docker-compose logs es01
+          docker-compose logs backend
+
+      - name: Stop docker-compose
+        if: ${{ !cancelled() }}
+        run: |
+          docker-compose down -v
+
+
       - uses: actions/upload-artifact@v3
-        if: failure()
+        if: ${{ failure() }}
         with:
           name: cypress-screenshots
           path: cypress/screenshots
 
       - uses: actions/upload-artifact@v3
-        if: failure()
+        if: ${{ failure() }}
         with:
           name: cypress-videos
           path: cypress/videos
