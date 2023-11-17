@@ -20,29 +20,29 @@ updates:
     groups:
       angular:
         patterns:
-        - "@angular*"
+          - "@angular*"
         update-types:
-        - "minor"
-        - "patch"
+          - "minor"
+          - "patch"
       eslint:
         patterns:
-        - "*eslint*"
+          - "*eslint*"
         update-types:
-        - "minor"
-        - "patch"
+          - "minor"
+          - "patch"
       ngrx:
         patterns:
-        - "@ngrx/*"
+          - "@ngrx/*"
         update-types:
-        - "minor"
-        - "patch"
+          - "minor"
+          - "patch"
       types:
         patterns:
-        - "types/*"
-        - "@types/*
+          - "types/*"
+          - "@types/*"
         update-types:
-        - "minor"
-        - "patch"
+          - "minor"
+          - "patch"
     ignore:
       - dependency-name: "@angular*"
         update-types: ["version-update:semver-major"]
