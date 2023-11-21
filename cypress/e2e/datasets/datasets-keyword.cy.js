@@ -9,10 +9,6 @@ describe("Datasets", () => {
   });
 
   after(() => {
-    cy.login(
-      Cypress.config("secondaryUsername"),
-      Cypress.config("secondaryPassword")
-    );
     cy.removeDatasets();
   });
 
@@ -109,7 +105,11 @@ describe("Datasets", () => {
 
       cy.get('[data-cy="edit-general-information"]').click();
 
-      cy.contains("cypresskey").parents('mat-chip-row').find(".mat-mdc-chip-remove").first().click();
+      cy.contains("cypresskey")
+        .parents("mat-chip-row")
+        .find(".mat-mdc-chip-remove")
+        .first()
+        .click();
 
       cy.get('[data-cy="save-general-information"]').click();
 

@@ -17,7 +17,7 @@ Cypress.Commands.add("login", (username, password) => {
     cy.setCookie("$LoopBackSDK$ttl", user.ttl.toString());
     cy.setCookie(
       "$LoopBackSDK$user",
-      encodeURIComponent(JSON.stringify(user.user))
+      encodeURIComponent(JSON.stringify(user.user)),
     );
     cy.setCookie("$LoopBackSDK$userId", user.userId);
   });
@@ -50,6 +50,7 @@ Cypress.Commands.add("createPolicy", (ownerGroup) => {
 });
 
 Cypress.Commands.add("removePolicies", () => {
+  cy.login(Cypress.config("username"), Cypress.config("password"));
   cy.getCookie("$LoopBackSDK$id").then((cookie) => {
     const token = cookie.value;
 
@@ -72,27 +73,33 @@ Cypress.Commands.add("removePolicies", () => {
       .its("body")
       .as("policies");
 
-    cy.get("@policies").then((policies) => {
-      policies.forEach((policy) => {
-        cy.request({
-          method: "DELETE",
-          url:
-            lbBaseUrl +
-            "/Policies/" +
-            encodeURIComponent(policy.id) +
-            "?access_token=" +
-            token,
-          headers: {
-            Authorization: token,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
+    cy.login(
+      Cypress.config("secondaryUsername"),
+      Cypress.config("secondaryPassword"),
+    );
+    cy.getCookie("$LoopBackSDK$id").then((deletionCookie) => {
+      const deletionToken = deletionCookie.value;
+      cy.get("@policies").then((policies) => {
+        policies.forEach((policy) => {
+          cy.request({
+            method: "DELETE",
+            url:
+              lbBaseUrl +
+              "/Policies/" +
+              encodeURIComponent(policy.id) +
+              "?access_token=" +
+              deletionToken,
+            headers: {
+              Authorization: deletionToken,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          });
         });
       });
     });
   });
 });
-
 Cypress.Commands.add("finishedLoading", (type) => {
   cy.contains("Loading")
     .should("not.exist")
@@ -203,6 +210,10 @@ Cypress.Commands.add("deleteProposal", (id) => {
 });
 
 Cypress.Commands.add("removeDatasets", () => {
+  cy.login(
+    Cypress.config("secondaryUsername"),
+    Cypress.config("secondaryPassword"),
+  );
   cy.getCookie("$LoopBackSDK$id").then((cookie) => {
     const token = cookie.value;
 
@@ -247,6 +258,7 @@ Cypress.Commands.add("removeDatasets", () => {
 });
 
 Cypress.Commands.add("removeSamples", () => {
+  cy.login(Cypress.config("username"), Cypress.config("password"));
   cy.getCookie("$LoopBackSDK$id").then((cookie) => {
     const token = cookie.value;
 
@@ -269,28 +281,36 @@ Cypress.Commands.add("removeSamples", () => {
       .its("body")
       .as("samples");
 
-    cy.get("@samples").then((samples) => {
-      samples.forEach((sample) => {
-        cy.request({
-          method: "DELETE",
-          url:
-            lbBaseUrl +
-            "/Samples/" +
-            sample.sampleId +
-            "?access_token=" +
-            token,
-          headers: {
-            Authorization: token,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
+    cy.login(
+      Cypress.config("secondaryUsername"),
+      Cypress.config("secondaryPassword"),
+    );
+    cy.getCookie("$LoopBackSDK$id").then((deletionCookie) => {
+      const deletionToken = deletionCookie.value;
+      cy.get("@samples").then((samples) => {
+        samples.forEach((sample) => {
+          cy.request({
+            method: "DELETE",
+            url:
+              lbBaseUrl +
+              "/Samples/" +
+              sample.sampleId +
+              "?access_token=" +
+              deletionToken,
+            headers: {
+              Authorization: deletionToken,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          });
         });
       });
     });
   });
 });
 
-Cypress.Commands.add("initializeElasticSearch", (index = "test") => {
+Cypress.Commands.add("initializeElasticSearch", (index) => {
+  cy.login(Cypress.config("username"), Cypress.config("password"));
   cy.getCookie("$LoopBackSDK$id").then((idCookie) => {
     const token = idCookie.value;
 
@@ -344,7 +364,8 @@ Cypress.Commands.add("createDatasetForElasticSearch", (datasetName) => {
   });
 });
 
-Cypress.Commands.add("removeElasticSearchIndex", (index = "test") => {
+Cypress.Commands.add("removeElasticSearchIndex", (index) => {
+  cy.login(Cypress.config("username"), Cypress.config("password"));
   cy.getCookie("$LoopBackSDK$id").then((idCookie) => {
     const token = idCookie.value;
     cy.request({
@@ -360,6 +381,7 @@ Cypress.Commands.add("removeElasticSearchIndex", (index = "test") => {
 });
 
 Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {
+  cy.login(Cypress.config("username"), Cypress.config("password"));
   cy.getCookie("$LoopBackSDK$id").then((cookie) => {
     const token = cookie.value;
 
@@ -382,21 +404,28 @@ Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {
       .its("body")
       .as("datasets");
 
-    cy.get("@datasets").then((datasets) => {
-      datasets.forEach((dataset) => {
-        cy.request({
-          method: "DELETE",
-          url:
-            lbBaseUrl +
-            "/Datasets/" +
-            encodeURIComponent(dataset.pid) +
-            "?access_token=" +
-            token,
-          headers: {
-            Authorization: token,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
+    cy.login(
+      Cypress.config("secondaryUsername"),
+      Cypress.config("secondaryPassword"),
+    );
+    cy.getCookie("$LoopBackSDK$id").then((deletionCookie) => {
+      const token = deletionCookie.value;
+      cy.get("@datasets").then((datasets) => {
+        datasets.forEach((dataset) => {
+          cy.request({
+            method: "DELETE",
+            url:
+              lbBaseUrl +
+              "/Datasets/" +
+              encodeURIComponent(dataset.pid) +
+              "?access_token=" +
+              token,
+            headers: {
+              Authorization: token,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          });
         });
       });
     });

@@ -47,7 +47,7 @@ describe("Dataset attachments", () => {
 
       cy.get(".attachment-card #caption").should(
         "have.value",
-        "scicat-logo.png"
+        "scicat-logo.png",
       );
     });
 
@@ -74,7 +74,7 @@ describe("Dataset attachments", () => {
 
       const downloadsFolder = Cypress.config("downloadsFolder");
       cy.readFile(path.join(downloadsFolder, "scicat-logo.png")).should(
-        "exist"
+        "exist",
       );
     });
 

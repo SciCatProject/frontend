@@ -11,10 +11,6 @@ describe("Datasets", () => {
   });
 
   after(() => {
-    cy.login(
-      Cypress.config("secondaryUsername"),
-      Cypress.config("secondaryPassword")
-    );
     cy.removeDatasets();
   });
 
@@ -38,7 +34,10 @@ describe("Datasets", () => {
 
       cy.get("mat-slide-toggle").as("publicToggle");
 
-      cy.get("@publicToggle").should("not.have.class", "mat-mdc-slide-toggle-checked");
+      cy.get("@publicToggle").should(
+        "not.have.class",
+        "mat-mdc-slide-toggle-checked",
+      );
 
       cy.get("@publicToggle").click();
 
@@ -47,7 +46,10 @@ describe("Datasets", () => {
         expect(response.statusCode).to.eq(200);
       });
 
-      cy.get("@publicToggle").should("have.class", "mat-mdc-slide-toggle-checked");
+      cy.get("@publicToggle").should(
+        "have.class",
+        "mat-mdc-slide-toggle-checked",
+      );
     });
   });
 });

@@ -12,10 +12,6 @@ describe("Datasets", () => {
   });
 
   after(() => {
-    cy.login(
-      Cypress.config("secondaryUsername"),
-      Cypress.config("secondaryPassword")
-    );
     cy.removeDatasets();
   });
 
@@ -76,10 +72,10 @@ describe("Datasets", () => {
           .first()
           .should("contain.text", "string");
         cy.get(
-          "[data-cy=metadata-edit-form] [data-cy=metadata-name-input]"
+          "[data-cy=metadata-edit-form] [data-cy=metadata-name-input]",
         ).should("have.value", metadataName);
         cy.get(
-          "[data-cy=metadata-edit-form] [data-cy=metadata-value-input]"
+          "[data-cy=metadata-edit-form] [data-cy=metadata-value-input]",
         ).should("have.value", metadataValue);
       });
     });
@@ -128,7 +124,6 @@ describe("Datasets", () => {
         .last()
         .type(`${metadataValue}{enter}`);
 
-
       // Add second row with same name. This should throw validation error
       cy.get('[data-cy="add-new-row"]').click();
 
@@ -148,9 +143,9 @@ describe("Datasets", () => {
         .last()
         .type(`${metadataValue}{enter}`);
 
-      cy.get('mat-error').contains("Name is already taken")
+      cy.get("mat-error").contains("Name is already taken");
       cy.get("button[data-cy=save-changes-button]").should("be.disabled");
-    })
+    });
   });
 
   describe("Remove metadata item", () => {
@@ -183,7 +178,7 @@ describe("Datasets", () => {
 
         cy.get("[data-cy=metadata-edit-form]").should(
           "not.contain",
-          metadataName
+          metadataName,
         );
       });
     });
