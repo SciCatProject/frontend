@@ -9,19 +9,18 @@ describe("Elastic search", () => {
   const searchQuery1 = "elast searc";
   const searchQuery2 = "style perfectly";
   const searchQueryIrrelevant = "Christmas";
+  const testIndex = "test";
 
   beforeEach(() => {
-    cy.login(Cypress.config("username"), Cypress.config("password"));
-    cy.initializeElasticSearch();
+    cy.initializeElasticSearch(testIndex);
     cy.createDatasetForElasticSearch(randomText1);
     cy.createDatasetForElasticSearch(randomText2);
   });
 
   afterEach(() => {
-    cy.login(Cypress.config("username"), Cypress.config("password"));
     cy.removeDatasetsForElasticSearch(randomText1);
     cy.removeDatasetsForElasticSearch(randomText2);
-    cy.removeElasticSearchIndex();
+    cy.removeElasticSearchIndex(testIndex);
   });
 
   describe("Elastic search query", () => {

@@ -6,10 +6,6 @@ describe("Datasets general", () => {
   });
 
   after(() => {
-    cy.login(
-      Cypress.config("secondaryUsername"),
-      Cypress.config("secondaryPassword")
-    );
     cy.removeDatasets();
   });
 
@@ -120,6 +116,11 @@ describe("Datasets general", () => {
       cy.url().should("include", "/proposals");
 
       cy.contains("A minimal test proposal");
+
+      cy.login(
+        Cypress.config("secondaryUsername"),
+        Cypress.config("secondaryPassword"),
+      );
 
       cy.deleteProposal(proposalId);
     });
