@@ -25,7 +25,6 @@
     [length]="dataSource.count$ | async"
     [pageSize]="pageSize"
     [pageSizeOptions]="pageSizeOptions"
-    showFirstLastButtons
   >
   </mat-paginator>
   <button mat-icon-button (click)="onShare()">
@@ -142,7 +141,7 @@
         </ng-container>
         <ng-container *ngSwitchDefault class="ellipsis">
           {{
-            getPropertyByPath(row, column.id) | newDynamicPipe : column.format
+            getPropertyByPath(row, column.id) | newDynamicPipe: column.format
           }}
         </ng-container>
       </ng-container>
@@ -177,7 +176,7 @@
             <ng-container *ngSwitchDefault>
               {{
                 getPropertyByPath(row, hiddenColumn.id)
-                  | newDynamicPipe : hiddenColumn.format
+                  | newDynamicPipe: hiddenColumn.format
               }}</ng-container
             >
           </ng-container>
