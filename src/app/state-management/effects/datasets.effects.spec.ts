@@ -95,6 +95,7 @@ describe("DatasetEffects", () => {
             "destroyByIdAttachments",
             "reduceDataset",
             "appendToArrayField",
+            "count",
           ]),
         },
       ],
@@ -329,15 +330,15 @@ describe("DatasetEffects", () => {
 
   describe("fetchRelatedDatasetsCount$", () => {
     it("should result in a fetchRelatedDatasetsCountCompleteAction", () => {
-      const relatedDatasets = [dataset];
+      const count = 3;
       const action = fromActions.fetchRelatedDatasetsAction();
       const outcome = fromActions.fetchRelatedDatasetsCountCompleteAction({
-        count: relatedDatasets.length,
+        count,
       });
 
       actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: relatedDatasets });
-      datasetApi.find.and.returnValue(response);
+      const response = cold("-a|", { a: { count } });
+      datasetApi.count.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchRelatedDatasetsCount$).toBeObservable(expected);
@@ -348,7 +349,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.find.and.returnValue(response);
+      datasetApi.count.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchRelatedDatasetsCount$).toBeObservable(expected);

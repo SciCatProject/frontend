@@ -238,9 +238,9 @@ export class DatasetEffects {
           };
         }
         return this.datasetApi.count(queryFilter).pipe(
-          map((datasets) =>
+          map(({ count }) =>
             fromActions.fetchRelatedDatasetsCountCompleteAction({
-              count: datasets.count,
+              count,
             }),
           ),
           catchError(() =>
