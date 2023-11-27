@@ -9,7 +9,6 @@
       [length]="datasetCount$ | async"
       [pageSize]="datasetsPerPage$ | async"
       (page)="onPageChange($event)"
-      showFirstLastButtons
     >
     </mat-paginator>
 
@@ -108,7 +107,7 @@
         *matCellDef="let dataset"
         matTooltip="{{ dataset.sourceFolder }}"
       >
-        ...{{ dataset.sourceFolder | slice : -10 }}
+        ...{{ dataset.sourceFolder | slice: -10 }}
       </mat-cell>
     </ng-container>
 
@@ -177,8 +176,8 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
         <div fxLayout="column">
-          <div>{{ dataset.creationTime | date : "yyyy-MM-dd" }}</div>
-          <div>{{ dataset.creationTime | date : "EEE HH:mm" }}</div>
+          <div>{{ dataset.creationTime | date: "yyyy-MM-dd" }}</div>
+          <div>{{ dataset.creationTime | date: "EEE HH:mm" }}</div>
         </div>
       </mat-cell>
     </ng-container>
@@ -243,7 +242,7 @@
         }}</ng-template>
         <ng-template #elseBlock
           >{{
-            dataset.scientificMetadata | json | slice : 0 : 100
+            dataset.scientificMetadata | json | slice: 0 : 100
           }}...</ng-template
         >
       </mat-cell>
