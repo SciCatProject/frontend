@@ -1,19 +1,19 @@
 /// <reference types="Cypress" />
 
-describe("Samples", function () {
-  beforeEach(function () {
+describe("Samples", () => {
+  beforeEach(() => {
     cy.login(Cypress.config("username"), Cypress.config("password"));
 
     cy.intercept("POST", "/api/v3/Samples").as("create");
     cy.intercept("GET", "*").as("fetch");
   });
 
-  after(function () {
+  after(() => {
     cy.removeSamples();
   });
 
-  describe("Create sample", function () {
-    it("should create a new sample", function () {
+  describe("Create sample", () => {
+    it("should create a new sample", () => {
       cy.visit("/samples");
 
       cy.wait("@fetch");
