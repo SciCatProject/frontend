@@ -10,7 +10,6 @@ import {
   ScientificMetadataTableData,
   ScientificMetadata,
 } from "../scientific-metadata.module";
-import { UnitsService } from "shared/services/units.service";
 
 @Component({
   selector: "metadata-view",
@@ -22,7 +21,6 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
   tableData: ScientificMetadataTableData[] = [];
   columnsToDisplay: string[] = ["name", "value", "unit"];
-  constructor(private unitsService: UnitsService) {}
 
   createMetadataArray(
     metadata: Record<string, any>,
@@ -39,11 +37,6 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           value: metadata[key]["value"],
           unit: metadata[key]["unit"],
         };
-        const validUnit = this.unitsService
-          .getUnits()
-          .includes(metadata[key]["unit"]);
-
-        metadataObject["validUnit"] = validUnit;
       } else {
         metadataObject = {
           name: key,

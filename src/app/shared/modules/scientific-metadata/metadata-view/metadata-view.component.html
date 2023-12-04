@@ -4,7 +4,9 @@
 
     <!-- Name Column -->
     <ng-container matColumnDef="name" style="align-content: center">
-      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>
+        Name
+      </mat-header-cell>
       <mat-cell *matCellDef="let metadata">
         {{ metadata.name | replaceUnderscore | titlecase }}
       </mat-cell>
@@ -12,30 +14,26 @@
 
     <!-- Value Column -->
     <ng-container matColumnDef="value" style="align-content: center">
-      <mat-header-cell *matHeaderCellDef> Value </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>
+        Value
+      </mat-header-cell>
       <mat-cell *matCellDef="let metadata">
-        {{ metadata.value }}
+          {{ metadata.value }}
       </mat-cell>
     </ng-container>
 
     <!-- Unit Column -->
     <ng-container matColumnDef="unit" style="align-content: center">
-      <mat-header-cell *matHeaderCellDef> Unit </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>
+        Unit
+      </mat-header-cell>
       <mat-cell *matCellDef="let metadata">
         <ng-template [ngIf]="metadata.unit.length > 0" [ngIfElse]="noUnit">
-          <span
-            [class.invalid-unit]="!metadata.validUnit"
-            [matTooltip]="
-              !metadata.validUnit
-                ? ' Unrecognized unit, conversion disabled
-              '
-                : ''
-            "
-          >
-            {{ metadata.unit | prettyUnit }}
-          </span>
+          {{ metadata.unit | prettyUnit }}
         </ng-template>
-        <ng-template #noUnit> -- </ng-template>
+        <ng-template #noUnit>
+          --
+        </ng-template>
       </mat-cell>
     </ng-container>
 

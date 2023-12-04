@@ -17,7 +17,6 @@ import {
   AbstractControl,
   ValidationErrors,
 } from "@angular/forms";
-import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { UnitsService } from "shared/services/units.service";
 import { startWith, map } from "rxjs/operators";
 import { Observable } from "rxjs";
@@ -35,7 +34,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   typeValues: string[] = ["quantity", "number", "string"];
   units: string[] = [];
   filteredUnits$: Observable<string[]> | undefined = new Observable<string[]>();
-  invalidUnitWarning: string[] = [];
+
   @Input() metadata: Record<string, any> | undefined;
   @Output() save = new EventEmitter<Record<string, unknown>>();
 
@@ -56,12 +55,12 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         Validators.required,
         Validators.minLength(1),
       ]),
-      fieldUnit: new FormControl("", [Validators.required]),
+      fieldUnit: new FormControl("", [
+        Validators.required,
+        this.unitValidator(),
+      ]),
     });
-
     this.items.push(field);
-
-    this.setupFieldUnitValueChangeListeners();
   }
 
   detectType(index: any) {
@@ -71,13 +70,20 @@ export class MetadataEditComponent implements OnInit, OnChanges {
       this.items
         .at(index)
         .get("fieldUnit")
-        ?.setValidators([Validators.required]);
+        ?.setValidators([Validators.required, this.unitValidator()]);
       this.items.at(index).get("fieldUnit")?.updateValueAndValidity();
     } else {
       this.items.at(index).get("fieldUnit")?.clearValidators();
       this.items.at(index).get("fieldUnit")?.setValue("");
       this.items.at(index).get("fieldUnit")?.disable();
     }
+  }
+
+  unitValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const allowed = this.unitsService.getUnits().includes(control.value);
+      return allowed ? null : { forbiddenUnit: { value: control.value } };
+    };
   }
 
   duplicateValidator(): ValidatorFn {
@@ -140,8 +146,6 @@ export class MetadataEditComponent implements OnInit, OnChanges {
           });
         }
         this.items.push(field);
-        this.setupFieldUnitValueChangeListeners();
-
         this.detectType(index);
       });
     }
@@ -169,9 +173,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
   getUnits(index: number): void {
     const name = this.items.at(index).get("fieldName")?.value;
-
     this.units = this.unitsService.getUnits(name);
-
     this.filteredUnits$ = this.items
       .at(index)
       .get("fieldUnit")
@@ -216,27 +218,9 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     return this.metadataForm.get("items") as FormArray;
   }
 
-  setupFieldUnitValueChangeListeners() {
-    this.items.controls.forEach((control, index) => {
-      control
-        .get("fieldUnit")
-        .valueChanges.pipe(debounceTime(300), distinctUntilChanged())
-        .subscribe((value) => {
-          this.invalidUnitWarning[index] = this.getCustomUnitWarning(value);
-        });
-    });
-  }
-
-  getCustomUnitWarning(value: string): string {
-    return !value || this.unitsService.getUnits().includes(value)
-      ? ""
-      : "Unrecognized unit, conversion disabled";
-  }
   ngOnInit() {
     this.addCurrentMetadata();
     this.units = this.unitsService.getUnits();
-
-    this.setupFieldUnitValueChangeListeners();
   }
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
