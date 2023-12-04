@@ -22,6 +22,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
   tableData: ScientificMetadataTableData[] = [];
   columnsToDisplay: string[] = ["name", "value", "unit"];
+
   constructor(private unitsService: UnitsService) {}
 
   createMetadataArray(
