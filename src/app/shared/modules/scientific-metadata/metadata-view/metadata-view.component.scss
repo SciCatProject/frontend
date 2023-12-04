@@ -1,5 +1,4 @@
 .metadataTable {
-
   .mat-column-name {
     flex: 1 0 7em;
   }
@@ -11,6 +10,11 @@
   .mat-column-unit {
     flex: 1 0 5em;
   }
+}
+
+.invalid-unit {
+  font-weight: bold;
+  color: rgb(179, 0, 0, 0.8);
 }
 
 @media only screen and (max-width: 1279px) {
