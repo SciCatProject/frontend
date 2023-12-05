@@ -191,9 +191,11 @@ export class DatasetEffects {
       switchMap(([_, dataset, filters]) => {
         const queryFilter: LoopBackFilter = {
           where: {},
-          skip: filters.skip,
-          limit: filters.limit,
-          order: filters.sortField,
+          limits: {
+            skip: filters.skip,
+            limit: filters.limit,
+            order: filters.sortField,
+          },
         };
         if (dataset.type === "raw") {
           queryFilter.where = {
@@ -235,10 +237,10 @@ export class DatasetEffects {
             pid: { $in: (dataset as unknown as DerivedDataset).inputDatasets },
           };
         }
-        return this.datasetApi.find(queryFilter).pipe(
-          map((datasets) =>
+        return this.datasetApi.count(queryFilter).pipe(
+          map(({ count }) =>
             fromActions.fetchRelatedDatasetsCountCompleteAction({
-              count: datasets.length,
+              count,
             }),
           ),
           catchError(() =>

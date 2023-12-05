@@ -33,7 +33,7 @@ In case you have questions, please contact the SciCat team at ESS:
 
 ## License
 
-This project is licensed under the GPL License - see the [LICENSE](LICENSE) file for details
+See the [LICENSE](LICENSE) file for details
 
 ## Acknowledgments
 

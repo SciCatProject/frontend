@@ -1,10 +1,13 @@
 /* eslint-disable */
 
+import { FilterLimits } from "shared/services/scicat-data-service";
+
 declare var Object: any;
 export interface LoopBackFilter {
   fields?: any;
   include?: any;
   limit?: any;
+  limits?: FilterLimits;
   order?: any;
   skip?: any;
   offset?: any;

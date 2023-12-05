@@ -239,14 +239,23 @@ export const selectOpenwhiskResult = createSelector(
 
 export const selectRelatedDatasetsPageViewModel = createSelector(
   selectDatasetState,
-  ({ relatedDatasets, relatedDatasetsCount, relatedDatasetsFilters }) => ({
+  ({ relatedDatasets, relatedDatasetsCount }) => ({
     relatedDatasets,
     relatedDatasetsCount,
-    relatedDatasetsFilters,
   }),
 );
 
 export const selectRelatedDatasetsFilters = createSelector(
   selectDatasetState,
   (state) => state.relatedDatasetsFilters,
+);
+
+export const selectRelatedDatasetsCurrentPage = createSelector(
+  selectRelatedDatasetsFilters,
+  (filters) => filters.skip / filters.limit,
+);
+
+export const selectRelatedDatasetsPerPage = createSelector(
+  selectRelatedDatasetsFilters,
+  (filters) => filters.limit,
 );
