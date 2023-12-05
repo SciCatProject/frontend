@@ -3,9 +3,9 @@
     [data]="vm.relatedDatasets"
     [columns]="tableColumns"
     [paginate]="tablePaginate"
-    [currentPage]="vm.relatedDatasetsFilters.skip"
+    [currentPage]="currentPage$ | async"
     [dataCount]="vm.relatedDatasetsCount"
-    [dataPerPage]="vm.relatedDatasetsFilters.limit"
+    [dataPerPage]="datasetsPerPage$ | async"
     (pageChange)="onPageChange($event)"
     (rowClick)="onRowClick($event)"
   ></app-table>

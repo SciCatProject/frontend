@@ -12,7 +12,11 @@ import {
   changeRelatedDatasetsPageAction,
   fetchRelatedDatasetsAction,
 } from "state-management/actions/datasets.actions";
-import { selectRelatedDatasetsPageViewModel } from "state-management/selectors/datasets.selectors";
+import {
+  selectRelatedDatasetsCurrentPage,
+  selectRelatedDatasetsPageViewModel,
+  selectRelatedDatasetsPerPage,
+} from "state-management/selectors/datasets.selectors";
 
 @Component({
   selector: "app-related-datasets",
@@ -26,6 +30,8 @@ export class RelatedDatasetsComponent {
       relatedDatasets: this.formatTableData(vm.relatedDatasets),
     })),
   );
+  currentPage$ = this.store.select(selectRelatedDatasetsCurrentPage);
+  datasetsPerPage$ = this.store.select(selectRelatedDatasetsPerPage);
 
   tablePaginate = true;
   tableColumns: TableColumn[] = [
