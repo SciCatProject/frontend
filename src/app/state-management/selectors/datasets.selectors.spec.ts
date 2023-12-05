@@ -403,12 +403,41 @@ describe("test dataset selectors", () => {
       ).toEqual({
         relatedDatasets: [],
         relatedDatasetsCount: 0,
-        relatedDatasetsFilters: {
-          skip: 0,
-          limit: 25,
-          sortField: "creationTime:desc",
-        },
       });
+    });
+  });
+
+  describe("selectRelatedDatasetsFilters", () => {
+    it("should return the current related datasets filters", () => {
+      expect(
+        fromDatasetSelectors.selectRelatedDatasetsFilters.projector(
+          initialDatasetState,
+        ),
+      ).toEqual({
+        skip: 0,
+        limit: 25,
+        sortField: "creationTime:desc",
+      });
+    });
+  });
+
+  describe("selectRelatedDatasetsCurrentPage", () => {
+    it("should return the current related datasets page", () => {
+      expect(
+        fromDatasetSelectors.selectRelatedDatasetsCurrentPage.projector(
+          initialDatasetState.relatedDatasetsFilters,
+        ),
+      ).toEqual(0);
+    });
+  });
+
+  describe("selectRelatedDatasetsPerPage", () => {
+    it("should return the current related datasets per page", () => {
+      expect(
+        fromDatasetSelectors.selectRelatedDatasetsPerPage.projector(
+          initialDatasetState.relatedDatasetsFilters,
+        ),
+      ).toEqual(25);
     });
   });
 
