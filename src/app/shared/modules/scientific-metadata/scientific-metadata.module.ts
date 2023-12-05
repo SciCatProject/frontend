@@ -14,6 +14,7 @@ import { MetadataEditComponent } from "./metadata-edit/metadata-edit.component";
 import { PipesModule } from "shared/pipes/pipes.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { FlexModule } from "@ngbracket/ngx-layout";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [MetadataViewComponent, MetadataEditComponent],
@@ -26,6 +27,7 @@ import { FlexModule } from "@ngbracket/ngx-layout";
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatTooltipModule,
     MatOptionModule,
     MatSelectModule,
     MatTableModule,

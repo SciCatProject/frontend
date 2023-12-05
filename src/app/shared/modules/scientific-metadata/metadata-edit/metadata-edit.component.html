@@ -90,6 +90,10 @@
               <mat-error *ngIf="fieldHasError(i, 'fieldUnit')">
                 A unit is required for quantities
               </mat-error>
+
+              <mat-hint *ngIf="invalidUnitWarning[i]">
+                {{ invalidUnitWarning[i] }}
+              </mat-hint>
             </mat-form-field>
           </div>
           <div class="formColumn" fxFlexAlign="center">
