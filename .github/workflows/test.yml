@@ -82,13 +82,18 @@ jobs:
 
       - name: Test
         run: |
-          npm run test
+          npm run -- test --code-coverage
           npm run build
-
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
+      # save pr number for later use
+      # (see https://securitylab.github.com/research/github-actions-preventing-pwn-requests/)
+      - name: Save PR number
+        run: |
+          echo ${{ github.event.number }} > ./coverage/PR
+      - uses: actions/upload-artifact@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: coverage
+          path: coverage/
+
 
   e2etests:
     name: Run E2E Tests
