@@ -1,7 +1,7 @@
 @use "@angular/material" as mat;
 
 @mixin color($theme) {
-  $color-config: map-get($theme,"color");
+  $color-config: map-get($theme, "color");
   $accent: map-get($color-config, "accent");
 
   mat-sidenav-container {

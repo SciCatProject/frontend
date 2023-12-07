@@ -1,67 +1,69 @@
-<div class='tool-bar'>
+<div class="tool-bar">
   <mat-form-field>
     <!-- Serch field -->
     <mat-icon matPrefix>search</mat-icon>
     <mat-label>Search</mat-label>
-    <input matInput
-      type="text"
-      [(ngModel)]="filterText">
-    <button 
+    <input matInput type="text" [(ngModel)]="filterText" />
+    <button
       matSuffix
       mat-icon-button
       aria-label="Clear"
-      (click)="filterText=''">
+      (click)="filterText = ''"
+    >
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
   <!-- Expand button -->
   <mat-button-toggle-group>
-    <button mat-icon-button
+    <button
+      mat-icon-button
       type="button"
       color="primary"
       (click)="toggleExpand()"
-      [title]="expand? 'Collapse all': 'Expand all'">
-      <mat-icon>{{expand? 'expand_less': 'expand_more'}}</mat-icon>
+      [title]="expand ? 'Collapse all' : 'Expand all'"
+    >
+      <mat-icon>{{ expand ? "expand_less" : "expand_more" }}</mat-icon>
     </button>
   </mat-button-toggle-group>
 </div>
 
-<mat-tree [dataSource]="dataSource"
-  [treeControl]="treeControl">
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
   <!-- Key - Value -->
-  <mat-tree-node *matTreeNodeDef="let node"
+  <mat-tree-node
+    *matTreeNodeDef="let node"
     matTreeNodeToggle
-    [style.display]="isVisible(0,node)?'flex':'none' ">
+    [style.display]="isVisible(0, node) ? 'flex' : 'none'"
+  >
     <section>
-      <div class="key-cell"
-        [style.padding-left.px]="getPadding(node)">
-        <button mat-icon-button
-          disabled>
-          <mat-icon class="mat-icon-rtl-mirror"
-            class="mat-icon-rtl-mirror">
+      <div class="key-cell" [style.padding-left.px]="getPadding(node)">
+        <button mat-icon-button disabled>
+          <mat-icon class="mat-icon-rtl-mirror" class="mat-icon-rtl-mirror">
           </mat-icon>
         </button>
-        <label>{{node.key}}</label>
+        <label>{{ node.key }}</label>
       </div>
-      <div class="value-cell">{{getValueRepresentation(node)}}</div>
+      <div class="value-cell">{{ getValueRepresentation(node) }}</div>
     </section>
   </mat-tree-node>
   <!-- Only Key -->
-  <mat-tree-node *matTreeNodeDef="let node; when: hasChild"
-    [style.display]="isVisible(0,node)?'flex':'none'">
+  <mat-tree-node
+    *matTreeNodeDef="let node; when: hasChild"
+    [style.display]="isVisible(0, node) ? 'flex' : 'none'"
+  >
     <section>
-      <div class='key-cell'
-        [style.padding-left.px]="getPadding(node)">
-        <button mat-icon-button
+      <div class="key-cell" [style.padding-left.px]="getPadding(node)">
+        <button
+          mat-icon-button
           matTreeNodeToggle
-          [attr.aria-label]="'Toggle ' + node.key">
-          <mat-icon class="mat-icon-rtl-mirror"
-            class="mat-icon-rtl-mirror">
-            {{treeControl.isExpanded(node) ?
-            'arrow_drop_down': 'arrow_right'}}
+          [attr.aria-label]="'Toggle ' + node.key"
+        >
+          <mat-icon class="mat-icon-rtl-mirror" class="mat-icon-rtl-mirror">
+            {{
+              treeControl.isExpanded(node) ? "arrow_drop_down" : "arrow_right"
+            }}
           </mat-icon>
         </button>
-        {{node.key}}
+        {{ node.key }}
       </div>
       <div class="value-cell"></div>
     </section>

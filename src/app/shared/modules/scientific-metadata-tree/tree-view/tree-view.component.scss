@@ -10,7 +10,7 @@
   }
 }
 @media only screen and (min-width: 1280px) {
-  .search-field{
+  .search-field {
     width: 40%;
   }
   .container {
@@ -27,7 +27,7 @@
 }
 
 @media only screen and (max-width: 1279px) {
-  .search-field{
+  .search-field {
     width: 50%;
   }
   .container {
@@ -50,7 +50,7 @@ mat-form-field {
   width: 40%;
   // padding-left: 40px;
 }
-.tool-bar{
+.tool-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -63,10 +63,10 @@ section {
   display: table;
   width: 100%;
 }
-.key-cell{
+.key-cell {
   display: table-cell;
   margin-left: 8px;
-  width:40% ;
+  width: 40%;
 }
 .value-cell {
   display: table-cell;
