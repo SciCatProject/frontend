@@ -1,24 +1,27 @@
-<h1 mat-dialog-title>{{data.title}}</h1>
+<h1 mat-dialog-title>{{ data.title }}</h1>
 <div mat-dialog-content>
-  <p>{{data.question}}</p>
+  <p>{{ data.question }}</p>
   <mat-form-field *ngIf="data.input">
-    <input matInput tabindex="1" [(ngModel)]="data.input">
+    <input matInput tabindex="1" [(ngModel)]="data.input" />
   </mat-form-field>
 </div>
 
 <div *ngIf="data.choice?.options?.length > 0">
   <mat-form-field>
     <mat-select [(ngModel)]="data.option">
-      <mat-option *ngFor="let choice of data.choice.options"
-        [value]="choice.option" [matTooltip]="choice.tooltip">{{choice.option}}</mat-option>
+      <mat-option
+        *ngFor="let choice of data.choice.options"
+        [value]="choice.option"
+        [matTooltip]="choice.tooltip"
+        >{{ choice.option }}</mat-option
+      >
     </mat-select>
   </mat-form-field>
 
   <span *ngFor="let choice of data.choice.options">
-    <mat-form-field
-      *ngIf="choice.option === data.option && choice.location">
-      <span matPrefix>{{choice.location}}&nbsp;</span>
-      <input [(ngModel)]="data.location" matInput placeholder="Relative path">
+    <mat-form-field *ngIf="choice.option === data.option && choice.location">
+      <span matPrefix>{{ choice.location }}&nbsp;</span>
+      <input [(ngModel)]="data.location" matInput placeholder="Relative path" />
     </mat-form-field>
   </span>
 </div>

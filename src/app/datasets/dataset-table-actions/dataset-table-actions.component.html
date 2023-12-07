@@ -4,12 +4,8 @@
     [value]="currentPublicViewMode"
     (change)="onViewPublicChange($event.value)"
   >
-    <mat-button-toggle [value]="''">
-      My Data
-    </mat-button-toggle>
-    <mat-button-toggle [value]="true">
-      All Public Data
-    </mat-button-toggle>
+    <mat-button-toggle [value]="''"> My Data </mat-button-toggle>
+    <mat-button-toggle [value]="true"> All Public Data </mat-button-toggle>
   </mat-button-toggle-group>
   <mat-button-toggle-group
     [value]="currentArchViewMode"

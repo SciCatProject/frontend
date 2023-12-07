@@ -10,8 +10,8 @@
 }
 
 @mixin theme($theme) {
-  $color-config: map-get($theme,"color");
+  $color-config: map-get($theme, "color");
   @if $color-config != null {
-    @include color( $theme);
+    @include color($theme);
   }
 }

@@ -1,7 +1,4 @@
-<div
-  class="breadcrumb"
-  *ngIf="breadcrumbs && breadcrumbs.length > 0"
->
+<div class="breadcrumb" *ngIf="breadcrumbs && breadcrumbs.length > 0">
   <span class="container" *ngFor="let breadcrumb of breadcrumbs; let i = index">
     <a
       [ngClass]="{ active: i === breadcrumbs.length - 1 }"

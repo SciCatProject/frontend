@@ -1,11 +1,14 @@
 <h1 mat-dialog-title>Request to download dataset</h1>
 <div mat-dialog-content>
-  <p>Please enter your email so we can contact you once the dataset is ready to be downloaded.</p>
+  <p>
+    Please enter your email so we can contact you once the dataset is ready to
+    be downloaded.
+  </p>
   <mat-form-field wid appearance="fill">
     <mat-label>Email</mat-label>
-    <input matInput [formControl]="emailFormControl" type="email">
+    <input matInput [formControl]="emailFormControl" type="email" />
     <mat-error *ngIf="emailFormControl.errors">
-      {{getErrorMessage()}}
+      {{ getErrorMessage() }}
     </mat-error>
   </mat-form-field>
 </div>

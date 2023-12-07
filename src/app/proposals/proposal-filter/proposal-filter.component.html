@@ -2,14 +2,14 @@
   <mat-card-header class="section-container">
     <mat-card-title>Search</mat-card-title>
     <button
-    mat-button
-    class="clear-button"
-    color="primary"
-    [disabled]="!hasAppliedFilters"
-    (click)="doClear()"
-  >
-    <mat-icon>clear_all</mat-icon> Clear
-  </button>
+      mat-button
+      class="clear-button"
+      color="primary"
+      [disabled]="!hasAppliedFilters"
+      (click)="doClear()"
+    >
+      <mat-icon>clear_all</mat-icon> Clear
+    </button>
   </mat-card-header>
   <mat-card-content>
     <app-search-bar

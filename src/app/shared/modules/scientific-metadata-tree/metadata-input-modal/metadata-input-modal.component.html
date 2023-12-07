@@ -3,30 +3,35 @@
     <!-- Parent Field -->
     <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
       <mat-form-field class="inputField">
-        <input matInput
+        <input
+          matInput
           autocomplete="off"
           autocorrect="off"
           autocapitalize="off"
           spellcheck="false"
           formControlName="parent"
-          placeholder="Parent field" />
+          placeholder="Parent field"
+        />
         <mat-error *ngIf="fieldHasError('parent')">
           Parent field is required
         </mat-error>
       </mat-form-field>
     </div>
 
-    <div class="formRow" fxLayout="row" fxLayout.lt-lg="column" fxLayoutAlign="flex-start end">
+    <div
+      class="formRow"
+      fxLayout="row"
+      fxLayout.lt-lg="column"
+      fxLayoutAlign="flex-start end"
+    >
       <!-- Type Field -->
       <div class="formColumn">
         <mat-form-field class="selectField">
           <mat-label>Type</mat-label>
-          <mat-select formControlName="type"
-            (selectionChange)="detectType()">
-            <mat-option *ngFor="let type of typeValues"
-              [value]="type">{{
+          <mat-select formControlName="type" (selectionChange)="detectType()">
+            <mat-option *ngFor="let type of typeValues" [value]="type">{{
               type
-              }}</mat-option>
+            }}</mat-option>
           </mat-select>
           <mat-error *ngIf="fieldHasError('type')">
             Type is required
@@ -36,14 +41,16 @@
       <!-- Child Field -->
       <div class="formColumn">
         <mat-form-field class="inputField">
-          <input matInput
+          <input
+            matInput
             autocomplete="off"
             autocorrect="off"
             autocapitalize="off"
             spellcheck="false"
             formControlName="child"
             placeholder="Child field"
-            (blur)="getUnits('child')" />
+            (blur)="getUnits('child')"
+          />
           <mat-error *ngIf="fieldHasError('child')">
             Child field is required
           </mat-error>
@@ -52,7 +59,8 @@
       <!-- Value Field -->
       <div class="formColumn" *ngIf="getType() !== 'date'; else dateInput">
         <mat-form-field class="inputField">
-          <input matInput
+          <input
+            matInput
             autocomplete="off"
             autocorrect="off"
             autocapitalize="off"
@@ -61,28 +69,36 @@
             placeholder="Value"
           />
           <mat-error *ngIf="fieldHasError('value')">
-            {{getErrorMessage("value")}}
+            {{ getErrorMessage("value") }}
           </mat-error>
         </mat-form-field>
       </div>
       <ng-template #dateInput>
         <mat-form-field class="inputField">
-          <input matInput
+          <input
+            matInput
             formControlName="date"
             placeholder="Value"
             [ngxMatDatetimePicker]="picker"
           />
-          <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
-          <ngx-mat-datetime-picker #picker [showSeconds]="true"></ngx-mat-datetime-picker>
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="$any(picker)"
+          ></mat-datepicker-toggle>
+          <ngx-mat-datetime-picker
+            #picker
+            [showSeconds]="true"
+          ></ngx-mat-datetime-picker>
           <mat-error *ngIf="fieldHasError('date')">
-            {{getErrorMessage('date')}}
+            {{ getErrorMessage("date") }}
           </mat-error>
         </mat-form-field>
       </ng-template>
       <!-- Unit Field -->
       <div class="formColumn">
         <mat-form-field class="inputField">
-          <input matInput
+          <input
+            matInput
             autocomplete="off"
             autocorrect="off"
             autocapitalize="off"
@@ -90,15 +106,18 @@
             formControlName="unit"
             placeholder="Unit"
             [matAutocomplete]="metadataUnits"
-            (focus)="getUnits('child')" />
+            (focus)="getUnits('child')"
+          />
           <mat-autocomplete #metadataUnits="matAutocomplete">
-            <mat-option *ngFor="let unit of filteredUnits$ | async"
-              [value]="unit">
+            <mat-option
+              *ngFor="let unit of filteredUnits$ | async"
+              [value]="unit"
+            >
               {{ unit }}
             </mat-option>
           </mat-autocomplete>
           <mat-error *ngIf="fieldHasError('unit')">
-            {{getErrorMessage("unit")}}
+            {{ getErrorMessage("unit") }}
           </mat-error>
         </mat-form-field>
       </div>
@@ -106,12 +125,13 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button
-    (click)="onClose()">Close</button>
-  <button mat-button
+  <button mat-button (click)="onClose()">Close</button>
+  <button
+    mat-button
     color="primary"
     (click)="onSave()"
-    [disabled]="this.metadataForm.invalid">
+    [disabled]="this.metadataForm.invalid"
+  >
     Save
   </button>
 </mat-dialog-actions>
