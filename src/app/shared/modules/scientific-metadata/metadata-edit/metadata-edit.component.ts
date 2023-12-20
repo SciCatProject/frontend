@@ -56,7 +56,10 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         Validators.required,
         Validators.minLength(1),
       ]),
-      fieldUnit: new FormControl("", [Validators.required]),
+      fieldUnit: new FormControl("", [
+        Validators.required,
+        this.whiteSpaceValidator(),
+      ]),
     });
 
     this.items.push(field);
@@ -71,7 +74,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
       this.items
         .at(index)
         .get("fieldUnit")
-        ?.setValidators([Validators.required]);
+        ?.setValidators([Validators.required, this.whiteSpaceValidator()]);
       this.items.at(index).get("fieldUnit")?.updateValueAndValidity();
     } else {
       this.items.at(index).get("fieldUnit")?.clearValidators();
@@ -89,6 +92,14 @@ export class MetadataEditComponent implements OnInit, OnChanges {
       return duplicate.length > 1
         ? { duplicateField: { value: control.value } }
         : null;
+    };
+  }
+  whiteSpaceValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control.value.length > 0 && !control.value.trim()) {
+        return { whitespace: true };
+      }
+      return null;
     };
   }
 
@@ -220,7 +231,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     this.items.controls.forEach((control, index) => {
       control
         .get("fieldUnit")
-        .valueChanges.pipe(debounceTime(300), distinctUntilChanged())
+        .valueChanges.pipe(debounceTime(600), distinctUntilChanged())
         .subscribe((value) => {
           this.invalidUnitWarning[index] = this.getCustomUnitWarning(value);
         });
@@ -228,7 +239,10 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   }
 
   getCustomUnitWarning(value: string): string {
-    return !value || this.unitsService.getUnits().includes(value)
+    if (value.length > 0 && !value.trim()) {
+      return "A unit is required for quantities";
+    }
+    return this.unitsService.unitValidation(value)
       ? ""
       : "Unrecognized unit, conversion disabled";
   }

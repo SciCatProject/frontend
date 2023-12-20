@@ -6,6 +6,12 @@
   }
 }
 
+.unit-warning {
+  cursor: pointer;
+  margin-bottom: -0.5em;
+  color: rgba(105, 85, 6, 0.8);
+}
+
 ::ng-deep mat-hint {
   white-space: nowrap;
   color: rgb(179, 0, 0);

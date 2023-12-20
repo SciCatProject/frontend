@@ -39,9 +39,10 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           value: metadata[key]["value"],
           unit: metadata[key]["unit"],
         };
-        const validUnit = this.unitsService
-          .getUnits()
-          .includes(metadata[key]["unit"]);
+
+        const validUnit = this.unitsService.unitValidation(
+          metadata[key]["unit"],
+        );
 
         metadataObject["validUnit"] = validUnit;
       } else {
