@@ -78,7 +78,19 @@
                 formControlName="fieldUnit"
                 [matAutocomplete]="metadataUnits"
                 (focus)="getUnits(i)"
+                data-cy="metadata-unit-input"
               />
+              <div
+                class="unit-warning"
+                *ngIf="invalidUnitWarning[i]"
+                mat-icon-button
+                matSuffix
+                (click)="$event.stopPropagation()"
+                [attr.aria-label]="'warning invalid unit'"
+                [matTooltip]="invalidUnitWarning[i]"
+              >
+                <mat-icon>{{ "error_outline" }}</mat-icon>
+              </div>
               <mat-autocomplete #metadataUnits="matAutocomplete">
                 <mat-option
                   *ngFor="let unit of filteredUnits$ | async"
@@ -90,10 +102,6 @@
               <mat-error *ngIf="fieldHasError(i, 'fieldUnit')">
                 A unit is required for quantities
               </mat-error>
-
-              <mat-hint *ngIf="invalidUnitWarning[i]">
-                {{ invalidUnitWarning[i] }}
-              </mat-hint>
             </mat-form-field>
           </div>
           <div class="formColumn" fxFlexAlign="center">
