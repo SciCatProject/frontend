@@ -22,6 +22,7 @@ import { UnitsService } from "shared/services/units.service";
 import { startWith, map } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { ScientificMetadata } from "../scientific-metadata.module";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "metadata-edit",
@@ -34,6 +35,8 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   });
   typeValues: string[] = ["quantity", "number", "string"];
   units: string[] = [];
+  appConfig = this.appConfigService.getConfig();
+
   filteredUnits$: Observable<string[]> | undefined = new Observable<string[]>();
   invalidUnitWarning: string[] = [];
   @Input() metadata: Record<string, any> | undefined;
@@ -42,6 +45,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   constructor(
     private formBuilder: FormBuilder,
     private unitsService: UnitsService,
+    private appConfigService: AppConfigService,
   ) {}
 
   addMetadata() {
@@ -180,8 +184,9 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
   getUnits(index: number): void {
     const name = this.items.at(index).get("fieldName")?.value;
-
-    this.units = this.unitsService.getUnits(name);
+    this.units = this.appConfig.metadataEditingUnitListDisabled
+      ? []
+      : this.unitsService.getUnits(name);
 
     this.filteredUnits$ = this.items
       .at(index)
