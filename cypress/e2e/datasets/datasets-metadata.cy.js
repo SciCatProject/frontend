@@ -146,8 +146,86 @@ describe("Datasets", () => {
         .last()
         .type(`${metadataValue}{enter}`);
 
-      cy.get("mat-error").contains("Name is already taken");
+      cy.get("mat-error").contains("Name already exists");
       cy.get("button[data-cy=save-changes-button]").should("be.disabled");
+    });
+
+    it("should not be able to edit the existing metadata with a duplicate name", () => {
+      cy.createDataset("raw");
+
+      cy.visit("/datasets");
+
+      cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+      cy.finishedLoading();
+
+      cy.get('[data-cy="text-search"] input[type="search"]')
+        .clear()
+        .type("Cypress");
+
+      cy.isLoading();
+
+      cy.get("mat-row").contains("Cypress Dataset").first().click();
+
+      cy.wait("@fetch");
+
+      cy.finishedLoading();
+
+      cy.scrollTo("bottom");
+
+      cy.get('[role="tab"]').contains("Edit").click();
+
+      // // Add first row with name as name1
+      cy.get('[data-cy="add-new-row"]').click();
+
+      cy.get("mat-select[data-cy=field-type-input]").last().click();
+
+      cy.get("mat-option")
+        .contains("string")
+        .then((option) => {
+          option[0].click();
+        });
+
+      cy.get("[data-cy=metadata-name-input]")
+        .last()
+        .type(`name1{enter}`);
+
+      cy.get("[data-cy=metadata-value-input]")
+        .last()
+        .type(`${metadataValue}{enter}`);
+
+      // // Add second row with name as name2. 
+      cy.get('[data-cy="add-new-row"]').click();
+
+      cy.get("mat-select[data-cy=field-type-input]").last().click();
+
+      cy.get("mat-option")
+        .contains("string")
+        .then((option) => {
+          option[0].click();
+        });
+
+      cy.get("[data-cy=metadata-name-input]")
+        .last()
+        .type(`name2{enter}`);
+
+      cy.get("[data-cy=metadata-value-input]")
+        .last()
+        .type(`${metadataValue}{enter}`);
+
+      cy.get("button[data-cy=save-changes-button]").click();
+
+      // Now try to change the name from name2 to name1, it should throw duplication error
+      cy.get("[data-cy=metadata-name-input]")
+        .last()
+        .clear()
+        .type("name1")
+        .parent()
+        .click()
+
+      cy.get("mat-error").contains("Name already exists");
+      cy.get("button[data-cy=save-changes-button]").should("be.disabled");
+
     });
 
     it("should show warning icon in the edit and view table if the metadata unit is invalid or cannot be converted", () => {
@@ -160,6 +238,7 @@ describe("Datasets", () => {
       cy.finishedLoading();
 
       cy.get('[data-cy="text-search"] input[type="search"]')
+        .clear()
         .clear()
         .type("Cypress");
 
