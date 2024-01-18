@@ -86,7 +86,7 @@ const reducer = createReducer(
   on(
     fromActions.sortByColumnAction,
     (state, { column, direction }): PolicyState => {
-      const sortField = column + (direction ? " " + direction : "");
+      const sortField = column + (direction ? ":" + direction : "");
       const policiesFilters = { ...state.policiesFilters, sortField, skip: 0 };
       return { ...state, policiesFilters };
     },
@@ -94,7 +94,7 @@ const reducer = createReducer(
   on(
     fromActions.sortEditableByColumnAction,
     (state, { column, direction }): PolicyState => {
-      const sortField = column + (direction ? " " + direction : "");
+      const sortField = column + (direction ? ":" + direction : "");
       const editableFilters = { ...state.editableFilters, sortField, skip: 0 };
       return { ...state, editableFilters };
     },
