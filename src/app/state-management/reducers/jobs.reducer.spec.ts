@@ -99,7 +99,7 @@ describe("jobsReducer", () => {
     it("should set sortField filter and set skip filter to 0", () => {
       const column = "test";
       const direction = "asc";
-      const sortField = column + " " + direction;
+      const sortField = column + ":" + direction;
       const action = fromActions.sortByColumnAction({ column, direction });
       const state = jobsReducer(initialJobsState, action);
 
