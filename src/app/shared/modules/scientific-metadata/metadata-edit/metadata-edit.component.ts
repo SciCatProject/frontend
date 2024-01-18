@@ -44,22 +44,31 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     private unitsService: UnitsService,
   ) {}
 
+  get formControlFields() {
+    return {
+      fieldType: (value = "") => new FormControl(value, [Validators.required]),
+      fieldName: (value = "") =>
+        new FormControl(value, [
+          Validators.required,
+          Validators.minLength(2),
+          this.duplicateValidator(),
+        ]),
+      fieldValue: (value: string | number = "") =>
+        new FormControl(value, [Validators.required, Validators.minLength(1)]),
+      fieldUnit: (value = "") =>
+        new FormControl(value, [
+          Validators.required,
+          this.whiteSpaceValidator(),
+        ]),
+    };
+  }
+
   addMetadata() {
     const field = this.formBuilder.group({
-      fieldType: new FormControl("", [Validators.required]),
-      fieldName: new FormControl("", [
-        Validators.required,
-        Validators.minLength(2),
-        this.duplicateValidator(),
-      ]),
-      fieldValue: new FormControl("", [
-        Validators.required,
-        Validators.minLength(1),
-      ]),
-      fieldUnit: new FormControl("", [
-        Validators.required,
-        this.whiteSpaceValidator(),
-      ]),
+      fieldType: this.formControlFields["fieldType"](),
+      fieldName: this.formControlFields["fieldName"](),
+      fieldValue: this.formControlFields["fieldValue"](),
+      fieldUnit: this.formControlFields["fieldUnit"](),
     });
 
     this.items.push(field);
@@ -122,32 +131,46 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         ) {
           if (this.metadata[key]["unit"].length > 0) {
             field = this.formBuilder.group({
-              fieldName: key,
-              fieldType: "quantity",
-              fieldValue: this.metadata[key]["value"],
-              fieldUnit: this.metadata[key]["unit"],
+              fieldType: this.formControlFields["fieldType"]("quantity"),
+              fieldName: this.formControlFields["fieldName"](key),
+              fieldValue: this.formControlFields["fieldValue"](
+                this.metadata[key]["value"],
+              ),
+              fieldUnit: this.formControlFields["fieldUnit"](
+                this.metadata[key]["unit"],
+              ),
             });
           } else if (typeof this.metadata[key]["value"] === "number") {
             field = this.formBuilder.group({
-              fieldName: key,
-              fieldType: "number",
-              fieldValue: Number(this.metadata[key]["value"]),
-              fieldUnit: this.metadata[key]["unit"],
+              fieldType: this.formControlFields["fieldType"]("number"),
+              fieldName: this.formControlFields["fieldName"](key),
+              fieldValue: this.formControlFields["fieldValue"](
+                Number(this.metadata[key]["value"]),
+              ),
+              fieldUnit: this.formControlFields["fieldUnit"](
+                this.metadata[key]["unit"],
+              ),
             });
           } else {
             field = this.formBuilder.group({
-              fieldName: key,
-              fieldType: "string",
-              fieldValue: this.metadata[key]["value"],
-              fieldUnit: this.metadata[key]["unit"],
+              fieldType: this.formControlFields["fieldType"]("string"),
+              fieldName: this.formControlFields["fieldName"](key),
+              fieldValue: this.formControlFields["fieldValue"](
+                this.metadata[key]["value"],
+              ),
+              fieldUnit: this.formControlFields["fieldUnit"](
+                this.metadata[key]["unit"],
+              ),
             });
           }
         } else {
           field = this.formBuilder.group({
-            fieldName: key,
-            fieldType: "string",
-            fieldValue: JSON.stringify(this.metadata[key]),
-            fieldUnit: "",
+            fieldType: this.formControlFields["fieldType"]("string"),
+            fieldName: this.formControlFields["fieldName"](key),
+            fieldValue: this.formControlFields["fieldValue"](
+              JSON.stringify(this.metadata[key]),
+            ),
+            fieldUnit: this.formControlFields["fieldUnit"](""),
           });
         }
         this.items.push(field);
