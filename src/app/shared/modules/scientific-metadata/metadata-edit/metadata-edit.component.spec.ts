@@ -5,6 +5,11 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 
 import { FormBuilder } from "@angular/forms";
 import { ScientificMetadataModule } from "../scientific-metadata.module";
+import { AppConfigService } from "app-config.service";
+
+const getConfig = () => ({
+  metadataEditingUnitListDisabled: true,
+});
 
 describe("MetadataEditComponent", () => {
   let component: MetadataEditComponent;
@@ -17,6 +22,16 @@ describe("MetadataEditComponent", () => {
       imports: [ScientificMetadataModule],
       providers: [FormBuilder],
     }).compileComponents();
+    TestBed.overrideComponent(MetadataEditComponent, {
+      set: {
+        providers: [
+          {
+            provide: AppConfigService,
+            useValue: { getConfig },
+          },
+        ],
+      },
+    });
   }));
 
   beforeEach(() => {
@@ -256,13 +271,26 @@ describe("MetadataEditComponent", () => {
   });
 
   describe("#getUnits()", () => {
-    it("should get an array of units based on the value of fieldName", () => {
+    it("should get an array of units based on the value of fieldName if metadataEditingUnitListDisabled is false", () => {
+      component.appConfig.metadataEditingUnitListDisabled = false;
+
       component.addMetadata();
       component.items.at(0).get("fieldName").setValue("elapsed_time");
 
       component.getUnits(0);
 
       expect(component.units.includes("seconds")).toEqual(true);
+    });
+
+    it("should not get an array of units based on the value of fieldName if metadataEditingUnitListDisabled is true", () => {
+      component.appConfig.metadataEditingUnitListDisabled = true;
+
+      component.addMetadata();
+      component.items.at(0).get("fieldName").setValue("elapsed_time");
+
+      component.getUnits(0);
+
+      expect(component.units).toEqual([]);
     });
   });
 
