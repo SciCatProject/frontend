@@ -306,16 +306,16 @@
                 </div>
               </td>
             </tr>
-            <tr *ngIf="dataset['inputDatasets'] as value">
+            <tr *ngIf="dataset['inputDatasets'] && dataset['inputDatasets'].length > 0">
               <th>Input Datasets</th>
               <td>
-                <div *ngFor="let datasetPid of value">
+                <div *ngFor="let datasetPid of dataset['inputDatasets']">
                   <span>
                     <a [routerLink]="['/datasets/', datasetPid]">
                       {{ datasetPid }}
                     </a>
                   </span>
-                  <span *ngIf="value.indexOf(datasetPid) < value.length - 1"
+                  <span *ngIf="dataset['inputDatasets'].indexOf(datasetPid) < dataset['inputDatasets'].length - 1"
                     >,
                   </span>
                 </div>
