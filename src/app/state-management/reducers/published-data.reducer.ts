@@ -44,7 +44,7 @@ const reducer = createReducer(
   on(
     fromActions.sortByColumnAction,
     (state, { column, direction }): PublishedDataState => {
-      const sortField = column + (direction ? " " + direction : "");
+      const sortField = column + (direction ? ":" + direction : "");
       const filters = { ...state.filters, sortField, skip: 0 };
       return { ...state, filters };
     },
