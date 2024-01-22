@@ -225,7 +225,6 @@ describe("Datasets", () => {
 
       cy.get("mat-error").contains("Name already exists");
       cy.get("button[data-cy=save-changes-button]").should("be.disabled");
-
     });
 
     it("should show warning icon in the edit and view table if the metadata unit is invalid or cannot be converted", () => {
