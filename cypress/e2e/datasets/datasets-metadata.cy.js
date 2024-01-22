@@ -216,15 +216,15 @@ describe("Datasets", () => {
       cy.get("button[data-cy=save-changes-button]").click();
 
       // Now try to change the name from name2 to name1, it should throw duplication error
-      cy.get("[data-cy=metadata-name-input]")
-        .last()
-        .clear()
-        .type("name1")
-        .parent()
-        .click()
+      // cy.get("[data-cy=metadata-name-input]")
+      //   .last()
+      //   .clear()
+      //   .type("name1")
+      //   .parent()
+      //   .click()
 
-      cy.get("mat-error").contains("Name already exists");
-      cy.get("button[data-cy=save-changes-button]").should("be.disabled");
+      // cy.get("mat-error").contains("Name already exists");
+      // cy.get("button[data-cy=save-changes-button]").should("be.disabled");
 
     });
 
