@@ -84,6 +84,7 @@ export interface AppConfig {
   helpMessages?: HelpMessages;
   notificationInterceptorEnabled: boolean;
   pidSearchMethod?: string;
+  metadataEditingUnitListDisabled?: boolean;
 }
 
 @Injectable()
