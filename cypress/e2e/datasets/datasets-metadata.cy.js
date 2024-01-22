@@ -239,7 +239,6 @@ describe("Datasets", () => {
 
       cy.get('[data-cy="text-search"] input[type="search"]')
         .clear()
-        .clear()
         .type("Cypress");
 
       cy.isLoading();
