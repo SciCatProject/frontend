@@ -219,7 +219,13 @@ describe("Datasets", () => {
       cy.get("[data-cy=metadata-name-input]")
         .last()
         .clear()
+
+      cy.get("[data-cy=metadata-name-input]")
+        .last()
         .type("name1")
+
+      cy.get("[data-cy=metadata-name-input]")
+        .last()
         .parent()
         .click()
 
