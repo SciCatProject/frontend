@@ -22,7 +22,7 @@ export const selectCurrentUserName = createSelector(
   selectCurrentUser,
   (profile, user) => {
     if (profile) {
-      return profile.username.replace("ms-ad.", "");
+      return profile.displayName.replace("ms-ad.", "");
     } else if (user) {
       return user.username.replace("ms-ad.", "");
     } else {
