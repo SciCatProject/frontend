@@ -85,9 +85,9 @@ export class UserEffects {
           this.configService.getConfig().accessTokenPrefix;
         const token = new SDKToken({
           id: accessTokenPrefix + oidcLoginResponse.accessToken,
-          userId: oidcLoginResponse.userId ,
+          userId: oidcLoginResponse.userId,
           ttl: oidcLoginResponse.ttl,
-          created: oidcLoginResponse.created
+          created: oidcLoginResponse.created,
         });
         this.loopBackAuth.setToken(token);
         return this.userApi.findById<User>(oidcLoginResponse.userId).pipe(
@@ -115,7 +115,7 @@ export class UserEffects {
           id: accessTokenPrefix + adLoginResponse.access_token,
           userId: adLoginResponse.userId,
           ttl: adLoginResponse.ttl,
-          created: adLoginResponse.created
+          created: adLoginResponse.created,
         });
         this.loopBackAuth.setToken(token);
         return this.userApi.findById<User>(adLoginResponse.userId).pipe(
@@ -240,15 +240,15 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchCurrentUserAction),
       filter(() => {
-        const { created, ttl, id } = this.userApi.getCurrentToken()
+        const { created, ttl, id } = this.userApi.getCurrentToken();
 
-        const currentTimeStamp = Math.floor(new Date().getTime())
-        const createdTimeStamp = Math.floor(new Date(created).getTime())
-        const expirationTimeStamp = (+createdTimeStamp) + (+ttl * 1000);
-        const isTokenExpired = currentTimeStamp >= expirationTimeStamp 
+        const currentTimeStamp = Math.floor(new Date().getTime());
+        const createdTimeStamp = Math.floor(new Date(created).getTime());
+        const expirationTimeStamp = +createdTimeStamp + +ttl * 1000;
+        const isTokenExpired = currentTimeStamp >= expirationTimeStamp;
 
-        if(id && isTokenExpired){
-          this.loopBackAuth.clear()
+        if (id && isTokenExpired) {
+          this.loopBackAuth.clear();
         }
 
         return this.userApi.isAuthenticated();
