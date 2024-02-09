@@ -18,6 +18,21 @@ export class AuthCallbackComponent implements OnInit {
     private router: Router,
   ) {}
 
+  private parseJwt(token: string) {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      window
+        .atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join(""),
+    );
+
+    return JSON.parse(jsonPayload);
+  }
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       // External authentication will redirect to this component with a access-token and user-id query parameter
@@ -52,21 +67,5 @@ export class AuthCallbackComponent implements OnInit {
         this.router.navigateByUrl(returnUrl || "/");
       }
     });
-  }
-
-  private parseJwt(token: string) {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-      window
-        .atob(base64)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join(""),
-    );
-
-    return JSON.parse(jsonPayload);
   }
 }
