@@ -247,7 +247,7 @@ export class UserEffects {
         const expirationTimeStamp = +createdTimeStamp + +ttl * 1000;
         const isTokenExpired = currentTimeStamp >= expirationTimeStamp;
 
-        if (id && isTokenExpired) {
+        if (id && ttl && isTokenExpired) {
           this.loopBackAuth.clear();
         }
 
