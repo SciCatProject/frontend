@@ -50,6 +50,7 @@ import { DatasetDetailsDashboardComponent } from "./dataset-details-dashboard/da
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { DatablocksComponent } from "./datablocks-table/datablocks-table.component";
 import { DatafilesComponent } from "./datafiles/datafiles.component";
+import { JsonScientificMetadataComponent } from "./jsonScientificMetadata/jsonScientificMetadata.component";
 import { DatasetDetailComponent } from "./dataset-detail/dataset-detail.component";
 import { DatasetTableComponent } from "./dataset-table/dataset-table.component";
 import { DatasetsFilterComponent } from "./datasets-filter/datasets-filter.component";
@@ -140,6 +141,7 @@ import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.co
     BatchViewComponent,
     DashboardComponent,
     DatablocksComponent,
+    JsonScientificMetadataComponent,
     DatafilesComponent,
     DatasetDetailComponent,
     DatasetTableComponent,
@@ -174,6 +176,7 @@ import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.co
   exports: [
     DashboardComponent,
     DatablocksComponent,
+    JsonScientificMetadataComponent,
     DatafilesComponent,
     DatasetDetailComponent,
     DatasetTableComponent,

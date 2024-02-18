@@ -33,6 +33,7 @@ export interface AppConfig {
   accessTokenPrefix: string;
   addDatasetEnabled: boolean;
   archiveWorkflowEnabled: boolean;
+  datasetJsonScientificMetadata: boolean;
   datasetReduceEnabled: boolean;
   editDatasetSampleEnabled: boolean;
   editMetadataEnabled: boolean;

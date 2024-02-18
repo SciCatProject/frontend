@@ -6,6 +6,7 @@ import { LeavingPageGuard } from "app-routing/pending-changes.guard";
 import { ServiceGuard } from "app-routing/service.guard";
 import { AdminTabComponent } from "datasets/admin-tab/admin-tab.component";
 import { DatafilesComponent } from "datasets/datafiles/datafiles.component";
+import { JsonScientificMetadataComponent } from "datasets/jsonScientificMetadata/jsonScientificMetadata.component";
 import { DatasetDetailComponent } from "datasets/dataset-detail/dataset-detail.component";
 import { DatasetFileUploaderComponent } from "datasets/dataset-file-uploader/dataset-file-uploader.component";
 import { DatasetLifecycleComponent } from "datasets/dataset-lifecycle/dataset-lifecycle.component";
@@ -17,6 +18,10 @@ const routes: Routes = [
     path: "",
     component: DatasetDetailComponent,
     canDeactivate: [LeavingPageGuard],
+  },
+  {
+    path: "jsonScientificMetadata",
+    component: JsonScientificMetadataComponent,
   },
   {
     path: "datafiles",

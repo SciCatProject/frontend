@@ -34,6 +34,16 @@ export const selectCurrentDatasetWithoutFileInfo = createSelector(
   },
 );
 
+export const selectCurrentDatasetWithOnlyScientificMetadataKey = createSelector(
+  selectCurrentDataset,
+  (currentSet) => {
+    if (currentSet) {
+      return currentSet?.scientificMetadata;
+    }
+    return undefined;
+  },
+);
+
 export const selectCurrentOrigDatablocks = createSelector(
   selectCurrentDataset,
   (dataset) => (dataset ? dataset.origdatablocks : []),
