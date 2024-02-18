@@ -3,6 +3,7 @@
   "addDatasetEnabled": true,
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
+  "datasetJsonScientificMetadata": true,
   "editDatasetSampleEnabled": true,
   "editMetadataEnabled": true,
   "editPublishedData": false,
@@ -106,7 +107,10 @@
   "multipleDownloadAction": "https://scicatfileserver.esss.dk/zip",
   "multipleDownloadEnabled": true,
   "oAuth2Endpoints": [
-    { "authURL": "api/v3/auth/oidc", "displayText": "ESS One Identity" }
+    {
+      "authURL": "api/v3/auth/oidc",
+      "displayText": "ESS One Identity"
+    }
   ],
   "policiesEnabled": true,
   "retrieveDestinations": [],
