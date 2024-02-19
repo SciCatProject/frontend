@@ -19,23 +19,23 @@ services:
       timeout: 10s
       retries: 5
       start_period: 40s
-  scichat-loopback:
-    image: "ghcr.io/scicatproject/scichat-loopback:e2e"
-    command:
-      [
-        "./wait-for-it.sh",
-        "mongodb:27017",
-        "--",
-        "node",
-        "-r",
-        "dotenv/config",
-        "."
-      ]
-    volumes:
-      - "./CI/ESS/e2e/.env:/home/node/app/.env"
-    depends_on:
-      mongodb:
-        condition: service_healthy
+#  scichat-loopback:
+#    image: "ghcr.io/scicatproject/scichat-loopback:e2e"
+#    command:
+#      [
+#        "./wait-for-it.sh",
+#        "mongodb:27017",
+#        "--",
+#        "node",
+#        "-r",
+#        "dotenv/config",
+#        "."
+#      ]
+#    volumes:
+#      - "./CI/ESS/e2e/.env:/home/node/app/.env"
+#    depends_on:
+#      mongodb:
+#        condition: service_healthy
   backend:
     image: ghcr.io/scicatproject/backend-next:latest
     command: sh -c "node dist/main"
