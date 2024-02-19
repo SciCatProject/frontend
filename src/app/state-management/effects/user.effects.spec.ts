@@ -76,7 +76,7 @@ describe("UserEffects", () => {
         },
         {
           provide: LoopBackAuth,
-          useValue: jasmine.createSpyObj("loopBackAuth", ["setToken"]),
+          useValue: jasmine.createSpyObj("loopBackAuth", ["setToken", "clear"]),
         },
         {
           provide: UserApi,
@@ -428,6 +428,14 @@ describe("UserEffects", () => {
     it("should result in a fetchCurrentUserCompleteAction, a fetchUserIdentityAction, and a fetchUserSettingsAction", () => {
       const user = new User();
       user.id = "testId";
+      const token: AccessToken = {
+        id: "testId",
+        ttl: 100,
+        scopes: ["string"],
+        created: new Date(),
+        userId: "testId",
+        user: "testUser",
+      };
       const action = fromActions.fetchCurrentUserAction();
       const outcome1 = fromActions.fetchCurrentUserCompleteAction({ user });
       const outcome2 = fromActions.fetchUserIdentityAction({ id: user.id });
@@ -435,6 +443,8 @@ describe("UserEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: user });
+      userApi.getCurrentToken.and.returnValue(token);
+      userApi.isAuthenticated.and.returnValue(true);
       userApi.getCurrentId.and.returnValue(user.id);
       userApi.getCurrent.and.returnValue(response);
 
@@ -449,16 +459,49 @@ describe("UserEffects", () => {
     it("should result in a fetchCurrentUserFailedAction", () => {
       const user = new User();
       user.id = "testId";
+      const token: AccessToken = {
+        id: "testId",
+        ttl: 3600,
+        scopes: ["string"],
+        created: new Date(),
+        userId: "testId",
+        user: "testUser",
+      };
       const action = fromActions.fetchCurrentUserAction();
       const outcome = fromActions.fetchCurrentUserFailedAction();
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
+      userApi.getCurrentToken.and.returnValue(token);
+      userApi.isAuthenticated.and.returnValue(true);
       userApi.getCurrentId.and.returnValue(user.id);
       userApi.getCurrent.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCurrentUser$).toBeObservable(expected);
+    });
+
+    it("should not call getCurrent() if token is expired", () => {
+      const user = new User();
+      user.id = "testId";
+      const token: AccessToken = {
+        id: "testId",
+        ttl: 100,
+        scopes: ["string"],
+        created: new Date(1611438651),
+        userId: "testId",
+        user: "testUser",
+      };
+      const action = fromActions.fetchCurrentUserAction();
+
+      actions = hot("-a", { a: action });
+      userApi.getCurrentToken.and.returnValue(token);
+      userApi.isAuthenticated.and.returnValue(false);
+
+      const expected = cold("");
+
+      expect(effects.fetchCurrentUser$).toBeObservable(expected);
+      expect(userApi.getCurrent).not.toHaveBeenCalled();
     });
   });
 
