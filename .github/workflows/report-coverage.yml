@@ -48,7 +48,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           output-file: comment.html
       - name: Post code coverage report
-        uses: marocchino/sticky-pull-request-comment@v2.8.0
+        uses: marocchino/sticky-pull-request-comment@v2.9.0
         with:
           path: comment.html
           number: ${{ env.pr_number }}            
