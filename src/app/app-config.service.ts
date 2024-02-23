@@ -64,6 +64,7 @@ export interface AppConfig {
   multipleDownloadAction: string | null;
   multipleDownloadEnabled: boolean;
   multipleDownloadUseAuthToken: boolean;
+  scicatLoginEnabled: boolean;
   oAuth2Endpoints: OAuth2Endpoint[];
   policiesEnabled: boolean;
   retrieveDestinations?: RetrieveDestinations[];

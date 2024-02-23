@@ -1,4 +1,5 @@
 {
+  "scicatLoginEnabled": true,
   "lbBaseURL": "https://dacat.psi.ch",
   "riotBaseUrl": null,
   "jupyterHubUrl": "https://jupyterhub.apps.ocp4a.psi.ch/hub/login",

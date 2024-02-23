@@ -1,4 +1,5 @@
 {
+  "scicatLoginEnabled": true,
   "lbBaseURL": "https://scicat.rfi.ac.uk",
   "riotBaseUrl": "http://scichat.maxiv.lu.se",
   "jupyterHubUrl": "https://jupyterhub.maxiv.lu.se",

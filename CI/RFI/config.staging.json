@@ -1,4 +1,5 @@
 {
+  "scicatLoginEnabled": true,
   "lbBaseURL": "https://dacat-staging.psi.ch",
   "riotBaseUrl": null,
   "jupyterHubUrl": null,

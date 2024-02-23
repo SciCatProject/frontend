@@ -86,7 +86,7 @@
     </span>
     <span *ngIf="(this.loggedIn$ | async) === false; else userButton">
       <h6>
-        <a class="toplink" [routerLink]="['/login']" data-cy="login-button">
+        <a class="toplink" (click)="login()" data-cy="login-button">
           <mat-icon> account_circle </mat-icon>
           <span class="large-screen-text">Sign in</span>
         </a>
