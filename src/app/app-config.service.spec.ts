@@ -5,6 +5,7 @@ import { of } from "rxjs";
 import { MockHttp } from "shared/MockStubs";
 
 const appConfig: AppConfig = {
+  scicatLoginEnabled: true,
   accessTokenPrefix: "",
   addDatasetEnabled: true,
   archiveWorkflowEnabled: true,
