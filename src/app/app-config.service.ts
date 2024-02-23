@@ -30,7 +30,7 @@ export class HelpMessages {
 }
 
 export interface AppConfig {
-  scicatLoginEnabled: boolean;
+  skipSciCatLoginPageEnabled?: boolean;
   accessTokenPrefix: string;
   addDatasetEnabled: boolean;
   archiveWorkflowEnabled: boolean;

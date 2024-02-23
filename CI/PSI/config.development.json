@@ -1,5 +1,4 @@
 {
-  "scicatLoginEnabled": true,
   "lbBaseURL": "https://dacat-development.psi.ch",
   "archiveWorkflowEnabled": true,
   "retrieveDestinations": [

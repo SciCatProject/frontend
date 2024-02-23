@@ -1,5 +1,4 @@
 {
-  "scicatLoginEnabled": true,
   "lbBaseURL": "https://scicatdev.orgasoft.frm2.tum.de",
   "archiveWorkflowEnabled": true,
   "retrieveDestinations": [

@@ -45,7 +45,7 @@ export class AppHeaderComponent implements OnInit {
   }
 
   login(): void {
-    if (!this.config.scicatLoginEnabled) {
+    if (this.config.skipSciCatLoginPageEnabled) {
       for (const endpoint of this.oAuth2Endpoints) {
         this.document.location.href = `${this.config.lbBaseURL}/${endpoint.authURL}`;
       }

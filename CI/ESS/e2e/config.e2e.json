@@ -1,5 +1,5 @@
 {
-  "scicatLoginEnabled": true,
+  "skipSciCatLoginPageEnabled": false,
   "accessTokenPrefix": "Bearer ",
   "addDatasetEnabled": true,
   "archiveWorkflowEnabled": false,

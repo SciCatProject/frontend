@@ -1,5 +1,4 @@
 {
-  "scicatLoginEnabled": true,
   "lbBaseURL": "https://scicat-dev.k8s-test.frm2.tum.de",
   "accessTokenPrefix": "Bearer ",
   "lbTokenPrefix": "Bearer ",
