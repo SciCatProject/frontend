@@ -1,3 +1,4 @@
+import { DOCUMENT } from "@angular/common";
 import { Component, OnInit, Inject } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Store } from "@ngrx/store";
@@ -11,7 +12,7 @@ import {
   selectThumbnailPhoto,
 } from "state-management/selectors/user.selectors";
 import { selectDatasetsInBatchIndicator } from "state-management/selectors/datasets.selectors";
-import { AppConfigService } from "app-config.service";
+import { AppConfigService, OAuth2Endpoint } from "app-config.service";
 import { Router } from "@angular/router";
 
 @Component({
@@ -25,6 +26,7 @@ export class AppHeaderComponent implements OnInit {
   status = this.appConfig.production ? "" : "test";
   siteIcon = this.config.siteIcon ?? "site-logo.png";
 
+  oAuth2Endpoints: OAuth2Endpoint[] = [];
   username$ = this.store.select(selectCurrentUserName);
   profileImage$ = this.store.select(selectThumbnailPhoto);
   inBatchIndicator$ = this.store.select(selectDatasetsInBatchIndicator);
@@ -35,13 +37,25 @@ export class AppHeaderComponent implements OnInit {
     private router: Router,
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private store: Store,
+    @Inject(DOCUMENT) public document: Document,
   ) {}
 
   logout(): void {
     this.store.dispatch(logoutAction());
   }
 
+  login(): void {
+    if (this.config.skipSciCatLoginPageEnabled) {
+      for (const endpoint of this.oAuth2Endpoints) {
+        this.document.location.href = `${this.config.lbBaseURL}/${endpoint.authURL}`;
+      }
+    } else {
+      this.router.navigateByUrl("/login");
+    }
+  }
+
   ngOnInit() {
     this.store.dispatch(fetchCurrentUserAction());
+    this.oAuth2Endpoints = this.config.oAuth2Endpoints;
   }
 }
