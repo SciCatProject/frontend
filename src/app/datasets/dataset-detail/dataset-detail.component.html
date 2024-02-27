@@ -306,7 +306,11 @@
                 </div>
               </td>
             </tr>
-            <tr *ngIf="dataset['inputDatasets'] && dataset['inputDatasets'].length > 0">
+            <tr
+              *ngIf="
+                dataset['inputDatasets'] && dataset['inputDatasets'].length > 0
+              "
+            >
               <th>Input Datasets</th>
               <td>
                 <div *ngFor="let datasetPid of dataset['inputDatasets']">
@@ -315,7 +319,11 @@
                       {{ datasetPid }}
                     </a>
                   </span>
-                  <span *ngIf="dataset['inputDatasets'].indexOf(datasetPid) < dataset['inputDatasets'].length - 1"
+                  <span
+                    *ngIf="
+                      dataset['inputDatasets'].indexOf(datasetPid) <
+                      dataset['inputDatasets'].length - 1
+                    "
                     >,
                   </span>
                 </div>
