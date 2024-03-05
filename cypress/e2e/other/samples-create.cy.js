@@ -37,7 +37,7 @@ describe("Samples", () => {
 
       cy.wait("@create").then(({ request, response }) => {
         expect(request.method).to.eq("POST");
-        expect(response.statusCode).to.eq(200);
+        expect(response.statusCode).to.eq(201);
       });
 
       cy.get("mat-table").children().should("contain.text", "Cypress Sample");
