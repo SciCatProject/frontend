@@ -120,5 +120,5 @@
   "scienceSearchUnitsEnabled": true,
   "metadataStructure": "",
   "loginFormEnabled": false,
-  "oAuth2Endpoints": [{"displayText": "MLZ", "authURL":"api/v3/auth/oidc"}]
+  "oAuth2Endpoints": [{ "displayText": "MLZ", "authURL": "api/v3/auth/oidc" }]
 }
