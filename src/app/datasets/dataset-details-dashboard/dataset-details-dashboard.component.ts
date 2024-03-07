@@ -156,8 +156,7 @@ export class DatasetDetailsDashboardComponent
                 label: TAB.jsonScientificMetadata,
                 icon: "schema",
                 enabled:
-                  this.appConfig.datasetJsonScientificMetadata &&
-                  isLoggedIn,
+                  this.appConfig.datasetJsonScientificMetadata && isLoggedIn,
               },
               {
                 location: "./datafiles",
