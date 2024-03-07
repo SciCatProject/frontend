@@ -52,7 +52,7 @@ export interface FileObject {
 }
 enum TAB {
   details = "Details",
-  jsonScientificMetadata = "Json Scientific Metadata",
+  jsonScientificMetadata = "Scientific Metadata (JSON)",
   datafiles = "Datafiles",
   relatedDatasets = "Related Datasets",
   reduce = "Reduce",
@@ -157,8 +157,7 @@ export class DatasetDetailsDashboardComponent
                 icon: "schema",
                 enabled:
                   this.appConfig.datasetJsonScientificMetadata &&
-                  isLoggedIn &&
-                  isInOwnerGroup,
+                  isLoggedIn,
               },
               {
                 location: "./datafiles",
