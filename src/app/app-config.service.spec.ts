@@ -10,6 +10,7 @@ const appConfig: AppConfig = {
   addDatasetEnabled: true,
   archiveWorkflowEnabled: true,
   datasetReduceEnabled: true,
+  datasetJsonScientificMetadata: true,
   editDatasetSampleEnabled: true,
   editMetadataEnabled: true,
   editPublishedData: true,

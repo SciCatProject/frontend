@@ -53,6 +53,7 @@ export interface DatasetInterface {
   origdatablocks?: OrigDatablock[];
   attachments?: Attachment[];
   instrument?: Instrument;
+  scientificMetadata?: any
 }
 
 export class Dataset implements DatasetInterface {
@@ -99,6 +100,7 @@ export class Dataset implements DatasetInterface {
   origdatablocks: OrigDatablock[];
   attachments: Attachment[];
   instrument: Instrument;
+  scientificMetadata?: any;
   constructor(data?: DatasetInterface) {
     Object.assign(this, data);
   }

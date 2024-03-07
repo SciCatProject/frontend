@@ -52,6 +52,7 @@ export interface FileObject {
 }
 enum TAB {
   details = "Details",
+  jsonScientificMetadata = "Scientific Metadata (JSON)",
   datafiles = "Datafiles",
   relatedDatasets = "Related Datasets",
   reduce = "Reduce",
@@ -92,6 +93,7 @@ export class DatasetDetailsDashboardComponent
 
   fetchDataActions: { [tab: string]: { action: any; loaded: boolean } } = {
     [TAB.details]: { action: fetchDatasetAction, loaded: false },
+    [TAB.jsonScientificMetadata]: { action: fetchDatasetAction, loaded: false },
     [TAB.relatedDatasets]: {
       action: fetchRelatedDatasetsAction,
       loaded: false,
@@ -148,6 +150,13 @@ export class DatasetDetailsDashboardComponent
                 label: TAB.details,
                 icon: "menu",
                 enabled: true,
+              },
+              {
+                location: "./jsonScientificMetadata",
+                label: TAB.jsonScientificMetadata,
+                icon: "schema",
+                enabled:
+                  this.appConfig.datasetJsonScientificMetadata && isLoggedIn,
               },
               {
                 location: "./datafiles",

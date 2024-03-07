@@ -1,0 +1,17 @@
+@use "@angular/material" as mat;
+
+@mixin color($theme) {
+  $color-config: map-get($theme, "color");
+  $warn-2: map-get($color-config, "warn-2");
+
+  .warning-icon {
+    color: mat.get-color-from-palette($warn-2, "default");
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: map-get($theme, "color");
+  @if $color-config != null {
+    @include color($theme);
+  }
+}
