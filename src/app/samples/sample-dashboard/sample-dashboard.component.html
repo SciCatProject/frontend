@@ -1,7 +1,7 @@
 <ng-container *ngIf="vm$ | async as vm">
   <div fxLayout="row" fxLayout.lt-lg="column">
     <div fxFlex="14" fxFlex.lt-xl="20">
-      <ng-template [ngIf]="appConfig.editSampleEnabled">
+      <ng-template [ngIf]="appConfig.addSampleEnabled">
         <button
           mat-stroked-button
           class="small-edit-sample"
@@ -77,7 +77,7 @@
           ></app-search-bar>
         </div>
       </ng-template>
-      <ng-template [ngIf]="appConfig.editSampleEnabled">
+      <ng-template [ngIf]="appConfig.addSampleEnabled">
         <mat-card class="big-edit-sample" (click)="openDialog()">
           <mat-card-content>
             <mat-icon>add_circle</mat-icon> Create Sample

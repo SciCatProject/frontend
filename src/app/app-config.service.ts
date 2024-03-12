@@ -39,7 +39,7 @@ export interface AppConfig {
   editDatasetSampleEnabled: boolean;
   editMetadataEnabled: boolean;
   editPublishedData: boolean;
-  editSampleEnabled: boolean;
+  addSampleEnabled: boolean;
   externalAuthEndpoint: string | null;
   facility: string | null;
   loginFacilityLabel: string | null;

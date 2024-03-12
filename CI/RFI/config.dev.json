@@ -10,7 +10,7 @@
   "editDatasetSampleEnabled": false,
   "editMetadataEnabled": true,
   "editPublishedData": false,
-  "editSampleEnabled": true,
+  "addSampleEnabled": true,
   "facility": "RFI",
   "fileColorEnabled": true,
   "gettingStarted": null,

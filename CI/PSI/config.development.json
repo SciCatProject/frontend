@@ -12,7 +12,7 @@
   ],
   "externalAuthEndpoint": "/auth/msad",
   "editMetadataEnabled": true,
-  "editSampleEnabled": true,
+  "addSampleEnabled": true,
   "editPublishedData": true,
   "scienceSearchEnabled": true,
   "facility": "PSI",

@@ -15,7 +15,7 @@
   "externalAuthEndpoint": "",
   "editMetadataEnabled": true,
   "addDatasetEnabled": true,
-  "editSampleEnabled": true,
+  "addSampleEnabled": true,
   "editPublishedData": true,
   "scienceSearchEnabled": true,
   "facility": "MLZ",

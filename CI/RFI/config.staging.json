@@ -9,7 +9,7 @@
   "editDatasetSampleEnabled": false,
   "editMetadataEnabled": false,
   "editPublishedData": false,
-  "editSampleEnabled": false,
+  "addSampleEnabled": false,
   "facility": "PSI",
   "fileColorEnabled": false,
   "gettingStarted": null,
