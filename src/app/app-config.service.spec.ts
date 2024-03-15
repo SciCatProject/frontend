@@ -14,7 +14,7 @@ const appConfig: AppConfig = {
   editDatasetSampleEnabled: true,
   editMetadataEnabled: true,
   editPublishedData: true,
-  editSampleEnabled: true,
+  addSampleEnabled: true,
   externalAuthEndpoint: "/auth/msad",
   facility: "ESS",
   loginFacilityLabel: "ESS",

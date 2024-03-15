@@ -17,7 +17,7 @@
   "datasetReduceEnabled": false,
   "editDatasetSampleEnabled": false,
   "editMetadataEnabled": false,
-  "editSampleEnabled": true,
+  "addSampleEnabled": true,
   "editPublishedData": true,
   "facility": "PSI",
   "fileColorEnabled": false,
