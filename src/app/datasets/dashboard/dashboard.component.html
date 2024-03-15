@@ -1,4 +1,7 @@
 <breadcrumb></breadcrumb>
+  <div class="full-width-search-container">
+    <input type="text" [(ngModel)]="searchTerm" class="full-width-search-input" placeholder="Search..." (keyup)="search()">
+  </div>
 <mat-sidenav-container [hasBackdrop]="false">
   <mat-sidenav-content>
     <div fxLayout="row" fxLayout.xs="column">

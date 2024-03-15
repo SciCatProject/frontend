@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import {ActivatedRoute, NavigationCancel, NavigationEnd, NavigationError, Router} from "@angular/router";
 import { Store, ActionsSubject } from "@ngrx/store";
 
 import deepEqual from "deep-equal";
@@ -77,6 +77,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   userGroups: string[] = [];
   clearColumnSearch = false;
 
+  searchTerm: string = '';
+
   @ViewChild(MatSidenav, { static: false }) sideNav!: MatSidenav;
 
   constructor(
@@ -86,7 +88,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private store: Store,
     private router: Router,
     private route: ActivatedRoute,
-  ) {}
+  ) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        console.log('NavigationEnd:', event);
+      } else if (event instanceof NavigationError) {
+        console.log('NavigationError:', event);
+      } else if (event instanceof NavigationCancel) {
+        console.log('NavigationCancel:', event);
+      }
+    });
+  }
 
   onSettingsClick(): void {
     this.sideNav.toggle();
@@ -194,6 +206,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.store.dispatch(fetchFacetCountsAction());
           this.router.navigate(["/datasets"], {
             queryParams: { args: JSON.stringify(obj[0]) },
+          }).then((result) => {
+            console.log(`Navigate result ${result}`);
+          }).catch(reason => {
+            console.log(reason)
           });
         }),
     );
@@ -245,5 +261,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
+  search() {
+    // Implement search logic here
+    console.log('Searching for: ', this.searchTerm);
   }
 }
