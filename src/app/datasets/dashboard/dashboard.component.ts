@@ -14,6 +14,7 @@ import {
   addDatasetAction,
   fetchDatasetCompleteAction,
   fetchMetadataKeysAction,
+  setSearchTermsAction,
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -21,7 +22,7 @@ import {
   selectHasPrefilledFilters,
   selectDatasetsInBatch,
   selectCurrentDataset,
-  selectSelectedDatasets,
+  selectSelectedDatasets, selectSearchTerms,
 } from "state-management/selectors/datasets.selectors";
 import { distinctUntilChanged, filter, map, take } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
@@ -77,7 +78,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   userGroups: string[] = [];
   clearColumnSearch = false;
 
-  searchTerm: string = '';
+  //full text search
+  searchTerms$ = this.store.select(selectSearchTerms);
+  clearSearchBar = false;
 
   @ViewChild(MatSidenav, { static: false }) sideNav!: MatSidenav;
 
@@ -263,8 +266,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
-  search() {
-    // Implement search logic here
-    console.log('Searching for: ', this.searchTerm);
+  fullTextSearch(terms: string) {
+    console.log('Searching for: ', terms);
+    this.clearSearchBar = false;
+    this.store.dispatch(setSearchTermsAction({ terms }));
   }
 }

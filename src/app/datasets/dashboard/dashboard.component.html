@@ -1,13 +1,15 @@
 <breadcrumb></breadcrumb>
 <div class="search-container">
-<mat-form-field appearance="fill" class="full-width-search">
-  <mat-label>Search</mat-label>
-  <input matInput [(ngModel)]="searchTerm" (keyup)="search()" placeholder="Type to search...">
-  <mat-icon matPrefix>search</mat-icon>
-  <button mat-button *ngIf="searchTerm" matSuffix mat-icon-button aria-label="Clear" (click)="searchTerm=''">
-    <mat-icon>close</mat-icon>
-  </button>
-</mat-form-field>
+  <app-search-bar
+    #searchBar
+    [prefilledValue]="searchTerms$ | async"
+    data-cy="text-search"
+    [placeholder]="'Text Search'"
+    [clear]="clearSearchBar"
+    (search)="fullTextSearch($event)"
+    (searchBarFocus)="fullTextSearch($event)"
+  >
+  </app-search-bar>
 </div>
 <mat-sidenav-container [hasBackdrop]="false">
   <mat-sidenav-content>
