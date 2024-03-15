@@ -1,17 +1,11 @@
-.full-width-search-container {
+.full-width-search {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 10px;
-  box-sizing: border-box;
 }
 
-.full-width-search-input {
-  width: 100%;
-  max-width: 600px; /* or whatever maximum width you prefer */
-  padding: 8px;
-  border: 1px solid #ccc; /* Style according to your theme */
-  border-radius: 4px; /* Optional */
+.search-container {
+  width: 100%; /* Ensure the parent container is full width */
+  max-width: 1280px; /* Optional: if you want to constrain the max width */
+  margin: 0 auto; /* Center the container if using a max-width */
 }
 
 mat-sidenav-container {
