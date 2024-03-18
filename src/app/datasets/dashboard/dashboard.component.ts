@@ -22,7 +22,8 @@ import {
   selectHasPrefilledFilters,
   selectDatasetsInBatch,
   selectCurrentDataset,
-  selectSelectedDatasets, selectSearchTerms,
+  selectSelectedDatasets,
+  selectSearchTerms,
 } from "state-management/selectors/datasets.selectors";
 import { distinctUntilChanged, filter, map, take } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
