@@ -199,11 +199,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.store.dispatch(fetchFacetCountsAction());
           this.router.navigate(["/datasets"], {
             queryParams: { args: JSON.stringify(obj[0]) },
-          }).then((result) => {
-            console.log(`Navigate result ${result}`);
-          }).catch(reason => {
-            console.log(reason)
-          });
+          })
         }),
     );
 
