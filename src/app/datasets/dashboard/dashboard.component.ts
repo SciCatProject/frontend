@@ -91,17 +91,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private store: Store,
     private router: Router,
     private route: ActivatedRoute,
-  ) {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        console.log('NavigationEnd:', event);
-      } else if (event instanceof NavigationError) {
-        console.log('NavigationError:', event);
-      } else if (event instanceof NavigationCancel) {
-        console.log('NavigationCancel:', event);
-      }
-    });
-  }
+  ) {}
 
   onSettingsClick(): void {
     this.sideNav.toggle();
