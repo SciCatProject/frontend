@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import {ActivatedRoute, NavigationCancel, NavigationEnd, NavigationError, Router} from "@angular/router";
 import { Store, ActionsSubject } from "@ngrx/store";
 
 import deepEqual from "deep-equal";
@@ -14,6 +14,7 @@ import {
   addDatasetAction,
   fetchDatasetCompleteAction,
   fetchMetadataKeysAction,
+  setSearchTermsAction,
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -22,6 +23,7 @@ import {
   selectDatasetsInBatch,
   selectCurrentDataset,
   selectSelectedDatasets,
+  selectSearchTerms,
 } from "state-management/selectors/datasets.selectors";
 import { distinctUntilChanged, filter, map, take } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
@@ -76,6 +78,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   currentUser: User = new User();
   userGroups: string[] = [];
   clearColumnSearch = false;
+
+  //full text search
+  searchTerms$ = this.store.select(selectSearchTerms);
+  clearSearchBar = false;
 
   @ViewChild(MatSidenav, { static: false }) sideNav!: MatSidenav;
 
@@ -194,7 +200,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.store.dispatch(fetchFacetCountsAction());
           this.router.navigate(["/datasets"], {
             queryParams: { args: JSON.stringify(obj[0]) },
-          });
+          })
         }),
     );
 
@@ -245,5 +251,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
+  fullTextSearch(terms: string) {
+    console.log('Searching for: ', terms);
+    this.clearSearchBar = false;
+    this.store.dispatch(setSearchTermsAction({ terms }));
   }
 }
