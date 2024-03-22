@@ -23,17 +23,6 @@
     >
     </app-search-bar>
 
-    <app-search-bar
-      #searchBar
-      [prefilledValue]="searchTerms$ | async"
-      data-cy="text-search"
-      [placeholder]="'Text Search'"
-      [clear]="clearSearchBar"
-      (search)="textSearchChanged($event)"
-      (searchBarFocus)="textSearchChanged($event)"
-    >
-    </app-search-bar>
-
     <mat-form-field>
       <mat-label>Location</mat-label>
       <mat-chip-grid #locationChipList>
