@@ -1,4 +1,16 @@
 <breadcrumb></breadcrumb>
+<div class="search-container">
+  <app-search-bar
+    #searchBar
+    [prefilledValue]="searchTerms$ | async"
+    data-cy="text-search"
+    [placeholder]="'Text Search'"
+    [clear]="clearSearchBar"
+    (search)="fullTextSearch($event)"
+    (searchBarFocus)="fullTextSearch($event)"
+  >
+  </app-search-bar>
+</div>
 <mat-sidenav-container [hasBackdrop]="false">
   <mat-sidenav-content>
     <div fxLayout="row" fxLayout.xs="column">
