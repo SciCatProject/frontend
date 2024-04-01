@@ -254,7 +254,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   fullTextSearch(terms: string) {
-    console.log('Searching for: ', terms);
     this.clearSearchBar = false;
     this.store.dispatch(setSearchTermsAction({ terms }));
   }
