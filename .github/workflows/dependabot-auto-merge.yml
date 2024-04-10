@@ -1,19 +1,38 @@
-name: Dependabot auto-merge
+name: Dependabot approve and merge
+
 on: pull_request_target
+
 permissions:
   pull-requests: write
   contents: write
+  packages: read
+
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' }}
     steps:
+      ## Extract information about the dependencies being updated by a Dependabot-generated PR
       - name: Dependabot metadata
         id: dependabot-metadata
-        uses: dependabot/fetch-metadata@v1
+        uses: dependabot/fetch-metadata@v2.0.0
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      ## NOTE: This step is only required if the repository has been configured to Require approval
+      ## Checks if update-type is patch or minor, then approve if the PR status is not approved yet.
+      - name: Auto approve patch and minor updates
+        uses: hmarr/auto-approve-action@v4
+        if: ${{steps.dependabot-metadata.outputs.update-type == 'version-update:semver-patch' || steps.dependabot-metadata.outputs.update-type == 'version-update:semver-minor'}}
+
+      ## NOTE: Requirements for merge has to be configured in the Branch protection rule page.
+      ## To do so, go to repository > Settings > Branches > Edit.
       - name: Enable auto-merge for Dependabot PRs
-        if: steps.dependabot-metadata.outputs.update-type == 'version-update:semver-patch'
+        if: ${{ contains(github.event.pull_request.title, 'bump')}}
         run: gh pr merge --auto --merge "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
