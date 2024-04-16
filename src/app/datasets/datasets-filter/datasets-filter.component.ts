@@ -58,6 +58,8 @@ import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { DateTime } from "luxon";
 import { AppConfigService } from "app-config.service";
 
+import { ApmService } from '@elastic/apm-rum-angular';
+
 interface DateRange {
   begin: string;
   end: string;
@@ -136,6 +138,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private asyncPipe: AsyncPipe,
     public dialog: MatDialog,
     private store: Store,
+    private apmService: ApmService
   ) {}
 
   private buildPidTermsCondition(terms: string) {
@@ -190,8 +193,14 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   pidSearchChanged(pid: string) {
     if ("string" != typeof pid) return;
+    const transaction = this.apmService.apm.startTransaction('PID Search Used', 'user-interaction');
+    // you can add more contextual information if necessary
+    transaction.addLabels({ buttonId: 'pid' });
     this.clearSearchBar = false;
     this.store.dispatch(setPidTermsAction({ pid }));
+    setTimeout(() => {
+      transaction.end()
+    },100)
   }
 
   onLocationInput(event: any) {
