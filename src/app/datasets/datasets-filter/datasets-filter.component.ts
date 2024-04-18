@@ -299,6 +299,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       });
   }
 
+  applyFilters(){
+    console.log("Apply filters clicked")
+  }
+
   removeCondition(condition: ScientificCondition, index: number) {
     this.store.dispatch(removeScientificConditionAction({ index }));
     this.store.dispatch(
