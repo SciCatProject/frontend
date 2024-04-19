@@ -81,6 +81,7 @@ import { AdminTabComponent } from "./admin-tab/admin-tab.component";
 import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
 import { InstrumentEffects } from "state-management/effects/instruments.effects";
 import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.component";
+import {FullTextSearchBarComponent} from "./dashboard/full-text-search/full-text-search-bar.component";
 
 @NgModule({
   imports: [
@@ -136,30 +137,31 @@ import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.co
     StoreModule.forFeature("publishedData", publishedDataReducer),
     StoreModule.forFeature("logbooks", logbooksReducer),
     LogbooksModule,
+    FullTextSearchBarComponent,
   ],
-  declarations: [
-    BatchViewComponent,
-    DashboardComponent,
-    DatablocksComponent,
-    JsonScientificMetadataComponent,
-    DatafilesComponent,
-    DatasetDetailComponent,
-    DatasetTableComponent,
-    DatasetsFilterComponent,
-    PublishComponent,
-    ReduceComponent,
-    DatasetDetailsDashboardComponent,
-    AddDatasetDialogComponent,
-    DatasetTableSettingsComponent,
-    DatasetTableActionsComponent,
-    DatasetLifecycleComponent,
-    SampleEditComponent,
-    PublicDownloadDialogComponent,
-    ShareDialogComponent,
-    DatasetFileUploaderComponent,
-    AdminTabComponent,
-    RelatedDatasetsComponent,
-  ],
+    declarations: [
+        BatchViewComponent,
+        DashboardComponent,
+        DatablocksComponent,
+        JsonScientificMetadataComponent,
+        DatafilesComponent,
+        DatasetDetailComponent,
+        DatasetTableComponent,
+        DatasetsFilterComponent,
+        PublishComponent,
+        ReduceComponent,
+        DatasetDetailsDashboardComponent,
+        AddDatasetDialogComponent,
+        DatasetTableSettingsComponent,
+        DatasetTableActionsComponent,
+        DatasetLifecycleComponent,
+        SampleEditComponent,
+        PublicDownloadDialogComponent,
+        ShareDialogComponent,
+        DatasetFileUploaderComponent,
+        AdminTabComponent,
+        RelatedDatasetsComponent,
+    ],
   providers: [
     ArchivingService,
     AsyncPipe,
