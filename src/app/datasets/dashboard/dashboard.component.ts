@@ -23,7 +23,6 @@ import {
   selectDatasetsInBatch,
   selectCurrentDataset,
   selectSelectedDatasets,
-  selectSearchTerms,
 } from "state-management/selectors/datasets.selectors";
 import { distinctUntilChanged, filter, map, take } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
@@ -80,7 +79,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   clearColumnSearch = false;
 
   //full text search
-  searchTerms$ = this.store.select(selectSearchTerms);
   clearSearchBar = false;
 
   @ViewChild(MatSidenav, { static: false }) sideNav!: MatSidenav;
@@ -253,8 +251,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
-  fullTextSearch(terms: string) {
+  fullTextSearch(terms: { searchTerm: string, transaction: any} ): void {
     this.clearSearchBar = false;
-    this.store.dispatch(setSearchTermsAction({ terms }));
+    this.store.dispatch(setSearchTermsAction({ terms: terms.searchTerm}));
+    setTimeout(() => {
+      terms.transaction.end();
+    }, 500)
+    // this.store.select(selectDatasets).subscribe(
+    //   datasets => {
+    //     console.log("Ending transaction");
+    //
+    //   }
+    // );
   }
 }

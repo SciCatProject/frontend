@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule, Title } from "@angular/platform-browser";
 import { EffectsModule } from "@ngrx/effects";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
-import { APP_INITIALIZER, NgModule } from "@angular/core";
+import {APP_INITIALIZER, ErrorHandler, NgModule} from "@angular/core";
 import { ExtraOptions, RouterModule } from "@angular/router";
 import { SampleApi, SDKBrowserModule } from "shared/sdk/index";
 import { StoreModule } from "@ngrx/store";
@@ -26,6 +26,7 @@ import { LayoutModule } from "_layout/layout.module";
 import { AppConfigService } from "app-config.service";
 import { AppThemeService } from "app-theme.service";
 import { SnackbarInterceptor } from "shared/interceptors/snackbar.interceptor";
+import { ApmModule, ApmService, ApmErrorHandler } from '@elastic/apm-rum-angular'
 
 const appConfigInitializerFn = (appConfig: AppConfigService) => {
   return () => appConfig.loadAppConfig();
@@ -38,6 +39,7 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    ApmModule,
     AppConfigModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -69,6 +71,8 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
   ],
   exports: [MatNativeDateModule],
   providers: [
+    ApmService,
+    ApmErrorHandler,
     AppConfigService,
     {
       provide: APP_INITIALIZER,
@@ -93,6 +97,10 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
         subscriptSizing: "dynamic",
       },
     },
+    {
+      provide: ErrorHandler,
+      useClass: ApmErrorHandler
+    },
     AppThemeService,
     UserApi,
     SampleApi,
@@ -101,4 +109,12 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(service: ApmService) {
+    // Agent API is exposed through this apm instance
+    const apm = service.init({
+      serviceName: 'frontend',
+      serverUrl: 'http://localhost:8200'
+    })
+  }
+}
