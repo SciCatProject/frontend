@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-header class="section-container">
-    <mat-card-title>Search</mat-card-title>
+    <mat-card-title>Filter by...</mat-card-title>
     <button
       [disabled]="(hasAppliedFilters$ | async) === false"
       mat-button
@@ -201,6 +201,12 @@
           >
         </mat-chip-option>
       </mat-chip-listbox>
+    </div>
+
+    <div class="section-container">
+      <button mat-raised-button color="primary" class="applyButton" (click)="applyFilters()">
+        Apply
+      </button>
     </div>
   </mat-card-content>
 </mat-card>
