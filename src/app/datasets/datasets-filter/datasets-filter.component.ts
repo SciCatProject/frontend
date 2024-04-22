@@ -300,7 +300,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       });
   }
 
-  applyFilters(){
+  applyFilters() {
     this.store.dispatch(fetchDatasetsAction());
   }
 
