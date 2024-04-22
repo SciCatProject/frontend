@@ -301,8 +301,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   applyFilters(){
-    //TODO RUM
-    console.log("Apply filters clicked")
     this.store.dispatch(fetchDatasetsAction());
   }
 
