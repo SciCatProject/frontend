@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import {ActivatedRoute, NavigationCancel, NavigationEnd, NavigationError, Router} from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Store, ActionsSubject } from "@ngrx/store";
 
 import deepEqual from "deep-equal";
@@ -200,7 +200,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.store.dispatch(fetchFacetCountsAction());
           this.router.navigate(["/datasets"], {
             queryParams: { args: JSON.stringify(obj[0]) },
-          })
+          });
         }),
     );
 
