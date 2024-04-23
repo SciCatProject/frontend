@@ -9,8 +9,6 @@ describe("Datasets", () => {
     valueSI: 1128,
     unitSI: "m",
   };
-  const metadataQuantityValue = 1128;
-  const metadataValidUnitValue = "meters";
   const metadataInvalidUnitValue = "invalidUnit";
 
   beforeEach(() => {
@@ -268,11 +266,11 @@ describe("Datasets", () => {
 
       cy.get("[data-cy=metadata-value-input]")
         .last()
-        .type(`${metadataQuantityValue}{enter}`);
+        .type(`${metadataValidJson.value}{enter}`);
 
       cy.get("[data-cy=metadata-unit-input]")
         .last()
-        .type(`${metadataValidUnitValue}{enter}`);
+        .type(`${metadataValidJson.unit}{enter}`);
 
       cy.get('[aria-label="warning invalid unit"]').should("not.exist");
 
@@ -291,7 +289,7 @@ describe("Datasets", () => {
 
       cy.get("[data-cy=metadata-value-input]")
         .last()
-        .type(`${metadataQuantityValue}{enter}`);
+        .type(`${metadataValidJson.value}{enter}`);
 
       cy.get("[data-cy=metadata-unit-input]")
         .last()
@@ -304,7 +302,7 @@ describe("Datasets", () => {
       cy.get('[role="tab"]').contains("View").click();
 
       cy.get(".unit-input")
-        .contains(`${metadataValidUnitValue}`)
+        .contains(`${metadataValidJson.unitSI}`)
         .within(() => {
           cy.get(".unit-input--warning").should("not.exist");
         });
@@ -359,11 +357,11 @@ describe("Datasets", () => {
 
       cy.get("[data-cy=metadata-value-input]")
         .last()
-        .type(`${metadataQuantityValue}{enter}`);
+        .type(`${metadataValidJson.value}{enter}`);
 
       cy.get("[data-cy=metadata-unit-input]")
         .last()
-        .type(`${metadataValidUnitValue}{enter}`);
+        .type(`${metadataValidJson.unit}{enter}`);
 
       cy.get("button[data-cy=save-changes-button]").click();
 
