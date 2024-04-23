@@ -3,7 +3,11 @@
     <div fxFlex="100%">
       <mat-card *ngIf="true && editingAllowed && appConfig.jsonMetadataEnabled">
         <mat-card-content>
-          <ngx-json-viewer [json]="datasetWithout$ | async" [expanded]="false">
+          <ngx-json-viewer
+            data-cy="metadata-json-view"
+            [json]="datasetWithout$ | async"
+            [expanded]="false"
+          >
           </ngx-json-viewer>
         </mat-card-content>
       </mat-card>
