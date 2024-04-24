@@ -63,6 +63,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     rememberMe: true,
   });
 
+  siteLoginLogo = this.appConfig.siteLoginLogo ?? "site-login-logo.png";
+  siteLoginBackground =
+    this.appConfig.siteLoginBackground ?? "site-login-background.png";
+
   constructor(
     private appConfigService: AppConfigService,
     public dialog: MatDialog,

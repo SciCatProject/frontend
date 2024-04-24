@@ -1,6 +1,6 @@
 <div
   class="main-login"
-  style="background-image: url(&quot;../../../assets/images/site.png&quot;)"
+  style="background-image: url('../../../assets/images/{{ siteLoginBackground }}')"
   *ngIf="vm$ | async as vm"
 >
   <div class="login-container" fxLayoutAlign="center center">
@@ -9,7 +9,7 @@
         <div fxLayout="row" class="facility-logo">
           <div fxFlex="auto"></div>
           <div fxFlex="200px">
-            <img src="assets/images/site-logo.png" />
+            <img src="assets/images/{{ siteLoginLogo }}" />
           </div>
           <div fxFlex="auto"></div>
         </div>

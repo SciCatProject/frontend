@@ -24,7 +24,7 @@ export class AppHeaderComponent implements OnInit {
   config = this.appConfigService.getConfig();
   facility = this.config.facility ?? "";
   status = this.appConfig.production ? "" : "test";
-  siteIcon = this.config.siteIcon ?? "site-logo.png";
+  siteHeaderLogo = this.config.siteHeaderLogo ?? "site-header-logo.png";
 
   oAuth2Endpoints: OAuth2Endpoint[] = [];
   username$ = this.store.select(selectCurrentUserName);

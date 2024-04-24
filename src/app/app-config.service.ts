@@ -78,7 +78,9 @@ export interface AppConfig {
   shareEnabled: boolean;
   shoppingCartEnabled: boolean;
   shoppingCartOnHeader: boolean;
-  siteIcon: string | null;
+  siteHeaderLogo: string | null;
+  siteLoginBackground: string | null;
+  siteLoginLogo: string | null;
   tableSciDataEnabled: boolean;
   fileserverBaseURL: string;
   fileserverButtonLabel: string | undefined;
