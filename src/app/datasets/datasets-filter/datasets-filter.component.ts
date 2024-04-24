@@ -189,12 +189,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.store.dispatch(setSearchTermsAction({ terms }));
   }
 
-  pidSearchChanged(pid: string) {
-    if ("string" != typeof pid) return;
-    this.clearSearchBar = false;
-    this.store.dispatch(setPidTermsAction({ pid }));
-  }
-
   onLocationInput(event: any) {
     const value = (<HTMLInputElement>event.target).value;
     this.locationInput$.next(value);

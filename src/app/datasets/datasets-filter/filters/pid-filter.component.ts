@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs/operators';
 import { FacetCount } from 'state-management/state/datasets.store';
-import {setPidTermsAction} from "../../../state-management/actions/datasets.actions";
+import { setPidTermsAction } from "../../../state-management/actions/datasets.actions";
 // import { addPidFilterAction, removePidFilterAction } from 'state-management/actions/datasets.actions';
 
 @Component({
@@ -11,12 +11,19 @@ import {setPidTermsAction} from "../../../state-management/actions/datasets.acti
   template: `
     <mat-form-field>
       <mat-label>PID filter</mat-label>
-      <input matInput [(ngModel)]="pidInput" (input)="onPidInput($event)" placeholder="Enter PID terms...">
+      <input
+        #pidBar
+        matInput
+        [(ngModel)]="pidInput"
+        (input)="onPidInput($event)"
+        placeholder="Enter PID terms...">
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
   `,
   styles: [`
-    input { width: 100% }
+    .mat-mdc-form-field {
+      width: 100%;
+    }
   `]
 })
 export class PidFilterComponent implements OnInit {
