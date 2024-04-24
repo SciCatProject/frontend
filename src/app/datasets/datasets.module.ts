@@ -82,6 +82,7 @@ import { instrumentsReducer } from "state-management/reducers/instruments.reduce
 import { InstrumentEffects } from "state-management/effects/instruments.effects";
 import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.component";
 import { FullTextSearchBarComponent } from "./dashboard/full-text-search/full-text-search-bar.component";
+import {PidFilterComponent} from "./datasets-filter/filters/pid-filter.component";
 
 @NgModule({
   imports: [
@@ -161,6 +162,7 @@ import { FullTextSearchBarComponent } from "./dashboard/full-text-search/full-te
     DatasetFileUploaderComponent,
     AdminTabComponent,
     RelatedDatasetsComponent,
+    PidFilterComponent,
   ],
   providers: [
     ArchivingService,

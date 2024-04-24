@@ -13,7 +13,7 @@
   </mat-card-header>
 
   <mat-card-content>
-    <app-search-bar
+    <!--<app-search-bar
       #pidBar
       [prefilledValue]="pidTerms$ | async"
       [placeholder]="'PID'"
@@ -21,7 +21,10 @@
       (search)="pidSearchChanged($event)"
       (searchBarFocus)="pidSearchChanged($event)"
     >
-    </app-search-bar>
+    </app-search-bar>-->
+    <app-pid-filter
+      #pidBar>
+    </app-pid-filter>
 
     <mat-form-field>
       <mat-label>Location</mat-label>
