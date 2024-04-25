@@ -1,10 +1,18 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { map } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
 import { FacetCount } from 'state-management/state/datasets.store';
-import { setPidTermsAction } from "../../../state-management/actions/datasets.actions";
+import {setPidTermsAction, setPidTermsFilterAction} from "../../../state-management/actions/datasets.actions";
+import {debounceTime, distinctUntilChanged, skipWhile} from "rxjs/operators";
+import {AppConfigService} from "../../../app-config.service";
 // import { addPidFilterAction, removePidFilterAction } from 'state-management/actions/datasets.actions';
+
+enum PidTermsSearchCondition {
+  startsWith = "startsWith",
+  contains = "contains",
+  equals = "equals",
+}
 
 @Component({
   selector: 'app-pid-filter',
@@ -14,7 +22,6 @@ import { setPidTermsAction } from "../../../state-management/actions/datasets.ac
       <input
         #pidBar
         matInput
-        [(ngModel)]="pidInput"
         (input)="onPidInput($event)"
         placeholder="Enter PID terms...">
       <mat-icon matSuffix>search</mat-icon>
@@ -29,18 +36,58 @@ import { setPidTermsAction } from "../../../state-management/actions/datasets.ac
 export class PidFilterComponent implements OnInit {
   @ViewChild("pidBar", { static: true }) pidBar!: ElementRef;
 
-  @Input() facetCounts$: Observable<FacetCount[]>;
-  @Output() pidSelected = new EventEmitter<string>();
+  private pidSubject = new Subject<string>();
+  private subscription: Subscription;
 
-  pidInput: string = "";
+  appConfig = this.appConfigService.getConfig();
 
-  constructor(private store: Store) {}
+
+  constructor(public appConfigService: AppConfigService, private store: Store) {
+    this.subscription = this.pidSubject.pipe(
+      skipWhile((terms) => terms.length < 5),
+      debounceTime(500),
+      distinctUntilChanged(),
+    ).subscribe(pid => {
+      const condition = this.buildPidTermsCondition(pid);
+      this.store.dispatch(setPidTermsFilterAction({pid: condition}));
+    })
+  }
+
+  @Input()
+  set clear(value: boolean){
+    if(value){
+      this.pidBar.nativeElement.value = "";
+    }
+  }
+
+
+  private buildPidTermsCondition(terms: string) {
+    if (!terms) return "";
+    switch (this.appConfig.pidSearchMethod) {
+      case PidTermsSearchCondition.startsWith: {
+        return { $regex: `^${terms}` };
+      }
+      case PidTermsSearchCondition.contains: {
+        return { $regex: terms };
+      }
+      default: {
+        return terms;
+      }
+    }
+  }
 
   ngOnInit() {
   }
 
+  ngOnDestroy() {
+    // Unsubscribe to avoid memory leaks
+    this.subscription.unsubscribe();
+    this.pidSubject.complete();
+  }
+
+
   onPidInput(event: any) {
-    const pid = this.pidInput = (event.target as HTMLInputElement).value;
-    this.store.dispatch(setPidTermsAction({ pid }));
+    const pid = (event.target as HTMLInputElement).value;
+    this.pidSubject.next(pid);
   }
 }

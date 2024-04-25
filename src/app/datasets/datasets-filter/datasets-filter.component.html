@@ -14,7 +14,9 @@
 
   <mat-card-content>
     <app-pid-filter
-      #pidBar>
+      #pidBar
+      [clear]="clearSearchBar"
+    >
     </app-pid-filter>
 
     <mat-form-field>
