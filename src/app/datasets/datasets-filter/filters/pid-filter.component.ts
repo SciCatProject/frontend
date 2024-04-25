@@ -24,7 +24,6 @@ enum PidTermsSearchCondition {
         matInput
         (input)="onPidInput($event)"
         placeholder="Enter PID terms...">
-      <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
   `,
   styles: [`
