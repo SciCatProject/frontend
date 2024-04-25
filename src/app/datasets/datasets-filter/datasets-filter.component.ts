@@ -1,14 +1,13 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { Store } from "@ngrx/store";
 import {
-  debounceTime,
-  distinctUntilChanged,
-  skipWhile,
-  map,
-} from "rxjs/operators";
+  Component,
+  OnDestroy,
+  OnInit,
+} from "@angular/core";
+import {MatDialog} from "@angular/material/dialog";
+import {Store} from "@ngrx/store";
+import {debounceTime, distinctUntilChanged, map, skipWhile,} from "rxjs/operators";
 
-import { FacetCount } from "state-management/state/datasets.store";
+import {FacetCount} from "state-management/state/datasets.store";
 import {
   selectCreationTimeFilter,
   selectGroupFacetCounts,
@@ -16,52 +15,59 @@ import {
   selectHasAppliedFilters,
   selectKeywordFacetCounts,
   selectKeywordsFilter,
+  selectKeywordsTerms,
   selectLocationFacetCounts,
   selectLocationFilter,
+  selectMetadataKeys,
   selectScientificConditions,
   selectSearchTerms,
   selectTypeFacetCounts,
   selectTypeFilter,
-  selectKeywordsTerms,
-  selectMetadataKeys,
 } from "state-management/selectors/datasets.selectors";
 
 import {
-  setTextFilterAction,
-  addKeywordFilterAction,
-  setSearchTermsAction,
-  addLocationFilterAction,
-  removeLocationFilterAction,
   addGroupFilterAction,
+  addKeywordFilterAction,
+  addLocationFilterAction,
+  addScientificConditionAction,
+  addTypeFilterAction,
+  clearFacetsAction,
+  fetchDatasetsAction,
   removeGroupFilterAction,
   removeKeywordFilterAction,
-  addTypeFilterAction,
+  removeLocationFilterAction,
+  removeScientificConditionAction,
   removeTypeFilterAction,
   setDateRangeFilterAction,
-  clearFacetsAction,
-  addScientificConditionAction,
-  removeScientificConditionAction,
   setPidTermsAction,
-  fetchDatasetsAction,
+  setSearchTermsAction,
+  setTextFilterAction,
 } from "state-management/actions/datasets.actions";
-import { combineLatest, BehaviorSubject, Observable, Subscription } from "rxjs";
+import {BehaviorSubject, combineLatest, from, Observable, Subscription} from "rxjs";
 import {
-  selectColumnAction,
-  deselectColumnAction,
   deselectAllCustomColumnsAction,
+  deselectColumnAction,
+  selectColumnAction,
 } from "state-management/actions/user.actions";
-import { ScientificCondition } from "state-management/models";
-import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
-import { AsyncPipe } from "@angular/common";
-import { MatDatepickerInputEvent } from "@angular/material/datepicker";
-import { DateTime } from "luxon";
-import { AppConfigService } from "app-config.service";
+import {ScientificCondition} from "state-management/models";
+import {
+  SearchParametersDialogComponent
+} from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
+import {AsyncPipe} from "@angular/common";
+import {MatDatepickerInputEvent} from "@angular/material/datepicker";
+import {DateTime} from "luxon";
+import {AppConfigService} from "app-config.service";
+import {PidFilterComponent} from "./filters/pid-filter.component";
 
 interface DateRange {
   begin: string;
   end: string;
 }
 
+class AvailableFilter {
+  constructor(public name: string, public component: any) {
+  }
+}
 
 @Component({
   selector: "datasets-filter",
@@ -120,6 +126,16 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   hasAppliedFilters$ = this.store.select(selectHasAppliedFilters);
 
+  isInEditMode : boolean = false;
+  availableFilters: { [key: string]: AvailableFilter } = {
+    PIDFilter: new AvailableFilter("pid", PidFilterComponent),
+    LocationFilter: new AvailableFilter("location", undefined),
+    // Add more filters as necessary
+  };
+
+  selectedFilters: AvailableFilter[] = [];
+
+
   dateRange: DateRange = {
     begin: "",
     end: "",
@@ -132,6 +148,14 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private store: Store,
   ) {}
 
+  toggleEditMode(){
+    this.isInEditMode = !this.isInEditMode;
+  }
+
+  addFilter(filter: AvailableFilter){
+    this.selectedFilters.push(filter);
+
+  }
 
   createSuggestionObserver(
     facetCounts$: Observable<FacetCount[]>,
@@ -274,6 +298,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   applyFilters() {
+    this.isInEditMode = false;
     this.store.dispatch(fetchDatasetsAction());
   }
 

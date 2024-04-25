@@ -10,14 +10,39 @@
     >
       <mat-icon>clear_all</mat-icon> Clear
     </button>
+    <button
+      mat-button
+      class="settings-button"
+      (click)="toggleEditMode()"
+    >
+      <mat-icon>settings</mat-icon>
+    </button>
   </mat-card-header>
 
   <mat-card-content>
-    <app-pid-filter
+    <div #filtersContainer>
+    <ng-container *ngFor="let filter of selectedFilters; let i = index">
+      <div style="display: flex; align-items: center;">
+      <ng-container *ngComponentOutlet="filter.component"></ng-container>
+      <button
+        *ngIf="isInEditMode"
+        mat-button
+
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+      </div>
+    </ng-container>
+    </div>
+
+   <!-- <app-pid-filter
       #pidBar
       [clear]="clearSearchBar"
+      style="flex-grow: 1;"
     >
-    </app-pid-filter>
+    </app-pid-filter>-->
+
+
 
     <mat-form-field>
       <mat-label>Location</mat-label>
@@ -159,7 +184,7 @@
       <mat-date-range-picker #picker></mat-date-range-picker>
     </mat-form-field>
 
-    <div class="section-container" *ngIf="appConfig.scienceSearchEnabled">
+    <div class="section-container" *ngIf="appConfig.scienceSearchEnabled && isInEditMode">
       <button mat-button color="primary" (click)="showAddConditionDialog()">
         <mat-icon>add</mat-icon> Add Condition
       </button>
@@ -197,6 +222,18 @@
           >
         </mat-chip-option>
       </mat-chip-listbox>
+    </div>
+
+    <div  class="section-container" *ngIf="isInEditMode">
+    <button mat-button color="primary" [matMenuTriggerFor]="addFilterMenu">
+      <mat-icon>add</mat-icon>
+      Add Filter
+    </button>
+    <mat-menu #addFilterMenu="matMenu">
+      <button mat-menu-item (click)="addFilter(availableFilters.PIDFilter)">PID Filter</button>
+      <button mat-menu-item (click)="addFilter(availableFilters.LocationFilter)">Location Filter</button>
+      <!-- Add more filter types here -->
+    </mat-menu>
     </div>
 
     <div class="section-container">

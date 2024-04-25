@@ -20,6 +20,10 @@ mat-card {
       margin-left: auto;
     }
 
+    .settings-button{
+      max-width: 32px;
+    }
+
     .scientific-chips {
       ::ng-deep .mat-mdc-chip-list-wrapper {
         margin: 0;
