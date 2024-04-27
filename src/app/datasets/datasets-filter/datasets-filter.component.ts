@@ -133,7 +133,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     // Add more filters as necessary
   };
 
-  selectedFilters: AvailableFilter[] = [];
+  //TODO extract to state
+  selectedFilters = {
+    [PidFilterComponent.kName]: false,
+    location: false,
+    keyword: false,
+    group: false,
+    type: false,
+    dateRange: false,
+  };
 
 
   dateRange: DateRange = {
@@ -152,9 +160,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.isInEditMode = !this.isInEditMode;
   }
 
-  addFilter(filter: AvailableFilter){
-    this.selectedFilters.push(filter);
+  addFilter(filter: string){
+    this.selectedFilters[filter] = true;
+  }
 
+  removeFilter(filter: string){
+    this.selectedFilters[filter] = false;
   }
 
   createSuggestionObserver(
@@ -338,4 +349,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
+
+  protected readonly PidFilterComponent = PidFilterComponent;
 }

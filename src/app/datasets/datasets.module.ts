@@ -82,7 +82,8 @@ import { instrumentsReducer } from "state-management/reducers/instruments.reduce
 import { InstrumentEffects } from "state-management/effects/instruments.effects";
 import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.component";
 import { FullTextSearchBarComponent } from "./dashboard/full-text-search/full-text-search-bar.component";
-import {PidFilterComponent} from "./datasets-filter/filters/pid-filter.component";
+import { PidFilterComponent } from "./datasets-filter/filters/pid-filter.component";
+import { MatMenuModule } from "@angular/material/menu";
 
 @NgModule({
   imports: [
@@ -139,6 +140,7 @@ import {PidFilterComponent} from "./datasets-filter/filters/pid-filter.component
     StoreModule.forFeature("logbooks", logbooksReducer),
     LogbooksModule,
     FullTextSearchBarComponent,
+    MatMenuModule,
   ],
   declarations: [
     BatchViewComponent,

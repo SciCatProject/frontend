@@ -20,20 +20,20 @@
   </mat-card-header>
 
   <mat-card-content>
-    <div #filtersContainer>
-    <ng-container *ngFor="let filter of selectedFilters; let i = index">
-      <div style="display: flex; align-items: center;">
-      <ng-container *ngComponentOutlet="filter.component"></ng-container>
+      <div style="display: flex; align-items: center;" *ngIf="selectedFilters[PidFilterComponent.kName]">
+      <app-pid-filter
+        [clear]="clearSearchBar"
+        style="flex-grow: 1;"
+      >
+      </app-pid-filter>
       <button
         *ngIf="isInEditMode"
         mat-button
-
+        (click)="removeFilter(PidFilterComponent.kName)"
       >
         <mat-icon>delete</mat-icon>
       </button>
       </div>
-    </ng-container>
-    </div>
 
    <!-- <app-pid-filter
       #pidBar
@@ -230,8 +230,8 @@
       Add Filter
     </button>
     <mat-menu #addFilterMenu="matMenu">
-      <button mat-menu-item (click)="addFilter(availableFilters.PIDFilter)">PID Filter</button>
-      <button mat-menu-item (click)="addFilter(availableFilters.LocationFilter)">Location Filter</button>
+      <button mat-menu-item (click)="addFilter(PidFilterComponent.kName)">PID Filter</button>
+      <button mat-menu-item (click)="addFilter('location')">Location Filter</button>
       <!-- Add more filter types here -->
     </mat-menu>
     </div>

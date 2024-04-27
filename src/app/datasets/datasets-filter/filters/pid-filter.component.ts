@@ -1,11 +1,9 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Component, ElementRef, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subject, Subscription } from 'rxjs';
-import { FacetCount } from 'state-management/state/datasets.store';
-import {setPidTermsAction, setPidTermsFilterAction} from "../../../state-management/actions/datasets.actions";
-import {debounceTime, distinctUntilChanged, skipWhile} from "rxjs/operators";
-import {AppConfigService} from "../../../app-config.service";
+import { setPidTermsFilterAction } from "../../../state-management/actions/datasets.actions";
+import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
+import { AppConfigService } from "../../../app-config.service";
 // import { addPidFilterAction, removePidFilterAction } from 'state-management/actions/datasets.actions';
 
 enum PidTermsSearchCondition {
@@ -33,6 +31,8 @@ enum PidTermsSearchCondition {
   `]
 })
 export class PidFilterComponent implements OnInit {
+  static kName = "pid";
+
   @ViewChild("pidBar", { static: true }) pidBar!: ElementRef;
 
   private pidSubject = new Subject<string>();
