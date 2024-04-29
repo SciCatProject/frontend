@@ -50,154 +50,102 @@
       </button>
     </div>
 
-   <!-- <app-pid-filter
-      #pidBar
-      [clear]="clearSearchBar"
-      style="flex-grow: 1;"
-    >
-    </app-pid-filter>
+    <div style="display: flex; align-items: center;" *ngIf="selectedFilters[GroupFilterComponent.kName]">
+      <app-group-filter
+        [clear]="clearSearchBar"
+        style="flex-grow: 1;"
+      >
+      </app-group-filter>
+      <button
+        *ngIf="isInEditMode"
+        mat-button
+        (click)="removeFilter(GroupFilterComponent.kName)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
+      <!--
 
 
+         <mat-form-field>
+           <mat-label>Type</mat-label>
+           <mat-chip-grid #typeChipList>
+             <mat-chip-row
+               *ngFor="let type of typeFilter$ | async"
+               [removable]="true"
+               (removed)="typeRemoved(type)"
+               >{{ type }}<mat-icon matChipRemove>cancel</mat-icon>
+             </mat-chip-row>
+           </mat-chip-grid>
+           <input
+             (input)="onKeywordInput($event)"
+             [value]="typeInput$ | async"
+             matInput
+             class="type-input"
+             [matChipInputFor]="typeChipList"
+             [matAutocomplete]="type"
+           />
 
-    <mat-form-field>
-      <mat-label>Location</mat-label>
-      <mat-chip-grid #locationChipList>
-        <mat-chip-row
-          *ngFor="let location of locationFilter$ | async"
-          [removable]="true"
-          (removed)="locationRemoved(location)"
-          >{{ location || "No Location" }}
-          <mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip-row>
-      </mat-chip-grid>
-      <input
-        (input)="onLocationInput($event)"
-        [value]="locationInput$ | async"
-        matInput
-        class="location-input"
-        [matChipInputFor]="locationChipList"
-        [matAutocomplete]="loc"
-      />
+           <mat-autocomplete #type="matAutocomplete">
+             <mat-option
+               (onSelectionChange)="typeSelected(getFacetId(fc))"
+               *ngFor="let fc of typeSuggestions$ | async"
+             >
+               <span>{{ getFacetId(fc, "No Type") }}</span> |
+               <small>{{ getFacetCount(fc) }}</small>
+             </mat-option>
+           </mat-autocomplete>
+         </mat-form-field>
 
-      <mat-autocomplete #loc="matAutocomplete">
-        <mat-option
-          (onSelectionChange)="locationSelected(getFacetId(fc))"
-          *ngFor="let fc of locationSuggestions$ | async"
-        >
-          <span>{{ getFacetId(fc, "No Location") }} | </span>
-          <small>{{ getFacetCount(fc) }}</small>
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
+         <mat-form-field>
+           <mat-label>Keywords</mat-label>
+           <mat-chip-grid #keywordChipList>
+             <mat-chip-row
+               *ngFor="let keyword of keywordsFilter$ | async"
+               [removable]="true"
+               (removed)="keywordRemoved(keyword)"
+               >{{ keyword }}<mat-icon matChipRemove>cancel</mat-icon>
+             </mat-chip-row>
+           </mat-chip-grid>
+           <input
+             (input)="onKeywordInput($event)"
+             [value]="keywordsInput$ | async"
+             matInput
+             class="keyword-input"
+             [matChipInputFor]="keywordChipList"
+             [matAutocomplete]="kw"
+           />
+           <mat-autocomplete #kw="matAutocomplete">
+             <mat-option
+               (onSelectionChange)="keywordSelected(getFacetId(fc))"
+               *ngFor="let fc of keywordsSuggestions$ | async"
+             >
+               <span>{{ getFacetId(fc, "No Keywords") }}</span>
+               <small>: {{ getFacetCount(fc) }}</small>
+             </mat-option>
+           </mat-autocomplete>
+         </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Group</mat-label>
-      <mat-chip-grid #groupChipList>
-        <mat-chip-row
-          *ngFor="let group of groupFilter$ | async"
-          [removable]="true"
-          (removed)="groupRemoved(group)"
-          >{{ group }}<mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip-row>
-      </mat-chip-grid>
-      <input
-        (input)="onGroupInput($event)"
-        [value]="groupInput$ | async"
-        matInput
-        class="group-input"
-        [matChipInputFor]="groupChipList"
-        [matAutocomplete]="grp"
-      />
-
-      <mat-autocomplete #grp="matAutocomplete">
-        <mat-option
-          (onSelectionChange)="groupSelected(getFacetId(fc))"
-          *ngFor="let fc of groupSuggestions$ | async"
-        >
-          <span>{{ getFacetId(fc, "No Group") }}</span> |
-          <small>{{ getFacetCount(fc) }}</small>
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Type</mat-label>
-      <mat-chip-grid #typeChipList>
-        <mat-chip-row
-          *ngFor="let type of typeFilter$ | async"
-          [removable]="true"
-          (removed)="typeRemoved(type)"
-          >{{ type }}<mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip-row>
-      </mat-chip-grid>
-      <input
-        (input)="onKeywordInput($event)"
-        [value]="typeInput$ | async"
-        matInput
-        class="type-input"
-        [matChipInputFor]="typeChipList"
-        [matAutocomplete]="type"
-      />
-
-      <mat-autocomplete #type="matAutocomplete">
-        <mat-option
-          (onSelectionChange)="typeSelected(getFacetId(fc))"
-          *ngFor="let fc of typeSuggestions$ | async"
-        >
-          <span>{{ getFacetId(fc, "No Type") }}</span> |
-          <small>{{ getFacetCount(fc) }}</small>
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Keywords</mat-label>
-      <mat-chip-grid #keywordChipList>
-        <mat-chip-row
-          *ngFor="let keyword of keywordsFilter$ | async"
-          [removable]="true"
-          (removed)="keywordRemoved(keyword)"
-          >{{ keyword }}<mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip-row>
-      </mat-chip-grid>
-      <input
-        (input)="onKeywordInput($event)"
-        [value]="keywordsInput$ | async"
-        matInput
-        class="keyword-input"
-        [matChipInputFor]="keywordChipList"
-        [matAutocomplete]="kw"
-      />
-      <mat-autocomplete #kw="matAutocomplete">
-        <mat-option
-          (onSelectionChange)="keywordSelected(getFacetId(fc))"
-          *ngFor="let fc of keywordsSuggestions$ | async"
-        >
-          <span>{{ getFacetId(fc, "No Keywords") }}</span>
-          <small>: {{ getFacetCount(fc) }}</small>
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Start Date - End Date</mat-label>
-      <mat-date-range-input class="date-input" [rangePicker]="picker">
-        <input
-          matStartDate
-          name="begin"
-          [value]="(creationTimeFilter$ | async)?.begin"
-          (dateChange)="dateChanged($event)"
-        />
-        <input
-          matEndDate
-          name="end"
-          [value]="(creationTimeFilter$ | async)?.end"
-          (dateChange)="dateChanged($event)"
-        />
-      </mat-date-range-input>
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-date-range-picker #picker></mat-date-range-picker>
-    </mat-form-field>-->
+         <mat-form-field>
+           <mat-label>Start Date - End Date</mat-label>
+           <mat-date-range-input class="date-input" [rangePicker]="picker">
+             <input
+               matStartDate
+               name="begin"
+               [value]="(creationTimeFilter$ | async)?.begin"
+               (dateChange)="dateChanged($event)"
+             />
+             <input
+               matEndDate
+               name="end"
+               [value]="(creationTimeFilter$ | async)?.end"
+               (dateChange)="dateChanged($event)"
+             />
+           </mat-date-range-input>
+           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+           <mat-date-range-picker #picker></mat-date-range-picker>
+         </mat-form-field>-->
 
     <div class="section-container" *ngIf="appConfig.scienceSearchEnabled && isInEditMode">
       <button mat-button color="primary" (click)="showAddConditionDialog()">
@@ -247,6 +195,7 @@
     <mat-menu #addFilterMenu="matMenu">
       <button mat-menu-item (click)="addFilter(PidFilterComponent.kName)">PID Filter</button>
       <button mat-menu-item (click)="addFilter(LocationFilterComponent.kName)">Location Filter</button>
+      <button mat-menu-item (click)="addFilter(GroupFilterComponent.kName)">Group Filter</button>
       <!-- Add more filter types here -->
     </mat-menu>
     </div>

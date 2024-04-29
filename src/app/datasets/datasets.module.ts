@@ -86,6 +86,7 @@ import { PidFilterComponent } from "./datasets-filter/filters/pid-filter.compone
 import { MatMenuModule } from "@angular/material/menu";
 import { LocationFilterComponent } from "./datasets-filter/filters/location-filter.component";
 import { ClearableInputComponent } from "./datasets-filter/filters/clearable-input.component";
+import {GroupFilterComponent} from "./datasets-filter/filters/group-filter.component";
 
 @NgModule({
   imports: [
@@ -169,6 +170,7 @@ import { ClearableInputComponent } from "./datasets-filter/filters/clearable-inp
     ClearableInputComponent,
     PidFilterComponent,
     LocationFilterComponent,
+    GroupFilterComponent,
   ],
   providers: [
     ArchivingService,

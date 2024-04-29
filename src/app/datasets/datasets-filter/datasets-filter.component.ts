@@ -5,8 +5,6 @@ import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
 
 import {
   selectCreationTimeFilter,
-  selectGroupFacetCounts,
-  selectGroupFilter,
   selectHasAppliedFilters,
   selectKeywordFacetCounts,
   selectKeywordsFilter,
@@ -19,18 +17,15 @@ import {
 } from "state-management/selectors/datasets.selectors";
 
 import {
-  addGroupFilterAction,
   addKeywordFilterAction,
   addScientificConditionAction,
   addTypeFilterAction,
   clearFacetsAction,
   fetchDatasetsAction,
-  removeGroupFilterAction,
   removeKeywordFilterAction,
   removeScientificConditionAction,
-  removeTypeFilterAction, resetClearSearchBar,
+  removeTypeFilterAction,
   setDateRangeFilterAction,
-  setPidTermsAction,
   setSearchTermsAction,
   setTextFilterAction,
 } from "state-management/actions/datasets.actions";
@@ -49,17 +44,11 @@ import { AppConfigService } from "app-config.service";
 import { PidFilterComponent } from "./filters/pid-filter.component";
 import { LocationFilterComponent } from "./filters/location-filter.component";
 import { createSuggestionObserver } from "./utils";
+import {GroupFilterComponent} from "./filters/group-filter.component";
 
 interface DateRange {
   begin: string;
   end: string;
-}
-
-class AvailableFilter {
-  constructor(
-    public name: string,
-    public component: any,
-  ) {}
 }
 
 @Component({
@@ -72,32 +61,26 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   protected readonly LocationFilterComponent = LocationFilterComponent;
   protected readonly PidFilterComponent = PidFilterComponent;
+  protected readonly GroupFilterComponent = GroupFilterComponent;
 
-  groupFacetCounts$ = this.store.select(selectGroupFacetCounts);
   typeFacetCounts$ = this.store.select(selectTypeFacetCounts);
   keywordFacetCounts$ = this.store.select(selectKeywordFacetCounts);
 
   searchTerms$ = this.store.select(selectSearchTerms);
   keywordsTerms$ = this.store.select(selectKeywordsTerms);
-  groupFilter$ = this.store.select(selectGroupFilter);
+
   typeFilter$ = this.store.select(selectTypeFilter);
   keywordsFilter$ = this.store.select(selectKeywordsFilter);
   creationTimeFilter$ = this.store.select(selectCreationTimeFilter);
   scientificConditions$ = this.store.select(selectScientificConditions);
   metadataKeys$ = this.store.select(selectMetadataKeys);
 
-  groupInput$ = new BehaviorSubject<string>("");
   typeInput$ = new BehaviorSubject<string>("");
   keywordsInput$ = new BehaviorSubject<string>("");
 
   appConfig = this.appConfigService.getConfig();
 
   clearSearchBar = false;
-  groupSuggestions$ = createSuggestionObserver(
-    this.groupFacetCounts$,
-    this.groupInput$,
-    this.groupFilter$,
-  );
 
   typeSuggestions$ = createSuggestionObserver(
     this.typeFacetCounts$,
@@ -155,11 +138,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.store.dispatch(setSearchTermsAction({ terms }));
   }
 
-  onGroupInput(event: any) {
-    const value = (<HTMLInputElement>event.target).value;
-    this.groupInput$.next(value);
-  }
-
   onKeywordInput(event: any) {
     const value = (<HTMLInputElement>event.target).value;
     this.keywordsInput$.next(value);
@@ -168,15 +146,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   onTypeInput(event: any) {
     const value = (<HTMLInputElement>event.target).value;
     this.typeInput$.next(value);
-  }
-
-  groupSelected(group: string) {
-    this.store.dispatch(addGroupFilterAction({ group }));
-    this.groupInput$.next("");
-  }
-
-  groupRemoved(group: string) {
-    this.store.dispatch(removeGroupFilterAction({ group }));
   }
 
   keywordSelected(keyword: string) {
