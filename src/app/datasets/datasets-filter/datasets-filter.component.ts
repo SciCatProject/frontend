@@ -12,19 +12,15 @@ import {
   selectMetadataKeys,
   selectScientificConditions,
   selectSearchTerms,
-  selectTypeFacetCounts,
-  selectTypeFilter,
 } from "state-management/selectors/datasets.selectors";
 
 import {
   addKeywordFilterAction,
   addScientificConditionAction,
-  addTypeFilterAction,
   clearFacetsAction,
   fetchDatasetsAction,
   removeKeywordFilterAction,
   removeScientificConditionAction,
-  removeTypeFilterAction,
   setDateRangeFilterAction,
   setSearchTermsAction,
   setTextFilterAction,
@@ -44,7 +40,8 @@ import { AppConfigService } from "app-config.service";
 import { PidFilterComponent } from "./filters/pid-filter.component";
 import { LocationFilterComponent } from "./filters/location-filter.component";
 import { createSuggestionObserver } from "./utils";
-import {GroupFilterComponent} from "./filters/group-filter.component";
+import { GroupFilterComponent } from "./filters/group-filter.component";
+import { TypeFilterComponent } from "./filters/type-filter.component";
 
 interface DateRange {
   begin: string;
@@ -62,31 +59,23 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   protected readonly LocationFilterComponent = LocationFilterComponent;
   protected readonly PidFilterComponent = PidFilterComponent;
   protected readonly GroupFilterComponent = GroupFilterComponent;
+  protected readonly TypeFilterComponent = TypeFilterComponent;
 
-  typeFacetCounts$ = this.store.select(selectTypeFacetCounts);
   keywordFacetCounts$ = this.store.select(selectKeywordFacetCounts);
 
   searchTerms$ = this.store.select(selectSearchTerms);
   keywordsTerms$ = this.store.select(selectKeywordsTerms);
 
-  typeFilter$ = this.store.select(selectTypeFilter);
   keywordsFilter$ = this.store.select(selectKeywordsFilter);
   creationTimeFilter$ = this.store.select(selectCreationTimeFilter);
   scientificConditions$ = this.store.select(selectScientificConditions);
   metadataKeys$ = this.store.select(selectMetadataKeys);
 
-  typeInput$ = new BehaviorSubject<string>("");
   keywordsInput$ = new BehaviorSubject<string>("");
 
   appConfig = this.appConfigService.getConfig();
 
   clearSearchBar = false;
-
-  typeSuggestions$ = createSuggestionObserver(
-    this.typeFacetCounts$,
-    this.typeInput$,
-    this.typeFilter$,
-  );
 
   keywordsSuggestions$ = createSuggestionObserver(
     this.keywordFacetCounts$,
@@ -143,11 +132,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.keywordsInput$.next(value);
   }
 
-  onTypeInput(event: any) {
-    const value = (<HTMLInputElement>event.target).value;
-    this.typeInput$.next(value);
-  }
-
   keywordSelected(keyword: string) {
     this.store.dispatch(addKeywordFilterAction({ keyword }));
     this.keywordsInput$.next("");
@@ -155,15 +139,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   keywordRemoved(keyword: string) {
     this.store.dispatch(removeKeywordFilterAction({ keyword }));
-  }
-
-  typeSelected(type: string) {
-    this.store.dispatch(addTypeFilterAction({ datasetType: type }));
-    this.typeInput$.next("");
-  }
-
-  typeRemoved(type: string) {
-    this.store.dispatch(removeTypeFilterAction({ datasetType: type }));
   }
 
   dateChanged(event: MatDatepickerInputEvent<DateTime>) {

@@ -65,38 +65,25 @@
       </button>
     </div>
 
+    <div style="display: flex; align-items: center;" *ngIf="selectedFilters[TypeFilterComponent.kName]">
+      <app-type-filter
+        [clear]="clearSearchBar"
+        style="flex-grow: 1;"
+      >
+      </app-type-filter>
+      <button
+        *ngIf="isInEditMode"
+        mat-button
+        (click)="removeFilter(TypeFilterComponent.kName)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
       <!--
 
 
-         <mat-form-field>
-           <mat-label>Type</mat-label>
-           <mat-chip-grid #typeChipList>
-             <mat-chip-row
-               *ngFor="let type of typeFilter$ | async"
-               [removable]="true"
-               (removed)="typeRemoved(type)"
-               >{{ type }}<mat-icon matChipRemove>cancel</mat-icon>
-             </mat-chip-row>
-           </mat-chip-grid>
-           <input
-             (input)="onKeywordInput($event)"
-             [value]="typeInput$ | async"
-             matInput
-             class="type-input"
-             [matChipInputFor]="typeChipList"
-             [matAutocomplete]="type"
-           />
 
-           <mat-autocomplete #type="matAutocomplete">
-             <mat-option
-               (onSelectionChange)="typeSelected(getFacetId(fc))"
-               *ngFor="let fc of typeSuggestions$ | async"
-             >
-               <span>{{ getFacetId(fc, "No Type") }}</span> |
-               <small>{{ getFacetCount(fc) }}</small>
-             </mat-option>
-           </mat-autocomplete>
-         </mat-form-field>
 
          <mat-form-field>
            <mat-label>Keywords</mat-label>
@@ -196,6 +183,7 @@
       <button mat-menu-item (click)="addFilter(PidFilterComponent.kName)">PID Filter</button>
       <button mat-menu-item (click)="addFilter(LocationFilterComponent.kName)">Location Filter</button>
       <button mat-menu-item (click)="addFilter(GroupFilterComponent.kName)">Group Filter</button>
+      <button mat-menu-item (click)="addFilter(TypeFilterComponent.kName)">Type Filter</button>
       <!-- Add more filter types here -->
     </mat-menu>
     </div>
