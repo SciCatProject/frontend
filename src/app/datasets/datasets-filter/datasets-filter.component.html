@@ -35,12 +35,27 @@
       </button>
       </div>
 
+    <div style="display: flex; align-items: center;" *ngIf="selectedFilters[LocationFilterComponent.kName]">
+      <app-location-filter
+        [clear]="clearSearchBar"
+        style="flex-grow: 1;"
+      >
+      </app-location-filter>
+      <button
+        *ngIf="isInEditMode"
+        mat-button
+        (click)="removeFilter(LocationFilterComponent.kName)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
    <!-- <app-pid-filter
       #pidBar
       [clear]="clearSearchBar"
       style="flex-grow: 1;"
     >
-    </app-pid-filter>-->
+    </app-pid-filter>
 
 
 
@@ -182,7 +197,7 @@
       </mat-date-range-input>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-date-range-picker #picker></mat-date-range-picker>
-    </mat-form-field>
+    </mat-form-field>-->
 
     <div class="section-container" *ngIf="appConfig.scienceSearchEnabled && isInEditMode">
       <button mat-button color="primary" (click)="showAddConditionDialog()">
@@ -231,7 +246,7 @@
     </button>
     <mat-menu #addFilterMenu="matMenu">
       <button mat-menu-item (click)="addFilter(PidFilterComponent.kName)">PID Filter</button>
-      <button mat-menu-item (click)="addFilter('location')">Location Filter</button>
+      <button mat-menu-item (click)="addFilter(LocationFilterComponent.kName)">Location Filter</button>
       <!-- Add more filter types here -->
     </mat-menu>
     </div>

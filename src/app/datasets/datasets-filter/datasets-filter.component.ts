@@ -1,13 +1,8 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-} from "@angular/core";
-import {MatDialog} from "@angular/material/dialog";
-import {Store} from "@ngrx/store";
-import {debounceTime, distinctUntilChanged, map, skipWhile,} from "rxjs/operators";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { Store } from "@ngrx/store";
+import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
 
-import {FacetCount} from "state-management/state/datasets.store";
 import {
   selectCreationTimeFilter,
   selectGroupFacetCounts,
@@ -16,8 +11,6 @@ import {
   selectKeywordFacetCounts,
   selectKeywordsFilter,
   selectKeywordsTerms,
-  selectLocationFacetCounts,
-  selectLocationFilter,
   selectMetadataKeys,
   selectScientificConditions,
   selectSearchTerms,
@@ -28,36 +21,34 @@ import {
 import {
   addGroupFilterAction,
   addKeywordFilterAction,
-  addLocationFilterAction,
   addScientificConditionAction,
   addTypeFilterAction,
   clearFacetsAction,
   fetchDatasetsAction,
   removeGroupFilterAction,
   removeKeywordFilterAction,
-  removeLocationFilterAction,
   removeScientificConditionAction,
-  removeTypeFilterAction,
+  removeTypeFilterAction, resetClearSearchBar,
   setDateRangeFilterAction,
   setPidTermsAction,
   setSearchTermsAction,
   setTextFilterAction,
 } from "state-management/actions/datasets.actions";
-import {BehaviorSubject, combineLatest, from, Observable, Subscription} from "rxjs";
+import { BehaviorSubject, Subscription } from "rxjs";
 import {
   deselectAllCustomColumnsAction,
   deselectColumnAction,
   selectColumnAction,
 } from "state-management/actions/user.actions";
-import {ScientificCondition} from "state-management/models";
-import {
-  SearchParametersDialogComponent
-} from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
-import {AsyncPipe} from "@angular/common";
-import {MatDatepickerInputEvent} from "@angular/material/datepicker";
-import {DateTime} from "luxon";
-import {AppConfigService} from "app-config.service";
-import {PidFilterComponent} from "./filters/pid-filter.component";
+import { ScientificCondition } from "state-management/models";
+import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
+import { AsyncPipe } from "@angular/common";
+import { MatDatepickerInputEvent } from "@angular/material/datepicker";
+import { DateTime } from "luxon";
+import { AppConfigService } from "app-config.service";
+import { PidFilterComponent } from "./filters/pid-filter.component";
+import { LocationFilterComponent } from "./filters/location-filter.component";
+import { createSuggestionObserver } from "./utils";
 
 interface DateRange {
   begin: string;
@@ -65,8 +56,10 @@ interface DateRange {
 }
 
 class AvailableFilter {
-  constructor(public name: string, public component: any) {
-  }
+  constructor(
+    public name: string,
+    public component: any,
+  ) {}
 }
 
 @Component({
@@ -77,14 +70,15 @@ class AvailableFilter {
 export class DatasetsFilterComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
-  locationFacetCounts$ = this.store.select(selectLocationFacetCounts);
+  protected readonly LocationFilterComponent = LocationFilterComponent;
+  protected readonly PidFilterComponent = PidFilterComponent;
+
   groupFacetCounts$ = this.store.select(selectGroupFacetCounts);
   typeFacetCounts$ = this.store.select(selectTypeFacetCounts);
   keywordFacetCounts$ = this.store.select(selectKeywordFacetCounts);
 
   searchTerms$ = this.store.select(selectSearchTerms);
   keywordsTerms$ = this.store.select(selectKeywordsTerms);
-  locationFilter$ = this.store.select(selectLocationFilter);
   groupFilter$ = this.store.select(selectGroupFilter);
   typeFilter$ = this.store.select(selectTypeFilter);
   keywordsFilter$ = this.store.select(selectKeywordsFilter);
@@ -92,7 +86,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   scientificConditions$ = this.store.select(selectScientificConditions);
   metadataKeys$ = this.store.select(selectMetadataKeys);
 
-  locationInput$ = new BehaviorSubject<string>("");
   groupInput$ = new BehaviorSubject<string>("");
   typeInput$ = new BehaviorSubject<string>("");
   keywordsInput$ = new BehaviorSubject<string>("");
@@ -100,25 +93,19 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
 
   clearSearchBar = false;
-  groupSuggestions$ = this.createSuggestionObserver(
+  groupSuggestions$ = createSuggestionObserver(
     this.groupFacetCounts$,
     this.groupInput$,
     this.groupFilter$,
   );
 
-  locationSuggestions$ = this.createSuggestionObserver(
-    this.locationFacetCounts$,
-    this.locationInput$,
-    this.locationFilter$,
-  );
-
-  typeSuggestions$ = this.createSuggestionObserver(
+  typeSuggestions$ = createSuggestionObserver(
     this.typeFacetCounts$,
     this.typeInput$,
     this.typeFilter$,
   );
 
-  keywordsSuggestions$ = this.createSuggestionObserver(
+  keywordsSuggestions$ = createSuggestionObserver(
     this.keywordFacetCounts$,
     this.keywordsInput$,
     this.keywordsFilter$,
@@ -126,23 +113,17 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   hasAppliedFilters$ = this.store.select(selectHasAppliedFilters);
 
-  isInEditMode : boolean = false;
-  availableFilters: { [key: string]: AvailableFilter } = {
-    PIDFilter: new AvailableFilter("pid", PidFilterComponent),
-    LocationFilter: new AvailableFilter("location", undefined),
-    // Add more filters as necessary
-  };
+  isInEditMode = false;
 
   //TODO extract to state
   selectedFilters = {
     [PidFilterComponent.kName]: false,
-    location: false,
+    [LocationFilterComponent.kName]: false,
     keyword: false,
     group: false,
     type: false,
     dateRange: false,
   };
-
 
   dateRange: DateRange = {
     begin: "",
@@ -156,56 +137,22 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private store: Store,
   ) {}
 
-  toggleEditMode(){
+  toggleEditMode() {
     this.isInEditMode = !this.isInEditMode;
   }
 
-  addFilter(filter: string){
+  addFilter(filter: string) {
     this.selectedFilters[filter] = true;
   }
 
-  removeFilter(filter: string){
+  removeFilter(filter: string) {
     this.selectedFilters[filter] = false;
-  }
-
-  createSuggestionObserver(
-    facetCounts$: Observable<FacetCount[]>,
-    input$: BehaviorSubject<string>,
-    currentFilters$: Observable<string[]>,
-  ): Observable<FacetCount[]> {
-    return combineLatest([facetCounts$, input$, currentFilters$]).pipe(
-      map(([counts, filterString, currentFilters]) => {
-        if (!counts) {
-          return [];
-        }
-        return counts.filter(
-          (count) =>
-            typeof count._id === "string" &&
-            count._id.toLowerCase().includes(filterString.toLowerCase()) &&
-            currentFilters.indexOf(count._id) < 0,
-        );
-      }),
-    );
-  }
-
-  getFacetId(facetCount: FacetCount, fallback = ""): string {
-    const id = facetCount._id;
-    return id ? String(id) : fallback;
-  }
-
-  getFacetCount(facetCount: FacetCount): number {
-    return facetCount.count;
   }
 
   textSearchChanged(terms: string) {
     if ("string" != typeof terms) return;
     this.clearSearchBar = false;
     this.store.dispatch(setSearchTermsAction({ terms }));
-  }
-
-  onLocationInput(event: any) {
-    const value = (<HTMLInputElement>event.target).value;
-    this.locationInput$.next(value);
   }
 
   onGroupInput(event: any) {
@@ -221,16 +168,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   onTypeInput(event: any) {
     const value = (<HTMLInputElement>event.target).value;
     this.typeInput$.next(value);
-  }
-
-  locationSelected(location: string | null) {
-    const loc = location || "";
-    this.store.dispatch(addLocationFilterAction({ location: loc }));
-    this.locationInput$.next("");
-  }
-
-  locationRemoved(location: string) {
-    this.store.dispatch(removeLocationFilterAction({ location }));
   }
 
   groupSelected(group: string) {
@@ -285,7 +222,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       end: "",
     };
     this.store.dispatch(clearFacetsAction());
-    this.store.dispatch(setPidTermsAction({ pid: "" }));
     this.store.dispatch(deselectAllCustomColumnsAction());
   }
 
@@ -349,6 +285,4 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
-
-  protected readonly PidFilterComponent = PidFilterComponent;
 }

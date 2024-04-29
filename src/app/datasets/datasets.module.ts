@@ -84,6 +84,8 @@ import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.co
 import { FullTextSearchBarComponent } from "./dashboard/full-text-search/full-text-search-bar.component";
 import { PidFilterComponent } from "./datasets-filter/filters/pid-filter.component";
 import { MatMenuModule } from "@angular/material/menu";
+import { LocationFilterComponent } from "./datasets-filter/filters/location-filter.component";
+import { ClearableInputComponent } from "./datasets-filter/filters/clearable-input.component";
 
 @NgModule({
   imports: [
@@ -164,7 +166,9 @@ import { MatMenuModule } from "@angular/material/menu";
     DatasetFileUploaderComponent,
     AdminTabComponent,
     RelatedDatasetsComponent,
+    ClearableInputComponent,
     PidFilterComponent,
+    LocationFilterComponent,
   ],
   providers: [
     ArchivingService,
