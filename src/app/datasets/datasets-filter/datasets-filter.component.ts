@@ -34,6 +34,7 @@ import { GroupFilterComponent } from "./filters/group-filter.component";
 import { TypeFilterComponent } from "./filters/type-filter.component";
 import { KeywordFilterComponent } from "./filters/keyword-filter.component";
 import { DateRangeFilterComponent } from "./filters/date-range-filter.component";
+import {TextFilterComponent} from "./filters/text-filter.component";
 
 @Component({
   selector: "datasets-filter",
@@ -50,7 +51,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   protected readonly KeywordFilterComponent = KeywordFilterComponent;
   protected readonly DateRangeFilterComponent = DateRangeFilterComponent;
 
-  searchTerms$ = this.store.select(selectSearchTerms);
+
 
   scientificConditions$ = this.store.select(selectScientificConditions);
   metadataKeys$ = this.store.select(selectMetadataKeys);
@@ -71,6 +72,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     [GroupFilterComponent.kName]: false,
     [TypeFilterComponent.kName]: false,
     [DateRangeFilterComponent.kName]: false,
+    [TextFilterComponent.kName]: false,
   };
 
   constructor(
@@ -90,12 +92,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   removeFilter(filter: string) {
     this.selectedFilters[filter] = false;
-  }
-
-  textSearchChanged(terms: string) {
-    if ("string" != typeof terms) return;
-    this.clearSearchBar = false;
-    this.store.dispatch(setSearchTermsAction({ terms }));
   }
 
   clearFacets() {
@@ -137,20 +133,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscriptions.push(
-      this.searchTerms$
-        .pipe(
-          skipWhile((terms) => terms === ""),
-          debounceTime(500),
-          distinctUntilChanged(),
-        )
-        .subscribe((terms) => {
-          this.store.dispatch(setTextFilterAction({ text: terms }));
-        }),
-    );
+
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
+
+  protected readonly TextFilterComponent = TextFilterComponent;
 }

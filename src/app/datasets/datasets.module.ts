@@ -90,6 +90,7 @@ import {GroupFilterComponent} from "./datasets-filter/filters/group-filter.compo
 import {TypeFilterComponent} from "./datasets-filter/filters/type-filter.component";
 import {KeywordFilterComponent} from "./datasets-filter/filters/keyword-filter.component";
 import {DateRangeFilterComponent} from "./datasets-filter/filters/date-range-filter.component";
+import {TextFilterComponent} from "./datasets-filter/filters/text-filter.component";
 
 @NgModule({
   imports: [
@@ -177,6 +178,7 @@ import {DateRangeFilterComponent} from "./datasets-filter/filters/date-range-fil
     TypeFilterComponent,
     KeywordFilterComponent,
     DateRangeFilterComponent,
+    TextFilterComponent,
   ],
   providers: [
     ArchivingService,

@@ -5,6 +5,15 @@ mat-card {
     width: 100%;
   }
 
+  .filter-container {
+    display: flex;
+    align-items: center;
+
+    :first-child {
+      flex-grow: 1;
+    }
+  }
+
   .section-container {
     font-size: 1.25rem;
     font-weight: 425;

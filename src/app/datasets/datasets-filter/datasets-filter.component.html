@@ -8,7 +8,8 @@
       color="primary"
       (click)="clearFacets()"
     >
-      <mat-icon>clear_all</mat-icon> Clear
+      <mat-icon>clear_all</mat-icon>
+      Clear
     </button>
     <button
       mat-button
@@ -20,10 +21,9 @@
   </mat-card-header>
 
   <mat-card-content>
-      <div style="display: flex; align-items: center;" *ngIf="selectedFilters[PidFilterComponent.kName]">
+    <div class="filter-container"  *ngIf="selectedFilters[PidFilterComponent.kName]">
       <app-pid-filter
         [clear]="clearSearchBar"
-        style="flex-grow: 1;"
       >
       </app-pid-filter>
       <button
@@ -33,12 +33,25 @@
       >
         <mat-icon>delete</mat-icon>
       </button>
-      </div>
+    </div>
 
-    <div style="display: flex; align-items: center;" *ngIf="selectedFilters[LocationFilterComponent.kName]">
-      <app-location-filter
+    <div class="filter-container"  *ngIf="selectedFilters[TextFilterComponent.kName]">
+      <app-text-filter
         [clear]="clearSearchBar"
-        style="flex-grow: 1;"
+      >
+      </app-text-filter>
+      <button
+        *ngIf="isInEditMode"
+        mat-button
+        (click)="removeFilter(TextFilterComponent.kName)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
+    <div class="filter-container"  *ngIf="selectedFilters[LocationFilterComponent.kName]">
+      <app-location-filter
+        [clear]="clearSearchBar"se
       >
       </app-location-filter>
       <button
@@ -50,10 +63,9 @@
       </button>
     </div>
 
-    <div style="display: flex; align-items: center;" *ngIf="selectedFilters[GroupFilterComponent.kName]">
+    <div class="filter-container" *ngIf="selectedFilters[GroupFilterComponent.kName]">
       <app-group-filter
         [clear]="clearSearchBar"
-        style="flex-grow: 1;"
       >
       </app-group-filter>
       <button
@@ -65,10 +77,9 @@
       </button>
     </div>
 
-    <div style="display: flex; align-items: center;" *ngIf="selectedFilters[TypeFilterComponent.kName]">
+    <div class="filter-container" *ngIf="selectedFilters[TypeFilterComponent.kName]">
       <app-type-filter
         [clear]="clearSearchBar"
-        style="flex-grow: 1;"
       >
       </app-type-filter>
       <button
@@ -80,10 +91,9 @@
       </button>
     </div>
 
-    <div style="display: flex; align-items: center;" *ngIf="selectedFilters[KeywordFilterComponent.kName]">
+    <div class="filter-container" *ngIf="selectedFilters[KeywordFilterComponent.kName]">
       <app-keyword-filter
         [clear]="clearSearchBar"
-        style="flex-grow: 1;"
       >
       </app-keyword-filter>
       <button
@@ -95,10 +105,9 @@
       </button>
     </div>
 
-    <div style="display: flex; align-items: center;" *ngIf="selectedFilters[DateRangeFilterComponent.kName]">
+    <div class="filter-container" *ngIf="selectedFilters[DateRangeFilterComponent.kName]">
       <app-date-range-filter
         [clear]="clearSearchBar"
-        style="flex-grow: 1;"
       >
       </app-date-range-filter>
       <button
@@ -110,9 +119,11 @@
       </button>
     </div>
 
+
     <div class="section-container" *ngIf="appConfig.scienceSearchEnabled && isInEditMode">
       <button mat-button color="primary" (click)="showAddConditionDialog()">
-        <mat-icon>add</mat-icon> Add Condition
+        <mat-icon>add</mat-icon>
+        Add Condition
       </button>
 
       <mat-chip-listbox class="scientific-chips" aria-orientation="vertical">
@@ -137,33 +148,35 @@
               </ng-container>
             </ng-container>
             {{
-              condition.relation === "EQUAL_TO_STRING"
-                ? '"' + condition.rhs + '"'
-                : condition.rhs
+            condition.relation === "EQUAL_TO_STRING"
+              ? '"' + condition.rhs + '"'
+              : condition.rhs
             }}
             {{ condition.unit | prettyUnit }}
           </span>
           <mat-icon matChipRemove (click)="removeCondition(condition, i)"
-            >cancel</mat-icon
+          >cancel
+          </mat-icon
           >
         </mat-chip-option>
       </mat-chip-listbox>
     </div>
 
-    <div  class="section-container" *ngIf="isInEditMode">
-    <button mat-button color="primary" [matMenuTriggerFor]="addFilterMenu">
-      <mat-icon>add</mat-icon>
-      Add Filter
-    </button>
-    <mat-menu #addFilterMenu="matMenu">
-      <button mat-menu-item (click)="addFilter(PidFilterComponent.kName)">PID Filter</button>
-      <button mat-menu-item (click)="addFilter(LocationFilterComponent.kName)">Location Filter</button>
-      <button mat-menu-item (click)="addFilter(GroupFilterComponent.kName)">Group Filter</button>
-      <button mat-menu-item (click)="addFilter(TypeFilterComponent.kName)">Type Filter</button>
-      <button mat-menu-item (click)="addFilter(KeywordFilterComponent.kName)">Keyword Filter</button>
-      <button mat-menu-item (click)="addFilter(DateRangeFilterComponent.kName)">Date Range Filter</button>
-      <!-- Add more filter types here -->
-    </mat-menu>
+    <div class="section-container" *ngIf="isInEditMode">
+      <button mat-button color="primary" [matMenuTriggerFor]="addFilterMenu">
+        <mat-icon>add</mat-icon>
+        Add Filter
+      </button>
+      <mat-menu #addFilterMenu="matMenu">
+        <button mat-menu-item (click)="addFilter(PidFilterComponent.kName)">PID Filter</button>
+        <button mat-menu-item (click)="addFilter(TextFilterComponent.kName)">Text Filter</button>
+        <button mat-menu-item (click)="addFilter(LocationFilterComponent.kName)">Location Filter</button>
+        <button mat-menu-item (click)="addFilter(GroupFilterComponent.kName)">Group Filter</button>
+        <button mat-menu-item (click)="addFilter(TypeFilterComponent.kName)">Type Filter</button>
+        <button mat-menu-item (click)="addFilter(KeywordFilterComponent.kName)">Keyword Filter</button>
+        <button mat-menu-item (click)="addFilter(DateRangeFilterComponent.kName)">Date Range Filter</button>
+        <!-- Add more filter types here -->
+      </mat-menu>
     </div>
 
     <div class="section-container">
