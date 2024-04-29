@@ -6,26 +6,21 @@ import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
 import {
   selectCreationTimeFilter,
   selectHasAppliedFilters,
-  selectKeywordFacetCounts,
-  selectKeywordsFilter,
-  selectKeywordsTerms,
   selectMetadataKeys,
   selectScientificConditions,
   selectSearchTerms,
 } from "state-management/selectors/datasets.selectors";
 
 import {
-  addKeywordFilterAction,
   addScientificConditionAction,
   clearFacetsAction,
   fetchDatasetsAction,
-  removeKeywordFilterAction,
   removeScientificConditionAction,
   setDateRangeFilterAction,
   setSearchTermsAction,
   setTextFilterAction,
 } from "state-management/actions/datasets.actions";
-import { BehaviorSubject, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 import {
   deselectAllCustomColumnsAction,
   deselectColumnAction,
@@ -39,9 +34,9 @@ import { DateTime } from "luxon";
 import { AppConfigService } from "app-config.service";
 import { PidFilterComponent } from "./filters/pid-filter.component";
 import { LocationFilterComponent } from "./filters/location-filter.component";
-import { createSuggestionObserver } from "./utils";
 import { GroupFilterComponent } from "./filters/group-filter.component";
 import { TypeFilterComponent } from "./filters/type-filter.component";
+import { KeywordFilterComponent } from "./filters/keyword-filter.component";
 
 interface DateRange {
   begin: string;
@@ -60,28 +55,17 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   protected readonly PidFilterComponent = PidFilterComponent;
   protected readonly GroupFilterComponent = GroupFilterComponent;
   protected readonly TypeFilterComponent = TypeFilterComponent;
-
-  keywordFacetCounts$ = this.store.select(selectKeywordFacetCounts);
+  protected readonly KeywordFilterComponent = KeywordFilterComponent;
 
   searchTerms$ = this.store.select(selectSearchTerms);
-  keywordsTerms$ = this.store.select(selectKeywordsTerms);
 
-  keywordsFilter$ = this.store.select(selectKeywordsFilter);
   creationTimeFilter$ = this.store.select(selectCreationTimeFilter);
   scientificConditions$ = this.store.select(selectScientificConditions);
   metadataKeys$ = this.store.select(selectMetadataKeys);
 
-  keywordsInput$ = new BehaviorSubject<string>("");
-
   appConfig = this.appConfigService.getConfig();
 
   clearSearchBar = false;
-
-  keywordsSuggestions$ = createSuggestionObserver(
-    this.keywordFacetCounts$,
-    this.keywordsInput$,
-    this.keywordsFilter$,
-  );
 
   hasAppliedFilters$ = this.store.select(selectHasAppliedFilters);
 
@@ -91,9 +75,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   selectedFilters = {
     [PidFilterComponent.kName]: false,
     [LocationFilterComponent.kName]: false,
-    keyword: false,
-    group: false,
-    type: false,
+    [KeywordFilterComponent.kName]: false,
+    [GroupFilterComponent.kName]: false,
+    [TypeFilterComponent.kName]: false,
     dateRange: false,
   };
 
@@ -125,20 +109,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     if ("string" != typeof terms) return;
     this.clearSearchBar = false;
     this.store.dispatch(setSearchTermsAction({ terms }));
-  }
-
-  onKeywordInput(event: any) {
-    const value = (<HTMLInputElement>event.target).value;
-    this.keywordsInput$.next(value);
-  }
-
-  keywordSelected(keyword: string) {
-    this.store.dispatch(addKeywordFilterAction({ keyword }));
-    this.keywordsInput$.next("");
-  }
-
-  keywordRemoved(keyword: string) {
-    this.store.dispatch(removeKeywordFilterAction({ keyword }));
   }
 
   dateChanged(event: MatDatepickerInputEvent<DateTime>) {
@@ -210,18 +180,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         )
         .subscribe((terms) => {
           this.store.dispatch(setTextFilterAction({ text: terms }));
-        }),
-    );
-
-    this.subscriptions.push(
-      this.keywordsTerms$
-        .pipe(
-          skipWhile((terms) => terms === ""),
-          debounceTime(500),
-          distinctUntilChanged(),
-        )
-        .subscribe((terms) => {
-          this.store.dispatch(addKeywordFilterAction({ keyword: terms }));
         }),
     );
   }

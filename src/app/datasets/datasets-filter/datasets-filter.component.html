@@ -80,39 +80,27 @@
       </button>
     </div>
 
+    <div style="display: flex; align-items: center;" *ngIf="selectedFilters[KeywordFilterComponent.kName]">
+      <app-keyword-filter
+        [clear]="clearSearchBar"
+        style="flex-grow: 1;"
+      >
+      </app-keyword-filter>
+      <button
+        *ngIf="isInEditMode"
+        mat-button
+        (click)="removeFilter(KeywordFilterComponent.kName)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
       <!--
 
 
 
 
-         <mat-form-field>
-           <mat-label>Keywords</mat-label>
-           <mat-chip-grid #keywordChipList>
-             <mat-chip-row
-               *ngFor="let keyword of keywordsFilter$ | async"
-               [removable]="true"
-               (removed)="keywordRemoved(keyword)"
-               >{{ keyword }}<mat-icon matChipRemove>cancel</mat-icon>
-             </mat-chip-row>
-           </mat-chip-grid>
-           <input
-             (input)="onKeywordInput($event)"
-             [value]="keywordsInput$ | async"
-             matInput
-             class="keyword-input"
-             [matChipInputFor]="keywordChipList"
-             [matAutocomplete]="kw"
-           />
-           <mat-autocomplete #kw="matAutocomplete">
-             <mat-option
-               (onSelectionChange)="keywordSelected(getFacetId(fc))"
-               *ngFor="let fc of keywordsSuggestions$ | async"
-             >
-               <span>{{ getFacetId(fc, "No Keywords") }}</span>
-               <small>: {{ getFacetCount(fc) }}</small>
-             </mat-option>
-           </mat-autocomplete>
-         </mat-form-field>
+
 
          <mat-form-field>
            <mat-label>Start Date - End Date</mat-label>
@@ -184,6 +172,7 @@
       <button mat-menu-item (click)="addFilter(LocationFilterComponent.kName)">Location Filter</button>
       <button mat-menu-item (click)="addFilter(GroupFilterComponent.kName)">Group Filter</button>
       <button mat-menu-item (click)="addFilter(TypeFilterComponent.kName)">Type Filter</button>
+      <button mat-menu-item (click)="addFilter(KeywordFilterComponent.kName)">Keyword Filter</button>
       <!-- Add more filter types here -->
     </mat-menu>
     </div>

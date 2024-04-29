@@ -88,6 +88,7 @@ import { LocationFilterComponent } from "./datasets-filter/filters/location-filt
 import { ClearableInputComponent } from "./datasets-filter/filters/clearable-input.component";
 import {GroupFilterComponent} from "./datasets-filter/filters/group-filter.component";
 import {TypeFilterComponent} from "./datasets-filter/filters/type-filter.component";
+import {KeywordFilterComponent} from "./datasets-filter/filters/keyword-filter.component";
 
 @NgModule({
   imports: [
@@ -173,6 +174,7 @@ import {TypeFilterComponent} from "./datasets-filter/filters/type-filter.compone
     LocationFilterComponent,
     GroupFilterComponent,
     TypeFilterComponent,
+    KeywordFilterComponent,
   ],
   providers: [
     ArchivingService,
