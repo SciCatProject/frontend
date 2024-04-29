@@ -95,32 +95,20 @@
       </button>
     </div>
 
-      <!--
-
-
-
-
-
-
-         <mat-form-field>
-           <mat-label>Start Date - End Date</mat-label>
-           <mat-date-range-input class="date-input" [rangePicker]="picker">
-             <input
-               matStartDate
-               name="begin"
-               [value]="(creationTimeFilter$ | async)?.begin"
-               (dateChange)="dateChanged($event)"
-             />
-             <input
-               matEndDate
-               name="end"
-               [value]="(creationTimeFilter$ | async)?.end"
-               (dateChange)="dateChanged($event)"
-             />
-           </mat-date-range-input>
-           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-           <mat-date-range-picker #picker></mat-date-range-picker>
-         </mat-form-field>-->
+    <div style="display: flex; align-items: center;" *ngIf="selectedFilters[DateRangeFilterComponent.kName]">
+      <app-date-range-filter
+        [clear]="clearSearchBar"
+        style="flex-grow: 1;"
+      >
+      </app-date-range-filter>
+      <button
+        *ngIf="isInEditMode"
+        mat-button
+        (click)="removeFilter(DateRangeFilterComponent.kName)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
 
     <div class="section-container" *ngIf="appConfig.scienceSearchEnabled && isInEditMode">
       <button mat-button color="primary" (click)="showAddConditionDialog()">
@@ -173,6 +161,7 @@
       <button mat-menu-item (click)="addFilter(GroupFilterComponent.kName)">Group Filter</button>
       <button mat-menu-item (click)="addFilter(TypeFilterComponent.kName)">Type Filter</button>
       <button mat-menu-item (click)="addFilter(KeywordFilterComponent.kName)">Keyword Filter</button>
+      <button mat-menu-item (click)="addFilter(DateRangeFilterComponent.kName)">Date Range Filter</button>
       <!-- Add more filter types here -->
     </mat-menu>
     </div>

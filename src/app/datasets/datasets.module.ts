@@ -89,6 +89,7 @@ import { ClearableInputComponent } from "./datasets-filter/filters/clearable-inp
 import {GroupFilterComponent} from "./datasets-filter/filters/group-filter.component";
 import {TypeFilterComponent} from "./datasets-filter/filters/type-filter.component";
 import {KeywordFilterComponent} from "./datasets-filter/filters/keyword-filter.component";
+import {DateRangeFilterComponent} from "./datasets-filter/filters/date-range-filter.component";
 
 @NgModule({
   imports: [
@@ -175,6 +176,7 @@ import {KeywordFilterComponent} from "./datasets-filter/filters/keyword-filter.c
     GroupFilterComponent,
     TypeFilterComponent,
     KeywordFilterComponent,
+    DateRangeFilterComponent,
   ],
   providers: [
     ArchivingService,
