@@ -66,13 +66,13 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   //TODO extract to state
   selectedFilters = {
-    [PidFilterComponent.kName]: false,
-    [LocationFilterComponent.kName]: false,
-    [KeywordFilterComponent.kName]: false,
-    [GroupFilterComponent.kName]: false,
-    [TypeFilterComponent.kName]: false,
-    [DateRangeFilterComponent.kName]: false,
-    [TextFilterComponent.kName]: false,
+    [PidFilterComponent.kName]: true,
+    [LocationFilterComponent.kName]: true,
+    [KeywordFilterComponent.kName]: true,
+    [GroupFilterComponent.kName]: true,
+    [TypeFilterComponent.kName]: true,
+    [DateRangeFilterComponent.kName]: true,
+    [TextFilterComponent.kName]: true,
   };
 
   constructor(
