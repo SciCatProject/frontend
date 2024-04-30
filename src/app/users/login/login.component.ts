@@ -131,8 +131,14 @@ export class LoginComponent implements OnInit, OnDestroy {
       // which are parsed here.
       if (params.returnUrl) {
         // dispatching to the loginOIDCAction passes information to eventually be added to Loopback AccessToken
-        const accessToken = params["access-token"];
-        const userId = params["user-id"];
+        let accessToken = params["access-token"];
+        let userId = params["user-id"];
+        // Required for backend v3 compatibility (access-token and user-id are encoded in returnUrl)
+        if (!accessToken && !userId) {
+          const urlqp = new URLSearchParams(params.returnUrl.split("?")[1]);
+          accessToken = urlqp.get("access-token");
+          userId = urlqp.get("user-id");
+        }
         this.store.dispatch(
           loginOIDCAction({ oidcLoginResponse: { accessToken, userId } }),
         );
