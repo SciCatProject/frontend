@@ -11,113 +11,43 @@
       <mat-icon>clear_all</mat-icon>
       Clear
     </button>
-    <button
-      mat-button
-      class="settings-button"
-      (click)="toggleEditMode()"
-    >
-      <mat-icon>settings</mat-icon>
-    </button>
   </mat-card-header>
 
   <mat-card-content>
-    <div class="filter-container"  *ngIf="selectedFilters[PidFilterComponent.kName]">
       <app-pid-filter
         [clear]="clearSearchBar"
       >
       </app-pid-filter>
-      <button
-        *ngIf="isInEditMode"
-        mat-button
-        (click)="removeFilter(PidFilterComponent.kName)"
-      >
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
 
-    <div class="filter-container"  *ngIf="selectedFilters[TextFilterComponent.kName]">
       <app-text-filter
         [clear]="clearSearchBar"
       >
       </app-text-filter>
-      <button
-        *ngIf="isInEditMode"
-        mat-button
-        (click)="removeFilter(TextFilterComponent.kName)"
-      >
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
 
-    <div class="filter-container"  *ngIf="selectedFilters[LocationFilterComponent.kName]">
       <app-location-filter
         [clear]="clearSearchBar"se
       >
       </app-location-filter>
-      <button
-        *ngIf="isInEditMode"
-        mat-button
-        (click)="removeFilter(LocationFilterComponent.kName)"
-      >
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
 
-    <div class="filter-container" *ngIf="selectedFilters[GroupFilterComponent.kName]">
       <app-group-filter
         [clear]="clearSearchBar"
       >
       </app-group-filter>
-      <button
-        *ngIf="isInEditMode"
-        mat-button
-        (click)="removeFilter(GroupFilterComponent.kName)"
-      >
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
 
-    <div class="filter-container" *ngIf="selectedFilters[TypeFilterComponent.kName]">
       <app-type-filter
         [clear]="clearSearchBar"
       >
       </app-type-filter>
-      <button
-        *ngIf="isInEditMode"
-        mat-button
-        (click)="removeFilter(TypeFilterComponent.kName)"
-      >
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
 
-    <div class="filter-container" *ngIf="selectedFilters[KeywordFilterComponent.kName]">
       <app-keyword-filter
         [clear]="clearSearchBar"
       >
       </app-keyword-filter>
-      <button
-        *ngIf="isInEditMode"
-        mat-button
-        (click)="removeFilter(KeywordFilterComponent.kName)"
-      >
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
 
-    <div class="filter-container" *ngIf="selectedFilters[DateRangeFilterComponent.kName]">
       <app-date-range-filter
         [clear]="clearSearchBar"
       >
       </app-date-range-filter>
-      <button
-        *ngIf="isInEditMode"
-        mat-button
-        (click)="removeFilter(DateRangeFilterComponent.kName)"
-      >
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
 
 
     <div class="section-container" *ngIf="appConfig.scienceSearchEnabled">
@@ -160,23 +90,6 @@
           >
         </mat-chip-option>
       </mat-chip-listbox>
-    </div>
-
-    <div class="section-container">
-      <button mat-button color="primary" [matMenuTriggerFor]="addFilterMenu">
-        <mat-icon>add</mat-icon>
-        Add Filter
-      </button>
-      <mat-menu #addFilterMenu="matMenu">
-        <button mat-menu-item (click)="addFilter(PidFilterComponent.kName)">PID Filter</button>
-        <button mat-menu-item (click)="addFilter(TextFilterComponent.kName)">Text Filter</button>
-        <button mat-menu-item (click)="addFilter(LocationFilterComponent.kName)">Location Filter</button>
-        <button mat-menu-item (click)="addFilter(GroupFilterComponent.kName)">Group Filter</button>
-        <button mat-menu-item (click)="addFilter(TypeFilterComponent.kName)">Type Filter</button>
-        <button mat-menu-item (click)="addFilter(KeywordFilterComponent.kName)">Keyword Filter</button>
-        <button mat-menu-item (click)="addFilter(DateRangeFilterComponent.kName)">Date Range Filter</button>
-        <!-- Add more filter types here -->
-      </mat-menu>
     </div>
 
     <div class="section-container">

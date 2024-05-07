@@ -1,13 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
-import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
 
 import {
   selectHasAppliedFilters,
   selectMetadataKeys,
   selectScientificConditions,
-  selectSearchTerms,
 } from "state-management/selectors/datasets.selectors";
 
 import {
@@ -15,8 +13,6 @@ import {
   clearFacetsAction,
   fetchDatasetsAction,
   removeScientificConditionAction,
-  setSearchTermsAction,
-  setTextFilterAction,
 } from "state-management/actions/datasets.actions";
 import { Subscription } from "rxjs";
 import {
@@ -34,14 +30,14 @@ import { GroupFilterComponent } from "./filters/group-filter.component";
 import { TypeFilterComponent } from "./filters/type-filter.component";
 import { KeywordFilterComponent } from "./filters/keyword-filter.component";
 import { DateRangeFilterComponent } from "./filters/date-range-filter.component";
-import {TextFilterComponent} from "./filters/text-filter.component";
+import { TextFilterComponent } from "./filters/text-filter.component";
 
 @Component({
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
   styleUrls: ["datasets-filter.component.scss"],
 })
-export class DatasetsFilterComponent implements OnInit, OnDestroy {
+export class DatasetsFilterComponent implements OnDestroy {
   private subscriptions: Subscription[] = [];
 
   protected readonly LocationFilterComponent = LocationFilterComponent;
@@ -50,8 +46,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   protected readonly TypeFilterComponent = TypeFilterComponent;
   protected readonly KeywordFilterComponent = KeywordFilterComponent;
   protected readonly DateRangeFilterComponent = DateRangeFilterComponent;
-
-
+  protected readonly TextFilterComponent = TextFilterComponent;
 
   scientificConditions$ = this.store.select(selectScientificConditions);
   metadataKeys$ = this.store.select(selectMetadataKeys);
@@ -81,10 +76,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private store: Store,
   ) {}
-
-  toggleEditMode() {
-    this.isInEditMode = !this.isInEditMode;
-  }
 
   addFilter(filter: string) {
     this.selectedFilters[filter] = true;
@@ -132,13 +123,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnInit() {
-
-  }
-
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
-
-  protected readonly TextFilterComponent = TextFilterComponent;
 }
