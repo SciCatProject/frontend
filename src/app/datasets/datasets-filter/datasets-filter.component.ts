@@ -21,7 +21,6 @@ import {
   selectColumnAction,
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
-import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AsyncPipe } from "@angular/common";
 import { AppConfigService } from "app-config.service";
 import { PidFilterComponent } from "./filters/pid-filter.component";
@@ -31,6 +30,7 @@ import { TypeFilterComponent } from "./filters/type-filter.component";
 import { KeywordFilterComponent } from "./filters/keyword-filter.component";
 import { DateRangeFilterComponent } from "./filters/date-range-filter.component";
 import { TextFilterComponent } from "./filters/text-filter.component";
+import { DatasetsFilterSettingsComponent } from "./settings/datasets-filter-settings.component";
 
 @Component({
   selector: "datasets-filter",
@@ -49,7 +49,6 @@ export class DatasetsFilterComponent implements OnDestroy {
   protected readonly TextFilterComponent = TextFilterComponent;
 
   scientificConditions$ = this.store.select(selectScientificConditions);
-  metadataKeys$ = this.store.select(selectMetadataKeys);
 
   appConfig = this.appConfigService.getConfig();
 
@@ -72,7 +71,6 @@ export class DatasetsFilterComponent implements OnDestroy {
 
   constructor(
     public appConfigService: AppConfigService,
-    private asyncPipe: AsyncPipe,
     public dialog: MatDialog,
     private store: Store,
   ) {}
@@ -92,23 +90,19 @@ export class DatasetsFilterComponent implements OnDestroy {
     this.store.dispatch(deselectAllCustomColumnsAction());
   }
 
-  showAddConditionDialog() {
-    this.dialog
-      .open(SearchParametersDialogComponent, {
-        data: { parameterKeys: this.asyncPipe.transform(this.metadataKeys$) },
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          const { data } = res;
-          this.store.dispatch(
-            addScientificConditionAction({ condition: data }),
-          );
-          this.store.dispatch(
-            selectColumnAction({ name: data.lhs, columnType: "custom" }),
-          );
-        }
-      });
+  showDatasetsFilterSettingsDialog(){
+    const dialogRef = this.dialog.open(DatasetsFilterSettingsComponent, {
+      // width: '250px'
+      data: this.appConfig
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result) {
+        // Handle the selected filter
+        console.log(`Selected filter: ${result}`);
+      }
+    });
   }
 
   applyFilters() {
