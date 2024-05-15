@@ -68,6 +68,9 @@ describe("Elastic search", () => {
       .clear()
       .type(searchQueryIrrelevant);
 
+    // Click the search button
+    cy.get('[data-cy="search-button"]').click();
+
     cy.finishedLoading();
 
     cy.get('mat-row:contains("' + randomText1 + '")').should("not.exist");
