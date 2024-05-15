@@ -45,6 +45,7 @@ import {
   setPidTermsAction,
   setPidTermsFilterAction,
   fetchDatasetsAction,
+  fetchFacetCountsAction,
 } from "state-management/actions/datasets.actions";
 import { combineLatest, BehaviorSubject, Observable, Subscription } from "rxjs";
 import {
@@ -302,6 +303,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   applyFilters() {
     this.store.dispatch(fetchDatasetsAction());
+    this.store.dispatch(fetchFacetCountsAction());
   }
 
   removeCondition(condition: ScientificCondition, index: number) {

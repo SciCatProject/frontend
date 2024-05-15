@@ -79,10 +79,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   userGroups: string[] = [];
   clearColumnSearch = false;
 
-  //full text search
-  searchTerms$ = this.store.select(selectSearchTerms);
-  clearSearchBar = false;
-
   @ViewChild(MatSidenav, { static: false }) sideNav!: MatSidenav;
 
   constructor(
@@ -254,8 +250,4 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
-  fullTextSearch(terms: string) {
-    this.clearSearchBar = false;
-    this.store.dispatch(setSearchTermsAction({ terms }));
-  }
 }
