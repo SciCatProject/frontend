@@ -1,7 +1,4 @@
-import {
-  Component,
-  Input,
-} from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatSelectModule } from "@angular/material/select";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -17,39 +14,44 @@ import { Store } from "@ngrx/store";
 
 @Component({
   selector: "full-text-search-bar",
-  template: `
-    <mat-form-field appearance="fill" class="full-text-search-field">
+  template: ` <mat-form-field appearance="fill" class="full-text-search-field">
       <mat-label>Search</mat-label>
-      <input matInput placeholder="Type to search..."
-             type="search"
-             [(ngModel)]="searchTerm"
-             (ngModelChange)="onSearchTermChange($event)"
-      >
+      <input
+        matInput
+        placeholder="Type to search..."
+        type="search"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchTermChange($event)"
+      />
     </mat-form-field>
     <span>
-  <button mat-flat-button
-          color="accent"
-          data-cy="search-button"
-          (click)="onSearch()">
-  <mat-icon>search</mat-icon>
-  Search
-</button>
-<button mat-flat-button
-        (click)="onClear()">
-  <mat-icon>close</mat-icon>
-  Clear
-</button>
+      <button
+        mat-flat-button
+        color="accent"
+        data-cy="search-button"
+        (click)="onSearch()"
+      >
+        <mat-icon>search</mat-icon>
+        Search
+      </button>
+      <button mat-flat-button (click)="onClear()">
+        <mat-icon>close</mat-icon>
+        Clear
+      </button>
+    </span>`,
+  styles: [
+    `
+      .full-text-search-field {
+        max-width: 80%;
+        width: 100%;
+        margin-left: 5em;
+      }
 
-  </span>`,
-  styles: [`.full-text-search-field {
-    max-width: 80%;
-    width: 100%;
-    margin-left: 5em;
-  }
-
-  .full-text-search-field + span {
-    margin-left: 5em;
-  }`],
+      .full-text-search-field + span {
+        margin-left: 5em;
+      }
+    `,
+  ],
   standalone: true,
   imports: [
     MatFormFieldModule,
@@ -68,8 +70,7 @@ export class FullTextSearchBarComponent {
 
   searchTerm = "";
 
-  constructor(private store: Store) {
-  }
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.searchTerm = this.prefilledValue;
@@ -79,7 +80,6 @@ export class FullTextSearchBarComponent {
     this.store.dispatch(fetchDatasetsAction());
     this.store.dispatch(fetchFacetCountsAction());
   }
-
 
   onSearchTermChange(terms: string) {
     this.store.dispatch(setSearchTermsAction({ terms }));
