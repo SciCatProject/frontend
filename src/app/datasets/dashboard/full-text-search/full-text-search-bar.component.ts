@@ -9,10 +9,16 @@ import {
   fetchDatasetsAction,
   fetchFacetCountsAction,
   setSearchTermsAction,
+  setTextFilterAction,
 } from "../../../state-management/actions/datasets.actions";
 import { Store } from "@ngrx/store";
-import { BehaviorSubject, Subscription } from "rxjs";
-import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
+import { BehaviorSubject, Subject, Subscription } from "rxjs";
+import {
+  debounceTime,
+  distinctUntilChanged,
+  withLatestFrom,
+} from "rxjs/operators";
+import { selectSearchTerms } from "../../../state-management/selectors/datasets.selectors";
 
 @Component({
   selector: "full-text-search-bar",
@@ -36,7 +42,7 @@ import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
         <mat-icon>search</mat-icon>
         Search
       </button>
-      <button mat-flat-button (click)="onClear()">
+      <button mat-flat-button data-cy="search-clear-button" (click)="onClear()">
         <mat-icon>close</mat-icon>
         Clear
       </button>
@@ -72,37 +78,53 @@ export class FullTextSearchBarComponent implements OnInit, OnDestroy {
 
   searchTerm = "";
 
-  searchTerm$ = new BehaviorSubject<string>("");
-  subscription: Subscription;
+  searchTermSubject = new BehaviorSubject<string>("");
+  searchClickSubject = new Subject<void>();
+  subscriptions: Subscription[] = [];
 
-  constructor(private store: Store) {
-    this.subscription = this.searchTerm$
-      .pipe(debounceTime(500), distinctUntilChanged())
-      .subscribe((terms) =>
-        this.store.dispatch(setSearchTermsAction({ terms })),
-      );
-  }
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.searchTerm = this.prefilledValue;
+    this.searchTermSubject.next(this.prefilledValue);
+
+    this.subscriptions.push(
+      this.searchTermSubject
+        .pipe(debounceTime(200), distinctUntilChanged())
+        .subscribe((terms) => {
+          console.log(`set terms: ${terms}`);
+          this.store.dispatch(setSearchTermsAction({ terms }));
+          this.store.dispatch(setTextFilterAction({ text: terms }));
+        }),
+    );
+
+    const searchTerms$ = this.store.select(selectSearchTerms);
+
+    this.subscriptions.push(
+      this.searchClickSubject
+        .pipe(debounceTime(250), withLatestFrom(searchTerms$))
+        .subscribe(([_, terms]) => {
+          console.log(`latest terms: ${terms}`);
+          this.store.dispatch(fetchDatasetsAction());
+          this.store.dispatch(fetchFacetCountsAction());
+        }),
+    );
   }
 
   onSearch(): void {
-    this.store.dispatch(fetchDatasetsAction());
-    this.store.dispatch(fetchFacetCountsAction());
+    this.searchClickSubject.next();
   }
 
   onSearchTermChange(terms: string) {
-    this.searchTerm$.next(terms);
+    this.searchTermSubject.next(terms);
   }
 
   onClear(): void {
     this.searchTerm = "";
-    this.store.dispatch(setSearchTermsAction({ terms: "" }));
-    // this.onSearch(); // Optionally trigger search on clear
+    this.searchTermSubject.next(undefined);
+    this.searchClickSubject.next();
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 }
