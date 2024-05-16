@@ -1,27 +1,24 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
 
 import {
   selectHasAppliedFilters,
-  selectMetadataKeys,
   selectScientificConditions,
 } from "state-management/selectors/datasets.selectors";
 
 import {
-  addScientificConditionAction,
   clearFacetsAction,
   fetchDatasetsAction,
+  fetchFacetCountsAction,
   removeScientificConditionAction,
 } from "state-management/actions/datasets.actions";
 import { Subscription } from "rxjs";
 import {
   deselectAllCustomColumnsAction,
   deselectColumnAction,
-  selectColumnAction,
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
-import { AsyncPipe } from "@angular/common";
 import { AppConfigService } from "app-config.service";
 import { PidFilterComponent } from "./filters/pid-filter.component";
 import { LocationFilterComponent } from "./filters/location-filter.component";
@@ -90,14 +87,14 @@ export class DatasetsFilterComponent implements OnDestroy {
     this.store.dispatch(deselectAllCustomColumnsAction());
   }
 
-  showDatasetsFilterSettingsDialog(){
+  showDatasetsFilterSettingsDialog() {
     const dialogRef = this.dialog.open(DatasetsFilterSettingsComponent, {
       // width: '250px'
-      data: this.appConfig
+      data: this.appConfig,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log("The dialog was closed");
       if (result) {
         // Handle the selected filter
         console.log(`Selected filter: ${result}`);
@@ -108,6 +105,7 @@ export class DatasetsFilterComponent implements OnDestroy {
   applyFilters() {
     this.isInEditMode = false;
     this.store.dispatch(fetchDatasetsAction());
+    this.store.dispatch(fetchFacetCountsAction());
   }
 
   removeCondition(condition: ScientificCondition, index: number) {
