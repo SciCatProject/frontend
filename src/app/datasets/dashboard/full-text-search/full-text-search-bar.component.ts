@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatSelectModule } from "@angular/material/select";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -11,6 +11,8 @@ import {
   setSearchTermsAction,
 } from "../../../state-management/actions/datasets.actions";
 import { Store } from "@ngrx/store";
+import { BehaviorSubject, Subscription } from "rxjs";
+import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
 
 @Component({
   selector: "full-text-search-bar",
@@ -63,14 +65,23 @@ import { Store } from "@ngrx/store";
     MatButtonModule,
   ],
 })
-export class FullTextSearchBarComponent {
+export class FullTextSearchBarComponent implements OnInit, OnDestroy {
   @Input() prefilledValue = "";
   @Input() placeholder = "Text Search";
   @Input() clear: boolean;
 
   searchTerm = "";
 
-  constructor(private store: Store) {}
+  searchTerm$ = new BehaviorSubject<string>("");
+  subscription: Subscription;
+
+  constructor(private store: Store) {
+    this.subscription = this.searchTerm$
+      .pipe(debounceTime(500), distinctUntilChanged())
+      .subscribe((terms) =>
+        this.store.dispatch(setSearchTermsAction({ terms })),
+      );
+  }
 
   ngOnInit(): void {
     this.searchTerm = this.prefilledValue;
@@ -82,12 +93,16 @@ export class FullTextSearchBarComponent {
   }
 
   onSearchTermChange(terms: string) {
-    this.store.dispatch(setSearchTermsAction({ terms }));
+    this.searchTerm$.next(terms);
   }
 
   onClear(): void {
     this.searchTerm = "";
     this.store.dispatch(setSearchTermsAction({ terms: "" }));
     // this.onSearch(); // Optionally trigger search on clear
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }
