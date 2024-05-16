@@ -3,8 +3,12 @@
 describe("Datasets", () => {
   const metadataName = "some name";
   const metadataValue = "some value";
-  const metadataQuantityValue = 1128;
-  const metadataValidUnitValue = "m";
+  const metadataValidJson = {
+    value: 1128,
+    unit: "meters",
+    valueSI: 1128,
+    unitSI: "m",
+  };
   const metadataInvalidUnitValue = "invalidUnit";
 
   beforeEach(() => {
@@ -186,15 +190,13 @@ describe("Datasets", () => {
           option[0].click();
         });
 
-      cy.get("[data-cy=metadata-name-input]")
-        .last()
-        .type(`name1{enter}`);
+      cy.get("[data-cy=metadata-name-input]").last().type(`name1{enter}`);
 
       cy.get("[data-cy=metadata-value-input]")
         .last()
         .type(`${metadataValue}{enter}`);
 
-      // // Add second row with name as name2. 
+      // // Add second row with name as name2.
       cy.get('[data-cy="add-new-row"]').click();
 
       cy.get("mat-select[data-cy=field-type-input]").last().click();
@@ -205,9 +207,7 @@ describe("Datasets", () => {
           option[0].click();
         });
 
-      cy.get("[data-cy=metadata-name-input]")
-        .last()
-        .type(`name2{enter}`);
+      cy.get("[data-cy=metadata-name-input]").last().type(`name2{enter}`);
 
       cy.get("[data-cy=metadata-value-input]")
         .last()
@@ -216,18 +216,11 @@ describe("Datasets", () => {
       cy.get("button[data-cy=save-changes-button]").click();
 
       // Now try to change the name from name2 to name1, it should throw duplication error
-      cy.get("[data-cy=metadata-name-input]")
-        .last()
-        .clear()
+      cy.get("[data-cy=metadata-name-input]").last().clear();
 
-      cy.get("[data-cy=metadata-name-input]")
-        .last()
-        .type("name1")
+      cy.get("[data-cy=metadata-name-input]").last().type("name1");
 
-      cy.get("[data-cy=metadata-name-input]")
-        .last()
-        .parent()
-        .click()
+      cy.get("[data-cy=metadata-name-input]").last().parent().click();
 
       cy.get("mat-error").contains("Name already exists");
       cy.get("button[data-cy=save-changes-button]").should("be.disabled");
@@ -273,11 +266,11 @@ describe("Datasets", () => {
 
       cy.get("[data-cy=metadata-value-input]")
         .last()
-        .type(`${metadataQuantityValue}{enter}`);
+        .type(`${metadataValidJson.value}{enter}`);
 
       cy.get("[data-cy=metadata-unit-input]")
         .last()
-        .type(`${metadataValidUnitValue}{enter}`);
+        .type(`${metadataValidJson.unit}{enter}`);
 
       cy.get('[aria-label="warning invalid unit"]').should("not.exist");
 
@@ -296,7 +289,7 @@ describe("Datasets", () => {
 
       cy.get("[data-cy=metadata-value-input]")
         .last()
-        .type(`${metadataQuantityValue}{enter}`);
+        .type(`${metadataValidJson.value}{enter}`);
 
       cy.get("[data-cy=metadata-unit-input]")
         .last()
@@ -309,7 +302,7 @@ describe("Datasets", () => {
       cy.get('[role="tab"]').contains("View").click();
 
       cy.get(".unit-input")
-        .contains(`${metadataValidUnitValue}`)
+        .contains(`${metadataValidJson.unitSI}`)
         .within(() => {
           cy.get(".unit-input--warning").should("not.exist");
         });
@@ -319,6 +312,71 @@ describe("Datasets", () => {
         .within(() => {
           cy.get(".unit-input--warning").should("exist");
         });
+    });
+
+    it("added metadata entry should be visible from the Scientific Metadata(JSON) table", () => {
+      cy.createDataset("raw");
+
+      cy.visit("/datasets");
+
+      cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+      cy.finishedLoading();
+
+      cy.get('[data-cy="text-search"] input[type="search"]')
+        .clear()
+        .type("Cypress");
+
+      cy.isLoading();
+
+      cy.get("mat-row").contains("Cypress Dataset").first().click();
+
+      cy.wait("@fetch");
+
+      cy.finishedLoading();
+
+      cy.scrollTo("bottom");
+
+      cy.get('[role="tab"]').contains("Edit").click();
+
+      cy.get('[data-cy="add-new-row"]').click();
+
+      // simulate click event on the drop down
+      cy.get("mat-select[data-cy=field-type-input]").last().click(); // opens the drop down
+
+      // simulate click event on the drop down item (mat-option)
+      cy.get("mat-option")
+        .contains("quantity")
+        .then((option) => {
+          option[0].click();
+        });
+
+      cy.get("[data-cy=metadata-name-input]")
+        .last()
+        .type(`${metadataName}{enter}`);
+
+      cy.get("[data-cy=metadata-value-input]")
+        .last()
+        .type(`${metadataValidJson.value}{enter}`);
+
+      cy.get("[data-cy=metadata-unit-input]")
+        .last()
+        .type(`${metadataValidJson.unit}{enter}`);
+
+      cy.get("button[data-cy=save-changes-button]").click();
+
+      cy.get("[mat-tab-nav-bar]")
+        .contains("Scientific Metadata (JSON)")
+        .click();
+
+      cy.contains(metadataName).click();
+
+      cy.get('[data-cy="metadata-json-view"]').within(() => {
+        cy.contains(`value: ${metadataValidJson.value}`).should("exist");
+        cy.contains(`unit: "${metadataValidJson.unit}"`).should("exist");
+        cy.contains(`valueSI: ${metadataValidJson.valueSI}`).should("exist");
+        cy.contains(`unitSI: "${metadataValidJson.unitSI}"`).should("exist");
+      });
     });
   });
 
