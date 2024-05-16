@@ -1,11 +1,8 @@
 <breadcrumb></breadcrumb>
   <full-text-search-bar
     #searchBar
-    [prefilledValue]="searchTerms$ | async"
     data-cy="text-search"
     [placeholder]="'Text Search'"
-    [clear]="clearSearchBar"
-    (search)="fullTextSearch($event)"
   >
   </full-text-search-bar>
 <mat-sidenav-container [hasBackdrop]="false">

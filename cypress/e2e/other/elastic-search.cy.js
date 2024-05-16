@@ -35,6 +35,9 @@ describe("Elastic search", () => {
         .clear()
         .type(searchQuery1);
 
+      // Click the search button
+      cy.get('[data-cy="search-button"]').click();
+
       cy.finishedLoading();
 
       cy.get("mat-row").contains(randomText1).click();
@@ -48,6 +51,9 @@ describe("Elastic search", () => {
       cy.get('[data-cy="text-search"] input[type="search"]')
         .clear()
         .type(searchQuery2);
+
+      // Click the search button
+      cy.get('[data-cy="search-button"]').click();
 
       cy.finishedLoading();
 
@@ -67,6 +73,9 @@ describe("Elastic search", () => {
     cy.get('[data-cy="text-search"] input[type="search"]')
       .clear()
       .type(searchQueryIrrelevant);
+
+    // Click the search button
+    cy.get('[data-cy="search-button"]').click();
 
     cy.finishedLoading();
 
