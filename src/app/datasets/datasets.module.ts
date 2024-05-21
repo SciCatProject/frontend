@@ -91,6 +91,7 @@ import { TypeFilterComponent } from "./datasets-filter/filters/type-filter.compo
 import { KeywordFilterComponent } from "./datasets-filter/filters/keyword-filter.component";
 import { DateRangeFilterComponent } from "./datasets-filter/filters/date-range-filter.component";
 import { TextFilterComponent } from "./datasets-filter/filters/text-filter.component";
+import { DatasetsFilterSettingsComponent } from "./datasets-filter/settings/datasets-filter-settings.component";
 
 @NgModule({
   imports: [
@@ -179,6 +180,7 @@ import { TextFilterComponent } from "./datasets-filter/filters/text-filter.compo
     KeywordFilterComponent,
     DateRangeFilterComponent,
     TextFilterComponent,
+    DatasetsFilterSettingsComponent,
   ],
   providers: [
     ArchivingService,

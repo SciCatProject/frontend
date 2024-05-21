@@ -23,8 +23,44 @@ import { selectSearchTerms } from "../../../state-management/selectors/datasets.
 
 @Component({
   selector: "full-text-search-bar",
-  templateUrl: "./full-text-search-bar.component.html",
-  styleUrls: ["./full-text-search-bar.component.scss"],
+  template: ` <mat-form-field appearance="fill" class="full-text-search-field">
+      <mat-label>Search</mat-label>
+      <input
+        matInput
+        placeholder="Type to search..."
+        type="search"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchTermChange($event)"
+      />
+    </mat-form-field>
+    <span>
+      <button
+        mat-flat-button
+        color="accent"
+        data-cy="search-button"
+        (click)="onSearch()"
+      >
+        <mat-icon>search</mat-icon>
+        Search
+      </button>
+      <button mat-flat-button data-cy="search-clear-button" (click)="onClear()">
+        <mat-icon>close</mat-icon>
+        Clear
+      </button>
+    </span>`,
+  styles: [
+    `
+      .full-text-search-field {
+        max-width: 80%;
+        width: 100%;
+        margin-left: 5em;
+      }
+
+      .full-text-search-field + span {
+        margin-left: 5em;
+      }
+    `,
+  ],
   standalone: true,
   imports: [
     MatFormFieldModule,
