@@ -86,11 +86,11 @@ import { PidFilterComponent } from "./datasets-filter/filters/pid-filter.compone
 import { MatMenuModule } from "@angular/material/menu";
 import { LocationFilterComponent } from "./datasets-filter/filters/location-filter.component";
 import { ClearableInputComponent } from "./datasets-filter/filters/clearable-input.component";
-import {GroupFilterComponent} from "./datasets-filter/filters/group-filter.component";
-import {TypeFilterComponent} from "./datasets-filter/filters/type-filter.component";
-import {KeywordFilterComponent} from "./datasets-filter/filters/keyword-filter.component";
-import {DateRangeFilterComponent} from "./datasets-filter/filters/date-range-filter.component";
-import {TextFilterComponent} from "./datasets-filter/filters/text-filter.component";
+import { GroupFilterComponent } from "./datasets-filter/filters/group-filter.component";
+import { TypeFilterComponent } from "./datasets-filter/filters/type-filter.component";
+import { KeywordFilterComponent } from "./datasets-filter/filters/keyword-filter.component";
+import { DateRangeFilterComponent } from "./datasets-filter/filters/date-range-filter.component";
+import { TextFilterComponent } from "./datasets-filter/filters/text-filter.component";
 
 @NgModule({
   imports: [

@@ -154,7 +154,7 @@ export class DatasetDetailsDashboardComponent
               {
                 location: "./jsonScientificMetadata",
                 label: TAB.jsonScientificMetadata,
-                icon: "schema",
+                icon: "data_object",
                 enabled:
                   this.appConfig.datasetJsonScientificMetadata && isLoggedIn,
               },

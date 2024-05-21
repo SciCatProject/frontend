@@ -8,8 +8,7 @@
       color="primary"
       (click)="clearFacets()"
     >
-      <mat-icon>clear_all</mat-icon>
-      Clear
+      <mat-icon>clear_all</mat-icon> Reset
     </button>
   </mat-card-header>
 
@@ -52,8 +51,7 @@
 
     <div class="section-container" *ngIf="appConfig.scienceSearchEnabled">
       <button mat-button color="primary" (click)="showAddConditionDialog()">
-        <mat-icon>add</mat-icon>
-        Add Condition
+        <mat-icon>add</mat-icon> Add Condition
       </button>
 
       <mat-chip-listbox class="scientific-chips" aria-orientation="vertical">
@@ -78,22 +76,26 @@
               </ng-container>
             </ng-container>
             {{
-            condition.relation === "EQUAL_TO_STRING"
-              ? '"' + condition.rhs + '"'
-              : condition.rhs
+              condition.relation === "EQUAL_TO_STRING"
+                ? '"' + condition.rhs + '"'
+                : condition.rhs
             }}
             {{ condition.unit | prettyUnit }}
           </span>
           <mat-icon matChipRemove (click)="removeCondition(condition, i)"
-          >cancel
-          </mat-icon
+            >cancel</mat-icon
           >
         </mat-chip-option>
       </mat-chip-listbox>
     </div>
 
     <div class="section-container">
-      <button mat-raised-button color="primary" class="applyButton" (click)="applyFilters()">
+      <button
+        mat-raised-button
+        color="primary"
+        class="applyButton"
+        (click)="applyFilters()"
+      >
         Apply
       </button>
     </div>
