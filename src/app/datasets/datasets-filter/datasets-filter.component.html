@@ -8,7 +8,7 @@
       color="primary"
       (click)="clearFacets()"
     >
-      <mat-icon>clear_all</mat-icon> Clear
+      <mat-icon>clear_all</mat-icon> Reset
     </button>
   </mat-card-header>
 
@@ -204,7 +204,12 @@
     </div>
 
     <div class="section-container">
-      <button mat-raised-button color="primary" class="applyButton" (click)="applyFilters()">
+      <button
+        mat-raised-button
+        color="primary"
+        class="applyButton"
+        (click)="applyFilters()"
+      >
         Apply
       </button>
     </div>

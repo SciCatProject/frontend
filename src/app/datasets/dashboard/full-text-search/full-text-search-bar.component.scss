@@ -1,0 +1,19 @@
+mat-card {
+  padding: 0.4em;
+  margin: 1.5em 0.5em 0.5em;
+
+  .search-card-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin: 0.5em;
+  }
+  .search-button-group {
+    flex-shrink: 0.6;
+    margin: 0 0.5em;
+  }
+
+  mat-form-field.full-text-search-field {
+    flex: 1;
+  }
+}
