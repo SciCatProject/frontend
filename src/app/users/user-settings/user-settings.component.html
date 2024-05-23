@@ -56,7 +56,7 @@
           <tr *ngIf="tokenValue" data-cy="user-token">
             <th>SciCat Token</th>
             <td>
-              {{ tokenValue }}
+              <span class="token-truncate">{{ tokenValue }}</span>
               <span class="copy-button" (click)="onCopy(tokenValue)">
                 <mat-icon matTooltip="Copy token to clipboard"
                   >post_add</mat-icon

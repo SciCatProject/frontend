@@ -14,6 +14,14 @@ mat-card {
     margin: 1em 0em;
   }
 
+  .token-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 20ch;
+  }
+
   table {
     th {
       min-width: 10em;
@@ -22,9 +30,9 @@ mat-card {
     }
 
     td {
-      width: 100%;
       padding: 0.5em;
-      display: inline-block;
+      display: flex;
+      align-items: center;
       word-break: break-all;
 
       .copy-button {
