@@ -14,7 +14,7 @@ interface DateRange {
 @Component({
   selector: "app-date-range-filter",
   template: `<mat-form-field>
-    <mat-label>Start Date - End Date</mat-label>
+    <mat-label>{{ label }}</mat-label>
     <mat-date-range-input class="date-input" [rangePicker]="picker">
       <input
         matStartDate
@@ -42,6 +42,8 @@ interface DateRange {
 })
 export class DateRangeFilterComponent extends ClearableInputComponent {
   static kName = "date";
+
+  label = "Start Date - End Date";
 
   creationTimeFilter$ = this.store.select(selectCreationTimeFilter);
 

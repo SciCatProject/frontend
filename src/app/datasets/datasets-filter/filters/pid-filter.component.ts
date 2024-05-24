@@ -8,7 +8,6 @@ import {
 import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
 import { AppConfigService } from "../../../app-config.service";
 import { ClearableInputComponent } from "./clearable-input.component";
-// import { addPidFilterAction, removePidFilterAction } from 'state-management/actions/datasets.actions';
 
 enum PidTermsSearchCondition {
   startsWith = "startsWith",
@@ -20,7 +19,7 @@ enum PidTermsSearchCondition {
   selector: "app-pid-filter",
   template: `
     <mat-form-field>
-      <mat-label>PID filter</mat-label>
+      <mat-label>{{ label }}</mat-label>
       <input
         #input
         matInput
@@ -45,6 +44,8 @@ export class PidFilterComponent
 
   private pidSubject = new Subject<string>();
   private subscription: Subscription;
+
+  label = "PID filter";
 
   appConfig = this.appConfigService.getConfig();
 

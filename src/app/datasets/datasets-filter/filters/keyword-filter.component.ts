@@ -17,7 +17,7 @@ import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
 @Component({
   selector: "app-keyword-filter",
   template: `<mat-form-field>
-    <mat-label>Keywords</mat-label>
+    <mat-label>{{ label }}</mat-label>
     <mat-chip-grid #keywordChipList>
       <mat-chip-row
         *ngFor="let keyword of keywordsFilter$ | async"
@@ -60,6 +60,8 @@ export class KeywordFilterComponent
 
   protected readonly getFacetCount = getFacetCount;
   protected readonly getFacetId = getFacetId;
+
+  label = "Keywords";
 
   keywordsTerms$ = this.store.select(selectKeywordsTerms);
 

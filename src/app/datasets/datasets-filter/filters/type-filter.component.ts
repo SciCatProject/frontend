@@ -15,7 +15,7 @@ import {
 @Component({
   selector: "app-type-filter",
   template: `<mat-form-field>
-    <mat-label>Type</mat-label>
+    <mat-label>{{ label }}</mat-label>
     <mat-chip-grid #typeChipList>
       <mat-chip-row
         *ngFor="let type of typeFilter$ | async"
@@ -56,6 +56,8 @@ export class TypeFilterComponent extends ClearableInputComponent {
 
   protected readonly getFacetCount = getFacetCount;
   protected readonly getFacetId = getFacetId;
+
+  label = "Type";
 
   typeFacetCounts$ = this.store.select(selectTypeFacetCounts);
 

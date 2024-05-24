@@ -1,15 +1,18 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
-import {ClearableInputComponent} from "./clearable-input.component";
-import {selectSearchTerms} from "../../../state-management/selectors/datasets.selectors";
-import {Store} from "@ngrx/store";
-import {setSearchTermsAction, setTextFilterAction} from "../../../state-management/actions/datasets.actions";
-import {debounceTime, distinctUntilChanged, skipWhile} from "rxjs/operators";
-import {Subject, Subscription} from "rxjs";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ClearableInputComponent } from "./clearable-input.component";
+import { selectSearchTerms } from "../../../state-management/selectors/datasets.selectors";
+import { Store } from "@ngrx/store";
+import {
+  setSearchTermsAction,
+  setTextFilterAction,
+} from "../../../state-management/actions/datasets.actions";
+import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
+import { Subject, Subscription } from "rxjs";
 
 @Component({
   selector: "app-text-filter",
   template: `<mat-form-field>
-    <mat-label>Text Filter</mat-label>
+    <mat-label>{{ label }}</mat-label>
     <input
       #input
       matInput
@@ -26,12 +29,18 @@ import {Subject, Subscription} from "rxjs";
     `,
   ],
 })
-export class TextFilterComponent extends ClearableInputComponent implements OnDestroy {
+export class TextFilterComponent
+  extends ClearableInputComponent
+  implements OnDestroy
+{
   static kName = "text";
+
+  private textSubject = new Subject<string>();
 
   searchTerms$ = this.store.select(selectSearchTerms);
 
-  private textSubject = new Subject<string>();
+  label = "Text filter";
+
   subscription: Subscription;
 
   constructor(private store: Store) {
@@ -52,9 +61,8 @@ export class TextFilterComponent extends ClearableInputComponent implements OnDe
     this.textSubject.next(pid);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subscription.unsubscribe();
     this.textSubject.complete();
   }
-
 }

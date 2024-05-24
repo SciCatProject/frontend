@@ -29,6 +29,11 @@ import { DateRangeFilterComponent } from "./filters/date-range-filter.component"
 import { TextFilterComponent } from "./filters/text-filter.component";
 import { DatasetsFilterSettingsComponent } from "./settings/datasets-filter-settings.component";
 
+export interface FilterConfig {
+  type: any;
+  visible: boolean;
+}
+
 @Component({
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
@@ -45,6 +50,16 @@ export class DatasetsFilterComponent implements OnDestroy {
   protected readonly DateRangeFilterComponent = DateRangeFilterComponent;
   protected readonly TextFilterComponent = TextFilterComponent;
 
+  filterConfigs: FilterConfig[] = [
+    { type: LocationFilterComponent, visible: true },
+    { type: PidFilterComponent, visible: true },
+    { type: GroupFilterComponent, visible: true },
+    { type: TypeFilterComponent, visible: true },
+    { type: KeywordFilterComponent, visible: true },
+    { type: DateRangeFilterComponent, visible: true },
+    { type: TextFilterComponent, visible: true },
+  ];
+
   scientificConditions$ = this.store.select(selectScientificConditions);
 
   appConfig = this.appConfigService.getConfig();
@@ -55,30 +70,11 @@ export class DatasetsFilterComponent implements OnDestroy {
 
   isInEditMode = false;
 
-  //TODO extract to state
-  selectedFilters = {
-    [PidFilterComponent.kName]: true,
-    [LocationFilterComponent.kName]: true,
-    [KeywordFilterComponent.kName]: true,
-    [GroupFilterComponent.kName]: true,
-    [TypeFilterComponent.kName]: true,
-    [DateRangeFilterComponent.kName]: true,
-    [TextFilterComponent.kName]: true,
-  };
-
   constructor(
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
     private store: Store,
   ) {}
-
-  addFilter(filter: string) {
-    this.selectedFilters[filter] = true;
-  }
-
-  removeFilter(filter: string) {
-    this.selectedFilters[filter] = false;
-  }
 
   clearFacets() {
     this.clearSearchBar = true;
@@ -89,8 +85,12 @@ export class DatasetsFilterComponent implements OnDestroy {
 
   showDatasetsFilterSettingsDialog() {
     const dialogRef = this.dialog.open(DatasetsFilterSettingsComponent, {
-      // width: '250px'
-      data: this.appConfig,
+      width: "60%",
+      data: {
+        filterConfigs: this.filterConfigs.map((filterConfig) =>
+          Object.assign({}, filterConfig),
+        ),
+      },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -98,6 +98,7 @@ export class DatasetsFilterComponent implements OnDestroy {
       if (result) {
         // Handle the selected filter
         console.log(`Selected filter: ${result}`);
+        this.filterConfigs = result;
       }
     });
   }

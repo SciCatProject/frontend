@@ -1,0 +1,58 @@
+mat-dialog-title {
+  background-color: #1976d2; /* Example: Material Indigo 500 */
+  color: white;
+  padding: 12px 24px;
+  width: 60%;
+}
+
+.filter-dialog-content {
+  max-height: 400px;
+  overflow: auto;
+  padding: 16px;
+  background-color: #f0f0f0; /* Light grey background for contrast */
+}
+
+mat-nav-list {
+  width: 100%;
+  max-height: 400px;
+  overflow: auto;
+}
+
+mat-list-item {
+  display: flex;
+  align-items: center; /* Centers items vertically */
+  justify-content: start; /* Aligns items to the start */
+  padding: 10px; /* Provides padding within each list item */
+  border-bottom: 1px solid #ccc; /* Adds a subtle line between items for better visual separation */
+}
+
+
+.filter-item {
+  display: flex;
+  align-items: center; /* Align items vertically in the center */
+  justify-content: space-between; /* Spread out the items to fill the horizontal space */
+  padding: 8px 16px; /* Add some padding around the items */
+  border-bottom: 1px solid #e0e0e0; /* Optional: adds a separator line between items */
+}
+
+.filter-toggle {
+  flex-shrink: 0; /* Prevents the toggle from shrinking */
+}
+
+.filter-name {
+  margin-left: 16px; /* Space between the toggle and the name */
+  flex-grow: 1; /* Allows the name to take up any available space */
+  white-space: nowrap; /* Prevents the text from wrapping */
+  overflow: hidden; /* Keeps the text within the container */
+  text-overflow: ellipsis; /* Adds an ellipsis if the text is too long */
+}
+
+.spacer {
+  flex-grow: 2; /* Forces any extra space to be added here, pushing the drag handle to the right */
+}
+
+.drag-handle {
+  cursor: grab; /* Changes the cursor to indicate draggable */
+  margin-left: auto;
+  margin-right: 20px;
+}

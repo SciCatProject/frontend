@@ -9,14 +9,14 @@ import {
   addLocationFilterAction,
   removeLocationFilterAction,
 } from "../../../state-management/actions/datasets.actions";
-import {ClearableInputComponent} from "./clearable-input.component";
-import {Store} from "@ngrx/store";
+import { ClearableInputComponent } from "./clearable-input.component";
+import { Store } from "@ngrx/store";
 
 @Component({
   selector: "app-location-filter",
   template: `
     <mat-form-field>
-      <mat-label>Location</mat-label>
+      <mat-label>{{ label }}</mat-label>
       <mat-chip-grid #locationChipList>
         <mat-chip-row
           *ngFor="let location of locationFilter$ | async"
@@ -60,6 +60,8 @@ export class LocationFilterComponent extends ClearableInputComponent {
 
   protected readonly getFacetId = getFacetId;
   protected readonly getFacetCount = getFacetCount;
+
+  label = "Location";
 
   locationFacetCounts$ = this.store.select(selectLocationFacetCounts);
   locationFilter$ = this.store.select(selectLocationFilter);

@@ -15,7 +15,7 @@ import { ClearableInputComponent } from "./clearable-input.component";
 @Component({
   selector: "app-group-filter",
   template: `<mat-form-field>
-    <mat-label>Group</mat-label>
+    <mat-label>{{ label }}</mat-label>
     <mat-chip-grid #groupChipList>
       <mat-chip-row
         *ngFor="let group of groupFilter$ | async"
@@ -55,6 +55,8 @@ export class GroupFilterComponent extends ClearableInputComponent {
 
   protected readonly getFacetId = getFacetId;
   protected readonly getFacetCount = getFacetCount;
+
+  label = "Group";
 
   groupFilter$ = this.store.select(selectGroupFilter);
 

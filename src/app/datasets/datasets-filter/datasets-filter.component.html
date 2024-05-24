@@ -20,40 +20,11 @@
   </mat-card-header>
 
   <mat-card-content>
-      <app-pid-filter
-        [clear]="clearSearchBar"
-      >
-      </app-pid-filter>
-
-      <app-text-filter
-        [clear]="clearSearchBar"
-      >
-      </app-text-filter>
-
-      <app-location-filter
-        [clear]="clearSearchBar"
-      >
-      </app-location-filter>
-
-      <app-group-filter
-        [clear]="clearSearchBar"
-      >
-      </app-group-filter>
-
-      <app-type-filter
-        [clear]="clearSearchBar"
-      >
-      </app-type-filter>
-
-      <app-keyword-filter
-        [clear]="clearSearchBar"
-      >
-      </app-keyword-filter>
-
-      <app-date-range-filter
-        [clear]="clearSearchBar"
-      >
-      </app-date-range-filter>
+    <ng-container *ngFor="let filterConfig of filterConfigs">
+      <ng-container  *ngIf="filterConfig.visible">
+        <ng-container *ngComponentOutlet="filterConfig.type; inputs: { 'clear': clearSearchBar}"></ng-container>
+      </ng-container>
+    </ng-container>
 
 
     <div class="section-container" *ngIf="appConfig.scienceSearchEnabled">
