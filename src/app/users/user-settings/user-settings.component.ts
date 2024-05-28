@@ -8,6 +8,8 @@ import {
 import { Message, MessageType } from "state-management/models";
 import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
 import { DOCUMENT } from "@angular/common";
+import packageJson from "../../../../package.json";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "app-user-settings",
@@ -16,10 +18,13 @@ import { DOCUMENT } from "@angular/common";
 })
 export class UserSettingsComponent implements OnInit {
   vm$ = this.store.select(selectUserSettingsPageViewModel);
+  appVersion: string | undefined = packageJson.version;
+  appConfig = this.appConfigService.getConfig();
   tokenValue: string;
   show = true;
 
   constructor(
+    public appConfigService: AppConfigService,
     @Inject(DOCUMENT) private document: Document,
     private store: Store,
   ) {
