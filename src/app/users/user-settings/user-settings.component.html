@@ -51,7 +51,23 @@
             data-cy="user-accessGroup"
           >
             <th>Groups</th>
-            <td>{{ vm.profile.accessGroups }}</td>
+            <td>
+              <span [class.show]="show">
+                {{
+                  show
+                    ? vm.profile.accessGroups
+                    : (vm.profile.accessGroups | slice: 0 : 15)
+                }}
+              </span>
+              <span class="toggleButton" (click)="show = !show">
+                <ng-container *ngIf="show; else showAllTemplate">
+                  <mat-icon matTooltip="Show Less Groups">expand_less</mat-icon>
+                </ng-container>
+                <ng-template #showAllTemplate>
+                  <mat-icon matTooltip="Show All Groups">expand_more</mat-icon>
+                </ng-template>
+              </span>
+            </td>
           </tr>
           <tr *ngIf="tokenValue" data-cy="user-token">
             <th>SciCat Token</th>
