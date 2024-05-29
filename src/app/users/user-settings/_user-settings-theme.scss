@@ -18,6 +18,9 @@
     .copy-button {
       color: mat.get-color-from-palette($primary, "default");
     }
+    .toggleButton {
+      color: mat.get-color-from-palette($primary, "default");
+    }
   }
 }
 

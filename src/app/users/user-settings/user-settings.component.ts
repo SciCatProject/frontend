@@ -17,6 +17,7 @@ import { DOCUMENT } from "@angular/common";
 export class UserSettingsComponent implements OnInit {
   vm$ = this.store.select(selectUserSettingsPageViewModel);
   tokenValue: string;
+  show = true;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
