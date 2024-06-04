@@ -7,8 +7,8 @@ import {
 } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { Store, StoreModule } from "@ngrx/store";
-import { MockConfigService, MockStore } from "shared/MockStubs";
-import { ConfigService } from "shared/services";
+import { MockStore } from "shared/MockStubs";
+import { AppConfigService } from "app-config.service";
 
 import { UserSettingsComponent } from "./user-settings.component";
 import { SharedScicatFrontendModule } from "shared/shared.module";
@@ -25,6 +25,8 @@ describe("UserSettingsComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
+  const getConfig = () => ({});
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
@@ -40,10 +42,7 @@ describe("UserSettingsComponent", () => {
     });
     TestBed.overrideComponent(UserSettingsComponent, {
       set: {
-        providers: [
-          // needed for config form sub component
-          { provide: ConfigService, useClass: MockConfigService },
-        ],
+        providers: [{ provide: AppConfigService, useValue: { getConfig } }],
       },
     });
     TestBed.compileComponents();
