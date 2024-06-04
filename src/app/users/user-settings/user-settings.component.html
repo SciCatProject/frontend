@@ -98,13 +98,13 @@
 
       <mat-card-content>
         <table>
-          <tr *ngIf="settings.datasetCount as value">
-            <th>Dataset Count</th>
-            <td>{{ value }}</td>
+          <tr *ngIf="appVersion">
+            <th>Frontend Release Version</th>
+            <td>{{ appVersion }}</td>
           </tr>
-          <tr *ngIf="settings.jobCount as value">
-            <th>Job Count</th>
-            <td>{{ value }}</td>
+          <tr *ngIf="appConfig.facility">
+            <th>Site</th>
+            <td>{{ appConfig.facility }}</td>
           </tr>
         </table>
       </mat-card-content>
