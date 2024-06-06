@@ -160,11 +160,18 @@ describe("DatasetsFilterComponent", () => {
     expect(type).toBeTruthy();
   });
 
-  it("should contain a clear button", () => {
+  it("should contain a clear all button", () => {
     const compiled = fixture.debugElement.nativeElement;
-    const btn = compiled.querySelector(".clear-button");
-    expect(btn.textContent).toContain("Reset");
+    const btn = compiled.querySelector(".datasets-filters-clear-all-button");
+    expect(btn.textContent).toContain("Clear All Filters");
   });
+
+  it("should contain a search button", () => {
+    const compiled = fixture.debugElement.nativeElement;
+    const btn = compiled.querySelector(".datasets-filters-search-button");
+    expect(btn.textContent).toContain("Search");
+  });
+
 
   describe("#getFacetId()", () => {
     it("should return the FacetCount id if present", () => {
