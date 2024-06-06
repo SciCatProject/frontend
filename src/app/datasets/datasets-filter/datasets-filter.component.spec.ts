@@ -172,7 +172,6 @@ describe("DatasetsFilterComponent", () => {
     expect(btn.textContent).toContain("Search");
   });
 
-
   describe("#getFacetId()", () => {
     it("should return the FacetCount id if present", () => {
       const facetCount: FacetCount = {
