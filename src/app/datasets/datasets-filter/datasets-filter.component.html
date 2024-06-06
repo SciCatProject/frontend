@@ -1,15 +1,6 @@
 <mat-card>
   <mat-card-header class="section-container">
     <mat-card-title>Filter by...</mat-card-title>
-    <button
-      [disabled]="(hasAppliedFilters$ | async) === false"
-      mat-button
-      class="clear-button"
-      color="primary"
-      (click)="clearFacets()"
-    >
-      <mat-icon>clear_all</mat-icon> Reset
-    </button>
   </mat-card-header>
 
   <mat-card-content>
@@ -207,11 +198,22 @@
       <button
         mat-raised-button
         color="primary"
-        class="applyButton"
+        class="datasets-filters-search-button"
         (click)="applyFilters()"
       >
-        Apply
+        <mat-icon>search</mat-icon>
+        Search
       </button>
+      <button
+        [disabled]="(hasAppliedFilters$ | async) === false"
+        mat-raised-button
+        color="primary"
+        class="datasets-filters-clear-all-button"
+        (click)="clearFacets()"
+      >
+      <mat-icon>clear_all</mat-icon>
+      Clear All Filters
+    </button>
     </div>
   </mat-card-content>
 </mat-card>
