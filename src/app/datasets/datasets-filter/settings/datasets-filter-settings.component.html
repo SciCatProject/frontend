@@ -3,7 +3,7 @@
   <mat-nav-list cdkDropList (cdkDropListDropped)="drop($event)">
     <mat-list-item class="filter-item" *ngFor="let filter of data.filterConfigs; let i = index" cdkDrag cdkDragHandle>
       <span class="drag-handle" matTooltip="Drag to reorder" aria-label="Drag handle">
-        <mat-icon>clear_all</mat-icon>
+        <mat-icon>sort</mat-icon>
       </span>
       <mat-slide-toggle
         class="filter-toggle"
@@ -24,12 +24,6 @@
     *ngIf="appConfig.scienceSearchEnabled"
     (click)="addCondition()"
   >
-    <mat-icon>add</mat-icon>
-    Add Condition
-  </button>
-  </div>
-  <div>
-  <button mat-button color="primary" (click)="addFilter()">
     <mat-icon>add</mat-icon>
     Add Filter
   </button>

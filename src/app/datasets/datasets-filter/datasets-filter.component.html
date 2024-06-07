@@ -1,22 +1,6 @@
 <mat-card>
   <mat-card-header class="section-container">
     <mat-card-title>Filter by...</mat-card-title>
-    <button
-      [disabled]="(hasAppliedFilters$ | async) === false"
-      mat-button
-      class="clear-button"
-      color="primary"
-      (click)="clearFacets()"
-    >
-      <mat-icon>clear_all</mat-icon> Reset
-    </button>
-    <button
-      mat-button
-      class="settings-button"
-      (click)="showDatasetsFilterSettingsDialog()"
-    >
-      <mat-icon>settings</mat-icon>
-    </button>
   </mat-card-header>
 
   <mat-card-content>
@@ -26,41 +10,14 @@
       </ng-container>
     </ng-container>
 
-
-    <div class="section-container" *ngIf="appConfig.scienceSearchEnabled">
-      <mat-chip-listbox class="scientific-chips" aria-orientation="vertical">
-        <mat-chip-option
-          class="scientific-chip"
-          *ngFor="let condition of scientificConditions$ | async; index as i"
-        >
-          <span class="scientific-chip-text">
-            {{ condition.lhs }}
-            <ng-container [ngSwitch]="condition.relation">
-              <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">
-                &nbsp;=&nbsp;
-              </ng-container>
-              <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">
-                &nbsp;=&nbsp;
-              </ng-container>
-              <ng-container *ngSwitchCase="'LESS_THAN'">
-                &nbsp;&lt;&nbsp;
-              </ng-container>
-              <ng-container *ngSwitchCase="'GREATER_THAN'">
-                &nbsp;&gt;&nbsp;
-              </ng-container>
-            </ng-container>
-            {{
-              condition.relation === "EQUAL_TO_STRING"
-                ? '"' + condition.rhs + '"'
-                : condition.rhs
-            }}
-            {{ condition.unit | prettyUnit }}
-          </span>
-          <mat-icon matChipRemove (click)="removeCondition(condition, i)"
-            >cancel</mat-icon
-          >
-        </mat-chip-option>
-      </mat-chip-listbox>
+    <div class="section-container">
+      <button
+        mat-button
+        class="full-width-button"
+        (click)="showDatasetsFilterSettingsDialog()"
+      >
+        <mat-icon>tune</mat-icon>More Filters...
+      </button>
     </div>
 
     <div class="section-container">
@@ -80,8 +37,8 @@
         class="datasets-filters-clear-all-button"
         (click)="clearFacets()"
       >
-      <mat-icon>clear_all</mat-icon>
-      Clear All Filters
+      <mat-icon>undo</mat-icon>
+      Reset
     </button>
     </div>
   </mat-card-content>

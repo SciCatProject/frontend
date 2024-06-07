@@ -29,8 +29,16 @@ mat-card {
       margin-left: auto;
     }
 
-    .settings-button{
-      max-width: 32px;
+    .full-width-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 0;
+
+      mat-icon {
+        margin-right: 8px;
+      }
     }
 
     .scientific-chips {
