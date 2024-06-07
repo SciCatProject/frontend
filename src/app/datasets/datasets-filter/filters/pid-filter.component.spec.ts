@@ -134,20 +134,20 @@ describe("PidFilterComponent", () => {
     });
   });
 
-  //TODO improve readability
   describe("#buildPidTermsCondition()", () => {
     const tests = [
-      ["", "", ""],
-      ["1", "startsWith", { $regex: "^1" }],
-      ["1", "contains", { $regex: "1" }],
-      ["1", "equals", "1"],
-      ["1", "", "1"],
+      { input: "", method: "", expected: "" },
+      { input: "1", method: "startsWith", expected: { $regex: "^1" } },
+      { input: "1", method: "contains", expected: { $regex: "1" } },
+      { input: "1", method: "equals", expected: "1" },
+      { input: "1", method: "", expected: "1" },
     ];
-    tests.forEach((t, i) => {
-      it(`should return buildPidTermsCondition ${i}`, () => {
-        component.appConfig.pidSearchMethod = t[1] as string;
-        const condition = component["buildPidTermsCondition"](t[0] as string);
-        expect(condition).toEqual(t[2]);
+
+    tests.forEach((test, index) => {
+      it(`should return correct condition for test case #${index + 1}`, () => {
+        component.appConfig.pidSearchMethod = test.method;
+        const condition = component["buildPidTermsCondition"](test.input);
+        expect(condition).toEqual(test.expected);
       });
     });
   });
