@@ -4,37 +4,15 @@ import {
   TestBed,
   inject,
   waitForAsync,
+  fakeAsync,
+  tick,
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
-import { DatasetsFilterComponent } from "datasets/datasets-filter/datasets-filter.component";
 import { MockStore } from "shared/MockStubs";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { FacetCount } from "state-management/state/datasets.store";
-import {
-  setSearchTermsAction,
-  addLocationFilterAction,
-  removeLocationFilterAction,
-  addGroupFilterAction,
-  removeGroupFilterAction,
-  addKeywordFilterAction,
-  removeKeywordFilterAction,
-  addTypeFilterAction,
-  removeTypeFilterAction,
-  clearFacetsAction,
-  removeScientificConditionAction,
-  setDateRangeFilterAction,
-  addScientificConditionAction,
-  setPidTermsAction,
-} from "state-management/actions/datasets.actions";
-import { of } from "rxjs";
-import {
-  selectColumnAction,
-  deselectColumnAction,
-  deselectAllCustomColumnsAction,
-} from "state-management/actions/user.actions";
-import { ScientificCondition } from "state-management/models";
+import { setPidTermsFilterAction } from "state-management/actions/datasets.actions";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatDialogModule, MatDialog } from "@angular/material/dialog";
@@ -43,11 +21,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AsyncPipe } from "@angular/common";
-import { DateTime } from "luxon";
-import {
-  MatDatepickerInputEvent,
-  MatDatepickerModule,
-} from "@angular/material/datepicker";
+import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatNativeDateModule, MatOptionModule } from "@angular/material/core";
 import { MatCardModule } from "@angular/material/card";
@@ -122,16 +96,20 @@ describe("PidFilterComponent", () => {
   });
 
   describe("#onPidInput()", () => {
-    it("should dispatch a SetSearchTermsAction", () => {
+    it("should dispatch a SetSearchTermsAction", fakeAsync(() => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const pid = "1";
+      const pid = "xxxxxx";
       const event = { target: { value: pid } };
       component.onPidInput(event);
 
+      tick(500); //wait for it
+
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(setPidTermsAction({ pid }));
-    });
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setPidTermsFilterAction({ pid }),
+      );
+    }));
   });
 
   describe("#buildPidTermsCondition()", () => {

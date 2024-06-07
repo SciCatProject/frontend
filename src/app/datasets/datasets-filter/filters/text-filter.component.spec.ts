@@ -4,13 +4,18 @@ import {
   TestBed,
   inject,
   waitForAsync,
+  fakeAsync,
+  tick,
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
 import { MockStore } from "shared/MockStubs";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { setSearchTermsAction } from "state-management/actions/datasets.actions";
+import {
+  setSearchTermsAction,
+  setTextFilterAction,
+} from "state-management/actions/datasets.actions";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatDialogModule } from "@angular/material/dialog";
@@ -77,14 +82,19 @@ describe("TextFilterComponent", () => {
   });
 
   describe("#textSearchChanged()", () => {
-    it("should dispatch a SetSearchTermsAction", () => {
+    it("should dispatch a SetSearchTermsAction", fakeAsync(() => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const terms = "test";
-      component.textSearchChanged(terms);
+      const event = { target: { value: terms } };
+      component.textSearchChanged(event);
+
+      tick(500); //wait for it
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(setSearchTermsAction({ terms }));
-    });
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        setTextFilterAction({ text: terms }),
+      );
+    }));
   });
 });
