@@ -76,11 +76,12 @@ export class DatasetsFilterComponent implements OnDestroy {
     private store: Store,
   ) {}
 
-  clearFacets() {
+  reset() {
     this.clearSearchBar = true;
 
     this.store.dispatch(clearFacetsAction());
     this.store.dispatch(deselectAllCustomColumnsAction());
+    this.applyFilters();
   }
 
   showDatasetsFilterSettingsDialog() {

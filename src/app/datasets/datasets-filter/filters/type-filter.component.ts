@@ -25,6 +25,7 @@ import {
       </mat-chip-row>
     </mat-chip-grid>
     <input
+      #input
       (input)="onTypeInput($event)"
       [value]="typeInput$ | async"
       matInput

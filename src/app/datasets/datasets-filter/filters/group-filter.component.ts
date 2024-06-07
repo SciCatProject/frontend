@@ -25,6 +25,7 @@ import { ClearableInputComponent } from "./clearable-input.component";
       </mat-chip-row>
     </mat-chip-grid>
     <input
+      #input
       (input)="onGroupInput($event)"
       [value]="groupInput$ | async"
       matInput

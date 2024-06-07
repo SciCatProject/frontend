@@ -27,6 +27,7 @@ import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
       </mat-chip-row>
     </mat-chip-grid>
     <input
+      #input
       (input)="onKeywordInput($event)"
       [value]="keywordsInput$ | async"
       matInput
