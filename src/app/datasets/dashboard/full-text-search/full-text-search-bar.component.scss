@@ -16,4 +16,8 @@ mat-card {
   mat-form-field.full-text-search-field {
     flex: 1;
   }
+  .full-text-search-button,
+  .full-text-clear-button {
+    margin:0 2px;
+  }
 }

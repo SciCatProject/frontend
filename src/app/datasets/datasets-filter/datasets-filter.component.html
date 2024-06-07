@@ -67,11 +67,22 @@
       <button
         mat-raised-button
         color="primary"
-        class="applyButton"
+        class="datasets-filters-search-button"
         (click)="applyFilters()"
       >
-        Apply
+        <mat-icon>search</mat-icon>
+        Search
       </button>
+      <button
+        [disabled]="(hasAppliedFilters$ | async) === false"
+        mat-raised-button
+        color="primary"
+        class="datasets-filters-clear-all-button"
+        (click)="clearFacets()"
+      >
+      <mat-icon>clear_all</mat-icon>
+      Clear All Filters
+    </button>
     </div>
   </mat-card-content>
 </mat-card>

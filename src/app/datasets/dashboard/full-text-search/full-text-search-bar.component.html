@@ -12,17 +12,24 @@
     </mat-form-field>
     <div class="search-button-group">
       <button
-        mat-flat-button
-        color="accent"
+        mat-raised-button
+        color="primary"
+        class="full-text-search-button"
         data-cy="search-button"
         (click)="onSearch()"
       >
         <mat-icon>search</mat-icon>
         Search
       </button>
-      <button mat-flat-button data-cy="search-clear-button" (click)="onClear()">
-        <mat-icon>close</mat-icon>
-        Clear
+      <button 
+        mat-raised-button 
+        color="primary"
+        class="full-text-clear-button"
+        data-cy="search-clear-button" 
+        (click)="onClear()"
+      >
+        <mat-icon>clear</mat-icon>
+        Clear Text
       </button>
     </div>
   </div>

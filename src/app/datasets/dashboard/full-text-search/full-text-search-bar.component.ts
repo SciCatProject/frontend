@@ -123,7 +123,7 @@ export class FullTextSearchBarComponent implements OnInit, OnDestroy {
   onClear(): void {
     this.searchTerm = "";
     this.searchTermSubject.next(undefined);
-    this.searchClickSubject.next();
+    //this.searchClickSubject.next();
   }
 
   ngOnDestroy(): void {

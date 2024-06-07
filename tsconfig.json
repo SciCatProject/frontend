@@ -4,6 +4,7 @@
   "compilerOptions": {
     "baseUrl": "./src/app",
     "outDir": "./dist/out-tsc",
+    "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -19,10 +20,7 @@
     "useDefineForClassFields": false,
     "target": "es2022",
     "module": "es2022",
-    "lib": [
-      "es2022",
-      "dom"
-    ]
+    "lib": ["es2022", "dom"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
