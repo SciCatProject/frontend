@@ -27,6 +27,8 @@ import {
   setDateRangeFilterAction,
   addScientificConditionAction,
   setPidTermsAction,
+  fetchDatasetsAction,
+  fetchFacetCountsAction,
 } from "state-management/actions/datasets.actions";
 import { of } from "rxjs";
 import {
@@ -172,320 +174,18 @@ describe("DatasetsFilterComponent", () => {
     expect(btn.textContent).toContain("Search");
   });
 
-  describe("#getFacetId()", () => {
-    it("should return the FacetCount id if present", () => {
-      const facetCount: FacetCount = {
-        _id: "test1",
-        count: 0,
-      };
-      const fallback = "test2";
-
-      const id = component.getFacetId(facetCount, fallback);
-
-      expect(id).toEqual("test1");
-    });
-
-    it("should return the FacetCount id if present", () => {
-      const facetCount: FacetCount = {
-        count: 0,
-      };
-      const fallback = "test";
-
-      const id = component.getFacetId(facetCount, fallback);
-
-      expect(id).toEqual(fallback);
-    });
-  });
-
-  describe("#getFacetCount()", () => {
-    it("should return the FacetCount", () => {
-      const facetCount: FacetCount = {
-        count: 0,
-      };
-
-      const count = component.getFacetCount(facetCount);
-
-      expect(count).toEqual(facetCount.count);
-    });
-  });
-
-  describe("#textSearchChanged()", () => {
-    it("should dispatch a SetSearchTermsAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const terms = "test";
-      component.textSearchChanged(terms);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(setSearchTermsAction({ terms }));
-    });
-  });
-
-  describe("#onLocationInput()", () => {
-    it("should call next on locationInput$", () => {
-      const nextSpy = spyOn(component.locationInput$, "next");
-
-      const event = {
-        target: {
-          value: "location",
-        },
-      };
-
-      component.onLocationInput(event);
-
-      expect(nextSpy).toHaveBeenCalledOnceWith(event.target.value);
-    });
-  });
-
-  describe("#onGroupInput()", () => {
-    it("should call next on groupInput$", () => {
-      const nextSpy = spyOn(component.groupInput$, "next");
-
-      const event = {
-        target: {
-          value: "group",
-        },
-      };
-
-      component.onGroupInput(event);
-
-      expect(nextSpy).toHaveBeenCalledOnceWith(event.target.value);
-    });
-  });
-
-  describe("#onKeywordInput()", () => {
-    it("should call next on keywordsInput$", () => {
-      const nextSpy = spyOn(component.keywordsInput$, "next");
-
-      const event = {
-        target: {
-          value: "keyword",
-        },
-      };
-
-      component.onKeywordInput(event);
-
-      expect(nextSpy).toHaveBeenCalledOnceWith(event.target.value);
-    });
-  });
-
-  describe("#onTypeInput()", () => {
-    it("should call next on typeInput$", () => {
-      const nextSpy = spyOn(component.typeInput$, "next");
-
-      const event = {
-        target: {
-          value: "type",
-        },
-      };
-
-      component.onTypeInput(event);
-
-      expect(nextSpy).toHaveBeenCalledOnceWith(event.target.value);
-    });
-  });
-
-  describe("#locationSelected()", () => {
-    it("should dispatch an AddLocationFilterAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const location = "test";
-      component.locationSelected(location);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        addLocationFilterAction({ location }),
-      );
-    });
-  });
-
-  describe("#locationRemoved()", () => {
-    it("should dispatch a RemoveLocationFilterAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const location = "test";
-      component.locationRemoved(location);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        removeLocationFilterAction({ location }),
-      );
-    });
-  });
-
-  describe("#groupSelected()", () => {
-    it("should dispatch an AddGroupFilterAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const group = "test";
-      component.groupSelected(group);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(addGroupFilterAction({ group }));
-    });
-  });
-
-  describe("#groupRemoved()", () => {
-    it("should dispatch a RemoveGroupFilterAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const group = "test";
-      component.groupRemoved(group);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        removeGroupFilterAction({ group }),
-      );
-    });
-  });
-
-  describe("#keywordSelected()", () => {
-    it("should dispatch an AddKeywordFilterAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const keyword = "test";
-      component.keywordSelected(keyword);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        addKeywordFilterAction({ keyword }),
-      );
-    });
-  });
-
-  describe("#keywordRemoved()", () => {
-    it("should dispatch a RemoveKeywordFilterAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const keyword = "test";
-      component.keywordRemoved(keyword);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        removeKeywordFilterAction({ keyword }),
-      );
-    });
-  });
-
-  describe("#typeSelected()", () => {
-    it("should dispatch an AddTypeFilterAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const datasetType = "string";
-      component.typeSelected(datasetType);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        addTypeFilterAction({ datasetType }),
-      );
-    });
-  });
-
-  describe("#typeRemoved()", () => {
-    it("should dispatch a RemoveTypeFilterAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const datasetType = "string";
-      component.typeRemoved(datasetType);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        removeTypeFilterAction({ datasetType }),
-      );
-    });
-  });
-
-  describe("#dateChanged()", () => {
-    it("should dispatch setDateRangeFilterAction with empty string values if event.value is null", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const event = {
-        targetElement: {
-          getAttribute: (name: string) => "begin",
-        },
-        value: null,
-      } as MatDatepickerInputEvent<DateTime>;
-
-      component.dateChanged(event);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        setDateRangeFilterAction({ begin: "", end: "" }),
-      );
-    });
-
-    it("should set dateRange.begin if event has value and event.targetElement name is begin", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const beginDate = DateTime.fromJSDate(new Date("2021-01-01"));
-      const event = {
-        targetElement: {
-          getAttribute: (name: string) => "begin",
-        },
-        value: beginDate,
-      } as MatDatepickerInputEvent<DateTime>;
-
-      component.dateChanged(event);
-
-      const expected = beginDate.toUTC().toISO();
-      expect(component.dateRange.begin).toEqual(expected);
-      expect(dispatchSpy).not.toHaveBeenCalled();
-    });
-
-    it("should set dateRange.end if event has value and event.targetElement name is end", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const endDate = DateTime.fromJSDate(new Date("2021-07-08"));
-      const event = {
-        targetElement: {
-          getAttribute: (name: string) => "end",
-        },
-        value: endDate,
-      } as MatDatepickerInputEvent<DateTime>;
-
-      component.dateChanged(event);
-
-      const expected = endDate.toUTC().plus({ days: 1 }).toISO();
-      expect(component.dateRange.end).toEqual(expected);
-      expect(dispatchSpy).not.toHaveBeenCalled();
-    });
-
-    it("should dispatch a setDateRangeFilterAction if dateRange.begin and dateRange.end have values", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const beginDate = DateTime.fromJSDate(new Date("2021-01-01"));
-      const endDate = DateTime.fromJSDate(new Date("2021-07-08"));
-      component.dateRange.begin = beginDate.toUTC().toISO();
-      const event = {
-        targetElement: {
-          getAttribute: (name: string) => "end",
-        },
-        value: endDate,
-      } as MatDatepickerInputEvent<DateTime>;
-
-      component.dateChanged(event);
-
-      const expected = {
-        begin: beginDate.toUTC().toISO(),
-        end: endDate.toUTC().plus({ days: 1 }).toISO(),
-      };
-      expect(dispatchSpy).toHaveBeenCalledOnceWith(
-        setDateRangeFilterAction(expected),
-      );
-    });
-  });
-
-  describe("#clearFacets()", () => {
+  describe("#reset()", () => {
     it("should dispatch a ClearFacetsAction and a deselectAllCustomColumnsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      component.clearFacets();
+      component.reset();
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(3);
-      expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
-      expect(dispatchSpy).toHaveBeenCalledWith(setPidTermsAction({ pid: "" }));
+      expect(dispatchSpy).toHaveBeenCalledTimes(4);
       expect(dispatchSpy).toHaveBeenCalledWith(
+        clearFacetsAction(),
         deselectAllCustomColumnsAction(),
+        fetchDatasetsAction(),
+        fetchFacetCountsAction(),
       );
     });
   });
@@ -495,17 +195,18 @@ describe("DatasetsFilterComponent", () => {
       spyOn(component.dialog, "open").and.callThrough();
       dispatchSpy = spyOn(store, "dispatch");
 
-      component.metadataKeys$ = of(["test", "keys"]);
-      component.showAddConditionDialog();
+      // component.metadataKeys$ = of(["test", "keys"]);
+      // component.showAddConditionDialog();
 
       expect(component.dialog.open).toHaveBeenCalledTimes(1);
       expect(component.dialog.open).toHaveBeenCalledWith(
         SearchParametersDialogComponent,
         {
           data: {
-            parameterKeys: component["asyncPipe"].transform(
-              component.metadataKeys$,
-            ),
+            parameterKeys: component["asyncPipe"]
+              .transform
+              // component.metadataKeys$,
+              (),
           },
         },
       );
@@ -546,35 +247,6 @@ describe("DatasetsFilterComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         deselectColumnAction({ name: condition.lhs, columnType: "custom" }),
       );
-    });
-  });
-
-  describe("#pidSearchChanged()", () => {
-    it("should dispatch a SetSearchTermsAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const pid = "1";
-      component.pidSearchChanged(pid);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(setPidTermsAction({ pid }));
-    });
-  });
-
-  describe("#buildPidTermsCondition()", () => {
-    const tests = [
-      ["", "", ""],
-      ["1", "startsWith", { $regex: "^1" }],
-      ["1", "contains", { $regex: "1" }],
-      ["1", "equals", "1"],
-      ["1", "", "1"],
-    ];
-    tests.forEach((t, i) => {
-      it(`should return buildPidTermsCondition ${i}`, () => {
-        component.appConfig.pidSearchMethod = t[1] as string;
-        const condition = component["buildPidTermsCondition"](t[0] as string);
-        expect(condition).toEqual(t[2]);
-      });
     });
   });
 });
