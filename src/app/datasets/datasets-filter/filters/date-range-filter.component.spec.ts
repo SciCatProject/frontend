@@ -6,35 +6,11 @@ import {
   waitForAsync,
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
-import { DatasetsFilterComponent } from "datasets/datasets-filter/datasets-filter.component";
 import { MockStore } from "shared/MockStubs";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { FacetCount } from "state-management/state/datasets.store";
-import {
-  setSearchTermsAction,
-  addLocationFilterAction,
-  removeLocationFilterAction,
-  addGroupFilterAction,
-  removeGroupFilterAction,
-  addKeywordFilterAction,
-  removeKeywordFilterAction,
-  addTypeFilterAction,
-  removeTypeFilterAction,
-  clearFacetsAction,
-  removeScientificConditionAction,
-  setDateRangeFilterAction,
-  addScientificConditionAction,
-  setPidTermsAction,
-} from "state-management/actions/datasets.actions";
-import { of } from "rxjs";
-import {
-  selectColumnAction,
-  deselectColumnAction,
-  deselectAllCustomColumnsAction,
-} from "state-management/actions/user.actions";
-import { ScientificCondition } from "state-management/models";
+import { setDateRangeFilterAction } from "state-management/actions/datasets.actions";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatDialogModule, MatDialog } from "@angular/material/dialog";
@@ -53,7 +29,6 @@ import { MatNativeDateModule, MatOptionModule } from "@angular/material/core";
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
-import { AppConfigService } from "app-config.service";
 import { DateRangeFilterComponent } from "./date-range-filter.component";
 
 describe("DateRangeFilterComponent", () => {
