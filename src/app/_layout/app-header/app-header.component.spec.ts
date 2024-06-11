@@ -52,7 +52,7 @@ describe("AppHeaderComponent", () => {
           selectors: [
             {
               selector: selectCurrentUserName,
-              value: "ms-ad.User Name",
+              value: "User Name",
             },
             {
               selector: selectThumbnailPhoto,

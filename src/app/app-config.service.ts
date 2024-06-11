@@ -30,14 +30,16 @@ export class HelpMessages {
 }
 
 export interface AppConfig {
+  skipSciCatLoginPageEnabled?: boolean;
   accessTokenPrefix: string;
   addDatasetEnabled: boolean;
   archiveWorkflowEnabled: boolean;
+  datasetJsonScientificMetadata: boolean;
   datasetReduceEnabled: boolean;
   editDatasetSampleEnabled: boolean;
   editMetadataEnabled: boolean;
   editPublishedData: boolean;
-  editSampleEnabled: boolean;
+  addSampleEnabled: boolean;
   externalAuthEndpoint: string | null;
   facility: string | null;
   loginFacilityLabel: string | null;
@@ -76,7 +78,9 @@ export interface AppConfig {
   shareEnabled: boolean;
   shoppingCartEnabled: boolean;
   shoppingCartOnHeader: boolean;
-  siteIcon: string | null;
+  siteHeaderLogo: string | null;
+  siteLoginBackground: string | null;
+  siteLoginLogo: string | null;
   tableSciDataEnabled: boolean;
   fileserverBaseURL: string;
   fileserverButtonLabel: string | undefined;
@@ -84,6 +88,7 @@ export interface AppConfig {
   helpMessages?: HelpMessages;
   notificationInterceptorEnabled: boolean;
   pidSearchMethod?: string;
+  metadataEditingUnitListDisabled?: boolean;
 }
 
 @Injectable()

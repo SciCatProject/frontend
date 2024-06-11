@@ -12,7 +12,14 @@ mat-card {
 
   .profile-image {
     margin: 1em 0em;
-    width: fit-content;
+  }
+
+  .token-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: 30vw;
   }
 
   table {
@@ -23,9 +30,9 @@ mat-card {
     }
 
     td {
-      width: 100%;
       padding: 0.5em;
-      display: inline-block;
+      display: flex;
+      align-items: center;
       word-break: break-all;
 
       .copy-button {
@@ -33,6 +40,14 @@ mat-card {
       }
 
       .copy-button:hover {
+        cursor: pointer;
+      }
+
+      .toggleButton {
+        margin: 0 1em;
+      }
+
+      .toggleButton:hover {
         cursor: pointer;
       }
     }

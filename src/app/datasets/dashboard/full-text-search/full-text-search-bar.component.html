@@ -1,0 +1,36 @@
+<mat-card>
+  <div class="search-card-container">
+    <mat-form-field appearance="fill" class="full-text-search-field">
+      <mat-label>Search</mat-label>
+      <input
+        matInput
+        placeholder="Type to search..."
+        type="search"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchTermChange($event)"
+      />
+    </mat-form-field>
+    <div class="search-button-group">
+      <button
+        mat-raised-button
+        color="primary"
+        class="full-text-search-button"
+        data-cy="search-button"
+        (click)="onSearch()"
+      >
+        <mat-icon>search</mat-icon>
+        Search
+      </button>
+      <button 
+        mat-raised-button 
+        color="primary"
+        class="full-text-clear-button"
+        data-cy="search-clear-button" 
+        (click)="onClear()"
+      >
+        <mat-icon>clear</mat-icon>
+        Clear Text
+      </button>
+    </div>
+  </div>
+</mat-card>

@@ -1,33 +1,33 @@
 <ng-template [ngIf]="dataset">
   <nav mat-tab-nav-bar [tabPanel]="tabPanel">
-    <ng-container  *ngFor="let link of navLinks">
+    <ng-container *ngFor="let link of navLinks">
       <a
         mat-tab-link
         *ngIf="link.enabled"
-        routerLink="{{ link.location}}"
+        routerLink="{{ link.location }}"
         routerLinkActive
         #rla="routerLinkActive"
         [routerLinkActiveOptions]="routerLinkActiveOptions"
         [active]="rla.isActive"
         [replaceUrl]="true"
         (click)="onTabSelected(link.label)"
-    >
-      <mat-icon>{{link.icon}}</mat-icon>
-      <span>{{ link.label}}</span>
-    </a>
+      >
+        <mat-icon>{{ link.icon }}</mat-icon>
+        <span>{{ link.label }}</span>
+      </a>
     </ng-container>
-
   </nav>
 </ng-template>
 <ng-template [ngIf]="!dataset">
   <error-page
     *ngIf="(loading$ | async) === false"
     [errorTitle]="'Dataset not found'"
-    [message]="'The dataset you are trying to view either doesn\'t exist or you don\'t have permission to view it.'"
+    [message]="
+      'The dataset you are trying to view either doesn\'t exist or you don\'t have permission to view it.'
+    "
   >
   </error-page>
 </ng-template>
 <mat-tab-nav-panel #tabPanel>
   <router-outlet></router-outlet>
 </mat-tab-nav-panel>
-

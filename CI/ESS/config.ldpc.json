@@ -5,7 +5,7 @@
   "editDatasetSampleEnabled": true,
   "editMetadataEnabled": true,
   "editPublishedData": false,
-  "editSampleEnabled": true,
+  "addSampleEnabled": true,
   "externalAuthEndpoint": "/auth/msad",
   "facility": "ESS",
   "fileColorEnabled": true,

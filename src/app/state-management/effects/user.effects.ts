@@ -86,6 +86,8 @@ export class UserEffects {
         const token = new SDKToken({
           id: accessTokenPrefix + oidcLoginResponse.accessToken,
           userId: oidcLoginResponse.userId,
+          ttl: oidcLoginResponse.ttl,
+          created: oidcLoginResponse.created,
         });
         this.loopBackAuth.setToken(token);
         return this.userApi.findById<User>(oidcLoginResponse.userId).pipe(
@@ -112,6 +114,8 @@ export class UserEffects {
         const token = new SDKToken({
           id: accessTokenPrefix + adLoginResponse.access_token,
           userId: adLoginResponse.userId,
+          ttl: adLoginResponse.ttl,
+          created: adLoginResponse.created,
         });
         this.loopBackAuth.setToken(token);
         return this.userApi.findById<User>(adLoginResponse.userId).pipe(
@@ -236,7 +240,18 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchCurrentUserAction),
       filter(() => {
-        return this.userApi.getCurrentId() !== "null";
+        const { created, ttl, id } = this.userApi.getCurrentToken();
+
+        const currentTimeStamp = Math.floor(new Date().getTime());
+        const createdTimeStamp = Math.floor(new Date(created).getTime());
+        const expirationTimeStamp = +createdTimeStamp + +ttl * 1000;
+        const isTokenExpired = currentTimeStamp >= expirationTimeStamp;
+
+        if (id && ttl && isTokenExpired) {
+          this.loopBackAuth.clear();
+        }
+
+        return this.userApi.isAuthenticated();
       }),
       switchMap(() =>
         this.userApi.getCurrent().pipe(

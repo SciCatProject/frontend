@@ -12,8 +12,15 @@
   }
 }
 
-.invalid-unit {
-  color: rgb(179, 0, 0, 0.8);
+.unit-input {
+  display: flex;
+  align-items: center;
+
+  &--warning {
+    cursor: pointer;
+    margin-left: 0.5em;
+    color: rgba(130, 4, 4, 0.6);
+  }
 }
 
 @media only screen and (max-width: 1279px) {

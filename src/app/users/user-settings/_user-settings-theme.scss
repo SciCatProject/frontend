@@ -13,6 +13,15 @@
       background-color: mat.get-color-from-palette($header-1, "lighter");
     }
   }
+
+  td {
+    .copy-button {
+      color: mat.get-color-from-palette($primary, "default");
+    }
+    .toggleButton {
+      color: mat.get-color-from-palette($primary, "default");
+    }
+  }
 }
 
 @mixin theme($theme) {

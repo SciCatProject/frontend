@@ -50,6 +50,7 @@ import { DatasetDetailsDashboardComponent } from "./dataset-details-dashboard/da
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { DatablocksComponent } from "./datablocks-table/datablocks-table.component";
 import { DatafilesComponent } from "./datafiles/datafiles.component";
+import { JsonScientificMetadataComponent } from "./jsonScientificMetadata/jsonScientificMetadata.component";
 import { DatasetDetailComponent } from "./dataset-detail/dataset-detail.component";
 import { DatasetTableComponent } from "./dataset-table/dataset-table.component";
 import { DatasetsFilterComponent } from "./datasets-filter/datasets-filter.component";
@@ -80,6 +81,7 @@ import { AdminTabComponent } from "./admin-tab/admin-tab.component";
 import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
 import { InstrumentEffects } from "state-management/effects/instruments.effects";
 import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.component";
+import { FullTextSearchBarComponent } from "./dashboard/full-text-search/full-text-search-bar.component";
 
 @NgModule({
   imports: [
@@ -135,11 +137,13 @@ import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.co
     StoreModule.forFeature("publishedData", publishedDataReducer),
     StoreModule.forFeature("logbooks", logbooksReducer),
     LogbooksModule,
+    FullTextSearchBarComponent,
   ],
   declarations: [
     BatchViewComponent,
     DashboardComponent,
     DatablocksComponent,
+    JsonScientificMetadataComponent,
     DatafilesComponent,
     DatasetDetailComponent,
     DatasetTableComponent,
@@ -174,6 +178,7 @@ import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.co
   exports: [
     DashboardComponent,
     DatablocksComponent,
+    JsonScientificMetadataComponent,
     DatafilesComponent,
     DatasetDetailComponent,
     DatasetTableComponent,

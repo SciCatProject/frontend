@@ -1,15 +1,6 @@
 <mat-card>
   <mat-card-header class="section-container">
-    <mat-card-title>Search</mat-card-title>
-    <button
-      [disabled]="(hasAppliedFilters$ | async) === false"
-      mat-button
-      class="clear-button"
-      color="primary"
-      (click)="clearFacets()"
-    >
-      <mat-icon>clear_all</mat-icon> Clear
-    </button>
+    <mat-card-title>Filter by...</mat-card-title>
   </mat-card-header>
 
   <mat-card-content>
@@ -20,17 +11,6 @@
       [clear]="clearSearchBar"
       (search)="pidSearchChanged($event)"
       (searchBarFocus)="pidSearchChanged($event)"
-    >
-    </app-search-bar>
-
-    <app-search-bar
-      #searchBar
-      [prefilledValue]="searchTerms$ | async"
-      data-cy="text-search"
-      [placeholder]="'Text Search'"
-      [clear]="clearSearchBar"
-      (search)="textSearchChanged($event)"
-      (searchBarFocus)="textSearchChanged($event)"
     >
     </app-search-bar>
 
@@ -215,6 +195,28 @@
           >
         </mat-chip-option>
       </mat-chip-listbox>
+    </div>
+
+    <div class="section-container">
+      <button
+        mat-raised-button
+        color="primary"
+        class="datasets-filters-search-button"
+        (click)="applyFilters()"
+      >
+        <mat-icon>search</mat-icon>
+        Search
+      </button>
+      <button
+        [disabled]="(hasAppliedFilters$ | async) === false"
+        mat-raised-button
+        color="primary"
+        class="datasets-filters-clear-all-button"
+        (click)="clearFacets()"
+      >
+      <mat-icon>clear_all</mat-icon>
+      Clear All Filters
+    </button>
     </div>
   </mat-card-content>
 </mat-card>

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-
+import * as Math from "mathjs";
 @Injectable({
   providedIn: "root",
 })
@@ -117,5 +117,13 @@ export class UnitsService {
       return this.flattenUnits();
     }
     return this.UNITS[kind];
+  }
+  unitValidation(variable?: string): boolean {
+    try {
+      Math.unit(variable);
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }

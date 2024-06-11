@@ -22,6 +22,7 @@ import { UnitsService } from "shared/services/units.service";
 import { startWith, map } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { ScientificMetadata } from "../scientific-metadata.module";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "metadata-edit",
@@ -34,6 +35,8 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   });
   typeValues: string[] = ["quantity", "number", "string"];
   units: string[] = [];
+  appConfig = this.appConfigService.getConfig();
+
   filteredUnits$: Observable<string[]> | undefined = new Observable<string[]>();
   invalidUnitWarning: string[] = [];
   @Input() metadata: Record<string, any> | undefined;
@@ -42,21 +45,34 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   constructor(
     private formBuilder: FormBuilder,
     private unitsService: UnitsService,
+    private appConfigService: AppConfigService,
   ) {}
+
+  get formControlFields() {
+    return {
+      fieldType: (value = "") => new FormControl(value, [Validators.required]),
+      fieldName: (value = "") =>
+        new FormControl(value, [
+          Validators.required,
+          Validators.minLength(2),
+          this.duplicateValidator(),
+        ]),
+      fieldValue: (value: string | number = "") =>
+        new FormControl(value, [Validators.required, Validators.minLength(1)]),
+      fieldUnit: (value = "") =>
+        new FormControl(value, [
+          Validators.required,
+          this.whiteSpaceValidator(),
+        ]),
+    };
+  }
 
   addMetadata() {
     const field = this.formBuilder.group({
-      fieldType: new FormControl("", [Validators.required]),
-      fieldName: new FormControl("", [
-        Validators.required,
-        Validators.minLength(2),
-        this.duplicateValidator(),
-      ]),
-      fieldValue: new FormControl("", [
-        Validators.required,
-        Validators.minLength(1),
-      ]),
-      fieldUnit: new FormControl("", [Validators.required]),
+      fieldType: this.formControlFields["fieldType"](),
+      fieldName: this.formControlFields["fieldName"](),
+      fieldValue: this.formControlFields["fieldValue"](),
+      fieldUnit: this.formControlFields["fieldUnit"](),
     });
 
     this.items.push(field);
@@ -71,7 +87,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
       this.items
         .at(index)
         .get("fieldUnit")
-        ?.setValidators([Validators.required]);
+        ?.setValidators([Validators.required, this.whiteSpaceValidator()]);
       this.items.at(index).get("fieldUnit")?.updateValueAndValidity();
     } else {
       this.items.at(index).get("fieldUnit")?.clearValidators();
@@ -89,6 +105,14 @@ export class MetadataEditComponent implements OnInit, OnChanges {
       return duplicate.length > 1
         ? { duplicateField: { value: control.value } }
         : null;
+    };
+  }
+  whiteSpaceValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control.value.length > 0 && !control.value.trim()) {
+        return { whitespace: true };
+      }
+      return null;
     };
   }
 
@@ -111,32 +135,46 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         ) {
           if (this.metadata[key]["unit"].length > 0) {
             field = this.formBuilder.group({
-              fieldName: key,
-              fieldType: "quantity",
-              fieldValue: this.metadata[key]["value"],
-              fieldUnit: this.metadata[key]["unit"],
+              fieldType: this.formControlFields["fieldType"]("quantity"),
+              fieldName: this.formControlFields["fieldName"](key),
+              fieldValue: this.formControlFields["fieldValue"](
+                this.metadata[key]["value"],
+              ),
+              fieldUnit: this.formControlFields["fieldUnit"](
+                this.metadata[key]["unit"],
+              ),
             });
           } else if (typeof this.metadata[key]["value"] === "number") {
             field = this.formBuilder.group({
-              fieldName: key,
-              fieldType: "number",
-              fieldValue: Number(this.metadata[key]["value"]),
-              fieldUnit: this.metadata[key]["unit"],
+              fieldType: this.formControlFields["fieldType"]("number"),
+              fieldName: this.formControlFields["fieldName"](key),
+              fieldValue: this.formControlFields["fieldValue"](
+                Number(this.metadata[key]["value"]),
+              ),
+              fieldUnit: this.formControlFields["fieldUnit"](
+                this.metadata[key]["unit"],
+              ),
             });
           } else {
             field = this.formBuilder.group({
-              fieldName: key,
-              fieldType: "string",
-              fieldValue: this.metadata[key]["value"],
-              fieldUnit: this.metadata[key]["unit"],
+              fieldType: this.formControlFields["fieldType"]("string"),
+              fieldName: this.formControlFields["fieldName"](key),
+              fieldValue: this.formControlFields["fieldValue"](
+                this.metadata[key]["value"],
+              ),
+              fieldUnit: this.formControlFields["fieldUnit"](
+                this.metadata[key]["unit"],
+              ),
             });
           }
         } else {
           field = this.formBuilder.group({
-            fieldName: key,
-            fieldType: "string",
-            fieldValue: JSON.stringify(this.metadata[key]),
-            fieldUnit: "",
+            fieldType: this.formControlFields["fieldType"]("string"),
+            fieldName: this.formControlFields["fieldName"](key),
+            fieldValue: this.formControlFields["fieldValue"](
+              JSON.stringify(this.metadata[key]),
+            ),
+            fieldUnit: this.formControlFields["fieldUnit"](""),
           });
         }
         this.items.push(field);
@@ -169,8 +207,9 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
   getUnits(index: number): void {
     const name = this.items.at(index).get("fieldName")?.value;
-
-    this.units = this.unitsService.getUnits(name);
+    this.units = this.appConfig.metadataEditingUnitListDisabled
+      ? []
+      : this.unitsService.getUnits(name);
 
     this.filteredUnits$ = this.items
       .at(index)
@@ -220,7 +259,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     this.items.controls.forEach((control, index) => {
       control
         .get("fieldUnit")
-        .valueChanges.pipe(debounceTime(300), distinctUntilChanged())
+        .valueChanges.pipe(debounceTime(600), distinctUntilChanged())
         .subscribe((value) => {
           this.invalidUnitWarning[index] = this.getCustomUnitWarning(value);
         });
@@ -228,7 +267,10 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   }
 
   getCustomUnitWarning(value: string): string {
-    return !value || this.unitsService.getUnits().includes(value)
+    if (value.length > 0 && !value.trim()) {
+      return "A unit is required for quantities";
+    }
+    return this.unitsService.unitValidation(value)
       ? ""
       : "Unrecognized unit, conversion disabled";
   }

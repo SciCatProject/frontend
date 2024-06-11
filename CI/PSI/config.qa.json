@@ -18,7 +18,7 @@
   "editDatasetSampleEnabled": false,
   "editMetadataEnabled": false,
   "editPublishedData": false,
-  "editSampleEnabled": true,
+  "addSampleEnabled": true,
   "facility": "PSI",
   "fileColorEnabled": false,
   "jsonMetadataEnabled": true,

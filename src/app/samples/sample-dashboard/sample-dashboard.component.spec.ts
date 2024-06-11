@@ -31,7 +31,7 @@ import { MatChipsModule } from "@angular/material/chips";
 import { AppConfigService } from "app-config.service";
 
 const getConfig = () => ({
-  editSampleEnabled: true,
+  addSampleEnabled: true,
 });
 
 describe("SampleDashboardComponent", () => {

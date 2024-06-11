@@ -23,16 +23,19 @@
       <mat-header-cell *matHeaderCellDef> Unit </mat-header-cell>
       <mat-cell *matCellDef="let metadata">
         <ng-template [ngIf]="metadata.unit.length > 0" [ngIfElse]="noUnit">
-          <span
-            [class.invalid-unit]="!metadata.validUnit"
-            [matTooltip]="
-              !metadata.validUnit
-                ? ' Unrecognized unit, conversion disabled
-              '
-                : ''
-            "
-          >
+          <span class="unit-input">
             {{ metadata.unit | prettyUnit }}
+            <mat-icon
+              class="unit-input--warning"
+              *ngIf="!metadata.validUnit"
+              [matTooltip]="
+                !metadata.validUnit
+                  ? ' Unrecognized unit, conversion disabled
+            '
+                  : ''
+              "
+              >{{ "error" }}</mat-icon
+            >
           </span>
         </ng-template>
         <ng-template #noUnit> -- </ng-template>

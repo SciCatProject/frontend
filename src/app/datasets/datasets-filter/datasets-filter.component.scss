@@ -34,6 +34,15 @@ mat-card {
       white-space: normal;
       word-break: break-all;
     }
+
+    .datasets-filters-search-button {
+      width: 49%;
+    }
+
+    .datasets-filters-clear-all-button {
+      width: 49%;
+      margin-left: 1%;
+    }
   }
 
   .section-container:first-child {

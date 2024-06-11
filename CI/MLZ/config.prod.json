@@ -12,7 +12,7 @@
   ],
   "externalAuthEndpoint": "/auth/ldap",
   "editMetadataEnabled": true,
-  "editSampleEnabled": true,
+  "addSampleEnabled": true,
   "editPublishedData": true,
   "scienceSearchEnabled": true,
   "facility": "MLZ",
@@ -118,7 +118,5 @@
   "scienceSearchUnitsEnabled": false,
   "metadataStructure": "",
   "loginFormEnabled": true,
-  "oAuth2Endpoints": [
-	  {"displayText": "MLZ", "authURL":"api/v3/auth/oidc"}
-  ]
+  "oAuth2Endpoints": [{ "displayText": "MLZ", "authURL": "api/v3/auth/oidc" }]
 }
