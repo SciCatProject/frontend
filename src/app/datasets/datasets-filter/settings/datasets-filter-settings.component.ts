@@ -7,12 +7,22 @@ import {
 import { SearchParametersDialogComponent } from "../../../shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AppConfigService } from "app-config.service";
 import { AsyncPipe } from "@angular/common";
-import { addScientificConditionAction } from "../../../state-management/actions/datasets.actions";
-import { selectColumnAction } from "../../../state-management/actions/user.actions";
+import {
+  addScientificConditionAction,
+  removeScientificConditionAction,
+} from "../../../state-management/actions/datasets.actions";
+import {
+  deselectColumnAction,
+  selectColumnAction,
+} from "../../../state-management/actions/user.actions";
 import { Store } from "@ngrx/store";
-import { selectMetadataKeys } from "../../../state-management/selectors/datasets.selectors";
+import {
+  selectMetadataKeys,
+  selectScientificConditions,
+} from "../../../state-management/selectors/datasets.selectors";
 import { FilterConfig } from "../datasets-filter.component";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
+import { ScientificCondition } from "../../../state-management/models";
 
 @Component({
   selector: "app-type-datasets-filter-settings",
@@ -23,6 +33,8 @@ export class DatasetsFilterSettingsComponent {
   showFilterOptions = false;
 
   metadataKeys$ = this.store.select(selectMetadataKeys);
+
+  scientificConditions$ = this.store.select(selectScientificConditions);
 
   appConfig = this.appConfigService.getConfig();
 
@@ -54,8 +66,11 @@ export class DatasetsFilterSettingsComponent {
       });
   }
 
-  addFilter() {
-    alert("Add filter");
+  removeCondition(condition: ScientificCondition, index: number) {
+    this.store.dispatch(removeScientificConditionAction({ index }));
+    this.store.dispatch(
+      deselectColumnAction({ name: condition.lhs, columnType: "custom" }),
+    );
   }
 
   toggleVisibility(filter: FilterConfig) {

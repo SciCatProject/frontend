@@ -28,6 +28,7 @@ import { KeywordFilterComponent } from "./filters/keyword-filter.component";
 import { DateRangeFilterComponent } from "./filters/date-range-filter.component";
 import { TextFilterComponent } from "./filters/text-filter.component";
 import { DatasetsFilterSettingsComponent } from "./settings/datasets-filter-settings.component";
+import { ConditionFilterComponent } from "./filters/condition-filter.component";
 
 export interface FilterConfig {
   type: any;
@@ -110,14 +111,9 @@ export class DatasetsFilterComponent implements OnDestroy {
     this.store.dispatch(fetchFacetCountsAction());
   }
 
-  removeCondition(condition: ScientificCondition, index: number) {
-    this.store.dispatch(removeScientificConditionAction({ index }));
-    this.store.dispatch(
-      deselectColumnAction({ name: condition.lhs, columnType: "custom" }),
-    );
-  }
-
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
+
+  protected readonly ConditionFilterComponent = ConditionFilterComponent;
 }

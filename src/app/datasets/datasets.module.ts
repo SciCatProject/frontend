@@ -93,6 +93,7 @@ import { DateRangeFilterComponent } from "./datasets-filter/filters/date-range-f
 import { TextFilterComponent } from "./datasets-filter/filters/text-filter.component";
 import { DatasetsFilterSettingsComponent } from "./datasets-filter/settings/datasets-filter-settings.component";
 import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
+import { ConditionFilterComponent } from "./datasets-filter/filters/condition-filter.component";
 
 @NgModule({
   imports: [
@@ -184,6 +185,7 @@ import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
     KeywordFilterComponent,
     DateRangeFilterComponent,
     TextFilterComponent,
+    ConditionFilterComponent,
     DatasetsFilterSettingsComponent,
   ],
   providers: [

@@ -12,39 +12,9 @@
 
 
     <div class="section-container" *ngIf="appConfig.scienceSearchEnabled">
-      <mat-chip-listbox class="scientific-chips" aria-orientation="vertical">
-        <mat-chip-option
-          class="scientific-chip"
-          *ngFor="let condition of scientificConditions$ | async; index as i"
-        >
-          <span class="scientific-chip-text">
-            {{ condition.lhs }}
-            <ng-container [ngSwitch]="condition.relation">
-              <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">
-                &nbsp;=&nbsp;
-              </ng-container>
-              <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">
-                &nbsp;=&nbsp;
-              </ng-container>
-              <ng-container *ngSwitchCase="'LESS_THAN'">
-                &nbsp;&lt;&nbsp;
-              </ng-container>
-              <ng-container *ngSwitchCase="'GREATER_THAN'">
-                &nbsp;&gt;&nbsp;
-              </ng-container>
-            </ng-container>
-            {{
-              condition.relation === "EQUAL_TO_STRING"
-                ? '"' + condition.rhs + '"'
-                : condition.rhs
-            }}
-            {{ condition.unit | prettyUnit }}
-          </span>
-          <mat-icon matChipRemove (click)="removeCondition(condition, i)"
-            >cancel</mat-icon
-          >
-        </mat-chip-option>
-      </mat-chip-listbox>
+      <ng-container *ngFor="let condition of scientificConditions$ | async">
+        <ng-container *ngComponentOutlet="ConditionFilterComponent; inputs: { condition }"></ng-container>
+      </ng-container>
     </div>
 
     <div class="section-container">
