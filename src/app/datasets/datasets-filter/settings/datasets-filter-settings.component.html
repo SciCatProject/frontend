@@ -14,17 +14,17 @@
       <span class="filter-name">{{ filter.type.kName }}</span>
       <span class="spacer"></span>
     </mat-list-item>
-    <mat-list-item class="filter-item" *ngFor="let condition of scientificConditions$ | async; index as i" cdkDrag cdkDragHandle>
-       <span class="drag-handle" matTooltip="Drag to reorder" aria-label="Drag handle">
-        <mat-icon>sort</mat-icon>
-      </span>
+    <mat-list-item class="filter-item" *ngFor="let condition of data.conditionConfigs; index as i">
       <mat-slide-toggle
         class="filter-toggle"
-        aria-label="Toggle visibility">
+        aria-label="Toggle visibility"
+        [checked]="condition.enabled"
+        (change)="toggleCondition(condition, i)"
+      >
       </mat-slide-toggle>
       <span class="scientific-chip-text">
-            {{ condition.lhs }}
-        <ng-container [ngSwitch]="condition.relation">
+            {{ condition.condition.lhs }}
+        <ng-container [ngSwitch]="condition.condition.relation">
               <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">
                 &nbsp;=&nbsp;
               </ng-container>
@@ -39,11 +39,11 @@
               </ng-container>
             </ng-container>
         {{
-          condition.relation === "EQUAL_TO_STRING"
-            ? '"' + condition.rhs + '"'
-            : condition.rhs
+          condition.condition.relation === "EQUAL_TO_STRING"
+            ? '"' + condition.condition.rhs + '"'
+            : condition.condition.rhs
         }}
-        {{ condition.unit | prettyUnit }}
+        {{ condition.condition.unit | prettyUnit }}
           </span>
       <span class="spacer"></span>
       <span><mat-icon (click)="removeCondition(condition, i)">delete</mat-icon></span>

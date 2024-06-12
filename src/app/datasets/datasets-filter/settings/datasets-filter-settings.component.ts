@@ -20,7 +20,7 @@ import {
   selectMetadataKeys,
   selectScientificConditions,
 } from "../../../state-management/selectors/datasets.selectors";
-import { FilterConfig } from "../datasets-filter.component";
+import { ConditionConfig, FilterConfig } from "../datasets-filter.component";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { ScientificCondition } from "../../../state-management/models";
 
@@ -30,11 +30,7 @@ import { ScientificCondition } from "../../../state-management/models";
   styleUrls: [`./datasets-filter-settings.component.scss`],
 })
 export class DatasetsFilterSettingsComponent {
-  showFilterOptions = false;
-
   metadataKeys$ = this.store.select(selectMetadataKeys);
-
-  scientificConditions$ = this.store.select(selectScientificConditions);
 
   appConfig = this.appConfigService.getConfig();
 
@@ -56,21 +52,41 @@ export class DatasetsFilterSettingsComponent {
       .subscribe((res) => {
         if (res) {
           const { data } = res;
-          this.store.dispatch(
-            addScientificConditionAction({ condition: data }),
-          );
-          this.store.dispatch(
-            selectColumnAction({ name: data.lhs, columnType: "custom" }),
-          );
+          this.data.conditionConfigs.push({
+            condition: data,
+            enabled: false,
+          });
         }
       });
   }
 
-  removeCondition(condition: ScientificCondition, index: number) {
-    this.store.dispatch(removeScientificConditionAction({ index }));
-    this.store.dispatch(
-      deselectColumnAction({ name: condition.lhs, columnType: "custom" }),
-    );
+  removeCondition(condition: ConditionConfig, index: number) {
+    this.data.conditionConfigs.splice(index, 1);
+    if (condition.enabled) {
+      this.store.dispatch(removeScientificConditionAction({ index }));
+      this.store.dispatch(
+        deselectColumnAction({
+          name: condition.condition.lhs,
+          columnType: "custom",
+        }),
+      );
+    }
+  }
+
+  toggleCondition(condition: ConditionConfig, index: number) {
+    condition.enabled = !condition.enabled;
+    const data = condition.condition;
+    if (condition.enabled) {
+      this.store.dispatch(addScientificConditionAction({ condition: data }));
+      this.store.dispatch(
+        selectColumnAction({ name: data.lhs, columnType: "custom" }),
+      );
+    } else {
+      this.store.dispatch(removeScientificConditionAction({ index }));
+      this.store.dispatch(
+        deselectColumnAction({ name: data.lhs, columnType: "custom" }),
+      );
+    }
   }
 
   toggleVisibility(filter: FilterConfig) {

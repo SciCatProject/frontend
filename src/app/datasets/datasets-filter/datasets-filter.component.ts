@@ -35,6 +35,11 @@ export interface FilterConfig {
   visible: boolean;
 }
 
+export interface ConditionConfig {
+  condition: ScientificCondition;
+  enabled: boolean;
+}
+
 @Component({
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
@@ -50,6 +55,7 @@ export class DatasetsFilterComponent implements OnDestroy {
   protected readonly KeywordFilterComponent = KeywordFilterComponent;
   protected readonly DateRangeFilterComponent = DateRangeFilterComponent;
   protected readonly TextFilterComponent = TextFilterComponent;
+  protected readonly ConditionFilterComponent = ConditionFilterComponent;
 
   filterConfigs: FilterConfig[] = [
     { type: LocationFilterComponent, visible: true },
@@ -60,6 +66,8 @@ export class DatasetsFilterComponent implements OnDestroy {
     { type: DateRangeFilterComponent, visible: true },
     { type: TextFilterComponent, visible: true },
   ];
+
+  conditionConfigs: ConditionConfig[] = [];
 
   scientificConditions$ = this.store.select(selectScientificConditions);
 
@@ -92,6 +100,7 @@ export class DatasetsFilterComponent implements OnDestroy {
         filterConfigs: this.filterConfigs.map((filterConfig) =>
           Object.assign({}, filterConfig),
         ),
+        conditionConfigs: this.conditionConfigs, // delibertly pass reference to the array
       },
     });
 
@@ -114,6 +123,4 @@ export class DatasetsFilterComponent implements OnDestroy {
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
-
-  protected readonly ConditionFilterComponent = ConditionFilterComponent;
 }
