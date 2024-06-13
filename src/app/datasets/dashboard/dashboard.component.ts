@@ -187,7 +187,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       combineLatest([this.pagination$, this.readyToFetch$, this.loggedIn$])
         .pipe(
-          map(([_, loggedIn]) => [loggedIn]),
+          map(([pagination, _, loggedIn]) => [pagination, loggedIn]),
           distinctUntilChanged(deepEqual),
         )
         .subscribe((obj) => {
