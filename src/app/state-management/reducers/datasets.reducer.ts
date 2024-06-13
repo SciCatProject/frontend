@@ -347,7 +347,7 @@ const reducer = createReducer(
   }),
 
   on(fromActions.clearFacetsAction, (state): DatasetState => {
-    const limit = state.filters.limit; // Save limit
+    const limit = state.pagination.limit; // Save limit
     const filters = { ...initialDatasetState.filters, skip: 0, limit };
     const pagination = { skip: 0, limit };
     return { ...state, filters, pagination, searchTerms: "" };

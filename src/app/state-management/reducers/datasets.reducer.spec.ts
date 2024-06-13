@@ -371,8 +371,8 @@ describe("DatasetsReducer", () => {
       const action = fromActions.clearFacetsAction();
       const state = fromDatasets.datasetsReducer(sta, action);
 
-      expect(state.filters.skip).toEqual(0);
-      expect(state.filters.limit).toEqual(limit);
+      expect(state.pagination.skip).toEqual(0);
+      expect(state.pagination.limit).toEqual(limit);
       expect(state.searchTerms).toEqual("");
     });
   });
