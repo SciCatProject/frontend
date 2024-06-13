@@ -59,6 +59,11 @@ export const selectCurrentAttachments = createSelector(
   (dataset) => (dataset ? dataset.attachments : []),
 );
 
+export const selectPagination = createSelector(
+  selectDatasetState,
+  (state) => state.pagination,
+);
+
 // === Filters ===
 
 export const selectFilters = createSelector(
@@ -168,20 +173,33 @@ const restrictFilter = (filter: any, allowedKeys?: string[]) => {
   }, {});
 };
 
-export const selectFullqueryParams = createSelector(selectFilters, (filter) => {
-  // don't query with modeToggle, it's only in filters for persistent routing
-  const { skip, limit, sortField, modeToggle, ...theRest } = filter;
-  const limits = { skip, limit, order: sortField };
-  const query = restrictFilter(theRest);
-  return { query: JSON.stringify(query), limits };
-});
+export const selectFullqueryParams = createSelector(
+  selectDatasetState,
+  (state) => {
+    const filter = state.filters;
+    const pagination = state.pagination;
+    // don't query with modeToggle, it's only in filters for persistent routing
+    const { skip, limit, sortField, modeToggle, ...theRest } = filter;
+    const limits = { ...pagination, order: sortField };
+    const query = restrictFilter(theRest);
+    return { query: JSON.stringify(query), limits };
+  },
+);
 
-export const selectFullfacetParams = createSelector(selectFilters, (filter) => {
-  const { skip, limit, sortField, modeToggle, ...theRest } = filter;
-  const fields = restrictFilter(theRest);
-  const facets = ["type", "creationLocation", "ownerGroup", "keywords"];
-  return { fields, facets };
-});
+export const selectFullfacetParams = createSelector(
+  selectDatasetState,
+  (state) => {
+    const filter = state.filters;
+    const pagination = state.pagination;
+    const { skip, limit, sortField, modeToggle, ...theRest } = {
+      ...filter,
+      ...pagination,
+    };
+    const fields = restrictFilter(theRest);
+    const facets = ["type", "creationLocation", "ownerGroup", "keywords"];
+    return { fields, facets };
+  },
+);
 
 // === Misc. ===
 
@@ -190,14 +208,14 @@ export const selectTotalSets = createSelector(
   (state) => state.totalCount,
 );
 
-export const selectPage = createSelector(selectFilters, (filters) => {
-  const { skip, limit } = filters;
+export const selectPage = createSelector(selectPagination, (pagination) => {
+  const { skip, limit } = pagination;
   return skip / limit;
 });
 
 export const selectDatasetsPerPage = createSelector(
-  selectFilters,
-  (filters) => filters.limit,
+  selectPagination,
+  (pagination) => pagination.limit,
 );
 
 export const selectSearchTerms = createSelector(

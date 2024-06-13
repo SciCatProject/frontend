@@ -275,8 +275,8 @@ describe("DatasetsReducer", () => {
       const action = fromActions.setDatasetsLimitFilterAction({ limit });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
-      expect(state.filters.limit).toEqual(limit);
-      expect(state.filters.skip).toEqual(0);
+      expect(state.pagination.limit).toEqual(limit);
+      expect(state.pagination.skip).toEqual(0);
     });
   });
 
@@ -289,8 +289,8 @@ describe("DatasetsReducer", () => {
       const action = fromActions.changePageAction({ page, limit });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
-      expect(state.filters.limit).toEqual(limit);
-      expect(state.filters.skip).toEqual(skip);
+      expect(state.pagination.limit).toEqual(limit);
+      expect(state.pagination.skip).toEqual(skip);
     });
   });
 
@@ -366,13 +366,13 @@ describe("DatasetsReducer", () => {
       const act = fromActions.changePageAction({ page, limit });
       const sta = fromDatasets.datasetsReducer(initialDatasetState, act);
 
-      expect(sta.filters.skip).toEqual(skip);
+      expect(sta.pagination.skip).toEqual(skip);
 
       const action = fromActions.clearFacetsAction();
       const state = fromDatasets.datasetsReducer(sta, action);
 
-      expect(state.filters.skip).toEqual(0);
-      expect(state.filters.limit).toEqual(limit);
+      expect(state.pagination.skip).toEqual(0);
+      expect(state.pagination.limit).toEqual(limit);
       expect(state.searchTerms).toEqual("");
     });
   });
