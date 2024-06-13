@@ -41,6 +41,10 @@ const initialDatasetState: DatasetState = {
     isPublished: false,
     pid: "",
   },
+  pagination: {
+    skip: 0,
+    limit: 30,
+  },
   relatedDatasetsFilters: {
     skip: 0,
     limit: 25,
