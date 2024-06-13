@@ -16,13 +16,9 @@ import {
   selectColumnAction,
 } from "../../../state-management/actions/user.actions";
 import { Store } from "@ngrx/store";
-import {
-  selectMetadataKeys,
-  selectScientificConditions,
-} from "../../../state-management/selectors/datasets.selectors";
+import { selectMetadataKeys } from "../../../state-management/selectors/datasets.selectors";
 import { ConditionConfig, FilterConfig } from "../datasets-filter.component";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
-import { ScientificCondition } from "../../../state-management/models";
 
 @Component({
   selector: "app-type-datasets-filter-settings",
@@ -63,7 +59,9 @@ export class DatasetsFilterSettingsComponent {
   removeCondition(condition: ConditionConfig, index: number) {
     this.data.conditionConfigs.splice(index, 1);
     if (condition.enabled) {
-      this.store.dispatch(removeScientificConditionAction({ index }));
+      this.store.dispatch(
+        removeScientificConditionAction({ condition: condition.condition }),
+      );
       this.store.dispatch(
         deselectColumnAction({
           name: condition.condition.lhs,
@@ -82,7 +80,7 @@ export class DatasetsFilterSettingsComponent {
         selectColumnAction({ name: data.lhs, columnType: "custom" }),
       );
     } else {
-      this.store.dispatch(removeScientificConditionAction({ index }));
+      this.store.dispatch(removeScientificConditionAction({ condition: data }));
       this.store.dispatch(
         deselectColumnAction({ name: data.lhs, columnType: "custom" }),
       );

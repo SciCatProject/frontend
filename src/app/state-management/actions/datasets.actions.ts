@@ -324,7 +324,7 @@ export const addScientificConditionAction = createAction(
 );
 export const removeScientificConditionAction = createAction(
   "[Dataset] Remove Scientific Condition",
-  props<{ index: number }>(),
+  props<{ condition: ScientificCondition }>(),
 );
 
 export const clearDatasetsStateAction = createAction("[Dataset] Clear State");
