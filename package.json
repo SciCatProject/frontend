@@ -38,6 +38,7 @@
     "exceljs": "^4.3.0",
     "file-saver": "^2.0.5",
     "filesize": "^10.0.7",
+    "font-awesome": "^4.7.0",
     "lodash-es": "^4.17.21",
     "luxon": "^3.3.0",
     "mathjs": "^13.0.0",
@@ -48,6 +49,7 @@
     "shortid": "^2.2.16",
     "socket.io-client": "^4.7.2",
     "tslib": "^2.4.0",
+    "webix": "^10.2.0",
     "zone.js": "^0.13"
   },
   "devDependencies": {
