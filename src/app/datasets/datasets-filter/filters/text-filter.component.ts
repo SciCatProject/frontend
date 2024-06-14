@@ -33,14 +33,9 @@ export class TextFilterComponent
   extends ClearableInputComponent
   implements OnDestroy
 {
-  static kName = "text";
+  static kLabel = "Text filter";
 
   private textSubject = new Subject<string>();
-
-  searchTerms$ = this.store.select(selectSearchTerms);
-
-  label = "Text filter";
-
   subscription: Subscription;
 
   constructor(private store: Store) {
@@ -54,6 +49,10 @@ export class TextFilterComponent
       .subscribe((terms) => {
         this.store.dispatch(setTextFilterAction({ text: terms }));
       });
+  }
+
+  get label() {
+    return TextFilterComponent.kLabel;
   }
 
   textSearchChanged(event: any) {

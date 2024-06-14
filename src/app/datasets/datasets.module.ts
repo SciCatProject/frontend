@@ -94,6 +94,8 @@ import { TextFilterComponent } from "./datasets-filter/filters/text-filter.compo
 import { DatasetsFilterSettingsComponent } from "./datasets-filter/settings/datasets-filter-settings.component";
 import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
 import { ConditionFilterComponent } from "./datasets-filter/filters/condition-filter.component";
+import { PidFilterContainsComponent } from "./datasets-filter/filters/pid-filter-contains.component";
+import { PidFilterStartsWithComponent } from "./datasets-filter/filters/pid-filter-startsWith.component";
 
 @NgModule({
   imports: [
@@ -179,6 +181,8 @@ import { ConditionFilterComponent } from "./datasets-filter/filters/condition-fi
     RelatedDatasetsComponent,
     ClearableInputComponent,
     PidFilterComponent,
+    PidFilterContainsComponent,
+    PidFilterStartsWithComponent,
     LocationFilterComponent,
     GroupFilterComponent,
     TypeFilterComponent,

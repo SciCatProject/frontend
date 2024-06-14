@@ -11,13 +11,9 @@ import {
   clearFacetsAction,
   fetchDatasetsAction,
   fetchFacetCountsAction,
-  removeScientificConditionAction,
 } from "state-management/actions/datasets.actions";
 import { Subscription } from "rxjs";
-import {
-  deselectAllCustomColumnsAction,
-  deselectColumnAction,
-} from "state-management/actions/user.actions";
+import { deselectAllCustomColumnsAction } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
 import { AppConfigService } from "app-config.service";
 import { PidFilterComponent } from "./filters/pid-filter.component";
@@ -29,6 +25,8 @@ import { DateRangeFilterComponent } from "./filters/date-range-filter.component"
 import { TextFilterComponent } from "./filters/text-filter.component";
 import { DatasetsFilterSettingsComponent } from "./settings/datasets-filter-settings.component";
 import { ConditionFilterComponent } from "./filters/condition-filter.component";
+import { PidFilterContainsComponent } from "./filters/pid-filter-contains.component";
+import { PidFilterStartsWithComponent } from "./filters/pid-filter-startsWith.component";
 
 export interface FilterConfig {
   type: any;
@@ -56,10 +54,15 @@ export class DatasetsFilterComponent implements OnDestroy {
   protected readonly DateRangeFilterComponent = DateRangeFilterComponent;
   protected readonly TextFilterComponent = TextFilterComponent;
   protected readonly ConditionFilterComponent = ConditionFilterComponent;
+  protected readonly PidFilterContainsComponent = PidFilterContainsComponent;
+  protected readonly PidFilterStartsWithComponent =
+    PidFilterStartsWithComponent;
 
   filterConfigs: FilterConfig[] = [
     { type: LocationFilterComponent, visible: true },
     { type: PidFilterComponent, visible: true },
+    { type: PidFilterContainsComponent, visible: false },
+    { type: PidFilterStartsWithComponent, visible: false },
     { type: GroupFilterComponent, visible: true },
     { type: TypeFilterComponent, visible: true },
     { type: KeywordFilterComponent, visible: true },

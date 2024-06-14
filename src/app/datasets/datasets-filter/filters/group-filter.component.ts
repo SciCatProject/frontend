@@ -52,12 +52,10 @@ import { ClearableInputComponent } from "./clearable-input.component";
   ],
 })
 export class GroupFilterComponent extends ClearableInputComponent {
-  static kName = "group";
+  static kLabel = "Group";
 
   protected readonly getFacetId = getFacetId;
   protected readonly getFacetCount = getFacetCount;
-
-  label = "Group";
 
   groupFilter$ = this.store.select(selectGroupFilter);
 
@@ -72,6 +70,10 @@ export class GroupFilterComponent extends ClearableInputComponent {
 
   constructor(private store: Store) {
     super();
+  }
+
+  get label() {
+    return GroupFilterComponent.kLabel;
   }
 
   onGroupInput(event: any) {

@@ -17,10 +17,7 @@ import { ScientificCondition } from "../../../state-management/models";
   ],
 })
 export class ConditionFilterComponent {
-  static kName = "condition";
-
   @Input() condition: ScientificCondition;
-  label = "Type";
 
   constructor(private store: Store) {}
 

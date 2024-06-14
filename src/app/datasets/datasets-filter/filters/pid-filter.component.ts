@@ -9,43 +9,19 @@ import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
 import { AppConfigService } from "../../../app-config.service";
 import { ClearableInputComponent } from "./clearable-input.component";
 
-enum PidTermsSearchCondition {
-  startsWith = "startsWith",
-  contains = "contains",
-  equals = "equals",
-}
-
 @Component({
   selector: "app-pid-filter",
-  template: `
-    <mat-form-field>
-      <mat-label>{{ label }}</mat-label>
-      <input
-        #input
-        matInput
-        (input)="onPidInput($event)"
-        placeholder="Enter PID terms..."
-      />
-    </mat-form-field>
-  `,
-  styles: [
-    `
-      .mat-mdc-form-field {
-        width: 100%;
-      }
-    `,
-  ],
+  templateUrl: `./pid-filter.component.html`,
+  styleUrls: [`./pid-filter.component.scss`],
 })
 export class PidFilterComponent
   extends ClearableInputComponent<string>
   implements OnDestroy
 {
-  static kName = "pid";
+  static kLabel = "PID filter (Equals)";
 
   private pidSubject = new Subject<string>();
   private subscription: Subscription;
-
-  label = "PID filter";
 
   appConfig = this.appConfigService.getConfig();
 
@@ -61,24 +37,17 @@ export class PidFilterComponent
         distinctUntilChanged(),
       )
       .subscribe((pid) => {
-        const condition = this.buildPidTermsCondition(pid);
+        const condition = !pid ? "" : this.buildPidTermsCondition(pid);
         this.store.dispatch(setPidTermsFilterAction({ pid: condition }));
       });
   }
 
-  private buildPidTermsCondition(terms: string) {
-    if (!terms) return "";
-    switch (this.appConfig.pidSearchMethod) {
-      case PidTermsSearchCondition.startsWith: {
-        return { $regex: `^${terms}` };
-      }
-      case PidTermsSearchCondition.contains: {
-        return { $regex: terms };
-      }
-      default: {
-        return terms;
-      }
-    }
+  get label() {
+    return (this.constructor as typeof PidFilterComponent).kLabel;
+  }
+
+  protected buildPidTermsCondition(terms: string): string | { $regex: string } {
+    return terms;
   }
 
   ngOnDestroy() {

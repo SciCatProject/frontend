@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Configure Filters</h2>
 <mat-dialog-content class="filter-dialog-content">
   <mat-nav-list cdkDropList (cdkDropListDropped)="drop($event)">
-    <mat-list-item class="filter-item" *ngFor="let filter of data.filterConfigs; index as i" cdkDrag cdkDragHandle>
+    <mat-list-item class="filter-item" *ngFor="let filter of data.filterConfigs" cdkDrag cdkDragHandle>
       <span class="drag-handle" matTooltip="Drag to reorder" aria-label="Drag handle">
         <mat-icon>sort</mat-icon>
       </span>
@@ -11,7 +11,7 @@
         (change)="toggleVisibility(filter)"
         aria-label="Toggle visibility">
       </mat-slide-toggle>
-      <span class="filter-name">{{ filter.type.kName }}</span>
+      <span class="filter-name">{{ filter.type.kLabel }}</span>
       <span class="spacer"></span>
     </mat-list-item>
     <mat-list-item class="filter-item" *ngFor="let condition of data.conditionConfigs; index as i">

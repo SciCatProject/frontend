@@ -56,12 +56,10 @@ import { Store } from "@ngrx/store";
   ],
 })
 export class LocationFilterComponent extends ClearableInputComponent {
-  static kName = "location";
+  static kLabel = "Location";
 
   protected readonly getFacetId = getFacetId;
   protected readonly getFacetCount = getFacetCount;
-
-  label = "Location";
 
   locationFacetCounts$ = this.store.select(selectLocationFacetCounts);
   locationFilter$ = this.store.select(selectLocationFilter);
@@ -76,6 +74,10 @@ export class LocationFilterComponent extends ClearableInputComponent {
 
   constructor(private store: Store) {
     super();
+  }
+
+  get label() {
+    return LocationFilterComponent.kLabel;
   }
 
   locationSelected(location: string | null) {

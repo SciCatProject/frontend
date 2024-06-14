@@ -57,12 +57,10 @@ export class KeywordFilterComponent
   extends ClearableInputComponent
   implements OnDestroy
 {
-  static kName = "keyword";
+  static kLabel = "Keyword";
 
   protected readonly getFacetCount = getFacetCount;
   protected readonly getFacetId = getFacetId;
-
-  label = "Keywords";
 
   keywordsTerms$ = this.store.select(selectKeywordsTerms);
 
@@ -91,6 +89,10 @@ export class KeywordFilterComponent
       .subscribe((terms) => {
         this.store.dispatch(addKeywordFilterAction({ keyword: terms }));
       });
+  }
+
+  get label() {
+    return KeywordFilterComponent.kLabel;
   }
 
   onKeywordInput(event: any) {

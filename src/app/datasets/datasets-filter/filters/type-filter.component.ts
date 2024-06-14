@@ -53,12 +53,10 @@ import {
   ],
 })
 export class TypeFilterComponent extends ClearableInputComponent {
-  static kName = "type";
+  static kLabel = "Type filter";
 
   protected readonly getFacetCount = getFacetCount;
   protected readonly getFacetId = getFacetId;
-
-  label = "Type";
 
   typeFacetCounts$ = this.store.select(selectTypeFacetCounts);
 
@@ -73,6 +71,10 @@ export class TypeFilterComponent extends ClearableInputComponent {
 
   constructor(private store: Store) {
     super();
+  }
+
+  get label() {
+    return TypeFilterComponent.kLabel;
   }
 
   onTypeInput(event: any) {

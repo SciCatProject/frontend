@@ -41,9 +41,7 @@ interface DateRange {
   ],
 })
 export class DateRangeFilterComponent extends ClearableInputComponent {
-  static kName = "date";
-
-  label = "Start Date - End Date";
+  static kLabel = "Start Date - End Date";
 
   creationTimeFilter$ = this.store.select(selectCreationTimeFilter);
 
@@ -54,6 +52,10 @@ export class DateRangeFilterComponent extends ClearableInputComponent {
 
   constructor(private store: Store) {
     super();
+  }
+
+  get label() {
+    return DateRangeFilterComponent.kLabel;
   }
 
   dateChanged(event: MatDatepickerInputEvent<DateTime>) {
