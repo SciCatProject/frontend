@@ -227,15 +227,15 @@ const reducer = createReducer(
   on(
     fromActions.setDatasetsLimitFilterAction,
     (state, { limit }): DatasetState => {
-      const filters = { ...state.filters, limit, skip: 0 };
-      return { ...state, filters };
+      const pagination = { limit, skip: 0 };
+      return { ...state, pagination };
     },
   ),
 
   on(fromActions.changePageAction, (state, { page, limit }): DatasetState => {
     const skip = page * limit;
-    const filters = { ...state.filters, skip, limit };
-    return { ...state, filters };
+    const pagination = { skip, limit };
+    return { ...state, pagination };
   }),
   on(
     fromActions.sortByColumnAction,
@@ -347,9 +347,10 @@ const reducer = createReducer(
   }),
 
   on(fromActions.clearFacetsAction, (state): DatasetState => {
-    const limit = state.filters.limit; // Save limit
+    const limit = state.pagination.limit; // Save limit
     const filters = { ...initialDatasetState.filters, skip: 0, limit };
-    return { ...state, filters, searchTerms: "" };
+    const pagination = { skip: 0, limit };
+    return { ...state, filters, pagination, searchTerms: "" };
   }),
 
   on(fromActions.setTextFilterAction, (state, { text }): DatasetState => {

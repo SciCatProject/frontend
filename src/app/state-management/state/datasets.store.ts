@@ -15,6 +15,11 @@ export interface FacetCounts {
   [field: string]: FacetCount[];
 }
 
+export interface Pagination {
+  skip: number;
+  limit: number;
+}
+
 export interface DatasetState {
   datasets: Dataset[];
   selectedSets: Dataset[];
@@ -30,6 +35,7 @@ export interface DatasetState {
   keywordsTerms: string;
   pidTerms: string;
   filters: DatasetFilters;
+  pagination: Pagination;
 
   relatedDatasetsFilters: {
     skip: number;
@@ -71,6 +77,10 @@ export const initialDatasetState: DatasetState = {
     scientific: [],
     isPublished: "",
     pid: "",
+  },
+  pagination: {
+    skip: 0,
+    limit: 25,
   },
   relatedDatasetsFilters: {
     skip: 0,
