@@ -31,11 +31,7 @@ export class PidFilterComponent
   ) {
     super();
     this.subscription = this.pidSubject
-      .pipe(
-        skipWhile((terms) => terms.length < 5),
-        debounceTime(500),
-        distinctUntilChanged(),
-      )
+      .pipe(debounceTime(500), distinctUntilChanged())
       .subscribe((pid) => {
         const condition = !pid ? "" : this.buildPidTermsCondition(pid);
         this.store.dispatch(setPidTermsFilterAction({ pid: condition }));
