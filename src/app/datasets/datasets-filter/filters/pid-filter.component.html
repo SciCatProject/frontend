@@ -1,0 +1,9 @@
+<mat-form-field>
+  <mat-label>{{ label }}</mat-label>
+  <input
+    #input
+    matInput
+    (input)="onPidInput($event)"
+    placeholder="Enter PID terms..."
+  />
+</mat-form-field>
