@@ -35,12 +35,19 @@
           ></dataset-table-actions>
         </ng-template>
 
-        <dataset-table
+
+        <app-webix-datatable
           [tableColumns]="tableColumns$ | async"
           [selectedSets]="selectedSets$ | async"
           (settingsClick)="onSettingsClick()"
           (rowClick)="onRowClick($event)"
-        ></dataset-table>
+        ></app-webix-datatable>
+        <!--dataset-table
+          [tableColumns]="tableColumns$ | async"
+          [selectedSets]="selectedSets$ | async"
+          (settingsClick)="onSettingsClick()"
+          (rowClick)="onRowClick($event)"
+        ></dataset-table-->
       </div>
     </div>
   </mat-sidenav-content>
