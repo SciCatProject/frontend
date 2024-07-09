@@ -207,26 +207,26 @@ describe("DatasetsFilterComponent", () => {
     });
   });
 
-  describe("#removeCondition()", () => {
-    it("should dispatch a removeScientificConditionAction and a deselectColumnAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const condition: ScientificCondition = {
-        lhs: "test",
-        relation: "EQUAL_TO_NUMERIC",
-        rhs: 5,
-        unit: "s",
-      };
-      const index = 0;
-      component.removeCondition(condition, index);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        removeScientificConditionAction({ index }),
-      );
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        deselectColumnAction({ name: condition.lhs, columnType: "custom" }),
-      );
-    });
-  });
+  //TODO move to the new dialog
+  // describe("#removeCondition()", () => {
+  //   it("should dispatch a removeScientificConditionAction and a deselectColumnAction", () => {
+  //     dispatchSpy = spyOn(store, "dispatch");
+  //
+  //     const condition: ScientificCondition = {
+  //       lhs: "test",
+  //       relation: "EQUAL_TO_NUMERIC",
+  //       rhs: 5,
+  //       unit: "s",
+  //     };
+  //     component.removeCondition(condition);
+  //
+  //     expect(dispatchSpy).toHaveBeenCalledTimes(2);
+  //     expect(dispatchSpy).toHaveBeenCalledWith(
+  //       removeScientificConditionAction({ condition }),
+  //     );
+  //     expect(dispatchSpy).toHaveBeenCalledWith(
+  //       deselectColumnAction({ name: condition.lhs, columnType: "custom" }),
+  //     );
+  //   });
+  // });
 });

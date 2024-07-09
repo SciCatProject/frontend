@@ -247,8 +247,14 @@ describe("DatasetEffects", () => {
 
     describe("ofType removeScientificConditionAction", () => {
       it("should result in a fetchMetadataKeysAction", () => {
+        const condition: ScientificCondition = {
+          lhs: "test",
+          relation: "EQUAL_TO_NUMERIC",
+          rhs: 1000,
+          unit: "s",
+        };
         const action = fromActions.removeScientificConditionAction({
-          index: 0,
+          condition,
         });
         const outcome = fromActions.fetchMetadataKeysAction();
 
