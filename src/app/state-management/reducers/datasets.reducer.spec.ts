@@ -526,9 +526,7 @@ describe("DatasetsReducer", () => {
 
       expect(sta.filters.scientific).toContain(condition);
 
-      const index = 0;
-
-      const action = fromActions.removeScientificConditionAction({ index });
+      const action = fromActions.removeScientificConditionAction({ condition });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.filters.scientific).not.toContain(condition);
