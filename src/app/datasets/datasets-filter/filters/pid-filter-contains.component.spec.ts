@@ -28,7 +28,6 @@ import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
-import { PidFilterComponent } from "./pid-filter.component";
 import { PidFilterContainsComponent } from "./pid-filter-contains.component";
 
 const getConfig = () => ({
