@@ -46,6 +46,8 @@ import { TypeFilterComponent } from "./filters/type-filter.component";
 import { KeywordFilterComponent } from "./filters/keyword-filter.component";
 import { DateRangeFilterComponent } from "./filters/date-range-filter.component";
 import { TextFilterComponent } from "./filters/text-filter.component";
+import { PidFilterContainsComponent } from "./filters/pid-filter-contains.component";
+import { PidFilterStartsWithComponent } from "./filters/pid-filter-startsWith.component";
 
 export class MockMatDialog {
   open() {
@@ -54,6 +56,8 @@ export class MockMatDialog {
         of([
           { type: LocationFilterComponent, visible: true },
           { type: PidFilterComponent, visible: true },
+          { type: PidFilterContainsComponent, visible: false },
+          { type: PidFilterStartsWithComponent, visible: false },
           { type: GroupFilterComponent, visible: true },
           { type: TypeFilterComponent, visible: true },
           { type: KeywordFilterComponent, visible: true },
@@ -201,6 +205,7 @@ describe("DatasetsFilterComponent", () => {
           width: "60%",
           data: {
             filterConfigs: component.filterConfigs,
+            conditionConfigs: [],
           },
         },
       );

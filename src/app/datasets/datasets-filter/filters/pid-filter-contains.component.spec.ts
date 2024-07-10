@@ -29,14 +29,15 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { PidFilterComponent } from "./pid-filter.component";
+import { PidFilterContainsComponent } from "./pid-filter-contains.component";
 
 const getConfig = () => ({
   scienceSearchEnabled: false,
 });
 
-describe("PidFilterComponent", () => {
-  let component: PidFilterComponent;
-  let fixture: ComponentFixture<PidFilterComponent>;
+describe("PidFilterContainsComponent", () => {
+  let component: PidFilterContainsComponent;
+  let fixture: ComponentFixture<PidFilterContainsComponent>;
 
   let store: MockStore;
   let dispatchSpy;
@@ -63,10 +64,13 @@ describe("PidFilterComponent", () => {
         SharedScicatFrontendModule,
         StoreModule.forRoot({}),
       ],
-      declarations: [PidFilterComponent, SearchParametersDialogComponent],
+      declarations: [
+        PidFilterContainsComponent,
+        SearchParametersDialogComponent,
+      ],
       providers: [AsyncPipe],
     });
-    TestBed.overrideComponent(PidFilterComponent, {
+    TestBed.overrideComponent(PidFilterContainsComponent, {
       set: {
         providers: [
           {
@@ -82,7 +86,7 @@ describe("PidFilterComponent", () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PidFilterComponent);
+    fixture = TestBed.createComponent(PidFilterContainsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -95,28 +99,9 @@ describe("PidFilterComponent", () => {
     fixture.destroy();
   });
 
-  describe("#onPidInput()", () => {
-    it("should dispatch a SetSearchTermsAction", fakeAsync(() => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const pid = "xxxxxx";
-      const event = { target: { value: pid } };
-      component.onPidInput(event);
-
-      tick(500); //wait for it
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        setPidTermsFilterAction({ pid }),
-      );
-    }));
-  });
-
   describe("#buildPidTermsCondition()", () => {
     const tests = [
-      { input: "", method: "", expected: "" },
-      { input: "1", method: "equals", expected: "1" },
-      { input: "1", method: "", expected: "1" },
+      { input: "1", method: "contains", expected: { $regex: "1" } },
     ];
 
     tests.forEach((test, index) => {
