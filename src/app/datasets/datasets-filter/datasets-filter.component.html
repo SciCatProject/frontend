@@ -4,9 +4,11 @@
   </mat-card-header>
 
   <mat-card-content>
-    <ng-container *ngFor="let filterConfig of filterConfigs">
-      <ng-container  *ngIf="filterConfig.visible">
-        <ng-container *ngComponentOutlet="filterConfig.type; inputs: { 'clear': clearSearchBar}"></ng-container>
+    <ng-container *ngIf="filterConfigs$ | async as filterConfigs">
+      <ng-container *ngFor="let filterConfig of filterConfigs">
+        <ng-container  *ngIf="filterConfig.visible">
+          <ng-container *ngComponentOutlet="filterConfig.type; inputs: { 'clear': clearSearchBar}"></ng-container>
+        </ng-container>
       </ng-container>
     </ng-container>
 

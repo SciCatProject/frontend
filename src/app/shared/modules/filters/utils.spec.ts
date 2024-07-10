@@ -1,4 +1,4 @@
-import { FacetCount } from "../../state-management/state/datasets.store";
+import { FacetCount } from "../../../state-management/state/datasets.store";
 import { getFacetCount, getFacetId } from "./utils";
 
 describe("#getFacetId()", () => {

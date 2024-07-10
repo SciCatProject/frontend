@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { ScientificCondition } from "../../../state-management/models";
+import { ScientificCondition } from "state-management/models";
 
 @Component({
   selector: "app-condition-filter",

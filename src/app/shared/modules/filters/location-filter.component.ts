@@ -2,13 +2,13 @@ import { Component } from "@angular/core";
 import {
   selectLocationFacetCounts,
   selectLocationFilter,
-} from "../../../state-management/selectors/datasets.selectors";
-import { createSuggestionObserver, getFacetCount, getFacetId } from "../utils";
+} from "state-management/selectors/datasets.selectors";
+import { createSuggestionObserver, getFacetCount, getFacetId } from "./utils";
 import { BehaviorSubject } from "rxjs";
 import {
   addLocationFilterAction,
   removeLocationFilterAction,
-} from "../../../state-management/actions/datasets.actions";
+} from "state-management/actions/datasets.actions";
 import { ClearableInputComponent } from "./clearable-input.component";
 import { Store } from "@ngrx/store";
 

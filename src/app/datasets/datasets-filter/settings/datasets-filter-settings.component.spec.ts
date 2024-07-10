@@ -38,7 +38,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { DatasetsFilterSettingsComponent } from "./datasets-filter-settings.component";
-import { ConditionConfig } from "../datasets-filter.component";
+import { ConditionConfig } from "../../../shared/modules/filters/filters.module";
 
 export class MockMatDialog {
   open() {

@@ -2,8 +2,8 @@ import { Component, Input } from "@angular/core";
 import { ClearableInputComponent } from "./clearable-input.component";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { DateTime } from "luxon";
-import { setDateRangeFilterAction } from "../../../state-management/actions/datasets.actions";
-import { selectCreationTimeFilter } from "../../../state-management/selectors/datasets.selectors";
+import { setDateRangeFilterAction } from "state-management/actions/datasets.actions";
+import { selectCreationTimeFilter } from "state-management/selectors/datasets.selectors";
 import { Store } from "@ngrx/store";
 
 interface DateRange {

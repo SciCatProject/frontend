@@ -4,15 +4,12 @@ import {
   TestBed,
   inject,
   waitForAsync,
-  fakeAsync,
-  tick,
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
 import { MockStore } from "shared/MockStubs";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { setPidTermsFilterAction } from "state-management/actions/datasets.actions";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatDialogModule, MatDialog } from "@angular/material/dialog";

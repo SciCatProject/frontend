@@ -2,13 +2,13 @@ import { Component } from "@angular/core";
 import {
   selectGroupFacetCounts,
   selectGroupFilter,
-} from "../../../state-management/selectors/datasets.selectors";
+} from "state-management/selectors/datasets.selectors";
 import { Store } from "@ngrx/store";
 import {
   addGroupFilterAction,
   removeGroupFilterAction,
-} from "../../../state-management/actions/datasets.actions";
-import { createSuggestionObserver, getFacetCount, getFacetId } from "../utils";
+} from "state-management/actions/datasets.actions";
+import { createSuggestionObserver, getFacetCount, getFacetId } from "./utils";
 import { BehaviorSubject } from "rxjs";
 import { ClearableInputComponent } from "./clearable-input.component";
 

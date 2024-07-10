@@ -1,11 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ClearableInputComponent } from "./clearable-input.component";
-import { selectSearchTerms } from "../../../state-management/selectors/datasets.selectors";
 import { Store } from "@ngrx/store";
-import {
-  setSearchTermsAction,
-  setTextFilterAction,
-} from "../../../state-management/actions/datasets.actions";
+import { setTextFilterAction } from "state-management/actions/datasets.actions";
 import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
 import { Subject, Subscription } from "rxjs";
 

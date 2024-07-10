@@ -1,5 +1,5 @@
 import { BehaviorSubject, combineLatest, Observable } from "rxjs";
-import { FacetCount } from "../../state-management/state/datasets.store";
+import { FacetCount } from "../../../state-management/state/datasets.store";
 import { map } from "rxjs/operators";
 
 export function createSuggestionObserver(

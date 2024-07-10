@@ -13,30 +13,18 @@ import {
   fetchFacetCountsAction,
 } from "state-management/actions/datasets.actions";
 import { Subscription } from "rxjs";
-import { deselectAllCustomColumnsAction } from "state-management/actions/user.actions";
-import { ScientificCondition } from "state-management/models";
+import {
+  deselectAllCustomColumnsAction,
+  updateFilterConfigs,
+} from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
-import { PidFilterComponent } from "./filters/pid-filter.component";
-import { LocationFilterComponent } from "./filters/location-filter.component";
-import { GroupFilterComponent } from "./filters/group-filter.component";
-import { TypeFilterComponent } from "./filters/type-filter.component";
-import { KeywordFilterComponent } from "./filters/keyword-filter.component";
-import { DateRangeFilterComponent } from "./filters/date-range-filter.component";
-import { TextFilterComponent } from "./filters/text-filter.component";
 import { DatasetsFilterSettingsComponent } from "./settings/datasets-filter-settings.component";
-import { ConditionFilterComponent } from "./filters/condition-filter.component";
-import { PidFilterContainsComponent } from "./filters/pid-filter-contains.component";
-import { PidFilterStartsWithComponent } from "./filters/pid-filter-startsWith.component";
-
-export interface FilterConfig {
-  type: any;
-  visible: boolean;
-}
-
-export interface ConditionConfig {
-  condition: ScientificCondition;
-  enabled: boolean;
-}
+import {
+  selectConditions,
+  selectFilters,
+} from "state-management/selectors/user.selectors";
+import { AsyncPipe } from "@angular/common";
+import { ConditionFilterComponent } from "../../shared/modules/filters/condition-filter.component";
 
 @Component({
   selector: "datasets-filter",
@@ -46,31 +34,9 @@ export interface ConditionConfig {
 export class DatasetsFilterComponent implements OnDestroy {
   private subscriptions: Subscription[] = [];
 
-  protected readonly LocationFilterComponent = LocationFilterComponent;
-  protected readonly PidFilterComponent = PidFilterComponent;
-  protected readonly GroupFilterComponent = GroupFilterComponent;
-  protected readonly TypeFilterComponent = TypeFilterComponent;
-  protected readonly KeywordFilterComponent = KeywordFilterComponent;
-  protected readonly DateRangeFilterComponent = DateRangeFilterComponent;
-  protected readonly TextFilterComponent = TextFilterComponent;
-  protected readonly ConditionFilterComponent = ConditionFilterComponent;
-  protected readonly PidFilterContainsComponent = PidFilterContainsComponent;
-  protected readonly PidFilterStartsWithComponent =
-    PidFilterStartsWithComponent;
+  filterConfigs$ = this.store.select(selectFilters);
 
-  filterConfigs: FilterConfig[] = [
-    { type: LocationFilterComponent, visible: true },
-    { type: PidFilterComponent, visible: true },
-    { type: PidFilterContainsComponent, visible: false },
-    { type: PidFilterStartsWithComponent, visible: false },
-    { type: GroupFilterComponent, visible: true },
-    { type: TypeFilterComponent, visible: true },
-    { type: KeywordFilterComponent, visible: true },
-    { type: DateRangeFilterComponent, visible: true },
-    { type: TextFilterComponent, visible: true },
-  ];
-
-  conditionConfigs: ConditionConfig[] = [];
+  conditionConfigs$ = this.store.select(selectConditions);
 
   scientificConditions$ = this.store.select(selectScientificConditions);
 
@@ -86,6 +52,7 @@ export class DatasetsFilterComponent implements OnDestroy {
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
     private store: Store,
+    private asyncPipe: AsyncPipe,
   ) {}
 
   reset() {
@@ -100,10 +67,8 @@ export class DatasetsFilterComponent implements OnDestroy {
     const dialogRef = this.dialog.open(DatasetsFilterSettingsComponent, {
       width: "60%",
       data: {
-        filterConfigs: this.filterConfigs.map((filterConfig) =>
-          Object.assign({}, filterConfig),
-        ),
-        conditionConfigs: this.conditionConfigs, // delibertly pass reference to the array
+        filterConfigs: this.asyncPipe.transform(this.filterConfigs$),
+        conditionConfigs: this.asyncPipe.transform(this.conditionConfigs$),
       },
     });
 
@@ -112,7 +77,7 @@ export class DatasetsFilterComponent implements OnDestroy {
       if (result) {
         // Handle the selected filter
         console.log(`Selected filter: ${result}`);
-        this.filterConfigs = result;
+        this.store.dispatch(updateFilterConfigs({ filterConfigs: result }));
       }
     });
   }
@@ -126,4 +91,6 @@ export class DatasetsFilterComponent implements OnDestroy {
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
+
+  protected readonly ConditionFilterComponent = ConditionFilterComponent;
 }

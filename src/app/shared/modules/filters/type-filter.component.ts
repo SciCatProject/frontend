@@ -1,16 +1,16 @@
 import { Component } from "@angular/core";
 import { ClearableInputComponent } from "./clearable-input.component";
-import { createSuggestionObserver, getFacetCount, getFacetId } from "../utils";
+import { createSuggestionObserver, getFacetCount, getFacetId } from "./utils";
 import {
   selectTypeFacetCounts,
   selectTypeFilter,
-} from "../../../state-management/selectors/datasets.selectors";
+} from "state-management/selectors/datasets.selectors";
 import { Store } from "@ngrx/store";
 import { BehaviorSubject } from "rxjs";
 import {
   addTypeFilterAction,
   removeTypeFilterAction,
-} from "../../../state-management/actions/datasets.actions";
+} from "state-management/actions/datasets.actions";
 
 @Component({
   selector: "app-type-filter",

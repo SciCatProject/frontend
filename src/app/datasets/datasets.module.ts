@@ -82,20 +82,10 @@ import { instrumentsReducer } from "state-management/reducers/instruments.reduce
 import { InstrumentEffects } from "state-management/effects/instruments.effects";
 import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.component";
 import { FullTextSearchBarComponent } from "./dashboard/full-text-search/full-text-search-bar.component";
-import { PidFilterComponent } from "./datasets-filter/filters/pid-filter.component";
 import { MatMenuModule } from "@angular/material/menu";
-import { LocationFilterComponent } from "./datasets-filter/filters/location-filter.component";
-import { ClearableInputComponent } from "./datasets-filter/filters/clearable-input.component";
-import { GroupFilterComponent } from "./datasets-filter/filters/group-filter.component";
-import { TypeFilterComponent } from "./datasets-filter/filters/type-filter.component";
-import { KeywordFilterComponent } from "./datasets-filter/filters/keyword-filter.component";
-import { DateRangeFilterComponent } from "./datasets-filter/filters/date-range-filter.component";
-import { TextFilterComponent } from "./datasets-filter/filters/text-filter.component";
 import { DatasetsFilterSettingsComponent } from "./datasets-filter/settings/datasets-filter-settings.component";
 import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
-import { ConditionFilterComponent } from "./datasets-filter/filters/condition-filter.component";
-import { PidFilterContainsComponent } from "./datasets-filter/filters/pid-filter-contains.component";
-import { PidFilterStartsWithComponent } from "./datasets-filter/filters/pid-filter-startsWith.component";
+import { FiltersModule } from "shared/modules/filters/filters.module";
 
 @NgModule({
   imports: [
@@ -156,6 +146,7 @@ import { PidFilterStartsWithComponent } from "./datasets-filter/filters/pid-filt
     CdkDropList,
     CdkDrag,
     CdkDragHandle,
+    FiltersModule,
   ],
   declarations: [
     BatchViewComponent,
@@ -179,17 +170,6 @@ import { PidFilterStartsWithComponent } from "./datasets-filter/filters/pid-filt
     DatasetFileUploaderComponent,
     AdminTabComponent,
     RelatedDatasetsComponent,
-    ClearableInputComponent,
-    PidFilterComponent,
-    PidFilterContainsComponent,
-    PidFilterStartsWithComponent,
-    LocationFilterComponent,
-    GroupFilterComponent,
-    TypeFilterComponent,
-    KeywordFilterComponent,
-    DateRangeFilterComponent,
-    TextFilterComponent,
-    ConditionFilterComponent,
     DatasetsFilterSettingsComponent,
   ],
   providers: [

@@ -17,8 +17,11 @@ import {
 } from "../../../state-management/actions/user.actions";
 import { Store } from "@ngrx/store";
 import { selectMetadataKeys } from "../../../state-management/selectors/datasets.selectors";
-import { ConditionConfig, FilterConfig } from "../datasets-filter.component";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
+import {
+  ConditionConfig,
+  FilterConfig,
+} from "../../../shared/modules/filters/filters.module";
 
 @Component({
   selector: "app-type-datasets-filter-settings",

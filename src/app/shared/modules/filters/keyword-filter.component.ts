@@ -1,17 +1,17 @@
 import { Component, OnDestroy } from "@angular/core";
 import { ClearableInputComponent } from "./clearable-input.component";
-import { createSuggestionObserver, getFacetCount, getFacetId } from "../utils";
+import { createSuggestionObserver, getFacetCount, getFacetId } from "./utils";
 import {
   selectKeywordFacetCounts,
   selectKeywordsFilter,
   selectKeywordsTerms,
-} from "../../../state-management/selectors/datasets.selectors";
+} from "state-management/selectors/datasets.selectors";
 import { Store } from "@ngrx/store";
 import { BehaviorSubject } from "rxjs";
 import {
   addKeywordFilterAction,
   removeKeywordFilterAction,
-} from "../../../state-management/actions/datasets.actions";
+} from "state-management/actions/datasets.actions";
 import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
 
 @Component({

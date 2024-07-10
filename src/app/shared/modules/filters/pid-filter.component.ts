@@ -4,9 +4,9 @@ import { Subject, Subscription } from "rxjs";
 import {
   setPidTermsAction,
   setPidTermsFilterAction,
-} from "../../../state-management/actions/datasets.actions";
+} from "state-management/actions/datasets.actions";
 import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
-import { AppConfigService } from "../../../app-config.service";
+import { AppConfigService } from "app-config.service";
 import { ClearableInputComponent } from "./clearable-input.component";
 
 @Component({
