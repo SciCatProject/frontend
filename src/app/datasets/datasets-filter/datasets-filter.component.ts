@@ -34,6 +34,8 @@ import { ConditionFilterComponent } from "../../shared/modules/filters/condition
 export class DatasetsFilterComponent implements OnDestroy {
   private subscriptions: Subscription[] = [];
 
+  protected readonly ConditionFilterComponent = ConditionFilterComponent;
+
   filterConfigs$ = this.store.select(selectFilters);
 
   conditionConfigs$ = this.store.select(selectConditions);
@@ -91,6 +93,4 @@ export class DatasetsFilterComponent implements OnDestroy {
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
-
-  protected readonly ConditionFilterComponent = ConditionFilterComponent;
 }
