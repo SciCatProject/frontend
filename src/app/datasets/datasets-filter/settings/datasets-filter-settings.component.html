@@ -46,7 +46,7 @@
         {{ condition.condition.unit | prettyUnit }}
           </span>
       <span class="spacer"></span>
-      <span><mat-icon (click)="removeCondition(condition, i)">delete</mat-icon></span>
+      <span><mat-icon (click)="removeCondition(condition, i)" (keydown)="removeCondition(condition, i)">delete</mat-icon></span>
     </mat-list-item>
   </mat-nav-list>
 </mat-dialog-content>
