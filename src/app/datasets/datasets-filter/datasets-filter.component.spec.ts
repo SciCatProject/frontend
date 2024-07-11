@@ -13,16 +13,11 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {
   clearFacetsAction,
-  removeScientificConditionAction,
   fetchDatasetsAction,
   fetchFacetCountsAction,
 } from "state-management/actions/datasets.actions";
 import { of } from "rxjs";
-import {
-  deselectColumnAction,
-  deselectAllCustomColumnsAction,
-} from "state-management/actions/user.actions";
-import { ScientificCondition } from "state-management/models";
+import { deselectAllCustomColumnsAction } from "state-management/actions/user.actions";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatDialogModule, MatDialog } from "@angular/material/dialog";
@@ -39,31 +34,43 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { DatasetsFilterSettingsComponent } from "./settings/datasets-filter-settings.component";
-import { LocationFilterComponent } from "./filters/location-filter.component";
-import { PidFilterComponent } from "./filters/pid-filter.component";
-import { GroupFilterComponent } from "./filters/group-filter.component";
-import { TypeFilterComponent } from "./filters/type-filter.component";
-import { KeywordFilterComponent } from "./filters/keyword-filter.component";
-import { DateRangeFilterComponent } from "./filters/date-range-filter.component";
-import { TextFilterComponent } from "./filters/text-filter.component";
-import { PidFilterContainsComponent } from "./filters/pid-filter-contains.component";
-import { PidFilterStartsWithComponent } from "./filters/pid-filter-startsWith.component";
+import { LocationFilterComponent } from "../../shared/modules/filters/location-filter.component";
+import { PidFilterComponent } from "../../shared/modules/filters/pid-filter.component";
+import { PidFilterContainsComponent } from "../../shared/modules/filters/pid-filter-contains.component";
+import { PidFilterStartsWithComponent } from "../../shared/modules/filters/pid-filter-startsWith.component";
+import { GroupFilterComponent } from "../../shared/modules/filters/group-filter.component";
+import { TypeFilterComponent } from "../../shared/modules/filters/type-filter.component";
+import { KeywordFilterComponent } from "../../shared/modules/filters/keyword-filter.component";
+import { DateRangeFilterComponent } from "../../shared/modules/filters/date-range-filter.component";
+import { TextFilterComponent } from "../../shared/modules/filters/text-filter.component";
+import { FilterConfig } from "../../shared/modules/filters/filters.module";
+import { selectFilters } from "../../state-management/selectors/user.selectors";
+
+const filterConfigs: FilterConfig[] = [
+  { type: LocationFilterComponent, visible: true },
+  { type: PidFilterComponent, visible: true },
+  { type: PidFilterContainsComponent, visible: false },
+  { type: PidFilterStartsWithComponent, visible: false },
+  { type: GroupFilterComponent, visible: true },
+  { type: TypeFilterComponent, visible: true },
+  { type: KeywordFilterComponent, visible: true },
+  { type: DateRangeFilterComponent, visible: true },
+  { type: TextFilterComponent, visible: true },
+];
+
+export class MockStoreWithFilters extends MockStore {
+  public select(selector: any) {
+    if (selector === selectFilters) {
+      return of(filterConfigs);
+    }
+    return of(null);
+  }
+}
 
 export class MockMatDialog {
   open() {
     return {
-      afterClosed: () =>
-        of([
-          { type: LocationFilterComponent, visible: true },
-          { type: PidFilterComponent, visible: true },
-          { type: PidFilterContainsComponent, visible: false },
-          { type: PidFilterStartsWithComponent, visible: false },
-          { type: GroupFilterComponent, visible: true },
-          { type: TypeFilterComponent, visible: true },
-          { type: KeywordFilterComponent, visible: true },
-          { type: DateRangeFilterComponent, visible: true },
-          { type: TextFilterComponent, visible: true },
-        ]),
+      afterClosed: () => of(filterConfigs),
     };
   }
 }
@@ -76,7 +83,7 @@ describe("DatasetsFilterComponent", () => {
   let component: DatasetsFilterComponent;
   let fixture: ComponentFixture<DatasetsFilterComponent>;
 
-  let store: MockStore;
+  let store: MockStoreWithFilters;
   let dispatchSpy;
 
   beforeEach(waitForAsync(() => {
@@ -102,7 +109,10 @@ describe("DatasetsFilterComponent", () => {
         StoreModule.forRoot({}),
       ],
       declarations: [DatasetsFilterComponent, SearchParametersDialogComponent],
-      providers: [AsyncPipe],
+      providers: [
+        AsyncPipe,
+        { provide: Store, useClass: MockStoreWithFilters },
+      ],
     });
     TestBed.overrideComponent(DatasetsFilterComponent, {
       set: {
@@ -126,7 +136,7 @@ describe("DatasetsFilterComponent", () => {
     fixture.detectChanges();
   });
 
-  beforeEach(inject([Store], (mockStore: MockStore) => {
+  beforeEach(inject([Store], (mockStore: MockStoreWithFilters) => {
     store = mockStore;
   }));
 
@@ -204,8 +214,8 @@ describe("DatasetsFilterComponent", () => {
         {
           width: "60%",
           data: {
-            filterConfigs: component.filterConfigs,
-            conditionConfigs: [],
+            filterConfigs: filterConfigs,
+            conditionConfigs: null,
           },
         },
       );

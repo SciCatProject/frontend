@@ -13,7 +13,7 @@ import { DateRangeFilterComponent } from "./date-range-filter.component";
 import { ScientificCondition } from "state-management/models";
 import { MatInputModule } from "@angular/material/input";
 import { MatDatepickerModule } from "@angular/material/datepicker";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, NgForOf } from "@angular/common";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatIconModule } from "@angular/material/icon";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
@@ -39,6 +39,7 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
     MatChipsModule,
     MatIconModule,
     MatAutocompleteModule,
+    NgForOf,
   ],
   exports: [
     ClearableInputComponent,

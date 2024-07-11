@@ -120,7 +120,7 @@ export class MockAppConfigService {
 export class MockStore {
   public dispatch() {}
 
-  public select() {
+  public select(selector) {
     return of([]);
   }
 
