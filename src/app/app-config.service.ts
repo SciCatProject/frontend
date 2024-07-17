@@ -36,6 +36,9 @@ export interface AppConfig {
   archiveWorkflowEnabled: boolean;
   datasetJsonScientificMetadata: boolean;
   datasetReduceEnabled: boolean;
+  datasetDetailsShowMissingProposalId: boolean;
+  datafilesActionsEnabled: boolean;
+  datafilesActions: any[];
   editDatasetSampleEnabled: boolean;
   editMetadataEnabled: boolean;
   editPublishedData: boolean;
@@ -84,7 +87,6 @@ export interface AppConfig {
   tableSciDataEnabled: boolean;
   fileserverBaseURL: string;
   fileserverButtonLabel: string | undefined;
-  datasetDetailsShowMissingProposalId: boolean;
   helpMessages?: HelpMessages;
   notificationInterceptorEnabled: boolean;
   pidSearchMethod?: string;
