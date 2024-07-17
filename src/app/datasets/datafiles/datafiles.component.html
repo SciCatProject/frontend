@@ -38,8 +38,10 @@
       <ng-template ngPluralCase="other">{{ count }} datafiles.</ng-template>
     </span>
     <div *ngIf="(datablocks$ | async) && (datablocks$ | async)?.length === 0">
-      <h3>No datafiles linked to this dataset</h3>
+      <h3>No files associated to this dataset</h3>
     </div>
+
+    <ng-template>
     <form
       ngNoForm
       method="POST"
@@ -130,7 +132,14 @@
       </a>
     </ng-template>
     <div style="clear: both"></div>
+    </ng-template>
+    <datafiles-actions
+      [actionsConfig]="appConfig.datafilesActions"
+      [dataset]="actionDataset"
+      [files]="files"
+    ></datafiles-actions>
   </div>
+  
 
   <app-table
     [data]="tableData"

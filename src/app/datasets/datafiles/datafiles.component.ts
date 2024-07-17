@@ -30,17 +30,8 @@ import { PublicDownloadDialogComponent } from "datasets/public-download-dialog/p
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import { AppConfigService } from "app-config.service";
 import { NgForm } from "@angular/forms";
-
-export interface File {
-  path: string;
-  size: number;
-  time: string;
-  chk: string;
-  uid: string;
-  gid: string;
-  perm: string;
-  selected: boolean;
-}
+import { DataFiles_File } from "./datafiles.interfaces";
+import { ActionDataset } from "datasets/datafiles-actions/datafiles-action.interfaces";
 
 @Component({
   selector: "datafiles",
@@ -73,6 +64,7 @@ export class DatafilesComponent
   files: Array<any> = [];
   sourcefolder = "";
   datasetPid = "";
+  actionDataset: ActionDataset;
 
   count = 0;
   pageSize = 25;
@@ -111,7 +103,7 @@ export class DatafilesComponent
       dateFormat: "yyyy-MM-dd HH:mm",
     },
   ];
-  tableData: File[] = [];
+  tableData: DataFiles_File[] = [];
 
   constructor(
     public appConfigService: AppConfigService,
@@ -205,13 +197,14 @@ export class DatafilesComponent
         if (dataset) {
           this.sourcefolder = dataset.sourceFolder;
           this.datasetPid = dataset.pid;
+          this.actionDataset = <ActionDataset>dataset;
         }
       }),
     );
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
         if (datablocks) {
-          const files: File[] = [];
+          const files: DataFiles_File[] = [];
           datablocks.forEach((block) => {
             block.dataFileList.map((file) => {
               this.totalFileSize += file.size;
