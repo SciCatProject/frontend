@@ -892,6 +892,38 @@ export class ProposalApi extends BaseLoopBackApi {
   }
 
   /**
+   * @method findByIdAccess
+   * @param {string} id ID of the resource
+   * @param {Function} [customHeaders] Optional custom headers function
+   * @return {Observable<{ canAccess: boolean }>}
+   * @description
+   * Generic findById method
+   */
+  public findByIdAccess<T>(
+    id: string,
+    customHeaders?: Function,
+  ): Observable<{ canAccess: boolean }> {
+    let _method: string = "GET";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/Proposals/:id/access";
+    let _routeParams: any = { id };
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
+    return result;
+  }
+  /**
    * Find proposal that took data at specified instrument and time
    *
    * @param {string} instrument
