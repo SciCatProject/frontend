@@ -152,6 +152,19 @@ export class DatafilesComponent
   updateSelectionStatus() {
     this.areAllSelected = this.getAreAllSelected();
     this.isNoneSelected = this.getIsNoneSelected();
+    this.updateSelectedInFiles();
+  }
+
+  updateSelectedInFiles() {
+    const selected = this.tableData
+      .filter((item) => item.selected)
+      .map((item) => item.path);
+    const files = this.files.map((item) => {
+      item.selected = selected.includes(item.path);
+      return item;
+    });
+    console.log(files);
+    this.files = [...files];
   }
 
   onSelectOne(checkboxEvent: CheckboxEvent) {
