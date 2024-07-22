@@ -623,6 +623,39 @@ export class SampleApi extends BaseLoopBackApi {
   }
 
   /**
+   * @method findByIdAccess
+   * @param {string} id ID of the resource
+   * @param {Function} [customHeaders] Optional custom headers function
+   * @return {Observable<{ canAccess: boolean }>}
+   * @description
+   * Generic findById method
+   */
+  public findByIdAccess<T>(
+    id: string,
+    customHeaders?: Function,
+  ): Observable<{ canAccess: boolean }> {
+    let _method: string = "GET";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/Samples/:id/access";
+    let _routeParams: any = { id };
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
+    return result;
+  }
+
+  /**
    * Get a list of sample characteristic keys
    *
    * @param {object} fields Define the filter conditions by specifying the name of values of fields requested. There is also support for a `text` search to look for strings anywhere in the sample.
