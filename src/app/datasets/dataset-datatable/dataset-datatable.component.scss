@@ -1,0 +1,24 @@
+.webix-datatable {
+  width: 100%;
+  height: 100%;
+
+
+  /* Define the hover effect for the rows */
+  .hover {
+    background-color: #0677b1; /* Light grey background */
+    cursor: pointer; /* Change cursor to pointer */
+  }
+
+  .webix_hcell {
+    border-right: 3px solid rgb(6, 119, 177) !important;
+  }
+}
+
+/* Define the hover effect for the rows */
+::ng-deep .hover {
+  background-color: #0677b1; /* Light grey background */
+  cursor: pointer; /* Change cursor to pointer */
+}
+
+
+
