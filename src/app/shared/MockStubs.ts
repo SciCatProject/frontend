@@ -6,7 +6,10 @@ import { AppConfig } from "app-config.module";
 import { SciCatDataSource } from "./services/scicat.datasource";
 import { LoopBackAuth } from "./sdk";
 import { Injectable } from "@angular/core";
-import { ActionConfig, ActionDataset } from "datasets/datafiles-actions/datafiles-action.interfaces";
+import {
+  ActionConfig,
+  ActionDataset,
+} from "datasets/datafiles-actions/datafiles-action.interfaces";
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 
 export class MockUserApi {
