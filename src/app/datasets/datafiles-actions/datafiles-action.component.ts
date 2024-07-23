@@ -19,7 +19,7 @@ import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 })
 export class DatafilesActionComponent implements OnInit, OnChanges {
   @Input({ required: true }) actionConfig: ActionConfig;
-  @Input({ required: true }) dataset: ActionDataset;
+  @Input({ required: true }) actionDataset: ActionDataset;
   @Input({ required: true }) files: DataFiles_File[];
   @Input({ required: true }) maxFileSize: number;
 
@@ -108,9 +108,11 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
 
     form.appendChild(this.add_input("jwt", this.jwt));
 
-    form.appendChild(this.add_input("dataset", this.dataset.pid));
+    form.appendChild(this.add_input("dataset", this.actionDataset.pid));
 
-    form.appendChild(this.add_input("directory", this.dataset.sourceFolder));
+    form.appendChild(
+      this.add_input("directory", this.actionDataset.sourceFolder),
+    );
 
     for (const [index, item] of this.files.entries()) {
       if (
