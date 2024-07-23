@@ -7,7 +7,7 @@ export interface ActionConfig {
   icon?: string;
   url: string;
   target: string;
-  authorization: string;
+  authorization: string[];
   method?: string;
   enabled?: string;
   disabled?: string;
