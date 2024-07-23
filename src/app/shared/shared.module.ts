@@ -16,6 +16,7 @@ import { CommonModule } from "@angular/common";
 import { SharedTableModule } from "./modules/shared-table/shared-table.module";
 import { ScicatDataService } from "./services/scicat-data-service";
 import { ScientificMetadataTreeModule } from "./modules/scientific-metadata-tree/scientific-metadata-tree.modules";
+import { FiltersModule } from "./modules/filters/filters.module";
 @NgModule({
   imports: [
     BreadcrumbModule,
@@ -48,6 +49,7 @@ import { ScientificMetadataTreeModule } from "./modules/scientific-metadata-tree
     FormsModule,
     SharedTableModule,
     ScientificMetadataTreeModule,
+    FiltersModule,
   ],
 })
 export class SharedScicatFrontendModule {}

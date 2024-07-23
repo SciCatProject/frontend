@@ -462,9 +462,10 @@ const reducer = createReducer(
   ),
   on(
     fromActions.removeScientificConditionAction,
-    (state, { index }): DatasetState => {
+    (state, { condition }): DatasetState => {
       const currentFilters = state.filters;
       const scientific = [...currentFilters.scientific];
+      const index = scientific.indexOf(condition);
       scientific.splice(index, 1);
       const filters = { ...currentFilters, scientific };
       return { ...state, filters };
