@@ -13,7 +13,7 @@ import { AppConfigService } from "app-config.service";
 })
 export class DatafilesActionsComponent implements OnInit {
   @Input({ required: true }) actionsConfig: ActionConfig[];
-  @Input({ required: true }) dataset: ActionDataset;
+  @Input({ required: true }) actionDataset: ActionDataset;
   @Input({ required: true }) files: DataFiles_File[];
 
   appConfig = this.appConfigService.getConfig();
