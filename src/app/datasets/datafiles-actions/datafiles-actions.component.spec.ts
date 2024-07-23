@@ -55,14 +55,6 @@ describe("DatafilesActionsComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DatafilesActionsComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  afterEach(() => {
-    fixture.destroy();
-  });
-
-  beforeEach(waitForAsync(() => {
     component.files = [
       {
         path: "test1",
@@ -132,12 +124,16 @@ describe("DatafilesActionsComponent", () => {
         authorization: ["#datasetAccess", "#datasetPublic"],
       },
     ];
-    component.dataset = {
+    component.actionDataset = {
       pid: "57eb0ad6-48d4-11ef-814b-df221a8e3571",
       sourceFolder: "/level_1/level_2/level3",
     };
     fixture.detectChanges();
-  }));
+  });
+
+  afterEach(() => {
+    fixture.destroy();
+  });
 
   it("should create", () => {
     expect(component).toBeTruthy();
