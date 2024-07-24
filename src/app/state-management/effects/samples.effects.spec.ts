@@ -54,6 +54,7 @@ describe("SampleEffects", () => {
           useValue: jasmine.createSpyObj("sampleApi", [
             "fullquery",
             "findById",
+            "findByIdAccess",
             "metadataKeys",
             "patchAttributes",
             "create",
@@ -259,16 +260,19 @@ describe("SampleEffects", () => {
 
   describe("fetchSample$", () => {
     const sampleId = "testId";
+    const permission = { canAccess: true };
 
     it("should result in a fetchSampleCompleteAction", () => {
       const action = fromActions.fetchSampleAction({ sampleId });
       const outcome = fromActions.fetchSampleCompleteAction({ sample });
 
       actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: sample });
+      const permissionResponse = cold("--a|", { a: permission });
+      const response = cold("---a|", { a: sample });
+      sampleApi.findByIdAccess.and.returnValue(permissionResponse);
       sampleApi.findById.and.returnValue(response);
 
-      const expected = cold("--b", { b: outcome });
+      const expected = cold("------b", { b: outcome });
       expect(effects.fetchSample$).toBeObservable(expected);
     });
 
@@ -277,10 +281,25 @@ describe("SampleEffects", () => {
       const outcome = fromActions.fetchSampleFailedAction();
 
       actions = hot("-a", { a: action });
-      const response = cold("-#", {});
+      const permissionResponse = cold("--a|", { a: permission });
+      const response = cold("---#", {});
+      sampleApi.findByIdAccess.and.returnValue(permissionResponse);
       sampleApi.findById.and.returnValue(response);
 
-      const expected = cold("--b", { b: outcome });
+      const expected = cold("------b", { b: outcome });
+      expect(effects.fetchSample$).toBeObservable(expected);
+    });
+
+    it("should do nothing if findByIdAccess returns false", () => {
+      const action = fromActions.fetchSampleAction({ sampleId });
+      permission.canAccess = false;
+
+      actions = hot("-a", { a: action });
+      const permissionResponse = cold("--a|", { a: permission });
+      sampleApi.findByIdAccess.and.returnValue(permissionResponse);
+
+      const expected = cold("------"); // No emission
+
       expect(effects.fetchSample$).toBeObservable(expected);
     });
   });
