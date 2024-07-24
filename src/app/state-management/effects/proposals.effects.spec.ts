@@ -61,6 +61,7 @@ describe("ProposalEffects", () => {
           useValue: jasmine.createSpyObj("proposalApi", [
             "fullquery",
             "findById",
+            "findByIdAccess",
             "createAttachments",
             "updateByIdAttachments",
             "destroyByIdAttachments",
@@ -240,16 +241,18 @@ describe("ProposalEffects", () => {
 
   describe("fetchProposal$", () => {
     const proposalId = "testId";
-
+    const permission = { canAccess: true };
     it("should result in a fetchCountCompleteAction", () => {
       const action = fromActions.fetchProposalAction({ proposalId });
       const outcome = fromActions.fetchProposalCompleteAction({ proposal });
 
       actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: proposal });
+      const permissionResponse = cold("--a|", { a: permission });
+      const response = cold("---a|", { a: proposal });
+      proposalApi.findByIdAccess.and.returnValue(permissionResponse);
       proposalApi.findById.and.returnValue(response);
 
-      const expected = cold("--b", { b: outcome });
+      const expected = cold("------b", { b: outcome });
       expect(effects.fetchProposal$).toBeObservable(expected);
     });
 
@@ -258,10 +261,25 @@ describe("ProposalEffects", () => {
       const outcome = fromActions.fetchProposalFailedAction();
 
       actions = hot("-a", { a: action });
-      const response = cold("-#", {});
+      const permissionResponse = cold("--a|", { a: permission });
+      const response = cold("---#", {});
+      proposalApi.findByIdAccess.and.returnValue(permissionResponse);
       proposalApi.findById.and.returnValue(response);
 
-      const expected = cold("--b", { b: outcome });
+      const expected = cold("------b", { b: outcome });
+      expect(effects.fetchProposal$).toBeObservable(expected);
+    });
+
+    it("should do nothing if findByIdAccess returns false", () => {
+      const action = fromActions.fetchProposalAction({ proposalId });
+      permission.canAccess = false;
+
+      actions = hot("-a", { a: action });
+      const permissionResponse = cold("--a|", { a: permission });
+      proposalApi.findByIdAccess.and.returnValue(permissionResponse);
+
+      const expected = cold("------"); // No emission
+
       expect(effects.fetchProposal$).toBeObservable(expected);
     });
   });
