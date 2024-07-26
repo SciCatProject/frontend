@@ -11,26 +11,38 @@ import { AppConfigService } from "app-config.service";
   templateUrl: "./datafiles-actions.component.html",
   styleUrls: ["./datafiles-actions.component.scss"],
 })
-export class DatafilesActionsComponent implements OnInit {
+export class DatafilesActionsComponent {
+  private _sortedActionsConfig: ActionConfig[];
+
   @Input({ required: true }) actionsConfig: ActionConfig[];
   @Input({ required: true }) actionDataset: ActionDataset;
   @Input({ required: true }) files: DataFiles_File[];
 
-  appConfig = this.appConfigService.getConfig();
-  maxFileSize: number | null = this.appConfig.maxDirectDownloadSize || 0;
-
-  sortedActionsConfig: ActionConfig[];
-
   constructor(public appConfigService: AppConfigService) {}
 
-  ngOnInit() {
-    this.sortedActionsConfig = this.actionsConfig;
-    this.sortedActionsConfig.sort((a: ActionConfig, b: ActionConfig) =>
-      a.order && b.order ? a.order - b.order : 0,
+  // ngOnInit() {
+  //   this.sortedActionsConfig = this.actionsConfig;
+  //   this.sortedActionsConfig.sort((a: ActionConfig, b: ActionConfig) =>
+  //     a.order && b.order ? a.order - b.order : 0,
+  //   );
+  // }
+
+  get visible(): boolean {
+    return (
+      this.appConfigService.getConfig().datafilesActionsEnabled &&
+      this.files.length > 0
     );
   }
 
-  visible() {
-    return this.appConfig.datafilesActionsEnabled && this.files.length > 0;
+  get maxFileSize(): number { 
+    return this.appConfigService.getConfig().maxDirectDownloadSize || 0;
+  }
+
+  get sortedActionsConfig(): ActionConfig[] {
+    this._sortedActionsConfig = this.actionsConfig;
+    this._sortedActionsConfig.sort((a: ActionConfig, b: ActionConfig) =>
+      a.order && b.order ? a.order - b.order : 0,
+    );
+    return this._sortedActionsConfig;
   }
 }

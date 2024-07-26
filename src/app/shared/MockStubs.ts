@@ -211,3 +211,57 @@ export class MockDatafilesActionsComponent {
   dataset: ActionDataset;
   files: DataFiles_File[];
 }
+
+export class MockHtmlElement {
+  id = "";
+  tag = "HTML";
+  innerHTML = "";
+  value = "";
+  name = "";
+  disabled = false;
+  style: unknown = { display: "block", backgroundColor: "red" };
+  children: MockHtmlElement[] = [];
+
+  constructor(tag = "", id = "") {
+    this.id = id;
+    this.tag = tag;
+  }
+  createElement(t: string, id = "") {
+    return new MockHtmlElement(t, id);
+  }
+  appendChild(x: MockHtmlElement) {
+    this.children.push(x);
+    return x;
+  }
+  clear() {
+    this.children = [];
+  }
+  querySelector(sel: string) {
+    // too hard to implement correctly, so just hack something
+    const list = this.getElementsByTagName(sel);
+    return list.length > 0 ? list[0] : this.children[0];
+  }
+  querySelectorAll(sel: string) {
+    // too hard to implement correctly, so just return all children
+    return this.children;
+  }
+  getElementById(id: string): any {
+    // if not found, just CREATE one!!
+    return (
+      this.children.find((x) => x.id == id) ||
+      this.appendChild(this.createElement("", id))
+    );
+  }
+  getElementsByClassName(classname: string): any[] {
+    return this.children.filter((x: any) => x.classList.contains(classname));
+  }
+  getElementsByName(name: string): any[] {
+    return this.children.filter((x: any) => x.name == name);
+  }
+  getElementsByTagName(tag: string): any[] {
+    return this.children.filter((x: any) => x.tag == tag.toUpperCase());
+  }
+  submit() {
+    return true;
+  }
+}
