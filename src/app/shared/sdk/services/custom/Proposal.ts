@@ -908,7 +908,7 @@ export class ProposalApi extends BaseLoopBackApi {
       LoopBackConfig.getPath() +
       "/" +
       LoopBackConfig.getApiVersion() +
-      "/Proposals/:id/access";
+      "/Proposals/:id/authorization";
     let _routeParams: any = { id };
     let _postBody: any = {};
     let _urlParams: any = {};

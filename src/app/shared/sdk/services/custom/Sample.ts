@@ -639,7 +639,7 @@ export class SampleApi extends BaseLoopBackApi {
       LoopBackConfig.getPath() +
       "/" +
       LoopBackConfig.getApiVersion() +
-      "/Samples/:id/access";
+      "/Samples/:id/authorization";
     let _routeParams: any = { id };
     let _postBody: any = {};
     let _urlParams: any = {};
