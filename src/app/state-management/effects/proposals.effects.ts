@@ -73,6 +73,7 @@ export class ProposalEffects {
                 catchError(() => of(fromActions.fetchProposalFailedAction())),
               ),
           ),
+          catchError(() => of(fromActions.fetchProposalAccessRejectedAction())),
         );
       }),
     );
