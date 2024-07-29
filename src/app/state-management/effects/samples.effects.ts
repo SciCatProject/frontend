@@ -91,6 +91,7 @@ export class SampleEffects {
               catchError(() => of(fromActions.fetchSampleFailedAction())),
             ),
           ),
+          catchError(() => of(fromActions.fetchSampleAccessFailedAction())),
         );
       }),
     );

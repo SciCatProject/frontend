@@ -31,8 +31,8 @@ export const fetchProposalCompleteAction = createAction(
 export const fetchProposalFailedAction = createAction(
   "[Proposal] Fetch Proposal Failed",
 );
-export const fetchProposalAccessRejectedAction = createAction(
-  "[Proposal] Fetch Proposal Access Rejected",
+export const fetchProposalAccessFailedAction = createAction(
+  "[Proposal] Fetch Proposal Access Failed",
 );
 
 export const fetchProposalDatasetsAction = createAction(

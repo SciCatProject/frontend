@@ -241,7 +241,10 @@ describe("ProposalEffects", () => {
 
   describe("fetchProposal$", () => {
     const proposalId = "testId";
-    const permission = { canAccess: true };
+    const permission = {
+      accepted: { canAccess: true },
+      rejected: { canAccess: false },
+    };
 
     it("should result in a fetchCountCompleteAction", () => {
       const action = fromActions.fetchProposalAction({ proposalId });
@@ -249,7 +252,7 @@ describe("ProposalEffects", () => {
 
       proposalApi.findByIdAccess
         .withArgs(proposalId)
-        .and.returnValue(of(permission));
+        .and.returnValue(of(permission.accepted));
       proposalApi.findById
         .withArgs(encodeURIComponent(proposalId))
         .and.returnValue(of(proposal));
@@ -266,7 +269,7 @@ describe("ProposalEffects", () => {
 
       proposalApi.findByIdAccess
         .withArgs(proposalId)
-        .and.returnValue(of(permission));
+        .and.returnValue(of(permission.accepted));
       proposalApi.findById.and.returnValue(throwError(() => new Error()));
 
       actions = hot("a", { a: action });
@@ -280,7 +283,7 @@ describe("ProposalEffects", () => {
 
       proposalApi.findByIdAccess
         .withArgs(proposalId)
-        .and.returnValue(of({ canAccess: false }));
+        .and.returnValue(of(permission.rejected));
 
       actions = hot("a", { a: action });
       const expected = cold("------");
@@ -289,9 +292,9 @@ describe("ProposalEffects", () => {
       expect(proposalApi.findById).not.toHaveBeenCalled();
     });
 
-    it("should result in fetchProposalAccessRejectedAction if findByIdAccess failed", () => {
+    it("should result in fetchProposalAccessFailedAction if findByIdAccess failed", () => {
       const action = fromActions.fetchProposalAction({ proposalId });
-      const failure = fromActions.fetchProposalAccessRejectedAction();
+      const failure = fromActions.fetchProposalAccessFailedAction();
 
       proposalApi.findByIdAccess
         .withArgs(proposalId)
