@@ -248,7 +248,7 @@ describe("ProposalEffects", () => {
 
     it("should result in a fetchProposalCompleteAction", () => {
       const action = fromActions.fetchProposalAction({ proposalId });
-      const outcome = fromActions.fetchProposalCompleteAction({ proposal });
+      const completion = fromActions.fetchProposalCompleteAction({ proposal });
 
       proposalApi.findByIdAccess
         .withArgs(proposalId)
