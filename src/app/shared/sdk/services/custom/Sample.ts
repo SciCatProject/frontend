@@ -627,7 +627,6 @@ export class SampleApi extends BaseLoopBackApi {
    * @param {string} id ID of the resource
    * @param {Function} [customHeaders] Optional custom headers function
    * @return {Observable<{ canAccess: boolean }>}
-   * @description
    */
   public findByIdAccess<T>(
     id: string,
