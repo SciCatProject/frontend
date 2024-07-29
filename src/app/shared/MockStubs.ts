@@ -261,7 +261,5 @@ export class MockHtmlElement {
   getElementsByTagName(tag: string): any[] {
     return this.children.filter((x: any) => x.tag == tag.toUpperCase());
   }
-  submit() {
-    return true;
-  }
+  submit() {}
 }
