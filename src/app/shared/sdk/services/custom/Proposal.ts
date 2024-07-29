@@ -896,8 +896,6 @@ export class ProposalApi extends BaseLoopBackApi {
    * @param {string} id ID of the resource
    * @param {Function} [customHeaders] Optional custom headers function
    * @return {Observable<{ canAccess: boolean }>}
-   * @description
-   * Generic findById method
    */
   public findByIdAccess<T>(
     id: string,
