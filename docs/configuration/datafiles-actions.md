@@ -149,5 +149,16 @@ datafilesActions = [
       enabled: "#Selected",
     },
   ]
-  ```
+
+```
+
+This configuration renders to the following buttons if no files are selected:  
+![Datafiles actions when no files are selected](./datafiles_actions_no_file_selected.png "Datafiles actions with no selected files")  
+
+or in this other one when at least one file is selected:  
+![Datafiles actions when at least one files are selected](./datafiles_actions_file_selected.png "Datafiles actions with selected files")
+
+
+
+
 
