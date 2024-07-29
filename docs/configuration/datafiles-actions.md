@@ -159,6 +159,4 @@ or in this other one when at least one file is selected:
 ![Datafiles actions when at least one files are selected](./datafiles_actions_file_selected.png "Datafiles actions with selected files")
 
 
-
-
-
+--
