@@ -267,7 +267,7 @@ describe("SampleEffects", () => {
 
     it("should result in a fetchSampleCompleteAction", () => {
       const action = fromActions.fetchSampleAction({ sampleId });
-      const completion = fromActions.fetchSampleCompleteAction({ sample });
+      const outcome = fromActions.fetchSampleCompleteAction({ sample });
 
       sampleApi.findByIdAccess
         .withArgs(sampleId)
@@ -277,7 +277,7 @@ describe("SampleEffects", () => {
         .and.returnValue(of(sample));
 
       actions = hot("a", { a: action });
-      const expected = cold("b", { b: completion });
+      const expected = cold("b", { b: outcome });
 
       expect(effects.fetchSample$).toBeObservable(expected);
     });

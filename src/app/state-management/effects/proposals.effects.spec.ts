@@ -246,9 +246,9 @@ describe("ProposalEffects", () => {
       rejected: { canAccess: false },
     };
 
-    it("should result in a fetchCountCompleteAction", () => {
+    it("should result in a fetchProposalCompleteAction", () => {
       const action = fromActions.fetchProposalAction({ proposalId });
-      const completion = fromActions.fetchProposalCompleteAction({ proposal });
+      const outcome = fromActions.fetchProposalCompleteAction({ proposal });
 
       proposalApi.findByIdAccess
         .withArgs(proposalId)
@@ -258,7 +258,7 @@ describe("ProposalEffects", () => {
         .and.returnValue(of(proposal));
 
       actions = hot("a", { a: action });
-      const expected = cold("b", { b: completion });
+      const expected = cold("b", { b: outcome });
 
       expect(effects.fetchProposal$).toBeObservable(expected);
     });
