@@ -129,7 +129,6 @@ describe("DatafilesActionComponent", () => {
     id: "4ac45f3e-4d79-11ef-856c-6339dab93bee",
   });
 
-
   const browserWindowMock = {
     document: {
       write() {},
@@ -256,10 +255,6 @@ describe("DatafilesActionComponent", () => {
         component.files[0].selected = true;
         component.files[1].selected = true;
         break;
-      //case selectedFilesType.none:
-      //default:
-        //component.files[0].selected = false;
-        //component.files[1].selected = false;
     }
     fixture.detectChanges();
   }
