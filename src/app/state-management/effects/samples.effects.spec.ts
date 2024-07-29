@@ -267,7 +267,7 @@ describe("SampleEffects", () => {
 
     it("should result in a fetchSampleCompleteAction", () => {
       const action = fromActions.fetchSampleAction({ sampleId });
-      const outcome = fromActions.fetchSampleCompleteAction({ sample });
+      const completion = fromActions.fetchSampleCompleteAction({ sample });
 
       sampleApi.findByIdAccess
         .withArgs(sampleId)
