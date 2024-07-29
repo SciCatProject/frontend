@@ -34,7 +34,7 @@ export class DatafilesActionsComponent {
     );
   }
 
-  get maxFileSize(): number { 
+  get maxFileSize(): number {
     return this.appConfigService.getConfig().maxDirectDownloadSize || 0;
   }
 
