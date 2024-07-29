@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { Observable, of, throwError } from "rxjs";
 import { SampleEffects } from "./samples.effects";
 import {
   SampleApi,
@@ -260,47 +260,70 @@ describe("SampleEffects", () => {
 
   describe("fetchSample$", () => {
     const sampleId = "testId";
-    const permission = { canAccess: true };
+    const permission = {
+      accepted: { canAccess: true },
+      rejected: { canAccess: false },
+    };
 
     it("should result in a fetchSampleCompleteAction", () => {
       const action = fromActions.fetchSampleAction({ sampleId });
-      const outcome = fromActions.fetchSampleCompleteAction({ sample });
+      const completion = fromActions.fetchSampleCompleteAction({ sample });
 
-      actions = hot("-a", { a: action });
-      const permissionResponse = cold("--a|", { a: permission });
-      const response = cold("---a|", { a: sample });
-      sampleApi.findByIdAccess.and.returnValue(permissionResponse);
-      sampleApi.findById.and.returnValue(response);
+      sampleApi.findByIdAccess
+        .withArgs(sampleId)
+        .and.returnValue(of(permission.accepted));
+      sampleApi.findById
+        .withArgs(encodeURIComponent(sampleId))
+        .and.returnValue(of(sample));
 
-      const expected = cold("------b", { b: outcome });
+      actions = hot("a", { a: action });
+      const expected = cold("b", { b: completion });
+
       expect(effects.fetchSample$).toBeObservable(expected);
     });
 
     it("should result in a fetchSampleFailedAction", () => {
       const action = fromActions.fetchSampleAction({ sampleId });
-      const outcome = fromActions.fetchSampleFailedAction();
+      const failure = fromActions.fetchSampleFailedAction();
 
-      actions = hot("-a", { a: action });
-      const permissionResponse = cold("--a|", { a: permission });
-      const response = cold("---#", {});
-      sampleApi.findByIdAccess.and.returnValue(permissionResponse);
-      sampleApi.findById.and.returnValue(response);
+      sampleApi.findByIdAccess
+        .withArgs(sampleId)
+        .and.returnValue(of(permission.accepted));
+      sampleApi.findById.and.returnValue(throwError(() => new Error()));
 
-      const expected = cold("------b", { b: outcome });
+      actions = hot("a", { a: action });
+      const expected = cold("b", { b: failure });
+
       expect(effects.fetchSample$).toBeObservable(expected);
     });
 
     it("should do nothing if findByIdAccess returns false", () => {
       const action = fromActions.fetchSampleAction({ sampleId });
-      permission.canAccess = false;
 
-      actions = hot("-a", { a: action });
-      const permissionResponse = cold("--a|", { a: permission });
-      sampleApi.findByIdAccess.and.returnValue(permissionResponse);
+      sampleApi.findByIdAccess
+        .withArgs(sampleId)
+        .and.returnValue(of(permission.rejected));
 
-      const expected = cold("------"); // No emission
+      actions = hot("a", { a: action });
+      const expected = cold("------");
 
       expect(effects.fetchSample$).toBeObservable(expected);
+      expect(sampleApi.findById).not.toHaveBeenCalled();
+    });
+
+    it("should result in fetchSampleAccessFailedAction if findByIdAccess failed", () => {
+      const action = fromActions.fetchSampleAction({ sampleId });
+      const failure = fromActions.fetchSampleAccessFailedAction();
+
+      sampleApi.findByIdAccess
+        .withArgs(sampleId)
+        .and.returnValue(throwError(() => new Error()));
+
+      actions = hot("a", { a: action });
+      const expected = cold("b", { b: failure });
+
+      expect(effects.fetchSample$).toBeObservable(expected);
+      expect(sampleApi.findById).not.toHaveBeenCalled();
     });
   });
 
