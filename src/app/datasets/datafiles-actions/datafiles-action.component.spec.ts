@@ -18,7 +18,7 @@ import {
 } from "shared/MockStubs";
 import { ActionDataset } from "./datafiles-action.interfaces";
 
-describe("DatafilesActionComponent", () => {
+describe("1000: DatafilesActionComponent", () => {
   let component: DatafilesActionComponent;
   let fixture: ComponentFixture<DatafilesActionComponent>;
 
@@ -185,46 +185,273 @@ describe("DatafilesActionComponent", () => {
   });
 
   /*
-   * Test cases
+   * Unit tests for enabled/disabled cases performed
    * ------------------------
-   * Action            , Max Size           , Selected           , Status
-   * ----------------------------------------------------------------
-   * Download All      , low max file size  , no selected files  , disabled
-   * Download All      , low max file size  , file 1 selected    , disabled
-   * Download All      , low max file size  , file 2 selected    , disabled
-   * Download All      , low max file size  , all files selected , disabled
-   * Download All      , high max file size , no selected files  , enabled
-   * Download All      , high max file size , file 1 selected    , enabled
-   * Download All      , high max file size , file 2 selected    , enabled
-   * Download All      , high max file size , all files selected , enabled
+   * Test # , Action            , Max Size           , Selected           , Status
+   * -------------------------------------------------------------------------------
+   * 0010   , Download All      , low max file size  , no selected files  , disabled
+   * 0020   , Download All      , low max file size  , file 1 selected    , disabled
+   * 0030   , Download All      , low max file size  , file 2 selected    , disabled
+   * 0040   , Download All      , low max file size  , all files selected , disabled
+   * 0050   , Download All      , high max file size , no selected files  , enabled
+   * 0060   , Download All      , high max file size , file 1 selected    , enabled
+   * 0070   , Download All      , high max file size , file 2 selected    , enabled
+   * 0080   , Download All      , high max file size , all files selected , enabled
    *
-   * Download Selected , low max file size  , no selected files  , disabled
-   * Download Selected , low max file size  , file 1 selected    , enabled
-   * Download Selected , low max file size  , file 2 selected    , disabled
-   * Download Selected , low max file size  , all files selected , disabled
-   * Download Selected , high max file size , no selected files  , disabled
-   * Download Selected , high max file size , file 1 selected    , enabled
-   * Download Selected , high max file size , file 2 selected    , enabled
-   * Download Selected , high max file size , all files selected , enabled
+   * 0090   , Download Selected , low max file size  , no selected files  , disabled
+   * 0100   , Download Selected , low max file size  , file 1 selected    , enabled
+   * 0110   , Download Selected , low max file size  , file 2 selected    , disabled
+   * 0120   , Download Selected , low max file size  , all files selected , disabled
+   * 0130   , Download Selected , high max file size , no selected files  , disabled
+   * 0140   , Download Selected , high max file size , file 1 selected    , enabled
+   * 0150   , Download Selected , high max file size , file 2 selected    , enabled
+   * 0160   , Download Selected , high max file size , all files selected , enabled
    *
-   * Notebook All      , low max file size  , no selected files  , enabled
-   * Notebook All      , low max file size  , file 1 selected    , enabled
-   * Notebook All      , low max file size  , file 2 selected    , enabled
-   * Notebook All      , low max file size  , all files selected , enabled
-   * Notebook All      , high max file size , no selected files  , enabled
-   * Notebook All      , high max file size , file 1 selected    , enabled
-   * Notebook All      , high max file size , file 2 selected    , enabled
-   * Notebook All      , high max file size , all files selected , enabled
+   * 0170   , Notebook All      , low max file size  , no selected files  , enabled
+   * 0180   , Notebook All      , low max file size  , file 1 selected    , enabled
+   * 0190   , Notebook All      , low max file size  , file 2 selected    , enabled
+   * 0200   , Notebook All      , low max file size  , all files selected , enabled
+   * 0210   , Notebook All      , high max file size , no selected files  , enabled
+   * 0220   , Notebook All      , high max file size , file 1 selected    , enabled
+   * 0230   , Notebook All      , high max file size , file 2 selected    , enabled
+   * 0240   , Notebook All      , high max file size , all files selected , enabled
    *
-   * Notebook Selected , low max file size  , no selected files  , disbaled
-   * Notebook Selected , low max file size  , file 1 selected    , enabled
-   * Notebook Selected , low max file size  , file 2 selected    , enabled
-   * Notebook Selected , low max file size  , all files selected , enabled
-   * Notebook Selected , high max file size , no selected files  , disabled
-   * Notebook Selected , high max file size , file 1 selected    , enabled
-   * Notebook Selected , high max file size , file 2 selected    , enabled
-   * Notebook Selected , high max file size , all files selected , enabled
+   * 0250   , Notebook Selected , low max file size  , no selected files  , disbaled
+   * 0260   , Notebook Selected , low max file size  , file 1 selected    , enabled
+   * 0270   , Notebook Selected , low max file size  , file 2 selected    , enabled
+   * 0280   , Notebook Selected , low max file size  , all files selected , enabled
+   * 0290   , Notebook Selected , high max file size , no selected files  , disabled
+   * 0300   , Notebook Selected , high max file size , file 1 selected    , enabled
+   * 0310   , Notebook Selected , high max file size , file 2 selected    , enabled
+   * 0320   , Notebook Selected , high max file size , all files selected , enabled
    */
+
+  const testEnabledDisabledCases = [
+    {
+      test: "0010: Download All should be disabled with lowest max size limit and no files selected",
+      action: actionSelectorType.download_all,
+      limit: maxSizeType.lower,
+      selection: selectedFilesType.none,
+      result: true,
+    },
+    {
+      test: "0020: Download All should be disabled with lowest max size limit and file 1 selected",
+      action: actionSelectorType.download_all,
+      limit: maxSizeType.lower,
+      selection: selectedFilesType.file1,
+      result: true,
+    },
+    {
+      test: "0030: Download All should be disabled with lowest max size limit and file 2 selected",
+      action: actionSelectorType.download_all,
+      limit: maxSizeType.lower,
+      selection: selectedFilesType.file2,
+      result: true,
+    },
+    {
+      test: "0040: Download All should be disabled with lowest max size limit and all files selected",
+      action: actionSelectorType.download_all,
+      limit: maxSizeType.lower,
+      selection: selectedFilesType.all,
+      result: true,
+    },
+    {
+      test: "0050: Download All should be enabled with highest max size limit and no files selected",
+      action: actionSelectorType.download_all,
+      limit: maxSizeType.higher,
+      selection: selectedFilesType.none,
+      result: false,
+    },
+    {
+      test: "0060: Download All should be enabled with highest max size limit and file 1 selected",
+      action: actionSelectorType.download_all,
+      limit: maxSizeType.higher,
+      selection: selectedFilesType.file1,
+      result: false,
+    },
+    {
+      test: "0070: Download All should be enabled with highest max size limit and file 2 selected",
+      action: actionSelectorType.download_all,
+      limit: maxSizeType.higher,
+      selection: selectedFilesType.file2,
+      result: false,
+    },
+    {
+      test: "0080: Download All should be enabled with highest max size limit and all files selected",
+      action: actionSelectorType.download_all,
+      limit: maxSizeType.higher,
+      selection: selectedFilesType.all,
+      result: false,
+    },
+    {
+      test: "0090: Download Selected should be disabled with lowest max size limit and no files selected",
+      action: actionSelectorType.download_selected,
+      limit: maxSizeType.lower,
+      selection: selectedFilesType.none,
+      result: true,
+    },
+    {
+      test: "0100: Download Selected should be enabled with lowest max size limit and file 1 selected",
+      action: actionSelectorType.download_selected,
+      limit: maxSizeType.lower,
+      selection: selectedFilesType.file1,
+      result: false,
+    },
+    {
+      test: "0110: Download Selected should be disabled with lowest max size limit and file 2 selected",
+      action: actionSelectorType.download_selected,
+      limit: maxSizeType.lower,
+      selection: selectedFilesType.file2,
+      result: true,
+    },
+    {
+      test: "0120: Download Selected should be disabled with lowest max size limit and all files selected",
+      action: actionSelectorType.download_selected,
+      limit: maxSizeType.lower,
+      selection: selectedFilesType.all,
+      result: true,
+    },
+    {
+      test: "0130: Download Selected should be disabled with highest max size limit and no files selected",
+      action: actionSelectorType.download_selected,
+      limit: maxSizeType.higher,
+      selection: selectedFilesType.none,
+      result: true,
+    },
+    {
+      test: "0140: Download Selected should be enabled with highest max size limit and file 1 selected",
+      action: actionSelectorType.download_selected,
+      limit: maxSizeType.higher,
+      selection: selectedFilesType.file1,
+      result: false,
+    },
+    {
+      test: "0150: Download Selected should be enabled with highest max size limit and file 2 selected",
+      action: actionSelectorType.download_selected,
+      limit: maxSizeType.higher,
+      selection: selectedFilesType.file2,
+      result: false,
+    },
+    {
+      test: "0160: Download Selected should be enabled with highest max size limit and all files selected",
+      action: actionSelectorType.download_selected,
+      limit: maxSizeType.higher,
+      selection: selectedFilesType.all,
+      result: false,
+    },
+    {
+      test: "0170: Notebook All should be enabled with lowest max size limit and no files selected",
+      action: actionSelectorType.notebook_all,
+      limit: maxSizeType.lower,
+      selection: selectedFilesType.none,
+      result: false,
+    },
+    {
+      test: "0180: Notebook All should be enabled with lowest max size limit and file 1 selected",
+      action: actionSelectorType.notebook_all,
+      limit: maxSizeType.lower,
+      selection: selectedFilesType.file1,
+      result: false,
+    },
+    {
+      test: "0190: Notebook All should be enabled with lowest max size limit and file 2 selected",
+      action: actionSelectorType.notebook_all,
+      limit: maxSizeType.lower,
+      selection: selectedFilesType.file2,
+      result: false,
+    },
+    {
+      test: "0200: Notebook All should be enabled with lowest max size limit and all files selected",
+      action: actionSelectorType.notebook_all,
+      limit: maxSizeType.lower,
+      selection :selectedFilesType.all,
+      result: false,
+    },
+    {
+      test: "0210: Notebook All should be enabled with highest max size limit and no files selected",
+      action : actionSelectorType.notebook_all,
+      limit: maxSizeType.higher,
+      selection: selectedFilesType.none,
+      result: false,
+    },
+    {
+      test: "0220: Notebook All should be enabled with highest max size limit and file 1 selected",
+      action: actionSelectorType.notebook_all,
+      limit: maxSizeType.higher,
+      selection: selectedFilesType.file1,
+      result: false,
+    },
+    {
+      test: "0230: Notebook All should be enabled with highest max size limit and file 2 selected",
+      action: actionSelectorType.notebook_all,
+      limit: maxSizeType.higher,
+      selection: selectedFilesType.file2,
+      result: false,
+    },
+    {
+      test: "0240: Notebook All should be enabled with highest max size limit and all files selected",
+      action: actionSelectorType.notebook_all,
+      limit: maxSizeType.higher,
+      selection: selectedFilesType.all,
+      result: false,
+    },
+    {
+      test: "0250: Notebook Selected should be disabled with lowest max size limit and no files selected",
+      action: actionSelectorType.notebook_selected,
+      limit: maxSizeType.lower,
+      selection: selectedFilesType.none,
+      result: true,
+    },
+    {
+      test: "0260: Notebook Selected should be enabled with lowest max size limit and file 1 selected",
+      action: actionSelectorType.notebook_selected,
+      limit: maxSizeType.lower,
+      selection: selectedFilesType.file1,
+      result: false,
+    },
+    {
+      test: "0270: Notebook Selected should be enabled with lowest max size limit and file 2 selected",
+      action: actionSelectorType.notebook_selected,
+      limit: maxSizeType.lower,
+      selection: selectedFilesType.file2,
+      result: false,
+    },
+    {
+      test: "0280: Notebook Selected should be enabled with lowest max size limit and all files selected",
+      action: actionSelectorType.notebook_selected,
+      limit: maxSizeType.lower,
+      selection: selectedFilesType.all,
+      result: false,
+    },
+    {
+      test: "0290: Notebook Selected should be disabled with highest max size limit and no files selected",
+      action : actionSelectorType.notebook_selected,
+      limit: maxSizeType.higher,
+      selection: selectedFilesType.none,
+      result: true,
+    },
+    {
+      test: "0300: Notebook Selected should be enabled with highest max size limit and file 1 selected",
+      action: actionSelectorType.notebook_selected,
+      limit: maxSizeType.higher,
+      selection: selectedFilesType.file1,
+      result: false,
+    },
+    {
+      test: "0310: Notebook Selected should be enabled with highest max size limit and file 2 selected",
+      action: actionSelectorType.notebook_selected,
+      limit: maxSizeType.higher,
+      selection: selectedFilesType.file2,
+      result: false,
+    },
+    {
+      test: "0320: Notebook Selected should be enabled with highest max size limit and all files selected",
+      action: actionSelectorType.notebook_selected,
+      limit: maxSizeType.higher,
+      selection: selectedFilesType.all,
+      result: false,
+    },
+  ];
 
   function selectTestCase(
     action: actionSelectorType,
@@ -259,324 +486,12 @@ describe("DatafilesActionComponent", () => {
     fixture.detectChanges();
   }
 
-  it("Download All should be disabled with lowest max size limit and no files selected", () => {
-    selectTestCase(
-      actionSelectorType.download_all,
-      maxSizeType.lower,
-      selectedFilesType.none,
-    );
+  testEnabledDisabledCases.forEach((testCase) => {
+    it(testCase.test, () => {
+      selectTestCase(testCase.action, testCase.limit, testCase.selection);
 
-    expect(component.disabled).toEqual(true);
-  });
-
-  it("Download All should be disabled with lowest max size limit and file 1 selected", () => {
-    selectTestCase(
-      actionSelectorType.download_all,
-      maxSizeType.lower,
-      selectedFilesType.file1,
-    );
-
-    expect(component.disabled).toEqual(true);
-  });
-
-  it("Download All should be disabled with lowest max size limit and file 2 selected", () => {
-    selectTestCase(
-      actionSelectorType.download_all,
-      maxSizeType.lower,
-      selectedFilesType.file2,
-    );
-
-    expect(component.disabled).toEqual(true);
-  });
-
-  it("Download All should be disabled with lowest max size limit and all files selected", () => {
-    selectTestCase(
-      actionSelectorType.download_all,
-      maxSizeType.lower,
-      selectedFilesType.all,
-    );
-
-    expect(component.disabled).toEqual(true);
-  });
-
-  it("Download All should be enabled with highest max size limit and no files selected", () => {
-    selectTestCase(
-      actionSelectorType.download_all,
-      maxSizeType.higher,
-      selectedFilesType.none,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Download All should be enabled with highest max size limit and file 1 selected", () => {
-    selectTestCase(
-      actionSelectorType.download_all,
-      maxSizeType.higher,
-      selectedFilesType.file1,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Download All should be enabled with highest max size limit and file 2 selected", () => {
-    selectTestCase(
-      actionSelectorType.download_all,
-      maxSizeType.higher,
-      selectedFilesType.file2,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Download All should be enabled with highest max size limit and all files selected", () => {
-    selectTestCase(
-      actionSelectorType.download_all,
-      maxSizeType.higher,
-      selectedFilesType.all,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Download Selected should be disabled with lowest max size limit and no files selected", () => {
-    selectTestCase(
-      actionSelectorType.download_selected,
-      maxSizeType.lower,
-      selectedFilesType.none,
-    );
-
-    expect(component.disabled).toEqual(true);
-  });
-
-  it("Download Selected should be enabled with lowest max size limit and file 1 selected", () => {
-    selectTestCase(
-      actionSelectorType.download_selected,
-      maxSizeType.lower,
-      selectedFilesType.file1,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Download Selected should be disabled with lowest max size limit and file 2 selected", () => {
-    selectTestCase(
-      actionSelectorType.download_selected,
-      maxSizeType.lower,
-      selectedFilesType.file2,
-    );
-
-    expect(component.disabled).toEqual(true);
-  });
-
-  it("Download Selected should be disabled with lowest max size limit and all files selected", () => {
-    selectTestCase(
-      actionSelectorType.download_selected,
-      maxSizeType.lower,
-      selectedFilesType.all,
-    );
-
-    expect(component.disabled).toEqual(true);
-  });
-
-  it("Download Selected should be disabled with highest max size limit and no files selected", () => {
-    selectTestCase(
-      actionSelectorType.download_selected,
-      maxSizeType.higher,
-      selectedFilesType.none,
-    );
-
-    expect(component.disabled).toEqual(true);
-  });
-
-  it("Download Selected should be enabled with highest max size limit and file 1 selected", () => {
-    selectTestCase(
-      actionSelectorType.download_selected,
-      maxSizeType.higher,
-      selectedFilesType.file1,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Download Selected should be enabled with highest max size limit and file 2 selected", () => {
-    selectTestCase(
-      actionSelectorType.download_selected,
-      maxSizeType.higher,
-      selectedFilesType.file2,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Download Selected should be enabled with highest max size limit and all files selected", () => {
-    selectTestCase(
-      actionSelectorType.download_selected,
-      maxSizeType.higher,
-      selectedFilesType.all,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Notebook All should be enabled with lowest max size limit and no files selected", () => {
-    selectTestCase(
-      actionSelectorType.notebook_all,
-      maxSizeType.lower,
-      selectedFilesType.none,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Notebook All should be enabled with lowest max size limit and file 1 selected", () => {
-    selectTestCase(
-      actionSelectorType.notebook_all,
-      maxSizeType.lower,
-      selectedFilesType.file1,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Notebook All should be enabled with lowest max size limit and file 2 selected", () => {
-    selectTestCase(
-      actionSelectorType.notebook_all,
-      maxSizeType.lower,
-      selectedFilesType.file2,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Notebook All should be enabled with lowest max size limit and all files selected", () => {
-    selectTestCase(
-      actionSelectorType.notebook_all,
-      maxSizeType.lower,
-      selectedFilesType.all,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Notebook All should be enabled with highest max size limit and no files selected", () => {
-    selectTestCase(
-      actionSelectorType.notebook_all,
-      maxSizeType.higher,
-      selectedFilesType.none,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Notebook All should be enabled with highest max size limit and file 1 selected", () => {
-    selectTestCase(
-      actionSelectorType.notebook_all,
-      maxSizeType.higher,
-      selectedFilesType.file1,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Notebook All should be enabled with highest max size limit and file 2 selected", () => {
-    selectTestCase(
-      actionSelectorType.notebook_all,
-      maxSizeType.higher,
-      selectedFilesType.file2,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Notebook All should be enabled with highest max size limit and all files selected", () => {
-    selectTestCase(
-      actionSelectorType.notebook_all,
-      maxSizeType.higher,
-      selectedFilesType.all,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Notebook Selected should be disabled with lowest max size limit and no files selected", () => {
-    selectTestCase(
-      actionSelectorType.notebook_selected,
-      maxSizeType.lower,
-      selectedFilesType.none,
-    );
-
-    expect(component.disabled).toEqual(true);
-  });
-
-  it("Notebook Selected should be enabled with lowest max size limit and file 1 selected", () => {
-    selectTestCase(
-      actionSelectorType.notebook_selected,
-      maxSizeType.lower,
-      selectedFilesType.file1,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Notebook Selected should be enabled with lowest max size limit and file 2 selected", () => {
-    selectTestCase(
-      actionSelectorType.notebook_selected,
-      maxSizeType.lower,
-      selectedFilesType.file2,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Notebook Selected should be enabled with lowest max size limit and all files selected", () => {
-    selectTestCase(
-      actionSelectorType.notebook_selected,
-      maxSizeType.lower,
-      selectedFilesType.all,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Notebook Selected should be disabled with highest max size limit and no files selected", () => {
-    selectTestCase(
-      actionSelectorType.notebook_selected,
-      maxSizeType.higher,
-      selectedFilesType.none,
-    );
-
-    expect(component.disabled).toEqual(true);
-  });
-
-  it("Notebook Selected should be enabled with highest max size limit and file 1 selected", () => {
-    selectTestCase(
-      actionSelectorType.notebook_selected,
-      maxSizeType.higher,
-      selectedFilesType.file1,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Notebook Selected should be enabled with highest max size limit and file 2 selected", () => {
-    selectTestCase(
-      actionSelectorType.notebook_selected,
-      maxSizeType.higher,
-      selectedFilesType.file2,
-    );
-
-    expect(component.disabled).toEqual(false);
-  });
-
-  it("Notebook Selected should be enabled with highest max size limit and all files selected", () => {
-    selectTestCase(
-      actionSelectorType.notebook_selected,
-      maxSizeType.higher,
-      selectedFilesType.all,
-    );
-
-    expect(component.disabled).toEqual(false);
+      expect(component.disabled).toEqual(testCase.result);
+    });
   });
 
   function getFakeElement(elementType: string): HTMLElement {
@@ -584,7 +499,7 @@ describe("DatafilesActionComponent", () => {
     return element as unknown as HTMLElement;
   }
 
-  it("Form submission should have all files when Download All is clicked", async () => {
+  it("0400: Form submission should have all files when Download All is clicked", async () => {
     selectTestCase(
       actionSelectorType.download_all,
       maxSizeType.higher,
@@ -605,7 +520,7 @@ describe("DatafilesActionComponent", () => {
     expect(formFiles.length).toEqual(2);
   });
 
-  it("Form submission should have correct url when Download All is clicked", async () => {
+  it("0410: Form submission should have correct url when Download All is clicked", async () => {
     selectTestCase(
       actionSelectorType.download_all,
       maxSizeType.higher,
@@ -621,7 +536,7 @@ describe("DatafilesActionComponent", () => {
     );
   });
 
-  it("Form submission should have correct dataset when Download All is clicked", async () => {
+  it("0420: Form submission should have correct dataset when Download All is clicked", async () => {
     selectTestCase(
       actionSelectorType.download_all,
       maxSizeType.higher,
@@ -644,7 +559,7 @@ describe("DatafilesActionComponent", () => {
     expect(datasetPid).toEqual(actionDataset.pid);
   });
 
-  it("Form submission should have correct file when Download Selected is clicked", async () => {
+  it("0430: Form submission should have correct file when Download Selected is clicked", async () => {
     const selectedFile = selectedFilesType.file1;
     selectTestCase(
       actionSelectorType.download_selected,
@@ -671,7 +586,7 @@ describe("DatafilesActionComponent", () => {
     expect(formFilePath).toEqual(selectedFilePath);
   });
 
-  it("Form submission should have all files when Notebook All is clicked", async () => {
+  it("0440: Form submission should have all files when Notebook All is clicked", async () => {
     selectTestCase(
       actionSelectorType.notebook_all,
       maxSizeType.higher,
@@ -692,7 +607,7 @@ describe("DatafilesActionComponent", () => {
     expect(formFiles.length).toEqual(2);
   });
 
-  it("Form submission should have correct url when Notebook All is clicked", async () => {
+  it("0450: Form submission should have correct url when Notebook All is clicked", async () => {
     selectTestCase(
       actionSelectorType.notebook_all,
       maxSizeType.higher,
@@ -708,7 +623,7 @@ describe("DatafilesActionComponent", () => {
     );
   });
 
-  it("Form submission should have correct file when Notebook Selected is clicked", async () => {
+  it("0460: Form submission should have correct file when Notebook Selected is clicked", async () => {
     const selectedFile = selectedFilesType.file2;
     selectTestCase(
       actionSelectorType.notebook_selected,
@@ -735,7 +650,7 @@ describe("DatafilesActionComponent", () => {
     expect(formFilePath).toEqual(selectedFilePath);
   });
 
-  it("Download All action button should contain the correct label", () => {
+  it("0500: Download All action button should contain the correct label", () => {
     selectTestCase(
       actionSelectorType.download_all,
       maxSizeType.higher,
@@ -749,7 +664,7 @@ describe("DatafilesActionComponent", () => {
     );
   });
 
-  it("Download Selected action button should contain the correct label", () => {
+  it("0510: Download Selected action button should contain the correct label", () => {
     selectTestCase(
       actionSelectorType.download_selected,
       maxSizeType.higher,
@@ -763,7 +678,7 @@ describe("DatafilesActionComponent", () => {
     );
   });
 
-  it("Notebook All action button should contain the correct label", () => {
+  it("0520: Notebook All action button should contain the correct label", () => {
     selectTestCase(
       actionSelectorType.notebook_all,
       maxSizeType.higher,
@@ -777,7 +692,7 @@ describe("DatafilesActionComponent", () => {
     );
   });
 
-  it("Notebook Selected action button should contain the correct label", () => {
+  it("0530: Notebook Selected action button should contain the correct label", () => {
     selectTestCase(
       actionSelectorType.notebook_selected,
       maxSizeType.higher,
