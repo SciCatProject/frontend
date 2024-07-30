@@ -6,7 +6,7 @@ import {
   Dataset,
   Attachment,
 } from "shared/sdk";
-import { Observable } from "rxjs";
+import { Observable, of, throwError } from "rxjs";
 import { ProposalEffects } from "./proposals.effects";
 import { TestBed } from "@angular/core/testing";
 import { provideMockStore } from "@ngrx/store/testing";
@@ -61,6 +61,7 @@ describe("ProposalEffects", () => {
           useValue: jasmine.createSpyObj("proposalApi", [
             "fullquery",
             "findById",
+            "findByIdAccess",
             "createAttachments",
             "updateByIdAttachments",
             "destroyByIdAttachments",
@@ -240,29 +241,70 @@ describe("ProposalEffects", () => {
 
   describe("fetchProposal$", () => {
     const proposalId = "testId";
+    const permission = {
+      accepted: { canAccess: true },
+      rejected: { canAccess: false },
+    };
 
-    it("should result in a fetchCountCompleteAction", () => {
+    it("should result in a fetchProposalCompleteAction", () => {
       const action = fromActions.fetchProposalAction({ proposalId });
       const outcome = fromActions.fetchProposalCompleteAction({ proposal });
 
-      actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: proposal });
-      proposalApi.findById.and.returnValue(response);
+      proposalApi.findByIdAccess
+        .withArgs(proposalId)
+        .and.returnValue(of(permission.accepted));
+      proposalApi.findById
+        .withArgs(encodeURIComponent(proposalId))
+        .and.returnValue(of(proposal));
 
-      const expected = cold("--b", { b: outcome });
+      actions = hot("a", { a: action });
+      const expected = cold("b", { b: outcome });
+
       expect(effects.fetchProposal$).toBeObservable(expected);
     });
 
     it("should result in a fetchProposalFailedAction", () => {
       const action = fromActions.fetchProposalAction({ proposalId });
-      const outcome = fromActions.fetchProposalFailedAction();
+      const failure = fromActions.fetchProposalFailedAction();
 
-      actions = hot("-a", { a: action });
-      const response = cold("-#", {});
-      proposalApi.findById.and.returnValue(response);
+      proposalApi.findByIdAccess
+        .withArgs(proposalId)
+        .and.returnValue(of(permission.accepted));
+      proposalApi.findById.and.returnValue(throwError(() => new Error()));
 
-      const expected = cold("--b", { b: outcome });
+      actions = hot("a", { a: action });
+      const expected = cold("b", { b: failure });
+
       expect(effects.fetchProposal$).toBeObservable(expected);
+    });
+
+    it("should do nothing if findByIdAccess returns false", () => {
+      const action = fromActions.fetchProposalAction({ proposalId });
+
+      proposalApi.findByIdAccess
+        .withArgs(proposalId)
+        .and.returnValue(of(permission.rejected));
+
+      actions = hot("a", { a: action });
+      const expected = cold("------");
+
+      expect(effects.fetchProposal$).toBeObservable(expected);
+      expect(proposalApi.findById).not.toHaveBeenCalled();
+    });
+
+    it("should result in fetchProposalAccessFailedAction if findByIdAccess failed", () => {
+      const action = fromActions.fetchProposalAction({ proposalId });
+      const failure = fromActions.fetchProposalAccessFailedAction();
+
+      proposalApi.findByIdAccess
+        .withArgs(proposalId)
+        .and.returnValue(throwError(() => new Error()));
+
+      actions = hot("a", { a: action });
+      const expected = cold("b", { b: failure });
+
+      expect(effects.fetchProposal$).toBeObservable(expected);
+      expect(proposalApi.findById).not.toHaveBeenCalled();
     });
   });
 

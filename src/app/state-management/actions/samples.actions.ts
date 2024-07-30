@@ -44,6 +44,9 @@ export const fetchSampleCompleteAction = createAction(
 export const fetchSampleFailedAction = createAction(
   "[Sample] Fetch Sample Failed",
 );
+export const fetchSampleAccessFailedAction = createAction(
+  "[Sample] Fetch Sample Access Failed",
+);
 export const fetchSampleAttachmentsAction = createAction(
   "[Sample] Fetch Sample Attachments",
   props<{ sampleId: string }>(),

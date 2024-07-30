@@ -7,7 +7,7 @@ import {
   selectDatasetsQueryParams,
 } from "state-management/selectors/samples.selectors";
 import * as fromActions from "state-management/actions/samples.actions";
-import { mergeMap, map, catchError, switchMap } from "rxjs/operators";
+import { mergeMap, map, catchError, switchMap, filter } from "rxjs/operators";
 import { of } from "rxjs";
 import {
   loadingAction,
@@ -81,11 +81,17 @@ export class SampleEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchSampleAction),
       switchMap(({ sampleId }) => {
-        return this.sampleApi.findById<Sample>(sampleId).pipe(
-          map((sample: Sample) =>
-            fromActions.fetchSampleCompleteAction({ sample }),
+        return this.sampleApi.findByIdAccess(sampleId).pipe(
+          filter((permission: { canAccess: boolean }) => permission.canAccess),
+          switchMap(() =>
+            this.sampleApi.findById<Sample>(sampleId).pipe(
+              map((sample: Sample) =>
+                fromActions.fetchSampleCompleteAction({ sample }),
+              ),
+              catchError(() => of(fromActions.fetchSampleFailedAction())),
+            ),
           ),
-          catchError(() => of(fromActions.fetchSampleFailedAction())),
+          catchError(() => of(fromActions.fetchSampleAccessFailedAction())),
         );
       }),
     );
