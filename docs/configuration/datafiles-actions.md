@@ -159,4 +159,43 @@ or in this other one when at least one file is selected:
 ![Datafiles actions when at least one files are selected](./datafiles_actions_file_selected.png "Datafiles actions with selected files")
 
 
---
+### Tests
+The previous examples are the settings used for the associated unit tests with the addition of the following settings:
+```
+files = [
+  {
+    path: "file1",
+    size: 5000,
+    time: "2019-09-06T13:11:37.102Z",
+    chk: "string",
+    uid: "string",
+    gid: "string",
+    perm: "string",
+    selected: false,
+    hash: "",
+  },
+  {
+    path: "file2",
+    size: 10000,
+    time: "2019-09-06T13:11:37.102Z",
+    chk: "string",
+    uid: "string",
+    gid: "string",
+    perm: "string",
+    selected: false,
+    hash: "",
+  },
+]
+
+lowerMaxFileSizeLimit = 9999;
+higherMaxFileSizeLimit = 20000;
+
+```
+
+There are three group of tests:
+1. testing enabling/disabling of the rendered buttons
+2. testing that action and related form submissions contains the correct files and urls
+3. testing that the buttons contain the correct label as specified in the configuration
+
+
+
