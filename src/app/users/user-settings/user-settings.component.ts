@@ -21,7 +21,7 @@ export class UserSettingsComponent implements OnInit {
   appVersion: string | undefined = packageJson.version;
   appConfig = this.appConfigService.getConfig();
   tokenValue: string;
-  show = true;
+  showMore = true;
 
   constructor(
     public appConfigService: AppConfigService,

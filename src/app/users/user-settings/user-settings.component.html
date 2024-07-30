@@ -52,21 +52,39 @@
           >
             <th>Groups</th>
             <td>
-              <span [class.show]="show">
-                {{
-                  show
-                    ? vm.profile.accessGroups
-                    : (vm.profile.accessGroups | slice: 0 : 15)
-                }}
-              </span>
-              <span class="toggleButton" (click)="show = !show">
-                <ng-container *ngIf="show; else showAllTemplate">
-                  <mat-icon matTooltip="Show Less Groups">expand_less</mat-icon>
-                </ng-container>
-                <ng-template #showAllTemplate>
-                  <mat-icon matTooltip="Show All Groups">expand_more</mat-icon>
-                </ng-template>
-              </span>
+              <ng-container
+                *ngIf="
+                  vm.profile.accessGroups.length > 0;
+                  else noGroupsTemplate
+                "
+              >
+                <span [class.showMore]="showMore">
+                  {{
+                    showMore
+                      ? vm.profile.accessGroups
+                      : (vm.profile.accessGroups | slice: 0 : 10) + "..."
+                  }}
+                </span>
+                <span
+                  *ngIf="vm.profile.accessGroups.length > 10"
+                  class="toggleButton"
+                  (click)="showMore = !showMore"
+                >
+                  <ng-container *ngIf="showMore; else showAllTemplate">
+                    <mat-icon matTooltip="Show Less Groups"
+                      >unfold_less</mat-icon
+                    >
+                  </ng-container>
+                  <ng-template #showAllTemplate>
+                    <mat-icon matTooltip="Show All Groups"
+                      >unfold_more</mat-icon
+                    >
+                  </ng-template>
+                </span>
+              </ng-container>
+              <ng-template #noGroupsTemplate>
+                <span class="empty-state">No groups available</span>
+              </ng-template>
             </td>
           </tr>
           <tr *ngIf="tokenValue" data-cy="user-token">
