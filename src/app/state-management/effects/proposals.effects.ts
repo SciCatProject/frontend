@@ -7,7 +7,7 @@ import {
   selectFullqueryParams,
   selectDatasetsQueryParams,
 } from "state-management/selectors/proposals.selectors";
-import { map, mergeMap, catchError, switchMap } from "rxjs/operators";
+import { map, mergeMap, catchError, switchMap, filter } from "rxjs/operators";
 import { of } from "rxjs";
 import {
   loadingAction,
@@ -60,16 +60,22 @@ export class ProposalEffects {
   fetchProposal$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchProposalAction),
-      switchMap(({ proposalId }) =>
-        this.proposalApi
-          .findById<Proposal>(encodeURIComponent(proposalId))
-          .pipe(
-            map((proposal: Proposal) =>
-              fromActions.fetchProposalCompleteAction({ proposal }),
-            ),
-            catchError(() => of(fromActions.fetchProposalFailedAction())),
+      switchMap(({ proposalId }) => {
+        return this.proposalApi.findByIdAccess(proposalId).pipe(
+          filter((permission: { canAccess: boolean }) => permission.canAccess),
+          switchMap(() =>
+            this.proposalApi
+              .findById<Proposal>(encodeURIComponent(proposalId))
+              .pipe(
+                map((proposal: Proposal) =>
+                  fromActions.fetchProposalCompleteAction({ proposal }),
+                ),
+                catchError(() => of(fromActions.fetchProposalFailedAction())),
+              ),
           ),
-      ),
+          catchError(() => of(fromActions.fetchProposalAccessFailedAction())),
+        );
+      }),
     );
   });
 
