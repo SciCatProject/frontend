@@ -14,16 +14,14 @@ import {
   addDatasetAction,
   fetchDatasetCompleteAction,
   fetchMetadataKeysAction,
-  setSearchTermsAction,
 } from "state-management/actions/datasets.actions";
 
 import {
-  selectFilters,
   selectHasPrefilledFilters,
   selectDatasetsInBatch,
   selectCurrentDataset,
   selectSelectedDatasets,
-  selectSearchTerms,
+  selectPagination,
 } from "state-management/selectors/datasets.selectors";
 import { distinctUntilChanged, filter, map, take } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
@@ -51,7 +49,7 @@ import { AppConfigService } from "app-config.service";
   styleUrls: ["dashboard.component.scss"],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  private filters$ = this.store.select(selectFilters);
+  private pagination$ = this.store.select(selectPagination);
   private readyToFetch$ = this.store
     .select(selectHasPrefilledFilters)
     .pipe(filter((has) => has));
@@ -187,9 +185,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.updateColumnSubscription();
 
     this.subscriptions.push(
-      combineLatest([this.readyToFetch$, this.loggedIn$])
+      combineLatest([this.pagination$, this.readyToFetch$, this.loggedIn$])
         .pipe(
-          map(([_, loggedIn]) => [loggedIn]),
+          map(([pagination, _, loggedIn]) => [pagination, loggedIn]),
           distinctUntilChanged(deepEqual),
         )
         .subscribe((obj) => {

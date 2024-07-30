@@ -45,9 +45,10 @@ jobs:
         run: npm ci
 
       - name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           push: true
+          platforms: linux/amd64,linux/arm64/v8
           tags: ${{ steps.meta.outputs.tags }}
 
       - name: Trigger ESS pipeline

@@ -41,6 +41,10 @@ const initialDatasetState: DatasetState = {
     isPublished: false,
     pid: "",
   },
+  pagination: {
+    skip: 0,
+    limit: 30,
+  },
   relatedDatasetsFilters: {
     skip: 0,
     limit: 25,
@@ -275,7 +279,7 @@ describe("test dataset selectors", () => {
     it("should return the fullquery params", () => {
       const fullqueryKeys = Object.keys(
         fromDatasetSelectors.selectFullqueryParams.projector(
-          initialDatasetState.filters,
+          initialDatasetState,
         ),
       );
       expect(fullqueryKeys).toContain("query");
@@ -284,9 +288,10 @@ describe("test dataset selectors", () => {
 
   describe("selectFullfacetParams", () => {
     it("should return the fullfacet params", () => {
-      const fullfacet = fromDatasetSelectors.selectFullfacetParams.projector(
-        initialDatasetState.filters,
-      );
+      const fullfacet =
+        fromDatasetSelectors.selectFullfacetParams.projector(
+          initialDatasetState,
+        );
       const fullfacetKeys = Object.keys(fullfacet);
       expect(fullfacet.facets).toEqual([
         "type",
@@ -309,7 +314,9 @@ describe("test dataset selectors", () => {
   describe("selectPage", () => {
     it("should select the current page", () => {
       expect(
-        fromDatasetSelectors.selectPage.projector(initialDatasetState.filters),
+        fromDatasetSelectors.selectPage.projector(
+          initialDatasetState.pagination,
+        ),
       ).toEqual(0);
     });
   });
@@ -318,7 +325,7 @@ describe("test dataset selectors", () => {
     it("should select the limit filter", () => {
       expect(
         fromDatasetSelectors.selectDatasetsPerPage.projector(
-          initialDatasetState.filters,
+          initialDatasetState.pagination,
         ),
       ).toEqual(30);
     });
