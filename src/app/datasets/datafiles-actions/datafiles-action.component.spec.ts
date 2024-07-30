@@ -364,12 +364,12 @@ describe("1000: DatafilesActionComponent", () => {
       test: "0200: Notebook All should be enabled with lowest max size limit and all files selected",
       action: actionSelectorType.notebook_all,
       limit: maxSizeType.lower,
-      selection :selectedFilesType.all,
+      selection: selectedFilesType.all,
       result: false,
     },
     {
       test: "0210: Notebook All should be enabled with highest max size limit and no files selected",
-      action : actionSelectorType.notebook_all,
+      action: actionSelectorType.notebook_all,
       limit: maxSizeType.higher,
       selection: selectedFilesType.none,
       result: false,
@@ -425,7 +425,7 @@ describe("1000: DatafilesActionComponent", () => {
     },
     {
       test: "0290: Notebook Selected should be disabled with highest max size limit and no files selected",
-      action : actionSelectorType.notebook_selected,
+      action: actionSelectorType.notebook_selected,
       limit: maxSizeType.higher,
       selection: selectedFilesType.none,
       result: true,
