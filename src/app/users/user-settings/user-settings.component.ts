@@ -6,7 +6,10 @@ import {
   fetchScicatTokenAction,
 } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
-import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
+import {
+  selectIsAdmin,
+  selectUserSettingsPageViewModel,
+} from "state-management/selectors/user.selectors";
 import { DOCUMENT } from "@angular/common";
 import packageJson from "../../../../package.json";
 import { AppConfigService } from "app-config.service";
@@ -18,10 +21,15 @@ import { AppConfigService } from "app-config.service";
 })
 export class UserSettingsComponent implements OnInit {
   vm$ = this.store.select(selectUserSettingsPageViewModel);
+  isAdmin$ = this.store.select(selectIsAdmin);
   appVersion: string | undefined = packageJson.version;
   appConfig = this.appConfigService.getConfig();
   tokenValue: string;
   showMore = true;
+  showConfig = {
+    frontend: true,
+    backend: true,
+  };
 
   constructor(
     public appConfigService: AppConfigService,
@@ -36,6 +44,7 @@ export class UserSettingsComponent implements OnInit {
       (settings) =>
         (this.tokenValue = settings.scicatToken.replace("Bearer ", "")),
     );
+
     this.store.dispatch(fetchCurrentUserAction());
     this.store.dispatch(fetchScicatTokenAction());
   }
