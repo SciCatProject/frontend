@@ -1,10 +1,6 @@
 # Frontend: SciCat GUI
 
-
-
 <img src="https://github.com/SciCatProject/frontend/blob/master/src/assets/images/site-logo.png" alt="sci-cat-logo" width="100">
-
-
 
 [![Test Status](https://github.com/SciCatProject/frontend/actions/workflows/deploy.yml/badge.svg?branch=master)](https://github.com/SciCatProject/frontend/actions)
 [![DeepScan grade](https://deepscan.io/api/teams/8394/projects/21314/branches/609376/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=8394&pid=21314&bid=609376)
@@ -21,11 +17,12 @@ as well as the option to carry out actions (i.e. archiving and publishing) and a
 For the full documentation please go to the [SciCat home page](https://scicatproject.github.io/) and follow the [documentation link](https://scicatproject.github.io/documentation)
 
 ## Configuration
+
 - [Site logo related images](SITE-LOGO-CONFIGURATION.md)
 
 ## License
 
-See the [LICENSE](LICENSE) file for details
+See the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
