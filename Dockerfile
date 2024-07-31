@@ -2,10 +2,7 @@ FROM node:18.18.0-alpine AS builder
 
 RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
 
-# Install Python and build dependencies for node-gyp
-RUN apk add --no-cache python3 py3-pip make g++ \
-    && pip3 install --upgrade pip \
-    && apk add --no-cache py3-setuptools py3-wheel py3-distutils
+RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
 
 WORKDIR /frontend
 COPY package*.json /frontend/
