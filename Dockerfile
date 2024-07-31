@@ -1,4 +1,4 @@
-FROM node:18-alpine AS builder
+FROM node:18.10.0 AS builder
 
 # Install Python and build dependencies for node-gyp
 RUN apk add --no-cache python3 py3-pip make g++ \
@@ -11,7 +11,7 @@ RUN npm ci
 COPY . /frontend/
 RUN npx ng build
 
-FROM nginx:1.21-alpine
+FROM nginx:1.22.1-alpine
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /frontend/dist/ /usr/share/nginx/html/
 COPY scripts/nginx.conf /etc/nginx/nginx.conf
