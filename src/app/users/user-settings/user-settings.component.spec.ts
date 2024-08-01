@@ -91,7 +91,7 @@ describe("UserSettingsComponent", () => {
   });
 
   describe("#configJsonView", () => {
-    it("should display the admin table when user is admin", () => {
+    it("should display the frontend config table when user is admin", () => {
       component.isAdmin$ = of(true);
       fixture.detectChanges();
 
@@ -99,7 +99,7 @@ describe("UserSettingsComponent", () => {
       expect(adminTable).toBeTruthy();
     });
 
-    it("should not display the admin table when user is not admin", () => {
+    it("should not display the frontend config table when user is not admin", () => {
       component.isAdmin$ = of(false);
       fixture.detectChanges();
 
@@ -107,7 +107,7 @@ describe("UserSettingsComponent", () => {
       expect(adminTable).not.toBeTruthy();
     });
 
-    it("should toggle the ngx-json-viewer table when the toggle button is triggerd", () => {
+    it("should toggle the frontend config ngx-json-viewer table when the toggle button is triggerd", () => {
       component.isAdmin$ = of(true);
       component.showConfig.frontend = false;
       fixture.detectChanges();
