@@ -83,4 +83,18 @@ export class UserSettingsComponent implements OnInit {
       }
     }
   }
+
+  toggleShowMore(event: MouseEvent | KeyboardEvent) {
+    const isMouseEvent = event instanceof MouseEvent;
+    const isKeyboardEvent =
+      event instanceof KeyboardEvent &&
+      (event.key === "Enter" || event.key === " ");
+
+    if (isMouseEvent || isKeyboardEvent) {
+      this.showMore = !this.showMore;
+      if (isKeyboardEvent) {
+        event.preventDefault();
+      }
+    }
+  }
 }

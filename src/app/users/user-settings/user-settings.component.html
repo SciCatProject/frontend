@@ -68,7 +68,8 @@
                 <span
                   *ngIf="vm.profile.accessGroups.length > 10"
                   class="toggleButton"
-                  (click)="showMore = !showMore"
+                  (click)="toggleShowMore($event)"
+                  (keydown)="toggleShowMore($event)"
                 >
                   <ng-container *ngIf="showMore; else showAllTemplate">
                     <mat-icon matTooltip="Show Less Groups"
