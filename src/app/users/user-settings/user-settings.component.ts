@@ -27,8 +27,9 @@ export class UserSettingsComponent implements OnInit {
   tokenValue: string;
   showMore = true;
   showConfig = {
+    //TODO backend settings to be implemented
     frontend: true,
-    backend: true,
+    // backend: true,
   };
 
   constructor(
