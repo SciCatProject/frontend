@@ -37,6 +37,7 @@ jobs:
             var fs = require('fs');
             fs.writeFileSync('${{github.workspace}}/coverage.zip', Buffer.from(download.data));
       - run: unzip coverage.zip
+
       - name: "get PR number"
         run: echo "pr_number=$(cat ./PR)">> $GITHUB_ENV
 
