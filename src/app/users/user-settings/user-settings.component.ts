@@ -29,7 +29,7 @@ export class UserSettingsComponent implements OnInit {
   showConfig = {
     //TODO backend settings to be implemented
     frontend: true,
-    // backend: true,
+    backend: true,
   };
 
   constructor(
@@ -70,14 +70,17 @@ export class UserSettingsComponent implements OnInit {
     );
     this.store.dispatch(showMessageAction({ message }));
   }
-  toggleShowConfig(event: MouseEvent | KeyboardEvent) {
+  toggleShowConfig(event: MouseEvent | KeyboardEvent, config: string) {
     const isMouseEvent = event instanceof MouseEvent;
     const isKeyboardEvent =
       event instanceof KeyboardEvent &&
       (event.key === "Enter" || event.key === " ");
 
     if (isMouseEvent || isKeyboardEvent) {
-      this.showConfig.frontend = !this.showConfig.frontend;
+      config === "frontend"
+        ? (this.showConfig.frontend = !this.showConfig.frontend)
+        : (this.showConfig.backend = !this.showConfig.backend);
+
       if (isKeyboardEvent) {
         event.preventDefault();
       }
