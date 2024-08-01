@@ -258,7 +258,7 @@ export class DatasetDetailsDashboardComponent
 
   fetchDatasetRelatedDocuments(): void {
     if (this.dataset) {
-      if ("proposalId" in this.dataset) {
+      if ("proposalId" in this.dataset && this.dataset["proposalId"] !== "") {
         this.store.dispatch(
           fetchProposalAction({
             proposalId: this.dataset["proposalId"] as string,
@@ -267,12 +267,15 @@ export class DatasetDetailsDashboardComponent
       } else {
         this.store.dispatch(clearLogbookAction());
       }
-      if ("sampleId" in this.dataset) {
+      if ("sampleId" in this.dataset && this.dataset["sampleId"] !== "") {
         this.store.dispatch(
           fetchSampleAction({ sampleId: this.dataset["sampleId"] as string }),
         );
       }
-      if ("instrumentId" in this.dataset) {
+      if (
+        "instrumentId" in this.dataset &&
+        this.dataset["instrumentId"] !== ""
+      ) {
         this.store.dispatch(
           fetchInstrumentAction({
             pid: this.dataset["instrumentId"] as string,
