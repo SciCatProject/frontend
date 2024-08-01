@@ -140,7 +140,8 @@
         <button
           mat-stroked-button
           class="config-button"
-          (click)="showConfig.frontend = !showConfig.frontend"
+          (click)="toggleShowConfig($event)"
+          (keydown)="toggleShowConfig($event)"
         >
           {{
             showConfig.frontend

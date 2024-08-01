@@ -70,4 +70,17 @@ export class UserSettingsComponent implements OnInit {
     );
     this.store.dispatch(showMessageAction({ message }));
   }
+  toggleShowConfig(event: MouseEvent | KeyboardEvent) {
+    const isMouseEvent = event instanceof MouseEvent;
+    const isKeyboardEvent =
+      event instanceof KeyboardEvent &&
+      (event.key === "Enter" || event.key === " ");
+
+    if (isMouseEvent || isKeyboardEvent) {
+      this.showConfig.frontend = !this.showConfig.frontend;
+      if (isKeyboardEvent) {
+        event.preventDefault();
+      }
+    }
+  }
 }
