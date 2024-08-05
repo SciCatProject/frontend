@@ -26,6 +26,7 @@ import { LayoutModule } from "_layout/layout.module";
 import { AppConfigService } from "app-config.service";
 import { AppThemeService } from "app-theme.service";
 import { SnackbarInterceptor } from "shared/interceptors/snackbar.interceptor";
+import { ApiModule, BASE_PATH } from "../../sdk";
 
 const appConfigInitializerFn = (appConfig: AppConfigService) => {
   return () => appConfig.loadAppConfig();
@@ -38,6 +39,7 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    ApiModule,
     AppConfigModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -92,6 +94,12 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
       useValue: {
         subscriptSizing: "dynamic",
       },
+    },
+    {
+      provide: BASE_PATH,
+      useFactory: (appconfigService: AppConfigService) =>
+        appconfigService.getConfig().lbBaseURL,
+      deps: [AppConfigService],
     },
     AppThemeService,
     UserApi,

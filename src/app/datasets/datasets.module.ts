@@ -84,6 +84,7 @@ import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.co
 import { FullTextSearchBarComponent } from "./dashboard/full-text-search/full-text-search-bar.component";
 import { DatafilesActionsComponent } from "./datafiles-actions/datafiles-actions.component";
 import { DatafilesActionComponent } from "./datafiles-actions/datafiles-action.component";
+import { AdminService } from "../../../sdk";
 
 @NgModule({
   imports: [
@@ -167,6 +168,7 @@ import { DatafilesActionComponent } from "./datafiles-actions/datafiles-action.c
     DatafilesActionComponent,
   ],
   providers: [
+    AdminService,
     ArchivingService,
     AsyncPipe,
     ADAuthService,

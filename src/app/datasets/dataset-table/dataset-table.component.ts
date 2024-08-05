@@ -37,6 +37,8 @@ import {
 import { get } from "lodash";
 import { AppConfigService } from "app-config.service";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
+import { AdminService } from "../../../../sdk";
+
 export interface SortChangeEvent {
   active: string;
   direction: "asc" | "desc" | "";
@@ -77,6 +79,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(
     public appConfigService: AppConfigService,
+    private adminService: AdminService,
     private store: Store,
   ) {}
   doSettingsClick(event: MouseEvent) {
@@ -216,6 +219,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   // }
 
   ngOnInit() {
+    this.adminService.adminControllerGetConfig().subscribe((config) => {
+      console.log("---config from sdk,", config);
+    });
     this.subscriptions.push(
       this.store.select(selectDatasetsInBatch).subscribe((datasets) => {
         this.inBatchPids = datasets.map((dataset) => {
