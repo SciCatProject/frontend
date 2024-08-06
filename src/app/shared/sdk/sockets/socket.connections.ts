@@ -98,7 +98,7 @@ export class SocketConnection {
       // Listen for authentication
       this.on("authenticated", () => {
         this.authenticated = true;
-        this.subjects.onAuthenticated.next();
+        this.subjects.onAuthenticated.next("authenticated");
         this.heartbeater();
       });
       // Listen for authentication
