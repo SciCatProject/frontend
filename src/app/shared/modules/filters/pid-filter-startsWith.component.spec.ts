@@ -39,9 +39,6 @@ describe("PidFilterStartsWithComponent", () => {
   let component: PidFilterStartsWithComponent;
   let fixture: ComponentFixture<PidFilterStartsWithComponent>;
 
-  let store: MockStore;
-  let dispatchSpy;
-
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
@@ -89,14 +86,6 @@ describe("PidFilterStartsWithComponent", () => {
     fixture = TestBed.createComponent(PidFilterStartsWithComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  beforeEach(inject([Store], (mockStore: MockStore) => {
-    store = mockStore;
-  }));
-
-  afterEach(() => {
-    fixture.destroy();
   });
 
   describe("#buildPidTermsCondition()", () => {

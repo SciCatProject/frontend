@@ -42,7 +42,7 @@ export class PidFilterComponent
     return (this.constructor as typeof PidFilterComponent).kLabel;
   }
 
-  protected buildPidTermsCondition(terms: string): string | { $regex: string } {
+  buildPidTermsCondition(terms: string): string | { $regex: string } {
     return terms;
   }
 

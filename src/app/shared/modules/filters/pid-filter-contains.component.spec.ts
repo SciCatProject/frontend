@@ -35,9 +35,6 @@ describe("PidFilterContainsComponent", () => {
   let component: PidFilterContainsComponent;
   let fixture: ComponentFixture<PidFilterContainsComponent>;
 
-  let store: MockStore;
-  let dispatchSpy;
-
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
@@ -87,14 +84,6 @@ describe("PidFilterContainsComponent", () => {
     fixture.detectChanges();
   });
 
-  beforeEach(inject([Store], (mockStore: MockStore) => {
-    store = mockStore;
-  }));
-
-  afterEach(() => {
-    fixture.destroy();
-  });
-
   describe("#buildPidTermsCondition()", () => {
     const tests = [
       { input: "1", method: "contains", expected: { $regex: "1" } },
@@ -103,7 +92,7 @@ describe("PidFilterContainsComponent", () => {
     tests.forEach((test, index) => {
       it(`should return correct condition for test case #${index + 1}`, () => {
         component.appConfig.pidSearchMethod = test.method;
-        const condition = component["buildPidTermsCondition"](test.input);
+        const condition = component.buildPidTermsCondition(test.input);
         expect(condition).toEqual(test.expected);
       });
     });

@@ -91,10 +91,6 @@ describe("PidFilterComponent", () => {
     store = mockStore;
   }));
 
-  afterEach(() => {
-    fixture.destroy();
-  });
-
   describe("#onPidInput()", () => {
     it("should dispatch a SetSearchTermsAction", fakeAsync(() => {
       dispatchSpy = spyOn(store, "dispatch");
@@ -122,7 +118,7 @@ describe("PidFilterComponent", () => {
     tests.forEach((test, index) => {
       it(`should return correct condition for test case #${index + 1}`, () => {
         component.appConfig.pidSearchMethod = test.method;
-        const condition = component["buildPidTermsCondition"](test.input);
+        const condition = component.buildPidTermsCondition(test.input);
         expect(condition).toEqual(test.expected);
       });
     });
