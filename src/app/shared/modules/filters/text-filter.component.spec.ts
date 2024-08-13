@@ -77,6 +77,10 @@ describe("TextFilterComponent", () => {
     store = mockStore;
   }));
 
+  afterEach(() => {
+    fixture.destroy();
+  });
+
   describe("#textSearchChanged()", () => {
     it("should dispatch a SetSearchTermsAction", fakeAsync(() => {
       dispatchSpy = spyOn(store, "dispatch");

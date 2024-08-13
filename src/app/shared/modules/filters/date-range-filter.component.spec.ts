@@ -76,6 +76,10 @@ describe("DateRangeFilterComponent", () => {
     store = mockStore;
   }));
 
+  afterEach(() => {
+    fixture.destroy();
+  });
+
   describe("#dateChanged()", () => {
     it("should dispatch setDateRangeFilterAction with empty string values if event.value is null", () => {
       dispatchSpy = spyOn(store, "dispatch");

@@ -75,6 +75,10 @@ describe("LocationFilterComponent", () => {
     store = mockStore;
   }));
 
+  afterEach(() => {
+    fixture.destroy();
+  });
+
   describe("#onLocationInput()", () => {
     it("should call next on locationInput$", () => {
       const nextSpy = spyOn(component.locationInput$, "next");

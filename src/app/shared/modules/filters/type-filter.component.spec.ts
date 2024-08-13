@@ -75,6 +75,10 @@ describe("TypeFilterComponent", () => {
     store = mockStore;
   }));
 
+  afterEach(() => {
+    fixture.destroy();
+  });
+
   describe("#onTypeInput()", () => {
     it("should call next on typeInput$", () => {
       const nextSpy = spyOn(component.typeInput$, "next");
