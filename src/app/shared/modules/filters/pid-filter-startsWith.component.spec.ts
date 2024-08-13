@@ -63,6 +63,7 @@ describe("PidFilterStartsWithComponent", () => {
       ],
       declarations: [
         PidFilterStartsWithComponent,
+        PidFilterComponent,
         SearchParametersDialogComponent,
       ],
       providers: [AsyncPipe],

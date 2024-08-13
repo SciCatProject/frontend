@@ -26,6 +26,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { PidFilterContainsComponent } from "./pid-filter-contains.component";
+import { PidFilterComponent } from "./pid-filter.component";
 
 const getConfig = () => ({
   scienceSearchEnabled: false,
@@ -59,6 +60,7 @@ describe("PidFilterContainsComponent", () => {
       ],
       declarations: [
         PidFilterContainsComponent,
+        PidFilterComponent,
         SearchParametersDialogComponent,
       ],
       providers: [AsyncPipe],
