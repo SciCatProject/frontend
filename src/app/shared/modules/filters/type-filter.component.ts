@@ -1,5 +1,10 @@
 import { Component, ElementRef, Input, ViewChild } from "@angular/core";
-import { createSuggestionObserver, getFacetCount, getFacetId } from "./utils";
+import {
+  createSuggestionObserver,
+  getFacetCount,
+  getFacetId,
+  getFilterLabel,
+} from "./utils";
 import {
   selectTypeFacetCounts,
   selectTypeFilter,
@@ -17,8 +22,6 @@ import {
   styleUrls: ["type-filter.component.scss"],
 })
 export class TypeFilterComponent {
-  static kLabel = "Type filter";
-
   protected readonly getFacetCount = getFacetCount;
   protected readonly getFacetId = getFacetId;
 
@@ -38,7 +41,7 @@ export class TypeFilterComponent {
   constructor(private store: Store) {}
 
   get label() {
-    return TypeFilterComponent.kLabel;
+    return getFilterLabel(this.constructor.name);
   }
 
   @Input()

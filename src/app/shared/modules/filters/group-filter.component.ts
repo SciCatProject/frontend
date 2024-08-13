@@ -8,7 +8,12 @@ import {
   addGroupFilterAction,
   removeGroupFilterAction,
 } from "state-management/actions/datasets.actions";
-import { createSuggestionObserver, getFacetCount, getFacetId } from "./utils";
+import {
+  createSuggestionObserver,
+  getFacetCount,
+  getFacetId,
+  getFilterLabel,
+} from "./utils";
 import { BehaviorSubject } from "rxjs";
 
 @Component({
@@ -17,8 +22,6 @@ import { BehaviorSubject } from "rxjs";
   styleUrls: ["group-filter.component.scss"],
 })
 export class GroupFilterComponent {
-  static kLabel = "Group";
-
   protected readonly getFacetId = getFacetId;
   protected readonly getFacetCount = getFacetCount;
 
@@ -38,7 +41,7 @@ export class GroupFilterComponent {
   constructor(private store: Store) {}
 
   get label() {
-    return GroupFilterComponent.kLabel;
+    return getFilterLabel(this.constructor.name);
   }
 
   @Input()

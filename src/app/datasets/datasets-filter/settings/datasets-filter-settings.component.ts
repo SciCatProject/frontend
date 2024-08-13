@@ -22,6 +22,7 @@ import {
   ConditionConfig,
   FilterConfig,
 } from "../../../shared/modules/filters/filters.module";
+import { getFilterLabel } from "../../../shared/modules/filters/utils";
 
 @Component({
   selector: "app-type-datasets-filter-settings",
@@ -109,4 +110,6 @@ export class DatasetsFilterSettingsComponent {
   onCancel() {
     this.dialogRef.close();
   }
+
+  protected readonly getFilterLabel = getFilterLabel;
 }

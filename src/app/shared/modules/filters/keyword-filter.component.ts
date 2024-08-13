@@ -5,7 +5,12 @@ import {
   OnDestroy,
   ViewChild,
 } from "@angular/core";
-import { createSuggestionObserver, getFacetCount, getFacetId } from "./utils";
+import {
+  createSuggestionObserver,
+  getFacetCount,
+  getFacetId,
+  getFilterLabel,
+} from "./utils";
 import {
   selectKeywordFacetCounts,
   selectKeywordsFilter,
@@ -25,8 +30,6 @@ import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
   styleUrls: ["keyword-filter.component.scss"],
 })
 export class KeywordFilterComponent implements OnDestroy {
-  static kLabel = "Keyword";
-
   protected readonly getFacetCount = getFacetCount;
   protected readonly getFacetId = getFacetId;
 
@@ -60,7 +63,7 @@ export class KeywordFilterComponent implements OnDestroy {
   }
 
   get label() {
-    return KeywordFilterComponent.kLabel;
+    return getFilterLabel(this.constructor.name);
   }
 
   @Input()

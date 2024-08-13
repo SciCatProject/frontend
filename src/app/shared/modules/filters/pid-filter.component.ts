@@ -13,6 +13,7 @@ import {
 } from "state-management/actions/datasets.actions";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { AppConfigService } from "app-config.service";
+import { getFilterLabel } from "./utils";
 
 @Component({
   selector: "app-pid-filter",
@@ -20,8 +21,6 @@ import { AppConfigService } from "app-config.service";
   styleUrls: [`./pid-filter.component.scss`],
 })
 export class PidFilterComponent implements OnDestroy {
-  static kLabel = "PID filter (Equals)";
-
   private pidSubject = new Subject<string>();
   private subscription: Subscription;
 
@@ -42,7 +41,7 @@ export class PidFilterComponent implements OnDestroy {
   }
 
   get label() {
-    return (this.constructor as typeof PidFilterComponent).kLabel;
+    return getFilterLabel((this.constructor as typeof PidFilterComponent).name);
   }
 
   buildPidTermsCondition(terms: string): string | { $regex: string } {

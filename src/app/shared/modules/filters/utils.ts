@@ -30,3 +30,19 @@ export function getFacetId(facetCount: FacetCount, fallback = ""): string {
 export function getFacetCount(facetCount: FacetCount): number {
   return facetCount.count;
 }
+
+const labelMap: Map<string, string> = new Map([
+  ["DateRangeFilterComponent", "Start Date - End Date"],
+  ["GroupFilterComponent", "Group"],
+  ["KeywordFilterComponent", "Keyword"],
+  ["LocationFilterComponent", "Location"],
+  ["PidFilterStartsWithComponent", "PID filter (Starts With)"],
+  ["PidFilterComponent", "PID filter (Equals)"],
+  ["PidFilterContainsComponent", "PID filter (Contains)"],
+  ["TextFilterComponent", "Text filter"],
+  ["TypeFilterComponent", "Type filter"],
+]);
+
+export function getFilterLabel(type: string): string {
+  return labelMap.get(type) || "Default Label";
+}

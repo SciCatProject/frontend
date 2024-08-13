@@ -4,6 +4,7 @@ import { DateTime } from "luxon";
 import { setDateRangeFilterAction } from "state-management/actions/datasets.actions";
 import { selectCreationTimeFilter } from "state-management/selectors/datasets.selectors";
 import { Store } from "@ngrx/store";
+import { getFilterLabel } from "./utils";
 
 interface DateRange {
   begin: string;
@@ -16,8 +17,6 @@ interface DateRange {
   styleUrls: ["date-range-filter.component.scss"],
 })
 export class DateRangeFilterComponent {
-  static kLabel = "Start Date - End Date";
-
   creationTimeFilter$ = this.store.select(selectCreationTimeFilter);
 
   dateRange: DateRange = {
@@ -28,7 +27,7 @@ export class DateRangeFilterComponent {
   constructor(private store: Store) {}
 
   get label() {
-    return DateRangeFilterComponent.kLabel;
+    return getFilterLabel(this.constructor.name);
   }
 
   dateChanged(event: MatDatepickerInputEvent<DateTime>) {

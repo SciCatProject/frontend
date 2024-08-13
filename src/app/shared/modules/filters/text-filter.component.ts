@@ -10,6 +10,7 @@ import { Store } from "@ngrx/store";
 import { setTextFilterAction } from "state-management/actions/datasets.actions";
 import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
 import { Subject, Subscription } from "rxjs";
+import { getFilterLabel } from "./utils";
 
 @Component({
   selector: "app-text-filter",
@@ -17,8 +18,6 @@ import { Subject, Subscription } from "rxjs";
   styleUrls: ["text-filter.component.scss"],
 })
 export class TextFilterComponent implements OnDestroy {
-  static kLabel = "Text filter";
-
   private textSubject = new Subject<string>();
 
   @ViewChild("input", { static: true }) input!: ElementRef;
@@ -38,7 +37,7 @@ export class TextFilterComponent implements OnDestroy {
   }
 
   get label() {
-    return TextFilterComponent.kLabel;
+    return getFilterLabel(this.constructor.name);
   }
 
   @Input()
