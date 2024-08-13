@@ -89,6 +89,10 @@ describe("PidFilterStartsWithComponent", () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    fixture.destroy();
+  });
+
   describe("#buildPidTermsCondition()", () => {
     const tests = [
       { input: "1", method: "startsWith", expected: { $regex: "^1" } },

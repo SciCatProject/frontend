@@ -91,6 +91,10 @@ describe("PidFilterComponent", () => {
     store = mockStore;
   }));
 
+  afterEach(() => {
+    fixture.destroy();
+  });
+
   describe("#onPidInput()", () => {
     it("should dispatch a SetSearchTermsAction", fakeAsync(() => {
       dispatchSpy = spyOn(store, "dispatch");

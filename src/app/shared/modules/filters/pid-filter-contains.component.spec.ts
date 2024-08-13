@@ -86,6 +86,10 @@ describe("PidFilterContainsComponent", () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    fixture.destroy();
+  });
+
   describe("#buildPidTermsCondition()", () => {
     const tests = [
       { input: "1", method: "contains", expected: { $regex: "1" } },
