@@ -30,6 +30,8 @@ import { getFilterLabel } from "../../../shared/modules/filters/utils";
   styleUrls: [`./datasets-filter-settings.component.scss`],
 })
 export class DatasetsFilterSettingsComponent {
+  protected readonly getFilterLabel = getFilterLabel;
+
   metadataKeys$ = this.store.select(selectMetadataKeys);
 
   appConfig = this.appConfigService.getConfig();
@@ -110,6 +112,4 @@ export class DatasetsFilterSettingsComponent {
   onCancel() {
     this.dialogRef.close();
   }
-
-  protected readonly getFilterLabel = getFilterLabel;
 }
