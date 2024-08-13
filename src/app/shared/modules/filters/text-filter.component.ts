@@ -20,8 +20,6 @@ import { getFilterLabel } from "./utils";
 export class TextFilterComponent implements OnDestroy {
   private textSubject = new Subject<string>();
 
-  @ViewChild("input", { static: false }) input!: ElementRef;
-
   subscription: Subscription;
 
   constructor(private store: Store) {
@@ -43,7 +41,7 @@ export class TextFilterComponent implements OnDestroy {
   @Input()
   set clear(value: boolean) {
     if (value) {
-      this.input.nativeElement.value = "";
+      this.textSubject.next("");
     }
   }
 

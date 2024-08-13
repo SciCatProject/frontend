@@ -33,8 +33,6 @@ export class KeywordFilterComponent implements OnDestroy {
   protected readonly getFacetCount = getFacetCount;
   protected readonly getFacetId = getFacetId;
 
-  @ViewChild("input", { static: false }) input!: ElementRef;
-
   keywordsTerms$ = this.store.select(selectKeywordsTerms);
 
   keywordsFilter$ = this.store.select(selectKeywordsFilter);
@@ -69,7 +67,7 @@ export class KeywordFilterComponent implements OnDestroy {
   @Input()
   set clear(value: boolean) {
     if (value) {
-      this.input.nativeElement.value = "";
+      this.keywordsInput$.next("");
     }
   }
 

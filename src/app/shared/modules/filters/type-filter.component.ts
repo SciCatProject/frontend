@@ -25,8 +25,6 @@ export class TypeFilterComponent {
   protected readonly getFacetCount = getFacetCount;
   protected readonly getFacetId = getFacetId;
 
-  @ViewChild("input", { static: false }) input!: ElementRef;
-
   typeFacetCounts$ = this.store.select(selectTypeFacetCounts);
 
   typeFilter$ = this.store.select(selectTypeFilter);
@@ -47,7 +45,7 @@ export class TypeFilterComponent {
   @Input()
   set clear(value: boolean) {
     if (value) {
-      this.input.nativeElement.value = "";
+      this.typeInput$.next("");
     }
   }
 
