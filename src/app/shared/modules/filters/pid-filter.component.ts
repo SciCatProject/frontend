@@ -1,27 +1,31 @@
-import { Component, Input, OnDestroy } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  ViewChild,
+} from "@angular/core";
 import { Store } from "@ngrx/store";
 import { Subject, Subscription } from "rxjs";
 import {
   setPidTermsAction,
   setPidTermsFilterAction,
 } from "state-management/actions/datasets.actions";
-import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { AppConfigService } from "app-config.service";
-import { ClearableInputComponent } from "./clearable-input.component";
 
 @Component({
   selector: "app-pid-filter",
   templateUrl: `./pid-filter.component.html`,
   styleUrls: [`./pid-filter.component.scss`],
 })
-export class PidFilterComponent
-  extends ClearableInputComponent<string>
-  implements OnDestroy
-{
+export class PidFilterComponent implements OnDestroy {
   static kLabel = "PID filter (Equals)";
 
   private pidSubject = new Subject<string>();
   private subscription: Subscription;
+
+  @ViewChild("input", { static: true }) input!: ElementRef;
 
   appConfig = this.appConfigService.getConfig();
 
@@ -29,7 +33,6 @@ export class PidFilterComponent
     public appConfigService: AppConfigService,
     private store: Store,
   ) {
-    super();
     this.subscription = this.pidSubject
       .pipe(debounceTime(500), distinctUntilChanged())
       .subscribe((pid) => {
@@ -59,8 +62,6 @@ export class PidFilterComponent
 
   @Input()
   set clear(value: boolean) {
-    super.clear = value;
-
     if (value) this.store.dispatch(setPidTermsAction({ pid: "" }));
   }
 }

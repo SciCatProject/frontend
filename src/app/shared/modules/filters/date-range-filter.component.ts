@@ -1,5 +1,4 @@
 import { Component, Input } from "@angular/core";
-import { ClearableInputComponent } from "./clearable-input.component";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { DateTime } from "luxon";
 import { setDateRangeFilterAction } from "state-management/actions/datasets.actions";
@@ -16,7 +15,7 @@ interface DateRange {
   templateUrl: "date-range-filter.component.html",
   styleUrls: ["date-range-filter.component.scss"],
 })
-export class DateRangeFilterComponent extends ClearableInputComponent {
+export class DateRangeFilterComponent {
   static kLabel = "Start Date - End Date";
 
   creationTimeFilter$ = this.store.select(selectCreationTimeFilter);
@@ -26,9 +25,7 @@ export class DateRangeFilterComponent extends ClearableInputComponent {
     end: "",
   };
 
-  constructor(private store: Store) {
-    super();
-  }
+  constructor(private store: Store) {}
 
   get label() {
     return DateRangeFilterComponent.kLabel;

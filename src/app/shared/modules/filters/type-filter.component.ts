@@ -1,5 +1,4 @@
-import { Component } from "@angular/core";
-import { ClearableInputComponent } from "./clearable-input.component";
+import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { createSuggestionObserver, getFacetCount, getFacetId } from "./utils";
 import {
   selectTypeFacetCounts,
@@ -17,11 +16,13 @@ import {
   templateUrl: "type-filter.component.html",
   styleUrls: ["type-filter.component.scss"],
 })
-export class TypeFilterComponent extends ClearableInputComponent {
+export class TypeFilterComponent {
   static kLabel = "Type filter";
 
   protected readonly getFacetCount = getFacetCount;
   protected readonly getFacetId = getFacetId;
+
+  @ViewChild("input", { static: true }) input!: ElementRef;
 
   typeFacetCounts$ = this.store.select(selectTypeFacetCounts);
 
@@ -34,12 +35,17 @@ export class TypeFilterComponent extends ClearableInputComponent {
     this.typeFilter$,
   );
 
-  constructor(private store: Store) {
-    super();
-  }
+  constructor(private store: Store) {}
 
   get label() {
     return TypeFilterComponent.kLabel;
+  }
+
+  @Input()
+  set clear(value: boolean) {
+    if (value) {
+      this.input.nativeElement.value = "";
+    }
   }
 
   onTypeInput(event: any) {

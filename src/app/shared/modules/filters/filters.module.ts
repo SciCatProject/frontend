@@ -2,7 +2,6 @@ import { NgModule } from "@angular/core";
 import { PidFilterContainsComponent } from "./pid-filter-contains.component";
 import { PidFilterComponent } from "./pid-filter.component";
 import { PidFilterStartsWithComponent } from "./pid-filter-startsWith.component";
-import { ClearableInputComponent } from "./clearable-input.component";
 import { LocationFilterComponent } from "./location-filter.component";
 import { GroupFilterComponent } from "./group-filter.component";
 import { ConditionFilterComponent } from "./condition-filter.component";
@@ -20,7 +19,6 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 
 @NgModule({
   declarations: [
-    ClearableInputComponent,
     PidFilterComponent,
     PidFilterContainsComponent,
     PidFilterStartsWithComponent,
@@ -42,7 +40,6 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
     NgForOf,
   ],
   exports: [
-    ClearableInputComponent,
     PidFilterComponent,
     PidFilterContainsComponent,
     PidFilterStartsWithComponent,
