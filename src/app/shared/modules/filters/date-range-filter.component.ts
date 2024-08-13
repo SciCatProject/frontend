@@ -13,32 +13,8 @@ interface DateRange {
 
 @Component({
   selector: "app-date-range-filter",
-  template: `<mat-form-field>
-    <mat-label>{{ label }}</mat-label>
-    <mat-date-range-input class="date-input" [rangePicker]="picker">
-      <input
-        matStartDate
-        name="begin"
-        [value]="(creationTimeFilter$ | async)?.begin"
-        (dateChange)="dateChanged($event)"
-      />
-      <input
-        matEndDate
-        name="end"
-        [value]="(creationTimeFilter$ | async)?.end"
-        (dateChange)="dateChanged($event)"
-      />
-    </mat-date-range-input>
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-date-range-picker #picker></mat-date-range-picker>
-  </mat-form-field>`,
-  styles: [
-    `
-      .mat-mdc-form-field {
-        width: 100%;
-      }
-    `,
-  ],
+  templateUrl: "date-range-filter.component.html",
+  styleUrls: ["date-range-filter.component.scss"],
 })
 export class DateRangeFilterComponent extends ClearableInputComponent {
   static kLabel = "Start Date - End Date";

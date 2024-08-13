@@ -1,0 +1,31 @@
+<mat-form-field>
+  <mat-label>{{ label }}</mat-label>
+  <mat-chip-grid #locationChipList>
+    <mat-chip-row
+      *ngFor="let location of locationFilter$ | async"
+      [removable]="true"
+      (removed)="locationRemoved(location)"
+    >{{ location || "No Location" }}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip-row>
+  </mat-chip-grid>
+  <input
+    #input
+    (input)="onLocationInput($event)"
+    [value]="locationInput$ | async"
+    matInput
+    class="location-input"
+    [matChipInputFor]="locationChipList"
+    [matAutocomplete]="loc"
+  />
+
+  <mat-autocomplete #loc="matAutocomplete">
+    <mat-option
+      (onSelectionChange)="locationSelected(getFacetId(fc))"
+      *ngFor="let fc of locationSuggestions$ | async"
+    >
+      <span>{{ getFacetId(fc, "No Location") }} | </span>
+      <small>{{ getFacetCount(fc) }}</small>
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

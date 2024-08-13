@@ -16,42 +16,8 @@ import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
 
 @Component({
   selector: "app-keyword-filter",
-  template: `<mat-form-field>
-    <mat-label>{{ label }}</mat-label>
-    <mat-chip-grid #keywordChipList>
-      <mat-chip-row
-        *ngFor="let keyword of keywordsFilter$ | async"
-        [removable]="true"
-        (removed)="keywordRemoved(keyword)"
-        >{{ keyword }}<mat-icon matChipRemove>cancel</mat-icon>
-      </mat-chip-row>
-    </mat-chip-grid>
-    <input
-      #input
-      (input)="onKeywordInput($event)"
-      [value]="keywordsInput$ | async"
-      matInput
-      class="keyword-input"
-      [matChipInputFor]="keywordChipList"
-      [matAutocomplete]="kw"
-    />
-    <mat-autocomplete #kw="matAutocomplete">
-      <mat-option
-        (onSelectionChange)="keywordSelected(getFacetId(fc))"
-        *ngFor="let fc of keywordsSuggestions$ | async"
-      >
-        <span>{{ getFacetId(fc, "No Keywords") }}</span>
-        <small>: {{ getFacetCount(fc) }}</small>
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>`,
-  styles: [
-    `
-      .mat-mdc-form-field {
-        width: 100%;
-      }
-    `,
-  ],
+  templateUrl: "keyword-filter.component.html",
+  styleUrls: ["keyword-filter.component.scss"],
 })
 export class KeywordFilterComponent
   extends ClearableInputComponent

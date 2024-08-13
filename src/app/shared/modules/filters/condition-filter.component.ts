@@ -4,17 +4,8 @@ import { ScientificCondition } from "state-management/models";
 
 @Component({
   selector: "app-condition-filter",
-  template: ` <mat-form-field appearance="fill" class="condition-display-field">
-    <mat-label>Condition</mat-label>
-    <input matInput [value]="formatCondition()" disabled />
-  </mat-form-field>`,
-  styles: [
-    `
-      .mat-mdc-form-field {
-        width: 100%;
-      }
-    `,
-  ],
+  templateUrl: "condition-filter.component.html",
+  styleUrls: ["condition-filter.component.scss"],
 })
 export class ConditionFilterComponent {
   @Input() condition: ScientificCondition;

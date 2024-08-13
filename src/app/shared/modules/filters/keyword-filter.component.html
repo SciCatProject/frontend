@@ -1,0 +1,29 @@
+<mat-form-field>
+  <mat-label>{{ label }}</mat-label>
+  <mat-chip-grid #keywordChipList>
+    <mat-chip-row
+      *ngFor="let keyword of keywordsFilter$ | async"
+      [removable]="true"
+      (removed)="keywordRemoved(keyword)"
+    >{{ keyword }}<mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip-row>
+  </mat-chip-grid>
+  <input
+    #input
+    (input)="onKeywordInput($event)"
+    [value]="keywordsInput$ | async"
+    matInput
+    class="keyword-input"
+    [matChipInputFor]="keywordChipList"
+    [matAutocomplete]="kw"
+  />
+  <mat-autocomplete #kw="matAutocomplete">
+    <mat-option
+      (onSelectionChange)="keywordSelected(getFacetId(fc))"
+      *ngFor="let fc of keywordsSuggestions$ | async"
+    >
+      <span>{{ getFacetId(fc, "No Keywords") }}</span>
+      <small>: {{ getFacetCount(fc) }}</small>
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

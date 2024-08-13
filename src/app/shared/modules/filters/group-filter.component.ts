@@ -14,42 +14,8 @@ import { ClearableInputComponent } from "./clearable-input.component";
 
 @Component({
   selector: "app-group-filter",
-  template: `<mat-form-field>
-    <mat-label>{{ label }}</mat-label>
-    <mat-chip-grid #groupChipList>
-      <mat-chip-row
-        *ngFor="let group of groupFilter$ | async"
-        [removable]="true"
-        (removed)="groupRemoved(group)"
-        >{{ group }}<mat-icon matChipRemove>cancel</mat-icon>
-      </mat-chip-row>
-    </mat-chip-grid>
-    <input
-      #input
-      (input)="onGroupInput($event)"
-      [value]="groupInput$ | async"
-      matInput
-      class="group-input"
-      [matChipInputFor]="groupChipList"
-      [matAutocomplete]="grp"
-    />
-    <mat-autocomplete #grp="matAutocomplete">
-      <mat-option
-        (onSelectionChange)="groupSelected(getFacetId(fc))"
-        *ngFor="let fc of groupSuggestions$ | async"
-      >
-        <span>{{ getFacetId(fc, "No Group") }}</span> |
-        <small>{{ getFacetCount(fc) }}</small>
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>`,
-  styles: [
-    `
-      .mat-mdc-form-field {
-        width: 100%;
-      }
-    `,
-  ],
+  templateUrl: "group-filter.component.html",
+  styleUrls: ["group-filter.component.scss"],
 })
 export class GroupFilterComponent extends ClearableInputComponent {
   static kLabel = "Group";

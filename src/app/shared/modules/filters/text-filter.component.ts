@@ -7,23 +7,8 @@ import { Subject, Subscription } from "rxjs";
 
 @Component({
   selector: "app-text-filter",
-  template: `<mat-form-field>
-    <mat-label>{{ label }}</mat-label>
-    <input
-      #input
-      matInput
-      class="search-input"
-      type="search"
-      (input)="textSearchChanged($event)"
-    />
-  </mat-form-field>`,
-  styles: [
-    `
-      .mat-mdc-form-field {
-        width: 100%;
-      }
-    `,
-  ],
+  templateUrl: "text-filter.component.html",
+  styleUrls: ["text-filter.component.scss"],
 })
 export class TextFilterComponent
   extends ClearableInputComponent
