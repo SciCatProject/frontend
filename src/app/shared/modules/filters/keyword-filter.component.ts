@@ -33,7 +33,7 @@ export class KeywordFilterComponent implements OnDestroy {
   protected readonly getFacetCount = getFacetCount;
   protected readonly getFacetId = getFacetId;
 
-  @ViewChild("input", { static: true }) input!: ElementRef;
+  @ViewChild("input", { static: false }) input!: ElementRef;
 
   keywordsTerms$ = this.store.select(selectKeywordsTerms);
 

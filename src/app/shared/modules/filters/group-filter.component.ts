@@ -25,7 +25,7 @@ export class GroupFilterComponent {
   protected readonly getFacetId = getFacetId;
   protected readonly getFacetCount = getFacetCount;
 
-  @ViewChild("input", { static: true }) input!: ElementRef;
+  @ViewChild("input", { static: false }) input!: ElementRef;
 
   groupFilter$ = this.store.select(selectGroupFilter);
 

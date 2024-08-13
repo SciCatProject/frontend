@@ -25,7 +25,7 @@ export class LocationFilterComponent {
   protected readonly getFacetId = getFacetId;
   protected readonly getFacetCount = getFacetCount;
 
-  @ViewChild("input", { static: true }) input!: ElementRef;
+  @ViewChild("input", { static: false }) input!: ElementRef;
 
   locationFacetCounts$ = this.store.select(selectLocationFacetCounts);
   locationFilter$ = this.store.select(selectLocationFilter);

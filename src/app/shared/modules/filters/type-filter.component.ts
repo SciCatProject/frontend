@@ -25,7 +25,7 @@ export class TypeFilterComponent {
   protected readonly getFacetCount = getFacetCount;
   protected readonly getFacetId = getFacetId;
 
-  @ViewChild("input", { static: true }) input!: ElementRef;
+  @ViewChild("input", { static: false }) input!: ElementRef;
 
   typeFacetCounts$ = this.store.select(selectTypeFacetCounts);
 

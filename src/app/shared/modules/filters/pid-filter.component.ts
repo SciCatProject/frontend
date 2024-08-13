@@ -24,7 +24,7 @@ export class PidFilterComponent implements OnDestroy {
   private pidSubject = new Subject<string>();
   private subscription: Subscription;
 
-  @ViewChild("input", { static: true }) input!: ElementRef;
+  @ViewChild("input", { static: false }) input!: ElementRef;
 
   appConfig = this.appConfigService.getConfig();
 

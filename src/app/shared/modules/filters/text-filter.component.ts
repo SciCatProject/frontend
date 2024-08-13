@@ -20,7 +20,7 @@ import { getFilterLabel } from "./utils";
 export class TextFilterComponent implements OnDestroy {
   private textSubject = new Subject<string>();
 
-  @ViewChild("input", { static: true }) input!: ElementRef;
+  @ViewChild("input", { static: false }) input!: ElementRef;
 
   subscription: Subscription;
 
