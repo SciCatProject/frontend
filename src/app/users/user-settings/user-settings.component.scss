@@ -6,6 +6,7 @@ mat-card {
   }
 
   .section-icon {
+    padding-right: 0.4em;
     height: auto !important;
     width: auto !important;
   }
@@ -20,6 +21,14 @@ mat-card {
     text-overflow: ellipsis;
     display: inline-block;
     max-width: 30vw;
+  }
+
+  .config-button {
+    margin-top: 1em;
+  }
+
+  .empty-state {
+    opacity: 0.5;
   }
 
   table {

@@ -1,30 +1,44 @@
 [
   {
     "username": "admin",
-    "email": "admin@your.site",
-    "password": "am2jf70TPNZsSan",
+    "email": "admin@scicat.project",
+    "password": "27f5fd86ae68fe740eef42b8bbd1d7d5",
     "role": "admin",
     "global": true
   },
   {
-    "username": "ingestor",
-    "email": "scicatingestor@your.site",
-    "password": "aman",
-    "role": "ingestor",
+    "username": "adminIngestor",
+    "email": "adminingestor@scicat.project",
+    "password": "13f4242dc691a3ee3bb5ca2006edcdf7",
+    "role": "adminingestor",
     "global": false
   },
   {
     "username": "archiveManager",
-    "email": "scicatarchivemanager@your.site",
-    "password": "aman",
+    "email": "archivemanager@scicat.project",
+    "password": "6d3b76392e6f41b087c11f8b77e3f9de",
     "role": "archivemanager",
     "global": false
   },
   {
+    "username": "datasetIngestor",
+    "email": "datasetingestor@scicat.project",
+    "password": "bc35db76848cf9fbb7f40b6661644e97",
+    "role": "datasetingestor",
+    "global": false
+  },
+  {
     "username": "proposalIngestor",
-    "email": "scicatproposalingestor@your.site",
-    "password": "aman",
+    "email": "proposalingestor@scicat.project",
+    "password": "7d8cd858fb9d0e4f5d91c34fd4016167",
     "role": "proposalingestor",
+    "global": false
+  },
+  {
+    "username": "sampleIngestor",
+    "email": "sampleingestor@scicat.project",
+    "password": "e4876cb39c7dc4fe957d7c4f6a34cdd8",
+    "role": "sampleingestor",
     "global": false
   },
   {
