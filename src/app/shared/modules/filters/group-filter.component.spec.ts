@@ -75,10 +75,6 @@ describe("GroupFilterComponent", () => {
     store = mockStore;
   }));
 
-  afterEach(() => {
-    fixture.destroy();
-  });
-
   describe("#onGroupInput()", () => {
     it("should call next on groupInput$", () => {
       const nextSpy = spyOn(component.groupInput$, "next");

@@ -75,10 +75,6 @@ describe("KeywordFilterComponent", () => {
     store = mockStore;
   }));
 
-  afterEach(() => {
-    fixture.destroy();
-  });
-
   describe("#onKeywordInput()", () => {
     it("should call next on keywordsInput$", () => {
       const nextSpy = spyOn(component.keywordsInput$, "next");
