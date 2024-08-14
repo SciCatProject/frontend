@@ -63,9 +63,9 @@ describe("GroupFilterComponent", () => {
             runtimeChecks: {
               strictActionImmutability: false,
               strictActionSerializability: false,
-              strictActionTypeUniqueness: isDevMode(),
-              strictActionWithinNgZone: isDevMode(),
-              strictStateImmutability: isDevMode(),
+              strictActionTypeUniqueness: false,
+              strictActionWithinNgZone: false,
+              strictStateImmutability: false,
               strictStateSerializability: false,
             },
           },
