@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { isDevMode, NO_ERRORS_SCHEMA } from "@angular/core";
 import {
   ComponentFixture,
   TestBed,
@@ -57,7 +57,19 @@ describe("KeywordFilterComponent", () => {
         MatNativeDateModule,
         ReactiveFormsModule,
         SharedScicatFrontendModule,
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictActionImmutability: false,
+              strictActionSerializability: false,
+              strictActionTypeUniqueness: isDevMode(),
+              strictActionWithinNgZone: isDevMode(),
+              strictStateImmutability: isDevMode(),
+              strictStateSerializability: false,
+            },
+          },
+        ),
       ],
       declarations: [KeywordFilterComponent, SearchParametersDialogComponent],
       providers: [AsyncPipe],
