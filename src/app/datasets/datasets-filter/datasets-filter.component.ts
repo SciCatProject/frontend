@@ -25,6 +25,28 @@ import {
 } from "state-management/selectors/user.selectors";
 import { AsyncPipe } from "@angular/common";
 import { ConditionFilterComponent } from "../../shared/modules/filters/condition-filter.component";
+import { PidFilterComponent } from "../../shared/modules/filters/pid-filter.component";
+import { PidFilterContainsComponent } from "../../shared/modules/filters/pid-filter-contains.component";
+import { PidFilterStartsWithComponent } from "../../shared/modules/filters/pid-filter-startsWith.component";
+import { LocationFilterComponent } from "../../shared/modules/filters/location-filter.component";
+import { GroupFilterComponent } from "../../shared/modules/filters/group-filter.component";
+import { TypeFilterComponent } from "../../shared/modules/filters/type-filter.component";
+import { KeywordFilterComponent } from "../../shared/modules/filters/keyword-filter.component";
+import { DateRangeFilterComponent } from "../../shared/modules/filters/date-range-filter.component";
+import { TextFilterComponent } from "../../shared/modules/filters/text-filter.component";
+
+const COMPONENT_MAP: { [key: string]: any } = {
+  PidFilterComponent: PidFilterComponent,
+  PidFilterContainsComponent: PidFilterContainsComponent,
+  PidFilterStartsWithComponent: PidFilterStartsWithComponent,
+  LocationFilterComponent: LocationFilterComponent,
+  GroupFilterComponent: GroupFilterComponent,
+  TypeFilterComponent: TypeFilterComponent,
+  KeywordFilterComponent: KeywordFilterComponent,
+  DateRangeFilterComponent: DateRangeFilterComponent,
+  TextFilterComponent: TextFilterComponent,
+  ConditionFilterComponent: ConditionFilterComponent,
+};
 
 @Component({
   selector: "datasets-filter",
@@ -92,5 +114,9 @@ export class DatasetsFilterComponent implements OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
+  resolveComponentType(typeAsString: string): any {
+    return COMPONENT_MAP[typeAsString];
   }
 }

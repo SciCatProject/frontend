@@ -47,15 +47,15 @@ import { FilterConfig } from "../../shared/modules/filters/filters.module";
 import { selectFilters } from "../../state-management/selectors/user.selectors";
 
 const filterConfigs: FilterConfig[] = [
-  { type: LocationFilterComponent, visible: true },
-  { type: PidFilterComponent, visible: true },
-  { type: PidFilterContainsComponent, visible: false },
-  { type: PidFilterStartsWithComponent, visible: false },
-  { type: GroupFilterComponent, visible: true },
-  { type: TypeFilterComponent, visible: true },
-  { type: KeywordFilterComponent, visible: true },
-  { type: DateRangeFilterComponent, visible: true },
-  { type: TextFilterComponent, visible: true },
+  { type: "LocationFilterComponent", visible: true },
+  { type: "PidFilterComponent", visible: true },
+  { type: "PidFilterContainsComponent", visible: false },
+  { type: "PidFilterStartsWithComponent", visible: false },
+  { type: "GroupFilterComponent", visible: true },
+  { type: "TypeFilterComponent", visible: true },
+  { type: "KeywordFilterComponent", visible: true },
+  { type: "DateRangeFilterComponent", visible: true },
+  { type: "TextFilterComponent", visible: true },
 ];
 
 export class MockStoreWithFilters extends MockStore {

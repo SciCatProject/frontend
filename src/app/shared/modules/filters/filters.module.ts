@@ -54,8 +54,20 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 })
 export class FiltersModule {}
 
+type Filter =
+  | "PidFilterComponent"
+  | "PidFilterContainsComponent"
+  | "PidFilterStartsWithComponent"
+  | "LocationFilterComponent"
+  | "GroupFilterComponent"
+  | "TypeFilterComponent"
+  | "KeywordFilterComponent"
+  | "DateRangeFilterComponent"
+  | "TextFilterComponent"
+  | "ConditionFilterComponent";
+
 export interface FilterConfig {
-  type: any;
+  type: Filter;
   visible: boolean;
 }
 

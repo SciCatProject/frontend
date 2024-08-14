@@ -11,7 +11,7 @@
         (change)="toggleVisibility(filter)"
         aria-label="Toggle visibility">
       </mat-slide-toggle>
-      <span class="filter-name">{{ getFilterLabel(filter.type.name) }}</span>
+      <span class="filter-name">{{ getFilterLabel(filter.type) }}</span>
       <span class="spacer"></span>
     </mat-list-item>
     <mat-list-item class="filter-item" *ngFor="let condition of data.conditionConfigs; index as i">
