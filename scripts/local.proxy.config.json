@@ -1,6 +1,6 @@
 {
   "/api/v3/*": {
-    "target": "http://localhost:3000",
+    "target": "http://backend.localhost",
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": true

@@ -34,7 +34,7 @@ const appConfig: AppConfig = {
   jsonMetadataEnabled: true,
   jupyterHubUrl: "https://jupyterhub.esss.lu.se/",
   landingPage: "doi2.psi.ch/detail/",
-  lbBaseURL: "http://127.0.0.1:3000",
+  lbBaseURL: "http://backend.localhost",
   localColumns: [
     {
       name: "select",

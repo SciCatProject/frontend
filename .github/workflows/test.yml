@@ -124,7 +124,7 @@ jobs:
       - name: Wait for Backend
         run: |
           npm install -g wait-on
-          wait-on http://localhost:3000/api/v3/health --timeout 200000
+          wait-on http://backend.localhost/api/v3/health --timeout 200000
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6

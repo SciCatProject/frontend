@@ -4,14 +4,42 @@
       <mat-card-title>Ingestor-Connection</mat-card-title>
     </mat-card-header>
     <mat-card-content class="ingestor-vertical-layout">
-      <div>
-        <p style="color: red;">No Backend connected</p>
+      <div *ngIf="connectingToFacilityBackend">
+        <mat-progress-spinner diameter="20"
+          mode="indeterminate"></mat-progress-spinner>
+      </div>
+      <div *ngIf="!connectingToFacilityBackend">
+        <ng-container *ngIf="connectedFacilityBackend === ''">
+          <p style="color: red;">No Backend connected</p>
+
+          <p>Please provide a valid Backend URL</p>
+          <mat-form-field>
+            <input matInput placeholder="Backend URL"
+              [(ngModel)]="forwardFacilityBackend">
+          </mat-form-field>
+          <button mat-raised-button color="primary"
+            (click)="forwardToIngestorPage()">Connect</button>
+
+          <div>
+            <ul>
+              <li *ngFor="let backend of lastUsedFacilityBackends">
+                <a (click)="selectFacilityBackend(backend)">{{ backend }}</a>
+              </li>
+            </ul>
+          </div>
+
+        </ng-container>
+        <ng-container *ngIf="connectedFacilityBackend !== ''">
+          <p style="color: green;">Connected to {{ connectedFacilityBackend }}
+            <a (click)="disconnectIngestor()">change</a>
+          </p>
+        </ng-container>
       </div>
     </mat-card-content>
   </mat-card>
 </p>
 
-<p>
+<p *ngIf="connectedFacilityBackend !== ''">
   <mat-card class="ingestor-card">
     <mat-card-header>
       <mat-card-title>Ingest Dataset</mat-card-title>
@@ -26,10 +54,27 @@
         </mat-form-field>
       </div>
       <div>
-        <button mat-raised-button color="primary" (click)="upload()" [disabled]="loading">
+        <button mat-raised-button color="primary" (click)="upload()"
+          [disabled]="loading">
           <span *ngIf="!loading">Upload</span>
-          <mat-progress-spinner *ngIf="loading" diameter="20" mode="indeterminate"></mat-progress-spinner>
+          <mat-progress-spinner *ngIf="loading" diameter="20"
+            mode="indeterminate"></mat-progress-spinner>
         </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</p>
+
+<p *ngIf="returnValue !== ''">
+  <mat-card class="ingestor-card">
+    <mat-card-header>
+      <mat-card-title>Return Value</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="ingestor-vertical-layout">
+      <div>
+      </div>
+      <div>
+          <p>{{returnValue}}</p>
       </div>
     </mat-card-content>
   </mat-card>

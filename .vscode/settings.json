@@ -1,20 +1,4 @@
 {
-    "workbench.colorCustomizations": {
-      "activityBar.background": "#0e3041",
-      "activityBar.foreground": "#e7e7e7",
-      "activityBar.inactiveForeground": "#e7e7e799",
-      "activityBarBadge.background": "#b82888",
-      "activityBarBadge.foreground": "#e7e7e7",
-      "titleBar.activeBackground": "#051117",
-      "titleBar.inactiveBackground": "#05111799",
-      "titleBar.activeForeground": "#e7e7e7",
-      "titleBar.inactiveForeground": "#e7e7e799",
-      "statusBar.background": "#051117",
-      "statusBarItem.hoverBackground": "#0e3041",
-      "statusBar.foreground": "#e7e7e7",
-      "activityBar.activeBackground": "#0e3041",
-      "activityBar.activeBorder": "#b82888"
-    },
     "peacock.color": "#051117",
     "editor.tabSize": 2,
     "diffEditor.wordWrap": "on",
