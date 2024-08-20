@@ -1,4 +1,5 @@
-import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { Component } from "@angular/core";
+import { ClearableInputComponent } from "./clearable-input.component";
 import {
   createSuggestionObserver,
   getFacetCount,
@@ -21,7 +22,7 @@ import {
   templateUrl: "type-filter.component.html",
   styleUrls: ["type-filter.component.scss"],
 })
-export class TypeFilterComponent {
+export class TypeFilterComponent extends ClearableInputComponent {
   protected readonly getFacetCount = getFacetCount;
   protected readonly getFacetId = getFacetId;
 
@@ -36,17 +37,12 @@ export class TypeFilterComponent {
     this.typeFilter$,
   );
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) {
+    super();
+  }
 
   get label() {
     return getFilterLabel(this.constructor.name);
-  }
-
-  @Input()
-  set clear(value: boolean) {
-    if (value) {
-      this.typeInput$.next("");
-    }
   }
 
   onTypeInput(event: any) {

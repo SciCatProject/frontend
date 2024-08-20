@@ -1,10 +1,5 @@
-import {
-  Component,
-  ElementRef,
-  Input,
-  OnDestroy,
-  ViewChild,
-} from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
+import { ClearableInputComponent } from "./clearable-input.component";
 import {
   createSuggestionObserver,
   getFacetCount,
@@ -29,7 +24,10 @@ import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
   templateUrl: "keyword-filter.component.html",
   styleUrls: ["keyword-filter.component.scss"],
 })
-export class KeywordFilterComponent implements OnDestroy {
+export class KeywordFilterComponent
+  extends ClearableInputComponent
+  implements OnDestroy
+{
   protected readonly getFacetCount = getFacetCount;
   protected readonly getFacetId = getFacetId;
 
@@ -49,6 +47,8 @@ export class KeywordFilterComponent implements OnDestroy {
   );
 
   constructor(private store: Store) {
+    super();
+
     this.subscription = this.keywordsTerms$
       .pipe(
         skipWhile((terms) => terms === ""),
@@ -62,13 +62,6 @@ export class KeywordFilterComponent implements OnDestroy {
 
   get label() {
     return getFilterLabel(this.constructor.name);
-  }
-
-  @Input()
-  set clear(value: boolean) {
-    if (value) {
-      this.keywordsInput$.next("");
-    }
   }
 
   onKeywordInput(event: any) {

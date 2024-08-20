@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { Component } from "@angular/core";
 import {
   selectLocationFacetCounts,
   selectLocationFilter,
@@ -14,6 +14,7 @@ import {
   addLocationFilterAction,
   removeLocationFilterAction,
 } from "state-management/actions/datasets.actions";
+import { ClearableInputComponent } from "./clearable-input.component";
 import { Store } from "@ngrx/store";
 
 @Component({
@@ -21,7 +22,7 @@ import { Store } from "@ngrx/store";
   templateUrl: "location-filter.component.html",
   styleUrls: ["location-filter.component.scss"],
 })
-export class LocationFilterComponent {
+export class LocationFilterComponent extends ClearableInputComponent {
   protected readonly getFacetId = getFacetId;
   protected readonly getFacetCount = getFacetCount;
 
@@ -36,17 +37,12 @@ export class LocationFilterComponent {
     this.locationFilter$,
   );
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) {
+    super();
+  }
 
   get label() {
     return getFilterLabel(this.constructor.name);
-  }
-
-  @Input()
-  set clear(value: boolean) {
-    if (value) {
-      this.locationInput$.next("");
-    }
   }
 
   locationSelected(location: string | null) {

@@ -1,11 +1,5 @@
-import {
-  Component,
-  ElementRef,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ClearableInputComponent } from "./clearable-input.component";
 import { Store } from "@ngrx/store";
 import { setTextFilterAction } from "state-management/actions/datasets.actions";
 import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
@@ -17,12 +11,16 @@ import { getFilterLabel } from "./utils";
   templateUrl: "text-filter.component.html",
   styleUrls: ["text-filter.component.scss"],
 })
-export class TextFilterComponent implements OnDestroy {
+export class TextFilterComponent
+  extends ClearableInputComponent
+  implements OnDestroy
+{
   private textSubject = new Subject<string>();
 
   subscription: Subscription;
 
   constructor(private store: Store) {
+    super();
     this.subscription = this.textSubject
       .pipe(
         skipWhile((terms) => terms === ""),
@@ -36,13 +34,6 @@ export class TextFilterComponent implements OnDestroy {
 
   get label() {
     return getFilterLabel(this.constructor.name);
-  }
-
-  @Input()
-  set clear(value: boolean) {
-    if (value) {
-      this.textSubject.next("");
-    }
   }
 
   textSearchChanged(event: any) {

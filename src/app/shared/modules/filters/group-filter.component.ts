@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { Component } from "@angular/core";
 import {
   selectGroupFacetCounts,
   selectGroupFilter,
@@ -15,13 +15,14 @@ import {
   getFilterLabel,
 } from "./utils";
 import { BehaviorSubject } from "rxjs";
+import { ClearableInputComponent } from "./clearable-input.component";
 
 @Component({
   selector: "app-group-filter",
   templateUrl: "group-filter.component.html",
   styleUrls: ["group-filter.component.scss"],
 })
-export class GroupFilterComponent {
+export class GroupFilterComponent extends ClearableInputComponent {
   protected readonly getFacetId = getFacetId;
   protected readonly getFacetCount = getFacetCount;
 
@@ -36,17 +37,12 @@ export class GroupFilterComponent {
     this.groupFilter$,
   );
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) {
+    super();
+  }
 
   get label() {
     return getFilterLabel(this.constructor.name);
-  }
-
-  @Input()
-  set clear(value: boolean) {
-    if (value) {
-      this.groupInput$.next("");
-    }
   }
 
   onGroupInput(event: any) {
