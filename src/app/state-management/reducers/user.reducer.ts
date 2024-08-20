@@ -229,6 +229,13 @@ const reducer = createReducer(
       filters: filterConfigs,
     }),
   ),
+  on(
+    fromActions.updateConditionsConfigs,
+    (state, { conditionConfigs }): UserState => ({
+      ...state,
+      conditions: conditionConfigs,
+    }),
+  ),
 );
 
 export const userReducer = (state: UserState | undefined, action: Action) => {

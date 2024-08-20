@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from "@angular/core";
+import { ChangeDetectorRef, Component, OnDestroy } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
 
@@ -15,6 +15,7 @@ import {
 import { Subscription } from "rxjs";
 import {
   deselectAllCustomColumnsAction,
+  updateConditionsConfigs,
   updateFilterConfigs,
 } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
@@ -77,6 +78,7 @@ export class DatasetsFilterComponent implements OnDestroy {
     public dialog: MatDialog,
     private store: Store,
     private asyncPipe: AsyncPipe,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   reset() {
@@ -101,7 +103,16 @@ export class DatasetsFilterComponent implements OnDestroy {
       if (result) {
         // Handle the selected filter
         console.log(`Selected filter: ${result}`);
-        this.store.dispatch(updateFilterConfigs({ filterConfigs: result }));
+        this.store.dispatch(
+          updateFilterConfigs({ filterConfigs: result.filterConfigs }),
+        );
+        this.store.dispatch(
+          updateConditionsConfigs({
+            conditionConfigs: result.conditionConfigs,
+          }),
+        );
+
+        // this.cdr.detectChanges();
       }
     });
   }

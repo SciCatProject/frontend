@@ -1,4 +1,4 @@
-import { Component, Inject } from "@angular/core";
+import { ChangeDetectorRef, Component, Inject } from "@angular/core";
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -23,6 +23,7 @@ import {
   FilterConfig,
 } from "../../../shared/modules/filters/filters.module";
 import { getFilterLabel } from "../../../shared/modules/filters/utils";
+import { ScientificCondition } from "../../../state-management/models";
 
 @Component({
   selector: "app-type-datasets-filter-settings",
@@ -48,7 +49,9 @@ export class DatasetsFilterSettingsComponent {
   addCondition() {
     this.dialog
       .open(SearchParametersDialogComponent, {
-        data: { parameterKeys: this.asyncPipe.transform(this.metadataKeys$) },
+        data: {
+          parameterKeys: this.asyncPipe.transform(this.metadataKeys$),
+        },
       })
       .afterClosed()
       .subscribe((res) => {
@@ -59,6 +62,41 @@ export class DatasetsFilterSettingsComponent {
             enabled: false,
           });
           this.data.conditionConfigs.push(condition);
+        }
+      });
+  }
+
+  editCondition(condition: ConditionConfig, i: number) {
+    this.store.dispatch(
+      removeScientificConditionAction({ condition: condition.condition }),
+    );
+    this.store.dispatch(
+      deselectColumnAction({
+        name: condition.condition.lhs,
+        columnType: "custom",
+      }),
+    );
+    this.dialog
+      .open(SearchParametersDialogComponent, {
+        data: {
+          parameterKeys: this.asyncPipe.transform(this.metadataKeys$),
+          condition: condition.condition,
+        },
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          const { data } = res;
+          this.data.conditionConfigs[i] = {
+            ...condition,
+            condition: data,
+          };
+          this.store.dispatch(
+            addScientificConditionAction({ condition: data }),
+          );
+          this.store.dispatch(
+            selectColumnAction({ name: data.lhs, columnType: "custom" }),
+          );
         }
       });
   }
@@ -108,7 +146,7 @@ export class DatasetsFilterSettingsComponent {
   }
 
   onApply() {
-    this.dialogRef.close(this.data.filterConfigs);
+    this.dialogRef.close(this.data);
   }
 
   onCancel() {

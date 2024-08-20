@@ -2,7 +2,10 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { createAction, props } from "@ngrx/store";
 import { User, AccessToken, UserIdentity, UserSetting } from "shared/sdk";
 import { Message, Settings, TableColumn } from "state-management/models";
-import { FilterConfig } from "../../shared/modules/filters/filters.module";
+import {
+  ConditionConfig,
+  FilterConfig,
+} from "../../shared/modules/filters/filters.module";
 
 export const setDatasetTableColumnsAction = createAction(
   "[User] Set Dataset Table Columns",
@@ -165,4 +168,9 @@ export const loadingCompleteAction = createAction("[User] Loading Complete");
 export const updateFilterConfigs = createAction(
   "[User] Update Filter Configs",
   props<{ filterConfigs: FilterConfig[] }>(),
+);
+
+export const updateConditionsConfigs = createAction(
+  "[User] Update Conditions Configs",
+  props<{ conditionConfigs: ConditionConfig[] }>(),
 );
