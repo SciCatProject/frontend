@@ -1,5 +1,6 @@
 <h2 mat-dialog-title>Configure Filters</h2>
 <mat-dialog-content class="filter-dialog-content">
+  <span layout="row"><hr flex/>Filters<hr flex/></span>
   <mat-nav-list cdkDropList (cdkDropListDropped)="drop($event)">
     <mat-list-item class="filter-item" *ngFor="let filter of data.filterConfigs" cdkDrag cdkDragHandle>
       <span class="drag-handle" matTooltip="Drag to reorder" aria-label="Drag handle">
@@ -14,6 +15,9 @@
       <span class="filter-name">{{ getFilterLabel(filter.type) }}</span>
       <span class="spacer"></span>
     </mat-list-item>
+  </mat-nav-list>
+  <span layout="row"><hr flex/>Conditions<hr flex/></span>
+  <mat-nav-list>
     <mat-list-item class="filter-item" *ngFor="let condition of data.conditionConfigs; index as i">
       <mat-slide-toggle
         class="filter-toggle"
