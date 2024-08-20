@@ -87,6 +87,10 @@ export class DatasetsFilterComponent implements OnDestroy {
     this.store.dispatch(clearFacetsAction());
     this.store.dispatch(deselectAllCustomColumnsAction());
     this.applyFilters();
+    // we need to treat JS event loop here, otherwise this.clearSearchBar is false for the components
+    setTimeout(() => {
+      this.clearSearchBar = false; // reset value so it will be triggered again
+    }, 0);
   }
 
   showDatasetsFilterSettingsDialog() {
