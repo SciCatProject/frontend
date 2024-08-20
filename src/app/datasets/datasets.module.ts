@@ -88,6 +88,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { DatasetsFilterSettingsComponent } from "./datasets-filter/settings/datasets-filter-settings.component";
 import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
 import { FiltersModule } from "shared/modules/filters/filters.module";
+import { userReducer } from "state-management/reducers/user.reducer";
 
 @NgModule({
   imports: [
@@ -142,6 +143,7 @@ import { FiltersModule } from "shared/modules/filters/filters.module";
     StoreModule.forFeature("samples", samplesReducer),
     StoreModule.forFeature("publishedData", publishedDataReducer),
     StoreModule.forFeature("logbooks", logbooksReducer),
+    StoreModule.forFeature("users", userReducer),
     LogbooksModule,
     FullTextSearchBarComponent,
     MatMenuModule,
