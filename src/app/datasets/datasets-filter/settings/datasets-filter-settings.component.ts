@@ -54,10 +54,11 @@ export class DatasetsFilterSettingsComponent {
       .subscribe((res) => {
         if (res) {
           const { data } = res;
-          this.data.conditionConfigs.push({
+          const condition = this.toggleCondition({
             condition: data,
             enabled: false,
           });
+          this.data.conditionConfigs.push(condition);
         }
       });
   }
@@ -77,7 +78,7 @@ export class DatasetsFilterSettingsComponent {
     }
   }
 
-  toggleCondition(condition: ConditionConfig, index: number) {
+  toggleCondition(condition: ConditionConfig) {
     condition.enabled = !condition.enabled;
     const data = condition.condition;
     if (condition.enabled) {
@@ -91,6 +92,7 @@ export class DatasetsFilterSettingsComponent {
         deselectColumnAction({ name: data.lhs, columnType: "custom" }),
       );
     }
+    return condition;
   }
 
   toggleVisibility(filter: FilterConfig) {
