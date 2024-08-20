@@ -76,7 +76,6 @@ export const initialUserState: UserState = {
     { type: "TypeFilterComponent", visible: true },
     { type: "KeywordFilterComponent", visible: true },
     { type: "DateRangeFilterComponent", visible: true },
-    { type: "TextFilterComponent", visible: true },
   ],
 
   conditions: [],
