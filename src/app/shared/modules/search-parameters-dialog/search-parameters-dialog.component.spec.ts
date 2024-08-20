@@ -17,6 +17,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppConfigService } from "app-config.service";
 
 import { SearchParametersDialogComponent } from "./search-parameters-dialog.component";
+import { ScientificCondition } from "../../../state-management/models";
 
 const getConfig = () => ({
   scienceSearchUnitsEnabled: true,
@@ -75,7 +76,7 @@ describe("SearchParametersDialogComponent", () => {
         rhs: 5,
         unit: "gram",
       };
-      component.parametersForm.setValue(formValues);
+      component.parametersForm.setValue(formValues as ScientificCondition);
 
       component.add();
 
@@ -114,7 +115,7 @@ describe("SearchParametersDialogComponent", () => {
         rhs: 5,
         unit: "",
       };
-      component.parametersForm.setValue(formValues);
+      component.parametersForm.setValue(formValues as ScientificCondition);
 
       component.toggleUnitField();
 
@@ -127,7 +128,7 @@ describe("SearchParametersDialogComponent", () => {
         rhs: 5,
         unit: "",
       };
-      component.parametersForm.setValue(formValues);
+      component.parametersForm.setValue(formValues as ScientificCondition);
 
       component.toggleUnitField();
 
@@ -140,7 +141,7 @@ describe("SearchParametersDialogComponent", () => {
         rhs: 5,
         unit: "",
       };
-      component.parametersForm.setValue(formValues);
+      component.parametersForm.setValue(formValues as ScientificCondition);
 
       component.toggleUnitField();
 
@@ -156,7 +157,7 @@ describe("SearchParametersDialogComponent", () => {
         rhs: 5,
         unit: "",
       };
-      component.parametersForm.setValue(formValues);
+      component.parametersForm.setValue(formValues as ScientificCondition);
 
       const isInvalid = component.isInvalid();
 
@@ -169,7 +170,7 @@ describe("SearchParametersDialogComponent", () => {
         rhs: "test",
         unit: "gram",
       };
-      component.parametersForm.setValue(formValues);
+      component.parametersForm.setValue(formValues as ScientificCondition);
 
       const isInvalid = component.isInvalid();
 
@@ -182,7 +183,7 @@ describe("SearchParametersDialogComponent", () => {
         rhs: "",
         unit: "gram",
       };
-      component.parametersForm.setValue(formValues);
+      component.parametersForm.setValue(formValues as ScientificCondition);
 
       const isInvalid = component.isInvalid();
 
@@ -195,7 +196,7 @@ describe("SearchParametersDialogComponent", () => {
         rhs: 5,
         unit: "gram",
       };
-      component.parametersForm.setValue(formValues);
+      component.parametersForm.setValue(formValues as ScientificCondition);
 
       const isInvalid = component.isInvalid();
 

@@ -140,6 +140,11 @@ describe("DatasetsFilterSettingsComponent", () => {
       spyOn(component.dialog, "open").and.callThrough();
       dispatchSpy = spyOn(store, "dispatch");
 
+      // Spy or stub other side effects in addCondition as needed
+      spyOn(component, "toggleCondition").and.callFake(
+        (ignored: ConditionConfig) => ignored,
+      );
+
       component.metadataKeys$ = of(["test", "keys"]);
       component.addCondition();
 
