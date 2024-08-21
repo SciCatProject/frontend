@@ -1,0 +1,30 @@
+<mat-form-field>
+  <mat-label>{{ label }}</mat-label>
+  <mat-chip-grid #typeChipList>
+    <mat-chip-row
+      *ngFor="let type of typeFilter$ | async"
+      [removable]="true"
+      (removed)="typeRemoved(type)"
+    >{{ type }}<mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip-row>
+  </mat-chip-grid>
+  <input
+    #input
+    (input)="onTypeInput($event)"
+    [value]="typeInput$ | async"
+    matInput
+    class="type-input"
+    [matChipInputFor]="typeChipList"
+    [matAutocomplete]="type"
+  />
+
+  <mat-autocomplete #type="matAutocomplete">
+    <mat-option
+      (onSelectionChange)="typeSelected(getFacetId(fc))"
+      *ngFor="let fc of typeSuggestions$ | async"
+    >
+      <span>{{ getFacetId(fc, "No Type") }}</span> |
+      <small>{{ getFacetCount(fc) }}</small>
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

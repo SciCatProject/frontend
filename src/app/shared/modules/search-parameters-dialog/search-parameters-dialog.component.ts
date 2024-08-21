@@ -1,9 +1,10 @@
-import { Component, Inject } from "@angular/core";
+import { ChangeDetectorRef, Component, Inject } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { AppConfigService } from "app-config.service";
 import { map, startWith } from "rxjs/operators";
 import { UnitsService } from "shared/services/units.service";
+import { ScientificCondition } from "../../../state-management/models";
 
 @Component({
   selector: "search-parameters-dialog",
@@ -17,12 +18,15 @@ export class SearchParametersDialogComponent {
   units: string[] = [];
 
   parametersForm = new FormGroup({
-    lhs: new FormControl("", [Validators.required, Validators.minLength(2)]),
-    relation: new FormControl("GREATER_THAN", [
+    lhs: new FormControl(this.data.condition?.lhs || "", [
+      Validators.required,
+      Validators.minLength(2),
+    ]),
+    relation: new FormControl(this.data.condition?.relation || "GREATER_THAN", [
       Validators.required,
       Validators.minLength(9),
     ]),
-    rhs: new FormControl<string | number>("", [
+    rhs: new FormControl<string | number>(this.data.condition?.rhs || "", [
       Validators.required,
       Validators.minLength(1),
     ]),
@@ -49,10 +53,18 @@ export class SearchParametersDialogComponent {
 
   constructor(
     public appConfigService: AppConfigService,
-    @Inject(MAT_DIALOG_DATA) public data: { parameterKeys: string[] },
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      parameterKeys: string[];
+      condition?: ScientificCondition;
+    },
     public dialogRef: MatDialogRef<SearchParametersDialogComponent>,
     private unitsService: UnitsService,
-  ) {}
+  ) {
+    if (this.data.condition?.lhs) {
+      this.getUnits(this.data.condition.lhs);
+    }
+  }
 
   add = (): void => {
     const { lhs, relation, unit } = this.parametersForm.value;

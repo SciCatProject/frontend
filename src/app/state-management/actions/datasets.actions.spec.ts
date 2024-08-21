@@ -731,11 +731,16 @@ describe("Dataset Actions", () => {
 
   describe("removeScientificConditionAction", () => {
     it("should create an action", () => {
-      const index = 0;
-      const action = fromActions.removeScientificConditionAction({ index });
+      const condition: ScientificCondition = {
+        lhs: "lhsTest",
+        relation: "LESS_THAN",
+        rhs: 5,
+        unit: "s",
+      };
+      const action = fromActions.removeScientificConditionAction({ condition });
       expect({ ...action }).toEqual({
         type: "[Dataset] Remove Scientific Condition",
-        index,
+        condition,
       });
     });
   });
