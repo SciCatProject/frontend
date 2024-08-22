@@ -32,8 +32,6 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
   selectedTotalFileSize = 0;
   numberOfFileSelected = 0;
 
-  form: HTMLFormElement;
-
   constructor(private userApi: UserApi) {
     this.userApi.jwt().subscribe((jwt) => {
       this.jwt = jwt.jwt;
@@ -111,36 +109,66 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
   }
 
   perform_action() {
-    this.form = document.createElement("form");
-    this.form.target = this.actionConfig.target;
-    this.form.method = this.actionConfig.method;
-    this.form.action = this.actionConfig.url;
+    const action_type = this.actionConfig.type || "form";
+    switch (action_type) {
+      case "form":
+      default:
+        return this.type_form();
+    }
+  }
 
-    this.form.appendChild(
+  type_form() {
+    const form = document.createElement("form");
+    form.target = this.actionConfig.target || "_self";
+    form.method = this.actionConfig.method || "POST";
+    form.action = this.actionConfig.url;
+    form.style.display = "none";
+
+    form.appendChild(
       this.add_input("auth_token", this.userApi.getCurrentToken().id),
     );
 
-    this.form.appendChild(this.add_input("jwt", this.jwt));
+    form.appendChild(this.add_input("jwt", this.jwt));
 
-    this.form.appendChild(this.add_input("dataset", this.actionDataset.pid));
+    form.appendChild(this.add_input("dataset", this.actionDataset.pid));
 
-    this.form.appendChild(
+    form.appendChild(
       this.add_input("directory", this.actionDataset.sourceFolder),
     );
 
-    for (const [index, item] of this.files.entries()) {
+    let index = 0;
+    for (const item of this.files) {
       if (
         this.actionConfig.files === "all" ||
         (this.actionConfig.files === "selected" && item.selected)
       ) {
-        this.form.appendChild(
-          this.add_input("files[" + index + "]", item.path),
-        );
+        form.appendChild(this.add_input("files[" + index + "]", item.path));
+        index = index + 1;
       }
     }
 
-    //document.body.appendChild(form);
-    this.form.submit();
-    window.open("", "view");
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+
+    return true;
   }
+
+  /*
+   * future development
+   *
+  type_fetch() {
+    const data = new URLSearchParams();
+    for (const pair of new FormData(formElement)) {
+      data.append(pair[0], pair[1]);
+    }
+
+    fetch(url, {
+      method: 'post',
+      body: data,
+    })
+    .then(…);
+    }
+  }
+   */
 }
