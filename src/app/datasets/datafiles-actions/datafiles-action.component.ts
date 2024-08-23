@@ -27,10 +27,11 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
   visible = true;
   use_mat_icon = false;
   use_icon = false;
-  //disabled = false;
   disabled_condition = "false";
   selectedTotalFileSize = 0;
   numberOfFileSelected = 0;
+
+  form: HTMLFormElement = null;
 
   constructor(private userApi: UserApi) {
     this.userApi.jwt().subscribe((jwt) => {
@@ -90,10 +91,6 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
     ).length;
   }
 
-  // compute_disabled() {
-  //   this.disabled = eval(this.disabled_condition);
-  // }
-
   get disabled() {
     this.update_status();
     this.prepare_disabled_condition();
@@ -118,21 +115,25 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
   }
 
   type_form() {
-    const form = document.createElement("form");
-    form.target = this.actionConfig.target || "_self";
-    form.method = this.actionConfig.method || "POST";
-    form.action = this.actionConfig.url;
-    form.style.display = "none";
+    if (this.form !== null) {
+      document.body.removeChild(this.form);
+    }
 
-    form.appendChild(
+    this.form = document.createElement("form");
+    this.form.target = this.actionConfig.target || "_self";
+    this.form.method = this.actionConfig.method || "POST";
+    this.form.action = this.actionConfig.url;
+    this.form.style.display = "none";
+
+    this.form.appendChild(
       this.add_input("auth_token", this.userApi.getCurrentToken().id),
     );
 
-    form.appendChild(this.add_input("jwt", this.jwt));
+    this.form.appendChild(this.add_input("jwt", this.jwt));
 
-    form.appendChild(this.add_input("dataset", this.actionDataset.pid));
+    this.form.appendChild(this.add_input("dataset", this.actionDataset.pid));
 
-    form.appendChild(
+    this.form.appendChild(
       this.add_input("directory", this.actionDataset.sourceFolder),
     );
 
@@ -142,14 +143,15 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
         this.actionConfig.files === "all" ||
         (this.actionConfig.files === "selected" && item.selected)
       ) {
-        form.appendChild(this.add_input("files[" + index + "]", item.path));
+        this.form.appendChild(
+          this.add_input("files[" + index + "]", item.path),
+        );
         index = index + 1;
       }
     }
 
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
+    document.body.appendChild(this.form);
+    this.form.submit();
 
     return true;
   }
