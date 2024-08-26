@@ -4,7 +4,6 @@ import {
   HttpTestingController,
 } from "@angular/common/http/testing";
 import { UserSettingsService } from "./user-settings.service";
-import { AppConfigService } from "../../app-config.service";
 
 describe("UnitsService", () => {
   let service: UserSettingsService;
@@ -17,10 +16,7 @@ describe("UnitsService", () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule], // Import HttpClientTestingModule
-      providers: [
-        UserSettingsService,
-        { provide: AppConfigService, useValue: { getConfig } },
-      ],
+      providers: [UserSettingsService],
     }),
   );
 
