@@ -21,6 +21,8 @@ import { ActionDataset } from "./datafiles-action.interfaces";
 describe("1000: DatafilesActionComponent", () => {
   let component: DatafilesActionComponent;
   let fixture: ComponentFixture<DatafilesActionComponent>;
+  let htmlForm: HTMLFormElement;
+  let htmlInput: HTMLInputElement;
 
   const actionsConfig = [
     {
@@ -129,14 +131,20 @@ describe("1000: DatafilesActionComponent", () => {
     id: "4ac45f3e-4d79-11ef-856c-6339dab93bee",
   });
 
-  const browserWindowMock = {
-    document: {
-      write() {},
-      body: {
-        setAttribute() {},
-      },
-    },
-  } as unknown as Window;
+  // const browserWindowMock = {
+  //   document: {
+  //     write() {},
+  //     body: {
+  //       setAttribute() {},
+  //     },
+  //   },
+  // } as unknown as Window;
+
+  beforeAll(() => {
+    htmlForm = document.createElement("form");
+    (htmlForm as HTMLFormElement).submit = () => {};
+    htmlInput = document.createElement("input");
+  });
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -494,9 +502,22 @@ describe("1000: DatafilesActionComponent", () => {
     });
   });
 
-  function getFakeElement(elementType: string): HTMLElement {
-    const element = new MockHtmlElement(elementType);
-    return element as unknown as HTMLElement;
+  function createFakeElement(elementType: string): HTMLElement {
+    //const element = new MockHtmlElement(elementType);
+    //return element as unknown as HTMLElement;
+    let element: HTMLElement = null;
+
+    switch (elementType) {
+      case "form":
+        element = htmlForm.cloneNode(true) as HTMLElement;
+        break;
+      case "input":
+        element = htmlInput.cloneNode(true) as HTMLElement;
+        break;
+      default:
+        element = null;
+    }
+    return element;
   }
 
   it("0400: Form submission should have all files when Download All is clicked", async () => {
@@ -505,8 +526,9 @@ describe("1000: DatafilesActionComponent", () => {
       maxSizeType.higher,
       selectedFilesType.none,
     );
-    spyOn(document, "createElement").and.callFake(getFakeElement);
-    spyOn(window, "open").and.returnValue(browserWindowMock);
+
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+    //spyOn(window, "open").and.returnValue(browserWindowMock);
 
     component.perform_action();
 
@@ -526,13 +548,13 @@ describe("1000: DatafilesActionComponent", () => {
       maxSizeType.higher,
       selectedFilesType.none,
     );
-    spyOn(document, "createElement").and.callFake(getFakeElement);
-    spyOn(window, "open").and.returnValue(browserWindowMock);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+    //spyOn(window, "open").and.returnValue(browserWindowMock);
 
     component.perform_action();
 
-    expect(component.form.action).toEqual(
-      actionsConfig[actionSelectorType.download_all].url,
+    expect(component.form.action.replace(/\/$/, "")).toEqual(
+      actionsConfig[actionSelectorType.download_all].url.replace(/\/$/, ""),
     );
   });
 
@@ -542,8 +564,8 @@ describe("1000: DatafilesActionComponent", () => {
       maxSizeType.higher,
       selectedFilesType.none,
     );
-    spyOn(document, "createElement").and.callFake(getFakeElement);
-    spyOn(window, "open").and.returnValue(browserWindowMock);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+    //spyOn(window, "open").and.returnValue(browserWindowMock);
 
     component.perform_action();
 
@@ -566,8 +588,8 @@ describe("1000: DatafilesActionComponent", () => {
       maxSizeType.higher,
       selectedFile,
     );
-    spyOn(document, "createElement").and.callFake(getFakeElement);
-    spyOn(window, "open").and.returnValue(browserWindowMock);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+    //spyOn(window, "open").and.returnValue(browserWindowMock);
 
     component.perform_action();
 
@@ -592,8 +614,8 @@ describe("1000: DatafilesActionComponent", () => {
       maxSizeType.higher,
       selectedFilesType.none,
     );
-    spyOn(document, "createElement").and.callFake(getFakeElement);
-    spyOn(window, "open").and.returnValue(browserWindowMock);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+    //spyOn(window, "open").and.returnValue(browserWindowMock);
 
     component.perform_action();
 
@@ -613,13 +635,13 @@ describe("1000: DatafilesActionComponent", () => {
       maxSizeType.higher,
       selectedFilesType.none,
     );
-    spyOn(document, "createElement").and.callFake(getFakeElement);
-    spyOn(window, "open").and.returnValue(browserWindowMock);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+    //spyOn(window, "open").and.returnValue(browserWindowMock);
 
     component.perform_action();
 
-    expect(component.form.action).toEqual(
-      actionsConfig[actionSelectorType.notebook_all].url,
+    expect(component.form.action.replace(/\/$/, "")).toEqual(
+      actionsConfig[actionSelectorType.notebook_all].url.replace(/\/$/, ""),
     );
   });
 
@@ -630,8 +652,8 @@ describe("1000: DatafilesActionComponent", () => {
       maxSizeType.higher,
       selectedFile,
     );
-    spyOn(document, "createElement").and.callFake(getFakeElement);
-    spyOn(window, "open").and.returnValue(browserWindowMock);
+    spyOn(document, "createElement").and.callFake(createFakeElement);
+    //spyOn(window, "open").and.returnValue(browserWindowMock);
 
     component.perform_action();
 
