@@ -7,7 +7,7 @@ import { LoopBackConfig } from "../sdk";
   providedIn: "root",
 })
 export class UserSettingsService {
-  private settingsUrl =
+  private defaultSettingsUrl =
     LoopBackConfig.getPath() +
     "/" +
     LoopBackConfig.getApiVersion() +
@@ -16,6 +16,6 @@ export class UserSettingsService {
   constructor(private http: HttpClient) {}
 
   getDefaultSettings(): Observable<any> {
-    return this.http.get<any>(this.settingsUrl);
+    return this.http.get<any>(this.defaultSettingsUrl);
   }
 }
