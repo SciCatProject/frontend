@@ -4,6 +4,7 @@ import {
   HttpTestingController,
 } from "@angular/common/http/testing";
 import { UserSettingsService } from "./user-settings.service";
+import { UserSetting } from "../sdk";
 
 describe("UnitsService", () => {
   let service: UserSettingsService;
@@ -36,7 +37,10 @@ describe("UnitsService", () => {
 
   describe("#getDefaultSettings()", () => {
     it("should return the unit symbol if present in dictionary", () => {
-      const mockSettings = { theme: "light", language: "en" };
+      const mockSettings = {
+        conditions: [],
+        filters: [{ type: "TextFilterComponent", visible: false }],
+      } as UserSetting;
 
       service.getDefaultSettings().subscribe((settings) => {
         expect(settings).toEqual(mockSettings);
