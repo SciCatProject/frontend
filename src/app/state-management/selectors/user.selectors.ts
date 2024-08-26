@@ -94,6 +94,16 @@ export const selectColumns = createSelector(
   (state) => state.columns,
 );
 
+export const selectFilters = createSelector(
+  selectUserState,
+  (state) => state.filters,
+);
+
+export const selectConditions = createSelector(
+  selectUserState,
+  (state) => state.conditions,
+);
+
 export const selectSampleDialogPageViewModel = createSelector(
   selectCurrentUser,
   selectProfile,

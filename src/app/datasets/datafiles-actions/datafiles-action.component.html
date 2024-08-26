@@ -1,0 +1,14 @@
+<ng-template [ngIf]="visible">
+  <button
+    mat-raised-button
+    class="action-button"
+    type="button"
+    (click)="perform_action()"
+    color="accent"
+    [disabled]="disabled"
+  >
+    <mat-icon *ngIf="use_mat_icon">{{ actionConfig.mat_icon }}</mat-icon>
+    <img *ngIf="use_icon" src="{{ actionConfig.icon }}" />
+    {{ actionConfig.label }}
+  </button>
+</ng-template>

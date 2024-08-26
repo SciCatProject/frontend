@@ -82,6 +82,13 @@ import { instrumentsReducer } from "state-management/reducers/instruments.reduce
 import { InstrumentEffects } from "state-management/effects/instruments.effects";
 import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.component";
 import { FullTextSearchBarComponent } from "./dashboard/full-text-search/full-text-search-bar.component";
+import { DatafilesActionsComponent } from "./datafiles-actions/datafiles-actions.component";
+import { DatafilesActionComponent } from "./datafiles-actions/datafiles-action.component";
+import { MatMenuModule } from "@angular/material/menu";
+import { DatasetsFilterSettingsComponent } from "./datasets-filter/settings/datasets-filter-settings.component";
+import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
+import { FiltersModule } from "shared/modules/filters/filters.module";
+import { userReducer } from "state-management/reducers/user.reducer";
 
 @NgModule({
   imports: [
@@ -136,8 +143,14 @@ import { FullTextSearchBarComponent } from "./dashboard/full-text-search/full-te
     StoreModule.forFeature("samples", samplesReducer),
     StoreModule.forFeature("publishedData", publishedDataReducer),
     StoreModule.forFeature("logbooks", logbooksReducer),
+    StoreModule.forFeature("users", userReducer),
     LogbooksModule,
     FullTextSearchBarComponent,
+    MatMenuModule,
+    CdkDropList,
+    CdkDrag,
+    CdkDragHandle,
+    FiltersModule,
   ],
   declarations: [
     BatchViewComponent,
@@ -161,6 +174,9 @@ import { FullTextSearchBarComponent } from "./dashboard/full-text-search/full-te
     DatasetFileUploaderComponent,
     AdminTabComponent,
     RelatedDatasetsComponent,
+    DatafilesActionsComponent,
+    DatafilesActionComponent,
+    DatasetsFilterSettingsComponent,
   ],
   providers: [
     ArchivingService,

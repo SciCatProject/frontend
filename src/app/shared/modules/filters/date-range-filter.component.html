@@ -1,0 +1,19 @@
+<mat-form-field>
+  <mat-label>{{ label }}</mat-label>
+  <mat-date-range-input class="date-input" [rangePicker]="picker">
+    <input
+      matStartDate
+      name="begin"
+      [value]="(creationTimeFilter$ | async)?.begin"
+      (dateChange)="dateChanged($event)"
+    />
+    <input
+      matEndDate
+      name="end"
+      [value]="(creationTimeFilter$ | async)?.end"
+      (dateChange)="dateChanged($event)"
+    />
+  </mat-date-range-input>
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-date-range-picker #picker></mat-date-range-picker>
+</mat-form-field>

@@ -6,7 +6,10 @@ import {
   fetchScicatTokenAction,
 } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
-import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
+import {
+  selectIsAdmin,
+  selectUserSettingsPageViewModel,
+} from "state-management/selectors/user.selectors";
 import { DOCUMENT } from "@angular/common";
 import packageJson from "../../../../package.json";
 import { AppConfigService } from "app-config.service";
@@ -18,10 +21,16 @@ import { AppConfigService } from "app-config.service";
 })
 export class UserSettingsComponent implements OnInit {
   vm$ = this.store.select(selectUserSettingsPageViewModel);
+  isAdmin$ = this.store.select(selectIsAdmin);
   appVersion: string | undefined = packageJson.version;
   appConfig = this.appConfigService.getConfig();
   tokenValue: string;
-  show = true;
+  showMore = true;
+  showConfig = {
+    //TODO backend settings to be implemented
+    frontend: true,
+    backend: true,
+  };
 
   constructor(
     public appConfigService: AppConfigService,
@@ -36,6 +45,7 @@ export class UserSettingsComponent implements OnInit {
       (settings) =>
         (this.tokenValue = settings.scicatToken.replace("Bearer ", "")),
     );
+
     this.store.dispatch(fetchCurrentUserAction());
     this.store.dispatch(fetchScicatTokenAction());
   }
@@ -59,5 +69,35 @@ export class UserSettingsComponent implements OnInit {
       5000,
     );
     this.store.dispatch(showMessageAction({ message }));
+  }
+  toggleShowConfig(event: MouseEvent | KeyboardEvent, config: string) {
+    const isMouseEvent = event instanceof MouseEvent;
+    const isKeyboardEvent =
+      event instanceof KeyboardEvent &&
+      (event.key === "Enter" || event.key === " ");
+
+    if (isMouseEvent || isKeyboardEvent) {
+      config === "frontend"
+        ? (this.showConfig.frontend = !this.showConfig.frontend)
+        : (this.showConfig.backend = !this.showConfig.backend);
+
+      if (isKeyboardEvent) {
+        event.preventDefault();
+      }
+    }
+  }
+
+  toggleShowMore(event: MouseEvent | KeyboardEvent) {
+    const isMouseEvent = event instanceof MouseEvent;
+    const isKeyboardEvent =
+      event instanceof KeyboardEvent &&
+      (event.key === "Enter" || event.key === " ");
+
+    if (isMouseEvent || isKeyboardEvent) {
+      this.showMore = !this.showMore;
+      if (isKeyboardEvent) {
+        event.preventDefault();
+      }
+    }
   }
 }

@@ -22,6 +22,7 @@ import { PrivacyDialogComponent } from "./privacy-dialog/privacy-dialog.componen
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { AuthCallbackComponent } from "./auth-callback/auth-callback.component";
 import { MatTabsModule } from "@angular/material/tabs";
+import { NgxJsonViewerModule } from "ngx-json-viewer";
 
 @NgModule({
   imports: [
@@ -39,6 +40,7 @@ import { MatTabsModule } from "@angular/material/tabs";
     MatInputModule,
     MatTabsModule,
     MatTooltipModule,
+    NgxJsonViewerModule,
     ReactiveFormsModule,
     SharedScicatFrontendModule,
     StoreModule.forFeature("users", userReducer),

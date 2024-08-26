@@ -1,0 +1,12 @@
+<ng-template [ngIf]="visible">
+  <div class="dataset-datafiles-actions">
+    <datafiles-action
+      *ngFor="let actionConfig of sortedActionsConfig"
+      [actionConfig]="actionConfig"
+      [actionDataset]="actionDataset"
+      [files]="files"
+      [maxFileSize]="maxFileSize"
+    >
+    </datafiles-action>
+  </div>
+</ng-template>

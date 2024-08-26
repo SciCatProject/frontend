@@ -222,6 +222,20 @@ const reducer = createReducer(
       isLoading: false,
     }),
   ),
+  on(
+    fromActions.updateFilterConfigs,
+    (state, { filterConfigs }): UserState => ({
+      ...state,
+      filters: filterConfigs,
+    }),
+  ),
+  on(
+    fromActions.updateConditionsConfigs,
+    (state, { conditionConfigs }): UserState => ({
+      ...state,
+      conditions: conditionConfigs,
+    }),
+  ),
 );
 
 export const userReducer = (state: UserState | undefined, action: Action) => {
