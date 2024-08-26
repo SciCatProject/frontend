@@ -8,6 +8,7 @@ import {
   SDKToken,
   User,
   UserIdentity,
+  UserSettingInterface,
 } from "shared/sdk";
 import { Router } from "@angular/router";
 import * as fromActions from "state-management/actions/user.actions";
@@ -44,6 +45,8 @@ import { clearPublishedDataStateAction } from "state-management/actions/publishe
 import { clearSamplesStateAction } from "state-management/actions/samples.actions";
 import { HttpErrorResponse } from "@angular/common/http";
 import { AppConfigService } from "app-config.service";
+import { loadDefaultSettings } from "state-management/actions/user.actions";
+import { UserSettingsService } from "../../shared/services/user-settings.service";
 
 @Injectable()
 export class UserEffects {
@@ -358,6 +361,25 @@ export class UserEffects {
     );
   });
 
+  loadDefaultSettings$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(loadDefaultSettings),
+      mergeMap(() =>
+        this.userSettingsService.getDefaultSettings().pipe(
+          mergeMap((settings: UserSettingInterface) => [
+            fromActions.updateConditionsConfigs({
+              conditionConfigs: settings.conditions,
+            }),
+            fromActions.updateFilterConfigs({
+              filterConfigs: settings.filters,
+            }),
+          ]),
+          catchError(() => of({ type: "[User] Load Default Settings Failed" })),
+        ),
+      ),
+    );
+  });
+
   constructor(
     private actions$: Actions,
     private activeDirAuthService: ADAuthService,
@@ -367,5 +389,6 @@ export class UserEffects {
     private store: Store,
     private userApi: UserApi,
     private userIdentityApi: UserIdentityApi,
+    private userSettingsService: UserSettingsService, // TODO should we use UserApi instead?
   ) {}
 }

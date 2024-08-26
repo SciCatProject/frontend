@@ -13,6 +13,7 @@ import { LoopBackConfig } from "shared/sdk";
 import {
   clearMessageAction,
   fetchCurrentUserAction,
+  loadDefaultSettings,
   logoutAction,
   setDatasetTableColumnsAction,
 } from "state-management/actions/user.actions";
@@ -70,6 +71,8 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
   ngOnInit() {
     LoopBackConfig.setBaseURL(this.config.lbBaseURL);
     console.log(LoopBackConfig.getPath());
+
+    this.store.dispatch(loadDefaultSettings());
 
     this.store.dispatch(
       setDatasetTableColumnsAction({ columns: this.config.localColumns }),

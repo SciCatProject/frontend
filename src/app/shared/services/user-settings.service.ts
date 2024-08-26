@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { LoopBackConfig } from "../sdk";
+import { LoopBackConfig, UserSettingInterface } from "../sdk";
 
 @Injectable({
   providedIn: "root",
@@ -15,7 +15,7 @@ export class UserSettingsService {
 
   constructor(private http: HttpClient) {}
 
-  getDefaultSettings(): Observable<any> {
-    return this.http.get<any>(this.defaultSettingsUrl);
+  getDefaultSettings(): Observable<UserSettingInterface> {
+    return this.http.get<UserSettingInterface>(this.defaultSettingsUrl);
   }
 }

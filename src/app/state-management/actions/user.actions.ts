@@ -174,3 +174,5 @@ export const updateConditionsConfigs = createAction(
   "[User] Update Conditions Configs",
   props<{ conditionConfigs: ConditionConfig[] }>(),
 );
+
+export const loadDefaultSettings = createAction("[User] Load Default Settings");
