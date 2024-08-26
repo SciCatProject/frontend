@@ -39,6 +39,7 @@ import { clearSamplesStateAction } from "state-management/actions/samples.action
 import { Type } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
 import { AppConfigService } from "app-config.service";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 class AppConfigServiceMock {
   getConfig() {
@@ -57,6 +58,7 @@ describe("UserEffects", () => {
   const error = new HttpErrorResponse({});
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule], // Import HttpClientTestingModule
       providers: [
         UserEffects,
         provideMockActions(() => actions),
