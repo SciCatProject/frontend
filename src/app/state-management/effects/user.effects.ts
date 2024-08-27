@@ -305,11 +305,27 @@ export class UserEffects {
       mergeMap(({ userSettings }) => [
         setDatasetsLimitFilterAction({ limit: userSettings.datasetCount }),
         setJobsLimitFilterAction({ limit: userSettings.jobCount }),
-        fromActions.updateConditionsConfigs({
-          conditionConfigs: userSettings.conditions,
-        }),
+      ]),
+    );
+  });
+
+  setFilters$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchUserSettingsCompleteAction),
+      mergeMap(({ userSettings }) => [
         fromActions.updateFilterConfigs({
           filterConfigs: userSettings.filters,
+        }),
+      ]),
+    );
+  });
+
+  setConditions$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchUserSettingsCompleteAction),
+      mergeMap(({ userSettings }) => [
+        fromActions.updateConditionsConfigs({
+          conditionConfigs: userSettings.conditions,
         }),
       ]),
     );
