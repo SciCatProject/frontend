@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
 
@@ -17,6 +17,7 @@ import {
   deselectAllCustomColumnsAction,
   updateConditionsConfigs,
   updateFilterConfigs,
+  updateUserSettingsAction,
 } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
 import { DatasetsFilterSettingsComponent } from "./settings/datasets-filter-settings.component";
@@ -78,7 +79,6 @@ export class DatasetsFilterComponent implements OnDestroy {
     public dialog: MatDialog,
     private store: Store,
     private asyncPipe: AsyncPipe,
-    private cdr: ChangeDetectorRef,
   ) {}
 
   reset() {
@@ -111,8 +111,18 @@ export class DatasetsFilterComponent implements OnDestroy {
           updateFilterConfigs({ filterConfigs: result.filterConfigs }),
         );
         this.store.dispatch(
+          updateUserSettingsAction({
+            property: { filters: result.filterConfigs },
+          }),
+        );
+        this.store.dispatch(
           updateConditionsConfigs({
             conditionConfigs: result.conditionConfigs,
+          }),
+        );
+        this.store.dispatch(
+          updateUserSettingsAction({
+            property: { conditions: result.conditionConfigs },
           }),
         );
 

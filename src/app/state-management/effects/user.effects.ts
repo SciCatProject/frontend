@@ -305,6 +305,12 @@ export class UserEffects {
       mergeMap(({ userSettings }) => [
         setDatasetsLimitFilterAction({ limit: userSettings.datasetCount }),
         setJobsLimitFilterAction({ limit: userSettings.jobCount }),
+        fromActions.updateConditionsConfigs({
+          conditionConfigs: userSettings.conditions,
+        }),
+        fromActions.updateFilterConfigs({
+          filterConfigs: userSettings.filters,
+        }),
       ]),
     );
   });
