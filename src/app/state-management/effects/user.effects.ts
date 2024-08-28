@@ -30,6 +30,7 @@ import {
   selectCurrentUser,
 } from "state-management/selectors/user.selectors";
 import {
+  addScientificConditionAction,
   clearDatasetsStateAction,
   setDatasetsLimitFilterAction,
 } from "state-management/actions/datasets.actions";
@@ -45,8 +46,12 @@ import { clearPublishedDataStateAction } from "state-management/actions/publishe
 import { clearSamplesStateAction } from "state-management/actions/samples.actions";
 import { HttpErrorResponse } from "@angular/common/http";
 import { AppConfigService } from "app-config.service";
-import { loadDefaultSettings } from "state-management/actions/user.actions";
+import {
+  loadDefaultSettings,
+  selectColumnAction,
+} from "state-management/actions/user.actions";
 import { UserSettingsService } from "../../shared/services/user-settings.service";
+import { ConditionConfig } from "../../shared/modules/filters/filters.module";
 
 @Injectable()
 export class UserEffects {
@@ -323,11 +328,31 @@ export class UserEffects {
   setConditions$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchUserSettingsCompleteAction),
-      mergeMap(({ userSettings }) => [
-        fromActions.updateConditionsConfigs({
-          conditionConfigs: userSettings.conditions,
-        }),
-      ]),
+      mergeMap(({ userSettings }) => {
+        const actions = [];
+
+        userSettings.conditions
+          .filter((condition) => condition.enabled)
+          .forEach((condition) => {
+            actions.push(
+              addScientificConditionAction({ condition: condition.condition }),
+            );
+            actions.push(
+              selectColumnAction({
+                name: condition.condition.lhs,
+                columnType: "custom",
+              }),
+            );
+          });
+
+        actions.push(
+          fromActions.updateConditionsConfigs({
+            conditionConfigs: userSettings.conditions,
+          }),
+        );
+
+        return actions;
+      }),
     );
   });
 
