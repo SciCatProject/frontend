@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { ActionConfig, ActionDataset } from "./datafiles-action.interfaces";
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import { AppConfigService } from "app-config.service";

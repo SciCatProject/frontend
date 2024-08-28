@@ -5,6 +5,7 @@ export interface ActionConfig {
   files: string;
   mat_icon?: string;
   icon?: string;
+  type?: string;
   url: string;
   target: string;
   authorization: string[];
