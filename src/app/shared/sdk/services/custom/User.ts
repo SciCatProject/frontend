@@ -11,7 +11,7 @@ import { Observable, Subject } from "rxjs";
 import { map } from "rxjs/operators";
 import { User } from "../../models/User";
 import { SocketConnection } from "../../sockets/socket.connections";
-import { UserSetting } from "../../models/UserSetting";
+import { UserSetting, UserSettingInterface } from "../../models/UserSetting";
 import { UserIdentity } from "../../models/UserIdentity";
 import { UserCredential } from "../../models/UserCredential";
 import { AppConfigService } from "app-config.service";
@@ -1904,5 +1904,15 @@ export class UserApi extends BaseLoopBackApi {
    */
   public getModelName() {
     return "User";
+  }
+
+  private defaultSettingsUrl =
+    LoopBackConfig.getPath() +
+    "/" +
+    LoopBackConfig.getApiVersion() +
+    "/Users/settings/default";
+
+  getDefaultSettings(): Observable<UserSettingInterface> {
+    return this.http.get<UserSettingInterface>(this.defaultSettingsUrl);
   }
 }

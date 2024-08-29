@@ -50,7 +50,6 @@ import {
   loadDefaultSettings,
   selectColumnAction,
 } from "state-management/actions/user.actions";
-import { UserSettingsService } from "../../shared/services/user-settings.service";
 import { ConditionConfig } from "../../shared/modules/filters/filters.module";
 
 @Injectable()
@@ -412,7 +411,7 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(loadDefaultSettings),
       mergeMap(() =>
-        this.userSettingsService.getDefaultSettings().pipe(
+        this.userApi.getDefaultSettings().pipe(
           mergeMap((settings: UserSettingInterface) => [
             fromActions.updateConditionsConfigs({
               conditionConfigs: settings.conditions,
@@ -436,6 +435,5 @@ export class UserEffects {
     private store: Store,
     private userApi: UserApi,
     private userIdentityApi: UserIdentityApi,
-    private userSettingsService: UserSettingsService, // TODO should we use UserApi instead?
   ) {}
 }
