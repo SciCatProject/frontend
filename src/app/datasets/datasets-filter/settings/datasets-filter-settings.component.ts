@@ -23,7 +23,6 @@ import {
   FilterConfig,
 } from "../../../shared/modules/filters/filters.module";
 import { getFilterLabel } from "../../../shared/modules/filters/utils";
-import { ScientificCondition } from "../../../state-management/models";
 
 @Component({
   selector: "app-type-datasets-filter-settings",

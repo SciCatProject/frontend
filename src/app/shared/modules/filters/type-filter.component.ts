@@ -1,11 +1,6 @@
 import { Component } from "@angular/core";
 import { ClearableInputComponent } from "./clearable-input.component";
-import {
-  createSuggestionObserver,
-  getFacetCount,
-  getFacetId,
-  getFilterLabel,
-} from "./utils";
+import { createSuggestionObserver, getFacetCount, getFacetId } from "./utils";
 import {
   selectTypeFacetCounts,
   selectTypeFilter,
@@ -42,7 +37,7 @@ export class TypeFilterComponent extends ClearableInputComponent {
   }
 
   get label() {
-    return getFilterLabel(this.constructor.name);
+    return "Type filter";
   }
 
   onTypeInput(event: any) {
