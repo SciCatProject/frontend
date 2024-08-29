@@ -1,11 +1,6 @@
 import { Component, OnDestroy } from "@angular/core";
 import { ClearableInputComponent } from "./clearable-input.component";
-import {
-  createSuggestionObserver,
-  getFacetCount,
-  getFacetId,
-  getFilterLabel,
-} from "./utils";
+import { createSuggestionObserver, getFacetCount, getFacetId } from "./utils";
 import {
   selectKeywordFacetCounts,
   selectKeywordsFilter,
@@ -61,7 +56,7 @@ export class KeywordFilterComponent
   }
 
   get label() {
-    return getFilterLabel(this.constructor.name);
+    return "Keyword";
   }
 
   onKeywordInput(event: any) {

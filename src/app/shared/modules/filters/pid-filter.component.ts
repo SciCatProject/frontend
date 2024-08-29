@@ -5,10 +5,9 @@ import {
   setPidTermsAction,
   setPidTermsFilterAction,
 } from "state-management/actions/datasets.actions";
-import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
+import { debounceTime } from "rxjs/operators";
 import { AppConfigService } from "app-config.service";
 import { ClearableInputComponent } from "./clearable-input.component";
-import { getFilterLabel } from "./utils";
 
 @Component({
   selector: "app-pid-filter",
@@ -38,7 +37,7 @@ export class PidFilterComponent
   }
 
   get label() {
-    return getFilterLabel((this.constructor as typeof PidFilterComponent).name);
+    return "PID filter (Equals)";
   }
 
   buildPidTermsCondition(terms: string): string | { $regex: string } {
