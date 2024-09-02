@@ -38,6 +38,7 @@ export class IngestorComponent implements OnInit {
     );
     this.gettingStarted = this.appConfig.gettingStarted;
     this.connectingToFacilityBackend = true;
+    this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
     // Get the GET parameter 'backendUrl' from the URL
     this.route.queryParams.subscribe(params => {
       const backendUrl = params['backendUrl'];
@@ -45,16 +46,12 @@ export class IngestorComponent implements OnInit {
         this.connectToFacilityBackend(backendUrl);
       }
       else {
-        this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackendsFromLocalStorage();
         this.connectingToFacilityBackend = false;
       }
     });
   }
 
   connectToFacilityBackend(facilityBackendUrl: string): boolean {
-    // Store the connected facility backend URL in the local storage
-    this.storeLastUsedFacilityBackendInLocalStorage(facilityBackendUrl);
-
     let facilityBackendUrlCleaned = facilityBackendUrl.slice();
     // Check if last symbol is a slash and add version endpoint
     if (facilityBackendUrlCleaned.slice(-1) !== '/') {
@@ -76,7 +73,7 @@ export class IngestorComponent implements OnInit {
         console.error('Failed to connect to facility backend', error);
         this.connectedFacilityBackend = '';
         this.connectingToFacilityBackend = false;
-        this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackendsFromLocalStorage();
+        this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
       }
     );
 
@@ -124,25 +121,9 @@ export class IngestorComponent implements OnInit {
     this.forwardFacilityBackend = facilityBackend;
   }
 
-  storeLastUsedFacilityBackendInLocalStorage(item: string) {
-    // Add the item to a list and store the list in the local Storage
-    let lastUsedFacilityBackends = this.loadLastUsedFacilityBackendsFromLocalStorage();
-    if (!lastUsedFacilityBackends) {
-      lastUsedFacilityBackends = [];
-    }
-
-    // Check if the item is already in the list, if yes ignore it
-    if (lastUsedFacilityBackends.includes(item)) {
-      return;
-    }
-
-    lastUsedFacilityBackends.push(item);
-    localStorage.setItem('lastUsedFacilityBackends', JSON.stringify(lastUsedFacilityBackends));
-  }
-
-  loadLastUsedFacilityBackendsFromLocalStorage(): string[] {
+  loadLastUsedFacilityBackends(): string[] {
     // Load the list from the local Storage
-    const lastUsedFacilityBackends = localStorage.getItem('lastUsedFacilityBackends');
+    const lastUsedFacilityBackends = '["http://localhost:8000"]';
     if (lastUsedFacilityBackends) {
       return JSON.parse(lastUsedFacilityBackends);
     }
