@@ -3,12 +3,7 @@ import {
   selectLocationFacetCounts,
   selectLocationFilter,
 } from "state-management/selectors/datasets.selectors";
-import {
-  createSuggestionObserver,
-  getFacetCount,
-  getFacetId,
-  getFilterLabel,
-} from "./utils";
+import { createSuggestionObserver, getFacetCount, getFacetId } from "./utils";
 import { BehaviorSubject } from "rxjs";
 import {
   addLocationFilterAction,
@@ -42,7 +37,7 @@ export class LocationFilterComponent extends ClearableInputComponent {
   }
 
   get label() {
-    return getFilterLabel(this.constructor.name);
+    return "Location";
   }
 
   locationSelected(location: string | null) {

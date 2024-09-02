@@ -4,7 +4,6 @@ import { Store } from "@ngrx/store";
 import { setTextFilterAction } from "state-management/actions/datasets.actions";
 import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
 import { Subject, Subscription } from "rxjs";
-import { getFilterLabel } from "./utils";
 
 @Component({
   selector: "app-text-filter",
@@ -33,7 +32,7 @@ export class TextFilterComponent
   }
 
   get label() {
-    return getFilterLabel(this.constructor.name);
+    return "Text filter";
   }
 
   textSearchChanged(event: any) {
