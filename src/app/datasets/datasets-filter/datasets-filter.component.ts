@@ -1,4 +1,11 @@
-import { Component, OnDestroy } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  Type,
+  ViewContainerRef,
+} from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
 
@@ -12,11 +19,8 @@ import {
   fetchDatasetsAction,
   fetchFacetCountsAction,
 } from "state-management/actions/datasets.actions";
-import { Subscription } from "rxjs";
 import {
   deselectAllCustomColumnsAction,
-  updateConditionsConfigs,
-  updateFilterConfigs,
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
@@ -36,18 +40,21 @@ import { TypeFilterComponent } from "../../shared/modules/filters/type-filter.co
 import { KeywordFilterComponent } from "../../shared/modules/filters/keyword-filter.component";
 import { DateRangeFilterComponent } from "../../shared/modules/filters/date-range-filter.component";
 import { TextFilterComponent } from "../../shared/modules/filters/text-filter.component";
+import { Filter, FilterConfig } from "shared/modules/filters/filters.module";
+import { FilterComponentInterface } from "shared/modules/filters/interface/filter-component.interface";
+import { Subscription } from "rxjs";
 
-const COMPONENT_MAP: { [key: string]: any } = {
-  PidFilterComponent: PidFilterComponent,
-  PidFilterContainsComponent: PidFilterContainsComponent,
-  PidFilterStartsWithComponent: PidFilterStartsWithComponent,
-  LocationFilterComponent: LocationFilterComponent,
-  GroupFilterComponent: GroupFilterComponent,
-  TypeFilterComponent: TypeFilterComponent,
-  KeywordFilterComponent: KeywordFilterComponent,
-  DateRangeFilterComponent: DateRangeFilterComponent,
-  TextFilterComponent: TextFilterComponent,
-  ConditionFilterComponent: ConditionFilterComponent,
+const COMPONENT_MAP: { [K in Filter]: Type<any> } = {
+  PidFilter: PidFilterComponent,
+  PidFilterContains: PidFilterContainsComponent,
+  PidFilterStartsWith: PidFilterStartsWithComponent,
+  LocationFilter: LocationFilterComponent,
+  GroupFilter: GroupFilterComponent,
+  TypeFilter: TypeFilterComponent,
+  KeywordFilter: KeywordFilterComponent,
+  DateRangeFilter: DateRangeFilterComponent,
+  TextFilter: TextFilterComponent,
+  ConditionFilter: ConditionFilterComponent,
 };
 
 @Component({
@@ -55,9 +62,8 @@ const COMPONENT_MAP: { [key: string]: any } = {
   templateUrl: "datasets-filter.component.html",
   styleUrls: ["datasets-filter.component.scss"],
 })
-export class DatasetsFilterComponent implements OnDestroy {
+export class DatasetsFilterComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
-
   protected readonly ConditionFilterComponent = ConditionFilterComponent;
 
   filterConfigs$ = this.store.select(selectFilters);
@@ -74,12 +80,34 @@ export class DatasetsFilterComponent implements OnDestroy {
 
   isInEditMode = false;
 
+  labelMaps: { [key: string]: string } = {};
+
   constructor(
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
     private store: Store,
     private asyncPipe: AsyncPipe,
+    private viewContainerRef: ViewContainerRef,
+    private cdr: ChangeDetectorRef,
   ) {}
+
+  ngOnInit() {
+    this.getAllComponentLabels();
+  }
+
+  getAllComponentLabels() {
+    Object.entries(COMPONENT_MAP).forEach(([key, component]) => {
+      const componentRef = this.viewContainerRef.createComponent(component);
+
+      const instance = componentRef.instance as FilterComponentInterface;
+
+      const label = instance.label;
+
+      this.labelMaps[key] = label;
+
+      componentRef.destroy();
+    });
+  }
 
   reset() {
     this.clearSearchBar = true;
@@ -95,38 +123,25 @@ export class DatasetsFilterComponent implements OnDestroy {
 
   showDatasetsFilterSettingsDialog() {
     const dialogRef = this.dialog.open(DatasetsFilterSettingsComponent, {
-      width: "60%",
+      width: "60vw",
       data: {
         filterConfigs: this.asyncPipe.transform(this.filterConfigs$),
         conditionConfigs: this.asyncPipe.transform(this.conditionConfigs$),
+        labelMaps: this.labelMaps,
       },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log("The dialog was closed");
+      this.cdr.detectChanges();
       if (result) {
-        // Handle the selected filter
-        console.log(`Selected filter: ${result}`);
-        this.store.dispatch(
-          updateFilterConfigs({ filterConfigs: result.filterConfigs }),
-        );
         this.store.dispatch(
           updateUserSettingsAction({
-            property: { filters: result.filterConfigs },
+            property: {
+              conditions: result.conditionConfigs,
+              filters: result.filterConfigs,
+            },
           }),
         );
-        this.store.dispatch(
-          updateConditionsConfigs({
-            conditionConfigs: result.conditionConfigs,
-          }),
-        );
-        this.store.dispatch(
-          updateUserSettingsAction({
-            property: { conditions: result.conditionConfigs },
-          }),
-        );
-
-        // this.cdr.detectChanges();
       }
     });
   }
@@ -137,11 +152,17 @@ export class DatasetsFilterComponent implements OnDestroy {
     this.store.dispatch(fetchFacetCountsAction());
   }
 
+  renderComponent(filterObj: FilterConfig): any {
+    const key = Object.keys(filterObj)[0];
+    const isEnabled = filterObj[key];
+
+    if (!isEnabled || !COMPONENT_MAP[key]) {
+      return null;
+    }
+
+    return COMPONENT_MAP[key];
+  }
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
-  }
-
-  resolveComponentType(typeAsString: string): any {
-    return COMPONENT_MAP[typeAsString];
   }
 }

@@ -31,18 +31,14 @@ export function getFacetCount(facetCount: FacetCount): number {
   return facetCount.count;
 }
 
-const labelMap: Map<string, string> = new Map([
-  ["DateRangeFilterComponent", "Start Date - End Date"],
-  ["GroupFilterComponent", "Group"],
-  ["KeywordFilterComponent", "Keyword"],
-  ["LocationFilterComponent", "Location"],
-  ["PidFilterStartsWithComponent", "PID filter (Starts With)"],
-  ["PidFilterComponent", "PID filter (Equals)"],
-  ["PidFilterContainsComponent", "PID filter (Contains)"],
-  ["TextFilterComponent", "Text filter"],
-  ["TypeFilterComponent", "Type filter"],
-]);
+export function getFilterLabel(
+  filters: Record<string, string> | undefined,
+  componentName: string,
+  defaultLabel: string,
+): string {
+  if (!filters || !componentName || !filters[componentName]) {
+    return defaultLabel;
+  }
 
-export function getFilterLabel(type: string): string {
-  return labelMap.get(type) || "Default Label";
+  return filters[componentName];
 }

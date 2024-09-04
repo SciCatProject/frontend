@@ -1,7 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { timeout } from "rxjs/operators";
-import { TableColumn } from "state-management/models";
+import {
+  DatasetsListSettings,
+  LabelMaps,
+  TableColumn,
+} from "state-management/models";
 
 export interface OAuth2Endpoint {
   authURL: string;
@@ -91,6 +95,8 @@ export interface AppConfig {
   notificationInterceptorEnabled: boolean;
   pidSearchMethod?: string;
   metadataEditingUnitListDisabled?: boolean;
+  defaultDatasetsListSettings: DatasetsListSettings;
+  labelMaps: LabelMaps;
 }
 
 @Injectable()

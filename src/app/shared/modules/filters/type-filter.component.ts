@@ -1,6 +1,11 @@
 import { Component } from "@angular/core";
 import { ClearableInputComponent } from "./clearable-input.component";
-import { createSuggestionObserver, getFacetCount, getFacetId } from "./utils";
+import {
+  createSuggestionObserver,
+  getFacetCount,
+  getFacetId,
+  getFilterLabel,
+} from "./utils";
 import {
   selectTypeFacetCounts,
   selectTypeFilter,
@@ -11,15 +16,24 @@ import {
   addTypeFilterAction,
   removeTypeFilterAction,
 } from "state-management/actions/datasets.actions";
+import { AppConfigService } from "app-config.service";
+import { FilterComponentInterface } from "./interface/filter-component.interface";
 
 @Component({
   selector: "app-type-filter",
   templateUrl: "type-filter.component.html",
   styleUrls: ["type-filter.component.scss"],
 })
-export class TypeFilterComponent extends ClearableInputComponent {
+export class TypeFilterComponent
+  extends ClearableInputComponent
+  implements FilterComponentInterface
+{
   protected readonly getFacetCount = getFacetCount;
   protected readonly getFacetId = getFacetId;
+  readonly componentName: string = "TypeFilter";
+  readonly label: string = "Type Filter";
+
+  appConfig = this.appConfigService.getConfig();
 
   typeFacetCounts$ = this.store.select(selectTypeFacetCounts);
 
@@ -32,12 +46,14 @@ export class TypeFilterComponent extends ClearableInputComponent {
     this.typeFilter$,
   );
 
-  constructor(private store: Store) {
+  constructor(
+    private store: Store,
+    public appConfigService: AppConfigService,
+  ) {
     super();
-  }
 
-  get label() {
-    return "Type filter";
+    const filters = this.appConfig.labelMaps?.filters;
+    this.label = getFilterLabel(filters, this.componentName, this.label);
   }
 
   onTypeInput(event: any) {

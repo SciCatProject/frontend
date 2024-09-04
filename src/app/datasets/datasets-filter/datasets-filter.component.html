@@ -6,16 +6,22 @@
   <mat-card-content>
     <ng-container *ngIf="filterConfigs$ | async as filterConfigs">
       <ng-container *ngFor="let filterConfig of filterConfigs">
-        <ng-container  *ngIf="filterConfig.visible">
-          <ng-container *ngComponentOutlet="resolveComponentType(filterConfig.type); inputs: { 'clear': clearSearchBar}"></ng-container>
+        <ng-container *ngIf="filterConfig">
+          <ng-container
+            *ngComponentOutlet="
+              renderComponent(filterConfig);
+              inputs: { clear: clearSearchBar }
+            "
+          ></ng-container>
         </ng-container>
       </ng-container>
     </ng-container>
 
-
     <div class="section-container" *ngIf="appConfig.scienceSearchEnabled">
       <ng-container *ngFor="let condition of scientificConditions$ | async">
-        <ng-container *ngComponentOutlet="ConditionFilterComponent; inputs: { condition }"></ng-container>
+        <ng-container
+          *ngComponentOutlet="ConditionFilterComponent; inputs: { condition }"
+        ></ng-container>
       </ng-container>
     </div>
 
@@ -29,7 +35,7 @@
       </button>
     </div>
 
-      <div class="section-container">
+    <div class="section-container">
       <button
         mat-raised-button
         color="primary"
@@ -46,9 +52,9 @@
         class="datasets-filters-clear-all-button"
         (click)="reset()"
       >
-      <mat-icon>undo</mat-icon>
-      Reset Filters
-    </button>
+        <mat-icon>undo</mat-icon>
+        Reset Filters
+      </button>
     </div>
   </mat-card-content>
 </mat-card>

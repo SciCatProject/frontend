@@ -8,7 +8,6 @@ import {
   SDKToken,
   User,
   UserIdentity,
-  UserSettingInterface,
 } from "shared/sdk";
 import { Router } from "@angular/router";
 import * as fromActions from "state-management/actions/user.actions";
@@ -21,6 +20,7 @@ import {
   distinctUntilChanged,
   mergeMap,
   takeWhile,
+  concatMap,
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
@@ -46,11 +46,8 @@ import { clearPublishedDataStateAction } from "state-management/actions/publishe
 import { clearSamplesStateAction } from "state-management/actions/samples.actions";
 import { HttpErrorResponse } from "@angular/common/http";
 import { AppConfigService } from "app-config.service";
-import {
-  loadDefaultSettings,
-  selectColumnAction,
-} from "state-management/actions/user.actions";
-import { ConditionConfig } from "../../shared/modules/filters/filters.module";
+import { selectColumnAction } from "state-management/actions/user.actions";
+import { initialUserState } from "state-management/state/user.store";
 
 @Injectable()
 export class UserEffects {
@@ -112,6 +109,7 @@ export class UserEffects {
       }),
     );
   });
+
   fetchUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchUserAction),
@@ -294,9 +292,22 @@ export class UserEffects {
       ofType(fromActions.fetchUserSettingsAction),
       switchMap(({ id }) =>
         this.userApi.getSettings(id, null).pipe(
-          map((userSettings) =>
-            fromActions.fetchUserSettingsCompleteAction({ userSettings }),
-          ),
+          map((userSettings) => {
+            const config = this.configService.getConfig();
+            if (userSettings.filters.length < 1) {
+              userSettings.filters =
+                config.defaultDatasetsListSettings.filters ||
+                initialUserState.filters;
+            }
+            if (userSettings.columns.length < 1) {
+              userSettings.columns =
+                config.defaultDatasetsListSettings.columns ||
+                initialUserState.columns;
+            }
+            return fromActions.fetchUserSettingsCompleteAction({
+              userSettings,
+            });
+          }),
           catchError(() => of(fromActions.fetchUserSettingsFailedAction())),
         ),
       ),
@@ -409,20 +420,35 @@ export class UserEffects {
 
   loadDefaultSettings$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(loadDefaultSettings),
-      mergeMap(() =>
-        this.userApi.getDefaultSettings().pipe(
-          mergeMap((settings: UserSettingInterface) => [
-            fromActions.updateConditionsConfigs({
-              conditionConfigs: settings.conditions,
-            }),
-            fromActions.updateFilterConfigs({
-              filterConfigs: settings.filters,
-            }),
-          ]),
-          catchError(() => of({ type: "[User] Load Default Settings Failed" })),
-        ),
-      ),
+      ofType(fromActions.loadDefaultSettings),
+      map(() => {
+        const config = this.configService.getConfig();
+        const defaultFilters =
+          config.defaultDatasetsListSettings.filters ||
+          initialUserState.filters;
+        const defaultConditions =
+          config.defaultDatasetsListSettings.conditions ||
+          initialUserState.conditions;
+
+        // NOTE: config.localColumns is for backward compatibility.
+        //       it should be removed once no longer needed
+        const columns =
+          config.defaultDatasetsListSettings.columns ||
+          config.localColumns ||
+          initialUserState.columns;
+
+        return [
+          fromActions.updateConditionsConfigs({
+            conditionConfigs: defaultConditions,
+          }),
+          fromActions.updateFilterConfigs({ filterConfigs: defaultFilters }),
+
+          fromActions.setDatasetTableColumnsAction({
+            columns: columns,
+          }),
+        ];
+      }),
+      concatMap((actions) => actions),
     );
   });
 

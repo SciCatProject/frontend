@@ -30,6 +30,10 @@ export {
 };
 
 import { DatasetInterface } from "shared/sdk";
+import {
+  ConditionConfig,
+  FilterConfig,
+} from "shared/modules/filters/filters.module";
 export { DatasetInterface };
 
 export interface Settings {
@@ -44,6 +48,16 @@ export interface TableColumn {
   order: number;
   type: "standard" | "custom";
   enabled: boolean;
+}
+
+export interface LabelMaps {
+  [key: string]: Record<string, string>;
+}
+
+export interface DatasetsListSettings {
+  columns: TableColumn[];
+  filters: FilterConfig[];
+  conditions: ConditionConfig[];
 }
 
 export enum MessageType {
