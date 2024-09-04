@@ -131,7 +131,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.cdr.detectChanges();
       if (result) {
         this.store.dispatch(
           updateUserSettingsAction({
