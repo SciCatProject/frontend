@@ -88,7 +88,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private store: Store,
     private asyncPipe: AsyncPipe,
     private viewContainerRef: ViewContainerRef,
-    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
