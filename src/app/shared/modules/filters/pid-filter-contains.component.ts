@@ -7,7 +7,7 @@ import { Component } from "@angular/core";
   styleUrls: ["./pid-filter-contains.component.scss"],
 })
 export class PidFilterContainsComponent extends PidFilterComponent {
-  readonly componentName: string = "PidFilter";
+  readonly componentName: string = "PidFilterContains";
   readonly label: string = "PID filter (Contains)- Not implemented";
 
   buildPidTermsCondition(terms: string): { $regex: string } {
