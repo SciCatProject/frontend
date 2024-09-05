@@ -1,6 +1,11 @@
 import { Component } from "@angular/core";
 import { ClearableInputComponent } from "./clearable-input.component";
-import { createSuggestionObserver, getFacetCount, getFacetId, getFilterLabel } from "./utils";
+import {
+  createSuggestionObserver,
+  getFacetCount,
+  getFacetId,
+  getFilterLabel,
+} from "./utils";
 import {
   selectTypeFacetCounts,
   selectTypeFilter,
@@ -49,7 +54,7 @@ export class TypeFilterComponent
 
     const filters = this.appConfig.labelMaps?.filters;
     this.label = getFilterLabel(filters, this.componentName, this.label);
-
+  }
   onTypeInput(event: any) {
     const value = (<HTMLInputElement>event.target).value;
     this.typeInput$.next(value);
