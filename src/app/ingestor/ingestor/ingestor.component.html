@@ -49,11 +49,6 @@
       </div>
       <app-metadata-editor></app-metadata-editor>
       <div>
-        <mat-form-field>
-          <input matInput placeholder="File Path" [(ngModel)]="filePath">
-        </mat-form-field>
-      </div>
-      <div>
         <button mat-raised-button color="primary" (click)="upload()"
           [disabled]="loading">
           <span *ngIf="!loading">Upload</span>
