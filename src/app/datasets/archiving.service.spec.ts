@@ -90,7 +90,7 @@ describe("ArchivingService", () => {
       const job = new Job({
         jobParams: { datasetIds: datasetList },
         createdBy: user.username,
-        DateTime: new Date(),
+        createdAt: new Date(),
         type: "archive",
       });
       const createJobSpy = spyOn<any, string>(

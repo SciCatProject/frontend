@@ -269,7 +269,7 @@ export class DatafilesComponent
         this.getSelectedFiles();
         const data = {
           createdBy: email,
-          DateTime: new Date(),
+          createdAt: new Date(),
           type: "public",
           jobParams: {
             datasetIds: [

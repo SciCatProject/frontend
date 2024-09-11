@@ -4,19 +4,21 @@ declare var Object: any;
 export interface JobInterface {
   id?: string;
   ownerUser?: string;
-  type: string;
+  type?: string;
   statusCode?: string;
   statusMessage?: string;
-  jobParams: any;
+  jobParams?: any;
   datasetsValidation?: boolean;
   contactEmail?: string;
   configVersion?: string;
   jobResultObject?: any;
-  createdBy: string;
+  createdBy?: string;
   updatedBy?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
   ownerGroup?: string;
   accessGroups?: any;
-  DateTime?: Date;
+  isPublished?: boolean;
 }
 
 export class Job implements JobInterface {
@@ -32,9 +34,11 @@ export class Job implements JobInterface {
   "jobResultObject": any;
   "createdBy": string;
   "updatedBy": string;
+  "createdAt": Date;
+  "updatedAt": Date;
   "ownerGroup": string;
   "accessGroups": any;
-  "DateTime": Date;
+  "isPublished": boolean;
 
   constructor(data?: JobInterface) {
     Object.assign(this, data);
@@ -118,6 +122,14 @@ export class Job implements JobInterface {
           name: "updatedBy",
           type: "string",
         },
+        createdAt: {
+          name: "createdAt",
+          type: "Date",
+        },
+        updatedAt: {
+          name: "updatedAt",
+          type: "Date",
+        },
         ownerGroup: {
           name: "ownerGroup",
           type: "string",
@@ -126,9 +138,9 @@ export class Job implements JobInterface {
           name: "accessGroups",
           type: "any",
         },
-        DateTime: {
-          name: "DateTime",
-          type: "Date",
+        isPublished: {
+          name: "isPublished",
+          type: "boolean",
         },
       },
       relations: {},

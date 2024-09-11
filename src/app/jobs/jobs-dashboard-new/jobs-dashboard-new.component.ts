@@ -47,7 +47,7 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
       hideOrder: 2,
     },
     {
-      id: "DateTime",
+      id: "createdAt",
       icon: "schedule",
       label: "Created at local time",
       format: "date medium ",

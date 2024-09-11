@@ -46,7 +46,7 @@ export class AdminTabComponent implements OnInit, OnDestroy {
           if (user && this.dataset) {
             const job = new Job();
             job.createdBy = user.username;
-            job.DateTime = new Date();
+            job.createdAt = new Date();
             job.type = "reset";
             job.jobParams = {};
             job.jobParams["datasetIds"] = [this.dataset["pid"]];
