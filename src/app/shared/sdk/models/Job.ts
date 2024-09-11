@@ -3,34 +3,39 @@
 declare var Object: any;
 export interface JobInterface {
   id?: string;
-  emailJobInitiator: string;
+  ownerUser?: string;
   type: string;
-  creationTime?: Date;
-  executionTime?: Date;
-  jobParams?: any;
-  jobStatusMessage?: string;
-  datasetList?: any;
+  statusCode?: string;
+  statusMessage?: string;
+  jobParams: any;
+  datasetsValidation?: boolean;
+  contactEmail?: string;
+  configVersion?: string;
   jobResultObject?: any;
-  createdBy?: string;
+  createdBy: string;
   updatedBy?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  ownerGroup?: string;
+  accessGroups?: any;
+  DateTime?: Date;
 }
 
 export class Job implements JobInterface {
   "id": string;
-  "emailJobInitiator": string;
+  "ownerUser": string;
   "type": string;
-  "creationTime": Date;
-  "executionTime": Date;
+  "statusCode": string;
+  "statusMessage": string;
   "jobParams": any;
-  "jobStatusMessage": string;
-  "datasetList": any;
+  "datasetsValidation": boolean;
+  "contactEmail": string;
+  "configVersion": string;
   "jobResultObject": any;
   "createdBy": string;
   "updatedBy": string;
-  "createdAt": Date;
-  "updatedAt": Date;
+  "ownerGroup": string;
+  "accessGroups": any;
+  "DateTime": Date;
+
   constructor(data?: JobInterface) {
     Object.assign(this, data);
   }
@@ -68,8 +73,8 @@ export class Job implements JobInterface {
           name: "id",
           type: "string",
         },
-        emailJobInitiator: {
-          name: "emailJobInitiator",
+        ownerUser: {
+          name: "ownerUser",
           type: "string",
         },
         type: {
@@ -77,25 +82,29 @@ export class Job implements JobInterface {
           type: "string",
           default: "retrieve",
         },
-        creationTime: {
-          name: "creationTime",
-          type: "Date",
+        statusCode: {
+          name: "statusCode",
+          type: "string",
         },
-        executionTime: {
-          name: "executionTime",
-          type: "Date",
+        statusMessage: {
+          name: "statusMessage",
+          type: "string",
         },
         jobParams: {
           name: "jobParams",
           type: "any",
         },
-        jobStatusMessage: {
-          name: "jobStatusMessage",
+        datasetsValidation: {
+          name: "datasetsValidation",
+          type: "boolean",
+        },
+        contactEmail: {
+          name: "contactEmail",
           type: "string",
         },
-        datasetList: {
-          name: "datasetList",
-          type: "any",
+        configVersion: {
+          name: "configVersion",
+          type: "string",
         },
         jobResultObject: {
           name: "jobResultObject",
@@ -109,12 +118,16 @@ export class Job implements JobInterface {
           name: "updatedBy",
           type: "string",
         },
-        createdAt: {
-          name: "createdAt",
-          type: "Date",
+        ownerGroup: {
+          name: "ownerGroup",
+          type: "string",
         },
-        updatedAt: {
-          name: "updatedAt",
+        accessGroups: {
+          name: "accessGroups",
+          type: "any",
+        },
+        DateTime: {
+          name: "DateTime",
           type: "Date",
         },
       },

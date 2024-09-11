@@ -48,7 +48,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
 
   jobs: JobsTableData[] = [];
   profile: any;
-  email = "";
+  username = "";
 
   subscriptions: Subscription[] = [];
 
@@ -96,13 +96,13 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     if (jobs) {
       tableData = jobs.map((job) => ({
         id: job.id,
-        initiator: job.emailJobInitiator,
+        initiator: job.createdBy,
         type: job.type,
         createdAt: this.datePipe.transform(
-          job.creationTime,
+          job.DateTime,
           "yyyy-MM-dd HH:mm",
         ),
-        statusMessage: job.jobStatusMessage,
+        statusMessage: job.statusMessage,
       }));
     }
     return tableData;
@@ -129,7 +129,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
         break;
       }
       case JobViewMode.myJobs: {
-        viewMode = { emailJobInitiator: this.email };
+        viewMode = { createdBy: this.username };
         break;
       }
       default: {
@@ -154,11 +154,11 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     // map column names back to original names
     switch (event.active) {
       case "statusMessage": {
-        event.active = "jobStatusMessage";
+        event.active = "statusMessage";
         break;
       }
       case "initiator": {
-        event.active = "emailJobInitiator";
+        event.active = "createdBy";
         break;
       }
       default: {
@@ -181,13 +181,13 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.store.select(selectCurrentUser).subscribe((current) => {
         if (current) {
-          this.email = current.email;
+          this.username = current.username;
 
           if (!current.realm) {
             this.store.select(selectProfile).subscribe((profile) => {
               if (profile) {
                 this.profile = profile;
-                this.email = profile.email;
+                this.username = profile.username;
               }
               this.onModeChange(JobViewMode.myJobs);
             });

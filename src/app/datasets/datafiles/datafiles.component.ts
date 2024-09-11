@@ -268,15 +268,14 @@ export class DatafilesComponent
       if (email) {
         this.getSelectedFiles();
         const data = {
-          emailJobInitiator: email,
-          creationTime: new Date(),
+          createdBy: email,
+          DateTime: new Date(),
           type: "public",
-          datasetList: [
-            {
-              pid: this.datasetPid,
-              files: this.getSelectedFiles(),
-            },
-          ],
+          jobParams: {
+            datasetIds: [
+              this.datasetPid,
+            ],
+          },
         };
         const job = new Job(data);
         this.store.dispatch(submitJobAction({ job }));
