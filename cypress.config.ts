@@ -3,7 +3,7 @@ import { defineConfig } from "cypress";
 export default defineConfig({
   e2e: {
     baseUrl: "http://127.0.0.1:4200",
-    lbBaseUrl: "http://backend.localhost/api/v3",
+    lbBaseUrl: "http://localhost:3000/api/v3",
     lbLoginEndpoint: "/Users/login",
     lbTokenPrefix: "Bearer ",
     viewportWidth: 1280,
