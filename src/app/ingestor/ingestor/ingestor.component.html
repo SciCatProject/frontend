@@ -30,9 +30,22 @@
 
         </ng-container>
         <ng-container *ngIf="connectedFacilityBackend !== ''">
-          <p style="color: green;">Connected to {{ connectedFacilityBackend }}
-            <a (click)="disconnectIngestor()">change</a>
-          </p>
+          <!-- Mat List with the most important information about the backend connection -->
+          <mat-list>
+            <mat-list-item>
+              <span matListItemTitle>Backend URL</span>
+              <span matListItemLine>{{ connectedFacilityBackend }} <a
+                  (click)="disconnectIngestor()">change</a></span>
+            </mat-list-item>
+            <mat-list-item>
+              <span matListItemTitle>Connection Status</span>
+              <span matListItemLine style="color: green;">Connected</span>
+            </mat-list-item>
+            <mat-list-item>
+              <span matListItemTitle>Version</span>
+              <span matListItemLine>{{ connectedFacilityBackendVersion }}</span>
+            </mat-list-item>
+          </mat-list>
         </ng-container>
       </div>
     </mat-card-content>
@@ -69,7 +82,23 @@
       <div>
       </div>
       <div>
-          <p>{{returnValue}}</p>
+        <p>{{returnValue}}</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</p>
+
+<p *ngIf="errorMessage !== ''">
+  <mat-card class="ingestor-card">
+    <mat-card-header class="ingestor-mixed-header">
+      <mat-card-title>Error message</mat-card-title>
+      <button mat-icon-button class="ingestor-close-button" (click)="clearErrorMessage()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-card-header>
+    <mat-card-content class="ingestor-vertical-layout">
+      <div>
+        <p style="color: red" [innerHTML]="errorMessage"></p>
       </div>
     </mat-card-content>
   </mat-card>

@@ -9,6 +9,8 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { FormsModule } from "@angular/forms";
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { FormsModule } from "@angular/forms";
     MatInputModule, 
     MatButtonModule, 
     MatProgressSpinnerModule, 
-    RouterModule
+    RouterModule,
+    MatListModule,
+    MatIconModule
   ],
 })
 export class IngestorModule { }

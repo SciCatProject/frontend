@@ -3,6 +3,7 @@ import { AppConfigService, HelpMessages } from "app-config.service";
 import { HttpClient } from '@angular/common/http';
 import { IngestorMetadataEditorComponent } from '../ingestor-metadata-editor/ingestor-metadata-editor.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { INGESTOR_API_ENDPOINTS_V1 } from "./ingestor-api-endpoints";
 
 @Component({
   selector: "ingestor",
@@ -19,12 +20,17 @@ export class IngestorComponent implements OnInit {
   gettingStarted: string | null = null;
   shoppingCartEnabled = false;
   helpMessages: HelpMessages;
+
   filePath: string = '';
   loading: boolean = false;
   forwardFacilityBackend: string = '';
+
   connectedFacilityBackend: string = '';
+  connectedFacilityBackendVersion: string = '';
   connectingToFacilityBackend: boolean = false;
   lastUsedFacilityBackends: string[] = [];
+
+  errorMessage: string = '';
   returnValue: string = '';
 
   constructor(public appConfigService: AppConfigService, private http: HttpClient, private route: ActivatedRoute, private router: Router) { }
@@ -58,7 +64,7 @@ export class IngestorComponent implements OnInit {
       facilityBackendUrlCleaned += '/';
     }
 
-    let facilityBackendUrlVersion = facilityBackendUrlCleaned + 'Version';
+    let facilityBackendUrlVersion = facilityBackendUrlCleaned + INGESTOR_API_ENDPOINTS_V1.OTHER.VERSION;
 
     // Try to connect to the facility backend/version to check if it is available
     console.log('Connecting to facility backend: ' + facilityBackendUrlVersion);
@@ -68,9 +74,11 @@ export class IngestorComponent implements OnInit {
         // If the connection is successful, store the connected facility backend URL
         this.connectedFacilityBackend = facilityBackendUrlCleaned;
         this.connectingToFacilityBackend = false;
+        this.connectedFacilityBackendVersion = response['version'];
       },
       error => {
-        console.error('Failed to connect to facility backend', error);
+        this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+        console.error('Request failed', error);
         this.connectedFacilityBackend = '';
         this.connectingToFacilityBackend = false;
         this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
@@ -90,13 +98,14 @@ export class IngestorComponent implements OnInit {
 
     console.log('Uploading', payload);
 
-    this.http.post(this.connectedFacilityBackend + 'Dataset/Ingest', payload).subscribe(
+    this.http.post(this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.DATASET, payload).subscribe(
       response => {
         console.log('Upload successful', response);
         this.returnValue = JSON.stringify(response);
         this.loading = false;
       },
       error => {
+        this.errorMessage += `${new Date().toLocaleString()}: ${error.message}]<br>`;
         console.error('Upload failed', error);
         this.loading = false;
       }
@@ -105,6 +114,14 @@ export class IngestorComponent implements OnInit {
 
   forwardToIngestorPage() {
     if (this.forwardFacilityBackend) {
+      this.connectingToFacilityBackend = true;
+
+      // If current route is equal to the forward route, the router will not navigate to the new route
+      if (this.connectedFacilityBackend === this.forwardFacilityBackend) {
+        this.connectToFacilityBackend(this.forwardFacilityBackend);
+        return;
+      }
+
       this.router.navigate(['/ingestor'], { queryParams: { backendUrl: this.forwardFacilityBackend } });
     }
   }
@@ -123,10 +140,14 @@ export class IngestorComponent implements OnInit {
 
   loadLastUsedFacilityBackends(): string[] {
     // Load the list from the local Storage
-    const lastUsedFacilityBackends = '["http://localhost:8000"]';
+    const lastUsedFacilityBackends = '["http://localhost:8000", "http://localhost:8888"]';
     if (lastUsedFacilityBackends) {
       return JSON.parse(lastUsedFacilityBackends);
     }
     return [];
+  }
+
+  clearErrorMessage(): void {
+    this.errorMessage = '';
   }
 }
