@@ -272,9 +272,7 @@ export class DatafilesComponent
           createdAt: new Date(),
           type: "public",
           jobParams: {
-            datasetIds: [
-              this.datasetPid,
-            ],
+            datasetIds: [this.datasetPid],
           },
         };
         const job = new Job(data);

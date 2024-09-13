@@ -27,9 +27,7 @@ export class ArchivingService {
   ): Job {
     const extra = archive ? {} : destinationPath;
     const jobParams = {
-      datasetIds: datasets.map((dataset) => (
-        dataset.pid
-      )),
+      datasetIds: datasets.map((dataset) => dataset.pid),
       ...extra,
     };
 

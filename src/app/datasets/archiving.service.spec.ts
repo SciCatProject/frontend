@@ -48,9 +48,7 @@ describe("ArchivingService", () => {
     it("should create a new object of type Job", () => {
       const user = new User({ username: "testName", email: "test@email.com" });
       const datasets = [new Dataset()];
-      const datasetList = datasets.map((dataset) => (
-        dataset.pid
-      ));
+      const datasetList = datasets.map((dataset) => dataset.pid);
       const archive = true;
       const destinationPath = { destinationPath: "/test/path/" };
 
@@ -83,9 +81,7 @@ describe("ArchivingService", () => {
 
       const user = new User({ username: "testName", email: "test@email.com" });
       const datasets = [new Dataset()];
-      const datasetList = datasets.map((dataset) => (
-        dataset.pid
-      ));
+      const datasetList = datasets.map((dataset) => dataset.pid);
       const archive = true;
       const job = new Job({
         jobParams: { datasetIds: datasetList },
