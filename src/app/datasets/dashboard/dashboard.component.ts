@@ -23,7 +23,7 @@ import {
   selectSelectedDatasets,
   selectPagination,
 } from "state-management/selectors/datasets.selectors";
-import { distinctUntilChanged, filter, map, take } from "rxjs/operators";
+import { distinctUntilChanged, filter, map, skip, take } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSidenav } from "@angular/material/sidenav";
 import { AddDatasetDialogComponent } from "datasets/add-dataset-dialog/add-dataset-dialog.component";
@@ -180,7 +180,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());
     this.store.dispatch(fetchMetadataKeysAction());
-    this.store.dispatch(fetchDatasetsAction());
+    // this.store.dispatch(fetchDatasetsAction());
 
     this.updateColumnSubscription();
 
@@ -189,6 +189,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         .pipe(
           map(([pagination, _, loggedIn]) => [pagination, loggedIn]),
           distinctUntilChanged(deepEqual),
+          skip(1), // TODO avoid this hack
         )
         .subscribe((obj) => {
           this.store.dispatch(fetchDatasetsAction());

@@ -287,3 +287,8 @@ export const selectRelatedDatasetsPerPage = createSelector(
   selectRelatedDatasetsFilters,
   (filters) => filters.limit,
 );
+
+export const selectLoadData = createSelector(
+  selectDatasetState,
+  (state) => state.dataLoaded,
+);

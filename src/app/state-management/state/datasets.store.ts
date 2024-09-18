@@ -46,6 +46,8 @@ export interface DatasetState {
   batch: Dataset[];
 
   openwhiskResult: Record<string, unknown> | undefined;
+
+  dataLoaded: boolean;
 }
 
 export const initialDatasetState: DatasetState = {
@@ -91,4 +93,6 @@ export const initialDatasetState: DatasetState = {
   batch: [],
 
   openwhiskResult: undefined,
+
+  dataLoaded: false,
 };
