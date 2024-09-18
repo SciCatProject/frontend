@@ -314,6 +314,106 @@ export class UserApi extends BaseLoopBackApi {
   }
 
   /**
+   * Update settings of this model.
+   *
+   * @param {any} id User id
+   *
+   * @param {object} data Request data.
+   *
+   * This method expects a subset of model properties as request parameters.
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `User` object.)
+   * </em>
+   */
+  public partialUpdateSettings(
+    id: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
+    let _method: string = "PATCH";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/Users/:id/settings";
+    let _routeParams: any = {
+      id: id,
+    };
+
+    let _postBody: any = {
+      data: data,
+    };
+
+    let _urlParams: any = {};
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
+    return result;
+  }
+
+  /**
+   * Update settings of this model.
+   *
+   * @param {any} id User id
+   *
+   * @param {object} data Request data.
+   *
+   * This method expects a subset of model properties as request parameters.
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `User` object.)
+   * </em>
+   */
+  public partialUpdateExternalSettings(
+    id: any,
+    data: any = {},
+    customHeaders?: Function,
+  ): Observable<any> {
+    let _method: string = "PATCH";
+    let _url: string =
+      LoopBackConfig.getPath() +
+      "/" +
+      LoopBackConfig.getApiVersion() +
+      "/Users/:id/settings/external";
+    let _routeParams: any = {
+      id: id,
+    };
+
+    let _postBody: any = {
+      data: data,
+    };
+
+    let _urlParams: any = {};
+    let result = this.request(
+      _method,
+      _url,
+      _routeParams,
+      _urlParams,
+      _postBody,
+      null,
+      customHeaders,
+    );
+    return result;
+  }
+
+  /**
    * Deletes settings of this model.
    *
    * @param {any} id User id
@@ -1278,7 +1378,7 @@ export class UserApi extends BaseLoopBackApi {
       LoopBackConfig.getPath() +
       "/" +
       LoopBackConfig.getApiVersion() +
-      "/Users/login";
+      "/auth/login";
     let _routeParams: any = {};
     let _postBody: any = {
       credentials: credentials,

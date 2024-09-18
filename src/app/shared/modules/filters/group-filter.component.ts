@@ -8,7 +8,12 @@ import {
   addGroupFilterAction,
   removeGroupFilterAction,
 } from "state-management/actions/datasets.actions";
-import { createSuggestionObserver, getFacetCount, getFacetId, getFilterLabel } from "./utils";
+import {
+  createSuggestionObserver,
+  getFacetCount,
+  getFacetId,
+  getFilterLabel,
+} from "./utils";
 import { BehaviorSubject } from "rxjs";
 import { ClearableInputComponent } from "./clearable-input.component";
 import { FilterComponentInterface } from "./interface/filter-component.interface";

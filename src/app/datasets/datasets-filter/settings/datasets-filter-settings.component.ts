@@ -1,4 +1,4 @@
-import { Component, Inject } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Inject } from "@angular/core";
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -27,11 +27,14 @@ import {
   selector: "app-type-datasets-filter-settings",
   templateUrl: `./datasets-filter-settings.component.html`,
   styleUrls: [`./datasets-filter-settings.component.scss`],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DatasetsFilterSettingsComponent {
   metadataKeys$ = this.store.select(selectMetadataKeys);
 
   appConfig = this.appConfigService.getConfig();
+
+  filterValidationStatus = {};
 
   constructor(
     public dialogRef: MatDialogRef<DatasetsFilterSettingsComponent>,
@@ -130,12 +133,12 @@ export class DatasetsFilterSettingsComponent {
   }
 
   toggleVisibility(filter: FilterConfig): void {
-    const key = Object.keys(filter)[0];
+    const key = this.getFilterKey(filter);
     filter[key] = !filter[key];
   }
 
   getChecked(filter: FilterConfig): boolean {
-    const key = Object.keys(filter)[0];
+    const key = this.getFilterKey(filter);
     return filter[key];
   }
 
@@ -159,8 +162,11 @@ export class DatasetsFilterSettingsComponent {
     labelMaps: Record<string, string>,
     filter: FilterConfig,
   ): string {
-    const key = Object.keys(filter)[0];
-
+    const key = this.getFilterKey(filter);
     return labelMaps[key] || "Unknown filter";
+  }
+
+  getFilterKey(filter: FilterConfig): string {
+    return Object.keys(filter)[0];
   }
 }

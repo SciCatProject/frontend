@@ -294,16 +294,27 @@ export class UserEffects {
         this.userApi.getSettings(id, null).pipe(
           map((userSettings) => {
             const config = this.configService.getConfig();
-            if (userSettings.filters.length < 1) {
-              userSettings.filters =
-                config.defaultDatasetsListSettings.filters ||
-                initialUserState.filters;
+            const externalSettings = userSettings.externalSettings || {};
+
+            const settingsToCheck = ["columns", "conditions", "filters"];
+
+            for (const setting of settingsToCheck) {
+              let items = [];
+
+              if (Array.isArray(externalSettings[setting])) {
+                items = externalSettings[setting];
+              }
+
+              if (items.length < 1) {
+                items =
+                  config.defaultDatasetsListSettings[setting] ||
+                  initialUserState[setting];
+              }
+
+              userSettings[setting] = items;
             }
-            if (userSettings.columns.length < 1) {
-              userSettings.columns =
-                config.defaultDatasetsListSettings.columns ||
-                initialUserState.columns;
-            }
+            delete userSettings.externalSettings;
+
             return fromActions.fetchUserSettingsCompleteAction({
               userSettings,
             });
@@ -384,8 +395,14 @@ export class UserEffects {
       ),
       concatLatestFrom(() => this.columns$),
       map(([action, columns]) => columns),
+      distinctUntilChanged(
+        (prevColumns, currColumns) =>
+          JSON.stringify(prevColumns) === JSON.stringify(currColumns),
+      ),
       map((columns) =>
-        fromActions.updateUserSettingsAction({ property: { columns } }),
+        fromActions.updateUserSettingsAction({
+          property: { columns },
+        }),
       ),
     );
   });
@@ -393,16 +410,50 @@ export class UserEffects {
   updateUserSettings$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.updateUserSettingsAction),
-      concatLatestFrom(() => this.user$),
+      concatLatestFrom(() => [this.user$]),
       takeWhile(([action, user]) => !!user),
-      switchMap(([{ property }, user]) =>
-        this.userApi.updateSettings(user?.id, property).pipe(
-          map((userSettings) =>
-            fromActions.updateUserSettingsCompleteAction({ userSettings }),
-          ),
+      switchMap(([{ property }, user]) => {
+        const settingsToNest = ["columns", "conditions", "filters"];
+        const propertyKeys = Object.keys(property);
+        const newProperty = {};
+        let useExternalSettings = false;
+
+        propertyKeys.forEach((key) => {
+          if (settingsToNest.includes(key)) {
+            useExternalSettings = true;
+          }
+          newProperty[key] = property[key];
+        });
+
+        // NOTE:
+        // - datasetCount and jobCount are updated using the partialUpdateSettings API,
+        //   which applies validation according to the updateSettingsDTO rules.
+        // - All other properties (like columns, conditions, and filters) are updated
+        //   using the partialUpdateExternalSettings API, which does not enforce validation.
+
+        const apiCall$ = useExternalSettings
+          ? this.userApi.partialUpdateExternalSettings(
+              user?.id,
+              JSON.stringify(newProperty),
+            )
+          : this.userApi.partialUpdateSettings(
+              user?.id,
+              JSON.stringify(newProperty),
+            );
+        return apiCall$.pipe(
+          map((userSettings) => {
+            userSettings["conditions"] =
+              userSettings.externalSettings.conditions;
+            userSettings["filters"] = userSettings.externalSettings.filters;
+            userSettings["columns"] = userSettings.externalSettings.columns;
+            delete userSettings.externalSettings;
+            return fromActions.updateUserSettingsCompleteAction({
+              userSettings,
+            });
+          }),
           catchError(() => of(fromActions.updateUserSettingsFailedAction())),
-        ),
-      ),
+        );
+      }),
     );
   });
 

@@ -57,20 +57,20 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 })
 export class FiltersModule {}
 
-export type Filter =
-  | "PidFilter"
-  | "PidFilterContains"
-  | "PidFilterStartsWith"
-  | "LocationFilter"
-  | "GroupFilter"
-  | "TypeFilter"
-  | "KeywordFilter"
-  | "DateRangeFilter"
-  | "TextFilter"
-  | "ConditionFilter";
-
+export enum Filters {
+  PidFilter = "PidFilter",
+  PidFilterContains = "PidFilterContains",
+  PidFilterStartsWith = "PidFilterStartsWith",
+  LocationFilter = "LocationFilter",
+  GroupFilter = "GroupFilter",
+  TypeFilter = "TypeFilter",
+  KeywordFilter = "KeywordFilter",
+  DateRangeFilter = "DateRangeFilter",
+  TextFilter = "TextFilter",
+  ConditionFilter = "ConditionFilter",
+}
 export type FilterConfig = Partial<{
-  [K in Filter]: boolean;
+  [K in Filters]: boolean;
 }>;
 
 export interface ConditionConfig {

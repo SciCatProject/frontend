@@ -1,5 +1,4 @@
 import {
-  ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit,
@@ -8,7 +7,7 @@ import {
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
-
+import { cloneDeep, isEqual } from "lodash-es";
 import {
   selectHasAppliedFilters,
   selectScientificConditions,
@@ -40,11 +39,12 @@ import { TypeFilterComponent } from "../../shared/modules/filters/type-filter.co
 import { KeywordFilterComponent } from "../../shared/modules/filters/keyword-filter.component";
 import { DateRangeFilterComponent } from "../../shared/modules/filters/date-range-filter.component";
 import { TextFilterComponent } from "../../shared/modules/filters/text-filter.component";
-import { Filter, FilterConfig } from "shared/modules/filters/filters.module";
+import { Filters, FilterConfig } from "shared/modules/filters/filters.module";
 import { FilterComponentInterface } from "shared/modules/filters/interface/filter-component.interface";
 import { Subscription } from "rxjs";
+import { take } from "rxjs/operators";
 
-const COMPONENT_MAP: { [K in Filter]: Type<any> } = {
+const COMPONENT_MAP: { [K in Filters]: Type<any> } = {
   PidFilter: PidFilterComponent,
   PidFilterContains: PidFilterContainsComponent,
   PidFilterStartsWith: PidFilterStartsWithComponent,
@@ -120,7 +120,21 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     }, 0);
   }
 
-  showDatasetsFilterSettingsDialog() {
+  async showDatasetsFilterSettingsDialog() {
+    // Get initial filter and condition configs
+    // to compare with the updated ones
+    // and dispatch the updated ones if they changed
+    // This is to prevent unnecessary API calls
+    const initialFilterConfigs = await this.filterConfigs$
+      .pipe(take(1))
+      .toPromise();
+    const initialConditionConfigs = await this.conditionConfigs$
+      .pipe(take(1))
+      .toPromise();
+
+    const initialFilterConfigsCopy = cloneDeep(initialFilterConfigs);
+    const initialConditionConfigsCopy = cloneDeep(initialConditionConfigs);
+
     const dialogRef = this.dialog.open(DatasetsFilterSettingsComponent, {
       width: "60vw",
       data: {
@@ -132,14 +146,31 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.store.dispatch(
-          updateUserSettingsAction({
-            property: {
-              conditions: result.conditionConfigs,
-              filters: result.filterConfigs,
-            },
-          }),
+        const filtersChanged = !isEqual(
+          initialFilterConfigsCopy,
+          result.filterConfigs,
         );
+        const conditionsChanged = !isEqual(
+          initialConditionConfigsCopy,
+          result.conditionConfigs,
+        );
+
+        if (filtersChanged || conditionsChanged) {
+          const updatedProperty = {};
+
+          if (filtersChanged) {
+            updatedProperty["filters"] = result.filterConfigs;
+          }
+
+          if (conditionsChanged) {
+            updatedProperty["conditions"] = result.conditionConfigs;
+          }
+          this.store.dispatch(
+            updateUserSettingsAction({
+              property: updatedProperty,
+            }),
+          );
+        }
       }
     });
   }
