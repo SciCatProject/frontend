@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { AppConfigService, HelpMessages } from "app-config.service";
 import { HttpClient } from '@angular/common/http';
 import { IngestorMetadataEditorComponent } from '../ingestor-metadata-editor/ingestor-metadata-editor.component';
@@ -60,7 +60,7 @@ export class IngestorComponent implements OnInit {
   connectToFacilityBackend(facilityBackendUrl: string): boolean {
     let facilityBackendUrlCleaned = facilityBackendUrl.slice();
     // Check if last symbol is a slash and add version endpoint
-    if (facilityBackendUrlCleaned.slice(-1) !== '/') {
+    if (!facilityBackendUrlCleaned.endsWith('/')) {
       facilityBackendUrlCleaned += '/';
     }
 
