@@ -1,5 +1,5 @@
 export const INGESTOR_API_ENDPOINTS_V1 = {
-  DATASET: "datasets",
+  DATASET: "dataset",
   TRANSFER: "transfer",
   OTHER: {
     VERSION: 'version',
