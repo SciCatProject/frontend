@@ -16,7 +16,10 @@ import {
   selectColumnAction,
 } from "../../../state-management/actions/user.actions";
 import { Store } from "@ngrx/store";
-import { selectMetadataKeys } from "../../../state-management/selectors/datasets.selectors";
+import {
+  selectMetadataKeys,
+  selectMetadataTypes,
+} from "../../../state-management/selectors/datasets.selectors";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import {
   ConditionConfig,
@@ -34,6 +37,7 @@ export class DatasetsFilterSettingsComponent {
   protected readonly getFilterLabel = getFilterLabel;
 
   metadataKeys$ = this.store.select(selectMetadataKeys);
+  metadataTypes$ = this.store.select(selectMetadataTypes);
 
   appConfig = this.appConfigService.getConfig();
 

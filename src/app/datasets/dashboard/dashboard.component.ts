@@ -14,6 +14,7 @@ import {
   addDatasetAction,
   fetchDatasetCompleteAction,
   fetchMetadataKeysAction,
+  fetchMetadataTypesAction,
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -180,7 +181,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());
     this.store.dispatch(fetchMetadataKeysAction());
-    // this.store.dispatch(fetchDatasetsAction());
+    this.store.dispatch(fetchMetadataTypesAction());
 
     this.updateColumnSubscription();
 

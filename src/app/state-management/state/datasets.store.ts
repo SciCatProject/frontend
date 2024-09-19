@@ -30,6 +30,7 @@ export interface DatasetState {
 
   facetCounts: FacetCounts;
   metadataKeys: string[];
+  metadataTypes: Record<string, string>[];
   hasPrefilledFilters: boolean;
   searchTerms: string;
   keywordsTerms: string;
@@ -60,6 +61,7 @@ export const initialDatasetState: DatasetState = {
 
   facetCounts: {},
   metadataKeys: [],
+  metadataTypes: [],
   hasPrefilledFilters: false,
   searchTerms: "",
   keywordsTerms: "",

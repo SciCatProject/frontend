@@ -35,6 +35,14 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.fetchMetadataTypesCompleteAction,
+    (state, { metadataTypes }): DatasetState => ({
+      ...state,
+      metadataTypes,
+    }),
+  ),
+
+  on(
     fromActions.fetchDatasetCompleteAction,
     (state, { dataset }): DatasetState => ({
       ...state,
