@@ -26,13 +26,18 @@ mat-list-item {
   border-bottom: 1px solid #ccc; /* Adds a subtle line between items for better visual separation */
 }
 
-
 .filter-item {
   display: flex;
   align-items: center; /* Align items vertically in the center */
   justify-content: space-between; /* Spread out the items to fill the horizontal space */
   padding: 8px 16px; /* Add some padding around the items */
   border-bottom: 1px solid #e0e0e0; /* Optional: adds a separator line between items */
+
+  &-disabled {
+    opacity: 0.5; /* Dim the item to indicate it's disabled */
+    pointer-events: none;
+    cursor: not-allowed;
+  }
 }
 
 .filter-toggle {

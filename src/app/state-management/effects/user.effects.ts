@@ -8,7 +8,6 @@ import {
   SDKToken,
   User,
   UserIdentity,
-  UserSettingInterface,
 } from "shared/sdk";
 import { Router } from "@angular/router";
 import * as fromActions from "state-management/actions/user.actions";
@@ -21,6 +20,7 @@ import {
   distinctUntilChanged,
   mergeMap,
   takeWhile,
+  concatMap,
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
@@ -46,11 +46,8 @@ import { clearPublishedDataStateAction } from "state-management/actions/publishe
 import { clearSamplesStateAction } from "state-management/actions/samples.actions";
 import { HttpErrorResponse } from "@angular/common/http";
 import { AppConfigService } from "app-config.service";
-import {
-  loadDefaultSettings,
-  selectColumnAction,
-} from "state-management/actions/user.actions";
-import { ConditionConfig } from "../../shared/modules/filters/filters.module";
+import { selectColumnAction } from "state-management/actions/user.actions";
+import { initialUserState } from "state-management/state/user.store";
 
 @Injectable()
 export class UserEffects {
@@ -112,6 +109,7 @@ export class UserEffects {
       }),
     );
   });
+
   fetchUser$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchUserAction),
@@ -294,9 +292,33 @@ export class UserEffects {
       ofType(fromActions.fetchUserSettingsAction),
       switchMap(({ id }) =>
         this.userApi.getSettings(id, null).pipe(
-          map((userSettings) =>
-            fromActions.fetchUserSettingsCompleteAction({ userSettings }),
-          ),
+          map((userSettings) => {
+            const config = this.configService.getConfig();
+            const externalSettings = userSettings.externalSettings || {};
+
+            const settingsToCheck = ["columns", "conditions", "filters"];
+
+            for (const setting of settingsToCheck) {
+              let items = [];
+
+              if (Array.isArray(externalSettings[setting])) {
+                items = externalSettings[setting];
+              }
+
+              if (items.length < 1) {
+                items =
+                  config.defaultDatasetsListSettings[setting] ||
+                  initialUserState[setting];
+              }
+
+              userSettings[setting] = items;
+            }
+            delete userSettings.externalSettings;
+
+            return fromActions.fetchUserSettingsCompleteAction({
+              userSettings,
+            });
+          }),
           catchError(() => of(fromActions.fetchUserSettingsFailedAction())),
         ),
       ),
@@ -373,8 +395,14 @@ export class UserEffects {
       ),
       concatLatestFrom(() => this.columns$),
       map(([action, columns]) => columns),
+      distinctUntilChanged(
+        (prevColumns, currColumns) =>
+          JSON.stringify(prevColumns) === JSON.stringify(currColumns),
+      ),
       map((columns) =>
-        fromActions.updateUserSettingsAction({ property: { columns } }),
+        fromActions.updateUserSettingsAction({
+          property: { columns },
+        }),
       ),
     );
   });
@@ -382,16 +410,50 @@ export class UserEffects {
   updateUserSettings$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.updateUserSettingsAction),
-      concatLatestFrom(() => this.user$),
+      concatLatestFrom(() => [this.user$]),
       takeWhile(([action, user]) => !!user),
-      switchMap(([{ property }, user]) =>
-        this.userApi.updateSettings(user?.id, property).pipe(
-          map((userSettings) =>
-            fromActions.updateUserSettingsCompleteAction({ userSettings }),
-          ),
+      switchMap(([{ property }, user]) => {
+        const settingsToNest = ["columns", "conditions", "filters"];
+        const propertyKeys = Object.keys(property);
+        const newProperty = {};
+        let useExternalSettings = false;
+
+        propertyKeys.forEach((key) => {
+          if (settingsToNest.includes(key)) {
+            useExternalSettings = true;
+          }
+          newProperty[key] = property[key];
+        });
+
+        // NOTE:
+        // - datasetCount and jobCount are updated using the partialUpdateSettings API,
+        //   which applies validation according to the updateSettingsDTO rules.
+        // - All other properties (like columns, conditions, and filters) are updated
+        //   using the partialUpdateExternalSettings API, which does not enforce validation.
+
+        const apiCall$ = useExternalSettings
+          ? this.userApi.partialUpdateExternalSettings(
+              user?.id,
+              JSON.stringify(newProperty),
+            )
+          : this.userApi.partialUpdateSettings(
+              user?.id,
+              JSON.stringify(newProperty),
+            );
+        return apiCall$.pipe(
+          map((userSettings) => {
+            userSettings["conditions"] =
+              userSettings.externalSettings.conditions;
+            userSettings["filters"] = userSettings.externalSettings.filters;
+            userSettings["columns"] = userSettings.externalSettings.columns;
+            delete userSettings.externalSettings;
+            return fromActions.updateUserSettingsCompleteAction({
+              userSettings,
+            });
+          }),
           catchError(() => of(fromActions.updateUserSettingsFailedAction())),
-        ),
-      ),
+        );
+      }),
     );
   });
 
@@ -409,20 +471,35 @@ export class UserEffects {
 
   loadDefaultSettings$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(loadDefaultSettings),
-      mergeMap(() =>
-        this.userApi.getDefaultSettings().pipe(
-          mergeMap((settings: UserSettingInterface) => [
-            fromActions.updateConditionsConfigs({
-              conditionConfigs: settings.conditions,
-            }),
-            fromActions.updateFilterConfigs({
-              filterConfigs: settings.filters,
-            }),
-          ]),
-          catchError(() => of({ type: "[User] Load Default Settings Failed" })),
-        ),
-      ),
+      ofType(fromActions.loadDefaultSettings),
+      map(() => {
+        const config = this.configService.getConfig();
+        const defaultFilters =
+          config.defaultDatasetsListSettings.filters ||
+          initialUserState.filters;
+        const defaultConditions =
+          config.defaultDatasetsListSettings.conditions ||
+          initialUserState.conditions;
+
+        // NOTE: config.localColumns is for backward compatibility.
+        //       it should be removed once no longer needed
+        const columns =
+          config.defaultDatasetsListSettings.columns ||
+          config.localColumns ||
+          initialUserState.columns;
+
+        return [
+          fromActions.updateConditionsConfigs({
+            conditionConfigs: defaultConditions,
+          }),
+          fromActions.updateFilterConfigs({ filterConfigs: defaultFilters }),
+
+          fromActions.setDatasetTableColumnsAction({
+            columns: columns,
+          }),
+        ];
+      }),
+      concatMap((actions) => actions),
     );
   });
 

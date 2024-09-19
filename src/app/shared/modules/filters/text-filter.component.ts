@@ -4,6 +4,9 @@ import { Store } from "@ngrx/store";
 import { setTextFilterAction } from "state-management/actions/datasets.actions";
 import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
 import { Subject, Subscription } from "rxjs";
+import { AppConfigService } from "app-config.service";
+import { FilterComponentInterface } from "./interface/filter-component.interface";
+import { getFilterLabel } from "./utils";
 
 @Component({
   selector: "app-text-filter",
@@ -12,14 +15,23 @@ import { Subject, Subscription } from "rxjs";
 })
 export class TextFilterComponent
   extends ClearableInputComponent
-  implements OnDestroy
+  implements FilterComponentInterface, OnDestroy
 {
   private textSubject = new Subject<string>();
+  readonly componentName: string = "TextFilter";
+  readonly label: string = "Text Filter";
 
+  appConfig = this.appConfigService.getConfig();
   subscription: Subscription;
 
-  constructor(private store: Store) {
+  constructor(
+    private store: Store,
+    public appConfigService: AppConfigService,
+  ) {
     super();
+
+    const filters = this.appConfig.labelMaps?.filters;
+    this.label = getFilterLabel(filters, this.componentName, this.label);
     this.subscription = this.textSubject
       .pipe(
         skipWhile((terms) => terms === ""),
@@ -29,10 +41,6 @@ export class TextFilterComponent
       .subscribe((terms) => {
         this.store.dispatch(setTextFilterAction({ text: terms }));
       });
-  }
-
-  get label() {
-    return "Text filter";
   }
 
   textSearchChanged(event: any) {

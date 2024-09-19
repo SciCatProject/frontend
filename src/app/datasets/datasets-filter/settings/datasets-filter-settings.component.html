@@ -1,24 +1,52 @@
 <h2 mat-dialog-title>Configure Filters</h2>
 <mat-dialog-content class="filter-dialog-content">
-  <span layout="row"><hr flex/>Filters<hr flex/></span>
+  <span layout="row"
+    ><hr flex />
+    Filters
+    <hr flex
+  /></span>
   <mat-nav-list cdkDropList (cdkDropListDropped)="drop($event)">
-    <mat-list-item class="filter-item" *ngFor="let filter of data.filterConfigs" cdkDrag cdkDragHandle>
-      <span class="drag-handle" matTooltip="Drag to reorder" aria-label="Drag handle">
+    <mat-list-item
+      class="filter-item"
+      *ngFor="let filter of data.filterConfigs"
+      cdkDrag
+      cdkDragHandle
+      [cdkDragDisabled]="!data.labelMaps[getFilterKey(filter)]"
+      [ngClass]="{
+        'filter-item-disabled': !data.labelMaps[getFilterKey(filter)],
+      }"
+    >
+      <span
+        class="drag-handle"
+        matTooltip="Drag to reorder"
+        aria-label="Drag handle"
+      >
         <mat-icon>sort</mat-icon>
       </span>
       <mat-slide-toggle
         class="filter-toggle"
-        [checked]="filter.visible"
+        [checked]="getChecked(filter)"
         (change)="toggleVisibility(filter)"
-        aria-label="Toggle visibility">
+        aria-label="Toggle visibility"
+        [disabled]="!data.labelMaps[getFilterKey(filter)]"
+      >
       </mat-slide-toggle>
-      <span class="filter-name">{{ getFilterLabel(filter.type) }}</span>
+      <span class="filter-name">{{
+        resolveFilterLabel(data.labelMaps, filter)
+      }}</span>
       <span class="spacer"></span>
     </mat-list-item>
   </mat-nav-list>
-  <span layout="row"><hr flex/>Conditions<hr flex/></span>
+  <span layout="row"
+    ><hr flex />
+    Conditions
+    <hr flex
+  /></span>
   <mat-nav-list>
-    <mat-list-item class="filter-item" *ngFor="let condition of data.conditionConfigs; index as i">
+    <mat-list-item
+      class="filter-item"
+      *ngFor="let condition of data.conditionConfigs; index as i"
+    >
       <mat-slide-toggle
         class="filter-toggle"
         aria-label="Toggle visibility"
@@ -27,45 +55,57 @@
       >
       </mat-slide-toggle>
       <span class="scientific-chip-text">
-            {{ condition.condition.lhs }}
+        {{ condition.condition.lhs }}
         <ng-container [ngSwitch]="condition.condition.relation">
-              <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">
-                &nbsp;=&nbsp;
-              </ng-container>
-              <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">
-                &nbsp;=&nbsp;
-              </ng-container>
-              <ng-container *ngSwitchCase="'LESS_THAN'">
-                &nbsp;&lt;&nbsp;
-              </ng-container>
-              <ng-container *ngSwitchCase="'GREATER_THAN'">
-                &nbsp;&gt;&nbsp;
-              </ng-container>
-            </ng-container>
+          <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">
+            &nbsp;=&nbsp;
+          </ng-container>
+          <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">
+            &nbsp;=&nbsp;
+          </ng-container>
+          <ng-container *ngSwitchCase="'LESS_THAN'">
+            &nbsp;&lt;&nbsp;
+          </ng-container>
+          <ng-container *ngSwitchCase="'GREATER_THAN'">
+            &nbsp;&gt;&nbsp;
+          </ng-container>
+        </ng-container>
         {{
           condition.condition.relation === "EQUAL_TO_STRING"
             ? '"' + condition.condition.rhs + '"'
             : condition.condition.rhs
         }}
         {{ condition.condition.unit | prettyUnit }}
-          </span>
+      </span>
       <span class="spacer"></span>
-      <span><mat-icon (click)="editCondition(condition, i)" (keydown)="editCondition(condition, i)">edit</mat-icon></span>
-      <span><mat-icon (click)="removeCondition(condition, i)" (keydown)="removeCondition(condition, i)">delete</mat-icon></span>
+      <span
+        ><mat-icon
+          (click)="editCondition(condition, i)"
+          (keydown)="editCondition(condition, i)"
+          >edit</mat-icon
+        ></span
+      >
+      <span
+        ><mat-icon
+          (click)="removeCondition(condition, i)"
+          (keydown)="removeCondition(condition, i)"
+          >delete</mat-icon
+        ></span
+      >
     </mat-list-item>
   </mat-nav-list>
 </mat-dialog-content>
 <mat-dialog-content>
   <div>
-  <button
-    mat-button
-    color="primary"
-    *ngIf="appConfig.scienceSearchEnabled"
-    (click)="addCondition()"
-  >
-    <mat-icon>add</mat-icon>
-    Add Conditions
-  </button>
+    <button
+      mat-button
+      color="primary"
+      *ngIf="appConfig.scienceSearchEnabled"
+      (click)="addCondition()"
+    >
+      <mat-icon>add</mat-icon>
+      Add Conditions
+    </button>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
