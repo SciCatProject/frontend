@@ -89,7 +89,7 @@ export class DatasetEffects {
       map(([action, params]) => params),
       mergeMap(({ query }) => {
         const parsedQuery = JSON.parse(query);
-        parsedQuery.metadataKey = "";
+        parsedQuery.scientificMetadata = { $exists: true, $ne: "" };
         return this.datasetApi.metadataKeys(JSON.stringify(parsedQuery)).pipe(
           map((metadataKeys) =>
             fromActions.fetchMetadataKeysCompleteAction({ metadataKeys }),
