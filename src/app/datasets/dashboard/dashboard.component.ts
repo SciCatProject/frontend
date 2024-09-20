@@ -163,7 +163,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         // NOTE: this.appConfig.localColumns is for backward compatibility.
         //       it should be removed once localColumns is removed from the appConfig
         const columns =
-          this.appConfig.defaultDatasetsListSettings.columns ||
+          this.appConfig.defaultDatasetsListSettings?.columns ||
           this.appConfig.localColumns;
         this.store.dispatch(setDatasetTableColumnsAction({ columns }));
         if (!status) {

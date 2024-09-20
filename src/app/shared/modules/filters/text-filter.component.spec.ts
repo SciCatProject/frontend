@@ -1,4 +1,4 @@
-import { isDevMode, NO_ERRORS_SCHEMA } from "@angular/core";
+import { NO_ERRORS_SCHEMA } from "@angular/core";
 import {
   ComponentFixture,
   TestBed,
@@ -8,14 +8,11 @@ import {
   tick,
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
-import { MockStore } from "shared/MockStubs";
+import { MockHttp, MockStore } from "shared/MockStubs";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import {
-  setSearchTermsAction,
-  setTextFilterAction,
-} from "state-management/actions/datasets.actions";
+import { setTextFilterAction } from "state-management/actions/datasets.actions";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatDialogModule } from "@angular/material/dialog";
@@ -31,6 +28,8 @@ import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { TextFilterComponent } from "./text-filter.component";
+import { HttpClient } from "@angular/common/http";
+import { AppConfigService } from "app-config.service";
 
 describe("TextFilterComponent", () => {
   let component: TextFilterComponent;
@@ -74,7 +73,11 @@ describe("TextFilterComponent", () => {
         ),
       ],
       declarations: [TextFilterComponent, SearchParametersDialogComponent],
-      providers: [AsyncPipe],
+      providers: [
+        AsyncPipe,
+        AppConfigService,
+        { provide: HttpClient, useClass: MockHttp },
+      ],
     });
     TestBed.compileComponents();
   }));

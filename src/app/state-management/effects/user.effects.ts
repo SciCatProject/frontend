@@ -472,8 +472,7 @@ export class UserEffects {
   loadDefaultSettings$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.loadDefaultSettings),
-      map(() => {
-        const config = this.configService.getConfig();
+      map(({ config }) => {
         const defaultFilters =
           config.defaultDatasetsListSettings.filters ||
           initialUserState.filters;

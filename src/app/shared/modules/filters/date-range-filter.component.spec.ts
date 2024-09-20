@@ -6,14 +6,14 @@ import {
   waitForAsync,
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
-import { MockStore } from "shared/MockStubs";
+import { MockHttp, MockStore } from "shared/MockStubs";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { setDateRangeFilterAction } from "state-management/actions/datasets.actions";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
-import { MatDialogModule, MatDialog } from "@angular/material/dialog";
+import { MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
@@ -30,6 +30,8 @@ import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { DateRangeFilterComponent } from "./date-range-filter.component";
+import { AppConfigService } from "app-config.service";
+import { HttpClient } from "@angular/common/http";
 
 describe("DateRangeFilterComponent", () => {
   let component: DateRangeFilterComponent;
@@ -73,7 +75,11 @@ describe("DateRangeFilterComponent", () => {
         ),
       ],
       declarations: [DateRangeFilterComponent, SearchParametersDialogComponent],
-      providers: [AsyncPipe],
+      providers: [
+        AsyncPipe,
+        AppConfigService,
+        { provide: HttpClient, useClass: MockHttp },
+      ],
     });
     TestBed.compileComponents();
   }));

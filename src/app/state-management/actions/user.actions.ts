@@ -6,6 +6,7 @@ import {
   ConditionConfig,
   FilterConfig,
 } from "../../shared/modules/filters/filters.module";
+import { AppConfig } from "app-config.service";
 
 export const setDatasetTableColumnsAction = createAction(
   "[User] Set Dataset Table Columns",
@@ -175,4 +176,7 @@ export const updateConditionsConfigs = createAction(
   props<{ conditionConfigs: ConditionConfig[] }>(),
 );
 
-export const loadDefaultSettings = createAction("[User] Load Default Settings");
+export const loadDefaultSettings = createAction(
+  "[User] Load Default Settings",
+  props<{ config: AppConfig }>(),
+);

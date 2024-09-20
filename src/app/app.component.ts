@@ -71,7 +71,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     LoopBackConfig.setBaseURL(this.config.lbBaseURL);
     console.log(LoopBackConfig.getPath());
 
-    this.store.dispatch(loadDefaultSettings());
+    this.store.dispatch(loadDefaultSettings({ config: this.config }));
 
     this.store.dispatch(fetchCurrentUserAction());
     if (window.location.pathname.indexOf("logout") !== -1) {

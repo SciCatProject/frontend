@@ -63,13 +63,15 @@ module.exports = function (config) {
     specReporter: {
       suppressPassed: true, // Suppress passed tests, only show failures
       suppressSkipped: true, // Optionally suppress skipped tests too
+      suppressFailed: false,
     },
     port: 9876,
     colors: true,
-    logLevel: config.LOG_DEBUG,
+    logLevel: config.LOG_ERROR,
     autoWatch: true,
     browsers: ["ChromeHeadless"],
     singleRun: true,
     restartOnFileChange: true,
+    failFast: false,
   });
 };

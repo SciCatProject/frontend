@@ -8,7 +8,7 @@ import {
   tick,
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
-import { MockStore } from "shared/MockStubs";
+import { MockHttp, MockStore } from "shared/MockStubs";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -29,6 +29,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { PidFilterComponent } from "./pid-filter.component";
+import { HttpClient } from "@angular/common/http";
 
 const getConfig = () => ({
   scienceSearchEnabled: false,
@@ -64,7 +65,11 @@ describe("PidFilterComponent", () => {
         StoreModule.forRoot({}),
       ],
       declarations: [PidFilterComponent, SearchParametersDialogComponent],
-      providers: [AsyncPipe],
+      providers: [
+        AsyncPipe,
+        AppConfigService,
+        { provide: HttpClient, useClass: MockHttp },
+      ],
     });
     TestBed.overrideComponent(PidFilterComponent, {
       set: {

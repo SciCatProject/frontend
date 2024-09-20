@@ -6,7 +6,7 @@ import {
   waitForAsync,
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
-import { MockStore } from "shared/MockStubs";
+import { MockHttp, MockStore } from "shared/MockStubs";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -29,6 +29,8 @@ import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { GroupFilterComponent } from "./group-filter.component";
+import { HttpClient } from "@angular/common/http";
+import { AppConfigService } from "app-config.service";
 
 describe("GroupFilterComponent", () => {
   let component: GroupFilterComponent;
@@ -72,7 +74,11 @@ describe("GroupFilterComponent", () => {
         ),
       ],
       declarations: [GroupFilterComponent, SearchParametersDialogComponent],
-      providers: [AsyncPipe],
+      providers: [
+        AsyncPipe,
+        AppConfigService,
+        { provide: HttpClient, useClass: MockHttp },
+      ],
     });
     TestBed.compileComponents();
   }));
