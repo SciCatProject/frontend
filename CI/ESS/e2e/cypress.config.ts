@@ -4,7 +4,7 @@ export default defineConfig({
   e2e: {
     baseUrl: "http://localhost:4200",
     lbBaseUrl: "http://localhost:3000/api/v3",
-    lbLoginEndpoint: "/Users/login?include=user",
+    lbLoginEndpoint: "/auth/login?include=user",
     lbTokenPrefix: "Bearer ",
     viewportWidth: 1280,
     username: "admin",

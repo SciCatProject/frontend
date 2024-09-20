@@ -34,28 +34,19 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { DatasetsFilterSettingsComponent } from "./settings/datasets-filter-settings.component";
-import { LocationFilterComponent } from "../../shared/modules/filters/location-filter.component";
-import { PidFilterComponent } from "../../shared/modules/filters/pid-filter.component";
-import { PidFilterContainsComponent } from "../../shared/modules/filters/pid-filter-contains.component";
-import { PidFilterStartsWithComponent } from "../../shared/modules/filters/pid-filter-startsWith.component";
-import { GroupFilterComponent } from "../../shared/modules/filters/group-filter.component";
-import { TypeFilterComponent } from "../../shared/modules/filters/type-filter.component";
-import { KeywordFilterComponent } from "../../shared/modules/filters/keyword-filter.component";
-import { DateRangeFilterComponent } from "../../shared/modules/filters/date-range-filter.component";
-import { TextFilterComponent } from "../../shared/modules/filters/text-filter.component";
 import { FilterConfig } from "../../shared/modules/filters/filters.module";
 import { selectFilters } from "../../state-management/selectors/user.selectors";
 
 const filterConfigs: FilterConfig[] = [
-  { type: "LocationFilterComponent", visible: true },
-  { type: "PidFilterComponent", visible: true },
-  { type: "PidFilterContainsComponent", visible: false },
-  { type: "PidFilterStartsWithComponent", visible: false },
-  { type: "GroupFilterComponent", visible: true },
-  { type: "TypeFilterComponent", visible: true },
-  { type: "KeywordFilterComponent", visible: true },
-  { type: "DateRangeFilterComponent", visible: true },
-  { type: "TextFilterComponent", visible: true },
+  { LocationFilter: true },
+  { PidFilter: true },
+  { GroupFilter: true },
+  { TypeFilter: true },
+  { KeywordFilter: true },
+  { DateRangeFilter: true },
+  { TextFilter: true },
+  { PidFilterContains: false },
+  { PidFilterStartsWith: false },
 ];
 
 export class MockStoreWithFilters extends MockStore {
