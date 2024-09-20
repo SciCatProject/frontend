@@ -3,7 +3,12 @@ import {
   selectLocationFacetCounts,
   selectLocationFilter,
 } from "state-management/selectors/datasets.selectors";
-import { createSuggestionObserver, getFacetCount, getFacetId, getFilterLabel } from "./utils";
+import {
+  createSuggestionObserver,
+  getFacetCount,
+  getFacetId,
+  getFilterLabel,
+} from "./utils";
 import { BehaviorSubject } from "rxjs";
 import {
   addLocationFilterAction,

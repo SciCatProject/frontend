@@ -1,6 +1,11 @@
 import { Component, OnDestroy } from "@angular/core";
 import { ClearableInputComponent } from "./clearable-input.component";
-import { createSuggestionObserver, getFacetCount, getFacetId, getFilterLabel } from "./utils";
+import {
+  createSuggestionObserver,
+  getFacetCount,
+  getFacetId,
+  getFilterLabel,
+} from "./utils";
 import {
   selectKeywordFacetCounts,
   selectKeywordsFilter,

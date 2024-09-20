@@ -9,7 +9,6 @@ import { FilterComponentInterface } from "./interface/filter-component.interface
 import { AppConfigService } from "app-config.service";
 import { getFilterLabel } from "./utils";
 
-
 interface DateRange {
   begin: string;
   end: string;
