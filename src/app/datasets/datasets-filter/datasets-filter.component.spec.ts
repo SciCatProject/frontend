@@ -7,7 +7,7 @@ import {
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
 import { DatasetsFilterComponent } from "datasets/datasets-filter/datasets-filter.component";
-import { MockStore } from "shared/MockStubs";
+import { MockHttp, MockStore } from "shared/MockStubs";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -35,7 +35,11 @@ import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { DatasetsFilterSettingsComponent } from "./settings/datasets-filter-settings.component";
 import { FilterConfig } from "../../shared/modules/filters/filters.module";
-import { selectFilters } from "../../state-management/selectors/user.selectors";
+import {
+  selectConditions,
+  selectFilters,
+} from "../../state-management/selectors/user.selectors";
+import { HttpClient } from "@angular/common/http";
 
 const filterConfigs: FilterConfig[] = [
   { LocationFilter: true },
@@ -49,10 +53,24 @@ const filterConfigs: FilterConfig[] = [
   { PidFilterStartsWith: false },
 ];
 
+const labelMaps = {
+  LocationFilter: "Location Filter",
+  PidFilter: "Pid Filter",
+  GroupFilter: "Group Filter",
+  TypeFilter: "Type Filter",
+  KeywordFilter: "Keyword Filter",
+  DateRangeFilter: "Start Date - End Date",
+  TextFilter: "Text Filter",
+  PidFilterContains: "PID filter (Contains)- Not implemented",
+  PidFilterStartsWith: "PID filter (Starts With)- Not implemented",
+};
 export class MockStoreWithFilters extends MockStore {
   public select(selector: any) {
     if (selector === selectFilters) {
       return of(filterConfigs);
+    }
+    if (selector === selectConditions) {
+      return of([]);
     }
     return of(null);
   }
@@ -61,7 +79,7 @@ export class MockStoreWithFilters extends MockStore {
 export class MockMatDialog {
   open() {
     return {
-      afterClosed: () => of(filterConfigs),
+      afterClosed: () => of(filterConfigs, selectConditions),
     };
   }
 }
@@ -102,6 +120,8 @@ describe("DatasetsFilterComponent", () => {
       declarations: [DatasetsFilterComponent, SearchParametersDialogComponent],
       providers: [
         AsyncPipe,
+        AppConfigService,
+        { provide: HttpClient, useClass: MockHttp },
         { provide: Store, useClass: MockStoreWithFilters },
       ],
     });
@@ -192,21 +212,21 @@ describe("DatasetsFilterComponent", () => {
   });
 
   describe("#showDatasetsFilterSettingsDialog()", () => {
-    it("should open DatasetsFilterSettingsComponent", () => {
+    it("should open DatasetsFilterSettingsComponent", async () => {
       spyOn(component.dialog, "open").and.callThrough();
       dispatchSpy = spyOn(store, "dispatch");
 
-      // component.metadataKeys$ = of(["test", "keys"]);
-      component.showDatasetsFilterSettingsDialog();
+      await component.showDatasetsFilterSettingsDialog();
 
       expect(component.dialog.open).toHaveBeenCalledTimes(1);
       expect(component.dialog.open).toHaveBeenCalledWith(
         DatasetsFilterSettingsComponent,
         {
-          width: "60%",
+          width: "60vw",
           data: {
             filterConfigs: filterConfigs,
-            conditionConfigs: null,
+            conditionConfigs: [],
+            labelMaps: labelMaps,
           },
         },
       );

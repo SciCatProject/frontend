@@ -100,9 +100,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
       const instance = componentRef.instance as FilterComponentInterface;
 
-      const label = instance.label;
-
-      this.labelMaps[key] = label;
+      if (instance.label) {
+        this.labelMaps[key] = instance.label;
+      }
 
       componentRef.destroy();
     });

@@ -67,7 +67,7 @@ module.exports = function (config) {
     },
     port: 9876,
     colors: true,
-    logLevel: config.LOG_ERROR,
+    logLevel: config.LOG_ERROR, // For debug use config.LOG_DEBUG
     autoWatch: true,
     browsers: ["ChromeHeadless"],
     singleRun: true,
