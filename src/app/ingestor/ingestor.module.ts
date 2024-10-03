@@ -11,6 +11,8 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { FormsModule } from "@angular/forms";
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatTableModule } from "@angular/material/table";
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { MatIconModule } from '@angular/material/icon';
     MatProgressSpinnerModule, 
     RouterModule,
     MatListModule,
-    MatIconModule
+    MatIconModule,
+    MatTabsModule,
+    MatTableModule,
   ],
 })
 export class IngestorModule { }

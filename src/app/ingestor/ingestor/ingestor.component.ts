@@ -5,6 +5,11 @@ import { IngestorMetadataEditorComponent } from '../ingestor-metadata-editor/ing
 import { ActivatedRoute, Router } from '@angular/router';
 import { INGESTOR_API_ENDPOINTS_V1 } from "./ingestor-api-endpoints";
 
+interface TransferDataListEntry {
+  transferId: string;
+  status: string;
+}
+
 @Component({
   selector: "ingestor",
   templateUrl: "./ingestor.component.html",
@@ -25,10 +30,13 @@ export class IngestorComponent implements OnInit {
   loading: boolean = false;
   forwardFacilityBackend: string = '';
 
+  createNewTransfer: boolean = false;
   connectedFacilityBackend: string = '';
   connectedFacilityBackendVersion: string = '';
   connectingToFacilityBackend: boolean = false;
   lastUsedFacilityBackends: string[] = [];
+  transferDataSource: TransferDataListEntry[] = []; // List of files to be transferred
+  displayedColumns: string[] = ['transferId', 'status', 'actions'];
 
   errorMessage: string = '';
   returnValue: string = '';
@@ -44,12 +52,14 @@ export class IngestorComponent implements OnInit {
     );
     this.gettingStarted = this.appConfig.gettingStarted;
     this.connectingToFacilityBackend = true;
+    this.createNewTransfer = false;
     this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
+    this.transferDataSource = [];
     // Get the GET parameter 'backendUrl' from the URL
     this.route.queryParams.subscribe(params => {
       const backendUrl = params['backendUrl'];
       if (backendUrl) {
-        this.connectToFacilityBackend(backendUrl);
+        this.apiConnectToFacilityBackend(backendUrl);
       }
       else {
         this.connectingToFacilityBackend = false;
@@ -57,7 +67,7 @@ export class IngestorComponent implements OnInit {
     });
   }
 
-  connectToFacilityBackend(facilityBackendUrl: string): boolean {
+  apiConnectToFacilityBackend(facilityBackendUrl: string): boolean {
     let facilityBackendUrlCleaned = facilityBackendUrl.slice();
     // Check if last symbol is a slash and add version endpoint
     if (!facilityBackendUrlCleaned.endsWith('/')) {
@@ -88,7 +98,23 @@ export class IngestorComponent implements OnInit {
     return true;
   }
 
-  upload() {
+  async apiGetTransferList(): Promise<TransferDataListEntry[]> {
+    await this.http.get(this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.TRANSFER).subscribe(
+      response => {
+        console.log('Transfer list received', response);
+        return response['transfers'];
+      },
+      error => {
+        this.errorMessage += `${new Date().toLocaleString()}: ${error.message}]<br>`;
+        console.error('Request failed', error);
+        return [];
+      }
+    );
+
+    return [];
+  }
+
+  apiUpload() {
     this.loading = true;
     this.returnValue = '';
     const payload = {
@@ -118,7 +144,7 @@ export class IngestorComponent implements OnInit {
 
       // If current route is equal to the forward route, the router will not navigate to the new route
       if (this.connectedFacilityBackend === this.forwardFacilityBackend) {
-        this.connectToFacilityBackend(this.forwardFacilityBackend);
+        this.apiConnectToFacilityBackend(this.forwardFacilityBackend);
         return;
       }
 
@@ -149,5 +175,28 @@ export class IngestorComponent implements OnInit {
 
   clearErrorMessage(): void {
     this.errorMessage = '';
+  }
+
+  openNewTransferDialog(): void {
+    this.createNewTransfer = true;
+    this.metadataEditor.clearMetadata();
+  }
+
+  onRefreshTransferList(): void {
+    const TEST_DATALIST: TransferDataListEntry[] = [
+      { transferId: '1', status: 'In progress' },
+      { transferId: '2', status: 'Done' },
+      { transferId: '3', status: 'Failed' },
+    ];
+
+    this.transferDataSource = TEST_DATALIST;
+    console.log(this.transferDataSource);
+    // TODO activate when the API is ready
+    //this.apiGetTransferList();
+  }
+
+  onCancelTransfer(transferId: string) {
+    console.log('Cancel transfer', transferId);
+    // TODO activate when the API is ready
   }
 }

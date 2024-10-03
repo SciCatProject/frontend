@@ -8,11 +8,14 @@ import { Component, EventEmitter, Output } from '@angular/core';
 export class IngestorMetadataEditorComponent {
   metadata: string = '';
 
-    // Optional: EventEmitter, um Änderungen an der Metadata zu melden
-    @Output() metadataChange = new EventEmitter<string>();
+  clearMetadata() {
+    this.metadata = '';
+  }
+  // Optional: EventEmitter, um Änderungen an der Metadata zu melden
+  @Output() metadataChange = new EventEmitter<string>();
 
-    onMetadataChange(newMetadata: string) {
-      this.metadata = newMetadata;
-      this.metadataChange.emit(this.metadata);
-    }
+  onMetadataChange(newMetadata: string) {
+    this.metadata = newMetadata;
+    this.metadataChange.emit(this.metadata);
+  }
 }
