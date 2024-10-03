@@ -258,27 +258,27 @@ export class DatasetDetailsDashboardComponent
 
   fetchDatasetRelatedDocuments(): void {
     if (this.dataset) {
-      if ("proposalIds" in this.dataset && this.dataset["proposalIds"] !== "") {
+      if ("proposalId" in this.dataset && this.dataset["proposalId"] !== "") {
         this.store.dispatch(
           fetchProposalAction({
-            proposalId: this.dataset["proposalIds"] as string,
+            proposalId: this.dataset["proposalId"] as string,
           }),
         );
       } else {
         this.store.dispatch(clearLogbookAction());
       }
-      if ("sampleIds" in this.dataset && this.dataset["sampleIds"] !== "") {
+      if ("sampleId" in this.dataset && this.dataset["sampleId"] !== "") {
         this.store.dispatch(
-          fetchSampleAction({ sampleId: this.dataset["sampleIds"] as string }),
+          fetchSampleAction({ sampleId: this.dataset["sampleId"] as string }),
         );
       }
       if (
-        "instrumentIds" in this.dataset &&
-        this.dataset["instrumentIds"] !== ""
+        "instrumentId" in this.dataset &&
+        this.dataset["instrumentId"] !== ""
       ) {
         this.store.dispatch(
           fetchInstrumentAction({
-            pid: this.dataset["instrumentIds"] as string,
+            pid: this.dataset["instrumentId"] as string,
           }),
         );
       }

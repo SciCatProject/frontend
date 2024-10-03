@@ -44,9 +44,8 @@ export interface DatasetInterface {
   createdAt?: Date;
   updatedAt?: Date;
   instrumentId?: string;
-  proposalIds?: string | string[];
-  sampleIds?: string | string[];
-  instrumentIds?: string | string[];
+  proposalId?: string | string[];
+  sampleId?: string | string[];
   historyList?: any[];
   datasetLifecycle?: any[];
   publisheddata?: PublishedData;

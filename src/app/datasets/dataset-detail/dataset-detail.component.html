@@ -244,7 +244,7 @@
 
         <mat-card-content>
           <table>
-            <tr *ngIf="dataset['proposalIds'] && proposal">
+            <tr *ngIf="dataset['proposalId'] && proposal">
               <th>Proposal</th>
               <td>
                 <a (click)="onClickProposal(proposal.proposalId)">{{
@@ -254,15 +254,15 @@
             </tr>
             <tr
               *ngIf="
-                dataset['proposalIds'] &&
+                dataset['proposalId'] &&
                 !proposal &&
                 appConfig.datasetDetailsShowMissingProposalId
               "
             >
               <th>Proposal Id</th>
-              <td>{{ dataset["proposalIds"] }}</td>
+              <td>{{ dataset["proposalId"] }}</td>
             </tr>
-            <tr *ngIf="dataset['sampleIds'] && sample">
+            <tr *ngIf="dataset['sampleId'] && sample">
               <th>Sample</th>
               <td>
                 <a (click)="onClickSample(sample.sampleId)">
@@ -277,7 +277,7 @@
                 </span>
               </td>
             </tr>
-            <tr *ngIf="dataset['instrumentIds'] && instrument">
+            <tr *ngIf="dataset['instrumentId'] && instrument">
               <th>Instrument</th>
               <td>
                 <a (click)="onClickInstrument(instrument.pid)">
