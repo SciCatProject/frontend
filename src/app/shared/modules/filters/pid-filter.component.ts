@@ -5,9 +5,10 @@ import {
   setPidTermsAction,
   setPidTermsFilterAction,
 } from "state-management/actions/datasets.actions";
-import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
+import { debounceTime } from "rxjs/operators";
 import { AppConfigService } from "app-config.service";
 import { ClearableInputComponent } from "./clearable-input.component";
+import { FilterComponentInterface } from "./interface/filter-component.interface";
 import { getFilterLabel } from "./utils";
 
 @Component({
@@ -17,10 +18,12 @@ import { getFilterLabel } from "./utils";
 })
 export class PidFilterComponent
   extends ClearableInputComponent<string>
-  implements OnDestroy
+  implements FilterComponentInterface, OnDestroy
 {
   private pidSubject = new Subject<string>();
   private subscription: Subscription;
+  readonly componentName: string = "PidFilter";
+  readonly label: string = "Pid Filter";
 
   appConfig = this.appConfigService.getConfig();
 
@@ -29,16 +32,15 @@ export class PidFilterComponent
     private store: Store,
   ) {
     super();
+
+    const filters = this.appConfig.labelMaps?.filters;
+    this.label = getFilterLabel(filters, this.componentName, this.label);
     this.subscription = this.pidSubject
       .pipe(debounceTime(500))
       .subscribe((pid) => {
         const condition = !pid ? "" : this.buildPidTermsCondition(pid);
         this.store.dispatch(setPidTermsFilterAction({ pid: condition }));
       });
-  }
-
-  get label() {
-    return getFilterLabel((this.constructor as typeof PidFilterComponent).name);
   }
 
   buildPidTermsCondition(terms: string): string | { $regex: string } {

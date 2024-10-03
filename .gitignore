@@ -53,3 +53,6 @@ Thumbs.db
 /cypress/downloads/*
 *.mp4
 .angular
+
+# karma
+karma-junit.xml

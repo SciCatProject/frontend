@@ -26,86 +26,6 @@
   "jupyterHubUrl": "https://jupyterhub.esss.lu.se/",
   "landingPage": "doi.ess.eu/detail/",
   "lbBaseURL": "http://127.0.0.1:3000",
-  "localColumns": [
-    {
-      "name": "select",
-      "order": 0,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "pid",
-      "order": 1,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "datasetName",
-      "order": 2,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "runNumber",
-      "order": 3,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "sourceFolder",
-      "order": 4,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "size",
-      "order": 5,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "creationTime",
-      "order": 6,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "type",
-      "order": 7,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "image",
-      "order": 8,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "metadata",
-      "order": 9,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "proposalId",
-      "order": 10,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "ownerGroup",
-      "order": 11,
-      "type": "standard",
-      "enabled": false
-    },
-    {
-      "name": "dataStatus",
-      "order": 12,
-      "type": "standard",
-      "enabled": false
-    }
-  ],
   "logbookEnabled": true,
   "loginFormEnabled": true,
   "maxDirectDownloadSize": 5000000000,
@@ -152,7 +72,7 @@
       "label": "Download Selected",
       "files": "selected",
       "mat_icon": "download",
-      "type": "form",      
+      "type": "form",
       "url": "https://www.scicat.info/download/selected",
       "target": "_blank",
       "enabled": "#Selected && #SizeLimit",
@@ -164,7 +84,7 @@
       "label": "Notebook All",
       "files": "all",
       "icon": "/assets/icons/jupyter_logo.png",
-      "type": "form",      
+      "type": "form",
       "url": "https://www.scicat.info/notebook/all",
       "target": "_blank",
       "authorization": ["#datasetAccess", "#datasetPublic"]
@@ -175,11 +95,114 @@
       "label": "Notebook Selected",
       "files": "selected",
       "icon": "/assets/icons/jupyter_logo.png",
-      "type": "form",      
+      "type": "form",
       "url": "https://www.scicat.info/notebook/selected",
       "target": "_blank",
       "enabled": "#Selected",
       "authorization": ["#datasetAccess", "#datasetPublic"]
     }
-  ]
+  ],
+  "labelMaps": {
+    "filters": {
+      "LocationFilter": "Location",
+      "PidFilter": "Pid",
+      "GroupFilter": "Group",
+      "TypeFilter": "Type",
+      "KeywordFilter": "Keyword",
+      "DateRangeFilter": "Start Date - End Date",
+      "TextFilter": "Text"
+    }
+  },
+  "defaultDatasetsListSettings": {
+    "columns": [
+      {
+        "name": "select",
+        "order": 0,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "pid",
+        "order": 1,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "datasetName",
+        "order": 2,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "runNumber",
+        "order": 3,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "sourceFolder",
+        "order": 4,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "size",
+        "order": 5,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "creationTime",
+        "order": 6,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "type",
+        "order": 7,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "image",
+        "order": 8,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "metadata",
+        "order": 9,
+        "type": "standard",
+        "enabled": false
+      },
+      {
+        "name": "proposalId",
+        "order": 10,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "ownerGroup",
+        "order": 11,
+        "type": "standard",
+        "enabled": false
+      },
+      {
+        "name": "dataStatus",
+        "order": 12,
+        "type": "standard",
+        "enabled": false
+      }
+    ],
+    "filters": [
+      { "LocationFilter": true },
+      { "PidFilter": true },
+      { "GroupFilter": true },
+      { "TypeFilter": true },
+      { "KeywordFilter": true },
+      { "DateRangeFilter": true },
+      { "TextFilter": true }
+    ],
+    "conditions": []
+  }
 }

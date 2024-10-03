@@ -18,6 +18,7 @@ import {
   removeKeywordFilterAction,
 } from "state-management/actions/datasets.actions";
 import { debounceTime, distinctUntilChanged, skipWhile } from "rxjs/operators";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "app-keyword-filter",
@@ -30,6 +31,10 @@ export class KeywordFilterComponent
 {
   protected readonly getFacetCount = getFacetCount;
   protected readonly getFacetId = getFacetId;
+  readonly componentName: string = "KeywordFilter";
+  readonly label: string = "Keyword Filter";
+
+  appConfig = this.appConfigService.getConfig();
 
   keywordsTerms$ = this.store.select(selectKeywordsTerms);
 
@@ -46,9 +51,14 @@ export class KeywordFilterComponent
     this.keywordsFilter$,
   );
 
-  constructor(private store: Store) {
+  constructor(
+    private store: Store,
+    private appConfigService: AppConfigService,
+  ) {
     super();
 
+    const filters = this.appConfig.labelMaps?.filters;
+    this.label = getFilterLabel(filters, this.componentName, this.label);
     this.subscription = this.keywordsTerms$
       .pipe(
         skipWhile((terms) => terms === ""),
@@ -58,10 +68,6 @@ export class KeywordFilterComponent
       .subscribe((terms) => {
         this.store.dispatch(addKeywordFilterAction({ keyword: terms }));
       });
-  }
-
-  get label() {
-    return getFilterLabel(this.constructor.name);
   }
 
   onKeywordInput(event: any) {

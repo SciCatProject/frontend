@@ -7,7 +7,8 @@ import { Component } from "@angular/core";
   styleUrls: ["./pid-filter-startsWith.component.scss"],
 })
 export class PidFilterStartsWithComponent extends PidFilterComponent {
-  static kLabel = "PID filter (Starts With)";
+  readonly componentName: string = "PidFilterStartsWith";
+  readonly label: string = "PID filter (Starts With)- Not implemented";
 
   buildPidTermsCondition(terms: string): { $regex: string } {
     return { $regex: `^${terms}` };

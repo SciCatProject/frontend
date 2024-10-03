@@ -8,14 +8,14 @@ import {
   tick,
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
-import { MockStore } from "shared/MockStubs";
+import { MockHttp, MockStore } from "shared/MockStubs";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { setPidTermsFilterAction } from "state-management/actions/datasets.actions";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
-import { MatDialogModule, MatDialog } from "@angular/material/dialog";
+import { MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
@@ -29,6 +29,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { PidFilterComponent } from "./pid-filter.component";
+import { HttpClient } from "@angular/common/http";
 
 const getConfig = () => ({
   scienceSearchEnabled: false,
@@ -64,7 +65,11 @@ describe("PidFilterComponent", () => {
         StoreModule.forRoot({}),
       ],
       declarations: [PidFilterComponent, SearchParametersDialogComponent],
-      providers: [AsyncPipe],
+      providers: [
+        AsyncPipe,
+        AppConfigService,
+        { provide: HttpClient, useClass: MockHttp },
+      ],
     });
     TestBed.overrideComponent(PidFilterComponent, {
       set: {

@@ -16,15 +16,24 @@ import {
 } from "./utils";
 import { BehaviorSubject } from "rxjs";
 import { ClearableInputComponent } from "./clearable-input.component";
+import { FilterComponentInterface } from "./interface/filter-component.interface";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "app-group-filter",
   templateUrl: "group-filter.component.html",
   styleUrls: ["group-filter.component.scss"],
 })
-export class GroupFilterComponent extends ClearableInputComponent {
+export class GroupFilterComponent
+  extends ClearableInputComponent
+  implements FilterComponentInterface
+{
   protected readonly getFacetId = getFacetId;
   protected readonly getFacetCount = getFacetCount;
+  readonly componentName: string = "GroupFilter";
+  readonly label: string = "Group Filter";
+
+  appConfig = this.appConfigService.getConfig();
 
   groupFilter$ = this.store.select(selectGroupFilter);
 
@@ -37,12 +46,14 @@ export class GroupFilterComponent extends ClearableInputComponent {
     this.groupFilter$,
   );
 
-  constructor(private store: Store) {
+  constructor(
+    private store: Store,
+    private appConfigService: AppConfigService,
+  ) {
     super();
-  }
 
-  get label() {
-    return getFilterLabel(this.constructor.name);
+    const filters = this.appConfig.labelMaps?.filters;
+    this.label = getFilterLabel(filters, this.componentName, this.label);
   }
 
   onGroupInput(event: any) {

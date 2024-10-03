@@ -74,7 +74,7 @@ const reducer = createReducer(
   on(
     fromActions.updateUserSettingsCompleteAction,
     (state, { userSettings }): UserState => {
-      const { datasetCount, jobCount, columns } = userSettings;
+      const { datasetCount, jobCount, columns = [] } = userSettings;
       const settings = { ...state.settings, datasetCount, jobCount };
       if (columns.length > 0) {
         return { ...state, settings, columns };

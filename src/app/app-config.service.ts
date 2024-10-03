@@ -1,7 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { timeout } from "rxjs/operators";
-import { TableColumn } from "state-management/models";
+import {
+  DatasetsListSettings,
+  LabelMaps,
+  TableColumn,
+} from "state-management/models";
 
 export interface OAuth2Endpoint {
   authURL: string;
@@ -60,7 +64,7 @@ export interface AppConfig {
   jupyterHubUrl: string | null;
   landingPage: string | null;
   lbBaseURL: string;
-  localColumns: TableColumn[];
+  localColumns?: TableColumn[]; // localColumns is deprecated and should be removed in the future
   logbookEnabled: boolean;
   loginFormEnabled: boolean;
   maxDirectDownloadSize: number | null;
@@ -91,6 +95,8 @@ export interface AppConfig {
   notificationInterceptorEnabled: boolean;
   pidSearchMethod?: string;
   metadataEditingUnitListDisabled?: boolean;
+  defaultDatasetsListSettings: DatasetsListSettings;
+  labelMaps: LabelMaps;
 }
 
 @Injectable()

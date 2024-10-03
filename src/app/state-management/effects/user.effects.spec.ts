@@ -39,10 +39,18 @@ import { clearSamplesStateAction } from "state-management/actions/samples.action
 import { Type } from "@angular/core";
 import { HttpErrorResponse } from "@angular/common/http";
 import { AppConfigService } from "app-config.service";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 class AppConfigServiceMock {
   getConfig() {
-    return { accessTokenPrefix: "" };
+    return {
+      accessTokenPrefix: "",
+      defaultDatasetsListSettings: {
+        columns: [],
+        conditions: [],
+        filters: [],
+      },
+    };
   }
 }
 
@@ -57,6 +65,7 @@ describe("UserEffects", () => {
   const error = new HttpErrorResponse({});
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule], // Import HttpClientTestingModule
       providers: [
         UserEffects,
         provideMockActions(() => actions),
@@ -88,6 +97,8 @@ describe("UserEffects", () => {
             "getCurrent",
             "getSettings",
             "updateSettings",
+            "partialUpdateExternalSettings",
+            "partialUpdateSettings",
             "getCurrentToken",
             "getCurrentId",
           ]),
@@ -657,21 +668,35 @@ describe("UserEffects", () => {
     const property = { columns: [] };
 
     it("should result in an updateUserSettingsCompleteAction", () => {
-      const userSettings = new UserSetting({
+      const userSettings = {
         columns: [],
+        filters: [],
+        conditions: [],
         datasetCount: 25,
         jobCount: 25,
         userId: "testId",
         id: "testId",
-      });
+      } as UserSetting;
+
+      const apiResponse = {
+        datasetCount: 25,
+        jobCount: 25,
+        userId: "testId",
+        id: "testId",
+        externalSettings: {
+          columns: [],
+          filters: [],
+          conditions: [],
+        },
+      };
       const action = fromActions.updateUserSettingsAction({ property });
       const outcome = fromActions.updateUserSettingsCompleteAction({
         userSettings,
       });
 
       actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: userSettings });
-      userApi.updateSettings.and.returnValue(response);
+      const response = cold("-a|", { a: apiResponse });
+      userApi.partialUpdateExternalSettings.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.updateUserSettings$).toBeObservable(expected);
@@ -683,7 +708,7 @@ describe("UserEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      userApi.updateSettings.and.returnValue(response);
+      userApi.partialUpdateExternalSettings.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.updateUserSettings$).toBeObservable(expected);

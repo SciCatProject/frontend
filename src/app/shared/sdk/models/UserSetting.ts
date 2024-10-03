@@ -1,5 +1,9 @@
 /* eslint-disable */
 import { User } from "../index";
+import {
+  ConditionConfig,
+  FilterConfig,
+} from "../../modules/filters/filters.module";
 
 declare var Object: any;
 export interface UserSettingInterface {
@@ -13,6 +17,8 @@ export interface UserSettingInterface {
   createdAt?: Date;
   updatedAt?: Date;
   user?: User;
+  conditions?: Array<ConditionConfig>;
+  filters?: Array<FilterConfig>;
 }
 
 export class UserSetting implements UserSettingInterface {
@@ -25,6 +31,8 @@ export class UserSetting implements UserSettingInterface {
   "userId": any;
   "createdAt": Date;
   "updatedAt": Date;
+  "conditions": Array<ConditionConfig>;
+  "filters": Array<FilterConfig>;
   user: User;
   constructor(data?: UserSettingInterface) {
     Object.assign(this, data);
@@ -96,6 +104,14 @@ export class UserSetting implements UserSettingInterface {
         updatedAt: {
           name: "updatedAt",
           type: "Date",
+        },
+        conditions: {
+          name: "conditions",
+          type: "Array&lt;ConditionConfig&gt;",
+        },
+        filters: {
+          name: "filters",
+          type: "Array&lt;FilterConfig&gt;",
         },
       },
       relations: {

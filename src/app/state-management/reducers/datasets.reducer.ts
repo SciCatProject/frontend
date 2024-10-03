@@ -4,7 +4,11 @@ import {
   DatasetState,
 } from "state-management/state/datasets.store";
 import * as fromActions from "state-management/actions/datasets.actions";
-import { ArchViewMode, Dataset } from "state-management/models";
+import {
+  ArchViewMode,
+  Dataset,
+  ScientificCondition,
+} from "state-management/models";
 
 const reducer = createReducer(
   initialDatasetState,
@@ -453,9 +457,30 @@ const reducer = createReducer(
     (state, { condition }): DatasetState => {
       const currentFilters = state.filters;
       const currentScientific = currentFilters.scientific;
+
+      // Custom comparison function to check if two conditions are equal
+      const areConditionsEqual = (
+        cond1: ScientificCondition,
+        cond2: ScientificCondition,
+      ) => {
+        return (
+          cond1.lhs === cond2.lhs &&
+          cond1.relation === cond2.relation &&
+          cond1.rhs === cond2.rhs &&
+          cond1.unit === cond2.unit
+        );
+      };
+
+      // Check if the condition already exists in the scientific array
+      const conditionExists = currentScientific.some((existingCondition) =>
+        areConditionsEqual(existingCondition, condition),
+      );
+
       const filters = {
         ...currentFilters,
-        scientific: [...currentScientific, condition],
+        scientific: conditionExists
+          ? currentScientific
+          : [...currentScientific, condition],
       };
       return { ...state, filters };
     },

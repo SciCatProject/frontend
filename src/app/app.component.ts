@@ -13,8 +13,8 @@ import { LoopBackConfig } from "shared/sdk";
 import {
   clearMessageAction,
   fetchCurrentUserAction,
+  loadDefaultSettings,
   logoutAction,
-  setDatasetTableColumnsAction,
 } from "state-management/actions/user.actions";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Meta, Title } from "@angular/platform-browser";
@@ -71,9 +71,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     LoopBackConfig.setBaseURL(this.config.lbBaseURL);
     console.log(LoopBackConfig.getPath());
 
-    this.store.dispatch(
-      setDatasetTableColumnsAction({ columns: this.config.localColumns }),
-    );
+    this.store.dispatch(loadDefaultSettings({ config: this.config }));
 
     this.store.dispatch(fetchCurrentUserAction());
     if (window.location.pathname.indexOf("logout") !== -1) {

@@ -16,15 +16,24 @@ import {
 } from "state-management/actions/datasets.actions";
 import { ClearableInputComponent } from "./clearable-input.component";
 import { Store } from "@ngrx/store";
+import { FilterComponentInterface } from "./interface/filter-component.interface";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "app-location-filter",
   templateUrl: "location-filter.component.html",
   styleUrls: ["location-filter.component.scss"],
 })
-export class LocationFilterComponent extends ClearableInputComponent {
+export class LocationFilterComponent
+  extends ClearableInputComponent
+  implements FilterComponentInterface
+{
   protected readonly getFacetId = getFacetId;
   protected readonly getFacetCount = getFacetCount;
+  readonly componentName: string = "LocationFilter";
+  readonly label: string = "Location Filter";
+
+  appConfig = this.appConfigService.getConfig();
 
   locationFacetCounts$ = this.store.select(selectLocationFacetCounts);
   locationFilter$ = this.store.select(selectLocationFilter);
@@ -37,12 +46,14 @@ export class LocationFilterComponent extends ClearableInputComponent {
     this.locationFilter$,
   );
 
-  constructor(private store: Store) {
+  constructor(
+    private store: Store,
+    public appConfigService: AppConfigService,
+  ) {
     super();
-  }
 
-  get label() {
-    return getFilterLabel(this.constructor.name);
+    const filters = this.appConfig.labelMaps?.filters;
+    this.label = getFilterLabel(filters, this.componentName, this.label);
   }
 
   locationSelected(location: string | null) {

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Inject } from "@angular/core";
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -22,20 +22,19 @@ import {
   ConditionConfig,
   FilterConfig,
 } from "../../../shared/modules/filters/filters.module";
-import { getFilterLabel } from "../../../shared/modules/filters/utils";
-import { ScientificCondition } from "../../../state-management/models";
 
 @Component({
   selector: "app-type-datasets-filter-settings",
   templateUrl: `./datasets-filter-settings.component.html`,
   styleUrls: [`./datasets-filter-settings.component.scss`],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DatasetsFilterSettingsComponent {
-  protected readonly getFilterLabel = getFilterLabel;
-
   metadataKeys$ = this.store.select(selectMetadataKeys);
 
   appConfig = this.appConfigService.getConfig();
+
+  filterValidationStatus = {};
 
   constructor(
     public dialogRef: MatDialogRef<DatasetsFilterSettingsComponent>,
@@ -133,8 +132,14 @@ export class DatasetsFilterSettingsComponent {
     return condition;
   }
 
-  toggleVisibility(filter: FilterConfig) {
-    filter.visible = !filter.visible;
+  toggleVisibility(filter: FilterConfig): void {
+    const key = this.getFilterKey(filter);
+    filter[key] = !filter[key];
+  }
+
+  getChecked(filter: FilterConfig): boolean {
+    const key = this.getFilterKey(filter);
+    return filter[key];
   }
 
   drop(event: CdkDragDrop<string[]>): void {
@@ -151,5 +156,17 @@ export class DatasetsFilterSettingsComponent {
 
   onCancel() {
     this.dialogRef.close();
+  }
+
+  resolveFilterLabel(
+    labelMaps: Record<string, string>,
+    filter: FilterConfig,
+  ): string {
+    const key = this.getFilterKey(filter);
+    return labelMaps[key] || "Unknown filter";
+  }
+
+  getFilterKey(filter: FilterConfig): string {
+    return Object.keys(filter)[0];
   }
 }

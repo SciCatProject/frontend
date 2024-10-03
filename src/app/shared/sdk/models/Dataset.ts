@@ -44,6 +44,8 @@ export interface DatasetInterface {
   createdAt?: Date;
   updatedAt?: Date;
   instrumentId?: string;
+  proposalId?: string | string[];
+  sampleId?: string | string[];
   historyList?: any[];
   datasetLifecycle?: any[];
   publisheddata?: PublishedData;
@@ -53,7 +55,7 @@ export interface DatasetInterface {
   origdatablocks?: OrigDatablock[];
   attachments?: Attachment[];
   instrument?: Instrument;
-  scientificMetadata?: any
+  scientificMetadata?: any;
 }
 
 export class Dataset implements DatasetInterface {
