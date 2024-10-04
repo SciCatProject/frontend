@@ -84,6 +84,7 @@ export class DatasetsFilterSettingsComponent {
       .open(SearchParametersDialogComponent, {
         data: {
           parameterKeys: this.asyncPipe.transform(this.metadataKeys$),
+          parameterTypes: this.asyncPipe.transform(this.metadataTypes$),
           condition: condition.condition,
         },
       })

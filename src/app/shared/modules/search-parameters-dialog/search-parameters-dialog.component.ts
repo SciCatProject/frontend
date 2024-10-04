@@ -9,8 +9,6 @@ import {
   map,
   mergeMap,
   startWith,
-  switchMap,
-  take,
 } from "rxjs/operators";
 import { UnitsService } from "shared/services/units.service";
 import { ScientificCondition } from "../../../state-management/models";
@@ -83,14 +81,16 @@ export class SearchParametersDialogComponent {
       .get("lhs")!
       .valueChanges.pipe(
         debounceTime(300),
-        filter((selectedLhs: string) => selectedLhs && selectedLhs.length > 3),
+        filter((selectedLhs: string) => selectedLhs && selectedLhs.length > 2),
         distinctUntilChanged(),
         mergeMap((selectedLhs: string) => {
-          return this.parameterTypes.filter((type) =>
-            type.metadataKey.includes(selectedLhs),
+          return of(
+            this.parameterTypes.find((type) =>
+              type.metadataKey.includes(selectedLhs),
+            ) || ({ metadataType: "mixed" } as Record<string, string>),
           );
         }),
-        take(1),
+        // take(1),
         map((field) => {
           return this.extractFieldType(field.metadataType);
         }),
@@ -105,39 +105,45 @@ export class SearchParametersDialogComponent {
     // Assuming metadata structure contains field type info
     if (type === "string") {
       return "string";
-    } else if (type === "int" || type === "double" /*|| type === "mixed"*/) {
-      // TODO what to do with mixed type
+    } else if (type === "int" || type === "double") {
       return "number";
     } else if (type === "Date") {
       return "date";
     }
 
-    return "string"; // Default to string if type can't be inferred
+    return "mixed"; // Default to string if type can't be inferred
   }
 
   // Dynamically fetch operators based on field type
   private getOperatorsByType(
     fieldType: string,
   ): { value: string; label: string }[] {
+    const forString = [
+      { value: "EQUAL_TO_STRING", label: "is equal to (string)" },
+      { value: "CONTAINS", label: "contains" },
+    ];
+    const forNumber = [
+      { value: "GREATER_THAN", label: "is greater than" },
+      { value: "LESS_THAN", label: "is less than" },
+      { value: "EQUAL_TO_NUMERIC", label: "is equal to (numeric)" },
+    ];
+    const forDate = [
+      { value: "BEFORE", label: "is before" },
+      { value: "AFTER", label: "is after" },
+    ];
+    const all = [{ value: "EQUAL", label: "is equal to" }]
+      .concat(forString)
+      .concat(forNumber)
+      .concat(forDate);
     switch (fieldType) {
       case "string":
-        return [
-          { value: "EQUAL_TO_STRING", label: "is equal to (string)" },
-          { value: "CONTAINS", label: "contains" },
-        ];
+        return forString;
       case "number":
-        return [
-          { value: "GREATER_THAN", label: "is greater than" },
-          { value: "LESS_THAN", label: "is less than" },
-          { value: "EQUAL_TO_NUMERIC", label: "is equal to (numeric)" },
-        ];
+        return forNumber;
       case "date":
-        return [
-          { value: "BEFORE", label: "is before" },
-          { value: "AFTER", label: "is after" },
-        ];
+        return forDate;
       default:
-        return [{ value: "EQUAL", label: "is equal to" }];
+        return all;
     }
   }
 
