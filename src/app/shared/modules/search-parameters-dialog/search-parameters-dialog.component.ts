@@ -22,7 +22,7 @@ export class SearchParametersDialogComponent {
   appConfig = this.appConfigService.getConfig();
   unitsEnabled = this.appConfig.scienceSearchUnitsEnabled;
 
-  parameterKeys = this.data.parameterKeys;
+  parameterKeys = this.data.parameterTypes.map((type) => type.metadataKey);
   parameterTypes = this.data.parameterTypes;
   filteredOperators$: Observable<{ value: string; label: string }[]> = of([]); // TODO default set of operators
   units: string[] = [];
@@ -72,8 +72,22 @@ export class SearchParametersDialogComponent {
     public dialogRef: MatDialogRef<SearchParametersDialogComponent>,
     private unitsService: UnitsService,
   ) {
+    function findMetadataTypeByKey(key) {
+      return (
+        this.parameterTypes.find((type) => type.metadataKey.includes(key)) ||
+        ({ metadataType: "mixed" } as Record<string, string>)
+      );
+    }
+
     if (this.data.condition?.lhs) {
       this.getUnits(this.data.condition.lhs);
+      this.filteredOperators$ = of(
+        this.getOperatorsByType(
+          this.extractFieldType(
+            findMetadataTypeByKey.bind(this, this.data.condition.lhs),
+          ),
+        ),
+      );
     }
 
     // Dynamically update operators based on the field selected by the user
@@ -84,11 +98,7 @@ export class SearchParametersDialogComponent {
         filter((selectedLhs: string) => selectedLhs && selectedLhs.length > 2),
         distinctUntilChanged(),
         mergeMap((selectedLhs: string) => {
-          return of(
-            this.parameterTypes.find((type) =>
-              type.metadataKey.includes(selectedLhs),
-            ) || ({ metadataType: "mixed" } as Record<string, string>),
-          );
+          return of(findMetadataTypeByKey.bind(this, selectedLhs));
         }),
         // take(1),
         map((field) => {
