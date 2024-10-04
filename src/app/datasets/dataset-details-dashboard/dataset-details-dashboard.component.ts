@@ -23,6 +23,8 @@ import {
   fetchAttachmentsAction,
   fetchDatablocksAction,
   fetchDatasetAction,
+  fetchMetadataKeysAction,
+  fetchMetadataTypesAction,
   fetchOrigDatablocksAction,
   fetchRelatedDatasetsAction,
 } from "state-management/actions/datasets.actions";
@@ -119,6 +121,9 @@ export class DatasetDetailsDashboardComponent
   ) {}
 
   ngOnInit() {
+    this.store.dispatch(fetchMetadataKeysAction());
+    this.store.dispatch(fetchMetadataTypesAction());
+
     this.subscriptions.push(
       this.route.params.pipe(pluck("id")).subscribe((id: string) => {
         if (id) {

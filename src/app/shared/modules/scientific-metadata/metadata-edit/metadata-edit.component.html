@@ -29,14 +29,24 @@
               <input
                 id="nameInput{{ i }}"
                 matInput
-                autocomplete="off"
+                autocomplete="on"
                 autocorrect="off"
                 autocapitalize="off"
                 spellcheck="false"
                 formControlName="fieldName"
                 data-cy="metadata-name-input"
+                [matAutocomplete]="metadataKeys"
                 (blur)="getUnits(i)"
               />
+              <mat-autocomplete #metadataKeys="matAutocomplete">
+                <mat-option
+                  *ngFor="let key of metadataKeys$ | async"
+                  [value]="key"
+                  [matTooltip]="key"
+                >
+                  {{ key }}
+                </mat-option>
+              </mat-autocomplete>
               <mat-error *ngIf="fieldHasError(i, 'fieldName')">
                 Name is required
               </mat-error>

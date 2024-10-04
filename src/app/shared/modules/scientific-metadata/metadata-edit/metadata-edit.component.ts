@@ -20,9 +20,14 @@ import {
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { UnitsService } from "shared/services/units.service";
 import { startWith, map } from "rxjs/operators";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { ScientificMetadata } from "../scientific-metadata.module";
 import { AppConfigService } from "app-config.service";
+import { Store } from "@ngrx/store";
+import {
+  selectMetadataKeys,
+  selectMetadataTypes,
+} from "../../../../state-management/selectors/datasets.selectors";
 
 @Component({
   selector: "metadata-edit",
@@ -38,6 +43,8 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   appConfig = this.appConfigService.getConfig();
 
   filteredUnits$: Observable<string[]> | undefined = new Observable<string[]>();
+  metadataKeys$ = this.store.select(selectMetadataKeys);
+  metadataTypes$ = this.store.select(selectMetadataTypes);
   invalidUnitWarning: string[] = [];
   @Input() metadata: Record<string, any> | undefined;
   @Output() save = new EventEmitter<Record<string, unknown>>();
@@ -46,6 +53,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     private formBuilder: FormBuilder,
     private unitsService: UnitsService,
     private appConfigService: AppConfigService,
+    private store: Store,
   ) {}
 
   get formControlFields() {
@@ -77,6 +85,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
     this.items.push(field);
 
+    this.setupFieldNameValueChangeListener();
     this.setupFieldUnitValueChangeListeners();
   }
 
@@ -178,6 +187,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
           });
         }
         this.items.push(field);
+        this.setupFieldNameValueChangeListener();
         this.setupFieldUnitValueChangeListeners();
 
         this.detectType(index);
@@ -255,6 +265,43 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     return this.metadataForm.get("items") as FormArray;
   }
 
+  setupFieldNameValueChangeListener() {
+    // Listen for changes in 'fieldName' to dynamically update 'fieldType'
+    this.items.controls.forEach((control, index) => {
+      control
+        .get("fieldName")
+        ?.valueChanges.pipe(/*debounceTime(600), distinctUntilChanged()*/)
+        .subscribe((selectedKey) => {
+          this.metadataTypes$.subscribe((types) => {
+            // Update the fieldType if the selectedKey exists in metadataTypes
+            const foundType = types.find(
+              (type) => type.metadataKey === selectedKey,
+            )?.metadataType;
+            if (foundType) {
+              this.items
+                .at(index)
+                .get("fieldType")
+                ?.setValue(
+                  // TODO we should think about consistent types naming, see BE#1428
+                  (function (foundType, that) {
+                    switch (foundType) {
+                      case "mixed":
+                        return that.typeValues[0]; // quantity
+                      case "double":
+                      case "int":
+                        return that.typeValues[1]; // number
+                      default:
+                        return that.typeValues[2]; // string
+                    }
+                  })(foundType, this),
+                );
+              this.detectType(index);
+            }
+          });
+        });
+    });
+  }
+
   setupFieldUnitValueChangeListeners() {
     this.items.controls.forEach((control, index) => {
       control
@@ -278,6 +325,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     this.addCurrentMetadata();
     this.units = this.unitsService.getUnits();
 
+    this.setupFieldNameValueChangeListener();
     this.setupFieldUnitValueChangeListeners();
   }
 
