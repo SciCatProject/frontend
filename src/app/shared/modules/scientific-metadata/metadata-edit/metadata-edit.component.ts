@@ -270,7 +270,11 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     this.items.controls.forEach((control, index) => {
       control
         .get("fieldName")
-        ?.valueChanges.pipe(/*debounceTime(600), distinctUntilChanged()*/)
+        ?.valueChanges.pipe(
+          debounceTime(600),
+          distinctUntilChanged(),
+          startWith(""),
+        )
         .subscribe((selectedKey) => {
           this.metadataTypes$.subscribe((types) => {
             // Update the fieldType if the selectedKey exists in metadataTypes
