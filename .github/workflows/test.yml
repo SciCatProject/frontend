@@ -94,7 +94,6 @@ jobs:
           name: coverage
           path: coverage/
 
-
   e2etests:
     name: Run E2E Tests
     runs-on: ubuntu-latest
