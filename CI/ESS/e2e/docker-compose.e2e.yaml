@@ -44,6 +44,7 @@ services:
     volumes:
       - "./CI/ESS/e2e/.env.backend-next:/home/node/app/.env"
       - "./CI/ESS/e2e/functionalAccounts.json:/home/node/app/functionalAccounts.json"
+      - "./CI/ESS/e2e/config.e2e.json:/home/node/app/dist/config/frontend.config.json"
     depends_on:
       mongodb:
         condition: service_healthy
