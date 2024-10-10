@@ -52,6 +52,7 @@
   "shoppingCartOnHeader": true,
   "tableSciDataEnabled": true,
   "datasetDetailsShowMissingProposalId": false,
+  "notificationInterceptorEnabled": true,
   "datafilesActionsEnabled": true,
   "datafilesActions": [
     {

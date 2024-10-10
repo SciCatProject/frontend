@@ -53,6 +53,56 @@
   "tableSciDataEnabled": true,
   "datasetDetailsShowMissingProposalId": false,
   "notificationInterceptorEnabled": true,
+  "datafilesActionsEnabled": true,
+  "datafilesActions": [
+    {
+      "id": "eed8efec-4354-11ef-a3b5-d75573a5d37f",
+      "order": 4,
+      "label": "Download All",
+      "files": "all",
+      "mat_icon": "download",
+      "type": "form",
+      "url": "https://www.scicat.info/download/all",
+      "target": "_blank",
+      "enabled": "#SizeLimit",
+      "authorization": ["#datasetAccess", "#datasetPublic"]
+    },
+    {
+      "id": "3072fafc-4363-11ef-b9f9-ebf568222d26",
+      "order": 3,
+      "label": "Download Selected",
+      "files": "selected",
+      "mat_icon": "download",
+      "type": "form",
+      "url": "https://www.scicat.info/download/selected",
+      "target": "_blank",
+      "enabled": "#Selected && #SizeLimit",
+      "authorization": ["#datasetAccess", "#datasetPublic"]
+    },
+    {
+      "id": "4f974f0e-4364-11ef-9c63-03d19f813f4e",
+      "order": 2,
+      "label": "Notebook All",
+      "files": "all",
+      "icon": "/assets/icons/jupyter_logo.png",
+      "type": "form",
+      "url": "https://www.scicat.info/notebook/all",
+      "target": "_blank",
+      "authorization": ["#datasetAccess", "#datasetPublic"]
+    },
+    {
+      "id": "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
+      "order": 1,
+      "label": "Notebook Selected",
+      "files": "selected",
+      "icon": "/assets/icons/jupyter_logo.png",
+      "type": "form",
+      "url": "https://www.scicat.info/notebook/selected",
+      "target": "_blank",
+      "enabled": "#Selected",
+      "authorization": ["#datasetAccess", "#datasetPublic"]
+    }
+  ],
   "labelMaps": {
     "filters": {
       "LocationFilter": "Location",
