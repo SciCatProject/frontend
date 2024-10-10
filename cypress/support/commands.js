@@ -1,4 +1,4 @@
-import { testData } from "../fixtures/TestData";
+import { testData } from "../fixtures/testData";
 
 const lbBaseUrl = Cypress.config("lbBaseUrl");
 const loginEndpoint = Cypress.config("lbLoginEndpoint");
