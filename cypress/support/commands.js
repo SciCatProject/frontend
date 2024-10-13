@@ -1,3 +1,5 @@
+import { testData } from "../fixtures/testData";
+
 const lbBaseUrl = Cypress.config("lbBaseUrl");
 const loginEndpoint = Cypress.config("lbLoginEndpoint");
 const accessTokenPrefix = Cypress.config("lbTokenPrefix");
@@ -30,20 +32,19 @@ Cypress.Commands.add("createPolicy", (ownerGroup) => {
     cy.getCookie("$LoopBackSDK$id").then((idCookie) => {
       const token = idCookie.value;
 
-      cy.fixture("policy").then((policy) => {
-        policy.manager = ["_cypress", user.email];
-        policy.ownerGroup = ownerGroup;
+      const policy = testData.policy;
+      policy.manager = ["_cypress", user.email];
+      policy.ownerGroup = ownerGroup;
 
-        cy.request({
-          method: "POST",
-          url: lbBaseUrl + "/Policies?access_token=" + token,
-          headers: {
-            Authorization: token,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: policy,
-        });
+      cy.request({
+        method: "POST",
+        url: lbBaseUrl + "/Policies",
+        headers: {
+          Authorization: token,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: policy,
       });
     });
   });
@@ -61,9 +62,7 @@ Cypress.Commands.add("removePolicies", () => {
       url:
         lbBaseUrl +
         "/Policies?filter=" +
-        encodeURIComponent(JSON.stringify(filter)) +
-        "&access_token=" +
-        token,
+        encodeURIComponent(JSON.stringify(filter)),
       headers: {
         Authorization: token,
         Accept: "application/json",
@@ -83,12 +82,7 @@ Cypress.Commands.add("removePolicies", () => {
         policies.forEach((policy) => {
           cy.request({
             method: "DELETE",
-            url:
-              lbBaseUrl +
-              "/Policies/" +
-              encodeURIComponent(policy.id) +
-              "?access_token=" +
-              deletionToken,
+            url: lbBaseUrl + "/Policies/" + encodeURIComponent(policy.id),
             headers: {
               Authorization: deletionToken,
               Accept: "application/json",
@@ -116,32 +110,50 @@ Cypress.Commands.add("isLoading", (type) => {
   cy.get('[data-cy="spinner"]').should("not.exist");
 });
 
-Cypress.Commands.add("createDataset", (type, proposalId = "20170266") => {
-  cy.getCookie("$LoopBackSDK$user").then((userCookie) => {
-    const user = JSON.parse(decodeURIComponent(userCookie.value));
+Cypress.Commands.add(
+  "createDataset",
+  (type, proposalId = "20170266", dataFileSize = "small") => {
+    cy.getCookie("$LoopBackSDK$user").then((userCookie) => {
+      const user = JSON.parse(decodeURIComponent(userCookie.value));
 
-    cy.getCookie("$LoopBackSDK$id").then((idCookie) => {
-      const token = idCookie.value;
+      cy.getCookie("$LoopBackSDK$id").then((idCookie) => {
+        const token = idCookie.value;
 
-      if (type === "raw") {
-        cy.fixture("rawDataset").then((dataset) => {
+        if (type === "raw") {
+          const dataset = testData.rawDataset;
           dataset.proposalId = proposalId;
           cy.log("Raw Dataset 1: " + JSON.stringify(dataset, null, 2));
           cy.log("User: " + JSON.stringify(user, null, 2));
 
           cy.request({
             method: "POST",
-            url: lbBaseUrl + "/Datasets?access_token=" + token,
+            url: lbBaseUrl + "/Datasets",
             headers: {
               Authorization: token,
               Accept: "application/json",
               "Content-Type": "application/json",
             },
             body: dataset,
+          }).then((response) => {
+            const origDataBlock =
+              dataFileSize === "small"
+                ? testData.origDataBlockSmall
+                : testData.origDataBlockLarge;
+            origDataBlock.datasetId = response.body.pid;
+
+            cy.request({
+              method: "POST",
+              url: lbBaseUrl + `/OrigDatablocks`,
+              headers: {
+                Authorization: token,
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: origDataBlock,
+            });
           });
-        });
-      } else if (type === "derived") {
-        cy.fixture("derivedDataset").then((dataset) => {
+        } else if (type === "derived") {
+          const dataset = testData.derivedDataset;
           dataset.investigator = user.email;
           dataset.owner = user.username;
           dataset.ownerEmail = user.email;
@@ -151,7 +163,7 @@ Cypress.Commands.add("createDataset", (type, proposalId = "20170266") => {
 
           cy.request({
             method: "POST",
-            url: lbBaseUrl + "/Datasets?access_token=" + token,
+            url: lbBaseUrl + "/Datasets",
             headers: {
               Authorization: token,
               Accept: "application/json",
@@ -159,32 +171,31 @@ Cypress.Commands.add("createDataset", (type, proposalId = "20170266") => {
             },
             body: dataset,
           });
-        });
-      }
+        }
+      });
     });
-  });
-});
+  },
+);
 Cypress.Commands.add("createProposal", (proposalId = "20170266") => {
   return cy.getCookie("$LoopBackSDK$user").then((userCookie) => {
     const user = JSON.parse(decodeURIComponent(userCookie.value));
 
     cy.getCookie("$LoopBackSDK$id").then((idCookie) => {
       const token = idCookie.value;
-      cy.fixture("proposal").then((proposal) => {
-        proposal.proposalId = proposalId;
-        cy.log("Proposal: " + JSON.stringify(proposal, null, 2));
-        cy.log("User: " + JSON.stringify(user, null, 2));
+      const proposal = testData.proposal;
+      proposal.proposalId = proposalId;
+      cy.log("Proposal: " + JSON.stringify(proposal, null, 2));
+      cy.log("User: " + JSON.stringify(user, null, 2));
 
-        cy.request({
-          method: "POST",
-          url: lbBaseUrl + "/Proposals?access_token=" + token,
-          headers: {
-            Authorization: token,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: proposal,
-        });
+      cy.request({
+        method: "POST",
+        url: lbBaseUrl + "/Proposals",
+        headers: {
+          Authorization: token,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: proposal,
       });
     });
   });
@@ -196,10 +207,7 @@ Cypress.Commands.add("deleteProposal", (id) => {
 
     cy.request({
       method: "DELETE",
-      url:
-        lbBaseUrl +
-        `/Proposals/${encodeURIComponent(id)}?access_token=` +
-        token,
+      url: lbBaseUrl + `/Proposals/${encodeURIComponent(id)}`,
       headers: {
         Authorization: token,
         Accept: "application/json",
@@ -224,9 +232,7 @@ Cypress.Commands.add("removeDatasets", () => {
       url:
         lbBaseUrl +
         "/Datasets?filter=" +
-        encodeURIComponent(JSON.stringify(filter)) +
-        "&access_token=" +
-        token,
+        encodeURIComponent(JSON.stringify(filter)),
       headers: {
         Authorization: token,
         Accept: "application/json",
@@ -240,12 +246,7 @@ Cypress.Commands.add("removeDatasets", () => {
       datasets.forEach((dataset) => {
         cy.request({
           method: "DELETE",
-          url:
-            lbBaseUrl +
-            "/Datasets/" +
-            encodeURIComponent(dataset.pid) +
-            "?access_token=" +
-            token,
+          url: lbBaseUrl + "/Datasets/" + encodeURIComponent(dataset.pid),
           headers: {
             Authorization: token,
             Accept: "application/json",
@@ -269,9 +270,7 @@ Cypress.Commands.add("removeSamples", () => {
       url:
         lbBaseUrl +
         "/Samples?filter=" +
-        encodeURIComponent(JSON.stringify(filter)) +
-        "&access_token=" +
-        token,
+        encodeURIComponent(JSON.stringify(filter)),
       headers: {
         Authorization: token,
         Accept: "application/json",
@@ -291,12 +290,7 @@ Cypress.Commands.add("removeSamples", () => {
         samples.forEach((sample) => {
           cy.request({
             method: "DELETE",
-            url:
-              lbBaseUrl +
-              "/Samples/" +
-              sample.sampleId +
-              "?access_token=" +
-              deletionToken,
+            url: lbBaseUrl + "/Samples/" + sample.sampleId,
             headers: {
               Authorization: deletionToken,
               Accept: "application/json",
@@ -344,21 +338,20 @@ Cypress.Commands.add("createDatasetForElasticSearch", (datasetName) => {
     cy.getCookie("$LoopBackSDK$id").then((idCookie) => {
       const token = idCookie.value;
 
-      cy.fixture("rawDataset").then((dataset) => {
-        dataset.datasetName = datasetName;
-        cy.log("Raw Dataset 1: " + JSON.stringify(dataset, null, 2));
-        cy.log("User: " + JSON.stringify(user, null, 2));
+      const dataset = testData.rawDataset;
+      dataset.datasetName = datasetName;
+      cy.log("Raw Dataset 1: " + JSON.stringify(dataset, null, 2));
+      cy.log("User: " + JSON.stringify(user, null, 2));
 
-        cy.request({
-          method: "POST",
-          url: lbBaseUrl + "/Datasets?access_token=" + token,
-          headers: {
-            Authorization: token,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: dataset,
-        });
+      cy.request({
+        method: "POST",
+        url: lbBaseUrl + "/Datasets",
+        headers: {
+          Authorization: token,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: dataset,
       });
     });
   });
@@ -392,9 +385,7 @@ Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {
       url:
         lbBaseUrl +
         "/Datasets?filter=" +
-        encodeURIComponent(JSON.stringify(filter)) +
-        "&access_token=" +
-        token,
+        encodeURIComponent(JSON.stringify(filter)),
       headers: {
         Authorization: token,
         Accept: "application/json",
@@ -414,12 +405,7 @@ Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {
         datasets.forEach((dataset) => {
           cy.request({
             method: "DELETE",
-            url:
-              lbBaseUrl +
-              "/Datasets/" +
-              encodeURIComponent(dataset.pid) +
-              "?access_token=" +
-              token,
+            url: lbBaseUrl + "/Datasets/" + encodeURIComponent(dataset.pid),
             headers: {
               Authorization: token,
               Accept: "application/json",
