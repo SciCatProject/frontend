@@ -47,7 +47,11 @@ export class DatasetEffects {
 
   fetchDatasets$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.fetchDatasetsAction),
+      ofType(
+        fromActions.fetchDatasetsAction,
+        fromActions.setPublicViewModeAction,
+        fromActions.sortByColumnAction,
+      ),
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
@@ -63,7 +67,11 @@ export class DatasetEffects {
 
   fetchFacetCounts$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.fetchFacetCountsAction),
+      ofType(
+        fromActions.fetchFacetCountsAction,
+        fromActions.setPublicViewModeAction,
+        fromActions.sortByColumnAction,
+      ),
       concatLatestFrom(() => this.fullfacetParams$),
       map(([action, params]) => params),
       mergeMap(({ fields, facets }) =>
@@ -89,7 +97,8 @@ export class DatasetEffects {
       map(([action, params]) => params),
       mergeMap(({ query }) => {
         const parsedQuery = JSON.parse(query);
-        parsedQuery.metadataKey = "";
+        // TODO: remove this line below after metadataKey endpoint is refactored in the backend
+        // parsedQuery.metadataKey = "";
         return this.datasetApi.metadataKeys(JSON.stringify(parsedQuery)).pipe(
           map((metadataKeys) =>
             fromActions.fetchMetadataKeysCompleteAction({ metadataKeys }),
