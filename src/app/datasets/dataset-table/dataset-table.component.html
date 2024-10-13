@@ -155,7 +155,7 @@
                 dataset.size >= 4000000000
                   ? 35 + (5 * dataset.size) / 40000000000
                   : 5 + (15 * dataset.size) / 4000000000,
-              background: dataset.size >= 4000000000 ? 'red' : 'green'
+              background: dataset.size >= 4000000000 ? 'red' : 'green',
             }"
           >
             &nbsp;
@@ -292,7 +292,7 @@
         [matTooltip]="
           [
             (dataset.datasetlifecycle || {}).archiveStatusMessage,
-            (dataset.datasetlifecycle || {}).retrieveStatus
+            (dataset.datasetlifecycle || {}).retrieveStatus,
           ].join('\n')
         "
       >
