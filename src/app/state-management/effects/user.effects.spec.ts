@@ -429,7 +429,7 @@ describe("UserEffects", () => {
 
       actions = hot("-a", { a: action });
 
-      expect(effects.logoutNavigate$).toBeObservable(actions);
+      expect(effects.logoutNavigate$).toBeObservable(actions as any);
       expect(router.navigate).toHaveBeenCalledTimes(1);
       expect(router.navigate).toHaveBeenCalledWith(["/login"]);
     });
