@@ -113,6 +113,13 @@ export const routes: Routes = [
               ),
           },
           {
+            path: "emexport",
+            loadChildren: () =>
+              import("./lazy/emexport-routing/emexport.feature.module").then(
+                (m) => m.EmExportFeatureModule,
+              ),
+          },
+          {
             path: "logbooks",
             loadChildren: () =>
               import("./lazy/logbooks-routing/logbooks.feature.module").then(

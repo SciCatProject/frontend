@@ -1,0 +1,23 @@
+  <div class="container two-column-layout">
+    <!-- OneDep Card -->
+    <mat-card class="onedep-card">
+      <mat-card-header class="centered-header">
+        <mat-card-title>OneDep deposition to PDB or EMDB</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="exmexport-vertical-layout centered-content">
+        <!-- Centered button to navigate to OneDep page -->
+        <button mat-raised-button color="primary" (click)="goToOneDep()">start</button>
+      </mat-card-content>
+    </mat-card>
+  
+    <!-- EMPIAR Card -->
+    <mat-card class="empiar-card">
+      <mat-card-header class="centered-header">
+        <mat-card-title>EMPIAR deposition of raw micrograps</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="exmexport-vertical-layout centered-content">
+        <!-- Centered button to navigate to EMPIAR page -->
+        <button mat-raised-button color="primary" (click)="goToEMPIAR()">start</button>
+      </mat-card-content>
+    </mat-card>
+  </div>

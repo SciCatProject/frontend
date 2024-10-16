@@ -1,0 +1,35 @@
+.container {
+    display: flex;
+    justify-content: space-between; /* Distributes space between the cards */
+    gap: 2em; /* Space between columns */
+  }
+  
+  .onedep-card, .empiar-card{
+    flex: 1; /* Makes both cards take equal width */
+    width:30%;
+    min-width: 300px; 
+    margin-top:20px;
+    margin-left:30px;
+    margin-right:30px;
+    
+  }
+  .centered-header {
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Center content horizontally */
+    width: 100%; /* Full width to center */
+  }
+  
+  .exmexport-vertical-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center elements horizontally */
+    gap: 1em;
+  }
+  
+  .centered-content {
+    display: flex; /* Flexbox for centering */
+    flex-direction: column; /* Align items in a column */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+  }
+  
