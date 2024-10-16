@@ -1,0 +1,75 @@
+<p>OneDep Component is working!</p>
+<ng-template [ngIf]="dataset">
+    <div style="clear: both"></div>
+    <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
+        <div fxFlex="80%">
+            <mat-card [formGroup]="form" data-cy="deposition">
+                <mat-card-header class="general-deposition">
+                    <div mat-card-avatar class="section-icon">
+                        <mat-icon> assignment </mat-icon>
+                    </div>
+                    Begin deposition
+                </mat-card-header>
+                <mat-card-content>
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <td *ngIf="!editEnabled">{{ dataset.datasetName || "-" }}</td>
+                            <td *ngIf="editEnabled && editingAllowed">
+                                <mat-form-field class="full-width">
+                                    <mat-label>Name</mat-label>
+                                    <input matInput type="text" formControlName="datasetName" />
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Description</th>
+                            <td *ngIf="!editEnabled">
+                                <span [innerHTML]="dataset.description || '-' "></span>
+                            </td>
+                            <td *ngIf="editEnabled && editingAllowed">
+                                <mat-form-field class="full-width">
+                                    <mat-label>Description</mat-label>
+                                    <textarea matInput rows="5" formControlName="description"></textarea>
+                                </mat-form-field>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>PID</th>
+                            <td>
+                                {{ dataset.pid }}
+                            </td>
+                        </tr>
+                        <tr *ngIf="dataset.type as value">
+                            <th>Type</th>
+                            <td>{{ value }}</td>
+                        </tr>
+                        <tr *ngIf="dataset.creationTime as value">
+                            <th>Creation Time</th>
+                            <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+                        </tr>
+                        <tr class="keywords-row">
+                            <th>Keywords</th>
+                            <td *ngIf="!editEnabled">
+                                <mat-chip-set role="list" #keywordChips>
+                                    <mat-chip role="listitem" *ngFor="let keyword of dataset.keywords">
+                                        {{ keyword }}
+                                    </mat-chip>
+                                </mat-chip-set>
+                            </td>
+                        </tr>
+                    </table>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div fxFlex="30%" *ngIf="attachments$ | async as attachments">
+            <ng-container *ngFor="let da of attachments">
+                <mat-card>
+                    <img mat-card-image src="{{ da.thumbnail }}" />
+                    <mat-card-actions>{{ da.caption }}</mat-card-actions>
+                </mat-card>
+            </ng-container>
+        </div>
+    </div>
+</ng-template>

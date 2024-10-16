@@ -1,0 +1,39 @@
+mat-card {
+    margin: 1em;
+  
+    .section-icon {
+      height: auto !important;
+      width: auto !important;
+  
+      mat-icon {
+        vertical-align: middle;
+      }
+    }
+  
+    table {
+      th {
+        min-width: 10rem;
+        padding-right: 0.5rem;
+        text-align: left;
+      }
+  
+      td {
+        width: 100%;
+        padding: 0.5rem 0;
+  
+        .sample-edit {
+          padding-left: 0.5rem;
+  
+          mat-icon {
+            font-size: medium;
+          }
+        }
+  
+      }
+  
+      .full-width {
+        width: 100%;
+      }
+    }
+  }
+ 

@@ -314,4 +314,5 @@ export class DatasetDetailComponent
   openAttachment(encoded: string) {
     this.attachmentService.openAttachment(encoded);
   }
+
 }

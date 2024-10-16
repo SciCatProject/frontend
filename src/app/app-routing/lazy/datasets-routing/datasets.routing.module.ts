@@ -6,6 +6,7 @@ import { DashboardComponent } from "datasets/dashboard/dashboard.component";
 import { DatablocksComponent } from "datasets/datablocks-table/datablocks-table.component";
 import { DatasetDetailsDashboardComponent } from "datasets/dataset-details-dashboard/dataset-details-dashboard.component";
 import { PublishComponent } from "datasets/publish/publish.component";
+import { OneDepComponent } from "datasets/onedep/onedep.component";
 
 const routes: Routes = [
   {
@@ -35,6 +36,10 @@ const routes: Routes = [
     component: DatablocksComponent,
     canActivate: [AuthGuard],
   },
+  { 
+    path: ":id/onedep", 
+    component: OneDepComponent, 
+  }, 
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

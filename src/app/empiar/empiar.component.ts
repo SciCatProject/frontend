@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'oneempiardep',
+  selector: 'empiar',
   templateUrl: './empiar.component.html',
   styleUrls: ['./empiar.component.scss']
 })

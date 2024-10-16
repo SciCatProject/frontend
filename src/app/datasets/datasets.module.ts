@@ -90,6 +90,7 @@ import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
 import { FiltersModule } from "shared/modules/filters/filters.module";
 import { userReducer } from "state-management/reducers/user.reducer";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { OneDepComponent } from "./onedep/onedep.component";
 
 @NgModule({
   imports: [
@@ -179,6 +180,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
     DatafilesActionsComponent,
     DatafilesActionComponent,
     DatasetsFilterSettingsComponent,
+    OneDepComponent,
   ],
   providers: [
     ArchivingService,
