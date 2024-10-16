@@ -266,13 +266,17 @@ export class DatafilesComponent
     });
     dialogRef.afterClosed().subscribe((email) => {
       if (email) {
-        this.getSelectedFiles();
         const data = {
           createdBy: email,
           createdAt: new Date(),
           type: "public",
           jobParams: {
-            datasetIds: [this.datasetPid],
+            datasetList: [
+              {
+                pid: this.datasetPid,
+                files: this.getSelectedFiles(),
+              },
+            ],
           },
         };
         const job = new Job(data);

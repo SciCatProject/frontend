@@ -21,7 +21,7 @@ const data: JobInterface = {
   createdBy: "testName",
   type: "archive",
   jobParams: {
-    datasetIds: [],
+    datasetList: [],
   },
 };
 const job = new Job(data);
