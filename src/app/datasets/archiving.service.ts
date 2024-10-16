@@ -27,7 +27,10 @@ export class ArchivingService {
   ): Job {
     const extra = archive ? {} : destinationPath;
     const jobParams = {
-      datasetIds: datasets.map((dataset) => dataset.pid),
+      datasetList: datasets.map((dataset) => ({
+        pid: dataset.pid,
+        files: [],
+      })),
       ...extra,
     };
 
@@ -37,8 +40,6 @@ export class ArchivingService {
 
     const data = {
       jobParams,
-      createdBy: user.username,
-      // Revise this, files == []...? See earlier version of this method in dataset-table component for context
       type: archive ? "archive" : "retrieve",
     };
 
