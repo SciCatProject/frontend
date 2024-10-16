@@ -318,4 +318,10 @@ export class DatasetDetailComponent
   openAttachment(encoded: string) {
     this.attachmentService.openAttachment(encoded);
   }
+
+  onOneDepClick() {
+    const id = encodeURIComponent(this.dataset.pid);
+    this.router.navigateByUrl("/datasets/" + id + "/onedep");
+  }
+
 }

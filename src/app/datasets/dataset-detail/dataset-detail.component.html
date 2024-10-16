@@ -21,6 +21,23 @@
         Public
       </mat-slide-toggle>
     </div>
+    <button
+          mat-raised-button
+          id="onedepBtn"
+          class="emexport-button"
+          (click)="onOneDepClick()"
+        >
+          OneDep
+    </button>
+    <div fxFlex="auto">
+      <a
+        mat-raised-button
+        [routerLink]="['/empiar']"
+        class="emexport-button"
+      >
+        EMPIAR
+      </a>
+    </div>
   </div>
 
   <div style="clear: both"></div>
