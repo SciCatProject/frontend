@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter, OnDestroy, Inject } from "@angular/core";
+import { Dataset, Proposal, Sample } from "shared/sdk/models";
 import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 
@@ -320,8 +321,11 @@ export class DatasetDetailComponent
   }
 
   onOneDepClick() {
+    console.log('started one dep click');
     const id = encodeURIComponent(this.dataset.pid);
     this.router.navigateByUrl("/datasets/" + id + "/onedep");
+    console.log("my datset in the details:", this.dataset);
+    // this.store.dispatch(selectDatasetAction({ dataset: this.dataset  }));
   }
 
 }
