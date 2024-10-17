@@ -12,23 +12,23 @@
         Jupyter Hub
       </a>
     </div>
-    <div fxFlex="auto" *ngIf="editingAllowed">
-      <mat-slide-toggle
-        class="public-toggle"
-        [checked]="dataset.isPublished"
-        (change)="onSlidePublic($event)"
-      >
-        Public
-      </mat-slide-toggle>
-    </div>
-    <button
+    <!-- <button
           mat-raised-button
           id="onedepBtn"
           class="emexport-button"
           (click)="onOneDepClick()"
         >
           OneDep
-    </button>
+    </button> -->
+    <div fxFlex="auto">
+      <a
+      mat-raised-button
+      [routerLink]="['/datasets', dataset.pid, 'onedep']"
+      class="emexport-button"
+      >
+        OneDep
+      </a>
+    </div>
     <div fxFlex="auto">
       <a
         mat-raised-button
@@ -37,6 +37,15 @@
       >
         EMPIAR
       </a>
+    </div>
+    <div fxFlex="auto" *ngIf="editingAllowed">
+      <mat-slide-toggle
+        class="public-toggle"
+        [checked]="dataset.isPublished"
+        (change)="onSlidePublic($event)"
+      >
+        Public
+      </mat-slide-toggle>
     </div>
   </div>
 
