@@ -1,26 +1,221 @@
-<p>OneDep Component is working!</p>
 <ng-template [ngIf]="dataset">
     <div style="clear: both"></div>
     <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
         <div fxFlex="80%">
-            <mat-card [formGroup]="form" data-cy="deposition">
-                <mat-card-header class="general-deposition">
+            <mat-card [formGroup]="form" data-cy="general-info">
+                <mat-card-header class="general-header">
                     <div mat-card-avatar class="section-icon">
                         <mat-icon> assignment </mat-icon>
                     </div>
-                    Begin deposition
+                    General information
                 </mat-card-header>
-                
-            </mat-card>
-        </div>
+                <mat-card-content>
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <td>{{ dataset.datasetName || "-" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Description</th>
+                            <td>
+                                <span
+                                    [innerHTML]="dataset.description || '-' | linky"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>PID</th>
+                            <td>
+                                {{ dataset.pid }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Type</th>
+                            <td>{{dataset.type }}</td>
+                        </tr>
+                        <tr>
+                            <th>Creation Time</th>
+                            <td>{{ dataset.creationTime | date: "yyyy-MM-dd
+                                HH:mm" }}</td>
+                        </tr>
+                        <tr class="keywords-row">
+                            <th>Keywords</th>
+                            <mat-chip-set role="list" #keywordChips>
+                                <mat-chip role="listitem"
+                                    *ngFor="let keyword of dataset.keywords">
+                                    {{ keyword }}
+                                </mat-chip>
+                            </mat-chip-set>
+                        </tr>
+                    </table>
+                </mat-card-content>
 
-        <!-- <div fxFlex="30%" *ngIf="attachments$ | async as attachments">
-            <ng-container *ngFor="let da of attachments">
-                <mat-card>
-                    <img mat-card-image src="{{ da.thumbnail }}" />
-                    <mat-card-actions>{{ da.caption }}</mat-card-actions>
-                </mat-card>
-            </ng-container>
-        </div> -->
+            </mat-card>
+            <mat-card>
+                <mat-card-header class="creator-header">
+                    <div mat-card-avatar class="section-icon">
+                        <mat-icon> blur_linear </mat-icon>
+                    </div>
+                    Method Information:
+                </mat-card-header>
+
+                <mat-card-content>
+                    <table>
+                        <!-- Question 1: Electron Microscopy Method -->
+                        <th>Choose Electron Microscopy
+                            Method</th>
+                        <mat-form-field>
+                            <mat-label>experimental method</mat-label>
+                                <mat-select 
+                                    [(ngModel)]="emMethod" name="method">
+                                    <mat-option *ngFor="let method of methodsList" [value]="method.value">
+                                      {{ method.viewValue }}
+                                    </mat-option>
+                                  </mat-select>
+                        </mat-form-field>
+
+
+                        <!-- Question 2: PDB Deposition -->
+                        <tr>
+                            <th>Are you deposing coordinates with this
+                                submission (for PDB)?</th>
+                            <td>
+                                <mat-radio-group
+                                formControlName="deposingCoordinates">
+                                    <mat-radio-button 
+                                        name="deposingCoordinates"
+                                        value=true
+                                        checked
+                                    >
+                                    Yes
+                                    </mat-radio-button>
+                                    <mat-radio-button 
+                                        name="deposingCoordinates"
+                                        value=false
+                                    >
+                                    No
+                                </mat-radio-button>
+                                </mat-radio-group>
+                            </td>
+                        </tr>
+
+                        <!-- Conditional Question: Associated Map Deposited to EMDB -->
+                        <tr
+                            *ngIf="form.get('deposingCoordinates')?.value === 'true'">
+                            <th>Has an associated map been deposited to EMDB?
+                            </th>
+                            <td>
+                                <mat-radio-group
+                                    formControlName="associatedMap">
+                                    <mat-radio-button 
+                                        name="associatedMap"
+                                        value=true
+                                        checked
+                                    >
+                                    Yes
+                                    </mat-radio-button>
+                                    <mat-radio-button 
+                                        name="associatedMap"
+                                        value=false
+                                    >
+                                    No
+                                </mat-radio-button>
+                                </mat-radio-group>
+                            </td>
+                        </tr>
+
+                        <!-- EMDB Identifier Field -->
+                        <tr *ngIf="form.get('associatedMap').value === true">
+                            <th>EMDB Identifier</th>
+                            <td>
+                                <mat-form-field class="full-width">
+                                    <mat-label>EMDB ID</mat-label>
+                                    <input matInput formControlName="emdbId" />
+                                </mat-form-field>
+                            </td>
+                        </tr>
+
+                        <!-- Final Question: Composite Map -->
+                        <tr>
+                            <th>Is this a composite map?</th>
+                            <td>
+                                <mat-radio-group formControlName="compositeMap">
+                                    <mat-radio-button 
+                                        name="compositeMap"
+                                        value=true
+                                    >
+                                    Yes
+                                </mat-radio-button>
+                                    <mat-radio-button 
+                                        name="compositeMap"
+                                        value=false 
+                                        checked
+                                    >
+                                    No
+                                </mat-radio-button>
+                                </mat-radio-group>
+                            </td>
+                        </tr>
+                    </table>
+                </mat-card-content>
+            </mat-card>
+            <mat-card>
+                <p> showValue()<p >
+            </mat-card>
+            <!-- <mat-card>
+                <mat-card-header class="scientific-header">
+                    <div mat-card-avatar class="section-icon">
+                        <mat-icon> science </mat-icon>
+                    </div>
+                    Scientific Metadata
+                </mat-card-header>
+                <mat-card-content>
+                    <ng-template [ngIf]="appConfig.tableSciDataEnabled"
+                        [ngIfElse]="jsonView">
+                        <ng-template #metadataView>
+                            <div [ngSwitch]="appConfig.metadataStructure">
+                                <tree-view *ngSwitchCase="'tree'"
+                                    [metadata]="dataset['scientificMetadata']"></tree-view>
+                                <metadata-view *ngSwitchDefault
+                                    [metadata]="dataset['scientificMetadata']">
+                                </metadata-view>
+                            </div>
+                        </ng-template>
+                        <mat-tab-group class="metadataGroup"
+                            *ngIf="editingAllowed; else metadataView">
+                            <mat-tab>
+                                <ng-template mat-tab-label>
+                                    <mat-icon> list </mat-icon> View
+                                </ng-template>
+                                <ng-container *ngTemplateOutlet="metadataView">
+                                </ng-container>
+                            </mat-tab>
+                            <mat-tab class="editTab" *ngIf="editingAllowed"
+                                [hidden]="!appConfig.editMetadataEnabled">
+                                <ng-template mat-tab-label>
+                                    <mat-icon> edit </mat-icon> Edit
+                                </ng-template>
+                                <div [ngSwitch]="appConfig.metadataStructure">
+                                    <tree-edit *ngSwitchCase="'tree'"
+                                        [metadata]="dataset['scientificMetadata']"
+                                        (save)="onSaveMetadata($event)"
+                                        (hasUnsavedChanges)="onHasUnsavedChanges($event)">
+                                    </tree-edit>
+                                    <metadata-edit *ngSwitchDefault
+                                        [metadata]="dataset['scientificMetadata']"
+                                        (save)="onSaveMetadata($event)">
+                                    </metadata-edit>
+                                </div>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </ng-template>
+
+                    <ng-template #jsonView>
+                        <ngx-json-viewer [json]="dataset['scientificMetadata']"
+                            [expanded]="false"></ngx-json-viewer>
+                    </ng-template>
+                </mat-card-content>
+            </mat-card> -->
+
+        </div>
     </div>
 </ng-template>

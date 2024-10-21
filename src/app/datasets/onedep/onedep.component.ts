@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { AppConfigService, HelpMessages } from "app-config.service";
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,7 +16,12 @@ import {
 } from "state-management/selectors/datasets.selectors";
 
 import { Subscription } from "rxjs";
+import { string } from "mathjs";
 
+interface EmMethod {
+  value: string;
+  viewValue:string;
+}
 
 @Component({
   selector: 'onedep',
@@ -27,35 +32,43 @@ export class OneDepComponent implements OnInit {
 
   appConfig = this.appConfigService.getConfig();
   dataset: Dataset | undefined;
-  cd$ = this.store.select(selectCurrentDataset);
   form: FormGroup;
-  //attachments$ = this.store.select(selectCurrentAttachments);
-  // datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
-  // userProfile$ = this.store.select(selectProfile);
-  // isAdmin$ = this.store.select(selectIsAdmin);
-  // accessGroups$: Observable<string[]> = this.userProfile$.pipe(
-  //   map((profile) => (profile ? profile.accessGroups : [])),
-  // );
   private subscriptions: Subscription[] = [];
+  showAssociatedMapQuestion: boolean = false;
 
+  methodsList: EmMethod[] = [
+    {value:'helical', viewValue: 'Helical'},
+    {value:'single-particle', viewValue:'Single Particle'},
+    {value:'subtomogram-averaging',viewValue: 'Subtomogram Averaging'},
+    {value:'tomogram', viewValue: 'Tomogram'},
+    {value:'electron-cristallography', viewValue:'Electron Crystallography'},
+  ];
+  emMethod: string;
   constructor(public appConfigService: AppConfigService,
     private store: Store,
     // private http: HttpClient,
     // private route: ActivatedRoute,
     // private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
     ) { }
 
   
     ngOnInit() {
-      console.log('init OneDep')
+      this.store.select(selectCurrentDataset).subscribe((dataset) => {
+        this.dataset = dataset;
+      });
       this.form = this.fb.group({
         datasetName: new FormControl("", [Validators.required]),
         description: new FormControl("", [Validators.required]),
         keywords: this.fb.array([]),
-      });
-      this.store.select(selectCurrentDataset).subscribe((dataset) => {
-        this.dataset = dataset;
-      });
+        deposingCoordinates:new FormControl(true),
+        associatedMap: new FormControl(false),
+        compositeMap:new FormControl(false), 
+        emdbId:new FormControl(false),
+
+      })
+    }
+    showValue(){
+      console.log(this.form['deposingCoordinates'])
     }
 }

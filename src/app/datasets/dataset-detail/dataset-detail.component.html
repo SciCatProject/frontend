@@ -12,27 +12,18 @@
         Jupyter Hub
       </a>
     </div>
-    <!-- <button
+    <button
           mat-raised-button
           id="onedepBtn"
           class="emexport-button"
           (click)="onOneDepClick()"
         >
           OneDep
-    </button> -->
-    <div fxFlex="auto">
-      <a
-      mat-raised-button
-      [routerLink]="['/datasets', dataset.pid, 'onedep']"
-      class="emexport-button"
-      >
-        OneDep
-      </a>
-    </div>
+    </button>
     <div fxFlex="auto">
       <a
         mat-raised-button
-        [routerLink]="['/empiar']"
+        [routerLink]="['/datasets', dataset.pid, 'onedep']"
         class="emexport-button"
       >
         EMPIAR
