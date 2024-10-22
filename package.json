@@ -11,8 +11,8 @@
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
     "betterer": "betterer",
-    "cypress:open": "cypress open -C ./CI/e2e/cypress.e2e.ts",
-    "cypress:run": "cypress run -C ./CI/e2e/cypress.e2e.ts"
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "private": true,
   "dependencies": {

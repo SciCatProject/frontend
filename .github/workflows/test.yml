@@ -122,15 +122,10 @@ jobs:
           docker compose build --no-cache
           docker compose up -d
 
-      # - name: Wait for Backend
-      #   run: |
-      #     npm install -g wait-on
-      #     wait-on http://localhost:3000/api/v3/health --timeout 200000
-
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
-          config-file: CI/e2e/cypress.e2e.ts
+          config-file: cypress.config.ts
           install-command: npm install --omit peer
           browser: chrome
 
