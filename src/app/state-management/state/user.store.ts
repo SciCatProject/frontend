@@ -1,17 +1,18 @@
 import { Settings, Message, User, TableColumn } from "../models";
-import { AccessToken } from "shared/sdk";
 import {
   ConditionConfig,
   FilterConfig,
 } from "../../shared/modules/filters/filters.module";
+import { AccessTokenInterface } from "shared/services/auth/auth.service";
+import { ReturnedUserDto } from "shared/sdk-new";
 
 // NOTE It IS ok to make up a state of other sub states
 export interface UserState {
-  currentUser: User | undefined;
+  currentUser: ReturnedUserDto | undefined;
   accountType?: string;
   profile?: any;
 
-  scicatToken: AccessToken;
+  scicatToken: AccessTokenInterface;
 
   settings: Settings;
 

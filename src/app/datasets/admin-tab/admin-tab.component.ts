@@ -3,7 +3,7 @@ import { Store } from "@ngrx/store";
 import { FileObject } from "datasets/dataset-details-dashboard/dataset-details-dashboard.component";
 import { Subscription } from "rxjs";
 import { take } from "rxjs/operators";
-import { Dataset, Job } from "shared/sdk";
+import { DatasetClass, JobClass } from "shared/sdk-new";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import {
   selectCurrentDatablocks,
@@ -22,7 +22,7 @@ import {
 })
 export class AdminTabComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
-  dataset: Dataset | undefined;
+  dataset: DatasetClass | undefined;
   datablocks$ = this.store.select(selectCurrentDatablocks);
   isAdmin$ = this.store.select(selectIsAdmin);
   loading$ = this.store.select(selectIsLoading);
@@ -44,11 +44,11 @@ export class AdminTabComponent implements OnInit, OnDestroy {
         .pipe(take(1))
         .subscribe((user) => {
           if (user && this.dataset) {
-            const job = new Job();
+            let job: JobClass;
             job.emailJobInitiator = user.email;
             job.jobParams = {};
             job.jobParams["username"] = user.username;
-            job.creationTime = new Date();
+            job.creationTime = new Date().toString();
             job.type = "reset";
             const fileObj: FileObject = {
               pid: "",
@@ -62,7 +62,7 @@ export class AdminTabComponent implements OnInit, OnDestroy {
               });
             }
             fileObj.files = fileList;
-            job.datasetList = [fileObj];
+            job.datasetList = [fileObj.toString()];
             console.log(job);
             this.store.dispatch(submitJobAction({ job }));
           }

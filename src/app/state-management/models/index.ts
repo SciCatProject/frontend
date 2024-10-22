@@ -3,7 +3,6 @@ import {
   UserIdentity,
   UserSetting,
   Job,
-  Dataset,
   RawDataset,
   Proposal,
   Policy,
@@ -18,7 +17,6 @@ export {
   UserIdentity,
   UserSetting,
   Job,
-  Dataset,
   RawDataset,
   Proposal,
   Policy,
@@ -29,12 +27,10 @@ export {
   Instrument,
 };
 
-import { DatasetInterface } from "shared/sdk";
 import {
   ConditionConfig,
   FilterConfig,
 } from "shared/modules/filters/filters.module";
-export { DatasetInterface };
 
 export interface Settings {
   tapeCopies: string;

@@ -1394,17 +1394,18 @@ export class UserApi extends BaseLoopBackApi {
       _postBody,
       null,
       customHeaders,
-    ).pipe(
-      map((response: any) => {
-        const accessTokenPrefix =
-          this.configService.getConfig().accessTokenPrefix;
-        response.id = accessTokenPrefix + response.id;
-        response.ttl = parseInt(response.ttl);
-        response.rememberMe = rememberMe;
-        this.auth.setToken(response);
-        return response;
-      }),
     );
+    // .pipe(
+    //   map((response: any) => {
+    //     const accessTokenPrefix =
+    //       this.configService.getConfig().accessTokenPrefix;
+    //     response.id = accessTokenPrefix + response.id;
+    //     response.ttl = parseInt(response.ttl);
+    //     response.rememberMe = rememberMe;
+    //     this.auth.setToken(response);
+    //     return response;
+    //   }),
+    // );
     return result;
   }
 

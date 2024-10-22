@@ -8,9 +8,8 @@ import { EffectsModule } from "@ngrx/effects";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { APP_INITIALIZER, NgModule } from "@angular/core";
 import { ExtraOptions, RouterModule } from "@angular/router";
-import { SampleApi, SDKBrowserModule } from "shared/sdk/index";
+import { SDKBrowserModule } from "shared/sdk/index";
 import { StoreModule } from "@ngrx/store";
-import { UserApi } from "shared/sdk/services";
 import { routerReducer } from "@ngrx/router-store";
 import { extModules } from "./build-specifics";
 import { MatNativeDateModule } from "@angular/material/core";
@@ -26,10 +25,23 @@ import { LayoutModule } from "_layout/layout.module";
 import { AppConfigService } from "app-config.service";
 import { AppThemeService } from "app-theme.service";
 import { SnackbarInterceptor } from "shared/interceptors/snackbar.interceptor";
+import { ApiModule, Configuration } from "shared/sdk-new";
+import { InternalStorage, SDKStorage } from "shared/services/auth/base.storage";
+import { AuthService } from "shared/services/auth/auth.service";
+import { CookieBrowser } from "shared/services/auth/cookie.browser";
 
 const appConfigInitializerFn = (appConfig: AppConfigService) => {
   return () => appConfig.loadAppConfig();
 };
+
+const apiConfigurationFn = (
+  authService: AuthService,
+  configurationService: AppConfigService,
+) =>
+  new Configuration({
+    basePath: configurationService.getConfig().lbBaseURL,
+    accessToken: authService.getToken().id,
+  });
 
 const appThemeInitializerFn = (appTheme: AppThemeService) => {
   return () => appTheme.loadTheme();
@@ -49,6 +61,7 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
     MatTabsModule,
     MatChipsModule,
     MatSnackBarModule,
+    ApiModule,
     SDKBrowserModule.forRoot(),
     StoreModule.forRoot(
       { router: routerReducer, users: userReducer },
@@ -93,11 +106,18 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
         subscriptSizing: "dynamic",
       },
     },
+    AuthService,
     AppThemeService,
-    UserApi,
-    SampleApi,
     Title,
     MatNativeDateModule,
+    { provide: InternalStorage, useClass: CookieBrowser },
+    { provide: SDKStorage, useClass: CookieBrowser },
+    {
+      provide: Configuration,
+      useFactory: apiConfigurationFn,
+      deps: [AuthService, AppConfigService],
+      multi: false,
+    },
   ],
   bootstrap: [AppComponent],
 })

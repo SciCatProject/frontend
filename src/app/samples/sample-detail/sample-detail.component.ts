@@ -1,7 +1,7 @@
 import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { fromEvent, Subscription } from "rxjs";
-import { Sample, Attachment, User, Dataset } from "shared/sdk/models";
+import { Sample, Attachment, Dataset } from "shared/sdk/models";
 import { selectSampleDetailPageViewModel } from "../../state-management/selectors/samples.selectors";
 import { Store } from "@ngrx/store";
 import {
@@ -26,6 +26,7 @@ import {
 } from "shared/modules/file-uploader/file-uploader.component";
 import { EditableComponent } from "app-routing/pending-changes.guard";
 import { AppConfigService } from "app-config.service";
+import { ReturnedUserDto } from "shared/sdk-new";
 
 export interface TableData {
   pid: string;
@@ -51,7 +52,7 @@ export class SampleDetailComponent
   appConfig = this.appConfigService.getConfig();
 
   sample: Sample = new Sample();
-  user: User = new User();
+  user: ReturnedUserDto;
   attachment: Partial<Attachment> = new Attachment();
   attachments: Attachment[] = [new Attachment()];
   show = false;

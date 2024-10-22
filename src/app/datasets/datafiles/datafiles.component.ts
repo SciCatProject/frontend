@@ -22,7 +22,6 @@ import {
   selectIsLoading,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
-import { Job, UserApi } from "shared/sdk";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";
@@ -32,6 +31,8 @@ import { AppConfigService } from "app-config.service";
 import { NgForm } from "@angular/forms";
 import { DataFiles_File } from "./datafiles.interfaces";
 import { ActionDataset } from "datasets/datafiles-actions/datafiles-action.interfaces";
+import { AuthService } from "shared/services/auth/auth.service";
+import { UsersService } from "shared/sdk-new";
 
 @Component({
   selector: "datafiles",
@@ -110,7 +111,8 @@ export class DatafilesComponent
     private store: Store,
     private cdRef: ChangeDetectorRef,
     private dialog: MatDialog,
-    private userApi: UserApi,
+    private usersService: UsersService,
+    private authService: AuthService,
   ) {}
 
   onPageChange(event: PageChangeEvent) {
@@ -240,12 +242,12 @@ export class DatafilesComponent
 
   downloadFiles(form: "downloadAllForm" | "downloadSelectedForm") {
     if (this.appConfig.multipleDownloadUseAuthToken) {
-      this.auth_token = this.userApi.getCurrentToken().id;
+      this.auth_token = this.authService.getToken().id;
       this[`${form}Element`].nativeElement.auth_token.value = this.auth_token;
     }
     if (!this.jwt) {
       this.subscriptions.push(
-        this.userApi.jwt().subscribe((jwt) => {
+        this.usersService.usersControllerGetUserJWT().subscribe((jwt) => {
           this.jwt = jwt;
           this[`${form}Element`].nativeElement.jwt.value = jwt.jwt;
           this[`${form}Element`].nativeElement.submit();
@@ -278,8 +280,8 @@ export class DatafilesComponent
             },
           ],
         };
-        const job = new Job(data);
-        this.store.dispatch(submitJobAction({ job }));
+        const job = data;
+        this.store.dispatch(submitJobAction({ job: job as any }));
       }
     });
   }

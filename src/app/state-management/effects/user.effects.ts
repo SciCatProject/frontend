@@ -1,14 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, ofType, createEffect, concatLatestFrom } from "@ngrx/effects";
 import { ADAuthService } from "users/adauth.service";
-import {
-  LoopBackAuth,
-  UserApi,
-  UserIdentityApi,
-  SDKToken,
-  User,
-  UserIdentity,
-} from "shared/sdk";
+import { UserApi, UserIdentityApi, UserIdentity } from "shared/sdk";
 import { Router } from "@angular/router";
 import * as fromActions from "state-management/actions/user.actions";
 import {
@@ -48,6 +41,15 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { AppConfigService } from "app-config.service";
 import { selectColumnAction } from "state-management/actions/user.actions";
 import { initialUserState } from "state-management/state/user.store";
+import { AuthService, SDKToken } from "shared/services/auth/auth.service";
+import {
+  ReturnedUserDto,
+  UsersService,
+  AuthService as SharedAuthService,
+  UserSettings,
+  Configuration,
+  UserIdentitiesService,
+} from "shared/sdk-new";
 
 @Injectable()
 export class UserEffects {
@@ -67,7 +69,7 @@ export class UserEffects {
   adLogin$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.activeDirLoginAction),
-      switchMap(({ username, password, rememberMe }) =>
+      switchMap(({ username, password }) =>
         this.activeDirAuthService.login(username, password).pipe(
           switchMap(({ body }) => [
             fromActions.activeDirLoginSuccessAction(),
@@ -85,27 +87,28 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(fromActions.loginOIDCAction),
       switchMap(({ oidcLoginResponse }) => {
-        const accessTokenPrefix =
-          this.configService.getConfig().accessTokenPrefix;
         const token = new SDKToken({
-          id: accessTokenPrefix + oidcLoginResponse.accessToken,
+          id: oidcLoginResponse.accessToken,
           userId: oidcLoginResponse.userId,
           ttl: oidcLoginResponse.ttl,
           created: oidcLoginResponse.created,
         });
-        this.loopBackAuth.setToken(token);
-        return this.userApi.findById<User>(oidcLoginResponse.userId).pipe(
-          switchMap((user: User) => [
-            fromActions.fetchUserCompleteAction(),
-            fromActions.loginCompleteAction({
-              user,
-              accountType: "external",
-            }),
-          ]),
-          catchError((error: HttpErrorResponse) =>
-            of(fromActions.fetchUserFailedAction({ error })),
-          ),
-        );
+        this.authService.setToken(token);
+        this.apiConfigService.accessToken = token.id;
+        return this.usersService
+          .usersControllerFindById(oidcLoginResponse.userId)
+          .pipe(
+            switchMap((user: ReturnedUserDto) => [
+              fromActions.fetchUserCompleteAction(),
+              fromActions.loginCompleteAction({
+                user,
+                accountType: "external",
+              }),
+            ]),
+            catchError((error: HttpErrorResponse) =>
+              of(fromActions.fetchUserFailedAction({ error })),
+            ),
+          );
       }),
     );
   });
@@ -114,29 +117,30 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchUserAction),
       switchMap(({ adLoginResponse }) => {
-        const accessTokenPrefix =
-          this.configService.getConfig().accessTokenPrefix;
         const token = new SDKToken({
-          id: accessTokenPrefix + adLoginResponse.access_token,
+          id: adLoginResponse.access_token,
           userId: adLoginResponse.userId,
           ttl: adLoginResponse.ttl,
           created: adLoginResponse.created,
         });
-        this.loopBackAuth.setToken(token);
-        return this.userApi.findById<User>(adLoginResponse.userId).pipe(
-          switchMap((user: User) => [
-            fromActions.fetchUserCompleteAction(),
-            fromActions.loginCompleteAction({
-              user,
-              accountType: "external",
-            }),
-            fromActions.fetchUserIdentityAction({ id: user.id }),
-            fromActions.fetchUserSettingsAction({ id: user.id }),
-          ]),
-          catchError((error: HttpErrorResponse) =>
-            of(fromActions.fetchUserFailedAction({ error })),
-          ),
-        );
+        this.authService.setToken(token);
+        this.apiConfigService.accessToken = token.id;
+        return this.usersService
+          .usersControllerFindById(adLoginResponse.userId)
+          .pipe(
+            switchMap((user: ReturnedUserDto) => [
+              fromActions.fetchUserCompleteAction(),
+              fromActions.loginCompleteAction({
+                user,
+                accountType: "external",
+              }),
+              fromActions.fetchUserIdentityAction({ id: user.id }),
+              fromActions.fetchUserSettingsAction({ id: user.id }),
+            ]),
+            catchError((error: HttpErrorResponse) =>
+              of(fromActions.fetchUserFailedAction({ error })),
+            ),
+          );
       }),
     );
   });
@@ -146,14 +150,22 @@ export class UserEffects {
       ofType(fromActions.funcLoginAction),
       map((action) => action.form),
       switchMap(({ username, password, rememberMe }) =>
-        this.userApi.login({ username, password, rememberMe }).pipe(
-          switchMap(({ user }) => [
-            fromActions.funcLoginSuccessAction(),
-            fromActions.loginCompleteAction({
-              user,
-              accountType: "functional",
-            }),
-          ]),
+        this.sharedAuthService.authControllerLogin({ username, password }).pipe(
+          switchMap((loginResponse) => {
+            this.apiConfigService.accessToken = loginResponse.access_token;
+            this.authService.setToken({
+              ...loginResponse,
+              rememberMe,
+              scopes: null,
+            });
+            return [
+              fromActions.funcLoginSuccessAction(),
+              fromActions.loginCompleteAction({
+                user: loginResponse.user,
+                accountType: "functional",
+              }),
+            ];
+          }),
           catchError((error: HttpErrorResponse) => {
             return of(fromActions.funcLoginFailedAction({ error }));
           }),
@@ -203,20 +215,23 @@ export class UserEffects {
   logout$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.logoutAction),
-      filter(() => this.userApi.isAuthenticated()),
+      filter(() => this.authService.isAuthenticated()),
       switchMap(() =>
-        this.userApi.logout().pipe(
-          switchMap(({ logoutURL }) => [
-            clearDatasetsStateAction(),
-            clearInstrumentsStateAction(),
-            clearJobsStateAction(),
-            clearLogbooksStateAction(),
-            clearPoliciesStateAction(),
-            clearProposalsStateAction(),
-            clearPublishedDataStateAction(),
-            clearSamplesStateAction(),
-            fromActions.logoutCompleteAction({ logoutURL }),
-          ]),
+        this.sharedAuthService.authControllerLogout().pipe(
+          switchMap(({ logoutURL }) => {
+            this.authService.clear();
+            return [
+              clearDatasetsStateAction(),
+              clearInstrumentsStateAction(),
+              clearJobsStateAction(),
+              clearLogbooksStateAction(),
+              clearPoliciesStateAction(),
+              clearProposalsStateAction(),
+              clearPublishedDataStateAction(),
+              clearSamplesStateAction(),
+              fromActions.logoutCompleteAction({ logoutURL }),
+            ];
+          }),
           catchError(() => of(fromActions.logoutFailedAction())),
         ),
       ),
@@ -245,7 +260,7 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchCurrentUserAction),
       filter(() => {
-        const { created, ttl, id } = this.userApi.getCurrentToken();
+        const { created, ttl, id } = this.authService.getToken();
 
         const currentTimeStamp = Math.floor(new Date().getTime());
         const createdTimeStamp = Math.floor(new Date(created).getTime());
@@ -253,14 +268,14 @@ export class UserEffects {
         const isTokenExpired = currentTimeStamp >= expirationTimeStamp;
 
         if (id && ttl && isTokenExpired) {
-          this.loopBackAuth.clear();
+          this.authService.clear();
         }
 
-        return this.userApi.isAuthenticated();
+        return this.authService.isAuthenticated();
       }),
       switchMap(() =>
-        this.userApi.getCurrent().pipe(
-          switchMap((user) => [
+        this.usersService.usersControllerGetMyUser().pipe(
+          switchMap((user: ReturnedUserDto) => [
             fromActions.fetchCurrentUserCompleteAction({ user }),
             fromActions.fetchUserIdentityAction({ id: user.id }),
             fromActions.fetchUserSettingsAction({ id: user.id }),
@@ -275,8 +290,10 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchUserIdentityAction),
       switchMap(({ id }) =>
-        this.userIdentityApi
-          .findOne<UserIdentity>({ where: { userId: id } })
+        this.userIdentityService
+          .userIdentitiesControllerFindOne({
+            where: { userId: id },
+          } as any)
           .pipe(
             map((userIdentity: UserIdentity) =>
               fromActions.fetchUserIdentityCompleteAction({ userIdentity }),
@@ -291,8 +308,8 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchUserSettingsAction),
       switchMap(({ id }) =>
-        this.userApi.getSettings(id, null).pipe(
-          map((userSettings) => {
+        this.usersService.usersControllerGetSettings(id, null).pipe(
+          map((userSettings: UserSettings) => {
             const config = this.configService.getConfig();
             const externalSettings = userSettings.externalSettings || {};
 
@@ -340,7 +357,7 @@ export class UserEffects {
       ofType(fromActions.fetchUserSettingsCompleteAction),
       mergeMap(({ userSettings }) => [
         fromActions.updateFilterConfigs({
-          filterConfigs: userSettings.filters,
+          filterConfigs: (userSettings.externalSettings as any)?.filters,
         }),
       ]),
     );
@@ -352,7 +369,7 @@ export class UserEffects {
       mergeMap(({ userSettings }) => {
         const actions = [];
 
-        userSettings.conditions
+        (userSettings.externalSettings as any)?.conditions
           .filter((condition) => condition.enabled)
           .forEach((condition) => {
             actions.push(
@@ -368,7 +385,8 @@ export class UserEffects {
 
         actions.push(
           fromActions.updateConditionsConfigs({
-            conditionConfigs: userSettings.conditions,
+            conditionConfigs: (userSettings.externalSettings as any)
+              ?.conditions,
           }),
         );
 
@@ -432,20 +450,25 @@ export class UserEffects {
         //   using the partialUpdateExternalSettings API, which does not enforce validation.
 
         const apiCall$ = useExternalSettings
-          ? this.userApi.partialUpdateExternalSettings(
+          ? this.usersService.usersControllerPatchExternalSettings(
               user?.id,
-              JSON.stringify(newProperty),
+              JSON.stringify(newProperty) as any,
             )
-          : this.userApi.partialUpdateSettings(
+          : this.usersService.usersControllerPatchSettings(
               user?.id,
-              JSON.stringify(newProperty),
+              JSON.stringify(newProperty) as any,
             );
         return apiCall$.pipe(
-          map((userSettings) => {
-            userSettings["conditions"] =
-              userSettings.externalSettings.conditions;
-            userSettings["filters"] = userSettings.externalSettings.filters;
-            userSettings["columns"] = userSettings.externalSettings.columns;
+          map((userSettings: UserSettings) => {
+            userSettings["conditions"] = (
+              userSettings.externalSettings as any
+            )?.conditions;
+            userSettings["filters"] = (
+              userSettings.externalSettings as any
+            )?.filters;
+            userSettings["columns"] = (
+              userSettings.externalSettings as any
+            )?.columns;
             delete userSettings.externalSettings;
             return fromActions.updateUserSettingsCompleteAction({
               userSettings,
@@ -461,7 +484,7 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchScicatTokenAction),
       switchMap(() =>
-        of(this.userApi.getCurrentToken()).pipe(
+        of(this.authService.getToken()).pipe(
           map((token) => fromActions.fetchScicatTokenCompleteAction({ token })),
           catchError(() => of(fromActions.fetchScicatTokenFailedAction())),
         ),
@@ -474,16 +497,16 @@ export class UserEffects {
       ofType(fromActions.loadDefaultSettings),
       map(({ config }) => {
         const defaultFilters =
-          config.defaultDatasetsListSettings.filters ||
+          config.defaultDatasetsListSettings?.filters ||
           initialUserState.filters;
         const defaultConditions =
-          config.defaultDatasetsListSettings.conditions ||
+          config.defaultDatasetsListSettings?.conditions ||
           initialUserState.conditions;
 
         // NOTE: config.localColumns is for backward compatibility.
         //       it should be removed once no longer needed
         const columns =
-          config.defaultDatasetsListSettings.columns ||
+          config.defaultDatasetsListSettings?.columns ||
           config.localColumns ||
           initialUserState.columns;
 
@@ -506,10 +529,13 @@ export class UserEffects {
     private actions$: Actions,
     private activeDirAuthService: ADAuthService,
     private configService: AppConfigService,
-    private loopBackAuth: LoopBackAuth,
+    private apiConfigService: Configuration,
+    private authService: AuthService,
     private router: Router,
     private store: Store,
-    private userApi: UserApi,
-    private userIdentityApi: UserIdentityApi,
+    private usersService: UsersService,
+    // TODO: Maybe the AuthService should be named as SessionService or something like this so we make some difference from this one
+    private sharedAuthService: SharedAuthService,
+    private userIdentityService: UserIdentitiesService,
   ) {}
 }

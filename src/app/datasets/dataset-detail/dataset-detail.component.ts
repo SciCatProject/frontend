@@ -29,7 +29,7 @@ import {
 } from "state-management/actions/datasets.actions";
 import { Router } from "@angular/router";
 import { selectCurrentProposal } from "state-management/selectors/proposals.selectors";
-import { DerivedDataset, Instrument, RawDataset, User } from "shared/sdk";
+import { DerivedDataset, Instrument, RawDataset } from "shared/sdk";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import { EditableComponent } from "app-routing/pending-changes.guard";
 import { AppConfigService } from "app-config.service";
@@ -44,6 +44,7 @@ import {
 } from "@angular/forms";
 import { Message, MessageType } from "state-management/models";
 import { DOCUMENT } from "@angular/common";
+import { ReturnedUserDto } from "shared/sdk-new";
 
 /**
  * Component to show details for a data set, using the
@@ -79,7 +80,7 @@ export class DatasetDetailComponent
   instrument: Instrument | undefined;
   proposal: Proposal | undefined;
   sample: Sample | undefined;
-  user: User | undefined;
+  user: ReturnedUserDto | undefined;
   editingAllowed = false;
   editEnabled = false;
   show = false;

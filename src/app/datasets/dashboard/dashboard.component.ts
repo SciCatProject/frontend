@@ -4,7 +4,7 @@ import { Store, ActionsSubject } from "@ngrx/store";
 
 import deepEqual from "deep-equal";
 
-import { DatasetFilters, User } from "state-management/models";
+import { DatasetFilters } from "state-management/models";
 
 import {
   fetchDatasetsAction,
@@ -42,6 +42,7 @@ import {
 } from "state-management/actions/user.actions";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
 import { AppConfigService } from "app-config.service";
+import { ReturnedUserDto } from "shared/sdk-new";
 
 @Component({
   selector: "dashboard",
@@ -73,7 +74,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   appConfig = this.appConfigService.getConfig();
 
-  currentUser: User = new User();
+  currentUser: ReturnedUserDto;
   userGroups: string[] = [];
   clearColumnSearch = false;
 
