@@ -24,6 +24,7 @@ import { MatChipsModule } from "@angular/material/chips";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { LayoutModule } from "_layout/layout.module";
 import { AppConfigService } from "app-config.service";
+import { ApiModule } from "@scicatproject/scicat-sdk-ts";
 import { AppThemeService } from "app-theme.service";
 import { SnackbarInterceptor } from "shared/interceptors/snackbar.interceptor";
 
@@ -50,6 +51,7 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
     MatChipsModule,
     MatSnackBarModule,
     SDKBrowserModule.forRoot(),
+    ApiModule,
     StoreModule.forRoot(
       { router: routerReducer, users: userReducer },
       {
