@@ -130,7 +130,7 @@ jobs:
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
-          config-file: CI/ESS/e2e/cypress.e2e.ts
+          config-file: CI/e2e/cypress.e2e.ts
           install-command: npm install --omit peer
           browser: chrome
 
