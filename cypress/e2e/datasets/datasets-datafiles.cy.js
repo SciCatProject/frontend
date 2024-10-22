@@ -1,4 +1,4 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 
 describe("Dataset datafiles", () => {
   beforeEach(() => {

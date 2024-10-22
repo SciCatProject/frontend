@@ -1,4 +1,4 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 var path = require("path");
 
 describe("Dataset attachments", () => {
@@ -72,7 +72,7 @@ describe("Dataset attachments", () => {
 
       cy.get(".download-button").click();
 
-      const downloadsFolder = Cypress.env("downloadsFolder");
+      const downloadsFolder = Cypress.config("downloadsFolder");
       cy.readFile(path.join(downloadsFolder, "scicat-logo.png")).should(
         "exist",
       );
