@@ -106,6 +106,8 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      # These settings optimize memory and file handling for Elasticsearch,
+      # preventing common issues related to system limits running on github workflow.
       - name: Configure sysctl limits
         run: |
           sudo swapoff -a
@@ -115,20 +117,15 @@ jobs:
 
       - name: Run docker-compose
         run: |
-          cp CI/ESS/e2e/docker-compose.e2e.yaml docker-compose.yaml
+          cp CI/e2e/docker-compose.e2e.yaml docker-compose.yaml
           docker compose pull
           docker compose build --no-cache
           docker compose up -d
 
-      - name: Wait for Backend
-        run: |
-          npm install -g wait-on
-          wait-on http://localhost:3000/api/v3/health --timeout 200000
-
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
-          config-file: CI/ESS/e2e/cypress.github.ts
+          config-file: cypress.config.ts
           install-command: npm install --omit peer
           browser: chrome
 

@@ -1,9 +1,9 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 var path = require("path");
 
 describe("Dataset attachments", () => {
   beforeEach(() => {
-    cy.login(Cypress.config("username"), Cypress.config("password"));
+    cy.login(Cypress.env("username"), Cypress.env("password"));
 
     cy.intercept("POST", "/api/v3/Datasets/**/*").as("upload");
   });

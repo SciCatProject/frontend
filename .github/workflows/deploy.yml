@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-    - master
+      - master
 env:
   NODE_VERSION: 18.x
 
@@ -50,21 +50,3 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64/v8
           tags: ${{ steps.meta.outputs.tags }}
-
-      - name: Trigger ESS pipeline
-        uses: swapActions/trigger-swap-deployment@v1
-        with:
-          repository: ${{ github.event.repository.name }}
-          environment: develop
-          gh-trigger-url: ${{ secrets.GITLAB_TRIGGER_URL }}
-          gh-token: ${{ secrets.GITLAB_TRIGGER_TOKEN }}
-          image-tag: ${{ github.sha }}
-
-      - name: Trigger MAXIV pipeline
-        uses: appleboy/gitlab-ci-action@master
-        with:
-          token: ${{ secrets.MAXIV_TOKEN }}
-          project_id: 21902377
-          ref: "develop"
-          host: "https://gitlab.com"
-          debug: true

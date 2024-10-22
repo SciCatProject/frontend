@@ -32,7 +32,7 @@
   "maxDirectDownloadSize": 1047521824,
   "metadataPreviewEnabled": true,
   "metadataStructure": "",
-  "multipleDownloadAction": "http:/127.0.0.1:3012/zip",
+  "multipleDownloadAction": "http:/localhost/zip",
   "multipleDownloadEnabled": true,
   "oAuth2Endpoints": [
     {
@@ -42,12 +42,12 @@
   ],
   "policiesEnabled": true,
   "retrieveDestinations": [],
-  "riotBaseUrl": "http://scichat.esss.lu.se",
+  "riotBaseUrl": "",
   "scienceSearchEnabled": true,
   "scienceSearchUnitsEnabled": true,
   "searchPublicDataEnabled": true,
   "searchSamples": true,
-  "sftpHost": "login.esss.dk",
+  "sftpHost": "",
   "shareEnabled": true,
   "shoppingCartEnabled": true,
   "shoppingCartOnHeader": true,

@@ -1,8 +1,8 @@
 import { testData } from "../fixtures/testData";
 
-const lbBaseUrl = Cypress.config("lbBaseUrl");
-const loginEndpoint = Cypress.config("lbLoginEndpoint");
-const accessTokenPrefix = Cypress.config("lbTokenPrefix");
+const lbBaseUrl = Cypress.env("lbBaseUrl");
+const loginEndpoint = Cypress.env("lbLoginEndpoint");
+const accessTokenPrefix = Cypress.env("lbTokenPrefix");
 
 Cypress.Commands.add("login", (username, password) => {
   cy.request("POST", lbBaseUrl + loginEndpoint, {
@@ -51,7 +51,7 @@ Cypress.Commands.add("createPolicy", (ownerGroup) => {
 });
 
 Cypress.Commands.add("removePolicies", () => {
-  cy.login(Cypress.config("username"), Cypress.config("password"));
+  cy.login(Cypress.env("username"), Cypress.env("password"));
   cy.getCookie("$LoopBackSDK$id").then((cookie) => {
     const token = cookie.value;
 
@@ -73,8 +73,8 @@ Cypress.Commands.add("removePolicies", () => {
       .as("policies");
 
     cy.login(
-      Cypress.config("secondaryUsername"),
-      Cypress.config("secondaryPassword"),
+      Cypress.env("secondaryUsername"),
+      Cypress.env("secondaryPassword"),
     );
     cy.getCookie("$LoopBackSDK$id").then((deletionCookie) => {
       const deletionToken = deletionCookie.value;
@@ -218,10 +218,7 @@ Cypress.Commands.add("deleteProposal", (id) => {
 });
 
 Cypress.Commands.add("removeDatasets", () => {
-  cy.login(
-    Cypress.config("secondaryUsername"),
-    Cypress.config("secondaryPassword"),
-  );
+  cy.login(Cypress.env("secondaryUsername"), Cypress.env("secondaryPassword"));
   cy.getCookie("$LoopBackSDK$id").then((cookie) => {
     const token = cookie.value;
 
@@ -259,7 +256,7 @@ Cypress.Commands.add("removeDatasets", () => {
 });
 
 Cypress.Commands.add("removeSamples", () => {
-  cy.login(Cypress.config("username"), Cypress.config("password"));
+  cy.login(Cypress.env("username"), Cypress.env("password"));
   cy.getCookie("$LoopBackSDK$id").then((cookie) => {
     const token = cookie.value;
 
@@ -281,8 +278,8 @@ Cypress.Commands.add("removeSamples", () => {
       .as("samples");
 
     cy.login(
-      Cypress.config("secondaryUsername"),
-      Cypress.config("secondaryPassword"),
+      Cypress.env("secondaryUsername"),
+      Cypress.env("secondaryPassword"),
     );
     cy.getCookie("$LoopBackSDK$id").then((deletionCookie) => {
       const deletionToken = deletionCookie.value;
@@ -304,7 +301,7 @@ Cypress.Commands.add("removeSamples", () => {
 });
 
 Cypress.Commands.add("initializeElasticSearch", (index) => {
-  cy.login(Cypress.config("username"), Cypress.config("password"));
+  cy.login(Cypress.env("username"), Cypress.env("password"));
   cy.getCookie("$LoopBackSDK$id").then((idCookie) => {
     const token = idCookie.value;
 
@@ -358,7 +355,7 @@ Cypress.Commands.add("createDatasetForElasticSearch", (datasetName) => {
 });
 
 Cypress.Commands.add("removeElasticSearchIndex", (index) => {
-  cy.login(Cypress.config("username"), Cypress.config("password"));
+  cy.login(Cypress.env("username"), Cypress.env("password"));
   cy.getCookie("$LoopBackSDK$id").then((idCookie) => {
     const token = idCookie.value;
     cy.request({
@@ -374,7 +371,7 @@ Cypress.Commands.add("removeElasticSearchIndex", (index) => {
 });
 
 Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {
-  cy.login(Cypress.config("username"), Cypress.config("password"));
+  cy.login(Cypress.env("username"), Cypress.env("password"));
   cy.getCookie("$LoopBackSDK$id").then((cookie) => {
     const token = cookie.value;
 
@@ -396,8 +393,8 @@ Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {
       .as("datasets");
 
     cy.login(
-      Cypress.config("secondaryUsername"),
-      Cypress.config("secondaryPassword"),
+      Cypress.env("secondaryUsername"),
+      Cypress.env("secondaryPassword"),
     );
     cy.getCookie("$LoopBackSDK$id").then((deletionCookie) => {
       const token = deletionCookie.value;

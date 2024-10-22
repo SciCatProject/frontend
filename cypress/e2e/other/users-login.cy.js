@@ -1,13 +1,13 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 
 describe("Users Login", () => {
-  const username = Cypress.config("username");
-  const password = Cypress.config("password");
+  const username = Cypress.env("username");
+  const password = Cypress.env("password");
 
-  const guestUsername = Cypress.config("guestUsername");
-  const guestPassword = Cypress.config("guestPassword");
+  const guestUsername = Cypress.env("guestUsername");
+  const guestPassword = Cypress.env("guestPassword");
 
-  const loginEndpoint = Cypress.config("lbLoginEndpoint");
+  const loginEndpoint = Cypress.env("lbLoginEndpoint");
 
   beforeEach(() => {
     cy.intercept("POST", "**/auth/msad").as("adLogin");
@@ -44,7 +44,7 @@ describe("Users Login", () => {
       expect(request.method).to.eq("POST");
       if (response.statusCode === 500) {
         cy.contains(
-          "Unable to connect to the authentication service. Please try again later or contact website maintainer."
+          "Unable to connect to the authentication service. Please try again later or contact website maintainer.",
         );
       }
     });
