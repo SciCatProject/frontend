@@ -3,7 +3,7 @@ var path = require("path");
 
 describe("Dataset attachments", () => {
   beforeEach(() => {
-    cy.login(Cypress.config("username"), Cypress.config("password"));
+    cy.login(Cypress.env("username"), Cypress.env("password"));
 
     cy.intercept("POST", "/api/v3/Datasets/**/*").as("upload");
   });
@@ -72,7 +72,7 @@ describe("Dataset attachments", () => {
 
       cy.get(".download-button").click();
 
-      const downloadsFolder = Cypress.config("downloadsFolder");
+      const downloadsFolder = Cypress.env("downloadsFolder");
       cy.readFile(path.join(downloadsFolder, "scicat-logo.png")).should(
         "exist",
       );
