@@ -52,9 +52,6 @@ services:
       - 4200:80
     volumes:
       - "./CI/e2e/frontend.config.e2e.json:/usr/share/nginx/html/assets/config.json"
-      # - "./CI/site.png:/usr/share/nginx/html/assets/images/site.png"
-      # - "./CI/site-logo.png:/usr/share/nginx/html/assets/images/site-logo.png"
-      # - "./CI/favicon.ico:/usr/share/nginx/html/favicon.ico"
     depends_on:
       - backend
     labels:
