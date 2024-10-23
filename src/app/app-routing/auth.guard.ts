@@ -5,7 +5,7 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
 } from "@angular/router";
-import { UsersService } from "shared/sdk-new/api/users.service";
+import { UsersService } from "shared/sdk/api/users.service";
 
 /**
  * Ensure that the current user is logged in

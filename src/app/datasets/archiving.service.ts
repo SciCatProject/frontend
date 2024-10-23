@@ -9,7 +9,7 @@ import {
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { RetrieveDestinations } from "app-config.service";
-import { DatasetClass, ReturnedUserDto } from "shared/sdk-new";
+import { DatasetClass, ReturnedUserDto } from "shared/sdk";
 
 @Injectable()
 export class ArchivingService {

@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Policy } from "state-management/models";
+import { Policy } from "shared/sdk";
 
 export const fetchPoliciesAction = createAction("[Policy] Fetch Policies");
 export const fetchPoliciesCompleteAction = createAction(

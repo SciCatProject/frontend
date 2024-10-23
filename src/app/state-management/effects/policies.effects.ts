@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import { PolicyApi, Policy } from "shared/sdk";
 import { Store } from "@ngrx/store";
 import {
   selectQueryParams,
@@ -20,6 +19,7 @@ import {
   loadingAction,
   loadingCompleteAction,
 } from "state-management/actions/user.actions";
+import { PoliciesService, UpdateWherePolicyDto } from "shared/sdk";
 
 @Injectable()
 export class PolicyEffects {
@@ -37,8 +37,8 @@ export class PolicyEffects {
       concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
       switchMap((params) =>
-        this.policyApi.find<Policy>(params).pipe(
-          mergeMap((policies: Policy[]) => [
+        this.policiesService.policiesControllerFindAll(params).pipe(
+          mergeMap((policies) => [
             fromActions.fetchPoliciesCompleteAction({ policies }),
             fromActions.fetchCountAction(),
             fromActions.fetchEditablePoliciesAction(),
@@ -53,7 +53,8 @@ export class PolicyEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
       switchMap(() =>
-        this.policyApi.count().pipe(
+        // TODO: Test this efffect
+        this.policiesService.policiesControllerCount(JSON.stringify({})).pipe(
           map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
           catchError(() => of(fromActions.fetchCountFailedAction())),
         ),
@@ -79,8 +80,8 @@ export class PolicyEffects {
           const { order, skip, limit } = params;
           filter = { where: { manager: email }, order, skip, limit };
         }
-        return this.policyApi.find<Policy>(filter).pipe(
-          mergeMap((policies: Policy[]) => [
+        return this.policiesService.policiesControllerFindAll(filter).pipe(
+          mergeMap((policies) => [
             fromActions.fetchEditablePoliciesCompleteAction({ policies }),
             fromActions.fetchEditableCountAction(),
           ]),
@@ -102,7 +103,7 @@ export class PolicyEffects {
           const email = profile.email.toLowerCase();
           filter = { manager: email };
         }
-        return this.policyApi.count(filter).pipe(
+        return this.policiesService.policiesControllerCount(filter).pipe(
           map(({ count }) =>
             fromActions.fetchEditableCountCompleteAction({ count }),
           ),
@@ -116,15 +117,21 @@ export class PolicyEffects {
     return this.actions$.pipe(
       ofType(fromActions.submitPolicyAction),
       switchMap(({ ownerList, policy }) =>
-        this.policyApi.updatewhere(ownerList.join(), policy).pipe(
-          mergeMap(({ submissionResponse }) => [
-            fromActions.submitPolicyCompleteAction({
-              policy: submissionResponse,
-            }),
-            fromActions.fetchPoliciesAction(),
-          ]),
-          catchError(() => of(fromActions.submitPolicyFailedAction())),
-        ),
+        // TODO: Check this type conversion here!
+        this.policiesService
+          .policiesControllerUpdateWhere({
+            data: policy,
+            ownerGroupList: ownerList.join(),
+          } as UpdateWherePolicyDto)
+          .pipe(
+            mergeMap(({ submissionResponse }) => [
+              fromActions.submitPolicyCompleteAction({
+                policy: submissionResponse,
+              }),
+              fromActions.fetchPoliciesAction(),
+            ]),
+            catchError(() => of(fromActions.submitPolicyFailedAction())),
+          ),
       ),
     );
   });
@@ -160,7 +167,7 @@ export class PolicyEffects {
 
   constructor(
     private actions$: Actions,
-    private policyApi: PolicyApi,
+    private policiesService: PoliciesService,
     private store: Store,
   ) {}
 }

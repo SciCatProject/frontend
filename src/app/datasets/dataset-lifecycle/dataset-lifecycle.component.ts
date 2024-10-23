@@ -1,5 +1,4 @@
 import { Component, OnInit, OnChanges, SimpleChange } from "@angular/core";
-import { Dataset } from "shared/sdk";
 import {
   trigger,
   state,
@@ -13,6 +12,7 @@ import { selectCurrentDataset } from "state-management/selectors/datasets.select
 import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
 import { selectIsLoading } from "state-management/selectors/user.selectors";
+import { DatasetClass } from "shared/sdk";
 
 export interface HistoryItem {
   property: string;
@@ -40,7 +40,7 @@ export interface HistoryItem {
 export class DatasetLifecycleComponent implements OnInit, OnChanges {
   appConfig = this.appConfigService.getConfig();
 
-  dataset: Dataset | undefined;
+  dataset: DatasetClass | undefined;
   historyItems: HistoryItem[] = [];
 
   pageSizeOptions = [10, 25, 50, 100, 500, 1000];

@@ -1,4 +1,4 @@
-import { DatasetClass } from "shared/sdk-new";
+import { DatasetClass } from "shared/sdk";
 import { DatasetFilters, ArchViewMode } from "state-management/models";
 
 export interface DateTriple {

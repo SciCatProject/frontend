@@ -2,7 +2,7 @@
 declare var Object: any;
 import { Injectable, Inject } from "@angular/core";
 import { InternalStorage } from "./base.storage";
-import { Configuration } from "shared/sdk-new";
+import { Configuration } from "shared/sdk";
 
 export interface AccessTokenInterface {
   id?: string;

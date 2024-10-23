@@ -1,4 +1,5 @@
-import { GenericFilters, Policy } from "state-management/models";
+import { Policy } from "shared/sdk";
+import { GenericFilters } from "state-management/models";
 
 export interface PolicyState {
   policies: Policy[];

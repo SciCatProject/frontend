@@ -1,4 +1,5 @@
-import { Instrument, GenericFilters } from "../models";
+import { Instrument } from "shared/sdk";
+import { GenericFilters } from "../models";
 
 export interface InstrumentState {
   instruments: Instrument[];

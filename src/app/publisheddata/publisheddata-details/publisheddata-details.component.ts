@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { PublishedData } from "shared/sdk";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
@@ -10,6 +9,7 @@ import { Subscription } from "rxjs";
 import { pluck } from "rxjs/operators";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { AppConfigService } from "app-config.service";
+import { PublishedData } from "shared/sdk";
 
 @Component({
   selector: "publisheddata-details",
@@ -18,7 +18,7 @@ import { AppConfigService } from "app-config.service";
 })
 export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   currentData$ = this.store.select(selectCurrentPublishedData);
-  publishedData: PublishedData = new PublishedData();
+  publishedData: PublishedData;
   subscriptions: Subscription[] = [];
   appConfig = this.appConfigService.getConfig();
   show = false;

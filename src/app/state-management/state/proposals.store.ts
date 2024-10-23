@@ -1,4 +1,4 @@
-import { Proposal, Dataset } from "../models";
+import { DatasetClass, ProposalClass } from "shared/sdk";
 
 export interface DateRange {
   begin: string;
@@ -21,9 +21,9 @@ export interface ProposalDatesetFilters {
 }
 
 export interface ProposalsState {
-  proposals: Proposal[];
-  currentProposal: Proposal | undefined;
-  datasets: Dataset[];
+  proposals: ProposalClass[];
+  currentProposal: ProposalClass | undefined;
+  datasets: DatasetClass[];
 
   proposalsCount: number;
   datasetsCount: number;

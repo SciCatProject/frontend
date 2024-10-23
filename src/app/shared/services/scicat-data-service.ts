@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { LoopBackAuth } from "shared/sdk";
 import { DateTime } from "luxon";
 import { Column } from "shared/modules/shared-table/shared-table.module";
+import { AuthService } from "./auth/auth.service";
 
 export interface FilterLimits {
   limit: number;
@@ -17,7 +17,7 @@ export interface FilterLimits {
 export class ScicatDataService {
   constructor(
     private http: HttpClient,
-    private auth: LoopBackAuth,
+    private authService: AuthService,
   ) {}
 
   findDataById(url: string, dataId: number): Observable<any> {
@@ -153,13 +153,15 @@ export class ScicatDataService {
     const params = new HttpParams()
       .set("fields", JSON.stringify(filterFields))
       .set("limits", JSON.stringify(limits))
-      .append("access_token", this.auth.getToken().id);
+      .append("access_token", `Bearer ${this.authService.getToken().id}`);
 
     // NOTE: For published data endpoint we don't have fullquery and fullfacet and that's why it is a bit special case.
     if (url.includes("publishedData")) {
       return this.http.get<any[]>(url, {
         params,
-        headers: { Authorization: this.auth.getAccessTokenId() },
+        headers: {
+          Authorization: `Bearer ${this.authService.getAccessTokenId()}`,
+        },
       });
     }
 
@@ -168,7 +170,9 @@ export class ScicatDataService {
 
     return this.http.get<any[]>(`${url}/fullquery${origDatablocksFiles}`, {
       params,
-      headers: { Authorization: this.auth.getAccessTokenId() },
+      headers: {
+        Authorization: `Bearer ${this.authService.getAccessTokenId()}`,
+      },
     });
   }
 
@@ -188,13 +192,15 @@ export class ScicatDataService {
     const params = new HttpParams()
       .set("fields", JSON.stringify(filterFields))
       .set("facets", JSON.stringify([]))
-      .append("access_token", this.auth.getToken().id);
+      .append("access_token", `Bearer ${this.authService.getToken().id}`);
 
     // NOTE: For published data endpoint we don't have fullquery and fullfacet and that's why it is a bit special case.
     if (url.includes("publishedData")) {
       return this.http.get<any>(`${url}/count`, {
         params,
-        headers: { Authorization: this.auth.getAccessTokenId() },
+        headers: {
+          Authorization: `Bearer ${this.authService.getAccessTokenId()}`,
+        },
       });
     }
 
@@ -203,7 +209,9 @@ export class ScicatDataService {
 
     return this.http.get<any>(`${url}/fullfacet${origDatablocksFiles}`, {
       params,
-      headers: { Authorization: this.auth.getAccessTokenId() },
+      headers: {
+        Authorization: `Bearer ${this.authService.getAccessTokenId()}`,
+      },
     });
   }
 }

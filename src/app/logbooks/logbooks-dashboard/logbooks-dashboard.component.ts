@@ -6,7 +6,6 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Dataset, Logbook } from "shared/sdk";
 import { combineLatest, Subscription } from "rxjs";
 import { selectLogbooksDashboardPageViewModel } from "state-management/selectors/logbooks.selectors";
 import {
@@ -30,9 +29,12 @@ import {
 import { AppConfigService } from "app-config.service";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { OwnershipService } from "shared/services/ownership.service";
+import { DatasetClass } from "shared/sdk";
 
 export interface LogbookData {
-  logbook: Logbook;
+  // logbook: Logbook;
+  // TODO: Check the type here!
+  logbook: any;
   entriesCount: number;
   entriesPerPage: number;
   currentPage: number;
@@ -48,7 +50,7 @@ export class LogbooksDashboardComponent
 {
   vm$ = this.store.select(selectLogbooksDashboardPageViewModel);
 
-  dataset: Dataset | undefined = undefined;
+  dataset: DatasetClass | undefined = undefined;
   appConfig = this.appConfigService.getConfig();
 
   subscriptions: Subscription[] = [];

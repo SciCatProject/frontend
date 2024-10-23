@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Sample } from "shared/sdk";
 import {
   changePageAction,
   fetchSamplesAction,
@@ -28,6 +27,7 @@ import { filter, map, distinctUntilChanged, take } from "rxjs/operators";
 import { SampleFilters } from "state-management/models";
 import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AppConfigService } from "app-config.service";
+import { SampleClass } from "shared/sdk";
 
 @Component({
   selector: "sample-dashboard",
@@ -65,7 +65,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     private store: Store,
   ) {}
 
-  formatTableData(samples: Sample[]): any {
+  formatTableData(samples: SampleClass[]): any {
     if (samples) {
       return samples.map((sample) => ({
         sampleId: sample.sampleId,
@@ -127,7 +127,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  onRowClick(sample: Sample) {
+  onRowClick(sample: SampleClass) {
     const id = encodeURIComponent(sample.sampleId);
     this.router.navigateByUrl("/samples/" + id);
   }

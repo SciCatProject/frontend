@@ -4,11 +4,8 @@ import {
   DatasetState,
 } from "state-management/state/datasets.store";
 import * as fromActions from "state-management/actions/datasets.actions";
-import {
-  ArchViewMode,
-  Dataset,
-  ScientificCondition,
-} from "state-management/models";
+import { ArchViewMode, ScientificCondition } from "state-management/models";
+import { DatasetClass } from "shared/sdk";
 
 const reducer = createReducer(
   initialDatasetState,
@@ -131,7 +128,7 @@ const reducer = createReducer(
     fromActions.addDatasetCompleteAction,
     (state, { dataset }): DatasetState => ({
       ...state,
-      currentSet: dataset as unknown as Dataset,
+      currentSet: dataset as unknown as DatasetClass,
     }),
   ),
 
@@ -139,7 +136,8 @@ const reducer = createReducer(
     fromActions.addAttachmentCompleteAction,
     (state, { attachment }): DatasetState => {
       if (state.currentSet) {
-        const attachments = state.currentSet.attachments.filter(
+        // TODO: Fix the any type here
+        const attachments = (state.currentSet as any).attachments.filter(
           (existingAttachment) => existingAttachment.id !== attachment.id,
         );
         attachments.push(attachment);
@@ -154,7 +152,7 @@ const reducer = createReducer(
     fromActions.updateAttachmentCaptionCompleteAction,
     (state, { attachment }): DatasetState => {
       if (state.currentSet) {
-        const attachments = state.currentSet.attachments.filter(
+        const attachments = (state.currentSet as any).attachments.filter(
           (existingAttachment) => existingAttachment.id !== attachment.id,
         );
         attachments.push(attachment);
@@ -169,7 +167,7 @@ const reducer = createReducer(
     fromActions.removeAttachmentCompleteAction,
     (state, { attachmentId }): DatasetState => {
       if (state.currentSet) {
-        const attachments = state.currentSet.attachments.filter(
+        const attachments = (state.currentSet as any).attachments.filter(
           (attachment) => attachment.id !== attachmentId,
         );
         const currentSet = { ...state.currentSet, attachments };

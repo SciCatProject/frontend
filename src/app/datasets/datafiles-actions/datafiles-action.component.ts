@@ -6,10 +6,9 @@ import {
   SimpleChanges,
 } from "@angular/core";
 
-import { UserApi } from "shared/sdk";
 import { ActionConfig, ActionDataset } from "./datafiles-action.interfaces";
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
-import { UsersService } from "shared/sdk-new";
+import { UsersService } from "shared/sdk";
 import { AuthService } from "shared/services/auth/auth.service";
 
 @Component({
@@ -131,7 +130,7 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
     this.form.style.display = "none";
 
     this.form.appendChild(
-      this.add_input("auth_token", this.authService.getToken().id),
+      this.add_input("auth_token", `Bearer ${this.authService.getToken().id}`),
     );
 
     this.form.appendChild(this.add_input("jwt", this.jwt));

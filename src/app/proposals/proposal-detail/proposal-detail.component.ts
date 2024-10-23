@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
-import { Proposal } from "state-management/models";
 import { AppConfigService } from "app-config.service";
+import { ProposalClass } from "shared/sdk";
 
 @Component({
   selector: "proposal-detail",
@@ -8,7 +8,7 @@ import { AppConfigService } from "app-config.service";
   styleUrls: ["proposal-detail.component.scss"],
 })
 export class ProposalDetailComponent {
-  @Input() proposal: Proposal = new Proposal();
+  @Input() proposal: ProposalClass;
 
   appConfig = this.appConfigService.getConfig();
 

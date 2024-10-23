@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Instrument } from "shared/sdk";
 import {
   fetchInstrumentsAction,
   changePageAction,
@@ -15,6 +14,7 @@ import {
 import { map } from "rxjs/operators";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { Router } from "@angular/router";
+import { Instrument } from "shared/sdk";
 
 @Component({
   selector: "app-instruments-dashboard",

@@ -1,11 +1,11 @@
 import { createAction, props } from "@ngrx/store";
-import { Proposal, Dataset, Attachment } from "shared/sdk/models";
+import { Attachment, DatasetClass, ProposalClass } from "shared/sdk";
 import { ProposalFilters } from "state-management/state/proposals.store";
 
 export const fetchProposalsAction = createAction("[Proposal] Fetch Proposals");
 export const fetchProposalsCompleteAction = createAction(
   "[Proposal] Fetch Proposals Complete",
-  props<{ proposals: Proposal[] }>(),
+  props<{ proposals: ProposalClass[] }>(),
 );
 export const fetchProposalsFailedAction = createAction(
   "[Proposal] Fetch Proposals Failed",
@@ -26,7 +26,7 @@ export const fetchProposalAction = createAction(
 );
 export const fetchProposalCompleteAction = createAction(
   "[Proposal] Fetch Proposal Complete",
-  props<{ proposal: Proposal }>(),
+  props<{ proposal: ProposalClass }>(),
 );
 export const fetchProposalFailedAction = createAction(
   "[Proposal] Fetch Proposal Failed",
@@ -41,7 +41,7 @@ export const fetchProposalDatasetsAction = createAction(
 );
 export const fetchProposalDatasetsCompleteAction = createAction(
   "[Proposal] Fetch Datasets Complete",
-  props<{ datasets: Dataset[] }>(),
+  props<{ datasets: DatasetClass[] }>(),
 );
 export const fetchProposalDatasetsFailedAction = createAction(
   "[Proposal] Fetch Datasets Failed",

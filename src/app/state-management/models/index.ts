@@ -1,33 +1,4 @@
 import {
-  User,
-  UserIdentity,
-  UserSetting,
-  Job,
-  RawDataset,
-  Proposal,
-  Policy,
-  Sample,
-  Logbook,
-  PublishedData,
-  Attachment,
-  Instrument,
-} from "shared/sdk/models";
-export {
-  User,
-  UserIdentity,
-  UserSetting,
-  Job,
-  RawDataset,
-  Proposal,
-  Policy,
-  Sample,
-  Logbook,
-  PublishedData,
-  Attachment,
-  Instrument,
-};
-
-import {
   ConditionConfig,
   FilterConfig,
 } from "shared/modules/filters/filters.module";

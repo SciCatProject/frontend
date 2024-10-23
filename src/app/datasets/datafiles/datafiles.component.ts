@@ -32,7 +32,7 @@ import { NgForm } from "@angular/forms";
 import { DataFiles_File } from "./datafiles.interfaces";
 import { ActionDataset } from "datasets/datafiles-actions/datafiles-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
-import { UsersService } from "shared/sdk-new";
+import { UsersService } from "shared/sdk";
 
 @Component({
   selector: "datafiles",
@@ -242,7 +242,7 @@ export class DatafilesComponent
 
   downloadFiles(form: "downloadAllForm" | "downloadSelectedForm") {
     if (this.appConfig.multipleDownloadUseAuthToken) {
-      this.auth_token = this.authService.getToken().id;
+      this.auth_token = `Bearer ${this.authService.getToken().id}`;
       this[`${form}Element`].nativeElement.auth_token.value = this.auth_token;
     }
     if (!this.jwt) {

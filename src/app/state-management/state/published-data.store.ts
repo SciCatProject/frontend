@@ -1,4 +1,5 @@
-import { PublishedData, GenericFilters } from "state-management/models";
+import { PublishedData } from "shared/sdk";
+import { GenericFilters } from "state-management/models";
 
 export interface PublishedDataState {
   publishedData: PublishedData[];

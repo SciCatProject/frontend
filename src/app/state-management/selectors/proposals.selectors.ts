@@ -15,7 +15,8 @@ export const selectCurrentProposal = createSelector(
 
 export const selectCurrentAttachments = createSelector(
   selectCurrentProposal,
-  (proposal) => (proposal ? proposal.attachments : []),
+  // TODO: Check the proposal type here as it is missing attachments in the new sdk
+  (proposal) => (proposal ? (proposal as any).attachments : []),
 );
 
 export const selectProposalDatasets = createSelector(

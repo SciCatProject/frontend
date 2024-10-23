@@ -6,8 +6,7 @@ import {
   PickedFile,
   SubmitCaptionEvent,
 } from "shared/modules/file-uploader/file-uploader.component";
-import { Attachment, Dataset } from "shared/sdk";
-import { ReturnedUserDto } from "shared/sdk-new";
+import { Attachment, DatasetClass, ReturnedUserDto } from "shared/sdk";
 import { OwnershipService } from "shared/services/ownership.service";
 import {
   addAttachmentAction,
@@ -29,7 +28,7 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
   attachments: Attachment[] = [];
   subscriptions: Subscription[] = [];
   attachment: Partial<Attachment> = {};
-  dataset: Dataset | undefined;
+  dataset: DatasetClass | undefined;
   user: ReturnedUserDto | undefined;
   constructor(
     private store: Store,

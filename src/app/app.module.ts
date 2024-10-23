@@ -8,7 +8,6 @@ import { EffectsModule } from "@ngrx/effects";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { APP_INITIALIZER, NgModule } from "@angular/core";
 import { ExtraOptions, RouterModule } from "@angular/router";
-import { SDKBrowserModule } from "shared/sdk/index";
 import { StoreModule } from "@ngrx/store";
 import { routerReducer } from "@ngrx/router-store";
 import { extModules } from "./build-specifics";
@@ -25,7 +24,7 @@ import { LayoutModule } from "_layout/layout.module";
 import { AppConfigService } from "app-config.service";
 import { AppThemeService } from "app-theme.service";
 import { SnackbarInterceptor } from "shared/interceptors/snackbar.interceptor";
-import { ApiModule, Configuration } from "shared/sdk-new";
+import { ApiModule, Configuration } from "shared/sdk";
 import { InternalStorage, SDKStorage } from "shared/services/auth/base.storage";
 import { AuthService } from "shared/services/auth/auth.service";
 import { CookieBrowser } from "shared/services/auth/cookie.browser";
@@ -62,7 +61,6 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
     MatChipsModule,
     MatSnackBarModule,
     ApiModule,
-    SDKBrowserModule.forRoot(),
     StoreModule.forRoot(
       { router: routerReducer, users: userReducer },
       {

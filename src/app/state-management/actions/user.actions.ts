@@ -1,13 +1,13 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { createAction, props } from "@ngrx/store";
-import { AccessToken, UserIdentity } from "shared/sdk";
 import { Message, Settings, TableColumn } from "state-management/models";
 import {
   ConditionConfig,
   FilterConfig,
 } from "../../shared/modules/filters/filters.module";
 import { AppConfig } from "app-config.service";
-import { ReturnedUserDto, UserSettings } from "shared/sdk-new";
+import { ReturnedUserDto, UserSettings } from "shared/sdk";
+import { AccessTokenInterface } from "shared/services/auth/auth.service";
 
 export const setDatasetTableColumnsAction = createAction(
   "[User] Set Dataset Table Columns",
@@ -87,7 +87,8 @@ export const fetchUserIdentityAction = createAction(
 );
 export const fetchUserIdentityCompleteAction = createAction(
   "[User] Fetch User Identity Complete",
-  props<{ userIdentity: UserIdentity }>(),
+  // TODO: Check the type here!
+  props<{ userIdentity: any }>(),
 );
 export const fetchUserIdentityFailedAction = createAction(
   "[User] Fetch User Identity Failed",
@@ -120,7 +121,7 @@ export const updateUserSettingsFailedAction = createAction(
 export const fetchScicatTokenAction = createAction("[User] Fetch Scicat Token");
 export const fetchScicatTokenCompleteAction = createAction(
   "[User] Fetch Scicat Token Complete",
-  props<{ token: AccessToken }>(),
+  props<{ token: AccessTokenInterface }>(),
 );
 export const fetchScicatTokenFailedAction = createAction(
   "[User] Fetch Scicat Token Failed",

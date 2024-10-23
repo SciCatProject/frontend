@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Policy, DatasetApi } from "shared/sdk";
 import {
   TableColumn,
   PageChangeEvent,
@@ -28,6 +27,7 @@ import { map } from "rxjs/operators";
 import { Router } from "@angular/router";
 
 import { GenericFilters } from "state-management/models";
+import { DatasetsService, Policy } from "shared/sdk";
 
 @Component({
   selector: "app-policies-dashboard",
@@ -75,7 +75,7 @@ export class PoliciesDashboardComponent implements OnInit {
   ];
 
   constructor(
-    private datasetApi: DatasetApi,
+    private datasetService: DatasetsService,
     public dialog: MatDialog,
     private router: Router,
     private store: Store,
@@ -195,8 +195,9 @@ export class PoliciesDashboardComponent implements OnInit {
       );
       // if datasets already exist
       this.selectedGroups.forEach((group) => {
-        this.datasetApi
-          .count({ ownerGroup: group })
+        // TODO: Test this new sdk count
+        this.datasetService
+          .datasetsControllerCount(`{ "ownerGroup": ${group} }`)
           .pipe(
             map((count) => {
               if (count) {

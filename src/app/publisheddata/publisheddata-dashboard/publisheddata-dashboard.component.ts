@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { PublishedData } from "shared/sdk";
 import { Router } from "@angular/router";
 import { selectPublishedDataDashboardPageViewModel } from "state-management/selectors/published-data.selectors";
 import { CheckboxEvent } from "shared/modules/table/table.component";
@@ -16,6 +15,7 @@ import { AppConfigService } from "app-config.service";
 import { ScicatDataService } from "shared/services/scicat-data-service";
 import { ExportExcelService } from "shared/services/export-excel.service";
 import { SelectionModel } from "@angular/cdk/collections";
+import { PublishedData } from "shared/sdk";
 
 @Component({
   selector: "app-publisheddata-dashboard",

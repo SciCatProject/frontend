@@ -1,17 +1,17 @@
 import { createAction, props } from "@ngrx/store";
-import {
-  Attachment,
-  DerivedDataset,
-  OrigDatablock,
-  Datablock,
-} from "shared/sdk";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
   DatasetFilters,
   ScientificCondition,
 } from "state-management/models";
-import { DatasetClass } from "shared/sdk-new";
+import {
+  Attachment,
+  CreateDerivedDatasetObsoleteDto,
+  Datablock,
+  DatasetClass,
+  OrigDatablock,
+} from "shared/sdk";
 
 // === Effects ===
 
@@ -134,11 +134,12 @@ export const clearBatchAction = createAction("[Dataset] Clear Batch");
 
 export const addDatasetAction = createAction(
   "[Dataset] Add Dataset",
-  props<{ dataset: DerivedDataset }>(),
+  props<{ dataset: CreateDerivedDatasetObsoleteDto }>(),
 );
 export const addDatasetCompleteAction = createAction(
   "[Dataset] Add Dataset Complete",
-  props<{ dataset: DerivedDataset }>(),
+  // TODO: Check the type here as it says obsolete!
+  props<{ dataset: CreateDerivedDatasetObsoleteDto }>(),
 );
 export const addDatasetFailedAction = createAction(
   "[Dataset] Add Dataset Failed",

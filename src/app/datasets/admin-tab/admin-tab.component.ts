@@ -3,7 +3,7 @@ import { Store } from "@ngrx/store";
 import { FileObject } from "datasets/dataset-details-dashboard/dataset-details-dashboard.component";
 import { Subscription } from "rxjs";
 import { take } from "rxjs/operators";
-import { DatasetClass, JobClass } from "shared/sdk-new";
+import { DatasetClass, JobClass } from "shared/sdk";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import {
   selectCurrentDatablocks,

@@ -37,14 +37,14 @@
           </th>
           <td>{{ value | json }}</td>
         </tr>
-        <tr *ngIf="job.updatedAt as value">
+        <!-- <tr *ngIf="job.updatedAt as value">
           <th>
             <mat-icon> markunread </mat-icon>
             Date Of Last Message
           </th>
           <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
-        </tr>
-        <tr *ngIf="job.datasetList as value">
+        </tr> -->
+        <!-- <tr *ngIf="job.datasetList as value">
           <th>
             <mat-icon> folder </mat-icon>
             Dataset List
@@ -52,21 +52,21 @@
           <div *ngFor="let daSet of value">
             {{ daSet.pid | json }}
           </div>
-        </tr>
-        <tr *ngIf="job.createdAt as value">
+        </tr> -->
+        <!-- <tr *ngIf="job.createdAt as value">
           <th>
             <mat-icon> calendar_today </mat-icon>
             Created At
           </th>
           <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
-        </tr>
-        <tr *ngIf="job.updatedAt as value">
+        </tr> -->
+        <!-- <tr *ngIf="job.updatedAt as value">
           <th>
             <mat-icon> calendar_today </mat-icon>
             Updated At
           </th>
           <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
-        </tr>
+        </tr> -->
       </table>
     </mat-card-content>
   </mat-card>

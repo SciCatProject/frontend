@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, ofType, createEffect, concatLatestFrom } from "@ngrx/effects";
 import { ADAuthService } from "users/adauth.service";
-import { UserApi, UserIdentityApi, UserIdentity } from "shared/sdk";
 import { Router } from "@angular/router";
 import * as fromActions from "state-management/actions/user.actions";
 import {
@@ -49,7 +48,7 @@ import {
   UserSettings,
   Configuration,
   UserIdentitiesService,
-} from "shared/sdk-new";
+} from "shared/sdk";
 
 @Injectable()
 export class UserEffects {
@@ -295,7 +294,7 @@ export class UserEffects {
             where: { userId: id },
           } as any)
           .pipe(
-            map((userIdentity: UserIdentity) =>
+            map((userIdentity) =>
               fromActions.fetchUserIdentityCompleteAction({ userIdentity }),
             ),
             catchError(() => of(fromActions.fetchUserIdentityFailedAction())),

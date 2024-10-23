@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { JobClass } from "shared/sdk-new";
+import { JobClass } from "shared/sdk";
 
 export const fetchJobsAction = createAction("[Job] Fetch Jobs");
 export const fetchJobsCompleteAction = createAction(

@@ -34,7 +34,6 @@ import {
   selectColumns,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
-import { Dataset, DerivedDataset } from "shared/sdk";
 import {
   selectColumnAction,
   deselectColumnAction,
@@ -42,7 +41,11 @@ import {
 } from "state-management/actions/user.actions";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
 import { AppConfigService } from "app-config.service";
-import { ReturnedUserDto } from "shared/sdk-new";
+import {
+  CreateDerivedDatasetObsoleteDto,
+  DatasetClass,
+  ReturnedUserDto,
+} from "shared/sdk";
 
 @Component({
   selector: "dashboard",
@@ -116,7 +119,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  onRowClick(dataset: Dataset): void {
+  onRowClick(dataset: DatasetClass): void {
     const pid = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl("/datasets/" + pid);
   }
@@ -130,10 +133,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((res) => {
       if (res) {
         const { username, email } = this.currentUser;
-        const dataset = new DerivedDataset({
+        // TODO: Check this type!
+        const dataset = {
           accessGroups: [],
           contactEmail: email, // Required
-          creationTime: new Date(), // Required
+          creationTime: new Date().toString(), // Required
           datasetName: res.datasetName,
           description: res.description,
           isPublished: false,
@@ -152,8 +156,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
             .split(",")
             .map((entry: string) => entry.trim())
             .filter((entry: string) => entry !== ""), // Required
-        });
-        this.store.dispatch(addDatasetAction({ dataset }));
+        };
+        this.store.dispatch(
+          addDatasetAction({
+            dataset: dataset as CreateDerivedDatasetObsoleteDto,
+          }),
+        );
       }
     });
   }

@@ -1,10 +1,10 @@
-import { Settings, Message, User, TableColumn } from "../models";
+import { Settings, Message, TableColumn } from "../models";
 import {
   ConditionConfig,
   FilterConfig,
 } from "../../shared/modules/filters/filters.module";
 import { AccessTokenInterface } from "shared/services/auth/auth.service";
-import { ReturnedUserDto } from "shared/sdk-new";
+import { ReturnedUserDto } from "shared/sdk";
 
 // NOTE It IS ok to make up a state of other sub states
 export interface UserState {

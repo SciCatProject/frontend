@@ -1,11 +1,11 @@
 import { createAction, props } from "@ngrx/store";
-import { Sample, Dataset, Attachment } from "shared/sdk/models";
+import { Attachment, DatasetClass, SampleClass } from "shared/sdk";
 import { SampleFilters, ScientificCondition } from "state-management/models";
 
 export const fetchSamplesAction = createAction("[Sample] Fetch Samples");
 export const fetchSamplesCompleteAction = createAction(
   "[Sample] Fetch Samples Complete",
-  props<{ samples: Sample[] }>(),
+  props<{ samples: SampleClass[] }>(),
 );
 export const fetchSamplesFailedAction = createAction(
   "[Sample] Fetch Samples Failed",
@@ -39,7 +39,7 @@ export const fetchSampleAction = createAction(
 );
 export const fetchSampleCompleteAction = createAction(
   "[Sample] Fetch Sample Complete",
-  props<{ sample: Sample }>(),
+  props<{ sample: SampleClass }>(),
 );
 export const fetchSampleFailedAction = createAction(
   "[Sample] Fetch Sample Failed",
@@ -65,7 +65,7 @@ export const fetchSampleDatasetsAction = createAction(
 );
 export const fetchSampleDatasetsCompleteAction = createAction(
   "[Sample] Fetch Datasets Complete",
-  props<{ datasets: Dataset[] }>(),
+  props<{ datasets: DatasetClass[] }>(),
 );
 export const fetchSampleDatasetsFailedAction = createAction(
   "[Sample] Fetch Datasets Failed",
@@ -85,11 +85,11 @@ export const fetchSampleDatasetsCountFailedAction = createAction(
 
 export const addSampleAction = createAction(
   "[Sample] Add Sample",
-  props<{ sample: Sample }>(),
+  props<{ sample: SampleClass }>(),
 );
 export const addSampleCompleteAction = createAction(
   "[Sample] Add Sample Complete",
-  props<{ sample: Sample }>(),
+  props<{ sample: SampleClass }>(),
 );
 export const addSampleFailedAction = createAction("[Sample] Add Sample Failed");
 
@@ -99,7 +99,7 @@ export const saveCharacteristicsAction = createAction(
 );
 export const saveCharacteristicsCompleteAction = createAction(
   "[Sample] Save Characteristics Complete",
-  props<{ sample: Sample }>(),
+  props<{ sample: SampleClass }>(),
 );
 export const saveCharacteristicsFailedAction = createAction(
   "[Sample] Save Characteristics Failed",

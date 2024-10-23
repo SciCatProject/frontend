@@ -24,7 +24,7 @@ import {
   selectIsAdmin,
   selectProfile,
 } from "state-management/selectors/user.selectors";
-import { DatasetClass } from "shared/sdk-new";
+import { DatasetClass } from "shared/sdk";
 
 @Component({
   selector: "batch-view",

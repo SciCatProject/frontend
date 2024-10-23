@@ -1,11 +1,10 @@
 import { createAction, props } from "@ngrx/store";
-import { Logbook } from "shared/sdk";
 import { LogbookFilters } from "state-management/models";
 
 export const fetchLogbooksAction = createAction("[Logbook] Fetch Logbooks");
 export const fetchLogbooksCompleteAction = createAction(
   "[Logbook] Fetch Logbooks Complete",
-  props<{ logbooks: Logbook[] }>(),
+  props<{ logbooks: any[] }>(),
 );
 export const fetchLogbooksFailedAction = createAction(
   "[Logbook] Fetch Logbooks Failed",
@@ -17,7 +16,7 @@ export const fetchLogbookAction = createAction(
 );
 export const fetchLogbookCompleteAction = createAction(
   "[Logbook] Fetch Logbook Complete",
-  props<{ logbook: Logbook }>(),
+  props<{ logbook: any }>(),
 );
 export const fetchLogbookFailedAction = createAction(
   "[Logbook] Fetch Logbook Failed",
@@ -29,7 +28,7 @@ export const fetchDatasetLogbookAction = createAction(
 );
 export const fetchDatasetLogbookCompleteAction = createAction(
   "[Logbook] Fetch Dataset Logbook Complete",
-  props<{ logbook: Logbook }>(),
+  props<{ logbook: any }>(),
 );
 export const fetchDatasetLogbookFailedAction = createAction(
   "[Logbook] Fetch Dataset Logbook Failed",
