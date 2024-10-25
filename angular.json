@@ -30,7 +30,8 @@
             "allowedCommonJsDependencies": [
               "deep-equal",
               "exceljs",
-              "file-saver"
+              "file-saver",
+              "socket.io-client"
             ],
             "outputPath": "dist",
             "index": "src/index.html",
