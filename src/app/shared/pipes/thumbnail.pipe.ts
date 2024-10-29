@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from "@angular/core";
-import { DatasetsService } from "shared/sdk";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
 
 @Pipe({
   name: "thumbnail",

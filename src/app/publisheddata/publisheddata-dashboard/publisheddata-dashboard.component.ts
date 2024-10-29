@@ -15,7 +15,7 @@ import { AppConfigService } from "app-config.service";
 import { ScicatDataService } from "shared/services/scicat-data-service";
 import { ExportExcelService } from "shared/services/export-excel.service";
 import { SelectionModel } from "@angular/cdk/collections";
-import { PublishedData } from "shared/sdk";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "app-publisheddata-dashboard",

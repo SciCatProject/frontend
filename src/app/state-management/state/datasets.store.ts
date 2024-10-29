@@ -1,4 +1,4 @@
-import { DatasetClass } from "shared/sdk";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
 import { DatasetFilters, ArchViewMode } from "state-management/models";
 
 export interface DateTriple {

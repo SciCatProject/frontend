@@ -32,7 +32,7 @@ import { NgForm } from "@angular/forms";
 import { DataFiles_File } from "./datafiles.interfaces";
 import { ActionDataset } from "datasets/datafiles-actions/datafiles-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
-import { UsersService } from "shared/sdk";
+import { UsersService } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "datafiles",

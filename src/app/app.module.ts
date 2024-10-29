@@ -24,10 +24,10 @@ import { LayoutModule } from "_layout/layout.module";
 import { AppConfigService } from "app-config.service";
 import { AppThemeService } from "app-theme.service";
 import { SnackbarInterceptor } from "shared/interceptors/snackbar.interceptor";
-import { ApiModule, Configuration } from "shared/sdk";
 import { InternalStorage, SDKStorage } from "shared/services/auth/base.storage";
 import { AuthService } from "shared/services/auth/auth.service";
 import { CookieBrowser } from "shared/services/auth/cookie.browser";
+import { ApiModule, Configuration } from "@scicatproject/scicat-sdk-ts";
 
 const appConfigInitializerFn = (appConfig: AppConfigService) => {
   return () => appConfig.loadAppConfig();

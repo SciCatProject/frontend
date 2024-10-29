@@ -1,5 +1,9 @@
 import { createAction, props } from "@ngrx/store";
-import { Attachment, DatasetClass, ProposalClass } from "shared/sdk";
+import {
+  Attachment,
+  DatasetClass,
+  ProposalClass,
+} from "@scicatproject/scicat-sdk-ts";
 import { ProposalFilters } from "state-management/state/proposals.store";
 
 export const fetchProposalsAction = createAction("[Proposal] Fetch Proposals");

@@ -1,6 +1,6 @@
 import { HttpClient, HttpClientModule } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
-import { LoopBackAuth } from "shared/sdk";
+import { LoopBackAuth } from "@scicatproject/scicat-sdk-ts";
 
 import { ScicatDataService } from "./scicat-data-service";
 

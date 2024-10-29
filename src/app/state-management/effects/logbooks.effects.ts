@@ -10,7 +10,10 @@ import {
 } from "state-management/actions/user.actions";
 import { Store } from "@ngrx/store";
 import { selectFilters } from "state-management/selectors/logbooks.selectors";
-import { DatasetsService, LogbooksService } from "shared/sdk";
+import {
+  DatasetsService,
+  LogbooksService,
+} from "@scicatproject/scicat-sdk-ts";
 
 @Injectable()
 export class LogbookEffects {

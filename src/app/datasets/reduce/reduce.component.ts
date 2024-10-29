@@ -21,7 +21,7 @@ import {
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 import { OwnershipService } from "shared/services/ownership.service";
-import { DatasetClass } from "shared/sdk";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "reduce",

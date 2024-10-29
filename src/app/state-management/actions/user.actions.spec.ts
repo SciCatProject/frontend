@@ -1,6 +1,6 @@
 import { Message, User, Settings, UserIdentity, MessageType } from "../models";
 import * as fromActions from "./user.actions";
-import { AccessToken, UserSetting } from "shared/sdk";
+import { AccessToken, UserSetting } from "@scicatproject/scicat-sdk-ts";
 import { HttpErrorResponse } from "@angular/common/http";
 
 describe("User Actions", () => {

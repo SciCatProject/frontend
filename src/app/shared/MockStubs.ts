@@ -4,7 +4,7 @@ import { Observable, of } from "rxjs";
 import { convertToParamMap, UrlTree } from "@angular/router";
 import { AppConfig } from "app-config.module";
 import { SciCatDataSource } from "./services/scicat.datasource";
-import { LoopBackAuth } from "./sdk";
+import { LoopBackAuth } from "./sdk-old";
 import { Injectable } from "@angular/core";
 import {
   ActionConfig,

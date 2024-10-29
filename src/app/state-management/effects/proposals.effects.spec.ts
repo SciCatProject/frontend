@@ -5,7 +5,7 @@ import {
   DatasetApi,
   Dataset,
   Attachment,
-} from "shared/sdk";
+} from "@scicatproject/scicat-sdk-ts";
 import { Observable, of, throwError } from "rxjs";
 import { ProposalEffects } from "./proposals.effects";
 import { TestBed } from "@angular/core/testing";

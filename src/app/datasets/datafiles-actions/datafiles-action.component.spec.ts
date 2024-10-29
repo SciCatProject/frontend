@@ -10,7 +10,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { RouterModule } from "@angular/router";
 import { StoreModule } from "@ngrx/store";
-import { UserApi } from "shared/sdk";
+import { UserApi } from "@scicatproject/scicat-sdk-ts";
 import {
   MockHtmlElement,
   MockMatDialogRef,

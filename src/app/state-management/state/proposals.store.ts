@@ -1,4 +1,4 @@
-import { DatasetClass, ProposalClass } from "shared/sdk";
+import { DatasetClass, ProposalClass } from "@scicatproject/scicat-sdk-ts";
 
 export interface DateRange {
   begin: string;

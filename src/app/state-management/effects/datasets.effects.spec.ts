@@ -9,7 +9,7 @@ import {
   Attachment,
   DerivedDataset,
   DerivedDatasetInterface,
-} from "shared/sdk";
+} from "@scicatproject/scicat-sdk-ts";
 import * as fromActions from "../actions/datasets.actions";
 import { Observable } from "rxjs";
 import { DatasetEffects } from "./datasets.effects";

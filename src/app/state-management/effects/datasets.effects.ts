@@ -34,7 +34,7 @@ import {
   DatasetsService,
   OrigDatablock,
   UpdateAttachmentDto,
-} from "shared/sdk";
+} from "@scicatproject/scicat-sdk-ts";
 
 @Injectable()
 export class DatasetEffects {

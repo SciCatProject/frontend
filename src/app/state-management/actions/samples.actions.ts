@@ -1,5 +1,9 @@
 import { createAction, props } from "@ngrx/store";
-import { Attachment, DatasetClass, SampleClass } from "shared/sdk";
+import {
+  Attachment,
+  DatasetClass,
+  SampleClass,
+} from "@scicatproject/scicat-sdk-ts";
 import { SampleFilters, ScientificCondition } from "state-management/models";
 
 export const fetchSamplesAction = createAction("[Sample] Fetch Samples");

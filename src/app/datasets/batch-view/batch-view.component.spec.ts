@@ -11,7 +11,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 
 import { MatDialogModule } from "@angular/material/dialog";
-import { DatasetApi, Dataset } from "shared/sdk";
+import { DatasetApi, Dataset } from "@scicatproject/scicat-sdk-ts";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatTableModule } from "@angular/material/table";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";

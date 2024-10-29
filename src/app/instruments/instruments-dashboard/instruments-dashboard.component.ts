@@ -14,7 +14,7 @@ import {
 import { map } from "rxjs/operators";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { Router } from "@angular/router";
-import { Instrument } from "shared/sdk";
+import { Instrument } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "app-instruments-dashboard",

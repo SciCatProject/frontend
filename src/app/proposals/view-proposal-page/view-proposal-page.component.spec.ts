@@ -11,7 +11,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { StoreModule, Store } from "@ngrx/store";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
-import { Dataset, Proposal } from "shared/sdk";
+import { Dataset, Proposal } from "@scicatproject/scicat-sdk-ts";
 import {
   changeDatasetsPageAction,
   fetchProposalDatasetsAction,

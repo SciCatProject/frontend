@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { AppConfigService } from "app-config.service";
-import { ProposalClass } from "shared/sdk";
+import { ProposalClass } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "proposal-detail",

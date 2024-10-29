@@ -19,7 +19,10 @@ import {
   loadingAction,
   loadingCompleteAction,
 } from "state-management/actions/user.actions";
-import { PoliciesService, UpdateWherePolicyDto } from "shared/sdk";
+import {
+  PoliciesService,
+  UpdateWherePolicyDto,
+} from "@scicatproject/scicat-sdk-ts";
 
 @Injectable()
 export class PolicyEffects {

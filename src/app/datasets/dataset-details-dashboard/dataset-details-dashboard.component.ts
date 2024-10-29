@@ -39,7 +39,7 @@ import {
 import { MatDialog } from "@angular/material/dialog";
 import { AppConfigService } from "app-config.service";
 import { fetchInstrumentAction } from "state-management/actions/instruments.actions";
-import { DatasetClass, UsersService } from "shared/sdk";
+import { DatasetClass, UsersService } from "@scicatproject/scicat-sdk-ts";
 
 export interface JWT {
   jwt: string;

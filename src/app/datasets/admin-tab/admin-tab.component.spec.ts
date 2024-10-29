@@ -1,6 +1,6 @@
 import { ComponentFixture, inject, TestBed } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
-import { Dataset } from "shared/sdk";
+import { Dataset } from "@scicatproject/scicat-sdk-ts";
 import { AdminTabComponent } from "./admin-tab.component";
 import { MatCardModule } from "@angular/material/card";
 import { of } from "rxjs";

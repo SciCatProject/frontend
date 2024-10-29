@@ -9,7 +9,7 @@ import { JobsDashboardComponent } from "./jobs-dashboard.component";
 import { MockStore } from "shared/MockStubs";
 import { Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
-import { Job } from "shared/sdk";
+import { Job } from "@scicatproject/scicat-sdk-ts";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { DatePipe } from "@angular/common";

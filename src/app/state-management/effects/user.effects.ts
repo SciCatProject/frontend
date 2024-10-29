@@ -48,7 +48,7 @@ import {
   UserSettings,
   Configuration,
   UserIdentitiesService,
-} from "shared/sdk";
+} from "@scicatproject/scicat-sdk-ts";
 
 @Injectable()
 export class UserEffects {

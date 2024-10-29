@@ -11,7 +11,7 @@ import { selectSampleDialogPageViewModel } from "state-management/selectors/user
 import { Subscription } from "rxjs";
 
 import * as shortid from "shortid";
-import { SampleClass } from "shared/sdk";
+import { SampleClass } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "app-sample-dialog",

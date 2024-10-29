@@ -2,7 +2,10 @@ import { Component, Inject } from "@angular/core";
 import { FormControl, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
-import { UserIdentitiesService, UsersService } from "shared/sdk";
+import {
+  UserIdentitiesService,
+  UsersService,
+} from "@scicatproject/scicat-sdk-ts";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
 

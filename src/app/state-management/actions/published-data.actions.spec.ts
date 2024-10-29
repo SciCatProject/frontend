@@ -1,5 +1,5 @@
 import * as fromActions from "./published-data.actions";
-import { PublishedData } from "shared/sdk";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts";
 
 describe("Published Data Actions", () => {
   describe("fetchAllPublishedDataAction", () => {

@@ -1,4 +1,4 @@
-import { JobClass } from "shared/sdk";
+import { JobClass } from "@scicatproject/scicat-sdk-ts";
 import { JobFilters } from "state-management/models";
 
 export interface JobsState {

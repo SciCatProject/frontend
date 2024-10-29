@@ -1,4 +1,8 @@
-import { Attachment, DatasetClass, SampleClass } from "shared/sdk";
+import {
+  Attachment,
+  DatasetClass,
+  SampleClass,
+} from "@scicatproject/scicat-sdk-ts";
 import { SampleFilters, GenericFilters } from "state-management/models";
 
 export interface SampleState {

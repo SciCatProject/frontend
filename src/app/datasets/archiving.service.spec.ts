@@ -1,7 +1,7 @@
 import { TestBed, waitForAsync } from "@angular/core/testing";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { RetrieveDestinations } from "app-config.service";
-import { Dataset, Job, User } from "shared/sdk";
+import { Dataset, Job, User } from "@scicatproject/scicat-sdk-ts";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import {
   selectCurrentUser,

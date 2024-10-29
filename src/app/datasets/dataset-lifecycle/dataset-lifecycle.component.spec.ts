@@ -10,7 +10,7 @@ import { DatasetLifecycleComponent } from "./dataset-lifecycle.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { PipesModule } from "shared/pipes/pipes.module";
 import { DatePipe } from "@angular/common";
-import { Dataset } from "shared/sdk";
+import { Dataset } from "@scicatproject/scicat-sdk-ts";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";

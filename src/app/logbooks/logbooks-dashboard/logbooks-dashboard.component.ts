@@ -29,7 +29,7 @@ import {
 import { AppConfigService } from "app-config.service";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { OwnershipService } from "shared/services/ownership.service";
-import { DatasetClass } from "shared/sdk";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
 
 export interface LogbookData {
   // logbook: Logbook;

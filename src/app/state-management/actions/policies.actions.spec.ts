@@ -1,5 +1,5 @@
 import * as fromActions from "./policies.actions";
-import { Policy } from "shared/sdk";
+import { Policy } from "@scicatproject/scicat-sdk-ts";
 
 describe("Policies Actions", () => {
   describe("fetchPoliciesAction", () => {

@@ -17,7 +17,7 @@ import { selectCurrentPublishedData } from "state-management/selectors/published
 import { Subscription } from "rxjs";
 import { selectCurrentUserName } from "state-management/selectors/user.selectors";
 import { AppConfigService } from "app-config.service";
-import { PublishedDataService } from "shared/sdk";
+import { PublishedDataService } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "publish",

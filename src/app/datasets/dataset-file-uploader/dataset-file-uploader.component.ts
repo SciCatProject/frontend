@@ -6,7 +6,11 @@ import {
   PickedFile,
   SubmitCaptionEvent,
 } from "shared/modules/file-uploader/file-uploader.component";
-import { Attachment, DatasetClass, ReturnedUserDto } from "shared/sdk";
+import {
+  Attachment,
+  DatasetClass,
+  ReturnedUserDto,
+} from "@scicatproject/scicat-sdk-ts";
 import { OwnershipService } from "shared/services/ownership.service";
 import {
   addAttachmentAction,

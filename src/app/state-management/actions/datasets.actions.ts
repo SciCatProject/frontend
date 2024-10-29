@@ -11,7 +11,7 @@ import {
   Datablock,
   DatasetClass,
   OrigDatablock,
-} from "shared/sdk";
+} from "@scicatproject/scicat-sdk-ts";
 
 // === Effects ===
 

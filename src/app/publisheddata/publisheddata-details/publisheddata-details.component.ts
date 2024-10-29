@@ -9,7 +9,7 @@ import { Subscription } from "rxjs";
 import { pluck } from "rxjs/operators";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { AppConfigService } from "app-config.service";
-import { PublishedData } from "shared/sdk";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "publisheddata-details",

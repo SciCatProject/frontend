@@ -22,7 +22,10 @@ import {
   loadingCompleteAction,
 } from "state-management/actions/user.actions";
 import { Router } from "@angular/router";
-import { PublishedData, PublishedDataService } from "shared/sdk";
+import {
+  PublishedData,
+  PublishedDataService,
+} from "@scicatproject/scicat-sdk-ts";
 
 @Injectable()
 export class PublishedDataEffects {

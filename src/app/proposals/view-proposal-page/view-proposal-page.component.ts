@@ -17,7 +17,7 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { fetchLogbookAction } from "state-management/actions/logbooks.actions";
 import { AppConfigService } from "app-config.service";
 import { selectLogbooksDashboardPageViewModel } from "state-management/selectors/logbooks.selectors";
-import { DatasetClass, ProposalClass } from "shared/sdk";
+import { DatasetClass, ProposalClass } from "@scicatproject/scicat-sdk-ts";
 
 export interface TableData {
   pid: string;

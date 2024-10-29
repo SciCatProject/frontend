@@ -16,7 +16,7 @@ import {
   CreateSubAttachmentDto,
   DatasetsService,
   SamplesService,
-} from "shared/sdk";
+} from "@scicatproject/scicat-sdk-ts";
 
 @Injectable()
 export class SampleEffects {

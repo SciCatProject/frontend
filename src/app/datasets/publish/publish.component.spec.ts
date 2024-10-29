@@ -9,7 +9,7 @@ import {
   MockActivatedRoute,
 } from "shared/MockStubs";
 import { Store, ActionsSubject } from "@ngrx/store";
-import { PublishedDataApi } from "shared/sdk";
+import { PublishedDataApi } from "@scicatproject/scicat-sdk-ts";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { of } from "rxjs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";

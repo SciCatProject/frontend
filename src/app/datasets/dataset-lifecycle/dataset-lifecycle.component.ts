@@ -12,7 +12,7 @@ import { selectCurrentDataset } from "state-management/selectors/datasets.select
 import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
 import { selectIsLoading } from "state-management/selectors/user.selectors";
-import { DatasetClass } from "shared/sdk";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
 
 export interface HistoryItem {
   property: string;

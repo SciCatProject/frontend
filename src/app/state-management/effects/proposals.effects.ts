@@ -12,7 +12,10 @@ import {
   loadingAction,
   loadingCompleteAction,
 } from "state-management/actions/user.actions";
-import { DatasetsService, ProposalsService } from "shared/sdk";
+import {
+  DatasetsService,
+  ProposalsService,
+} from "@scicatproject/scicat-sdk-ts";
 
 @Injectable()
 export class ProposalEffects {

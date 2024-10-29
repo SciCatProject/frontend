@@ -5,7 +5,7 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
 } from "@angular/router";
-import { UsersService } from "shared/sdk/api/users.service";
+import { UsersService } from "@scicatproject/scicat-sdk-ts";
 
 /**
  * Ensure that the current user is logged in

@@ -27,7 +27,7 @@ import { filter, map, distinctUntilChanged, take } from "rxjs/operators";
 import { SampleFilters } from "state-management/models";
 import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AppConfigService } from "app-config.service";
-import { SampleClass } from "shared/sdk";
+import { SampleClass } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "sample-dashboard",

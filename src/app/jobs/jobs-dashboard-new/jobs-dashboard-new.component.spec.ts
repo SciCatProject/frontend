@@ -13,7 +13,10 @@ import { JobsDashboardNewComponent } from "./jobs-dashboard-new.component";
 import { SharedTableModule } from "shared/modules/shared-table/shared-table.module";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { HttpClient } from "@angular/common/http";
-import { InternalStorage, LoopBackAuth } from "shared/sdk";
+import {
+  InternalStorage,
+  LoopBackAuth,
+} from "@scicatproject/scicat-sdk-ts";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("JobsDashboardNewComponent", () => {

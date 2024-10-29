@@ -24,7 +24,7 @@ import {
   PageChangeEvent,
   SortChangeEvent,
 } from "shared/modules/table/table.component";
-import { Sample } from "shared/sdk";
+import { Sample } from "@scicatproject/scicat-sdk-ts";
 import {
   changePageAction,
   setTextFilterAction,

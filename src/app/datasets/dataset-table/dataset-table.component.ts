@@ -37,7 +37,7 @@ import {
 import { get } from "lodash";
 import { AppConfigService } from "app-config.service";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
-import { DatasetClass } from "shared/sdk";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
 export interface SortChangeEvent {
   active: string;
   direction: "asc" | "desc" | "";

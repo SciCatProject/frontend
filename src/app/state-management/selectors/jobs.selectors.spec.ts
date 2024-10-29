@@ -1,7 +1,7 @@
 import * as fromSelectors from "./jobs.selectors";
 
 import { JobsState } from "../state/jobs.store";
-import { JobInterface, Job } from "shared/sdk";
+import { JobInterface, Job } from "@scicatproject/scicat-sdk-ts";
 
 const data: JobInterface = {
   id: "testId",

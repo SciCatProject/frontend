@@ -27,7 +27,7 @@ import { map } from "rxjs/operators";
 import { Router } from "@angular/router";
 
 import { GenericFilters } from "state-management/models";
-import { DatasetsService, Policy } from "shared/sdk";
+import { DatasetsService, Policy } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "app-policies-dashboard",

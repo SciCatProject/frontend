@@ -4,7 +4,7 @@ import {
   FilterConfig,
 } from "../../shared/modules/filters/filters.module";
 import { AccessTokenInterface } from "shared/services/auth/auth.service";
-import { ReturnedUserDto } from "shared/sdk";
+import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts";
 
 // NOTE It IS ok to make up a state of other sub states
 export interface UserState {

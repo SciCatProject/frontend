@@ -45,7 +45,7 @@ import {
   CreateDerivedDatasetObsoleteDto,
   DatasetClass,
   ReturnedUserDto,
-} from "shared/sdk";
+} from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "dashboard",

@@ -11,7 +11,7 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { StoreModule, Store } from "@ngrx/store";
 import { Router } from "@angular/router";
 import { CheckboxEvent } from "shared/modules/table/table.component";
-import { PublishedData } from "shared/sdk";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { of } from "rxjs";
 import { Message, MessageType } from "state-management/models";

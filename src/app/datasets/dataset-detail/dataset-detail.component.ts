@@ -48,7 +48,7 @@ import {
   ProposalClass,
   ReturnedUserDto,
   SampleClass,
-} from "shared/sdk";
+} from "@scicatproject/scicat-sdk-ts";
 
 /**
  * Component to show details for a data set, using the

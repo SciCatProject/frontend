@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { JobClass } from "shared/sdk";
+import { JobClass } from "@scicatproject/scicat-sdk-ts";
 
 export const fetchJobsAction = createAction("[Job] Fetch Jobs");
 export const fetchJobsCompleteAction = createAction(

@@ -30,7 +30,7 @@ import {
   DatasetClass,
   ReturnedUserDto,
   SampleClass,
-} from "shared/sdk";
+} from "@scicatproject/scicat-sdk-ts";
 
 export interface TableData {
   pid: string;

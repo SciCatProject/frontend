@@ -7,7 +7,7 @@ import {
   PageChangeEvent,
   TableColumn,
 } from "shared/modules/table/table.component";
-import { DatasetClass } from "shared/sdk";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
 import {
   changeRelatedDatasetsPageAction,
   fetchRelatedDatasetsAction,

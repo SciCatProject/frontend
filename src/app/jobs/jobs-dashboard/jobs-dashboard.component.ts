@@ -26,7 +26,7 @@ import {
   selectCurrentUser,
   selectProfile,
 } from "state-management/selectors/user.selectors";
-import { JobClass } from "shared/sdk";
+import { JobClass } from "@scicatproject/scicat-sdk-ts";
 
 export interface JobsTableData {
   id: string;

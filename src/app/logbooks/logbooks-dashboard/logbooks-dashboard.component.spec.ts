@@ -22,7 +22,7 @@ import {
   RawDatasetInterface,
   Logbook,
   LogbookInterface,
-} from "shared/sdk";
+} from "@scicatproject/scicat-sdk-ts";
 import { LogbookFilters } from "state-management/models";
 import { RouterTestingModule } from "@angular/router/testing";
 

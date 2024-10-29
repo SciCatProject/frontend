@@ -6,7 +6,10 @@ import {
   FilterConfig,
 } from "../../shared/modules/filters/filters.module";
 import { AppConfig } from "app-config.service";
-import { ReturnedUserDto, UserSettings } from "shared/sdk";
+import {
+  ReturnedUserDto,
+  UserSettings,
+} from "@scicatproject/scicat-sdk-ts";
 import { AccessTokenInterface } from "shared/services/auth/auth.service";
 
 export const setDatasetTableColumnsAction = createAction(

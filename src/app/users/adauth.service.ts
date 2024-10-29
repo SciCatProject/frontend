@@ -3,7 +3,7 @@ import { HttpClient, HttpResponse, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { timeout } from "rxjs/operators";
 import { AppConfigService } from "app-config.service";
-import { Configuration } from "shared/sdk";
+import { Configuration } from "@scicatproject/scicat-sdk-ts";
 
 export interface Credentials {
   username: string;

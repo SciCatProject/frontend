@@ -12,7 +12,7 @@ import { PickedFile } from "shared/modules/file-uploader/file-uploader.component
 import { tap } from "rxjs/operators";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable, Subscription } from "rxjs";
-import { Attachment, PublishedData } from "shared/sdk";
+import { Attachment, PublishedData } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "publisheddata-edit",

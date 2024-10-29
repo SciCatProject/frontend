@@ -22,7 +22,7 @@ import {
   sortByColumnAction,
 } from "state-management/actions/instruments.actions";
 import { Router } from "@angular/router";
-import { Instrument } from "shared/sdk";
+import { Instrument } from "@scicatproject/scicat-sdk-ts";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 
 describe("InstrumentsDashboardComponent", () => {

@@ -12,7 +12,11 @@ import {
   loadingCompleteAction,
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
-import { CreateJobDto, JobClass, JobsService } from "shared/sdk";
+import {
+  CreateJobDto,
+  JobClass,
+  JobsService,
+} from "@scicatproject/scicat-sdk-ts";
 
 @Injectable()
 export class JobEffects {

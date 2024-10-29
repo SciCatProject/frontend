@@ -24,7 +24,7 @@ import {
   selectIsAdmin,
   selectProfile,
 } from "state-management/selectors/user.selectors";
-import { DatasetClass } from "shared/sdk";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "batch-view",

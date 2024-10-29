@@ -9,7 +9,7 @@ import {
   UserIdentity,
   TableColumn,
 } from "../models";
-import { AccessToken, UserSetting } from "shared/sdk";
+import { AccessToken, UserSetting } from "@scicatproject/scicat-sdk-ts";
 import { HttpErrorResponse } from "@angular/common/http";
 
 describe("UserReducer", () => {

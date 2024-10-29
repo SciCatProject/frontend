@@ -9,7 +9,7 @@ import {
   LoopBackAuth,
   SDKToken,
   UserSetting,
-} from "shared/sdk";
+} from "@scicatproject/scicat-sdk-ts";
 import { ADAuthService } from "users/adauth.service";
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";

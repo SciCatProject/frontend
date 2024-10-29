@@ -9,7 +9,10 @@ import {
   loadingAction,
   loadingCompleteAction,
 } from "state-management/actions/user.actions";
-import { Instrument, InstrumentsService } from "shared/sdk";
+import {
+  Instrument,
+  InstrumentsService,
+} from "@scicatproject/scicat-sdk-ts";
 
 @Injectable()
 export class InstrumentEffects {

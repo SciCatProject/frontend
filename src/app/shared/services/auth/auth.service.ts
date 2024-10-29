@@ -2,7 +2,7 @@
 declare var Object: any;
 import { Injectable, Inject } from "@angular/core";
 import { InternalStorage } from "./base.storage";
-import { Configuration } from "shared/sdk";
+import { Configuration } from "@scicatproject/scicat-sdk-ts";
 
 export interface AccessTokenInterface {
   id?: string;
