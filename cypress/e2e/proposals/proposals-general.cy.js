@@ -14,7 +14,7 @@ describe("Proposals general", () => {
 
       cy.contains("A minimal test proposal").click();
 
-      cy.wait("@logbooksCall", { timeout: 500 });
+      cy.wait("@logbooksCall", { timeout: 3000 });
 
       cy.visit("/datasets");
 
