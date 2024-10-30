@@ -403,49 +403,6 @@ describe("DatasetTableComponent", () => {
     });
   });
 
-  describe("#onPageChange()", () => {
-    const name = "image";
-    const columnType = "standard";
-
-    it("should dispatch a changePangeAction and a selectColumnAction if pageSize is less than 50", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const event: PageChangeEvent = {
-        pageIndex: 0,
-        pageSize: 25,
-        length: 25,
-      };
-      component.onPageChange(event);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        changePageAction({ page: event.pageIndex, limit: event.pageSize }),
-      );
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        selectColumnAction({ name, columnType }),
-      );
-    });
-
-    it("should dispatch a changePangeAction and a deselectColumnAction if pageSize is larger than or equal to 50", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const event: PageChangeEvent = {
-        pageIndex: 0,
-        pageSize: 50,
-        length: 25,
-      };
-      component.onPageChange(event);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        changePageAction({ page: event.pageIndex, limit: event.pageSize }),
-      );
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        deselectColumnAction({ name, columnType }),
-      );
-    });
-  });
-
   describe("#onSortChange()", () => {
     it("should dispatch a sortByColumnAction", () => {
       dispatchSpy = spyOn(store, "dispatch");

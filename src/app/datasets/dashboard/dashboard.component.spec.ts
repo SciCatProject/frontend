@@ -11,7 +11,10 @@ import { Store, StoreModule } from "@ngrx/store";
 import { MockActivatedRoute, MockStore } from "shared/MockStubs";
 import { DashboardComponent } from "./dashboard.component";
 import { of } from "rxjs";
-import { addDatasetAction } from "state-management/actions/datasets.actions";
+import {
+  addDatasetAction,
+  changePageAction,
+} from "state-management/actions/datasets.actions";
 import { User, Dataset, DerivedDataset } from "shared/sdk";
 import {
   selectColumnAction,
@@ -32,6 +35,7 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
+import { PageChangeEvent } from "shared/modules/table/table.component";
 
 class MockMatDialog {
   open() {
@@ -264,8 +268,26 @@ describe("DashboardComponent", () => {
     });
   });
 
-  describe("#updateColumnSubscription()", () => {
-    it("should navigate to a dataset", () => {
+  describe("#onPageChange()", () => {
+    it("should dispatch a changePangeAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
+
+      const event: PageChangeEvent = {
+        pageIndex: 0,
+        pageSize: 25,
+        length: 25,
+      };
+      component.onPageChange(event);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        changePageAction({ page: event.pageIndex, limit: event.pageSize }),
+      );
+    });
+  });
+
+  describe("#tableColumn$ observable", () => {
+    it("should show 'select' column when user is logged in", () => {
       const testColumn: TableColumn = {
         name: "test",
         order: 0,
@@ -276,18 +298,16 @@ describe("DashboardComponent", () => {
         name: "select",
         order: 1,
         type: "standard",
-        enabled: false,
+        enabled: true,
       };
       selectColumns.setResult([testColumn, selectColumn]);
       selectIsLoggedIn.setResult(true);
-      component.updateColumnSubscription();
 
-      component.tableColumns$.subscribe((result) =>
-        expect(result.length).toEqual(2),
-      );
+      component.tableColumns$.subscribe((result) => {
+        expect(result.length).toEqual(2);
+      });
 
       selectIsLoggedIn.setResult(false);
-      component.updateColumnSubscription();
       component.tableColumns$.subscribe((result) =>
         expect(result).toEqual([testColumn]),
       );

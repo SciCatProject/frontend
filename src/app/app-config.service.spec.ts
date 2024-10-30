@@ -37,6 +37,7 @@ const appConfig: AppConfig = {
   lbBaseURL: "http://127.0.0.1:3000",
   logbookEnabled: true,
   loginFormEnabled: true,
+  thumbnailFetchLimitPerPage: 500,
   maxDirectDownloadSize: 5000000000,
   metadataPreviewEnabled: true,
   metadataStructure: "",
