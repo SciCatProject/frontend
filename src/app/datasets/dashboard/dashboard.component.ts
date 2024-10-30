@@ -14,6 +14,7 @@ import {
   addDatasetAction,
   fetchDatasetCompleteAction,
   fetchMetadataKeysAction,
+  changePageAction,
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -38,7 +39,6 @@ import { Dataset, DerivedDataset } from "shared/sdk";
 import {
   selectColumnAction,
   deselectColumnAction,
-  setDatasetTableColumnsAction,
 } from "state-management/actions/user.actions";
 import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
 import { AppConfigService } from "app-config.service";
@@ -87,6 +87,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
   ) {}
+
+  onPageChange(event: { pageIndex: number; pageSize: number }) {
+    this.store.dispatch(
+      changePageAction({ page: event.pageIndex, limit: event.pageSize }),
+    );
+  }
 
   onSettingsClick(): void {
     this.sideNav.toggle();
@@ -157,36 +163,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateColumnSubscription(): void {
-    this.subscriptions.push(
-      this.loggedIn$.subscribe((status) => {
-        // NOTE: this.appConfig.localColumns is for backward compatibility.
-        //       it should be removed once localColumns is removed from the appConfig
-        const columns =
-          this.appConfig.defaultDatasetsListSettings?.columns ||
-          this.appConfig.localColumns;
-        this.store.dispatch(setDatasetTableColumnsAction({ columns }));
-        if (!status) {
-          this.tableColumns$ = this.store
-            .select(selectColumns)
-            .pipe(
-              map((columns) =>
-                columns.filter((column) => column.name !== "select"),
-              ),
-            );
-        } else {
-          this.tableColumns$ = this.store.select(selectColumns);
-        }
-      }),
-    );
-  }
-
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());
     this.store.dispatch(fetchMetadataKeysAction());
-    this.store.dispatch(fetchDatasetsAction());
-
-    this.updateColumnSubscription();
 
     this.subscriptions.push(
       combineLatest([this.pagination$, this.readyToFetch$, this.loggedIn$])
