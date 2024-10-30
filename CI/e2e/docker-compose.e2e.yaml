@@ -24,7 +24,6 @@ services:
 
   backend:
     image: ghcr.io/scicatproject/backend-next:latest
-    command: sh -c "node dist/main"
     ports:
       - 3000:3000
     volumes:
@@ -47,7 +46,6 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile
     ports:
       - 4200:80
     volumes:
