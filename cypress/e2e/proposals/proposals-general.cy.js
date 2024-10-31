@@ -20,7 +20,6 @@ describe("Proposals general", () => {
           if (args[0] === logBookAction) {
             logbookLogs.push(args[0]);
           }
-          cy.task("log", args[0]); // Log for easier debugging on GitHub
           originalConsoleLog.apply(win.console, args); // Preserve default behavior
         };
       });
