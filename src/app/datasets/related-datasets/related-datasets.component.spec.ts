@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { provideMockStore } from "@ngrx/store/testing";
 import { PageChangeEvent } from "shared/modules/table/table.component";
-import { Dataset } from "shared/sdk";
+import { Dataset } from "@scicatproject/scicat-sdk-ts";
 import {
   changeRelatedDatasetsPageAction,
   fetchRelatedDatasetsAction,

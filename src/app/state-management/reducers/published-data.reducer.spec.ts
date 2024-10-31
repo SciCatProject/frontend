@@ -1,7 +1,7 @@
 import { initialPublishedDataState } from "state-management/state/published-data.store";
 import * as fromActions from "state-management/actions/published-data.actions";
 import { publishedDataReducer } from "./published-data.reducer";
-import { PublishedData, PublishedDataInterface } from "shared/sdk";
+import { PublishedData, PublishedDataInterface } from "@scicatproject/scicat-sdk-ts";
 
 const data: PublishedDataInterface = {
   doi: "testDOI",

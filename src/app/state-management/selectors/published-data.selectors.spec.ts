@@ -1,4 +1,4 @@
-import { PublishedDataInterface, PublishedData } from "shared/sdk";
+import { PublishedDataInterface, PublishedData } from "@scicatproject/scicat-sdk-ts";
 import { GenericFilters } from "state-management/models";
 import { PublishedDataState } from "state-management/state/published-data.store";
 import * as fromSelectors from "./published-data.selectors";

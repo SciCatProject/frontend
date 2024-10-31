@@ -29,7 +29,6 @@ import {
 } from "state-management/actions/datasets.actions";
 import { Router } from "@angular/router";
 import { selectCurrentProposal } from "state-management/selectors/proposals.selectors";
-import { DerivedDataset, Instrument, RawDataset, User } from "shared/sdk";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import { EditableComponent } from "app-routing/pending-changes.guard";
 import { AppConfigService } from "app-config.service";
@@ -44,6 +43,12 @@ import {
 } from "@angular/forms";
 import { Message, MessageType } from "state-management/models";
 import { DOCUMENT } from "@angular/common";
+import {
+  DatasetClass,
+  Instrument,
+  ReturnedUserDto,
+  SampleClass,
+} from "@scicatproject/scicat-sdk-ts";
 
 /**
  * Component to show details for a data set, using the
@@ -71,15 +76,15 @@ export class DatasetDetailComponent
 
   appConfig = this.appConfigService.getConfig();
 
-  dataset: Dataset | undefined;
+  dataset: DatasetClass | undefined;
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
   proposal$ = this.store.select(selectCurrentProposal);
   loading$ = this.store.select(selectIsLoading);
   instrument: Instrument | undefined;
   proposal: Proposal | undefined;
-  sample: Sample | undefined;
-  user: User | undefined;
+  sample: SampleClass | undefined;
+  user: ReturnedUserDto | undefined;
   editingAllowed = false;
   editEnabled = false;
   show = false;
@@ -172,17 +177,13 @@ export class DatasetDetailComponent
       if (this.dataset.type === "raw") {
         return (
           this.user.email.toLowerCase() ===
-          (this.dataset as unknown as RawDataset)[
-            "principalInvestigator"
-          ].toLowerCase()
+          this.dataset["principalInvestigator"].toLowerCase()
         );
       }
       if (this.dataset.type === "derived") {
         return (
           this.user.email.toLowerCase() ===
-          (this.dataset as unknown as DerivedDataset)[
-            "investigator"
-          ].toLowerCase()
+          this.dataset["investigator"].toLowerCase()
         );
       }
     }

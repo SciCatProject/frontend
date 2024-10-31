@@ -1,5 +1,5 @@
 import { jobsReducer } from "./jobs.reducer";
-import { JobInterface, Job } from "shared/sdk";
+import { JobInterface, Job } from "@scicatproject/scicat-sdk-ts";
 import * as fromActions from "../actions/jobs.actions";
 import { initialJobsState } from "state-management/state/jobs.store";
 

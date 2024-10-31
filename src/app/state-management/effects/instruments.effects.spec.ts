@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
 import { InstrumentEffects } from "./instruments.effects";
-import { InstrumentApi, Instrument } from "shared/sdk";
+import { InstrumentApi, Instrument } from "@scicatproject/scicat-sdk-ts";
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import * as fromActions from "state-management/actions/instruments.actions";

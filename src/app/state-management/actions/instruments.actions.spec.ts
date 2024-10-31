@@ -1,5 +1,5 @@
 import * as fromActions from "./instruments.actions";
-import { Instrument } from "shared/sdk";
+import { Instrument } from "@scicatproject/scicat-sdk-ts";
 
 describe("Instrument Actions", () => {
   describe("fetchInstrumentsAction", () => {

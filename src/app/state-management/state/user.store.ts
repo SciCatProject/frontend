@@ -1,5 +1,5 @@
 import { Settings, Message, User, TableColumn } from "../models";
-import { AccessToken } from "shared/sdk";
+import { AccessToken } from "@scicatproject/scicat-sdk-ts";
 import {
   ConditionConfig,
   FilterConfig,

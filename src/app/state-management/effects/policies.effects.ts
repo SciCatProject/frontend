@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import { PolicyApi, Policy } from "shared/sdk";
+import { PolicyApi, Policy } from "@scicatproject/scicat-sdk-ts";
 import { Store } from "@ngrx/store";
 import {
   selectQueryParams,

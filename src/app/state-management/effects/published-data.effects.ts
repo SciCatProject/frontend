@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import { PublishedDataApi, PublishedData } from "shared/sdk";
+import { PublishedDataApi, PublishedData } from "@scicatproject/scicat-sdk-ts";
 import { Store } from "@ngrx/store";
 import {
   selectCurrentPublishedData,

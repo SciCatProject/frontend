@@ -4,7 +4,7 @@ import {
   PublishedDataApi,
   PublishedDataInterface,
   PublishedData,
-} from "shared/sdk";
+} from "@scicatproject/scicat-sdk-ts";
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";

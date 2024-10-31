@@ -12,7 +12,7 @@ import { MockActivatedRoute, MockStore } from "shared/MockStubs";
 import { DashboardComponent } from "./dashboard.component";
 import { of } from "rxjs";
 import { addDatasetAction } from "state-management/actions/datasets.actions";
-import { User, Dataset, DerivedDataset } from "shared/sdk";
+import { User, Dataset, DerivedDataset } from "@scicatproject/scicat-sdk-ts";
 import {
   selectColumnAction,
   deselectColumnAction,

@@ -12,7 +12,7 @@ import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatTableModule } from "@angular/material/table";
 import { MatChipInputEvent, MatChipsModule } from "@angular/material/chips";
 import { of } from "rxjs";
-import { Dataset, Sample, User } from "shared/sdk";
+import { Dataset, Sample, User } from "@scicatproject/scicat-sdk-ts";
 import { MatDialogRef } from "@angular/material/dialog";
 import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
 import { MatCardModule } from "@angular/material/card";

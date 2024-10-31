@@ -8,7 +8,6 @@ import {
   changeDatasetsPageAction,
 } from "state-management/actions/proposals.actions";
 import { selectViewProposalPageViewModel } from "state-management/selectors/proposals.selectors";
-import { Dataset, Proposal } from "state-management/models";
 import {
   TableColumn,
   PageChangeEvent,
@@ -18,6 +17,7 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { fetchLogbookAction } from "state-management/actions/logbooks.actions";
 import { AppConfigService } from "app-config.service";
 import { selectLogbooksDashboardPageViewModel } from "state-management/selectors/logbooks.selectors";
+import { DatasetClass, ProposalClass } from "@scicatproject/scicat-sdk-ts";
 
 export interface TableData {
   pid: string;
@@ -39,7 +39,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   logbook$ = this.store.select(selectLogbooksDashboardPageViewModel);
   appConfig = this.appConfigService.getConfig();
 
-  proposal: Proposal = new Proposal();
+  proposal: ProposalClass;
 
   subscriptions: Subscription[] = [];
 
@@ -64,7 +64,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     private store: Store,
   ) {}
 
-  formatTableData(datasets: Dataset[]): TableData[] {
+  formatTableData(datasets: DatasetClass[]): TableData[] {
     let tableData: TableData[] = [];
     if (datasets) {
       tableData = datasets.map((dataset: any) => ({
@@ -96,7 +96,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     );
   }
 
-  onRowClick(dataset: Dataset) {
+  onRowClick(dataset: DatasetClass) {
     const pid = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl("/datasets/" + pid);
   }

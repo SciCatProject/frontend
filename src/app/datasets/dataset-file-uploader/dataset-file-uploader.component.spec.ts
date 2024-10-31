@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 import { MockStore } from "@ngrx/store/testing";
 import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
-import { Dataset, User } from "shared/sdk";
+import { Dataset, User } from "@scicatproject/scicat-sdk-ts";
 import {
   addAttachmentAction,
   removeAttachmentAction,

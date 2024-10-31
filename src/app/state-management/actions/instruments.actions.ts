@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Instrument } from "shared/sdk";
+import { Instrument } from "@scicatproject/scicat-sdk-ts";
 
 export const fetchInstrumentsAction = createAction(
   "[Instrument] Fetch Instruments",

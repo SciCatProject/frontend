@@ -1,12 +1,13 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { createAction, props } from "@ngrx/store";
-import { User, AccessToken, UserIdentity, UserSetting } from "shared/sdk";
+import { ReturnedUserDto, UserSettings } from "@scicatproject/scicat-sdk-ts";
 import { Message, Settings, TableColumn } from "state-management/models";
 import {
   ConditionConfig,
   FilterConfig,
 } from "../../shared/modules/filters/filters.module";
 import { AppConfig } from "app-config.service";
+import { AccessTokenInterface } from "shared/services/auth/auth.service";
 
 export const setDatasetTableColumnsAction = createAction(
   "[User] Set Dataset Table Columns",
@@ -26,7 +27,7 @@ export const loginAction = createAction(
 );
 export const loginCompleteAction = createAction(
   "[User] Login Complete",
-  props<{ user: User; accountType: string }>(),
+  props<{ user: ReturnedUserDto; accountType: string }>(),
 );
 export const loginFailedAction = createAction(
   "[User] Login Failed",
@@ -74,7 +75,7 @@ export const fetchUserFailedAction = createAction(
 export const fetchCurrentUserAction = createAction("[User] Fetch Current User");
 export const fetchCurrentUserCompleteAction = createAction(
   "[User] Fetch Current User Complete",
-  props<{ user: User }>(),
+  props<{ user: ReturnedUserDto }>(),
 );
 export const fetchCurrentUserFailedAction = createAction(
   "[User] Fetch Current User Failed",
@@ -86,7 +87,8 @@ export const fetchUserIdentityAction = createAction(
 );
 export const fetchUserIdentityCompleteAction = createAction(
   "[User] Fetch User Identity Complete",
-  props<{ userIdentity: UserIdentity }>(),
+  // TODO: Check the type here!
+  props<{ userIdentity: any }>(),
 );
 export const fetchUserIdentityFailedAction = createAction(
   "[User] Fetch User Identity Failed",
@@ -98,7 +100,7 @@ export const fetchUserSettingsAction = createAction(
 );
 export const fetchUserSettingsCompleteAction = createAction(
   "[User] Fetch User Settings Complete",
-  props<{ userSettings: UserSetting }>(),
+  props<{ userSettings: UserSettings }>(),
 );
 export const fetchUserSettingsFailedAction = createAction(
   "[User] Fetch User Settings Failed",
@@ -110,7 +112,7 @@ export const updateUserSettingsAction = createAction(
 );
 export const updateUserSettingsCompleteAction = createAction(
   "[User] Update User Settings Complete",
-  props<{ userSettings: UserSetting }>(),
+  props<{ userSettings: UserSettings }>(),
 );
 export const updateUserSettingsFailedAction = createAction(
   "[User] Update User Settings Failed",
@@ -119,7 +121,7 @@ export const updateUserSettingsFailedAction = createAction(
 export const fetchScicatTokenAction = createAction("[User] Fetch Scicat Token");
 export const fetchScicatTokenCompleteAction = createAction(
   "[User] Fetch Scicat Token Complete",
-  props<{ token: AccessToken }>(),
+  props<{ token: AccessTokenInterface }>(),
 );
 export const fetchScicatTokenFailedAction = createAction(
   "[User] Fetch Scicat Token Failed",

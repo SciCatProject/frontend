@@ -1,6 +1,6 @@
 import { Injectable, Inject } from "@angular/core";
 import { InternalStorage } from "./base.storage";
-import { User } from "shared/sdk";
+import { User } from "@scicatproject/scicat-sdk-ts";
 
 export interface AccessTokenInterface {
   id?: string;

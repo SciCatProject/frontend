@@ -1,5 +1,5 @@
 import * as fromActions from "./datasets.actions";
-import { Dataset, Attachment, DerivedDataset } from "shared/sdk";
+import { Dataset, Attachment, DerivedDataset } from "@scicatproject/scicat-sdk-ts";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,

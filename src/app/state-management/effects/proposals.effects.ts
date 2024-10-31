@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import { DatasetApi, ProposalApi, Proposal, Dataset } from "shared/sdk";
+import { DatasetApi, ProposalApi, Proposal, Dataset } from "@scicatproject/scicat-sdk-ts";
 import { Store } from "@ngrx/store";
 import * as fromActions from "state-management/actions/proposals.actions";
 import {

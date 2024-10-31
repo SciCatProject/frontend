@@ -6,8 +6,7 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Dataset } from "shared/sdk/models";
-import { UserApi } from "shared/sdk";
+import { DatasetClass, UsersService } from "@scicatproject/scicat-sdk-ts";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import {
   selectIsAdmin,
@@ -76,7 +75,7 @@ export class DatasetDetailsDashboardComponent
   jwt$: Observable<JWT> = new Observable<JWT>();
   appConfig = this.appConfigService.getConfig();
 
-  dataset: Dataset | undefined;
+  dataset: DatasetClass | undefined;
   navLinks: {
     location: string;
     label: string;
@@ -114,7 +113,7 @@ export class DatasetDetailsDashboardComponent
     private cdRef: ChangeDetectorRef,
     private route: ActivatedRoute,
     private store: Store,
-    private userApi: UserApi,
+    private userService: UsersService,
     public dialog: MatDialog,
   ) {}
 
@@ -221,7 +220,7 @@ export class DatasetDetailsDashboardComponent
       }
     });
     this.subscriptions.push(datasetSub);
-    this.jwt$ = this.userApi.jwt();
+    this.jwt$ = this.userService.usersControllerGetUserJWT();
   }
   resetTabs() {
     Object.values(this.fetchDataActions).forEach((tab) => {

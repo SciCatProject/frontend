@@ -10,6 +10,7 @@ import {
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { RetrieveDestinations } from "app-config.service";
+import { DatasetClass, ReturnedUserDto } from '@scicatproject/scicat-sdk-ts';
 
 @Injectable()
 export class ArchivingService {
@@ -19,12 +20,12 @@ export class ArchivingService {
   constructor(private store: Store) {}
 
   private createJob(
-    user: User,
-    datasets: Dataset[],
+    user: ReturnedUserDto,
+    datasets: DatasetClass[],
     archive: boolean,
     destinationPath?: Record<string, string>,
     // Do not specify tape copies here
-  ): Job {
+  ) {
     const extra = archive ? {} : destinationPath;
     const jobParams = {
       username: user.username,
@@ -46,11 +47,11 @@ export class ArchivingService {
       type: archive ? "archive" : "retrieve",
     };
 
-    return new Job(data);
+    return data;
   }
 
   private archiveOrRetrieve(
-    datasets: Dataset[],
+    datasets: DatasetClass[],
     archive: boolean,
     destPath?: Record<string, string>,
   ): Observable<void> {
@@ -77,12 +78,12 @@ export class ArchivingService {
     );
   }
 
-  public archive(datasets: Dataset[]): Observable<void> {
+  public archive(datasets: DatasetClass[]): Observable<void> {
     return this.archiveOrRetrieve(datasets, true);
   }
 
   public retrieve(
-    datasets: Dataset[],
+    datasets: DatasetClass[],
     destinationPath: Record<string, string>,
   ): Observable<void> {
     return this.archiveOrRetrieve(datasets, false, destinationPath);

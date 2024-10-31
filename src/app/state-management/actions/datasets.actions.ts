@@ -1,11 +1,11 @@
 import { createAction, props } from "@ngrx/store";
 import {
-  Dataset,
+  DatasetClass,
   Attachment,
-  DerivedDataset,
   OrigDatablock,
   Datablock,
-} from "shared/sdk";
+  CreateDerivedDatasetObsoleteDto,
+} from "@scicatproject/scicat-sdk-ts";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
@@ -18,7 +18,7 @@ import {
 export const fetchDatasetsAction = createAction("[Dataset] Fetch Datasets");
 export const fetchDatasetsCompleteAction = createAction(
   "[Dataset] Fetch Datasets Complete",
-  props<{ datasets: Dataset[] }>(),
+  props<{ datasets: DatasetClass[] }>(),
 );
 export const fetchDatasetsFailedAction = createAction(
   "[Dataset] Fetch Datasets Failed",
@@ -52,7 +52,7 @@ export const fetchDatasetAction = createAction(
 );
 export const fetchDatasetCompleteAction = createAction(
   "[Dataset] Fetch Dataset Complete",
-  props<{ dataset: Dataset }>(),
+  props<{ dataset: DatasetClass }>(),
 );
 export const fetchDatasetFailedAction = createAction(
   "[Dataset] Fetch Dataset Failed",
@@ -97,7 +97,7 @@ export const fetchRelatedDatasetsAction = createAction(
 );
 export const fetchRelatedDatasetsCompleteAction = createAction(
   "[Dataset] Fetch Related Datasets Complete",
-  props<{ relatedDatasets: Dataset[] }>(),
+  props<{ relatedDatasets: DatasetClass[] }>(),
 );
 export const fetchRelatedDatasetsFailedAction = createAction(
   "[Datasets] Fetch Related Datasets Failed",
@@ -119,26 +119,26 @@ export const changeRelatedDatasetsPageAction = createAction(
 export const prefillBatchAction = createAction("[Dataset] Prefill Batch");
 export const prefillBatchCompleteAction = createAction(
   "[Dataset] Prefill Batch Complete",
-  props<{ batch: Dataset[] }>(),
+  props<{ batch: DatasetClass[] }>(),
 );
 export const addToBatchAction = createAction("[Dataset] Add To Batch");
 export const storeBatchAction = createAction(
   "[Dataset] Store To Batch",
-  props<{ batch: Dataset[] }>(),
+  props<{ batch: DatasetClass[] }>(),
 );
 export const removeFromBatchAction = createAction(
   "[Dataset] Remove From Batch",
-  props<{ dataset: Dataset }>(),
+  props<{ dataset: DatasetClass }>(),
 );
 export const clearBatchAction = createAction("[Dataset] Clear Batch");
 
 export const addDatasetAction = createAction(
   "[Dataset] Add Dataset",
-  props<{ dataset: DerivedDataset }>(),
+  props<{ dataset: CreateDerivedDatasetObsoleteDto }>(),
 );
 export const addDatasetCompleteAction = createAction(
   "[Dataset] Add Dataset Complete",
-  props<{ dataset: DerivedDataset }>(),
+  props<{ dataset: CreateDerivedDatasetObsoleteDto }>(),
 );
 export const addDatasetFailedAction = createAction(
   "[Dataset] Add Dataset Failed",
@@ -193,7 +193,7 @@ export const removeAttachmentFailedAction = createAction(
 
 export const reduceDatasetAction = createAction(
   "[Dataset] Reduce Dataset",
-  props<{ dataset: Dataset }>(),
+  props<{ dataset: DatasetClass }>(),
 );
 export const reduceDatasetCompleteAction = createAction(
   "[Dataset] Reduce Dataset Complete",
@@ -218,11 +218,11 @@ export const appendToDatasetArrayFieldFailedAction = createAction(
 
 export const selectDatasetAction = createAction(
   "[Dataset] Select Dataset",
-  props<{ dataset: Dataset }>(),
+  props<{ dataset: DatasetClass }>(),
 );
 export const deselectDatasetAction = createAction(
   "[Dataset] Deselect Dataset",
-  props<{ dataset: Dataset }>(),
+  props<{ dataset: DatasetClass }>(),
 );
 
 export const selectAllDatasetsAction = createAction(

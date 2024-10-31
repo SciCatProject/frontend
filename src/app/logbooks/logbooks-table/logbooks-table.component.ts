@@ -4,7 +4,6 @@ import { Store } from "@ngrx/store";
 
 import { fetchLogbooksAction } from "state-management/actions/logbooks.actions";
 import { selectLogbooks } from "state-management/selectors/logbooks.selectors";
-import { Logbook } from "state-management/models";
 
 @Component({
   selector: "app-logbooks-table",
@@ -21,7 +20,8 @@ export class LogbooksTableComponent implements OnInit {
     private store: Store,
   ) {}
 
-  onClick(logbook: Logbook): void {
+  // TODO: Fix the type when the new sdk is generated with backend fix
+  onClick(logbook: any): void {
     this.router.navigateByUrl("/logbooks/" + logbook.name);
   }
 

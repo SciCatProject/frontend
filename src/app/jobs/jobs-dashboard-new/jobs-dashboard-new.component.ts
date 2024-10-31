@@ -7,9 +7,9 @@ import {
 import { SciCatDataSource } from "../../shared/services/scicat.datasource";
 import { ScicatDataService } from "../../shared/services/scicat-data-service";
 import { ExportExcelService } from "../../shared/services/export-excel.service";
-import { Job } from "shared/sdk";
 import { Column } from "shared/modules/shared-table/shared-table.module";
 import { AppConfigService } from "app-config.service";
+import { JobsTableData } from "jobs/jobs-dashboard/jobs-dashboard.component";
 
 @Component({
   selector: "app-jobs-new-dashboard",
@@ -119,7 +119,7 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
     this.dataSource.disconnectExportData();
   }
 
-  onRowClick(job: Job) {
+  onRowClick(job: JobsTableData) {
     // currently deactivated, no extra data available
     /*     console.log("Row clicked:", job);
     const id = encodeURIComponent(job.id);

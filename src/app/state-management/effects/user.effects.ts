@@ -8,7 +8,7 @@ import {
   SDKToken,
   User,
   UserIdentity,
-} from "shared/sdk";
+} from "@scicatproject/scicat-sdk-ts";
 import { Router } from "@angular/router";
 import * as fromActions from "state-management/actions/user.actions";
 import {

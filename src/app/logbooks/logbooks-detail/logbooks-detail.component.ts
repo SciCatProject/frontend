@@ -5,7 +5,6 @@ import {
   EventEmitter,
   ViewEncapsulation,
 } from "@angular/core";
-import { Logbook } from "state-management/models";
 import {
   PageChangeEvent,
   SortChangeEvent,
@@ -18,7 +17,7 @@ import {
   encapsulation: ViewEncapsulation.None,
 })
 export class LogbooksDetailComponent {
-  @Input() logbook: Logbook = new Logbook();
+  @Input() logbook: any;
   @Input() entriesCount: number | null = 0;
   @Input() entriesPerPage: number | null = 0;
   @Input() currentPage: number | null = 0;

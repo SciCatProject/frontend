@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import { DatasetApi, SampleApi, Sample, Dataset, Attachment } from "shared/sdk";
+import { DatasetApi, SampleApi, Sample, Dataset, Attachment } from "@scicatproject/scicat-sdk-ts";
 import { Store } from "@ngrx/store";
 import {
   selectFullqueryParams,

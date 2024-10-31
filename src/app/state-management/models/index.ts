@@ -29,7 +29,7 @@ export {
   Instrument,
 };
 
-import { DatasetInterface } from "shared/sdk";
+import { DatasetInterface } from "@scicatproject/scicat-sdk-ts";
 import {
   ConditionConfig,
   FilterConfig,

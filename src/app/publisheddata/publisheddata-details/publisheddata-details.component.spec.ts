@@ -7,7 +7,7 @@ import {
   MockActivatedRoute,
 } from "shared/MockStubs";
 import { Store } from "@ngrx/store";
-import { PublishedDataApi } from "shared/sdk";
+import { PublishedDataApi } from "@scicatproject/scicat-sdk-ts";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { Router, ActivatedRoute } from "@angular/router";
 import { LinkyModule } from "ngx-linky";

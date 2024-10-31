@@ -21,7 +21,7 @@ import {
   PageChangeEvent,
   SortChangeEvent,
 } from "shared/modules/table/table.component";
-import { Sample } from "shared/sdk";
+import { SampleClass } from "@scicatproject/scicat-sdk-ts";
 import {
   changePageAction,
   fetchSamplesAction,
@@ -57,7 +57,7 @@ export class SampleEditComponent implements OnInit, OnDestroy {
     );
 
   samplesSubscription: Subscription = new Subscription();
-  samples: Sample[] = [];
+  samples: SampleClass[] = [];
 
   selectedSampleId = "";
   displayedColumns = [
@@ -69,7 +69,7 @@ export class SampleEditComponent implements OnInit, OnDestroy {
   ];
 
   form = new FormGroup({
-    sample: new FormControl<Sample>(null, [
+    sample: new FormControl<SampleClass>(null, [
       Validators.required,
       this.sampleValidator(),
     ]),
@@ -79,7 +79,7 @@ export class SampleEditComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA)
     public data: { ownerGroup: string; sampleId: string },
     public dialogRef: MatDialogRef<SampleEditComponent>,
-    private store: Store<Sample>,
+    private store: Store<SampleClass>,
   ) {
     this.store.dispatch(setTextFilterAction({ text: "" }));
     this.store.dispatch(changePageAction({ page: 0, limit: 10 }));
@@ -128,7 +128,7 @@ export class SampleEditComponent implements OnInit, OnDestroy {
       sortByColumnAction({ column: event.active, direction: event.direction }),
     );
 
-  onRowClick = (sample: Sample): void => {
+  onRowClick = (sample: SampleClass): void => {
     this.selectedSampleId = sample.sampleId;
     this.sample?.setValue(sample);
   };

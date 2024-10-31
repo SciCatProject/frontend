@@ -6,9 +6,10 @@ import {
   SimpleChanges,
 } from "@angular/core";
 
-import { UserApi } from "shared/sdk";
+import { UsersService } from "@scicatproject/scicat-sdk-ts";
 import { ActionConfig, ActionDataset } from "./datafiles-action.interfaces";
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
+import { AuthService } from "shared/services/auth/auth.service";
 
 @Component({
   selector: "datafiles-action",
@@ -33,8 +34,11 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
 
   form: HTMLFormElement = null;
 
-  constructor(private userApi: UserApi) {
-    this.userApi.jwt().subscribe((jwt) => {
+  constructor(
+    private usersService: UsersService,
+    private authService: AuthService,
+  ) {
+    this.usersService.usersControllerGetUserJWT().subscribe((jwt) => {
       this.jwt = jwt.jwt;
     });
   }
@@ -126,7 +130,7 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
     this.form.style.display = "none";
 
     this.form.appendChild(
-      this.add_input("auth_token", this.userApi.getCurrentToken().id),
+      this.add_input("auth_token", `Bearer ${this.authService.getToken().id}`),
     );
 
     this.form.appendChild(this.add_input("jwt", this.jwt));

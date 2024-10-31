@@ -17,7 +17,7 @@ import {
   sortByColumnAction,
   fetchLogbookAction,
 } from "state-management/actions/logbooks.actions";
-import { Logbook, LogbookInterface } from "shared/sdk";
+import { Logbook, LogbookInterface } from "@scicatproject/scicat-sdk-ts";
 import { LogbookFilters } from "state-management/models";
 import { RouterTestingModule } from "@angular/router/testing";
 

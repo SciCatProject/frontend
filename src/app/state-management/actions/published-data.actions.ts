@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { PublishedData } from "shared/sdk";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts";
 
 export const fetchAllPublishedDataAction = createAction(
   "[PublishedData] Fetch All Published Data",
