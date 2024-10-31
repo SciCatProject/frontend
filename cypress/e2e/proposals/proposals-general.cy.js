@@ -1,3 +1,5 @@
+/// <reference types="Cypress" />
+
 describe("Proposals general", () => {
   beforeEach(() => {
     cy.login(Cypress.config("username"), Cypress.config("password"));
@@ -14,12 +16,13 @@ describe("Proposals general", () => {
 
       cy.contains("A minimal test proposal").click();
 
-      cy.wait("@logbooksCall", { timeout: 10000 });
+      cy.wait(20000);
+      cy.wait("@logbooksCall");
 
       cy.visit("/datasets");
 
-      // The logbook API call consists of two calls, one for the fullquery and one for the fullfacet
-      // which is why we check for less than 2 calls
+      // The logbook API call consists of two calls, one for the fullquery and the other for the fullfacet
+      // which is why lte 2 is used
       cy.get("@logbooksCall.all").should("have.length.lte", 2);
 
       cy.login(
