@@ -16,19 +16,20 @@
           mat-raised-button
           id="onedepBtn"
           class="emexport-button"
+          *ngIf="hasOpenEMKeyword()"
           (click)="onOneDepClick()"
         >
           OneDep
     </button>
-    <div fxFlex="auto">
-      <a
-        mat-raised-button
-        [routerLink]="['/datasets', dataset.pid, 'onedep']"
-        class="emexport-button"
-      >
-        EMPIAR
-      </a>
-    </div>
+    <button
+          mat-raised-button
+          id="onedepBtn"
+          class="emexport-button"
+          *ngIf="hasOpenEMKeyword()"
+          (click)="onEMPIARclick()"
+        >
+          EMPIAR
+    </button>
     <div fxFlex="auto" *ngIf="editingAllowed">
       <mat-slide-toggle
         class="public-toggle"

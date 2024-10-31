@@ -18,8 +18,7 @@
                         <tr>
                             <th>Description</th>
                             <td>
-                                <span
-                                    [innerHTML]="dataset.description || '-' | linky"></span>
+                                <span [innerHTML]="dataset.description || '-' | linky"></span>
                             </td>
                         </tr>
                         <tr>
@@ -40,8 +39,7 @@
                         <tr class="keywords-row">
                             <th>Keywords</th>
                             <mat-chip-set role="list" #keywordChips>
-                                <mat-chip role="listitem"
-                                    *ngFor="let keyword of dataset.keywords">
+                                <mat-chip role="listitem" *ngFor="let keyword of dataset.keywords">
                                     {{ keyword }}
                                 </mat-chip>
                             </mat-chip-set>
@@ -50,7 +48,7 @@
                 </mat-card-content>
 
             </mat-card>
-            <mat-card>
+            <mat-card [formGroup]="form">
                 <mat-card-header class="creator-header">
                     <div mat-card-avatar class="section-icon">
                         <mat-icon> blur_linear </mat-icon>
@@ -61,73 +59,53 @@
                 <mat-card-content>
                     <table>
                         <!-- Question 1: Electron Microscopy Method -->
-                        <th>Choose Electron Microscopy
+                        <th class="questionnaire">Choose Electron Microscopy
                             Method</th>
-                        <mat-form-field>
+                        <mat-form-field class="method-name">
                             <mat-label>experimental method</mat-label>
-                                <mat-select 
-                                    [(ngModel)]="emMethod" name="method">
-                                    <mat-option *ngFor="let method of methodsList" [value]="method.value">
-                                      {{ method.viewValue }}
-                                    </mat-option>
-                                  </mat-select>
+                            <mat-select formControlName="emMethod" name="method">
+                                <mat-option *ngFor="let method of methodsList" [value]="method.value">
+                                    {{ method.viewValue }}
+                                </mat-option>
+                            </mat-select>
                         </mat-form-field>
 
 
                         <!-- Question 2: PDB Deposition -->
                         <tr>
-                            <th>Are you deposing coordinates with this
-                                submission (for PDB)?</th>
+                            <th class="questionnaire">Are you deposing coordinates with this
+                                submission? (for PDB)</th>
                             <td>
-                                <mat-radio-group
-                                formControlName="deposingCoordinates">
-                                    <mat-radio-button 
-                                        name="deposingCoordinates"
-                                        value=true
-                                        checked
-                                    >
-                                    Yes
+                                <mat-radio-group formControlName="deposingCoordinates">
+                                    <mat-radio-button name="deposingCoordinates" value=true checked>
+                                        Yes
                                     </mat-radio-button>
-                                    <mat-radio-button 
-                                        name="deposingCoordinates"
-                                        value=false
-                                    >
-                                    No
-                                </mat-radio-button>
+                                    <mat-radio-button name="deposingCoordinates" value=false>
+                                        No
+                                    </mat-radio-button>
                                 </mat-radio-group>
                             </td>
                         </tr>
-
-                        <!-- Conditional Question: Associated Map Deposited to EMDB -->
-                        <tr
-                            *ngIf="form.get('deposingCoordinates')?.value === 'true'">
+                        <tr *ngIf="form.get('deposingCoordinates')?.value === 'true'">
                             <th>Has an associated map been deposited to EMDB?
                             </th>
                             <td>
-                                <mat-radio-group
-                                    formControlName="associatedMap">
-                                    <mat-radio-button 
-                                        name="associatedMap"
-                                        value=true
-                                        checked
-                                    >
-                                    Yes
+                                <mat-radio-group formControlName="associatedMap">
+                                    <mat-radio-button name="associatedMap" value=true checked>
+                                        Yes
                                     </mat-radio-button>
-                                    <mat-radio-button 
-                                        name="associatedMap"
-                                        value=false
-                                    >
-                                    No
-                                </mat-radio-button>
+                                    <mat-radio-button name="associatedMap" value=false>
+                                        No
+                                    </mat-radio-button>
                                 </mat-radio-group>
                             </td>
                         </tr>
 
                         <!-- EMDB Identifier Field -->
-                        <tr *ngIf="form.get('associatedMap').value === true">
+                        <tr *ngIf="form.get('associatedMap').value === 'true'">
                             <th>EMDB Identifier</th>
                             <td>
-                                <mat-form-field class="full-width">
+                                <mat-form-field class="EMDB-ID">
                                     <mat-label>EMDB ID</mat-label>
                                     <input matInput formControlName="emdbId" />
                                 </mat-form-field>
@@ -136,85 +114,263 @@
 
                         <!-- Final Question: Composite Map -->
                         <tr>
-                            <th>Is this a composite map?</th>
+                            <th class="questionnaire">Is this a composite map?</th>
                             <td>
                                 <mat-radio-group formControlName="compositeMap">
-                                    <mat-radio-button 
-                                        name="compositeMap"
-                                        value=true
-                                    >
-                                    Yes
-                                </mat-radio-button>
-                                    <mat-radio-button 
-                                        name="compositeMap"
-                                        value=false 
-                                        checked
-                                    >
-                                    No
-                                </mat-radio-button>
+                                    <mat-radio-button name="compositeMap" value=true>
+                                        Yes
+                                    </mat-radio-button>
+                                    <mat-radio-button name="compositeMap" value=false checked>
+                                        No
+                                    </mat-radio-button>
                                 </mat-radio-group>
                             </td>
                         </tr>
                     </table>
                 </mat-card-content>
             </mat-card>
+
             <mat-card>
-                <p> showValue()<p >
-            </mat-card>
-            <!-- <mat-card>
-                <mat-card-header class="scientific-header">
+                <mat-card-header class="file-header">
                     <div mat-card-avatar class="section-icon">
-                        <mat-icon> science </mat-icon>
+                        <mat-icon> folder </mat-icon>
                     </div>
-                    Scientific Metadata
+                    Choose files for deposition
                 </mat-card-header>
                 <mat-card-content>
-                    <ng-template [ngIf]="appConfig.tableSciDataEnabled"
-                        [ngIfElse]="jsonView">
-                        <ng-template #metadataView>
-                            <div [ngSwitch]="appConfig.metadataStructure">
-                                <tree-view *ngSwitchCase="'tree'"
-                                    [metadata]="dataset['scientificMetadata']"></tree-view>
-                                <metadata-view *ngSwitchDefault
-                                    [metadata]="dataset['scientificMetadata']">
-                                </metadata-view>
-                            </div>
-                        </ng-template>
-                        <mat-tab-group class="metadataGroup"
-                            *ngIf="editingAllowed; else metadataView">
-                            <mat-tab>
-                                <ng-template mat-tab-label>
-                                    <mat-icon> list </mat-icon> View
-                                </ng-template>
-                                <ng-container *ngTemplateOutlet="metadataView">
-                                </ng-container>
-                            </mat-tab>
-                            <mat-tab class="editTab" *ngIf="editingAllowed"
-                                [hidden]="!appConfig.editMetadataEnabled">
-                                <ng-template mat-tab-label>
-                                    <mat-icon> edit </mat-icon> Edit
-                                </ng-template>
-                                <div [ngSwitch]="appConfig.metadataStructure">
-                                    <tree-edit *ngSwitchCase="'tree'"
-                                        [metadata]="dataset['scientificMetadata']"
-                                        (save)="onSaveMetadata($event)"
-                                        (hasUnsavedChanges)="onHasUnsavedChanges($event)">
-                                    </tree-edit>
-                                    <metadata-edit *ngSwitchDefault
-                                        [metadata]="dataset['scientificMetadata']"
-                                        (save)="onSaveMetadata($event)">
-                                    </metadata-edit>
-                                </div>
-                            </mat-tab>
-                        </mat-tab-group>
-                    </ng-template>
+                    <table>
+                        <!-- ADD THE MAIN MAP -->
+                        <tr>
+                            <th class="file-types">Main Map</th>
+                            <td>
+                                <div style="display: flex; align-items: center;">
 
-                    <ng-template #jsonView>
-                        <ngx-json-viewer [json]="dataset['scientificMetadata']"
-                            [expanded]="false"></ngx-json-viewer>
-                    </ng-template>
+
+                                    <button class="fileChooser" mat-raised-button color="primary"
+                                        (click)="fileInput1.click()">
+                                        Choose File
+                                    </button>
+
+                                    <div *ngIf="selectedFile['pathToMainMap']">
+                                        <mat-icon>attach_file</mat-icon>
+                                    </div>
+
+                                    <input type="file" #fileInput1 (change)="onFileSelected($event, 'pathToMainMap')"
+                                        style="display: none;" />
+
+                                    <!-- Selected file name (shown only when a file is selected) -->
+                                    <div *ngIf="selectedFile['pathToMainMap']" class="fileName">
+                                        <p style="margin: 0;">Selected File: {{ selectedFile['pathToMainMap'].name }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- ADD THE HALF MAP 1 -->
+                        <tr>
+                            <th class="file-types">Half Map (1)</th>
+                            <td>
+                                <div style="display: flex; align-items: center;">
+
+
+                                    <button class="fileChooser" mat-raised-button color="primary"
+                                        (click)="fileInput2.click()">
+                                        Choose File
+                                    </button>
+
+                                    <div *ngIf="selectedFile['pathToHalfMap1']">
+                                        <mat-icon>attach_file</mat-icon>
+                                    </div>
+
+                                    <input type="file" #fileInput2 (change)="onFileSelected($event, 'pathToHalfMap1')"
+                                        style="display: none;" />
+
+                                    <!-- Selected file name (shown only when a file is selected) -->
+                                    <div *ngIf="selectedFile['pathToHalfMap1']" class="fileName">
+                                        <p style="margin: 0;">Selected File: {{ selectedFile['pathToHalfMap1'].name }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- ADD THE HALF MAP 2 -->
+                        <tr>
+                            <th class="file-types">Half Map (2)</th>
+                            <td>
+                                <div style="display: flex; align-items: center;">
+
+
+                                    <button class="fileChooser" mat-raised-button color="primary"
+                                        (click)="fileInput3.click()">
+                                        Choose File
+                                    </button>
+
+                                    <div *ngIf="selectedFile['pathToHalfMap2']">
+                                        <mat-icon>attach_file</mat-icon>
+                                    </div>
+
+                                    <input type="file" #fileInput3 (change)="onFileSelected($event, 'pathToHalfMap2')"
+                                        style="display: none;" />
+
+                                    <!-- Selected file name (shown only when a file is selected) -->
+                                    <div *ngIf="selectedFile['pathToHalfMap2']" class="fileName">
+                                        <p style="margin: 0;">Selected File: {{ selectedFile['pathToHalfMap2'].name }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- ADD THE MASK MAP  -->
+                        <tr>
+                            <th class="file-types">Mask Map </th>
+                            <td>
+                                <div style="display: flex; align-items: center;">
+
+
+                                    <button class="fileChooser" mat-raised-button color="primary"
+                                        (click)="fileInput4.click()">
+                                        Choose File
+                                    </button>
+
+                                    <div *ngIf="selectedFile['pathToHalfMask']">
+                                        <mat-icon>attach_file</mat-icon>
+                                    </div>
+
+                                    <input type="file" #fileInput4 (change)="onFileSelected($event, 'pathToHalfMask')"
+                                        style="display: none;" />
+
+                                    <!-- Selected file name (shown only when a file is selected) -->
+                                    <div *ngIf="selectedFile['pathToHalfMask']" class="fileName">
+                                        <p style="margin: 0;">Selected File: {{ selectedFile['pathToHalfMask'].name }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- ADD THE ADDITIONAL MAP  -->
+                        <tr>
+                            <th class="file-types">Additional Map </th>
+                            <td>
+                                <div style="display: flex; align-items: center;">
+
+
+                                    <button class="fileChooser" mat-raised-button color="primary"
+                                        (click)="fileInput5.click()">
+                                        Choose File
+                                    </button>
+
+                                    <div *ngIf="selectedFile['pathToAdditionalMap']">
+                                        <mat-icon>attach_file</mat-icon>
+                                    </div>
+
+                                    <input type="file" #fileInput5
+                                        (change)="onFileSelected($event, 'pathToAdditionalMap')"
+                                        style="display: none;" />
+
+                                    <!-- Selected file name (shown only when a file is selected) -->
+                                    <div *ngIf="selectedFile['pathToAdditionalMap']" class="fileName">
+                                        <p style="margin: 0;">Selected File: {{ selectedFile['pathToAdditionalMap'].name
+                                            }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- ADD THE COORDINATES FILE  -->
+                        <tr *ngIf="form.get('deposingCoordinates')?.value === 'true'">
+                            <th class="file-types">Coordinates</th>
+                            <td>
+                                <div style="display: flex; align-items: center;">
+
+
+                                    <button class="fileChooser" mat-raised-button color="primary"
+                                        (click)="fileInput6.click()">
+                                        Choose File
+                                    </button>
+
+                                    <div *ngIf="selectedFile['pathToCoordinates']">
+                                        <mat-icon>attach_file</mat-icon>
+                                    </div>
+
+                                    <input type="file" #fileInput6
+                                        (change)="onFileSelected($event, 'pathToCoordinates')" style="display: none;" />
+
+                                    <!-- Selected file name (shown only when a file is selected) -->
+                                    <div *ngIf="selectedFile['pathToCoordinates']" class="fileName">
+                                        <p style="margin: 0;">Selected File: {{ selectedFile['pathToCoordinates'].name
+                                            }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- ADD THE IMAGE  -->
+                        <tr>
+                            <th class="file-types"> Public Image </th>
+                            <td>
+                                <div style="display: flex; align-items: center;">
+
+
+                                    <button class="fileChooser" mat-raised-button color="primary"
+                                        (click)="fileInput7.click()">
+                                        Choose File
+                                    </button>
+
+                                    <div *ngIf="selectedFile['pathToImage']">
+                                        <mat-icon>attach_file</mat-icon>
+                                    </div>
+
+                                    <input type="file" #fileInput7 (change)="onFileSelected($event, 'pathToImage')"
+                                        style="display: none;" />
+
+                                    <!-- Selected file name (shown only when a file is selected) -->
+                                    <div *ngIf="selectedFile['pathToImage']" class="fileName">
+                                        <p style="margin: 0;">Selected File: {{ selectedFile['pathToImage'].name }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- ADD THE FCS CURVE   -->
+                        <tr>
+                            <th class="file-types">FSC-XML</th>
+                            <td>
+                                <div style="display: flex; align-items: center;">
+
+
+                                    <button class="fileChooser" mat-raised-button color="primary"
+                                        (click)="fileInput8.click()">
+                                        Choose File
+                                    </button>
+
+                                    <div *ngIf="selectedFile['pathToFSC']">
+                                        <mat-icon>attach_file</mat-icon>
+                                    </div>
+
+                                    <input type="file" #fileInput8 (change)="onFileSelected($event, 'pathToFSC')"
+                                        style="display: none;" />
+
+                                    <!-- Selected file name (shown only when a file is selected) -->
+                                    <div *ngIf="selectedFile['pathToFSC']" class="fileName">
+                                        <p style="margin: 0;">Selected File: {{ selectedFile['pathToFSC'].name }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- UPLOAD FILES DONE -->
+
+                        <button class="submitDep" mat-raised-button color="primary" (click)="connectToDepositionBackend()">
+                            connect
+                        </button>
+                        <button class="submitDep" mat-raised-button color="primary" (click)="onDepositClick()">
+                            Start Deposition
+                        </button>
+
+                    </table>
                 </mat-card-content>
-            </mat-card> -->
+            </mat-card>
+
 
         </div>
     </div>

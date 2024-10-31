@@ -159,6 +159,7 @@ export class DatasetDetailComponent
         }
       }),
     );
+    console.log("the keywords:" , this.dataset.keywords);
   }
 
   onEditModeEnable() {
@@ -317,6 +318,10 @@ export class DatasetDetailComponent
 
   openAttachment(encoded: string) {
     this.attachmentService.openAttachment(encoded);
+  }
+  onEMPIARclick(){
+    const id = encodeURIComponent(this.dataset.pid);
+    this.router.navigateByUrl("/datasets/" + id + "/empiar");
   }
 
 }

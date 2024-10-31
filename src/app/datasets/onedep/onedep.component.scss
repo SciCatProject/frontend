@@ -12,6 +12,9 @@ mat-card {
   
     table {
       th {
+        .questionnaire{
+          min-width: 20rem;
+        }
         min-width: 10rem;
         padding-right: 0.5rem;
         text-align: left;
@@ -30,10 +33,29 @@ mat-card {
         }
   
       }
-  
+      .EMDB-ID{
+        width: 15%;
+      }
+      .method-name{
+        width: 25%;
+      }
+      .file-types{
+        width:10%;
+      }
       .full-width {
         width: 100%;
       }
+      .fileChooser{
+        margin-left: 0px;
+      }
+      .fileName {
+        margin-left: 10px; 
+        white-space: nowrap; 
+      }
+      .submitDep{
+        background-color: blueviolet;
+      }
     }
+    
   }
  
