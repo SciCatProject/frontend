@@ -1,8 +1,8 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 
 describe("Datasets", () => {
   beforeEach(() => {
-    cy.login(Cypress.config("username"), Cypress.config("password"));
+    cy.login(Cypress.env("username"), Cypress.env("password"));
   });
 
   after(() => {
@@ -35,13 +35,13 @@ describe("Datasets", () => {
 
       cy.get("#shareButton").click();
 
-      cy.get("#userEmailField").type(Cypress.config("guestUserEmail"));
+      cy.get("#userEmailField").type(Cypress.env("guestUserEmail"));
 
       cy.get("#addUserButton").click();
 
       cy.get("mat-dialog-content mat-chip-listbox mat-chip-option")
         .first()
-        .should("contain.text", Cypress.config("guestUserEmail"));
+        .should("contain.text", Cypress.env("guestUserEmail"));
 
       cy.get("#shareListButton").should("not.be.disabled");
       cy.get("#shareListButton").click();
@@ -52,7 +52,7 @@ describe("Datasets", () => {
 
       cy.get("mat-dialog-content mat-chip-listbox mat-chip-option")
         .first()
-        .should("contain.text", Cypress.config("guestUserEmail"));
+        .should("contain.text", Cypress.env("guestUserEmail"));
 
       cy.get("#removeAllButton").should("not.be.disabled");
       cy.get("#removeAllButton").click();

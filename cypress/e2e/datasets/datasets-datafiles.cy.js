@@ -1,8 +1,8 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 
 describe("Dataset datafiles", () => {
   beforeEach(() => {
-    cy.login(Cypress.config("username"), Cypress.config("password"));
+    cy.login(Cypress.env("username"), Cypress.env("password"));
     cy.intercept("PATCH", "/api/v3/Datasets/**/*").as("change");
     cy.intercept("GET", "*").as("fetch");
   });

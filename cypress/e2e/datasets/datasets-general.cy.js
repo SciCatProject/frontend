@@ -1,8 +1,8 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 
 describe("Datasets general", () => {
   beforeEach(() => {
-    cy.login(Cypress.config("username"), Cypress.config("password"));
+    cy.login(Cypress.env("username"), Cypress.env("password"));
   });
 
   after(() => {
@@ -11,8 +11,8 @@ describe("Datasets general", () => {
 
   describe("Show dataset table after logout and login", () => {
     it("should be able to see datasets after visiting details page logout and login again", () => {
-      const username = Cypress.config("username");
-      const password = Cypress.config("password");
+      const username = Cypress.env("username");
+      const password = Cypress.env("password");
 
       cy.createDataset("raw");
 
@@ -86,8 +86,8 @@ describe("Datasets general", () => {
       cy.contains("A minimal test proposal");
 
       cy.login(
-        Cypress.config("secondaryUsername"),
-        Cypress.config("secondaryPassword"),
+        Cypress.env("secondaryUsername"),
+        Cypress.env("secondaryPassword"),
       );
 
       cy.deleteProposal(proposalId);
