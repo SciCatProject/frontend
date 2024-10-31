@@ -16,6 +16,8 @@ describe("Proposals general", () => {
 
       cy.contains("A minimal test proposal").click();
 
+      cy.finishedLoading();
+
       cy.wait("@logbooksCall");
 
       cy.visit("/datasets");
