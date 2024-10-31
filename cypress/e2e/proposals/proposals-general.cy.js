@@ -35,6 +35,7 @@ describe("Proposals general", () => {
       cy.finishedLoading();
       cy.visit("/datasets");
 
+      cy.wait(50000); // Test
       cy.wrap(null).should(() => {
         expect(logbookLogs).to.have.length(1);
       });
