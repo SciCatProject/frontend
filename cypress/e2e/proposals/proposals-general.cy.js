@@ -13,6 +13,9 @@ describe("Proposals general", () => {
     beforeEach(() => {
       // Clear logs before each test
       logbookLogs = [];
+    });
+
+    it("should trigger 'Fetch Logbook Complete' action only once after navigation", () => {
       // Capture console logs matching logBookAction
       Cypress.on("window:before:load", (win) => {
         const originalConsoleLog = win.console.log;
@@ -23,9 +26,7 @@ describe("Proposals general", () => {
           originalConsoleLog.apply(win.console, args); // Preserve default behavior
         };
       });
-    });
 
-    it("should trigger 'Fetch Logbook Complete' action only once after navigation", () => {
       const proposalId = Math.floor(100000 + Math.random() * 900000).toString();
       cy.createProposal(proposalId);
       cy.visit("/proposals");
