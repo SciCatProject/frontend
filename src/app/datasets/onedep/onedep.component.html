@@ -18,8 +18,7 @@
                         <tr>
                             <th>Description</th>
                             <td>
-                                <span
-                                    [innerHTML]="dataset.description || '-' | linky"></span>
+                                <span [innerHTML]="dataset.description || '-' | linky"></span>
                             </td>
                         </tr>
                         <tr>
@@ -40,8 +39,7 @@
                         <tr class="keywords-row">
                             <th>Keywords</th>
                             <mat-chip-set role="list" #keywordChips>
-                                <mat-chip role="listitem"
-                                    *ngFor="let keyword of dataset.keywords">
+                                <mat-chip role="listitem" *ngFor="let keyword of dataset.keywords">
                                     {{ keyword }}
                                 </mat-chip>
                             </mat-chip-set>

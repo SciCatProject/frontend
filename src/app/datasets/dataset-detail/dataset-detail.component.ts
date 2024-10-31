@@ -160,6 +160,7 @@ export class DatasetDetailComponent
         }
       }),
     );
+    console.log("the keywords:" , this.dataset.keywords);
   }
 
   onEditModeEnable() {
@@ -319,6 +320,13 @@ export class DatasetDetailComponent
   openAttachment(encoded: string) {
     this.attachmentService.openAttachment(encoded);
   }
+  
+  hasOpenEMKeyword(): boolean {
+    const keywordsArray = this.dataset.keywords;
+    return keywordsArray.some((keyword: string) =>
+      keyword.toLowerCase() === 'openem'
+    );
+  }
 
   onOneDepClick() {
     console.log('started one dep click');
@@ -326,6 +334,10 @@ export class DatasetDetailComponent
     this.router.navigateByUrl("/datasets/" + id + "/onedep");
     console.log("my datset in the details:", this.dataset);
     // this.store.dispatch(selectDatasetAction({ dataset: this.dataset  }));
+  }
+  onEMPIARclick(){
+    const id = encodeURIComponent(this.dataset.pid);
+    this.router.navigateByUrl("/datasets/" + id + "/empiar");
   }
 
 }

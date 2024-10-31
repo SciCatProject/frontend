@@ -16,6 +16,7 @@
           mat-raised-button
           id="onedepBtn"
           class="emexport-button"
+          *ngIf="hasOpenEMKeyword()"
           (click)="onOneDepClick()"
         >
           OneDep
