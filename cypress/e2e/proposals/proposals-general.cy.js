@@ -5,30 +5,44 @@ describe("Proposals general", () => {
     cy.login(Cypress.config("username"), Cypress.config("password"));
   });
 
-  describe("Proposals Page API Calls", () => {
-    it("should make fetch logbook API call only once", () => {
-      cy.intercept("GET", "/api/v3/Logbooks/**").as("logbooksCall");
+  describe("Proposals Page Component", () => {
+    let logbookLogs = [];
+    const logBookAction =
+      "Logbook reducer Action came in! [Logbook] Fetch Logbook Complete";
 
+    beforeEach(() => {
+      // Clear logs before each test
+      logbookLogs = [];
+      // Capture console logs matching logBookAction
+      Cypress.on("window:before:load", (win) => {
+        const originalConsoleLog = win.console.log;
+        win.console.log = (...args) => {
+          if (args[0] === logBookAction) {
+            logbookLogs.push(args[0]);
+          }
+          cy.task("log", args[0]); // Log for easier debugging on GitHub
+          originalConsoleLog.apply(win.console, args); // Preserve default behavior
+        };
+      });
+    });
+
+    it("should trigger 'Fetch Logbook Complete' action only once after navigation", () => {
       const proposalId = Math.floor(100000 + Math.random() * 900000).toString();
       cy.createProposal(proposalId);
-
       cy.visit("/proposals");
 
       cy.contains("A minimal test proposal").click();
-
       cy.finishedLoading();
-
-      cy.wait("@logbooksCall");
-
       cy.visit("/datasets");
 
-      // The logbook API call consists of two calls, one for the fullquery and the other for the fullfacet
-      // which is why lte 2 is used
+      cy.wrap(null).should(() => {
+        expect(logbookLogs).to.have.length(1);
+      });
+
       cy.login(
         Cypress.config("secondaryUsername"),
         Cypress.config("secondaryPassword"),
       );
-
       cy.deleteProposal(proposalId);
     });
   });
