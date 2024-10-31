@@ -33,7 +33,7 @@ export class AuthService {
   constructor(@Inject(InternalStorage) protected storage: InternalStorage) {
     // TODO: Test if all this works with the new changes and removal of any types
     this.token.id = this.load("id");
-    this.token.user = JSON.parse(this.load("user"));
+    this.token.user = JSON.parse(this.load("user") || null);
     this.token.userId = this.load("userId");
     this.token.created = new Date(this.load("created"));
     this.token.ttl = parseInt(this.load("ttl"));
@@ -56,13 +56,15 @@ export class AuthService {
         this.token.rememberMe ? expires : null,
       );
     } catch (err) {
-      console.error("Cannot access local/session storage:", err);
+      throw new Error(
+        `Cannot access local/session storage: ${JSON.stringify(err)}`,
+      );
     }
   }
 
   public clear(): void {
     Object.keys(this.token).forEach((prop: string) =>
-      this.storage.remove(`${this.prefix}${prop}`),
+      this.storage.delete(`${this.prefix}${prop}`),
     );
     this.token = new SDKToken();
   }

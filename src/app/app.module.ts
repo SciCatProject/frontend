@@ -28,7 +28,7 @@ import { AppThemeService } from "app-theme.service";
 import { SnackbarInterceptor } from "shared/interceptors/snackbar.interceptor";
 import { AuthService } from "shared/services/auth/auth.service";
 import { InternalStorage, SDKStorage } from "shared/services/auth/base.storage";
-import { CookieBrowser } from "shared/services/auth/cookie.browser";
+import { CookieService } from "ngx-cookie-service";
 
 const appConfigInitializerFn = (appConfig: AppConfigService) => {
   return () => appConfig.loadAppConfig();
@@ -102,8 +102,8 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
     SampleApi,
     Title,
     MatNativeDateModule,
-    { provide: InternalStorage, useClass: CookieBrowser },
-    { provide: SDKStorage, useClass: CookieBrowser },
+    { provide: InternalStorage, useClass: CookieService },
+    { provide: SDKStorage, useClass: CookieService },
   ],
   bootstrap: [AppComponent],
 })

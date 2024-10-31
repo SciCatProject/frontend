@@ -22,11 +22,11 @@ export class LocalStorageBrowser {
     );
   }
 
-  remove(key: string): void {
+  delete(key: string): void {
     if (localStorage[key]) {
       localStorage.removeItem(key);
     } else {
-      console.log("Trying to remove unexisting key: ", key);
+      throw new Error(`Cannot remove non-existent key: ${key}`);
     }
   }
 }

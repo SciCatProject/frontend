@@ -7,7 +7,7 @@ export class BaseStorage {
 
   set(key: string, value: string | number | boolean, expires?: Date): void {}
 
-  remove(key: string): void {}
+  delete(key: string): void {}
 }
 
 export class InternalStorage extends BaseStorage {}
