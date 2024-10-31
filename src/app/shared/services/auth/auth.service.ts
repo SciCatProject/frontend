@@ -30,6 +30,11 @@ export class AuthService {
 
   protected prefix = "";
 
+  /**
+   * NOTE: This was the suggestion from the ai-bot review to simplify the storage and logic here
+   * (might be worth checking in the future if we want to make some changes in the cookies storage structure and keep them in one encoded object):
+   * https://github.com/SciCatProject/frontend/pull/1632#discussion_r1824033871
+   */
   constructor(@Inject(InternalStorage) protected storage: InternalStorage) {
     // TODO: Test if all this works with the new changes and removal of any types
     this.token.id = this.load("id");
