@@ -1,6 +1,10 @@
 import { Observable } from "rxjs";
 import { PolicyEffects } from "./policies.effects";
-import { PolicyApi, PolicyInterface, Policy } from "@scicatproject/scicat-sdk-ts";
+import {
+  PolicyApi,
+  PolicyInterface,
+  Policy,
+} from "@scicatproject/scicat-sdk-ts";
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";

@@ -10,7 +10,7 @@ import {
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { RetrieveDestinations } from "app-config.service";
-import { DatasetClass, ReturnedUserDto } from '@scicatproject/scicat-sdk-ts';
+import { DatasetClass, ReturnedUserDto } from "@scicatproject/scicat-sdk-ts";
 
 @Injectable()
 export class ArchivingService {

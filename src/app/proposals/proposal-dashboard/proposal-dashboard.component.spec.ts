@@ -16,7 +16,11 @@ import { Store, StoreModule } from "@ngrx/store";
 import { ProposalDashboardComponent } from "./proposal-dashboard.component";
 import { ProposalsModule } from "proposals/proposals.module";
 import { EffectsModule } from "@ngrx/effects";
-import { DatasetApi, LogbookApi, ProposalApi } from "@scicatproject/scicat-sdk-ts";
+import {
+  DatasetApi,
+  LogbookApi,
+  ProposalApi,
+} from "@scicatproject/scicat-sdk-ts";
 import { HttpClient } from "@angular/common/http";
 import { ScicatDataService } from "shared/services/scicat-data-service";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";

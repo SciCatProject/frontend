@@ -4,11 +4,8 @@ import {
   DatasetState,
 } from "state-management/state/datasets.store";
 import * as fromActions from "state-management/actions/datasets.actions";
-import {
-  ArchViewMode,
-  Dataset,
-  ScientificCondition,
-} from "state-management/models";
+import { ArchViewMode, ScientificCondition } from "state-management/models";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
 
 const reducer = createReducer(
   initialDatasetState,
@@ -131,7 +128,7 @@ const reducer = createReducer(
     fromActions.addDatasetCompleteAction,
     (state, { dataset }): DatasetState => ({
       ...state,
-      currentSet: dataset as unknown as Dataset,
+      currentSet: dataset as unknown as DatasetClass,
     }),
   ),
 
@@ -139,6 +136,7 @@ const reducer = createReducer(
     fromActions.addAttachmentCompleteAction,
     (state, { attachment }): DatasetState => {
       if (state.currentSet) {
+        // TODO: Fix the any type here
         const attachments = state.currentSet.attachments.filter(
           (existingAttachment) => existingAttachment.id !== attachment.id,
         );
