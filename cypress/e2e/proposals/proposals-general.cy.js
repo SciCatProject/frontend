@@ -1,8 +1,6 @@
-/// <reference types="Cypress" />
-
 describe("Proposals general", () => {
   beforeEach(() => {
-    cy.login(Cypress.config("username"), Cypress.config("password"));
+    cy.login(Cypress.env("username"), Cypress.env("password"));
   });
 
   describe("Proposals Page Component", () => {
@@ -41,8 +39,8 @@ describe("Proposals general", () => {
       });
 
       cy.login(
-        Cypress.config("secondaryUsername"),
-        Cypress.config("secondaryPassword"),
+        Cypress.env("secondaryUsername"),
+        Cypress.env("secondaryPassword"),
       );
       cy.deleteProposal(proposalId);
     });

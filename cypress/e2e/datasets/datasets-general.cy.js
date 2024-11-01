@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 describe("Datasets general", () => {
   beforeEach(() => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
