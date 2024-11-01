@@ -116,10 +116,8 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchUserAction),
       switchMap(({ adLoginResponse }) => {
-        const accessTokenPrefix =
-          this.configService.getConfig().accessTokenPrefix;
         const token = new SDKToken({
-          id: accessTokenPrefix + adLoginResponse.access_token,
+          id: adLoginResponse.access_token,
           userId: adLoginResponse.userId,
           ttl: adLoginResponse.ttl,
           created: adLoginResponse.created,
