@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 describe("Users Login", () => {
   const username = Cypress.env("username");
   const password = Cypress.env("password");

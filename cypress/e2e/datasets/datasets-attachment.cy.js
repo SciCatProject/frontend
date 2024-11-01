@@ -1,4 +1,3 @@
-/// <reference types="cypress" />
 var path = require("path");
 
 describe("Dataset attachments", () => {

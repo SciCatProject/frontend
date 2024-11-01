@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 describe("Datasets", () => {
   const metadataName = "some name";
   const metadataValue = "some value";
