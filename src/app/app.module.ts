@@ -26,6 +26,9 @@ import { LayoutModule } from "_layout/layout.module";
 import { AppConfigService } from "app-config.service";
 import { AppThemeService } from "app-theme.service";
 import { SnackbarInterceptor } from "shared/interceptors/snackbar.interceptor";
+import { AuthService } from "shared/services/auth/auth.service";
+import { InternalStorage, SDKStorage } from "shared/services/auth/base.storage";
+import { CookieService } from "ngx-cookie-service";
 
 const appConfigInitializerFn = (appConfig: AppConfigService) => {
   return () => appConfig.loadAppConfig();
@@ -93,11 +96,14 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
         subscriptSizing: "dynamic",
       },
     },
+    AuthService,
     AppThemeService,
     UserApi,
     SampleApi,
     Title,
     MatNativeDateModule,
+    { provide: InternalStorage, useClass: CookieService },
+    { provide: SDKStorage, useClass: CookieService },
   ],
   bootstrap: [AppComponent],
 })
