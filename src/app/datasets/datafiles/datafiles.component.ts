@@ -281,7 +281,8 @@ export class DatafilesComponent
           ],
         };
         const job = data;
-        this.store.dispatch(submitJobAction({ job: job }));
+        // TODO: Fix the any type here
+        this.store.dispatch(submitJobAction({ job: job as any }));
       }
     });
   }

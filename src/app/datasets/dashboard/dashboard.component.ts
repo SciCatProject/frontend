@@ -34,7 +34,11 @@ import {
   selectColumns,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
-import { DatasetClass, ReturnedUserDto } from "@scicatproject/scicat-sdk-ts";
+import {
+  CreateDerivedDatasetObsoleteDto,
+  DatasetClass,
+  ReturnedUserDto,
+} from "@scicatproject/scicat-sdk-ts";
 import {
   selectColumnAction,
   deselectColumnAction,
@@ -129,6 +133,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((res) => {
       if (res) {
         const { username, email } = this.currentUser;
+        // TODO: Check this type!
         const dataset = {
           accessGroups: [],
           contactEmail: email, // Required
@@ -152,7 +157,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
             .map((entry: string) => entry.trim())
             .filter((entry: string) => entry !== ""), // Required
         };
-        this.store.dispatch(addDatasetAction({ dataset }));
+        this.store.dispatch(
+          addDatasetAction({
+            dataset: dataset as CreateDerivedDatasetObsoleteDto,
+          }),
+        );
       }
     });
   }

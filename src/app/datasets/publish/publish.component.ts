@@ -12,7 +12,6 @@ import {
 } from "state-management/actions/published-data.actions";
 
 import { PublishedDataService } from "@scicatproject/scicat-sdk-ts";
-import { PublishedData } from "shared/sdk/models";
 import { formatDate } from "@angular/common";
 import { Router } from "@angular/router";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";

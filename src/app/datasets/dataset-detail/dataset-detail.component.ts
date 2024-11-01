@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
-import { Dataset, Proposal, Sample } from "shared/sdk/models";
 import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 
@@ -46,6 +45,7 @@ import { DOCUMENT } from "@angular/common";
 import {
   DatasetClass,
   Instrument,
+  ProposalClass,
   ReturnedUserDto,
   SampleClass,
 } from "@scicatproject/scicat-sdk-ts";
@@ -82,7 +82,7 @@ export class DatasetDetailComponent
   proposal$ = this.store.select(selectCurrentProposal);
   loading$ = this.store.select(selectIsLoading);
   instrument: Instrument | undefined;
-  proposal: Proposal | undefined;
+  proposal: ProposalClass | undefined;
   sample: SampleClass | undefined;
   user: ReturnedUserDto | undefined;
   editingAllowed = false;

@@ -8,7 +8,6 @@ import { EffectsModule } from "@ngrx/effects";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { APP_INITIALIZER, NgModule } from "@angular/core";
 import { ExtraOptions, RouterModule } from "@angular/router";
-import { SampleApi, SDKBrowserModule } from "shared/sdk/index";
 import { StoreModule } from "@ngrx/store";
 import { ApiModule, Configuration } from "@scicatproject/scicat-sdk-ts";
 import { routerReducer } from "@ngrx/router-store";
@@ -61,7 +60,6 @@ const apiConfigurationFn = (
     MatTabsModule,
     MatChipsModule,
     MatSnackBarModule,
-    SDKBrowserModule.forRoot(),
     ApiModule,
     StoreModule.forRoot(
       { router: routerReducer, users: userReducer },

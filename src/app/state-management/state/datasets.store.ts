@@ -1,4 +1,5 @@
-import { DatasetFilters, Dataset, ArchViewMode } from "state-management/models";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
+import { DatasetFilters, ArchViewMode } from "state-management/models";
 
 export interface DateTriple {
   year: number;
@@ -21,10 +22,10 @@ export interface Pagination {
 }
 
 export interface DatasetState {
-  datasets: Dataset[];
-  selectedSets: Dataset[];
-  currentSet: Dataset | undefined;
-  relatedDatasets: Dataset[];
+  datasets: DatasetClass[];
+  selectedSets: DatasetClass[];
+  currentSet: DatasetClass | undefined;
+  relatedDatasets: DatasetClass[];
   relatedDatasetsCount: number;
   totalCount: number;
 
@@ -43,7 +44,7 @@ export interface DatasetState {
     sortField: string;
   };
 
-  batch: Dataset[];
+  batch: DatasetClass[];
 
   openwhiskResult: Record<string, unknown> | undefined;
 }

@@ -46,7 +46,7 @@ const reducer = createReducer(
     fromActions.addAttachmentCompleteAction,
     (state, { attachment }): ProposalsState => {
       if (state.currentProposal) {
-        const attachments = state.currentProposal.attachments;
+        const attachments = (state.currentProposal as any).attachments;
         attachments.push(attachment);
         const currentProposal = { ...state.currentProposal, attachments };
         return { ...state, currentProposal };
@@ -59,7 +59,7 @@ const reducer = createReducer(
     fromActions.updateAttachmentCaptionCompleteAction,
     (state, { attachment }): ProposalsState => {
       if (state.currentProposal) {
-        const attachments = state.currentProposal.attachments.filter(
+        const attachments = (state.currentProposal as any).attachments.filter(
           (existingAttachment) => existingAttachment.id !== attachment.id,
         );
         attachments.push(attachment);
@@ -74,7 +74,7 @@ const reducer = createReducer(
     fromActions.removeAttachmentCompleteAction,
     (state, { attachmentId }): ProposalsState => {
       if (state.currentProposal) {
-        const attachments = state.currentProposal.attachments.filter(
+        const attachments = (state.currentProposal as any).attachments.filter(
           (attachment) => attachment.id !== attachmentId,
         );
         const currentProposal = { ...state.currentProposal, attachments };

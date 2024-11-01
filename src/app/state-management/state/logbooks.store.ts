@@ -1,8 +1,9 @@
-import { Logbook, LogbookFilters } from "state-management/models";
+import { LogbookFilters } from "state-management/models";
 
 export interface LogbookState {
-  logbooks: Logbook[];
-  currentLogbook: Logbook | undefined;
+  // TODO: Fix any type when backend type is fixed
+  logbooks: any[];
+  currentLogbook: any | undefined;
 
   totalCount: number;
 
