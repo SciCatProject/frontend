@@ -30,6 +30,7 @@
   "logbookEnabled": true,
   "loginFormEnabled": true,
   "maxDirectDownloadSize": 1047521824,
+  "thumbnailFetchLimitPerPage": 100,
   "metadataPreviewEnabled": true,
   "metadataStructure": "",
   "multipleDownloadAction": "http:/localhost/zip",

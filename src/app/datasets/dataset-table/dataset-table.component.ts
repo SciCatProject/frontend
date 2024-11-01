@@ -18,7 +18,6 @@ import {
   selectDatasetAction,
   deselectDatasetAction,
   selectAllDatasetsAction,
-  changePageAction,
   sortByColumnAction,
 } from "state-management/actions/datasets.actions";
 
@@ -29,14 +28,10 @@ import {
   selectTotalSets,
   selectDatasetsInBatch,
 } from "state-management/selectors/datasets.selectors";
-import { PageChangeEvent } from "shared/modules/table/table.component";
-import {
-  selectColumnAction,
-  deselectColumnAction,
-} from "state-management/actions/user.actions";
 import { get } from "lodash";
 import { AppConfigService } from "app-config.service";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
+import { PageEvent } from "@angular/material/paginator";
 export interface SortChangeEvent {
   active: string;
   direction: "asc" | "desc" | "";
@@ -67,6 +62,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   @Input() tableColumns: TableColumn[] | null = null;
   displayedColumns: string[] = [];
   @Input() selectedSets: Dataset[] | null = null;
+  @Output() pageChange = new EventEmitter<{
+    pageIndex: number;
+    pageSize: number;
+  }>();
 
   datasets: Dataset[] = [];
   // datasetDerivationsMaps: DatasetDerivationsMap[] = [];
@@ -79,6 +78,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
     public appConfigService: AppConfigService,
     private store: Store,
   ) {}
+
+  onPageChange(event: PageEvent) {
+    this.pageChange.emit({
+      pageIndex: event.pageIndex,
+      pageSize: event.pageSize,
+    });
+  }
   doSettingsClick(event: MouseEvent) {
     this.settingsClick.emit(event);
   }
@@ -175,21 +181,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
       this.store.dispatch(selectAllDatasetsAction());
     } else {
       this.store.dispatch(clearSelectionAction());
-    }
-  }
-
-  onPageChange(event: PageChangeEvent): void {
-    this.store.dispatch(
-      changePageAction({ page: event.pageIndex, limit: event.pageSize }),
-    );
-    if (event.pageSize < 50) {
-      this.store.dispatch(
-        selectColumnAction({ name: "image", columnType: "standard" }),
-      );
-    } else {
-      this.store.dispatch(
-        deselectColumnAction({ name: "image", columnType: "standard" }),
-      );
     }
   }
 
