@@ -36,12 +36,12 @@ export class OneDepComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   showAssociatedMapQuestion: boolean = false;
 
-  connectedDepositionBackend: string = '';
-  connectedDepositionBackendVersion: string = '';
-  connectingToDepositionBackend: boolean = false;
-  lastUsedDepositionBackends: string[] = [];
-  forwardDepositionBackend: string = '';
-  errorMessage: string = '';
+  // connectedDepositionBackend: string = '';
+  // connectedDepositionBackendVersion: string = '';
+  // connectingToDepositionBackend: boolean = false;
+  // lastUsedDepositionBackends: string[] = [];
+  // forwardDepositionBackend: string = '';
+  // errorMessage: string = '';
 
 
   methodsList: EmMethod[] = [
@@ -89,7 +89,7 @@ export class OneDepComponent implements OnInit {
         pathToFSC: new FormControl(""), 
       })
 
-      this.connectingToDepositionBackend = true;
+      // this.connectingToDepositionBackend = true;
       // Get the GET parameter 'backendUrl' from the URL
       // this.route.queryParams.subscribe(params => {
       //   const backendUrl = params['backendUrl'];
@@ -102,36 +102,6 @@ export class OneDepComponent implements OnInit {
       // });
     }
 
-    connectToDepositionBackend(): boolean {
-      var DepositionBackendUrl = "http://localhost:8080"
-      let DepositionBackendUrlCleaned = DepositionBackendUrl.slice();
-      // Check if last symbol is a slash and add version endpoint
-      if (!DepositionBackendUrlCleaned.endsWith('/')) {
-        DepositionBackendUrlCleaned += '/';
-      }
-  
-      let DepositionBackendUrlVersion = DepositionBackendUrlCleaned;
-  
-      // Try to connect to the facility backend/version to check if it is available
-      console.log('Connecting to facility backend: ' + DepositionBackendUrlVersion);
-      this.http.get(DepositionBackendUrlVersion).subscribe(
-        response => {
-          console.log('Connected to facility backend', response);
-          // If the connection is successful, store the connected facility backend URL
-          this.connectedDepositionBackend = DepositionBackendUrlCleaned;
-          this.connectingToDepositionBackend = false;
-          this.connectedDepositionBackendVersion = response['version'];
-        },
-        error => {
-          this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
-          console.error('Request failed', error);
-          this.connectedDepositionBackend = '';
-          this.connectingToDepositionBackend = false;
-        }
-      );
-  
-      return true;
-    }
 
     onFileSelected(event: Event, controlName: string) {
       const input = event.target as HTMLInputElement;
@@ -142,6 +112,10 @@ export class OneDepComponent implements OnInit {
     }
     onDepositClick(){
       const formData = this.form.value;
+      // need to properly catch the dataset details
+      console.log(this.dataset)
+      //return this.http.post(this.backendUrl, formData);
+      
     }
     
 }

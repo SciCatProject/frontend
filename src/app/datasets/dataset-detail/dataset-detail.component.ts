@@ -7,6 +7,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { combineLatest, fromEvent, Observable, Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
+import { HttpClient } from '@angular/common/http';
 
 import { showMessageAction } from "state-management/actions/user.actions";
 import {
@@ -90,6 +91,14 @@ export class DatasetDetailComponent
   editEnabled = false;
   show = false;
 
+
+  connectedDepositionBackend: string = '';
+  connectedDepositionBackendVersion: string = '';
+  connectingToDepositionBackend: boolean = false;
+  lastUsedDepositionBackends: string[] = [];
+  forwardDepositionBackend: string = '';
+  errorMessage: string = '';
+
   @Output() emClick = new EventEmitter<Dataset>();
 
   readonly separatorKeyCodes: number[] = [ENTER, COMMA, SPACE];
@@ -100,11 +109,14 @@ export class DatasetDetailComponent
     private attachmentService: AttachmentService,
     public dialog: MatDialog,
     private store: Store,
+    private http: HttpClient,
     private router: Router,
     private fb: FormBuilder,
   ) {}
 
   ngOnInit() {
+    this.connectingToDepositionBackend = true;
+
     this.form = this.fb.group({
       datasetName: new FormControl("", [Validators.required]),
       description: new FormControl("", [Validators.required]),
@@ -324,4 +336,37 @@ export class DatasetDetailComponent
     this.router.navigateByUrl("/datasets/" + id + "/empiar");
   }
 
+
+  connectToDepositionBackend(): boolean {
+    var DepositionBackendUrl = "http://localhost:8080"
+    let DepositionBackendUrlCleaned = DepositionBackendUrl.slice();
+    // Check if last symbol is a slash and add version endpoint
+    if (!DepositionBackendUrlCleaned.endsWith('/')) {
+      DepositionBackendUrlCleaned += '/';
+    }
+
+    let DepositionBackendUrlVersion = DepositionBackendUrlCleaned;
+
+    // Try to connect to the facility backend/version to check if it is available
+    console.log('Connecting to facility backend: ' + DepositionBackendUrlVersion);
+    this.http.get(DepositionBackendUrlVersion).subscribe(
+      response => {
+        console.log('Connected to facility backend', response);
+        // If the connection is successful, store the connected facility backend URL
+        this.connectedDepositionBackend = DepositionBackendUrlCleaned;
+        this.connectingToDepositionBackend = false;
+        this.connectedDepositionBackendVersion = response['version'];
+      },
+      error => {
+        this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+        console.error('Request failed', error);
+        this.connectedDepositionBackend = '';
+        this.connectingToDepositionBackend = false;
+      }
+    );
+
+    return true;
+  }
+
 }
+
