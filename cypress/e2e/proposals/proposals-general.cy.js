@@ -11,20 +11,21 @@ describe("Proposals general", () => {
     beforeEach(() => {
       // Clear logs before each test
       logbookLogs = [];
-    });
 
-    it("should trigger 'Fetch Logbook Complete' action only once after navigation", () => {
       // Capture console logs matching logBookAction
-      Cypress.on("window:before:load", (win) => {
-        const originalConsoleLog = win.console.log;
-        win.console.log = (...args) => {
+      cy.window().then((win) => {
+        cy.stub(win.console, "log").callsFake((...args) => {
+          // Check if the first argument matches logBookAction
           if (args[0] === logBookAction) {
             logbookLogs.push(args[0]);
           }
-          originalConsoleLog.apply(win.console, args); // Preserve default behavior
-        };
+          // Preserve the original console.log behavior
+          return win.console.log.apply(win.console, args);
+        });
       });
+    });
 
+    it("should trigger 'Fetch Logbook Complete' action only once after navigation", () => {
       const proposalId = Math.floor(100000 + Math.random() * 900000).toString();
       cy.createProposal(proposalId);
       cy.visit("/proposals");
@@ -33,7 +34,6 @@ describe("Proposals general", () => {
       cy.finishedLoading();
       cy.visit("/datasets");
 
-      cy.wait(50000); // Test
       cy.wrap(null).should(() => {
         expect(logbookLogs).to.have.length(1);
       });
