@@ -1,12 +1,10 @@
 import { defineConfig } from "cypress";
 
 export default defineConfig({
-  e2e: {
-    baseUrl: "http://127.0.0.1:4200",
+  env: {
     lbBaseUrl: "http://localhost:3000/api/v3",
     lbLoginEndpoint: "/auth/login",
     lbTokenPrefix: "Bearer ",
-    viewportWidth: 1280,
     username: "admin",
     password: "27f5fd86ae68fe740eef42b8bbd1d7d5",
     secondaryUsername: "archiveManager",
@@ -14,6 +12,10 @@ export default defineConfig({
     guestUsername: "user1",
     guestUserEmail: "user1@your.site",
     guestPassword: "a609316768619f154ef58db4d847b75e",
+  },
+  e2e: {
+    baseUrl: "http://localhost:4200",
+    viewportWidth: 1280,
     defaultCommandTimeout: 10000,
     retries: 1,
   },

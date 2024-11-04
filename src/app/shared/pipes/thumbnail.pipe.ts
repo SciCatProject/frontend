@@ -1,30 +1,15 @@
 import { Pipe, PipeTransform } from "@angular/core";
 
-import { DatasetApi } from "shared/sdk";
+import { ThumbnailService } from "shared/services/thumbnail.service";
 
 @Pipe({
   name: "thumbnail",
+  pure: true,
 })
 export class ThumbnailPipe implements PipeTransform {
-  constructor(private datasetApi: DatasetApi) {}
+  constructor(private thumbnailService: ThumbnailService) {}
 
-  async transform(pid: string, args?: any): Promise<string | null> {
-    const encodedPid = encodeURIComponent(pid);
-
-    const res = await this.datasetApi.thumbnail(encodedPid).toPromise();
-
-    if (!res) {
-      return null;
-    }
-
-    if (typeof res === "string") {
-      return res;
-    }
-
-    if (!res.thumbnail) {
-      return null;
-    }
-
-    return res.thumbnail;
+  transform(pid: string): Promise<string | null> {
+    return this.thumbnailService.getThumbnail(pid);
   }
 }

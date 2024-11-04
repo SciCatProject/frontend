@@ -36,7 +36,7 @@ export class JsonHeadPipe implements PipeTransform {
       val2 = " ";
     }
     outputString =
-      key1 + ":" + (val1?.value.toString() || val1) + "\n" + key2 + ":" + val2;
+      key1 + ":" + (val1?.value?.toString() || val1) + "\n" + key2 + ":" + val2;
     if (key1 === undefined) {
       outputString = "No metadata found";
     }
