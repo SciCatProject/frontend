@@ -67,8 +67,7 @@ import { AttachmentService } from "shared/services/attachment.service";
   standalone: false,
 })
 export class DatasetDetailComponent
-  implements OnInit, OnDestroy, EditableComponent
-{
+  implements OnInit, OnDestroy, EditableComponent {
   private subscriptions: Subscription[] = [];
   private _hasUnsavedChanges = false;
   form: FormGroup;
@@ -114,7 +113,7 @@ export class DatasetDetailComponent
     private http: HttpClient,
     private router: Router,
     private fb: FormBuilder,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.connectingToDepositionBackend = true;
@@ -173,7 +172,6 @@ export class DatasetDetailComponent
         }
       }),
     );
-    console.log("the keywords:" , this.dataset.keywords);
   }
 
   onEditModeEnable() {
@@ -344,11 +342,12 @@ export class DatasetDetailComponent
   onOneDepClick() {
     console.log('started one dep click');
     const id = encodeURIComponent(this.dataset.pid);
+    this.connectToDepositionBackend();
     this.router.navigateByUrl("/datasets/" + id + "/onedep");
     console.log("my datset in the details:", this.dataset);
     // this.store.dispatch(selectDatasetAction({ dataset: this.dataset  }));
   }
-  onEMPIARclick(){
+  onEMPIARclick() {
     const id = encodeURIComponent(this.dataset.pid);
     this.router.navigateByUrl("/datasets/" + id + "/empiar");
   }
@@ -362,13 +361,13 @@ export class DatasetDetailComponent
       DepositionBackendUrlCleaned += '/';
     }
 
-    let DepositionBackendUrlVersion = DepositionBackendUrlCleaned;
+    let DepositionBackendUrlVersion = DepositionBackendUrlCleaned + 'version';
 
     // Try to connect to the facility backend/version to check if it is available
-    console.log('Connecting to facility backend: ' + DepositionBackendUrlVersion);
+    console.log('Connecting to OneDep backend: ' + DepositionBackendUrlVersion);
     this.http.get(DepositionBackendUrlVersion).subscribe(
       response => {
-        console.log('Connected to facility backend', response);
+        console.log('Connected to OneDep backend', response);
         // If the connection is successful, store the connected facility backend URL
         this.connectedDepositionBackend = DepositionBackendUrlCleaned;
         this.connectingToDepositionBackend = false;
