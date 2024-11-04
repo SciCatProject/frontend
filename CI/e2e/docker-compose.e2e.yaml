@@ -1,14 +1,16 @@
 version: "3.4"
 services:
   reverse-proxy:
-    image: traefik:2.5
+    image: traefik:2.10
     command: --api.insecure=true --providers.docker=true --entrypoints.web.address=:80
     ports:
       - 8080:80
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   mongodb:
-    image: "bitnami/mongodb:latest"
+    ## As of 2024-10-22 bitnami mongoDB still do not support ARM64
+    ## Change back to bitnami/mongodb when it supports ARM64
+    image: "mongo:latest" 
     ports:
       - "27017:27017"
     volumes:
@@ -19,60 +21,35 @@ services:
       timeout: 10s
       retries: 5
       start_period: 40s
-  scichat-loopback:
-    image: "ghcr.io/scicatproject/scichat-loopback:e2e"
-    command:
-      [
-        "./wait-for-it.sh",
-        "mongodb:27017",
-        "--",
-        "node",
-        "-r",
-        "dotenv/config",
-        "."
-      ]
-    volumes:
-      - "./CI/ESS/e2e/.env:/home/node/app/.env"
-    depends_on:
-      mongodb:
-        condition: service_healthy
+
   backend:
     image: ghcr.io/scicatproject/backend-next:latest
-    command: sh -c "node dist/main"
     ports:
       - 3000:3000
     volumes:
-      - "./CI/ESS/e2e/.env.backend-next:/home/node/app/.env"
-      - "./CI/ESS/e2e/functionalAccounts.json:/home/node/app/functionalAccounts.json"
-      - "./CI/ESS/e2e/config.e2e.json:/home/node/app/dist/config/frontend.config.json"
+      - "./CI/e2e/.env.backend.e2e:/home/node/app/.env"
+      - "./CI/e2e/functionalAccounts.e2e.json:/home/node/app/functionalAccounts.json"
+      - "./CI/e2e/frontend.config.e2e.json:/home/node/app/dist/config/frontend.config.json"
     depends_on:
       mongodb:
         condition: service_healthy
       es01:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/v3/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     labels:
       - "traefik.http.routers.backend.rule=PathPrefix(`/api/v3`, `/auth/msad`)"
       - "traefik.http.routers.backend.entrypoints=web"
   frontend:
     build:
       context: .
-      dockerfile: CI/ESS/e2e/Dockerfile.e2e
-    command:
-      [
-        "./wait-for-it.sh",
-        "backend:3000",
-        "--",
-        "nginx",
-        "-g",
-        "daemon off;"
-      ]
     ports:
       - 4200:80
     volumes:
-      - "./CI/ESS/e2e/config.e2e.json:/usr/share/nginx/html/assets/config.json"
-      - "./CI/ESS/site.png:/usr/share/nginx/html/assets/images/site.png"
-      - "./CI/ESS/site-logo.png:/usr/share/nginx/html/assets/images/site-logo.png"
-      - "./CI/ESS/favicon.ico:/usr/share/nginx/html/favicon.ico"
+      - "./CI/e2e/frontend.config.e2e.json:/usr/share/nginx/html/assets/config.json"
     depends_on:
       - backend
     labels:
@@ -110,6 +87,29 @@ services:
       timeout: 10s
       start_period: 60s
       retries: 4
+  
+  
+  ## NOTE:
+  ## scichat-loopback is ESS specific microservice for logbook
+  ## Discussion is needed to decide if this should be included in the e2e test
+  ## If not, remove the following block and also .env.scichat-loopback.e2e in the same directory
+  
+  
+  # scichat-loopback:
+  #   image: "ghcr.io/scicatproject/scichat-loopback:latest"
+  #   command:
+  #     [
+  #       "node",
+  #       "-r",
+  #       "dotenv/config",
+  #       "."
+  #     ]
+  #   volumes:
+  #     - "./CI/e2e/.env.scichat-loopback.e2e:/home/node/app/.env"
+  #   depends_on:
+  #     mongodb:
+  #       condition: service_healthy
+
 volumes:
   mongodb_data:
     driver: local

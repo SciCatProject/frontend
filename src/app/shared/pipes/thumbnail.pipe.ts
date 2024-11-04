@@ -1,32 +1,15 @@
 import { Pipe, PipeTransform } from "@angular/core";
 
-import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
+import { ThumbnailService } from "shared/services/thumbnail.service";
 
 @Pipe({
   name: "thumbnail",
+  pure: true,
 })
 export class ThumbnailPipe implements PipeTransform {
-  constructor(private datasetsService: DatasetsService) {}
+  constructor(private thumbnailService: ThumbnailService) {}
 
-  async transform(pid: string, args?: any): Promise<string | null> {
-    const encodedPid = encodeURIComponent(pid);
-
-    const res = await this.datasetsService
-      .datasetsControllerThumbnail(encodedPid)
-      .toPromise();
-
-    if (!res) {
-      return null;
-    }
-
-    if (typeof res === "string") {
-      return res;
-    }
-
-    if (!res.thumbnail) {
-      return null;
-    }
-
-    return res.thumbnail;
+  transform(pid: string): Promise<string | null> {
+    return this.thumbnailService.getThumbnail(pid);
   }
 }
