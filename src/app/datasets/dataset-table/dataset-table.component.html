@@ -206,13 +206,11 @@
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
-        <ng-container *ngIf="datasetsPerPage$ | async as datasetsPerPage">
-          <img
-            *ngIf="datasetsPerPage < 50"
-            src="{{ dataset.pid | thumbnail | async }}"
-            height="60px"
-          />
-        </ng-container>
+        <img
+          src="{{ dataset.pid | thumbnail | async }}"
+          height="60px"
+          loading="lazy"
+        />
       </mat-cell>
     </ng-container>
 

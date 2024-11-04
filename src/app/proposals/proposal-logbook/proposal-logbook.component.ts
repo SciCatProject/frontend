@@ -7,7 +7,7 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Subscription } from "rxjs";
+import { Observable, Subscription, take } from "rxjs";
 import { selectCurrentLogbook } from "state-management/selectors/logbooks.selectors";
 import {
   fetchLogbookAction,
@@ -41,10 +41,11 @@ export interface LogbookData {
 export class ProposalLogbookComponent
   implements OnInit, OnDestroy, AfterViewChecked
 {
+  logbook$: Observable<any | null> = this.store.select(selectCurrentLogbook);
   appConfig = this.appConfigService.getConfig();
   subscriptions: Subscription[] = [];
 
-  @Input() logbook: LogbookData;
+  @Input() logbook: LogbookData | null = null; // Still accepting input from parent if provided
 
   constructor(
     public appConfigService: AppConfigService,
@@ -86,11 +87,13 @@ export class ProposalLogbookComponent
   }
 
   ngOnInit() {
-    this.subscriptions.push(
-      this.store.select(selectCurrentLogbook).subscribe((logbook) => {
-        this.store.dispatch(fetchLogbookAction({ name: logbook.name }));
-      }),
-    );
+    if (!this.logbook) {
+      this.logbook$.pipe(take(1)).subscribe((logbook) => {
+        if (logbook && logbook.name) {
+          this.store.dispatch(fetchLogbookAction({ name: logbook.name }));
+        }
+      });
+    }
   }
 
   ngAfterViewChecked() {

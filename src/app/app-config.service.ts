@@ -97,6 +97,7 @@ export interface AppConfig {
   metadataEditingUnitListDisabled?: boolean;
   defaultDatasetsListSettings: DatasetsListSettings;
   labelMaps: LabelMaps;
+  thumbnailFetchLimitPerPage: number;
 }
 
 @Injectable()

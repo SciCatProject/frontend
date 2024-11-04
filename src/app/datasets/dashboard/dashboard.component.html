@@ -40,6 +40,7 @@
           [selectedSets]="selectedSets$ | async"
           (settingsClick)="onSettingsClick()"
           (rowClick)="onRowClick($event)"
+          (pageChange)="onPageChange($event)"
         ></dataset-table>
       </div>
     </div>
