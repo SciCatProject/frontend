@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { JobClass } from "@scicatproject/scicat-sdk-ts";
+import { CreateJobDto, JobClass } from "@scicatproject/scicat-sdk-ts";
 
 export const fetchJobsAction = createAction("[Job] Fetch Jobs");
 export const fetchJobsCompleteAction = createAction(
@@ -27,7 +27,7 @@ export const fetchJobFailedAction = createAction("[Job] Fetch Job Failed");
 
 export const submitJobAction = createAction(
   "[Job] Submit Job",
-  props<{ job: JobClass }>(),
+  props<{ job: CreateJobDto }>(),
 );
 export const submitJobCompleteAction = createAction(
   "[Job] Submit Job Complete",

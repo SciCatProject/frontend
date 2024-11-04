@@ -1,8 +1,8 @@
+import { Logbook } from "@scicatproject/scicat-sdk-ts";
 import { LogbookFilters } from "state-management/models";
 
 export interface LogbookState {
-  // TODO: Fix any type when backend type is fixed
-  logbooks: any[];
+  logbooks: Logbook[];
   currentLogbook: any | undefined;
 
   totalCount: number;

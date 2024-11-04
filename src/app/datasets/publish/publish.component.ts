@@ -147,8 +147,7 @@ export class PublishComponent implements OnInit, OnDestroy {
 
     this.publishedDataApi
       .publishedDataControllerFormPopulate(this.form.pidArray[0])
-      // TODO: Fix the backend type as it is not correct
-      .subscribe((result: any) => {
+      .subscribe((result) => {
         this.form.abstract = result.abstract;
         this.form.title = result.title;
         this.form.description = result.description;

@@ -140,7 +140,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((res) => {
       if (res) {
         const { username, email } = this.currentUser;
-        // TODO: Check this type!
         const dataset = {
           accessGroups: [],
           contactEmail: email, // Required
@@ -164,6 +163,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             .map((entry: string) => entry.trim())
             .filter((entry: string) => entry !== ""), // Required
         };
+        // TODO: Check the type as it should not need conversion
         this.store.dispatch(
           addDatasetAction({
             dataset: dataset as CreateDerivedDatasetObsoleteDto,
