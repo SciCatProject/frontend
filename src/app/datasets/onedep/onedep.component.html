@@ -64,7 +64,7 @@
                         <mat-form-field class="method-name">
                             <mat-label>experimental method</mat-label>
                             <mat-select formControlName="emMethod" name="method">
-                                <mat-option *ngFor="let method of methodsList" [value]="method.value">
+                                <mat-option *ngFor="let method of methodsList" [value]="experiment[method.value]">
                                     {{ method.viewValue }}
                                 </mat-option>
                             </mat-select>
@@ -151,16 +151,16 @@
                                         Choose File
                                     </button>
 
-                                    <div *ngIf="selectedFile['pathToMainMap']">
+                                    <div *ngIf="selectedFile['mainMap']">
                                         <mat-icon>attach_file</mat-icon>
                                     </div>
 
-                                    <input type="file" #fileInput1 (change)="onFileSelected($event, 'pathToMainMap')"
+                                    <input type="file" #fileInput1 (change)="onFileSelected($event, 'mainMap')"
                                         style="display: none;" />
 
                                     <!-- Selected file name (shown only when a file is selected) -->
-                                    <div *ngIf="selectedFile['pathToMainMap']" class="fileName">
-                                        <p style="margin: 0;">Selected File: {{ selectedFile['pathToMainMap'].name }}
+                                    <div *ngIf="selectedFile['mainMap']" class="fileName">
+                                        <p style="margin: 0;">Selected File: {{ selectedFile['mainMap'].name }}
                                         </p>
                                     </div>
                                 </div>
@@ -178,16 +178,16 @@
                                         Choose File
                                     </button>
 
-                                    <div *ngIf="selectedFile['pathToHalfMap1']">
+                                    <div *ngIf="selectedFile['halfMap1']">
                                         <mat-icon>attach_file</mat-icon>
                                     </div>
 
-                                    <input type="file" #fileInput2 (change)="onFileSelected($event, 'pathToHalfMap1')"
+                                    <input type="file" #fileInput2 (change)="onFileSelected($event, 'halfMap1')"
                                         style="display: none;" />
 
                                     <!-- Selected file name (shown only when a file is selected) -->
-                                    <div *ngIf="selectedFile['pathToHalfMap1']" class="fileName">
-                                        <p style="margin: 0;">Selected File: {{ selectedFile['pathToHalfMap1'].name }}
+                                    <div *ngIf="selectedFile['halfMap1']" class="fileName">
+                                        <p style="margin: 0;">Selected File: {{ selectedFile['halfMap1'].name }}
                                         </p>
                                     </div>
                                 </div>
@@ -205,16 +205,16 @@
                                         Choose File
                                     </button>
 
-                                    <div *ngIf="selectedFile['pathToHalfMap2']">
+                                    <div *ngIf="selectedFile['halfMap2']">
                                         <mat-icon>attach_file</mat-icon>
                                     </div>
 
-                                    <input type="file" #fileInput3 (change)="onFileSelected($event, 'pathToHalfMap2')"
+                                    <input type="file" #fileInput3 (change)="onFileSelected($event, 'halfMap2')"
                                         style="display: none;" />
 
                                     <!-- Selected file name (shown only when a file is selected) -->
-                                    <div *ngIf="selectedFile['pathToHalfMap2']" class="fileName">
-                                        <p style="margin: 0;">Selected File: {{ selectedFile['pathToHalfMap2'].name }}
+                                    <div *ngIf="selectedFile['halfMap2']" class="fileName">
+                                        <p style="margin: 0;">Selected File: {{ selectedFile['halfMap2'].name }}
                                         </p>
                                     </div>
                                 </div>
@@ -233,16 +233,16 @@
                                         Choose File
                                     </button>
 
-                                    <div *ngIf="selectedFile['pathToHalfMask']">
+                                    <div *ngIf="selectedFile['mask']">
                                         <mat-icon>attach_file</mat-icon>
                                     </div>
 
-                                    <input type="file" #fileInput4 (change)="onFileSelected($event, 'pathToHalfMask')"
+                                    <input type="file" #fileInput4 (change)="onFileSelected($event, 'mask')"
                                         style="display: none;" />
 
                                     <!-- Selected file name (shown only when a file is selected) -->
-                                    <div *ngIf="selectedFile['pathToHalfMask']" class="fileName">
-                                        <p style="margin: 0;">Selected File: {{ selectedFile['pathToHalfMask'].name }}
+                                    <div *ngIf="selectedFile['mask']" class="fileName">
+                                        <p style="margin: 0;">Selected File: {{ selectedFile['mask'].name }}
                                         </p>
                                     </div>
                                 </div>
@@ -260,17 +260,17 @@
                                         Choose File
                                     </button>
 
-                                    <div *ngIf="selectedFile['pathToAdditionalMap']">
+                                    <div *ngIf="selectedFile['addMap']">
                                         <mat-icon>attach_file</mat-icon>
                                     </div>
 
                                     <input type="file" #fileInput5
-                                        (change)="onFileSelected($event, 'pathToAdditionalMap')"
+                                        (change)="onFileSelected($event, 'addMap')"
                                         style="display: none;" />
 
                                     <!-- Selected file name (shown only when a file is selected) -->
-                                    <div *ngIf="selectedFile['pathToAdditionalMap']" class="fileName">
-                                        <p style="margin: 0;">Selected File: {{ selectedFile['pathToAdditionalMap'].name
+                                    <div *ngIf="selectedFile['addMap']" class="fileName">
+                                        <p style="margin: 0;">Selected File: {{ selectedFile['addMap'].name
                                             }}</p>
                                     </div>
                                 </div>
@@ -289,16 +289,16 @@
                                         Choose File
                                     </button>
 
-                                    <div *ngIf="selectedFile['pathToCoordinates']">
+                                    <div *ngIf="selectedFile['coordinates']">
                                         <mat-icon>attach_file</mat-icon>
                                     </div>
 
                                     <input type="file" #fileInput6
-                                        (change)="onFileSelected($event, 'pathToCoordinates')" style="display: none;" />
+                                        (change)="onFileSelected($event, 'coordinates')" style="display: none;" />
 
                                     <!-- Selected file name (shown only when a file is selected) -->
-                                    <div *ngIf="selectedFile['pathToCoordinates']" class="fileName">
-                                        <p style="margin: 0;">Selected File: {{ selectedFile['pathToCoordinates'].name
+                                    <div *ngIf="selectedFile['coordinates']" class="fileName">
+                                        <p style="margin: 0;">Selected File: {{ selectedFile['coordinates'].name
                                             }}</p>
                                     </div>
                                 </div>
@@ -317,16 +317,16 @@
                                         Choose File
                                     </button>
 
-                                    <div *ngIf="selectedFile['pathToImage']">
+                                    <div *ngIf="selectedFile['image']">
                                         <mat-icon>attach_file</mat-icon>
                                     </div>
 
-                                    <input type="file" #fileInput7 (change)="onFileSelected($event, 'pathToImage')"
+                                    <input type="file" #fileInput7 (change)="onFileSelected($event, 'image')"
                                         style="display: none;" />
 
                                     <!-- Selected file name (shown only when a file is selected) -->
-                                    <div *ngIf="selectedFile['pathToImage']" class="fileName">
-                                        <p style="margin: 0;">Selected File: {{ selectedFile['pathToImage'].name }}</p>
+                                    <div *ngIf="selectedFile['image']" class="fileName">
+                                        <p style="margin: 0;">Selected File: {{ selectedFile['image'].name }}</p>
                                     </div>
                                 </div>
                             </td>
@@ -344,16 +344,16 @@
                                         Choose File
                                     </button>
 
-                                    <div *ngIf="selectedFile['pathToFSC']">
+                                    <div *ngIf="selectedFile['fsc']">
                                         <mat-icon>attach_file</mat-icon>
                                     </div>
 
-                                    <input type="file" #fileInput8 (change)="onFileSelected($event, 'pathToFSC')"
+                                    <input type="file" #fileInput8 (change)="onFileSelected($event, 'fsc')"
                                         style="display: none;" />
 
                                     <!-- Selected file name (shown only when a file is selected) -->
-                                    <div *ngIf="selectedFile['pathToFSC']" class="fileName">
-                                        <p style="margin: 0;">Selected File: {{ selectedFile['pathToFSC'].name }}</p>
+                                    <div *ngIf="selectedFile['fsc']" class="fileName">
+                                        <p style="margin: 0;">Selected File: {{ selectedFile['fsc'].name }}</p>
                                     </div>
                                 </div>
                             </td>

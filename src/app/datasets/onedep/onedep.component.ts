@@ -14,14 +14,10 @@ import {
 
   selectCurrentDataset,
 } from "state-management/selectors/datasets.selectors";
-
+import { MethodsList, Experiment, OneDepFile } from "./types/methods.enum"
 import { Subscription } from "rxjs";
 import { string } from "mathjs";
 
-interface EmMethod {
-  value: string;
-  viewValue:string;
-}
 
 @Component({
   selector: 'onedep',
@@ -35,24 +31,9 @@ export class OneDepComponent implements OnInit {
   form: FormGroup;
   private subscriptions: Subscription[] = [];
   showAssociatedMapQuestion: boolean = false;
-
-  // connectedDepositionBackend: string = '';
-  // connectedDepositionBackendVersion: string = '';
-  // connectingToDepositionBackend: boolean = false;
-  // lastUsedDepositionBackends: string[] = [];
-  // forwardDepositionBackend: string = '';
-  // errorMessage: string = '';
-
-
-  methodsList: EmMethod[] = [
-    {value:'helical', viewValue: 'Helical'},
-    {value:'single-particle', viewValue:'Single Particle'},
-    {value:'subtomogram-averaging',viewValue: 'Subtomogram Averaging'},
-    {value:'tomogram', viewValue: 'Tomogram'},
-    {value:'electron-cristallography', viewValue:'Electron Crystallography'},
-  ];
-
-  selectedFile: { [key: string]: File | null } = {}; 
+  methodsList = MethodsList;
+  experiment = Experiment;
+  selectedFile: { [key: string]: File | null } = {};
 
 
   constructor(public appConfigService: AppConfigService,
@@ -61,61 +42,110 @@ export class OneDepComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    ) { }
+  ) { }
 
-  
-    ngOnInit() {
-      this.store.select(selectCurrentDataset).subscribe((dataset) => {
-        this.dataset = dataset;
+
+  ngOnInit() {
+    this.store.select(selectCurrentDataset).subscribe((dataset) => {
+      this.dataset = dataset;
+    });
+    this.form = this.fb.group({
+      datasetName: this.dataset.datasetName,
+      description: this.dataset.description,
+      keywords: this.fb.array(this.dataset.keywords),
+      metadata: this.dataset.scientificMetadata,
+      emMethod: new FormControl(""),
+      deposingCoordinates: new FormControl(true),
+      associatedMap: new FormControl(false),
+      compositeMap: new FormControl(false),
+      emdbId: new FormControl(""),
+
+      mainMap: {
+        name: "",
+        type: "vo-map",
+        pathToFile: "",
+        contour: 0.0,
+        details: "",
+      },
+      halfMap1: {
+        name: "",
+        type: "half-map",
+        pathToFile: "",
+        contour: 0.0,
+        details: "",
+      },
+      halfMap2: {
+        name: "",
+        type: "half-map",
+        pathToFile: "",
+        contour: 0.0,
+        details: "",
+      },
+      mask: {
+        name: "",
+        type: "mask-map",
+        pathToFile: "",
+        contour: 0.0,
+        details: "",
+      },
+      addMap: {
+        name: "",
+        type: "add-map",
+        pathToFile: "",
+        contour: 0.0,
+        details: "",
+      },
+      coordinates: {
+        name: "",
+        type: "co-cif",
+        pathToFile: "",
+        details: "",
+      },
+      image: {
+        name: "",
+        type: "img-emdb",
+        pathToFile: "",
+        details: "",
+      },
+      // pathToCif: {  --> should be extracted from this.dataset.scientificMetadata
+      //   name: "",
+      //   type: "undef",
+      //   pathToFile: "",
+      //   details: "",
+      // },
+      fsc: {
+        name: "",
+        type: "fsc-xml",
+        pathToFile: "",
+        details: "",
+      },
+    })
+  }
+
+
+  onFileSelected(event: Event, controlName: string) {
+    const input = event.target as HTMLInputElement;
+    console.log(input);
+    if (input.files && input.files.length > 0) {
+      this.selectedFile[controlName] = input.files[0];
+      this.form.get(controlName)?.setValue({
+        ...this.form.get(controlName)?.value,
+        pathToFile: this.selectedFile[controlName].name
       });
-      this.form = this.fb.group({
-        datasetName: new FormControl("", [Validators.required]),
-        description: new FormControl("", [Validators.required]),
-        keywords: this.fb.array([]),
-        emMethod: new FormControl(""),
-        deposingCoordinates:new FormControl(true),
-        associatedMap: new FormControl(false),
-        compositeMap:new FormControl(false), 
-        emdbId:new FormControl(""),
-
-        pathToMainMap: new FormControl(""), 
-        pathToHalfMap1: new FormControl(""), 
-        pathToHalfMap2: new FormControl(""), 
-        pathToMask: new FormControl(""), 
-        pathToAdditionalMap: new FormControl(""), 
-        pathToCoordinates: new FormControl(""), 
-        pathToImage: new FormControl(""), 
-        pathToCif: new FormControl(""), 
-        pathToFSC: new FormControl(""), 
-      })
-
-      // this.connectingToDepositionBackend = true;
-      // Get the GET parameter 'backendUrl' from the URL
-      // this.route.queryParams.subscribe(params => {
-      //   const backendUrl = params['backendUrl'];
-      //   if (backendUrl) {
-      //     this.connectToDepositionBackend(backendUrl);
-      //   }
-      //   else {
-      //     this.connectingToDepositionBackend = false;
-      //   }
-      // });
     }
-
-
-    onFileSelected(event: Event, controlName: string) {
-      const input = event.target as HTMLInputElement;
-      if (input.files && input.files.length > 0) {
-        this.selectedFile[controlName] = input.files[0];
-        this.form.get(controlName)?.setValue(this.selectedFile[controlName].name);
+  }
+  onDepositClick() {
+    const formData = this.form.value;
+    // need to properly catch the dataset details
+    console.log("creating deposition", formData)
+    this.http.post("http://localhost:8080/onedep", formData).subscribe(
+      response => {
+        console.log('created deposition in OneDep', response);
+      },
+      error => {
+        console.error('Request failed esf', error);
       }
-    }
-    onDepositClick(){
-      const formData = this.form.value;
-      // need to properly catch the dataset details
-      console.log(this.dataset)
-      //return this.http.post(this.backendUrl, formData);
-      
-    }
-    
+    );
+  }
+
 }
