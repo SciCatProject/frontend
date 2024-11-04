@@ -70,7 +70,7 @@
     "@types/lodash": "^4.14.172",
     "@types/luxon": "^3.3.0",
     "@types/node": "^22.0.0",
-    "@types/shortid": "0.0.32",
+    "@types/shortid": "2.2.0",
     "@types/source-map-support": "^0.5.3",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "^7.3.0",
