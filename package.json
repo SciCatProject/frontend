@@ -12,7 +12,8 @@
     "lint:fix": "ng lint --fix",
     "betterer": "betterer",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "generate:sdk:local": "node scripts/generate-nestjs-sdk"
   },
   "private": true,
   "dependencies": {
