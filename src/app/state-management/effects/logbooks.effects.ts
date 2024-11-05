@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { createEffect, Actions, ofType, concatLatestFrom } from "@ngrx/effects";
-import { LogbookApi, Logbook } from "shared/sdk";
+import { DatasetsService, LogbooksService } from "@scicatproject/scicat-sdk-ts";
 import * as fromActions from "state-management/actions/logbooks.actions";
 import { mergeMap, catchError, map, timeout } from "rxjs/operators";
 import { of } from "rxjs";
@@ -20,8 +20,9 @@ export class LogbookEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchLogbooksAction),
       mergeMap(() =>
-        this.logbookApi.find<Logbook>().pipe(
-          map((logbooks: Logbook[]) =>
+        this.logbooksService.logbooksControllerFindAll().pipe(
+          // TODO: Check the type here as logbook interface is not included in the sdk
+          map((logbooks: any) =>
             fromActions.fetchLogbooksCompleteAction({ logbooks }),
           ),
           catchError(() => of(fromActions.fetchLogbooksFailedAction())),
@@ -35,8 +36,11 @@ export class LogbookEffects {
       ofType(fromActions.fetchLogbookAction),
       concatLatestFrom(() => this.filters$),
       mergeMap(([{ name }, filters]) => {
-        return this.logbookApi
-          .findByName(encodeURIComponent(name), JSON.stringify(filters))
+        return this.logbooksService
+          .logbooksControllerFindByName(
+            encodeURIComponent(name),
+            JSON.stringify(filters),
+          )
           .pipe(
             timeout(3000),
             mergeMap((logbook) => [
@@ -54,8 +58,11 @@ export class LogbookEffects {
       ofType(fromActions.fetchDatasetLogbookAction),
       concatLatestFrom(() => this.filters$),
       mergeMap(([{ pid }, filters]) =>
-        this.logbookApi
-          .findDatasetLogbook(encodeURIComponent(pid), JSON.stringify(filters))
+        this.datasetsService
+          .datasetsControllerFindLogbookByPid(
+            encodeURIComponent(pid),
+            JSON.stringify(filters),
+          )
           .pipe(
             timeout(3000),
             mergeMap((logbook) => [
@@ -76,16 +83,16 @@ export class LogbookEffects {
         const { skip, limit, sortField, ...theRest } = filters;
         return (
           name
-            ? this.logbookApi.findByName(
+            ? this.logbooksService.logbooksControllerFindByName(
                 encodeURIComponent(name),
                 JSON.stringify(theRest),
               )
-            : this.logbookApi.findDatasetLogbook(
+            : this.datasetsService.datasetsControllerFindLogbookByPid(
                 encodeURIComponent(pid),
                 JSON.stringify(theRest),
               )
         ).pipe(
-          map((logbook: Logbook) => {
+          map((logbook: any) => {
             return fromActions.fetchCountCompleteAction({
               count: logbook.messages.length,
             });
@@ -123,7 +130,8 @@ export class LogbookEffects {
 
   constructor(
     private actions$: Actions,
-    private logbookApi: LogbookApi,
+    private logbooksService: LogbooksService,
+    private datasetsService: DatasetsService,
     private store: Store,
   ) {}
 }

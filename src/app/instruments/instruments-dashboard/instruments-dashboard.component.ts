@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Instrument } from "shared/sdk";
+import { Instrument } from "@scicatproject/scicat-sdk-ts";
 import {
   fetchInstrumentsAction,
   changePageAction,

@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { distinctUntilChanged, firstValueFrom } from "rxjs";
-import { DatasetApi } from "shared/sdk";
 import { selectDatasetsPerPage } from "state-management/selectors/datasets.selectors";
 import { AppConfigService } from "app-config.service";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
 
 interface ThumbnailCache {
   [pid: string]: {
@@ -23,7 +23,7 @@ export class ThumbnailService {
   private cacheTimeout = 5 * 60 * 1000; // 5 minutes in milliseconds
 
   constructor(
-    private datasetApi: DatasetApi,
+    private datasetApi: DatasetsService,
     private store: Store,
     private appConfigService: AppConfigService,
   ) {
@@ -59,7 +59,9 @@ export class ThumbnailService {
 
     try {
       const encodedPid = encodeURIComponent(pid);
-      const res = await firstValueFrom(this.datasetApi.thumbnail(encodedPid));
+      const res = await firstValueFrom(
+        this.datasetApi.datasetsControllerThumbnail(encodedPid),
+      );
       const thumbnail = res?.thumbnail || null;
 
       this.thumbnailCache[pid] = {

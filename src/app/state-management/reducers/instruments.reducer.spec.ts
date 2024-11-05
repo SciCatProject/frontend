@@ -1,5 +1,5 @@
 import * as fromActions from "state-management/actions/instruments.actions";
-import { Instrument } from "shared/sdk";
+import { Instrument } from "@scicatproject/scicat-sdk-ts";
 import { instrumentsReducer } from "./instruments.reducer";
 import { initialInstrumentState } from "state-management/state/instruments.store";
 

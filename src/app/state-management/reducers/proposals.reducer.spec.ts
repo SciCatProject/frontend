@@ -5,7 +5,7 @@ import {
 } from "../state/proposals.store";
 import * as fromActions from "../actions/proposals.actions";
 import { Attachment, Dataset, DatasetInterface, Proposal } from "../models";
-import { ProposalInterface } from "shared/sdk";
+import { ProposalInterface } from "@scicatproject/scicat-sdk-ts";
 
 const proposalData: ProposalInterface = {
   proposalId: "testId",

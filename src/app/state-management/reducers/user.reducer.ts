@@ -61,8 +61,9 @@ const reducer = createReducer(
   on(
     fromActions.fetchUserSettingsCompleteAction,
     (state, { userSettings }): UserState => {
-      const { datasetCount, jobCount, columns } = userSettings;
+      const { datasetCount, jobCount, externalSettings } = userSettings;
       const settings = { ...state.settings, datasetCount, jobCount };
+      const columns = (externalSettings as any)?.columns || [];
       if (columns.length > 0) {
         return { ...state, settings, columns };
       } else {
@@ -74,8 +75,9 @@ const reducer = createReducer(
   on(
     fromActions.updateUserSettingsCompleteAction,
     (state, { userSettings }): UserState => {
-      const { datasetCount, jobCount, columns = [] } = userSettings;
+      const { datasetCount, jobCount, externalSettings } = userSettings;
       const settings = { ...state.settings, datasetCount, jobCount };
+      const columns = (externalSettings as any)?.columns || [];
       if (columns.length > 0) {
         return { ...state, settings, columns };
       } else {

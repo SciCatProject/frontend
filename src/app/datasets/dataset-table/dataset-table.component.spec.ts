@@ -13,7 +13,7 @@ import {
   waitForAsync,
 } from "@angular/core/testing";
 import { StoreModule, Store } from "@ngrx/store";
-import { Dataset, DatasetApi } from "shared/sdk";
+import { Dataset, DatasetApi } from "@scicatproject/scicat-sdk-ts";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import {
   selectDatasetAction,

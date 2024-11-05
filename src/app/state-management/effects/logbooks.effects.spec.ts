@@ -3,7 +3,7 @@ import { provideMockActions } from "@ngrx/effects/testing";
 import { hot, cold } from "jasmine-marbles";
 import { Observable } from "rxjs";
 import { LogbookEffects } from "./logbooks.effects";
-import { LogbookApi, Logbook } from "shared/sdk";
+import { LogbookApi, Logbook } from "@scicatproject/scicat-sdk-ts";
 import * as fromActions from "state-management/actions/logbooks.actions";
 import {
   loadingAction,

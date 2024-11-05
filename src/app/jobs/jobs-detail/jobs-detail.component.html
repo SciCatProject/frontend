@@ -37,7 +37,8 @@
           </th>
           <td>{{ value | json }}</td>
         </tr>
-        <tr *ngIf="job.updatedAt as value">
+        <!-- // TODO: Fix this as something is wrong with generated types -->
+        <!-- <tr *ngIf="job.updatedAt as value">
           <th>
             <mat-icon> markunread </mat-icon>
             Date Of Last Message
@@ -66,7 +67,7 @@
             Updated At
           </th>
           <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
-        </tr>
+        </tr> -->
       </table>
     </mat-card-content>
   </mat-card>

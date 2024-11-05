@@ -7,7 +7,6 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Logbook } from "shared/sdk";
 import { Observable, Subscription, take } from "rxjs";
 import { selectCurrentLogbook } from "state-management/selectors/logbooks.selectors";
 import {
@@ -27,7 +26,8 @@ import {
 import { AppConfigService } from "app-config.service";
 
 export interface LogbookData {
-  logbook: Logbook;
+  // TODO: Find out why Logbook response type is commented out in the backend findLogbookByPid method!
+  logbook: any;
   entriesCount: number;
   entriesPerPage: number;
   currentPage: number;
@@ -41,8 +41,7 @@ export interface LogbookData {
 export class ProposalLogbookComponent
   implements OnInit, OnDestroy, AfterViewChecked
 {
-  logbook$: Observable<Logbook | null> =
-    this.store.select(selectCurrentLogbook);
+  logbook$: Observable<any | null> = this.store.select(selectCurrentLogbook);
   appConfig = this.appConfigService.getConfig();
   subscriptions: Subscription[] = [];
 

@@ -1,6 +1,6 @@
 import * as fromSelectors from "./samples.selectors";
 import { SampleState } from "state-management/state/samples.store";
-import { SampleInterface, Sample } from "shared/sdk";
+import { SampleInterface, Sample } from "@scicatproject/scicat-sdk-ts";
 import { initialUserState } from "state-management/state/user.store";
 
 const data: SampleInterface = {

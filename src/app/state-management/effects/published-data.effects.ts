@@ -1,6 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import { PublishedDataApi, PublishedData } from "shared/sdk";
+import {
+  PublishedData,
+  PublishedDataService,
+} from "@scicatproject/scicat-sdk-ts";
 import { Store } from "@ngrx/store";
 import {
   selectCurrentPublishedData,
@@ -38,13 +41,20 @@ export class PublishedDataEffects {
       concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
       mergeMap((params) =>
-        this.publishedDataApi.find<PublishedData>(params).pipe(
-          mergeMap((publishedData: PublishedData[]) => [
-            fromActions.fetchAllPublishedDataCompleteAction({ publishedData }),
-            fromActions.fetchCountAction(),
-          ]),
-          catchError(() => of(fromActions.fetchAllPublishedDataFailedAction())),
-        ),
+        this.publishedDataService
+          // TODO: Check the types here on the backend as it is wrong generated
+          .publishedDataControllerFindAll("", "", JSON.stringify(params))
+          .pipe(
+            mergeMap((publishedData) => [
+              fromActions.fetchAllPublishedDataCompleteAction({
+                publishedData,
+              }),
+              fromActions.fetchCountAction(),
+            ]),
+            catchError(() =>
+              of(fromActions.fetchAllPublishedDataFailedAction()),
+            ),
+          ),
       ),
     );
   });
@@ -53,8 +63,11 @@ export class PublishedDataEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
       switchMap(() =>
-        this.publishedDataApi.count().pipe(
-          map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
+        this.publishedDataService.publishedDataControllerCount().pipe(
+          // TODO: The type on the backend should be improved as there is not ApiResponse type.
+          map(({ count }: { count: number }) =>
+            fromActions.fetchCountCompleteAction({ count }),
+          ),
           catchError(() => of(fromActions.fetchCountFailedAction())),
         ),
       ),
@@ -65,8 +78,8 @@ export class PublishedDataEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchPublishedDataAction),
       switchMap(({ id }) =>
-        this.publishedDataApi
-          .findById<PublishedData>(encodeURIComponent(id))
+        this.publishedDataService
+          .publishedDataControllerFindOne(encodeURIComponent(id))
           .pipe(
             map((publishedData: PublishedData) =>
               fromActions.fetchPublishedDataCompleteAction({ publishedData }),
@@ -97,8 +110,8 @@ export class PublishedDataEffects {
     return this.actions$.pipe(
       ofType(fromActions.publishDatasetAction),
       switchMap(({ data }) =>
-        this.publishedDataApi.create(data).pipe(
-          mergeMap((publishedData: PublishedData) => [
+        this.publishedDataService.publishedDataControllerCreate(data).pipe(
+          mergeMap((publishedData) => [
             fromActions.publishDatasetCompleteAction({ publishedData }),
             fromActions.fetchPublishedDataAction({ id: publishedData.doi }),
           ]),
@@ -140,13 +153,19 @@ export class PublishedDataEffects {
     return this.actions$.pipe(
       ofType(fromActions.registerPublishedDataAction),
       switchMap(({ doi }) =>
-        this.publishedDataApi.register(encodeURIComponent(doi)).pipe(
-          mergeMap((publishedData) => [
-            fromActions.registerPublishedDataCompleteAction({ publishedData }),
-            fromActions.fetchPublishedDataAction({ id: doi }),
-          ]),
-          catchError(() => of(fromActions.registerPublishedDataFailedAction())),
-        ),
+        this.publishedDataService
+          .publishedDataControllerRegister(encodeURIComponent(doi))
+          .pipe(
+            mergeMap((publishedData: PublishedData) => [
+              fromActions.registerPublishedDataCompleteAction({
+                publishedData,
+              }),
+              fromActions.fetchPublishedDataAction({ id: doi }),
+            ]),
+            catchError(() =>
+              of(fromActions.registerPublishedDataFailedAction()),
+            ),
+          ),
       ),
     );
   });
@@ -155,13 +174,16 @@ export class PublishedDataEffects {
     return this.actions$.pipe(
       ofType(fromActions.resyncPublishedDataAction),
       switchMap(({ doi, data }) =>
-        this.publishedDataApi.resync(encodeURIComponent(doi), data).pipe(
-          mergeMap((publishedData) => [
-            fromActions.resyncPublishedDataCompleteAction(publishedData),
-            fromActions.fetchPublishedDataAction({ id: doi }),
-          ]),
-          catchError(() => of(fromActions.resyncPublishedDataFailedAction())),
-        ),
+        this.publishedDataService
+          // @ts-expect-error TODO: Check the backend type as it needs to be fixed and the sdk should be re-generated
+          .publishedDataControllerResync(encodeURIComponent(doi), data)
+          .pipe(
+            mergeMap((publishedData) => [
+              fromActions.resyncPublishedDataCompleteAction(publishedData),
+              fromActions.fetchPublishedDataAction({ id: doi }),
+            ]),
+            catchError(() => of(fromActions.resyncPublishedDataFailedAction())),
+          ),
       ),
     );
   });
@@ -216,7 +238,7 @@ export class PublishedDataEffects {
 
   constructor(
     private actions$: Actions,
-    private publishedDataApi: PublishedDataApi,
+    private publishedDataService: PublishedDataService,
     private router: Router,
     private store: Store,
   ) {}

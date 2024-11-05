@@ -2,7 +2,7 @@ import * as fromSelectors from "./user.selectors";
 
 import { UserState } from "../state/user.store";
 import { User, UserIdentity, Settings } from "../models";
-import { AccessToken } from "shared/sdk";
+import { AccessToken } from "@scicatproject/scicat-sdk-ts";
 import { LocationFilterComponent } from "../../shared/modules/filters/location-filter.component";
 import { PidFilterComponent } from "../../shared/modules/filters/pid-filter.component";
 import { PidFilterContainsComponent } from "../../shared/modules/filters/pid-filter-contains.component";

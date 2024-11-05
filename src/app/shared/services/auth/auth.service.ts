@@ -1,6 +1,5 @@
 import { Injectable, Inject } from "@angular/core";
 import { InternalStorage } from "./base.storage";
-import { User } from "shared/sdk";
 
 export interface AccessTokenInterface {
   id?: string;
@@ -8,7 +7,7 @@ export interface AccessTokenInterface {
   scopes?: [string];
   created?: Date;
   userId?: string;
-  user?: User;
+  user?: any;
 }
 
 export class SDKToken implements AccessTokenInterface {
@@ -17,7 +16,7 @@ export class SDKToken implements AccessTokenInterface {
   scopes: [string] = null;
   created: Date = null;
   userId: string = null;
-  user: User = null;
+  user: any = null;
   rememberMe: boolean = null;
   constructor(data?: AccessTokenInterface) {
     Object.assign(this, data);
@@ -51,7 +50,7 @@ export class AuthService {
 
   protected persist(
     prop: string,
-    value: string | User | number | Date | boolean,
+    value: string | number | Date | boolean,
     expires?: Date,
   ): void {
     try {
@@ -78,7 +77,7 @@ export class AuthService {
     this.token.rememberMe = value;
   }
 
-  public setUser(user: User) {
+  public setUser(user: any) {
     this.token.user = user;
     this.save();
   }

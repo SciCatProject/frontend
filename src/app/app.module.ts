@@ -8,9 +8,8 @@ import { EffectsModule } from "@ngrx/effects";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { APP_INITIALIZER, NgModule } from "@angular/core";
 import { ExtraOptions, RouterModule } from "@angular/router";
-import { SampleApi, SDKBrowserModule } from "shared/sdk/index";
 import { StoreModule } from "@ngrx/store";
-import { UserApi } from "shared/sdk/services";
+import { ApiModule, Configuration } from "@scicatproject/scicat-sdk-ts";
 import { routerReducer } from "@ngrx/router-store";
 import { extModules } from "./build-specifics";
 import { MatNativeDateModule } from "@angular/material/core";
@@ -38,6 +37,15 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
   return () => appTheme.loadTheme();
 };
 
+const apiConfigurationFn = (
+  authService: AuthService,
+  configurationService: AppConfigService,
+) =>
+  new Configuration({
+    basePath: configurationService.getConfig().lbBaseURL,
+    accessToken: authService.getToken().id,
+  });
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -52,7 +60,7 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
     MatTabsModule,
     MatChipsModule,
     MatSnackBarModule,
-    SDKBrowserModule.forRoot(),
+    ApiModule,
     StoreModule.forRoot(
       { router: routerReducer, users: userReducer },
       {
@@ -98,12 +106,16 @@ const appThemeInitializerFn = (appTheme: AppThemeService) => {
     },
     AuthService,
     AppThemeService,
-    UserApi,
-    SampleApi,
     Title,
     MatNativeDateModule,
     { provide: InternalStorage, useClass: CookieService },
     { provide: SDKStorage, useClass: CookieService },
+    {
+      provide: Configuration,
+      useFactory: apiConfigurationFn,
+      deps: [AuthService, AppConfigService],
+      multi: false,
+    },
   ],
   bootstrap: [AppComponent],
 })

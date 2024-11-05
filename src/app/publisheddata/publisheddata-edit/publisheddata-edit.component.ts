@@ -8,7 +8,7 @@ import {
 import { ActivatedRoute, Router } from "@angular/router";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { MatChipInputEvent } from "@angular/material/chips";
-import { Attachment, PublishedData } from "shared/sdk";
+import { Attachment, PublishedData } from "@scicatproject/scicat-sdk-ts";
 import { PickedFile } from "shared/modules/file-uploader/file-uploader.component";
 import { tap } from "rxjs/operators";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";

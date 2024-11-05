@@ -1,4 +1,4 @@
-import { JobInterface, Job, JobApi } from "shared/sdk";
+import { JobInterface, Job, JobApi } from "@scicatproject/scicat-sdk-ts";
 import { Observable } from "rxjs";
 import { JobEffects } from "./jobs.effects";
 import { TestBed } from "@angular/core/testing";

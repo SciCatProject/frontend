@@ -5,7 +5,7 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
 } from "@angular/router";
-import { UserApi } from "shared/sdk/services";
+import { UsersService } from "@scicatproject/scicat-sdk-ts";
 
 /**
  * Ensure that the current user is logged in
@@ -19,7 +19,7 @@ import { UserApi } from "shared/sdk/services";
 })
 export class AuthGuard implements CanActivate {
   constructor(
-    private us: UserApi,
+    private us: UsersService,
     private router: Router,
   ) {}
 
@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot,
   ): Promise<boolean> {
     return this.us
-      .getCurrent()
+      .usersControllerGetMyUser()
       .toPromise()
       .catch(() => {
         this.router.navigate(["/login"], {

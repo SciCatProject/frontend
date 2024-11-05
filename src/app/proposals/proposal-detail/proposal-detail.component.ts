@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { Proposal } from "state-management/models";
+import { ProposalClass } from "@scicatproject/scicat-sdk-ts";
 import { AppConfigService } from "app-config.service";
 
 @Component({
@@ -8,7 +8,7 @@ import { AppConfigService } from "app-config.service";
   styleUrls: ["proposal-detail.component.scss"],
 })
 export class ProposalDetailComponent {
-  @Input() proposal: Proposal = new Proposal();
+  @Input() proposal: ProposalClass;
 
   appConfig = this.appConfigService.getConfig();
 

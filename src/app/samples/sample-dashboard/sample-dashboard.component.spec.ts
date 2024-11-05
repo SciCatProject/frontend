@@ -14,7 +14,7 @@ import {
   changePageAction,
   sortByColumnAction,
 } from "state-management/actions/samples.actions";
-import { Sample } from "shared/sdk";
+import { Sample } from "@scicatproject/scicat-sdk-ts";
 import {
   PageChangeEvent,
   SortChangeEvent,

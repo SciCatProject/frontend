@@ -11,8 +11,7 @@ import {
   fetchPublishedDataCompleteAction,
 } from "state-management/actions/published-data.actions";
 
-import { PublishedDataApi } from "shared/sdk/services/custom";
-import { PublishedData } from "shared/sdk/models";
+import { PublishedDataService } from "@scicatproject/scicat-sdk-ts";
 import { formatDate } from "@angular/common";
 import { Router } from "@angular/router";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
@@ -60,7 +59,7 @@ export class PublishComponent implements OnInit, OnDestroy {
   constructor(
     private appConfigService: AppConfigService,
     private store: Store,
-    private publishedDataApi: PublishedDataApi,
+    private publishedDataApi: PublishedDataService,
     private actionsSubj: ActionsSubject,
     private router: Router,
   ) {}
@@ -147,8 +146,9 @@ export class PublishComponent implements OnInit, OnDestroy {
     });
 
     this.publishedDataApi
-      .formPopulate(this.form.pidArray[0])
-      .subscribe((result) => {
+      .publishedDataControllerFormPopulate(this.form.pidArray[0])
+      // TODO: Fix the backend type as it is not correct
+      .subscribe((result: any) => {
         this.form.abstract = result.abstract;
         this.form.title = result.title;
         this.form.description = result.description;
@@ -175,7 +175,7 @@ export class PublishComponent implements OnInit, OnDestroy {
   }
 
   public onPublish() {
-    const publishedData = new PublishedData();
+    const publishedData = null;
     publishedData.title = this.form.title;
     publishedData.abstract = this.form.abstract;
     publishedData.dataDescription = this.form.description;

@@ -17,7 +17,7 @@ import {
   selectOpenwhiskResult,
   selectDatasets,
 } from "state-management/selectors/datasets.selectors";
-import { Dataset } from "shared/sdk";
+import { Dataset } from "@scicatproject/scicat-sdk-ts";
 import { reduceDatasetAction } from "state-management/actions/datasets.actions";
 import { FormBuilder } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";

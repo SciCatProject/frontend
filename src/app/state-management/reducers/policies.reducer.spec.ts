@@ -1,6 +1,6 @@
 import * as fromActions from "state-management/actions/policies.actions";
 import { policiesReducer } from "./policies.reducer";
-import { Policy } from "shared/sdk";
+import { Policy } from "@scicatproject/scicat-sdk-ts";
 import { initialPolicyState } from "state-management/state/policies.store";
 
 describe("PoliciesReducer", () => {

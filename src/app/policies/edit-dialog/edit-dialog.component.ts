@@ -3,7 +3,7 @@ import { MatChipInputEvent } from "@angular/material/chips";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { FormControl, FormGroup } from "@angular/forms";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { Policy } from "shared/sdk";
+import { Policy } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "edit-dialog",

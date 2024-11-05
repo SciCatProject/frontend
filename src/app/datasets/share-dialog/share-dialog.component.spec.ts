@@ -32,7 +32,7 @@ import {
   SampleApi,
   UserApi,
   UserIdentityApi,
-} from "shared/sdk";
+} from "@scicatproject/scicat-sdk-ts";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
 

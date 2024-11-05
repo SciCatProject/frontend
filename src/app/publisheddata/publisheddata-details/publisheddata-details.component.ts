@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { PublishedData } from "shared/sdk";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
@@ -18,7 +18,7 @@ import { AppConfigService } from "app-config.service";
 })
 export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   currentData$ = this.store.select(selectCurrentPublishedData);
-  publishedData: PublishedData = new PublishedData();
+  publishedData: PublishedData;
   subscriptions: Subscription[] = [];
   appConfig = this.appConfigService.getConfig();
   show = false;

@@ -1,7 +1,6 @@
 import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { fromEvent, Subscription } from "rxjs";
-import { Sample, Attachment, User, Dataset } from "shared/sdk/models";
 import { selectSampleDetailPageViewModel } from "../../state-management/selectors/samples.selectors";
 import { Store } from "@ngrx/store";
 import {
@@ -26,6 +25,12 @@ import {
 } from "shared/modules/file-uploader/file-uploader.component";
 import { EditableComponent } from "app-routing/pending-changes.guard";
 import { AppConfigService } from "app-config.service";
+import {
+  Attachment,
+  DatasetClass,
+  ReturnedUserDto,
+  SampleClass,
+} from "@scicatproject/scicat-sdk-ts";
 
 export interface TableData {
   pid: string;
@@ -50,10 +55,10 @@ export class SampleDetailComponent
 
   appConfig = this.appConfigService.getConfig();
 
-  sample: Sample = new Sample();
-  user: User = new User();
-  attachment: Partial<Attachment> = new Attachment();
-  attachments: Attachment[] = [new Attachment()];
+  sample: SampleClass;
+  user: ReturnedUserDto;
+  attachment: Partial<Attachment>;
+  attachments: Attachment[] = [];
   show = false;
   subscriptions: Subscription[] = [];
 
@@ -78,7 +83,7 @@ export class SampleDetailComponent
     private store: Store,
   ) {}
 
-  formatTableData(datasets: Dataset[]): TableData[] {
+  formatTableData(datasets: DatasetClass[]): TableData[] {
     let tableData: TableData[] = [];
     if (datasets) {
       tableData = datasets.map((dataset: any) => ({
@@ -108,17 +113,18 @@ export class SampleDetailComponent
   }
 
   onFilePicked(file: PickedFile) {
+    // TODO: Check if commented code is needed
     this.attachment = {
       thumbnail: file.content,
       caption: file.name,
       ownerGroup: this.sample.ownerGroup,
       accessGroups: this.sample.accessGroups,
       sampleId: this.sample.sampleId,
-      dataset: undefined,
+      // dataset: undefined,
       datasetId: undefined,
-      rawDatasetId: undefined,
-      derivedDatasetId: undefined,
-      proposal: undefined,
+      // rawDatasetId: undefined,
+      // derivedDatasetId: undefined,
+      // proposal: undefined,
       proposalId: undefined,
     };
     this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));
@@ -153,7 +159,7 @@ export class SampleDetailComponent
     );
   }
 
-  onRowClick(dataset: Dataset) {
+  onRowClick(dataset: DatasetClass) {
     const id = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl("/datasets/" + id);
   }

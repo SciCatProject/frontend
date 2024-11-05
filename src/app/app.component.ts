@@ -9,7 +9,6 @@ import {
   ChangeDetectorRef,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { LoopBackConfig } from "shared/sdk";
 import {
   clearMessageAction,
   fetchCurrentUserAction,
@@ -25,6 +24,7 @@ import {
 } from "state-management/selectors/user.selectors";
 import { MessageType } from "state-management/models";
 import { AppConfigService, AppConfig as Config } from "app-config.service";
+import { Configuration } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "app-root",
@@ -45,6 +45,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
   constructor(
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private appConfigService: AppConfigService,
+    private apiConfigService: Configuration,
     private cdRef: ChangeDetectorRef,
     private metaService: Meta,
     public snackBar: MatSnackBar,
@@ -68,8 +69,8 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
    * @memberof AppComponent
    */
   ngOnInit() {
-    LoopBackConfig.setBaseURL(this.config.lbBaseURL);
-    console.log(LoopBackConfig.getPath());
+    this.apiConfigService.basePath = this.config.lbBaseURL;
+    console.log(this.apiConfigService.basePath);
 
     this.store.dispatch(loadDefaultSettings({ config: this.config }));
 

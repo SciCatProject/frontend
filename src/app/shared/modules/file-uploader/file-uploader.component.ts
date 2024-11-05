@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, Input } from "@angular/core";
 import saveAs from "file-saver";
-import { Attachment } from "shared/sdk";
+import { Attachment } from "@scicatproject/scicat-sdk-ts";
 
 export interface PickedFile {
   content: string;

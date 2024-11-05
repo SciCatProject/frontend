@@ -8,7 +8,7 @@ import {
   SampleFilters,
   ScientificCondition,
 } from "../models";
-import { SampleInterface } from "shared/sdk";
+import { SampleInterface } from "@scicatproject/scicat-sdk-ts";
 
 const data: SampleInterface = {
   sampleId: "testId",

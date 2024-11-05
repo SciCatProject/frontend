@@ -15,7 +15,7 @@ import {
   addDatasetAction,
   changePageAction,
 } from "state-management/actions/datasets.actions";
-import { User, Dataset, DerivedDataset } from "shared/sdk";
+import { User, Dataset, DerivedDataset } from "@scicatproject/scicat-sdk-ts";
 import {
   selectColumnAction,
   deselectColumnAction,

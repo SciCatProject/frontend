@@ -8,7 +8,7 @@ import {
 import { DatasetDetailsDashboardComponent } from "./dataset-details-dashboard.component";
 import { MockActivatedRoute, MockUserApi } from "shared/MockStubs";
 import { Store, StoreModule } from "@ngrx/store";
-import { UserApi } from "shared/sdk";
+import { UserApi } from "@scicatproject/scicat-sdk-ts";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { Router, ActivatedRoute } from "@angular/router";
