@@ -15,9 +15,7 @@ export enum EmFile {
     Coordinates = 'co-cif',
     Image = 'img-emdb',
     FSC = 'fsc-xml',
-
 };
-
 
 export const EmFiles: { [f in EmFile]: OneDepFile } = {
     [EmFile.MainMap]: {
@@ -88,12 +86,14 @@ export const MethodsList: EmMethod[] = [
     { value: EmType.Tomogram, viewValue: 'Tomogram' },
     { value: EmType.ElectronCristallography, viewValue: 'Electron Crystallography' },
 ];
-interface OneDepExperiment {
+
+
+export interface OneDepExperiment {
     type: string;
     subtype?: string;
 }
 
-export const Experiment: { [e in EmType]: OneDepExperiment } = {
+export const Experiments: { [e in EmType]: OneDepExperiment } = {
     [EmType.Helical]: { type: "em", subtype: "helical" },
     [EmType.SingleParticle]: { type: "em", subtype: "single" },
     [EmType.SubtomogramAveraging]: { type: "em", subtype: "subtomogram" },

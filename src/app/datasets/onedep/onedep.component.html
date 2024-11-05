@@ -64,7 +64,7 @@
                         <mat-form-field class="method-name">
                             <mat-label>experimental method</mat-label>
                             <mat-select formControlName="emMethod" name="method">
-                                <mat-option *ngFor="let method of methodsList" [value]="experiment[method.value]">
+                                <mat-option *ngFor="let method of methodsList" [value]="experiments[method.value]">
                                     {{ method.viewValue }}
                                 </mat-option>
                             </mat-select>
@@ -138,234 +138,47 @@
                     Choose files for deposition
                 </mat-card-header>
                 <mat-card-content>
-                    <table>
-                        <!-- ADD THE MAIN MAP -->
-                        <tr>
-                            <th class="file-types">Main Map</th>
-                            <td>
-                                <div style="display: flex; align-items: center;">
-
-
-                                    <button class="fileChooser" mat-raised-button color="primary"
-                                        (click)="fileInput1.click()">
-                                        Choose File
-                                    </button>
-
-                                    <div *ngIf="selectedFile[emFile.MainMap]">
-                                        <mat-icon>attach_file</mat-icon>
-                                    </div>
-
-                                    <input type="file" #fileInput1 (change)="onFileSelected($event, emFile.MainMap)"
-                                        style="display: none;" />
-
-                                    <!-- Selected file name (shown only when a file is selected) -->
-                                    <div *ngIf="selectedFile[emFile.MainMap]" class="fileName">
-                                        <p style="margin: 0;">Selected File: {{ selectedFile[emFile.MainMap].name }}
-                                        </p>
-                                    </div>
+                    <mat-card *ngFor="let fileType of fileTypes" class="fileCard">
+                        <mat-card-header>
+                            <mat-card-title>{{ fileType.header }}</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="file-selection-container">
+                                <button class="fileChooser" mat-raised-button color="primary" (click)="onChooseFile(fileInput)">
+                                    Choose File
+                                </button>
+                                <div *ngIf="selectedFile[fileType.key]">
+                                    <mat-icon>attach_file</mat-icon>
                                 </div>
-                            </td>
-                        </tr>
-                        <!-- ADD THE HALF MAP 1 -->
-                        <tr>
-                            <th class="file-types">Half Map (1)</th>
-                            <td>
-                                <div style="display: flex; align-items: center;">
-
-
-                                    <button class="fileChooser" mat-raised-button color="primary"
-                                        (click)="fileInput2.click()">
-                                        Choose File
-                                    </button>
-
-                                    <div *ngIf="selectedFile[emFile.HalfMap1]">
-                                        <mat-icon>attach_file</mat-icon>
-                                    </div>
-
-                                    <input type="file" #fileInput2 (change)="onFileSelected($event, emFile.HalfMap1)"
-                                        style="display: none;" />
-
-                                    <!-- Selected file name (shown only when a file is selected) -->
-                                    <div *ngIf="selectedFile[emFile.HalfMap1]" class="fileName">
-                                        <p style="margin: 0;">Selected File: {{ selectedFile[emFile.HalfMap1].name }}
-                                        </p>
-                                    </div>
+                                <input type="file" #fileInput (change)="onFileSelected($event, fileType.key)" style="display: none;" />
+                                <div *ngIf="selectedFile[fileType.key]" class="fileName">
+                                    <p>Selected File: {{ selectedFile[fileType.key].name }}</p>
                                 </div>
-                            </td>
-                        </tr>
-                        <!-- ADD THE HALF MAP 2 -->
-                        <tr>
-                            <th class="file-types">Half Map (2)</th>
-                            <td>
-                                <div style="display: flex; align-items: center;">
+                            </div>
 
+                            <div class="input-container">
+                                <ng-container *ngIf="files[fileType.key]?.contour !== undefined">
+                                    <mat-form-field appearance="outline" class="contour-level">
+                                        <mat-label>Contour Level</mat-label>
+                                        <input matInput type="number" placeholder="0.0" 
+                                        (input)="updateContourLevel($event, fileType.key)" 
+                                        pattern="^[+-]?(\d+([.,]\d+)$" 
+                                        />
+                                    </mat-form-field>
+                                </ng-container>
+                                <mat-form-field class="details">
+                                    <mat-label>Details</mat-label>
+                                    <textarea matInput placeholder="Enter details..." rows="1" (input)="updateDetails($event, fileType.key)"
+                                        (input)="autoGrow($event)" [style.overflow]="detailsOverflow"></textarea>
+                                </mat-form-field>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
 
-                                    <button class="fileChooser" mat-raised-button color="primary"
-                                        (click)="fileInput3.click()">
-                                        Choose File
-                                    </button>
-
-                                    <div *ngIf="selectedFile[emFile.HalfMap2]">
-                                        <mat-icon>attach_file</mat-icon>
-                                    </div>
-
-                                    <input type="file" #fileInput3 (change)="onFileSelected($event, emFile.HalfMap2)"
-                                        style="display: none;" />
-
-                                    <!-- Selected file name (shown only when a file is selected) -->
-                                    <div *ngIf="selectedFile[emFile.HalfMap2]" class="fileName">
-                                        <p style="margin: 0;">Selected File: {{ selectedFile[emFile.HalfMap2].name }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- ADD THE MASK MAP  -->
-                        <tr>
-                            <th class="file-types">Mask Map </th>
-                            <td>
-                                <div style="display: flex; align-items: center;">
-
-
-                                    <button class="fileChooser" mat-raised-button color="primary"
-                                        (click)="fileInput4.click()">
-                                        Choose File
-                                    </button>
-
-                                    <div *ngIf="selectedFile[emFile.MaskMap]">
-                                        <mat-icon>attach_file</mat-icon>
-                                    </div>
-
-                                    <input type="file" #fileInput4 (change)="onFileSelected($event, emFile.MaskMap)"
-                                        style="display: none;" />
-
-                                    <!-- Selected file name (shown only when a file is selected) -->
-                                    <div *ngIf="selectedFile[emFile.MaskMap]" class="fileName">
-                                        <p style="margin: 0;">Selected File: {{ selectedFile[emFile.MaskMap].name }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- ADD THE ADDITIONAL MAP  -->
-                        <tr>
-                            <th class="file-types">Additional Map </th>
-                            <td>
-                                <div style="display: flex; align-items: center;">
-
-
-                                    <button class="fileChooser" mat-raised-button color="primary"
-                                        (click)="fileInput5.click()">
-                                        Choose File
-                                    </button>
-
-                                    <div *ngIf="selectedFile[emFile.AddMap]">
-                                        <mat-icon>attach_file</mat-icon>
-                                    </div>
-
-                                    <input type="file" #fileInput5
-                                        (change)="onFileSelected($event, emFile.AddMap)"
-                                        style="display: none;" />
-
-                                    <!-- Selected file name (shown only when a file is selected) -->
-                                    <div *ngIf="selectedFile[emFile.AddMap]" class="fileName">
-                                        <p style="margin: 0;">Selected File: {{ selectedFile[emFile.AddMap].name
-                                            }}</p>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- ADD THE COORDINATES FILE  -->
-                        <tr *ngIf="form.get('deposingCoordinates')?.value === 'true'">
-                            <th class="file-types">Coordinates</th>
-                            <td>
-                                <div style="display: flex; align-items: center;">
-
-
-                                    <button class="fileChooser" mat-raised-button color="primary"
-                                        (click)="fileInput6.click()">
-                                        Choose File
-                                    </button>
-
-                                    <div *ngIf="selectedFile[emFile.Coordinates]">
-                                        <mat-icon>attach_file</mat-icon>
-                                    </div>
-
-                                    <input type="file" #fileInput6
-                                        (change)="onFileSelected($event, emFile.Coordinates)" style="display: none;" />
-
-                                    <!-- Selected file name (shown only when a file is selected) -->
-                                    <div *ngIf="selectedFile[emFile.Coordinates]" class="fileName">
-                                        <p style="margin: 0;">Selected File: {{ selectedFile[emFile.Coordinates].name
-                                            }}</p>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- ADD THE IMAGE  -->
-                        <tr>
-                            <th class="file-types"> Public Image </th>
-                            <td>
-                                <div style="display: flex; align-items: center;">
-
-
-                                    <button class="fileChooser" mat-raised-button color="primary"
-                                        (click)="fileInput7.click()">
-                                        Choose File
-                                    </button>
-
-                                    <div *ngIf="selectedFile[emFile.Image]">
-                                        <mat-icon>attach_file</mat-icon>
-                                    </div>
-
-                                    <input type="file" #fileInput7 (change)="onFileSelected($event, emFile.Image)"
-                                        style="display: none;" />
-
-                                    <!-- Selected file name (shown only when a file is selected) -->
-                                    <div *ngIf="selectedFile[emFile.Image]" class="fileName">
-                                        <p style="margin: 0;">Selected File: {{ selectedFile[emFile.Image].name }}</p>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- ADD THE FCS CURVE   -->
-                        <tr>
-                            <th class="file-types">FSC-XML</th>
-                            <td>
-                                <div style="display: flex; align-items: center;">
-
-
-                                    <button class="fileChooser" mat-raised-button color="primary"
-                                        (click)="fileInput8.click()">
-                                        Choose File
-                                    </button>
-
-                                    <div *ngIf="selectedFile[emFile.FSC]">
-                                        <mat-icon>attach_file</mat-icon>
-                                    </div>
-
-                                    <input type="file" #fileInput8 (change)="onFileSelected($event, emFile.FSC)"
-                                        style="display: none;" />
-
-                                    <!-- Selected file name (shown only when a file is selected) -->
-                                    <div *ngIf="selectedFile[emFile.FSC]" class="fileName">
-                                        <p style="margin: 0;">Selected File: {{ selectedFile[emFile.FSC].name }}</p>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- UPLOAD FILES DONE -->
-
-                 
-                        <button class="submitDep" mat-raised-button color="primary" (click)="onDepositClick()">
-                            Start Deposition
-                        </button>
-
-                    </table>
+                    <!-- UPLOAD FILES DONE -->
+                    <button class="submitDep" mat-raised-button color="primary" (click)="onDepositClick()">
+                        Start Deposition
+                    </button>
                 </mat-card-content>
             </mat-card>
 

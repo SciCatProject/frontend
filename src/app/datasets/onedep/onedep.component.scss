@@ -1,61 +1,146 @@
 mat-card {
-    margin: 1em;
-  
-    .section-icon {
-      height: auto !important;
-      width: auto !important;
-  
-      mat-icon {
-        vertical-align: middle;
+  margin: 1em;
+
+  .section-icon {
+    height: auto !important;
+    width: auto !important;
+
+    mat-icon {
+      vertical-align: middle;
+    }
+  }
+
+  table {
+    th {
+      .questionnaire {
+        min-width: 20rem;
+      }
+
+      min-width: 10rem;
+      padding-right: 0.5rem;
+      text-align: left;
+    }
+
+    td {
+      width: 100%;
+      padding: 0.5rem 0;
+
+      .sample-edit {
+        padding-left: 0.5rem;
+
+        mat-icon {
+          font-size: medium;
+        }
       }
     }
-  
-    table {
-      th {
-        .questionnaire{
-          min-width: 20rem;
-        }
-        min-width: 10rem;
-        padding-right: 0.5rem;
-        text-align: left;
+
+    .EMDB-ID {
+      width: 15%;
+    }
+
+    .method-name {
+      width: 25%;
+    }
+
+    .file-types {
+      width: 10%;
+    }
+
+    .full-width {
+      width: 100%;
+    }
+  }
+
+  .fileCard {
+    width: 80%;
+    margin: 10px 0 10px 0;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    mat-card-header {
+      background-color: #B3D9AC;
+      height: 26px;
+      display: flex; // Use flexbox to align items
+      align-items: center; // Center content vertically
+      padding: 0 16px; // Optional: adjust padding as needed
+    }
+    mat-card-title{
+      font-size: 16px;
+    }
+
+    .file-selection-container {
+      display: flex; // Use flexbox for layout
+      align-items: center; // Center items vertically
+      gap: 10px; // Space between items
+
+      .fileChooser {
+        background-color: #CFE7CB;
+        color: #333;
+        margin: 5px 0 0 0; // Reset any margin
+    }
+      .fileName {
+        font-size: 14px; // Adjust the font size as needed
+        color: #333; // Adjust the text color if needed
       }
-  
-      td {
-        width: 100%;
-        padding: 0.5rem 0;
-  
-        .sample-edit {
-          padding-left: 0.5rem;
-  
-          mat-icon {
-            font-size: medium;
+    }
+
+    mat-card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      .fileChooser {
+        margin: 3px auto;
+      }
+
+      .input-container {
+        display: flex; // Use flexbox for layout
+        align-items: flex-end; 
+        gap: 10px; // Space between the fields
+
+        .contour-level {
+          flex: 0 0 20%; // Set to take 20% of the width
+          min-width: 100px; // Optional: set a minimum width for usability
+               
+          /* Chrome, Safari, Edge, Opera */
+          input[matinput]::-webkit-outer-spin-button,
+          input[matinput]::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+          }
+        
+          /* Firefox */
+          input[matinput][type=number] {
+          -moz-appearance: textfield;
           }
         }
-  
-      }
-      .EMDB-ID{
-        width: 15%;
-      }
-      .method-name{
-        width: 25%;
-      }
-      .file-types{
-        width:10%;
-      }
-      .full-width {
-        width: 100%;
-      }
-      .fileChooser{
-        margin-left: 0px;
-      }
-      .fileName {
-        margin-left: 10px; 
-        white-space: nowrap; 
-      }
-      .submitDep{
-        background-color: blueviolet;
+
+        .details {
+          flex: 1; // Allow this field to take the remaining space
+          min-width: 200px; // Optional: set a minimum width for usability
+    
+          mat-form-field {
+            textarea {
+              max-height: calc(5 * 1.5em); // 5 lines max height
+              overflow-y: hidden; // Hide overflow
+              resize: none; // Disable resizing
+              line-height: 1.5; // Set line height
+    
+              &:focus {
+                height: auto; // Allow height to grow as needed
+              }
+            }
+          }
+        }
+
+        mat-form-field {
+          width: 100%; // Ensure fields take full width of their flex container
+          margin-bottom: 0;
+        }
       }
     }
-    
   }
- 
+  .submitDep {
+    background-color: #B3D9AC;
+  }
+}
