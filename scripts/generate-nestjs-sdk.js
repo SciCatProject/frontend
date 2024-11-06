@@ -5,6 +5,19 @@
  */
 
 const execSync = require("child_process").execSync;
+const os = require("os");
+
+function isWindows() {
+  return os.platform() === "win32";
+}
+
+function getCurrentDirectory() {
+  if (isWindows()) {
+    return "%cd%";
+  }
+
+  return "$(pwd)";
+}
 
 // NOTE: First do some cleanup before starting the generation
 console.log("Cleanup old files...");
@@ -15,7 +28,7 @@ execSync(
 
 console.log("Generating the new sdk...");
 const generationOutput = execSync(
-  'docker run --rm -v "%cd%:/local" openapitools/openapi-generator-cli:v7.9.0 generate -i http://host.docker.internal:3000/explorer-json -g typescript-angular -o local/@scicatproject/scicat-sdk-ts --additional-properties=ngVersion=16.2.12,npmName=@scicatproject/scicat-sdk-ts,supportsES6=true,npmVersion=10.8.2,withInterfaces=true',
+  `docker run --rm --add-host host.docker.internal:host-gateway -v "${getCurrentDirectory()}:/local" openapitools/openapi-generator-cli:v7.9.0 generate -i http://host.docker.internal:3000/explorer-json -g typescript-angular -o local/@scicatproject/scicat-sdk-ts --additional-properties=ngVersion=16.2.12,npmName=@scicatproject/scicat-sdk-ts,supportsES6=true,npmVersion=10.8.2,withInterfaces=true`,
   { encoding: "utf-8" },
 );
 console.log(generationOutput);
