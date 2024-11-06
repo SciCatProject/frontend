@@ -195,9 +195,8 @@ export class PoliciesDashboardComponent implements OnInit {
       );
       // if datasets already exist
       this.selectedGroups.forEach((group) => {
-        // TODO: Test this new sdk count
         this.datasetService
-          .datasetsControllerCount(`{ "ownerGroup": ${group} }`)
+          .datasetsControllerCount(`{ "ownerGroup": "${group}" }`)
           .pipe(
             map((count) => {
               if (count) {
