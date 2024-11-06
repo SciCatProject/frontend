@@ -3,7 +3,7 @@ import { Store } from "@ngrx/store";
 import { FileObject } from "datasets/dataset-details-dashboard/dataset-details-dashboard.component";
 import { Subscription } from "rxjs";
 import { take } from "rxjs/operators";
-import { DatasetClass, JobClass } from "@scicatproject/scicat-sdk-ts";
+import { CreateJobDto, DatasetClass } from "@scicatproject/scicat-sdk-ts";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import {
   selectCurrentDatablocks,
@@ -44,11 +44,12 @@ export class AdminTabComponent implements OnInit, OnDestroy {
         .pipe(take(1))
         .subscribe((user) => {
           if (user && this.dataset) {
-            let job: JobClass;
+            let job: CreateJobDto;
             job.emailJobInitiator = user.email;
             job.jobParams = {};
             job.jobParams["username"] = user.username;
-            job.creationTime = new Date().toString();
+            // TODO: Check if we need this property as it is not needed in the CreateJobDto.
+            // job.creationTime = new Date().toString();
             job.type = "reset";
             const fileObj: FileObject = {
               pid: "",
@@ -62,7 +63,7 @@ export class AdminTabComponent implements OnInit, OnDestroy {
               });
             }
             fileObj.files = fileList;
-            job.datasetList = [fileObj.toString()];
+            job.datasetList = [fileObj];
             console.log(job);
             this.store.dispatch(submitJobAction({ job }));
           }
