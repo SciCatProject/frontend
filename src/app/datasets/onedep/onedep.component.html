@@ -64,7 +64,7 @@
                         <mat-form-field class="method-name">
                             <mat-label>experimental method</mat-label>
                             <mat-select formControlName="emMethod" name="method">
-                                <mat-option *ngFor="let method of methodsList" [value]="experiments[method.value]">
+                                <mat-option *ngFor="let method of methodsList" [value]="method.value">
                                     {{ method.viewValue }}
                                 </mat-option>
                             </mat-select>

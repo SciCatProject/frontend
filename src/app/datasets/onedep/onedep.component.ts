@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { AppConfigService } from "app-config.service";
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   FormBuilder,
@@ -13,7 +13,8 @@ import { Dataset } from "shared/sdk/models";
 import {
   selectCurrentDataset,
 } from "state-management/selectors/datasets.selectors";
-import {selectCurrentUser
+import {
+  selectCurrentUser
 } from "state-management/selectors/user.selectors";
 import { User } from "shared/sdk";
 import { MethodsList, OneDepExperiment, Experiments, EmFile, EmFiles } from "./types/methods.enum"
@@ -35,7 +36,7 @@ export class OneDepComponent implements OnInit {
   form: FormGroup;
   showAssociatedMapQuestion: boolean = false;
   methodsList = MethodsList;
-  experiments = Experiments;
+  // experiments = Experiments;
   experiment: OneDepExperiment
   selectedFile: { [key: string]: File | null } = {};
   emFile = EmFile;
@@ -91,9 +92,8 @@ export class OneDepComponent implements OnInit {
       associatedMap: new FormControl(false),
       compositeMap: new FormControl(false),
       emdbId: new FormControl(""),
-      files: this.fb.array([]),
       email: this.user.email
-    })    
+    })
   }
 
   hasUnsavedChanges() {
@@ -147,69 +147,33 @@ export class OneDepComponent implements OnInit {
     }
   }
   onDepositClick() {
-  //   const filesArray = this.form.get('files') as FormArray;
-  //   filesArray.clear();
-  //   for (const key in this.files) {
-  //     if (this.files[key].file) { // e.g coordinates or add-map might not be present
-  //       filesArray.push(new FormControl(this.files[key]));
-  //     }
-  //   }
-  
-  //   const expArray = this.form.get('experiments') as FormArray;
-  //   expArray.clear();
-  //   expArray.push(new FormControl(this.form.get('emMethod')));
+    const formDataToSend = new FormData();
+    formDataToSend.append('email', this.form.value.email);
+    formDataToSend.append('metadata', JSON.stringify(this.form.value.metadata));
+    formDataToSend.append('experiments', this.form.value.emMethod);
+    // emdbId: this.form.value.emdbId, 
 
-  //   const formDataToSend = {
-  //     email: this.form.value.email,
-  //     experiments: this.form.value.experiments, 
-  //     metadata: this.form.value.metadata, 
-  //     // emdbId: this.form.value.emdbId,
-  //     files: this.form.value.files.map(file => file.file),
-  //   };
-    
-
-  //   // const formData = this.form.value;
-  //   // need to properly catch the dataset details
-  //   console.log("creating deposition", formDataToSend);
-  //   console.log(JSON.stringify(formDataToSend));
-
-  const filesArray = this.form.get('files') as FormArray;
-  filesArray.clear();
-  const formData = new FormData();
-
-  // Append the email
-  formData.append('email', this.form.value.email);
-
-  // Append metadata
-  formData.append('metadata', JSON.stringify(this.form.value.metadata));
-
-  // Append experiments
-  
-  const experiments = this.form.value.experiments.map(exp => {
-      return {
-          type: exp.type, // adjust based on your experiment structure
-          subtype: exp.subtype // adjust based on your experiment structure
-      };
-  });
-  formData.append('experiments', JSON.stringify(experiments));
-
-  // Append files
-  for (const key in this.files) {
-      if (this.files[key].file) { // e.g coordinates or add-map might not be present
-        formData.append('files', this.files[key].file); 
+    const fileMeta = Object.entries(this.files).reduce((acc, [key, file]) => {
+      if (file.file) {
+        formDataToSend.append('file', file.file);
+        acc[file.name] = { type: file.type, contour: file.contour, details: file.details };
       }
-    }
+      return acc;
+    }, {});
+    formDataToSend.append('fileMetadata', JSON.stringify(fileMeta));
 
 
-  console.log("Creating deposition", formData);
-  console.log('Files to send:', this.files);
-  this.http.post("http://localhost:8080/onedep", formData).subscribe(
-    response => {
+    console.log("Creating deposition", formDataToSend);
+    this.http.post("http://localhost:8080/onedep", formDataToSend, {
+      headers: { }
+    }).subscribe(
+      response => {
         console.log('Created deposition in OneDep', response);
-    },
-    error => {
-        console.error('Request failed', error);
-    }
-);
+      },
+      error => {
+        console.error('Request failed', error.error);
+      }
+    );
+
   }
 }
