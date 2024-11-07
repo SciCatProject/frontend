@@ -40,7 +40,7 @@ export const initialUserState: UserState = {
     scopes: ["string"],
     created: new Date(),
     userId: "",
-    user: {},
+    user: { id: "", username: "", email: "", authStrategy: "" },
   },
 
   settings: {

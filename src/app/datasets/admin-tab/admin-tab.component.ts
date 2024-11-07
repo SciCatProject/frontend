@@ -48,8 +48,6 @@ export class AdminTabComponent implements OnInit, OnDestroy {
             job.emailJobInitiator = user.email;
             job.jobParams = {};
             job.jobParams["username"] = user.username;
-            // TODO: Check if we need this property as it is not needed in the CreateJobDto.
-            // job.creationTime = new Date().toString();
             job.type = "reset";
             const fileObj: FileObject = {
               pid: "",

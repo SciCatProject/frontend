@@ -65,32 +65,22 @@ export class ProposalEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchProposalAction),
       switchMap(({ proposalId }) => {
-        return (
-          this.proposalsService
-            .proposalsControllerFindByIdAccess(proposalId)
-            // TODO: Check the backend type because it is incorrect. It says that the ApiResponse is Boolean but it actually returns {canAccess: boolean}
-            .pipe(
-              filter(
-                (permission) =>
-                  (permission as unknown as { canAccess: boolean }).canAccess,
-              ),
-              switchMap(() =>
-                this.proposalsService
-                  .proposalsControllerFindById(encodeURIComponent(proposalId))
-                  .pipe(
-                    map((proposal) =>
-                      fromActions.fetchProposalCompleteAction({ proposal }),
-                    ),
-                    catchError(() =>
-                      of(fromActions.fetchProposalFailedAction()),
-                    ),
+        return this.proposalsService
+          .proposalsControllerFindByIdAccess(proposalId)
+          .pipe(
+            filter((permission) => permission.canAccess),
+            switchMap(() =>
+              this.proposalsService
+                .proposalsControllerFindById(encodeURIComponent(proposalId))
+                .pipe(
+                  map((proposal) =>
+                    fromActions.fetchProposalCompleteAction({ proposal }),
                   ),
-              ),
-              catchError(() =>
-                of(fromActions.fetchProposalAccessFailedAction()),
-              ),
-            )
-        );
+                  catchError(() => of(fromActions.fetchProposalFailedAction())),
+                ),
+            ),
+            catchError(() => of(fromActions.fetchProposalAccessFailedAction())),
+          );
       }),
     );
   });

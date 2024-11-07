@@ -2,7 +2,6 @@ import { createAction, props } from "@ngrx/store";
 import { Logbook } from "@scicatproject/scicat-sdk-ts";
 import { LogbookFilters } from "state-management/models";
 
-// TODO: Fix Logbook type here when new sdk is ready
 export const fetchLogbooksAction = createAction("[Logbook] Fetch Logbooks");
 export const fetchLogbooksCompleteAction = createAction(
   "[Logbook] Fetch Logbooks Complete",

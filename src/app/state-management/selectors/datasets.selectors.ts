@@ -45,6 +45,7 @@ export const selectCurrentDatasetWithOnlyScientificMetadataKey = createSelector(
   },
 );
 
+// TODO: See why the (origdatablocks, datablocks and attachments) properties are commented out on the backend DatasetClass
 export const selectCurrentOrigDatablocks = createSelector(
   selectCurrentDataset,
   (dataset: any) => (dataset ? dataset.origdatablocks : []),

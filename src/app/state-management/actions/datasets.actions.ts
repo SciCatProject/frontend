@@ -138,7 +138,7 @@ export const addDatasetAction = createAction(
 );
 export const addDatasetCompleteAction = createAction(
   "[Dataset] Add Dataset Complete",
-  props<{ dataset: CreateDerivedDatasetObsoleteDto }>(),
+  props<{ dataset: DatasetClass }>(),
 );
 export const addDatasetFailedAction = createAction(
   "[Dataset] Add Dataset Failed",

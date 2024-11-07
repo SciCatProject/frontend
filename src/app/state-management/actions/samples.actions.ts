@@ -1,6 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import {
   Attachment,
+  CreateAttachmentDto,
   DatasetClass,
   SampleClass,
 } from "@scicatproject/scicat-sdk-ts";
@@ -111,7 +112,7 @@ export const saveCharacteristicsFailedAction = createAction(
 
 export const addAttachmentAction = createAction(
   "[Sample] Add Attachment",
-  props<{ attachment: Partial<Attachment> }>(),
+  props<{ attachment: CreateAttachmentDto }>(),
 );
 export const addAttachmentCompleteAction = createAction(
   "[Sample] Add Attachment Complete",

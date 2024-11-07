@@ -76,19 +76,22 @@ export class DatasetEffects {
       concatLatestFrom(() => this.fullfacetParams$),
       map(([action, params]) => params),
       mergeMap(({ fields, facets }) =>
-        // @ts-expect-error FIXME: Fix this one as the backend types are not correct
-        this.datasetsService.datasetsControllerFullfacet(fields, facets).pipe(
-          // TODO: Check the types here
-          map((res: any) => {
-            const { all, ...facetCounts } = res[0];
-            const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
-            return fromActions.fetchFacetCountsCompleteAction({
-              facetCounts,
-              allCounts,
-            });
-          }),
-          catchError(() => of(fromActions.fetchFacetCountsFailedAction())),
-        ),
+        this.datasetsService
+          .datasetsControllerFullfacet(
+            JSON.stringify(facets),
+            JSON.stringify(fields),
+          )
+          .pipe(
+            map((res) => {
+              const { all, ...facetCounts } = res[0];
+              const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
+              return fromActions.fetchFacetCountsCompleteAction({
+                facetCounts,
+                allCounts,
+              });
+            }),
+            catchError(() => of(fromActions.fetchFacetCountsFailedAction())),
+          ),
       ),
     );
   });
@@ -100,12 +103,10 @@ export class DatasetEffects {
       map(([action, params]) => params),
       mergeMap(({ query }) => {
         const parsedQuery = JSON.parse(query);
-        // TODO: remove this line below after metadataKey endpoint is refactored in the backend
-        // parsedQuery.metadataKey = "";
         return this.datasetsService
           .datasetsControllerMetadataKeys(JSON.stringify(parsedQuery))
           .pipe(
-            map((metadataKeys: any) =>
+            map((metadataKeys) =>
               fromActions.fetchMetadataKeysCompleteAction({ metadataKeys }),
             ),
             catchError(() => of(fromActions.fetchMetadataKeysFailedAction())),
@@ -208,8 +209,7 @@ export class DatasetEffects {
         this.relatedDatasetsFilters$,
       ]),
       switchMap(([_, dataset, filters]) => {
-        // TODO: Check this!
-        const queryFilter: any = {
+        const queryFilter = {
           where: {},
           limits: {
             skip: filters.skip,
@@ -228,12 +228,18 @@ export class DatasetEffects {
             pid: { $in: dataset.inputDatasets },
           };
         }
-        return this.datasetsService.datasetsControllerFindAll(queryFilter).pipe(
-          map((relatedDatasets: DatasetClass[]) =>
-            fromActions.fetchRelatedDatasetsCompleteAction({ relatedDatasets }),
-          ),
-          catchError(() => of(fromActions.fetchRelatedDatasetsFailedAction())),
-        );
+        return this.datasetsService
+          .datasetsControllerFindAll(JSON.stringify(queryFilter))
+          .pipe(
+            map((relatedDatasets: DatasetClass[]) =>
+              fromActions.fetchRelatedDatasetsCompleteAction({
+                relatedDatasets,
+              }),
+            ),
+            catchError(() =>
+              of(fromActions.fetchRelatedDatasetsFailedAction()),
+            ),
+          );
       }),
     );
   });
@@ -278,8 +284,7 @@ export class DatasetEffects {
       ofType(fromActions.addDatasetAction),
       mergeMap(({ dataset }) =>
         this.datasetsService.datasetsControllerCreate(dataset).pipe(
-          // TODO: Fix the any type
-          mergeMap((res: any) => [
+          mergeMap((res) => [
             fromActions.addDatasetCompleteAction({
               dataset: res,
             }),
@@ -371,19 +376,6 @@ export class DatasetEffects {
             catchError(() => of(fromActions.removeAttachmentFailedAction())),
           ),
       ),
-    );
-  });
-
-  reduceDataset$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.reduceDatasetAction),
-      // mergeMap(({ dataset }) =>
-      // TODO: Check if this still exists the reduce endpoint on the datasets!
-      // this.datasetsService.reduceDataset(dataset).pipe(
-      //   map((result) => fromActions.reduceDatasetCompleteAction({ result })),
-      //   catchError(() => of(fromActions.reduceDatasetFailedAction())),
-      // ),
-      // ),
     );
   });
 

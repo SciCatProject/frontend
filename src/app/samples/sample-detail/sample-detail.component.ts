@@ -27,6 +27,7 @@ import { EditableComponent } from "app-routing/pending-changes.guard";
 import { AppConfigService } from "app-config.service";
 import {
   Attachment,
+  CreateAttachmentDto,
   DatasetClass,
   ReturnedUserDto,
   SampleClass,
@@ -57,7 +58,7 @@ export class SampleDetailComponent
 
   sample: SampleClass;
   user: ReturnedUserDto;
-  attachment: Partial<Attachment>;
+  attachment: CreateAttachmentDto;
   attachments: Attachment[] = [];
   show = false;
   subscriptions: Subscription[] = [];
@@ -113,19 +114,12 @@ export class SampleDetailComponent
   }
 
   onFilePicked(file: PickedFile) {
-    // TODO: Check if commented code is needed
     this.attachment = {
       thumbnail: file.content,
       caption: file.name,
       ownerGroup: this.sample.ownerGroup,
       accessGroups: this.sample.accessGroups,
       sampleId: this.sample.sampleId,
-      // dataset: undefined,
-      datasetId: undefined,
-      // rawDatasetId: undefined,
-      // derivedDatasetId: undefined,
-      // proposal: undefined,
-      proposalId: undefined,
     };
     this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));
   }

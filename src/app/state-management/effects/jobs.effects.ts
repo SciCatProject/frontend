@@ -44,24 +44,6 @@ export class JobEffects {
     );
   });
 
-  fetchCount$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.fetchCountAction),
-      concatLatestFrom(() => this.queryParams$),
-      map(([action, params]) => params),
-      switchMap(
-        ({ where }) => [],
-        // TODO: Check if this enpoint exists in the new backend
-        // this.jobsService.count(where).pipe(
-        //   map((res) =>
-        //     fromActions.fetchCountCompleteAction({ count: res.count }),
-        //   ),
-        //   catchError(() => of(fromActions.fetchCountFailedAction())),
-        // ),
-      ),
-    );
-  });
-
   updateUserJobsLimit$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.changePageAction),
@@ -87,13 +69,10 @@ export class JobEffects {
     return this.actions$.pipe(
       ofType(fromActions.submitJobAction),
       switchMap(({ job }) =>
-        // TODO: Check this type conversion here!
-        this.jobsService
-          .jobsControllerCreate(job as unknown as CreateJobDto)
-          .pipe(
-            map((res) => fromActions.submitJobCompleteAction({ job: res })),
-            catchError((err) => of(fromActions.submitJobFailedAction({ err }))),
-          ),
+        this.jobsService.jobsControllerCreate(job).pipe(
+          map((res) => fromActions.submitJobCompleteAction({ job: res })),
+          catchError((err) => of(fromActions.submitJobFailedAction({ err }))),
+        ),
       ),
     );
   });

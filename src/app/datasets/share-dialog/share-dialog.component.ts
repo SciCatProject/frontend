@@ -44,12 +44,11 @@ export class ShareDialogComponent {
 
   add = async (email: string): Promise<void> => {
     try {
-      // TODO: Test if this works with the new sdk
       const isValidEmail = await this.userIdentititiesService
         .userIdentitiesControllerIsValidEmail(
-          `{
-          where: { "profile.email": ${email.trim()} },
-        }`,
+          JSON.stringify({
+            where: { "profile.email": email.trim() },
+          }),
         )
         .toPromise();
 

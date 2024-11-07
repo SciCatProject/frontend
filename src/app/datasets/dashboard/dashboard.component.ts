@@ -158,15 +158,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
           inputDatasets: [], // Required
           investigator: email, // Required
           scientificMetadata: {},
+          numberOfFilesArchived: 0, // Required
           usedSoftware: res.usedSoftware
             .split(",")
             .map((entry: string) => entry.trim())
             .filter((entry: string) => entry !== ""), // Required
         };
-        // TODO: Check the type as it should not need conversion
         this.store.dispatch(
           addDatasetAction({
-            dataset: dataset as CreateDerivedDatasetObsoleteDto,
+            dataset: dataset,
           }),
         );
       }

@@ -91,11 +91,7 @@ export class SampleEffects {
       ofType(fromActions.fetchSampleAction),
       switchMap(({ sampleId }) => {
         return this.sampleApi.samplesControllerFindByIdAccess(sampleId).pipe(
-          filter(
-            (permission) =>
-              // TODO: Fix the backend type here
-              (permission as unknown as { canAccess: boolean }).canAccess,
-          ),
+          filter((permission) => permission.canAccess),
           switchMap(() =>
             this.sampleApi.samplesControllerFindById(sampleId).pipe(
               map((sample) =>
