@@ -1,6 +1,9 @@
 import { Component, Output, EventEmitter, Input } from "@angular/core";
+import { Store } from "@ngrx/store";
 import saveAs from "file-saver";
 import { Attachment } from "shared/sdk";
+import { showMessageAction } from "state-management/actions/user.actions";
+import { Message, MessageType } from "state-management/models";
 
 export interface PickedFile {
   content: string;
@@ -26,12 +29,27 @@ export class FileUploaderComponent {
   @Output() submitCaption = new EventEmitter<SubmitCaptionEvent>();
   @Output() deleteAttachment = new EventEmitter<string>();
 
+  constructor(private store: Store) {}
+
   async onFileDropped(event: unknown) {
+    const maxFileSizeMB = 12;
+    const maxFileSizeBytes = maxFileSizeMB * 1024 * 1024; // Convert MB to bytes
+
     const files = Array.from(event as FileList);
 
     if (files.length > 0) {
       await Promise.all(
         files.map(async (file) => {
+          if (file.size > maxFileSizeBytes) {
+            const message = new Message(
+              `File "${file.name}" exceeds the maximum size of ${maxFileSizeMB} MB.`,
+              MessageType.Error,
+              5000,
+            );
+
+            return this.store.dispatch(showMessageAction({ message }));
+          }
+
           const buffer = await file.arrayBuffer();
           let binary = "";
           const bytes = new Uint8Array(buffer);
@@ -81,6 +99,30 @@ export class FileUploaderComponent {
     }
 
     return result;
+  }
+
+  getImageUrl(encoded: string) {
+    const mimeType = this.base64MimeType(encoded);
+    if (mimeType === "application/pdf") {
+      return "assets/images/pdf-icon.svg";
+    }
+    return encoded;
+  }
+
+  openAttachment(encoded: string) {
+    const mimeType = this.base64MimeType(encoded);
+    const strippedData = encoded.replace(
+      new RegExp(`^data:${mimeType};base64,`),
+      "",
+    );
+
+    const blob = new Blob(
+      [Uint8Array.from(atob(strippedData), (c) => c.charCodeAt(0))],
+      { type: mimeType },
+    );
+    const objectUrl = URL.createObjectURL(blob);
+
+    window.open(objectUrl);
   }
 
   onDownloadAttachment(attachment: Attachment) {
