@@ -383,5 +383,7 @@ export class DatasetDetailComponent
     const objectUrl = URL.createObjectURL(blob);
 
     window.open(objectUrl);
+
+    URL.revokeObjectURL(objectUrl);
   }
 }

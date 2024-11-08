@@ -123,6 +123,7 @@ export class FileUploaderComponent {
     const objectUrl = URL.createObjectURL(blob);
 
     window.open(objectUrl);
+    URL.revokeObjectURL(objectUrl);
   }
 
   onDownloadAttachment(attachment: Attachment) {

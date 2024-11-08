@@ -9,6 +9,9 @@ mat-card {
       vertical-align: middle;
     }
   }
+  .caption-text {
+    word-break: break-all;
+  }
 
   table {
     th {
