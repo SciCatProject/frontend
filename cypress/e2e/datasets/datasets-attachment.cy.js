@@ -50,7 +50,7 @@ describe("Dataset attachments", () => {
       );
     });
 
-    it.only("should open a new tab when clicking the attachment thumbnail", () => {
+    it("should open a new tab when clicking the attachment thumbnail", () => {
       cy.visit("/datasets");
 
       cy.get(".dataset-table mat-table mat-header-row").should("exist");
