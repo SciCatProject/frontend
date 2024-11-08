@@ -17,7 +17,11 @@ import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { fetchLogbookAction } from "state-management/actions/logbooks.actions";
 import { AppConfigService } from "app-config.service";
 import { selectLogbooksDashboardPageViewModel } from "state-management/selectors/logbooks.selectors";
-import { DatasetClass, ProposalClass } from "@scicatproject/scicat-sdk-ts";
+import {
+  DatasetClass,
+  OutputDatasetObsoleteDto,
+  ProposalClass,
+} from "@scicatproject/scicat-sdk-ts";
 
 export interface TableData {
   pid: string;
@@ -64,7 +68,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     private store: Store,
   ) {}
 
-  formatTableData(datasets: DatasetClass[]): TableData[] {
+  formatTableData(datasets: OutputDatasetObsoleteDto[]): TableData[] {
     let tableData: TableData[] = [];
     if (datasets) {
       tableData = datasets.map((dataset: any) => ({

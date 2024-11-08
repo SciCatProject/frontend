@@ -24,7 +24,7 @@ import {
   selectIsAdmin,
   selectProfile,
 } from "state-management/selectors/user.selectors";
-import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "batch-view",
@@ -32,7 +32,9 @@ import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
   styleUrls: ["./batch-view.component.scss"],
 })
 export class BatchViewComponent implements OnInit, OnDestroy {
-  batch$: Observable<DatasetClass[]> = this.store.select(selectDatasetsInBatch);
+  batch$: Observable<OutputDatasetObsoleteDto[]> = this.store.select(
+    selectDatasetsInBatch,
+  );
   userProfile$ = this.store.select(selectProfile);
   isAdmin$ = this.store.select(selectIsAdmin);
   isAdmin = false;
@@ -42,7 +44,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
   shareEnabled = this.appConfig.shareEnabled;
 
-  datasetList: DatasetClass[] = [];
+  datasetList: OutputDatasetObsoleteDto[] = [];
   public hasBatch = false;
   visibleColumns: string[] = ["remove", "pid", "sourceFolder", "creationTime"];
 
@@ -58,7 +60,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     this.store.dispatch(clearBatchAction());
   }
 
-  private storeBatch(datasetUpdatedBatch: DatasetClass[]) {
+  private storeBatch(datasetUpdatedBatch: OutputDatasetObsoleteDto[]) {
     this.store.dispatch(storeBatchAction({ batch: datasetUpdatedBatch }));
   }
 
@@ -70,7 +72,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  onRemove(dataset: DatasetClass) {
+  onRemove(dataset: OutputDatasetObsoleteDto) {
     this.store.dispatch(removeFromBatchAction({ dataset }));
   }
 

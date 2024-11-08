@@ -1,6 +1,6 @@
 import {
   Attachment,
-  DatasetClass,
+  OutputDatasetObsoleteDto,
   SampleClass,
 } from "@scicatproject/scicat-sdk-ts";
 import { SampleFilters, GenericFilters } from "state-management/models";
@@ -9,7 +9,7 @@ export interface SampleState {
   samples: SampleClass[];
   attachments: Attachment[];
   currentSample: SampleClass | undefined;
-  datasets: DatasetClass[];
+  datasets: OutputDatasetObsoleteDto[];
   metadataKeys: string[];
 
   samplesCount: number;

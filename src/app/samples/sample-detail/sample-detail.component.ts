@@ -29,6 +29,7 @@ import {
   Attachment,
   CreateAttachmentDto,
   DatasetClass,
+  OutputDatasetObsoleteDto,
   ReturnedUserDto,
   SampleClass,
 } from "@scicatproject/scicat-sdk-ts";
@@ -84,7 +85,7 @@ export class SampleDetailComponent
     private store: Store,
   ) {}
 
-  formatTableData(datasets: DatasetClass[]): TableData[] {
+  formatTableData(datasets: OutputDatasetObsoleteDto[]): TableData[] {
     let tableData: TableData[] = [];
     if (datasets) {
       tableData = datasets.map((dataset: any) => ({

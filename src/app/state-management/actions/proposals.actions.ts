@@ -1,7 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import {
   Attachment,
-  DatasetClass,
+  OutputDatasetObsoleteDto,
   ProposalClass,
 } from "@scicatproject/scicat-sdk-ts";
 import { ProposalFilters } from "state-management/state/proposals.store";
@@ -45,7 +45,7 @@ export const fetchProposalDatasetsAction = createAction(
 );
 export const fetchProposalDatasetsCompleteAction = createAction(
   "[Proposal] Fetch Datasets Complete",
-  props<{ datasets: DatasetClass[] }>(),
+  props<{ datasets: OutputDatasetObsoleteDto[] }>(),
 );
 export const fetchProposalDatasetsFailedAction = createAction(
   "[Proposal] Fetch Datasets Failed",

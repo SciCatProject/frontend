@@ -4,9 +4,9 @@ import {
   Attachment,
   CreateAttachmentDto,
   Datablock,
-  DatasetClass,
   DatasetsService,
   OrigDatablock,
+  OutputDatasetObsoleteDto,
   UpdateAttachmentDto,
 } from "@scicatproject/scicat-sdk-ts";
 import { Store } from "@ngrx/store";
@@ -55,13 +55,14 @@ export class DatasetEffects {
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
-        // @ts-expect-error FIXME: Fix this one as the backend types are not correct
-        this.datasetsService.datasetsControllerFullquery(query, limits).pipe(
-          map((datasets) =>
-            fromActions.fetchDatasetsCompleteAction({ datasets }),
+        this.datasetsService
+          .datasetsControllerFullquery(JSON.stringify(limits), query)
+          .pipe(
+            map((datasets) =>
+              fromActions.fetchDatasetsCompleteAction({ datasets }),
+            ),
+            catchError(() => of(fromActions.fetchDatasetsFailedAction())),
           ),
-          catchError(() => of(fromActions.fetchDatasetsFailedAction())),
-        ),
       ),
     );
   });
@@ -142,7 +143,7 @@ export class DatasetEffects {
         return this.datasetsService
           .datasetsControllerFindById(encodeURIComponent(pid))
           .pipe(
-            map((dataset: DatasetClass) =>
+            map((dataset) =>
               fromActions.fetchDatasetCompleteAction({ dataset }),
             ),
             catchError(() => of(fromActions.fetchDatasetFailedAction())),
@@ -231,7 +232,7 @@ export class DatasetEffects {
         return this.datasetsService
           .datasetsControllerFindAll(JSON.stringify(queryFilter))
           .pipe(
-            map((relatedDatasets: DatasetClass[]) =>
+            map((relatedDatasets) =>
               fromActions.fetchRelatedDatasetsCompleteAction({
                 relatedDatasets,
               }),
@@ -491,13 +492,13 @@ export class DatasetEffects {
     private store: Store,
   ) {}
 
-  private storeBatch(batch: DatasetClass[], userId: string) {
+  private storeBatch(batch: OutputDatasetObsoleteDto[], userId: string) {
     const json = JSON.stringify(batch);
     localStorage.setItem("batch", json);
     localStorage.setItem("batchUser", userId);
   }
 
-  private retrieveBatch(ofUserId: string): DatasetClass[] {
+  private retrieveBatch(ofUserId: string): OutputDatasetObsoleteDto[] {
     const json = localStorage.getItem("batch");
     const userId = localStorage.getItem("batchUser");
 

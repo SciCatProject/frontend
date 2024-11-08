@@ -36,8 +36,7 @@ import {
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 import {
-  CreateDerivedDatasetObsoleteDto,
-  DatasetClass,
+  OutputDatasetObsoleteDto,
   ReturnedUserDto,
 } from "@scicatproject/scicat-sdk-ts";
 import {
@@ -126,7 +125,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  onRowClick(dataset: DatasetClass): void {
+  onRowClick(dataset: OutputDatasetObsoleteDto): void {
     const pid = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl("/datasets/" + pid);
   }

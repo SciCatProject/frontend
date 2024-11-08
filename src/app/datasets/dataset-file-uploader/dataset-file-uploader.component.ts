@@ -8,7 +8,7 @@ import {
 } from "shared/modules/file-uploader/file-uploader.component";
 import {
   Attachment,
-  DatasetClass,
+  OutputDatasetObsoleteDto,
   ReturnedUserDto,
 } from "@scicatproject/scicat-sdk-ts";
 import { OwnershipService } from "shared/services/ownership.service";
@@ -32,7 +32,7 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
   attachments: Attachment[] = [];
   subscriptions: Subscription[] = [];
   attachment: Partial<Attachment> = {};
-  dataset: DatasetClass | undefined;
+  dataset: OutputDatasetObsoleteDto | undefined;
   user: ReturnedUserDto | undefined;
   constructor(
     private store: Store,

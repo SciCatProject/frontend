@@ -1,4 +1,7 @@
-import { DatasetClass, ProposalClass } from "@scicatproject/scicat-sdk-ts";
+import {
+  OutputDatasetObsoleteDto,
+  ProposalClass,
+} from "@scicatproject/scicat-sdk-ts";
 
 export interface DateRange {
   begin: string;
@@ -23,7 +26,7 @@ export interface ProposalDatesetFilters {
 export interface ProposalsState {
   proposals: ProposalClass[];
   currentProposal: ProposalClass | undefined;
-  datasets: DatasetClass[];
+  datasets: OutputDatasetObsoleteDto[];
 
   proposalsCount: number;
   datasetsCount: number;

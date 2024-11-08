@@ -1,5 +1,8 @@
 import { Component, OnInit, OnChanges, SimpleChange } from "@angular/core";
-import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
+import {
+  DatasetClass,
+  OutputDatasetObsoleteDto,
+} from "@scicatproject/scicat-sdk-ts";
 import {
   trigger,
   state,
@@ -40,7 +43,7 @@ export interface HistoryItem {
 export class DatasetLifecycleComponent implements OnInit, OnChanges {
   appConfig = this.appConfigService.getConfig();
 
-  dataset: DatasetClass | undefined;
+  dataset: OutputDatasetObsoleteDto | undefined;
   historyItems: HistoryItem[] = [];
 
   pageSizeOptions = [10, 25, 50, 100, 500, 1000];
@@ -59,8 +62,10 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
   ) {}
 
   private parseHistoryItems(): HistoryItem[] {
-    if (this.dataset && this.dataset.history) {
-      const history = this.dataset.history.map(
+    // TODO: This should be checked because something is wrong with the types
+    const dataset = this.dataset as DatasetClass;
+    if (dataset && dataset.history) {
+      const history = dataset.history.map(
         ({ updatedAt, updatedBy, id, ...properties }) =>
           Object.keys(properties).map(
             (property) =>

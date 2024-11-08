@@ -33,14 +33,15 @@ export class ProposalEffects {
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
-        // @ts-expect-error FIXME: Fix this one as the backend types are not correct
-        this.proposalsService.proposalsControllerFullquery(query, limits).pipe(
-          mergeMap((proposals) => [
-            fromActions.fetchProposalsCompleteAction({ proposals }),
-            fromActions.fetchCountAction(),
-          ]),
-          catchError(() => of(fromActions.fetchProposalsFailedAction())),
-        ),
+        this.proposalsService
+          .proposalsControllerFullquery(JSON.stringify(limits), query)
+          .pipe(
+            mergeMap((proposals) => [
+              fromActions.fetchProposalsCompleteAction({ proposals }),
+              fromActions.fetchCountAction(),
+            ]),
+            catchError(() => of(fromActions.fetchProposalsFailedAction())),
+          ),
       ),
     );
   });

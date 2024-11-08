@@ -28,10 +28,13 @@ import {
   selectTotalSets,
   selectDatasetsInBatch,
 } from "state-management/selectors/datasets.selectors";
-import { get } from "lodash";
+import { get } from "lodash-es";
 import { AppConfigService } from "app-config.service";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
-import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
+import {
+  DatasetClass,
+  OutputDatasetObsoleteDto,
+} from "@scicatproject/scicat-sdk-ts";
 import { PageEvent } from "@angular/material/paginator";
 export interface SortChangeEvent {
   active: string;
@@ -57,18 +60,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() tableColumns: TableColumn[] | null = null;
   displayedColumns: string[] = [];
-  @Input() selectedSets: DatasetClass[] | null = null;
+  @Input() selectedSets: OutputDatasetObsoleteDto[] | null = null;
   @Output() pageChange = new EventEmitter<{
     pageIndex: number;
     pageSize: number;
   }>();
 
-  datasets: DatasetClass[] = [];
-  // datasetDerivationsMaps: DatasetDerivationsMap[] = [];
-  // derivationMapPids: string[] = [];
+  datasets: OutputDatasetObsoleteDto[] = [];
 
   @Output() settingsClick = new EventEmitter<MouseEvent>();
-  @Output() rowClick = new EventEmitter<DatasetClass>();
+  @Output() rowClick = new EventEmitter<OutputDatasetObsoleteDto>();
 
   constructor(
     public appConfigService: AppConfigService,
@@ -85,7 +86,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
     this.settingsClick.emit(event);
   }
 
-  doRowClick(dataset: DatasetClass): void {
+  doRowClick(dataset: OutputDatasetObsoleteDto): void {
     this.rowClick.emit(dataset);
   }
 
@@ -164,7 +165,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
     return this.inBatchPids.indexOf(dataset.pid) !== -1;
   }
 
-  onSelect(event: MatCheckboxChange, dataset: DatasetClass): void {
+  onSelect(event: MatCheckboxChange, dataset: OutputDatasetObsoleteDto): void {
     if (event.checked) {
       this.store.dispatch(selectDatasetAction({ dataset }));
     } else {

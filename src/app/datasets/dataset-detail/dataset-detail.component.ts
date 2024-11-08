@@ -43,8 +43,8 @@ import {
 import { Message, MessageType } from "state-management/models";
 import { DOCUMENT } from "@angular/common";
 import {
-  DatasetClass,
   Instrument,
+  OutputDatasetObsoleteDto,
   ProposalClass,
   ReturnedUserDto,
   SampleClass,
@@ -76,7 +76,7 @@ export class DatasetDetailComponent
 
   appConfig = this.appConfigService.getConfig();
 
-  dataset: DatasetClass | undefined;
+  dataset: OutputDatasetObsoleteDto | undefined;
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
   proposal$ = this.store.select(selectCurrentProposal);
