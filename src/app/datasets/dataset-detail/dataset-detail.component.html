@@ -455,6 +455,7 @@
       <ng-container *ngFor="let da of attachments">
         <mat-card>
           <img
+            data-cy="attachment-thumbnail"
             mat-card-image
             [src]="getImageUrl(da.thumbnail)"
             (click)="openAttachment(da.thumbnail)"

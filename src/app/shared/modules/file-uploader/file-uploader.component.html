@@ -43,6 +43,7 @@
     <mat-card class="attachment-card">
       <mat-card-content class="attachment-content">
         <img
+          data-cy="attachment-thumbnail"
           [src]="getImageUrl(attachment.thumbnail)"
           (click)="openAttachment(attachment.thumbnail)"
         />
