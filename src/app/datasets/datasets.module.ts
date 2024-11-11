@@ -181,7 +181,6 @@ import { AttachmentService } from "shared/services/attachment.service";
   ],
   providers: [
     ArchivingService,
-    AttachmentService,
     AsyncPipe,
     ADAuthService,
     FileSizePipe,
