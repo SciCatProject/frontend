@@ -44,6 +44,7 @@ import {
 } from "@angular/forms";
 import { Message, MessageType } from "state-management/models";
 import { DOCUMENT } from "@angular/common";
+import { AttachmentService } from "shared/services/attachment.service";
 
 /**
  * Component to show details for a data set, using the
@@ -88,6 +89,7 @@ export class DatasetDetailComponent
   constructor(
     @Inject(DOCUMENT) private document: Document,
     public appConfigService: AppConfigService,
+    private attachmentService: AttachmentService,
     public dialog: MatDialog,
     private store: Store,
     private router: Router,
@@ -346,19 +348,7 @@ export class DatasetDetailComponent
     this.store.dispatch(showMessageAction({ message }));
   }
   base64MimeType(encoded: string): string {
-    let result = null;
-
-    if (typeof encoded !== "string") {
-      return result;
-    }
-
-    const mime = encoded.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/);
-
-    if (mime && mime.length) {
-      result = mime[1];
-    }
-
-    return result;
+    return this.attachmentService.base64MimeType(encoded);
   }
 
   getImageUrl(encoded: string) {
@@ -370,20 +360,6 @@ export class DatasetDetailComponent
   }
 
   openAttachment(encoded: string) {
-    const mimeType = this.base64MimeType(encoded);
-    const strippedData = encoded.replace(
-      new RegExp(`^data:${mimeType};base64,`),
-      "",
-    );
-
-    const blob = new Blob(
-      [Uint8Array.from(atob(strippedData), (c) => c.charCodeAt(0))],
-      { type: mimeType },
-    );
-    const objectUrl = URL.createObjectURL(blob);
-
-    window.open(objectUrl);
-
-    URL.revokeObjectURL(objectUrl);
+    this.attachmentService.openAttachment(encoded);
   }
 }
