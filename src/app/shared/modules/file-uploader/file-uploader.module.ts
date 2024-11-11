@@ -9,6 +9,8 @@ import { MatInputModule } from "@angular/material/input";
 import { FileUploaderComponent } from "./file-uploader.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DragAndDropDirective } from "./directives/drag-and-drop.directive";
+import { AttachmentService } from "shared/services/attachment.service";
+import { AppConfigService } from "app-config.service";
 
 @NgModule({
   declarations: [FileUploaderComponent, DragAndDropDirective],
@@ -23,6 +25,7 @@ import { DragAndDropDirective } from "./directives/drag-and-drop.directive";
     PipesModule,
     ReactiveFormsModule,
   ],
+  providers: [AttachmentService, AppConfigService],
   exports: [FileUploaderComponent],
 })
 export class FileUploaderModule {}

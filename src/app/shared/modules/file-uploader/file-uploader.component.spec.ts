@@ -10,6 +10,7 @@ import { StoreModule } from "@ngrx/store";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
 import { AppConfigService } from "app-config.service";
+import { AttachmentService } from "shared/services/attachment.service";
 
 describe("FileUploaderComponent", () => {
   let component: FileUploaderComponent;
@@ -26,7 +27,7 @@ describe("FileUploaderComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [SharedScicatFrontendModule, StoreModule.forRoot({})],
-      providers: [DragAndDropDirective],
+      providers: [DragAndDropDirective, AttachmentService],
       declarations: [FileUploaderComponent],
     });
 

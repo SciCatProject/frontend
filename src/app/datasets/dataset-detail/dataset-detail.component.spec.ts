@@ -71,12 +71,12 @@ describe("DatasetDetailComponent", () => {
         SharedScicatFrontendModule,
         StoreModule.forRoot({}),
       ],
+      providers: [AttachmentService],
       declarations: [DatasetDetailComponent, DatafilesComponent, LinkyPipe],
     });
     TestBed.overrideComponent(DatasetDetailComponent, {
       set: {
         providers: [
-          AttachmentService,
           { provide: Router, useValue: router },
           {
             provide: AppConfigService,
