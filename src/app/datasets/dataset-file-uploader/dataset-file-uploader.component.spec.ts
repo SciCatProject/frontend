@@ -12,9 +12,16 @@ import {
 
 import { DatasetFileUploaderComponent } from "./dataset-file-uploader.component";
 import { SharedScicatFrontendModule } from "shared/shared.module";
+import { AppConfigService } from "app-config.service";
+import { HttpClient } from "@angular/common/http";
+import { MockHttp } from "shared/MockStubs";
+
 const router = {
   navigateByUrl: jasmine.createSpy("navigateByUrl"),
 };
+
+const getConfig = () => ({});
+
 describe("DatasetFileUploaderComponent", () => {
   let component: DatasetFileUploaderComponent;
   let fixture: ComponentFixture<DatasetFileUploaderComponent>;
@@ -25,6 +32,10 @@ describe("DatasetFileUploaderComponent", () => {
     await TestBed.configureTestingModule({
       declarations: [DatasetFileUploaderComponent],
       imports: [SharedScicatFrontendModule, StoreModule.forRoot({})],
+      providers: [
+        { provide: AppConfigService, useValue: { getConfig } },
+        { provide: HttpClient, useClass: MockHttp },
+      ],
     }).compileComponents();
     TestBed.overrideComponent(DatasetFileUploaderComponent, {
       set: {
