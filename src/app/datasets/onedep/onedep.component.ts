@@ -152,20 +152,21 @@ export class OneDepComponent implements OnInit {
     formDataToSend.append('metadata', JSON.stringify(this.form.value.metadata));
     formDataToSend.append('experiments', this.form.value.emMethod);
     // emdbId: this.form.value.emdbId, 
+    var fileMetadata = []
 
-    const fileMeta = Object.entries(this.files).reduce((acc, [key, file]) => {
-      if (file.file) {
-        formDataToSend.append('file', file.file);
-        acc[file.name] = { type: file.type, contour: file.contour, details: file.details };
+    for (const key in this.files) {
+      if (this.files[key].file) {
+        formDataToSend.append('file', this.files[key].file);
+        fileMetadata.push({ name: this.files[key].name, type: this.files[key].type, contour: this.files[key].contour, details: this.files[key].details });
       }
-      return acc;
-    }, {});
-    formDataToSend.append('fileMetadata', JSON.stringify(fileMeta));
+    }
+    console.log(fileMetadata);
+    formDataToSend.append('fileMetadata', JSON.stringify(fileMetadata));
 
 
     console.log("Creating deposition", formDataToSend);
     this.http.post("http://localhost:8080/onedep", formDataToSend, {
-      headers: { }
+      headers: {}
     }).subscribe(
       response => {
         console.log('Created deposition in OneDep', response);
