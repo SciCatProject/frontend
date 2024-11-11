@@ -1,5 +1,6 @@
 import { Component, Output, EventEmitter, Input } from "@angular/core";
 import { Store } from "@ngrx/store";
+import { AppConfigService } from "app-config.service";
 import saveAs from "file-saver";
 import { Attachment } from "shared/sdk";
 import { showMessageAction } from "state-management/actions/user.actions";
@@ -23,26 +24,42 @@ export interface SubmitCaptionEvent {
   styleUrls: ["./file-uploader.component.scss"],
 })
 export class FileUploaderComponent {
-  @Input() attachments: Attachment[] = [];
+  appConfig = this.appConfigService.getConfig();
+  maxFileUploadSizeInMb = 16;
 
+  @Input() attachments: Attachment[] = [];
   @Output() filePicked = new EventEmitter<PickedFile>();
   @Output() submitCaption = new EventEmitter<SubmitCaptionEvent>();
   @Output() deleteAttachment = new EventEmitter<string>();
 
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    private appConfigService: AppConfigService,
+  ) {
+    if (this.appConfig.maxFileUploadSizeInMb) {
+      this.maxFileUploadSizeInMb = Number(
+        this.appConfig.maxFileUploadSizeInMb.replace(
+          /\D/g, // Removes any non-digit characters
+          "",
+        ),
+      );
+    }
+  }
 
   async onFileDropped(event: unknown) {
-    const maxFileSizeMB = 12;
-    const maxFileSizeBytes = maxFileSizeMB * 1024 * 1024; // Convert MB to bytes
+    // base64 encoding increases the file size by 33% minimum
+    const postEncodedMaxFileUploadSizeInMb = this.maxFileUploadSizeInMb * 0.67;
+    const postEncodedmaxFileUploadSizeInBytes =
+      postEncodedMaxFileUploadSizeInMb * 1024 * 1024;
 
     const files = Array.from(event as FileList);
 
     if (files.length > 0) {
       await Promise.all(
         files.map(async (file) => {
-          if (file.size > maxFileSizeBytes) {
+          if (file.size > postEncodedmaxFileUploadSizeInBytes) {
             const message = new Message(
-              `File "${file.name}" exceeds the maximum size of ${maxFileSizeMB} MB.`,
+              `File "${file.name}" exceeds the maximum size of ${postEncodedMaxFileUploadSizeInMb} MB.`,
               MessageType.Error,
               5000,
             );

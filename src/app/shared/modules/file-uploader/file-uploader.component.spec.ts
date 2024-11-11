@@ -9,10 +9,18 @@ import { SharedScicatFrontendModule } from "shared/shared.module";
 import { StoreModule } from "@ngrx/store";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
+import { AppConfigService } from "app-config.service";
 
 describe("FileUploaderComponent", () => {
   let component: FileUploaderComponent;
   let fixture: ComponentFixture<FileUploaderComponent>;
+  const mockAppConfigService = {
+    getConfig: () => {
+      return {
+        maxFileUploadSizeInMb: "16mb",
+      };
+    },
+  };
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -20,6 +28,14 @@ describe("FileUploaderComponent", () => {
       imports: [SharedScicatFrontendModule, StoreModule.forRoot({})],
       providers: [DragAndDropDirective],
       declarations: [FileUploaderComponent],
+    });
+
+    TestBed.overrideComponent(FileUploaderComponent, {
+      set: {
+        providers: [
+          { provide: AppConfigService, useValue: mockAppConfigService },
+        ],
+      },
     });
     TestBed.compileComponents();
   }));
@@ -76,10 +92,15 @@ describe("FileUploaderComponent", () => {
       expect(component.filePicked.emit).toHaveBeenCalledTimes(2);
     });
 
-    it("should dispatch showMessageAction and not to emit, if file size exceeds 12MB", async () => {
+    it("should dispatch showMessageAction and not to emit, if file size exceeds maxFileUploadSizeInMb", async () => {
+      const maxFileUploadSizeInMb = Number(
+        mockAppConfigService
+          .getConfig()
+          .maxFileUploadSizeInMb.replace(/\D/g, ""),
+      );
+      const expectedMaxFileUploadSizeInMb = maxFileUploadSizeInMb * 0.67;
       spyOn(component.filePicked, "emit");
       spyOn(component["store"], "dispatch");
-      const maxFileSizeMB = 12;
       const largeFileBlob = new Blob([""], { type: "application/pdf" });
       const largeFile = {
         ...largeFileBlob,
@@ -98,7 +119,7 @@ describe("FileUploaderComponent", () => {
       await component.onFileDropped(fileList);
 
       const message = new Message(
-        `File "${largeFile.name}" exceeds the maximum size of ${maxFileSizeMB} MB.`,
+        `File "${largeFile.name}" exceeds the maximum size of ${expectedMaxFileUploadSizeInMb} MB.`,
         MessageType.Error,
         5000,
       );
