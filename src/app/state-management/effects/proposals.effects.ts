@@ -60,8 +60,8 @@ export class ProposalEffects {
   fetchProposal$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchProposalAction),
-      switchMap(({ proposalId }) => {
-        return this.proposalApi.findByIdAccess(proposalId).pipe(
+      switchMap(({ proposalId }) =>
+        this.proposalApi.findByIdAccess(encodeURIComponent(proposalId)).pipe(
           filter((permission: { canAccess: boolean }) => permission.canAccess),
           switchMap(() =>
             this.proposalApi
@@ -74,8 +74,34 @@ export class ProposalEffects {
               ),
           ),
           catchError(() => of(fromActions.fetchProposalAccessFailedAction())),
-        );
-      }),
+        ),
+      ),
+    );
+  });
+
+  fetchParentProposal$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchParentProposalAction),
+      switchMap(({ proposalId }) =>
+        this.proposalApi.findByIdAccess(encodeURIComponent(proposalId)).pipe(
+          filter((permission: { canAccess: boolean }) => permission.canAccess),
+          switchMap(() =>
+            this.proposalApi
+              .findById<Proposal>(encodeURIComponent(proposalId))
+              .pipe(
+                map((proposal: Proposal) =>
+                  fromActions.fetchParentProposalCompleteAction({ proposal }),
+                ),
+                catchError(() =>
+                  of(fromActions.fetchParentProposalFailedAction()),
+                ),
+              ),
+          ),
+          catchError(() =>
+            of(fromActions.fetchParentProposalAccessFailedAction()),
+          ),
+        ),
+      ),
     );
   });
 

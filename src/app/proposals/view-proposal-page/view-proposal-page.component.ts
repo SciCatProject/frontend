@@ -6,6 +6,7 @@ import {
   fetchProposalAction,
   fetchProposalDatasetsAction,
   changeDatasetsPageAction,
+  fetchParentProposalAction,
 } from "state-management/actions/proposals.actions";
 import { selectViewProposalPageViewModel } from "state-management/selectors/proposals.selectors";
 import { Dataset, Proposal } from "state-management/models";
@@ -39,7 +40,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   logbook$ = this.store.select(selectLogbooksDashboardPageViewModel);
   appConfig = this.appConfigService.getConfig();
 
-  proposal: Proposal = new Proposal();
+  proposal: Proposal;
 
   subscriptions: Subscription[] = [];
 
@@ -106,6 +107,13 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
       this.vm$.subscribe((vm) => {
         if (vm.proposal) {
           this.proposal = vm.proposal;
+
+          if (
+            this.proposal["parentProposalId"] &&
+            this.proposal["parentProposalId"] !== ""
+          ) {
+            this.fetchProposalRelatedDocuments();
+          }
         }
       }),
     );
@@ -123,6 +131,14 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.vm$.subscribe((vm) => {
         this.tableData = this.formatTableData(vm.datasets);
+      }),
+    );
+  }
+
+  fetchProposalRelatedDocuments(): void {
+    this.store.dispatch(
+      fetchParentProposalAction({
+        proposalId: this.proposal["parentProposalId"] as string,
       }),
     );
   }

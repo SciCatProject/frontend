@@ -35,6 +35,21 @@ export const fetchProposalAccessFailedAction = createAction(
   "[Proposal] Fetch Proposal Access Failed",
 );
 
+export const fetchParentProposalAction = createAction(
+  "[Proposal] Fetch Parent Proposal",
+  props<{ proposalId: string }>(),
+);
+export const fetchParentProposalCompleteAction = createAction(
+  "[Proposal] Fetch Parent Proposal Complete",
+  props<{ proposal: Proposal }>(),
+);
+export const fetchParentProposalFailedAction = createAction(
+  "[Proposal] Fetch Parent Proposal Failed",
+);
+export const fetchParentProposalAccessFailedAction = createAction(
+  "[Proposal] Fetch Parent Proposal Access Failed",
+);
+
 export const fetchProposalDatasetsAction = createAction(
   "[Proposal] Fetch Datasets",
   props<{ proposalId: string }>(),

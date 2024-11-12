@@ -74,7 +74,6 @@ export class DatasetDetailComponent
   dataset: Dataset | undefined;
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
-  proposal$ = this.store.select(selectCurrentProposal);
   loading$ = this.store.select(selectIsLoading);
   instrument: Instrument | undefined;
   proposal: Proposal | undefined;
