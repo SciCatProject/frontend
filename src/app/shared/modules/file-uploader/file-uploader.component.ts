@@ -1,6 +1,11 @@
 import { Component, Output, EventEmitter, Input } from "@angular/core";
+import { Store } from "@ngrx/store";
+import { AppConfigService } from "app-config.service";
 import saveAs from "file-saver";
 import { Attachment } from "shared/sdk";
+import { AttachmentService } from "shared/services/attachment.service";
+import { showMessageAction } from "state-management/actions/user.actions";
+import { Message, MessageType } from "state-management/models";
 
 export interface PickedFile {
   content: string;
@@ -20,18 +25,50 @@ export interface SubmitCaptionEvent {
   styleUrls: ["./file-uploader.component.scss"],
 })
 export class FileUploaderComponent {
-  @Input() attachments: Attachment[] = [];
+  appConfig = this.appConfigService.getConfig();
+  maxFileUploadSizeInMb = 16;
 
+  @Input() attachments: Attachment[] = [];
   @Output() filePicked = new EventEmitter<PickedFile>();
   @Output() submitCaption = new EventEmitter<SubmitCaptionEvent>();
   @Output() deleteAttachment = new EventEmitter<string>();
 
+  constructor(
+    private store: Store,
+    private appConfigService: AppConfigService,
+    private attachmentService: AttachmentService,
+  ) {
+    if (this.appConfig.maxFileUploadSizeInMb) {
+      this.maxFileUploadSizeInMb = Number(
+        this.appConfig.maxFileUploadSizeInMb.replace(
+          /\D/g, // Removes any non-digit characters
+          "",
+        ),
+      );
+    }
+  }
+
   async onFileDropped(event: unknown) {
+    // base64 encoding increases the file size by 33% minimum
+    const postEncodedMaxFileUploadSizeInMb = this.maxFileUploadSizeInMb * 0.67;
+    const postEncodedmaxFileUploadSizeInBytes =
+      postEncodedMaxFileUploadSizeInMb * 1024 * 1024;
+
     const files = Array.from(event as FileList);
 
     if (files.length > 0) {
       await Promise.all(
         files.map(async (file) => {
+          if (file.size > postEncodedmaxFileUploadSizeInBytes) {
+            const message = new Message(
+              `File "${file.name}" exceeds the maximum size of ${postEncodedMaxFileUploadSizeInMb} MB.`,
+              MessageType.Error,
+              5000,
+            );
+
+            return this.store.dispatch(showMessageAction({ message }));
+          }
+
           const buffer = await file.arrayBuffer();
           let binary = "";
           const bytes = new Uint8Array(buffer);
@@ -68,19 +105,19 @@ export class FileUploaderComponent {
   }
 
   base64MimeType(encoded: string): string {
-    let result = null;
+    return this.attachmentService.base64MimeType(encoded);
+  }
 
-    if (typeof encoded !== "string") {
-      return result;
+  getImageUrl(encoded: string) {
+    const mimeType = this.base64MimeType(encoded);
+    if (mimeType === "application/pdf") {
+      return "assets/images/pdf-icon.svg";
     }
+    return encoded;
+  }
 
-    const mime = encoded.match(/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).*,.*/);
-
-    if (mime && mime.length) {
-      result = mime[1];
-    }
-
-    return result;
+  openAttachment(encoded: string) {
+    this.attachmentService.openAttachment(encoded);
   }
 
   onDownloadAttachment(attachment: Attachment) {
