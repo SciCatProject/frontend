@@ -147,13 +147,20 @@ export class PublishComponent implements OnInit, OnDestroy {
 
     this.publishedDataApi
       .publishedDataControllerFormPopulate(this.form.pidArray[0])
-      .subscribe((result) => {
-        this.form.abstract = result.abstract;
-        this.form.title = result.title;
-        this.form.description = result.description;
-        this.form.resourceType = "raw";
-        this.form.thumbnail = result.thumbnail ?? "";
-      });
+      .subscribe(
+        (result: {
+          abstract: string;
+          title: string;
+          description: string;
+          thumbnail: string;
+        }) => {
+          this.form.abstract = result.abstract;
+          this.form.title = result.title;
+          this.form.description = result.description;
+          this.form.resourceType = "raw";
+          this.form.thumbnail = result.thumbnail ?? "";
+        },
+      );
 
     this.actionSubjectSubscription = this.actionsSubj.subscribe((data) => {
       if (data.type === fetchPublishedDataCompleteAction.type) {
