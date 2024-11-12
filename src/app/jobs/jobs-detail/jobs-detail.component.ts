@@ -3,7 +3,8 @@ import { fetchJobAction } from "state-management/actions/jobs.actions";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
 import { selectCurrentJob } from "state-management/selectors/jobs.selectors";
-import { Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
+import { JobClass } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "app-jobs-detail",
@@ -11,7 +12,10 @@ import { Subscription } from "rxjs";
   styleUrls: ["./jobs-detail.component.scss"],
 })
 export class JobsDetailComponent implements OnInit, OnDestroy {
-  job$ = this.store.select(selectCurrentJob);
+  // TODO: We should extract the response dto with the right properties instead of using the schema for ApiResponse in the backend
+  job$ = this.store.select(selectCurrentJob) as Observable<
+    JobClass & { createdAt: string; updatedAt: string }
+  >;
   routeSubscription: Subscription = new Subscription();
 
   constructor(

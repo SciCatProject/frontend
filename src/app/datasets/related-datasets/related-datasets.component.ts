@@ -7,7 +7,10 @@ import {
   PageChangeEvent,
   TableColumn,
 } from "shared/modules/table/table.component";
-import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
+import {
+  DatasetClass,
+  OutputDatasetObsoleteDto,
+} from "@scicatproject/scicat-sdk-ts";
 import {
   changeRelatedDatasetsPageAction,
   fetchRelatedDatasetsAction,
@@ -79,7 +82,9 @@ export class RelatedDatasetsComponent {
     private store: Store,
   ) {}
 
-  formatTableData(datasets: DatasetClass[]): Record<string, unknown>[] {
+  formatTableData(
+    datasets: OutputDatasetObsoleteDto[],
+  ): Record<string, unknown>[] {
     if (!datasets) {
       return [];
     }

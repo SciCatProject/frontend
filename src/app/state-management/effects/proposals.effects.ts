@@ -33,14 +33,15 @@ export class ProposalEffects {
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
-        // @ts-expect-error FIXME: Fix this one as the backend types are not correct
-        this.proposalsService.proposalsControllerFullquery(query, limits).pipe(
-          mergeMap((proposals) => [
-            fromActions.fetchProposalsCompleteAction({ proposals }),
-            fromActions.fetchCountAction(),
-          ]),
-          catchError(() => of(fromActions.fetchProposalsFailedAction())),
-        ),
+        this.proposalsService
+          .proposalsControllerFullquery(JSON.stringify(limits), query)
+          .pipe(
+            mergeMap((proposals) => [
+              fromActions.fetchProposalsCompleteAction({ proposals }),
+              fromActions.fetchCountAction(),
+            ]),
+            catchError(() => of(fromActions.fetchProposalsFailedAction())),
+          ),
       ),
     );
   });
@@ -65,32 +66,22 @@ export class ProposalEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchProposalAction),
       switchMap(({ proposalId }) => {
-        return (
-          this.proposalsService
-            .proposalsControllerFindByIdAccess(proposalId)
-            // TODO: Check the backend type because it is incorrect. It says that the ApiResponse is Boolean but it actually returns {canAccess: boolean}
-            .pipe(
-              filter(
-                (permission) =>
-                  (permission as unknown as { canAccess: boolean }).canAccess,
-              ),
-              switchMap(() =>
-                this.proposalsService
-                  .proposalsControllerFindById(encodeURIComponent(proposalId))
-                  .pipe(
-                    map((proposal) =>
-                      fromActions.fetchProposalCompleteAction({ proposal }),
-                    ),
-                    catchError(() =>
-                      of(fromActions.fetchProposalFailedAction()),
-                    ),
+        return this.proposalsService
+          .proposalsControllerFindByIdAccess(proposalId)
+          .pipe(
+            filter((permission) => permission.canAccess),
+            switchMap(() =>
+              this.proposalsService
+                .proposalsControllerFindById(encodeURIComponent(proposalId))
+                .pipe(
+                  map((proposal) =>
+                    fromActions.fetchProposalCompleteAction({ proposal }),
                   ),
-              ),
-              catchError(() =>
-                of(fromActions.fetchProposalAccessFailedAction()),
-              ),
-            )
-        );
+                  catchError(() => of(fromActions.fetchProposalFailedAction())),
+                ),
+            ),
+            catchError(() => of(fromActions.fetchProposalAccessFailedAction())),
+          );
       }),
     );
   });

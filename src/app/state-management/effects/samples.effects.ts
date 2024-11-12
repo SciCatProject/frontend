@@ -35,8 +35,7 @@ export class SampleEffects {
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
         this.sampleApi
-          // @ts-expect-error FIXME: Fix this one as the backend types are not correct
-          .samplesControllerFullquery(query, limits)
+          .samplesControllerFullquery(JSON.stringify(limits), query)
           .pipe(
             mergeMap((samples) => [
               fromActions.fetchSamplesCompleteAction({ samples }),
@@ -91,11 +90,7 @@ export class SampleEffects {
       ofType(fromActions.fetchSampleAction),
       switchMap(({ sampleId }) => {
         return this.sampleApi.samplesControllerFindByIdAccess(sampleId).pipe(
-          filter(
-            (permission) =>
-              // TODO: Fix the backend type here
-              (permission as unknown as { canAccess: boolean }).canAccess,
-          ),
+          filter((permission) => permission.canAccess),
           switchMap(() =>
             this.sampleApi.samplesControllerFindById(sampleId).pipe(
               map((sample) =>
@@ -223,32 +218,6 @@ export class SampleEffects {
             catchError(() => of(fromActions.addAttachmentFailedAction())),
           );
       }),
-    );
-  });
-
-  updateAttachmentCaption$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.updateAttachmentCaptionAction),
-      // NOTE: Seems that the endpoint is missing in the backend. Check this and remove if not needed.
-      // switchMap(({ sampleId, attachmentId, caption }) => {
-      //   const newCaption = { caption };
-      //   return this.sampleApi
-      //     .updateByIdAttachments(
-      //       encodeURIComponent(sampleId),
-      //       encodeURIComponent(attachmentId),
-      //       newCaption,
-      //     )
-      //     .pipe(
-      //       map((res) =>
-      //         fromActions.updateAttachmentCaptionCompleteAction({
-      //           attachment: res,
-      //         }),
-      //       ),
-      //       catchError(() =>
-      //         of(fromActions.updateAttachmentCaptionFailedAction()),
-      //       ),
-      //     );
-      // }),
     );
   });
 

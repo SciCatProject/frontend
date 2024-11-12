@@ -4,9 +4,9 @@ import {
   Attachment,
   CreateAttachmentDto,
   Datablock,
-  DatasetClass,
   DatasetsService,
   OrigDatablock,
+  OutputDatasetObsoleteDto,
   UpdateAttachmentDto,
 } from "@scicatproject/scicat-sdk-ts";
 import { Store } from "@ngrx/store";
@@ -55,13 +55,14 @@ export class DatasetEffects {
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
-        // @ts-expect-error FIXME: Fix this one as the backend types are not correct
-        this.datasetsService.datasetsControllerFullquery(query, limits).pipe(
-          map((datasets) =>
-            fromActions.fetchDatasetsCompleteAction({ datasets }),
+        this.datasetsService
+          .datasetsControllerFullquery(JSON.stringify(limits), query)
+          .pipe(
+            map((datasets) =>
+              fromActions.fetchDatasetsCompleteAction({ datasets }),
+            ),
+            catchError(() => of(fromActions.fetchDatasetsFailedAction())),
           ),
-          catchError(() => of(fromActions.fetchDatasetsFailedAction())),
-        ),
       ),
     );
   });
@@ -76,19 +77,22 @@ export class DatasetEffects {
       concatLatestFrom(() => this.fullfacetParams$),
       map(([action, params]) => params),
       mergeMap(({ fields, facets }) =>
-        // @ts-expect-error FIXME: Fix this one as the backend types are not correct
-        this.datasetsService.datasetsControllerFullfacet(fields, facets).pipe(
-          // TODO: Check the types here
-          map((res: any) => {
-            const { all, ...facetCounts } = res[0];
-            const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
-            return fromActions.fetchFacetCountsCompleteAction({
-              facetCounts,
-              allCounts,
-            });
-          }),
-          catchError(() => of(fromActions.fetchFacetCountsFailedAction())),
-        ),
+        this.datasetsService
+          .datasetsControllerFullfacet(
+            JSON.stringify(facets),
+            JSON.stringify(fields),
+          )
+          .pipe(
+            map((res) => {
+              const { all, ...facetCounts } = res[0];
+              const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
+              return fromActions.fetchFacetCountsCompleteAction({
+                facetCounts,
+                allCounts,
+              });
+            }),
+            catchError(() => of(fromActions.fetchFacetCountsFailedAction())),
+          ),
       ),
     );
   });
@@ -100,12 +104,10 @@ export class DatasetEffects {
       map(([action, params]) => params),
       mergeMap(({ query }) => {
         const parsedQuery = JSON.parse(query);
-        // TODO: remove this line below after metadataKey endpoint is refactored in the backend
-        // parsedQuery.metadataKey = "";
         return this.datasetsService
           .datasetsControllerMetadataKeys(JSON.stringify(parsedQuery))
           .pipe(
-            map((metadataKeys: any) =>
+            map((metadataKeys) =>
               fromActions.fetchMetadataKeysCompleteAction({ metadataKeys }),
             ),
             catchError(() => of(fromActions.fetchMetadataKeysFailedAction())),
@@ -141,7 +143,7 @@ export class DatasetEffects {
         return this.datasetsService
           .datasetsControllerFindById(encodeURIComponent(pid))
           .pipe(
-            map((dataset: DatasetClass) =>
+            map((dataset) =>
               fromActions.fetchDatasetCompleteAction({ dataset }),
             ),
             catchError(() => of(fromActions.fetchDatasetFailedAction())),
@@ -208,8 +210,7 @@ export class DatasetEffects {
         this.relatedDatasetsFilters$,
       ]),
       switchMap(([_, dataset, filters]) => {
-        // TODO: Check this!
-        const queryFilter: any = {
+        const queryFilter = {
           where: {},
           limits: {
             skip: filters.skip,
@@ -228,12 +229,18 @@ export class DatasetEffects {
             pid: { $in: dataset.inputDatasets },
           };
         }
-        return this.datasetsService.datasetsControllerFindAll(queryFilter).pipe(
-          map((relatedDatasets: DatasetClass[]) =>
-            fromActions.fetchRelatedDatasetsCompleteAction({ relatedDatasets }),
-          ),
-          catchError(() => of(fromActions.fetchRelatedDatasetsFailedAction())),
-        );
+        return this.datasetsService
+          .datasetsControllerFindAll(JSON.stringify(queryFilter))
+          .pipe(
+            map((relatedDatasets) =>
+              fromActions.fetchRelatedDatasetsCompleteAction({
+                relatedDatasets,
+              }),
+            ),
+            catchError(() =>
+              of(fromActions.fetchRelatedDatasetsFailedAction()),
+            ),
+          );
       }),
     );
   });
@@ -278,8 +285,7 @@ export class DatasetEffects {
       ofType(fromActions.addDatasetAction),
       mergeMap(({ dataset }) =>
         this.datasetsService.datasetsControllerCreate(dataset).pipe(
-          // TODO: Fix the any type
-          mergeMap((res: any) => [
+          mergeMap((res) => [
             fromActions.addDatasetCompleteAction({
               dataset: res,
             }),
@@ -371,19 +377,6 @@ export class DatasetEffects {
             catchError(() => of(fromActions.removeAttachmentFailedAction())),
           ),
       ),
-    );
-  });
-
-  reduceDataset$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.reduceDatasetAction),
-      // mergeMap(({ dataset }) =>
-      // TODO: Check if this still exists the reduce endpoint on the datasets!
-      // this.datasetsService.reduceDataset(dataset).pipe(
-      //   map((result) => fromActions.reduceDatasetCompleteAction({ result })),
-      //   catchError(() => of(fromActions.reduceDatasetFailedAction())),
-      // ),
-      // ),
     );
   });
 
@@ -499,13 +492,13 @@ export class DatasetEffects {
     private store: Store,
   ) {}
 
-  private storeBatch(batch: DatasetClass[], userId: string) {
+  private storeBatch(batch: OutputDatasetObsoleteDto[], userId: string) {
     const json = JSON.stringify(batch);
     localStorage.setItem("batch", json);
     localStorage.setItem("batchUser", userId);
   }
 
-  private retrieveBatch(ofUserId: string): DatasetClass[] {
+  private retrieveBatch(ofUserId: string): OutputDatasetObsoleteDto[] {
     const json = localStorage.getItem("batch");
     const userId = localStorage.getItem("batchUser");
 

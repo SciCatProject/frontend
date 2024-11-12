@@ -56,16 +56,6 @@ describe("Proposal Selectors", () => {
     });
   });
 
-  describe("selectCurrentAttachments", () => {
-    it("should select attachments from current proposal", () => {
-      expect(
-        fromSelectors.selectCurrentAttachments.projector(
-          initialProposalsState.currentProposal,
-        ),
-      ).toEqual(attachments);
-    });
-  });
-
   describe("selectProposalDatasets", () => {
     it("should select datasets belonging to current proposal", () => {
       expect(

@@ -70,8 +70,7 @@
               [ngIf]="appConfig.tableSciDataEnabled"
               [ngIfElse]="jsonView"
             >
-              <!-- TODO: Fix this as something is wrong with types -->
-              <!-- <mat-tab-group>
+              <mat-tab-group>
                 <mat-tab>
                   <ng-template mat-tab-label>
                     <mat-icon> list </mat-icon> View
@@ -106,7 +105,7 @@
                     </metadata-edit>
                   </div>
                 </mat-tab>
-              </mat-tab-group> -->
+              </mat-tab-group>
             </ng-template>
 
             <ng-template #jsonView>

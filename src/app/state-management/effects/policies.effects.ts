@@ -56,8 +56,7 @@ export class PolicyEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
       switchMap(() =>
-        // TODO: Test this efffect
-        this.policiesService.policiesControllerCount(JSON.stringify({})).pipe(
+        this.policiesService.policiesControllerCount().pipe(
           map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
           catchError(() => of(fromActions.fetchCountFailedAction())),
         ),
@@ -120,12 +119,11 @@ export class PolicyEffects {
     return this.actions$.pipe(
       ofType(fromActions.submitPolicyAction),
       switchMap(({ ownerList, policy }) =>
-        // TODO: Check this type conversion here!
         this.policiesService
           .policiesControllerUpdateWhere({
             data: policy,
             ownerGroupList: ownerList.join(),
-          } as UpdateWherePolicyDto)
+          })
           .pipe(
             mergeMap(({ submissionResponse }) => [
               fromActions.submitPolicyCompleteAction({

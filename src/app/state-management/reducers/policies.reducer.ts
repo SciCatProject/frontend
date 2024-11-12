@@ -39,30 +39,23 @@ const reducer = createReducer(
     }),
   ),
 
-  on(
-    fromActions.selectPolicyAction,
-    // TODO: Fix the any type after comparing against the backend and figuring out the correct type of the returned policies.
-    (state, { policy }: { policy: any }): PolicyState => {
-      const alreadySelected = state.selectedPolicies.find(
-        (existing: any) => existing.id === policy.id,
-      );
-      if (alreadySelected) {
-        return state;
-      } else {
-        const selectedPolicies = state.selectedPolicies.concat(policy);
-        return { ...state, selectedPolicies };
-      }
-    },
-  ),
-  on(
-    fromActions.deselectPolicyAction,
-    (state, { policy }: { policy: any }): PolicyState => {
-      const selectedPolicies = state.selectedPolicies.filter(
-        (selectedPolicy: any) => selectedPolicy.id !== policy.id,
-      );
+  on(fromActions.selectPolicyAction, (state, { policy }): PolicyState => {
+    const alreadySelected = state.selectedPolicies.find(
+      (existing) => existing._id === policy._id,
+    );
+    if (alreadySelected) {
+      return state;
+    } else {
+      const selectedPolicies = state.selectedPolicies.concat(policy);
       return { ...state, selectedPolicies };
-    },
-  ),
+    }
+  }),
+  on(fromActions.deselectPolicyAction, (state, { policy }): PolicyState => {
+    const selectedPolicies = state.selectedPolicies.filter(
+      (selectedPolicy) => selectedPolicy._id !== policy._id,
+    );
+    return { ...state, selectedPolicies };
+  }),
 
   on(fromActions.selectAllPoliciesAction, (state): PolicyState => {
     const selectedPolicies = state.editablePolicies;

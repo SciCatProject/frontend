@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
+import { Logbook } from "@scicatproject/scicat-sdk-ts";
 
 import { fetchLogbooksAction } from "state-management/actions/logbooks.actions";
 import { selectLogbooks } from "state-management/selectors/logbooks.selectors";
@@ -20,8 +21,7 @@ export class LogbooksTableComponent implements OnInit {
     private store: Store,
   ) {}
 
-  // TODO: Fix the type when the new sdk is generated with backend fix
-  onClick(logbook: any): void {
+  onClick(logbook: Logbook): void {
     this.router.navigateByUrl("/logbooks/" + logbook.name);
   }
 

@@ -1,6 +1,10 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { createAction, props } from "@ngrx/store";
-import { ReturnedUserDto, UserSettings } from "@scicatproject/scicat-sdk-ts";
+import {
+  ReturnedUserDto,
+  UserIdentity,
+  UserSettings,
+} from "@scicatproject/scicat-sdk-ts";
 import { Message, Settings, TableColumn } from "state-management/models";
 import {
   ConditionConfig,
@@ -87,8 +91,7 @@ export const fetchUserIdentityAction = createAction(
 );
 export const fetchUserIdentityCompleteAction = createAction(
   "[User] Fetch User Identity Complete",
-  // TODO: Check the type here!
-  props<{ userIdentity: any }>(),
+  props<{ userIdentity: UserIdentity }>(),
 );
 export const fetchUserIdentityFailedAction = createAction(
   "[User] Fetch User Identity Failed",

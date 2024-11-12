@@ -1,6 +1,10 @@
 import { Injectable } from "@angular/core";
 import { createEffect, Actions, ofType, concatLatestFrom } from "@ngrx/effects";
-import { DatasetsService, LogbooksService } from "@scicatproject/scicat-sdk-ts";
+import {
+  DatasetsService,
+  Logbook,
+  LogbooksService,
+} from "@scicatproject/scicat-sdk-ts";
 import * as fromActions from "state-management/actions/logbooks.actions";
 import { mergeMap, catchError, map, timeout } from "rxjs/operators";
 import { of } from "rxjs";
@@ -21,8 +25,7 @@ export class LogbookEffects {
       ofType(fromActions.fetchLogbooksAction),
       mergeMap(() =>
         this.logbooksService.logbooksControllerFindAll().pipe(
-          // TODO: Check the type here as logbook interface is not included in the sdk
-          map((logbooks: any) =>
+          map((logbooks: Logbook[]) =>
             fromActions.fetchLogbooksCompleteAction({ logbooks }),
           ),
           catchError(() => of(fromActions.fetchLogbooksFailedAction())),
@@ -43,7 +46,7 @@ export class LogbookEffects {
           )
           .pipe(
             timeout(3000),
-            mergeMap((logbook) => [
+            mergeMap((logbook: Logbook) => [
               fromActions.fetchLogbookCompleteAction({ logbook }),
               fromActions.fetchCountAction({ name }),
             ]),
@@ -92,7 +95,7 @@ export class LogbookEffects {
                 JSON.stringify(theRest),
               )
         ).pipe(
-          map((logbook: any) => {
+          map((logbook: Logbook) => {
             return fromActions.fetchCountCompleteAction({
               count: logbook.messages.length,
             });

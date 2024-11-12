@@ -6,7 +6,10 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
+import {
+  Logbook,
+  OutputDatasetObsoleteDto,
+} from "@scicatproject/scicat-sdk-ts";
 import { combineLatest, Subscription } from "rxjs";
 import { selectLogbooksDashboardPageViewModel } from "state-management/selectors/logbooks.selectors";
 import {
@@ -32,8 +35,7 @@ import { selectCurrentDataset } from "state-management/selectors/datasets.select
 import { OwnershipService } from "shared/services/ownership.service";
 
 export interface LogbookData {
-  // TODO: Check the type here!
-  logbook: any;
+  logbook: Logbook;
   entriesCount: number;
   entriesPerPage: number;
   currentPage: number;
@@ -49,7 +51,7 @@ export class LogbooksDashboardComponent
 {
   vm$ = this.store.select(selectLogbooksDashboardPageViewModel);
 
-  dataset: DatasetClass | undefined = undefined;
+  dataset: OutputDatasetObsoleteDto | undefined = undefined;
   appConfig = this.appConfigService.getConfig();
 
   subscriptions: Subscription[] = [];

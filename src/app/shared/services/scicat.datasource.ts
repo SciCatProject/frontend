@@ -42,7 +42,7 @@ export class SciCatDataSource implements DataSource<any> {
       // convert array of objects into array of arrays
       this.dataForExcel = [];
       if (data.length > 0) {
-        data.forEach((row: any) => {
+        data.forEach((row) => {
           const rowSorted = this.columnsdef.map((col) =>
             resolvePath(row, col.id, null),
           );

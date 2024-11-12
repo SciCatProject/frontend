@@ -27,7 +27,9 @@ import { EditableComponent } from "app-routing/pending-changes.guard";
 import { AppConfigService } from "app-config.service";
 import {
   Attachment,
+  CreateAttachmentDto,
   DatasetClass,
+  OutputDatasetObsoleteDto,
   ReturnedUserDto,
   SampleClass,
 } from "@scicatproject/scicat-sdk-ts";
@@ -57,7 +59,7 @@ export class SampleDetailComponent
 
   sample: SampleClass;
   user: ReturnedUserDto;
-  attachment: Partial<Attachment>;
+  attachment: CreateAttachmentDto;
   attachments: Attachment[] = [];
   show = false;
   subscriptions: Subscription[] = [];
@@ -83,7 +85,7 @@ export class SampleDetailComponent
     private store: Store,
   ) {}
 
-  formatTableData(datasets: DatasetClass[]): TableData[] {
+  formatTableData(datasets: OutputDatasetObsoleteDto[]): TableData[] {
     let tableData: TableData[] = [];
     if (datasets) {
       tableData = datasets.map((dataset: any) => ({
@@ -113,19 +115,12 @@ export class SampleDetailComponent
   }
 
   onFilePicked(file: PickedFile) {
-    // TODO: Check if commented code is needed
     this.attachment = {
       thumbnail: file.content,
       caption: file.name,
       ownerGroup: this.sample.ownerGroup,
       accessGroups: this.sample.accessGroups,
       sampleId: this.sample.sampleId,
-      // dataset: undefined,
-      datasetId: undefined,
-      // rawDatasetId: undefined,
-      // derivedDatasetId: undefined,
-      // proposal: undefined,
-      proposalId: undefined,
     };
     this.store.dispatch(addAttachmentAction({ attachment: this.attachment }));
   }

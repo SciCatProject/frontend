@@ -25,8 +25,7 @@ export const selectCurrentDataset = createSelector(
 
 export const selectCurrentDatasetWithoutFileInfo = createSelector(
   selectCurrentDataset,
-  // TODO: Check backend types and fix any if it is not needed
-  (currentSet: any) => {
+  (currentSet) => {
     if (currentSet) {
       const { origdatablocks, datablocks, ...theRest } = currentSet;
       return theRest;
@@ -47,17 +46,17 @@ export const selectCurrentDatasetWithOnlyScientificMetadataKey = createSelector(
 
 export const selectCurrentOrigDatablocks = createSelector(
   selectCurrentDataset,
-  (dataset: any) => (dataset ? dataset.origdatablocks : []),
+  (dataset) => (dataset ? dataset.origdatablocks : []),
 );
 
 export const selectCurrentDatablocks = createSelector(
   selectCurrentDataset,
-  (dataset: any) => (dataset ? dataset.datablocks : []),
+  (dataset) => (dataset ? dataset.datablocks : []),
 );
 
 export const selectCurrentAttachments = createSelector(
   selectCurrentDataset,
-  (dataset: any) => (dataset ? dataset.attachments : []),
+  (dataset) => (dataset ? dataset.attachments : []),
 );
 
 export const selectPagination = createSelector(

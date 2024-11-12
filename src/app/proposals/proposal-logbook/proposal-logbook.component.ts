@@ -24,10 +24,10 @@ import {
   SortChangeEvent,
 } from "shared/modules/table/table.component";
 import { AppConfigService } from "app-config.service";
+import { Logbook } from "@scicatproject/scicat-sdk-ts";
 
 export interface LogbookData {
-  // TODO: Find out why Logbook response type is commented out in the backend findLogbookByPid method!
-  logbook: any;
+  logbook: Logbook;
   entriesCount: number;
   entriesPerPage: number;
   currentPage: number;

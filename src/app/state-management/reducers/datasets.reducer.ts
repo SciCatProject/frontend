@@ -128,7 +128,7 @@ const reducer = createReducer(
     fromActions.addDatasetCompleteAction,
     (state, { dataset }): DatasetState => ({
       ...state,
-      currentSet: dataset as unknown as DatasetClass,
+      currentSet: dataset,
     }),
   ),
 
@@ -136,8 +136,7 @@ const reducer = createReducer(
     fromActions.addAttachmentCompleteAction,
     (state, { attachment }): DatasetState => {
       if (state.currentSet) {
-        // TODO: Fix the any type here
-        const attachments = (state.currentSet as any).attachments.filter(
+        const attachments = state.currentSet.attachments.filter(
           (existingAttachment) => existingAttachment.id !== attachment.id,
         );
         attachments.push(attachment);
@@ -152,7 +151,7 @@ const reducer = createReducer(
     fromActions.updateAttachmentCaptionCompleteAction,
     (state, { attachment }): DatasetState => {
       if (state.currentSet) {
-        const attachments = (state.currentSet as any).attachments.filter(
+        const attachments = state.currentSet.attachments.filter(
           (existingAttachment) => existingAttachment.id !== attachment.id,
         );
         attachments.push(attachment);
@@ -167,7 +166,7 @@ const reducer = createReducer(
     fromActions.removeAttachmentCompleteAction,
     (state, { attachmentId }): DatasetState => {
       if (state.currentSet) {
-        const attachments = (state.currentSet as any).attachments.filter(
+        const attachments = state.currentSet.attachments.filter(
           (attachment) => attachment.id !== attachmentId,
         );
         const currentSet = { ...state.currentSet, attachments };

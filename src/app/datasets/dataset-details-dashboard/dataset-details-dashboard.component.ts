@@ -6,7 +6,10 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { DatasetClass, UsersService } from "@scicatproject/scicat-sdk-ts";
+import {
+  OutputDatasetObsoleteDto,
+  UsersService,
+} from "@scicatproject/scicat-sdk-ts";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import {
   selectIsAdmin,
@@ -75,7 +78,7 @@ export class DatasetDetailsDashboardComponent
   jwt$: Observable<JWT> = new Observable<JWT>();
   appConfig = this.appConfigService.getConfig();
 
-  dataset: DatasetClass | undefined;
+  dataset: OutputDatasetObsoleteDto | undefined;
   navLinks: {
     location: string;
     label: string;

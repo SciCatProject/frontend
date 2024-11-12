@@ -288,9 +288,11 @@ export class UserEffects {
       ofType(fromActions.fetchUserIdentityAction),
       switchMap(({ id }) =>
         this.userIdentityService
-          .userIdentitiesControllerFindOne({
-            where: { userId: id },
-          } as any)
+          .userIdentitiesControllerFindOne(
+            JSON.stringify({
+              where: { userId: id },
+            }),
+          )
           .pipe(
             map((userIdentity) =>
               fromActions.fetchUserIdentityCompleteAction({ userIdentity }),
@@ -531,7 +533,6 @@ export class UserEffects {
     private router: Router,
     private store: Store,
     private usersService: UsersService,
-    // TODO: Maybe the AuthService should be named as SessionService or something like this so we make some difference from this one
     private sharedAuthService: SharedAuthService,
     private userIdentityService: UserIdentitiesService,
   ) {}

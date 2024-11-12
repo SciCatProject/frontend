@@ -1,7 +1,8 @@
 import { createAction, props } from "@ngrx/store";
 import {
   Attachment,
-  DatasetClass,
+  CreateAttachmentDto,
+  OutputDatasetObsoleteDto,
   SampleClass,
 } from "@scicatproject/scicat-sdk-ts";
 import { SampleFilters, ScientificCondition } from "state-management/models";
@@ -69,7 +70,7 @@ export const fetchSampleDatasetsAction = createAction(
 );
 export const fetchSampleDatasetsCompleteAction = createAction(
   "[Sample] Fetch Datasets Complete",
-  props<{ datasets: DatasetClass[] }>(),
+  props<{ datasets: OutputDatasetObsoleteDto[] }>(),
 );
 export const fetchSampleDatasetsFailedAction = createAction(
   "[Sample] Fetch Datasets Failed",
@@ -111,7 +112,7 @@ export const saveCharacteristicsFailedAction = createAction(
 
 export const addAttachmentAction = createAction(
   "[Sample] Add Attachment",
-  props<{ attachment: Partial<Attachment> }>(),
+  props<{ attachment: CreateAttachmentDto }>(),
 );
 export const addAttachmentCompleteAction = createAction(
   "[Sample] Add Attachment Complete",

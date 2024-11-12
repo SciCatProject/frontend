@@ -36,8 +36,7 @@ import {
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 import {
-  CreateDerivedDatasetObsoleteDto,
-  DatasetClass,
+  OutputDatasetObsoleteDto,
   ReturnedUserDto,
 } from "@scicatproject/scicat-sdk-ts";
 import {
@@ -126,7 +125,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  onRowClick(dataset: DatasetClass): void {
+  onRowClick(dataset: OutputDatasetObsoleteDto): void {
     const pid = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl("/datasets/" + pid);
   }
@@ -140,7 +139,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((res) => {
       if (res) {
         const { username, email } = this.currentUser;
-        // TODO: Check this type!
         const dataset = {
           accessGroups: [],
           contactEmail: email, // Required
@@ -159,6 +157,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           inputDatasets: [], // Required
           investigator: email, // Required
           scientificMetadata: {},
+          numberOfFilesArchived: 0, // Required
           usedSoftware: res.usedSoftware
             .split(",")
             .map((entry: string) => entry.trim())
@@ -166,7 +165,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         };
         this.store.dispatch(
           addDatasetAction({
-            dataset: dataset as CreateDerivedDatasetObsoleteDto,
+            dataset: dataset,
           }),
         );
       }

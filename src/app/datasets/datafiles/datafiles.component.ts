@@ -221,7 +221,7 @@ export class DatafilesComponent
         if (datablocks) {
           const files: DataFiles_File[] = [];
           datablocks.forEach((block) => {
-            block.dataFileList.map((file) => {
+            block.dataFileList.map((file: DataFiles_File) => {
               this.totalFileSize += file.size;
               file.selected = false;
               files.push(file);
@@ -280,9 +280,7 @@ export class DatafilesComponent
             },
           ],
         };
-        const job = data;
-        // TODO: Fix the any type here
-        this.store.dispatch(submitJobAction({ job: job as any }));
+        this.store.dispatch(submitJobAction({ job: data }));
       }
     });
   }

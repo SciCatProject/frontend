@@ -95,8 +95,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     let tableData: JobsTableData[] = [];
     if (jobs) {
       tableData = jobs.map((job) => ({
-        // TODO: Check the types here!
-        id: (job as any).id,
+        id: job._id,
         initiator: job.emailJobInitiator,
         type: job.type,
         createdAt: this.datePipe.transform(

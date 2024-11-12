@@ -42,7 +42,6 @@ export class PublishedDataEffects {
       map(([action, params]) => params),
       mergeMap((params) =>
         this.publishedDataService
-          // TODO: Check the types here on the backend as it is wrong generated
           .publishedDataControllerFindAll("", "", JSON.stringify(params))
           .pipe(
             mergeMap((publishedData) => [
@@ -64,10 +63,7 @@ export class PublishedDataEffects {
       ofType(fromActions.fetchCountAction),
       switchMap(() =>
         this.publishedDataService.publishedDataControllerCount().pipe(
-          // TODO: The type on the backend should be improved as there is not ApiResponse type.
-          map(({ count }: { count: number }) =>
-            fromActions.fetchCountCompleteAction({ count }),
-          ),
+          map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
           catchError(() => of(fromActions.fetchCountFailedAction())),
         ),
       ),
@@ -175,7 +171,6 @@ export class PublishedDataEffects {
       ofType(fromActions.resyncPublishedDataAction),
       switchMap(({ doi, data }) =>
         this.publishedDataService
-          // @ts-expect-error TODO: Check the backend type as it needs to be fixed and the sdk should be re-generated
           .publishedDataControllerResync(encodeURIComponent(doi), data)
           .pipe(
             mergeMap((publishedData) => [

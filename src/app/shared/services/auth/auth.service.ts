@@ -1,5 +1,6 @@
 import { Injectable, Inject } from "@angular/core";
 import { InternalStorage } from "./base.storage";
+import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts";
 
 export interface AccessTokenInterface {
   id?: string;
@@ -7,7 +8,7 @@ export interface AccessTokenInterface {
   scopes?: [string];
   created?: Date;
   userId?: string;
-  user?: any;
+  user?: ReturnedUserDto;
 }
 
 export class SDKToken implements AccessTokenInterface {
@@ -16,7 +17,7 @@ export class SDKToken implements AccessTokenInterface {
   scopes: [string] = null;
   created: Date = null;
   userId: string = null;
-  user: any = null;
+  user: ReturnedUserDto = null;
   rememberMe: boolean = null;
   constructor(data?: AccessTokenInterface) {
     Object.assign(this, data);
@@ -35,7 +36,6 @@ export class AuthService {
    * https://github.com/SciCatProject/frontend/pull/1632#discussion_r1824033871
    */
   constructor(@Inject(InternalStorage) protected storage: InternalStorage) {
-    // TODO: Test if all this works with the new changes and removal of any types
     this.token.id = this.load("id");
     this.token.user = JSON.parse(this.load("user") || null);
     this.token.userId = this.load("userId");
@@ -77,7 +77,7 @@ export class AuthService {
     this.token.rememberMe = value;
   }
 
-  public setUser(user: any) {
+  public setUser(user: ReturnedUserDto) {
     this.token.user = user;
     this.save();
   }
@@ -117,7 +117,7 @@ export class AuthService {
     const today = new Date();
     const expires = new Date(today.getTime() + this.token.ttl * 1000);
     this.persist("id", this.token.id, expires);
-    this.persist("user", this.token.user, expires);
+    this.persist("user", JSON.stringify(this.token.user), expires);
     this.persist("userId", this.token.userId, expires);
     this.persist("created", this.token.created, expires);
     this.persist("ttl", this.token.ttl, expires);
