@@ -17,6 +17,7 @@ import { SharedTableModule } from "./modules/shared-table/shared-table.module";
 import { ScicatDataService } from "./services/scicat-data-service";
 import { ScientificMetadataTreeModule } from "./modules/scientific-metadata-tree/scientific-metadata-tree.modules";
 import { FiltersModule } from "./modules/filters/filters.module";
+import { AttachmentService } from "./services/attachment.service";
 @NgModule({
   imports: [
     BreadcrumbModule,
@@ -35,7 +36,13 @@ import { FiltersModule } from "./modules/filters/filters.module";
     SharedTableModule,
     ScientificMetadataTreeModule,
   ],
-  providers: [ConfigService, UnitsService, FilePathTruncate, ScicatDataService],
+  providers: [
+    ConfigService,
+    UnitsService,
+    FilePathTruncate,
+    ScicatDataService,
+    AttachmentService,
+  ],
   exports: [
     BreadcrumbModule,
     FileUploaderModule,

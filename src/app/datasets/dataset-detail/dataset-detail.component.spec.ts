@@ -38,6 +38,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MockActivatedRoute } from "shared/MockStubs";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { AppConfigService } from "app-config.service";
+import { AttachmentService } from "shared/services/attachment.service";
 
 describe("DatasetDetailComponent", () => {
   let component: DatasetDetailComponent;
@@ -70,6 +71,7 @@ describe("DatasetDetailComponent", () => {
         SharedScicatFrontendModule,
         StoreModule.forRoot({}),
       ],
+      providers: [AttachmentService],
       declarations: [DatasetDetailComponent, DatafilesComponent, LinkyPipe],
     });
     TestBed.overrideComponent(DatasetDetailComponent, {

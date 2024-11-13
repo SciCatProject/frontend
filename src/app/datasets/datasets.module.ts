@@ -89,6 +89,7 @@ import { DatasetsFilterSettingsComponent } from "./datasets-filter/settings/data
 import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
 import { FiltersModule } from "shared/modules/filters/filters.module";
 import { userReducer } from "state-management/reducers/user.reducer";
+import { AttachmentService } from "shared/services/attachment.service";
 
 @NgModule({
   imports: [

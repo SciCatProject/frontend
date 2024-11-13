@@ -9,6 +9,9 @@ mat-card {
       vertical-align: middle;
     }
   }
+  .caption-text {
+    word-break: break-all;
+  }
 
   table {
     th {
@@ -51,4 +54,14 @@ mat-card {
 .public-toggle {
   margin: 1em 1em 0 0;
   float: right;
+}
+.attachment-card {
+  display: flex;
+  align-items: center;
+}
+.thumbnail-image {
+  cursor: pointer;
+  max-width: 14em; /* Set maximum width */
+  width: 100%; /* Make it responsive within the card */
+  height: auto; /* Maintain aspect ratio */
 }

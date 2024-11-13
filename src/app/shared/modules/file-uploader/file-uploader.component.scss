@@ -1,15 +1,28 @@
-.attachment-card {
-  width: 22em;
-  float: left;
-  margin: 1em 2em 1em 0;
+.grid-container {
+  display: grid;
+  margin-top: 2em;
+  grid-template-columns: repeat(auto-fill, minmax(14em, 1fr));
+  gap: 1em;
+}
 
+.grid-item {
+  display: flex;
+  flex-direction: column; /* Align content vertically */
+  height: 100%; /* Ensures the card takes full height */
+}
+
+.attachment-card {
   img {
-    width: 20em;
-    height: 20em;
+    cursor: pointer;
+    width: 12em;
+    height: 14em;
   }
 
   button {
-    float: right;
+    width: 100%; /* Makes the button fill the width of the parent container */
+    display: flex; /* Use Flexbox for centering */
+    justify-content: center; /* Center the text horizontally */
+    align-items: center; /* Center the text vertically */
   }
 
   .submit-button {
@@ -43,8 +56,7 @@
     border: dashed 1px grey;
     display: flex;
     justify-content: center;
-    height: 350px;
-    width: 500px;
+    height: 14em;
 
     input {
       display: none;
