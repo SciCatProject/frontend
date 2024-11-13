@@ -38,6 +38,7 @@ const appConfig: AppConfig = {
   logbookEnabled: true,
   loginFormEnabled: true,
   thumbnailFetchLimitPerPage: 500,
+  maxFileUploadSizeInMb: "16mb",
   maxDirectDownloadSize: 5000000000,
   metadataPreviewEnabled: true,
   metadataStructure: "",

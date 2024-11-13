@@ -49,6 +49,7 @@ import {
   ReturnedUserDto,
   SampleClass,
 } from "@scicatproject/scicat-sdk-ts";
+import { AttachmentService } from "shared/services/attachment.service";
 
 /**
  * Component to show details for a data set, using the
@@ -93,6 +94,7 @@ export class DatasetDetailComponent
   constructor(
     @Inject(DOCUMENT) private document: Document,
     public appConfigService: AppConfigService,
+    private attachmentService: AttachmentService,
     public dialog: MatDialog,
     private store: Store,
     private router: Router,
@@ -345,5 +347,20 @@ export class DatasetDetailComponent
       5000,
     );
     this.store.dispatch(showMessageAction({ message }));
+  }
+  base64MimeType(encoded: string): string {
+    return this.attachmentService.base64MimeType(encoded);
+  }
+
+  getImageUrl(encoded: string) {
+    const mimeType = this.base64MimeType(encoded);
+    if (mimeType === "application/pdf") {
+      return "assets/images/pdf-icon.svg";
+    }
+    return encoded;
+  }
+
+  openAttachment(encoded: string) {
+    this.attachmentService.openAttachment(encoded);
   }
 }

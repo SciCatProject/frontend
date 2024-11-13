@@ -98,6 +98,7 @@ export interface AppConfig {
   defaultDatasetsListSettings: DatasetsListSettings;
   labelMaps: LabelMaps;
   thumbnailFetchLimitPerPage: number;
+  maxFileUploadSizeInMb?: string;
 }
 
 @Injectable()

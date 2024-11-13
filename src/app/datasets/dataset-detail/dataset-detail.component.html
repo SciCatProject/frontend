@@ -24,7 +24,7 @@
   </div>
   <div style="clear: both"></div>
   <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
-    <div fxFlex="80%">
+    <div [fxFlex]="(attachments$ | async)?.length > 0 ? '90%' : '100%'">
       <mat-card [formGroup]="form" data-cy="general-info">
         <mat-card-header class="general-header">
           <div mat-card-avatar class="section-icon">
@@ -437,7 +437,7 @@
 
           <br />
 
-          <div *ngIf="show">
+          <div *ngIf="show" class="jsonViewOverFlow">
             <ngx-json-viewer
               [json]="datasetWithout$ | async"
               [expanded]="false"
@@ -448,11 +448,22 @@
       </mat-card>
     </div>
 
-    <div fxFlex="30%" *ngIf="attachments$ | async as attachments">
+    <div
+      [fxFlex]="(attachments$ | async)?.length > 0 ? '10%' : '0'"
+      *ngIf="attachments$ | async as attachments"
+    >
       <ng-container *ngFor="let da of attachments">
         <mat-card>
-          <img mat-card-image src="{{ da.thumbnail }}" />
-          <mat-card-actions>{{ da.caption }}</mat-card-actions>
+          <img
+            data-cy="attachment-thumbnail"
+            mat-card-image
+            [src]="getImageUrl(da.thumbnail)"
+            (click)="openAttachment(da.thumbnail)"
+            class="thumbnail-image"
+          />
+          <mat-card-actions class="caption-text">{{
+            da.caption
+          }}</mat-card-actions>
         </mat-card>
       </ng-container>
     </div>
