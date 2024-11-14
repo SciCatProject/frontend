@@ -115,14 +115,67 @@
   </mat-card>
 
   <mat-card *ngIf="appConfig.jsonMetadataEnabled">
-    <mat-card-content>
-      <button mat-stroked-button (click)="show = !show">
-        {{ show ? "Hide MetaData" : "Show Metadata" }}
-      </button>
-      <br />
-      <div *ngIf="show">
-        <ngx-json-viewer [json]="proposal" [expanded]="false"></ngx-json-viewer>
+    <mat-card-header class="scientific-header">
+      <div mat-card-avatar class="section-icon">
+        <mat-icon> science </mat-icon>
       </div>
+      Scientific Metadata
+    </mat-card-header>
+    <mat-card-content>
+      <ng-template [ngIf]="appConfig.tableSciDataEnabled" [ngIfElse]="jsonView">
+        <ng-template #metadataView>
+          <div [ngSwitch]="appConfig.metadataStructure">
+            <tree-view
+              *ngSwitchCase="'tree'"
+              [metadata]="proposal['metadata']"
+            ></tree-view>
+            <metadata-view *ngSwitchDefault [metadata]="proposal['metadata']">
+            </metadata-view>
+          </div>
+        </ng-template>
+        <mat-tab-group
+          class="metadataGroup"
+          *ngIf="editingAllowed; else metadataView"
+        >
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon> list </mat-icon> View
+            </ng-template>
+            <ng-container *ngTemplateOutlet="metadataView"> </ng-container>
+          </mat-tab>
+          <mat-tab
+            class="editTab"
+            *ngIf="editingAllowed"
+            [hidden]="!appConfig.editMetadataEnabled"
+          >
+            <ng-template mat-tab-label>
+              <mat-icon> edit </mat-icon> Edit
+            </ng-template>
+            <div [ngSwitch]="appConfig.metadataStructure">
+              <tree-edit
+                *ngSwitchCase="'tree'"
+                [metadata]="proposal['metadata']"
+                (save)="onSaveMetadata($event)"
+                (hasUnsavedChanges)="onHasUnsavedChanges($event)"
+              >
+              </tree-edit>
+              <metadata-edit
+                *ngSwitchDefault
+                [metadata]="proposal['metadata']"
+                (save)="onSaveMetadata($event)"
+              >
+              </metadata-edit>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </ng-template>
+
+      <ng-template #jsonView>
+        <ngx-json-viewer
+          [json]="proposal['metadata']"
+          [expanded]="false"
+        ></ngx-json-viewer>
+      </ng-template>
     </mat-card-content>
   </mat-card>
 </div>
