@@ -79,11 +79,11 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="edit-general-information"]').should("exist");
 
-      cy.contains("A minimal test proposal").click();
+      cy.contains(testData.proposal.title).click();
 
       cy.url().should("include", "/proposals");
 
-      cy.contains("A minimal test proposal");
+      cy.contains(testData.proposal.title);
 
       cy.login(
         Cypress.env("secondaryUsername"),
