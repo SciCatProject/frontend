@@ -1,10 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import {
-  DatasetsService,
-  ProposalClass,
-  ProposalsService,
-} from "@scicatproject/scicat-sdk-ts";
+import { DatasetApi, ProposalApi, Proposal, Dataset } from "shared/sdk";
 import { Action, Store } from "@ngrx/store";
 import * as fromActions from "state-management/actions/proposals.actions";
 import {
@@ -12,6 +8,7 @@ import {
   selectDatasetsQueryParams,
 } from "state-management/selectors/proposals.selectors";
 import { map, mergeMap, catchError, switchMap, filter } from "rxjs/operators";
+import { ObservableInput, of } from "rxjs";
 import { ObservableInput, of } from "rxjs";
 import {
   loadingAction,
@@ -72,7 +69,19 @@ export class ProposalEffects {
     fromActions.fetchProposalFailedAction,
     fromActions.fetchProposalAccessFailedAction,
   );
+  fetchProposal$ = this.createProposalFetchEffect(
+    fromActions.fetchProposalAction.type,
+    fromActions.fetchProposalCompleteAction,
+    fromActions.fetchProposalFailedAction,
+    fromActions.fetchProposalAccessFailedAction,
+  );
 
+  fetchParentProposal$ = this.createProposalFetchEffect(
+    fromActions.fetchParentProposalAction.type,
+    fromActions.fetchParentProposalCompleteAction,
+    fromActions.fetchParentProposalFailedAction,
+    fromActions.fetchParentProposalAccessFailedAction,
+  );
   fetchParentProposal$ = this.createProposalFetchEffect(
     fromActions.fetchParentProposalAction.type,
     fromActions.fetchParentProposalCompleteAction,
@@ -262,28 +271,28 @@ export class ProposalEffects {
 
   private createProposalFetchEffect(
     triggerAction: string,
-    completeAction: (props: { proposal: ProposalClass }) => Action,
+    completeAction: (props: { proposal: Proposal }) => Action,
     failedAction: () => Action,
     accessFailedAction: () => Action,
   ) {
     return createEffect(() => {
       return this.actions$.pipe(
         ofType(triggerAction),
-        switchMap<ProposalClass, ObservableInput<Action>>(({ proposalId }) =>
-          this.proposalsService
-            .proposalsControllerFindByIdAccess(proposalId)
-            .pipe(
-              filter((permission) => permission.canAccess),
-              switchMap(() =>
-                this.proposalsService
-                  .proposalsControllerFindById(proposalId)
-                  .pipe(
-                    map((proposal) => completeAction({ proposal })),
-                    catchError(() => of(failedAction())),
-                  ),
-              ),
-              catchError(() => of(accessFailedAction())),
+        switchMap<Proposal, ObservableInput<Action>>(({ proposalId }) =>
+          this.proposalApi.findByIdAccess(encodeURIComponent(proposalId)).pipe(
+            filter(
+              (permission: { canAccess: boolean }) => permission.canAccess,
             ),
+            switchMap(() =>
+              this.proposalApi
+                .findById<Proposal>(encodeURIComponent(proposalId))
+                .pipe(
+                  map((proposal) => completeAction({ proposal })),
+                  catchError(() => of(failedAction())),
+                ),
+            ),
+            catchError(() => of(accessFailedAction())),
+          ),
         ),
       );
     });
