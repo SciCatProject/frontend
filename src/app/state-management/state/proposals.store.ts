@@ -23,6 +23,7 @@ export interface ProposalDatesetFilters {
 export interface ProposalsState {
   proposals: Proposal[];
   currentProposal: Proposal | undefined;
+  parentProposal: Proposal | undefined;
   datasets: Dataset[];
 
   proposalsCount: number;
@@ -36,6 +37,7 @@ export interface ProposalsState {
 export const initialProposalsState: ProposalsState = {
   proposals: [],
   currentProposal: undefined,
+  parentProposal: undefined,
   datasets: [],
 
   proposalsCount: 0,

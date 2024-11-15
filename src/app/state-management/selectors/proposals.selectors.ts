@@ -13,6 +13,11 @@ export const selectCurrentProposal = createSelector(
   (state) => state.currentProposal,
 );
 
+export const selectParentProposal = createSelector(
+  selectProposalsState,
+  (state) => state.parentProposal,
+);
+
 export const selectCurrentAttachments = createSelector(
   selectCurrentProposal,
   (proposal) => (proposal ? proposal.attachments : []),

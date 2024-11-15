@@ -3,6 +3,9 @@ import { Proposal, Dataset, Attachment } from "shared/sdk/models";
 import { ProposalFilters } from "state-management/state/proposals.store";
 
 export const fetchProposalsAction = createAction("[Proposal] Fetch Proposals");
+export const clearCurrentProposalAction = createAction(
+  "[Proposal] Clear proposal",
+);
 export const fetchProposalsCompleteAction = createAction(
   "[Proposal] Fetch Proposals Complete",
   props<{ proposals: Proposal[] }>(),
@@ -33,6 +36,21 @@ export const fetchProposalFailedAction = createAction(
 );
 export const fetchProposalAccessFailedAction = createAction(
   "[Proposal] Fetch Proposal Access Failed",
+);
+
+export const fetchParentProposalAction = createAction(
+  "[Proposal] Fetch Parent Proposal",
+  props<{ proposalId: string }>(),
+);
+export const fetchParentProposalCompleteAction = createAction(
+  "[Proposal] Fetch Parent Proposal Complete",
+  props<{ proposal: Proposal }>(),
+);
+export const fetchParentProposalFailedAction = createAction(
+  "[Proposal] Fetch Parent Proposal Failed",
+);
+export const fetchParentProposalAccessFailedAction = createAction(
+  "[Proposal] Fetch Parent Proposal Access Failed",
 );
 
 export const fetchProposalDatasetsAction = createAction(
