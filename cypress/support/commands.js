@@ -260,8 +260,6 @@ Cypress.Commands.add("removeProposals", () => {
 
     const filter = { where: { title: testData.proposal.title } };
 
-    console.log(token);
-
     cy.request({
       method: "GET",
       url:
@@ -278,7 +276,6 @@ Cypress.Commands.add("removeProposals", () => {
       .as("proposals");
 
     cy.get("@proposals").then((proposals) => {
-      console.log(proposals);
       cy.login(
         Cypress.env("secondaryUsername"),
         Cypress.env("secondaryPassword"),

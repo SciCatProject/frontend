@@ -4,6 +4,7 @@ import { AppConfigService } from "app-config.service";
 import { Store } from "@ngrx/store";
 import { selectParentProposal } from "state-management/selectors/proposals.selectors";
 import { Router } from "@angular/router";
+import { clearProposalsStateAction } from "state-management/actions/proposals.actions";
 
 @Component({
   selector: "proposal-detail",
@@ -26,6 +27,7 @@ export class ProposalDetailComponent {
   ) {}
 
   onClickProposal(proposalId: string): void {
+    this.store.dispatch(clearProposalsStateAction());
     const id = encodeURIComponent(proposalId);
     this.router.navigateByUrl("/proposals/" + id);
   }
