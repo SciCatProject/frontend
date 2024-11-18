@@ -4,18 +4,16 @@
 
     <!-- Name Column -->
     <ng-container matColumnDef="name" style="align-content: center">
-      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-      <mat-cell *matCellDef="let metadata">
-        {{ metadata.name | replaceUnderscore | titlecase }}
-      </mat-cell>
+      <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+      <mat-cell *matCellDef="let metadata">{{
+        metadata.name | replaceUnderscore | titlecase
+      }}</mat-cell>
     </ng-container>
 
     <!-- Value Column -->
     <ng-container matColumnDef="value" style="align-content: center">
-      <mat-header-cell *matHeaderCellDef> Value </mat-header-cell>
-      <mat-cell *matCellDef="let metadata">
-        {{ metadata.value }}
-      </mat-cell>
+      <mat-header-cell *matHeaderCellDef>Value</mat-header-cell>
+      <mat-cell *matCellDef="let metadata">{{ metadata.value }}</mat-cell>
     </ng-container>
 
     <!-- Unit Column -->
