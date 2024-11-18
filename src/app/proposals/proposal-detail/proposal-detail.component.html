@@ -54,6 +54,14 @@
             </tr>
           </ng-template>
         </ng-template>
+        <tr *ngIf="proposal['parentProposalId'] && parentProposal$ | async as parentProposal">
+          <th>Parent proposal</th>
+          <td>
+            <a (click)="onClickProposal(parentProposal.proposalId)">{{
+              parentProposal.title
+            }}</a>
+          </td>
+        </tr>
       </table>
     </mat-card-content>
   </mat-card>

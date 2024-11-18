@@ -91,7 +91,8 @@ describe("DatasetDetailComponent", () => {
     TestBed.compileComponents();
   }));
 
-  beforeEach(() => {
+  beforeEach(inject([Store], (mockStore: MockStore) => {
+    store = mockStore;
     fixture = TestBed.createComponent(DatasetDetailComponent);
     component = fixture.componentInstance;
     component.dataset = {
@@ -99,9 +100,6 @@ describe("DatasetDetailComponent", () => {
       isPublished: false,
     } as unknown as Dataset;
     fixture.detectChanges();
-  });
-  beforeEach(inject([Store], (mockStore: MockStore) => {
-    store = mockStore;
   }));
   afterEach(() => {
     fixture.destroy();

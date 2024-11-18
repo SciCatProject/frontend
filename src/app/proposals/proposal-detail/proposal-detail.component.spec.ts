@@ -6,6 +6,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { AppConfigService } from "app-config.service";
+import { StoreModule } from "@ngrx/store";
 
 const getConfig = () => ({
   jsonMetadataEnabled: true,
@@ -23,6 +24,7 @@ describe("ProposalsDetailComponent", () => {
         MatCardModule,
         MatIconModule,
         NgxJsonViewerModule,
+        StoreModule.forRoot({}),
       ],
       declarations: [ProposalDetailComponent],
     });

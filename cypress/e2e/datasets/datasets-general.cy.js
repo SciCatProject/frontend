@@ -1,3 +1,5 @@
+import { testData } from "../../fixtures/testData";
+
 describe("Datasets general", () => {
   beforeEach(() => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
@@ -58,7 +60,7 @@ describe("Datasets general", () => {
   describe("Proposal connection and link from dataset details", () => {
     it("should be able to see and click proposal connection link from dataset details page", () => {
       const proposalId = Math.floor(100000 + Math.random() * 900000).toString();
-      cy.createProposal(proposalId);
+      cy.createProposal({ ...testData.proposal, proposalId });
       cy.createDataset("raw", proposalId);
 
       cy.visit("/datasets");
@@ -77,11 +79,11 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="edit-general-information"]').should("exist");
 
-      cy.contains("A minimal test proposal").click();
+      cy.contains(testData.proposal.title).click();
 
       cy.url().should("include", "/proposals");
 
-      cy.contains("A minimal test proposal");
+      cy.contains(testData.proposal.title);
 
       cy.login(
         Cypress.env("secondaryUsername"),

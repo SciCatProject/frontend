@@ -7,13 +7,20 @@ const data: ProposalInterface = {
   email: "testEmail",
   ownerGroup: "testGroup",
 };
+const parentProposalData: ProposalInterface = {
+  proposalId: "parentTestId",
+  email: "parentTestEmail",
+  ownerGroup: "parentTestGroup",
+};
 const proposal = new Proposal(data);
+const parentProposal = new Proposal(parentProposalData);
 const attachments = [new Attachment()];
 proposal.attachments = attachments;
 
 const initialProposalsState: ProposalsState = {
   proposals: [],
   currentProposal: proposal,
+  parentProposal: parentProposal,
   datasets: [],
 
   proposalsCount: 0,

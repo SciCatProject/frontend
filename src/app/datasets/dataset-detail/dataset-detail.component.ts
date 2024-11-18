@@ -80,7 +80,6 @@ export class DatasetDetailComponent
   dataset: OutputDatasetObsoleteDto | undefined;
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
-  proposal$ = this.store.select(selectCurrentProposal);
   loading$ = this.store.select(selectIsLoading);
   instrument: Instrument | undefined;
   proposal: ProposalClass | undefined;

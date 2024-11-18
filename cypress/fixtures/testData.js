@@ -56,7 +56,7 @@ export const testData = {
   proposal: {
     proposalId: "20170266",
     email: "proposer@uni.edu",
-    title: "A minimal test proposal",
+    title: "Cypress minimal test proposal",
     abstract: "Abstract of test proposal",
     ownerGroup: "20170251-group",
     accessGroups: [],

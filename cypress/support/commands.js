@@ -176,14 +176,12 @@ Cypress.Commands.add(
     });
   },
 );
-Cypress.Commands.add("createProposal", (proposalId = "20170266") => {
+Cypress.Commands.add("createProposal", (proposal) => {
   return cy.getCookie("$LoopBackSDK$user").then((userCookie) => {
     const user = JSON.parse(decodeURIComponent(userCookie.value));
 
     cy.getCookie("$LoopBackSDK$id").then((idCookie) => {
       const token = idCookie.value;
-      const proposal = testData.proposal;
-      proposal.proposalId = proposalId;
       cy.log("Proposal: " + JSON.stringify(proposal, null, 2));
       cy.log("User: " + JSON.stringify(user, null, 2));
 
@@ -249,6 +247,54 @@ Cypress.Commands.add("removeDatasets", () => {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
+        });
+      });
+    });
+  });
+});
+
+Cypress.Commands.add("removeProposals", () => {
+  cy.login(Cypress.env("username"), Cypress.env("password"));
+  cy.getCookie("$LoopBackSDK$id").then((cookie) => {
+    const token = cookie.value;
+
+    const filter = { where: { title: testData.proposal.title } };
+
+    cy.request({
+      method: "GET",
+      url:
+        lbBaseUrl +
+        "/proposals?filters=" +
+        encodeURIComponent(JSON.stringify(filter)),
+      headers: {
+        Authorization: token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .its("body")
+      .as("proposals");
+
+    cy.get("@proposals").then((proposals) => {
+      cy.login(
+        Cypress.env("secondaryUsername"),
+        Cypress.env("secondaryPassword"),
+      );
+      cy.getCookie("$LoopBackSDK$id").then((cookie) => {
+        const archiveManagerToken = cookie.value;
+        proposals.forEach((proposal) => {
+          cy.request({
+            method: "DELETE",
+            url:
+              lbBaseUrl +
+              "/proposals/" +
+              encodeURIComponent(proposal.proposalId),
+            headers: {
+              Authorization: archiveManagerToken,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          });
         });
       });
     });

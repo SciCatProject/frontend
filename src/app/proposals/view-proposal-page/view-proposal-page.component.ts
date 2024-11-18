@@ -6,6 +6,8 @@ import {
   fetchProposalAction,
   fetchProposalDatasetsAction,
   changeDatasetsPageAction,
+  fetchParentProposalAction,
+  clearProposalsStateAction,
 } from "state-management/actions/proposals.actions";
 import { selectViewProposalPageViewModel } from "state-management/selectors/proposals.selectors";
 import {
@@ -43,7 +45,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   logbook$ = this.store.select(selectLogbooksDashboardPageViewModel);
   appConfig = this.appConfigService.getConfig();
 
-  proposal: ProposalClass;
+  proposal: OutputDatasetObsoleteDto;
 
   subscriptions: Subscription[] = [];
 
@@ -110,6 +112,13 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
       this.vm$.subscribe((vm) => {
         if (vm.proposal) {
           this.proposal = vm.proposal;
+
+          if (
+            this.proposal["parentProposalId"] &&
+            this.proposal["parentProposalId"] !== ""
+          ) {
+            this.fetchProposalRelatedDocuments();
+          }
         }
       }),
     );
@@ -131,7 +140,16 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     );
   }
 
+  fetchProposalRelatedDocuments(): void {
+    this.store.dispatch(
+      fetchParentProposalAction({
+        proposalId: this.proposal["parentProposalId"] as string,
+      }),
+    );
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.store.dispatch(clearProposalsStateAction());
   }
 }
