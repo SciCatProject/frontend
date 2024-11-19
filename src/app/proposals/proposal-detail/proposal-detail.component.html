@@ -54,7 +54,17 @@
             </tr>
           </ng-template>
         </ng-template>
-        <tr *ngIf="proposal['parentProposalId'] && parentProposal$ | async as parentProposal">
+        <tr data-cy="proposal-type">
+          <th>Type</th>
+          <!-- TODO: Change this to just proposal.type when new sdk is merged -->
+          <td>{{ proposal["type"] }}</td>
+        </tr>
+        <tr
+          *ngIf="
+            proposal['parentProposalId'] && parentProposal$
+              | async as parentProposal
+          "
+        >
           <th>Parent proposal</th>
           <td>
             <a (click)="onClickProposal(parentProposal.proposalId)">{{

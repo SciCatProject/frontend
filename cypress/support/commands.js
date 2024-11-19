@@ -198,6 +198,30 @@ Cypress.Commands.add("createProposal", (proposal) => {
     });
   });
 });
+Cypress.Commands.add("updateProposal", (proposalId, updateProposalDto) => {
+  return cy.getCookie("$LoopBackSDK$user").then((userCookie) => {
+    const user = JSON.parse(decodeURIComponent(userCookie.value));
+
+    cy.getCookie("$LoopBackSDK$id").then((idCookie) => {
+      const token = idCookie.value;
+      cy.log(
+        "Update proposal DTO: " + JSON.stringify(updateProposalDto, null, 2),
+      );
+      cy.log("User: " + JSON.stringify(user, null, 2));
+
+      cy.request({
+        method: "PATCH",
+        url: `${lbBaseUrl}/Proposals/${encodeURIComponent(proposalId)}`,
+        headers: {
+          Authorization: token,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: updateProposalDto,
+      });
+    });
+  });
+});
 
 Cypress.Commands.add("deleteProposal", (id) => {
   cy.getCookie("$LoopBackSDK$id").then((idCookie) => {

@@ -74,5 +74,38 @@ describe("Proposals general", () => {
 
       cy.get("mat-card").should("not.contain", newProposal.title);
     });
+
+    it("proposal should have type", () => {
+      const defaultProposalType = "Default Proposal";
+      const newProposal = {
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+      };
+      cy.createProposal(newProposal);
+
+      cy.visit(`/proposals/${newProposal.proposalId}`);
+
+      cy.finishedLoading();
+
+      cy.contains(newProposal.title);
+
+      cy.finishedLoading();
+
+      cy.get('[data-cy="proposal-type"]').contains(defaultProposalType);
+
+      const newProposalType = "Beamtime";
+
+      cy.updateProposal(newProposal.proposalId, {
+        type: newProposalType,
+      });
+
+      cy.reload();
+
+      cy.finishedLoading();
+
+      cy.contains(newProposal.title);
+
+      cy.get('[data-cy="proposal-type"]').contains(newProposalType);
+    });
   });
 });
