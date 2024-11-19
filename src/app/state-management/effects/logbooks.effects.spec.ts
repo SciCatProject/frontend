@@ -1,9 +1,8 @@
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { hot, cold } from "jasmine-marbles";
-import { Observable } from "rxjs";
 import { LogbookEffects } from "./logbooks.effects";
-import { LogbookApi, Logbook } from "@scicatproject/scicat-sdk-ts";
+import { Logbook, LogbooksService } from "@scicatproject/scicat-sdk-ts";
 import * as fromActions from "state-management/actions/logbooks.actions";
 import {
   loadingAction,
@@ -12,6 +11,7 @@ import {
 import { provideMockStore } from "@ngrx/store/testing";
 import { selectFilters } from "state-management/selectors/logbooks.selectors";
 import { Type } from "@angular/core";
+import { TestObservable } from "jasmine-marbles/src/test-observables";
 
 const logbook: Logbook = {
   name: "test",
@@ -20,9 +20,9 @@ const logbook: Logbook = {
 };
 
 describe("LogbookEffects", () => {
-  let actions: Observable<any>;
+  let actions: TestObservable;
   let effects: LogbookEffects;
-  let logbookApi: jasmine.SpyObj<LogbookApi>;
+  let logbookApi: jasmine.SpyObj<LogbooksService>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -43,14 +43,14 @@ describe("LogbookEffects", () => {
           ],
         }),
         {
-          provide: LogbookApi,
+          provide: LogbooksService,
           useValue: jasmine.createSpyObj("logbookApi", ["find", "findByName"]),
         },
       ],
     });
 
     effects = TestBed.inject(LogbookEffects);
-    logbookApi = injectedStub(LogbookApi);
+    logbookApi = injectedStub(LogbooksService);
   });
 
   const injectedStub = <S>(service: Type<S>): jasmine.SpyObj<S> =>
@@ -64,7 +64,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: logbooks });
-      logbookApi.find.and.returnValue(response);
+      logbookApi.logbooksControllerFindAll.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchLogbooks$).toBeObservable(expected);
@@ -76,7 +76,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      logbookApi.find.and.returnValue(response);
+      logbookApi.logbooksControllerFindAll.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchLogbooks$).toBeObservable(expected);
@@ -93,7 +93,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: logbook });
-      logbookApi.findByName.and.returnValue(response);
+      logbookApi.logbooksControllerFindByName.and.returnValue(response);
 
       const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
       expect(effects.fetchLogbook$).toBeObservable(expected);
@@ -105,7 +105,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      logbookApi.findByName.and.returnValue(response);
+      logbookApi.logbooksControllerFindByName.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchLogbook$).toBeObservable(expected);
@@ -121,7 +121,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: logbook });
-      logbookApi.findByName.and.returnValue(response);
+      logbookApi.logbooksControllerFindByName.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
@@ -133,7 +133,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      logbookApi.findByName.and.returnValue(response);
+      logbookApi.logbooksControllerFindByName.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);

@@ -1,8 +1,14 @@
 import { InstrumentState } from "state-management/state/instruments.store";
 import * as fromSelectors from "./instruments.selectors";
-import { GenericFilters, Instrument } from "state-management/models";
+import { GenericFilters } from "state-management/models";
+import { Instrument } from "@scicatproject/scicat-sdk-ts";
 
-const instrument = new Instrument();
+const instrument: Instrument = {
+  pid: "",
+  name: "",
+  uniqueName: "",
+  customMetadata: {},
+};
 
 const instrumentFilters: GenericFilters = {
   sortField: "name desc",

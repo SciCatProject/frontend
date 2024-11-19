@@ -2,6 +2,25 @@ import * as fromActions from "./published-data.actions";
 import { PublishedData } from "@scicatproject/scicat-sdk-ts";
 
 describe("Published Data Actions", () => {
+  const publishedData: PublishedData = {
+    createdAt: "",
+    doi: "",
+    registeredTime: "",
+    updatedAt: "",
+    creator: [],
+    publisher: "",
+    publicationYear: 2020,
+    title: "dd",
+    url: "",
+    abstract: "dd",
+    dataDescription: "dd",
+    resourceType: "raw",
+    numberOfFiles: 1,
+    sizeOfArchive: 1,
+    pidArray: [],
+    status: "pending_registration",
+  };
+
   describe("fetchAllPublishedDataAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchAllPublishedDataAction();
@@ -13,13 +32,12 @@ describe("Published Data Actions", () => {
 
   describe("fetchAllPublishedDataCompleteAction", () => {
     it("should create an action", () => {
-      const publishedData = [new PublishedData()];
       const action = fromActions.fetchAllPublishedDataCompleteAction({
-        publishedData,
+        publishedData: [publishedData],
       });
       expect({ ...action }).toEqual({
         type: "[PublishedData] Fetch All Published Data Complete",
-        publishedData,
+        publishedData: [publishedData],
       });
     });
   });
@@ -73,7 +91,6 @@ describe("Published Data Actions", () => {
 
   describe("fetchPublishedDataCompleteAction", () => {
     it("should create an action", () => {
-      const publishedData = new PublishedData();
       const action = fromActions.fetchPublishedDataCompleteAction({
         publishedData,
       });
@@ -95,18 +112,16 @@ describe("Published Data Actions", () => {
 
   describe("publishDatasetAction", () => {
     it("should create an action", () => {
-      const data = new PublishedData();
-      const action = fromActions.publishDatasetAction({ data });
+      const action = fromActions.publishDatasetAction({ data: publishedData });
       expect({ ...action }).toEqual({
         type: "[PublishedData] Publish Dataset",
-        data,
+        data: publishedData,
       });
     });
   });
 
   describe("publishDatasetCompleteAction", () => {
     it("should create an action", () => {
-      const publishedData = new PublishedData();
       const action = fromActions.publishDatasetCompleteAction({
         publishedData,
       });
@@ -139,7 +154,6 @@ describe("Published Data Actions", () => {
 
   describe("registerPublishedDataCompleteAction", () => {
     it("should create an action", () => {
-      const publishedData = new PublishedData();
       const action = fromActions.registerPublishedDataCompleteAction({
         publishedData,
       });

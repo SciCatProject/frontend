@@ -1,15 +1,20 @@
 import * as fromSelectors from "./jobs.selectors";
 
 import { JobsState } from "../state/jobs.store";
-import { JobInterface, Job } from "@scicatproject/scicat-sdk-ts";
+import { JobClass } from "@scicatproject/scicat-sdk-ts";
 
-const data: JobInterface = {
-  id: "testId",
+const job: JobClass = {
   emailJobInitiator: "test@email.com",
   type: "archive",
-  datasetList: {},
+  _id: "",
+  creationTime: "",
+  executionTime: "",
+  jobParams: {},
+  jobResultObject: {},
+  jobStatusMessage: "",
+  ownerGroup: "",
+  datasetList: [],
 };
-const job = new Job(data);
 
 const jobFilters = {
   mode: null,

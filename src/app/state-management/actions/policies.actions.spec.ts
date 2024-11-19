@@ -2,6 +2,26 @@ import * as fromActions from "./policies.actions";
 import { Policy } from "@scicatproject/scicat-sdk-ts";
 
 describe("Policies Actions", () => {
+  const policy: Policy = {
+    manager: ["adminIngestor"],
+    tapeRedundancy: "low",
+    autoArchiveDelay: 7,
+    archiveEmailNotification: false,
+    archiveEmailsToBeNotified: [],
+    retrieveEmailNotification: false,
+    retrieveEmailsToBeNotified: [],
+    ownerGroup: "",
+    accessGroups: [],
+    _id: "",
+    autoArchive: false,
+    createdAt: "",
+    createdBy: "",
+    embargoPeriod: 0,
+    isPublished: false,
+    updatedAt: "",
+    updatedBy: "",
+    instrumentGroup: "",
+  };
   describe("fetchPoliciesAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchPoliciesAction();
@@ -11,7 +31,7 @@ describe("Policies Actions", () => {
 
   describe("fetchPoliciesCompleteAction", () => {
     it("should create an action", () => {
-      const policies = [new Policy()];
+      const policies = [policy];
       const action = fromActions.fetchPoliciesCompleteAction({ policies });
       expect({ ...action }).toEqual({
         type: "[Policy] Fetch Policies Complete",
@@ -63,7 +83,7 @@ describe("Policies Actions", () => {
 
   describe("fetchEditablePoliciesCompleteAction", () => {
     it("should create an action", () => {
-      const policies = [new Policy()];
+      const policies = [policy];
       const action = fromActions.fetchEditablePoliciesCompleteAction({
         policies,
       });
@@ -115,7 +135,6 @@ describe("Policies Actions", () => {
   describe("submitPolicyAction", () => {
     it("should create an action", () => {
       const ownerList = ["test"];
-      const policy = new Policy();
       const action = fromActions.submitPolicyAction({ ownerList, policy });
       expect({ ...action }).toEqual({
         type: "[Policy] Submit Policy",
@@ -127,7 +146,6 @@ describe("Policies Actions", () => {
 
   describe("submitPolicyCompleteAction", () => {
     it("should create an action", () => {
-      const policy = new Policy();
       const action = fromActions.submitPolicyCompleteAction({ policy });
       expect({ ...action }).toEqual({
         type: "[Policy] Submit Policy Complete",
@@ -145,7 +163,6 @@ describe("Policies Actions", () => {
 
   describe("selectPolicyAction", () => {
     it("should create an action", () => {
-      const policy = new Policy();
       const action = fromActions.selectPolicyAction({ policy });
       expect({ ...action }).toEqual({
         type: "[Policy] Select Policy",
@@ -156,7 +173,6 @@ describe("Policies Actions", () => {
 
   describe("deselectPolicyAction", () => {
     it("should create an action", () => {
-      const policy = new Policy();
       const action = fromActions.deselectPolicyAction({ policy });
       expect({ ...action }).toEqual({
         type: "[Policy] Deselect Policy",

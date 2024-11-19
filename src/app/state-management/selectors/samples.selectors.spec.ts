@@ -1,14 +1,18 @@
+import { SampleClass } from "@scicatproject/scicat-sdk-ts";
 import * as fromSelectors from "./samples.selectors";
 import { SampleState } from "state-management/state/samples.store";
-import { SampleInterface, Sample } from "@scicatproject/scicat-sdk-ts";
 import { initialUserState } from "state-management/state/user.store";
 
-const data: SampleInterface = {
+const sample: SampleClass = {
   sampleId: "testId",
   ownerGroup: "testGroup",
-  attachments: [],
+  createdBy: "",
+  updatedBy: "",
+  createdAt: new Date().toString(),
+  updatedAt: new Date().toString(),
+  accessGroups: [],
+  isPublished: false,
 };
-const sample = new Sample(data);
 
 const initialSampleState: SampleState = {
   samples: [],

@@ -4,9 +4,15 @@ import { instrumentsReducer } from "./instruments.reducer";
 import { initialInstrumentState } from "state-management/state/instruments.store";
 
 describe("InstrumentsReducer", () => {
+  const instrument: Instrument = {
+    pid: "",
+    name: "",
+    uniqueName: "",
+    customMetadata: {},
+  };
   describe("on fetchInstrumentsCompleteAction", () => {
     it("should set instruments property", () => {
-      const instruments = [new Instrument()];
+      const instruments = [instrument];
       const action = fromActions.fetchInstrumentsCompleteAction({
         instruments,
       });
@@ -28,7 +34,6 @@ describe("InstrumentsReducer", () => {
 
   describe("on fetchInstrumentCompleteAction", () => {
     it("should set currentInstrument property", () => {
-      const instrument = new Instrument();
       const action = fromActions.fetchInstrumentCompleteAction({
         instrument,
       });
@@ -40,7 +45,6 @@ describe("InstrumentsReducer", () => {
 
   describe("on saveCustomMetadataCompleteAction", () => {
     it("should set currentInstrument property", () => {
-      const instrument = new Instrument();
       const action = fromActions.saveCustomMetadataCompleteAction({
         instrument,
       });

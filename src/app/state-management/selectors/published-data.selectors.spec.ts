@@ -1,12 +1,9 @@
-import {
-  PublishedDataInterface,
-  PublishedData,
-} from "@scicatproject/scicat-sdk-ts";
 import { GenericFilters } from "state-management/models";
 import { PublishedDataState } from "state-management/state/published-data.store";
 import * as fromSelectors from "./published-data.selectors";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts";
 
-const data: PublishedDataInterface = {
+const publishedData: PublishedData = {
   doi: "testDOI",
   affiliation: "test affiliation",
   creator: ["test creator"],
@@ -17,8 +14,14 @@ const data: PublishedDataInterface = {
   dataDescription: "test description",
   resourceType: "test type",
   pidArray: ["testPid"],
+  createdAt: "",
+  registeredTime: "",
+  updatedAt: "",
+  url: "",
+  numberOfFiles: 1,
+  sizeOfArchive: 1,
+  status: "pending_registration",
 };
-const publishedData = new PublishedData(data);
 
 const filters: GenericFilters = {
   sortField: "publicationYear desc",

@@ -53,7 +53,7 @@ export class DatasetEffects {
         fromActions.sortByColumnAction,
       ),
       concatLatestFrom(() => this.fullqueryParams$),
-      map(([action, params]) => params),
+      map(([, params]) => params),
       mergeMap(({ query, limits }) =>
         this.datasetsService
           .datasetsControllerFullquery(JSON.stringify(limits), query)
@@ -75,7 +75,7 @@ export class DatasetEffects {
         fromActions.sortByColumnAction,
       ),
       concatLatestFrom(() => this.fullfacetParams$),
-      map(([action, params]) => params),
+      map(([, params]) => params),
       mergeMap(({ fields, facets }) =>
         this.datasetsService
           .datasetsControllerFullfacet(
@@ -101,7 +101,7 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchMetadataKeysAction),
       concatLatestFrom(() => this.fullqueryParams$),
-      map(([action, params]) => params),
+      map(([, params]) => params),
       mergeMap(({ query }) => {
         const parsedQuery = JSON.parse(query);
         return this.datasetsService
@@ -170,7 +170,7 @@ export class DatasetEffects {
   fetchOrigDatablocksOfDataset$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchOrigDatablocksAction),
-      switchMap(({ pid, filters }) => {
+      switchMap(({ pid }) => {
         return this.datasetsService
           .datasetsControllerFindAllOrigDatablocks(encodeURIComponent(pid))
           .pipe(
@@ -209,7 +209,7 @@ export class DatasetEffects {
         this.currentDataset$,
         this.relatedDatasetsFilters$,
       ]),
-      switchMap(([_, dataset, filters]) => {
+      switchMap(([, dataset, filters]) => {
         const queryFilter = {
           where: {},
           limits: {
@@ -249,7 +249,7 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchRelatedDatasetsAction),
       concatLatestFrom(() => [this.currentDataset$]),
-      switchMap(([_, dataset]) => {
+      switchMap(([, dataset]) => {
         const queryFilter = {
           where: {},
         };

@@ -48,7 +48,7 @@ export const fetchParentProposalAction = createAction(
 );
 export const fetchParentProposalCompleteAction = createAction(
   "[Proposal] Fetch Parent Proposal Complete",
-  props<{ proposal: Proposal }>(),
+  props<{ proposal: ProposalClass }>(),
 );
 export const fetchParentProposalFailedAction = createAction(
   "[Proposal] Fetch Parent Proposal Failed",

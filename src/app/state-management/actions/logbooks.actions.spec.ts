@@ -1,7 +1,9 @@
-import { Logbook, LogbookFilters } from "../models";
+import { Logbook } from "@scicatproject/scicat-sdk-ts";
+import { LogbookFilters } from "../models";
 import * as fromActions from "./logbooks.actions";
 
 describe("Logbook Actions", () => {
+  const logbook: Logbook = { messages: [], name: "", roomId: "" };
   describe("fetchLogbooksAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchLogbooksAction();
@@ -11,7 +13,7 @@ describe("Logbook Actions", () => {
 
   describe("fetchLogbooksCompleteAction", () => {
     it("should create an action", () => {
-      const logbooks = [new Logbook()];
+      const logbooks = [logbook];
       const action = fromActions.fetchLogbooksCompleteAction({ logbooks });
       expect({ ...action }).toEqual({
         type: "[Logbook] Fetch Logbooks Complete",
@@ -39,7 +41,6 @@ describe("Logbook Actions", () => {
 
   describe("fetchLogbookCompleteAction", () => {
     it("should create an action", () => {
-      const logbook = new Logbook();
       const action = fromActions.fetchLogbookCompleteAction({ logbook });
       expect({ ...action }).toEqual({
         type: "[Logbook] Fetch Logbook Complete",

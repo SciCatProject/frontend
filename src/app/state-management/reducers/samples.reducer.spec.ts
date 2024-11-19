@@ -1,21 +1,57 @@
 import { samplesReducer } from "./samples.reducer";
 import { initialSampleState } from "../state/samples.store";
 import * as fromActions from "../actions/samples.actions";
+import { SampleFilters, ScientificCondition } from "../models";
 import {
   Attachment,
-  Sample,
-  Dataset,
-  SampleFilters,
-  ScientificCondition,
-} from "../models";
-import { SampleInterface } from "@scicatproject/scicat-sdk-ts";
+  OutputDatasetObsoleteDto,
+  SampleClass,
+} from "@scicatproject/scicat-sdk-ts";
 
-const data: SampleInterface = {
+const sample: SampleClass = {
   sampleId: "testId",
   ownerGroup: "testGroup",
-  attachments: [],
+  createdBy: "",
+  updatedBy: "",
+  createdAt: new Date().toString(),
+  updatedAt: new Date().toString(),
+  accessGroups: [],
+  isPublished: false,
 };
-const sample = new Sample(data);
+
+const dataset: OutputDatasetObsoleteDto = {
+  pid: "testPid",
+  owner: "",
+  contactEmail: "",
+  sourceFolder: "",
+  creationTime: new Date().toString(),
+  type: "raw",
+  ownerGroup: "",
+  attachments: [],
+  createdAt: "",
+  createdBy: "",
+  creationLocation: "",
+  inputDatasets: [],
+  investigator: "",
+  numberOfFilesArchived: 0,
+  principalInvestigator: "",
+  updatedAt: "",
+  updatedBy: "",
+  usedSoftware: [],
+};
+
+const attachment: Attachment = {
+  accessGroups: [],
+  caption: "Test",
+  createdAt: "",
+  updatedAt: "",
+  createdBy: "",
+  updatedBy: "",
+  isPublished: false,
+  ownerGroup: "",
+  thumbnail: "",
+  id: "",
+};
 
 describe("SamplesReducer", () => {
   describe("on fetchSamplesCompleteAction", () => {
@@ -61,7 +97,7 @@ describe("SamplesReducer", () => {
 
   describe("on fetchSampleDatasetsCompleteAction", () => {
     it("should set datasets", () => {
-      const datasets = [new Dataset()];
+      const datasets = [dataset];
       const action = fromActions.fetchSampleDatasetsCompleteAction({
         datasets,
       });
@@ -105,7 +141,6 @@ describe("SamplesReducer", () => {
     it("should set attachments for currentSample", () => {
       initialSampleState.currentSample = sample;
 
-      const attachment = new Attachment();
       const action = fromActions.addAttachmentCompleteAction({
         attachment,
       });
@@ -119,7 +154,6 @@ describe("SamplesReducer", () => {
     it("should set attachments for currentSample", () => {
       initialSampleState.currentSample = sample;
 
-      const attachment = new Attachment();
       const action = fromActions.updateAttachmentCaptionCompleteAction({
         attachment,
       });
@@ -132,7 +166,6 @@ describe("SamplesReducer", () => {
   describe("on removeAttachmentCompleteAction", () => {
     it("should set attachments for currentSample", () => {
       initialSampleState.currentSample = sample;
-      const attachment = new Attachment();
       const attachmentId = "testId";
       attachment.id = attachmentId;
       initialSampleState.attachments = [attachment];

@@ -1,21 +1,33 @@
+import { ProposalClass } from "@scicatproject/scicat-sdk-ts";
 import * as fromSelectors from "./proposals.selectors";
-import { Proposal, ProposalInterface, Attachment } from "shared/sdk/models";
 import { ProposalsState } from "state-management/state/proposals.store";
 
-const data: ProposalInterface = {
+const proposal: ProposalClass = {
   proposalId: "testId",
   email: "testEmail",
   ownerGroup: "testGroup",
+  accessGroups: [],
+  createdAt: "",
+  createdBy: "",
+  isPublished: false,
+  title: "test",
+  type: "",
+  updatedAt: "",
+  updatedBy: "",
 };
-const parentProposalData: ProposalInterface = {
+const parentProposal: ProposalClass = {
   proposalId: "parentTestId",
   email: "parentTestEmail",
   ownerGroup: "parentTestGroup",
+  accessGroups: [],
+  createdAt: "",
+  createdBy: "",
+  isPublished: false,
+  title: "test",
+  type: "",
+  updatedAt: "",
+  updatedBy: "",
 };
-const proposal = new Proposal(data);
-const parentProposal = new Proposal(parentProposalData);
-const attachments = [new Attachment()];
-proposal.attachments = attachments;
 
 const initialProposalsState: ProposalsState = {
   proposals: [],

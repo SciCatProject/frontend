@@ -1,8 +1,63 @@
-import { Attachment, Dataset, Proposal } from "../models";
+import {
+  Attachment,
+  OutputDatasetObsoleteDto,
+  ProposalClass,
+} from "@scicatproject/scicat-sdk-ts";
 import * as fromActions from "./proposals.actions";
 import { ProposalFilters } from "state-management/state/proposals.store";
 
 describe("Proposal Actions", () => {
+  const dataset: OutputDatasetObsoleteDto = {
+    createdBy: "",
+    updatedBy: "",
+    ownerGroup: "",
+    pid: "",
+    owner: "",
+    ownerEmail: "",
+    contactEmail: "",
+    sourceFolder: "",
+    numberOfFilesArchived: 0,
+    creationTime: "2024-07-22T07:07:18.000Z",
+    type: "raw",
+    description: "Test description",
+    datasetName: "Test Dataset",
+    principalInvestigator: "",
+    creationLocation: "",
+    inputDatasets: [],
+    usedSoftware: [],
+    createdAt: "2024-07-22T07:07:18.669Z",
+    updatedAt: "2024-07-22T15:11:45.056Z",
+    classification: "",
+    investigator: "",
+  };
+
+  const attachment: Attachment = {
+    accessGroups: [],
+    caption: "Test",
+    createdAt: "",
+    updatedAt: "",
+    createdBy: "",
+    updatedBy: "",
+    isPublished: false,
+    ownerGroup: "",
+    thumbnail: "",
+    id: "",
+  };
+
+  const proposal: ProposalClass = {
+    accessGroups: [],
+    createdAt: "",
+    createdBy: "",
+    email: "",
+    isPublished: false,
+    ownerGroup: "",
+    proposalId: "",
+    title: "Test proposal",
+    type: "",
+    updatedAt: "",
+    updatedBy: "",
+  };
+
   describe("fetchProposalsAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchProposalsAction();
@@ -12,7 +67,7 @@ describe("Proposal Actions", () => {
 
   describe("fetchProposalsCompleteAction", () => {
     it("should create an action", () => {
-      const proposals = [new Proposal()];
+      const proposals = [proposal];
       const action = fromActions.fetchProposalsCompleteAction({ proposals });
       expect({ ...action }).toEqual({
         type: "[Proposal] Fetch Proposals Complete",
@@ -68,7 +123,6 @@ describe("Proposal Actions", () => {
 
   describe("fetchProposalCompleteAction", () => {
     it("should create an action", () => {
-      const proposal = new Proposal();
       const action = fromActions.fetchProposalCompleteAction({ proposal });
       expect({ ...action }).toEqual({
         type: "[Proposal] Fetch Proposal Complete",
@@ -99,7 +153,7 @@ describe("Proposal Actions", () => {
 
   describe("fetchProposalDatasetsCompleteAction", () => {
     it("should create an action", () => {
-      const datasets = [new Dataset()];
+      const datasets = [dataset];
       const action = fromActions.fetchProposalDatasetsCompleteAction({
         datasets,
       });
@@ -156,7 +210,6 @@ describe("Proposal Actions", () => {
 
   describe("addAttachmentAction", () => {
     it("should create an action", () => {
-      const attachment = new Attachment();
       const action = fromActions.addAttachmentAction({ attachment });
       expect({ ...action }).toEqual({
         type: "[Proposal] Add Attachment",
@@ -167,7 +220,6 @@ describe("Proposal Actions", () => {
 
   describe("addAttachmentCompleteAction", () => {
     it("should create an action", () => {
-      const attachment = new Attachment();
       const action = fromActions.addAttachmentCompleteAction({ attachment });
       expect({ ...action }).toEqual({
         type: "[Proposal] Add Attachment Complete",
@@ -206,7 +258,6 @@ describe("Proposal Actions", () => {
 
   describe("updateAttachmentCompleteCaption", () => {
     it("should create an action", () => {
-      const attachment = new Attachment();
       const action = fromActions.updateAttachmentCaptionCompleteAction({
         attachment,
       });
