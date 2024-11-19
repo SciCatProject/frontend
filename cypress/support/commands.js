@@ -283,6 +283,7 @@ Cypress.Commands.add("removeProposals", () => {
     const token = cookie.value;
 
     const filter = { where: { title: testData.proposal.title } };
+
     cy.request({
       method: "GET",
       url:

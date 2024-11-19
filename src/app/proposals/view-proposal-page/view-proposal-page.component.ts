@@ -7,6 +7,7 @@ import {
   fetchProposalDatasetsAction,
   changeDatasetsPageAction,
   fetchParentProposalAction,
+  clearProposalsStateAction,
 } from "state-management/actions/proposals.actions";
 import { selectViewProposalPageViewModel } from "state-management/selectors/proposals.selectors";
 import { Dataset, Proposal } from "state-management/models";
@@ -145,5 +146,6 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.store.dispatch(clearProposalsStateAction());
   }
 }

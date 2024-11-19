@@ -41,6 +41,14 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.clearCurrentProposalAction,
+    (state): ProposalsState => ({
+      ...state,
+      currentProposal: null,
+    }),
+  ),
+
+  on(
     fromActions.fetchProposalDatasetsCompleteAction,
     (state, { datasets }): ProposalsState => ({ ...state, datasets }),
   ),

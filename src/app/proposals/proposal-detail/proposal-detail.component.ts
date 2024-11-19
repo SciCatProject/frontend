@@ -13,6 +13,7 @@ import {
   selectIsAdmin,
   selectProfile,
 } from "state-management/selectors/user.selectors";
+import { clearProposalsStateAction } from "state-management/actions/proposals.actions";
 
 @Component({
   selector: "proposal-detail",
@@ -71,6 +72,7 @@ export class ProposalDetailComponent implements OnInit {
   }
 
   onClickProposal(proposalId: string): void {
+    this.store.dispatch(clearProposalsStateAction());
     const id = encodeURIComponent(proposalId);
     this.router.navigateByUrl("/proposals/" + id);
   }

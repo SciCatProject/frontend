@@ -3,6 +3,9 @@ import { Proposal, Dataset, Attachment } from "shared/sdk/models";
 import { ProposalFilters } from "state-management/state/proposals.store";
 
 export const fetchProposalsAction = createAction("[Proposal] Fetch Proposals");
+export const clearCurrentProposalAction = createAction(
+  "[Proposal] Clear proposal",
+);
 export const fetchProposalsCompleteAction = createAction(
   "[Proposal] Fetch Proposals Complete",
   props<{ proposals: Proposal[] }>(),

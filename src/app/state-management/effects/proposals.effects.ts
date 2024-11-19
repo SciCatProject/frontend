@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
 import { DatasetApi, ProposalApi, Proposal, Dataset } from "shared/sdk";
-import { Store } from "@ngrx/store";
+import { Action, Store } from "@ngrx/store";
 import * as fromActions from "state-management/actions/proposals.actions";
 import {
   selectFullqueryParams,
   selectDatasetsQueryParams,
 } from "state-management/selectors/proposals.selectors";
 import { map, mergeMap, catchError, switchMap, filter } from "rxjs/operators";
-import { of } from "rxjs";
+import { ObservableInput, of } from "rxjs";
 import {
   loadingAction,
   loadingCompleteAction,
@@ -57,53 +57,19 @@ export class ProposalEffects {
     );
   });
 
-  fetchProposal$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.fetchProposalAction),
-      switchMap(({ proposalId }) =>
-        this.proposalApi.findByIdAccess(encodeURIComponent(proposalId)).pipe(
-          filter((permission: { canAccess: boolean }) => permission.canAccess),
-          switchMap(() =>
-            this.proposalApi
-              .findById<Proposal>(encodeURIComponent(proposalId))
-              .pipe(
-                map((proposal: Proposal) =>
-                  fromActions.fetchProposalCompleteAction({ proposal }),
-                ),
-                catchError(() => of(fromActions.fetchProposalFailedAction())),
-              ),
-          ),
-          catchError(() => of(fromActions.fetchProposalAccessFailedAction())),
-        ),
-      ),
-    );
-  });
+  fetchProposal$ = this.createProposalFetchEffect(
+    fromActions.fetchProposalAction.type,
+    fromActions.fetchProposalCompleteAction,
+    fromActions.fetchProposalFailedAction,
+    fromActions.fetchProposalAccessFailedAction,
+  );
 
-  fetchParentProposal$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.fetchParentProposalAction),
-      switchMap(({ proposalId }) =>
-        this.proposalApi.findByIdAccess(encodeURIComponent(proposalId)).pipe(
-          filter((permission: { canAccess: boolean }) => permission.canAccess),
-          switchMap(() =>
-            this.proposalApi
-              .findById<Proposal>(encodeURIComponent(proposalId))
-              .pipe(
-                map((proposal: Proposal) =>
-                  fromActions.fetchParentProposalCompleteAction({ proposal }),
-                ),
-                catchError(() =>
-                  of(fromActions.fetchParentProposalFailedAction()),
-                ),
-              ),
-          ),
-          catchError(() =>
-            of(fromActions.fetchParentProposalAccessFailedAction()),
-          ),
-        ),
-      ),
-    );
-  });
+  fetchParentProposal$ = this.createProposalFetchEffect(
+    fromActions.fetchParentProposalAction.type,
+    fromActions.fetchParentProposalCompleteAction,
+    fromActions.fetchParentProposalFailedAction,
+    fromActions.fetchParentProposalAccessFailedAction,
+  );
 
   fetchProposalDatasets$ = createEffect(() => {
     return this.actions$.pipe(
@@ -279,4 +245,33 @@ export class ProposalEffects {
     private proposalApi: ProposalApi,
     private store: Store,
   ) {}
+
+  private createProposalFetchEffect(
+    triggerAction: string,
+    completeAction: (props: { proposal: Proposal }) => Action,
+    failedAction: () => Action,
+    accessFailedAction: () => Action,
+  ) {
+    return createEffect(() => {
+      return this.actions$.pipe(
+        ofType(triggerAction),
+        switchMap<Proposal, ObservableInput<Action>>(({ proposalId }) =>
+          this.proposalApi.findByIdAccess(encodeURIComponent(proposalId)).pipe(
+            filter(
+              (permission: { canAccess: boolean }) => permission.canAccess,
+            ),
+            switchMap(() =>
+              this.proposalApi
+                .findById<Proposal>(encodeURIComponent(proposalId))
+                .pipe(
+                  map((proposal) => completeAction({ proposal })),
+                  catchError(() => of(failedAction())),
+                ),
+            ),
+            catchError(() => of(accessFailedAction())),
+          ),
+        ),
+      );
+    });
+  }
 }
