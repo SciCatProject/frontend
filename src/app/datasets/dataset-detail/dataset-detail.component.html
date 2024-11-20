@@ -268,13 +268,17 @@
                 <a (click)="onClickSample(sample.sampleId)">
                   <span>{{ sample.description }}</span>
                 </a>
-                <span
+                <!-- NOTE: Sample editing is currently disabled.
+                    This feature not only contains bugs that need to be fixed,
+                    but we also want to have a centralized edit button in one location.
+                -->
+                <!-- <span
                   class="sample-edit"
                   (click)="openSampleEditDialog()"
                   *ngIf="appConfig.editDatasetSampleEnabled && editingAllowed"
                 >
                   <mat-icon>edit</mat-icon>
-                </span>
+                </span> -->
               </td>
             </tr>
             <tr *ngIf="dataset['instrumentId'] && instrument">

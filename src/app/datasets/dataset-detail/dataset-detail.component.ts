@@ -277,28 +277,31 @@ export class DatasetDetailComponent
     this.router.navigateByUrl("/samples/" + id);
   }
 
-  openSampleEditDialog() {
-    if (this.dataset) {
-      this.dialog
-        .open(SampleEditComponent, {
-          width: "1000px",
-          data: {
-            ownerGroup: this.dataset.ownerGroup,
-            sampleId: this.sample?.sampleId,
-          },
-        })
-        .afterClosed()
-        .subscribe((res) => {
-          if (res && this.dataset) {
-            const { sample } = res;
-            this.sample = sample;
-            const pid = this.dataset.pid;
-            const property = { sampleId: sample.sampleId };
-            this.store.dispatch(updatePropertyAction({ pid, property }));
-          }
-        });
-    }
-  }
+  // NOTE: Sample editing is currently disabled.
+  // This feature not only contains bugs that need to be fixed,
+  // but we also want to have a centralized edit button in one location.
+  // openSampleEditDialog() {
+  //   if (this.dataset) {
+  //     this.dialog
+  //       .open(SampleEditComponent, {
+  //         width: "1000px",
+  //         data: {
+  //           ownerGroup: this.dataset.ownerGroup,
+  //           sampleId: this.sample?.sampleId,
+  //         },
+  //       })
+  //       .afterClosed()
+  //       .subscribe((res) => {
+  //         if (res && this.dataset) {
+  //           const { sample } = res;
+  //           this.sample = sample;
+  //           const pid = this.dataset.pid;
+  //           const property = { sampleId: sample.sampleId };
+  //           this.store.dispatch(updatePropertyAction({ pid, property }));
+  //         }
+  //       });
+  //   }
+  // }
 
   onSlidePublic(event: MatSlideToggleChange) {
     if (this.dataset) {
