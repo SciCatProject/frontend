@@ -1,4 +1,4 @@
-import { MockStore, MockActivatedRoute } from "shared/MockStubs";
+import { MockStore, MockActivatedRoute, Sample } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { SampleDashboardComponent } from "./sample-dashboard.component";
@@ -14,7 +14,6 @@ import {
   changePageAction,
   sortByColumnAction,
 } from "state-management/actions/samples.actions";
-import { Sample } from "@scicatproject/scicat-sdk-ts";
 import {
   PageChangeEvent,
   SortChangeEvent,

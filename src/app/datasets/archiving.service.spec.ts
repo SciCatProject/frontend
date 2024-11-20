@@ -1,7 +1,6 @@
 import { TestBed, waitForAsync } from "@angular/core/testing";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { RetrieveDestinations } from "app-config.service";
-import { Dataset, Job, User } from "@scicatproject/scicat-sdk-ts";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import {
   selectCurrentUser,
@@ -10,6 +9,7 @@ import {
 } from "state-management/selectors/user.selectors";
 import { JobsState } from "state-management/state/jobs.store";
 import { ArchivingService } from "./archiving.service";
+import { Dataset, Job, User } from "shared/MockStubs";
 
 describe("ArchivingService", () => {
   let service: ArchivingService;
@@ -27,6 +27,8 @@ describe("ArchivingService", () => {
               value: new User({
                 email: "test@email.com",
                 username: "testName",
+                authStrategy: "",
+                id: "",
               }),
             },
             { selector: selectTapeCopies, value: "test" },
@@ -46,7 +48,12 @@ describe("ArchivingService", () => {
 
   describe("#createJob()", () => {
     it("should create a new object of type Job", () => {
-      const user = new User({ username: "testName", email: "test@email.com" });
+      const user = new User({
+        username: "testName",
+        email: "test@email.com",
+        authStrategy: "",
+        id: "",
+      });
       const datasets = [new Dataset()];
       const datasetList = datasets.map((dataset) => ({
         pid: dataset.pid,
@@ -83,7 +90,12 @@ describe("ArchivingService", () => {
     xit("should call #createJob() and then dispatch a submitJobAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const user = new User({ username: "testName", email: "test@email.com" });
+      const user = new User({
+        username: "testName",
+        email: "test@email.com",
+        authStrategy: "",
+        id: "",
+      });
       const datasets = [new Dataset()];
       const datasetList = datasets.map((dataset) => ({
         pid: dataset.pid,
@@ -93,9 +105,15 @@ describe("ArchivingService", () => {
       const job = new Job({
         jobParams: { username: user.username },
         emailJobInitiator: user.email,
-        creationTime: new Date(),
+        creationTime: new Date().toString(),
         datasetList,
         type: "archive",
+        _id: "",
+        executionTime: "",
+        id: "",
+        jobResultObject: {},
+        jobStatusMessage: "",
+        ownerGroup: "",
       });
       const createJobSpy = spyOn<any, string>(
         service,

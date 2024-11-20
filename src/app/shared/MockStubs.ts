@@ -25,6 +25,10 @@ import {
   TechniqueClass,
   Logbook as LogbookInterface,
   Policy as PolicyInterface,
+  UserSettings,
+  UserIdentity,
+  ReturnedUserDto,
+  HistoryClass,
 } from "@scicatproject/scicat-sdk-ts";
 import { AuthService } from "./services/auth/auth.service";
 
@@ -307,7 +311,7 @@ export class Dataset implements OutputDatasetObsoleteDto {
   accessGroups: Array<string>;
   createdBy: string;
   updatedBy: string;
-  history: Array<object>;
+  history: Array<HistoryClass>;
   datasetlifecycle: object;
   publisheddataId: string;
   techniques: Array<TechniqueClass>;
@@ -432,6 +436,7 @@ export class Instrument implements InstrumentInterface {
 
 export class Job implements JobClass {
   _id: string;
+  id: string;
   emailJobInitiator: string;
   type: string;
   creationTime: string;
@@ -514,6 +519,19 @@ export class PublishedData implements PublishedDataInterface {
   datasets: Dataset[];
 
   constructor(data?: PublishedDataInterface) {
+    Object.assign(this, data);
+  }
+}
+
+export class User implements ReturnedUserDto {
+  id: string;
+  username: string;
+  email: string;
+  emailVerified: boolean;
+  realm: string;
+  authStrategy: string;
+
+  constructor(data?: ReturnedUserDto) {
     Object.assign(this, data);
   }
 }

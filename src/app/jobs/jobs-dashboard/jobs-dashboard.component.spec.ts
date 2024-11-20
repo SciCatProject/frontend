@@ -6,10 +6,9 @@ import {
 } from "@angular/core/testing";
 
 import { JobsDashboardComponent } from "./jobs-dashboard.component";
-import { MockStore } from "shared/MockStubs";
+import { Job, MockStore } from "shared/MockStubs";
 import { Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
-import { Job } from "@scicatproject/scicat-sdk-ts";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { DatePipe } from "@angular/common";
@@ -146,7 +145,12 @@ describe("JobsDashboardComponent", () => {
     it("should navigate to a job", () => {
       const job = new Job();
       job.id = "test";
-      component.onRowClick(job);
+      component.onRowClick({
+        ...job,
+        initiator: "",
+        statusMessage: "",
+        createdAt: "",
+      });
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
       expect(router.navigateByUrl).toHaveBeenCalledWith(

@@ -4,7 +4,7 @@ import {
   DatasetTableComponent,
   SortChangeEvent,
 } from "./dataset-table.component";
-import { MockStore, MockDatasetApi } from "shared/MockStubs";
+import { MockStore, MockDatasetApi, Dataset } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import {
   ComponentFixture,
@@ -13,7 +13,6 @@ import {
   waitForAsync,
 } from "@angular/core/testing";
 import { StoreModule, Store } from "@ngrx/store";
-import { Dataset, DatasetApi } from "@scicatproject/scicat-sdk-ts";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import {
   selectDatasetAction,
@@ -34,6 +33,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppConfigService } from "app-config.service";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
 
 const getConfig = () => ({});
 
@@ -71,7 +71,7 @@ describe("DatasetTableComponent", () => {
             provide: AppConfigService,
             useValue: { getConfig },
           },
-          { provide: DatasetApi, useClass: MockDatasetApi },
+          { provide: DatasetsService, useClass: MockDatasetApi },
         ],
       },
     });

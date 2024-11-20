@@ -7,6 +7,7 @@ const job = new Job({
   emailJobInitiator: "test@email.com",
   type: "archive",
   _id: "",
+  id: "",
   creationTime: "",
   executionTime: "",
   jobParams: {},

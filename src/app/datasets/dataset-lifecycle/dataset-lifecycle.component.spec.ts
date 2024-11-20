@@ -10,7 +10,6 @@ import { DatasetLifecycleComponent } from "./dataset-lifecycle.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { PipesModule } from "shared/pipes/pipes.module";
 import { DatePipe } from "@angular/common";
-import { Dataset } from "@scicatproject/scicat-sdk-ts";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
@@ -20,6 +19,7 @@ import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { Store, StoreModule } from "@ngrx/store";
 import { MockStore } from "@ngrx/store/testing";
 import { AppConfigService } from "app-config.service";
+import { Dataset } from "shared/MockStubs";
 
 const historyItems = [
   {
@@ -118,7 +118,7 @@ describe("DatasetLifecycleComponent", () => {
       dataset.history = [
         {
           id: "testId",
-          keywords,
+          // keywords,
           updatedBy: "Test User",
           updatedAt: new Date().toISOString(),
         },

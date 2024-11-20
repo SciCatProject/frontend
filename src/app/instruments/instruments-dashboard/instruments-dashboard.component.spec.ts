@@ -6,7 +6,7 @@ import {
 } from "@angular/core/testing";
 
 import { InstrumentsDashboardComponent } from "./instruments-dashboard.component";
-import { MockStore } from "shared/MockStubs";
+import { Instrument, MockStore } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { provideMockStore } from "@ngrx/store/testing";
 import { selectInstrumentsDashboardPageViewModel } from "state-management/selectors/instruments.selectors";
@@ -22,7 +22,6 @@ import {
   sortByColumnAction,
 } from "state-management/actions/instruments.actions";
 import { Router } from "@angular/router";
-import { Instrument } from "@scicatproject/scicat-sdk-ts";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 
 describe("InstrumentsDashboardComponent", () => {

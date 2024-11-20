@@ -6,12 +6,16 @@ import {
   waitForAsync,
 } from "@angular/core/testing";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { MockStore, MockActivatedRoute } from "shared/MockStubs";
+import {
+  MockStore,
+  MockActivatedRoute,
+  Dataset,
+  Proposal,
+} from "shared/MockStubs";
 import { Router, ActivatedRoute } from "@angular/router";
 import { StoreModule, Store } from "@ngrx/store";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
-import { Dataset, Proposal } from "@scicatproject/scicat-sdk-ts";
 import {
   changeDatasetsPageAction,
   fetchProposalDatasetsAction,

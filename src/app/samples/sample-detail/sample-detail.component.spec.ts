@@ -1,6 +1,12 @@
 import { ActivatedRoute, Router } from "@angular/router";
 
-import { MockActivatedRoute, MockStore } from "shared/MockStubs";
+import {
+  Dataset,
+  MockActivatedRoute,
+  MockStore,
+  Sample,
+  User,
+} from "shared/MockStubs";
 import { SampleDetailComponent } from "./sample-detail.component";
 import { Store, StoreModule } from "@ngrx/store";
 import {
@@ -19,7 +25,6 @@ import {
   removeAttachmentAction,
   addAttachmentAction,
 } from "state-management/actions/samples.actions";
-import { Dataset, Sample, User } from "@scicatproject/scicat-sdk-ts";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";

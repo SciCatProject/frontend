@@ -8,14 +8,13 @@ import {
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 
-import { MockActivatedRoute, MockStore } from "shared/MockStubs";
+import { Dataset, MockActivatedRoute, MockStore, User } from "shared/MockStubs";
 import { DashboardComponent } from "./dashboard.component";
 import { of } from "rxjs";
 import {
   addDatasetAction,
   changePageAction,
 } from "state-management/actions/datasets.actions";
-import { User, Dataset, DerivedDataset } from "@scicatproject/scicat-sdk-ts";
 import {
   selectColumnAction,
   deselectColumnAction,
@@ -231,16 +230,13 @@ describe("DashboardComponent", () => {
         email: "test@email.com",
         realm: "test",
         emailVerified: true,
-        password: "testPassword",
-        accessTokens: [],
-        identities: [],
-        credentials: [],
+        authStrategy: "",
       });
 
-      const dataset = new DerivedDataset({
+      const dataset = new Dataset({
         accessGroups: [],
         contactEmail: currentUser.email,
-        creationTime: new Date(),
+        creationTime: new Date().toString(),
         datasetName: "Test Name",
         description: "Test description",
         isPublished: false,
@@ -256,6 +252,13 @@ describe("DashboardComponent", () => {
         investigator: currentUser.email,
         scientificMetadata: {},
         usedSoftware: ["test software"],
+        createdAt: "",
+        createdBy: "",
+        creationLocation: "",
+        numberOfFilesArchived: 0,
+        principalInvestigator: "",
+        updatedAt: "",
+        updatedBy: "",
       });
 
       component.currentUser = currentUser;

@@ -6,12 +6,11 @@ import {
 } from "@angular/core/testing";
 
 import { PublisheddataDashboardComponent } from "./publisheddata-dashboard.component";
-import { MockStore } from "shared/MockStubs";
+import { MockStore, PublishedData } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { StoreModule, Store } from "@ngrx/store";
 import { Router } from "@angular/router";
 import { CheckboxEvent } from "shared/modules/table/table.component";
-import { PublishedData } from "@scicatproject/scicat-sdk-ts";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { of } from "rxjs";
 import { Message, MessageType } from "state-management/models";
@@ -128,6 +127,10 @@ describe("PublisheddataDashboardComponent", () => {
         dataDescription: "test",
         resourceType: "test",
         pidArray: [],
+        createdAt: "",
+        registeredTime: "",
+        status: "",
+        updatedAt: "",
       });
 
       spyOn(component.vm$, "pipe").and.returnValue(

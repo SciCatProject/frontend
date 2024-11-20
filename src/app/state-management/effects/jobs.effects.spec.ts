@@ -19,6 +19,7 @@ import { Job } from "shared/MockStubs";
 
 const job = new Job({
   _id: "testId",
+  id: "testId",
   emailJobInitiator: "test@email.com",
   type: "archive",
   datasetList: [],

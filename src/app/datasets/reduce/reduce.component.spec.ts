@@ -8,7 +8,7 @@ import {
 import { Store, StoreModule } from "@ngrx/store";
 
 import { ReduceComponent } from "./reduce.component";
-import { MockStore } from "shared/MockStubs";
+import { Dataset, MockStore } from "shared/MockStubs";
 
 import { Router } from "@angular/router";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -17,7 +17,6 @@ import {
   selectOpenwhiskResult,
   selectDatasets,
 } from "state-management/selectors/datasets.selectors";
-import { Dataset } from "@scicatproject/scicat-sdk-ts";
 import { reduceDatasetAction } from "state-management/actions/datasets.actions";
 import { FormBuilder } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";

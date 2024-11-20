@@ -8,8 +8,7 @@ import {
 import { PoliciesDashboardComponent } from "./policies-dashboard.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { SharedScicatFrontendModule } from "shared/shared.module";
-import { DatasetApi, Policy } from "@scicatproject/scicat-sdk-ts";
-import { MockDatasetApi, MockStore } from "shared/MockStubs";
+import { MockDatasetApi, MockStore, Policy } from "shared/MockStubs";
 import { StoreModule, Store } from "@ngrx/store";
 import {
   PageChangeEvent,
@@ -44,6 +43,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
 
 describe("PoliciesDashboardComponent", () => {
   let component: PoliciesDashboardComponent;
@@ -95,7 +95,7 @@ describe("PoliciesDashboardComponent", () => {
     TestBed.overrideComponent(PoliciesDashboardComponent, {
       set: {
         providers: [
-          { provide: DatasetApi, useClass: MockDatasetApi },
+          { provide: DatasetsService, useClass: MockDatasetApi },
           { provide: Router, useValue: router },
         ],
       },

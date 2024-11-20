@@ -8,7 +8,7 @@ import {
 
 import { ProposalLogbookComponent } from "./proposal-logbook.component";
 import { Store, StoreModule } from "@ngrx/store";
-import { MockStore, MockActivatedRoute } from "shared/MockStubs";
+import { MockStore, MockActivatedRoute, Logbook } from "shared/MockStubs";
 import { ActivatedRoute } from "@angular/router";
 import {
   setTextFilterAction,
@@ -17,7 +17,6 @@ import {
   sortByColumnAction,
   fetchLogbookAction,
 } from "state-management/actions/logbooks.actions";
-import { Logbook, LogbookInterface } from "@scicatproject/scicat-sdk-ts";
 import { LogbookFilters } from "state-management/models";
 import { RouterTestingModule } from "@angular/router/testing";
 
@@ -42,12 +41,11 @@ describe("DashboardComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  const logbookData: LogbookInterface = {
+  const logbook = new Logbook({
     name: "testLogbook",
     roomId: "testId",
     messages: [{ message: "test1" }, { message: "test2" }],
-  };
-  const logbook = new Logbook(logbookData);
+  });
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

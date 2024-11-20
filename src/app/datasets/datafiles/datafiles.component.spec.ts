@@ -2,7 +2,6 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { DatafilesComponent } from "./datafiles.component";
-import { UserApi } from "@scicatproject/scicat-sdk-ts";
 import { MatTableModule } from "@angular/material/table";
 import { PipesModule } from "shared/pipes/pipes.module";
 import { RouterModule } from "@angular/router";
@@ -19,6 +18,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { AppConfigService } from "app-config.service";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { DatafilesActionsComponent } from "datasets/datafiles-actions/datafiles-actions.component";
+import { UsersService } from "@scicatproject/scicat-sdk-ts";
 
 describe("DatafilesComponent", () => {
   let component: DatafilesComponent;
@@ -92,10 +92,10 @@ describe("DatafilesComponent", () => {
     TestBed.overrideComponent(DatafilesComponent, {
       set: {
         providers: [
-          { provide: UserApi, useClass: MockUserApi },
+          { provide: UsersService, useClass: MockUserApi },
           { provide: MatDialogRef, useClass: MockMatDialogRef },
           { provide: AppConfigService, useValue: { getConfig } },
-          { provide: UserApi, useClass: MockUserApi },
+          { provide: UsersService, useClass: MockUserApi },
           {
             provide: DatafilesActionsComponent,
             useClass: MockDatafilesActionsComponent,

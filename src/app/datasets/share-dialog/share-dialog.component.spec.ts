@@ -20,19 +20,6 @@ import {
   MockUserApi,
   MockUserIdentityApi,
 } from "shared/MockStubs";
-import {
-  DatasetApi,
-  InstrumentApi,
-  InternalStorage,
-  JobApi,
-  LogbookApi,
-  LoopBackAuth,
-  ProposalApi,
-  PublishedDataApi,
-  SampleApi,
-  UserApi,
-  UserIdentityApi,
-} from "@scicatproject/scicat-sdk-ts";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
 
@@ -41,6 +28,20 @@ import { DatasetsModule } from "datasets/datasets.module";
 import { EffectsModule } from "@ngrx/effects";
 import { AppConfigService } from "app-config.service";
 import { HttpClient } from "@angular/common/http";
+import {
+  DatasetsService,
+  InstrumentsService,
+  JobsService,
+  LogbooksService,
+  ProposalsService,
+  PublishedDataService,
+  SamplesService,
+  UserIdentitiesService,
+  UsersService,
+} from "@scicatproject/scicat-sdk-ts";
+import { AuthService } from "shared/services/auth/auth.service";
+import { InternalStorage } from "shared/services/auth/base.storage";
+import { cold } from "jasmine-marbles";
 
 const data = {
   infoMessage: "",
@@ -67,18 +68,18 @@ describe("ShareDialogComponent", () => {
       providers: [
         { provide: MatDialogRef, useValue: { close: () => {} } },
         { provide: Store, useClass: MockStore },
-        { provide: UserIdentityApi, useClass: MockUserIdentityApi },
-        { provide: LogbookApi, useValue: {} },
-        { provide: DatasetApi, useClass: MockDatasetApi },
+        { provide: UserIdentitiesService, useClass: MockUserIdentityApi },
+        { provide: LogbooksService, useValue: {} },
+        { provide: DatasetsService, useClass: MockDatasetApi },
         { provide: AppConfigService, useValue: appconfig },
         { provide: HttpClient, useClass: MockHttp },
-        { provide: LoopBackAuth, useClass: MockLoopBackAuth },
-        { provide: UserApi, useClass: MockUserApi },
-        { provide: InstrumentApi, useValue: {} },
-        { provide: JobApi, useValue: {} },
-        { provide: ProposalApi, useValue: {} },
-        { provide: SampleApi, useValue: {} },
-        { provide: PublishedDataApi, useClass: MockPublishedDataApi },
+        { provide: AuthService, useClass: MockLoopBackAuth },
+        { provide: UsersService, useClass: MockUserApi },
+        { provide: InstrumentsService, useValue: {} },
+        { provide: JobsService, useValue: {} },
+        { provide: ProposalsService, useValue: {} },
+        { provide: SamplesService, useValue: {} },
+        { provide: PublishedDataService, useClass: MockPublishedDataApi },
         { provide: MAT_DIALOG_DATA, useValue: data },
         InternalStorage,
       ],
@@ -126,9 +127,10 @@ describe("ShareDialogComponent", () => {
 
   describe("#add()", () => {
     it("should dispatch a showMessageAction with type `error` if user does not exist", fakeAsync(() => {
-      spyOn(component.userIdentityApi, "isValidEmail").and.throwError(
-        "Not found",
-      );
+      spyOn(
+        component.userIdentititiesService,
+        "userIdentitiesControllerIsValidEmail",
+      ).and.throwError("Not found");
       const dispatchSpy = spyOn(component.store, "dispatch");
       const email = "test@email.com";
 
@@ -153,9 +155,11 @@ describe("ShareDialogComponent", () => {
           email,
         },
       };
-      spyOn(component.userIdentityApi, "isValidEmail").and.returnValue(
-        of(true),
-      );
+      const response = cold("-a|", { a: true });
+      spyOn(
+        component.userIdentititiesService,
+        "userIdentitiesControllerIsValidEmail",
+      ).and.returnValue(response);
       component.emailFormControl.setValue(email);
       expect(component.emailFormControl.value).toEqual(email);
 

@@ -4,7 +4,6 @@ import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { provideMockStore } from "@ngrx/store/testing";
 import { PageChangeEvent } from "shared/modules/table/table.component";
-import { Dataset } from "@scicatproject/scicat-sdk-ts";
 import {
   changeRelatedDatasetsPageAction,
   fetchRelatedDatasetsAction,
@@ -13,6 +12,7 @@ import { selectRelatedDatasetsPageViewModel } from "state-management/selectors/d
 
 import { RelatedDatasetsComponent } from "./related-datasets.component";
 import { TableModule } from "shared/modules/table/table.module";
+import { Dataset } from "shared/MockStubs";
 
 describe("RelatedDatasetsComponent", () => {
   let component: RelatedDatasetsComponent;

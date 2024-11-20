@@ -3,7 +3,6 @@ import { Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 import { MockStore } from "@ngrx/store/testing";
 import { SubmitCaptionEvent } from "shared/modules/file-uploader/file-uploader.component";
-import { Dataset, User } from "@scicatproject/scicat-sdk-ts";
 import {
   addAttachmentAction,
   removeAttachmentAction,
@@ -14,7 +13,7 @@ import { DatasetFileUploaderComponent } from "./dataset-file-uploader.component"
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { AppConfigService } from "app-config.service";
 import { HttpClient } from "@angular/common/http";
-import { MockHttp } from "shared/MockStubs";
+import { Dataset, MockHttp, User } from "shared/MockStubs";
 
 const router = {
   navigateByUrl: jasmine.createSpy("navigateByUrl"),

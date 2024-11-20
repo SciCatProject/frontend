@@ -19,12 +19,11 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatTableModule } from "@angular/material/table";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Store } from "@ngrx/store";
-import { MockStore } from "shared/MockStubs";
+import { MockStore, Sample } from "shared/MockStubs";
 import {
   PageChangeEvent,
   SortChangeEvent,
 } from "shared/modules/table/table.component";
-import { Sample } from "@scicatproject/scicat-sdk-ts";
 import {
   changePageAction,
   setTextFilterAction,
@@ -166,18 +165,14 @@ describe("SampleEditComponent", () => {
         sampleId,
         owner: "test",
         description: "test",
-        createdAt: new Date(),
+        createdAt: new Date().toString(),
         sampleCharacteristics: {},
         isPublished: false,
         ownerGroup: "test",
         accessGroups: [],
         createdBy: "test",
         updatedBy: "test",
-        datasetId: "test",
-        datasetsId: "test",
-        rawDatasetId: "test",
-        derivedDatasetId: "test",
-        updatedAt: new Date(),
+        updatedAt: new Date().toString(),
       });
 
       component.data.sampleId = sampleId;
@@ -195,18 +190,14 @@ describe("SampleEditComponent", () => {
         sampleId: "123abc",
         owner: "test",
         description: "test",
-        createdAt: new Date(),
+        createdAt: new Date().toString(),
         sampleCharacteristics: {},
         isPublished: false,
         ownerGroup: "test",
         accessGroups: [],
         createdBy: "test",
         updatedBy: "test",
-        datasetId: "test",
-        datasetsId: "test",
-        rawDatasetId: "test",
-        derivedDatasetId: "test",
-        updatedAt: new Date(),
+        updatedAt: new Date().toString(),
       });
 
       component.data.sampleId = sampleId;
@@ -236,18 +227,14 @@ describe("SampleEditComponent", () => {
         sampleId: "123abc",
         owner: "test",
         description: "test",
-        createdAt: new Date(),
+        createdAt: new Date().toString(),
         sampleCharacteristics: {},
         isPublished: false,
         ownerGroup: "test",
         accessGroups: [],
         createdBy: "test",
         updatedBy: "test",
-        datasetId: "test",
-        datasetsId: "test",
-        rawDatasetId: "test",
-        derivedDatasetId: "test",
-        updatedAt: new Date(),
+        updatedAt: new Date().toString(),
       });
 
       component.sample.setValue(sample);

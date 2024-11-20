@@ -4,8 +4,7 @@ import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
 
 import { LogbooksTableComponent } from "./logbooks-table.component";
-import { MockStore } from "shared/MockStubs";
-import { Logbook } from "@scicatproject/scicat-sdk-ts";
+import { Logbook, MockStore } from "shared/MockStubs";
 import { MatTableModule } from "@angular/material/table";
 import { MatIconModule } from "@angular/material/icon";
 import { MatCardModule } from "@angular/material/card";

@@ -12,7 +12,6 @@ import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatTableModule } from "@angular/material/table";
 import { MatChipInputEvent, MatChipsModule } from "@angular/material/chips";
 import { of } from "rxjs";
-import { Dataset, Sample, User } from "@scicatproject/scicat-sdk-ts";
 import { MatDialogRef } from "@angular/material/dialog";
 import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
 import { MatCardModule } from "@angular/material/card";
@@ -35,7 +34,7 @@ import {
   MatSlideToggleChange,
 } from "@angular/material/slide-toggle";
 import { ActivatedRoute, Router } from "@angular/router";
-import { MockActivatedRoute } from "shared/MockStubs";
+import { Dataset, MockActivatedRoute, Sample, User } from "shared/MockStubs";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { AppConfigService } from "app-config.service";
 import { AttachmentService } from "shared/services/attachment.service";
@@ -392,6 +391,8 @@ describe("DatasetDetailComponent", () => {
       component.user = new User({
         username: "admin",
         email: "test@email.com",
+        authStrategy: "",
+        id: "",
       });
 
       const isPI = component.isPI();
@@ -400,7 +401,12 @@ describe("DatasetDetailComponent", () => {
     });
 
     it("should return true if user email equals principalInvestigator of a raw dataset", () => {
-      component.user = new User({ email: "test@email.com" });
+      component.user = new User({
+        email: "test@email.com",
+        authStrategy: "",
+        id: "",
+        username: "",
+      });
       component.dataset = {
         owner: "test",
         contactEmail: "test",
@@ -418,7 +424,12 @@ describe("DatasetDetailComponent", () => {
     });
 
     it("should return false if user email does not equal principalInvestigator of a raw dataset", () => {
-      component.user = new User({ email: "failTest@email.com" });
+      component.user = new User({
+        email: "failTest@email.com",
+        authStrategy: "",
+        id: "",
+        username: "",
+      });
       component.dataset = {
         owner: "test",
         contactEmail: "test",
@@ -435,7 +446,12 @@ describe("DatasetDetailComponent", () => {
     });
 
     it("should return true if user email equals investigator of a derived dataset", () => {
-      component.user = new User({ email: "test@email.com" });
+      component.user = new User({
+        email: "test@email.com",
+        authStrategy: "",
+        id: "",
+        username: "",
+      });
       component.dataset = {
         owner: "test",
         contactEmail: "test",
@@ -454,7 +470,12 @@ describe("DatasetDetailComponent", () => {
     });
 
     it("should return false if user email does not equal investigator of a derived dataset", () => {
-      component.user = new User({ email: "failTest@email.com" });
+      component.user = new User({
+        email: "failTest@email.com",
+        authStrategy: "",
+        id: "",
+        username: "",
+      });
       component.dataset = {
         owner: "test",
         contactEmail: "test",
@@ -472,7 +493,12 @@ describe("DatasetDetailComponent", () => {
     });
 
     it("should return false if dataset type is neither 'raw' or 'derived'", () => {
-      component.user = new User({ email: "failTest@email.com" });
+      component.user = new User({
+        email: "failTest@email.com",
+        authStrategy: "",
+        id: "",
+        username: "",
+      });
       component.dataset = {
         owner: "test",
         contactEmail: "test",
