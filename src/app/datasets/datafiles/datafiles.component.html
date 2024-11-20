@@ -2,7 +2,7 @@
   <ng-template [ngIf]="maxFileSize && tooLargeFile">
     <span>
       <mat-icon class="warning-icon"> warning </mat-icon>
-      <span [innerHTML]="replace_dynamic_values()"></span>
+      <span [innerHTML]="hasTooLargeFilesMessage()"></span>
     </span>
   </ng-template>
 
