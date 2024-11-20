@@ -76,7 +76,9 @@ export class DatafilesComponent
     this.appConfig.fileserverButtonLabel || "Download";
   multipleDownloadAction: string | null = this.appConfig.multipleDownloadAction;
   maxFileSize: number | null = this.appConfig.maxDirectDownloadSize;
-  sftpHost: string | null = this.appConfig.sftpHost;
+  sftpHost: string = this.appConfig.sftpHost || "no sftp host provided";
+  customSourcefolder: string | null =
+    this.appConfig.largeDataFileAccessInstruction;
   jwt: any;
   auth_token: any;
 
@@ -202,6 +204,13 @@ export class DatafilesComponent
     } else {
       return false;
     }
+  }
+
+  replace_dynamic_values() {
+    const fileTooLargeMessage = `Some files are too big, but they can be downloaded at our sftp server: <strong>${this.sftpHost}</strong> at the folder: 
+    <strong>${this.customSourcefolder || this.sourcefolder}</strong>`;
+
+    return fileTooLargeMessage;
   }
 
   ngAfterViewInit() {

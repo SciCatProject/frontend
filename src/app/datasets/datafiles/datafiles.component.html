@@ -2,16 +2,7 @@
   <ng-template [ngIf]="maxFileSize && tooLargeFile">
     <span>
       <mat-icon class="warning-icon"> warning </mat-icon>
-      One or more files are too large to be downloaded directly.
-      {{
-        sftpHost
-          ? "These files are available via sftp host " +
-            sftpHost +
-            " in directory " +
-            sourcefolder +
-            "."
-          : ""
-      }}
+      <span [innerHTML]="replace_dynamic_values()"></span>
     </span>
   </ng-template>
 
