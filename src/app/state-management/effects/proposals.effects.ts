@@ -169,6 +169,25 @@ export class ProposalEffects {
     );
   });
 
+  updateProposalProperty$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.updateProposalPropertyAction),
+      switchMap(({ proposalId, property }) =>
+        this.proposalsService
+          .proposalsControllerUpdate(encodeURIComponent(proposalId), property)
+          .pipe(
+            switchMap(() => [
+              fromActions.updateProposalPropertyCompleteAction(),
+              fromActions.fetchProposalAction({ proposalId }),
+            ]),
+            catchError(() =>
+              of(fromActions.updateProposalPropertyFailedAction()),
+            ),
+          ),
+      ),
+    );
+  });
+
   removeAttachment$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.removeAttachmentAction),
@@ -192,12 +211,14 @@ export class ProposalEffects {
     return this.actions$.pipe(
       ofType(
         fromActions.fetchProposalsAction,
+        fromActions.fetchParentProposalAction,
         fromActions.fetchCountAction,
         fromActions.fetchProposalAction,
         fromActions.fetchProposalDatasetsAction,
         fromActions.fetchProposalDatasetsCountAction,
         fromActions.addAttachmentAction,
         fromActions.updateAttachmentCaptionAction,
+        fromActions.updateProposalPropertyAction,
         fromActions.removeAttachmentAction,
       ),
       switchMap(() => of(loadingAction())),
@@ -209,6 +230,8 @@ export class ProposalEffects {
       ofType(
         fromActions.fetchProposalsCompleteAction,
         fromActions.fetchProposalsFailedAction,
+        fromActions.fetchParentProposalCompleteAction,
+        fromActions.fetchParentProposalFailedAction,
         fromActions.fetchCountCompleteAction,
         fromActions.fetchCountFailedAction,
         fromActions.fetchProposalCompleteAction,
@@ -221,6 +244,8 @@ export class ProposalEffects {
         fromActions.addAttachmentFailedAction,
         fromActions.updateAttachmentCaptionCompleteAction,
         fromActions.updateAttachmentCaptionFailedAction,
+        fromActions.updateProposalPropertyCompleteAction,
+        fromActions.updateProposalPropertyFailedAction,
         fromActions.removeAttachmentCompleteAction,
         fromActions.removeAttachmentFailedAction,
       ),

@@ -24,9 +24,9 @@ export interface ProposalDatesetFilters {
 }
 
 export interface ProposalsState {
-  proposals: OutputDatasetObsoleteDto[];
-  currentProposal: OutputDatasetObsoleteDto | undefined;
-  parentProposal: OutputDatasetObsoleteDto | undefined;
+  proposals: ProposalClass[];
+  currentProposal: ProposalClass | undefined;
+  parentProposal: ProposalClass | undefined;
   datasets: OutputDatasetObsoleteDto[];
 
   proposalsCount: number;
