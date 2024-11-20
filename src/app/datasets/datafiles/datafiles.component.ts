@@ -207,10 +207,9 @@ export class DatafilesComponent
   }
 
   replace_dynamic_values() {
-    const fileTooLargeMessage = `Some files are too big, but they can be downloaded at our sftp server: <strong>${this.sftpHost}</strong> at the folder: 
-    <strong>${this.customSourcefolder || this.sourcefolder}</strong>`;
-
-    return fileTooLargeMessage;
+    return `Some files are too big, but they can be downloaded 
+    at our sftp server: <strong>${this.sftpHost}</strong> 
+    at the folder: <strong>${this.customSourcefolder || this.sourcefolder}</strong>`;
   }
 
   ngAfterViewInit() {
