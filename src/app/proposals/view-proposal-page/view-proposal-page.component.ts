@@ -45,7 +45,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   logbook$ = this.store.select(selectLogbooksDashboardPageViewModel);
   appConfig = this.appConfigService.getConfig();
 
-  proposal: OutputDatasetObsoleteDto;
+  proposal: ProposalClass;
 
   subscriptions: Subscription[] = [];
 

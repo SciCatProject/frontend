@@ -97,8 +97,6 @@ describe("DatasetTableActionsComponent", () => {
   describe("#onModeChange()", () => {
     it("should dispatch a SetViewModeAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
-
-      const event = "test";
       const modeToggle = ArchViewMode.all;
 
       component.onModeChange(modeToggle);

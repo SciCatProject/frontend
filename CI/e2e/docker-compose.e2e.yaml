@@ -29,6 +29,7 @@ services:
     volumes:
       - "./CI/e2e/.env.backend.e2e:/home/node/app/.env"
       - "./CI/e2e/functionalAccounts.e2e.json:/home/node/app/functionalAccounts.json"
+      - "./CI/e2e/proposalTypes.e2e.json:/home/node/app/proposalTypes.json"
       - "./CI/e2e/frontend.config.e2e.json:/home/node/app/dist/config/frontend.config.json"
     depends_on:
       mongodb:
