@@ -3,6 +3,7 @@ import { Store, StoreModule } from "@ngrx/store";
 import { AdminTabComponent } from "./admin-tab.component";
 import { MatCardModule } from "@angular/material/card";
 import { of } from "rxjs";
+import { Dataset } from "shared/MockStubs";
 
 describe("AdminTabComponent", () => {
   let component: AdminTabComponent;
@@ -35,7 +36,7 @@ describe("AdminTabComponent", () => {
     it("should return 'undefined' without confirmation", () => {
       spyOn(window, "confirm").and.returnValue(true);
 
-      const selectSpy = store.select.and.returnValue(
+      store.select.and.returnValue(
         of({ email: "test@example.com", username: "testuser" }),
       );
       const dispatchSpy = store.dispatch as jasmine.Spy;

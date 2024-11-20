@@ -1,9 +1,9 @@
 import { initialPublishedDataState } from "state-management/state/published-data.store";
 import * as fromActions from "state-management/actions/published-data.actions";
 import { publishedDataReducer } from "./published-data.reducer";
-import { PublishedData } from "@scicatproject/scicat-sdk-ts";
+import { PublishedData } from "shared/MockStubs";
 
-const publishedData: PublishedData = {
+const publishedData = new PublishedData({
   doi: "testDOI",
   affiliation: "test affiliation",
   creator: ["test creator"],
@@ -21,7 +21,7 @@ const publishedData: PublishedData = {
   numberOfFiles: 1,
   sizeOfArchive: 1,
   status: "pending_registration",
-};
+});
 
 describe("PublishedData Reducer", () => {
   describe("on fetchAllPublishedDataCompleteAction", () => {

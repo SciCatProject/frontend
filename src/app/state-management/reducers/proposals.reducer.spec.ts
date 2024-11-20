@@ -4,13 +4,9 @@ import {
   ProposalFilters,
 } from "../state/proposals.store";
 import * as fromActions from "../actions/proposals.actions";
-import {
-  Attachment,
-  OutputDatasetObsoleteDto,
-  ProposalClass,
-} from "@scicatproject/scicat-sdk-ts";
+import { Dataset, Proposal } from "shared/MockStubs";
 
-const proposal: ProposalClass = {
+const proposal = new Proposal({
   proposalId: "testId",
   email: "testEmail",
   ownerGroup: "testGroup",
@@ -22,16 +18,16 @@ const proposal: ProposalClass = {
   type: "",
   updatedAt: "",
   updatedBy: "",
-};
+});
 
-const dataset: OutputDatasetObsoleteDto = {
-  pid: "testPid",
-  owner: "",
-  contactEmail: "",
-  sourceFolder: "",
-  creationTime: new Date().toString(),
+const dataset = new Dataset({
+  ownerGroup: "testGroup",
+  owner: "testOwner",
+  contactEmail: "testEmail",
+  sourceFolder: "testFolder",
+  creationTime: new Date(2019, 10, 7).toString(),
   type: "raw",
-  ownerGroup: "",
+  pid: "testPid",
   attachments: [],
   createdAt: "",
   createdBy: "",
@@ -43,20 +39,7 @@ const dataset: OutputDatasetObsoleteDto = {
   updatedAt: "",
   updatedBy: "",
   usedSoftware: [],
-};
-
-// const attachment: Attachment = {
-//   accessGroups: [],
-//   caption: "Test",
-//   createdAt: "",
-//   updatedAt: "",
-//   createdBy: "",
-//   updatedBy: "",
-//   isPublished: false,
-//   ownerGroup: "",
-//   thumbnail: "",
-//   id: "",
-// };
+});
 
 describe("ProposalsReducer", () => {
   describe("on fetchProposalsCompleteAction", () => {

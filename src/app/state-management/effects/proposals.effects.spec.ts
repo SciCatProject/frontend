@@ -16,61 +16,29 @@ import {
 } from "state-management/actions/user.actions";
 import { Type } from "@angular/core";
 import {
-  Attachment,
   DatasetsService,
-  OutputDatasetObsoleteDto,
-  ProposalClass,
   ProposalsService,
 } from "@scicatproject/scicat-sdk-ts";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
+import { Attachment, Dataset, Proposal } from "shared/MockStubs";
 
-const proposal: ProposalClass = {
+const proposal = new Proposal({
+  proposalId: "testId",
+  email: "testEmail",
+  ownerGroup: "testGroup",
   accessGroups: [],
   createdAt: "",
   createdBy: "",
-  email: "",
   isPublished: false,
-  ownerGroup: "",
-  proposalId: "",
-  title: "Test proposal",
+  title: "",
   type: "",
   updatedAt: "",
   updatedBy: "",
-};
+});
 
-const dataset: OutputDatasetObsoleteDto = {
-  pid: "testPid",
-  owner: "",
-  contactEmail: "",
-  sourceFolder: "",
-  creationTime: new Date().toString(),
-  type: "raw",
-  ownerGroup: "",
-  attachments: [],
-  createdAt: "",
-  createdBy: "",
-  creationLocation: "",
-  inputDatasets: [],
-  investigator: "",
-  numberOfFilesArchived: 0,
-  principalInvestigator: "",
-  updatedAt: "",
-  updatedBy: "",
-  usedSoftware: [],
-};
+const dataset = new Dataset();
 
-const attachment: Attachment = {
-  accessGroups: [],
-  caption: "Test",
-  createdAt: "",
-  updatedAt: "",
-  createdBy: "",
-  updatedBy: "",
-  isPublished: false,
-  ownerGroup: "",
-  thumbnail: "",
-  id: "",
-};
+const attachment = new Attachment();
 
 describe("ProposalEffects", () => {
   let actions: TestObservable;

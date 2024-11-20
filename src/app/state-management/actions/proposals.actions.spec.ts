@@ -1,62 +1,11 @@
-import {
-  Attachment,
-  OutputDatasetObsoleteDto,
-  ProposalClass,
-} from "@scicatproject/scicat-sdk-ts";
 import * as fromActions from "./proposals.actions";
 import { ProposalFilters } from "state-management/state/proposals.store";
+import { Attachment, Dataset, Proposal } from "shared/MockStubs";
 
 describe("Proposal Actions", () => {
-  const dataset: OutputDatasetObsoleteDto = {
-    createdBy: "",
-    updatedBy: "",
-    ownerGroup: "",
-    pid: "",
-    owner: "",
-    ownerEmail: "",
-    contactEmail: "",
-    sourceFolder: "",
-    numberOfFilesArchived: 0,
-    creationTime: "2024-07-22T07:07:18.000Z",
-    type: "raw",
-    description: "Test description",
-    datasetName: "Test Dataset",
-    principalInvestigator: "",
-    creationLocation: "",
-    inputDatasets: [],
-    usedSoftware: [],
-    createdAt: "2024-07-22T07:07:18.669Z",
-    updatedAt: "2024-07-22T15:11:45.056Z",
-    classification: "",
-    investigator: "",
-  };
-
-  const attachment: Attachment = {
-    accessGroups: [],
-    caption: "Test",
-    createdAt: "",
-    updatedAt: "",
-    createdBy: "",
-    updatedBy: "",
-    isPublished: false,
-    ownerGroup: "",
-    thumbnail: "",
-    id: "",
-  };
-
-  const proposal: ProposalClass = {
-    accessGroups: [],
-    createdAt: "",
-    createdBy: "",
-    email: "",
-    isPublished: false,
-    ownerGroup: "",
-    proposalId: "",
-    title: "Test proposal",
-    type: "",
-    updatedAt: "",
-    updatedBy: "",
-  };
+  const dataset = new Dataset();
+  const attachment = new Attachment();
+  const proposal = new Proposal();
 
   describe("fetchProposalsAction", () => {
     it("should create an action", () => {

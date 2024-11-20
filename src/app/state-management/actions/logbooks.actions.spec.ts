@@ -1,9 +1,10 @@
-import { Logbook } from "@scicatproject/scicat-sdk-ts";
 import { LogbookFilters } from "../models";
 import * as fromActions from "./logbooks.actions";
+import { Logbook } from "shared/MockStubs";
 
 describe("Logbook Actions", () => {
-  const logbook: Logbook = { messages: [], name: "", roomId: "" };
+  const logbook = new Logbook();
+
   describe("fetchLogbooksAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchLogbooksAction();

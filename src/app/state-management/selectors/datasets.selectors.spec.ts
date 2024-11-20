@@ -1,28 +1,9 @@
 import * as fromDatasetSelectors from "./datasets.selectors";
 import { ArchViewMode } from "../models";
 import { DatasetState } from "../state/datasets.store";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts";
+import { Dataset } from "shared/MockStubs";
 
-const dataset: OutputDatasetObsoleteDto = {
-  pid: "testPid",
-  investigator: "",
-  inputDatasets: [],
-  usedSoftware: [],
-  owner: "",
-  contactEmail: "",
-  sourceFolder: "",
-  creationTime: new Date().toString(),
-  type: "derived",
-  ownerGroup: "",
-  numberOfFilesArchived: 0,
-  accessGroups: [],
-  createdAt: "",
-  createdBy: "",
-  creationLocation: "",
-  principalInvestigator: "",
-  updatedAt: "",
-  updatedBy: "",
-};
+const dataset = new Dataset();
 
 const initialDatasetState: DatasetState = {
   datasets: [],

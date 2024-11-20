@@ -1,14 +1,10 @@
+import { Instrument } from "shared/MockStubs";
 import * as fromActions from "./instruments.actions";
-import { Instrument } from "@scicatproject/scicat-sdk-ts";
 
 describe("Instrument Actions", () => {
-  const instrument: Instrument = {
-    pid: "",
-    name: "",
-    uniqueName: "",
-    customMetadata: {},
-  };
+  const instrument = new Instrument();
   const instruments = [instrument];
+
   describe("fetchInstrumentsAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchInstrumentsAction();

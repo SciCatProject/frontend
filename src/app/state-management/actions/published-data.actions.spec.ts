@@ -1,25 +1,8 @@
+import { PublishedData } from "shared/MockStubs";
 import * as fromActions from "./published-data.actions";
-import { PublishedData } from "@scicatproject/scicat-sdk-ts";
 
 describe("Published Data Actions", () => {
-  const publishedData: PublishedData = {
-    createdAt: "",
-    doi: "",
-    registeredTime: "",
-    updatedAt: "",
-    creator: [],
-    publisher: "",
-    publicationYear: 2020,
-    title: "dd",
-    url: "",
-    abstract: "dd",
-    dataDescription: "dd",
-    resourceType: "raw",
-    numberOfFiles: 1,
-    sizeOfArchive: 1,
-    pidArray: [],
-    status: "pending_registration",
-  };
+  const publishedData = new PublishedData();
 
   describe("fetchAllPublishedDataAction", () => {
     it("should create an action", () => {

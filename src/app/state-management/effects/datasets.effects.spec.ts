@@ -18,14 +18,11 @@ import {
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
 import { Type } from "@angular/core";
-import {
-  Attachment,
-  DatasetsService,
-  OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
+import { Attachment, Dataset } from "shared/MockStubs";
 
-const derivedData: OutputDatasetObsoleteDto = {
+const derivedData = new Dataset({
   investigator: "",
   inputDatasets: [],
   usedSoftware: [],
@@ -42,42 +39,13 @@ const derivedData: OutputDatasetObsoleteDto = {
   principalInvestigator: "",
   updatedAt: "",
   updatedBy: "",
-};
+});
 const derivedDataset = { pid: "testPid", ...derivedData };
 
-const data: OutputDatasetObsoleteDto = {
-  owner: "",
-  contactEmail: "",
-  sourceFolder: "",
-  creationTime: new Date().toString(),
-  type: "raw",
-  ownerGroup: "",
-  attachments: [],
-  createdAt: "",
-  createdBy: "",
-  creationLocation: "",
-  inputDatasets: [],
-  investigator: "",
-  numberOfFilesArchived: 0,
-  principalInvestigator: "",
-  updatedAt: "",
-  updatedBy: "",
-  usedSoftware: [],
-};
+const data = new Dataset();
 const dataset = { pid: "testPid", ...data };
 
-const attachment: Attachment = {
-  accessGroups: [],
-  caption: "Test",
-  createdAt: "",
-  updatedAt: "",
-  createdBy: "",
-  updatedBy: "",
-  isPublished: false,
-  ownerGroup: "",
-  thumbnail: "",
-  id: "",
-};
+const attachment = new Attachment();
 
 describe("DatasetEffects", () => {
   let actions: TestObservable;

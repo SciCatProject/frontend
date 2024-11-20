@@ -13,14 +13,11 @@ import {
 } from "state-management/actions/user.actions";
 import { Type } from "@angular/core";
 import { Router } from "@angular/router";
-import { MockRouter } from "shared/MockStubs";
-import {
-  PublishedData,
-  PublishedDataService,
-} from "@scicatproject/scicat-sdk-ts";
+import { MockRouter, PublishedData } from "shared/MockStubs";
+import { PublishedDataService } from "@scicatproject/scicat-sdk-ts";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 
-const publishedData: PublishedData = {
+const publishedData = new PublishedData({
   doi: "testDOI",
   affiliation: "test affiliation",
   creator: ["test creator"],
@@ -38,7 +35,7 @@ const publishedData: PublishedData = {
   numberOfFiles: 1,
   sizeOfArchive: 1,
   status: "pending_registration",
-};
+});
 
 describe("PublishedDataEffects", () => {
   let actions: TestObservable;

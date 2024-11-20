@@ -2,13 +2,9 @@ import { samplesReducer } from "./samples.reducer";
 import { initialSampleState } from "../state/samples.store";
 import * as fromActions from "../actions/samples.actions";
 import { SampleFilters, ScientificCondition } from "../models";
-import {
-  Attachment,
-  OutputDatasetObsoleteDto,
-  SampleClass,
-} from "@scicatproject/scicat-sdk-ts";
+import { Attachment, Dataset, Sample } from "shared/MockStubs";
 
-const sample: SampleClass = {
+const sample = new Sample({
   sampleId: "testId",
   ownerGroup: "testGroup",
   createdBy: "",
@@ -17,41 +13,11 @@ const sample: SampleClass = {
   updatedAt: new Date().toString(),
   accessGroups: [],
   isPublished: false,
-};
+});
 
-const dataset: OutputDatasetObsoleteDto = {
-  pid: "testPid",
-  owner: "",
-  contactEmail: "",
-  sourceFolder: "",
-  creationTime: new Date().toString(),
-  type: "raw",
-  ownerGroup: "",
-  attachments: [],
-  createdAt: "",
-  createdBy: "",
-  creationLocation: "",
-  inputDatasets: [],
-  investigator: "",
-  numberOfFilesArchived: 0,
-  principalInvestigator: "",
-  updatedAt: "",
-  updatedBy: "",
-  usedSoftware: [],
-};
+const dataset = new Dataset();
 
-const attachment: Attachment = {
-  accessGroups: [],
-  caption: "Test",
-  createdAt: "",
-  updatedAt: "",
-  createdBy: "",
-  updatedBy: "",
-  isPublished: false,
-  ownerGroup: "",
-  thumbnail: "",
-  id: "",
-};
+const attachment = new Attachment();
 
 describe("SamplesReducer", () => {
   describe("on fetchSamplesCompleteAction", () => {

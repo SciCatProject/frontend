@@ -4,13 +4,29 @@ import { Observable, of } from "rxjs";
 import { convertToParamMap, UrlTree } from "@angular/router";
 import { AppConfig } from "app-config.module";
 import { SciCatDataSource } from "./services/scicat.datasource";
-import { LoopBackAuth } from "./sdk";
 import { Injectable } from "@angular/core";
 import {
   ActionConfig,
   ActionDataset,
 } from "datasets/datafiles-actions/datafiles-action.interfaces";
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
+import {
+  Attachment as AttachmentInterface,
+  Datablock,
+  IDatasetList,
+  Instrument as InstrumentInterface,
+  JobClass,
+  MeasurementPeriodClass,
+  OrigDatablock,
+  OutputDatasetObsoleteDto,
+  ProposalClass,
+  PublishedData as PublishedDataInterface,
+  SampleClass,
+  TechniqueClass,
+  Logbook as LogbookInterface,
+  Policy as PolicyInterface,
+} from "@scicatproject/scicat-sdk-ts";
+import { AuthService } from "./services/auth/auth.service";
 
 export class MockUserApi {
   getCurrentId() {
@@ -192,7 +208,7 @@ export class MockScicatDataSource extends SciCatDataSource {
 }
 
 @Injectable()
-export class MockLoopBackAuth extends LoopBackAuth {
+export class MockLoopBackAuth extends AuthService {
   getToken = () => ({
     id: "test",
     ttl: null,
@@ -262,4 +278,242 @@ export class MockHtmlElement {
     return this.children.filter((x: any) => x.tag == tag.toUpperCase());
   }
   submit() {}
+}
+
+export class Dataset implements OutputDatasetObsoleteDto {
+  pid: string;
+  owner: string;
+  ownerEmail: string;
+  orcidOfOwner: string;
+  contactEmail: string;
+  sourceFolder: string;
+  sourceFolderHost: string;
+  size: number;
+  packedSize: number;
+  numberOfFiles: number;
+  numberOfFilesArchived: number;
+  creationTime: string;
+  type: any;
+  validationStatus: string;
+  keywords: Array<string>;
+  description: string;
+  datasetName: string;
+  classification: string;
+  license: string;
+  version: string;
+  isPublished: boolean;
+  sharedWith: Array<string>;
+  ownerGroup: string;
+  accessGroups: Array<string>;
+  createdBy: string;
+  updatedBy: string;
+  history: Array<object>;
+  datasetlifecycle: object;
+  publisheddataId: string;
+  techniques: Array<TechniqueClass>;
+  publishedDataId: string;
+  createdAt: string;
+  updatedAt: string;
+  instrumentId: string;
+  historyList: object[];
+  datasetLifecycle: object[];
+  publisheddata: PublishedData;
+  techniquesList: object[];
+  samples: SampleClass[];
+  datablocks: Datablock[];
+  origdatablocks: OrigDatablock[];
+  attachments: AttachmentInterface[];
+  instrument: InstrumentInterface;
+  scientificMetadata?: object;
+  principalInvestigator: string;
+  creationLocation: string;
+  investigator: string;
+  inputDatasets: string[];
+  usedSoftware: string[];
+
+  constructor(data?: OutputDatasetObsoleteDto) {
+    Object.assign(this, data);
+  }
+}
+
+export class Attachment implements AttachmentInterface {
+  id: string;
+  thumbnail: string;
+  caption: string;
+  ownerGroup: string;
+  accessGroups: Array<string>;
+  createdBy: string;
+  updatedBy: string;
+  datasetId: string;
+  sampleId: string;
+  proposalId: string;
+  rawDatasetId: string;
+  derivedDatasetId: string;
+  createdAt: string;
+  updatedAt: string;
+  dataset: Dataset;
+  sample: SampleClass;
+  proposal: ProposalClass;
+  isPublished: boolean;
+
+  constructor(data?: AttachmentInterface) {
+    Object.assign(this, data);
+  }
+}
+
+export class Sample implements SampleClass {
+  sampleId: string;
+  owner: string;
+  description: string;
+  createdAt: string;
+  sampleCharacteristics: object;
+  isPublished: boolean;
+  ownerGroup: string;
+  accessGroups: Array<string>;
+  createdBy: string;
+  updatedBy: string;
+  datasetsId: string;
+  datasetId: string;
+  rawDatasetId: string;
+  derivedDatasetId: string;
+  updatedAt: string;
+  datasets: Dataset;
+  attachments: AttachmentInterface[];
+
+  constructor(data?: SampleClass) {
+    Object.assign(this, data);
+  }
+}
+
+export class Proposal implements ProposalClass {
+  proposalId: string;
+  pi_email: string;
+  pi_firstname: string;
+  pi_lastname: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+  title: string;
+  abstract: string;
+  startTime: string;
+  endTime: string;
+  ownerGroup: string;
+  accessGroups: Array<string>;
+  createdBy: string;
+  updatedBy: string;
+  MeasurementPeriodList: Array<MeasurementPeriodClass>;
+  createdAt: string;
+  updatedAt: string;
+  measurementPeriods: object[];
+  attachments: Attachment[];
+  isPublished: boolean;
+  type: string;
+
+  constructor(data?: ProposalClass) {
+    Object.assign(this, data);
+  }
+}
+
+export class Instrument implements InstrumentInterface {
+  pid: string;
+  uniqueName: string;
+  name: string;
+  customMetadata: object;
+  createdBy: string;
+  updatedBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+  datasets: Dataset[];
+
+  constructor(data?: InstrumentInterface) {
+    Object.assign(this, data);
+  }
+}
+
+export class Job implements JobClass {
+  _id: string;
+  emailJobInitiator: string;
+  type: string;
+  creationTime: string;
+  executionTime: string;
+  jobParams: object;
+  jobStatusMessage: string;
+  datasetList: IDatasetList[];
+  jobResultObject: object;
+  createdBy: string;
+  updatedBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+  ownerGroup: string;
+
+  constructor(data?: JobClass) {
+    Object.assign(this, data);
+  }
+}
+
+export class Logbook implements LogbookInterface {
+  name: string;
+  roomId: string;
+  messages: Array<object>;
+
+  constructor(data?: LogbookInterface) {
+    Object.assign(this, data);
+  }
+}
+
+export class Policy implements PolicyInterface {
+  _id: string;
+  id: string;
+  manager: Array<any>;
+  tapeRedundancy: string;
+  autoArchive: boolean;
+  autoArchiveDelay: number;
+  archiveEmailNotification: boolean;
+  archiveEmailsToBeNotified: Array<any>;
+  retrieveEmailNotification: boolean;
+  retrieveEmailsToBeNotified: Array<any>;
+  embargoPeriod: number;
+  ownerGroup: string;
+  accessGroups: Array<any>;
+  createdBy: string;
+  updatedBy: string;
+  createdAt: string;
+  updatedAt: string;
+  isPublished: boolean;
+
+  constructor(data?: PolicyInterface) {
+    Object.assign(this, data);
+  }
+}
+
+export class PublishedData implements PublishedDataInterface {
+  doi: string;
+  affiliation: string;
+  creator: Array<string>;
+  publisher: string;
+  publicationYear: number;
+  title: string;
+  url: string;
+  abstract: string;
+  dataDescription: string;
+  resourceType: string;
+  numberOfFiles: number;
+  sizeOfArchive: number;
+  pidArray: Array<string>;
+  authors: Array<string>;
+  registeredTime: string;
+  status: string;
+  scicatUser: string;
+  thumbnail: string;
+  relatedPublications: Array<string>;
+  downloadLink: string;
+  createdBy: string;
+  updatedBy: string;
+  createdAt: string;
+  updatedAt: string;
+  datasets: Dataset[];
+
+  constructor(data?: PublishedDataInterface) {
+    Object.assign(this, data);
+  }
 }

@@ -1,13 +1,9 @@
-import { Logbook } from "@scicatproject/scicat-sdk-ts";
+import { Logbook } from "shared/MockStubs";
 import * as fromSelectors from "./logbooks.selectors";
 import { LogbookFilters } from "state-management/models";
 import { LogbookState } from "state-management/state/logbooks.store";
 
-const logbook: Logbook = {
-  name: "test",
-  roomId: "!test@site",
-  messages: [],
-};
+const logbook = new Logbook();
 
 const logbookFilters: LogbookFilters = {
   textSearch: "test",

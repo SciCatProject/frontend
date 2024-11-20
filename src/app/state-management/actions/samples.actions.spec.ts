@@ -1,36 +1,10 @@
-import {
-  Attachment,
-  OutputDatasetObsoleteDto,
-  SampleClass,
-} from "@scicatproject/scicat-sdk-ts";
-
 import * as fromActions from "./samples.actions";
 import { SampleFilters, ScientificCondition } from "state-management/models";
+import { Attachment, Dataset, Sample } from "shared/MockStubs";
 
 describe("Sample Actions", () => {
-  const sample: SampleClass = {
-    sampleId: "testId",
-    createdBy: "",
-    updatedBy: "",
-    createdAt: new Date().toString(),
-    updatedAt: new Date().toString(),
-    accessGroups: [],
-    isPublished: false,
-    ownerGroup: "",
-  };
-
-  const attachment: Attachment = {
-    accessGroups: [],
-    caption: "Test",
-    createdAt: "",
-    updatedAt: "",
-    createdBy: "",
-    updatedBy: "",
-    isPublished: false,
-    ownerGroup: "",
-    thumbnail: "",
-    id: "",
-  };
+  const sample = new Sample();
+  const attachment = new Attachment();
 
   describe("fetchSamplesAction", () => {
     it("should create an action", () => {
@@ -155,29 +129,7 @@ describe("Sample Actions", () => {
 
   describe("fetchSampleDatasetsCompleteAction", () => {
     it("should create an action", () => {
-      const dataset: OutputDatasetObsoleteDto = {
-        createdBy: "",
-        updatedBy: "",
-        ownerGroup: "",
-        pid: "",
-        owner: "",
-        ownerEmail: "",
-        contactEmail: "",
-        sourceFolder: "",
-        numberOfFilesArchived: 0,
-        creationTime: "2024-07-22T07:07:18.000Z",
-        type: "raw",
-        description: "Test description",
-        datasetName: "Test Dataset",
-        principalInvestigator: "",
-        creationLocation: "",
-        inputDatasets: [],
-        usedSoftware: [],
-        createdAt: "2024-07-22T07:07:18.669Z",
-        updatedAt: "2024-07-22T15:11:45.056Z",
-        classification: "",
-        investigator: "",
-      };
+      const dataset = new Dataset();
       const datasets = [dataset];
       const action = fromActions.fetchSampleDatasetsCompleteAction({
         datasets,

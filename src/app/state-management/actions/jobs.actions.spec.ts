@@ -1,20 +1,11 @@
-import { CreateJobDto, JobClass } from "@scicatproject/scicat-sdk-ts";
+import { CreateJobDto } from "@scicatproject/scicat-sdk-ts";
 import * as fromActions from "./jobs.actions";
+import { Job } from "shared/MockStubs";
 
 describe("Job Actions", () => {
-  const job: JobClass = {
-    _id: "",
-    creationTime: "",
-    emailJobInitiator: "",
-    executionTime: "",
-    jobParams: {},
-    jobResultObject: {},
-    jobStatusMessage: "",
-    ownerGroup: "",
-    type: "",
-    datasetList: [],
-  };
+  const job = new Job();
   const jobs = [job];
+
   describe("fetchJobsAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchJobsAction();

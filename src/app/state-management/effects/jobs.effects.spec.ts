@@ -13,25 +13,22 @@ import {
 } from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
 import { Type } from "@angular/core";
-import {
-  CreateJobDto,
-  JobClass,
-  JobsService,
-} from "@scicatproject/scicat-sdk-ts";
+import { CreateJobDto, JobsService } from "@scicatproject/scicat-sdk-ts";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
+import { Job } from "shared/MockStubs";
 
-const job: JobClass = {
-  _id: "",
+const job = new Job({
+  _id: "testId",
+  emailJobInitiator: "test@email.com",
+  type: "archive",
+  datasetList: [],
   creationTime: "",
-  emailJobInitiator: "",
   executionTime: "",
   jobParams: {},
   jobResultObject: {},
   jobStatusMessage: "",
   ownerGroup: "",
-  type: "",
-  datasetList: [],
-};
+});
 
 describe("JobEffects", () => {
   let actions: TestObservable;

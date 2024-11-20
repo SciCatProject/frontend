@@ -2,20 +2,25 @@ import { logbooksReducer } from "./logbooks.reducer";
 import { initialLogbookState } from "../state/logbooks.store";
 import * as fromActions from "../actions/logbooks.actions";
 import { LogbookFilters } from "../models";
-import { Logbook } from "@scicatproject/scicat-sdk-ts";
+import { Logbook } from "shared/MockStubs";
 
 describe("LogbooksReducer", () => {
-  const logbook: Logbook = {
+  const logbook = new Logbook({
     name: "test",
     roomId: "!test@site",
     messages: [],
-  };
+  });
 
   describe("on fetchLogbooksComplete", () => {
     it("should set logbooks", () => {
       const firstTestMessage = { content: "First message" };
       const secondTestMessage = { content: "Second message" };
-      const logbooks = [logbook];
+      const logbooks = [
+        new Logbook({
+          ...logbook,
+          messages: [firstTestMessage, secondTestMessage],
+        }),
+      ];
 
       const action = fromActions.fetchLogbooksCompleteAction({ logbooks });
       const state = logbooksReducer(initialLogbookState, action);

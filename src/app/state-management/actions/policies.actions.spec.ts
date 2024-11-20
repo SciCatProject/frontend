@@ -1,27 +1,9 @@
+import { Policy } from "shared/MockStubs";
 import * as fromActions from "./policies.actions";
-import { Policy } from "@scicatproject/scicat-sdk-ts";
 
 describe("Policies Actions", () => {
-  const policy: Policy = {
-    manager: ["adminIngestor"],
-    tapeRedundancy: "low",
-    autoArchiveDelay: 7,
-    archiveEmailNotification: false,
-    archiveEmailsToBeNotified: [],
-    retrieveEmailNotification: false,
-    retrieveEmailsToBeNotified: [],
-    ownerGroup: "",
-    accessGroups: [],
-    _id: "",
-    autoArchive: false,
-    createdAt: "",
-    createdBy: "",
-    embargoPeriod: 0,
-    isPublished: false,
-    updatedAt: "",
-    updatedBy: "",
-    instrumentGroup: "",
-  };
+  const policy = new Policy();
+
   describe("fetchPoliciesAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchPoliciesAction();

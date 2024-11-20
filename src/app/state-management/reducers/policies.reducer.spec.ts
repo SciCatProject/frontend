@@ -1,29 +1,10 @@
 import * as fromActions from "state-management/actions/policies.actions";
 import { policiesReducer } from "./policies.reducer";
-import { Policy } from "@scicatproject/scicat-sdk-ts";
 import { initialPolicyState } from "state-management/state/policies.store";
+import { Policy } from "shared/MockStubs";
 
 describe("PoliciesReducer", () => {
-  const policy: Policy = {
-    manager: ["adminIngestor"],
-    tapeRedundancy: "low",
-    autoArchiveDelay: 7,
-    archiveEmailNotification: false,
-    archiveEmailsToBeNotified: [],
-    retrieveEmailNotification: false,
-    retrieveEmailsToBeNotified: [],
-    ownerGroup: "",
-    accessGroups: [],
-    _id: "",
-    autoArchive: false,
-    createdAt: "",
-    createdBy: "",
-    embargoPeriod: 0,
-    isPublished: false,
-    updatedAt: "",
-    updatedBy: "",
-    instrumentGroup: "",
-  };
+  const policy = new Policy();
 
   describe("on fetchPoliciesCompleteAction", () => {
     it("should set policies", () => {

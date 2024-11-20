@@ -5,12 +5,9 @@ import {
   initialDatasetState,
 } from "state-management/state/datasets.store";
 import { ArchViewMode, ScientificCondition } from "../models";
-import {
-  Attachment,
-  OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts";
+import { Attachment, Dataset } from "shared/MockStubs";
 
-const dataset: OutputDatasetObsoleteDto = {
+const derivedDataset = new Dataset({
   pid: "testPid",
   investigator: "",
   inputDatasets: [],
@@ -29,20 +26,11 @@ const dataset: OutputDatasetObsoleteDto = {
   principalInvestigator: "",
   updatedAt: "",
   updatedBy: "",
-};
+});
 
-const attachment: Attachment = {
-  accessGroups: [],
-  caption: "Test",
-  createdAt: "",
-  updatedAt: "",
-  createdBy: "",
-  updatedBy: "",
-  isPublished: false,
-  ownerGroup: "",
-  thumbnail: "",
-  id: "",
-};
+const attachment = new Attachment();
+
+const dataset = new Dataset({ ...derivedDataset, type: "raw" });
 
 describe("DatasetsReducer", () => {
   describe("on fetchDatasetsCompleteAction", () => {
@@ -133,7 +121,7 @@ describe("DatasetsReducer", () => {
 
   describe("on prefillBatchCompleteAction", () => {
     it("should set batch property", () => {
-      const batch: OutputDatasetObsoleteDto[] = [];
+      const batch: Dataset[] = [];
       const action = fromActions.prefillBatchCompleteAction({ batch });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
@@ -186,11 +174,11 @@ describe("DatasetsReducer", () => {
   describe("on addDatasetCompleteAction", () => {
     it("should set currentSet", () => {
       const action = fromActions.addDatasetCompleteAction({
-        dataset,
+        dataset: derivedDataset,
       });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
-      expect(state.currentSet).toEqual(dataset);
+      expect(state.currentSet).toEqual(derivedDataset as unknown as Dataset);
     });
   });
 

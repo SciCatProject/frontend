@@ -14,10 +14,11 @@ import {
   loadingCompleteAction,
 } from "state-management/actions/user.actions";
 import { Type } from "@angular/core";
-import { PoliciesService, Policy } from "@scicatproject/scicat-sdk-ts";
+import { PoliciesService } from "@scicatproject/scicat-sdk-ts";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
+import { Policy } from "shared/MockStubs";
 
-const policy: Policy = {
+const policy = new Policy({
   manager: ["adminIngestor"],
   tapeRedundancy: "low",
   autoArchiveDelay: 7,
@@ -36,7 +37,7 @@ const policy: Policy = {
   updatedAt: "",
   updatedBy: "",
   instrumentGroup: "",
-};
+});
 
 describe("PolicyEffects", () => {
   let actions: TestObservable;

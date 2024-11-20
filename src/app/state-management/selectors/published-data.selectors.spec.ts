@@ -1,9 +1,9 @@
 import { GenericFilters } from "state-management/models";
 import { PublishedDataState } from "state-management/state/published-data.store";
 import * as fromSelectors from "./published-data.selectors";
-import { PublishedData } from "@scicatproject/scicat-sdk-ts";
+import { PublishedData } from "shared/MockStubs";
 
-const publishedData: PublishedData = {
+const publishedData = new PublishedData({
   doi: "testDOI",
   affiliation: "test affiliation",
   creator: ["test creator"],
@@ -21,7 +21,7 @@ const publishedData: PublishedData = {
   numberOfFiles: 1,
   sizeOfArchive: 1,
   status: "pending_registration",
-};
+});
 
 const filters: GenericFilters = {
   sortField: "publicationYear desc",
