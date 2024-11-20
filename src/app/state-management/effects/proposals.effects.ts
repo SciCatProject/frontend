@@ -157,18 +157,20 @@ export class ProposalEffects {
     );
   });
 
-  updateProperty$ = createEffect(() => {
+  updateProposalProperty$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.updatePropertyAction),
+      ofType(fromActions.updateProposalPropertyAction),
       switchMap(({ proposalId, property }) =>
         this.proposalApi
           .patchAttributes(encodeURIComponent(proposalId), property)
           .pipe(
             switchMap(() => [
-              fromActions.updatePropertyCompleteAction(),
+              fromActions.updateProposalPropertyCompleteAction(),
               fromActions.fetchProposalAction({ proposalId }),
             ]),
-            catchError(() => of(fromActions.updatePropertyFailedAction())),
+            catchError(() =>
+              of(fromActions.updateProposalPropertyFailedAction()),
+            ),
           ),
       ),
     );
@@ -204,7 +206,7 @@ export class ProposalEffects {
         fromActions.fetchProposalDatasetsCountAction,
         fromActions.addAttachmentAction,
         fromActions.updateAttachmentCaptionAction,
-        fromActions.updatePropertyAction,
+        fromActions.updateProposalPropertyAction,
         fromActions.removeAttachmentAction,
       ),
       switchMap(() => of(loadingAction())),
@@ -230,8 +232,8 @@ export class ProposalEffects {
         fromActions.addAttachmentFailedAction,
         fromActions.updateAttachmentCaptionCompleteAction,
         fromActions.updateAttachmentCaptionFailedAction,
-        fromActions.updatePropertyCompleteAction,
-        fromActions.updatePropertyFailedAction,
+        fromActions.updateProposalPropertyCompleteAction,
+        fromActions.updateProposalPropertyFailedAction,
         fromActions.removeAttachmentCompleteAction,
         fromActions.removeAttachmentFailedAction,
       ),

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { Proposal } from "state-management/models";
 import { AppConfigService } from "app-config.service";
 import { Store } from "@ngrx/store";
@@ -7,8 +7,15 @@ import {
   selectParentProposal,
 } from "state-management/selectors/proposals.selectors";
 import { Router } from "@angular/router";
-import { updatePropertyAction } from "state-management/actions/proposals.actions";
-import { Observable, Subscription, combineLatest, fromEvent, map } from "rxjs";
+import { updateProposalPropertyAction } from "state-management/actions/proposals.actions";
+import {
+  Observable,
+  Subscription,
+  combineLatest,
+  fromEvent,
+  map,
+  switchMap,
+} from "rxjs";
 import {
   selectIsAdmin,
   selectProfile,
@@ -20,7 +27,7 @@ import { clearProposalsStateAction } from "state-management/actions/proposals.ac
   templateUrl: "proposal-detail.component.html",
   styleUrls: ["proposal-detail.component.scss"],
 })
-export class ProposalDetailComponent implements OnInit {
+export class ProposalDetailComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private _hasUnsavedChanges = false;
   @Input() proposal: Proposal;
@@ -54,16 +61,25 @@ export class ProposalDetailComponent implements OnInit {
     );
 
     this.subscriptions.push(
-      this.store.select(selectCurrentProposal).subscribe((proposal) => {
-        this.proposal = proposal;
-
-        combineLatest([this.accessGroups$, this.isAdmin$]).subscribe(
-          ([groups, isAdmin]) => {
+      this.store
+        .select(selectCurrentProposal)
+        .pipe(
+          switchMap((proposal) => {
+            this.proposal = proposal;
+            return combineLatest([this.accessGroups$, this.isAdmin$]).pipe(
+              map(([groups, isAdmin]) => ({
+                proposal,
+                groups,
+                isAdmin,
+              })),
+            );
+          }),
+          map(({ proposal, groups, isAdmin }) => {
             this.editingAllowed =
-              groups.indexOf(this.proposal?.ownerGroup) !== -1 || isAdmin;
-          },
-        );
-      }),
+              groups.indexOf(proposal?.ownerGroup) !== -1 || isAdmin;
+          }),
+        )
+        .subscribe(),
     );
   }
 
@@ -79,13 +95,20 @@ export class ProposalDetailComponent implements OnInit {
 
   onSaveMetadata(metadata: Record<string, any>) {
     if (this.proposal) {
-      const proposalId = this.proposal.proposalId;
+      const { proposalId } = this.proposal;
       const property = { metadata };
-      this.store.dispatch(updatePropertyAction({ proposalId, property }));
+
+      this.store.dispatch(
+        updateProposalPropertyAction({ proposalId, property }),
+      );
     }
   }
 
   onHasUnsavedChanges($event: boolean) {
     this._hasUnsavedChanges = $event;
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

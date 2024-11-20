@@ -101,16 +101,16 @@ export const updateAttachmentCaptionFailedAction = createAction(
   "[Proposal] Update Attachment Caption Failed",
 );
 
-export const updatePropertyAction = createAction(
-  "[Dataset] Update Property",
+export const updateProposalPropertyAction = createAction(
+  "[Proposal] Update Proposal Property",
   // TODO: Most probably with the new sdk the property should be of type UpdateProposalDto or something similar
   props<{ proposalId: string; property: Record<string, unknown> }>(),
 );
-export const updatePropertyCompleteAction = createAction(
-  "[Dataset] Update Property Complete",
+export const updateProposalPropertyCompleteAction = createAction(
+  "[Proposal] Update Proposal Property Complete",
 );
-export const updatePropertyFailedAction = createAction(
-  "[Dataset] Update Property Failed",
+export const updateProposalPropertyFailedAction = createAction(
+  "[Proposal] Update Proposal Property Failed",
 );
 
 export const removeAttachmentAction = createAction(

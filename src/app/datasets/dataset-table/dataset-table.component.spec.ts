@@ -20,16 +20,10 @@ import {
   deselectDatasetAction,
   selectAllDatasetsAction,
   clearSelectionAction,
-  changePageAction,
   sortByColumnAction,
 } from "state-management/actions/datasets.actions";
-import { PageChangeEvent } from "shared/modules/table/table.component";
 import { provideMockStore } from "@ngrx/store/testing";
 import { selectDatasets } from "state-management/selectors/datasets.selectors";
-import {
-  selectColumnAction,
-  deselectColumnAction,
-} from "state-management/actions/user.actions";
 import { MatTableModule } from "@angular/material/table";
 import {
   MatCheckboxChange,
