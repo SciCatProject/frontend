@@ -107,5 +107,65 @@ describe("Proposals general", () => {
 
       cy.get('[data-cy="proposal-type"]').contains(newProposalType);
     });
+
+    it("proposal should have metadata and if not it should be able to add", () => {
+      const metadataName = "Proposal Metadata Name";
+      const metadataValue = "proposal metadata value";
+      const newProposal = {
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+      };
+      cy.createProposal(newProposal);
+
+      cy.visit(`/proposals/${newProposal.proposalId}`);
+
+      cy.finishedLoading();
+
+      cy.contains(newProposal.title);
+
+      cy.finishedLoading();
+
+      cy.get('[data-cy="proposal-metadata-card"]').should("exist");
+
+      cy.get('[data-cy="proposal-metadata-card"] [role="tab"]')
+        .contains("Edit")
+        .click();
+
+      cy.get('[data-cy="add-new-row"]').click();
+
+      // simulate click event on the drop down
+      cy.get("mat-select[data-cy=field-type-input]").last().click(); // opens the drop down
+
+      // simulate click event on the drop down item (mat-option)
+      cy.get("mat-option")
+        .contains("string")
+        .then((option) => {
+          option[0].click();
+        });
+
+      cy.get("[data-cy=metadata-name-input]")
+        .last()
+        .type(`${metadataName}{enter}`);
+      cy.get("[data-cy=metadata-value-input]")
+        .last()
+        .type(`${metadataValue}{enter}`);
+
+      cy.get("button[data-cy=save-changes-button]").click();
+
+      cy.finishedLoading();
+
+      cy.reload();
+
+      cy.finishedLoading();
+
+      cy.contains(newProposal.title);
+
+      cy.get('[data-cy="proposal-metadata-card"]').contains(metadataName, {
+        matchCase: true,
+      });
+      cy.get('[data-cy="proposal-metadata-card"]').contains(metadataValue, {
+        matchCase: true,
+      });
+    });
   });
 });

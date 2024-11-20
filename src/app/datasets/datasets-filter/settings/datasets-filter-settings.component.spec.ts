@@ -12,10 +12,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { removeScientificConditionAction } from "state-management/actions/datasets.actions";
 import { of } from "rxjs";
-import {
-  deselectColumnAction,
-  deselectAllCustomColumnsAction,
-} from "state-management/actions/user.actions";
+import { deselectColumnAction } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";

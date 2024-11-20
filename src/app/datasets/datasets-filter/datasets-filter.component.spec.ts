@@ -65,7 +65,7 @@ const labelMaps = {
   PidFilterStartsWith: "PID filter (Starts With)- Not implemented",
 };
 export class MockStoreWithFilters extends MockStore {
-  public select(selector: any) {
+  public select(selector) {
     if (selector === selectFilters) {
       return of(filterConfigs);
     }
