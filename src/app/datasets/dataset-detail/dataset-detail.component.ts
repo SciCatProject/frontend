@@ -4,7 +4,7 @@ import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 
 import { MatDialog } from "@angular/material/dialog";
-import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
+// import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { combineLatest, fromEvent, Observable, Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
@@ -354,11 +354,7 @@ export class DatasetDetailComponent
   }
 
   getImageUrl(encoded: string) {
-    const mimeType = this.base64MimeType(encoded);
-    if (mimeType === "application/pdf") {
-      return "assets/images/pdf-icon.svg";
-    }
-    return encoded;
+    return this.attachmentService.getImageUrl(encoded);
   }
 
   openAttachment(encoded: string) {
