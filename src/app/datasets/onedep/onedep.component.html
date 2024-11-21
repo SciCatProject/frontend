@@ -160,9 +160,12 @@
                                 <ng-container *ngIf="files[fileType.key]?.contour !== undefined">
                                     <mat-form-field appearance="outline" class="contour-level">
                                         <mat-label>Contour Level</mat-label>
-                                        <input matInput type="number" placeholder="0.0" 
-                                        (input)="updateContourLevel($event, fileType.key)" 
-                                        pattern="^[+-]?(\d+([.,]\d+)$" 
+                                        <input
+                                            matInput
+                                            type="number"
+                                            placeholder="e.g. 0.0"
+                                            [value]="files[fileType.key]?.contour || ''"
+                                            (input)="fileType.key === 'vo-map' ? updateContourLevelMain($event) : updateContourLevel($event, fileType.key)"
                                         />
                                     </mat-form-field>
                                 </ng-container>

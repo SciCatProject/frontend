@@ -129,6 +129,20 @@ export class OneDepComponent implements OnInit {
       this.files[controlName].name = this.selectedFile[controlName].name;
     }
   }
+  updateContourLevelMain(event: Event) {
+    const input = (event.target as HTMLInputElement).value.trim();
+    const normalizedInput = input.replace(',', '.');
+    const parsedValue = parseFloat(normalizedInput);
+    if (!isNaN(parsedValue)) {
+      [EmFile.MainMap, EmFile.HalfMap1, EmFile.HalfMap2].forEach((key) => {
+        if (this.files[key]) {
+          this.files[key].contour = parsedValue;
+        }
+      });
+    } else {
+      console.warn('Invalid number format:', input);
+    }
+  }
   updateContourLevel(event: Event, controlName: EmFile) {
     const input = (event.target as HTMLInputElement).value.trim();
     const normalizedInput = input.replace(',', '.');
@@ -160,11 +174,9 @@ export class OneDepComponent implements OnInit {
         fileMetadata.push({ name: this.files[key].name, type: this.files[key].type, contour: this.files[key].contour, details: this.files[key].details });
       }
     }
-    console.log(fileMetadata);
     formDataToSend.append('fileMetadata', JSON.stringify(fileMetadata));
 
 
-    console.log("Creating deposition", formDataToSend);
     this.http.post("http://localhost:8080/onedep", formDataToSend, {
       headers: {}
     }).subscribe(
