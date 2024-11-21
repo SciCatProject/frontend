@@ -53,11 +53,11 @@ describe("PublishedDataEffects", () => {
         {
           provide: PublishedDataService,
           useValue: jasmine.createSpyObj("publsihedDataApi", [
-            "find",
-            "count",
-            "findById",
-            "create",
-            "register",
+            "publishedDataControllerFindAll",
+            "publishedDataControllerCount",
+            "publishedDataControllerFindOne",
+            "publishedDataControllerCreate",
+            "publishedDataControllerRegister",
           ]),
         },
         { provide: Router, useClass: MockRouter },

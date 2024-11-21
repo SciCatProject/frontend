@@ -56,20 +56,21 @@ describe("SampleEffects", () => {
         {
           provide: SamplesService,
           useValue: jasmine.createSpyObj("sampleApi", [
-            "fullquery",
-            "findById",
-            "findByIdAccess",
-            "metadataKeys",
-            "patchAttributes",
-            "create",
-            "createAttachments",
-            "updateByIdAttachments",
-            "destroyByIdAttachments",
+            "samplesControllerFullquery",
+            "samplesControllerFindById",
+            "samplesControllerFindByIdAccess",
+            "samplesControllerMetadataKeys",
+            "samplesControllerUpdate",
+            "samplesControllerCreate",
+            "samplesControllerCreateAttachments",
+            "samplesControllerFindOneAttachmentAndRemove",
           ]),
         },
         {
           provide: DatasetsService,
-          useValue: jasmine.createSpyObj("datasetApi", ["find"]),
+          useValue: jasmine.createSpyObj("datasetApi", [
+            "datasetsControllerFindAll",
+          ]),
         },
       ],
     });

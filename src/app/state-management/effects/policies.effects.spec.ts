@@ -59,9 +59,9 @@ describe("PolicyEffects", () => {
         {
           provide: PoliciesService,
           useValue: jasmine.createSpyObj("policyApi", [
-            "find",
-            "count",
-            "updatewhere",
+            "policiesControllerFindAll",
+            "policiesControllerCount",
+            "policiesControllerUpdateWhere",
           ]),
         },
       ],

@@ -47,10 +47,9 @@ describe("JobEffects", () => {
         {
           provide: JobsService,
           useValue: jasmine.createSpyObj("jobApi", [
-            "find",
-            "count",
-            "findById",
-            "create",
+            "jobsControllerFindAll",
+            "jobsControllerFindOne",
+            "jobsControllerCreate",
           ]),
         },
       ],

@@ -88,22 +88,18 @@ describe("UserEffects", () => {
         {
           provide: UsersService,
           useValue: jasmine.createSpyObj("userApi", [
-            "findById",
-            "login",
-            "isAuthenticated",
-            "logout",
-            "getCurrent",
-            "getSettings",
-            "updateSettings",
-            "partialUpdateExternalSettings",
-            "partialUpdateSettings",
-            "getCurrentToken",
-            "getCurrentId",
+            "usersControllerFindById",
+            "usersControllerLogin",
+            "usersControllerLogout",
+            "usersControllerGetSettings",
+            "usersControllerPatchExternalSettings",
           ]),
         },
         {
           provide: UserIdentitiesService,
-          useValue: jasmine.createSpyObj("userIdentityApi", ["findOne"]),
+          useValue: jasmine.createSpyObj("userIdentityApi", [
+            "userIdentitiesControllerFindOne",
+          ]),
         },
         {
           provide: Router,

@@ -67,17 +67,19 @@ describe("ProposalEffects", () => {
         {
           provide: ProposalsService,
           useValue: jasmine.createSpyObj("proposalApi", [
-            "fullquery",
-            "findById",
-            "findByIdAccess",
-            "createAttachments",
-            "updateByIdAttachments",
-            "destroyByIdAttachments",
+            "proposalsControllerFullquery",
+            "proposalsControllerFindById",
+            "proposalsControllerFindByIdAccess",
+            "proposalsControllerCreateAttachment",
+            "proposalsControllerFindOneAttachmentAndUpdate",
+            "proposalsControllerFindOneAttachmentAndRemove",
           ]),
         },
         {
           provide: DatasetsService,
-          useValue: jasmine.createSpyObj("datasetApi", ["find"]),
+          useValue: jasmine.createSpyObj("datasetApi", [
+            "datasetsControllerFindAll",
+          ]),
         },
       ],
     });
@@ -102,7 +104,7 @@ describe("ProposalEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: proposals });
-        proposalApi.proposalsControllerFullfacet.and.returnValue(response);
+        proposalApi.proposalsControllerFullquery.and.returnValue(response);
 
         const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
         expect(effects.fetchProposals$).toBeObservable(expected);
@@ -114,7 +116,7 @@ describe("ProposalEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        proposalApi.proposalsControllerFullfacet.and.returnValue(response);
+        proposalApi.proposalsControllerFullquery.and.returnValue(response);
 
         const expected = cold("--b", { b: outcome });
         expect(effects.fetchProposals$).toBeObservable(expected);
@@ -135,7 +137,7 @@ describe("ProposalEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: proposals });
-        proposalApi.proposalsControllerFullfacet.and.returnValue(response);
+        proposalApi.proposalsControllerFullquery.and.returnValue(response);
 
         const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
         expect(effects.fetchProposals$).toBeObservable(expected);
@@ -147,7 +149,7 @@ describe("ProposalEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        proposalApi.proposalsControllerFullfacet.and.returnValue(response);
+        proposalApi.proposalsControllerFullquery.and.returnValue(response);
 
         const expected = cold("--b", { b: outcome });
         expect(effects.fetchProposals$).toBeObservable(expected);
@@ -168,7 +170,7 @@ describe("ProposalEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: proposals });
-        proposalApi.proposalsControllerFullfacet.and.returnValue(response);
+        proposalApi.proposalsControllerFullquery.and.returnValue(response);
 
         const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
         expect(effects.fetchProposals$).toBeObservable(expected);
@@ -180,7 +182,7 @@ describe("ProposalEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        proposalApi.proposalsControllerFullfacet.and.returnValue(response);
+        proposalApi.proposalsControllerFullquery.and.returnValue(response);
 
         const expected = cold("--b", { b: outcome });
         expect(effects.fetchProposals$).toBeObservable(expected);
@@ -198,7 +200,7 @@ describe("ProposalEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: proposals });
-        proposalApi.proposalsControllerFullfacet.and.returnValue(response);
+        proposalApi.proposalsControllerFullquery.and.returnValue(response);
 
         const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
         expect(effects.fetchProposals$).toBeObservable(expected);
@@ -210,7 +212,7 @@ describe("ProposalEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        proposalApi.proposalsControllerFullfacet.and.returnValue(response);
+        proposalApi.proposalsControllerFullquery.and.returnValue(response);
 
         const expected = cold("--b", { b: outcome });
         expect(effects.fetchProposals$).toBeObservable(expected);
@@ -228,7 +230,7 @@ describe("ProposalEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: proposals });
-      proposalApi.proposalsControllerFullfacet.and.returnValue(response);
+      proposalApi.proposalsControllerFullquery.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
@@ -240,7 +242,7 @@ describe("ProposalEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      proposalApi.proposalsControllerFullfacet.and.returnValue(response);
+      proposalApi.proposalsControllerFullquery.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
