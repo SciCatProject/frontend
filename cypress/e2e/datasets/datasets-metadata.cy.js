@@ -12,7 +12,7 @@ describe("Datasets", () => {
   beforeEach(() => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
 
-    cy.intercept("PATCH", "/api/v3/Datasets/**/*").as("metadata");
+    cy.intercept("PATCH", "/api/v3/datasets/**/*").as("metadata");
     cy.intercept("GET", "*").as("fetch");
   });
 
@@ -66,6 +66,8 @@ describe("Datasets", () => {
         .type(`${metadataValue}{enter}`);
 
       cy.get("button[data-cy=save-changes-button]").click();
+
+      cy.finishedLoading();
 
       cy.wait("@metadata").then(({ request, response }) => {
         expect(request.method).to.eq("PATCH");

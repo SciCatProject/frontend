@@ -166,6 +166,9 @@ export class UserEffects {
               }),
             ];
           }),
+          catchError((error: HttpErrorResponse) => {
+            return of(fromActions.funcLoginFailedAction({ error }));
+          }),
         ),
       ),
     );
@@ -356,7 +359,7 @@ export class UserEffects {
       ofType(fromActions.fetchUserSettingsCompleteAction),
       mergeMap(({ userSettings }) => [
         fromActions.updateFilterConfigs({
-          filterConfigs: (userSettings.externalSettings as any)?.filters,
+          filterConfigs: (userSettings as any).filters,
         }),
       ]),
     );
@@ -368,7 +371,8 @@ export class UserEffects {
       mergeMap(({ userSettings }) => {
         const actions = [];
 
-        (userSettings.externalSettings as any)?.conditions
+        // TODO: Check with the types here. This is working better as it is now with the conditions and filters. We are leaving it for now as it was from before.
+        (userSettings as any).conditions
           .filter((condition) => condition.enabled)
           .forEach((condition) => {
             actions.push(
@@ -384,8 +388,7 @@ export class UserEffects {
 
         actions.push(
           fromActions.updateConditionsConfigs({
-            conditionConfigs: (userSettings.externalSettings as any)
-              ?.conditions,
+            conditionConfigs: (userSettings as any).conditions,
           }),
         );
 
@@ -461,13 +464,13 @@ export class UserEffects {
           map((userSettings: UserSettings) => {
             userSettings["conditions"] = (
               userSettings.externalSettings as any
-            )?.conditions;
+            ).conditions;
             userSettings["filters"] = (
               userSettings.externalSettings as any
-            )?.filters;
+            ).filters;
             userSettings["columns"] = (
               userSettings.externalSettings as any
-            )?.columns;
+            ).columns;
             delete userSettings.externalSettings;
             return fromActions.updateUserSettingsCompleteAction({
               userSettings,
@@ -496,16 +499,16 @@ export class UserEffects {
       ofType(fromActions.loadDefaultSettings),
       map(({ config }) => {
         const defaultFilters =
-          config.defaultDatasetsListSettings?.filters ||
+          config.defaultDatasetsListSettings.filters ||
           initialUserState.filters;
         const defaultConditions =
-          config.defaultDatasetsListSettings?.conditions ||
+          config.defaultDatasetsListSettings.conditions ||
           initialUserState.conditions;
 
         // NOTE: config.localColumns is for backward compatibility.
         //       it should be removed once no longer needed
         const columns =
-          config.defaultDatasetsListSettings?.columns ||
+          config.defaultDatasetsListSettings.columns ||
           config.localColumns ||
           initialUserState.columns;
 
