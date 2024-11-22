@@ -56,11 +56,11 @@ describe("ProposalDashboardComponent", () => {
         { provide: DatasetsService, useClass: MockDatasetApi },
         {
           provide: LogbooksService,
-          useValue: jasmine.createSpyObj("logbookApi"),
+          useValue: jasmine.createSpyObj("logbookApi", []),
         },
         {
           provide: ProposalsService,
-          useValue: jasmine.createSpyObj("proposalApi"),
+          useValue: jasmine.createSpyObj("proposalApi", []),
         },
         { provide: ScicatDataService, useValue: {} },
       ],

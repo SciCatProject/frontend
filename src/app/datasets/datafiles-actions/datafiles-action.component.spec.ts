@@ -17,6 +17,7 @@ import {
 } from "shared/MockStubs";
 import { ActionDataset } from "./datafiles-action.interfaces";
 import { UsersService } from "@scicatproject/scicat-sdk-ts";
+import { AuthService } from "shared/services/auth/auth.service";
 
 describe("1000: DatafilesActionComponent", () => {
   let component: DatafilesActionComponent;
@@ -121,7 +122,7 @@ describe("1000: DatafilesActionComponent", () => {
     notebook_selected = 3,
   }
 
-  const jwt = () => ({
+  const usersControllerGetUserJWT = () => ({
     subscribe: () => ({
       jwt: "9a2322a8-4a7d-11ef-a0f5-d7c40fcf1693",
     }),
@@ -167,7 +168,14 @@ describe("1000: DatafilesActionComponent", () => {
         providers: [
           { provide: UsersService, useClass: MockUserApi },
           { provide: MatDialogRef, useClass: MockMatDialogRef },
-          { provide: UsersService, useValue: { jwt, getCurrentToken } },
+          {
+            provide: UsersService,
+            useValue: { usersControllerGetUserJWT, getCurrentToken },
+          },
+          {
+            provide: AuthService,
+            useValue: jasmine.createSpyObj("authService", ["getToken"]),
+          },
         ],
       },
     });

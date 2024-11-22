@@ -7,6 +7,7 @@ import { MockStore } from "./shared/MockStubs";
 import { APP_CONFIG } from "./app-config.module";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { AppConfigService } from "app-config.service";
+import { Configuration } from "@scicatproject/scicat-sdk-ts";
 
 describe("AppComponent", () => {
   const getConfig = () => ({
@@ -29,6 +30,10 @@ describe("AppComponent", () => {
         providers: [
           { provide: Store, useClass: MockStore },
           { provide: AppConfigService, useValue: { getConfig } },
+          {
+            provide: Configuration,
+            useClass: Configuration,
+          },
           {
             provide: APP_CONFIG,
             useValue: {

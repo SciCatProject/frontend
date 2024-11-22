@@ -8,6 +8,7 @@ import { RouterModule } from "@angular/router";
 import { StoreModule } from "@ngrx/store";
 import { CheckboxEvent } from "shared/modules/table/table.component";
 import {
+  MockAuthService,
   MockDatafilesActionsComponent,
   MockMatDialogRef,
   MockUserApi,
@@ -19,6 +20,7 @@ import { AppConfigService } from "app-config.service";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { DatafilesActionsComponent } from "datasets/datafiles-actions/datafiles-actions.component";
 import { UsersService } from "@scicatproject/scicat-sdk-ts";
+import { AuthService } from "shared/services/auth/auth.service";
 
 describe("DatafilesComponent", () => {
   let component: DatafilesComponent;
@@ -95,7 +97,7 @@ describe("DatafilesComponent", () => {
           { provide: UsersService, useClass: MockUserApi },
           { provide: MatDialogRef, useClass: MockMatDialogRef },
           { provide: AppConfigService, useValue: { getConfig } },
-          { provide: UsersService, useClass: MockUserApi },
+          { provide: AuthService, useValue: MockAuthService },
           {
             provide: DatafilesActionsComponent,
             useClass: MockDatafilesActionsComponent,

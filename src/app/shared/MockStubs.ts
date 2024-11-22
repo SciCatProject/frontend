@@ -25,12 +25,10 @@ import {
   TechniqueClass,
   Logbook as LogbookInterface,
   Policy as PolicyInterface,
-  UserSettings,
-  UserIdentity,
   ReturnedUserDto,
   HistoryClass,
 } from "@scicatproject/scicat-sdk-ts";
-import { AuthService } from "./services/auth/auth.service";
+import { AuthService, SDKToken } from "./services/auth/auth.service";
 
 export class MockUserApi {
   getCurrentId() {
@@ -49,8 +47,64 @@ export class MockUserApi {
     return { username: "admin" };
   }
 
-  jwt() {
+  usersControllerGetUserJWT() {
     return of("");
+  }
+}
+
+export class MockAuthService {
+  private token = new SDKToken();
+
+  protected load(prop: string) {
+    return "";
+  }
+
+  protected persist(
+    prop: string,
+    value: string | number | Date | boolean,
+    expires?: Date,
+  ): void {}
+
+  public clear(): void {}
+
+  public setRememberMe(value: boolean): void {}
+
+  public setUser(user: ReturnedUserDto) {
+    this.save();
+  }
+
+  public setToken(token: SDKToken): void {
+    this.save();
+  }
+
+  public getToken(): SDKToken {
+    return this.token;
+  }
+
+  public getAccessTokenId(): string {
+    return this.token.id;
+  }
+
+  public getCurrentUserId() {
+    return this.token.userId;
+  }
+
+  public getCurrentUserData() {
+    return typeof this.token.user === "string"
+      ? JSON.parse(this.token.user)
+      : this.token.user;
+  }
+
+  public isAuthenticated() {
+    return !(
+      this.getCurrentUserId() === "" ||
+      this.getCurrentUserId() == null ||
+      this.getCurrentUserId() == "null"
+    );
+  }
+
+  public save(): boolean {
+    return true;
   }
 }
 
@@ -69,15 +123,15 @@ export class MockDatasetApi {
     return of([]);
   }
 
-  find() {
+  datasetsControllerFindAll() {
     return of([]);
   }
 
-  findById() {
+  datasetsControllerFindById() {
     return of([]);
   }
 
-  count(data?: any) {
+  datasetsControllerCount(data?: any) {
     return of(0);
   }
 }
@@ -163,7 +217,7 @@ export class MockArchivingService {
 }
 
 export class MockPublishedDataApi {
-  findbyId() {
+  publishedDataControllerFindOne() {
     return of({
       creator: "string",
       publicationYear: "string",
@@ -174,7 +228,7 @@ export class MockPublishedDataApi {
     });
   }
 
-  find() {
+  publishedDataControllerFindAll() {
     return of([
       {
         creator: "string",
@@ -187,7 +241,7 @@ export class MockPublishedDataApi {
     ]);
   }
 
-  formPopulate() {
+  publishedDataControllerFormPopulate() {
     return of({});
   }
 }
