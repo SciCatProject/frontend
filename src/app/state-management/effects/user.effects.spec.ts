@@ -5,6 +5,8 @@ import {
   UserIdentity,
   ReturnedUserDto,
   UserSettings,
+  Configuration,
+  AuthService as SharedAuthService,
 } from "@scicatproject/scicat-sdk-ts";
 import { ADAuthService } from "users/adauth.service";
 import { TestBed } from "@angular/core/testing";
@@ -38,6 +40,7 @@ import { AppConfigService } from "app-config.service";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { AuthService, SDKToken } from "shared/services/auth/auth.service";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
+import { User } from "shared/MockStubs";
 
 class AppConfigServiceMock {
   getConfig() {
@@ -58,6 +61,7 @@ describe("UserEffects", () => {
   let activeDirAuthService: jasmine.SpyObj<ADAuthService>;
   let authService: jasmine.SpyObj<AuthService>;
   let userApi: jasmine.SpyObj<UsersService>;
+  let sharedAuthService: jasmine.SpyObj<SharedAuthService>;
   let userIdentityApi: jasmine.SpyObj<UserIdentitiesService>;
   let router: jasmine.SpyObj<Router>;
   const error = new HttpErrorResponse({});
@@ -78,21 +82,38 @@ describe("UserEffects", () => {
           useClass: AppConfigServiceMock,
         },
         {
+          provide: Configuration,
+          useClass: Configuration,
+        },
+        {
           provide: ADAuthService,
           useValue: jasmine.createSpyObj("activeDirAuthService", ["login"]),
         },
         {
           provide: AuthService,
-          useValue: jasmine.createSpyObj("authService", ["setToken", "clear"]),
+          useValue: jasmine.createSpyObj("authService", [
+            "setToken",
+            "clear",
+            "isAuthenticated",
+            "getCurrentUserData",
+            "getCurrentUserId",
+            "getToken",
+          ]),
+        },
+        {
+          provide: SharedAuthService,
+          useValue: jasmine.createSpyObj("sharedAuthService", [
+            "authControllerLogin",
+            "authControllerLogout",
+          ]),
         },
         {
           provide: UsersService,
           useValue: jasmine.createSpyObj("userApi", [
             "usersControllerFindById",
-            "usersControllerLogin",
-            "usersControllerLogout",
             "usersControllerGetSettings",
             "usersControllerPatchExternalSettings",
+            "usersControllerGetMyUser",
           ]),
         },
         {
@@ -111,6 +132,7 @@ describe("UserEffects", () => {
     effects = TestBed.inject(UserEffects);
     activeDirAuthService = injectedStub(ADAuthService);
     authService = injectedStub(AuthService);
+    sharedAuthService = injectedStub(SharedAuthService);
     userApi = injectedStub(UsersService);
     userIdentityApi = injectedStub(UserIdentitiesService);
     router = injectedStub(Router);
@@ -196,7 +218,7 @@ describe("UserEffects", () => {
     });
 
     it("should result in a fetchUserCompleteAction, loginCompleteAction, fetchUserIdentityAction and a fetchUserSettingsAction", () => {
-      let user: ReturnedUserDto;
+      const user = new User();
       user.id = "testId";
       const accountType = "external";
       const action = fromActions.fetchUserAction({ adLoginResponse });
@@ -282,7 +304,7 @@ describe("UserEffects", () => {
     };
 
     it("should result in a funcLoginSuccessAction and a loginCompleteAction", () => {
-      let user: ReturnedUserDto;
+      const user = new User();
       const accountType = "functional";
       const action = fromActions.funcLoginAction({ form });
       const outcome1 = fromActions.funcLoginSuccessAction();
@@ -290,7 +312,7 @@ describe("UserEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: { user } });
-      userApi.usersControllerLogin.and.returnValue(response);
+      sharedAuthService.authControllerLogin.and.returnValue(response);
 
       const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
       expect(effects.funcLogin$).toBeObservable(expected);
@@ -302,7 +324,7 @@ describe("UserEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {}, error);
-      userApi.usersControllerLogin.and.returnValue(response);
+      sharedAuthService.authControllerLogin.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.funcLogin$).toBeObservable(expected);
@@ -387,7 +409,7 @@ describe("UserEffects", () => {
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: { logoutURL: "" } });
       authService.isAuthenticated.and.returnValue(true);
-      userApi.usersControllerLogout.and.returnValue(response);
+      sharedAuthService.authControllerLogout.and.returnValue(response);
 
       const expected = cold("--(bcdefghij)", {
         b: outcome1,
@@ -410,7 +432,7 @@ describe("UserEffects", () => {
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
       authService.isAuthenticated.and.returnValue(true);
-      userApi.usersControllerLogout.and.returnValue(response);
+      sharedAuthService.authControllerLogout.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.logout$).toBeObservable(expected);
@@ -431,22 +453,17 @@ describe("UserEffects", () => {
 
   describe("fetchCurrentUser$", () => {
     it("should result in a fetchCurrentUserCompleteAction, a fetchUserIdentityAction, and a fetchUserSettingsAction", () => {
-      let user: ReturnedUserDto;
+      const user = new User();
       user.id = "testId";
-      const token: SDKToken = {
+      const token = {
         id: "testId",
         ttl: 100,
         scopes: ["string"],
         created: new Date(),
         userId: "testId",
+        user: "testUser",
         rememberMe: false,
-        user: {
-          id: "test",
-          email: "test@test.com",
-          username: "testUsername",
-          authStrategy: "local",
-        },
-      };
+      } as unknown as SDKToken;
       const action = fromActions.fetchCurrentUserAction();
       const outcome1 = fromActions.fetchCurrentUserCompleteAction({ user });
       const outcome2 = fromActions.fetchUserIdentityAction({ id: user.id });
@@ -457,7 +474,7 @@ describe("UserEffects", () => {
       authService.getToken.and.returnValue(token);
       authService.isAuthenticated.and.returnValue(true);
       authService.getCurrentUserId.and.returnValue(user.id);
-      authService.getCurrentUserData.and.returnValue(response);
+      userApi.usersControllerGetMyUser.and.returnValue(response);
 
       const expected = cold("--(bcd)", {
         b: outcome1,
@@ -468,22 +485,16 @@ describe("UserEffects", () => {
     });
 
     it("should result in a fetchCurrentUserFailedAction", () => {
-      let user: ReturnedUserDto;
+      const user = new User();
       user.id = "testId";
-      const token: SDKToken = {
+      const token = {
         id: "testId",
         ttl: 3600,
         scopes: ["string"],
         created: new Date(),
         userId: "testId",
-        rememberMe: false,
-        user: {
-          id: "test",
-          email: "test@test.com",
-          username: "testUsername",
-          authStrategy: "local",
-        },
-      };
+        user: "testUser",
+      } as unknown as SDKToken;
       const action = fromActions.fetchCurrentUserAction();
       const outcome = fromActions.fetchCurrentUserFailedAction();
 
@@ -492,29 +503,23 @@ describe("UserEffects", () => {
       authService.getToken.and.returnValue(token);
       authService.isAuthenticated.and.returnValue(true);
       authService.getCurrentUserId.and.returnValue(user.id);
-      authService.getCurrentUserData.and.returnValue(response);
+      userApi.usersControllerGetMyUser.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCurrentUser$).toBeObservable(expected);
     });
 
     it("should not call getCurrent() if token is expired", () => {
-      let user: ReturnedUserDto;
+      const user = new User();
       user.id = "testId";
-      const token: SDKToken = {
+      const token = {
         id: "testId",
         ttl: 100,
         scopes: ["string"],
         created: new Date(1611438651),
         userId: "testId",
-        rememberMe: false,
-        user: {
-          id: "test",
-          email: "test@test.com",
-          username: "testUsername",
-          authStrategy: "local",
-        },
-      };
+        user: "testUser",
+      } as unknown as SDKToken;
       const action = fromActions.fetchCurrentUserAction();
 
       actions = hot("-a", { a: action });
@@ -581,15 +586,13 @@ describe("UserEffects", () => {
     const id = "testId";
 
     it("should result in a fetchUserSettingsCompleteAction", () => {
-      const userSettings: UserSettings = {
+      const userSettings = {
+        columns: [],
         datasetCount: 25,
         jobCount: 25,
         userId: "testId",
-        externalSettings: {
-          columns: [],
-        },
         id: "testId",
-      };
+      } as unknown as UserSettings;
       const action = fromActions.fetchUserSettingsAction({ id });
       const outcome = fromActions.fetchUserSettingsCompleteAction({
         userSettings,
@@ -618,14 +621,12 @@ describe("UserEffects", () => {
 
   describe("setLimitFilters$", () => {
     it("should result in a setDatasetsLimitFilterAction and a setJobsLimitFilterAction", () => {
-      const userSettings: UserSettings = {
-        externalSettings: {
-          columns: [],
-        },
-        userId: "test",
+      const userSettings = {
+        columns: [],
         datasetCount: 10,
         jobCount: 10,
-      };
+      } as unknown as UserSettings;
+
       const action = fromActions.fetchUserSettingsCompleteAction({
         userSettings,
       });
@@ -703,17 +704,16 @@ describe("UserEffects", () => {
     const property = { columns: [] };
 
     it("should result in an updateUserSettingsCompleteAction", () => {
-      const userSettings: UserSettings = {
+      // TODO: try to fix the types here instead of using type casting and conversion
+      const userSettings = {
+        columns: [],
+        filters: [],
+        conditions: [],
         datasetCount: 25,
         jobCount: 25,
         userId: "testId",
         id: "testId",
-        externalSettings: {
-          columns: [],
-          filters: [],
-          conditions: [],
-        },
-      };
+      } as unknown as UserSettings;
 
       const apiResponse = {
         datasetCount: 25,
@@ -754,20 +754,14 @@ describe("UserEffects", () => {
 
   describe("fetchScicatToken$", () => {
     it("should result in a fetchScicatTokenCompleteAction", () => {
-      const token: SDKToken = {
+      const token = {
         id: "testId",
         ttl: 100,
         scopes: ["string"],
         created: new Date(),
         userId: "testId",
-        rememberMe: false,
-        user: {
-          id: "test",
-          email: "test@test.com",
-          username: "testUsername",
-          authStrategy: "local",
-        },
-      };
+        user: "testUser",
+      } as unknown as SDKToken;
       const action = fromActions.fetchScicatTokenAction();
       const outcome = fromActions.fetchScicatTokenCompleteAction({ token });
 

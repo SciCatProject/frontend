@@ -1,4 +1,4 @@
-import { throwError } from "rxjs";
+import { of, throwError } from "rxjs";
 import { ProposalEffects } from "./proposals.effects";
 import { TestBed } from "@angular/core/testing";
 import { provideMockStore } from "@ngrx/store/testing";
@@ -10,10 +10,6 @@ import {
 } from "state-management/selectors/proposals.selectors";
 import * as fromActions from "state-management/actions/proposals.actions";
 import { hot, cold } from "jasmine-marbles";
-import {
-  loadingAction,
-  loadingCompleteAction,
-} from "state-management/actions/user.actions";
 import { Type } from "@angular/core";
 import {
   DatasetsService,
@@ -21,6 +17,10 @@ import {
 } from "@scicatproject/scicat-sdk-ts";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import { Attachment, Dataset, Proposal } from "shared/MockStubs";
+import {
+  loadingAction,
+  loadingCompleteAction,
+} from "state-management/actions/user.actions";
 
 const proposal = new Proposal({
   proposalId: "testId",
@@ -68,6 +68,7 @@ describe("ProposalEffects", () => {
           provide: ProposalsService,
           useValue: jasmine.createSpyObj("proposalApi", [
             "proposalsControllerFullquery",
+            "proposalsControllerFullfacet",
             "proposalsControllerFindById",
             "proposalsControllerFindByIdAccess",
             "proposalsControllerCreateAttachment",
@@ -228,21 +229,26 @@ describe("ProposalEffects", () => {
         count: proposals.length,
       });
 
+      const responseArray = [
+        {
+          all: [{ totalSets: proposals.length }],
+        },
+      ];
       actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: proposals });
-      proposalApi.proposalsControllerFullquery.and.returnValue(response);
+      const response = cold("-a|", { a: responseArray });
+      proposalApi.proposalsControllerFullfacet.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
     });
 
-    it("should result in a fetchProposalsFailedAction", () => {
+    it("should result in a fetchCountFailedAction", () => {
       const action = fromActions.fetchCountAction();
       const outcome = fromActions.fetchCountFailedAction();
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      proposalApi.proposalsControllerFullquery.and.returnValue(response);
+      proposalApi.proposalsControllerFullfacet.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
@@ -252,23 +258,21 @@ describe("ProposalEffects", () => {
   describe("fetchProposal$", () => {
     const proposalId = "testId";
     const permission = {
-      accepted: { canAccess: true },
-      rejected: { canAccess: false },
+      accepted: { canAccess: true } as any,
+      rejected: { canAccess: false } as any,
     };
 
+    // TODO: For now the tests are passing but check the types and fix any types
     it("should result in a fetchProposalCompleteAction", () => {
       const action = fromActions.fetchProposalAction({ proposalId });
       const outcome = fromActions.fetchProposalCompleteAction({ proposal });
 
-      const responseAccess = cold("-#", permission.accepted);
-      const responseProposal = cold("-#", proposal);
-
       proposalApi.proposalsControllerFindByIdAccess
         .withArgs(proposalId)
-        .and.returnValue(responseAccess);
+        .and.returnValue(of(permission.accepted));
       proposalApi.proposalsControllerFindById
         .withArgs(encodeURIComponent(proposalId))
-        .and.returnValue(responseProposal);
+        .and.returnValue(of(proposal as any));
 
       actions = hot("a", { a: action });
       const expected = cold("b", { b: outcome });
@@ -278,19 +282,17 @@ describe("ProposalEffects", () => {
 
     it("should result in a fetchProposalFailedAction", () => {
       const action = fromActions.fetchProposalAction({ proposalId });
-      const failure = fromActions.fetchProposalFailedAction();
-
-      const responseAccess = cold("-#", permission.accepted);
+      const outcome = fromActions.fetchProposalFailedAction();
 
       proposalApi.proposalsControllerFindByIdAccess
         .withArgs(proposalId)
-        .and.returnValue(responseAccess);
+        .and.returnValue(of(permission.accepted));
       proposalApi.proposalsControllerFindById.and.returnValue(
         throwError(() => new Error()),
       );
 
       actions = hot("a", { a: action });
-      const expected = cold("b", { b: failure });
+      const expected = cold("b", { b: outcome });
 
       expect(effects.fetchProposal$).toBeObservable(expected);
     });
@@ -298,11 +300,9 @@ describe("ProposalEffects", () => {
     it("should do nothing if findByIdAccess returns false", () => {
       const action = fromActions.fetchProposalAction({ proposalId });
 
-      const responseAccess = cold("-#", permission.rejected);
-
       proposalApi.proposalsControllerFindByIdAccess
         .withArgs(proposalId)
-        .and.returnValue(responseAccess);
+        .and.returnValue(of(permission.rejected));
 
       actions = hot("a", { a: action });
       const expected = cold("------");
@@ -313,14 +313,14 @@ describe("ProposalEffects", () => {
 
     it("should result in fetchProposalAccessFailedAction if findByIdAccess failed", () => {
       const action = fromActions.fetchProposalAction({ proposalId });
-      const failure = fromActions.fetchProposalAccessFailedAction();
+      const outcome = fromActions.fetchProposalAccessFailedAction();
 
       proposalApi.proposalsControllerFindByIdAccess
         .withArgs(proposalId)
         .and.returnValue(throwError(() => new Error()));
 
       actions = hot("a", { a: action });
-      const expected = cold("b", { b: failure });
+      const expected = cold("b", { b: outcome });
 
       expect(effects.fetchProposal$).toBeObservable(expected);
       expect(proposalApi.proposalsControllerFindById).not.toHaveBeenCalled();

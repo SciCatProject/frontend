@@ -54,9 +54,12 @@ export class ProposalEffects {
       map(([action, params]) => params),
       switchMap(({ query }) =>
         this.proposalsService.proposalsControllerFullfacet(query).pipe(
-          map((proposals) =>
-            fromActions.fetchCountCompleteAction({ count: proposals.length }),
-          ),
+          map((res) => {
+            const { all } = res[0];
+            const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
+
+            return fromActions.fetchCountCompleteAction({ count: allCounts });
+          }),
           catchError(() => of(fromActions.fetchCountFailedAction())),
         ),
       ),

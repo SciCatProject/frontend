@@ -1,4 +1,4 @@
-import { throwError } from "rxjs";
+import { of, throwError } from "rxjs";
 import { SampleEffects } from "./samples.effects";
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
@@ -265,24 +265,22 @@ describe("SampleEffects", () => {
 
   describe("fetchSample$", () => {
     const sampleId = "testId";
+    // TODO: Try to fix the any types here
     const permission = {
-      accepted: { canAccess: true },
-      rejected: { canAccess: false },
+      accepted: { canAccess: true } as any,
+      rejected: { canAccess: false } as any,
     };
 
     it("should result in a fetchSampleCompleteAction", () => {
       const action = fromActions.fetchSampleAction({ sampleId });
       const outcome = fromActions.fetchSampleCompleteAction({ sample });
 
-      const responseAccess = cold("-#", permission.accepted);
-      const responseSample = cold("-#", sample);
-
       sampleApi.samplesControllerFindByIdAccess
         .withArgs(sampleId)
-        .and.returnValue(responseAccess);
+        .and.returnValue(of(permission.accepted));
       sampleApi.samplesControllerFindById
         .withArgs(encodeURIComponent(sampleId))
-        .and.returnValue(responseSample);
+        .and.returnValue(of(sample as any));
 
       actions = hot("a", { a: action });
       const expected = cold("b", { b: outcome });
@@ -294,11 +292,9 @@ describe("SampleEffects", () => {
       const action = fromActions.fetchSampleAction({ sampleId });
       const failure = fromActions.fetchSampleFailedAction();
 
-      const responseAccess = cold("-#", permission.accepted);
-
       sampleApi.samplesControllerFindByIdAccess
         .withArgs(sampleId)
-        .and.returnValue(responseAccess);
+        .and.returnValue(of(permission.accepted));
       sampleApi.samplesControllerFindById.and.returnValue(
         throwError(() => new Error()),
       );
@@ -312,11 +308,9 @@ describe("SampleEffects", () => {
     it("should do nothing if findByIdAccess returns false", () => {
       const action = fromActions.fetchSampleAction({ sampleId });
 
-      const responseAccess = cold("-#", permission.rejected);
-
       sampleApi.samplesControllerFindByIdAccess
         .withArgs(sampleId)
-        .and.returnValue(responseAccess);
+        .and.returnValue(of(permission.rejected));
 
       actions = hot("a", { a: action });
       const expected = cold("------");
