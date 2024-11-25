@@ -1,10 +1,10 @@
 import * as fromActions from "state-management/actions/policies.actions";
 import { policiesReducer } from "./policies.reducer";
 import { initialPolicyState } from "state-management/state/policies.store";
-import { Policy } from "shared/MockStubs";
+import { mockPolicy } from "shared/MockStubs";
 
 describe("PoliciesReducer", () => {
-  const policy = new Policy();
+  const policy = mockPolicy;
 
   describe("on fetchPoliciesCompleteAction", () => {
     it("should set policies", () => {

@@ -13,11 +13,15 @@ import {
 } from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
 import { Type } from "@angular/core";
-import { CreateJobDto, JobsService } from "@scicatproject/scicat-sdk-ts";
+import {
+  CreateJobDto,
+  JobClass,
+  JobsService,
+} from "@scicatproject/scicat-sdk-ts";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
-import { Job } from "shared/MockStubs";
+import { createMock } from "shared/MockStubs";
 
-const job = new Job({
+const job = createMock<JobClass>({
   _id: "testId",
   id: "testId",
   emailJobInitiator: "test@email.com",

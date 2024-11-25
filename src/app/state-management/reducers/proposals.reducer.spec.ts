@@ -4,9 +4,13 @@ import {
   ProposalFilters,
 } from "../state/proposals.store";
 import * as fromActions from "../actions/proposals.actions";
-import { Dataset, Proposal } from "shared/MockStubs";
+import { createMock } from "shared/MockStubs";
+import {
+  OutputDatasetObsoleteDto,
+  ProposalClass,
+} from "@scicatproject/scicat-sdk-ts";
 
-const proposal = new Proposal({
+const proposal = createMock<ProposalClass>({
   proposalId: "testId",
   email: "testEmail",
   ownerGroup: "testGroup",
@@ -20,7 +24,7 @@ const proposal = new Proposal({
   updatedBy: "",
 });
 
-const dataset = new Dataset({
+const dataset = createMock<OutputDatasetObsoleteDto>({
   ownerGroup: "testGroup",
   owner: "testOwner",
   contactEmail: "testEmail",

@@ -1,8 +1,8 @@
-import { Policy } from "shared/MockStubs";
+import { mockPolicy } from "shared/MockStubs";
 import * as fromActions from "./policies.actions";
 
 describe("Policies Actions", () => {
-  const policy = new Policy();
+  const policy = mockPolicy;
 
   describe("fetchPoliciesAction", () => {
     it("should create an action", () => {

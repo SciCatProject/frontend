@@ -9,7 +9,8 @@ import {
 } from "state-management/selectors/user.selectors";
 import { JobsState } from "state-management/state/jobs.store";
 import { ArchivingService } from "./archiving.service";
-import { Dataset, Job, User } from "shared/MockStubs";
+import { createMock, mockDataset } from "shared/MockStubs";
+import { CreateJobDto, ReturnedUserDto } from "@scicatproject/scicat-sdk-ts";
 
 describe("ArchivingService", () => {
   let service: ArchivingService;
@@ -24,7 +25,7 @@ describe("ArchivingService", () => {
           selectors: [
             {
               selector: selectCurrentUser,
-              value: new User({
+              value: createMock<ReturnedUserDto>({
                 email: "test@email.com",
                 username: "testName",
                 authStrategy: "",
@@ -48,13 +49,13 @@ describe("ArchivingService", () => {
 
   describe("#createJob()", () => {
     it("should create a new object of type Job", () => {
-      const user = new User({
+      const user = createMock<ReturnedUserDto>({
         username: "testName",
         email: "test@email.com",
         authStrategy: "",
         id: "",
       });
-      const datasets = [new Dataset()];
+      const datasets = [mockDataset];
       const datasetList = datasets.map((dataset) => ({
         pid: dataset.pid,
         files: [],
@@ -90,30 +91,26 @@ describe("ArchivingService", () => {
     xit("should call #createJob() and then dispatch a submitJobAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const user = new User({
+      const user = createMock<ReturnedUserDto>({
         username: "testName",
         email: "test@email.com",
         authStrategy: "",
         id: "",
       });
-      const datasets = [new Dataset()];
+      const datasets = [mockDataset];
       const datasetList = datasets.map((dataset) => ({
         pid: dataset.pid,
         files: [],
       }));
       const archive = true;
-      const job = new Job({
+      const job = createMock<CreateJobDto>({
         jobParams: { username: user.username },
         emailJobInitiator: user.email,
-        creationTime: new Date().toString(),
         datasetList,
         type: "archive",
-        _id: "",
         executionTime: "",
-        id: "",
         jobResultObject: {},
         jobStatusMessage: "",
-        ownerGroup: "",
       });
       const createJobSpy = spyOn<any, string>(
         service,
@@ -138,7 +135,7 @@ describe("ArchivingService", () => {
         service,
         "archiveOrRetrieve",
       );
-      const datasets = [new Dataset()];
+      const datasets = [mockDataset];
 
       service.archive(datasets);
 
@@ -152,7 +149,7 @@ describe("ArchivingService", () => {
         service,
         "archiveOrRetrieve",
       );
-      const datasets = [new Dataset()];
+      const datasets = [mockDataset];
       const destinationPath = { location: "/test/path/" };
 
       service.retrieve(datasets, destinationPath);

@@ -18,11 +18,14 @@ import {
 } from "state-management/actions/user.actions";
 import { ScientificCondition } from "state-management/models";
 import { Type } from "@angular/core";
-import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
+import {
+  DatasetsService,
+  OutputDatasetObsoleteDto,
+} from "@scicatproject/scicat-sdk-ts";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
-import { Attachment, Dataset } from "shared/MockStubs";
+import { createMock, mockAttachment, mockDataset } from "shared/MockStubs";
 
-const derivedData = new Dataset({
+const derivedData = createMock<OutputDatasetObsoleteDto>({
   investigator: "",
   inputDatasets: [],
   usedSoftware: [],
@@ -42,10 +45,10 @@ const derivedData = new Dataset({
 });
 const derivedDataset = { pid: "testPid", ...derivedData };
 
-const data = new Dataset();
+const data = mockDataset;
 const dataset = { pid: "testPid", ...data };
 
-const attachment = new Attachment();
+const attachment = mockAttachment;
 
 describe("DatasetEffects", () => {
   let actions: TestObservable;

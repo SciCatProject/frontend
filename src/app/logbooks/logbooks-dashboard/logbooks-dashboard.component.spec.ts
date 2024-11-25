@@ -8,12 +8,7 @@ import {
 
 import { LogbooksDashboardComponent } from "./logbooks-dashboard.component";
 import { Store, StoreModule } from "@ngrx/store";
-import {
-  MockStore,
-  MockActivatedRoute,
-  Logbook,
-  Dataset,
-} from "shared/MockStubs";
+import { MockStore, MockActivatedRoute, createMock } from "shared/MockStubs";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   setTextFilterAction,
@@ -67,7 +62,7 @@ describe("DashboardComponent", () => {
     updatedBy: "",
     usedSoftware: [],
   };
-  const dataset = new Dataset(rawDatasetData as any);
+  const dataset = createMock(rawDatasetData);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

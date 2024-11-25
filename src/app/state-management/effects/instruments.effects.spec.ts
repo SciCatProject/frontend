@@ -1,5 +1,5 @@
 import { InstrumentEffects } from "./instruments.effects";
-import { InstrumentsService } from "@scicatproject/scicat-sdk-ts";
+import { Instrument, InstrumentsService } from "@scicatproject/scicat-sdk-ts";
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import * as fromActions from "state-management/actions/instruments.actions";
@@ -12,14 +12,14 @@ import {
 } from "state-management/actions/user.actions";
 import { Type } from "@angular/core";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
-import { Instrument } from "shared/MockStubs";
+import { mockInstrument } from "shared/MockStubs";
 
 describe("InstrumentEffects", () => {
   let actions: TestObservable;
   let effects: InstrumentEffects;
   let instrumentApi: jasmine.SpyObj<InstrumentsService>;
 
-  const instrument = new Instrument();
+  const instrument = mockInstrument;
 
   const instruments = [instrument];
 

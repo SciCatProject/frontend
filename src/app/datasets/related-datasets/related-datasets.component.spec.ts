@@ -12,7 +12,8 @@ import { selectRelatedDatasetsPageViewModel } from "state-management/selectors/d
 
 import { RelatedDatasetsComponent } from "./related-datasets.component";
 import { TableModule } from "shared/modules/table/table.module";
-import { Dataset } from "shared/MockStubs";
+import { createMock } from "shared/MockStubs";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
 
 describe("RelatedDatasetsComponent", () => {
   let component: RelatedDatasetsComponent;
@@ -88,7 +89,7 @@ describe("RelatedDatasetsComponent", () => {
 
   describe("#onRowClick()", () => {
     it("should navigate to a dataset", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
 
       component.onRowClick(dataset);
 

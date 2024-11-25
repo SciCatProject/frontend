@@ -8,7 +8,12 @@ import {
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 
-import { Dataset, MockActivatedRoute, MockStore, User } from "shared/MockStubs";
+import {
+  MockActivatedRoute,
+  MockStore,
+  createMock,
+  mockDataset,
+} from "shared/MockStubs";
 import { DashboardComponent } from "./dashboard.component";
 import { of } from "rxjs";
 import {
@@ -35,7 +40,10 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { PageChangeEvent } from "shared/modules/table/table.component";
-import { CreateDerivedDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts";
+import {
+  CreateDerivedDatasetObsoleteDto,
+  ReturnedUserDto,
+} from "@scicatproject/scicat-sdk-ts";
 
 class MockMatDialog {
   open() {
@@ -208,7 +216,7 @@ describe("DashboardComponent", () => {
 
   describe("#onRowClick()", () => {
     it("should navigate to a dataset", () => {
-      const dataset = new Dataset();
+      const dataset = mockDataset;
       component.onRowClick(dataset);
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
@@ -225,7 +233,7 @@ describe("DashboardComponent", () => {
 
       dispatchSpy = spyOn(store, "dispatch");
 
-      const currentUser = new User({
+      const currentUser = createMock<ReturnedUserDto>({
         id: "testId",
         username: "ldap.Test User",
         email: "test@email.com",

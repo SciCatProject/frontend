@@ -1,8 +1,8 @@
-import { Instrument } from "shared/MockStubs";
+import { mockInstrument } from "shared/MockStubs";
 import * as fromActions from "./instruments.actions";
 
 describe("Instrument Actions", () => {
-  const instrument = new Instrument();
+  const instrument = mockInstrument;
   const instruments = [instrument];
 
   describe("fetchInstrumentsAction", () => {

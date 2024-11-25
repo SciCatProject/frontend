@@ -2,10 +2,11 @@ import { logbooksReducer } from "./logbooks.reducer";
 import { initialLogbookState } from "../state/logbooks.store";
 import * as fromActions from "../actions/logbooks.actions";
 import { LogbookFilters } from "../models";
-import { Logbook } from "shared/MockStubs";
+import { createMock } from "shared/MockStubs";
+import { Logbook } from "@scicatproject/scicat-sdk-ts";
 
 describe("LogbooksReducer", () => {
-  const logbook = new Logbook({
+  const logbook = createMock<Logbook>({
     name: "test",
     roomId: "!test@site",
     messages: [],
@@ -16,7 +17,7 @@ describe("LogbooksReducer", () => {
       const firstTestMessage = { content: "First message" };
       const secondTestMessage = { content: "Second message" };
       const logbooks = [
-        new Logbook({
+        createMock<Logbook>({
           ...logbook,
           messages: [firstTestMessage, secondTestMessage],
         }),

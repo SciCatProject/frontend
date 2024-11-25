@@ -1,11 +1,12 @@
 import * as fromActions from "./proposals.actions";
 import { ProposalFilters } from "state-management/state/proposals.store";
-import { Attachment, Dataset, Proposal } from "shared/MockStubs";
+import { createMock, mockDataset } from "shared/MockStubs";
+import { Attachment, ProposalClass } from "@scicatproject/scicat-sdk-ts";
 
 describe("Proposal Actions", () => {
-  const dataset = new Dataset();
-  const attachment = new Attachment();
-  const proposal = new Proposal();
+  const dataset = mockDataset;
+  const attachment = createMock<Attachment>({});
+  const proposal = createMock<ProposalClass>({});
 
   describe("fetchProposalsAction", () => {
     it("should create an action", () => {

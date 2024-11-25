@@ -1,9 +1,9 @@
 import { CreateJobDto } from "@scicatproject/scicat-sdk-ts";
 import * as fromActions from "./jobs.actions";
-import { Job } from "shared/MockStubs";
+import { mockJob } from "shared/MockStubs";
 
 describe("Job Actions", () => {
-  const job = new Job();
+  const job = mockJob;
   const jobs = [job];
 
   describe("fetchJobsAction", () => {

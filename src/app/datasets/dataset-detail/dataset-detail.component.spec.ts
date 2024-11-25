@@ -34,10 +34,15 @@ import {
   MatSlideToggleChange,
 } from "@angular/material/slide-toggle";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Dataset, MockActivatedRoute, Sample, User } from "shared/MockStubs";
+import { createMock, MockActivatedRoute, mockDataset } from "shared/MockStubs";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { AppConfigService } from "app-config.service";
 import { AttachmentService } from "shared/services/attachment.service";
+import {
+  OutputDatasetObsoleteDto,
+  ReturnedUserDto,
+  SampleClass,
+} from "@scicatproject/scicat-sdk-ts";
 
 describe("DatasetDetailComponent", () => {
   let component: DatasetDetailComponent;
@@ -97,7 +102,7 @@ describe("DatasetDetailComponent", () => {
     component.dataset = {
       pid: "testPid",
       isPublished: false,
-    } as unknown as Dataset;
+    } as unknown as OutputDatasetObsoleteDto;
     fixture.detectChanges();
   }));
   afterEach(() => {
@@ -112,7 +117,7 @@ describe("DatasetDetailComponent", () => {
     it("should update datasets keyword filter and navigate to datasets table", () => {
       const dispatchSpy = spyOn(store, "dispatch");
       const keyword = "test";
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.onClickKeyword(keyword);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
@@ -135,7 +140,7 @@ describe("DatasetDetailComponent", () => {
         value: "test",
       };
       const pid = "testPid";
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.pid = pid;
       component.onEditModeEnable();
       component.onAddKeyword(event as MatChipInputEvent);
@@ -154,7 +159,7 @@ describe("DatasetDetailComponent", () => {
         },
         value: "test",
       };
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.keywords = ["test"];
       component.onEditModeEnable();
       expect(component.keywords.value.length).toBe(1);
@@ -175,7 +180,7 @@ describe("DatasetDetailComponent", () => {
         value: "test",
       };
       const pid = "testPid";
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.pid = pid;
       component.dataset.keywords = [];
       component.onEditModeEnable();
@@ -193,7 +198,7 @@ describe("DatasetDetailComponent", () => {
       const dispatchSpy = spyOn(store, "dispatch");
 
       const keyword = "test";
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.keywords = [];
       component.onRemoveKeyword(keyword);
 
@@ -203,7 +208,7 @@ describe("DatasetDetailComponent", () => {
     it("should dispatch an updatePropertyAction if the keyword does exist", () => {
       const keyword = "test";
       const pid = "testPid";
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.pid = pid;
       component.dataset.keywords = [keyword];
       component.onEditModeEnable();
@@ -222,7 +227,7 @@ describe("DatasetDetailComponent", () => {
 
       const keyword = "test";
       const pid = "testPid";
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.pid = pid;
       component.dataset.keywords = [keyword];
       component.dataset.datasetName = "Test dataset name";
@@ -249,7 +254,7 @@ describe("DatasetDetailComponent", () => {
     it("should dispatch a updatePropertyAction", () => {
       const dispatchSpy = spyOn(store, "dispatch");
       const pid = "testPid";
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.pid = pid;
       const event = new MatSlideToggleChange({} as MatSlideToggle, true);
       const property = { isPublished: true };
@@ -276,7 +281,7 @@ describe("DatasetDetailComponent", () => {
     it("should do nothing if dataset is defined and group does not exist", () => {
       const dispatchSpy = spyOn(store, "dispatch");
 
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.sharedWith = [];
       const share = "test";
       component.onRemoveShare(share);
@@ -293,7 +298,7 @@ describe("DatasetDetailComponent", () => {
         pid,
         isPublished: false,
         sharedWith: [share],
-      } as unknown as Dataset;
+      } as unknown as OutputDatasetObsoleteDto;
       const dialogOpenSpy = spyOn(component.dialog, "open").and.returnValue({
         afterClosed: () => of("ok"),
       } as MatDialogRef<DialogComponent>);
@@ -343,9 +348,9 @@ describe("DatasetDetailComponent", () => {
   describe("#openSampleEditDialog()", () => {
     it("should open the sample edit dialog and dispatch updatePropertyAction", () => {
       const dispatchSpy = spyOn(store, "dispatch");
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.ownerGroup = "test";
-      component.sample = new Sample();
+      component.sample = createMock<SampleClass>({});
       const sampleId = "testId";
       component.sample.sampleId = sampleId;
       const pid = "testPid";
@@ -373,7 +378,7 @@ describe("DatasetDetailComponent", () => {
       const dispatchSpy = spyOn(store, "dispatch");
 
       const pid = "testPid";
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.pid = pid;
       const metadata = {};
       const property = { scientificMetadata: metadata };
@@ -388,7 +393,7 @@ describe("DatasetDetailComponent", () => {
 
   describe("#isPI()", () => {
     it("should return true if user username is admin", () => {
-      component.user = new User({
+      component.user = createMock<ReturnedUserDto>({
         username: "admin",
         email: "test@email.com",
         authStrategy: "",
@@ -401,7 +406,7 @@ describe("DatasetDetailComponent", () => {
     });
 
     it("should return true if user email equals principalInvestigator of a raw dataset", () => {
-      component.user = new User({
+      component.user = createMock<ReturnedUserDto>({
         email: "test@email.com",
         authStrategy: "",
         id: "",
@@ -416,7 +421,7 @@ describe("DatasetDetailComponent", () => {
         ownerGroup: "test",
         principalInvestigator: "test@email.com",
         creationLocation: "test",
-      } as unknown as Dataset;
+      } as unknown as OutputDatasetObsoleteDto;
 
       const isPI = component.isPI();
 
@@ -424,7 +429,7 @@ describe("DatasetDetailComponent", () => {
     });
 
     it("should return false if user email does not equal principalInvestigator of a raw dataset", () => {
-      component.user = new User({
+      component.user = createMock<ReturnedUserDto>({
         email: "failTest@email.com",
         authStrategy: "",
         id: "",
@@ -439,14 +444,14 @@ describe("DatasetDetailComponent", () => {
         ownerGroup: "test",
         principalInvestigator: "test@email.com",
         creationLocation: "test",
-      } as unknown as Dataset;
+      } as unknown as OutputDatasetObsoleteDto;
       const isPI = component.isPI();
 
       expect(isPI).toEqual(false);
     });
 
     it("should return true if user email equals investigator of a derived dataset", () => {
-      component.user = new User({
+      component.user = createMock<ReturnedUserDto>({
         email: "test@email.com",
         authStrategy: "",
         id: "",
@@ -462,7 +467,7 @@ describe("DatasetDetailComponent", () => {
         investigator: "test@email.com",
         inputDatasets: ["test"],
         usedSoftware: ["test"],
-      } as unknown as Dataset;
+      } as unknown as OutputDatasetObsoleteDto;
 
       const isPI = component.isPI();
 
@@ -470,7 +475,7 @@ describe("DatasetDetailComponent", () => {
     });
 
     it("should return false if user email does not equal investigator of a derived dataset", () => {
-      component.user = new User({
+      component.user = createMock<ReturnedUserDto>({
         email: "failTest@email.com",
         authStrategy: "",
         id: "",
@@ -486,14 +491,14 @@ describe("DatasetDetailComponent", () => {
         investigator: "test@email.com",
         inputDatasets: ["test"],
         usedSoftware: ["test"],
-      } as unknown as Dataset;
+      } as unknown as OutputDatasetObsoleteDto;
       const isPI = component.isPI();
 
       expect(isPI).toEqual(false);
     });
 
     it("should return false if dataset type is neither 'raw' or 'derived'", () => {
-      component.user = new User({
+      component.user = createMock<ReturnedUserDto>({
         email: "failTest@email.com",
         authStrategy: "",
         id: "",
@@ -508,7 +513,7 @@ describe("DatasetDetailComponent", () => {
         ownerGroup: "test",
         principalInvestigator: "test@email.com",
         creationLocation: "test",
-      } as unknown as Dataset;
+      } as unknown as OutputDatasetObsoleteDto;
       const isPI = component.isPI();
 
       expect(isPI).toEqual(false);

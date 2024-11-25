@@ -1,8 +1,9 @@
 import * as fromSelectors from "./proposals.selectors";
 import { ProposalsState } from "state-management/state/proposals.store";
-import { Proposal } from "shared/MockStubs";
+import { createMock } from "shared/MockStubs";
+import { ProposalClass } from "@scicatproject/scicat-sdk-ts";
 
-const proposal = new Proposal({
+const proposal = createMock<ProposalClass>({
   proposalId: "testId",
   email: "testEmail",
   ownerGroup: "testGroup",
@@ -15,7 +16,7 @@ const proposal = new Proposal({
   updatedAt: "",
   updatedBy: "",
 });
-const parentProposal = new Proposal({
+const parentProposal = createMock<ProposalClass>({
   proposalId: "parentTestId",
   email: "parentTestEmail",
   ownerGroup: "parentTestGroup",

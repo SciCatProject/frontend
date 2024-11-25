@@ -1,9 +1,10 @@
 import * as fromSelectors from "./samples.selectors";
 import { SampleState } from "state-management/state/samples.store";
 import { initialUserState } from "state-management/state/user.store";
-import { Sample } from "shared/MockStubs";
+import { createMock } from "shared/MockStubs";
+import { SampleClass } from "@scicatproject/scicat-sdk-ts";
 
-const sample = new Sample({
+const sample = createMock<SampleClass>({
   sampleId: "testId",
   ownerGroup: "testGroup",
   createdBy: "",

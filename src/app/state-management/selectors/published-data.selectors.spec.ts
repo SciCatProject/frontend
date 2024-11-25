@@ -1,9 +1,10 @@
 import { GenericFilters } from "state-management/models";
 import { PublishedDataState } from "state-management/state/published-data.store";
 import * as fromSelectors from "./published-data.selectors";
-import { PublishedData } from "shared/MockStubs";
+import { createMock } from "shared/MockStubs";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts";
 
-const publishedData = new PublishedData({
+const publishedData = createMock<PublishedData>({
   doi: "testDOI",
   affiliation: "test affiliation",
   creator: ["test creator"],

@@ -1,10 +1,11 @@
 import * as fromActions from "./samples.actions";
 import { SampleFilters, ScientificCondition } from "state-management/models";
-import { Attachment, Dataset, Sample } from "shared/MockStubs";
+import { createMock, mockDataset } from "shared/MockStubs";
+import { Attachment, SampleClass } from "@scicatproject/scicat-sdk-ts";
 
 describe("Sample Actions", () => {
-  const sample = new Sample();
-  const attachment = new Attachment();
+  const sample = createMock<SampleClass>({});
+  const attachment = createMock<Attachment>({});
 
   describe("fetchSamplesAction", () => {
     it("should create an action", () => {
@@ -129,7 +130,7 @@ describe("Sample Actions", () => {
 
   describe("fetchSampleDatasetsCompleteAction", () => {
     it("should create an action", () => {
-      const dataset = new Dataset();
+      const dataset = mockDataset;
       const datasets = [dataset];
       const action = fromActions.fetchSampleDatasetsCompleteAction({
         datasets,

@@ -5,12 +5,16 @@ import {
   DatasetFilters,
   ScientificCondition,
 } from "state-management/models";
-import { Attachment, Dataset } from "shared/MockStubs";
+import { mockDataset, createMock } from "shared/MockStubs";
+import {
+  Attachment,
+  OutputDatasetObsoleteDto,
+} from "@scicatproject/scicat-sdk-ts";
 
 describe("Dataset Actions", () => {
-  const dataset = new Dataset();
+  const dataset = mockDataset;
   const datasets = [dataset];
-  const derivedDataset = new Dataset({
+  const derivedDataset = createMock<OutputDatasetObsoleteDto>({
     investigator: "",
     inputDatasets: [],
     usedSoftware: [],
@@ -30,7 +34,7 @@ describe("Dataset Actions", () => {
     updatedBy: "",
   });
 
-  const attachment = new Attachment();
+  const attachment = createMock<Attachment>({});
 
   describe("fetchDatasetsAction", () => {
     it("should create an action", () => {

@@ -1,10 +1,10 @@
 import * as fromActions from "state-management/actions/instruments.actions";
 import { instrumentsReducer } from "./instruments.reducer";
 import { initialInstrumentState } from "state-management/state/instruments.store";
-import { Instrument } from "shared/MockStubs";
+import { mockInstrument } from "shared/MockStubs";
 
 describe("InstrumentsReducer", () => {
-  const instrument = new Instrument();
+  const instrument = mockInstrument;
 
   describe("on fetchInstrumentsCompleteAction", () => {
     it("should set instruments property", () => {

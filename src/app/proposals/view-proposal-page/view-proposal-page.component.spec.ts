@@ -9,8 +9,8 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import {
   MockStore,
   MockActivatedRoute,
-  Dataset,
-  Proposal,
+  createMock,
+  mockDataset,
 } from "shared/MockStubs";
 import { Router, ActivatedRoute } from "@angular/router";
 import { StoreModule, Store } from "@ngrx/store";
@@ -25,6 +25,7 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatIconModule } from "@angular/material/icon";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppConfigService } from "app-config.service";
+import { DatasetClass, ProposalClass } from "@scicatproject/scicat-sdk-ts";
 
 const getConfig = () => ({
   logbookEnabled: true,
@@ -90,7 +91,7 @@ describe("ViewProposalPageComponent", () => {
     });
 
     it("should return an array of data objects if there are datasets", () => {
-      const datasets = [new Dataset()];
+      const datasets = [mockDataset];
       const data = component.formatTableData(datasets);
 
       expect(data.length).toEqual(1);
@@ -101,7 +102,7 @@ describe("ViewProposalPageComponent", () => {
     it("should dispatch a changeDatasetsPageAction and a fetchProposalDatasetsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const proposal = new Proposal();
+      const proposal = createMock<ProposalClass>({});
       proposal.proposalId = "testId";
       component.proposal = proposal;
       const event: PageChangeEvent = {
@@ -126,7 +127,7 @@ describe("ViewProposalPageComponent", () => {
 
   describe("#onRowClick()", () => {
     it("should navigate to a dataset", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       const pid = encodeURIComponent(dataset.pid);
       component.onRowClick(dataset);
 

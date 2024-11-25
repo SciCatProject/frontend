@@ -40,7 +40,7 @@ import { AppConfigService } from "app-config.service";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { AuthService, SDKToken } from "shared/services/auth/auth.service";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
-import { User } from "shared/MockStubs";
+import { mockUser } from "shared/MockStubs";
 
 class AppConfigServiceMock {
   getConfig() {
@@ -218,7 +218,7 @@ describe("UserEffects", () => {
     });
 
     it("should result in a fetchUserCompleteAction, loginCompleteAction, fetchUserIdentityAction and a fetchUserSettingsAction", () => {
-      const user = new User();
+      const user = mockUser;
       user.id = "testId";
       const accountType = "external";
       const action = fromActions.fetchUserAction({ adLoginResponse });
@@ -304,7 +304,7 @@ describe("UserEffects", () => {
     };
 
     it("should result in a funcLoginSuccessAction and a loginCompleteAction", () => {
-      const user = new User();
+      const user = mockUser;
       const accountType = "functional";
       const action = fromActions.funcLoginAction({ form });
       const outcome1 = fromActions.funcLoginSuccessAction();
@@ -453,7 +453,7 @@ describe("UserEffects", () => {
 
   describe("fetchCurrentUser$", () => {
     it("should result in a fetchCurrentUserCompleteAction, a fetchUserIdentityAction, and a fetchUserSettingsAction", () => {
-      const user = new User();
+      const user = mockUser;
       user.id = "testId";
       const token = {
         id: "testId",
@@ -485,7 +485,7 @@ describe("UserEffects", () => {
     });
 
     it("should result in a fetchCurrentUserFailedAction", () => {
-      const user = new User();
+      const user = mockUser;
       user.id = "testId";
       const token = {
         id: "testId",
@@ -510,7 +510,7 @@ describe("UserEffects", () => {
     });
 
     it("should not call getCurrent() if token is expired", () => {
-      const user = new User();
+      const user = mockUser;
       user.id = "testId";
       const token = {
         id: "testId",

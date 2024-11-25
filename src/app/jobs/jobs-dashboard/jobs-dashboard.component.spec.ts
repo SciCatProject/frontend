@@ -6,7 +6,7 @@ import {
 } from "@angular/core/testing";
 
 import { JobsDashboardComponent } from "./jobs-dashboard.component";
-import { Job, MockStore } from "shared/MockStubs";
+import { MockStore, createMock, mockJob } from "shared/MockStubs";
 import { Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
@@ -23,6 +23,7 @@ import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { JobClass } from "@scicatproject/scicat-sdk-ts";
 
 describe("JobsDashboardComponent", () => {
   let component: JobsDashboardComponent;
@@ -83,7 +84,7 @@ describe("JobsDashboardComponent", () => {
     });
 
     it("should return an array of data object jobs are defined", () => {
-      const jobs = [new Job()];
+      const jobs = [mockJob];
 
       const data = component.formatTableData(jobs);
 
@@ -143,8 +144,7 @@ describe("JobsDashboardComponent", () => {
 
   describe("#onRowClick()", () => {
     it("should navigate to a job", () => {
-      const job = new Job();
-      job.id = "test";
+      const job = createMock<JobClass>({ id: "test" });
       component.onRowClick({
         ...job,
         initiator: "",

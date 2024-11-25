@@ -1,8 +1,9 @@
-import { PublishedData } from "shared/MockStubs";
+import { createMock } from "shared/MockStubs";
 import * as fromActions from "./published-data.actions";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts";
 
 describe("Published Data Actions", () => {
-  const publishedData = new PublishedData();
+  const publishedData = createMock<PublishedData>({});
 
   describe("fetchAllPublishedDataAction", () => {
     it("should create an action", () => {

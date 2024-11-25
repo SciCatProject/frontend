@@ -13,11 +13,14 @@ import {
 } from "state-management/actions/user.actions";
 import { Type } from "@angular/core";
 import { Router } from "@angular/router";
-import { MockRouter, PublishedData } from "shared/MockStubs";
-import { PublishedDataService } from "@scicatproject/scicat-sdk-ts";
+import { MockRouter, createMock } from "shared/MockStubs";
+import {
+  PublishedData,
+  PublishedDataService,
+} from "@scicatproject/scicat-sdk-ts";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 
-const publishedData = new PublishedData({
+const publishedData = createMock<PublishedData>({
   doi: "testDOI",
   affiliation: "test affiliation",
   creator: ["test creator"],

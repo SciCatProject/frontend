@@ -6,7 +6,7 @@ import {
 } from "@angular/core/testing";
 
 import { PublisheddataDashboardComponent } from "./publisheddata-dashboard.component";
-import { MockStore, PublishedData } from "shared/MockStubs";
+import { MockStore, createMock } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { StoreModule, Store } from "@ngrx/store";
 import { Router } from "@angular/router";
@@ -21,6 +21,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { ScicatDataService } from "shared/services/scicat-data-service";
 import { ExportExcelService } from "shared/services/export-excel.service";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts";
 
 const getConfig = () => ({});
 
@@ -104,7 +105,7 @@ describe("PublisheddataDashboardComponent", () => {
 
   describe("#onRowClick", () => {
     it("should navigate to a Published Dataset", () => {
-      const published = new PublishedData();
+      const published = createMock<PublishedData>({});
       const id = encodeURIComponent(published.doi);
       component.onRowClick(published);
 
@@ -117,7 +118,7 @@ describe("PublisheddataDashboardComponent", () => {
 
   describe("#onSelectAll()", () => {
     it("should add all DOI's to selectedDOIs if checked is true", () => {
-      const published = new PublishedData({
+      const published = createMock<PublishedData>({
         doi: "test",
         creator: ["test"],
         publisher: "test",

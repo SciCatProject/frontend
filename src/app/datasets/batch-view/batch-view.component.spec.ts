@@ -6,9 +6,9 @@ import { BatchViewComponent } from "./batch-view.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router } from "@angular/router";
 import {
-  Dataset,
   MockArchivingService,
   MockDatasetApi,
+  mockDataset,
 } from "shared/MockStubs";
 import { ArchivingService } from "../archiving.service";
 import { MatIconModule } from "@angular/material/icon";
@@ -105,7 +105,7 @@ describe("BatchViewComponent", () => {
   describe("#onRemove()", () => {
     it("should dispatch a removeFromBatchAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
-      const dataset = new Dataset();
+      const dataset = mockDataset;
 
       component.onRemove(dataset);
 

@@ -1,9 +1,10 @@
 import { jobsReducer } from "./jobs.reducer";
 import * as fromActions from "../actions/jobs.actions";
 import { initialJobsState } from "state-management/state/jobs.store";
-import { Job } from "shared/MockStubs";
+import { createMock } from "shared/MockStubs";
+import { JobClass } from "@scicatproject/scicat-sdk-ts";
 
-const job = new Job({
+const job = createMock<JobClass>({
   _id: "testId",
   id: "testId",
   emailJobInitiator: "test@email.com",

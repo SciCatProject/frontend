@@ -3,7 +3,7 @@ import { Store, StoreModule } from "@ngrx/store";
 import { AdminTabComponent } from "./admin-tab.component";
 import { MatCardModule } from "@angular/material/card";
 import { of } from "rxjs";
-import { Dataset } from "shared/MockStubs";
+import { mockDataset } from "shared/MockStubs";
 
 describe("AdminTabComponent", () => {
   let component: AdminTabComponent;
@@ -41,7 +41,7 @@ describe("AdminTabComponent", () => {
       );
       const dispatchSpy = store.dispatch as jasmine.Spy;
       const pipeSpy = store.select as jasmine.Spy;
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       const res = component.resetDataset();
 
       expect(res).toBeUndefined();

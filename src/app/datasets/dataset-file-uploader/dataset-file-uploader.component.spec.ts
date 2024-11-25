@@ -13,7 +13,7 @@ import { DatasetFileUploaderComponent } from "./dataset-file-uploader.component"
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { AppConfigService } from "app-config.service";
 import { HttpClient } from "@angular/common/http";
-import { Dataset, MockHttp, User } from "shared/MockStubs";
+import { mockDataset, MockHttp, mockUser } from "shared/MockStubs";
 
 const router = {
   navigateByUrl: jasmine.createSpy("navigateByUrl"),
@@ -65,8 +65,8 @@ describe("DatasetFileUploaderComponent", () => {
     it("should dispatch an AddAttchment action", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      component.user = new User();
-      component.dataset = new Dataset();
+      component.user = mockUser;
+      component.dataset = mockDataset;
       const file = {
         name: "test",
         size: 100,
@@ -86,7 +86,7 @@ describe("DatasetFileUploaderComponent", () => {
     it("should dispatch an UpdateAttachmentCaptionAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       const event: SubmitCaptionEvent = {
         attachmentId: "testAttachmentId",
         caption: "Test caption",
@@ -108,7 +108,7 @@ describe("DatasetFileUploaderComponent", () => {
     it("should dispatch a DeleteAttachment action", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       const attachmentId = "testAttachmentId";
       component.deleteAttachment(attachmentId);
 

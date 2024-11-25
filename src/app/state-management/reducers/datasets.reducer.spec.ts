@@ -5,9 +5,13 @@ import {
   initialDatasetState,
 } from "state-management/state/datasets.store";
 import { ArchViewMode, ScientificCondition } from "../models";
-import { Attachment, Dataset } from "shared/MockStubs";
+import { createMock } from "shared/MockStubs";
+import {
+  Attachment,
+  OutputDatasetObsoleteDto,
+} from "@scicatproject/scicat-sdk-ts";
 
-const derivedDataset = new Dataset({
+const derivedDataset = createMock<OutputDatasetObsoleteDto>({
   pid: "testPid",
   investigator: "",
   inputDatasets: [],
@@ -29,9 +33,9 @@ const derivedDataset = new Dataset({
   attachments: [],
 });
 
-const attachment = new Attachment();
+const attachment = createMock<Attachment>({});
 
-const dataset = new Dataset({
+const dataset = createMock<OutputDatasetObsoleteDto>({
   ...derivedDataset,
   type: "raw",
 });
@@ -125,7 +129,7 @@ describe("DatasetsReducer", () => {
 
   describe("on prefillBatchCompleteAction", () => {
     it("should set batch property", () => {
-      const batch: Dataset[] = [];
+      const batch = [];
       const action = fromActions.prefillBatchCompleteAction({ batch });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
@@ -182,7 +186,7 @@ describe("DatasetsReducer", () => {
       });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
-      expect(state.currentSet).toEqual(derivedDataset as unknown as Dataset);
+      expect(state.currentSet).toEqual(derivedDataset);
     });
   });
 

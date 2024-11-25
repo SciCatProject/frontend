@@ -8,7 +8,7 @@ import {
 
 import { ProposalLogbookComponent } from "./proposal-logbook.component";
 import { Store, StoreModule } from "@ngrx/store";
-import { MockStore, MockActivatedRoute, Logbook } from "shared/MockStubs";
+import { MockStore, MockActivatedRoute, createMock } from "shared/MockStubs";
 import { ActivatedRoute } from "@angular/router";
 import {
   setTextFilterAction,
@@ -29,6 +29,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppConfigService } from "app-config.service";
+import { Logbook } from "@scicatproject/scicat-sdk-ts";
 
 const getConfig = () => ({
   riotBaseUrl: "https://riot.base.com",
@@ -41,7 +42,7 @@ describe("DashboardComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  const logbook = new Logbook({
+  const logbook = createMock<Logbook>({
     name: "testLogbook",
     roomId: "testId",
     messages: [{ message: "test1" }, { message: "test2" }],

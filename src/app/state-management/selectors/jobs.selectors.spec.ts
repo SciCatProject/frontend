@@ -1,9 +1,10 @@
 import * as fromSelectors from "./jobs.selectors";
 
 import { JobsState } from "../state/jobs.store";
-import { Job } from "shared/MockStubs";
+import { createMock } from "shared/MockStubs";
+import { JobClass } from "@scicatproject/scicat-sdk-ts";
 
-const job = new Job({
+const job = createMock<JobClass>({
   emailJobInitiator: "test@email.com",
   type: "archive",
   _id: "",

@@ -14,11 +14,11 @@ import {
   loadingCompleteAction,
 } from "state-management/actions/user.actions";
 import { Type } from "@angular/core";
-import { PoliciesService } from "@scicatproject/scicat-sdk-ts";
+import { PoliciesService, Policy } from "@scicatproject/scicat-sdk-ts";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
-import { Policy } from "shared/MockStubs";
+import { createMock } from "shared/MockStubs";
 
-const policy = new Policy({
+const policy = createMock<Policy>({
   manager: ["adminIngestor"],
   tapeRedundancy: "low",
   autoArchiveDelay: 7,

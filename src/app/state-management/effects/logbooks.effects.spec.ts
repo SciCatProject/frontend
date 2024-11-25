@@ -2,7 +2,7 @@ import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { hot, cold } from "jasmine-marbles";
 import { LogbookEffects } from "./logbooks.effects";
-import { LogbooksService } from "@scicatproject/scicat-sdk-ts";
+import { Logbook, LogbooksService } from "@scicatproject/scicat-sdk-ts";
 import * as fromActions from "state-management/actions/logbooks.actions";
 import {
   loadingAction,
@@ -12,10 +12,10 @@ import { provideMockStore } from "@ngrx/store/testing";
 import { selectFilters } from "state-management/selectors/logbooks.selectors";
 import { Type } from "@angular/core";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
-import { Logbook } from "shared/MockStubs";
+import { createMock } from "shared/MockStubs";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 
-const logbook = new Logbook({
+const logbook = createMock<Logbook>({
   name: "test",
   roomId: "!test@site",
   messages: [],

@@ -1,9 +1,10 @@
 import { initialPublishedDataState } from "state-management/state/published-data.store";
 import * as fromActions from "state-management/actions/published-data.actions";
 import { publishedDataReducer } from "./published-data.reducer";
-import { PublishedData } from "shared/MockStubs";
+import { createMock } from "shared/MockStubs";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts";
 
-const publishedData = new PublishedData({
+const publishedData = createMock<PublishedData>({
   doi: "testDOI",
   affiliation: "test affiliation",
   creator: ["test creator"],
