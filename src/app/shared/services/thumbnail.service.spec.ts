@@ -6,7 +6,7 @@ import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { of, throwError } from "rxjs";
 import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
 
-fdescribe("ThumbnailService", () => {
+describe("ThumbnailService", () => {
   let service: ThumbnailService;
   let datasetApi: jasmine.SpyObj<DatasetsService>;
   let store: MockStore;
