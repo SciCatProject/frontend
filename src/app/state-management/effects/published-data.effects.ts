@@ -78,7 +78,9 @@ export class PublishedDataEffects {
           .publishedDataControllerFindOne(encodeURIComponent(id))
           .pipe(
             map((publishedData: PublishedData) =>
-              fromActions.fetchPublishedDataCompleteAction({ publishedData }),
+              fromActions.fetchPublishedDataCompleteAction({
+                publishedData,
+              }),
             ),
             catchError(() => of(fromActions.fetchPublishedDataFailedAction())),
           ),

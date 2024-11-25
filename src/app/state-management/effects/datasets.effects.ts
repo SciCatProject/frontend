@@ -385,7 +385,11 @@ export class DatasetEffects {
       ofType(fromActions.appendToDatasetArrayFieldAction),
       mergeMap(({ pid, fieldName, data }) =>
         this.datasetsService
-          .datasetsControllerAppendToArrayField(pid, fieldName, data)
+          .datasetsControllerAppendToArrayField(
+            encodeURIComponent(pid),
+            fieldName,
+            data,
+          )
           .pipe(
             map(() => fromActions.appendToDatasetArrayFieldCompleteAction()),
             catchError(() =>

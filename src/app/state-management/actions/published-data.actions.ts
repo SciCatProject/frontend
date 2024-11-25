@@ -1,5 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import {
+  CreatePublishedDataDto,
   PublishedData,
   UpdatePublishedDataDto,
 } from "@scicatproject/scicat-sdk-ts";
@@ -38,7 +39,7 @@ export const fetchPublishedDataFailedAction = createAction(
 
 export const publishDatasetAction = createAction(
   "[PublishedData] Publish Dataset",
-  props<{ data: PublishedData }>(),
+  props<{ data: CreatePublishedDataDto }>(),
 );
 export const publishDatasetCompleteAction = createAction(
   "[PublishedData] Publish Dataset Complete",
