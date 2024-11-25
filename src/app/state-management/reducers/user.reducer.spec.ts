@@ -3,11 +3,7 @@ import { initialUserState } from "../state/user.store";
 import * as fromActions from "../actions/user.actions";
 import { MessageType, Message, Settings, TableColumn } from "../models";
 import { HttpErrorResponse } from "@angular/common/http";
-import {
-  ReturnedUserDto,
-  UserIdentity,
-  UserSettings,
-} from "@scicatproject/scicat-sdk-ts";
+import { ReturnedUserDto, UserIdentity } from "@scicatproject/scicat-sdk-ts";
 import { SDKToken } from "shared/services/auth/auth.service";
 
 describe("UserReducer", () => {
@@ -116,15 +112,12 @@ describe("UserReducer", () => {
 
   describe("on fetchUserSettingsCompleteAction", () => {
     it("should set jobCount and datasetCount settings, and columns if not empty", () => {
-      const userSettings: UserSettings = {
+      const userSettings = {
+        columns: [{ name: "test", order: 0, type: "standard", enabled: true }],
         datasetCount: 50,
         jobCount: 50,
         userId: "testId",
-        externalSettings: {
-          columns: [
-            { name: "test", order: 0, type: "standard", enabled: true },
-          ],
-        },
+        externalSettings: {},
         id: "testId",
       };
       const action = fromActions.fetchUserSettingsCompleteAction({
@@ -135,21 +128,18 @@ describe("UserReducer", () => {
       expect(state.settings.datasetCount).toEqual(userSettings.datasetCount);
       expect(state.settings.jobCount).toEqual(userSettings.jobCount);
       expect(state.columns).toEqual(
-        (userSettings.externalSettings as { columns: TableColumn[] }).columns,
+        (userSettings as { columns: TableColumn[] }).columns,
       );
     });
 
     it("should set jobCount and datasetCount settings, and not columns if empty", () => {
-      const userSettings: UserSettings = {
+      const userSettings = {
+        columns: [],
         datasetCount: 50,
         jobCount: 50,
         userId: "testId",
-        externalSettings: {
-          columns: [
-            { name: "test", order: 0, type: "standard", enabled: true },
-          ],
-        },
         id: "testId",
+        externalSettings: {},
       };
       const action = fromActions.fetchUserSettingsCompleteAction({
         userSettings,
@@ -164,15 +154,12 @@ describe("UserReducer", () => {
 
   describe("on updateUserSettingsCompleteAction", () => {
     it("should set jobCount and datasetCount settings, and columns if not empty", () => {
-      const userSettings: UserSettings = {
+      const userSettings = {
+        columns: [{ name: "test", order: 0, type: "standard", enabled: true }],
         datasetCount: 50,
         jobCount: 50,
         userId: "testId",
-        externalSettings: {
-          columns: [
-            { name: "test", order: 0, type: "standard", enabled: true },
-          ],
-        },
+        externalSettings: {},
         id: "testId",
       };
       const action = fromActions.updateUserSettingsCompleteAction({
@@ -183,18 +170,17 @@ describe("UserReducer", () => {
       expect(state.settings.datasetCount).toEqual(userSettings.datasetCount);
       expect(state.settings.jobCount).toEqual(userSettings.jobCount);
       expect(state.columns).toEqual(
-        (userSettings.externalSettings as { columns: TableColumn[] }).columns,
+        (userSettings as { columns: TableColumn[] }).columns,
       );
     });
 
     it("should set jobCount and datasetCount settings, and not columns if empty", () => {
-      const userSettings: UserSettings = {
+      const userSettings = {
+        columns: [],
         datasetCount: 50,
         jobCount: 50,
         userId: "testId",
-        externalSettings: {
-          columns: [],
-        },
+        externalSettings: {},
         id: "testId",
       };
       const action = fromActions.updateUserSettingsCompleteAction({

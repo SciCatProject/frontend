@@ -19,11 +19,7 @@ import { EffectsModule } from "@ngrx/effects";
 import { HttpClient } from "@angular/common/http";
 import { ScicatDataService } from "shared/services/scicat-data-service";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import {
-  DatasetsService,
-  LogbooksService,
-  ProposalsService,
-} from "@scicatproject/scicat-sdk-ts";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
 
 describe("ProposalDashboardComponent", () => {
   let component: ProposalDashboardComponent;
@@ -54,14 +50,6 @@ describe("ProposalDashboardComponent", () => {
         { provide: Router, useClass: MockRouter },
         { provide: Store, useClass: MockStore },
         { provide: DatasetsService, useClass: MockDatasetApi },
-        {
-          provide: LogbooksService,
-          useValue: jasmine.createSpyObj("logbookApi", []),
-        },
-        {
-          provide: ProposalsService,
-          useValue: jasmine.createSpyObj("proposalApi", []),
-        },
         { provide: ScicatDataService, useValue: {} },
       ],
     }).compileComponents();

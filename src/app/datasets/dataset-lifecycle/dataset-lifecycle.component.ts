@@ -67,21 +67,15 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
     if (dataset && dataset.history) {
       const history = dataset.history.map(
         ({ updatedAt, updatedBy, id, ...properties }) =>
-          Object.keys(properties).map(
-            (property) =>
-              ({
-                property,
-                value: properties[property],
-                updatedBy: updatedBy.replace("ldap.", ""),
-                updatedAt: this.datePipe.transform(
-                  updatedAt,
-                  "yyyy-MM-dd HH:mm",
-                ),
-              }) as HistoryItem,
-          ),
+          Object.keys(properties).map((property) => ({
+            property,
+            value: properties[property],
+            updatedBy: updatedBy.replace("ldap.", ""),
+            updatedAt: this.datePipe.transform(updatedAt, "yyyy-MM-dd HH:mm"),
+          })),
       );
       // flatten and reverse array before return
-      return ([] as HistoryItem[]).concat(...history).reverse();
+      return [].concat(...history).reverse();
     }
     return [];
   }

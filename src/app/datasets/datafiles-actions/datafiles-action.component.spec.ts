@@ -170,11 +170,11 @@ describe("1000: DatafilesActionComponent", () => {
           { provide: MatDialogRef, useClass: MockMatDialogRef },
           {
             provide: UsersService,
-            useValue: { usersControllerGetUserJWT, getCurrentToken },
+            useValue: { usersControllerGetUserJWT },
           },
           {
             provide: AuthService,
-            useValue: jasmine.createSpyObj("authService", ["getToken"]),
+            useValue: { getToken: getCurrentToken },
           },
         ],
       },

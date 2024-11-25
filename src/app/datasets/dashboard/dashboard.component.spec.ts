@@ -35,6 +35,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { PageChangeEvent } from "shared/modules/table/table.component";
+import { CreateDerivedDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts";
 
 class MockMatDialog {
   open() {
@@ -230,10 +231,10 @@ describe("DashboardComponent", () => {
         email: "test@email.com",
         realm: "test",
         emailVerified: true,
-        authStrategy: "",
+        authStrategy: "local",
       });
 
-      const dataset = new Dataset({
+      const dataset: CreateDerivedDatasetObsoleteDto = {
         accessGroups: [],
         contactEmail: currentUser.email,
         creationTime: new Date().toString(),
@@ -252,14 +253,8 @@ describe("DashboardComponent", () => {
         investigator: currentUser.email,
         scientificMetadata: {},
         usedSoftware: ["test software"],
-        createdAt: "",
-        createdBy: "",
-        creationLocation: "",
         numberOfFilesArchived: 0,
-        principalInvestigator: "",
-        updatedAt: "",
-        updatedBy: "",
-      });
+      };
 
       component.currentUser = currentUser;
       component.userGroups = ["test"];

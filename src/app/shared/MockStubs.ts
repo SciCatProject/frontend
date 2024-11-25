@@ -265,21 +265,6 @@ export class MockScicatDataSource extends SciCatDataSource {
   }
 }
 
-@Injectable()
-export class MockLoopBackAuth extends AuthService {
-  getToken = () => ({
-    id: "test",
-    ttl: null,
-    scopes: null,
-    created: null,
-    user: null,
-    userId: null,
-    rememberMe: false,
-  });
-  getAccessToken = () => ({ id: "test" });
-  getAccessTokenId = () => "test";
-}
-
 export class MockDatafilesActionsComponent {
   actionsConfig: ActionConfig[];
   dataset: ActionDataset;

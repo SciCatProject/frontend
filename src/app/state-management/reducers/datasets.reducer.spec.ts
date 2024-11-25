@@ -26,11 +26,15 @@ const derivedDataset = new Dataset({
   principalInvestigator: "",
   updatedAt: "",
   updatedBy: "",
+  attachments: [],
 });
 
 const attachment = new Attachment();
 
-const dataset = new Dataset({ ...derivedDataset, type: "raw" });
+const dataset = new Dataset({
+  ...derivedDataset,
+  type: "raw",
+});
 
 describe("DatasetsReducer", () => {
   describe("on fetchDatasetsCompleteAction", () => {

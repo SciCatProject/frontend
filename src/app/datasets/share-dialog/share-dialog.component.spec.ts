@@ -9,12 +9,11 @@ import {
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { Store, StoreModule } from "@ngrx/store";
-import { of } from "rxjs";
 import {
   MockAppConfigService,
+  MockAuthService,
   MockDatasetApi,
   MockHttp,
-  MockLoopBackAuth,
   MockPublishedDataApi,
   MockStore,
   MockUserApi,
@@ -29,6 +28,7 @@ import { EffectsModule } from "@ngrx/effects";
 import { AppConfigService } from "app-config.service";
 import { HttpClient } from "@angular/common/http";
 import {
+  Configuration,
   DatasetsService,
   InstrumentsService,
   JobsService,
@@ -42,6 +42,7 @@ import {
 import { AuthService } from "shared/services/auth/auth.service";
 import { InternalStorage } from "shared/services/auth/base.storage";
 import { cold } from "jasmine-marbles";
+import { of } from "rxjs";
 
 const data = {
   infoMessage: "",
@@ -52,9 +53,8 @@ const data = {
 describe("ShareDialogComponent", () => {
   let component: ShareDialogComponent;
   let fixture: ComponentFixture<ShareDialogComponent>;
-  const appconfig = new MockAppConfigService(
-    null,
-  ) as unknown as AppConfigService;
+  const appconfig = new MockAppConfigService(null);
+  const authService = new MockAuthService();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -73,7 +73,7 @@ describe("ShareDialogComponent", () => {
         { provide: DatasetsService, useClass: MockDatasetApi },
         { provide: AppConfigService, useValue: appconfig },
         { provide: HttpClient, useClass: MockHttp },
-        { provide: AuthService, useClass: MockLoopBackAuth },
+        { provide: AuthService, useValue: authService },
         { provide: UsersService, useClass: MockUserApi },
         { provide: InstrumentsService, useValue: {} },
         { provide: JobsService, useValue: {} },
@@ -81,6 +81,14 @@ describe("ShareDialogComponent", () => {
         { provide: SamplesService, useValue: {} },
         { provide: PublishedDataService, useClass: MockPublishedDataApi },
         { provide: MAT_DIALOG_DATA, useValue: data },
+        {
+          provide: Configuration,
+          useClass: Configuration,
+        },
+        {
+          provide: UserIdentitiesService,
+          useValue: { userIdentitiesControllerIsValidEmail: () => {} },
+        },
         InternalStorage,
       ],
     }).compileComponents();
@@ -155,11 +163,11 @@ describe("ShareDialogComponent", () => {
           email,
         },
       };
-      const response = cold("-a|", { a: true });
+      // TODO: Fix this any type casting here
       spyOn(
         component.userIdentititiesService,
         "userIdentitiesControllerIsValidEmail",
-      ).and.returnValue(response);
+      ).and.returnValue(of(true) as any);
       component.emailFormControl.setValue(email);
       expect(component.emailFormControl.value).toEqual(email);
 

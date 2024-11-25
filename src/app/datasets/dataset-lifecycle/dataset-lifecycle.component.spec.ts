@@ -20,6 +20,7 @@ import { Store, StoreModule } from "@ngrx/store";
 import { MockStore } from "@ngrx/store/testing";
 import { AppConfigService } from "app-config.service";
 import { Dataset } from "shared/MockStubs";
+import { HistoryClass } from "@scicatproject/scicat-sdk-ts";
 
 const historyItems = [
   {
@@ -115,14 +116,15 @@ describe("DatasetLifecycleComponent", () => {
     it("should parse dataset.history into a HistoryItem array if dataset is defined", () => {
       const keywords = ["test", "parse"];
       const dataset = new Dataset();
+      // TODO: Check the types here and see if we need the keywords at all or not as it doesn't exist on the HistoryClass.
       dataset.history = [
         {
           id: "testId",
-          // keywords,
+          keywords,
           updatedBy: "Test User",
           updatedAt: new Date().toISOString(),
         },
-      ];
+      ] as unknown as HistoryClass[];
 
       component.dataset = dataset;
       const parsedHistoryItems = component["parseHistoryItems"]();
