@@ -82,7 +82,8 @@ export interface AppConfig {
   searchPublicDataEnabled: boolean;
   searchSamples: boolean;
   sftpHost: string | null;
-  largeDataFileAccessInstruction?: string;
+  sourceFolder?: string;
+  maxFileSizeWarning?: string;
   shareEnabled: boolean;
   shoppingCartEnabled: boolean;
   shoppingCartOnHeader: boolean;

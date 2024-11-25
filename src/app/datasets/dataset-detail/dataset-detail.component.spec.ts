@@ -341,38 +341,6 @@ describe("DatasetDetailComponent", () => {
     });
   });
 
-  // NOTE: Sample editing is currently disabled.
-  // This feature not only contains bugs that need to be fixed,
-  // but we also want to have a centralized edit button in one location.
-
-  // describe("#openSampleEditDialog()", () => {
-  //   it("should open the sample edit dialog and dispatch updatePropertyAction", () => {
-  //     const dispatchSpy = spyOn(store, "dispatch");
-  //     component.dataset = new Dataset();
-  //     component.dataset.ownerGroup = "test";
-  //     component.sample = new Sample();
-  //     const sampleId = "testId";
-  //     component.sample.sampleId = sampleId;
-  //     const pid = "testPid";
-  //     component.dataset.pid = pid;
-  //     const property = { sampleId };
-  //     const dialogOpenSpy = spyOn(component.dialog, "open").and.returnValue({
-  //       afterClosed: () => of({ sample: { sampleId: "testId" } }),
-  //     } as MatDialogRef<SampleEditComponent>);
-  //     component.openSampleEditDialog();
-
-  //     expect(dialogOpenSpy).toHaveBeenCalledTimes(1);
-  //     expect(dialogOpenSpy).toHaveBeenCalledWith(SampleEditComponent, {
-  //       width: "1000px",
-  //       data: { ownerGroup: "test", sampleId: "testId" },
-  //     });
-  //     expect(dispatchSpy).toHaveBeenCalledTimes(1);
-  //     expect(dispatchSpy).toHaveBeenCalledWith(
-  //       updatePropertyAction({ pid, property }),
-  //     );
-  //   });
-  // });
-
   describe("#onSaveMetadata()", () => {
     it("should dispatch an updatePropertyAction", () => {
       const dispatchSpy = spyOn(store, "dispatch");
