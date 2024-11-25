@@ -91,6 +91,7 @@ import { FiltersModule } from "shared/modules/filters/filters.module";
 import { userReducer } from "state-management/reducers/user.reducer";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { OneDepComponent } from "./onedep/onedep.component";
+import { OrcidFormatterDirective } from "./onedep/onedep.directive";
 
 @NgModule({
   imports: [
@@ -181,6 +182,7 @@ import { OneDepComponent } from "./onedep/onedep.component";
     DatafilesActionComponent,
     DatasetsFilterSettingsComponent,
     OneDepComponent,
+    OrcidFormatterDirective,
   ],
   providers: [
     ArchivingService,

@@ -7,6 +7,7 @@ import {
   FormControl,
   FormGroup,
   FormArray,
+  Validators,
 } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import { Dataset } from "shared/sdk/models";
@@ -42,6 +43,7 @@ export class OneDepComponent implements OnInit {
   emFile = EmFile;
   files = EmFiles;
   detailsOverflow: string = 'hidden';
+
 
   @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
 
@@ -92,8 +94,14 @@ export class OneDepComponent implements OnInit {
       associatedMap: new FormControl(false),
       compositeMap: new FormControl(false),
       emdbId: new FormControl(""),
-      email: this.user.email
+      email: this.user.email,
+      jwtToken: new FormControl(""),
+      orcid: this.fb.array([]),
     })
+  }
+
+  get orcidArray(): FormArray {
+    return this.form.get('orcid') as FormArray;
   }
 
   hasUnsavedChanges() {
@@ -101,6 +109,15 @@ export class OneDepComponent implements OnInit {
   }
   onHasUnsavedChanges($event: boolean) {
     this._hasUnsavedChanges = $event;
+  }
+  addOrcidField(): void {
+    const orcidField = this.fb.group({
+      orcidId: ['', [Validators.required, Validators.pattern(/^(\d{4}-){3}\d{4}$/)]],
+    });
+    this.orcidArray.push(orcidField);
+  }
+  removeOrcidField(index: number): void {
+    this.orcidArray.removeAt(index);
   }
 
   autoGrow(event: Event): void {
@@ -163,6 +180,7 @@ export class OneDepComponent implements OnInit {
   onDepositClick() {
     const formDataToSend = new FormData();
     formDataToSend.append('email', this.form.value.email);
+    formDataToSend.append('orcidIds', this.form.value.orcidArray);
     formDataToSend.append('metadata', JSON.stringify(this.form.value.metadata));
     formDataToSend.append('experiments', this.form.value.emMethod);
     // emdbId: this.form.value.emdbId, 
@@ -175,7 +193,6 @@ export class OneDepComponent implements OnInit {
       }
     }
     formDataToSend.append('fileMetadata', JSON.stringify(fileMetadata));
-
 
     this.http.post("http://localhost:8080/onedep", formDataToSend, {
       headers: {}
