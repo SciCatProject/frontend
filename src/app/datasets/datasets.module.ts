@@ -94,6 +94,7 @@ import { OneDepComponent } from "./onedep/onedep.component";
 import { OrcidFormatterDirective } from "./onedep/onedep.directive";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { OneDepComponent } from "./onedep/onedep.component";
+import { OrcidFormatterDirective } from "./onedep/onedep.directive";
 
 @NgModule({
   imports: [
