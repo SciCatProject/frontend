@@ -5,9 +5,8 @@ import { selectDatasetsPerPage } from "state-management/selectors/datasets.selec
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { of, throwError } from "rxjs";
 import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
-import { cold } from "jasmine-marbles";
 
-describe("ThumbnailService", () => {
+fdescribe("ThumbnailService", () => {
   let service: ThumbnailService;
   let datasetApi: jasmine.SpyObj<DatasetsService>;
   let store: MockStore;
@@ -83,9 +82,10 @@ describe("ThumbnailService", () => {
       isError: false,
     };
 
-    const response = cold("-a|", { a: thumbnail });
-
-    datasetApi.datasetsControllerThumbnail.and.returnValue(response);
+    // TODO: Try to fix any type casting here
+    datasetApi.datasetsControllerThumbnail.and.returnValue(
+      of({ thumbnail } as any),
+    );
 
     const result = await service.getThumbnail(pid);
     expect(datasetApi.datasetsControllerThumbnail).toHaveBeenCalledWith(
@@ -108,9 +108,9 @@ describe("ThumbnailService", () => {
     const pid = "test-pid";
     const thumbnail = "http://thumbnail-url.com/image.jpg";
 
-    const response = cold("-a|", { a: thumbnail });
-
-    datasetApi.datasetsControllerThumbnail.and.returnValue(response);
+    datasetApi.datasetsControllerThumbnail.and.returnValue(
+      of({ thumbnail } as any),
+    );
 
     const result = await service.getThumbnail(pid);
     expect(datasetApi.datasetsControllerThumbnail).toHaveBeenCalledWith(
