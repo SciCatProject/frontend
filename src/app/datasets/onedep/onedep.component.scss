@@ -51,6 +51,13 @@ mat-card {
     height: 20px;
     margin-bottom: 40px;
   }
+  .remove-field-btn {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    margin-left: 8px; 
+}
 
   .add-field-btn {
     margin-top: 16px;
@@ -89,7 +96,21 @@ mat-card {
         }
       }
     }
+    mat-radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
 
+    mat-radio-button {
+      display: block;
+      margin-bottom: -0.7rem;
+      /* Optional: Adds spacing between buttons */
+    }
+
+    // .error{
+    //   color: red;
+    // }
     .EMDB-ID {
       width: 15%;
     }

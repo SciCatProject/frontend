@@ -87,15 +87,15 @@ export class OneDepComponent implements OnInit {
       }),
     );
     this.form = this.fb.group({
+      email: this.user.email,
+      jwtToken: new FormControl(""),
       metadata: this.dataset.scientificMetadata,
       experiments: this.fb.array([]),
       emMethod: new FormControl(""),
-      deposingCoordinates: new FormControl(true),
-      associatedMap: new FormControl(false),
-      compositeMap: new FormControl(false),
+      deposingCoordinates: new FormControl(null, Validators.required),
+      associatedMap: new FormControl(null, Validators.required),
+      compositeMap: new FormControl(null, Validators.required),
       emdbId: new FormControl(""),
-      email: this.user.email,
-      jwtToken: new FormControl(""),
       orcid: this.fb.array([]),
     })
   }
@@ -193,7 +193,6 @@ export class OneDepComponent implements OnInit {
       }
     }
     formDataToSend.append('fileMetadata', JSON.stringify(fileMetadata));
-
     this.http.post("http://localhost:8080/onedep", formDataToSend, {
       headers: {}
     }).subscribe(
