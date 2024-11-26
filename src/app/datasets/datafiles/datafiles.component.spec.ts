@@ -19,6 +19,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { AppConfigService } from "app-config.service";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { DatafilesActionsComponent } from "datasets/datafiles-actions/datafiles-actions.component";
+import { FileSizePipe } from "shared/pipes/filesize.pipe";
 
 describe("DatafilesComponent", () => {
   let component: DatafilesComponent;
@@ -100,6 +101,7 @@ describe("DatafilesComponent", () => {
             provide: DatafilesActionsComponent,
             useClass: MockDatafilesActionsComponent,
           },
+          { provide: FileSizePipe },
         ],
       },
     });
@@ -140,7 +142,7 @@ describe("DatafilesComponent", () => {
       },
     ];
     component.tableData = component.files;
-    component.sourcefolder = "/test/";
+    component.sourceFolder = "/test/";
     fixture.detectChanges();
   });
 

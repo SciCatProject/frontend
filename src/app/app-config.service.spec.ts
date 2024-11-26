@@ -54,6 +54,8 @@ const appConfig: AppConfig = {
   searchPublicDataEnabled: true,
   searchSamples: true,
   sftpHost: "login.esss.dk",
+  sourceFolder: "default",
+  maxFileSizeWarning: "Some files are above the max size",
   shareEnabled: true,
   shoppingCartEnabled: true,
   shoppingCartOnHeader: true,

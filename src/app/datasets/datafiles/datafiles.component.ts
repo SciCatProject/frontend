@@ -75,9 +75,9 @@ export class DatafilesComponent
     this.appConfig.fileserverButtonLabel || "Download";
   multipleDownloadAction: string | null = this.appConfig.multipleDownloadAction;
   maxFileSize: number | null = this.appConfig.maxDirectDownloadSize;
-  sourceFolder: string | null =
-    this.appConfig.sourceFolder || "no source folder provided";
-  sftpHost: string = this.appConfig.sftpHost || "no sftp host provided";
+  sourceFolder: string =
+    this.appConfig.sourceFolder || "No source folder provided";
+  sftpHost: string = this.appConfig.sftpHost || "No sftp host provided";
   maxFileSizeWarning: string | null =
     this.appConfig.maxFileSizeWarning ||
     `Some files are above the max size ${this.fileSizePipe.transform(this.maxFileSize)}`;
