@@ -1,4 +1,4 @@
-import { MockStore, MockActivatedRoute, createMock } from "shared/MockStubs";
+import { MockStore, MockActivatedRoute, mockSample } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { SampleDashboardComponent } from "./sample-dashboard.component";
@@ -28,7 +28,6 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatChipsModule } from "@angular/material/chips";
 import { AppConfigService } from "app-config.service";
-import { SampleClass } from "@scicatproject/scicat-sdk-ts";
 
 const getConfig = () => ({
   addSampleEnabled: true,
@@ -92,7 +91,7 @@ describe("SampleDashboardComponent", () => {
 
   describe("#formatTableData", () => {
     it("should return an array of sample objects formatted for the table", () => {
-      const samples = [createMock<SampleClass>({})];
+      const samples = [mockSample];
 
       const data = component.formatTableData(samples);
 
@@ -174,7 +173,7 @@ describe("SampleDashboardComponent", () => {
 
   describe("#onRowClick()", () => {
     it("should navigate to a sample", () => {
-      const sample = createMock<SampleClass>({});
+      const sample = mockSample;
 
       component.onRowClick(sample);
 

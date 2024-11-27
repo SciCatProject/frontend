@@ -12,7 +12,7 @@ import {
   MockActivatedRoute,
   MockStore,
   createMock,
-  mockDataset,
+  mockDataset as dataset,
 } from "shared/MockStubs";
 import { DashboardComponent } from "./dashboard.component";
 import { of } from "rxjs";
@@ -216,7 +216,6 @@ describe("DashboardComponent", () => {
 
   describe("#onRowClick()", () => {
     it("should navigate to a dataset", () => {
-      const dataset = mockDataset;
       component.onRowClick(dataset);
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);

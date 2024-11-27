@@ -1,13 +1,12 @@
 import * as fromActions from "./proposals.actions";
 import { ProposalFilters } from "state-management/state/proposals.store";
-import { createMock, mockDataset } from "shared/MockStubs";
-import { Attachment, ProposalClass } from "@scicatproject/scicat-sdk-ts";
+import {
+  mockAttachment as attachment,
+  mockProposal as proposal,
+  mockDataset,
+} from "shared/MockStubs";
 
 describe("Proposal Actions", () => {
-  const dataset = mockDataset;
-  const attachment = createMock<Attachment>({});
-  const proposal = createMock<ProposalClass>({});
-
   describe("fetchProposalsAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchProposalsAction();
@@ -103,7 +102,7 @@ describe("Proposal Actions", () => {
 
   describe("fetchProposalDatasetsCompleteAction", () => {
     it("should create an action", () => {
-      const datasets = [dataset];
+      const datasets = [mockDataset];
       const action = fromActions.fetchProposalDatasetsCompleteAction({
         datasets,
       });

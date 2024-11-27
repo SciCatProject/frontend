@@ -1,10 +1,8 @@
 import { LogbookFilters } from "../models";
 import * as fromActions from "./logbooks.actions";
-import { mockLogbook } from "shared/MockStubs";
+import { mockLogbook as logbook } from "shared/MockStubs";
 
 describe("Logbook Actions", () => {
-  const logbook = mockLogbook;
-
   describe("fetchLogbooksAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchLogbooksAction();

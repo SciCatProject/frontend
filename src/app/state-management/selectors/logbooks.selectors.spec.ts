@@ -1,9 +1,7 @@
-import { mockLogbook } from "shared/MockStubs";
+import { mockLogbook as logbook } from "shared/MockStubs";
 import * as fromSelectors from "./logbooks.selectors";
 import { LogbookFilters } from "state-management/models";
 import { LogbookState } from "state-management/state/logbooks.store";
-
-const logbook = mockLogbook;
 
 const logbookFilters: LogbookFilters = {
   textSearch: "test",
