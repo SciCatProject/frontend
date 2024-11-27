@@ -6,7 +6,7 @@ import {
 } from "@angular/core/testing";
 
 import { PublisheddataDashboardComponent } from "./publisheddata-dashboard.component";
-import { MockStore, createMock } from "shared/MockStubs";
+import { MockStore, createMock, mockPublishedData } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { StoreModule, Store } from "@ngrx/store";
 import { Router } from "@angular/router";
@@ -105,7 +105,7 @@ describe("PublisheddataDashboardComponent", () => {
 
   describe("#onRowClick", () => {
     it("should navigate to a Published Dataset", () => {
-      const published = createMock<PublishedData>({});
+      const published = mockPublishedData;
       const id = encodeURIComponent(published.doi);
       component.onRowClick(published);
 

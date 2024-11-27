@@ -15,13 +15,16 @@ import {
 } from "state-management/actions/user.actions";
 import { Type } from "@angular/core";
 import {
-  Attachment,
   DatasetsService,
   SampleClass,
   SamplesService,
 } from "@scicatproject/scicat-sdk-ts";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
-import { createMock, mockDataset } from "shared/MockStubs";
+import {
+  createMock,
+  mockDataset as dataset,
+  mockAttachment as attachment,
+} from "shared/MockStubs";
 
 const sample = createMock<SampleClass>({
   sampleId: "testId",
@@ -33,10 +36,6 @@ const sample = createMock<SampleClass>({
   accessGroups: [],
   isPublished: false,
 });
-
-const dataset = mockDataset;
-
-const attachment = createMock<Attachment>({});
 
 describe("SampleEffects", () => {
   let actions: TestObservable;

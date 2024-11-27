@@ -5,11 +5,8 @@ import {
   initialDatasetState,
 } from "state-management/state/datasets.store";
 import { ArchViewMode, ScientificCondition } from "../models";
-import { createMock } from "shared/MockStubs";
-import {
-  Attachment,
-  OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts";
+import { createMock, mockAttachment as attachment } from "shared/MockStubs";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts";
 
 const derivedDataset = createMock<OutputDatasetObsoleteDto>({
   pid: "testPid",
@@ -32,8 +29,6 @@ const derivedDataset = createMock<OutputDatasetObsoleteDto>({
   updatedBy: "",
   attachments: [],
 });
-
-const attachment = createMock<Attachment>({});
 
 const dataset = createMock<OutputDatasetObsoleteDto>({
   ...derivedDataset,

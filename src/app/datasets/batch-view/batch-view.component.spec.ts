@@ -8,7 +8,7 @@ import { Router } from "@angular/router";
 import {
   MockArchivingService,
   MockDatasetApi,
-  mockDataset,
+  mockDataset as dataset,
 } from "shared/MockStubs";
 import { ArchivingService } from "../archiving.service";
 import { MatIconModule } from "@angular/material/icon";
@@ -105,8 +105,6 @@ describe("BatchViewComponent", () => {
   describe("#onRemove()", () => {
     it("should dispatch a removeFromBatchAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
-      const dataset = mockDataset;
-
       component.onRemove(dataset);
 
       expect(dispatchSpy).toHaveBeenCalledOnceWith(

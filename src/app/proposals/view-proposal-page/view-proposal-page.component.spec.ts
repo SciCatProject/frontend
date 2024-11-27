@@ -11,6 +11,7 @@ import {
   MockActivatedRoute,
   createMock,
   mockDataset,
+  mockProposal,
 } from "shared/MockStubs";
 import { Router, ActivatedRoute } from "@angular/router";
 import { StoreModule, Store } from "@ngrx/store";
@@ -25,7 +26,7 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatIconModule } from "@angular/material/icon";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppConfigService } from "app-config.service";
-import { DatasetClass, ProposalClass } from "@scicatproject/scicat-sdk-ts";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
 
 const getConfig = () => ({
   logbookEnabled: true,
@@ -102,7 +103,7 @@ describe("ViewProposalPageComponent", () => {
     it("should dispatch a changeDatasetsPageAction and a fetchProposalDatasetsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const proposal = createMock<ProposalClass>({});
+      const proposal = mockProposal;
       proposal.proposalId = "testId";
       component.proposal = proposal;
       const event: PageChangeEvent = {

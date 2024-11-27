@@ -34,14 +34,18 @@ import {
   MatSlideToggleChange,
 } from "@angular/material/slide-toggle";
 import { ActivatedRoute, Router } from "@angular/router";
-import { createMock, MockActivatedRoute, mockDataset } from "shared/MockStubs";
+import {
+  createMock,
+  MockActivatedRoute,
+  mockDataset,
+  mockSample,
+} from "shared/MockStubs";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { AppConfigService } from "app-config.service";
 import { AttachmentService } from "shared/services/attachment.service";
 import {
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
-  SampleClass,
 } from "@scicatproject/scicat-sdk-ts";
 
 describe("DatasetDetailComponent", () => {
@@ -350,7 +354,7 @@ describe("DatasetDetailComponent", () => {
       const dispatchSpy = spyOn(store, "dispatch");
       component.dataset = mockDataset;
       component.dataset.ownerGroup = "test";
-      component.sample = createMock<SampleClass>({});
+      component.sample = mockSample;
       const sampleId = "testId";
       component.sample.sampleId = sampleId;
       const pid = "testPid";

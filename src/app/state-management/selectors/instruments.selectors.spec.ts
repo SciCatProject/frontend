@@ -1,9 +1,7 @@
 import { InstrumentState } from "state-management/state/instruments.store";
 import * as fromSelectors from "./instruments.selectors";
 import { GenericFilters } from "state-management/models";
-import { mockInstrument } from "shared/MockStubs";
-
-const instrument = mockInstrument;
+import { mockInstrument as instrument } from "shared/MockStubs";
 
 const instrumentFilters: GenericFilters = {
   sortField: "name desc",

@@ -2,8 +2,12 @@ import { samplesReducer } from "./samples.reducer";
 import { initialSampleState } from "../state/samples.store";
 import * as fromActions from "../actions/samples.actions";
 import { SampleFilters, ScientificCondition } from "../models";
-import { createMock, mockDataset } from "shared/MockStubs";
-import { Attachment, SampleClass } from "@scicatproject/scicat-sdk-ts";
+import {
+  createMock,
+  mockDataset as dataset,
+  mockAttachment as attachment,
+} from "shared/MockStubs";
+import { SampleClass } from "@scicatproject/scicat-sdk-ts";
 
 const sample = createMock<SampleClass>({
   sampleId: "testId",
@@ -15,10 +19,6 @@ const sample = createMock<SampleClass>({
   accessGroups: [],
   isPublished: false,
 });
-
-const dataset = mockDataset;
-
-const attachment = createMock<Attachment>({});
 
 describe("SamplesReducer", () => {
   describe("on fetchSamplesCompleteAction", () => {

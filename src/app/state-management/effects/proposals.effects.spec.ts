@@ -12,13 +12,16 @@ import * as fromActions from "state-management/actions/proposals.actions";
 import { hot, cold } from "jasmine-marbles";
 import { Type } from "@angular/core";
 import {
-  Attachment,
   DatasetsService,
   ProposalClass,
   ProposalsService,
 } from "@scicatproject/scicat-sdk-ts";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
-import { createMock, mockDataset } from "shared/MockStubs";
+import {
+  createMock,
+  mockDataset as dataset,
+  mockAttachment as attachment,
+} from "shared/MockStubs";
 import {
   loadingAction,
   loadingCompleteAction,
@@ -37,10 +40,6 @@ const proposal = createMock<ProposalClass>({
   updatedAt: "",
   updatedBy: "",
 });
-
-const dataset = mockDataset;
-
-const attachment = createMock<Attachment>({});
 
 describe("ProposalEffects", () => {
   let actions: TestObservable;

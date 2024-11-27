@@ -1,9 +1,7 @@
 import * as fromDatasetSelectors from "./datasets.selectors";
 import { ArchViewMode } from "../models";
 import { DatasetState } from "../state/datasets.store";
-import { mockDataset } from "shared/MockStubs";
-
-const dataset = mockDataset;
+import { mockDataset as dataset } from "shared/MockStubs";
 
 const initialDatasetState: DatasetState = {
   datasets: [],

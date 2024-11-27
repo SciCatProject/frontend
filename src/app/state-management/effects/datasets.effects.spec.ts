@@ -23,7 +23,11 @@ import {
   OutputDatasetObsoleteDto,
 } from "@scicatproject/scicat-sdk-ts";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
-import { createMock, mockAttachment, mockDataset } from "shared/MockStubs";
+import {
+  createMock,
+  mockAttachment as attachment,
+  mockDataset,
+} from "shared/MockStubs";
 
 const derivedData = createMock<OutputDatasetObsoleteDto>({
   investigator: "",
@@ -45,10 +49,7 @@ const derivedData = createMock<OutputDatasetObsoleteDto>({
 });
 const derivedDataset = { pid: "testPid", ...derivedData };
 
-const data = mockDataset;
-const dataset = { pid: "testPid", ...data };
-
-const attachment = mockAttachment;
+const dataset = { pid: "testPid", ...mockDataset };
 
 describe("DatasetEffects", () => {
   let actions: TestObservable;

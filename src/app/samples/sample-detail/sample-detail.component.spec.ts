@@ -5,6 +5,7 @@ import {
   MockStore,
   createMock,
   mockDataset,
+  mockSample,
 } from "shared/MockStubs";
 import { SampleDetailComponent } from "./sample-detail.component";
 import { Store, StoreModule } from "@ngrx/store";
@@ -35,11 +36,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatTabsModule } from "@angular/material/tabs";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { AppConfigService } from "app-config.service";
-import {
-  DatasetClass,
-  ReturnedUserDto,
-  SampleClass,
-} from "@scicatproject/scicat-sdk-ts";
+import { DatasetClass, ReturnedUserDto } from "@scicatproject/scicat-sdk-ts";
 
 const getConfig = () => ({
   editMetadataEnabled: true,
@@ -125,7 +122,7 @@ describe("SampleDetailComponent", () => {
     it("should dispatch a saveCharacteristicsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const sample = createMock<SampleClass>({});
+      const sample = mockSample;
       sample.sampleId = "testId";
       component.sample = sample;
       const characteristics = {};
@@ -147,7 +144,7 @@ describe("SampleDetailComponent", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       component.user = createMock<ReturnedUserDto>({});
-      component.sample = createMock<SampleClass>({});
+      component.sample = mockSample;
       const file = {
         name: "test",
         size: 100,
@@ -167,7 +164,7 @@ describe("SampleDetailComponent", () => {
     it("should dispatch an updateAttachmentCaptionAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      component.sample = createMock<SampleClass>({});
+      component.sample = mockSample;
       const sampleId = "testId";
       component.sample.sampleId = sampleId;
       const event: SubmitCaptionEvent = {
@@ -191,7 +188,7 @@ describe("SampleDetailComponent", () => {
     it("should dispatch a removeAttachmentAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      component.sample = createMock<SampleClass>({});
+      component.sample = mockSample;
       const sampleId = "testId";
       component.sample.sampleId = sampleId;
       const attachmentId = "testId";
@@ -208,7 +205,7 @@ describe("SampleDetailComponent", () => {
     it("should dispatch a changeDatasetsPageAction and a fetchSampleDatasetsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const sample = createMock<SampleClass>({});
+      const sample = mockSample;
       sample.sampleId = "testId";
       component.sample = sample;
       const event: PageChangeEvent = {
