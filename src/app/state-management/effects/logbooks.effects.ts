@@ -40,10 +40,7 @@ export class LogbookEffects {
       concatLatestFrom(() => this.filters$),
       mergeMap(([{ name }, filters]) => {
         return this.logbooksService
-          .logbooksControllerFindByName(
-            encodeURIComponent(name),
-            JSON.stringify(filters),
-          )
+          .logbooksControllerFindByName(name, JSON.stringify(filters))
           .pipe(
             timeout(3000),
             mergeMap((logbook: Logbook) => [
@@ -62,10 +59,7 @@ export class LogbookEffects {
       concatLatestFrom(() => this.filters$),
       mergeMap(([{ pid }, filters]) =>
         this.datasetsService
-          .datasetsControllerFindLogbookByPid(
-            encodeURIComponent(pid),
-            JSON.stringify(filters),
-          )
+          .datasetsControllerFindLogbookByPid(pid, JSON.stringify(filters))
           .pipe(
             timeout(3000),
             mergeMap((logbook) => [
@@ -87,11 +81,11 @@ export class LogbookEffects {
         return (
           name
             ? this.logbooksService.logbooksControllerFindByName(
-                encodeURIComponent(name),
+                name,
                 JSON.stringify(theRest),
               )
             : this.datasetsService.datasetsControllerFindLogbookByPid(
-                encodeURIComponent(pid),
+                pid,
                 JSON.stringify(theRest),
               )
         ).pipe(

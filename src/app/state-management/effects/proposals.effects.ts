@@ -133,10 +133,7 @@ export class ProposalEffects {
       switchMap(({ attachment }) => {
         const { id, sampleId, ...theRest } = attachment;
         return this.proposalsService
-          .proposalsControllerCreateAttachment(
-            encodeURIComponent(theRest.proposalId),
-            theRest,
-          )
+          .proposalsControllerCreateAttachment(theRest.proposalId, theRest)
           .pipe(
             map((res) =>
               fromActions.addAttachmentCompleteAction({ attachment: res }),
@@ -154,8 +151,8 @@ export class ProposalEffects {
         const newCaption = { caption };
         return this.proposalsService
           .proposalsControllerFindOneAttachmentAndUpdate(
-            encodeURIComponent(proposalId),
-            encodeURIComponent(attachmentId),
+            proposalId,
+            attachmentId,
             newCaption,
           )
           .pipe(
@@ -177,7 +174,7 @@ export class ProposalEffects {
       ofType(fromActions.updateProposalPropertyAction),
       switchMap(({ proposalId, property }) =>
         this.proposalsService
-          .proposalsControllerUpdate(encodeURIComponent(proposalId), property)
+          .proposalsControllerUpdate(proposalId, property)
           .pipe(
             switchMap(() => [
               fromActions.updateProposalPropertyCompleteAction(),
@@ -197,8 +194,8 @@ export class ProposalEffects {
       switchMap(({ proposalId, attachmentId }) =>
         this.proposalsService
           .proposalsControllerFindOneAttachmentAndRemove(
-            encodeURIComponent(proposalId),
-            encodeURIComponent(attachmentId),
+            proposalId,
+            attachmentId,
           )
           .pipe(
             map((res) =>
@@ -274,12 +271,12 @@ export class ProposalEffects {
         ofType(triggerAction),
         switchMap<ProposalClass, ObservableInput<Action>>(({ proposalId }) =>
           this.proposalsService
-            .proposalsControllerFindByIdAccess(encodeURIComponent(proposalId))
+            .proposalsControllerFindByIdAccess(proposalId)
             .pipe(
               filter((permission) => permission.canAccess),
               switchMap(() =>
                 this.proposalsService
-                  .proposalsControllerFindById(encodeURIComponent(proposalId))
+                  .proposalsControllerFindById(proposalId)
                   .pipe(
                     map((proposal) => completeAction({ proposal })),
                     catchError(() => of(failedAction())),

@@ -130,7 +130,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
 
           this.store.dispatch(
             appendToDatasetArrayFieldAction({
-              pid: encodeURIComponent(dataset.pid),
+              pid: dataset.pid,
               fieldName: "sharedWith",
               data: result.users,
             }),

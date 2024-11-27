@@ -208,7 +208,7 @@ export class SampleEffects {
         const { id, datasetId, proposalId, ...theRest } = attachment;
         return this.sampleApi
           .samplesControllerCreateAttachments(
-            encodeURIComponent(theRest.sampleId!),
+            theRest.sampleId,
             theRest as CreateSubAttachmentDto,
           )
           .pipe(
@@ -226,10 +226,7 @@ export class SampleEffects {
       ofType(fromActions.removeAttachmentAction),
       switchMap(({ sampleId, attachmentId }) =>
         this.sampleApi
-          .samplesControllerFindOneAttachmentAndRemove(
-            encodeURIComponent(sampleId),
-            encodeURIComponent(attachmentId),
-          )
+          .samplesControllerFindOneAttachmentAndRemove(sampleId, attachmentId)
           .pipe(
             map(() =>
               fromActions.removeAttachmentCompleteAction({ attachmentId }),

@@ -86,6 +86,7 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
           datasetId: this.dataset.pid,
           attachmentId: event.attachmentId,
           caption: event.caption,
+          ownerGroup: this.dataset.ownerGroup,
         }),
       );
     }

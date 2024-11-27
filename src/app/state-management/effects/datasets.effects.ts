@@ -140,14 +140,10 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchDatasetAction),
       switchMap(({ pid }) => {
-        return this.datasetsService
-          .datasetsControllerFindById(encodeURIComponent(pid))
-          .pipe(
-            map((dataset) =>
-              fromActions.fetchDatasetCompleteAction({ dataset }),
-            ),
-            catchError(() => of(fromActions.fetchDatasetFailedAction())),
-          );
+        return this.datasetsService.datasetsControllerFindById(pid).pipe(
+          map((dataset) => fromActions.fetchDatasetCompleteAction({ dataset })),
+          catchError(() => of(fromActions.fetchDatasetFailedAction())),
+        );
       }),
     );
   });
@@ -156,7 +152,7 @@ export class DatasetEffects {
       ofType(fromActions.fetchDatablocksAction),
       switchMap(({ pid, filters }) => {
         return this.datasetsService
-          .datasetsControllerFindAllDatablocks(encodeURIComponent(pid), filters)
+          .datasetsControllerFindAllDatablocks(pid, filters)
           .pipe(
             map((datablocks: Datablock[]) =>
               fromActions.fetchDatablocksCompleteAction({ datablocks }),
@@ -172,7 +168,7 @@ export class DatasetEffects {
       ofType(fromActions.fetchOrigDatablocksAction),
       switchMap(({ pid }) => {
         return this.datasetsService
-          .datasetsControllerFindAllOrigDatablocks(encodeURIComponent(pid))
+          .datasetsControllerFindAllOrigDatablocks(pid)
           .pipe(
             map((origdatablocks: OrigDatablock[]) =>
               fromActions.fetchOrigDatablocksCompleteAction({ origdatablocks }),
@@ -188,10 +184,7 @@ export class DatasetEffects {
       ofType(fromActions.fetchAttachmentsAction),
       switchMap(({ pid, filters }) => {
         return this.datasetsService
-          .datasetsControllerFindAllAttachments(
-            encodeURIComponent(pid),
-            filters,
-          )
+          .datasetsControllerFindAllAttachments(pid, filters)
           .pipe(
             map((attachments: Attachment[]) =>
               fromActions.fetchAttachmentsCompleteAction({ attachments }),
@@ -303,10 +296,7 @@ export class DatasetEffects {
       ofType(fromActions.updatePropertyAction),
       switchMap(({ pid, property }) =>
         this.datasetsService
-          .datasetsControllerFindByIdAndUpdate(
-            encodeURIComponent(pid),
-            property,
-          )
+          .datasetsControllerFindByIdAndUpdate(pid, property)
           .pipe(
             switchMap(() => [
               fromActions.updatePropertyCompleteAction(),
@@ -325,7 +315,7 @@ export class DatasetEffects {
         const { id, proposalId, sampleId, ...theRest } = attachment;
         return this.datasetsService
           .datasetsControllerCreateAttachment(
-            encodeURIComponent(theRest.datasetId!),
+            theRest.datasetId,
             theRest as CreateAttachmentDto,
           )
           .pipe(
@@ -341,12 +331,12 @@ export class DatasetEffects {
   updateAttachmentCaption$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.updateAttachmentCaptionAction),
-      switchMap(({ datasetId, attachmentId, caption }) => {
-        const data = { caption };
+      switchMap(({ datasetId, attachmentId, caption, ownerGroup }) => {
+        const data = { caption, ownerGroup };
         return this.datasetsService
           .datasetsControllerFindOneAttachmentAndUpdate(
-            encodeURIComponent(datasetId),
-            encodeURIComponent(attachmentId),
+            datasetId,
+            attachmentId,
             data as UpdateAttachmentDto,
           )
           .pipe(
@@ -366,10 +356,7 @@ export class DatasetEffects {
       ofType(fromActions.removeAttachmentAction),
       switchMap(({ datasetId, attachmentId }) =>
         this.datasetsService
-          .datasetsControllerFindOneAttachmentAndRemove(
-            encodeURIComponent(datasetId),
-            attachmentId,
-          )
+          .datasetsControllerFindOneAttachmentAndRemove(datasetId, attachmentId)
           .pipe(
             map(() =>
               fromActions.removeAttachmentCompleteAction({ attachmentId }),
@@ -385,11 +372,7 @@ export class DatasetEffects {
       ofType(fromActions.appendToDatasetArrayFieldAction),
       mergeMap(({ pid, fieldName, data }) =>
         this.datasetsService
-          .datasetsControllerAppendToArrayField(
-            encodeURIComponent(pid),
-            fieldName,
-            data,
-          )
+          .datasetsControllerAppendToArrayField(pid, fieldName, data)
           .pipe(
             map(() => fromActions.appendToDatasetArrayFieldCompleteAction()),
             catchError(() =>
