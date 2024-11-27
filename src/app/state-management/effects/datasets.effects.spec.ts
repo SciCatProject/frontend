@@ -459,12 +459,14 @@ describe("DatasetEffects", () => {
     const datasetId = "testPid";
     const attachmentId = "testId";
     const caption = "test";
+    const ownerGroup = "test";
 
     it("should result in an addAttachmentCaptionCompleteAction", () => {
       const action = fromActions.updateAttachmentCaptionAction({
         datasetId,
         attachmentId,
         caption,
+        ownerGroup,
       });
       const outcome = fromActions.updateAttachmentCaptionCompleteAction({
         attachment,
@@ -485,6 +487,7 @@ describe("DatasetEffects", () => {
         datasetId,
         attachmentId,
         caption,
+        ownerGroup,
       });
       const outcome = fromActions.updateAttachmentCaptionFailedAction();
 
@@ -678,10 +681,13 @@ describe("DatasetEffects", () => {
         const datasetId = "testId";
         const attachmentId = "testId";
         const caption = "test";
+        const ownerGroup = "test";
+
         const action = fromActions.updateAttachmentCaptionAction({
           datasetId,
           attachmentId,
           caption,
+          ownerGroup,
         });
         const outcome = loadingAction();
 

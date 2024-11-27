@@ -353,16 +353,19 @@ describe("Dataset Actions", () => {
       const datasetId = "testId";
       const attachmentId = "testId";
       const caption = "test";
+      const ownerGroup = "test";
       const action = fromActions.updateAttachmentCaptionAction({
         datasetId,
         attachmentId,
         caption,
+        ownerGroup,
       });
       expect({ ...action }).toEqual({
         type: "[Dataset] Update Attachment Caption",
         datasetId,
         attachmentId,
         caption,
+        ownerGroup,
       });
     });
   });
