@@ -22,6 +22,7 @@ import {
   ConditionConfig,
   FilterConfig,
 } from "../../../shared/modules/filters/filters.module";
+import { isEqual } from "lodash-es";
 
 @Component({
   selector: "app-type-datasets-filter-settings",
@@ -55,6 +56,15 @@ export class DatasetsFilterSettingsComponent {
       .subscribe((res) => {
         if (res) {
           const { data } = res;
+
+          // If the condition already exists, do nothing
+          const existingConditionIndex = this.data.conditionConfigs.findIndex(
+            (config) => isEqual(config.condition, data),
+          );
+          if (existingConditionIndex !== -1) {
+            console.log("Condition already exists");
+            return;
+          }
           const condition = this.toggleCondition({
             condition: data,
             enabled: false,
@@ -77,30 +87,33 @@ export class DatasetsFilterSettingsComponent {
         if (res) {
           const { data } = res;
 
-          if (data !== condition.condition) {
-            this.store.dispatch(
-              removeScientificConditionAction({
-                condition: condition.condition,
-              }),
-            );
-            this.store.dispatch(
-              deselectColumnAction({
-                name: condition.condition.lhs,
-                columnType: "custom",
-              }),
-            );
-
-            this.data.conditionConfigs[i] = {
-              ...condition,
-              condition: data,
-            };
-            this.store.dispatch(
-              addScientificConditionAction({ condition: data }),
-            );
-            this.store.dispatch(
-              selectColumnAction({ name: data.lhs, columnType: "custom" }),
-            );
+          // If the condition is unchanged, do nothing
+          if (isEqual(condition.condition, data)) {
+            return;
           }
+
+          this.store.dispatch(
+            removeScientificConditionAction({
+              condition: condition.condition,
+            }),
+          );
+          this.store.dispatch(
+            deselectColumnAction({
+              name: condition.condition.lhs,
+              columnType: "custom",
+            }),
+          );
+
+          this.data.conditionConfigs[i] = {
+            ...condition,
+            condition: data,
+          };
+          this.store.dispatch(
+            addScientificConditionAction({ condition: data }),
+          );
+          this.store.dispatch(
+            selectColumnAction({ name: data.lhs, columnType: "custom" }),
+          );
         }
       });
   }
