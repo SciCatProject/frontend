@@ -23,7 +23,7 @@ services:
       start_period: 40s
 
   backend:
-    image: ghcr.io/scicatproject/backend-next:latest
+    image: ghcr.io/scicatproject/backend-next:new-sdk-release
     ports:
       - 3000:3000
     volumes:
