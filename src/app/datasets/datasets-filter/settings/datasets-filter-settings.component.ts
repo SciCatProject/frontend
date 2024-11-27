@@ -27,7 +27,6 @@ import {
   selector: "app-type-datasets-filter-settings",
   templateUrl: `./datasets-filter-settings.component.html`,
   styleUrls: [`./datasets-filter-settings.component.scss`],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DatasetsFilterSettingsComponent {
   metadataKeys$ = this.store.select(selectMetadataKeys);
@@ -66,15 +65,6 @@ export class DatasetsFilterSettingsComponent {
   }
 
   editCondition(condition: ConditionConfig, i: number) {
-    this.store.dispatch(
-      removeScientificConditionAction({ condition: condition.condition }),
-    );
-    this.store.dispatch(
-      deselectColumnAction({
-        name: condition.condition.lhs,
-        columnType: "custom",
-      }),
-    );
     this.dialog
       .open(SearchParametersDialogComponent, {
         data: {
@@ -86,16 +76,31 @@ export class DatasetsFilterSettingsComponent {
       .subscribe((res) => {
         if (res) {
           const { data } = res;
-          this.data.conditionConfigs[i] = {
-            ...condition,
-            condition: data,
-          };
-          this.store.dispatch(
-            addScientificConditionAction({ condition: data }),
-          );
-          this.store.dispatch(
-            selectColumnAction({ name: data.lhs, columnType: "custom" }),
-          );
+
+          if (data !== condition.condition) {
+            this.store.dispatch(
+              removeScientificConditionAction({
+                condition: condition.condition,
+              }),
+            );
+            this.store.dispatch(
+              deselectColumnAction({
+                name: condition.condition.lhs,
+                columnType: "custom",
+              }),
+            );
+
+            this.data.conditionConfigs[i] = {
+              ...condition,
+              condition: data,
+            };
+            this.store.dispatch(
+              addScientificConditionAction({ condition: data }),
+            );
+            this.store.dispatch(
+              selectColumnAction({ name: data.lhs, columnType: "custom" }),
+            );
+          }
         }
       });
   }
