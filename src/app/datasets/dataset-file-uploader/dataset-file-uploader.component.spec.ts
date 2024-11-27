@@ -99,6 +99,7 @@ describe("DatasetFileUploaderComponent", () => {
           datasetId: component.dataset.pid,
           attachmentId: event.attachmentId,
           caption: event.caption,
+          ownerGroup: component.dataset.ownerGroup,
         }),
       );
     });
