@@ -23,6 +23,7 @@ import {
   FilterConfig,
 } from "../../../shared/modules/filters/filters.module";
 import { isEqual } from "lodash-es";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-type-datasets-filter-settings",
@@ -39,6 +40,7 @@ export class DatasetsFilterSettingsComponent {
   constructor(
     public dialogRef: MatDialogRef<DatasetsFilterSettingsComponent>,
     public dialog: MatDialog,
+    private snackBar: MatSnackBar,
     private store: Store,
     private asyncPipe: AsyncPipe,
     private appConfigService: AppConfigService,
@@ -62,7 +64,10 @@ export class DatasetsFilterSettingsComponent {
             (config) => isEqual(config.condition, data),
           );
           if (existingConditionIndex !== -1) {
-            console.log("Condition already exists");
+            this.snackBar.open("Condition already exists", "Close", {
+              duration: 2000,
+              panelClass: ["snackbar-error"],
+            });
             return;
           }
           const condition = this.toggleCondition({
