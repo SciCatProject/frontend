@@ -1,0 +1,17 @@
+<div class="ingestor-mixed-header">
+  <h2 mat-dialog-title>
+    Correct dataset-specific metadata
+  </h2>
+  <button mat-icon-button mat-dialog-close aria-label="Close" class="ingestor-close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<mat-dialog-content class="mat-typography">
+  <ingestor-dialog-stepper [activeStep]="2"></ingestor-dialog-stepper>
+
+  <app-metadata-editor></app-metadata-editor>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="onClickBack()">Back</button>
+  <button mat-button color="primary" cdkFocusInitial [mat-dialog-close]="true" (click)="onClickNext()">Next</button>
+</mat-dialog-actions>

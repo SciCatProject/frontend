@@ -18,12 +18,12 @@
               [(ngModel)]="forwardFacilityBackend">
           </mat-form-field>
           <button mat-raised-button color="primary"
-            (click)="forwardToIngestorPage()">Connect</button>
+            (click)="onClickForwardToIngestorPage()">Connect</button>
 
           <div>
             <ul>
               <li *ngFor="let backend of lastUsedFacilityBackends">
-                <a (click)="selectFacilityBackend(backend)">{{ backend }}</a>
+                <a (click)="onClickSelectFacilityBackend(backend)">{{ backend }}</a>
               </li>
             </ul>
           </div>
@@ -33,7 +33,7 @@
           <mat-tab-group animationDuration="0ms">
             <mat-tab label="Transfers">
               <button mat-button aria-label="Refresh transfer list"
-                (click)="onRefreshTransferList()">
+                (click)="onClickRefreshTransferList()">
                 <mat-icon>refresh</mat-icon>
               </button>
               <table mat-table [dataSource]="transferDataSource"
@@ -51,15 +51,17 @@
                 </ng-container>
 
                 <ng-container matColumnDef="actions">
-                  <th mat-header-cell *matHeaderCellDef class="text-right"> <b>Action</b> </th>
+                  <th mat-header-cell *matHeaderCellDef class="text-right">
+                    <b>Action</b>
+                  </th>
                   <td mat-cell *matCellDef="let element" class="text-right">
-                  <button mat-button aria-label="Delete transfer"
-                    (click)="onCancelTransfer(element.transferId)">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                  <button mat-button aria-label="Pause transfer">
-                    <mat-icon>pause_circle</mat-icon>
-                  </button>
+                    <button mat-button aria-label="Delete transfer"
+                      (click)="onCancelTransfer(element.transferId)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                    <button mat-button aria-label="Pause transfer">
+                      <mat-icon>pause_circle</mat-icon>
+                    </button>
                   </td>
                 </ng-container>
 
@@ -74,7 +76,7 @@
                 <mat-list-item>
                   <span matListItemTitle>Backend URL</span>
                   <span matListItemLine>{{ connectedFacilityBackend }} <a
-                      (click)="disconnectIngestor()">change</a></span>
+                      (click)="onClickDisconnectIngestor()">change</a></span>
                 </mat-list-item>
                 <mat-list-item>
                   <span matListItemTitle>Connection Status</span>
@@ -87,39 +89,24 @@
                 </mat-list-item>
               </mat-list>
             </mat-tab>
-            <mat-tab label="Settings">
-              Todo
-            </mat-tab>
           </mat-tab-group>
-
           <br><br>
-          <button mat-fab aria-label="Add a new dataset transfer"
-            color="primary" (click)="openNewTransferDialog()">
-            <mat-icon>add</mat-icon>
-          </button><i>Create new transfer</i>
         </ng-container>
       </div>
     </mat-card-content>
   </mat-card>
 </p>
 
-<p *ngIf="connectedFacilityBackend !== '' && createNewTransfer">
+<p *ngIf="connectedFacilityBackend !== ''">
   <mat-card class="ingestor-card">
     <mat-card-header>
-      <mat-card-title>Ingest Dataset</mat-card-title>
+      <mat-card-title>New transfer</mat-card-title>
     </mat-card-header>
     <mat-card-content class="ingestor-vertical-layout">
-      <div>
-      </div>
-      <app-metadata-editor></app-metadata-editor>
-      <div>
-        <button mat-raised-button color="primary" (click)="apiUpload()"
-          [disabled]="loading">
-          <span *ngIf="!loading">Upload</span>
-          <mat-progress-spinner *ngIf="loading" diameter="20"
-            mode="indeterminate"></mat-progress-spinner>
-        </button>
-      </div>
+      <button mat-fab aria-label="Add a new dataset transfer" color="primary"
+        (click)="onClickNext(0)">
+        <mat-icon>add</mat-icon>
+      </button>
     </mat-card-content>
   </mat-card>
 </p>

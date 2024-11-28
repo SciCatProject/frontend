@@ -1,10 +1,12 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
 .ingestor-vertical-layout {
   display: flex;
   flex-direction: column;
   gap: 1em;
 }
 
-/* src/app/ingestor/ingestor.component.scss */
 .ingestor-mixed-header {
   display: flex;
   justify-content: space-between;
@@ -13,4 +15,52 @@
 
 .ingestor-close-button {
   margin-left: auto;
+}
+
+.form-full-width {
+  width: 100%;
+}
+
+mat-card {
+  margin: 1em;
+
+  .section-icon {
+    height: auto !important;
+    width: auto !important;
+
+    mat-icon {
+      vertical-align: middle;
+    }
+  }
+}
+
+@mixin color($theme) {
+  $color-config: map-get($theme, "color");
+  $primary: map-get($color-config, "primary");
+  $header-1: map-get($color-config, "header-1");
+  $accent: map-get($color-config, "accent");
+  mat-card {
+    .organizational-header {
+      background-color: mat.get-color-from-palette($primary, "lighter");
+    }
+
+    .sample-header {
+      background-color: mat.get-color-from-palette($header-1, "lighter");
+    }
+
+    .instrument-header {
+      background-color: mat.get-color-from-palette($accent, "lighter");
+    }
+
+    .acquisition-header {
+      background-color: mat.get-color-from-palette($accent, "lighter");
+    }
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
 }

@@ -4,4 +4,5 @@ export const INGESTOR_API_ENDPOINTS_V1 = {
   OTHER: {
     VERSION: 'version',
   },
+  EXTRACTOR: 'extractor',
 };

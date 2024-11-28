@@ -1,13 +1,24 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { AppConfigService, HelpMessages } from "app-config.service";
+import { Component, inject, OnInit } from "@angular/core";
+import { AppConfigService } from "app-config.service";
 import { HttpClient } from '@angular/common/http';
-import { IngestorMetadataEditorComponent } from '../ingestor-metadata-editor/ingestor-metadata-editor.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { INGESTOR_API_ENDPOINTS_V1 } from "./ingestor-api-endpoints";
+import { IngestorNewTransferDialogComponent } from "./dialog/ingestor.new-transfer-dialog";
+import { MatDialog } from "@angular/material/dialog";
+import { IngestorUserMetadataDialog } from "./dialog/ingestor.user-metadata-dialog";
+import { IngestorExtractorMetadataDialog } from "./dialog/ingestor.extractor-metadata-dialog";
+import { IngestorConfirmTransferDialog } from "./dialog/ingestor.confirm-transfer-dialog";
 
-interface TransferDataListEntry {
+interface ITransferDataListEntry {
   transferId: string;
   status: string;
+}
+
+interface IIngestionRequestInformation {
+  filePath: string;
+  availableMethods: string[];
+  userMetaData: string;
+  extractorMetaData: string;
 }
 
 @Component({
@@ -16,43 +27,30 @@ interface TransferDataListEntry {
   styleUrls: ["./ingestor.component.scss"],
 })
 export class IngestorComponent implements OnInit {
-
-  @ViewChild(IngestorMetadataEditorComponent) metadataEditor: IngestorMetadataEditorComponent;
-
-  appConfig = this.appConfigService.getConfig();
-  facility: string | null = null;
-  ingestManual: string | null = null;
-  gettingStarted: string | null = null;
-  shoppingCartEnabled = false;
-  helpMessages: HelpMessages;
+  readonly dialog = inject(MatDialog);
 
   filePath: string = '';
   loading: boolean = false;
   forwardFacilityBackend: string = '';
 
-  createNewTransfer: boolean = false;
   connectedFacilityBackend: string = '';
   connectedFacilityBackendVersion: string = '';
   connectingToFacilityBackend: boolean = false;
+
   lastUsedFacilityBackends: string[] = [];
-  transferDataSource: TransferDataListEntry[] = []; // List of files to be transferred
+  
+  transferDataSource: ITransferDataListEntry[] = []; // List of files to be transferred
   displayedColumns: string[] = ['transferId', 'status', 'actions'];
 
   errorMessage: string = '';
   returnValue: string = '';
 
+  metadataEditorData: string = ""; // TODO
+
   constructor(public appConfigService: AppConfigService, private http: HttpClient, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
-    this.facility = this.appConfig.facility;
-    this.ingestManual = this.appConfig.ingestManual;
-    this.helpMessages = new HelpMessages(
-      this.appConfig.helpMessages?.gettingStarted,
-      this.appConfig.helpMessages?.ingestManual,
-    );
-    this.gettingStarted = this.appConfig.gettingStarted;
     this.connectingToFacilityBackend = true;
-    this.createNewTransfer = false;
     this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
     this.transferDataSource = [];
     // Get the GET parameter 'backendUrl' from the URL
@@ -98,20 +96,24 @@ export class IngestorComponent implements OnInit {
     return true;
   }
 
-  async apiGetTransferList(): Promise<TransferDataListEntry[]> {
-    await this.http.get(this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.TRANSFER).subscribe(
+  apiGetTransferList(page: number, pageSize: number, transferId?: string): void {
+    const params: any = {
+      page: page.toString(),
+      pageSize: pageSize.toString(),
+    };
+    if (transferId) {
+      params.transferId = transferId;
+    }
+    this.http.get(this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.TRANSFER, { params }).subscribe(
       response => {
         console.log('Transfer list received', response);
-        return response['transfers'];
+        this.transferDataSource = response['transfers'];
       },
       error => {
         this.errorMessage += `${new Date().toLocaleString()}: ${error.message}]<br>`;
         console.error('Request failed', error);
-        return [];
       }
     );
-
-    return [];
   }
 
   apiUpload() {
@@ -119,7 +121,7 @@ export class IngestorComponent implements OnInit {
     this.returnValue = '';
     const payload = {
       filePath: this.filePath,
-      metaData: this.metadataEditor.metadata
+      metaData: 'todo'//this.metadataEditor.metadata
     };
 
     console.log('Uploading', payload);
@@ -138,7 +140,7 @@ export class IngestorComponent implements OnInit {
     );
   }
 
-  forwardToIngestorPage() {
+  onClickForwardToIngestorPage() {
     if (this.forwardFacilityBackend) {
       this.connectingToFacilityBackend = true;
 
@@ -152,7 +154,7 @@ export class IngestorComponent implements OnInit {
     }
   }
 
-  disconnectIngestor() {
+  onClickDisconnectIngestor() {
     this.returnValue = '';
     this.connectedFacilityBackend = '';
     // Remove the GET parameter 'backendUrl' from the URL
@@ -160,7 +162,7 @@ export class IngestorComponent implements OnInit {
   }
 
   // Helper functions
-  selectFacilityBackend(facilityBackend: string) {
+  onClickSelectFacilityBackend(facilityBackend: string) {
     this.forwardFacilityBackend = facilityBackend;
   }
 
@@ -177,26 +179,65 @@ export class IngestorComponent implements OnInit {
     this.errorMessage = '';
   }
 
-  openNewTransferDialog(): void {
-    this.createNewTransfer = true;
-    this.metadataEditor.clearMetadata();
+  onClickNext(step: number): void {
+    console.log('Next step', step);
+    this.dialog.closeAll();
+
+    let dialogRef = null;
+
+    switch (step) {
+      case 0:
+        dialogRef = this.dialog.open(IngestorNewTransferDialogComponent, {
+          data: { onClickNext: this.onClickNext.bind(this), metadataEditorData: this.metadataEditorData },
+          disableClose: true
+        });
+
+        break;
+      case 1:
+        dialogRef = this.dialog.open(IngestorUserMetadataDialog, {
+          data: { onClickNext: this.onClickNext.bind(this), metadataEditorData: this.metadataEditorData },
+          disableClose: true
+        });
+        break;
+      case 2:
+        dialogRef = this.dialog.open(IngestorExtractorMetadataDialog, {
+          data: { onClickNext: this.onClickNext.bind(this), metadataEditorData: this.metadataEditorData },
+          disableClose: true
+        });
+        break;
+      case 3:
+        dialogRef = this.dialog.open(IngestorConfirmTransferDialog, {
+          data: { onClickNext: this.onClickNext.bind(this), metadataEditorData: this.metadataEditorData },
+          disableClose: true
+        });
+        break;
+      default:
+        console.error('Unknown step', step);
+    }
+
+    // Error if the dialog reference is not set
+    if (dialogRef === null) return;
+
+    /*dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });*/
   }
 
-  onRefreshTransferList(): void {
-    const TEST_DATALIST: TransferDataListEntry[] = [
-      { transferId: '1', status: 'In progress' },
-      { transferId: '2', status: 'Done' },
-      { transferId: '3', status: 'Failed' },
-    ];
-
-    this.transferDataSource = TEST_DATALIST;
-    console.log(this.transferDataSource);
-    // TODO activate when the API is ready
-    //this.apiGetTransferList();
+  onClickRefreshTransferList(): void {
+    this.apiGetTransferList(1, 100);
   }
 
   onCancelTransfer(transferId: string) {
     console.log('Cancel transfer', transferId);
-    // TODO activate when the API is ready
+    this.http.delete(this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.TRANSFER + '/' + transferId).subscribe(
+      response => {
+        console.log('Transfer cancelled', response);
+        this.apiGetTransferList(1, 100);
+      },
+      error => {
+        this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+        console.error('Cancel transfer failed', error);
+      }
+    );
   }
 }

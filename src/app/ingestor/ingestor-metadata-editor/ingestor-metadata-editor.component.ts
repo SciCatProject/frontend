@@ -1,21 +1,35 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { angularMaterialRenderers } from '@jsonforms/angular-material';
+import { IngestorMetadaEditorHelper, Schema, UISchema } from './ingestor-metadata-editor-helper';
 
 @Component({
   selector: 'app-metadata-editor',
-  templateUrl: './ingestor-metadata-editor.component.html',
-  styleUrls: ['./ingestor-metadata-editor.component.scss']
+  template: `<jsonforms
+  [data]="data"
+  [schema]="schema"
+  [uischema]="uischema"
+  [renderers]="renderers"
+  (dataChange)="onDataChange($event)"
+></jsonforms>`,
 })
-export class IngestorMetadataEditorComponent {
-  metadata: string = '';
 
-  clearMetadata() {
-    this.metadata = '';
+export class IngestorMetadataEditorComponent implements OnChanges {
+  @Input() data: string;
+  @Input() schema: Schema;
+
+  @Output() dataChange = new EventEmitter<string>();
+
+  renderers = angularMaterialRenderers;
+
+  uischema: UISchema;
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.schema) {
+      this.uischema = IngestorMetadaEditorHelper.generateUISchemaFromSchema(JSON.stringify(this.schema));
+    }
   }
-  // Optional: EventEmitter, um Änderungen an der Metadata zu melden
-  @Output() metadataChange = new EventEmitter<string>();
 
-  onMetadataChange(newMetadata: string) {
-    this.metadata = newMetadata;
-    this.metadataChange.emit(this.metadata);
+  onDataChange(event: any) {
+    this.dataChange.emit(event);
   }
 }
