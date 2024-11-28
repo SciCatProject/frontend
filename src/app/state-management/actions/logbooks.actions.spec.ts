@@ -1,5 +1,6 @@
-import { Logbook, LogbookFilters } from "../models";
+import { LogbookFilters } from "../models";
 import * as fromActions from "./logbooks.actions";
+import { mockLogbook as logbook } from "shared/MockStubs";
 
 describe("Logbook Actions", () => {
   describe("fetchLogbooksAction", () => {
@@ -11,7 +12,7 @@ describe("Logbook Actions", () => {
 
   describe("fetchLogbooksCompleteAction", () => {
     it("should create an action", () => {
-      const logbooks = [new Logbook()];
+      const logbooks = [logbook];
       const action = fromActions.fetchLogbooksCompleteAction({ logbooks });
       expect({ ...action }).toEqual({
         type: "[Logbook] Fetch Logbooks Complete",
@@ -39,7 +40,6 @@ describe("Logbook Actions", () => {
 
   describe("fetchLogbookCompleteAction", () => {
     it("should create an action", () => {
-      const logbook = new Logbook();
       const action = fromActions.fetchLogbookCompleteAction({ logbook });
       expect({ ...action }).toEqual({
         type: "[Logbook] Fetch Logbook Complete",

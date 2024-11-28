@@ -74,14 +74,14 @@ export class PublishedDataEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchPublishedDataAction),
       switchMap(({ id }) =>
-        this.publishedDataService
-          .publishedDataControllerFindOne(encodeURIComponent(id))
-          .pipe(
-            map((publishedData: PublishedData) =>
-              fromActions.fetchPublishedDataCompleteAction({ publishedData }),
-            ),
-            catchError(() => of(fromActions.fetchPublishedDataFailedAction())),
+        this.publishedDataService.publishedDataControllerFindOne(id).pipe(
+          map((publishedData: PublishedData) =>
+            fromActions.fetchPublishedDataCompleteAction({
+              publishedData,
+            }),
           ),
+          catchError(() => of(fromActions.fetchPublishedDataFailedAction())),
+        ),
       ),
     );
   });
@@ -94,7 +94,7 @@ export class PublishedDataEffects {
         filter(([_, publishedData]) => !!publishedData),
         exhaustMap(([_, publishedData]) =>
           this.router.navigateByUrl(
-            "/publishedDatasets/" + encodeURIComponent(publishedData!.doi),
+            "/publishedDatasets/" + encodeURIComponent(publishedData.doi),
           ),
         ),
       );
@@ -149,19 +149,15 @@ export class PublishedDataEffects {
     return this.actions$.pipe(
       ofType(fromActions.registerPublishedDataAction),
       switchMap(({ doi }) =>
-        this.publishedDataService
-          .publishedDataControllerRegister(encodeURIComponent(doi))
-          .pipe(
-            mergeMap((publishedData: PublishedData) => [
-              fromActions.registerPublishedDataCompleteAction({
-                publishedData,
-              }),
-              fromActions.fetchPublishedDataAction({ id: doi }),
-            ]),
-            catchError(() =>
-              of(fromActions.registerPublishedDataFailedAction()),
-            ),
-          ),
+        this.publishedDataService.publishedDataControllerRegister(doi).pipe(
+          mergeMap((publishedData: PublishedData) => [
+            fromActions.registerPublishedDataCompleteAction({
+              publishedData,
+            }),
+            fromActions.fetchPublishedDataAction({ id: doi }),
+          ]),
+          catchError(() => of(fromActions.registerPublishedDataFailedAction())),
+        ),
       ),
     );
   });
@@ -170,15 +166,13 @@ export class PublishedDataEffects {
     return this.actions$.pipe(
       ofType(fromActions.resyncPublishedDataAction),
       switchMap(({ doi, data }) =>
-        this.publishedDataService
-          .publishedDataControllerResync(encodeURIComponent(doi), data)
-          .pipe(
-            mergeMap((publishedData) => [
-              fromActions.resyncPublishedDataCompleteAction(publishedData),
-              fromActions.fetchPublishedDataAction({ id: doi }),
-            ]),
-            catchError(() => of(fromActions.resyncPublishedDataFailedAction())),
-          ),
+        this.publishedDataService.publishedDataControllerResync(doi, data).pipe(
+          mergeMap((publishedData) => [
+            fromActions.resyncPublishedDataCompleteAction(publishedData),
+            fromActions.fetchPublishedDataAction({ id: doi }),
+          ]),
+          catchError(() => of(fromActions.resyncPublishedDataFailedAction())),
+        ),
       ),
     );
   });

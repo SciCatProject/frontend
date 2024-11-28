@@ -4,6 +4,7 @@ import { ADAuthService } from "./adauth.service";
 
 import { MockHttp } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
+import { Configuration } from "@scicatproject/scicat-sdk-ts";
 
 describe("ADAuthService", () => {
   let service: ADAuthService;
@@ -19,6 +20,10 @@ describe("ADAuthService", () => {
         {
           provide: AppConfigService,
           useValue: { getConfig },
+        },
+        {
+          provide: Configuration,
+          useClass: Configuration,
         },
         { provide: HttpClient, useClass: MockHttp },
       ],

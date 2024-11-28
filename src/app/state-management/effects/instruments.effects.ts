@@ -56,14 +56,12 @@ export class InstrumentEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchInstrumentAction),
       switchMap(({ pid }) =>
-        this.instrumentsService
-          .instrumentsControllerFindById(encodeURIComponent(pid))
-          .pipe(
-            map((instrument: Instrument) =>
-              fromActions.fetchInstrumentCompleteAction({ instrument }),
-            ),
-            catchError(() => of(fromActions.fetchInstrumentFailedAction())),
+        this.instrumentsService.instrumentsControllerFindById(pid).pipe(
+          map((instrument: Instrument) =>
+            fromActions.fetchInstrumentCompleteAction({ instrument }),
           ),
+          catchError(() => of(fromActions.fetchInstrumentFailedAction())),
+        ),
       ),
     );
   });
@@ -73,7 +71,7 @@ export class InstrumentEffects {
       ofType(fromActions.saveCustomMetadataAction),
       switchMap(({ pid, customMetadata }) =>
         this.instrumentsService
-          .instrumentsControllerUpdate(encodeURIComponent(pid), {
+          .instrumentsControllerUpdate(pid, {
             customMetadata,
           })
           .pipe(

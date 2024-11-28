@@ -1,41 +1,39 @@
 import * as fromDatasets from "./datasets.reducer";
 import * as fromActions from "../actions/datasets.actions";
 import {
-  Dataset,
-  DatasetInterface,
-  Attachment,
-  DerivedDatasetInterface,
-  DerivedDataset,
-} from "shared/sdk/models";
-import {
   FacetCounts,
   initialDatasetState,
 } from "state-management/state/datasets.store";
 import { ArchViewMode, ScientificCondition } from "../models";
+import { createMock, mockAttachment as attachment } from "shared/MockStubs";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts";
 
-const derivedData: DerivedDatasetInterface = {
+const derivedDataset = createMock<OutputDatasetObsoleteDto>({
+  pid: "testPid",
   investigator: "",
   inputDatasets: [],
   usedSoftware: [],
   owner: "",
   contactEmail: "",
   sourceFolder: "",
-  creationTime: new Date(),
+  creationTime: new Date().toString(),
   type: "derived",
   ownerGroup: "",
-};
-const derivedDataset = new DerivedDataset({ pid: "testPid", ...derivedData });
-
-const data: DatasetInterface = {
-  owner: "",
-  contactEmail: "",
-  sourceFolder: "",
-  creationTime: new Date(),
-  type: "",
-  ownerGroup: "",
+  numberOfFilesArchived: 0,
+  accessGroups: [],
+  createdAt: "",
+  createdBy: "",
+  creationLocation: "",
+  principalInvestigator: "",
+  updatedAt: "",
+  updatedBy: "",
   attachments: [],
-};
-const dataset = new Dataset({ pid: "testPid", ...data });
+});
+
+const dataset = createMock<OutputDatasetObsoleteDto>({
+  ...derivedDataset,
+  type: "raw",
+});
 
 describe("DatasetsReducer", () => {
   describe("on fetchDatasetsCompleteAction", () => {
@@ -126,7 +124,7 @@ describe("DatasetsReducer", () => {
 
   describe("on prefillBatchCompleteAction", () => {
     it("should set batch property", () => {
-      const batch: Dataset[] = [];
+      const batch = [];
       const action = fromActions.prefillBatchCompleteAction({ batch });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
@@ -183,7 +181,7 @@ describe("DatasetsReducer", () => {
       });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
-      expect(state.currentSet).toEqual(derivedDataset as unknown as Dataset);
+      expect(state.currentSet).toEqual(derivedDataset);
     });
   });
 
@@ -191,7 +189,6 @@ describe("DatasetsReducer", () => {
     it("should add attachment to currentSet property", () => {
       initialDatasetState.currentSet = dataset;
 
-      const attachment = new Attachment();
       const action = fromActions.addAttachmentCompleteAction({ attachment });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
@@ -203,7 +200,6 @@ describe("DatasetsReducer", () => {
     it("should add new caption to an attachment", () => {
       initialDatasetState.currentSet = dataset;
 
-      const attachment = new Attachment();
       const action = fromActions.updateAttachmentCaptionCompleteAction({
         attachment,
       });
@@ -217,7 +213,6 @@ describe("DatasetsReducer", () => {
     it("should add attachment to currentSet property", () => {
       initialDatasetState.currentSet = dataset;
 
-      const attachment = new Attachment();
       const attachmentId = "testId";
       attachment.id = attachmentId;
       initialDatasetState.currentSet.attachments = [attachment];

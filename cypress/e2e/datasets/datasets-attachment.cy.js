@@ -4,7 +4,7 @@ describe("Dataset attachments", () => {
   beforeEach(() => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
 
-    cy.intercept("POST", "/api/v3/Datasets/**/*").as("upload");
+    cy.intercept("POST", "/api/v3/datasets/**/*").as("upload");
   });
 
   after(() => {

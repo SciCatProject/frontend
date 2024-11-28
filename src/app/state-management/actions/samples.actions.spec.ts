@@ -1,6 +1,10 @@
 import * as fromActions from "./samples.actions";
-import { Attachment, Sample, Dataset } from "shared/sdk/models";
 import { SampleFilters, ScientificCondition } from "state-management/models";
+import {
+  mockAttachment as attachment,
+  mockDataset as dataset,
+  mockSample as sample,
+} from "shared/MockStubs";
 
 describe("Sample Actions", () => {
   describe("fetchSamplesAction", () => {
@@ -12,7 +16,7 @@ describe("Sample Actions", () => {
 
   describe("fetchSamplesCompleteAction", () => {
     it("should create an action", () => {
-      const samples = [new Sample()];
+      const samples = [sample];
       const action = fromActions.fetchSamplesCompleteAction({ samples });
       expect({ ...action }).toEqual({
         type: "[Sample] Fetch Samples Complete",
@@ -97,7 +101,7 @@ describe("Sample Actions", () => {
 
   describe("fetchSampleCompleteAction", () => {
     it("should create an action", () => {
-      const sample = new Sample();
+      // const sample = new Sample();
       const action = fromActions.fetchSampleCompleteAction({ sample });
       expect({ ...action }).toEqual({
         type: "[Sample] Fetch Sample Complete",
@@ -126,7 +130,7 @@ describe("Sample Actions", () => {
 
   describe("fetchSampleDatasetsCompleteAction", () => {
     it("should create an action", () => {
-      const datasets = [new Dataset()];
+      const datasets = [dataset];
       const action = fromActions.fetchSampleDatasetsCompleteAction({
         datasets,
       });
@@ -181,7 +185,6 @@ describe("Sample Actions", () => {
 
   describe("addSampleAction", () => {
     it("should create an action", () => {
-      const sample = new Sample();
       const action = fromActions.addSampleAction({ sample });
       expect({ ...action }).toEqual({
         type: "[Sample] Add Sample",
@@ -192,7 +195,6 @@ describe("Sample Actions", () => {
 
   describe("addSampleCompleteAction", () => {
     it("should create an action", () => {
-      const sample = new Sample();
       const action = fromActions.addSampleCompleteAction({ sample });
       expect({ ...action }).toEqual({
         type: "[Sample] Add Sample Complete",
@@ -226,7 +228,6 @@ describe("Sample Actions", () => {
 
   describe("saveCharacteristicsCompleteAction", () => {
     it("should create an action", () => {
-      const sample = new Sample();
       const action = fromActions.saveCharacteristicsCompleteAction({ sample });
       expect({ ...action }).toEqual({
         type: "[Sample] Save Characteristics Complete",
@@ -246,7 +247,6 @@ describe("Sample Actions", () => {
 
   describe("addAttachmentAction", () => {
     it("should create an action", () => {
-      const attachment = new Attachment();
       const action = fromActions.addAttachmentAction({ attachment });
       expect({ ...action }).toEqual({
         type: "[Sample] Add Attachment",
@@ -257,7 +257,6 @@ describe("Sample Actions", () => {
 
   describe("addAttachmentCompleteAction", () => {
     it("should create an action", () => {
-      const attachment = new Attachment();
       const action = fromActions.addAttachmentCompleteAction({ attachment });
       expect({ ...action }).toEqual({
         type: "[Sample] Add Attachment Complete",
@@ -296,7 +295,6 @@ describe("Sample Actions", () => {
 
   describe("updateAttachmentCompleteCaption", () => {
     it("should create an action", () => {
-      const attachment = new Attachment();
       const action = fromActions.updateAttachmentCaptionCompleteAction({
         attachment,
       });

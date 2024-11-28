@@ -1,14 +1,14 @@
 import { TestBed } from "@angular/core/testing";
-import { DatasetApi } from "shared/sdk";
 import { AppConfigService } from "app-config.service";
 import { ThumbnailService } from "./thumbnail.service";
 import { selectDatasetsPerPage } from "state-management/selectors/datasets.selectors";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { of, throwError } from "rxjs";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
 
 describe("ThumbnailService", () => {
   let service: ThumbnailService;
-  let datasetApi: jasmine.SpyObj<DatasetApi>;
+  let datasetApi: jasmine.SpyObj<DatasetsService>;
   let store: MockStore;
   const cacheTimeout = 5 * 60 * 1000; // 5 minutes in milliseconds
 
@@ -17,12 +17,14 @@ describe("ThumbnailService", () => {
   });
 
   beforeEach(() => {
-    const datasetApiSpy = jasmine.createSpyObj("DatasetApi", ["thumbnail"]);
+    const datasetApiSpy = jasmine.createSpyObj("DatasetApi", [
+      "datasetsControllerThumbnail",
+    ]);
 
     TestBed.configureTestingModule({
       providers: [
         ThumbnailService,
-        { provide: DatasetApi, useValue: datasetApiSpy },
+        { provide: DatasetsService, useValue: datasetApiSpy },
         {
           provide: AppConfigService,
           useValue: { getConfig },
@@ -39,7 +41,9 @@ describe("ThumbnailService", () => {
     });
 
     service = TestBed.inject(ThumbnailService);
-    datasetApi = TestBed.inject(DatasetApi) as jasmine.SpyObj<DatasetApi>;
+    datasetApi = TestBed.inject(
+      DatasetsService,
+    ) as jasmine.SpyObj<DatasetsService>;
     store = TestBed.inject(MockStore);
   });
 
@@ -78,10 +82,15 @@ describe("ThumbnailService", () => {
       isError: false,
     };
 
-    datasetApi.thumbnail.and.returnValue(of({ thumbnail }));
+    // TODO: Try to fix any type casting here
+    datasetApi.datasetsControllerThumbnail.and.returnValue(
+      of({ thumbnail } as any),
+    );
 
     const result = await service.getThumbnail(pid);
-    expect(datasetApi.thumbnail).toHaveBeenCalledWith(encodeURIComponent(pid));
+    expect(datasetApi.datasetsControllerThumbnail).toHaveBeenCalledWith(
+      encodeURIComponent(pid),
+    );
     expect(result).toBe(thumbnail);
   });
 
@@ -92,17 +101,21 @@ describe("ThumbnailService", () => {
     const result = await service.getThumbnail(pid);
 
     expect(result).toBeNull(); // Should return null when over limit
-    expect(datasetApi.thumbnail).not.toHaveBeenCalled();
+    expect(datasetApi.datasetsControllerThumbnail).not.toHaveBeenCalled();
   });
 
   it("should fetch thumbnail and cache it if not already cached", async () => {
     const pid = "test-pid";
     const thumbnail = "http://thumbnail-url.com/image.jpg";
 
-    datasetApi.thumbnail.and.returnValue(of({ thumbnail }));
+    datasetApi.datasetsControllerThumbnail.and.returnValue(
+      of({ thumbnail } as any),
+    );
 
     const result = await service.getThumbnail(pid);
-    expect(datasetApi.thumbnail).toHaveBeenCalledWith(encodeURIComponent(pid));
+    expect(datasetApi.datasetsControllerThumbnail).toHaveBeenCalledWith(
+      encodeURIComponent(pid),
+    );
     expect(result).toBe(thumbnail);
     expect(service["thumbnailCache"][pid].value).toBe(thumbnail);
   });
@@ -110,7 +123,9 @@ describe("ThumbnailService", () => {
   it("should cache failed requests as null with isError=true", async () => {
     const pid = "test-pid";
     const err = new Error("Failed to fetch thumbnail");
-    datasetApi.thumbnail.and.returnValue(throwError(() => err));
+    datasetApi.datasetsControllerThumbnail.and.returnValue(
+      throwError(() => err),
+    );
 
     const result = await service.getThumbnail(pid);
     expect(result).toBeNull();

@@ -58,9 +58,8 @@ export class ThumbnailService {
     }
 
     try {
-      const encodedPid = encodeURIComponent(pid);
       const res = await firstValueFrom(
-        this.datasetApi.datasetsControllerThumbnail(encodedPid),
+        this.datasetApi.datasetsControllerThumbnail(pid),
       );
       const thumbnail = res?.thumbnail || null;
 

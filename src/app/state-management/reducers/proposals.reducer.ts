@@ -62,6 +62,7 @@ const reducer = createReducer(
     fromActions.addAttachmentCompleteAction,
     (state, { attachment }): ProposalsState => {
       if (state.currentProposal) {
+        // TODO: Check this type here because on the proposals there are no attachements. Maybe we need to improve the backend type instead of returning ProposalClass
         const attachments = (state.currentProposal as any).attachments;
         attachments.push(attachment);
         const currentProposal = { ...state.currentProposal, attachments };

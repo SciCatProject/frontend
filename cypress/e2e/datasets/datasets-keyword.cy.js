@@ -2,7 +2,7 @@ describe("Datasets", () => {
   beforeEach(() => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
 
-    cy.intercept("PATCH", "/api/v3/Datasets/**/*").as("keyword");
+    cy.intercept("PATCH", "/api/v3/datasets/**/*").as("keyword");
     cy.intercept("GET", "*").as("fetch");
   });
 

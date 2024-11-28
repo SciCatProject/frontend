@@ -170,7 +170,12 @@ export const addAttachmentFailedAction = createAction(
 
 export const updateAttachmentCaptionAction = createAction(
   "[Dataset] Update Attachment Caption",
-  props<{ datasetId: string; attachmentId: string; caption: string }>(),
+  props<{
+    datasetId: string;
+    attachmentId: string;
+    caption: string;
+    ownerGroup: string;
+  }>(),
 );
 export const updateAttachmentCaptionCompleteAction = createAction(
   "[Dataset] Update Attachment Caption Complete",

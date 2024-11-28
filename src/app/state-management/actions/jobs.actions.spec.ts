@@ -1,7 +1,10 @@
-import { Job } from "shared/sdk/models";
+import { CreateJobDto } from "@scicatproject/scicat-sdk-ts";
 import * as fromActions from "./jobs.actions";
+import { mockJob as job } from "shared/MockStubs";
 
 describe("Job Actions", () => {
+  const jobs = [job];
+
   describe("fetchJobsAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchJobsAction();
@@ -11,7 +14,6 @@ describe("Job Actions", () => {
 
   describe("fetchJobsCompleteAction", () => {
     it("should create an action", () => {
-      const jobs = [new Job()];
       const action = fromActions.fetchJobsCompleteAction({ jobs });
       expect({ ...action }).toEqual({
         type: "[Job] Fetch Jobs Complete",
@@ -62,7 +64,6 @@ describe("Job Actions", () => {
 
   describe("fetchJobCompleteAction", () => {
     it("should create an action", () => {
-      const job = new Job();
       const action = fromActions.fetchJobCompleteAction({ job });
       expect({ ...action }).toEqual({ type: "[Job] Fetch Job Complete", job });
     });
@@ -77,15 +78,14 @@ describe("Job Actions", () => {
 
   describe("submitJobAction", () => {
     it("should create an action", () => {
-      const job = new Job();
-      const action = fromActions.submitJobAction({ job });
-      expect({ ...action }).toEqual({ type: "[Job] Submit Job", job });
+      const newJob = { ...job } as CreateJobDto;
+      const action = fromActions.submitJobAction({ job: newJob });
+      expect({ ...action }).toEqual({ type: "[Job] Submit Job", job: newJob });
     });
   });
 
   describe("submitJobCompleteAction", () => {
     it("should create an action", () => {
-      const job = new Job();
       const action = fromActions.submitJobCompleteAction({ job });
       expect({ ...action }).toEqual({ type: "[Job] Submit Job Complete", job });
     });

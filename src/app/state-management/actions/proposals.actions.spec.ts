@@ -1,6 +1,10 @@
-import { Attachment, Dataset, Proposal } from "../models";
 import * as fromActions from "./proposals.actions";
 import { ProposalFilters } from "state-management/state/proposals.store";
+import {
+  mockAttachment as attachment,
+  mockProposal as proposal,
+  mockDataset,
+} from "shared/MockStubs";
 
 describe("Proposal Actions", () => {
   describe("fetchProposalsAction", () => {
@@ -12,7 +16,7 @@ describe("Proposal Actions", () => {
 
   describe("fetchProposalsCompleteAction", () => {
     it("should create an action", () => {
-      const proposals = [new Proposal()];
+      const proposals = [proposal];
       const action = fromActions.fetchProposalsCompleteAction({ proposals });
       expect({ ...action }).toEqual({
         type: "[Proposal] Fetch Proposals Complete",
@@ -68,7 +72,6 @@ describe("Proposal Actions", () => {
 
   describe("fetchProposalCompleteAction", () => {
     it("should create an action", () => {
-      const proposal = new Proposal();
       const action = fromActions.fetchProposalCompleteAction({ proposal });
       expect({ ...action }).toEqual({
         type: "[Proposal] Fetch Proposal Complete",
@@ -99,7 +102,7 @@ describe("Proposal Actions", () => {
 
   describe("fetchProposalDatasetsCompleteAction", () => {
     it("should create an action", () => {
-      const datasets = [new Dataset()];
+      const datasets = [mockDataset];
       const action = fromActions.fetchProposalDatasetsCompleteAction({
         datasets,
       });
@@ -156,7 +159,6 @@ describe("Proposal Actions", () => {
 
   describe("addAttachmentAction", () => {
     it("should create an action", () => {
-      const attachment = new Attachment();
       const action = fromActions.addAttachmentAction({ attachment });
       expect({ ...action }).toEqual({
         type: "[Proposal] Add Attachment",
@@ -167,7 +169,6 @@ describe("Proposal Actions", () => {
 
   describe("addAttachmentCompleteAction", () => {
     it("should create an action", () => {
-      const attachment = new Attachment();
       const action = fromActions.addAttachmentCompleteAction({ attachment });
       expect({ ...action }).toEqual({
         type: "[Proposal] Add Attachment Complete",
@@ -206,7 +207,6 @@ describe("Proposal Actions", () => {
 
   describe("updateAttachmentCompleteCaption", () => {
     it("should create an action", () => {
-      const attachment = new Attachment();
       const action = fromActions.updateAttachmentCaptionCompleteAction({
         attachment,
       });
