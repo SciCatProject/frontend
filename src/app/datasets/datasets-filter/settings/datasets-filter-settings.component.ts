@@ -66,6 +66,7 @@ export class DatasetsFilterSettingsComponent {
           if (existingConditionIndex !== -1) {
             this.snackBar.open("Condition already exists", "Close", {
               duration: 2000,
+              panelClass: ["snackbar-warning"],
             });
             return;
           }

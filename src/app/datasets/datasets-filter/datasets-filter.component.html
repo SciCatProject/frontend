@@ -17,7 +17,11 @@
       </ng-container>
     </ng-container>
 
-    <div class="section-container" *ngIf="appConfig.scienceSearchEnabled">
+    <div
+      class="section-container"
+      *ngIf="appConfig.scienceSearchEnabled"
+      data-cy="scientific-condition-filter-list"
+    >
       <ng-container *ngFor="let condition of scientificConditions$ | async">
         <ng-container
           *ngComponentOutlet="ConditionFilterComponent; inputs: { condition }"
@@ -25,7 +29,7 @@
       </ng-container>
     </div>
 
-    <div class="section-container">
+    <div class="section-container" data-cy="more-filters-button">
       <button
         mat-button
         class="full-width-button"
