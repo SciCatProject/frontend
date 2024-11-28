@@ -5,6 +5,7 @@ import { selectDatasetsPerPage } from "state-management/selectors/datasets.selec
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { of, throwError } from "rxjs";
 import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
+import { AttachmentService } from "./attachment.service";
 
 describe("ThumbnailService", () => {
   let service: ThumbnailService;
@@ -28,6 +29,9 @@ describe("ThumbnailService", () => {
         {
           provide: AppConfigService,
           useValue: { getConfig },
+        },
+        {
+          provide: AttachmentService,
         },
         provideMockStore({
           selectors: [

@@ -3,6 +3,10 @@ import { Injectable } from "@angular/core";
 @Injectable()
 export class AttachmentService {
   base64MimeType(encoded: string): string {
+    if (!encoded) {
+      return null;
+    }
+
     let result = null;
 
     if (typeof encoded !== "string") {
@@ -17,7 +21,24 @@ export class AttachmentService {
 
     return result;
   }
+
+  getImageUrl(encoded: string) {
+    if (!encoded) {
+      return null;
+    }
+
+    const mimeType = this.base64MimeType(encoded);
+    if (mimeType === "application/pdf") {
+      return "assets/images/pdf-icon.svg";
+    }
+    return encoded;
+  }
+
   openAttachment(encoded: string) {
+    if (!encoded) {
+      return null;
+    }
+
     const mimeType = this.base64MimeType(encoded);
     const strippedData = encoded.replace(
       new RegExp(`^data:${mimeType};base64,`),

@@ -268,13 +268,6 @@
                 <a (click)="onClickSample(sample.sampleId)">
                   <span>{{ sample.description }}</span>
                 </a>
-                <span
-                  class="sample-edit"
-                  (click)="openSampleEditDialog()"
-                  *ngIf="appConfig.editDatasetSampleEnabled && editingAllowed"
-                >
-                  <mat-icon>edit</mat-icon>
-                </span>
               </td>
             </tr>
             <tr *ngIf="dataset['instrumentId'] && instrument">

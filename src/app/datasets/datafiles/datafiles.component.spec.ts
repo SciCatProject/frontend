@@ -21,6 +21,7 @@ import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { DatafilesActionsComponent } from "datasets/datafiles-actions/datafiles-actions.component";
 import { UsersService } from "@scicatproject/scicat-sdk-ts";
 import { AuthService } from "shared/services/auth/auth.service";
+import { FileSizePipe } from "shared/pipes/filesize.pipe";
 
 describe("DatafilesComponent", () => {
   let component: DatafilesComponent;
@@ -102,6 +103,7 @@ describe("DatafilesComponent", () => {
             provide: DatafilesActionsComponent,
             useClass: MockDatafilesActionsComponent,
           },
+          { provide: FileSizePipe },
         ],
       },
     });
@@ -129,6 +131,7 @@ describe("DatafilesComponent", () => {
         gid: "string",
         perm: "string",
         selected: false,
+        hash: "",
       },
       {
         path: "test2",
@@ -139,10 +142,11 @@ describe("DatafilesComponent", () => {
         gid: "string",
         perm: "string",
         selected: false,
+        hash: "",
       },
     ];
     component.tableData = component.files;
-    component.sourcefolder = "/test/";
+    component.sourceFolder = "/test/";
     fixture.detectChanges();
   });
 

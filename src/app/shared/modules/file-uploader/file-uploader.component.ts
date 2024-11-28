@@ -109,11 +109,7 @@ export class FileUploaderComponent {
   }
 
   getImageUrl(encoded: string) {
-    const mimeType = this.base64MimeType(encoded);
-    if (mimeType === "application/pdf") {
-      return "assets/images/pdf-icon.svg";
-    }
-    return encoded;
+    return this.attachmentService.getImageUrl(encoded);
   }
 
   openAttachment(encoded: string) {

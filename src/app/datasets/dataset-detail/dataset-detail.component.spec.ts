@@ -13,7 +13,6 @@ import { MatTableModule } from "@angular/material/table";
 import { MatChipInputEvent, MatChipsModule } from "@angular/material/chips";
 import { of } from "rxjs";
 import { MatDialogRef } from "@angular/material/dialog";
-import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
@@ -346,34 +345,6 @@ describe("DatasetDetailComponent", () => {
       component.onClickSample(sampleId);
 
       expect(router.navigateByUrl).toHaveBeenCalledWith("/samples/" + sampleId);
-    });
-  });
-
-  describe("#openSampleEditDialog()", () => {
-    it("should open the sample edit dialog and dispatch updatePropertyAction", () => {
-      const dispatchSpy = spyOn(store, "dispatch");
-      component.dataset = mockDataset;
-      component.dataset.ownerGroup = "test";
-      component.sample = mockSample;
-      const sampleId = "testId";
-      component.sample.sampleId = sampleId;
-      const pid = "testPid";
-      component.dataset.pid = pid;
-      const property = { sampleId };
-      const dialogOpenSpy = spyOn(component.dialog, "open").and.returnValue({
-        afterClosed: () => of({ sample: { sampleId: "testId" } }),
-      } as MatDialogRef<SampleEditComponent>);
-      component.openSampleEditDialog();
-
-      expect(dialogOpenSpy).toHaveBeenCalledTimes(1);
-      expect(dialogOpenSpy).toHaveBeenCalledWith(SampleEditComponent, {
-        width: "1000px",
-        data: { ownerGroup: "test", sampleId: "testId" },
-      });
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        updatePropertyAction({ pid, property }),
-      );
     });
   });
 

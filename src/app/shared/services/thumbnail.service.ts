@@ -4,6 +4,7 @@ import { distinctUntilChanged, firstValueFrom } from "rxjs";
 import { selectDatasetsPerPage } from "state-management/selectors/datasets.selectors";
 import { AppConfigService } from "app-config.service";
 import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
+import { AttachmentService } from "./attachment.service";
 
 interface ThumbnailCache {
   [pid: string]: {
@@ -25,6 +26,7 @@ export class ThumbnailService {
   constructor(
     private datasetApi: DatasetsService,
     private store: Store,
+    private attachmentService: AttachmentService,
     private appConfigService: AppConfigService,
   ) {
     this.store
@@ -61,7 +63,7 @@ export class ThumbnailService {
       const res = await firstValueFrom(
         this.datasetApi.datasetsControllerThumbnail(pid),
       );
-      const thumbnail = res?.thumbnail || null;
+      const thumbnail = this.attachmentService.getImageUrl(res?.thumbnail);
 
       this.thumbnailCache[pid] = {
         value: thumbnail,
