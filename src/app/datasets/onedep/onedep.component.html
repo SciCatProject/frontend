@@ -55,127 +55,10 @@
                     <div mat-card-avatar class="section-icon">
                         <mat-icon> blur_linear </mat-icon>
                     </div>
-                    Method Information:
-                </mat-card-header>
-
-                <mat-card-content>
-                    <table>
-                        <!-- Question 1: Electron Microscopy Method -->
-                        <th class="questionnaire">Choose Electron Microscopy
-                            Method</th>
-                        <mat-form-field class="method-name">
-                            <mat-label>experimental method</mat-label>
-                            <mat-select 
-                                required
-                                formControlName="emMethod"
-                                name="method">
-                                <mat-option *ngFor="let method of methodsList"
-                                    [value]="method.value">
-                                    {{ method.viewValue }}
-                                </mat-option>
-                            </mat-select>
-                            <!-- Error Message -->
-                            <div *ngIf="form.get('emMethod')?.invalid && form.get('emMethod')?.touched" class="error">
-                                You must specify the experimental method
-                            </div>
-                        </mat-form-field>
-
-
-                        <!-- Question 2: PDB Deposition -->
-                        <tr>
-                            <th class="questionnaire">Are you deposing
-                                coordinates with this
-                                submission? (for PDB)</th>
-                            <td>
-                                <mat-radio-group
-                                    reuired
-                                    formControlName="deposingCoordinates">
-                                    <mat-radio-button 
-                                        name="deposingCoordinates"
-                                        value=true >
-                                        Yes
-                                    </mat-radio-button>
-                                    <mat-radio-button 
-                                        name="deposingCoordinates"
-                                        value=false
-                                        checked>
-                                        No
-                                    </mat-radio-button>
-                                </mat-radio-group>
-                            </td>
-                        </tr>
-                        <tr
-                            *ngIf="form.get('deposingCoordinates')?.value === 'true'">
-                            <th>Has an associated map been deposited to EMDB?
-                            </th>
-                            <td>
-                                <mat-radio-group
-                                    reuired
-                                    formControlName="associatedMap">
-                                    <mat-radio-button 
-                                        name="associatedMap"
-                                        value=true 
-                                        >
-                                        Yes
-                                    </mat-radio-button>
-                                    <mat-radio-button 
-                                        name="associatedMap"
-                                        value=false>
-                                        No
-                                    </mat-radio-button>
-                                </mat-radio-group>
-                            </td>
-                        </tr>
-
-                        <!-- EMDB Identifier Field -->
-                        <tr *ngIf="form.get('associatedMap').value === 'true' && form.get('deposingCoordinates').value === 'true'">
-                            <th>EMDB Identifier</th>
-                            <td>
-                                <mat-form-field class="EMDB-ID">
-                                    <mat-label>EMDB ID</mat-label>
-                                    <input 
-                                        required
-                                        matInput 
-                                        formControlName="emdbId" />
-                                </mat-form-field>
-                            </td>
-                        </tr>
-
-                        <!-- Final Question: Composite Map -->
-                        <tr>
-                            <th class="questionnaire">Is this a composite map?
-                            </th>
-                            <td>
-                                <mat-radio-group 
-                                    required
-                                    formControlName="compositeMap">
-                                    <mat-radio-button name="compositeMap"
-                                        value=true>
-                                        Yes
-                                    </mat-radio-button>
-                                    <mat-radio-button 
-                                        name="compositeMap"
-                                        value=false 
-                                        checked>
-                                        No
-                                    </mat-radio-button>
-                                </mat-radio-group>
-                            </td>
-                        </tr>
-                    </table>
-                </mat-card-content>
-            </mat-card>
-            <mat-card >
-                <form [formGroup]="form">
-                <mat-card-header class="related-header">
-                    <div mat-card-avatar class="section-icon">
-                        <mat-icon>assignment_ind</mat-icon>
-                    </div>
-                    <span>Administrative</span>
+                    Administrative and Method Information:
                 </mat-card-header>
 
                 <div class="card-container">
-                    <!-- Left Section -->
                     <div class="card-left">
                         <h2>Obtain OneDep Token</h2>
                         <p class="instruction">Add instruction how to get it</p>
@@ -183,16 +66,17 @@
                             class="token-field"
                             appearance="outline">
                             <mat-label>Token</mat-label>
-                            <input 
-                                required
+                            <textarea 
                                 matInput
-                                placeholder="copy the token text here"
-                                formControlName="jwtToken" />
+                                required
+                                placeholder="copy the token here"
+                                rows="1"
+                                formControlName="jwtToken" 
+                                (input)="autoGrow($event)"
+                                [style.overflow]="detailsOverflow"></textarea>
                         </mat-form-field>
                     </div>
-
-                    <!-- Right Section -->
-                    <div class="card-right">
+                    <div class="card-middle">
                         <h2>Enter 16-digit ORCID iD</h2>
                         <p class="instruction">Owners of these ORCIDs iDs are
                             allowed to access this deposition.</p>
@@ -233,12 +117,106 @@
                             </button>
                         
                     </div>
+                    
+                    <div class="card-right">
+                    
+                        <!-- Question 1: Electron Microscopy Method -->
+                        <h2>Choose Electron Microscopy
+                            Method</h2>
+                        <mat-form-field class="method-name">
+                            <mat-label>experimental method</mat-label>
+                            <mat-select required formControlName="emMethod"
+                                name="method">
+                                <mat-option *ngFor="let method of methodsList"
+                                    [value]="method.value">
+                                    {{ method.viewValue }}
+                                </mat-option>
+                            </mat-select>
+                            <!-- Error Message -->
+                            <div *ngIf="form.get('emMethod')?.invalid && form.get('emMethod')?.touched"
+                                class="error">
+                                You must specify the experimental method
+                            </div>
+                        </mat-form-field>
+
+
+                        <!-- Question 2: PDB Deposition -->
+                        <tr>
+                            <th class="questionnaire">Are you deposing
+                                coordinates with this
+                                submission? (for PDB)</th>
+                            <td>
+                                <mat-radio-group reuired
+                                    formControlName="deposingCoordinates">
+                                    <mat-radio-button name="deposingCoordinates"
+                                        value=true>
+                                        Yes
+                                    </mat-radio-button>
+                                    <mat-radio-button name="deposingCoordinates"
+                                        value=false checked>
+                                        No
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </td>
+                        </tr>
+                        <tr
+                            *ngIf="form.get('deposingCoordinates')?.value === 'true'">
+                            <th>Has an associated map been deposited to EMDB?
+                            </th>
+                            <td>
+                                <mat-radio-group reuired
+                                    formControlName="associatedMap">
+                                    <mat-radio-button name="associatedMap"
+                                        value=true>
+                                        Yes
+                                    </mat-radio-button>
+                                    <mat-radio-button name="associatedMap"
+                                        value=false>
+                                        No
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </td>
+                        </tr>
+
+                        <!-- EMDB Identifier Field -->
+                        <tr
+                            *ngIf="form.get('associatedMap').value === 'true' && form.get('deposingCoordinates').value === 'true'">
+                            <th>EMDB Identifier</th>
+                            <td>
+                                <mat-form-field class="EMDB-ID">
+                                    <mat-label>EMDB ID</mat-label>
+                                    <input required matInput
+                                        formControlName="emdbId" />
+                                </mat-form-field>
+                            </td>
+                        </tr>
+
+                        <!-- Final Question: Composite Map -->
+                        <tr>
+                            <th class="questionnaire">Is this a composite map?
+                            </th>
+                            <td>
+                                <mat-radio-group required
+                                    formControlName="compositeMap">
+                                    <mat-radio-button name="compositeMap"
+                                        value=true>
+                                        Yes
+                                    </mat-radio-button>
+                                    <mat-radio-button name="compositeMap"
+                                        value=false checked>
+                                        No
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </td>
+                        </tr>
+                    </div>
                 </div>
-                </form>
+                <button class="submitDep" mat-raised-button color="primary"
+                (click)="onCreateClick()">
+                Create Deposition
+                </button>
             </mat-card>
 
-
-            
 
             <mat-card>
                 <mat-card-header class="file-header">
@@ -248,33 +226,43 @@
                     Choose files for deposition
                 </mat-card-header>
                 <mat-card-content>
-                    <mat-card *ngFor="let fileType of fileTypes" class="fileCard">
-                        <ng-container *ngIf="fileType.key !== 'co-cif' || form.get('deposingCoordinates').value === 'true'">
+                    <mat-card *ngFor="let fileType of fileTypes"
+                        class="fileCard">
+                        <ng-container
+                            *ngIf="fileType.key !== 'co-cif' || form.get('deposingCoordinates').value === 'true'">
                             <mat-card-header>
-                                <mat-card-title>{{ fileType.header }}</mat-card-title>
+                                <mat-card-title>{{ fileType.header
+                                    }}</mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
                                 <div class="file-selection-container">
-                                    <button class="fileChooser" mat-raised-button color="primary" (click)="onChooseFile(fileInput)">
+                                    <button class="fileChooser"
+                                        mat-raised-button color="primary"
+                                        (click)="onChooseFile(fileInput)">
                                         Choose File
                                     </button>
                                     <div *ngIf="selectedFile[fileType.key]">
                                         <mat-icon>attach_file</mat-icon>
                                     </div>
-                                    <input type="file" #fileInput (change)="onFileSelected($event, fileType.key)" style="display: none;" />
-                                    <div *ngIf="selectedFile[fileType.key]" class="fileName">
-                                        <p>Selected File: {{ selectedFile[fileType.key].name }}</p>
+                                    <input type="file" #fileInput
+                                        (change)="onFileSelected($event, fileType.key)"
+                                        style="display: none;" />
+                                    <div *ngIf="selectedFile[fileType.key]"
+                                        class="fileName">
+                                        <p>Selected File: {{
+                                            selectedFile[fileType.key].name }}
+                                        </p>
                                     </div>
                                 </div>
-                    
+
                                 <div class="input-container">
-                                    <ng-container *ngIf="files[fileType.key]?.contour !== undefined">
-                                        <mat-form-field appearance="outline" class="contour-level">
+                                    <ng-container
+                                        *ngIf="files[fileType.key]?.contour !== undefined">
+                                        <mat-form-field appearance="outline"
+                                            class="contour-level">
                                             <mat-label>Contour Level</mat-label>
-                                            <input 
-                                                matInput type="number" 
-                                                placeholder="e.g. 0.0"
-                                                required
+                                            <input matInput type="number"
+                                                placeholder="e.g. 0.0" required
                                                 [value]="files[fileType.key]?.contour || ''"
                                                 (input)="fileType.key === 'vo-map' ? updateContourLevelMain($event) : updateContourLevel($event, fileType.key)" />
                                         </mat-form-field>
@@ -286,14 +274,18 @@
                                     </ng-container>
                                     <mat-form-field class="details">
                                         <mat-label>Details</mat-label>
-                                        <textarea matInput placeholder="Enter details..." rows="1" (input)="updateDetails($event, fileType.key)"
-                                                  (input)="autoGrow($event)" [style.overflow]="detailsOverflow"></textarea>
+                                        <textarea matInput
+                                            placeholder="Enter details..."
+                                            rows="1"
+                                            (input)="updateDetails($event, fileType.key)"
+                                            (input)="autoGrow($event)"
+                                            [style.overflow]="detailsOverflow"></textarea>
                                     </mat-form-field>
                                 </div>
                             </mat-card-content>
                         </ng-container>
                     </mat-card>
-                    
+
 
                     <!-- UPLOAD FILES DONE -->
                     <button class="submitDep" mat-raised-button color="primary"

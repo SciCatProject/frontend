@@ -13,11 +13,19 @@ mat-card {
   .card-container {
     display: flex;
     justify-content: space-between;
-    align-items: start;
+    align-items: flex-start;
+    gap: 16px;
     padding: 16px;
+    margin-bottom: 16px;
   }
 
   .card-left {
+    flex: 1;
+    margin-left: 20px;
+    margin-right: 16px;
+  }
+
+  .card-middle {
     flex: 1;
     margin-right: 16px;
   }
@@ -26,9 +34,7 @@ mat-card {
     flex: 1;
     display: flex;
     flex-direction: column;
-    /* Stack fields vertically */
   }
-
 
   .file-header {
     display: flex;
@@ -40,27 +46,28 @@ mat-card {
   }
 
   .token-field {
-    width: 100%;
+    width: 70%;
     height: 20px;
     margin-bottom: 8px;
     margin-top: 0;
   }
 
-  .data-field {
-    width: 30%;
+  .orcid-field {
+    width: 40%;
     height: 20px;
     margin-bottom: 40px;
   }
+
   .remove-field-btn {
     position: absolute;
     top: 50%;
-    right: 0;
+    right: -30%;
     transform: translateY(-50%);
-    margin-left: 8px; 
-}
+    margin-left: 8px;
+  }
 
   .add-field-btn {
-    margin-top: 16px;
+    margin-top: 5px;
     color: rgba(0, 0, 0, 0.6);
     transition: color 0.3s ease;
   }
@@ -73,60 +80,59 @@ mat-card {
     font-size: 24px;
   }
 
-  table {
-    th {
-      .questionnaire {
-        min-width: 20rem;
+
+  th {
+    .questionnaire {
+      min-width: 20rem;
+    }
+
+    min-width: 10rem;
+    padding-right: 0.5rem;
+    text-align: left;
+  }
+
+  td {
+    width: 100%;
+    padding: 0.5rem 0;
+
+    .sample-edit {
+      padding-left: 0.5rem;
+
+      mat-icon {
+        font-size: medium;
       }
-
-      min-width: 10rem;
-      padding-right: 0.5rem;
-      text-align: left;
-    }
-
-    td {
-      width: 100%;
-      padding: 0.5rem 0;
-
-      .sample-edit {
-        padding-left: 0.5rem;
-
-        mat-icon {
-          font-size: medium;
-        }
-      }
-    }
-    mat-radio-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    mat-radio-button {
-      display: block;
-      margin-bottom: -0.7rem;
-      /* Optional: Adds spacing between buttons */
-    }
-
-    // .error{
-    //   color: red;
-    // }
-    .EMDB-ID {
-      width: 15%;
-    }
-
-    .method-name {
-      width: 25%;
-    }
-
-    .file-types {
-      width: 10%;
-    }
-
-    .full-width {
-      width: 100%;
     }
   }
+
+  mat-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  mat-radio-button {
+    display: block;
+    margin-bottom: -0.7rem;
+    /* Optional: Adds spacing between buttons */
+  }
+
+
+  .EMDB-ID {
+    width: 50%;
+  }
+
+  .method-name {
+    width: 50%;
+  }
+
+  .file-types {
+    width: 10%;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
 
   .fileCard {
     width: 80%;
@@ -222,5 +228,6 @@ mat-card {
 
   .submitDep {
     background-color: #B3D9AC;
+    color:black;
   }
 }

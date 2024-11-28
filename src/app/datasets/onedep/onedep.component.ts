@@ -37,7 +37,6 @@ export class OneDepComponent implements OnInit {
   form: FormGroup;
   showAssociatedMapQuestion: boolean = false;
   methodsList = MethodsList;
-  // experiments = Experiments;
   experiment: OneDepExperiment
   selectedFile: { [key: string]: File | null } = {};
   emFile = EmFile;
@@ -96,7 +95,7 @@ export class OneDepComponent implements OnInit {
       associatedMap: new FormControl(null, Validators.required),
       compositeMap: new FormControl(null, Validators.required),
       emdbId: new FormControl(""),
-      orcid: this.fb.array([]),
+      orcid: this.fb.array(['']),
     })
   }
 
@@ -205,4 +204,36 @@ export class OneDepComponent implements OnInit {
     );
 
   }
+
+  onCreateClick(){
+    let bearer = 'Bearer ' + this.form.value['jwtToken'];
+    const headers = new HttpHeaders()
+    .append(
+      'Content-Type',
+      'application/json'
+    )
+    .append( 
+      'Authorization', 
+      bearer
+    );
+
+    const body=JSON.stringify(
+      { 
+        "email": "sofya.laskina@epfl.ch",
+        "users": ["0009-0003-3665-5367"],
+        "country": "United States",
+        "experiments": [Experiments[this.form.value.emMethod]],
+      }
+    );
+
+    this.http
+      .post('https://onedep-depui-test.wwpdb.org/deposition/api/v1/depositions/new', body, {
+        headers: headers,
+      })
+      .subscribe((res) => console.log(res));
+
+  }
+
 }
+
+
