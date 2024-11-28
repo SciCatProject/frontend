@@ -22,7 +22,7 @@ import {
   selectIsLoading,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
-import { UsersService } from "@scicatproject/scicat-sdk-ts";
+import { CreateUserJWT, UsersService } from "@scicatproject/scicat-sdk-ts";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";
@@ -62,8 +62,7 @@ export class DatafilesComponent
 
   subscriptions: Subscription[] = [];
 
-  files: Array<any> = [];
-  sourcefolder = "";
+  files: Array<DataFiles_File> = [];
   datasetPid = "";
   actionDataset: ActionDataset;
 
@@ -77,9 +76,14 @@ export class DatafilesComponent
     this.appConfig.fileserverButtonLabel || "Download";
   multipleDownloadAction: string | null = this.appConfig.multipleDownloadAction;
   maxFileSize: number | null = this.appConfig.maxDirectDownloadSize;
-  sftpHost: string | null = this.appConfig.sftpHost;
-  jwt: any;
-  auth_token: any;
+  sourceFolder: string =
+    this.appConfig.sourceFolder || "No source folder provided";
+  sftpHost: string = this.appConfig.sftpHost || "No sftp host provided";
+  maxFileSizeWarning: string | null =
+    this.appConfig.maxFileSizeWarning ||
+    `Some files are above the max size ${this.fileSizePipe.transform(this.maxFileSize)}`;
+  jwt: CreateUserJWT;
+  auth_token: string;
 
   tableColumns: TableColumn[] = [
     {
@@ -113,6 +117,7 @@ export class DatafilesComponent
     private dialog: MatDialog,
     private usersService: UsersService,
     private authService: AuthService,
+    private fileSizePipe: FileSizePipe,
   ) {}
 
   onPageChange(event: PageChangeEvent) {
@@ -206,11 +211,40 @@ export class DatafilesComponent
     }
   }
 
+  hasFileAboveMaxSizeWarning() {
+    /**
+     * Template for a file size warning message.
+     * Placeholders:
+     * - <maxDirectDownloadSize>: Maximum file size allowed (e.g., "10 MB").
+     * - <sftpHost>: SFTP host for downloading large files.
+     * - <sourceFolder>: Directory path on the SFTP host.
+     *
+     * Example usage:
+     * Some files are above <maxDirectDownloadSize>. These file can be accessed via sftp host: <sftpHost> in directory: <sourceFolder>
+     */
+
+    const valueMapping = {
+      sftpHost: this.sftpHost,
+      sourceFolder: this.sourceFolder,
+      maxDirectDownloadSize: this.fileSizePipe.transform(this.maxFileSize),
+    };
+
+    let warning = this.maxFileSizeWarning;
+
+    Object.keys(valueMapping).forEach((key) => {
+      warning = warning.replace(
+        "<" + key + ">",
+        `<strong>${valueMapping[key]}</strong>`,
+      );
+    });
+
+    return warning;
+  }
   ngAfterViewInit() {
     this.subscriptions.push(
       this.dataset$.subscribe((dataset) => {
         if (dataset) {
-          this.sourcefolder = dataset.sourceFolder;
+          this.sourceFolder = dataset.sourceFolder;
           this.datasetPid = dataset.pid;
           this.actionDataset = <ActionDataset>dataset;
         }
@@ -288,7 +322,7 @@ export class DatafilesComponent
     return (
       this.fileserverBaseURL +
       "&origin_path=" +
-      encodeURIComponent(this.sourcefolder)
+      encodeURIComponent(this.sourceFolder)
     );
   }
 }

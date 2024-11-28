@@ -29,8 +29,22 @@ describe("AttachmentService", () => {
     });
 
     it("should return null for non-string input", () => {
-      const mimeType = service.base64MimeType(null as any);
+      const mimeType = service.base64MimeType(null);
       expect(mimeType).toBeNull();
+    });
+  });
+
+  describe("getImageUrl", () => {
+    it("should return the pdf icon if the file is pdf", () => {
+      const encoded = "data:application/pdf;base64,SGVsbG8sIFdvcmxkIQ==";
+      const imageUrl = service.getImageUrl(encoded);
+      expect(imageUrl).toBe("assets/images/pdf-icon.svg");
+    });
+
+    it("should return the encoded string if the file is not pdf", () => {
+      const encoded = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA";
+      const imageUrl = service.getImageUrl(encoded);
+      expect(imageUrl).toBe(encoded);
     });
   });
 
