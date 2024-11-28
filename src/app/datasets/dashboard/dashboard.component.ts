@@ -73,7 +73,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
 
   appConfig = this.appConfigService.getConfig();
-
   currentUser: User = new User();
   userGroups: string[] = [];
   clearColumnSearch = false;
