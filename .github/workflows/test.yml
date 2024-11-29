@@ -132,6 +132,7 @@ jobs:
       - name: docker logs
         if: ${{ failure() }}
         run: |
+          docker compose logs frontend
           docker compose logs es01
           docker compose logs backend
 

@@ -10,4 +10,5 @@ RUN npx ng build
 
 FROM nginxinc/nginx-unprivileged
 COPY --from=builder /frontend/dist/ /usr/share/nginx/html/
+
 EXPOSE 8080
