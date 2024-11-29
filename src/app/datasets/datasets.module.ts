@@ -89,6 +89,7 @@ import { DatasetsFilterSettingsComponent } from "./datasets-filter/settings/data
 import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
 import { FiltersModule } from "shared/modules/filters/filters.module";
 import { userReducer } from "state-management/reducers/user.reducer";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 @NgModule({
   imports: [
@@ -121,6 +122,7 @@ import { userReducer } from "state-management/reducers/user.reducer";
     MatStepperModule,
     MatTableModule,
     MatTabsModule,
+    MatSnackBarModule,
     MatTooltipModule,
     NgxJsonViewerModule,
     ReactiveFormsModule,
