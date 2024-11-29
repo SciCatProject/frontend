@@ -93,4 +93,55 @@ describe("Datasets general", () => {
       cy.deleteProposal(proposalId);
     });
   });
+
+  describe.only("Dataset page filter and scientific condition UI test", () => {
+    it("should not be able to add duplicated conditions ", () => {
+      cy.visit("/datasets");
+
+      cy.get(".user-button").click();
+
+      cy.get("[data-cy=logout-button]").click();
+
+      cy.finishedLoading();
+
+      cy.visit("/datasets");
+
+      cy.get('[data-cy="more-filters-button"]').click();
+
+      cy.get('[data-cy="add-scientific-condition-button"]').click();
+
+      cy.get('input[name="lhs"]').type("test");
+      cy.get('input[name="rhs"]').type("1");
+
+      cy.get('button[type="submit"]').click();
+
+      cy.get('[data-cy="add-scientific-condition-button"]').click();
+
+      cy.get('input[name="lhs"]').type("test");
+      cy.get('input[name="rhs"]').type("1");
+
+      cy.get('button[type="submit"]').click();
+
+      cy.get(".snackbar-warning")
+        .should("contain", "Condition already exists")
+        .contains("Close")
+        .click();
+
+      cy.get('[data-cy="scientific-condition-filter-list"').should(
+        "have.length",
+        1,
+      );
+
+      cy.get('[data-cy="add-scientific-condition-button"]').click();
+
+      cy.get('input[name="lhs"]').type("test");
+      cy.get('input[name="rhs"]').type("2");
+
+      cy.get('button[type="submit"]').click();
+
+      cy.get('[data-cy="scientific-condition-filter-list"]')
+        .find("input")
+        .should("have.length", 2);
+    });
+  });
 });
