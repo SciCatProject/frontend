@@ -92,6 +92,7 @@ import { userReducer } from "state-management/reducers/user.reducer";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { OneDepComponent } from "./onedep/onedep.component";
 import { OrcidFormatterDirective } from "./onedep/onedep.directive";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 @NgModule({
   imports: [
