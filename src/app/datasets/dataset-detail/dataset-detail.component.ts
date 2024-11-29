@@ -170,27 +170,6 @@ export class DatasetDetailComponent
     return this._hasUnsavedChanges;
   }
 
-  isPI(): boolean {
-    if (this.user && this.dataset) {
-      if (this.user.username === "admin") {
-        return true;
-      }
-      if (this.dataset.type === "raw") {
-        return (
-          this.user.email.toLowerCase() ===
-          this.dataset["principalInvestigator"].toLowerCase()
-        );
-      }
-      if (this.dataset.type === "derived") {
-        return (
-          this.user.email.toLowerCase() ===
-          this.dataset["investigator"].toLowerCase()
-        );
-      }
-    }
-    return false;
-  }
-
   onClickKeyword(keyword: string) {
     this.store.dispatch(clearFacetsAction());
     this.store.dispatch(addKeywordFilterAction({ keyword }));
