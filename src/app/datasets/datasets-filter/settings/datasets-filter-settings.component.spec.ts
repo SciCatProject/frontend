@@ -36,6 +36,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { DatasetsFilterSettingsComponent } from "./datasets-filter-settings.component";
 import { ConditionConfig } from "../../../shared/modules/filters/filters.module";
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 
 export class MockMatDialog {
   open() {
@@ -82,6 +83,7 @@ describe("DatasetsFilterSettingsComponent", () => {
         MatSelectModule,
         MatNativeDateModule,
         ReactiveFormsModule,
+        MatSnackBarModule,
         SharedScicatFrontendModule,
         StoreModule.forRoot({}),
       ],
@@ -96,6 +98,7 @@ describe("DatasetsFilterSettingsComponent", () => {
         providers: [
           { provide: AppConfigService, useValue: { getConfig } },
           { provide: MatDialog, useClass: MockMatDialog },
+          { provide: MatSnackBar },
           { provide: MatDialogRef, useClass: MockMatDialogRef },
           {
             provide: MAT_DIALOG_DATA,
