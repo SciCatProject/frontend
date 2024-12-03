@@ -65,6 +65,7 @@ export class IngestorMetadaEditorHelper {
     return {
       selectedPath: '',
       selectedMethod: '',
+      scicatHeader: {},
       userMetaData: {},
       extractorMetaData: {},
       mergedMetaDataString: ''

@@ -27,19 +27,22 @@
             Instrument Information
           </mat-card-header>
           <mat-card-content>
-            <app-metadata-editor [schema]="metadataSchema"
-              [data]="createNewTransferData.extractorMetaData"
-              (dataChange)="onDataChange($event)"></app-metadata-editor>
+            <app-metadata-editor [schema]="metadataSchemaInstrument"
+              [data]="createNewTransferData.userMetaData['instrument']"
+              (dataChange)="onDataChangeUserMetadataInstrument($event)"></app-metadata-editor>
           </mat-card-content>
         </mat-card>
         <mat-card>
-          <mat-card-header class="acqusition-header">
+          <mat-card-header class="acquisition-header">
             <div mat-card-avatar class="section-icon">
               <mat-icon> category-search </mat-icon>
             </div>
             Acquisition Information
           </mat-card-header>
           <mat-card-content>
+            <app-metadata-editor [schema]="metadataSchemaAcquisition"
+              [data]="createNewTransferData.userMetaData['acquisition']"
+              (dataChange)="onDataChangeUserMetadataAcquisition($event)"></app-metadata-editor>
           </mat-card-content>
         </mat-card>
       </div>

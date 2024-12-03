@@ -15,21 +15,10 @@ interface ITransferDataListEntry {
   status: string;
 }
 
-interface ISciCatHeader {
-  datasetName: string;
-  description: string;
-  creationLocation: string;
-  dataFormat: string;
-  ownerGroup: string;
-  type: string;
-  license: string;
-  keywords: string[];
-  scientificMetadata: string;
-}
-
 export interface IIngestionRequestInformation {
   selectedPath: string;
   selectedMethod: string;
+  scicatHeader: Object;
   userMetaData: Object;
   extractorMetaData: Object;
   mergedMetaDataString: string;
@@ -52,7 +41,7 @@ export class IngestorComponent implements OnInit {
   connectingToFacilityBackend: boolean = false;
 
   lastUsedFacilityBackends: string[] = [];
-  
+
   transferDataSource: ITransferDataListEntry[] = []; // List of files to be transferred
   displayedColumns: string[] = ['transferId', 'status', 'actions'];
 

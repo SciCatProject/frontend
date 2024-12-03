@@ -1,8 +1,26 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IIngestionRequestInformation } from '../ingestor.component';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 import { IngestorMetadaEditorHelper } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper';
+
+interface ISciCatHeader {
+  datasetName: string;
+  description: string;
+  creationLocation: string;
+  dataFormat: string;
+  ownerGroup: string;
+  type: string;
+  license: string;
+  keywords: string[];
+  scientificMetadata: IScientificMetadata;
+}
+
+interface IScientificMetadata {
+  organization: Object;
+  sample: Object;
+  acquisition: Object;
+  instrument: Object;
+}
 
 @Component({
   selector: 'ingestor.confirm-transfer-dialog',
@@ -20,8 +38,29 @@ export class IngestorConfirmTransferDialog {
   }
 
   ngOnInit() {
+    this.provideMergeMetaData = this.createMetaDataString();
+  }
+
+  createMetaDataString(): string {
     const space = 2;
-    this.provideMergeMetaData = IngestorMetadaEditorHelper.mergeUserAndExtractorMetadata(this.createNewTransferData.userMetaData, this.createNewTransferData.extractorMetaData, space);
+    const scicatMetadata: ISciCatHeader = {
+      datasetName: this.createNewTransferData.scicatHeader['datasetName'],
+      description: this.createNewTransferData.scicatHeader['description'],
+      creationLocation: this.createNewTransferData.scicatHeader['creationLocation'],
+      dataFormat: this.createNewTransferData.scicatHeader['dataFormat'],
+      ownerGroup: this.createNewTransferData.scicatHeader['ownerGroup'],
+      type: this.createNewTransferData.scicatHeader['type'],
+      license: this.createNewTransferData.scicatHeader['license'],
+      keywords: this.createNewTransferData.scicatHeader['keywords'],
+      scientificMetadata: {
+        organization: this.createNewTransferData.userMetaData['organization'],
+        sample: this.createNewTransferData.userMetaData['sample'],
+        acquisition: this.createNewTransferData.extractorMetaData['acquisition'],
+        instrument: this.createNewTransferData.extractorMetaData['instrument'],
+      },
+    };
+
+    return JSON.stringify(scicatMetadata, null, space);
   }
 
   onClickBack(): void {

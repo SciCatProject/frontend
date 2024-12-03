@@ -1,6 +1,3 @@
-@use "sass:map";
-@use "@angular/material" as mat;
-
 .ingestor-vertical-layout {
   display: flex;
   flex-direction: column;
@@ -35,36 +32,5 @@ mat-card {
     mat-icon {
       vertical-align: middle;
     }
-  }
-}
-
-@mixin color($theme) {
-  $color-config: map-get($theme, "color");
-  $primary: map-get($color-config, "primary");
-  $header-1: map-get($color-config, "header-1");
-  $accent: map-get($color-config, "accent");
-  mat-card {
-    .organizational-header {
-      background-color: mat.get-color-from-palette($primary, "lighter");
-    }
-
-    .sample-header {
-      background-color: mat.get-color-from-palette($header-1, "lighter");
-    }
-
-    .instrument-header {
-      background-color: mat.get-color-from-palette($accent, "lighter");
-    }
-
-    .acquisition-header {
-      background-color: mat.get-color-from-palette($accent, "lighter");
-    }
-  }
-}
-
-@mixin theme($theme) {
-  $color-config: mat.get-color-config($theme);
-  @if $color-config != null {
-    @include color($theme);
   }
 }

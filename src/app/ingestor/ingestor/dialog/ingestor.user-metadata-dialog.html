@@ -13,6 +13,19 @@
   <div fxLayout="row" fxLayout.xs="column">
     <div fxFlex="80%">
       <mat-card>
+        <mat-card-header class="scicat-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> info </mat-icon>
+          </div>
+          SciCat Information
+        </mat-card-header>
+        <mat-card-content>
+          <app-metadata-editor [schema]="scicatHeaderSchema" [data]="createNewTransferData.scicatHeader"
+          (dataChange)="onDataChangeUserScicatHeader($event)"></app-metadata-editor>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
         <mat-card-header class="organizational-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> person </mat-icon>
@@ -20,8 +33,8 @@
           Organizational Information
         </mat-card-header>
         <mat-card-content>
-          <app-metadata-editor [schema]="metadataSchema" [data]="createNewTransferData.userMetaData"
-          (dataChange)="onDataChange($event)"></app-metadata-editor>
+          <app-metadata-editor [schema]="metadataSchemaOrganizational" [data]="createNewTransferData.userMetaData['organization']"
+          (dataChange)="onDataChangeUserMetadataOrganization($event)"></app-metadata-editor>
         </mat-card-content>
       </mat-card>
 
@@ -33,6 +46,8 @@
           Sample Information
         </mat-card-header>
         <mat-card-content>
+          <app-metadata-editor [schema]="metadataSchemaSample" [data]="createNewTransferData.userMetaData['sample']"
+          (dataChange)="onDataChangeUserMetadataSample($event)"></app-metadata-editor>
         </mat-card-content>
       </mat-card>
     </div>

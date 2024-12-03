@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { IngestorMetadaEditorHelper, Schema } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper';
-import { schema_mask2 } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-schematest';
+import { organizational_schema, sample_schema, scicatheader_schema } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-schematest';
 import { IIngestionRequestInformation } from '../ingestor.component';
 
 @Component({
@@ -12,12 +12,15 @@ import { IIngestionRequestInformation } from '../ingestor.component';
 })
 
 export class IngestorUserMetadataDialog {
-  metadataSchema: Schema;
-
+  metadataSchemaOrganizational: Schema;
+  metadataSchemaSample: Schema;
+  scicatHeaderSchema: Schema;
   createNewTransferData: IIngestionRequestInformation = IngestorMetadaEditorHelper.createEmptyRequestInformation();
 
   constructor(public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.metadataSchema = schema_mask2;
+    this.metadataSchemaOrganizational = organizational_schema;
+    this.metadataSchemaSample = sample_schema;
+    this.scicatHeaderSchema = scicatheader_schema;
     this.createNewTransferData = data.createNewTransferData;
   }
 
@@ -33,7 +36,15 @@ export class IngestorUserMetadataDialog {
     }
   }
 
-  onDataChange(event: Object) {
-    this.createNewTransferData.userMetaData = event;
+  onDataChangeUserMetadataOrganization(event: Object) {
+    this.createNewTransferData.userMetaData['organization'] = event;
+  }
+
+  onDataChangeUserMetadataSample(event: Object) {
+    this.createNewTransferData.userMetaData['sample'] = event;
+  }
+
+  onDataChangeUserScicatHeader(event: Object) {
+    this.createNewTransferData.scicatHeader = event;
   }
 }
