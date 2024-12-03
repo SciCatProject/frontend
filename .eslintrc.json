@@ -31,19 +31,6 @@
           }
         ],
         "@angular-eslint/component-selector": "off",
-        "@typescript-eslint/member-delimiter-style": [
-          "error",
-          {
-            "multiline": {
-              "delimiter": "semi",
-              "requireLast": true
-            },
-            "singleline": {
-              "delimiter": "semi",
-              "requireLast": false
-            }
-          }
-        ],
         "@typescript-eslint/member-ordering": [
           "error",
           {
@@ -78,15 +65,7 @@
         "@typescript-eslint/no-inferrable-types": "error",
         "@typescript-eslint/no-explicit-any": "warn",
         "@typescript-eslint/no-unused-vars": "warn",
-        "@typescript-eslint/no-unsafe-declaration-merging": "warn",
-        "@typescript-eslint/quotes": [
-          "error",
-          "double",
-          {
-            "allowTemplateLiterals": true
-          }
-        ],
-        "@typescript-eslint/semi": ["error", "always"]
+        "@typescript-eslint/no-unsafe-declaration-merging": "warn"
       }
     },
     {

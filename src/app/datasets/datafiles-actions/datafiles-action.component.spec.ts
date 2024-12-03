@@ -540,7 +540,6 @@ describe("1000: DatafilesActionComponent", () => {
 
     component.perform_action();
 
-    // eslint-disable-next-line @typescript-eslint/quotes
     const formChildren = Array.from(component.form.children).map(
       (item) => item as unknown as MockHtmlElement,
     );
@@ -577,7 +576,6 @@ describe("1000: DatafilesActionComponent", () => {
 
     component.perform_action();
 
-    // eslint-disable-next-line @typescript-eslint/quotes
     const formChildren = Array.from(component.form.children).map(
       (item) => item as unknown as MockHtmlElement,
     );
@@ -601,7 +599,6 @@ describe("1000: DatafilesActionComponent", () => {
 
     component.perform_action();
 
-    // eslint-disable-next-line @typescript-eslint/quotes
     const formChildren = Array.from(component.form.children).map(
       (item) => item as unknown as MockHtmlElement,
     );
@@ -627,7 +624,6 @@ describe("1000: DatafilesActionComponent", () => {
 
     component.perform_action();
 
-    // eslint-disable-next-line @typescript-eslint/quotes
     const formChildren = Array.from(component.form.children).map(
       (item) => item as unknown as MockHtmlElement,
     );
@@ -665,7 +661,6 @@ describe("1000: DatafilesActionComponent", () => {
 
     component.perform_action();
 
-    // eslint-disable-next-line @typescript-eslint/quotes
     const formChildren = Array.from(component.form.children).map(
       (item) => item as unknown as MockHtmlElement,
     );
