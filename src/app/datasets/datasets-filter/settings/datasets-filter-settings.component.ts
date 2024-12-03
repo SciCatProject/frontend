@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -22,12 +22,13 @@ import {
   ConditionConfig,
   FilterConfig,
 } from "../../../shared/modules/filters/filters.module";
+import { isEqual } from "lodash-es";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-type-datasets-filter-settings",
   templateUrl: `./datasets-filter-settings.component.html`,
   styleUrls: [`./datasets-filter-settings.component.scss`],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DatasetsFilterSettingsComponent {
   metadataKeys$ = this.store.select(selectMetadataKeys);
@@ -39,6 +40,7 @@ export class DatasetsFilterSettingsComponent {
   constructor(
     public dialogRef: MatDialogRef<DatasetsFilterSettingsComponent>,
     public dialog: MatDialog,
+    private snackBar: MatSnackBar,
     private store: Store,
     private asyncPipe: AsyncPipe,
     private appConfigService: AppConfigService,
@@ -56,6 +58,18 @@ export class DatasetsFilterSettingsComponent {
       .subscribe((res) => {
         if (res) {
           const { data } = res;
+
+          // If the condition already exists, do nothing
+          const existingConditionIndex = this.data.conditionConfigs.findIndex(
+            (config) => isEqual(config.condition, data),
+          );
+          if (existingConditionIndex !== -1) {
+            this.snackBar.open("Condition already exists", "Close", {
+              duration: 2000,
+              panelClass: ["snackbar-warning"],
+            });
+            return;
+          }
           const condition = this.toggleCondition({
             condition: data,
             enabled: false,
@@ -66,15 +80,6 @@ export class DatasetsFilterSettingsComponent {
   }
 
   editCondition(condition: ConditionConfig, i: number) {
-    this.store.dispatch(
-      removeScientificConditionAction({ condition: condition.condition }),
-    );
-    this.store.dispatch(
-      deselectColumnAction({
-        name: condition.condition.lhs,
-        columnType: "custom",
-      }),
-    );
     this.dialog
       .open(SearchParametersDialogComponent, {
         data: {
@@ -86,6 +91,24 @@ export class DatasetsFilterSettingsComponent {
       .subscribe((res) => {
         if (res) {
           const { data } = res;
+
+          // If the condition is unchanged, do nothing
+          if (isEqual(condition.condition, data)) {
+            return;
+          }
+
+          this.store.dispatch(
+            removeScientificConditionAction({
+              condition: condition.condition,
+            }),
+          );
+          this.store.dispatch(
+            deselectColumnAction({
+              name: condition.condition.lhs,
+              columnType: "custom",
+            }),
+          );
+
           this.data.conditionConfigs[i] = {
             ...condition,
             condition: data,

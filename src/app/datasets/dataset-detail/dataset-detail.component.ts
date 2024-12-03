@@ -4,7 +4,7 @@ import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 
 import { MatDialog } from "@angular/material/dialog";
-import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
+// import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { combineLatest, fromEvent, Observable, Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
@@ -165,31 +165,6 @@ export class DatasetDetailComponent
     return this._hasUnsavedChanges;
   }
 
-  isPI(): boolean {
-    if (this.user && this.dataset) {
-      if (this.user.username === "admin") {
-        return true;
-      }
-      if (this.dataset.type === "raw") {
-        return (
-          this.user.email.toLowerCase() ===
-          (this.dataset as unknown as RawDataset)[
-            "principalInvestigator"
-          ].toLowerCase()
-        );
-      }
-      if (this.dataset.type === "derived") {
-        return (
-          this.user.email.toLowerCase() ===
-          (this.dataset as unknown as DerivedDataset)[
-            "investigator"
-          ].toLowerCase()
-        );
-      }
-    }
-    return false;
-  }
-
   onClickKeyword(keyword: string) {
     this.store.dispatch(clearFacetsAction());
     this.store.dispatch(addKeywordFilterAction({ keyword }));
@@ -277,29 +252,6 @@ export class DatasetDetailComponent
     this.router.navigateByUrl("/samples/" + id);
   }
 
-  openSampleEditDialog() {
-    if (this.dataset) {
-      this.dialog
-        .open(SampleEditComponent, {
-          width: "1000px",
-          data: {
-            ownerGroup: this.dataset.ownerGroup,
-            sampleId: this.sample?.sampleId,
-          },
-        })
-        .afterClosed()
-        .subscribe((res) => {
-          if (res && this.dataset) {
-            const { sample } = res;
-            this.sample = sample;
-            const pid = this.dataset.pid;
-            const property = { sampleId: sample.sampleId };
-            this.store.dispatch(updatePropertyAction({ pid, property }));
-          }
-        });
-    }
-  }
-
   onSlidePublic(event: MatSlideToggleChange) {
     if (this.dataset) {
       const pid = this.dataset.pid;
@@ -351,11 +303,7 @@ export class DatasetDetailComponent
   }
 
   getImageUrl(encoded: string) {
-    const mimeType = this.base64MimeType(encoded);
-    if (mimeType === "application/pdf") {
-      return "assets/images/pdf-icon.svg";
-    }
-    return encoded;
+    return this.attachmentService.getImageUrl(encoded);
   }
 
   openAttachment(encoded: string) {

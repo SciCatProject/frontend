@@ -4,6 +4,7 @@ import { distinctUntilChanged, firstValueFrom } from "rxjs";
 import { DatasetApi } from "shared/sdk";
 import { selectDatasetsPerPage } from "state-management/selectors/datasets.selectors";
 import { AppConfigService } from "app-config.service";
+import { AttachmentService } from "./attachment.service";
 
 interface ThumbnailCache {
   [pid: string]: {
@@ -25,6 +26,7 @@ export class ThumbnailService {
   constructor(
     private datasetApi: DatasetApi,
     private store: Store,
+    private attachmentService: AttachmentService,
     private appConfigService: AppConfigService,
   ) {
     this.store
@@ -60,7 +62,7 @@ export class ThumbnailService {
     try {
       const encodedPid = encodeURIComponent(pid);
       const res = await firstValueFrom(this.datasetApi.thumbnail(encodedPid));
-      const thumbnail = res?.thumbnail || null;
+      const thumbnail = this.attachmentService.getImageUrl(res?.thumbnail);
 
       this.thumbnailCache[pid] = {
         value: thumbnail,
