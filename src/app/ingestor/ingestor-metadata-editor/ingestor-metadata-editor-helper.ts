@@ -1,3 +1,5 @@
+import { IIngestionRequestInformation } from "ingestor/ingestor/ingestor.component";
+
 export interface Schema {
   type?: string;
   properties?: {
@@ -19,8 +21,12 @@ export interface UISchema {
 export class IngestorMetadaEditorHelper {
   static generateUISchemaFromSchema(schema: string): UISchema {
     const parsedSchema: Schema = JSON.parse(schema);
-    
+
     const flattenProperties = (properties: any, parentKey: string = ''): any[] => {
+      if (!properties) {
+        return [];
+      }
+
       return Object.keys(properties).reduce((acc, key) => {
         const property = properties[key];
         const fullKey = parentKey ? `${parentKey}.${key}` : key;
@@ -47,7 +53,21 @@ export class IngestorMetadaEditorHelper {
       type: 'VerticalLayout',
       elements: flattenProperties(parsedSchema.properties)
     };
-    
+
     return uischema;
   }
+
+  static mergeUserAndExtractorMetadata(userMetadata: Object, extractorMetadata: Object, space: number): string {
+    return JSON.stringify({ ...userMetadata, ...extractorMetadata }, null, space);
+  }
+
+  static createEmptyRequestInformation = (): IIngestionRequestInformation => {
+    return {
+      selectedPath: '',
+      selectedMethod: '',
+      userMetaData: {},
+      extractorMetaData: {},
+      mergedMetaDataString: ''
+    };
+  };
 };

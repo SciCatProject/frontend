@@ -3,22 +3,36 @@ import { AppConfigService } from "app-config.service";
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { INGESTOR_API_ENDPOINTS_V1 } from "./ingestor-api-endpoints";
-import { IngestorNewTransferDialogComponent } from "./dialog/ingestor.new-transfer-dialog";
+import { IngestorNewTransferDialogComponent } from "./dialog/ingestor.new-transfer-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
-import { IngestorUserMetadataDialog } from "./dialog/ingestor.user-metadata-dialog";
-import { IngestorExtractorMetadataDialog } from "./dialog/ingestor.extractor-metadata-dialog";
-import { IngestorConfirmTransferDialog } from "./dialog/ingestor.confirm-transfer-dialog";
+import { IngestorUserMetadataDialog } from "./dialog/ingestor.user-metadata-dialog.component";
+import { IngestorExtractorMetadataDialog } from "./dialog/ingestor.extractor-metadata-dialog.component";
+import { IngestorConfirmTransferDialog } from "./dialog/ingestor.confirm-transfer-dialog.component";
+import { IngestorMetadaEditorHelper } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 
 interface ITransferDataListEntry {
   transferId: string;
   status: string;
 }
 
-interface IIngestionRequestInformation {
-  filePath: string;
-  availableMethods: string[];
-  userMetaData: string;
-  extractorMetaData: string;
+interface ISciCatHeader {
+  datasetName: string;
+  description: string;
+  creationLocation: string;
+  dataFormat: string;
+  ownerGroup: string;
+  type: string;
+  license: string;
+  keywords: string[];
+  scientificMetadata: string;
+}
+
+export interface IIngestionRequestInformation {
+  selectedPath: string;
+  selectedMethod: string;
+  userMetaData: Object;
+  extractorMetaData: Object;
+  mergedMetaDataString: string;
 }
 
 @Component({
@@ -45,7 +59,7 @@ export class IngestorComponent implements OnInit {
   errorMessage: string = '';
   returnValue: string = '';
 
-  metadataEditorData: string = ""; // TODO
+  createNewTransferData: IIngestionRequestInformation = IngestorMetadaEditorHelper.createEmptyRequestInformation();
 
   constructor(public appConfigService: AppConfigService, private http: HttpClient, private route: ActivatedRoute, private router: Router) { }
 
@@ -120,8 +134,8 @@ export class IngestorComponent implements OnInit {
     this.loading = true;
     this.returnValue = '';
     const payload = {
-      filePath: this.filePath,
-      metaData: 'todo'//this.metadataEditor.metadata
+      filePath: this.createNewTransferData.selectedPath,
+      metaData: this.createNewTransferData.mergedMetaDataString,
     };
 
     console.log('Uploading', payload);
@@ -179,8 +193,12 @@ export class IngestorComponent implements OnInit {
     this.errorMessage = '';
   }
 
+  onClickAddIngestion(): void {
+    this.createNewTransferData = IngestorMetadaEditorHelper.createEmptyRequestInformation();
+    this.onClickNext(0);
+  }
+
   onClickNext(step: number): void {
-    console.log('Next step', step);
     this.dialog.closeAll();
 
     let dialogRef = null;
@@ -188,26 +206,26 @@ export class IngestorComponent implements OnInit {
     switch (step) {
       case 0:
         dialogRef = this.dialog.open(IngestorNewTransferDialogComponent, {
-          data: { onClickNext: this.onClickNext.bind(this), metadataEditorData: this.metadataEditorData },
+          data: { onClickNext: this.onClickNext.bind(this), createNewTransferData: this.createNewTransferData },
           disableClose: true
         });
 
         break;
       case 1:
         dialogRef = this.dialog.open(IngestorUserMetadataDialog, {
-          data: { onClickNext: this.onClickNext.bind(this), metadataEditorData: this.metadataEditorData },
+          data: { onClickNext: this.onClickNext.bind(this), createNewTransferData: this.createNewTransferData },
           disableClose: true
         });
         break;
       case 2:
         dialogRef = this.dialog.open(IngestorExtractorMetadataDialog, {
-          data: { onClickNext: this.onClickNext.bind(this), metadataEditorData: this.metadataEditorData },
+          data: { onClickNext: this.onClickNext.bind(this), createNewTransferData: this.createNewTransferData },
           disableClose: true
         });
         break;
       case 3:
         dialogRef = this.dialog.open(IngestorConfirmTransferDialog, {
-          data: { onClickNext: this.onClickNext.bind(this), metadataEditorData: this.metadataEditorData },
+          data: { onClickNext: this.onClickNext.bind(this), createNewTransferData: this.createNewTransferData },
           disableClose: true
         });
         break;

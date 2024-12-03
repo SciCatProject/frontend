@@ -10,8 +10,9 @@
   <ingestor-dialog-stepper [activeStep]="3"></ingestor-dialog-stepper>
 
   <p>Confirm Metadata</p>
+
   <mat-form-field class="form-full-width">
-    <textarea matInput placeholder="metadata.json...." readonly></textarea>
+    <textarea class="metadata-preview" matInput readonly>{{ provideMergeMetaData }}</textarea>
   </mat-form-field>
 
 </mat-dialog-content>

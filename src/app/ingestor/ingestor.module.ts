@@ -16,14 +16,15 @@ import { MatTableModule } from "@angular/material/table";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatSelectModule } from "@angular/material/select";
 import { MatOptionModule } from "@angular/material/core";
-import { IngestorNewTransferDialogComponent } from "./ingestor/dialog/ingestor.new-transfer-dialog";
-import { IngestorUserMetadataDialog } from "./ingestor/dialog/ingestor.user-metadata-dialog";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { IngestorNewTransferDialogComponent } from "./ingestor/dialog/ingestor.new-transfer-dialog.component";
+import { IngestorUserMetadataDialog } from "./ingestor/dialog/ingestor.user-metadata-dialog.component";
 import { JsonFormsModule } from '@jsonforms/angular';
 import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
-import { IngestorExtractorMetadataDialog } from "./ingestor/dialog/ingestor.extractor-metadata-dialog";
-import { IngestorConfirmTransferDialog } from "./ingestor/dialog/ingestor.confirm-transfer-dialog";
+import { IngestorExtractorMetadataDialog } from "./ingestor/dialog/ingestor.extractor-metadata-dialog.component";
+import { IngestorConfirmTransferDialog } from "./ingestor/dialog/ingestor.confirm-transfer-dialog.component";
 import { MatStepperModule } from "@angular/material/stepper";
-import { IngestorDialogStepperComponent } from "./ingestor/dialog/ingestor.dialog-stepper.component";
+import { IngestorDialogStepperComponent } from "./ingestor/dialog/ingestor.dialog-stepper.component.component";
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { IngestorDialogStepperComponent } from "./ingestor/dialog/ingestor.dialo
     MatSelectModule,
     MatOptionModule,
     MatStepperModule,
+    MatAutocompleteModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
   ],

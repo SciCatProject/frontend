@@ -20,7 +20,7 @@
           Organizational Information
         </mat-card-header>
         <mat-card-content>
-          <app-metadata-editor [schema]="metadataSchema" [data]="metadataEditorData"
+          <app-metadata-editor [schema]="metadataSchema" [data]="createNewTransferData.userMetaData"
           (dataChange)="onDataChange($event)"></app-metadata-editor>
         </mat-card-content>
       </mat-card>

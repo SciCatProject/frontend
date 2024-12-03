@@ -14,7 +14,7 @@ import { IngestorMetadaEditorHelper, Schema, UISchema } from './ingestor-metadat
 })
 
 export class IngestorMetadataEditorComponent implements OnChanges {
-  @Input() data: string;
+  @Input() data: Object;
   @Input() schema: Schema;
 
   @Output() dataChange = new EventEmitter<string>();
