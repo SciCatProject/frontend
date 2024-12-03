@@ -31,6 +31,6 @@ export class PublicDownloadDialogComponent {
 
   onCancel(): void {
     this.dialogRef.close();
-    this.emailFormControl.errors;
+    this.emailFormControl.setErrors(null);
   }
 }
