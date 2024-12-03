@@ -27,6 +27,7 @@ export interface OneDepExperiment {
 
 export interface DepositionFiles {
     emName: EmFile;
+    id?: number, 
     nameFE: string;
     type: string,
     fileName: string,
@@ -94,6 +95,7 @@ export const DepositionMaskMap:DepositionFiles ={
 }
 export const DepositionAddMap:DepositionFiles ={
     emName: EmFile.AddMap,
+    id:0,
     nameFE: 'Additional Map',
     type: "add-map",
     fileName: "",
@@ -155,15 +157,15 @@ export const MethodsList: EmMethod[] = [
         viewValue: 'Helical',
         experiment: { type: "em", subtype: "helical" },
         files: [
+            DepositionImage, 
+            DepositionCoordinates, 
             DepositionMainMap, 
             DepositionMaskMap, 
             DepositionHalfMap1, 
             DepositionHalfMap2, 
-            DepositionAddMap, 
-            DepositionCoordinates, 
-            DepositionImage, 
             DepositionFSC,
             DepositionLayerLines,
+            DepositionAddMap, 
         ],
     },
     {
@@ -171,15 +173,15 @@ export const MethodsList: EmMethod[] = [
         viewValue: 'Single Particle',
         experiment: { type: "em", subtype: "single" },
         files: [
+            DepositionImage, 
+            DepositionCoordinates, 
             DepositionMainMap, 
             DepositionMaskMap, 
             DepositionHalfMap1, 
             DepositionHalfMap2, 
-            DepositionAddMap, 
-            DepositionCoordinates, 
-            DepositionImage, 
             DepositionFSC,
             DepositionLayerLines,
+            DepositionAddMap, 
         ],
     },
     {
@@ -187,15 +189,15 @@ export const MethodsList: EmMethod[] = [
         viewValue: 'Subtomogram Averaging',
         experiment: { type: "em", subtype: "subtomogram" },
         files:[
+            DepositionImage, 
+            DepositionCoordinates, 
             DepositionMainMap, 
             DepositionMaskMap, 
             DepositionHalfMap1, 
             DepositionHalfMap2, 
-            DepositionAddMap, 
-            DepositionCoordinates, 
-            DepositionImage, 
             DepositionFSC,
             DepositionLayerLines,
+            DepositionAddMap, 
         ],
     },
     {
@@ -203,12 +205,12 @@ export const MethodsList: EmMethod[] = [
         viewValue: 'Tomogram',
         experiment: { type: "em", subtype: "tomography" },
         files: [
+            DepositionImage, 
             DepositionMainMap, 
             DepositionMaskMap, 
-            DepositionAddMap, 
-            DepositionImage, 
             DepositionFSC,
             DepositionLayerLines,
+            DepositionAddMap, 
         ],
     },
     {
@@ -216,17 +218,17 @@ export const MethodsList: EmMethod[] = [
         viewValue: 'Electron Crystallography',
         experiment: { type: "ec" },
         files: [
+            DepositionImage, 
+            DepositionCoordinates, 
             DepositionMainMap, 
             DepositionMaskMap, 
             DepositionHalfMap1, 
             DepositionHalfMap2, 
             DepositionStructureFactors,
             DepositionMTZ,
-            DepositionAddMap, 
-            DepositionCoordinates, 
-            DepositionImage, 
             DepositionFSC,
             DepositionLayerLines,
+            DepositionAddMap, 
         ],
     },
 ];

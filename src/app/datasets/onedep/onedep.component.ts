@@ -18,7 +18,7 @@ import {
   selectCurrentUser
 } from "state-management/selectors/user.selectors";
 import { User } from "shared/sdk";
-import { MethodsList, OneDepExperiment, EmFile, DepositionFiles } from "./types/methods.enum"
+import { MethodsList, OneDepExperiment, EmFile, DepositionFiles, DepositionAddMap } from "./types/methods.enum"
 import { Subscription, fromEvent } from "rxjs";
 
 
@@ -42,6 +42,7 @@ export class OneDepComponent implements OnInit {
   emFile = EmFile;
   fileTypes: DepositionFiles[];
   detailsOverflow: string = 'hidden';
+  additionalMaps = 0;
 
 
   @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
@@ -113,7 +114,6 @@ export class OneDepComponent implements OnInit {
   }
   onMethodChange() {
     this.fileTypes = this.methodsList.find(mL => mL.value === this.form.value['emMethod']).files;
-    console.log("files", this.fileTypes)
     this.fileTypes.forEach((fT) => {
       if (fT.emName === this.emFile.MainMap || fT.emName === this.emFile.Image) {
         fT.required = true;
@@ -181,6 +181,19 @@ export class OneDepComponent implements OnInit {
       });
     }
   }
+  onFileAddMapSelected(event: Event, id: number) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+        // Use the ID to store the file uniquely for each "add-map"
+        this.selectedFile[`add-map-${id}`] = input.files[0];
+        this.fileTypes.forEach((fT) => {
+            if (fT.emName === this.emFile.AddMap && fT.id === id) {
+                fT.file = this.selectedFile[`add-map-${id}`];
+                fT.fileName = this.selectedFile[`add-map-${id}`].name;
+            }
+        });
+    }
+}
   isRequired(controlName: string): boolean {
     let value: boolean;
     this.fileTypes.forEach((fT) => {
@@ -197,6 +210,20 @@ export class OneDepComponent implements OnInit {
     if (!isNaN(parsedValue)) {
       this.fileTypes.forEach((fT) => {
         if (fT.emName === EmFile.MainMap || fT.emName === EmFile.HalfMap1 || fT.emName === EmFile.HalfMap2) {
+          fT.contour = parsedValue;
+        }
+      });
+    } else {
+      console.warn('Invalid number format:', input);
+    }
+  }
+  updateContourLevelAddMap(event: Event, id: number) {
+    const input = (event.target as HTMLInputElement).value.trim();
+    const normalizedInput = input.replace(',', '.');
+    const parsedValue = parseFloat(normalizedInput);
+    if (!isNaN(parsedValue)) {
+      this.fileTypes.forEach((fT) => {
+        if (fT.emName === this.emFile.AddMap && fT.id === id) {
           fT.contour = parsedValue;
         }
       });
@@ -227,6 +254,35 @@ export class OneDepComponent implements OnInit {
       }
     });
 
+  }
+  updateDetailsAddMap(event: Event, id:number) {
+    const textarea = event.target as HTMLTextAreaElement; // Cast to HTMLTextAreaElement
+    const value = textarea.value;
+    this.fileTypes.forEach((fT) => {
+      if (fT.emName === this.emFile.AddMap && fT.id === id) {
+        fT.details = value;
+      }
+    });
+
+  }
+  addMap(){
+    const nextId = this.fileTypes
+    .filter(file => file.emName === EmFile.AddMap)
+    .reduce((maxId, file) => (file.id > maxId ? file.id : maxId), 0) + 1;
+
+    const newMap: DepositionFiles = {
+        emName: EmFile.AddMap,
+        id: nextId,
+        nameFE: 'Additional Map ( ' + (nextId+1).toString() + ' )',
+        type: "add-map",
+        fileName: "",
+        file: null,
+        contour: 0.0,
+        details: "",
+        required: false,
+    };
+
+    this.fileTypes.push(newMap);
   }
 
   onDepositClick() {

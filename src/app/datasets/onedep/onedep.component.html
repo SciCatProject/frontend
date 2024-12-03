@@ -249,15 +249,23 @@
                                     <div *ngIf="selectedFile[fileType.emName]">
                                         <mat-icon>attach_file</mat-icon>
                                     </div>
-                                    <input type="file" #fileInput
-                                        (change)="onFileSelected($event, fileType.emName)"
-                                        style="display: none;" />
-                                    <div *ngIf="selectedFile[fileType.emName]"
-                                        class="fileName">
-                                        <p>Selected File: {{
-                                            selectedFile[fileType.emName].name }}
-                                        </p>
+
+                                    <div *ngIf="fileType.emName === 'add-map' && selectedFile['add-map-' + fileType.id]">
+                                        <mat-icon>attach_file</mat-icon>
                                     </div>
+                                    <input type="file" #fileInput
+                                        (change)="fileType.emName === 'add-map' ? onFileAddMapSelected($event, fileType.id) : onFileSelected($event, fileType.emName)"
+                                        style="display: none;" />
+                                    <div 
+                                        *ngIf="fileType.emName !== 'add-map' && selectedFile[fileType.emName]"
+                                        class="fileName">
+                                        <p>Selected File: {{ selectedFile[fileType.emName]?.name }}</p>
+                                    </div>
+                                    <div *ngIf="fileType.emName === 'add-map' && selectedFile['add-map-' + fileType.id]"
+                                        class="fileName">
+                                        <p>Selected File: {{ selectedFile['add-map-' + fileType.id]?.name }}</p>
+                                    </div>
+                                    
                                 </div>
 
                                 <div class="input-container">
@@ -269,7 +277,11 @@
                                             <input matInput type="number"
                                                 placeholder="e.g. 0.0" required
                                                 [value]="fileType.contour || ''"
-                                                (input)="fileType.emName === 'vo-map' ? updateContourLevelMain($event) : updateContourLevel($event, fileType.emName)" />
+                                                (input)="fileType.emName === 'vo-map' ? updateContourLevelMain($event) : 
+                                                         fileType.emName === 'add-map' ? updateContourLevelAddMap($event, fileType.id) : 
+                                                         updateContourLevel($event, fileType.emName)" />
+
+                                                         
                                         </mat-form-field>
                                         <!-- Error Message -->
                                         <!-- FIX ME -->
@@ -282,13 +294,22 @@
                                         <textarea matInput
                                             placeholder="Enter details..."
                                             rows="1"
-                                            (input)="updateDetails($event, fileType.emName)"
+                                            (input)="fileType.emName === 'add-map' ? updateDetailsAddMap($event, fileType.id) : updateDetails($event,fileType.emName)"
                                             (input)="autoGrow($event)"
                                             [style.overflow]="detailsOverflow"></textarea>
                                     </mat-form-field>
                                 </div>
                             </mat-card-content>
                         </ng-container>
+                        <div *ngIf="fileType.emName === 'add-map' && fileType.id ===0">
+                            <button 
+                                mat-icon-button 
+                                matTooltip="Add more maps" 
+                                aria-label="Add another map" 
+                                (click)="addMap()">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </div>
                     </mat-card>
 
 
