@@ -18,7 +18,7 @@ import {
   selectCurrentUser
 } from "state-management/selectors/user.selectors";
 import { User } from "shared/sdk";
-import { MethodsList, OneDepExperiment, Experiments, EmFile, EmFiles } from "./types/methods.enum"
+import { MethodsList, OneDepExperiment, EmFile, DepositionFiles } from "./types/methods.enum"
 import { Subscription, fromEvent } from "rxjs";
 
 
@@ -40,22 +40,11 @@ export class OneDepComponent implements OnInit {
   experiment: OneDepExperiment
   selectedFile: { [key: string]: File | null } = {};
   emFile = EmFile;
-  files = EmFiles;
+  fileTypes: DepositionFiles[];
   detailsOverflow: string = 'hidden';
 
 
   @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
-
-  fileTypes = [
-    { header: 'Main Map', key: this.emFile.MainMap },
-    { header: 'Half Map (1)', key: this.emFile.HalfMap1 },
-    { header: 'Half Map (2)', key: this.emFile.HalfMap2 },
-    { header: 'Mask Map', key: this.emFile.MaskMap },
-    { header: 'Additional Map', key: this.emFile.AddMap },
-    { header: 'Coordinates', key: this.emFile.Coordinates },
-    { header: 'Public Image', key: this.emFile.Image },
-    { header: 'FSC-XML', key: this.emFile.FSC },
-  ];
 
   constructor(public appConfigService: AppConfigService,
     private store: Store,
@@ -95,31 +84,74 @@ export class OneDepComponent implements OnInit {
       associatedMap: new FormControl(null, Validators.required),
       compositeMap: new FormControl(null, Validators.required),
       emdbId: new FormControl(""),
-      orcid: this.fb.array(['']),
+      orcid: this.fb.array([
+        this.fb.group({
+          orcidId: ['', [Validators.required, Validators.pattern(/^(\d{4}-){3}\d{4}$/)]],
+        })
+      ]),
     })
   }
-
-  get orcidArray(): FormArray {
-    return this.form.get('orcid') as FormArray;
-  }
-
   hasUnsavedChanges() {
     return this._hasUnsavedChanges;
   }
   onHasUnsavedChanges($event: boolean) {
     this._hasUnsavedChanges = $event;
   }
-  addOrcidField(): void {
+  orcidArray(): FormArray {
+    return this.form.get('orcid') as FormArray;
+  }
+  addOrcidField() {
     const orcidField = this.fb.group({
       orcidId: ['', [Validators.required, Validators.pattern(/^(\d{4}-){3}\d{4}$/)]],
     });
-    this.orcidArray.push(orcidField);
+    this.orcidArray().push(orcidField);
   }
-  removeOrcidField(index: number): void {
-    this.orcidArray.removeAt(index);
+  removeOrcidField(index: number) {
+    if (this.orcidArray().length > 1) { 
+      this.orcidArray().removeAt(index);
+    }
+  }
+  onMethodChange() {
+    this.fileTypes = this.methodsList.find(mL => mL.value === this.form.value['emMethod']).files;
+    console.log("files", this.fileTypes)
+    this.fileTypes.forEach((fT) => {
+      if (fT.emName === this.emFile.MainMap || fT.emName === this.emFile.Image) {
+        fT.required = true;
+      }else{
+        fT.required = false;
+      }
+    });
+    switch (this.form.value['emMethod']) {
+      case 'helical':
+        this.fileTypes.forEach((fT) => {
+          if (fT.emName === this.emFile.HalfMap1 || fT.emName === this.emFile.HalfMap2) {
+            fT.required = true;
+          }
+        });
+        break;
+      case "single-particle":
+        this.fileTypes.forEach((fT) => {
+          if (fT.emName === this.emFile.HalfMap1 || fT.emName === this.emFile.HalfMap2 || fT.emName === this.emFile.MaskMap) {
+            fT.required = true;
+          }
+        });
+        break;
+    }
+
   }
 
-  autoGrow(event: Event): void {
+  onPDB(event: any) {
+    const input = event.value;
+    if (input === 'true') {
+      this.fileTypes.forEach((fT) => {
+        if (fT.emName === this.emFile.Coordinates ) {
+          fT.required = true;
+        }
+      });
+    }
+  }
+
+  autoGrow(event: Event) {
     const textarea = event.target as HTMLTextAreaElement;
     const lineHeight = parseInt(getComputedStyle(textarea).lineHeight, 10);
     const maxLines = 5;
@@ -134,25 +166,38 @@ export class OneDepComponent implements OnInit {
     // Update overflow property based on height
     this.detailsOverflow = textarea.scrollHeight > newHeight ? 'auto' : 'hidden';
   }
-  onChooseFile(fileInput: HTMLInputElement): void {
+  onChooseFile(fileInput: HTMLInputElement) {
     fileInput.click();
   }
   onFileSelected(event: Event, controlName: EmFile) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile[controlName] = input.files[0];
-      this.files[controlName].file = this.selectedFile[controlName];
-      this.files[controlName].name = this.selectedFile[controlName].name;
+      this.fileTypes.forEach((fT) => {
+        if (fT.emName === controlName) {
+          fT.file = this.selectedFile[controlName];
+          fT.fileName = this.selectedFile[controlName].name;
+        }
+      });
     }
+  }
+  isRequired(controlName: string): boolean {
+    let value: boolean;
+    this.fileTypes.forEach((fT) => {
+      if (fT.emName === controlName) {
+        value = fT.required;
+      }
+    });
+    return value;
   }
   updateContourLevelMain(event: Event) {
     const input = (event.target as HTMLInputElement).value.trim();
     const normalizedInput = input.replace(',', '.');
     const parsedValue = parseFloat(normalizedInput);
     if (!isNaN(parsedValue)) {
-      [EmFile.MainMap, EmFile.HalfMap1, EmFile.HalfMap2].forEach((key) => {
-        if (this.files[key]) {
-          this.files[key].contour = parsedValue;
+      this.fileTypes.forEach((fT) => {
+        if (fT.emName === EmFile.MainMap || fT.emName === EmFile.HalfMap1 || fT.emName === EmFile.HalfMap2) {
+          fT.contour = parsedValue;
         }
       });
     } else {
@@ -164,7 +209,11 @@ export class OneDepComponent implements OnInit {
     const normalizedInput = input.replace(',', '.');
     const parsedValue = parseFloat(normalizedInput);
     if (!isNaN(parsedValue)) {
-      this.files[controlName].contour = parsedValue;
+      this.fileTypes.forEach((fT) => {
+        if (fT.emName === controlName) {
+          fT.contour = parsedValue;
+        }
+      });
     } else {
       console.warn('Invalid number format:', input);
     }
@@ -172,10 +221,14 @@ export class OneDepComponent implements OnInit {
   updateDetails(event: Event, controlName: EmFile) {
     const textarea = event.target as HTMLTextAreaElement; // Cast to HTMLTextAreaElement
     const value = textarea.value;
-    if (this.files[controlName]) {
-      this.files[controlName].details = value;
-    }
+    this.fileTypes.forEach((fT) => {
+      if (fT.emName === controlName) {
+        fT.details = value;
+      }
+    });
+
   }
+
   onDepositClick() {
     const formDataToSend = new FormData();
     formDataToSend.append('email', this.form.value.email);
@@ -185,12 +238,13 @@ export class OneDepComponent implements OnInit {
     // emdbId: this.form.value.emdbId, 
     var fileMetadata = []
 
-    for (const key in this.files) {
-      if (this.files[key].file) {
-        formDataToSend.append('file', this.files[key].file);
-        fileMetadata.push({ name: this.files[key].name, type: this.files[key].type, contour: this.files[key].contour, details: this.files[key].details });
+    // for (const fI in this.fileTypes) {
+    this.fileTypes.forEach((fT) => {
+      if (fT.file) {
+        formDataToSend.append('file', fT.file);
+        fileMetadata.push({ name: fT.fileName, type: fT.type, contour: fT.contour, details: fT.details });
       }
-    }
+    });
     formDataToSend.append('fileMetadata', JSON.stringify(fileMetadata));
     this.http.post("http://localhost:8080/onedep", formDataToSend, {
       headers: {}
@@ -205,34 +259,34 @@ export class OneDepComponent implements OnInit {
 
   }
 
-  onCreateClick(){
-    let bearer = 'Bearer ' + this.form.value['jwtToken'];
-    const headers = new HttpHeaders()
-    .append(
-      'Content-Type',
-      'application/json'
-    )
-    .append( 
-      'Authorization', 
-      bearer
-    );
+  //   onCreateClick() {
+  //     let bearer = 'Bearer ' + this.form.value['jwtToken'];
+  //     const headers = new HttpHeaders()
+  //       .append(
+  //         'Content-Type',
+  //         'application/json'
+  //       )
+  //       .append(
+  //         'Authorization',
+  //         bearer
+  //       );
 
-    const body=JSON.stringify(
-      { 
-        "email": "sofya.laskina@epfl.ch",
-        "users": ["0009-0003-3665-5367"],
-        "country": "United States",
-        "experiments": [Experiments[this.form.value.emMethod]],
-      }
-    );
+  //     const body = JSON.stringify(
+  //       {
+  //         "email": "sofya.laskina@epfl.ch",
+  //         "users": ["0009-0003-3665-5367"],
+  //         "country": "United States",
+  //         "experiments": [Experiments[this.form.value.emMethod]],
+  //       }
+  //     );
 
-    this.http
-      .post('https://onedep-depui-test.wwpdb.org/deposition/api/v1/depositions/new', body, {
-        headers: headers,
-      })
-      .subscribe((res) => console.log(res));
+  //     this.http
+  //       .post('https://onedep-depui-test.wwpdb.org/deposition/api/v1/depositions/new', body, {
+  //         headers: headers,
+  //       })
+  //       .subscribe((res) => console.log(res));
 
-  }
+  //   }
 
 }
 

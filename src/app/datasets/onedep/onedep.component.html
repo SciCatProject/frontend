@@ -84,7 +84,7 @@
                             <!-- Link the orcid FormArray -->
                             <div formArrayName="orcid">
                                 <ng-container
-                                    *ngFor="let field of orcidArray.controls; let i = index">
+                                    *ngFor="let field of orcidArray().controls; let i = index">
                                     <div [formGroupName]="i">
                                         <mat-form-field 
                                             class="data-field"
@@ -125,13 +125,17 @@
                             Method</h2>
                         <mat-form-field class="method-name">
                             <mat-label>experimental method</mat-label>
-                            <mat-select required formControlName="emMethod"
-                                name="method">
+                            <mat-select 
+                                required
+                                formControlName="emMethod"
+                                name="method"
+                                (selectionChange)="onMethodChange()">
                                 <mat-option *ngFor="let method of methodsList"
                                     [value]="method.value">
                                     {{ method.viewValue }}
                                 </mat-option>
                             </mat-select>
+                            
                             <!-- Error Message -->
                             <div *ngIf="form.get('emMethod')?.invalid && form.get('emMethod')?.touched"
                                 class="error">
@@ -141,13 +145,14 @@
 
 
                         <!-- Question 2: PDB Deposition -->
-                        <tr>
+                        <tr *ngIf="form.value['emMethod'] && form.value['emMethod'] !== 'tomogram'">
                             <th class="questionnaire">Are you deposing
                                 coordinates with this
                                 submission? (for PDB)</th>
                             <td>
                                 <mat-radio-group reuired
-                                    formControlName="deposingCoordinates">
+                                    formControlName="deposingCoordinates"
+                                    (change)="onPDB($event)">
                                     <mat-radio-button name="deposingCoordinates"
                                         value=true>
                                         Yes
@@ -160,7 +165,7 @@
                             </td>
                         </tr>
                         <tr
-                            *ngIf="form.get('deposingCoordinates')?.value === 'true'">
+                            *ngIf="form.value['emMethod'] && form.get('deposingCoordinates')?.value === 'true'">
                             <th>Has an associated map been deposited to EMDB?
                             </th>
                             <td>
@@ -180,7 +185,7 @@
 
                         <!-- EMDB Identifier Field -->
                         <tr
-                            *ngIf="form.get('associatedMap').value === 'true' && form.get('deposingCoordinates').value === 'true'">
+                            *ngIf="form.value['emMethod'] && form.get('associatedMap').value === 'true' && form.get('deposingCoordinates').value === 'true'">
                             <th>EMDB Identifier</th>
                             <td>
                                 <mat-form-field class="EMDB-ID">
@@ -192,7 +197,7 @@
                         </tr>
 
                         <!-- Final Question: Composite Map -->
-                        <tr>
+                        <tr *ngIf=" form.value['emMethod']">
                             <th class="questionnaire">Is this a composite map?
                             </th>
                             <td>
@@ -211,13 +216,13 @@
                         </tr>
                     </div>
                 </div>
-                <button class="submitDep" mat-raised-button color="primary"
+                <!-- <button class="submitDep" mat-raised-button color="primary"
                 (click)="onCreateClick()">
                 Create Deposition
-                </button>
+                </button> -->
             </mat-card>
 
-
+            <!-- Attachments -->
             <mat-card>
                 <mat-card-header class="file-header">
                     <div mat-card-avatar class="section-icon">
@@ -229,10 +234,10 @@
                     <mat-card *ngFor="let fileType of fileTypes"
                         class="fileCard">
                         <ng-container
-                            *ngIf="fileType.key !== 'co-cif' || form.get('deposingCoordinates').value === 'true'">
+                            *ngIf="fileType.emName !== 'co-cif' || form.get('deposingCoordinates').value === 'true'">
                             <mat-card-header>
-                                <mat-card-title>{{ fileType.header
-                                    }}</mat-card-title>
+                                <mat-card-title>{{ fileType.nameFE}} <span class="required-asterisk" *ngIf="isRequired(fileType.emName)"> *</span></mat-card-title>
+                                
                             </mat-card-header>
                             <mat-card-content>
                                 <div class="file-selection-container">
@@ -241,30 +246,30 @@
                                         (click)="onChooseFile(fileInput)">
                                         Choose File
                                     </button>
-                                    <div *ngIf="selectedFile[fileType.key]">
+                                    <div *ngIf="selectedFile[fileType.emName]">
                                         <mat-icon>attach_file</mat-icon>
                                     </div>
                                     <input type="file" #fileInput
-                                        (change)="onFileSelected($event, fileType.key)"
+                                        (change)="onFileSelected($event, fileType.emName)"
                                         style="display: none;" />
-                                    <div *ngIf="selectedFile[fileType.key]"
+                                    <div *ngIf="selectedFile[fileType.emName]"
                                         class="fileName">
                                         <p>Selected File: {{
-                                            selectedFile[fileType.key].name }}
+                                            selectedFile[fileType.emName].name }}
                                         </p>
                                     </div>
                                 </div>
 
                                 <div class="input-container">
                                     <ng-container
-                                        *ngIf="files[fileType.key]?.contour !== undefined">
+                                        *ngIf="fileType.contour !== undefined">
                                         <mat-form-field appearance="outline"
                                             class="contour-level">
                                             <mat-label>Contour Level</mat-label>
                                             <input matInput type="number"
                                                 placeholder="e.g. 0.0" required
-                                                [value]="files[fileType.key]?.contour || ''"
-                                                (input)="fileType.key === 'vo-map' ? updateContourLevelMain($event) : updateContourLevel($event, fileType.key)" />
+                                                [value]="fileType.contour || ''"
+                                                (input)="fileType.emName === 'vo-map' ? updateContourLevelMain($event) : updateContourLevel($event, fileType.emName)" />
                                         </mat-form-field>
                                         <!-- Error Message -->
                                         <!-- FIX ME -->
@@ -277,7 +282,7 @@
                                         <textarea matInput
                                             placeholder="Enter details..."
                                             rows="1"
-                                            (input)="updateDetails($event, fileType.key)"
+                                            (input)="updateDetails($event, fileType.emName)"
                                             (input)="autoGrow($event)"
                                             [style.overflow]="detailsOverflow"></textarea>
                                     </mat-form-field>
