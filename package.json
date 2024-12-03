@@ -29,7 +29,7 @@
     "@angular/platform-server": "^16",
     "@angular/router": "^16",
     "@angular/service-worker": "^16",
-    "@ngbracket/ngx-layout": "^16.0.0",
+    "@ngbracket/ngx-layout": "^18.0.0",
     "@ngrx/effects": "^16",
     "@ngrx/router-store": "^16",
     "@ngrx/store": "^16",
