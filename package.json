@@ -48,7 +48,7 @@
     "shortid": "^2.2.16",
     "socket.io-client": "^4.7.2",
     "tslib": "^2.4.0",
-    "zone.js": "^0.13"
+    "zone.js": "^0.15"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16",
