@@ -20,10 +20,6 @@ export enum EmFile {
     MTZ = "xs-mtz",
 };
 
-export interface OneDepExperiment {
-    type: string;
-    subtype?: string;
-}
 
 export interface DepositionFiles {
     emName: EmFile;
@@ -40,7 +36,6 @@ export interface DepositionFiles {
 interface EmMethod {
     value: EmType;
     viewValue: string;
-    experiment: OneDepExperiment;
     files:  DepositionFiles[];
 }
 
@@ -155,7 +150,6 @@ export const MethodsList: EmMethod[] = [
     {
         value: EmType.Helical,
         viewValue: 'Helical',
-        experiment: { type: "em", subtype: "helical" },
         files: [
             DepositionImage, 
             DepositionCoordinates, 
@@ -171,7 +165,6 @@ export const MethodsList: EmMethod[] = [
     {
         value: EmType.SingleParticle,
         viewValue: 'Single Particle',
-        experiment: { type: "em", subtype: "single" },
         files: [
             DepositionImage, 
             DepositionCoordinates, 
@@ -187,7 +180,6 @@ export const MethodsList: EmMethod[] = [
     {
         value: EmType.SubtomogramAveraging,
         viewValue: 'Subtomogram Averaging',
-        experiment: { type: "em", subtype: "subtomogram" },
         files:[
             DepositionImage, 
             DepositionCoordinates, 
@@ -203,7 +195,6 @@ export const MethodsList: EmMethod[] = [
     {
         value: EmType.Tomogram,
         viewValue: 'Tomogram',
-        experiment: { type: "em", subtype: "tomography" },
         files: [
             DepositionImage, 
             DepositionMainMap, 
@@ -216,7 +207,6 @@ export const MethodsList: EmMethod[] = [
     {
         value: EmType.ElectronCristallography,
         viewValue: 'Electron Crystallography',
-        experiment: { type: "ec" },
         files: [
             DepositionImage, 
             DepositionCoordinates, 
