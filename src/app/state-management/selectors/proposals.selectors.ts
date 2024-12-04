@@ -20,7 +20,8 @@ export const selectParentProposal = createSelector(
 
 export const selectCurrentAttachments = createSelector(
   selectCurrentProposal,
-  (proposal) => (proposal ? proposal.attachments : []),
+  // TODO: Check if this is still relevant because proposal doesn't have attachments in the schema
+  (proposal) => (proposal ? (proposal as any).attachments : []),
 );
 
 export const selectProposalDatasets = createSelector(

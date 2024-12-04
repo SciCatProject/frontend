@@ -1,21 +1,24 @@
 import { samplesReducer } from "./samples.reducer";
 import { initialSampleState } from "../state/samples.store";
 import * as fromActions from "../actions/samples.actions";
+import { SampleFilters, ScientificCondition } from "../models";
 import {
-  Attachment,
-  Sample,
-  Dataset,
-  SampleFilters,
-  ScientificCondition,
-} from "../models";
-import { SampleInterface } from "shared/sdk";
+  createMock,
+  mockDataset as dataset,
+  mockAttachment as attachment,
+} from "shared/MockStubs";
+import { SampleClass } from "@scicatproject/scicat-sdk-ts";
 
-const data: SampleInterface = {
+const sample = createMock<SampleClass>({
   sampleId: "testId",
   ownerGroup: "testGroup",
-  attachments: [],
-};
-const sample = new Sample(data);
+  createdBy: "",
+  updatedBy: "",
+  createdAt: new Date().toString(),
+  updatedAt: new Date().toString(),
+  accessGroups: [],
+  isPublished: false,
+});
 
 describe("SamplesReducer", () => {
   describe("on fetchSamplesCompleteAction", () => {
@@ -61,7 +64,7 @@ describe("SamplesReducer", () => {
 
   describe("on fetchSampleDatasetsCompleteAction", () => {
     it("should set datasets", () => {
-      const datasets = [new Dataset()];
+      const datasets = [dataset];
       const action = fromActions.fetchSampleDatasetsCompleteAction({
         datasets,
       });
@@ -105,7 +108,6 @@ describe("SamplesReducer", () => {
     it("should set attachments for currentSample", () => {
       initialSampleState.currentSample = sample;
 
-      const attachment = new Attachment();
       const action = fromActions.addAttachmentCompleteAction({
         attachment,
       });
@@ -119,7 +121,6 @@ describe("SamplesReducer", () => {
     it("should set attachments for currentSample", () => {
       initialSampleState.currentSample = sample;
 
-      const attachment = new Attachment();
       const action = fromActions.updateAttachmentCaptionCompleteAction({
         attachment,
       });
@@ -132,7 +133,6 @@ describe("SamplesReducer", () => {
   describe("on removeAttachmentCompleteAction", () => {
     it("should set attachments for currentSample", () => {
       initialSampleState.currentSample = sample;
-      const attachment = new Attachment();
       const attachmentId = "testId";
       attachment.id = attachmentId;
       initialSampleState.attachments = [attachment];

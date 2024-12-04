@@ -4,8 +4,7 @@ import { Store } from "@ngrx/store";
 import { Router } from "@angular/router";
 
 import { LogbooksTableComponent } from "./logbooks-table.component";
-import { MockStore } from "shared/MockStubs";
-import { Logbook } from "shared/sdk";
+import { MockStore, mockLogbook } from "shared/MockStubs";
 import { MatTableModule } from "@angular/material/table";
 import { MatIconModule } from "@angular/material/icon";
 import { MatCardModule } from "@angular/material/card";
@@ -52,7 +51,7 @@ describe("LogbooksTableComponent", () => {
   describe("#onClick()", () => {
     it("should navigate to a logbook", () => {
       const name = "testName";
-      const logbook = new Logbook();
+      const logbook = mockLogbook;
       logbook.name = name;
 
       component.onClick(logbook);

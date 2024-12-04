@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Logbook } from "shared/sdk";
+import { Logbook } from "@scicatproject/scicat-sdk-ts";
 import { LogbookFilters } from "state-management/models";
 
 export const fetchLogbooksAction = createAction("[Logbook] Fetch Logbooks");

@@ -8,7 +8,7 @@ import {
 import { Store, StoreModule } from "@ngrx/store";
 
 import { ReduceComponent } from "./reduce.component";
-import { MockStore } from "shared/MockStubs";
+import { MockStore, createMock, mockDataset } from "shared/MockStubs";
 
 import { Router } from "@angular/router";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -17,7 +17,6 @@ import {
   selectOpenwhiskResult,
   selectDatasets,
 } from "state-management/selectors/datasets.selectors";
-import { Dataset } from "shared/sdk";
 import { reduceDatasetAction } from "state-management/actions/datasets.actions";
 import { FormBuilder } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
@@ -29,6 +28,7 @@ import { MatStepperModule } from "@angular/material/stepper";
 import { MatTableModule } from "@angular/material/table";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatOptionModule } from "@angular/material/core";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
 
 describe("ReduceComponent", () => {
   let component: ReduceComponent;
@@ -97,7 +97,7 @@ describe("ReduceComponent", () => {
     it("should dispatch a reduceDatasetAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const dataset = new Dataset();
+      const dataset = mockDataset;
 
       component.reduceDataset(dataset);
 
@@ -110,7 +110,7 @@ describe("ReduceComponent", () => {
 
   describe("#onRowClick()", () => {
     it("should navigate to a dataset", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       component.onRowClick(dataset);
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);

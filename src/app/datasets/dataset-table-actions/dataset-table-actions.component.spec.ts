@@ -8,10 +8,10 @@ import {
 } from "@angular/core/testing";
 
 import { DatasetTableActionsComponent } from "./dataset-table-actions.component";
-import { MockStore, MockArchivingService } from "shared/MockStubs";
+import { MockStore, MockArchivingService, mockDataset } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Store, StoreModule } from "@ngrx/store";
-import { ArchViewMode, Dataset } from "state-management/models";
+import { ArchViewMode } from "state-management/models";
 import {
   setArchiveViewModeAction,
   setPublicViewModeAction,
@@ -130,7 +130,7 @@ describe("DatasetTableActionsComponent", () => {
     });
 
     it("should return false if the length of selectedSets is larger than 0", () => {
-      component.selectedSets = [new Dataset()];
+      component.selectedSets = [mockDataset];
 
       const isEmpty = component.isEmptySelection();
 

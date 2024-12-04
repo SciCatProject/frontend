@@ -2,7 +2,10 @@ import { Component, Inject } from "@angular/core";
 import { FormControl, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
-import { UserIdentityApi } from "shared/sdk";
+import {
+  UserIdentitiesService,
+  UsersService,
+} from "@scicatproject/scicat-sdk-ts";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
 
@@ -23,7 +26,7 @@ export class ShareDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<ShareDialogComponent>,
     public store: Store,
-    public userIdentityApi: UserIdentityApi,
+    public userIdentititiesService: UserIdentitiesService,
     @Inject(MAT_DIALOG_DATA)
     data: {
       infoMessage: string;
@@ -41,10 +44,12 @@ export class ShareDialogComponent {
 
   add = async (email: string): Promise<void> => {
     try {
-      const isValidEmail = await this.userIdentityApi
-        .isValidEmail({
-          where: { "profile.email": email.trim() },
-        })
+      const isValidEmail = await this.userIdentititiesService
+        .userIdentitiesControllerIsValidEmail(
+          JSON.stringify({
+            where: { "profile.email": email.trim() },
+          }),
+        )
         .toPromise();
 
       if (!isValidEmail) {

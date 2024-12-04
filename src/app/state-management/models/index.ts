@@ -1,40 +1,7 @@
 import {
-  User,
-  UserIdentity,
-  UserSetting,
-  Job,
-  Dataset,
-  RawDataset,
-  Proposal,
-  Policy,
-  Sample,
-  Logbook,
-  PublishedData,
-  Attachment,
-  Instrument,
-} from "shared/sdk/models";
-export {
-  User,
-  UserIdentity,
-  UserSetting,
-  Job,
-  Dataset,
-  RawDataset,
-  Proposal,
-  Policy,
-  Sample,
-  Logbook,
-  PublishedData,
-  Attachment,
-  Instrument,
-};
-
-import { DatasetInterface } from "shared/sdk";
-import {
   ConditionConfig,
   FilterConfig,
 } from "shared/modules/filters/filters.module";
-export { DatasetInterface };
 
 export interface Settings {
   tapeCopies: string;

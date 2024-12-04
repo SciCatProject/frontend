@@ -41,10 +41,9 @@ export class UserSettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.vm$.subscribe(
-      (settings) =>
-        (this.tokenValue = settings.scicatToken.replace("Bearer ", "")),
-    );
+    this.vm$.subscribe((settings) => {
+      this.tokenValue = settings.scicatToken;
+    });
 
     this.store.dispatch(fetchCurrentUserAction());
     this.store.dispatch(fetchScicatTokenAction());

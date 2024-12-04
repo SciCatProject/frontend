@@ -6,7 +6,11 @@ import {
   PickedFile,
   SubmitCaptionEvent,
 } from "shared/modules/file-uploader/file-uploader.component";
-import { Attachment, Dataset, User } from "shared/sdk";
+import {
+  Attachment,
+  OutputDatasetObsoleteDto,
+  ReturnedUserDto,
+} from "@scicatproject/scicat-sdk-ts";
 import { OwnershipService } from "shared/services/ownership.service";
 import {
   addAttachmentAction,
@@ -28,8 +32,8 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
   attachments: Attachment[] = [];
   subscriptions: Subscription[] = [];
   attachment: Partial<Attachment> = {};
-  dataset: Dataset | undefined;
-  user: User | undefined;
+  dataset: OutputDatasetObsoleteDto | undefined;
+  user: ReturnedUserDto | undefined;
   constructor(
     private store: Store,
     private ownershipService: OwnershipService,
@@ -82,6 +86,7 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
           datasetId: this.dataset.pid,
           attachmentId: event.attachmentId,
           caption: event.caption,
+          ownerGroup: this.dataset.ownerGroup,
         }),
       );
     }

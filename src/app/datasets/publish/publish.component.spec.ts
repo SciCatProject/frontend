@@ -9,7 +9,6 @@ import {
   MockActivatedRoute,
 } from "shared/MockStubs";
 import { Store, ActionsSubject } from "@ngrx/store";
-import { PublishedDataApi } from "shared/sdk";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { of } from "rxjs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
@@ -25,6 +24,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatButtonModule } from "@angular/material/button";
 import { AppConfigService } from "app-config.service";
+import { PublishedDataService } from "@scicatproject/scicat-sdk-ts";
 
 const getConfig = () => ({
   facility: "test",
@@ -65,7 +65,7 @@ describe("PublishComponent", () => {
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: ActionsSubject, useValue: of({}) },
           { provide: AppConfigService, useValue: { getConfig } },
-          { provide: PublishedDataApi, useClass: MockPublishedDataApi },
+          { provide: PublishedDataService, useClass: MockPublishedDataApi },
           { provide: Router, useClass: MockRouter },
           { provide: Store, useClass: MockStore },
         ],

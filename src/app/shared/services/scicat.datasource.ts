@@ -3,7 +3,6 @@ import { Observable, BehaviorSubject, of, Subscription } from "rxjs";
 import { ScicatDataService } from "./scicat-data-service";
 import { catchError, finalize } from "rxjs/operators";
 import { ExportExcelService } from "./export-excel.service";
-import { LoopBackConfig } from "shared/sdk";
 import { Column } from "shared/modules/shared-table/shared-table.module";
 import { AppConfig, AppConfigService } from "app-config.service";
 
@@ -33,12 +32,9 @@ export class SciCatDataSource implements DataSource<any> {
     private tableDefinition: any,
   ) {
     this.appConfig = this.appConfigService.getConfig();
+    // TODO: Check if we can get the api version somehow or add it in the configuration instеad.
     this.url =
-      this.appConfig.lbBaseURL +
-      "/" +
-      LoopBackConfig.getApiVersion() +
-      "/" +
-      this.tableDefinition.collection;
+      this.appConfig.lbBaseURL + "/api/v3/" + this.tableDefinition.collection;
     this.collection = this.tableDefinition.collection;
     this.columnsdef = this.tableDefinition.columns;
 
@@ -46,7 +42,7 @@ export class SciCatDataSource implements DataSource<any> {
       // convert array of objects into array of arrays
       this.dataForExcel = [];
       if (data.length > 0) {
-        data.forEach((row: any) => {
+        data.forEach((row) => {
           const rowSorted = this.columnsdef.map((col) =>
             resolvePath(row, col.id, null),
           );

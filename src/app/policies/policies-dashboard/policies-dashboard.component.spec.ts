@@ -8,8 +8,7 @@ import {
 import { PoliciesDashboardComponent } from "./policies-dashboard.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { SharedScicatFrontendModule } from "shared/shared.module";
-import { DatasetApi, Policy } from "shared/sdk";
-import { MockDatasetApi, MockStore } from "shared/MockStubs";
+import { MockDatasetApi, MockStore, mockPolicy } from "shared/MockStubs";
 import { StoreModule, Store } from "@ngrx/store";
 import {
   PageChangeEvent,
@@ -44,6 +43,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
 
 describe("PoliciesDashboardComponent", () => {
   let component: PoliciesDashboardComponent;
@@ -95,7 +95,7 @@ describe("PoliciesDashboardComponent", () => {
     TestBed.overrideComponent(PoliciesDashboardComponent, {
       set: {
         providers: [
-          { provide: DatasetApi, useClass: MockDatasetApi },
+          { provide: DatasetsService, useClass: MockDatasetApi },
           { provide: Router, useValue: router },
         ],
       },
@@ -292,7 +292,7 @@ describe("PoliciesDashboardComponent", () => {
 
       const checkboxEvent: CheckboxEvent = {
         event: new MatCheckboxChange(),
-        row: new Policy(),
+        row: mockPolicy,
       };
       checkboxEvent.event.checked = true;
       component.onSelectOne(checkboxEvent);
@@ -308,7 +308,7 @@ describe("PoliciesDashboardComponent", () => {
 
       const checkboxEvent: CheckboxEvent = {
         event: new MatCheckboxChange(),
-        row: new Policy(),
+        row: mockPolicy,
       };
       checkboxEvent.event.checked = false;
       component.onSelectOne(checkboxEvent);
@@ -336,7 +336,7 @@ describe("PoliciesDashboardComponent", () => {
     it("should dispatch a submitPolicyAction and a clearSelectionAction if there is a result", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const result = new Policy();
+      const result = mockPolicy;
       component.selectedGroups = ["test"];
       component.onDialogClose(result);
 

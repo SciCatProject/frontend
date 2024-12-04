@@ -1,8 +1,9 @@
-import { Logbook, LogbookFilters } from "state-management/models";
+import { Logbook } from "@scicatproject/scicat-sdk-ts";
+import { LogbookFilters } from "state-management/models";
 
 export interface LogbookState {
   logbooks: Logbook[];
-  currentLogbook: Logbook | undefined;
+  currentLogbook: any | undefined;
 
   totalCount: number;
 

@@ -1,9 +1,15 @@
-import { Message, User, Settings, UserIdentity, MessageType } from "../models";
+import {
+  ReturnedUserDto,
+  UserIdentity,
+  UserSettings,
+} from "@scicatproject/scicat-sdk-ts";
+import { Message, Settings, MessageType } from "../models";
 import * as fromActions from "./user.actions";
-import { AccessToken, UserSetting } from "shared/sdk";
 import { HttpErrorResponse } from "@angular/common/http";
+import { SDKToken } from "shared/services/auth/auth.service";
 
 describe("User Actions", () => {
+  let user: ReturnedUserDto;
   const error = new HttpErrorResponse({});
   describe("loginAction", () => {
     it("should create an action", () => {
@@ -18,7 +24,6 @@ describe("User Actions", () => {
 
   describe("loginCompleteAction", () => {
     it("should create an action", () => {
-      const user = new User();
       const accountType = "test";
       const action = fromActions.loginCompleteAction({ user, accountType });
       expect({ ...action }).toEqual({
@@ -69,9 +74,6 @@ describe("User Actions", () => {
 
   describe("activeDirLoginFailedAction", () => {
     it("should create an action", () => {
-      const username = "test";
-      const password = "test";
-      const rememberMe = true;
       const action = fromActions.activeDirLoginFailedAction({
         error,
       });
@@ -165,7 +167,6 @@ describe("User Actions", () => {
 
   describe("fetchCurrentUserCompleteAction", () => {
     it("should create an action", () => {
-      const user = new User();
       const action = fromActions.fetchCurrentUserCompleteAction({ user });
       expect({ ...action }).toEqual({
         type: "[User] Fetch Current User Complete",
@@ -193,7 +194,7 @@ describe("User Actions", () => {
 
   describe("fetchUserIdentityCompleteAction", () => {
     it("should create an action", () => {
-      const userIdentity = new UserIdentity();
+      let userIdentity: UserIdentity;
       const action = fromActions.fetchUserIdentityCompleteAction({
         userIdentity,
       });
@@ -223,13 +224,15 @@ describe("User Actions", () => {
 
   describe("fetchUserSettingsCompleteAction", () => {
     it("should create an action", () => {
-      const userSettings = new UserSetting({
-        columns: [],
+      const userSettings: UserSettings = {
+        externalSettings: {
+          columns: [],
+        },
         datasetCount: 25,
         jobCount: 25,
         userId: "testId",
         id: "testId",
-      });
+      };
       const action = fromActions.fetchUserSettingsCompleteAction({
         userSettings,
       });
@@ -262,13 +265,15 @@ describe("User Actions", () => {
 
   describe("updateUserSettingsCompleteAction", () => {
     it("should create an action", () => {
-      const userSettings = new UserSetting({
-        columns: [],
+      const userSettings: UserSettings = {
+        externalSettings: {
+          columns: [],
+        },
         datasetCount: 25,
         jobCount: 25,
         userId: "testId",
         id: "testId",
-      });
+      };
       const action = fromActions.updateUserSettingsCompleteAction({
         userSettings,
       });
@@ -297,7 +302,7 @@ describe("User Actions", () => {
 
   describe("fetchScicatTokenCompleteAction", () => {
     it("should create an action", () => {
-      const token = new AccessToken();
+      const token = new SDKToken();
       const action = fromActions.fetchScicatTokenCompleteAction({ token });
       expect({ ...action }).toEqual({
         type: "[User] Fetch Scicat Token Complete",

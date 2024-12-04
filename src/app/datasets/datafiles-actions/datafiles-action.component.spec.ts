@@ -10,13 +10,14 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { RouterModule } from "@angular/router";
 import { StoreModule } from "@ngrx/store";
-import { UserApi } from "shared/sdk";
 import {
   MockHtmlElement,
   MockMatDialogRef,
   MockUserApi,
 } from "shared/MockStubs";
 import { ActionDataset } from "./datafiles-action.interfaces";
+import { UsersService } from "@scicatproject/scicat-sdk-ts";
+import { AuthService } from "shared/services/auth/auth.service";
 
 describe("1000: DatafilesActionComponent", () => {
   let component: DatafilesActionComponent;
@@ -121,8 +122,8 @@ describe("1000: DatafilesActionComponent", () => {
     notebook_selected = 3,
   }
 
-  const jwt = () => ({
-    subscribe: (f: any) => ({
+  const usersControllerGetUserJWT = () => ({
+    subscribe: () => ({
       jwt: "9a2322a8-4a7d-11ef-a0f5-d7c40fcf1693",
     }),
   });
@@ -165,9 +166,16 @@ describe("1000: DatafilesActionComponent", () => {
     TestBed.overrideComponent(DatafilesActionComponent, {
       set: {
         providers: [
-          { provide: UserApi, useClass: MockUserApi },
+          { provide: UsersService, useClass: MockUserApi },
           { provide: MatDialogRef, useClass: MockMatDialogRef },
-          { provide: UserApi, useValue: { jwt, getCurrentToken } },
+          {
+            provide: UsersService,
+            useValue: { usersControllerGetUserJWT },
+          },
+          {
+            provide: AuthService,
+            useValue: { getToken: getCurrentToken },
+          },
         ],
       },
     });

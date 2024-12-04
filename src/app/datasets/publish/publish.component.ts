@@ -11,8 +11,10 @@ import {
   fetchPublishedDataCompleteAction,
 } from "state-management/actions/published-data.actions";
 
-import { PublishedDataApi } from "shared/sdk/services/custom";
-import { PublishedData } from "shared/sdk/models";
+import {
+  CreatePublishedDataDto,
+  PublishedDataService,
+} from "@scicatproject/scicat-sdk-ts";
 import { formatDate } from "@angular/common";
 import { Router } from "@angular/router";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
@@ -60,7 +62,7 @@ export class PublishComponent implements OnInit, OnDestroy {
   constructor(
     private appConfigService: AppConfigService,
     private store: Store,
-    private publishedDataApi: PublishedDataApi,
+    private publishedDataApi: PublishedDataService,
     private actionsSubj: ActionsSubject,
     private router: Router,
   ) {}
@@ -147,7 +149,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     });
 
     this.publishedDataApi
-      .formPopulate(this.form.pidArray[0])
+      .publishedDataControllerFormPopulate(this.form.pidArray[0])
       .subscribe((result) => {
         this.form.abstract = result.abstract;
         this.form.title = result.title;
@@ -175,25 +177,38 @@ export class PublishComponent implements OnInit, OnDestroy {
   }
 
   public onPublish() {
-    const publishedData = new PublishedData();
-    publishedData.title = this.form.title;
-    publishedData.abstract = this.form.abstract;
-    publishedData.dataDescription = this.form.description;
-    publishedData.resourceType = this.form.resourceType;
+    const {
+      title,
+      abstract,
+      description,
+      creators,
+      resourceType,
+      pidArray,
+      publisher,
+      url,
+      thumbnail,
+      numberOfFiles,
+      sizeOfArchive,
+      downloadLink,
+      relatedPublications,
+    } = this.form;
 
-    publishedData.creator = this.form.creators;
-    publishedData.pidArray = this.form.pidArray;
-    publishedData.publisher = this.form.publisher;
-    publishedData.publicationYear = parseInt(
-      formatDate(this.today, "yyyy", "en_GB"),
-      10,
-    );
-    publishedData.url = this.form.url;
-    publishedData.thumbnail = this.form.thumbnail;
-    publishedData.numberOfFiles = this.form.numberOfFiles;
-    publishedData.sizeOfArchive = this.form.sizeOfArchive;
-    publishedData.downloadLink = this.form.downloadLink;
-    publishedData.relatedPublications = this.form.relatedPublications;
+    const publishedData: CreatePublishedDataDto = {
+      title: title,
+      abstract: abstract,
+      dataDescription: description,
+      creator: creators,
+      resourceType: resourceType,
+      pidArray: pidArray,
+      publisher: publisher,
+      publicationYear: parseInt(formatDate(this.today, "yyyy", "en_GB"), 10),
+      url: url,
+      thumbnail: thumbnail,
+      numberOfFiles: numberOfFiles,
+      sizeOfArchive: sizeOfArchive,
+      downloadLink: downloadLink,
+      relatedPublications: relatedPublications,
+    };
 
     this.store.dispatch(publishDatasetAction({ data: publishedData }));
   }

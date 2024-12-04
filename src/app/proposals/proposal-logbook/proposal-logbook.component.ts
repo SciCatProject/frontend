@@ -7,7 +7,6 @@ import {
   AfterViewChecked,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Logbook } from "shared/sdk";
 import { Observable, Subscription, take } from "rxjs";
 import { selectCurrentLogbook } from "state-management/selectors/logbooks.selectors";
 import {
@@ -25,6 +24,7 @@ import {
   SortChangeEvent,
 } from "shared/modules/table/table.component";
 import { AppConfigService } from "app-config.service";
+import { Logbook } from "@scicatproject/scicat-sdk-ts";
 
 export interface LogbookData {
   logbook: Logbook;
@@ -41,8 +41,7 @@ export interface LogbookData {
 export class ProposalLogbookComponent
   implements OnInit, OnDestroy, AfterViewChecked
 {
-  logbook$: Observable<Logbook | null> =
-    this.store.select(selectCurrentLogbook);
+  logbook$: Observable<any | null> = this.store.select(selectCurrentLogbook);
   appConfig = this.appConfigService.getConfig();
   subscriptions: Subscription[] = [];
 

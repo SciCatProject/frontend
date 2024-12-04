@@ -1,21 +1,34 @@
 import * as fromSelectors from "./proposals.selectors";
-import { Proposal, ProposalInterface, Attachment } from "shared/sdk/models";
 import { ProposalsState } from "state-management/state/proposals.store";
+import { createMock } from "shared/MockStubs";
+import { ProposalClass } from "@scicatproject/scicat-sdk-ts";
 
-const data: ProposalInterface = {
+const proposal = createMock<ProposalClass>({
   proposalId: "testId",
   email: "testEmail",
   ownerGroup: "testGroup",
-};
-const parentProposalData: ProposalInterface = {
+  accessGroups: [],
+  createdAt: "",
+  createdBy: "",
+  isPublished: false,
+  title: "test",
+  type: "",
+  updatedAt: "",
+  updatedBy: "",
+});
+const parentProposal = createMock<ProposalClass>({
   proposalId: "parentTestId",
   email: "parentTestEmail",
   ownerGroup: "parentTestGroup",
-};
-const proposal = new Proposal(data);
-const parentProposal = new Proposal(parentProposalData);
-const attachments = [new Attachment()];
-proposal.attachments = attachments;
+  accessGroups: [],
+  createdAt: "",
+  createdBy: "",
+  isPublished: false,
+  title: "test",
+  type: "",
+  updatedAt: "",
+  updatedBy: "",
+});
 
 const initialProposalsState: ProposalsState = {
   proposals: [],
@@ -60,16 +73,6 @@ describe("Proposal Selectors", () => {
       expect(
         fromSelectors.selectCurrentProposal.projector(initialProposalsState),
       ).toEqual(proposal);
-    });
-  });
-
-  describe("selectCurrentAttachments", () => {
-    it("should select attachments from current proposal", () => {
-      expect(
-        fromSelectors.selectCurrentAttachments.projector(
-          initialProposalsState.currentProposal,
-        ),
-      ).toEqual(attachments);
     });
   });
 

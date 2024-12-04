@@ -5,7 +5,7 @@ describe("Users Login", () => {
   const guestUsername = Cypress.env("guestUsername");
   const guestPassword = Cypress.env("guestPassword");
 
-  const loginEndpoint = Cypress.env("lbLoginEndpoint");
+  const loginEndpoint = Cypress.env("loginEndpoint");
 
   beforeEach(() => {
     cy.intercept("POST", "**/auth/msad").as("adLogin");

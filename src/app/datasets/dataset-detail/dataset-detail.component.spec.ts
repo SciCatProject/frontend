@@ -12,9 +12,7 @@ import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatTableModule } from "@angular/material/table";
 import { MatChipInputEvent, MatChipsModule } from "@angular/material/chips";
 import { of } from "rxjs";
-import { Dataset, Sample, User } from "shared/sdk";
 import { MatDialogRef } from "@angular/material/dialog";
-import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
@@ -35,10 +33,19 @@ import {
   MatSlideToggleChange,
 } from "@angular/material/slide-toggle";
 import { ActivatedRoute, Router } from "@angular/router";
-import { MockActivatedRoute } from "shared/MockStubs";
+import {
+  createMock,
+  MockActivatedRoute,
+  mockDataset,
+  mockSample,
+} from "shared/MockStubs";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { AppConfigService } from "app-config.service";
 import { AttachmentService } from "shared/services/attachment.service";
+import {
+  OutputDatasetObsoleteDto,
+  ReturnedUserDto,
+} from "@scicatproject/scicat-sdk-ts";
 
 describe("DatasetDetailComponent", () => {
   let component: DatasetDetailComponent;
@@ -98,7 +105,7 @@ describe("DatasetDetailComponent", () => {
     component.dataset = {
       pid: "testPid",
       isPublished: false,
-    } as unknown as Dataset;
+    } as unknown as OutputDatasetObsoleteDto;
     fixture.detectChanges();
   }));
   afterEach(() => {
@@ -113,7 +120,7 @@ describe("DatasetDetailComponent", () => {
     it("should update datasets keyword filter and navigate to datasets table", () => {
       const dispatchSpy = spyOn(store, "dispatch");
       const keyword = "test";
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.onClickKeyword(keyword);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
@@ -136,7 +143,7 @@ describe("DatasetDetailComponent", () => {
         value: "test",
       };
       const pid = "testPid";
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.pid = pid;
       component.onEditModeEnable();
       component.onAddKeyword(event as MatChipInputEvent);
@@ -155,7 +162,7 @@ describe("DatasetDetailComponent", () => {
         },
         value: "test",
       };
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.keywords = ["test"];
       component.onEditModeEnable();
       expect(component.keywords.value.length).toBe(1);
@@ -176,7 +183,7 @@ describe("DatasetDetailComponent", () => {
         value: "test",
       };
       const pid = "testPid";
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.pid = pid;
       component.dataset.keywords = [];
       component.onEditModeEnable();
@@ -194,7 +201,7 @@ describe("DatasetDetailComponent", () => {
       const dispatchSpy = spyOn(store, "dispatch");
 
       const keyword = "test";
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.keywords = [];
       component.onRemoveKeyword(keyword);
 
@@ -204,7 +211,7 @@ describe("DatasetDetailComponent", () => {
     it("should dispatch an updatePropertyAction if the keyword does exist", () => {
       const keyword = "test";
       const pid = "testPid";
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.pid = pid;
       component.dataset.keywords = [keyword];
       component.onEditModeEnable();
@@ -223,7 +230,7 @@ describe("DatasetDetailComponent", () => {
 
       const keyword = "test";
       const pid = "testPid";
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.pid = pid;
       component.dataset.keywords = [keyword];
       component.dataset.datasetName = "Test dataset name";
@@ -250,7 +257,7 @@ describe("DatasetDetailComponent", () => {
     it("should dispatch a updatePropertyAction", () => {
       const dispatchSpy = spyOn(store, "dispatch");
       const pid = "testPid";
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.pid = pid;
       const event = new MatSlideToggleChange({} as MatSlideToggle, true);
       const property = { isPublished: true };
@@ -277,7 +284,7 @@ describe("DatasetDetailComponent", () => {
     it("should do nothing if dataset is defined and group does not exist", () => {
       const dispatchSpy = spyOn(store, "dispatch");
 
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.sharedWith = [];
       const share = "test";
       component.onRemoveShare(share);
@@ -294,7 +301,7 @@ describe("DatasetDetailComponent", () => {
         pid,
         isPublished: false,
         sharedWith: [share],
-      } as unknown as Dataset;
+      } as unknown as OutputDatasetObsoleteDto;
       const dialogOpenSpy = spyOn(component.dialog, "open").and.returnValue({
         afterClosed: () => of("ok"),
       } as MatDialogRef<DialogComponent>);
@@ -346,7 +353,7 @@ describe("DatasetDetailComponent", () => {
       const dispatchSpy = spyOn(store, "dispatch");
 
       const pid = "testPid";
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       component.dataset.pid = pid;
       const metadata = {};
       const property = { scientificMetadata: metadata };

@@ -4,7 +4,6 @@ import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { provideMockStore } from "@ngrx/store/testing";
 import { PageChangeEvent } from "shared/modules/table/table.component";
-import { Dataset } from "shared/sdk";
 import {
   changeRelatedDatasetsPageAction,
   fetchRelatedDatasetsAction,
@@ -13,6 +12,8 @@ import { selectRelatedDatasetsPageViewModel } from "state-management/selectors/d
 
 import { RelatedDatasetsComponent } from "./related-datasets.component";
 import { TableModule } from "shared/modules/table/table.module";
+import { createMock } from "shared/MockStubs";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
 
 describe("RelatedDatasetsComponent", () => {
   let component: RelatedDatasetsComponent;
@@ -88,7 +89,7 @@ describe("RelatedDatasetsComponent", () => {
 
   describe("#onRowClick()", () => {
     it("should navigate to a dataset", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
 
       component.onRowClick(dataset);
 

@@ -7,7 +7,7 @@ import {
 import { Router } from "@angular/router";
 import { AppConfigService } from "app-config.service";
 import { Column } from "shared/modules/shared-table/shared-table.module";
-import { Proposal } from "shared/sdk";
+import { ProposalClass } from "@scicatproject/scicat-sdk-ts";
 import { ExportExcelService } from "shared/services/export-excel.service";
 import { ScicatDataService } from "shared/services/scicat-data-service";
 import { SciCatDataSource } from "shared/services/scicat.datasource";
@@ -97,7 +97,7 @@ export class ProposalDashboardComponent implements OnDestroy, AfterViewChecked {
   ngOnDestroy() {
     this.dataSource.disconnectExportData();
   }
-  onRowClick(proposal: Proposal) {
+  onRowClick(proposal: ProposalClass) {
     const id = encodeURIComponent(proposal.proposalId);
     this.router.navigateByUrl("/proposals/" + id);
   }

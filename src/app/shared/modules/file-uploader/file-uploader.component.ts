@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter, Input } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
 import saveAs from "file-saver";
-import { Attachment } from "shared/sdk";
+import { Attachment } from "@scicatproject/scicat-sdk-ts";
 import { AttachmentService } from "shared/services/attachment.service";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";

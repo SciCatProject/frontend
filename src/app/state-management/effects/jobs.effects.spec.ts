@@ -1,5 +1,3 @@
-import { JobInterface, Job, JobApi } from "shared/sdk";
-import { Observable } from "rxjs";
 import { JobEffects } from "./jobs.effects";
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
@@ -15,19 +13,32 @@ import {
 } from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
 import { Type } from "@angular/core";
+import {
+  CreateJobDto,
+  JobClass,
+  JobsService,
+} from "@scicatproject/scicat-sdk-ts";
+import { TestObservable } from "jasmine-marbles/src/test-observables";
+import { createMock } from "shared/MockStubs";
 
-const data: JobInterface = {
+const job = createMock<JobClass>({
+  _id: "testId",
   id: "testId",
   emailJobInitiator: "test@email.com",
   type: "archive",
-  datasetList: {},
-};
-const job = new Job(data);
+  datasetList: [],
+  creationTime: "",
+  executionTime: "",
+  jobParams: {},
+  jobResultObject: {},
+  jobStatusMessage: "",
+  ownerGroup: "",
+});
 
 describe("JobEffects", () => {
-  let actions: Observable<any>;
+  let actions: TestObservable;
   let effects: JobEffects;
-  let jobApi: jasmine.SpyObj<JobApi>;
+  let jobApi: jasmine.SpyObj<JobsService>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -38,19 +49,18 @@ describe("JobEffects", () => {
           selectors: [{ selector: selectQueryParams, value: {} }],
         }),
         {
-          provide: JobApi,
+          provide: JobsService,
           useValue: jasmine.createSpyObj("jobApi", [
-            "find",
-            "count",
-            "findById",
-            "create",
+            "jobsControllerFindAll",
+            "jobsControllerFindOne",
+            "jobsControllerCreate",
           ]),
         },
       ],
     });
 
     effects = TestBed.inject(JobEffects);
-    jobApi = injectedStub(JobApi);
+    jobApi = injectedStub(JobsService);
   });
 
   const injectedStub = <S>(service: Type<S>): jasmine.SpyObj<S> =>
@@ -66,7 +76,7 @@ describe("JobEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: jobs });
-        jobApi.find.and.returnValue(response);
+        jobApi.jobsControllerFindAll.and.returnValue(response);
 
         const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
         expect(effects.fetchJobs$).toBeObservable(expected);
@@ -78,7 +88,7 @@ describe("JobEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        jobApi.find.and.returnValue(response);
+        jobApi.jobsControllerFindAll.and.returnValue(response);
 
         const expected = cold("--b", { b: outcome });
         expect(effects.fetchJobs$).toBeObservable(expected);
@@ -97,7 +107,7 @@ describe("JobEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: jobs });
-        jobApi.find.and.returnValue(response);
+        jobApi.jobsControllerFindAll.and.returnValue(response);
 
         const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
         expect(effects.fetchJobs$).toBeObservable(expected);
@@ -109,7 +119,7 @@ describe("JobEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        jobApi.find.and.returnValue(response);
+        jobApi.jobsControllerFindAll.and.returnValue(response);
 
         const expected = cold("--b", { b: outcome });
         expect(effects.fetchJobs$).toBeObservable(expected);
@@ -128,7 +138,7 @@ describe("JobEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: jobs });
-        jobApi.find.and.returnValue(response);
+        jobApi.jobsControllerFindAll.and.returnValue(response);
 
         const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
         expect(effects.fetchJobs$).toBeObservable(expected);
@@ -140,7 +150,7 @@ describe("JobEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        jobApi.find.and.returnValue(response);
+        jobApi.jobsControllerFindAll.and.returnValue(response);
 
         const expected = cold("--b", { b: outcome });
         expect(effects.fetchJobs$).toBeObservable(expected);
@@ -158,7 +168,7 @@ describe("JobEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: jobs });
-        jobApi.find.and.returnValue(response);
+        jobApi.jobsControllerFindAll.and.returnValue(response);
 
         const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
         expect(effects.fetchJobs$).toBeObservable(expected);
@@ -170,38 +180,11 @@ describe("JobEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        jobApi.find.and.returnValue(response);
+        jobApi.jobsControllerFindAll.and.returnValue(response);
 
         const expected = cold("--b", { b: outcome });
         expect(effects.fetchJobs$).toBeObservable(expected);
       });
-    });
-  });
-
-  describe("fetchCount$", () => {
-    it("should result in a fetchCountCompleteAction", () => {
-      const count = 100;
-      const action = fromActions.fetchCountAction();
-      const outcome = fromActions.fetchCountCompleteAction({ count });
-
-      actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: { count } });
-      jobApi.count.and.returnValue(response);
-
-      const expected = cold("--b", { b: outcome });
-      expect(effects.fetchCount$).toBeObservable(expected);
-    });
-
-    it("should result in a fetchCountFailedAction", () => {
-      const action = fromActions.fetchCountAction();
-      const outcome = fromActions.fetchCountFailedAction();
-
-      actions = hot("-a", { a: action });
-      const response = cold("-#", {});
-      jobApi.count.and.returnValue(response);
-
-      const expected = cold("--b", { b: outcome });
-      expect(effects.fetchCount$).toBeObservable(expected);
     });
   });
 
@@ -229,7 +212,7 @@ describe("JobEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: job });
-      jobApi.findById.and.returnValue(response);
+      jobApi.jobsControllerFindOne.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchJob$).toBeObservable(expected);
@@ -241,7 +224,7 @@ describe("JobEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      jobApi.findById.and.returnValue(response);
+      jobApi.jobsControllerFindOne.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchJob$).toBeObservable(expected);
@@ -250,12 +233,12 @@ describe("JobEffects", () => {
 
   describe("submitJob$", () => {
     it("should result in a submitJobCompleteAction", () => {
-      const action = fromActions.submitJobAction({ job });
+      const action = fromActions.submitJobAction({ job: job as CreateJobDto });
       const outcome = fromActions.submitJobCompleteAction({ job });
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: job });
-      jobApi.create.and.returnValue(response);
+      jobApi.jobsControllerCreate.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.submitJob$).toBeObservable(expected);
@@ -337,7 +320,9 @@ describe("JobEffects", () => {
 
     describe("ofType submitJobAction", () => {
       it("should dispatch a loadingAction", () => {
-        const action = fromActions.submitJobAction({ job });
+        const action = fromActions.submitJobAction({
+          job: job as CreateJobDto,
+        });
         const outcome = loadingAction();
 
         actions = hot("-a", { a: action });

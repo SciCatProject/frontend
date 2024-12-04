@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import { InstrumentApi, Instrument } from "shared/sdk";
+import { Instrument, InstrumentsService } from "@scicatproject/scicat-sdk-ts";
 import * as fromActions from "state-management/actions/instruments.actions";
 import { switchMap, map, catchError, mergeMap } from "rxjs/operators";
 import { of } from "rxjs";
@@ -25,13 +25,15 @@ export class InstrumentEffects {
       concatLatestFrom(() => this.filters$),
       map(([action, filters]) => filters),
       switchMap(({ sortField: order, skip, limit }) =>
-        this.instrumentApi.find<Instrument>({ order, limit, skip }).pipe(
-          mergeMap((instruments: Instrument[]) => [
-            fromActions.fetchInstrumentsCompleteAction({ instruments }),
-            fromActions.fetchCountAction(),
-          ]),
-          catchError(() => of(fromActions.fetchInstrumentsFailedAction())),
-        ),
+        this.instrumentsService
+          .instrumentsControllerFindAll(JSON.stringify({ order, limit, skip }))
+          .pipe(
+            mergeMap((instruments: Instrument[]) => [
+              fromActions.fetchInstrumentsCompleteAction({ instruments }),
+              fromActions.fetchCountAction(),
+            ]),
+            catchError(() => of(fromActions.fetchInstrumentsFailedAction())),
+          ),
       ),
     );
   });
@@ -40,8 +42,8 @@ export class InstrumentEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
       switchMap(() =>
-        this.instrumentApi.find().pipe(
-          map((instruments) =>
+        this.instrumentsService.instrumentsControllerFindAll().pipe(
+          map((instruments: Instrument[]) =>
             fromActions.fetchCountCompleteAction({ count: instruments.length }),
           ),
           catchError(() => of(fromActions.fetchCountFailedAction())),
@@ -54,7 +56,7 @@ export class InstrumentEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchInstrumentAction),
       switchMap(({ pid }) =>
-        this.instrumentApi.findById<Instrument>(encodeURIComponent(pid)).pipe(
+        this.instrumentsService.instrumentsControllerFindById(pid).pipe(
           map((instrument: Instrument) =>
             fromActions.fetchInstrumentCompleteAction({ instrument }),
           ),
@@ -68,8 +70,10 @@ export class InstrumentEffects {
     return this.actions$.pipe(
       ofType(fromActions.saveCustomMetadataAction),
       switchMap(({ pid, customMetadata }) =>
-        this.instrumentApi
-          .patchAttributes(encodeURIComponent(pid), { customMetadata })
+        this.instrumentsService
+          .instrumentsControllerUpdate(pid, {
+            customMetadata,
+          })
           .pipe(
             map((instrument: Instrument) =>
               fromActions.saveCustomMetadataCompleteAction({ instrument }),
@@ -110,7 +114,7 @@ export class InstrumentEffects {
 
   constructor(
     private actions$: Actions,
-    private instrumentApi: InstrumentApi,
+    private instrumentsService: InstrumentsService,
     private store: Store,
   ) {}
 }

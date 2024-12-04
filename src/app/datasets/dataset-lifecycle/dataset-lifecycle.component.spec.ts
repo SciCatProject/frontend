@@ -10,7 +10,6 @@ import { DatasetLifecycleComponent } from "./dataset-lifecycle.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { PipesModule } from "shared/pipes/pipes.module";
 import { DatePipe } from "@angular/common";
-import { Dataset } from "shared/sdk";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatTableModule } from "@angular/material/table";
@@ -20,6 +19,11 @@ import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { Store, StoreModule } from "@ngrx/store";
 import { MockStore } from "@ngrx/store/testing";
 import { AppConfigService } from "app-config.service";
+import { createMock, mockDataset } from "shared/MockStubs";
+import {
+  HistoryClass,
+  OutputDatasetObsoleteDto,
+} from "@scicatproject/scicat-sdk-ts";
 
 const historyItems = [
   {
@@ -74,7 +78,12 @@ describe("DatasetLifecycleComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetLifecycleComponent);
     component = fixture.componentInstance;
-    component.dataset = { pid: "testPid", history: [] } as unknown as Dataset;
+    component.dataset = createMock<
+      OutputDatasetObsoleteDto & { history: HistoryClass[] }
+    >({
+      pid: "testPid",
+      history: [],
+    });
     fixture.detectChanges();
   });
   beforeEach(inject([Store], (mockStore: MockStore) => {
@@ -114,7 +123,10 @@ describe("DatasetLifecycleComponent", () => {
 
     it("should parse dataset.history into a HistoryItem array if dataset is defined", () => {
       const keywords = ["test", "parse"];
-      const dataset = new Dataset();
+      const dataset = createMock<
+        OutputDatasetObsoleteDto & { history: HistoryClass[] }
+      >({ ...mockDataset });
+      // TODO: Check the types here and see if we need the keywords at all or not as it doesn't exist on the HistoryClass.
       dataset.history = [
         {
           id: "testId",
@@ -122,7 +134,7 @@ describe("DatasetLifecycleComponent", () => {
           updatedBy: "Test User",
           updatedAt: new Date().toISOString(),
         },
-      ];
+      ] as unknown as HistoryClass[];
 
       component.dataset = dataset;
       const parsedHistoryItems = component["parseHistoryItems"]();

@@ -8,7 +8,6 @@ import {
 import { DatasetDetailsDashboardComponent } from "./dataset-details-dashboard.component";
 import { MockActivatedRoute, MockUserApi } from "shared/MockStubs";
 import { Store, StoreModule } from "@ngrx/store";
-import { UserApi } from "shared/sdk";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -19,6 +18,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MockStore } from "@ngrx/store/testing";
 import { AppConfigService } from "app-config.service";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { UsersService } from "@scicatproject/scicat-sdk-ts";
 
 describe("DetailsDashboardComponent", () => {
   let component: DatasetDetailsDashboardComponent;
@@ -59,7 +59,7 @@ describe("DetailsDashboardComponent", () => {
             },
           },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          { provide: UserApi, useClass: MockUserApi },
+          { provide: UsersService, useClass: MockUserApi },
         ],
       },
     });

@@ -1,4 +1,4 @@
-import { MockStore, MockActivatedRoute } from "shared/MockStubs";
+import { MockStore, MockActivatedRoute, mockSample } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { SampleDashboardComponent } from "./sample-dashboard.component";
@@ -14,7 +14,6 @@ import {
   changePageAction,
   sortByColumnAction,
 } from "state-management/actions/samples.actions";
-import { Sample } from "shared/sdk";
 import {
   PageChangeEvent,
   SortChangeEvent,
@@ -92,7 +91,7 @@ describe("SampleDashboardComponent", () => {
 
   describe("#formatTableData", () => {
     it("should return an array of sample objects formatted for the table", () => {
-      const samples = [new Sample()];
+      const samples = [mockSample];
 
       const data = component.formatTableData(samples);
 
@@ -174,7 +173,7 @@ describe("SampleDashboardComponent", () => {
 
   describe("#onRowClick()", () => {
     it("should navigate to a sample", () => {
-      const sample = new Sample();
+      const sample = mockSample;
 
       component.onRowClick(sample);
 

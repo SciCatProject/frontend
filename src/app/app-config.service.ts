@@ -111,14 +111,16 @@ export class AppConfigService {
 
   async loadAppConfig(): Promise<void> {
     try {
-      this.appConfig = await this.http
+      const config = await this.http
         .get("/api/v3/admin/config")
         .pipe(timeout(2000))
         .toPromise();
+      this.appConfig = Object.assign({}, this.appConfig, config);
     } catch (err) {
       console.log("No config available in backend, trying with local config.");
       try {
-        this.appConfig = await this.http.get("/assets/config.json").toPromise();
+        const config = await this.http.get("/assets/config.json").toPromise();
+        this.appConfig = Object.assign({}, this.appConfig, config);
       } catch (err) {
         console.error("No config provided.");
       }

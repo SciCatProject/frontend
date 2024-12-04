@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
 import {
-  DatasetApi,
-  Dataset,
-  LoopBackFilter,
-  OrigDatablock,
   Attachment,
+  CreateAttachmentDto,
   Datablock,
-  DerivedDataset,
-} from "shared/sdk";
+  DatasetsService,
+  OrigDatablock,
+  OutputDatasetObsoleteDto,
+  UpdateAttachmentDto,
+} from "@scicatproject/scicat-sdk-ts";
 import { Store } from "@ngrx/store";
 import {
   selectFullqueryParams,
@@ -53,14 +53,16 @@ export class DatasetEffects {
         fromActions.sortByColumnAction,
       ),
       concatLatestFrom(() => this.fullqueryParams$),
-      map(([action, params]) => params),
+      map(([, params]) => params),
       mergeMap(({ query, limits }) =>
-        this.datasetApi.fullquery(query, limits).pipe(
-          map((datasets) =>
-            fromActions.fetchDatasetsCompleteAction({ datasets }),
+        this.datasetsService
+          .datasetsControllerFullquery(JSON.stringify(limits), query)
+          .pipe(
+            map((datasets) =>
+              fromActions.fetchDatasetsCompleteAction({ datasets }),
+            ),
+            catchError(() => of(fromActions.fetchDatasetsFailedAction())),
           ),
-          catchError(() => of(fromActions.fetchDatasetsFailedAction())),
-        ),
       ),
     );
   });
@@ -73,19 +75,24 @@ export class DatasetEffects {
         fromActions.sortByColumnAction,
       ),
       concatLatestFrom(() => this.fullfacetParams$),
-      map(([action, params]) => params),
+      map(([, params]) => params),
       mergeMap(({ fields, facets }) =>
-        this.datasetApi.fullfacet(fields, facets).pipe(
-          map((res) => {
-            const { all, ...facetCounts } = res[0];
-            const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
-            return fromActions.fetchFacetCountsCompleteAction({
-              facetCounts,
-              allCounts,
-            });
-          }),
-          catchError(() => of(fromActions.fetchFacetCountsFailedAction())),
-        ),
+        this.datasetsService
+          .datasetsControllerFullfacet(
+            JSON.stringify(facets),
+            JSON.stringify(fields),
+          )
+          .pipe(
+            map((res) => {
+              const { all, ...facetCounts } = res[0];
+              const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
+              return fromActions.fetchFacetCountsCompleteAction({
+                facetCounts,
+                allCounts,
+              });
+            }),
+            catchError(() => of(fromActions.fetchFacetCountsFailedAction())),
+          ),
       ),
     );
   });
@@ -94,17 +101,17 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchMetadataKeysAction),
       concatLatestFrom(() => this.fullqueryParams$),
-      map(([action, params]) => params),
+      map(([, params]) => params),
       mergeMap(({ query }) => {
         const parsedQuery = JSON.parse(query);
-        // TODO: remove this line below after metadataKey endpoint is refactored in the backend
-        // parsedQuery.metadataKey = "";
-        return this.datasetApi.metadataKeys(JSON.stringify(parsedQuery)).pipe(
-          map((metadataKeys) =>
-            fromActions.fetchMetadataKeysCompleteAction({ metadataKeys }),
-          ),
-          catchError(() => of(fromActions.fetchMetadataKeysFailedAction())),
-        );
+        return this.datasetsService
+          .datasetsControllerMetadataKeys(JSON.stringify(parsedQuery))
+          .pipe(
+            map((metadataKeys) =>
+              fromActions.fetchMetadataKeysCompleteAction({ metadataKeys }),
+            ),
+            catchError(() => of(fromActions.fetchMetadataKeysFailedAction())),
+          );
       }),
     );
   });
@@ -133,10 +140,8 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchDatasetAction),
       switchMap(({ pid }) => {
-        return this.datasetApi.findById<Dataset>(encodeURIComponent(pid)).pipe(
-          map((dataset: Dataset) =>
-            fromActions.fetchDatasetCompleteAction({ dataset }),
-          ),
+        return this.datasetsService.datasetsControllerFindById(pid).pipe(
+          map((dataset) => fromActions.fetchDatasetCompleteAction({ dataset })),
           catchError(() => of(fromActions.fetchDatasetFailedAction())),
         );
       }),
@@ -146,8 +151,8 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchDatablocksAction),
       switchMap(({ pid, filters }) => {
-        return this.datasetApi
-          .getDatablocks(encodeURIComponent(pid), filters)
+        return this.datasetsService
+          .datasetsControllerFindAllDatablocks(pid, filters)
           .pipe(
             map((datablocks: Datablock[]) =>
               fromActions.fetchDatablocksCompleteAction({ datablocks }),
@@ -161,9 +166,9 @@ export class DatasetEffects {
   fetchOrigDatablocksOfDataset$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchOrigDatablocksAction),
-      switchMap(({ pid, filters }) => {
-        return this.datasetApi
-          .getOrigdatablocks(encodeURIComponent(pid), {})
+      switchMap(({ pid }) => {
+        return this.datasetsService
+          .datasetsControllerFindAllOrigDatablocks(pid)
           .pipe(
             map((origdatablocks: OrigDatablock[]) =>
               fromActions.fetchOrigDatablocksCompleteAction({ origdatablocks }),
@@ -178,8 +183,8 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchAttachmentsAction),
       switchMap(({ pid, filters }) => {
-        return this.datasetApi
-          .getAttachments(encodeURIComponent(pid), filters)
+        return this.datasetsService
+          .datasetsControllerFindAllAttachments(pid, filters)
           .pipe(
             map((attachments: Attachment[]) =>
               fromActions.fetchAttachmentsCompleteAction({ attachments }),
@@ -197,8 +202,8 @@ export class DatasetEffects {
         this.currentDataset$,
         this.relatedDatasetsFilters$,
       ]),
-      switchMap(([_, dataset, filters]) => {
-        const queryFilter: LoopBackFilter = {
+      switchMap(([, dataset, filters]) => {
+        const queryFilter = {
           where: {},
           limits: {
             skip: filters.skip,
@@ -214,15 +219,21 @@ export class DatasetEffects {
         }
         if (dataset.type === "derived") {
           queryFilter.where = {
-            pid: { $in: (dataset as unknown as DerivedDataset).inputDatasets },
+            pid: { $in: dataset.inputDatasets },
           };
         }
-        return this.datasetApi.find<Dataset>(queryFilter).pipe(
-          map((relatedDatasets: Dataset[]) =>
-            fromActions.fetchRelatedDatasetsCompleteAction({ relatedDatasets }),
-          ),
-          catchError(() => of(fromActions.fetchRelatedDatasetsFailedAction())),
-        );
+        return this.datasetsService
+          .datasetsControllerFindAll(JSON.stringify(queryFilter))
+          .pipe(
+            map((relatedDatasets) =>
+              fromActions.fetchRelatedDatasetsCompleteAction({
+                relatedDatasets,
+              }),
+            ),
+            catchError(() =>
+              of(fromActions.fetchRelatedDatasetsFailedAction()),
+            ),
+          );
       }),
     );
   });
@@ -231,8 +242,8 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchRelatedDatasetsAction),
       concatLatestFrom(() => [this.currentDataset$]),
-      switchMap(([_, dataset]) => {
-        const queryFilter: LoopBackFilter = {
+      switchMap(([, dataset]) => {
+        const queryFilter = {
           where: {},
         };
         if (dataset.type === "raw") {
@@ -243,19 +254,21 @@ export class DatasetEffects {
         }
         if (dataset.type === "derived") {
           queryFilter.where = {
-            pid: { $in: (dataset as unknown as DerivedDataset).inputDatasets },
+            pid: { $in: dataset.inputDatasets },
           };
         }
-        return this.datasetApi.count(queryFilter).pipe(
-          map(({ count }) =>
-            fromActions.fetchRelatedDatasetsCountCompleteAction({
-              count,
-            }),
-          ),
-          catchError(() =>
-            of(fromActions.fetchRelatedDatasetsCountFailedAction()),
-          ),
-        );
+        return this.datasetsService
+          .datasetsControllerCount(JSON.stringify(queryFilter))
+          .pipe(
+            map(({ count }) =>
+              fromActions.fetchRelatedDatasetsCountCompleteAction({
+                count,
+              }),
+            ),
+            catchError(() =>
+              of(fromActions.fetchRelatedDatasetsCountFailedAction()),
+            ),
+          );
       }),
     );
   });
@@ -264,9 +277,11 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.addDatasetAction),
       mergeMap(({ dataset }) =>
-        this.datasetApi.create(dataset).pipe(
+        this.datasetsService.datasetsControllerCreate(dataset).pipe(
           mergeMap((res) => [
-            fromActions.addDatasetCompleteAction({ dataset: res }),
+            fromActions.addDatasetCompleteAction({
+              dataset: res,
+            }),
             fromActions.fetchDatasetsAction(),
             fromActions.fetchDatasetAction({ pid: res.pid }),
           ]),
@@ -280,13 +295,15 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.updatePropertyAction),
       switchMap(({ pid, property }) =>
-        this.datasetApi.patchAttributes(encodeURIComponent(pid), property).pipe(
-          switchMap(() => [
-            fromActions.updatePropertyCompleteAction(),
-            fromActions.fetchDatasetAction({ pid }),
-          ]),
-          catchError(() => of(fromActions.updatePropertyFailedAction())),
-        ),
+        this.datasetsService
+          .datasetsControllerFindByIdAndUpdate(pid, property)
+          .pipe(
+            switchMap(() => [
+              fromActions.updatePropertyCompleteAction(),
+              fromActions.fetchDatasetAction({ pid }),
+            ]),
+            catchError(() => of(fromActions.updatePropertyFailedAction())),
+          ),
       ),
     );
   });
@@ -295,16 +312,12 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.addAttachmentAction),
       switchMap(({ attachment }) => {
-        const {
-          id,
-          rawDatasetId,
-          derivedDatasetId,
-          proposalId,
-          sampleId,
-          ...theRest
-        } = attachment;
-        return this.datasetApi
-          .createAttachments(encodeURIComponent(theRest.datasetId!), theRest)
+        const { id, proposalId, sampleId, ...theRest } = attachment;
+        return this.datasetsService
+          .datasetsControllerCreateAttachment(
+            theRest.datasetId,
+            theRest as CreateAttachmentDto,
+          )
           .pipe(
             map((res) =>
               fromActions.addAttachmentCompleteAction({ attachment: res }),
@@ -318,13 +331,13 @@ export class DatasetEffects {
   updateAttachmentCaption$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.updateAttachmentCaptionAction),
-      switchMap(({ datasetId, attachmentId, caption }) => {
-        const data = { caption };
-        return this.datasetApi
-          .updateByIdAttachments(
-            encodeURIComponent(datasetId),
-            encodeURIComponent(attachmentId),
-            data,
+      switchMap(({ datasetId, attachmentId, caption, ownerGroup }) => {
+        const data = { caption, ownerGroup };
+        return this.datasetsService
+          .datasetsControllerFindOneAttachmentAndUpdate(
+            datasetId,
+            attachmentId,
+            data as UpdateAttachmentDto,
           )
           .pipe(
             map((attachment) =>
@@ -342,8 +355,8 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.removeAttachmentAction),
       switchMap(({ datasetId, attachmentId }) =>
-        this.datasetApi
-          .destroyByIdAttachments(encodeURIComponent(datasetId), attachmentId)
+        this.datasetsService
+          .datasetsControllerFindOneAttachmentAndRemove(datasetId, attachmentId)
           .pipe(
             map(() =>
               fromActions.removeAttachmentCompleteAction({ attachmentId }),
@@ -354,28 +367,18 @@ export class DatasetEffects {
     );
   });
 
-  reduceDataset$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.reduceDatasetAction),
-      mergeMap(({ dataset }) =>
-        this.datasetApi.reduceDataset(dataset).pipe(
-          map((result) => fromActions.reduceDatasetCompleteAction({ result })),
-          catchError(() => of(fromActions.reduceDatasetFailedAction())),
-        ),
-      ),
-    );
-  });
-
   appendToArrayField$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.appendToDatasetArrayFieldAction),
       mergeMap(({ pid, fieldName, data }) =>
-        this.datasetApi.appendToArrayField(pid, fieldName, data).pipe(
-          map(() => fromActions.appendToDatasetArrayFieldCompleteAction()),
-          catchError(() =>
-            of(fromActions.appendToDatasetArrayFieldFailedAction()),
+        this.datasetsService
+          .datasetsControllerAppendToArrayField(pid, fieldName, data)
+          .pipe(
+            map(() => fromActions.appendToDatasetArrayFieldCompleteAction()),
+            catchError(() =>
+              of(fromActions.appendToDatasetArrayFieldFailedAction()),
+            ),
           ),
-        ),
       ),
     );
   });
@@ -472,17 +475,17 @@ export class DatasetEffects {
 
   constructor(
     private actions$: Actions,
-    private datasetApi: DatasetApi,
+    private datasetsService: DatasetsService,
     private store: Store,
   ) {}
 
-  private storeBatch(batch: Dataset[], userId: string) {
+  private storeBatch(batch: OutputDatasetObsoleteDto[], userId: string) {
     const json = JSON.stringify(batch);
     localStorage.setItem("batch", json);
     localStorage.setItem("batchUser", userId);
   }
 
-  private retrieveBatch(ofUserId: string): Dataset[] {
+  private retrieveBatch(ofUserId: string): OutputDatasetObsoleteDto[] {
     const json = localStorage.getItem("batch");
     const userId = localStorage.getItem("batchUser");
 

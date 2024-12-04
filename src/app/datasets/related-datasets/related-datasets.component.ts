@@ -7,7 +7,10 @@ import {
   PageChangeEvent,
   TableColumn,
 } from "shared/modules/table/table.component";
-import { Dataset } from "shared/sdk";
+import {
+  DatasetClass,
+  OutputDatasetObsoleteDto,
+} from "@scicatproject/scicat-sdk-ts";
 import {
   changeRelatedDatasetsPageAction,
   fetchRelatedDatasetsAction,
@@ -79,7 +82,9 @@ export class RelatedDatasetsComponent {
     private store: Store,
   ) {}
 
-  formatTableData(datasets: Dataset[]): Record<string, unknown>[] {
+  formatTableData(
+    datasets: OutputDatasetObsoleteDto[],
+  ): Record<string, unknown>[] {
     if (!datasets) {
       return [];
     }
@@ -108,7 +113,7 @@ export class RelatedDatasetsComponent {
     this.store.dispatch(fetchRelatedDatasetsAction());
   }
 
-  onRowClick(dataset: Dataset): void {
+  onRowClick(dataset: DatasetClass): void {
     const pid = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl("/datasets/" + pid);
   }

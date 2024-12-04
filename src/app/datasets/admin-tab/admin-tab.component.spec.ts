@@ -1,9 +1,9 @@
-import { ComponentFixture, inject, TestBed } from "@angular/core/testing";
+import { TestBed } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
-import { Dataset } from "shared/sdk";
 import { AdminTabComponent } from "./admin-tab.component";
 import { MatCardModule } from "@angular/material/card";
 import { of } from "rxjs";
+import { mockDataset } from "shared/MockStubs";
 
 describe("AdminTabComponent", () => {
   let component: AdminTabComponent;
@@ -36,12 +36,12 @@ describe("AdminTabComponent", () => {
     it("should return 'undefined' without confirmation", () => {
       spyOn(window, "confirm").and.returnValue(true);
 
-      const selectSpy = store.select.and.returnValue(
+      store.select.and.returnValue(
         of({ email: "test@example.com", username: "testuser" }),
       );
       const dispatchSpy = store.dispatch as jasmine.Spy;
       const pipeSpy = store.select as jasmine.Spy;
-      component.dataset = new Dataset();
+      component.dataset = mockDataset;
       const res = component.resetDataset();
 
       expect(res).toBeUndefined();

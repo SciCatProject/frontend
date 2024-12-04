@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from "@angular/core";
-import { ArchViewMode, MessageType, Dataset } from "state-management/models";
+import { ArchViewMode, MessageType } from "state-management/models";
 import { Store } from "@ngrx/store";
 import {
   setPublicViewModeAction,
@@ -19,6 +19,7 @@ import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { selectSubmitError } from "state-management/selectors/jobs.selectors";
 import { AppConfigService } from "app-config.service";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "dataset-table-actions",
@@ -29,7 +30,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
   loading$ = this.store.select(selectIsLoading);
 
-  @Input() selectedSets: Dataset[] | null = [];
+  @Input() selectedSets: OutputDatasetObsoleteDto[] | null = [];
 
   public currentArchViewMode: ArchViewMode = ArchViewMode.all;
   public viewModes = ArchViewMode;

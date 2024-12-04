@@ -1,12 +1,12 @@
 import * as fromActions from "state-management/actions/policies.actions";
 import { policiesReducer } from "./policies.reducer";
-import { Policy } from "shared/sdk";
 import { initialPolicyState } from "state-management/state/policies.store";
+import { mockPolicy as policy } from "shared/MockStubs";
 
 describe("PoliciesReducer", () => {
   describe("on fetchPoliciesCompleteAction", () => {
     it("should set policies", () => {
-      const policies = [new Policy()];
+      const policies = [policy];
       const action = fromActions.fetchPoliciesCompleteAction({ policies });
       const state = policiesReducer(initialPolicyState, action);
 
@@ -26,7 +26,7 @@ describe("PoliciesReducer", () => {
 
   describe("on fetchEditablePoliciesCompleteAction", () => {
     it("should set editablePolicies", () => {
-      const policies = [new Policy()];
+      const policies = [policy];
       const action = fromActions.fetchEditablePoliciesCompleteAction({
         policies,
       });
@@ -48,7 +48,6 @@ describe("PoliciesReducer", () => {
 
   describe("on selectPolicyAction", () => {
     it("should set selectedPolicies", () => {
-      const policy = new Policy();
       const action = fromActions.selectPolicyAction({ policy });
       const state = policiesReducer(initialPolicyState, action);
 
@@ -56,8 +55,8 @@ describe("PoliciesReducer", () => {
     });
 
     it("should return same state if policy already selected", () => {
-      const policy = new Policy();
-      policy.id = "1";
+      const testPolicy = { ...policy };
+      testPolicy._id = "1";
       initialPolicyState.selectedPolicies = [policy];
 
       const action = fromActions.selectPolicyAction({ policy });
@@ -67,8 +66,8 @@ describe("PoliciesReducer", () => {
     });
 
     it("should add different policies to selectedPolicies", () => {
-      const firstPolicy = new Policy();
-      firstPolicy.id = "1";
+      const firstPolicy = { ...policy };
+      firstPolicy._id = "1";
       const firstSelectAction = fromActions.selectPolicyAction({
         policy: firstPolicy,
       });
@@ -76,8 +75,8 @@ describe("PoliciesReducer", () => {
         initialPolicyState,
         firstSelectAction,
       );
-      const secondPolicy = new Policy();
-      secondPolicy.id = "2";
+      const secondPolicy = { ...policy };
+      secondPolicy._id = "2";
       const secondSelectAction = fromActions.selectPolicyAction({
         policy: secondPolicy,
       });
@@ -90,8 +89,8 @@ describe("PoliciesReducer", () => {
 
   describe("on deselectPolicyAction", () => {
     it("should remove policy from selectedPolicies", () => {
-      const policy = new Policy();
-      policy.id = "testId";
+      const testPolicy = { ...policy };
+      testPolicy._id = "testId";
       initialPolicyState.selectedPolicies = [policy];
 
       const action = fromActions.deselectPolicyAction({ policy });
@@ -103,7 +102,7 @@ describe("PoliciesReducer", () => {
 
   describe("on selectAllPoliciesAction", () => {
     it("should add all editable policies to selectedPolicies", () => {
-      const policies = [new Policy()];
+      const policies = [policy];
       initialPolicyState.editablePolicies = policies;
       const action = fromActions.selectAllPoliciesAction();
       const state = policiesReducer(initialPolicyState, action);
@@ -114,7 +113,7 @@ describe("PoliciesReducer", () => {
 
   describe("on clearSelectionAction", () => {
     it("should set selectedPolicies to an empty array", () => {
-      initialPolicyState.selectedPolicies = [new Policy()];
+      initialPolicyState.selectedPolicies = [policy];
 
       const action = fromActions.clearSelectionAction();
       const state = policiesReducer(initialPolicyState, action);

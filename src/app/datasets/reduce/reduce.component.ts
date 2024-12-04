@@ -7,7 +7,6 @@ import {
 } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { Dataset, DerivedDataset } from "shared/sdk/models";
 import {
   selectOpenwhiskResult,
   selectDatasets,
@@ -22,6 +21,10 @@ import {
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 import { OwnershipService } from "shared/services/ownership.service";
+import {
+  DatasetClass,
+  OutputDatasetObsoleteDto,
+} from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "reduce",
@@ -29,20 +32,21 @@ import { OwnershipService } from "shared/services/ownership.service";
   styleUrls: ["./reduce.component.scss"],
 })
 export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
-  dataset: Dataset | undefined;
+  dataset: OutputDatasetObsoleteDto | undefined;
   subscriptions: Subscription[] = [];
-  derivedDatasets$ = this.store.select(selectDatasets).pipe(
-    map((datasets) =>
-      datasets
-        .filter((dataset) => dataset.type === "derived")
-        .map((dataset: unknown) => dataset as DerivedDataset)
-        .filter((dataset) =>
-          dataset["inputDatasets"].includes(this.dataset?.pid),
-        ),
-    ),
-  );
+  derivedDatasets$ = this.store
+    .select(selectDatasets)
+    .pipe(
+      map((datasets) =>
+        datasets
+          .filter((dataset) => dataset.type === "derived")
+          .filter((dataset) =>
+            dataset["inputDatasets"].includes(this.dataset?.pid),
+          ),
+      ),
+    );
 
-  derivedDatasets: DerivedDataset[] = [];
+  derivedDatasets = [];
   loading$ = this.store.select(selectIsLoading);
   loggedIn$ = this.store.select(selectIsLoggedIn);
   result$ = this.store.select(selectOpenwhiskResult);
@@ -83,11 +87,11 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
     private ownershipService: OwnershipService,
   ) {}
 
-  reduceDataset(dataset: Dataset): void {
+  reduceDataset(dataset: OutputDatasetObsoleteDto): void {
     this.store.dispatch(reduceDatasetAction({ dataset }));
   }
 
-  onRowClick(dataset: Dataset): void {
+  onRowClick(dataset: DatasetClass): void {
     const pid = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl("/datasets/" + pid);
   }
@@ -130,16 +134,17 @@ export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
     for (const propName in changes) {
       if (propName === "dataset") {
         this.dataset = changes[propName].currentValue;
-        this.derivedDatasets$ = this.store.select(selectDatasets).pipe(
-          map((datasets) =>
-            datasets
-              .filter((dataset) => dataset.type === "derived")
-              .map((dataset: unknown) => dataset as DerivedDataset)
-              .filter((dataset) =>
-                dataset["inputDatasets"].includes(this.dataset?.pid),
-              ),
-          ),
-        );
+        this.derivedDatasets$ = this.store
+          .select(selectDatasets)
+          .pipe(
+            map((datasets) =>
+              datasets
+                .filter((dataset) => dataset.type === "derived")
+                .filter((dataset) =>
+                  dataset["inputDatasets"].includes(this.dataset?.pid),
+                ),
+            ),
+          );
       }
     }
   }

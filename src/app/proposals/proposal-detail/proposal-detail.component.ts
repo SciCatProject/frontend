@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { Proposal } from "state-management/models";
+import { ProposalClass } from "@scicatproject/scicat-sdk-ts";
 import { AppConfigService } from "app-config.service";
 import { Store } from "@ngrx/store";
 import {
@@ -30,8 +30,8 @@ import { clearProposalsStateAction } from "state-management/actions/proposals.ac
 export class ProposalDetailComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private _hasUnsavedChanges = false;
-  @Input() proposal: Proposal;
-  parentProposal: Proposal | undefined;
+  @Input() proposal: ProposalClass;
+  parentProposal: ProposalClass | undefined;
   parentProposal$ = this.store.select(selectParentProposal);
   editingAllowed = false;
   userProfile$ = this.store.select(selectProfile);

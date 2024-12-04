@@ -2,9 +2,9 @@ import { defineConfig } from "cypress";
 
 export default defineConfig({
   env: {
-    lbBaseUrl: "http://localhost:3000/api/v3",
-    lbLoginEndpoint: "/auth/login",
-    lbTokenPrefix: "Bearer ",
+    baseUrl: "http://localhost:3000/api/v3",
+    loginEndpoint: "/auth/login",
+    tokenPrefix: "Bearer",
     username: "admin",
     password: "27f5fd86ae68fe740eef42b8bbd1d7d5",
     secondaryUsername: "archiveManager",

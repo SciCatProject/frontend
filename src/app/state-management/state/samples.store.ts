@@ -1,16 +1,15 @@
 import {
-  Sample,
-  SampleFilters,
-  Dataset,
-  GenericFilters,
   Attachment,
-} from "state-management/models";
+  OutputDatasetObsoleteDto,
+  SampleClass,
+} from "@scicatproject/scicat-sdk-ts";
+import { SampleFilters, GenericFilters } from "state-management/models";
 
 export interface SampleState {
-  samples: Sample[];
+  samples: SampleClass[];
   attachments: Attachment[];
-  currentSample: Sample | undefined;
-  datasets: Dataset[];
+  currentSample: SampleClass | undefined;
+  datasets: OutputDatasetObsoleteDto[];
   metadataKeys: string[];
 
   samplesCount: number;

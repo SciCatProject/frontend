@@ -8,7 +8,7 @@ import {
 
 import { LogbooksDashboardComponent } from "./logbooks-dashboard.component";
 import { Store, StoreModule } from "@ngrx/store";
-import { MockStore, MockActivatedRoute } from "shared/MockStubs";
+import { MockStore, MockActivatedRoute, createMock } from "shared/MockStubs";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   setTextFilterAction,
@@ -17,12 +17,6 @@ import {
   changePageAction,
   sortByColumnAction,
 } from "state-management/actions/logbooks.actions";
-import {
-  RawDataset,
-  RawDatasetInterface,
-  Logbook,
-  LogbookInterface,
-} from "shared/sdk";
 import { LogbookFilters } from "state-management/models";
 import { RouterTestingModule } from "@angular/router/testing";
 
@@ -48,14 +42,7 @@ describe("DashboardComponent", () => {
   let store: MockStore;
   let dispatchSpy;
 
-  const logbookData: LogbookInterface = {
-    name: "testLogbook",
-    roomId: "testId",
-    messages: [{ message: "test1" }, { message: "test2" }],
-  };
-  const logbook = new Logbook(logbookData);
-
-  const rawDatasetData: RawDatasetInterface = {
+  const rawDatasetData = {
     pid: "67ac46e4-5e87-11ed-9634-fba3f42127ef",
     ownerGroup: "testLogbook",
     proposalId: "testLogbook",
@@ -66,8 +53,16 @@ describe("DashboardComponent", () => {
     sourceFolder: "some/folders/on/some/server",
     creationTime: undefined,
     type: "raw",
+    createdAt: "",
+    createdBy: "",
+    inputDatasets: [],
+    investigator: "",
+    numberOfFilesArchived: 0,
+    updatedAt: "",
+    updatedBy: "",
+    usedSoftware: [],
   };
-  const dataset = new RawDataset(rawDatasetData);
+  const dataset = createMock(rawDatasetData);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

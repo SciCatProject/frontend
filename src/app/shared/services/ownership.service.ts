@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { combineLatest, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { Dataset } from "shared/sdk";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts";
 import {
   selectIsAdmin,
   selectProfile,
@@ -14,7 +14,7 @@ import {
 })
 export class OwnershipService {
   checkDatasetAccess(
-    dataset: Dataset | undefined,
+    dataset: OutputDatasetObsoleteDto | undefined,
     store: Store,
     router: Router,
   ) {

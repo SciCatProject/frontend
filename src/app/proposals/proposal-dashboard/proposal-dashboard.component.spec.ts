@@ -16,10 +16,10 @@ import { Store, StoreModule } from "@ngrx/store";
 import { ProposalDashboardComponent } from "./proposal-dashboard.component";
 import { ProposalsModule } from "proposals/proposals.module";
 import { EffectsModule } from "@ngrx/effects";
-import { DatasetApi, LogbookApi, ProposalApi } from "shared/sdk";
 import { HttpClient } from "@angular/common/http";
 import { ScicatDataService } from "shared/services/scicat-data-service";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
 
 describe("ProposalDashboardComponent", () => {
   let component: ProposalDashboardComponent;
@@ -49,15 +49,7 @@ describe("ProposalDashboardComponent", () => {
         { provide: ExportExcelService, useValue: {} },
         { provide: Router, useClass: MockRouter },
         { provide: Store, useClass: MockStore },
-        { provide: DatasetApi, useClass: MockDatasetApi },
-        {
-          provide: LogbookApi,
-          useValue: jasmine.createSpyObj("logbookApi", ["find", "findByName"]),
-        },
-        {
-          provide: ProposalApi,
-          useValue: jasmine.createSpyObj("proposalApi", ["find", "findByName"]),
-        },
+        { provide: DatasetsService, useClass: MockDatasetApi },
         { provide: ScicatDataService, useValue: {} },
       ],
     }).compileComponents();

@@ -1,7 +1,9 @@
+import { mockInstrument as instrument } from "shared/MockStubs";
 import * as fromActions from "./instruments.actions";
-import { Instrument } from "shared/sdk";
 
 describe("Instrument Actions", () => {
+  const instruments = [instrument];
+
   describe("fetchInstrumentsAction", () => {
     it("should create an action", () => {
       const action = fromActions.fetchInstrumentsAction();
@@ -12,7 +14,6 @@ describe("Instrument Actions", () => {
 
   describe("fetchInstrumentsCompleteAction", () => {
     it("should create an action", () => {
-      const instruments = [new Instrument()];
       const action = fromActions.fetchInstrumentsCompleteAction({
         instruments,
       });
@@ -80,7 +81,6 @@ describe("Instrument Actions", () => {
 
   describe("fetchInstrumentCompleteAction", () => {
     it("should create an action", () => {
-      const instrument = new Instrument();
       const action = fromActions.fetchInstrumentCompleteAction({
         instrument,
       });
@@ -120,7 +120,6 @@ describe("Instrument Actions", () => {
 
   describe("saveCustomMetadataCompleteAction", () => {
     it("should create an action", () => {
-      const instrument = new Instrument();
       const action = fromActions.saveCustomMetadataCompleteAction({
         instrument,
       });

@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { combineLatest, Observable } from "rxjs";
 import { first, map } from "rxjs/operators";
-import { Dataset, Job, User } from "state-management/models";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import {
   selectCurrentUser,
@@ -10,6 +9,10 @@ import {
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { RetrieveDestinations } from "app-config.service";
+import {
+  OutputDatasetObsoleteDto,
+  ReturnedUserDto,
+} from "@scicatproject/scicat-sdk-ts";
 
 @Injectable()
 export class ArchivingService {
@@ -19,12 +22,12 @@ export class ArchivingService {
   constructor(private store: Store) {}
 
   private createJob(
-    user: User,
-    datasets: Dataset[],
+    user: ReturnedUserDto,
+    datasets: OutputDatasetObsoleteDto[],
     archive: boolean,
     destinationPath?: Record<string, string>,
     // Do not specify tape copies here
-  ): Job {
+  ) {
     const extra = archive ? {} : destinationPath;
     const jobParams = {
       username: user.username,
@@ -46,11 +49,11 @@ export class ArchivingService {
       type: archive ? "archive" : "retrieve",
     };
 
-    return new Job(data);
+    return data;
   }
 
   private archiveOrRetrieve(
-    datasets: Dataset[],
+    datasets: OutputDatasetObsoleteDto[],
     archive: boolean,
     destPath?: Record<string, string>,
   ): Observable<void> {
@@ -71,18 +74,18 @@ export class ArchivingService {
 
           const job = this.createJob(user, datasets, archive, destPath);
 
-          this.store.dispatch(submitJobAction({ job }));
+          this.store.dispatch(submitJobAction({ job: job as any }));
         }
       }),
     );
   }
 
-  public archive(datasets: Dataset[]): Observable<void> {
+  public archive(datasets: OutputDatasetObsoleteDto[]): Observable<void> {
     return this.archiveOrRetrieve(datasets, true);
   }
 
   public retrieve(
-    datasets: Dataset[],
+    datasets: OutputDatasetObsoleteDto[],
     destinationPath: Record<string, string>,
   ): Observable<void> {
     return this.archiveOrRetrieve(datasets, false, destinationPath);

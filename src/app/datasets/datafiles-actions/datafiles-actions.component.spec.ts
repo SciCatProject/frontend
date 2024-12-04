@@ -10,9 +10,9 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { RouterModule } from "@angular/router";
 import { StoreModule } from "@ngrx/store";
-import { UserApi } from "shared/sdk";
 import { MockMatDialogRef, MockUserApi } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
+import { UsersService } from "@scicatproject/scicat-sdk-ts";
 
 describe("DatafilesActionsComponent", () => {
   let component: DatafilesActionsComponent;
@@ -91,10 +91,10 @@ describe("DatafilesActionsComponent", () => {
     TestBed.overrideComponent(DatafilesActionsComponent, {
       set: {
         providers: [
-          { provide: UserApi, useClass: MockUserApi },
+          { provide: UsersService, useClass: MockUserApi },
           { provide: MatDialogRef, useClass: MockMatDialogRef },
           { provide: AppConfigService, useValue: mockAppConfigService },
-          { provide: UserApi, useClass: MockUserApi },
+          { provide: UsersService, useClass: MockUserApi },
         ],
       },
     });

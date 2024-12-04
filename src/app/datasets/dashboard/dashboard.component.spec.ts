@@ -8,14 +8,18 @@ import {
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 
-import { MockActivatedRoute, MockStore } from "shared/MockStubs";
+import {
+  MockActivatedRoute,
+  MockStore,
+  createMock,
+  mockDataset as dataset,
+} from "shared/MockStubs";
 import { DashboardComponent } from "./dashboard.component";
 import { of } from "rxjs";
 import {
   addDatasetAction,
   changePageAction,
 } from "state-management/actions/datasets.actions";
-import { User, Dataset, DerivedDataset } from "shared/sdk";
 import {
   selectColumnAction,
   deselectColumnAction,
@@ -36,6 +40,10 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { PageChangeEvent } from "shared/modules/table/table.component";
+import {
+  CreateDerivedDatasetObsoleteDto,
+  ReturnedUserDto,
+} from "@scicatproject/scicat-sdk-ts";
 
 class MockMatDialog {
   open() {
@@ -208,7 +216,6 @@ describe("DashboardComponent", () => {
 
   describe("#onRowClick()", () => {
     it("should navigate to a dataset", () => {
-      const dataset = new Dataset();
       component.onRowClick(dataset);
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
@@ -225,22 +232,19 @@ describe("DashboardComponent", () => {
 
       dispatchSpy = spyOn(store, "dispatch");
 
-      const currentUser = new User({
+      const currentUser = createMock<ReturnedUserDto>({
         id: "testId",
         username: "ldap.Test User",
         email: "test@email.com",
         realm: "test",
         emailVerified: true,
-        password: "testPassword",
-        accessTokens: [],
-        identities: [],
-        credentials: [],
+        authStrategy: "local",
       });
 
-      const dataset = new DerivedDataset({
+      const dataset: CreateDerivedDatasetObsoleteDto = {
         accessGroups: [],
         contactEmail: currentUser.email,
-        creationTime: new Date(),
+        creationTime: new Date().toString(),
         datasetName: "Test Name",
         description: "Test description",
         isPublished: false,
@@ -256,7 +260,8 @@ describe("DashboardComponent", () => {
         investigator: currentUser.email,
         scientificMetadata: {},
         usedSoftware: ["test software"],
-      });
+        numberOfFilesArchived: 0,
+      };
 
       component.currentUser = currentUser;
       component.userGroups = ["test"];

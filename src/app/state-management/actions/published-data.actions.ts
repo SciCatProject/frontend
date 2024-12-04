@@ -1,5 +1,9 @@
 import { createAction, props } from "@ngrx/store";
-import { PublishedData } from "shared/sdk";
+import {
+  CreatePublishedDataDto,
+  PublishedData,
+  UpdatePublishedDataDto,
+} from "@scicatproject/scicat-sdk-ts";
 
 export const fetchAllPublishedDataAction = createAction(
   "[PublishedData] Fetch All Published Data",
@@ -35,7 +39,7 @@ export const fetchPublishedDataFailedAction = createAction(
 
 export const publishDatasetAction = createAction(
   "[PublishedData] Publish Dataset",
-  props<{ data: PublishedData }>(),
+  props<{ data: CreatePublishedDataDto }>(),
 );
 export const publishDatasetCompleteAction = createAction(
   "[PublishedData] Publish Dataset Complete",
@@ -59,7 +63,7 @@ export const registerPublishedDataFailedAction = createAction(
 
 export const resyncPublishedDataAction = createAction(
   "[PublishedData] Resync Published Data",
-  props<{ doi: string; data: Partial<PublishedData> }>(),
+  props<{ doi: string; data: UpdatePublishedDataDto }>(),
 );
 export const resyncPublishedDataCompleteAction = createAction(
   "[PublishedData] Resync Published Data Complete",

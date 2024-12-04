@@ -1,6 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import { DatasetApi, ProposalApi, Proposal, Dataset } from "shared/sdk";
+import {
+  DatasetsService,
+  ProposalClass,
+  ProposalsService,
+} from "@scicatproject/scicat-sdk-ts";
 import { Action, Store } from "@ngrx/store";
 import * as fromActions from "state-management/actions/proposals.actions";
 import {
@@ -30,13 +34,15 @@ export class ProposalEffects {
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
-        this.proposalApi.fullquery(query, limits).pipe(
-          mergeMap((proposals) => [
-            fromActions.fetchProposalsCompleteAction({ proposals }),
-            fromActions.fetchCountAction(),
-          ]),
-          catchError(() => of(fromActions.fetchProposalsFailedAction())),
-        ),
+        this.proposalsService
+          .proposalsControllerFullquery(JSON.stringify(limits), query)
+          .pipe(
+            mergeMap((proposals) => [
+              fromActions.fetchProposalsCompleteAction({ proposals }),
+              fromActions.fetchCountAction(),
+            ]),
+            catchError(() => of(fromActions.fetchProposalsFailedAction())),
+          ),
       ),
     );
   });
@@ -47,10 +53,13 @@ export class ProposalEffects {
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       switchMap(({ query }) =>
-        this.proposalApi.fullquery(query).pipe(
-          map((proposals) =>
-            fromActions.fetchCountCompleteAction({ count: proposals.length }),
-          ),
+        this.proposalsService.proposalsControllerFullfacet(query).pipe(
+          map((res) => {
+            const { all } = res[0];
+            const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
+
+            return fromActions.fetchCountCompleteAction({ count: allCounts });
+          }),
           catchError(() => of(fromActions.fetchCountFailedAction())),
         ),
       ),
@@ -76,15 +85,17 @@ export class ProposalEffects {
       ofType(fromActions.fetchProposalDatasetsAction),
       concatLatestFrom(() => this.datasetQueryParams$),
       switchMap(([{ proposalId }, { limits }]) =>
-        this.datasetApi
-          .find<Dataset>({
-            where: { proposalId },
-            skip: limits.skip,
-            limit: limits.limit,
-            order: limits.order,
-          })
+        this.datasetsService
+          .datasetsControllerFindAll(
+            JSON.stringify({
+              where: { proposalId },
+              skip: limits.skip,
+              limit: limits.limit,
+              order: limits.order,
+            }),
+          )
           .pipe(
-            mergeMap((datasets: Dataset[]) => [
+            mergeMap((datasets) => [
               fromActions.fetchProposalDatasetsCompleteAction({ datasets }),
               fromActions.fetchProposalDatasetsCountAction({ proposalId }),
             ]),
@@ -100,16 +111,18 @@ export class ProposalEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchProposalDatasetsCountAction),
       switchMap(({ proposalId }) =>
-        this.datasetApi.find({ where: { proposalId } }).pipe(
-          map((datasets) =>
-            fromActions.fetchProposalDatasetsCountCompleteAction({
-              count: datasets.length,
-            }),
+        this.datasetsService
+          .datasetsControllerFindAll(JSON.stringify({ where: { proposalId } }))
+          .pipe(
+            map((datasets) =>
+              fromActions.fetchProposalDatasetsCountCompleteAction({
+                count: datasets.length,
+              }),
+            ),
+            catchError(() =>
+              of(fromActions.fetchProposalDatasetsCountFailedAction()),
+            ),
           ),
-          catchError(() =>
-            of(fromActions.fetchProposalDatasetsCountFailedAction()),
-          ),
-        ),
       ),
     );
   });
@@ -118,10 +131,9 @@ export class ProposalEffects {
     return this.actions$.pipe(
       ofType(fromActions.addAttachmentAction),
       switchMap(({ attachment }) => {
-        const { id, rawDatasetId, derivedDatasetId, sampleId, ...theRest } =
-          attachment;
-        return this.proposalApi
-          .createAttachments(encodeURIComponent(theRest.proposalId), theRest)
+        const { id, sampleId, ...theRest } = attachment;
+        return this.proposalsService
+          .proposalsControllerCreateAttachment(theRest.proposalId, theRest)
           .pipe(
             map((res) =>
               fromActions.addAttachmentCompleteAction({ attachment: res }),
@@ -137,10 +149,10 @@ export class ProposalEffects {
       ofType(fromActions.updateAttachmentCaptionAction),
       switchMap(({ proposalId, attachmentId, caption }) => {
         const newCaption = { caption };
-        return this.proposalApi
-          .updateByIdAttachments(
-            encodeURIComponent(proposalId),
-            encodeURIComponent(attachmentId),
+        return this.proposalsService
+          .proposalsControllerFindOneAttachmentAndUpdate(
+            proposalId,
+            attachmentId,
             newCaption,
           )
           .pipe(
@@ -161,8 +173,8 @@ export class ProposalEffects {
     return this.actions$.pipe(
       ofType(fromActions.updateProposalPropertyAction),
       switchMap(({ proposalId, property }) =>
-        this.proposalApi
-          .patchAttributes(encodeURIComponent(proposalId), property)
+        this.proposalsService
+          .proposalsControllerUpdate(proposalId, property)
           .pipe(
             switchMap(() => [
               fromActions.updateProposalPropertyCompleteAction(),
@@ -180,10 +192,10 @@ export class ProposalEffects {
     return this.actions$.pipe(
       ofType(fromActions.removeAttachmentAction),
       switchMap(({ proposalId, attachmentId }) =>
-        this.proposalApi
-          .destroyByIdAttachments(
-            encodeURIComponent(proposalId),
-            encodeURIComponent(attachmentId),
+        this.proposalsService
+          .proposalsControllerFindOneAttachmentAndRemove(
+            proposalId,
+            attachmentId,
           )
           .pipe(
             map((res) =>
@@ -243,35 +255,35 @@ export class ProposalEffects {
 
   constructor(
     private actions$: Actions,
-    private datasetApi: DatasetApi,
-    private proposalApi: ProposalApi,
+    private datasetsService: DatasetsService,
+    private proposalsService: ProposalsService,
     private store: Store,
   ) {}
 
   private createProposalFetchEffect(
     triggerAction: string,
-    completeAction: (props: { proposal: Proposal }) => Action,
+    completeAction: (props: { proposal: ProposalClass }) => Action,
     failedAction: () => Action,
     accessFailedAction: () => Action,
   ) {
     return createEffect(() => {
       return this.actions$.pipe(
         ofType(triggerAction),
-        switchMap<Proposal, ObservableInput<Action>>(({ proposalId }) =>
-          this.proposalApi.findByIdAccess(encodeURIComponent(proposalId)).pipe(
-            filter(
-              (permission: { canAccess: boolean }) => permission.canAccess,
+        switchMap<ProposalClass, ObservableInput<Action>>(({ proposalId }) =>
+          this.proposalsService
+            .proposalsControllerFindByIdAccess(proposalId)
+            .pipe(
+              filter((permission) => permission.canAccess),
+              switchMap(() =>
+                this.proposalsService
+                  .proposalsControllerFindById(proposalId)
+                  .pipe(
+                    map((proposal) => completeAction({ proposal })),
+                    catchError(() => of(failedAction())),
+                  ),
+              ),
+              catchError(() => of(accessFailedAction())),
             ),
-            switchMap(() =>
-              this.proposalApi
-                .findById<Proposal>(encodeURIComponent(proposalId))
-                .pipe(
-                  map((proposal) => completeAction({ proposal })),
-                  catchError(() => of(failedAction())),
-                ),
-            ),
-            catchError(() => of(accessFailedAction())),
-          ),
         ),
       );
     });

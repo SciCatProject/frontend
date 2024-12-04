@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Policy, DatasetApi } from "shared/sdk";
+import { DatasetsService, Policy } from "@scicatproject/scicat-sdk-ts";
 import {
   TableColumn,
   PageChangeEvent,
@@ -75,7 +75,7 @@ export class PoliciesDashboardComponent implements OnInit {
   ];
 
   constructor(
-    private datasetApi: DatasetApi,
+    private datasetService: DatasetsService,
     public dialog: MatDialog,
     private router: Router,
     private store: Store,
@@ -195,8 +195,8 @@ export class PoliciesDashboardComponent implements OnInit {
       );
       // if datasets already exist
       this.selectedGroups.forEach((group) => {
-        this.datasetApi
-          .count({ ownerGroup: group })
+        this.datasetService
+          .datasetsControllerCount(`{ "ownerGroup": "${group}" }`)
           .pipe(
             map((count) => {
               if (count) {

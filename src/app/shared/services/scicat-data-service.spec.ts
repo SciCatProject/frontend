@@ -1,8 +1,8 @@
 import { HttpClient, HttpClientModule } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
-import { LoopBackAuth } from "shared/sdk";
 
 import { ScicatDataService } from "./scicat-data-service";
+import { AuthService } from "./auth/auth.service";
 
 describe("ScicatDataServiceService", () => {
   let service: ScicatDataService;
@@ -17,7 +17,7 @@ describe("ScicatDataServiceService", () => {
         ScicatDataService,
         { provide: HttpClient, useClass: HttpClientModule },
         {
-          provide: LoopBackAuth,
+          provide: AuthService,
           useValue: loopBackAuth,
         },
       ],

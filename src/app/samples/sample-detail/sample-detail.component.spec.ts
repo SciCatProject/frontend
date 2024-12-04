@@ -1,6 +1,12 @@
 import { ActivatedRoute, Router } from "@angular/router";
 
-import { MockActivatedRoute, MockStore } from "shared/MockStubs";
+import {
+  MockActivatedRoute,
+  MockStore,
+  createMock,
+  mockDataset,
+  mockSample,
+} from "shared/MockStubs";
 import { SampleDetailComponent } from "./sample-detail.component";
 import { Store, StoreModule } from "@ngrx/store";
 import {
@@ -19,7 +25,6 @@ import {
   removeAttachmentAction,
   addAttachmentAction,
 } from "state-management/actions/samples.actions";
-import { Dataset, Sample, User } from "shared/sdk";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
@@ -31,6 +36,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatTabsModule } from "@angular/material/tabs";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { AppConfigService } from "app-config.service";
+import { DatasetClass, ReturnedUserDto } from "@scicatproject/scicat-sdk-ts";
 
 const getConfig = () => ({
   editMetadataEnabled: true,
@@ -105,7 +111,7 @@ describe("SampleDetailComponent", () => {
     });
 
     it("should return an array of data objects if there are datasets", () => {
-      const datasets = [new Dataset()];
+      const datasets = [mockDataset];
       const data = component.formatTableData(datasets);
 
       expect(data.length).toEqual(1);
@@ -116,7 +122,7 @@ describe("SampleDetailComponent", () => {
     it("should dispatch a saveCharacteristicsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const sample = new Sample();
+      const sample = mockSample;
       sample.sampleId = "testId";
       component.sample = sample;
       const characteristics = {};
@@ -137,8 +143,8 @@ describe("SampleDetailComponent", () => {
     it("should dispatch an addAttachmentAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      component.user = new User();
-      component.sample = new Sample();
+      component.user = createMock<ReturnedUserDto>({});
+      component.sample = mockSample;
       const file = {
         name: "test",
         size: 100,
@@ -158,7 +164,7 @@ describe("SampleDetailComponent", () => {
     it("should dispatch an updateAttachmentCaptionAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      component.sample = new Sample();
+      component.sample = mockSample;
       const sampleId = "testId";
       component.sample.sampleId = sampleId;
       const event: SubmitCaptionEvent = {
@@ -182,7 +188,7 @@ describe("SampleDetailComponent", () => {
     it("should dispatch a removeAttachmentAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      component.sample = new Sample();
+      component.sample = mockSample;
       const sampleId = "testId";
       component.sample.sampleId = sampleId;
       const attachmentId = "testId";
@@ -199,7 +205,7 @@ describe("SampleDetailComponent", () => {
     it("should dispatch a changeDatasetsPageAction and a fetchSampleDatasetsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const sample = new Sample();
+      const sample = mockSample;
       sample.sampleId = "testId";
       component.sample = sample;
       const event: PageChangeEvent = {
@@ -225,10 +231,10 @@ describe("SampleDetailComponent", () => {
 
   describe("#onRowClick()", () => {
     it("should navigate to a dataset", () => {
-      const dataset = new Dataset();
+      const dataset = mockDataset;
       dataset.pid = "testId";
 
-      component.onRowClick(dataset);
+      component.onRowClick(dataset as DatasetClass);
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
       expect(router.navigateByUrl).toHaveBeenCalledWith(

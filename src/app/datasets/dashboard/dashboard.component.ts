@@ -4,7 +4,7 @@ import { Store, ActionsSubject } from "@ngrx/store";
 
 import deepEqual from "deep-equal";
 
-import { DatasetFilters, User } from "state-management/models";
+import { DatasetFilters } from "state-management/models";
 
 import {
   fetchDatasetsAction,
@@ -35,7 +35,10 @@ import {
   selectColumns,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
-import { Dataset, DerivedDataset } from "shared/sdk";
+import {
+  OutputDatasetObsoleteDto,
+  ReturnedUserDto,
+} from "@scicatproject/scicat-sdk-ts";
 import {
   selectColumnAction,
   deselectColumnAction,
@@ -73,7 +76,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
 
   appConfig = this.appConfigService.getConfig();
-  currentUser: User = new User();
+
+  currentUser: ReturnedUserDto;
   userGroups: string[] = [];
   clearColumnSearch = false;
 
@@ -121,7 +125,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  onRowClick(dataset: Dataset): void {
+  onRowClick(dataset: OutputDatasetObsoleteDto): void {
     const pid = encodeURIComponent(dataset.pid);
     this.router.navigateByUrl("/datasets/" + pid);
   }
@@ -135,10 +139,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((res) => {
       if (res) {
         const { username, email } = this.currentUser;
-        const dataset = new DerivedDataset({
+        const dataset = {
           accessGroups: [],
           contactEmail: email, // Required
-          creationTime: new Date(), // Required
+          creationTime: new Date().toString(), // Required
           datasetName: res.datasetName,
           description: res.description,
           isPublished: false,
@@ -153,12 +157,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
           inputDatasets: [], // Required
           investigator: email, // Required
           scientificMetadata: {},
+          numberOfFilesArchived: 0, // Required
           usedSoftware: res.usedSoftware
             .split(",")
             .map((entry: string) => entry.trim())
             .filter((entry: string) => entry !== ""), // Required
-        });
-        this.store.dispatch(addDatasetAction({ dataset }));
+        };
+        this.store.dispatch(
+          addDatasetAction({
+            dataset: dataset,
+          }),
+        );
       }
     });
   }

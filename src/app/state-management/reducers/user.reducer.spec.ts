@@ -1,16 +1,10 @@
 import { userReducer } from "./user.reducer";
 import { initialUserState } from "../state/user.store";
 import * as fromActions from "../actions/user.actions";
-import {
-  User,
-  MessageType,
-  Message,
-  Settings,
-  UserIdentity,
-  TableColumn,
-} from "../models";
-import { AccessToken, UserSetting } from "shared/sdk";
+import { MessageType, Message, Settings, TableColumn } from "../models";
 import { HttpErrorResponse } from "@angular/common/http";
+import { ReturnedUserDto, UserIdentity } from "@scicatproject/scicat-sdk-ts";
+import { SDKToken } from "shared/services/auth/auth.service";
 
 describe("UserReducer", () => {
   describe("on setDatasetTableColumnsAction", () => {
@@ -42,7 +36,12 @@ describe("UserReducer", () => {
 
   describe("on loginCompletAction", () => {
     it("should set currentUser, accountType, and set isLoggingIn to false and isLoggedIn to true", () => {
-      const user = new User();
+      const user: ReturnedUserDto = {
+        id: "",
+        authStrategy: "",
+        email: "",
+        username: "",
+      };
       const accountType = "test";
       const action = fromActions.loginCompleteAction({ user, accountType });
       const state = userReducer(initialUserState, action);
@@ -67,7 +66,12 @@ describe("UserReducer", () => {
 
   describe("on fetchCurrentUserCompleteAction", () => {
     it("should set currentUser and set isLoggedIn to true", () => {
-      const user = new User();
+      const user: ReturnedUserDto = {
+        id: "",
+        authStrategy: "",
+        email: "",
+        username: "",
+      };
       const action = fromActions.fetchCurrentUserCompleteAction({ user });
       const state = userReducer(initialUserState, action);
 
@@ -78,7 +82,25 @@ describe("UserReducer", () => {
 
   describe("on fetchUserIdentityCompleteAction", () => {
     it("should set profile", () => {
-      const userIdentity = new UserIdentity();
+      const userIdentity: UserIdentity = {
+        authStrategy: "",
+        created: "",
+        credentials: {},
+        externalId: "",
+        modified: "",
+        profile: {
+          accessGroups: [],
+          displayName: "",
+          email: "",
+          emails: [],
+          id: "",
+          oidcClaims: [],
+          thumbnailPhoto: "",
+          username: "",
+        },
+        provider: "",
+        userId: "",
+      };
       const action = fromActions.fetchUserIdentityCompleteAction({
         userIdentity,
       });
@@ -90,13 +112,14 @@ describe("UserReducer", () => {
 
   describe("on fetchUserSettingsCompleteAction", () => {
     it("should set jobCount and datasetCount settings, and columns if not empty", () => {
-      const userSettings = new UserSetting({
+      const userSettings = {
         columns: [{ name: "test", order: 0, type: "standard", enabled: true }],
         datasetCount: 50,
         jobCount: 50,
         userId: "testId",
+        externalSettings: {},
         id: "testId",
-      });
+      };
       const action = fromActions.fetchUserSettingsCompleteAction({
         userSettings,
       });
@@ -104,17 +127,20 @@ describe("UserReducer", () => {
 
       expect(state.settings.datasetCount).toEqual(userSettings.datasetCount);
       expect(state.settings.jobCount).toEqual(userSettings.jobCount);
-      expect(state.columns).toEqual(userSettings.columns);
+      expect(state.columns).toEqual(
+        (userSettings as { columns: TableColumn[] }).columns,
+      );
     });
 
     it("should set jobCount and datasetCount settings, and not columns if empty", () => {
-      const userSettings = new UserSetting({
+      const userSettings = {
         columns: [],
         datasetCount: 50,
         jobCount: 50,
         userId: "testId",
         id: "testId",
-      });
+        externalSettings: {},
+      };
       const action = fromActions.fetchUserSettingsCompleteAction({
         userSettings,
       });
@@ -128,13 +154,14 @@ describe("UserReducer", () => {
 
   describe("on updateUserSettingsCompleteAction", () => {
     it("should set jobCount and datasetCount settings, and columns if not empty", () => {
-      const userSettings = new UserSetting({
+      const userSettings = {
         columns: [{ name: "test", order: 0, type: "standard", enabled: true }],
         datasetCount: 50,
         jobCount: 50,
         userId: "testId",
+        externalSettings: {},
         id: "testId",
-      });
+      };
       const action = fromActions.updateUserSettingsCompleteAction({
         userSettings,
       });
@@ -142,17 +169,20 @@ describe("UserReducer", () => {
 
       expect(state.settings.datasetCount).toEqual(userSettings.datasetCount);
       expect(state.settings.jobCount).toEqual(userSettings.jobCount);
-      expect(state.columns).toEqual(userSettings.columns);
+      expect(state.columns).toEqual(
+        (userSettings as { columns: TableColumn[] }).columns,
+      );
     });
 
     it("should set jobCount and datasetCount settings, and not columns if empty", () => {
-      const userSettings = new UserSetting({
+      const userSettings = {
         columns: [],
         datasetCount: 50,
         jobCount: 50,
         userId: "testId",
+        externalSettings: {},
         id: "testId",
-      });
+      };
       const action = fromActions.updateUserSettingsCompleteAction({
         userSettings,
       });
@@ -166,7 +196,20 @@ describe("UserReducer", () => {
 
   describe("on fetchScicatTokenCompleteAction", () => {
     it("should set scicatToken", () => {
-      const token = new AccessToken();
+      const token: SDKToken = {
+        id: "testId",
+        ttl: 100,
+        scopes: ["string"],
+        created: new Date(),
+        userId: "testId",
+        rememberMe: false,
+        user: {
+          id: "test",
+          email: "test@test.com",
+          username: "testUsername",
+          authStrategy: "local",
+        },
+      };
       const action = fromActions.fetchScicatTokenCompleteAction({ token });
       const state = userReducer(initialUserState, action);
 

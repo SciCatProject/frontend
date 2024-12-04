@@ -1,7 +1,6 @@
 import { TestBed, waitForAsync } from "@angular/core/testing";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { RetrieveDestinations } from "app-config.service";
-import { Dataset, Job, User } from "shared/sdk";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import {
   selectCurrentUser,
@@ -10,6 +9,8 @@ import {
 } from "state-management/selectors/user.selectors";
 import { JobsState } from "state-management/state/jobs.store";
 import { ArchivingService } from "./archiving.service";
+import { createMock, mockDataset } from "shared/MockStubs";
+import { CreateJobDto, ReturnedUserDto } from "@scicatproject/scicat-sdk-ts";
 
 describe("ArchivingService", () => {
   let service: ArchivingService;
@@ -24,9 +25,11 @@ describe("ArchivingService", () => {
           selectors: [
             {
               selector: selectCurrentUser,
-              value: new User({
+              value: createMock<ReturnedUserDto>({
                 email: "test@email.com",
                 username: "testName",
+                authStrategy: "",
+                id: "",
               }),
             },
             { selector: selectTapeCopies, value: "test" },
@@ -46,8 +49,13 @@ describe("ArchivingService", () => {
 
   describe("#createJob()", () => {
     it("should create a new object of type Job", () => {
-      const user = new User({ username: "testName", email: "test@email.com" });
-      const datasets = [new Dataset()];
+      const user = createMock<ReturnedUserDto>({
+        username: "testName",
+        email: "test@email.com",
+        authStrategy: "",
+        id: "",
+      });
+      const datasets = [mockDataset];
       const datasetList = datasets.map((dataset) => ({
         pid: dataset.pid,
         files: [],
@@ -62,7 +70,7 @@ describe("ArchivingService", () => {
         destinationPath,
       );
 
-      expect(job).toBeInstanceOf(Job);
+      // expect(job).toBeInstanceOf(Job);
       expect(job["emailJobInitiator"]).toEqual("test@email.com");
       expect(job["jobParams"]["username"]).toEqual("testName");
       expect(job["datasetList"]).toEqual(datasetList);
@@ -83,19 +91,26 @@ describe("ArchivingService", () => {
     xit("should call #createJob() and then dispatch a submitJobAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const user = new User({ username: "testName", email: "test@email.com" });
-      const datasets = [new Dataset()];
+      const user = createMock<ReturnedUserDto>({
+        username: "testName",
+        email: "test@email.com",
+        authStrategy: "",
+        id: "",
+      });
+      const datasets = [mockDataset];
       const datasetList = datasets.map((dataset) => ({
         pid: dataset.pid,
         files: [],
       }));
       const archive = true;
-      const job = new Job({
+      const job = createMock<CreateJobDto>({
         jobParams: { username: user.username },
         emailJobInitiator: user.email,
-        creationTime: new Date(),
         datasetList,
         type: "archive",
+        executionTime: "",
+        jobResultObject: {},
+        jobStatusMessage: "",
       });
       const createJobSpy = spyOn<any, string>(
         service,
@@ -120,7 +135,7 @@ describe("ArchivingService", () => {
         service,
         "archiveOrRetrieve",
       );
-      const datasets = [new Dataset()];
+      const datasets = [mockDataset];
 
       service.archive(datasets);
 
@@ -134,7 +149,7 @@ describe("ArchivingService", () => {
         service,
         "archiveOrRetrieve",
       );
-      const datasets = [new Dataset()];
+      const datasets = [mockDataset];
       const destinationPath = { location: "/test/path/" };
 
       service.retrieve(datasets, destinationPath);

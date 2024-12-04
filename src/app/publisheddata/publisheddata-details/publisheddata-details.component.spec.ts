@@ -7,7 +7,6 @@ import {
   MockActivatedRoute,
 } from "shared/MockStubs";
 import { Store } from "@ngrx/store";
-import { PublishedDataApi } from "shared/sdk";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { Router, ActivatedRoute } from "@angular/router";
 import { LinkyModule } from "ngx-linky";
@@ -16,6 +15,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { AppConfigService } from "app-config.service";
+import { PublishedDataService } from "@scicatproject/scicat-sdk-ts";
 
 const getConfig = () => ({
   editMetadataEnabled: true,
@@ -45,7 +45,7 @@ describe("PublisheddataDetailsComponent", () => {
           { provide: Store, useClass: MockStore },
           { provide: Router, useClass: MockRouter },
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
-          { provide: PublishedDataApi, useClass: MockPublishedDataApi },
+          { provide: PublishedDataService, useClass: MockPublishedDataApi },
           {
             provide: AppConfigService,
             useValue: { getConfig },

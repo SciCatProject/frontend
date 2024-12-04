@@ -2,7 +2,7 @@ describe("Policies", () => {
   beforeEach(() => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
 
-    cy.intercept("POST", "/api/v3/Policies/**/*").as("update");
+    cy.intercept("POST", "/api/v3/policies/**/*").as("update");
     cy.intercept("GET", "*").as("fetch");
   });
 

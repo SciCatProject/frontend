@@ -9,7 +9,7 @@ import {
   SimpleChange,
   ViewEncapsulation,
 } from "@angular/core";
-import { Dataset, TableColumn } from "state-management/models";
+import { TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
@@ -28,19 +28,18 @@ import {
   selectTotalSets,
   selectDatasetsInBatch,
 } from "state-management/selectors/datasets.selectors";
-import { get } from "lodash";
+import { get } from "lodash-es";
 import { AppConfigService } from "app-config.service";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
+import {
+  DatasetClass,
+  OutputDatasetObsoleteDto,
+} from "@scicatproject/scicat-sdk-ts";
 import { PageEvent } from "@angular/material/paginator";
 export interface SortChangeEvent {
   active: string;
   direction: "asc" | "desc" | "";
 }
-
-// interface DatasetDerivationsMap {
-//   datasetPid: string;
-//   derivedDatasetsNum: number;
-// }
 
 @Component({
   selector: "dataset-table",
@@ -61,18 +60,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() tableColumns: TableColumn[] | null = null;
   displayedColumns: string[] = [];
-  @Input() selectedSets: Dataset[] | null = null;
+  @Input() selectedSets: OutputDatasetObsoleteDto[] | null = null;
   @Output() pageChange = new EventEmitter<{
     pageIndex: number;
     pageSize: number;
   }>();
 
-  datasets: Dataset[] = [];
-  // datasetDerivationsMaps: DatasetDerivationsMap[] = [];
-  // derivationMapPids: string[] = [];
+  datasets: OutputDatasetObsoleteDto[] = [];
 
   @Output() settingsClick = new EventEmitter<MouseEvent>();
-  @Output() rowClick = new EventEmitter<Dataset>();
+  @Output() rowClick = new EventEmitter<OutputDatasetObsoleteDto>();
 
   constructor(
     public appConfigService: AppConfigService,
@@ -89,13 +86,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
     this.settingsClick.emit(event);
   }
 
-  doRowClick(dataset: Dataset): void {
+  doRowClick(dataset: OutputDatasetObsoleteDto): void {
     this.rowClick.emit(dataset);
   }
 
   // conditional to asses dataset status and assign correct icon ArchViewMode.work_in_progress
   // TODO: when these concepts stabilise, we should move the definitions to site config
-  wipCondition(dataset: Dataset): boolean {
+  wipCondition(dataset: DatasetClass): boolean {
     if (
       !dataset.datasetlifecycle.archivable &&
       !dataset.datasetlifecycle.retrievable &&
@@ -109,7 +106,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
     return false;
   }
 
-  systemErrorCondition(dataset: Dataset): boolean {
+  systemErrorCondition(dataset: DatasetClass): boolean {
     if (
       (dataset.datasetlifecycle.retrievable &&
         dataset.datasetlifecycle.archivable) ||
@@ -123,14 +120,14 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
     return false;
   }
 
-  userErrorCondition(dataset: Dataset): boolean {
+  userErrorCondition(dataset: DatasetClass): boolean {
     if (dataset.datasetlifecycle.archiveStatusMessage === "missingFilesError") {
       return true;
     }
     return false;
   }
 
-  archivableCondition(dataset: Dataset): boolean {
+  archivableCondition(dataset: DatasetClass): boolean {
     if (
       dataset.datasetlifecycle.archivable &&
       !dataset.datasetlifecycle.retrievable &&
@@ -141,7 +138,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
     return false;
   }
 
-  retrievableCondition(dataset: Dataset): boolean {
+  retrievableCondition(dataset: DatasetClass): boolean {
     if (
       !dataset.datasetlifecycle.archivable &&
       dataset.datasetlifecycle.retrievable
@@ -151,7 +148,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
     return false;
   }
 
-  isSelected(dataset: Dataset): boolean {
+  isSelected(dataset: DatasetClass): boolean {
     if (!this.selectedSets) {
       return false;
     }
@@ -164,11 +161,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
     return numSelected === numRows;
   }
 
-  isInBatch(dataset: Dataset): boolean {
+  isInBatch(dataset: DatasetClass): boolean {
     return this.inBatchPids.indexOf(dataset.pid) !== -1;
   }
 
-  onSelect(event: MatCheckboxChange, dataset: Dataset): void {
+  onSelect(event: MatCheckboxChange, dataset: OutputDatasetObsoleteDto): void {
     if (event.checked) {
       this.store.dispatch(selectDatasetAction({ dataset }));
     } else {

@@ -4,7 +4,12 @@ import {
   DatasetTableComponent,
   SortChangeEvent,
 } from "./dataset-table.component";
-import { MockStore, MockDatasetApi } from "shared/MockStubs";
+import {
+  MockStore,
+  MockDatasetApi,
+  mockDataset,
+  createMock,
+} from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import {
   ComponentFixture,
@@ -13,7 +18,6 @@ import {
   waitForAsync,
 } from "@angular/core/testing";
 import { StoreModule, Store } from "@ngrx/store";
-import { Dataset, DatasetApi } from "shared/sdk";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import {
   selectDatasetAction,
@@ -34,6 +38,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppConfigService } from "app-config.service";
+import { DatasetClass, DatasetsService } from "@scicatproject/scicat-sdk-ts";
 
 const getConfig = () => ({});
 
@@ -71,7 +76,7 @@ describe("DatasetTableComponent", () => {
             provide: AppConfigService,
             useValue: { getConfig },
           },
-          { provide: DatasetApi, useClass: MockDatasetApi },
+          { provide: DatasetsService, useClass: MockDatasetApi },
         ],
       },
     });
@@ -113,7 +118,7 @@ describe("DatasetTableComponent", () => {
     it("should emit the dataset clicked", () => {
       const emitSpy = spyOn(component.rowClick, "emit");
 
-      const dataset = new Dataset();
+      const dataset = mockDataset;
       component.doRowClick(dataset);
 
       expect(emitSpy).toHaveBeenCalledTimes(1);
@@ -131,7 +136,7 @@ describe("DatasetTableComponent", () => {
 
   describe("#userErrorCondition()", () => {
     it("should return true if dataset has missingFilesError", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       dataset.datasetlifecycle = {
         archiveStatusMessage: "missingFilesError",
       };
@@ -142,7 +147,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset has no missingFilesError", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       dataset.datasetlifecycle = {
         archiveStatusMessage: "",
       };
@@ -155,7 +160,7 @@ describe("DatasetTableComponent", () => {
 
   describe("#archivableCondition()", () => {
     it("should return false if dataset is not archivable and retrievable and does not have a missingFilesError", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: true,
@@ -168,7 +173,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset is not archivable and retrievable and does have a missingFilesError", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: true,
@@ -181,7 +186,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset is not archivable and not retrievable and does not have a missingFilesError", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: false,
@@ -194,7 +199,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset is not archivable and not retrievable and does have a missingFilesError", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: false,
@@ -207,7 +212,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset is not archivable and retrievable and does not have a missingFilesError", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: true,
@@ -220,7 +225,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset is archivable and retrievable and does not have a missingFilesError", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       dataset.datasetlifecycle = {
         archivable: true,
         retrievable: true,
@@ -233,7 +238,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset is archivable and retrievable and does have a missingFilesError", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       dataset.datasetlifecycle = {
         archivable: true,
         retrievable: true,
@@ -246,7 +251,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return true if dataset is archivable and not retrievable and does not have a missingFilesError", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       dataset.datasetlifecycle = {
         archivable: true,
         retrievable: false,
@@ -261,7 +266,7 @@ describe("DatasetTableComponent", () => {
 
   describe("#retrievableCondition()", () => {
     it("should return false if dataset is archivable and not retrievable", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       dataset.datasetlifecycle = {
         archivable: true,
         retrievable: false,
@@ -273,7 +278,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset is not archivable and not retrievable", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: false,
@@ -285,7 +290,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return false if dataset is archivable and retrievable", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       dataset.datasetlifecycle = {
         archivable: true,
         retrievable: true,
@@ -297,7 +302,7 @@ describe("DatasetTableComponent", () => {
     });
 
     it("should return true if dataset is retrievable and not archivable", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       dataset.datasetlifecycle = {
         archivable: false,
         retrievable: true,
@@ -311,7 +316,7 @@ describe("DatasetTableComponent", () => {
 
   describe("#isSelected()", () => {
     it("should return false if dataset is not selected", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       const selected = component.isSelected(dataset);
 
       expect(selected).toEqual(false);
@@ -320,7 +325,7 @@ describe("DatasetTableComponent", () => {
 
   describe("#isAllSelected()", () => {
     it("should return false if length of datasets and length of selectedSets are not equal", () => {
-      component.datasets = [new Dataset()];
+      component.datasets = [mockDataset];
 
       const allSelected = component.isAllSelected();
 
@@ -336,7 +341,7 @@ describe("DatasetTableComponent", () => {
 
   describe("#isInBatch()", () => {
     it("should return false if dataset is not in batch", () => {
-      const dataset = new Dataset();
+      const dataset = createMock<DatasetClass>({});
       const inBatch = component.isInBatch(dataset);
 
       expect(inBatch).toEqual(false);
@@ -349,7 +354,7 @@ describe("DatasetTableComponent", () => {
 
       const event = new MatCheckboxChange();
       event.checked = true;
-      const dataset = new Dataset();
+      const dataset = mockDataset;
       component.onSelect(event, dataset);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
@@ -363,7 +368,7 @@ describe("DatasetTableComponent", () => {
 
       const event = new MatCheckboxChange();
       event.checked = false;
-      const dataset = new Dataset();
+      const dataset = mockDataset;
       component.onSelect(event, dataset);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
@@ -417,7 +422,7 @@ describe("DatasetTableComponent", () => {
 
   describe("#countDerivedDatasets()", () => {
     xit("should return the number of derived datasets for a dataset", () => {
-      // const dataset = new Dataset();
+      // const dataset = mockDataset;
       // const numberOfDerivedDataset = component.countDerivedDatasets(dataset);
       // expect(numberOfDerivedDataset).toEqual(0);
     });

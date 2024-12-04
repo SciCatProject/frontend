@@ -12,7 +12,8 @@
     "lint:fix": "ng lint --fix",
     "betterer": "betterer",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "generate:sdk:local": "node scripts/generate-nestjs-sdk"
   },
   "private": true,
   "dependencies": {
@@ -33,6 +34,7 @@
     "@ngrx/effects": "^16",
     "@ngrx/router-store": "^16",
     "@ngrx/store": "^16",
+    "@scicatproject/scicat-sdk-ts": "^4.7.2",
     "autolinker": "^4.0.0",
     "deep-equal": "^2.0.5",
     "exceljs": "^4.3.0",
@@ -41,6 +43,7 @@
     "lodash-es": "^4.17.21",
     "luxon": "^3.3.0",
     "mathjs": "^14.0.0",
+    "ngx-cookie-service": "^16.1.0",
     "ngx-json-viewer": "^3",
     "ngx-linky": "^4.0.0",
     "ngx-material-luxon": "^1.1.1",
@@ -67,7 +70,7 @@
     "@types/deep-equal": "^1.0.1",
     "@types/file-saver": "^2.0.2",
     "@types/jasmine": "^5.1.0",
-    "@types/lodash": "^4.14.172",
+    "@types/lodash-es": "^4.17.12",
     "@types/luxon": "^3.3.0",
     "@types/node": "^22.0.0",
     "@types/shortid": "2.2.0",

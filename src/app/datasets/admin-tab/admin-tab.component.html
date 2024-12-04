@@ -2,7 +2,7 @@
   <ng-container *ngIf="datablocks$ | async as datablocks">
     <h3>Datablocks: {{ datablocks.length }}</h3>
     <ul *ngFor="let block of datablocks">
-      <li>{{ block.id }}</li>
+      <li>{{ block._id }}</li>
       <ul>
         <li>{{ block.archiveId }}</li>
       </ul>

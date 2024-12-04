@@ -1,6 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import { JobApi, Job } from "shared/sdk";
+import {
+  CreateJobDto,
+  JobClass,
+  JobsService,
+} from "@scicatproject/scicat-sdk-ts";
 import { Store } from "@ngrx/store";
 import { selectQueryParams } from "state-management/selectors/jobs.selectors";
 import * as fromActions from "state-management/actions/jobs.actions";
@@ -29,28 +33,12 @@ export class JobEffects {
       concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
       switchMap((params) =>
-        this.jobApi.find<Job>(params).pipe(
-          switchMap((jobs: Job[]) => [
+        this.jobsService.jobsControllerFindAll(JSON.stringify(params)).pipe(
+          switchMap((jobs) => [
             fromActions.fetchJobsCompleteAction({ jobs }),
             fromActions.fetchCountAction(),
           ]),
           catchError(() => of(fromActions.fetchJobsFailedAction())),
-        ),
-      ),
-    );
-  });
-
-  fetchCount$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.fetchCountAction),
-      concatLatestFrom(() => this.queryParams$),
-      map(([action, params]) => params),
-      switchMap(({ where }) =>
-        this.jobApi.count(where).pipe(
-          map((res) =>
-            fromActions.fetchCountCompleteAction({ count: res.count }),
-          ),
-          catchError(() => of(fromActions.fetchCountFailedAction())),
         ),
       ),
     );
@@ -69,8 +57,8 @@ export class JobEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchJobAction),
       switchMap(({ jobId }) =>
-        this.jobApi.findById<Job>(jobId).pipe(
-          map((job: Job) => fromActions.fetchJobCompleteAction({ job })),
+        this.jobsService.jobsControllerFindOne(jobId).pipe(
+          map((job: JobClass) => fromActions.fetchJobCompleteAction({ job })),
           catchError(() => of(fromActions.fetchJobFailedAction())),
         ),
       ),
@@ -81,7 +69,7 @@ export class JobEffects {
     return this.actions$.pipe(
       ofType(fromActions.submitJobAction),
       switchMap(({ job }) =>
-        this.jobApi.create(job).pipe(
+        this.jobsService.jobsControllerCreate(job).pipe(
           map((res) => fromActions.submitJobCompleteAction({ job: res })),
           catchError((err) => of(fromActions.submitJobFailedAction({ err }))),
         ),
@@ -146,7 +134,7 @@ export class JobEffects {
 
   constructor(
     private actions$: Actions,
-    private jobApi: JobApi,
+    private jobsService: JobsService,
     private store: Store,
   ) {}
 }

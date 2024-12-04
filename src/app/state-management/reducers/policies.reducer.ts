@@ -41,7 +41,7 @@ const reducer = createReducer(
 
   on(fromActions.selectPolicyAction, (state, { policy }): PolicyState => {
     const alreadySelected = state.selectedPolicies.find(
-      (existing) => existing.id === policy.id,
+      (existing) => existing._id === policy._id,
     );
     if (alreadySelected) {
       return state;
@@ -52,7 +52,7 @@ const reducer = createReducer(
   }),
   on(fromActions.deselectPolicyAction, (state, { policy }): PolicyState => {
     const selectedPolicies = state.selectedPolicies.filter(
-      (selectedPolicy) => selectedPolicy.id !== policy.id,
+      (selectedPolicy) => selectedPolicy._id !== policy._id,
     );
     return { ...state, selectedPolicies };
   }),

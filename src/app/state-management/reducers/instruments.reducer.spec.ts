@@ -1,12 +1,12 @@
 import * as fromActions from "state-management/actions/instruments.actions";
-import { Instrument } from "shared/sdk";
 import { instrumentsReducer } from "./instruments.reducer";
 import { initialInstrumentState } from "state-management/state/instruments.store";
+import { mockInstrument as instrument } from "shared/MockStubs";
 
 describe("InstrumentsReducer", () => {
   describe("on fetchInstrumentsCompleteAction", () => {
     it("should set instruments property", () => {
-      const instruments = [new Instrument()];
+      const instruments = [instrument];
       const action = fromActions.fetchInstrumentsCompleteAction({
         instruments,
       });
@@ -28,7 +28,6 @@ describe("InstrumentsReducer", () => {
 
   describe("on fetchInstrumentCompleteAction", () => {
     it("should set currentInstrument property", () => {
-      const instrument = new Instrument();
       const action = fromActions.fetchInstrumentCompleteAction({
         instrument,
       });
@@ -40,7 +39,6 @@ describe("InstrumentsReducer", () => {
 
   describe("on saveCustomMetadataCompleteAction", () => {
     it("should set currentInstrument property", () => {
-      const instrument = new Instrument();
       const action = fromActions.saveCustomMetadataCompleteAction({
         instrument,
       });

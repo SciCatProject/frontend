@@ -9,7 +9,6 @@ import {
   MockActivatedRoute,
 } from "shared/MockStubs";
 import { Store, ActionsSubject } from "@ngrx/store";
-import { PublishedDataApi } from "shared/sdk";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { of } from "rxjs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
@@ -25,6 +24,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatOptionModule } from "@angular/material/core";
 import { MatButtonModule } from "@angular/material/button";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
+import { PublishedDataService } from "@scicatproject/scicat-sdk-ts";
 
 describe("PublisheddataEditComponent", () => {
   let component: PublisheddataEditComponent;
@@ -59,7 +59,7 @@ describe("PublisheddataEditComponent", () => {
         providers: [
           { provide: ActivatedRoute, useClass: MockActivatedRoute },
           { provide: ActionsSubject, useValue: of({}) },
-          { provide: PublishedDataApi, useClass: MockPublishedDataApi },
+          { provide: PublishedDataService, useClass: MockPublishedDataApi },
           { provide: Router, useClass: MockRouter },
           { provide: Store, useClass: MockStore },
         ],

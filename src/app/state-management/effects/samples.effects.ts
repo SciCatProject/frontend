@@ -1,6 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import { DatasetApi, SampleApi, Sample, Dataset, Attachment } from "shared/sdk";
+import {
+  CreateSubAttachmentDto,
+  DatasetsService,
+  SamplesService,
+} from "@scicatproject/scicat-sdk-ts";
 import { Store } from "@ngrx/store";
 import {
   selectFullqueryParams,
@@ -30,13 +34,15 @@ export class SampleEffects {
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
-        this.sampleApi.fullquery(query, limits).pipe(
-          mergeMap((samples) => [
-            fromActions.fetchSamplesCompleteAction({ samples }),
-            fromActions.fetchSamplesCountAction(),
-          ]),
-          catchError(() => of(fromActions.fetchSamplesFailedAction())),
-        ),
+        this.sampleApi
+          .samplesControllerFullquery(JSON.stringify(limits), query)
+          .pipe(
+            mergeMap((samples) => [
+              fromActions.fetchSamplesCompleteAction({ samples }),
+              fromActions.fetchSamplesCountAction(),
+            ]),
+            catchError(() => of(fromActions.fetchSamplesFailedAction())),
+          ),
       ),
     );
   });
@@ -47,7 +53,7 @@ export class SampleEffects {
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query }) =>
-        this.sampleApi.fullquery(query).pipe(
+        this.sampleApi.samplesControllerFullquery(query).pipe(
           map((samples) =>
             fromActions.fetchSamplesCountCompleteAction({
               count: samples.length,
@@ -67,12 +73,14 @@ export class SampleEffects {
       mergeMap(({ query }) => {
         const parsedQuery = JSON.parse(query);
         parsedQuery.metadataKey = "";
-        return this.sampleApi.metadataKeys(JSON.stringify(parsedQuery)).pipe(
-          map((metadataKeys) =>
-            fromActions.fetchMetadataKeysCompleteAction({ metadataKeys }),
-          ),
-          catchError(() => of(fromActions.fetchMetadataKeysFailedAction())),
-        );
+        return this.sampleApi
+          .samplesControllerMetadataKeys(JSON.stringify(parsedQuery))
+          .pipe(
+            map((metadataKeys) =>
+              fromActions.fetchMetadataKeysCompleteAction({ metadataKeys }),
+            ),
+            catchError(() => of(fromActions.fetchMetadataKeysFailedAction())),
+          );
       }),
     );
   });
@@ -81,11 +89,11 @@ export class SampleEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchSampleAction),
       switchMap(({ sampleId }) => {
-        return this.sampleApi.findByIdAccess(sampleId).pipe(
-          filter((permission: { canAccess: boolean }) => permission.canAccess),
+        return this.sampleApi.samplesControllerFindByIdAccess(sampleId).pipe(
+          filter((permission) => permission.canAccess),
           switchMap(() =>
-            this.sampleApi.findById<Sample>(sampleId).pipe(
-              map((sample: Sample) =>
+            this.sampleApi.samplesControllerFindById(sampleId).pipe(
+              map((sample) =>
                 fromActions.fetchSampleCompleteAction({ sample }),
               ),
               catchError(() => of(fromActions.fetchSampleFailedAction())),
@@ -101,14 +109,16 @@ export class SampleEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchSampleAttachmentsAction),
       switchMap(({ sampleId }) => {
-        return this.sampleApi.getAttachments(sampleId).pipe(
-          map((attachments: Attachment[]) =>
-            fromActions.fetchSampleAttachmentsCompleteAction({ attachments }),
-          ),
-          catchError(() =>
-            of(fromActions.fetchSampleAttachmentsFailedAction()),
-          ),
-        );
+        return this.sampleApi
+          .samplesControllerFindAllAttachments(sampleId)
+          .pipe(
+            map((attachments) =>
+              fromActions.fetchSampleAttachmentsCompleteAction({ attachments }),
+            ),
+            catchError(() =>
+              of(fromActions.fetchSampleAttachmentsFailedAction()),
+            ),
+          );
       }),
     );
   });
@@ -119,9 +129,16 @@ export class SampleEffects {
       concatLatestFrom(() => this.datasetsQueryParams$),
       mergeMap(([{ sampleId }, { order, skip, limit }]) =>
         this.datasetApi
-          .find<Dataset>({ where: { sampleId }, order, skip, limit })
+          .datasetsControllerFindAll(
+            JSON.stringify({
+              where: { sampleId },
+              order,
+              skip,
+              limit,
+            }),
+          )
           .pipe(
-            mergeMap((datasets: Dataset[]) => [
+            mergeMap((datasets) => [
               fromActions.fetchSampleDatasetsCompleteAction({ datasets }),
               fromActions.fetchSampleDatasetsCountAction({ sampleId }),
             ]),
@@ -135,16 +152,18 @@ export class SampleEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchSampleDatasetsCountAction),
       switchMap(({ sampleId }) =>
-        this.datasetApi.find({ where: { sampleId } }).pipe(
-          map((datasets) =>
-            fromActions.fetchSampleDatasetsCountCompleteAction({
-              count: datasets.length,
-            }),
+        this.datasetApi
+          .datasetsControllerFindAll(JSON.stringify({ where: { sampleId } }))
+          .pipe(
+            map((datasets) =>
+              fromActions.fetchSampleDatasetsCountCompleteAction({
+                count: datasets.length,
+              }),
+            ),
+            catchError(() =>
+              of(fromActions.fetchSampleDatasetsCountFailedAction()),
+            ),
           ),
-          catchError(() =>
-            of(fromActions.fetchSampleDatasetsCountFailedAction()),
-          ),
-        ),
       ),
     );
   });
@@ -154,11 +173,11 @@ export class SampleEffects {
       ofType(fromActions.saveCharacteristicsAction),
       switchMap(({ sampleId, characteristics }) =>
         this.sampleApi
-          .patchAttributes(sampleId, {
+          .samplesControllerUpdate(sampleId, {
             sampleCharacteristics: characteristics,
           })
           .pipe(
-            map((sample: Sample) =>
+            map((sample) =>
               fromActions.saveCharacteristicsCompleteAction({ sample }),
             ),
             catchError(() => of(fromActions.saveCharacteristicsFailedAction())),
@@ -171,7 +190,7 @@ export class SampleEffects {
     return this.actions$.pipe(
       ofType(fromActions.addSampleAction),
       mergeMap(({ sample }) =>
-        this.sampleApi.create(sample).pipe(
+        this.sampleApi.samplesControllerCreate(sample).pipe(
           mergeMap((res) => [
             fromActions.addSampleCompleteAction({ sample: res }),
             fromActions.fetchSamplesAction(),
@@ -186,16 +205,12 @@ export class SampleEffects {
     return this.actions$.pipe(
       ofType(fromActions.addAttachmentAction),
       switchMap(({ attachment }) => {
-        const {
-          id,
-          datasetId,
-          rawDatasetId,
-          derivedDatasetId,
-          proposalId,
-          ...theRest
-        } = attachment;
+        const { id, datasetId, proposalId, ...theRest } = attachment;
         return this.sampleApi
-          .createAttachments(encodeURIComponent(theRest.sampleId!), theRest)
+          .samplesControllerCreateAttachments(
+            theRest.sampleId,
+            theRest as CreateSubAttachmentDto,
+          )
           .pipe(
             map((res) =>
               fromActions.addAttachmentCompleteAction({ attachment: res }),
@@ -206,40 +221,12 @@ export class SampleEffects {
     );
   });
 
-  updateAttachmentCaption$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.updateAttachmentCaptionAction),
-      switchMap(({ sampleId, attachmentId, caption }) => {
-        const newCaption = { caption };
-        return this.sampleApi
-          .updateByIdAttachments(
-            encodeURIComponent(sampleId),
-            encodeURIComponent(attachmentId),
-            newCaption,
-          )
-          .pipe(
-            map((res) =>
-              fromActions.updateAttachmentCaptionCompleteAction({
-                attachment: res,
-              }),
-            ),
-            catchError(() =>
-              of(fromActions.updateAttachmentCaptionFailedAction()),
-            ),
-          );
-      }),
-    );
-  });
-
   removeAttachment$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.removeAttachmentAction),
       switchMap(({ sampleId, attachmentId }) =>
         this.sampleApi
-          .destroyByIdAttachments(
-            encodeURIComponent(sampleId),
-            encodeURIComponent(attachmentId),
-          )
+          .samplesControllerFindOneAttachmentAndRemove(sampleId, attachmentId)
           .pipe(
             map(() =>
               fromActions.removeAttachmentCompleteAction({ attachmentId }),
@@ -298,8 +285,8 @@ export class SampleEffects {
 
   constructor(
     private actions$: Actions,
-    private datasetApi: DatasetApi,
-    private sampleApi: SampleApi,
+    private datasetApi: DatasetsService,
+    private sampleApi: SamplesService,
     private store: Store,
   ) {}
 }

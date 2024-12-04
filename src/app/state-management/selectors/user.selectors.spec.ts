@@ -1,56 +1,47 @@
 import * as fromSelectors from "./user.selectors";
 
 import { UserState } from "../state/user.store";
-import { User, UserIdentity, Settings } from "../models";
-import { AccessToken } from "shared/sdk";
-import { LocationFilterComponent } from "../../shared/modules/filters/location-filter.component";
-import { PidFilterComponent } from "../../shared/modules/filters/pid-filter.component";
-import { PidFilterContainsComponent } from "../../shared/modules/filters/pid-filter-contains.component";
-import { PidFilterStartsWithComponent } from "../../shared/modules/filters/pid-filter-startsWith.component";
-import { GroupFilterComponent } from "../../shared/modules/filters/group-filter.component";
-import { TypeFilterComponent } from "../../shared/modules/filters/type-filter.component";
-import { KeywordFilterComponent } from "../../shared/modules/filters/keyword-filter.component";
-import { DateRangeFilterComponent } from "../../shared/modules/filters/date-range-filter.component";
-import { TextFilterComponent } from "../../shared/modules/filters/text-filter.component";
+import { Settings } from "../models";
+import { ReturnedUserDto, UserIdentity } from "@scicatproject/scicat-sdk-ts";
+import { SDKToken } from "shared/services/auth/auth.service";
 
-const user = new User({
+const user: ReturnedUserDto = {
   id: "testId",
   realm: "testRealm",
   username: "testName",
   email: "test@email.com",
   emailVerified: true,
-  password: "testPassword",
-  accessTokens: [],
-  identities: [],
-  credentials: [],
-});
+  authStrategy: "local",
+};
 
 const userIdentity: UserIdentity = {
-  id: "testId",
-  user,
+  ...user,
   provider: "testProvider",
-  authScheme: "testScheme",
   externalId: "testId",
   credentials: null,
   userId: "testId",
-  created: new Date(),
-  modified: new Date(),
+  created: new Date().toDateString(),
+  modified: new Date().toDateString(),
   profile: {
     id: "testId",
     displayName: "testName",
     email: "test@email.com",
     username: "testName",
     thumbnailPhoto: "data",
+    accessGroups: [],
+    emails: [],
+    oidcClaims: [],
   },
 };
 
-const scicatToken: AccessToken = {
+const scicatToken: SDKToken = {
   id: "testId",
   ttl: 100,
   scopes: ["string"],
   created: new Date(),
   userId: "testId",
   user: null,
+  rememberMe: false,
 };
 
 const settings: Settings = {
