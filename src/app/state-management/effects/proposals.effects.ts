@@ -1,6 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import { DatasetApi, ProposalApi, Proposal, Dataset } from "shared/sdk";
+import {
+  DatasetsService,
+  ProposalClass,
+  ProposalsService,
+} from "@scicatproject/scicat-sdk-ts";
 import { Action, Store } from "@ngrx/store";
 import * as fromActions from "state-management/actions/proposals.actions";
 import {
@@ -271,28 +275,28 @@ export class ProposalEffects {
 
   private createProposalFetchEffect(
     triggerAction: string,
-    completeAction: (props: { proposal: Proposal }) => Action,
+    completeAction: (props: { proposal: ProposalClass }) => Action,
     failedAction: () => Action,
     accessFailedAction: () => Action,
   ) {
     return createEffect(() => {
       return this.actions$.pipe(
         ofType(triggerAction),
-        switchMap<Proposal, ObservableInput<Action>>(({ proposalId }) =>
-          this.proposalApi.findByIdAccess(encodeURIComponent(proposalId)).pipe(
-            filter(
-              (permission: { canAccess: boolean }) => permission.canAccess,
+        switchMap<ProposalClass, ObservableInput<Action>>(({ proposalId }) =>
+          this.proposalsService
+            .proposalsControllerFindByIdAccess(proposalId)
+            .pipe(
+              filter((permission) => permission.canAccess),
+              switchMap(() =>
+                this.proposalsService
+                  .proposalsControllerFindById(proposalId)
+                  .pipe(
+                    map((proposal) => completeAction({ proposal })),
+                    catchError(() => of(failedAction())),
+                  ),
+              ),
+              catchError(() => of(accessFailedAction())),
             ),
-            switchMap(() =>
-              this.proposalApi
-                .findById<Proposal>(encodeURIComponent(proposalId))
-                .pipe(
-                  map((proposal) => completeAction({ proposal })),
-                  catchError(() => of(failedAction())),
-                ),
-            ),
-            catchError(() => of(accessFailedAction())),
-          ),
         ),
       );
     });

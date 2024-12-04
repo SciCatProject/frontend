@@ -1,12 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Output,
-  EventEmitter,
-  OnDestroy,
-  Inject,
-} from "@angular/core";
-import { Dataset, Proposal, Sample } from "shared/sdk/models";
+import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 
