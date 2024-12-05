@@ -282,15 +282,29 @@ export class OneDepComponent implements OnInit {
 
     this.fileTypes.push(newMap);
   }
-  sendFollowUpRequests(depID: string, form: FormData) {
-    this.http.post("http://localhost:8080/onedep/${depID}", form ).subscribe({
-      next: (res) => console.log('Uploaded File and Metadata', res),
+  sendFile(depID: string, form: FormData) {
+    this.http.post("http://localhost:8080/onedep/" + depID + "/file", form).subscribe({
+      next: (res) => console.log('Uploaded', this.emFile[form.get("fileMetadata")["type"]],res),
       error: (error) => console.error('Could not upload File and Metadata', error),
+    });
+  }
+  sendCoordFile(depID: string, form: FormData) {
+    this.http.post("http://localhost:8080/onedep/" + depID + "/pdb", form).subscribe({
+      next: (res) => console.log('Uploaded Coordinates and Metadata', res),
+      error: (error) => console.error('Could not upload Coordinates and Metadata', error),
+    });
+  }
+  sendMetadata(depID: string, body: string) {
+    // missing token!
+    this.http.post("http://localhost:8080/onedep/" + depID + "/metadata", body, {
+      headers: { 'Content-Type': 'application/json' },
+    }).subscribe({
+      next: (res) => console.log('Uploaded Metadata', res),
+      error: (error) => console.error('Could not upload Metadata', error),
     });
   }
   onDepositClick() {
     //  Create a deposition
-    console.log(this.orcidArray().value.map(item => item.orcidId));
     const body = JSON.stringify(
       {
         "email": "sofya.laskina@epfl.ch",  // for now
@@ -301,33 +315,45 @@ export class OneDepComponent implements OnInit {
       }
     );
     let depID: string;
-    this.http.post("http://localhost:8080/onedep", body, {
-      headers: {}
-    }).subscribe({
-      next: (response: any) => {
-        depID = response.depID; // Update the outer variable
-        console.log('Created deposition in OneDep', depID);
-        
-        // Call subsequent requests
-        this.fileTypes.forEach((fT) => {
-            if (fT.file) {
-              const formDataFile = new FormData()
-              formDataFile.append('jwtToken', this.form.value.jwtToken )
-              formDataFile.append('file', fT.file);
-              formDataFile.append('fileMetadata', JSON.stringify({ name: fT.fileName, type: fT.type, contour: fT.contour, details: fT.details }))
-              console.log(formDataFile)
-              this.sendFollowUpRequests(depID, formDataFile);
-            }
-          });
-        
-      },
-      error: (error) => console.error('Request failed', error.error),
+    let metadataAdded = false;
+    depID = "D_800043";
+    // this.http.post("http://localhost:8080/onedep", body, {
+    //  headers: { 'Content-Type': 'application/json' },
+    // }).subscribe({
+    //   next: (response: any) => {
+    //     depID = response.depID; // Update the outer variable
+    //     console.log('Created deposition in OneDep', depID);
+
+    //     // Call subsequent requests
+    this.fileTypes.forEach((fT) => { 
+      if (fT.file) {
+        const formDataFile = new FormData()
+        formDataFile.append('jwtToken', this.form.value.jwtToken)
+        formDataFile.append('file', fT.file);
+        formDataFile.append('fileMetadata', JSON.stringify({ name: fT.fileName, type: fT.type, contour: fT.contour, details: fT.details }))
+        if (fT.emName === this.emFile.Coordinates) {
+          formDataFile.append('metadata', JSON.stringify(this.form.value.metadata));
+          this.sendCoordFile(depID, formDataFile);
+          metadataAdded = true
+        } else {
+          this.sendFile(depID, formDataFile);
+        }
+      }
     });
-    
-    depID
+    if (! metadataAdded){
+      const metadataBody = JSON.stringify({
+        metadata: this.form.value.metadata,
+        jwtToken: this.form.value.jwtToken ,
+      });
+      this.sendMetadata(depID, metadataBody);
+    }
+    //   },
+    //   error: (error) => console.error('Request failed', error.error),
+    // });
+
     // const formDataFile = new FormData();
     // formDataToSend.append('jwtToken', this.form.value.jwtToken);
-    // formDataToSend.append('metadata', JSON.stringify(this.form.value.metadata));
+    // 
 
     // var fileMetadata = []
     // // for (const fI in this.fileTypes) {
