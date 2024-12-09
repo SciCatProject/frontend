@@ -31,6 +31,7 @@ export interface DepositionFiles {
     contour?: number,
     details?: string,
     required: boolean,
+    explanation?: string, 
 }
 
 interface EmMethod {
@@ -47,6 +48,7 @@ export const DepositionImage: DepositionFiles ={
     file: null,
     details: "",
     required: false,
+    explanation: "Image of the map (500 x 500 pixels in .jpg, .png, etc. format)",
 }
 export const DepositionMainMap:DepositionFiles ={
     emName: EmFile.MainMap,
@@ -57,6 +59,7 @@ export const DepositionMainMap:DepositionFiles ={
     contour: 0.0,
     details: "",
     required: false,
+    explanation: "Primary map (.mrc or .ccp4 format, may use gzip or bzip2 compression) along with recommended contour level", 
 }
 export const DepositionHalfMap1:DepositionFiles ={
     emName: EmFile.HalfMap1,
@@ -67,6 +70,7 @@ export const DepositionHalfMap1:DepositionFiles ={
     contour: 0.0,
     details: "",
     required: false,
+    explanation:"Half maps (as used for FSC calculation; two maps must be uploaded)",
 }
 export const DepositionHalfMap2:DepositionFiles ={
     emName: EmFile.HalfMap2,
@@ -77,6 +81,7 @@ export const DepositionHalfMap2:DepositionFiles ={
     contour: 0.0,
     details: "",
     required: false,
+    explanation:"Half maps (as used for FSC calculation; two maps must be uploaded)",
 }
 export const DepositionMaskMap:DepositionFiles ={
     emName: EmFile.MaskMap,
@@ -87,6 +92,7 @@ export const DepositionMaskMap:DepositionFiles ={
     contour: 0.0,
     details: "",
     required: false,
+    explanation:"Primary/raw map mask, segmentation/focused refinement mask and half-map mask",
 }
 export const DepositionAddMap:DepositionFiles ={
     emName: EmFile.AddMap,
@@ -98,6 +104,7 @@ export const DepositionAddMap:DepositionFiles ={
     contour: 0.0,
     details: "",
     required: false,
+    explanation:"Difference maps, maps showing alternative conformations and/or compositions, maps with differential processing (e.g. filtering, sharpening and masking)", 
 }
 export const DepositionFSC:DepositionFiles ={
     emName: EmFile.FSC,
@@ -107,6 +114,7 @@ export const DepositionFSC:DepositionFiles ={
     file: null,
     details: "",
     required: false,
+    explanation: "Half-map FSC, Map-model FSC, Cross-validation FSCs", 
 }
 export const DepositionLayerLines:DepositionFiles ={
     emName: EmFile.LayerLines,
@@ -125,6 +133,7 @@ export const DepositionCoordinates: DepositionFiles = {
     file: null,
     details: "",
     required: false,
+    explanation: "mmCIF or PDB format",
 }
 export const DepositionStructureFactors: DepositionFiles = {
     emName: EmFile.StructureFactors,

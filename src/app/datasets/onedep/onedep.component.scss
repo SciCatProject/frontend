@@ -21,19 +21,14 @@ mat-card {
 
   .card-left {
     flex: 1;
-    margin-left: 20px;
-    margin-right: 16px;
   }
 
   .card-middle {
     flex: 1;
-    margin-right: 16px;
   }
 
   .card-right {
     flex: 1;
-    display: flex;
-    flex-direction: column;
   }
 
   .file-header {
@@ -48,14 +43,9 @@ mat-card {
   .token-field {
     width: 70%;
     height: 20px;
+    min-width: 12rem;
     margin-bottom: 8px;
     margin-top: 0;
-  }
-
-  .orcid-field {
-    width: 40%;
-    height: 20px;
-    margin-bottom: 40px;
   }
 
   .remove-field-btn {
@@ -117,7 +107,6 @@ mat-card {
   mat-radio-button {
     display: block;
     margin-bottom: -0.7rem;
-    /* Optional: Adds spacing between buttons */
   }
 
 
@@ -126,6 +115,7 @@ mat-card {
   }
 
   .method-name {
+    min-width: 12rem;
     width: 50%;
   }
 
@@ -176,15 +166,15 @@ mat-card {
     mat-card-content {
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      margin-bottom: 40px;
 
       .fileChooser {
         margin: 3px auto;
       }
       .data-field {
-        width: 350px; /* Fixed width to accommodate 16 digits, 3 dashes, and button */
-        margin-bottom: 40px;
-        position: relative; /* Necessary for child positioning */
+        width: 350px; 
+        min-width: 320px; 
+        position: relative; 
     }
       .input-container {
         display: flex; // Use flexbox for layout
@@ -193,14 +183,13 @@ mat-card {
 
         .contour-level {
           flex: 0 0 20%; // Set to take 20% of the width
-          min-width: 100px; // Optional: set a minimum width for usability
+          min-width: 150px; // Optional: set a minimum width for usability
 
           /* Chrome, Safari, Edge, Opera */
           input[matinput]::-webkit-outer-spin-button,
           input[matinput]::-webkit-inner-spin-button {
             -webkit-appearance: none;
-            margin: 0;
-          }
+            margin: 0;          }
 
           /* Firefox */
           input[matinput][type=number] {
@@ -209,6 +198,8 @@ mat-card {
         }
 
         .details {
+
+          margin-top:  10px;
           flex: 1; // Allow this field to take the remaining space
           min-width: 200px; // Optional: set a minimum width for usability
 

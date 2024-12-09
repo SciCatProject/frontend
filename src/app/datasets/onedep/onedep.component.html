@@ -1,7 +1,7 @@
 <ng-template [ngIf]="dataset">
     <div style="clear: both"></div>
-    <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
-        <div fxFlex="80%">
+    <div>
+        <div>
             <mat-card [formGroup]="form" data-cy="general-info">
                 <mat-card-header class="general-header">
                     <div mat-card-avatar class="section-icon">
@@ -97,8 +97,9 @@
                                                 maxlength="19"
                                                 placeholder="xxxx-xxxx-xxxx-xxxx"
                                                 formControlName="orcidId"
-                                                orcidFormatter>
-                                                <button 
+                                                orcidFormatter
+                                            >
+                                            <button 
                                                 mat-icon-button 
                                                 class="remove-field-btn" 
                                                 (click)="removeOrcidField(i)">
@@ -235,7 +236,7 @@
                         class="fileCard">
                         <ng-container
                             *ngIf="fileType.emName !== 'co-cif' || form.get('deposingCoordinates').value === 'true'">
-                            <mat-card-header>
+                            <mat-card-header matTooltip="{{fileType.explanation}}" matTooltipPosition="above">
                                 <mat-card-title>{{ fileType.nameFE}} <span class="required-asterisk" *ngIf="isRequired(fileType.emName)"> *</span></mat-card-title>
                                 
                             </mat-card-header>
