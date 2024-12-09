@@ -181,7 +181,11 @@ mat-card {
       .fileChooser {
         margin: 3px auto;
       }
-
+      .data-field {
+        width: 350px; /* Fixed width to accommodate 16 digits, 3 dashes, and button */
+        margin-bottom: 40px;
+        position: relative; /* Necessary for child positioning */
+    }
       .input-container {
         display: flex; // Use flexbox for layout
         align-items: flex-end;
