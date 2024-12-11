@@ -283,9 +283,9 @@ export class OneDepComponent implements OnInit {
 
     this.fileTypes.push(newMap);
   }
-  sendFile(depID: string, form: FormData) {
+  sendFile(depID: string, form: FormData, fileType: string) {
     this.http.post("http://localhost:8080/onedep/" + depID + "/file", form).subscribe({
-      next: (res) => console.log('Uploaded', this.emFile[form.get("fileMetadata")["type"]],res),
+      next: (res) => console.log('Uploaded', fileType, res),
       error: (error) => console.error('Could not upload File and Metadata', error),
     });
   }
@@ -317,13 +317,12 @@ export class OneDepComponent implements OnInit {
     );
     let depID: string;
     let metadataAdded = false;
-    depID = "D_800043";
-    // this.http.post("http://localhost:8080/onedep", body, {
-    //  headers: { 'Content-Type': 'application/json' },
-    // }).subscribe({
-    //   next: (response: any) => {
-    //     depID = response.depID; // Update the outer variable
-    //     console.log('Created deposition in OneDep', depID);
+    this.http.post("http://localhost:8080/onedep", body, {
+     headers: { 'Content-Type': 'application/json' },
+    }).subscribe({
+      next: (response: any) => {
+        depID = response.depID; // Update the outer variable
+        console.log('Created deposition in OneDep', depID);
 
     //     // Call subsequent requests
     this.fileTypes.forEach((fT) => { 
@@ -331,13 +330,13 @@ export class OneDepComponent implements OnInit {
         const formDataFile = new FormData()
         formDataFile.append('jwtToken', this.form.value.jwtToken)
         formDataFile.append('file', fT.file);
-        formDataFile.append('fileMetadata', JSON.stringify({ name: fT.fileName, type: fT.type, contour: fT.contour, details: fT.details }))
         if (fT.emName === this.emFile.Coordinates) {
-          formDataFile.append('metadata', JSON.stringify(this.form.value.metadata));
+          formDataFile.append('scientificMetadata', JSON.stringify(this.form.value.metadata));
           this.sendCoordFile(depID, formDataFile);
           metadataAdded = true
         } else {
-          this.sendFile(depID, formDataFile);
+          formDataFile.append('fileMetadata', JSON.stringify({ name: fT.fileName, type: fT.type, contour: fT.contour, details: fT.details }))
+          this.sendFile(depID, formDataFile, fT.type);
         }
       }
     });
@@ -348,9 +347,9 @@ export class OneDepComponent implements OnInit {
       });
       this.sendMetadata(depID, metadataBody);
     }
-    //   },
-    //   error: (error) => console.error('Request failed', error.error),
-    // });
+      },
+      error: (error) => console.error('Request failed', error.error),
+    });
 
     // const formDataFile = new FormData();
     // formDataToSend.append('jwtToken', this.form.value.jwtToken);
