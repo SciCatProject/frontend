@@ -295,11 +295,9 @@ export class OneDepComponent implements OnInit {
       error: (error) => console.error('Could not upload Coordinates and Metadata', error),
     });
   }
-  sendMetadata(depID: string, body: string) {
+  sendMetadata(depID: string, form: FormData) {
     // missing token!
-    this.http.post("http://localhost:8080/onedep/" + depID + "/metadata", body, {
-      headers: { 'Content-Type': 'application/json' },
-    }).subscribe({
+    this.http.post("http://localhost:8080/onedep/" + depID + "/metadata", form).subscribe({
       next: (res) => console.log('Uploaded Metadata', res),
       error: (error) => console.error('Could not upload Metadata', error),
     });
@@ -341,11 +339,11 @@ export class OneDepComponent implements OnInit {
       }
     });
     if (! metadataAdded){
-      const metadataBody = JSON.stringify({
-        metadata: this.form.value.metadata,
-        jwtToken: this.form.value.jwtToken ,
-      });
-      this.sendMetadata(depID, metadataBody);
+      const formDataFile = new FormData()
+
+      formDataFile.append('jwtToken', this.form.value.jwtToken)
+      formDataFile.append('scientificMetadata', JSON.stringify(this.form.value.metadata));
+      this.sendMetadata(depID, formDataFile);
     }
       },
       error: (error) => console.error('Request failed', error.error),
