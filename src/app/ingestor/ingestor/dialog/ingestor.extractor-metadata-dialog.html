@@ -53,6 +53,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close (click)="onClickBack()">Back</button>
-  <button mat-button color="primary" cdkFocusInitial [mat-dialog-close]="true" disabled="!extractorMetaDataReady"
-    (click)="onClickNext()">Next</button>
+  <button mat-button color="primary" cdkFocusInitial [mat-dialog-close]="true" (click)="onClickNext()">Next</button>
 </mat-dialog-actions>

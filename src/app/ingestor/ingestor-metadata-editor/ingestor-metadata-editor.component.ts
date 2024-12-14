@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Output, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
-import { Schema } from './ingestor-metadata-editor-helper';
 import { customRenderers } from './customRenderer/custom-renderers';
+import { JsonSchema } from '@jsonforms/core';
+import { configuredRenderer } from './ingestor-metadata-editor-helper';
 
 @Component({
   selector: 'app-metadata-editor',
@@ -15,12 +16,12 @@ import { customRenderers } from './customRenderer/custom-renderers';
 
 export class IngestorMetadataEditorComponent {
   @Input() data: Object;
-  @Input() schema: Schema;
+  @Input() schema: JsonSchema;
 
   @Output() dataChange = new EventEmitter<string>();
 
   get combinedRenderers() {
-    return [...angularMaterialRenderers, ...customRenderers];
+    return configuredRenderer;
   }
 
   onDataChange(event: any) {

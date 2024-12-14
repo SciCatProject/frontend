@@ -25,6 +25,9 @@ import { IngestorExtractorMetadataDialog } from "./ingestor/dialog/ingestor.extr
 import { IngestorConfirmTransferDialog } from "./ingestor/dialog/ingestor.confirm-transfer-dialog.component";
 import { MatStepperModule } from "@angular/material/stepper";
 import { IngestorDialogStepperComponent } from "./ingestor/dialog/ingestor.dialog-stepper.component.component";
+import { AnyOfRenderer } from "./ingestor-metadata-editor/customRenderer/any-of-renderer";
+import { OneOfRenderer } from "./ingestor-metadata-editor/customRenderer/one-of-renderer";
+import { MatRadioModule } from "@angular/material/radio";
 
 @NgModule({
   declarations: [
@@ -35,6 +38,8 @@ import { IngestorDialogStepperComponent } from "./ingestor/dialog/ingestor.dialo
     IngestorExtractorMetadataDialog,
     IngestorConfirmTransferDialog,
     IngestorDialogStepperComponent,
+    AnyOfRenderer,
+    OneOfRenderer,
   ],
   imports: [
     CommonModule, 
@@ -53,6 +58,7 @@ import { IngestorDialogStepperComponent } from "./ingestor/dialog/ingestor.dialo
     MatSelectModule,
     MatOptionModule,
     MatStepperModule,
+    MatRadioModule,
     MatAutocompleteModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,

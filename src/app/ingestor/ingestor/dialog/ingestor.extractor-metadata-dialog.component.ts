@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IIngestionRequestInformation, IngestorMetadaEditorHelper, Schema } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper';
+import { IIngestionRequestInformation, IngestorMetadaEditorHelper } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper';
 import { acquisition_schema, instrument_schema } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-schematest';
+import { JsonSchema } from '@jsonforms/core';
 
 @Component({
   selector: 'ingestor.extractor-metadata-dialog',
@@ -11,19 +12,27 @@ import { acquisition_schema, instrument_schema } from 'ingestor/ingestor-metadat
 })
 
 export class IngestorExtractorMetadataDialog {
-  metadataSchemaInstrument: Schema;
-  metadataSchemaAcquisition: Schema;
+  metadataSchemaInstrument: JsonSchema;
+  metadataSchemaAcquisition: JsonSchema;
   createNewTransferData: IIngestionRequestInformation = IngestorMetadaEditorHelper.createEmptyRequestInformation();
 
   backendURL: string = '';
-  extractorMetaDataReady: boolean = true;
+  extractorMetaDataReady: boolean = false;
 
   constructor(public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.backendURL = data.backendURL;
-    this.metadataSchemaInstrument = instrument_schema;
-    this.metadataSchemaAcquisition = acquisition_schema;
-    this.createNewTransferData = data.createNewTransferData;
-    this.extractorMetaDataReady = data.extractorMetaDataReady
+        const encodedSchema = data.createNewTransferData.selectedMethod.schema;
+        const decodedSchema = atob(encodedSchema);
+        const schema = JSON.parse(decodedSchema);
+        
+        const resolvedSchema = IngestorMetadaEditorHelper.resolveRefs(schema, schema);
+        const instrumentSchema = resolvedSchema.properties.instrument;
+        const acqusitionSchema = resolvedSchema.properties.acquisition;
+        
+        this.metadataSchemaInstrument = instrumentSchema;
+        this.metadataSchemaAcquisition = acqusitionSchema;
+        this.createNewTransferData = data.createNewTransferData;
+        this.backendURL = data.backendURL;
+        this.extractorMetaDataReady = true //data.extractorMetaDataReady
   }
 
 

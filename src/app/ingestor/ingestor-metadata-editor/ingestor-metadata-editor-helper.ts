@@ -1,3 +1,6 @@
+import { angularMaterialRenderers } from "@jsonforms/angular-material";
+import { customRenderers } from "./customRenderer/custom-renderers";
+
 export interface IIngestionRequestInformation {
   selectedPath: string;
   selectedMethod: IExtractionMethod;
@@ -13,39 +16,11 @@ export interface IExtractionMethod {
   schema: string; // Base64 encoded JSON schema
 };
 
-export interface Schema {
-  type?: string;
-  properties?: {
-    [key: string]: {
-      type: string;
-      format?: string;
-      enum?: string[];
-      minLength?: number;
-      maxLength?: number;
-      pattern?: string;
-      items?: Schema;
-      additionalProperties?: boolean | Schema;
-      description?: string;
-      title?: string;
-      anyOf?: any[];
-      allOf?: any[];
-      oneOf?: any[];
-      not?: Schema;
-      required?: string[];
-      properties?: {
-        [key: string]: Schema;
-      };
-    };
-  };
-  required?: string[];
-  additionalProperties?: boolean | Schema;
-  description?: string;
-  title?: string;
-  anyOf?: any[];
-  allOf?: any[];
-  oneOf?: any[];
-  not?: Schema;
-}
+export const configuredRenderer = [
+  ...angularMaterialRenderers,
+  ...customRenderers,
+];
+
 
 export class IngestorMetadaEditorHelper {
   // Resolve all $ref in a schema

@@ -1,7 +1,8 @@
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { IIngestionRequestInformation, IngestorMetadaEditorHelper, Schema } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper';
-import { organizational_schema, sample_schema, scicatheader_schema } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-schematest';
+import { IIngestionRequestInformation, IngestorMetadaEditorHelper } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper';
+import { scicatheader_schema } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-schematest';
+import { JsonSchema } from '@jsonforms/core';
 
 @Component({
   selector: 'ingestor.user-metadata-dialog',
@@ -11,9 +12,9 @@ import { organizational_schema, sample_schema, scicatheader_schema } from 'inges
 })
 
 export class IngestorUserMetadataDialog {
-  metadataSchemaOrganizational: Schema;
-  metadataSchemaSample: Schema;
-  scicatHeaderSchema: Schema;
+  metadataSchemaOrganizational: JsonSchema;
+  metadataSchemaSample: JsonSchema;
+  scicatHeaderSchema: JsonSchema;
   createNewTransferData: IIngestionRequestInformation = IngestorMetadaEditorHelper.createEmptyRequestInformation();
   backendURL: string = '';
 
@@ -30,16 +31,9 @@ export class IngestorUserMetadataDialog {
     const decodedSchema = atob(encodedSchema);
     const schema = JSON.parse(decodedSchema);
     
-    console.log(schema);
     const resolvedSchema = IngestorMetadaEditorHelper.resolveRefs(schema, schema);
-
-    console.log(resolvedSchema);
-
     const organizationalSchema = resolvedSchema.properties.organizational;
     const sampleSchema = resolvedSchema.properties.sample;
-
-    console.log(organizationalSchema);
-    console.log(sampleSchema);
     
     this.metadataSchemaOrganizational = organizationalSchema;
     this.metadataSchemaSample = sampleSchema;
