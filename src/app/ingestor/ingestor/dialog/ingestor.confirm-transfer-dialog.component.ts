@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IIngestionRequestInformation } from '../ingestor.component';
-import { IngestorMetadaEditorHelper } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper';
+import { IIngestionRequestInformation, IngestorMetadaEditorHelper } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper';
 
 interface ISciCatHeader {
   datasetName: string;
@@ -32,9 +31,11 @@ interface IScientificMetadata {
 export class IngestorConfirmTransferDialog {
   createNewTransferData: IIngestionRequestInformation = IngestorMetadaEditorHelper.createEmptyRequestInformation();
   provideMergeMetaData: string = '';
+  backendURL: string = '';
 
   constructor(public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any) {
     this.createNewTransferData = data.createNewTransferData;
+    this.backendURL = data.backendURL;
   }
 
   ngOnInit() {

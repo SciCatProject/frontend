@@ -1,4 +1,17 @@
-import { IIngestionRequestInformation } from "ingestor/ingestor/ingestor.component";
+export interface IIngestionRequestInformation {
+  selectedPath: string;
+  selectedMethod: IExtractionMethod;
+  scicatHeader: Object;
+  userMetaData: Object;
+  extractorMetaData: Object;
+  extractorMetaDataReady: boolean;
+  mergedMetaDataString: string;
+}
+
+export interface IExtractionMethod {
+  name: string;
+  schema: string; // Base64 encoded JSON schema
+};
 
 export interface Schema {
   type?: string;
@@ -8,54 +21,55 @@ export interface Schema {
       format?: string;
       enum?: string[];
       minLength?: number;
+      maxLength?: number;
+      pattern?: string;
+      items?: Schema;
+      additionalProperties?: boolean | Schema;
+      description?: string;
+      title?: string;
+      anyOf?: any[];
+      allOf?: any[];
+      oneOf?: any[];
+      not?: Schema;
+      required?: string[];
+      properties?: {
+        [key: string]: Schema;
+      };
     };
   };
   required?: string[];
-}
-
-export interface UISchema {
-  type: string;
-  elements: { type: string; scope: string; label?: boolean }[];
+  additionalProperties?: boolean | Schema;
+  description?: string;
+  title?: string;
+  anyOf?: any[];
+  allOf?: any[];
+  oneOf?: any[];
+  not?: Schema;
 }
 
 export class IngestorMetadaEditorHelper {
-  static generateUISchemaFromSchema(schema: string): UISchema {
-    const parsedSchema: Schema = JSON.parse(schema);
+  // Resolve all $ref in a schema
+  static resolveRefs(schema: any, rootSchema: any): any {
+    if (schema === null || schema === undefined) {
+      return schema;
+    }
 
-    const flattenProperties = (properties: any, parentKey: string = ''): any[] => {
-      if (!properties) {
-        return [];
-      }
-
-      return Object.keys(properties).reduce((acc, key) => {
-        const property = properties[key];
-        const fullKey = parentKey ? `${parentKey}.${key}` : key;
-
-        if (property.type === 'object' && property.properties) {
-          acc.push({
-            type: 'Label',
-            text: key.charAt(0).toUpperCase() + key.slice(1)
-          });
-          acc.push(...flattenProperties(property.properties, fullKey));
-        } else {
-          acc.push({
-            type: 'Control',
-            scope: `#/properties/${fullKey}`,
-            label: parsedSchema.required && parsedSchema.required.includes(key) ? true : undefined
-          });
+    if (schema.$ref) {
+      const refPath = schema.$ref.replace('#/', '').split('/');
+      let ref = rootSchema;
+      refPath.forEach((part) => {
+        ref = ref[part];
+      });
+      return IngestorMetadaEditorHelper.resolveRefs(ref, rootSchema);
+    } else if (typeof schema === 'object') {
+      for (const key in schema) {
+        if (schema.hasOwnProperty(key)) {
+          schema[key] = IngestorMetadaEditorHelper.resolveRefs(schema[key], rootSchema);
         }
-
-        return acc;
-      }, []);
-    };
-
-    const uischema = {
-      type: 'VerticalLayout',
-      elements: flattenProperties(parsedSchema.properties)
-    };
-
-    return uischema;
-  }
+      }
+    }
+    return schema;
+  };
 
   static mergeUserAndExtractorMetadata(userMetadata: Object, extractorMetadata: Object, space: number): string {
     return JSON.stringify({ ...userMetadata, ...extractorMetadata }, null, space);
@@ -64,11 +78,12 @@ export class IngestorMetadaEditorHelper {
   static createEmptyRequestInformation = (): IIngestionRequestInformation => {
     return {
       selectedPath: '',
-      selectedMethod: '',
+      selectedMethod: { name: '', schema: '' },
       scicatHeader: {},
       userMetaData: {},
       extractorMetaData: {},
-      mergedMetaDataString: ''
+      extractorMetaDataReady: false,
+      mergedMetaDataString: '',
     };
   };
 };

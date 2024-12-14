@@ -8,20 +8,11 @@ import { MatDialog } from "@angular/material/dialog";
 import { IngestorUserMetadataDialog } from "./dialog/ingestor.user-metadata-dialog.component";
 import { IngestorExtractorMetadataDialog } from "./dialog/ingestor.extractor-metadata-dialog.component";
 import { IngestorConfirmTransferDialog } from "./dialog/ingestor.confirm-transfer-dialog.component";
-import { IngestorMetadaEditorHelper } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
+import { IIngestionRequestInformation, IngestorMetadaEditorHelper } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 
 interface ITransferDataListEntry {
   transferId: string;
   status: string;
-}
-
-export interface IIngestionRequestInformation {
-  selectedPath: string;
-  selectedMethod: string;
-  scicatHeader: Object;
-  userMetaData: Object;
-  extractorMetaData: Object;
-  mergedMetaDataString: string;
 }
 
 @Component({
@@ -195,26 +186,26 @@ export class IngestorComponent implements OnInit {
     switch (step) {
       case 0:
         dialogRef = this.dialog.open(IngestorNewTransferDialogComponent, {
-          data: { onClickNext: this.onClickNext.bind(this), createNewTransferData: this.createNewTransferData },
+          data: { onClickNext: this.onClickNext.bind(this), createNewTransferData: this.createNewTransferData, backendURL: this.connectedFacilityBackend },
           disableClose: true
         });
 
         break;
       case 1:
         dialogRef = this.dialog.open(IngestorUserMetadataDialog, {
-          data: { onClickNext: this.onClickNext.bind(this), createNewTransferData: this.createNewTransferData },
+          data: { onClickNext: this.onClickNext.bind(this), createNewTransferData: this.createNewTransferData, backendURL: this.connectedFacilityBackend },
           disableClose: true
         });
         break;
       case 2:
         dialogRef = this.dialog.open(IngestorExtractorMetadataDialog, {
-          data: { onClickNext: this.onClickNext.bind(this), createNewTransferData: this.createNewTransferData },
+          data: { onClickNext: this.onClickNext.bind(this), createNewTransferData: this.createNewTransferData, backendURL: this.connectedFacilityBackend },
           disableClose: true
         });
         break;
       case 3:
         dialogRef = this.dialog.open(IngestorConfirmTransferDialog, {
-          data: { onClickNext: this.onClickNext.bind(this), createNewTransferData: this.createNewTransferData },
+          data: { onClickNext: this.onClickNext.bind(this), createNewTransferData: this.createNewTransferData, backendURL: this.connectedFacilityBackend },
           disableClose: true
         });
         break;
