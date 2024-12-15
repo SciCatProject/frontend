@@ -1,25 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IIngestionRequestInformation, IngestorMetadaEditorHelper } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper';
-
-interface ISciCatHeader {
-  datasetName: string;
-  description: string;
-  creationLocation: string;
-  dataFormat: string;
-  ownerGroup: string;
-  type: string;
-  license: string;
-  keywords: string[];
-  scientificMetadata: IScientificMetadata;
-}
-
-interface IScientificMetadata {
-  organization: Object;
-  sample: Object;
-  acquisition: Object;
-  instrument: Object;
-}
+import { IDialogDataObject, IIngestionRequestInformation, IngestorHelper, ISciCatHeader } from '../ingestor.component-helper';
 
 @Component({
   selector: 'ingestor.confirm-transfer-dialog',
@@ -29,11 +10,11 @@ interface IScientificMetadata {
 })
 
 export class IngestorConfirmTransferDialog {
-  createNewTransferData: IIngestionRequestInformation = IngestorMetadaEditorHelper.createEmptyRequestInformation();
+  createNewTransferData: IIngestionRequestInformation = IngestorHelper.createEmptyRequestInformation();
   provideMergeMetaData: string = '';
   backendURL: string = '';
 
-  constructor(public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any) {
+  constructor(public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: IDialogDataObject) {
     this.createNewTransferData = data.createNewTransferData;
     this.backendURL = data.backendURL;
   }
@@ -53,8 +34,9 @@ export class IngestorConfirmTransferDialog {
       type: this.createNewTransferData.scicatHeader['type'],
       license: this.createNewTransferData.scicatHeader['license'],
       keywords: this.createNewTransferData.scicatHeader['keywords'],
+      filePath: this.createNewTransferData.scicatHeader['filePath'],
       scientificMetadata: {
-        organization: this.createNewTransferData.userMetaData['organization'],
+        organizational: this.createNewTransferData.userMetaData['organizational'],
         sample: this.createNewTransferData.userMetaData['sample'],
         acquisition: this.createNewTransferData.extractorMetaData['acquisition'],
         instrument: this.createNewTransferData.extractorMetaData['instrument'],
@@ -73,7 +55,7 @@ export class IngestorConfirmTransferDialog {
   onClickConfirm(): void {
     if (this.data && this.data.onClickNext) {
       this.createNewTransferData.mergedMetaDataString = this.provideMergeMetaData;
-      this.data.onClickConfirm();
+      this.data.onClickNext(4);
     }
   }
 }

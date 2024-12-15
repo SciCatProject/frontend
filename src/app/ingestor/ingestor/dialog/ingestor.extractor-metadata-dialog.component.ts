@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IIngestionRequestInformation, IngestorMetadaEditorHelper } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper';
-import { acquisition_schema, instrument_schema } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-schematest';
 import { JsonSchema } from '@jsonforms/core';
+import { IDialogDataObject, IIngestionRequestInformation, IngestorHelper } from '../ingestor.component-helper';
 
 @Component({
   selector: 'ingestor.extractor-metadata-dialog',
@@ -14,27 +13,28 @@ import { JsonSchema } from '@jsonforms/core';
 export class IngestorExtractorMetadataDialog {
   metadataSchemaInstrument: JsonSchema;
   metadataSchemaAcquisition: JsonSchema;
-  createNewTransferData: IIngestionRequestInformation = IngestorMetadaEditorHelper.createEmptyRequestInformation();
+  createNewTransferData: IIngestionRequestInformation = IngestorHelper.createEmptyRequestInformation();
 
   backendURL: string = '';
   extractorMetaDataReady: boolean = false;
+  extractorMetaDataError: boolean = false;
 
-  constructor(public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any) {
-        const encodedSchema = data.createNewTransferData.selectedMethod.schema;
-        const decodedSchema = atob(encodedSchema);
-        const schema = JSON.parse(decodedSchema);
-        
-        const resolvedSchema = IngestorMetadaEditorHelper.resolveRefs(schema, schema);
-        const instrumentSchema = resolvedSchema.properties.instrument;
-        const acqusitionSchema = resolvedSchema.properties.acquisition;
+  isCardContentVisible = {
+    instrument: true,
+    acquisition: true
+  };
+
+  constructor(public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: IDialogDataObject) {
+        this.createNewTransferData = data.createNewTransferData;
+        this.backendURL = data.backendURL;
+        const instrumentSchema = this.createNewTransferData.selectedResolvedDecodedSchema.properties.instrument;
+        const acqusitionSchema = this.createNewTransferData.selectedResolvedDecodedSchema.properties.acquisition;
         
         this.metadataSchemaInstrument = instrumentSchema;
         this.metadataSchemaAcquisition = acqusitionSchema;
-        this.createNewTransferData = data.createNewTransferData;
-        this.backendURL = data.backendURL;
-        this.extractorMetaDataReady = true //data.extractorMetaDataReady
+        this.extractorMetaDataReady = this.createNewTransferData.extractorMetaDataReady;
+        this.extractorMetaDataError = this.createNewTransferData.apiErrorInformation.metaDataExtraction;
   }
-
 
   onClickBack(): void {
     if (this.data && this.data.onClickNext) {
@@ -43,18 +43,20 @@ export class IngestorExtractorMetadataDialog {
   }
 
   onClickNext(): void {
-    console.log(this.createNewTransferData.selectedMethod)
-
     if (this.data && this.data.onClickNext) {
       this.data.onClickNext(3); // Beispielwert für den Schritt
     }
   }
 
-  onDataChangeUserMetadataInstrument(event: any) {
+  onDataChangeExtractorMetadataInstrument(event: Object) {
     this.createNewTransferData.extractorMetaData['instrument'] = event;
   }
 
-  onDataChangeUserMetadataAcquisition(event: any) {
+  onDataChangeExtractorMetadataAcquisition(event: Object) {
     this.createNewTransferData.extractorMetaData['acquisition'] = event;
+  }
+
+  toggleCardContent(card: string): void {
+    this.isCardContentVisible[card] = !this.isCardContentVisible[card];
   }
 }

@@ -1,4 +1,4 @@
-export const organizational_schema = {
+export const demo_organizational_schema = {
   type: 'object',
   properties: {
     grants: {
@@ -113,7 +113,7 @@ export const organizational_schema = {
   required: ['authors', 'funder'],
 };
 
-export const acquisition_schema = {
+export const demo_acquisition_schema = {
   type: 'object',
   properties: {
     nominal_defocus: {
@@ -228,7 +228,7 @@ export const acquisition_schema = {
   required: ['detector', 'dose_per_movie', 'date_time', 'binning_camera', 'pixel_size'],
 };
 
-export const sample_schema = {
+export const demo_sample_schema = {
   type: 'object',
   properties: {
     overall_molecule: {
@@ -428,7 +428,7 @@ export const sample_schema = {
   required: ['overall_molecule', 'molecule', 'specimen', 'grid'],
 };
 
-export const instrument_schema = { 
+export const demo_instrument_schema = { 
   type: 'object',
   properties: {
     microscope: {
@@ -463,7 +463,7 @@ export const instrument_schema = {
   required: ['microscope', 'illumination', 'imaging', 'electron_source', 'acceleration_voltage', 'cs'],
 };
 
-export const scicatheader_schema = {
+export const demo_scicatheader_schema = {
   type: "object",
   properties: {
     datasetName: { type: "string" },

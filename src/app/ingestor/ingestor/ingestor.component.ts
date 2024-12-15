@@ -2,13 +2,13 @@ import { Component, inject, OnInit } from "@angular/core";
 import { AppConfigService } from "app-config.service";
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { INGESTOR_API_ENDPOINTS_V1 } from "./ingestor-api-endpoints";
+import { INGESTOR_API_ENDPOINTS_V1, IPostDatasetEndpoint, IPostExtractorEndpoint } from "./ingestor-api-endpoints";
 import { IngestorNewTransferDialogComponent } from "./dialog/ingestor.new-transfer-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { IngestorUserMetadataDialog } from "./dialog/ingestor.user-metadata-dialog.component";
 import { IngestorExtractorMetadataDialog } from "./dialog/ingestor.extractor-metadata-dialog.component";
 import { IngestorConfirmTransferDialog } from "./dialog/ingestor.confirm-transfer-dialog.component";
-import { IIngestionRequestInformation, IngestorMetadaEditorHelper } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
+import { IIngestionRequestInformation, IngestorHelper } from "./ingestor.component-helper";
 
 interface ITransferDataListEntry {
   transferId: string;
@@ -39,7 +39,7 @@ export class IngestorComponent implements OnInit {
   errorMessage: string = '';
   returnValue: string = '';
 
-  createNewTransferData: IIngestionRequestInformation = IngestorMetadaEditorHelper.createEmptyRequestInformation();
+  createNewTransferData: IIngestionRequestInformation = IngestorHelper.createEmptyRequestInformation();
 
   constructor(public appConfigService: AppConfigService, private http: HttpClient, private route: ActivatedRoute, private router: Router) { }
 
@@ -112,17 +112,14 @@ export class IngestorComponent implements OnInit {
 
   apiUpload() {
     this.loading = true;
-    this.returnValue = '';
-    const payload = {
-      filePath: this.createNewTransferData.selectedPath,
+
+    const payload: IPostDatasetEndpoint = {
       metaData: this.createNewTransferData.mergedMetaDataString,
     };
 
-    console.log('Uploading', payload);
-
     this.http.post(this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.DATASET, payload).subscribe(
       response => {
-        console.log('Upload successful', response);
+        console.log('Upload successfully started', response);
         this.returnValue = JSON.stringify(response);
         this.loading = false;
       },
@@ -132,6 +129,42 @@ export class IngestorComponent implements OnInit {
         this.loading = false;
       }
     );
+  }
+
+  async apiStartMetadataExtraction(): Promise<boolean> {
+    this.createNewTransferData.apiErrorInformation.metaDataExtraction = false;
+
+    if (this.createNewTransferData.extractMetaDataRequested) {
+      console.log(this.createNewTransferData.extractMetaDataRequested, ' already requested'); // Debugging
+      return false;
+    }
+
+    this.createNewTransferData.extractorMetaDataReady = false;
+    this.createNewTransferData.extractMetaDataRequested = true;
+
+    const payload: IPostExtractorEndpoint = {
+      filePath: this.createNewTransferData.selectedPath,
+      methodName: this.createNewTransferData.selectedMethod.name,
+    };
+
+    return new Promise<boolean>((resolve) => {
+      this.http.post(this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.EXTRACTOR, payload).subscribe(
+        response => {
+          console.log('Metadata extraction result', response);
+          this.createNewTransferData.extractorMetaData.instrument = (response as any).instrument ?? {};
+          this.createNewTransferData.extractorMetaData.acquisition = (response as any).acquisition ?? {};
+          this.createNewTransferData.extractorMetaDataReady = true;
+          resolve(true);
+        },
+        error => {
+          this.errorMessage += `${new Date().toLocaleString()}: ${error.message}]<br>`;
+          console.error('Metadata extraction failed', error);
+          this.createNewTransferData.extractorMetaDataReady = true;
+          this.createNewTransferData.apiErrorInformation.metaDataExtraction = true;
+          resolve(false);
+        }
+      );
+    });
   }
 
   onClickForwardToIngestorPage() {
@@ -174,8 +207,8 @@ export class IngestorComponent implements OnInit {
   }
 
   onClickAddIngestion(): void {
-    this.createNewTransferData = IngestorMetadaEditorHelper.createEmptyRequestInformation();
-    this.onClickNext(0);
+    this.createNewTransferData = IngestorHelper.createEmptyRequestInformation();
+    this.onClickNext(0); // Open first dialog to start the ingestion process
   }
 
   onClickNext(step: number): void {
@@ -185,6 +218,8 @@ export class IngestorComponent implements OnInit {
 
     switch (step) {
       case 0:
+        this.createNewTransferData.extractMetaDataRequested = false;
+        this.createNewTransferData.extractorMetaDataReady = false;
         dialogRef = this.dialog.open(IngestorNewTransferDialogComponent, {
           data: { onClickNext: this.onClickNext.bind(this), createNewTransferData: this.createNewTransferData, backendURL: this.connectedFacilityBackend },
           disableClose: true
@@ -192,6 +227,13 @@ export class IngestorComponent implements OnInit {
 
         break;
       case 1:
+        this.apiStartMetadataExtraction().then((response: boolean) => {
+          if (response) console.log('Metadata extraction finished');
+          else console.error('Metadata extraction failed');
+        }).catch(error => {
+          console.error('Metadata extraction error', error);
+        });
+
         dialogRef = this.dialog.open(IngestorUserMetadataDialog, {
           data: { onClickNext: this.onClickNext.bind(this), createNewTransferData: this.createNewTransferData, backendURL: this.connectedFacilityBackend },
           disableClose: true
@@ -209,16 +251,15 @@ export class IngestorComponent implements OnInit {
           disableClose: true
         });
         break;
+      case 4:
+        this.apiUpload();
+        break;
       default:
         console.error('Unknown step', step);
     }
 
     // Error if the dialog reference is not set
     if (dialogRef === null) return;
-
-    /*dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });*/
   }
 
   onClickRefreshTransferList(): void {

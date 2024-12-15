@@ -1,6 +1,4 @@
-import { Component, EventEmitter, Output, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { angularMaterialRenderers } from '@jsonforms/angular-material';
-import { customRenderers } from './customRenderer/custom-renderers';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { JsonSchema } from '@jsonforms/core';
 import { configuredRenderer } from './ingestor-metadata-editor-helper';
 

@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { IIngestionRequestInformation, IngestorMetadaEditorHelper } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper';
-import { scicatheader_schema } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-schematest';
+import { IngestorMetadataEditorHelper } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper';
 import { JsonSchema } from '@jsonforms/core';
+import { IDialogDataObject, IIngestionRequestInformation, IngestorHelper, SciCatHeader_Schema } from '../ingestor.component-helper';
 
 @Component({
   selector: 'ingestor.user-metadata-dialog',
@@ -15,7 +15,7 @@ export class IngestorUserMetadataDialog {
   metadataSchemaOrganizational: JsonSchema;
   metadataSchemaSample: JsonSchema;
   scicatHeaderSchema: JsonSchema;
-  createNewTransferData: IIngestionRequestInformation = IngestorMetadaEditorHelper.createEmptyRequestInformation();
+  createNewTransferData: IIngestionRequestInformation = IngestorHelper.createEmptyRequestInformation();
   backendURL: string = '';
 
   uiNextButtonReady: boolean = true; // Change to false when dev is ready
@@ -26,20 +26,15 @@ export class IngestorUserMetadataDialog {
     sample: true
   };
 
-  constructor(public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any) {
-    const encodedSchema = data.createNewTransferData.selectedMethod.schema;
-    const decodedSchema = atob(encodedSchema);
-    const schema = JSON.parse(decodedSchema);
-    
-    const resolvedSchema = IngestorMetadaEditorHelper.resolveRefs(schema, schema);
-    const organizationalSchema = resolvedSchema.properties.organizational;
-    const sampleSchema = resolvedSchema.properties.sample;
+  constructor(public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: IDialogDataObject) {
+    this.createNewTransferData = data.createNewTransferData;
+    this.backendURL = data.backendURL;
+    const organizationalSchema = this.createNewTransferData.selectedResolvedDecodedSchema.properties.organizational;
+    const sampleSchema = this.createNewTransferData.selectedResolvedDecodedSchema.properties.sample;
     
     this.metadataSchemaOrganizational = organizationalSchema;
     this.metadataSchemaSample = sampleSchema;
-    this.scicatHeaderSchema = scicatheader_schema;
-    this.createNewTransferData = data.createNewTransferData;
-    this.backendURL = data.backendURL;
+    this.scicatHeaderSchema = SciCatHeader_Schema;
   }
 
   onClickBack(): void {
@@ -55,7 +50,7 @@ export class IngestorUserMetadataDialog {
   }
 
   onDataChangeUserMetadataOrganization(event: Object) {
-    this.createNewTransferData.userMetaData['organization'] = event;
+    this.createNewTransferData.userMetaData['organizational'] = event;
   }
 
   onDataChangeUserMetadataSample(event: Object) {

@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
-import { IExtractionMethod, IIngestionRequestInformation, IngestorMetadaEditorHelper } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper';
 import { INGESTOR_API_ENDPOINTS_V1 } from '../ingestor-api-endpoints';
+import { IDialogDataObject, IExtractionMethod, IIngestionRequestInformation, IngestorHelper } from '../ingestor.component-helper';
+import { IngestorMetadataEditorHelper } from 'ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper';
 
 @Component({
   selector: 'ingestor.new-transfer-dialog',
@@ -20,9 +21,9 @@ export class IngestorNewTransferDialogComponent implements OnInit {
 
   uiNextButtonReady: boolean = false;
 
-  createNewTransferData: IIngestionRequestInformation = IngestorMetadaEditorHelper.createEmptyRequestInformation();
+  createNewTransferData: IIngestionRequestInformation = IngestorHelper.createEmptyRequestInformation();
 
-  constructor(public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: any, private http: HttpClient) {
+  constructor(public dialog: MatDialog, @Inject(MAT_DIALOG_DATA) public data: IDialogDataObject, private http: HttpClient) {
     this.createNewTransferData = data.createNewTransferData;
     this.backendURL = data.backendURL;
   }
@@ -84,6 +85,26 @@ export class IngestorNewTransferDialogComponent implements OnInit {
     );
   }
 
+  generateExampleDataForSciCatHeader(): void {
+    this.data.createNewTransferData.scicatHeader['filePath'] = this.createNewTransferData.selectedPath;
+    this.data.createNewTransferData.scicatHeader['keywords'] = ['OpenEM'];
+
+    const nameWithoutPath = this.createNewTransferData.selectedPath.split('/|\\')[-1] ?? this.createNewTransferData.selectedPath;
+    this.data.createNewTransferData.scicatHeader['datasetName'] = nameWithoutPath;
+    this.data.createNewTransferData.scicatHeader['license'] = 'MIT License';
+    this.data.createNewTransferData.scicatHeader['type'] = 'raw';
+    this.data.createNewTransferData.scicatHeader['dataFormat'] = 'root';
+    this.data.createNewTransferData.scicatHeader['owner'] = 'User';
+  }
+
+  prepareSchemaForProcessing(): void {
+    const encodedSchema = this.createNewTransferData.selectedMethod.schema;
+    const decodedSchema = atob(encodedSchema);
+    const schema = JSON.parse(decodedSchema);
+    const resolvedSchema = IngestorMetadataEditorHelper.resolveRefs(schema, schema);
+    this.createNewTransferData.selectedResolvedDecodedSchema = resolvedSchema;
+  }
+
   onClickRetryRequests(): void {
     this.apiGetExtractionMethods();
     this.apiGetAvailableFilePaths();
@@ -91,6 +112,8 @@ export class IngestorNewTransferDialogComponent implements OnInit {
 
   onClickNext(): void {
     if (this.data && this.data.onClickNext) {
+      this.generateExampleDataForSciCatHeader();
+      this.prepareSchemaForProcessing();
       this.data.onClickNext(1); // Open next dialog
     }
   }

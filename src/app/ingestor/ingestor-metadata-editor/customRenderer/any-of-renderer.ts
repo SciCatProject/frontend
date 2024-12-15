@@ -9,9 +9,9 @@ import { configuredRenderer } from '../ingestor-metadata-editor-helper';
     <div class="anyof-group">
     <mat-card-title>{{anyOfTitle}}</mat-card-title>
 
-    <mat-tab-group animationDuration="0ms">
+    <mat-tab-group animationDuration="0ms" [selectedIndex]="selectedTabIndex">
         <mat-tab *ngFor="let option of options" label="{{option}}">
-            <div style="margin-top: 20px;" *ngIf="option !== 'null'">
+            <div style="margin: 20px auto; width: 85%" *ngIf="option !== 'null'">
                 <jsonforms [schema]="getTabSchema(option)" [data]="passedProps.data" [renderers]="defaultRenderer" (dataChange)=onInnerJsonFormsChange($event)></jsonforms>
             </div>
         </mat-tab>
@@ -24,6 +24,7 @@ export class AnyOfRenderer extends JsonFormsControl {
     dataAsString: string;
     options: string[] = [];
     anyOfTitle: string;
+    selectedTabIndex: number = 0; // default value 
 
     rendererService: JsonFormsAngularService;
 
@@ -39,6 +40,10 @@ export class AnyOfRenderer extends JsonFormsControl {
         this.passedProps = props;
         this.anyOfTitle = props.label || 'AnyOf';
         this.options = props.schema.anyOf.map((option: any) => option.title || option.type || JSON.stringify(option));
+    
+        if (this.options.includes("null") && !props.data) {
+            this.selectedTabIndex = this.options.indexOf("null");
+        }
     }
 
     public getTabSchema(tabOption: string): JsonSchema {
