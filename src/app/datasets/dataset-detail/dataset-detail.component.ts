@@ -1,4 +1,11 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy, Inject } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  OnDestroy,
+  Inject,
+} from "@angular/core";
 import { Dataset, Proposal, Sample } from "shared/sdk/models";
 import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
@@ -67,7 +74,8 @@ import { AttachmentService } from "shared/services/attachment.service";
   standalone: false,
 })
 export class DatasetDetailComponent
-  implements OnInit, OnDestroy, EditableComponent {
+  implements OnInit, OnDestroy, EditableComponent
+{
   private subscriptions: Subscription[] = [];
   private _hasUnsavedChanges = false;
   form: FormGroup;
@@ -91,16 +99,6 @@ export class DatasetDetailComponent
   editEnabled = false;
   show = false;
 
-
-  connectedDepositionBackend: string = '';
-  connectedDepositionBackendVersion: string = '';
-  connectingToDepositionBackend: boolean = false;
-  lastUsedDepositionBackends: string[] = [];
-  forwardDepositionBackend: string = '';
-  errorMessage: string = '';
-
-  @Output() emClick = new EventEmitter<Dataset>();
-
   readonly separatorKeyCodes: number[] = [ENTER, COMMA, SPACE];
 
   constructor(
@@ -113,11 +111,9 @@ export class DatasetDetailComponent
     private http: HttpClient,
     private router: Router,
     private fb: FormBuilder,
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.connectingToDepositionBackend = true;
-
     this.form = this.fb.group({
       datasetName: new FormControl("", [Validators.required]),
       description: new FormControl("", [Validators.required]),
