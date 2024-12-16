@@ -5,9 +5,11 @@ import { initialJobsState } from "state-management/state/jobs.store";
 
 const data: JobInterface = {
   id: "testId",
-  emailJobInitiator: "test@email.com",
+  createdBy: "testName",
   type: "archive",
-  datasetList: {},
+  jobParams: {
+    datasetIds: [],
+  },
 };
 const job = new Job(data);
 

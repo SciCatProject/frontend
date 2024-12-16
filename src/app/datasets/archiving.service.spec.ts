@@ -48,10 +48,7 @@ describe("ArchivingService", () => {
     it("should create a new object of type Job", () => {
       const user = new User({ username: "testName", email: "test@email.com" });
       const datasets = [new Dataset()];
-      const datasetList = datasets.map((dataset) => ({
-        pid: dataset.pid,
-        files: [],
-      }));
+      const datasetList = datasets.map((dataset) => dataset.pid);
       const archive = true;
       const destinationPath = { destinationPath: "/test/path/" };
 
@@ -63,9 +60,8 @@ describe("ArchivingService", () => {
       );
 
       expect(job).toBeInstanceOf(Job);
-      expect(job["emailJobInitiator"]).toEqual("test@email.com");
-      expect(job["jobParams"]["username"]).toEqual("testName");
-      expect(job["datasetList"]).toEqual(datasetList);
+      expect(job["createdBy"]).toEqual("testName");
+      expect(job["jobParams"]["datasetIds"]).toEqual(datasetList);
       expect(job["type"]).toEqual("archive");
     });
   });
@@ -85,16 +81,12 @@ describe("ArchivingService", () => {
 
       const user = new User({ username: "testName", email: "test@email.com" });
       const datasets = [new Dataset()];
-      const datasetList = datasets.map((dataset) => ({
-        pid: dataset.pid,
-        files: [],
-      }));
+      const datasetList = datasets.map((dataset) => dataset.pid);
       const archive = true;
       const job = new Job({
-        jobParams: { username: user.username },
-        emailJobInitiator: user.email,
-        creationTime: new Date(),
-        datasetList,
+        jobParams: { datasetIds: datasetList },
+        createdBy: user.username,
+        createdAt: new Date(),
         type: "archive",
       });
       const createJobSpy = spyOn<any, string>(

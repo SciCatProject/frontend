@@ -5,9 +5,11 @@ import { JobInterface, Job } from "shared/sdk";
 
 const data: JobInterface = {
   id: "testId",
-  emailJobInitiator: "test@email.com",
+  createdBy: "testName",
   type: "archive",
-  datasetList: {},
+  jobParams: {
+    datasetIds: [],
+  },
 };
 const job = new Job(data);
 
