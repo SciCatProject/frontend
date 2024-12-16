@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from "@angular/core";
 import { AppConfigService } from "app-config.service";
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import {
   FormBuilder,
   FormControl,
@@ -19,7 +19,7 @@ import {
   selectCurrentUser
 } from "state-management/selectors/user.selectors";
 import { User } from "shared/sdk";
-import { MethodsList, EmFile, DepositionFiles, DepositionAddMap } from "./types/methods.enum"
+import { MethodsList, EmFile, DepositionFiles } from "./types/methods.enum"
 import { Subscription, fromEvent } from "rxjs";
 
 
@@ -28,7 +28,7 @@ import { Subscription, fromEvent } from "rxjs";
   templateUrl: './onedep.component.html',
   styleUrls: ['./onedep.component.scss']
 })
-export class OneDepComponent implements OnInit {
+export class OneDepComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private _hasUnsavedChanges = false;
 
@@ -43,6 +43,7 @@ export class OneDepComponent implements OnInit {
   fileTypes: DepositionFiles[];
   detailsOverflow: string = 'hidden';
   additionalMaps = 0;
+  showPassword = false;
 
 
   @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
@@ -50,7 +51,6 @@ export class OneDepComponent implements OnInit {
   constructor(public appConfigService: AppConfigService,
     private store: Store,
     private http: HttpClient,
-    private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
   ) { }
@@ -78,6 +78,7 @@ export class OneDepComponent implements OnInit {
     this.form = this.fb.group({
       email: this.user.email,
       jwtToken: new FormControl(""),
+      password: new FormControl(),
       metadata: this.dataset.scientificMetadata,
       emMethod: new FormControl(""),
       deposingCoordinates: new FormControl(null, Validators.required),
@@ -91,11 +92,20 @@ export class OneDepComponent implements OnInit {
       ]),
     })
   }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    });
+  }
   hasUnsavedChanges() {
     return this._hasUnsavedChanges;
   }
   onHasUnsavedChanges($event: boolean) {
     this._hasUnsavedChanges = $event;
+  }
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
   orcidArray(): FormArray {
     return this.form.get('orcid') as FormArray;
@@ -140,6 +150,7 @@ export class OneDepComponent implements OnInit {
   }
 
   onPDB(event: any) {
+    console.log(this.form.get('password'))
     const input = event.value;
     if (input === 'true') {
       this.fileTypes.forEach((fT) => {
@@ -153,7 +164,7 @@ export class OneDepComponent implements OnInit {
   autoGrow(event: Event) {
     const textarea = event.target as HTMLTextAreaElement;
     const lineHeight = parseInt(getComputedStyle(textarea).lineHeight, 10);
-    const maxLines = 5;
+    const maxLines = 3;
 
     // Reset height to auto to calculate scrollHeight
     textarea.style.height = 'auto';
@@ -304,15 +315,29 @@ export class OneDepComponent implements OnInit {
   }
   onDepositClick() {
     //  Create a deposition
-    const body = JSON.stringify(
-      {
-        "email": "sofya.laskina@epfl.ch",  // for now
-        "orcidIds": this.orcidArray().value.map(item => item.orcidId),
-        "country": "United States",
-        "method": this.form.value.emMethod,
-        "jwtToken": this.form.value.jwtToken,
-      }
-    );
+    let body: string; 
+    if (this.form.value.password){
+      body = JSON.stringify(
+        {
+          "email": "sofya.laskina@epfl.ch",  // for now
+          "orcidIds": this.orcidArray().value.map(item => item.orcidId),
+          "country": "United States",
+          "method": this.form.value.emMethod,
+          "jwtToken": this.form.value.jwtToken,
+          "password": this.form.value.password,
+        }
+      );
+    }else{
+      body = JSON.stringify(
+        {
+          "email": "sofya.laskina@epfl.ch",  // for now
+          "orcidIds": this.orcidArray().value.map(item => item.orcidId),
+          "country": "United States",
+          "method": this.form.value.emMethod,
+          "jwtToken": this.form.value.jwtToken,
+        }
+      );
+    }
     let depID: string;
     let metadataAdded = false;
     this.http.post("http://localhost:8080/onedep", body, {
@@ -322,7 +347,7 @@ export class OneDepComponent implements OnInit {
         depID = response.depID; // Update the outer variable
         console.log('Created deposition in OneDep', depID);
 
-    //     // Call subsequent requests
+    // Call subsequent requests
     this.fileTypes.forEach((fT) => { 
       if (fT.file) {
         const formDataFile = new FormData()
@@ -348,57 +373,7 @@ export class OneDepComponent implements OnInit {
       },
       error: (error) => console.error('Request failed', error.error),
     });
-
-    // const formDataFile = new FormData();
-    // formDataToSend.append('jwtToken', this.form.value.jwtToken);
-    // 
-
-    // var fileMetadata = []
-    // // for (const fI in this.fileTypes) {
-    // 
-    // formDataToSend.append('fileMetadata', JSON.stringify(fileMetadata));
-    // this.http.post("http://localhost:8080/onedep", formDataToSend, {
-    //   headers: {}
-    // }).subscribe(
-    //   response => {
-    //     console.log('Created deposition in OneDep', response);
-    //   },
-    //   error => {
-    //     console.error('Request failed', error.error);
-    //   }
-    // );
-
   }
-
-  //   onCreateClick() {
-  //     let bearer = 'Bearer ' + this.form.value['jwtToken'];
-  //     const headers = new HttpHeaders()
-  //       .append(
-  //         'Content-Type',
-  //         'application/json'
-  //       )
-  //       .append(
-  //         'Authorization',
-  //         bearer
-  //       );
-
-  //     const body = JSON.stringify(
-  //       {
-  //         "email": "sofya.laskina@epfl.ch",
-  //         "users": ["0009-0003-3665-5367"],
-  //         "country": "United States",
-  //         "experiments": [Experiments[this.form.value.emMethod]],
-  //       }
-  //     );
-
-  //     this.http
-  //       .post('https://onedep-depui-test.wwpdb.org/deposition/api/v1/depositions/new', body, {
-  //         headers: headers,
-  //       })
-  //       .subscribe((res) => console.log(res));
-
-  //   }
-
 }
 
 

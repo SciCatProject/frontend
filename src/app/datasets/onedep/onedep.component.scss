@@ -1,6 +1,5 @@
 mat-card {
   margin: 1em;
-
   .section-icon {
     height: auto !important;
     width: auto !important;
@@ -16,21 +15,31 @@ mat-card {
     align-items: flex-start;
     gap: 16px;
     padding: 16px;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
+  }
+
+  .card-left, 
+  .card-middle,
+  .card-right {
+    flex: 0 0 33%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-sizing: border-box;
+    padding: 1rem; 
+
   }
 
   .card-left {
-    flex: 1;
+    overflow-y: auto; /* Allows content to scroll if it overflows */
   }
-
-  .card-middle {
-    flex: 1;
+  h2 {
+    font-size: 1.2rem;
+    margin-top: 0;
   }
-
-  .card-right {
-    flex: 1;
+  h2.password{
+    margin-top:3rem;
   }
-
   .file-header {
     display: flex;
     margin-bottom: 16px;
@@ -38,14 +47,31 @@ mat-card {
 
   .instruction {
     color: #555;
+    width: 80%;
   }
 
   .token-field {
-    width: 70%;
+    width: 80%;
     height: 20px;
     min-width: 12rem;
     margin-bottom: 8px;
     margin-top: 0;
+    box-sizing: border-box
+  }
+  .token-field 
+    textarea {
+      width: 100%;              
+      max-height: calc(3 * 1.5em); // Allow up to 5 lines of text
+      overflow-y: auto;          // Show scrollbar only when needed
+      resize: none;              // Prevent manual resizing
+      box-sizing: border-box;    // Padding doesn't affect the size
+      line-height: 1.5;          // Match text line height
+      border: none;              // Remove textarea border
+      padding: 0;                // Remove padding
+    
+  }
+  .password-field{
+    width:40%;
   }
 
   .remove-field-btn {
@@ -205,7 +231,7 @@ mat-card {
 
           mat-form-field {
             textarea {
-              max-height: calc(5 * 1.5em); // 5 lines max height
+              max-height: calc(3 * 1.5em); // 5 lines max height
               overflow-y: hidden; // Hide overflow
               resize: none; // Disable resizing
               line-height: 1.5; // Set line height

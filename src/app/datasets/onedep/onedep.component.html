@@ -61,7 +61,7 @@
                 <div class="card-container">
                     <div class="card-left">
                         <h2>Obtain OneDep Token</h2>
-                        <p class="instruction">Add instruction how to get it</p>
+                        <p class="instruction">Go to <a href="https://onedep-depui-test.wwpdb.org" target="_blank" >OneDep API</a> and choose option to sign in with ORCID. After the authorization you will be redirected back to OneDep. In the left bar below the map, tick the Deposition API option and click "Generate Key". Copy the token in the field below.    </p>
                         <mat-form-field 
                             class="token-field"
                             appearance="outline">
@@ -74,6 +74,20 @@
                                 formControlName="jwtToken" 
                                 (input)="autoGrow($event)"
                                 [style.overflow]="detailsOverflow"></textarea>
+                        </mat-form-field>
+                        <!-- Password Field -->
+                        <h2 class="password">Password</h2>
+                        <p class="instruction">You can provide a password, which will be confirmed in the email and sent to all provided ORCID users.</p>
+                        <mat-form-field class="password-field" appearance="outline">
+                            <mat-label>Password</mat-label>
+                            <input 
+                                matInput
+                                [type]="showPassword ? 'text' : 'password'"
+                                placeholder="enter your password"
+                                formControlName="password">
+                            <button mat-icon-button matSuffix (click)="togglePasswordVisibility()">
+                                <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                            </button>
                         </mat-form-field>
                     </div>
                     <div class="card-middle">
