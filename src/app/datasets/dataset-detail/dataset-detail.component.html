@@ -12,24 +12,6 @@
         Jupyter Hub
       </a>
     </div>
-    <button
-          mat-raised-button
-          id="onedepBtn"
-          class="emexport-button"
-          *ngIf="hasOpenEMKeyword()"
-          (click)="onOneDepClick()"
-        >
-          OneDep
-    </button>
-    <button
-          mat-raised-button
-          id="onedepBtn"
-          class="emexport-button"
-          *ngIf="hasOpenEMKeyword()"
-          (click)="onEMPIARclick()"
-        >
-          EMPIAR
-    </button>
     <div fxFlex="auto" *ngIf="editingAllowed">
       <mat-slide-toggle
         class="public-toggle"

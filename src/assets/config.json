@@ -1,7 +1,8 @@
 {
   "addDatasetEnabled": false,
   "archiveWorkflowEnabled": false,
-  "datasetReduceEnabled": true,
+  "datasetReduceEnabled": false,
+  "datasetOneDepIntegration": true,
   "editDatasetSampleEnabled": true,
   "editMetadataEnabled": true,
   "editPublishedData": true,
@@ -16,6 +17,7 @@
   "jupyterHubUrl": "",
   "landingPage": "",
   "lbBaseURL": "http://127.0.0.1:3000",
+  "depositorURL": "http://127.0.0.1:8080",
   "localColumns": [
     {
       "name": "datasetName",

@@ -1,7 +1,13 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from "@angular/core";
-import { AppConfigService } from "app-config.service";
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+} from "@angular/core";
+import { AppConfigService, AppConfig } from "app-config.service";
+import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
 import {
   FormBuilder,
   FormControl,
@@ -12,51 +18,59 @@ import {
 
 import { Store } from "@ngrx/store";
 import { Dataset } from "shared/sdk/models";
-import {
-  selectCurrentDataset,
-} from "state-management/selectors/datasets.selectors";
-import {
-  selectCurrentUser
-} from "state-management/selectors/user.selectors";
+import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import { User } from "shared/sdk";
-import { MethodsList, EmFile, DepositionFiles } from "./types/methods.enum"
+import { methodsList, EmFile, DepositionFiles } from "./types/methods.enum";
 import { Subscription, fromEvent } from "rxjs";
 
-
 @Component({
-  selector: 'onedep',
-  templateUrl: './onedep.component.html',
-  styleUrls: ['./onedep.component.scss']
+  selector: "onedep",
+  templateUrl: "./onedep.component.html",
+  styleUrls: ["./onedep.component.scss"],
 })
 export class OneDepComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   private _hasUnsavedChanges = false;
 
-  appConfig = this.appConfigService.getConfig();
+  config: AppConfig;
+
   dataset: Dataset | undefined;
   user: User | undefined;
   form: FormGroup;
-  showAssociatedMapQuestion: boolean = false;
-  methodsList = MethodsList;
+  showAssociatedMapQuestion = false;
+  methodsList = methodsList;
   selectedFile: { [key: string]: File | null } = {};
   emFile = EmFile;
   fileTypes: DepositionFiles[];
-  detailsOverflow: string = 'hidden';
+  detailsOverflow = "hidden";
   additionalMaps = 0;
   showPassword = false;
 
+  connectedDepositionBackend = "";
+  connectedDepositionBackendVersion = "";
+  connectingToDepositionBackend = false;
+  lastUsedDepositionBackends: string[] = [];
+  forwardDepositionBackend = "";
+  errorMessage = "";
 
-  @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
+  @ViewChild("fileInput") fileInput: ElementRef<HTMLInputElement> | undefined;
 
-  constructor(public appConfigService: AppConfigService,
+  constructor(
+    public appConfigService: AppConfigService,
     private store: Store,
     private http: HttpClient,
     private router: Router,
     private fb: FormBuilder,
-  ) { }
-
+  ) {
+    this.config = this.appConfigService.getConfig();
+  }
 
   ngOnInit() {
+    //  connect to the depositor
+    this.connectingToDepositionBackend = true;
+    this.connectToDepositionBackend();
+
     this.store.select(selectCurrentDataset).subscribe((dataset) => {
       this.dataset = dataset;
     });
@@ -87,10 +101,13 @@ export class OneDepComponent implements OnInit, OnDestroy {
       emdbId: new FormControl(""),
       orcid: this.fb.array([
         this.fb.group({
-          orcidId: ['', [Validators.required, Validators.pattern(/^(\d{4}-){3}\d{4}$/)]],
-        })
+          orcidId: [
+            "",
+            [Validators.required, Validators.pattern(/^(\d{4}-){3}\d{4}$/)],
+          ],
+        }),
       ]),
-    })
+    });
   }
 
   ngOnDestroy() {
@@ -108,11 +125,14 @@ export class OneDepComponent implements OnInit, OnDestroy {
     this.showPassword = !this.showPassword;
   }
   orcidArray(): FormArray {
-    return this.form.get('orcid') as FormArray;
+    return this.form.get("orcid") as FormArray;
   }
   addOrcidField() {
     const orcidField = this.fb.group({
-      orcidId: ['', [Validators.required, Validators.pattern(/^(\d{4}-){3}\d{4}$/)]],
+      orcidId: [
+        "",
+        [Validators.required, Validators.pattern(/^(\d{4}-){3}\d{4}$/)],
+      ],
     });
     this.orcidArray().push(orcidField);
   }
@@ -122,37 +142,48 @@ export class OneDepComponent implements OnInit, OnDestroy {
     }
   }
   onMethodChange() {
-    this.fileTypes = this.methodsList.find(mL => mL.value === this.form.value['emMethod']).files;
+    this.fileTypes = this.methodsList.find(
+      (mL) => mL.value === this.form.value["emMethod"],
+    ).files;
     this.fileTypes.forEach((fT) => {
-      if (fT.emName === this.emFile.MainMap || fT.emName === this.emFile.Image) {
+      if (
+        fT.emName === this.emFile.MainMap ||
+        fT.emName === this.emFile.Image
+      ) {
         fT.required = true;
       } else {
         fT.required = false;
       }
     });
-    switch (this.form.value['emMethod']) {
-      case 'helical':
+    switch (this.form.value["emMethod"]) {
+      case "helical":
         this.fileTypes.forEach((fT) => {
-          if (fT.emName === this.emFile.HalfMap1 || fT.emName === this.emFile.HalfMap2) {
+          if (
+            fT.emName === this.emFile.HalfMap1 ||
+            fT.emName === this.emFile.HalfMap2
+          ) {
             fT.required = true;
           }
         });
         break;
       case "single-particle":
         this.fileTypes.forEach((fT) => {
-          if (fT.emName === this.emFile.HalfMap1 || fT.emName === this.emFile.HalfMap2 || fT.emName === this.emFile.MaskMap) {
+          if (
+            fT.emName === this.emFile.HalfMap1 ||
+            fT.emName === this.emFile.HalfMap2 ||
+            fT.emName === this.emFile.MaskMap
+          ) {
             fT.required = true;
           }
         });
         break;
     }
-
   }
 
-  onPDB(event: any) {
-    console.log(this.form.get('password'))
+  onPDB(event: any) { // FIXME specify type
+    console.log(this.form.get("password"));
     const input = event.value;
-    if (input === 'true') {
+    if (input === "true") {
       this.fileTypes.forEach((fT) => {
         if (fT.emName === this.emFile.Coordinates) {
           fT.required = true;
@@ -167,14 +198,15 @@ export class OneDepComponent implements OnInit, OnDestroy {
     const maxLines = 3;
 
     // Reset height to auto to calculate scrollHeight
-    textarea.style.height = 'auto';
+    textarea.style.height = "auto";
 
     // Set the height based on the scrollHeight but limit it
     const newHeight = Math.min(textarea.scrollHeight, lineHeight * maxLines);
     textarea.style.height = `${newHeight}px`;
 
     // Update overflow property based on height
-    this.detailsOverflow = textarea.scrollHeight > newHeight ? 'auto' : 'hidden';
+    this.detailsOverflow =
+      textarea.scrollHeight > newHeight ? "auto" : "hidden";
   }
   onChooseFile(fileInput: HTMLInputElement) {
     fileInput.click();
@@ -215,21 +247,25 @@ export class OneDepComponent implements OnInit, OnDestroy {
   }
   updateContourLevelMain(event: Event) {
     const input = (event.target as HTMLInputElement).value.trim();
-    const normalizedInput = input.replace(',', '.');
+    const normalizedInput = input.replace(",", ".");
     const parsedValue = parseFloat(normalizedInput);
     if (!isNaN(parsedValue)) {
       this.fileTypes.forEach((fT) => {
-        if (fT.emName === EmFile.MainMap || fT.emName === EmFile.HalfMap1 || fT.emName === EmFile.HalfMap2) {
+        if (
+          fT.emName === EmFile.MainMap ||
+          fT.emName === EmFile.HalfMap1 ||
+          fT.emName === EmFile.HalfMap2
+        ) {
           fT.contour = parsedValue;
         }
       });
     } else {
-      console.warn('Invalid number format:', input);
+      console.warn("Invalid number format:", input);
     }
   }
   updateContourLevelAddMap(event: Event, id: number) {
     const input = (event.target as HTMLInputElement).value.trim();
-    const normalizedInput = input.replace(',', '.');
+    const normalizedInput = input.replace(",", ".");
     const parsedValue = parseFloat(normalizedInput);
     if (!isNaN(parsedValue)) {
       this.fileTypes.forEach((fT) => {
@@ -238,12 +274,12 @@ export class OneDepComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      console.warn('Invalid number format:', input);
+      console.warn("Invalid number format:", input);
     }
   }
   updateContourLevel(event: Event, controlName: EmFile) {
     const input = (event.target as HTMLInputElement).value.trim();
-    const normalizedInput = input.replace(',', '.');
+    const normalizedInput = input.replace(",", ".");
     const parsedValue = parseFloat(normalizedInput);
     if (!isNaN(parsedValue)) {
       this.fileTypes.forEach((fT) => {
@@ -252,7 +288,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      console.warn('Invalid number format:', input);
+      console.warn("Invalid number format:", input);
     }
   }
   updateDetails(event: Event, controlName: EmFile) {
@@ -263,7 +299,6 @@ export class OneDepComponent implements OnInit, OnDestroy {
         fT.details = value;
       }
     });
-
   }
   updateDetailsAddMap(event: Event, id: number) {
     const textarea = event.target as HTMLTextAreaElement; // Cast to HTMLTextAreaElement
@@ -273,17 +308,17 @@ export class OneDepComponent implements OnInit, OnDestroy {
         fT.details = value;
       }
     });
-
   }
   addMap() {
-    const nextId = this.fileTypes
-      .filter(file => file.emName === EmFile.AddMap)
-      .reduce((maxId, file) => (file.id > maxId ? file.id : maxId), 0) + 1;
+    const nextId =
+      this.fileTypes
+        .filter((file) => file.emName === EmFile.AddMap)
+        .reduce((maxId, file) => (file.id > maxId ? file.id : maxId), 0) + 1;
 
     const newMap: DepositionFiles = {
       emName: EmFile.AddMap,
       id: nextId,
-      nameFE: 'Additional Map ( ' + (nextId + 1).toString() + ' )',
+      nameFE: "Additional Map ( " + (nextId + 1).toString() + " )",
       type: "add-map",
       fileName: "",
       file: null,
@@ -295,85 +330,133 @@ export class OneDepComponent implements OnInit, OnDestroy {
     this.fileTypes.push(newMap);
   }
   sendFile(depID: string, form: FormData, fileType: string) {
-    this.http.post("http://localhost:8080/onedep/" + depID + "/file", form).subscribe({
-      next: (res) => console.log('Uploaded', fileType, res),
-      error: (error) => console.error('Could not upload File and Metadata', error),
-    });
+    this.http
+      .post("http://localhost:8080/onedep/" + depID + "/file", form)
+      .subscribe({
+        next: (res) => console.log("Uploaded", fileType, res),
+        error: (error) =>
+          console.error("Could not upload File and Metadata", error),
+      });
   }
   sendCoordFile(depID: string, form: FormData) {
-    this.http.post("http://localhost:8080/onedep/" + depID + "/pdb", form).subscribe({
-      next: (res) => console.log('Uploaded Coordinates and Metadata', res),
-      error: (error) => console.error('Could not upload Coordinates and Metadata', error),
-    });
+    this.http
+      .post("http://localhost:8080/onedep/" + depID + "/pdb", form)
+      .subscribe({
+        next: (res) => console.log("Uploaded Coordinates and Metadata", res),
+        error: (error) =>
+          console.error("Could not upload Coordinates and Metadata", error),
+      });
   }
   sendMetadata(depID: string, form: FormData) {
     // missing token!
-    this.http.post("http://localhost:8080/onedep/" + depID + "/metadata", form).subscribe({
-      next: (res) => console.log('Uploaded Metadata', res),
-      error: (error) => console.error('Could not upload Metadata', error),
-    });
+    this.http
+      .post("http://localhost:8080/onedep/" + depID + "/metadata", form)
+      .subscribe({
+        next: (res) => console.log("Uploaded Metadata", res),
+        error: (error) => console.error("Could not upload Metadata", error),
+      });
   }
   onDepositClick() {
     //  Create a deposition
-    let body: string; 
-    if (this.form.value.password){
-      body = JSON.stringify(
-        {
-          "email": "sofya.laskina@epfl.ch",  // for now
-          "orcidIds": this.orcidArray().value.map(item => item.orcidId),
-          "country": "United States",
-          "method": this.form.value.emMethod,
-          "jwtToken": this.form.value.jwtToken,
-          "password": this.form.value.password,
-        }
-      );
-    }else{
-      body = JSON.stringify(
-        {
-          "email": "sofya.laskina@epfl.ch",  // for now
-          "orcidIds": this.orcidArray().value.map(item => item.orcidId),
-          "country": "United States",
-          "method": this.form.value.emMethod,
-          "jwtToken": this.form.value.jwtToken,
-        }
-      );
+    let body: string;
+    if (this.form.value.password) {
+      body = JSON.stringify({
+        email: "sofya.laskina@epfl.ch", // for now
+        orcidIds: this.orcidArray().value.map((item) => item.orcidId),
+        country: "United States",
+        method: this.form.value.emMethod,
+        jwtToken: this.form.value.jwtToken,
+        password: this.form.value.password,
+      });
+    } else {
+      body = JSON.stringify({
+        email: "sofya.laskina@epfl.ch", // for now
+        orcidIds: this.orcidArray().value.map((item) => item.orcidId),
+        country: "United States",
+        method: this.form.value.emMethod,
+        jwtToken: this.form.value.jwtToken,
+      });
     }
     let depID: string;
     let metadataAdded = false;
-    this.http.post("http://localhost:8080/onedep", body, {
-     headers: { 'Content-Type': 'application/json' },
-    }).subscribe({
-      next: (response: any) => {
-        depID = response.depID; // Update the outer variable
-        console.log('Created deposition in OneDep', depID);
+    this.http
+      .post("http://localhost:8080/onedep", body, {
+        headers: { "Content-Type": "application/json" },
+      })
+      .subscribe({
+        next: (response: any) => { // FIX ME specify type
+          depID = response.depID; // Update the outer variable
+          console.log("Created deposition in OneDep", depID);
 
-    // Call subsequent requests
-    this.fileTypes.forEach((fT) => { 
-      if (fT.file) {
-        const formDataFile = new FormData()
-        formDataFile.append('jwtToken', this.form.value.jwtToken)
-        formDataFile.append('file', fT.file);
-        if (fT.emName === this.emFile.Coordinates) {
-          formDataFile.append('scientificMetadata', JSON.stringify(this.form.value.metadata));
-          this.sendCoordFile(depID, formDataFile);
-          metadataAdded = true
-        } else {
-          formDataFile.append('fileMetadata', JSON.stringify({ name: fT.fileName, type: fT.type, contour: fT.contour, details: fT.details }))
-          this.sendFile(depID, formDataFile, fT.type);
-        }
-      }
-    });
-    if (! metadataAdded){
-      const formDataFile = new FormData()
+          // Call subsequent requests
+          this.fileTypes.forEach((fT) => {
+            if (fT.file) {
+              const formDataFile = new FormData();
+              formDataFile.append("jwtToken", this.form.value.jwtToken);
+              formDataFile.append("file", fT.file);
+              if (fT.emName === this.emFile.Coordinates) {
+                formDataFile.append(
+                  "scientificMetadata",
+                  JSON.stringify(this.form.value.metadata),
+                );
+                this.sendCoordFile(depID, formDataFile);
+                metadataAdded = true;
+              } else {
+                formDataFile.append(
+                  "fileMetadata",
+                  JSON.stringify({
+                    name: fT.fileName,
+                    type: fT.type,
+                    contour: fT.contour,
+                    details: fT.details,
+                  }),
+                );
+                this.sendFile(depID, formDataFile, fT.type);
+              }
+            }
+          });
+          if (!metadataAdded) {
+            const formDataFile = new FormData();
 
-      formDataFile.append('jwtToken', this.form.value.jwtToken)
-      formDataFile.append('scientificMetadata', JSON.stringify(this.form.value.metadata));
-      this.sendMetadata(depID, formDataFile);
+            formDataFile.append("jwtToken", this.form.value.jwtToken);
+            formDataFile.append(
+              "scientificMetadata",
+              JSON.stringify(this.form.value.metadata),
+            );
+            this.sendMetadata(depID, formDataFile);
+          }
+        },
+        error: (error) => console.error("Request failed", error.error),
+      });
+  }
+  connectToDepositionBackend(): boolean {
+    const depositionBackendUrl = this.config.depositorURL;
+    let depositionBackendUrlCleaned = depositionBackendUrl.slice();
+    // Check if last symbol is a slash and add version endpoint
+    if (!depositionBackendUrlCleaned.endsWith("/")) {
+      depositionBackendUrlCleaned += "/";
     }
+
+    const depositionBackendUrlVersion = depositionBackendUrlCleaned + "version";
+
+    // Try to connect to the facility backend/version to check if it is available
+    console.log("Connecting to OneDep backend: " + depositionBackendUrlVersion);
+    this.http.get(depositionBackendUrlVersion).subscribe(
+      (response) => {
+        console.log("Connected to OneDep backend", response);
+        // If the connection is successful, store the connected facility backend URL
+        this.connectedDepositionBackend = depositionBackendUrlCleaned;
+        this.connectingToDepositionBackend = false;
+        this.connectedDepositionBackendVersion = response["version"];
       },
-      error: (error) => console.error('Request failed', error.error),
-    });
+      (error) => {
+        this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+        console.error("Request failed", error);
+        this.connectedDepositionBackend = "";
+        this.connectingToDepositionBackend = false;
+      },
+    );
+
+    return true;
   }
 }
-
-
