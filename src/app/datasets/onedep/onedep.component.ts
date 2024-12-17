@@ -5,6 +5,7 @@ import {
   ElementRef,
   OnDestroy,
 } from "@angular/core";
+import { MatRadioChange } from "@angular/material/radio";
 import { AppConfigService, AppConfig } from "app-config.service";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
@@ -180,8 +181,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
     }
   }
 
-  onPDB(event: any) { // FIXME specify type
-    console.log(this.form.get("password"));
+  onPDB(event: MatRadioChange) {
     const input = event.value;
     if (input === "true") {
       this.fileTypes.forEach((fT) => {
@@ -331,7 +331,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
   }
   sendFile(depID: string, form: FormData, fileType: string) {
     this.http
-      .post("http://localhost:8080/onedep/" + depID + "/file", form)
+      .post(this.connectedDepositionBackend + "onedep/" + depID + "/file", form)
       .subscribe({
         next: (res) => console.log("Uploaded", fileType, res),
         error: (error) =>
@@ -340,7 +340,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
   }
   sendCoordFile(depID: string, form: FormData) {
     this.http
-      .post("http://localhost:8080/onedep/" + depID + "/pdb", form)
+      .post(this.connectedDepositionBackend + "onedep/" + depID + "/pdb", form)
       .subscribe({
         next: (res) => console.log("Uploaded Coordinates and Metadata", res),
         error: (error) =>
@@ -350,7 +350,10 @@ export class OneDepComponent implements OnInit, OnDestroy {
   sendMetadata(depID: string, form: FormData) {
     // missing token!
     this.http
-      .post("http://localhost:8080/onedep/" + depID + "/metadata", form)
+      .post(
+        this.connectedDepositionBackend + "onedep/" + depID + "/metadata",
+        form,
+      )
       .subscribe({
         next: (res) => console.log("Uploaded Metadata", res),
         error: (error) => console.error("Could not upload Metadata", error),
@@ -379,13 +382,17 @@ export class OneDepComponent implements OnInit, OnDestroy {
     }
     let depID: string;
     let metadataAdded = false;
+
+    interface OneDepCreate {
+      depID: string;
+    }
     this.http
-      .post("http://localhost:8080/onedep", body, {
+      .post(this.connectedDepositionBackend + "onedep", body, {
         headers: { "Content-Type": "application/json" },
       })
       .subscribe({
-        next: (response: any) => { // FIX ME specify type
-          depID = response.depID; // Update the outer variable
+        next: (response: OneDepCreate) => {
+          depID = response.depID;
           console.log("Created deposition in OneDep", depID);
 
           // Call subsequent requests
@@ -429,6 +436,57 @@ export class OneDepComponent implements OnInit, OnDestroy {
         error: (error) => console.error("Request failed", error.error),
       });
   }
+  onDownloadClick() {
+    console.log("download data");
+    if (this.form.value.deposingCoordinates === true) {
+      const formDataFile = new FormData();
+      const fT = this.fileTypes.find(
+        (fileType) => fileType.emName === this.emFile.Coordinates,
+      );
+      formDataFile.append("file", fT.file);
+      formDataFile.append(
+        "scientificMetadata",
+        JSON.stringify(this.form.value.metadata),
+      );
+      this.http
+        .post(this.connectedDepositionBackend + "onedep/pdb", formDataFile, {
+          responseType: "blob",
+        })
+        .subscribe({
+          next: (response: Blob) => {
+            this.triggerDownload(response, "coordinatesWithMmetadata.cif");
+          },
+          error: (error) => {
+            console.error("Error downloading file from onedep/pdb", error);
+          },
+        });
+    } else {
+      const body = JSON.stringify(this.form.value.metadata);
+      this.http
+        .post(this.connectedDepositionBackend + "onedep/metadata", body, {
+          headers: { "Content-Type": "application/json" },
+          responseType: "blob",
+        })
+        .subscribe({
+          next: (response: Blob) => {
+            this.triggerDownload(response, "metadata.cif");
+          },
+          error: (error) => {
+            console.error("Error downloading file from onedep/metadata", error);
+          },
+        });
+    }
+  }
+  triggerDownload(response: Blob, filename: string) {
+    const downloadUrl = window.URL.createObjectURL(response);
+    const a = document.createElement("a");
+    a.href = downloadUrl;
+    a.download = filename; // Set the file name here
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
   connectToDepositionBackend(): boolean {
     const depositionBackendUrl = this.config.depositorURL;
     let depositionBackendUrlCleaned = depositionBackendUrl.slice();
