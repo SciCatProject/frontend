@@ -185,7 +185,7 @@ describe("1000: DatafilesActionComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DatafilesActionComponent);
     component = fixture.componentInstance;
-    component.files = structuredClone(actionFiles);
+    component.files = JSON.parse(JSON.stringify(actionFiles));
     component.actionConfig = actionsConfig[0];
     component.actionDataset = actionDataset;
     component.maxFileSize = lowerMaxFileSizeLimit;
@@ -484,7 +484,7 @@ describe("1000: DatafilesActionComponent", () => {
         component.maxFileSize = lowerMaxFileSizeLimit;
         break;
     }
-    component.files = structuredClone(actionFiles);
+    component.files = JSON.parse(JSON.stringify(actionFiles));
     switch (selectedFiles) {
       case selectedFilesType.file1:
         component.files[0].selected = true;

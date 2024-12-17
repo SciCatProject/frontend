@@ -7,12 +7,11 @@ import { JobClass } from "@scicatproject/scicat-sdk-ts";
 const job = createMock<JobClass>({
   _id: "testId",
   id: "testId",
-  emailJobInitiator: "test@email.com",
+  createdBy: "testName",
   type: "archive",
-  datasetList: [],
-  creationTime: "",
-  executionTime: "",
-  jobParams: {},
+  jobParams: {
+    datasetList: []
+  },
   jobResultObject: {},
   jobStatusMessage: "",
   ownerGroup: "",

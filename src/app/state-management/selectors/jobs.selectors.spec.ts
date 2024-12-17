@@ -4,18 +4,17 @@ import { JobsState } from "../state/jobs.store";
 import { createMock } from "shared/MockStubs";
 import { JobClass } from "@scicatproject/scicat-sdk-ts";
 
-const job = createMock<JobClass>({
-  emailJobInitiator: "test@email.com",
+const data: JobInterface = {
+  _id: "testId",
+  id: "testId",
+  createdBy: "testName",
   type: "archive",
-  _id: "",
-  id: "",
-  creationTime: "",
-  executionTime: "",
-  jobParams: {},
+  jobParams: {
+    datasetList: [],
+  },
   jobResultObject: {},
   jobStatusMessage: "",
   ownerGroup: "",
-  datasetList: [],
 });
 
 const jobFilters = {
