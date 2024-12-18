@@ -4,7 +4,6 @@ import {
   Component,
   OnDestroy,
 } from "@angular/core";
-import { Router } from "@angular/router";
 import { SciCatDataSource } from "../../shared/services/scicat.datasource";
 import { ScicatDataService } from "../../shared/services/scicat-data-service";
 import { ExportExcelService } from "../../shared/services/export-excel.service";
@@ -31,11 +30,11 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
       hideOrder: 0,
     },
     {
-      id: "createdBy",
-      label: "Creator",
+      id: "emailJobInitiator",
+      label: "Initiator",
       icon: "person",
       canSort: true,
-      matchMode: "is",
+      matchMode: "contains",
       hideOrder: 1,
     },
     {
@@ -47,7 +46,7 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
       hideOrder: 2,
     },
     {
-      id: "createdAt",
+      id: "creationTime",
       icon: "schedule",
       label: "Created at local time",
       format: "date medium ",
@@ -65,12 +64,21 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
       hideOrder: 4,
     },
     {
-      id: "statusCode",
+      id: "jobStatusMessage",
       icon: "traffic",
       label: "Status",
+      format: "json",
       canSort: true,
       matchMode: "contains",
       hideOrder: 5,
+    },
+    {
+      id: "datasetList",
+      icon: "list",
+      label: "Datasets",
+      format: "json",
+      canSort: true,
+      hideOrder: 6,
     },
     {
       id: "jobResultObject",
@@ -94,7 +102,6 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
     private cdRef: ChangeDetectorRef,
     private dataService: ScicatDataService,
     private exportService: ExportExcelService,
-    private router: Router,
   ) {
     this.dataSource = new SciCatDataSource(
       this.appConfigService,

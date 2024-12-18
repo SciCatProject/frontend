@@ -9,7 +9,7 @@
   "plugins": ["@typescript-eslint/eslint-plugin"],
   "overrides": [
     {
-      "files": ["onedep*.ts"],
+      "files": ["*.ts"],
       "parserOptions": {
         "project": ["tsconfig.json"],
         "createDefaultProgram": true

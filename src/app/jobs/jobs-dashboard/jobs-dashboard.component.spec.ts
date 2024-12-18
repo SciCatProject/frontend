@@ -100,7 +100,8 @@ describe("JobsDashboardComponent", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const mode = JobViewMode.myJobs;
-      component.username = "testName";
+      component.email = "test@email.com";
+      const viewMode = { emailJobInitiator: component.email };
       const viewMode = { createdBy: component.username };
       component.onModeChange(mode);
 

@@ -304,12 +304,15 @@ export class DatafilesComponent
       if (email) {
         this.getSelectedFiles();
         const data = {
-          createdBy: email,
-          createdAt: new Date(),
+          emailJobInitiator: email,
+          creationTime: new Date(),
           type: "public",
-          jobParams: {
-            datasetIds: [this.datasetPid],
-          },
+          datasetList: [
+            {
+              pid: this.datasetPid,
+              files: this.getSelectedFiles(),
+            },
+          ],
         };
         this.store.dispatch(submitJobAction({ job: data }));
       }

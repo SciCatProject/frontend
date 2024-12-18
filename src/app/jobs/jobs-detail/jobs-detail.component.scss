@@ -1,25 +1,20 @@
-mat-card {
-  margin: 1em;
+.job-detail {
+  mat-card {
+    margin: 1em;
 
-  .section-icon {
-    height: auto !important;
-    width: auto !important;
+    table {
+      td {
+        padding: 0.3em;
+      }
 
-    mat-icon {
-      vertical-align: middle;
-    }
-  }
+      th {
+        text-align: left;
+        padding-right: 0.5em;
 
-  table {
-    th {
-      min-width: 10rem;
-      padding-right: 0.5rem;
-      text-align: left;
-    }
-
-    td {
-      width: 100%;
-      padding: 0.5rem 0;
+        mat-icon {
+          vertical-align: middle;
+        }
+      }
     }
   }
 }

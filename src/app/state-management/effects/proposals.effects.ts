@@ -13,7 +13,6 @@ import {
 } from "state-management/selectors/proposals.selectors";
 import { map, mergeMap, catchError, switchMap, filter } from "rxjs/operators";
 import { ObservableInput, of } from "rxjs";
-import { ObservableInput, of } from "rxjs";
 import {
   loadingAction,
   loadingCompleteAction,
@@ -73,19 +72,7 @@ export class ProposalEffects {
     fromActions.fetchProposalFailedAction,
     fromActions.fetchProposalAccessFailedAction,
   );
-  fetchProposal$ = this.createProposalFetchEffect(
-    fromActions.fetchProposalAction.type,
-    fromActions.fetchProposalCompleteAction,
-    fromActions.fetchProposalFailedAction,
-    fromActions.fetchProposalAccessFailedAction,
-  );
 
-  fetchParentProposal$ = this.createProposalFetchEffect(
-    fromActions.fetchParentProposalAction.type,
-    fromActions.fetchParentProposalCompleteAction,
-    fromActions.fetchParentProposalFailedAction,
-    fromActions.fetchParentProposalAccessFailedAction,
-  );
   fetchParentProposal$ = this.createProposalFetchEffect(
     fromActions.fetchParentProposalAction.type,
     fromActions.fetchParentProposalCompleteAction,

@@ -1,12 +1,4 @@
-import {
-  Component,
-  OnInit,
-  Output,
-  EventEmitter,
-  OnDestroy,
-  Inject,
-} from "@angular/core";
-import { Dataset, Proposal, Sample } from "shared/sdk/models";
+import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 
@@ -15,7 +7,6 @@ import { MatDialog } from "@angular/material/dialog";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { combineLatest, fromEvent, Observable, Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
-import { HttpClient } from "@angular/common/http";
 
 import { showMessageAction } from "state-management/actions/user.actions";
 import {
@@ -34,7 +25,6 @@ import {
   addKeywordFilterAction,
   clearFacetsAction,
   updatePropertyAction,
-  selectDatasetAction,
 } from "state-management/actions/datasets.actions";
 import { Router } from "@angular/router";
 import { selectCurrentProposal } from "state-management/selectors/proposals.selectors";
@@ -98,7 +88,6 @@ export class DatasetDetailComponent
   editingAllowed = false;
   editEnabled = false;
   show = false;
-
   readonly separatorKeyCodes: number[] = [ENTER, COMMA, SPACE];
 
   constructor(
@@ -107,8 +96,6 @@ export class DatasetDetailComponent
     private attachmentService: AttachmentService,
     public dialog: MatDialog,
     private store: Store,
-    private http: HttpClient,
-    private http: HttpClient,
     private router: Router,
     private fb: FormBuilder,
   ) {}
@@ -327,58 +314,4 @@ export class DatasetDetailComponent
   openAttachment(encoded: string) {
     this.attachmentService.openAttachment(encoded);
   }
-  
-  hasOpenEMKeyword(): boolean {
-    const keywordsArray = this.dataset.keywords;
-    return keywordsArray.some((keyword: string) =>
-      keyword.toLowerCase() === 'openem'
-    );
-  }
-
-  onOneDepClick() {
-    console.log('started one dep click');
-    const id = encodeURIComponent(this.dataset.pid);
-    this.connectToDepositionBackend();
-    this.router.navigateByUrl("/datasets/" + id + "/onedep");
-    console.log("my datset in the details:", this.dataset);
-    // this.store.dispatch(selectDatasetAction({ dataset: this.dataset  }));
-  }
-  onEMPIARclick() {
-    const id = encodeURIComponent(this.dataset.pid);
-    this.router.navigateByUrl("/datasets/" + id + "/empiar");
-  }
-
-
-  connectToDepositionBackend(): boolean {
-    var DepositionBackendUrl = "http://localhost:8080"
-    let DepositionBackendUrlCleaned = DepositionBackendUrl.slice();
-    // Check if last symbol is a slash and add version endpoint
-    if (!DepositionBackendUrlCleaned.endsWith('/')) {
-      DepositionBackendUrlCleaned += '/';
-    }
-
-    let DepositionBackendUrlVersion = DepositionBackendUrlCleaned + 'version';
-
-    // Try to connect to the facility backend/version to check if it is available
-    console.log('Connecting to OneDep backend: ' + DepositionBackendUrlVersion);
-    this.http.get(DepositionBackendUrlVersion).subscribe(
-      response => {
-        console.log('Connected to OneDep backend', response);
-        // If the connection is successful, store the connected facility backend URL
-        this.connectedDepositionBackend = DepositionBackendUrlCleaned;
-        this.connectingToDepositionBackend = false;
-        this.connectedDepositionBackendVersion = response['version'];
-      },
-      error => {
-        this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
-        console.error('Request failed', error);
-        this.connectedDepositionBackend = '';
-        this.connectingToDepositionBackend = false;
-      }
-    );
-
-    return true;
-  }
-
 }
-
