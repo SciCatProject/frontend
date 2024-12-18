@@ -20,19 +20,17 @@ import {
 } from "@scicatproject/scicat-sdk-ts";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import { createMock } from "shared/MockStubs";
+import { Job, JobInterface } from "shared/sdk/models/Job";
 
-const job = createMock<JobClass>({
-  _id: "testId",
+const data: JobInterface = {
   id: "testId",
   createdBy: "testName",
   type: "archive",
   jobParams: {
     datasetList: [],
   },
-  jobResultObject: {},
-  jobStatusMessage: "",
-  ownerGroup: "",
-});
+};
+const job = new Job(data);
 
 describe("JobEffects", () => {
   let actions: TestObservable;

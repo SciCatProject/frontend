@@ -1,21 +1,18 @@
 import * as fromSelectors from "./jobs.selectors";
-
 import { JobsState } from "../state/jobs.store";
 import { createMock } from "shared/MockStubs";
 import { JobClass } from "@scicatproject/scicat-sdk-ts";
+import { Job, JobInterface } from "shared/sdk/models/Job";
 
 const data: JobInterface = {
-  _id: "testId",
   id: "testId",
   createdBy: "testName",
   type: "archive",
   jobParams: {
     datasetList: [],
   },
-  jobResultObject: {},
-  jobStatusMessage: "",
-  ownerGroup: "",
-});
+};
+const job = new Job(data);
 
 const jobFilters = {
   mode: null,

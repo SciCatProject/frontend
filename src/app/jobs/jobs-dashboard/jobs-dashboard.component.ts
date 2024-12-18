@@ -27,6 +27,7 @@ import {
   selectCurrentUser,
   selectProfile,
 } from "state-management/selectors/user.selectors";
+import { Job, JobInterface } from "shared/sdk/models/Job";
 
 export interface JobsTableData {
   id: string;
@@ -91,11 +92,11 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  formatTableData(jobs: JobClass[]): JobsTableData[] {
+  formatTableData(jobs: JobInterface[]): JobsTableData[] {
     let tableData: JobsTableData[] = [];
     if (jobs) {
       tableData = jobs.map((job) => ({
-        id: job._id,
+        id: job.id,
         initiator: job.createdBy,
         type: job.type,
         createdAt: this.datePipe.transform(job.createdAt, "yyyy-MM-dd HH:mm"),

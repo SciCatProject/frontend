@@ -17,6 +17,8 @@ import {
   loadingCompleteAction,
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
+import { JobInterface } from "shared/sdk/models/Job";
+import { datasets } from "state-management/selectors";
 
 @Injectable()
 export class JobEffects {
@@ -58,7 +60,7 @@ export class JobEffects {
       ofType(fromActions.fetchJobAction),
       switchMap(({ jobId }) =>
         this.jobsService.jobsControllerFindOne(jobId).pipe(
-          map((job: JobClass) => fromActions.fetchJobCompleteAction({ job })),
+          map((job: JobInterface) => fromActions.fetchJobCompleteAction({ job })),
           catchError(() => of(fromActions.fetchJobFailedAction())),
         ),
       ),
@@ -69,8 +71,12 @@ export class JobEffects {
     return this.actions$.pipe(
       ofType(fromActions.submitJobAction),
       switchMap(({ job }) =>
-        this.jobsService.jobsControllerCreate(job).pipe(
-          map((res) => fromActions.submitJobCompleteAction({ job: res })),
+        this.jobsService.jobsControllerCreate({
+          ...job,
+          emailJobInitiator: job.createdBy,
+          datasetList: job.jobParams.datasetList,
+        } as CreateJobDto).pipe(
+          map((res) => fromActions.submitJobCompleteAction({ job: res as JobInterface })),
           catchError((err) => of(fromActions.submitJobFailedAction({ err }))),
         ),
       ),

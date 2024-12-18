@@ -24,6 +24,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { JobClass } from "@scicatproject/scicat-sdk-ts";
+import { JobInterface } from "shared/sdk/models/Job";
 
 describe("JobsDashboardComponent", () => {
   let component: JobsDashboardComponent;
@@ -144,7 +145,7 @@ describe("JobsDashboardComponent", () => {
 
   describe("#onRowClick()", () => {
     it("should navigate to a job", () => {
-      const job = createMock<JobClass>({ id: "test" });
+      const job = createMock<JobInterface>({ id: "test" });
       component.onRowClick({
         ...job,
         initiator: "",

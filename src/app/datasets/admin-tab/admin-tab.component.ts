@@ -17,6 +17,7 @@ import {
   selectIsAdmin,
   selectIsLoading,
 } from "state-management/selectors/user.selectors";
+import { Job } from "shared/sdk/models/Job";
 
 @Component({
   selector: "app-admin-tab",
@@ -47,15 +48,12 @@ export class AdminTabComponent implements OnInit, OnDestroy {
         .pipe(take(1))
         .subscribe((user) => {
           if (user && this.dataset) {
-            const job: CreateJobDto = {
-              emailJobInitiator: user.email,
-              type: "reset",
+            const job = new Job({
               createdBy: user.username,
-              createdAt: new Date(),
-              datasetList: [],
+              createdAt: new Date().toDateString(),
+              type: "reset",
               jobParams: {},
-            };
-
+            });
             const fileList: string[] = [];
             if (this.dataset["datablocks"]) {
               this.dataset["datablocks"].map((d) => {

@@ -4,18 +4,18 @@ declare var Object: any;
 export interface JobInterface {
   id?: string;
   ownerUser?: string;
-  type?: string;
+  type: string;
   statusCode?: string;
   statusMessage?: string;
-  jobParams?: any;
+  jobParams: any;
   datasetsValidation?: boolean;
   contactEmail?: string;
   configVersion?: string;
   jobResultObject?: any;
   createdBy?: string;
   updatedBy?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: string;
+  updatedAt?: string;
   ownerGroup?: string;
   accessGroups?: any;
   isPublished?: boolean;
@@ -34,8 +34,8 @@ export class Job implements JobInterface {
   "jobResultObject": any;
   "createdBy": string;
   "updatedBy": string;
-  "createdAt": Date;
-  "updatedAt": Date;
+  "createdAt": string;
+  "updatedAt": string;
   "ownerGroup": string;
   "accessGroups": any;
   "isPublished": boolean;
@@ -124,11 +124,11 @@ export class Job implements JobInterface {
         },
         createdAt: {
           name: "createdAt",
-          type: "Date",
+          type: "string",
         },
         updatedAt: {
           name: "updatedAt",
-          type: "Date",
+          type: "string",
         },
         ownerGroup: {
           name: "ownerGroup",

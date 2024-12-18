@@ -22,6 +22,7 @@ import {
   ReturnedUserDto,
 } from "@scicatproject/scicat-sdk-ts";
 import { SDKToken } from "./services/auth/auth.service";
+import { JobInterface } from "./sdk/models/Job";
 
 export class MockUserApi {
   getCurrentId() {
@@ -325,7 +326,7 @@ export const mockAttachment = createMock<Attachment>({});
 export const mockSample = createMock<SampleClass>({});
 export const mockProposal = createMock<ProposalClass>({});
 export const mockInstrument = createMock<Instrument>({});
-export const mockJob = createMock<JobClass>({});
+export const mockJob = createMock<JobInterface>({});
 export const mockLogbook = createMock<Logbook>({});
 export const mockPolicy = createMock<Policy>({});
 export const mockPublishedData = createMock<PublishedData>({});

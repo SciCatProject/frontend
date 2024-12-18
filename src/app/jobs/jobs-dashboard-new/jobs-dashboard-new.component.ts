@@ -11,6 +11,7 @@ import { ExportExcelService } from "../../shared/services/export-excel.service";
 import { Column } from "shared/modules/shared-table/shared-table.module";
 import { AppConfigService } from "app-config.service";
 import { JobsTableData } from "jobs/jobs-dashboard/jobs-dashboard.component";
+import { Job } from "shared/sdk/models/Job";
 
 @Component({
   selector: "app-jobs-new-dashboard",
@@ -73,20 +74,12 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
       hideOrder: 5,
     },
     {
-      id: "datasetList",
-      icon: "list",
-      label: "Datasets",
-      format: "json",
-      canSort: true,
-      hideOrder: 6,
-    },
-    {
       id: "jobResultObject",
       icon: "work_outline",
       label: "Result",
       format: "json",
       canSort: true,
-      hideOrder: 7,
+      hideOrder: 6,
     },
   ];
 
