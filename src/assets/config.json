@@ -1,7 +1,7 @@
 {
   "accessTokenPrefix": "Bearer ",
   "addDatasetEnabled": true,
-  "archiveWorkflowEnabled": false,
+  "archiveWorkflowEnabled": true,
   "datasetReduceEnabled": true,
   "datasetJsonScientificMetadata": true,
   "editDatasetSampleEnabled": true,
