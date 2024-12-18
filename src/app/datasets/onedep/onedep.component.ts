@@ -18,10 +18,12 @@ import {
 } from "@angular/forms";
 
 import { Store } from "@ngrx/store";
-import { Dataset } from "shared/sdk/models";
+import {
+  OutputDatasetObsoleteDto,
+  ReturnedUserDto,
+} from "@scicatproject/scicat-sdk-ts";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
-import { User } from "shared/sdk";
 import { methodsList, EmFile, DepositionFiles } from "./types/methods.enum";
 import { Subscription, fromEvent } from "rxjs";
 
@@ -36,8 +38,8 @@ export class OneDepComponent implements OnInit, OnDestroy {
 
   config: AppConfig;
 
-  dataset: Dataset | undefined;
-  user: User | undefined;
+  dataset: OutputDatasetObsoleteDto | undefined;
+  user: ReturnedUserDto | undefined;
   form: FormGroup;
   showAssociatedMapQuestion = false;
   methodsList = methodsList;
@@ -437,8 +439,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
       });
   }
   onDownloadClick() {
-    console.log("download data");
-    if (this.form.value.deposingCoordinates === true) {
+    if (this.form.value.deposingCoordinates === "true") {
       const formDataFile = new FormData();
       const fT = this.fileTypes.find(
         (fileType) => fileType.emName === this.emFile.Coordinates,
