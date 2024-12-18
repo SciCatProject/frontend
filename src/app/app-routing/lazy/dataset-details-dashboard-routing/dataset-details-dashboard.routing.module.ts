@@ -11,6 +11,7 @@ import { DatasetDetailComponent } from "datasets/dataset-detail/dataset-detail.c
 import { DatasetFileUploaderComponent } from "datasets/dataset-file-uploader/dataset-file-uploader.component";
 import { DatasetLifecycleComponent } from "datasets/dataset-lifecycle/dataset-lifecycle.component";
 import { ReduceComponent } from "datasets/reduce/reduce.component";
+import { OneDepComponent } from "datasets/onedep/onedep.component";
 import { RelatedDatasetsComponent } from "datasets/related-datasets/related-datasets.component";
 import { LogbooksDashboardComponent } from "logbooks/logbooks-dashboard/logbooks-dashboard.component";
 const routes: Routes = [
@@ -70,6 +71,18 @@ const routes: Routes = [
     path: "admin",
     component: AdminTabComponent,
     canActivate: [AuthGuard, AdminGuard],
+  },
+  {
+    path: "onedep",
+    canActivate: [ServiceGuard],
+    children: [
+      {
+        path: "",
+        component: OneDepComponent,
+        canActivate: [AuthGuard],
+      },
+    ],
+    data: { service: "onedep" },
   },
 ];
 @NgModule({

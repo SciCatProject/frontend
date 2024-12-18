@@ -1,0 +1,347 @@
+<ng-template [ngIf]="dataset">
+    <div style="clear: both"></div>
+    <div>
+        <div>
+            <mat-card [formGroup]="form" data-cy="general-info">
+                <mat-card-header class="general-header">
+                    <div mat-card-avatar class="section-icon">
+                        <mat-icon> assignment </mat-icon>
+                    </div>
+                    General information
+                </mat-card-header>
+                <mat-card-content>
+                    <table>
+                        <tr>
+                            <th>Name</th>
+                            <td>{{ dataset.datasetName || "-" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Description</th>
+                            <td>
+                                <span 
+                                    [innerHTML]="dataset.description || '-' | linky"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>PID</th>
+                            <td>
+                                {{ dataset.pid }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Type</th>
+                            <td>{{dataset.type }}</td>
+                        </tr>
+                        <tr>
+                            <th>Creation Time</th>
+                            <td>{{ dataset.creationTime | date: "yyyy-MM-dd
+                                HH:mm" }}</td>
+                        </tr>
+                        <tr class="keywords-row">
+                            <th>Keywords</th>
+                            <mat-chip-set role="list" #keywordChips>
+                                <mat-chip role="listitem"
+                                    *ngFor="let keyword of dataset.keywords">
+                                    {{ keyword }}
+                                </mat-chip>
+                            </mat-chip-set>
+                        </tr>
+                    </table>
+                </mat-card-content>
+
+            </mat-card>
+            <mat-card [formGroup]="form">
+                <mat-card-header class="creator-header">
+                    <div mat-card-avatar class="section-icon">
+                        <mat-icon> blur_linear </mat-icon>
+                    </div>
+                    Administrative and Method Information:
+                </mat-card-header>
+
+                <div class="card-container">
+                    <div class="card-left">
+                        <h2>Obtain OneDep Token</h2>
+                        <p class="instruction">Go to <a href="https://onedep-depui-test.wwpdb.org" target="_blank" >OneDep API</a> and choose option to sign in with ORCID. After the authorization you will be redirected back to OneDep. In the left bar below the map, tick the Deposition API option and click "Generate Key". Copy the token in the field below.    </p>
+                        <mat-form-field 
+                            class="token-field"
+                            appearance="outline">
+                            <mat-label>Token</mat-label>
+                            <textarea 
+                                matInput
+                                required
+                                placeholder="copy the token here"
+                                rows="1"
+                                formControlName="jwtToken" 
+                                (input)="autoGrow($event)"
+                                [style.overflow]="detailsOverflow"></textarea>
+                        </mat-form-field>
+                        <!-- Password Field -->
+                        <h2 class="password">Password</h2>
+                        <p class="instruction">You can provide a password, which will be confirmed in the email and sent to all provided ORCID users.</p>
+                        <mat-form-field class="password-field" appearance="outline">
+                            <mat-label>Password</mat-label>
+                            <input 
+                                matInput
+                                [type]="showPassword ? 'text' : 'password'"
+                                placeholder="enter your password"
+                                formControlName="password">
+                            <button mat-icon-button matSuffix (click)="togglePasswordVisibility()">
+                                <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                            </button>
+                        </mat-form-field>
+                    </div>
+                    <div class="card-middle">
+                        <h2>Enter 16-digit ORCID iD</h2>
+                        <p class="instruction">Owners of these ORCIDs iDs are
+                            allowed to access this deposition.</p>
+                        
+                            <!-- Link the orcid FormArray -->
+                            <div formArrayName="orcid">
+                                <ng-container
+                                    *ngFor="let field of orcidArray().controls; let i = index">
+                                    <div [formGroupName]="i">
+                                        <mat-form-field 
+                                            class="data-field"
+                                            appearance="outline">
+                                            <mat-label>Enter 16-digits ORCID iD</mat-label>
+                                            <div class="input-container">
+                                            <input 
+                                                matInput 
+                                                type="text"
+                                                maxlength="19"
+                                                placeholder="xxxx-xxxx-xxxx-xxxx"
+                                                formControlName="orcidId"
+                                                orcidFormatter
+                                            >
+                                            <button 
+                                                mat-icon-button 
+                                                class="remove-field-btn" 
+                                                (click)="removeOrcidField(i)">
+                                                <mat-icon>clear</mat-icon>    
+                                            </button>                                    
+                                            </div>
+                                        </mat-form-field>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <button 
+                                mat-icon-button 
+                                class="add-field-btn" 
+                                (click)="addOrcidField()">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        
+                    </div>
+                    
+                    <div class="card-right">
+                    
+                        <!-- Question 1: Electron Microscopy Method -->
+                        <h2>Choose Electron Microscopy
+                            Method</h2>
+                        <mat-form-field class="method-name">
+                            <mat-label>experimental method</mat-label>
+                            <mat-select 
+                                required
+                                formControlName="emMethod"
+                                name="method"
+                                (selectionChange)="onMethodChange()">
+                                <mat-option *ngFor="let method of methodsList"
+                                    [value]="method.value">
+                                    {{ method.viewValue }}
+                                </mat-option>
+                            </mat-select>
+                            
+                            <!-- Error Message -->
+                            <div *ngIf="form.get('emMethod')?.invalid && form.get('emMethod')?.touched"
+                                class="error">
+                                You must specify the experimental method
+                            </div>
+                        </mat-form-field>
+
+
+                        <!-- Question 2: PDB Deposition -->
+                        <tr *ngIf="form.value['emMethod'] && form.value['emMethod'] !== 'tomogram'">
+                            <th class="questionnaire">Are you deposing
+                                coordinates with this
+                                submission? (for PDB)</th>
+                            <td>
+                                <mat-radio-group reuired
+                                    formControlName="deposingCoordinates"
+                                    (change)="onPDB($event)">
+                                    <mat-radio-button name="deposingCoordinates"
+                                        value=true>
+                                        Yes
+                                    </mat-radio-button>
+                                    <mat-radio-button name="deposingCoordinates"
+                                        value=false checked>
+                                        No
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </td>
+                        </tr>
+                        <tr
+                            *ngIf="form.value['emMethod'] && form.get('deposingCoordinates')?.value === 'true'">
+                            <th>Has an associated map been deposited to EMDB?
+                            </th>
+                            <td>
+                                <mat-radio-group reuired
+                                    formControlName="associatedMap">
+                                    <mat-radio-button name="associatedMap"
+                                        value=true>
+                                        Yes
+                                    </mat-radio-button>
+                                    <mat-radio-button name="associatedMap"
+                                        value=false>
+                                        No
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </td>
+                        </tr>
+
+                        <!-- EMDB Identifier Field -->
+                        <tr
+                            *ngIf="form.value['emMethod'] && form.get('associatedMap').value === 'true' && form.get('deposingCoordinates').value === 'true'">
+                            <th>EMDB Identifier</th>
+                            <td>
+                                <mat-form-field class="EMDB-ID">
+                                    <mat-label>EMDB ID</mat-label>
+                                    <input required matInput
+                                        formControlName="emdbId" />
+                                </mat-form-field>
+                            </td>
+                        </tr>
+
+                        <!-- Final Question: Composite Map -->
+                        <tr *ngIf=" form.value['emMethod']">
+                            <th class="questionnaire">Is this a composite map?
+                            </th>
+                            <td>
+                                <mat-radio-group required
+                                    formControlName="compositeMap">
+                                    <mat-radio-button name="compositeMap"
+                                        value=true>
+                                        Yes
+                                    </mat-radio-button>
+                                    <mat-radio-button name="compositeMap"
+                                        value=false checked>
+                                        No
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </td>
+                        </tr>
+                    </div>
+                </div>
+                <!-- <button class="submitDep" mat-raised-button color="primary"
+                (click)="onCreateClick()">
+                Create Deposition
+                </button> -->
+            </mat-card>
+
+            <!-- Attachments -->
+            <mat-card>
+                <mat-card-header class="file-header">
+                    <div mat-card-avatar class="section-icon">
+                        <mat-icon> attachment </mat-icon>
+                    </div>
+                    Choose files for deposition
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-card *ngFor="let fileType of fileTypes"
+                        class="fileCard">
+                        <ng-container
+                            *ngIf="fileType.emName !== 'co-cif' || form.get('deposingCoordinates').value === 'true'">
+                            <mat-card-header matTooltip="{{fileType.explanation}}" matTooltipPosition="above">
+                                <mat-card-title>{{ fileType.nameFE}} <span class="required-asterisk" *ngIf="isRequired(fileType.emName)"> *</span></mat-card-title>
+                                
+                            </mat-card-header>
+                            <mat-card-content>
+                                <div class="file-selection-container">
+                                    <button class="fileChooser"
+                                        mat-raised-button color="primary"
+                                        (click)="onChooseFile(fileInput)">
+                                        Choose File
+                                    </button>
+                                    <div *ngIf="selectedFile[fileType.emName]">
+                                        <mat-icon>attach_file</mat-icon>
+                                    </div>
+
+                                    <div *ngIf="fileType.emName === 'add-map' && selectedFile['add-map-' + fileType.id]">
+                                        <mat-icon>attach_file</mat-icon>
+                                    </div>
+                                    <input type="file" #fileInput
+                                        (change)="fileType.emName === 'add-map' ? onFileAddMapSelected($event, fileType.id) : onFileSelected($event, fileType.emName)"
+                                        style="display: none;" />
+                                    <div 
+                                        *ngIf="fileType.emName !== 'add-map' && selectedFile[fileType.emName]"
+                                        class="fileName">
+                                        <p>Selected File: {{ selectedFile[fileType.emName]?.name }}</p>
+                                    </div>
+                                    <div *ngIf="fileType.emName === 'add-map' && selectedFile['add-map-' + fileType.id]"
+                                        class="fileName">
+                                        <p>Selected File: {{ selectedFile['add-map-' + fileType.id]?.name }}</p>
+                                    </div>
+                                    
+                                </div>
+
+                                <div class="input-container">
+                                    <ng-container
+                                        *ngIf="fileType.contour !== undefined">
+                                        <mat-form-field appearance="outline"
+                                            class="contour-level">
+                                            <mat-label>Contour Level</mat-label>
+                                            <input matInput type="number"
+                                                placeholder="e.g. 0.0" 
+                                                [required]="fileType.file && fileType.required"
+                                                [value]="fileType.contour || ''"
+                                                (input)="fileType.emName === 'vo-map' ? updateContourLevelMain($event) : 
+                                                         fileType.emName === 'add-map' ? updateContourLevelAddMap($event, fileType.id) : 
+                                                         updateContourLevel($event, fileType.emName)" />
+
+                                                         
+                                        </mat-form-field>
+                                        <!-- Error Message -->
+                                        <!-- FIX ME -->
+                                        <!-- <div *ngIf="form.get('emMethod')?.invalid && form.get('emMethod')?.touched" class="error">
+                                            You must specify the experimental method
+                                        </div> -->
+                                    </ng-container>
+                                    <mat-form-field class="details">
+                                        <mat-label>Details</mat-label>
+                                        <textarea matInput
+                                            placeholder="Enter details..."
+                                            rows="1"
+                                            (input)="fileType.emName === 'add-map' ? updateDetailsAddMap($event, fileType.id) : updateDetails($event,fileType.emName)"
+                                            (input)="autoGrow($event)"
+                                            [style.overflow]="detailsOverflow"></textarea>
+                                    </mat-form-field>
+                                </div>
+                            </mat-card-content>
+                        </ng-container>
+                        <div *ngIf="fileType.emName === 'add-map' && fileType.id ===0">
+                            <button 
+                                mat-icon-button 
+                                matTooltip="Add more maps" 
+                                aria-label="Add another map" 
+                                (click)="addMap()">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </div>
+                    </mat-card>
+
+
+                    <!-- UPLOAD FILES DONE -->
+                    <button class="submitDep" mat-raised-button color="primary"
+                        (click)="onDepositClick()">
+                        Start Deposition
+                    </button>
+                    <button class="submitDep" mat-raised-button color="primary"
+                        (click)="onDownloadClick()">
+                        Download mmCIF
+                    </button>
+                </mat-card-content>
+            </mat-card>
+
+
+        </div>
+    </div>
+</ng-template>
