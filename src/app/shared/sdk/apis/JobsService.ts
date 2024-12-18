@@ -47,9 +47,13 @@ export class JobsServiceV4 implements JobsServiceInterfaceV4 {
     context?: HttpContext;
   } = {}): Observable<any> {
     const headers = this.defaultHeaders;
-    const url = `${this.configuration.basePath}/jobs`;
+    const url = `${this.configuration.basePath}/api/v3/jobs`;
 
-    return this.httpClient.post<JobInterface>(url, createJobDto, {
+    return this.httpClient.post<JobInterface>(url,
+      {
+        ...createJobDto,
+        createdBy: undefined,
+      }, {
       headers: headers,
       observe: observe,
       reportProgress: reportProgress,
