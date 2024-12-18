@@ -3,10 +3,7 @@ import { Store } from "@ngrx/store";
 import { FileObject } from "datasets/dataset-details-dashboard/dataset-details-dashboard.component";
 import { Subscription } from "rxjs";
 import { take } from "rxjs/operators";
-import {
-  CreateJobDto,
-  OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import {
   selectCurrentDatablocks,

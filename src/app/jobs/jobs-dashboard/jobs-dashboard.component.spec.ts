@@ -23,7 +23,6 @@ import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { JobClass } from "@scicatproject/scicat-sdk-ts";
 import { JobInterface } from "shared/sdk/models/Job";
 
 describe("JobsDashboardComponent", () => {

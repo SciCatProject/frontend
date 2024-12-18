@@ -12,7 +12,6 @@ import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import {
   Attachment,
   Instrument,
-  JobClass,
   OutputDatasetObsoleteDto,
   ProposalClass,
   PublishedData,

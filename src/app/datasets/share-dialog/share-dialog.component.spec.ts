@@ -43,6 +43,7 @@ import { AuthService } from "shared/services/auth/auth.service";
 import { InternalStorage } from "shared/services/auth/base.storage";
 import { cold } from "jasmine-marbles";
 import { of } from "rxjs";
+import { JobsServiceV4 } from "shared/sdk/apis/JobsService";
 
 const data = {
   infoMessage: "",
@@ -77,6 +78,7 @@ describe("ShareDialogComponent", () => {
         { provide: UsersService, useClass: MockUserApi },
         { provide: InstrumentsService, useValue: {} },
         { provide: JobsService, useValue: {} },
+        { provide: JobsServiceV4, useValue: {} },
         { provide: ProposalsService, useValue: {} },
         { provide: SamplesService, useValue: {} },
         { provide: PublishedDataService, useClass: MockPublishedDataApi },

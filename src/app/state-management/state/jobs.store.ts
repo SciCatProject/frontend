@@ -1,4 +1,3 @@
-import { JobClass } from "@scicatproject/scicat-sdk-ts";
 import { JobInterface } from "shared/sdk/models/Job";
 import { JobFilters } from "state-management/models";
 

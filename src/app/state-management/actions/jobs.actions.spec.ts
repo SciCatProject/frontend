@@ -1,4 +1,3 @@
-import { CreateJobDto } from "@scicatproject/scicat-sdk-ts";
 import * as fromActions from "./jobs.actions";
 import { mockJob as job } from "shared/MockStubs";
 
@@ -78,8 +77,7 @@ describe("Job Actions", () => {
 
   describe("submitJobAction", () => {
     it("should create an action", () => {
-      const newJob = { ...job } as CreateJobDto;
-      const action = fromActions.submitJobAction({ job: newJob });
+      const action = fromActions.submitJobAction({ job });
       expect({ ...action }).toEqual({ type: "[Job] Submit Job", job: newJob });
     });
   });
