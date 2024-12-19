@@ -1,19 +1,18 @@
-import { Component, EventEmitter, Output, Input } from '@angular/core';
-import { JsonSchema } from '@jsonforms/core';
-import { configuredRenderer } from './ingestor-metadata-editor-helper';
+import { Component, EventEmitter, Output, Input } from "@angular/core";
+import { JsonSchema } from "@jsonforms/core";
+import { configuredRenderer } from "./ingestor-metadata-editor-helper";
 
 @Component({
-  selector: 'app-metadata-editor',
+  selector: "app-metadata-editor",
   template: `<jsonforms
-  [data]="data"
-  [schema]="schema"
-  [renderers]="combinedRenderers"
-  (dataChange)="onDataChange($event)"
-></jsonforms>`,
+    [data]="data"
+    [schema]="schema"
+    [renderers]="combinedRenderers"
+    (dataChange)="onDataChange($event)"
+  ></jsonforms>`,
 })
-
 export class IngestorMetadataEditorComponent {
-  @Input() data: Object;
+  @Input() data: object;
   @Input() schema: JsonSchema;
 
   @Output() dataChange = new EventEmitter<string>();

@@ -14,19 +14,22 @@ export class IngestorMetadataEditorHelper {
     }
 
     if (schema.$ref) {
-      const refPath = schema.$ref.replace('#/', '').split('/');
+      const refPath = schema.$ref.replace("#/", "").split("/");
       let ref = rootSchema;
       refPath.forEach((part) => {
         ref = ref[part];
       });
       return IngestorMetadataEditorHelper.resolveRefs(ref, rootSchema);
-    } else if (typeof schema === 'object') {
+    } else if (typeof schema === "object") {
       for (const key in schema) {
-        if (schema.hasOwnProperty(key)) {
-          schema[key] = IngestorMetadataEditorHelper.resolveRefs(schema[key], rootSchema);
+        if (Object.prototype.hasOwnProperty.call(schema, key)) {
+          schema[key] = IngestorMetadataEditorHelper.resolveRefs(
+            schema[key],
+            rootSchema,
+          );
         }
       }
     }
     return schema;
-  };
-};
+  }
+}

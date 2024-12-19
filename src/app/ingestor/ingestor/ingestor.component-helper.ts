@@ -1,22 +1,22 @@
-import { JsonSchema } from '@jsonforms/core';
+import { JsonSchema } from "@jsonforms/core";
 
-export interface IExtractionMethod {
+export interface ExtractionMethod {
   name: string;
   schema: string; // Base64 encoded JSON schema
-};
+}
 
-export interface IIngestionRequestInformation {
+export interface IngestionRequestInformation {
   selectedPath: string;
-  selectedMethod: IExtractionMethod;
+  selectedMethod: ExtractionMethod;
   selectedResolvedDecodedSchema: JsonSchema;
-  scicatHeader: Object;
+  scicatHeader: object;
   userMetaData: {
-    organizational: Object,
-    sample: Object,
+    organizational: object;
+    sample: object;
   };
   extractorMetaData: {
-    instrument: Object,
-    acquisition: Object,
+    instrument: object;
+    acquisition: object;
   };
   extractorMetaDataReady: boolean;
   extractMetaDataRequested: boolean;
@@ -24,11 +24,16 @@ export interface IIngestionRequestInformation {
 
   apiErrorInformation: {
     metaDataExtraction: boolean;
-  }
+  };
+}
+
+export interface TransferDataListEntry {
+  transferId: string;
+  status: string;
 }
 
 // There are many more... see DerivedDataset.ts
-export interface ISciCatHeader {
+export interface SciCatHeader {
   datasetName: string;
   description: string;
   creationLocation: string;
@@ -38,27 +43,27 @@ export interface ISciCatHeader {
   license: string;
   keywords: string[];
   filePath: string;
-  scientificMetadata: IScientificMetadata;
+  scientificMetadata: ScientificMetadata;
 }
 
-export interface IScientificMetadata {
-  organizational: Object;
-  sample: Object;
-  acquisition: Object;
-  instrument: Object;
+export interface ScientificMetadata {
+  organizational: object;
+  sample: object;
+  acquisition: object;
+  instrument: object;
 }
 
-export interface IDialogDataObject {
-  createNewTransferData: IIngestionRequestInformation;
+export interface DialogDataObject {
+  createNewTransferData: IngestionRequestInformation;
   backendURL: string;
   onClickNext: (step: number) => void;
 }
 
 export class IngestorHelper {
-  static createEmptyRequestInformation = (): IIngestionRequestInformation => {
+  static createEmptyRequestInformation = (): IngestionRequestInformation => {
     return {
-      selectedPath: '',
-      selectedMethod: { name: '', schema: '' },
+      selectedPath: "",
+      selectedMethod: { name: "", schema: "" },
       selectedResolvedDecodedSchema: {},
       scicatHeader: {},
       userMetaData: {
@@ -71,18 +76,27 @@ export class IngestorHelper {
       },
       extractorMetaDataReady: false,
       extractMetaDataRequested: false,
-      mergedMetaDataString: '',
+      mergedMetaDataString: "",
       apiErrorInformation: {
         metaDataExtraction: false,
       },
     };
   };
 
-  static mergeUserAndExtractorMetadata(userMetadata: Object, extractorMetadata: Object, space: number): string {
-    return JSON.stringify({ ...userMetadata, ...extractorMetadata }, null, space);
-  };
+  static mergeUserAndExtractorMetadata(
+    userMetadata: object,
+    extractorMetadata: object,
+    space: number,
+  ): string {
+    return JSON.stringify(
+      { ...userMetadata, ...extractorMetadata },
+      null,
+      space,
+    );
+  }
 }
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const SciCatHeader_Schema: JsonSchema = {
   type: "object",
   properties: {
@@ -96,9 +110,19 @@ export const SciCatHeader_Schema: JsonSchema = {
     license: { type: "string" },
     keywords: {
       type: "array",
-      items: { type: "string" }
+      items: { type: "string" },
     },
     // scientificMetadata: { type: "string" } ; is created during the ingestor process
   },
-  required: ["datasetName", "creationLocation", "dataFormat", "ownerGroup", "type", "license", "keywords", "scientificMetadata", "filePath"]
-}
+  required: [
+    "datasetName",
+    "creationLocation",
+    "dataFormat",
+    "ownerGroup",
+    "type",
+    "license",
+    "keywords",
+    "scientificMetadata",
+    "filePath",
+  ],
+};

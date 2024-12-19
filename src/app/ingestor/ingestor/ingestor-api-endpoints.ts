@@ -2,16 +2,16 @@ export const INGESTOR_API_ENDPOINTS_V1 = {
   DATASET: "dataset",
   TRANSFER: "transfer",
   OTHER: {
-    VERSION: 'version',
+    VERSION: "version",
   },
-  EXTRACTOR: 'extractor',
+  EXTRACTOR: "extractor",
 };
 
-export interface IPostExtractorEndpoint {
-  filePath: string,
-  methodName: string,
+export interface PostExtractorEndpoint {
+  filePath: string;
+  methodName: string;
 }
 
-export interface IPostDatasetEndpoint {
-  metaData: string
+export interface PostDatasetEndpoint {
+  metaData: string;
 }
