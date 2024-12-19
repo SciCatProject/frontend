@@ -366,7 +366,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
     let body: string;
     if (this.form.value.password) {
       body = JSON.stringify({
-        email: "sofya.laskina@epfl.ch", // for now
+        email: this.form.value.email,
         orcidIds: this.orcidArray().value.map((item) => item.orcidId),
         country: "United States",
         method: this.form.value.emMethod,
@@ -375,7 +375,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
       });
     } else {
       body = JSON.stringify({
-        email: "sofya.laskina@epfl.ch", // for now
+        email: this.form.value.email,
         orcidIds: this.orcidArray().value.map((item) => item.orcidId),
         country: "United States",
         method: this.form.value.emMethod,
