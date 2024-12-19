@@ -92,6 +92,9 @@ import { userReducer } from "state-management/reducers/user.reducer";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { OneDepComponent } from "./onedep/onedep.component";
 import { OrcidFormatterDirective } from "./onedep/onedep.directive";
+import { EmpiarComponent } from "./empiar/empiar.component";
+import { OneDepEffects } from "./state-management/effects/onedep.effects";
+
 
 @NgModule({
   imports: [
@@ -139,6 +142,7 @@ import { OrcidFormatterDirective } from "./onedep/onedep.directive";
       SampleEffects,
       PublishedDataEffects,
       LogbookEffects,
+      OneDepEffects,
     ]),
     StoreModule.forFeature("datasets", datasetsReducer),
     StoreModule.forFeature("instruments", instrumentsReducer),
@@ -183,6 +187,7 @@ import { OrcidFormatterDirective } from "./onedep/onedep.directive";
     DatasetsFilterSettingsComponent,
     OneDepComponent,
     OrcidFormatterDirective,
+    EmpiarComponent,
   ],
   providers: [
     ArchivingService,

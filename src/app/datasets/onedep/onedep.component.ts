@@ -25,6 +25,7 @@ import {
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import { methodsList, EmFile, DepositionFiles } from "./types/methods.enum";
+import { Depositor } from "shared/sdk/apis/onedep-depositor.service";
 import { Subscription, fromEvent } from "rxjs";
 
 @Component({
@@ -65,6 +66,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private router: Router,
     private fb: FormBuilder,
+    private depositor: Depositor,
   ) {
     this.config = this.appConfigService.getConfig();
   }
@@ -111,12 +113,14 @@ export class OneDepComponent implements OnInit, OnDestroy {
         }),
       ]),
     });
+    console.log(this.form);
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });
+    this.fileTypes = [];
   }
   hasUnsavedChanges() {
     return this._hasUnsavedChanges;
@@ -388,14 +392,10 @@ export class OneDepComponent implements OnInit, OnDestroy {
     interface OneDepCreate {
       depID: string;
     }
-    this.http
-      .post(this.connectedDepositionBackend + "onedep", body, {
-        headers: { "Content-Type": "application/json" },
-      })
-      .subscribe({
-        next: (response: OneDepCreate) => {
-          depID = response.depID;
-          console.log("Created deposition in OneDep", depID);
+    this.depositor.createDep(body).subscribe({
+      next: (response: OneDepCreate) => {
+        // depID = response.depID;
+        console.log("Created deposition in OneDep", response);
 
           // Call subsequent requests
           this.fileTypes.forEach((fT) => {

@@ -1,5 +1,12 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpResponse, HttpEvent, HttpParameterCodec, HttpContext } from "@angular/common/http";
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpResponse,
+  HttpEvent,
+  HttpParameterCodec,
+  HttpContext,
+} from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Configuration } from "@scicatproject/scicat-sdk-ts";
 import { Job, JobInterface } from "../models/Job";
