@@ -1,0 +1,39 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@mixin color($theme) {
+  $color-config: map-get($theme, "color");
+  $primary: map-get($color-config, "primary");
+  $header-1: map-get($color-config, "header-1");
+  $header-2: map-get($color-config, "header-2");
+  $header-3: map-get($color-config, "header-3");
+  $accent: map-get($color-config, "accent");
+  mat-card {
+    .scicat-header {
+      background-color: mat.get-color-from-palette($primary, "lighter");
+    }
+
+    .organizational-header {
+      background-color: mat.get-color-from-palette($header-1, "lighter");
+    }
+
+    .sample-header {
+      background-color: mat.get-color-from-palette($header-2, "lighter");
+    }
+
+    .instrument-header {
+      background-color: mat.get-color-from-palette($header-3, "lighter");
+    }
+
+    .acquisition-header {
+      background-color: mat.get-color-from-palette($accent, "lighter");
+    }
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}
