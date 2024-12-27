@@ -9,7 +9,9 @@ COPY . /frontend/
 RUN npx ng build
 
 FROM nginxinc/nginx-unprivileged
+USER root
 RUN rm -rf /usr/share/nginx/html/*
-COPY --from=builder /frontend/dist/ /usr/share/nginx/html/
 COPY scripts/nginx.conf /etc/nginx/nginx.conf
+USER 101
+COPY --from=builder /frontend/dist/ /usr/share/nginx/html/
 EXPOSE 8080
