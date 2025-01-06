@@ -20,6 +20,18 @@ export enum EmFile {
   MTZ = "xs-mtz",
 }
 
+export interface OneDepUserInfo {
+  email: string;
+  orcidIds: string[];
+  country: string;
+  method: string;
+  jwtToken: string;
+  password?: string;
+}
+
+export interface OneDepCreate {
+  depID: string;
+}
 export interface DepositionFiles {
   emName: EmFile;
   id?: number;

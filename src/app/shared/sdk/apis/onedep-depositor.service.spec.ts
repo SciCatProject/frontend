@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
 
-import { OnedepDepositorService } from './onedep-depositor.service';
+import { Depositor } from "./onedep-depositor.service";
 
-describe('OnedepDepositorService', () => {
-  let service: OnedepDepositorService;
+describe("OnedepDepositorService", () => {
+  let service: Depositor;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(OnedepDepositorService);
+    service = TestBed.inject(Depositor);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

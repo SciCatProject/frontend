@@ -93,7 +93,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { OneDepComponent } from "./onedep/onedep.component";
 import { OrcidFormatterDirective } from "./onedep/onedep.directive";
 import { EmpiarComponent } from "./empiar/empiar.component";
-import { OneDepEffects } from "./state-management/effects/onedep.effects";
+import { OneDepEffects } from "state-management/effects/onedep.effects";
 
 
 @NgModule({

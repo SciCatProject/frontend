@@ -24,7 +24,14 @@ import {
 } from "@scicatproject/scicat-sdk-ts";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
-import { methodsList, EmFile, DepositionFiles } from "./types/methods.enum";
+import * as fromActions from "state-management/actions/onedep.actions";
+import {
+  methodsList,
+  EmFile,
+  DepositionFiles,
+  OneDepUserInfo,
+  OneDepCreate,
+} from "./types/methods.enum";
 import { Depositor } from "shared/sdk/apis/onedep-depositor.service";
 import { Subscription, fromEvent } from "rxjs";
 
@@ -113,7 +120,6 @@ export class OneDepComponent implements OnInit, OnDestroy {
         }),
       ]),
     });
-    console.log(this.form);
   }
 
   ngOnDestroy() {
@@ -367,73 +373,76 @@ export class OneDepComponent implements OnInit, OnDestroy {
   }
   onDepositClick() {
     //  Create a deposition
-    let body: string;
+    let body: OneDepUserInfo;
     if (this.form.value.password) {
-      body = JSON.stringify({
+      body = {
         email: this.form.value.email,
         orcidIds: this.orcidArray().value.map((item) => item.orcidId),
         country: "United States",
         method: this.form.value.emMethod,
         jwtToken: this.form.value.jwtToken,
         password: this.form.value.password,
-      });
+      };
     } else {
-      body = JSON.stringify({
+      body = {
         email: this.form.value.email,
         orcidIds: this.orcidArray().value.map((item) => item.orcidId),
         country: "United States",
         method: this.form.value.emMethod,
         jwtToken: this.form.value.jwtToken,
-      });
+      };
     }
     let depID: string;
     let metadataAdded = false;
 
-    interface OneDepCreate {
-      depID: string;
-    }
+    this.store.dispatch(
+      fromActions.createDepositionAction({
+        deposition: body as OneDepUserInfo,
+      }),
+    );
+
     this.depositor.createDep(body).subscribe({
       next: (response: OneDepCreate) => {
-        // depID = response.depID;
-        console.log("Created deposition in OneDep", response);
+        depID = response.depID;
 
-          // Call subsequent requests
-          this.fileTypes.forEach((fT) => {
-            if (fT.file) {
-              const formDataFile = new FormData();
-              formDataFile.append("jwtToken", this.form.value.jwtToken);
-              formDataFile.append("file", fT.file);
-              if (fT.emName === this.emFile.Coordinates) {
-                formDataFile.append(
-                  "scientificMetadata",
-                  JSON.stringify(this.form.value.metadata),
-                );
-                this.sendCoordFile(depID, formDataFile);
-                metadataAdded = true;
-              } else {
-                formDataFile.append(
-                  "fileMetadata",
-                  JSON.stringify({
-                    name: fT.fileName,
-                    type: fT.type,
-                    contour: fT.contour,
-                    details: fT.details,
-                  }),
-                );
-                this.sendFile(depID, formDataFile, fT.type);
-              }
-            }
-          });
-          if (!metadataAdded) {
+        // Call subsequent requests
+        this.fileTypes.forEach((fT) => {
+          if (fT.file) {
             const formDataFile = new FormData();
-
             formDataFile.append("jwtToken", this.form.value.jwtToken);
-            formDataFile.append(
-              "scientificMetadata",
-              JSON.stringify(this.form.value.metadata),
-            );
-            this.sendMetadata(depID, formDataFile);
+            formDataFile.append("file", fT.file);
+            if (fT.emName === this.emFile.Coordinates) {
+              formDataFile.append(
+                "scientificMetadata",
+                JSON.stringify(this.form.value.metadata),
+              );
+              this.sendCoordFile(depID, formDataFile);
+              metadataAdded = true;
+            } else {
+              formDataFile.append(
+                "fileMetadata",
+                JSON.stringify({
+                  name: fT.fileName,
+                  type: fT.type,
+                  contour: fT.contour,
+                  details: fT.details,
+                }),
+              );
+              // log that into message fT.type
+              this.depositor.sendFile(depID, formDataFile);
+            }
           }
+        });
+          // if (!metadataAdded) {
+          //   const formDataFile = new FormData();
+
+          //   formDataFile.append("jwtToken", this.form.value.jwtToken);
+          //   formDataFile.append(
+          //     "scientificMetadata",
+          //     JSON.stringify(this.form.value.metadata),
+          //   );
+          //   this.sendMetadata(depID, formDataFile);
+          // }
         },
         error: (error) => console.error("Request failed", error.error),
       });

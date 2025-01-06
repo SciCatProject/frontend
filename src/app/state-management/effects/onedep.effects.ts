@@ -1,34 +1,45 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { of } from "rxjs";
-import { catchError, map, mergeMap } from "rxjs/operators";
-import { HttpClient } from "@angular/common/http";
+import { catchError, map, switchMap } from "rxjs/operators";
+import { HttpErrorResponse } from "@angular/common/http";
+import { MessageType } from "state-management/models";
+import { showMessageAction } from "state-management/actions/user.actions";
 import * as fromActions from "state-management/actions/onedep.actions";
 import { Depositor } from "shared/sdk/apis/onedep-depositor.service";
-import { Store } from "@ngrx/store";
+import {
+  OneDepUserInfo,
+  OneDepCreated,
+  UploadedFile,
+} from "shared/sdk/models/OneDep";
 
 @Injectable()
 export class OneDepEffects {
-
-  submitJob$ = createEffect(() => {
+  createDeposition$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.submitJobAction),
-      switchMap(({ job }) =>
-        this.jobsServiceV4.jobsControllerCreateV4(job as Job).pipe(
-          map((res) => fromActions.submitJobCompleteAction({ job: res as JobInterface })),
-          catchError((err) => of(fromActions.submitJobFailedAction({ err }))),
+      ofType(fromActions.createDepositionAction),
+      switchMap(({ deposition }) =>
+        this.onedepDepositor.createDep(deposition as OneDepUserInfo).pipe(
+          map((res) =>
+            fromActions.createDepositionSuccess({
+              deposition: res as OneDepCreated,
+            }),
+          ),
+          catchError((err) => of(fromActions.createDepositionFailure({ err }))),
         ),
       ),
     );
   });
 
-  submitJobCompleteMessage$ = createEffect(() => {
+  createDepositionSuccessMessage$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.submitJobCompleteAction),
-      switchMap(() => {
+      ofType(fromActions.createDepositionSuccess),
+      switchMap(({ deposition }) => {
         const message = {
           type: MessageType.Success,
-          content: "Job Created Successfully",
+          content:
+            "Deposition Created Successfully. Deposition ID: " +
+            deposition.depID,
           duration: 5000,
         };
         return of(showMessageAction({ message }));
@@ -36,42 +47,75 @@ export class OneDepEffects {
     );
   });
 
-  submitJobFailedMessage$ = createEffect(() => {
+  createDepositionFailureMessage$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.submitJobFailedAction),
+      ofType(fromActions.createDepositionFailure),
       switchMap(({ err }) => {
+        const errorMessage =
+          err instanceof HttpErrorResponse
+            ? (err.error?.message ?? err.message ?? "Unknown error")
+            : err.message || "Unknown error";
         const message = {
           type: MessageType.Error,
-          content: "Job Not Submitted: " + err.message,
+          content: "Deposition to OneDep failed: " + errorMessage,
+          duration: 10000,
+        };
+        return of(showMessageAction({ message }));
+      }),
+    );
+  });
+
+  sendFile$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.sendFile),
+      switchMap(({ depID, form }) =>
+        this.onedepDepositor.sendFile(depID, form).pipe(
+          map((res) =>
+            fromActions.sendFileSuccess({
+              uploadedFile: res as UploadedFile,
+            }),
+          ),
+          catchError((err) => of(fromActions.sendFileFailure({ err }))),
+        ),
+      ),
+    );
+  });
+
+  sendFileSuccessMessage$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.sendFileSuccess),
+      switchMap(({ uploadedFile }) => {
+        const message = {
+          type: MessageType.Success,
+          content:
+            "File Upladed to Deposition ID: " +
+            uploadedFile.depID +
+            " with File ID: " +
+            uploadedFile.FileID,
           duration: 5000,
         };
         return of(showMessageAction({ message }));
       }),
     );
   });
-  
 
-  // sendFile$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(OneDepActions.sendFile),
-  //     mergeMap((action) =>
-  //       this.http
-  //         .post(
-  //           `${this.connectedDepositionBackend}onedep/${action.depID}/file`,
-  //           action.form
-  //         )
-  //         .pipe(
-  //           map((res) =>
-  //             OneDepActions.sendFileSuccess({ fileType: action.fileType, res })
-  //           ),
-  //           catchError((error) =>
-  //             of(OneDepActions.sendFileFailure({ error }))
-  //           )
-  //         )
-  //     )
-  //   )
-  // );
-
+  sendFileFailureMessage$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.sendFileFailure),
+      switchMap(({ err }) => {
+        const errorMessage =
+          err instanceof HttpErrorResponse
+            ? (err.error?.message ?? err.message ?? "Unknown error")
+            : err.message || "Unknown error";
+        const message = {
+          type: MessageType.Error,
+          content: "Deposition to OneDep failed: " + errorMessage,
+          duration: 10000,
+        };
+        return of(showMessageAction({ message }));
+      }),
+    );
+  });
   // sendCoordFile$ = createEffect(() =>
   //   this.actions$.pipe(
   //     ofType(OneDepActions.sendCoordFile),
@@ -116,6 +160,5 @@ export class OneDepEffects {
   constructor(
     private actions$: Actions,
     private onedepDepositor: Depositor,
-    private store: Store,
   ) {}
 }
