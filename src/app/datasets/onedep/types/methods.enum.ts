@@ -246,4 +246,3 @@ export const methodsList: EmMethod[] = [
     ],
   },
 ];
-

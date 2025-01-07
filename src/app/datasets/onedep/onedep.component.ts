@@ -24,6 +24,7 @@ import {
 } from "@scicatproject/scicat-sdk-ts";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
+import { selectDepID } from "state-management/selectors/onedep.selectors";
 import * as fromActions from "state-management/actions/onedep.actions";
 import {
   methodsList,
@@ -33,7 +34,8 @@ import {
   OneDepCreate,
 } from "./types/methods.enum";
 import { Depositor } from "shared/sdk/apis/onedep-depositor.service";
-import { Subscription, fromEvent } from "rxjs";
+import { Observable, Subscription, fromEvent } from "rxjs";
+import { filter, map, take } from "rxjs/operators";
 
 @Component({
   selector: "onedep",
@@ -64,7 +66,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
   lastUsedDepositionBackends: string[] = [];
   forwardDepositionBackend = "";
   errorMessage = "";
-
+  depID$: Observable<string>;
   @ViewChild("fileInput") fileInput: ElementRef<HTMLInputElement> | undefined;
 
   constructor(
@@ -341,38 +343,29 @@ export class OneDepComponent implements OnInit, OnDestroy {
 
     this.fileTypes.push(newMap);
   }
-  sendFile(depID: string, form: FormData, fileType: string) {
-    this.http
-      .post(this.connectedDepositionBackend + "onedep/" + depID + "/file", form)
-      .subscribe({
-        next: (res) => console.log("Uploaded", fileType, res),
-        error: (error) =>
-          console.error("Could not upload File and Metadata", error),
-      });
-  }
-  sendCoordFile(depID: string, form: FormData) {
-    this.http
-      .post(this.connectedDepositionBackend + "onedep/" + depID + "/pdb", form)
-      .subscribe({
-        next: (res) => console.log("Uploaded Coordinates and Metadata", res),
-        error: (error) =>
-          console.error("Could not upload Coordinates and Metadata", error),
-      });
-  }
-  sendMetadata(depID: string, form: FormData) {
-    // missing token!
-    this.http
-      .post(
-        this.connectedDepositionBackend + "onedep/" + depID + "/metadata",
-        form,
-      )
-      .subscribe({
-        next: (res) => console.log("Uploaded Metadata", res),
-        error: (error) => console.error("Could not upload Metadata", error),
-      });
-  }
+  // sendFile(depID: string, form: FormData, fileType: string) {
+  //   this.http
+  //     .post(this.connectedDepositionBackend + "onedep/" + depID + "/file", form)
+  //     .subscribe({
+  //       next: (res) => console.log("Uploaded", fileType, res),
+  //       error: (error) =>
+  //         console.error("Could not upload File and Metadata", error),
+  //     });
+  // }
+
+  // sendMetadata(depID: string, form: FormData) {
+  //   // missing token!
+  //   this.http
+  //     .post(
+  //       this.connectedDepositionBackend + "onedep/" + depID + "/metadata",
+  //       form,
+  //     )
+  //     .subscribe({
+  //       next: (res) => console.log("Uploaded Metadata", res),
+  //       error: (error) => console.error("Could not upload Metadata", error),
+  //     });
+  // }
   onDepositClick() {
-    //  Create a deposition
     let body: OneDepUserInfo;
     if (this.form.value.password) {
       body = {
@@ -392,60 +385,51 @@ export class OneDepComponent implements OnInit, OnDestroy {
         jwtToken: this.form.value.jwtToken,
       };
     }
-    let depID: string;
     let metadataAdded = false;
 
+    const filesToUpload = this.fileTypes
+      .filter((fT) => fT.file)
+      .map((fT) => {
+        const formDataFile = new FormData();
+        formDataFile.append("jwtToken", this.form.value.jwtToken);
+        formDataFile.append("file", fT.file);
+        if (fT.emName === this.emFile.Coordinates) {
+          formDataFile.append(
+            "scientificMetadata",
+            JSON.stringify(this.form.value.metadata),
+          );
+          metadataAdded = true;
+        } else {
+          formDataFile.append(
+            "fileMetadata",
+            JSON.stringify({
+              name: fT.fileName,
+              type: fT.type,
+              contour: fT.contour,
+              details: fT.details,
+            }),
+          );
+        }
+        return { form: formDataFile, fileType: fT.emName };
+      });
+    // if (!metadataAdded) {
+    //   const formDataFile = new FormData();
+
+    //   formDataFile.append("jwtToken", this.form.value.jwtToken);
+    //   formDataFile.append(
+    //     "scientificMetadata",
+    //     JSON.stringify(this.form.value.metadata),
+    //   );
+    //   // FIXME: This is a temporary fix, the metadata fileType should be specified as such, once supported by OneDep API
+    //   filesToUpload.push({ form: formDataFile, fileType: EmFile.Coordinates });
+    // }
+
     this.store.dispatch(
-      fromActions.createDepositionAction({
+      fromActions.submitDeposition({
         deposition: body as OneDepUserInfo,
+        files: filesToUpload,
       }),
     );
-
-    this.depositor.createDep(body).subscribe({
-      next: (response: OneDepCreate) => {
-        depID = response.depID;
-
-        // Call subsequent requests
-        this.fileTypes.forEach((fT) => {
-          if (fT.file) {
-            const formDataFile = new FormData();
-            formDataFile.append("jwtToken", this.form.value.jwtToken);
-            formDataFile.append("file", fT.file);
-            if (fT.emName === this.emFile.Coordinates) {
-              formDataFile.append(
-                "scientificMetadata",
-                JSON.stringify(this.form.value.metadata),
-              );
-              this.sendCoordFile(depID, formDataFile);
-              metadataAdded = true;
-            } else {
-              formDataFile.append(
-                "fileMetadata",
-                JSON.stringify({
-                  name: fT.fileName,
-                  type: fT.type,
-                  contour: fT.contour,
-                  details: fT.details,
-                }),
-              );
-              // log that into message fT.type
-              this.depositor.sendFile(depID, formDataFile);
-            }
-          }
-        });
-          // if (!metadataAdded) {
-          //   const formDataFile = new FormData();
-
-          //   formDataFile.append("jwtToken", this.form.value.jwtToken);
-          //   formDataFile.append(
-          //     "scientificMetadata",
-          //     JSON.stringify(this.form.value.metadata),
-          //   );
-          //   this.sendMetadata(depID, formDataFile);
-          // }
-        },
-        error: (error) => console.error("Request failed", error.error),
-      });
   }
   onDownloadClick() {
     if (this.form.value.deposingCoordinates === "true") {

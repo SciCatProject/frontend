@@ -1,3 +1,5 @@
+import { EmFile } from "../../../datasets/onedep/types/methods.enum";
+
 export interface OneDepCreated {
   depID: string;
 }
@@ -13,5 +15,10 @@ export interface OneDepUserInfo {
 
 export interface UploadedFile {
   depID: string;
-  FileID: string;
+  fileID: string;
+}
+
+export interface FileUpload {
+  form: FormData;
+  fileType: EmFile;
 }
