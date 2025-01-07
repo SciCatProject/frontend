@@ -2,8 +2,8 @@ import { angularMaterialRenderers } from "@jsonforms/angular-material";
 import { customRenderers } from "./customRenderer/custom-renderers";
 
 export const configuredRenderer = [
-  ...angularMaterialRenderers,
   ...customRenderers,
+  ...angularMaterialRenderers,
 ];
 
 export class IngestorMetadataEditorHelper {

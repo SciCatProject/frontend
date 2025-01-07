@@ -53,6 +53,12 @@ export interface ScientificMetadata {
   instrument: object;
 }
 
+export interface MetadataExtractorResult {
+  cmdStdErr: string;
+  cmdStdOut: string;
+  result: string;
+}
+
 export interface DialogDataObject {
   createNewTransferData: IngestionRequestInformation;
   backendURL: string;

@@ -5,29 +5,55 @@ import { configuredRenderer } from "../ingestor-metadata-editor-helper";
 
 @Component({
   selector: "app-anyof-renderer",
+  styleUrls: ["../ingestor-metadata-editor.component.scss"],
   template: `
-    <div class="anyof-group">
-      <mat-card-title>{{ anyOfTitle }}</mat-card-title>
-      <mat-tab-group animationDuration="0ms" [selectedIndex]="selectedTabIndex">
-        <mat-tab *ngFor="let option of options" label="{{ option }}">
-          <div style="margin: 20px auto; width: 85%" *ngIf="option !== 'null'">
-            <jsonforms
-              [schema]="getTabSchema(option)"
-              [data]="passedProps.data"
-              [renderers]="defaultRenderer"
-              (dataChange)="onInnerJsonFormsChange($event)"
-            ></jsonforms>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
-    </div>
+    <mat-card class="anyof-group">
+      <mat-card-title
+        >{{ anyOfTitle }}
+        <span class="spacer"></span>
+        <mat-checkbox
+          *ngIf="options.includes('null')"
+          [(ngModel)]="!nullOptionSelected"
+          (change)="nullOptionSelected = !nullOptionSelected"
+        >
+          Enabled
+        </mat-checkbox></mat-card-title
+      >
+      <mat-card-content *ngIf="!nullOptionSelected">
+        <mat-tab-group *ngIf="tabAmount > 1">
+          animationDuration="0ms" [selectedIndex]="selectedTabIndex" >
+          <mat-tab *ngFor="let option of filteredOptions" label="{{ option }}">
+            <div *ngIf="option !== 'null'">
+              <jsonforms
+                [schema]="getTabSchema(option)"
+                [data]="passedProps.data"
+                [renderers]="defaultRenderer"
+                (dataChange)="onInnerJsonFormsChange($event)"
+              ></jsonforms>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+
+        <div *ngIf="tabAmount === 1">
+          <jsonforms
+            [schema]="getTabSchema(options[0])"
+            [data]="passedProps.data"
+            [renderers]="defaultRenderer"
+            (dataChange)="onInnerJsonFormsChange($event)"
+          ></jsonforms>
+        </div>
+      </mat-card-content>
+    </mat-card>
   `,
 })
 export class AnyOfRendererComponent extends JsonFormsControl {
   dataAsString: string;
   options: string[] = [];
+  filteredOptions: string[] = [];
   anyOfTitle: string;
+  nullOptionSelected = false;
   selectedTabIndex = 0; // default value
+  tabAmount = 0; // max tabs
 
   rendererService: JsonFormsAngularService;
 
@@ -48,7 +74,11 @@ export class AnyOfRendererComponent extends JsonFormsControl {
 
     if (this.options.includes("null") && !props.data) {
       this.selectedTabIndex = this.options.indexOf("null");
+      this.nullOptionSelected = true;
     }
+
+    this.filteredOptions = this.options.filter((option) => option !== "null");
+    this.tabAmount = this.filteredOptions.length;
   }
 
   public getTabSchema(tabOption: string): JsonSchema {

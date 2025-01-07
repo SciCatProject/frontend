@@ -5,6 +5,7 @@ import { configuredRenderer } from "../ingestor-metadata-editor-helper";
 
 @Component({
   selector: "app-oneof-component",
+  styleUrls: ["../ingestor-metadata-editor.component.scss"],
   template: `
     <div class="anyof-group">
       <p>{{ anyOfTitle }}</p>

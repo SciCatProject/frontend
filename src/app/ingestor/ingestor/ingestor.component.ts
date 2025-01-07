@@ -15,6 +15,8 @@ import { IngestorConfirmTransferDialogComponent } from "./dialog/ingestor.confir
 import {
   IngestionRequestInformation,
   IngestorHelper,
+  MetadataExtractorResult,
+  ScientificMetadata,
   TransferDataListEntry,
 } from "./ingestor.component-helper";
 
@@ -181,10 +183,15 @@ export class IngestorComponent implements OnInit {
         .subscribe(
           (response) => {
             console.log("Metadata extraction result", response);
+            const extractedMetadata = response as MetadataExtractorResult;
+            const extractedScientificMetadata = JSON.parse(
+              extractedMetadata.result,
+            ) as ScientificMetadata;
+
             this.createNewTransferData.extractorMetaData.instrument =
-              (response as any).instrument ?? {};
+              extractedScientificMetadata.instrument ?? {};
             this.createNewTransferData.extractorMetaData.acquisition =
-              (response as any).acquisition ?? {};
+              extractedScientificMetadata.acquisition ?? {};
             this.createNewTransferData.extractorMetaDataReady = true;
             resolve(true);
           },

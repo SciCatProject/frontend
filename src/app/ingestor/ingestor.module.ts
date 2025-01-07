@@ -28,6 +28,9 @@ import { IngestorDialogStepperComponent } from "./ingestor/dialog/ingestor.dialo
 import { AnyOfRendererComponent } from "./ingestor-metadata-editor/customRenderer/any-of-renderer";
 import { OneOfRendererComponent } from "./ingestor-metadata-editor/customRenderer/one-of-renderer";
 import { MatRadioModule } from "@angular/material/radio";
+import { ArrayLayoutRendererCustom } from "./ingestor-metadata-editor/customRenderer/array-renderer";
+import { MatBadgeModule } from "@angular/material/badge";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
@@ -40,6 +43,7 @@ import { MatRadioModule } from "@angular/material/radio";
     IngestorDialogStepperComponent,
     AnyOfRendererComponent,
     OneOfRendererComponent,
+    ArrayLayoutRendererCustom,
   ],
   imports: [
     CommonModule,
@@ -55,11 +59,13 @@ import { MatRadioModule } from "@angular/material/radio";
     MatTabsModule,
     MatTableModule,
     MatDialogModule,
+    MatTooltipModule,
     MatSelectModule,
     MatOptionModule,
     MatStepperModule,
     MatRadioModule,
     MatAutocompleteModule,
+    MatBadgeModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
   ],
