@@ -27,7 +27,7 @@ import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import { selectDepID } from "state-management/selectors/onedep.selectors";
 import * as fromActions from "state-management/actions/onedep.actions";
 import {
-  methodsList,
+  createMethodsList,
   EmFile,
   DepositionFiles,
   OneDepUserInfo,
@@ -52,14 +52,14 @@ export class OneDepComponent implements OnInit, OnDestroy {
   user: ReturnedUserDto | undefined;
   form: FormGroup;
   showAssociatedMapQuestion = false;
-  methodsList = methodsList;
+  methodsList = createMethodsList();
   selectedFile: { [key: string]: File | null } = {};
   emFile = EmFile;
-  fileTypes: DepositionFiles[];
   detailsOverflow = "hidden";
   additionalMaps = 0;
   showPassword = false;
-
+  fileTypes: DepositionFiles[];
+  mainContour = 0.0;
   connectedDepositionBackend = "";
   connectedDepositionBackendVersion = "";
   connectingToDepositionBackend = false;
@@ -78,41 +78,11 @@ export class OneDepComponent implements OnInit, OnDestroy {
     private depositor: Depositor,
   ) {
     this.config = this.appConfigService.getConfig();
-  }
-
-  ngOnInit() {
-    //  connect to the depositor
-    this.connectingToDepositionBackend = true;
-    this.connectToDepositionBackend();
-
-    this.store.select(selectCurrentDataset).subscribe((dataset) => {
-      this.dataset = dataset;
-    });
-    this.subscriptions.push(
-      this.store.select(selectCurrentUser).subscribe((user) => {
-        if (user) {
-          this.user = user;
-        }
-      }),
-    );
-    // Prevent user from reloading page if there are unsave changes
-    this.subscriptions.push(
-      fromEvent(window, "beforeunload").subscribe((event) => {
-        if (this.hasUnsavedChanges()) {
-          event.preventDefault();
-        }
-      }),
-    );
     this.form = this.fb.group({
-      email: this.user.email,
+      email: "",
       jwtToken: new FormControl(""),
-      password: new FormControl(),
-      metadata: this.dataset.scientificMetadata,
-      emMethod: new FormControl(""),
-      deposingCoordinates: new FormControl(null, Validators.required),
-      associatedMap: new FormControl(null, Validators.required),
-      compositeMap: new FormControl(null, Validators.required),
-      emdbId: new FormControl(""),
+      password: new FormControl(""),
+      metadata: "",
       orcid: this.fb.array([
         this.fb.group({
           orcidId: [
@@ -121,14 +91,46 @@ export class OneDepComponent implements OnInit, OnDestroy {
           ],
         }),
       ]),
+      emMethod: new FormControl(""),
+      deposingCoordinates: new FormControl(null, Validators.required),
+      associatedMap: new FormControl(null, Validators.required),
+      compositeMap: new FormControl(null, Validators.required),
+      emdbId: new FormControl(""),
     });
+  }
+
+  ngOnInit() {
+    // initialize an array for the files to be uploaded
+    this.fileTypes = [];
+    this.mainContour = 0.0;
+    //  connect to the depositor
+    this.connectingToDepositionBackend = true;
+    this.connectToDepositionBackend();
+
+    this.store.select(selectCurrentDataset).subscribe((dataset) => {
+      this.dataset = dataset;
+      if (dataset) {
+        this.form.patchValue({
+          metadata: this.dataset.scientificMetadata,
+        });
+      }
+    });
+    this.subscriptions.push(
+      this.store.select(selectCurrentUser).subscribe((user) => {
+        if (user) {
+          this.user = user;
+          this.form.patchValue({
+            email: this.user?.email || "",
+          });
+        }
+      }),
+    );
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });
-    this.fileTypes = [];
   }
   hasUnsavedChanges() {
     return this._hasUnsavedChanges;
@@ -157,6 +159,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
     }
   }
   onMethodChange() {
+    this.methodsList = createMethodsList(); // Reset the methods list to be empty
     this.fileTypes = this.methodsList.find(
       (mL) => mL.value === this.form.value["emMethod"],
     ).files;
@@ -233,10 +236,19 @@ export class OneDepComponent implements OnInit, OnDestroy {
         if (fT.emName === controlName) {
           fT.file = this.selectedFile[controlName];
           fT.fileName = this.selectedFile[controlName].name;
+          if (
+            this.mainContour !== 0.0 &&
+            (fT.emName === EmFile.MainMap ||
+              fT.emName === EmFile.HalfMap1 ||
+              fT.emName === EmFile.HalfMap2)
+          ) {
+            fT.contour = this.mainContour;
+          }
         }
       });
     }
   }
+
   onFileAddMapSelected(event: Event, id: number) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -264,13 +276,15 @@ export class OneDepComponent implements OnInit, OnDestroy {
     const normalizedInput = input.replace(",", ".");
     const parsedValue = parseFloat(normalizedInput);
     if (!isNaN(parsedValue)) {
+      this.mainContour = parsedValue;
       this.fileTypes.forEach((fT) => {
         if (
-          fT.emName === EmFile.MainMap ||
-          fT.emName === EmFile.HalfMap1 ||
-          fT.emName === EmFile.HalfMap2
+          fT.file &&
+          (fT.emName === EmFile.MainMap ||
+            fT.emName === EmFile.HalfMap1 ||
+            fT.emName === EmFile.HalfMap2)
         ) {
-          fT.contour = parsedValue;
+          fT.contour = this.mainContour;
         }
       });
     } else {
@@ -343,28 +357,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
 
     this.fileTypes.push(newMap);
   }
-  // sendFile(depID: string, form: FormData, fileType: string) {
-  //   this.http
-  //     .post(this.connectedDepositionBackend + "onedep/" + depID + "/file", form)
-  //     .subscribe({
-  //       next: (res) => console.log("Uploaded", fileType, res),
-  //       error: (error) =>
-  //         console.error("Could not upload File and Metadata", error),
-  //     });
-  // }
 
-  // sendMetadata(depID: string, form: FormData) {
-  //   // missing token!
-  //   this.http
-  //     .post(
-  //       this.connectedDepositionBackend + "onedep/" + depID + "/metadata",
-  //       form,
-  //     )
-  //     .subscribe({
-  //       next: (res) => console.log("Uploaded Metadata", res),
-  //       error: (error) => console.error("Could not upload Metadata", error),
-  //     });
-  // }
   onDepositClick() {
     let body: OneDepUserInfo;
     if (this.form.value.password) {

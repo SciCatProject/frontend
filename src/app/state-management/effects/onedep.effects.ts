@@ -28,7 +28,7 @@ export class OneDepEffects {
                   : this.onedepDepositor.sendFile(dep.depID, file.form),
               ),
 
-              last(), // Ensures the final emission happens only after all uploads are complete
+              last(),
               map(() =>
                 fromActions.submitDepositionSuccess({
                   deposition: dep as OneDepCreated,
