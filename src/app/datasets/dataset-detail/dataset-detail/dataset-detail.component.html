@@ -396,6 +396,13 @@
                   <mat-icon> edit </mat-icon> Edit
                 </ng-template>
                 <div [ngSwitch]="appConfig.metadataStructure">
+                  <tree-edit
+                    *ngSwitchCase="'tree'"
+                    [metadata]="dataset['scientificMetadata']"
+                    (save)="onSaveMetadata($event)"
+                    (hasUnsavedChanges)="onHasUnsavedChanges($event)"
+                  >
+                  </tree-edit>
                   <metadata-edit
                     *ngSwitchDefault
                     [metadata]="dataset['scientificMetadata']"
@@ -423,7 +430,7 @@
 
           <br />
 
-          <div *ngIf="show" class="json-view-overflow">
+          <div *ngIf="show" class="jsonViewOverFlow">
             <ngx-json-viewer
               [json]="datasetWithout$ | async"
               [expanded]="false"
