@@ -132,6 +132,10 @@ export class AppConfigService {
   }
 
   getConfig(): AppConfig {
+    if (!this.appConfig) {
+      console.error("AppConfigService: Configuration not loaded!");
+    }
+
     return this.appConfig as AppConfig;
   }
 }
