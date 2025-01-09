@@ -1,15 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { IngestorComponent } from './ingestor.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { IngestorComponent } from "./ingestor.component";
 
-describe('IngestorComponent', () => {
+describe("IngestorComponent", () => {
   let component: IngestorComponent;
   let fixture: ComponentFixture<IngestorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ IngestorComponent ]
-    })
-    .compileComponents();
+      declarations: [IngestorComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -18,7 +17,7 @@ describe('IngestorComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

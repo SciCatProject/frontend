@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
-import { JsonFormsControl } from '@jsonforms/angular';
+import { Component, OnInit } from "@angular/core";
+import { JsonFormsControl } from "@jsonforms/angular";
 
 @Component({
-  selector: 'AllOfRenderer',
-  template: `<div>AllOf Renderer</div>`
+  selector: "AllOfRenderer",
+  styleUrls: ["../ingestor-metadata-editor.component.scss"],
+  template: `<div>AllOf Renderer</div>`,
 })
-export class AllOfRenderer extends JsonFormsControl {
+export class AllOfRendererComponent extends JsonFormsControl implements OnInit {
   data: any[] = [];
 
   ngOnInit() {

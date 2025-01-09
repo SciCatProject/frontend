@@ -1,10 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input } from "@angular/core";
 
 @Component({
-  selector: 'ingestor-dialog-stepper',
-  templateUrl: './ingestor.dialog-stepper.component.html',
-  styleUrls: ['./ingestor.dialog-stepper.component.css']
+  selector: "ingestor-dialog-stepper",
+  templateUrl: "./ingestor.dialog-stepper.component.html",
+  styleUrls: ["./ingestor.dialog-stepper.component.css"],
 })
 export class IngestorDialogStepperComponent {
-  @Input() activeStep: number = 0;
+  @Input() activeStep = 0;
 }
