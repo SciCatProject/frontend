@@ -28,7 +28,7 @@ import {
 export class IngestorComponent implements OnInit {
   readonly dialog = inject(MatDialog);
 
-  filePath = "";
+  sourceFolder = "";
   loading = false;
   forwardFacilityBackend = "";
 

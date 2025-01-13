@@ -42,8 +42,15 @@ export interface SciCatHeader {
   type: string;
   license: string;
   keywords: string[];
-  filePath: string;
+  sourceFolder: string;
   scientificMetadata: ScientificMetadata;
+  principalInvestigator: string;
+  ownerEmail: string;
+  contactEmail: string;
+  sourceFolderHost: string;
+  investigator: string;
+  creationTime: string;
+  owner: string;
 }
 
 export interface ScientificMetadata {
@@ -111,14 +118,20 @@ export const SciCatHeader_Schema: JsonSchema = {
     creationLocation: { type: "string" },
     dataFormat: { type: "string" },
     ownerGroup: { type: "string" },
-    filePath: { type: "string", readOnly: true }, // disabled, because its selected in the first step
     type: { type: "string" },
     license: { type: "string" },
     keywords: {
       type: "array",
       items: { type: "string" },
     },
-    // scientificMetadata: { type: "string" } ; is created during the ingestor process
+    sourceFolder: { type: "string", readOnly: true }, // disabled, because its selected in the first step
+    principalInvestigator: { type: "string" },
+    ownerEmail: { type: "string" },
+    contactEmail: { type: "string" },
+    sourceFolderHost: { type: "string" },
+    investigator: { type: "string" },
+    creationTime: { type: "string" },
+    owner: { type: "string" },
   },
   required: [
     "datasetName",
@@ -126,9 +139,13 @@ export const SciCatHeader_Schema: JsonSchema = {
     "dataFormat",
     "ownerGroup",
     "type",
-    "license",
-    "keywords",
-    "scientificMetadata",
-    "filePath",
+    "sourceFolder",
+    "principalInvestigator",
+    "ownerEmail",
+    "contactEmail",
+    "sourceFolderHost",
+    "investigator",
+    "creationTime",
+    "owner",
   ],
 };
