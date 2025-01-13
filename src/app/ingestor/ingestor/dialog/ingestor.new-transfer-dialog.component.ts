@@ -102,7 +102,7 @@ export class IngestorNewTransferDialogComponent implements OnInit {
   }
 
   generateExampleDataForSciCatHeader(): void {
-    this.data.createNewTransferData.scicatHeader["filePath"] =
+    this.data.createNewTransferData.scicatHeader["sourceFolder"] =
       this.createNewTransferData.selectedPath;
     this.data.createNewTransferData.scicatHeader["keywords"] = ["OpenEM"];
 

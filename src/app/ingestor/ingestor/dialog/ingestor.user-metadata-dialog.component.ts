@@ -45,9 +45,6 @@ export class IngestorUserMetadataDialogComponent {
 
     this.metadataSchemaOrganizational = organizationalSchema;
 
-    // TODO Remove after debug
-    console.log("organizationalSchema", organizationalSchema);
-
     this.metadataSchemaSample = sampleSchema;
     this.scicatHeaderSchema = SciCatHeader_Schema;
   }

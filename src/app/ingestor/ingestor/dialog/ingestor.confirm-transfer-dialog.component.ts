@@ -39,16 +39,7 @@ export class IngestorConfirmTransferDialogComponent implements OnInit {
   createMetaDataString(): string {
     const space = 2;
     const scicatMetadata: SciCatHeader = {
-      datasetName: this.createNewTransferData.scicatHeader["datasetName"],
-      description: this.createNewTransferData.scicatHeader["description"],
-      creationLocation:
-        this.createNewTransferData.scicatHeader["creationLocation"],
-      dataFormat: this.createNewTransferData.scicatHeader["dataFormat"],
-      ownerGroup: this.createNewTransferData.scicatHeader["ownerGroup"],
-      type: this.createNewTransferData.scicatHeader["type"],
-      license: this.createNewTransferData.scicatHeader["license"],
-      keywords: this.createNewTransferData.scicatHeader["keywords"],
-      filePath: this.createNewTransferData.scicatHeader["filePath"],
+      ...(this.createNewTransferData.scicatHeader as SciCatHeader),
       scientificMetadata: {
         organizational:
           this.createNewTransferData.userMetaData["organizational"],

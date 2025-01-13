@@ -16,8 +16,8 @@
       <mat-label>File Path</mat-label>
       <input matInput [(ngModel)]="selectedPath" [matAutocomplete]="auto">
       <mat-autocomplete #auto="matAutocomplete">
-        <mat-option *ngFor="let filePath of availableFilePaths" [value]="filePath">
-          {{ filePath }}
+        <mat-option *ngFor="let sourceFolder of availableFilePaths" [value]="sourceFolder">
+          {{ sourceFolder }}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
