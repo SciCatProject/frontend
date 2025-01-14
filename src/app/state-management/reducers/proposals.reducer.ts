@@ -160,6 +160,34 @@ const reducer = createReducer(
     ...state,
     currentProposal: undefined,
   })),
+
+  on(
+    fromActions.fetchRelatedProposalsCompleteAction,
+    (state, { relatedProposals }): ProposalsState => ({
+      ...state,
+      relatedProposals,
+    }),
+  ),
+  on(
+    fromActions.fetchRelatedProposalsCountCompleteAction,
+    (state, { count }): ProposalsState => ({
+      ...state,
+      relatedProposalsCount: count,
+    }),
+  ),
+
+  on(
+    fromActions.changeRelatedProposalsPageAction,
+    (state, { page, limit }): ProposalsState => {
+      const skip = page * limit;
+      const relatedProposalsFilters = {
+        ...state.relatedProposalsFilters,
+        skip,
+        limit,
+      };
+      return { ...state, relatedProposalsFilters };
+    },
+  ),
 );
 
 export const proposalsReducer = (
