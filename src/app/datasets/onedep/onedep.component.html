@@ -96,32 +96,34 @@
                    </p>
                    <!-- Link the orcid FormArray -->
                    <div formArrayName="orcid">
-                      <ng-container
-                         *ngFor="let field of orcidArray().controls; let i = index">
-                         <div [formGroupName]="i">
-                            <mat-form-field 
-                               class="data-field"
-                               appearance="outline">
-                               <mat-label>Enter 16-digits ORCID iD</mat-label>
-                               <div class="input-container">
-                                  <input 
-                                     matInput 
-                                     type="text"
-                                     maxlength="19"
-                                     placeholder="xxxx-xxxx-xxxx-xxxx"
-                                     formControlName="orcidId"
-                                     orcidFormatter
-                                     >
-                                  <button 
-                                     mat-icon-button 
-                                     class="remove-field-btn" 
-                                     (click)="removeOrcidField(i)">
-                                     <mat-icon>clear</mat-icon>
-                                  </button>
-                               </div>
-                            </mat-form-field>
-                         </div>
-                      </ng-container>
+                     <ng-container
+                        *ngFor="let field of orcidArray().controls; let i = index">
+                        <div [formGroupName]="i">
+                           <mat-form-field 
+                              class="data-field"
+                              appearance="outline">
+                              <mat-label>Enter 16-digits ORCID iD</mat-label>
+                              <div class="input-container">
+                                 <input 
+                                    matInput 
+                                    type="text"
+                                    maxlength="19"
+                                    placeholder="xxxx-xxxx-xxxx-xxxx"
+                                    formControlName="orcidId"
+                                    orcidFormatter>
+                                 <button 
+                                    mat-icon-button 
+                                    class="remove-field-btn" 
+                                    (click)="removeOrcidField(i)">
+                                    <mat-icon>clear</mat-icon>
+                                 </button>
+                              </div>
+                           </mat-form-field>
+                           <div class="error-text" *ngIf="field.get('orcidId')?.hasError('notNumeric')">
+                              ORCID ID must contain only numbers.
+                           </div>
+                        </div>
+                     </ng-container>
                    </div>
                    <button 
                       mat-icon-button 

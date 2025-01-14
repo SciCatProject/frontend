@@ -6,29 +6,6 @@ export class OrcidFormatterDirective {
 
   constructor(private el: ElementRef) {}
 
-  @HostListener("input", ["$event"])
-  onInput(event: InputEvent): void {
-    const inputElement = this.el.nativeElement as HTMLInputElement;
-
-    // Remove all existing dashes and limit to the max length
-    const rawValue = inputElement.value
-      .replace(/-/g, "")
-      .slice(0, this.maxRawLength);
-
-    // Format with dashes
-    const formattedValue = this.formatWithDashes(rawValue);
-
-    // Update the input's visible value
-    inputElement.value = formattedValue;
-
-    // Preserve the cursor position
-    const cursorPosition = this.getAdjustedCursorPosition(
-      rawValue,
-      inputElement.selectionStart || 0,
-    );
-    inputElement.setSelectionRange(cursorPosition, cursorPosition);
-  }
-
   private formatWithDashes(value: string): string {
     return value.match(/.{1,4}/g)?.join("-") || value;
   }
@@ -40,5 +17,48 @@ export class OrcidFormatterDirective {
     const rawCursorPosition = rawValue.slice(0, originalPosition).length;
     const dashCountBeforeCursor = Math.floor(rawCursorPosition / 4);
     return rawCursorPosition + dashCountBeforeCursor;
+  }
+
+  private calculateCursorAdjustment(
+    previousValue: string,
+    newValue: string,
+    cursorPosition: number,
+  ): number {
+    const removedChar = previousValue.length > newValue.length;
+    const addedDash = newValue.charAt(cursorPosition - 1) === "-";
+    if (removedChar && addedDash) {
+      return -1;
+    }
+    if (addedDash) {
+      return +1;
+    }
+
+    return 0;
+  }
+  @HostListener("input", ["$event"])
+  onInput(event: InputEvent): void {
+    const inputElement = this.el.nativeElement as HTMLInputElement;
+
+    const rawValue = inputElement.value
+      .replace(/-/g, "")
+      .slice(0, this.maxRawLength);
+
+    const formattedValue = this.formatWithDashes(rawValue);
+
+    // Calculate the new cursor position
+    const previousValue = inputElement.value;
+    const previousCursorPosition = inputElement.selectionStart || 0;
+    const adjustment = this.calculateCursorAdjustment(
+      previousValue,
+      formattedValue,
+      previousCursorPosition,
+    );
+
+    // Update the input's visible value
+    inputElement.value = formattedValue;
+
+    // Set the cursor to the adjusted position
+    const cursorPosition = previousCursorPosition + adjustment;
+    inputElement.setSelectionRange(cursorPosition, cursorPosition);
   }
 }

@@ -15,6 +15,8 @@ import {
   FormGroup,
   FormArray,
   Validators,
+  AbstractControl,
+  ValidationErrors,
 } from "@angular/forms";
 
 import { Store } from "@ngrx/store";
@@ -85,10 +87,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
       metadata: "",
       orcid: this.fb.array([
         this.fb.group({
-          orcidId: [
-            "",
-            [Validators.required, Validators.pattern(/^(\d{4}-){3}\d{4}$/)],
-          ],
+          orcidId: ["", [Validators.required, this.orcidValidator()]],
         }),
       ]),
       emMethod: new FormControl(""),
@@ -141,20 +140,29 @@ export class OneDepComponent implements OnInit, OnDestroy {
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
+  orcidValidator(): (control: AbstractControl) => ValidationErrors | null {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value.replace(/-/g, "");
+      if (!value) {
+        return null;
+      }
+      const isValid = /^\d+$/.test(value);
+      return isValid ? null : { notNumeric: true };
+    };
+  }
   orcidArray(): FormArray {
     return this.form.get("orcid") as FormArray;
   }
   addOrcidField() {
     const orcidField = this.fb.group({
-      orcidId: [
-        "",
-        [Validators.required, Validators.pattern(/^(\d{4}-){3}\d{4}$/)],
-      ],
+      orcidId: ["", [Validators.required, this.orcidValidator()]],
     });
     this.orcidArray().push(orcidField);
   }
   removeOrcidField(index: number) {
-    if (this.orcidArray().length > 1) {
+    if (index === 0) {
+      this.orcidArray().at(0).reset({ orcidId: "" });
+    } else if (this.orcidArray().length > 1) {
       this.orcidArray().removeAt(index);
     }
   }
