@@ -169,7 +169,9 @@ export const fetchRelatedProposalsAction = createAction(
 );
 export const fetchRelatedProposalsCompleteAction = createAction(
   "[Proposal] Fetch Related Proposals Complete",
-  props<{ relatedProposals: ProposalClass[] }>(),
+  props<{
+    relatedProposals: (ProposalClass & { relation: string })[];
+  }>(),
 );
 export const fetchRelatedProposalsFailedAction = createAction(
   "[Proposal] Fetch Related Proposals Failed",

@@ -12,6 +12,7 @@ import {
   selectDatasetsQueryParams,
   selectCurrentProposal,
   selectRelatedProposalsFilters,
+  selectFullfacetParams,
 } from "state-management/selectors/proposals.selectors";
 import { map, mergeMap, catchError, switchMap, filter } from "rxjs/operators";
 import { ObservableInput, of } from "rxjs";
@@ -25,6 +26,7 @@ export class ProposalEffects {
   currentProposal$ = this.store.select(selectCurrentProposal);
   relatedProposalFilters$ = this.store.select(selectRelatedProposalsFilters);
   fullqueryParams$ = this.store.select(selectFullqueryParams);
+  fullfacetParams$ = this.store.select(selectFullfacetParams);
   datasetQueryParams$ = this.store.select(selectDatasetsQueryParams);
 
   fetchProposals$ = createEffect(() => {
@@ -54,18 +56,23 @@ export class ProposalEffects {
   fetchCount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
-      concatLatestFrom(() => this.fullqueryParams$),
+      concatLatestFrom(() => this.fullfacetParams$),
       map(([action, params]) => params),
-      switchMap(({ query }) =>
-        this.proposalsService.proposalsControllerFullfacet(query).pipe(
-          map((res) => {
-            const { all } = res[0];
-            const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
+      switchMap(({ fields, facets }) =>
+        this.proposalsService
+          .proposalsControllerFullfacet(
+            JSON.stringify(facets),
+            JSON.stringify(fields),
+          )
+          .pipe(
+            map((res) => {
+              const { all } = res[0];
+              const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
 
-            return fromActions.fetchCountCompleteAction({ count: allCounts });
-          }),
-          catchError(() => of(fromActions.fetchCountFailedAction())),
-        ),
+              return fromActions.fetchCountCompleteAction({ count: allCounts });
+            }),
+            catchError(() => of(fromActions.fetchCountFailedAction())),
+          ),
       ),
     );
   });
@@ -220,7 +227,12 @@ export class ProposalEffects {
       ]),
       switchMap(([, proposal, filters]) => {
         const queryFilter = {
-          where: { proposalId: { $in: [proposal.parentProposalId] } },
+          where: {
+            $or: [
+              { proposalId: { $in: [proposal.parentProposalId] } },
+              { parentProposalId: { $in: [proposal.proposalId] } },
+            ],
+          },
           limits: {
             skip: filters.skip,
             limit: filters.limit,
@@ -232,8 +244,20 @@ export class ProposalEffects {
           .proposalsControllerFindAll(JSON.stringify(queryFilter))
           .pipe(
             map((relatedProposals) => {
+              const relatedProposalsWithRelations = relatedProposals.map(
+                (p) => {
+                  return {
+                    ...p,
+                    relation:
+                      p.proposalId === proposal.parentProposalId
+                        ? "parent"
+                        : "child",
+                  };
+                },
+              );
+
               return fromActions.fetchRelatedProposalsCompleteAction({
-                relatedProposals,
+                relatedProposals: relatedProposalsWithRelations,
               });
             }),
             catchError(() =>
@@ -247,15 +271,17 @@ export class ProposalEffects {
   fetchRelatedProposalsCount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchRelatedProposalsAction),
-      concatLatestFrom(() => [this.currentProposal$]),
-      switchMap(([, proposal]) => {
-        const queryFilter = {
-          where: {
-            proposalId: { $in: [proposal.parentProposalId] },
-          },
+      concatLatestFrom(() => [this.currentProposal$, this.fullfacetParams$]),
+      switchMap(([, proposal, { facets, fields }]) => {
+        fields = {
+          ...fields,
+          proposalId: { $in: [proposal.parentProposalId] },
         };
         return this.proposalsService
-          .proposalsControllerFullfacet(JSON.stringify(queryFilter))
+          .proposalsControllerFullfacet(
+            JSON.stringify(facets),
+            JSON.stringify(fields),
+          )
           .pipe(
             map((res) => {
               const { all } = res[0];

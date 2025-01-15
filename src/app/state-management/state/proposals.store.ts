@@ -27,7 +27,7 @@ export interface ProposalsState {
   proposals: ProposalClass[];
   currentProposal: ProposalClass | undefined;
   parentProposal: ProposalClass | undefined;
-  relatedProposals: ProposalClass[];
+  relatedProposals: (ProposalClass & { relation: string })[];
   relatedProposalsCount: number;
   datasets: OutputDatasetObsoleteDto[];
 

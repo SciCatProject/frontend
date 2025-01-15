@@ -1,5 +1,4 @@
-import { DatePipe } from "@angular/common";
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { ProposalClass } from "@scicatproject/scicat-sdk-ts";
@@ -37,61 +36,41 @@ export class RelatedProposalsComponent implements OnInit {
       inList: true,
     },
     {
+      name: "relation",
+      icon: "compare_arrows",
+      sort: true,
+      inList: true,
+    },
+    {
       name: "title",
       icon: "description",
       sort: true,
       inList: true,
     },
     {
-      name: "firstname",
+      name: "abstract",
+      icon: "description",
+      sort: true,
+      inList: true,
+    },
+    {
+      name: "email",
       icon: "badge",
       sort: true,
       inList: true,
     },
     {
-      name: "lastname",
-      icon: "badge",
-      sort: true,
-      inList: true,
-    },
-    {
-      name: "startTime",
-      icon: "timer",
-      sort: true,
-      inList: true,
-    },
-    {
-      name: "endTime",
-      icon: "timer_off",
+      name: "type",
+      icon: "text_format",
       sort: true,
       inList: true,
     },
   ];
 
   constructor(
-    private datePipe: DatePipe,
     private router: Router,
     private store: Store,
   ) {}
-
-  // formatTableData(datasets: ProposalClass[]): Record<string, unknown>[] {
-  //   if (!datasets) {
-  //     return [];
-  //   }
-
-  //   return datasets.map((dataset) => ({
-  //     pid: dataset.proposalId,
-  //     name: dataset.title,
-  //     sourceFolder: dataset.sourceFolder,
-  //     size: dataset.size,
-  //     type: dataset.type,
-  //     creationTime: this.datePipe.transform(
-  //       dataset.creationTime,
-  //       "yyyy-MM-dd, hh:mm",
-  //     ),
-  //     owner: dataset.owner,
-  //   }));
-  // }
 
   ngOnInit() {
     this.store.dispatch(fetchRelatedProposalsAction());

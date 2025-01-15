@@ -16,18 +16,10 @@
     </ng-template>
 
     <ng-template matTabContent>
-      <div class="dataset-table">
-        <app-table
-          [data]="tableData"
-          [columns]="tableColumns"
-          [paginate]="tablePaginate"
-          [currentPage]="vm.currentPage"
-          [dataCount]="vm.datasetCount"
-          [dataPerPage]="vm.datasetsPerPage"
-          (pageChange)="onPageChange($event)"
-          (rowClick)="onRowClick($event)"
-        ></app-table>
-      </div>
+      <app-proposal-datasets
+        *ngIf="proposal"
+        [proposalId]="proposal.proposalId"
+      ></app-proposal-datasets>
     </ng-template>
   </mat-tab>
 
@@ -49,7 +41,10 @@
     </ng-template>
 
     <ng-template matTabContent>
-      <app-proposal-logbook [logbook]="logbook$ | async"></app-proposal-logbook>
+      <app-proposal-logbook
+        *ngIf="proposal"
+        [proposalId]="proposal.proposalId"
+      ></app-proposal-logbook>
     </ng-template>
   </mat-tab>
 </mat-tab-group>
