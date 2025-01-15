@@ -244,15 +244,19 @@ mat-card {
         }
 
         mat-form-field {
-          width: 100%; // Ensure fields take full width of their flex container
+          width: 100%;
           margin-bottom: 0;
         }
       }
     }
   }
-
+  .button-container {
+    display: flex;          
+    gap: 20px; 
+  }
   .submitDep {
     background-color: #B3D9AC;
     color:black;
+    // padding: 10px 20px;
   }
 }

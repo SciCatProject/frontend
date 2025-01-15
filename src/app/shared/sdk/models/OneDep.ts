@@ -1,5 +1,9 @@
 import { EmFile } from "../../../datasets/onedep/types/methods.enum";
 
+export interface DepBackendVersion {
+  version: string;
+}
+
 export interface OneDepCreated {
   depID: string;
 }

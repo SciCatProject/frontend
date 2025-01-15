@@ -4,8 +4,19 @@ import {
   OneDepCreated,
   UploadedFile,
   FileUpload,
+  DepBackendVersion,
 } from "shared/sdk/models/OneDep";
 
+export const connectToDepositor = createAction("[OneDep] Connect to Depositor");
+export const connectToDepositorSuccess = createAction(
+  "[OneDep] Connect To Depositor Success",
+  props<{ depositor: DepBackendVersion }>(),
+);
+
+export const connectToDepositorFailure = createAction(
+  "[OneDep] Connect To Depositor Failure",
+  props<{ err: Error }>(),
+);
 export const submitDeposition = createAction(
   "[OneDep] Submit Deposition",
   props<{ deposition: OneDepUserInfo; files: FileUpload[] }>(),

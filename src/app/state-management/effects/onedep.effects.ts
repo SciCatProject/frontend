@@ -11,10 +11,65 @@ import {
   OneDepUserInfo,
   OneDepCreated,
   UploadedFile,
+  DepBackendVersion,
 } from "shared/sdk/models/OneDep";
 import { EmFile } from "../../datasets/onedep/types/methods.enum";
 @Injectable()
 export class OneDepEffects {
+  createDeposition$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.connectToDepositor),
+      switchMap(() =>
+        this.onedepDepositor.getVersion().pipe(
+          map((res) =>
+            fromActions.connectToDepositorSuccess({
+              depositor: res as DepBackendVersion,
+            }),
+          ),
+          catchError((err) =>
+            of(fromActions.connectToDepositorFailure({ err })),
+          ),
+        ),
+      ),
+    );
+  });
+
+  connectToDepositorSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.connectToDepositorSuccess),
+      switchMap(({ depositor }) => {
+        const message = {
+          type: MessageType.Success,
+          content:
+            "Successfully connected to depositor version " + depositor.version,
+          duration: 5000,
+        };
+        return of(showMessageAction({ message }));
+      }),
+    );
+  });
+
+  connectToDepositorFailure$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.connectToDepositorFailure),
+      switchMap(({ err }) => {
+        const errorMessage =
+          err instanceof HttpErrorResponse
+            ? (err.error?.message ?? err.message ?? "Unknown error")
+            : err.message || "Unknown error";
+        const message = {
+          type: MessageType.Error,
+          content:
+            "Failed to connect to the depositor service: " +
+            errorMessage +
+            " Are you sure service is running?",
+          duration: 5000,
+        };
+        return of(showMessageAction({ message }));
+      }),
+    );
+  });
+
   submitDeposition$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.submitDeposition),

@@ -81,20 +81,21 @@ export class OneDepComponent implements OnInit, OnDestroy {
   ) {
     this.config = this.appConfigService.getConfig();
     this.form = this.fb.group({
-      email: "",
-      jwtToken: new FormControl(""),
+      email: ["", [Validators.required, Validators.email]],
+      jwtToken: ["", Validators.required],
       password: new FormControl(""),
-      metadata: "",
+      metadata: ["", Validators.required],
       orcid: this.fb.array([
         this.fb.group({
           orcidId: ["", [Validators.required, this.orcidValidator()]],
         }),
       ]),
-      emMethod: new FormControl(""),
-      deposingCoordinates: new FormControl(null, Validators.required),
-      associatedMap: new FormControl(null, Validators.required),
-      compositeMap: new FormControl(null, Validators.required),
+      emMethod: ["", Validators.required],
+      deposingCoordinates: new FormControl("false", Validators.required),
+      associatedMap: new FormControl("false", Validators.required),
+      compositeMap: new FormControl("false", Validators.required),
       emdbId: new FormControl(""),
+      files: this.fb.array([]),
     });
   }
 
@@ -103,8 +104,8 @@ export class OneDepComponent implements OnInit, OnDestroy {
     this.fileTypes = [];
     this.mainContour = 0.0;
     //  connect to the depositor
-    this.connectingToDepositionBackend = true;
-    this.connectToDepositionBackend();
+
+    this.store.dispatch(fromActions.connectToDepositor());
 
     this.store.select(selectCurrentDataset).subscribe((dataset) => {
       this.dataset = dataset;
@@ -166,20 +167,34 @@ export class OneDepComponent implements OnInit, OnDestroy {
       this.orcidArray().removeAt(index);
     }
   }
+  addFilesToForm(files: DepositionFiles[]) {
+    const filesArray = this.form.get("files") as FormArray;
+    filesArray.clear();
+    files.forEach((file) => {
+      filesArray.push(
+        this.fb.group({
+          emName: [file.emName],
+          id: [file.id],
+          nameFE: [file.nameFE],
+          type: [file.type],
+          fileName: [file.fileName],
+          file: [file.file],
+          required: [file.required],
+          contour: [file.contour],
+          details: [file.details],
+          explanation: [file.explanation],
+        }),
+      );
+    });
+  }
   onMethodChange() {
     this.methodsList = createMethodsList(); // Reset the methods list to be empty
     this.fileTypes = this.methodsList.find(
       (mL) => mL.value === this.form.value["emMethod"],
     ).files;
     this.fileTypes.forEach((fT) => {
-      if (
-        fT.emName === this.emFile.MainMap ||
-        fT.emName === this.emFile.Image
-      ) {
-        fT.required = true;
-      } else {
-        fT.required = false;
-      }
+      fT.required =
+        fT.emName === this.emFile.MainMap || fT.emName === this.emFile.Image;
     });
     switch (this.form.value["emMethod"]) {
       case "helical":
@@ -203,7 +218,15 @@ export class OneDepComponent implements OnInit, OnDestroy {
           }
         });
         break;
+      case "tomogram":
+        this.form.get("deposingCoordinates")?.setValue("false");
+        this.form.get("associatedMap")?.setValue("false");
+        break;
     }
+    this.addFilesToForm(this.fileTypes);
+  }
+  get files() {
+    return (this.form.get("files") as FormArray).controls;
   }
 
   onPDB(event: MatRadioChange) {
@@ -215,6 +238,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
         }
       });
     }
+    this.addFilesToForm(this.fileTypes); // update the co-cif required status
   }
 
   autoGrow(event: Event) {
@@ -240,23 +264,24 @@ export class OneDepComponent implements OnInit, OnDestroy {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile[controlName] = input.files[0];
-      this.fileTypes.forEach((fT) => {
-        if (fT.emName === controlName) {
-          fT.file = this.selectedFile[controlName];
-          fT.fileName = this.selectedFile[controlName].name;
+      this.files.forEach((fT) => {
+        if (fT.value.emName === controlName) {
+          fT.value.file = this.selectedFile[controlName];
+          fT.value.fileName = this.selectedFile[controlName].name;
           if (
             this.mainContour !== 0.0 &&
-            (fT.emName === EmFile.MainMap ||
-              fT.emName === EmFile.HalfMap1 ||
-              fT.emName === EmFile.HalfMap2)
+            (fT.value.emName === EmFile.MainMap ||
+              fT.value.emName === EmFile.HalfMap1 ||
+              fT.value.emName === EmFile.HalfMap2)
           ) {
-            fT.contour = this.mainContour;
+            fT.value.contour = this.mainContour;
           }
         }
       });
     }
   }
 
+  // FIX ME needs refac
   onFileAddMapSelected(event: Event, id: number) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -272,9 +297,9 @@ export class OneDepComponent implements OnInit, OnDestroy {
   }
   isRequired(controlName: string): boolean {
     let value: boolean;
-    this.fileTypes.forEach((fT) => {
-      if (fT.emName === controlName) {
-        value = fT.required;
+    this.files.forEach((fT) => {
+      if (fT.value.emName === controlName) {
+        value = fT.value.required;
       }
     });
     return value;
@@ -285,18 +310,16 @@ export class OneDepComponent implements OnInit, OnDestroy {
     const parsedValue = parseFloat(normalizedInput);
     if (!isNaN(parsedValue)) {
       this.mainContour = parsedValue;
-      this.fileTypes.forEach((fT) => {
+      this.files.forEach((fT) => {
         if (
-          fT.file &&
-          (fT.emName === EmFile.MainMap ||
-            fT.emName === EmFile.HalfMap1 ||
-            fT.emName === EmFile.HalfMap2)
+          fT.value.file &&
+          (fT.value.emName === EmFile.MainMap ||
+            fT.value.emName === EmFile.HalfMap1 ||
+            fT.value.emName === EmFile.HalfMap2)
         ) {
-          fT.contour = this.mainContour;
+          fT.value.contour = this.mainContour;
         }
       });
-    } else {
-      console.warn("Invalid number format:", input);
     }
   }
   updateContourLevelAddMap(event: Event, id: number) {
@@ -304,13 +327,11 @@ export class OneDepComponent implements OnInit, OnDestroy {
     const normalizedInput = input.replace(",", ".");
     const parsedValue = parseFloat(normalizedInput);
     if (!isNaN(parsedValue)) {
-      this.fileTypes.forEach((fT) => {
-        if (fT.emName === this.emFile.AddMap && fT.id === id) {
-          fT.contour = parsedValue;
+      this.files.forEach((fT) => {
+        if (fT.value.emName === this.emFile.AddMap && fT.value.id === id) {
+          fT.value.contour = parsedValue;
         }
       });
-    } else {
-      console.warn("Invalid number format:", input);
     }
   }
   updateContourLevel(event: Event, controlName: EmFile) {
@@ -318,38 +339,40 @@ export class OneDepComponent implements OnInit, OnDestroy {
     const normalizedInput = input.replace(",", ".");
     const parsedValue = parseFloat(normalizedInput);
     if (!isNaN(parsedValue)) {
-      this.fileTypes.forEach((fT) => {
-        if (fT.emName === controlName) {
-          fT.contour = parsedValue;
+      this.files.forEach((fT) => {
+        if (fT.value.emName === controlName) {
+          fT.value.contour = parsedValue;
         }
       });
-    } else {
-      console.warn("Invalid number format:", input);
     }
   }
   updateDetails(event: Event, controlName: EmFile) {
     const textarea = event.target as HTMLTextAreaElement; // Cast to HTMLTextAreaElement
     const value = textarea.value;
-    this.fileTypes.forEach((fT) => {
-      if (fT.emName === controlName) {
-        fT.details = value;
+    this.files.forEach((fT) => {
+      if (fT.value.emName === controlName) {
+        fT.value.details = value;
       }
     });
   }
   updateDetailsAddMap(event: Event, id: number) {
     const textarea = event.target as HTMLTextAreaElement; // Cast to HTMLTextAreaElement
     const value = textarea.value;
-    this.fileTypes.forEach((fT) => {
-      if (fT.emName === this.emFile.AddMap && fT.id === id) {
-        fT.details = value;
+    this.files.forEach((fT) => {
+      if (fT.value.emName === this.emFile.AddMap && fT.value.id === id) {
+        fT.value.details = value;
       }
     });
   }
   addMap() {
+    // FIX ME
     const nextId =
-      this.fileTypes
-        .filter((file) => file.emName === EmFile.AddMap)
-        .reduce((maxId, file) => (file.id > maxId ? file.id : maxId), 0) + 1;
+      this.files
+        .filter((file) => file.value.emName === EmFile.AddMap)
+        .reduce(
+          (maxId, file) => (file.value.id > maxId ? file.value.id : maxId),
+          0,
+        ) + 1;
 
     const newMap: DepositionFiles = {
       emName: EmFile.AddMap,
@@ -363,7 +386,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
       required: false,
     };
 
-    this.fileTypes.push(newMap);
+    // this.files.push(newMap);
   }
 
   onDepositClick() {
@@ -388,13 +411,13 @@ export class OneDepComponent implements OnInit, OnDestroy {
     }
     let metadataAdded = false;
 
-    const filesToUpload = this.fileTypes
-      .filter((fT) => fT.file)
+    const filesToUpload = this.files
+      .filter((fT) => fT.value.file)
       .map((fT) => {
         const formDataFile = new FormData();
         formDataFile.append("jwtToken", this.form.value.jwtToken);
-        formDataFile.append("file", fT.file);
-        if (fT.emName === this.emFile.Coordinates) {
+        formDataFile.append("file", fT.value.file);
+        if (fT.value.emName === this.emFile.Coordinates) {
           formDataFile.append(
             "scientificMetadata",
             JSON.stringify(this.form.value.metadata),
@@ -404,14 +427,14 @@ export class OneDepComponent implements OnInit, OnDestroy {
           formDataFile.append(
             "fileMetadata",
             JSON.stringify({
-              name: fT.fileName,
-              type: fT.type,
-              contour: fT.contour,
-              details: fT.details,
+              name: fT.value.fileName,
+              type: fT.value.type,
+              contour: fT.value.contour,
+              details: fT.value.details,
             }),
           );
         }
-        return { form: formDataFile, fileType: fT.emName };
+        return { form: formDataFile, fileType: fT.value.emName };
       });
     // if (!metadataAdded) {
     //   const formDataFile = new FormData();
@@ -434,82 +457,42 @@ export class OneDepComponent implements OnInit, OnDestroy {
   }
   onDownloadClick() {
     if (this.form.value.deposingCoordinates === "true") {
-      const formDataFile = new FormData();
-      const fT = this.fileTypes.find(
-        (fileType) => fileType.emName === this.emFile.Coordinates,
+      const fileEntry = this.files.find(
+        (fileType) => fileType.value.emName === this.emFile.Coordinates,
       );
-      formDataFile.append("file", fT.file);
-      formDataFile.append(
-        "scientificMetadata",
-        JSON.stringify(this.form.value.metadata),
-      );
-      this.http
-        .post(this.connectedDepositionBackend + "onedep/pdb", formDataFile, {
-          responseType: "blob",
-        })
-        .subscribe({
-          next: (response: Blob) => {
-            this.triggerDownload(response, "coordinatesWithMmetadata.cif");
-          },
-          error: (error) => {
-            console.error("Error downloading file from onedep/pdb", error);
-          },
-        });
+
+      if (fileEntry) {
+        const file = fileEntry.value.file;
+        this.depositor
+          .downloadCoordinatesWithMetadata(file, this.form.value.metadata)
+          .subscribe({
+            next: (response: Blob) => {
+              this.triggerDownload(response, "coordinatesWithMetadata.cif");
+            },
+            // error: (error) => {
+            //   console.error("Error downloading file from /onedep/pdb", error);
+            // },
+          });
+      }
     } else {
-      const body = JSON.stringify(this.form.value.metadata);
-      this.http
-        .post(this.connectedDepositionBackend + "onedep/metadata", body, {
-          headers: { "Content-Type": "application/json" },
-          responseType: "blob",
-        })
-        .subscribe({
-          next: (response: Blob) => {
-            this.triggerDownload(response, "metadata.cif");
-          },
-          error: (error) => {
-            console.error("Error downloading file from onedep/metadata", error);
-          },
-        });
+      this.depositor.downloadMetadata(this.form.value.metadata).subscribe({
+        next: (response: Blob) => {
+          this.triggerDownload(response, "metadata.cif");
+        },
+        // error: (error) => {
+        //   console.error("Error downloading file from /onedep/metadata", error);
+        // },
+      });
     }
   }
+
   triggerDownload(response: Blob, filename: string) {
     const downloadUrl = window.URL.createObjectURL(response);
     const a = document.createElement("a");
     a.href = downloadUrl;
-    a.download = filename; // Set the file name here
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-  }
-
-  connectToDepositionBackend(): boolean {
-    const depositionBackendUrl = this.config.depositorURL;
-    let depositionBackendUrlCleaned = depositionBackendUrl.slice();
-    // Check if last symbol is a slash and add version endpoint
-    if (!depositionBackendUrlCleaned.endsWith("/")) {
-      depositionBackendUrlCleaned += "/";
-    }
-
-    const depositionBackendUrlVersion = depositionBackendUrlCleaned + "version";
-
-    // Try to connect to the facility backend/version to check if it is available
-    console.log("Connecting to OneDep backend: " + depositionBackendUrlVersion);
-    this.http.get(depositionBackendUrlVersion).subscribe(
-      (response) => {
-        console.log("Connected to OneDep backend", response);
-        // If the connection is successful, store the connected facility backend URL
-        this.connectedDepositionBackend = depositionBackendUrlCleaned;
-        this.connectingToDepositionBackend = false;
-        this.connectedDepositionBackendVersion = response["version"];
-      },
-      (error) => {
-        this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
-        console.error("Request failed", error);
-        this.connectedDepositionBackend = "";
-        this.connectingToDepositionBackend = false;
-      },
-    );
-
-    return true;
   }
 }

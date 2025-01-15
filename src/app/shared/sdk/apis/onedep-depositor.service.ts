@@ -1,11 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { tap } from "rxjs/operators";
-import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { AppConfigService, AppConfig } from "app-config.service";
-import { OneDepUserInfo, OneDepCreated, UploadedFile } from "../models/OneDep";
-import * as fromActions from "state-management/actions/onedep.actions";
+import {
+  DepBackendVersion,
+  OneDepUserInfo,
+  OneDepCreated,
+  UploadedFile,
+} from "../models/OneDep";
 
 @Injectable({
   providedIn: "root",
@@ -20,6 +23,11 @@ export class Depositor {
     this.config = this.appConfigService.getConfig();
   }
 
+  getVersion(): Observable<DepBackendVersion> {
+    return this.http.get<DepBackendVersion>(
+      `${this.config.depositorURL}/version`,
+    );
+  }
   createDep(body: OneDepUserInfo): Observable<OneDepCreated> {
     return this.http.post<OneDepCreated>(
       `${this.config.depositorURL}/onedep`,
@@ -46,5 +54,29 @@ export class Depositor {
       `${this.config.depositorURL}/onedep/${depID}/metadata`,
       form,
     );
+  }
+
+  downloadCoordinatesWithMetadata(file: File, metadata: any) {
+    const formDataFile = new FormData();
+    formDataFile.append("file", file);
+    formDataFile.append("scientificMetadata", JSON.stringify(metadata));
+
+    return this.http.post(
+      `${this.config.depositorURL}/onedep/pdb`,
+      formDataFile,
+      {
+        responseType: "blob",
+      },
+    );
+  }
+
+  downloadMetadata(metadata: any) {
+    const headers = new HttpHeaders({ "Content-Type": "application/json" });
+    const body = JSON.stringify(metadata);
+
+    return this.http.post(`${this.config.depositorURL}/onedep/metadata`, body, {
+      headers,
+      responseType: "blob",
+    });
   }
 }
