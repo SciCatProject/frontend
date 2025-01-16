@@ -1,4 +1,8 @@
-<mat-tab-group *ngIf="vm$ | async as vm">
+<mat-tab-group
+  (selectedTabChange)="onTabChanged($event.index)"
+  [selectedIndex]="selectedTabIndex"
+  *ngIf="vm$ | async as vm"
+>
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon> details </mat-icon>

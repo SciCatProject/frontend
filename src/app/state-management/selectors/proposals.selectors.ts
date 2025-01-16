@@ -156,19 +156,6 @@ export const selectFullqueryParams = createSelector(
   },
 );
 
-export const selectFullfacetParams = createSelector(
-  selectProposalsState,
-  (state) => {
-    const filter = state.proposalFilters;
-    const { skip, limit, sortField, dateRange, ...theRest } = {
-      ...filter,
-    };
-    const fields = restrictFilter(theRest);
-    const facets = ["all"];
-    return { fields, facets };
-  },
-);
-
 export const selectDatasetsQueryParams = createSelector(
   selectDatasetFilters,
   (filters) => {

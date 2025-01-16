@@ -21,6 +21,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
   proposal: ProposalClass;
   subscriptions: Subscription[] = [];
+  public selectedTabIndex = 0;
 
   constructor(
     public appConfigService: AppConfigService,
@@ -34,7 +35,10 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
         if (vm.proposal) {
           this.proposal = vm.proposal;
 
-          if (this.proposal["parentProposalId"]) {
+          if (
+            this.proposal["parentProposalId"] &&
+            this.selectedTabIndex === 0
+          ) {
             this.fetchProposalRelatedDocuments();
           }
         }
@@ -44,8 +48,17 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.route.params.subscribe((params) => {
         this.store.dispatch(fetchProposalAction({ proposalId: params.id }));
+        this.resetTabs();
       }),
     );
+  }
+
+  onTabChanged(newIndex: number): void {
+    this.selectedTabIndex = newIndex;
+  }
+
+  resetTabs(): void {
+    this.selectedTabIndex = 0;
   }
 
   fetchProposalRelatedDocuments(): void {

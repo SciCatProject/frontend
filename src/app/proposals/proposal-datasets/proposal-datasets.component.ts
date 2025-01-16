@@ -16,10 +16,6 @@ import {
   changeDatasetsPageAction,
   fetchProposalDatasetsAction,
 } from "state-management/actions/proposals.actions";
-import {
-  selectRelatedDatasetsCurrentPage,
-  selectRelatedDatasetsPerPage,
-} from "state-management/selectors/datasets.selectors";
 import { selectViewProposalPageViewModel } from "state-management/selectors/proposals.selectors";
 
 export interface TableData {
@@ -39,8 +35,6 @@ export interface TableData {
 })
 export class ProposalDatasetsComponent implements OnInit {
   vm$ = this.store.select(selectViewProposalPageViewModel);
-  currentPage$ = this.store.select(selectRelatedDatasetsCurrentPage);
-  datasetsPerPage$ = this.store.select(selectRelatedDatasetsPerPage);
 
   subscriptions: Subscription[] = [];
   @Input() proposalId: string;

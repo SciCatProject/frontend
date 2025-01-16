@@ -12,7 +12,6 @@ import {
   selectDatasetsQueryParams,
   selectCurrentProposal,
   selectRelatedProposalsFilters,
-  selectFullfacetParams,
 } from "state-management/selectors/proposals.selectors";
 import { map, mergeMap, catchError, switchMap, filter } from "rxjs/operators";
 import { ObservableInput, of } from "rxjs";
@@ -26,7 +25,6 @@ export class ProposalEffects {
   currentProposal$ = this.store.select(selectCurrentProposal);
   relatedProposalFilters$ = this.store.select(selectRelatedProposalsFilters);
   fullqueryParams$ = this.store.select(selectFullqueryParams);
-  fullfacetParams$ = this.store.select(selectFullfacetParams);
   datasetQueryParams$ = this.store.select(selectDatasetsQueryParams);
 
   fetchProposals$ = createEffect(() => {
@@ -56,14 +54,11 @@ export class ProposalEffects {
   fetchCount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
-      concatLatestFrom(() => this.fullfacetParams$),
+      concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
-      switchMap(({ fields, facets }) =>
+      switchMap((filters) =>
         this.proposalsService
-          .proposalsControllerFullfacet(
-            JSON.stringify(facets),
-            JSON.stringify(fields),
-          )
+          .proposalsControllerCount(JSON.stringify(filters))
           .pipe(
             map((res) => {
               const { all } = res[0];
@@ -123,11 +118,11 @@ export class ProposalEffects {
       ofType(fromActions.fetchProposalDatasetsCountAction),
       switchMap(({ proposalId }) =>
         this.datasetsService
-          .datasetsControllerFindAll(JSON.stringify({ where: { proposalId } }))
+          .datasetsControllerCount(JSON.stringify({ where: { proposalId } }))
           .pipe(
-            map((datasets) =>
+            map(({ count }) =>
               fromActions.fetchProposalDatasetsCountCompleteAction({
-                count: datasets.length,
+                count,
               }),
             ),
             catchError(() =>
@@ -227,16 +222,12 @@ export class ProposalEffects {
       ]),
       switchMap(([, proposal, filters]) => {
         const queryFilter = {
+          ...filters,
           where: {
             $or: [
               { proposalId: { $in: [proposal.parentProposalId] } },
               { parentProposalId: { $in: [proposal.proposalId] } },
             ],
-          },
-          limits: {
-            skip: filters.skip,
-            limit: filters.limit,
-            order: filters.sortField,
           },
         };
 
@@ -271,24 +262,25 @@ export class ProposalEffects {
   fetchRelatedProposalsCount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchRelatedProposalsAction),
-      concatLatestFrom(() => [this.currentProposal$, this.fullfacetParams$]),
-      switchMap(([, proposal, { facets, fields }]) => {
-        fields = {
-          ...fields,
-          proposalId: { $in: [proposal.parentProposalId] },
+      concatLatestFrom(() => [this.currentProposal$]),
+      switchMap(([, proposal]) => {
+        const queryFilter = {
+          where: {
+            $or: [
+              { proposalId: { $in: [proposal.parentProposalId] } },
+              { parentProposalId: { $in: [proposal.proposalId] } },
+            ],
+          },
         };
+
         return this.proposalsService
-          .proposalsControllerFullfacet(
-            JSON.stringify(facets),
-            JSON.stringify(fields),
-          )
+          .proposalsControllerCount(JSON.stringify(queryFilter))
           .pipe(
             map((res) => {
-              const { all } = res[0];
-              const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
+              const count = res.count;
 
               return fromActions.fetchRelatedProposalsCountCompleteAction({
-                count: allCounts,
+                count,
               });
             }),
             catchError(() =>
