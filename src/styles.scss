@@ -207,6 +207,7 @@ $theme: map-merge(
 @include dashboard.theme($theme);
 @include datafiles.theme($theme);
 @include dataset-detail.theme($theme);
+@include dataset-detail-dynamic.theme($theme);
 @include dataset-details-dashboard.theme($theme);
 @include dataset-lifecycle.theme($theme);
 @include dataset-table.theme($theme);

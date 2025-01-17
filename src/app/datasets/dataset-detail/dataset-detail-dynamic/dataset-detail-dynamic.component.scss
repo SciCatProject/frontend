@@ -61,7 +61,22 @@ mat-card {
 }
 .thumbnail-image {
   cursor: pointer;
-  max-width: 14em; /* Set maximum width */
-  width: 100%; /* Make it responsive within the card */
-  height: auto; /* Maintain aspect ratio */
+  max-width: 14em;
+  width: 100%;
+  height: auto;
+}
+.show-json-metadata-btn {
+  margin: 1em;
+}
+.json-view-overflow {
+  flex: 0 0 auto;
+  max-width: 80vw;
+  overflow: auto;
+}
+.truncated-text {
+  max-width: 60vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
 }

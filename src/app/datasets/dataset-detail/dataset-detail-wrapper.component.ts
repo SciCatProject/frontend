@@ -15,7 +15,7 @@ export class DatasetDetailWrapperComponent {
   constructor(private appConfigService: AppConfigService) {}
 
   getDatasetDetailsComponent() {
-    return this.appConfig.datasetDetailsComponent?.enableCustomizedComponent
+    return this.appConfig.datasetDetailComponent?.enableCustomizedComponent
       ? DatasetDetailDynamicComponent
       : DatasetDetailComponent;
   }

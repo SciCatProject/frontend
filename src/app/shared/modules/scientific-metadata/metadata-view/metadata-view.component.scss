@@ -10,17 +10,28 @@
   .mat-column-unit {
     flex: 1 0 5em;
   }
+
+  &-header {
+    font-weight: bold;
+  }
+}
+
+mat-header-row {
+  min-height: 36px;
+}
+
+mat-row {
+  min-height: 36px;
 }
 
 .unit-input {
   display: flex;
   align-items: center;
+}
 
-  &--warning {
-    cursor: pointer;
-    margin-left: 0.5em;
-    color: rgba(130, 4, 4, 0.6);
-  }
+.general-warning {
+  cursor: pointer;
+  margin-left: 0.5em;
 }
 
 @media only screen and (max-width: 1279px) {
