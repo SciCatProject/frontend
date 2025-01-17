@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
 import { MatDialog } from "@angular/material/dialog";
-import { Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
 
 import { showMessageAction } from "state-management/actions/user.actions";
@@ -11,15 +10,10 @@ import {
   selectCurrentDatasetWithoutFileInfo,
 } from "state-management/selectors/datasets.selectors";
 import { selectIsLoading } from "state-management/selectors/user.selectors";
-import {
-  addKeywordFilterAction,
-  clearFacetsAction,
-} from "state-management/actions/datasets.actions";
-import { Router } from "@angular/router";
 
 import { AppConfigService } from "app-config.service";
 
-import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import {
   CustomizationItem,
   DatasetViewFieldType,
@@ -43,9 +37,7 @@ import { Attachment } from "@scicatproject/scicat-sdk-ts";
   styleUrls: ["./dataset-detail-dynamic.component.scss"],
   standalone: false,
 })
-export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
-  private subscriptions: Subscription[] = [];
-
+export class DatasetDetailDynamicComponent implements OnInit {
   datasetView: CustomizationItem[];
   form: FormGroup;
 
@@ -65,7 +57,6 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private attachmentService: AttachmentService,
     private translateService: TranslateService,
     private store: Store,
-    private router: Router,
     private fb: FormBuilder,
   ) {
     this.translateService.use(
@@ -86,22 +77,6 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     });
 
     this.datasetView = sortedDatasetView;
-  }
-
-  onClickKeyword(keyword: string) {
-    this.store.dispatch(clearFacetsAction());
-    this.store.dispatch(addKeywordFilterAction({ keyword }));
-    this.router.navigateByUrl("/datasets");
-  }
-
-  get keywords(): FormArray {
-    return this.form.controls.keywords as FormArray;
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => {
-      subscription.unsubscribe();
-    });
   }
 
   onCopy(value: string) {
@@ -137,7 +112,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     this.attachmentService.openAttachment(encoded);
   }
 
-  hideAttachmentsThumbnail(attachments: Attachment[] = []) {
+  hideAttachmentsThumbnail(attachments: Attachment[] = []): boolean {
     return !this.enabledAttachmentsDisplay || attachments.length < 1
       ? true
       : false;
