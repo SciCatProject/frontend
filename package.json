@@ -35,6 +35,8 @@
     "@ngrx/router-store": "^16",
     "@ngrx/store": "^16",
     "@scicatproject/scicat-sdk-ts": "^4.8.3",
+    "ag-grid-angular": "^32.3.3",
+    "ag-grid-community": "^32.3.3",
     "autolinker": "^4.0.0",
     "deep-equal": "^2.0.5",
     "exceljs": "^4.3.0",

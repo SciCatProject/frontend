@@ -353,3 +353,20 @@ a:hover {
 .mat-mdc-tab-header {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
+
+.ag-theme-quartz {
+  width: 100%;
+  height: 400px;
+
+  .ag-header {
+    background-color: var(--theme-primary-default);
+
+    .ag-header-row {
+      color: var(--theme-primary-default-contrast);
+
+      .ag-icon {
+        color: var(--theme-primary-default-contrast) !important;
+      }
+    }
+  }
+}

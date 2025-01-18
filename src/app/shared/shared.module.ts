@@ -18,6 +18,8 @@ import { ScicatDataService } from "./services/scicat-data-service";
 import { ScientificMetadataTreeModule } from "./modules/scientific-metadata-tree/scientific-metadata-tree.modules";
 import { FiltersModule } from "./modules/filters/filters.module";
 import { AttachmentService } from "./services/attachment.service";
+import { AgGridModule } from "ag-grid-angular";
+
 @NgModule({
   imports: [
     BreadcrumbModule,
@@ -35,6 +37,7 @@ import { AttachmentService } from "./services/attachment.service";
     FormsModule,
     SharedTableModule,
     ScientificMetadataTreeModule,
+    AgGridModule,
   ],
   providers: [
     ConfigService,
@@ -57,6 +60,7 @@ import { AttachmentService } from "./services/attachment.service";
     SharedTableModule,
     ScientificMetadataTreeModule,
     FiltersModule,
+    AgGridModule,
   ],
 })
 export class SharedScicatFrontendModule {}

@@ -45,7 +45,11 @@
               "src/robots.txt",
               "src/manifest.json"
             ],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "ag-grid-community/styles/ag-grid.css",
+              "ag-grid-community/styles/ag-theme-quartz.css",
+              "src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {
