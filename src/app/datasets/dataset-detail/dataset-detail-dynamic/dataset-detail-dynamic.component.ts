@@ -83,7 +83,7 @@ export class DatasetDetailDynamicComponent implements OnInit {
     navigator.clipboard.writeText(value).then(
       () => {
         const message = new Message(
-          "Dataset PID has been copied to your clipboard",
+          "Selected field has been copied to your clipboard",
           MessageType.Success,
           5000,
         );
@@ -91,7 +91,7 @@ export class DatasetDetailDynamicComponent implements OnInit {
       },
       (err) => {
         const errorMessage = new Message(
-          "Failed to copy Dataset PID to clipboard",
+          "Failed to copy selected field to clipboard",
           MessageType.Error,
           5000,
         );
