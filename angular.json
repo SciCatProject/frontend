@@ -46,9 +46,9 @@
               "src/manifest.json"
             ],
             "styles": [
+              "src/styles.scss",
               "ag-grid-community/styles/ag-grid.css",
-              "ag-grid-community/styles/ag-theme-quartz.css",
-              "src/styles.scss"
+              "ag-grid-community/styles/ag-theme-material.css"
             ],
             "scripts": []
           },

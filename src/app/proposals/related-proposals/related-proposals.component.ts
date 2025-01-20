@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { ProposalClass } from "@scicatproject/scicat-sdk-ts";
 import { ColDef } from "ag-grid-community";
+import { CustomInnerHeaderComponent } from "shared/modules/ag-grid-table/custom-inner-header/custom-inner-header.component";
 import {
   PageChangeEvent,
   TableColumn,
@@ -77,7 +78,12 @@ export class RelatedProposalsComponent implements OnInit {
 
   // Column Definitions: Defines the columns to be displayed.
   colDefs: ColDef[] = [
-    { field: "proposalId" },
+    {
+      field: "proposalId",
+      headerComponentParams: {
+        icon: "fa-user",
+      },
+    },
     { field: "relation" },
     { field: "title" },
     { field: "abstract" },
@@ -85,6 +91,9 @@ export class RelatedProposalsComponent implements OnInit {
   ];
   defaultColDef: ColDef = {
     flex: 1,
+    headerComponentParams: {
+      innerHeaderComponent: CustomInnerHeaderComponent,
+    },
   };
 
   pagination = true;

@@ -19,8 +19,10 @@ import { ScientificMetadataTreeModule } from "./modules/scientific-metadata-tree
 import { FiltersModule } from "./modules/filters/filters.module";
 import { AttachmentService } from "./services/attachment.service";
 import { AgGridModule } from "ag-grid-angular";
+import { CustomInnerHeaderComponent } from "./modules/ag-grid-table/custom-inner-header/custom-inner-header.component";
 
 @NgModule({
+  declarations: [CustomInnerHeaderComponent],
   imports: [
     BreadcrumbModule,
     ErrorPageModule,
@@ -61,6 +63,7 @@ import { AgGridModule } from "ag-grid-angular";
     ScientificMetadataTreeModule,
     FiltersModule,
     AgGridModule,
+    CustomInnerHeaderComponent,
   ],
 })
 export class SharedScicatFrontendModule {}
