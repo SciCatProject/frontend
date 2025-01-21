@@ -12,11 +12,14 @@
   $warn: map.get($color-config, "warn");
 
   .dynamic-template-general-header {
-    background-color: mat.get-color-from-palette($header-1, "lighter");
+    background-color: mat.get-color-from-palette($primary, "lighter");
   }
 
   .dynamic-template-json-view-header {
-    background-color: mat.get-color-from-palette($primary, "lighter");
+    background-color: mat.get-color-from-palette($header-1, "lighter");
+  }
+  .dynamic-template-attachments-header {
+    background-color: mat.get-color-from-palette($accent, "lighter");
   }
 
   .general-warning {
