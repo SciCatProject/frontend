@@ -42,6 +42,7 @@ import { AppConfigService } from "app-config.service";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import {
   CreateDerivedDatasetObsoleteDto,
+  DatasetsControllerCreateRequest,
   ReturnedUserDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 
@@ -269,7 +270,11 @@ describe("DashboardComponent", () => {
       component.openDialog();
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(addDatasetAction({ dataset }));
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        addDatasetAction({
+          dataset: dataset as DatasetsControllerCreateRequest,
+        }),
+      );
     });
   });
 

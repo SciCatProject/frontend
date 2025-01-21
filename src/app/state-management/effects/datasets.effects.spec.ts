@@ -19,6 +19,7 @@ import {
 import { ScientificCondition } from "state-management/models";
 import { Type } from "@angular/core";
 import {
+  DatasetsControllerCreateRequest,
   DatasetsService,
   OutputDatasetObsoleteDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -360,7 +361,9 @@ describe("DatasetEffects", () => {
 
   describe("addDataset$", () => {
     it("should result in an addDatasetCompleteAction, a fetchDatasetsAction and a fetchDatasetAction", () => {
-      const action = fromActions.addDatasetAction({ dataset: derivedDataset });
+      const action = fromActions.addDatasetAction({
+        dataset: derivedDataset as DatasetsControllerCreateRequest,
+      });
       const outcome1 = fromActions.addDatasetCompleteAction({
         dataset: derivedDataset,
       });
@@ -382,7 +385,9 @@ describe("DatasetEffects", () => {
     });
 
     it("should result in an addDatasetFailedAction", () => {
-      const action = fromActions.addDatasetAction({ dataset: derivedDataset });
+      const action = fromActions.addDatasetAction({
+        dataset: derivedDataset as DatasetsControllerCreateRequest,
+      });
       const outcome = fromActions.addDatasetFailedAction();
 
       actions = hot("-a", { a: action });
@@ -596,7 +601,7 @@ describe("DatasetEffects", () => {
     describe("ofType addDatasetAction", () => {
       it("should dispatch a loadingAction", () => {
         const action = fromActions.addDatasetAction({
-          dataset: derivedDataset,
+          dataset: derivedDataset as DatasetsControllerCreateRequest,
         });
         const outcome = loadingAction();
 
