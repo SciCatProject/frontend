@@ -40,11 +40,20 @@ export enum DatasetViewFieldType {
   COPY = "copy",
   TAG = "tag",
 }
+
+interface AttachmentOptions {
+  limit: number;
+  size: "small" | "medium" | "large";
+}
+type viewModeOptions = "table" | "json" | "tree";
+
 export interface CustomizationItem {
   type: CustomizationType;
   label: string;
   order: number;
   fields?: Field[];
+  options?: AttachmentOptions;
+  viewMode?: viewModeOptions;
 }
 
 export interface Field {
@@ -54,7 +63,11 @@ export interface Field {
 }
 
 // Type alias for allowed customization types
-type CustomizationType = "regular" | "scientificMetadata" | "metadataJsonView";
+type CustomizationType =
+  | "regular"
+  | "scientificMetadata"
+  | "datasetJsonView"
+  | "attachments";
 
 // Type alias for allowed field types
 type FieldType = "text" | "copy" | "linky" | "tag" | "date";

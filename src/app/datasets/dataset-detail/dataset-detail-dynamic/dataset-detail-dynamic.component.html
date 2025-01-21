@@ -15,7 +15,7 @@
   </div>
   <div style="clear: both"></div>
   <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset$ | async as dataset">
-    <div [fxFlex]="hideAttachmentsThumbnail ? 100 : 90">
+    <div fxFlex="100">
       <ng-container *ngFor="let section of datasetView">
         <ng-container [ngSwitch]="section.type">
           <mat-card
@@ -77,8 +77,8 @@
                         <span
                           *ngIf="fieldType === 'date'"
                           [title]="fieldValue"
-                          >{{ fieldValue | date: "yyyy-MM-dd HH:mm" }}</span
-                        >
+                          [innerHTML]="fieldValue"
+                        ></span>
 
                         <!-- Copy -->
                         <ng-container *ngIf="fieldType === 'copy'">
@@ -133,7 +133,7 @@
             </mat-card-header>
             <mat-card-content>
               <ng-container *ngIf="appConfig.tableSciDataEnabled">
-                <div [ngSwitch]="appConfig.metadataStructure">
+                <div [ngSwitch]="section.viewMode">
                   <tree-view
                     *ngSwitchCase="'tree'"
                     [metadata]="dataset['scientificMetadata']"
@@ -142,12 +142,64 @@
                     *ngSwitchDefault
                     [metadata]="dataset['scientificMetadata']"
                   ></metadata-view>
+                  <div class="json-view">
+                    <ngx-json-viewer
+                      *ngSwitchCase="'json'"
+                      [json]="dataset['scientificMetadata']"
+                      [expanded]="false"
+                    >
+                    </ngx-json-viewer>
+                  </div>
                 </div>
               </ng-container>
             </mat-card-content>
           </mat-card>
 
-          <mat-card *ngSwitchCase="'metadataJsonView'">
+          <!-- Attachments -->
+          <mat-card *ngSwitchCase="'attachments'">
+            <mat-card-header class="scientific-header">
+              <div mat-card-avatar class="section-icon">
+                <mat-icon> photo_library </mat-icon>
+              </div>
+              {{ section.label | translate }}
+            </mat-card-header>
+            <mat-card-content>
+              <div class="attachments-wrapper">
+                <ng-container *ngIf="attachments$ | async as attachments">
+                  <ng-container
+                    *ngIf="attachments.length > 0; else noAttachments"
+                  >
+                    <ng-container
+                      *ngFor="
+                        let item of attachments
+                          | slice: 0 : section.options.limit
+                      "
+                    >
+                      <img
+                        [class]="
+                          [
+                            'thumbnail-image',
+                            getThumbnailSize(section.options.size),
+                          ].join(' ')
+                        "
+                        data-cy="attachment-thumbnail"
+                        mat-card-image
+                        [src]="getImageUrl(item.thumbnail)"
+                        (click)="openAttachment(item.thumbnail)"
+                        title="{{ item.caption }}"
+                      />
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+                <ng-template #noAttachments>
+                  <p class="no-attachments-message">No attachments found</p>
+                </ng-template>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Dataset JSON View-->
+          <mat-card *ngSwitchCase="'datasetJsonView'">
             <mat-card-header class="dynamic-template-json-view-header">
               <div mat-card-avatar class="section-icon">
                 <mat-icon> data_object </mat-icon>
@@ -178,28 +230,6 @@
             </mat-card-content>
           </mat-card>
         </ng-container>
-      </ng-container>
-    </div>
-
-    <!-- Attachments thumbnail-->
-    <div
-      [hidden]="hideAttachmentsThumbnail(attachments)"
-      [fxFlex]="10"
-      *ngIf="attachments$ | async as attachments"
-    >
-      <ng-container *ngFor="let da of attachments">
-        <mat-card>
-          <img
-            data-cy="attachment-thumbnail"
-            mat-card-image
-            [src]="getImageUrl(da.thumbnail)"
-            (click)="openAttachment(da.thumbnail)"
-            class="thumbnail-image"
-          />
-          <mat-card-actions class="caption-text">{{
-            da.caption
-          }}</mat-card-actions>
-        </mat-card>
       </ng-container>
     </div>
   </div>

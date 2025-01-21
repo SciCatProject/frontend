@@ -23,7 +23,7 @@ import {
 
 import { AttachmentService } from "shared/services/attachment.service";
 import { TranslateService } from "@ngx-translate/core";
-import { Attachment } from "@scicatproject/scicat-sdk-ts";
+import { DatePipe } from "@angular/common";
 
 /**
  * Component to show customizable details for a dataset, using the
@@ -56,6 +56,7 @@ export class DatasetDetailDynamicComponent implements OnInit {
     public dialog: MatDialog,
     private attachmentService: AttachmentService,
     private translateService: TranslateService,
+    private datePipe: DatePipe,
     private store: Store,
     private fb: FormBuilder,
   ) {
@@ -77,6 +78,8 @@ export class DatasetDetailDynamicComponent implements OnInit {
     });
 
     this.datasetView = sortedDatasetView;
+
+    console.log("===this.datasetview", this.datasetView);
   }
 
   onCopy(value: string) {
@@ -112,12 +115,6 @@ export class DatasetDetailDynamicComponent implements OnInit {
     this.attachmentService.openAttachment(encoded);
   }
 
-  hideAttachmentsThumbnail(attachments: Attachment[] = []): boolean {
-    return !this.enabledAttachmentsDisplay || attachments.length < 1
-      ? true
-      : false;
-  }
-
   isUnsupportedFieldType(fieldType: string): boolean {
     const supportedTypes = Object.values(DatasetViewFieldType) as string[];
     return !supportedTypes.includes(fieldType);
@@ -127,15 +124,17 @@ export class DatasetDetailDynamicComponent implements OnInit {
     fieldType: string,
     value: string | string[],
   ): string | string[] {
+    const errorElement = `<span class="general-warning">Unsupported data type</span>`;
+
     switch (fieldType) {
       case DatasetViewFieldType.TEXT:
         return typeof value === "string" ? value : JSON.stringify(value);
       case DatasetViewFieldType.COPY:
         return typeof value === "string" ? value : JSON.stringify(value);
       case DatasetViewFieldType.LINKY:
-        return typeof value === "string" ? value : "Unsupported data type";
+        return typeof value === "string" ? value : errorElement;
       case DatasetViewFieldType.DATE:
-        return typeof value === "string" ? value : "Unsupported data type";
+        return this.transformDate(value, errorElement);
       case DatasetViewFieldType.TAG:
         if (Array.isArray(value)) {
           return value.length > 0 ? value : ["-"];
@@ -144,5 +143,18 @@ export class DatasetDetailDynamicComponent implements OnInit {
       default:
         return "Unsupported data type";
     }
+  }
+  transformDate(value: unknown, errorElement: string): string {
+    if (typeof value !== "string") {
+      return errorElement;
+    }
+    try {
+      return this.datePipe.transform(value, "yyyy-MM-dd HH:mm");
+    } catch {
+      return errorElement;
+    }
+  }
+  getThumbnailSize(value: string): string {
+    return value ? `thumbnail-image--${value}` : "";
   }
 }
