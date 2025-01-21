@@ -1,11 +1,10 @@
 import { createAction, props } from "@ngrx/store";
 import {
-  DatasetClass,
   Attachment,
   OrigDatablock,
   Datablock,
-  CreateDerivedDatasetObsoleteDto,
   OutputDatasetObsoleteDto,
+  DatasetsControllerCreateRequest,
 } from "@scicatproject/scicat-sdk-ts";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
@@ -135,7 +134,7 @@ export const clearBatchAction = createAction("[Dataset] Clear Batch");
 
 export const addDatasetAction = createAction(
   "[Dataset] Add Dataset",
-  props<{ dataset: CreateDerivedDatasetObsoleteDto }>(),
+  props<{ dataset: DatasetsControllerCreateRequest }>(),
 );
 export const addDatasetCompleteAction = createAction(
   "[Dataset] Add Dataset Complete",

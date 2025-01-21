@@ -158,6 +158,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           investigator: email, // Required
           scientificMetadata: {},
           numberOfFilesArchived: 0, // Required
+          principalInvestigator: email, // Required
+          creationLocation: res.creationLocation, // Required
           usedSoftware: res.usedSoftware
             .split(",")
             .map((entry: string) => entry.trim())
