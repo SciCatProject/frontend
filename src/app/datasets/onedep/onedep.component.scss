@@ -14,8 +14,7 @@ mat-card {
     justify-content: space-between;
     align-items: flex-start;
     gap: 16px;
-    padding: 16px;
-    margin-bottom: 20px;
+    padding: 8px 16px 8px;
   }
 
   .card-left, 
@@ -40,7 +39,7 @@ mat-card {
   h2.password{
     margin-top:3rem;
   }
-  .file-header {
+  .file-header {/* space after the main Attachments card */
     display: flex;
     margin-bottom: 16px;
   }
@@ -156,7 +155,7 @@ mat-card {
 
   .fileCard {
     width: 80%;
-    margin: 10px 0 10px 0;
+    margin: 16px 0 0 0; /* Space between attachment cards */
     border: 1px solid #ddd;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
@@ -175,12 +174,12 @@ mat-card {
     .file-selection-container {
       display: flex; // Use flexbox for layout
       align-items: center; // Center items vertically
-      gap: 10px; // Space between items
+      gap: 16px; // Space between items
 
       .fileChooser {
         background-color: #CFE7CB;
         color: #333;
-        margin: 5px 0 0 0; // Reset any margin
+        margin: 16px 0 0 0; // Reset any margin
       }
 
       .fileName {
@@ -192,20 +191,18 @@ mat-card {
     mat-card-content {
       display: flex;
       flex-direction: column;
-      margin-bottom: 40px;
-
-      .fileChooser {
-        margin: 3px auto;
-      }
+      margin-bottom: 0px;
+      
       .data-field {
         width: 350px; 
         min-width: 320px; 
         position: relative; 
     }
+      
       .input-container {
         display: flex; // Use flexbox for layout
         align-items: flex-end;
-        gap: 10px; // Space between the fields
+        gap: 16px; // Space between the fields
 
         .contour-level {
           flex: 0 0 20%; // Set to take 20% of the width
@@ -225,7 +222,7 @@ mat-card {
 
         .details {
 
-          margin-top:  10px;
+          margin-top:  16px;
           flex: 1; // Allow this field to take the remaining space
           min-width: 200px; // Optional: set a minimum width for usability
 
@@ -253,10 +250,11 @@ mat-card {
   .button-container {
     display: flex;          
     gap: 20px; 
+    margin-top: 16px;
   }
   .submitDep {
     background-color: #B3D9AC;
     color:black;
-    // padding: 10px 20px;
   }
+
 }

@@ -58,7 +58,6 @@ export const createMethodsList = (): EmMethod[] => {
     type: "img-emdb",
     fileName: "",
     file: null,
-    details: "",
     required: false,
     explanation:
       "Image of the map (500 x 500 pixels in .jpg, .png, etc. format)",
@@ -126,11 +125,11 @@ export const createMethodsList = (): EmMethod[] => {
   };
   const depositionFSC: DepositionFiles = {
     emName: EmFile.FSC,
+    id: 0,
     nameFE: "FSC-XML",
     type: "fsc-xml",
     fileName: "",
     file: null,
-    details: "",
     required: false,
     explanation: "Half-map FSC, Map-model FSC, Cross-validation FSCs",
   };
@@ -140,7 +139,6 @@ export const createMethodsList = (): EmMethod[] => {
     type: "layer-lines",
     fileName: "",
     file: null,
-    details: "",
     required: false,
   };
   const depositionCoordinates: DepositionFiles = {
@@ -149,7 +147,6 @@ export const createMethodsList = (): EmMethod[] => {
     type: "co-cif",
     fileName: "",
     file: null,
-    details: "",
     required: false,
     explanation: "mmCIF or PDB format",
   };
@@ -159,7 +156,6 @@ export const createMethodsList = (): EmMethod[] => {
     type: "xs-cif",
     fileName: "",
     file: null,
-    details: "",
     required: false,
   };
   const depositionMTZ: DepositionFiles = {
@@ -168,7 +164,6 @@ export const createMethodsList = (): EmMethod[] => {
     type: "xs-mtz",
     fileName: "",
     file: null,
-    details: "",
     required: false,
   };
   return [

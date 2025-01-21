@@ -251,12 +251,13 @@ export class OneDepComponent implements OnInit, OnDestroy {
   }
 
   onPDB(event: MatRadioChange) {
+    // fix me : add removal on
     const input = event.value;
     if (input === "true") {
       this.fileTypes.forEach((fT) => {
         if (fT.emName === this.emFile.Coordinates) {
           fT.required = true; // update the co-cif required status
-          this.addFileToForm(fT)
+          this.addFileToForm(fT);
         }
       });
     }
@@ -302,21 +303,18 @@ export class OneDepComponent implements OnInit, OnDestroy {
     }
   }
 
-
   onFileAddMapSelected(event: Event, id: number) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       // Use the ID to store the file uniquely for each "add-map"
       this.selectedFile[`add-map-${id}`] = input.files[0];
       this.files.forEach((fT) => {
-      
         if (fT.value.emName === this.emFile.AddMap && fT.value.id === id) {
           fT.value.file = this.selectedFile[`add-map-${id}`];
           fT.value.fileName = this.selectedFile[`add-map-${id}`].name;
         }
       });
     }
-    console.log(this.files);
   }
   isRequired(controlName: string): boolean {
     let value: boolean;
@@ -388,7 +386,6 @@ export class OneDepComponent implements OnInit, OnDestroy {
     });
   }
   addMap() {
-    console.log("addMaps() was called. files before:", this.files);
     const nextId =
       this.files
         .filter((file) => file.value.emName === EmFile.AddMap)
@@ -410,7 +407,29 @@ export class OneDepComponent implements OnInit, OnDestroy {
     };
     // update the co-cif required status
     this.addFileToForm(newMap);
-    console.log("addMaps() files after:", this.files);
+  }
+  addFSC() {
+    const nextId =
+      this.files
+        .filter((file) => file.value.emName === EmFile.FSC)
+        .reduce(
+          (maxId, file) => (file.value.id > maxId ? file.value.id : maxId),
+          0,
+        ) + 1;
+
+    const newFSC: DepositionFiles = {
+      emName: EmFile.FSC,
+      id: nextId,
+      nameFE: "FSC-XML ( " + (nextId + 1).toString() + " )",
+      type: "fsc-xml",
+      fileName: "",
+      file: null,
+      contour: 0.0,
+      details: "",
+      required: false,
+    };
+    // update the co-cif required status
+    this.addFileToForm(newFSC);
   }
 
   onDepositClick() {
