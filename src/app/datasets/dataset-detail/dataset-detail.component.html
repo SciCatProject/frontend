@@ -39,7 +39,7 @@
               <td *ngIf="!editEnabled">{{ dataset.datasetName || "-" }}</td>
               <td *ngIf="editEnabled && editingAllowed">
                 <mat-form-field class="full-width">
-                  <mat-label>dataset_name</mat-label>
+                  <mat-label>{{ "Dataset Name" | translate }}</mat-label>
                   <input matInput type="text" formControlName="datasetName" />
                 </mat-form-field>
               </td>
@@ -51,7 +51,7 @@
               </td>
               <td *ngIf="editEnabled && editingAllowed">
                 <mat-form-field class="full-width">
-                  <mat-label>description</mat-label>
+                  <mat-label>{{ "Description" | translate }}</mat-label>
                   <textarea
                     matInput
                     rows="5"
