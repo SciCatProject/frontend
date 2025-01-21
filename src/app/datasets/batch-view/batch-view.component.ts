@@ -9,7 +9,7 @@ import {
   removeFromBatchAction,
   storeBatchAction,
 } from "state-management/actions/datasets.actions";
-import { Message, MessageType } from "state-management/models";
+import { MessageType } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 
@@ -123,45 +123,68 @@ export class BatchViewComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe(async (result: Record<string, string[]>) => {
         if (result && result.users) {
-          let message: Message;
-          try {
-            const sharedDatasets = await Promise.all(
-              this.datasetList.map((dataset) => {
-                if (
-                  (!this.isAdmin &&
-                    dataset.ownerEmail !== this.userProfile.email) ||
-                  (!this.isAdmin &&
-                    !this.userProfile.accessGroups.includes(dataset.ownerGroup))
-                ) {
-                  return null;
-                }
-
-                return firstValueFrom(
-                  this.datasetService.datasetsControllerFindByIdAndUpdate(
-                    dataset.pid,
-                    {
-                      sharedWith: result.users,
-                    },
-                  ),
-                );
-              }),
-            );
-
-            if (sharedDatasets.length === this.datasetList.length) {
-              this.clearBatch();
-              this.storeBatch(sharedDatasets);
-
-              message = new Message(
-                result.users.length
-                  ? "Datasets successfully shared!"
-                  : "Shared users successfully removed!",
-                MessageType.Success,
-                5000,
-              );
+          const successfulShares: string[] = [];
+          const failedShares: string[] = [];
+          // Process each dataset sharing attempt individually
+          for (const dataset of this.datasetList) {
+            if (
+              (!this.isAdmin &&
+                dataset.ownerEmail !== this.userProfile.email) ||
+              (!this.isAdmin &&
+                !this.userProfile.accessGroups.includes(dataset.ownerGroup))
+            ) {
+              continue;
             }
-          } catch (error) {
-            message = new Message(error, MessageType.Error, 5000);
+
+            try {
+              await firstValueFrom(
+                this.datasetService.datasetsControllerFindByIdAndUpdate(
+                  dataset.pid,
+                  {
+                    sharedWith: result.users,
+                  },
+                ),
+              );
+
+              successfulShares.push(dataset.datasetName || dataset.pid);
+            } catch (error) {
+              console.error(error);
+
+              failedShares.push(dataset.datasetName || dataset.pid);
+            }
           }
+          const message = {
+            type:
+              successfulShares.length > 0
+                ? MessageType.Success
+                : MessageType.Error,
+            content: [
+              successfulShares.length > 0
+                ? `Successfully shared ${successfulShares.length} datasets`
+                : "",
+              failedShares.length > 0
+                ? `Failed to share ${failedShares.length} datasets`
+                : "",
+            ]
+              .filter(Boolean)
+              .join(". "),
+            duration: 5000,
+          };
+
+          if (successfulShares.length === this.datasetList.length) {
+            const sharedDatasets = this.datasetList.map((dataset) => ({
+              ...dataset,
+              sharedWith: result.users,
+            }));
+
+            this.clearBatch();
+            this.storeBatch(sharedDatasets);
+
+            if (!result.users.length) {
+              message.content = "Shared users successfully removed!";
+            }
+          }
+
           this.store.dispatch(showMessageAction({ message }));
         }
       });
