@@ -17,7 +17,7 @@ import {
   CreateJobDto,
   JobClass,
   JobsService,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import { createMock } from "shared/MockStubs";
 

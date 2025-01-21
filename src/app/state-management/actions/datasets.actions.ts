@@ -5,7 +5,7 @@ import {
   Datablock,
   OutputDatasetObsoleteDto,
   DatasetsControllerCreateRequest,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,

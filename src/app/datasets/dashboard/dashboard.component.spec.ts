@@ -43,7 +43,7 @@ import { PageChangeEvent } from "shared/modules/table/table.component";
 import {
   CreateDerivedDatasetObsoleteDto,
   ReturnedUserDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 class MockMatDialog {
   open() {

@@ -4,7 +4,7 @@ import {
   DatasetsService,
   Logbook,
   LogbooksService,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import * as fromActions from "state-management/actions/logbooks.actions";
 import { mergeMap, catchError, map, timeout } from "rxjs/operators";
 import { of } from "rxjs";

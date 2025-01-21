@@ -26,7 +26,7 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatIconModule } from "@angular/material/icon";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppConfigService } from "app-config.service";
-import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts-angular";
 
 const getConfig = () => ({
   logbookEnabled: true,

@@ -10,7 +10,7 @@ import {
   createMock,
   mockAttachment as attachment,
 } from "shared/MockStubs";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("Dataset Actions", () => {
   const datasets = [dataset];

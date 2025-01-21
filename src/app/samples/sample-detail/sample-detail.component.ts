@@ -32,7 +32,7 @@ import {
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
   SampleClass,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 export interface TableData {
   pid: string;

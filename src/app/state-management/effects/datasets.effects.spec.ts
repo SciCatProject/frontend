@@ -21,7 +21,7 @@ import { Type } from "@angular/core";
 import {
   DatasetsService,
   OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import {
   createMock,

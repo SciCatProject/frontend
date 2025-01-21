@@ -38,7 +38,7 @@ import {
 import {
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import {
   selectColumnAction,
   deselectColumnAction,

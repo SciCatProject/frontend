@@ -1,4 +1,4 @@
-import { Policy } from "@scicatproject/scicat-sdk-ts";
+import { Policy } from "@scicatproject/scicat-sdk-ts-angular";
 import { GenericFilters } from "state-management/models";
 
 export interface PolicyState {
