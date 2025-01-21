@@ -187,6 +187,23 @@ export class OneDepComponent implements OnInit, OnDestroy {
       );
     });
   }
+  addFileToForm(file: DepositionFiles) {
+    const filesArray = this.form.get("files") as FormArray;
+    filesArray.push(
+      this.fb.group({
+        emName: [file.emName],
+        id: [file.id],
+        nameFE: [file.nameFE],
+        type: [file.type],
+        fileName: [file.fileName],
+        file: [file.file],
+        required: [file.required],
+        contour: [file.contour],
+        details: [file.details],
+        explanation: [file.explanation],
+      }),
+    );
+  }
   onMethodChange() {
     this.methodsList = createMethodsList(); // Reset the methods list to be empty
     this.fileTypes = this.methodsList.find(
@@ -223,7 +240,11 @@ export class OneDepComponent implements OnInit, OnDestroy {
         this.form.get("associatedMap")?.setValue("false");
         break;
     }
-    this.addFilesToForm(this.fileTypes);
+    const filesArray = this.form.get("files") as FormArray;
+    filesArray.clear();
+    this.fileTypes.forEach((file) => {
+      this.addFileToForm(file);
+    });
   }
   get files() {
     return (this.form.get("files") as FormArray).controls;
@@ -234,11 +255,11 @@ export class OneDepComponent implements OnInit, OnDestroy {
     if (input === "true") {
       this.fileTypes.forEach((fT) => {
         if (fT.emName === this.emFile.Coordinates) {
-          fT.required = true;
+          fT.required = true; // update the co-cif required status
+          this.addFileToForm(fT)
         }
       });
     }
-    this.addFilesToForm(this.fileTypes); // update the co-cif required status
   }
 
   autoGrow(event: Event) {
@@ -281,19 +302,21 @@ export class OneDepComponent implements OnInit, OnDestroy {
     }
   }
 
-  // FIX ME needs refac
+
   onFileAddMapSelected(event: Event, id: number) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       // Use the ID to store the file uniquely for each "add-map"
       this.selectedFile[`add-map-${id}`] = input.files[0];
-      this.fileTypes.forEach((fT) => {
-        if (fT.emName === this.emFile.AddMap && fT.id === id) {
-          fT.file = this.selectedFile[`add-map-${id}`];
-          fT.fileName = this.selectedFile[`add-map-${id}`].name;
+      this.files.forEach((fT) => {
+      
+        if (fT.value.emName === this.emFile.AddMap && fT.value.id === id) {
+          fT.value.file = this.selectedFile[`add-map-${id}`];
+          fT.value.fileName = this.selectedFile[`add-map-${id}`].name;
         }
       });
     }
+    console.log(this.files);
   }
   isRequired(controlName: string): boolean {
     let value: boolean;
@@ -365,7 +388,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
     });
   }
   addMap() {
-    // FIX ME
+    console.log("addMaps() was called. files before:", this.files);
     const nextId =
       this.files
         .filter((file) => file.value.emName === EmFile.AddMap)
@@ -385,8 +408,9 @@ export class OneDepComponent implements OnInit, OnDestroy {
       details: "",
       required: false,
     };
-
-    // this.files.push(newMap);
+    // update the co-cif required status
+    this.addFileToForm(newMap);
+    console.log("addMaps() files after:", this.files);
   }
 
   onDepositClick() {
