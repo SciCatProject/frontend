@@ -422,7 +422,7 @@
           </ng-template>
         </mat-card-content>
       </mat-card>
-      <mat-card *ngIf="editingAllowed && appConfig.jsonMetadataEnabled">
+      <mat-card *ngIf="appConfig.jsonMetadataEnabled">
         <mat-card-content>
           <button mat-stroked-button (click)="show = !show">
             {{ (show ? "Hide Metadata" : "Show Metadata") | translate }}
