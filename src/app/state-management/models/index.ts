@@ -21,6 +21,13 @@ export interface LabelMaps {
   [key: string]: Record<string, string>;
 }
 
+export interface datasetDetailViewLabelOption {
+  currentLabelSet: string;
+  labelSets: {
+    [key: string]: Record<string, string>;
+  };
+}
+
 export interface DatasetsListSettings {
   columns: TableColumn[];
   filters: FilterConfig[];
