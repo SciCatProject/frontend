@@ -21,7 +21,7 @@ export interface LabelMaps {
   [key: string]: Record<string, string>;
 }
 
-export interface DatasetDetailView {
+export interface datasetDetailViewLabelOption {
   currentLabelSet: string;
   labelSets: {
     [key: string]: Record<string, string>;

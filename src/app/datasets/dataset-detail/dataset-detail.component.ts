@@ -102,7 +102,7 @@ export class DatasetDetailComponent
     private fb: FormBuilder,
   ) {
     this.translateService.use(
-      this.appConfig.datasetDetailView?.currentLabelSet,
+      this.appConfig.datasetDetailViewLabelOption?.currentLabelSet,
     );
   }
 

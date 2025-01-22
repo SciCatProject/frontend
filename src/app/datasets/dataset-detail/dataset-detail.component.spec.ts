@@ -58,7 +58,7 @@ describe("DatasetDetailComponent", () => {
   };
 
   const getConfig = () => ({
-    datasetDetailView: {
+    datasetDetailViewLabelOption: {
       currentLabel: "test",
     },
   });
