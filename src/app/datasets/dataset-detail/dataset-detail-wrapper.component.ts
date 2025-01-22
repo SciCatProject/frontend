@@ -10,12 +10,11 @@ import { DatasetDetailDynamicComponent } from "./dataset-detail-dynamic/dataset-
   `,
 })
 export class DatasetDetailWrapperComponent {
-  appConfig = this.appConfigService.getConfig();
-
   constructor(private appConfigService: AppConfigService) {}
 
   getDatasetDetailsComponent() {
-    return this.appConfig.datasetDetailComponent?.enableCustomizedComponent
+    return this.appConfigService.getConfig().datasetDetailComponent
+      ?.enableCustomizedComponent
       ? DatasetDetailDynamicComponent
       : DatasetDetailComponent;
   }
