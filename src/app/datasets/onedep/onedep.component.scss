@@ -73,12 +73,18 @@ mat-card {
     width:40%;
   }
 
-  .remove-field-btn {
+  .remove-orcid-btn {
     position: absolute;
     top: 50%;
     right: -40%;
     transform: translateY(-50%);
     margin-left: 8px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .remove-file-btn {
+    position: absolute;
+    margin-left: 16px;
     color: rgba(0, 0, 0, 0.6);
   }
 
@@ -162,9 +168,9 @@ mat-card {
     mat-card-header {
       background-color: #B3D9AC;
       height: 26px;
-      display: flex; // Use flexbox to align items
-      align-items: center; // Center content vertically
-      padding: 0 16px; // Optional: adjust padding as needed
+      display: flex; 
+      align-items: center; 
+      padding: 0 16px; 
     }
 
     mat-card-title {
@@ -172,19 +178,20 @@ mat-card {
     }
 
     .file-selection-container {
-      display: flex; // Use flexbox for layout
-      align-items: center; // Center items vertically
-      gap: 16px; // Space between items
+      display: flex; 
+      align-items: center; 
+      gap: 16px;
 
       .fileChooser {
         background-color: #CFE7CB;
         color: #333;
-        margin: 16px 0 0 0; // Reset any margin
+        margin: 16px 0 0 0;
       }
 
       .fileName {
-        font-size: 14px; // Adjust the font size as needed
-        color: #333; // Adjust the text color if needed
+        font-size: 16px; 
+        transform: translateY(15%);
+        color: #333; 
       }
     }
 
@@ -200,13 +207,13 @@ mat-card {
     }
       
       .input-container {
-        display: flex; // Use flexbox for layout
+        display: flex; 
         align-items: flex-end;
-        gap: 16px; // Space between the fields
+        gap: 16px;
 
         .contour-level {
           flex: 0 0 20%; // Set to take 20% of the width
-          min-width: 150px; // Optional: set a minimum width for usability
+          min-width: 150px;
 
           /* Chrome, Safari, Edge, Opera */
           input[matinput]::-webkit-outer-spin-button,
@@ -223,8 +230,8 @@ mat-card {
         .details {
 
           margin-top:  16px;
-          flex: 1; // Allow this field to take the remaining space
-          min-width: 200px; // Optional: set a minimum width for usability
+          flex: 1;
+          min-width: 200px;
 
           mat-form-field {
             textarea {

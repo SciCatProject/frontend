@@ -167,26 +167,6 @@ export class OneDepComponent implements OnInit, OnDestroy {
       this.orcidArray().removeAt(index);
     }
   }
-  addFilesToForm(files: DepositionFiles[]) {
-    const filesArray = this.form.get("files") as FormArray;
-    filesArray.clear();
-    files.forEach((file) => {
-      filesArray.push(
-        this.fb.group({
-          emName: [file.emName],
-          id: [file.id],
-          nameFE: [file.nameFE],
-          type: [file.type],
-          fileName: [file.fileName],
-          file: [file.file],
-          required: [file.required],
-          contour: [file.contour],
-          details: [file.details],
-          explanation: [file.explanation],
-        }),
-      );
-    });
-  }
   addFileToForm(file: DepositionFiles) {
     const filesArray = this.form.get("files") as FormArray;
     filesArray.push(
@@ -204,7 +184,19 @@ export class OneDepComponent implements OnInit, OnDestroy {
       }),
     );
   }
+  removeFileFromForm(fileCat: EmFile) {
+    const filesArray = this.form.get("files") as FormArray;
+    const index = filesArray.value.findIndex(
+      (file: DepositionFiles) => file.emName === fileCat,
+    );
+    if (index > -1) {
+      filesArray.removeAt(index);
+    }
+  }
   onMethodChange() {
+    const filesArray = this.form.get("files") as FormArray;
+    filesArray.clear();
+
     this.methodsList = createMethodsList(); // Reset the methods list to be empty
     this.fileTypes = this.methodsList.find(
       (mL) => mL.value === this.form.value["emMethod"],
@@ -240,10 +232,10 @@ export class OneDepComponent implements OnInit, OnDestroy {
         this.form.get("associatedMap")?.setValue("false");
         break;
     }
-    const filesArray = this.form.get("files") as FormArray;
-    filesArray.clear();
     this.fileTypes.forEach((file) => {
-      this.addFileToForm(file);
+      if (file.emName !== this.emFile.Coordinates) {
+        this.addFileToForm(file);
+      }
     });
   }
   get files() {
@@ -251,7 +243,6 @@ export class OneDepComponent implements OnInit, OnDestroy {
   }
 
   onPDB(event: MatRadioChange) {
-    // fix me : add removal on
     const input = event.value;
     if (input === "true") {
       this.fileTypes.forEach((fT) => {
@@ -260,6 +251,8 @@ export class OneDepComponent implements OnInit, OnDestroy {
           this.addFileToForm(fT);
         }
       });
+    } else {
+      this.removeFileFromForm(this.emFile.Coordinates);
     }
   }
 
@@ -302,18 +295,57 @@ export class OneDepComponent implements OnInit, OnDestroy {
       });
     }
   }
+  clearFile(fileCat: EmFile, id?: number) {
+    const key =
+      fileCat === "add-map" || fileCat === "fsc-xml"
+        ? `${fileCat}-${id}`
+        : fileCat;
+    this.selectedFile[key] = null;
 
-  onFileAddMapSelected(event: Event, id: number) {
+    let index = -1;
+    const filesArray = this.form.get("files") as FormArray;
+    if (fileCat !== "add-map" && fileCat !== "fsc-xml") {
+      index = filesArray.value.findIndex(
+        (file: DepositionFiles) => file.emName === fileCat,
+      );
+    } else {
+      for (let i = 0; i < filesArray.length; i++) {
+        if (
+          filesArray.at(i).value.emName === fileCat &&
+          filesArray.at(i).value.id === id
+        ) {
+          index = i;
+          break;
+        }
+      }
+    }
+    if (index > -1) {
+      filesArray.at(index).patchValue({ file: null });
+    }
+  }
+  onFileAddMore(event: Event, id: number, fileType: string) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      // Use the ID to store the file uniquely for each "add-map"
-      this.selectedFile[`add-map-${id}`] = input.files[0];
-      this.files.forEach((fT) => {
-        if (fT.value.emName === this.emFile.AddMap && fT.value.id === id) {
-          fT.value.file = this.selectedFile[`add-map-${id}`];
-          fT.value.fileName = this.selectedFile[`add-map-${id}`].name;
+      this.selectedFile[`${fileType}-${id}`] = input.files[0];
+      for (let i = 0; i < this.files.length; i++) {
+        if (
+          this.files.at(i).value.emName === this.emFile.AddMap &&
+          this.files.at(i).value.id === id &&
+          fileType === "add-map"
+        ) {
+          this.files.at(i).value.file = this.selectedFile[`${fileType}-${id}`];
+          this.files.at(i).value.fileName =
+            this.selectedFile[`${fileType}-${id}`].name;
+        } else if (
+          this.files.at(i).value.emName === this.emFile.FSC &&
+          this.files.at(i).value.id === id &&
+          fileType === "fsc-xml"
+        ) {
+          this.files.at(i).value.file = this.selectedFile[`${fileType}-${id}`];
+          this.files.at(i).value.fileName =
+            this.selectedFile[`${fileType}-${id}`].name;
         }
-      });
+      }
     }
   }
   isRequired(controlName: string): boolean {
@@ -424,8 +456,6 @@ export class OneDepComponent implements OnInit, OnDestroy {
       type: "fsc-xml",
       fileName: "",
       file: null,
-      contour: 0.0,
-      details: "",
       required: false,
     };
     // update the co-cif required status

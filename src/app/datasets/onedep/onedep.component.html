@@ -86,7 +86,7 @@
                      <mat-label>Enter 16-digits ORCID iD</mat-label>
                      <div class="input-container">
                        <input matInput type="text" maxlength="19" placeholder="xxxx-xxxx-xxxx-xxxx" formControlName="orcidId" orcidFormatter />
-                       <button mat-icon-button class="remove-field-btn" (click)="removeOrcidField(i)">
+                       <button mat-icon-button class="remove-orcid-btn" (click)="removeOrcidField(i)">
                          <mat-icon>clear</mat-icon>
                        </button>
                      </div>
@@ -185,7 +185,6 @@
          </mat-card-header>
          <mat-card-content>
            <mat-card *ngFor="let fileType of form.get('files').value; let i = index" class="fileCard">
-             <ng-container *ngIf="fileType.emName !== 'co-cif' || form.get('deposingCoordinates').value === 'true'">
                <mat-card-header matTooltip="{{ fileType.explanation }}" matTooltipPosition="above">
                  <mat-card-title>
                    {{ fileType.nameFE }}
@@ -200,16 +199,31 @@
                    <div *ngIf="selectedFile[fileType.emName]">
                      <mat-icon>attach_file</mat-icon>
                    </div>
-                   <div *ngIf="fileType.emName === 'add-map' && selectedFile['add-map-' + fileType.id]">
+                   <div *ngIf="(fileType.emName === 'add-map' && selectedFile['add-map-' + fileType.id]) || (fileType.emName === 'fsc-xml' && selectedFile['fsc-xml-' + fileType.id])">
                      <mat-icon>attach_file</mat-icon>
                    </div>
-                   <input type="file" #fileInput (change)="fileType.emName === 'add-map' ? onFileAddMapSelected($event, fileType.id) : onFileSelected($event, fileType.emName)" style="display: none;" />
-                   <div *ngIf="fileType.emName !== 'add-map' && selectedFile[fileType.emName]" class="fileName">
+                   <input type="file" #fileInput (change)="fileType.emName === 'add-map' ? onFileAddMore($event, fileType.id, 'add-map') : fileType.emName === 'fsc-xml' ? onFileAddMore($event, fileType.id, 'fsc-xml') : onFileSelected($event, fileType.emName)" style="display: none;" />
+                   <div *ngIf="(fileType.emName !== 'add-map' && selectedFile[fileType.emName]) || (fileType.emName === 'fsc-xml' && selectedFile['fsc-xml' + fileType.id])" class="fileName">
                      <p>Selected File: {{ selectedFile[fileType.emName]?.name }}</p>
                    </div>
                    <div *ngIf="fileType.emName === 'add-map' && selectedFile['add-map-' + fileType.id]" class="fileName">
                      <p>Selected File: {{ selectedFile['add-map-' + fileType.id]?.name }}</p>
                    </div>
+                   <div *ngIf="fileType.emName === 'fsc-xml' && selectedFile['fsc-xml-' + fileType.id]" class="fileName">
+                    <p>Selected File: {{ selectedFile['fsc-xml-' + fileType.id]?.name }}</p>
+                  </div>
+                  <div *ngIf=
+                      "(fileType.emName !== 'add-map' && fileType.emName !== 'fsc-xml' && selectedFile[fileType.emName]) ||
+                      (fileType.emName === 'add-map' && selectedFile['add-map-' + fileType.id]) ||
+                      (fileType.emName === 'fsc-xml' && selectedFile['fsc-xml-' + fileType.id])">
+                    <button
+                      mat-icon-button
+                      class="remove-field-btn"
+                      (click)="clearFile(fileType.emName, fileType.id)"
+                    >
+                      <mat-icon>clear</mat-icon>
+                    </button>
+                  </div>
                  </div>
                  <ng-container *ngIf="fileType.contour !== null || fileType.details !== null">
                    <div class="input-container">
@@ -254,7 +268,6 @@
                     <mat-icon>add</mat-icon>
                   </button>
                 </div>
-             </ng-container>
            </mat-card>
  
            <!-- UPLOAD FILES DONE -->
