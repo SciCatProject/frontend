@@ -1,6 +1,6 @@
-import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { DatasetFilters, ArchViewMode } from "state-management/models";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 export interface DateTriple {
   year: number;

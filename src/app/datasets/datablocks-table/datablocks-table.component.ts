@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
-import { Datablock } from "@scicatproject/scicat-sdk-ts";
+import { Datablock } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
   selector: "datablocks-table",

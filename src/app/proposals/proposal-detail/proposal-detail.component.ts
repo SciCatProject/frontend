@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { ProposalClass } from "@scicatproject/scicat-sdk-ts";
+import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { AppConfigService } from "app-config.service";
 import { Store } from "@ngrx/store";
 import {

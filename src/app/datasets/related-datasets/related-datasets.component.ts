@@ -10,7 +10,7 @@ import {
 import {
   DatasetClass,
   OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import {
   changeRelatedDatasetsPageAction,
   fetchRelatedDatasetsAction,

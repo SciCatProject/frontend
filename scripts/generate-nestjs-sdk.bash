@@ -6,8 +6,8 @@ USER=`who am i | cut -d\  -f1`
 echo -e "\nUser running the script: ${USER}"
 
 echo -e "\nCleanup old files..."
-rm -rf node_modules/@scicatproject/scicat-sdk-ts
-rm -rf @scicatproject/scicat-sdk-ts
+rm -rf node_modules/@scicatproject/scicat-sdk-ts-angular
+rm -rf @scicatproject/scicat-sdk-ts-angular
 
 echo -e "\nGenerating the new sdk..."
 docker run \
@@ -17,8 +17,8 @@ docker run \
 	openapitools/openapi-generator-cli:v7.9.0 generate \
 	-i http://host.docker.internal:3000/explorer-json \
 	-g typescript-angular \
-	-o local/@scicatproject/scicat-sdk-ts \
-	--additional-properties=ngVersion=16.2.12,npmName=@scicatproject/scicat-sdk-ts,supportsES6=true,npmVersion=10.8.2,withInterfaces=true
+	-o local/@scicatproject/scicat-sdk-ts-angular \
+	--additional-properties=ngVersion=16.2.12,npmName=@scicatproject/scicat-sdk-ts-angular,supportsES6=true,npmVersion=10.8.2,withInterfaces=true
 
 REMOVE_NPM_LINK=0
 if ! command -v npm 2>&1 1>/dev/null
@@ -38,16 +38,16 @@ then
 fi
 
 echo -e "\nInstalling dependencies and building the sdk..."
-cd @scicatproject/scicat-sdk-ts 
+cd @scicatproject/scicat-sdk-ts-angular 
 npm install
 npm run build
 
 echo -e "\nCopying the build files in node_modules..."
 cd ../..
-cp -rv @scicatproject/scicat-sdk-ts/dist node_modules/@scicatproject/scicat-sdk-ts
+cp -rv @scicatproject/scicat-sdk-ts-angular/dist node_modules/@scicatproject/scicat-sdk-ts-angular
 
 echo -e "\nAdjusting ownership to user ${USER}"
-chown -Rv ${USER} node_modules/@scicatproject/scicat-sdk-ts
+chown -Rv ${USER} node_modules/@scicatproject/scicat-sdk-ts-angular
 
 echo -e "\nFinal cleanup..."
 echo -e "Removing sdk folder"

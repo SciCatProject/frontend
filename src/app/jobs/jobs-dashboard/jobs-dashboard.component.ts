@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { JobClass } from "@scicatproject/scicat-sdk-ts";
+import { JobClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { Subscription } from "rxjs";
 import {
   selectJobs,

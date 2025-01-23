@@ -17,7 +17,7 @@ import { MockRouter, createMock } from "shared/MockStubs";
 import {
   PublishedData,
   PublishedDataService,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 
 const publishedData = createMock<PublishedData>({

@@ -24,7 +24,7 @@ import {
   SortChangeEvent,
 } from "shared/modules/table/table.component";
 import { AppConfigService } from "app-config.service";
-import { Logbook } from "@scicatproject/scicat-sdk-ts";
+import { Logbook } from "@scicatproject/scicat-sdk-ts-angular";
 
 export interface LogbookData {
   logbook: Logbook;

@@ -1,5 +1,5 @@
 import { InstrumentEffects } from "./instruments.effects";
-import { InstrumentsService } from "@scicatproject/scicat-sdk-ts";
+import { InstrumentsService } from "@scicatproject/scicat-sdk-ts-angular";
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import * as fromActions from "state-management/actions/instruments.actions";

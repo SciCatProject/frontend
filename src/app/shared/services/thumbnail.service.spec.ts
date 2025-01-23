@@ -4,7 +4,7 @@ import { ThumbnailService } from "./thumbnail.service";
 import { selectDatasetsPerPage } from "state-management/selectors/datasets.selectors";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { of, throwError } from "rxjs";
-import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "./attachment.service";
 
 describe("ThumbnailService", () => {

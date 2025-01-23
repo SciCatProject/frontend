@@ -2,7 +2,7 @@ import { jobsReducer } from "./jobs.reducer";
 import * as fromActions from "../actions/jobs.actions";
 import { initialJobsState } from "state-management/state/jobs.store";
 import { createMock } from "shared/MockStubs";
-import { JobClass } from "@scicatproject/scicat-sdk-ts";
+import { JobClass } from "@scicatproject/scicat-sdk-ts-angular";
 
 const job = createMock<JobClass>({
   _id: "testId",
