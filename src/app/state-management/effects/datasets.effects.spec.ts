@@ -92,6 +92,7 @@ describe("DatasetEffects", () => {
             "datasetsControllerCreateAttachment",
             "datasetsControllerFindOneAttachmentAndUpdate",
             "datasetsControllerFindOneAttachmentAndRemove",
+            "datasetsControllerAppendToArrayField",
             "datasetsControllerCount",
           ]),
         },
