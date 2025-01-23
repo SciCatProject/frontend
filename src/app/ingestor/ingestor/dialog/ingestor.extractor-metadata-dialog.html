@@ -39,6 +39,10 @@
             </div>
             Instrument Information
             <span class="spacer"></span>
+            <mat-icon
+            matTooltip="TODO - Check if everything is filled out correctly"
+            [ngClass]="isInstrumentMetadataOk ? 'success-icon' : 'error-icon'">{{
+            isInstrumentMetadataOk ? 'check_circle_outline' : 'error_outline'}}</mat-icon>
             <mat-icon class="toggle-icon">{{ isCardContentVisible.instrument ? 'expand_less' : 'expand_more' }}</mat-icon>
           </mat-card-header>
           <mat-card-content *ngIf="isCardContentVisible.instrument">
@@ -54,6 +58,10 @@
             </div>
             Acquisition Information
             <span class="spacer"></span>
+            <mat-icon
+            matTooltip="TODO - Check if everything is filled out correctly"
+            [ngClass]="isAcquisitionMetadataOk ? 'success-icon' : 'error-icon'">{{
+            isAcquisitionMetadataOk ? 'check_circle_outline' : 'error_outline'}}</mat-icon>
             <mat-icon class="toggle-icon">{{ isCardContentVisible.acquisition ? 'expand_less' : 'expand_more' }}</mat-icon>
           </mat-card-header>
           <mat-card-content *ngIf="isCardContentVisible.acquisition">

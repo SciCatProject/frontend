@@ -23,7 +23,8 @@
           <div>
             <ul>
               <li *ngFor="let backend of lastUsedFacilityBackends">
-                <a (click)="onClickSelectFacilityBackend(backend)">{{ backend }}</a>
+                <a (click)="onClickSelectFacilityBackend(backend)">{{ backend
+                  }}</a>
               </li>
             </ul>
           </div>
@@ -32,7 +33,7 @@
         <ng-container *ngIf="connectedFacilityBackend !== ''">
           <mat-tab-group animationDuration="0ms">
             <mat-tab label="Transfers">
-              <button mat-button aria-label="Refresh transfer list"
+              <button matTooltip="Refresh transfer list" mat-button aria-label="Refresh transfer list"
                 (click)="onClickRefreshTransferList()">
                 <mat-icon>refresh</mat-icon>
               </button>
@@ -86,6 +87,15 @@
                   <span matListItemTitle>Version</span>
                   <span matListItemLine>{{ connectedFacilityBackendVersion
                     }}</span>
+                </mat-list-item>
+                <mat-list-item>
+                  <span matListItemTitle>Health Status</span>
+                  <ng-container *ngFor="let status of ingestorHealthStatus">
+                    <mat-list-item>
+                      <span matListItemTitle>{{ status.title }}</span>
+                      <span matListItemLine>{{ status.value }}</span>
+                    </mat-list-item>
+                  </ng-container>
                 </mat-list-item>
               </mat-list>
             </mat-tab>

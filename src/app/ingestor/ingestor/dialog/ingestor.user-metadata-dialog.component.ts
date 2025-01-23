@@ -23,6 +23,9 @@ export class IngestorUserMetadataDialogComponent {
   backendURL = "";
 
   uiNextButtonReady = true; // Change to false when dev is ready
+  isSciCatHeaderOk = false; // TODO IMPLEMENT VALUE CHECK
+  isOrganizationalMetadataOk = false; // TODO IMPLEMENT VALUE CHECK
+  isSampleInformationOk = false; // TODO IMPLEMENT VALUE CHECK
 
   isCardContentVisible = {
     scicat: true,

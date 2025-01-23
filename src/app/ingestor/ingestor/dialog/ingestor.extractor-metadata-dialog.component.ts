@@ -23,6 +23,9 @@ export class IngestorExtractorMetadataDialogComponent {
   extractorMetaDataReady = false;
   extractorMetaDataError = false;
 
+  isAcquisitionMetadataOk = false; // TODO IMPLEMENT VALUE CHECK
+  isInstrumentMetadataOk = false; // TODO IMPLEMENT VALUE CHECK
+
   isCardContentVisible = {
     instrument: true,
     acquisition: true,

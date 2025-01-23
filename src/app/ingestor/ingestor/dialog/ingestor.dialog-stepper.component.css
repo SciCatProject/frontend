@@ -4,14 +4,28 @@
   align-items: center;
 }
 
-.stepper div {
-  margin: 5px;
+.ingestor-stepper {
+  max-width: 100%;
 }
 
-.stepper div.active {
-  font-weight: bold;
+.dialog-control-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1em;
 }
 
-button {
-  margin: 5px;
+.control-button-icon {
+  margin: auto;
+}
+
+@media (max-width: 768px) {
+  .stepper {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .stepper div {
+    width: 100%;
+    text-align: center;
+  }
 }

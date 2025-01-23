@@ -1,5 +1,10 @@
+<div class="dialog-control-buttons">
+  <button mat-button matTooltip="Save the current values." [disabled]="activeStep < 1" (click)="onSave()"><mat-icon class="control-button-icon">save</mat-icon></button>
+  <button mat-button matTooltip="Upload a template." [disabled]="activeStep < 1" (click)="onUpload()"><mat-icon class="control-button-icon">upload</mat-icon></button>
+</div>
+
 <div class="stepper">
-  <mat-stepper [linear]="true" [selectedIndex]="activeStep" #stepper>
+  <mat-stepper [linear]="true" [selectedIndex]="activeStep" class="ingestor-stepper">
     <mat-step [completed]="activeStep > 0" [editable]="false" [stepControl]="null">
       <ng-template matStepLabel>Select your ingestion method</ng-template>
     </mat-step>

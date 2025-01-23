@@ -7,4 +7,14 @@ import { Component, Input } from "@angular/core";
 })
 export class IngestorDialogStepperComponent {
   @Input() activeStep = 0;
+
+  // Save a template of metadata
+  onSave() {
+    console.log("Save action triggered");
+  }
+
+  // Upload a template of metadata
+  onUpload() {
+    console.log("Upload action triggered");
+  }
 }

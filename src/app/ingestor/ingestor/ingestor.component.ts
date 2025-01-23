@@ -3,6 +3,7 @@ import { AppConfigService } from "app-config.service";
 import { HttpClient } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
+  apiGetHealth,
   INGESTOR_API_ENDPOINTS_V1,
   PostDatasetEndpoint,
   PostExtractorEndpoint,
@@ -35,6 +36,7 @@ export class IngestorComponent implements OnInit {
   connectedFacilityBackend = "";
   connectedFacilityBackendVersion = "";
   connectingToFacilityBackend = false;
+  ingestorHealthStatus = [];
 
   lastUsedFacilityBackends: string[] = [];
 
@@ -88,6 +90,9 @@ export class IngestorComponent implements OnInit {
         this.connectedFacilityBackend = facilityBackendUrlCleaned;
         this.connectingToFacilityBackend = false;
         this.connectedFacilityBackendVersion = response["version"];
+
+        // TODO Do Health check
+        apiGetHealth();
       },
       (error) => {
         this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;

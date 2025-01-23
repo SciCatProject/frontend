@@ -15,3 +15,7 @@ export interface PostExtractorEndpoint {
 export interface PostDatasetEndpoint {
   metaData: string;
 }
+
+export const apiGetHealth = () => {
+  console.log("Health check"); // TODO IMPLEMENT
+};
