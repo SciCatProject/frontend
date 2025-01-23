@@ -26,18 +26,16 @@ import {
 } from "@scicatproject/scicat-sdk-ts";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
-import { selectDepID } from "state-management/selectors/onedep.selectors";
 import * as fromActions from "state-management/actions/onedep.actions";
 import {
   createMethodsList,
   EmFile,
   DepositionFile,
   OneDepUserInfo,
-  OneDepCreate,
 } from "./types/methods.enum";
 import { Depositor } from "shared/sdk/apis/onedep-depositor.service";
-import { Observable, Subscription, fromEvent } from "rxjs";
-import { filter, map, take } from "rxjs/operators";
+import { Observable, Subscription } from "rxjs";
+import { runInThisContext } from "vm";
 
 @Component({
   selector: "onedep",
@@ -60,7 +58,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
   detailsOverflow = "hidden";
   additionalMaps = 0;
   showPassword = false;
-  fileTypes: DepositionFile[];
+  fileTypes: DepositionFile[]; // required to keep the initial set of files based on EM method
   mainContour = 0.0;
   connectedDepositionBackend = "";
   connectedDepositionBackendVersion = "";
@@ -132,15 +130,11 @@ export class OneDepComponent implements OnInit, OnDestroy {
       subscription.unsubscribe();
     });
   }
-  hasUnsavedChanges() {
-    return this._hasUnsavedChanges;
-  }
-  onHasUnsavedChanges($event: boolean) {
-    this._hasUnsavedChanges = $event;
-  }
+
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
+  // custom validator of the ORCID ids
   orcidValidator(): (control: AbstractControl) => ValidationErrors | null {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value.replace(/-/g, "");
@@ -155,12 +149,14 @@ export class OneDepComponent implements OnInit, OnDestroy {
     return this.form.get("orcid") as FormArray;
   }
   addOrcidField() {
+    // adds an empty ORCID field to the form
     const orcidField = this.fb.group({
       orcidId: ["", [Validators.required, this.orcidValidator()]],
     });
     this.orcidArray().push(orcidField);
   }
   removeOrcidField(index: number) {
+    // removes an ORCID field from the form; if it's first entry, just wipes the field
     if (index === 0) {
       this.orcidArray().at(0).reset({ orcidId: "" });
     } else if (this.orcidArray().length > 1) {
@@ -168,6 +164,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
     }
   }
   addFileToForm(file: DepositionFile) {
+    // adds a depositionFile to the form
     const filesArray = this.form.get("files") as FormArray;
     filesArray.push(
       this.fb.group({
@@ -185,18 +182,20 @@ export class OneDepComponent implements OnInit, OnDestroy {
       }),
     );
   }
-  removeFileFromForm(fileCat: EmFile) {
+  //remove a file from the form; only used for co-cif (yes/no toggle). On method change a new files array will be generated
+  removeFileFromForm(controlName: EmFile) {
     const filesArray = this.form.get("files") as FormArray;
     const index = filesArray.value.findIndex(
-      (file: DepositionFile) => file.emName === fileCat,
+      (file: DepositionFile) => file.emName === controlName,
     );
     if (index > -1) {
       filesArray.removeAt(index);
     }
   }
   onMethodChange() {
+    // generates a form array with predefined types of depositionFiles with empty peoperties and specified required tag
     const filesArray = this.form.get("files") as FormArray;
-    filesArray.clear();
+    filesArray.clear(); // clear files form
 
     this.methodsList = createMethodsList(); // Reset the methods list to be empty
     this.fileTypes = this.methodsList.find(
@@ -229,6 +228,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
         });
         break;
       case "tomogram":
+        // these questions in questionnaire are not relevant for tomogram but required for other methods
         this.form.get("deposingCoordinates")?.setValue("false");
         this.form.get("associatedMap")?.setValue("false");
         break;
@@ -258,44 +258,44 @@ export class OneDepComponent implements OnInit, OnDestroy {
   }
 
   autoGrow(event: Event) {
+    // function to auto-grow the textarea
     const textarea = event.target as HTMLTextAreaElement;
     const lineHeight = parseInt(getComputedStyle(textarea).lineHeight, 10);
     const maxLines = 3;
 
-    // Reset height to auto to calculate scrollHeight
     textarea.style.height = "auto";
 
-    // Set the height based on the scrollHeight but limit it
     const newHeight = Math.min(textarea.scrollHeight, lineHeight * maxLines);
     textarea.style.height = `${newHeight}px`;
 
-    // Update overflow property based on height
     this.detailsOverflow =
       textarea.scrollHeight > newHeight ? "auto" : "hidden";
   }
   onChooseFile(fileInput: HTMLInputElement) {
     fileInput.click();
   }
-  onFileSelected(event: Event, emCat: EmFile) {
+  onFileSelected(event: Event, controlName: EmFile) {
     // once the file is selected, adds it to the form
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.selectedFile[emCat] = input.files[0];
+      this.selectedFile[controlName] = input.files[0];
 
       const filesArray = this.form.get("files") as FormArray;
-      const fileTypeControl = filesArray.controls.find(
-        (control) => control.get("emName")?.value === emCat,
+      const fileControl = filesArray.controls.find(
+        (control) => control.get("emName")?.value === controlName,
       );
-      if (fileTypeControl) {
-        fileTypeControl.get("file")?.setValue(this.selectedFile[emCat]);
-        fileTypeControl
+      if (fileControl) {
+        fileControl.get("file")?.setValue(this.selectedFile[controlName]);
+        fileControl
           .get("fileName")
-          ?.setValue(this.selectedFile[emCat].name);
+          ?.setValue(this.selectedFile[controlName].name);
         if (
           this.mainContour !== 0.0 &&
-          [EmFile.MainMap, EmFile.HalfMap1, EmFile.HalfMap2].includes(emCat)
+          [EmFile.MainMap, EmFile.HalfMap1, EmFile.HalfMap2].includes(
+            controlName,
+          )
         ) {
-          fileTypeControl.get("contour").setValue(this.mainContour);
+          fileControl.get("contour").setValue(this.mainContour);
         }
       }
     }
@@ -303,53 +303,53 @@ export class OneDepComponent implements OnInit, OnDestroy {
   onFileAddMore(event: Event, id: number, fileType: string) {
     // once the file is selected, adds it to the form. Only for additional maps and FSC inputs, as they can include multiple files
     const input = event.target as HTMLInputElement;
-    let fileTypeControl;
+    let fileControl;
     if (input.files && input.files.length > 0) {
       this.selectedFile[`${fileType}-${id}`] = input.files[0];
 
       const filesArray = this.form.get("files") as FormArray;
       if (fileType === "add-map") {
-        fileTypeControl = filesArray.controls.find(
+        fileControl = filesArray.controls.find(
           (control) =>
             control.get("emName")?.value === this.emFile.AddMap &&
             control.get("id")?.value === id,
         );
       } else {
-        fileTypeControl = filesArray.controls.find(
+        fileControl = filesArray.controls.find(
           (control) =>
             control.get("emName")?.value === this.emFile.FSC &&
             control.get("id")?.value === id,
         );
       }
-      if (fileTypeControl) {
-        fileTypeControl
+      if (fileControl) {
+        fileControl
           .get("file")
           ?.setValue(this.selectedFile[`${fileType}-${id}`]);
-        fileTypeControl
+        fileControl
           .get("fileName")
           ?.setValue(this.selectedFile[`${fileType}-${id}`].name);
       }
     }
   }
 
-  clearFile(fileCat: EmFile, id?: number) {
-    // clear the selected file
+  clearFile(controlName: EmFile, id?: number) {
+    // clear the selected file from form
     const key =
-      fileCat === "add-map" || fileCat === "fsc-xml"
-        ? `${fileCat}-${id}`
-        : fileCat;
+      controlName === "add-map" || controlName === "fsc-xml"
+        ? `${controlName}-${id}`
+        : controlName;
     this.selectedFile[key] = null;
 
     let index = -1;
     const filesArray = this.form.get("files") as FormArray;
-    if (fileCat !== "add-map" && fileCat !== "fsc-xml") {
+    if (controlName !== "add-map" && controlName !== "fsc-xml") {
       index = filesArray.value.findIndex(
-        (file: DepositionFile) => file.emName === fileCat,
+        (file: DepositionFile) => file.emName === controlName,
       );
     } else {
       for (let i = 0; i < filesArray.length; i++) {
         if (
-          filesArray.at(i).value.emName === fileCat &&
+          filesArray.at(i).value.emName === controlName &&
           filesArray.at(i).value.id === id
         ) {
           index = i;
@@ -365,6 +365,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
     // for a given file extracts the "required" status for the chosen EM method
     // FIX me subject to change
     let value: boolean;
+
     this.files.forEach((fT) => {
       if (fT.value.emName === controlName) {
         value = fT.value.required;
@@ -395,11 +396,15 @@ export class OneDepComponent implements OnInit, OnDestroy {
     const normalizedInput = input.replace(",", ".");
     const parsedValue = parseFloat(normalizedInput);
     if (!isNaN(parsedValue)) {
-      this.files.forEach((fT) => {
-        if (fT.value.emName === this.emFile.AddMap && fT.value.id === id) {
-          fT.value.contour = parsedValue;
-        }
-      });
+      const filesArray = this.form.get("files") as FormArray;
+      const fileControl = filesArray.controls.find(
+        (control) =>
+          control.get("emName")?.value === this.emFile.AddMap &&
+          control.get("id")?.value === id,
+      );
+      if (fileControl) {
+        fileControl.get("contour")?.patchValue(parsedValue);
+      }
     }
   }
   updateContourLevel(event: Event, controlName: EmFile) {
@@ -407,32 +412,44 @@ export class OneDepComponent implements OnInit, OnDestroy {
     const normalizedInput = input.replace(",", ".");
     const parsedValue = parseFloat(normalizedInput);
     if (!isNaN(parsedValue)) {
-      this.files.forEach((fT) => {
-        if (fT.value.emName === controlName) {
-          fT.value.contour = parsedValue;
-        }
-      });
+      const filesArray = this.form.get("files") as FormArray;
+      const fileControl = filesArray.controls.find(
+        (control) => control.get("emName")?.value === controlName,
+      );
+      if (fileControl) {
+        fileControl.get("contour")?.patchValue(parsedValue);
+      }
     }
   }
   updateDetails(event: Event, controlName: EmFile) {
-    const textarea = event.target as HTMLTextAreaElement; // Cast to HTMLTextAreaElement
+    // function to update details for a map
+    const textarea = event.target as HTMLTextAreaElement;
     const value = textarea.value;
-    this.files.forEach((fT) => {
-      if (fT.value.emName === controlName) {
-        fT.value.details = value;
-      }
-    });
+
+    const filesArray = this.form.get("files") as FormArray;
+    const fileControl = filesArray.controls.find(
+      (control) => control.get("emName")?.value === controlName,
+    );
+    if (fileControl) {
+      fileControl.get("details")?.patchValue(value);
+    }
   }
   updateDetailsAddMap(event: Event, id: number) {
-    const textarea = event.target as HTMLTextAreaElement; // Cast to HTMLTextAreaElement
+    // function to update details for additional maps
+    const textarea = event.target as HTMLTextAreaElement;
     const value = textarea.value;
-    this.files.forEach((fT) => {
-      if (fT.value.emName === this.emFile.AddMap && fT.value.id === id) {
-        fT.value.details = value;
-      }
-    });
+    const filesArray = this.form.get("files") as FormArray;
+    const fileControl = filesArray.controls.find(
+      (control) =>
+        control.get("emName")?.value === this.emFile.AddMap &&
+        control.get("id")?.value === id,
+    );
+    if (fileControl) {
+      fileControl.get("details")?.patchValue(value);
+    }
   }
   addMap() {
+    // adds an empty DepositionFile of type Add-Map to the form
     const nextId =
       this.files
         .filter((file) => file.value.emName === EmFile.AddMap)
@@ -459,6 +476,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
     this.addFileToForm(newMap);
   }
   addFSC() {
+    // adds an empty DepositionFile of type FSC to the form
     const nextId =
       this.files
         .filter((file) => file.value.emName === EmFile.FSC)
@@ -482,13 +500,13 @@ export class OneDepComponent implements OnInit, OnDestroy {
     this.addFileToForm(newFSC);
   }
 
-  correctExtension(control: AbstractControl) {
-    console.log("calling validator");
-    const fileValue = control.value;
+  correctExtension(controlFile: AbstractControl) {
+    // checks if the provided files has a correct extension
+    const fileValue = controlFile.value;
     if (!fileValue) {
       return null;
     }
-    const allowedExtensions = control.parent?.get("fileFormat")?.value;
+    const allowedExtensions = controlFile.parent?.get("fileFormat")?.value;
     const fileName = fileValue.name || fileValue;
     const fileExtension = fileName.endsWith(".gz")
       ? "." + fileName.split(".").slice(-2).join(".")
@@ -501,6 +519,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
   }
 
   onDepositClick() {
+    console.log(this.files);
     let body: OneDepUserInfo;
     if (this.form.value.password) {
       body = {
