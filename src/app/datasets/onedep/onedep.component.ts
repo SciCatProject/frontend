@@ -36,6 +36,7 @@ import {
 import { Depositor } from "shared/sdk/apis/onedep-depositor.service";
 import { Observable, Subscription } from "rxjs";
 import { runInThisContext } from "vm";
+import { FlexAlignDirective } from "@ngbracket/ngx-layout";
 
 @Component({
   selector: "onedep",
@@ -165,22 +166,26 @@ export class OneDepComponent implements OnInit, OnDestroy {
   }
   addFileToForm(file: DepositionFile) {
     // adds a depositionFile to the form
+    const validators = [this.correctExtension];
+    if (file.required) {
+      validators.push(Validators.required); // Add required dynamically
+    }
+
     const filesArray = this.form.get("files") as FormArray;
-    filesArray.push(
-      this.fb.group({
-        emName: [file.emName],
-        id: [file.id],
-        nameFE: [file.nameFE],
-        type: [file.type],
-        fileName: [file.fileName],
-        file: [file.file, [this.correctExtension]],
-        required: [file.required],
-        contour: [file.contour],
-        details: [file.details],
-        fileFormat: [file.fileFormat],
-        explanation: [file.explanation],
-      }),
-    );
+    const fileGroup = this.fb.group({
+      emName: [file.emName],
+      id: [file.id],
+      nameFE: [file.nameFE],
+      type: [file.type],
+      fileName: [file.fileName],
+      file: [file.file, validators],
+      required: [file.required],
+      contour: [file.contour],
+      details: [file.details],
+      fileFormat: [file.fileFormat],
+      explanation: [file.explanation],
+    });
+    filesArray.push(fileGroup);
   }
   //remove a file from the form; only used for co-cif (yes/no toggle). On method change a new files array will be generated
   removeFileFromForm(controlName: EmFile) {
@@ -500,7 +505,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
     this.addFileToForm(newFSC);
   }
 
-  correctExtension(controlFile: AbstractControl) {
+  correctExtension(controlFile: AbstractControl): ValidationErrors | null {
     // checks if the provided files has a correct extension
     const fileValue = controlFile.value;
     if (!fileValue) {
@@ -515,11 +520,10 @@ export class OneDepComponent implements OnInit, OnDestroy {
     if (allowedExtensions && allowedExtensions.includes(fileExtension)) {
       return null;
     }
-    return { correctExtension: false };
+    return { correctExtension: true };
   }
 
   onDepositClick() {
-    console.log(this.files);
     let body: OneDepUserInfo;
     if (this.form.value.password) {
       body = {

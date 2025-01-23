@@ -112,7 +112,7 @@
                 </mat-option>
               </mat-select>
               <!-- Error Message -->
-              <div *ngIf="form.get('emMethod')?.invalid && form.get('emMethod')?.touched" class="error">
+              <div *ngIf="form.get('emMethod')?.invalid && form.get('emMethod')?.touched" class="error-text">
                 You must specify the experimental method
               </div>
             </mat-form-field>
@@ -220,7 +220,7 @@
                     <mat-icon>clear</mat-icon>
                   </button>
                 </div>
-                <div *ngIf="fileType.get('file').invalid" class="error-text">
+                <div *ngIf="fileType.get('file').hasError('correctExtension')" class="error-text">
                   Invalid file format. Allowed formats: {{ fileType.get('fileFormat').value }}
                 </div>
                
