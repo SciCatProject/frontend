@@ -78,8 +78,6 @@ export class DatasetDetailDynamicComponent implements OnInit {
     });
 
     this.datasetView = sortedDatasetView;
-
-    console.log("===this.datasetview", this.datasetView);
   }
 
   onCopy(value: string) {
