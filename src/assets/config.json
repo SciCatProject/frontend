@@ -224,10 +224,14 @@
           "General Information": "Proposal Information",
           "Title" : "Proposal Title",
           "Abstract" : "Abstract",
-          "Identifier" : "Proposal Id",
-          "Type" : "Proposal Type",
+          "Proposal Id" : "Proposal Id",
+          "Proposal Type" : "Proposal Type",
+          "Parent Proposal" : "Parent Proposal",
+          "Start Time" : "Start Time",
+          "End Time" : "End Time",
           "Creator Information" : "People",
           "Main Proposer": "Proposal Submitted By",
+          "Principal Investigator" : "Principal Investigator",
           "Metadata": "Additional Information"
         }
       }

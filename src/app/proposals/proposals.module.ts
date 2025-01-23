@@ -35,6 +35,7 @@ import { MatNativeDateModule } from "@angular/material/core";
 import { LogbookEffects } from "state-management/effects/logbooks.effects";
 import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
 import { ProposalLogbookComponent } from "./proposal-logbook/proposal-logbook.component";
+import { TranslateModule } from "@ngx-translate/core";
 
 @NgModule({
   imports: [
@@ -60,6 +61,7 @@ import { ProposalLogbookComponent } from "./proposal-logbook/proposal-logbook.co
     SharedScicatFrontendModule,
     StoreModule.forFeature("proposals", proposalsReducer),
     StoreModule.forFeature("logbooks", logbooksReducer),
+    TranslateModule,
   ],
   declarations: [
     ViewProposalPageComponent,
