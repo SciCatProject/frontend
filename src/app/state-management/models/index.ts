@@ -30,7 +30,6 @@ export interface DatasetDetailViewLabelOption {
 
 export interface DatasetDetailComponentConfig {
   enableCustomizedComponent: boolean;
-  enableAttachmentsInDatasetDetails: boolean;
   customization: CustomizationItem[];
 }
 export enum DatasetViewFieldType {

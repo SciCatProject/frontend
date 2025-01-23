@@ -42,8 +42,6 @@ export class DatasetDetailDynamicComponent implements OnInit {
   form: FormGroup;
 
   appConfig = this.appConfigService.getConfig();
-  enabledAttachmentsDisplay =
-    this.appConfig.datasetDetailComponent?.enableAttachmentsInDatasetDetails;
 
   dataset$ = this.store.select(selectCurrentDataset);
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
