@@ -1,4 +1,4 @@
-import { CreateJobDto } from "@scicatproject/scicat-sdk-ts";
+import { CreateJobDto } from "@scicatproject/scicat-sdk-ts-angular";
 import * as fromActions from "./jobs.actions";
 import { mockJob as job } from "shared/MockStubs";
 

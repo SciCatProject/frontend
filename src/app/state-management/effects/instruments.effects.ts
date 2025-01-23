@@ -1,6 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import { Instrument, InstrumentsService } from "@scicatproject/scicat-sdk-ts";
+import {
+  Instrument,
+  InstrumentsService,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import * as fromActions from "state-management/actions/instruments.actions";
 import { switchMap, map, catchError, mergeMap } from "rxjs/operators";
 import { of } from "rxjs";

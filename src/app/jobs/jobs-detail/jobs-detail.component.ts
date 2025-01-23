@@ -4,7 +4,7 @@ import { Store } from "@ngrx/store";
 import { ActivatedRoute } from "@angular/router";
 import { selectCurrentJob } from "state-management/selectors/jobs.selectors";
 import { Observable, Subscription } from "rxjs";
-import { JobClass } from "@scicatproject/scicat-sdk-ts";
+import { JobClass } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
   selector: "app-jobs-detail",

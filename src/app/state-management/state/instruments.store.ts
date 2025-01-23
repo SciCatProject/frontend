@@ -1,4 +1,4 @@
-import { Instrument } from "@scicatproject/scicat-sdk-ts";
+import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
 import { GenericFilters } from "../models";
 
 export interface InstrumentState {

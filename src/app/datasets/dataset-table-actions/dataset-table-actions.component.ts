@@ -19,7 +19,7 @@ import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { selectSubmitError } from "state-management/selectors/jobs.selectors";
 import { AppConfigService } from "app-config.service";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
   selector: "dataset-table-actions",

@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { Logbook } from "@scicatproject/scicat-sdk-ts";
+import { Logbook } from "@scicatproject/scicat-sdk-ts-angular";
 
 import { fetchLogbooksAction } from "state-management/actions/logbooks.actions";
 import { selectLogbooks } from "state-management/selectors/logbooks.selectors";

@@ -9,7 +9,7 @@ import { Store } from "@ngrx/store";
 import {
   Logbook,
   OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { combineLatest, Subscription } from "rxjs";
 import { selectLogbooksDashboardPageViewModel } from "state-management/selectors/logbooks.selectors";
 import {

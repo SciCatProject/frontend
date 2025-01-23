@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { PublishedData } from "@scicatproject/scicat-sdk-ts";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
 import { Router } from "@angular/router";
 import { selectPublishedDataDashboardPageViewModel } from "state-management/selectors/published-data.selectors";
 import { CheckboxEvent } from "shared/modules/table/table.component";

@@ -3,7 +3,7 @@ import {
   CreatePublishedDataDto,
   PublishedData,
   UpdatePublishedDataDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 export const fetchAllPublishedDataAction = createAction(
   "[PublishedData] Fetch All Published Data",

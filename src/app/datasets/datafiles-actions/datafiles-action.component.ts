@@ -6,7 +6,7 @@ import {
   SimpleChanges,
 } from "@angular/core";
 
-import { UsersService } from "@scicatproject/scicat-sdk-ts";
+import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 import { ActionConfig, ActionDataset } from "./datafiles-action.interfaces";
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";

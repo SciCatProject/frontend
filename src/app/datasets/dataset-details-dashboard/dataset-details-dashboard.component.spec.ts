@@ -18,7 +18,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MockStore } from "@ngrx/store/testing";
 import { AppConfigService } from "app-config.service";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { UsersService } from "@scicatproject/scicat-sdk-ts";
+import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("DetailsDashboardComponent", () => {
   let component: DatasetDetailsDashboardComponent;

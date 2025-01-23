@@ -5,7 +5,7 @@ import { Store } from "@ngrx/store";
 import {
   UserIdentitiesService,
   UsersService,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
 

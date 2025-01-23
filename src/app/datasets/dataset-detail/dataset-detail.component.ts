@@ -48,7 +48,7 @@ import {
   ProposalClass,
   ReturnedUserDto,
   SampleClass,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "shared/services/attachment.service";
 import { TranslateService } from "@ngx-translate/core";
 

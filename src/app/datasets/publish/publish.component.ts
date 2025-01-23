@@ -14,7 +14,7 @@ import {
 import {
   CreatePublishedDataDto,
   PublishedDataService,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { formatDate } from "@angular/common";
 import { Router } from "@angular/router";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";

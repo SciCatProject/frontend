@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { combineLatest, Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   selectIsAdmin,
   selectProfile,

@@ -2,7 +2,7 @@ import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
 import { hot, cold } from "jasmine-marbles";
 import { LogbookEffects } from "./logbooks.effects";
-import { Logbook, LogbooksService } from "@scicatproject/scicat-sdk-ts";
+import { Logbook, LogbooksService } from "@scicatproject/scicat-sdk-ts-angular";
 import * as fromActions from "state-management/actions/logbooks.actions";
 import {
   loadingAction,

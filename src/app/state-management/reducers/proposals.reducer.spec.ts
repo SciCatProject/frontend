@@ -8,7 +8,7 @@ import { createMock } from "shared/MockStubs";
 import {
   OutputDatasetObsoleteDto,
   ProposalClass,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 const proposal = createMock<ProposalClass>({
   proposalId: "testId",

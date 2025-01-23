@@ -24,7 +24,7 @@ import {
 } from "state-management/selectors/user.selectors";
 import { MessageType } from "state-management/models";
 import { AppConfigService, AppConfig as Config } from "app-config.service";
-import { Configuration } from "@scicatproject/scicat-sdk-ts";
+import { Configuration } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
   selector: "app-root",

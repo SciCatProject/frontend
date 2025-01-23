@@ -2,7 +2,10 @@ import * as fromSelectors from "./user.selectors";
 
 import { UserState } from "../state/user.store";
 import { Settings } from "../models";
-import { ReturnedUserDto, UserIdentity } from "@scicatproject/scicat-sdk-ts";
+import {
+  ReturnedUserDto,
+  UserIdentity,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { SDKToken } from "shared/services/auth/auth.service";
 
 const user: ReturnedUserDto = {

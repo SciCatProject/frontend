@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { SampleClass } from "@scicatproject/scicat-sdk-ts";
+import { SampleClass } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   changePageAction,
   fetchSamplesAction,

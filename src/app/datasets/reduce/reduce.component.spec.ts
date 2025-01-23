@@ -28,7 +28,7 @@ import { MatStepperModule } from "@angular/material/stepper";
 import { MatTableModule } from "@angular/material/table";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatOptionModule } from "@angular/material/core";
-import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("ReduceComponent", () => {
   let component: ReduceComponent;

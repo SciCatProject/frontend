@@ -2,7 +2,7 @@ import { Component, OnInit, OnChanges, SimpleChange } from "@angular/core";
 import {
   DatasetClass,
   OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import {
   trigger,
   state,

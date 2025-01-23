@@ -36,7 +36,10 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatTabsModule } from "@angular/material/tabs";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { AppConfigService } from "app-config.service";
-import { DatasetClass, ReturnedUserDto } from "@scicatproject/scicat-sdk-ts";
+import {
+  DatasetClass,
+  ReturnedUserDto,
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 const getConfig = () => ({
   editMetadataEnabled: true,

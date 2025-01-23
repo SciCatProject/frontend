@@ -29,7 +29,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppConfigService } from "app-config.service";
-import { Logbook } from "@scicatproject/scicat-sdk-ts";
+import { Logbook } from "@scicatproject/scicat-sdk-ts-angular";
 
 const getConfig = () => ({
   riotBaseUrl: "https://riot.base.com",
