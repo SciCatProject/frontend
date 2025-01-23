@@ -32,7 +32,7 @@ export interface OneDepUserInfo {
 export interface OneDepCreate {
   depID: string;
 }
-export interface DepositionFiles {
+export interface DepositionFile {
   emName: EmFile;
   id?: number;
   nameFE: string;
@@ -42,27 +42,29 @@ export interface DepositionFiles {
   contour?: number;
   details?: string;
   required: boolean;
+  fileFormat?: string[];
   explanation?: string;
 }
 
 interface EmMethod {
   value: EmType;
   viewValue: string;
-  files: DepositionFiles[];
+  files: DepositionFile[];
 }
 
 export const createMethodsList = (): EmMethod[] => {
-  const depositionImage: DepositionFiles = {
+  const depositionImage: DepositionFile = {
     emName: EmFile.Image,
     nameFE: "Public Image",
     type: "img-emdb",
     fileName: "",
     file: null,
     required: false,
+    fileFormat: [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff"],
     explanation:
       "Image of the map (500 x 500 pixels in .jpg, .png, etc. format)",
   };
-  const depositionMainMap: DepositionFiles = {
+  const depositionMainMap: DepositionFile = {
     emName: EmFile.MainMap,
     nameFE: "Main Map",
     type: "vo-map",
@@ -71,10 +73,11 @@ export const createMethodsList = (): EmMethod[] => {
     contour: 0.0,
     details: "",
     required: false,
+    fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
     explanation:
       "Primary map (.mrc or .ccp4 format, may use gzip or bzip2 compression) along with recommended contour level",
   };
-  const depositionHalfMap1: DepositionFiles = {
+  const depositionHalfMap1: DepositionFile = {
     emName: EmFile.HalfMap1,
     nameFE: "Half Map (1)",
     type: "half-map",
@@ -83,10 +86,11 @@ export const createMethodsList = (): EmMethod[] => {
     contour: 0.0,
     details: "",
     required: false,
+    fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
     explanation:
       "Half maps (as used for FSC calculation; two maps must be uploaded)",
   };
-  const depositionHalfMap2: DepositionFiles = {
+  const depositionHalfMap2: DepositionFile = {
     emName: EmFile.HalfMap2,
     nameFE: "Half Map (2)",
     type: "half-map",
@@ -95,10 +99,11 @@ export const createMethodsList = (): EmMethod[] => {
     contour: 0.0,
     details: "",
     required: false,
+    fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
     explanation:
       "Half maps (as used for FSC calculation; two maps must be uploaded)",
   };
-  const depositionMaskMap: DepositionFiles = {
+  const depositionMaskMap: DepositionFile = {
     emName: EmFile.MaskMap,
     nameFE: "Mask Map",
     type: "mask-map",
@@ -107,10 +112,11 @@ export const createMethodsList = (): EmMethod[] => {
     contour: 0.0,
     details: "",
     required: false,
+    fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
     explanation:
       "Primary/raw map mask, segmentation/focused refinement mask and half-map mask",
   };
-  const depositionAddMap: DepositionFiles = {
+  const depositionAddMap: DepositionFile = {
     emName: EmFile.AddMap,
     id: 0,
     nameFE: "Additional Map",
@@ -120,20 +126,22 @@ export const createMethodsList = (): EmMethod[] => {
     contour: 0.0,
     details: "",
     required: false,
+    fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
     explanation:
       "Difference maps, maps showing alternative conformations and/or compositions, maps with differential processing (e.g. filtering, sharpening and masking)",
   };
-  const depositionFSC: DepositionFiles = {
+  const depositionFSC: DepositionFile = {
     emName: EmFile.FSC,
     id: 0,
     nameFE: "FSC-XML",
     type: "fsc-xml",
     fileName: "",
     file: null,
+    fileFormat: [".xml"],
     required: false,
     explanation: "Half-map FSC, Map-model FSC, Cross-validation FSCs",
   };
-  const depositionLayerLines: DepositionFiles = {
+  const depositionLayerLines: DepositionFile = {
     emName: EmFile.LayerLines,
     nameFE: "Other: Layer Lines Data ",
     type: "layer-lines",
@@ -141,24 +149,35 @@ export const createMethodsList = (): EmMethod[] => {
     file: null,
     required: false,
   };
-  const depositionCoordinates: DepositionFiles = {
+  const depositionCoordinates: DepositionFile = {
     emName: EmFile.Coordinates,
     nameFE: "Coordinates",
     type: "co-cif",
     fileName: "",
     file: null,
     required: false,
+    fileFormat: [
+      ".cif",
+      ".pdb",
+      ".ent",
+      ".brk",
+      ".cif.gz",
+      ".pdb.gz",
+      ".ent.gz",
+      ".brk.gz",
+    ],
     explanation: "mmCIF or PDB format",
   };
-  const depositionStructureFactors: DepositionFiles = {
+  const depositionStructureFactors: DepositionFile = {
     emName: EmFile.StructureFactors,
     nameFE: "Structure Factors",
     type: "xs-cif",
     fileName: "",
     file: null,
     required: false,
+    fileFormat: [".cif", ".mtz", ".cif.gz", ".mtz.gz"],
   };
-  const depositionMTZ: DepositionFiles = {
+  const depositionMTZ: DepositionFile = {
     emName: EmFile.MTZ,
     nameFE: "MTZ",
     type: "xs-mtz",
