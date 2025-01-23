@@ -548,6 +548,46 @@ describe("DatasetEffects", () => {
     });
   });
 
+  describe("appendToArrayField$", () => {
+    it("should result in a appendToDatasetArrayFieldCompleteAction", () => {
+      const pid = "string";
+      const fieldName = "test";
+      const data = ["string"];
+      const action = fromActions.appendToDatasetArrayFieldAction({
+        pid,
+        fieldName,
+        data,
+      });
+      const outcome = fromActions.appendToDatasetArrayFieldCompleteAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-a|", {});
+      datasetApi.datasetsControllerAppendToArrayField.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.appendToArrayField$).toBeObservable(expected);
+    });
+
+    it("should result in a appendToDatasetArrayFieldFailedAction", () => {
+      const pid = "string";
+      const fieldName = "test";
+      const data = ["string"];
+      const action = fromActions.appendToDatasetArrayFieldAction({
+        pid,
+        fieldName,
+        data,
+      });
+      const outcome = fromActions.appendToDatasetArrayFieldFailedAction();
+
+      actions = hot("-a", { a: action });
+      const response = cold("-#", {});
+      datasetApi.datasetsControllerAppendToArrayField.and.returnValue(response);
+
+      const expected = cold("--b", { b: outcome });
+      expect(effects.appendToArrayField$).toBeObservable(expected);
+    });
+  });
+
   describe("loading$", () => {
     describe("ofType fetchDatasetsAction", () => {
       it("should dispatch a loadingAction", () => {

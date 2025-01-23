@@ -465,6 +465,25 @@ describe("Dataset Actions", () => {
     });
   });
 
+  describe("appendToDatasetArrayFieldAction", () => {
+    it("should create an action", () => {
+      const pid = "string";
+      const fieldName = "test";
+      const data: string[] = ["string"];
+      const action = fromActions.appendToDatasetArrayFieldAction({
+        pid,
+        fieldName,
+        data,
+      });
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Append To Array Field",
+        pid,
+        fieldName,
+        data,
+      });
+    });
+  });
+
   describe("updateDatasetAccessGrappendToDatasetArrayFieldCompleteActionoupsCompleteAction", () => {
     it("should create an action", () => {
       const action = fromActions.appendToDatasetArrayFieldCompleteAction();
