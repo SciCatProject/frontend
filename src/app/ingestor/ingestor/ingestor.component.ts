@@ -81,7 +81,7 @@ export class IngestorComponent implements OnInit {
 
     // Try to connect to the facility backend/version to check if it is available
     console.log("Connecting to facility backend: " + facilityBackendUrlVersion);
-    this.http.get(facilityBackendUrlVersion).subscribe(
+    this.http.get(facilityBackendUrlVersion, {withCredentials: true}).subscribe(
       (response) => {
         console.log("Connected to facility backend", response);
         // If the connection is successful, store the connected facility backend URL
@@ -115,7 +115,7 @@ export class IngestorComponent implements OnInit {
     }
     this.http
       .get(this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.TRANSFER, {
-        params,
+        params, withCredentials: true
       })
       .subscribe(
         (response) => {
@@ -139,7 +139,7 @@ export class IngestorComponent implements OnInit {
     this.http
       .post(
         this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.DATASET,
-        payload,
+        {payload, withCredentials: true},
       )
       .subscribe(
         (response) => {
@@ -178,7 +178,7 @@ export class IngestorComponent implements OnInit {
       this.http
         .post(
           this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.EXTRACTOR,
-          payload,
+          {payload, withCredentials: true},
         )
         .subscribe(
           (response) => {
@@ -334,7 +334,8 @@ export class IngestorComponent implements OnInit {
         this.connectedFacilityBackend +
           INGESTOR_API_ENDPOINTS_V1.TRANSFER +
           "/" +
-          transferId,
+          transferId, 
+          {withCredentials: true}
       )
       .subscribe(
         (response) => {
