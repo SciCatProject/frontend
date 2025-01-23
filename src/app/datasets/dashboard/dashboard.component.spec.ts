@@ -41,7 +41,6 @@ import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import {
-  CreateDerivedDatasetObsoleteDto,
   DatasetsControllerCreateRequest,
   ReturnedUserDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -242,10 +241,10 @@ describe("DashboardComponent", () => {
         authStrategy: "local",
       });
 
-      const dataset: CreateDerivedDatasetObsoleteDto = {
+      const dataset: DatasetsControllerCreateRequest = {
         accessGroups: [],
         contactEmail: currentUser.email,
-        creationTime: new Date().toString(),
+        creationTime: new Date().toISOString(),
         datasetName: "Test Name",
         description: "Test description",
         isPublished: false,
@@ -262,6 +261,8 @@ describe("DashboardComponent", () => {
         scientificMetadata: {},
         usedSoftware: ["test software"],
         numberOfFilesArchived: 0,
+        creationLocation: undefined,
+        principalInvestigator: undefined,
       };
 
       component.currentUser = currentUser;
@@ -272,7 +273,7 @@ describe("DashboardComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
         addDatasetAction({
-          dataset: dataset as DatasetsControllerCreateRequest,
+          dataset: dataset,
         }),
       );
     });

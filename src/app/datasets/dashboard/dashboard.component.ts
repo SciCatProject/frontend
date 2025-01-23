@@ -142,7 +142,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const dataset = {
           accessGroups: [],
           contactEmail: email, // Required
-          creationTime: new Date().toString(), // Required
+          creationTime: new Date().toISOString(), // Required
           datasetName: res.datasetName,
           description: res.description,
           isPublished: false,
@@ -158,8 +158,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           investigator: email, // Required
           scientificMetadata: {},
           numberOfFilesArchived: 0, // Required
-          principalInvestigator: email, // Required
-          creationLocation: res.creationLocation, // Required
+          principalInvestigator: undefined, // Required
+          creationLocation: undefined, // Required
           usedSoftware: res.usedSoftware
             .split(",")
             .map((entry: string) => entry.trim())
