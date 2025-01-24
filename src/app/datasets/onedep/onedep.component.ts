@@ -169,9 +169,10 @@ export class OneDepComponent implements OnInit, OnDestroy {
     const fileValidators = [this.correctExtension];
     const contourValidators = [];
     if (file.required) {
-      if (this.isMap(file.emName)) {
+      // add-map is not required
+      if (this.isMap(file.emName) && file.emName !== this.emFile.AddMap) {
+        console.log("file is map", file.emName);
         contourValidators.push(Validators.required);
-        contourValidators.push(Validators.pattern(/^[0-9]+(\.[0-9]+)?$/));
       }
       fileValidators.push(Validators.required);
     }
@@ -252,7 +253,9 @@ export class OneDepComponent implements OnInit, OnDestroy {
   get files() {
     return (this.form.get("files") as FormArray).controls;
   }
-
+  getContourControl(fileType: AbstractControl): FormControl {
+    return fileType.get("contour") as FormControl;
+  }
   onPDB(event: MatRadioChange) {
     const input = event.value;
     if (input === "true") {
@@ -324,6 +327,14 @@ export class OneDepComponent implements OnInit, OnDestroy {
             control.get("emName")?.value === this.emFile.AddMap &&
             control.get("id")?.value === id,
         );
+        if (fileControl) {
+          const contourControl = fileControl.get("contour");
+          contourControl.setValidators([
+            Validators.required,
+            ...(contourControl?.validator ? [contourControl.validator] : []),
+          ]);
+          // contourControl?.updateValueAndValidity();
+        }
       } else {
         fileControl = filesArray.controls.find(
           (control) =>
@@ -400,6 +411,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
         }
       });
     }
+    console.log("main contour:", this.mainContour, parsedValue, typeof parsedValue);
   }
   updateContourLevelAddMap(event: Event, id: number) {
     const input = (event.target as HTMLInputElement).value.trim();
@@ -475,7 +487,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
       type: "add-map",
       fileName: "",
       file: null,
-      contour: 0.0,
+      contour: null,
       details: "",
       required: false,
       fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],

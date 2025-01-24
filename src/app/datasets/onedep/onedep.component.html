@@ -235,12 +235,15 @@
                       type="number"
                       placeholder="e.g. 0.0"
                       [required]="!!fileType.get('file')"
-                      [value]="fileType.get('contour').value || ''"
+                      [formControl]="getContourControl(fileType)"
                       (input)="fileType.get('emName').value === 'vo-map' ? updateContourLevelMain($event) : 
                       fileType.get('emName').value === 'add-map' ? updateContourLevelAddMap($event, fileType.get('id').value) : 
                       updateContourLevel($event, fileType.get('emName').value)"
                       />
                     </mat-form-field>
+                    <div *ngIf="fileType.get('contour').invalid && fileType.get('contour').touched" class="error-text">
+                      Invalid Contour level, please enter  numeric value.
+                    </div>
                   </ng-container>
                   <ng-container> <!--  *ngIf="fileType.get('details') !== null" -->  
                     <mat-form-field class="details">

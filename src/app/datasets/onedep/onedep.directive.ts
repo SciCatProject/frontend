@@ -1,4 +1,4 @@
-import { Directive, HostListener, ElementRef, OnInit } from "@angular/core";
+import { Directive, HostListener, ElementRef } from "@angular/core";
 
 @Directive({ selector: "[orcidFormatter]" })
 export class OrcidFormatterDirective {
