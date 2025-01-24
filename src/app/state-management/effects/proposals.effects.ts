@@ -60,11 +60,7 @@ export class ProposalEffects {
         this.proposalsService
           .proposalsControllerCount(JSON.stringify(filters))
           .pipe(
-            map((res) => {
-              const count = res.count;
-
-              return fromActions.fetchCountCompleteAction({ count });
-            }),
+            map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
             catchError(() => of(fromActions.fetchCountFailedAction())),
           ),
       ),
@@ -275,13 +271,11 @@ export class ProposalEffects {
         return this.proposalsService
           .proposalsControllerCount(JSON.stringify(queryFilter))
           .pipe(
-            map((res) => {
-              const count = res.count;
-
-              return fromActions.fetchRelatedProposalsCountCompleteAction({
+            map(({ count }) =>
+              fromActions.fetchRelatedProposalsCountCompleteAction({
                 count,
-              });
-            }),
+              }),
+            ),
             catchError(() =>
               of(fromActions.fetchRelatedProposalsCountFailedAction()),
             ),
