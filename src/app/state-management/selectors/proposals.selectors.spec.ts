@@ -1,7 +1,7 @@
 import * as fromSelectors from "./proposals.selectors";
 import { ProposalsState } from "state-management/state/proposals.store";
 import { createMock } from "shared/MockStubs";
-import { ProposalClass } from "@scicatproject/scicat-sdk-ts";
+import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
 
 const proposal = createMock<ProposalClass>({
   proposalId: "testId",

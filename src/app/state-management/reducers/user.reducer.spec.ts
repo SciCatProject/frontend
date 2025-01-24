@@ -3,7 +3,10 @@ import { initialUserState } from "../state/user.store";
 import * as fromActions from "../actions/user.actions";
 import { MessageType, Message, Settings, TableColumn } from "../models";
 import { HttpErrorResponse } from "@angular/common/http";
-import { ReturnedUserDto, UserIdentity } from "@scicatproject/scicat-sdk-ts";
+import {
+  ReturnedUserDto,
+  UserIdentity,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { SDKToken } from "shared/services/auth/auth.service";
 
 describe("UserReducer", () => {

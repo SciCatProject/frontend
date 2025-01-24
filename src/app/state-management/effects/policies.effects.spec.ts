@@ -14,7 +14,7 @@ import {
   loadingCompleteAction,
 } from "state-management/actions/user.actions";
 import { Type } from "@angular/core";
-import { PoliciesService, Policy } from "@scicatproject/scicat-sdk-ts";
+import { PoliciesService, Policy } from "@scicatproject/scicat-sdk-ts-angular";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import { createMock } from "shared/MockStubs";
 

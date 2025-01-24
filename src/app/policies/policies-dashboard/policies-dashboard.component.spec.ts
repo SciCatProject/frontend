@@ -43,7 +43,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("PoliciesDashboardComponent", () => {
   let component: PoliciesDashboardComponent;

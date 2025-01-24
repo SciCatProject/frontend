@@ -15,7 +15,7 @@ import {
   DatasetsService,
   ProposalClass,
   ProposalsService,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import {
   createMock,

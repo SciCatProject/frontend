@@ -4,7 +4,7 @@ import {
   CreateAttachmentDto,
   OutputDatasetObsoleteDto,
   SampleClass,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { SampleFilters, ScientificCondition } from "state-management/models";
 
 export const fetchSamplesAction = createAction("[Sample] Fetch Samples");

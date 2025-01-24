@@ -23,7 +23,7 @@ import { createMock, mockDataset } from "shared/MockStubs";
 import {
   HistoryClass,
   OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 const historyItems = [
   {

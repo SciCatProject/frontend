@@ -25,7 +25,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatInputModule } from "@angular/material/input";
 import { AppConfigService } from "app-config.service";
-import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("BatchViewComponent", () => {
   let component: BatchViewComponent;

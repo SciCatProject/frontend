@@ -9,7 +9,7 @@ import { Store } from "@ngrx/store";
 import {
   OutputDatasetObsoleteDto,
   UsersService,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import {
   selectIsAdmin,

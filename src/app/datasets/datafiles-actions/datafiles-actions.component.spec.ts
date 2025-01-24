@@ -12,7 +12,7 @@ import { RouterModule } from "@angular/router";
 import { StoreModule } from "@ngrx/store";
 import { MockMatDialogRef, MockUserApi } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
-import { UsersService } from "@scicatproject/scicat-sdk-ts";
+import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("DatafilesActionsComponent", () => {
   let component: DatafilesActionsComponent;

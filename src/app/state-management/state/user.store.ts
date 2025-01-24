@@ -1,6 +1,6 @@
 import { Settings, Message, TableColumn } from "../models";
 import { AccessTokenInterface } from "shared/services/auth/auth.service";
-import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts";
+import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   ConditionConfig,
   FilterConfig,

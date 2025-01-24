@@ -13,7 +13,7 @@ import { selectRelatedDatasetsPageViewModel } from "state-management/selectors/d
 import { RelatedDatasetsComponent } from "./related-datasets.component";
 import { TableModule } from "shared/modules/table/table.module";
 import { createMock } from "shared/MockStubs";
-import { DatasetClass } from "@scicatproject/scicat-sdk-ts";
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("RelatedDatasetsComponent", () => {
   let component: RelatedDatasetsComponent;

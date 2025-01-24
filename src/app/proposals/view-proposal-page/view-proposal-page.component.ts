@@ -9,7 +9,7 @@ import {
 } from "state-management/actions/proposals.actions";
 import { selectViewProposalPageViewModel } from "state-management/selectors/proposals.selectors";
 import { AppConfigService } from "app-config.service";
-import { ProposalClass } from "@scicatproject/scicat-sdk-ts";
+import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
   selector: "view-proposal-page",
