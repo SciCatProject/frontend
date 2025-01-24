@@ -61,10 +61,9 @@ export class ProposalEffects {
           .proposalsControllerCount(JSON.stringify(filters))
           .pipe(
             map((res) => {
-              const { all } = res[0];
-              const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
+              const count = res.count;
 
-              return fromActions.fetchCountCompleteAction({ count: allCounts });
+              return fromActions.fetchCountCompleteAction({ count });
             }),
             catchError(() => of(fromActions.fetchCountFailedAction())),
           ),
