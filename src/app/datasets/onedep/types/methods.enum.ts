@@ -20,6 +20,16 @@ export enum EmFile {
   MTZ = "xs-mtz",
 }
 
+export function isMap(emFile: EmFile): boolean {
+  return (
+    emFile === EmFile.MainMap ||
+    emFile === EmFile.HalfMap1 ||
+    emFile === EmFile.HalfMap2 ||
+    emFile === EmFile.MaskMap ||
+    emFile === EmFile.AddMap
+  );
+}
+
 export interface OneDepUserInfo {
   email: string;
   orcidIds: string[];
@@ -70,7 +80,7 @@ export const createMethodsList = (): EmMethod[] => {
     type: "vo-map",
     fileName: "",
     file: null,
-    contour: 0.0,
+    contour: null,
     details: "",
     required: false,
     fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
@@ -83,7 +93,7 @@ export const createMethodsList = (): EmMethod[] => {
     type: "half-map",
     fileName: "",
     file: null,
-    contour: 0.0,
+    contour: null,
     details: "",
     required: false,
     fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
@@ -96,7 +106,7 @@ export const createMethodsList = (): EmMethod[] => {
     type: "half-map",
     fileName: "",
     file: null,
-    contour: 0.0,
+    contour: null,
     details: "",
     required: false,
     fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
@@ -109,7 +119,7 @@ export const createMethodsList = (): EmMethod[] => {
     type: "mask-map",
     fileName: "",
     file: null,
-    contour: 0.0,
+    contour: null,
     details: "",
     required: false,
     fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
@@ -123,7 +133,7 @@ export const createMethodsList = (): EmMethod[] => {
     type: "add-map",
     fileName: "",
     file: null,
-    contour: 0.0,
+    contour: null,
     details: "",
     required: false,
     fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],

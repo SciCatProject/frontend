@@ -225,9 +225,9 @@
                 </div>
                
               </div>
-              <ng-container *ngIf="fileType.get('contour').value !== null || fileType.get('details').value !== null">
+              <ng-container *ngIf="isMap(fileType.get('emName').value)">
                 <div class="input-container">
-                  <ng-container *ngIf="fileType.get('contour').value !== null">
+                  <ng-container>  <!--  *ngIf="fileType.get('contour').value !== null"  details and contour come together-->
                     <mat-form-field appearance="outline" class="contour-level">
                       <mat-label>Contour Level</mat-label>
                       <input
@@ -242,7 +242,7 @@
                       />
                     </mat-form-field>
                   </ng-container>
-                  <ng-container *ngIf="fileType.get('details') !== null">
+                  <ng-container> <!--  *ngIf="fileType.get('details') !== null" -->  
                     <mat-form-field class="details">
                       <mat-label>Short description</mat-label>
                       <textarea

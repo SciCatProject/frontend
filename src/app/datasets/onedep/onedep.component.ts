@@ -32,11 +32,10 @@ import {
   EmFile,
   DepositionFile,
   OneDepUserInfo,
+  isMap,
 } from "./types/methods.enum";
 import { Depositor } from "shared/sdk/apis/onedep-depositor.service";
 import { Observable, Subscription } from "rxjs";
-import { runInThisContext } from "vm";
-import { FlexAlignDirective } from "@ngbracket/ngx-layout";
 
 @Component({
   selector: "onedep",
@@ -61,6 +60,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
   showPassword = false;
   fileTypes: DepositionFile[]; // required to keep the initial set of files based on EM method
   mainContour = 0.0;
+  isMap = isMap;
   connectedDepositionBackend = "";
   connectedDepositionBackendVersion = "";
   connectingToDepositionBackend = false;
@@ -166,9 +166,14 @@ export class OneDepComponent implements OnInit, OnDestroy {
   }
   addFileToForm(file: DepositionFile) {
     // adds a depositionFile to the form
-    const validators = [this.correctExtension];
+    const fileValidators = [this.correctExtension];
+    const contourValidators = [];
     if (file.required) {
-      validators.push(Validators.required); // Add required dynamically
+      if (this.isMap(file.emName)) {
+        contourValidators.push(Validators.required);
+        contourValidators.push(Validators.pattern(/^[0-9]+(\.[0-9]+)?$/));
+      }
+      fileValidators.push(Validators.required);
     }
 
     const filesArray = this.form.get("files") as FormArray;
@@ -178,9 +183,9 @@ export class OneDepComponent implements OnInit, OnDestroy {
       nameFE: [file.nameFE],
       type: [file.type],
       fileName: [file.fileName],
-      file: [file.file, validators],
+      file: [file.file, fileValidators],
       required: [file.required],
-      contour: [file.contour],
+      contour: [file.contour, contourValidators],
       details: [file.details],
       fileFormat: [file.fileFormat],
       explanation: [file.explanation],
@@ -524,6 +529,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
   }
 
   onDepositClick() {
+    console.log(this.files);
     let body: OneDepUserInfo;
     if (this.form.value.password) {
       body = {
