@@ -8,7 +8,7 @@ import { PageChangeEvent } from "shared/modules/table/table.component";
 import { RelatedProposalsComponent } from "./related-proposals.component";
 import { TableModule } from "shared/modules/table/table.module";
 import { createMock } from "shared/MockStubs";
-import { ProposalClass } from "@scicatproject/scicat-sdk-ts";
+import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { selectRelatedProposalsPageViewModel } from "state-management/selectors/proposals.selectors";
 import {
   changeRelatedProposalsPageAction,

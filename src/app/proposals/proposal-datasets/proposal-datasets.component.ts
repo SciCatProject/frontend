@@ -5,7 +5,7 @@ import { Store } from "@ngrx/store";
 import {
   DatasetClass,
   OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { Subscription } from "rxjs";
 import {
   PageChangeEvent,

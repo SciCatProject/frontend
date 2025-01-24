@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { ProposalClass } from "@scicatproject/scicat-sdk-ts";
+import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   PageChangeEvent,
   TableColumn,
