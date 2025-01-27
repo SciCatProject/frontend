@@ -278,6 +278,14 @@
             </div>
           </mat-card>
           <!-- UPLOAD FILES DONE -->
+          <div>
+            <mat-checkbox
+            formControlName="privacyTermsTicked"
+            >
+            Tick to indicate that you have read and accepted the wwPDB policy on personal data privacy, including what data wwPDB collects, how the data is stored and shared.
+            <a href="https://www.wwpdb.org/about/privacy" target="_blank">www.wwpdb.org/about/privacy</a>
+            </mat-checkbox>            
+          </div>
           <div class="button-container">
             <div class="button-wrapper">
               <div *ngIf="depositClicked && !form.valid">
@@ -295,7 +303,6 @@
                 </mat-error>
               </div>
               <div *ngIf="!depositClicked || (depositClicked && form.valid)">
-                
                 <button 
                   class="submitDep" 
                   mat-raised-button 

@@ -69,6 +69,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
   forwardDepositionBackend = "";
   errorMessage = "";
   depositClicked = false;
+  privacyTermsTicked = false;
   depID$: Observable<string>;
   @ViewChild("fileInput") fileInput: ElementRef<HTMLInputElement> | undefined;
 
@@ -82,6 +83,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
   ) {
     this.config = this.appConfigService.getConfig();
     this.form = this.fb.group({
+      privacyTermsTicked: new FormControl(false, Validators.requiredTrue),
       email: ["", [Validators.required, Validators.email]],
       jwtToken: ["", Validators.required],
       password: new FormControl(""),
@@ -586,6 +588,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
   }
 
   onDepositClick() {
+    console.log(this.form);
     // Mark the form as submitted (trigger validation)
     this.depositClicked = true;
     this.form.markAllAsTouched();
