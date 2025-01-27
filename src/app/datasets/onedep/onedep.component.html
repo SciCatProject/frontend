@@ -234,7 +234,6 @@
                       matInput
                       type="number"
                       placeholder="e.g. 0.0"
-                      [required]="!!fileType.get('file')"
                       [formControl]="getContourControl(fileType)"
                       (input)="fileType.get('emName').value === 'vo-map' ? updateContourLevelMain($event) : 
                       fileType.get('emName').value === 'add-map' ? updateContourLevelAddMap($event, fileType.get('id').value) : 

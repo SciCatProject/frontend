@@ -36,6 +36,7 @@ import {
 } from "./types/methods.enum";
 import { Depositor } from "shared/sdk/apis/onedep-depositor.service";
 import { Observable, Subscription } from "rxjs";
+import { isNumeric } from "mathjs";
 
 @Component({
   selector: "onedep",
@@ -167,11 +168,10 @@ export class OneDepComponent implements OnInit, OnDestroy {
   addFileToForm(file: DepositionFile) {
     // adds a depositionFile to the form
     const fileValidators = [this.correctExtension];
-    const contourValidators = [];
+    const contourValidators = [this.numericContourValidator];
     if (file.required) {
       // add-map is not required
-      if (this.isMap(file.emName) && file.emName !== this.emFile.AddMap) {
-        console.log("file is map", file.emName);
+      if (this.isMap(file.emName)) {
         contourValidators.push(Validators.required);
       }
       fileValidators.push(Validators.required);
@@ -333,7 +333,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
             Validators.required,
             ...(contourControl?.validator ? [contourControl.validator] : []),
           ]);
-          // contourControl?.updateValueAndValidity();
+          contourControl?.updateValueAndValidity();
         }
       } else {
         fileControl = filesArray.controls.find(
@@ -411,7 +411,6 @@ export class OneDepComponent implements OnInit, OnDestroy {
         }
       });
     }
-    console.log("main contour:", this.mainContour, parsedValue, typeof parsedValue);
   }
   updateContourLevelAddMap(event: Event, id: number) {
     const input = (event.target as HTMLInputElement).value.trim();
@@ -540,8 +539,19 @@ export class OneDepComponent implements OnInit, OnDestroy {
     return { correctExtension: true };
   }
 
+  numericContourValidator(
+    controlFile: AbstractControl,
+  ): ValidationErrors | null {
+    const value = controlFile.value;
+
+    if (value === null || value === undefined) {
+      return null;
+    }
+
+    return isNumeric(value) ? null : { notNumeric: true };
+  }
+
   onDepositClick() {
-    console.log(this.files);
     let body: OneDepUserInfo;
     if (this.form.value.password) {
       body = {
