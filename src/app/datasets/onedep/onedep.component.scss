@@ -120,12 +120,8 @@ mat-card {
     width: 100%;
     padding: 0.5rem 0;
 
-    .sample-edit {
-      padding-left: 0.5rem;
-
-      mat-icon {
-        font-size: medium;
-      }
+    mat-icon {
+      font-size: medium;
     }
   }
 
@@ -181,11 +177,12 @@ mat-card {
       display: flex; 
       align-items: center; 
       gap: 16px;
+      
 
       .fileChooser {
         background-color: #CFE7CB;
         color: #333;
-        margin: 16px 0 0 0;
+        margin: 16px 0 2px 0;
       }
 
       .fileName {
@@ -210,9 +207,10 @@ mat-card {
         display: flex; 
         align-items: flex-end;
         gap: 16px;
+        margin-top: 0px;
 
         .contour-level {
-          flex: 0 0 20%; // Set to take 20% of the width
+          flex: 0 0 12%; // Set to take 12% of the width
           min-width: 150px;
 
           /* Chrome, Safari, Edge, Opera */
@@ -226,7 +224,16 @@ mat-card {
             -moz-appearance: textfield;
           }
         }
-
+        .contour-field-wrapper {
+          display: flex;
+          flex-direction: column;
+        }
+        
+        .mat-error {
+          flex: 1;
+          font-size: 0.75rem; /* Angular Material error size */
+          color: #f44336; /* Default error color */
+        }
         .details {
 
           margin-top:  16px;
@@ -246,27 +253,28 @@ mat-card {
             }
           }
         }
-
-        mat-form-field {
-          width: 100%;
-          margin-bottom: 0;
-        }
       }
     }
   }
   .button-container {
-    display: flex;          
+    display: flex;       
+    align-items: flex-start; 
     gap: 20px; 
     margin-top: 16px;
+
+    .button-wrapper {
+      display: flex;
+      flex-direction: column;
+    }
   }
   .submitDep {
+    width: 300px;  
+    flex-direction: column;
     background-color: #B3D9AC;
     color:black;
   }
-  .error-text {
-    color: #c81919;
-    font-size: 0.8rem;
-    margin-top: 0;
+  .form-error{
+    margin-top: 16px;
   }
 
 }

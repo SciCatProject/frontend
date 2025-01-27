@@ -68,6 +68,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
   lastUsedDepositionBackends: string[] = [];
   forwardDepositionBackend = "";
   errorMessage = "";
+  depositClicked = false;
   depID$: Observable<string>;
   @ViewChild("fileInput") fileInput: ElementRef<HTMLInputElement> | undefined;
 
@@ -87,7 +88,14 @@ export class OneDepComponent implements OnInit, OnDestroy {
       metadata: ["", Validators.required],
       orcid: this.fb.array([
         this.fb.group({
-          orcidId: ["", [Validators.required, this.orcidValidator()]],
+          orcidId: [
+            "",
+            [
+              Validators.required,
+              this.orcidValidatorNumeric(),
+              this.orcidValidator16digits(),
+            ],
+          ],
         }),
       ]),
       emMethod: ["", Validators.required],
@@ -137,7 +145,9 @@ export class OneDepComponent implements OnInit, OnDestroy {
     this.showPassword = !this.showPassword;
   }
   // custom validator of the ORCID ids
-  orcidValidator(): (control: AbstractControl) => ValidationErrors | null {
+  orcidValidatorNumeric(): (
+    control: AbstractControl,
+  ) => ValidationErrors | null {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value.replace(/-/g, "");
       if (!value) {
@@ -147,13 +157,31 @@ export class OneDepComponent implements OnInit, OnDestroy {
       return isValid ? null : { notNumeric: true };
     };
   }
+  orcidValidator16digits(): (
+    control: AbstractControl,
+  ) => ValidationErrors | null {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value.replace(/-/g, "");
+      if (!value) {
+        return null;
+      }
+      return value.length === 16 ? null : { not16digits: true };
+    };
+  }
   orcidArray(): FormArray {
     return this.form.get("orcid") as FormArray;
   }
   addOrcidField() {
     // adds an empty ORCID field to the form
     const orcidField = this.fb.group({
-      orcidId: ["", [Validators.required, this.orcidValidator()]],
+      orcidId: [
+        "",
+        [
+          Validators.required,
+          this.orcidValidatorNumeric(),
+          this.orcidValidator16digits(),
+        ],
+      ],
     });
     this.orcidArray().push(orcidField);
   }
@@ -165,12 +193,12 @@ export class OneDepComponent implements OnInit, OnDestroy {
       this.orcidArray().removeAt(index);
     }
   }
-  addFileToForm(file: DepositionFile) {
+  addFileToForm(file: DepositionFile, index?: number) {
     // adds a depositionFile to the form
     const fileValidators = [this.correctExtension];
     const contourValidators = [this.numericContourValidator];
     if (file.required) {
-      // add-map is not required
+      // add-map is not required and hence excluded
       if (this.isMap(file.emName)) {
         contourValidators.push(Validators.required);
       }
@@ -191,8 +219,13 @@ export class OneDepComponent implements OnInit, OnDestroy {
       fileFormat: [file.fileFormat],
       explanation: [file.explanation],
     });
-    filesArray.push(fileGroup);
+    if (index !== undefined) {
+      filesArray.insert(index, fileGroup);
+    } else {
+      filesArray.push(fileGroup);
+    }
   }
+
   //remove a file from the form; only used for co-cif (yes/no toggle). On method change a new files array will be generated
   removeFileFromForm(controlName: EmFile) {
     const filesArray = this.form.get("files") as FormArray;
@@ -244,6 +277,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
         this.form.get("associatedMap")?.setValue("false");
         break;
     }
+    // let sortedfileType = new Array<DepositionFile>(this.fileTypes.length);
     this.fileTypes.forEach((file) => {
       if (file.emName !== this.emFile.Coordinates) {
         this.addFileToForm(file);
@@ -253,6 +287,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
   get files() {
     return (this.form.get("files") as FormArray).controls;
   }
+
   getContourControl(fileType: AbstractControl): FormControl {
     return fileType.get("contour") as FormControl;
   }
@@ -262,7 +297,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
       this.fileTypes.forEach((fT) => {
         if (fT.emName === this.emFile.Coordinates) {
           fT.required = true; // update the co-cif required status
-          this.addFileToForm(fT);
+          this.addFileToForm(fT, 1);
         }
       });
     } else {
@@ -382,18 +417,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
       filesArray.at(index).patchValue({ file: null });
     }
   }
-  isRequired(controlName: string): boolean {
-    // for a given file extracts the "required" status for the chosen EM method
-    // FIX me subject to change
-    let value: boolean;
 
-    this.files.forEach((fT) => {
-      if (fT.value.emName === controlName) {
-        value = fT.value.required;
-      }
-    });
-    return value;
-  }
   updateContourLevelMain(event: Event) {
     const input = (event.target as HTMLInputElement).value.trim();
     const normalizedInput = input.replace(",", ".");
@@ -493,8 +517,13 @@ export class OneDepComponent implements OnInit, OnDestroy {
       explanation:
         "Difference maps, maps showing alternative conformations and/or compositions, maps with differential processing (e.g. filtering, sharpening and masking)",
     };
-    // update the co-cif required status
-    this.addFileToForm(newMap);
+    // get the index of last map in the files array and insert as next
+    const filesArray = this.form.get("files") as FormArray;
+    const index = filesArray.value.findIndex(
+      (file: DepositionFile) =>
+        file.emName === EmFile.AddMap && file.id === nextId - 1,
+    );
+    this.addFileToForm(newMap, index + 1);
   }
   addFSC() {
     // adds an empty DepositionFile of type FSC to the form
@@ -517,8 +546,13 @@ export class OneDepComponent implements OnInit, OnDestroy {
       fileFormat: [".xml"],
       explanation: "Half-map FSC, Map-model FSC, Cross-validation FSCs",
     };
-    // update the co-cif required status
-    this.addFileToForm(newFSC);
+    // get the index of last fsc in the files array and insert as next
+    const filesArray = this.form.get("files") as FormArray;
+    const index = filesArray.value.findIndex(
+      (file: DepositionFile) =>
+        file.emName === EmFile.FSC && file.id === nextId - 1,
+    );
+    this.addFileToForm(newFSC, index + 1);
   }
 
   correctExtension(controlFile: AbstractControl): ValidationErrors | null {
@@ -552,6 +586,15 @@ export class OneDepComponent implements OnInit, OnDestroy {
   }
 
   onDepositClick() {
+    // Mark the form as submitted (trigger validation)
+    this.depositClicked = true;
+    this.form.markAllAsTouched();
+    if (this.form.invalid) {
+      return;
+    }
+    this.submit();
+  }
+  submit() {
     let body: OneDepUserInfo;
     if (this.form.value.password) {
       body = {

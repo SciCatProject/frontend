@@ -91,9 +91,12 @@
                       </button>
                     </div>
                   </mat-form-field>
-                  <div class="error-text" *ngIf="field.get('orcidId')?.hasError('notNumeric')">
+                  <mat-error *ngIf="field.get('orcidId')?.hasError('notNumeric')">
                     ORCID ID must contain only numbers.
-                  </div>
+                  </mat-error>
+                  <mat-error *ngIf="field.get('orcidId')?.touched  && field.get('orcidId')?.hasError('not16digits')">
+                    ORCID ID must contain 16 digits.
+                  </mat-error>
                 </div>
               </ng-container>
             </div>
@@ -112,9 +115,9 @@
                 </mat-option>
               </mat-select>
               <!-- Error Message -->
-              <div *ngIf="form.get('emMethod')?.invalid && form.get('emMethod')?.touched" class="error-text">
+              <mat-error *ngIf="form.get('emMethod')?.invalid && form.get('emMethod')?.touched">
                 You must specify the experimental method
-              </div>
+              </mat-error>
             </mat-form-field>
             <!-- Question 2: PDB Deposition -->
             <tr *ngIf="form.value['emMethod'] && form.value['emMethod'] !== 'tomogram'">
@@ -184,7 +187,7 @@
             <mat-card-header matTooltip="{{ fileType.get('explanation').value }}" matTooltipPosition="above">
               <mat-card-title>
                 {{ fileType.get('nameFE').value }}
-                <span class="required-asterisk" *ngIf="isRequired(fileType.get('emName').value)"> *</span>
+                <span class="required-asterisk" *ngIf="fileType.get('required').value"> *</span>
               </mat-card-title>
             </mat-card-header>
             <mat-card-content>
@@ -220,30 +223,33 @@
                     <mat-icon>clear</mat-icon>
                   </button>
                 </div>
-                <div *ngIf="fileType.get('file').hasError('correctExtension')" class="error-text">
+                <mat-error *ngIf="fileType.get('file').hasError('correctExtension')">
                   Invalid file format. Allowed formats: {{ fileType.get('fileFormat').value }}
-                </div>
+                </mat-error>
                
               </div>
               <ng-container *ngIf="isMap(fileType.get('emName').value)">
                 <div class="input-container">
-                  <ng-container>  <!--  *ngIf="fileType.get('contour').value !== null"  details and contour come together-->
-                    <mat-form-field appearance="outline" class="contour-level">
-                      <mat-label>Contour Level</mat-label>
-                      <input
-                      matInput
-                      type="number"
-                      placeholder="e.g. 0.0"
-                      [formControl]="getContourControl(fileType)"
-                      (input)="fileType.get('emName').value === 'vo-map' ? updateContourLevelMain($event) : 
-                      fileType.get('emName').value === 'add-map' ? updateContourLevelAddMap($event, fileType.get('id').value) : 
-                      updateContourLevel($event, fileType.get('emName').value)"
-                      />
-                    </mat-form-field>
-                    <div *ngIf="fileType.get('contour').invalid && fileType.get('contour').touched" class="error-text">
-                      Invalid Contour level, please enter  numeric value.
-                    </div>
-                  </ng-container>
+                  <div class="contour-field-wrapper">  <!-- wrap into column the contour level and it's error message -->
+                    <ng-container>  <!--  *ngIf="fileType.get('contour').value !== null"  details and contour come together-->
+                      <mat-form-field appearance="outline" class="contour-level">
+                        <mat-label>Contour Level</mat-label>
+                        <input
+                        matInput
+                        type="number"
+                        placeholder="e.g. 0.0"
+                        [formControl]="getContourControl(fileType)"
+                        (input)="fileType.get('emName').value === 'vo-map' ? updateContourLevelMain($event) : 
+                        fileType.get('emName').value === 'add-map' ? updateContourLevelAddMap($event, fileType.get('id').value) : 
+                        updateContourLevel($event, fileType.get('emName').value)"
+                        />
+                      </mat-form-field>
+                      
+                      <mat-error *ngIf="fileType.get('contour').invalid && fileType.get('contour').touched" class="contour-error">
+                        Invalid contour level, must be numeric.
+                      </mat-error>
+                    </ng-container>
+                  </div>
                   <ng-container> <!--  *ngIf="fileType.get('details') !== null" -->  
                     <mat-form-field class="details">
                       <mat-label>Short description</mat-label>
@@ -273,9 +279,36 @@
           </mat-card>
           <!-- UPLOAD FILES DONE -->
           <div class="button-container">
-            <button class="submitDep" mat-raised-button color="primary" (click)="onDepositClick()">
-            Start Deposition
-            </button>
+            <div class="button-wrapper">
+              <div *ngIf="depositClicked && !form.valid">
+                <button 
+                  class="submitDep" 
+                  mat-raised-button 
+                  color="primary" 
+                  (click)="onDepositClick()"
+                  [disabled]="!form.valid"
+                  >
+                  Start Deposition
+                </button>
+                <mat-error *ngIf="!form.valid && form.touched" class="form-error">
+                  Please complete the form before starting deposition!
+                </mat-error>
+              </div>
+              <div *ngIf="!depositClicked || (depositClicked && form.valid)">
+                
+                <button 
+                  class="submitDep" 
+                  mat-raised-button 
+                  color="primary" 
+                  (click)="onDepositClick()"
+                  >
+                  Start Deposition
+                </button>
+                <mat-error *ngIf="!form.valid && form.touched" class="form-error">
+                  Please complete the form before starting deposition!
+                </mat-error>
+              </div>
+            </div>
             <button class="submitDep" mat-raised-button color="primary" (click)="onDownloadClick()">
             Download mmCIF
             </button>

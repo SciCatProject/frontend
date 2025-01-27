@@ -53,6 +53,7 @@ export interface DepositionFile {
   details?: string;
   required: boolean;
   fileFormat?: string[];
+  prioritySort?: number; // additional fsc and xml may have no value, sort will be exequted based on id
   explanation?: string;
 }
 
@@ -71,6 +72,7 @@ export const createMethodsList = (): EmMethod[] => {
     file: null,
     required: false,
     fileFormat: [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff"],
+    prioritySort: 0,
     explanation:
       "Image of the map (500 x 500 pixels in .jpg, .png, etc. format)",
   };
@@ -84,6 +86,7 @@ export const createMethodsList = (): EmMethod[] => {
     details: "",
     required: false,
     fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
+    prioritySort: 2,
     explanation:
       "Primary map (.mrc or .ccp4 format, may use gzip or bzip2 compression) along with recommended contour level",
   };
@@ -97,6 +100,7 @@ export const createMethodsList = (): EmMethod[] => {
     details: "",
     required: false,
     fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
+    prioritySort: 4,
     explanation:
       "Half maps (as used for FSC calculation; two maps must be uploaded)",
   };
@@ -110,6 +114,7 @@ export const createMethodsList = (): EmMethod[] => {
     details: "",
     required: false,
     fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
+    prioritySort: 5,
     explanation:
       "Half maps (as used for FSC calculation; two maps must be uploaded)",
   };
@@ -123,6 +128,7 @@ export const createMethodsList = (): EmMethod[] => {
     details: "",
     required: false,
     fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
+    prioritySort: 3,
     explanation:
       "Primary/raw map mask, segmentation/focused refinement mask and half-map mask",
   };
@@ -137,6 +143,7 @@ export const createMethodsList = (): EmMethod[] => {
     details: "",
     required: false,
     fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
+    prioritySort: 10,
     explanation:
       "Difference maps, maps showing alternative conformations and/or compositions, maps with differential processing (e.g. filtering, sharpening and masking)",
   };
@@ -149,6 +156,7 @@ export const createMethodsList = (): EmMethod[] => {
     file: null,
     fileFormat: [".xml"],
     required: false,
+    prioritySort: 7,
     explanation: "Half-map FSC, Map-model FSC, Cross-validation FSCs",
   };
   const depositionLayerLines: DepositionFile = {
@@ -158,6 +166,7 @@ export const createMethodsList = (): EmMethod[] => {
     fileName: "",
     file: null,
     required: false,
+    prioritySort: 9,
   };
   const depositionCoordinates: DepositionFile = {
     emName: EmFile.Coordinates,
@@ -176,6 +185,7 @@ export const createMethodsList = (): EmMethod[] => {
       ".ent.gz",
       ".brk.gz",
     ],
+    prioritySort: 1,
     explanation: "mmCIF or PDB format",
   };
   const depositionStructureFactors: DepositionFile = {
@@ -185,6 +195,7 @@ export const createMethodsList = (): EmMethod[] => {
     fileName: "",
     file: null,
     required: false,
+    prioritySort: 8,
     fileFormat: [".cif", ".mtz", ".cif.gz", ".mtz.gz"],
   };
   const depositionMTZ: DepositionFile = {
@@ -194,6 +205,7 @@ export const createMethodsList = (): EmMethod[] => {
     fileName: "",
     file: null,
     required: false,
+    prioritySort: 6,
   };
   return [
     {
@@ -203,9 +215,9 @@ export const createMethodsList = (): EmMethod[] => {
         depositionImage,
         depositionCoordinates,
         depositionMainMap,
-        depositionMaskMap,
         depositionHalfMap1,
         depositionHalfMap2,
+        depositionMaskMap,
         depositionFSC,
         depositionLayerLines,
         depositionAddMap,
@@ -218,9 +230,9 @@ export const createMethodsList = (): EmMethod[] => {
         depositionImage,
         depositionCoordinates,
         depositionMainMap,
-        depositionMaskMap,
         depositionHalfMap1,
         depositionHalfMap2,
+        depositionMaskMap,
         depositionFSC,
         depositionLayerLines,
         depositionAddMap,
@@ -233,9 +245,9 @@ export const createMethodsList = (): EmMethod[] => {
         depositionImage,
         depositionCoordinates,
         depositionMainMap,
-        depositionMaskMap,
         depositionHalfMap1,
         depositionHalfMap2,
+        depositionMaskMap,
         depositionFSC,
         depositionLayerLines,
         depositionAddMap,
@@ -260,9 +272,9 @@ export const createMethodsList = (): EmMethod[] => {
         depositionImage,
         depositionCoordinates,
         depositionMainMap,
-        depositionMaskMap,
         depositionHalfMap1,
         depositionHalfMap2,
+        depositionMaskMap,
         depositionStructureFactors,
         depositionMTZ,
         depositionFSC,
