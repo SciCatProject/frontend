@@ -6,43 +6,6 @@ describe("Datasets detail view", () => {
   });
 
   describe("Show dataset detail view with default component and fallback labels", () => {
-    beforeEach(() => {
-      cy.intercept("GET", `/api/v3/admin/config`, (req) => {
-        req.reply((res) => {
-          res.headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
-          res.headers["Pragma"] = "no-cache";
-          res.headers["Expires"] = "0";
-          res.send({
-            ...res.body,
-            ...testConfig.fallbackDetailViewComponent,
-          });
-        });
-      }).as("getFrontendConfig");
-
-      cy.visit("/datasets");
-
-      cy.login(Cypress.env("username"), Cypress.env("password"));
-
-      cy.createDataset("raw");
-      cy.visit("/datasets");
-
-      cy.wait("@getFrontendConfig");
-
-      cy.get(".dataset-table mat-table mat-header-row").should("exist");
-
-      cy.finishedLoading();
-
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type("Cypress");
-
-      cy.isLoading();
-
-      cy.get("mat-row").contains("Cypress Dataset").click();
-
-      cy.isLoading();
-    });
-
     it("should load datasets with fallback labels", () => {
       const fallbackLabels = [
         "File Information",
@@ -51,6 +14,9 @@ describe("Datasets detail view", () => {
         "Description",
         "Orcid",
       ];
+
+      cy.setupDatasetDetailView("fallbackDetailViewComponent");
+
       cy.wrap(fallbackLabels).each((value) => {
         cy.get("mat-card").should(($matCards) => {
           const matchFound = [...$matCards].some((card) =>
@@ -66,42 +32,10 @@ describe("Datasets detail view", () => {
     const defaultDetailViewComponent = testConfig.defaultDetailViewComponent;
     const customizedLabelSets =
       defaultDetailViewComponent.datasetDetailViewLabelOption.labelSets.test;
-    beforeEach(() => {
-      cy.intercept("GET", `/api/v3/admin/config`, (req) => {
-        req.reply((res) => {
-          res.headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
-          res.headers["Pragma"] = "no-cache";
-          res.headers["Expires"] = "0";
-          res.send({
-            ...res.body,
-            ...testConfig.defaultDetailViewComponent,
-          });
-        });
-      }).as("getFrontendConfig");
-
-      cy.login(Cypress.env("username"), Cypress.env("password"));
-
-      cy.createDataset("raw");
-      cy.visit("/datasets");
-
-      cy.wait("@getFrontendConfig");
-
-      cy.get(".dataset-table mat-table mat-header-row").should("exist");
-
-      cy.finishedLoading();
-
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type("Cypress");
-
-      cy.isLoading();
-
-      cy.get("mat-row").contains("Cypress Dataset").click();
-
-      cy.isLoading();
-    });
 
     it("should load datasets with customized labels", () => {
+      cy.setupDatasetDetailView("defaultDetailViewComponent");
+
       cy.wrap(Object.values(customizedLabelSets)).each((value) => {
         cy.get("mat-card").should(($matCards) => {
           const matchFound = [...$matCards].some((card) =>
@@ -120,43 +54,8 @@ describe("Datasets detail view", () => {
     const customizedComponents =
       dynamicComponentConfig.datasetDetailComponent.customization;
 
-    beforeEach(() => {
-      cy.intercept("GET", `/api/v3/admin/config`, (req) => {
-        req.reply((res) => {
-          res.headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
-          res.headers["Pragma"] = "no-cache";
-          res.headers["Expires"] = "0";
-          res.send({
-            ...res.body,
-            ...testConfig.dynamicDetialViewComponent,
-          });
-        });
-      }).as("getFrontendConfig");
-
-      cy.login(Cypress.env("username"), Cypress.env("password"));
-
-      cy.createDataset("raw");
-
-      cy.visit("/datasets");
-
-      cy.wait("@getFrontendConfig");
-
-      cy.get(".dataset-table mat-table mat-header-row").should("exist");
-
-      cy.finishedLoading();
-
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type("Cypress");
-
-      cy.isLoading();
-
-      cy.get("mat-row").contains("Cypress Dataset").click();
-
-      cy.isLoading();
-    });
-
     it("should load datasets with customized labels", () => {
+      cy.setupDatasetDetailView("dynamicDetialViewComponent");
       cy.wrap(Object.values(customizedLabelSets)).each((value) => {
         cy.get("body")
           .find('[data-cy="section-label"], [data-cy="field-label"]')
@@ -165,6 +64,7 @@ describe("Datasets detail view", () => {
     });
 
     it("should order sections based on customized settings", () => {
+      cy.setupDatasetDetailView("dynamicDetialViewComponent");
       const sortedLabels = customizedComponents
         .sort((a, b) => a.order - b.order)
         .map((section) => section.label);
@@ -177,6 +77,8 @@ describe("Datasets detail view", () => {
     });
 
     it("should order fields based on customized settings", () => {
+      cy.setupDatasetDetailView("dynamicDetialViewComponent");
+
       const componentLabel = "Section Label Regular";
       const sectionToTest = customizedComponents.find(
         (section) => section.label === componentLabel,
@@ -193,6 +95,8 @@ describe("Datasets detail view", () => {
     });
 
     it("should render attachments section with customized settings", () => {
+      cy.setupDatasetDetailView("dynamicDetialViewComponent");
+
       const componentLabel = "Section Label Attachments";
       const sectionToTest = customizedComponents.find(
         (section) => section.label === componentLabel,

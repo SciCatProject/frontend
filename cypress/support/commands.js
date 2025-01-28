@@ -1,4 +1,5 @@
 import { testData } from "../fixtures/testData";
+import { testConfig } from "../fixtures/testData";
 
 const lbBaseUrl = Cypress.env("baseUrl");
 const loginEndpoint = Cypress.env("loginEndpoint");
@@ -483,3 +484,45 @@ Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {
     });
   });
 });
+
+Cypress.Commands.add(
+  "setupDatasetDetailView",
+  (
+    frontendConfig = "fallbackDetailViewComponent",
+    datasetName = "Cypress Dataset",
+  ) => {
+    cy.intercept("GET", `/api/v3/admin/config`, (req) => {
+      req.reply((res) => {
+        res.headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+        res.headers["Pragma"] = "no-cache";
+        res.headers["Expires"] = "0";
+        res.send({
+          ...res.body,
+          ...testConfig[`${frontendConfig}`],
+        });
+      });
+    }).as("getFrontendConfig");
+
+    cy.login(Cypress.env("username"), Cypress.env("password"));
+
+    cy.createDataset("raw");
+
+    cy.visit("/datasets");
+
+    cy.wait("@getFrontendConfig");
+
+    cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+    cy.finishedLoading();
+
+    cy.get('[data-cy="text-search"] input[type="search"]')
+      .clear()
+      .type(datasetName);
+
+    cy.isLoading();
+
+    cy.get("mat-row").contains(datasetName).click();
+
+    cy.isLoading();
+  },
+);
