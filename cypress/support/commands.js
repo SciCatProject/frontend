@@ -491,7 +491,7 @@ Cypress.Commands.add(
     frontendConfig = "fallbackDetailViewComponent",
     datasetName = "Cypress Dataset",
   ) => {
-    cy.intercept("GET", `**/config`, (req) => {
+    cy.intercept("GET", `**/assets/config.json`, (req) => {
       cy.log("URL being used.1", req.url);
 
       req.reply((res) => {
@@ -512,6 +512,10 @@ Cypress.Commands.add(
         console.log("Response from localhost:3000:", response);
         cy.log("Response from localhost:3000:", JSON.stringify(response.body));
       })
+      .catch((error) => {
+        console.log("-=---catch error---=-", error);
+        cy.log("-=---catch error---=-", error);
+      })
       .its("status")
       .should("eq", 200);
 
@@ -520,6 +524,10 @@ Cypress.Commands.add(
         console.log("Response from localhost:3000:", response);
         cy.log("Response from localhost:3000:", JSON.stringify(response.body));
       })
+      .catch((error) => {
+        console.log("-=---catch error---=-", error);
+        cy.log("-=---catch error---=-", error);
+      })
       .its("status")
       .should("eq", 200);
 
@@ -527,6 +535,10 @@ Cypress.Commands.add(
       .then((response) => {
         console.log("Response from localhost:4200:", response);
         cy.log("Response from localhost:4200:", JSON.stringify(response.body));
+      })
+      .catch((error) => {
+        console.log("-=---catch error---=-", error);
+        cy.log("-=---catch error---=-", error);
       })
       .its("status")
       .should("eq", 200);
