@@ -49,7 +49,6 @@ class MockTranslateLoader implements TranslateLoader {
     return of({});
   }
 }
-// test
 describe("DatasetDetailComponent", () => {
   let component: DatasetDetailComponent;
   let fixture: ComponentFixture<DatasetDetailComponent>;
