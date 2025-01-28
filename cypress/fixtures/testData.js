@@ -249,5 +249,16 @@ export const testConfig = {
         },
       },
     },
+    datasetDetailComponent: {
+      enableCustomizedComponent: false,
+      customization: [],
+    },
+  },
+  fallbackDetailViewComponent: {
+    datasetDetailViewLabelOption: {},
+    datasetDetailComponent: {
+      enableCustomizedComponent: false,
+      customization: [],
+    },
   },
 };

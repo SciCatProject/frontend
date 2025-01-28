@@ -1,19 +1,32 @@
 import { testConfig } from "../../fixtures/testData";
 
 describe("Datasets detail view", () => {
-  beforeEach(() => cy.reload(true));
   after(() => {
     cy.removeDatasets();
   });
 
   describe("Show dataset detail view with default component and fallback labels", () => {
     beforeEach(() => {
+      cy.intercept("GET", `/api/v3/admin/config`, (req) => {
+        req.reply((res) => {
+          res.headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+          res.headers["Pragma"] = "no-cache";
+          res.headers["Expires"] = "0";
+          res.send({
+            ...res.body,
+            ...testConfig.fallbackDetailViewComponent,
+          });
+        });
+      }).as("getFrontendConfig");
+
       cy.visit("/datasets");
 
       cy.login(Cypress.env("username"), Cypress.env("password"));
 
       cy.createDataset("raw");
       cy.visit("/datasets");
+
+      cy.wait("@getFrontendConfig");
 
       cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
