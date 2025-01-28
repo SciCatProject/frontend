@@ -1,6 +1,7 @@
 import { testConfig } from "../../fixtures/testData";
 
 describe("Datasets detail view", () => {
+  beforeEach(() => cy.reload(true));
   after(() => {
     cy.removeDatasets();
   });

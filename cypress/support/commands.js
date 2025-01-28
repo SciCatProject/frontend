@@ -492,11 +492,7 @@ Cypress.Commands.add(
     datasetName = "Cypress Dataset",
   ) => {
     cy.intercept("GET", `**/admin/config`, (req) => {
-      cy.log("URL being used.1", req.url);
-
       req.reply((res) => {
-        cy.log("URL being used.2", req.url);
-
         res.headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
         res.headers["Pragma"] = "no-cache";
         res.headers["Expires"] = "0";
