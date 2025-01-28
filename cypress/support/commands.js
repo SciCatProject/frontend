@@ -507,6 +507,14 @@ Cypress.Commands.add(
       });
     }).as("getFrontendConfig");
 
+    cy.request("http://localhost:8080/api/v3/admin/config")
+      .then((response) => {
+        console.log("Response from localhost:3000:", response);
+        cy.log("Response from localhost:3000:", JSON.stringify(response.body));
+      })
+      .its("status")
+      .should("eq", 200);
+
     cy.request("http://localhost:3000/api/v3/admin/config")
       .then((response) => {
         console.log("Response from localhost:3000:", response);
