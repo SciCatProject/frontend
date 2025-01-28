@@ -507,42 +507,6 @@ Cypress.Commands.add(
       });
     }).as("getFrontendConfig");
 
-    cy.request("http://localhost:8080/api/v3/admin/config")
-      .then((response) => {
-        console.log("Response from localhost:3000:", response);
-        cy.log("Response from localhost:3000:", JSON.stringify(response.body));
-      })
-      .catch((error) => {
-        console.log("-=---catch error---=-", error);
-        cy.log("-=---catch error---=-", error);
-      })
-      .its("status")
-      .should("eq", 200);
-
-    cy.request("http://localhost:3000/api/v3/admin/config")
-      .then((response) => {
-        console.log("Response from localhost:3000:", response);
-        cy.log("Response from localhost:3000:", JSON.stringify(response.body));
-      })
-      .catch((error) => {
-        console.log("-=---catch error---=-", error);
-        cy.log("-=---catch error---=-", error);
-      })
-      .its("status")
-      .should("eq", 200);
-
-    cy.request("http://localhost:4200/api/v3/admin/config")
-      .then((response) => {
-        console.log("Response from localhost:4200:", response);
-        cy.log("Response from localhost:4200:", JSON.stringify(response.body));
-      })
-      .catch((error) => {
-        console.log("-=---catch error---=-", error);
-        cy.log("-=---catch error---=-", error);
-      })
-      .its("status")
-      .should("eq", 200);
-
     cy.login(Cypress.env("username"), Cypress.env("password"));
 
     cy.createDataset("raw");
