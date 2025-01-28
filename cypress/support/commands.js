@@ -492,6 +492,7 @@ Cypress.Commands.add(
     datasetName = "Cypress Dataset",
   ) => {
     cy.intercept("GET", `http://localhost:4200/api/v3/admin/config`, (req) => {
+      console.log("Intercepted URL:", req.url);
       req.reply((res) => {
         res.headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
         res.headers["Pragma"] = "no-cache";
