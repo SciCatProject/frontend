@@ -124,8 +124,6 @@ jobs:
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
-        env:
-          DEBUG: cypress:server:browsers:*
         with:
           config-file: cypress.config.ts
           install-command: npm install --omit peer

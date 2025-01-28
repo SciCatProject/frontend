@@ -519,7 +519,7 @@ Cypress.Commands.add(
 
     cy.get('[data-cy="text-search"] input[type="search"]')
       .clear()
-      .type(datasetName);
+      .type("Cypress");
 
     cy.isLoading();
 
