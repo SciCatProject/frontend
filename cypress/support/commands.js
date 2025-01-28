@@ -492,8 +492,11 @@ Cypress.Commands.add(
     datasetName = "Cypress Dataset",
   ) => {
     cy.intercept("GET", `**/config`, (req) => {
-      console.log("Intercepted URL:", req.url);
+      cy.log("URL being used.1", req.url);
+
       req.reply((res) => {
+        cy.log("URL being used.2", req.url);
+
         res.headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
         res.headers["Pragma"] = "no-cache";
         res.headers["Expires"] = "0";
@@ -503,6 +506,22 @@ Cypress.Commands.add(
         });
       });
     }).as("getFrontendConfig");
+
+    cy.request("http://localhost:3000/api/v3/admin/config")
+      .then((response) => {
+        console.log("Response from localhost:3000:", response);
+        cy.log("Response from localhost:3000:", JSON.stringify(response.body));
+      })
+      .its("status")
+      .should("eq", 200);
+
+    cy.request("http://localhost:4200/api/v3/admin/config")
+      .then((response) => {
+        console.log("Response from localhost:4200:", response);
+        cy.log("Response from localhost:4200:", JSON.stringify(response.body));
+      })
+      .its("status")
+      .should("eq", 200);
 
     cy.login(Cypress.env("username"), Cypress.env("password"));
 
