@@ -491,6 +491,8 @@ Cypress.Commands.add(
     frontendConfig = "fallbackDetailViewComponent",
     datasetName = "Cypress Dataset",
   ) => {
+    cy.reload(true);
+
     cy.intercept("GET", `**/admin/config`, (req) => {
       req.reply((res) => {
         res.headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
@@ -508,8 +510,6 @@ Cypress.Commands.add(
     cy.createDataset("raw");
 
     cy.visit("/datasets");
-
-    cy.reload(true);
 
     cy.wait("@getFrontendConfig");
 
