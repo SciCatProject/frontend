@@ -509,6 +509,8 @@ Cypress.Commands.add(
 
     cy.visit("/datasets");
 
+    cy.reload(true);
+
     cy.wait("@getFrontendConfig");
 
     cy.get(".dataset-table mat-table mat-header-row").should("exist");

@@ -7,6 +7,7 @@ describe("Datasets detail view", () => {
   });
 
   describe("Show dataset detail view with default component and fallback labels", () => {
+    beforeEach(() => cy.reload(true));
     it("should load datasets with fallback labels", () => {
       const fallbackLabels = [
         "File Information",
@@ -54,7 +55,7 @@ describe("Datasets detail view", () => {
       dynamicComponentConfig.datasetDetailViewLabelOption.labelSets.test;
     const customizedComponents =
       dynamicComponentConfig.datasetDetailComponent.customization;
-
+    beforeEach(() => cy.reload(true));
     it("should load datasets with customized labels", () => {
       cy.setupDatasetDetailView("dynamicDetialViewComponent");
       cy.wrap(Object.values(customizedLabelSets)).each((value) => {
