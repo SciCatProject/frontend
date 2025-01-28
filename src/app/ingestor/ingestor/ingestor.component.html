@@ -71,6 +71,18 @@
                 </tr>
               </table>
             </mat-tab>
+            <mat-tab label="User information">
+              <!-- Mat List with the most important information about the user connection -->
+              <mat-list>
+                <mat-list-item>
+                  <span matListItemTitle>Username</span>
+                  <span matListItemLine>Name</span>
+                </mat-list-item>
+                <mat-list-item>
+                  <button mat-button (click)="openIngestorLogin()">Login</button>
+                </mat-list-item>
+              </mat-list>
+            </mat-tab>
             <mat-tab label="Connection information">
               <!-- Mat List with the most important information about the backend connection -->
               <mat-list>

@@ -1,13 +1,12 @@
 import { Component, inject, OnInit } from "@angular/core";
 import { AppConfigService } from "app-config.service";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   apiGetHealth,
   INGESTOR_API_ENDPOINTS_V1,
   PostDatasetEndpoint,
-  PostExtractorEndpoint,
-} from "./ingestor-api-endpoints";
+} from "./helper/ingestor-api-endpoints";
 import { IngestorNewTransferDialogComponent } from "./dialog/ingestor.new-transfer-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { IngestorUserMetadataDialogComponent } from "./dialog/ingestor.user-metadata-dialog.component";
@@ -16,10 +15,10 @@ import { IngestorConfirmTransferDialogComponent } from "./dialog/ingestor.confir
 import {
   IngestionRequestInformation,
   IngestorHelper,
-  MetadataExtractorResult,
   ScientificMetadata,
   TransferDataListEntry,
-} from "./ingestor.component-helper";
+} from "./helper/ingestor.component-helper";
+import { IngestorMetadataSSEService } from "./helper/ingestor.metadata-sse-service";
 
 @Component({
   selector: "ingestor",
@@ -49,11 +48,14 @@ export class IngestorComponent implements OnInit {
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
 
+  metadataExtractionStatus = "";
+
   constructor(
     public appConfigService: AppConfigService,
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
+    private sseService: IngestorMetadataSSEService,
   ) {}
 
   ngOnInit() {
@@ -83,25 +85,27 @@ export class IngestorComponent implements OnInit {
 
     // Try to connect to the facility backend/version to check if it is available
     console.log("Connecting to facility backend: " + facilityBackendUrlVersion);
-    this.http.get(facilityBackendUrlVersion, {withCredentials: true}).subscribe(
-      (response) => {
-        console.log("Connected to facility backend", response);
-        // If the connection is successful, store the connected facility backend URL
-        this.connectedFacilityBackend = facilityBackendUrlCleaned;
-        this.connectingToFacilityBackend = false;
-        this.connectedFacilityBackendVersion = response["version"];
+    this.http
+      .get(facilityBackendUrlVersion, { withCredentials: true })
+      .subscribe(
+        (response) => {
+          console.log("Connected to facility backend", response);
+          // If the connection is successful, store the connected facility backend URL
+          this.connectedFacilityBackend = facilityBackendUrlCleaned;
+          this.connectingToFacilityBackend = false;
+          this.connectedFacilityBackendVersion = response["version"];
 
-        // TODO Do Health check
-        apiGetHealth();
-      },
-      (error) => {
-        this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
-        console.error("Request failed", error);
-        this.connectedFacilityBackend = "";
-        this.connectingToFacilityBackend = false;
-        this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
-      },
-    );
+          // TODO Do Health check
+          apiGetHealth();
+        },
+        (error) => {
+          this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+          console.error("Request failed", error);
+          this.connectedFacilityBackend = "";
+          this.connectingToFacilityBackend = false;
+          this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
+        },
+      );
 
     return true;
   }
@@ -120,7 +124,8 @@ export class IngestorComponent implements OnInit {
     }
     this.http
       .get(this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.TRANSFER, {
-        params, withCredentials: true
+        params,
+        withCredentials: true,
       })
       .subscribe(
         (response) => {
@@ -128,7 +133,7 @@ export class IngestorComponent implements OnInit {
           this.transferDataSource = response["transfers"];
         },
         (error) => {
-          this.errorMessage += `${new Date().toLocaleString()}: ${error.message}]<br>`;
+          this.errorMessage += `${new Date().toLocaleString()}: ${error.type}]<br>`;
           console.error("Request failed", error);
         },
       );
@@ -142,10 +147,10 @@ export class IngestorComponent implements OnInit {
     };
 
     this.http
-      .post(
-        this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.DATASET,
-        {payload, withCredentials: true},
-      )
+      .post(this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.DATASET, {
+        payload,
+        withCredentials: true,
+      })
       .subscribe(
         (response) => {
           console.log("Upload successfully started", response);
@@ -174,42 +179,39 @@ export class IngestorComponent implements OnInit {
     this.createNewTransferData.extractorMetaDataReady = false;
     this.createNewTransferData.extractMetaDataRequested = true;
 
-    const payload: PostExtractorEndpoint = {
-      filePath: this.createNewTransferData.selectedPath,
-      methodName: this.createNewTransferData.selectedMethod.name,
-    };
+    const params = new HttpParams()
+      .set("filePath", this.createNewTransferData.selectedPath)
+      .set("methodName", this.createNewTransferData.selectedMethod.name);
 
-    return new Promise<boolean>((resolve) => {
-      this.http
-        .post(
-          this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.EXTRACTOR,
-          {payload, withCredentials: true},
-        )
-        .subscribe(
-          (response) => {
-            console.log("Metadata extraction result", response);
-            const extractedMetadata = response as MetadataExtractorResult;
-            const extractedScientificMetadata = JSON.parse(
-              extractedMetadata.result,
-            ) as ScientificMetadata;
+    const sseUrl = `${this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.METADATA}?${params.toString()}`;
 
-            this.createNewTransferData.extractorMetaData.instrument =
-              extractedScientificMetadata.instrument ?? {};
-            this.createNewTransferData.extractorMetaData.acquisition =
-              extractedScientificMetadata.acquisition ?? {};
-            this.createNewTransferData.extractorMetaDataReady = true;
-            resolve(true);
-          },
-          (error) => {
-            this.errorMessage += `${new Date().toLocaleString()}: ${error.message}]<br>`;
-            console.error("Metadata extraction failed", error);
-            this.createNewTransferData.extractorMetaDataReady = true;
-            this.createNewTransferData.apiErrorInformation.metaDataExtraction =
-              true;
-            resolve(false);
-          },
-        );
-    });
+    this.sseService.connect(sseUrl);
+
+    this.sseService.getMessages().subscribe(
+      (data) => {
+        // TODO Remove logging
+        console.log("Received SSE data:", data);
+        if (data.result) {
+          this.createNewTransferData.extractorMetaDataReady = true;
+          const extractedScientificMetadata = JSON.parse(
+            data.resultMessage,
+          ) as ScientificMetadata;
+
+          this.createNewTransferData.extractorMetaData.instrument =
+            extractedScientificMetadata.instrument ?? {};
+          this.createNewTransferData.extractorMetaData.acquisition =
+            extractedScientificMetadata.acquisition ?? {};
+          this.createNewTransferData.extractorMetaDataReady = true;
+        }
+      },
+      (error) => {
+        console.error("Error receiving SSE data:", error);
+        this.createNewTransferData.apiErrorInformation.metaDataExtraction =
+          true;
+      },
+    );
+
+    return true;
   }
 
   onClickForwardToIngestorPage() {
@@ -281,7 +283,7 @@ export class IngestorComponent implements OnInit {
       case 1:
         this.apiStartMetadataExtraction()
           .then((response: boolean) => {
-            if (response) console.log("Metadata extraction finished");
+            if (response) console.log("Metadata extraction started");
             else console.error("Metadata extraction failed");
           })
           .catch((error) => {
@@ -339,8 +341,8 @@ export class IngestorComponent implements OnInit {
         this.connectedFacilityBackend +
           INGESTOR_API_ENDPOINTS_V1.TRANSFER +
           "/" +
-          transferId, 
-          {withCredentials: true}
+          transferId,
+        { withCredentials: true },
       )
       .subscribe(
         (response) => {
@@ -352,5 +354,10 @@ export class IngestorComponent implements OnInit {
           console.error("Cancel transfer failed", error);
         },
       );
+  }
+
+  openIngestorLogin(): void {
+    window.location.href =
+      this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.AUTH.LOGIN;
   }
 }

@@ -6,7 +6,7 @@ import {
   IngestionRequestInformation,
   IngestorHelper,
   SciCatHeader_Schema,
-} from "../ingestor.component-helper";
+} from "../helper/ingestor.component-helper";
 
 @Component({
   selector: "ingestor.user-metadata-dialog",
@@ -74,6 +74,11 @@ export class IngestorUserMetadataDialogComponent {
 
   onDataChangeUserScicatHeader(event: any) {
     this.createNewTransferData.scicatHeader = event;
+  }
+
+  onCreateNewTransferDataChange(updatedData: IngestionRequestInformation) {
+    this.createNewTransferData = updatedData;
+    console.log("Transfer data updated:", this.createNewTransferData);
   }
 
   toggleCardContent(card: string): void {

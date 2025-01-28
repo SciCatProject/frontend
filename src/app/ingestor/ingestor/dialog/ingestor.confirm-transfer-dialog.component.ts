@@ -10,7 +10,7 @@ import {
   IngestionRequestInformation,
   IngestorHelper,
   SciCatHeader,
-} from "../ingestor.component-helper";
+} from "../helper/ingestor.component-helper";
 
 @Component({
   selector: "ingestor.confirm-transfer-dialog",

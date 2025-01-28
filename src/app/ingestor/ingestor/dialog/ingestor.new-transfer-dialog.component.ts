@@ -6,13 +6,13 @@ import {
 } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
 import { HttpClient } from "@angular/common/http";
-import { INGESTOR_API_ENDPOINTS_V1 } from "../ingestor-api-endpoints";
+import { INGESTOR_API_ENDPOINTS_V1 } from "../helper/ingestor-api-endpoints";
 import {
   DialogDataObject,
   ExtractionMethod,
   IngestionRequestInformation,
   IngestorHelper,
-} from "../ingestor.component-helper";
+} from "../helper/ingestor.component-helper";
 import { IngestorMetadataEditorHelper } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 
 @Component({

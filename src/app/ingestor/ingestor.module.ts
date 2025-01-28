@@ -31,6 +31,8 @@ import { MatRadioModule } from "@angular/material/radio";
 import { ArrayLayoutRendererCustom } from "./ingestor-metadata-editor/customRenderer/array-renderer";
 import { MatBadgeModule } from "@angular/material/badge";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { IngestorConfirmationDialogComponent } from "./ingestor/dialog/confirmation-dialog/ingestor.confirmation-dialog.component";
+import { ExportTemplateHelperComponent } from "./ingestor/dialog/checkbox/checkbox.component";
 
 @NgModule({
   declarations: [
@@ -44,6 +46,8 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     AnyOfRendererComponent,
     OneOfRendererComponent,
     ArrayLayoutRendererCustom,
+    IngestorConfirmationDialogComponent,
+    ExportTemplateHelperComponent,
   ],
   imports: [
     CommonModule,

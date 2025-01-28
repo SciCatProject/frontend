@@ -8,7 +8,7 @@
   </button>
 </div>
 <mat-dialog-content class="mat-typography" disableClose="true">
-  <ingestor-dialog-stepper [activeStep]="1"></ingestor-dialog-stepper>
+  <ingestor-dialog-stepper [activeStep]="1" [createNewTransferData]="createNewTransferData" (createNewTransferDataChange)="onCreateNewTransferDataChange($event)"></ingestor-dialog-stepper>
 
   <div fxLayout="row" fxLayout.xs="column">
     <div fxFlex="80%">

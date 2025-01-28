@@ -5,7 +5,7 @@ import {
   DialogDataObject,
   IngestionRequestInformation,
   IngestorHelper,
-} from "../ingestor.component-helper";
+} from "../helper/ingestor.component-helper";
 
 @Component({
   selector: "ingestor.extractor-metadata-dialog",
