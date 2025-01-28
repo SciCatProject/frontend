@@ -128,7 +128,6 @@ jobs:
           config-file: cypress.config.ts
           install-command: npm install --omit peer
           browser: chrome
-          spec: cypress/e2e/datasets-detail.cy.js
 
       - name: docker logs
         if: ${{ failure() }}
