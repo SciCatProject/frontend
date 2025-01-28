@@ -116,17 +116,20 @@ export class AppConfigService {
   async loadAppConfig(): Promise<void> {
     try {
       const config = await this.http
-        .get("http://localhost:3000/api/v3/admin/config")
+        .get("/api/v3/admin/config")
         .pipe(timeout(2000))
         .toPromise();
       this.appConfig = Object.assign({}, this.appConfig, config);
     } catch (err) {
-      console.log("No config available in backend, trying with local config.");
+      console.log(
+        "No config available in backend, trying with local config.",
+        err,
+      );
       try {
         const config = await this.http.get("/assets/config.json").toPromise();
         this.appConfig = Object.assign({}, this.appConfig, config);
       } catch (err) {
-        console.error("No config provided.");
+        console.error("No config provided.", err);
       }
     }
   }
