@@ -1,6 +1,7 @@
 import { testConfig } from "../../fixtures/testData";
 
 describe("Datasets detail view", () => {
+  beforeEach(() => cy.reload(true));
   after(() => {
     cy.removeDatasets();
   });
@@ -63,16 +64,14 @@ describe("Datasets detail view", () => {
             ...testConfig.defaultDetailViewComponent,
           });
         });
-      }).as("getAdminConfig");
-
-      cy.visit("/datasets");
+      }).as("getFrontendConfig");
 
       cy.login(Cypress.env("username"), Cypress.env("password"));
 
       cy.createDataset("raw");
       cy.visit("/datasets");
 
-      cy.wait("@getAdminConfig");
+      cy.wait("@getFrontendConfig");
 
       cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
@@ -119,14 +118,15 @@ describe("Datasets detail view", () => {
             ...testConfig.dynamicDetialViewComponent,
           });
         });
-      }).as("getAdminConfig");
+      }).as("getFrontendConfig");
 
       cy.login(Cypress.env("username"), Cypress.env("password"));
 
       cy.createDataset("raw");
+
       cy.visit("/datasets");
 
-      cy.wait("@getAdminConfig");
+      cy.wait("@getFrontendConfig");
 
       cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
