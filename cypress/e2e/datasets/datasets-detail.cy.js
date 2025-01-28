@@ -1,6 +1,6 @@
 import { testConfig } from "../../fixtures/testData";
 
-describe("Datasets dynamic detail view ", () => {
+describe("Datasets detail view", () => {
   after(() => {
     cy.removeDatasets();
   });
