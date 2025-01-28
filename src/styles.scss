@@ -28,6 +28,7 @@
 @use "./app/shared/modules/error-page/error-page-theme" as error-page;
 @use "./app/shared/modules/shared-table/shared-table-theme" as shared-table;
 @use "./app/shared/modules/table/table-theme" as table;
+@use "./app/shared/modules/scicat-table/scicat-table-theme" as scicat-table;
 @use "./app/users/user-settings/user-settings-theme" as user-settings;
 
 $my-custom-button-level: mat.define-typography-level(

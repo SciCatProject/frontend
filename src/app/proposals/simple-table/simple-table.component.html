@@ -1,0 +1,50 @@
+<mat-card style="height: 400px">
+  <dynamic-mat-table
+    tableName="simple-table"
+    [showReload]="showReloadData"
+    [dir]="direction"
+    [rowHeight]="rowHeight"
+    [columns]="columns"
+    [pending]="pending"
+    [setting]="setting"
+    [pagingMode]="paginationMode"
+    [sticky]="stickyHeader"
+    [dataSource]="dataSource"
+    [pagination]="pagination"
+    [showNoData]="showNoData"
+    [rowSelectionMode]="rowSelectionMode"
+    [printConfig]="printConfig"
+    [showProgress]="showProgress"
+    (paginationChange)="onPaginationChange($event)"
+    style="height: 100%"
+  >
+  </dynamic-mat-table>
+</mat-card>
+
+<div class="container">
+  <button
+    mat-raised-button
+    class="table-btn"
+    color="primary"
+    (click)="dataPlay()"
+  >
+    {{ dataPlayName }}
+  </button>
+  <button
+    *ngIf="noDataBtn"
+    mat-raised-button
+    class="table-btn"
+    color="primary"
+    (click)="showNoData = !showNoData"
+  >
+    NO DATA: {{ showNoData }}
+  </button>
+  <button
+    mat-raised-button
+    class="table-btn"
+    color="primary"
+    (click)="changeHeaderMode()"
+  >
+    Sticky Header: {{ stickyHeader }}
+  </button>
+</div>

@@ -1,0 +1,27 @@
+:host {
+  display: block;
+  pointer-events: none;
+  border: solid 1px #ffffff;
+  border-radius: 8px;
+  padding: 5px;
+  background-color: black;
+  color: white;
+}
+
+div {
+  background-color: #292929;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+.cell-tooltip {
+  pointer-events: none;
+  max-width: 200px;
+  background-color: #000000b3;
+  border: solid 1px black;
+  color: white;
+  border-radius: 8px;
+  margin: 0 5px;
+  font-size: 14px;
+}
