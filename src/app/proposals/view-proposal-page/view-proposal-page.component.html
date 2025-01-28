@@ -1,10 +1,16 @@
-<mat-tab-group *ngIf="vm$ | async as vm">
+<mat-tab-group
+  (selectedTabChange)="onTabChanged($event.index)"
+  [selectedIndex]="selectedTabIndex"
+  *ngIf="vm$ | async as vm"
+>
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon> details </mat-icon>
       Details
     </ng-template>
-    <proposal-detail [proposal]="proposal"></proposal-detail>
+    <ng-template matTabContent
+      ><proposal-detail [proposal]="proposal"></proposal-detail
+    ></ng-template>
   </mat-tab>
 
   <mat-tab>
@@ -13,18 +19,23 @@
       Datasets
     </ng-template>
 
-    <div class="dataset-table">
-      <app-table
-        [data]="tableData"
-        [columns]="tableColumns"
-        [paginate]="tablePaginate"
-        [currentPage]="vm.currentPage"
-        [dataCount]="vm.datasetCount"
-        [dataPerPage]="vm.datasetsPerPage"
-        (pageChange)="onPageChange($event)"
-        (rowClick)="onRowClick($event)"
-      ></app-table>
-    </div>
+    <ng-template matTabContent>
+      <app-proposal-datasets
+        *ngIf="proposal"
+        [proposalId]="proposal.proposalId"
+      ></app-proposal-datasets>
+    </ng-template>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon data-cy="related-proposals"> folder </mat-icon>
+      Related Proposals
+    </ng-template>
+
+    <ng-template matTabContent>
+      <app-related-proposals *ngIf="proposal"></app-related-proposals>
+    </ng-template>
   </mat-tab>
 
   <mat-tab *ngIf="appConfig.logbookEnabled">
@@ -33,6 +44,11 @@
       Logbook
     </ng-template>
 
-    <app-proposal-logbook [logbook]="logbook$ | async"></app-proposal-logbook>
+    <ng-template matTabContent>
+      <app-proposal-logbook
+        *ngIf="proposal"
+        [proposalId]="proposal.proposalId"
+      ></app-proposal-logbook>
+    </ng-template>
   </mat-tab>
 </mat-tab-group>
