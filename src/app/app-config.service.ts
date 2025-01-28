@@ -116,7 +116,7 @@ export class AppConfigService {
   async loadAppConfig(): Promise<void> {
     try {
       const config = await this.http
-        .get("/api/v3/admin/config")
+        .get("http://localhost:3000/api/v3/admin/config")
         .pipe(timeout(2000))
         .toPromise();
       this.appConfig = Object.assign({}, this.appConfig, config);

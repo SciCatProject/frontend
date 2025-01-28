@@ -491,7 +491,7 @@ Cypress.Commands.add(
     frontendConfig = "fallbackDetailViewComponent",
     datasetName = "Cypress Dataset",
   ) => {
-    cy.intercept("GET", `**/assets/config.json`, (req) => {
+    cy.intercept("GET", `**/admin/config`, (req) => {
       cy.log("URL being used.1", req.url);
 
       req.reply((res) => {
