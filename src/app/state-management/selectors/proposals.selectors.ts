@@ -110,6 +110,29 @@ export const selectViewProposalPageViewModel = createSelector(
   }),
 );
 
+export const selectRelatedProposalsPageViewModel = createSelector(
+  selectProposalsState,
+  ({ relatedProposals, relatedProposalsCount }) => ({
+    relatedProposals,
+    relatedProposalsCount,
+  }),
+);
+
+export const selectRelatedProposalsFilters = createSelector(
+  selectProposalsState,
+  (state) => state.relatedProposalsFilters,
+);
+
+export const selectRelatedProposalsCurrentPage = createSelector(
+  selectRelatedProposalsFilters,
+  (filters) => filters.skip / filters.limit,
+);
+
+export const selectRelatedProposalsPerPage = createSelector(
+  selectRelatedProposalsFilters,
+  (filters) => filters.limit,
+);
+
 const restrictFilter = (filter: any, allowedKeys?: string[]) => {
   const isNully = (value: any) => {
     const hasLength = typeof value === "string" || Array.isArray(value);
