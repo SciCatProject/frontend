@@ -1,4 +1,5 @@
 import { testData } from "../fixtures/testData";
+import { testConfig } from "../fixtures/testData";
 
 const lbBaseUrl = Cypress.env("baseUrl");
 const loginEndpoint = Cypress.env("loginEndpoint");
@@ -417,6 +418,31 @@ Cypress.Commands.add("removeElasticSearchIndex", (index) => {
   });
 });
 
+Cypress.Commands.add("uploadDatasetAttachments", (number = 1, wait = 500) => {
+  cy.get(".mat-mdc-tab-link").contains("Attachments").click();
+
+  for (let i = 0; i < number; i++) {
+    const randomContent = `data:image/png;base64,${Cypress._.times(100, () =>
+      Math.floor(Math.random()).toString(16),
+    ).join("")}`;
+
+    const fileName = `random-image-${Date.now()}-${i}.png`;
+
+    cy.get(".dropzone").selectFile(
+      {
+        contents: Cypress.Buffer.from(randomContent, "base64"),
+        fileName: fileName,
+        mimeType: "image/png",
+      },
+      {
+        action: "drag-drop",
+        force: true,
+      },
+    );
+    cy.wait(wait);
+  }
+});
+
 Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {
   cy.login(Cypress.env("username"), Cypress.env("password"));
   cy.getToken().then((token) => {
@@ -458,3 +484,47 @@ Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {
     });
   });
 });
+
+Cypress.Commands.add(
+  "setupDatasetDetailView",
+  (
+    frontendConfig = "fallbackDetailViewComponent",
+    datasetName = "Cypress Dataset",
+  ) => {
+    cy.reload(true);
+
+    cy.intercept("GET", `**/admin/config`, (req) => {
+      req.reply((res) => {
+        res.headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+        res.headers["Pragma"] = "no-cache";
+        res.headers["Expires"] = "0";
+        res.send({
+          ...res.body,
+          ...testConfig[`${frontendConfig}`],
+        });
+      });
+    }).as("getFrontendConfig");
+
+    cy.login(Cypress.env("username"), Cypress.env("password"));
+
+    cy.createDataset("raw");
+
+    cy.visit("/datasets");
+
+    cy.wait("@getFrontendConfig");
+
+    cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+    cy.finishedLoading();
+
+    cy.get('[data-cy="text-search"] input[type="search"]')
+      .clear()
+      .type("Cypress");
+
+    cy.isLoading();
+
+    cy.get("mat-row").contains(datasetName).click();
+
+    cy.isLoading();
+  },
+);

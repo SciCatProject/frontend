@@ -1,0 +1,36 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@mixin color($theme) {
+  $color-config: map.get($theme, "color");
+  $primary: map.get($color-config, "primary");
+  $header-1: map.get($color-config, "header-1");
+  $accent: map.get($color-config, "accent");
+  $header-2: map.get($color-config, "header-2");
+  $header-3: map.get($color-config, "header-3");
+  $header-4: map.get($color-config, "header-4");
+  $warn: map.get($color-config, "warn");
+
+  .dynamic-template-general-header {
+    background-color: mat.get-color-from-palette($primary, "lighter");
+  }
+
+  .dynamic-template-json-view-header {
+    background-color: mat.get-color-from-palette($header-1, "lighter");
+  }
+  .dynamic-template-attachments-header {
+    background-color: mat.get-color-from-palette($accent, "lighter");
+  }
+
+  .general-warning {
+    color: mat.get-color-from-palette($warn, "default");
+    font-weight: bold;
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}

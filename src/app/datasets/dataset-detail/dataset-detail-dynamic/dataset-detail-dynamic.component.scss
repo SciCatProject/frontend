@@ -1,6 +1,5 @@
 mat-card {
   margin: 1em;
-
   .section-icon {
     height: auto !important;
     width: auto !important;
@@ -48,6 +47,7 @@ mat-card {
     }
   }
 }
+
 .jupyter-button {
   margin: 1em 0 0 1em;
 }
@@ -55,13 +55,50 @@ mat-card {
   margin: 1em 1em 0 0;
   float: right;
 }
-.attachment-card {
-  display: flex;
-  align-items: center;
+.show-json-metadata-btn {
+  margin: 1em;
 }
+.json-view-overflow {
+  flex: 0 0 auto;
+  max-width: 80vw;
+  overflow: auto;
+}
+.truncated-text {
+  max-width: 60vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.attachments-wrapper {
+  display: flex;
+  padding-top: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
 .thumbnail-image {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
   cursor: pointer;
-  max-width: 14em; /* Set maximum width */
-  width: 100%; /* Make it responsive within the card */
-  height: auto; /* Maintain aspect ratio */
+
+  &--small {
+    width: 50px;
+    height: 50px;
+  }
+  &--medium {
+    width: 100px;
+    height: 100px;
+  }
+  &--large {
+    width: 200px;
+    height: 200px;
+  }
+}
+.json-view {
+  margin: 0 1.8em;
 }

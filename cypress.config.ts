@@ -1,6 +1,9 @@
 import { defineConfig } from "cypress";
 
 export default defineConfig({
+  video: true,
+  screenshotsFolder: "cypress/screenshots",
+  videosFolder: "cypress/videos",
   env: {
     baseUrl: "http://localhost:3000/api/v3",
     loginEndpoint: "/auth/login",

@@ -3,9 +3,8 @@ import { ENTER, COMMA, SPACE } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 
 import { MatDialog } from "@angular/material/dialog";
-// import { SampleEditComponent } from "datasets/sample-edit/sample-edit.component";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
-import { combineLatest, fromEvent, Observable, Subscription } from "rxjs";
+import { combineLatest, Observable, Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
 
 import { showMessageAction } from "state-management/actions/user.actions";
@@ -29,7 +28,6 @@ import {
 import { Router } from "@angular/router";
 import { selectCurrentProposal } from "state-management/selectors/proposals.selectors";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
-import { EditableComponent } from "app-routing/pending-changes.guard";
 import { AppConfigService } from "app-config.service";
 import { selectCurrentSample } from "state-management/selectors/samples.selectors";
 import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
@@ -64,11 +62,9 @@ import { TranslateService } from "@ngx-translate/core";
   styleUrls: ["./dataset-detail.component.scss"],
   standalone: false,
 })
-export class DatasetDetailComponent
-  implements OnInit, OnDestroy, EditableComponent
-{
+export class DatasetDetailComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
-  private _hasUnsavedChanges = false;
+
   form: FormGroup;
   userProfile$ = this.store.select(selectProfile);
   isAdmin$ = this.store.select(selectIsAdmin);
@@ -145,15 +141,6 @@ export class DatasetDetailComponent
       }),
     );
 
-    // Prevent user from reloading page if there are unsave changes
-    this.subscriptions.push(
-      fromEvent(window, "beforeunload").subscribe((event) => {
-        if (this.hasUnsavedChanges()) {
-          event.preventDefault();
-        }
-      }),
-    );
-
     this.subscriptions.push(
       this.store.select(selectCurrentUser).subscribe((user) => {
         if (user) {
@@ -170,10 +157,6 @@ export class DatasetDetailComponent
       keywords: this.fb.array(this.dataset.keywords || []),
     });
     this.editEnabled = true;
-  }
-
-  hasUnsavedChanges() {
-    return this._hasUnsavedChanges;
   }
 
   onClickKeyword(keyword: string) {
@@ -277,10 +260,6 @@ export class DatasetDetailComponent
       const property = { scientificMetadata: metadata };
       this.store.dispatch(updatePropertyAction({ pid, property }));
     }
-  }
-
-  onHasUnsavedChanges($event: boolean) {
-    this._hasUnsavedChanges = $event;
   }
 
   ngOnDestroy() {

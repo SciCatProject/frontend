@@ -2,7 +2,8 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { timeout } from "rxjs/operators";
 import {
-  datasetDetailViewLabelOption,
+  DatasetDetailComponentConfig,
+  DatasetDetailViewLabelOption,
   DatasetsListSettings,
   LabelMaps,
   TableColumn,
@@ -102,7 +103,8 @@ export interface AppConfig {
   labelMaps: LabelMaps;
   thumbnailFetchLimitPerPage: number;
   maxFileUploadSizeInMb?: string;
-  datasetDetailViewLabelOption?: datasetDetailViewLabelOption;
+  datasetDetailViewLabelOption?: DatasetDetailViewLabelOption;
+  datasetDetailComponent?: DatasetDetailComponentConfig;
 }
 
 @Injectable()
@@ -119,17 +121,24 @@ export class AppConfigService {
         .toPromise();
       this.appConfig = Object.assign({}, this.appConfig, config);
     } catch (err) {
-      console.log("No config available in backend, trying with local config.");
+      console.log(
+        "No config available in backend, trying with local config.",
+        err,
+      );
       try {
         const config = await this.http.get("/assets/config.json").toPromise();
         this.appConfig = Object.assign({}, this.appConfig, config);
       } catch (err) {
-        console.error("No config provided.");
+        console.error("No config provided.", err);
       }
     }
   }
 
   getConfig(): AppConfig {
+    if (!this.appConfig) {
+      console.error("AppConfigService: Configuration not loaded!");
+    }
+
     return this.appConfig as AppConfig;
   }
 }

@@ -6,7 +6,10 @@
 @use "./app/datasets/batch-view/batch-view-theme" as batch-view;
 @use "./app/datasets/dashboard/dashboard-theme" as dashboard;
 @use "./app/datasets/datafiles/datafiles-theme" as datafiles;
-@use "./app/datasets/dataset-detail/dataset-detail-theme" as dataset-detail;
+@use "./app/datasets/dataset-detail/dataset-detail/dataset-detail-theme" as
+  dataset-detail;
+@use "./app/datasets/dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic-theme"
+  as dataset-detail-dynamic;
 @use "./app/datasets/dataset-details-dashboard/dataset-details-dashboard-theme"
   as dataset-details-dashboard;
 @use "./app/datasets/dataset-lifecycle/dataset-lifecycle-theme" as
@@ -204,6 +207,7 @@ $theme: map-merge(
 @include dashboard.theme($theme);
 @include datafiles.theme($theme);
 @include dataset-detail.theme($theme);
+@include dataset-detail-dynamic.theme($theme);
 @include dataset-details-dashboard.theme($theme);
 @include dataset-lifecycle.theme($theme);
 @include dataset-table.theme($theme);

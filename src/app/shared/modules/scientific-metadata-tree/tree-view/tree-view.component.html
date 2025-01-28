@@ -36,11 +36,7 @@
   >
     <section>
       <div class="key-cell" [style.padding-left.px]="getPadding(node)">
-        <button mat-icon-button disabled>
-          <mat-icon class="mat-icon-rtl-mirror" class="mat-icon-rtl-mirror">
-          </mat-icon>
-        </button>
-        <label>{{ node.key }}</label>
+        <label class="label-cell">{{ node.key }}</label>
       </div>
       <div class="value-cell">{{ getValueRepresentation(node) }}</div>
     </section>
