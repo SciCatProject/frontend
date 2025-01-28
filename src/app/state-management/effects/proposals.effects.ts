@@ -36,18 +36,28 @@ export class ProposalEffects {
         fromActions.clearFacetsAction,
       ),
       concatLatestFrom(() => this.fullqueryParams$),
-      map(([action, params]) => params),
-      mergeMap(({ query, limits }) =>
-        this.proposalsService
-          .proposalsControllerFullquery(JSON.stringify(limits), query)
+      map(([action, params]) => ({
+        action,
+        params,
+      })),
+      mergeMap(({ action, params: { limits, query } }) => {
+        // TODO: Review this part as it should be simpler.
+        const limitsParam = {
+          order: limits.order,
+          skip: (action as any).limit * (action as any).page,
+          limit: (action as any).limit,
+        };
+
+        return this.proposalsService
+          .proposalsControllerFullquery(JSON.stringify(limitsParam), "{}")
           .pipe(
             mergeMap((proposals) => [
               fromActions.fetchProposalsCompleteAction({ proposals }),
               fromActions.fetchCountAction(),
             ]),
             catchError(() => of(fromActions.fetchProposalsFailedAction())),
-          ),
-      ),
+          );
+      }),
     );
   });
 
@@ -56,9 +66,9 @@ export class ProposalEffects {
       ofType(fromActions.fetchCountAction),
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
-      switchMap((filters) =>
+      switchMap(({ query }) =>
         this.proposalsService
-          .proposalsControllerCount(JSON.stringify(filters))
+          .proposalsControllerCount(JSON.stringify({ query }))
           .pipe(
             map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
             catchError(() => of(fromActions.fetchCountFailedAction())),

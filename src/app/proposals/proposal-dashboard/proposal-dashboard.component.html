@@ -1,11 +1,11 @@
-<shared-table
+<!-- <shared-table
   [dataSource]="dataSource"
   [columnsdef]="columns"
   [pageSize]="10"
   (rowClick)="onRowClick($event)"
 >
-</shared-table>
+</shared-table> -->
 
 <div style="margin-top: 20px">
-  <app-simple-table></app-simple-table>
+  <app-simple-table [realDataSource]="dataSource"></app-simple-table>
 </div>

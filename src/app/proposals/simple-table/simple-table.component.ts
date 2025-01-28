@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { DATA } from "./simple-table.model";
 import {
@@ -15,6 +15,14 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-pagination.model";
 import { PrintConfig } from "shared/modules/dynamic-material-table/models/print-config.model";
 import { TableSelectionMode } from "shared/modules/dynamic-material-table/models/table-row.model";
+import { SciCatDataSource } from "shared/services/scicat.datasource";
+import { Store } from "@ngrx/store";
+import {
+  selectProposals,
+  selectProposalsCount,
+} from "state-management/selectors/proposals.selectors";
+import { fetchProposalsAction } from "state-management/actions/proposals.actions";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-simple-table",
@@ -22,6 +30,9 @@ import { TableSelectionMode } from "shared/modules/dynamic-material-table/models
   styleUrls: ["./simple-table.component.scss"],
 })
 export class DemoTableComponent implements OnInit {
+  vm$ = this.store.select(selectProposals);
+  proposalsCount$ = this.store.select(selectProposalsCount);
+
   columns!: TableField<any>[];
 
   direction: "ltr" | "rtl" = "ltr";
@@ -56,15 +67,36 @@ export class DemoTableComponent implements OnInit {
 
   @Output() pageChange = new EventEmitter<PageChangeEvent>();
 
-  constructor() {}
+  @Input() realDataSource: SciCatDataSource;
+
+  constructor(
+    private store: Store,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
-    this.initTable(tableColumnsConfig, tableSettingsConfig, paginationConfig);
-    const newData = DATA.slice(
-      this.pagination.pageIndex * this.pagination.pageSize,
-      (this.pagination.pageIndex + 1) * this.pagination.pageSize,
-    );
-    this.dataSource.next(newData);
+    this.store.dispatch(fetchProposalsAction({ limit: 10, page: 0 }));
+
+    this.vm$.subscribe((data) => {
+      this.dataSource.next(data);
+    });
+
+    this.proposalsCount$.subscribe((count) => {
+      this.initTable(tableColumnsConfig, tableSettingsConfig, {
+        ...paginationConfig,
+        length: count,
+      });
+    });
+
+    // const newData = DATA.slice(
+    //   this.pagination.pageIndex * this.pagination.pageSize,
+    //   (this.pagination.pageIndex + 1) * this.pagination.pageSize,
+    // );
+    // this.realDataSource.connect().subscribe((data) => {
+    //   console.log(data);
+    //   this.dataSource.next(data);
+    // });
+    // this.dataSource.next(newData);
   }
 
   initTable(
@@ -98,10 +130,27 @@ export class DemoTableComponent implements OnInit {
   }
 
   onPaginationChange(pagination: TablePagination) {
-    const newData = DATA.slice(
-      pagination.pageIndex * pagination.pageSize,
-      (pagination.pageIndex + 1) * pagination.pageSize,
+    // const newData = DATA.slice(
+    //   pagination.pageIndex * pagination.pageSize,
+    //   (pagination.pageIndex + 1) * pagination.pageSize,
+    // );
+    // this.dataSource.next(newData);
+
+    this.router.navigate([], {
+      queryParams: {
+        // sortActive: this.sort.active,
+        // sortDirection: this.sort.direction,
+        pageIndex: this.pagination.pageIndex,
+        pageSize: this.pagination.pageSize,
+      },
+      queryParamsHandling: "merge",
+    });
+
+    this.store.dispatch(
+      fetchProposalsAction({
+        limit: pagination.pageSize,
+        page: pagination.pageIndex,
+      }),
     );
-    this.dataSource.next(newData);
   }
 }

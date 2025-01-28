@@ -6,7 +6,10 @@ import {
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { ProposalFilters } from "state-management/state/proposals.store";
 
-export const fetchProposalsAction = createAction("[Proposal] Fetch Proposals");
+export const fetchProposalsAction = createAction(
+  "[Proposal] Fetch Proposals",
+  props<{ page?: number; limit?: number }>(),
+);
 export const clearCurrentProposalAction = createAction(
   "[Proposal] Clear proposal",
 );

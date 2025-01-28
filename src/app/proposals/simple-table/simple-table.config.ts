@@ -5,34 +5,64 @@ import {
   VisibleActionMenu,
 } from "shared/modules/dynamic-material-table/models/table-setting.model";
 
+// export const tableColumnsConfig: TableField<any>[] = [
+//   {
+//     name: "row",
+//     type: "number",
+//   },
+//   {
+//     name: "order",
+//     header: "Row Order",
+//     sticky: "start",
+//     option: 1,
+//     clickable: false,
+//     rowSelectable: false,
+//   },
+//   {
+//     name: "name",
+//     header: "Element Name",
+//     sticky: "start",
+//   },
+//   { name: "weight" },
+//   { name: "color" },
+//   { name: "brand" },
+//   {
+//     name: "setting",
+//     icon: "chrome_reader_mode",
+//     iconColor: "white",
+//     option: 2,
+//     clickable: false,
+//     rowSelectable: false,
+//   },
+// ];
 export const tableColumnsConfig: TableField<any>[] = [
   {
-    name: "row",
-    type: "number",
+    name: "proposalId",
+    header: "Proposal ID",
+    icon: "perm_device_information",
+    type: "text",
   },
   {
-    name: "order",
-    header: "Row Order",
-    sticky: "start",
-    option: 1,
-    clickable: false,
-    rowSelectable: false,
+    name: "title",
+    icon: "description",
+    // header: "Row Order",
+    // sticky: "start",
+    // option: 1,
+    // clickable: false,
+    // rowSelectable: false,
   },
   {
-    name: "name",
-    header: "Element Name",
-    sticky: "start",
-  },
-  { name: "weight" },
-  { name: "color" },
-  { name: "brand" },
-  {
-    name: "setting",
+    name: "abstract",
     icon: "chrome_reader_mode",
-    iconColor: "white",
-    option: 2,
-    clickable: false,
-    rowSelectable: false,
+    // header: "Element Name",
+    // sticky: "start",
+  },
+  { name: "email", icon: "email" },
+  // { name: "color" },
+  { name: "type", icon: "badge" },
+  {
+    name: "createdBy",
+    icon: "badge",
   },
 ];
 
@@ -53,7 +83,7 @@ export const tableSettingsConfig: TableSetting = {
 };
 
 export const paginationConfig: TablePagination = {
-  length: 100,
+  // length: 100,
   pageIndex: 0,
   pageSize: 10,
   pageSizeOptions: [5, 10, 15, 20],
