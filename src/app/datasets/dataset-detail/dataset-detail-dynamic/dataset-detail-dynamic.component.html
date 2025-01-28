@@ -24,7 +24,10 @@
             data-cy="general-info"
           >
             <!-- Section Header -->
-            <mat-card-header class="dynamic-template-general-header">
+            <mat-card-header
+              class="dynamic-template-general-header"
+              data-cy="section-label"
+            >
               <div mat-card-avatar class="section-icon">
                 <mat-icon> description </mat-icon>
               </div>
@@ -36,7 +39,9 @@
               <table>
                 <ng-container *ngFor="let field of section.fields">
                   <tr *ngIf="dataset[field.source]">
-                    <th>{{ field.source | translate }}</th>
+                    <th data-cy="field-label">
+                      {{ field.source | translate }}
+                    </th>
                     <td>
                       <ng-container [ngSwitch]="field.element">
                         <!-- Render based on fieldType -->
@@ -125,7 +130,7 @@
 
           <!-- Scientific Metadata -->
           <mat-card *ngSwitchCase="'scientificMetadata'">
-            <mat-card-header class="scientific-header">
+            <mat-card-header class="scientific-header" data-cy="section-label">
               <div mat-card-avatar class="section-icon">
                 <mat-icon> science </mat-icon>
               </div>
@@ -157,7 +162,10 @@
 
           <!-- Attachments -->
           <mat-card *ngSwitchCase="'attachments'">
-            <mat-card-header class="dynamic-template-attachments-header">
+            <mat-card-header
+              class="dynamic-template-attachments-header"
+              data-cy="section-label"
+            >
               <div mat-card-avatar class="section-icon">
                 <mat-icon> photo_library </mat-icon>
               </div>
@@ -200,7 +208,10 @@
 
           <!-- Dataset JSON View-->
           <mat-card *ngSwitchCase="'datasetJsonView'">
-            <mat-card-header class="dynamic-template-json-view-header">
+            <mat-card-header
+              class="dynamic-template-json-view-header"
+              data-cy="section-label"
+            >
               <div mat-card-avatar class="section-icon">
                 <mat-icon> data_object </mat-icon>
               </div>
