@@ -223,6 +223,7 @@
           (click)="setting_onClick(i)"
           #menuTrigger="matMenuTrigger"
           [matMenuTriggerFor]="columnSettingMenu"
+          *ngIf="currentTableSetting.showColumnSettingMenu"
           >settings</mat-icon
         >
         <div class="va-mat-table-drag-preview" *cdkDragPreview>

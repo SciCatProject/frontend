@@ -8,7 +8,7 @@ import { ProposalFilters } from "state-management/state/proposals.store";
 
 export const fetchProposalsAction = createAction(
   "[Proposal] Fetch Proposals",
-  props<{ page?: number; limit?: number }>(),
+  props<{ page?: number; limit?: number; fields?: Record<string, unknown> }>(),
 );
 export const clearCurrentProposalAction = createAction(
   "[Proposal] Clear proposal",
@@ -21,7 +21,10 @@ export const fetchProposalsFailedAction = createAction(
   "[Proposal] Fetch Proposals Failed",
 );
 
-export const fetchCountAction = createAction("[Proposal] Fetch Count");
+export const fetchCountAction = createAction(
+  "[Proposal] Fetch Count",
+  props<{ fields?: Record<string, unknown> }>(),
+);
 export const fetchCountCompleteAction = createAction(
   "[Proposal] Fetch Count Complete",
   props<{ count: number }>(),

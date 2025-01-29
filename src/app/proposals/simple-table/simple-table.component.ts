@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
-import { DATA } from "./simple-table.model";
 import {
   paginationConfig,
   tableColumnsConfig,
@@ -22,7 +21,7 @@ import {
   selectProposalsCount,
 } from "state-management/selectors/proposals.selectors";
 import { fetchProposalsAction } from "state-management/actions/proposals.actions";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: "app-simple-table",
@@ -39,7 +38,7 @@ export class DemoTableComponent implements OnInit {
 
   showReloadData = true;
 
-  rowHeight = 40;
+  rowHeight = 50;
 
   pending = false;
 
@@ -53,7 +52,7 @@ export class DemoTableComponent implements OnInit {
 
   pagination: TablePagination = {};
 
-  stickyHeader = false;
+  stickyHeader = true;
 
   printConfig: PrintConfig = {};
 
@@ -65,6 +64,8 @@ export class DemoTableComponent implements OnInit {
 
   rowSelectionMode: TableSelectionMode = "multi";
 
+  globalTextSearch = "";
+
   @Output() pageChange = new EventEmitter<PageChangeEvent>();
 
   @Input() realDataSource: SciCatDataSource;
@@ -72,10 +73,21 @@ export class DemoTableComponent implements OnInit {
   constructor(
     private store: Store,
     private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
-    this.store.dispatch(fetchProposalsAction({ limit: 10, page: 0 }));
+    const queryParams = this.route.snapshot.queryParams;
+    if (queryParams.textSearch) {
+      this.globalTextSearch = queryParams.textSearch;
+    }
+    this.store.dispatch(
+      fetchProposalsAction({
+        limit: queryParams.pageSize,
+        page: queryParams.pageIndex,
+        fields: { text: queryParams.textSearch },
+      }),
+    );
 
     this.vm$.subscribe((data) => {
       this.dataSource.next(data);
@@ -84,19 +96,11 @@ export class DemoTableComponent implements OnInit {
     this.proposalsCount$.subscribe((count) => {
       this.initTable(tableColumnsConfig, tableSettingsConfig, {
         ...paginationConfig,
+        pageIndex: queryParams.pageIndex,
+        pageSize: queryParams.pageSize,
         length: count,
       });
     });
-
-    // const newData = DATA.slice(
-    //   this.pagination.pageIndex * this.pagination.pageSize,
-    //   (this.pagination.pageIndex + 1) * this.pagination.pageSize,
-    // );
-    // this.realDataSource.connect().subscribe((data) => {
-    //   console.log(data);
-    //   this.dataSource.next(data);
-    // });
-    // this.dataSource.next(newData);
   }
 
   initTable(
@@ -109,37 +113,9 @@ export class DemoTableComponent implements OnInit {
     this.pagination = paginationConfig;
   }
 
-  dataPlay(): void {
-    const newData = DATA.slice(
-      this.pagination.pageIndex * this.pagination.pageSize,
-      (this.pagination.pageIndex + 1) * this.pagination.pageSize,
-    );
-    if (this.dataSource.value !== newData) {
-      this.dataSource.next(newData);
-      this.dataPlayName = "clear data";
-    } else if (this.dataSource.value === newData) {
-      this.dataSource.next([]);
-      this.dataPlayName = "fetch data";
-    }
-
-    this.noDataBtn = !this.noDataBtn;
-  }
-
-  changeHeaderMode() {
-    this.stickyHeader = !this.stickyHeader;
-  }
-
   onPaginationChange(pagination: TablePagination) {
-    // const newData = DATA.slice(
-    //   pagination.pageIndex * pagination.pageSize,
-    //   (pagination.pageIndex + 1) * pagination.pageSize,
-    // );
-    // this.dataSource.next(newData);
-
     this.router.navigate([], {
       queryParams: {
-        // sortActive: this.sort.active,
-        // sortDirection: this.sort.direction,
         pageIndex: this.pagination.pageIndex,
         pageSize: this.pagination.pageSize,
       },
@@ -150,6 +126,31 @@ export class DemoTableComponent implements OnInit {
       fetchProposalsAction({
         limit: pagination.pageSize,
         page: pagination.pageIndex,
+      }),
+    );
+  }
+
+  onGlobalTextSearchChange(text: string) {
+    this.pagination.pageIndex = 0;
+    this.router.navigate([], {
+      queryParams: {
+        textSearch: text,
+        pageIndex: 0,
+      },
+      queryParamsHandling: "merge",
+    });
+
+    const fields: Record<string, unknown> = {};
+
+    if (text) {
+      fields.text = text;
+    }
+
+    this.store.dispatch(
+      fetchProposalsAction({
+        limit: this.pagination.pageSize,
+        page: this.pagination.pageIndex,
+        fields: fields,
       }),
     );
   }

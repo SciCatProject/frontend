@@ -66,6 +66,9 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() footerEnable = false;
   @Input() showNoData: boolean;
   @Input() showReload: boolean;
+  @Input() showGlobalTextSearch = true;
+  @Input() globalTextSearch = "";
+  @Input() globalTextSearchPlaceholder = "Search";
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onTableEvent: EventEmitter<ITableEvent> = new EventEmitter();
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
@@ -83,6 +86,7 @@ export class TableCoreDirective<T extends TableRow> {
   }> = new EventEmitter();
   @Output() paginationChange: EventEmitter<TablePagination> =
     new EventEmitter();
+  @Output() globalTextSearchChange: EventEmitter<string> = new EventEmitter();
 
   //**this event is deprecate and move to onRowEvent */
   // @Output() rowActionMenuChange: EventEmitter<IRowActionMenuEvent<any>> = new EventEmitter();

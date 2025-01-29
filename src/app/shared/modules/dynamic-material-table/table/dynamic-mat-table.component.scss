@@ -8,8 +8,16 @@
   position: relative;
   overflow: auto;
   transition: 0.3s cubic-bezier(0.46, -0.72, 0.46, 1.54);
-  background-color: #f3f3f3;
   border: 2px rgb(0, 150, 136);
+
+  .global-search-wrapper {
+    text-align: right;
+    padding: 0 20px;
+
+    mat-form-field {
+      min-width: 30%;
+    }
+  }
 }
 
 /* Fixed Scroll */

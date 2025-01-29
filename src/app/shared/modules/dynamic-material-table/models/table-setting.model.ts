@@ -19,6 +19,7 @@ export interface TableSetting {
   saveSettingMode?: "simple" | "multi" | "none";
   settingName?: string;
   settingList?: SettingItem[];
+  showColumnSettingMenu?: boolean;
 }
 
 export interface SettingItem extends TableSetting {
@@ -50,4 +51,5 @@ export class TableSetting implements TableSetting {
   enableContextMenu?: boolean;
   autoHeight?: boolean;
   saveSettingMode?: "simple" | "multi" | "none";
+  showColumnSettingMenu?: boolean = false;
 }

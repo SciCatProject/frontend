@@ -78,14 +78,16 @@ const actionMenu: VisibleActionMenu = {
 export const tableSettingsConfig: TableSetting = {
   direction: "ltr",
   visibleActionMenu: actionMenu,
-  autoHeight: true,
+  autoHeight: false,
   saveSettingMode: "multi",
+  rowStyle: {
+    "border-bottom": "1px solid #d2d2d2",
+  },
 };
 
 export const paginationConfig: TablePagination = {
-  // length: 100,
   pageIndex: 0,
   pageSize: 10,
-  pageSizeOptions: [5, 10, 15, 20],
+  pageSizeOptions: [5, 10, 25, 100],
   showFirstLastButtons: true,
 };

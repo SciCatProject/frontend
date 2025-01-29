@@ -1,3 +1,15 @@
+<div class="global-search-wrapper" *ngIf="showGlobalTextSearch">
+  <mat-form-field>
+    <mat-icon matPrefix>search</mat-icon>
+    <input
+      [(ngModel)]="globalTextSearch"
+      type="text"
+      matInput
+      [placeholder]="globalTextSearchPlaceholder"
+      (input)="globalTextSearch_onChange($event)"
+    />
+  </mat-form-field>
+</div>
 <cdk-virtual-scroll-viewport
   #tbl
   [ngClass]="viewportClass"

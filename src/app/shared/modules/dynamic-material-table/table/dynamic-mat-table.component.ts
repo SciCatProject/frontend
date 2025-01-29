@@ -707,6 +707,13 @@ export class DynamicMatTableComponent<T extends TableRow>
     }
   }
 
+  globalTextSearch_onChange(event: Event) {
+    if (this.showGlobalTextSearch) {
+      this.globalTextSearch = (event.target as HTMLInputElement).value;
+      this.globalTextSearchChange.emit(this.globalTextSearch);
+    }
+  }
+
   autoHeight() {
     const minHeight =
       this.headerHeight +

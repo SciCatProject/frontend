@@ -48,12 +48,20 @@ export class ProposalEffects {
           limit: (action as any).limit,
         };
 
+        const queryParam = { text: (action as any)?.fields?.text };
+
         return this.proposalsService
-          .proposalsControllerFullquery(JSON.stringify(limitsParam), "{}")
+          .proposalsControllerFullquery(
+            JSON.stringify(limitsParam),
+            JSON.stringify(queryParam),
+          )
           .pipe(
             mergeMap((proposals) => [
               fromActions.fetchProposalsCompleteAction({ proposals }),
-              fromActions.fetchCountAction(),
+              // TODO: Maybe this part should be refactored. Now we need to send 2 separate requests to get the data and count
+              fromActions.fetchCountAction({
+                fields: { text: queryParam.text },
+              }),
             ]),
             catchError(() => of(fromActions.fetchProposalsFailedAction())),
           );
@@ -64,11 +72,9 @@ export class ProposalEffects {
   fetchCount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
-      concatLatestFrom(() => this.fullqueryParams$),
-      map(([action, params]) => params),
-      switchMap(({ query }) =>
+      switchMap(({ fields }) =>
         this.proposalsService
-          .proposalsControllerCount(JSON.stringify({ query }))
+          .proposalsControllerCount(JSON.stringify(fields))
           .pipe(
             map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
             catchError(() => of(fromActions.fetchCountFailedAction())),
