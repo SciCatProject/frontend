@@ -245,9 +245,12 @@ export const testConfig = {
           Pid: "Test Pid",
           Type: "Test Type",
           "General Information": "Test General Information",
-          "Creator Information": "Test Creator Information",
         },
       },
+    },
+    datasetDetailComponent: {
+      enableCustomizedComponent: false,
+      customization: [],
     },
   },
 };

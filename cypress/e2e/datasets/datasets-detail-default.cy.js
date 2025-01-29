@@ -1,15 +1,8 @@
-import { testConfig } from "../../fixtures/testData";
-
 describe("Datasets Detail View Default", () => {
   beforeEach(() => {
-    cy.intercept("GET", `**/admin/config`, (req) => {
-      req.reply((res) => {
-        res.send({
-          ...res.body,
-          ...testConfig.defaultDetailViewComponent,
-        });
-      });
-    }).as("getFrontendConfig");
+    cy.fixture("frontend-config-default.json").then((config) => {
+      cy.intercept("GET", "**/admin/config", config).as("getFrontendConfig");
+    });
   });
 
   after(() => {
