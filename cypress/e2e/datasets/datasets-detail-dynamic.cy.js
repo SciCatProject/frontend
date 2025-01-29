@@ -1,4 +1,5 @@
 import { testConfig } from "../../fixtures/testData";
+import { mergeConfig } from "../../support/utils";
 
 describe("Datasets Detail View Dynamic", () => {
   const dynamicComponentConfig = testConfig.dynamicDetialViewComponent;
@@ -8,25 +9,24 @@ describe("Datasets Detail View Dynamic", () => {
     dynamicComponentConfig.datasetDetailComponent.customization;
 
   beforeEach(() => {
-    cy.fixture("frontend-config-dynamic.json").then((config) => {
-      cy.intercept("GET", "**/admin/config", config).as("getFrontendConfig");
+    cy.fixture("frontend-base-config.json").then((baseConfig) => {
+      const mergedConfig = mergeConfig(baseConfig, dynamicComponentConfig);
+      cy.intercept("GET", "**/admin/config", mergedConfig).as(
+        "getFrontendConfig",
+      );
     });
 
     cy.login(Cypress.env("username"), Cypress.env("password"));
     cy.createDataset("raw");
+    cy.visit("/datasets");
+    cy.wait("@getFrontendConfig");
   });
 
   after(() => {
     cy.removeDatasets();
-    cy.clearLocalStorage();
-    cy.clearCookies();
-    cy.reload(true);
   });
 
   it("should load datasets with customized labels", () => {
-    cy.visit("/datasets");
-    cy.wait("@getFrontendConfig");
-
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
     cy.finishedLoading();
@@ -48,9 +48,6 @@ describe("Datasets Detail View Dynamic", () => {
   });
 
   it("should order sections based on customized settings", () => {
-    cy.visit("/datasets");
-    cy.wait("@getFrontendConfig");
-
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
     cy.finishedLoading();
@@ -76,9 +73,6 @@ describe("Datasets Detail View Dynamic", () => {
   });
 
   it("should order fields based on customized settings", () => {
-    cy.visit("/datasets");
-    cy.wait("@getFrontendConfig");
-
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
     cy.finishedLoading();
@@ -108,9 +102,6 @@ describe("Datasets Detail View Dynamic", () => {
   });
 
   it("should render attachments section with customized settings", () => {
-    cy.visit("/datasets");
-    cy.wait("@getFrontendConfig");
-
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
     cy.finishedLoading();

@@ -13,6 +13,7 @@ import {
 } from "@ngx-translate/core";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { Observable, of } from "rxjs";
+import { LinkyPipe } from "ngx-linky";
 
 class MockTranslateLoader implements TranslateLoader {
   getTranslation(): Observable<TranslationObject> {
@@ -46,6 +47,7 @@ describe("DatasetDetailWrapperComponent", () => {
         DatasetDetailWrapperComponent,
         DatasetDetailComponent,
         DatasetDetailDynamicComponent,
+        LinkyPipe,
       ],
       providers: [{ provide: AppConfigService, useValue: appConfigServiceSpy }],
       schemas: [NO_ERRORS_SCHEMA],

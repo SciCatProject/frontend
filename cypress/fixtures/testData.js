@@ -234,23 +234,4 @@ export const testConfig = {
       ],
     },
   },
-  defaultDetailViewComponent: {
-    datasetDetailViewLabelOption: {
-      currentLabelSet: "test",
-      labelSets: {
-        test: {
-          "Dataset Name": "Test Dataset name",
-          Description: "Test Description",
-          "Creation time": "Test Creation time",
-          Pid: "Test Pid",
-          Type: "Test Type",
-          "General Information": "Test General Information",
-        },
-      },
-    },
-    datasetDetailComponent: {
-      enableCustomizedComponent: false,
-      customization: [],
-    },
-  },
 };

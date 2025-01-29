@@ -1,33 +1,27 @@
 describe("Datasets Detail View Default", () => {
   beforeEach(() => {
-    cy.fixture("frontend-config-default.json").then((config) => {
+    cy.fixture("frontend-base-config.json").then((config) => {
       cy.intercept("GET", "**/admin/config", config).as("getFrontendConfig");
     });
+
+    cy.login(Cypress.env("username"), Cypress.env("password"));
+    cy.createDataset("raw");
+    cy.visit("/datasets");
+    cy.wait("@getFrontendConfig");
   });
 
   after(() => {
-    cy.window().then((win) => {
-      win.sessionStorage.clear();
-    });
     cy.removeDatasets();
-    cy.clearLocalStorage();
-    cy.clearCookies();
   });
-  const fallbackLabels = ["Creator Information", "Orcid"];
 
-  const customizedLabels = [
-    "Test Dataset name",
-    "Test General Information",
-    "Test Description",
-  ];
+  it("should load datasets with fallback labels when no custom labels are available", () => {
+    const fallbackLabelsToCheck = ["Creator Information", "Orcid"];
+    const customizedLabelsToCheck = [
+      "Test Dataset name",
+      "Test General Information",
+      "Test Description",
+    ];
 
-  it("should load datasets with fallback labels", () => {
-    cy.login(Cypress.env("username"), Cypress.env("password"));
-
-    cy.createDataset("raw");
-    cy.visit("/datasets");
-
-    cy.wait("@getFrontendConfig");
     cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
     cy.finishedLoading();
@@ -42,13 +36,15 @@ describe("Datasets Detail View Default", () => {
 
     cy.isLoading();
 
-    cy.wrap([...fallbackLabels, ...customizedLabels]).each((value) => {
-      cy.get("mat-card").should(($matCards) => {
-        const matchFound = [...$matCards].some((card) =>
-          card.innerText.includes(value),
-        );
-        expect(matchFound).to.be.true;
-      });
-    });
+    cy.wrap([...fallbackLabelsToCheck, ...customizedLabelsToCheck]).each(
+      (value) => {
+        cy.get("mat-card").should(($matCards) => {
+          const matchFound = [...$matCards].some((card) =>
+            card.innerText.includes(value),
+          );
+          expect(matchFound).to.be.true;
+        });
+      },
+    );
   });
 });
