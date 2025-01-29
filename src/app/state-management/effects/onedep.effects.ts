@@ -79,8 +79,8 @@ export class OneDepEffects {
             from(files).pipe(
               concatMap((file) =>
                 file.fileType === EmFile.Coordinates
-                  ? this.onedepDepositor.sendCoordFile(dep.depID, file.form)
-                  : this.onedepDepositor.sendFile(dep.depID, file.form),
+                  ? this.onedepDepositor.sendCoordFile(dep.id, file.form)
+                  : this.onedepDepositor.sendFile(dep.id, file.form),
               ),
 
               last(),
@@ -104,8 +104,7 @@ export class OneDepEffects {
         const message = {
           type: MessageType.Success,
           content:
-            "Deposition Created Successfully. Deposition ID: " +
-            deposition.depID,
+            "Deposition Created Successfully. Deposition ID: " + deposition.id,
           duration: 5000,
         };
         return of(showMessageAction({ message }));

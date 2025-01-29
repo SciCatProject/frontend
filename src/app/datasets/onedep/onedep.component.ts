@@ -588,7 +588,6 @@ export class OneDepComponent implements OnInit, OnDestroy {
   }
 
   onDepositClick() {
-    console.log(this.form);
     // Mark the form as submitted (trigger validation)
     this.depositClicked = true;
     this.form.markAllAsTouched();
