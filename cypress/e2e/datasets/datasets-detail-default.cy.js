@@ -1,7 +1,15 @@
+import { testConfig } from "../../fixtures/testData";
+import { mergeConfig } from "../../support/utils";
+
 describe("Datasets Detail View Default", () => {
+  const defaultComponentConfig = testConfig.defaultDetailViewComponent;
+
   beforeEach(() => {
-    cy.fixture("frontend-base-config.json").then((config) => {
-      cy.intercept("GET", "**/admin/config", config).as("getFrontendConfig");
+    cy.fixture("frontend-base-config.json").then((baseConfig) => {
+      const mergedConfig = mergeConfig(baseConfig, defaultComponentConfig);
+      cy.intercept("GET", "**/admin/config", mergedConfig).as(
+        "getFrontendConfig",
+      );
     });
 
     cy.login(Cypress.env("username"), Cypress.env("password"));

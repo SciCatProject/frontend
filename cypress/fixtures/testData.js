@@ -83,7 +83,7 @@ export const testData = {
     classification: "AV=medium,CO=low",
     license: "string",
     version: "string",
-    isPublished: false,
+    isPublished: true,
     ownerGroup: "ess",
     accessGroups: [],
     sampleId: "string",
@@ -232,6 +232,26 @@ export const testConfig = {
           order: 5,
         },
       ],
+    },
+  },
+  defaultDetailViewComponent: {
+    datasetDetailViewLabelOption: {
+      currentLabelSet: "test",
+      labelSets: {
+        test: {
+          "Dataset Name": "Test Dataset name",
+          Description: "Test Description",
+          "Creation time": "Test Creation time",
+          Pid: "Test Pid",
+          Type: "Test Type",
+          "General Information": "Test General Information",
+          "Creator Information": "Creator Information",
+        },
+      },
+    },
+    datasetDetailComponent: {
+      enableCustomizedComponent: false,
+      customization: [],
     },
   },
 };
