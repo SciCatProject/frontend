@@ -3,6 +3,7 @@ import {
   TableRow,
   TableSelectionMode,
   ITableEvent,
+  RowEventType,
 } from "../models/table-row.model";
 import { TableVirtualScrollDataSource } from "./table-data-source";
 import {
@@ -72,7 +73,7 @@ export class TableCoreDirective<T extends TableRow> {
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onTableEvent: EventEmitter<ITableEvent> = new EventEmitter();
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
-  @Output() onRowEvent: EventEmitter<IRowEvent> = new EventEmitter();
+  @Output() onRowEvent: EventEmitter<IRowEvent<any>> = new EventEmitter();
   @Output() settingChange: EventEmitter<{
     type:
       | "create"
@@ -459,7 +460,7 @@ export class TableCoreDirective<T extends TableRow> {
       this._rowSelectionModel.clear();
     }
     this.onRowEvent.emit({
-      event: "MasterSelectionChange",
+      event: RowEventType.MasterSelectionChange,
       sender: { selectionModel: this._rowSelectionModel },
     });
   }
@@ -468,7 +469,7 @@ export class TableCoreDirective<T extends TableRow> {
     if (e) {
       this._rowSelectionModel.toggle(row);
       this.onRowEvent.emit({
-        event: "RowSelectionChange",
+        event: RowEventType.RowSelectionChange,
         sender: {
           selectionModel: this._rowSelectionModel,
           row: row,

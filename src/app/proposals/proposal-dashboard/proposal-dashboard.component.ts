@@ -1,104 +1,217 @@
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
+import { PageChangeEvent } from "shared/modules/table/table.component";
+import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
-  AfterViewChecked,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-} from "@angular/core";
-import { Router } from "@angular/router";
-import { AppConfigService } from "app-config.service";
-import { Column } from "shared/modules/shared-table/shared-table.module";
-import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
-import { ExportExcelService } from "shared/services/export-excel.service";
-import { ScicatDataService } from "shared/services/scicat-data-service";
+  TableSetting,
+  VisibleActionMenu,
+} from "shared/modules/dynamic-material-table/models/table-setting.model";
+import {
+  TablePagination,
+  TablePaginationMode,
+} from "shared/modules/dynamic-material-table/models/table-pagination.model";
+import { PrintConfig } from "shared/modules/dynamic-material-table/models/print-config.model";
+import {
+  IRowEvent,
+  RowEventType,
+  TableSelectionMode,
+} from "shared/modules/dynamic-material-table/models/table-row.model";
 import { SciCatDataSource } from "shared/services/scicat.datasource";
+import { Store } from "@ngrx/store";
+import {
+  selectProposals,
+  selectProposalsCount,
+} from "state-management/selectors/proposals.selectors";
+import { fetchProposalsAction } from "state-management/actions/proposals.actions";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
+
+export const tableColumnsConfig: TableField<any>[] = [
+  {
+    name: "proposalId",
+    header: "Proposal ID",
+    icon: "perm_device_information",
+    type: "text",
+  },
+  {
+    name: "title",
+    icon: "description",
+  },
+  {
+    name: "abstract",
+    icon: "chrome_reader_mode",
+  },
+  { name: "email", icon: "email" },
+  { name: "type", icon: "badge" },
+  {
+    name: "createdBy",
+    icon: "badge",
+  },
+];
+
+const actionMenu: VisibleActionMenu = {
+  json: true,
+  csv: true,
+  print: true,
+  columnSettingPin: true,
+  columnSettingFilter: true,
+  clearFilter: true,
+};
+
+export const tableSettingsConfig: TableSetting = {
+  direction: "ltr",
+  visibleActionMenu: actionMenu,
+  autoHeight: false,
+  saveSettingMode: "multi",
+  rowStyle: {
+    "border-bottom": "1px solid #d2d2d2",
+  },
+};
 
 @Component({
   selector: "app-proposal-dashboard",
   templateUrl: "./proposal-dashboard.component.html",
   styleUrls: ["./proposal-dashboard.component.scss"],
 })
-export class ProposalDashboardComponent implements OnDestroy, AfterViewChecked {
-  columns: Column[] = [
-    {
-      id: "proposalId",
-      label: "Proposal ID",
-      canSort: true,
-      icon: "perm_device_information",
-      matchMode: "contains",
-      hideOrder: 0,
-    },
-    {
-      id: "title",
-      label: "Title",
-      icon: "description",
-      canSort: true,
-      matchMode: "contains",
-      hideOrder: 1,
-    },
-    {
-      id: "firstname",
-      label: "First Name",
-      icon: "badge",
-      canSort: true,
-      matchMode: "contains",
-      hideOrder: 2,
-    },
-    {
-      id: "lastname",
-      label: "Last Name",
-      icon: "badge",
-      canSort: true,
-      matchMode: "contains",
-      hideOrder: 3,
-    },
-    {
-      id: "startTime",
-      icon: "timer",
-      label: "Start Date",
-      format: "date",
-      canSort: true,
-      matchMode: "between",
-      hideOrder: 4,
-      sortDefault: "desc",
-    },
-    {
-      id: "endTime",
-      icon: "timer_off",
-      label: "End Date",
-      format: "date",
-      canSort: true,
-      matchMode: "between",
-      hideOrder: 5,
-    },
-  ];
-  tableDefinition = {
-    collection: "Proposals",
-    columns: this.columns,
-  };
-  dataSource: SciCatDataSource;
+export class ProposalDashboardComponent implements OnInit {
+  vm$ = this.store.select(selectProposals);
+  proposalsCount$ = this.store.select(selectProposalsCount);
+
+  columns!: TableField<any>[];
+
+  direction: "ltr" | "rtl" = "ltr";
+
+  showReloadData = true;
+
+  rowHeight = 50;
+
+  pending = false;
+
+  setting: TableSetting = {};
+
+  paginationMode: TablePaginationMode = "server-side";
+
+  showNoData = true;
+
+  dataSource: BehaviorSubject<ProposalClass[]> = new BehaviorSubject<
+    ProposalClass[]
+  >([]);
+
+  pagination: TablePagination = {};
+
+  stickyHeader = true;
+
+  printConfig: PrintConfig = {};
+
+  showProgress = true;
+
+  dataPlayName: "clear data" | "fetch data" = "clear data";
+
+  noDataBtn = false;
+
+  rowSelectionMode: TableSelectionMode = "multi";
+
+  globalTextSearch = "";
+
+  @Output() pageChange = new EventEmitter<PageChangeEvent>();
+
+  @Input() realDataSource: SciCatDataSource;
+
   constructor(
-    private appConfigService: AppConfigService,
-    private cdRef: ChangeDetectorRef,
-    private dataService: ScicatDataService,
-    private exportService: ExportExcelService,
+    private store: Store,
     private router: Router,
-  ) {
-    this.dataSource = new SciCatDataSource(
-      this.appConfigService,
-      this.dataService,
-      this.exportService,
-      this.tableDefinition,
+    private route: ActivatedRoute,
+  ) {}
+
+  ngOnInit(): void {
+    const queryParams = this.route.snapshot.queryParams;
+    if (queryParams.textSearch) {
+      this.globalTextSearch = queryParams.textSearch;
+    }
+    this.store.dispatch(
+      fetchProposalsAction({
+        limit: queryParams.pageSize,
+        page: queryParams.pageIndex,
+        fields: { text: queryParams.textSearch },
+      }),
+    );
+
+    this.vm$.subscribe((data) => {
+      this.dataSource.next(data);
+    });
+
+    this.proposalsCount$.subscribe((count) => {
+      const pagginationConfig = {
+        pageSizeOptions: [5, 10, 25, 100],
+        pageIndex: queryParams.pageIndex,
+        pageSize: queryParams.pageSize || 10,
+        length: count,
+      };
+
+      this.initTable(
+        tableColumnsConfig,
+        tableSettingsConfig,
+        pagginationConfig,
+      );
+    });
+  }
+
+  initTable(
+    columnsConfig: TableField<any>[],
+    settingConfig: TableSetting,
+    paginationConfig: TablePagination,
+  ): void {
+    this.columns = columnsConfig;
+    this.setting = settingConfig;
+    this.pagination = paginationConfig;
+  }
+
+  onPaginationChange(pagination: TablePagination) {
+    this.router.navigate([], {
+      queryParams: {
+        pageIndex: this.pagination.pageIndex,
+        pageSize: this.pagination.pageSize,
+      },
+      queryParamsHandling: "merge",
+    });
+
+    this.store.dispatch(
+      fetchProposalsAction({
+        limit: pagination.pageSize,
+        page: pagination.pageIndex,
+      }),
     );
   }
 
-  ngAfterViewChecked() {
-    this.cdRef.detectChanges();
+  onGlobalTextSearchChange(text: string) {
+    this.pagination.pageIndex = 0;
+    this.router.navigate([], {
+      queryParams: {
+        textSearch: text,
+        pageIndex: 0,
+      },
+      queryParamsHandling: "merge",
+    });
+
+    const fields: Record<string, unknown> = {};
+
+    if (text) {
+      fields.text = text;
+    }
+
+    this.store.dispatch(
+      fetchProposalsAction({
+        limit: this.pagination.pageSize,
+        page: this.pagination.pageIndex,
+        fields: fields,
+      }),
+    );
   }
-  ngOnDestroy() {
-    this.dataSource.disconnectExportData();
-  }
-  onRowClick(proposal: ProposalClass) {
-    const id = encodeURIComponent(proposal.proposalId);
-    this.router.navigateByUrl("/proposals/" + id);
+
+  onRowClick(event: IRowEvent<ProposalClass>) {
+    if (event.event === RowEventType.RowClick) {
+      const id = encodeURIComponent(event.sender.row.proposalId);
+      this.router.navigateByUrl("/proposals/" + id);
+    }
   }
 }

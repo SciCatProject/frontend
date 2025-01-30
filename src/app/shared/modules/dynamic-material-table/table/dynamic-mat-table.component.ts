@@ -38,11 +38,7 @@ import {
 } from "@angular/animations";
 import { ResizeColumn } from "../models/resize-column.mode";
 import { TableMenuActionChange } from "./extensions/table-menu/table-menu.component";
-import {
-  CdkDragDrop,
-  CdkDragStart,
-  moveItemInArray,
-} from "@angular/cdk/drag-drop";
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { HashMap, isNullorUndefined } from "../cores/type";
 import { SettingItem, TableSetting } from "../models/table-setting.model";
 import { delay, filter } from "rxjs/operators";
@@ -60,14 +56,14 @@ import { requestFullscreen } from "../utilizes/html.helper";
 import { TooltipComponent } from "../tooltip/tooltip.component";
 import { ComponentPortal } from "@angular/cdk/portal";
 import { PageEvent } from "@angular/material/paginator";
-import { IRowEvent, TableRow } from "../models/table-row.model";
+import { IRowEvent, RowEventType, TableRow } from "../models/table-row.model";
 import { PrintTableDialogComponent } from "./extensions/print-dialog/print-dialog.component";
 
 export interface IDynamicCell {
   row: TableRow;
   column: TableField<any>;
   parent: DynamicMatTableComponent<any>;
-  onRowEvent?: EventEmitter<IRowEvent>;
+  onRowEvent?: EventEmitter<IRowEvent<any>>;
 }
 
 // NOTE: This directive is in the same file as the parent component to avoind production build error (https://angular.dev/errors/NG3003).
@@ -79,7 +75,7 @@ export class DynamicCellDirective implements OnChanges, OnDestroy {
   @Input() component: any;
   @Input() column: TableField<any>;
   @Input() row: any;
-  @Input() onRowEvent: EventEmitter<IRowEvent>;
+  @Input() onRowEvent: EventEmitter<IRowEvent<any>>;
   componentRef: ComponentRef<IDynamicCell> = null;
 
   constructor(
@@ -535,7 +531,7 @@ export class DynamicMatTableComponent<T extends TableRow>
     this.contextMenu.menuData = this.currentContextMenuSender;
     this.contextMenu.menu.focusFirstItem("mouse");
     this.onRowEvent.emit({
-      event: "BeforeContextMenuOpen",
+      event: RowEventType.BeforeContextMenuOpen,
       sender: { row: row, column: column, contextMenu: this.contextMenuItems },
     });
     this.contextMenu.openMenu();
@@ -544,7 +540,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   onContextMenuItemClick(data: ContextMenuItem) {
     this.contextMenu.menuData.item = data;
     this.onRowEvent.emit({
-      event: "ContextMenuClick",
+      event: RowEventType.ContextMenuClick,
       sender: this.contextMenu.menuData,
     });
   }
@@ -688,7 +684,7 @@ export class DynamicMatTableComponent<T extends TableRow>
 
   rowMenuActionChange(contextMenuItem: ContextMenuItem, row: any) {
     this.onRowEvent.emit({
-      event: "RowActionMenu",
+      event: RowEventType.RowActionMenu,
       sender: { row: row, action: contextMenuItem },
     });
     // this.rowActionMenuChange.emit({actionItem: contextMenuItem, rowItem: row });
@@ -845,13 +841,13 @@ export class DynamicMatTableComponent<T extends TableRow>
     if (column.cellTooltipEnable === true) {
       this.closeTooltip(); /* Fixed BUG: Open Overlay when redirect to other route */
     }
-    this.onRowSelection(e, row, column);
+    // this.onRowSelection(e, row, column);
     if (
       column.clickable !== false &&
       (column.clickType === null || column.clickType === "cell")
     ) {
       this.onRowEvent.emit({
-        event: "CellClick",
+        event: RowEventType.CellClick,
         sender: { row: row, column: column },
       });
     }
@@ -860,18 +856,24 @@ export class DynamicMatTableComponent<T extends TableRow>
   onLabelClick(e, row, column: TableField<T>) {
     if (column.clickable !== false && column.clickType === "label") {
       this.onRowEvent.emit({
-        event: "LabelClick",
+        event: RowEventType.LabelClick,
         sender: { row: row, column: column, e: e },
       });
     }
   }
 
   onRowDblClick(e, row) {
-    this.onRowEvent.emit({ event: "DoubleClick", sender: { row: row, e: e } });
+    this.onRowEvent.emit({
+      event: RowEventType.DoubleClick,
+      sender: { row: row, e: e },
+    });
   }
 
   onRowClick(e, row) {
-    this.onRowEvent.emit({ event: "RowClick", sender: { row: row, e: e } });
+    this.onRowEvent.emit({
+      event: RowEventType.RowClick,
+      sender: { row: row, e: e },
+    });
   }
 
   /************************************ Drag & Drop Column *******************************************/

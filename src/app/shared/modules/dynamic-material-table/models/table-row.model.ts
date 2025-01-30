@@ -11,21 +11,22 @@ export interface TableRow {
 }
 
 export type TableSelectionMode = "single" | "multi" | "none";
-export type RowEventType =
-  | "MasterSelectionChange"
-  | "RowSelectionChange"
-  | "RowActionMenu"
-  | "RowClick"
-  | "DoubleClick"
-  | "CellClick"
-  | "LabelClick"
-  | "BeforeContextMenuOpen"
-  | "ContextMenuClick";
+export enum RowEventType {
+  MasterSelectionChange = "MasterSelectionChange",
+  RowSelectionChange = "RowSelectionChange",
+  RowActionMenu = "RowActionMenu",
+  RowClick = "RowClick",
+  DoubleClick = "DoubleClick",
+  CellClick = "CellClick",
+  LabelClick = "LabelClick",
+  BeforeContextMenuOpen = "BeforeContextMenuOpen",
+  ContextMenuClick = "ContextMenuClick",
+}
 
-export interface IRowEvent {
+export interface IRowEvent<T extends object> {
   event: RowEventType | any;
   sender: {
-    row?: any;
+    row?: T;
     column?: TableField<any>;
     selectionModel?: SelectionModel<any>;
     [t: string]: any;
