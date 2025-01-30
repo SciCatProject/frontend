@@ -1,10 +1,5 @@
 describe("Datasets", () => {
   beforeEach(() => {
-    cy.fixture("frontend-base-config.json").then((baseConfig) => {
-      cy.intercept("GET", "**/admin/config", baseConfig).as(
-        "getFrontendConfig",
-      );
-    });
     cy.login(Cypress.env("username"), Cypress.env("password"));
 
     cy.createDataset("raw");

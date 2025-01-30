@@ -83,7 +83,7 @@ export const testData = {
     classification: "AV=medium,CO=low",
     license: "string",
     version: "string",
-    isPublished: true,
+    isPublished: false,
     ownerGroup: "ess",
     accessGroups: [],
     sampleId: "string",
