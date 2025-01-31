@@ -21,7 +21,7 @@
           SciCat Information
           <span class="spacer"></span>
             <mat-icon
-            matTooltip="TODO - Check if everything is filled out correctly"
+            [matTooltip]="isSciCatHeaderOk ? 'Your input is correct.' : scicatHeaderErrors"
             [ngClass]="isSciCatHeaderOk ? 'success-icon' : 'error-icon'">{{
             isSciCatHeaderOk ? 'check_circle_outline' : 'error_outline'}}</mat-icon>
           <mat-icon class="toggle-icon">{{ isCardContentVisible.scicat ?
@@ -30,7 +30,7 @@
         <mat-card-content *ngIf="isCardContentVisible.scicat">
           <app-metadata-editor [schema]="scicatHeaderSchema"
             [data]="createNewTransferData.scicatHeader"
-            (dataChange)="onDataChangeUserScicatHeader($event)"></app-metadata-editor>
+            (dataChange)="onDataChangeUserScicatHeader($event)" (errors)="scicatHeaderErrorsHandler($event)"></app-metadata-editor>
         </mat-card-content>
       </mat-card>
 
@@ -43,7 +43,7 @@
           Organizational Information
           <span class="spacer"></span>
           <mat-icon
-            matTooltip="TODO - Check if everything is filled out correctly"
+            [matTooltip]="isOrganizationalMetadataOk ? 'Your input is correct.' : organizationalErrors"
             [ngClass]="isOrganizationalMetadataOk ? 'success-icon' : 'error-icon'">{{
             isOrganizationalMetadataOk ? 'check_circle_outline' : 'error_outline'}}</mat-icon>
           <mat-icon class="toggle-icon">{{ isCardContentVisible.organizational ?
@@ -52,7 +52,7 @@
         <mat-card-content *ngIf="isCardContentVisible.organizational">
           <app-metadata-editor [schema]="metadataSchemaOrganizational"
             [data]="createNewTransferData.userMetaData['organizational']"
-            (dataChange)="onDataChangeUserMetadataOrganization($event)"></app-metadata-editor>
+            (dataChange)="onDataChangeUserMetadataOrganization($event)" (errors)="organizationalErrorsHandler($event)"></app-metadata-editor>
         </mat-card-content>
       </mat-card>
 
@@ -65,7 +65,7 @@
           Sample Information
           <span class="spacer"></span>
           <mat-icon
-            matTooltip="TODO - Check if everything is filled out correctly"
+            [matTooltip]="isSampleInformationOk ? 'Your input is correct.' : sampleErrors"
             [ngClass]="isSampleInformationOk ? 'success-icon' : 'error-icon'">{{
             isSampleInformationOk ? 'check_circle_outline' : 'error_outline'}}</mat-icon>
           <mat-icon class="toggle-icon">{{ isCardContentVisible.sample ?
@@ -74,7 +74,7 @@
         <mat-card-content *ngIf="isCardContentVisible.sample">
           <app-metadata-editor [schema]="metadataSchemaSample"
             [data]="createNewTransferData.userMetaData['sample']"
-            (dataChange)="onDataChangeUserMetadataSample($event)"></app-metadata-editor>
+            (dataChange)="onDataChangeUserMetadataSample($event)" (errors)="sampleErrorsHandler($event)"></app-metadata-editor>
         </mat-card-content>
       </mat-card>
     </div>

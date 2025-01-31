@@ -40,7 +40,7 @@
             Instrument Information
             <span class="spacer"></span>
             <mat-icon
-            matTooltip="TODO - Check if everything is filled out correctly"
+            [matTooltip]="isInstrumentMetadataOk ? 'Your input is correct.' : instrumentErrors"
             [ngClass]="isInstrumentMetadataOk ? 'success-icon' : 'error-icon'">{{
             isInstrumentMetadataOk ? 'check_circle_outline' : 'error_outline'}}</mat-icon>
             <mat-icon class="toggle-icon">{{ isCardContentVisible.instrument ? 'expand_less' : 'expand_more' }}</mat-icon>
@@ -48,7 +48,7 @@
           <mat-card-content *ngIf="isCardContentVisible.instrument">
             <app-metadata-editor [schema]="metadataSchemaInstrument"
               [data]="createNewTransferData.extractorMetaData['instrument']"
-              (dataChange)="onDataChangeExtractorMetadataInstrument($event)"></app-metadata-editor>
+              (dataChange)="onDataChangeExtractorMetadataInstrument($event)" (errors)="instrumentErrorsHandler($event)"></app-metadata-editor>
           </mat-card-content>
         </mat-card>
         <mat-card>
@@ -59,7 +59,7 @@
             Acquisition Information
             <span class="spacer"></span>
             <mat-icon
-            matTooltip="TODO - Check if everything is filled out correctly"
+            [matTooltip]="isAcquisitionMetadataOk ? 'Your input is correct.' : acquisitionErrors"
             [ngClass]="isAcquisitionMetadataOk ? 'success-icon' : 'error-icon'">{{
             isAcquisitionMetadataOk ? 'check_circle_outline' : 'error_outline'}}</mat-icon>
             <mat-icon class="toggle-icon">{{ isCardContentVisible.acquisition ? 'expand_less' : 'expand_more' }}</mat-icon>
@@ -67,7 +67,7 @@
           <mat-card-content *ngIf="isCardContentVisible.acquisition">
             <app-metadata-editor [schema]="metadataSchemaAcquisition"
               [data]="createNewTransferData.extractorMetaData['acquisition']"
-              (dataChange)="onDataChangeExtractorMetadataAcquisition($event)"></app-metadata-editor>
+              (dataChange)="onDataChangeExtractorMetadataAcquisition($event)" (errors)="acquisitionErrorsHandler($event)"></app-metadata-editor>
           </mat-card-content>
         </mat-card>
       </div>
@@ -77,5 +77,5 @@
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close (click)="onClickBack()">Back</button>
   <button mat-button color="primary" cdkFocusInitial [mat-dialog-close]="true"
-    (click)="onClickNext()" [disabled]="!extractorMetaDataReady">Next</button>
+    (click)="onClickNext()" [disabled]="!uiNextButtonReady">Next</button>
 </mat-dialog-actions>

@@ -23,8 +23,11 @@ export class IngestorExtractorMetadataDialogComponent {
   extractorMetaDataReady = false;
   extractorMetaDataError = false;
 
-  isAcquisitionMetadataOk = false; // TODO IMPLEMENT VALUE CHECK
-  isInstrumentMetadataOk = false; // TODO IMPLEMENT VALUE CHECK
+  uiNextButtonReady = false;
+  isAcquisitionMetadataOk = false;
+  acquisitionErrors = "";
+  isInstrumentMetadataOk = false;
+  instrumentErrors = "";
 
   isCardContentVisible = {
     instrument: true,
@@ -74,5 +77,39 @@ export class IngestorExtractorMetadataDialogComponent {
 
   toggleCardContent(card: string): void {
     this.isCardContentVisible[card] = !this.isCardContentVisible[card];
+  }
+
+  instrumentErrorsHandler(errors: any[]) {
+    this.isInstrumentMetadataOk = errors.length === 0;
+    this.instrumentErrors = "";
+    errors.forEach((error, number) => {
+      if (error.message) {
+        const ctrNum = number + 1;
+        this.instrumentErrors += ctrNum + ": " + error.message + "\n";
+      }
+    });
+    this.validateNextButton();
+  }
+
+  acquisitionErrorsHandler(errors: any[]) {
+    this.isAcquisitionMetadataOk = errors.length === 0;
+    this.acquisitionErrors = "";
+    errors.forEach((error, number) => {
+      if (error.message) {
+        const ctrNum = number + 1;
+        this.acquisitionErrors += ctrNum + ": " + error.message + "\n";
+      }
+    });
+    this.validateNextButton();
+  }
+
+  validateNextButton(): void {
+    /*this.uiNextButtonReady =
+      this.isInstrumentMetadataOk &&
+      this.isAcquisitionMetadataOk &&
+      this.extractorMetaDataReady;*/
+
+    // TODO: Use upper line if schema values are fine
+    this.uiNextButtonReady = this.extractorMetaDataReady;
   }
 }

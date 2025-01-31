@@ -22,10 +22,13 @@ export class IngestorUserMetadataDialogComponent {
     IngestorHelper.createEmptyRequestInformation();
   backendURL = "";
 
-  uiNextButtonReady = true; // Change to false when dev is ready
-  isSciCatHeaderOk = false; // TODO IMPLEMENT VALUE CHECK
-  isOrganizationalMetadataOk = false; // TODO IMPLEMENT VALUE CHECK
-  isSampleInformationOk = false; // TODO IMPLEMENT VALUE CHECK
+  uiNextButtonReady = false;
+  isSciCatHeaderOk = false;
+  scicatHeaderErrors = "";
+  isOrganizationalMetadataOk = false;
+  organizationalErrors = "";
+  isSampleInformationOk = false;
+  sampleErrors = "";
 
   isCardContentVisible = {
     scicat: true,
@@ -83,5 +86,48 @@ export class IngestorUserMetadataDialogComponent {
 
   toggleCardContent(card: string): void {
     this.isCardContentVisible[card] = !this.isCardContentVisible[card];
+  }
+
+  scicatHeaderErrorsHandler(errors: any[]) {
+    this.isSciCatHeaderOk = errors.length === 0;
+    this.scicatHeaderErrors = "";
+    errors.forEach((error, number) => {
+      if (error.message) {
+        const ctrNum = number + 1;
+        this.scicatHeaderErrors += ctrNum + ": " + error.message + "\n";
+      }
+    });
+    this.validateNextButton();
+  }
+
+  organizationalErrorsHandler(errors: any[]) {
+    this.isOrganizationalMetadataOk = errors.length === 0;
+    this.organizationalErrors = "";
+    errors.forEach((error, number) => {
+      if (error.message) {
+        const ctrNum = number + 1;
+        this.organizationalErrors += ctrNum + ": " + error.message + "\n";
+      }
+    });
+    this.validateNextButton();
+  }
+
+  sampleErrorsHandler(errors: any[]) {
+    this.isSampleInformationOk = errors.length === 0;
+    this.sampleErrors = "";
+    errors.forEach((error, number) => {
+      if (error.message) {
+        const ctrNum = number + 1;
+        this.sampleErrors += ctrNum + ": " + error.message + "\n";
+      }
+    });
+    this.validateNextButton();
+  }
+
+  validateNextButton(): void {
+    this.uiNextButtonReady =
+      this.isSciCatHeaderOk &&
+      this.isOrganizationalMetadataOk &&
+      this.isSampleInformationOk;
   }
 }

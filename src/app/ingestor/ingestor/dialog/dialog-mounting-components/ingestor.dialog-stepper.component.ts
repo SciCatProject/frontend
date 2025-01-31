@@ -9,12 +9,12 @@ import { MatDialog } from "@angular/material/dialog";
 import {
   IngestionRequestInformation,
   SciCatHeader,
-} from "../helper/ingestor.component-helper";
-import { IngestorConfirmationDialogComponent } from "./confirmation-dialog/ingestor.confirmation-dialog.component";
+} from "../../helper/ingestor.component-helper";
+import { IngestorConfirmationDialogComponent } from "../confirmation-dialog/ingestor.confirmation-dialog.component";
 import {
   ExportOptions,
   ExportTemplateHelperComponent,
-} from "./dialog-mounting-components/ingestor.export-helper.component";
+} from "./ingestor.export-helper.component";
 
 @Component({
   selector: "ingestor-dialog-stepper",

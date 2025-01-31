@@ -24,7 +24,7 @@ import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 import { IngestorExtractorMetadataDialogComponent } from "./ingestor/dialog/ingestor.extractor-metadata-dialog.component";
 import { IngestorConfirmTransferDialogComponent } from "./ingestor/dialog/ingestor.confirm-transfer-dialog.component";
 import { MatStepperModule } from "@angular/material/stepper";
-import { IngestorDialogStepperComponent } from "./ingestor/dialog/ingestor.dialog-stepper.component.component";
+import { IngestorDialogStepperComponent } from "./ingestor/dialog/dialog-mounting-components/ingestor.dialog-stepper.component";
 import { AnyOfRendererComponent } from "./ingestor-metadata-editor/customRenderer/any-of-renderer";
 import { OneOfRendererComponent } from "./ingestor-metadata-editor/customRenderer/one-of-renderer";
 import { MatRadioModule } from "@angular/material/radio";

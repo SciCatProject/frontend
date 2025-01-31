@@ -67,7 +67,9 @@ export class IngestorNewTransferDialogComponent implements OnInit {
 
   apiGetExtractionMethods(): void {
     this.http
-      .get(this.backendURL + INGESTOR_API_ENDPOINTS_V1.EXTRACTOR, {withCredentials: true})
+      .get(this.backendURL + INGESTOR_API_ENDPOINTS_V1.EXTRACTOR, {
+        withCredentials: true,
+      })
       .subscribe(
         (response: any) => {
           if (response.methods && response.methods.length > 0) {
@@ -85,7 +87,9 @@ export class IngestorNewTransferDialogComponent implements OnInit {
 
   apiGetAvailableFilePaths(): void {
     this.http
-      .get(this.backendURL + INGESTOR_API_ENDPOINTS_V1.DATASET, {withCredentials: true})
+      .get(this.backendURL + INGESTOR_API_ENDPOINTS_V1.DATASET, {
+        withCredentials: true,
+      })
       .subscribe(
         (response: any) => {
           if (response.datasets && response.datasets.length > 0) {
