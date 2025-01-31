@@ -15,7 +15,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { AppConfigService } from "app-config.service";
-import { PublishedDataService } from "@scicatproject/scicat-sdk-ts";
+import { PublishedDataService } from "@scicatproject/scicat-sdk-ts-angular";
 
 const getConfig = () => ({
   editMetadataEnabled: true,

@@ -10,7 +10,10 @@ import {
 import { JobsState } from "state-management/state/jobs.store";
 import { ArchivingService } from "./archiving.service";
 import { createMock, mockDataset } from "shared/MockStubs";
-import { CreateJobDto, ReturnedUserDto } from "@scicatproject/scicat-sdk-ts";
+import {
+  CreateJobDto,
+  ReturnedUserDto,
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("ArchivingService", () => {
   let service: ArchivingService;

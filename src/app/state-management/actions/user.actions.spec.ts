@@ -2,7 +2,7 @@ import {
   ReturnedUserDto,
   UserIdentity,
   UserSettings,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { Message, Settings, MessageType } from "../models";
 import * as fromActions from "./user.actions";
 import { HttpErrorResponse } from "@angular/common/http";

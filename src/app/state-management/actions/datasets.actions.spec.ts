@@ -10,7 +10,10 @@ import {
   createMock,
   mockAttachment as attachment,
 } from "shared/MockStubs";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts";
+import {
+  DatasetsControllerCreateRequest,
+  OutputDatasetObsoleteDto,
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("Dataset Actions", () => {
   const datasets = [dataset];
@@ -263,8 +266,13 @@ describe("Dataset Actions", () => {
 
   describe("addDatasetAction", () => {
     it("should create an action", () => {
-      const action = fromActions.addDatasetAction({ dataset });
-      expect({ ...action }).toEqual({ type: "[Dataset] Add Dataset", dataset });
+      const action = fromActions.addDatasetAction({
+        dataset: dataset as DatasetsControllerCreateRequest,
+      });
+      expect({ ...action }).toEqual({
+        type: "[Dataset] Add Dataset",
+        dataset: dataset as DatasetsControllerCreateRequest,
+      });
     });
   });
 
@@ -475,6 +483,7 @@ describe("Dataset Actions", () => {
       });
     });
   });
+
   describe("updateDatasetAccessGrappendToDatasetArrayFieldCompleteActionoupsCompleteAction", () => {
     it("should create an action", () => {
       const action = fromActions.appendToDatasetArrayFieldCompleteAction();

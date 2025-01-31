@@ -4,7 +4,7 @@ import {
   CreateSubAttachmentDto,
   DatasetsService,
   SamplesService,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import {
   selectFullqueryParams,

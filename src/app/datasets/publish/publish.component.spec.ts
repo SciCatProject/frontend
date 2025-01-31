@@ -24,7 +24,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatButtonModule } from "@angular/material/button";
 import { AppConfigService } from "app-config.service";
-import { PublishedDataService } from "@scicatproject/scicat-sdk-ts";
+import { PublishedDataService } from "@scicatproject/scicat-sdk-ts-angular";
 
 const getConfig = () => ({
   facility: "test",
