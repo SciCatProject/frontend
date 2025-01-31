@@ -400,7 +400,6 @@
                     *ngSwitchCase="'tree'"
                     [metadata]="dataset['scientificMetadata']"
                     (save)="onSaveMetadata($event)"
-                    (hasUnsavedChanges)="onHasUnsavedChanges($event)"
                   >
                   </tree-edit>
                   <metadata-edit

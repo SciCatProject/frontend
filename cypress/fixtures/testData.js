@@ -16,7 +16,7 @@ export const testData = {
     creationTime: "2019-10-31T14:44:45.092Z",
     type: "derived",
     validationStatus: "string",
-    keywords: [],
+    keywords: ["test1", "test2", "test3"],
     description: "Cypress e2e test derived dataset",
     datasetName: "Cypress Dataset",
     classification: "AV=medium,CO=low",
@@ -77,7 +77,7 @@ export const testData = {
     creationTime: "2019-10-31T14:44:46.143Z",
     type: "raw",
     validationStatus: "string",
-    keywords: [],
+    keywords: ["test1", "test2"],
     description: "Cypress e2e test raw dataset",
     datasetName: "Cypress Dataset",
     classification: "AV=medium,CO=low",
@@ -147,5 +147,111 @@ export const testData = {
         perm: "-rw-rw-r--",
       },
     ],
+  },
+};
+
+export const testConfig = {
+  dynamicDetialViewComponent: {
+    datasetDetailViewLabelOption: {
+      currentLabelSet: "test",
+      labelSets: {
+        test: {
+          datasetName: "Test String",
+          description: "Test Copy",
+          ownerEmail: "Test Linky",
+          keywords: "Test Tag",
+          "Section Label Regular": "Test Section Regular",
+          "Section Label Attachments": "Test Section Attachments",
+          "Section Label Metadata JSON": "Test Section Metadata JSON",
+          "Section Label Metadata TABLE": "Test Section Metadata TABLE",
+          "Section Label Metadata TREE": "Test Section Metadata TREE",
+          "Section Label Dataset JsonView": "Test Section Dataset JsonView",
+        },
+      },
+    },
+    datasetDetailComponent: {
+      enableCustomizedComponent: true,
+      customization: [
+        {
+          type: "attachments",
+          label: "Section Label Attachments",
+          order: 1,
+          options: {
+            limit: 2,
+            size: "small",
+          },
+        },
+        {
+          type: "regular",
+          label: "Section Label Regular",
+          order: 0,
+          fields: [
+            {
+              element: "text",
+              source: "datasetName",
+              order: 0,
+            },
+            {
+              element: "copy",
+              source: "description",
+              order: 1,
+            },
+            {
+              element: "linky",
+              source: "ownerEmail",
+              order: 2,
+            },
+            {
+              element: "tag",
+              source: "keywords",
+              order: 3,
+            },
+          ],
+        },
+        {
+          type: "scientificMetadata",
+          label: "Section Label Metadata JSON",
+          viewMode: "json",
+          order: 2,
+        },
+        {
+          type: "scientificMetadata",
+          label: "Section Label Metadata TABLE",
+          viewMode: "table",
+          order: 3,
+        },
+        {
+          type: "scientificMetadata",
+          label: "Section Label Metadata TREE",
+          viewMode: "tree",
+          order: 4,
+        },
+        {
+          type: "datasetJsonView",
+          label: "Section Label Dataset JsonView",
+          order: 5,
+        },
+      ],
+    },
+  },
+  defaultDetailViewComponent: {
+    datasetDetailViewLabelOption: {
+      currentLabelSet: "test",
+      labelSets: {
+        test: {
+          "Dataset Name": "Test Dataset name",
+          Description: "Test Description",
+          "Creation time": "Test Creation time",
+          Pid: "Test Pid",
+          Type: "Test Type",
+          "General Information": "Test General Information",
+          "Creator Information": "Creator Information",
+        },
+      },
+    },
+    datasetDetailComponent: {
+      enableCustomizedComponent: false,
+      customization: [],
+    },
   },
 };

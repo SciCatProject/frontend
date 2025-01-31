@@ -1,0 +1,72 @@
+mat-card {
+  margin: 1em;
+
+  .section-icon {
+    height: auto !important;
+    width: auto !important;
+
+    mat-icon {
+      vertical-align: middle;
+    }
+  }
+  .caption-text {
+    word-break: break-all;
+  }
+
+  table {
+    th {
+      min-width: 10rem;
+      padding-right: 0.5rem;
+      text-align: left;
+    }
+
+    td {
+      width: 100%;
+      padding: 0.5rem 0;
+
+      .sample-edit {
+        padding-left: 0.5rem;
+
+        mat-icon {
+          font-size: medium;
+        }
+      }
+
+      .sample-edit:hover {
+        cursor: pointer;
+      }
+    }
+
+    .full-width {
+      width: 100%;
+    }
+
+    .keywords-row {
+      .add-keyword-chip:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+.jupyter-button {
+  margin: 1em 0 0 1em;
+}
+.public-toggle {
+  margin: 1em 1em 0 0;
+  float: right;
+}
+.attachment-card {
+  display: flex;
+  align-items: center;
+}
+.thumbnail-image {
+  cursor: pointer;
+  max-width: 14em;
+  width: 100%;
+  height: auto;
+}
+.json-view-overflow {
+  flex: 0 0 auto;
+  max-width: 80vw;
+  overflow: auto;
+}

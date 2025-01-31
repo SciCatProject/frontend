@@ -1,0 +1,212 @@
+{
+  "accessTokenPrefix": "Bearer ",
+  "addDatasetEnabled": false,
+  "archiveWorkflowEnabled": false,
+  "datasetReduceEnabled": true,
+  "datasetJsonScientificMetadata": true,
+  "editDatasetSampleEnabled": true,
+  "editMetadataEnabled": true,
+  "editPublishedData": false,
+  "addSampleEnabled": false,
+  "externalAuthEndpoint": "/api/v3/auth/msad",
+  "facility": "SciCat Vanilla",
+  "siteIcon": "site-header-logo.png",
+  "loginFacilityLabel": "SciCat Vanilla",
+  "loginLdapLabel": "Ldap",
+  "loginLocalLabel": "Local",
+  "loginFacilityEnabled": true,
+  "loginLdapEnabled": true,
+  "loginLocalEnabled": true,
+  "localLoginLabel": "Local",
+  "fileColorEnabled": true,
+  "fileDownloadEnabled": true,
+  "gettingStarted": null,
+  "ingestManual": null,
+  "jobsEnabled": true,
+  "jsonMetadataEnabled": true,
+  "jupyterHubUrl": "",
+  "landingPage": "doi.ess.eu/detail/",
+  "lbBaseURL": "http://localhost:3000",
+  "logbookEnabled": true,
+  "loginFormEnabled": true,
+  "maxDirectDownloadSize": 1047521824,
+  "thumbnailFetchLimitPerPage": 100,
+  "metadataPreviewEnabled": true,
+  "metadataStructure": "",
+  "multipleDownloadAction": "http:/localhost/zip",
+  "multipleDownloadEnabled": true,
+  "oAuth2Endpoints": [
+    {
+      "authURL": "api/v3/auth/oidc",
+      "displayText": "ESS One Identity"
+    }
+  ],
+  "policiesEnabled": true,
+  "retrieveDestinations": [],
+  "riotBaseUrl": "",
+  "scienceSearchEnabled": true,
+  "scienceSearchUnitsEnabled": true,
+  "searchPublicDataEnabled": true,
+  "searchSamples": true,
+  "sftpHost": "",
+  "shareEnabled": true,
+  "shoppingCartEnabled": true,
+  "shoppingCartOnHeader": true,
+  "tableSciDataEnabled": true,
+  "datasetDetailsShowMissingProposalId": false,
+  "notificationInterceptorEnabled": true,
+  "metadataEditingUnitListDisabled": true,
+  "datafilesActionsEnabled": true,
+  "datafilesActions": [
+    {
+      "id": "eed8efec-4354-11ef-a3b5-d75573a5d37f",
+      "order": 4,
+      "label": "Download All",
+      "files": "all",
+      "mat_icon": "download",
+      "type": "form",
+      "url": "https://www.scicat.info/download/all",
+      "target": "_blank",
+      "enabled": "#SizeLimit",
+      "authorization": ["#datasetAccess", "#datasetPublic"]
+    },
+    {
+      "id": "3072fafc-4363-11ef-b9f9-ebf568222d26",
+      "order": 3,
+      "label": "Download Selected",
+      "files": "selected",
+      "mat_icon": "download",
+      "type": "form",
+      "url": "https://www.scicat.info/download/selected",
+      "target": "_blank",
+      "enabled": "#Selected && #SizeLimit",
+      "authorization": ["#datasetAccess", "#datasetPublic"]
+    },
+    {
+      "id": "4f974f0e-4364-11ef-9c63-03d19f813f4e",
+      "order": 2,
+      "label": "Notebook All",
+      "files": "all",
+      "icon": "/assets/icons/jupyter_logo.png",
+      "type": "form",
+      "url": "https://www.scicat.info/notebook/all",
+      "target": "_blank",
+      "authorization": ["#datasetAccess", "#datasetPublic"]
+    },
+    {
+      "id": "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
+      "order": 1,
+      "label": "Notebook Selected",
+      "files": "selected",
+      "icon": "/assets/icons/jupyter_logo.png",
+      "type": "form",
+      "url": "https://www.scicat.info/notebook/selected",
+      "target": "_blank",
+      "enabled": "#Selected",
+      "authorization": ["#datasetAccess", "#datasetPublic"]
+    }
+  ],
+  "labelMaps": {
+    "filters": {
+      "LocationFilter": "Location",
+      "PidFilter": "Pid",
+      "GroupFilter": "Group",
+      "TypeFilter": "Type",
+      "KeywordFilter": "Keyword",
+      "DateRangeFilter": "Start Date - End Date",
+      "TextFilter": "Text"
+    }
+  },
+  "defaultDatasetsListSettings": {
+    "columns": [
+      {
+        "name": "select",
+        "order": 0,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "pid",
+        "order": 1,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "datasetName",
+        "order": 2,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "runNumber",
+        "order": 3,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "sourceFolder",
+        "order": 4,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "size",
+        "order": 5,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "creationTime",
+        "order": 6,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "type",
+        "order": 7,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "image",
+        "order": 8,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "metadata",
+        "order": 9,
+        "type": "standard",
+        "enabled": false
+      },
+      {
+        "name": "proposalId",
+        "order": 10,
+        "type": "standard",
+        "enabled": true
+      },
+      {
+        "name": "ownerGroup",
+        "order": 11,
+        "type": "standard",
+        "enabled": false
+      },
+      {
+        "name": "dataStatus",
+        "order": 12,
+        "type": "standard",
+        "enabled": false
+      }
+    ],
+    "filters": [
+      { "LocationFilter": true },
+      { "PidFilter": true },
+      { "GroupFilter": true },
+      { "TypeFilter": true },
+      { "KeywordFilter": true },
+      { "DateRangeFilter": true },
+      { "TextFilter": true }
+    ],
+    "conditions": []
+  }
+}
