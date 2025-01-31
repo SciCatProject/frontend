@@ -75,6 +75,10 @@ export class IngestorExtractorMetadataDialogComponent {
     this.createNewTransferData.extractorMetaData["acquisition"] = event;
   }
 
+  onCreateNewTransferDataChange(updatedData: IngestionRequestInformation) {
+    Object.assign(this.createNewTransferData, updatedData);
+  }
+
   toggleCardContent(card: string): void {
     this.isCardContentVisible[card] = !this.isCardContentVisible[card];
   }

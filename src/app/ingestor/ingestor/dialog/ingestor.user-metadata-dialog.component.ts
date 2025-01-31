@@ -80,8 +80,7 @@ export class IngestorUserMetadataDialogComponent {
   }
 
   onCreateNewTransferDataChange(updatedData: IngestionRequestInformation) {
-    this.createNewTransferData = updatedData;
-    console.log("Transfer data updated:", this.createNewTransferData);
+    Object.assign(this.createNewTransferData, updatedData);
   }
 
   toggleCardContent(card: string): void {

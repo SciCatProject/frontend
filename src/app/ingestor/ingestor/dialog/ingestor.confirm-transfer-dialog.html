@@ -7,7 +7,7 @@
   </button>
 </div>
 <mat-dialog-content class="mat-typography">
-  <ingestor-dialog-stepper [activeStep]="3"></ingestor-dialog-stepper>
+  <ingestor-dialog-stepper [activeStep]="3" [createNewTransferData]="createNewTransferData" (createNewTransferDataChange)="onCreateNewTransferDataChange($event)"></ingestor-dialog-stepper>
 
   <p>Confirm Metadata</p>
 

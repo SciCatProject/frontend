@@ -18,7 +18,7 @@
   </div>
 
   <div *ngIf="extractorMetaDataReady">
-    <ingestor-dialog-stepper [activeStep]="2"></ingestor-dialog-stepper>
+    <ingestor-dialog-stepper [activeStep]="2" [createNewTransferData]="createNewTransferData" (createNewTransferDataChange)="onCreateNewTransferDataChange($event)"></ingestor-dialog-stepper>
     <div *ngIf="extractorMetaDataError" class="error-message">
       <mat-card class="error-card">
         <mat-card-header>

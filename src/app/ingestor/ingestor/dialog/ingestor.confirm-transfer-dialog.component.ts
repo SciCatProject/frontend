@@ -53,6 +53,10 @@ export class IngestorConfirmTransferDialogComponent implements OnInit {
     return JSON.stringify(scicatMetadata, null, space);
   }
 
+  onCreateNewTransferDataChange(updatedData: IngestionRequestInformation) {
+    Object.assign(this.createNewTransferData, updatedData);
+  }
+
   onClickBack(): void {
     if (this.data && this.data.onClickNext) {
       this.data.onClickNext(2); // Beispielwert für den Schritt
