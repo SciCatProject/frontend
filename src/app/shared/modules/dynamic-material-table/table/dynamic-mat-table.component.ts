@@ -645,7 +645,10 @@ export class DynamicMatTableComponent<T extends TableRow>
           this.rowSelectionModel,
         );
       } else if (e.data === "JSON") {
-        this.tableService.exportToJson(this.tvsDataSource.filteredData);
+        this.tableService.exportToJson(
+          this.tvsDataSource.filteredData,
+          this.rowSelectionModel,
+        );
       }
     } else if (e.type === "FilterClear") {
       this.tvsDataSource.clearFilter();

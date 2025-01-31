@@ -58,7 +58,7 @@ const actionMenu: VisibleActionMenu = {
   clearFilter: true,
 };
 
-export const tableSettingsConfig: TableSetting = {
+const tableSettingsConfig: TableSetting = {
   direction: "ltr",
   visibleActionMenu: actionMenu,
   autoHeight: false,
@@ -67,6 +67,8 @@ export const tableSettingsConfig: TableSetting = {
     "border-bottom": "1px solid #d2d2d2",
   },
 };
+
+const DEFAULT_PAGE_SIZE = 10;
 
 @Component({
   selector: "app-proposal-dashboard",
@@ -130,7 +132,7 @@ export class ProposalDashboardComponent implements OnInit {
     }
     this.store.dispatch(
       fetchProposalsAction({
-        limit: queryParams.pageSize,
+        limit: queryParams.pageSize || DEFAULT_PAGE_SIZE,
         page: queryParams.pageIndex,
         fields: { text: queryParams.textSearch },
       }),
@@ -144,7 +146,7 @@ export class ProposalDashboardComponent implements OnInit {
       const pagginationConfig = {
         pageSizeOptions: [5, 10, 25, 100],
         pageIndex: queryParams.pageIndex,
-        pageSize: queryParams.pageSize || 10,
+        pageSize: queryParams.pageSize || DEFAULT_PAGE_SIZE,
         length: count,
       };
 

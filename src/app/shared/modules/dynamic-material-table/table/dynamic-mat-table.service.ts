@@ -69,11 +69,15 @@ export class TableService {
     selectionModel: SelectionModel<any>,
     filename = "",
   ) {
+    const dataToExport = selectionModel.selected.length
+      ? selectionModel.selected
+      : rows;
+
     filename =
       filename === ""
         ? this.tableName + TableService.getFormattedTime() + ".csv"
         : filename;
-    if (!rows || !rows.length) {
+    if (!dataToExport || !dataToExport.length) {
       return;
     }
     const fields = columns.filter(
@@ -86,7 +90,7 @@ export class TableService {
     const csvContent =
       headers.join(separator) +
       CR_LF +
-      rows
+      dataToExport
         .map((row) => {
           return fields
             .map((f) => {
@@ -111,12 +115,20 @@ export class TableService {
     this.downloadBlob(blob, filename);
   }
 
-  public exportToJson(rows: object[], filename = "") {
+  public exportToJson(
+    rows: object[],
+    selectionModel: SelectionModel<any>,
+    filename = "",
+  ) {
+    const dataToExport = selectionModel.selected.length
+      ? selectionModel.selected
+      : rows;
+
     filename =
       filename === ""
         ? this.tableName + TableService.getFormattedTime() + ".json"
         : filename;
-    const blob = new Blob([JSON.stringify(rows)], {
+    const blob = new Blob([JSON.stringify(dataToExport)], {
       type: "text/csv;charset=utf-8;",
     });
     this.downloadBlob(blob, filename);
