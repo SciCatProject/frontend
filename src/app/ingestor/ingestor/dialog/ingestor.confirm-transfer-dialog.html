@@ -15,23 +15,29 @@
   <p *ngIf="errorMessage !== ''">
     <mat-card class="ingestor-card">
       <mat-card-header class="ingestor-mixed-header">
-        <mat-card-title>
-          <p style="color: red" [innerHTML]="errorMessage"></p>
-        </mat-card-title>
+        <mat-card-title>Error message</mat-card-title>
         <button mat-icon-button class="ingestor-close-button"
           (click)="clearErrorMessage()">
           <mat-icon>close</mat-icon>
         </button>
       </mat-card-header>
+      <mat-card-content class="ingestor-vertical-layout">
+        <div>
+          <p style="color: red" [innerHTML]="errorMessage"></p>
+        </div>
+      </mat-card-content>
     </mat-card>
   </p>
 
   <p>Confirm Metadata</p>
 
-  <mat-form-field class="form-full-width">
-    <textarea class="metadata-preview" matInput
-      readonly>{{ provideMergeMetaData }}</textarea>
-  </mat-form-field>
+  <div class="code-editor">
+    <pre class="code">
+    <div *ngFor="let line of provideMergeMetaData.split('\n')">
+      <code>{{ line }}</code>
+    </div>
+    </pre>
+  </div>
 
 </mat-dialog-content>
 <mat-dialog-actions align="end">

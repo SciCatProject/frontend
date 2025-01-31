@@ -2,11 +2,7 @@ import { Component, inject, OnInit } from "@angular/core";
 import { AppConfigService } from "app-config.service";
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
-import {
-  apiGetHealth,
-  INGESTOR_API_ENDPOINTS_V1,
-  PostDatasetEndpoint,
-} from "./helper/ingestor-api-endpoints";
+import { INGESTOR_API_ENDPOINTS_V1 } from "./helper/ingestor-api-endpoints";
 import { IngestorNewTransferDialogComponent } from "./dialog/ingestor.new-transfer-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { IngestorUserMetadataDialogComponent } from "./dialog/ingestor.user-metadata-dialog.component";
@@ -19,6 +15,13 @@ import {
   TransferDataListEntry,
 } from "./helper/ingestor.component-helper";
 import { IngestorMetadataSSEService } from "./helper/ingestor.metadata-sse-service";
+import { IngestorAPIManager } from "./helper/ingestor-api-manager";
+import {
+  UserInfo,
+  OtherHealthResponse,
+  OtherVersionResponse,
+  PostDatasetRequest,
+} from "ingestor/model/models";
 
 @Component({
   selector: "ingestor",
@@ -33,17 +36,18 @@ export class IngestorComponent implements OnInit {
   forwardFacilityBackend = "";
 
   connectedFacilityBackend = "";
-  connectedFacilityBackendVersion = "";
-  connectingToFacilityBackend = false;
-  ingestorHealthStatus = [];
+  connectingToFacilityBackend = true;
 
   lastUsedFacilityBackends: string[] = [];
 
   transferDataSource: TransferDataListEntry[] = []; // List of files to be transferred
   displayedColumns: string[] = ["transferId", "status", "actions"];
 
+  versionInfo: OtherVersionResponse = null;
+  userInfo: UserInfo = null;
+  healthInfo: OtherHealthResponse = null;
+
   errorMessage = "";
-  returnValue = "";
 
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
@@ -55,124 +59,90 @@ export class IngestorComponent implements OnInit {
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
+    private apiManager: IngestorAPIManager,
     private sseService: IngestorMetadataSSEService,
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.connectingToFacilityBackend = true;
     this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
     this.transferDataSource = [];
+
     // Get the GET parameter 'backendUrl' from the URL
     this.route.queryParams.subscribe((params) => {
       const backendUrl = params["backendUrl"];
       if (backendUrl) {
-        this.apiConnectToFacilityBackend(backendUrl);
+        this.initializeIngestorConnection(backendUrl);
       } else {
         this.connectingToFacilityBackend = false;
       }
     });
   }
 
-  apiConnectToFacilityBackend(facilityBackendUrl: string): boolean {
+  async initializeIngestorConnection(
+    facilityBackendUrl: string,
+  ): Promise<boolean> {
+    this.connectingToFacilityBackend = true;
     let facilityBackendUrlCleaned = facilityBackendUrl.slice();
     // Check if last symbol is a slash and add version endpoint
     if (!facilityBackendUrlCleaned.endsWith("/")) {
       facilityBackendUrlCleaned += "/";
     }
 
-    const facilityBackendUrlVersion =
-      facilityBackendUrlCleaned + INGESTOR_API_ENDPOINTS_V1.OTHER.VERSION;
+    this.apiManager.connect(facilityBackendUrlCleaned);
 
-    // Try to connect to the facility backend/version to check if it is available
-    console.log("Connecting to facility backend: " + facilityBackendUrlVersion);
-    this.http
-      .get(facilityBackendUrlVersion, { withCredentials: true })
-      .subscribe(
-        (response) => {
-          console.log("Connected to facility backend", response);
-          // If the connection is successful, store the connected facility backend URL
-          this.connectedFacilityBackend = facilityBackendUrlCleaned;
-          this.connectingToFacilityBackend = false;
-          this.connectedFacilityBackendVersion = response["version"];
+    this.connectedFacilityBackend = facilityBackendUrlCleaned;
 
-          // TODO Do Health check
-          apiGetHealth();
-        },
-        (error) => {
-          this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
-          console.error("Request failed", error);
-          this.connectedFacilityBackend = "";
-          this.connectingToFacilityBackend = false;
-          this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
-        },
-      );
+    try {
+      this.versionInfo = await this.apiManager.getVersion();
+    } catch (error) {
+      this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+      this.connectedFacilityBackend = "";
+      this.connectingToFacilityBackend = false;
+      this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
+      return false;
+    }
 
+    try {
+      this.userInfo = await this.apiManager.getUserInfo();
+    } catch (error) {
+      this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+    }
+
+    try {
+      this.healthInfo = await this.apiManager.getHealth();
+    } catch (error) {
+      this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+    }
+
+    this.connectingToFacilityBackend = false;
     return true;
   }
 
-  apiGetTransferList(
-    page: number,
-    pageSize: number,
-    transferId?: string,
-  ): void {
-    const params: any = {
-      page: page.toString(),
-      pageSize: pageSize.toString(),
-    };
-    if (transferId) {
-      params.transferId = transferId;
-    }
-    this.http
-      .get(this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.TRANSFER, {
-        params,
-        withCredentials: true,
-      })
-      .subscribe(
-        (response) => {
-          //console.log("Transfer list received", response);
-          this.transferDataSource = response["transfers"];
-        },
-        (error) => {
-          this.errorMessage += `${new Date().toLocaleString()}: ${error.type}]<br>`;
-          console.error("Request failed", error);
-        },
-      );
-  }
-
-  apiUpload(): Promise<boolean> {
+  async ingestDataset(): Promise<boolean> {
     this.loading = true;
 
-    const payload: PostDatasetEndpoint = {
+    const payload: PostDatasetRequest = {
       metaData: this.createNewTransferData.mergedMetaDataString,
     };
 
-    return new Promise((resolve, reject) => {
-      this.http
-        .post(
-          this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.DATASET,
-          {
-            payload,
-            withCredentials: true,
-          },
-        )
-        .subscribe(
-          (response) => {
-            //console.log("Upload successfully started", response);
-            this.returnValue = JSON.stringify(response);
-            this.loading = false;
-            resolve(true);
-          },
-          (error) => {
-            this.errorMessage += `${new Date().toLocaleString()}: ${error.message}]<br>`;
-            console.error("Upload failed", error);
-            this.loading = false;
-            reject(error);
-          },
-        );
-    });
+    try {
+      const result = await this.apiManager.startIngestion(payload);
+      if (result) {
+        this.loading = false;
+        this.onClickRefreshTransferList();
+        return true;
+      }
+    } catch (error) {
+      this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+      this.loading = false;
+      throw error;
+    }
+
+    this.loading = false;
+    return false;
   }
 
-  async apiStartMetadataExtraction(): Promise<boolean> {
+  async startMetadataExtraction(): Promise<boolean> {
     this.createNewTransferData.apiErrorInformation.metaDataExtraction = false;
 
     if (this.createNewTransferData.extractMetaDataRequested) {
@@ -227,7 +197,7 @@ export class IngestorComponent implements OnInit {
 
       // If current route is equal to the forward route, the router will not navigate to the new route
       if (this.connectedFacilityBackend === this.forwardFacilityBackend) {
-        this.apiConnectToFacilityBackend(this.forwardFacilityBackend);
+        this.initializeIngestorConnection(this.forwardFacilityBackend);
         return;
       }
 
@@ -238,7 +208,6 @@ export class IngestorComponent implements OnInit {
   }
 
   onClickDisconnectIngestor() {
-    this.returnValue = "";
     this.connectedFacilityBackend = "";
     // Remove the GET parameter 'backendUrl' from the URL
     this.router.navigate(["/ingestor"]);
@@ -288,7 +257,7 @@ export class IngestorComponent implements OnInit {
 
         break;
       case 1:
-        this.apiStartMetadataExtraction().catch((error) => {
+        this.startMetadataExtraction().catch((error) => {
           console.error("Metadata extraction error", error);
         });
 
@@ -315,7 +284,7 @@ export class IngestorComponent implements OnInit {
         dialogRef = this.dialog.open(IngestorConfirmTransferDialogComponent, {
           data: {
             onClickNext: this.onClickNext.bind(this),
-            onStartUpload: this.apiUpload.bind(this),
+            onStartUpload: this.ingestDataset.bind(this),
             createNewTransferData: this.createNewTransferData,
             backendURL: this.connectedFacilityBackend,
           },
@@ -332,30 +301,22 @@ export class IngestorComponent implements OnInit {
     if (dialogRef === null) return;
   }
 
-  onClickRefreshTransferList(): void {
-    this.apiGetTransferList(1, 100);
+  async onClickRefreshTransferList(): Promise<void> {
+    try {
+      const transferList = await this.apiManager.getTransferList(1, 100);
+      this.transferDataSource = transferList;
+    } catch (error) {
+      this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+    }
   }
 
-  onCancelTransfer(transferId: string) {
-    console.log("Cancel transfer", transferId);
-    this.http
-      .delete(
-        this.connectedFacilityBackend +
-          INGESTOR_API_ENDPOINTS_V1.TRANSFER +
-          "/" +
-          transferId,
-        { withCredentials: true },
-      )
-      .subscribe(
-        (response) => {
-          console.log("Transfer cancelled", response);
-          this.apiGetTransferList(1, 100);
-        },
-        (error) => {
-          this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
-          console.error("Cancel transfer failed", error);
-        },
-      );
+  async onCancelTransfer(transferId: string) {
+    try {
+      await this.apiManager.cancelTransfer(transferId);
+      this.onClickRefreshTransferList();
+    } catch (error) {
+      this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+    }
   }
 
   openIngestorLogin(): void {

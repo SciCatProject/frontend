@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from "@angular/core";
+import { ChangeDetectorRef, Component, Inject } from "@angular/core";
 import { MatDialog, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { JsonSchema } from "@jsonforms/core";
 import {
@@ -11,7 +11,6 @@ import {
   selector: "ingestor.extractor-metadata-dialog",
   templateUrl: "ingestor.extractor-metadata-dialog.html",
   styleUrls: ["../ingestor.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IngestorExtractorMetadataDialogComponent {
   metadataSchemaInstrument: JsonSchema;
@@ -37,6 +36,7 @@ export class IngestorExtractorMetadataDialogComponent {
   constructor(
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: DialogDataObject,
+    private cdr: ChangeDetectorRef,
   ) {
     this.createNewTransferData = data.createNewTransferData;
     this.backendURL = data.backendURL;
@@ -93,6 +93,7 @@ export class IngestorExtractorMetadataDialogComponent {
       }
     });
     this.validateNextButton();
+    this.cdr.detectChanges();
   }
 
   acquisitionErrorsHandler(errors: any[]) {
@@ -105,6 +106,7 @@ export class IngestorExtractorMetadataDialogComponent {
       }
     });
     this.validateNextButton();
+    this.cdr.detectChanges();
   }
 
   validateNextButton(): void {

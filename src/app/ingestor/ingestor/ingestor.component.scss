@@ -57,18 +57,6 @@ mat-card {
   flex: 1 1 auto;
 }
 
-.error-message {
-  color: red;
-}
-
-.error-icon {
-  color: red;
-}
-
-.success-icon {
-  color: green;
-}
-
 .user-info {
   padding: 1em;
 }
@@ -76,6 +64,7 @@ mat-card {
 .user-info .user-icon-container {
   display: flex;
   align-items: center;
+  margin-bottom: 0.5em;
 }
 
 .user-info .user-icon-container p {
@@ -84,4 +73,23 @@ mat-card {
 
 .divider-down {
   margin-bottom: 1em;
+}
+
+.code-editor pre.code {
+  white-space: pre-wrap;
+  counter-reset: listing; 
+  line-height: 0.1;
+}
+.code-editor pre.code code {
+  counter-increment: listing; 
+  display: flex;
+  line-height: 1;
+}
+
+.code-editor pre.code code::before {
+  content: counter(listing) " ";
+  display: inline-block;
+  width: 2em; /* Breite für die Zeilennummern */
+  text-align: right; /* Rechtsbündige Zeilennummern */
+  margin-right: 0.5em; /* Abstand zwischen Zeilennummer und Code */
 }

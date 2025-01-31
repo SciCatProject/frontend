@@ -14,15 +14,5 @@ export const INGESTOR_API_ENDPOINTS_V1 = {
   METADATA: "metadata",
 };
 
-export interface PostExtractorEndpoint {
-  filePath: string;
-  methodName: string;
-}
-
-export interface PostDatasetEndpoint {
-  metaData: string;
-}
-
-export const apiGetHealth = () => {
-  console.log("Health check"); // TODO IMPLEMENT
-};
+export const LAST_USED_FALLBACK =
+  '["http://localhost:8000", "http://localhost:8888"]';

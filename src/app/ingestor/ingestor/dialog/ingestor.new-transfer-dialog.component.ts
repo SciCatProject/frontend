@@ -18,7 +18,6 @@ import { IngestorMetadataEditorHelper } from "ingestor/ingestor-metadata-editor/
 @Component({
   selector: "ingestor.new-transfer-dialog",
   templateUrl: "ingestor.new-transfer-dialog.html",
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ["../ingestor.component.scss"],
 })
 export class IngestorNewTransferDialogComponent implements OnInit {

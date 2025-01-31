@@ -16,7 +16,6 @@ import { IngestorConfirmationDialogComponent } from "./confirmation-dialog/inges
 @Component({
   selector: "ingestor.confirm-transfer-dialog",
   templateUrl: "ingestor.confirm-transfer-dialog.html",
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ["../ingestor.component.scss"],
 })
 export class IngestorConfirmTransferDialogComponent implements OnInit {

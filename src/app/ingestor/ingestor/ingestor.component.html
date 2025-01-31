@@ -32,14 +32,14 @@
         </ng-container>
         <ng-container *ngIf="connectedFacilityBackend !== ''">
           <mat-divider></mat-divider>
-          <div class="user-info">
-            <div class="user-icon-container">
+          <div *ngIf="userInfo !== null" class="user-info">
+            <div *ngIf="userInfo.logged_in" class="user-icon-container">
               <mat-icon>account_circle</mat-icon>
-              <p>username</p>
+              <p>Hello, {{ userInfo.name }}</p>
             </div>
-            <button mat-stroked-button
+            <button *ngIf="!userInfo.logged_in" mat-stroked-button
               (click)="openIngestorLogin()">Login</button>
-            <button mat-stroked-button
+            <button *ngIf="userInfo.logged_in" mat-stroked-button
               (click)="openIngestorLogin()">Logout</button>
           </div>
           <mat-divider class="divider-down"></mat-divider>
@@ -100,17 +100,12 @@
                 </mat-list-item>
                 <mat-list-item>
                   <span matListItemTitle>Version</span>
-                  <span matListItemLine>{{ connectedFacilityBackendVersion
+                  <span matListItemLine>{{ versionInfo.version
                     }}</span>
                 </mat-list-item>
                 <mat-list-item>
                   <span matListItemTitle>Health Status</span>
-                  <ng-container *ngFor="let status of ingestorHealthStatus">
-                    <mat-list-item>
-                      <span matListItemTitle>{{ status.title }}</span>
-                      <span matListItemLine>{{ status.value }}</span>
-                    </mat-list-item>
-                  </ng-container>
+                  <span matListItemLine>{{ healthInfo.status }}</span>
                 </mat-list-item>
               </mat-list>
             </mat-tab>
@@ -132,21 +127,6 @@
         (click)="onClickAddIngestion()">
         <mat-icon>add</mat-icon>
       </button>
-    </mat-card-content>
-  </mat-card>
-</p>
-
-<p *ngIf="returnValue !== ''">
-  <mat-card class="ingestor-card">
-    <mat-card-header>
-      <mat-card-title>Return Value</mat-card-title>
-    </mat-card-header>
-    <mat-card-content class="ingestor-vertical-layout">
-      <div>
-      </div>
-      <div>
-        <p>{{returnValue}}</p>
-      </div>
     </mat-card-content>
   </mat-card>
 </p>

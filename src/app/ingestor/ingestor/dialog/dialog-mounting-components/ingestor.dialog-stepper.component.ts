@@ -107,12 +107,13 @@ export class IngestorDialogStepperComponent {
     const input = document.createElement("input");
     input.type = "file";
     input.accept = ".json";
-    input.onchange = (event: any) => {
-      const file = event.target.files[0];
+    input.onchange = (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      const file = target.files?.[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          const content = e.target.result;
+          const content = e.target?.result as string;
 
           const dialogRef = this.dialog.open(
             IngestorConfirmationDialogComponent,
@@ -120,14 +121,13 @@ export class IngestorDialogStepperComponent {
               data: {
                 header: "Confirm template",
                 message: "Do you really want to apply the following values?",
-                //messageComponent: CheckboxComponent,
               },
             },
           );
           dialogRef.afterClosed().subscribe((result) => {
             if (result) {
               try {
-                const parsedData = JSON.parse(content as string);
+                const parsedData = JSON.parse(content);
                 this.createNewTransferData = {
                   ...this.createNewTransferData,
                   scicatHeader: {
@@ -139,7 +139,6 @@ export class IngestorDialogStepperComponent {
                     ...parsedData.userMetaData,
                   },
                 };
-                console.log(this.createNewTransferData.scicatHeader);
                 this.createNewTransferDataChange.emit(
                   this.createNewTransferData,
                 );

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from "@angular/core";
+import { ChangeDetectorRef, Component, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
 import { JsonSchema } from "@jsonforms/core";
 import {
@@ -11,7 +11,6 @@ import {
 @Component({
   selector: "ingestor.user-metadata-dialog",
   templateUrl: "ingestor.user-metadata-dialog.html",
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ["../ingestor.component.scss"],
 })
 export class IngestorUserMetadataDialogComponent {
@@ -39,6 +38,7 @@ export class IngestorUserMetadataDialogComponent {
   constructor(
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: DialogDataObject,
+    private cdr: ChangeDetectorRef,
   ) {
     this.createNewTransferData = data.createNewTransferData;
     this.backendURL = data.backendURL;
@@ -50,7 +50,6 @@ export class IngestorUserMetadataDialogComponent {
         .sample;
 
     this.metadataSchemaOrganizational = organizationalSchema;
-
     this.metadataSchemaSample = sampleSchema;
     this.scicatHeaderSchema = SciCatHeader_Schema;
   }
@@ -97,6 +96,7 @@ export class IngestorUserMetadataDialogComponent {
       }
     });
     this.validateNextButton();
+    this.cdr.detectChanges();
   }
 
   organizationalErrorsHandler(errors: any[]) {
@@ -109,6 +109,7 @@ export class IngestorUserMetadataDialogComponent {
       }
     });
     this.validateNextButton();
+    this.cdr.detectChanges();
   }
 
   sampleErrorsHandler(errors: any[]) {
@@ -121,6 +122,7 @@ export class IngestorUserMetadataDialogComponent {
       }
     });
     this.validateNextButton();
+    this.cdr.detectChanges();
   }
 
   validateNextButton(): void {
