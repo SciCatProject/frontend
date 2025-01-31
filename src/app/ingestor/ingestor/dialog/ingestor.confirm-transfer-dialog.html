@@ -2,21 +2,40 @@
   <h2 mat-dialog-title>
     Confirm transfer
   </h2>
-  <button mat-icon-button mat-dialog-close aria-label="Close" class="ingestor-close-button">
+  <button mat-icon-button mat-dialog-close aria-label="Close"
+    class="ingestor-close-button">
     <mat-icon>close</mat-icon>
   </button>
 </div>
 <mat-dialog-content class="mat-typography">
-  <ingestor-dialog-stepper [activeStep]="3" [createNewTransferData]="createNewTransferData" (createNewTransferDataChange)="onCreateNewTransferDataChange($event)"></ingestor-dialog-stepper>
+  <ingestor-dialog-stepper [activeStep]="3"
+    [createNewTransferData]="createNewTransferData"
+    (createNewTransferDataChange)="onCreateNewTransferDataChange($event)"></ingestor-dialog-stepper>
+
+  <p *ngIf="errorMessage !== ''">
+    <mat-card class="ingestor-card">
+      <mat-card-header class="ingestor-mixed-header">
+        <mat-card-title>
+          <p style="color: red" [innerHTML]="errorMessage"></p>
+        </mat-card-title>
+        <button mat-icon-button class="ingestor-close-button"
+          (click)="clearErrorMessage()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-card-header>
+    </mat-card>
+  </p>
 
   <p>Confirm Metadata</p>
 
   <mat-form-field class="form-full-width">
-    <textarea class="metadata-preview" matInput readonly>{{ provideMergeMetaData }}</textarea>
+    <textarea class="metadata-preview" matInput
+      readonly>{{ provideMergeMetaData }}</textarea>
   </mat-form-field>
 
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close (click)="onClickBack()">Back</button>
-  <button mat-button color="primary" cdkFocusInitial [mat-dialog-close]="true" (click)="onClickConfirm()">Ingest</button>
+  <button mat-button color="primary" cdkFocusInitial
+    (click)="onClickConfirm()">Ingest</button>
 </mat-dialog-actions>

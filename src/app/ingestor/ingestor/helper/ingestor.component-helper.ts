@@ -70,6 +70,7 @@ export interface DialogDataObject {
   createNewTransferData: IngestionRequestInformation;
   backendURL: string;
   onClickNext: (step: number) => void;
+  onStartUpload: () => Promise<boolean>;
 }
 
 export class IngestorHelper {

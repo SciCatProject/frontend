@@ -139,30 +139,37 @@ export class IngestorComponent implements OnInit {
       );
   }
 
-  apiUpload() {
+  apiUpload(): Promise<boolean> {
     this.loading = true;
 
     const payload: PostDatasetEndpoint = {
       metaData: this.createNewTransferData.mergedMetaDataString,
     };
 
-    this.http
-      .post(this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.DATASET, {
-        payload,
-        withCredentials: true,
-      })
-      .subscribe(
-        (response) => {
-          //console.log("Upload successfully started", response);
-          this.returnValue = JSON.stringify(response);
-          this.loading = false;
-        },
-        (error) => {
-          this.errorMessage += `${new Date().toLocaleString()}: ${error.message}]<br>`;
-          console.error("Upload failed", error);
-          this.loading = false;
-        },
-      );
+    return new Promise((resolve, reject) => {
+      this.http
+        .post(
+          this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.DATASET,
+          {
+            payload,
+            withCredentials: true,
+          },
+        )
+        .subscribe(
+          (response) => {
+            //console.log("Upload successfully started", response);
+            this.returnValue = JSON.stringify(response);
+            this.loading = false;
+            resolve(true);
+          },
+          (error) => {
+            this.errorMessage += `${new Date().toLocaleString()}: ${error.message}]<br>`;
+            console.error("Upload failed", error);
+            this.loading = false;
+            reject(error);
+          },
+        );
+    });
   }
 
   async apiStartMetadataExtraction(): Promise<boolean> {
@@ -308,6 +315,7 @@ export class IngestorComponent implements OnInit {
         dialogRef = this.dialog.open(IngestorConfirmTransferDialogComponent, {
           data: {
             onClickNext: this.onClickNext.bind(this),
+            onStartUpload: this.apiUpload.bind(this),
             createNewTransferData: this.createNewTransferData,
             backendURL: this.connectedFacilityBackend,
           },
@@ -315,7 +323,6 @@ export class IngestorComponent implements OnInit {
         });
         break;
       case 4:
-        this.apiUpload();
         break;
       default:
         console.error("Unknown step", step);
