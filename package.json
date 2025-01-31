@@ -35,7 +35,7 @@
     "@ngrx/router-store": "^16",
     "@ngrx/store": "^16",
     "@ngx-translate/core": "^16.0.4",
-    "@scicatproject/scicat-sdk-ts-angular": "^4.11.0",
+    "@scicatproject/scicat-sdk-ts-angular": "^4.12.0",
     "autolinker": "^4.0.0",
     "deep-equal": "^2.0.5",
     "exceljs": "^4.3.0",
