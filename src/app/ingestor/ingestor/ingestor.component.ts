@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from "@angular/core";
 import { AppConfigService } from "app-config.service";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpParams } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import { INGESTOR_API_ENDPOINTS_V1 } from "./helper/ingestor-api-endpoints";
 import { IngestorNewTransferDialogComponent } from "./dialog/ingestor.new-transfer-dialog.component";
@@ -45,6 +45,7 @@ export class IngestorComponent implements OnInit {
 
   versionInfo: OtherVersionResponse = null;
   userInfo: UserInfo = null;
+  authIsDisabled = false;
   healthInfo: OtherHealthResponse = null;
 
   errorMessage = "";
@@ -56,7 +57,6 @@ export class IngestorComponent implements OnInit {
 
   constructor(
     public appConfigService: AppConfigService,
-    private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
     private apiManager: IngestorAPIManager,
@@ -88,7 +88,7 @@ export class IngestorComponent implements OnInit {
       facilityBackendUrlCleaned += "/";
     }
 
-    this.apiManager.connect(facilityBackendUrlCleaned);
+    this.apiManager.connect(facilityBackendUrlCleaned, !this.authIsDisabled);
 
     this.connectedFacilityBackend = facilityBackendUrlCleaned;
 
@@ -105,7 +105,11 @@ export class IngestorComponent implements OnInit {
     try {
       this.userInfo = await this.apiManager.getUserInfo();
     } catch (error) {
-      this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+      if (String(error.error).includes("disabled")) {
+        this.authIsDisabled = true;
+      } else {
+        this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+      }
     }
 
     try {
