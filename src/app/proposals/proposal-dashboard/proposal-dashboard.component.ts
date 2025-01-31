@@ -41,11 +41,37 @@ export const tableColumnsConfig: TableField<any>[] = [
     name: "abstract",
     icon: "chrome_reader_mode",
   },
+  {
+    name: "firstname",
+    header: "First Name",
+    icon: "person",
+  },
+  {
+    name: "lastname",
+    header: "Last Name",
+    icon: "person",
+  },
   { name: "email", icon: "email" },
   { name: "type", icon: "badge" },
   {
-    name: "createdBy",
+    name: "parentProposalId",
+    header: "Parent Proposal",
     icon: "badge",
+  },
+  {
+    name: "pi_firstname",
+    header: "PI First Name",
+    icon: "person_pin",
+  },
+  {
+    name: "pi_lastname",
+    header: "PI Last Name",
+    icon: "person_pin",
+  },
+  {
+    name: "pi_email",
+    header: "PI Email",
+    icon: "email",
   },
 ];
 
@@ -111,7 +137,7 @@ export class ProposalDashboardComponent implements OnInit {
 
   noDataBtn = false;
 
-  rowSelectionMode: TableSelectionMode = "multi";
+  rowSelectionMode: TableSelectionMode = "none";
 
   globalTextSearch = "";
 
