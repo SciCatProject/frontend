@@ -9,7 +9,7 @@ import {
 describe("Proposal Actions", () => {
   describe("fetchProposalsAction", () => {
     it("should create an action", () => {
-      const action = fromActions.fetchProposalsAction();
+      const action = fromActions.fetchProposalsAction({});
       expect({ ...action }).toEqual({ type: "[Proposal] Fetch Proposals" });
     });
   });
@@ -36,7 +36,7 @@ describe("Proposal Actions", () => {
 
   describe("fetchCountAction", () => {
     it("should create an action", () => {
-      const action = fromActions.fetchCountAction();
+      const action = fromActions.fetchCountAction({});
       expect({ ...action }).toEqual({ type: "[Proposal] Fetch Count" });
     });
   });

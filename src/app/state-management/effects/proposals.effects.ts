@@ -43,12 +43,16 @@ export class ProposalEffects {
       mergeMap(({ action, params: { limits, query } }) => {
         // TODO: Review this part as it should be simpler.
         const limitsParam = {
-          order: limits.order,
-          skip: (action as any).limit * (action as any).page,
-          limit: (action as any).limit,
+          order: limits?.order,
+          skip: (action as any)?.limit * (action as any).page,
+          limit: (action as any)?.limit,
         };
 
-        const queryParam = { text: (action as any)?.fields?.text };
+        const queryParam: { text?: string } = {};
+
+        if ((action as any)?.fields?.text) {
+          queryParam.text = (action as any)?.fields?.text;
+        }
 
         return this.proposalsService
           .proposalsControllerFullquery(
@@ -60,7 +64,7 @@ export class ProposalEffects {
               fromActions.fetchProposalsCompleteAction({ proposals }),
               // TODO: Maybe this part should be refactored. Now we need to send 2 separate requests to get the data and count
               fromActions.fetchCountAction({
-                fields: { text: queryParam.text },
+                fields: queryParam,
               }),
             ]),
             catchError(() => of(fromActions.fetchProposalsFailedAction())),
