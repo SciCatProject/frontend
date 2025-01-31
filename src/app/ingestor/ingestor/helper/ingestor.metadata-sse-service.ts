@@ -24,8 +24,8 @@ export class IngestorMetadataSSEService {
 
   constructor() {}
 
-  public connect(url: string): void {
-    this.eventSource = new EventSource(url);
+  public connect(url: string, withCredentials = true): void {
+    this.eventSource = new EventSource(url, { withCredentials });
 
     this.eventSource.onmessage = (event) => {
       const messageData = event.data;

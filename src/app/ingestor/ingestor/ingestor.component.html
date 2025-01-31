@@ -31,9 +31,23 @@
 
         </ng-container>
         <ng-container *ngIf="connectedFacilityBackend !== ''">
+          <mat-divider></mat-divider>
+          <div class="user-info">
+            <div class="user-icon-container">
+              <mat-icon>account_circle</mat-icon>
+              <p>username</p>
+            </div>
+            <button mat-stroked-button
+              (click)="openIngestorLogin()">Login</button>
+            <button mat-stroked-button
+              (click)="openIngestorLogin()">Logout</button>
+          </div>
+          <mat-divider class="divider-down"></mat-divider>
+
           <mat-tab-group animationDuration="0ms">
             <mat-tab label="Transfers">
-              <button matTooltip="Refresh transfer list" mat-button aria-label="Refresh transfer list"
+              <button matTooltip="Refresh transfer list" mat-button
+                aria-label="Refresh transfer list"
                 (click)="onClickRefreshTransferList()">
                 <mat-icon>refresh</mat-icon>
               </button>
@@ -71,18 +85,7 @@
                 </tr>
               </table>
             </mat-tab>
-            <mat-tab label="User information">
-              <!-- Mat List with the most important information about the user connection -->
-              <mat-list>
-                <mat-list-item>
-                  <span matListItemTitle>Username</span>
-                  <span matListItemLine>Name</span>
-                </mat-list-item>
-                <mat-list-item>
-                  <button mat-button (click)="openIngestorLogin()">Login</button>
-                </mat-list-item>
-              </mat-list>
-            </mat-tab>
+
             <mat-tab label="Connection information">
               <!-- Mat List with the most important information about the backend connection -->
               <mat-list>

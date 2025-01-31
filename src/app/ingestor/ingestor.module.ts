@@ -32,7 +32,7 @@ import { ArrayLayoutRendererCustom } from "./ingestor-metadata-editor/customRend
 import { MatBadgeModule } from "@angular/material/badge";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { IngestorConfirmationDialogComponent } from "./ingestor/dialog/confirmation-dialog/ingestor.confirmation-dialog.component";
-import { ExportTemplateHelperComponent } from "./ingestor/dialog/checkbox/checkbox.component";
+import { ExportTemplateHelperComponent } from "./ingestor/dialog/dialog-mounting-components/ingestor.export-helper.component";
 
 @NgModule({
   declarations: [
@@ -72,6 +72,7 @@ import { ExportTemplateHelperComponent } from "./ingestor/dialog/checkbox/checkb
     MatBadgeModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
+    CommonModule,
   ],
 })
 export class IngestorModule {}

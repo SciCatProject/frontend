@@ -1,8 +1,20 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  Injector,
+} from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { IngestionRequestInformation } from "../helper/ingestor.component-helper";
+import {
+  IngestionRequestInformation,
+  SciCatHeader,
+} from "../helper/ingestor.component-helper";
 import { IngestorConfirmationDialogComponent } from "./confirmation-dialog/ingestor.confirmation-dialog.component";
-import { ExportTemplateHelperComponent } from "./checkbox/checkbox.component";
+import {
+  ExportOptions,
+  ExportTemplateHelperComponent,
+} from "./dialog-mounting-components/ingestor.export-helper.component";
 
 @Component({
   selector: "ingestor-dialog-stepper",
@@ -15,6 +27,23 @@ export class IngestorDialogStepperComponent {
   @Output() createNewTransferDataChange =
     new EventEmitter<IngestionRequestInformation>();
 
+  testMessageComponent = ExportTemplateHelperComponent;
+
+  exportValueOptions: ExportOptions = {
+    exportSciCat: true,
+    exportOrganizational: false,
+    exportSample: false,
+  };
+
+  injector = Injector.create({
+    providers: [
+      {
+        provide: "data",
+        useValue: this.exportValueOptions,
+      },
+    ],
+  });
+
   constructor(private dialog: MatDialog) {}
 
   // Save a template of metadata
@@ -23,15 +52,45 @@ export class IngestorDialogStepperComponent {
       data: {
         header: "Confirm template",
         message: "Do you really want to apply the following values?",
-        messageComponent: ExportTemplateHelperComponent,
+        messageComponent: this.testMessageComponent,
+        injector: this.injector,
       },
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         if (this.createNewTransferData) {
+          const sciCatHeaderWithoutSourcePath = {
+            ...this.createNewTransferData.scicatHeader,
+          } as SciCatHeader;
+          delete sciCatHeaderWithoutSourcePath.sourceFolder;
+
+          const exportData = {};
+          if (this.exportValueOptions.exportSciCat) {
+            exportData["scicatHeader"] = { ...sciCatHeaderWithoutSourcePath };
+          }
+
+          if (
+            this.exportValueOptions.exportOrganizational ||
+            this.exportValueOptions.exportSample
+          ) {
+            exportData["userMetaData"] = {};
+          }
+
+          if (this.exportValueOptions.exportOrganizational) {
+            exportData["userMetaData"]["organizational"] = {
+              ...this.createNewTransferData.userMetaData.organizational,
+            };
+          }
+
+          if (this.exportValueOptions.exportSample) {
+            exportData["userMetaData"]["sample"] = {
+              ...this.createNewTransferData.userMetaData.sample,
+            };
+          }
+
           const dataStr =
             "data:text/json;charset=utf-8," +
-            encodeURIComponent(JSON.stringify(this.createNewTransferData));
+            encodeURIComponent(JSON.stringify(exportData));
           const downloadAnchorNode = document.createElement("a");
           downloadAnchorNode.setAttribute("href", dataStr);
           downloadAnchorNode.setAttribute("download", "ingestor-template.json");
@@ -68,7 +127,18 @@ export class IngestorDialogStepperComponent {
           dialogRef.afterClosed().subscribe((result) => {
             if (result) {
               try {
-                this.createNewTransferData = JSON.parse(content as string);
+                const parsedData = JSON.parse(content as string);
+                this.createNewTransferData = {
+                  ...this.createNewTransferData,
+                  scicatHeader: {
+                    ...this.createNewTransferData.scicatHeader,
+                    ...parsedData.scicatHeader,
+                  },
+                  userMetaData: {
+                    ...this.createNewTransferData.userMetaData,
+                    ...parsedData.userMetaData,
+                  },
+                };
                 console.log(this.createNewTransferData.scicatHeader);
                 this.createNewTransferDataChange.emit(
                   this.createNewTransferData,

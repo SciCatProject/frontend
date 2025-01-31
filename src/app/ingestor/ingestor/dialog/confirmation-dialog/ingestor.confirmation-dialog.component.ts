@@ -1,4 +1,4 @@
-import { Component, Inject, Type } from "@angular/core";
+import { Component, Inject, Injector, Type } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 
 @Component({
@@ -18,6 +18,10 @@ export class IngestorConfirmationDialogComponent {
 
   get header(): string {
     return this.data.header || "Confirmation";
+  }
+
+  get injector(): Injector {
+    return this.data.injector || null;
   }
 
   get messageComponent(): Type<any> | null {

@@ -10,7 +10,7 @@
 <mat-dialog-content class="mat-typography" disableClose="true">
   <div class="confirmation-dialog">
     <p>{{ message }}</p>
-    <ng-container *ngComponentOutlet="messageComponent"></ng-container>
+    <ng-container *ngComponentOutlet="messageComponent; injector: injector"></ng-container>
   </div>
 </mat-dialog-content>
 

@@ -68,3 +68,20 @@ mat-card {
 .success-icon {
   color: green;
 }
+
+.user-info {
+  padding: 1em;
+}
+
+.user-info .user-icon-container {
+  display: flex;
+  align-items: center;
+}
+
+.user-info .user-icon-container p {
+  margin: auto 0;
+}
+
+.divider-down {
+  margin-bottom: 1em;
+}

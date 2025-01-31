@@ -129,7 +129,7 @@ export class IngestorComponent implements OnInit {
       })
       .subscribe(
         (response) => {
-          console.log("Transfer list received", response);
+          //console.log("Transfer list received", response);
           this.transferDataSource = response["transfers"];
         },
         (error) => {
@@ -153,7 +153,7 @@ export class IngestorComponent implements OnInit {
       })
       .subscribe(
         (response) => {
-          console.log("Upload successfully started", response);
+          //console.log("Upload successfully started", response);
           this.returnValue = JSON.stringify(response);
           this.loading = false;
         },
@@ -189,8 +189,7 @@ export class IngestorComponent implements OnInit {
 
     this.sseService.getMessages().subscribe(
       (data) => {
-        // TODO Remove logging
-        console.log("Received SSE data:", data);
+        //console.log("Received SSE data:", data);
         if (data.result) {
           this.createNewTransferData.extractorMetaDataReady = true;
           const extractedScientificMetadata = JSON.parse(
@@ -205,7 +204,8 @@ export class IngestorComponent implements OnInit {
         }
       },
       (error) => {
-        console.error("Error receiving SSE data:", error);
+        //console.error("Error receiving SSE data:", error);
+        this.errorMessage += `${new Date().toLocaleString()}: ${error.message}]<br>`;
         this.createNewTransferData.apiErrorInformation.metaDataExtraction =
           true;
       },
@@ -281,14 +281,9 @@ export class IngestorComponent implements OnInit {
 
         break;
       case 1:
-        this.apiStartMetadataExtraction()
-          .then((response: boolean) => {
-            if (response) console.log("Metadata extraction started");
-            else console.error("Metadata extraction failed");
-          })
-          .catch((error) => {
-            console.error("Metadata extraction error", error);
-          });
+        this.apiStartMetadataExtraction().catch((error) => {
+          console.error("Metadata extraction error", error);
+        });
 
         dialogRef = this.dialog.open(IngestorUserMetadataDialogComponent, {
           data: {
@@ -359,5 +354,10 @@ export class IngestorComponent implements OnInit {
   openIngestorLogin(): void {
     window.location.href =
       this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.AUTH.LOGIN;
+  }
+
+  openIngestorLogout(): void {
+    window.location.href =
+      this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.AUTH.LOGOUT;
   }
 }
