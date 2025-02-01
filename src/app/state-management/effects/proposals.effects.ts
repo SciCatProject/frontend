@@ -280,12 +280,10 @@ export class ProposalEffects {
       concatLatestFrom(() => [this.currentProposal$]),
       switchMap(([, proposal]) => {
         const queryFilter = {
-          where: {
-            $or: [
-              { proposalId: { $in: [proposal.parentProposalId] } },
-              { parentProposalId: { $in: [proposal.proposalId] } },
-            ],
-          },
+          $or: [
+            { proposalId: { $in: [proposal.parentProposalId] } },
+            { parentProposalId: { $in: [proposal.proposalId] } },
+          ],
         };
 
         return this.proposalsService

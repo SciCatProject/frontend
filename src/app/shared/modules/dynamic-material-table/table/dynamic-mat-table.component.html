@@ -178,7 +178,7 @@
               type="text"
               matInput
               [placeholder]="globalTextSearchPlaceholder"
-              (input)="globalTextSearch_onChange($event)"
+              (ngModelChange)="this.globalSearchUpdate.next($event)"
             />
           </mat-form-field>
         </div>

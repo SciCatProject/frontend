@@ -41,9 +41,14 @@ import { TableMenuActionChange } from "./extensions/table-menu/table-menu.compon
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { HashMap, isNullorUndefined } from "../cores/type";
 import { SettingItem, TableSetting } from "../models/table-setting.model";
-import { delay, filter } from "rxjs/operators";
+import {
+  debounceTime,
+  delay,
+  distinctUntilChanged,
+  filter,
+} from "rxjs/operators";
 import { FixedSizeTableVirtualScrollStrategy } from "../cores/fixed-size-table-virtual-scroll-strategy";
-import { Subscription } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ContextMenuItem } from "../models/context-menu.model";
 import {
@@ -175,6 +180,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   private dragDropData = { dragColumnIndex: -1, dropColumnIndex: -1 };
   private eventsSubscription: Subscription;
   currentContextMenuSender: any = {};
+  globalSearchUpdate = new Subject<string>();
 
   @ViewChild("tbl", { static: true }) tbl;
   @Input()
@@ -294,6 +300,12 @@ export class DynamicMatTableComponent<T extends TableRow>
           this.tableSetting.columnSetting[i].width = data.w;
         }
         this.refreshGrid();
+      });
+
+    this.globalSearchUpdate
+      .pipe(debounceTime(500), distinctUntilChanged())
+      .subscribe((value) => {
+        this.globalTextSearch_onChange(value);
       });
   }
 
@@ -706,9 +718,9 @@ export class DynamicMatTableComponent<T extends TableRow>
     }
   }
 
-  globalTextSearch_onChange(event: Event) {
+  globalTextSearch_onChange(newValue: string) {
     if (this.showGlobalTextSearch) {
-      this.globalTextSearch = (event.target as HTMLInputElement).value;
+      this.globalTextSearch = newValue;
       this.globalTextSearchChange.emit(this.globalTextSearch);
     }
   }

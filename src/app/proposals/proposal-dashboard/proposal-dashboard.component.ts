@@ -190,11 +190,16 @@ export class ProposalDashboardComponent implements OnInit {
   }
 
   onPaginationChange(pagination: TablePagination) {
+    const queryParams: Record<string, string | number> = {
+      pageIndex: pagination.pageIndex,
+      pageSize: pagination.pageSize,
+    };
+
+    if (this.route.snapshot.queryParams.textSearch) {
+      queryParams.textSearch = this.route.snapshot.queryParams.textSearch;
+    }
     this.router.navigate([], {
-      queryParams: {
-        pageIndex: this.pagination.pageIndex,
-        pageSize: this.pagination.pageSize,
-      },
+      queryParams,
       queryParamsHandling: "merge",
     });
 
@@ -202,6 +207,7 @@ export class ProposalDashboardComponent implements OnInit {
       fetchProposalsAction({
         limit: pagination.pageSize,
         page: pagination.pageIndex,
+        fields: { text: queryParams.textSearch },
       }),
     );
   }
