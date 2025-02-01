@@ -89,18 +89,15 @@ export class TableCoreDirective<T extends TableRow> {
     new EventEmitter();
   @Output() globalTextSearchChange: EventEmitter<string> = new EventEmitter();
 
-  //**this event is deprecate and move to onRowEvent */
-  // @Output() rowActionMenuChange: EventEmitter<IRowActionMenuEvent<any>> = new EventEmitter();
-
   /*************************************** Expand Row *********************************/
   expandedElement: TableRow | null;
   @Input() contextMenuItems: ContextMenuItem[] = [];
 
   // Variables //
   progressColumn: string[] = [];
+  searchRowColumns = ["placeholder-column", "global-search"];
   displayedColumns: string[] = [];
   displayedFooter: string[] = [];
-  // private menus: TableMenu[] = [];
   public tableColumns: TableField<T>[];
   public tvsDataSource: TableVirtualScrollDataSource<T> =
     new TableVirtualScrollDataSource<T>([]);

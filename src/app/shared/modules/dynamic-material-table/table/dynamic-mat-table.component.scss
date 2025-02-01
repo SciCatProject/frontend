@@ -89,16 +89,7 @@ mat-header-cell {
   align-self: stretch;
   color: inherit;
   background-color: inherit;
-  // hyphens: auto;
-  //   overflow: hidden;
-  //   width: 200px;
-  //   text-overflow: ellipsis;
-  //   white-space: nowrap;
 }
-
-// mat-cell, mat-footer-cell, mat-mdc-header-cell {
-//   min-width: 100px;
-// }
 
 @include table-base;
 @include progress;
@@ -112,12 +103,7 @@ cdk-virtual-scroll-viewport {
   min-height: 100px;
   height: inherit;
   overflow: auto;
-  //transition: 0.5s;
 }
-
-// mat-mdc-header-cell:not(.row-checkbox) {
-//   padding-left: 0 !important;
-// }
 
 // Header Text
 .header-caption {
@@ -155,6 +141,17 @@ cdk-virtual-scroll-viewport {
 }
 
 // table action menu
+.table-global-search {
+  max-width: 300px;
+  min-width: initial;
+  padding: 0 !important;
+  background-color: inherit;
+
+  .global-search-wrapper {
+    width: 100%;
+  }
+}
+
 .table-menu {
   max-width: 42px;
   min-width: initial;
@@ -208,17 +205,6 @@ cdk-virtual-scroll-viewport {
   content: none;
 }
 
-// .cdk-drag-placeholder::after {
-//   content: "";
-//   position: absolute;
-//   top: 0;
-//   bottom: 0;
-//   left: 2px;
-//   right: 2px;
-//   background-color: rgba(0,0,0,0.1);
-//   border: dashed 1px rgba(0,0,0,0.4);
-// }
-
 .cdk-drag-animating {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
@@ -255,7 +241,6 @@ cdk-virtual-scroll-viewport {
   display: block;
   border-width: 0;
   padding: 0px !important;
-  // position: fixed;
   width: 100%;
   z-index: 2;
 }

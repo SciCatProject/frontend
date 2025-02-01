@@ -9,10 +9,6 @@
   transition-property: opacity, transform;
 }
 
-// mat-cell:not(.row-checkbox):first-of-type, mat-footer-cell:not(.row-checkbox):first-of-type, mat-header-cell:not(.row-checkbox):first-of-type {
-//   padding-right: 0 !important;
-// }
-
 @mixin table-base {
   .mat-mdc-table {
     .row-selection {

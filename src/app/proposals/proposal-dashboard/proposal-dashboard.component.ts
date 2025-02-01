@@ -25,6 +25,7 @@ import {
 import { fetchProposalsAction } from "state-management/actions/proposals.actions";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
+import { Direction } from "@angular/cdk/bidi";
 
 export const tableColumnsConfig: TableField<any>[] = [
   {
@@ -107,7 +108,7 @@ export class ProposalDashboardComponent implements OnInit {
 
   columns!: TableField<any>[];
 
-  direction: "ltr" | "rtl" = "ltr";
+  direction: Direction = "ltr";
 
   showReloadData = true;
 
@@ -133,17 +134,11 @@ export class ProposalDashboardComponent implements OnInit {
 
   showProgress = true;
 
-  dataPlayName: "clear data" | "fetch data" = "clear data";
-
-  noDataBtn = false;
-
   rowSelectionMode: TableSelectionMode = "none";
 
   globalTextSearch = "";
 
   @Output() pageChange = new EventEmitter<PageChangeEvent>();
-
-  @Input() realDataSource: SciCatDataSource;
 
   constructor(
     private store: Store,
