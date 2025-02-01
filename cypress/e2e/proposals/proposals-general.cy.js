@@ -27,9 +27,9 @@ describe("Proposals general", () => {
 
       cy.get("mat-table mat-row").should("contain", proposal.proposalId);
 
-      cy.get("mat-row")
+      cy.get("mat-cell")
         .contains(proposal.proposalId)
-        .parent()
+        .closest("mat-row")
         .contains(proposal.title)
         .click();
 
@@ -55,9 +55,9 @@ describe("Proposals general", () => {
       cy.get("mat-table mat-row").should("contain", newProposal.proposalId);
       cy.get("mat-table mat-row").should("contain", proposal.proposalId);
 
-      cy.get("mat-row")
+      cy.get("mat-cell")
         .contains(newProposal.proposalId)
-        .parent()
+        .closest('mat-row')
         .contains(newProposal.title)
         .click();
 
@@ -166,6 +166,48 @@ describe("Proposals general", () => {
       cy.get('[data-cy="proposal-metadata-card"]').contains(metadataValue, {
         matchCase: true,
       });
+    });
+
+    it("should be able to see and click related proposals on a proposal", () => {
+      const newProposal = {
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+        parentProposalId: proposal.proposalId,
+      };
+      const newProposal2 = {
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+        parentProposalId: newProposal.proposalId,
+      };
+      cy.createProposal(newProposal);
+      cy.createProposal(newProposal2);
+
+      cy.visit("/proposals");
+
+      cy.get("mat-table mat-header-row").should("exist");
+
+      cy.finishedLoading();
+
+      cy.get("mat-table mat-row").should("contain", newProposal.proposalId);
+      cy.get("mat-table mat-row").should("contain", newProposal2.proposalId);
+
+      cy.get("mat-cell.mat-column-proposalId")
+        .contains(newProposal.proposalId)
+        .closest('mat-row')
+        .contains(newProposal.title)
+        .click();
+
+      cy.url().should("include", `/proposals/${newProposal.proposalId}`);
+
+      cy.get('[data-cy="related-proposals"]').click();
+
+      cy.get('[data-cy="related-proposals-table"] mat-row')
+        .contains(newProposal2.title)
+        .parent()
+        .contains("child");
+      cy.get('[data-cy="related-proposals-table"] mat-row')
+        .contains(proposal.title)
+        .click();
     });
   });
 });
