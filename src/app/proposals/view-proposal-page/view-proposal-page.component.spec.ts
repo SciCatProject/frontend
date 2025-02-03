@@ -10,6 +10,18 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { MatIconModule } from "@angular/material/icon";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppConfigService } from "app-config.service";
+import {
+  TranslateLoader,
+  TranslateModule,
+  TranslationObject,
+} from "@ngx-translate/core";
+import { Observable, of } from "rxjs";
+
+class MockTranslateLoader implements TranslateLoader {
+  getTranslation(): Observable<TranslationObject> {
+    return of({});
+  }
+}
 
 const getConfig = () => ({
   logbookEnabled: true,
@@ -31,6 +43,12 @@ describe("ViewProposalPageComponent", () => {
         BrowserAnimationsModule,
         MatIconModule,
         MatTabsModule,
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useClass: MockTranslateLoader,
+          },
+        }),
         StoreModule.forRoot({}),
       ],
       providers: [DatePipe, FileSizePipe, SlicePipe],
