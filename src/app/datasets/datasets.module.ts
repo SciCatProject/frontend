@@ -155,7 +155,6 @@ import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-w
     CdkDrag,
     CdkDragHandle,
     FiltersModule,
-    TranslateModule,
   ],
   declarations: [
     BatchViewComponent,
