@@ -35,6 +35,8 @@ import { MatNativeDateModule } from "@angular/material/core";
 import { LogbookEffects } from "state-management/effects/logbooks.effects";
 import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
 import { ProposalLogbookComponent } from "./proposal-logbook/proposal-logbook.component";
+import { RelatedProposalsComponent } from "./related-proposals/related-proposals.component";
+import { ProposalDatasetsComponent } from "./proposal-datasets/proposal-datasets.component";
 
 @NgModule({
   imports: [
@@ -67,6 +69,8 @@ import { ProposalLogbookComponent } from "./proposal-logbook/proposal-logbook.co
     ProposalFilterComponent,
     ProposalDashboardComponent,
     ProposalLogbookComponent,
+    RelatedProposalsComponent,
+    ProposalDatasetsComponent,
   ],
   exports: [],
   providers: [DatePipe, FileSizePipe, SlicePipe],
