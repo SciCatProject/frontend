@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
@@ -16,7 +16,6 @@ import {
   RowEventType,
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
-import { SciCatDataSource } from "shared/services/scicat.datasource";
 import { Store } from "@ngrx/store";
 import {
   selectProposals,
@@ -154,8 +153,8 @@ export class ProposalDashboardComponent implements OnInit {
     this.store.dispatch(
       fetchProposalsAction({
         limit: queryParams.pageSize || DEFAULT_PAGE_SIZE,
-        page: queryParams.pageIndex,
-        fields: { text: queryParams.textSearch },
+        skip: queryParams.pageIndex * queryParams.pageSize,
+        search: queryParams.textSearch,
       }),
     );
 
@@ -206,8 +205,8 @@ export class ProposalDashboardComponent implements OnInit {
     this.store.dispatch(
       fetchProposalsAction({
         limit: pagination.pageSize,
-        page: pagination.pageIndex,
-        fields: { text: queryParams.textSearch },
+        skip: pagination.pageIndex * pagination.pageSize,
+        search: queryParams.textSearch as string,
       }),
     );
   }
@@ -222,17 +221,11 @@ export class ProposalDashboardComponent implements OnInit {
       queryParamsHandling: "merge",
     });
 
-    const fields: Record<string, unknown> = {};
-
-    if (text) {
-      fields.text = text;
-    }
-
     this.store.dispatch(
       fetchProposalsAction({
         limit: this.pagination.pageSize,
-        page: this.pagination.pageIndex,
-        fields: fields,
+        skip: this.pagination.pageIndex * this.pagination.pageSize,
+        search: text,
       }),
     );
   }

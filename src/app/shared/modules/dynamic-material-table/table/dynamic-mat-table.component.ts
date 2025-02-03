@@ -61,7 +61,12 @@ import { requestFullscreen } from "../utilizes/html.helper";
 import { TooltipComponent } from "../tooltip/tooltip.component";
 import { ComponentPortal } from "@angular/cdk/portal";
 import { PageEvent } from "@angular/material/paginator";
-import { IRowEvent, RowEventType, TableRow } from "../models/table-row.model";
+import {
+  IRowEvent,
+  RowEventType,
+  TableEventType,
+  TableRow,
+} from "../models/table-row.model";
 import { PrintTableDialogComponent } from "./extensions/print-dialog/print-dialog.component";
 
 export interface IDynamicCell {
@@ -150,7 +155,6 @@ export const tableAnimation = trigger("tableAnimation", [
         ),
       ]),
       {
-        //limit: 5,
         optional: true,
       },
     ),
@@ -318,15 +322,15 @@ export class DynamicMatTableComponent<T extends TableRow>
       this.tvsDataSource.data = [];
       this.initSystemField(x);
       this.tvsDataSource.data = x;
-      // this.cdr.detectChanges();
       this.refreshUI();
-      // window.requestAnimationFrame(() => {
-      // });
     });
 
     this.tvsDataSource.sort.sortChange.subscribe((sort) => {
       this.pagination.pageIndex = 0;
-      this.onTableEvent.emit({ event: "SortChanged", sender: sort });
+      this.onTableEvent.emit({
+        event: TableEventType.SortChanged,
+        sender: sort,
+      });
     });
   }
 
@@ -642,7 +646,7 @@ export class DynamicMatTableComponent<T extends TableRow>
       requestFullscreen(this.tbl.elementRef);
     } else if (e.type === "Download") {
       this.onTableEvent.emit({
-        event: "ExportData",
+        event: TableEventType.ExportData,
         sender: {
           type: e.data,
           columns: this.columns,
@@ -667,7 +671,7 @@ export class DynamicMatTableComponent<T extends TableRow>
       this.headerFilterList.forEach((hf) => hf.clearColumn_OnClick());
     } else if (e.type === "Print") {
       this.onTableEvent.emit({
-        event: "ExportData",
+        event: TableEventType.ExportData,
         sender: {
           type: "Print",
           columns: this.columns,
@@ -702,7 +706,6 @@ export class DynamicMatTableComponent<T extends TableRow>
       event: RowEventType.RowActionMenu,
       sender: { row: row, action: contextMenuItem },
     });
-    // this.rowActionMenuChange.emit({actionItem: contextMenuItem, rowItem: row });
   }
 
   pagination_onChange(e: PageEvent) {
@@ -734,7 +737,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   reload_onClick() {
-    this.onTableEvent.emit({ sender: null, event: "ReloadData" });
+    this.onTableEvent.emit({ sender: null, event: TableEventType.ReloadData });
   }
 
   /////////////////////////////////////////////////////////////////
@@ -856,7 +859,6 @@ export class DynamicMatTableComponent<T extends TableRow>
     if (column.cellTooltipEnable === true) {
       this.closeTooltip(); /* Fixed BUG: Open Overlay when redirect to other route */
     }
-    // this.onRowSelection(e, row, column);
     if (
       column.clickable !== false &&
       (column.clickType === null || column.clickType === "cell")

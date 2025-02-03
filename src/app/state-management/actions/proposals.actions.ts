@@ -8,7 +8,7 @@ import { ProposalFilters } from "state-management/state/proposals.store";
 
 export const fetchProposalsAction = createAction(
   "[Proposal] Fetch Proposals",
-  props<{ page?: number; limit?: number; fields?: Record<string, unknown> }>(),
+  props<{ skip?: number; limit?: number; search?: string; order?: string }>(),
 );
 export const clearCurrentProposalAction = createAction(
   "[Proposal] Clear proposal",
@@ -149,8 +149,9 @@ export const setDateRangeFilterAction = createAction(
   props<{ begin: string; end: string }>(),
 );
 
+// TODO: If this is not used should be removed.
 export const clearFacetsAction = createAction("[Proposal] Clear Facets");
-
+// TODO: If this is not used should be removed.
 export const changePageAction = createAction(
   "[Proposal] Change Page",
   props<{ page: number; limit: number }>(),
@@ -160,6 +161,7 @@ export const changeDatasetsPageAction = createAction(
   props<{ page: number; limit: number }>(),
 );
 
+// TODO: If this is not used should be removed.
 export const sortByColumnAction = createAction(
   "[Proposal] Sort By Column",
   props<{ column: string; direction: string }>(),

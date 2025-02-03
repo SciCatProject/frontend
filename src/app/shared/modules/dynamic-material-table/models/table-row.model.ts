@@ -33,8 +33,14 @@ export interface IRowEvent<T extends object> {
   };
 }
 
+export enum TableEventType {
+  ReloadData = "ReloadData",
+  SortChanged = "SortChanged",
+  ExportData = "ExportData",
+}
+
 export interface ITableEvent {
-  event: "ReloadData" | "SortChanged" | "ExportData" | any;
+  event: TableEventType | any;
   sender: any | undefined;
 }
 

@@ -29,30 +29,15 @@ export class ProposalEffects {
 
   fetchProposals$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(
-        fromActions.fetchProposalsAction,
-        fromActions.changePageAction,
-        fromActions.sortByColumnAction,
-        fromActions.clearFacetsAction,
-      ),
-      concatLatestFrom(() => this.fullqueryParams$),
-      map(([action, params]) => ({
-        action,
-        params,
-      })),
-      mergeMap(({ action, params: { limits, query } }) => {
-        // TODO: Review this part as it should be simpler.
+      ofType(fromActions.fetchProposalsAction),
+      mergeMap(({ skip, limit, search, order }) => {
         const limitsParam = {
-          order: limits?.order,
-          skip: (action as any)?.limit * (action as any).page,
-          limit: (action as any)?.limit,
+          order: order,
+          skip: skip,
+          limit: limit,
         };
 
-        const queryParam: { text?: string } = {};
-
-        if ((action as any)?.fields?.text) {
-          queryParam.text = (action as any)?.fields?.text;
-        }
+        const queryParam = { text: search || undefined };
 
         return this.proposalsService
           .proposalsControllerFullquery(

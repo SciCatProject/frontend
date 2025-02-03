@@ -119,6 +119,7 @@ const reducer = createReducer(
     },
   ),
 
+  // TODO: If this is not used should be removed.
   on(fromActions.clearFacetsAction, (state): ProposalsState => {
     const limit = state.proposalFilters.limit; // Save limit
     const proposalFilters = {
@@ -129,11 +130,13 @@ const reducer = createReducer(
     return { ...state, proposalFilters };
   }),
 
+  // TODO: If this is not used should be removed.
   on(fromActions.changePageAction, (state, { page, limit }): ProposalsState => {
     const skip = page * limit;
     const proposalFilters = { ...state.proposalFilters, skip, limit };
     return { ...state, proposalFilters };
   }),
+
   on(
     fromActions.changeDatasetsPageAction,
     (state, { page, limit }): ProposalsState => {
@@ -143,6 +146,7 @@ const reducer = createReducer(
     },
   ),
 
+  // TODO: If this is not used should be removed.
   on(
     fromActions.sortByColumnAction,
     (state, { column, direction }): ProposalsState => {
