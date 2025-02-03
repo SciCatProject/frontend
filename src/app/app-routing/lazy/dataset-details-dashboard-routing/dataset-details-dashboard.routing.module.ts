@@ -28,7 +28,7 @@ const routes: Routes = [
     component: DatafilesComponent,
   },
   {
-    path: "related-datasets",
+    path: "relatedDatasets",
     component: RelatedDatasetsComponent,
   },
   // For reduce && logbook this is a work around because guard priority somehow doesn't work and this work around make guards excuted sequencial
