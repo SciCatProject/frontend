@@ -27,6 +27,8 @@ export interface ProposalsState {
   proposals: ProposalClass[];
   currentProposal: ProposalClass | undefined;
   parentProposal: ProposalClass | undefined;
+  relatedProposals: (ProposalClass & { relation: string })[];
+  relatedProposalsCount: number;
   datasets: OutputDatasetObsoleteDto[];
 
   proposalsCount: number;
@@ -35,12 +37,20 @@ export interface ProposalsState {
   hasPrefilledFilters: boolean;
   proposalFilters: ProposalFilters;
   datasetFilters: ProposalDatesetFilters;
+
+  relatedProposalsFilters: {
+    skip: number;
+    limit: number;
+    sortField: string;
+  };
 }
 
 export const initialProposalsState: ProposalsState = {
   proposals: [],
   currentProposal: undefined,
   parentProposal: undefined,
+  relatedProposals: [],
+  relatedProposalsCount: 0,
   datasets: [],
 
   proposalsCount: 0,
@@ -61,6 +71,12 @@ export const initialProposalsState: ProposalsState = {
 
   datasetFilters: {
     text: "",
+    skip: 0,
+    limit: 25,
+    sortField: "creationTime:desc",
+  },
+
+  relatedProposalsFilters: {
     skip: 0,
     limit: 25,
     sortField: "creationTime:desc",
