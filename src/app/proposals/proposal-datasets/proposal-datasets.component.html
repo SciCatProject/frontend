@@ -1,0 +1,12 @@
+<div class="datasets-table" *ngIf="vm$ | async as vm">
+  <app-table
+    [data]="tableData"
+    [columns]="tableColumns"
+    [paginate]="tablePaginate"
+    [currentPage]="vm.currentPage"
+    [dataCount]="vm.datasetCount"
+    [dataPerPage]="vm.datasetsPerPage"
+    (pageChange)="onPageChange($event)"
+    (rowClick)="onRowClick($event)"
+  ></app-table>
+</div>

@@ -1,0 +1,12 @@
+<div class="proposals-table" *ngIf="vm$ | async as vm" data-cy="related-proposals-table">
+  <app-table
+    [data]="vm.relatedProposals"
+    [columns]="tableColumns"
+    [paginate]="tablePaginate"
+    [currentPage]="currentPage$ | async"
+    [dataCount]="vm.relatedProposalsCount"
+    [dataPerPage]="proposalsPerPage$ | async"
+    (pageChange)="onPageChange($event)"
+    (rowClick)="onRowClick($event)"
+  ></app-table>
+</div>
