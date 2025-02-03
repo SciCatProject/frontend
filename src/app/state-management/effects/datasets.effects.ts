@@ -8,7 +8,7 @@ import {
   OrigDatablock,
   OutputDatasetObsoleteDto,
   UpdateAttachmentDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import {
   selectFullqueryParams,
@@ -408,6 +408,8 @@ export class DatasetEffects {
       ofType(
         fromActions.fetchDatasetsCompleteAction,
         fromActions.fetchDatasetsFailedAction,
+        fromActions.fetchRelatedDatasetsCompleteAction,
+        fromActions.fetchRelatedDatasetsFailedAction,
         fromActions.fetchFacetCountsCompleteAction,
         fromActions.fetchFacetCountsFailedAction,
         fromActions.fetchMetadataKeysCompleteAction,

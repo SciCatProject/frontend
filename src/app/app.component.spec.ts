@@ -7,7 +7,7 @@ import { MockStore } from "./shared/MockStubs";
 import { APP_CONFIG } from "./app-config.module";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { AppConfigService } from "app-config.service";
-import { Configuration } from "@scicatproject/scicat-sdk-ts";
+import { Configuration } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("AppComponent", () => {
   const getConfig = () => ({

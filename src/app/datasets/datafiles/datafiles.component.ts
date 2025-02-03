@@ -22,7 +22,10 @@ import {
   selectIsLoading,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
-import { CreateUserJWT, UsersService } from "@scicatproject/scicat-sdk-ts";
+import {
+  CreateUserJWT,
+  UsersService,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";

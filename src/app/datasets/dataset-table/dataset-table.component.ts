@@ -34,7 +34,7 @@ import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import {
   DatasetClass,
   OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { PageEvent } from "@angular/material/paginator";
 export interface SortChangeEvent {
   active: string;

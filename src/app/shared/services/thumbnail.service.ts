@@ -3,7 +3,7 @@ import { Store } from "@ngrx/store";
 import { distinctUntilChanged, firstValueFrom } from "rxjs";
 import { selectDatasetsPerPage } from "state-management/selectors/datasets.selectors";
 import { AppConfigService } from "app-config.service";
-import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "./attachment.service";
 
 interface ThumbnailCache {

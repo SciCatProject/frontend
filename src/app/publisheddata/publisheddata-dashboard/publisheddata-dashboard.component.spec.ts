@@ -21,7 +21,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { ScicatDataService } from "shared/services/scicat-data-service";
 import { ExportExcelService } from "shared/services/export-excel.service";
-import { PublishedData } from "@scicatproject/scicat-sdk-ts";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
 
 const getConfig = () => ({});
 

@@ -9,7 +9,7 @@ import {
   UserSettings,
   Configuration,
   UserIdentitiesService,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { Router } from "@angular/router";
 import * as fromActions from "state-management/actions/user.actions";
 import {

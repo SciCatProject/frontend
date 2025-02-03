@@ -3,7 +3,7 @@ import {
   Attachment,
   OutputDatasetObsoleteDto,
   ProposalClass,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { ProposalFilters } from "state-management/state/proposals.store";
 
 export const fetchProposalsAction = createAction("[Proposal] Fetch Proposals");
@@ -162,4 +162,30 @@ export const sortByColumnAction = createAction(
 export const clearProposalsStateAction = createAction("[Proposal] Clear State");
 export const clearCurrentProposalStateAction = createAction(
   "[Proposal] Clear Current Proposal State",
+);
+
+export const fetchRelatedProposalsAction = createAction(
+  "[Proposal] Fetch Related Proposals",
+);
+export const fetchRelatedProposalsCompleteAction = createAction(
+  "[Proposal] Fetch Related Proposals Complete",
+  props<{
+    relatedProposals: (ProposalClass & { relation: string })[];
+  }>(),
+);
+export const fetchRelatedProposalsFailedAction = createAction(
+  "[Proposal] Fetch Related Proposals Failed",
+);
+
+export const fetchRelatedProposalsCountCompleteAction = createAction(
+  "[Proposal] Fetch Related Proposals Count Complete",
+  props<{ count: number }>(),
+);
+export const fetchRelatedProposalsCountFailedAction = createAction(
+  "[Proposal] Fetch Related Proposals Count Failed",
+);
+
+export const changeRelatedProposalsPageAction = createAction(
+  "[Proposal] Change Related Proposals Page",
+  props<{ page: number; limit: number }>(),
 );

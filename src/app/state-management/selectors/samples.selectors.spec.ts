@@ -2,7 +2,7 @@ import * as fromSelectors from "./samples.selectors";
 import { SampleState } from "state-management/state/samples.store";
 import { initialUserState } from "state-management/state/user.store";
 import { createMock } from "shared/MockStubs";
-import { SampleClass } from "@scicatproject/scicat-sdk-ts";
+import { SampleClass } from "@scicatproject/scicat-sdk-ts-angular";
 
 const sample = createMock<SampleClass>({
   sampleId: "testId",

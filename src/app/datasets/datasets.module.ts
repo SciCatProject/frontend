@@ -90,7 +90,6 @@ import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
 import { FiltersModule } from "shared/modules/filters/filters.module";
 import { userReducer } from "state-management/reducers/user.reducer";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-
 @NgModule({
   imports: [
     CommonModule,
@@ -184,6 +183,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
     ArchivingService,
     AsyncPipe,
     ADAuthService,
+    SharedScicatFrontendModule,
     FileSizePipe,
     {
       provide: DateAdapter,
