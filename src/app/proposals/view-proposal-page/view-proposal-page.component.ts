@@ -31,7 +31,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
   ) {
     this.translateService.use(
-      this.appConfig.datasetDetailViewLabelOption?.currentLabelSet,
+      this.appConfig.labelsLocalization?.currentLabelSet["proposal"],
     );
   }
 
