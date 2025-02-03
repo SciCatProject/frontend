@@ -6,7 +6,7 @@
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon> details </mat-icon>
-      Details
+      {{ "Details" | translate }}
     </ng-template>
     <ng-template matTabContent
       ><proposal-detail [proposal]="proposal"></proposal-detail
@@ -16,7 +16,7 @@
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon> folder </mat-icon>
-      Datasets
+      {{ "Datasets" | translate }}
     </ng-template>
 
     <ng-template matTabContent>
@@ -30,7 +30,7 @@
   <mat-tab>
     <ng-template mat-tab-label>
       <mat-icon data-cy="related-proposals"> folder </mat-icon>
-      Related Proposals
+      {{ "Related Proposals" | translate }}
     </ng-template>
 
     <ng-template matTabContent>
@@ -41,7 +41,7 @@
   <mat-tab *ngIf="appConfig.logbookEnabled">
     <ng-template mat-tab-label>
       <mat-icon> book </mat-icon>
-      Logbook
+      {{ "Logbook" | translate }}
     </ng-template>
 
     <ng-template matTabContent>

@@ -10,6 +10,7 @@ import {
 import { selectViewProposalPageViewModel } from "state-management/selectors/proposals.selectors";
 import { AppConfigService } from "app-config.service";
 import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "view-proposal-page",
@@ -27,7 +28,12 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     public appConfigService: AppConfigService,
     private route: ActivatedRoute,
     private store: Store,
-  ) {}
+    private translateService: TranslateService,
+  ) {
+    this.translateService.use(
+      this.appConfig.datasetDetailViewLabelOption?.currentLabelSet,
+    );
+  }
 
   ngOnInit() {
     this.subscriptions.push(
