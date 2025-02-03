@@ -5,7 +5,7 @@ describe("Datasets Detail View Default", () => {
   const defaultComponentConfig = testConfig.defaultDetailViewComponent;
 
   beforeEach(() => {
-    cy.fixture("frontend-base-config.json").then((baseConfig) => {
+    cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
       const mergedConfig = mergeConfig(baseConfig, defaultComponentConfig);
       cy.intercept("GET", "**/admin/config", mergedConfig).as(
         "getFrontendConfig",

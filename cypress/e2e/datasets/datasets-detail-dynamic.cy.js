@@ -9,7 +9,7 @@ describe("Datasets Detail View Dynamic", () => {
     dynamicComponentConfig.datasetDetailComponent.customization;
 
   beforeEach(() => {
-    cy.fixture("frontend-base-config.json").then((baseConfig) => {
+    cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
       const mergedConfig = mergeConfig(baseConfig, dynamicComponentConfig);
       cy.intercept("GET", "**/admin/config", mergedConfig).as(
         "getFrontendConfig",
