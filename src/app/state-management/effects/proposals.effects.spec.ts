@@ -69,7 +69,7 @@ describe("ProposalEffects", () => {
           provide: ProposalsService,
           useValue: jasmine.createSpyObj("proposalApi", [
             "proposalsControllerFullquery",
-            "proposalsControllerFullfacet",
+            "proposalsControllerCount",
             "proposalsControllerFindById",
             "proposalsControllerFindByIdAccess",
             "proposalsControllerCreateAttachment",
@@ -81,6 +81,7 @@ describe("ProposalEffects", () => {
           provide: DatasetsService,
           useValue: jasmine.createSpyObj("datasetApi", [
             "datasetsControllerFindAll",
+            "datasetsControllerCount",
           ]),
         },
       ],
@@ -224,20 +225,15 @@ describe("ProposalEffects", () => {
 
   describe("fetchCount$", () => {
     it("should result in a fetchCountCompleteAction", () => {
-      const proposals = [proposal];
+      const count = 1;
       const action = fromActions.fetchCountAction();
       const outcome = fromActions.fetchCountCompleteAction({
-        count: proposals.length,
+        count,
       });
 
-      const responseArray = [
-        {
-          all: [{ totalSets: proposals.length }],
-        },
-      ];
       actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: responseArray });
-      proposalApi.proposalsControllerFullfacet.and.returnValue(response);
+      const response = cold("-a|", { a: { count } });
+      proposalApi.proposalsControllerCount.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
@@ -249,7 +245,7 @@ describe("ProposalEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      proposalApi.proposalsControllerFullfacet.and.returnValue(response);
+      proposalApi.proposalsControllerCount.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
@@ -366,7 +362,6 @@ describe("ProposalEffects", () => {
     const proposalId = "testId";
 
     it("should result in a fetchProposalDatasetsCountCompleteAction", () => {
-      const datasets = [dataset];
       const count = 1;
       const action = fromActions.fetchProposalDatasetsCountAction({
         proposalId,
@@ -376,8 +371,8 @@ describe("ProposalEffects", () => {
       });
 
       actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: datasets });
-      datasetApi.datasetsControllerFindAll.and.returnValue(response);
+      const response = cold("-a|", { a: { count } });
+      datasetApi.datasetsControllerCount.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchProposalDatasetsCount$).toBeObservable(expected);
@@ -391,7 +386,7 @@ describe("ProposalEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFindAll.and.returnValue(response);
+      datasetApi.datasetsControllerCount.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchProposalDatasetsCount$).toBeObservable(expected);
