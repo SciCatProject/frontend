@@ -9,7 +9,7 @@ export class CustomTranslateLoader implements TranslateLoader {
 
   getTranslation(): Observable<TranslationObject> {
     const { currentLabelSet = "", labelSets = {} } =
-      this.appConfig.datasetDetailViewLabelOption || {};
+      this.appConfig?.labelsLocalization || {};
 
     if (currentLabelSet in labelSets) {
       return of(labelSets[currentLabelSet]);

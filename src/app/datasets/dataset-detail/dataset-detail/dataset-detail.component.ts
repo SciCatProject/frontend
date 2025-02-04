@@ -98,7 +98,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
   ) {
     this.translateService.use(
-      this.appConfig.datasetDetailViewLabelOption?.currentLabelSet,
+      this.appConfig.labelsLocalization?.currentLabelSet["dataset-default"],
     );
   }
 
