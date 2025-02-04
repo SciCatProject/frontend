@@ -8,12 +8,13 @@ export class CustomTranslateLoader implements TranslateLoader {
   constructor(private appConfigService: AppConfigService) {}
 
   getTranslation(): Observable<TranslationObject> {
-    const { currentLabelSet = "", labelSets = {} } =
-      this.appConfig?.labelsLocalization || {};
+    // const { currentLabelSet = "", labelSets = {} } =
+    //   this.appConfig?.labelsLocalization || {};
 
-    if (currentLabelSet in labelSets) {
-      return of(labelSets[currentLabelSet]);
-    }
-    return of({});
+    // if (currentLabelSet in labelSets) {
+    //   return of(labelSets[currentLabelSet]);
+    // }
+    //return of({});
+    return of(this.appConfig.labelsLocalization || {});
   }
 }

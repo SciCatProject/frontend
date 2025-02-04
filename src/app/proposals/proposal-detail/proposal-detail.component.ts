@@ -51,7 +51,7 @@ export class ProposalDetailComponent implements OnInit, OnDestroy {
     private store: Store,
     private router: Router,
   ) {
-    this.translateService.use(this.appConfig.labelsLocalization?.proposal);
+    this.translateService.use("proposalDefault");
   }
 
   ngOnInit(): void {

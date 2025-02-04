@@ -22,12 +22,9 @@ export interface LabelMaps {
 }
 
 export interface LabelsLocalization {
-  currentLabelSet: string;
-  labelSets: {
-    [key: string]: {
-      [key: string]: Record<string, string>;
-    };
-  };
+  datasetDefault: Record<string, string>;
+  datasetCustom: Record<string, string>;
+  proposalDefault: Record<string, string>;
 }
 
 export interface DatasetDetailComponentConfig {
