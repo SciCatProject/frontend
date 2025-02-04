@@ -21,12 +21,55 @@ export interface LabelMaps {
   [key: string]: Record<string, string>;
 }
 
-export interface datasetDetailViewLabelOption {
+export interface DatasetDetailViewLabelOption {
   currentLabelSet: string;
   labelSets: {
     [key: string]: Record<string, string>;
   };
 }
+
+export interface DatasetDetailComponentConfig {
+  enableCustomizedComponent: boolean;
+  customization: CustomizationItem[];
+}
+export enum DatasetViewFieldType {
+  TEXT = "text",
+  DATE = "date",
+  LINKY = "linky",
+  COPY = "copy",
+  TAG = "tag",
+}
+
+interface AttachmentOptions {
+  limit: number;
+  size: "small" | "medium" | "large";
+}
+type viewModeOptions = "table" | "json" | "tree";
+
+export interface CustomizationItem {
+  type: CustomizationType;
+  label: string;
+  order: number;
+  fields?: Field[];
+  options?: AttachmentOptions;
+  viewMode?: viewModeOptions;
+}
+
+export interface Field {
+  element: FieldType;
+  source: string;
+  order: number;
+}
+
+// Type alias for allowed customization types
+type CustomizationType =
+  | "regular"
+  | "scientificMetadata"
+  | "datasetJsonView"
+  | "attachments";
+
+// Type alias for allowed field types
+type FieldType = "text" | "copy" | "linky" | "tag" | "date";
 
 export interface DatasetsListSettings {
   columns: TableColumn[];

@@ -304,13 +304,13 @@ describe("Datasets", () => {
       cy.get(".unit-input")
         .contains(`${metadataValidJson.unitSI}`)
         .within(() => {
-          cy.get(".unit-input--warning").should("not.exist");
+          cy.get(".general-warning").should("not.exist");
         });
 
       cy.get(".unit-input")
         .contains(`${metadataInvalidUnitValue}`)
         .within(() => {
-          cy.get(".unit-input--warning").should("exist");
+          cy.get(".general-warning").should("exist");
         });
     });
 
