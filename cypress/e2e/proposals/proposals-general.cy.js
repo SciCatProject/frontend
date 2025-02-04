@@ -4,7 +4,14 @@ import { mergeConfig } from "../../support/utils";
 
 describe("Proposals general", () => {
   let proposal;
+  const proposalLabelsConfig = testConfig.proposalViewCustomLabels;
   beforeEach(() => {
+    cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+      const mergedConfig = mergeConfig(baseConfig, proposalLabelsConfig);
+      cy.intercept("GET", "**/admin/config", mergedConfig).as(
+        "getFrontendConfig",
+      );
+    });
     cy.login(Cypress.env("username"), Cypress.env("password"));
   });
 
@@ -77,7 +84,7 @@ describe("Proposals general", () => {
       cy.get("mat-card").should("not.contain", newProposal.title);
     });
 
-    it("proposal should have type", () => {
+    it.only("proposal should have type", () => {
       const defaultProposalType = "Default Proposal";
       const newProposal = {
         ...testData.proposal,
@@ -214,15 +221,6 @@ describe("Proposals general", () => {
   });
 
   describe("Proposal view details labelization", () => {
-    const proposalLabelsConfig = testConfig.proposalViewCustomLabels;
-    before(() => {
-      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
-        const mergedConfig = mergeConfig(baseConfig, proposalLabelsConfig);
-        cy.intercept("GET", "**/admin/config", mergedConfig).as(
-          "getFrontendConfig",
-        );
-      });
-    });
     it("should load proposal with fallback labels when no custom labels are available", () => {
       const fallbackLabelsToCheck = ["Main proposer", "Proposal Type"];
       const customizedLabelsToCheck = [
