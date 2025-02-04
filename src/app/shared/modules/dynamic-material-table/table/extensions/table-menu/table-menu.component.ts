@@ -91,13 +91,6 @@ export class TableMenuComponent {
       data: this.currentTableSetting,
     });
     this.tableService.saveColumnInfo(this.currentTableSetting.columnSetting);
-    // setTimeout(() => {
-    //   this.menuActionChange.emit({
-    //     type: 'TableSetting',
-    //     data: this.currentTableSetting,
-    //   });
-    //   this.tableService.saveColumnInfo(this.currentTableSetting.columnSetting);
-    // });
   }
 
   setting_onClick(i) {
@@ -178,23 +171,17 @@ export class TableMenuComponent {
 
   /*****  Filter ********/
   clearFilter_onClick() {
-    setTimeout(() => {
-      this.menuActionChange.emit({ type: "FilterClear" });
-    });
+    this.menuActionChange.emit({ type: "FilterClear" });
   }
 
   /******* Save File (JSON, CSV, Print)***********/
   download_onClick(type: string) {
-    setTimeout(() => {
-      this.menuActionChange.emit({ type: "Download", data: type });
-    });
+    this.menuActionChange.emit({ type: "Download", data: type });
   }
 
   print_onClick(menu) {
     menu._overlayRef._host.parentElement.click();
-    setTimeout(() => {
-      this.menuActionChange.emit({ type: "Print", data: null });
-    });
+    this.menuActionChange.emit({ type: "Print", data: null });
   }
 }
 

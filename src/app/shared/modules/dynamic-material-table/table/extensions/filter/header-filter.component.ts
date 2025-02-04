@@ -148,14 +148,14 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   focusToLastInput() {
-    setTimeout(() => {
-      if (this.filterInputList.length > 0) {
-        this.filterInputList.last.focus();
-      }
-    });
+    if (this.filterInputList.length > 0) {
+      this.filterInputList.last.focus();
+    }
   }
 
-  filterAction_OnClick(index, action) {
+  filterAction_OnClick(event, index, action) {
+    event.stopPropagation();
+    event.preventDefault();
     if (action === 0 || action === 1) {
       // and or
       this.filters[index].type = action === 0 ? "and" : "or";
@@ -165,11 +165,9 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     } else if (action === 2 && this.filters.length > 1) {
       // delete
-      setTimeout(() => {
-        this.filters.splice(index, 1);
-        this.cdr.detectChanges();
-        this.focusToLastInput();
-      }); // bug for delete filter item(unwanted reaction close menu)
+      this.filters.splice(index, 1);
+      this.cdr.detectChanges();
+      this.focusToLastInput();
     }
   }
 

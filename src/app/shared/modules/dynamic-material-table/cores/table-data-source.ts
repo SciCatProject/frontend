@@ -60,11 +60,9 @@ export class TableVirtualScrollDataSource<
   setFilter(fieldName: string, filters: AbstractFilter[]): Observable<null> {
     this.filterMap[fieldName] = filters;
     return new Observable((subscriber) => {
-      setTimeout(() => {
-        this.refreshFilterPredicate();
-        subscriber.next();
-        subscriber.complete();
-      }, 200); // for show progress
+      this.refreshFilterPredicate();
+      subscriber.next();
+      subscriber.complete();
     });
   }
 

@@ -19,10 +19,9 @@ export class PrintTableDialogComponent {
   ) {}
 
   print() {
-    setTimeout(() => {
-      const dialogConfig =
-        "width=600,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no";
-      const printDoc = `
+    const dialogConfig =
+      "width=600,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no";
+    const printDoc = `
     <html>
       <head>
         <style> ${styles} </style>
@@ -33,9 +32,8 @@ export class PrintTableDialogComponent {
     </html>
     `;
 
-      const popupWinindow = window.open("", "_blank", dialogConfig);
-      popupWinindow.document.write(printDoc);
-      popupWinindow.document.close();
-    });
+    const popupWinindow = window.open("", "_blank", dialogConfig);
+    popupWinindow.document.write(printDoc);
+    popupWinindow.document.close();
   }
 }

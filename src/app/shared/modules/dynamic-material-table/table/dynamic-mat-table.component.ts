@@ -518,10 +518,8 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   filter_onChanged(column: TableField<T>, filter: AbstractFilter[]) {
-    this.pending = true;
     this.tvsDataSource.setFilter(column.name, filter).subscribe(() => {
       this.clearSelection();
-      this.pending = false;
     });
   }
 
@@ -710,7 +708,6 @@ export class DynamicMatTableComponent<T extends TableRow>
 
   pagination_onChange(e: PageEvent) {
     if (this.pagingMode !== "none") {
-      this.pending = true;
       this.tvsDataSource.refreshFilterPredicate();
       this.pagination.length = e.length;
       this.pagination.pageIndex = e.pageIndex;

@@ -48,8 +48,6 @@ export class RowMenuComponent<T> {
   }
 
   menuButton_OnClick(menu: ContextMenuItem) {
-    setTimeout(() => {
-      this.rowActionChange.emit(menu);
-    });
+    this.rowActionChange.emit(menu);
   }
 }

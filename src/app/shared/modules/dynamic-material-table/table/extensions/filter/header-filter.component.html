@@ -49,17 +49,21 @@
           >{{ filter?.type === "and" ? "and" : "or" }}</span
         >
         <span class="svg">
-          <mat-icon (click)="filterAction_OnClick(index, 0)">add</mat-icon>
+          <mat-icon (click)="filterAction_OnClick($event, index, 0)"
+            >add</mat-icon
+          >
         </span>
         <span class="svg">
           <mat-icon
-            (click)="filterAction_OnClick(index, 1)"
+            (click)="filterAction_OnClick($event, index, 1)"
             style="transform: rotate(90deg)"
             >drag_handle</mat-icon
           >
         </span>
         <span class="svg">
-          <mat-icon (click)="filterAction_OnClick(index, 2)">clear</mat-icon>
+          <mat-icon (click)="filterAction_OnClick($event, index, 2)"
+            >clear</mat-icon
+          >
         </span>
       </div>
     </div>
