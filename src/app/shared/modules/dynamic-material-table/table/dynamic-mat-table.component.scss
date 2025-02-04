@@ -33,6 +33,12 @@
   width: 100%;
 }
 
+mat-cell .label-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 mat-cell:first-of-type,
 mat-header-cell:first-of-type:not(.row-checkbox),
 mat-footer-cell:first-of-type {

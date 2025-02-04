@@ -36,10 +36,12 @@ export const tableColumnsConfig: TableField<any>[] = [
   {
     name: "title",
     icon: "description",
+    width: 250,
   },
   {
     name: "abstract",
     icon: "chrome_reader_mode",
+    width: 250,
   },
   {
     name: "firstname",
@@ -49,10 +51,9 @@ export const tableColumnsConfig: TableField<any>[] = [
   {
     name: "lastname",
     header: "Last Name",
-    icon: "person",
   },
-  { name: "email", icon: "email" },
-  { name: "type", icon: "badge" },
+  { name: "email", icon: "email", width: 200 },
+  { name: "type", icon: "badge", width: 200 },
   {
     name: "parentProposalId",
     header: "Parent Proposal",
