@@ -31,7 +31,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
   ) {
     this.translateService.use(
-      this.appConfig.labelsLocalization?.currentLabelSet["proposal"],
+      this.appConfig.labelsLocalization?.currentLabelSet,
     );
   }
 

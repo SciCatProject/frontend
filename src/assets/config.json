@@ -222,7 +222,7 @@
         },
         "proposal" : {
           "General Information": "Proposal Information",
-          "Title" : "Proposal Title",
+          //"Title" : "Proposal Title",
           "Abstract" : "Abstract",
           "Proposal Id" : "Proposal Id",
           "Proposal Type" : "Proposal Type",
