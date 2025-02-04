@@ -136,10 +136,12 @@ export class IngestorAPIManager {
   public startIngestion(payload: PostDatasetRequest): Promise<string> {
     return new Promise((resolve, reject) => {
       this.http
-        .post(this.connectUrl + INGESTOR_API_ENDPOINTS_V1.DATASET, {
+        .post(this.connectUrl + INGESTOR_API_ENDPOINTS_V1.DATASET, 
           payload,
+          {
           ...this.connectOptions,
-        })
+          }
+        )
         .subscribe(
           (response) => {
             const returnValue = JSON.stringify(response);
