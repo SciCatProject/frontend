@@ -4,22 +4,40 @@
       <div mat-card-avatar class="section-icon">
         <mat-icon> description </mat-icon>
       </div>
-      General Information
+      {{ "General Information" | translate }}
     </mat-card-header>
 
     <mat-card-content>
       <table>
         <tr>
-          <th>Title</th>
+          <th>{{ "Title" | translate }}</th>
           <td>{{ proposal.title }}</td>
         </tr>
         <tr>
-          <th>Abstract</th>
+          <th>{{ "Abstract" | translate }}</th>
           <td>{{ proposal.abstract }}</td>
         </tr>
         <tr>
-          <th>Identifier</th>
+          <th>{{ "Proposal Id" | translate }}</th>
           <td>{{ proposal.proposalId }}</td>
+        </tr>
+        <tr data-cy="proposal-type">
+          <th>{{ "Proposal Type" | translate }}</th>
+          <!-- TODO: Change this to just proposal.type when new sdk is merged -->
+          <td>{{ proposal["type"] }}</td>
+        </tr>
+        <tr
+          *ngIf="
+            proposal['parentProposalId'] && parentProposal$
+              | async as parentProposal
+          "
+        >
+          <th>{{ "Parent proposal" | translate }}</th>
+          <td>
+            <a (click)="onClickProposal(parentProposal.proposalId)">{{
+              parentProposal.title
+            }}</a>
+          </td>
         </tr>
         <ng-template
           [ngIf]="
@@ -35,7 +53,7 @@
             let-first="first"
           >
             <tr *ngIf="first">
-              <th>Start Time</th>
+              <th>{{ "Start Time" | translate }}</th>
               <td>
                 {{ period.start | date }}
               </td>
@@ -49,29 +67,11 @@
             let-last="last"
           >
             <tr *ngIf="last">
-              <th>End Time</th>
+              <th>{{ "End Time" | translate }}</th>
               <td>{{ period.end | date }}</td>
             </tr>
           </ng-template>
         </ng-template>
-        <tr data-cy="proposal-type">
-          <th>Type</th>
-          <!-- TODO: Change this to just proposal.type when new sdk is merged -->
-          <td>{{ proposal["type"] }}</td>
-        </tr>
-        <tr
-          *ngIf="
-            proposal['parentProposalId'] && parentProposal$
-              | async as parentProposal
-          "
-        >
-          <th>Parent proposal</th>
-          <td>
-            <a (click)="onClickProposal(parentProposal.proposalId)">{{
-              parentProposal.title
-            }}</a>
-          </td>
-        </tr>
       </table>
     </mat-card-content>
   </mat-card>
@@ -81,13 +81,13 @@
       <div mat-card-avatar class="section-icon">
         <mat-icon> person </mat-icon>
       </div>
-      Creator Information
+      {{ "Creator Information" | translate }}
     </mat-card-header>
 
     <mat-card-content>
       <table>
         <tr>
-          <th>Main proposer</th>
+          <th>{{ "Main proposer" |  translate }}</th>
           <td *ngIf="proposal.firstname && proposal.lastname; else noName">
             <a href="mailto:{{ proposal.email }}"
               >{{ proposal.firstname }} {{ proposal.lastname }}</a
@@ -100,7 +100,7 @@
           </ng-template>
         </tr>
         <tr *ngIf="proposal.pi_firstname && proposal.pi_lastname">
-          <th>Principal investigator</th>
+          <th>{{ "Principal Investigator" | translate }}</th>
           <td *ngIf="proposal.pi_email; else withoutEmail">
             <a href="mailto:{{ proposal.pi_email }}"
               >{{ proposal.pi_firstname }} {{ proposal.pi_lastname }}</a
@@ -122,7 +122,7 @@
       <div mat-card-avatar class="section-icon">
         <mat-icon> science </mat-icon>
       </div>
-      Metadata
+      {{ "Metadata" | translate }}
     </mat-card-header>
     <mat-card-content>
       <ng-template [ngIf]="appConfig.tableSciDataEnabled" [ngIfElse]="jsonView">
