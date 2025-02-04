@@ -152,21 +152,18 @@ export const testData = {
 
 export const testConfig = {
   dynamicDetialViewComponent: {
-    datasetDetailViewLabelOption: {
-      currentLabelSet: "test",
-      labelSets: {
-        test: {
-          datasetName: "Test String",
-          description: "Test Copy",
-          ownerEmail: "Test Linky",
-          keywords: "Test Tag",
-          "Section Label Regular": "Test Section Regular",
-          "Section Label Attachments": "Test Section Attachments",
-          "Section Label Metadata JSON": "Test Section Metadata JSON",
-          "Section Label Metadata TABLE": "Test Section Metadata TABLE",
-          "Section Label Metadata TREE": "Test Section Metadata TREE",
-          "Section Label Dataset JsonView": "Test Section Dataset JsonView",
-        },
+    labelsLocalization: {
+      datasetCustom: {
+        datasetName: "Test String",
+        description: "Test Copy",
+        ownerEmail: "Test Linky",
+        keywords: "Test Tag",
+        "Section Label Regular": "Test Section Regular",
+        "Section Label Attachments": "Test Section Attachments",
+        "Section Label Metadata JSON": "Test Section Metadata JSON",
+        "Section Label Metadata TABLE": "Test Section Metadata TABLE",
+        "Section Label Metadata TREE": "Test Section Metadata TREE",
+        "Section Label Dataset JsonView": "Test Section Dataset JsonView",
       },
     },
     datasetDetailComponent: {
@@ -235,18 +232,15 @@ export const testConfig = {
     },
   },
   defaultDetailViewComponent: {
-    datasetDetailViewLabelOption: {
-      currentLabelSet: "test",
-      labelSets: {
-        test: {
-          "Dataset Name": "Test Dataset name",
-          Description: "Test Description",
-          "Creation time": "Test Creation time",
-          Pid: "Test Pid",
-          Type: "Test Type",
-          "General Information": "Test General Information",
-          "Creator Information": "Creator Information",
-        },
+    labelsLocalization: {
+      datasetDefault: {
+        "Dataset Name": "Test Dataset name",
+        Description: "Test Description",
+        "Creation time": "Test Creation time",
+        Pid: "Test Pid",
+        Type: "Test Type",
+        "General Information": "Test General Information",
+        "Creator Information": "Creator Information",
       },
     },
     datasetDetailComponent: {
