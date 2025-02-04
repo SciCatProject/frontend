@@ -419,10 +419,8 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   moveColumn(from: number, to: number) {
-    setTimeout(() => {
-      moveItemInArray(this.columns, from, to);
-      this.refreshColumn(this.columns);
-    });
+    moveItemInArray(this.columns, from, to);
+    this.refreshColumn(this.columns);
   }
 
   refreshColumn(columns: TableField<T>[]) {

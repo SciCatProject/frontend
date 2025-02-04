@@ -301,3 +301,7 @@ cdk-virtual-scroll-viewport {
     }
   }
 }
+
+::ng-deep .mat-mdc-progress-bar .mdc-linear-progress__buffer-bar {
+  background: white !important;
+}

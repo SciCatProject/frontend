@@ -114,7 +114,7 @@ export class ProposalDashboardComponent implements OnInit {
 
   rowHeight = 50;
 
-  pending = false;
+  pending = true;
 
   setting: TableSetting = {};
 
@@ -161,6 +161,7 @@ export class ProposalDashboardComponent implements OnInit {
 
     this.vm$.subscribe((data) => {
       this.dataSource.next(data);
+      this.pending = false;
     });
 
     this.proposalsCount$.subscribe((count) => {
@@ -190,6 +191,7 @@ export class ProposalDashboardComponent implements OnInit {
   }
 
   onPaginationChange(pagination: TablePagination) {
+    this.pending = true;
     const queryParams: Record<string, string | number> = {
       pageIndex: pagination.pageIndex,
       pageSize: pagination.pageSize,
@@ -213,6 +215,7 @@ export class ProposalDashboardComponent implements OnInit {
   }
 
   onGlobalTextSearchChange(text: string) {
+    this.pending = true;
     this.pagination.pageIndex = 0;
     this.router.navigate([], {
       queryParams: {
