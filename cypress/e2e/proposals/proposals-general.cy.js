@@ -1,4 +1,6 @@
 import { testData } from "../../fixtures/testData";
+import { testConfig } from "../../fixtures/testData";
+import { mergeConfig } from "../../support/utils";
 
 describe("Proposals general", () => {
   let proposal;
@@ -208,6 +210,62 @@ describe("Proposals general", () => {
       cy.get('[data-cy="related-proposals-table"] mat-row')
         .contains(proposal.title)
         .click();
+    });
+  });
+
+  describe("Proposal view details labelization", () => {
+    const proposalLabelsConfig = testConfig.proposalViewCustomLabels;
+    before(() => {
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const mergedConfig = mergeConfig(baseConfig, proposalLabelsConfig);
+        cy.intercept("GET", "**/admin/config", mergedConfig).as(
+          "getFrontendConfig",
+        );
+      });
+    });
+    it("should load proposal with fallback labels when no custom labels are available", () => {
+      const fallbackLabelsToCheck = ["Main proposer", "Proposal Type"];
+      const customizedLabelsToCheck = [
+        "Test Proposal Title",
+        "Test Abstract",
+        "Test Proposal Id",
+      ];
+
+      proposal = {
+        ...testData.proposal,
+        title: "Cypress test parent proposal",
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+      };
+      cy.createProposal(proposal);
+
+      cy.visit("/proposals");
+
+      cy.get("mat-table mat-header-row").should("exist");
+
+      cy.finishedLoading();
+
+      cy.get("mat-table mat-row").should("contain", proposal.proposalId);
+
+      cy.get("mat-row")
+        .contains(proposal.proposalId)
+        .parent()
+        .contains(proposal.title)
+        .click();
+
+      cy.url().should("include", `/proposals/${proposal.proposalId}`);
+
+      cy.contains(proposal.title);
+
+      cy.wrap([...fallbackLabelsToCheck, ...customizedLabelsToCheck]).each(
+        (value) => {
+          cy.get("mat-card").should(($matCards) => {
+            const matchFound = [...$matCards].some((card) =>
+              card.innerText.includes(value),
+            );
+            expect(matchFound).to.be.true;
+          });
+        },
+      );
     });
   });
 });
