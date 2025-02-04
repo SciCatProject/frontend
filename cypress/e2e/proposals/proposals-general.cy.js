@@ -84,7 +84,7 @@ describe("Proposals general", () => {
       cy.get("mat-card").should("not.contain", newProposal.title);
     });
 
-    it.only("proposal should have type", () => {
+    it("proposal should have type", () => {
       const defaultProposalType = "Default Proposal";
       const newProposal = {
         ...testData.proposal,
