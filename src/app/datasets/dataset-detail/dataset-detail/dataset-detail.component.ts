@@ -97,9 +97,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
   ) {
-    this.translateService.use(
-      this.appConfig.labelsLocalization?.currentLabelSet["dataset-default"],
-    );
+    this.translateService.use("datasetDefault");
   }
 
   ngOnInit() {

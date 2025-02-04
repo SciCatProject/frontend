@@ -30,11 +30,7 @@ describe("DatasetDetailDynamicComponent", () => {
     navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
 
-  const getConfig = () => ({
-    datasetDetailViewLabelOption: {
-      currentLabel: "test",
-    },
-  });
+  const getConfig = () => ({});
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

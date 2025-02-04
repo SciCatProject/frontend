@@ -87,7 +87,7 @@
     <mat-card-content>
       <table>
         <tr>
-          <th>{{ "Main proposer" |  translate }}</th>
+          <th>{{ "Main proposer" | translate }}</th>
           <td *ngIf="proposal.firstname && proposal.lastname; else noName">
             <a href="mailto:{{ proposal.email }}"
               >{{ proposal.firstname }} {{ proposal.lastname }}</a
