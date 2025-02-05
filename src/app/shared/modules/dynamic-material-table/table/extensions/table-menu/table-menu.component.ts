@@ -13,6 +13,10 @@ import { TableSetting } from "../../../models/table-setting.model";
 import { deepClone, isNullorUndefined } from "../../../cores/type";
 import { AbstractField } from "../../../models/table-field.model";
 import { Direction } from "@angular/cdk/bidi";
+import {
+  TableMenuAction,
+  TableMenuActionChange,
+} from "shared/modules/dynamic-material-table/models/table-menu.model";
 
 @Component({
   selector: "table-menu",
@@ -64,7 +68,7 @@ export class TableMenuComponent {
 
   screenMode_onClick() {
     this.menuActionChange.emit({
-      type: "FullScreenMode",
+      type: TableMenuAction.FullScreenMode,
       data: this.currentTableSetting,
     });
   }
@@ -87,7 +91,7 @@ export class TableMenuComponent {
     e.stopPropagation();
     e.preventDefault();
     this.menuActionChange.emit({
-      type: "TableSetting",
+      type: TableMenuAction.TableSetting,
       data: this.currentTableSetting,
     });
     this.tableService.saveColumnInfo(this.currentTableSetting.columnSetting);
@@ -109,7 +113,15 @@ export class TableMenuComponent {
   saveSetting_onClick(e, setting) {
     e.stopPropagation();
     this.menuActionChange.emit({
-      type: "SaveSetting",
+      type: TableMenuAction.SaveSetting,
+      data: setting?.settingName,
+    });
+  }
+
+  saveSimpleSetting_onClick(e, setting) {
+    e.stopPropagation();
+    this.menuActionChange.emit({
+      type: TableMenuAction.SaveSimpleSetting,
       data: setting?.settingName,
     });
   }
@@ -126,7 +138,7 @@ export class TableMenuComponent {
   selectSetting_onClick(e, setting: TableSetting) {
     e.stopPropagation();
     this.menuActionChange.emit({
-      type: "SelectSetting",
+      type: TableMenuAction.SelectSetting,
       data: setting.settingName,
     });
   }
@@ -134,7 +146,15 @@ export class TableMenuComponent {
   resetDefault_onClick(e) {
     e.stopPropagation();
     this.menuActionChange.emit({
-      type: "SelectSetting",
+      type: TableMenuAction.SelectSetting,
+      data: null,
+    });
+  }
+
+  resetDefaultSimple_onClick(e) {
+    e.stopPropagation();
+    this.menuActionChange.emit({
+      type: TableMenuAction.DefaultSimpleSetting,
       data: null,
     });
   }
@@ -142,7 +162,7 @@ export class TableMenuComponent {
   default_onClick(e, setting) {
     e.stopPropagation();
     this.menuActionChange.emit({
-      type: "DefaultSetting",
+      type: TableMenuAction.DefaultSetting,
       data: setting.settingName,
     });
   }
@@ -150,7 +170,7 @@ export class TableMenuComponent {
   applySaveSetting_onClick(e) {
     e.stopPropagation();
     this.menuActionChange.emit({
-      type: "SaveSetting",
+      type: TableMenuAction.SaveSetting,
       data: this.newSettingName,
     });
     this.showNewSetting = false;
@@ -164,37 +184,26 @@ export class TableMenuComponent {
 
   deleteSetting_onClick(e, setting) {
     e.stopPropagation();
-    this.menuActionChange.emit({ type: "DeleteSetting", data: setting });
+    this.menuActionChange.emit({
+      type: TableMenuAction.DeleteSetting,
+      data: setting,
+    });
     this.newSettingName = "";
     this.showNewSetting = false;
   }
 
   /*****  Filter ********/
   clearFilter_onClick() {
-    this.menuActionChange.emit({ type: "FilterClear" });
+    this.menuActionChange.emit({ type: TableMenuAction.FilterClear });
   }
 
   /******* Save File (JSON, CSV, Print)***********/
   download_onClick(type: string) {
-    this.menuActionChange.emit({ type: "Download", data: type });
+    this.menuActionChange.emit({ type: TableMenuAction.Download, data: type });
   }
 
   print_onClick(menu) {
     menu._overlayRef._host.parentElement.click();
-    this.menuActionChange.emit({ type: "Print", data: null });
+    this.menuActionChange.emit({ type: TableMenuAction.Print, data: null });
   }
-}
-
-export interface TableMenuActionChange {
-  type:
-    | "FilterClear"
-    | "TableSetting"
-    | "Download"
-    | "SaveSetting"
-    | "DeleteSetting"
-    | "SelectSetting"
-    | "DefaultSetting"
-    | "Print"
-    | "FullScreenMode";
-  data?: any;
 }

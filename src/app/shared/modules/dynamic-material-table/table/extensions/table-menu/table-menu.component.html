@@ -46,11 +46,21 @@
     mat-menu-item
     type="button"
     *ngIf="currentTableSetting?.saveSettingMode === 'simple'"
-    (click)="saveSetting_onClick($event, null)"
+    (click)="saveSimpleSetting_onClick($event, null)"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
   >
     <mat-icon>grading</mat-icon>
     <span>Save table setting</span>
+  </button>
+  <button
+    mat-menu-item
+    type="button"
+    *ngIf="currentTableSetting?.saveSettingMode === 'simple'"
+    (click)="resetDefaultSimple_onClick($event)"
+    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
+  >
+    <mat-icon>settings_backup_restore</mat-icon>
+    Default setting
   </button>
   <button
     mat-menu-item

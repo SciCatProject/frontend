@@ -53,3 +53,14 @@ export class TableSetting implements TableSetting {
   saveSettingMode?: "simple" | "multi" | "none";
   showColumnSettingMenu?: boolean = false;
 }
+
+export enum TableSettingEventType {
+  create = "create",
+  save = "save",
+  apply = "apply",
+  delete = "delete",
+  default = "default",
+  reset = "reset",
+  select = "select",
+  error = "error",
+}

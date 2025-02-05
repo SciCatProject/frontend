@@ -4,6 +4,7 @@ import { PageChangeEvent } from "shared/modules/table/table.component";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
   TableSetting,
+  TableSettingEventType,
   VisibleActionMenu,
 } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import {
@@ -26,7 +27,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { Direction } from "@angular/cdk/bidi";
 
-export const tableColumnsConfig: TableField<any>[] = [
+export const tableDefaultColumnsConfig: TableField<any>[] = [
   {
     name: "proposalId",
     header: "Proposal ID",
@@ -89,7 +90,22 @@ const tableSettingsConfig: TableSetting = {
   direction: "ltr",
   visibleActionMenu: actionMenu,
   autoHeight: false,
-  saveSettingMode: "multi",
+  saveSettingMode: "simple",
+  settingList: [
+    {
+      direction: "ltr",
+      visibleActionMenu: actionMenu,
+      autoHeight: false,
+      saveSettingMode: "simple",
+      isDefaultSetting: true,
+      isCurrentSetting: true,
+      settingName: "default",
+      rowStyle: {
+        "border-bottom": "1px solid #d2d2d2",
+      },
+      columnSetting: [...tableDefaultColumnsConfig],
+    },
+  ],
   rowStyle: {
     "border-bottom": "1px solid #d2d2d2",
   },
@@ -172,20 +188,34 @@ export class ProposalDashboardComponent implements OnInit {
         length: count,
       };
 
-      this.initTable(
-        tableColumnsConfig,
-        tableSettingsConfig,
-        pagginationConfig,
+      const savedTableConfig = this.loadSavedColumnInfo("proposal-table");
+      const foundTableSetting = tableSettingsConfig.settingList.find(
+        (s) => s.settingName === "proposal-table",
       );
+
+      if (savedTableConfig && !foundTableSetting) {
+        tableSettingsConfig.settingList.push({
+          ...tableSettingsConfig.settingList[0],
+          settingName: "proposal-table",
+          isCurrentSetting: true,
+          isDefaultSetting: false,
+          columnSetting: savedTableConfig,
+        });
+
+        tableSettingsConfig.settingList[0].isCurrentSetting = false;
+      }
+
+      this.initTable(tableSettingsConfig, pagginationConfig);
     });
   }
 
   initTable(
-    columnsConfig: TableField<any>[],
     settingConfig: TableSetting,
     paginationConfig: TablePagination,
   ): void {
-    this.columns = columnsConfig;
+    this.columns = settingConfig.settingList.find(
+      (s) => s.isCurrentSetting,
+    ).columnSetting;
     this.setting = settingConfig;
     this.pagination = paginationConfig;
   }
@@ -234,10 +264,56 @@ export class ProposalDashboardComponent implements OnInit {
     );
   }
 
+  saveTableSettings(setting: TableSetting) {
+    this.saveColumnInfo(setting.columnSetting, setting.settingName);
+  }
+
+  onSettingChange(event: {
+    type: TableSettingEventType;
+    setting: TableSetting;
+  }) {
+    if (
+      event.type === TableSettingEventType.save ||
+      event.type === TableSettingEventType.create
+    ) {
+      this.saveTableSettings(event.setting);
+    }
+  }
+
   onRowClick(event: IRowEvent<ProposalClass>) {
     if (event.event === RowEventType.RowClick) {
       const id = encodeURIComponent(event.sender.row.proposalId);
       this.router.navigateByUrl("/proposals/" + id);
+    }
+  }
+
+  loadSavedColumnInfo(saveName: string): TableField<any>[] {
+    // Only load if a save name is passed in
+    if (saveName) {
+      if (!localStorage) {
+        return null;
+      }
+
+      const loadedInfo = localStorage.getItem(`${saveName}`);
+
+      if (loadedInfo) {
+        return JSON.parse(loadedInfo);
+      }
+    }
+
+    return null;
+  }
+
+  saveColumnInfo(
+    columnInfo: TableField<any>[],
+    saveName = "proposal-table",
+  ): void {
+    if (saveName) {
+      if (!localStorage) {
+        return;
+      }
+
+      localStorage.setItem(`${saveName}`, JSON.stringify(columnInfo));
     }
   }
 }
