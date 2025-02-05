@@ -2,22 +2,21 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AdminGuard } from "app-routing/admin.guard";
 import { AuthGuard } from "app-routing/auth.guard";
-import { LeavingPageGuard } from "app-routing/pending-changes.guard";
 import { ServiceGuard } from "app-routing/service.guard";
 import { AdminTabComponent } from "datasets/admin-tab/admin-tab.component";
 import { DatafilesComponent } from "datasets/datafiles/datafiles.component";
 import { JsonScientificMetadataComponent } from "datasets/jsonScientificMetadata/jsonScientificMetadata.component";
-import { DatasetDetailComponent } from "datasets/dataset-detail/dataset-detail.component";
 import { DatasetFileUploaderComponent } from "datasets/dataset-file-uploader/dataset-file-uploader.component";
 import { DatasetLifecycleComponent } from "datasets/dataset-lifecycle/dataset-lifecycle.component";
 import { ReduceComponent } from "datasets/reduce/reduce.component";
 import { RelatedDatasetsComponent } from "datasets/related-datasets/related-datasets.component";
 import { LogbooksDashboardComponent } from "logbooks/logbooks-dashboard/logbooks-dashboard.component";
+import { DatasetDetailWrapperComponent } from "datasets/dataset-detail/dataset-detail-wrapper.component";
+
 const routes: Routes = [
   {
     path: "",
-    component: DatasetDetailComponent,
-    canDeactivate: [LeavingPageGuard],
+    component: DatasetDetailWrapperComponent,
   },
   {
     path: "jsonScientificMetadata",

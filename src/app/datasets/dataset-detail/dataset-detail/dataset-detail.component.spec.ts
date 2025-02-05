@@ -1,4 +1,4 @@
-import { DatafilesComponent } from "../../datasets/datafiles/datafiles.component";
+import { DatafilesComponent } from "../../datafiles/datafiles.component";
 import { DatasetDetailComponent } from "./dataset-detail.component";
 import { LinkyPipe } from "ngx-linky";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
@@ -43,12 +43,12 @@ import {
   TranslateModule,
   TranslationObject,
 } from "@ngx-translate/core";
+
 class MockTranslateLoader implements TranslateLoader {
   getTranslation(): Observable<TranslationObject> {
     return of({});
   }
 }
-
 describe("DatasetDetailComponent", () => {
   let component: DatasetDetailComponent;
   let fixture: ComponentFixture<DatasetDetailComponent>;
