@@ -18,12 +18,13 @@ export interface IngestionRequestInformation {
     instrument: object;
     acquisition: object;
   };
-  extractorMetaDataReady: boolean;
-  extractMetaDataRequested: boolean;
   mergedMetaDataString: string;
 
-  apiErrorInformation: {
-    metaDataExtraction: boolean;
+  apiInformation: {
+    extractMetaDataRequested: boolean;
+    extractorMetaDataReady: boolean;
+    metaDataExtractionFailed: boolean;
+    extractorMetaDataStatus: string;
   };
 }
 
@@ -88,11 +89,12 @@ export class IngestorHelper {
         instrument: {},
         acquisition: {},
       },
-      extractorMetaDataReady: false,
-      extractMetaDataRequested: false,
       mergedMetaDataString: "",
-      apiErrorInformation: {
-        metaDataExtraction: false,
+      apiInformation: {
+        metaDataExtractionFailed: false,
+        extractMetaDataRequested: false,
+        extractorMetaDataReady: false,
+        extractorMetaDataStatus: "",
       },
     };
   };

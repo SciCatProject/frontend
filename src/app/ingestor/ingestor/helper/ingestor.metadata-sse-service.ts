@@ -6,10 +6,12 @@ interface IngestorMetadataEvent {
   progress: number;
   result: boolean;
   resultMessage: string;
+  error: boolean;
 }
 
 interface ProgressMessage {
   result?: string;
+  err?: string;
   std_err: string;
   std_out: string;
 }
@@ -34,6 +36,7 @@ export class IngestorMetadataSSEService {
         progress: 0,
         result: false,
         resultMessage: "",
+        error: false,
       });
     };
 
@@ -54,20 +57,28 @@ export class IngestorMetadataSSEService {
       }
 
       this.messageSubject.next({
-        message: data.std_out,
+        message: data.err ?? data.std_out,
         progress: progress,
         result: data.result !== undefined,
         resultMessage: data.result !== undefined ? data.result : "",
+        error: data.err !== undefined,
       });
       // Check if data contains result then close connection
-      if (data.result) {
+      if (data.result || data.err !== undefined) {
         this.disconnect();
       }
     });
 
     this.eventSource.onerror = (error) => {
-      console.error("SSE Fehler:", error);
+      console.error("SSE Error:", error);
       this.eventSource.close();
+      this.messageSubject.next({
+        message: "An error occurred while extracting metadata.",
+        progress: 0,
+        result: false,
+        resultMessage: "",
+        error: true,
+      });
     };
   }
 

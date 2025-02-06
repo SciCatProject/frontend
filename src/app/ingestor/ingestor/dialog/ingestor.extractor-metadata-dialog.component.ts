@@ -20,6 +20,7 @@ export class IngestorExtractorMetadataDialogComponent {
 
   backendURL = "";
   extractorMetaDataReady = false;
+  extractorMetaDataStatus = "";
   extractorMetaDataError = false;
 
   uiNextButtonReady = false;
@@ -50,9 +51,11 @@ export class IngestorExtractorMetadataDialogComponent {
     this.metadataSchemaInstrument = instrumentSchema;
     this.metadataSchemaAcquisition = acqusitionSchema;
     this.extractorMetaDataReady =
-      this.createNewTransferData.extractorMetaDataReady;
+      this.createNewTransferData.apiInformation.extractorMetaDataReady;
     this.extractorMetaDataError =
-      this.createNewTransferData.apiErrorInformation.metaDataExtraction;
+      this.createNewTransferData.apiInformation.metaDataExtractionFailed;
+    this.extractorMetaDataStatus =
+      this.createNewTransferData.apiInformation.extractorMetaDataStatus;
   }
 
   onClickBack(): void {

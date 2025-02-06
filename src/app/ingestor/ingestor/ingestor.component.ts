@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from "@angular/core";
-import { AppConfigService } from "app-config.service";
 import { HttpParams } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import { INGESTOR_API_ENDPOINTS_V1 } from "./helper/ingestor-api-endpoints";
@@ -70,10 +69,7 @@ export class IngestorComponent implements OnInit {
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
 
-  metadataExtractionStatus = "";
-
   constructor(
-    public appConfigService: AppConfigService,
     private route: ActivatedRoute,
     private router: Router,
     private apiManager: IngestorAPIManager,
@@ -94,7 +90,6 @@ export class IngestorComponent implements OnInit {
       }
     });
 
-    // Move that part TODO
     // Fetch the API token that the ingestor can authenticate to scicat as the user
     this.vm$.subscribe((settings) => {
       this.tokenValue = settings.scicatToken;
@@ -104,8 +99,6 @@ export class IngestorComponent implements OnInit {
       }
     });
     this.store.dispatch(fetchCurrentUserAction());
-
-    console.log(this.sciCatLoggedIn$);
   }
 
   async initializeIngestorConnection(
@@ -156,8 +149,6 @@ export class IngestorComponent implements OnInit {
   async ingestDataset(): Promise<boolean> {
     this.loading = true;
 
-    console.log("Token value: ", this.tokenValue);
-
     const payload: PostDatasetRequest = {
       metaData: this.createNewTransferData.mergedMetaDataString,
       userToken: this.tokenValue,
@@ -181,18 +172,14 @@ export class IngestorComponent implements OnInit {
   }
 
   async startMetadataExtraction(): Promise<boolean> {
-    this.createNewTransferData.apiErrorInformation.metaDataExtraction = false;
+    this.createNewTransferData.apiInformation.metaDataExtractionFailed = false;
 
-    if (this.createNewTransferData.extractMetaDataRequested) {
-      console.log(
-        this.createNewTransferData.extractMetaDataRequested,
-        " already requested",
-      ); // Debugging
+    if (this.createNewTransferData.apiInformation.extractMetaDataRequested) {
       return false;
     }
 
-    this.createNewTransferData.extractorMetaDataReady = false;
-    this.createNewTransferData.extractMetaDataRequested = true;
+    this.createNewTransferData.apiInformation.extractorMetaDataReady = false;
+    this.createNewTransferData.apiInformation.extractMetaDataRequested = true;
 
     const params = new HttpParams()
       .set("filePath", this.createNewTransferData.selectedPath)
@@ -205,8 +192,12 @@ export class IngestorComponent implements OnInit {
     this.sseService.getMessages().subscribe(
       (data) => {
         //console.log("Received SSE data:", data);
+        this.createNewTransferData.apiInformation.extractorMetaDataStatus =
+          data.message;
+
         if (data.result) {
-          this.createNewTransferData.extractorMetaDataReady = true;
+          this.createNewTransferData.apiInformation.extractorMetaDataReady =
+            true;
           const extractedScientificMetadata = JSON.parse(
             data.resultMessage,
           ) as ScientificMetadata;
@@ -215,14 +206,24 @@ export class IngestorComponent implements OnInit {
             extractedScientificMetadata.instrument ?? {};
           this.createNewTransferData.extractorMetaData.acquisition =
             extractedScientificMetadata.acquisition ?? {};
-          this.createNewTransferData.extractorMetaDataReady = true;
+          this.createNewTransferData.apiInformation.extractorMetaDataReady =
+            true;
+        } else if (data.error) {
+          this.createNewTransferData.apiInformation.metaDataExtractionFailed =
+            true;
+          this.createNewTransferData.apiInformation.extractMetaDataRequested =
+            false;
+          this.createNewTransferData.apiInformation.extractorMetaDataStatus =
+            data.message;
         }
       },
       (error) => {
-        //console.error("Error receiving SSE data:", error);
+        console.error("Error receiving SSE data:", error);
         this.errorMessage += `${new Date().toLocaleString()}: ${error.message}]<br>`;
-        this.createNewTransferData.apiErrorInformation.metaDataExtraction =
+        this.createNewTransferData.apiInformation.metaDataExtractionFailed =
           true;
+        this.createNewTransferData.apiInformation.extractMetaDataRequested =
+          false;
       },
     );
 
@@ -282,8 +283,10 @@ export class IngestorComponent implements OnInit {
 
     switch (step) {
       case 0:
-        this.createNewTransferData.extractMetaDataRequested = false;
-        this.createNewTransferData.extractorMetaDataReady = false;
+        this.createNewTransferData.apiInformation.extractMetaDataRequested =
+          false;
+        this.createNewTransferData.apiInformation.extractorMetaDataReady =
+          false;
         dialogRef = this.dialog.open(IngestorNewTransferDialogComponent, {
           data: {
             onClickNext: this.onClickNext.bind(this),
