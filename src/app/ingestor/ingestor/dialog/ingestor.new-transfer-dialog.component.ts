@@ -1,7 +1,5 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
-import { HttpClient } from "@angular/common/http";
-import { INGESTOR_API_ENDPOINTS_V1 } from "../helper/ingestor-api-endpoints";
 import {
   DialogDataObject,
   ExtractionMethod,
@@ -9,6 +7,12 @@ import {
   IngestorHelper,
 } from "../helper/ingestor.component-helper";
 import { IngestorMetadataEditorHelper } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
+import { IngestorAPIManager } from "../helper/ingestor-api-manager";
+import {
+  GetDatasetResponse,
+  GetExtractorResponse,
+} from "ingestor/model/models";
+import { PageChangeEvent } from "shared/modules/table/table.component";
 
 @Component({
   selector: "ingestor.new-transfer-dialog",
@@ -16,8 +20,12 @@ import { IngestorMetadataEditorHelper } from "ingestor/ingestor-metadata-editor/
   styleUrls: ["../ingestor.component.scss"],
 })
 export class IngestorNewTransferDialogComponent implements OnInit {
-  extractionMethods: ExtractionMethod[] = [];
-  availableFilePaths: string[] = [];
+  extractionMethods: GetExtractorResponse = null;
+  availableFilePaths: GetDatasetResponse = null;
+  dropdownPageSize = 50;
+  extractionMethodsPage = 0;
+  availableFilePathsPage = 0;
+
   backendURL = "";
   extractionMethodsError = "";
   availableFilePathsError = "";
@@ -30,15 +38,16 @@ export class IngestorNewTransferDialogComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: DialogDataObject,
-    private http: HttpClient,
+    private apiManager: IngestorAPIManager,
   ) {
     this.createNewTransferData = data.createNewTransferData;
     this.backendURL = data.backendURL;
+    this.apiManager.connect(this.backendURL);
   }
 
   ngOnInit(): void {
-    this.apiGetExtractionMethods();
-    this.apiGetAvailableFilePaths();
+    this.loadExtractionMethods();
+    this.loadAvailableFilePaths();
   }
 
   set selectedPath(value: string) {
@@ -59,54 +68,31 @@ export class IngestorNewTransferDialogComponent implements OnInit {
     return this.createNewTransferData.selectedMethod;
   }
 
-  apiGetExtractionMethods(): void {
-    /*try {
-      this.transferDataInformation = await this.apiManager.getTransferList(
-        this.transferDataPageIndex + 1,
-        this.transferDataPageSize,
+  async loadExtractionMethods(): Promise<void> {
+    try {
+      this.extractionMethods = await this.apiManager.getExtractionMethods(
+        this.extractionMethodsPage + 1, // 1-based
+        this.dropdownPageSize,
       );
     } catch (error) {
-      this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
-    }*/
-
-
-    this.http
-      .get(this.backendURL + INGESTOR_API_ENDPOINTS_V1.EXTRACTOR, {
-        withCredentials: true,
-      })
-      .subscribe(
-        (response: any) => {
-          if (response.methods && response.methods.length > 0) {
-            this.extractionMethods = response.methods;
-          } else {
-            this.extractionMethodsError = "No extraction methods found.";
-          }
-        },
-        (error: any) => {
-          this.extractionMethodsError = error.message;
-          console.error(this.extractionMethodsError);
-        },
-      );
+      this.extractionMethodsError = error.message;
+      console.error(this.extractionMethodsError);
+    }
   }
 
-  apiGetAvailableFilePaths(): void {
-    this.http
-      .get(this.backendURL + INGESTOR_API_ENDPOINTS_V1.DATASET, {
-        withCredentials: true,
-      })
-      .subscribe(
-        (response: any) => {
-          if (response.datasets && response.datasets.length > 0) {
-            this.availableFilePaths = response.datasets;
-          } else {
-            this.availableFilePathsError = "No datasets found.";
-          }
-        },
-        (error: any) => {
-          this.availableFilePathsError = error.message;
-          console.error(this.availableFilePathsError);
-        },
+  async loadAvailableFilePaths(): Promise<void> {
+    try {
+      this.availableFilePaths = await this.apiManager.getAvailableFilePaths(
+        this.availableFilePathsPage + 1, // 1-based
+        this.dropdownPageSize,
       );
+      if (this.availableFilePaths.total === 0) {
+        this.availableFilePathsError = "No datasets found.";
+      }
+    } catch (error) {
+      this.availableFilePathsError = error.message;
+      console.error(this.extractionMethodsError);
+    }
   }
 
   generateExampleDataForSciCatHeader(): void {
@@ -137,8 +123,8 @@ export class IngestorNewTransferDialogComponent implements OnInit {
   }
 
   onClickRetryRequests(): void {
-    this.apiGetExtractionMethods();
-    this.apiGetAvailableFilePaths();
+    this.loadExtractionMethods();
+    this.loadAvailableFilePaths();
   }
 
   onClickNext(): void {
@@ -153,5 +139,15 @@ export class IngestorNewTransferDialogComponent implements OnInit {
     this.uiNextButtonReady =
       !!this.createNewTransferData.selectedPath &&
       !!this.createNewTransferData.selectedMethod?.name;
+  }
+
+  onAvailablePathPageChange(event: PageChangeEvent) {
+    this.availableFilePathsPage = event.pageIndex; // 0-based
+    this.loadAvailableFilePaths();
+  }
+
+  onExtractorMethodsPageChange(event: PageChangeEvent) {
+    this.extractionMethodsPage = event.pageIndex; // 0-based
+    this.loadExtractionMethods();
   }
 }

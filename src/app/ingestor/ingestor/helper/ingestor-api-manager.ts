@@ -152,8 +152,13 @@ export class IngestorAPIManager {
     });
   }
 
-  public getExtractionMethods(): Promise<GetExtractorResponse> {
-    const params = new HttpParams();
+  public getExtractionMethods(
+    page: number,
+    pageSize: number,
+  ): Promise<GetExtractorResponse> {
+    const params = new HttpParams()
+      .set("page", page.toString())
+      .set("pageSize", pageSize.toString());
 
     return new Promise((resolve, reject) => {
       this.http
@@ -173,8 +178,13 @@ export class IngestorAPIManager {
     });
   }
 
-  public getAvailableFilePaths(): Promise<GetDatasetResponse> {
-    const params = new HttpParams();
+  public getAvailableFilePaths(
+    page: number,
+    pageSize: number,
+  ): Promise<GetDatasetResponse> {
+    const params = new HttpParams()
+      .set("page", page.toString())
+      .set("pageSize", pageSize.toString());
 
     return new Promise((resolve, reject) => {
       this.http

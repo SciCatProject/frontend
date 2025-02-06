@@ -13,12 +13,12 @@
   <p>Please select the dataset to be uploaded and the appropriate metadata
     extractor method.</p>
 
-  <div>
+  <div *ngIf="availableFilePaths !== null">
     <mat-form-field class="form-full-width">
       <mat-label>File Path</mat-label>
       <input matInput [(ngModel)]="selectedPath" [matAutocomplete]="auto">
       <mat-autocomplete #auto="matAutocomplete">
-        <mat-option *ngFor="let sourceFolder of availableFilePaths"
+        <mat-option *ngFor="let sourceFolder of availableFilePaths.datasets"
           [value]="sourceFolder">
           {{ sourceFolder }}
         </mat-option>
@@ -27,16 +27,16 @@
     <mat-error *ngIf="availableFilePathsError">{{ availableFilePathsError
       }}</mat-error>
 
-    <!-- <mat-paginator [length]="100" [pageSize]="25" aria-label="Select page"
-      [hidePageSize]="true" [showFirstLastButtons]="false">
-    </mat-paginator> -->
+    <mat-paginator *ngIf="availableFilePaths.total > dropdownPageSize" [length]="availableFilePaths.total" [pageSize]="dropdownPageSize" aria-label="Select page"
+      [hidePageSize]="true" [showFirstLastButtons]="false" [pageIndex]="availableFilePathsPage" (page)="onAvailablePathPageChange($event)">
+    </mat-paginator>
   </div>
 
-  <div>
+  <div *ngIf="extractionMethods !== null">
     <mat-form-field class="form-full-width">
       <mat-label>Extraction Method</mat-label>
       <mat-select [(ngModel)]="selectedMethod">
-        <mat-option *ngFor="let method of extractionMethods" [value]="method">
+        <mat-option *ngFor="let method of extractionMethods.methods" [value]="method">
           {{ method.name }}
         </mat-option>
       </mat-select>
@@ -44,9 +44,9 @@
     <mat-error *ngIf="extractionMethodsError">{{ extractionMethodsError
       }}</mat-error>
 
-    <!--<mat-paginator [length]="100" [pageSize]="25" aria-label="Select page"
-      [hidePageSize]="true" [showFirstLastButtons]="false">
-    </mat-paginator>-->
+    <mat-paginator *ngIf="extractionMethods.total > dropdownPageSize" [length]="extractionMethods.total" [pageSize]="dropdownPageSize" aria-label="Select page"
+      [hidePageSize]="true" [showFirstLastButtons]="false" [pageIndex]="extractionMethodsPage" (page)="onExtractorMethodsPageChange($event)">
+    </mat-paginator>
   </div>
 
 </mat-dialog-content>
