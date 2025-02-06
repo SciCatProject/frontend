@@ -11,11 +11,11 @@
 
 export interface DeleteTransferResponse { 
     /**
-     * Ingestion id to abort the ingestion
+     * Transfer id affected
      */
-    ingestId?: string;
+    transferId: string;
     /**
-     * New status of the ingestion.
+     * New status of the transfer.
      */
     status?: string;
 }

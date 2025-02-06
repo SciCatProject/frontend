@@ -14,5 +14,9 @@ export interface PostDatasetRequest {
      * The metadata of the dataset.
      */
     metaData: string;
+    /**
+     * the scicat token for acting on behalf of the user
+     */
+    userToken: string;
 }
 

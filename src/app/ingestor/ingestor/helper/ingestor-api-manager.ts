@@ -1,9 +1,11 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { INGESTOR_API_ENDPOINTS_V1 } from "./ingestor-api-endpoints";
-import { TransferDataListEntry } from "./ingestor.component-helper";
 import {
   DeleteTransferResponse,
+  GetDatasetResponse,
+  GetExtractorResponse,
+  GetTransferResponse,
   OtherHealthResponse,
   OtherVersionResponse,
   PostDatasetRequest,
@@ -17,7 +19,7 @@ export class IngestorAPIManager {
   private connectUrl: string;
   private connectOptions: object;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   public connect(url: string, withCredentials = true): void {
     this.connectUrl = url;
@@ -82,13 +84,13 @@ export class IngestorAPIManager {
   }
 
   public cancelTransfer(transferId: string): Promise<DeleteTransferResponse> {
-    const params = new HttpParams().set("transferId", transferId);
+    const body = { ingestId: transferId };
 
     console.log("Cancel transfer", transferId);
     return new Promise((resolve, reject) => {
       this.http
         .delete(this.connectUrl + INGESTOR_API_ENDPOINTS_V1.TRANSFER, {
-          params,
+          body,
           ...this.connectOptions,
         })
         .subscribe(
@@ -106,7 +108,7 @@ export class IngestorAPIManager {
     page: number,
     pageSize: number,
     transferId?: string,
-  ): Promise<TransferDataListEntry[]> {
+  ): Promise<GetTransferResponse> {
     const params: any = {
       page: page.toString(),
       pageSize: pageSize.toString(),
@@ -122,9 +124,7 @@ export class IngestorAPIManager {
         })
         .subscribe(
           (response) => {
-            const transferDataList: TransferDataListEntry[] =
-              response["transfers"];
-            resolve(transferDataList);
+            resolve(response as GetTransferResponse);
           },
           (error) => {
             reject(error);
@@ -136,12 +136,9 @@ export class IngestorAPIManager {
   public startIngestion(payload: PostDatasetRequest): Promise<string> {
     return new Promise((resolve, reject) => {
       this.http
-        .post(this.connectUrl + INGESTOR_API_ENDPOINTS_V1.DATASET, 
-          payload,
-          {
+        .post(this.connectUrl + INGESTOR_API_ENDPOINTS_V1.DATASET, payload, {
           ...this.connectOptions,
-          }
-        )
+        })
         .subscribe(
           (response) => {
             const returnValue = JSON.stringify(response);
@@ -149,6 +146,48 @@ export class IngestorAPIManager {
           },
           (error) => {
             console.error("Upload failed", error);
+            reject(error);
+          },
+        );
+    });
+  }
+
+  public getExtractionMethods(): Promise<GetExtractorResponse> {
+    const params = new HttpParams();
+
+    return new Promise((resolve, reject) => {
+      this.http
+        .get(this.connectUrl + INGESTOR_API_ENDPOINTS_V1.EXTRACTOR, {
+          params,
+          ...this.connectOptions,
+        })
+        .subscribe(
+          (response: GetExtractorResponse) => {
+            resolve(response as GetExtractorResponse);
+          },
+          (error) => {
+            console.error(error);
+            reject(error);
+          },
+        );
+    });
+  }
+
+  public getAvailableFilePaths(): Promise<GetDatasetResponse> {
+    const params = new HttpParams();
+
+    return new Promise((resolve, reject) => {
+      this.http
+        .get(this.connectUrl + INGESTOR_API_ENDPOINTS_V1.DATASET, {
+          params,
+          ...this.connectOptions,
+        })
+        .subscribe(
+          (response: GetDatasetResponse) => {
+            resolve(response as GetDatasetResponse);
+          },
+          (error) => {
+            console.error(error);
             reject(error);
           },
         );

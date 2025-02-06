@@ -11,11 +11,11 @@
 
 export interface PostDatasetResponse { 
     /**
-     * The unique ingestion id of the dataset.
+     * The unique transfer id of the dataset transfer job.
      */
-    ingestId?: string;
+    transferId: string;
     /**
-     * The status of the ingestion. Can be used to send a message back to the ui.
+     * The status of the transfer. Can be used to send a message back to the ui.
      */
     status?: string;
 }

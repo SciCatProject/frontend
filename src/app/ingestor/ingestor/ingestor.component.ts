@@ -12,7 +12,6 @@ import {
   IngestionRequestInformation,
   IngestorHelper,
   ScientificMetadata,
-  TransferDataListEntry,
 } from "./helper/ingestor.component-helper";
 import { IngestorMetadataSSEService } from "./helper/ingestor.metadata-sse-service";
 import { IngestorAPIManager } from "./helper/ingestor-api-manager";
@@ -21,7 +20,18 @@ import {
   OtherHealthResponse,
   OtherVersionResponse,
   PostDatasetRequest,
+  GetTransferResponse,
 } from "ingestor/model/models";
+import { PageChangeEvent } from "shared/modules/table/table.component";
+import { Store } from "@ngrx/store";
+import {
+  selectIsLoggedIn,
+  selectUserSettingsPageViewModel,
+} from "state-management/selectors/user.selectors";
+import {
+  fetchCurrentUserAction,
+  fetchScicatTokenAction,
+} from "state-management/actions/user.actions";
 
 @Component({
   selector: "ingestor",
@@ -30,6 +40,10 @@ import {
 })
 export class IngestorComponent implements OnInit {
   readonly dialog = inject(MatDialog);
+
+  vm$ = this.store.select(selectUserSettingsPageViewModel);
+  sciCatLoggedIn$ = this.store.select(selectIsLoggedIn);
+  tokenValue: string;
 
   sourceFolder = "";
   loading = false;
@@ -40,7 +54,10 @@ export class IngestorComponent implements OnInit {
 
   lastUsedFacilityBackends: string[] = [];
 
-  transferDataSource: TransferDataListEntry[] = []; // List of files to be transferred
+  transferDataInformation: GetTransferResponse = null;
+  transferDataPageSize = 100;
+  transferDataPageIndex = 0;
+  transferDataPageSizeOptions = [5, 10, 25, 100];
   displayedColumns: string[] = ["transferId", "status", "actions"];
 
   versionInfo: OtherVersionResponse = null;
@@ -61,11 +78,11 @@ export class IngestorComponent implements OnInit {
     private router: Router,
     private apiManager: IngestorAPIManager,
     private sseService: IngestorMetadataSSEService,
-  ) { }
+    private store: Store,
+  ) {}
 
   ngOnInit() {
     this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
-    this.transferDataSource = [];
 
     // Get the GET parameter 'backendUrl' from the URL
     this.route.queryParams.subscribe((params) => {
@@ -76,6 +93,19 @@ export class IngestorComponent implements OnInit {
         this.connectingToFacilityBackend = false;
       }
     });
+
+    // Move that part TODO
+    // Fetch the API token that the ingestor can authenticate to scicat as the user
+    this.vm$.subscribe((settings) => {
+      this.tokenValue = settings.scicatToken;
+
+      if (this.tokenValue === "") {
+        this.store.dispatch(fetchScicatTokenAction());
+      }
+    });
+    this.store.dispatch(fetchCurrentUserAction());
+
+    console.log(this.sciCatLoggedIn$);
   }
 
   async initializeIngestorConnection(
@@ -104,6 +134,7 @@ export class IngestorComponent implements OnInit {
 
     try {
       this.userInfo = await this.apiManager.getUserInfo();
+      this.doRefreshTransferList();
     } catch (error) {
       if (String(error.error).includes("disabled")) {
         this.authIsDisabled = true;
@@ -125,15 +156,18 @@ export class IngestorComponent implements OnInit {
   async ingestDataset(): Promise<boolean> {
     this.loading = true;
 
+    console.log("Token value: ", this.tokenValue);
+
     const payload: PostDatasetRequest = {
       metaData: this.createNewTransferData.mergedMetaDataString,
+      userToken: this.tokenValue,
     };
 
     try {
       const result = await this.apiManager.startIngestion(payload);
       if (result) {
         this.loading = false;
-        this.onClickRefreshTransferList();
+        this.doRefreshTransferList();
         return true;
       }
     } catch (error) {
@@ -305,10 +339,12 @@ export class IngestorComponent implements OnInit {
     if (dialogRef === null) return;
   }
 
-  async onClickRefreshTransferList(): Promise<void> {
+  async doRefreshTransferList(): Promise<void> {
     try {
-      const transferList = await this.apiManager.getTransferList(1, 100);
-      this.transferDataSource = transferList;
+      this.transferDataInformation = await this.apiManager.getTransferList(
+        this.transferDataPageIndex + 1,
+        this.transferDataPageSize,
+      );
     } catch (error) {
       this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
     }
@@ -317,10 +353,16 @@ export class IngestorComponent implements OnInit {
   async onCancelTransfer(transferId: string) {
     try {
       await this.apiManager.cancelTransfer(transferId);
-      this.onClickRefreshTransferList();
+      this.doRefreshTransferList();
     } catch (error) {
       this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
     }
+  }
+
+  onTransferPageChange(event: PageChangeEvent): void {
+    this.transferDataPageIndex = event.pageIndex;
+    this.transferDataPageSize = event.pageSize;
+    this.doRefreshTransferList();
   }
 
   openIngestorLogin(): void {

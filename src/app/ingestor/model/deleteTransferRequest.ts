@@ -11,8 +11,8 @@
 
 export interface DeleteTransferRequest { 
     /**
-     * Ingestion id to abort the ingestion
+     * id of the transfer that should be cancelled
      */
-    ingestId?: string;
+    transferId: string;
 }
 

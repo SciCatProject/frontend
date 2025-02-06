@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  OnInit,
-} from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
 import { HttpClient } from "@angular/common/http";
 import { INGESTOR_API_ENDPOINTS_V1 } from "../helper/ingestor-api-endpoints";
@@ -65,6 +60,16 @@ export class IngestorNewTransferDialogComponent implements OnInit {
   }
 
   apiGetExtractionMethods(): void {
+    /*try {
+      this.transferDataInformation = await this.apiManager.getTransferList(
+        this.transferDataPageIndex + 1,
+        this.transferDataPageSize,
+      );
+    } catch (error) {
+      this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+    }*/
+
+
     this.http
       .get(this.backendURL + INGESTOR_API_ENDPOINTS_V1.EXTRACTOR, {
         withCredentials: true,
