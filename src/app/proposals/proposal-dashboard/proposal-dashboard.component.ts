@@ -5,7 +5,6 @@ import { TableField } from "shared/modules/dynamic-material-table/models/table-f
 import {
   TableSetting,
   TableSettingEventType,
-  VisibleActionMenu,
 } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import {
   TablePagination,
@@ -26,6 +25,7 @@ import { fetchProposalsAction } from "state-management/actions/proposals.actions
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { Direction } from "@angular/cdk/bidi";
+import { getTableSettingsConfig } from "shared/modules/dynamic-material-table/utilizes/default-table-config";
 
 export const tableDefaultColumnsConfig: TableField<any>[] = [
   {
@@ -77,52 +77,16 @@ export const tableDefaultColumnsConfig: TableField<any>[] = [
   },
 ];
 
-const actionMenu: VisibleActionMenu = {
-  json: true,
-  csv: true,
-  print: true,
-  columnSettingPin: true,
-  columnSettingFilter: true,
-  clearFilter: true,
-};
-
-const tableDefaultSettingsConfig: TableSetting = {
-  direction: "ltr",
-  visibleActionMenu: actionMenu,
-  autoHeight: false,
-  saveSettingMode: "simple",
-  settingList: [
-    {
-      direction: "ltr",
-      visibleActionMenu: actionMenu,
-      autoHeight: false,
-      saveSettingMode: "simple",
-      isDefaultSetting: true,
-      isCurrentSetting: true,
-      settingName: "default",
-      rowStyle: {
-        "border-bottom": "1px solid #d2d2d2",
-      },
-      columnSetting: [...tableDefaultColumnsConfig],
-    },
-  ],
-  rowStyle: {
-    "border-bottom": "1px solid #d2d2d2",
-  },
-};
-
-const DEFAULT_PAGE_SIZE = 10;
-
 @Component({
   selector: "app-proposal-dashboard",
   templateUrl: "./proposal-dashboard.component.html",
   styleUrls: ["./proposal-dashboard.component.scss"],
 })
 export class ProposalDashboardComponent implements OnInit {
-  vm$ = this.store.select(selectProposals);
+  proposals$ = this.store.select(selectProposals);
   proposalsCount$ = this.store.select(selectProposalsCount);
 
-  tableName = "proposal-table";
+  tableName = "proposalTable";
 
   columns!: TableField<any>[];
 
@@ -156,6 +120,8 @@ export class ProposalDashboardComponent implements OnInit {
 
   globalTextSearch = "";
 
+  defaultPageSize = 10;
+
   @Output() pageChange = new EventEmitter<PageChangeEvent>();
 
   constructor(
@@ -171,50 +137,34 @@ export class ProposalDashboardComponent implements OnInit {
     }
     this.store.dispatch(
       fetchProposalsAction({
-        limit: queryParams.pageSize || DEFAULT_PAGE_SIZE,
+        limit: queryParams.pageSize || this.defaultPageSize,
         skip: queryParams.pageIndex * queryParams.pageSize,
         search: queryParams.textSearch,
       }),
     );
 
-    this.vm$.subscribe((data) => {
+    const savedTableConfig = this.loadSavedColumnInfo(this.tableName);
+
+    const tableSettingsConfig = getTableSettingsConfig(
+      this.tableName,
+      tableDefaultColumnsConfig,
+      savedTableConfig,
+    );
+
+    this.proposals$.subscribe((data) => {
       this.dataSource.next(data);
       this.pending = false;
-    });
 
-    this.proposalsCount$.subscribe((count) => {
-      const pagginationConfig = {
-        pageSizeOptions: [5, 10, 25, 100],
-        pageIndex: queryParams.pageIndex,
-        pageSize: queryParams.pageSize || DEFAULT_PAGE_SIZE,
-        length: count,
-      };
+      this.proposalsCount$.subscribe((count) => {
+        const pagginationConfig = {
+          pageSizeOptions: [5, 10, 25, 100],
+          pageIndex: queryParams.pageIndex,
+          pageSize: queryParams.pageSize || this.defaultPageSize,
+          length: count,
+        };
 
-      const foundTableSetting = tableDefaultSettingsConfig.settingList.find(
-        (s) => s.settingName === this.tableName,
-      );
-
-      const tableSettingsConfig: TableSetting = {
-        ...tableDefaultSettingsConfig,
-      };
-
-      if (!foundTableSetting) {
-        const savedTableConfig = this.loadSavedColumnInfo(this.tableName);
-
-        if (savedTableConfig) {
-          tableSettingsConfig.settingList.push({
-            ...tableDefaultSettingsConfig.settingList[0],
-            settingName: this.tableName,
-            isCurrentSetting: true,
-            isDefaultSetting: false,
-            columnSetting: savedTableConfig,
-          });
-
-          tableSettingsConfig.settingList[0].isCurrentSetting = false;
-        }
-      }
-
-      this.initTable(tableSettingsConfig, pagginationConfig);
+        this.initTable(tableSettingsConfig, pagginationConfig);
+      });
     });
   }
 
@@ -274,7 +224,10 @@ export class ProposalDashboardComponent implements OnInit {
   }
 
   saveTableSettings(setting: TableSetting) {
-    this.saveColumnInfo(setting.columnSetting, setting.settingName);
+    this.saveColumnInfo(
+      setting.columnSetting,
+      setting.settingName || this.tableName,
+    );
   }
 
   onSettingChange(event: {
@@ -296,7 +249,7 @@ export class ProposalDashboardComponent implements OnInit {
     }
   }
 
-  loadSavedColumnInfo(saveName: string): TableField<any>[] {
+  loadSavedColumnInfo(saveName: string): TableField<any>[] | null {
     // Only load if a save name is passed in
     if (saveName) {
       if (!localStorage) {
@@ -313,10 +266,7 @@ export class ProposalDashboardComponent implements OnInit {
     return null;
   }
 
-  saveColumnInfo(
-    columnInfo: TableField<any>[],
-    saveName = "proposal-table",
-  ): void {
+  saveColumnInfo(columnInfo: TableField<any>[], saveName: string): void {
     if (saveName) {
       if (!localStorage) {
         return;

@@ -620,7 +620,7 @@ export class DynamicMatTableComponent<T extends TableRow>
     } else if (e.type === TableMenuAction.SaveSimpleSetting) {
       const newSetting = Object.assign({}, this.setting);
       delete newSetting.settingList;
-      newSetting.settingName = e.data || this.tableName;
+      newSetting.settingName = this.tableName;
       const settingIndex = (this.setting.settingList || []).findIndex(
         (f) => f.settingName === newSetting.settingName,
       );
@@ -628,7 +628,7 @@ export class DynamicMatTableComponent<T extends TableRow>
         this.setting.settingList.push(JSON.parse(JSON.stringify(newSetting)));
         this.settingChange.emit({
           type: TableSettingEventType.create,
-          setting: this.tableSetting,
+          setting: newSetting,
         });
       } else {
         this.setting.settingList[settingIndex] = JSON.parse(
@@ -636,7 +636,7 @@ export class DynamicMatTableComponent<T extends TableRow>
         );
         this.settingChange.emit({
           type: TableSettingEventType.save,
-          setting: this.tableSetting,
+          setting: newSetting,
         });
       }
     } else if (e.type === TableMenuAction.DeleteSetting) {
