@@ -107,7 +107,6 @@ export class ScicatDataService {
         }
       }
     });
-    // console.log("Result of map after single syntax:",result)
 
     return result;
   };

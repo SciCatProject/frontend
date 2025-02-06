@@ -51,20 +51,27 @@ export const getTableSettingsConfig = (
   tableSettingsConfig.settingList[defaultSettingIndex].columnSetting =
     tableDefaultColumnsConfig;
 
-  const foundTableSetting = tableSettingsConfig.settingList.find(
+  const savedTableSettingIndex = tableSettingsConfig.settingList.findIndex(
     (s) => s.settingName === tableName,
   );
 
-  if (!foundTableSetting && savedTableConfig) {
-    tableSettingsConfig.settingList.push({
-      ...tableDefaultSettingsConfig.settingList[defaultSettingIndex],
-      settingName: tableName,
-      isCurrentSetting: true,
-      isDefaultSetting: false,
-      columnSetting: savedTableConfig,
-    });
+  if (savedTableSettingIndex < 0) {
+    if (savedTableConfig) {
+      tableSettingsConfig.settingList.push({
+        ...tableDefaultSettingsConfig.settingList[defaultSettingIndex],
+        settingName: tableName,
+        isCurrentSetting: true,
+        isDefaultSetting: false,
+        columnSetting: savedTableConfig,
+      });
 
-    tableSettingsConfig.settingList[defaultSettingIndex].isCurrentSetting =
+      tableSettingsConfig.settingList[defaultSettingIndex].isCurrentSetting =
+        false;
+    }
+  } else {
+    tableSettingsConfig.settingList[savedTableSettingIndex].isCurrentSetting =
+      true;
+    tableSettingsConfig.settingList[savedTableSettingIndex].isDefaultSetting =
       false;
   }
 

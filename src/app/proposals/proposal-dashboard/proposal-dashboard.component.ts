@@ -17,15 +17,13 @@ import {
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { Store } from "@ngrx/store";
-import {
-  selectProposals,
-  selectProposalsCount,
-} from "state-management/selectors/proposals.selectors";
+import { selectProposalsWithCountAndTableSettings } from "state-management/selectors/proposals.selectors";
 import { fetchProposalsAction } from "state-management/actions/proposals.actions";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { Direction } from "@angular/cdk/bidi";
 import { getTableSettingsConfig } from "shared/modules/dynamic-material-table/utilizes/default-table-config";
+import { updateUserSettingsAction } from "state-management/actions/user.actions";
 
 export const tableDefaultColumnsConfig: TableField<any>[] = [
   {
@@ -83,10 +81,11 @@ export const tableDefaultColumnsConfig: TableField<any>[] = [
   styleUrls: ["./proposal-dashboard.component.scss"],
 })
 export class ProposalDashboardComponent implements OnInit {
-  proposals$ = this.store.select(selectProposals);
-  proposalsCount$ = this.store.select(selectProposalsCount);
+  proposalsWithCountAndTableSettings$ = this.store.select(
+    selectProposalsWithCountAndTableSettings,
+  );
 
-  tableName = "proposalTable";
+  tableName = "proposalsTable";
 
   columns!: TableField<any>[];
 
@@ -122,6 +121,8 @@ export class ProposalDashboardComponent implements OnInit {
 
   defaultPageSize = 10;
 
+  tablesSettings: object;
+
   @Output() pageChange = new EventEmitter<PageChangeEvent>();
 
   constructor(
@@ -143,19 +144,19 @@ export class ProposalDashboardComponent implements OnInit {
       }),
     );
 
-    const savedTableConfig = this.loadSavedColumnInfo(this.tableName);
+    this.proposalsWithCountAndTableSettings$.subscribe(
+      ({ proposals, count, tablesSettings }) => {
+        this.tablesSettings = tablesSettings;
+        this.dataSource.next(proposals);
+        this.pending = false;
 
-    const tableSettingsConfig = getTableSettingsConfig(
-      this.tableName,
-      tableDefaultColumnsConfig,
-      savedTableConfig,
-    );
+        const savedTableConfig = tablesSettings?.[this.tableName];
 
-    this.proposals$.subscribe((data) => {
-      this.dataSource.next(data);
-      this.pending = false;
-
-      this.proposalsCount$.subscribe((count) => {
+        const tableSettingsConfig = getTableSettingsConfig(
+          this.tableName,
+          tableDefaultColumnsConfig,
+          savedTableConfig?.columns,
+        );
         const pagginationConfig = {
           pageSizeOptions: [5, 10, 25, 100],
           pageIndex: queryParams.pageIndex,
@@ -163,9 +164,11 @@ export class ProposalDashboardComponent implements OnInit {
           length: count,
         };
 
-        this.initTable(tableSettingsConfig, pagginationConfig);
-      });
-    });
+        if (tableSettingsConfig?.settingList.length) {
+          this.initTable(tableSettingsConfig, pagginationConfig);
+        }
+      },
+    );
   }
 
   initTable(
@@ -224,9 +227,20 @@ export class ProposalDashboardComponent implements OnInit {
   }
 
   saveTableSettings(setting: TableSetting) {
-    this.saveColumnInfo(
-      setting.columnSetting,
-      setting.settingName || this.tableName,
+    this.pending = true;
+    const tablesSettings = {
+      ...this.tablesSettings,
+      [setting.settingName || this.tableName]: {
+        columns: setting.columnSetting,
+      },
+    };
+
+    this.store.dispatch(
+      updateUserSettingsAction({
+        property: {
+          tablesSettings,
+        },
+      }),
     );
   }
 
@@ -246,33 +260,6 @@ export class ProposalDashboardComponent implements OnInit {
     if (event.event === RowEventType.RowClick) {
       const id = encodeURIComponent(event.sender.row.proposalId);
       this.router.navigateByUrl("/proposals/" + id);
-    }
-  }
-
-  loadSavedColumnInfo(saveName: string): TableField<any>[] | null {
-    // Only load if a save name is passed in
-    if (saveName) {
-      if (!localStorage) {
-        return null;
-      }
-
-      const loadedInfo = localStorage.getItem(`${saveName}`);
-
-      if (loadedInfo) {
-        return JSON.parse(loadedInfo);
-      }
-    }
-
-    return null;
-  }
-
-  saveColumnInfo(columnInfo: TableField<any>[], saveName: string): void {
-    if (saveName) {
-      if (!localStorage) {
-        return;
-      }
-
-      localStorage.setItem(`${saveName}`, JSON.stringify(columnInfo));
     }
   }
 }

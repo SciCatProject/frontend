@@ -19,7 +19,5 @@ export class DatablocksComponent {
     this.blockSource = new MatTableDataSource(this.datablocks);
   }
 
-  onSelect(row: Record<string, unknown>) {
-    console.log(row);
-  }
+  onSelect(row: Record<string, unknown>) {}
 }

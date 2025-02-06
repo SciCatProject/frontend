@@ -332,7 +332,6 @@ export class UserEffects {
 
               userSettings[setting] = items;
             }
-            delete userSettings.externalSettings;
 
             return fromActions.fetchUserSettingsCompleteAction({
               userSettings,
@@ -433,7 +432,12 @@ export class UserEffects {
       concatLatestFrom(() => [this.user$]),
       takeWhile(([action, user]) => !!user),
       switchMap(([{ property }, user]) => {
-        const settingsToNest = ["columns", "conditions", "filters"];
+        const settingsToNest = [
+          "columns",
+          "conditions",
+          "filters",
+          "tablesSettings",
+        ];
         const propertyKeys = Object.keys(property);
         const newProperty = {};
         let useExternalSettings = false;
@@ -471,7 +475,6 @@ export class UserEffects {
             userSettings["columns"] = (
               userSettings.externalSettings as any
             ).columns;
-            delete userSettings.externalSettings;
             return fromActions.updateUserSettingsCompleteAction({
               userSettings,
             });
