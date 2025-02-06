@@ -86,7 +86,7 @@ const actionMenu: VisibleActionMenu = {
   clearFilter: true,
 };
 
-const tableSettingsConfig: TableSetting = {
+const tableDefaultSettingsConfig: TableSetting = {
   direction: "ltr",
   visibleActionMenu: actionMenu,
   autoHeight: false,
@@ -121,6 +121,8 @@ const DEFAULT_PAGE_SIZE = 10;
 export class ProposalDashboardComponent implements OnInit {
   vm$ = this.store.select(selectProposals);
   proposalsCount$ = this.store.select(selectProposalsCount);
+
+  tableName = "proposal-table";
 
   columns!: TableField<any>[];
 
@@ -188,21 +190,28 @@ export class ProposalDashboardComponent implements OnInit {
         length: count,
       };
 
-      const savedTableConfig = this.loadSavedColumnInfo("proposal-table");
-      const foundTableSetting = tableSettingsConfig.settingList.find(
-        (s) => s.settingName === "proposal-table",
+      const foundTableSetting = tableDefaultSettingsConfig.settingList.find(
+        (s) => s.settingName === this.tableName,
       );
 
-      if (savedTableConfig && !foundTableSetting) {
-        tableSettingsConfig.settingList.push({
-          ...tableSettingsConfig.settingList[0],
-          settingName: "proposal-table",
-          isCurrentSetting: true,
-          isDefaultSetting: false,
-          columnSetting: savedTableConfig,
-        });
+      const tableSettingsConfig: TableSetting = {
+        ...tableDefaultSettingsConfig,
+      };
 
-        tableSettingsConfig.settingList[0].isCurrentSetting = false;
+      if (!foundTableSetting) {
+        const savedTableConfig = this.loadSavedColumnInfo(this.tableName);
+
+        if (savedTableConfig) {
+          tableSettingsConfig.settingList.push({
+            ...tableDefaultSettingsConfig.settingList[0],
+            settingName: this.tableName,
+            isCurrentSetting: true,
+            isDefaultSetting: false,
+            columnSetting: savedTableConfig,
+          });
+
+          tableSettingsConfig.settingList[0].isCurrentSetting = false;
+        }
       }
 
       this.initTable(tableSettingsConfig, pagginationConfig);

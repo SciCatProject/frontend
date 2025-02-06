@@ -588,6 +588,7 @@ export class DynamicMatTableComponent<T extends TableRow>
       defaultColumns.columnSetting.forEach((c) => {
         columns.push(Object.assign({}, c));
       });
+      this.tableSetting.columnSetting = columns;
       this.refreshColumn(columns);
       this.refreshUI();
       this.settingChange.emit({

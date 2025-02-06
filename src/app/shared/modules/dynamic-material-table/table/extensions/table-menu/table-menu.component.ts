@@ -94,7 +94,6 @@ export class TableMenuComponent {
       type: TableMenuAction.TableSetting,
       data: this.currentTableSetting,
     });
-    this.tableService.saveColumnInfo(this.currentTableSetting.columnSetting);
   }
 
   setting_onClick(i) {
