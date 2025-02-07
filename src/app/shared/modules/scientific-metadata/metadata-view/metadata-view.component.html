@@ -26,7 +26,10 @@
         Unit
       </mat-header-cell>
       <mat-cell *matCellDef="let metadata">
-        <ng-template [ngIf]="metadata.unit.length > 0" [ngIfElse]="noUnit">
+        <ng-template
+          [ngIf]="metadata.unit && metadata.unit.length > 0"
+          [ngIfElse]="noUnit"
+        >
           <span class="unit-input">
             {{ metadata.unit | prettyUnit }}
             <mat-icon
