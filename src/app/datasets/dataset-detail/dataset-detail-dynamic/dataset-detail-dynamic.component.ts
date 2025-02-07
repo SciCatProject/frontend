@@ -58,9 +58,7 @@ export class DatasetDetailDynamicComponent implements OnInit {
     private store: Store,
     private fb: FormBuilder,
   ) {
-    this.translateService.use(
-      this.appConfig.datasetDetailViewLabelOption?.currentLabelSet,
-    );
+    this.translateService.use("datasetCustom");
   }
 
   ngOnInit() {
