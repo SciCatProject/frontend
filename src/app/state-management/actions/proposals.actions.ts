@@ -149,22 +149,9 @@ export const setDateRangeFilterAction = createAction(
   props<{ begin: string; end: string }>(),
 );
 
-// TODO: If this is not used should be removed.
-export const clearFacetsAction = createAction("[Proposal] Clear Facets");
-// TODO: If this is not used should be removed.
-export const changePageAction = createAction(
-  "[Proposal] Change Page",
-  props<{ page: number; limit: number }>(),
-);
 export const changeDatasetsPageAction = createAction(
   "[Proposal] Change Datasets Page",
   props<{ page: number; limit: number }>(),
-);
-
-// TODO: If this is not used should be removed.
-export const sortByColumnAction = createAction(
-  "[Proposal] Sort By Column",
-  props<{ column: string; direction: string }>(),
 );
 
 export const clearProposalsStateAction = createAction("[Proposal] Clear State");

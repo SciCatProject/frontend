@@ -103,7 +103,9 @@ describe("ProposalEffects", () => {
         const outcome1 = fromActions.fetchProposalsCompleteAction({
           proposals,
         });
-        const outcome2 = fromActions.fetchCountAction({ fields: {} });
+        const outcome2 = fromActions.fetchCountAction({
+          fields: { text: undefined },
+        });
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: proposals });
@@ -115,103 +117,6 @@ describe("ProposalEffects", () => {
 
       it("should result in a fetchProposalsFailedAction", () => {
         const action = fromActions.fetchProposalsAction({});
-        const outcome = fromActions.fetchProposalsFailedAction();
-
-        actions = hot("-a", { a: action });
-        const response = cold("-#", {});
-        proposalApi.proposalsControllerFullquery.and.returnValue(response);
-
-        const expected = cold("--b", { b: outcome });
-        expect(effects.fetchProposals$).toBeObservable(expected);
-      });
-    });
-
-    describe("ofType changePageAction", () => {
-      const page = 1;
-      const limit = 25;
-
-      it("should result in a fetchProposalsCompleteAction and a fetchCountAction", () => {
-        const proposals = [proposal];
-        const action = fromActions.changePageAction({ page, limit });
-        const outcome1 = fromActions.fetchProposalsCompleteAction({
-          proposals,
-        });
-        const outcome2 = fromActions.fetchCountAction({ fields: {} });
-
-        actions = hot("-a", { a: action });
-        const response = cold("-a|", { a: proposals });
-        proposalApi.proposalsControllerFullquery.and.returnValue(response);
-
-        const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
-        expect(effects.fetchProposals$).toBeObservable(expected);
-      });
-
-      it("should result in a fetchProposalsFailedAction", () => {
-        const action = fromActions.changePageAction({ page, limit });
-        const outcome = fromActions.fetchProposalsFailedAction();
-
-        actions = hot("-a", { a: action });
-        const response = cold("-#", {});
-        proposalApi.proposalsControllerFullquery.and.returnValue(response);
-
-        const expected = cold("--b", { b: outcome });
-        expect(effects.fetchProposals$).toBeObservable(expected);
-      });
-    });
-
-    // TODO: When sortByColumn is used this can be fixed
-    // describe("ofType sortByColumnAction", () => {
-    //   const column = "test";
-    //   const direction = "desc";
-
-    //   it("should result in a fetchProposalsCompleteAction and a fetchCountAction", () => {
-    //     const proposals = [proposal];
-    //     const action = fromActions.sortByColumnAction({ column, direction });
-    //     const outcome1 = fromActions.fetchProposalsCompleteAction({
-    //       proposals,
-    //     });
-    //     const outcome2 = fromActions.fetchCountAction({});
-
-    //     actions = hot("-a", { a: action });
-    //     const response = cold("-a|", { a: proposals });
-    //     proposalApi.proposalsControllerFullquery.and.returnValue(response);
-
-    //     const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
-    //     expect(effects.fetchProposals$).toBeObservable(expected);
-    //   });
-
-    //   it("should result in a fetchProposalsFailedAction", () => {
-    //     const action = fromActions.sortByColumnAction({ column, direction });
-    //     const outcome = fromActions.fetchProposalsFailedAction();
-
-    //     actions = hot("-a", { a: action });
-    //     const response = cold("-#", {});
-    //     proposalApi.proposalsControllerFullquery.and.returnValue(response);
-
-    //     const expected = cold("--b", { b: outcome });
-    //     expect(effects.fetchProposals$).toBeObservable(expected);
-    //   });
-    // });
-
-    describe("ofType clearFacetsAction", () => {
-      it("should result in a fetchProposalsCompleteAction and a fetchCountAction", () => {
-        const proposals = [proposal];
-        const action = fromActions.clearFacetsAction();
-        const outcome1 = fromActions.fetchProposalsCompleteAction({
-          proposals,
-        });
-        const outcome2 = fromActions.fetchCountAction({ fields: {} });
-
-        actions = hot("-a", { a: action });
-        const response = cold("-a|", { a: proposals });
-        proposalApi.proposalsControllerFullquery.and.returnValue(response);
-
-        const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
-        expect(effects.fetchProposals$).toBeObservable(expected);
-      });
-
-      it("should result in a fetchProposalsFailedAction", () => {
-        const action = fromActions.clearFacetsAction();
         const outcome = fromActions.fetchProposalsFailedAction();
 
         actions = hot("-a", { a: action });
