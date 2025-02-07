@@ -957,9 +957,11 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   dropListDropped(event: CdkDragDrop<string[]>) {
+    const columnPreviousIndex = event.item.data.columnIndex;
+
     if (event) {
       this.dragDropData.dropColumnIndex = event.currentIndex;
-      this.moveColumn(event.previousIndex, event.currentIndex);
+      this.moveColumn(columnPreviousIndex, event.currentIndex);
     }
   }
 
