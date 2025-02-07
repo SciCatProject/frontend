@@ -132,20 +132,24 @@ export class ProposalDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const queryParams = this.route.snapshot.queryParams;
-    if (queryParams.textSearch) {
-      this.globalTextSearch = queryParams.textSearch;
+    const initialQueryParams = this.route.snapshot.queryParams;
+    if (initialQueryParams.textSearch) {
+      this.globalTextSearch = initialQueryParams.textSearch;
     }
     this.store.dispatch(
       fetchProposalsAction({
-        limit: queryParams.pageSize || this.defaultPageSize,
-        skip: queryParams.pageIndex * queryParams.pageSize,
-        search: queryParams.textSearch,
+        limit: initialQueryParams.pageSize || this.defaultPageSize,
+        skip: initialQueryParams.pageIndex * initialQueryParams.pageSize,
+        search: initialQueryParams.textSearch,
       }),
     );
 
     this.proposalsWithCountAndTableSettings$.subscribe(
       ({ proposals, count, tablesSettings }) => {
+        const queryParams = this.route.snapshot.queryParams;
+        if (queryParams.textSearch) {
+          this.globalTextSearch = queryParams.textSearch;
+        }
         this.tablesSettings = tablesSettings;
         this.dataSource.next(proposals);
         this.pending = false;

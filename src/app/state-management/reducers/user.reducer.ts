@@ -73,13 +73,13 @@ const reducer = createReducer(
           ...state,
           settings,
           columns,
-          tablesSettings: externalSettings.tablesSettings,
+          tablesSettings: externalSettings?.tablesSettings,
         };
       } else {
         return {
           ...state,
           settings,
-          tablesSettings: externalSettings.tablesSettings,
+          tablesSettings: externalSettings?.tablesSettings,
         };
       }
     },
@@ -100,13 +100,13 @@ const reducer = createReducer(
           ...state,
           settings,
           columns,
-          tablesSettings: externalSettings.tablesSettings,
+          tablesSettings: externalSettings?.tablesSettings,
         };
       } else {
         return {
           ...state,
           settings,
-          tablesSettings: externalSettings.tablesSettings,
+          tablesSettings: externalSettings?.tablesSettings,
         };
       }
     },
