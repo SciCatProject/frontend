@@ -94,7 +94,7 @@ describe("Datasets general", () => {
     });
   });
 
-  describe.only("Dataset page filter and scientific condition UI test", () => {
+  describe("Dataset page filter and scientific condition UI test", () => {
     it("should not be able to add duplicated conditions ", () => {
       cy.visit("/datasets");
 

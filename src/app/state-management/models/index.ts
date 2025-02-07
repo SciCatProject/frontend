@@ -21,11 +21,10 @@ export interface LabelMaps {
   [key: string]: Record<string, string>;
 }
 
-export interface DatasetDetailViewLabelOption {
-  currentLabelSet: string;
-  labelSets: {
-    [key: string]: Record<string, string>;
-  };
+export interface LabelsLocalization {
+  datasetDefault: Record<string, string>;
+  datasetCustom: Record<string, string>;
+  proposalDefault: Record<string, string>;
 }
 
 export interface DatasetDetailComponentConfig {

@@ -57,11 +57,7 @@ describe("DatasetDetailComponent", () => {
     navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
 
-  const getConfig = () => ({
-    datasetDetailViewLabelOption: {
-      currentLabel: "test",
-    },
-  });
+  const getConfig = () => ({});
 
   let store: MockStore;
 

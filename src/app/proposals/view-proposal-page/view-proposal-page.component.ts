@@ -30,9 +30,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     private store: Store,
     private translateService: TranslateService,
   ) {
-    this.translateService.use(
-      this.appConfig.datasetDetailViewLabelOption?.currentLabelSet,
-    );
+    this.translateService.use("proposalDefault");
   }
 
   ngOnInit() {
