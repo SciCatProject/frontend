@@ -39,6 +39,7 @@ export const getTableSettingsConfig = (
   tableName: string,
   tableDefaultColumnsConfig: TableField<any>[],
   savedTableConfig?: TableField<any>[],
+  tableSort?: { sortColumn: string; sortDirection: "asc" | "desc" },
 ) => {
   const tableSettingsConfig: TableSetting = {
     ...tableDefaultSettingsConfig,
@@ -73,6 +74,10 @@ export const getTableSettingsConfig = (
       true;
     tableSettingsConfig.settingList[savedTableSettingIndex].isDefaultSetting =
       false;
+  }
+
+  if (tableSort) {
+    tableSettingsConfig.tableSort = tableSort;
   }
 
   return tableSettingsConfig;

@@ -13,7 +13,9 @@ import {
 import { PrintConfig } from "shared/modules/dynamic-material-table/models/print-config.model";
 import {
   IRowEvent,
+  ITableEvent,
   RowEventType,
+  TableEventType,
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { Store } from "@ngrx/store";
@@ -24,6 +26,7 @@ import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { Direction } from "@angular/cdk/bidi";
 import { getTableSettingsConfig } from "shared/modules/dynamic-material-table/utilizes/default-table-config";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
+import { Sort } from "@angular/material/sort";
 
 export const tableDefaultColumnsConfig: TableField<any>[] = [
   {
@@ -141,6 +144,8 @@ export class ProposalDashboardComponent implements OnInit {
         limit: initialQueryParams.pageSize || this.defaultPageSize,
         skip: initialQueryParams.pageIndex * initialQueryParams.pageSize,
         search: initialQueryParams.textSearch,
+        sortColumn: initialQueryParams.sortColumn,
+        sortDirection: initialQueryParams.sortDirection,
       }),
     );
 
@@ -154,12 +159,21 @@ export class ProposalDashboardComponent implements OnInit {
         this.dataSource.next(proposals);
         this.pending = false;
 
+        let tableSort: TableSetting["tableSort"];
+        if (queryParams.sortDirection && queryParams.sortColumn) {
+          tableSort = {
+            sortColumn: queryParams.sortColumn,
+            sortDirection: queryParams.sortDirection,
+          };
+        }
+
         const savedTableConfig = tablesSettings?.[this.tableName];
 
         const tableSettingsConfig = getTableSettingsConfig(
           this.tableName,
           tableDefaultColumnsConfig,
           savedTableConfig?.columns,
+          tableSort,
         );
         const pagginationConfig = {
           pageSizeOptions: [5, 10, 25, 100],
@@ -179,9 +193,11 @@ export class ProposalDashboardComponent implements OnInit {
     settingConfig: TableSetting,
     paginationConfig: TablePagination,
   ): void {
-    this.columns = settingConfig.settingList.find(
+    const currentColumnSetting = settingConfig.settingList.find(
       (s) => s.isCurrentSetting,
-    ).columnSetting;
+    )?.columnSetting;
+
+    this.columns = currentColumnSetting;
     this.setting = settingConfig;
     this.pagination = paginationConfig;
   }
@@ -192,9 +208,11 @@ export class ProposalDashboardComponent implements OnInit {
       pageIndex: pagination.pageIndex,
       pageSize: pagination.pageSize,
     };
+    const { textSearch, sortColumn, sortDirection } =
+      this.route.snapshot.queryParams;
 
-    if (this.route.snapshot.queryParams.textSearch) {
-      queryParams.textSearch = this.route.snapshot.queryParams.textSearch;
+    if (textSearch) {
+      queryParams.textSearch = textSearch;
     }
     this.router.navigate([], {
       queryParams,
@@ -206,6 +224,8 @@ export class ProposalDashboardComponent implements OnInit {
         limit: pagination.pageSize,
         skip: pagination.pageIndex * pagination.pageSize,
         search: queryParams.textSearch as string,
+        sortColumn: sortColumn,
+        sortDirection: sortDirection,
       }),
     );
   }
@@ -215,17 +235,21 @@ export class ProposalDashboardComponent implements OnInit {
     this.pagination.pageIndex = 0;
     this.router.navigate([], {
       queryParams: {
-        textSearch: text,
+        textSearch: text || undefined,
         pageIndex: 0,
       },
       queryParamsHandling: "merge",
     });
+
+    const { sortColumn, sortDirection } = this.route.snapshot.queryParams;
 
     this.store.dispatch(
       fetchProposalsAction({
         limit: this.pagination.pageSize,
         skip: this.pagination.pageIndex * this.pagination.pageSize,
         search: text,
+        sortColumn: sortColumn,
+        sortDirection: sortDirection,
       }),
     );
   }
@@ -264,6 +288,35 @@ export class ProposalDashboardComponent implements OnInit {
     if (event.event === RowEventType.RowClick) {
       const id = encodeURIComponent(event.sender.row.proposalId);
       this.router.navigateByUrl("/proposals/" + id);
+    }
+  }
+
+  onTableEvent({ event, sender }: ITableEvent) {
+    if (event === TableEventType.SortChanged) {
+      const { active: sortColumn, direction: sortDirection } = sender as Sort;
+      this.pending = true;
+      this.router.navigate([], {
+        queryParams: {
+          pageIndex: 0,
+          sortDirection: sortDirection || undefined,
+          sortColumn: sortDirection ? sortColumn : undefined,
+        },
+        queryParamsHandling: "merge",
+      });
+
+      const queryParams = this.route.snapshot.queryParams;
+
+      this.store.dispatch(
+        fetchProposalsAction({
+          limit: queryParams.pageSize,
+          skip:
+            queryParams.pageIndex *
+            (queryParams.pageSize || this.defaultPageSize),
+          search: queryParams.textSearch,
+          sortColumn: sortColumn,
+          sortDirection: sortDirection,
+        }),
+      );
     }
   }
 }
