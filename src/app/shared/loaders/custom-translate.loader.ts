@@ -7,13 +7,15 @@ export class CustomTranslateLoader implements TranslateLoader {
 
   constructor(private appConfigService: AppConfigService) {}
 
-  getTranslation(): Observable<TranslationObject> {
-    const { currentLabelSet = "", labelSets = {} } =
-      this.appConfig.datasetDetailViewLabelOption || {};
-
-    if (currentLabelSet in labelSets) {
-      return of(labelSets[currentLabelSet]);
+  getTranslation(lang: string): Observable<TranslationObject> {
+    if (
+      this.appConfig.labelsLocalization &&
+      this.appConfig.labelsLocalization[lang]
+    ) {
+      return of(this.appConfig.labelsLocalization[lang]);
     }
+
+    console.warn(`Translation for "${lang}" not found.`);
     return of({});
   }
 }

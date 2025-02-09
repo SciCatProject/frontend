@@ -37,6 +37,7 @@ import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
 import { ProposalLogbookComponent } from "./proposal-logbook/proposal-logbook.component";
 import { RelatedProposalsComponent } from "./related-proposals/related-proposals.component";
 import { ProposalDatasetsComponent } from "./proposal-datasets/proposal-datasets.component";
+import { TranslateModule } from "@ngx-translate/core";
 
 @NgModule({
   imports: [
@@ -62,6 +63,7 @@ import { ProposalDatasetsComponent } from "./proposal-datasets/proposal-datasets
     SharedScicatFrontendModule,
     StoreModule.forFeature("proposals", proposalsReducer),
     StoreModule.forFeature("logbooks", logbooksReducer),
+    TranslateModule,
   ],
   declarations: [
     ViewProposalPageComponent,

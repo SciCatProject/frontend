@@ -3,9 +3,9 @@ import { Injectable } from "@angular/core";
 import { timeout } from "rxjs/operators";
 import {
   DatasetDetailComponentConfig,
-  DatasetDetailViewLabelOption,
   DatasetsListSettings,
   LabelMaps,
+  LabelsLocalization,
   TableColumn,
 } from "state-management/models";
 
@@ -103,8 +103,8 @@ export interface AppConfig {
   labelMaps: LabelMaps;
   thumbnailFetchLimitPerPage: number;
   maxFileUploadSizeInMb?: string;
-  datasetDetailViewLabelOption?: DatasetDetailViewLabelOption;
   datasetDetailComponent?: DatasetDetailComponentConfig;
+  labelsLocalization?: LabelsLocalization;
 }
 
 @Injectable()
