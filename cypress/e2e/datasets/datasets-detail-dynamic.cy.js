@@ -4,7 +4,7 @@ import { mergeConfig } from "../../support/utils";
 describe("Datasets Detail View Dynamic", () => {
   const dynamicComponentConfig = testConfig.dynamicDetialViewComponent;
   const customizedLabelSets =
-    dynamicComponentConfig.datasetDetailViewLabelOption.labelSets.test;
+    dynamicComponentConfig.labelsLocalization.datasetCustom;
   const customizedComponents =
     dynamicComponentConfig.datasetDetailComponent.customization;
 

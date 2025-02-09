@@ -7,6 +7,17 @@ import { MatButtonModule } from "@angular/material/button";
 import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { AppConfigService } from "app-config.service";
 import { StoreModule } from "@ngrx/store";
+import {
+  TranslateLoader,
+  TranslateModule,
+  TranslationObject,
+} from "@ngx-translate/core";
+import { Observable, of } from "rxjs";
+class MockTranslateLoader implements TranslateLoader {
+  getTranslation(): Observable<TranslationObject> {
+    return of({});
+  }
+}
 
 const getConfig = () => ({
   jsonMetadataEnabled: true,
@@ -25,12 +36,23 @@ describe("ProposalsDetailComponent", () => {
         MatIconModule,
         NgxJsonViewerModule,
         StoreModule.forRoot({}),
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useClass: MockTranslateLoader,
+          },
+        }),
       ],
       declarations: [ProposalDetailComponent],
     });
     TestBed.overrideComponent(ProposalDetailComponent, {
       set: {
-        providers: [{ provide: AppConfigService, useValue: { getConfig } }],
+        providers: [
+          {
+            provide: AppConfigService,
+            useValue: { getConfig },
+          },
+        ],
       },
     });
     TestBed.compileComponents();
