@@ -115,6 +115,7 @@ export class IngestorComponent implements OnInit {
 
     this.connectedFacilityBackend = facilityBackendUrlCleaned;
 
+    // Try to connect - get ingestor version
     try {
       this.versionInfo = await this.apiManager.getVersion();
     } catch (error) {
@@ -125,9 +126,9 @@ export class IngestorComponent implements OnInit {
       return false;
     }
 
+    // If connected, get User Info
     try {
       this.userInfo = await this.apiManager.getUserInfo();
-      this.doRefreshTransferList();
     } catch (error) {
       if (String(error.error).includes("disabled")) {
         this.authIsDisabled = true;
@@ -136,6 +137,12 @@ export class IngestorComponent implements OnInit {
       }
     }
 
+    // Only refresh if the user is logged in or the auth is disabled
+    if (this.authIsDisabled || this.userInfo.logged_in) {
+      this.doRefreshTransferList();
+    }
+
+    // Get health state
     try {
       this.healthInfo = await this.apiManager.getHealth();
     } catch (error) {

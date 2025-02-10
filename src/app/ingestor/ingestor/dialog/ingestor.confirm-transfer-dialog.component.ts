@@ -88,6 +88,10 @@ export class IngestorConfirmTransferDialogComponent implements OnInit {
             }
           } catch (error) {
             this.errorMessage = error.message;
+
+            if (error.error) {
+              this.errorMessage += ": " + error.error;
+            }
           }
         }
       });
