@@ -71,7 +71,14 @@ export const fetchParentProposalAccessFailedAction = createAction(
 
 export const fetchProposalDatasetsAction = createAction(
   "[Proposal] Fetch Datasets",
-  props<{ proposalId: string }>(),
+  props<{
+    proposalId: string;
+    skip?: number;
+    limit?: number;
+    search?: string;
+    sortDirection?: string;
+    sortColumn?: string;
+  }>(),
 );
 export const fetchProposalDatasetsCompleteAction = createAction(
   "[Proposal] Fetch Datasets Complete",
@@ -167,6 +174,13 @@ export const clearCurrentProposalStateAction = createAction(
 
 export const fetchRelatedProposalsAction = createAction(
   "[Proposal] Fetch Related Proposals",
+  props<{
+    skip?: number;
+    limit?: number;
+    search?: string;
+    sortDirection?: string;
+    sortColumn?: string;
+  }>(),
 );
 export const fetchRelatedProposalsCompleteAction = createAction(
   "[Proposal] Fetch Related Proposals Complete",

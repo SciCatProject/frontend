@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 import {
@@ -28,6 +28,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     public appConfigService: AppConfigService,
     private route: ActivatedRoute,
     private store: Store,
+    private router: Router,
     private translateService: TranslateService,
   ) {
     this.translateService.use("proposalDefault");
@@ -59,6 +60,11 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
 
   onTabChanged(newIndex: number): void {
     this.selectedTabIndex = newIndex;
+
+    // Clear the query params when we change tab
+    this.router.navigate([], {
+      queryParams: {},
+    });
   }
 
   resetTabs(): void {

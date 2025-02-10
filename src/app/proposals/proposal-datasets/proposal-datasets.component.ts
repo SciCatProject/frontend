@@ -1,7 +1,8 @@
 import { Direction } from "@angular/cdk/bidi";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { Sort } from "@angular/material/sort";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { BehaviorSubject, Subscription } from "rxjs";
@@ -13,7 +14,9 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-pagination.model";
 import {
   IRowEvent,
+  ITableEvent,
   RowEventType,
+  TableEventType,
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { TableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
@@ -134,6 +137,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
     private filesizePipe: FileSizePipe,
     private slicePipe: SlicePipe,
     private router: Router,
+    private route: ActivatedRoute,
     private store: Store,
   ) {}
 
@@ -198,15 +202,56 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
   }
 
   onPaginationChange(pagination: TablePagination) {
+    this.pending = true;
+    const queryParams: Record<string, string | number> = {
+      pageIndex: pagination.pageIndex,
+      pageSize: pagination.pageSize,
+    };
+    const { sortColumn, sortDirection } = this.route.snapshot.queryParams;
+
+    this.router.navigate([], {
+      queryParams,
+      queryParamsHandling: "merge",
+    });
+
     this.store.dispatch(
-      changeDatasetsPageAction({
-        page: pagination.pageIndex,
+      fetchProposalDatasetsAction({
+        proposalId: this.proposalId,
         limit: pagination.pageSize,
+        skip: pagination.pageIndex * pagination.pageSize,
+        sortColumn: sortColumn,
+        sortDirection: sortDirection,
       }),
     );
-    this.store.dispatch(
-      fetchProposalDatasetsAction({ proposalId: this.proposalId }),
-    );
+  }
+
+  onTableEvent({ event, sender }: ITableEvent) {
+    if (event === TableEventType.SortChanged) {
+      const { active: sortColumn, direction: sortDirection } = sender as Sort;
+      this.pending = true;
+      this.router.navigate([], {
+        queryParams: {
+          pageIndex: 0,
+          sortDirection: sortDirection || undefined,
+          sortColumn: sortDirection ? sortColumn : undefined,
+        },
+        queryParamsHandling: "merge",
+      });
+
+      const queryParams = this.route.snapshot.queryParams;
+
+      this.store.dispatch(
+        fetchProposalDatasetsAction({
+          proposalId: this.proposalId,
+          limit: queryParams.pageSize,
+          skip:
+            queryParams.pageIndex *
+            (queryParams.pageSize || this.defaultPageSize),
+          sortColumn: sortColumn,
+          sortDirection: sortDirection,
+        }),
+      );
+    }
   }
 
   onRowClick(event: IRowEvent<OutputDatasetObsoleteDto>) {
