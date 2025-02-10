@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
-import { Store } from "@ngrx/store";
-import { JobClass } from "@scicatproject/scicat-sdk-ts";
+import { Store } from "@ngrx/store";;
 import { Subscription } from "rxjs";
 import {
   selectJobs,
@@ -27,6 +26,7 @@ import {
   selectCurrentUser,
   selectProfile,
 } from "state-management/selectors/user.selectors";
+import { Job, JobInterface } from "shared/sdk/models/Job";
 
 export interface JobsTableData {
   id: string;
@@ -48,7 +48,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
 
   jobs: JobsTableData[] = [];
   profile: any;
-  email = "";
+  username = "";
 
   subscriptions: Subscription[] = [];
 
@@ -91,18 +91,15 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  formatTableData(jobs: JobClass[]): JobsTableData[] {
+  formatTableData(jobs: JobInterface[]): JobsTableData[] {
     let tableData: JobsTableData[] = [];
     if (jobs) {
       tableData = jobs.map((job) => ({
-        id: job._id,
-        initiator: job.emailJobInitiator,
+        id: job.id,
+        initiator: job.createdBy,
         type: job.type,
-        createdAt: this.datePipe.transform(
-          job.creationTime,
-          "yyyy-MM-dd HH:mm",
-        ),
-        statusMessage: job.jobStatusMessage,
+        createdAt: this.datePipe.transform(job.createdAt, "yyyy-MM-dd HH:mm"),
+        statusMessage: job.statusMessage,
       }));
     }
     return tableData;
@@ -129,7 +126,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
         break;
       }
       case JobViewMode.myJobs: {
-        viewMode = { emailJobInitiator: this.email };
+        viewMode = { createdBy: this.username };
         break;
       }
       default: {
@@ -154,11 +151,11 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     // map column names back to original names
     switch (event.active) {
       case "statusMessage": {
-        event.active = "jobStatusMessage";
+        event.active = "statusMessage";
         break;
       }
       case "initiator": {
-        event.active = "emailJobInitiator";
+        event.active = "createdBy";
         break;
       }
       default: {
@@ -181,13 +178,13 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.store.select(selectCurrentUser).subscribe((current) => {
         if (current) {
-          this.email = current.email;
+          this.username = current.username;
 
           if (!current.realm) {
             this.store.select(selectProfile).subscribe((profile) => {
               if (profile) {
                 this.profile = profile;
-                this.email = profile.email;
+                this.username = profile.username;
               }
               this.onModeChange(JobViewMode.myJobs);
             });

@@ -1,10 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import {
-  CreateJobDto,
-  JobClass,
-  JobsService,
-} from "@scicatproject/scicat-sdk-ts";
+import { JobsService } from "@scicatproject/scicat-sdk-ts";
 import { Store } from "@ngrx/store";
 import { selectQueryParams } from "state-management/selectors/jobs.selectors";
 import * as fromActions from "state-management/actions/jobs.actions";
@@ -17,6 +13,8 @@ import {
   loadingCompleteAction,
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
+import { Job, JobInterface } from "shared/sdk/models/Job";
+import { JobsServiceV4 } from "shared/sdk/apis/JobsService";
 
 @Injectable()
 export class JobEffects {
@@ -58,7 +56,7 @@ export class JobEffects {
       ofType(fromActions.fetchJobAction),
       switchMap(({ jobId }) =>
         this.jobsService.jobsControllerFindOne(jobId).pipe(
-          map((job: JobClass) => fromActions.fetchJobCompleteAction({ job })),
+          map((job: JobInterface) => fromActions.fetchJobCompleteAction({ job })),
           catchError(() => of(fromActions.fetchJobFailedAction())),
         ),
       ),
@@ -69,8 +67,8 @@ export class JobEffects {
     return this.actions$.pipe(
       ofType(fromActions.submitJobAction),
       switchMap(({ job }) =>
-        this.jobsService.jobsControllerCreate(job).pipe(
-          map((res) => fromActions.submitJobCompleteAction({ job: res })),
+        this.jobsServiceV4.jobsControllerCreateV4(job as Job).pipe(
+          map((res) => fromActions.submitJobCompleteAction({ job: res as JobInterface })),
           catchError((err) => of(fromActions.submitJobFailedAction({ err }))),
         ),
       ),
@@ -135,6 +133,7 @@ export class JobEffects {
   constructor(
     private actions$: Actions,
     private jobsService: JobsService,
+    private jobsServiceV4: JobsServiceV4,
     private store: Store,
   ) {}
 }

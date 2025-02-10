@@ -112,6 +112,7 @@ import {
       </mat-card-content>
     </mat-card>
   `,
+  
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class ArrayLayoutRendererCustom

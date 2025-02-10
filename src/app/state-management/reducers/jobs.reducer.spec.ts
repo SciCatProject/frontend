@@ -1,22 +1,17 @@
 import { jobsReducer } from "./jobs.reducer";
 import * as fromActions from "../actions/jobs.actions";
 import { initialJobsState } from "state-management/state/jobs.store";
-import { createMock } from "shared/MockStubs";
-import { JobClass } from "@scicatproject/scicat-sdk-ts";
+import { Job, JobInterface } from "shared/sdk/models/Job";
 
-const job = createMock<JobClass>({
-  _id: "testId",
+const data: JobInterface = {
   id: "testId",
-  emailJobInitiator: "test@email.com",
+  createdBy: "testName",
   type: "archive",
-  datasetList: [],
-  creationTime: "",
-  executionTime: "",
-  jobParams: {},
-  jobResultObject: {},
-  jobStatusMessage: "",
-  ownerGroup: "",
-});
+  jobParams: {
+    datasetList: [],
+  },
+};
+const job = new Job(data);
 
 describe("jobsReducer", () => {
   describe("on fetchJobsCompleteAction", () => {

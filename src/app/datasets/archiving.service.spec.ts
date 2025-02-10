@@ -10,7 +10,8 @@ import {
 import { JobsState } from "state-management/state/jobs.store";
 import { ArchivingService } from "./archiving.service";
 import { createMock, mockDataset } from "shared/MockStubs";
-import { CreateJobDto, ReturnedUserDto } from "@scicatproject/scicat-sdk-ts";
+import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts";
+import { Job } from "shared/sdk/models/Job";
 
 describe("ArchivingService", () => {
   let service: ArchivingService;
@@ -70,10 +71,9 @@ describe("ArchivingService", () => {
         destinationPath,
       );
 
-      // expect(job).toBeInstanceOf(Job);
-      expect(job["emailJobInitiator"]).toEqual("test@email.com");
-      expect(job["jobParams"]["username"]).toEqual("testName");
-      expect(job["datasetList"]).toEqual(datasetList);
+      expect(job).toBeInstanceOf(Job);
+      expect(job["createdBy"]).toEqual("testName");
+      expect(job["jobParams"]["datasetList"]).toEqual(datasetList);
       expect(job["type"]).toEqual("archive");
     });
   });
@@ -103,14 +103,13 @@ describe("ArchivingService", () => {
         files: [],
       }));
       const archive = true;
-      const job = createMock<CreateJobDto>({
-        jobParams: { username: user.username },
-        emailJobInitiator: user.email,
-        datasetList,
+      const job = createMock<Job>({
+        jobParams: { datasetList },
+        createdBy: user.username,
+        createdAt: new Date().toDateString(),
         type: "archive",
-        executionTime: "",
         jobResultObject: {},
-        jobStatusMessage: "",
+        statusMessage: "",
       });
       const createJobSpy = spyOn<any, string>(
         service,

@@ -22,6 +22,7 @@
       </mat-slide-toggle>
     </div>
   </div>
+
   <div style="clear: both"></div>
   <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
     <div [fxFlex]="(attachments$ | async)?.length > 0 ? '90%' : '100%'">

@@ -23,7 +23,7 @@ import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { JobClass } from "@scicatproject/scicat-sdk-ts";
+import { JobInterface } from "shared/sdk/models/Job";
 
 describe("JobsDashboardComponent", () => {
   let component: JobsDashboardComponent;
@@ -100,8 +100,8 @@ describe("JobsDashboardComponent", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const mode = JobViewMode.myJobs;
-      component.email = "test@email.com";
-      const viewMode = { emailJobInitiator: component.email };
+      component.username = "testName";
+      const viewMode = { createdBy: component.username };
       component.onModeChange(mode);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
@@ -144,7 +144,7 @@ describe("JobsDashboardComponent", () => {
 
   describe("#onRowClick()", () => {
     it("should navigate to a job", () => {
-      const job = createMock<JobClass>({ id: "test" });
+      const job = createMock<JobInterface>({ id: "test" });
       component.onRowClick({
         ...job,
         initiator: "",

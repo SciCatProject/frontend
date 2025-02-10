@@ -33,6 +33,7 @@ import { NgForm } from "@angular/forms";
 import { DataFiles_File } from "./datafiles.interfaces";
 import { ActionDataset } from "datasets/datafiles-actions/datafiles-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
+import { Job } from "shared/sdk/models/Job";
 
 @Component({
   selector: "datafiles",
@@ -302,19 +303,21 @@ export class DatafilesComponent
     });
     dialogRef.afterClosed().subscribe((email) => {
       if (email) {
-        this.getSelectedFiles();
+        const selectedFiles = this.getSelectedFiles();
         const data = {
-          emailJobInitiator: email,
-          creationTime: new Date(),
+          createdBy: email,
+          createdAt: new Date().toDateString(),
           type: "public",
-          datasetList: [
-            {
-              pid: this.datasetPid,
-              files: this.getSelectedFiles(),
-            },
-          ],
+          jobParams: {
+            datasetList: [
+              {
+                pid: this.datasetPid,
+                files: selectedFiles,
+              },
+            ],
+          },
         };
-        this.store.dispatch(submitJobAction({ job: data }));
+        this.store.dispatch(submitJobAction({ job: data as Job }));
       }
     });
   }

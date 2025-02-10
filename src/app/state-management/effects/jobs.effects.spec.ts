@@ -13,32 +13,26 @@ import {
 } from "state-management/actions/user.actions";
 import { MessageType } from "state-management/models";
 import { Type } from "@angular/core";
-import {
-  CreateJobDto,
-  JobClass,
-  JobsService,
-} from "@scicatproject/scicat-sdk-ts";
+import { JobsService } from "@scicatproject/scicat-sdk-ts";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
-import { createMock } from "shared/MockStubs";
+import { Job, JobInterface } from "shared/sdk/models/Job";
+import { JobsServiceV4 } from "shared/sdk/apis/JobsService";
 
-const job = createMock<JobClass>({
-  _id: "testId",
+const data: JobInterface = {
   id: "testId",
-  emailJobInitiator: "test@email.com",
+  createdBy: "testName",
   type: "archive",
-  datasetList: [],
-  creationTime: "",
-  executionTime: "",
-  jobParams: {},
-  jobResultObject: {},
-  jobStatusMessage: "",
-  ownerGroup: "",
-});
+  jobParams: {
+    datasetList: [],
+  },
+};
+const job = new Job(data);
 
 describe("JobEffects", () => {
   let actions: TestObservable;
   let effects: JobEffects;
   let jobApi: jasmine.SpyObj<JobsService>;
+  let jobApiV4: jasmine.SpyObj<JobsServiceV4>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -56,11 +50,18 @@ describe("JobEffects", () => {
             "jobsControllerCreate",
           ]),
         },
+        {
+          provide: JobsServiceV4,
+          useValue: jasmine.createSpyObj("jobApiV4", [
+            "jobsControllerCreateV4",
+          ]),
+        },
       ],
     });
 
     effects = TestBed.inject(JobEffects);
     jobApi = injectedStub(JobsService);
+    jobApiV4 = injectedStub(JobsServiceV4);
   });
 
   const injectedStub = <S>(service: Type<S>): jasmine.SpyObj<S> =>
@@ -233,12 +234,12 @@ describe("JobEffects", () => {
 
   describe("submitJob$", () => {
     it("should result in a submitJobCompleteAction", () => {
-      const action = fromActions.submitJobAction({ job: job as CreateJobDto });
+      const action = fromActions.submitJobAction({ job });
       const outcome = fromActions.submitJobCompleteAction({ job });
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: job });
-      jobApi.jobsControllerCreate.and.returnValue(response);
+      jobApiV4.jobsControllerCreateV4.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.submitJob$).toBeObservable(expected);
@@ -320,9 +321,7 @@ describe("JobEffects", () => {
 
     describe("ofType submitJobAction", () => {
       it("should dispatch a loadingAction", () => {
-        const action = fromActions.submitJobAction({
-          job: job as CreateJobDto,
-        });
+        const action = fromActions.submitJobAction({ job });
         const outcome = loadingAction();
 
         actions = hot("-a", { a: action });
