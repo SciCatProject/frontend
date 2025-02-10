@@ -1,16 +1,26 @@
+import { Direction } from "@angular/cdk/bidi";
 import { DatePipe, SlicePipe } from "@angular/common";
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { BehaviorSubject, Subscription } from "rxjs";
+import { PrintConfig } from "shared/modules/dynamic-material-table/models/print-config.model";
+import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
-  DatasetClass,
-  OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts-angular";
-import { Subscription } from "rxjs";
+  TablePagination,
+  TablePaginationMode,
+} from "shared/modules/dynamic-material-table/models/table-pagination.model";
 import {
-  PageChangeEvent,
-  TableColumn,
-} from "shared/modules/table/table.component";
+  IRowEvent,
+  RowEventType,
+  TableSelectionMode,
+} from "shared/modules/dynamic-material-table/models/table-row.model";
+import { TableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
+import {
+  actionMenu,
+  getTableSettingsConfig,
+} from "shared/modules/dynamic-material-table/utilizes/default-table-config";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import {
   changeDatasetsPageAction,
@@ -28,27 +38,96 @@ export interface TableData {
   location: string;
 }
 
+const tableDefaultSettingsConfig: TableSetting = {
+  visibleActionMenu: actionMenu,
+  saveSettingMode: "none",
+  settingList: [
+    {
+      visibleActionMenu: actionMenu,
+      saveSettingMode: "none",
+      isDefaultSetting: true,
+      isCurrentSetting: true,
+      columnSetting: [
+        {
+          name: "name",
+          header: "Name",
+          icon: "portrait",
+        },
+        {
+          name: "sourceFolder",
+          icon: "explore",
+          header: "Source folder",
+        },
+        {
+          name: "size",
+          icon: "save",
+        },
+        {
+          name: "creationTime",
+          header: "Creation time",
+          icon: "calendar_today",
+        },
+        {
+          name: "owner",
+          icon: "face",
+        },
+        { name: "location", icon: "explore" },
+      ],
+    },
+  ],
+  rowStyle: {
+    "border-bottom": "1px solid #d2d2d2",
+  },
+};
+
 @Component({
   selector: "app-proposal-datasets",
   templateUrl: "./proposal-datasets.component.html",
   styleUrls: ["./proposal-datasets.component.scss"],
 })
-export class ProposalDatasetsComponent implements OnInit {
+export class ProposalDatasetsComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectViewProposalPageViewModel);
 
-  subscriptions: Subscription[] = [];
+  subscription: Subscription;
   @Input() proposalId: string;
 
-  tablePaginate = true;
-  tableData: TableData[] = [];
-  tableColumns: TableColumn[] = [
-    { name: "name", icon: "portrait", sort: false, inList: true },
-    { name: "sourceFolder", icon: "explore", sort: false, inList: true },
-    { name: "size", icon: "save", sort: false, inList: true },
-    { name: "creationTime", icon: "calendar_today", sort: false, inList: true },
-    { name: "owner", icon: "face", sort: false, inList: true },
-    { name: "location", icon: "explore", sort: false, inList: true },
-  ];
+  tableName = "proposalDatasetsTable";
+
+  columns: TableField<any>[];
+
+  direction: Direction = "ltr";
+
+  showReloadData = true;
+
+  rowHeight = 50;
+
+  pending = true;
+
+  setting: TableSetting = {};
+
+  paginationMode: TablePaginationMode = "server-side";
+
+  showNoData = true;
+
+  dataSource: BehaviorSubject<TableData[]> = new BehaviorSubject<TableData[]>(
+    [],
+  );
+
+  pagination: TablePagination = {};
+
+  stickyHeader = true;
+
+  printConfig: PrintConfig = {};
+
+  showProgress = true;
+
+  rowSelectionMode: TableSelectionMode = "none";
+
+  defaultPageSize = 10;
+
+  tablesSettings: object;
+
+  showGlobalTextSearch = false;
 
   constructor(
     private datePipe: DatePipe,
@@ -59,17 +138,43 @@ export class ProposalDatasetsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.subscriptions.push(
-      this.vm$.subscribe((vm) => {
-        this.tableData = this.formatTableData(vm.datasets);
-      }),
+    // NOTE: Maybe we don't need to fetch datasets on every init here. Check this
+    this.store.dispatch(
+      fetchProposalDatasetsAction({ proposalId: this.proposalId }),
     );
 
-    if (!this.tableData.length) {
-      this.store.dispatch(
-        fetchProposalDatasetsAction({ proposalId: this.proposalId }),
+    this.subscription = this.vm$.subscribe((data) => {
+      this.dataSource.next(this.formatTableData(data.datasets));
+      this.pending = false;
+
+      const tableSettingsConfig = getTableSettingsConfig(
+        this.tableName,
+        tableDefaultSettingsConfig,
       );
-    }
+      const pagginationConfig = {
+        pageSizeOptions: [5, 10, 25, 100],
+        pageIndex: data.currentPage || 0,
+        pageSize: data.datasetsPerPage || this.defaultPageSize,
+        length: data.datasetCount,
+      };
+
+      if (tableSettingsConfig?.settingList.length) {
+        this.initTable(tableSettingsConfig, pagginationConfig);
+      }
+    });
+  }
+
+  initTable(
+    settingConfig: TableSetting,
+    paginationConfig: TablePagination,
+  ): void {
+    const currentColumnSetting = settingConfig.settingList.find(
+      (s) => s.isCurrentSetting,
+    )?.columnSetting;
+
+    this.columns = currentColumnSetting;
+    this.setting = settingConfig;
+    this.pagination = paginationConfig;
   }
 
   formatTableData(datasets: OutputDatasetObsoleteDto[]): TableData[] {
@@ -92,11 +197,11 @@ export class ProposalDatasetsComponent implements OnInit {
     return tableData;
   }
 
-  onPageChange(event: PageChangeEvent) {
+  onPaginationChange(pagination: TablePagination) {
     this.store.dispatch(
       changeDatasetsPageAction({
-        page: event.pageIndex,
-        limit: event.pageSize,
+        page: pagination.pageIndex,
+        limit: pagination.pageSize,
       }),
     );
     this.store.dispatch(
@@ -104,8 +209,14 @@ export class ProposalDatasetsComponent implements OnInit {
     );
   }
 
-  onRowClick(dataset: DatasetClass) {
-    const pid = encodeURIComponent(dataset.pid);
-    this.router.navigateByUrl("/datasets/" + pid);
+  onRowClick(event: IRowEvent<OutputDatasetObsoleteDto>) {
+    if (event.event === RowEventType.RowClick) {
+      const pid = encodeURIComponent(event.sender.row.pid);
+      this.router.navigateByUrl("/datasets/" + pid);
+    }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

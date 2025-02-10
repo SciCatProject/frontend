@@ -10,47 +10,17 @@ export const actionMenu: VisibleActionMenu = {
   clearFilter: true,
 };
 
-export const tableDefaultSettingsConfig: TableSetting = {
-  direction: "ltr",
-  visibleActionMenu: actionMenu,
-  autoHeight: false,
-  saveSettingMode: "simple",
-  settingList: [
-    {
-      direction: "ltr",
-      visibleActionMenu: actionMenu,
-      autoHeight: false,
-      saveSettingMode: "simple",
-      isDefaultSetting: true,
-      isCurrentSetting: true,
-      settingName: "default",
-      rowStyle: {
-        "border-bottom": "1px solid #d2d2d2",
-      },
-      columnSetting: [],
-    },
-  ],
-  rowStyle: {
-    "border-bottom": "1px solid #d2d2d2",
-  },
-};
-
 export const getTableSettingsConfig = (
   tableName: string,
-  tableDefaultColumnsConfig: TableField<any>[],
+  tableDefaultSettingsConfig: TableSetting,
   savedTableConfig?: TableField<any>[],
   tableSort?: { sortColumn: string; sortDirection: "asc" | "desc" },
 ) => {
-  const tableSettingsConfig: TableSetting = {
-    ...tableDefaultSettingsConfig,
-  };
+  const tableSettingsConfig: TableSetting = { ...tableDefaultSettingsConfig };
 
   const defaultSettingIndex = tableSettingsConfig.settingList.findIndex(
     (s) => s.isDefaultSetting,
   );
-
-  tableSettingsConfig.settingList[defaultSettingIndex].columnSetting =
-    tableDefaultColumnsConfig;
 
   const savedTableSettingIndex = tableSettingsConfig.settingList.findIndex(
     (s) => s.settingName === tableName,

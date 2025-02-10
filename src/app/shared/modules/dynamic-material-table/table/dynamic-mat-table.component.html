@@ -260,12 +260,14 @@
       ></tr>
     </ng-container>
 
-    <mat-header-row
-      class="global-search"
-      [@tableAnimation]
-      *matHeaderRowDef="searchRowColumns; sticky: sticky"
-      [style.top.px]="inverseOfTranslation"
-    ></mat-header-row>
+    <ng-container *ngIf="showGlobalTextSearch">
+      <mat-header-row
+        class="global-search"
+        [@tableAnimation]
+        *matHeaderRowDef="searchRowColumns; sticky: sticky"
+        [style.top.px]="inverseOfTranslation"
+      ></mat-header-row>
+    </ng-container>
     <mat-header-row
       class="header"
       [@tableAnimation]
