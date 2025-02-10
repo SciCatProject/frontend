@@ -25,6 +25,7 @@ export interface IngestionRequestInformation {
     extractMetaDataRequested: boolean;
     extractorMetaDataReady: boolean;
     metaDataExtractionFailed: boolean;
+    extractorMetadataProgress: number;
     extractorMetaDataStatus: string;
   };
 }
@@ -96,6 +97,7 @@ export class IngestorHelper {
         metaDataExtractionFailed: false,
         extractMetaDataRequested: false,
         extractorMetaDataReady: false,
+        extractorMetadataProgress: 0,
         extractorMetaDataStatus: "",
       },
     };

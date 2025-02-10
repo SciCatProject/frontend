@@ -201,6 +201,8 @@ export class IngestorComponent implements OnInit {
         //console.log("Received SSE data:", data);
         this.createNewTransferData.apiInformation.extractorMetaDataStatus =
           data.message;
+        this.createNewTransferData.apiInformation.extractorMetadataProgress =
+          data.progress;
 
         if (data.result) {
           this.createNewTransferData.apiInformation.extractorMetaDataReady =
@@ -213,8 +215,6 @@ export class IngestorComponent implements OnInit {
             extractedScientificMetadata.instrument ?? {};
           this.createNewTransferData.extractorMetaData.acquisition =
             extractedScientificMetadata.acquisition ?? {};
-          this.createNewTransferData.apiInformation.extractorMetaDataReady =
-            true;
         } else if (data.error) {
           this.createNewTransferData.apiInformation.metaDataExtractionFailed =
             true;
@@ -222,6 +222,8 @@ export class IngestorComponent implements OnInit {
             false;
           this.createNewTransferData.apiInformation.extractorMetaDataStatus =
             data.message;
+          this.createNewTransferData.apiInformation.extractorMetadataProgress =
+            data.progress;
         }
       },
       (error) => {
