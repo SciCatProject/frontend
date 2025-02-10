@@ -98,11 +98,13 @@ export class ProposalEffects {
           .datasetsControllerFindAll(
             JSON.stringify({
               where: { proposalId },
-              skip: skip,
-              limit: limit,
-              order: sortDirection
-                ? `${sortColumn}:${sortDirection}`
-                : undefined,
+              limits: {
+                skip: skip,
+                limit: limit,
+                order: sortDirection
+                  ? `${sortColumn}:${sortDirection}`
+                  : undefined,
+              },
             }),
           )
           .pipe(
@@ -224,9 +226,11 @@ export class ProposalEffects {
       concatLatestFrom(() => [this.currentProposal$]),
       switchMap(([{ limit, skip, sortColumn, sortDirection }, proposal]) => {
         const queryFilter = {
-          skip,
-          limit,
-          sort: sortDirection ? `${sortColumn}:${sortDirection}` : undefined,
+          limits: {
+            skip,
+            limit,
+            order: sortDirection ? `${sortColumn}:${sortDirection}` : undefined,
+          },
           where: {
             $or: [
               { proposalId: { $in: [proposal.parentProposalId] } },

@@ -25,10 +25,7 @@ import {
   getTableSettingsConfig,
 } from "shared/modules/dynamic-material-table/utilizes/default-table-config";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
-import {
-  changeDatasetsPageAction,
-  fetchProposalDatasetsAction,
-} from "state-management/actions/proposals.actions";
+import { fetchProposalDatasetsAction } from "state-management/actions/proposals.actions";
 import { selectViewProposalPageViewModel } from "state-management/selectors/proposals.selectors";
 
 export interface TableData {
@@ -89,7 +86,7 @@ const tableDefaultSettingsConfig: TableSetting = {
   styleUrls: ["./proposal-datasets.component.scss"],
 })
 export class ProposalDatasetsComponent implements OnInit, OnDestroy {
-  vm$ = this.store.select(selectViewProposalPageViewModel);
+  proposalDatasets$ = this.store.select(selectViewProposalPageViewModel);
 
   subscription: Subscription;
   @Input() proposalId: string;
@@ -142,12 +139,11 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // NOTE: Maybe we don't need to fetch datasets on every init here. Check this
     this.store.dispatch(
       fetchProposalDatasetsAction({ proposalId: this.proposalId }),
     );
 
-    this.subscription = this.vm$.subscribe((data) => {
+    this.subscription = this.proposalDatasets$.subscribe((data) => {
       this.dataSource.next(this.formatTableData(data.datasets));
       this.pending = false;
 
@@ -243,7 +239,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
       this.store.dispatch(
         fetchProposalDatasetsAction({
           proposalId: this.proposalId,
-          limit: queryParams.pageSize,
+          limit: queryParams.pageSize || this.defaultPageSize,
           skip:
             queryParams.pageIndex *
             (queryParams.pageSize || this.defaultPageSize),

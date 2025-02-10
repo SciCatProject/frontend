@@ -227,7 +227,7 @@ export class RelatedProposalsComponent implements OnInit, OnDestroy {
 
       this.store.dispatch(
         fetchRelatedProposalsAction({
-          limit: queryParams.pageSize,
+          limit: queryParams.pageSize || this.defaultPageSize,
           skip:
             queryParams.pageIndex *
             (queryParams.pageSize || this.defaultPageSize),

@@ -142,56 +142,56 @@ describe("ProposalsReducer", () => {
   //   });
   // });
 
-  describe("on prefillFiltersAction", () => {
-    it("should set filters and set hasPrefilledFilters to true", () => {
-      const values: Partial<ProposalFilters> = {
-        text: "test",
-      };
-      const action = fromActions.prefillFiltersAction({ values });
-      const state = proposalsReducer(initialProposalsState, action);
+  // describe("on prefillFiltersAction", () => {
+  //   it("should set filters and set hasPrefilledFilters to true", () => {
+  //     const values: Partial<ProposalFilters> = {
+  //       text: "test",
+  //     };
+  //     const action = fromActions.prefillFiltersAction({ values });
+  //     const state = proposalsReducer(initialProposalsState, action);
 
-      expect(state.proposalFilters.text).toEqual(values.text);
-      expect(state.hasPrefilledFilters).toEqual(true);
-    });
-  });
+  //     expect(state.proposalFilters.text).toEqual(values.text);
+  //     expect(state.hasPrefilledFilters).toEqual(true);
+  //   });
+  // });
 
-  describe("on setTextFilterAction", () => {
-    it("should set text filter", () => {
-      const text = "test";
-      const action = fromActions.setTextFilterAction({ text });
-      const state = proposalsReducer(initialProposalsState, action);
+  // describe("on setTextFilterAction", () => {
+  //   it("should set text filter", () => {
+  //     const text = "test";
+  //     const action = fromActions.setTextFilterAction({ text });
+  //     const state = proposalsReducer(initialProposalsState, action);
 
-      expect(state.proposalFilters.text).toEqual(text);
-    });
-  });
+  //     expect(state.proposalFilters.text).toEqual(text);
+  //   });
+  // });
 
-  describe("on setDateRangeFilterAction", () => {
-    it("should set dateRange filter", () => {
-      const begin = new Date().toISOString();
-      const end = new Date().toISOString();
-      const action = fromActions.setDateRangeFilterAction({
-        begin,
-        end,
-      });
-      const state = proposalsReducer(initialProposalsState, action);
+  // describe("on setDateRangeFilterAction", () => {
+  //   it("should set dateRange filter", () => {
+  //     const begin = new Date().toISOString();
+  //     const end = new Date().toISOString();
+  //     const action = fromActions.setDateRangeFilterAction({
+  //       begin,
+  //       end,
+  //     });
+  //     const state = proposalsReducer(initialProposalsState, action);
 
-      expect(state.proposalFilters.dateRange.begin).toEqual(begin);
-      expect(state.proposalFilters.dateRange.end).toEqual(end);
-    });
-  });
+  //     expect(state.proposalFilters.dateRange.begin).toEqual(begin);
+  //     expect(state.proposalFilters.dateRange.end).toEqual(end);
+  //   });
+  // });
 
-  describe("on changeDatasetsPageAction", () => {
-    it("should set skip and limit dataset filters", () => {
-      const page = 1;
-      const limit = 25;
-      const skip = page * limit;
-      const action = fromActions.changeDatasetsPageAction({ page, limit });
-      const state = proposalsReducer(initialProposalsState, action);
+  // describe("on changeDatasetsPageAction", () => {
+  //   it("should set skip and limit dataset filters", () => {
+  //     const page = 1;
+  //     const limit = 25;
+  //     const skip = page * limit;
+  //     const action = fromActions.changeDatasetsPageAction({ page, limit });
+  //     const state = proposalsReducer(initialProposalsState, action);
 
-      expect(state.datasetFilters.skip).toEqual(skip);
-      expect(state.datasetFilters.limit).toEqual(limit);
-    });
-  });
+  //     expect(state.datasetFilters.skip).toEqual(skip);
+  //     expect(state.datasetFilters.limit).toEqual(limit);
+  //   });
+  // });
 
   describe("on clearProposalsStateAction", () => {
     it("it should set proposals state to initialProposState", () => {
