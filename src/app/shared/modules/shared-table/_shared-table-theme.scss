@@ -42,6 +42,15 @@
       }
     }
   }
+
+  dynamic-mat-table {
+    mat-header-row.mat-mdc-header-row.header {
+      background-color: mat.get-color-from-palette(
+        $primary,
+        "default"
+      ) !important;
+    }
+  }
 }
 
 @mixin theme($theme) {
