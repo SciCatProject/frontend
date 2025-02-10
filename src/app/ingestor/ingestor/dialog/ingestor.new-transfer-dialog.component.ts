@@ -109,6 +109,17 @@ export class IngestorNewTransferDialogComponent implements OnInit {
     this.data.createNewTransferData.scicatHeader["type"] = "raw";
     this.data.createNewTransferData.scicatHeader["dataFormat"] = "root";
     this.data.createNewTransferData.scicatHeader["owner"] = "User";
+
+    this.data.createNewTransferData.scicatHeader["principalInvestigator"] =
+      this.data.userInfo?.name ?? "";
+    this.data.createNewTransferData.scicatHeader["investigator"] =
+      this.data.userInfo?.name ?? "";
+    this.data.createNewTransferData.scicatHeader["ownerEmail"] =
+      this.data.userInfo?.email ?? "";
+    this.data.createNewTransferData.scicatHeader["contactEmail"] =
+      this.data.userInfo?.email ?? "";
+    this.data.createNewTransferData.scicatHeader["creationTime"] =
+      new Date().toDateString();
   }
 
   prepareSchemaForProcessing(): void {

@@ -1,4 +1,5 @@
 import { JsonSchema } from "@jsonforms/core";
+import { UserInfo } from "ingestor/model/userInfo";
 
 export interface ExtractionMethod {
   name: string;
@@ -69,6 +70,7 @@ export interface MetadataExtractorResult {
 
 export interface DialogDataObject {
   createNewTransferData: IngestionRequestInformation;
+  userInfo: UserInfo;
   backendURL: string;
   onClickNext: (step: number) => void;
   onStartUpload: () => Promise<boolean>;

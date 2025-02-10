@@ -299,6 +299,7 @@ export class IngestorComponent implements OnInit {
             onClickNext: this.onClickNext.bind(this),
             createNewTransferData: this.createNewTransferData,
             backendURL: this.connectedFacilityBackend,
+            userInfo: this.userInfo,
           },
           disableClose: true,
         });
@@ -314,6 +315,7 @@ export class IngestorComponent implements OnInit {
             onClickNext: this.onClickNext.bind(this),
             createNewTransferData: this.createNewTransferData,
             backendURL: this.connectedFacilityBackend,
+            userInfo: this.userInfo,
           },
           disableClose: true,
         });
@@ -324,6 +326,7 @@ export class IngestorComponent implements OnInit {
             onClickNext: this.onClickNext.bind(this),
             createNewTransferData: this.createNewTransferData,
             backendURL: this.connectedFacilityBackend,
+            userInfo: this.userInfo,
           },
           disableClose: true,
         });
@@ -335,6 +338,7 @@ export class IngestorComponent implements OnInit {
             onStartUpload: this.ingestDataset.bind(this),
             createNewTransferData: this.createNewTransferData,
             backendURL: this.connectedFacilityBackend,
+            userInfo: this.userInfo,
           },
           disableClose: true,
         });
