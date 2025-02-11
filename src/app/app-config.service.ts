@@ -122,14 +122,7 @@ export class AppConfigService {
       console.log("No config available in backend, trying with local config.");
       try {
         const config = await this.http.get("/assets/config.json").toPromise();
-        const defaultDatasetsListSettings = await this.http.get("/assets/defaultDatasetsListSettings.json").toPromise();
-
-        const appConfig = {
-          ...config,
-          defaultDatasetsListSettings,
-        } as AppConfig;
-
-        this.appConfig = Object.assign({}, this.appConfig, appConfig);
+        this.appConfig = Object.assign({}, this.appConfig, config);
       } catch (err) {
         console.error("No config provided.");
       }
