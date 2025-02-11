@@ -1,0 +1,9 @@
+@import "../.././dynamic-mat-table.style.scss";
+
+@include context-menu;
+
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

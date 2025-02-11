@@ -1,0 +1,42 @@
+<mat-dialog-content>
+  <div [dir]="printTable.direction" #printContentRef>
+    <h2>
+      {{ printTable?.title }}
+    </h2>
+    <div class="param-list">
+      <div class="param" *ngFor="let param of printTable?.userPrintParameters">
+        <b>{{ param.key }} </b> : {{ param.value }}
+      </div>
+      <div class="param" *ngFor="let param of printTable?.tablePrintParameters">
+        <b>{{ param.key }} </b> : {{ param.value }}
+      </div>
+    </div>
+    <table class="print-table" mat-table [dataSource]="printTable.data">
+      <ng-container
+        *ngFor="let column of printTable.columns"
+        matColumnDef="{{ column.name }}"
+      >
+        <th mat-header-cell *matHeaderCellDef>{{ column.header }}</th>
+        <td mat-cell *matCellDef="let row">{{ row[column.name] }}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="printTable.displayedFields"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: printTable.displayedFields"
+      ></tr>
+    </table>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" mat-dialog-close>Cancel</button>
+  <button
+    mat-button
+    type="button"
+    [mat-dialog-close]="true"
+    cdkFocusInitial
+    (click)="print()"
+  >
+    Print
+  </button>
+</mat-dialog-actions>
