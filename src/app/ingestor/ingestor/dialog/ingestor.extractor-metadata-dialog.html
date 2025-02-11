@@ -1,0 +1,73 @@
+<div class="ingestor-mixed-header">
+  <h2 mat-dialog-title>
+    Correct dataset-specific metadata
+  </h2>
+  <button mat-icon-button mat-dialog-close aria-label="Close"
+    class="ingestor-close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<mat-dialog-content class="mat-typography">
+
+  <div *ngIf="!extractorMetaDataReady" class="spinner-container">
+    <mat-progress-spinner diameter="20"
+      mode="indeterminate"></mat-progress-spinner>
+    <div class="spinner-text">
+      <span>Wait for the Ingestor...</span>
+    </div>
+  </div>
+
+  <div *ngIf="extractorMetaDataReady">
+    <ingestor-dialog-stepper [activeStep]="2"></ingestor-dialog-stepper>
+    <div *ngIf="extractorMetaDataError" class="error-message">
+      <mat-card class="error-card">
+        <mat-card-header>
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> error </mat-icon>
+          </div>
+          The automatic metadata extraction was not successful. Please enter
+          the data manually.
+        </mat-card-header>
+      </mat-card>
+    </div>
+    <div fxLayout="row" fxLayout.xs="column">
+      <div fxFlex="80%">
+        <mat-card>
+          <mat-card-header class="instrument-header" (click)="toggleCardContent('instrument')">
+            <div mat-card-avatar class="section-icon">
+              <mat-icon> biotech </mat-icon>
+            </div>
+            Instrument Information
+            <span class="spacer"></span>
+            <mat-icon class="toggle-icon">{{ isCardContentVisible.instrument ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </mat-card-header>
+          <mat-card-content *ngIf="isCardContentVisible.instrument">
+            <app-metadata-editor [schema]="metadataSchemaInstrument"
+              [data]="createNewTransferData.extractorMetaData['instrument']"
+              (dataChange)="onDataChangeExtractorMetadataInstrument($event)"></app-metadata-editor>
+          </mat-card-content>
+        </mat-card>
+        <mat-card>
+          <mat-card-header class="acquisition-header" (click)="toggleCardContent('acquisition')">
+            <div mat-card-avatar class="section-icon">
+              <mat-icon> category-search </mat-icon>
+            </div>
+            Acquisition Information
+            <span class="spacer"></span>
+            <mat-icon class="toggle-icon">{{ isCardContentVisible.acquisition ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </mat-card-header>
+          <mat-card-content *ngIf="isCardContentVisible.acquisition">
+            <app-metadata-editor [schema]="metadataSchemaAcquisition"
+              [data]="createNewTransferData.extractorMetaData['acquisition']"
+              (dataChange)="onDataChangeExtractorMetadataAcquisition($event)"></app-metadata-editor>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="onClickBack()">Back</button>
+  <button mat-button color="primary" cdkFocusInitial [mat-dialog-close]="true"
+    (click)="onClickNext()" [disabled]="!extractorMetaDataReady">Next</button>
+</mat-dialog-actions>

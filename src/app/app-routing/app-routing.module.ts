@@ -106,6 +106,13 @@ export const routes: Routes = [
               ),
           },
           {
+            path: "ingestor",
+            loadChildren: () =>
+              import("./lazy/ingestor-routing/ingestor.feature.module").then(
+                (m) => m.IngestorFeatureModule,
+              ),
+          },
+          {
             path: "logbooks",
             loadChildren: () =>
               import("./lazy/logbooks-routing/logbooks.feature.module").then(

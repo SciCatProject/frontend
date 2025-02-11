@@ -1,0 +1,45 @@
+<div class="ingestor-mixed-header">
+  <h2 mat-dialog-title>
+    Select your ingestion method
+  </h2>
+  <button mat-icon-button mat-dialog-close aria-label="Close" class="ingestor-close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<mat-dialog-content class="mat-typography" disableClose="true">
+  <ingestor-dialog-stepper [activeStep]="0"></ingestor-dialog-stepper>
+
+  <p>Please select the dataset to be uploaded and the appropriate metadata extractor method.</p>
+
+  <div>
+    <mat-form-field class="form-full-width">
+      <mat-label>File Path</mat-label>
+      <input matInput [(ngModel)]="selectedPath" [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let sourceFolder of availableFilePaths" [value]="sourceFolder">
+          {{ sourceFolder }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-error *ngIf="availableFilePathsError">{{ availableFilePathsError }}</mat-error>
+  </div>
+
+  <div>
+    <mat-form-field class="form-full-width">
+      <mat-label>Extraction Method</mat-label>
+      <mat-select [(ngModel)]="selectedMethod">
+        <mat-option *ngFor="let method of extractionMethods" [value]="method">
+          {{ method.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-error *ngIf="extractionMethodsError">{{ extractionMethodsError }}</mat-error>
+  </div>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button *ngIf="availableFilePathsError || extractionMethodsError" mat-button color="warn" (click)="onClickRetryRequests()">Retry</button>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button color="primary" cdkFocusInitial [mat-dialog-close]="true" [disabled]="!uiNextButtonReady"
+    (click)="onClickNext()">Next</button>
+</mat-dialog-actions>
