@@ -747,18 +747,16 @@ export class DynamicMatTableComponent<T extends TableRow>
         event.target as Node
       ).parentElement.clientWidth;
       this.resizeColumn.columnIndex = index;
+    } else if (
+      (event.target as Node).parentElement.previousElementSibling === null
+    ) {
+      /* for first column not resize */
+      return;
     } else {
-      if (
-        (event.target as Node).parentElement.previousElementSibling === null
-      ) {
-        /* for first column not resize */
-        return;
-      } else {
-        this.resizeColumn.startWidth = (
-          event.target as Node
-        ).parentElement.previousElementSibling.clientWidth;
-        this.resizeColumn.columnIndex = index;
-      }
+      this.resizeColumn.startWidth = (
+        event.target as Node
+      ).parentElement.previousElementSibling.clientWidth;
+      this.resizeColumn.columnIndex = index;
     }
     event.preventDefault();
     this.mouseMove(index);

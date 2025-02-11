@@ -31,6 +31,12 @@ import { MatMenuTrigger } from "@angular/material/menu";
 import { isNullorUndefined } from "../../../cores/type";
 import { Subscription } from "rxjs";
 
+export enum FilterAction {
+  And = 0,
+  Or = 1,
+  Delete = 2,
+}
+
 const listAnimation = trigger("listAnimation", [
   transition("* <=> *", [
     query(
@@ -153,17 +159,17 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  filterAction_OnClick(event, index, action) {
+  filterAction_OnClick(event, index, action: FilterAction) {
     event.stopPropagation();
     event.preventDefault();
-    if (action === 0 || action === 1) {
+    if (action === FilterAction.And || action === FilterAction.Or) {
       // and or
-      this.filters[index].type = action === 0 ? "and" : "or";
+      this.filters[index].type = action === FilterAction.And ? "and" : "or";
       if (this.filters.length === index + 1) {
         this.addNewFilter(this.field.type);
         this.focusToLastInput();
       }
-    } else if (action === 2 && this.filters.length > 1) {
+    } else if (action === FilterAction.Delete && this.filters.length > 1) {
       // delete
       this.filters.splice(index, 1);
       this.cdr.detectChanges();

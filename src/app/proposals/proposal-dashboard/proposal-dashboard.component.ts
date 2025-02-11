@@ -147,7 +147,7 @@ export class ProposalDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const queryParams = this.route.snapshot.queryParams;
+    const { queryParams } = this.route.snapshot;
     if (queryParams.textSearch) {
       this.globalTextSearch = queryParams.textSearch;
     }
