@@ -83,6 +83,14 @@ export class IngestorComponent implements OnInit {
     // Get the GET parameter 'backendUrl' from the URL
     this.route.queryParams.subscribe((params) => {
       const backendUrl = params["backendUrl"];
+      const discovery = params["discovery"];
+
+      if (discovery && !backendUrl) {
+        // TODO REMOVE HARDCODED AND DO AUTODISCOVERY
+        const psiUrl = 'https://ingestor.development.psi.ch';
+        this.initializeIngestorConnection(psiUrl);
+      }
+
       if (backendUrl) {
         this.initializeIngestorConnection(backendUrl);
       } else {
@@ -269,7 +277,7 @@ export class IngestorComponent implements OnInit {
   loadLastUsedFacilityBackends(): string[] {
     // Load the list from the local Storage
     const lastUsedFacilityBackends =
-      '["http://localhost:8000", "http://localhost:8888"]';
+      '["http://localhost:8000", "http://localhost:8888", "https://ingestor.development.psi.ch"]';
     if (lastUsedFacilityBackends) {
       return JSON.parse(lastUsedFacilityBackends);
     }

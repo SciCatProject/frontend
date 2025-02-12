@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { INGESTOR_API_ENDPOINTS_V1 } from "./ingestor-api-endpoints";
 import {
@@ -23,7 +23,12 @@ export class IngestorAPIManager {
 
   public connect(url: string, withCredentials = true): void {
     this.connectUrl = url;
-    this.connectOptions = { withCredentials: withCredentials };
+    this.connectOptions = {
+      withCredentials: withCredentials,
+      headers: new HttpHeaders({
+        "Content-Type": "application/json;charset=UTF-8",
+      }),
+    };
   }
 
   public getVersion(): Promise<OtherVersionResponse> {
