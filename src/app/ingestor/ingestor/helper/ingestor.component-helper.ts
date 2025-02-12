@@ -50,7 +50,7 @@ export interface SciCatHeader {
   principalInvestigator: string;
   ownerEmail: string;
   contactEmail: string;
-  sourceFolderHost: string;
+  //sourceFolderHost: string;
   investigator: string;
   creationTime: string;
   owner: string;
@@ -135,7 +135,7 @@ export const SciCatHeader_Schema: JsonSchema = {
     principalInvestigator: { type: "string" },
     ownerEmail: { type: "string" },
     contactEmail: { type: "string" },
-    sourceFolderHost: { type: "string" },
+    //sourceFolderHost: { type: "string" },
     investigator: { type: "string" },
     creationTime: { type: "string" },
     owner: { type: "string" },
@@ -150,7 +150,7 @@ export const SciCatHeader_Schema: JsonSchema = {
     "principalInvestigator",
     "ownerEmail",
     "contactEmail",
-    "sourceFolderHost",
+    //"sourceFolderHost",
     "investigator",
     "creationTime",
     "owner",

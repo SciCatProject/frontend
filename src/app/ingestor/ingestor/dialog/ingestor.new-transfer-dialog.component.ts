@@ -118,8 +118,14 @@ export class IngestorNewTransferDialogComponent implements OnInit {
       this.data.userInfo?.email ?? "";
     this.data.createNewTransferData.scicatHeader["contactEmail"] =
       this.data.userInfo?.email ?? "";
+
+    const thisTime = new Date();
     this.data.createNewTransferData.scicatHeader["creationTime"] =
-      new Date().toDateString();
+      thisTime.getFullYear() +
+      "-" +
+      String(thisTime.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(thisTime.getDate()).padStart(2, "0");
   }
 
   prepareSchemaForProcessing(): void {
