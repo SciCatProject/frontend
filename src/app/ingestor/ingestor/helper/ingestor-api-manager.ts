@@ -161,9 +161,10 @@ export class IngestorAPIManager {
     page: number,
     pageSize: number,
   ): Promise<GetExtractorResponse> {
-    const params = new HttpParams()
+    // TODO ACTIVATE PAGING PARAMETERS IF FIXED BY INGESTOR
+    const params = {};/*; new HttpParams()
       .set("page", page.toString())
-      .set("pageSize", pageSize.toString());
+      .set("pageSize", pageSize.toString());*/
 
     return new Promise((resolve, reject) => {
       this.http
