@@ -83,6 +83,14 @@ export class IngestorComponent implements OnInit {
     // Get the GET parameter 'backendUrl' from the URL
     this.route.queryParams.subscribe((params) => {
       const backendUrl = params["backendUrl"];
+      const discovery = params["discovery"];
+
+      if (discovery && !backendUrl) {
+        // TODO REMOVE HARDCODED AND DO AUTODISCOVERY
+        const psiUrl = 'https://ingestor.development.psi.ch';
+        this.initializeIngestorConnection(psiUrl);
+      }
+
       if (backendUrl) {
         this.initializeIngestorConnection(backendUrl);
       } else {
@@ -201,6 +209,8 @@ export class IngestorComponent implements OnInit {
         //console.log("Received SSE data:", data);
         this.createNewTransferData.apiInformation.extractorMetaDataStatus =
           data.message;
+        this.createNewTransferData.apiInformation.extractorMetadataProgress =
+          data.progress;
 
         if (data.result) {
           this.createNewTransferData.apiInformation.extractorMetaDataReady =
@@ -213,8 +223,6 @@ export class IngestorComponent implements OnInit {
             extractedScientificMetadata.instrument ?? {};
           this.createNewTransferData.extractorMetaData.acquisition =
             extractedScientificMetadata.acquisition ?? {};
-          this.createNewTransferData.apiInformation.extractorMetaDataReady =
-            true;
         } else if (data.error) {
           this.createNewTransferData.apiInformation.metaDataExtractionFailed =
             true;
@@ -222,6 +230,8 @@ export class IngestorComponent implements OnInit {
             false;
           this.createNewTransferData.apiInformation.extractorMetaDataStatus =
             data.message;
+          this.createNewTransferData.apiInformation.extractorMetadataProgress =
+            data.progress;
         }
       },
       (error) => {
@@ -267,7 +277,7 @@ export class IngestorComponent implements OnInit {
   loadLastUsedFacilityBackends(): string[] {
     // Load the list from the local Storage
     const lastUsedFacilityBackends =
-      '["http://localhost:8000", "http://localhost:8888"]';
+      '["http://localhost:8000", "http://localhost:8888", "https://ingestor.development.psi.ch"]';
     if (lastUsedFacilityBackends) {
       return JSON.parse(lastUsedFacilityBackends);
     }
@@ -299,6 +309,7 @@ export class IngestorComponent implements OnInit {
             onClickNext: this.onClickNext.bind(this),
             createNewTransferData: this.createNewTransferData,
             backendURL: this.connectedFacilityBackend,
+            userInfo: this.userInfo,
           },
           disableClose: true,
         });
@@ -314,6 +325,7 @@ export class IngestorComponent implements OnInit {
             onClickNext: this.onClickNext.bind(this),
             createNewTransferData: this.createNewTransferData,
             backendURL: this.connectedFacilityBackend,
+            userInfo: this.userInfo,
           },
           disableClose: true,
         });
@@ -324,6 +336,7 @@ export class IngestorComponent implements OnInit {
             onClickNext: this.onClickNext.bind(this),
             createNewTransferData: this.createNewTransferData,
             backendURL: this.connectedFacilityBackend,
+            userInfo: this.userInfo,
           },
           disableClose: true,
         });
@@ -335,6 +348,7 @@ export class IngestorComponent implements OnInit {
             onStartUpload: this.ingestDataset.bind(this),
             createNewTransferData: this.createNewTransferData,
             backendURL: this.connectedFacilityBackend,
+            userInfo: this.userInfo,
           },
           disableClose: true,
         });

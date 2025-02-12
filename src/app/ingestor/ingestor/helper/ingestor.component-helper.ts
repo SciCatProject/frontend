@@ -1,4 +1,5 @@
 import { JsonSchema } from "@jsonforms/core";
+import { UserInfo } from "ingestor/model/userInfo";
 
 export interface ExtractionMethod {
   name: string;
@@ -24,6 +25,7 @@ export interface IngestionRequestInformation {
     extractMetaDataRequested: boolean;
     extractorMetaDataReady: boolean;
     metaDataExtractionFailed: boolean;
+    extractorMetadataProgress: number;
     extractorMetaDataStatus: string;
   };
 }
@@ -69,6 +71,7 @@ export interface MetadataExtractorResult {
 
 export interface DialogDataObject {
   createNewTransferData: IngestionRequestInformation;
+  userInfo: UserInfo;
   backendURL: string;
   onClickNext: (step: number) => void;
   onStartUpload: () => Promise<boolean>;
@@ -94,6 +97,7 @@ export class IngestorHelper {
         metaDataExtractionFailed: false,
         extractMetaDataRequested: false,
         extractorMetaDataReady: false,
+        extractorMetadataProgress: 0,
         extractorMetaDataStatus: "",
       },
     };

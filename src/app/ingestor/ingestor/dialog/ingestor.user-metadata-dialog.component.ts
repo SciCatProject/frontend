@@ -126,9 +126,12 @@ export class IngestorUserMetadataDialogComponent {
   }
 
   validateNextButton(): void {
-    this.uiNextButtonReady =
+    this.uiNextButtonReady = true;
+
+    // Uncomment if prod
+    /*this.uiNextButtonReady =
       this.isSciCatHeaderOk &&
       this.isOrganizationalMetadataOk &&
-      this.isSampleInformationOk;
+      this.isSampleInformationOk;*/
   }
 }

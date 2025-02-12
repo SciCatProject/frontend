@@ -22,6 +22,7 @@ export class IngestorExtractorMetadataDialogComponent {
   extractorMetaDataReady = false;
   extractorMetaDataStatus = "";
   extractorMetaDataError = false;
+  process = 0;
 
   uiNextButtonReady = false;
   isAcquisitionMetadataOk = false;
@@ -56,6 +57,7 @@ export class IngestorExtractorMetadataDialogComponent {
       this.createNewTransferData.apiInformation.metaDataExtractionFailed;
     this.extractorMetaDataStatus =
       this.createNewTransferData.apiInformation.extractorMetaDataStatus;
+    this.process = this.createNewTransferData.apiInformation.extractorMetadataProgress;
   }
 
   onClickBack(): void {
