@@ -58,7 +58,12 @@
   ],
   "logbookEnabled": false,
   "loginFormEnabled": true,
-  "oAuth2Endpoints": [],
+  "oAuth2Endpoints": [
+    {
+      "authURL": "api/v3/auth/oidc",
+      "displayText": "Login with OIDC"
+    }
+  ],
   "maxDirectDownloadSize": 5000000000,
   "metadataPreviewEnabled": true,
   "metadataStructure": "tree",

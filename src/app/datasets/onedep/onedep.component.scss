@@ -14,8 +14,7 @@ mat-card {
     justify-content: space-between;
     align-items: flex-start;
     gap: 16px;
-    padding: 16px;
-    margin-bottom: 20px;
+    padding: 8px 16px 8px;
   }
 
   .card-left, 
@@ -40,7 +39,7 @@ mat-card {
   h2.password{
     margin-top:3rem;
   }
-  .file-header {
+  .file-header {/* space after the main Attachments card */
     display: flex;
     margin-bottom: 16px;
   }
@@ -74,12 +73,18 @@ mat-card {
     width:40%;
   }
 
-  .remove-field-btn {
+  .remove-orcid-btn {
     position: absolute;
     top: 50%;
     right: -40%;
     transform: translateY(-50%);
     margin-left: 8px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .remove-file-btn {
+    position: absolute;
+    margin-left: 16px;
     color: rgba(0, 0, 0, 0.6);
   }
 
@@ -115,12 +120,8 @@ mat-card {
     width: 100%;
     padding: 0.5rem 0;
 
-    .sample-edit {
-      padding-left: 0.5rem;
-
-      mat-icon {
-        font-size: medium;
-      }
+    mat-icon {
+      font-size: medium;
     }
   }
 
@@ -156,16 +157,16 @@ mat-card {
 
   .fileCard {
     width: 80%;
-    margin: 10px 0 10px 0;
+    margin: 16px 0 0 0; /* Space between attachment cards */
     border: 1px solid #ddd;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
     mat-card-header {
       background-color: #B3D9AC;
       height: 26px;
-      display: flex; // Use flexbox to align items
-      align-items: center; // Center content vertically
-      padding: 0 16px; // Optional: adjust padding as needed
+      display: flex; 
+      align-items: center; 
+      padding: 0 16px; 
     }
 
     mat-card-title {
@@ -173,43 +174,44 @@ mat-card {
     }
 
     .file-selection-container {
-      display: flex; // Use flexbox for layout
-      align-items: center; // Center items vertically
-      gap: 10px; // Space between items
+      display: flex; 
+      align-items: center; 
+      gap: 16px;
+      
 
       .fileChooser {
         background-color: #CFE7CB;
         color: #333;
-        margin: 5px 0 0 0; // Reset any margin
+        margin: 16px 0 2px 0;
       }
 
       .fileName {
-        font-size: 14px; // Adjust the font size as needed
-        color: #333; // Adjust the text color if needed
+        font-size: 16px; 
+        transform: translateY(15%);
+        color: #333; 
       }
     }
 
     mat-card-content {
       display: flex;
       flex-direction: column;
-      margin-bottom: 40px;
-
-      .fileChooser {
-        margin: 3px auto;
-      }
+      margin-bottom: 0px;
+      
       .data-field {
         width: 350px; 
         min-width: 320px; 
         position: relative; 
     }
+      
       .input-container {
-        display: flex; // Use flexbox for layout
+        display: flex; 
         align-items: flex-end;
-        gap: 10px; // Space between the fields
+        gap: 16px;
+        margin-top: 0px;
 
         .contour-level {
-          flex: 0 0 20%; // Set to take 20% of the width
-          min-width: 150px; // Optional: set a minimum width for usability
+          flex: 0 0 12%; // Set to take 12% of the width
+          min-width: 150px;
 
           /* Chrome, Safari, Edge, Opera */
           input[matinput]::-webkit-outer-spin-button,
@@ -222,12 +224,21 @@ mat-card {
             -moz-appearance: textfield;
           }
         }
-
+        .contour-field-wrapper {
+          display: flex;
+          flex-direction: column;
+        }
+        
+        .mat-error {
+          flex: 1;
+          font-size: 0.75rem; /* Angular Material error size */
+          color: #f44336; /* Default error color */
+        }
         .details {
 
-          margin-top:  10px;
-          flex: 1; // Allow this field to take the remaining space
-          min-width: 200px; // Optional: set a minimum width for usability
+          margin-top:  16px;
+          flex: 1;
+          min-width: 200px;
 
           mat-form-field {
             textarea {
@@ -242,17 +253,28 @@ mat-card {
             }
           }
         }
-
-        mat-form-field {
-          width: 100%; // Ensure fields take full width of their flex container
-          margin-bottom: 0;
-        }
       }
     }
   }
+  .button-container {
+    display: flex;       
+    align-items: flex-start; 
+    gap: 20px; 
+    margin-top: 16px;
 
+    .button-wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+  }
   .submitDep {
+    width: 300px;  
+    flex-direction: column;
     background-color: #B3D9AC;
     color:black;
   }
+  .form-error{
+    margin-top: 16px;
+  }
+
 }

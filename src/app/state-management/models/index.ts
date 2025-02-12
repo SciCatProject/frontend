@@ -30,6 +30,7 @@ export interface DatasetsListSettings {
 export enum MessageType {
   Success = "success",
   Error = "error",
+  Info = "info",
 }
 
 export interface Message {
