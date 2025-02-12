@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { JsonFormsAngularService, JsonFormsControl } from "@jsonforms/angular";
 import { ControlProps, JsonSchema } from "@jsonforms/core";
 import { configuredRenderer } from "../ingestor-metadata-editor-helper";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 
 @Component({
   selector: "app-anyof-renderer",
@@ -14,7 +15,7 @@ import { configuredRenderer } from "../ingestor-metadata-editor-helper";
         <mat-checkbox
           *ngIf="options.includes('null')"
           [(ngModel)]="!nullOptionSelected"
-          (change)="nullOptionSelected = !nullOptionSelected"
+          (change)="onEnableCheckboxChange($event)"
         >
           Enabled
         </mat-checkbox></mat-card-title
@@ -89,6 +90,23 @@ export class AnyOfRendererComponent extends JsonFormsControl {
         JSON.stringify(option) === tabOption,
     );
     return selectedSchema;
+  }
+
+  public onEnableCheckboxChange(event: MatCheckboxChange) {
+    this.nullOptionSelected = !event.checked;
+
+    if (this.nullOptionSelected) {
+      const updatedData = this.rendererService.getState().jsonforms.core.data;
+      // Update the data in the correct path
+      const pathSegments = this.passedProps.path.split(".");
+      let current = updatedData;
+      for (let i = 0; i < pathSegments.length - 1; i++) {
+        current = current[pathSegments[i]];
+      }
+      current[pathSegments[pathSegments.length - 1]] = null;
+
+      this.rendererService.setData(updatedData);
+    }
   }
 
   public onInnerJsonFormsChange(event: any) {

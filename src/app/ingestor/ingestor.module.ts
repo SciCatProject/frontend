@@ -24,13 +24,16 @@ import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 import { IngestorExtractorMetadataDialogComponent } from "./ingestor/dialog/ingestor.extractor-metadata-dialog.component";
 import { IngestorConfirmTransferDialogComponent } from "./ingestor/dialog/ingestor.confirm-transfer-dialog.component";
 import { MatStepperModule } from "@angular/material/stepper";
-import { IngestorDialogStepperComponent } from "./ingestor/dialog/ingestor.dialog-stepper.component.component";
+import { IngestorDialogStepperComponent } from "./ingestor/dialog/dialog-mounting-components/ingestor.dialog-stepper.component";
 import { AnyOfRendererComponent } from "./ingestor-metadata-editor/customRenderer/any-of-renderer";
 import { OneOfRendererComponent } from "./ingestor-metadata-editor/customRenderer/one-of-renderer";
 import { MatRadioModule } from "@angular/material/radio";
 import { ArrayLayoutRendererCustom } from "./ingestor-metadata-editor/customRenderer/array-renderer";
 import { MatBadgeModule } from "@angular/material/badge";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { IngestorConfirmationDialogComponent } from "./ingestor/dialog/confirmation-dialog/ingestor.confirmation-dialog.component";
+import { ExportTemplateHelperComponent } from "./ingestor/dialog/dialog-mounting-components/ingestor.export-helper.component";
+import { MatPaginatorModule } from "@angular/material/paginator";
 
 @NgModule({
   declarations: [
@@ -44,6 +47,8 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     AnyOfRendererComponent,
     OneOfRendererComponent,
     ArrayLayoutRendererCustom,
+    IngestorConfirmationDialogComponent,
+    ExportTemplateHelperComponent,
   ],
   imports: [
     CommonModule,
@@ -68,6 +73,8 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     MatBadgeModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
+    CommonModule,
+    MatPaginatorModule,
   ],
 })
 export class IngestorModule {}

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from "@angular/core";
+import { ChangeDetectorRef, Component, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
 import { JsonSchema } from "@jsonforms/core";
 import {
@@ -6,12 +6,11 @@ import {
   IngestionRequestInformation,
   IngestorHelper,
   SciCatHeader_Schema,
-} from "../ingestor.component-helper";
+} from "../helper/ingestor.component-helper";
 
 @Component({
   selector: "ingestor.user-metadata-dialog",
   templateUrl: "ingestor.user-metadata-dialog.html",
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ["../ingestor.component.scss"],
 })
 export class IngestorUserMetadataDialogComponent {
@@ -22,7 +21,13 @@ export class IngestorUserMetadataDialogComponent {
     IngestorHelper.createEmptyRequestInformation();
   backendURL = "";
 
-  uiNextButtonReady = true; // Change to false when dev is ready
+  uiNextButtonReady = false;
+  isSciCatHeaderOk = false;
+  scicatHeaderErrors = "";
+  isOrganizationalMetadataOk = false;
+  organizationalErrors = "";
+  isSampleInformationOk = false;
+  sampleErrors = "";
 
   isCardContentVisible = {
     scicat: true,
@@ -33,6 +38,7 @@ export class IngestorUserMetadataDialogComponent {
   constructor(
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: DialogDataObject,
+    private cdr: ChangeDetectorRef,
   ) {
     this.createNewTransferData = data.createNewTransferData;
     this.backendURL = data.backendURL;
@@ -44,7 +50,6 @@ export class IngestorUserMetadataDialogComponent {
         .sample;
 
     this.metadataSchemaOrganizational = organizationalSchema;
-
     this.metadataSchemaSample = sampleSchema;
     this.scicatHeaderSchema = SciCatHeader_Schema;
   }
@@ -73,7 +78,57 @@ export class IngestorUserMetadataDialogComponent {
     this.createNewTransferData.scicatHeader = event;
   }
 
+  onCreateNewTransferDataChange(updatedData: IngestionRequestInformation) {
+    Object.assign(this.createNewTransferData, updatedData);
+  }
+
   toggleCardContent(card: string): void {
     this.isCardContentVisible[card] = !this.isCardContentVisible[card];
+  }
+
+  scicatHeaderErrorsHandler(errors: any[]) {
+    this.isSciCatHeaderOk = errors.length === 0;
+    this.scicatHeaderErrors = "";
+    errors.forEach((error, number) => {
+      if (error.message) {
+        const ctrNum = number + 1;
+        this.scicatHeaderErrors += ctrNum + ": " + error.message + "\n";
+      }
+    });
+    this.validateNextButton();
+    this.cdr.detectChanges();
+  }
+
+  organizationalErrorsHandler(errors: any[]) {
+    this.isOrganizationalMetadataOk = errors.length === 0;
+    this.organizationalErrors = "";
+    errors.forEach((error, number) => {
+      if (error.message) {
+        const ctrNum = number + 1;
+        this.organizationalErrors += ctrNum + ": " + error.message + "\n";
+      }
+    });
+    this.validateNextButton();
+    this.cdr.detectChanges();
+  }
+
+  sampleErrorsHandler(errors: any[]) {
+    this.isSampleInformationOk = errors.length === 0;
+    this.sampleErrors = "";
+    errors.forEach((error, number) => {
+      if (error.message) {
+        const ctrNum = number + 1;
+        this.sampleErrors += ctrNum + ": " + error.message + "\n";
+      }
+    });
+    this.validateNextButton();
+    this.cdr.detectChanges();
+  }
+
+  validateNextButton(): void {
+    this.uiNextButtonReady =
+      this.isSciCatHeaderOk &&
+      this.isOrganizationalMetadataOk &&
+      this.isSampleInformationOk;
   }
 }

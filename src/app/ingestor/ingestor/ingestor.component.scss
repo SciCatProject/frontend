@@ -57,6 +57,43 @@ mat-card {
   flex: 1 1 auto;
 }
 
-.error-message {
-  color: red;
+.user-info {
+  padding: 1em;
+}
+
+.user-info .user-icon-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.user-info .user-icon-container p {
+  margin: auto 0;
+}
+
+.divider-down {
+  margin-bottom: 1em;
+}
+
+.code-editor pre.code {
+  white-space: pre-wrap;
+  counter-reset: listing; 
+  line-height: 0.1;
+}
+.code-editor pre.code code {
+  counter-increment: listing; 
+  display: flex;
+  line-height: 1;
+}
+
+.code-editor pre.code code::before {
+  content: counter(listing) " ";
+  display: inline-block;
+  width: 2em; /* Breite für die Zeilennummern */
+  text-align: right; /* Rechtsbündige Zeilennummern */
+  margin-right: 0.5em; /* Abstand zwischen Zeilennummer und Code */
+}
+
+.transferPaginator {
+  margin-top: 1.5em;
 }

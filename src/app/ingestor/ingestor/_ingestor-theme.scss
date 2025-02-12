@@ -8,6 +8,7 @@
   $header-2: map-get($color-config, "header-2");
   $header-3: map-get($color-config, "header-3");
   $accent: map-get($color-config, "accent");
+  $warn: map-get($color-config, "warn");
   mat-card {
     .scicat-header {
       background-color: mat.get-color-from-palette($primary, "lighter");
@@ -28,6 +29,18 @@
     .acquisition-header {
       background-color: mat.get-color-from-palette($accent, "lighter");
     }
+  }
+
+  .error-message {
+    color: mat.get-color-from-palette($warn, "default");
+  }
+
+  .error-icon {
+    color: mat.get-color-from-palette($warn, "default");
+  }
+
+  .success-icon {
+    color: green;
   }
 }
 

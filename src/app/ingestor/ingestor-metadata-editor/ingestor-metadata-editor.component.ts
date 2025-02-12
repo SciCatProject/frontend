@@ -9,6 +9,7 @@ import { configuredRenderer } from "./ingestor-metadata-editor-helper";
     [schema]="schema"
     [renderers]="combinedRenderers"
     (dataChange)="onDataChange($event)"
+    (errors)="onErrors($event)"
   ></jsonforms>`,
 })
 export class IngestorMetadataEditorComponent {
@@ -16,6 +17,7 @@ export class IngestorMetadataEditorComponent {
   @Input() schema: JsonSchema;
 
   @Output() dataChange = new EventEmitter<string>();
+  @Output() errors = new EventEmitter<any[]>();
 
   get combinedRenderers() {
     return configuredRenderer;
@@ -23,5 +25,13 @@ export class IngestorMetadataEditorComponent {
 
   onDataChange(event: any) {
     this.dataChange.emit(event);
+  }
+
+  onErrors(errors: any[]) {
+    this.errors.emit(errors);
+  }
+
+  hasErrors(): boolean {
+    return this.errors.length > 0;
   }
 }

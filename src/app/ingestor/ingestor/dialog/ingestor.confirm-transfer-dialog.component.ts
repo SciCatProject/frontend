@@ -10,12 +10,12 @@ import {
   IngestionRequestInformation,
   IngestorHelper,
   SciCatHeader,
-} from "../ingestor.component-helper";
+} from "../helper/ingestor.component-helper";
+import { IngestorConfirmationDialogComponent } from "./confirmation-dialog/ingestor.confirmation-dialog.component";
 
 @Component({
   selector: "ingestor.confirm-transfer-dialog",
   templateUrl: "ingestor.confirm-transfer-dialog.html",
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ["../ingestor.component.scss"],
 })
 export class IngestorConfirmTransferDialogComponent implements OnInit {
@@ -23,6 +23,7 @@ export class IngestorConfirmTransferDialogComponent implements OnInit {
     IngestorHelper.createEmptyRequestInformation();
   provideMergeMetaData = "";
   backendURL = "";
+  errorMessage = "";
 
   constructor(
     public dialog: MatDialog,
@@ -53,17 +54,47 @@ export class IngestorConfirmTransferDialogComponent implements OnInit {
     return JSON.stringify(scicatMetadata, null, space);
   }
 
+  onCreateNewTransferDataChange(updatedData: IngestionRequestInformation) {
+    Object.assign(this.createNewTransferData, updatedData);
+  }
+
+  clearErrorMessage(): void {
+    this.errorMessage = "";
+  }
+
   onClickBack(): void {
     if (this.data && this.data.onClickNext) {
-      this.data.onClickNext(2); // Beispielwert für den Schritt
+      this.data.onClickNext(2);
     }
   }
 
   onClickConfirm(): void {
+    this.errorMessage = "";
     if (this.data && this.data.onClickNext) {
-      this.createNewTransferData.mergedMetaDataString =
-        this.provideMergeMetaData;
-      this.data.onClickNext(4);
+      const dialogRef = this.dialog.open(IngestorConfirmationDialogComponent, {
+        data: {
+          header: "Confirm ingestion",
+          message: "Create a new dataset and start data transfer?",
+        },
+      });
+      dialogRef.afterClosed().subscribe(async (result) => {
+        if (result) {
+          this.createNewTransferData.mergedMetaDataString =
+            this.provideMergeMetaData;
+          try {
+            const success = await this.data.onStartUpload();
+            if (success) {
+              this.data.onClickNext(4);
+            }
+          } catch (error) {
+            this.errorMessage = error.message;
+
+            if (error.error) {
+              this.errorMessage += ": " + error.error;
+            }
+          }
+        }
+      });
     }
   }
 }
