@@ -87,7 +87,7 @@ export class IngestorComponent implements OnInit {
 
       if (discovery && !backendUrl) {
         // TODO REMOVE HARDCODED AND DO AUTODISCOVERY
-        const psiUrl = 'https://ingestor.development.psi.ch';
+        const psiUrl = "https://ingestor.development.psi.ch";
         this.initializeIngestorConnection(psiUrl);
       }
 
@@ -277,7 +277,7 @@ export class IngestorComponent implements OnInit {
   loadLastUsedFacilityBackends(): string[] {
     // Load the list from the local Storage
     const lastUsedFacilityBackends =
-      '["https://ingestor.development.psi.ch", "http://localhost:8800", "http://localhost:8000", "http://localhost:8888", ]';
+      '["https://ingestor.development.psi.ch", "http://localhost:8800", "http://localhost:8000", "http://localhost:8888" ]';
     if (lastUsedFacilityBackends) {
       return JSON.parse(lastUsedFacilityBackends);
     }
