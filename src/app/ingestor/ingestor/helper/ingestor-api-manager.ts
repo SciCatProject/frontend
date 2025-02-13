@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { INGESTOR_API_ENDPOINTS_V1 } from "./ingestor-api-endpoints";
 import {
+  DeleteTransferRequest,
   DeleteTransferResponse,
   GetDatasetResponse,
   GetExtractorResponse,
@@ -89,7 +90,7 @@ export class IngestorAPIManager {
   }
 
   public cancelTransfer(transferId: string): Promise<DeleteTransferResponse> {
-    const body = { ingestId: transferId };
+    const body: DeleteTransferRequest = { transferId: transferId };
 
     console.log("Cancel transfer", transferId);
     return new Promise((resolve, reject) => {
