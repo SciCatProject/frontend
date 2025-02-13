@@ -129,15 +129,29 @@
         [ngStyle]="cellStyle(row?.option, column)"
         (contextmenu)="onContextMenu($event, column, row)"
       >
-        <label
-          *ngIf="!column.dynamicCellComponent"
-          (click)="onLabelClick($event, row, column)"
-          [class.rtl-cell]="direction === 'rtl'"
-          [class.ltr-cell]="direction === 'ltr'"
-          [ngStyle]="ellipsis(column)"
-          class="label-cell"
-          >{{ row[column.name] }}</label
-        >
+        <ng-template *ngIf="column.customRender; else regularColumnRender">
+          <label
+            *ngIf="!column.dynamicCellComponent"
+            (click)="onLabelClick($event, row, column)"
+            [class.rtl-cell]="direction === 'rtl'"
+            [class.ltr-cell]="direction === 'ltr'"
+            [ngStyle]="ellipsis(column)"
+            class="label-cell"
+            [innerHTML]="columnName(row, column)"
+          >
+          </label>
+        </ng-template>
+        <ng-template #regularColumnRender>
+          <label
+            *ngIf="!column.dynamicCellComponent"
+            (click)="onLabelClick($event, row, column)"
+            [class.rtl-cell]="direction === 'rtl'"
+            [class.ltr-cell]="direction === 'ltr'"
+            [ngStyle]="ellipsis(column)"
+            class="label-cell"
+            >{{ row[column.name] }}
+          </label>
+        </ng-template>
         <ng-container
           *ngIf="column.dynamicCellComponent"
           appDynamicCell

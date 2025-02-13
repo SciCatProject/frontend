@@ -22,6 +22,11 @@
     .formRow {
       .formColumn {
         padding-right: 1em;
+        min-width: 24%;
+
+        &.deleteColumn {
+          min-width: auto;
+        }
 
         .selectField {
           max-width: 8em;
