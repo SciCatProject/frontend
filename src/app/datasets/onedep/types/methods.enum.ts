@@ -85,7 +85,7 @@ export const createMethodsList = (): EmMethod[] => {
     contour: null,
     details: "",
     required: false,
-    fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
+    fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz", ".map", ".map.gz"],
     prioritySort: 2,
     explanation:
       "Primary map (.mrc or .ccp4 format, may use gzip or bzip2 compression) along with recommended contour level",
@@ -99,7 +99,7 @@ export const createMethodsList = (): EmMethod[] => {
     contour: null,
     details: "",
     required: false,
-    fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
+    fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz", ".map", ".map.gz"],
     prioritySort: 4,
     explanation:
       "Half maps (as used for FSC calculation; two maps must be uploaded)",
@@ -113,7 +113,7 @@ export const createMethodsList = (): EmMethod[] => {
     contour: null,
     details: "",
     required: false,
-    fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
+    fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz", ".map", ".map.gz"],
     prioritySort: 5,
     explanation:
       "Half maps (as used for FSC calculation; two maps must be uploaded)",
@@ -127,7 +127,7 @@ export const createMethodsList = (): EmMethod[] => {
     contour: null,
     details: "",
     required: false,
-    fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
+    fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz", ".map", ".map.gz"],
     prioritySort: 3,
     explanation:
       "Primary/raw map mask, segmentation/focused refinement mask and half-map mask",
@@ -142,7 +142,7 @@ export const createMethodsList = (): EmMethod[] => {
     contour: null,
     details: "",
     required: false,
-    fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz"],
+    fileFormat: [".mrc", ".ccp4", ".mrc.gz", ".ccp4.gz", ".map", ".map.gz"],
     prioritySort: 10,
     explanation:
       "Difference maps, maps showing alternative conformations and/or compositions, maps with differential processing (e.g. filtering, sharpening and masking)",
