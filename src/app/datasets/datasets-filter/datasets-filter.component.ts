@@ -78,8 +78,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   hasAppliedFilters$ = this.store.select(selectHasAppliedFilters);
 
-  isInEditMode = false;
-
   labelMaps: { [key: string]: string } = {};
 
   constructor(
@@ -176,7 +174,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   applyFilters() {
-    this.isInEditMode = false;
     this.store.dispatch(fetchDatasetsAction());
     this.store.dispatch(fetchFacetCountsAction());
   }
