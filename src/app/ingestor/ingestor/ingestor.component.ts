@@ -20,6 +20,7 @@ import {
   OtherVersionResponse,
   PostDatasetRequest,
   GetTransferResponse,
+  TransferItem,
 } from "ingestor/model/models";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { Store } from "@ngrx/store";
@@ -54,10 +55,18 @@ export class IngestorComponent implements OnInit {
   lastUsedFacilityBackends: string[] = [];
 
   transferDataInformation: GetTransferResponse = null;
+  transferDetailInformation: TransferItem[] = [];
+  transferAutoRefreshIntervalDetail = 3000;
   transferDataPageSize = 100;
   transferDataPageIndex = 0;
   transferDataPageSizeOptions = [5, 10, 25, 100];
-  displayedColumns: string[] = ["transferId", "status", "actions"];
+  displayedColumns: string[] = [
+    "transferId",
+    "status",
+    "message",
+    "progress",
+    "actions",
+  ];
 
   versionInfo: OtherVersionResponse = null;
   userInfo: UserInfo = null;
@@ -69,13 +78,15 @@ export class IngestorComponent implements OnInit {
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
 
+  autoRefreshInterval: NodeJS.Timeout = null;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private apiManager: IngestorAPIManager,
     private sseService: IngestorMetadataSSEService,
     private store: Store,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
@@ -363,12 +374,19 @@ export class IngestorComponent implements OnInit {
     if (dialogRef === null) return;
   }
 
-  async doRefreshTransferList(): Promise<void> {
+  async doRefreshTransferList(transferId?: string): Promise<void> {
     try {
-      this.transferDataInformation = await this.apiManager.getTransferList(
+      const response = await this.apiManager.getTransferList(
         this.transferDataPageIndex + 1,
         this.transferDataPageSize,
+        transferId,
       );
+
+      if (transferId && response.transfers.length > 0) {
+        this.transferDetailInformation.push(response.transfers[0]);
+      } else {
+        this.transferDataInformation = response;
+      }
     } catch (error) {
       this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
     }
@@ -397,5 +415,61 @@ export class IngestorComponent implements OnInit {
   openIngestorLogout(): void {
     window.location.href =
       this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.AUTH.LOGOUT;
+  }
+
+  getTransferDetailInformation(transferId: string): string {
+    const detailItem = this.transferDetailInformation.find(
+      (item) => item.transferId === transferId,
+    );
+    if (detailItem) {
+      let progressState = "";
+      let progressPercent = 0;
+      let fileState = "";
+
+      if (detailItem.bytesTransferred && detailItem.bytesTotal) {
+        const bytesToGB = (bytes: number) => (bytes / 1024 ** 3).toFixed();
+        progressState = `${bytesToGB(detailItem.bytesTransferred)} / ${bytesToGB(detailItem.bytesTotal)} GB`;
+        progressPercent =
+          (detailItem.bytesTransferred / detailItem.bytesTotal) * 100;
+      }
+
+      if (
+        detailItem.filesTransferred &&
+        detailItem.filesTotal &&
+        detailItem.filesTotal > 0
+      ) {
+        fileState = `${detailItem.filesTransferred} / ${detailItem.filesTotal} Files`;
+      }
+
+      return (
+        "Progress: " +
+        progressPercent +
+        "%" +
+        " - Data: " +
+        progressState +
+        " - Files: " +
+        fileState
+      );
+    }
+    return "No further information available.";
+  }
+
+  reloadTransferDetailInformation(transferId: string): void {
+    this.doRefreshTransferList(transferId);
+  }
+
+  startAutoRefresh(transferId: string): void {
+    this.reloadTransferDetailInformation(transferId);
+    this.stopAutoRefresh();
+    this.autoRefreshInterval = setInterval(() => {
+      this.reloadTransferDetailInformation(transferId);
+    }, this.transferAutoRefreshIntervalDetail);
+  }
+
+  stopAutoRefresh(): void {
+    if (this.autoRefreshInterval) {
+      clearInterval(this.autoRefreshInterval);
+      this.autoRefreshInterval = null;
+    }
   }
 }

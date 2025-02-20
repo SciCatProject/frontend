@@ -10,7 +10,24 @@
 
 
 export interface TransferItem { 
-    transferId?: string;
-    status?: string;
+    transferId: string;
+    status: TransferItem.StatusEnum;
+    message?: string;
+    bytesTransferred?: number;
+    bytesTotal?: number;
+    filesTransferred?: number;
+    filesTotal?: number;
 }
+export namespace TransferItem {
+    export type StatusEnum = 'waiting' | 'transferring' | 'finished' | 'failed' | 'cancelled' | 'invalid status';
+    export const StatusEnum = {
+        Waiting: 'waiting' as StatusEnum,
+        Transferring: 'transferring' as StatusEnum,
+        Finished: 'finished' as StatusEnum,
+        Failed: 'failed' as StatusEnum,
+        Cancelled: 'cancelled' as StatusEnum,
+        InvalidStatus: 'invalid status' as StatusEnum
+    };
+}
+
 
