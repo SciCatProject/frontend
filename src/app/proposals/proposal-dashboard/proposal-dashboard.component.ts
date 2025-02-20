@@ -139,6 +139,7 @@ export class ProposalDashboardComponent implements OnInit {
     if (initialQueryParams.textSearch) {
       this.globalTextSearch = initialQueryParams.textSearch;
     }
+
     this.store.dispatch(
       fetchProposalsAction({
         limit: initialQueryParams.pageSize || this.defaultPageSize,

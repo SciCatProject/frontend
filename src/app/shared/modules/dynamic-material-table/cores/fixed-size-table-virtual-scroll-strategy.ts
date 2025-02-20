@@ -128,9 +128,6 @@ export class FixedSizeTableVirtualScrollStrategy
   }
 
   public scrollToIndex(index: number, behavior: ScrollBehavior): void {
-    // if (this.viewport) {
-    //   this.viewport.scrollToOffset( this.rowHeight * index , behavior);
-    // }
     if (!this.viewport || !this.rowHeight) {
       return;
     }

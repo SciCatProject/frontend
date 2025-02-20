@@ -79,7 +79,6 @@
     line-height: 33px;
     background-color: white;
     border: none;
-    // padding-right: 77px;
     padding-left: 5px;
     border-radius: 4px;
     outline: none;
@@ -128,7 +127,6 @@
 .save-table-setting {
   display: flex;
   min-width: 70px;
-  // margin-left: -60px;
   mat-icon {
     width: 32px;
     height: 32px;
@@ -153,34 +151,10 @@
   }
 }
 
-// .va-mat-table-dragable-container .dragable-row .column-setting-button {
-//   //float: right;
-//   margin: 0 5px;
-//   cursor: pointer;
-//   width: 26px;
-//   height: 26px;
-//   mat-icon{
-//     cursor: pointer;
-//     font-size: 22px;
-//   }
-// }
-
-// .column-setting-button:dir(ltr) {
-//   margin: 15px;
-// }
-// .va-mat-table-dragable-container .dragable-row mat-icon {
-//   margin-top: -2px;
-// }
-// .va-mat-table-dragable-container .dragable-row mat-icon,
-// .va-mat-table-dragable-container .dragable-row mat-checkbox {
-//   vertical-align: top;
-// }
 .va-mat-table-dragable-container .dragable-row mat-icon {
   line-height: 30px;
   opacity: 0.15;
   transition: opacity 0.5s;
-  // margin-right: 8px;
-  // padding-left: 4px;
   color: #616161;
   cursor: grab;
   background-color: white;
@@ -204,7 +178,6 @@
   vertical-align: top;
 }
 .va-mat-table-drag-preview mat-icon {
-  // margin-right: 8px;
   padding-left: 4px;
   color: #616161;
 }

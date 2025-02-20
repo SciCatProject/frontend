@@ -79,13 +79,12 @@ export function copy(
   const f: string[] = Object.keys(from);
   const t: string[] = Object.keys(to);
   f.forEach((fi) => {
-    if (forced === true || t.includes(fi) === true) {
-      if (
-        !(from[fi] === null && nullSkip === true) &&
-        !(from[fi] === undefined && undefinedSkip === true)
-      ) {
-        to[fi] = from[fi];
-      }
+    if (
+      (forced === true || t.includes(fi) === true) &&
+      !(from[fi] === null && nullSkip === true) &&
+      !(from[fi] === undefined && undefinedSkip === true)
+    ) {
+      to[fi] = from[fi];
     }
   });
 }
