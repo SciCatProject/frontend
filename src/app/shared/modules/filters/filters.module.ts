@@ -17,6 +17,7 @@ import { AsyncPipe, NgForOf } from "@angular/common";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatIconModule } from "@angular/material/icon";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
     ConditionFilterComponent,
   ],
   imports: [
+    MatTooltipModule,
     MatInputModule,
     MatDatepickerModule,
     AsyncPipe,
