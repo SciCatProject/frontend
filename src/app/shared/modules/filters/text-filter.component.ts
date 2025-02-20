@@ -35,7 +35,7 @@ export class TextFilterComponent
     this.subscription = this.textSubject
       .pipe(
         skipWhile((terms) => terms === ""),
-        debounceTime(500),
+        debounceTime(200),
         distinctUntilChanged(),
       )
       .subscribe((terms) => {
