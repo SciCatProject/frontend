@@ -90,14 +90,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
       metadata: ["", Validators.required],
       orcid: this.fb.array([
         this.fb.group({
-          orcidId: [
-            "",
-            [
-              Validators.required,
-              this.orcidValidatorNumeric(),
-              this.orcidValidator16digits(),
-            ],
-          ],
+          orcidId: ["", [Validators.required, this.orcidValidator()]],
         }),
       ]),
       emMethod: ["", Validators.required],
@@ -147,27 +140,16 @@ export class OneDepComponent implements OnInit, OnDestroy {
     this.showPassword = !this.showPassword;
   }
   // custom validator of the ORCID ids
-  orcidValidatorNumeric(): (
-    control: AbstractControl,
-  ) => ValidationErrors | null {
+  orcidValidator(): (control: AbstractControl) => ValidationErrors | null {
     return (control: AbstractControl): ValidationErrors | null => {
-      const value = control.value.replace(/-/g, "");
+      const value = control.value.replace(/-/g, "").toUpperCase();
       if (!value) {
         return null;
       }
-      const isValid = /^\d+$/.test(value);
-      return isValid ? null : { notNumeric: true };
-    };
-  }
-  orcidValidator16digits(): (
-    control: AbstractControl,
-  ) => ValidationErrors | null {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const value = control.value.replace(/-/g, "");
-      if (!value) {
-        return null;
-      }
-      return value.length === 16 ? null : { not16digits: true };
+      const isValid =
+        (value.length === 16 && /^\d{16}$/.test(value)) ||
+        (value.length === 16 && /^\d{15}X$/.test(value));
+      return isValid ? null : { invalidOrcid: true };
     };
   }
   orcidArray(): FormArray {
@@ -176,14 +158,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
   addOrcidField() {
     // adds an empty ORCID field to the form
     const orcidField = this.fb.group({
-      orcidId: [
-        "",
-        [
-          Validators.required,
-          this.orcidValidatorNumeric(),
-          this.orcidValidator16digits(),
-        ],
-      ],
+      orcidId: ["", [Validators.required, this.orcidValidator()]],
     });
     this.orcidArray().push(orcidField);
   }
