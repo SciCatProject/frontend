@@ -276,7 +276,6 @@ export class DynamicMatTableComponent<T extends TableRow>
           );
           i = visibleColumns[visibleColumns.length - 1].index;
         }
-        // this.columns[i].width = data.w;
         const unit = this.columns[i].widthUnit || "px";
         let style = "";
         if (this.columns[i].minWidth) {
@@ -781,7 +780,6 @@ export class DynamicMatTableComponent<T extends TableRow>
             this.resizeColumn.columnIndex === index &&
             width > this.minWidth
           ) {
-            // this.resizeColumn.columnIndex = index;
             this.resizeColumn.widthUpdate.next({
               e: this.resizeColumn,
               w: width,
@@ -890,9 +888,7 @@ export class DynamicMatTableComponent<T extends TableRow>
 
   /************************************ Drag & Drop Column *******************************************/
 
-  dragStarted(event: Event) {
-    // this.dragDropData.dragColumnIndex = event.source.;
-  }
+  dragStarted(event: Event) {}
 
   dropListDropped(event: CdkDragDrop<string[]>) {
     if (event) {
@@ -907,9 +903,6 @@ export class DynamicMatTableComponent<T extends TableRow>
       event.previousIndex,
       event.currentIndex,
     );
-
-    // updates moved data and table, but not dynamic if more dropzones
-    // this.dataSource.data = clonedeep(this.dataSource.data);
   }
   /************************************  *******************************************/
 

@@ -79,8 +79,6 @@ export class TableItemSizeDirective
 
   @ContentChild(MatTable, { static: true }) table: MatTable<any>;
 
-  // @Output() requestRendering: EventEmitter<any> = new EventEmitter();
-
   scrollStrategy = new FixedSizeTableVirtualScrollStrategy();
 
   dataSourceChanges = new Subject<void>();
@@ -153,7 +151,6 @@ export class TableItemSizeDirective
           switchMap((data) =>
             this.scrollStrategy.renderedRangeStream.pipe(
               map(({ start, end }) => {
-                // this.requestRendering.emit({from: start, to: end});
                 return typeof start !== "number" || typeof end !== "number"
                   ? data
                   : data.slice(start, end);

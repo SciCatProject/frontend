@@ -22,28 +22,6 @@ export class TableService {
 
   constructor() {}
 
-  // private downloadBlob(blob: any, filename: string) {
-  //   if (navigator.msSaveBlob) { // IE 10+
-  //     navigator.msSaveBlob(blob, filename);
-  //   } else {
-  //     const link = document.createElement('a');
-  //     if (link.download !== undefined) {
-  //       // Browsers that support HTML5 download attribute
-  //       const link = window.document.createElement('a');
-  //       const date = new Date();
-  //       link.className = 'download' + date.getUTCFullYear() + date.getUTCMonth() + date.getUTCSeconds();
-  //       link.setAttribute('href', blob);
-  //       link.setAttribute('download', filename);
-  //       link.style.visibility = 'hidden';
-  //       link.click();
-  //       // setTimeout(() => {
-  //       //   const g = document.body.getElementsByClassName(link.className);
-  //       //   document.body.removeChild(link);
-  //       // });
-  //     }
-  //   }
-  // }
-
   private downloadBlob(blob: Blob | any, filename: string) {
     if ((navigator as any).msSaveBlob) {
       // IE 10+

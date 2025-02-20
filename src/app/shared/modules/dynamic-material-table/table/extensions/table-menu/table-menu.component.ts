@@ -79,7 +79,6 @@ export class TableMenuComponent {
   }
 
   toggleSelectedColumn(column: AbstractField) {
-    // const colFound = this.currentTableSetting.columnSetting.find(c => c === column);
     column.display = column.display === "visible" ? "hidden" : "visible";
   }
 

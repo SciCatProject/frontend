@@ -1,5 +1,4 @@
 import {
-  ComponentRef,
   Directive,
   ElementRef,
   HostListener,
@@ -55,10 +54,9 @@ export class TooltipDirective implements OnInit, OnDestroy {
     const injector = Injector.create({
       providers: [{ provide: "tooltipConfig", useValue: this.content }],
     });
-    const tooptipRef: ComponentRef<TooltipComponent> = this.overlayRef.attach(
+    this.overlayRef.attach(
       new ComponentPortal(TooltipComponent, null, injector),
     );
-    // tooptipRef.onDestroy((x) => {});
   }
 
   @HostListener("mouseleave")

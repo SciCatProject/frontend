@@ -12,8 +12,7 @@
   position: sticky;
   right: 0px;
   z-index: 1;
-  // background-color: white;
-  padding-left: 0 8px;
+  padding-left: 8px;
   padding-right: 8px;
   :host.has-value & {
     opacity: 1;
@@ -39,12 +38,10 @@
 
 .menu-title {
   font-weight: bolder;
-  // height: 24px;
   top: -8px;
   position: sticky;
   background-color: white;
   z-index: 1;
-  //padding-top: 5px;
 }
 
 .menu-action {
