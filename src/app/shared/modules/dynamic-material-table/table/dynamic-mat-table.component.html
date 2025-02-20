@@ -129,7 +129,14 @@
         [ngStyle]="cellStyle(row?.option, column)"
         (contextmenu)="onContextMenu($event, column, row)"
       >
-        <ng-template *ngIf="column.customRender; else regularColumnRender">
+        <label
+          *ngIf="
+            column.customRender;
+            then customColumnRender;
+            else regularColumnRender
+          "
+        ></label>
+        <ng-template #customColumnRender>
           <label
             *ngIf="!column.dynamicCellComponent"
             (click)="onLabelClick($event, row, column)"

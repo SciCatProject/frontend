@@ -19,7 +19,7 @@ import { PrintConfig } from "shared/modules/dynamic-material-table/models/print-
 import { TableSelectionMode } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-config";
 import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
-import { TitleCasePipe } from "@angular/common";
+import { DatePipe, TitleCasePipe } from "@angular/common";
 import { ToLinkPipe } from "shared/pipes/to-link.pipe";
 import { AppConfigService } from "app-config.service";
 
@@ -80,20 +80,21 @@ export class MetadataViewComponent implements OnInit, OnChanges {
         isCurrentSetting: true,
         columnSetting: [
           {
-            header: "Human readable name",
+            header: "Name",
             name: "human_name",
-            icon: "perm_device_information",
           },
           {
             name: "name",
-            header: "Property name",
-            icon: "perm_device_information",
+            header: "Raw property name",
           },
           {
             name: "value",
-            icon: "compare_arrows",
             customRender: (column, row) => {
-              if (typeof row[column.name] === "string") {
+              if (row.type === "date" || this.isDate(row)) {
+                return this.datePipe.transform(row[column.name]);
+              }
+
+              if (row.type === "link") {
                 return this.linkPipe.transform(row[column.name] || "");
               }
 
@@ -103,11 +104,9 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           },
           {
             name: "unit",
-            icon: "description",
           },
           {
             name: "type",
-            icon: "description",
           },
         ],
       },
@@ -124,6 +123,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     private replaceUnderscore: ReplaceUnderscorePipe,
     private titleCase: TitleCasePipe,
     private linkPipe: ToLinkPipe,
+    private datePipe: DatePipe,
     public appConfigService: AppConfigService,
   ) {}
 
@@ -137,18 +137,6 @@ export class MetadataViewComponent implements OnInit, OnChanges {
         typeof metadata[key] === "object" &&
         "value" in (metadata[key] as ScientificMetadata)
       ) {
-        const isDate = this.isDate(
-          metadata[key] as ScientificMetadataTableData,
-        );
-
-        if (isDate) {
-          // TODO: This format should be retreived from a config
-          metadata[key].value = DateTime.fromISO(metadata[key].value).toFormat(
-            this.appConfigService.getConfig().dateFormat ||
-              this.defaultDateFormat,
-          );
-        }
-
         metadataObject = {
           name: key,
           value: metadata[key]["value"],
@@ -181,8 +169,12 @@ export class MetadataViewComponent implements OnInit, OnChanges {
   }
 
   isDate(scientificMetadata: ScientificMetadataTableData): boolean {
+    // NOTE: If the type is date, we expect the value to be in ISO format.
+    if (scientificMetadata.type === "date") {
+      return true;
+    }
+
     if (
-      scientificMetadata.type === "date" &&
       typeof scientificMetadata.value !== "number" &&
       DateTime.fromISO(scientificMetadata.value).isValid
     ) {
