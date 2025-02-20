@@ -70,6 +70,7 @@ export class IngestorComponent implements OnInit {
 
   versionInfo: OtherVersionResponse = null;
   userInfo: UserInfo = null;
+  scicatUserProfile: any = null;
   authIsDisabled = false;
   healthInfo: OtherHealthResponse = null;
 
@@ -91,15 +92,34 @@ export class IngestorComponent implements OnInit {
   ngOnInit() {
     this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
 
+    // Fetch the API token that the ingestor can authenticate to scicat as the user
+    this.vm$.subscribe((settings) => {
+      this.scicatUserProfile = settings.profile;
+      this.tokenValue = settings.scicatToken;
+      this.loadIngestorConfiguration();
+
+      if (this.tokenValue === "") {
+        this.store.dispatch(fetchScicatTokenAction());
+      }
+    });
+    this.store.dispatch(fetchCurrentUserAction());
+  }
+
+  loadIngestorConfiguration(): void {
     // Get the GET parameter 'backendUrl' from the URL
-    this.route.queryParams.subscribe((params) => {
+    this.route.queryParams.subscribe(async (params) => {
       const backendUrl = params["backendUrl"];
       const discovery = params["discovery"];
 
-      if (discovery && !backendUrl) {
-        // TODO REMOVE HARDCODED AND DO AUTODISCOVERY
-        const psiUrl = "https://ingestor.development.psi.ch";
-        this.initializeIngestorConnection(psiUrl);
+      if (discovery === "true" && !backendUrl) {
+        const facilityUrl = await this.getFacilityURLByUserInfo();
+        if (facilityUrl != null) {
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { backendUrl: facilityUrl },
+            queryParamsHandling: "",
+          });
+        }
       }
 
       if (backendUrl) {
@@ -108,16 +128,6 @@ export class IngestorComponent implements OnInit {
         this.connectingToFacilityBackend = false;
       }
     });
-
-    // Fetch the API token that the ingestor can authenticate to scicat as the user
-    this.vm$.subscribe((settings) => {
-      this.tokenValue = settings.scicatToken;
-
-      if (this.tokenValue === "") {
-        this.store.dispatch(fetchScicatTokenAction());
-      }
-    });
-    this.store.dispatch(fetchCurrentUserAction());
   }
 
   async initializeIngestorConnection(
@@ -471,5 +481,26 @@ export class IngestorComponent implements OnInit {
       clearInterval(this.autoRefreshInterval);
       this.autoRefreshInterval = null;
     }
+  }
+
+  async getFacilityURLByUserInfo(): Promise<string | null> {
+    if (this.scicatUserProfile && this.scicatUserProfile.email) {
+      const facilityEmail = this.scicatUserProfile.email;
+      const facility = facilityEmail.split("@")[1] as string;
+
+      try {
+        const facilityName = facility.toLowerCase();
+        //const discoveryJson = await this.apiManager.getAutodiscoveryList();
+        //const discoveryList = JSON.parse(discoveryJson);
+        console.log(facilityName);
+        // TODO
+        if (facilityName === "unibe.ch") {
+          return "http://localhost:8888";
+        }
+      } catch (error) {
+        this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+      }
+    }
+    return null;
   }
 }

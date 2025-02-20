@@ -96,10 +96,12 @@ export class AnyOfRendererComponent extends JsonFormsControl {
     this.nullOptionSelected = !event.checked;
 
     if (this.nullOptionSelected) {
-      const updatedData = this.rendererService.getState().jsonforms.core.data;
+      const updatedData =
+        this.rendererService.getState().jsonforms.core.data ?? {};
+
       // Update the data in the correct path
       const pathSegments = this.passedProps.path.split(".");
-      let current = updatedData;
+      let current = updatedData ?? {};
       for (let i = 0; i < pathSegments.length - 1; i++) {
         current = current[pathSegments[i]];
       }
@@ -111,11 +113,12 @@ export class AnyOfRendererComponent extends JsonFormsControl {
 
   public onInnerJsonFormsChange(event: any) {
     if (event !== this.passedProps.data) {
-      const updatedData = this.rendererService.getState().jsonforms.core.data;
+      const updatedData =
+        this.rendererService.getState().jsonforms.core.data ?? {};
 
       // Update the data in the correct path
       const pathSegments = this.passedProps.path.split(".");
-      let current = updatedData;
+      let current = updatedData ?? {};
       for (let i = 0; i < pathSegments.length - 1; i++) {
         current = current[pathSegments[i]];
       }

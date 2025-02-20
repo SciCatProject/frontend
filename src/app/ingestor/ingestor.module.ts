@@ -34,6 +34,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { IngestorConfirmationDialogComponent } from "./ingestor/dialog/confirmation-dialog/ingestor.confirmation-dialog.component";
 import { ExportTemplateHelperComponent } from "./ingestor/dialog/dialog-mounting-components/ingestor.export-helper.component";
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { CustomObjectControlRendererComponent } from "./ingestor-metadata-editor/customRenderer/object-group-renderer";
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
     AnyOfRendererComponent,
     OneOfRendererComponent,
     ArrayLayoutRendererCustom,
+    CustomObjectControlRendererComponent,
     IngestorConfirmationDialogComponent,
     ExportTemplateHelperComponent,
   ],

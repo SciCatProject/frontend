@@ -14,5 +14,8 @@ export const INGESTOR_API_ENDPOINTS_V1 = {
   METADATA: "metadata",
 };
 
+/*export const AUTODISCOVERY_ENDPOINT =
+  "http://localhost:4000/assets/discovery/discovery.txt";*/
+
 export const LAST_USED_FALLBACK =
   '["http://localhost:8000", "http://localhost:8888"]';

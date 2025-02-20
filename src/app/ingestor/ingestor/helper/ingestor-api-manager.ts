@@ -40,14 +40,14 @@ export class IngestorAPIManager {
           params,
           ...this.connectOptions,
         })
-        .subscribe(
-          (response) => {
+        .subscribe({
+          next: (response) => {
             resolve(response as OtherVersionResponse);
           },
-          (error) => {
+          error: (error) => {
             reject(error);
           },
-        );
+        });
     });
   }
 
@@ -59,14 +59,14 @@ export class IngestorAPIManager {
           params,
           ...this.connectOptions,
         })
-        .subscribe(
-          (response) => {
+        .subscribe({
+          next: (response) => {
             resolve(response as UserInfo);
           },
-          (error) => {
+          error: (error) => {
             reject(error);
           },
-        );
+        });
     });
   }
 
@@ -78,14 +78,14 @@ export class IngestorAPIManager {
           params,
           ...this.connectOptions,
         })
-        .subscribe(
-          (response) => {
+        .subscribe({
+          next: (response) => {
             resolve(response as OtherHealthResponse);
           },
-          (error) => {
+          error: (error) => {
             reject(error);
           },
-        );
+        });
     });
   }
 
@@ -99,14 +99,14 @@ export class IngestorAPIManager {
           body,
           ...this.connectOptions,
         })
-        .subscribe(
-          (response) => {
+        .subscribe({
+          next: (response) => {
             resolve(response as DeleteTransferResponse);
           },
-          (error) => {
+          error: (error) => {
             reject(error);
           },
-        );
+        });
     });
   }
 
@@ -128,14 +128,14 @@ export class IngestorAPIManager {
           params,
           ...this.connectOptions,
         })
-        .subscribe(
-          (response) => {
+        .subscribe({
+          next: (response) => {
             resolve(response as GetTransferResponse);
           },
-          (error) => {
+          error: (error) => {
             reject(error);
           },
-        );
+        });
     });
   }
 
@@ -145,16 +145,16 @@ export class IngestorAPIManager {
         .post(this.connectUrl + INGESTOR_API_ENDPOINTS_V1.DATASET, payload, {
           ...this.connectOptions,
         })
-        .subscribe(
-          (response) => {
+        .subscribe({
+          next: (response) => {
             const returnValue = JSON.stringify(response);
             resolve(returnValue);
           },
-          (error) => {
+          error: (error) => {
             console.error("Upload failed", error);
             reject(error);
           },
-        );
+        });
     });
   }
 
@@ -172,15 +172,15 @@ export class IngestorAPIManager {
           params,
           ...this.connectOptions,
         })
-        .subscribe(
-          (response: GetExtractorResponse) => {
+        .subscribe({
+          next: (response: GetExtractorResponse) => {
             resolve(response as GetExtractorResponse);
           },
-          (error) => {
+          error: (error) => {
             console.error(error);
             reject(error);
           },
-        );
+        });
     });
   }
 
@@ -198,15 +198,29 @@ export class IngestorAPIManager {
           params,
           ...this.connectOptions,
         })
-        .subscribe(
-          (response: GetDatasetResponse) => {
+        .subscribe({
+          next: (response: GetDatasetResponse) => {
             resolve(response as GetDatasetResponse);
           },
-          (error) => {
+          error: (error) => {
             console.error(error);
             reject(error);
           },
-        );
+        });
     });
   }
+
+  /*public getAutodiscoveryList(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.http.get(AUTODISCOVERY_ENDPOINT, {}).subscribe({
+        next: (data) => {
+          console.log(data);
+          resolve(data as string);
+        },
+        error: (error) => {
+          console.error("Fetch error:", error);
+          reject(error);
+        },
+      });
+    }); }*/
 }

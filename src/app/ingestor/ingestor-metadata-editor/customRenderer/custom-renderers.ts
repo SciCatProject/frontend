@@ -9,8 +9,12 @@ import { OneOfRendererComponent } from "ingestor/ingestor-metadata-editor/custom
 import { AllOfRendererComponent } from "ingestor/ingestor-metadata-editor/customRenderer/all-of-renderer";
 import { AnyOfRendererComponent } from "ingestor/ingestor-metadata-editor/customRenderer/any-of-renderer";
 import { rankWith } from "@jsonforms/core";
-import { TableRendererTester } from "@jsonforms/angular-material";
+import {
+  ObjectControlRendererTester,
+  TableRendererTester,
+} from "@jsonforms/angular-material";
 import { ArrayLayoutRendererCustom } from "./array-renderer";
+import { CustomObjectControlRendererComponent } from "./object-group-renderer";
 
 export const customRenderers: JsonFormsRendererRegistryEntry[] = [
   {
@@ -31,4 +35,8 @@ export const customRenderers: JsonFormsRendererRegistryEntry[] = [
     renderer: ArrayLayoutRendererCustom,
   },
   { tester: TableRendererTester, renderer: ArrayLayoutRendererCustom },
+  {
+    tester: ObjectControlRendererTester,
+    renderer: CustomObjectControlRendererComponent,
+  },
 ];

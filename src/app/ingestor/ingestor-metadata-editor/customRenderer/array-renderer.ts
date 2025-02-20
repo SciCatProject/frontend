@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-} from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import {
   JsonFormsAngularService,
   JsonFormsAbstractControl,
@@ -45,7 +40,6 @@ import {
         >
           error_outline
         </mat-icon>
-        <span></span>
         <button
           mat-button
           matTooltip="{{ translations.addTooltip }}"
@@ -98,6 +92,7 @@ import {
               <mat-icon>arrow_downward</mat-icon>
             </button>
             <button
+              *ngIf="(minOne && [].constructor(data).length > 1) || !minOne"
               mat-button
               color="warn"
               (click)="remove(idx)"
@@ -116,9 +111,9 @@ import {
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class ArrayLayoutRendererCustom
   extends JsonFormsAbstractControl<StatePropsOfArrayLayout>
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   noData: boolean;
+  minOne: boolean;
   translations: ArrayTranslations;
   addItem: (path: string, value: any) => () => void;
   moveItemUp: (path: string, index: number) => () => void;
@@ -141,7 +136,7 @@ export class ArrayLayoutRendererCustom
   add(): void {
     this.addItem(
       this.propsPath,
-      createDefaultValue(this.scopedSchema, this.rootSchema)
+      createDefaultValue(this.scopedSchema, this.rootSchema),
     )();
   }
   up(index: number): void {
@@ -165,6 +160,7 @@ export class ArrayLayoutRendererCustom
     this.translations = props.translations;
     this.noData = !props.data || props.data === 0;
     this.uischemas = props.uischemas;
+    this.minOne = props.required;
   }
   getProps(index: number): OwnPropsOfRenderer {
     const uischema = findUISchema(
