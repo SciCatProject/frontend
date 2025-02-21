@@ -60,19 +60,15 @@ mat-form-field {
   padding-left: 0px;
 }
 section {
-  display: grid;
-  grid-template-columns: 40% 60%;
-  gap: 1em;
+  display: table;
   width: 100%;
-  margin: 0 2em;
 }
-
 .key-cell {
-  grid-column: 1;
-  word-wrap: break-word;
+  display: table-cell;
+  margin-left: 8px;
+  width: 40%;
 }
-
 .value-cell {
-  grid-column: 2;
-  word-wrap: break-word;
+  display: table-cell;
+  width: 60%;
 }

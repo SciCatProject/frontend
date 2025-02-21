@@ -167,7 +167,7 @@ export class DatasetDetailsDashboardComponent
                 enabled: true,
               },
               {
-                location: "./relatedDatasets",
+                location: "./related-datasets",
                 label: TAB.relatedDatasets,
                 icon: "folder",
                 enabled: true,
