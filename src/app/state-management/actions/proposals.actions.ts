@@ -8,7 +8,13 @@ import { ProposalFilters } from "state-management/state/proposals.store";
 
 export const fetchProposalsAction = createAction(
   "[Proposal] Fetch Proposals",
-  props<{ skip?: number; limit?: number; search?: string; order?: string }>(),
+  props<{
+    skip?: number;
+    limit?: number;
+    search?: string;
+    sortDirection?: string;
+    sortColumn?: string;
+  }>(),
 );
 export const clearCurrentProposalAction = createAction(
   "[Proposal] Clear proposal",

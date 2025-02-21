@@ -46,7 +46,6 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
 
   save() {
     this.dialogRef.close(this.form.value);
-    console.log("gmnov", this.form.value);
     this.sample.sampleCharacteristics = {
       characteristics: this.form.value.sampleCharacteristics,
     };
