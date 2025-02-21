@@ -9,7 +9,7 @@ import {
 describe("Proposal Actions", () => {
   describe("fetchProposalsAction", () => {
     it("should create an action", () => {
-      const action = fromActions.fetchProposalsAction();
+      const action = fromActions.fetchProposalsAction({});
       expect({ ...action }).toEqual({ type: "[Proposal] Fetch Proposals" });
     });
   });
@@ -36,7 +36,7 @@ describe("Proposal Actions", () => {
 
   describe("fetchCountAction", () => {
     it("should create an action", () => {
-      const action = fromActions.fetchCountAction();
+      const action = fromActions.fetchCountAction({});
       expect({ ...action }).toEqual({ type: "[Proposal] Fetch Count" });
     });
   });
@@ -304,26 +304,6 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("clearFacetsAction", () => {
-    it("should create an action", () => {
-      const action = fromActions.clearFacetsAction();
-      expect({ ...action }).toEqual({ type: "[Proposal] Clear Facets" });
-    });
-  });
-
-  describe("changePageAction", () => {
-    it("should create an action", () => {
-      const page = 0;
-      const limit = 25;
-      const action = fromActions.changePageAction({ page, limit });
-      expect({ ...action }).toEqual({
-        type: "[Proposal] Change Page",
-        page,
-        limit,
-      });
-    });
-  });
-
   describe("changeDatasetsPageAction", () => {
     it("should create an action", () => {
       const page = 0;
@@ -333,19 +313,6 @@ describe("Proposal Actions", () => {
         type: "[Proposal] Change Datasets Page",
         page,
         limit,
-      });
-    });
-  });
-
-  describe("sortByColumnAction", () => {
-    it("should create an action", () => {
-      const column = "test";
-      const direction = "asc";
-      const action = fromActions.sortByColumnAction({ column, direction });
-      expect({ ...action }).toEqual({
-        type: "[Proposal] Sort By Column",
-        column,
-        direction,
       });
     });
   });

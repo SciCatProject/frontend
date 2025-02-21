@@ -1,0 +1,362 @@
+<button
+  class="clear"
+  type="button"
+  mat-icon-button
+  #menuTrigger="matMenuTrigger"
+  [matMenuTriggerFor]="menu"
+  [dir]="reverseDirection"
+>
+  <mat-icon class="main-menu">more_vert</mat-icon>
+</button>
+
+<mat-menu #menu="matMenu" [overlapTrigger]="false" [dir]="reverseDirection">
+  <button
+    mat-menu-item
+    type="button"
+    *ngIf="tableSetting?.visibleActionMenu?.fullscreen !== false"
+    (click)="screenMode_onClick()"
+    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
+  >
+    <mat-icon>fullscreen</mat-icon>
+    <span>Fullscreen</span>
+  </button>
+  <button
+    mat-menu-item
+    type="button"
+    color="primary"
+    [matMenuTriggerFor]="convertMenu"
+    *ngIf="isSaveDataActive"
+    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
+  >
+    <mat-icon>save</mat-icon>
+    <span>Save data</span>
+  </button>
+  <button
+    mat-menu-item
+    type="button"
+    color="primary"
+    [matMenuTriggerFor]="columnMenu"
+    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
+  >
+    <mat-icon>view_column</mat-icon>
+    <span>Column setting</span>
+  </button>
+
+  <button
+    mat-menu-item
+    type="button"
+    *ngIf="currentTableSetting?.saveSettingMode === 'simple'"
+    (click)="saveSetting_onClick($event, null)"
+    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
+  >
+    <mat-icon>grading</mat-icon>
+    <span>Save table setting</span>
+  </button>
+  <button
+    mat-menu-item
+    *ngIf="currentTableSetting?.saveSettingMode === 'multi'"
+    [matMenuTriggerFor]="saveTableSetting"
+    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
+  >
+    <mat-icon>grading</mat-icon>
+    <span>Save table setting</span>
+  </button>
+  <button
+    mat-menu-item
+    type="button"
+    (click)="clearFilter_onClick()"
+    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
+  >
+    <mat-icon>clear</mat-icon>
+    <span>Clear filter</span>
+  </button>
+</mat-menu>
+
+<!-- Save Table Config Menu -->
+
+<mat-menu #saveTableSetting="matMenu">
+  <button
+    mat-menu-item
+    type="button"
+    (click)="newSetting_onClick($event)"
+    *ngIf="showNewSetting === false"
+    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
+  >
+    <mat-icon>tune</mat-icon>
+    <span>New setting</span>
+  </button>
+  <section
+    *ngIf="showNewSetting === true"
+    class="new-setting"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="input-container">
+      <input
+        matInput
+        type="text"
+        #newSetting
+        placeholder="New setting"
+        [(ngModel)]="newSettingName"
+        (keydown.enter)="applySaveSetting_onClick($event)"
+      />
+    </div>
+    <div class="save-table-setting">
+      <mat-icon (click)="cancelSaveSetting_onClick($event)">close</mat-icon>
+      <mat-icon (click)="applySaveSetting_onClick($event)">done</mat-icon>
+    </div>
+  </section>
+  <mat-divider></mat-divider>
+
+  <button
+    mat-menu-item
+    type="button"
+    (click)="resetDefault_onClick($event)"
+    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
+  >
+    <mat-icon>settings_backup_restore</mat-icon>
+    Default setting
+  </button>
+
+  <section
+    *ngFor="let setting of tableSetting?.settingList"
+    class="setting-item"
+    [class.setting-item-active]="setting?.isCurrentSetting === true"
+    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
+  >
+    <button
+      mat-icon-button
+      type="button"
+      (click)="default_onClick($event, setting)"
+    >
+      <mat-icon style="color: #dcc48f"
+        >{{ setting?.isDefaultSetting === true ? "star" : "star_outline" }}
+      </mat-icon>
+    </button>
+    <span (click)="selectSetting_onClick($event, setting)">{{
+      setting.settingName
+    }}</span>
+    <mat-icon (click)="saveSetting_onClick($event, setting)">save</mat-icon>
+    <mat-icon
+      style="color: #ff4081"
+      (click)="deleteSetting_onClick($event, setting)"
+      >delete</mat-icon
+    >
+  </section>
+  <section
+    *ngIf="tableSetting?.settingList?.length === 0"
+    mat-menu-item
+    (click)="$event.stopPropagation()"
+  >
+    <mat-icon style="color: #dcc48f">lightbulb</mat-icon>
+    No setting
+  </section>
+</mat-menu>
+
+<!-- Convert Sub Menu -->
+
+<mat-menu #convertMenu="matMenu">
+  <button
+    mat-menu-item
+    type="button"
+    *ngIf="tableSetting?.visibleActionMenu?.json !== false"
+    (click)="download_onClick('JSON')"
+    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
+  >
+    <span>Json file</span>
+  </button>
+  <button
+    mat-menu-item
+    type="button"
+    *ngIf="tableSetting?.visibleActionMenu?.csv !== false"
+    (click)="download_onClick('CSV')"
+    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
+  >
+    <span>CSV file</span>
+  </button>
+  <button
+    mat-menu-item
+    type="button"
+    *ngIf="tableSetting?.visibleActionMenu?.print !== false"
+    (click)="print_onClick(menuTrigger)"
+    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
+  >
+    <span>Print table</span>
+  </button>
+</mat-menu>
+
+<!-- Column Setting Sub Menu -->
+
+<mat-menu #columnMenu="matMenu">
+  <ng-container
+    *ngIf="currentTableSetting?.columnSetting?.length > 0; else noColumns"
+  >
+    <div
+      class="va-mat-table-dragable-container"
+      cdkDropList
+      dkDropListLockAxis="y"
+      cdkDropListOrientation="vertical"
+      dir="ltr"
+    >
+      <div
+        *ngFor="let column of currentTableSetting?.columnSetting; let i = index"
+        (click)="$event.stopPropagation(); $event.preventDefault()"
+        class="dragable-row"
+        cdkDrag
+        [cdkDragData]="{ columnIndex: i, columnTitle: column.header }"
+        (cdkDragDropped)="columnMenuDropped($event)"
+      >
+        <mat-icon cdkDragHandle>drag_indicator</mat-icon>
+        <mat-checkbox
+          class="column-config"
+          [disabled]="column?.display === 'prevent-hidden'"
+          [checked]="
+            column?.display === 'visible' ||
+            column?.display === 'prevent-hidden'
+          "
+          (click)="$event.stopPropagation()"
+          (change)="toggleSelectedColumn(column)"
+        >
+          {{ column.header }}
+        </mat-checkbox>
+        <mat-icon
+          class="column-setting-button"
+          (click)="setting_onClick(i)"
+          #menuTrigger="matMenuTrigger"
+          [matMenuTriggerFor]="columnSettingMenu"
+          *ngIf="currentTableSetting.showColumnSettingMenu"
+          >settings</mat-icon
+        >
+        <div class="va-mat-table-drag-preview" *cdkDragPreview>
+          <mat-icon>drag_indicator</mat-icon>
+          <mat-checkbox [checked]="column?.display === 'visible'">
+            {{ column.header }}
+          </mat-checkbox>
+        </div>
+      </div>
+    </div>
+
+    <div class="column-config-apply">
+      <button
+        mat-menu-item
+        type="button"
+        color="primary"
+        class="done-setting"
+        (click)="apply_onClick($event)"
+      >
+        <mat-icon color="primary">done</mat-icon>
+      </button>
+      <button
+        mat-menu-item
+        type="button"
+        color="primary"
+        class="done-setting"
+        (click)="cancel_onClick()"
+      >
+        <mat-icon color="primary">clear</mat-icon>
+      </button>
+    </div>
+  </ng-container>
+
+  <ng-template #noColumns>
+    <div mat-menu-item>No column</div>
+  </ng-template>
+</mat-menu>
+
+<mat-menu
+  #columnSettingMenu="matMenu"
+  [overlapTrigger]="false"
+  style="padding: 10px !important"
+>
+  <div
+    *ngIf="currentColumn !== null"
+    (click)="$event.stopPropagation(); $event.preventDefault()"
+    class="column-setting"
+  >
+    <ng-container
+      *ngIf="
+        isVisible(currentTableSetting?.visibleActionMenu?.columnSettingFilter)
+      "
+    >
+      <div class="column-setting-header column-setting-header-first">
+        <mat-icon color="primary">filter_alt</mat-icon>Filter mode
+      </div>
+      <mat-radio-group
+        class="radio"
+        [(ngModel)]="currentTableSetting.columnSetting[currentColumn].filter"
+      >
+        <mat-radio-button value="client-side" (click)="$event.stopPropagation()"
+          >Filter local mode</mat-radio-button
+        >
+        <mat-radio-button value="server-side" (click)="$event.stopPropagation()"
+          >Filter server mode</mat-radio-button
+        >
+      </mat-radio-group>
+    </ng-container>
+
+    <ng-container
+      *ngIf="
+        isVisible(currentTableSetting?.visibleActionMenu?.columnSettingSort)
+      "
+    >
+      <div class="column-setting-header">
+        <mat-icon color="primary">sort</mat-icon>Sort mode
+      </div>
+      <mat-radio-group
+        class="radio"
+        [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sort"
+      >
+        <mat-radio-button value="client-side" (click)="$event.stopPropagation()"
+          >Sort local mode</mat-radio-button
+        >
+        <mat-radio-button value="server-side" (click)="$event.stopPropagation()"
+          >Sort server mode</mat-radio-button
+        >
+      </mat-radio-group>
+    </ng-container>
+
+    <ng-container
+      *ngIf="
+        isVisible(currentTableSetting?.visibleActionMenu?.columnSettingFilter)
+      "
+    >
+      <div class="column-setting-header">
+        <mat-icon color="primary">print</mat-icon>Print mode
+      </div>
+      <mat-radio-group
+        class="radio"
+        [(ngModel)]="currentTableSetting.columnSetting[currentColumn].printable"
+      >
+        <mat-radio-button [value]="true" (click)="$event.stopPropagation()"
+          >Print yes mode
+        </mat-radio-button>
+        <mat-radio-button [value]="false" (click)="$event.stopPropagation()"
+          >Print no mode
+        </mat-radio-button>
+      </mat-radio-group>
+    </ng-container>
+
+    <ng-container
+      *ngIf="
+        isVisible(currentTableSetting?.visibleActionMenu?.columnSettingPin)
+      "
+    >
+      <div class="column-setting-header">
+        <mat-icon color="primary">push_pin</mat-icon>Pin mode
+      </div>
+      <mat-radio-group
+        class="radio"
+        [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sticky"
+      >
+        <mat-radio-button value="none" (click)="$event.stopPropagation()"
+          >Pin none mode
+        </mat-radio-button>
+        <mat-radio-button value="start" (click)="$event.stopPropagation()"
+          >Pin start mode
+        </mat-radio-button>
+        <mat-radio-button value="end" (click)="$event.stopPropagation()"
+          >Pin end mode
+        </mat-radio-button>
+      </mat-radio-group>
+    </ng-container>
+  </div>
+</mat-menu>

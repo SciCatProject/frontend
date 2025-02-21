@@ -36,9 +36,9 @@ describe("Proposals general", () => {
 
       cy.get("mat-table mat-row").should("contain", proposal.proposalId);
 
-      cy.get("mat-row")
+      cy.get("mat-cell")
         .contains(proposal.proposalId)
-        .parent()
+        .closest("mat-row")
         .contains(proposal.title)
         .click();
 
@@ -64,9 +64,9 @@ describe("Proposals general", () => {
       cy.get("mat-table mat-row").should("contain", newProposal.proposalId);
       cy.get("mat-table mat-row").should("contain", proposal.proposalId);
 
-      cy.get("mat-row")
+      cy.get("mat-cell")
         .contains(newProposal.proposalId)
-        .parent()
+        .closest("mat-row")
         .contains(newProposal.title)
         .click();
 
@@ -200,9 +200,9 @@ describe("Proposals general", () => {
       cy.get("mat-table mat-row").should("contain", newProposal.proposalId);
       cy.get("mat-table mat-row").should("contain", newProposal2.proposalId);
 
-      cy.get("mat-row")
+      cy.get("mat-cell.mat-column-proposalId")
         .contains(newProposal.proposalId)
-        .parent()
+        .closest("mat-row")
         .contains(newProposal.title)
         .click();
 
@@ -244,9 +244,9 @@ describe("Proposals general", () => {
 
       cy.get("mat-table mat-row").should("contain", proposal.proposalId);
 
-      cy.get("mat-row")
+      cy.get("mat-cell.mat-column-proposalId")
         .contains(proposal.proposalId)
-        .parent()
+        .closest("mat-row")
         .contains(proposal.title)
         .click();
 

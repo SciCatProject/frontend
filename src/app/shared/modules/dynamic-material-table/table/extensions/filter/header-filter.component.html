@@ -1,0 +1,93 @@
+<ng-content></ng-content>
+
+<mat-menu appFilterEvent #filterMenu="matMenu" class="menu">
+  <ng-template matMenuContent>
+    <div appFilterEvent class="menu-title">
+      {{ field?.header }}
+    </div>
+    <div
+      [@listAnimation]="filters.length"
+      appFilterEvent
+      *ngFor="let filter of filters; let index = index"
+      class="filter-panel"
+    >
+      <mat-form-field>
+        <mat-select
+          [value]="filter.selectedIndex"
+          [panelClass]="'mat-elevation-z10'"
+          (selectionChange)="filter.selectedIndex = $event.value"
+          placeholder="Conditions"
+          (keyup.enter)="applyFilter_OnClick()"
+        >
+          <mat-option
+            *ngFor="let op of filter.getOperations(); let selectedIndex = index"
+            [value]="selectedIndex"
+          >
+            {{ op.text }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div *ngFor="let ctrl of filter?.parameters">
+        <mat-form-field class="input-field">
+          <mat-label>{{ ctrl.text }}</mat-label>
+          <input
+            matInput
+            #filterInput="matInput"
+            [(ngModel)]="ctrl.value"
+            [placeholder]=""
+            (keyup.enter)="applyFilter_OnClick()"
+            autocomplete="off"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="or-and">
+        <span
+          *ngIf="filters?.length !== index + 1"
+          class="selected-filter-type"
+          >{{ filter?.type === "and" ? "and" : "or" }}</span
+        >
+        <span class="svg">
+          <mat-icon (click)="filterAction_OnClick($event, index, 0)"
+            >add</mat-icon
+          >
+        </span>
+        <span class="svg">
+          <mat-icon
+            (click)="filterAction_OnClick($event, index, 1)"
+            style="transform: rotate(90deg)"
+            >drag_handle</mat-icon
+          >
+        </span>
+        <span class="svg">
+          <mat-icon (click)="filterAction_OnClick($event, index, 2)"
+            >clear</mat-icon
+          >
+        </span>
+      </div>
+    </div>
+
+    <div appFilterEvent class="menu-action">
+      <button mat-raised-button type="button" (click)="clearColumn_OnClick()">
+        Clear
+      </button>
+      <button
+        mat-raised-button
+        type="button"
+        color="primary"
+        (click)="applyFilter_OnClick()"
+      >
+        Search
+      </button>
+    </div>
+  </ng-template>
+</mat-menu>
+
+<span
+  class="trigger"
+  [matMenuTriggerFor]="filterMenu"
+  *ngIf="field.filter !== 'none'"
+>
+  <mat-icon>filter_list</mat-icon>
+</span>
