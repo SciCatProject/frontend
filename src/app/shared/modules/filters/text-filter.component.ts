@@ -20,6 +20,7 @@ export class TextFilterComponent
   private textSubject = new Subject<string>();
   readonly componentName: string = "TextFilter";
   readonly label: string = "Text Filter";
+  readonly tooltipText: string = "Search across dataset name and description";
 
   appConfig = this.appConfigService.getConfig();
   subscription: Subscription;

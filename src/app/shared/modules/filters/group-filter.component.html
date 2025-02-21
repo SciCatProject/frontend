@@ -5,7 +5,7 @@
       *ngFor="let group of groupFilter$ | async"
       [removable]="true"
       (removed)="groupRemoved(group)"
-    >{{ group }}<mat-icon matChipRemove>cancel</mat-icon>
+      >{{ group }}<mat-icon matChipRemove>cancel</mat-icon>
     </mat-chip-row>
   </mat-chip-grid>
   <input
@@ -16,6 +16,8 @@
     class="group-input"
     [matChipInputFor]="groupChipList"
     [matAutocomplete]="grp"
+    matTooltip="{{ tooltipText }}"
+    matTooltipPosition="after"
   />
   <mat-autocomplete #grp="matAutocomplete">
     <mat-option
