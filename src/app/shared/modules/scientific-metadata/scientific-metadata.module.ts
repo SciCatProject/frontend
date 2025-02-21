@@ -49,6 +49,7 @@ export interface ScientificMetadata {
   unit: string;
   valueSI?: number;
   unitSI?: string;
+  human_name?: string;
   type?: string;
 }
 

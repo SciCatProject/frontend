@@ -32,7 +32,6 @@ export class MetadataViewComponent implements OnInit, OnChanges {
   @Input() metadata: object = {};
 
   tableData: ScientificMetadataTableData[] = [];
-  columnsToDisplay: string[] = ["name", "value", "unit"];
 
   tableName = "scientificMetadataTable";
 
@@ -127,8 +126,6 @@ export class MetadataViewComponent implements OnInit, OnChanges {
       "border-bottom": "1px solid #d2d2d2",
     },
   };
-
-  defaultDateFormat = "dd-mm-yyyy HH:MM";
 
   constructor(
     private unitsService: UnitsService,

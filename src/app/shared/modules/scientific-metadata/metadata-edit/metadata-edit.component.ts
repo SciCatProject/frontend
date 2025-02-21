@@ -23,6 +23,16 @@ import { startWith, map } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { ScientificMetadata } from "../scientific-metadata.module";
 import { AppConfigService } from "app-config.service";
+import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
+import { TitleCasePipe } from "@angular/common";
+
+export enum MetadataTypes {
+  quantity = "quantity",
+  number = "number",
+  string = "string",
+  date = "date",
+  link = "link",
+}
 
 @Component({
   selector: "metadata-edit",
@@ -33,7 +43,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   metadataForm: FormGroup = this.formBuilder.group({
     items: this.formBuilder.array([]),
   });
-  typeValues: string[] = ["quantity", "number", "string"];
+  typeValues: MetadataTypes[] = Object.values(MetadataTypes);
   units: string[] = [];
   appConfig = this.appConfigService.getConfig();
 
@@ -46,6 +56,8 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     private formBuilder: FormBuilder,
     private unitsService: UnitsService,
     private appConfigService: AppConfigService,
+    private replaceUnderscore: ReplaceUnderscorePipe,
+    private titleCase: TitleCasePipe,
   ) {}
 
   get formControlFields() {
@@ -57,6 +69,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
           Validators.minLength(2),
           this.duplicateValidator(),
         ]),
+      fieldHumanName: (value = "") => new FormControl(value, []),
       fieldValue: (value: string | number = "") =>
         new FormControl(value, [Validators.required, Validators.minLength(1)]),
       fieldUnit: (value = "") =>
@@ -71,6 +84,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     const field = this.formBuilder.group({
       fieldType: this.formControlFields["fieldType"](),
       fieldName: this.formControlFields["fieldName"](),
+      fieldHumanName: this.formControlFields["fieldHumanName"](),
       fieldValue: this.formControlFields["fieldValue"](),
       fieldUnit: this.formControlFields["fieldUnit"](),
     });
@@ -82,7 +96,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
   detectType(index: any) {
     const type = this.items.at(index).get("fieldType")?.value;
-    if (type === "quantity") {
+    if (type === MetadataTypes.quantity) {
       this.items.at(index).get("fieldUnit")?.enable();
       this.items
         .at(index)
@@ -125,6 +139,13 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     this.items.removeAt(index);
   }
 
+  getHumanNameFieldValue(metadata: ScientificMetadata, key: string): string {
+    return (
+      metadata.human_name ||
+      this.titleCase.transform(this.replaceUnderscore.transform(key))
+    );
+  }
+
   addCurrentMetadata() {
     if (this.metadata) {
       Object.keys(this.metadata).forEach((key, index) => {
@@ -135,8 +156,13 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         ) {
           if (this.metadata[key].unit?.length > 0) {
             field = this.formBuilder.group({
-              fieldType: this.formControlFields["fieldType"]("quantity"),
+              fieldType: this.formControlFields["fieldType"](
+                MetadataTypes.quantity,
+              ),
               fieldName: this.formControlFields["fieldName"](key),
+              fieldHumanName: this.formControlFields["fieldHumanName"](
+                this.getHumanNameFieldValue(this.metadata[key], key),
+              ),
               fieldValue: this.formControlFields["fieldValue"](
                 this.metadata[key]["value"],
               ),
@@ -144,10 +170,17 @@ export class MetadataEditComponent implements OnInit, OnChanges {
                 this.metadata[key]["unit"],
               ),
             });
-          } else if (typeof this.metadata[key]["value"] === "number") {
+          } else if (
+            typeof this.metadata[key]["value"] === MetadataTypes.number
+          ) {
             field = this.formBuilder.group({
-              fieldType: this.formControlFields["fieldType"]("number"),
+              fieldType: this.formControlFields["fieldType"](
+                MetadataTypes.number,
+              ),
               fieldName: this.formControlFields["fieldName"](key),
+              fieldHumanName: this.formControlFields["fieldHumanName"](
+                this.getHumanNameFieldValue(this.metadata[key], key),
+              ),
               fieldValue: this.formControlFields["fieldValue"](
                 Number(this.metadata[key]["value"]),
               ),
@@ -157,8 +190,13 @@ export class MetadataEditComponent implements OnInit, OnChanges {
             });
           } else {
             field = this.formBuilder.group({
-              fieldType: this.formControlFields["fieldType"]("string"),
+              fieldType: this.formControlFields["fieldType"](
+                MetadataTypes.string,
+              ),
               fieldName: this.formControlFields["fieldName"](key),
+              fieldHumanName: this.formControlFields["fieldHumanName"](
+                this.getHumanNameFieldValue(this.metadata[key], key),
+              ),
               fieldValue: this.formControlFields["fieldValue"](
                 this.metadata[key]["value"],
               ),
@@ -169,8 +207,13 @@ export class MetadataEditComponent implements OnInit, OnChanges {
           }
         } else {
           field = this.formBuilder.group({
-            fieldType: this.formControlFields["fieldType"]("string"),
+            fieldType: this.formControlFields["fieldType"](
+              MetadataTypes.string,
+            ),
             fieldName: this.formControlFields["fieldName"](key),
+            fieldHumanName: this.formControlFields["fieldHumanName"](
+              this.getHumanNameFieldValue(this.metadata[key], key),
+            ),
             fieldValue: this.formControlFields["fieldValue"](
               JSON.stringify(this.metadata[key]),
             ),
@@ -188,13 +231,17 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   createMetadataObject(): Record<string, ScientificMetadata> {
     const metadata: Record<string, any> = {};
     this.items.controls.forEach((control) => {
-      const { fieldName, fieldType, fieldValue, fieldUnit } = control.value;
+      const { fieldName, fieldHumanName, fieldType, fieldValue, fieldUnit } =
+        control.value;
       metadata[fieldName] = {
         value:
-          fieldType === "number" || fieldType === "quantity"
+          fieldType === MetadataTypes.number ||
+          fieldType === MetadataTypes.quantity
             ? Number(fieldValue)
             : fieldValue,
-        unit: fieldType === "quantity" ? fieldUnit : "",
+        unit: fieldType === MetadataTypes.quantity ? fieldUnit : "",
+        human_name: fieldHumanName,
+        type: fieldType,
       };
     });
     return metadata;
@@ -228,11 +275,11 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   setValueInputType(index: number): string {
     const type = this.items.at(index).get("fieldType")?.value;
     switch (type) {
-      case "number":
-      case "quantity": {
-        return "number";
+      case MetadataTypes.number:
+      case MetadataTypes.quantity: {
+        return MetadataTypes.number;
       }
-      case "string": {
+      case MetadataTypes.string: {
         return "text";
       }
       default: {

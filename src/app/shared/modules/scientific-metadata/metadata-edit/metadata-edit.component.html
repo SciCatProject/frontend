@@ -6,7 +6,7 @@
     >
       <div [formGroupName]="i">
         <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
-          <div class="formColumn">
+          <div class="formColumn typeColumn">
             <mat-form-field class="selectField" fxFlex="100">
               <mat-label>Type</mat-label>
               <mat-select
@@ -25,7 +25,22 @@
           </div>
           <div class="formColumn">
             <mat-form-field class="inputField" fxFlex="100">
-              <mat-label>Name</mat-label>
+              <mat-label>Displayed Name</mat-label>
+              <input
+                id="humanNameInput{{ i }}"
+                matInput
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                formControlName="fieldHumanName"
+                data-cy="metadata-human-name-input"
+              />
+            </mat-form-field>
+          </div>
+          <div class="formColumn">
+            <mat-form-field class="inputField" fxFlex="100">
+              <mat-label>Raw property name</mat-label>
               <input
                 id="nameInput{{ i }}"
                 matInput
