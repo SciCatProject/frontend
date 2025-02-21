@@ -18,7 +18,7 @@ export class RouteTrackerService {
       });
   }
 
-  getLastRoute(): string | null {
+  getPreviousRoute(): string | null {
     return this.previousRoute;
   }
 }

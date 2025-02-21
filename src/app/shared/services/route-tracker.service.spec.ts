@@ -32,7 +32,15 @@ describe("RouteTrackerService", () => {
     expect(router).toBeTruthy();
     await router.navigateByUrl("/datasets/123");
     await router.navigateByUrl("/login");
-    const lastRoute = service.getLastRoute();
-    expect(lastRoute).toBe("/datasets/123");
+    const previousRoute = service.getPreviousRoute();
+    expect(previousRoute).toBe("/datasets/123");
+  });
+
+  it("should preserve query parameters in the previous route", async () => {
+    expect(router).toBeTruthy();
+    await router.navigateByUrl("/datasets/123?query=value");
+    await router.navigateByUrl("/login");
+    const previousRoute = service.getPreviousRoute();
+    expect(previousRoute).toBe("/datasets/123?query=value");
   });
 });

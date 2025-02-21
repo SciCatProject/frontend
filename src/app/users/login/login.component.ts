@@ -78,12 +78,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     private routeTrackerService: RouteTrackerService,
     @Inject(DOCUMENT) public document: Document,
   ) {
-    this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "";
+    this.returnUrl = this.routeTrackerService.getPreviousRoute() || "";
   }
 
   redirectOIDC(authURL: string) {
-    const lastRoute = this.routeTrackerService.getLastRoute();
-    const returnURL = lastRoute ? encodeURIComponent(lastRoute) : "/datasets";
+    const returnURL = this.returnUrl
+      ? encodeURIComponent(this.returnUrl)
+      : "/datasets";
     this.document.location.href = `${this.appConfig.lbBaseURL}/${authURL}?returnURL=${returnURL}`;
   }
 
