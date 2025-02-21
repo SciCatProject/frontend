@@ -82,10 +82,21 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           {
             header: "Name",
             name: "human_name",
+            width: 250,
+            customRender: (column, row) => {
+              return (
+                row[column.name] ||
+                this.titleCase.transform(
+                  this.replaceUnderscore.transform(row.name),
+                )
+              );
+            },
           },
           {
             name: "name",
             header: "Raw property name",
+            width: 250,
+            display: "hidden",
           },
           {
             name: "value",
@@ -107,6 +118,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           },
           {
             name: "type",
+            display: "hidden",
           },
         ],
       },
@@ -141,9 +153,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           name: key,
           value: metadata[key]["value"],
           unit: metadata[key]["unit"],
-          human_name:
-            metadata[key]["human_name"] ||
-            this.titleCase.transform(this.replaceUnderscore.transform(key)),
+          human_name: metadata[key]["human_name"],
           type: metadata[key]["type"],
         };
 
@@ -157,9 +167,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           name: key,
           value: JSON.stringify(metadata[key]),
           unit: "",
-          human_name:
-            metadata[key]["human_name"] ||
-            this.titleCase.transform(this.replaceUnderscore.transform(key)),
+          human_name: metadata[key]["human_name"],
           type: metadata[key]["type"],
         };
       }
