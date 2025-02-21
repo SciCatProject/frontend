@@ -1,0 +1,464 @@
+<ng-template [ngIf]="dataset">
+  <div fxLayout="row">
+    <div fxFlex="auto">
+      <a
+        mat-raised-button
+        href="{{ appConfig.jupyterHubUrl }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="jupyter-button"
+        *ngIf="appConfig.jupyterHubUrl"
+      >
+        Jupyter Hub
+      </a>
+    </div>
+    <div fxFlex="auto" *ngIf="editingAllowed">
+      <mat-slide-toggle
+        class="public-toggle"
+        [checked]="dataset.isPublished"
+        (change)="onSlidePublic($event)"
+      >
+        Public
+      </mat-slide-toggle>
+    </div>
+  </div>
+  <div style="clear: both"></div>
+  <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
+    <div [fxFlex]="(attachments$ | async)?.length > 0 ? '90%' : '100%'">
+      <mat-card [formGroup]="form" data-cy="general-info">
+        <mat-card-header class="general-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> description </mat-icon>
+          </div>
+          {{ "General Information" | translate }}
+        </mat-card-header>
+        <mat-card-content>
+          <table>
+            <tr>
+              <th>{{ "Dataset Name" | translate }}</th>
+              <td *ngIf="!editEnabled">{{ dataset.datasetName || "-" }}</td>
+              <td *ngIf="editEnabled && editingAllowed">
+                <mat-form-field class="full-width">
+                  <mat-label>{{ "Dataset Name" | translate }}</mat-label>
+                  <input matInput type="text" formControlName="datasetName" />
+                </mat-form-field>
+              </td>
+            </tr>
+            <tr>
+              <th>{{ "Description" | translate }}</th>
+              <td *ngIf="!editEnabled">
+                <span [innerHTML]="dataset.description || '-' | linky"></span>
+              </td>
+              <td *ngIf="editEnabled && editingAllowed">
+                <mat-form-field class="full-width">
+                  <mat-label>{{ "Description" | translate }}</mat-label>
+                  <textarea
+                    matInput
+                    rows="5"
+                    formControlName="description"
+                  ></textarea>
+                </mat-form-field>
+              </td>
+            </tr>
+            <tr>
+              <th>{{ "Pid" | translate }}</th>
+              <td>
+                {{ dataset.pid }}
+                <button
+                  mat-icon-button
+                  aria-label="copy"
+                  (click)="onCopy(dataset.pid)"
+                >
+                  <mat-icon class="copy-button">content_copy</mat-icon>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="dataset.type as value">
+              <th>{{ "Type" | translate }}</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="dataset.creationTime as value">
+              <th>{{ "Creation time" | translate }}</th>
+              <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+            </tr>
+            <tr class="keywords-row">
+              <th>{{ "Keywords" | translate }}</th>
+              <td *ngIf="!editEnabled">
+                <mat-chip-set role="list" #keywordChips>
+                  <mat-chip
+                    role="listitem"
+                    *ngFor="let keyword of dataset.keywords"
+                  >
+                    {{ keyword }}
+                  </mat-chip>
+                </mat-chip-set>
+              </td>
+              <td *ngIf="editEnabled && editingAllowed">
+                <mat-form-field class="full-width">
+                  <mat-chip-grid #keywordChips formArrayName="keywords">
+                    <mat-chip-row
+                      *ngFor="let keyword of keywords.value"
+                      [removable]="true"
+                      (removed)="onRemoveKeyword(keyword)"
+                      (click)="onClickKeyword(keyword)"
+                    >
+                      {{ keyword }}
+                      <button matChipRemove>
+                        <mat-icon>cancel</mat-icon>
+                      </button>
+                    </mat-chip-row>
+                    <input
+                      [matChipInputFor]="keywordChips"
+                      [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+                      [matChipInputAddOnBlur]="true"
+                      (matChipInputTokenEnd)="onAddKeyword($event)"
+                    />
+                  </mat-chip-grid>
+                </mat-form-field>
+              </td>
+            </tr>
+            <tr *ngIf="dataset.sharedWith && dataset.sharedWith.length > 0">
+              <th>{{ "Shared With" | translate }}</th>
+              <td>
+                <mat-chip-listbox>
+                  <mat-chip-option
+                    *ngFor="let share of dataset.sharedWith"
+                    [removable]="true"
+                    (removed)="onRemoveShare(share)"
+                  >
+                    {{ share }}
+                    <button matChipRemove>
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip-option>
+                </mat-chip-listbox>
+              </td>
+            </tr>
+          </table>
+        </mat-card-content>
+        <mat-card-actions align="end" *ngIf="editingAllowed">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onEditModeEnable()"
+            *ngIf="!editEnabled"
+            data-cy="edit-general-information"
+          >
+            <mat-icon> edit </mat-icon> Edit
+          </button>
+          <button
+            *ngIf="editEnabled"
+            mat-raised-button
+            color="warn"
+            (click)="editEnabled = false"
+          >
+            Close
+          </button>
+          <button
+            *ngIf="editEnabled"
+            mat-raised-button
+            color="primary"
+            (click)="onSaveGeneralInformationChanges()"
+            data-cy="save-general-information"
+          >
+            <mat-icon> save </mat-icon> Save changes
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header class="creator-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> person </mat-icon>
+          </div>
+          {{ "Creator Information" | translate }}
+        </mat-card-header>
+
+        <mat-card-content>
+          <table>
+            <tr *ngIf="dataset.owner as value">
+              <th>{{ "Owner" | translate }}</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="dataset['principalInvestigator'] as value">
+              <th>{{ "Principal Investigator" | translate }}</th>
+              <td><span [innerHTML]="value | linky"></span></td>
+            </tr>
+            <tr *ngIf="dataset['investigator'] as value">
+              <th>{{ "Investigator" | translate }}</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="dataset.orcidOfOwner as value">
+              <th>{{ "Orcid" | translate }}</th>
+              <td><span [innerHTML]="value | linky"></span></td>
+            </tr>
+            <tr *ngIf="dataset.contactEmail as value">
+              <th>{{ "Contact Email" | translate }}</th>
+              <td><span [innerHTML]="value | linky"></span></td>
+            </tr>
+            <tr *ngIf="dataset.ownerGroup as value">
+              <th>{{ "Owner Group" | translate }}</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="dataset.accessGroups as value">
+              <th>{{ "Access Groups" | translate }}</th>
+              <td>{{ value }}</td>
+            </tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header class="file-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> folder </mat-icon>
+          </div>
+          {{ "File Information" | translate }}
+        </mat-card-header>
+
+        <mat-card-content>
+          <table>
+            <tr *ngIf="dataset.sourceFolder as value">
+              <th>{{ "Source Folder" | translate }}</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="dataset.size as value">
+              <th>{{ "Size" | translate }}</th>
+              <td>{{ value | filesize }}</td>
+            </tr>
+            <tr *ngIf="dataset['dataFormat'] as value">
+              <th>{{ "Data Format" | translate }}</th>
+              <td>{{ value }}</td>
+            </tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header class="related-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> library_books </mat-icon>
+          </div>
+          {{ "Related Documents" | translate }}
+        </mat-card-header>
+
+        <mat-card-content>
+          <table>
+            <tr *ngIf="dataset['proposalId'] && proposal">
+              <th>{{ "Proposal" | translate }}</th>
+              <td>
+                <a (click)="onClickProposal(proposal.proposalId)">{{
+                  proposal.title
+                }}</a>
+              </td>
+            </tr>
+            <tr
+              *ngIf="
+                dataset['proposalId'] &&
+                !proposal &&
+                appConfig.datasetDetailsShowMissingProposalId
+              "
+            >
+              <th>{{ "Proposal Id" | translate }}</th>
+              <td>{{ dataset["proposalId"] }}</td>
+            </tr>
+            <tr *ngIf="dataset['sampleId'] && sample">
+              <th>{{ "Sample" | translate }}</th>
+              <td>
+                <a (click)="onClickSample(sample.sampleId)">
+                  <span>{{ sample.description }}</span>
+                </a>
+              </td>
+            </tr>
+            <tr *ngIf="dataset['instrumentId'] && instrument">
+              <th>{{ "Instrument" | translate }}</th>
+              <td>
+                <a (click)="onClickInstrument(instrument.pid)">
+                  {{ instrument.name }}
+                </a>
+              </td>
+            </tr>
+            <tr *ngIf="dataset['creationLocation'] as value">
+              <th>{{ "Creation Location" | translate }}</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="dataset.techniques && dataset.techniques.length > 0">
+              <th>{{ "Techniques" | translate }}</th>
+              <td>
+                <div *ngFor="let technique of dataset.techniques">
+                  <span>
+                    {{ technique.name }}
+                  </span>
+                  <span
+                    *ngIf="
+                      dataset.techniques.indexOf(technique) <
+                      dataset.techniques.length - 1
+                    "
+                    >,
+                  </span>
+                </div>
+              </td>
+            </tr>
+            <tr
+              *ngIf="
+                dataset['inputDatasets'] && dataset['inputDatasets'].length > 0
+              "
+            >
+              <th>{{ "Input Datasets" | translate }}</th>
+              <td>
+                <div *ngFor="let datasetPid of dataset['inputDatasets']">
+                  <span>
+                    <a [routerLink]="['/datasets/', datasetPid]">
+                      {{ datasetPid }}
+                    </a>
+                  </span>
+                  <span
+                    *ngIf="
+                      dataset['inputDatasets'].indexOf(datasetPid) <
+                      dataset['inputDatasets'].length - 1
+                    "
+                    >,
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card *ngIf="dataset.type === 'derived'">
+        <mat-card-header class="derived-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> analytics </mat-icon>
+          </div>
+          {{ "Derived Data" | translate }}
+        </mat-card-header>
+
+        <mat-card-content>
+          <table>
+            <tr *ngIf="dataset['usedSoftware'] as value">
+              <th>{{ "Software Used" | translate }}</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="dataset['jobParameters'] as value">
+              <th>{{ "Job Parameters" | translate }}</th>
+              <td>{{ value | json }}</td>
+            </tr>
+            <tr *ngIf="dataset['jobLogData'] as value">
+              <th>{{ "Job Log Data" | translate }}</th>
+              <td>{{ value }}</td>
+            </tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header class="scientific-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> science </mat-icon>
+          </div>
+          {{ "Scientific Metadata" | translate }}
+        </mat-card-header>
+        <mat-card-content>
+          <ng-template
+            [ngIf]="appConfig.tableSciDataEnabled"
+            [ngIfElse]="jsonView"
+          >
+            <ng-template #metadataView>
+              <div [ngSwitch]="appConfig.metadataStructure">
+                <tree-view
+                  *ngSwitchCase="'tree'"
+                  [metadata]="dataset['scientificMetadata']"
+                ></tree-view>
+                <metadata-view
+                  *ngSwitchDefault
+                  [metadata]="dataset['scientificMetadata']"
+                >
+                </metadata-view>
+              </div>
+            </ng-template>
+            <mat-tab-group
+              class="metadataGroup"
+              *ngIf="editingAllowed; else metadataView"
+            >
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <mat-icon> list </mat-icon> View
+                </ng-template>
+                <ng-container *ngTemplateOutlet="metadataView"> </ng-container>
+              </mat-tab>
+              <mat-tab
+                class="editTab"
+                *ngIf="editingAllowed"
+                [hidden]="!appConfig.editMetadataEnabled"
+              >
+                <ng-template mat-tab-label>
+                  <mat-icon> edit </mat-icon> Edit
+                </ng-template>
+                <div [ngSwitch]="appConfig.metadataStructure">
+                  <tree-edit
+                    *ngSwitchCase="'tree'"
+                    [metadata]="dataset['scientificMetadata']"
+                    (save)="onSaveMetadata($event)"
+                    (hasUnsavedChanges)="onHasUnsavedChanges($event)"
+                  >
+                  </tree-edit>
+                  <metadata-edit
+                    *ngSwitchDefault
+                    [metadata]="dataset['scientificMetadata']"
+                    (save)="onSaveMetadata($event)"
+                  >
+                  </metadata-edit>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </ng-template>
+
+          <ng-template #jsonView>
+            <ngx-json-viewer
+              [json]="dataset['scientificMetadata']"
+              [expanded]="false"
+            ></ngx-json-viewer>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+      <mat-card *ngIf="appConfig.jsonMetadataEnabled">
+        <mat-card-content>
+          <button mat-stroked-button (click)="show = !show">
+            {{ (show ? "Hide Metadata" : "Show Metadata") | translate }}
+          </button>
+
+          <br />
+
+          <div *ngIf="show" class="jsonViewOverFlow">
+            <ngx-json-viewer
+              [json]="datasetWithout$ | async"
+              [expanded]="false"
+            >
+            </ngx-json-viewer>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div
+      [fxFlex]="(attachments$ | async)?.length > 0 ? '10%' : '0'"
+      *ngIf="attachments$ | async as attachments"
+    >
+      <ng-container *ngFor="let da of attachments">
+        <mat-card>
+          <img
+            data-cy="attachment-thumbnail"
+            mat-card-image
+            [src]="getImageUrl(da.thumbnail)"
+            (click)="openAttachment(da.thumbnail)"
+            class="thumbnail-image"
+          />
+          <mat-card-actions class="caption-text">{{
+            da.caption
+          }}</mat-card-actions>
+        </mat-card>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
