@@ -100,7 +100,6 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         if (res) {
           const { data } = res;
-          console.log({ data });
           this.store.dispatch(
             addCharacteristicsFilterAction({ characteristic: data }),
           );

@@ -14,6 +14,7 @@ import { NewDynamicPipe } from "./newDynamicPipe.pipe";
 import { DescriptionTitlePipe } from "./description-title.pipe";
 import { FormatNumberPipe } from "./format-number.pipe";
 import { ComponentTranslatePipe } from "./component-translate.pipe";
+import { ToLinkPipe } from "./to-link.pipe";
 @NgModule({
   declarations: [
     FileSizePipe,
@@ -30,6 +31,7 @@ import { ComponentTranslatePipe } from "./component-translate.pipe";
     NewDynamicPipe,
     DescriptionTitlePipe,
     ComponentTranslatePipe,
+    ToLinkPipe,
   ],
   imports: [CommonModule],
   exports: [
@@ -47,6 +49,7 @@ import { ComponentTranslatePipe } from "./component-translate.pipe";
     NewDynamicPipe,
     DescriptionTitlePipe,
     ComponentTranslatePipe,
+    ToLinkPipe,
   ],
 })
 export class PipesModule {}

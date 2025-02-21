@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { CommonModule, TitleCasePipe } from "@angular/common";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
 import { MatOptionModule } from "@angular/material/core";
@@ -15,6 +15,9 @@ import { PipesModule } from "shared/pipes/pipes.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { FlexModule } from "@ngbracket/ngx-layout";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { DynamicMatTableModule } from "../dynamic-material-table/table/dynamic-mat-table.module";
+import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
+import { ToLinkPipe } from "shared/pipes/to-link.pipe";
 
 @NgModule({
   declarations: [MetadataViewComponent, MetadataEditComponent],
@@ -34,8 +37,10 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     MatTabsModule,
     PipesModule,
     ReactiveFormsModule,
+    DynamicMatTableModule.forRoot({}),
   ],
   exports: [MetadataEditComponent, MetadataViewComponent],
+  providers: [ReplaceUnderscorePipe, TitleCasePipe, ToLinkPipe],
 })
 export class ScientificMetadataModule {}
 
@@ -44,10 +49,13 @@ export interface ScientificMetadata {
   unit: string;
   valueSI?: number;
   unitSI?: string;
+  type?: string;
 }
 
 export interface ScientificMetadataTableData {
   name: string;
   value: string | number;
   unit: string;
+  human_name?: string;
+  type?: string;
 }
