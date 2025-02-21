@@ -28,7 +28,7 @@
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let message">
-        {{ message.origin_server_ts | date: "yyyy-MM-dd, EEE HH:mm" }}
+        {{ message.origin_server_ts | date }}
       </mat-cell>
     </ng-container>
 

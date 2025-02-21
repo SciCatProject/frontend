@@ -1,8 +1,14 @@
 describe("Dataset datafiles", () => {
   beforeEach(() => {
+    cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+      cy.intercept("GET", "**/admin/config", baseConfig).as(
+        "getFrontendConfig",
+      );
+    });
     cy.login(Cypress.env("username"), Cypress.env("password"));
     cy.intercept("PATCH", "/api/v3/datasets/**/*").as("change");
     cy.intercept("GET", "*").as("fetch");
+    cy.visit("/");
   });
 
   after(() => {
@@ -11,10 +17,10 @@ describe("Dataset datafiles", () => {
 
   describe("Datafiles action test", () => {
     const actionUrl = {
-      downloadSelected: "https://www.scicat.info/download/selected",
-      downloadAll: "https://www.scicat.info/download/all",
-      notebookSelected: "https://www.scicat.info/notebook/selected",
-      notebookAll: "https://www.scicat.info/notebook/all",
+      downloadSelected: "http://localhost:4200/download/selected",
+      downloadAll: "http://localhost:4200/download/all",
+      notebookSelected: "http://localhost:4200/notebook/selected",
+      notebookAll: "http://localhost:4200/notebook/all",
     };
     it("Should be able to download/notebook with selected/all", () => {
       cy.createDataset("raw", undefined, "small");

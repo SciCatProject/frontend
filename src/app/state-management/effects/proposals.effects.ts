@@ -10,6 +10,8 @@ import * as fromActions from "state-management/actions/proposals.actions";
 import {
   selectFullqueryParams,
   selectDatasetsQueryParams,
+  selectCurrentProposal,
+  selectRelatedProposalsFilters,
 } from "state-management/selectors/proposals.selectors";
 import { map, mergeMap, catchError, switchMap, filter } from "rxjs/operators";
 import { ObservableInput, of } from "rxjs";
@@ -20,48 +22,52 @@ import {
 
 @Injectable()
 export class ProposalEffects {
+  currentProposal$ = this.store.select(selectCurrentProposal);
+  relatedProposalFilters$ = this.store.select(selectRelatedProposalsFilters);
   fullqueryParams$ = this.store.select(selectFullqueryParams);
   datasetQueryParams$ = this.store.select(selectDatasetsQueryParams);
 
   fetchProposals$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(
-        fromActions.fetchProposalsAction,
-        fromActions.changePageAction,
-        fromActions.sortByColumnAction,
-        fromActions.clearFacetsAction,
-      ),
-      concatLatestFrom(() => this.fullqueryParams$),
-      map(([action, params]) => params),
-      mergeMap(({ query, limits }) =>
-        this.proposalsService
-          .proposalsControllerFullquery(JSON.stringify(limits), query)
+      ofType(fromActions.fetchProposalsAction),
+      mergeMap(({ skip, limit, search, order }) => {
+        const limitsParam = {
+          order: order,
+          skip: skip,
+          limit: limit,
+        };
+
+        const queryParam = { text: search || undefined };
+
+        return this.proposalsService
+          .proposalsControllerFullquery(
+            JSON.stringify(limitsParam),
+            JSON.stringify(queryParam),
+          )
           .pipe(
             mergeMap((proposals) => [
               fromActions.fetchProposalsCompleteAction({ proposals }),
-              fromActions.fetchCountAction(),
+              // TODO: Maybe this part should be refactored. Now we need to send 2 separate requests to get the data and count
+              fromActions.fetchCountAction({
+                fields: queryParam,
+              }),
             ]),
             catchError(() => of(fromActions.fetchProposalsFailedAction())),
-          ),
-      ),
+          );
+      }),
     );
   });
 
   fetchCount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
-      concatLatestFrom(() => this.fullqueryParams$),
-      map(([action, params]) => params),
-      switchMap(({ query }) =>
-        this.proposalsService.proposalsControllerFullfacet(query).pipe(
-          map((res) => {
-            const { all } = res[0];
-            const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
-
-            return fromActions.fetchCountCompleteAction({ count: allCounts });
-          }),
-          catchError(() => of(fromActions.fetchCountFailedAction())),
-        ),
+      switchMap(({ fields }) =>
+        this.proposalsService
+          .proposalsControllerCount(JSON.stringify(fields))
+          .pipe(
+            map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
+            catchError(() => of(fromActions.fetchCountFailedAction())),
+          ),
       ),
     );
   });
@@ -112,11 +118,11 @@ export class ProposalEffects {
       ofType(fromActions.fetchProposalDatasetsCountAction),
       switchMap(({ proposalId }) =>
         this.datasetsService
-          .datasetsControllerFindAll(JSON.stringify({ where: { proposalId } }))
+          .datasetsControllerCount(JSON.stringify({ where: { proposalId } }))
           .pipe(
-            map((datasets) =>
+            map(({ count }) =>
               fromActions.fetchProposalDatasetsCountCompleteAction({
-                count: datasets.length,
+                count,
               }),
             ),
             catchError(() =>
@@ -207,6 +213,80 @@ export class ProposalEffects {
     );
   });
 
+  fetchRelatedProposals$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchRelatedProposalsAction),
+      concatLatestFrom(() => [
+        this.currentProposal$,
+        this.relatedProposalFilters$,
+      ]),
+      switchMap(([, proposal, filters]) => {
+        const queryFilter = {
+          ...filters,
+          where: {
+            $or: [
+              { proposalId: { $in: [proposal.parentProposalId] } },
+              { parentProposalId: { $in: [proposal.proposalId] } },
+            ],
+          },
+        };
+
+        return this.proposalsService
+          .proposalsControllerFindAll(JSON.stringify(queryFilter))
+          .pipe(
+            map((relatedProposals) => {
+              const relatedProposalsWithRelations = relatedProposals.map(
+                (p) => {
+                  return {
+                    ...p,
+                    relation:
+                      p.proposalId === proposal.parentProposalId
+                        ? "parent"
+                        : "child",
+                  };
+                },
+              );
+
+              return fromActions.fetchRelatedProposalsCompleteAction({
+                relatedProposals: relatedProposalsWithRelations,
+              });
+            }),
+            catchError(() =>
+              of(fromActions.fetchRelatedProposalsFailedAction()),
+            ),
+          );
+      }),
+    );
+  });
+
+  fetchRelatedProposalsCount$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchRelatedProposalsAction),
+      concatLatestFrom(() => [this.currentProposal$]),
+      switchMap(([, proposal]) => {
+        const queryFilter = {
+          $or: [
+            { proposalId: { $in: [proposal.parentProposalId] } },
+            { parentProposalId: { $in: [proposal.proposalId] } },
+          ],
+        };
+
+        return this.proposalsService
+          .proposalsControllerCount(JSON.stringify(queryFilter))
+          .pipe(
+            map(({ count }) =>
+              fromActions.fetchRelatedProposalsCountCompleteAction({
+                count,
+              }),
+            ),
+            catchError(() =>
+              of(fromActions.fetchRelatedProposalsCountFailedAction()),
+            ),
+          );
+      }),
+    );
+  });
+
   loading$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(
@@ -248,6 +328,8 @@ export class ProposalEffects {
         fromActions.updateProposalPropertyFailedAction,
         fromActions.removeAttachmentCompleteAction,
         fromActions.removeAttachmentFailedAction,
+        fromActions.fetchRelatedProposalsCompleteAction,
+        fromActions.fetchRelatedProposalsFailedAction,
       ),
       switchMap(() => of(loadingCompleteAction())),
     );

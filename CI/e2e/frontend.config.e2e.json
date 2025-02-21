@@ -65,7 +65,7 @@
       "files": "all",
       "mat_icon": "download",
       "type": "form",
-      "url": "https://www.scicat.info/download/all",
+      "url": "http://localhost:4200/download/all",
       "target": "_blank",
       "enabled": "#SizeLimit",
       "authorization": ["#datasetAccess", "#datasetPublic"]
@@ -77,7 +77,7 @@
       "files": "selected",
       "mat_icon": "download",
       "type": "form",
-      "url": "https://www.scicat.info/download/selected",
+      "url": "http://localhost:4200/download/selected",
       "target": "_blank",
       "enabled": "#Selected && #SizeLimit",
       "authorization": ["#datasetAccess", "#datasetPublic"]
@@ -89,7 +89,7 @@
       "files": "all",
       "icon": "/assets/icons/jupyter_logo.png",
       "type": "form",
-      "url": "https://www.scicat.info/notebook/all",
+      "url": "http://localhost:4200/notebook/all",
       "target": "_blank",
       "authorization": ["#datasetAccess", "#datasetPublic"]
     },
@@ -100,7 +100,7 @@
       "files": "selected",
       "icon": "/assets/icons/jupyter_logo.png",
       "type": "form",
-      "url": "https://www.scicat.info/notebook/selected",
+      "url": "http://localhost:4200/notebook/selected",
       "target": "_blank",
       "enabled": "#Selected",
       "authorization": ["#datasetAccess", "#datasetPublic"]

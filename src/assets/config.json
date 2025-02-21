@@ -205,5 +205,36 @@
       { "TextFilter": true }
     ],
     "conditions": []
+  },
+  "labelsLocalization": {
+    "currentLabelSet": "ess",
+    "labelSets": {
+      "ess": {
+        "dataset-default": {},
+        "dataset-custom" : {
+          "pid": "PID",
+          "description": "Description",
+          "principalInvestigator": "Principal Investigator",
+          "keywords": "Keywords",
+          "creationTime": "Creation Time",
+          "scientificMetadata": "Scientific Metadata",
+          "metadataJsonView": "Metadata JsonView"
+        },
+        "proposal" : {
+          "General Information": "Proposal Information",
+          //"Title" : "Proposal Title",
+          "Abstract" : "Abstract",
+          "Proposal Id" : "Proposal Id",
+          "Proposal Type" : "Proposal Type",
+          "Parent Proposal" : "Parent Proposal",
+          "Start Time" : "Start Time",
+          "End Time" : "End Time",
+          "Creator Information" : "People",
+          "Main Proposer": "Proposal Submitted By",
+          "Principal Investigator" : "Principal Investigator",
+          "Metadata": "Additional Information"
+        }
+      }
+    }
   }
 }

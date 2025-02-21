@@ -1,0 +1,247 @@
+<ng-template [ngIf]="dataset$">
+  <div fxLayout="row">
+    <div fxFlex="auto">
+      <a
+        mat-raised-button
+        href="{{ appConfig.jupyterHubUrl }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="jupyter-button"
+        *ngIf="appConfig.jupyterHubUrl"
+      >
+        Jupyter Hub
+      </a>
+    </div>
+  </div>
+  <div style="clear: both"></div>
+  <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset$ | async as dataset">
+    <div fxFlex="100">
+      <ng-container *ngFor="let section of datasetView">
+        <ng-container [ngSwitch]="section.type">
+          <mat-card
+            [formGroup]="form"
+            *ngSwitchCase="'regular'"
+            data-cy="general-info"
+          >
+            <!-- Section Header -->
+            <mat-card-header
+              class="dynamic-template-general-header"
+              data-cy="section-label"
+            >
+              <div mat-card-avatar class="section-icon">
+                <mat-icon> description </mat-icon>
+              </div>
+              {{ section.label | translate }}
+            </mat-card-header>
+
+            <!-- Section Table -->
+            <mat-card-content>
+              <table>
+                <ng-container *ngFor="let field of section.fields">
+                  <tr *ngIf="dataset[field.source]">
+                    <th data-cy="field-label">
+                      {{ field.source | translate }}
+                    </th>
+                    <td>
+                      <ng-container [ngSwitch]="field.element">
+                        <!-- Render based on fieldType -->
+                        <ng-container
+                          [ngTemplateOutlet]="dynamicTemplate"
+                          [ngTemplateOutletContext]="{
+                            fieldType: field.element,
+                            fieldValue: handleFieldValue(
+                              field.element,
+                              dataset[field.source]
+                            ),
+                          }"
+                        >
+                        </ng-container>
+                      </ng-container>
+
+                      <!-- Define a single dynamic template -->
+                      <ng-template
+                        #dynamicTemplate
+                        let-fieldType="fieldType"
+                        let-fieldValue="fieldValue"
+                      >
+                        <!-- Text -->
+                        <span
+                          *ngIf="fieldType === 'text'"
+                          [title]="fieldValue"
+                          >{{ fieldValue }}</span
+                        >
+
+                        <!-- Linky -->
+                        <span
+                          *ngIf="fieldType === 'linky'"
+                          [innerHTML]="fieldValue | linky"
+                          [title]="fieldValue"
+                        ></span>
+
+                        <!-- Date -->
+                        <span
+                          *ngIf="fieldType === 'date'"
+                          [title]="fieldValue"
+                          [innerHTML]="fieldValue"
+                        ></span>
+
+                        <!-- Copy -->
+                        <ng-container *ngIf="fieldType === 'copy'">
+                          <span class="truncated-text" [title]="fieldValue">
+                            {{ fieldValue }}
+                          </span>
+                          <button
+                            mat-icon-button
+                            aria-label="copy"
+                            (click)="onCopy(fieldValue)"
+                          >
+                            <mat-icon class="copy-button"
+                              >content_copy</mat-icon
+                            >
+                          </button>
+                        </ng-container>
+
+                        <!-- Tag -->
+                        <mat-chip-set *ngIf="fieldType === 'tag'" role="list">
+                          <mat-chip
+                            role="listitem"
+                            *ngFor="let tag of fieldValue"
+                            [title]="tag"
+                          >
+                            {{ tag }}
+                          </mat-chip>
+                        </mat-chip-set>
+
+                        <!-- Default -->
+                        <span
+                          *ngIf="isUnsupportedFieldType(fieldType)"
+                          [title]="fieldValue"
+                          class="general-warning"
+                        >
+                          {{ fieldValue }}
+                        </span>
+                      </ng-template>
+                    </td>
+                  </tr>
+                </ng-container>
+              </table>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Scientific Metadata -->
+          <mat-card *ngSwitchCase="'scientificMetadata'">
+            <mat-card-header class="scientific-header" data-cy="section-label">
+              <div mat-card-avatar class="section-icon">
+                <mat-icon> science </mat-icon>
+              </div>
+              {{ section.label | translate }}
+            </mat-card-header>
+            <mat-card-content>
+              <ng-container *ngIf="appConfig.tableSciDataEnabled">
+                <div [ngSwitch]="section.viewMode">
+                  <tree-view
+                    *ngSwitchCase="'tree'"
+                    [metadata]="dataset['scientificMetadata']"
+                  ></tree-view>
+                  <metadata-view
+                    *ngSwitchDefault
+                    [metadata]="dataset['scientificMetadata']"
+                  ></metadata-view>
+                  <div class="json-view">
+                    <ngx-json-viewer
+                      *ngSwitchCase="'json'"
+                      [json]="dataset['scientificMetadata']"
+                      [expanded]="false"
+                    >
+                    </ngx-json-viewer>
+                  </div>
+                </div>
+              </ng-container>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Attachments -->
+          <mat-card *ngSwitchCase="'attachments'">
+            <mat-card-header
+              class="dynamic-template-attachments-header"
+              data-cy="section-label"
+            >
+              <div mat-card-avatar class="section-icon">
+                <mat-icon> photo_library </mat-icon>
+              </div>
+              {{ section.label | translate }}
+            </mat-card-header>
+            <mat-card-content>
+              <div class="attachments-wrapper">
+                <ng-container *ngIf="attachments$ | async as attachments">
+                  <ng-container
+                    *ngIf="attachments.length > 0; else noAttachments"
+                  >
+                    <ng-container
+                      *ngFor="
+                        let item of attachments
+                          | slice: 0 : section.options.limit
+                      "
+                    >
+                      <img
+                        [class]="
+                          [
+                            'thumbnail-image',
+                            getThumbnailSize(section.options.size),
+                          ].join(' ')
+                        "
+                        data-cy="attachment-thumbnail"
+                        mat-card-image
+                        [src]="getImageUrl(item.thumbnail)"
+                        (click)="openAttachment(item.thumbnail)"
+                        title="{{ item.caption }}"
+                      />
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+                <ng-template #noAttachments>
+                  <p class="no-attachments-message">No attachments found</p>
+                </ng-template>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Dataset JSON View-->
+          <mat-card *ngSwitchCase="'datasetJsonView'">
+            <mat-card-header
+              class="dynamic-template-json-view-header"
+              data-cy="section-label"
+            >
+              <div mat-card-avatar class="section-icon">
+                <mat-icon> data_object </mat-icon>
+              </div>
+              {{ section.label | translate }}
+            </mat-card-header>
+            <mat-card-content>
+              <ng-container *ngIf="appConfig.jsonMetadataEnabled">
+                <button
+                  class="show-json-metadata-btn"
+                  mat-flat-button
+                  color="primary"
+                  (click)="show = !show"
+                >
+                  {{ (show ? "Hide JSON View" : "Show JSON View") | translate }}
+                </button>
+
+                <br />
+
+                <div *ngIf="show" class="json-view-overflow">
+                  <ngx-json-viewer
+                    [json]="datasetWithout$ | async"
+                    [expanded]="false"
+                  >
+                  </ngx-json-viewer>
+                </div>
+              </ng-container>
+            </mat-card-content>
+          </mat-card>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
