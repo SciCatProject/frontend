@@ -1,25 +1,7 @@
-<dynamic-mat-table
-  tableName="propsals-table"
-  [showReload]="showReloadData"
-  [dir]="direction"
-  [rowHeight]="rowHeight"
-  [columns]="columns"
-  [pending]="pending"
-  [setting]="setting"
-  [pagingMode]="paginationMode"
-  [sticky]="stickyHeader"
+<shared-table
   [dataSource]="dataSource"
-  [pagination]="pagination"
-  [showNoData]="showNoData"
-  [rowSelectionMode]="rowSelectionMode"
-  [printConfig]="printConfig"
-  [showProgress]="showProgress"
-  [globalTextSearch]="globalTextSearch"
-  globalTextSearchPlaceholder="Global text search"
-  (paginationChange)="onPaginationChange($event)"
-  (globalTextSearchChange)="onGlobalTextSearchChange($event)"
-  (onRowEvent)="onRowClick($event)"
-  style="height: 70vh"
-  class="mat-elevation-z2"
+  [columnsdef]="columns"
+  [pageSize]="5"
+  (rowClick)="onRowClick($event)"
 >
-</dynamic-mat-table>
+</shared-table>

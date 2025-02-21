@@ -10,7 +10,6 @@
         <ul>
           <li>
             <a
-              *ngIf="facility === 'PSI'"
               href="{{ SciCatGitHub }}"
               target="blank"
               >SciCat Github Project.</a
@@ -24,7 +23,9 @@
       <mat-card-header>
         <mat-card-title>Access Conditions</mat-card-title>
       </mat-card-header>
-      <mat-card-content> {{ accessText }}</mat-card-content>
+      <mat-card-content>
+        <span [innerHTML]="accessText | linky"></span>
+      </mat-card-content>
     </mat-card>
 
     <mat-card class="example-card">
@@ -32,12 +33,12 @@
         <mat-card-title>Terms of Use</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        {{ termsText }}
+        <span [innerHTML]="termsText | linky"></span>
         <a *ngIf="facility === 'PSI'" href="{{ SNFLink }}" target="blank"
           >Open Research Data.</a
         >
         <br /><br />
-        {{ termsTextContinued }}
+        <span [innerHTML]="termsTextContinued | linky"></span>
         <a *ngIf="facility === 'PSI'" href="{{ PSIDataPolicy }}" target="blank"
           >Data Policy.</a
         >
