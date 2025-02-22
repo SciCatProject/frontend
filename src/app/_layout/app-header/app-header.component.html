@@ -94,15 +94,13 @@
     </span>
     <ng-template #userButton>
       <span *ngIf="config.shoppingCartOnHeader" [matMenuTriggerFor]="cartMenu">
-        <button
-          id="cartOnHeaderButton"
-          mat-icon-button
-          matBadge="{{ inBatchIndicator$ | async }}"
-          matBadgePosition="after"
-          matBadgeColor="accent"
-          matBadgeSize="medium"
-        >
-          <mat-icon> shopping_cart </mat-icon>
+        <button id="cartOnHeaderButton" mat-icon-button>
+          <mat-icon
+            matBadge="{{ inBatchIndicator$ | async }}"
+            matBadgeColor="accent"
+            matBadgeSize="medium"
+            >shopping_cart</mat-icon
+          >
         </button>
       </span>
 
