@@ -78,6 +78,9 @@
               <mat-error *ngIf="fieldHasError(i, 'fieldValue')">
                 Value is required
               </mat-error>
+              <mat-error *ngIf="fieldHasDateError(i, 'fieldValue')">
+                Invalid date
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="formColumn">

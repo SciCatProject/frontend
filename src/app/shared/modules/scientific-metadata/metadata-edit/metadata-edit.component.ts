@@ -25,6 +25,7 @@ import { ScientificMetadata } from "../scientific-metadata.module";
 import { AppConfigService } from "app-config.service";
 import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
 import { TitleCasePipe } from "@angular/common";
+import { DateTime } from "luxon";
 
 export enum MetadataTypes {
   quantity = "quantity",
@@ -71,7 +72,11 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         ]),
       fieldHumanName: (value = "") => new FormControl(value, []),
       fieldValue: (value: string | number = "") =>
-        new FormControl(value, [Validators.required, Validators.minLength(1)]),
+        new FormControl(value, [
+          Validators.required,
+          Validators.minLength(1),
+          this.dateValidator(),
+        ]),
       fieldUnit: (value = "") =>
         new FormControl(value, [
           Validators.required,
@@ -108,6 +113,21 @@ export class MetadataEditComponent implements OnInit, OnChanges {
       this.items.at(index).get("fieldUnit")?.setValue("");
       this.items.at(index).get("fieldUnit")?.disable();
     }
+
+    if (type === MetadataTypes.date) {
+      this.items
+        .at(index)
+        .get("fieldValue")
+        ?.addValidators([this.dateValidator()]);
+      this.items.at(index).get("fieldValue")?.updateValueAndValidity();
+      this.items.at(index).get("fieldValue")?.markAsTouched();
+    } else {
+      this.items
+        .at(index)
+        .get("fieldValue")
+        ?.removeValidators([this.dateValidator()]);
+      this.items.at(index).get("fieldValue")?.updateValueAndValidity();
+    }
   }
 
   duplicateValidator(): ValidatorFn {
@@ -121,6 +141,24 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         : null;
     };
   }
+
+  dateValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control.parent?.value.fieldType === MetadataTypes.date) {
+        if (
+          DateTime.fromISO(control.value).toUTC().isValid ||
+          DateTime.fromFormat(control.value, this.appConfig.dateFormat).isValid
+        ) {
+          return null;
+        } else {
+          return { dateValidator: { valid: false } };
+        }
+      }
+
+      return null;
+    };
+  }
+
   whiteSpaceValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (control.value.length > 0 && !control.value.trim()) {
@@ -130,8 +168,26 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     };
   }
 
+  formatDateFields() {
+    for (const [key, value] of Object.entries(this.metadata)) {
+      if (value.type === MetadataTypes.date) {
+        if (
+          DateTime.fromFormat(value.value, this.appConfig.dateFormat).isValid
+        ) {
+          this.metadata[key].value = DateTime.fromFormat(
+            value.value,
+            this.appConfig.dateFormat,
+          ).toISO();
+        } else {
+          this.metadata[key].value = DateTime.fromISO(value.value).toISO();
+        }
+      }
+    }
+  }
+
   doSave() {
     this.metadata = this.createMetadataObject();
+    this.formatDateFields();
     this.save.emit(this.metadata);
   }
 
@@ -189,10 +245,17 @@ export class MetadataEditComponent implements OnInit, OnChanges {
               ),
             });
           } else {
+            let fieldType = MetadataTypes.string;
+
+            if (this.metadata[key]["type"] === MetadataTypes.link) {
+              fieldType = MetadataTypes.link;
+            }
+            if (this.metadata[key]["type"] === MetadataTypes.date) {
+              fieldType = MetadataTypes.date;
+            }
+
             field = this.formBuilder.group({
-              fieldType: this.formControlFields["fieldType"](
-                MetadataTypes.string,
-              ),
+              fieldType: fieldType,
               fieldName: this.formControlFields["fieldName"](key),
               fieldHumanName: this.formControlFields["fieldHumanName"](
                 this.getHumanNameFieldValue(this.metadata[key], key),
@@ -296,6 +359,15 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   fieldHasDuplicateError(index: number, field: string): boolean {
     const formField = this.items.at(index).get(field);
     return formField ? formField.hasError("duplicateField") : true;
+  }
+
+  fieldHasDateError(index: number, field: string): boolean {
+    const formField = this.items.at(index).get(field);
+    if (formField.parent?.value.fieldType === MetadataTypes.date) {
+      return formField ? formField.hasError("dateValidator") : true;
+    }
+
+    return false;
   }
 
   get items() {
