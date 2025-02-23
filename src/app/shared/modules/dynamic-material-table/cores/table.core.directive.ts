@@ -308,7 +308,6 @@ export class TableCoreDirective<T extends TableRow> {
 
   public updateColumn() {
     if (this.tableColumns) {
-      // isNullorUndefined(this.tableSetting.columnSetting)
       this.tableSetting.columnSetting = clone(this.tableColumns);
     }
     this.setDisplayedColumns();
@@ -420,7 +419,6 @@ export class TableCoreDirective<T extends TableRow> {
     if (this.viewport) {
       const currentOffset = this.viewport.measureScrollOffset();
       this.columns = columns;
-      // this.setDisplayedColumns();
       setTimeout(
         () => this.viewport.scrollTo({ top: currentOffset, behavior: "auto" }),
         0,

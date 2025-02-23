@@ -21,7 +21,6 @@ export declare type FieldFilter = "client-side" | "server-side" | "none";
 export declare type FieldSort = "client-side" | "server-side" | "none";
 
 export interface TableField<R extends TableRow> extends AbstractField {
-  // renderer?: AtRenderFunc<R>;
   classNames?: string;
   rowClass?: string | AtClassFunc;
   customSortFunction?: AtSortFunc<R>;

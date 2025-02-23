@@ -4,7 +4,6 @@ import { AbstractField } from "./table-field.model";
 export type Direction = "rtl" | "ltr";
 export type DisplayMode = "visible" | "hidden" | "none";
 export interface TableSetting {
-  // screenMode?: ScreenMode;
   pageSize?: number;
   direction?: Direction;
   columnSetting?: AbstractField[] | null;
