@@ -173,7 +173,6 @@ export class DatafilesComponent
       item.selected = selected.includes(item.path);
       return item;
     });
-    console.log(files);
     this.files = [...files];
   }
 
