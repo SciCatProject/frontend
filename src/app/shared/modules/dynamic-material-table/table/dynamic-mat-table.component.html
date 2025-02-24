@@ -1,0 +1,343 @@
+<cdk-virtual-scroll-viewport
+  #tbl
+  [ngClass]="viewportClass"
+  [tvsItemSize]="rowHeight || 48"
+  [headerHeight]="headerHeight || 56"
+  [footerHeight]="headerHeight || 56"
+  [headerEnabled]="headerEnable || true"
+  [footerEnabled]="footerEnable || false"
+  [ngStyle]="{ 'background-color': backgroundColor || 'white' }"
+  [class.print-preview]="printing"
+>
+  <mat-table
+    matSort
+    class="dynamic-table"
+    multiTemplateDataRows
+    [cdkDropListDisabled]="false"
+    cdkDropList
+    cdkDropListOrientation="horizontal"
+    (cdkDragStarted)="dragStarted($event)"
+    (cdkDropListDropped)="dropListDropped($event)"
+    [trackBy]="indexTrackFn"
+    [dataSource]="tvsDataSource"
+  >
+    <!-- Select Checkbox Column -->
+    <ng-container matColumnDef="row-checkbox">
+      <!-- HEADER -->
+      <mat-header-cell
+        *matHeaderCellDef
+        class="row-checkbox"
+        style="z-index: 2"
+      >
+        <mat-checkbox
+          style="z-index: 10"
+          (change)="$event ? masterToggle() : null"
+          [checked]="rowSelectionModel.hasValue() && isAllSelected()"
+          [indeterminate]="rowSelectionModel.hasValue() && !isAllSelected()"
+          *ngIf="rowSelectionMode === 'multi'"
+        >
+        </mat-checkbox>
+        <!-- <mat-icon *ngIf="rowSelectionMode === 'single'">indeterminate_check_box</mat-icon> -->
+      </mat-header-cell>
+      <!-- DATA -->
+      <mat-cell *matCellDef="let row" class="row-checkbox">
+        <mat-checkbox
+          (click)="$event.stopPropagation()"
+          (change)="onRowSelectionChange($event, row)"
+          [checked]="rowSelectionModel?.isSelected(row)"
+        >
+        </mat-checkbox>
+      </mat-cell>
+      <!-- FOOTER -->
+      <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+    </ng-container>
+
+    <!-- Table Columns -->
+    <ng-container
+      *ngFor="let column of columns; let i = index; trackBy: trackColumn"
+      [matColumnDef]="column.name"
+      [sticky]="column.sticky === 'start' ? true : false"
+      [stickyEnd]="column.sticky === 'end' ? true : false"
+    >
+      <!-- HEADER -->
+      <mat-header-cell
+        *matHeaderCellDef
+        cdkDrag
+        [cdkDragDisabled]="column?.draggable === false"
+        cdkDragBoundary="mat-header-row"
+        cdkDropListLockAxis="x"
+        [ngClass]="headerClass(column)"
+        [cdkDragData]="{ name: column.name, columIndex: i }"
+        [ngStyle]="column.style"
+        [class.active-resize]="resizeColumn.columnIndex === i"
+        cdkDragBoundary="mat-header-row"
+      >
+        <!-- class="left-resize-handler" -->
+        <div
+          class="resize-handler"
+          [ngClass]="{
+            'left-resize-handler': tableSetting.direction === 'ltr',
+            'right-resize-handler': tableSetting.direction === 'rtl',
+          }"
+          (mousedown)="onResizeColumn($event, i, 'left')"
+        ></div>
+        <header-filter
+          [field]="column"
+          (filterChanged)="filter_onChanged(column, $event)"
+          [filters]="tvsDataSource.getFilter(column.name)"
+        >
+          <mat-icon
+            class="column-icon"
+            [ngStyle]="{ color: column?.iconColor }"
+            >{{ column?.icon }}</mat-icon
+          >
+          <mat-icon
+            *ngIf="column?.draggable !== false"
+            class="drag-indicator"
+            cdkDragHandle
+            >drag_indicator</mat-icon
+          >
+          <div
+            mat-sort-header
+            [matTooltip]="column.header"
+            matTooltipClass="cell-tooltip"
+            [disabled]="column.sort === 'none'"
+            class="header-caption"
+          >
+            {{ column.header }}
+          </div>
+        </header-filter>
+        <!-- class="right-resize-handler" -->
+        <div
+          class="resize-handler"
+          [ngClass]="{
+            'right-resize-handler': tableSetting.direction === 'ltr',
+            'left-resize-handler': tableSetting.direction === 'rtl',
+          }"
+          (mousedown)="onResizeColumn($event, i, 'right')"
+        ></div>
+      </mat-header-cell>
+      <!-- DATA -->
+      <mat-cell
+        *matCellDef="let row"
+        #cell
+        (mouseenter)="tooltip_onChanged(column, row, cell, true)"
+        (mouseleave)="tooltip_onChanged(column, row, cell, false)"
+        [class]="row[column.cellClass]"
+        (click)="onCellClick($event, row, column)"
+        [ngClass]="cellClass(row?.option, column)"
+        [ngStyle]="cellStyle(row?.option, column)"
+        (contextmenu)="onContextMenu($event, column, row)"
+      >
+        <label
+          *ngIf="!column.dynamicCellComponent"
+          (click)="onLabelClick($event, row, column)"
+          [class.rtl-cell]="direction === 'rtl'"
+          [class.ltr-cell]="direction === 'ltr'"
+          [ngStyle]="ellipsis(column)"
+          class="label-cell"
+          >{{ row[column.name] }}</label
+        >
+        <ng-container
+          *ngIf="column.dynamicCellComponent"
+          appDynamicCell
+          [component]="column.dynamicCellComponent"
+          [column]="column"
+          [row]="row"
+          [onRowEvent]="onRowEvent"
+        >
+        </ng-container>
+      </mat-cell>
+      <!-- FOOTER -->
+      <mat-footer-cell *matFooterCellDef [ngStyle]="column.style">
+        <div *ngFor="let footer of column?.footer" class="footer-column">
+          <div [style.height.px]="footerHeight" class="footer-row">
+            <span> {{ footer.aggregateText }}</span>
+          </div>
+        </div>
+      </mat-footer-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="progress">
+      <mat-header-cell
+        *matHeaderCellDef
+        [attr.colspan]="displayedColumns.length"
+      >
+        <mat-progress-bar mode="indeterminate" [class.show]="pending">
+        </mat-progress-bar>
+      </mat-header-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="global-search" [stickyEnd]="true">
+      <mat-header-cell *matHeaderCellDef class="table-global-search">
+        <div class="global-search-wrapper" *ngIf="showGlobalTextSearch">
+          <mat-form-field>
+            <mat-icon matPrefix style="color: black">search</mat-icon>
+            <input
+              [(ngModel)]="globalTextSearch"
+              type="text"
+              matInput
+              [placeholder]="globalTextSearchPlaceholder"
+              (ngModelChange)="this.globalSearchUpdate.next($event)"
+            />
+          </mat-form-field>
+        </div>
+      </mat-header-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="placeholder-column">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+    </ng-container>
+
+    <!-- Expanded Content Column - The detail row is made up of Dynamic Cell -->
+    <ng-container *ngIf="expandColumn.length > 0" matColumnDef="expandedDetail">
+      <td
+        mat-cell
+        *matCellDef="let row"
+        [attr.colspan]="displayedColumns.length"
+        class="expanded-detail-cell"
+      >
+        <div
+          class="expanded-detail"
+          [@detailExpand]="row === expandedElement ? 'expanded' : 'collapsed'"
+        >
+          <ng-container
+            appDynamicCell
+            [component]="expandComponent"
+            [row]="row"
+            [onRowEvent]="onRowEvent"
+          >
+          </ng-container>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Table Menu[ Sort, Visible, Export] -->
+    <ng-container
+      matColumnDef="table-menu"
+      [stickyEnd]="true"
+      *ngIf="setting?.visibleTableMenu !== false"
+    >
+      <mat-header-cell *matHeaderCellDef class="table-menu">
+        <table-menu
+          [(tableSetting)]="tableSetting"
+          (menuActionChange)="tableMenuActionChange($event)"
+        ></table-menu>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" class="table-menu">
+        <row-menu
+          *ngIf="rowContextMenuItems && rowContextMenuItems.length > 0"
+          [rowActionMenu]="row?.actionMenu"
+          [actionMenus]="rowContextMenuItems"
+          [tableSetting]="tableSetting"
+          (rowActionChange)="rowMenuActionChange($event, row)"
+        ></row-menu>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Row Table[Header, Data, Footer] -->
+    <mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      (dblclick)="onRowDblClick($event, row)"
+      (click)="onRowClick($event, row)"
+      [style.height.px]="rowHeight"
+      class="table-row"
+      [ngClass]="row?.option?.class"
+      [ngStyle]="rowStyle(row)"
+      [class.expanded-row]="expandedElement === row"
+      [class.row-selection]="
+        rowSelectionModel ? rowSelectionModel.isSelected(row) : false
+      "
+      (contextmenu)="onContextMenu($event, null, row)"
+    >
+    </mat-row>
+
+    <ng-container *ngIf="expandColumn.length > 0">
+      <tr
+        mat-row
+        *matRowDef="let expandRow; columns: expandColumn"
+        class="detail-row"
+      ></tr>
+    </ng-container>
+
+    <mat-header-row
+      class="global-search"
+      [@tableAnimation]
+      *matHeaderRowDef="searchRowColumns; sticky: sticky"
+      [style.top.px]="inverseOfTranslation"
+    ></mat-header-row>
+    <mat-header-row
+      class="header"
+      [@tableAnimation]
+      *matHeaderRowDef="displayedColumns; sticky: sticky"
+      [style.top.px]="inverseOfTranslation"
+    ></mat-header-row>
+    <ng-container *ngIf="displayedFooter.length > 0">
+      <mat-footer-row
+        class="footer"
+        [@tableAnimation]
+        *matFooterRowDef="displayedFooter"
+      ></mat-footer-row>
+    </ng-container>
+    <mat-header-row
+      class="progress"
+      *matHeaderRowDef="progressColumn; sticky: sticky"
+      [style.top.px]="inverseOfTranslation + headerHeight - 5"
+    ></mat-header-row>
+  </mat-table>
+</cdk-virtual-scroll-viewport>
+<mat-paginator
+  [pageSizeOptions]="pagination.pageSizeOptions"
+  [pageIndex]="pagination.pageIndex"
+  [length]="pagination.length"
+  [pageSize]="pagination.pageSize"
+  (page)="pagination_onChange($event)"
+  *ngIf="pagination"
+>
+</mat-paginator>
+<ng-container *ngIf="showNoData && init === true">
+  <div class="no-records" *ngIf="tvsDataSource.data.length === 0">
+    No data
+    <br />
+    <button
+      mat-icon-button
+      type="button"
+      *ngIf="showReload === true"
+      color="primary"
+      (click)="reload_onClick()"
+    >
+      <mat-icon>autorenew</mat-icon>
+    </button>
+  </div>
+</ng-container>
+
+<!-- Context Menu -->
+<div
+  style="visibility: hidden; position: fixed"
+  [style.left]="contextMenuPosition.x"
+  [style.top]="contextMenuPosition.y"
+  [matMenuTriggerFor]="contextMenu"
+></div>
+<mat-menu #contextMenu="matMenu">
+  <ng-template matMenuContent let-item="item">
+    <ng-container *ngFor="let menu of contextMenuItems">
+      <button
+        mat-button
+        type="button"
+        [class.ltr-menu]="tableSetting.direction === 'rtl'"
+        [color]="menu.color"
+        class="button-menu"
+        [disabled]="menu.disabled"
+        (click)="onContextMenuItemClick(menu)"
+      >
+        <mat-icon>{{ menu.icon }}</mat-icon>
+        <span
+          [class.text-align-right]="tableSetting.direction === 'rtl'"
+          class="text-align-left"
+          >{{ menu.text }}</span
+        >
+      </button>
+      <mat-divider *ngIf="menu.divider === true"></mat-divider>
+    </ng-container>
+  </ng-template>
+</mat-menu>

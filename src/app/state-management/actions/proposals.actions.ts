@@ -6,7 +6,10 @@ import {
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { ProposalFilters } from "state-management/state/proposals.store";
 
-export const fetchProposalsAction = createAction("[Proposal] Fetch Proposals");
+export const fetchProposalsAction = createAction(
+  "[Proposal] Fetch Proposals",
+  props<{ skip?: number; limit?: number; search?: string; order?: string }>(),
+);
 export const clearCurrentProposalAction = createAction(
   "[Proposal] Clear proposal",
 );
@@ -18,7 +21,10 @@ export const fetchProposalsFailedAction = createAction(
   "[Proposal] Fetch Proposals Failed",
 );
 
-export const fetchCountAction = createAction("[Proposal] Fetch Count");
+export const fetchCountAction = createAction(
+  "[Proposal] Fetch Count",
+  props<{ fields?: Record<string, unknown> }>(),
+);
 export const fetchCountCompleteAction = createAction(
   "[Proposal] Fetch Count Complete",
   props<{ count: number }>(),
@@ -143,20 +149,9 @@ export const setDateRangeFilterAction = createAction(
   props<{ begin: string; end: string }>(),
 );
 
-export const clearFacetsAction = createAction("[Proposal] Clear Facets");
-
-export const changePageAction = createAction(
-  "[Proposal] Change Page",
-  props<{ page: number; limit: number }>(),
-);
 export const changeDatasetsPageAction = createAction(
   "[Proposal] Change Datasets Page",
   props<{ page: number; limit: number }>(),
-);
-
-export const sortByColumnAction = createAction(
-  "[Proposal] Sort By Column",
-  props<{ column: string; direction: string }>(),
 );
 
 export const clearProposalsStateAction = createAction("[Proposal] Clear State");

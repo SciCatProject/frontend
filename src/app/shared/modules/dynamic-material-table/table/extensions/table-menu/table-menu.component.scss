@@ -1,0 +1,295 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ltr-menu {
+  span {
+    float: left;
+  }
+}
+
+.main-menu {
+  width: 38px !important;
+  line-height: 24px !important;
+}
+
+.va-mat-button-no-input {
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+
+.va-mat-table-dragable-container {
+  min-width: 200px;
+  padding: 8px 0 8px 0;
+  user-select: none;
+  max-height: 100vh;
+}
+
+.va-mat-table-dragable-container:dir(rtl) {
+  background-color: green !important;
+}
+
+.dragable-row {
+  mat-checkbox {
+    width: calc(100% - 54px);
+    line-height: 28px;
+    display: inline-flex;
+  }
+}
+
+.va-mat-table-dragable-container .dragable-row {
+  background-color: white;
+  display: flex;
+  width: 100%;
+  height: 30px;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.column-setting-button {
+  cursor: pointer !important;
+  font-size: 24px;
+  margin-right: 5px;
+}
+
+.new-setting {
+  text-align: center;
+  margin-left: 0px;
+  margin-top: 0px;
+  align-items: center;
+  user-select: none;
+  outline: none;
+  border: none;
+  line-height: 48px;
+  height: 48px;
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
+  .input-container {
+    overflow: hidden;
+  }
+  input {
+    line-height: 33px;
+    background-color: white;
+    border: none;
+    padding-left: 5px;
+    border-radius: 4px;
+    outline: none;
+    text-align: center;
+    direction: ltr;
+  }
+}
+
+.setting-item {
+  line-height: 48px;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  font-size: 14px;
+  mat-icon {
+    width: 38px;
+    height: 38px;
+    line-height: 38px;
+    color: #0000008a;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 50%;
+    &:hover {
+      background-color: #dbdbdb;
+    }
+  }
+  span {
+    cursor: pointer;
+    width: 154px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: list-item;
+  }
+}
+
+.setting-item-active {
+  background-color: #fdd78a;
+}
+
+::ng-deep .mat-mdc-menu-panel {
+  min-height: auto !important;
+}
+
+.save-table-setting {
+  display: flex;
+  min-width: 70px;
+  mat-icon {
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    cursor: pointer;
+  }
+}
+
+.delete-table-setting {
+  position: absolute;
+  cursor: pointer;
+  line-height: 38px !important;
+  height: 38px;
+  width: 38px;
+  border-radius: 100%;
+  text-align: center;
+  pointer-events: none;
+  margin-top: 5px;
+  &:hover {
+    color: white;
+    background-color: #afafaf;
+  }
+}
+
+.va-mat-table-dragable-container .dragable-row mat-icon {
+  line-height: 30px;
+  opacity: 0.15;
+  transition: opacity 0.5s;
+  color: #616161;
+  cursor: grab;
+  background-color: white;
+}
+.va-mat-table-dragable-container .dragable-row:hover mat-icon {
+  opacity: 1;
+}
+
+.va-mat-table-drag-preview {
+  direction: ltr;
+  background-color: rgb(236, 236, 236);
+  padding: 4px 8px 4px 4px !important;
+  cursor: grabbing !important;
+  margin-top: -4px;
+  margin-left: -4px;
+  font-size: 14px;
+  border-radius: 5px;
+}
+.va-mat-table-drag-preview mat-icon,
+.va-mat-table-drag-preview mat-checkbox {
+  vertical-align: top;
+}
+.va-mat-table-drag-preview mat-icon {
+  padding-left: 4px;
+  color: #616161;
+}
+
+/* Animate items as they're being sorted. */
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* Animate an item that has been dropped. */
+.cdk-drag-animating {
+  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.done-setting {
+  width: 50% !important;
+  display: inline-flex;
+  text-align: center;
+  height: 42px;
+  mat-icon {
+    line-height: 38px !important;
+    opacity: 0.6;
+    transition: opacity 0.5s;
+    color: #616161;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+  }
+  mat-icon:hover {
+    opacity: 1;
+  }
+}
+
+.column-setting {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  padding: 10px;
+  .radio {
+    width: 100%;
+    display: flex;
+    font-size: 12px;
+    margin-top: -2px;
+    mat-radio-button {
+      padding: 5px;
+      width: 50%;
+    }
+
+    mat-radio-button:last-child {
+      margin-right: 10px;
+    }
+  }
+  .column-setting-header {
+    line-height: 30px;
+    padding: 5px 5px 0px 5px;
+    font-size: 14px;
+    border-top: 1px solid #f3f3f3;
+    margin-top: 5px;
+    mat-icon {
+      opacity: 0.7;
+      font-size: 22px;
+      line-height: 30px;
+      float: right;
+      color: #616161;
+    }
+  }
+}
+
+.column-setting-header:first-child {
+  border-top: none !important;
+  padding: 0px 5px 0 !important;
+  margin-top: -5px !important;
+}
+
+.first-menu-item {
+  width: 100px;
+  display: inline-block;
+  text-align: left;
+}
+
+::ng-deep [dir="rtl"] .mat-mdc-checkbox-inner-container {
+  margin-left: auto !important;
+  margin-right: 5px !important;
+}
+
+.mat-mdc-menu-item {
+  display: inline-flex;
+  width: 100%;
+  box-sizing: border-box;
+  span {
+    width: 100%;
+  }
+  mat-icon {
+    line-height: 48px !important;
+    height: 48px;
+  }
+}
+
+::ng-deep .column-config {
+  .mat-mdc-checkbox-layout {
+    width: 100%;
+  }
+  .mat-mdc-checkbox-layout .mat-mdc-checkbox-label {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.column-config-apply {
+  border-top: 1px solid rgb(231, 231, 231);
+  position: sticky;
+  bottom: 0px;
+  z-index: 2147483647;
+  background-color: white;
+}

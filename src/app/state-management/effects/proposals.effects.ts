@@ -29,36 +29,41 @@ export class ProposalEffects {
 
   fetchProposals$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(
-        fromActions.fetchProposalsAction,
-        fromActions.changePageAction,
-        fromActions.sortByColumnAction,
-        fromActions.clearFacetsAction,
-      ),
-      concatLatestFrom(() => this.fullqueryParams$),
-      map(([action, params]) => params),
-      mergeMap(({ query, limits }) =>
-        this.proposalsService
-          .proposalsControllerFullquery(JSON.stringify(limits), query)
+      ofType(fromActions.fetchProposalsAction),
+      mergeMap(({ skip, limit, search, order }) => {
+        const limitsParam = {
+          order: order,
+          skip: skip,
+          limit: limit,
+        };
+
+        const queryParam = { text: search || undefined };
+
+        return this.proposalsService
+          .proposalsControllerFullquery(
+            JSON.stringify(limitsParam),
+            JSON.stringify(queryParam),
+          )
           .pipe(
             mergeMap((proposals) => [
               fromActions.fetchProposalsCompleteAction({ proposals }),
-              fromActions.fetchCountAction(),
+              // TODO: Maybe this part should be refactored. Now we need to send 2 separate requests to get the data and count
+              fromActions.fetchCountAction({
+                fields: queryParam,
+              }),
             ]),
             catchError(() => of(fromActions.fetchProposalsFailedAction())),
-          ),
-      ),
+          );
+      }),
     );
   });
 
   fetchCount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
-      concatLatestFrom(() => this.fullqueryParams$),
-      map(([action, params]) => params),
-      switchMap((filters) =>
+      switchMap(({ fields }) =>
         this.proposalsService
-          .proposalsControllerCount(JSON.stringify(filters))
+          .proposalsControllerCount(JSON.stringify(fields))
           .pipe(
             map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
             catchError(() => of(fromActions.fetchCountFailedAction())),
@@ -260,12 +265,10 @@ export class ProposalEffects {
       concatLatestFrom(() => [this.currentProposal$]),
       switchMap(([, proposal]) => {
         const queryFilter = {
-          where: {
-            $or: [
-              { proposalId: { $in: [proposal.parentProposalId] } },
-              { parentProposalId: { $in: [proposal.proposalId] } },
-            ],
-          },
+          $or: [
+            { proposalId: { $in: [proposal.parentProposalId] } },
+            { parentProposalId: { $in: [proposal.proposalId] } },
+          ],
         };
 
         return this.proposalsService

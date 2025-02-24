@@ -21,14 +21,14 @@
             <mat-icon> brightness_high </mat-icon>
             Creation Time
           </th>
-          <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+          <td>{{ value | date }}</td>
         </tr>
         <tr *ngIf="job.executionTime as value">
           <th>
             <mat-icon> gavel </mat-icon>
             Execution Time
           </th>
-          <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+          <td>{{ value | date }}</td>
         </tr>
         <tr *ngIf="job.jobParams as value">
           <th>
@@ -42,7 +42,7 @@
             <mat-icon> markunread </mat-icon>
             Date Of Last Message
           </th>
-          <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+          <td>{{ value | date }}</td>
         </tr>
         <tr *ngIf="job.datasetList as value">
           <th>
@@ -58,14 +58,14 @@
             <mat-icon> calendar_today </mat-icon>
             Created At
           </th>
-          <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+          <td>{{ value | date }}</td>
         </tr>
         <tr *ngIf="job.updatedAt as value">
           <th>
             <mat-icon> calendar_today </mat-icon>
             Updated At
           </th>
-          <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+          <td>{{ value | date }}</td>
         </tr>
       </table>
     </mat-card-content>

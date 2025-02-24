@@ -105,6 +105,7 @@ export interface AppConfig {
   maxFileUploadSizeInMb?: string;
   datasetDetailComponent?: DatasetDetailComponentConfig;
   labelsLocalization?: LabelsLocalization;
+  dateFormat?: string;
 }
 
 @Injectable()

@@ -1,0 +1,128 @@
+@import "../../dynamic-mat-table.style.scss";
+
+:host {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  align-self: stretch;
+}
+
+.trigger {
+  @include header-icon-base;
+  position: sticky;
+  right: 0px;
+  z-index: 1;
+  padding-left: 8px;
+  padding-right: 8px;
+  :host.has-value & {
+    opacity: 1;
+    color: rgba(0, 0, 0, 0.54);
+  }
+  :host:hover &,
+  :host.show-trigger & {
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+}
+
+::ng-deep.mat-mdc-menu-content:not(:empty) {
+  padding: 0 !important;
+}
+
+.mat-mdc-menu-item-highlighted:not([disabled]),
+.mat-mdc-menu-item.cdk-keyboard-focused:not([disabled]),
+.mat-mdc-menu-item.cdk-program-focused:not([disabled]),
+.mat-mdc-menu-item:hover:not([disabled]) {
+  background-color: inherit;
+}
+
+.menu-title {
+  font-weight: bolder;
+  top: -8px;
+  position: sticky;
+  background-color: white;
+  z-index: 1;
+}
+
+.menu-action {
+  position: sticky;
+  bottom: -8px;
+  padding-top: 10px;
+  padding-bottom: 0px;
+  background-color: white;
+  button {
+    width: calc(50% - 10px);
+    margin: 5px;
+    border-radius: 10px;
+  }
+}
+
+.filter-panel {
+  border-radius: 5px;
+  background-color: #fdfbfb;
+  border: solid 1px #efefef;
+  transition: all 0.5s;
+  padding: 5px;
+  overflow: hidden;
+  font-size: 14px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-panel:nth-child(2) {
+  margin-top: 0 !important;
+}
+
+.filter-panel:hover {
+  border: solid 1px #d1d1d1;
+  .svg {
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+}
+
+.or-and {
+  display: inherit !important;
+  text-align: right;
+  height: 35px;
+  cursor: inherit;
+  font-size: 12px;
+}
+
+.svg {
+  @include header-icon-base;
+  margin-left: 5px;
+  padding: 2px;
+  border-radius: 5px;
+  color: rgb(76, 76, 76);
+  cursor: pointer;
+  display: inline-block !important;
+  height: 24px;
+  mat-icon {
+    margin: 0;
+    vertical-align: top;
+    border-radius: 5px;
+  }
+  mat-icon:hover {
+    color: white;
+    background-color: #89898a;
+  }
+}
+.svg:hover {
+  background-color: rgb(248, 248, 248);
+}
+
+.selected-filter-type {
+  float: left;
+  color: #ffffff;
+  background-color: #89898a;
+  border-radius: 5px;
+  padding: 0 4px 0px 4px;
+  line-height: 24px;
+}
+
+::ng-deep .menu {
+  padding: 8px;
+  user-select: none;
+}

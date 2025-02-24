@@ -28,10 +28,7 @@
         </mat-header-cell>
         <mat-cell *matCellDef="let logbook">
           <div fxLayout="column" *ngIf="logbook.messages.length > 0">
-            {{
-              logbook.messages[0].origin_server_ts
-                | date: "yyyy-MM-dd, EEE HH:mm"
-            }}
+            {{ logbook.messages[0].origin_server_ts | date }}
           </div>
           <div fxLayout="column" *ngIf="logbook.messages.length === 0">
             No entries.
