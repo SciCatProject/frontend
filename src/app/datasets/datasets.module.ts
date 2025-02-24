@@ -51,7 +51,7 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { DatablocksComponent } from "./datablocks-table/datablocks-table.component";
 import { DatafilesComponent } from "./datafiles/datafiles.component";
 import { JsonScientificMetadataComponent } from "./jsonScientificMetadata/jsonScientificMetadata.component";
-import { DatasetDetailComponent } from "./dataset-detail/dataset-detail/dataset-detail.component";
+import { DatasetDetailComponent } from "./dataset-detail/dataset-detail.component";
 import { DatasetTableComponent } from "./dataset-table/dataset-table.component";
 import { DatasetsFilterComponent } from "./datasets-filter/datasets-filter.component";
 import { AddDatasetDialogComponent } from "./add-dataset-dialog/add-dataset-dialog.component";
@@ -90,8 +90,7 @@ import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
 import { FiltersModule } from "shared/modules/filters/filters.module";
 import { userReducer } from "state-management/reducers/user.reducer";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
-import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
+import { TranslateModule } from "@ngx-translate/core";
 @NgModule({
   imports: [
     CommonModule,
@@ -154,6 +153,7 @@ import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-w
     CdkDrag,
     CdkDragHandle,
     FiltersModule,
+    TranslateModule,
   ],
   declarations: [
     BatchViewComponent,
@@ -161,9 +161,7 @@ import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-w
     DatablocksComponent,
     JsonScientificMetadataComponent,
     DatafilesComponent,
-    DatasetDetailWrapperComponent,
     DatasetDetailComponent,
-    DatasetDetailDynamicComponent,
     DatasetTableComponent,
     DatasetsFilterComponent,
     PublishComponent,
@@ -202,7 +200,7 @@ import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-w
     DatablocksComponent,
     JsonScientificMetadataComponent,
     DatafilesComponent,
-    DatasetDetailWrapperComponent,
+    DatasetDetailComponent,
     DatasetTableComponent,
     DatasetsFilterComponent,
   ],

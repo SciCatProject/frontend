@@ -35,9 +35,6 @@ import { MatNativeDateModule } from "@angular/material/core";
 import { LogbookEffects } from "state-management/effects/logbooks.effects";
 import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
 import { ProposalLogbookComponent } from "./proposal-logbook/proposal-logbook.component";
-import { RelatedProposalsComponent } from "./related-proposals/related-proposals.component";
-import { ProposalDatasetsComponent } from "./proposal-datasets/proposal-datasets.component";
-import { TranslateModule } from "@ngx-translate/core";
 
 @NgModule({
   imports: [
@@ -63,7 +60,6 @@ import { TranslateModule } from "@ngx-translate/core";
     SharedScicatFrontendModule,
     StoreModule.forFeature("proposals", proposalsReducer),
     StoreModule.forFeature("logbooks", logbooksReducer),
-    TranslateModule,
   ],
   declarations: [
     ViewProposalPageComponent,
@@ -71,8 +67,6 @@ import { TranslateModule } from "@ngx-translate/core";
     ProposalFilterComponent,
     ProposalDashboardComponent,
     ProposalLogbookComponent,
-    RelatedProposalsComponent,
-    ProposalDatasetsComponent,
   ],
   exports: [],
   providers: [DatePipe, FileSizePipe, SlicePipe],
