@@ -23,6 +23,17 @@ import { startWith, map } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { ScientificMetadata } from "../scientific-metadata.module";
 import { AppConfigService } from "app-config.service";
+import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
+import { TitleCasePipe } from "@angular/common";
+import { DateTime } from "luxon";
+
+export enum MetadataTypes {
+  quantity = "quantity",
+  number = "number",
+  string = "string",
+  date = "date",
+  link = "link",
+}
 
 @Component({
   selector: "metadata-edit",
@@ -33,7 +44,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   metadataForm: FormGroup = this.formBuilder.group({
     items: this.formBuilder.array([]),
   });
-  typeValues: string[] = ["quantity", "number", "string"];
+  typeValues: MetadataTypes[] = Object.values(MetadataTypes);
   units: string[] = [];
   appConfig = this.appConfigService.getConfig();
 
@@ -46,6 +57,8 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     private formBuilder: FormBuilder,
     private unitsService: UnitsService,
     private appConfigService: AppConfigService,
+    private replaceUnderscore: ReplaceUnderscorePipe,
+    private titleCase: TitleCasePipe,
   ) {}
 
   get formControlFields() {
@@ -57,8 +70,14 @@ export class MetadataEditComponent implements OnInit, OnChanges {
           Validators.minLength(2),
           this.duplicateValidator(),
         ]),
+      fieldHumanName: (value = "") => new FormControl(value, []),
       fieldValue: (value: string | number = "") =>
-        new FormControl(value, [Validators.required, Validators.minLength(1)]),
+        new FormControl(value, [
+          Validators.required,
+          Validators.minLength(1),
+          this.dateValidator(),
+          this.urlValidator(),
+        ]),
       fieldUnit: (value = "") =>
         new FormControl(value, [
           Validators.required,
@@ -71,6 +90,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     const field = this.formBuilder.group({
       fieldType: this.formControlFields["fieldType"](),
       fieldName: this.formControlFields["fieldName"](),
+      fieldHumanName: this.formControlFields["fieldHumanName"](),
       fieldValue: this.formControlFields["fieldValue"](),
       fieldUnit: this.formControlFields["fieldUnit"](),
     });
@@ -82,7 +102,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
   detectType(index: any) {
     const type = this.items.at(index).get("fieldType")?.value;
-    if (type === "quantity") {
+    if (type === MetadataTypes.quantity) {
       this.items.at(index).get("fieldUnit")?.enable();
       this.items
         .at(index)
@@ -93,6 +113,36 @@ export class MetadataEditComponent implements OnInit, OnChanges {
       this.items.at(index).get("fieldUnit")?.clearValidators();
       this.items.at(index).get("fieldUnit")?.setValue("");
       this.items.at(index).get("fieldUnit")?.disable();
+    }
+
+    if (type === MetadataTypes.date) {
+      this.items
+        .at(index)
+        .get("fieldValue")
+        ?.addValidators([this.dateValidator()]);
+      this.items.at(index).get("fieldValue")?.updateValueAndValidity();
+      this.items.at(index).get("fieldValue")?.markAsTouched();
+    } else {
+      this.items
+        .at(index)
+        .get("fieldValue")
+        ?.removeValidators([this.dateValidator()]);
+      this.items.at(index).get("fieldValue")?.updateValueAndValidity();
+    }
+
+    if (type === MetadataTypes.link) {
+      this.items
+        .at(index)
+        .get("fieldValue")
+        ?.addValidators([this.urlValidator()]);
+      this.items.at(index).get("fieldValue")?.updateValueAndValidity();
+      this.items.at(index).get("fieldValue")?.markAsTouched();
+    } else {
+      this.items
+        .at(index)
+        .get("fieldValue")
+        ?.removeValidators([this.urlValidator()]);
+      this.items.at(index).get("fieldValue")?.updateValueAndValidity();
     }
   }
 
@@ -107,6 +157,42 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         : null;
     };
   }
+
+  dateValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control.parent?.value.fieldType === MetadataTypes.date) {
+        if (
+          DateTime.fromISO(control.value).toUTC().isValid ||
+          DateTime.fromFormat(control.value, this.appConfig.dateFormat).isValid
+        ) {
+          return null;
+        } else {
+          return { dateValidator: { valid: false } };
+        }
+      }
+
+      return null;
+    };
+  }
+
+  urlValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control.parent?.value.fieldType === MetadataTypes.link) {
+        let validUrl = true;
+
+        try {
+          new URL(control.value);
+        } catch {
+          validUrl = false;
+        }
+
+        return validUrl ? null : { invalidUrl: true };
+      }
+
+      return null;
+    };
+  }
+
   whiteSpaceValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (control.value.length > 0 && !control.value.trim()) {
@@ -116,13 +202,38 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     };
   }
 
+  formatDateFields() {
+    for (const [key, value] of Object.entries(this.metadata)) {
+      if (value.type === MetadataTypes.date) {
+        if (
+          DateTime.fromFormat(value.value, this.appConfig.dateFormat).isValid
+        ) {
+          this.metadata[key].value = DateTime.fromFormat(
+            value.value,
+            this.appConfig.dateFormat,
+          ).toISO();
+        } else {
+          this.metadata[key].value = DateTime.fromISO(value.value).toISO();
+        }
+      }
+    }
+  }
+
   doSave() {
     this.metadata = this.createMetadataObject();
+    this.formatDateFields();
     this.save.emit(this.metadata);
   }
 
   onRemove(index: number) {
     this.items.removeAt(index);
+  }
+
+  getHumanNameFieldValue(metadata: ScientificMetadata, key: string): string {
+    return (
+      metadata.human_name ||
+      this.titleCase.transform(this.replaceUnderscore.transform(key))
+    );
   }
 
   addCurrentMetadata() {
@@ -135,8 +246,13 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         ) {
           if (this.metadata[key].unit?.length > 0) {
             field = this.formBuilder.group({
-              fieldType: this.formControlFields["fieldType"]("quantity"),
+              fieldType: this.formControlFields["fieldType"](
+                MetadataTypes.quantity,
+              ),
               fieldName: this.formControlFields["fieldName"](key),
+              fieldHumanName: this.formControlFields["fieldHumanName"](
+                this.getHumanNameFieldValue(this.metadata[key], key),
+              ),
               fieldValue: this.formControlFields["fieldValue"](
                 this.metadata[key]["value"],
               ),
@@ -144,10 +260,17 @@ export class MetadataEditComponent implements OnInit, OnChanges {
                 this.metadata[key]["unit"],
               ),
             });
-          } else if (typeof this.metadata[key]["value"] === "number") {
+          } else if (
+            typeof this.metadata[key]["value"] === MetadataTypes.number
+          ) {
             field = this.formBuilder.group({
-              fieldType: this.formControlFields["fieldType"]("number"),
+              fieldType: this.formControlFields["fieldType"](
+                MetadataTypes.number,
+              ),
               fieldName: this.formControlFields["fieldName"](key),
+              fieldHumanName: this.formControlFields["fieldHumanName"](
+                this.getHumanNameFieldValue(this.metadata[key], key),
+              ),
               fieldValue: this.formControlFields["fieldValue"](
                 Number(this.metadata[key]["value"]),
               ),
@@ -156,9 +279,21 @@ export class MetadataEditComponent implements OnInit, OnChanges {
               ),
             });
           } else {
+            let fieldType = MetadataTypes.string;
+
+            if (this.metadata[key]["type"] === MetadataTypes.link) {
+              fieldType = MetadataTypes.link;
+            }
+            if (this.metadata[key]["type"] === MetadataTypes.date) {
+              fieldType = MetadataTypes.date;
+            }
+
             field = this.formBuilder.group({
-              fieldType: this.formControlFields["fieldType"]("string"),
+              fieldType: fieldType,
               fieldName: this.formControlFields["fieldName"](key),
+              fieldHumanName: this.formControlFields["fieldHumanName"](
+                this.getHumanNameFieldValue(this.metadata[key], key),
+              ),
               fieldValue: this.formControlFields["fieldValue"](
                 this.metadata[key]["value"],
               ),
@@ -169,8 +304,13 @@ export class MetadataEditComponent implements OnInit, OnChanges {
           }
         } else {
           field = this.formBuilder.group({
-            fieldType: this.formControlFields["fieldType"]("string"),
+            fieldType: this.formControlFields["fieldType"](
+              MetadataTypes.string,
+            ),
             fieldName: this.formControlFields["fieldName"](key),
+            fieldHumanName: this.formControlFields["fieldHumanName"](
+              this.getHumanNameFieldValue(this.metadata[key], key),
+            ),
             fieldValue: this.formControlFields["fieldValue"](
               JSON.stringify(this.metadata[key]),
             ),
@@ -188,13 +328,17 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   createMetadataObject(): Record<string, ScientificMetadata> {
     const metadata: Record<string, any> = {};
     this.items.controls.forEach((control) => {
-      const { fieldName, fieldType, fieldValue, fieldUnit } = control.value;
+      const { fieldName, fieldHumanName, fieldType, fieldValue, fieldUnit } =
+        control.value;
       metadata[fieldName] = {
         value:
-          fieldType === "number" || fieldType === "quantity"
+          fieldType === MetadataTypes.number ||
+          fieldType === MetadataTypes.quantity
             ? Number(fieldValue)
             : fieldValue,
-        unit: fieldType === "quantity" ? fieldUnit : "",
+        unit: fieldType === MetadataTypes.quantity ? fieldUnit : "",
+        human_name: fieldHumanName,
+        type: fieldType,
       };
     });
     return metadata;
@@ -228,11 +372,11 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   setValueInputType(index: number): string {
     const type = this.items.at(index).get("fieldType")?.value;
     switch (type) {
-      case "number":
-      case "quantity": {
-        return "number";
+      case MetadataTypes.number:
+      case MetadataTypes.quantity: {
+        return MetadataTypes.number;
       }
-      case "string": {
+      case MetadataTypes.string: {
         return "text";
       }
       default: {
@@ -249,6 +393,24 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   fieldHasDuplicateError(index: number, field: string): boolean {
     const formField = this.items.at(index).get(field);
     return formField ? formField.hasError("duplicateField") : true;
+  }
+
+  fieldHasDateError(index: number, field: string): boolean {
+    const formField = this.items.at(index).get(field);
+    if (formField.parent?.value.fieldType === MetadataTypes.date) {
+      return formField ? formField.hasError("dateValidator") : true;
+    }
+
+    return false;
+  }
+
+  fieldHasLinkError(index: number, field: string): boolean {
+    const formField = this.items.at(index).get(field);
+    if (formField.parent?.value.fieldType === MetadataTypes.link) {
+      return formField ? formField.hasError("invalidUrl") : true;
+    }
+
+    return false;
   }
 
   get items() {

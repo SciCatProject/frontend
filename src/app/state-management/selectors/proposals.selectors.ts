@@ -1,5 +1,6 @@
 import { createSelector, createFeatureSelector } from "@ngrx/store";
 import { ProposalsState } from "../state/proposals.store";
+import { selectTablesSettings } from "./user.selectors";
 
 const selectProposalsState = createFeatureSelector<ProposalsState>("proposals");
 
@@ -162,5 +163,18 @@ export const selectDatasetsQueryParams = createSelector(
     const { text, skip, limit, sortField } = filters;
     const limits = { order: sortField, skip, limit };
     return { query: JSON.stringify({ text }), limits };
+  },
+);
+
+export const selectProposalsWithCountAndTableSettings = createSelector(
+  selectProposals,
+  selectProposalsCount,
+  selectTablesSettings,
+  (proposals, count, tablesSettings) => {
+    return {
+      proposals,
+      count,
+      tablesSettings,
+    };
   },
 );
