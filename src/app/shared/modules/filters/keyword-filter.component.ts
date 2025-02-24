@@ -33,6 +33,7 @@ export class KeywordFilterComponent
   protected readonly getFacetId = getFacetId;
   readonly componentName: string = "KeywordFilter";
   readonly label: string = "Keyword Filter";
+  readonly tooltipText: string = "Filters datasets by keyword";
 
   appConfig = this.appConfigService.getConfig();
 

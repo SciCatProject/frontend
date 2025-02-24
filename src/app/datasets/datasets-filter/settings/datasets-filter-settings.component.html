@@ -1,99 +1,127 @@
 <h2 mat-dialog-title>Configure Filters</h2>
 <mat-dialog-content class="filter-dialog-content">
-  <span layout="row"
-    ><hr flex />
-    Filters
-    <hr flex
-  /></span>
-  <mat-nav-list cdkDropList (cdkDropListDropped)="drop($event)">
-    <mat-list-item
-      class="filter-item"
-      *ngFor="let filter of data.filterConfigs"
-      cdkDrag
-      cdkDragHandle
-      [cdkDragDisabled]="!data.labelMaps[getFilterKey(filter)]"
-      [ngClass]="{
-        'filter-item-disabled': !data.labelMaps[getFilterKey(filter)],
-      }"
-    >
-      <span
-        class="drag-handle"
-        matTooltip="Drag to reorder"
-        aria-label="Drag handle"
+  <!-- Filters  -->
+  <div class="filters-container">
+    <span layout="row"
+      ><hr flex />
+      Filters
+      <hr flex
+    /></span>
+    <mat-nav-list cdkDropList (cdkDropListDropped)="drop($event)">
+      <mat-list-item
+        class="filter-item"
+        *ngFor="let filter of data.filterConfigs"
+        cdkDrag
+        cdkDragHandle
+        [cdkDragDisabled]="!data.labelMaps[getFilterKey(filter)]"
+        [ngClass]="{
+          'filter-item-disabled': !data.labelMaps[getFilterKey(filter)],
+        }"
       >
-        <mat-icon>sort</mat-icon>
-      </span>
-      <mat-slide-toggle
-        class="filter-toggle"
-        [checked]="getChecked(filter)"
-        (change)="toggleVisibility(filter)"
-        aria-label="Toggle visibility"
-        [disabled]="!data.labelMaps[getFilterKey(filter)]"
+        <span
+          class="drag-handle"
+          aria-label="Drag handle"
+          matTooltip="Drag to reorder"
+          matTooltipPosition="above"
+        >
+          <mat-icon>sort</mat-icon>
+        </span>
+        <mat-slide-toggle
+          class="filter-toggle"
+          [checked]="getChecked(filter)"
+          (change)="toggleVisibility(filter)"
+          aria-label="Toggle visibility"
+          [disabled]="!data.labelMaps[getFilterKey(filter)]"
+        >
+        </mat-slide-toggle>
+        <span class="filter-name">{{
+          resolveFilterLabel(data.labelMaps, filter)
+        }}</span>
+        <span class="spacer"></span>
+      </mat-list-item>
+    </mat-nav-list>
+  </div>
+  <!-- Conditions -->
+  <div class="conditions-container">
+    <span layout="row"
+      ><hr flex />
+      Conditions
+      <hr flex
+    /></span>
+    <mat-nav-list>
+      <mat-list-item
+        class="filter-item"
+        *ngFor="let condition of data.conditionConfigs; index as i"
       >
-      </mat-slide-toggle>
-      <span class="filter-name">{{
-        resolveFilterLabel(data.labelMaps, filter)
-      }}</span>
-      <span class="spacer"></span>
-    </mat-list-item>
-  </mat-nav-list>
-  <span layout="row"
-    ><hr flex />
-    Conditions
-    <hr flex
-  /></span>
-  <mat-nav-list>
-    <mat-list-item
-      class="filter-item"
-      *ngFor="let condition of data.conditionConfigs; index as i"
-    >
-      <mat-slide-toggle
-        class="filter-toggle"
-        aria-label="Toggle visibility"
-        [checked]="condition.enabled"
-        (change)="toggleCondition(condition)"
-      >
-      </mat-slide-toggle>
-      <span class="scientific-chip-text">
-        {{ condition.condition.lhs }}
-        <ng-container [ngSwitch]="condition.condition.relation">
-          <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">
-            &nbsp;=&nbsp;
+        <span class="condition-action-items">
+          <mat-icon
+            (click)="editCondition(condition, i)"
+            (keydown)="editCondition(condition, i)"
+            matTooltip="Edit"
+            matTooltipPosition="above"
+            >edit</mat-icon
+          >
+          <mat-icon
+            (click)="removeCondition(condition, i)"
+            (keydown)="removeCondition(condition, i)"
+            matTooltip="Delete"
+            matTooltipPosition="above"
+            >delete</mat-icon
+          >
+        </span>
+        <mat-slide-toggle
+          class="filter-toggle"
+          aria-label="Toggle visibility"
+          [checked]="condition.enabled"
+          (change)="toggleCondition(condition)"
+        >
+        </mat-slide-toggle>
+        <span class="scientific-chip-text">
+          <span
+            class="scientific-chip-text-shrink-left"
+            matTooltip="{{ condition.condition.lhs }}"
+          >
+            {{ condition.condition.lhs }}
+          </span>
+          <ng-container [ngSwitch]="condition.condition.relation">
+            <ng-container *ngSwitchCase="'EQUAL_TO_NUMERIC'">
+              &nbsp;=&nbsp;
+            </ng-container>
+            <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">
+              &nbsp;=&nbsp;
+            </ng-container>
+            <ng-container *ngSwitchCase="'LESS_THAN'">
+              &nbsp;&lt;&nbsp;
+            </ng-container>
+            <ng-container *ngSwitchCase="'GREATER_THAN'">
+              &nbsp;&gt;&nbsp;
+            </ng-container>
           </ng-container>
-          <ng-container *ngSwitchCase="'EQUAL_TO_STRING'">
-            &nbsp;=&nbsp;
-          </ng-container>
-          <ng-container *ngSwitchCase="'LESS_THAN'">
-            &nbsp;&lt;&nbsp;
-          </ng-container>
-          <ng-container *ngSwitchCase="'GREATER_THAN'">
-            &nbsp;&gt;&nbsp;
-          </ng-container>
-        </ng-container>
-        {{
-          condition.condition.relation === "EQUAL_TO_STRING"
-            ? '"' + condition.condition.rhs + '"'
-            : condition.condition.rhs
-        }}
-        {{ condition.condition.unit | prettyUnit }}
-      </span>
-      <span class="spacer"></span>
-      <span
-        ><mat-icon
-          (click)="editCondition(condition, i)"
-          (keydown)="editCondition(condition, i)"
-          >edit</mat-icon
-        ></span
-      >
-      <span
-        ><mat-icon
-          (click)="removeCondition(condition, i)"
-          (keydown)="removeCondition(condition, i)"
-          >delete</mat-icon
-        ></span
-      >
-    </mat-list-item>
-  </mat-nav-list>
+
+          <span matTooltip="{{ condition.condition.rhs }}">
+            <ng-container
+              *ngIf="condition.condition.relation === 'EQUAL_TO_STRING'"
+            >
+              &quot;<span class="scientific-chip-text-shrink-right">{{
+                condition.condition.rhs
+              }}</span
+              >&quot;
+            </ng-container>
+            <ng-container
+              *ngIf="condition.condition.relation !== 'EQUAL_TO_STRING'"
+            >
+              <span class="scientific-chip-text-shrink-right">{{
+                condition.condition.rhs
+              }}</span>
+            </ng-container>
+          </span>
+          <span matTooltip="{{ condition.condition.unit }}">
+            {{ condition.condition.unit | prettyUnit }}
+          </span>
+        </span>
+      </mat-list-item>
+    </mat-nav-list>
+  </div>
 </mat-dialog-content>
 <mat-dialog-content>
   <div>
@@ -103,12 +131,15 @@
       *ngIf="appConfig.scienceSearchEnabled"
       (click)="addCondition()"
       data-cy="add-scientific-condition-button"
+      matTooltip="Add a new scientific metadata condition to filter datasets"
+      matTooltipPosition="after"
     >
       <mat-icon>add</mat-icon>
       Add Conditions
     </button>
   </div>
 </mat-dialog-content>
+
 <mat-dialog-actions>
   <button mat-button (click)="onCancel()">Cancel</button>
   <button mat-button color="primary" (click)="onApply()">Apply</button>
