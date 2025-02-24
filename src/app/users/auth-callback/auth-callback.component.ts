@@ -63,7 +63,8 @@ export class AuthCallbackComponent implements OnInit {
         );
 
         // After the user is authenticated, we will redirect to the home page
-        const returnUrl = params["returnUrl"];
+        // or the value of returnUrl query param
+        const returnUrl: string = params["returnUrl"];
         this.router.navigateByUrl(returnUrl || "/");
       }
     });
