@@ -81,6 +81,9 @@
               <mat-error *ngIf="fieldHasDateError(i, 'fieldValue')">
                 Invalid date
               </mat-error>
+              <mat-error *ngIf="fieldHasLinkError(i, 'fieldValue')">
+                Invalid link
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="formColumn">

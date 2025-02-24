@@ -17,7 +17,7 @@ import { FlexModule } from "@ngbracket/ngx-layout";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { DynamicMatTableModule } from "../dynamic-material-table/table/dynamic-mat-table.module";
 import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
-import { ToLinkPipe } from "shared/pipes/to-link.pipe";
+import { LinkyModule, LinkyPipe } from "ngx-linky";
 
 @NgModule({
   declarations: [MetadataViewComponent, MetadataEditComponent],
@@ -38,9 +38,10 @@ import { ToLinkPipe } from "shared/pipes/to-link.pipe";
     PipesModule,
     ReactiveFormsModule,
     DynamicMatTableModule.forRoot({}),
+    LinkyModule,
   ],
   exports: [MetadataEditComponent, MetadataViewComponent],
-  providers: [ReplaceUnderscorePipe, TitleCasePipe, ToLinkPipe],
+  providers: [ReplaceUnderscorePipe, TitleCasePipe, LinkyPipe],
 })
 export class ScientificMetadataModule {}
 

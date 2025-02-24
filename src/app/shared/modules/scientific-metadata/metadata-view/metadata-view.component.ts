@@ -20,8 +20,8 @@ import { TableSelectionMode } from "shared/modules/dynamic-material-table/models
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-config";
 import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
 import { DatePipe, TitleCasePipe } from "@angular/common";
-import { ToLinkPipe } from "shared/pipes/to-link.pipe";
 import { AppConfigService } from "app-config.service";
+import { LinkyPipe } from "ngx-linky";
 
 @Component({
   selector: "metadata-view",
@@ -105,7 +105,12 @@ export class MetadataViewComponent implements OnInit, OnChanges {
               }
 
               if (row.type === "link") {
-                return this.linkPipe.transform(row[column.name] || "");
+                return this.linkyPipe.transform(row[column.name] || "", {
+                  urls: true,
+                  newWindow: true,
+                  stripPrefix: false,
+                  sanitizeHtml: true,
+                });
               }
 
               return row[column.name];
@@ -131,9 +136,9 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     private unitsService: UnitsService,
     private replaceUnderscore: ReplaceUnderscorePipe,
     private titleCase: TitleCasePipe,
-    private linkPipe: ToLinkPipe,
     private datePipe: DatePipe,
     public appConfigService: AppConfigService,
+    public linkyPipe: LinkyPipe,
   ) {}
 
   createMetadataArray(

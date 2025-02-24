@@ -76,6 +76,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
           Validators.required,
           Validators.minLength(1),
           this.dateValidator(),
+          this.urlValidator(),
         ]),
       fieldUnit: (value = "") =>
         new FormControl(value, [
@@ -128,6 +129,21 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         ?.removeValidators([this.dateValidator()]);
       this.items.at(index).get("fieldValue")?.updateValueAndValidity();
     }
+
+    if (type === MetadataTypes.link) {
+      this.items
+        .at(index)
+        .get("fieldValue")
+        ?.addValidators([this.urlValidator()]);
+      this.items.at(index).get("fieldValue")?.updateValueAndValidity();
+      this.items.at(index).get("fieldValue")?.markAsTouched();
+    } else {
+      this.items
+        .at(index)
+        .get("fieldValue")
+        ?.removeValidators([this.urlValidator()]);
+      this.items.at(index).get("fieldValue")?.updateValueAndValidity();
+    }
   }
 
   duplicateValidator(): ValidatorFn {
@@ -153,6 +169,24 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         } else {
           return { dateValidator: { valid: false } };
         }
+      }
+
+      return null;
+    };
+  }
+
+  urlValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control.parent?.value.fieldType === MetadataTypes.link) {
+        let validUrl = true;
+
+        try {
+          new URL(control.value);
+        } catch {
+          validUrl = false;
+        }
+
+        return validUrl ? null : { invalidUrl: true };
       }
 
       return null;
@@ -365,6 +399,15 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     const formField = this.items.at(index).get(field);
     if (formField.parent?.value.fieldType === MetadataTypes.date) {
       return formField ? formField.hasError("dateValidator") : true;
+    }
+
+    return false;
+  }
+
+  fieldHasLinkError(index: number, field: string): boolean {
+    const formField = this.items.at(index).get(field);
+    if (formField.parent?.value.fieldType === MetadataTypes.link) {
+      return formField ? formField.hasError("invalidUrl") : true;
     }
 
     return false;
