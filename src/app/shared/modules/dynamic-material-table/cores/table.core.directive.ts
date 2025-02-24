@@ -25,7 +25,11 @@ import {
   TablePaginationMode,
 } from "../models/table-pagination.model";
 import { PrintConfig } from "../models/print-config.model";
-import { TableSetting, Direction } from "../models/table-setting.model";
+import {
+  TableSetting,
+  Direction,
+  TableSettingEventType,
+} from "../models/table-setting.model";
 import { MatSort } from "@angular/material/sort";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTable } from "@angular/material/table";
@@ -75,14 +79,7 @@ export class TableCoreDirective<T extends TableRow> {
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onRowEvent: EventEmitter<IRowEvent<any>> = new EventEmitter();
   @Output() settingChange: EventEmitter<{
-    type:
-      | "create"
-      | "save"
-      | "apply"
-      | "delete"
-      | "default"
-      | "select"
-      | "error";
+    type: TableSettingEventType;
     setting: TableSetting;
   }> = new EventEmitter();
   @Output() paginationChange: EventEmitter<TablePagination> =
