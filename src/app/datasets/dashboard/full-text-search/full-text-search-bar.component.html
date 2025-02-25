@@ -8,6 +8,8 @@
         type="search"
         [(ngModel)]="searchTerm"
         (ngModelChange)="onSearchTermChange($event)"
+        (keydown.enter)="onSearch()"
+        (keydown.escape)="onClear()"
       />
     </mat-form-field>
     <div class="search-button-group">
