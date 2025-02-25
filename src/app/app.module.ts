@@ -30,7 +30,6 @@ import { InternalStorage, SDKStorage } from "shared/services/auth/base.storage";
 import { CookieService } from "ngx-cookie-service";
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { CustomTranslateLoader } from "shared/loaders/custom-translate.loader";
-import { DATE_PIPE_DEFAULT_OPTIONS } from "@angular/common";
 
 const appConfigInitializerFn = (appConfig: AppConfigService) => {
   return () => appConfig.loadAppConfig();
@@ -113,16 +112,6 @@ const apiConfigurationFn = (
       useValue: {
         subscriptSizing: "dynamic",
       },
-    },
-    {
-      provide: DATE_PIPE_DEFAULT_OPTIONS,
-      useFactory: (appConfigService: AppConfigService) => {
-        return {
-          dateFormat:
-            appConfigService.getConfig().dateFormat || "yyyy-MM-dd HH:mm",
-        };
-      },
-      deps: [AppConfigService],
     },
     AuthService,
     AppThemeService,

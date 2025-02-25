@@ -1,4 +1,4 @@
-<ng-container *ngIf="logbook$ | async as logbook">
+<ng-container *ngIf="logbook">
   <div
     *ngIf="(logbook.logbook | keyvalue)?.length !== 0 && logbook.logbook?.name"
   >
