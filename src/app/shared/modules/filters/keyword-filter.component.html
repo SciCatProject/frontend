@@ -5,7 +5,7 @@
       *ngFor="let keyword of keywordsFilter$ | async"
       [removable]="true"
       (removed)="keywordRemoved(keyword)"
-    >{{ keyword }}<mat-icon matChipRemove>cancel</mat-icon>
+      >{{ keyword }}<mat-icon matChipRemove>cancel</mat-icon>
     </mat-chip-row>
   </mat-chip-grid>
   <input
@@ -16,6 +16,8 @@
     class="keyword-input"
     [matChipInputFor]="keywordChipList"
     [matAutocomplete]="kw"
+    matTooltip="{{ tooltipText }}"
+    matTooltipPosition="after"
   />
   <mat-autocomplete #kw="matAutocomplete">
     <mat-option
