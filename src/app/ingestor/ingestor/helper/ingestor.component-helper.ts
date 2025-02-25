@@ -153,3 +153,13 @@ export const SciCatHeader_Schema: JsonSchema = {
     "owner",
   ],
 };
+
+export const isBase64 = (str: string) => {
+  try {
+    return btoa(atob(str)) === str;
+  } catch (err) {
+    console.error(err);
+    console.error("Not a valid base64 string; try to parse plain text as JSON");
+    return false;
+  }
+};

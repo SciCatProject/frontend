@@ -88,7 +88,7 @@ export class IngestorComponent implements OnInit {
     private apiManager: IngestorAPIManager,
     private sseService: IngestorMetadataSSEService,
     private store: Store,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
