@@ -20,8 +20,8 @@ import { TableSelectionMode } from "shared/modules/dynamic-material-table/models
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-config";
 import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
 import { DatePipe, TitleCasePipe } from "@angular/common";
-import { AppConfigService } from "app-config.service";
 import { LinkyPipe } from "ngx-linky";
+import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
 
 @Component({
   selector: "metadata-view",
@@ -119,6 +119,17 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           },
           {
             name: "unit",
+            customRender: (column, row) => {
+              return row[column.name]
+                ? this.prettyUnit.transform(row[column.name])
+                : "--";
+            },
+            renderIcon: (column, row) => {
+              return !row.validUnit;
+            },
+            contentIcon: "error",
+            warningIconTooltip: "Unrecognized unit, conversion disabled",
+            cellClass: "unit-input",
           },
           {
             name: "type",
@@ -137,8 +148,8 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     private replaceUnderscore: ReplaceUnderscorePipe,
     private titleCase: TitleCasePipe,
     private datePipe: DatePipe,
-    public appConfigService: AppConfigService,
     public linkyPipe: LinkyPipe,
+    public prettyUnit: PrettyUnitPipe,
   ) {}
 
   createMetadataArray(

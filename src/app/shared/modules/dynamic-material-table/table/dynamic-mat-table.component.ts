@@ -516,6 +516,14 @@ export class DynamicMatTableComponent<T extends TableRow>
     return row[column.name];
   }
 
+  shouldRenderIcon(row: any, column: TableField<any>) {
+    if (column.renderIcon) {
+      return column.renderIcon(column, row);
+    }
+
+    return false;
+  }
+
   cellStyle(option: HashMap<any>, column) {
     let style = null;
     if (option && column.name) {

@@ -147,6 +147,12 @@
             [innerHTML]="columnName(row, column)"
           >
           </label>
+          <mat-icon
+            class="general-warning"
+            *ngIf="shouldRenderIcon(row, column)"
+            [matTooltip]="column.warningIconTooltip"
+            >{{ column.contentIcon }}</mat-icon
+          >
         </ng-template>
         <ng-template #regularColumnRender>
           <label

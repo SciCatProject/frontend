@@ -4,6 +4,9 @@ import { MetadataViewComponent } from "./metadata-view.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { PipesModule } from "shared/pipes/pipes.module";
 import { MatTableModule } from "@angular/material/table";
+import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
+import { LinkyPipe } from "ngx-linky";
+import { DatePipe, TitleCasePipe } from "@angular/common";
 
 describe("MetadataViewComponent", () => {
   let component: MetadataViewComponent;
@@ -13,6 +16,7 @@ describe("MetadataViewComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [MatTableModule, PipesModule],
+      providers: [ReplaceUnderscorePipe, TitleCasePipe, DatePipe, LinkyPipe],
       declarations: [MetadataViewComponent],
     }).compileComponents();
   }));
