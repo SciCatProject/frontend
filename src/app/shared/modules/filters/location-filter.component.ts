@@ -32,6 +32,7 @@ export class LocationFilterComponent
   protected readonly getFacetCount = getFacetCount;
   readonly componentName: string = "LocationFilter";
   readonly label: string = "Location Filter";
+  readonly tooltipText: string = "Filters datasets by location";
 
   appConfig = this.appConfigService.getConfig();
 
