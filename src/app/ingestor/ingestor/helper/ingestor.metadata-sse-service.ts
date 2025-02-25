@@ -42,6 +42,7 @@ export class IngestorMetadataSSEService {
 
     this.eventSource.addEventListener("progress", (event) => {
       // Decode from base64 and parse JSON
+      //console.log(event);
       const encodedData = atob(event.data.replace(/"/g, ""));
       const data = JSON.parse(encodedData) as ProgressMessage;
 

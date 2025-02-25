@@ -43,6 +43,7 @@ export class IngestorComponent implements OnInit {
 
   vm$ = this.store.select(selectUserSettingsPageViewModel);
   sciCatLoggedIn$ = this.store.select(selectIsLoggedIn);
+  ingestorInitialized = false;
   tokenValue: string;
 
   sourceFolder = "";
@@ -96,7 +97,11 @@ export class IngestorComponent implements OnInit {
     this.vm$.subscribe((settings) => {
       this.scicatUserProfile = settings.profile;
       this.tokenValue = settings.scicatToken;
-      this.loadIngestorConfiguration();
+
+      if (!this.ingestorInitialized) {
+        this.ingestorInitialized = true;
+        this.loadIngestorConfiguration();
+      }
 
       if (this.tokenValue === "") {
         this.store.dispatch(fetchScicatTokenAction());
