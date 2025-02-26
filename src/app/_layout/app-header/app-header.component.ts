@@ -46,8 +46,9 @@ export class AppHeaderComponent implements OnInit {
 
   login(): void {
     if (this.config.skipSciCatLoginPageEnabled) {
+      const returnURL = encodeURIComponent(this.router.url);
       for (const endpoint of this.oAuth2Endpoints) {
-        this.document.location.href = `${this.config.lbBaseURL}/${endpoint.authURL}`;
+        this.document.location.href = `${this.config.lbBaseURL}/${endpoint.authURL}?returnURL=${returnURL}`;
       }
     } else {
       this.router.navigateByUrl("/login");
