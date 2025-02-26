@@ -212,13 +212,11 @@ describe("Proposals general", () => {
 
       cy.get('[data-cy="related-proposals"]').click();
 
-      cy.get('app-related-proposals mat-row')
+      cy.get("app-related-proposals mat-row")
         .contains(newProposal2.title)
-        .closest('mat-row')
+        .closest("mat-row")
         .contains("child");
-      cy.get('app-related-proposals mat-row')
-        .contains(proposal.title)
-        .click();
+      cy.get("app-related-proposals mat-row").contains(proposal.title).click();
     });
   });
 
@@ -266,6 +264,114 @@ describe("Proposals general", () => {
           });
         },
       );
+    });
+  });
+
+  describe("Proposals dynamic material table", () => {
+    it("should be able to search for proposal in the global search", () => {
+      const newProposal = {
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+      };
+
+      cy.createProposal(newProposal);
+
+      cy.visit("/proposals");
+
+      cy.get('.table-global-search input[type="text"]').type(
+        newProposal.proposalId,
+      );
+
+      cy.get("mat-table mat-row")
+        .first()
+        .should("contain", newProposal.proposalId);
+
+      cy.reload();
+
+      cy.get("mat-table mat-row")
+        .first()
+        .should("contain", newProposal.proposalId);
+    });
+
+    it("should be able to sort for proposal in the column sort", () => {
+      const newProposal = {
+        ...testData.proposal,
+        proposalId: "000000",
+      };
+
+      const newProposal2 = {
+        ...testData.proposal,
+        proposalId: "000001",
+      };
+
+      cy.createProposal(newProposal2);
+      cy.createProposal(newProposal);
+
+      cy.visit("/proposals");
+
+      cy.get("mat-table mat-row")
+        .first()
+        .should("not.contain", newProposal.proposalId);
+
+      cy.get(".mat-sort-header-container").contains("Proposal ID").click();
+
+      cy.get("mat-table mat-row")
+        .first()
+        .should("contain", newProposal.proposalId);
+
+      cy.reload();
+
+      cy.get("mat-table mat-row")
+        .first()
+        .should("contain", newProposal.proposalId);
+    });
+
+    it("should be able to sort for proposal in the column sort", () => {
+      const newProposal = {
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+      };
+      const defaultPageSize = "10";
+      const newPageSize = "5";
+
+      cy.createProposal(newProposal);
+
+      cy.visit("/proposals");
+
+      cy.get("mat-paginator mat-select .mat-mdc-select-value-text").contains(
+        defaultPageSize,
+      );
+
+      cy.get("mat-paginator mat-select").click();
+      cy.get("mat-option").contains(newPageSize).click();
+
+      cy.reload();
+
+      cy.get("mat-paginator mat-select .mat-mdc-select-value-text").contains(
+        newPageSize,
+      );
+
+      cy.get("mat-paginator .mat-mdc-paginator-range-actions").contains(
+        `1 – ${newPageSize}`,
+      );
+
+      cy.get("mat-paginator [aria-label='Next page']").click();
+
+      cy.get("mat-paginator .mat-mdc-paginator-range-actions").should(
+        "not.contain",
+        `1 – ${newPageSize}`,
+      );
+
+      cy.url("should.contain", `pageIndex=1`);
+
+      cy.reload();
+
+      cy.get("mat-paginator .mat-mdc-paginator-range-actions").should(
+        "not.contain",
+        `1 – ${newPageSize}`,
+      );
+
+      cy.url("should.contain", `pageIndex=1`);
     });
   });
 });
