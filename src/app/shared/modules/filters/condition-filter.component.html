@@ -1,4 +1,9 @@
-<mat-form-field appearance="fill" class="condition-display-field">
+<mat-form-field
+  appearance="fill"
+  class="condition-display-field"
+  matTooltip="{{ formatCondition() }}"
+  matTooltipPosition="after"
+>
   <mat-label>Condition</mat-label>
   <input matInput [value]="formatCondition()" disabled />
 </mat-form-field>

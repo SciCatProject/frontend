@@ -24,6 +24,7 @@ export class PidFilterComponent
   private subscription: Subscription;
   readonly componentName: string = "PidFilter";
   readonly label: string = "Pid Filter";
+  readonly tooltipText: string = "Search by dataset's Persistent Identifier";
 
   appConfig = this.appConfigService.getConfig();
 
