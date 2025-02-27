@@ -157,9 +157,18 @@ export const SciCatHeader_Schema: JsonSchema = {
 export const isBase64 = (str: string) => {
   try {
     return btoa(atob(str)) === str;
-  } catch (err) {
-    console.error(err);
-    console.error("Not a valid base64 string; try to parse plain text as JSON");
+  } catch {
     return false;
   }
+};
+
+export const decodeBase64ToUTF8 = (base64: string) => {
+  const text = atob(base64);
+  const length = text.length;
+  const bytes = new Uint8Array(length);
+  for (let i = 0; i < length; i++) {
+    bytes[i] = text.charCodeAt(i);
+  }
+  const decoder = new TextDecoder(); // default is utf-8
+  return decoder.decode(bytes);
 };

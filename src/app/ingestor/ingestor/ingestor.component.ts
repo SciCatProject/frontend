@@ -227,11 +227,9 @@ export class IngestorComponent implements OnInit {
       .set("methodName", this.createNewTransferData.selectedMethod.name);
 
     const sseUrl = `${this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.METADATA}?${params.toString()}`;
-
     this.sseService.connect(sseUrl);
-
-    this.sseService.getMessages().subscribe(
-      (data) => {
+    this.sseService.getMessages().subscribe({
+      next: (data) => {
         //console.log("Received SSE data:", data);
         this.createNewTransferData.apiInformation.extractorMetaDataStatus =
           data.message;
@@ -260,7 +258,7 @@ export class IngestorComponent implements OnInit {
             data.progress;
         }
       },
-      (error) => {
+      error: (error) => {
         console.error("Error receiving SSE data:", error);
         this.errorMessage += `${new Date().toLocaleString()}: ${error.message}]<br>`;
         this.createNewTransferData.apiInformation.metaDataExtractionFailed =
@@ -268,7 +266,7 @@ export class IngestorComponent implements OnInit {
         this.createNewTransferData.apiInformation.extractMetaDataRequested =
           false;
       },
-    );
+    });
 
     return true;
   }

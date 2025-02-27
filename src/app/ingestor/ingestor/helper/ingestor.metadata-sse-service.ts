@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
-import { isBase64 } from "./ingestor.component-helper";
+import { decodeBase64ToUTF8, isBase64 } from "./ingestor.component-helper";
 
 interface IngestorMetadataEvent {
   message: string;
@@ -44,9 +44,10 @@ export class IngestorMetadataSSEService {
     this.eventSource.addEventListener("progress", (event) => {
       // Decode from base64 and parse JSON
       // Check if event is a valid base64 string
+
       let eventData = event.data;
       if (isBase64(event.data.replace(/"/g, ""))) {
-        eventData = atob(event.data.replace(/"/g, ""));
+        eventData = decodeBase64ToUTF8(event.data.replace(/"/g, ""));
       }
 
       const data = JSON.parse(eventData) as ProgressMessage;

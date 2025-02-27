@@ -26,7 +26,6 @@ import { IngestorConfirmTransferDialogComponent } from "./ingestor/dialog/ingest
 import { MatStepperModule } from "@angular/material/stepper";
 import { IngestorDialogStepperComponent } from "./ingestor/dialog/dialog-mounting-components/ingestor.dialog-stepper.component";
 import { AnyOfRendererComponent } from "./ingestor-metadata-editor/customRenderer/any-of-renderer";
-import { OneOfRendererComponent } from "./ingestor-metadata-editor/customRenderer/one-of-renderer";
 import { MatRadioModule } from "@angular/material/radio";
 import { ArrayLayoutRendererCustom } from "./ingestor-metadata-editor/customRenderer/array-renderer";
 import { MatBadgeModule } from "@angular/material/badge";
@@ -46,7 +45,6 @@ import { CustomObjectControlRendererComponent } from "./ingestor-metadata-editor
     IngestorConfirmTransferDialogComponent,
     IngestorDialogStepperComponent,
     AnyOfRendererComponent,
-    OneOfRendererComponent,
     ArrayLayoutRendererCustom,
     CustomObjectControlRendererComponent,
     IngestorConfirmationDialogComponent,
