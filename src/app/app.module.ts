@@ -31,6 +31,7 @@ import { CookieService } from "ngx-cookie-service";
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { CustomTranslateLoader } from "shared/loaders/custom-translate.loader";
 import { DATE_PIPE_DEFAULT_OPTIONS } from "@angular/common";
+import { RouteTrackerService } from "shared/services/route-tracker.service";
 
 const appConfigInitializerFn = (appConfig: AppConfigService) => {
   return () => appConfig.loadAppConfig();
@@ -102,6 +103,12 @@ const apiConfigurationFn = (
       useFactory: appThemeInitializerFn,
       multi: true,
       deps: [AppThemeService],
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {},
+      multi: true,
+      deps: [RouteTrackerService],
     },
     {
       provide: HTTP_INTERCEPTORS,
