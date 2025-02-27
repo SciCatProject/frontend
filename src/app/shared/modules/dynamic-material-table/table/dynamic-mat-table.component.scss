@@ -1,0 +1,307 @@
+@import "./dynamic-mat-table.style.scss";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  table-layout: fixed;
+  min-height: 200px;
+  position: relative;
+  overflow: auto;
+  transition: 0.3s cubic-bezier(0.46, -0.72, 0.46, 1.54);
+  border: 2px rgb(0, 150, 136);
+
+  .global-search-wrapper {
+    text-align: right;
+    padding: 0 20px;
+
+    mat-form-field {
+      min-width: 30%;
+    }
+  }
+}
+
+/* Fixed Scroll */
+::ng-deep .cdk-virtual-scroll-content-wrapper {
+  left: auto !important;
+}
+
+::ng-deep .mat-mdc-menu-panel {
+  min-height: 48px;
+}
+
+.label-cell {
+  width: 100%;
+}
+
+mat-cell .label-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+mat-cell:first-of-type,
+mat-header-cell:first-of-type:not(.row-checkbox),
+mat-footer-cell:first-of-type {
+  padding-left: 0 !important;
+}
+
+.rtl-cell {
+  padding-right: 20px;
+}
+
+.ltr-cell {
+  padding-left: 20px;
+}
+
+.viewport {
+  height: calc(100% - 0px);
+}
+
+.viewport-with-pagination {
+  height: calc(100% - 48px);
+}
+
+.table-paginator {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 48px;
+  align-items: center;
+  overflow: hidden;
+  direction: ltr;
+}
+
+mat-footer-row,
+mat-row {
+  min-height: auto !important;
+}
+
+mat-row,
+mat-header-row,
+mat-footer-row {
+  display: flex;
+  border-width: 0;
+  border-bottom-width: 1px;
+  border-bottom-color: #d2d2d2;
+  border-style: solid;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+mat-cell,
+mat-footer-cell,
+mat-header-cell {
+  align-self: stretch;
+  color: inherit;
+  background-color: inherit;
+}
+
+@include table-base;
+@include progress;
+@include no-records;
+@include dmf-class;
+@include resize-column;
+@include context-menu;
+@include header-sort;
+
+cdk-virtual-scroll-viewport {
+  min-height: 100px;
+  height: inherit;
+  overflow: auto;
+}
+
+// Header Text
+.header-caption {
+  font-weight: bolder;
+  font-size: 14px;
+  width: 100%;
+}
+
+.header {
+  user-select: none;
+  background-color: white;
+}
+
+.footer {
+  user-select: none;
+  background-color: white;
+}
+
+.mdc-data-table__header-cell {
+  padding: 0;
+}
+
+// Table Column Select
+.row-checkbox {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  max-width: 46px;
+  min-width: 46px;
+  mat-checkbox {
+    padding: 10px;
+  }
+  mat-icon {
+    padding: 11px !important;
+  }
+}
+
+// table action menu
+.table-global-search {
+  max-width: 300px;
+  min-width: initial;
+  padding: 0 !important;
+  background-color: inherit;
+
+  .global-search-wrapper {
+    width: 100%;
+  }
+}
+
+.table-menu {
+  max-width: 42px;
+  min-width: initial;
+  padding: 0 !important;
+  background-color: inherit;
+}
+
+.mat-mdc-header-cell .column-icon {
+  padding-right: 16px;
+}
+
+.column-icon {
+  :host .mat-mdc-header-row > .mat-mdc-header-cell:hover & {
+    opacity: 0;
+    transform: translateY(5px);
+    transition: all 0.2s;
+  }
+}
+
+.drag-indicator {
+  position: absolute;
+  @include header-icon-base;
+  cursor: move;
+  :host .mat-mdc-header-row > .mat-mdc-header-cell:hover & {
+    opacity: 1;
+    pointer-events: fill;
+    transform: translateY(0px);
+  }
+}
+
+.drag-indicator:hover {
+  color: #bfc0c0 !important;
+}
+
+.cdk-drag-preview {
+  color: black;
+  min-height: 55px; // fixed drag and height max-mized ;) used with min-height
+  border: solid 1px #d4d4d4;
+  background-color: rgba(245, 245, 245);
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow:
+    0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  border: dotted 1px rgb(156, 156, 156);
+  background-color: rgb(211, 211, 211);
+  content: none;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drop-list-dragging {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.detail-row {
+  height: 0px;
+  display: inline !important;
+  width: 100%;
+}
+
+.table-row:not(.expanded-row):hover {
+  background: whitesmoke;
+}
+
+.table-row:not(.expanded-row):active {
+  background: #efefef;
+}
+
+.table-row mat-cell {
+  border-bottom-width: 0;
+}
+
+.expanded-detail {
+  overflow: hidden;
+  display: flex;
+  background-color: #fafafa;
+}
+
+.expanded-detail-cell {
+  display: block;
+  border-width: 0;
+  padding: 0px !important;
+  width: 100%;
+  z-index: 2;
+}
+
+::ng-deep .cell-tooltip {
+  padding: 8px;
+  font-size: 12px;
+  min-width: 100px;
+  text-align: center;
+  margin-right: -20px;
+}
+
+/* Custom Tooltip */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  min-width: 120px;
+  background-color: #e91e63;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 43px;
+  margin-left: -86%;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  white-space: pre;
+}
+::ng-deep .mat-mdc-footer-cell {
+  flex-direction: column !important;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  .footer-row {
+    display: flex;
+    flex-direction: row;
+    span {
+      display: inherit;
+      align-items: center;
+    }
+  }
+}
+
+::ng-deep .mat-mdc-progress-bar .mdc-linear-progress__buffer-bar {
+  background: white !important;
+}

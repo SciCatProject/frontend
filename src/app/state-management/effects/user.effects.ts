@@ -216,25 +216,23 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(fromActions.logoutAction),
       filter(() => this.authService.isAuthenticated()),
-      switchMap(() =>
-        this.sharedAuthService.authControllerLogout().pipe(
-          switchMap(({ logoutURL }) => {
-            this.authService.clear();
-            return [
-              clearDatasetsStateAction(),
-              clearInstrumentsStateAction(),
-              clearJobsStateAction(),
-              clearLogbooksStateAction(),
-              clearPoliciesStateAction(),
-              clearProposalsStateAction(),
-              clearPublishedDataStateAction(),
-              clearSamplesStateAction(),
-              fromActions.logoutCompleteAction({ logoutURL }),
-            ];
-          }),
+      switchMap(() => {
+        this.authService.clear();
+        return this.sharedAuthService.authControllerLogout().pipe(
+          switchMap(({ logoutURL }) => [
+            clearDatasetsStateAction(),
+            clearInstrumentsStateAction(),
+            clearJobsStateAction(),
+            clearLogbooksStateAction(),
+            clearPoliciesStateAction(),
+            clearProposalsStateAction(),
+            clearPublishedDataStateAction(),
+            clearSamplesStateAction(),
+            fromActions.logoutCompleteAction({ logoutURL }),
+          ]),
           catchError(() => of(fromActions.logoutFailedAction())),
-        ),
-      ),
+        );
+      }),
     );
   });
 

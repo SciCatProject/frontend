@@ -20,6 +20,7 @@ import {
   AppConfigService,
   OAuth2Endpoint,
 } from "app-config.service";
+import { RouteTrackerService } from "shared/services/route-tracker.service";
 
 interface LoginForm {
   username: string;
@@ -74,13 +75,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private store: Store,
+    private routeTrackerService: RouteTrackerService,
     @Inject(DOCUMENT) public document: Document,
   ) {
-    this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "";
+    this.returnUrl = this.routeTrackerService.getPreviousRoute() || "";
   }
 
   redirectOIDC(authURL: string) {
-    this.document.location.href = `${this.appConfig.lbBaseURL}/${authURL}`;
+    const returnURL = this.returnUrl
+      ? encodeURIComponent(this.returnUrl)
+      : "/datasets";
+    this.document.location.href = `${this.appConfig.lbBaseURL}/${authURL}?returnURL=${returnURL}`;
   }
 
   openPrivacyDialog() {

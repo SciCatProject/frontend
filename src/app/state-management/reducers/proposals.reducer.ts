@@ -119,36 +119,12 @@ const reducer = createReducer(
     },
   ),
 
-  on(fromActions.clearFacetsAction, (state): ProposalsState => {
-    const limit = state.proposalFilters.limit; // Save limit
-    const proposalFilters = {
-      ...initialProposalsState.proposalFilters,
-      skip: 0,
-      limit,
-    };
-    return { ...state, proposalFilters };
-  }),
-
-  on(fromActions.changePageAction, (state, { page, limit }): ProposalsState => {
-    const skip = page * limit;
-    const proposalFilters = { ...state.proposalFilters, skip, limit };
-    return { ...state, proposalFilters };
-  }),
   on(
     fromActions.changeDatasetsPageAction,
     (state, { page, limit }): ProposalsState => {
       const skip = page * limit;
       const datasetFilters = { ...state.datasetFilters, skip, limit };
       return { ...state, datasetFilters };
-    },
-  ),
-
-  on(
-    fromActions.sortByColumnAction,
-    (state, { column, direction }): ProposalsState => {
-      const sortField = column + (direction ? ":" + direction : "");
-      const proposalFilters = { ...state.proposalFilters, sortField, skip: 0 };
-      return { ...state, proposalFilters };
     },
   ),
 
@@ -160,6 +136,34 @@ const reducer = createReducer(
     ...state,
     currentProposal: undefined,
   })),
+
+  on(
+    fromActions.fetchRelatedProposalsCompleteAction,
+    (state, { relatedProposals }): ProposalsState => ({
+      ...state,
+      relatedProposals,
+    }),
+  ),
+  on(
+    fromActions.fetchRelatedProposalsCountCompleteAction,
+    (state, { count }): ProposalsState => ({
+      ...state,
+      relatedProposalsCount: count,
+    }),
+  ),
+
+  on(
+    fromActions.changeRelatedProposalsPageAction,
+    (state, { page, limit }): ProposalsState => {
+      const skip = page * limit;
+      const relatedProposalsFilters = {
+        ...state.relatedProposalsFilters,
+        skip,
+        limit,
+      };
+      return { ...state, relatedProposalsFilters };
+    },
+  ),
 );
 
 export const proposalsReducer = (

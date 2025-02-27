@@ -19,19 +19,18 @@ import { EffectsModule } from "@ngrx/effects";
 import { HttpClient } from "@angular/common/http";
 import { ScicatDataService } from "shared/services/scicat-data-service";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  DatasetsService,
+  ProposalClass,
+} from "@scicatproject/scicat-sdk-ts-angular";
+import { BehaviorSubject } from "rxjs";
 
 describe("ProposalDashboardComponent", () => {
   let component: ProposalDashboardComponent;
   let fixture: ComponentFixture<ProposalDashboardComponent>;
 
   const getConfig = () => ({});
-  const dataSource = new MockScicatDataSource(
-    new MockAppConfigService(null) as unknown as AppConfigService,
-    null,
-    null,
-    { collections: null, columns: null },
-  );
+  const dataSource = new BehaviorSubject<ProposalClass[]>([]);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

@@ -25,6 +25,8 @@ export class DateRangeFilterComponent
 {
   readonly componentName: string = "DateRangeFilter";
   readonly label: string = "Start Date - End Date";
+  readonly tooltipText: string =
+    "Filters datasets by creation date, within the specified range";
 
   appConfig = this.appConfigService.getConfig();
   creationTimeFilter$ = this.store.select(selectCreationTimeFilter);

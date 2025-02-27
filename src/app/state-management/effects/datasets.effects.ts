@@ -408,6 +408,8 @@ export class DatasetEffects {
       ofType(
         fromActions.fetchDatasetsCompleteAction,
         fromActions.fetchDatasetsFailedAction,
+        fromActions.fetchRelatedDatasetsCompleteAction,
+        fromActions.fetchRelatedDatasetsFailedAction,
         fromActions.fetchFacetCountsCompleteAction,
         fromActions.fetchFacetCountsFailedAction,
         fromActions.fetchMetadataKeysCompleteAction,
