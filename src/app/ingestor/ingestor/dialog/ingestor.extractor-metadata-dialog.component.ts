@@ -6,6 +6,7 @@ import {
   IngestionRequestInformation,
   IngestorHelper,
 } from "../helper/ingestor.component-helper";
+import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 
 @Component({
   selector: "ingestor.extractor-metadata-dialog",
@@ -57,7 +58,8 @@ export class IngestorExtractorMetadataDialogComponent {
       this.createNewTransferData.apiInformation.metaDataExtractionFailed;
     this.extractorMetaDataStatus =
       this.createNewTransferData.apiInformation.extractorMetaDataStatus;
-    this.process = this.createNewTransferData.apiInformation.extractorMetadataProgress;
+    this.process =
+      this.createNewTransferData.apiInformation.extractorMetadataProgress;
   }
 
   onClickBack(): void {
@@ -90,26 +92,14 @@ export class IngestorExtractorMetadataDialogComponent {
 
   instrumentErrorsHandler(errors: any[]) {
     this.isInstrumentMetadataOk = errors.length === 0;
-    this.instrumentErrors = "";
-    errors.forEach((error, number) => {
-      if (error.message) {
-        const ctrNum = number + 1;
-        this.instrumentErrors += ctrNum + ": " + error.message + "\n";
-      }
-    });
+    this.instrumentErrors = convertJSONFormsErrorToString(errors);
     this.validateNextButton();
     this.cdr.detectChanges();
   }
 
   acquisitionErrorsHandler(errors: any[]) {
     this.isAcquisitionMetadataOk = errors.length === 0;
-    this.acquisitionErrors = "";
-    errors.forEach((error, number) => {
-      if (error.message) {
-        const ctrNum = number + 1;
-        this.acquisitionErrors += ctrNum + ": " + error.message + "\n";
-      }
-    });
+    this.acquisitionErrors = convertJSONFormsErrorToString(errors);
     this.validateNextButton();
     this.cdr.detectChanges();
   }

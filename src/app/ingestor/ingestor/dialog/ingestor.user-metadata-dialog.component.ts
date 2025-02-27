@@ -7,6 +7,7 @@ import {
   IngestorHelper,
   SciCatHeader_Schema,
 } from "../helper/ingestor.component-helper";
+import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 
 @Component({
   selector: "ingestor.user-metadata-dialog",
@@ -88,26 +89,14 @@ export class IngestorUserMetadataDialogComponent {
 
   scicatHeaderErrorsHandler(errors: any[]) {
     this.isSciCatHeaderOk = errors.length === 0;
-    this.scicatHeaderErrors = "";
-    errors.forEach((error, number) => {
-      if (error.message) {
-        const ctrNum = number + 1;
-        this.scicatHeaderErrors += ctrNum + ": " + error.message + "\n";
-      }
-    });
+    this.scicatHeaderErrors = convertJSONFormsErrorToString(errors);
     this.validateNextButton();
     this.cdr.detectChanges();
   }
 
   organizationalErrorsHandler(errors: any[]) {
     this.isOrganizationalMetadataOk = errors.length === 0;
-    this.organizationalErrors = "";
-    errors.forEach((error, number) => {
-      if (error.message) {
-        const ctrNum = number + 1;
-        this.organizationalErrors += ctrNum + ": " + error.message + "\n";
-      }
-    });
+    this.organizationalErrors = convertJSONFormsErrorToString(errors);
     this.validateNextButton();
     this.cdr.detectChanges();
   }

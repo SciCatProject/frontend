@@ -33,3 +33,16 @@ export class IngestorMetadataEditorHelper {
     return schema;
   }
 }
+
+export const convertJSONFormsErrorToString = (error: any): string => {
+  let errorString = "";
+
+  error.forEach((error, number) => {
+    if (error.message) {
+      const ctrNum = number + 1;
+      errorString += ctrNum + ": " + error.message + "\n";
+    }
+  });
+
+  return errorString;
+};

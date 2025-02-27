@@ -4,7 +4,10 @@ import {
   JsonFormsControlWithDetail,
 } from "@jsonforms/angular";
 import { ControlProps } from "@jsonforms/core";
-import { configuredRenderer } from "../ingestor-metadata-editor-helper";
+import {
+  configuredRenderer,
+  convertJSONFormsErrorToString,
+} from "../ingestor-metadata-editor-helper";
 
 @Component({
   selector: "app-objec==t-group-renderer",
@@ -81,13 +84,7 @@ export class CustomObjectControlRendererComponent extends JsonFormsControlWithDe
   }
 
   onInnerErrors(errors: any[]) {
-    this.innerErrors = "";
-    errors.forEach((error, number) => {
-      if (error.message) {
-        const ctrNum = number + 1;
-        this.innerErrors += ctrNum + ": " + error.message + "\n";
-      }
-    });
+    this.innerErrors = convertJSONFormsErrorToString(errors);
     this.cdr.detectChanges();
   }
 }
