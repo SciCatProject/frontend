@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectorRef, Component } from "@angular/core";
 import {
   JsonFormsAngularService,
   JsonFormsControlWithDetail,
@@ -7,7 +7,7 @@ import { ControlProps } from "@jsonforms/core";
 import { configuredRenderer } from "../ingestor-metadata-editor-helper";
 
 @Component({
-  selector: "app-object-group-renderer",
+  selector: "app-objec==t-group-renderer",
   styleUrls: ["../ingestor-metadata-editor.component.scss"],
   template: `
     <mat-card class="anyof-group">
@@ -15,10 +15,10 @@ import { configuredRenderer } from "../ingestor-metadata-editor-helper";
         >{{ objectTitle }}
         <span class="spacer"></span>
         <mat-icon
-          *ngIf="this.error?.length"
+          *ngIf="this.innerErrors?.length"
           color="warn"
           matBadgeColor="warn"
-          matTooltip="{{ this.error }}"
+          matTooltip="{{ this.innerErrors }}"
           matTooltipClass="error-message-tooltip"
         >
           error_outline
@@ -30,6 +30,7 @@ import { configuredRenderer } from "../ingestor-metadata-editor-helper";
           [data]="passedProps.data"
           [renderers]="defaultRenderer"
           (dataChange)="onInnerJsonFormsChange($event)"
+          (errors)="onInnerErrors($event)"
         ></jsonforms>
       </mat-card-content>
     </mat-card>
@@ -41,8 +42,12 @@ export class CustomObjectControlRendererComponent extends JsonFormsControlWithDe
   defaultRenderer = configuredRenderer;
   passedProps: ControlProps;
   objectTitle: string;
+  innerErrors: string;
 
-  constructor(service: JsonFormsAngularService) {
+  constructor(
+    service: JsonFormsAngularService,
+    private cdr: ChangeDetectorRef,
+  ) {
     super(service);
     this.rendererService = service;
   }
@@ -73,5 +78,16 @@ export class CustomObjectControlRendererComponent extends JsonFormsControlWithDe
 
       this.rendererService.setData(updatedData);
     }
+  }
+
+  onInnerErrors(errors: any[]) {
+    this.innerErrors = "";
+    errors.forEach((error, number) => {
+      if (error.message) {
+        const ctrNum = number + 1;
+        this.innerErrors += ctrNum + ": " + error.message + "\n";
+      }
+    });
+    this.cdr.detectChanges();
   }
 }
