@@ -1,6 +1,8 @@
+var path = require("path");
+
 import { testData } from "../../fixtures/testData";
 import { testConfig } from "../../fixtures/testData";
-import { mergeConfig } from "../../support/utils";
+import { getFormattedTime, mergeConfig } from "../../support/utils";
 
 describe("Proposals general", () => {
   let proposal;
@@ -372,6 +374,129 @@ describe("Proposals general", () => {
       );
 
       cy.url("should.contain", `pageIndex=1`);
+    });
+
+    it("should be able to change visible columns settings in the table", () => {
+      const newProposal = {
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+      };
+
+      cy.createProposal(newProposal);
+
+      cy.visit("/proposals");
+
+      cy.get("mat-header-cell").contains("First Name");
+      cy.get("mat-header-cell").contains("Last Name");
+
+      cy.get("dynamic-mat-table table-menu button").click();
+
+      cy.get('[role="menu"] button').contains("Column setting").click();
+      cy.get('[role="menu"]').contains("First Name").click();
+      cy.get('[role="menu"]').contains("Last Name").click();
+      cy.get('[role="menu"]').contains("PI First Name").click();
+      cy.get('[role="menu"]').contains("PI Last Name").click();
+
+      cy.get('[role="menu"] .column-config-apply .done-setting')
+        .contains("done")
+        .click();
+
+      cy.get("dynamic-mat-table mat-header-row.header").should(
+        "not.contain",
+        "First Name",
+      );
+      cy.get("dynamic-mat-table mat-header-row.header").should(
+        "not.contain",
+        "Last Name",
+      );
+
+      cy.get("dynamic-mat-table table-menu button").click();
+      cy.get('[role="menu"] button').contains("Save table setting").click();
+
+      cy.reload();
+
+      cy.get("dynamic-mat-table mat-header-row.header").should(
+        "not.contain",
+        "First Name",
+      );
+      cy.get("dynamic-mat-table mat-header-row.header").should(
+        "not.contain",
+        "Last Name",
+      );
+
+      cy.get("dynamic-mat-table table-menu button").click();
+      cy.get('[role="menu"] button').contains("Default setting").click();
+
+      cy.get("dynamic-mat-table mat-header-row.header").should(
+        "contain",
+        "First Name",
+      );
+      cy.get("dynamic-mat-table mat-header-row.header").should(
+        "contain",
+        "Last Name",
+      );
+    });
+
+    it("should be able to download table data as a json", () => {
+      const newProposal = {
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+      };
+
+      cy.createProposal(newProposal);
+
+      cy.visit("/proposals");
+
+      cy.get("mat-paginator mat-select").click();
+      cy.get("mat-option").contains("25").click();
+
+      cy.get("dynamic-mat-table table-menu button").click();
+
+      cy.get('[role="menu"] button').contains("Save data").click();
+
+      cy.get('[role="menu"] button').contains("Json file").click();
+
+      const downloadsFolder = Cypress.config("downloadsFolder");
+      const tableName = "proposalsTable";
+
+      cy.readFile(
+        path.join(downloadsFolder, `${tableName}${getFormattedTime()}.json`),
+      ).then((actualExport) => {
+        const foundProposal = actualExport.find(
+          (proposal) => proposal.proposalId === newProposal.proposalId,
+        );
+
+        expect(foundProposal).to.exist;
+      });
+    });
+
+    it("should be able to download table data as a csv", () => {
+      const newProposal = {
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+      };
+
+      cy.createProposal(newProposal);
+
+      cy.visit("/proposals");
+
+      cy.get("mat-paginator mat-select").click();
+      cy.get("mat-option").contains("25").click();
+
+      cy.get("dynamic-mat-table table-menu button").click();
+
+      cy.get('[role="menu"] button').contains("Save data").click();
+
+      cy.get('[role="menu"] button').contains("CSV file").click();
+
+      const downloadsFolder = Cypress.config("downloadsFolder");
+      const tableName = "proposalsTable";
+
+      cy.readFile(
+        path.join(downloadsFolder, `${tableName}${getFormattedTime()}.csv`),
+      ).then((actualExport) => {
+        expect(actualExport).to.contain(newProposal.proposalId);
+      });
     });
   });
 });
