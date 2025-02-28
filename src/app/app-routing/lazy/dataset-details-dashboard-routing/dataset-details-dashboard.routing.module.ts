@@ -11,9 +11,10 @@ import { DatasetDetailComponent } from "datasets/dataset-detail/dataset-detail.c
 import { DatasetFileUploaderComponent } from "datasets/dataset-file-uploader/dataset-file-uploader.component";
 import { DatasetLifecycleComponent } from "datasets/dataset-lifecycle/dataset-lifecycle.component";
 import { ReduceComponent } from "datasets/reduce/reduce.component";
-import { OneDepComponent } from "datasets/onedep/onedep.component";
+import { DepositorComponent } from "datasets/depositor/depositor.component";
 import { RelatedDatasetsComponent } from "datasets/related-datasets/related-datasets.component";
 import { LogbooksDashboardComponent } from "logbooks/logbooks-dashboard/logbooks-dashboard.component";
+
 const routes: Routes = [
   {
     path: "",
@@ -73,12 +74,12 @@ const routes: Routes = [
     canActivate: [AuthGuard, AdminGuard],
   },
   {
-    path: "onedep",
+    path: "depositor",
     canActivate: [ServiceGuard],
     children: [
       {
         path: "",
-        component: OneDepComponent,
+        component: DepositorComponent,
         canActivate: [AuthGuard],
       },
     ],

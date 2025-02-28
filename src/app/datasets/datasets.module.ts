@@ -94,7 +94,7 @@ import { OneDepComponent } from "./onedep/onedep.component";
 import { OrcidFormatterDirective } from "./onedep/onedep.directive";
 import { EmpiarComponent } from "./empiar/empiar.component";
 import { OneDepEffects } from "state-management/effects/onedep.effects";
-
+import { DepositorComponent } from "./depositor/depositor.component";
 
 @NgModule({
   imports: [
@@ -188,6 +188,7 @@ import { OneDepEffects } from "state-management/effects/onedep.effects";
     OneDepComponent,
     OrcidFormatterDirective,
     EmpiarComponent,
+    DepositorComponent,
   ],
   providers: [
     ArchivingService,

@@ -8,7 +8,7 @@ import {
 import { MatRadioChange } from "@angular/material/radio";
 import { AppConfigService, AppConfig } from "app-config.service";
 import { HttpClient } from "@angular/common/http";
-import { Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import {
   FormBuilder,
   FormControl,
@@ -27,6 +27,7 @@ import {
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import * as fromActions from "state-management/actions/onedep.actions";
+import * as datasetActions from "state-management/actions/datasets.actions";
 import {
   createMethodsList,
   EmFile,
@@ -71,13 +72,14 @@ export class OneDepComponent implements OnInit, OnDestroy {
   depositClicked = false;
   privacyTermsTicked = false;
   depID$: Observable<string>;
+  pid$: Observable<object>;
   @ViewChild("fileInput") fileInput: ElementRef<HTMLInputElement> | undefined;
 
   constructor(
     public appConfigService: AppConfigService,
     private store: Store,
     private http: HttpClient,
-    private router: Router,
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     private depositor: Depositor,
   ) {
@@ -111,10 +113,11 @@ export class OneDepComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // initialize an array for the files to be uploaded
+    const pid = history.state.pid;
+    this.store.dispatch(datasetActions.fetchDatasetAction({ pid }));
     this.fileTypes = [];
     this.mainContour = 0.0;
     //  connect to the depositor
-
     this.store.dispatch(fromActions.connectToDepositor());
 
     this.store.select(selectCurrentDataset).subscribe((dataset) => {
@@ -125,6 +128,7 @@ export class OneDepComponent implements OnInit, OnDestroy {
         });
       }
     });
+
     this.subscriptions.push(
       this.store.select(selectCurrentUser).subscribe((user) => {
         if (user) {
