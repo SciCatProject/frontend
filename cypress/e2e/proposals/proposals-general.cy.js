@@ -328,7 +328,7 @@ describe("Proposals general", () => {
         .should("contain", newProposal.proposalId);
     });
 
-    it("should be able to sort for proposal in the column sort", () => {
+    it("should be able to change page and page size in the proposal table", () => {
       const newProposal = {
         ...testData.proposal,
         proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
@@ -386,12 +386,16 @@ describe("Proposals general", () => {
 
       cy.visit("/proposals");
 
-      cy.get(
+      cy.wait(1000);
+
+      cy.contains(
         "dynamic-mat-table mat-header-row.header mat-header-cell",
-      ).contains("First Name");
-      cy.get(
+        "First Name",
+      );
+      cy.contains(
         "dynamic-mat-table mat-header-row.header mat-header-cell",
-      ).contains("Last Name");
+        "Last Name",
+      );
 
       cy.get("dynamic-mat-table table-menu button").click();
 
@@ -430,15 +434,18 @@ describe("Proposals general", () => {
 
       cy.get("dynamic-mat-table table-menu button").click();
       cy.get('[role="menu"] button').contains("Default setting").click();
-      // NOTE: Test fails in the CI pipeline, but works locally in the cypress open mode. This is a quick fix for the CI pipeline.
-      cy.wait(1000);
 
-      cy.get("dynamic-mat-table mat-header-row.header").should(
-        "contain",
+      cy.get("dynamic-mat-table table-menu button").click();
+      cy.get('[role="menu"] button').contains("Save table setting").click();
+
+      cy.get("body").type("{esc}");
+
+      cy.contains(
+        "dynamic-mat-table mat-header-row.header mat-header-cell",
         "First Name",
       );
-      cy.get("dynamic-mat-table mat-header-row.header").should(
-        "contain",
+      cy.contains(
+        "dynamic-mat-table mat-header-row.header mat-header-cell",
         "Last Name",
       );
     });
