@@ -33,6 +33,8 @@ export enum MetadataTypes {
   string = "string",
   date = "date",
   link = "link",
+  number_range = "number_range",
+  quantity_range = "quantity_range",
 }
 
 @Component({
@@ -102,7 +104,10 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
   detectType(index: any) {
     const type = this.items.at(index).get("fieldType")?.value;
-    if (type === MetadataTypes.quantity) {
+    if (
+      type === MetadataTypes.quantity ||
+      type === MetadataTypes.quantity_range
+    ) {
       this.items.at(index).get("fieldUnit")?.enable();
       this.items
         .at(index)
@@ -142,6 +147,21 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         .at(index)
         .get("fieldValue")
         ?.removeValidators([this.urlValidator()]);
+      this.items.at(index).get("fieldValue")?.updateValueAndValidity();
+    }
+
+    if (type === MetadataTypes.number_range || MetadataTypes.quantity_range) {
+      this.items
+        .at(index)
+        .get("fieldValue")
+        ?.addValidators([this.numberRangeValidator()]);
+      this.items.at(index).get("fieldValue")?.updateValueAndValidity();
+      this.items.at(index).get("fieldValue")?.markAsTouched();
+    } else {
+      this.items
+        .at(index)
+        .get("fieldValue")
+        ?.removeValidators([this.numberRangeValidator()]);
       this.items.at(index).get("fieldValue")?.updateValueAndValidity();
     }
   }
@@ -193,6 +213,33 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     };
   }
 
+  numberRangeValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (
+        control.parent?.value.fieldType === MetadataTypes.number_range ||
+        control.parent?.value.fieldType === MetadataTypes.quantity_range
+      ) {
+        if (typeof control.value === "string") {
+          const numbers = control.value.split(", ");
+
+          if (numbers.length !== 2) {
+            return { invalidNumberRange: true };
+          }
+
+          const validNumberRange =
+            numbers[0] &&
+            numbers[1] &&
+            !isNaN(Number(numbers[0])) &&
+            !isNaN(Number(numbers[1]));
+
+          return validNumberRange ? null : { invalidNumberRange: true };
+        }
+      }
+
+      return null;
+    };
+  }
+
   whiteSpaceValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (control.value.length > 0 && !control.value.trim()) {
@@ -202,7 +249,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     };
   }
 
-  formatDateFields() {
+  formatFields() {
     for (const [key, value] of Object.entries(this.metadata)) {
       if (value.type === MetadataTypes.date) {
         if (
@@ -221,7 +268,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
   doSave() {
     this.metadata = this.createMetadataObject();
-    this.formatDateFields();
+    this.formatFields();
     this.save.emit(this.metadata);
   }
 
@@ -245,9 +292,49 @@ export class MetadataEditComponent implements OnInit, OnChanges {
           "value" in (this.metadata[key] as ScientificMetadata)
         ) {
           if (this.metadata[key].unit?.length > 0) {
+            const quantityType =
+              this.metadata[key].type === MetadataTypes.quantity_range
+                ? MetadataTypes.quantity_range
+                : MetadataTypes.quantity;
+
+            field = this.formBuilder.group({
+              fieldType: this.formControlFields["fieldType"](quantityType),
+              fieldName: this.formControlFields["fieldName"](key),
+              fieldHumanName: this.formControlFields["fieldHumanName"](
+                this.getHumanNameFieldValue(this.metadata[key], key),
+              ),
+              fieldValue: this.formControlFields["fieldValue"](
+                this.metadata[key]["value"],
+              ),
+              fieldUnit: this.formControlFields["fieldUnit"](
+                this.metadata[key]["unit"],
+              ),
+            });
+          } else if (
+            typeof this.metadata[key]["value"] === MetadataTypes.number ||
+            this.metadata[key]["type"] === MetadataTypes.number
+          ) {
             field = this.formBuilder.group({
               fieldType: this.formControlFields["fieldType"](
-                MetadataTypes.quantity,
+                MetadataTypes.number,
+              ),
+              fieldName: this.formControlFields["fieldName"](key),
+              fieldHumanName: this.formControlFields["fieldHumanName"](
+                this.getHumanNameFieldValue(this.metadata[key], key),
+              ),
+              fieldValue: this.formControlFields["fieldValue"](
+                Number(this.metadata[key]["value"]),
+              ),
+              fieldUnit: this.formControlFields["fieldUnit"](
+                this.metadata[key]["unit"],
+              ),
+            });
+          } else if (
+            this.metadata[key]["type"] === MetadataTypes.number_range
+          ) {
+            field = this.formBuilder.group({
+              fieldType: this.formControlFields["fieldType"](
+                MetadataTypes.number_range,
               ),
               fieldName: this.formControlFields["fieldName"](key),
               fieldHumanName: this.formControlFields["fieldHumanName"](
@@ -261,18 +348,18 @@ export class MetadataEditComponent implements OnInit, OnChanges {
               ),
             });
           } else if (
-            typeof this.metadata[key]["value"] === MetadataTypes.number
+            this.metadata[key]["type"] === MetadataTypes.quantity_range
           ) {
             field = this.formBuilder.group({
               fieldType: this.formControlFields["fieldType"](
-                MetadataTypes.number,
+                MetadataTypes.quantity_range,
               ),
               fieldName: this.formControlFields["fieldName"](key),
               fieldHumanName: this.formControlFields["fieldHumanName"](
                 this.getHumanNameFieldValue(this.metadata[key], key),
               ),
               fieldValue: this.formControlFields["fieldValue"](
-                Number(this.metadata[key]["value"]),
+                this.metadata[key]["value"],
               ),
               fieldUnit: this.formControlFields["fieldUnit"](
                 this.metadata[key]["unit"],
@@ -336,7 +423,11 @@ export class MetadataEditComponent implements OnInit, OnChanges {
           fieldType === MetadataTypes.quantity
             ? Number(fieldValue)
             : fieldValue,
-        unit: fieldType === MetadataTypes.quantity ? fieldUnit : "",
+        unit:
+          fieldType === MetadataTypes.quantity ||
+          fieldType === MetadataTypes.quantity_range
+            ? fieldUnit
+            : "",
         human_name: fieldHumanName,
         type: fieldType,
       };
@@ -408,6 +499,18 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     const formField = this.items.at(index).get(field);
     if (formField.parent?.value.fieldType === MetadataTypes.link) {
       return formField ? formField.hasError("invalidUrl") : true;
+    }
+
+    return false;
+  }
+
+  fieldHasRangeError(index: number, field: string): boolean {
+    const formField = this.items.at(index).get(field);
+    if (
+      formField.parent?.value.fieldType === MetadataTypes.number_range ||
+      formField.parent?.value.fieldType === MetadataTypes.quantity_range
+    ) {
+      return formField ? formField.hasError("invalidNumberRange") : true;
     }
 
     return false;
