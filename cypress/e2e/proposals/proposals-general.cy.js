@@ -386,8 +386,12 @@ describe("Proposals general", () => {
 
       cy.visit("/proposals");
 
-      cy.get("mat-header-cell").contains("First Name");
-      cy.get("mat-header-cell").contains("Last Name");
+      cy.get(
+        "dynamic-mat-table mat-header-row.header mat-header-cell",
+      ).contains("First Name");
+      cy.get(
+        "dynamic-mat-table mat-header-row.header mat-header-cell",
+      ).contains("Last Name");
 
       cy.get("dynamic-mat-table table-menu button").click();
 
@@ -426,6 +430,8 @@ describe("Proposals general", () => {
 
       cy.get("dynamic-mat-table table-menu button").click();
       cy.get('[role="menu"] button').contains("Default setting").click();
+      // NOTE: Test fails in the CI pipeline, but works locally in the cypress open mode. This is a quick fix for the CI pipeline.
+      cy.wait(1000);
 
       cy.get("dynamic-mat-table mat-header-row.header").should(
         "contain",
