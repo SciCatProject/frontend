@@ -220,7 +220,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         control.parent?.value.fieldType === MetadataTypes.quantity_range
       ) {
         if (typeof control.value === "string") {
-          const numbers = control.value.split(", ");
+          const numbers = control.value.split(",").map((item) => item.trim());
 
           if (numbers.length !== 2) {
             return { invalidNumberRange: true };
@@ -262,6 +262,14 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         } else {
           this.metadata[key].value = DateTime.fromISO(value.value).toISO();
         }
+      }
+
+      if (
+        (value.type === MetadataTypes.number_range ||
+          value.type === MetadataTypes.quantity_range) &&
+        typeof value.value === "string"
+      ) {
+        this.metadata[key].value = value.value.split(",").map(Number);
       }
     }
   }
