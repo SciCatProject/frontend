@@ -305,3 +305,8 @@ cdk-virtual-scroll-viewport {
 ::ng-deep .mat-mdc-progress-bar .mdc-linear-progress__buffer-bar {
   background: white !important;
 }
+
+.general-warning {
+  cursor: pointer;
+  padding-right: 0.5em;
+}

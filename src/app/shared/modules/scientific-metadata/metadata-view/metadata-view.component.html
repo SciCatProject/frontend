@@ -1,55 +1,22 @@
 <div class="metadataTable" *ngIf="metadata">
-  <mat-table class="metadataTable" [dataSource]="tableData">
-    <!-- Column Definitions -->
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="name" style="align-content: center">
-      <mat-header-cell *matHeaderCellDef class="metadataTable-header"
-        >Name</mat-header-cell
-      >
-      <mat-cell *matCellDef="let metadata">{{
-        metadata.name | replaceUnderscore | titlecase
-      }}</mat-cell>
-    </ng-container>
-
-    <!-- Value Column -->
-    <ng-container matColumnDef="value" style="align-content: center">
-      <mat-header-cell *matHeaderCellDef class="metadataTable-header"
-        >Value</mat-header-cell
-      >
-      <mat-cell *matCellDef="let metadata">{{ metadata.value }}</mat-cell>
-    </ng-container>
-
-    <!-- Unit Column -->
-    <ng-container matColumnDef="unit" style="align-content: center">
-      <mat-header-cell *matHeaderCellDef class="metadataTable-header">
-        Unit
-      </mat-header-cell>
-      <mat-cell *matCellDef="let metadata">
-        <ng-template [ngIf]="metadata.unit?.length > 0" [ngIfElse]="noUnit">
-          <span class="unit-input">
-            {{ metadata.unit | prettyUnit }}
-            <mat-icon
-              class="general-warning"
-              *ngIf="!metadata.validUnit"
-              [matTooltip]="
-                !metadata.validUnit
-                  ? ' Unrecognized unit, conversion disabled
-            '
-                  : ''
-              "
-              >{{ "error" }}</mat-icon
-            >
-          </span>
-        </ng-template>
-        <ng-template #noUnit> -- </ng-template>
-      </mat-cell>
-    </ng-container>
-
-    <!-- End of Column Definitions -->
-
-    <mat-header-row *matHeaderRowDef="columnsToDisplay"> </mat-header-row>
-
-    <mat-row *matRowDef="let metadata; columns: columnsToDisplay"> </mat-row>
-  </mat-table>
+  <dynamic-mat-table
+    [tableName]="tableName"
+    [showReload]="showReloadData"
+    [dir]="direction"
+    [rowHeight]="rowHeight"
+    [columns]="columns"
+    [pending]="pending"
+    [setting]="setting"
+    [sticky]="stickyHeader"
+    [dataSource]="dataSource"
+    [pagination]="pagination"
+    [showNoData]="showNoData"
+    [rowSelectionMode]="rowSelectionMode"
+    [printConfig]="printConfig"
+    [showProgress]="showProgress"
+    [showGlobalTextSearch]="showGlobalTextSearch"
+    style="height: 60vh"
+    class="mat-elevation-z2"
+  >
+  </dynamic-mat-table>
 </div>

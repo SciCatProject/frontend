@@ -12,10 +12,8 @@ export class TableService {
     const y = today.getFullYear();
     const m = today.getMonth() + 1;
     const d = today.getDate();
-    const h = today.getHours();
-    const mi = today.getMinutes();
-    const s = today.getSeconds();
-    return y + "-" + m + "-" + d + "-" + h + "-" + mi + "-" + s;
+
+    return y + "-" + m + "-" + d;
   }
 
   public tableName: string;
