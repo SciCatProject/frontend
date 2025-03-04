@@ -144,7 +144,9 @@
             <ng-template mat-tab-label>
               <mat-icon> list </mat-icon> View
             </ng-template>
-            <ng-container *ngTemplateOutlet="metadataView"> </ng-container>
+            <ng-template matTabContent>
+              <ng-container *ngTemplateOutlet="metadataView"> </ng-container>
+            </ng-template>
           </mat-tab>
           <mat-tab
             class="editTab"
@@ -154,21 +156,23 @@
             <ng-template mat-tab-label>
               <mat-icon> edit </mat-icon> Edit
             </ng-template>
-            <div [ngSwitch]="appConfig.metadataStructure">
-              <tree-edit
-                *ngSwitchCase="'tree'"
-                [metadata]="proposal['metadata']"
-                (save)="onSaveMetadata($event)"
-                (hasUnsavedChanges)="onHasUnsavedChanges($event)"
-              >
-              </tree-edit>
-              <metadata-edit
-                *ngSwitchDefault
-                [metadata]="proposal['metadata']"
-                (save)="onSaveMetadata($event)"
-              >
-              </metadata-edit>
-            </div>
+            <ng-template matTabContent>
+              <div [ngSwitch]="appConfig.metadataStructure">
+                <tree-edit
+                  *ngSwitchCase="'tree'"
+                  [metadata]="proposal['metadata']"
+                  (save)="onSaveMetadata($event)"
+                  (hasUnsavedChanges)="onHasUnsavedChanges($event)"
+                >
+                </tree-edit>
+                <metadata-edit
+                  *ngSwitchDefault
+                  [metadata]="proposal['metadata']"
+                  (save)="onSaveMetadata($event)"
+                >
+                </metadata-edit>
+              </div>
+            </ng-template>
           </mat-tab>
         </mat-tab-group>
       </ng-template>

@@ -6,7 +6,7 @@
     >
       <div [formGroupName]="i">
         <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
-          <div class="formColumn">
+          <div class="formColumn typeColumn">
             <mat-form-field class="selectField" fxFlex="100">
               <mat-label>Type</mat-label>
               <mat-select
@@ -25,7 +25,22 @@
           </div>
           <div class="formColumn">
             <mat-form-field class="inputField" fxFlex="100">
-              <mat-label>Name</mat-label>
+              <mat-label>Displayed Name</mat-label>
+              <input
+                id="humanNameInput{{ i }}"
+                matInput
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                formControlName="fieldHumanName"
+                data-cy="metadata-human-name-input"
+              />
+            </mat-form-field>
+          </div>
+          <div class="formColumn">
+            <mat-form-field class="inputField" fxFlex="100">
+              <mat-label>Raw property name</mat-label>
               <input
                 id="nameInput{{ i }}"
                 matInput
@@ -62,6 +77,12 @@
               />
               <mat-error *ngIf="fieldHasError(i, 'fieldValue')">
                 Value is required
+              </mat-error>
+              <mat-error *ngIf="fieldHasDateError(i, 'fieldValue')">
+                Invalid date
+              </mat-error>
+              <mat-error *ngIf="fieldHasLinkError(i, 'fieldValue')">
+                Invalid link
               </mat-error>
             </mat-form-field>
           </div>
@@ -104,7 +125,7 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div class="formColumn" fxFlexAlign="center">
+          <div class="formColumn deleteColumn" fxFlexAlign="center">
             <button
               mat-icon-button
               class="deleteButton"
