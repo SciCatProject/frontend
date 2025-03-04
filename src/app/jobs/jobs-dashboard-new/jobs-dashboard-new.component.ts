@@ -62,6 +62,7 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
       label: "Parameters",
       format: "json",
       canSort: false,
+      matchMode: "contains",
       hideOrder: 4,
     },
     {
@@ -78,7 +79,8 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
       icon: "list",
       label: "Datasets",
       format: "json",
-      canSort: true,
+      canSort: false,
+      matchMode: "contains",
       hideOrder: 6,
     },
     {
@@ -86,7 +88,8 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
       icon: "work_outline",
       label: "Result",
       format: "json",
-      canSort: true,
+      canSort: false,
+      matchMode: "contains",
       hideOrder: 7,
     },
   ];
