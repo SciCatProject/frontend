@@ -19,6 +19,7 @@ export interface TableSetting {
   settingName?: string;
   settingList?: SettingItem[];
   showColumnSettingMenu?: boolean;
+  tableSort?: { sortColumn: string; sortDirection: "asc" | "desc" };
 }
 
 export interface SettingItem extends TableSetting {
@@ -51,4 +52,16 @@ export class TableSetting implements TableSetting {
   autoHeight?: boolean;
   saveSettingMode?: "simple" | "multi" | "none";
   showColumnSettingMenu?: boolean = false;
+  tableSort?: { sortColumn: string; sortDirection: "asc" | "desc" };
+}
+
+export enum TableSettingEventType {
+  create = "create",
+  save = "save",
+  apply = "apply",
+  delete = "delete",
+  default = "default",
+  reset = "reset",
+  select = "select",
+  error = "error",
 }

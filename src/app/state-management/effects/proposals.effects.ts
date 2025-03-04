@@ -30,12 +30,16 @@ export class ProposalEffects {
   fetchProposals$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchProposalsAction),
-      mergeMap(({ skip, limit, search, order }) => {
+      mergeMap(({ skip, limit, search, sortColumn, sortDirection }) => {
         const limitsParam = {
-          order: order,
           skip: skip,
           limit: limit,
+          order: undefined,
         };
+
+        if (sortColumn && sortDirection) {
+          limitsParam.order = `${sortColumn}:${sortDirection}`;
+        }
 
         const queryParam = { text: search || undefined };
 

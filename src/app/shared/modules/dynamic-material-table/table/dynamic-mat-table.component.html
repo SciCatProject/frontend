@@ -67,7 +67,7 @@
         cdkDragBoundary="mat-header-row"
         cdkDropListLockAxis="x"
         [ngClass]="headerClass(column)"
-        [cdkDragData]="{ name: column.name, columIndex: i }"
+        [cdkDragData]="{ name: column.name, columnIndex: i }"
         [ngStyle]="column.style"
         [class.active-resize]="resizeColumn.columnIndex === i"
         cdkDragBoundary="mat-header-row"

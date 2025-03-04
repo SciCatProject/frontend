@@ -1,5 +1,5 @@
 <dynamic-mat-table
-  tableName="propsals-table"
+  [tableName]="tableName"
   [showReload]="showReloadData"
   [dir]="direction"
   [rowHeight]="rowHeight"
@@ -19,6 +19,8 @@
   (paginationChange)="onPaginationChange($event)"
   (globalTextSearchChange)="onGlobalTextSearchChange($event)"
   (onRowEvent)="onRowClick($event)"
+  (settingChange)="onSettingChange($event)"
+  (onTableEvent)="onTableEvent($event)"
   style="height: 70vh"
   class="mat-elevation-z2"
 >
