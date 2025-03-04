@@ -272,7 +272,10 @@ export class ProposalEffects {
         };
 
         return this.proposalsService
-          .proposalsControllerCount(JSON.stringify(queryFilter))
+          .proposalsControllerCount(
+            JSON.stringify({}),
+            JSON.stringify(queryFilter),
+          )
           .pipe(
             map(({ count }) =>
               fromActions.fetchRelatedProposalsCountCompleteAction({
