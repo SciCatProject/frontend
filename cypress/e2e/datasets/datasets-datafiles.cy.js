@@ -1,3 +1,5 @@
+import { testData } from "../../fixtures/testData";
+
 describe("Dataset datafiles", () => {
   beforeEach(() => {
     cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
@@ -23,7 +25,12 @@ describe("Dataset datafiles", () => {
       notebookAll: "http://localhost:4200/notebook/all",
     };
     it("Should be able to download/notebook with selected/all", () => {
-      cy.createDataset("raw", undefined, "small");
+      cy.createDataset(
+        "raw",
+        testData.rawDataset.datasetName,
+        undefined,
+        "small",
+      );
 
       cy.visit("/datasets");
 
@@ -75,7 +82,12 @@ describe("Dataset datafiles", () => {
     });
 
     it("Should not be able to download selected/all file that is exceeding size limit", () => {
-      cy.createDataset("raw", undefined, "large");
+      cy.createDataset(
+        "raw",
+        testData.rawDataset.datasetName,
+        undefined,
+        "large",
+      );
 
       cy.visit("/datasets");
 
