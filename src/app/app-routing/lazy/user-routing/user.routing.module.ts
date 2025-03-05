@@ -31,10 +31,7 @@ const routes: Routes = [
   },
 ];
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes),
-    NgxJsonViewerModule,
-  ],
+  imports: [RouterModule.forChild(routes), NgxJsonViewerModule],
   exports: [RouterModule],
 })
 export class UsersRoutingModule {}

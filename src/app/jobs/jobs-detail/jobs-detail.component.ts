@@ -6,7 +6,6 @@ import { ActivatedRoute } from "@angular/router";
 import { selectCurrentJob } from "state-management/selectors/jobs.selectors";
 import { Observable, Subscription } from "rxjs";
 import { JobClass } from "@scicatproject/scicat-sdk-ts-angular";
-import { AppConfigService } from "app-config.service";
 import { Message, MessageType } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
 
@@ -21,7 +20,6 @@ export class JobsDetailComponent implements OnInit, OnDestroy {
     JobClass & { createdAt: string; updatedAt: string }
   >;
   routeSubscription: Subscription = new Subscription();
-  appConfig = this.appConfigService.getConfig();
 
   showJobParams = false;
   showJobResultObject = false;
@@ -31,7 +29,6 @@ export class JobsDetailComponent implements OnInit, OnDestroy {
     @Inject(DOCUMENT) private document: Document,
     private route: ActivatedRoute,
     private store: Store,
-    public appConfigService: AppConfigService,
   ) {}
 
   ngOnInit() {
@@ -39,7 +36,8 @@ export class JobsDetailComponent implements OnInit, OnDestroy {
       this.store.dispatch(fetchJobAction({ jobId: params.id }));
     });
     this.job$.subscribe((job) => {
-      this.hasJobResultObject = Object.keys(job.jobResultObject || {}).length > 0;
+      this.hasJobResultObject =
+        Object.keys(job.jobResultObject || {}).length > 0;
     });
   }
 
