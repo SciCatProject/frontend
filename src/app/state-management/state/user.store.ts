@@ -25,6 +25,8 @@ export interface UserState {
 
   columns: TableColumn[];
 
+  tablesSettings: object;
+
   filters: FilterConfig[];
 
   conditions: ConditionConfig[];
@@ -70,4 +72,6 @@ export const initialUserState: UserState = {
   ],
 
   conditions: [],
+
+  tablesSettings: {},
 };
