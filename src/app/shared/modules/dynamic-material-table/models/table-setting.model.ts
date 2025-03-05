@@ -19,6 +19,7 @@ export interface TableSetting {
   settingName?: string;
   settingList?: SettingItem[];
   showColumnSettingMenu?: boolean;
+  tableSort?: { sortColumn: string; sortDirection: "asc" | "desc" };
 }
 
 export interface SettingItem extends TableSetting {
@@ -47,8 +48,21 @@ export class TableSetting implements TableSetting {
   alternativeRowStyle?: any;
   normalRowStyle?: any;
   rowStyle?: any;
+  settingName?: string = "default";
   enableContextMenu?: boolean;
-  autoHeight?: boolean;
-  saveSettingMode?: "simple" | "multi" | "none";
+  autoHeight?: boolean = false;
+  saveSettingMode?: "simple" | "multi" | "none" = "simple";
   showColumnSettingMenu?: boolean = false;
+  tableSort?: { sortColumn: string; sortDirection: "asc" | "desc" };
+}
+
+export enum TableSettingEventType {
+  create = "create",
+  save = "save",
+  apply = "apply",
+  delete = "delete",
+  default = "default",
+  reset = "reset",
+  select = "select",
+  error = "error",
 }

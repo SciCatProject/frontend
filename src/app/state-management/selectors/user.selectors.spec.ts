@@ -85,6 +85,7 @@ const initialUserState: UserState = {
   ],
 
   conditions: [],
+  tablesSettings: {},
 };
 
 describe("User Selectors", () => {
