@@ -38,6 +38,8 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
+      cy.url().should("include", "/login");
+
       cy.reload();
       // Without reloading, the user will land on last visited page before logout
       // i.e. the dataset detail page, because the login page "remembers" the previousRoute.
@@ -65,7 +67,7 @@ describe("Datasets general", () => {
     it("should be able to see and click proposal connection link from dataset details page", () => {
       const proposalId = Math.floor(100000 + Math.random() * 900000).toString();
       cy.createProposal({ ...testData.proposal, proposalId });
-      cy.createDataset("raw", proposalId);
+      cy.createDataset("raw", undefined, proposalId);
 
       cy.visit("/datasets");
 

@@ -732,13 +732,17 @@ describe("Datasets", () => {
 
       cy.get("dynamic-mat-table table-menu button").click();
 
-      cy.get('[role="menu"] button').contains("Column setting").click();
-      cy.get('[role="menu"]').contains("Raw property name").click();
-      cy.get('[role="menu"]').contains("Type").click();
+      cy.get('[role="menu"] button')
+        .contains("Column setting")
+        .click({ force: true });
+      cy.get('[role="menu"]')
+        .contains("Raw property name")
+        .click({ force: true });
+      cy.get('[role="menu"]').contains("Type").click({ force: true });
 
       cy.get('[role="menu"] .column-config-apply .done-setting')
         .contains("done")
-        .click();
+        .click({ force: true });
 
       cy.contains(
         "dynamic-mat-table mat-header-row.header",
