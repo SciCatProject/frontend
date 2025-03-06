@@ -36,6 +36,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { CustomObjectControlRendererComponent } from "./ingestor-metadata-editor/customRenderer/object-group-renderer";
 import { IngestorFileBrowserComponent } from "./ingestor-file-browser/ingestor.file-browser.component";
 import { MatTreeModule } from "@angular/material/tree";
+import { OwnerGroupFieldComponent } from "./ingestor-metadata-editor/customRenderer/owner-group-field-renderer";
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { MatTreeModule } from "@angular/material/tree";
     IngestorConfirmationDialogComponent,
     ExportTemplateHelperComponent,
     IngestorFileBrowserComponent,
+    OwnerGroupFieldComponent,
   ],
   imports: [
     CommonModule,

@@ -47,6 +47,7 @@ export class IngestorMetadataEditorComponent implements OnInit {
 
   onDataChange(event: any) {
     this.dataChange.emit(event);
+    //console.log(this.schema);
   }
 
   onErrors(errors: any[]) {

@@ -113,7 +113,7 @@ export class IngestorFileBrowserComponent implements OnInit {
     }
   }
 
-  onCancel = (): void => { };
+  onCancel = (): void => {};
 
   onSelect = (): void => {
     if (this.activeNode) {

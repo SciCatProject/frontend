@@ -11,6 +11,10 @@ import {
 } from "@jsonforms/angular-material";
 import { ArrayLayoutRendererCustom } from "./array-renderer";
 import { CustomObjectControlRendererComponent } from "./object-group-renderer";
+import {
+  OwnerGroupFieldComponent,
+  ownerGroupFieldTester,
+} from "./owner-group-field-renderer";
 
 export const customRenderers: JsonFormsRendererRegistryEntry[] = [
   /*{
@@ -34,5 +38,9 @@ export const customRenderers: JsonFormsRendererRegistryEntry[] = [
   {
     tester: ObjectControlRendererTester,
     renderer: CustomObjectControlRendererComponent,
+  },
+  {
+    tester: ownerGroupFieldTester,
+    renderer: OwnerGroupFieldComponent,
   },
 ];
