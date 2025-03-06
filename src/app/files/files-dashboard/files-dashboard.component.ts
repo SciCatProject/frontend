@@ -97,7 +97,5 @@ export class FilesDashboardComponent implements OnDestroy {
     this.dataSource.disconnectExportData();
   }
 
-  onRowClick(file: any) {
-    console.log("Row clicked:", file);
-  }
+  onRowClick(file: any) {}
 }

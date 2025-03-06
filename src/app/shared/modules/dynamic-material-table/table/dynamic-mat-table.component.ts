@@ -37,10 +37,14 @@ import {
   state,
 } from "@angular/animations";
 import { ResizeColumn } from "../models/resize-column.mode";
-import { TableMenuActionChange } from "./extensions/table-menu/table-menu.component";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { HashMap, isNullorUndefined } from "../cores/type";
-import { SettingItem, TableSetting } from "../models/table-setting.model";
+import {
+  SettingItem,
+  ITableSetting,
+  TableSettingEventType,
+  TableSetting,
+} from "../models/table-setting.model";
 import {
   debounceTime,
   delay,
@@ -68,6 +72,10 @@ import {
   TableRow,
 } from "../models/table-row.model";
 import { PrintTableDialogComponent } from "./extensions/print-dialog/print-dialog.component";
+import {
+  TableMenuAction,
+  TableMenuActionChange,
+} from "../models/table-menu.model";
 
 export interface IDynamicCell {
   row: TableRow;
@@ -191,7 +199,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   get setting() {
     return this.tableSetting;
   }
-  set setting(value: TableSetting) {
+  set setting(value: ITableSetting) {
     if (!isNullorUndefined(value)) {
       value.alternativeRowStyle =
         value.alternativeRowStyle || this.tableSetting.alternativeRowStyle;
@@ -286,11 +294,6 @@ export class DynamicMatTableComponent<T extends TableRow>
         } else if (unit === "%") {
           const widthChanges =
             (this.tableSetting.columnSetting[i].width ?? 0) - data.w;
-          console.log(
-            this.tableSetting.columnSetting[i].width,
-            data.w,
-            widthChanges,
-          );
           style = `calc( ${this.columns[i].widthPercentage}% + ${widthChanges}px)`;
         }
         this.columns[i].style = {
@@ -314,6 +317,13 @@ export class DynamicMatTableComponent<T extends TableRow>
 
   ngAfterViewInit(): void {
     this.tvsDataSource.paginator = this.paginator;
+    if (this.tableSetting.tableSort) {
+      this.sort.sort({
+        id: this.tableSetting.tableSort.sortColumn,
+        start: this.tableSetting.tableSort.sortDirection,
+        disableClear: false,
+      });
+    }
     this.tvsDataSource.sort = this.sort;
     this.dataSource.subscribe((x) => {
       x = x || [];
@@ -559,10 +569,13 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   tableMenuActionChange(e: TableMenuActionChange) {
-    if (e.type === "TableSetting") {
-      this.settingChange.emit({ type: "apply", setting: this.tableSetting });
+    if (e.type === TableMenuAction.TableSetting) {
+      this.settingChange.emit({
+        type: TableSettingEventType.apply,
+        setting: this.tableSetting,
+      });
       this.refreshColumn(this.tableSetting.columnSetting);
-    } else if (e.type === "DefaultSetting") {
+    } else if (e.type === TableMenuAction.DefaultSetting) {
       (this.setting.settingList || []).forEach((setting) => {
         if (setting.settingName === e.data) {
           setting.isDefaultSetting = true;
@@ -570,24 +583,70 @@ export class DynamicMatTableComponent<T extends TableRow>
           setting.isDefaultSetting = false;
         }
       });
-      this.settingChange.emit({ type: "default", setting: this.tableSetting });
-    } else if (e.type === "SaveSetting") {
+      this.settingChange.emit({
+        type: TableSettingEventType.default,
+        setting: this.tableSetting,
+      });
+    } else if (e.type === TableMenuAction.DefaultSimpleSetting) {
+      const columns = [];
+      const defaultColumns = this.setting.settingList.find(
+        (s) => s.isDefaultSetting,
+      );
+      defaultColumns.columnSetting.forEach((c) => {
+        columns.push(Object.assign({}, c));
+      });
+      this.tableSetting.columnSetting = columns;
+      this.refreshColumn(columns);
+      this.refreshUI();
+      this.settingChange.emit({
+        type: TableSettingEventType.reset,
+        setting: this.tableSetting,
+      });
+    } else if (e.type === TableMenuAction.SaveSetting) {
       const newSetting = Object.assign({}, this.setting);
       delete newSetting.settingList;
-      newSetting.settingName = e.data;
+      newSetting.settingName = e.data || this.tableName;
       const settingIndex = (this.setting.settingList || []).findIndex(
-        (f) => f.settingName === e.data,
+        (f) => f.settingName === newSetting.settingName,
       );
       if (settingIndex === -1) {
         this.setting.settingList.push(JSON.parse(JSON.stringify(newSetting)));
-        this.settingChange.emit({ type: "create", setting: this.tableSetting });
+        this.settingChange.emit({
+          type: TableSettingEventType.create,
+          setting: this.tableSetting,
+        });
       } else {
         this.setting.settingList[settingIndex] = JSON.parse(
           JSON.stringify(newSetting),
         );
-        this.settingChange.emit({ type: "save", setting: this.tableSetting });
+        this.settingChange.emit({
+          type: TableSettingEventType.save,
+          setting: this.tableSetting,
+        });
       }
-    } else if (e.type === "DeleteSetting") {
+    } else if (e.type === TableMenuAction.SaveSimpleSetting) {
+      const newSetting = Object.assign({}, this.setting);
+      delete newSetting.settingList;
+      newSetting.settingName = this.tableName;
+      const settingIndex = (this.setting.settingList || []).findIndex(
+        (f) => f.settingName === newSetting.settingName,
+      );
+      if (settingIndex === -1) {
+        this.setting.settingList.push(JSON.parse(JSON.stringify(newSetting)));
+        this.settingChange.emit({
+          type: TableSettingEventType.create,
+          setting: newSetting,
+        });
+      } else {
+        this.setting.settingList[settingIndex] = JSON.parse(
+          JSON.stringify(newSetting),
+        );
+        this.settingChange.emit({
+          type: TableSettingEventType.save,
+          setting: newSetting,
+        });
+      }
+    } else if (e.type === TableMenuAction.DeleteSetting) {
       this.setting.settingList = this.setting.settingList.filter(
         (s) => s.settingName !== e.data.settingName,
       );
@@ -595,8 +654,11 @@ export class DynamicMatTableComponent<T extends TableRow>
         .filter((f) => f.display === "hidden")
         .forEach((f) => (f.display = "visible"));
       this.refreshColumn(this.setting.columnSetting);
-      this.settingChange.emit({ type: "delete", setting: this.tableSetting });
-    } else if (e.type === "SelectSetting") {
+      this.settingChange.emit({
+        type: TableSettingEventType.delete,
+        setting: this.tableSetting,
+      });
+    } else if (e.type === TableMenuAction.SelectSetting) {
       if (e.data != null) {
         let setting: SettingItem = null;
         this.setting.settingList.forEach((s) => {
@@ -630,18 +692,24 @@ export class DynamicMatTableComponent<T extends TableRow>
         });
         this.tableSetting = setting;
         this.refreshColumn(this.setting.columnSetting);
-        this.settingChange.emit({ type: "select", setting: this.tableSetting });
+        this.settingChange.emit({
+          type: TableSettingEventType.select,
+          setting: this.tableSetting,
+        });
       } else {
         const columns = [];
-        this.columns.forEach((c) => {
+        const defaultColumns = this.setting.settingList.find(
+          (s) => s.isDefaultSetting,
+        );
+        defaultColumns.columnSetting.forEach((c) => {
           columns.push(Object.assign({}, c));
         });
         this.refreshColumn(columns);
         this.refreshUI();
       }
-    } else if (e.type === "FullScreenMode") {
+    } else if (e.type === TableMenuAction.FullScreenMode) {
       requestFullscreen(this.tbl.elementRef);
-    } else if (e.type === "Download") {
+    } else if (e.type === TableMenuAction.Download) {
       this.onTableEvent.emit({
         event: TableEventType.ExportData,
         sender: {
@@ -663,14 +731,14 @@ export class DynamicMatTableComponent<T extends TableRow>
           this.rowSelectionModel,
         );
       }
-    } else if (e.type === "FilterClear") {
+    } else if (e.type === TableMenuAction.FilterClear) {
       this.tvsDataSource.clearFilter();
       this.headerFilterList.forEach((hf) => hf.clearColumn_OnClick());
-    } else if (e.type === "Print") {
+    } else if (e.type === TableMenuAction.Print) {
       this.onTableEvent.emit({
         event: TableEventType.ExportData,
         sender: {
-          type: "Print",
+          type: TableMenuAction.Print,
           columns: this.columns,
           data: this.tvsDataSource.filteredData,
           dataSelection: this.rowSelectionModel,
@@ -891,9 +959,11 @@ export class DynamicMatTableComponent<T extends TableRow>
   dragStarted(event: Event) {}
 
   dropListDropped(event: CdkDragDrop<string[]>) {
+    const columnPreviousIndex = event.item.data.columnIndex;
+
     if (event) {
       this.dragDropData.dropColumnIndex = event.currentIndex;
-      this.moveColumn(event.previousIndex, event.currentIndex);
+      this.moveColumn(columnPreviousIndex, event.currentIndex);
     }
   }
 
