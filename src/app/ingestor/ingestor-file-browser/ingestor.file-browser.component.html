@@ -18,11 +18,12 @@
     <mat-list class="ingestor-file-list">
       <div mat-subheader>Selected Path</div>
       <mat-list-item class="mat-elevation-z2">
-        <mat-icon matListItemIcon>folder_open</mat-icon>
+        <mat-icon matListItemIcon>{{activeNode.probablyDataset ? 'folder_special' : 'folder'}}</mat-icon>
         <div matListItemTitle>{{activeNode.path}}</div>
       </mat-list-item>
+      <i *ngIf="activeNode.probablyDataset">This node is probably a valid data set.</i>
       <div mat-subheader>Children</div>
-      <mat-list-item *ngIf="!goBackNode.isRootNode" (click)='onItemClick(goBackNode.name, goBackNode.path)' 
+      <mat-list-item *ngIf="!goBackNode.isRootNode" (click)='onItemClick(goBackNode)' 
         class="mat-elevation-z2 mat-list-item-hover">
         <mat-icon matListItemIcon>folder</mat-icon>
         <div matListItemTitle>{{goBackNode.name}}</div>
@@ -30,9 +31,9 @@
       </mat-list-item>
       <ng-container
         *ngFor="let folder of activeNode.childrenNodes; trackBy: trackByFn">
-        <mat-list-item (click)="onItemClick(folder.name, folder.path)"
+        <mat-list-item (click)="onItemClick(folder)"
           class="mat-elevation-z2 mat-list-item-hover">
-          <mat-icon matListItemIcon>folder</mat-icon>
+          <mat-icon matListItemIcon>{{folder.probablyDataset ? 'folder_special' : 'folder'}}</mat-icon>
           <div matListItemTitle>{{folder.name}}</div>
           <div matListItemLine>{{folder.path}}</div>
         </mat-list-item>

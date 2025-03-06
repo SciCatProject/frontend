@@ -76,8 +76,11 @@ export class IngestorFileBrowserComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     const rootNode: FolderNode = {
-      name: "Root",
-      path: "/",
+      name: "",
+      path:
+        this.createNewTransferData.selectedPath !== ""
+          ? this.createNewTransferData.selectedPath
+          : "/",
       children: false,
     };
 
@@ -122,19 +125,20 @@ export class IngestorFileBrowserComponent implements OnInit {
     return item.id; // or any unique identifier for the items
   }
 
-  async onItemClick(itemName: string, itemPath: string): Promise<void> {
+  async onItemClick(item: BrowsableNode): Promise<void> {
     const newActiveNode: BrowsableNode = {
-      name: itemName,
-      path: itemPath,
+      ...item,
+      childrenNodes: [],
       children: false,
     };
-    const newActiveNodeChildren = await this.onLoadFilePath(itemPath);
+    const newActiveNodeChildren = await this.onLoadFilePath(item.path);
     this.setExtendedNodeActive(newActiveNode, newActiveNodeChildren);
   }
 
   async onLoadFilePath(path: string): Promise<GetBrowseDatasetResponse | null> {
     const page = 1;
     const pageSize = 50;
+    // TODO MAKE THIS DYNAMIC
 
     try {
       const folderNodeResponse = await this.apiManager.getBrowseFilePath(

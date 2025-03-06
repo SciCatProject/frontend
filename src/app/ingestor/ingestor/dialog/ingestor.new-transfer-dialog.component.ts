@@ -8,10 +8,7 @@ import {
 } from "../helper/ingestor.component-helper";
 import { IngestorMetadataEditorHelper } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 import { IngestorAPIManager } from "../helper/ingestor-api-manager";
-import {
-  GetDatasetResponse,
-  GetExtractorResponse,
-} from "ingestor/model/models";
+import { GetExtractorResponse } from "ingestor/model/models";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { IngestorFileBrowserComponent } from "ingestor/ingestor-file-browser/ingestor.file-browser.component";
 
@@ -22,14 +19,11 @@ import { IngestorFileBrowserComponent } from "ingestor/ingestor-file-browser/ing
 })
 export class IngestorNewTransferDialogComponent implements OnInit {
   extractionMethods: GetExtractorResponse = null;
-  availableFilePaths: GetDatasetResponse = null;
   dropdownPageSize = 50;
   extractionMethodsPage = 0;
-  availableFilePathsPage = 0;
 
   backendURL = "";
   extractionMethodsError = "";
-  availableFilePathsError = "";
 
   uiNextButtonReady = false;
 
@@ -48,7 +42,6 @@ export class IngestorNewTransferDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadExtractionMethods();
-    this.loadAvailableFilePaths();
   }
 
   set selectedPath(value: string) {
@@ -77,21 +70,6 @@ export class IngestorNewTransferDialogComponent implements OnInit {
       );
     } catch (error) {
       this.extractionMethodsError = error.message;
-      console.error(this.extractionMethodsError);
-    }
-  }
-
-  async loadAvailableFilePaths(): Promise<void> {
-    try {
-      this.availableFilePaths = await this.apiManager.getAvailableFilePaths(
-        this.availableFilePathsPage + 1, // 1-based
-        this.dropdownPageSize,
-      );
-      if (this.availableFilePaths.total === 0) {
-        this.availableFilePathsError = "No datasets found.";
-      }
-    } catch (error) {
-      this.availableFilePathsError = error.message;
       console.error(this.extractionMethodsError);
     }
   }
@@ -138,7 +116,6 @@ export class IngestorNewTransferDialogComponent implements OnInit {
 
   onClickRetryRequests(): void {
     this.loadExtractionMethods();
-    this.loadAvailableFilePaths();
   }
 
   onClickNext(): void {
@@ -153,11 +130,6 @@ export class IngestorNewTransferDialogComponent implements OnInit {
     this.uiNextButtonReady =
       !!this.createNewTransferData.selectedPath &&
       !!this.createNewTransferData.selectedMethod?.name;
-  }
-
-  onAvailablePathPageChange(event: PageChangeEvent) {
-    this.availableFilePathsPage = event.pageIndex; // 0-based
-    this.loadAvailableFilePaths();
   }
 
   onExtractorMethodsPageChange(event: PageChangeEvent) {
