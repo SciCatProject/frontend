@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
 import {
+  decodeBase64ToUTF8,
   DialogDataObject,
   ExtractionMethod,
   IngestionRequestInformation,
@@ -105,7 +106,7 @@ export class IngestorNewTransferDialogComponent implements OnInit {
 
   prepareSchemaForProcessing(): void {
     const encodedSchema = this.createNewTransferData.selectedMethod.schema;
-    const decodedSchema = atob(encodedSchema);
+    const decodedSchema = decodeBase64ToUTF8(encodedSchema);
     const schema = JSON.parse(decodedSchema);
     const resolvedSchema = IngestorMetadataEditorHelper.resolveRefs(
       schema,
