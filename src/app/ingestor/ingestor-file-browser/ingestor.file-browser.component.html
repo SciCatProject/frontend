@@ -23,7 +23,12 @@
       </mat-list-item>
       <i *ngIf="activeNode.probablyDataset">This node is probably a valid data set.</i>
       <div mat-subheader>Children</div>
-      <mat-list-item *ngIf="!goBackNode.isRootNode" (click)='onItemClick(goBackNode)' 
+
+      <mat-paginator *ngIf="true" [length]="activeNodeChildrenTotal" [pageSize]="browseFolderPageSize" aria-label="Select page"
+        [hidePageSize]="true" [showFirstLastButtons]="false" [pageIndex]="browseFolderPage" (page)="onFileBrowserChildrenPageChange($event)">
+      </mat-paginator>
+
+      <mat-list-item *ngIf="!goBackNode.isRootNode" (click)='onLoadFolderNode(goBackNode)' 
         class="mat-elevation-z2 mat-list-item-hover">
         <mat-icon matListItemIcon>folder</mat-icon>
         <div matListItemTitle>{{goBackNode.name}}</div>
@@ -31,7 +36,7 @@
       </mat-list-item>
       <ng-container
         *ngFor="let folder of activeNode.childrenNodes; trackBy: trackByFn">
-        <mat-list-item (click)="onItemClick(folder)"
+        <mat-list-item (click)="onLoadFolderNode(folder)"
           class="mat-elevation-z2 mat-list-item-hover">
           <mat-icon matListItemIcon>{{folder.probablyDataset ? 'folder_special' : 'folder'}}</mat-icon>
           <div matListItemTitle>{{folder.name}}</div>
@@ -47,6 +52,6 @@
 
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close (click)="onCancel()">Cancel</button>
-  <button mat-button color="primary" cdkFocusInitial (click)="onConfirm()"
-    [mat-dialog-close]="true">Confirm</button>
+  <button mat-button color="primary" cdkFocusInitial (click)="onSelect()"
+    [mat-dialog-close]="true">Select</button>
 </mat-dialog-actions>
