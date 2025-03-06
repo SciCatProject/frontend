@@ -215,10 +215,12 @@ export class DynamicMatTableComponent<T extends TableRow>
       value.autoHeight = value.autoHeight || this.tableSetting.autoHeight;
       value.saveSettingMode =
         value.saveSettingMode || this.tableSetting.saveSettingMode || "simple";
-      this.pagination.pageSize =
-        value.pageSize ||
-        this.tableSetting.pageSize ||
-        this.pagination.pageSize;
+      if (this.pagination) {
+        this.pagination.pageSize =
+          value.pageSize ||
+          this.tableSetting.pageSize ||
+          this.pagination.pageSize;
+      }
       /* Dynamic Cell must update when setting change */
       value?.columnSetting?.forEach((column) => {
         const originalColumn = this.columns?.find(
@@ -335,7 +337,9 @@ export class DynamicMatTableComponent<T extends TableRow>
     });
 
     this.tvsDataSource.sort.sortChange.subscribe((sort) => {
-      this.pagination.pageIndex = 0;
+      if (this.pagination) {
+        this.pagination.pageIndex = 0;
+      }
       this.onTableEvent.emit({
         event: TableEventType.SortChanged,
         sender: sort,
@@ -503,6 +507,22 @@ export class DynamicMatTableComponent<T extends TableRow>
     } else {
       return { ...className, ...column.cellClass };
     }
+  }
+
+  columnName(row: any, column: TableField<any>) {
+    if (column.customRender) {
+      return column.customRender(column, row);
+    }
+
+    return row[column.name];
+  }
+
+  shouldRenderIcon(row: any, column: TableField<any>) {
+    if (column.renderIcon) {
+      return column.renderIcon(column, row);
+    }
+
+    return false;
   }
 
   cellStyle(option: HashMap<any>, column) {

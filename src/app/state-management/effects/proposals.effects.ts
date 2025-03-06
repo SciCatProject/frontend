@@ -93,15 +93,18 @@ export class ProposalEffects {
   fetchProposalDatasets$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchProposalDatasetsAction),
-      concatLatestFrom(() => this.datasetQueryParams$),
-      switchMap(([{ proposalId }, { limits }]) =>
-        this.datasetsService
+      mergeMap(({ skip, limit, sortColumn, sortDirection, proposalId }) => {
+        return this.datasetsService
           .datasetsControllerFindAll(
             JSON.stringify({
               where: { proposalId },
-              skip: limits.skip,
-              limit: limits.limit,
-              order: limits.order,
+              limits: {
+                skip: skip,
+                limit: limit,
+                order: sortDirection
+                  ? `${sortColumn}:${sortDirection}`
+                  : undefined,
+              },
             }),
           )
           .pipe(
@@ -112,8 +115,8 @@ export class ProposalEffects {
             catchError(() =>
               of(fromActions.fetchProposalDatasetsFailedAction()),
             ),
-          ),
-      ),
+          );
+      }),
     );
   });
 
@@ -220,13 +223,14 @@ export class ProposalEffects {
   fetchRelatedProposals$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchRelatedProposalsAction),
-      concatLatestFrom(() => [
-        this.currentProposal$,
-        this.relatedProposalFilters$,
-      ]),
-      switchMap(([, proposal, filters]) => {
+      concatLatestFrom(() => [this.currentProposal$]),
+      switchMap(([{ limit, skip, sortColumn, sortDirection }, proposal]) => {
         const queryFilter = {
-          ...filters,
+          limits: {
+            skip,
+            limit,
+            order: sortDirection ? `${sortColumn}:${sortDirection}` : undefined,
+          },
           where: {
             $or: [
               { proposalId: { $in: [proposal.parentProposalId] } },

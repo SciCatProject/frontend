@@ -6,9 +6,12 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ScientificMetadataModule } from "../scientific-metadata.module";
 import { AppConfigService } from "app-config.service";
+import { TitleCasePipe } from "shared/pipes/title-case.pipe";
+import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
 
 const getConfig = () => ({
   metadataEditingUnitListDisabled: true,
+  dateFormat: "yyyy-MM-dd HH:mm",
 });
 
 describe("MetadataEditComponent", () => {
@@ -20,7 +23,7 @@ describe("MetadataEditComponent", () => {
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [MetadataEditComponent],
       imports: [ScientificMetadataModule],
-      providers: [FormBuilder],
+      providers: [FormBuilder, ReplaceUnderscorePipe, TitleCasePipe],
     }).compileComponents();
     TestBed.overrideComponent(MetadataEditComponent, {
       set: {

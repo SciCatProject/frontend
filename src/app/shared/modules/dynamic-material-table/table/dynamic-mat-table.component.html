@@ -130,14 +130,41 @@
         (contextmenu)="onContextMenu($event, column, row)"
       >
         <label
-          *ngIf="!column.dynamicCellComponent"
-          (click)="onLabelClick($event, row, column)"
-          [class.rtl-cell]="direction === 'rtl'"
-          [class.ltr-cell]="direction === 'ltr'"
-          [ngStyle]="ellipsis(column)"
-          class="label-cell"
-          >{{ row[column.name] }}</label
-        >
+          *ngIf="
+            column.customRender;
+            then customColumnRender;
+            else regularColumnRender
+          "
+        ></label>
+        <ng-template #customColumnRender>
+          <label
+            *ngIf="!column.dynamicCellComponent"
+            (click)="onLabelClick($event, row, column)"
+            [class.rtl-cell]="direction === 'rtl'"
+            [class.ltr-cell]="direction === 'ltr'"
+            [ngStyle]="ellipsis(column)"
+            class="label-cell"
+            [innerHTML]="columnName(row, column)"
+          >
+          </label>
+          <mat-icon
+            class="general-warning"
+            *ngIf="shouldRenderIcon(row, column)"
+            [matTooltip]="column.warningIconTooltip"
+            >{{ column.contentIcon }}</mat-icon
+          >
+        </ng-template>
+        <ng-template #regularColumnRender>
+          <label
+            *ngIf="!column.dynamicCellComponent"
+            (click)="onLabelClick($event, row, column)"
+            [class.rtl-cell]="direction === 'rtl'"
+            [class.ltr-cell]="direction === 'ltr'"
+            [ngStyle]="ellipsis(column)"
+            class="label-cell"
+            >{{ row[column.name] }}
+          </label>
+        </ng-template>
         <ng-container
           *ngIf="column.dynamicCellComponent"
           appDynamicCell
@@ -260,12 +287,14 @@
       ></tr>
     </ng-container>
 
-    <mat-header-row
-      class="global-search"
-      [@tableAnimation]
-      *matHeaderRowDef="searchRowColumns; sticky: sticky"
-      [style.top.px]="inverseOfTranslation"
-    ></mat-header-row>
+    <ng-container *ngIf="showGlobalTextSearch">
+      <mat-header-row
+        class="global-search"
+        [@tableAnimation]
+        *matHeaderRowDef="searchRowColumns; sticky: sticky"
+        [style.top.px]="inverseOfTranslation"
+      ></mat-header-row>
+    </ng-container>
     <mat-header-row
       class="header"
       [@tableAnimation]
