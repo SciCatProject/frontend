@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { HelpComponent } from "./help.component";
 import { MatCardModule } from "@angular/material/card";
+import { LinkyModule } from "ngx-linky";
 import { AppConfigService, HelpMessages } from "app-config.service";
 
 const getConfig = () => ({
@@ -18,7 +19,7 @@ describe("HelpComponent", () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [HelpComponent],
-      imports: [MatCardModule],
+      imports: [MatCardModule, LinkyModule],
     });
     TestBed.overrideComponent(HelpComponent, {
       set: {

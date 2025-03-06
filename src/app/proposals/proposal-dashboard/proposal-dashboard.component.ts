@@ -1,7 +1,3 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
-import { PageChangeEvent } from "shared/modules/table/table.component";
-import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
   ITableSetting,
   TableSettingEventType,
@@ -129,7 +125,10 @@ export class ProposalDashboardComponent implements OnInit {
   @Output() pageChange = new EventEmitter<PageChangeEvent>();
 
   constructor(
-    private store: Store,
+    private appConfigService: AppConfigService,
+    private cdRef: ChangeDetectorRef,
+    private dataService: ScicatDataService,
+    private exportService: ExportExcelService,
     private router: Router,
     private route: ActivatedRoute,
   ) {}

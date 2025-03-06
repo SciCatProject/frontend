@@ -27,10 +27,7 @@ export const fetchProposalsFailedAction = createAction(
   "[Proposal] Fetch Proposals Failed",
 );
 
-export const fetchCountAction = createAction(
-  "[Proposal] Fetch Count",
-  props<{ fields?: Record<string, unknown> }>(),
-);
+export const fetchCountAction = createAction("[Proposal] Fetch Count");
 export const fetchCountCompleteAction = createAction(
   "[Proposal] Fetch Count Complete",
   props<{ count: number }>(),
@@ -155,38 +152,23 @@ export const setDateRangeFilterAction = createAction(
   props<{ begin: string; end: string }>(),
 );
 
+export const clearFacetsAction = createAction("[Proposal] Clear Facets");
+
+export const changePageAction = createAction(
+  "[Proposal] Change Page",
+  props<{ page: number; limit: number }>(),
+);
 export const changeDatasetsPageAction = createAction(
   "[Proposal] Change Datasets Page",
   props<{ page: number; limit: number }>(),
 );
 
+export const sortByColumnAction = createAction(
+  "[Proposal] Sort By Column",
+  props<{ column: string; direction: string }>(),
+);
+
 export const clearProposalsStateAction = createAction("[Proposal] Clear State");
 export const clearCurrentProposalStateAction = createAction(
   "[Proposal] Clear Current Proposal State",
-);
-
-export const fetchRelatedProposalsAction = createAction(
-  "[Proposal] Fetch Related Proposals",
-);
-export const fetchRelatedProposalsCompleteAction = createAction(
-  "[Proposal] Fetch Related Proposals Complete",
-  props<{
-    relatedProposals: (ProposalClass & { relation: string })[];
-  }>(),
-);
-export const fetchRelatedProposalsFailedAction = createAction(
-  "[Proposal] Fetch Related Proposals Failed",
-);
-
-export const fetchRelatedProposalsCountCompleteAction = createAction(
-  "[Proposal] Fetch Related Proposals Count Complete",
-  props<{ count: number }>(),
-);
-export const fetchRelatedProposalsCountFailedAction = createAction(
-  "[Proposal] Fetch Related Proposals Count Failed",
-);
-
-export const changeRelatedProposalsPageAction = createAction(
-  "[Proposal] Change Related Proposals Page",
-  props<{ page: number; limit: number }>(),
 );
