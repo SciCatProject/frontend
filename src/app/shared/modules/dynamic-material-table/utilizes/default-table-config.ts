@@ -1,5 +1,8 @@
 import { TableField } from "../models/table-field.model";
-import { TableSetting, VisibleActionMenu } from "../models/table-setting.model";
+import {
+  ITableSetting,
+  VisibleActionMenu,
+} from "../models/table-setting.model";
 
 export const actionMenu: VisibleActionMenu = {
   json: true,
@@ -12,11 +15,11 @@ export const actionMenu: VisibleActionMenu = {
 
 export const getTableSettingsConfig = (
   tableName: string,
-  tableDefaultSettingsConfig: TableSetting,
+  tableDefaultSettingsConfig: ITableSetting,
   savedTableConfig?: TableField<any>[],
   tableSort?: { sortColumn: string; sortDirection: "asc" | "desc" },
 ) => {
-  const tableSettingsConfig: TableSetting = { ...tableDefaultSettingsConfig };
+  const tableSettingsConfig: ITableSetting = { ...tableDefaultSettingsConfig };
 
   const defaultSettingIndex = tableSettingsConfig.settingList.findIndex(
     (s) => s.isDefaultSetting,

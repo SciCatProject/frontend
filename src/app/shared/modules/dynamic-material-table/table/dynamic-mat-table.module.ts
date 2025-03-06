@@ -31,7 +31,7 @@ import { OverlayModule } from "@angular/cdk/overlay";
 import { TooltipDirective } from "../tooltip/tooltip.directive";
 import { TemplateOrStringDirective } from "../tooltip/template-or-string.directive";
 import { FormsModule } from "@angular/forms";
-import { TableSetting } from "../models/table-setting.model";
+import { ITableSetting, TableSetting } from "../models/table-setting.model";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
@@ -74,7 +74,7 @@ const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
 })
 export class DynamicMatTableModule {
   static forRoot(
-    config: TableSetting,
+    config: ITableSetting,
   ): ModuleWithProviders<DynamicMatTableModule> {
     return {
       ngModule: DynamicMatTableModule,
