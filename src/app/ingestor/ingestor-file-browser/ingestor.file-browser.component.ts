@@ -67,7 +67,7 @@ export class IngestorFileBrowserComponent implements OnInit {
     }
 
     this.goBackNode = {
-      name: "...",
+      name: "..",
       path: backNodePath,
       children: true,
       isRootNode: isRootNode,
