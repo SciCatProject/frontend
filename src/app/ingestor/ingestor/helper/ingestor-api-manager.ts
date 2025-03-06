@@ -4,6 +4,7 @@ import { INGESTOR_API_ENDPOINTS_V1 } from "./ingestor-api-endpoints";
 import {
   DeleteTransferRequest,
   DeleteTransferResponse,
+  GetBrowseDatasetResponse,
   GetDatasetResponse,
   GetExtractorResponse,
   GetTransferResponse,
@@ -201,6 +202,34 @@ export class IngestorAPIManager {
         .subscribe({
           next: (response: GetDatasetResponse) => {
             resolve(response as GetDatasetResponse);
+          },
+          error: (error) => {
+            console.error(error);
+            reject(error);
+          },
+        });
+    });
+  }
+
+  public getBrowseFilePath(
+    page: number,
+    pageSize: number,
+    path: string,
+  ): Promise<GetBrowseDatasetResponse> {
+    const params = new HttpParams()
+      .set("page", page.toString())
+      .set("pageSize", pageSize.toString())
+      .set("path", path.toString());
+
+    return new Promise((resolve, reject) => {
+      this.http
+        .get(this.connectUrl + INGESTOR_API_ENDPOINTS_V1.DATASET_BROWSE, {
+          params,
+          ...this.connectOptions,
+        })
+        .subscribe({
+          next: (response: GetBrowseDatasetResponse) => {
+            resolve(response as GetBrowseDatasetResponse);
           },
           error: (error) => {
             console.error(error);

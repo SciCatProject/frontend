@@ -16,13 +16,17 @@
   <div *ngIf="availableFilePaths !== null">
     <mat-form-field class="form-full-width">
       <mat-label>File Path</mat-label>
-      <input matInput [(ngModel)]="selectedPath" [matAutocomplete]="auto">
-      <mat-autocomplete #auto="matAutocomplete">
+      <input matInput [(ngModel)]="selectedPath" (click)="onClickOpenFileBrowser()" readonly>
+      <!-- [matAutocomplete]="auto" -->
+      <button mat-icon-button matSuffix (click)="onClickOpenFileBrowser()">
+        <mat-icon>folder</mat-icon>
+      </button>
+      <!--<mat-autocomplete #auto="matAutocomplete">
         <mat-option *ngFor="let sourceFolder of availableFilePaths.datasets"
           [value]="sourceFolder">
           {{ sourceFolder }}
         </mat-option>
-      </mat-autocomplete>
+      </mat-autocomplete> -->
     </mat-form-field>
     <mat-error *ngIf="availableFilePathsError">{{ availableFilePathsError
       }}</mat-error>

@@ -1,0 +1,51 @@
+<div class="ingestor-mixed-header">
+  <h2 mat-dialog-title>
+    Ingestor Dataset Browser
+  </h2>
+  <button mat-icon-button mat-dialog-close aria-label="Close"
+    class="ingestor-close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<mat-dialog-content class="mat-typography" disableClose="true">
+  <div class="file-browser-view-toggle">
+    <button mat-button disabled="true" (click)="toggleView()" [matTooltip]="isListView ? 'Switch to Tree View' : 'Switch to List View'">
+      <mat-icon *ngIf="isListView">account_tree</mat-icon>
+      <mat-icon *ngIf="!isListView">list</mat-icon>
+    </button>
+  </div>
+  <div *ngIf="isListView && activeNode !== null">
+    <mat-list class="ingestor-file-list">
+      <div mat-subheader>Selected Path</div>
+      <mat-list-item class="mat-elevation-z2">
+        <mat-icon matListItemIcon>folder_open</mat-icon>
+        <div matListItemTitle>{{activeNode.path}}</div>
+      </mat-list-item>
+      <div mat-subheader>Children</div>
+      <mat-list-item *ngIf="!goBackNode.isRootNode" (click)='onItemClick(goBackNode.name, goBackNode.path)' 
+        class="mat-elevation-z2 mat-list-item-hover">
+        <mat-icon matListItemIcon>folder</mat-icon>
+        <div matListItemTitle>{{goBackNode.name}}</div>
+        <div matListItemLine>{{goBackNode.path}}</div>
+      </mat-list-item>
+      <ng-container
+        *ngFor="let folder of activeNode.childrenNodes; trackBy: trackByFn">
+        <mat-list-item (click)="onItemClick(folder.name, folder.path)"
+          class="mat-elevation-z2 mat-list-item-hover">
+          <mat-icon matListItemIcon>folder</mat-icon>
+          <div matListItemTitle>{{folder.name}}</div>
+          <div matListItemLine>{{folder.path}}</div>
+        </mat-list-item>
+      </ng-container>
+    </mat-list>
+  </div>
+  <div *ngIf="!isListView && activeNode !== null">
+    <!-- Tree view content goes here -->
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="onCancel()">Cancel</button>
+  <button mat-button color="primary" cdkFocusInitial (click)="onConfirm()"
+    [mat-dialog-close]="true">Confirm</button>
+</mat-dialog-actions>

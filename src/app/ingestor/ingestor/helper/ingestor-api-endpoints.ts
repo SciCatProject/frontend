@@ -5,6 +5,7 @@ export const INGESTOR_API_ENDPOINTS_V1 = {
     USERINFO: "userinfo",
   },
   DATASET: "dataset",
+  DATASET_BROWSE: "dataset/browse",
   TRANSFER: "transfer",
   OTHER: {
     VERSION: "version",

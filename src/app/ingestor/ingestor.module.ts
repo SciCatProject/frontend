@@ -34,6 +34,8 @@ import { IngestorConfirmationDialogComponent } from "./ingestor/dialog/confirmat
 import { ExportTemplateHelperComponent } from "./ingestor/dialog/dialog-mounting-components/ingestor.export-helper.component";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { CustomObjectControlRendererComponent } from "./ingestor-metadata-editor/customRenderer/object-group-renderer";
+import { IngestorFileBrowserComponent } from "./ingestor-file-browser/ingestor.file-browser.component";
+import { MatTreeModule } from "@angular/material/tree";
 
 @NgModule({
   declarations: [
@@ -49,6 +51,7 @@ import { CustomObjectControlRendererComponent } from "./ingestor-metadata-editor
     CustomObjectControlRendererComponent,
     IngestorConfirmationDialogComponent,
     ExportTemplateHelperComponent,
+    IngestorFileBrowserComponent,
   ],
   imports: [
     CommonModule,
@@ -71,6 +74,7 @@ import { CustomObjectControlRendererComponent } from "./ingestor-metadata-editor
     MatRadioModule,
     MatAutocompleteModule,
     MatBadgeModule,
+    MatTreeModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
     CommonModule,

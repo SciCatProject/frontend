@@ -1,5 +1,7 @@
 export * from './deleteTransferRequest';
 export * from './deleteTransferResponse';
+export * from './folderNode';
+export * from './getBrowseDatasetResponse';
 export * from './getDatasetResponse';
 export * from './getExtractorResponse';
 export * from './getTransferResponse';

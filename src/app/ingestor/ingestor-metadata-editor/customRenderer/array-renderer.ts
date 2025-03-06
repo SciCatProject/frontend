@@ -111,7 +111,8 @@ import {
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class ArrayLayoutRendererCustom
   extends JsonFormsAbstractControl<StatePropsOfArrayLayout>
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   noData: boolean;
   minOne: boolean;
   translations: ArrayTranslations;

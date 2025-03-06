@@ -97,3 +97,16 @@ mat-card {
 .transferPaginator {
   margin-top: 1.5em;
 }
+
+.ingestor-file-list .mat-list-item-hover:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.ingestor-file-list .mat-list-item-hover:active {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.file-browser-view-toggle {
+  display: flex;
+  justify-content: flex-end;
+}

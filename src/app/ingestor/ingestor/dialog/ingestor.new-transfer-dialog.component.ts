@@ -13,6 +13,7 @@ import {
   GetExtractorResponse,
 } from "ingestor/model/models";
 import { PageChangeEvent } from "shared/modules/table/table.component";
+import { IngestorFileBrowserComponent } from "ingestor/ingestor-file-browser/ingestor.file-browser.component";
 
 @Component({
   selector: "ingestor.new-transfer-dialog",
@@ -162,5 +163,14 @@ export class IngestorNewTransferDialogComponent implements OnInit {
   onExtractorMethodsPageChange(event: PageChangeEvent) {
     this.extractionMethodsPage = event.pageIndex; // 0-based
     this.loadExtractionMethods();
+  }
+
+  onClickOpenFileBrowser(): void {
+    this.dialog.open(IngestorFileBrowserComponent, {
+      data: {
+        backendURL: this.backendURL,
+        createNewTransferData: this.createNewTransferData,
+      },
+    });
   }
 }
