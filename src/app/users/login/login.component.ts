@@ -127,7 +127,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(filter((vm) => vm.isLoggedIn))
       .subscribe(() => {
         this.store.dispatch(fetchCurrentUserAction());
-        console.log(this.returnUrl);
         this.router.navigateByUrl(this.returnUrl || "/datasets");
       });
 

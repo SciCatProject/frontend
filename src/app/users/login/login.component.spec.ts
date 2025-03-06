@@ -240,12 +240,10 @@ describe("LoginComponent", () => {
     });
     it("should display OAuth2 provider", () => {
       dispatchSpy = spyOn(component, "redirectOIDC");
-      console.log(`!!!!!     ${component.document.location.href}`);
       component.redirectOIDC("/auth/foo");
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith("/auth/foo");
-      console.log(`!!!!!     ${component.document.location.href}`);
       // expect(component.document.location.href).toEqual(`${appConfig.lbBaseURL}/auth/foo`);
     });
   });

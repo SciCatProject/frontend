@@ -3,7 +3,7 @@ import { AbstractField } from "./table-field.model";
 
 export type Direction = "rtl" | "ltr";
 export type DisplayMode = "visible" | "hidden" | "none";
-export interface TableSetting {
+export interface ITableSetting {
   pageSize?: number;
   direction?: Direction;
   columnSetting?: AbstractField[] | null;
@@ -19,11 +19,12 @@ export interface TableSetting {
   settingName?: string;
   settingList?: SettingItem[];
   showColumnSettingMenu?: boolean;
+  tableSort?: { sortColumn: string; sortDirection: "asc" | "desc" };
 }
 
-export interface SettingItem extends TableSetting {
-  isCurrentSetting?: boolean;
-  isDefaultSetting?: boolean;
+export interface SettingItem extends ITableSetting {
+  isCurrentSetting: boolean;
+  isDefaultSetting: boolean;
 }
 
 export interface VisibleActionMenu {
@@ -40,7 +41,7 @@ export interface VisibleActionMenu {
   clearFilter?: boolean;
 }
 
-export class TableSetting implements TableSetting {
+export class TableSetting implements ITableSetting {
   direction?: Direction = "ltr";
   visibleActionMenu?: VisibleActionMenu | null = null;
   visibleTableMenu?: boolean;
@@ -51,4 +52,16 @@ export class TableSetting implements TableSetting {
   autoHeight?: boolean;
   saveSettingMode?: "simple" | "multi" | "none";
   showColumnSettingMenu?: boolean = false;
+  tableSort?: { sortColumn: string; sortDirection: "asc" | "desc" };
+}
+
+export enum TableSettingEventType {
+  create = "create",
+  save = "save",
+  apply = "apply",
+  delete = "delete",
+  default = "default",
+  reset = "reset",
+  select = "select",
+  error = "error",
 }
