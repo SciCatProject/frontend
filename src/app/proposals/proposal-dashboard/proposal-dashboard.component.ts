@@ -3,7 +3,7 @@ import { BehaviorSubject } from "rxjs";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
-  TableSetting,
+  ITableSetting,
   TableSettingEventType,
 } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import {
@@ -100,7 +100,7 @@ export class ProposalDashboardComponent implements OnInit {
 
   pending = true;
 
-  setting: TableSetting = {};
+  setting: ITableSetting = {};
 
   paginationMode: TablePaginationMode = "server-side";
 
@@ -160,7 +160,7 @@ export class ProposalDashboardComponent implements OnInit {
         this.dataSource.next(proposals);
         this.pending = false;
 
-        let tableSort: TableSetting["tableSort"];
+        let tableSort: ITableSetting["tableSort"];
         if (queryParams.sortDirection && queryParams.sortColumn) {
           tableSort = {
             sortColumn: queryParams.sortColumn,
@@ -191,7 +191,7 @@ export class ProposalDashboardComponent implements OnInit {
   }
 
   initTable(
-    settingConfig: TableSetting,
+    settingConfig: ITableSetting,
     paginationConfig: TablePagination,
   ): void {
     const currentColumnSetting = settingConfig.settingList.find(
@@ -255,7 +255,7 @@ export class ProposalDashboardComponent implements OnInit {
     );
   }
 
-  saveTableSettings(setting: TableSetting) {
+  saveTableSettings(setting: ITableSetting) {
     this.pending = true;
     const tablesSettings = {
       ...this.tablesSettings,
@@ -275,7 +275,7 @@ export class ProposalDashboardComponent implements OnInit {
 
   onSettingChange(event: {
     type: TableSettingEventType;
-    setting: TableSetting;
+    setting: ITableSetting;
   }) {
     if (
       event.type === TableSettingEventType.save ||

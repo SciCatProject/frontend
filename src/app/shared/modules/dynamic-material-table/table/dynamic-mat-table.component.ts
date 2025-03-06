@@ -41,8 +41,9 @@ import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { HashMap, isNullorUndefined } from "../cores/type";
 import {
   SettingItem,
-  TableSetting,
+  ITableSetting,
   TableSettingEventType,
+  TableSetting,
 } from "../models/table-setting.model";
 import {
   debounceTime,
@@ -198,7 +199,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   get setting() {
     return this.tableSetting;
   }
-  set setting(value: TableSetting) {
+  set setting(value: ITableSetting) {
     if (!isNullorUndefined(value)) {
       value.alternativeRowStyle =
         value.alternativeRowStyle || this.tableSetting.alternativeRowStyle;

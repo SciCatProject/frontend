@@ -29,6 +29,7 @@ import {
   TableSetting,
   Direction,
   TableSettingEventType,
+  ITableSetting,
 } from "../models/table-setting.model";
 import { MatSort } from "@angular/material/sort";
 import { MatPaginator } from "@angular/material/paginator";
@@ -102,7 +103,7 @@ export class TableCoreDirective<T extends TableRow> {
   public tablePagingMode: TablePaginationMode = "none";
   public viewportClass: "viewport" | "viewport-with-pagination" =
     "viewport-with-pagination";
-  tableSetting: TableSetting;
+  tableSetting: ITableSetting;
 
   /**************************************** Reference Variables ***************************************/
   @ViewChild(MatTable, { static: true }) table!: MatTable<any>;
