@@ -3,7 +3,7 @@ import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { Observable } from "rxjs";
-import { OneDepEffects } from "./onedep.effects";
+import { OneDepEffects } from "./depositor.effects";
 import { Actions } from "@ngrx/effects";
 
 describe("OneDepEffects", () => {

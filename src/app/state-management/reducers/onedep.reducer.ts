@@ -1,9 +1,9 @@
 import { createReducer, Action, on } from "@ngrx/store";
-import * as fromActions from "state-management/actions/onedep.actions";
+import * as fromActions from "state-management/actions/depositor.actions";
 import {
   OneDepState,
   initialOneDepState,
-} from "state-management/state/onedep.store";
+} from "state-management/state/depositor.store";
 
 const reducer = createReducer(
   initialOneDepState,

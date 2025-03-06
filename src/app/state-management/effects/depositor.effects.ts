@@ -5,8 +5,8 @@ import { catchError, map, switchMap, concatMap, last } from "rxjs/operators";
 import { HttpErrorResponse } from "@angular/common/http";
 import { MessageType } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
-import * as fromActions from "state-management/actions/onedep.actions";
-import { Depositor } from "shared/sdk/apis/onedep-depositor.service";
+import * as fromActions from "state-management/actions/depositor.actions";
+import { Depositor } from "shared/sdk/apis/depositor.service";
 import {
   OneDepUserInfo,
   OneDepCreated,
@@ -16,7 +16,7 @@ import {
 import { EmFile } from "../../datasets/onedep/types/methods.enum";
 @Injectable()
 export class OneDepEffects {
-  createDeposition$ = createEffect(() => {
+  connectToDepositor$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.connectToDepositor),
       switchMap(() =>
@@ -123,6 +123,56 @@ export class OneDepEffects {
         const message = {
           type: MessageType.Error,
           content: "Deposition to OneDep failed: " + errorMessage,
+          duration: 10000,
+        };
+        return of(showMessageAction({ message }));
+      }),
+    );
+  });
+
+  accessEmpiarSchema$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.accessEmpiarSchema),
+      switchMap(() =>
+        this.onedepDepositor.getEmpiarSchema().pipe(
+          map((res) =>
+            fromActions.accessEmpiarSchemaSuccess({
+              schema: res.schema,
+            }),
+          ),
+          catchError((err) =>
+            of(fromActions.accessEmpiarSchemaFailure({ err })),
+          ),
+        ),
+      ),
+    );
+  });
+
+  accessEmpiarSchemaSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.accessEmpiarSchemaSuccess),
+      switchMap(() => {
+        const message = {
+          type: MessageType.Success,
+          content: "Successfully retrieved EMPIAR schema ",
+          duration: 5000,
+        };
+        return of(showMessageAction({ message }));
+      }),
+    );
+  });
+
+  accessEmpiarSchemaFailure$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.accessEmpiarSchemaFailure),
+      switchMap(({ err }) => {
+        const errorMessage =
+          err instanceof HttpErrorResponse
+            ? (err.error?.message ?? err.message ?? "Unknown error")
+            : err.message || "Unknown error";
+        const message = {
+          type: MessageType.Error,
+          content: "Failed to retrieve EMPIAR schema: " + errorMessage,
           duration: 10000,
         };
         return of(showMessageAction({ message }));

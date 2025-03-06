@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { Store } from "@ngrx/store";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { AppConfigService, AppConfig } from "app-config.service";
@@ -17,7 +16,6 @@ export class Depositor {
   config: AppConfig;
   constructor(
     private http: HttpClient,
-    private store: Store,
     public appConfigService: AppConfigService,
   ) {
     this.config = this.appConfigService.getConfig();
@@ -78,5 +76,11 @@ export class Depositor {
       headers,
       responseType: "blob",
     });
+  }
+
+  getEmpiarSchema() {
+    return this.http.get<{ schema: string }>(
+      `${this.config.depositorURL}/empiar/schema`,
+    );
   }
 }

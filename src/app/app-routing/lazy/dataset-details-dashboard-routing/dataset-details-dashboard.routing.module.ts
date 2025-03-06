@@ -83,7 +83,7 @@ const routes: Routes = [
         canActivate: [AuthGuard],
       },
     ],
-    data: { service: "onedep" },
+    data: { service: "depositor" },
   },
 ];
 @NgModule({

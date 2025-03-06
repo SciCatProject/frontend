@@ -7,14 +7,16 @@ import {
   DepBackendVersion,
 } from "shared/sdk/models/OneDep";
 
-export const connectToDepositor = createAction("[OneDep] Connect to Depositor");
+export const connectToDepositor = createAction(
+  "[Depositor] Connect to Depositor",
+);
 export const connectToDepositorSuccess = createAction(
-  "[OneDep] Connect To Depositor Success",
+  "[Depositor] Successfully connected to Depositor",
   props<{ depositor: DepBackendVersion }>(),
 );
 
 export const connectToDepositorFailure = createAction(
-  "[OneDep] Connect To Depositor Failure",
+  "[Depositor] Failed to connect to Depositor",
   props<{ err: Error }>(),
 );
 export const submitDeposition = createAction(
@@ -22,12 +24,23 @@ export const submitDeposition = createAction(
   props<{ deposition: OneDepUserInfo; files: FileUpload[] }>(),
 );
 export const submitDepositionSuccess = createAction(
-  "[OneDep] Create Deposition Complete",
+  "[OneDep] Completed Deposition Creation",
   props<{ deposition: OneDepCreated }>(),
 );
 
 export const submitDepositionFailure = createAction(
-  "[OneDep] Create Deposition Failure",
+  "[OneDep] Failed to complete Deposition ",
+  props<{ err: Error }>(),
+);
+
+export const accessEmpiarSchema = createAction("[EMPIAR] get EMPIAR schema");
+export const accessEmpiarSchemaSuccess = createAction(
+  "[EMPIAR] Successfully retrieved JSON schema for EMPIAR deposition",
+  props<{ schema: any }>(),
+);
+
+export const accessEmpiarSchemaFailure = createAction(
+  "[EMPIAR] Failed to retrieve JSON schema for EMPIAR deposition",
   props<{ err: Error }>(),
 );
 

@@ -24,7 +24,7 @@ import {
   selectCurrentUser,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
-import * as fromActions from "state-management/actions/onedep.actions";
+import * as fromActions from "state-management/actions/depositor.actions";
 
 import { Subscription, combineLatest } from "rxjs";
 import { Router } from "@angular/router";
@@ -94,9 +94,14 @@ export class DepositorComponent implements OnInit, OnDestroy {
 
   onChooseRepo() {
     const id = encodeURIComponent(this.dataset.pid);
-    this.router.navigate(["/datasets", id, "onedep"], {
-      state: { pid: this.dataset.pid },
-    });
-    // this.router.navigateByUrl("/datasets/" + id + "/empiar");
+    if (this.depositionRepository.value === "onedep") {
+      this.router.navigate(["/datasets", id, "onedep"], {
+        state: { pid: this.dataset.pid },
+      });
+    } else if (this.depositionRepository.value === "empiar") {
+      this.router.navigate(["/datasets", id, "empiar"], {
+        state: { pid: this.dataset.pid },
+      });
+    }
   }
 }

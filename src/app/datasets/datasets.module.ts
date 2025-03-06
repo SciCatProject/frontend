@@ -93,8 +93,13 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { OneDepComponent } from "./onedep/onedep.component";
 import { OrcidFormatterDirective } from "./onedep/onedep.directive";
 import { EmpiarComponent } from "./empiar/empiar.component";
-import { OneDepEffects } from "state-management/effects/onedep.effects";
+import { OneDepEffects } from "state-management/effects/depositor.effects";
 import { DepositorComponent } from "./depositor/depositor.component";
+import { QuestionnaireComponent } from "./depositor/empiar/questionnaire/questionnaire.component";
+import { onedepReducer } from "state-management/reducers/onedep.reducer";
+import { empiarReducer } from "state-management/reducers/empiar.reducer";
+import { JsonFormsModule } from "@jsonforms/angular";
+import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 
 @NgModule({
   imports: [
@@ -103,6 +108,8 @@ import { DepositorComponent } from "./depositor/depositor.component";
     FlexLayoutModule,
     FormsModule,
     LinkyModule,
+    JsonFormsModule,
+    JsonFormsAngularMaterialModule,
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,
@@ -152,6 +159,8 @@ import { DepositorComponent } from "./depositor/depositor.component";
     StoreModule.forFeature("publishedData", publishedDataReducer),
     StoreModule.forFeature("logbooks", logbooksReducer),
     StoreModule.forFeature("users", userReducer),
+    StoreModule.forFeature("onedep", onedepReducer),
+    StoreModule.forFeature("empiar", empiarReducer),
     LogbooksModule,
     FullTextSearchBarComponent,
     MatMenuModule,
@@ -189,6 +198,7 @@ import { DepositorComponent } from "./depositor/depositor.component";
     OrcidFormatterDirective,
     EmpiarComponent,
     DepositorComponent,
+    QuestionnaireComponent,
   ],
   providers: [
     ArchivingService,

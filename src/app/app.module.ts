@@ -28,7 +28,7 @@ import { SnackbarInterceptor } from "shared/interceptors/snackbar.interceptor";
 import { AuthService } from "shared/services/auth/auth.service";
 import { InternalStorage, SDKStorage } from "shared/services/auth/base.storage";
 import { CookieService } from "ngx-cookie-service";
-import { JobsServiceV4 } from 'shared/sdk/apis/JobsService';
+import { JobsServiceV4 } from "shared/sdk/apis/JobsService";
 
 const appConfigInitializerFn = (appConfig: AppConfigService) => {
   return () => appConfig.loadAppConfig();

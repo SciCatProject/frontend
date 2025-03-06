@@ -1,6 +1,6 @@
 import { TestBed } from "@angular/core/testing";
 
-import { Depositor } from "./onedep-depositor.service";
+import { Depositor } from "./depositor.service";
 
 describe("OnedepDepositorService", () => {
   let service: Depositor;

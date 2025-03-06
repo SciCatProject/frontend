@@ -7,8 +7,6 @@ import {
 } from "@angular/core";
 import { MatRadioChange } from "@angular/material/radio";
 import { AppConfigService, AppConfig } from "app-config.service";
-import { HttpClient } from "@angular/common/http";
-import { ActivatedRoute } from "@angular/router";
 import {
   FormBuilder,
   FormControl,
@@ -26,7 +24,7 @@ import {
 } from "@scicatproject/scicat-sdk-ts";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
-import * as fromActions from "state-management/actions/onedep.actions";
+import * as fromActions from "state-management/actions/depositor.actions";
 import * as datasetActions from "state-management/actions/datasets.actions";
 import {
   createMethodsList,
@@ -35,7 +33,7 @@ import {
   OneDepUserInfo,
   isMap,
 } from "./types/methods.enum";
-import { Depositor } from "shared/sdk/apis/onedep-depositor.service";
+import { Depositor } from "shared/sdk/apis/depositor.service";
 import { Observable, Subscription } from "rxjs";
 import { isNumeric } from "mathjs";
 
@@ -46,7 +44,6 @@ import { isNumeric } from "mathjs";
 })
 export class OneDepComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
-  private _hasUnsavedChanges = false;
 
   config: AppConfig;
 
@@ -63,12 +60,6 @@ export class OneDepComponent implements OnInit, OnDestroy {
   fileTypes: DepositionFile[]; // required to keep the initial set of files based on EM method
   mainContour = 0.0;
   isMap = isMap;
-  connectedDepositionBackend = "";
-  connectedDepositionBackendVersion = "";
-  connectingToDepositionBackend = false;
-  lastUsedDepositionBackends: string[] = [];
-  forwardDepositionBackend = "";
-  errorMessage = "";
   depositClicked = false;
   privacyTermsTicked = false;
   depID$: Observable<string>;
@@ -78,8 +69,6 @@ export class OneDepComponent implements OnInit, OnDestroy {
   constructor(
     public appConfigService: AppConfigService,
     private store: Store,
-    private http: HttpClient,
-    private route: ActivatedRoute,
     private fb: FormBuilder,
     private depositor: Depositor,
   ) {
@@ -117,8 +106,8 @@ export class OneDepComponent implements OnInit, OnDestroy {
     this.store.dispatch(datasetActions.fetchDatasetAction({ pid }));
     this.fileTypes = [];
     this.mainContour = 0.0;
-    //  connect to the depositor
-    this.store.dispatch(fromActions.connectToDepositor());
+    //  connected in the depositor component
+    // this.store.dispatch(fromActions.connectToDepositor());
 
     this.store.select(selectCurrentDataset).subscribe((dataset) => {
       this.dataset = dataset;

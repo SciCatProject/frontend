@@ -6,6 +6,7 @@ import { DashboardComponent } from "datasets/dashboard/dashboard.component";
 import { DatablocksComponent } from "datasets/datablocks-table/datablocks-table.component";
 import { DatasetDetailsDashboardComponent } from "datasets/dataset-details-dashboard/dataset-details-dashboard.component";
 import { OneDepComponent } from "datasets/onedep/onedep.component";
+import { EmpiarComponent } from "datasets/empiar/empiar.component";
 import { PublishComponent } from "datasets/publish/publish.component";
 
 const routes: Routes = [
@@ -41,11 +42,11 @@ const routes: Routes = [
     component: OneDepComponent,
     canActivate: [AuthGuard],
   },
-  // {
-  //   path: ":id/empiar",
-  //   component: EmpiarComponent,
-  //   canActivate: [AuthGuard],
-  // },
+  {
+    path: ":id/empiar",
+    component: EmpiarComponent,
+    canActivate: [AuthGuard],
+  },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

@@ -31,7 +31,7 @@ export class ServiceGuard implements CanActivate {
       case "reduce":
         shouldActivate = this.appConfig.datasetReduceEnabled;
         break;
-      case "onedep":
+      case "depositor":
         shouldActivate = this.appConfig.datasetOneDepIntegration;
         break;
     }

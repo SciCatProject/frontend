@@ -1,1 +1,57 @@
-<p>empiar works!</p>
+<ng-template [ngIf]="dataset">
+  <div style="clear: both;"></div>
+  <div>
+    <div>
+      <mat-card [formGroup]="form" data-cy="general-info">
+        <mat-card-header class="general-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> assignment </mat-icon>
+          </div>
+          General information
+        </mat-card-header>
+        <mat-card-content>
+          <table>
+            <tr>
+              <th>Name</th>
+              <td>{{ dataset.datasetName || "-" }}</td>
+            </tr>
+            <tr>
+              <th>Description</th>
+              <td>
+                <span [innerHTML]="dataset.description || '-' | linky"></span>
+              </td>
+            </tr>
+            <tr>
+              <th>PID</th>
+              <td>
+                {{ dataset.pid }}
+              </td>
+            </tr>
+            <tr>
+              <th>Type</th>
+              <td>{{dataset.type }}</td>
+            </tr>
+            <tr>
+              <th>Creation Time</th>
+              <td>{{ dataset.creationTime | date: "yyyy-MM-dd HH:mm" }}</td>
+            </tr>
+            <tr class="keywords-row">
+              <th>Keywords</th>
+              <mat-chip-set role="list" #keywordChips>
+                <mat-chip role="listitem" *ngFor="let keyword of dataset.keywords">
+                  {{ keyword }}
+                </mat-chip>
+              </mat-chip-set>
+            </tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <jsonforms
+          [data]="data"
+          [schema]="schema"
+         ></jsonforms>
+      </mat-card>
+    </div>
+  </div>
+</ng-template>
