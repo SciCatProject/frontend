@@ -147,12 +147,34 @@
             [innerHTML]="columnName(row, column)"
           >
           </label>
-          <mat-icon
-            class="general-warning"
-            *ngIf="shouldRenderIcon(row, column)"
-            [matTooltip]="column.warningIconTooltip"
-            >{{ column.contentIcon }}</mat-icon
-          >
+          <label
+            *ngIf="
+              column.contentIconLink;
+              then linkIconRender;
+              else regularIconRender
+            "
+          ></label>
+          <ng-template #linkIconRender>
+            <a
+              *ngIf="renderContentIconLink(row, column)"
+              [href]="renderContentIconLink(row, column)"
+              target="_blank"
+            >
+              <mat-icon
+                [ngClass]="column.contentIconClass"
+                [matTooltip]="column.contentIconTooltip"
+                >{{ column.contentIcon }}</mat-icon
+              ></a
+            >
+          </ng-template>
+          <ng-template #regularIconRender>
+            <mat-icon
+              [ngClass]="column.contentIconClass"
+              *ngIf="shouldRenderIcon(row, column)"
+              [matTooltip]="column.contentIconTooltip"
+              >{{ column.contentIcon }}</mat-icon
+            >
+          </ng-template>
         </ng-template>
         <ng-template #regularColumnRender>
           <label

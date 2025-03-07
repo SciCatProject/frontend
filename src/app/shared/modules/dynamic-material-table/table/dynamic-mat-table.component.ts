@@ -524,6 +524,14 @@ export class DynamicMatTableComponent<T extends TableRow>
     return false;
   }
 
+  renderContentIconLink(row: any, column: TableField<any>) {
+    if (column.contentIconLink) {
+      return column.contentIconLink(column, row);
+    }
+
+    return null;
+  }
+
   cellStyle(option: HashMap<any>, column) {
     let style = null;
     if (option && column.name) {

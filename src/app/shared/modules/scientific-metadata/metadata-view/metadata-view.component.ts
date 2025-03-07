@@ -115,6 +115,10 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
               return row[column.name];
             },
+            contentIcon: "hub",
+            contentIconLink: (column, row) => {
+              return row.ontology_reference;
+            },
             width: 500,
           },
           {
@@ -128,7 +132,8 @@ export class MetadataViewComponent implements OnInit, OnChanges {
               return !row.validUnit;
             },
             contentIcon: "error",
-            warningIconTooltip: "Unrecognized unit, conversion disabled",
+            contentIconTooltip: "Unrecognized unit, conversion disabled",
+            contentIconClass: "general-warning",
             cellClass: "unit-input",
           },
           {
@@ -168,6 +173,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           unit: metadata[key]["unit"],
           human_name: metadata[key]["human_name"],
           type: metadata[key]["type"],
+          ontology_reference: metadata[key]["ontology_reference"],
         };
 
         const validUnit = this.unitsService.unitValidation(
@@ -182,6 +188,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           unit: "",
           human_name: metadata[key]["human_name"],
           type: metadata[key]["type"],
+          ontology_reference: metadata[key]["ontology_reference"],
         };
       }
       metadataArray.push(metadataObject);
