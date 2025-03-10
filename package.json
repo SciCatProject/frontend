@@ -32,6 +32,8 @@
     "@angular/service-worker": "^16",
     "@jsonforms/angular": "3.2.*",
     "@jsonforms/angular-material": "3.2.*",
+    "@jsonforms/core": "^3.2.*",
+    "@jsonforms/react": "3.2.*",
     "@ngbracket/ngx-layout": "^16.0.0",
     "@ngrx/effects": "^16",
     "@ngrx/router-store": "^16",

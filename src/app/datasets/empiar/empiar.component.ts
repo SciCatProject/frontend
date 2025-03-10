@@ -5,8 +5,8 @@ import {
   OnDestroy,
   OnInit,
 } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
 import { JsonSchema } from "@jsonforms/core";
+import { angularMaterialRenderers } from "@jsonforms/angular-material";
 import { AppConfigService, AppConfig } from "app-config.service";
 import { Store, select } from "@ngrx/store";
 import {
@@ -20,6 +20,9 @@ import * as fromActions from "state-management/actions/depositor.actions";
 import { Subscription, Observable } from "rxjs";
 import * as datasetActions from "state-management/actions/datasets.actions";
 import { FormGroup, FormBuilder } from "@angular/forms";
+import { releaseDateRendererEntry } from "./renderer";
+import uischemaAsset from "./questionnaureUI.json";
+
 
 @Component({
   selector: "app-empiar",
@@ -37,6 +40,13 @@ export class EmpiarComponent implements OnInit, OnDestroy {
   empiarSchema: string;
   data: JsonSchema = createEmptyInstance();
   schema: JsonSchema;
+  materialRenderers = angularMaterialRenderers; 
+  uischema = uischemaAsset;
+  configuredRenderer = [
+    releaseDateRendererEntry,
+  ...angularMaterialRenderers,
+];
+
 
   constructor(
     public appConfigService: AppConfigService,
@@ -76,6 +86,7 @@ export class EmpiarComponent implements OnInit, OnDestroy {
 
     const decodedSchema = atob(this.empiarSchema);
     this.schema = JSON.parse(decodedSchema);
+    this.data = { ...this.data };
   }
 
   ngOnDestroy() {
