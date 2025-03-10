@@ -25,7 +25,7 @@ export interface TableField<R extends TableRow> extends AbstractField {
   rowClass?: string | AtClassFunc;
   customSortFunction?: AtSortFunc<R>;
   customRenderFunction?: AtSortFunc<R>;
-  renderIconFunction?: AtSortFunc<R>;
+  renderContentIconFunction?: AtSortFunc<R>;
   contentIconLinkFunction?: AtSortFunc<R>;
   customFilterFunction?: AtSortFunc<R>;
   toPrint?: ToPrint;
@@ -73,7 +73,7 @@ export interface AbstractField {
   toString?: (column: TableField<any>, row: TableRow) => string;
   customSort?: (column: TableField<any>, row: any) => string;
   customRender?: (column: TableField<any>, row: any) => string;
-  renderIcon?: (column: TableField<any>, row: any) => boolean;
+  renderContentIcon?: (column: TableField<any>, row: any) => boolean;
   contentIcon?: string;
   contentIconTooltip?: string;
   contentIconClass?: string;

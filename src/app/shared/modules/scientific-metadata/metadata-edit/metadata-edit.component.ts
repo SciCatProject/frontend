@@ -438,6 +438,9 @@ export class MetadataEditComponent implements OnInit, OnChanges {
             : "",
         human_name: fieldHumanName,
         type: fieldType,
+        // NOTE: This is a temporary solution to keep the ontology reference in the metadata object.
+        // In the future if we need the ontology reference edit it can be added as a separate field like the other ones.
+        ontology_reference: this.metadata[fieldName]?.ontology_reference,
       };
     });
     return metadata;

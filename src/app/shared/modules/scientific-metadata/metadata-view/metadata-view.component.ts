@@ -116,6 +116,9 @@ export class MetadataViewComponent implements OnInit, OnChanges {
               return row[column.name];
             },
             contentIcon: "hub",
+            renderContentIcon: (column, row) => {
+              return !!row.ontology_reference;
+            },
             contentIconLink: (column, row) => {
               return row.ontology_reference;
             },
@@ -128,7 +131,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
                 ? this.prettyUnit.transform(row[column.name])
                 : "--";
             },
-            renderIcon: (column, row) => {
+            renderContentIcon: (column, row) => {
               return !row.validUnit;
             },
             contentIcon: "error",
