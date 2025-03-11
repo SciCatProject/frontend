@@ -22,6 +22,7 @@ import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
 import { DatePipe, TitleCasePipe } from "@angular/common";
 import { LinkyPipe } from "ngx-linky";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
+import { MetadataTypes } from "../metadata-edit/metadata-edit.component";
 
 @Component({
   selector: "metadata-view",
@@ -132,7 +133,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
                 : "--";
             },
             renderContentIcon: (column, row) => {
-              return !row.validUnit;
+              return row.validUnit === false;
             },
             contentIcon: "error",
             contentIconTooltip: "Unrecognized unit, conversion disabled",
@@ -185,9 +186,15 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
         metadataObject["validUnit"] = validUnit;
       } else {
+        const metadataValue =
+          typeof metadata[key] === MetadataTypes.string ||
+          typeof metadata[key] === MetadataTypes.number
+            ? metadata[key]
+            : JSON.stringify(metadata[key]);
+
         metadataObject = {
           name: key,
-          value: JSON.stringify(metadata[key]),
+          value: metadataValue,
           unit: "",
           human_name: metadata[key]["human_name"],
           type: metadata[key]["type"],

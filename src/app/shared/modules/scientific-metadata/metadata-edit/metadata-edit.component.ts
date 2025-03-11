@@ -398,17 +398,22 @@ export class MetadataEditComponent implements OnInit, OnChanges {
             });
           }
         } else {
+          const metadataType =
+            typeof this.metadata[key] === MetadataTypes.number
+              ? MetadataTypes.number
+              : MetadataTypes.string;
+          const metadataValue =
+            metadataType === "string" || metadataType === "number"
+              ? this.metadata[key]
+              : JSON.stringify(this.metadata[key]);
+
           field = this.formBuilder.group({
-            fieldType: this.formControlFields["fieldType"](
-              MetadataTypes.string,
-            ),
+            fieldType: this.formControlFields["fieldType"](metadataType),
             fieldName: this.formControlFields["fieldName"](key),
             fieldHumanName: this.formControlFields["fieldHumanName"](
               this.getHumanNameFieldValue(this.metadata[key], key),
             ),
-            fieldValue: this.formControlFields["fieldValue"](
-              JSON.stringify(this.metadata[key]),
-            ),
+            fieldValue: this.formControlFields["fieldValue"](metadataValue),
             fieldUnit: this.formControlFields["fieldUnit"](""),
           });
         }
