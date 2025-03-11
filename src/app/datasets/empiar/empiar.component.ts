@@ -20,9 +20,11 @@ import * as fromActions from "state-management/actions/depositor.actions";
 import { Subscription, Observable } from "rxjs";
 import * as datasetActions from "state-management/actions/datasets.actions";
 import { FormGroup, FormBuilder } from "@angular/forms";
-import { releaseDateRendererEntry } from "./renderer";
-import uischemaAsset from "./questionnaureUI.json";
-
+import { releaseDateRendererEntry } from "./customRenderers/rendererRelease";
+import { emdbRefRendererEntry } from "./customRenderers/rendererEMDB";
+import generalSchemaAsset from "./schemasUI/generalQuestionUI.json";
+import imageSetsAssets from "./schemasUI/imageSetsUI.json";
+import piAsset from "./schemasUI/authorInfoUI.json";
 
 @Component({
   selector: "app-empiar",
@@ -40,13 +42,15 @@ export class EmpiarComponent implements OnInit, OnDestroy {
   empiarSchema: string;
   data: JsonSchema = createEmptyInstance();
   schema: JsonSchema;
-  materialRenderers = angularMaterialRenderers; 
-  uischema = uischemaAsset;
+  // materialRenderers = angularMaterialRenderers;
+  generalSchema = generalSchemaAsset;
+  imageSets = imageSetsAssets;
+  schemaPI = piAsset;
   configuredRenderer = [
-    releaseDateRendererEntry,
-  ...angularMaterialRenderers,
-];
-
+    // releaseDateRendererEntry,
+    // emdbRefRendererEntry,
+    ...angularMaterialRenderers,
+  ];
 
   constructor(
     public appConfigService: AppConfigService,
@@ -63,7 +67,6 @@ export class EmpiarComponent implements OnInit, OnDestroy {
     // initialize an array for the files to be uploaded
     const pid = history.state.pid;
     this.store.dispatch(datasetActions.fetchDatasetAction({ pid }));
-
     this.store.select(selectCurrentDataset).subscribe((dataset) => {
       this.dataset = dataset;
     });
@@ -75,17 +78,20 @@ export class EmpiarComponent implements OnInit, OnDestroy {
         }
       }),
     );
-    //  connect to the depositor in the previous step
-    // this.store.dispatch(fromActions.connectToDepositor());
-
     this.store.dispatch(fromActions.accessEmpiarSchema());
     this.empiarSchema$ = this.store.pipe(select(selectEmpiarSchema));
-    this.empiarSchema$.subscribe((schema) => {
-      this.empiarSchema = schema;
-    });
 
-    const decodedSchema = atob(this.empiarSchema);
-    this.schema = JSON.parse(decodedSchema);
+    this.empiarSchema$.subscribe((schema) => {
+      if (schema) {
+        this.empiarSchema = schema;
+        try {
+          const decodedSchema = atob(this.empiarSchema);
+          this.schema = JSON.parse(decodedSchema);
+        } catch (error) {
+          console.error("Failed to decode schema:", error);
+        }
+      }
+    });
     this.data = { ...this.data };
   }
 
@@ -93,6 +99,13 @@ export class EmpiarComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });
+  }
+  onDataChange(event: any) {
+    this.data = event;
+  }
+
+  onSubmitClick() {
+    console.log(this.data);
   }
 }
 
@@ -103,7 +116,7 @@ function createEmptyInstance() {
     release_date: "",
     experiment_type: 0,
     scale: "",
-    cross_references: [],
+    cross_references: [{ name: "" }],
     workflows: [],
     authors: [],
     corresponding_author: {

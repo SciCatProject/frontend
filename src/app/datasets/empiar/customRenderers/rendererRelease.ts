@@ -2,7 +2,6 @@ import { JsonFormsControl } from "@jsonforms/angular";
 import {
   JsonFormsRendererRegistryEntry,
   rankWith,
-  isAnyOfControl,
   scopeEndsWith,
 } from "@jsonforms/core";
 
