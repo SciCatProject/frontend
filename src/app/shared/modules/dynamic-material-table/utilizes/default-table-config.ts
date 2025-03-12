@@ -1,4 +1,4 @@
-import { TableField } from "../models/table-field.model";
+import { AbstractField, TableField } from "../models/table-field.model";
 import {
   ITableSetting,
   VisibleActionMenu,
@@ -11,6 +11,17 @@ export const actionMenu: VisibleActionMenu = {
   columnSettingPin: true,
   columnSettingFilter: true,
   clearFilter: true,
+};
+
+const mergeColumnSettings = (
+  defaultColumnSetting: AbstractField[],
+  savedColumnSetting: TableField<any>[],
+) => {
+  return defaultColumnSetting.map((column) => {
+    const savedColumn = savedColumnSetting.find((c) => c.name === column.name);
+
+    return savedColumn ? { ...column, ...savedColumn } : column;
+  });
 };
 
 export const getTableSettingsConfig = (
@@ -31,12 +42,21 @@ export const getTableSettingsConfig = (
 
   if (savedTableSettingIndex < 0) {
     if (savedTableConfig) {
+      const defaultColumnSetting =
+        tableDefaultSettingsConfig.settingList[defaultSettingIndex]
+          .columnSetting;
+
+      const columnSettingMerged = mergeColumnSettings(
+        defaultColumnSetting,
+        savedTableConfig,
+      );
+
       tableSettingsConfig.settingList.push({
-        ...tableDefaultSettingsConfig.settingList[defaultSettingIndex],
+        ...defaultColumnSetting,
         settingName: tableName,
         isCurrentSetting: true,
         isDefaultSetting: false,
-        columnSetting: savedTableConfig,
+        columnSetting: columnSettingMerged,
       });
 
       tableSettingsConfig.settingList[defaultSettingIndex].isCurrentSetting =
