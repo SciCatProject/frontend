@@ -31,13 +31,29 @@ export class HelpComponent implements OnInit {
     );
     this.gettingStarted = this.appConfig.gettingStarted;
     this.shoppingCartEnabled = this.appConfig.shoppingCartEnabled;
-    this.docText = this.appConfig.docText || "This is our documentation homepage https://scicatproject.github.io/. Following the documentation link (blue button at top left) you will find detailed information for Users, Developers, Operators and Ingestors.";
-    this.gettingStartedExtraText = this.appConfig.gettingStartedExtraText || "";
-    let rawText = this.appConfig.whereIsMyDataText || "Your data is stored and can be accessed by logging into {{ facility }} using sftp to download a file. Alternatively, individual datafiles can be downloaded by clicking on a datafiles tab for a given dataset, however this is not recommended for large datasets.";
-    this.whereIsMyDataText = rawText.replace("{{ facility }}", this.facility);
-    this.howToPublishDataText = this.appConfig.howToPublishDataText || "Select datasets in the dataset table and add to <b>Cart</b>. Once in <b>Cart</b>, click <b>Publish</b> and follow instructions."; 
-    this.ingestManualExtraText = this.appConfig.ingestManualExtraText || "";
-    this.whereAreMyProposalsExtraText = this.appConfig.whereAreMyProposalsExtraText || "";
-    this.whereAreMySamplesExtraText = this.appConfig.whereAreMySamplesExtraText || "";
+    this.docText = 
+      this.appConfig.docText || 
+      "This is our documentation homepage https://scicatproject.github.io/. Following the documentation link (blue button at top left) you will find detailed information for Users, Developers, Operators and Ingestors.";
+    this.gettingStartedExtraText = 
+      this.appConfig.gettingStartedExtraText || 
+      "";
+    let rawText = 
+      this.appConfig.whereIsMyDataText || 
+      "Your data is stored and can be accessed by logging into {{ facility }} using sftp to download a file. Alternatively, individual datafiles can be downloaded by clicking on a datafiles tab for a given dataset, however this is not recommended for large datasets.";
+    this.whereIsMyDataText = rawText.replace(
+      "{{ facility }}", this.facility
+    );
+    this.howToPublishDataText = 
+      this.appConfig.howToPublishDataText || 
+      "Select datasets in the dataset table and add to <b>Cart</b>. Once in <b>Cart</b>, click <b>Publish</b> and follow instructions."; 
+    this.ingestManualExtraText = 
+      this.appConfig.ingestManualExtraText || 
+      "";
+    this.whereAreMyProposalsExtraText = 
+      this.appConfig.whereAreMyProposalsExtraText || 
+      "";
+    this.whereAreMySamplesExtraText = 
+      this.appConfig.whereAreMySamplesExtraText || 
+      "";
   }
 }
