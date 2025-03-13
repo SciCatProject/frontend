@@ -1,4 +1,4 @@
-var path = require("path");
+const path = require("path");
 
 import { testData } from "../../fixtures/testData";
 import { testConfig } from "../../fixtures/testData";

@@ -18,31 +18,22 @@ const mergeColumnSettings = (
   defaultColumnSetting: AbstractField[],
   savedColumnSetting: TableField<any>[],
 ) => {
-  const mergedColumns = [];
-  const extraColumnsAddedAfterLastSave = [];
+  const defaultMap = new Map(defaultColumnSetting.map((c) => [c.name, c]));
 
-  // Loop through the default column settings and merge with the saved column settings
-  defaultColumnSetting.forEach((column, index) => {
-    const savedColumnIndex = savedColumnSetting.findIndex(
-      (c) => c.name === column.name,
-    );
+  // Merge saved columns that still exist in defaults
+  const mergedColumns = savedColumnSetting
+    .map((saved) => {
+      const defCol = defaultMap.get(saved.name);
+      return defCol ? { ...defCol, ...saved } : null;
+    })
+    .filter(Boolean);
 
-    if (savedColumnIndex !== -1) {
-      const savedColumn = savedColumnSetting[savedColumnIndex];
-      const columnToPush = savedColumn ? { ...column, ...savedColumn } : column;
-      mergedColumns[savedColumnIndex] = { ...columnToPush };
-    } else {
-      // If the column is not found in the saved column settings, we add it to the extraColumnsAddedAfterLastSave array
-      extraColumnsAddedAfterLastSave.push({ ...column });
-    }
-  });
+  // Append default columns that are new (i.e. not in saved settings)
+  const extraColumns = defaultColumnSetting.filter(
+    (defCol) => !savedColumnSetting.some((saved) => saved.name === defCol.name),
+  );
 
-  // Filter out any undefined columns (removed from the default table columns since the last save) and merge the extra columns added after the last save
-  const allColumns = mergedColumns
-    .concat(extraColumnsAddedAfterLastSave)
-    .filter((c) => c);
-
-  return allColumns;
+  return [...mergedColumns, ...extraColumns];
 };
 
 export const getTableSettingsConfig = (
