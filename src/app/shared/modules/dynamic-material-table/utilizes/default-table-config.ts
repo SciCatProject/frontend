@@ -13,15 +13,36 @@ export const actionMenu: VisibleActionMenu = {
   clearFilter: true,
 };
 
+// NOTE: Need to merge the column settings from the default setting and the saved setting as we might change the default in the codebase so we don't end up with inconsistencies if we have saved settings in the database.
 const mergeColumnSettings = (
   defaultColumnSetting: AbstractField[],
   savedColumnSetting: TableField<any>[],
 ) => {
-  return defaultColumnSetting.map((column) => {
-    const savedColumn = savedColumnSetting.find((c) => c.name === column.name);
+  const mergedColumns = [];
+  const extraColumnsAddedAfterLastSave = [];
 
-    return savedColumn ? { ...column, ...savedColumn } : column;
+  // Loop through the default column settings and merge with the saved column settings
+  defaultColumnSetting.forEach((column, index) => {
+    const savedColumnIndex = savedColumnSetting.findIndex(
+      (c) => c.name === column.name,
+    );
+
+    if (savedColumnIndex !== -1) {
+      const savedColumn = savedColumnSetting[savedColumnIndex];
+      const columnToPush = savedColumn ? { ...column, ...savedColumn } : column;
+      mergedColumns[savedColumnIndex] = { ...columnToPush };
+    } else {
+      // If the column is not found in the saved column settings, we add it to the extraColumnsAddedAfterLastSave array
+      extraColumnsAddedAfterLastSave.push({ ...column });
+    }
   });
+
+  // Filter out any undefined columns (removed from the default table columns since the last save) and merge the extra columns added after the last save
+  const allColumns = mergedColumns
+    .concat(extraColumnsAddedAfterLastSave)
+    .filter((c) => c);
+
+  return allColumns;
 };
 
 export const getTableSettingsConfig = (
