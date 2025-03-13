@@ -264,59 +264,6 @@ describe("Proposal Actions", () => {
     });
   });
 
-  describe("prefillFiltersAction", () => {
-    it("should create an action", () => {
-      const values: Partial<ProposalFilters> = {
-        text: "test",
-      };
-      const action = fromActions.prefillFiltersAction({ values });
-      expect({ ...action }).toEqual({
-        type: "[Proposal] Prefill Filters",
-        values,
-      });
-    });
-  });
-
-  describe("setTextFilterAction", () => {
-    it("should create an action", () => {
-      const text = "test";
-      const action = fromActions.setTextFilterAction({ text });
-      expect({ ...action }).toEqual({
-        type: "[Proposal] Set Text Filter",
-        text,
-      });
-    });
-  });
-
-  describe("setDateRangeFilterAction", () => {
-    it("should create an action", () => {
-      const begin = new Date().toISOString();
-      const end = new Date().toISOString();
-      const action = fromActions.setDateRangeFilterAction({
-        begin,
-        end,
-      });
-      expect({ ...action }).toEqual({
-        type: "[Proposal] Set Date Range Filter",
-        begin,
-        end,
-      });
-    });
-  });
-
-  describe("changeDatasetsPageAction", () => {
-    it("should create an action", () => {
-      const page = 0;
-      const limit = 25;
-      const action = fromActions.changeDatasetsPageAction({ page, limit });
-      expect({ ...action }).toEqual({
-        type: "[Proposal] Change Datasets Page",
-        page,
-        limit,
-      });
-    });
-  });
-
   describe("clearProposalsStateAction", () => {
     it("should create an action", () => {
       const action = fromActions.clearProposalsStateAction();

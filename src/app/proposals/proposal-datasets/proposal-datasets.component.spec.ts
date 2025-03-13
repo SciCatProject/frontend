@@ -15,17 +15,15 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { StoreModule, Store } from "@ngrx/store";
 import { DatePipe, SlicePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
-import {
-  changeDatasetsPageAction,
-  fetchProposalDatasetsAction,
-} from "state-management/actions/proposals.actions";
+import { fetchProposalDatasetsAction } from "state-management/actions/proposals.actions";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatIconModule } from "@angular/material/icon";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppConfigService } from "app-config.service";
-import { DatasetClass } from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { ProposalDatasetsComponent } from "./proposal-datasets.component";
+import { RowEventType } from "shared/modules/dynamic-material-table/models/table-row.model";
 
 const getConfig = () => ({
   logbookEnabled: true,
@@ -37,6 +35,7 @@ describe("ViewProposalPageComponent", () => {
 
   const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl"),
+    navigate: jasmine.createSpy("navigate"),
   };
   let store: MockStore;
   let dispatchSpy;
@@ -99,7 +98,7 @@ describe("ViewProposalPageComponent", () => {
   });
 
   describe("#onPageChange()", () => {
-    it("should dispatch a changeDatasetsPageAction and a fetchProposalDatasetsAction", () => {
+    it("should dispatch a fetchProposalDatasetsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const proposalId = "testId";
@@ -109,26 +108,29 @@ describe("ViewProposalPageComponent", () => {
         pageSize: 25,
         length: 25,
       };
-      component.onPageChange(event);
+      component.onPaginationChange(event);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        changeDatasetsPageAction({
-          page: event.pageIndex,
+        fetchProposalDatasetsAction({
+          proposalId,
           limit: event.pageSize,
+          skip: event.pageIndex * event.pageSize,
+          sortColumn: undefined,
+          sortDirection: undefined,
         }),
-      );
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchProposalDatasetsAction({ proposalId }),
       );
     });
   });
 
   describe("#onRowClick()", () => {
     it("should navigate to a dataset", () => {
-      const dataset = createMock<DatasetClass>({});
+      const dataset = createMock<OutputDatasetObsoleteDto>({});
       const pid = encodeURIComponent(dataset.pid);
-      component.onRowClick(dataset);
+      component.onRowClick({
+        event: RowEventType.RowClick,
+        sender: { row: dataset },
+      });
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
       expect(router.navigateByUrl).toHaveBeenCalledWith("/datasets/" + pid);
