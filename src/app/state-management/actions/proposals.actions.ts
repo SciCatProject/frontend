@@ -147,25 +147,6 @@ export const removeAttachmentFailedAction = createAction(
   "[Proposal] Remove Attachment Failed",
 );
 
-// export const prefillFiltersAction = createAction(
-//   "[Proposal] Prefill Filters",
-//   props<{ values: Partial<ProposalFilters> }>(),
-// );
-
-// export const setTextFilterAction = createAction(
-//   "[Proposal] Set Text Filter",
-//   props<{ text: string }>(),
-// );
-// export const setDateRangeFilterAction = createAction(
-//   "[Proposal] Set Date Range Filter",
-//   props<{ begin: string; end: string }>(),
-// );
-
-// export const changeDatasetsPageAction = createAction(
-//   "[Proposal] Change Datasets Page",
-//   props<{ page: number; limit: number }>(),
-// );
-
 export const clearProposalsStateAction = createAction("[Proposal] Clear State");
 export const clearCurrentProposalStateAction = createAction(
   "[Proposal] Clear Current Proposal State",

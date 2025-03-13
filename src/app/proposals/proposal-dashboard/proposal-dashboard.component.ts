@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
-  TableSetting,
+  ITableSetting,
   TableSettingEventType,
 } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import {
@@ -30,7 +30,7 @@ import {
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { Sort } from "@angular/material/sort";
 
-const tableDefaultSettingsConfig: TableSetting = {
+const tableDefaultSettingsConfig: ITableSetting = {
   visibleActionMenu: actionMenu,
   settingList: [
     {
@@ -117,7 +117,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
 
   pending = true;
 
-  setting: TableSetting = {};
+  setting: ITableSetting = {};
 
   paginationMode: TablePaginationMode = "server-side";
 
@@ -175,7 +175,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
         this.dataSource.next(proposals);
         this.pending = false;
 
-        let tableSort: TableSetting["tableSort"];
+        let tableSort: ITableSetting["tableSort"];
         if (queryParams.sortDirection && queryParams.sortColumn) {
           tableSort = {
             sortColumn: queryParams.sortColumn,
@@ -206,7 +206,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   }
 
   initTable(
-    settingConfig: TableSetting,
+    settingConfig: ITableSetting,
     paginationConfig: TablePagination,
   ): void {
     const currentColumnSetting = settingConfig.settingList.find(
@@ -270,7 +270,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  saveTableSettings(setting: TableSetting) {
+  saveTableSettings(setting: ITableSetting) {
     this.pending = true;
     const tablesSettings = {
       ...this.tablesSettings,
@@ -290,7 +290,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
 
   onSettingChange(event: {
     type: TableSettingEventType;
-    setting: TableSetting;
+    setting: ITableSetting;
   }) {
     if (
       event.type === TableSettingEventType.save ||

@@ -101,33 +101,6 @@ const reducer = createReducer(
     },
   ),
 
-  // on(fromActions.prefillFiltersAction, (state, { values }): ProposalsState => {
-  //   const proposalFilters = { ...state.proposalFilters, ...values };
-  //   return { ...state, proposalFilters, hasPrefilledFilters: true };
-  // }),
-
-  // on(fromActions.setTextFilterAction, (state, { text }): ProposalsState => {
-  //   const proposalFilters = { ...state.proposalFilters, text, skip: 0 };
-  //   return { ...state, proposalFilters };
-  // }),
-  // on(
-  //   fromActions.setDateRangeFilterAction,
-  //   (state, { begin, end }): ProposalsState => {
-  //     const dateRange = { begin, end };
-  //     const proposalFilters = { ...state.proposalFilters, dateRange };
-  //     return { ...state, proposalFilters };
-  //   },
-  // ),
-
-  // on(
-  //   fromActions.changeDatasetsPageAction,
-  //   (state, { page, limit }): ProposalsState => {
-  //     const skip = page * limit;
-  //     const datasetFilters = { ...state.datasetFilters, skip, limit };
-  //     return { ...state, datasetFilters };
-  //   },
-  // ),
-
   on(
     fromActions.clearProposalsStateAction,
     (): ProposalsState => ({

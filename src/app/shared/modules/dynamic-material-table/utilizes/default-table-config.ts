@@ -1,5 +1,8 @@
-import { TableField } from "../models/table-field.model";
-import { TableSetting, VisibleActionMenu } from "../models/table-setting.model";
+import { AbstractField, TableField } from "../models/table-field.model";
+import {
+  ITableSetting,
+  VisibleActionMenu,
+} from "../models/table-setting.model";
 
 export const actionMenu: VisibleActionMenu = {
   json: true,
@@ -10,13 +13,24 @@ export const actionMenu: VisibleActionMenu = {
   clearFilter: true,
 };
 
+const mergeColumnSettings = (
+  defaultColumnSetting: AbstractField[],
+  savedColumnSetting: TableField<any>[],
+) => {
+  return defaultColumnSetting.map((column) => {
+    const savedColumn = savedColumnSetting.find((c) => c.name === column.name);
+
+    return savedColumn ? { ...column, ...savedColumn } : column;
+  });
+};
+
 export const getTableSettingsConfig = (
   tableName: string,
-  tableDefaultSettingsConfig: TableSetting,
+  tableDefaultSettingsConfig: ITableSetting,
   savedTableConfig?: TableField<any>[],
   tableSort?: { sortColumn: string; sortDirection: "asc" | "desc" },
 ) => {
-  const tableSettingsConfig: TableSetting = { ...tableDefaultSettingsConfig };
+  const tableSettingsConfig: ITableSetting = { ...tableDefaultSettingsConfig };
 
   const defaultSettingIndex = tableSettingsConfig.settingList.findIndex(
     (s) => s.isDefaultSetting,
@@ -28,12 +42,21 @@ export const getTableSettingsConfig = (
 
   if (savedTableSettingIndex < 0) {
     if (savedTableConfig) {
+      const defaultColumnSetting =
+        tableDefaultSettingsConfig.settingList[defaultSettingIndex]
+          .columnSetting;
+
+      const columnSettingMerged = mergeColumnSettings(
+        defaultColumnSetting,
+        savedTableConfig,
+      );
+
       tableSettingsConfig.settingList.push({
-        ...tableDefaultSettingsConfig.settingList[defaultSettingIndex],
+        ...defaultColumnSetting,
         settingName: tableName,
         isCurrentSetting: true,
         isDefaultSetting: false,
-        columnSetting: savedTableConfig,
+        columnSetting: columnSettingMerged,
       });
 
       tableSettingsConfig.settingList[defaultSettingIndex].isCurrentSetting =
