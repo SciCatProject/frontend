@@ -19,6 +19,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
       ## Commit message examples for Release type (patch|minor|major) can be found:
       ## https://github.com/mathieudutour/github-tag-action
       - name: Bump version and push tag
@@ -27,6 +32,24 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           release_branches: ${{ env.RELEASE_BRANCH }}
+
+      - name: Strip 'v' from the tag
+        id: release_version
+        run: |
+          TAG=${{ steps.tag_version.outputs.new_tag }}
+          WITHOUT_V=${TAG#v}
+          echo "release_version=$WITHOUT_V" >> $GITHUB_OUTPUT
+
+      - name: Update release version
+        run: |
+          npm version --no-git-tag-version ${{ steps.release_version.release_version }}
+
+      - name: Commit package with new version
+        run: |
+          git config --global user.name 'SciCat FE Release Workflow'
+          git config --global user.email 'nitrosx@users.noreply.github.com'
+          git commit -am "Set release"
+          git push
 
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
@@ -49,11 +72,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
 
       - name: Install Node.js dependencies
         run: npm ci
