@@ -32,12 +32,16 @@ export class AboutComponent implements OnInit {
       "http://www.snf.ch/en/theSNSF/research-policies/open_research_data/Pages/default.aspx#Guidelines%20and%20Regulations";
     this.PSIDataPolicy = "https://www.psi.ch/en/science/psi-data-policy";
     this.aboutText = 
-      this.appConfig.aboutText || "Scicat allows users to access data and metadata from experiments";
+      this.appConfig.aboutText || 
+      "Scicat allows users to access data and metadata from experiments";
     this.accessText = 
-      this.appConfig.accessText || "Users must comply with access policy of instruments";
+      this.appConfig.accessText || 
+      "Users must comply with access policy of instruments";
     this.termsText = 
-      this.appConfig.termsText || "Data can be used freely under the CC-BY-4.0 license";
+      this.appConfig.termsText || 
+      "Data can be used freely under the CC-BY-4.0 license";
     this.termsTextContinued = 
-      this.appConfig.termsTextContinued || "";
+      this.appConfig.termsTextContinued || 
+      "";
   }
 }
