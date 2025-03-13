@@ -154,9 +154,11 @@ describe("Proposals general", () => {
 
       cy.get("[data-cy=metadata-name-input]")
         .last()
+        .focus()
         .type(`${metadataName}{enter}`);
       cy.get("[data-cy=metadata-value-input]")
         .last()
+        .focus()
         .type(`${metadataValue}{enter}`);
 
       cy.get("button[data-cy=save-changes-button]").click();
@@ -210,11 +212,11 @@ describe("Proposals general", () => {
 
       cy.get('[data-cy="related-proposals"]').click();
 
-      cy.get('[data-cy="related-proposals-table"] mat-row')
+      cy.get('app-related-proposals mat-row')
         .contains(newProposal2.title)
-        .parent()
+        .closest('mat-row')
         .contains("child");
-      cy.get('[data-cy="related-proposals-table"] mat-row')
+      cy.get('app-related-proposals mat-row')
         .contains(proposal.title)
         .click();
     });

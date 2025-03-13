@@ -101,22 +101,11 @@ const reducer = createReducer(
     },
   ),
 
-  on(fromActions.prefillFiltersAction, (state, { values }): ProposalsState => {
-    const proposalFilters = { ...state.proposalFilters, ...values };
-    return { ...state, proposalFilters, hasPrefilledFilters: true };
-  }),
-
-  on(fromActions.setTextFilterAction, (state, { text }): ProposalsState => {
-    const proposalFilters = { ...state.proposalFilters, text, skip: 0 };
-    return { ...state, proposalFilters };
-  }),
   on(
-    fromActions.setDateRangeFilterAction,
-    (state, { begin, end }): ProposalsState => {
-      const dateRange = { begin, end };
-      const proposalFilters = { ...state.proposalFilters, dateRange };
-      return { ...state, proposalFilters };
-    },
+    fromActions.clearProposalsStateAction,
+    (): ProposalsState => ({
+      ...initialProposalsState,
+    }),
   ),
 
   on(fromActions.clearFacetsAction, (state): ProposalsState => {
@@ -135,31 +124,15 @@ const reducer = createReducer(
     return { ...state, proposalFilters };
   }),
   on(
-    fromActions.changeDatasetsPageAction,
-    (state, { page, limit }): ProposalsState => {
-      const skip = page * limit;
-      const datasetFilters = { ...state.datasetFilters, skip, limit };
-      return { ...state, datasetFilters };
-    },
+    fromActions.clearCurrentProposalStateAction,
+    (state): ProposalsState => ({
+      ...state,
+      currentProposal: undefined,
+    }),
   ),
 
   on(
-    fromActions.sortByColumnAction,
-    (state, { column, direction }): ProposalsState => {
-      const sortField = column + (direction ? ":" + direction : "");
-      const proposalFilters = { ...state.proposalFilters, sortField, skip: 0 };
-      return { ...state, proposalFilters };
-    },
-  ),
 
-  on(fromActions.clearProposalsStateAction, () => ({
-    ...initialProposalsState,
-  })),
-
-  on(fromActions.clearCurrentProposalStateAction, (state) => ({
-    ...state,
-    currentProposal: undefined,
-  })),
 );
 
 export const proposalsReducer = (

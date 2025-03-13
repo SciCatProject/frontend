@@ -68,43 +68,6 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     private router: Router,
     private slicePipe: SlicePipe,
     private store: Store,
-  ) {}
-
-  formatTableData(datasets: OutputDatasetObsoleteDto[]): TableData[] {
-    let tableData: TableData[] = [];
-    if (datasets) {
-      tableData = datasets.map((dataset: any) => ({
-        pid: dataset.pid,
-        name: dataset.datasetName,
-        sourceFolder:
-          "..." + this.slicePipe.transform(dataset.sourceFolder, -14),
-        size: this.filesizePipe.transform(dataset.size),
-        creationTime: this.datePipe.transform(
-          dataset.creationTime,
-          "yyyy-MM-dd HH:mm",
-        ),
-        owner: dataset.owner,
-        location: dataset.creationLocation,
-      }));
-    }
-    return tableData;
-  }
-
-  onPageChange(event: PageChangeEvent) {
-    this.store.dispatch(
-      changeDatasetsPageAction({
-        page: event.pageIndex,
-        limit: event.pageSize,
-      }),
-    );
-    this.store.dispatch(
-      fetchProposalDatasetsAction({ proposalId: this.proposal.proposalId }),
-    );
-  }
-
-  onRowClick(dataset: DatasetClass) {
-    const pid = encodeURIComponent(dataset.pid);
-    this.router.navigateByUrl("/datasets/" + pid);
   }
 
   ngOnInit() {
@@ -133,11 +96,6 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
       }),
     );
 
-    this.subscriptions.push(
-      this.vm$.subscribe((vm) => {
-        this.tableData = this.formatTableData(vm.datasets);
-      }),
-    );
   }
 
   fetchProposalRelatedDocuments(): void {
