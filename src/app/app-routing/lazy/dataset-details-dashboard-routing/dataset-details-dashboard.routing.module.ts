@@ -59,7 +59,6 @@ const routes: Routes = [
   {
     path: "attachments",
     component: DatasetFileUploaderComponent,
-    canActivate: [AuthGuard],
   },
   {
     path: "lifecycle",
