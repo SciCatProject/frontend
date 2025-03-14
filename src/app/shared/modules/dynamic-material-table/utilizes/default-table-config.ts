@@ -13,15 +13,27 @@ export const actionMenu: VisibleActionMenu = {
   clearFilter: true,
 };
 
+// NOTE: Need to merge the column settings from the default setting and the saved setting as we might change the default in the codebase so we don't end up with inconsistencies if we have saved settings in the database.
 const mergeColumnSettings = (
   defaultColumnSetting: AbstractField[],
   savedColumnSetting: TableField<any>[],
 ) => {
-  return defaultColumnSetting.map((column) => {
-    const savedColumn = savedColumnSetting.find((c) => c.name === column.name);
+  const defaultMap = new Map(defaultColumnSetting.map((c) => [c.name, c]));
 
-    return savedColumn ? { ...column, ...savedColumn } : column;
-  });
+  // Merge saved columns that still exist in defaults
+  const mergedColumns = savedColumnSetting
+    .map((saved) => {
+      const defCol = defaultMap.get(saved.name);
+      return defCol ? { ...defCol, ...saved } : null;
+    })
+    .filter(Boolean);
+
+  // Append default columns that are new (i.e. not in saved settings)
+  const extraColumns = defaultColumnSetting.filter(
+    (defCol) => !savedColumnSetting.some((saved) => saved.name === defCol.name),
+  );
+
+  return [...mergedColumns, ...extraColumns];
 };
 
 export const getTableSettingsConfig = (
