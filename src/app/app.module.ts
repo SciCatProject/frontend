@@ -121,16 +121,6 @@ const apiConfigurationFn = (
         subscriptSizing: "dynamic",
       },
     },
-    {
-      provide: DATE_PIPE_DEFAULT_OPTIONS,
-      useFactory: (appConfigService: AppConfigService) => {
-        return {
-          dateFormat:
-            appConfigService.getConfig().dateFormat || "yyyy-MM-dd HH:mm",
-        };
-      },
-      deps: [AppConfigService],
-    },
     AuthService,
     AppThemeService,
     Title,

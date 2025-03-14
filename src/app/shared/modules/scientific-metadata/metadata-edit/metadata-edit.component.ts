@@ -244,7 +244,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
           typeof this.metadata[key] === "object" &&
           "value" in (this.metadata[key] as ScientificMetadata)
         ) {
-          if (this.metadata[key].unit?.length > 0) {
+          if (this.metadata[key]["unit"].length > 0) {
             field = this.formBuilder.group({
               fieldType: this.formControlFields["fieldType"](
                 MetadataTypes.quantity,
