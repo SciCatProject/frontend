@@ -111,6 +111,8 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
   perform_action() {
     const action_type = this.actionConfig.type || "form";
     switch (action_type) {
+      case "json":
+        return this.type_json();
       case "form":
       default:
         return this.type_form();
@@ -159,21 +161,27 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
     return true;
   }
 
-  /*
-   * future development
-   *
-  type_fetch() {
-    const data = new URLSearchParams();
-    for (const pair of new FormData(formElement)) {
-      data.append(pair[0], pair[1]);
-    }
+  type_json() {
+    const data = {
+      auth_token: `Bearer ${this.authService.getToken().id}`,
+      jwt: this.jwt,
+      dataset: this.actionDataset.pid,
+      directory: this.actionDataset.sourceFolder,
+      files: this.files
+        .filter(
+          (item) =>
+            this.actionConfig.files === "all" ||
+            (this.actionConfig.files === "selected" && item.selected),
+        )
+        .map((item) => item.path),
+    };
 
-    fetch(url, {
-      method: 'post',
-      body: data,
-    })
-    .then(…);
-    }
+    fetch(this.actionConfig.url, {
+      method: this.actionConfig.method || "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    return true;
   }
-   */
 }
