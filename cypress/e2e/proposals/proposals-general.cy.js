@@ -2,7 +2,7 @@ const path = require("path");
 
 import { testData } from "../../fixtures/testData";
 import { testConfig } from "../../fixtures/testData";
-import { getFormattedTime, mergeConfig } from "../../support/utils";
+import { getFormattedFileNamingDate, mergeConfig } from "../../support/utils";
 
 describe("Proposals general", () => {
   let proposal;
@@ -490,7 +490,7 @@ describe("Proposals general", () => {
       const tableName = "proposalsTable";
 
       cy.readFile(
-        path.join(downloadsFolder, `${tableName}${getFormattedTime()}.json`),
+        path.join(downloadsFolder, `${tableName}${getFormattedFileNamingDate()}.json`),
       ).then((actualExport) => {
         const foundProposal = actualExport.find(
           (proposal) => proposal.proposalId === newProposal.proposalId,
@@ -523,7 +523,7 @@ describe("Proposals general", () => {
       const tableName = "proposalsTable";
 
       cy.readFile(
-        path.join(downloadsFolder, `${tableName}${getFormattedTime()}.csv`),
+        path.join(downloadsFolder, `${tableName}${getFormattedFileNamingDate()}.csv`),
       ).then((actualExport) => {
         expect(actualExport).to.contain(newProposal.proposalId);
       });
