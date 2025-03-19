@@ -19,7 +19,7 @@ import {
   TableEventType,
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
-import { TableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
+import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import {
   actionMenu,
   getTableSettingsConfig,
@@ -38,7 +38,7 @@ export interface TableData {
   location: string;
 }
 
-const tableDefaultSettingsConfig: TableSetting = {
+const tableDefaultSettingsConfig: ITableSetting = {
   visibleActionMenu: actionMenu,
   saveSettingMode: "none",
   settingList: [
@@ -103,7 +103,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
 
   pending = true;
 
-  setting: TableSetting = {};
+  setting: ITableSetting = {};
 
   paginationMode: TablePaginationMode = "server-side";
 
@@ -165,7 +165,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
   }
 
   initTable(
-    settingConfig: TableSetting,
+    settingConfig: ITableSetting,
     paginationConfig: TablePagination,
   ): void {
     const currentColumnSetting = settingConfig.settingList.find(

@@ -1,8 +1,8 @@
-var path = require("path");
+const path = require("path");
 
 import { testData } from "../../fixtures/testData";
 import { testConfig } from "../../fixtures/testData";
-import { getFormattedTime, mergeConfig } from "../../support/utils";
+import { getFormattedFileNamingDate, mergeConfig } from "../../support/utils";
 
 describe("Proposals general", () => {
   let proposal;
@@ -386,7 +386,11 @@ describe("Proposals general", () => {
 
       cy.visit("/proposals");
 
-      cy.wait(1000);
+      cy.get("dynamic-mat-table mat-header-row.header").should("exist");
+
+      cy.get("dynamic-mat-table table-menu button").click();
+      cy.get('[role="menu"] button').contains("Default setting").click();
+      cy.get("body").type("{esc}");
 
       cy.contains(
         "dynamic-mat-table mat-header-row.header mat-header-cell",
@@ -400,28 +404,37 @@ describe("Proposals general", () => {
       cy.get("dynamic-mat-table table-menu button").click();
 
       cy.get('[role="menu"] button').contains("Column setting").click();
-      cy.get('[role="menu"]').contains("First Name").click();
-      cy.get('[role="menu"]').contains("Last Name").click();
-      cy.get('[role="menu"]').contains("PI First Name").click();
-      cy.get('[role="menu"]').contains("PI Last Name").click();
+      cy.get('[role="menu"]')
+        .contains("First Name")
+        .parent()
+        .find("input[type=checkbox]")
+        .uncheck();
+      cy.get('[role="menu"]')
+        .contains("Last Name")
+        .parent()
+        .find("input[type=checkbox]")
+        .uncheck();
+      cy.get('[role="menu"]')
+        .contains("PI First Name")
+        .parent()
+        .find("input[type=checkbox]")
+        .uncheck();
+      cy.get('[role="menu"]')
+        .contains("PI Last Name")
+        .parent()
+        .find("input[type=checkbox]")
+        .uncheck();
 
       cy.get('[role="menu"] .column-config-apply .done-setting')
         .contains("done")
         .click();
 
-      cy.get("dynamic-mat-table mat-header-row.header").should(
-        "not.contain",
-        "First Name",
-      );
-      cy.get("dynamic-mat-table mat-header-row.header").should(
-        "not.contain",
-        "Last Name",
-      );
-
       cy.get("dynamic-mat-table table-menu button").click();
       cy.get('[role="menu"] button').contains("Save table setting").click();
 
       cy.reload();
+
+      cy.get("dynamic-mat-table mat-header-row.header").should("exist");
 
       cy.get("dynamic-mat-table mat-header-row.header").should(
         "not.contain",
@@ -439,6 +452,10 @@ describe("Proposals general", () => {
       cy.get('[role="menu"] button').contains("Save table setting").click();
 
       cy.get("body").type("{esc}");
+
+      cy.reload();
+
+      cy.get("dynamic-mat-table mat-header-row.header").should("exist");
 
       cy.contains(
         "dynamic-mat-table mat-header-row.header mat-header-cell",
@@ -473,7 +490,7 @@ describe("Proposals general", () => {
       const tableName = "proposalsTable";
 
       cy.readFile(
-        path.join(downloadsFolder, `${tableName}${getFormattedTime()}.json`),
+        path.join(downloadsFolder, `${tableName}${getFormattedFileNamingDate()}.json`),
       ).then((actualExport) => {
         const foundProposal = actualExport.find(
           (proposal) => proposal.proposalId === newProposal.proposalId,
@@ -506,7 +523,7 @@ describe("Proposals general", () => {
       const tableName = "proposalsTable";
 
       cy.readFile(
-        path.join(downloadsFolder, `${tableName}${getFormattedTime()}.csv`),
+        path.join(downloadsFolder, `${tableName}${getFormattedFileNamingDate()}.csv`),
       ).then((actualExport) => {
         expect(actualExport).to.contain(newProposal.proposalId);
       });
