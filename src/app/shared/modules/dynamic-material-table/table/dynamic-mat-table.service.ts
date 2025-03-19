@@ -7,15 +7,13 @@ import { TableRow } from "../models/table-row.model";
 })
 export class TableService {
   /************************************* Local Export *****************************************/
-  static getFormattedTime() {
+  static getFormattedFileNamingDate() {
     const today = new Date();
     const y = today.getFullYear();
     const m = today.getMonth() + 1;
     const d = today.getDate();
-    const h = today.getHours();
-    const mi = today.getMinutes();
-    const s = today.getSeconds();
-    return y + "-" + m + "-" + d + "-" + h + "-" + mi + "-" + s;
+
+    return y + "-" + m + "-" + d;
   }
 
   public tableName: string;
@@ -53,7 +51,7 @@ export class TableService {
 
     filename =
       filename === ""
-        ? this.tableName + TableService.getFormattedTime() + ".csv"
+        ? this.tableName + TableService.getFormattedFileNamingDate() + ".csv"
         : filename;
     if (!dataToExport || !dataToExport.length) {
       return;
@@ -104,7 +102,7 @@ export class TableService {
 
     filename =
       filename === ""
-        ? this.tableName + TableService.getFormattedTime() + ".json"
+        ? this.tableName + TableService.getFormattedFileNamingDate() + ".json"
         : filename;
     const blob = new Blob([JSON.stringify(dataToExport)], {
       type: "text/csv;charset=utf-8;",
