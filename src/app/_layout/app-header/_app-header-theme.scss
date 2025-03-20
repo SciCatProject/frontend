@@ -5,6 +5,9 @@
   $primary: map-get($color-config, "primary");
 
   .header {
+    mat-toolbar {
+      background-color: mat.get-color-from-palette($primary, "darker");
+    }
     a {
       color: mat.get-color-from-palette($primary, "default-contrast");
     }
