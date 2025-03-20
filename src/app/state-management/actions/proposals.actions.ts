@@ -2,9 +2,9 @@ import { createAction, props } from "@ngrx/store";
 import {
   Attachment,
   OutputDatasetObsoleteDto,
+  PartialUpdateProposalDto,
   ProposalClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
-import { ProposalFilters } from "state-management/state/proposals.store";
 
 export const fetchProposalsAction = createAction(
   "[Proposal] Fetch Proposals",
@@ -71,7 +71,14 @@ export const fetchParentProposalAccessFailedAction = createAction(
 
 export const fetchProposalDatasetsAction = createAction(
   "[Proposal] Fetch Datasets",
-  props<{ proposalId: string }>(),
+  props<{
+    proposalId: string;
+    skip?: number;
+    limit?: number;
+    search?: string;
+    sortDirection?: string;
+    sortColumn?: string;
+  }>(),
 );
 export const fetchProposalDatasetsCompleteAction = createAction(
   "[Proposal] Fetch Datasets Complete",
@@ -119,8 +126,7 @@ export const updateAttachmentCaptionFailedAction = createAction(
 
 export const updateProposalPropertyAction = createAction(
   "[Proposal] Update Proposal Property",
-  // TODO: Most probably with the new sdk the property should be of type UpdateProposalDto or something similar
-  props<{ proposalId: string; property: Record<string, unknown> }>(),
+  props<{ proposalId: string; property: PartialUpdateProposalDto }>(),
 );
 export const updateProposalPropertyCompleteAction = createAction(
   "[Proposal] Update Proposal Property Complete",
@@ -141,25 +147,6 @@ export const removeAttachmentFailedAction = createAction(
   "[Proposal] Remove Attachment Failed",
 );
 
-export const prefillFiltersAction = createAction(
-  "[Proposal] Prefill Filters",
-  props<{ values: Partial<ProposalFilters> }>(),
-);
-
-export const setTextFilterAction = createAction(
-  "[Proposal] Set Text Filter",
-  props<{ text: string }>(),
-);
-export const setDateRangeFilterAction = createAction(
-  "[Proposal] Set Date Range Filter",
-  props<{ begin: string; end: string }>(),
-);
-
-export const changeDatasetsPageAction = createAction(
-  "[Proposal] Change Datasets Page",
-  props<{ page: number; limit: number }>(),
-);
-
 export const clearProposalsStateAction = createAction("[Proposal] Clear State");
 export const clearCurrentProposalStateAction = createAction(
   "[Proposal] Clear Current Proposal State",
@@ -167,6 +154,13 @@ export const clearCurrentProposalStateAction = createAction(
 
 export const fetchRelatedProposalsAction = createAction(
   "[Proposal] Fetch Related Proposals",
+  props<{
+    skip?: number;
+    limit?: number;
+    search?: string;
+    sortDirection?: string;
+    sortColumn?: string;
+  }>(),
 );
 export const fetchRelatedProposalsCompleteAction = createAction(
   "[Proposal] Fetch Related Proposals Complete",
@@ -184,9 +178,4 @@ export const fetchRelatedProposalsCountCompleteAction = createAction(
 );
 export const fetchRelatedProposalsCountFailedAction = createAction(
   "[Proposal] Fetch Related Proposals Count Failed",
-);
-
-export const changeRelatedProposalsPageAction = createAction(
-  "[Proposal] Change Related Proposals Page",
-  props<{ page: number; limit: number }>(),
 );

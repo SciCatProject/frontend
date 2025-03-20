@@ -1,6 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
-import { PageChangeEvent } from "shared/modules/table/table.component";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { BehaviorSubject, Subscription } from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
   ITableSetting,
@@ -24,69 +23,87 @@ import { fetchProposalsAction } from "state-management/actions/proposals.actions
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { Direction } from "@angular/cdk/bidi";
-import { getTableSettingsConfig } from "shared/modules/dynamic-material-table/utilizes/default-table-config";
+import {
+  actionMenu,
+  getTableSettingsConfig,
+} from "shared/modules/dynamic-material-table/utilizes/default-table-config";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { Sort } from "@angular/material/sort";
 
-export const tableDefaultColumnsConfig: TableField<any>[] = [
-  {
-    name: "proposalId",
-    header: "Proposal ID",
-    icon: "perm_device_information",
-    type: "text",
+const tableDefaultSettingsConfig: ITableSetting = {
+  visibleActionMenu: actionMenu,
+  settingList: [
+    {
+      visibleActionMenu: actionMenu,
+      isDefaultSetting: true,
+      isCurrentSetting: true,
+      columnSetting: [
+        {
+          name: "proposalId",
+          header: "Proposal ID",
+          icon: "perm_device_information",
+          type: "text",
+        },
+        {
+          name: "title",
+          icon: "description",
+          width: 250,
+        },
+        {
+          name: "abstract",
+          icon: "chrome_reader_mode",
+          width: 250,
+        },
+        {
+          name: "firstname",
+          header: "First Name",
+          icon: "person",
+        },
+        {
+          name: "lastname",
+          header: "Last Name",
+        },
+        { name: "email", icon: "email", width: 200 },
+        { name: "type", icon: "badge", width: 200 },
+        {
+          name: "parentProposalId",
+          header: "Parent Proposal",
+          icon: "badge",
+        },
+        {
+          name: "pi_firstname",
+          header: "PI First Name",
+          icon: "person_pin",
+        },
+        {
+          name: "pi_lastname",
+          header: "PI Last Name",
+          icon: "person_pin",
+        },
+        {
+          name: "pi_email",
+          header: "PI Email",
+          icon: "email",
+        },
+      ],
+    },
+  ],
+  rowStyle: {
+    "border-bottom": "1px solid #d2d2d2",
   },
-  {
-    name: "title",
-    icon: "description",
-    width: 250,
-  },
-  {
-    name: "abstract",
-    icon: "chrome_reader_mode",
-    width: 250,
-  },
-  {
-    name: "firstname",
-    header: "First Name",
-    icon: "person",
-  },
-  {
-    name: "lastname",
-    header: "Last Name",
-  },
-  { name: "email", icon: "email", width: 200 },
-  { name: "type", icon: "badge", width: 200 },
-  {
-    name: "parentProposalId",
-    header: "Parent Proposal",
-    icon: "badge",
-  },
-  {
-    name: "pi_firstname",
-    header: "PI First Name",
-    icon: "person_pin",
-  },
-  {
-    name: "pi_lastname",
-    header: "PI Last Name",
-    icon: "person_pin",
-  },
-  {
-    name: "pi_email",
-    header: "PI Email",
-    icon: "email",
-  },
-];
+};
 
 @Component({
   selector: "app-proposal-dashboard",
   templateUrl: "./proposal-dashboard.component.html",
   styleUrls: ["./proposal-dashboard.component.scss"],
 })
-export class ProposalDashboardComponent implements OnInit {
+export class ProposalDashboardComponent implements OnInit, OnDestroy {
   proposalsWithCountAndTableSettings$ = this.store.select(
     selectProposalsWithCountAndTableSettings,
   );
+
+  subscription: Subscription;
 
   tableName = "proposalsTable";
 
@@ -126,8 +143,6 @@ export class ProposalDashboardComponent implements OnInit {
 
   tablesSettings: object;
 
-  @Output() pageChange = new EventEmitter<PageChangeEvent>();
-
   constructor(
     private store: Store,
     private router: Router,
@@ -150,7 +165,7 @@ export class ProposalDashboardComponent implements OnInit {
       }),
     );
 
-    this.proposalsWithCountAndTableSettings$.subscribe(
+    this.subscription = this.proposalsWithCountAndTableSettings$.subscribe(
       ({ proposals, count, tablesSettings }) => {
         const queryParams = this.route.snapshot.queryParams;
         if (queryParams.textSearch) {
@@ -167,15 +182,15 @@ export class ProposalDashboardComponent implements OnInit {
             sortDirection: queryParams.sortDirection,
           };
         }
-
         const savedTableConfig = tablesSettings?.[this.tableName];
 
         const tableSettingsConfig = getTableSettingsConfig(
           this.tableName,
-          tableDefaultColumnsConfig,
+          tableDefaultSettingsConfig,
           savedTableConfig?.columns,
           tableSort,
         );
+
         const pagginationConfig = {
           pageSizeOptions: [5, 10, 25, 100],
           pageIndex: queryParams.pageIndex,
@@ -257,10 +272,16 @@ export class ProposalDashboardComponent implements OnInit {
 
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
+    const columnsSetting = setting.columnSetting.map((column) => {
+      const { name, display, index, width } = column;
+
+      return { name, display, index, width };
+    });
+
     const tablesSettings = {
       ...this.tablesSettings,
       [setting.settingName || this.tableName]: {
-        columns: setting.columnSetting,
+        columns: columnsSetting,
       },
     };
 
@@ -319,5 +340,9 @@ export class ProposalDashboardComponent implements OnInit {
         }),
       );
     }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

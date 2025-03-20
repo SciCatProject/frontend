@@ -1,11 +1,11 @@
 {
   "name": "light",
   "properties": {
-    "--theme-primary-default": "#0099c8",
+    "--theme-primary-default": "#27aae1",
     "--theme-primary-default-contrast": "#ffffff",
     "--theme-primary-lighter": "#99d5e9",
     "--theme-primary-lighter-contrast": "#000000",
-    "--theme-primary-darker": "#32acd3",
+    "--theme-primary-darker": "#325b84",
     "--theme-primary-darker-contrast": "#ffffff",
     "--theme-accent-default": "#99be00",
     "--theme-accent-default-contrast": "#ffffff",

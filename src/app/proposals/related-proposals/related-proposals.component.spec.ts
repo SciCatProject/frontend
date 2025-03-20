@@ -1,19 +1,18 @@
 import { DatePipe } from "@angular/common";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { provideMockStore } from "@ngrx/store/testing";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 
 import { RelatedProposalsComponent } from "./related-proposals.component";
-import { TableModule } from "shared/modules/table/table.module";
-import { createMock } from "shared/MockStubs";
+import { MockActivatedRoute, createMock } from "shared/MockStubs";
 import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { selectRelatedProposalsPageViewModel } from "state-management/selectors/proposals.selectors";
-import {
-  changeRelatedProposalsPageAction,
-  fetchRelatedProposalsAction,
-} from "state-management/actions/proposals.actions";
+import { fetchRelatedProposalsAction } from "state-management/actions/proposals.actions";
+import { RowEventType } from "shared/modules/dynamic-material-table/models/table-row.model";
+import { DynamicMatTableModule } from "shared/modules/dynamic-material-table/table/dynamic-mat-table.module";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("RelatedProposalsComponent", () => {
   let component: RelatedProposalsComponent;
@@ -21,6 +20,7 @@ describe("RelatedProposalsComponent", () => {
 
   const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl"),
+    navigate: jasmine.createSpy("navigate"),
   };
   let store: Store;
   let dispatchSpy;
@@ -28,7 +28,7 @@ describe("RelatedProposalsComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RelatedProposalsComponent],
-      imports: [TableModule],
+      imports: [BrowserAnimationsModule, DynamicMatTableModule.forRoot({})],
       providers: [
         DatePipe,
         provideMockStore({
@@ -48,6 +48,7 @@ describe("RelatedProposalsComponent", () => {
           ],
         }),
         { provide: Router, useValue: router },
+        { provide: ActivatedRoute, useClass: MockActivatedRoute },
       ],
     }).compileComponents();
 
@@ -64,8 +65,8 @@ describe("RelatedProposalsComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("#onPageChange", () => {
-    it("should dispatch a changeRelatedProposalsPageAction and a fetchRelatedProposalsAction", () => {
+  describe("#onPaginationChange", () => {
+    it("should dispatch a fetchRelatedProposalsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event: PageChangeEvent = {
@@ -74,16 +75,17 @@ describe("RelatedProposalsComponent", () => {
         length: 25,
       };
 
-      component.onPageChange(event);
+      component.onPaginationChange(event);
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        changeRelatedProposalsPageAction({
-          page: event.pageIndex,
+        fetchRelatedProposalsAction({
           limit: event.pageSize,
+          skip: event.pageIndex * event.pageSize,
+          sortColumn: undefined,
+          sortDirection: undefined,
         }),
       );
-      expect(dispatchSpy).toHaveBeenCalledWith(fetchRelatedProposalsAction());
     });
   });
 
@@ -91,7 +93,10 @@ describe("RelatedProposalsComponent", () => {
     it("should navigate to a proposal", () => {
       const proposal = createMock<ProposalClass>({});
 
-      component.onRowClick(proposal);
+      component.onRowClick({
+        event: RowEventType.RowClick,
+        sender: { row: proposal },
+      });
 
       expect(router.navigateByUrl).toHaveBeenCalledOnceWith(
         "/proposals/" + encodeURIComponent(proposal.proposalId),

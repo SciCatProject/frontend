@@ -60,9 +60,11 @@ describe("Datasets", () => {
 
       cy.get("[data-cy=metadata-name-input]")
         .last()
+        .focus()
         .type(`${metadataName}{enter}`);
       cy.get("[data-cy=metadata-value-input]")
         .last()
+        .focus()
         .type(`${metadataValue}{enter}`);
 
       cy.get("button[data-cy=save-changes-button]").click();
@@ -125,10 +127,12 @@ describe("Datasets", () => {
 
       cy.get("[data-cy=metadata-name-input]")
         .last()
+        .focus()
         .type(`${metadataName}{enter}`);
 
       cy.get("[data-cy=metadata-value-input]")
         .last()
+        .focus()
         .type(`${metadataValue}{enter}`);
 
       // Add second row with same name. This should throw validation error
@@ -144,10 +148,12 @@ describe("Datasets", () => {
 
       cy.get("[data-cy=metadata-name-input]")
         .last()
+        .focus()
         .type(`${metadataName}{enter}`);
 
       cy.get("[data-cy=metadata-value-input]")
         .last()
+        .focus()
         .type(`${metadataValue}{enter}`);
 
       cy.get("mat-error").contains("Name already exists");
@@ -190,10 +196,14 @@ describe("Datasets", () => {
           option[0].click();
         });
 
-      cy.get("[data-cy=metadata-name-input]").last().type(`name1{enter}`);
+      cy.get("[data-cy=metadata-name-input]")
+        .last()
+        .focus()
+        .type(`name1{enter}`);
 
       cy.get("[data-cy=metadata-value-input]")
         .last()
+        .focus()
         .type(`${metadataValue}{enter}`);
 
       // // Add second row with name as name2.
@@ -207,10 +217,14 @@ describe("Datasets", () => {
           option[0].click();
         });
 
-      cy.get("[data-cy=metadata-name-input]").last().type(`name2{enter}`);
+      cy.get("[data-cy=metadata-name-input]")
+        .last()
+        .focus()
+        .type(`name2{enter}`);
 
       cy.get("[data-cy=metadata-value-input]")
         .last()
+        .focus()
         .type(`${metadataValue}{enter}`);
 
       cy.get("button[data-cy=save-changes-button]").click();
@@ -262,14 +276,17 @@ describe("Datasets", () => {
 
       cy.get("[data-cy=metadata-name-input]")
         .last()
+        .focus()
         .type(`${metadataName}{enter}`);
 
       cy.get("[data-cy=metadata-value-input]")
         .last()
+        .focus()
         .type(`${metadataValidJson.value}{enter}`);
 
       cy.get("[data-cy=metadata-unit-input]")
         .last()
+        .focus()
         .type(`${metadataValidJson.unit}{enter}`);
 
       cy.get('[aria-label="warning invalid unit"]').should("not.exist");
@@ -285,14 +302,17 @@ describe("Datasets", () => {
 
       cy.get("[data-cy=metadata-name-input]")
         .last()
+        .focus()
         .type(`${metadataName}-2{enter}`);
 
       cy.get("[data-cy=metadata-value-input]")
         .last()
+        .focus()
         .type(`${metadataValidJson.value}{enter}`);
 
       cy.get("[data-cy=metadata-unit-input]")
         .last()
+        .focus()
         .type(`${metadataInvalidUnitValue}{enter}`);
 
       cy.wait(1000);
@@ -303,12 +323,14 @@ describe("Datasets", () => {
 
       cy.get(".unit-input")
         .contains(`${metadataValidJson.unitSI}`)
+        .parent()
         .within(() => {
           cy.get(".general-warning").should("not.exist");
         });
 
       cy.get(".unit-input")
         .contains(`${metadataInvalidUnitValue}`)
+        .parent()
         .within(() => {
           cy.get(".general-warning").should("exist");
         });
@@ -353,14 +375,17 @@ describe("Datasets", () => {
 
       cy.get("[data-cy=metadata-name-input]")
         .last()
+        .focus()
         .type(`${metadataName}{enter}`);
 
       cy.get("[data-cy=metadata-value-input]")
         .last()
+        .focus()
         .type(`${metadataValidJson.value}{enter}`);
 
       cy.get("[data-cy=metadata-unit-input]")
         .last()
+        .focus()
         .type(`${metadataValidJson.unit}{enter}`);
 
       cy.get("button[data-cy=save-changes-button]").click();

@@ -47,11 +47,7 @@ import { BehaviorSubject } from "rxjs";
 export class TableCoreDirective<T extends TableRow> {
   private _expandComponent: any;
   private _rowSelectionModel = new SelectionModel<T>(true, []);
-  private _tablePagination: TablePagination = {
-    pageIndex: 0,
-    pageSize: 10,
-    pageSizeOptions: [5, 10, 100, 1000, 10000],
-  };
+  private _tablePagination: TablePagination = null;
   protected _rowSelectionMode: TableSelectionMode;
   public expandColumn = [];
   public noData = true;
