@@ -1,4 +1,9 @@
-<mat-card class="dropzone" appDragAndDrop (fileDropped)="onFileDropped($event)">
+<mat-card
+  *ngIf="isOwner"
+  class="dropzone"
+  appDragAndDrop
+  (fileDropped)="onFileDropped($event)"
+>
   <mat-card-content>
     <input
       class="instructions"
@@ -9,11 +14,12 @@
       multiple
       (change)="onFilePicked($event.target['files'])"
     />
+
     <div fxLayout="column" style="align-items: center">
       <div class="instructions">Drop a file here</div>
       <div class="instructions">or</div>
       <div class="instructions">
-        <button mat-raised-button color="accent" (click)="fileDropRef.click()">
+        <button mat-raised-button color="accent" (click)="triggerFileDrop()">
           Browse
         </button>
       </div>
@@ -24,7 +30,7 @@
   </mat-card-content>
 </mat-card>
 
-<mat-card class="file-picker">
+<mat-card class="file-picker" *ngIf="isOwner">
   <mat-card-content>
     <div class="mat-headline-6">
       Choose an image to upload
@@ -33,7 +39,7 @@
       </div>
     </div>
 
-    <button mat-raised-button color="accent" (click)="fileDropRef.click()">
+    <button mat-raised-button color="accent" (click)="triggerFileDrop()">
       Browse
     </button>
   </mat-card-content>
@@ -48,7 +54,10 @@
           (click)="openAttachment(attachment.thumbnail)"
         />
 
-        <form (submit)="onSubmitCaption(attachment.id, caption.value)">
+        <form
+          *ngIf="isOwner"
+          (submit)="onSubmitCaption(attachment.id, caption.value)"
+        >
           <mat-form-field>
             <mat-label>Caption</mat-label>
             <input
@@ -78,6 +87,7 @@
           Download
         </button>
         <button
+          *ngIf="isOwner"
           mat-button
           class="delete-button"
           (click)="onDeleteAttachment(attachment.id)"
