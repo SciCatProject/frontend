@@ -108,6 +108,21 @@ const reducer = createReducer(
     }),
   ),
 
+  on(fromActions.clearFacetsAction, (state): ProposalsState => {
+    const limit = state.proposalFilters.limit; // Save limit
+    const proposalFilters = {
+      ...initialProposalsState.proposalFilters,
+      skip: 0,
+      limit,
+    };
+    return { ...state, proposalFilters };
+  }),
+
+  on(fromActions.changePageAction, (state, { page, limit }): ProposalsState => {
+    const skip = page * limit;
+    const proposalFilters = { ...state.proposalFilters, skip, limit };
+    return { ...state, proposalFilters };
+  }),
   on(
     fromActions.clearCurrentProposalStateAction,
     (state): ProposalsState => ({
@@ -117,19 +132,7 @@ const reducer = createReducer(
   ),
 
   on(
-    fromActions.fetchRelatedProposalsCompleteAction,
-    (state, { relatedProposals }): ProposalsState => ({
-      ...state,
-      relatedProposals,
-    }),
-  ),
-  on(
-    fromActions.fetchRelatedProposalsCountCompleteAction,
-    (state, { count }): ProposalsState => ({
-      ...state,
-      relatedProposalsCount: count,
-    }),
-  ),
+
 );
 
 export const proposalsReducer = (

@@ -27,10 +27,7 @@ export const fetchProposalsFailedAction = createAction(
   "[Proposal] Fetch Proposals Failed",
 );
 
-export const fetchCountAction = createAction(
-  "[Proposal] Fetch Count",
-  props<{ fields?: Record<string, unknown> }>(),
-);
+export const fetchCountAction = createAction("[Proposal] Fetch Count");
 export const fetchCountCompleteAction = createAction(
   "[Proposal] Fetch Count Complete",
   props<{ count: number }>(),
@@ -152,30 +149,3 @@ export const clearCurrentProposalStateAction = createAction(
   "[Proposal] Clear Current Proposal State",
 );
 
-export const fetchRelatedProposalsAction = createAction(
-  "[Proposal] Fetch Related Proposals",
-  props<{
-    skip?: number;
-    limit?: number;
-    search?: string;
-    sortDirection?: string;
-    sortColumn?: string;
-  }>(),
-);
-export const fetchRelatedProposalsCompleteAction = createAction(
-  "[Proposal] Fetch Related Proposals Complete",
-  props<{
-    relatedProposals: (ProposalClass & { relation: string })[];
-  }>(),
-);
-export const fetchRelatedProposalsFailedAction = createAction(
-  "[Proposal] Fetch Related Proposals Failed",
-);
-
-export const fetchRelatedProposalsCountCompleteAction = createAction(
-  "[Proposal] Fetch Related Proposals Count Complete",
-  props<{ count: number }>(),
-);
-export const fetchRelatedProposalsCountFailedAction = createAction(
-  "[Proposal] Fetch Related Proposals Count Failed",
-);

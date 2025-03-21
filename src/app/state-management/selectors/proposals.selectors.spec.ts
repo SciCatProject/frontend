@@ -36,14 +36,6 @@ const initialProposalsState: ProposalsState = {
   parentProposal: parentProposal,
   datasets: [],
 
-  relatedProposals: [],
-  relatedProposalsCount: 0,
-  relatedProposalsFilters: {
-    skip: 0,
-    limit: 25,
-    sortField: "creationTime:desc",
-  },
-
   proposalsCount: 0,
   datasetsCount: 0,
 

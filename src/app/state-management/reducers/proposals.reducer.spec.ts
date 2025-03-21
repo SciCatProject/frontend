@@ -99,6 +99,7 @@ describe("ProposalsReducer", () => {
     });
   });
 
+
   describe("on clearProposalsStateAction", () => {
     it("it should set proposals state to initialProposState", () => {
       const action = fromActions.clearProposalsStateAction();

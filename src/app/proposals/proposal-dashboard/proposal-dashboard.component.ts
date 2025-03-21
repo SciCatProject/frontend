@@ -1,6 +1,3 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { BehaviorSubject, Subscription } from "rxjs";
-import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
   ITableSetting,
   TableSettingEventType,
@@ -144,7 +141,10 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   tablesSettings: object;
 
   constructor(
-    private store: Store,
+    private appConfigService: AppConfigService,
+    private cdRef: ChangeDetectorRef,
+    private dataService: ScicatDataService,
+    private exportService: ExportExcelService,
     private router: Router,
     private route: ActivatedRoute,
   ) {}
