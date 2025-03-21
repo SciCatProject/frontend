@@ -272,10 +272,16 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
 
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
+    const columnsSetting = setting.columnSetting.map((column) => {
+      const { name, display, index, width } = column;
+
+      return { name, display, index, width };
+    });
+
     const tablesSettings = {
       ...this.tablesSettings,
       [setting.settingName || this.tableName]: {
-        columns: setting.columnSetting,
+        columns: columnsSetting,
       },
     };
 

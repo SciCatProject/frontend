@@ -143,6 +143,7 @@ export class DatasetDetailsDashboardComponent
           .subscribe(([groups, isAdmin, isLoggedIn]) => {
             const isInOwnerGroup =
               groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
+            const isPublished = this.dataset.isPublished;
             const hasAccessToLogbook =
               isInOwnerGroup ||
               this.dataset.accessGroups.some((g) => groups.includes(g));
@@ -194,7 +195,7 @@ export class DatasetDetailsDashboardComponent
                 location: "./attachments",
                 label: TAB.attachments,
                 icon: "insert_photo",
-                enabled: isLoggedIn && isInOwnerGroup,
+                enabled: isInOwnerGroup || isPublished,
               },
               {
                 location: "./lifecycle",
