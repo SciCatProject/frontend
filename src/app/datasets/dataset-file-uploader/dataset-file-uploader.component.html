@@ -1,6 +1,7 @@
 <app-file-uploader
   *ngIf="dataset"
   [attachments]="attachments"
+  [isOwner]="isOwner"
   (filePicked)="onFileUploaderFilePicked($event)"
   (submitCaption)="updateCaption($event)"
   (deleteAttachment)="deleteAttachment($event)"

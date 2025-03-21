@@ -713,6 +713,11 @@ describe("UserEffects", () => {
         jobCount: 25,
         userId: "testId",
         id: "testId",
+        externalSettings: {
+          columns: [],
+          filters: [],
+          conditions: [],
+        },
       } as unknown as UserSettings;
 
       const apiResponse = {

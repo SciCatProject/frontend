@@ -25,7 +25,12 @@ import {
   TablePaginationMode,
 } from "../models/table-pagination.model";
 import { PrintConfig } from "../models/print-config.model";
-import { TableSetting, Direction } from "../models/table-setting.model";
+import {
+  TableSetting,
+  Direction,
+  TableSettingEventType,
+  ITableSetting,
+} from "../models/table-setting.model";
 import { MatSort } from "@angular/material/sort";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTable } from "@angular/material/table";
@@ -42,11 +47,7 @@ import { BehaviorSubject } from "rxjs";
 export class TableCoreDirective<T extends TableRow> {
   private _expandComponent: any;
   private _rowSelectionModel = new SelectionModel<T>(true, []);
-  private _tablePagination: TablePagination = {
-    pageIndex: 0,
-    pageSize: 10,
-    pageSizeOptions: [5, 10, 100, 1000, 10000],
-  };
+  private _tablePagination: TablePagination = null;
   protected _rowSelectionMode: TableSelectionMode;
   public expandColumn = [];
   public noData = true;
@@ -75,14 +76,7 @@ export class TableCoreDirective<T extends TableRow> {
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onRowEvent: EventEmitter<IRowEvent<any>> = new EventEmitter();
   @Output() settingChange: EventEmitter<{
-    type:
-      | "create"
-      | "save"
-      | "apply"
-      | "delete"
-      | "default"
-      | "select"
-      | "error";
+    type: TableSettingEventType;
     setting: TableSetting;
   }> = new EventEmitter();
   @Output() paginationChange: EventEmitter<TablePagination> =
@@ -105,7 +99,7 @@ export class TableCoreDirective<T extends TableRow> {
   public tablePagingMode: TablePaginationMode = "none";
   public viewportClass: "viewport" | "viewport-with-pagination" =
     "viewport-with-pagination";
-  tableSetting: TableSetting;
+  tableSetting: ITableSetting;
 
   /**************************************** Reference Variables ***************************************/
   @ViewChild(MatTable, { static: true }) table!: MatTable<any>;

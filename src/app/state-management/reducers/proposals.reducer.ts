@@ -101,41 +101,20 @@ const reducer = createReducer(
     },
   ),
 
-  on(fromActions.prefillFiltersAction, (state, { values }): ProposalsState => {
-    const proposalFilters = { ...state.proposalFilters, ...values };
-    return { ...state, proposalFilters, hasPrefilledFilters: true };
-  }),
-
-  on(fromActions.setTextFilterAction, (state, { text }): ProposalsState => {
-    const proposalFilters = { ...state.proposalFilters, text, skip: 0 };
-    return { ...state, proposalFilters };
-  }),
   on(
-    fromActions.setDateRangeFilterAction,
-    (state, { begin, end }): ProposalsState => {
-      const dateRange = { begin, end };
-      const proposalFilters = { ...state.proposalFilters, dateRange };
-      return { ...state, proposalFilters };
-    },
+    fromActions.clearProposalsStateAction,
+    (): ProposalsState => ({
+      ...initialProposalsState,
+    }),
   ),
 
   on(
-    fromActions.changeDatasetsPageAction,
-    (state, { page, limit }): ProposalsState => {
-      const skip = page * limit;
-      const datasetFilters = { ...state.datasetFilters, skip, limit };
-      return { ...state, datasetFilters };
-    },
+    fromActions.clearCurrentProposalStateAction,
+    (state): ProposalsState => ({
+      ...state,
+      currentProposal: undefined,
+    }),
   ),
-
-  on(fromActions.clearProposalsStateAction, () => ({
-    ...initialProposalsState,
-  })),
-
-  on(fromActions.clearCurrentProposalStateAction, (state) => ({
-    ...state,
-    currentProposal: undefined,
-  })),
 
   on(
     fromActions.fetchRelatedProposalsCompleteAction,
@@ -150,19 +129,6 @@ const reducer = createReducer(
       ...state,
       relatedProposalsCount: count,
     }),
-  ),
-
-  on(
-    fromActions.changeRelatedProposalsPageAction,
-    (state, { page, limit }): ProposalsState => {
-      const skip = page * limit;
-      const relatedProposalsFilters = {
-        ...state.relatedProposalsFilters,
-        skip,
-        limit,
-      };
-      return { ...state, relatedProposalsFilters };
-    },
   ),
 );
 
