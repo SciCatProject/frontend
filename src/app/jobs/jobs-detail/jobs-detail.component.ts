@@ -61,7 +61,7 @@ export class JobsDetailComponent implements OnInit, OnDestroy {
     const message = new Message(
       "Job ID has been copied to your clipboard",
       MessageType.Success,
-      5000,
+      2000,
     );
     this.store.dispatch(showMessageAction({ message }));
   }
