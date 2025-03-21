@@ -6,7 +6,7 @@ describe("Instrument Actions", () => {
 
   describe("fetchInstrumentsAction", () => {
     it("should create an action", () => {
-      const action = fromActions.fetchInstrumentsAction();
+      const action = fromActions.fetchInstrumentsAction({});
 
       expect({ ...action }).toEqual({ type: "[Instrument] Fetch Instruments" });
     });
@@ -135,34 +135,6 @@ describe("Instrument Actions", () => {
       const action = fromActions.saveCustomMetadataFailedAction();
       expect({ ...action }).toEqual({
         type: "[Instrument] Save Custom Metadata Failed",
-      });
-    });
-  });
-
-  describe("changePageAction", () => {
-    it("should create an action", () => {
-      const page = 0;
-      const limit = 25;
-      const action = fromActions.changePageAction({ page, limit });
-
-      expect({ ...action }).toEqual({
-        type: "[Instrument] Change Page",
-        page,
-        limit,
-      });
-    });
-  });
-
-  describe("changePageAction", () => {
-    it("should create an action", () => {
-      const column = "test";
-      const direction = "desc";
-      const action = fromActions.sortByColumnAction({ column, direction });
-
-      expect({ ...action }).toEqual({
-        type: "[Instrument] Sort By Column",
-        column,
-        direction,
       });
     });
   });
