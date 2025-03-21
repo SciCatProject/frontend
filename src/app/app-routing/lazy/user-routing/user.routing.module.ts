@@ -5,6 +5,7 @@ import { JobsGuard } from "app-routing/jobs.guard";
 import { JobsDashboardNewComponent } from "jobs/jobs-dashboard-new/jobs-dashboard-new.component";
 import { JobsDetailComponent } from "jobs/jobs-detail/jobs-detail.component";
 import { UserSettingsComponent } from "users/user-settings/user-settings.component";
+import { NgxJsonViewerModule } from "ngx-json-viewer";
 
 const routes: Routes = [
   {
@@ -30,7 +31,7 @@ const routes: Routes = [
   },
 ];
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(routes), NgxJsonViewerModule],
   exports: [RouterModule],
 })
 export class UsersRoutingModule {}

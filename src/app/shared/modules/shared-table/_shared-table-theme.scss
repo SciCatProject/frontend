@@ -31,6 +31,7 @@
 
     mat-row:hover {
       background-color: mat.get-color-from-palette($hover, "lighter");
+      cursor: pointer;
     }
 
     .mat-form-field-appearance-outline {
