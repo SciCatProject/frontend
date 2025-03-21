@@ -146,7 +146,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
           const savedTableConfigColumns =
             tablesSettings?.[this.tableName]?.columns;
           const tableSort = this.getTableSort();
-          const pagginationConfig = this.getTablePaginationConfig(count);
+          const paginationConfig = this.getTablePaginationConfig(count);
 
           const tableSettingsConfig = getTableSettingsConfig(
             this.tableName,
@@ -156,7 +156,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
           );
 
           if (tableSettingsConfig?.settingList.length) {
-            this.initTable(tableSettingsConfig, pagginationConfig);
+            this.initTable(tableSettingsConfig, paginationConfig);
           }
         },
       ),
