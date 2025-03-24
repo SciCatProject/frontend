@@ -48,9 +48,10 @@ export class TableSetting implements ITableSetting {
   alternativeRowStyle?: any;
   normalRowStyle?: any;
   rowStyle?: any;
+  settingName?: string = "default";
   enableContextMenu?: boolean;
-  autoHeight?: boolean;
-  saveSettingMode?: "simple" | "multi" | "none";
+  autoHeight?: boolean = false;
+  saveSettingMode?: "simple" | "multi" | "none" = "simple";
   showColumnSettingMenu?: boolean = false;
   tableSort?: { sortColumn: string; sortDirection: "asc" | "desc" };
 }
