@@ -63,6 +63,7 @@ export const initialUserState: UserState = {
 
   filters: [
     { LocationFilter: true },
+    { InstrumentFilter: true },
     { PidFilter: true },
     { GroupFilter: true },
     { TypeFilter: true },

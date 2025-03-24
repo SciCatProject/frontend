@@ -323,6 +323,16 @@ export const setDateRangeFilterAction = createAction(
   props<{ begin: string; end: string }>(),
 );
 
+export const addInstrumentFilterAction = createAction(
+  "[Dataset] Add Instrument Filter",
+  props<{ instrument: string }>(),
+);
+
+export const removeInstrumentFilterAction = createAction(
+  "[Dataset] Remove Instrument Filter",
+  props<{ instrument: string }>(),
+);
+
 export const addScientificConditionAction = createAction(
   "[Dataset] Add Scientific Condition",
   props<{ condition: ScientificCondition }>(),

@@ -7,7 +7,11 @@
 
   .dataset-table {
     .settings-button {
-      color: mat.get-color-from-palette($hover, "lighter");
+      color: mat.get-color-from-palette($hover, "hover");
+      
+      &:hover {
+        color: mat.get-color-from-palette($hover, "hover");
+      }
     }
 
     mat-table {

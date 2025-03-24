@@ -135,6 +135,7 @@ export interface DatasetFilters extends GenericFilters {
   creationTime: { begin: string; end: string } | null;
   creationLocation: string[];
   keywords: string[];
+  instrumentIds: string[];
   mode: Record<string, unknown>;
   scientific: ScientificCondition[];
   isPublished: boolean | "";

@@ -101,6 +101,11 @@ export const selectCreationTimeFilter = createSelector(
   (filters) => filters.creationTime,
 );
 
+export const selectInstrumentFilter = createSelector(
+  selectFilters,
+  (filters) => (filters ? filters.instrumentIds : []),
+);
+
 export const selectArchiveViewMode = createSelector(
   selectFilters,
   (filters) => filters.modeToggle,
@@ -157,6 +162,11 @@ export const selectKeywordFacetCounts = createSelector(
   (counts) => counts.keywords || [],
 );
 
+export const selectInstrumentFacetCounts = createSelector(
+  selectFacetCounts,
+  (facetCounts) => (facetCounts ? facetCounts.instrument : []),
+);
+
 // === Querying ===
 
 // Returns copy with null/undefined values and empty arrays removed
@@ -196,7 +206,13 @@ export const selectFullfacetParams = createSelector(
       ...pagination,
     };
     const fields = restrictFilter(theRest);
-    const facets = ["type", "creationLocation", "ownerGroup", "keywords"];
+    const facets = [
+      "type",
+      "creationLocation",
+      "ownerGroup",
+      "keywords",
+      "instrument",
+    ];
     return { fields, facets };
   },
 );

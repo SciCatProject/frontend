@@ -11,7 +11,7 @@ import {
 } from "@angular/core";
 import { TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
-import { Subscription } from "rxjs";
+import { Subscription, combineLatest } from "rxjs";
 import { Store } from "@ngrx/store";
 import {
   clearSelectionAction,
@@ -21,6 +21,8 @@ import {
   sortByColumnAction,
 } from "state-management/actions/datasets.actions";
 
+import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
+
 import {
   selectDatasets,
   selectDatasetsPerPage,
@@ -28,12 +30,14 @@ import {
   selectTotalSets,
   selectDatasetsInBatch,
 } from "state-management/selectors/datasets.selectors";
+import { selectInstruments } from "state-management/selectors/instruments.selectors";
 import { get } from "lodash-es";
 import { AppConfigService } from "app-config.service";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import {
   DatasetClass,
   OutputDatasetObsoleteDto,
+  Instrument,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { PageEvent } from "@angular/material/paginator";
 export interface SortChangeEvent {
@@ -52,6 +56,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   private subscriptions: Subscription[] = [];
 
   appConfig = this.appConfigService.getConfig();
+  instruments: { [id: string]: Instrument } = {};
 
   lodashGet = get;
   currentPage$ = this.store.select(selectPage);
@@ -221,13 +226,24 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.subscriptions.push(
-      this.store.select(selectDatasets).subscribe((datasets) => {
-        this.store.select(selectCurrentUser).subscribe((currentUser) => {
-          const publishedDatasets = datasets.filter(
-            (dataset) => dataset.isPublished,
-          );
-          this.datasets = currentUser ? datasets : publishedDatasets;
-        });
+      combineLatest([
+        this.store.select(selectDatasets),
+        this.store.select(selectCurrentUser),
+      ]).subscribe(([datasets, currentUser]) => {
+        const publishedDatasets = datasets.filter(
+          (dataset) => dataset.isPublished,
+        );
+        this.datasets = currentUser ? datasets : publishedDatasets;
+
+        const hasInstruments = datasets.some(
+          (dataset) =>
+            dataset.instrumentIds && dataset.instrumentIds.length > 0,
+        );
+
+        if (hasInstruments) {
+          // This will trigger the instruments fetch
+          this.store.dispatch(fetchInstrumentsAction());
+        }
 
         // this.derivationMapPids = this.datasetDerivationsMaps.map(
         //   datasetderivationMap => datasetderivationMap.datasetPid
@@ -238,6 +254,19 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
         //     datasetPid: dataset.pid,
         //     derivedDatasetsNum: this.countDerivedDatasets(dataset)
         //   }));
+      }),
+    );
+
+    this.subscriptions.push(
+      // Use a selector that returns all instruments instead of just the current one
+      this.store.select(selectInstruments).subscribe((instruments) => {
+        // Create a map of instrument IDs to instrument objects
+        this.instruments = {};
+        instruments.forEach((instrument) => {
+          if (instrument && instrument.pid) {
+            this.instruments[instrument.pid] = instrument;
+          }
+        });
       }),
     );
   }
@@ -255,5 +284,11 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
+  getInstrumentName(instrumentId: string): string {
+    return instrumentId && this.instruments[instrumentId]
+      ? this.instruments[instrumentId].name
+      : "-";
   }
 }

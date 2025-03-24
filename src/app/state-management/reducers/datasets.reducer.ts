@@ -450,6 +450,28 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.addInstrumentFilterAction,
+    (state, { instrument }): DatasetState => {
+      const instruments = state.filters.instrumentIds
+        .concat(instrument)
+        .filter((val, i, self) => self.indexOf(val) === i); // Unique
+      const filters = { ...state.filters, instrumentIds: instruments, skip: 0 };
+      return { ...state, filters };
+    },
+  ),
+
+  on(
+    fromActions.removeInstrumentFilterAction,
+    (state, { instrument }): DatasetState => {
+      const instruments = state.filters.instrumentIds.filter(
+        (existingInstrument) => existingInstrument !== instrument,
+      );
+      const filters = { ...state.filters, instrumentIds: instruments, skip: 0 };
+      return { ...state, filters };
+    },
+  ),
+
+  on(
     fromActions.addScientificConditionAction,
     (state, { condition }): DatasetState => {
       const currentFilters = state.filters;

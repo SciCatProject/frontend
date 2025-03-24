@@ -40,7 +40,7 @@
     }
 
     .mat-column-standard_datasetName {
-      flex: 1 0 200px;
+      flex: 1 0 280px;
       justify-content: left;
     }
 
@@ -57,7 +57,7 @@
     }
 
     .mat-column-standard_creationTime {
-      flex: 0 1 90px;
+      flex: 0 1 110px;
     }
 
     .mat-column-standard_type {
@@ -73,7 +73,7 @@
     }
 
     .mat-column-standard_proposalId {
-      flex: 0 1 90px;
+      flex: 0 1 80px;
     }
 
     .mat-column-standard_ownerGroup {
@@ -86,6 +86,14 @@
 
     .mat-column-standard_derivedDatasetsNum {
       flex: 0 1 80px;
+    }
+
+    .mat-column-standard_instrumentName {
+      flex: 0 1 140px;
+    }
+
+    .mat-column-standard_numberOfFiles {
+      flex: 0 1 110px;
     }
   }
 }

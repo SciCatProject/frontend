@@ -12,6 +12,7 @@ import { AppMainLayoutComponent } from "./app-main-layout/app-main-layout.compon
 import { BatchCardModule } from "datasets/batch-card/batch-card.module";
 import { BreadcrumbModule } from "shared/modules/breadcrumb/breadcrumb.module";
 import { UsersModule } from "../users/users.module";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { UsersModule } from "../users/users.module";
     MatIconModule,
     MatMenuModule,
     MatToolbarModule,
+    MatTooltipModule,
     RouterModule,
     BreadcrumbModule,
     UsersModule,
