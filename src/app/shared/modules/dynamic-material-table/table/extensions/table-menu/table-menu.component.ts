@@ -9,7 +9,7 @@ import {
 } from "@angular/core";
 import { moveItemInArray, CdkDragDrop } from "@angular/cdk/drag-drop";
 import { TableService } from "../../dynamic-mat-table.service";
-import { TableSetting } from "../../../models/table-setting.model";
+import { ITableSetting } from "../../../models/table-setting.model";
 import { deepClone, isNullorUndefined } from "../../../cores/type";
 import { AbstractField } from "../../../models/table-field.model";
 import { Direction } from "@angular/cdk/bidi";
@@ -29,11 +29,11 @@ export class TableMenuComponent {
     new EventEmitter<TableMenuActionChange>();
 
   @Input()
-  get tableSetting(): TableSetting {
+  get tableSetting(): ITableSetting {
     return this.currentTableSetting;
   }
 
-  set tableSetting(value: TableSetting) {
+  set tableSetting(value: ITableSetting) {
     value.settingList =
       value.settingList === undefined ? [] : value.settingList;
     this.originalTableSetting = value;
@@ -53,7 +53,7 @@ export class TableMenuComponent {
     }
   }
 
-  @Output() tableSettingChange = new EventEmitter<TableSetting>();
+  @Output() tableSettingChange = new EventEmitter<ITableSetting>();
   @ViewChild("newSetting", { static: false }) newSettingElement: ElementRef;
 
   newSettingName = "";
@@ -61,8 +61,8 @@ export class TableMenuComponent {
 
   currentColumn: number = null;
   reverseDirection: "auto" | Direction = "auto";
-  originalTableSetting: TableSetting;
-  currentTableSetting: TableSetting;
+  originalTableSetting: ITableSetting;
+  currentTableSetting: ITableSetting;
 
   constructor(public tableService: TableService) {}
 
@@ -133,7 +133,7 @@ export class TableMenuComponent {
     e.stopPropagation();
   }
 
-  selectSetting_onClick(e, setting: TableSetting) {
+  selectSetting_onClick(e, setting: ITableSetting) {
     e.stopPropagation();
     this.menuActionChange.emit({
       type: TableMenuAction.SelectSetting,

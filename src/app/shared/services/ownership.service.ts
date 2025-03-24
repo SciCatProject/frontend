@@ -13,6 +13,7 @@ import {
   providedIn: "root",
 })
 export class OwnershipService {
+  public isOwner = false;
   checkDatasetAccess(
     dataset: OutputDatasetObsoleteDto | undefined,
     store: Store,
@@ -26,12 +27,15 @@ export class OwnershipService {
       );
       combineLatest([accessGroups$, isAdmin$])
         .subscribe(([groups, isAdmin]) => {
-          const isInOwnerGroup =
-            groups.indexOf(dataset.ownerGroup) !== -1 || isAdmin;
-          const hasAccessToDataset =
-            isInOwnerGroup ||
-            dataset.accessGroups.some((g) => groups.includes(g));
-          if (!isInOwnerGroup && !hasAccessToDataset) {
+          const isPublished = dataset.isPublished;
+          const userHasAccess =
+            isAdmin ||
+            groups.includes(dataset.ownerGroup) ||
+            dataset.accessGroups.some((group) => groups.includes(group));
+
+          this.isOwner = userHasAccess;
+
+          if (!userHasAccess && !isPublished) {
             router.navigate(["/401"], {
               skipLocationChange: true,
               queryParams: {
@@ -42,5 +46,6 @@ export class OwnershipService {
         })
         .unsubscribe();
     }
+    return this.isOwner;
   }
 }
