@@ -1,0 +1,28 @@
+{
+  "type": "Group",
+  "elements": [
+    {
+      "type": "Control",
+      "label": "Citations",
+      "scope": "#/properties/citation",
+      "options": {
+        "elementLabelProp": "title",
+        "showSortButtons": true,
+        "detail": {
+          "type": "VerticalLayout",
+          "elements": [
+            { "type": "Control", "label": "Title", "scope": "#/properties/title" },
+            { "type": "Control", "label": "Published", "scope": "#/properties/published" },
+            { "type": "Control", "label": "Preprint", "scope": "#/properties/preprint" },
+            { "type": "Control", "label": "Journal Citation", "scope": "#/properties/j_or_nj_citation" },
+            { "type": "Control", "label": "Year", "scope": "#/properties/year" },
+            { "type": "Control", "label": "DOI", "scope": "#/properties/doi" },
+            { "type": "Control", "label": "Language", "scope": "#/properties/language" },
+            { "type": "Control", "label": "Country", "scope": "#/properties/country" },
+            { "type": "Control", "label": "Details", "scope": "#/properties/details" }
+          ]
+        }
+      }
+    }
+  ]
+}

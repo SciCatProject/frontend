@@ -99,6 +99,25 @@
       </mat-card>
 
 
+      <!-- Citation card -->
+
+      <mat-card>
+        <mat-card-header class="file-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> assignment </mat-icon>
+          </div>
+          Author Information
+        </mat-card-header>
+        <jsonforms
+          [data]="data"
+          [schema]="schema"
+          [uischema]="citationSchema"
+          [renderers]="configuredRenderer"
+          (dataChange)="onDataChange($event)"
+         ></jsonforms>
+      </mat-card>
+
+
       <div class="button-container">
         <button class="submitDep" mat-raised-button color="primary" (click)="onSubmitClick()">
           Next

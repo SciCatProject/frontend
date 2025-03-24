@@ -84,3 +84,8 @@ export class Depositor {
     );
   }
 }
+
+
+//  properly initialize instances
+// authors and pi render propoerly
+// good-looking renderers

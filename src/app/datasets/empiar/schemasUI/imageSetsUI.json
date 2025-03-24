@@ -63,8 +63,28 @@
             },
             {
               "type": "Control",
-              "label": "Details",
-              "scope": "#/properties/details"
+              "label": "micrographs file pattern",
+              "scope": "#/properties/micrographs_file_pattern"
+            },
+            {
+              "type": "Control",
+              "label": "picked particles file pattern",
+              "scope": "#/properties/picked_particles_file_pattern"
+            },
+            {
+              "type": "Control",
+              "label": "picked particles directory",
+              "scope": "#/properties/picked_particles_directory"
+            },
+            {
+              "type": "Control",
+              "label": "Image width",
+              "scope": "#/properties/image_width"
+            },
+            {
+              "type": "Control",
+              "label": "Image hight",
+              "scope": "#/properties/image_hight"
             }
           ]
         }

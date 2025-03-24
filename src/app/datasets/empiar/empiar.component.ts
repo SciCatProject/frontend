@@ -25,6 +25,7 @@ import { emdbRefRendererEntry } from "./customRenderers/rendererEMDB";
 import generalSchemaAsset from "./schemasUI/generalQuestionUI.json";
 import imageSetsAssets from "./schemasUI/imageSetsUI.json";
 import piAsset from "./schemasUI/authorInfoUI.json";
+import citationAsset from "./schemasUI/citationUI.json";
 
 @Component({
   selector: "app-empiar",
@@ -46,6 +47,7 @@ export class EmpiarComponent implements OnInit, OnDestroy {
   generalSchema = generalSchemaAsset;
   imageSets = imageSetsAssets;
   schemaPI = piAsset;
+  citationSchema = citationAsset;
   configuredRenderer = [
     // releaseDateRendererEntry,
     // emdbRefRendererEntry,
