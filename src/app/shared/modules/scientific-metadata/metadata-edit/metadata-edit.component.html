@@ -84,6 +84,9 @@
               <mat-error *ngIf="fieldHasLinkError(i, 'fieldValue')">
                 Invalid link
               </mat-error>
+              <mat-error *ngIf="fieldHasRangeError(i, 'fieldValue')">
+                Invalid range
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="formColumn">
