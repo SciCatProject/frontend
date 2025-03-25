@@ -26,6 +26,7 @@ import generalSchemaAsset from "./schemasUI/generalQuestionUI.json";
 import imageSetsAssets from "./schemasUI/imageSetsUI.json";
 import piAsset from "./schemasUI/authorInfoUI.json";
 import citationAsset from "./schemasUI/citationUI.json";
+import {EmpiarJson, ReleaseDate, ExperimentType, GetEnumTitles} from "./depositionEMPIAR";
 
 @Component({
   selector: "app-empiar",
@@ -43,11 +44,14 @@ export class EmpiarComponent implements OnInit, OnDestroy {
   empiarSchema: string;
   data: JsonSchema = createEmptyInstance();
   schema: JsonSchema;
+
   // materialRenderers = angularMaterialRenderers;
   generalSchema = generalSchemaAsset;
   imageSets = imageSetsAssets;
   schemaPI = piAsset;
   citationSchema = citationAsset;
+  releaseDateTitles = Object.values(ReleaseDate);  
+
   configuredRenderer = [
     // releaseDateRendererEntry,
     // emdbRefRendererEntry,
@@ -95,6 +99,7 @@ export class EmpiarComponent implements OnInit, OnDestroy {
       }
     });
     this.data = { ...this.data };
+    this.updateReleaseDateControl();
   }
 
   ngOnDestroy() {
@@ -104,43 +109,72 @@ export class EmpiarComponent implements OnInit, OnDestroy {
   }
   onDataChange(event: any) {
     this.data = event;
+    console.log(event, this.data)
   }
 
   onSubmitClick() {
     console.log(this.data);
   }
+ 
+  updateReleaseDateControl() {
+    const releaseDateControl = this.findControlInSchema(this.generalSchema, '#/properties/release_date');
+
+    if (releaseDateControl) {
+      releaseDateControl.options = releaseDateControl.options || {};
+      releaseDateControl.options.enum = Object.keys(ReleaseDate); // Enum values (short codes)
+      releaseDateControl.options.enumTitles = Object.values(ReleaseDate); // Enum titles (human-readable)
+    }
+  }
+
+  findControlInSchema(schema: any, scope: string) {
+    // Recursive function to find the control based on scope
+    if (schema.scope === scope) {
+      return schema;
+    }
+    if (schema.elements) {
+      for (const element of schema.elements) {
+        const result = this.findControlInSchema(element, scope);
+        if (result) return result;
+      }
+    }
+    return null;
+  }
+
 }
 
-function createEmptyInstance() {
-  // not complete yet
+function createEmptyInstance(): EmpiarJson {
   return {
     title: "",
-    release_date: "",
-    experiment_type: 0,
-    scale: "",
-    cross_references: [{ name: "" }],
+    release_date: null,
+    experiment_type: null,
+    scale: undefined,
+    crossReferences: [],
+    biostudiesReferences: [],
+    idrReferences: [],
+    empiarReferences: [],
     workflows: [],
     authors: [],
-    corresponding_author: {
-      author_orcid: "",
-      middle_name: "",
-      organization: "",
-      street: "",
-      town_or_city: "",
-      state_or_province: "",
-      post_or_zip: "",
-      telephone: "",
-      fax: null,
+    correspondingAuthor: {
+      author_orcid: null,
       first_name: "",
+      middle_name: null,
       last_name: "",
+      organization: "",
+      street: null,
+      town_or_city: "",
+      state_or_province: null,
+      post_or_zip: "",
+      telephone: null,
+      fax: null,
       email: "",
-      country: "",
+      country: null, 
     },
-    principal_investigator: [],
-    workflow_file: {
-      path: "",
-    },
+    principalInvestigator: [],
     imagesets: [],
-    citation: [],
+    citations: [],
   };
 }
+
+
+// authors and pi render propoerly
+// good-looking renderers

@@ -17,7 +17,7 @@
           "label": "Release Date",
           "scope": "#/properties/release_date",
           "options": {
-            "format": "radio"
+            "format": "select"
           }
         },
         {
@@ -25,12 +25,12 @@
           "label": "Experiment Type",
           "scope": "#/properties/experiment_type",
           "options": {
-            "format": "select"
+            "format": "radio"
           }
         },
         {
           "type": "Control",
-          "label":"Scope",
+          "label":"Scale",
           "scope": "#/properties/scale",
           "options": {
             "format": "select"
