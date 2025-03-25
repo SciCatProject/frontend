@@ -5,7 +5,6 @@ import {
   OnChanges,
   SimpleChange,
 } from "@angular/core";
-import { DateTime } from "luxon";
 import {
   ScientificMetadataTableData,
   ScientificMetadata,
@@ -195,10 +194,10 @@ export class MetadataViewComponent implements OnInit, OnChanges {
       return true;
     }
 
-    if (
-      typeof scientificMetadata.value !== "number" &&
-      DateTime.fromISO(scientificMetadata.value).isValid
-    ) {
+    const isValidDate =
+      new Date(scientificMetadata.value).toString() !== "Invalid Date";
+
+    if (typeof scientificMetadata.value !== "number" && isValidDate) {
       return true;
     }
 
