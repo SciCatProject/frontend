@@ -4,7 +4,7 @@ import {
   CreateJobDto,
   JobClass,
   JobsService,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import { selectQueryParams } from "state-management/selectors/jobs.selectors";
 import * as fromActions from "state-management/actions/jobs.actions";

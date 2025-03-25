@@ -7,7 +7,7 @@ import {
   UserSettings,
   Configuration,
   AuthService as SharedAuthService,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { ADAuthService } from "users/adauth.service";
 import { TestBed } from "@angular/core/testing";
 import { provideMockActions } from "@ngrx/effects/testing";
@@ -713,6 +713,11 @@ describe("UserEffects", () => {
         jobCount: 25,
         userId: "testId",
         id: "testId",
+        externalSettings: {
+          columns: [],
+          filters: [],
+          conditions: [],
+        },
       } as unknown as UserSettings;
 
       const apiResponse = {

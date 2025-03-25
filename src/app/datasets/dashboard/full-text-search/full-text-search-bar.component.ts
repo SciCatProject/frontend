@@ -57,7 +57,6 @@ export class FullTextSearchBarComponent implements OnInit, OnDestroy {
       this.searchTermSubject
         .pipe(debounceTime(200), distinctUntilChanged())
         .subscribe((terms) => {
-          console.log(`set terms: ${terms}`);
           this.store.dispatch(setSearchTermsAction({ terms }));
           this.store.dispatch(setTextFilterAction({ text: terms }));
         }),
@@ -69,7 +68,6 @@ export class FullTextSearchBarComponent implements OnInit, OnDestroy {
       this.searchClickSubject
         .pipe(debounceTime(250), withLatestFrom(searchTerms$))
         .subscribe(([_, terms]) => {
-          console.log(`latest terms: ${terms}`);
           this.store.dispatch(fetchDatasetsAction());
           this.store.dispatch(fetchFacetCountsAction());
         }),

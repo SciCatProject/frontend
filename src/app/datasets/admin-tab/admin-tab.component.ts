@@ -6,7 +6,7 @@ import { take } from "rxjs/operators";
 import {
   CreateJobDto,
   OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { submitJobAction } from "state-management/actions/jobs.actions";
 import {
   selectCurrentDatablocks,

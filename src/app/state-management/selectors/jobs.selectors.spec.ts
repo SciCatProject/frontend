@@ -2,7 +2,7 @@ import * as fromSelectors from "./jobs.selectors";
 
 import { JobsState } from "../state/jobs.store";
 import { createMock } from "shared/MockStubs";
-import { JobClass } from "@scicatproject/scicat-sdk-ts";
+import { JobClass } from "@scicatproject/scicat-sdk-ts-angular";
 
 const job = createMock<JobClass>({
   emailJobInitiator: "test@email.com",

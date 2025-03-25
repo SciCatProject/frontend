@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
 import {
   PoliciesService,
   UpdateWherePolicyDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import {
   selectQueryParams,

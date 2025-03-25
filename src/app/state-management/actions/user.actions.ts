@@ -4,7 +4,7 @@ import {
   ReturnedUserDto,
   UserIdentity,
   UserSettings,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { Message, Settings, TableColumn } from "state-management/models";
 import {
   ConditionConfig,

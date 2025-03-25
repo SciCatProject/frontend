@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, OnDestroy } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { SampleClass } from "@scicatproject/scicat-sdk-ts";
+import { SampleClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import {
   addSampleAction,
@@ -46,7 +46,6 @@ export class SampleDialogComponent implements OnInit, OnDestroy {
 
   save() {
     this.dialogRef.close(this.form.value);
-    console.log("gmnov", this.form.value);
     this.sample.sampleCharacteristics = {
       characteristics: this.form.value.sampleCharacteristics,
     };

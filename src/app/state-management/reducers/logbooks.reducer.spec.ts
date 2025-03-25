@@ -3,7 +3,7 @@ import { initialLogbookState } from "../state/logbooks.store";
 import * as fromActions from "../actions/logbooks.actions";
 import { LogbookFilters } from "../models";
 import { createMock } from "shared/MockStubs";
-import { Logbook } from "@scicatproject/scicat-sdk-ts";
+import { Logbook } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("LogbooksReducer", () => {
   const logbook = createMock<Logbook>({

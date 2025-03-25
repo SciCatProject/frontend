@@ -6,7 +6,7 @@ import {
 } from "state-management/state/datasets.store";
 import { ArchViewMode, ScientificCondition } from "../models";
 import { createMock, mockAttachment as attachment } from "shared/MockStubs";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 const derivedDataset = createMock<OutputDatasetObsoleteDto>({
   pid: "testPid",

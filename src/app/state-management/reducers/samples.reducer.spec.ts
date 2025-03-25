@@ -7,7 +7,7 @@ import {
   mockDataset as dataset,
   mockAttachment as attachment,
 } from "shared/MockStubs";
-import { SampleClass } from "@scicatproject/scicat-sdk-ts";
+import { SampleClass } from "@scicatproject/scicat-sdk-ts-angular";
 
 const sample = createMock<SampleClass>({
   sampleId: "testId",

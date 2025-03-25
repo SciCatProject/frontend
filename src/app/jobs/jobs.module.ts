@@ -13,6 +13,7 @@ import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { JobsDashboardNewComponent } from "./jobs-dashboard-new/jobs-dashboard-new.component";
 import { SharedTableModule } from "shared/modules/shared-table/shared-table.module";
+import { NgxJsonViewerModule } from "ngx-json-viewer";
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { SharedTableModule } from "shared/modules/shared-table/shared-table.modu
     SharedScicatFrontendModule,
     SharedTableModule,
     StoreModule.forFeature("jobs", jobsReducer),
+    NgxJsonViewerModule,
   ],
   exports: [
     JobsDetailComponent,

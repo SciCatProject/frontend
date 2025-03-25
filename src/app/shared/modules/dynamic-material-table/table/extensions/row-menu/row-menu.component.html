@@ -1,0 +1,37 @@
+<button
+  class="clear"
+  type="button"
+  mat-icon-button
+  #menuTrigger="matMenuTrigger"
+  (click)="menuOnClick($event)"
+  [matMenuTriggerFor]="menu"
+  [dir]="tableSetting.direction === 'rtl' ? 'ltr' : 'rtl'"
+>
+  <mat-icon>more_horiz</mat-icon>
+</button>
+
+<mat-menu
+  #menu="matMenu"
+  [overlapTrigger]="false"
+  [dir]="tableSetting.direction === 'rtl' ? 'ltr' : 'rtl'"
+>
+  <ng-template matMenuContent>
+    <button
+      mat-button
+      type="button"
+      [class.ltr-menu]="tableSetting.direction === 'rtl'"
+      [color]="menu.color"
+      class="button-menu"
+      *ngFor="let menu of visibleActionMenus"
+      [disabled]="menu.disabled"
+      (click)="menuButton_OnClick(menu)"
+    >
+      <mat-icon>{{ menu.icon }}</mat-icon>
+      <span
+        [class.text-align-right]="tableSetting.direction === 'rtl'"
+        class="text-align-left"
+        >{{ menu.text }}</span
+      >
+    </button>
+  </ng-template>
+</mat-menu>

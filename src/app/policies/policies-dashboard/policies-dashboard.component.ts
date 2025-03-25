@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { DatasetsService, Policy } from "@scicatproject/scicat-sdk-ts";
+import { DatasetsService, Policy } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   TableColumn,
   PageChangeEvent,
