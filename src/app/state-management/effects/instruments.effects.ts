@@ -7,7 +7,6 @@ import {
 import * as fromActions from "state-management/actions/instruments.actions";
 import { switchMap, map, catchError, mergeMap } from "rxjs/operators";
 import { of } from "rxjs";
-import { Store } from "@ngrx/store";
 import {
   loadingAction,
   loadingCompleteAction,
@@ -30,7 +29,7 @@ export class InstrumentEffects {
         }
 
         return this.instrumentsService
-          .instrumentsControllerFindAll(JSON.stringify(limitsParam))
+          .instrumentsControllerFindAll(JSON.stringify({ limits: limitsParam }))
           .pipe(
             mergeMap((instruments: Instrument[]) => [
               fromActions.fetchInstrumentsCompleteAction({ instruments }),
@@ -117,6 +116,5 @@ export class InstrumentEffects {
   constructor(
     private actions$: Actions,
     private instrumentsService: InstrumentsService,
-    private store: Store,
   ) {}
 }
