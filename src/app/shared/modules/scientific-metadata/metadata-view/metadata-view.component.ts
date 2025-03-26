@@ -13,7 +13,7 @@ import {
 import { UnitsService } from "shared/services/units.service";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import { Direction } from "@angular/cdk/bidi";
-import { TableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
+import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import { BehaviorSubject } from "rxjs";
 import { PrintConfig } from "shared/modules/dynamic-material-table/models/print-config.model";
 import { TableSelectionMode } from "shared/modules/dynamic-material-table/models/table-row.model";
@@ -46,7 +46,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
   pending = true;
 
-  setting: TableSetting = {};
+  setting: ITableSetting = {};
 
   showNoData = true;
 
@@ -69,7 +69,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
   showGlobalTextSearch = false;
 
-  tableDefaultSettingsConfig: TableSetting = {
+  tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
     saveSettingMode: "none",
     settingList: [
@@ -233,7 +233,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     }
   }
 
-  initTable(settingConfig: TableSetting): void {
+  initTable(settingConfig: ITableSetting): void {
     const currentColumnSetting = settingConfig.settingList.find(
       (s) => s.isCurrentSetting,
     )?.columnSetting;

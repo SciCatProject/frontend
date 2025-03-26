@@ -88,6 +88,13 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     };
   }
 
+  private isRangeType(type: MetadataTypes): boolean {
+    return (
+      type === MetadataTypes.number_range ||
+      type === MetadataTypes.quantity_range
+    );
+  }
+
   addMetadata() {
     const field = this.formBuilder.group({
       fieldType: this.formControlFields["fieldType"](),
@@ -150,7 +157,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
       this.items.at(index).get("fieldValue")?.updateValueAndValidity();
     }
 
-    if (type === MetadataTypes.number_range || MetadataTypes.quantity_range) {
+    if (this.isRangeType(type)) {
       this.items
         .at(index)
         .get("fieldValue")
@@ -216,24 +223,22 @@ export class MetadataEditComponent implements OnInit, OnChanges {
   numberRangeValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (
-        control.parent?.value.fieldType === MetadataTypes.number_range ||
-        control.parent?.value.fieldType === MetadataTypes.quantity_range
+        this.isRangeType(control.parent?.value.fieldType) &&
+        typeof control.value === "string"
       ) {
-        if (typeof control.value === "string") {
-          const numbers = control.value.split(",").map((item) => item.trim());
+        const numbers = control.value.split(",").map((item) => item.trim());
 
-          if (numbers.length !== 2) {
-            return { invalidNumberRange: true };
-          }
-
-          const validNumberRange =
-            numbers[0] &&
-            numbers[1] &&
-            !isNaN(Number(numbers[0])) &&
-            !isNaN(Number(numbers[1]));
-
-          return validNumberRange ? null : { invalidNumberRange: true };
+        if (numbers.length !== 2) {
+          return { invalidNumberRange: true };
         }
+
+        const validNumberRange =
+          numbers[0] &&
+          numbers[1] &&
+          !isNaN(Number(numbers[0])) &&
+          !isNaN(Number(numbers[1]));
+
+        return validNumberRange ? null : { invalidNumberRange: true };
       }
 
       return null;
@@ -264,11 +269,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
         }
       }
 
-      if (
-        (value.type === MetadataTypes.number_range ||
-          value.type === MetadataTypes.quantity_range) &&
-        typeof value.value === "string"
-      ) {
+      if (this.isRangeType(value.type) && typeof value.value === "string") {
         this.metadata[key].value = value.value.split(",").map(Number);
       }
     }
@@ -337,31 +338,14 @@ export class MetadataEditComponent implements OnInit, OnChanges {
                 this.metadata[key]["unit"],
               ),
             });
-          } else if (
-            this.metadata[key]["type"] === MetadataTypes.number_range
-          ) {
+          } else if (this.isRangeType(this.metadata[key]["type"])) {
+            const rangeFieldType =
+              this.metadata[key]["type"] === MetadataTypes.number_range
+                ? MetadataTypes.number_range
+                : MetadataTypes.quantity_range;
+
             field = this.formBuilder.group({
-              fieldType: this.formControlFields["fieldType"](
-                MetadataTypes.number_range,
-              ),
-              fieldName: this.formControlFields["fieldName"](key),
-              fieldHumanName: this.formControlFields["fieldHumanName"](
-                this.getHumanNameFieldValue(this.metadata[key], key),
-              ),
-              fieldValue: this.formControlFields["fieldValue"](
-                this.metadata[key]["value"],
-              ),
-              fieldUnit: this.formControlFields["fieldUnit"](
-                this.metadata[key]["unit"],
-              ),
-            });
-          } else if (
-            this.metadata[key]["type"] === MetadataTypes.quantity_range
-          ) {
-            field = this.formBuilder.group({
-              fieldType: this.formControlFields["fieldType"](
-                MetadataTypes.quantity_range,
-              ),
+              fieldType: this.formControlFields["fieldType"](rangeFieldType),
               fieldName: this.formControlFields["fieldName"](key),
               fieldHumanName: this.formControlFields["fieldHumanName"](
                 this.getHumanNameFieldValue(this.metadata[key], key),
@@ -522,10 +506,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
   fieldHasRangeError(index: number, field: string): boolean {
     const formField = this.items.at(index).get(field);
-    if (
-      formField.parent?.value.fieldType === MetadataTypes.number_range ||
-      formField.parent?.value.fieldType === MetadataTypes.quantity_range
-    ) {
+    if (this.isRangeType(formField.parent?.value.fieldType)) {
       return formField ? formField.hasError("invalidNumberRange") : true;
     }
 

@@ -3,7 +3,7 @@ import { AbstractField } from "./table-field.model";
 
 export type Direction = "rtl" | "ltr";
 export type DisplayMode = "visible" | "hidden" | "none";
-export interface TableSetting {
+export interface ITableSetting {
   pageSize?: number;
   direction?: Direction;
   columnSetting?: AbstractField[] | null;
@@ -22,9 +22,9 @@ export interface TableSetting {
   tableSort?: { sortColumn: string; sortDirection: "asc" | "desc" };
 }
 
-export interface SettingItem extends TableSetting {
-  isCurrentSetting?: boolean;
-  isDefaultSetting?: boolean;
+export interface SettingItem extends ITableSetting {
+  isCurrentSetting: boolean;
+  isDefaultSetting: boolean;
 }
 
 export interface VisibleActionMenu {
@@ -41,7 +41,7 @@ export interface VisibleActionMenu {
   clearFilter?: boolean;
 }
 
-export class TableSetting implements TableSetting {
+export class TableSetting implements ITableSetting {
   direction?: Direction = "ltr";
   visibleActionMenu?: VisibleActionMenu | null = null;
   visibleTableMenu?: boolean;

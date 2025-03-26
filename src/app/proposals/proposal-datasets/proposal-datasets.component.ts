@@ -19,7 +19,7 @@ import {
   TableEventType,
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
-import { TableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
+import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import {
   actionMenu,
   getTableSettingsConfig,
@@ -38,7 +38,7 @@ export interface TableData {
   location: string;
 }
 
-const tableDefaultSettingsConfig: TableSetting = {
+const tableDefaultSettingsConfig: ITableSetting = {
   visibleActionMenu: actionMenu,
   saveSettingMode: "none",
   settingList: [
@@ -103,7 +103,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
 
   pending = true;
 
-  setting: TableSetting = {};
+  setting: ITableSetting = {};
 
   paginationMode: TablePaginationMode = "server-side";
 
@@ -165,7 +165,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
   }
 
   initTable(
-    settingConfig: TableSetting,
+    settingConfig: ITableSetting,
     paginationConfig: TablePagination,
   ): void {
     const currentColumnSetting = settingConfig.settingList.find(
@@ -180,16 +180,13 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
   formatTableData(datasets: OutputDatasetObsoleteDto[]): TableData[] {
     let tableData: TableData[] = [];
     if (datasets) {
-      tableData = datasets.map((dataset: any) => ({
+      tableData = datasets.map((dataset) => ({
         pid: dataset.pid,
         name: dataset.datasetName,
         sourceFolder:
           "..." + this.slicePipe.transform(dataset.sourceFolder, -14),
         size: this.filesizePipe.transform(dataset.size),
-        creationTime: this.datePipe.transform(
-          dataset.creationTime,
-          "yyyy-MM-dd HH:mm",
-        ),
+        creationTime: this.datePipe.transform(dataset.creationTime),
         owner: dataset.owner,
         location: dataset.creationLocation,
       }));

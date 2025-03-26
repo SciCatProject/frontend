@@ -19,7 +19,7 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import {
   Direction,
-  TableSetting,
+  ITableSetting,
 } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import {
   actionMenu,
@@ -28,7 +28,7 @@ import {
 import { fetchRelatedProposalsAction } from "state-management/actions/proposals.actions";
 import { selectRelatedProposalsPageViewModel } from "state-management/selectors/proposals.selectors";
 
-const tableDefaultSettingsConfig: TableSetting = {
+const tableDefaultSettingsConfig: ITableSetting = {
   visibleActionMenu: actionMenu,
   saveSettingMode: "none",
   settingList: [
@@ -95,7 +95,7 @@ export class RelatedProposalsComponent implements OnInit, OnDestroy {
 
   pending = true;
 
-  setting: TableSetting = {};
+  setting: ITableSetting = {};
 
   paginationMode: TablePaginationMode = "server-side";
 
@@ -145,7 +145,7 @@ export class RelatedProposalsComponent implements OnInit, OnDestroy {
         this.dataSource.next(relatedProposals);
         this.pending = false;
 
-        let tableSort: TableSetting["tableSort"];
+        let tableSort: ITableSetting["tableSort"];
         if (queryParams.sortDirection && queryParams.sortColumn) {
           tableSort = {
             sortColumn: queryParams.sortColumn,
@@ -175,7 +175,7 @@ export class RelatedProposalsComponent implements OnInit, OnDestroy {
   }
 
   initTable(
-    settingConfig: TableSetting,
+    settingConfig: ITableSetting,
     paginationConfig: TablePagination,
   ): void {
     const currentColumnSetting = settingConfig.settingList.find(
