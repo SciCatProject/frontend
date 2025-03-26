@@ -208,5 +208,6 @@
       { "TextFilter": true }
     ],
     "conditions": []
-  }
+  },
+  "dateFormat": "yyyy-MM-dd HH:mm"
 }
