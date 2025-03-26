@@ -21,6 +21,7 @@ import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
 import { DatePipe, TitleCasePipe } from "@angular/common";
 import { LinkyPipe } from "ngx-linky";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
+import { DateTime } from "luxon";
 
 @Component({
   selector: "metadata-view",
@@ -195,9 +196,11 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     }
 
     const isValidDate =
-      new Date(scientificMetadata.value).toString() !== "Invalid Date";
+      typeof scientificMetadata.value !== "number" &&
+      new Date(scientificMetadata.value).toString() !== "Invalid Date" &&
+      DateTime.fromISO(scientificMetadata.value).isValid;
 
-    if (typeof scientificMetadata.value !== "number" && isValidDate) {
+    if (isValidDate) {
       return true;
     }
 
