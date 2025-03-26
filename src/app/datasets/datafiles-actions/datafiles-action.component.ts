@@ -162,24 +162,46 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
   }
 
   type_json() {
-    const data = {
-      auth_token: `Bearer ${this.authService.getToken().id}`,
-      jwt: this.jwt,
-      dataset: this.actionDataset.pid,
-      directory: this.actionDataset.sourceFolder,
-      files: this.files
-        .filter(
-          (item) =>
-            this.actionConfig.files === "all" ||
-            (this.actionConfig.files === "selected" && item.selected),
-        )
-        .map((item) => item.path),
-    };
+    let payload = "";
+    if (this.actionConfig.payload) {
+      payload = this.actionConfig.payload
+        .replace(/{{ auth_token }}/, `Bearer ${this.authService.getToken().id}`)
+        .replace(/{{ jwt }}/, this.jwt)
+        .replace(/{{ datasetPid }}/, this.actionDataset.pid)
+        .replace(/{{ sourceFolder }}/, this.actionDataset.sourceFolder)
+        .replace(/{{ filesPath }}/, JSON.stringify(
+	  this.files.filter(
+            (item) =>
+              this.actionConfig.files === "all" ||
+              (this.actionConfig.files === "selected" && item.selected),
+          )
+          .map((item) => item.path)));
+    }
+    else {
+      const data = {
+        auth_token: `Bearer ${this.authService.getToken().id}`,
+        jwt: this.jwt,
+        dataset: this.actionDataset.pid,
+        directory: this.actionDataset.sourceFolder,
+        files: this.files
+          .filter(
+            (item) =>
+              this.actionConfig.files === "all" ||
+              (this.actionConfig.files === "selected" && item.selected),
+          )
+          .map((item) => item.path),
+      };
+      payload = JSON.stringify(data);
+    }
 
     fetch(this.actionConfig.url, {
       method: this.actionConfig.method || "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      headers: { 
+        "Content-Type": "application/json",
+      },
+      body: payload,
+    }).then((response) => {
+      console.log(response.json());
     });
 
     return true;

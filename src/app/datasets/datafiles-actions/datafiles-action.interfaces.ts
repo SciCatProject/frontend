@@ -12,6 +12,7 @@ export interface ActionConfig {
   method?: string;
   enabled?: string;
   disabled?: string;
+  payload?: string;
 }
 
 export interface ActionDataset {
