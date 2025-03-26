@@ -82,14 +82,6 @@ export class MetadataViewComponent implements OnInit, OnChanges {
             header: "Name",
             name: "human_name",
             width: 250,
-            customRender: (column, row) => {
-              return (
-                row[column.name] ||
-                this.titleCase.transform(
-                  this.replaceUnderscore.transform(row.name),
-                )
-              );
-            },
           },
           {
             name: "name",
@@ -152,12 +144,19 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     public prettyUnit: PrettyUnitPipe,
   ) {}
 
+  getHumanReadableName(name: string): string {
+    return this.titleCase.transform(this.replaceUnderscore.transform(name));
+  }
+
   createMetadataArray(
     metadata: Record<string, any>,
   ): ScientificMetadataTableData[] {
     const metadataArray: ScientificMetadataTableData[] = [];
     Object.keys(metadata).forEach((key) => {
       let metadataObject: ScientificMetadataTableData;
+      const humanReadableName =
+        metadata[key]["human_name"] || this.getHumanReadableName(key);
+
       if (
         typeof metadata[key] === "object" &&
         "value" in (metadata[key] as ScientificMetadata)
@@ -166,7 +165,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           name: key,
           value: metadata[key]["value"],
           unit: metadata[key]["unit"],
-          human_name: metadata[key]["human_name"],
+          human_name: humanReadableName,
           type: metadata[key]["type"],
         };
 
@@ -180,7 +179,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           name: key,
           value: JSON.stringify(metadata[key]),
           unit: "",
-          human_name: metadata[key]["human_name"],
+          human_name: humanReadableName,
           type: metadata[key]["type"],
         };
       }
