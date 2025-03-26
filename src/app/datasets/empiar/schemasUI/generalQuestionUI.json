@@ -17,7 +17,25 @@
           "label": "Release Date",
           "scope": "#/properties/release_date",
           "options": {
-            "format": "select"
+            "format": "select",
+            "enum": [
+              {
+                "value": "RE",
+                "label": "Directly after the submission has been processed"
+              },
+              {
+                "value": "EP",
+                "label": "After the related EMDB entry has been released"
+              },
+              {
+                "value": "HP",
+                "label": "After the related primary citation has been published"
+              },
+              {
+                "value": "HO",
+                "label": "Delay release of entry by one year from the date of deposition"
+              }
+            ]
           }
         },
         {

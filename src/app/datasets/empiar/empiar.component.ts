@@ -20,13 +20,12 @@ import * as fromActions from "state-management/actions/depositor.actions";
 import { Subscription, Observable } from "rxjs";
 import * as datasetActions from "state-management/actions/datasets.actions";
 import { FormGroup, FormBuilder } from "@angular/forms";
-import { releaseDateRendererEntry } from "./customRenderers/rendererRelease";
-import { emdbRefRendererEntry } from "./customRenderers/rendererEMDB";
 import generalSchemaAsset from "./schemasUI/generalQuestionUI.json";
 import imageSetsAssets from "./schemasUI/imageSetsUI.json";
 import piAsset from "./schemasUI/authorInfoUI.json";
 import citationAsset from "./schemasUI/citationUI.json";
 import {EmpiarJson, ReleaseDate, ExperimentType, GetEnumTitles} from "./depositionEMPIAR";
+import { customEnumRenderer } from "./customRenderers/rendererGeneral";
 
 @Component({
   selector: "app-empiar",
@@ -56,6 +55,7 @@ export class EmpiarComponent implements OnInit, OnDestroy {
     // releaseDateRendererEntry,
     // emdbRefRendererEntry,
     ...angularMaterialRenderers,
+    customEnumRenderer
   ];
 
   constructor(
