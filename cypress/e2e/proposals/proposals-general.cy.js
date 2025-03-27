@@ -490,7 +490,10 @@ describe("Proposals general", () => {
       const tableName = "proposalsTable";
 
       cy.readFile(
-        path.join(downloadsFolder, `${tableName}${getFormattedFileNamingDate()}.json`),
+        path.join(
+          downloadsFolder,
+          `${tableName}${getFormattedFileNamingDate()}.json`,
+        ),
       ).then((actualExport) => {
         const foundProposal = actualExport.find(
           (proposal) => proposal.proposalId === newProposal.proposalId,
@@ -523,7 +526,10 @@ describe("Proposals general", () => {
       const tableName = "proposalsTable";
 
       cy.readFile(
-        path.join(downloadsFolder, `${tableName}${getFormattedFileNamingDate()}.csv`),
+        path.join(
+          downloadsFolder,
+          `${tableName}${getFormattedFileNamingDate()}.csv`,
+        ),
       ).then((actualExport) => {
         expect(actualExport).to.contain(newProposal.proposalId);
       });

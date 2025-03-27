@@ -67,7 +67,7 @@ describe("Datasets general", () => {
     it("should be able to see and click proposal connection link from dataset details page", () => {
       const proposalId = Math.floor(100000 + Math.random() * 900000).toString();
       cy.createProposal({ ...testData.proposal, proposalId });
-      cy.createDataset("raw", proposalId);
+      cy.createDataset("raw", undefined, proposalId);
 
       cy.visit("/datasets");
 
