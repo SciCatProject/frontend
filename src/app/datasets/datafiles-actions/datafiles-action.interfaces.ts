@@ -1,5 +1,6 @@
 export interface ActionConfig {
   id: string;
+  description?: string;
   order: number;
   label: string;
   files: string;
@@ -13,6 +14,7 @@ export interface ActionConfig {
   enabled?: string;
   disabled?: string;
   payload?: string;
+  filename?: string;
 }
 
 export interface ActionDataset {
