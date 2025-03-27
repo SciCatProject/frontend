@@ -257,7 +257,7 @@
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">{{
-        dataset.proposalId | StripProposalPrefix
+        dataset.proposalId || (dataset.proposalIds && dataset.proposalIds.length > 0) ? dataset.proposalIds[0] : "Not found" | StripProposalPrefix
       }}</mat-cell>
     </ng-container>
 
