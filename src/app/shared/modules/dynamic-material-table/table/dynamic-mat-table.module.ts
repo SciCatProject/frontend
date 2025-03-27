@@ -27,7 +27,11 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatRippleModule } from "@angular/material/core";
 import { TooltipComponent } from "../tooltip/tooltip.component";
-import { OverlayModule } from "@angular/cdk/overlay";
+import {
+  FullscreenOverlayContainer,
+  OverlayContainer,
+  OverlayModule,
+} from "@angular/cdk/overlay";
 import { TooltipDirective } from "../tooltip/tooltip.directive";
 import { TemplateOrStringDirective } from "../tooltip/template-or-string.directive";
 import { FormsModule } from "@angular/forms";
@@ -70,6 +74,12 @@ const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
     TooltipComponent,
     TooltipDirective,
     TemplateOrStringDirective,
+  ],
+  providers: [
+    {
+      provide: OverlayContainer,
+      useClass: FullscreenOverlayContainer,
+    },
   ],
 })
 export class DynamicMatTableModule {
