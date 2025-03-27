@@ -101,6 +101,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       datasetName: new FormControl("", [Validators.required]),
       description: new FormControl("", [Validators.required]),
+      comment: new FormControl("", [Validators.required]),
       keywords: this.fb.array([]),
     });
 
@@ -151,6 +152,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       datasetName: this.dataset.datasetName || "",
       description: this.dataset.description || "",
+      comment: this.dataset.comment || "",
       keywords: this.fb.array(this.dataset.keywords || []),
     });
     this.editEnabled = true;
@@ -203,6 +205,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
       const property = {
         datasetName: this.form.value.datasetName,
         description: this.form.value.description,
+        comment: this.form.value.comment,
         keywords: this.keywords.value,
       };
 
