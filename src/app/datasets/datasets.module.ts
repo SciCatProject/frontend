@@ -100,7 +100,7 @@ import { onedepReducer } from "state-management/reducers/onedep.reducer";
 import { empiarReducer } from "state-management/reducers/empiar.reducer";
 import { JsonFormsModule } from "@jsonforms/angular";
 import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
-import { CustomEnumRenderer } from "./empiar/customRenderers/rendererGeneral";
+import { CustomEnumRendererComponent } from "./empiar/customRenderers/enumRenderer";
 
 @NgModule({
   imports: [
@@ -200,7 +200,7 @@ import { CustomEnumRenderer } from "./empiar/customRenderers/rendererGeneral";
     EmpiarComponent,
     DepositorComponent,
     QuestionnaireComponent,
-    CustomEnumRenderer,
+    CustomEnumRendererComponent,
   ],
   providers: [
     ArchivingService,

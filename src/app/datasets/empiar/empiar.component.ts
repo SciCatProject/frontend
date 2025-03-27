@@ -24,8 +24,8 @@ import generalSchemaAsset from "./schemasUI/generalQuestionUI.json";
 import imageSetsAssets from "./schemasUI/imageSetsUI.json";
 import piAsset from "./schemasUI/authorInfoUI.json";
 import citationAsset from "./schemasUI/citationUI.json";
-import {EmpiarJson, ReleaseDate, ExperimentType, GetEnumTitles} from "./depositionEMPIAR";
-import { customEnumRenderer } from "./customRenderers/rendererGeneral";
+import { EmpiarJson } from "./depositionEMPIAR";
+import { customEnumRenderer } from "./customRenderers/enumRenderer";
 
 @Component({
   selector: "app-empiar",
@@ -44,19 +44,12 @@ export class EmpiarComponent implements OnInit, OnDestroy {
   data: JsonSchema = createEmptyInstance();
   schema: JsonSchema;
 
-  // materialRenderers = angularMaterialRenderers;
   generalSchema = generalSchemaAsset;
   imageSets = imageSetsAssets;
   schemaPI = piAsset;
   citationSchema = citationAsset;
-  releaseDateTitles = Object.values(ReleaseDate);  
 
-  configuredRenderer = [
-    // releaseDateRendererEntry,
-    // emdbRefRendererEntry,
-    ...angularMaterialRenderers,
-    customEnumRenderer
-  ];
+  configuredRenderer = [...angularMaterialRenderers, customEnumRenderer];
 
   constructor(
     public appConfigService: AppConfigService,
@@ -99,7 +92,6 @@ export class EmpiarComponent implements OnInit, OnDestroy {
       }
     });
     this.data = { ...this.data };
-    this.updateReleaseDateControl();
   }
 
   ngOnDestroy() {
@@ -109,37 +101,11 @@ export class EmpiarComponent implements OnInit, OnDestroy {
   }
   onDataChange(event: any) {
     this.data = event;
-    console.log(event, this.data)
   }
 
   onSubmitClick() {
     console.log(this.data);
   }
- 
-  updateReleaseDateControl() {
-    const releaseDateControl = this.findControlInSchema(this.generalSchema, '#/properties/release_date');
-
-    if (releaseDateControl) {
-      releaseDateControl.options = releaseDateControl.options || {};
-      releaseDateControl.options.enum = Object.keys(ReleaseDate); // Enum values (short codes)
-      releaseDateControl.options.enumTitles = Object.values(ReleaseDate); // Enum titles (human-readable)
-    }
-  }
-
-  findControlInSchema(schema: any, scope: string) {
-    // Recursive function to find the control based on scope
-    if (schema.scope === scope) {
-      return schema;
-    }
-    if (schema.elements) {
-      for (const element of schema.elements) {
-        const result = this.findControlInSchema(element, scope);
-        if (result) return result;
-      }
-    }
-    return null;
-  }
-
 }
 
 function createEmptyInstance(): EmpiarJson {
@@ -167,14 +133,10 @@ function createEmptyInstance(): EmpiarJson {
       telephone: null,
       fax: null,
       email: "",
-      country: null, 
+      country: null,
     },
     principalInvestigator: [],
     imagesets: [],
     citations: [],
   };
 }
-
-
-// authors and pi render propoerly
-// good-looking renderers

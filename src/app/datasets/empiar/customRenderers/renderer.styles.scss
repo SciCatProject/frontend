@@ -1,0 +1,14 @@
+.custom-dropdown {
+  width: 100%; 
+}
+
+.option-text {
+  white-space: normal;
+  display: block;
+  max-width:100%;
+  overflow-wrap: break-word;
+}
+
+::ng-deep .mat-option {
+  white-space: normal !important;
+}
