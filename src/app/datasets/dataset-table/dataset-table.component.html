@@ -261,6 +261,21 @@
       }}</mat-cell>
     </ng-container>
 
+    <!-- Comment Column -->
+    <ng-container matColumnDef="standard_comment">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <mat-icon>comment</mat-icon>
+          </div>
+          <div>Comment</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let dataset">{{
+        dataset.comment && dataset.comment.length > 30 ? (dataset.comment | slice:0:30) + '...' : dataset.comment
+      }}</mat-cell>
+    </ng-container>
+
     <!-- Group Column -->
     <ng-container matColumnDef="standard_ownerGroup">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
