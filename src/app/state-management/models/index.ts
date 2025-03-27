@@ -31,6 +31,7 @@ export interface LabelsLocalization {
 export interface DatasetDetailComponentConfig {
   enableCustomizedComponent: boolean;
   customization: CustomizationItem[];
+  showComment?: boolean;
 }
 
 export interface IngestorComponentConfig {

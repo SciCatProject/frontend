@@ -64,8 +64,24 @@
                 </mat-form-field>
               </td>
             </tr>
+            <tr *ngIf="appConfig.datasetDetailComponent?.showComment">
+              <th>{{ "Comment" | translate }}</th>
+              <td *ngIf="!editEnabled">
+                <span [innerHTML]="(dataset.comment || '-') | linky"></span>
+              </td>
+              <td *ngIf="editEnabled && editingAllowed">
+                <mat-form-field class="full-width">
+                  <mat-label>{{ "Comment" | translate }}</mat-label>
+                  <textarea
+                    matInput
+                    rows="5"
+                    formControlName="comment"
+                  ></textarea>
+                </mat-form-field>
+              </td>
+            </tr>
             <tr>
-              <th>{{ "Pid" | translate: localization }}</th>
+              <th>{{ "Pid" | translate }}</th>
               <td>
                 {{ dataset.pid }}
                 <button

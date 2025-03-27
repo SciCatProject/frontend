@@ -265,6 +265,25 @@ describe("AppConfigService", () => {
         5, 10, 25, 100,
       ]);
     });
+
+    it("should default datasetDetailComponent.showComment to false", async () => {
+      const configWithoutShowComment = {
+        ...appConfig,
+        datasetDetailComponent: {
+          enableCustomizedComponent: false,
+          customization: [],
+        },
+      };
+      spyOn(service["http"], "get").and.returnValue(
+        of(configWithoutShowComment),
+      );
+
+      await service.loadAppConfig();
+
+      expect(service.getConfig().datasetDetailComponent?.showComment).toBe(
+        false,
+      );
+    });
   });
 
   describe("#getConfig()", () => {
@@ -274,6 +293,11 @@ describe("AppConfigService", () => {
         lbBaseURL: "http://127.0.0.1:3000",
         gettingStarted: null,
         datasetPageSizeOptions: [5, 10, 25, 100],
+        datasetDetailComponent: {
+          enableCustomizedComponent: false,
+          customization: [],
+          showComment: false,
+        },
         defaultMainPage: {
           nonAuthenticatedUser: "DATASETS",
           authenticatedUser: "DATASETS",
@@ -301,6 +325,11 @@ describe("AppConfigService", () => {
       gettingStarted: "aGettingStarted",
       datasetPageSizeOptions: [5, 10, 25, 100],
       addDatasetEnabled: true,
+      datasetDetailComponent: {
+        enableCustomizedComponent: false,
+        customization: [],
+        showComment: false,
+      },
       defaultMainPage: {
         nonAuthenticatedUser: "DATASETS",
         authenticatedUser: "DATASETS",

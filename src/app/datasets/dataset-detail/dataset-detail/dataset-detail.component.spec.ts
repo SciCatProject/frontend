@@ -241,6 +241,7 @@ describe("DatasetDetailComponent", () => {
         keywords: component.dataset.keywords,
         datasetName: component.dataset.datasetName,
         description: component.dataset.description,
+        comment: "",
       };
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);

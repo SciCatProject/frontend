@@ -70,6 +70,9 @@
   "shoppingCartOnHeader": true,
   "tableSciDataEnabled": true,
   "datasetDetailsShowMissingProposalId": false,
+  "datasetDetailComponent": {
+    "showComment": false
+  },
   "notificationInterceptorEnabled": true,
   "metadataEditingUnitListDisabled": true,
   "hideEmptyMetadataTable": false,

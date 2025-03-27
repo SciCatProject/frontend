@@ -310,6 +310,7 @@
         "type": "object",
         "properties": {
           "enableCustomizedComponent": { "type": "boolean" },
+          "showComment": { "type": "boolean" },
           "customization": {
             "type": "array",
             "items": {

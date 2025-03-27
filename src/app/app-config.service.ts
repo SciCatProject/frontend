@@ -275,6 +275,13 @@ export class AppConfigService {
       config.datasetPageSizeOptions = [5, 10, 25, 100];
     }
 
+    if (
+      config.datasetDetailComponent &&
+      config.datasetDetailComponent.showComment === undefined
+    ) {
+      config.datasetDetailComponent.showComment = false;
+    }
+
     this.appConfig = config;
   }
 
