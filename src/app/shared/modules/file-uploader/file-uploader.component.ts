@@ -1,8 +1,15 @@
-import { Component, Output, EventEmitter, Input } from "@angular/core";
+import {
+  Component,
+  Output,
+  EventEmitter,
+  Input,
+  ViewChild,
+  ElementRef,
+} from "@angular/core";
 import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
 import saveAs from "file-saver";
-import { Attachment } from "@scicatproject/scicat-sdk-ts";
+import { Attachment } from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "shared/services/attachment.service";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
@@ -29,9 +36,12 @@ export class FileUploaderComponent {
   maxFileUploadSizeInMb = 16;
 
   @Input() attachments: Attachment[] = [];
+  @Input() isOwner: boolean;
   @Output() filePicked = new EventEmitter<PickedFile>();
   @Output() submitCaption = new EventEmitter<SubmitCaptionEvent>();
   @Output() deleteAttachment = new EventEmitter<string>();
+
+  @ViewChild("fileDropRef") fileDropRef: ElementRef<HTMLInputElement>;
 
   constructor(
     private store: Store,
@@ -90,6 +100,12 @@ export class FileUploaderComponent {
 
   onFilePicked(files: FileList) {
     this.onFileDropped(files);
+  }
+
+  triggerFileDrop(): void {
+    if (this.fileDropRef) {
+      this.fileDropRef.nativeElement.click();
+    }
   }
 
   onSubmitCaption(attachmentId: string, caption: string) {

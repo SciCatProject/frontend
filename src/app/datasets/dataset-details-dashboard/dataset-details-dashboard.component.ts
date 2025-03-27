@@ -9,7 +9,7 @@ import { Store } from "@ngrx/store";
 import {
   OutputDatasetObsoleteDto,
   UsersService,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import {
   selectIsAdmin,
@@ -145,6 +145,7 @@ export class DatasetDetailsDashboardComponent
           .subscribe(([groups, isAdmin, isLoggedIn]) => {
             const isInOwnerGroup =
               groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
+            const isPublished = this.dataset.isPublished;
             const hasAccessToLogbook =
               isInOwnerGroup ||
               this.dataset.accessGroups.some((g) => groups.includes(g));
@@ -172,7 +173,7 @@ export class DatasetDetailsDashboardComponent
                 enabled: true,
               },
               {
-                location: "./related-datasets",
+                location: "./relatedDatasets",
                 label: TAB.relatedDatasets,
                 icon: "folder",
                 enabled: true,
@@ -199,7 +200,7 @@ export class DatasetDetailsDashboardComponent
                 location: "./attachments",
                 label: TAB.attachments,
                 icon: "insert_photo",
-                enabled: isLoggedIn && isInOwnerGroup,
+                enabled: isInOwnerGroup || isPublished,
               },
               {
                 location: "./lifecycle",

@@ -18,6 +18,8 @@ import { ScicatDataService } from "./services/scicat-data-service";
 import { ScientificMetadataTreeModule } from "./modules/scientific-metadata-tree/scientific-metadata-tree.modules";
 import { FiltersModule } from "./modules/filters/filters.module";
 import { AttachmentService } from "./services/attachment.service";
+import { DynamicMatTableModule } from "./modules/dynamic-material-table/table/dynamic-mat-table.module";
+import { TranslateModule } from "@ngx-translate/core";
 @NgModule({
   imports: [
     BreadcrumbModule,
@@ -35,6 +37,8 @@ import { AttachmentService } from "./services/attachment.service";
     FormsModule,
     SharedTableModule,
     ScientificMetadataTreeModule,
+    DynamicMatTableModule.forRoot({}),
+    TranslateModule,
   ],
   providers: [
     ConfigService,
@@ -57,6 +61,8 @@ import { AttachmentService } from "./services/attachment.service";
     SharedTableModule,
     ScientificMetadataTreeModule,
     FiltersModule,
+    DynamicMatTableModule,
+    TranslateModule,
   ],
 })
 export class SharedScicatFrontendModule {}

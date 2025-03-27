@@ -4,7 +4,7 @@ import { ADAuthService } from "./adauth.service";
 
 import { MockHttp } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
-import { Configuration } from "@scicatproject/scicat-sdk-ts";
+import { Configuration } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("ADAuthService", () => {
   let service: ADAuthService;

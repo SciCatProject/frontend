@@ -24,7 +24,7 @@ import { OwnershipService } from "shared/services/ownership.service";
 import {
   DatasetClass,
   OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
   selector: "reduce",

@@ -35,6 +35,8 @@ export class ConditionFilterComponent {
         ? `"${condition.rhs}"`
         : condition.rhs;
 
-    return `${condition.lhs} ${relationSymbol} ${rhsValue} ${condition.unit}`;
+    const unit = condition.unit || "";
+
+    return `${condition.lhs} ${relationSymbol} ${rhsValue} ${unit}`;
   }
 }

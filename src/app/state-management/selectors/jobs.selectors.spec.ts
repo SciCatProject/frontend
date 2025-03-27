@@ -1,6 +1,7 @@
 import * as fromSelectors from "./jobs.selectors";
 import { JobsState } from "../state/jobs.store";
-import { Job, JobInterface } from "shared/sdk/models/Job";
+import { createMock } from "shared/MockStubs";
+import { JobClass } from "@scicatproject/scicat-sdk-ts-angular";
 
 const data: JobInterface = {
   id: "testId",

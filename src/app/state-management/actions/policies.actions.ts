@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Policy } from "@scicatproject/scicat-sdk-ts";
+import { Policy } from "@scicatproject/scicat-sdk-ts-angular";
 
 export const fetchPoliciesAction = createAction("[Policy] Fetch Policies");
 export const fetchPoliciesCompleteAction = createAction(

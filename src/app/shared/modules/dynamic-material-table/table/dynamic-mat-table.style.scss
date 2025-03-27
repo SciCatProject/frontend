@@ -1,0 +1,214 @@
+@mixin header-icon-base {
+  color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  opacity: 0;
+  transform: translateY(-5px);
+  cursor: pointer;
+
+  transition-duration: 0.4s;
+  transition-property: opacity, transform;
+}
+
+@mixin table-base {
+  .mat-mdc-table {
+    .row-selection {
+      background-color: #f7f5f5;
+    }
+
+    .mat-mdc-row:hover {
+      background-color: #fafafa;
+    }
+
+    mat-cell {
+      box-sizing: border-box;
+    }
+  }
+}
+
+@mixin progress {
+  .mat-mdc-header-row.progress {
+    border: none;
+    max-height: 4px;
+    min-height: 4px;
+    height: 0;
+    margin-top: -4px;
+    background-color: transparent !important;
+    border-top: transparent !important;
+    background: transparent !important;
+
+    .mat-mdc-header-cell {
+      border: 0;
+      padding: 0;
+      z-index: 1;
+    }
+
+    mat-progress-bar {
+      transition:
+        height 0.3s,
+        opacity 0.25s linear;
+
+      &:not(.show) {
+        height: 0;
+        opacity: 0;
+      }
+    }
+  }
+}
+
+@mixin no-records {
+  .no-records {
+    display: flex;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    margin: -42px 0 0 -25px;
+    line-height: 42px;
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+
+    button {
+      pointer-events: initial;
+    }
+  }
+}
+
+@mixin dmf-class {
+  // remove botton padding
+  ::ng-deep .dmf {
+    min-width: 100%;
+  }
+
+  ::ng-deep
+    dynamic-mat-table
+    cdk-virtual-scroll-viewport
+    .cdk-virtual-scroll-content-wrapper
+    .mat-mdc-table
+    mat-row
+    .mat-mdc-cell
+    mat-form-field {
+    max-width: 100%;
+
+    .mat-mdc-form-field-wrapper {
+      padding-bottom: 0 !important;
+    }
+
+    ::ng-deep .mat-mdc-form-field-underline {
+      bottom: 0 !important;
+    }
+  }
+}
+
+@mixin resize-column {
+  mat-header-cell:hover {
+    .left-resize-handler {
+      height: 100%;
+      transition: height 0.4s ease-out;
+    }
+
+    .right-resize-handler {
+      height: 100%;
+      transition: height 0.4s ease-out;
+    }
+  }
+
+  .resize-handler {
+    display: inline-block;
+    min-width: 1px;
+    height: 0;
+    position: sticky;
+    cursor: col-resize;
+    border-width: 0;
+    z-index: 10;
+  }
+
+  .left-resize-handler {
+    left: 0;
+    padding-right: 10px;
+    margin-right: -10px;
+    border-left: solid 2px #8b8b8b;
+  }
+
+  .right-resize-handler {
+    right: 0px;
+    padding-left: 10px;
+    margin-left: -10px;
+    border-right: solid 2px #8b8b8b;
+  }
+
+  .active-resize {
+    background-color: #f5f5f566;
+  }
+}
+
+@mixin header-sort {
+  .mat-mdc-sort-header-arrow {
+    margin: 0 6px !important;
+  }
+}
+
+@mixin context-menu {
+  .ltr-menu {
+    span {
+      float: left;
+    }
+  }
+
+  .button-menu {
+    width: 100%;
+    line-height: 48px;
+
+    &::ng-deep .mat-mdc-button-wrapper {
+      display: flex;
+
+      span {
+        display: inline-block;
+        width: 100%;
+        text-align: left;
+      }
+
+      mat-icon {
+        line-height: 48px;
+        height: 48px;
+        margin: 0 5px;
+      }
+    }
+  }
+
+  mat-button-wrapper .button-menu {
+    display: inline-block !important;
+  }
+
+  .text-align-left {
+    text-align: left !important;
+  }
+
+  .text-align-right {
+    text-align: right !important;
+  }
+
+  .mat-mdc-menu-panel {
+    min-height: unset !important;
+  }
+}
+
+@media print {
+  .print-preview {
+    background-color: white;
+    position: fixed;
+    width: 100%;
+    height: auto;
+    z-index: 99999999;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+    overflow: visible;
+    display: block;
+  }
+}
+
+.disable-backdrop-click
+  .cdk-overlay-backdrop.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing {
+  pointer-events: none;
+}

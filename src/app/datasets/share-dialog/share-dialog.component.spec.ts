@@ -38,7 +38,7 @@ import {
   SamplesService,
   UserIdentitiesService,
   UsersService,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { AuthService } from "shared/services/auth/auth.service";
 import { InternalStorage } from "shared/services/auth/base.storage";
 import { cold } from "jasmine-marbles";

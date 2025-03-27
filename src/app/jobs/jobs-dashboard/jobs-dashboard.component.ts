@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
-import { Store } from "@ngrx/store";;
+import { Store } from "@ngrx/store";
+import { JobClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { Subscription } from "rxjs";
 import {
   selectJobs,
@@ -26,7 +27,6 @@ import {
   selectCurrentUser,
   selectProfile,
 } from "state-management/selectors/user.selectors";
-import { Job, JobInterface } from "shared/sdk/models/Job";
 
 export interface JobsTableData {
   id: string;
@@ -91,15 +91,18 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  formatTableData(jobs: JobInterface[]): JobsTableData[] {
+  formatTableData(jobs: JobClass[]): JobsTableData[] {
     let tableData: JobsTableData[] = [];
     if (jobs) {
       tableData = jobs.map((job) => ({
-        id: job.id,
-        initiator: job.createdBy,
+        id: job._id,
+        initiator: job.emailJobInitiator,
         type: job.type,
-        createdAt: this.datePipe.transform(job.createdAt, "yyyy-MM-dd HH:mm"),
-        statusMessage: job.statusMessage,
+        createdAt: this.datePipe.transform(
+          job.creationTime,
+          "yyyy-MM-dd HH:mm",
+        ),
+        statusMessage: job.jobStatusMessage,
       }));
     }
     return tableData;

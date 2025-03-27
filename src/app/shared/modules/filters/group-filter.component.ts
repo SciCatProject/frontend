@@ -32,6 +32,7 @@ export class GroupFilterComponent
   protected readonly getFacetCount = getFacetCount;
   readonly componentName: string = "GroupFilter";
   readonly label: string = "Group Filter";
+  readonly tooltipText: string = "Filters datasets by group";
 
   appConfig = this.appConfigService.getConfig();
 

@@ -1,10 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  Inject,
-  OnDestroy,
-  OnInit,
-} from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { JsonSchema } from "@jsonforms/core";
 import { angularMaterialRenderers } from "@jsonforms/angular-material";
 import { AppConfigService, AppConfig } from "app-config.service";
@@ -12,7 +6,7 @@ import { Store, select } from "@ngrx/store";
 import {
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import { selectEmpiarSchema } from "state-management/selectors/depositor.selectors";
@@ -69,7 +63,6 @@ export class EmpiarComponent implements OnInit, OnDestroy {
     this.store.select(selectCurrentDataset).subscribe((dataset) => {
       this.dataset = dataset;
     });
-
     this.subscriptions.push(
       this.store.select(selectCurrentUser).subscribe((user) => {
         if (user) {

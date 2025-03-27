@@ -108,14 +108,18 @@ Cypress.Commands.add("isLoading", (type) => {
 
 Cypress.Commands.add(
   "createDataset",
-  (type, proposalId = "20170266", dataFileSize = "small") => {
+  (
+    type,
+    datasetName = testData.rawDataset.datasetName,
+    proposalId = "20170266",
+    dataFileSize = "small",
+  ) => {
     cy.getCookie("user").then((userCookie) => {
       const user = JSON.parse(decodeURIComponent(userCookie.value));
 
       cy.getToken().then((token) => {
         if (type === "raw") {
-          const dataset = testData.rawDataset;
-          dataset.proposalId = proposalId;
+          const dataset = { ...testData.rawDataset, datasetName, proposalId };
           cy.log("Raw Dataset 1: " + JSON.stringify(dataset, null, 2));
           cy.log("User: " + JSON.stringify(user, null, 2));
 
@@ -415,6 +419,31 @@ Cypress.Commands.add("removeElasticSearchIndex", (index) => {
       },
     });
   });
+});
+
+Cypress.Commands.add("uploadDatasetAttachments", (number = 1, wait = 500) => {
+  cy.get(".mat-mdc-tab-link").contains("Attachments").click();
+
+  for (let i = 0; i < number; i++) {
+    const randomContent = `data:image/png;base64,${Cypress._.times(100, () =>
+      Math.floor(Math.random()).toString(16),
+    ).join("")}`;
+
+    const fileName = `random-image-${Date.now()}-${i}.png`;
+
+    cy.get(".dropzone").selectFile(
+      {
+        contents: Cypress.Buffer.from(randomContent, "base64"),
+        fileName: fileName,
+        mimeType: "image/png",
+      },
+      {
+        action: "drag-drop",
+        force: true,
+      },
+    );
+    cy.wait(wait);
+  }
 });
 
 Cypress.Commands.add("removeDatasetsForElasticSearch", (datasetName) => {

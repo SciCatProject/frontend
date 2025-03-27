@@ -1,4 +1,4 @@
-import { Logbook } from "@scicatproject/scicat-sdk-ts";
+import { Logbook } from "@scicatproject/scicat-sdk-ts-angular";
 import { LogbookFilters } from "state-management/models";
 
 export interface LogbookState {

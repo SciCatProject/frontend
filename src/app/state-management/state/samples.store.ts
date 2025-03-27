@@ -2,7 +2,7 @@ import {
   Attachment,
   OutputDatasetObsoleteDto,
   SampleClass,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { SampleFilters, GenericFilters } from "state-management/models";
 
 export interface SampleState {

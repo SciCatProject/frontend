@@ -22,7 +22,10 @@ import {
   selectIsLoading,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
-import { CreateUserJWT, UsersService } from "@scicatproject/scicat-sdk-ts";
+import {
+  CreateUserJWT,
+  UsersService,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";
@@ -33,7 +36,6 @@ import { NgForm } from "@angular/forms";
 import { DataFiles_File } from "./datafiles.interfaces";
 import { ActionDataset } from "datasets/datafiles-actions/datafiles-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
-import { Job } from "shared/sdk/models/Job";
 
 @Component({
   selector: "datafiles",
@@ -171,7 +173,6 @@ export class DatafilesComponent
       item.selected = selected.includes(item.path);
       return item;
     });
-    console.log(files);
     this.files = [...files];
   }
 
@@ -303,21 +304,19 @@ export class DatafilesComponent
     });
     dialogRef.afterClosed().subscribe((email) => {
       if (email) {
-        const selectedFiles = this.getSelectedFiles();
+        this.getSelectedFiles();
         const data = {
-          createdBy: email,
-          createdAt: new Date().toDateString(),
+          emailJobInitiator: email,
+          creationTime: new Date(),
           type: "public",
-          jobParams: {
-            datasetList: [
-              {
-                pid: this.datasetPid,
-                files: selectedFiles,
-              },
-            ],
-          },
+          datasetList: [
+            {
+              pid: this.datasetPid,
+              files: this.getSelectedFiles(),
+            },
+          ],
         };
-        this.store.dispatch(submitJobAction({ job: data as Job }));
+        this.store.dispatch(submitJobAction({ job: data }));
       }
     });
   }

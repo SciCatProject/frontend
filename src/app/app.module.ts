@@ -9,7 +9,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { APP_INITIALIZER, NgModule } from "@angular/core";
 import { ExtraOptions, RouterModule } from "@angular/router";
 import { StoreModule } from "@ngrx/store";
-import { ApiModule, Configuration } from "@scicatproject/scicat-sdk-ts";
+import { ApiModule, Configuration } from "@scicatproject/scicat-sdk-ts-angular";
 import { routerReducer } from "@ngrx/router-store";
 import { extModules } from "./build-specifics";
 import { MatNativeDateModule } from "@angular/material/core";
@@ -28,7 +28,10 @@ import { SnackbarInterceptor } from "shared/interceptors/snackbar.interceptor";
 import { AuthService } from "shared/services/auth/auth.service";
 import { InternalStorage, SDKStorage } from "shared/services/auth/base.storage";
 import { CookieService } from "ngx-cookie-service";
-import { JobsServiceV4 } from "shared/sdk/apis/JobsService";
+import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
+import { CustomTranslateLoader } from "shared/loaders/custom-translate.loader";
+import { DATE_PIPE_DEFAULT_OPTIONS } from "@angular/common";
+import { RouteTrackerService } from "shared/services/route-tracker.service";
 
 const appConfigInitializerFn = (appConfig: AppConfigService) => {
   return () => appConfig.loadAppConfig();
@@ -52,6 +55,13 @@ const apiConfigurationFn = (
   imports: [
     AppConfigModule,
     AppRoutingModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useClass: CustomTranslateLoader,
+        deps: [AppConfigService],
+      },
+    }),
     BrowserAnimationsModule,
     BrowserModule,
     HttpClientModule,
@@ -82,7 +92,6 @@ const apiConfigurationFn = (
   exports: [MatNativeDateModule],
   providers: [
     AppConfigService,
-    JobsServiceV4,
     {
       provide: APP_INITIALIZER,
       useFactory: appConfigInitializerFn,
@@ -96,6 +105,12 @@ const apiConfigurationFn = (
       deps: [AppThemeService],
     },
     {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {},
+      multi: true,
+      deps: [RouteTrackerService],
+    },
+    {
       provide: HTTP_INTERCEPTORS,
       useClass: SnackbarInterceptor,
       multi: true,
@@ -105,6 +120,16 @@ const apiConfigurationFn = (
       useValue: {
         subscriptSizing: "dynamic",
       },
+    },
+    {
+      provide: DATE_PIPE_DEFAULT_OPTIONS,
+      useFactory: (appConfigService: AppConfigService) => {
+        return {
+          dateFormat:
+            appConfigService.getConfig().dateFormat || "yyyy-MM-dd HH:mm",
+        };
+      },
+      deps: [AppConfigService],
     },
     AuthService,
     AppThemeService,

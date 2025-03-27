@@ -12,7 +12,7 @@ import { Store } from "@ngrx/store";
 import {
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 // import {
 //   selectIsAdmin,
@@ -20,13 +20,10 @@ import { selectCurrentDataset } from "state-management/selectors/datasets.select
 //   selectIsLoggedIn,
 //   selectProfile,
 // } from "state-management/selectors/user.selectors";
-import {
-  selectCurrentUser,
-  selectIsLoggedIn,
-} from "state-management/selectors/user.selectors";
+import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import * as fromActions from "state-management/actions/depositor.actions";
 
-import { Subscription, combineLatest } from "rxjs";
+import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
 
 interface DepositionRepository {

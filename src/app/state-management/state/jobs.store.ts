@@ -1,9 +1,9 @@
-import { JobInterface } from "shared/sdk/models/Job";
+import { JobClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { JobFilters } from "state-management/models";
 
 export interface JobsState {
-  jobs: JobInterface[];
-  currentJob: JobInterface | undefined;
+  jobs: JobClass[];
+  currentJob: JobClass | undefined;
 
   totalCount: number;
 

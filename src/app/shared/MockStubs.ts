@@ -19,7 +19,7 @@ import {
   Logbook,
   Policy,
   ReturnedUserDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { SDKToken } from "./services/auth/auth.service";
 import { JobInterface } from "./sdk/models/Job";
 

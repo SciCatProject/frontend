@@ -1,4 +1,4 @@
-import { PublishedData } from "@scicatproject/scicat-sdk-ts";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
 import { GenericFilters } from "state-management/models";
 
 export interface PublishedDataState {

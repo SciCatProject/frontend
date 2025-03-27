@@ -12,7 +12,7 @@ import { RetrieveDestinations } from "app-config.service";
 import {
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 @Injectable()
 export class ArchivingService {

@@ -10,7 +10,7 @@ import {
   Attachment,
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { OwnershipService } from "shared/services/ownership.service";
 import {
   addAttachmentAction,
@@ -34,6 +34,8 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
   attachment: Partial<Attachment> = {};
   dataset: OutputDatasetObsoleteDto | undefined;
   user: ReturnedUserDto | undefined;
+  isOwner: boolean;
+
   constructor(
     private store: Store,
     private ownershipService: OwnershipService,
@@ -45,7 +47,7 @@ export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
       this.store.select(selectCurrentDataset).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
-          this.ownershipService.checkDatasetAccess(
+          this.isOwner = this.ownershipService.checkDatasetAccess(
             dataset,
             this.store,
             this.router,

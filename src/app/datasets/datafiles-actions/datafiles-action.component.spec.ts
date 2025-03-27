@@ -16,7 +16,7 @@ import {
   MockUserApi,
 } from "shared/MockStubs";
 import { ActionDataset } from "./datafiles-action.interfaces";
-import { UsersService } from "@scicatproject/scicat-sdk-ts";
+import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 import { AuthService } from "shared/services/auth/auth.service";
 
 describe("1000: DatafilesActionComponent", () => {

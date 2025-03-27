@@ -21,7 +21,7 @@ import {
   PageChangeEvent,
   SortChangeEvent,
 } from "shared/modules/table/table.component";
-import { SampleClass } from "@scicatproject/scicat-sdk-ts";
+import { SampleClass } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   changePageAction,
   fetchSamplesAction,

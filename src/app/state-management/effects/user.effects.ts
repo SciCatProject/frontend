@@ -9,7 +9,7 @@ import {
   UserSettings,
   Configuration,
   UserIdentitiesService,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { Router } from "@angular/router";
 import * as fromActions from "state-management/actions/user.actions";
 import {
@@ -216,25 +216,23 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(fromActions.logoutAction),
       filter(() => this.authService.isAuthenticated()),
-      switchMap(() =>
-        this.sharedAuthService.authControllerLogout().pipe(
-          switchMap(({ logoutURL }) => {
-            this.authService.clear();
-            return [
-              clearDatasetsStateAction(),
-              clearInstrumentsStateAction(),
-              clearJobsStateAction(),
-              clearLogbooksStateAction(),
-              clearPoliciesStateAction(),
-              clearProposalsStateAction(),
-              clearPublishedDataStateAction(),
-              clearSamplesStateAction(),
-              fromActions.logoutCompleteAction({ logoutURL }),
-            ];
-          }),
+      switchMap(() => {
+        this.authService.clear();
+        return this.sharedAuthService.authControllerLogout().pipe(
+          switchMap(({ logoutURL }) => [
+            clearDatasetsStateAction(),
+            clearInstrumentsStateAction(),
+            clearJobsStateAction(),
+            clearLogbooksStateAction(),
+            clearPoliciesStateAction(),
+            clearProposalsStateAction(),
+            clearPublishedDataStateAction(),
+            clearSamplesStateAction(),
+            fromActions.logoutCompleteAction({ logoutURL }),
+          ]),
           catchError(() => of(fromActions.logoutFailedAction())),
-        ),
-      ),
+        );
+      }),
     );
   });
 
@@ -332,7 +330,6 @@ export class UserEffects {
 
               userSettings[setting] = items;
             }
-            delete userSettings.externalSettings;
 
             return fromActions.fetchUserSettingsCompleteAction({
               userSettings,
@@ -433,7 +430,12 @@ export class UserEffects {
       concatLatestFrom(() => [this.user$]),
       takeWhile(([action, user]) => !!user),
       switchMap(([{ property }, user]) => {
-        const settingsToNest = ["columns", "conditions", "filters"];
+        const settingsToNest = [
+          "columns",
+          "conditions",
+          "filters",
+          "tablesSettings",
+        ];
         const propertyKeys = Object.keys(property);
         const newProperty = {};
         let useExternalSettings = false;
@@ -471,7 +473,6 @@ export class UserEffects {
             userSettings["columns"] = (
               userSettings.externalSettings as any
             ).columns;
-            delete userSettings.externalSettings;
             return fromActions.updateUserSettingsCompleteAction({
               userSettings,
             });

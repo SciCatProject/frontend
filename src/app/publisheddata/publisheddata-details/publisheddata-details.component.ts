@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { PublishedData } from "@scicatproject/scicat-sdk-ts";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import {

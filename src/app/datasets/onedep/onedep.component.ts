@@ -21,7 +21,7 @@ import { Store } from "@ngrx/store";
 import {
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import * as fromActions from "state-management/actions/depositor.actions";
