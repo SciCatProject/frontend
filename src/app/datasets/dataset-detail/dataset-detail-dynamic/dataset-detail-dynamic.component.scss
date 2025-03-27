@@ -1,12 +1,15 @@
 mat-card {
-  margin: 1em;
-  .section-icon {
-    height: auto !important;
-    width: auto !important;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enables both vertical and horizontal scrolling if needed */
+  box-sizing: border-box;
+  // border: 1px solid rgb(207, 207, 207);
 
-    mat-icon {
-      vertical-align: middle;
-    }
+  .section-icon {
+    height: auto;
+    width: auto;
+    display: flex;
+    align-items: center;
   }
   .caption-text {
     word-break: break-all;
@@ -101,4 +104,22 @@ mat-card {
 }
 .json-view {
   margin: 0 1.8em;
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
+  line-height: 10px;
+  height: 42px;
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+.custom-grid {
+  margin-top: 16px;
+  display: grid;
+  grid-auto-rows: auto; /* Each row height is driven by its content */
 }
