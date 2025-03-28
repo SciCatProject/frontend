@@ -10,7 +10,7 @@ import {
 } from "../depositionEMPIAR";
 
 @Component({
-  selector: "app-custom-enum-renderer",
+  selector: "custom-enum-renderer",
   styleUrls: ["./renderer.styles.scss"],
 
   template: `
@@ -62,7 +62,7 @@ export class CustomEnumRendererComponent extends JsonFormsControl {
     }
   }
 
-  onEnumChange(value: any) {
+  onEnumChange(value: string) {
     this.onChange({ value });
   }
 }

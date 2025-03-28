@@ -2,8 +2,8 @@ import { JsonSchema4 } from "@jsonforms/core";
 
 export interface EmpiarJson {
   title: string;
-  release_date: ReleaseDate;
-  experiment_type: ExperimentType;
+  releaseDate: ReleaseDate;
+  experimentType: ExperimentType;
   scale?: Scale;
   crossReferences?: References[];
   biostudiesReferences?: References[];
@@ -28,20 +28,20 @@ interface Workflow {
 
 interface Author {
   name: string;
-  order_id: number;
-  author_orcid?: string | null;
+  orderId: number;
+  authorOrcid?: string | null;
 }
 
 interface AuthorExtended {
-  author_orcid?: string | null;
-  first_name: string;
-  middle_name?: string | null;
-  last_name: string;
+  authorOrcid?: string | null;
+  firstName: string;
+  middleName?: string | null;
+  lastName: string;
   organization: string;
   street?: string | null;
-  town_or_city: string;
-  state_or_province?: string | null;
-  post_or_zip: string;
+  townOrCity: string;
+  stateOrProvince?: string | null;
+  postOrZip: string;
   telephone?: string | null;
   fax?: string | null;
   email: string;
@@ -52,21 +52,21 @@ interface ImageSet {
   name: string;
   directory: string;
   category: string;
-  header_format: string;
-  data_format: string;
-  num_images_or_tilt_series: number;
-  frames_per_image: number;
-  frame_range_min?: number | null;
-  frame_range_max?: number | null;
-  voxel_type: string;
-  pixel_width?: number | null;
-  pixel_height?: number | null;
+  headerFormat: string;
+  dataFormat: string;
+  numImagesOrTiltSeries: number;
+  framesPerImage: number;
+  frameRangeMin?: number | null;
+  frameRangeMax?: number | null;
+  voxelType: string;
+  pixelWidth?: number | null;
+  pixelHeight?: number | null;
   details?: string | null;
-  micrographs_file_pattern?: string | null;
-  picked_particles_file_pattern?: string | null;
-  picked_particles_directory?: string | null;
-  image_width?: number | null;
-  image_height?: number | null;
+  micrographsFilePattern?: string | null;
+  pickedParticlesFilePattern?: string | null;
+  pickedParticlesDirectory?: string | null;
+  imageWidth?: number | null;
+  imageHeight?: number | null;
 }
 
 interface Citation {
@@ -74,27 +74,57 @@ interface Citation {
   editors?: Author[];
   published: boolean;
   preprint: boolean;
-  j_or_nj_citation: boolean;
+  jOrNjCitation: boolean;
   title: string;
   volume?: string | null;
   country?: CountryEnum | null;
-  first_page?: string | null;
-  last_page?: string | null;
+  firstPage?: string | null;
+  lastPage?: string | null;
   year?: number | null;
   language?: string | null;
   doi?: string | null;
   pubmedid?: string | null;
   details?: string | null;
-  book_chapter_title?: string | null;
+  bookChapterTitle?: string | null;
   publisher?: string | null;
-  publication_location?: string | null;
+  publicationLocation?: string | null;
   journal?: string | null;
-  journal_abbreviation?: string | null;
+  journalAbbreviation?: string | null;
   issue?: string | null;
 }
 // export function GetEnumTitles(enumObj: any): string[] {
 //   return Object.keys(enumObj).map(key => enumObj[key]);
 // }
+
+export function camelToSnake(obj: any): any {
+  if (Array.isArray(obj)) {
+    return obj.map(camelToSnake);
+  } else if (obj !== null && typeof obj === "object") {
+    return Object.keys(obj).reduce((acc, key) => {
+      const snakeKey = key.replace(
+        /[A-Z]/g,
+        (letter) => `_${letter.toLowerCase()}`,
+      );
+      acc[snakeKey] = camelToSnake(obj[key]);
+      return acc;
+    }, {} as any);
+  }
+  return obj;
+}
+export function snakeToCamel(obj: any): any {
+  if (Array.isArray(obj)) {
+    return obj.map(snakeToCamel);
+  } else if (obj !== null && typeof obj === "object") {
+    return Object.keys(obj).reduce((acc, key) => {
+      const camelKey = key.replace(/_([a-z])/g, (_, letter) =>
+        letter.toUpperCase(),
+      );
+      acc[camelKey] = snakeToCamel(obj[key]);
+      return acc;
+    }, {} as any);
+  }
+  return obj;
+}
 
 export interface ExtendedJsonSchema extends JsonSchema4 {
   $id?: string;

@@ -7,7 +7,7 @@
       "scope": "#/properties/principal_investigator",
       "options": {
         "elementLabelProp": "last_name",
-        "showSortButtons": true,
+        "showSortButtons": false,
         "detail": {
           "type": "VerticalLayout",
           "elements": [

@@ -101,8 +101,11 @@ import { empiarReducer } from "state-management/reducers/empiar.reducer";
 import { JsonFormsModule } from "@jsonforms/angular";
 import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 import { CustomEnumRendererComponent } from "./empiar/customRenderers/enumRenderer";
+import { CustomAuthorNameControlComponent } from "./empiar/customRenderers/authorRenderer";
+import { CustomReferenceControlComponent } from "./empiar/customRenderers/referenceRenderer";
 import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
+
 @NgModule({
   imports: [
     CommonModule,
@@ -204,6 +207,8 @@ import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-w
     DepositorComponent,
     QuestionnaireComponent,
     CustomEnumRendererComponent,
+    CustomAuthorNameControlComponent,
+    CustomReferenceControlComponent,
   ],
   providers: [
     ArchivingService,

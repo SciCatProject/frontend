@@ -18,8 +18,10 @@ import generalSchemaAsset from "./schemasUI/generalQuestionUI.json";
 import imageSetsAssets from "./schemasUI/imageSetsUI.json";
 import piAsset from "./schemasUI/authorInfoUI.json";
 import citationAsset from "./schemasUI/citationUI.json";
-import { EmpiarJson } from "./depositionEMPIAR";
+import { EmpiarJson, camelToSnake, snakeToCamel } from "./depositionEMPIAR";
 import { customEnumRenderer } from "./customRenderers/enumRenderer";
+import { customNameControlRenderer } from "./customRenderers/authorRenderer";
+import { customReferenceControlRenderer } from "./customRenderers/referenceRenderer";
 
 @Component({
   selector: "app-empiar",
@@ -42,8 +44,12 @@ export class EmpiarComponent implements OnInit, OnDestroy {
   imageSets = imageSetsAssets;
   schemaPI = piAsset;
   citationSchema = citationAsset;
-
-  configuredRenderer = [...angularMaterialRenderers, customEnumRenderer];
+  configuredRenderer = [
+    ...angularMaterialRenderers,
+    customEnumRenderer,
+    customNameControlRenderer,
+    customReferenceControlRenderer,
+  ];
 
   constructor(
     public appConfigService: AppConfigService,
@@ -57,6 +63,7 @@ export class EmpiarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log("generalSchema", this.generalSchema);
     // initialize an array for the files to be uploaded
     const pid = history.state.pid;
     this.store.dispatch(datasetActions.fetchDatasetAction({ pid }));
@@ -85,6 +92,7 @@ export class EmpiarComponent implements OnInit, OnDestroy {
       }
     });
     this.data = { ...this.data };
+    this.data = camelToSnake(this.dataset || createEmptyInstance());
   }
 
   ngOnDestroy() {
@@ -92,11 +100,12 @@ export class EmpiarComponent implements OnInit, OnDestroy {
       subscription.unsubscribe();
     });
   }
-  onDataChange(event: any) {
+  onDataChange(event: EmpiarJson) {
     this.data = event;
   }
 
   onSubmitClick() {
+    this.data = snakeToCamel(this.data);
     console.log(this.data);
   }
 }
@@ -104,25 +113,31 @@ export class EmpiarComponent implements OnInit, OnDestroy {
 function createEmptyInstance(): EmpiarJson {
   return {
     title: "",
-    release_date: null,
-    experiment_type: null,
+    releaseDate: null,
+    experimentType: null,
     scale: undefined,
-    crossReferences: [],
+    crossReferences: [{ name: "EMD-" }],
     biostudiesReferences: [],
     idrReferences: [],
     empiarReferences: [],
     workflows: [],
-    authors: [],
+    authors: [
+      {
+        name: "",
+        orderId: 0,
+        authorOrcid: null,
+      },
+    ],
     correspondingAuthor: {
-      author_orcid: null,
-      first_name: "",
-      middle_name: null,
-      last_name: "",
+      authorOrcid: null,
+      firstName: "",
+      middleName: null,
+      lastName: "",
       organization: "",
       street: null,
-      town_or_city: "",
-      state_or_province: null,
-      post_or_zip: "",
+      townOrCity: "",
+      stateOrProvince: null,
+      postOrZip: "",
       telephone: null,
       fax: null,
       email: "",

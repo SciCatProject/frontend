@@ -7,7 +7,7 @@
       "scope": "#/properties/citation",
       "options": {
         "elementLabelProp": "title",
-        "showSortButtons": true,
+        "showSortButtons": false,
         "detail": {
           "type": "VerticalLayout",
           "elements": [

@@ -96,6 +96,41 @@
               }
             }
           ]
+        },
+        {
+          "type": "Group",
+          "elements": [
+            {
+              "type": "Control",
+              "label": "Authors",
+              "scope": "#/properties/authors",
+              "options": {
+                "showSortButtons": false,
+                "detail": {
+                  "type": "VerticalLayout",
+                  "elements": [
+                    {
+                      "type": "Control",
+                      "label": "Author's Name",
+                      "scope": "#/properties/name",
+                      "description": "Format: ('Surname', 'Initials')",
+                      "renderer": "customNameControlRenderer"
+                    },
+                    {
+                      "type": "Control",
+                      "label": "Author's Order ID",
+                      "scope": "#/properties/order_id" 
+                    },
+                    {
+                      "type": "Control",
+                      "label": "Author ORCID",
+                      "scope": "#/properties/author_orcid"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
         }
       ]
     }

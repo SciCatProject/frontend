@@ -7,7 +7,7 @@
       "scope": "#/properties/imagesets",
       "options": {
         "elementLabelProp": "name",
-        "showSortButtons": true,
+        "showSortButtons": false,
         "detail": {
           "type": "VerticalLayout",
           "elements": [
