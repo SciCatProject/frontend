@@ -275,12 +275,19 @@ export class DatasetDetailsDashboardComponent
           fetchSampleAction({ sampleId: this.dataset.sampleId }),
         );
       }
-      if ("instrumentId" in this.dataset && this.dataset.instrumentId) {
-        this.store.dispatch(
-          fetchInstrumentAction({
-            pid: this.dataset.instrumentId,
-          }),
-        );
+
+      if (
+        "instrumentIds" in this.dataset &&
+        this.dataset.instrumentIds?.length
+      ) {
+        // Fetch each instrument in the array
+        this.dataset.instrumentIds.forEach((instrumentId) => {
+          this.store.dispatch(
+            fetchInstrumentAction({
+              pid: instrumentId,
+            }),
+          );
+        });
       }
     }
   }

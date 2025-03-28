@@ -32,6 +32,7 @@ import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { CustomTranslateLoader } from "shared/loaders/custom-translate.loader";
 import { DATE_PIPE_DEFAULT_OPTIONS } from "@angular/common";
 import { RouteTrackerService } from "shared/services/route-tracker.service";
+import { SearchService } from "./datasets/services/search.service";
 
 const appConfigInitializerFn = (appConfig: AppConfigService) => {
   return () => appConfig.loadAppConfig();
@@ -143,6 +144,7 @@ const apiConfigurationFn = (
       deps: [AuthService, AppConfigService],
       multi: false,
     },
+    SearchService,
   ],
   bootstrap: [AppComponent],
 })
