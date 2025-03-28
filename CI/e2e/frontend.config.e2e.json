@@ -209,6 +209,7 @@
     ],
     "conditions": []
   },
+
   "labelsLocalization": {
     "datasetDefault": {},
     "datasetCustom": {
@@ -236,7 +237,6 @@
       "Metadata": "Additional Information"
     }
   },
-  "dateFormat": "yyyy-MM-dd HH:mm",
   "datasetDetailComponent": {
     "enableCustomizedComponent": true,
     "customization": [
@@ -410,4 +410,5 @@
       }
     ]
   }
+  "dateFormat": "yyyy-MM-dd HH:mm"
 }
