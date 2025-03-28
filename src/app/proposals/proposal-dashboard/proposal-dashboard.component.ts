@@ -9,7 +9,6 @@ import {
   TablePagination,
   TablePaginationMode,
 } from "shared/modules/dynamic-material-table/models/table-pagination.model";
-import { PrintConfig } from "shared/modules/dynamic-material-table/models/print-config.model";
 import {
   IRowEvent,
   ITableEvent,
@@ -22,7 +21,6 @@ import { selectProposalsWithCountAndTableSettings } from "state-management/selec
 import { fetchProposalsAction } from "state-management/actions/proposals.actions";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
-import { Direction } from "@angular/cdk/bidi";
 import {
   actionMenu,
   getTableSettingsConfig,
@@ -103,17 +101,11 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     selectProposalsWithCountAndTableSettings,
   );
 
-  subscription: Subscription;
+  subscriptions: Subscription[] = [];
 
   tableName = "proposalsTable";
 
-  columns!: TableField<any>[];
-
-  direction: Direction = "ltr";
-
-  showReloadData = true;
-
-  rowHeight = 50;
+  columns: TableField<any>[];
 
   pending = true;
 
@@ -121,25 +113,19 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
 
   paginationMode: TablePaginationMode = "server-side";
 
-  showNoData = true;
-
   dataSource: BehaviorSubject<ProposalClass[]> = new BehaviorSubject<
     ProposalClass[]
   >([]);
 
   pagination: TablePagination = {};
 
-  stickyHeader = true;
-
-  printConfig: PrintConfig = {};
-
-  showProgress = true;
-
   rowSelectionMode: TableSelectionMode = "none";
 
   globalTextSearch = "";
 
   defaultPageSize = 10;
+
+  defaultPageSizeOptions = [5, 10, 25, 100];
 
   tablesSettings: object;
 
@@ -150,59 +136,78 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const initialQueryParams = this.route.snapshot.queryParams;
-    if (initialQueryParams.textSearch) {
-      this.globalTextSearch = initialQueryParams.textSearch;
-    }
+    this.subscriptions.push(
+      this.proposalsWithCountAndTableSettings$.subscribe(
+        ({ proposals, count, tablesSettings }) => {
+          this.tablesSettings = tablesSettings;
+          this.dataSource.next(proposals);
+          this.pending = false;
 
-    this.store.dispatch(
-      fetchProposalsAction({
-        limit: initialQueryParams.pageSize || this.defaultPageSize,
-        skip: initialQueryParams.pageIndex * initialQueryParams.pageSize,
-        search: initialQueryParams.textSearch,
-        sortColumn: initialQueryParams.sortColumn,
-        sortDirection: initialQueryParams.sortDirection,
-      }),
+          const savedTableConfigColumns =
+            tablesSettings?.[this.tableName]?.columns;
+          const tableSort = this.getTableSort();
+          const paginationConfig = this.getTablePaginationConfig(count);
+
+          const tableSettingsConfig = getTableSettingsConfig(
+            this.tableName,
+            tableDefaultSettingsConfig,
+            savedTableConfigColumns,
+            tableSort,
+          );
+
+          if (tableSettingsConfig?.settingList.length) {
+            this.initTable(tableSettingsConfig, paginationConfig);
+          }
+        },
+      ),
     );
 
-    this.subscription = this.proposalsWithCountAndTableSettings$.subscribe(
-      ({ proposals, count, tablesSettings }) => {
-        const queryParams = this.route.snapshot.queryParams;
+    this.subscriptions.push(
+      this.route.queryParams.subscribe((queryParams) => {
+        this.pending = true;
+        const limit = queryParams.pageSize
+          ? +queryParams.pageSize
+          : this.defaultPageSize;
+        const skip = queryParams.pageIndex ? +queryParams.pageIndex * limit : 0;
         if (queryParams.textSearch) {
           this.globalTextSearch = queryParams.textSearch;
         }
-        this.tablesSettings = tablesSettings;
-        this.dataSource.next(proposals);
-        this.pending = false;
 
-        let tableSort: ITableSetting["tableSort"];
-        if (queryParams.sortDirection && queryParams.sortColumn) {
-          tableSort = {
+        this.store.dispatch(
+          fetchProposalsAction({
+            limit: limit,
+            skip: skip,
+            search: queryParams.textSearch,
             sortColumn: queryParams.sortColumn,
             sortDirection: queryParams.sortDirection,
-          };
-        }
-        const savedTableConfig = tablesSettings?.[this.tableName];
-
-        const tableSettingsConfig = getTableSettingsConfig(
-          this.tableName,
-          tableDefaultSettingsConfig,
-          savedTableConfig?.columns,
-          tableSort,
+          }),
         );
-
-        const pagginationConfig = {
-          pageSizeOptions: [5, 10, 25, 100],
-          pageIndex: queryParams.pageIndex,
-          pageSize: queryParams.pageSize || this.defaultPageSize,
-          length: count,
-        };
-
-        if (tableSettingsConfig?.settingList.length) {
-          this.initTable(tableSettingsConfig, pagginationConfig);
-        }
-      },
+      }),
     );
+  }
+
+  getTableSort(): ITableSetting["tableSort"] {
+    const { queryParams } = this.route.snapshot;
+
+    if (queryParams.sortDirection && queryParams.sortColumn) {
+      return {
+        sortColumn: queryParams.sortColumn,
+        sortDirection: queryParams.sortDirection,
+      };
+    }
+
+    return null;
+  }
+
+  getTablePaginationConfig(dataCount = 0): TablePagination {
+    const { queryParams } = this.route.snapshot;
+
+    return {
+      pageSizeOptions: this.defaultPageSizeOptions,
+      pageIndex: queryParams.pageIndex,
+      pageSize: queryParams.pageSize || this.defaultPageSize,
+      length: dataCount,
+    };
   }
 
   initTable(
@@ -219,36 +224,16 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   }
 
   onPaginationChange(pagination: TablePagination) {
-    this.pending = true;
-    const queryParams: Record<string, string | number> = {
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-    };
-    const { textSearch, sortColumn, sortDirection } =
-      this.route.snapshot.queryParams;
-
-    if (textSearch) {
-      queryParams.textSearch = textSearch;
-    }
     this.router.navigate([], {
-      queryParams,
+      queryParams: {
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
+      },
       queryParamsHandling: "merge",
     });
-
-    this.store.dispatch(
-      fetchProposalsAction({
-        limit: pagination.pageSize,
-        skip: pagination.pageIndex * pagination.pageSize,
-        search: queryParams.textSearch as string,
-        sortColumn: sortColumn,
-        sortDirection: sortDirection,
-      }),
-    );
   }
 
   onGlobalTextSearchChange(text: string) {
-    this.pending = true;
-    this.pagination.pageIndex = 0;
     this.router.navigate([], {
       queryParams: {
         textSearch: text || undefined,
@@ -256,18 +241,6 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
       },
       queryParamsHandling: "merge",
     });
-
-    const { sortColumn, sortDirection } = this.route.snapshot.queryParams;
-
-    this.store.dispatch(
-      fetchProposalsAction({
-        limit: this.pagination.pageSize,
-        skip: this.pagination.pageIndex * this.pagination.pageSize,
-        search: text,
-        sortColumn: sortColumn,
-        sortDirection: sortDirection,
-      }),
-    );
   }
 
   saveTableSettings(setting: ITableSetting) {
@@ -316,7 +289,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   onTableEvent({ event, sender }: ITableEvent) {
     if (event === TableEventType.SortChanged) {
       const { active: sortColumn, direction: sortDirection } = sender as Sort;
-      this.pending = true;
+
       this.router.navigate([], {
         queryParams: {
           pageIndex: 0,
@@ -325,24 +298,12 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
         },
         queryParamsHandling: "merge",
       });
-
-      const queryParams = this.route.snapshot.queryParams;
-
-      this.store.dispatch(
-        fetchProposalsAction({
-          limit: queryParams.pageSize,
-          skip:
-            queryParams.pageIndex *
-            (queryParams.pageSize || this.defaultPageSize),
-          search: queryParams.textSearch,
-          sortColumn: sortColumn,
-          sortDirection: sortDirection,
-        }),
-      );
     }
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscriptions.forEach((sub) => {
+      sub.unsubscribe();
+    });
   }
 }
