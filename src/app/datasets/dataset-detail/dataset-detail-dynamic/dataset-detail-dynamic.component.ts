@@ -40,6 +40,8 @@ import { DatePipe } from "@angular/common";
 export class DatasetDetailDynamicComponent implements OnInit {
   datasetView: CustomizationItem[];
   form: FormGroup;
+  cols = 10;
+  gutterSize = 12;
 
   appConfig = this.appConfigService.getConfig();
 
