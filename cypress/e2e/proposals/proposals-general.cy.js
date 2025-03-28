@@ -49,7 +49,7 @@ describe("Proposals general", () => {
       cy.contains(proposal.title);
     });
 
-    it("if user has no access should to see the proposal should see not found screen", () => {
+    it("if user has no access on a proposal should see not found screen", () => {
       const newProposal = {
         ...testData.proposal,
         proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
