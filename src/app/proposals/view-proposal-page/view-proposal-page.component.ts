@@ -11,6 +11,7 @@ import { selectViewProposalPageViewModel } from "state-management/selectors/prop
 import { AppConfigService } from "app-config.service";
 import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { TranslateService } from "@ngx-translate/core";
+import { selectIsLoading } from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "view-proposal-page",
@@ -19,6 +20,7 @@ import { TranslateService } from "@ngx-translate/core";
 })
 export class ViewProposalPageComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectViewProposalPageViewModel);
+  loading$ = this.store.select(selectIsLoading);
   appConfig = this.appConfigService.getConfig();
   proposal: ProposalClass;
   subscriptions: Subscription[] = [];

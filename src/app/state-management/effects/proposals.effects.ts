@@ -327,6 +327,7 @@ export class ProposalEffects {
         fromActions.fetchCountFailedAction,
         fromActions.fetchProposalCompleteAction,
         fromActions.fetchProposalFailedAction,
+        fromActions.fetchProposalAccessFailedAction,
         fromActions.fetchProposalDatasetsCompleteAction,
         fromActions.fetchProposalDatasetsFailedAction,
         fromActions.fetchProposalDatasetsCountCompleteAction,
@@ -366,15 +367,18 @@ export class ProposalEffects {
           this.proposalsService
             .proposalsControllerFindByIdAccess(proposalId)
             .pipe(
-              filter((permission) => permission.canAccess),
-              switchMap(() =>
-                this.proposalsService
-                  .proposalsControllerFindById(proposalId)
-                  .pipe(
-                    map((proposal) => completeAction({ proposal })),
-                    catchError(() => of(failedAction())),
-                  ),
-              ),
+              switchMap((permission) => {
+                if (permission.canAccess) {
+                  return this.proposalsService
+                    .proposalsControllerFindById(proposalId)
+                    .pipe(
+                      map((proposal) => completeAction({ proposal })),
+                      catchError(() => of(failedAction())),
+                    );
+                } else {
+                  return of(accessFailedAction());
+                }
+              }),
               catchError(() => of(accessFailedAction())),
             ),
         ),
