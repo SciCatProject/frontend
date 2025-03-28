@@ -129,14 +129,7 @@
         [ngStyle]="cellStyle(row?.option, column)"
         (contextmenu)="onContextMenu($event, column, row)"
       >
-        <label
-          *ngIf="
-            column.customRender;
-            then customColumnRender;
-            else regularColumnRender
-          "
-        ></label>
-        <ng-template #customColumnRender>
+        <ng-container *ngIf="column.customRender; else regularColumnRender">
           <label
             *ngIf="!column.dynamicCellComponent"
             (click)="onLabelClick($event, row, column)"
@@ -147,13 +140,7 @@
             [innerHTML]="columnName(row, column)"
           >
           </label>
-          <mat-icon
-            class="general-warning"
-            *ngIf="shouldRenderIcon(row, column)"
-            [matTooltip]="column.warningIconTooltip"
-            >{{ column.contentIcon }}</mat-icon
-          >
-        </ng-template>
+        </ng-container>
         <ng-template #regularColumnRender>
           <label
             *ngIf="!column.dynamicCellComponent"
@@ -165,6 +152,34 @@
             >{{ row[column.name] }}
           </label>
         </ng-template>
+
+        <ng-container *ngIf="column.renderContentIcon">
+          <ng-container
+            *ngIf="column.contentIconLink; else regularIconRender"
+          >
+            <a
+              *ngIf="renderContentIconLink(row, column)"
+              [href]="renderContentIconLink(row, column)"
+              target="_blank"
+              class="content-icon-link"
+            >
+              <mat-icon
+                [ngClass]="column.contentIconClass"
+                [matTooltip]="column.contentIconTooltip"
+                >{{ column.contentIcon }}</mat-icon
+              ></a
+            >
+          </ng-container>
+          <ng-template #regularIconRender>
+            <mat-icon
+              [ngClass]="column.contentIconClass"
+              *ngIf="shouldRenderContentIcon(row, column)"
+              [matTooltip]="column.contentIconTooltip"
+              >{{ column.contentIcon }}</mat-icon
+            >
+          </ng-template>
+        </ng-container>
+
         <ng-container
           *ngIf="column.dynamicCellComponent"
           appDynamicCell
