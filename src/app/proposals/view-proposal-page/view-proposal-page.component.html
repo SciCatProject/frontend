@@ -1,54 +1,67 @@
-<mat-tab-group
-  (selectedTabChange)="onTabChanged($event.index)"
-  [selectedIndex]="selectedTabIndex"
-  *ngIf="vm$ | async as vm"
->
-  <mat-tab>
-    <ng-template mat-tab-label>
-      <mat-icon> details </mat-icon>
-      {{ "Details" | translate }}
-    </ng-template>
-    <ng-template matTabContent
-      ><proposal-detail [proposal]="proposal"></proposal-detail
-    ></ng-template>
-  </mat-tab>
+<ng-container *ngIf="vm$ | async as vm">
+  <mat-tab-group
+    (selectedTabChange)="onTabChanged($event.index)"
+    [selectedIndex]="selectedTabIndex"
+    *ngIf="vm.proposal"
+  >
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon> details </mat-icon>
+        {{ "Details" | translate }}
+      </ng-template>
+      <ng-template matTabContent
+        ><proposal-detail [proposal]="proposal"></proposal-detail
+      ></ng-template>
+    </mat-tab>
 
-  <mat-tab>
-    <ng-template mat-tab-label>
-      <mat-icon> folder </mat-icon>
-      {{ "Datasets" | translate }}
-    </ng-template>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon> folder </mat-icon>
+        {{ "Datasets" | translate }}
+      </ng-template>
 
-    <ng-template matTabContent>
-      <app-proposal-datasets
-        *ngIf="proposal"
-        [proposalId]="proposal.proposalId"
-      ></app-proposal-datasets>
-    </ng-template>
-  </mat-tab>
+      <ng-template matTabContent>
+        <app-proposal-datasets
+          *ngIf="proposal"
+          [proposalId]="proposal.proposalId"
+        ></app-proposal-datasets>
+      </ng-template>
+    </mat-tab>
 
-  <mat-tab>
-    <ng-template mat-tab-label>
-      <mat-icon data-cy="related-proposals"> folder </mat-icon>
-      {{ "Related Proposals" | translate }}
-    </ng-template>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon data-cy="related-proposals"> folder </mat-icon>
+        {{ "Related Proposals" | translate }}
+      </ng-template>
 
-    <ng-template matTabContent>
-      <app-related-proposals *ngIf="proposal"></app-related-proposals>
-    </ng-template>
-  </mat-tab>
+      <ng-template matTabContent>
+        <app-related-proposals *ngIf="proposal"></app-related-proposals>
+      </ng-template>
+    </mat-tab>
 
-  <mat-tab *ngIf="appConfig.logbookEnabled">
-    <ng-template mat-tab-label>
-      <mat-icon> book </mat-icon>
-      {{ "Logbook" | translate }}
-    </ng-template>
+    <mat-tab *ngIf="appConfig.logbookEnabled">
+      <ng-template mat-tab-label>
+        <mat-icon> book </mat-icon>
+        {{ "Logbook" | translate }}
+      </ng-template>
 
-    <ng-template matTabContent>
-      <app-proposal-logbook
-        *ngIf="proposal"
-        [proposalId]="proposal.proposalId"
-      ></app-proposal-logbook>
-    </ng-template>
-  </mat-tab>
-</mat-tab-group>
+      <ng-template matTabContent>
+        <app-proposal-logbook
+          *ngIf="proposal"
+          [proposalId]="proposal.proposalId"
+        ></app-proposal-logbook>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+
+  <ng-template [ngIf]="!vm.proposal && (loading$ | async) === false">
+    <error-page
+      data-cy="proposal-not-found"
+      [errorTitle]="'Proposal not found'"
+      [message]="
+        'The proposal you are trying to view either doesn\'t exist or you don\'t have permission to view it.'
+      "
+    >
+    </error-page>
+  </ng-template>
+</ng-container>
