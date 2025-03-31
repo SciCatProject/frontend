@@ -60,4 +60,5 @@ export interface ScientificMetadataTableData {
   unit: string;
   human_name?: string;
   type?: string;
+  ontology_reference?: string;
 }
