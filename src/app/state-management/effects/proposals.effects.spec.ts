@@ -200,15 +200,16 @@ describe("ProposalEffects", () => {
       expect(effects.fetchProposal$).toBeObservable(expected);
     });
 
-    it("should do nothing if findByIdAccess returns false", () => {
+    it("should call fetchProposalAccessFailedAction if findByIdAccess returns false", () => {
       const action = fromActions.fetchProposalAction({ proposalId });
+      const outcome = fromActions.fetchProposalAccessFailedAction();
 
       proposalApi.proposalsControllerFindByIdAccess
         .withArgs(proposalId)
         .and.returnValue(of(permission.rejected));
 
       actions = hot("a", { a: action });
-      const expected = cold("------");
+      const expected = cold("b", { b: outcome });
 
       expect(effects.fetchProposal$).toBeObservable(expected);
       expect(proposalApi.proposalsControllerFindById).not.toHaveBeenCalled();
