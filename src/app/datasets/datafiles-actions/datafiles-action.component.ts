@@ -208,7 +208,17 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
       },
       body: payload,
     })
-      .then((response) => response.blob())
+      .then((response) => {
+        if (response.ok) {
+          return response.blob();
+        } else {
+          // http error
+          console.log(`HTTP Error code: ${response.status}`);
+          return Promise.reject(
+            new Error(`HTTP Error code: ${response.status}`),
+          );
+        }
+      })
       .then((blob) => URL.createObjectURL(blob))
       .then((url) => {
         const a = document.createElement("a");
@@ -216,15 +226,11 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
         a.download = filename;
         a.click();
         URL.revokeObjectURL(url);
-        // Object.assign(document.createElement("a"), {
-        //   url,
-        //   download: "filename.csv",
-        // }).click();
+      })
+      .catch((error) => {
+        console.log("Datafile action error : ", error);
+        alert("There has been an error performing the action");
       });
-    // .then((url) => {
-    //   window.open(url, "_blank");
-    //   URL.revokeObjectURL(url);
-    // });
 
     return true;
   }
