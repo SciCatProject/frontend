@@ -103,9 +103,10 @@
             {
               "type": "Control",
               "label": "Authors",
+              "description": "Please add authors in the order they should appear in the publication.",
               "scope": "#/properties/authors",
               "options": {
-                "showSortButtons": false,
+                "showSortButtons": true,
                 "detail": {
                   "type": "VerticalLayout",
                   "elements": [
@@ -113,13 +114,7 @@
                       "type": "Control",
                       "label": "Author's Name",
                       "scope": "#/properties/name",
-                      "description": "Format: ('Surname', 'Initials')",
-                      "renderer": "customNameControlRenderer"
-                    },
-                    {
-                      "type": "Control",
-                      "label": "Author's Order ID",
-                      "scope": "#/properties/order_id" 
+                      "description": "Format: ('Surname', 'Initials')"
                     },
                     {
                       "type": "Control",
@@ -129,9 +124,9 @@
                   ]
                 }
               }
-            }
+            }            
           ]
-        }
+        }        
       ]
     }
   ]

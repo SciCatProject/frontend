@@ -1,6 +1,12 @@
 import { Component } from "@angular/core";
 import { JsonFormsControl } from "@jsonforms/angular";
-import { and, rankWith, schemaTypeIs, schemaMatches } from "@jsonforms/core";
+import {
+  and,
+  rankWith,
+  schemaTypeIs,
+  schemaMatches,
+  ControlElement,
+} from "@jsonforms/core";
 import { ExtendedJsonSchema } from "../depositionEMPIAR";
 
 @Component({
@@ -12,12 +18,9 @@ import { ExtendedJsonSchema } from "../depositionEMPIAR";
           matInput
           [(ngModel)]="referenceValue"
           (ngModelChange)="onReferenceChange()"
-          [required]="isRequired"
           [pattern]="pattern"
         />
-        <mat-error *ngIf="isRequired && !referenceValue"
-          >This field is required.</mat-error
-        >
+
         <mat-error *ngIf="referenceValue && !referenceValue.match(pattern)">
           Please enter a valid reference.
         </mat-error>
@@ -27,22 +30,15 @@ import { ExtendedJsonSchema } from "../depositionEMPIAR";
 })
 export class CustomReferenceControlComponent extends JsonFormsControl {
   referenceValue = "";
-  isRequired = false;
   pattern: string | undefined;
 
   override ngOnInit() {
     super.ngOnInit();
     this.initializeValue();
-    console.log(this.schema);
-    if (
-      this.schema.required &&
-      this.schema.required.includes(this.uischema.scope.split("/").pop())
-    ) {
-      this.isRequired = true;
-    }
     if (this.schema?.properties?.name?.pattern) {
       this.pattern = this.schema.properties.name.pattern;
     }
+    console.log(this);
   }
 
   initializeValue() {
@@ -51,6 +47,17 @@ export class CustomReferenceControlComponent extends JsonFormsControl {
     }
   }
 
+  addReference() {
+    const newReference = { name: "EMD-" };
+    const updatedData = this.data
+      ? [...this.data, newReference]
+      : [newReference];
+
+    this.onChange({
+      path: this.path,
+      value: updatedData,
+    });
+  }
   onReferenceChange() {
     if (this.onChange) {
       this.onChange({

@@ -106,7 +106,10 @@ export class EmpiarComponent implements OnInit, OnDestroy {
 
   onSubmitClick() {
     this.data = snakeToCamel(this.data);
-    console.log(this.data);
+    this.data["authors"].map((author) => {
+      author["orderId"] = this.data["authors"].indexOf(author);
+    });
+    console.log("Data changed:", this.data);
   }
 }
 

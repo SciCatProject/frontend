@@ -26,7 +26,7 @@ interface Workflow {
   type: number;
 }
 
-interface Author {
+export interface Author {
   name: string;
   orderId: number;
   authorOrcid?: string | null;

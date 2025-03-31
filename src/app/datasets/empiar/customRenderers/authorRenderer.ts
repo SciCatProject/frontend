@@ -1,26 +1,35 @@
 import { Component } from "@angular/core";
 import { JsonFormsControl } from "@jsonforms/angular";
-import { and, schemaTypeIs, rankWith, schemaMatches } from "@jsonforms/core";
+import {
+  and,
+  schemaTypeIs,
+  rankWith,
+  schemaMatches,
+  ControlElement,
+} from "@jsonforms/core";
+
 @Component({
   selector: "custom-author-name-control",
   template: `
     <div>
       <mat-form-field appearance="outline">
-        <mat-label>Last Name</mat-label>
+        <mat-label>Last Name<span *ngIf="isRequired">*</span></mat-label>
         <input
           matInput
           [(ngModel)]="lastName"
           (ngModelChange)="onNameChange()"
         />
+        <mat-error *ngIf="error">{{ error }}</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>First Name(s)</mat-label>
+        <mat-label>First Name(s)<span *ngIf="isRequired">*</span></mat-label>
         <input
           matInput
           [(ngModel)]="firstNames"
           (ngModelChange)="onNameChange()"
         />
+        <mat-error *ngIf="error">{{ error }}</mat-error>
       </mat-form-field>
     </div>
   `,
@@ -28,12 +37,13 @@ import { and, schemaTypeIs, rankWith, schemaMatches } from "@jsonforms/core";
 export class CustomAuthorNameControlComponent extends JsonFormsControl {
   lastName = "";
   firstNames = "";
+  isRequired = false;
 
   override ngOnInit() {
     super.ngOnInit();
     this.initializeValues();
+    this.checkIfRequired();
   }
-
   initializeValues() {
     if (this.data) {
       const nameMatch = this.data?.match(/\('(.+)', '(.+)'\)/);
@@ -41,6 +51,15 @@ export class CustomAuthorNameControlComponent extends JsonFormsControl {
         this.lastName = nameMatch[1];
         this.firstNames = nameMatch[2];
       }
+    }
+  }
+
+  checkIfRequired() {
+    const controlElement = this.uischema as ControlElement;
+    const schemaProperties = this.schema?.properties;
+    if (controlElement?.scope && schemaProperties) {
+      const propertyKey = controlElement.scope.replace("#/properties/", "");
+      this.isRequired = this.schema?.required?.includes(propertyKey);
     }
   }
 
