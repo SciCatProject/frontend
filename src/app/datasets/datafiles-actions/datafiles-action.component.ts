@@ -11,6 +11,7 @@ import { ActionConfig, ActionDataset } from "./datafiles-action.interfaces";
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 import { v4 } from "uuid";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "datafiles-action",
@@ -38,6 +39,7 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
   constructor(
     private usersService: UsersService,
     private authService: AuthService,
+    private snackBar: MatSnackBar,
   ) {
     this.usersService.usersControllerGetUserJWT().subscribe((jwt) => {
       this.jwt = jwt.jwt;
@@ -229,7 +231,13 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
       })
       .catch((error) => {
         console.log("Datafile action error : ", error);
-        alert("There has been an error performing the action");
+        this.snackBar.open(
+          "There has been an error performing the action",
+          "Close",
+          {
+            duration: 2000,
+          },
+        );
       });
 
     return true;
