@@ -49,6 +49,24 @@ describe("Proposals general", () => {
       cy.contains(proposal.title);
     });
 
+    it("if user has no access on a proposal should see not found screen", () => {
+      const newProposal = {
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+      };
+      cy.createProposal(newProposal);
+
+      cy.login(
+        Cypress.env("secondaryUsername"),
+        Cypress.env("secondaryPassword"),
+      );
+      cy.visit(`/proposals/${newProposal.proposalId}`);
+
+      cy.get("[data-cy=spinner]").should("not.exist");
+
+      cy.get("[data-cy='proposal-not-found']").should("exist");
+    });
+
     it("should be able to see proposal and its parent proposal if it exists", () => {
       const newProposal = {
         ...testData.proposal,
