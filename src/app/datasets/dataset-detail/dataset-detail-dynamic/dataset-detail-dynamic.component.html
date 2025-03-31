@@ -248,7 +248,7 @@
                   color="primary"
                   (click)="show = !show"
                 >
-                  {{ show ? "Hide JSON View" : ("Show JSON View" | translate) }}
+                  {{ (show ? "Hide JSON View" : "Show JSON View") | translate }}
                 </button>
                 <br />
                 <div *ngIf="show" class="json-view-overflow">
