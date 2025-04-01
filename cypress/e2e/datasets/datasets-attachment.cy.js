@@ -79,7 +79,7 @@ describe("Dataset attachments", () => {
 
       cy.get(".mat-mdc-tab-link").contains("Details").click();
 
-      cy.get('[data-cy="attachment-thumbnail"]').click();
+      cy.get('[data-cy="attachment-thumbnail"]').first().click();
 
       cy.get("@open").should("be.calledWith", Cypress.sinon.match(/blob:.*/));
     });
