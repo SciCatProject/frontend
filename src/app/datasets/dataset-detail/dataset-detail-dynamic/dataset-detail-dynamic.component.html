@@ -48,7 +48,7 @@
             <mat-card-content>
               <table>
                 <ng-container *ngFor="let field of section.fields">
-                  <tr *ngIf="dataset[field.source]">
+                  <tr *ngIf="getNestedValue(dataset, field.source)">
                     <th data-cy="field-label">
                       {{ field.source | translate }}
                     </th>
@@ -61,7 +61,7 @@
                             fieldType: field.element,
                             fieldValue: handleFieldValue(
                               field.element,
-                              dataset[field.source]
+                              getNestedValue(dataset, field.source)
                             ),
                           }"
                         ></ng-container>
@@ -72,11 +72,28 @@
                         let-fieldType="fieldType"
                         let-fieldValue="fieldValue"
                       >
+                        <!-- InternalLink Field-->
+                        <ng-container *ngIf="fieldType === 'internalLink'">
+                          <ng-container *ngFor="let value of fieldValue">
+                            <ng-container *ngIf="value; else noValue">
+                              <a
+                                (click)="
+                                  onClickInternalLink(field.source, value)
+                                "
+                                [title]="value"
+                                >{{ value }}
+                              </a>
+                            </ng-container>
+                            <ng-template #noValue>
+                              <span> - </span>
+                            </ng-template>
+                          </ng-container>
+                        </ng-container>
                         <!-- Text Field -->
                         <span *ngIf="fieldType === 'text'" [title]="fieldValue">
                           {{ fieldValue }}
                         </span>
-                        <!-- Link Field -->
+                        <!-- Linky Field -->
                         <span
                           *ngIf="fieldType === 'linky'"
                           [innerHTML]="fieldValue | linky"
@@ -248,7 +265,7 @@
                   color="primary"
                   (click)="show = !show"
                 >
-                  {{ show ? "Hide JSON View" : ("Show JSON View" | translate) }}
+                  {{ (show ? "Hide JSON View" : "Show JSON View") | translate }}
                 </button>
                 <br />
                 <div *ngIf="show" class="json-view-overflow">
