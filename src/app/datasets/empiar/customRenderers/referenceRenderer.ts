@@ -1,12 +1,6 @@
 import { Component } from "@angular/core";
 import { JsonFormsControl } from "@jsonforms/angular";
-import {
-  and,
-  rankWith,
-  schemaTypeIs,
-  schemaMatches,
-  ControlElement,
-} from "@jsonforms/core";
+import { and, rankWith, schemaTypeIs, schemaMatches } from "@jsonforms/core";
 import { ExtendedJsonSchema } from "../depositionEMPIAR";
 
 @Component({
@@ -38,7 +32,6 @@ export class CustomReferenceControlComponent extends JsonFormsControl {
     if (this.schema?.properties?.name?.pattern) {
       this.pattern = this.schema.properties.name.pattern;
     }
-    console.log(this);
   }
 
   initializeValue() {

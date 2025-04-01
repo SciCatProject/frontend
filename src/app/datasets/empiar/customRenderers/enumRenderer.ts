@@ -12,7 +12,6 @@ import {
 @Component({
   selector: "custom-enum-renderer",
   styleUrls: ["./renderer.styles.scss"],
-
   template: `
     <mat-form-field appearance="outline" class="custom-dropdown">
       <mat-label>{{ label }}</mat-label>
@@ -45,10 +44,12 @@ export class CustomEnumRendererComponent extends JsonFormsControl {
         label: Scale["S" + val] || val,
       }));
     } else if (propertyId.split("/").at(-1) == "country") {
-      this.transformedOptions = this.scopedSchema.enum.map((val: string) => ({
-        value: val,
-        label: CountryEnum[val] || val,
-      }));
+      this.transformedOptions = this.scopedSchema.enum
+        .map((val: string) => ({
+          value: val,
+          label: CountryEnum[val] || val,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
     } else if (propertyId == "/properties/experiment_type") {
       this.transformedOptions = this.scopedSchema.enum.map((val: string) => ({
         value: val,

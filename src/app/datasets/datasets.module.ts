@@ -103,6 +103,7 @@ import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 import { CustomEnumRendererComponent } from "./empiar/customRenderers/enumRenderer";
 import { CustomAuthorNameControlComponent } from "./empiar/customRenderers/authorRenderer";
 import { CustomReferenceControlComponent } from "./empiar/customRenderers/referenceRenderer";
+import { CustomSemiEnumControlComponent } from "./empiar/customRenderers/imagesSetRenderer";
 import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
 
@@ -209,6 +210,7 @@ import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-w
     CustomEnumRendererComponent,
     CustomAuthorNameControlComponent,
     CustomReferenceControlComponent,
+    CustomSemiEnumControlComponent,
   ],
   providers: [
     ArchivingService,

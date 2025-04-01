@@ -63,12 +63,46 @@
          ></jsonforms>
       </mat-card>
 
+      <!-- Authors card -->
+      <mat-card>
+        <mat-card-header class="file-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> contact_mail </mat-icon>
+          </div>
+          Corresponding Author Information
+        </mat-card-header>
+          <jsonforms
+          [data]="data"
+          [schema]="schema"
+          [uischema]="schemaCorrespondingAuthor"
+          [renderers]="configuredRenderer"
+          (dataChange)="onDataChange($event)"
+        ></jsonforms>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header class="file-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> contacts </mat-icon>
+          </div>
+          Principal Investigators Information
+        </mat-card-header>
+        <jsonforms
+          [data]="data"
+          [schema]="schema"
+          [uischema]="schemaPI"
+          [renderers]="configuredRenderer"
+          (dataChange)="onDataChange($event)"
+        ></jsonforms>
+      </mat-card>
+
+
       <!-- Imagesets card -->
 
       <mat-card>
         <mat-card-header class="file-header">
           <div mat-card-avatar class="section-icon">
-            <mat-icon> assignment </mat-icon>
+            <mat-icon> biotech </mat-icon>
           </div>
           Image sets
         </mat-card-header>
@@ -81,33 +115,15 @@
          ></jsonforms>
       </mat-card>
 
-      <!-- Authors card -->
-
-      <mat-card>
-        <mat-card-header class="file-header">
-          <div mat-card-avatar class="section-icon">
-            <mat-icon> assignment </mat-icon>
-          </div>
-          Author Information
-        </mat-card-header>
-        <jsonforms
-          [data]="data"
-          [schema]="schema"
-          [uischema]="schemaPI"
-          [renderers]="configuredRenderer"
-          (dataChange)="onDataChange($event)"
-         ></jsonforms>
-      </mat-card>
-
-
+    
       <!-- Citation card -->
 
       <mat-card>
         <mat-card-header class="file-header">
           <div mat-card-avatar class="section-icon">
-            <mat-icon> assignment </mat-icon>
+            <mat-icon> article </mat-icon>
           </div>
-          Author Information
+          Citation Information
         </mat-card-header>
         <jsonforms
           [data]="data"

@@ -84,7 +84,7 @@
             {
               "type": "Control",
               "label": "Image hight",
-              "scope": "#/properties/image_hight"
+              "scope": "#/properties/image_height"
             }
           ]
         }

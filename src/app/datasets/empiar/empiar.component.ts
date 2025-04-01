@@ -16,12 +16,14 @@ import * as datasetActions from "state-management/actions/datasets.actions";
 import { FormGroup, FormBuilder } from "@angular/forms";
 import generalSchemaAsset from "./schemasUI/generalQuestionUI.json";
 import imageSetsAssets from "./schemasUI/imageSetsUI.json";
-import piAsset from "./schemasUI/authorInfoUI.json";
+import piAsset from "./schemasUI/piInfoUI.json";
+import correspondingAuthorAsset from "./schemasUI/correspondingAuthorUI.json";
 import citationAsset from "./schemasUI/citationUI.json";
 import { EmpiarJson, camelToSnake, snakeToCamel } from "./depositionEMPIAR";
 import { customEnumRenderer } from "./customRenderers/enumRenderer";
 import { customNameControlRenderer } from "./customRenderers/authorRenderer";
 import { customReferenceControlRenderer } from "./customRenderers/referenceRenderer";
+import { customSemiEnumControlRenderer } from "./customRenderers/imagesSetRenderer";
 
 @Component({
   selector: "app-empiar",
@@ -43,12 +45,15 @@ export class EmpiarComponent implements OnInit, OnDestroy {
   generalSchema = generalSchemaAsset;
   imageSets = imageSetsAssets;
   schemaPI = piAsset;
+  schemaCorrespondingAuthor = correspondingAuthorAsset;
   citationSchema = citationAsset;
+
   configuredRenderer = [
     ...angularMaterialRenderers,
     customEnumRenderer,
     customNameControlRenderer,
     customReferenceControlRenderer,
+    customSemiEnumControlRenderer,
   ];
 
   constructor(
@@ -63,7 +68,6 @@ export class EmpiarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log("generalSchema", this.generalSchema);
     // initialize an array for the files to be uploaded
     const pid = history.state.pid;
     this.store.dispatch(datasetActions.fetchDatasetAction({ pid }));
@@ -78,7 +82,7 @@ export class EmpiarComponent implements OnInit, OnDestroy {
       }),
     );
     this.store.dispatch(fromActions.accessEmpiarSchema());
-    this.empiarSchema$ = this.store.pipe(select(selectEmpiarSchema));
+    this.empiarSchema$ = this.store.select(selectEmpiarSchema);
 
     this.empiarSchema$.subscribe((schema) => {
       if (schema) {
@@ -92,7 +96,7 @@ export class EmpiarComponent implements OnInit, OnDestroy {
       }
     });
     this.data = { ...this.data };
-    this.data = camelToSnake(this.dataset || createEmptyInstance());
+    this.data = camelToSnake(createEmptyInstance());
   }
 
   ngOnDestroy() {
@@ -109,7 +113,8 @@ export class EmpiarComponent implements OnInit, OnDestroy {
     this.data["authors"].map((author) => {
       author["orderId"] = this.data["authors"].indexOf(author);
     });
-    console.log("Data changed:", this.data);
+    // to do create a json file based on entered data
+    console.log(this.data);
   }
 }
 
@@ -146,8 +151,75 @@ function createEmptyInstance(): EmpiarJson {
       email: "",
       country: null,
     },
-    principalInvestigator: [],
-    imagesets: [],
-    citations: [],
+    principalInvestigator: [
+      {
+        authorOrcid: null,
+        firstName: "",
+        middleName: null,
+        lastName: "",
+        organization: "",
+        street: null,
+        townOrCity: "",
+        stateOrProvince: null,
+        postOrZip: "",
+        telephone: null,
+        fax: null,
+        email: "",
+        country: null,
+      },
+    ],
+    imagesets: [
+      {
+        name: "",
+        directory: "",
+        category: "",
+        headerFormat: "",
+        dataFormat: "",
+        numImagesOrTiltSeries: 0,
+        framesPerImage: 0,
+        // frameRangeMin?: 0,
+        // frameRangeMax?: 0,
+        voxelType: "",
+        // pixelWidth?: 0,
+        // pixelHeight?: 0,
+        // details?: "",
+        // micrographsFilePattern?: "",
+        // pickedParticlesFilePattern?: "",
+        // pickedParticlesDirectory?: "",
+        // imageWidth?: 0,
+        // imageHeight?: 0,
+      },
+    ],
+    citation: [
+      {
+        authors: [
+          {
+            name: "",
+            orderId: 0,
+            authorOrcid: "",
+          },
+        ],
+        editors: [],
+        published: false,
+        preprint: false,
+        jOrNjCitation: false,
+        title: "",
+        volume: null,
+        country: null,
+        firstPage: null,
+        lastPage: null,
+        year: null,
+        language: null,
+        doi: null,
+        pubmedid: null,
+        details: null,
+        bookChapterTitle: null,
+        publisher: null,
+        publicationLocation: null,
+        journal: null,
+        journalAbbreviation: null,
+        issue: null,
+      },
+    ],
   };
 }

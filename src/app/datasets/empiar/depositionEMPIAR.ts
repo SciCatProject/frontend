@@ -14,7 +14,7 @@ export interface EmpiarJson {
   correspondingAuthor: AuthorExtended;
   principalInvestigator: AuthorExtended[];
   imagesets: ImageSet[];
-  citations: Citation[];
+  citation: Citation[];
 }
 
 interface References {

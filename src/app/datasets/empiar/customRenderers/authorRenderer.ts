@@ -7,6 +7,7 @@ import {
   schemaMatches,
   ControlElement,
 } from "@jsonforms/core";
+import { ExtendedJsonSchema } from "../depositionEMPIAR";
 
 @Component({
   selector: "custom-author-name-control",
@@ -84,6 +85,10 @@ export const customNameControlRenderer = {
     4,
     and(
       schemaTypeIs("string"),
+      schemaMatches((schema) => {
+        const schemaId = (schema as ExtendedJsonSchema).$id;
+        return schemaId.includes("authors") || schemaId.includes("editors");
+      }),
       schemaMatches((schema) => schema.title === "The Name Schema "), // careful with space at the end..
     ),
   ),
