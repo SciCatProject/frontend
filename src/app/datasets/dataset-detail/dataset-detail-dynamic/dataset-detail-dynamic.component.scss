@@ -1,12 +1,14 @@
 mat-card {
-  margin: 1em;
-  .section-icon {
-    height: auto !important;
-    width: auto !important;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
 
-    mat-icon {
-      vertical-align: middle;
-    }
+  .section-icon {
+    height: auto;
+    width: auto;
+    display: flex;
+    align-items: center;
   }
   .caption-text {
     word-break: break-all;
@@ -64,7 +66,7 @@ mat-card {
   overflow: auto;
 }
 .truncated-text {
-  max-width: 60vw;
+  max-width: 40vw;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -101,4 +103,22 @@ mat-card {
 }
 .json-view {
   margin: 0 1.8em;
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
+  line-height: 10px;
+  height: 42px;
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+.custom-grid {
+  margin-top: 16px;
+  display: grid;
+  grid-auto-rows: auto; /* Each row height is driven by its content */
 }

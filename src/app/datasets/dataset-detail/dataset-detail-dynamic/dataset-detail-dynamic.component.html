@@ -1,40 +1,50 @@
 <ng-template [ngIf]="dataset$">
+  <!-- Jupyter Hub Button -->
   <div fxLayout="row">
     <div fxFlex="auto">
       <a
         mat-raised-button
-        href="{{ appConfig.jupyterHubUrl }}"
+        *ngIf="appConfig.jupyterHubUrl"
+        class="jupyter-button"
+        [href]="appConfig.jupyterHubUrl"
         target="_blank"
         rel="noopener noreferrer"
-        class="jupyter-button"
-        *ngIf="appConfig.jupyterHubUrl"
       >
         Jupyter Hub
       </a>
     </div>
   </div>
   <div style="clear: both"></div>
-  <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset$ | async as dataset">
-    <div fxFlex="100">
-      <ng-container *ngFor="let section of datasetView">
-        <ng-container [ngSwitch]="section.type">
-          <mat-card
-            [formGroup]="form"
-            *ngSwitchCase="'regular'"
-            data-cy="general-info"
-          >
+
+  <!-- Main Grid List -->
+  <div
+    class="custom-grid"
+    [style.grid-template-columns]="'repeat(' + cols + ', 1fr)'"
+    [style.gap.px]="gutterSize"
+    *ngIf="dataset$ | async as dataset"
+  >
+    <!-- Iterate over each section in datasetView -->
+    <ng-container *ngFor="let section of datasetView">
+      <ng-container [ngSwitch]="section.type">
+        <!-- Regular Section -->
+        <div
+          *ngSwitchCase="'regular'"
+          class="card-container"
+          [style.gridColumn]="'span ' + (section.col || 10)"
+          [style.gridRow]="'span ' + (section.row || 1)"
+        >
+          <mat-card>
             <!-- Section Header -->
             <mat-card-header
-              class="dynamic-template-general-header"
+              class="dynamic-template-general-header sticky-header"
               data-cy="section-label"
             >
               <div mat-card-avatar class="section-icon">
-                <mat-icon> description </mat-icon>
+                <mat-icon>description</mat-icon>
               </div>
               {{ section.label | translate }}
             </mat-card-header>
-
-            <!-- Section Table -->
+            <!-- Section Content -->
             <mat-card-content>
               <table>
                 <ng-container *ngFor="let field of section.fields">
@@ -43,8 +53,8 @@
                       {{ field.source | translate }}
                     </th>
                     <td>
+                      <!-- Render based on field type using a dynamic template -->
                       <ng-container [ngSwitch]="field.element">
-                        <!-- Render based on fieldType -->
                         <ng-container
                           [ngTemplateOutlet]="dynamicTemplate"
                           [ngTemplateOutletContext]="{
@@ -54,38 +64,31 @@
                               dataset[field.source]
                             ),
                           }"
-                        >
-                        </ng-container>
+                        ></ng-container>
                       </ng-container>
-
-                      <!-- Define a single dynamic template -->
+                      <!-- Dynamic Template Definition -->
                       <ng-template
                         #dynamicTemplate
                         let-fieldType="fieldType"
                         let-fieldValue="fieldValue"
                       >
-                        <!-- Text -->
-                        <span
-                          *ngIf="fieldType === 'text'"
-                          [title]="fieldValue"
-                          >{{ fieldValue }}</span
-                        >
-
-                        <!-- Linky -->
+                        <!-- Text Field -->
+                        <span *ngIf="fieldType === 'text'" [title]="fieldValue">
+                          {{ fieldValue }}
+                        </span>
+                        <!-- Link Field -->
                         <span
                           *ngIf="fieldType === 'linky'"
                           [innerHTML]="fieldValue | linky"
                           [title]="fieldValue"
                         ></span>
-
-                        <!-- Date -->
+                        <!-- Date Field -->
                         <span
                           *ngIf="fieldType === 'date'"
                           [title]="fieldValue"
                           [innerHTML]="fieldValue"
                         ></span>
-
-                        <!-- Copy -->
+                        <!-- Copy Field -->
                         <ng-container *ngIf="fieldType === 'copy'">
                           <span class="truncated-text" [title]="fieldValue">
                             {{ fieldValue }}
@@ -100,8 +103,7 @@
                             >
                           </button>
                         </ng-container>
-
-                        <!-- Tag -->
+                        <!-- Tag Field -->
                         <mat-chip-set *ngIf="fieldType === 'tag'" role="list">
                           <mat-chip
                             role="listitem"
@@ -111,8 +113,7 @@
                             {{ tag }}
                           </mat-chip>
                         </mat-chip-set>
-
-                        <!-- Default -->
+                        <!-- Fallback for unsupported types -->
                         <span
                           *ngIf="isUnsupportedFieldType(fieldType)"
                           [title]="fieldValue"
@@ -127,12 +128,22 @@
               </table>
             </mat-card-content>
           </mat-card>
+        </div>
 
-          <!-- Scientific Metadata -->
-          <mat-card *ngSwitchCase="'scientificMetadata'">
-            <mat-card-header class="scientific-header" data-cy="section-label">
+        <!-- Scientific Metadata Section -->
+        <div
+          *ngSwitchCase="'scientificMetadata'"
+          class="card-container"
+          [style.gridColumn]="'span ' + (section.col || 10)"
+          [style.gridRow]="'span ' + (section.row || 1)"
+        >
+          <mat-card>
+            <mat-card-header
+              class="scientific-header sticky-header"
+              data-cy="section-label"
+            >
               <div mat-card-avatar class="section-icon">
-                <mat-icon> science </mat-icon>
+                <mat-icon>science</mat-icon>
               </div>
               {{ section.label | translate }}
             </mat-card-header>
@@ -147,27 +158,32 @@
                     *ngSwitchDefault
                     [metadata]="dataset['scientificMetadata']"
                   ></metadata-view>
-                  <div class="json-view">
+                  <div class="json-view" *ngSwitchCase="'json'">
                     <ngx-json-viewer
-                      *ngSwitchCase="'json'"
                       [json]="dataset['scientificMetadata']"
                       [expanded]="false"
-                    >
-                    </ngx-json-viewer>
+                    ></ngx-json-viewer>
                   </div>
                 </div>
               </ng-container>
             </mat-card-content>
           </mat-card>
+        </div>
 
-          <!-- Attachments -->
-          <mat-card *ngSwitchCase="'attachments'">
+        <!-- Attachments Section -->
+        <div
+          *ngSwitchCase="'attachments'"
+          class="card-container attachments-container"
+          [style.gridColumn]="'span ' + (section.col || 10)"
+          [style.gridRow]="'span ' + (section.row || 1)"
+        >
+          <mat-card>
             <mat-card-header
-              class="dynamic-template-attachments-header"
+              class="dynamic-template-attachments-header sticky-header"
               data-cy="section-label"
             >
               <div mat-card-avatar class="section-icon">
-                <mat-icon> photo_library </mat-icon>
+                <mat-icon>photo_library</mat-icon>
               </div>
               {{ section.label | translate }}
             </mat-card-header>
@@ -184,6 +200,7 @@
                       "
                     >
                       <img
+                        mat-card-image
                         [class]="
                           [
                             'thumbnail-image',
@@ -191,10 +208,9 @@
                           ].join(' ')
                         "
                         data-cy="attachment-thumbnail"
-                        mat-card-image
                         [src]="getImageUrl(item.thumbnail)"
                         (click)="openAttachment(item.thumbnail)"
-                        title="{{ item.caption }}"
+                        [title]="item.caption"
                       />
                     </ng-container>
                   </ng-container>
@@ -205,15 +221,22 @@
               </div>
             </mat-card-content>
           </mat-card>
+        </div>
 
-          <!-- Dataset JSON View-->
-          <mat-card *ngSwitchCase="'datasetJsonView'">
+        <!-- Dataset JSON View Section -->
+        <div
+          *ngSwitchCase="'datasetJsonView'"
+          class="card-container"
+          [style.gridColumn]="'span ' + (section.col || 10)"
+          [style.gridRow]="'span ' + (section.row || 1)"
+        >
+          <mat-card>
             <mat-card-header
-              class="dynamic-template-json-view-header"
+              class="dynamic-template-json-view-header sticky-header"
               data-cy="section-label"
             >
               <div mat-card-avatar class="section-icon">
-                <mat-icon> data_object </mat-icon>
+                <mat-icon>data_object</mat-icon>
               </div>
               {{ section.label | translate }}
             </mat-card-header>
@@ -227,21 +250,18 @@
                 >
                   {{ (show ? "Hide JSON View" : "Show JSON View") | translate }}
                 </button>
-
                 <br />
-
                 <div *ngIf="show" class="json-view-overflow">
                   <ngx-json-viewer
                     [json]="datasetWithout$ | async"
                     [expanded]="false"
-                  >
-                  </ngx-json-viewer>
+                  ></ngx-json-viewer>
                 </div>
               </ng-container>
             </mat-card-content>
           </mat-card>
-        </ng-container>
+        </div>
       </ng-container>
-    </div>
+    </ng-container>
   </div>
 </ng-template>

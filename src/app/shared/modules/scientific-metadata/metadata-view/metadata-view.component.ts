@@ -22,6 +22,7 @@ import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
 import { DatePipe, TitleCasePipe } from "@angular/common";
 import { LinkyPipe } from "ngx-linky";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
+import { MetadataTypes } from "../metadata-edit/metadata-edit.component";
 
 @Component({
   selector: "metadata-view",
@@ -115,6 +116,13 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
               return row[column.name];
             },
+            contentIcon: "hub",
+            renderContentIcon: (column, row) => {
+              return !!row.ontology_reference;
+            },
+            contentIconLink: (column, row) => {
+              return row.ontology_reference;
+            },
             width: 500,
           },
           {
@@ -124,11 +132,12 @@ export class MetadataViewComponent implements OnInit, OnChanges {
                 ? this.prettyUnit.transform(row[column.name])
                 : "--";
             },
-            renderIcon: (column, row) => {
-              return !row.validUnit;
+            renderContentIcon: (column, row) => {
+              return row.validUnit === false;
             },
             contentIcon: "error",
-            warningIconTooltip: "Unrecognized unit, conversion disabled",
+            contentIconTooltip: "Unrecognized unit, conversion disabled",
+            contentIconClass: "general-warning",
             cellClass: "unit-input",
           },
           {
@@ -168,6 +177,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           unit: metadata[key]["unit"],
           human_name: metadata[key]["human_name"],
           type: metadata[key]["type"],
+          ontology_reference: metadata[key]["ontology_reference"],
         };
 
         const validUnit = this.unitsService.unitValidation(
@@ -176,12 +186,19 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
         metadataObject["validUnit"] = validUnit;
       } else {
+        const metadataValue =
+          typeof metadata[key] === MetadataTypes.string ||
+          typeof metadata[key] === MetadataTypes.number
+            ? metadata[key]
+            : JSON.stringify(metadata[key]);
+
         metadataObject = {
           name: key,
-          value: JSON.stringify(metadata[key]),
+          value: metadataValue,
           unit: "",
           human_name: metadata[key]["human_name"],
           type: metadata[key]["type"],
+          ontology_reference: metadata[key]["ontology_reference"],
         };
       }
       metadataArray.push(metadataObject);

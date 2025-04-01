@@ -517,12 +517,20 @@ export class DynamicMatTableComponent<T extends TableRow>
     return row[column.name];
   }
 
-  shouldRenderIcon(row: any, column: TableField<any>) {
-    if (column.renderIcon) {
-      return column.renderIcon(column, row);
+  shouldRenderContentIcon(row: any, column: TableField<any>) {
+    if (column.renderContentIcon) {
+      return column.renderContentIcon(column, row);
     }
 
     return false;
+  }
+
+  renderContentIconLink(row: any, column: TableField<any>) {
+    if (column.contentIconLink) {
+      return column.contentIconLink(column, row);
+    }
+
+    return null;
   }
 
   cellStyle(option: HashMap<any>, column) {

@@ -49,6 +49,8 @@ export interface CustomizationItem {
   type: CustomizationType;
   label: string;
   order: number;
+  row: number;
+  col: number;
   fields?: Field[];
   options?: AttachmentOptions;
   viewMode?: viewModeOptions;
