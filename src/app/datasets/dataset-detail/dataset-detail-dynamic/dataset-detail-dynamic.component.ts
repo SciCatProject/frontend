@@ -168,6 +168,13 @@ export class DatasetDetailDynamicComponent implements OnInit {
     obj: OutputDatasetObsoleteDto,
     path: string,
   ): string | string[] {
+    if (!path) {
+      return "field source is missing";
+    }
+    if (!obj) {
+      return null;
+    }
+
     return path
       .split(".")
       .reduce((prev, curr) => (prev ? prev[curr] : undefined), obj);
