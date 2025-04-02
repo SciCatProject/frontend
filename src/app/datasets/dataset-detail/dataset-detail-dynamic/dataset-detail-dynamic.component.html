@@ -75,18 +75,12 @@
                         <!-- InternalLink Field-->
                         <ng-container *ngIf="fieldType === 'internalLink'">
                           <ng-container *ngFor="let value of fieldValue">
-                            <ng-container *ngIf="value; else noValue">
-                              <a
-                                (click)="
-                                  onClickInternalLink(field.source, value)
-                                "
-                                [title]="value"
-                                >{{ value }}
-                              </a>
-                            </ng-container>
-                            <ng-template #noValue>
-                              <span> - </span>
-                            </ng-template>
+                            <a
+                              (click)="onClickInternalLink(field.source, value)"
+                              [title]="value"
+                              [ngClass]="{ disabled: !value }"
+                              >{{ value ?? "-" }}
+                            </a>
                           </ng-container>
                         </ng-container>
                         <!-- Text Field -->
@@ -127,7 +121,7 @@
                             *ngFor="let tag of fieldValue"
                             [title]="tag"
                           >
-                            {{ tag }}
+                            {{ tag ?? "-" }}
                           </mat-chip>
                         </mat-chip-set>
                         <!-- Fallback for unsupported types -->

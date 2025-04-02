@@ -139,16 +139,12 @@ export class DatasetDetailDynamicComponent implements OnInit {
         return this.transformDate(value, errorElement);
       case DatasetViewFieldType.TAG:
         if (Array.isArray(value)) {
-          return value.length > 0 && !value.some((val) => val === null)
-            ? value
-            : ["-"];
+          return value.length > 0 ? value : [null];
         }
         return typeof value === "string" ? [value] : ["Unsupported data type"];
       case DatasetViewFieldType.INTERNALLINK:
         if (Array.isArray(value)) {
-          return value.length > 0 && value.some((val) => val === "")
-            ? value
-            : [null];
+          return value.length > 0 ? value : [null];
         }
         return typeof value === "string" ? [value] : ["Unsupported data type"];
       default:
