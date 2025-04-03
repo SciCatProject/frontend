@@ -48,7 +48,7 @@
             <mat-card-content>
               <table>
                 <ng-container *ngFor="let field of section.fields">
-                  <tr *ngIf="dataset[field.source]">
+                  <tr *ngIf="getNestedValue(dataset, field.source)">
                     <th data-cy="field-label">
                       {{ field.source | translate }}
                     </th>
@@ -61,7 +61,7 @@
                             fieldType: field.element,
                             fieldValue: handleFieldValue(
                               field.element,
-                              dataset[field.source]
+                              getNestedValue(dataset, field.source)
                             ),
                           }"
                         ></ng-container>
@@ -72,11 +72,22 @@
                         let-fieldType="fieldType"
                         let-fieldValue="fieldValue"
                       >
+                        <!-- InternalLink Field-->
+                        <ng-container *ngIf="fieldType === 'internalLink'">
+                          <ng-container *ngFor="let value of fieldValue">
+                            <a
+                              (click)="onClickInternalLink(field.source, value)"
+                              [title]="value"
+                              [ngClass]="{ disabled: !value }"
+                              >{{ value ?? "-" }}
+                            </a>
+                          </ng-container>
+                        </ng-container>
                         <!-- Text Field -->
                         <span *ngIf="fieldType === 'text'" [title]="fieldValue">
                           {{ fieldValue }}
                         </span>
-                        <!-- Link Field -->
+                        <!-- Linky Field -->
                         <span
                           *ngIf="fieldType === 'linky'"
                           [innerHTML]="fieldValue | linky"
@@ -110,7 +121,7 @@
                             *ngFor="let tag of fieldValue"
                             [title]="tag"
                           >
-                            {{ tag }}
+                            {{ tag ?? "-" }}
                           </mat-chip>
                         </mat-chip-set>
                         <!-- Fallback for unsupported types -->

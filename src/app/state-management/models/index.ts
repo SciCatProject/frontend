@@ -37,6 +37,14 @@ export enum DatasetViewFieldType {
   LINKY = "linky",
   COPY = "copy",
   TAG = "tag",
+  INTERNALLINK = "internalLink",
+}
+
+export enum InternalLinkType {
+  DATASETS = "inputDatasets",
+  SAMPLES = "sampleIds",
+  INSTRUMENTS = "instrumentIds",
+  PROPOSALS = "proposalIds",
 }
 
 interface AttachmentOptions {
@@ -60,6 +68,7 @@ export interface Field {
   element: FieldType;
   source: string;
   order: number;
+  path?: string;
 }
 
 // Type alias for allowed customization types
