@@ -17,6 +17,7 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 import {
   CustomizationItem,
   DatasetViewFieldType,
+  InternalLinkType,
   Message,
   MessageType,
 } from "state-management/models";
@@ -24,6 +25,9 @@ import {
 import { AttachmentService } from "shared/services/attachment.service";
 import { TranslateService } from "@ngx-translate/core";
 import { DatePipe } from "@angular/common";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular/model/outputDatasetObsoleteDto";
+import { Router } from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 /**
  * Component to show customizable details for a dataset, using the
@@ -59,6 +63,8 @@ export class DatasetDetailDynamicComponent implements OnInit {
     private datePipe: DatePipe,
     private store: Store,
     private fb: FormBuilder,
+    private router: Router,
+    private snackBar: MatSnackBar,
   ) {
     this.translateService.use("datasetCustom");
   }
@@ -133,7 +139,12 @@ export class DatasetDetailDynamicComponent implements OnInit {
         return this.transformDate(value, errorElement);
       case DatasetViewFieldType.TAG:
         if (Array.isArray(value)) {
-          return value.length > 0 ? value : ["-"];
+          return value.length > 0 ? value : [null];
+        }
+        return typeof value === "string" ? [value] : ["Unsupported data type"];
+      case DatasetViewFieldType.INTERNALLINK:
+        if (Array.isArray(value)) {
+          return value.length > 0 ? value : [null];
         }
         return typeof value === "string" ? [value] : ["Unsupported data type"];
       default:
@@ -152,5 +163,44 @@ export class DatasetDetailDynamicComponent implements OnInit {
   }
   getThumbnailSize(value: string): string {
     return value ? `thumbnail-image--${value}` : "";
+  }
+  getNestedValue(
+    obj: OutputDatasetObsoleteDto,
+    path: string,
+  ): string | string[] {
+    if (!path) {
+      return "field source is missing";
+    }
+    if (!obj) {
+      return null;
+    }
+
+    return path
+      .split(".")
+      .reduce((prev, curr) => (prev ? prev[curr] : undefined), obj);
+  }
+
+  onClickInternalLink(internalLinkType: string, id: string): void {
+    const encodedId = encodeURIComponent(id);
+
+    switch (internalLinkType) {
+      case InternalLinkType.DATASETS:
+        this.router.navigateByUrl("/datasets/" + encodedId);
+        break;
+      case InternalLinkType.SAMPLES:
+        this.router.navigateByUrl("/samples/" + encodedId);
+        break;
+      case InternalLinkType.PROPOSALS:
+        this.router.navigateByUrl("/proposals/" + encodedId);
+        break;
+      case InternalLinkType.INSTRUMENTS:
+        this.router.navigateByUrl("/instruments/" + encodedId);
+        break;
+      default:
+        this.snackBar.open("The URL is not valid", "Close", {
+          duration: 2000,
+        });
+        break;
+    }
   }
 }
