@@ -82,10 +82,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   redirectOIDC(authURL: string) {
-    const returnURL = this.returnUrl
+    const returnUrl = this.returnUrl
       ? encodeURIComponent(this.returnUrl)
       : "/datasets";
-    this.document.location.href = `${this.appConfig.lbBaseURL}/${authURL}?returnURL=${returnURL}`;
+    this.document.location.href = `${this.appConfig.lbBaseURL}/${authURL}?returnUrl=${returnUrl}`;
   }
 
   openPrivacyDialog() {
