@@ -90,7 +90,6 @@ export class CustomLayoutChildrenRenderPropsPipe implements PipeTransform {
         return scopeA.localeCompare(scopeB);
       });
 
-    console.log("elements", elements);
     return elements;
   }
 }

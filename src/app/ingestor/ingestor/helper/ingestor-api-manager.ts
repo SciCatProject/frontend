@@ -93,7 +93,7 @@ export class IngestorAPIManager {
   public cancelTransfer(transferId: string): Promise<DeleteTransferResponse> {
     const body: DeleteTransferRequest = { transferId: transferId };
 
-    console.log("Cancel transfer", transferId);
+    //console.log("Cancel transfer", transferId);
     return new Promise((resolve, reject) => {
       this.http
         .delete(this.connectUrl + INGESTOR_API_ENDPOINTS_V1.TRANSFER, {
