@@ -195,6 +195,29 @@ Cypress.Commands.add("createProposal", (proposal) => {
     });
   });
 });
+
+Cypress.Commands.add("createInstrument", (instrument) => {
+  return cy.getCookie("user").then((userCookie) => {
+    const user = JSON.parse(decodeURIComponent(userCookie.value));
+
+    cy.getToken().then((token) => {
+      cy.log("Instrument: " + JSON.stringify(instrument, null, 2));
+      cy.log("User: " + JSON.stringify(user, null, 2));
+
+      cy.request({
+        method: "POST",
+        url: lbBaseUrl + "/Instruments",
+        headers: {
+          Authorization: token,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: instrument,
+      });
+    });
+  });
+});
+
 Cypress.Commands.add("updateProposal", (proposalId, updateProposalDto) => {
   return cy.getCookie("user").then((userCookie) => {
     const user = JSON.parse(decodeURIComponent(userCookie.value));
@@ -302,6 +325,46 @@ Cypress.Commands.add("removeProposals", () => {
               lbBaseUrl +
               "/proposals/" +
               encodeURIComponent(proposal.proposalId),
+            headers: {
+              Authorization: token,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          });
+        });
+      });
+    });
+  });
+});
+
+Cypress.Commands.add("removeInstruments", () => {
+  cy.login(Cypress.env("username"), Cypress.env("password"));
+  cy.getToken().then((token) => {
+    cy.request({
+      method: "GET",
+      url: lbBaseUrl + "/instruments",
+      headers: {
+        Authorization: token,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .its("body")
+      .as("instruments");
+
+    cy.get("@instruments").then((instruments) => {
+      cy.login(
+        Cypress.env("secondaryUsername"),
+        Cypress.env("secondaryPassword"),
+      );
+      cy.getToken().then((token) => {
+        instruments.forEach((instrument) => {
+          cy.request({
+            method: "DELETE",
+            url:
+              lbBaseUrl +
+              "/instruments/" +
+              encodeURIComponent(instrument.pid),
             headers: {
               Authorization: token,
               Accept: "application/json",
