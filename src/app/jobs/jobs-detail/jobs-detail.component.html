@@ -1,73 +1,109 @@
-<div *ngIf="job$ | async as job" class="job-detail">
-  <mat-card>
-    <mat-card-content>
-      <table>
-        <tr>
-          <th>
-            <mat-icon> mail </mat-icon>
-            Email Job Initiator
-          </th>
-          <td>{{ job.emailJobInitiator }}</td>
-        </tr>
-        <tr *ngIf="job.type as value">
-          <th>
-            <mat-icon> bubble_chart </mat-icon>
-            Type
-          </th>
-          <td>{{ value }}</td>
-        </tr>
-        <tr *ngIf="job.creationTime as value">
-          <th>
-            <mat-icon> brightness_high </mat-icon>
-            Creation Time
-          </th>
-          <td>{{ value | date }}</td>
-        </tr>
-        <tr *ngIf="job.executionTime as value">
-          <th>
-            <mat-icon> gavel </mat-icon>
-            Execution Time
-          </th>
-          <td>{{ value | date }}</td>
-        </tr>
-        <tr *ngIf="job.jobParams as value">
-          <th>
-            <mat-icon> settings </mat-icon>
-            Job Params
-          </th>
-          <td>{{ value | json }}</td>
-        </tr>
-        <tr *ngIf="job.updatedAt as value">
-          <th>
-            <mat-icon> markunread </mat-icon>
-            Date Of Last Message
-          </th>
-          <td>{{ value | date }}</td>
-        </tr>
-        <tr *ngIf="job.datasetList as value">
-          <th>
-            <mat-icon> folder </mat-icon>
-            Dataset List
-          </th>
-          <div *ngFor="let daSet of value">
-            {{ daSet.pid | json }}
+  <div fxLayout="row" fxLayout.xs="column" *ngIf="job$ | async as job">
+    <div fxFlex="100%">
+      <mat-card>
+        <mat-card-header class="general-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> description </mat-icon>
           </div>
-        </tr>
-        <tr *ngIf="job.createdAt as value">
-          <th>
-            <mat-icon> calendar_today </mat-icon>
-            Created At
-          </th>
-          <td>{{ value | date }}</td>
-        </tr>
-        <tr *ngIf="job.updatedAt as value">
-          <th>
-            <mat-icon> calendar_today </mat-icon>
-            Updated At
-          </th>
-          <td>{{ value | date }}</td>
-        </tr>
-      </table>
-    </mat-card-content>
-  </mat-card>
-</div>
+          General Information
+        </mat-card-header>
+        <mat-card-content>
+          <table>
+             <tr *ngIf="job.id as value">
+              <th>ID</th>
+              <td>
+                {{ value }}
+                <button
+                  mat-icon-button
+                  aria-label="copy"
+                  (click)="onCopy(value)"
+                >
+                  <mat-icon class="copy-button">content_copy</mat-icon>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="job.type as value">
+              <th>Type</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="job.creationTime as value">
+              <th>Created At</th>
+              <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+            </tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-header class="creator-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> person </mat-icon>
+          </div>
+          Creator Information
+        </mat-card-header>
+        <mat-card-content>
+          <table>
+            <tr *ngIf="job.emailJobInitiator as value">
+              <th>Created By</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="job.ownerGroup as value">
+              <th>Owner Group</th>
+              <td>{{ value }}</td>
+            </tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-header class="derived-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> analytics </mat-icon>
+          </div>
+          Status
+        </mat-card-header>
+        <mat-card-content>
+          <table>
+            <tr *ngIf="job.jobStatusMessage as value">
+              <th>Status Message</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="job.updatedAt as value">
+              <th>Updated At</th>
+              <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
+            </tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-header class="related-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> settings </mat-icon>
+          </div>
+          Job Parameters and Datasets
+        </mat-card-header>
+        <mat-card-content>
+          <ngx-json-viewer
+            [json]="job.jobParams"
+            [expanded]="false"
+          ></ngx-json-viewer>
+          <ngx-json-viewer
+            [json]="job.datasetList"
+            [expanded]="false"
+          ></ngx-json-viewer>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-header class="scientific-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> library_books </mat-icon>
+          </div>
+          Job Result Object
+        </mat-card-header>
+        <mat-card-content>
+          <ngx-json-viewer
+            [json]="job.jobResultObject"
+            [expanded]="false"
+          ></ngx-json-viewer>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>

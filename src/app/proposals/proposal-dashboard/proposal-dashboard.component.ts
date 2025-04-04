@@ -1,126 +1,117 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
-import { PageChangeEvent } from "shared/modules/table/table.component";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { BehaviorSubject, Subscription } from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
-  TableSetting,
-  VisibleActionMenu,
+  ITableSetting,
+  TableSettingEventType,
 } from "shared/modules/dynamic-material-table/models/table-setting.model";
 import {
   TablePagination,
   TablePaginationMode,
 } from "shared/modules/dynamic-material-table/models/table-pagination.model";
-import { PrintConfig } from "shared/modules/dynamic-material-table/models/print-config.model";
 import {
   IRowEvent,
+  ITableEvent,
   RowEventType,
+  TableEventType,
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { Store } from "@ngrx/store";
-import {
-  selectProposals,
-  selectProposalsCount,
-} from "state-management/selectors/proposals.selectors";
+import { selectProposalsWithCountAndTableSettings } from "state-management/selectors/proposals.selectors";
 import { fetchProposalsAction } from "state-management/actions/proposals.actions";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
-import { Direction } from "@angular/cdk/bidi";
+import {
+  actionMenu,
+  getTableSettingsConfig,
+} from "shared/modules/dynamic-material-table/utilizes/default-table-config";
+import { updateUserSettingsAction } from "state-management/actions/user.actions";
+import { Sort } from "@angular/material/sort";
 
-export const tableColumnsConfig: TableField<any>[] = [
-  {
-    name: "proposalId",
-    header: "Proposal ID",
-    icon: "perm_device_information",
-    type: "text",
-  },
-  {
-    name: "title",
-    icon: "description",
-    width: 250,
-  },
-  {
-    name: "abstract",
-    icon: "chrome_reader_mode",
-    width: 250,
-  },
-  {
-    name: "firstname",
-    header: "First Name",
-    icon: "person",
-  },
-  {
-    name: "lastname",
-    header: "Last Name",
-  },
-  { name: "email", icon: "email", width: 200 },
-  { name: "type", icon: "badge", width: 200 },
-  {
-    name: "parentProposalId",
-    header: "Parent Proposal",
-    icon: "badge",
-  },
-  {
-    name: "pi_firstname",
-    header: "PI First Name",
-    icon: "person_pin",
-  },
-  {
-    name: "pi_lastname",
-    header: "PI Last Name",
-    icon: "person_pin",
-  },
-  {
-    name: "pi_email",
-    header: "PI Email",
-    icon: "email",
-  },
-];
-
-const actionMenu: VisibleActionMenu = {
-  json: true,
-  csv: true,
-  print: true,
-  columnSettingPin: true,
-  columnSettingFilter: true,
-  clearFilter: true,
-};
-
-const tableSettingsConfig: TableSetting = {
-  direction: "ltr",
+const tableDefaultSettingsConfig: ITableSetting = {
   visibleActionMenu: actionMenu,
-  autoHeight: false,
-  saveSettingMode: "multi",
+  settingList: [
+    {
+      visibleActionMenu: actionMenu,
+      isDefaultSetting: true,
+      isCurrentSetting: true,
+      columnSetting: [
+        {
+          name: "proposalId",
+          header: "Proposal ID",
+          icon: "perm_device_information",
+          type: "text",
+        },
+        {
+          name: "title",
+          icon: "description",
+          width: 250,
+        },
+        {
+          name: "abstract",
+          icon: "chrome_reader_mode",
+          width: 250,
+        },
+        {
+          name: "firstname",
+          header: "First Name",
+          icon: "person",
+        },
+        {
+          name: "lastname",
+          header: "Last Name",
+        },
+        { name: "email", icon: "email", width: 200 },
+        { name: "type", icon: "badge", width: 200 },
+        {
+          name: "parentProposalId",
+          header: "Parent Proposal",
+          icon: "badge",
+        },
+        {
+          name: "pi_firstname",
+          header: "PI First Name",
+          icon: "person_pin",
+        },
+        {
+          name: "pi_lastname",
+          header: "PI Last Name",
+          icon: "person_pin",
+        },
+        {
+          name: "pi_email",
+          header: "PI Email",
+          icon: "email",
+        },
+      ],
+    },
+  ],
   rowStyle: {
     "border-bottom": "1px solid #d2d2d2",
   },
 };
-
-const DEFAULT_PAGE_SIZE = 10;
 
 @Component({
   selector: "app-proposal-dashboard",
   templateUrl: "./proposal-dashboard.component.html",
   styleUrls: ["./proposal-dashboard.component.scss"],
 })
-export class ProposalDashboardComponent implements OnInit {
-  vm$ = this.store.select(selectProposals);
-  proposalsCount$ = this.store.select(selectProposalsCount);
+export class ProposalDashboardComponent implements OnInit, OnDestroy {
+  proposalsWithCountAndTableSettings$ = this.store.select(
+    selectProposalsWithCountAndTableSettings,
+  );
 
-  columns!: TableField<any>[];
+  subscriptions: Subscription[] = [];
 
-  direction: Direction = "ltr";
+  tableName = "proposalsTable";
 
-  showReloadData = true;
-
-  rowHeight = 50;
+  columns: TableField<any>[];
 
   pending = true;
 
-  setting: TableSetting = {};
+  setting: ITableSetting = {};
 
   paginationMode: TablePaginationMode = "server-side";
-
-  showNoData = true;
 
   dataSource: BehaviorSubject<ProposalClass[]> = new BehaviorSubject<
     ProposalClass[]
@@ -128,17 +119,15 @@ export class ProposalDashboardComponent implements OnInit {
 
   pagination: TablePagination = {};
 
-  stickyHeader = true;
-
-  printConfig: PrintConfig = {};
-
-  showProgress = true;
-
   rowSelectionMode: TableSelectionMode = "none";
 
   globalTextSearch = "";
 
-  @Output() pageChange = new EventEmitter<PageChangeEvent>();
+  defaultPageSize = 10;
+
+  defaultPageSizeOptions = [5, 10, 25, 100];
+
+  tablesSettings: object;
 
   constructor(
     private store: Store,
@@ -147,91 +136,147 @@ export class ProposalDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const { queryParams } = this.route.snapshot;
-    if (queryParams.textSearch) {
-      this.globalTextSearch = queryParams.textSearch;
-    }
-    this.store.dispatch(
-      fetchProposalsAction({
-        limit: queryParams.pageSize || DEFAULT_PAGE_SIZE,
-        skip: queryParams.pageIndex * queryParams.pageSize,
-        search: queryParams.textSearch,
-      }),
+    this.subscriptions.push(
+      this.proposalsWithCountAndTableSettings$.subscribe(
+        ({ proposals, count, tablesSettings }) => {
+          this.tablesSettings = tablesSettings;
+          this.dataSource.next(proposals);
+          this.pending = false;
+
+          const savedTableConfigColumns =
+            tablesSettings?.[this.tableName]?.columns;
+          const tableSort = this.getTableSort();
+          const paginationConfig = this.getTablePaginationConfig(count);
+
+          const tableSettingsConfig = getTableSettingsConfig(
+            this.tableName,
+            tableDefaultSettingsConfig,
+            savedTableConfigColumns,
+            tableSort,
+          );
+
+          if (tableSettingsConfig?.settingList.length) {
+            this.initTable(tableSettingsConfig, paginationConfig);
+          }
+        },
+      ),
     );
 
-    this.vm$.subscribe((data) => {
-      this.dataSource.next(data);
-      this.pending = false;
-    });
+    this.subscriptions.push(
+      this.route.queryParams.subscribe((queryParams) => {
+        this.pending = true;
+        const limit = queryParams.pageSize
+          ? +queryParams.pageSize
+          : this.defaultPageSize;
+        const skip = queryParams.pageIndex ? +queryParams.pageIndex * limit : 0;
+        if (queryParams.textSearch) {
+          this.globalTextSearch = queryParams.textSearch;
+        }
 
-    this.proposalsCount$.subscribe((count) => {
-      const pagginationConfig = {
-        pageSizeOptions: [5, 10, 25, 100],
-        pageIndex: queryParams.pageIndex,
-        pageSize: queryParams.pageSize || DEFAULT_PAGE_SIZE,
-        length: count,
+        this.store.dispatch(
+          fetchProposalsAction({
+            limit: limit,
+            skip: skip,
+            search: queryParams.textSearch,
+            sortColumn: queryParams.sortColumn,
+            sortDirection: queryParams.sortDirection,
+          }),
+        );
+      }),
+    );
+  }
+
+  getTableSort(): ITableSetting["tableSort"] {
+    const { queryParams } = this.route.snapshot;
+
+    if (queryParams.sortDirection && queryParams.sortColumn) {
+      return {
+        sortColumn: queryParams.sortColumn,
+        sortDirection: queryParams.sortDirection,
       };
+    }
 
-      this.initTable(
-        tableColumnsConfig,
-        tableSettingsConfig,
-        pagginationConfig,
-      );
-    });
+    return null;
+  }
+
+  getTablePaginationConfig(dataCount = 0): TablePagination {
+    const { queryParams } = this.route.snapshot;
+
+    return {
+      pageSizeOptions: this.defaultPageSizeOptions,
+      pageIndex: queryParams.pageIndex,
+      pageSize: queryParams.pageSize || this.defaultPageSize,
+      length: dataCount,
+    };
   }
 
   initTable(
-    columnsConfig: TableField<any>[],
-    settingConfig: TableSetting,
+    settingConfig: ITableSetting,
     paginationConfig: TablePagination,
   ): void {
-    this.columns = columnsConfig;
+    const currentColumnSetting = settingConfig.settingList.find(
+      (s) => s.isCurrentSetting,
+    )?.columnSetting;
+
+    this.columns = currentColumnSetting;
     this.setting = settingConfig;
     this.pagination = paginationConfig;
   }
 
   onPaginationChange(pagination: TablePagination) {
-    this.pending = true;
-    const queryParams: Record<string, string | number> = {
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-    };
-
-    if (this.route.snapshot.queryParams.textSearch) {
-      queryParams.textSearch = this.route.snapshot.queryParams.textSearch;
-    }
     this.router.navigate([], {
-      queryParams,
+      queryParams: {
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
+      },
       queryParamsHandling: "merge",
     });
-
-    this.store.dispatch(
-      fetchProposalsAction({
-        limit: pagination.pageSize,
-        skip: pagination.pageIndex * pagination.pageSize,
-        search: queryParams.textSearch as string,
-      }),
-    );
   }
 
   onGlobalTextSearchChange(text: string) {
-    this.pending = true;
-    this.pagination.pageIndex = 0;
     this.router.navigate([], {
       queryParams: {
-        textSearch: text,
+        textSearch: text || undefined,
         pageIndex: 0,
       },
       queryParamsHandling: "merge",
     });
+  }
+
+  saveTableSettings(setting: ITableSetting) {
+    this.pending = true;
+    const columnsSetting = setting.columnSetting.map((column) => {
+      const { name, display, index, width } = column;
+
+      return { name, display, index, width };
+    });
+
+    const tablesSettings = {
+      ...this.tablesSettings,
+      [setting.settingName || this.tableName]: {
+        columns: columnsSetting,
+      },
+    };
 
     this.store.dispatch(
-      fetchProposalsAction({
-        limit: this.pagination.pageSize,
-        skip: this.pagination.pageIndex * this.pagination.pageSize,
-        search: text,
+      updateUserSettingsAction({
+        property: {
+          tablesSettings,
+        },
       }),
     );
+  }
+
+  onSettingChange(event: {
+    type: TableSettingEventType;
+    setting: ITableSetting;
+  }) {
+    if (
+      event.type === TableSettingEventType.save ||
+      event.type === TableSettingEventType.create
+    ) {
+      this.saveTableSettings(event.setting);
+    }
   }
 
   onRowClick(event: IRowEvent<ProposalClass>) {
@@ -239,5 +284,26 @@ export class ProposalDashboardComponent implements OnInit {
       const id = encodeURIComponent(event.sender.row.proposalId);
       this.router.navigateByUrl("/proposals/" + id);
     }
+  }
+
+  onTableEvent({ event, sender }: ITableEvent) {
+    if (event === TableEventType.SortChanged) {
+      const { active: sortColumn, direction: sortDirection } = sender as Sort;
+
+      this.router.navigate([], {
+        queryParams: {
+          pageIndex: 0,
+          sortDirection: sortDirection || undefined,
+          sortColumn: sortDirection ? sortColumn : undefined,
+        },
+        queryParamsHandling: "merge",
+      });
+    }
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sub) => {
+      sub.unsubscribe();
+    });
   }
 }

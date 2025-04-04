@@ -27,11 +27,15 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatRippleModule } from "@angular/material/core";
 import { TooltipComponent } from "../tooltip/tooltip.component";
-import { OverlayModule } from "@angular/cdk/overlay";
+import {
+  FullscreenOverlayContainer,
+  OverlayContainer,
+  OverlayModule,
+} from "@angular/cdk/overlay";
 import { TooltipDirective } from "../tooltip/tooltip.directive";
 import { TemplateOrStringDirective } from "../tooltip/template-or-string.directive";
 import { FormsModule } from "@angular/forms";
-import { TableSetting } from "../models/table-setting.model";
+import { ITableSetting, TableSetting } from "../models/table-setting.model";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
@@ -71,10 +75,16 @@ const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
     TooltipDirective,
     TemplateOrStringDirective,
   ],
+  providers: [
+    {
+      provide: OverlayContainer,
+      useClass: FullscreenOverlayContainer,
+    },
+  ],
 })
 export class DynamicMatTableModule {
   static forRoot(
-    config: TableSetting,
+    config: ITableSetting,
   ): ModuleWithProviders<DynamicMatTableModule> {
     return {
       ngModule: DynamicMatTableModule,
