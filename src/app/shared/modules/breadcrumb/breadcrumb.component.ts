@@ -9,6 +9,10 @@ import {
 import { take, filter } from "rxjs/operators";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 import { ArchViewMode } from "state-management/models";
+import {
+  selectCurrentInstrument,
+  selectInstruments,
+} from "state-management/selectors/instruments.selectors";
 
 interface Breadcrumb {
   label: string;
@@ -31,6 +35,7 @@ interface Breadcrumb {
   styleUrls: ["breadcrumb.component.scss"],
 })
 export class BreadcrumbComponent implements OnInit {
+  private entityNames: Record<string, string> = {};
   // partially based on: http://brianflove.com/2016/10/23/angular2-breadcrumb-using-router/
   breadcrumbs: Breadcrumb[] = [];
 
@@ -43,17 +48,30 @@ export class BreadcrumbComponent implements OnInit {
   ngOnInit() {
     // Set initial breadcrumb
     this.setBreadcrumbs();
+
     // Update breadcrumb when navigating to child routes
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event) => {
         this.setBreadcrumbs();
       });
+
+    // Listen for current instrument changes
+    this.store
+      .select(selectCurrentInstrument)
+      .pipe(filter((instrument) => !!instrument))
+      .subscribe((instrument) => {
+        if (instrument) {
+          this.entityNames[instrument.pid] =
+            instrument.name || instrument.uniqueName;
+          // Update breadcrumbs when an instrument loads
+          this.setBreadcrumbs();
+        }
+      });
   }
 
   /**
    * Creates breadcrumbs from route and pushes them to breadcrumbs array
-   * @memberof BreadcrumbComponent
    */
   setBreadcrumbs(): void {
     this.breadcrumbs = [];
@@ -64,19 +82,35 @@ export class BreadcrumbComponent implements OnInit {
       },
       [],
     );
+
     children.forEach((root) => {
       let param: string;
+      const routePath = root.routeConfig?.path || "";
+
       Object.keys(root.snapshot.params).forEach((key) => {
         param = root.snapshot.params[key];
       });
+
       root.snapshot.url.forEach((url) => {
+        let label = this.sanitise(url.path, param);
+        const path = url.path;
+
+        // Check if we're on an instrument route and have a friendly name
+        if (
+          (routePath === "instruments/:id" || url.path === param) &&
+          this.entityNames[param]
+        ) {
+          label = this.entityNames[param];
+        }
+
         const crumb: Breadcrumb = {
-          label: this.sanitise(url.path, param),
-          path: url.path,
+          label,
+          path,
           params: url.parameters,
           url: "/" + encodeURIComponent(url.path),
           fallback: "/" + encodeURIComponent(url.path + "s"),
         };
+
         this.breadcrumbs.push(crumb);
       });
     });

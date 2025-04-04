@@ -92,6 +92,8 @@ import { userReducer } from "state-management/reducers/user.reducer";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
+import { ScrollingModule } from "@angular/cdk/scrolling";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 @NgModule({
   imports: [
     CommonModule,
@@ -125,6 +127,7 @@ import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-w
     MatTabsModule,
     MatSnackBarModule,
     MatTooltipModule,
+    MatProgressSpinnerModule,
     NgxJsonViewerModule,
     ReactiveFormsModule,
     RouterModule,
@@ -154,6 +157,7 @@ import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-w
     CdkDrag,
     CdkDragHandle,
     FiltersModule,
+    ScrollingModule,
   ],
   declarations: [
     BatchViewComponent,
