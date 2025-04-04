@@ -17,7 +17,7 @@ import { showMessageAction } from "state-management/actions/user.actions";
 export class JobsDetailComponent implements OnInit, OnDestroy {
   // TODO: We should extract the response dto with the right properties instead of using the schema for ApiResponse in the backend
   job$ = this.store.select(selectCurrentJob) as Observable<
-    JobClass & { createdAt: string; updatedAt: string }
+    any & { createdAt: string; updatedAt: string }
   >;
   routeSubscription: Subscription = new Subscription();
 
