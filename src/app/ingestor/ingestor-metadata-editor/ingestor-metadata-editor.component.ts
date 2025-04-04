@@ -26,6 +26,7 @@ export class IngestorMetadataEditorComponent implements OnInit {
     this.visualData = JSON.parse(JSON.stringify(this.data));
 
     // Update the data with the same keys as the schema, including nested properties
+    // This is necessary, otherwise the error checks will not work correctly
     const initializeVisualData = (schema: JsonSchema, target: any) => {
       Object.keys(schema.properties).forEach((key) => {
         const property = schema.properties[key];

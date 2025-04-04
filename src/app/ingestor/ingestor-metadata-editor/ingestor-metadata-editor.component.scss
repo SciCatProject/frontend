@@ -41,3 +41,13 @@ mat-card {
 .custom-input-box {
   width: 100%;
 }
+
+.quantity-value-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quantity-value-element {
+  flex: 1;
+}

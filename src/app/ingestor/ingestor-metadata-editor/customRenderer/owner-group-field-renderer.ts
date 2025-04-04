@@ -68,7 +68,8 @@ import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 })
 export class OwnerGroupFieldComponent
   extends JsonFormsControl
-  implements OnInit {
+  implements OnInit
+{
   focused = false;
   vm$ = this.store.select(selectUserSettingsPageViewModel);
   userOwnerGroups = [];
@@ -115,7 +116,6 @@ export class OwnerGroupFieldComponent
         this.store.dispatch(fetchCurrentUserAction());
       }
 
-      // Überprüfen Sie den Status des formControl-Objekts und aktivieren Sie es, falls es deaktiviert ist
       if (this.form.disabled) {
         this.form.enable();
       }

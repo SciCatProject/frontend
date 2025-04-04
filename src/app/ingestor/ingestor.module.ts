@@ -37,6 +37,11 @@ import { CustomObjectControlRendererComponent } from "./ingestor-metadata-editor
 import { IngestorFileBrowserComponent } from "./ingestor-file-browser/ingestor.file-browser.component";
 import { MatTreeModule } from "@angular/material/tree";
 import { OwnerGroupFieldComponent } from "./ingestor-metadata-editor/customRenderer/owner-group-field-renderer";
+import { QuantityValueObjectComponent } from "./ingestor-metadata-editor/customRenderer/quantity-value-renderer";
+import {
+  CustomLayoutChildrenRenderPropsPipe,
+  QuantityValueLayoutRendererComponent,
+} from "./ingestor-metadata-editor/customRenderer/quantity-value-layout-renderer";
 
 @NgModule({
   declarations: [
@@ -54,6 +59,9 @@ import { OwnerGroupFieldComponent } from "./ingestor-metadata-editor/customRende
     ExportTemplateHelperComponent,
     IngestorFileBrowserComponent,
     OwnerGroupFieldComponent,
+    QuantityValueObjectComponent,
+    QuantityValueLayoutRendererComponent,
+    CustomLayoutChildrenRenderPropsPipe,
   ],
   imports: [
     CommonModule,
