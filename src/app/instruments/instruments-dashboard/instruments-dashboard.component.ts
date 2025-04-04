@@ -82,7 +82,9 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
 
   rowSelectionMode: TableSelectionMode = "none";
 
-  showGlobalTextSearch = false;
+  showGlobalTextSearch = true;
+
+  globalTextSearch = "";
 
   defaultPageSize = 10;
 
@@ -131,12 +133,17 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
           : this.defaultPageSize;
         const skip = queryParams.pageIndex ? +queryParams.pageIndex * limit : 0;
 
+        if (queryParams.textSearch) {
+          this.globalTextSearch = queryParams.textSearch;
+        }
+
         this.store.dispatch(
           fetchInstrumentsAction({
             limit: limit,
             skip: skip,
             sortColumn: queryParams.sortColumn,
             sortDirection: queryParams.sortDirection,
+            search: queryParams.textSearch,
           }),
         );
       }),
@@ -185,6 +192,16 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
       queryParams: {
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
+      },
+      queryParamsHandling: "merge",
+    });
+  }
+
+  onGlobalTextSearchChange(text: string) {
+    this.router.navigate([], {
+      queryParams: {
+        textSearch: text || undefined,
+        pageIndex: 0,
       },
       queryParamsHandling: "merge",
     });

@@ -17,7 +17,7 @@ export class InstrumentEffects {
   fetchInstruments$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchInstrumentsAction),
-      switchMap(({ limit, skip, sortColumn, sortDirection }) => {
+      switchMap(({ limit, skip, sortColumn, sortDirection, search }) => {
         const limitsParam = {
           skip: skip,
           limit: limit,
@@ -28,12 +28,23 @@ export class InstrumentEffects {
           limitsParam.order = `${sortColumn}:${sortDirection}`;
         }
 
+        const whereParam = {};
+
+        if (search) {
+          whereParam["$text"] = { $search: search };
+        }
+
         return this.instrumentsService
-          .instrumentsControllerFindAll(JSON.stringify({ limits: limitsParam }))
+          .instrumentsControllerFindAllComplete(
+            JSON.stringify({
+              limits: limitsParam,
+              where: whereParam,
+            }),
+          )
           .pipe(
-            mergeMap((instruments: Instrument[]) => [
-              fromActions.fetchInstrumentsCompleteAction({ instruments }),
-              fromActions.fetchCountAction(),
+            mergeMap(({ data, totalCount }) => [
+              fromActions.fetchInstrumentsCompleteAction({ instruments: data }),
+              fromActions.fetchCountCompleteAction({ count: totalCount }),
             ]),
             catchError(() => of(fromActions.fetchInstrumentsFailedAction())),
           );
