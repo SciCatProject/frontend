@@ -122,3 +122,8 @@ mat-card {
   display: grid;
   grid-auto-rows: auto; /* Each row height is driven by its content */
 }
+
+.disabled {
+  pointer-events: none;
+  cursor: default;
+}
