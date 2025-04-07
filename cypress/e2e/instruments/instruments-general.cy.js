@@ -41,7 +41,7 @@ describe("Instruments general", () => {
       cy.contains(instrument.uniqueName);
     });
 
-    it("proposal should have metadata and if not it should be able to add", () => {
+    it("instrument should have metadata and if not it should be able to add", () => {
       const metadataName = "Instrument Metadata Name";
       const metadataValue = "instrument metadata value";
       const instrument = {
@@ -109,8 +109,8 @@ describe("Instruments general", () => {
     });
   });
 
-  describe("Proposals dynamic material table", () => {
-    it("should be able to sort for proposal in the column sort", () => {
+  describe("Instruments dynamic material table", () => {
+    it("should be able to sort for instrument in the column sort", () => {
       const newInstrument = {
         ...testData.instrument,
         name: "000 Cypress test instrument",
