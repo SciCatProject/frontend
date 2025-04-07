@@ -48,7 +48,7 @@ jobs:
         run: |
           git config --global user.name 'SciCat FE Release Workflow'
           git config --global user.email 'scicat.release.workflow@users.noreply.github.com'
-          git commit -am --amend "Set release"
+          git commit --amend -am "Set release"
           git push
 
       - name: Create a GitHub release
