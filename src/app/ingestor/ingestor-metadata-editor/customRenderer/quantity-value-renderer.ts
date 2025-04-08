@@ -10,7 +10,6 @@ import {
   Generate,
   GroupLayout,
   JsonSchema,
-  OwnPropsOfRenderer,
   RankedTester,
   rankWith,
   schemaMatches,
@@ -97,13 +96,6 @@ export class QuantityValueObjectComponent
     if (this.form.disabled) {
       this.form.enable();
     }
-  }
-
-  getProps(): OwnPropsOfRenderer {
-    const newProps: OwnPropsOfRenderer = {
-      ...this.props,
-    };
-    return newProps;
   }
 }
 

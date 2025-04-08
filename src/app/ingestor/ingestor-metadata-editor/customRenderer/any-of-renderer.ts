@@ -94,7 +94,6 @@ export class AnyOfRendererComponent extends JsonFormsControl {
   public getUISchema(tabOption: string): UISchemaElement {
     const selectedSchema = this.getTabSchema(tabOption);
 
-
     const isQuantityValue = selectedSchema.title == "QuantityValue";
 
     const detailUiSchema = findUISchema(

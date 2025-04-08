@@ -243,7 +243,6 @@ export class IngestorAPIManager {
     return new Promise((resolve, reject) => {
       this.http.get(AUTODISCOVERY_ENDPOINT, {}).subscribe({
         next: (data) => {
-          console.log(data);
           resolve(data as string);
         },
         error: (error) => {
