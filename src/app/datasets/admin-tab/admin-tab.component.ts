@@ -47,7 +47,7 @@ export class AdminTabComponent implements OnInit, OnDestroy {
         .pipe(take(1))
         .subscribe((user) => {
           if (user && this.dataset) {
-            const job: CreateJobDto = {
+            const job: any = {
               emailJobInitiator: user.email,
               type: "reset",
               datasetList: [],
