@@ -11,6 +11,7 @@ export interface IngestionRequestInformation {
   selectedMethod: ExtractionMethod;
   selectedResolvedDecodedSchema: JsonSchema;
   scicatHeader: object;
+
   userMetaData: {
     organizational: object;
     sample: object;
@@ -19,8 +20,10 @@ export interface IngestionRequestInformation {
     instrument: object;
     acquisition: object;
   };
+
   mergedMetaDataString: string;
 
+  editorMode: string;
   apiInformation: {
     extractMetaDataRequested: boolean;
     extractorMetaDataReady: boolean;
@@ -92,6 +95,7 @@ export class IngestorHelper {
         acquisition: {},
       },
       mergedMetaDataString: "",
+      editorMode: "INGESTION",
       apiInformation: {
         metaDataExtractionFailed: false,
         extractMetaDataRequested: false,

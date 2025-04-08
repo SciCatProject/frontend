@@ -128,9 +128,13 @@ export class IngestorNewTransferDialogComponent implements OnInit {
   }
 
   validateNextButton(): void {
-    this.uiNextButtonReady =
-      !!this.createNewTransferData.selectedPath &&
-      !!this.createNewTransferData.selectedMethod?.name;
+    const selectedPathReady =
+      (this.createNewTransferData.editorMode === "INGESTION" &&
+        this.createNewTransferData.selectedPath) ||
+      this.createNewTransferData.editorMode === "EDITOR";
+    const selectedMethodReady = this.createNewTransferData.selectedMethod?.name;
+
+    this.uiNextButtonReady = !!selectedPathReady && !!selectedMethodReady;
   }
 
   onExtractorMethodsPageChange(event: PageChangeEvent) {
@@ -145,5 +149,9 @@ export class IngestorNewTransferDialogComponent implements OnInit {
         createNewTransferData: this.createNewTransferData,
       },
     });
+  }
+
+  onCreateNewTransferDataChange(updatedData: IngestionRequestInformation) {
+    Object.assign(this.createNewTransferData, updatedData);
   }
 }

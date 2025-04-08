@@ -42,6 +42,7 @@ import {
   CustomLayoutChildrenRenderPropsPipe,
   QuantityValueLayoutRendererComponent,
 } from "./ingestor-metadata-editor/customRenderer/quantity-value-layout-renderer";
+import { MatMenuModule } from "@angular/material/menu";
 
 @NgModule({
   declarations: [
@@ -89,6 +90,7 @@ import {
     JsonFormsAngularMaterialModule,
     CommonModule,
     MatPaginatorModule,
+    MatMenuModule,
   ],
 })
 export class IngestorModule {}

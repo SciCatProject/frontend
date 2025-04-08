@@ -19,6 +19,7 @@ export class IngestorConfirmTransferDialogComponent implements OnInit {
   provideMergeMetaData = "";
   backendURL = "";
   errorMessage = "";
+  copiedToClipboard = false;
 
   constructor(
     public dialog: MatDialog,
@@ -91,5 +92,16 @@ export class IngestorConfirmTransferDialogComponent implements OnInit {
         }
       });
     }
+  }
+
+  onCopyMetadata(): void {
+    navigator.clipboard.writeText(this.provideMergeMetaData).then(
+      () => {
+        this.copiedToClipboard = true;
+      },
+      (err) => {
+        console.error("Failed to copy metadata to clipboard: ", err);
+      },
+    );
   }
 }

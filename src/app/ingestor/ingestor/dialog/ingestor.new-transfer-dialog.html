@@ -8,12 +8,14 @@
   </button>
 </div>
 <mat-dialog-content class="mat-typography" disableClose="true">
-  <ingestor-dialog-stepper [activeStep]="0"></ingestor-dialog-stepper>
+  <ingestor-dialog-stepper [activeStep]="0"
+  [createNewTransferData]="createNewTransferData"
+  (createNewTransferDataChange)="onCreateNewTransferDataChange($event)"></ingestor-dialog-stepper>
 
   <p>Please select the dataset to be uploaded and the appropriate metadata
     extractor method.</p>
 
-  <div>
+  <div *ngIf="createNewTransferData.editorMode === 'INGESTION'">
     <mat-form-field class="form-full-width">
       <mat-label>File Path</mat-label>
       <input matInput [(ngModel)]="selectedPath" (click)="onClickOpenFileBrowser()" readonly>
@@ -26,7 +28,8 @@
 
   <div *ngIf="extractionMethods !== null">
     <mat-form-field class="form-full-width">
-      <mat-label>Extraction Method</mat-label>
+      <mat-label *ngIf="createNewTransferData.editorMode === 'INGESTION'">Extraction Method</mat-label>
+      <mat-label *ngIf="createNewTransferData.editorMode === 'EDITOR'">Editor schema</mat-label>
       <mat-select [(ngModel)]="selectedMethod">
         <mat-option *ngFor="let method of extractionMethods.methods" [value]="method">
           {{ method.name }}

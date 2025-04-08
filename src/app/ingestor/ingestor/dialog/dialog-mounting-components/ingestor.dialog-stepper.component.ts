@@ -4,6 +4,7 @@ import {
   Output,
   EventEmitter,
   Injector,
+  OnInit,
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import {
@@ -152,5 +153,25 @@ export class IngestorDialogStepperComponent {
       }
     };
     input.click();
+  }
+
+  onSwitchEditorMode(mode: string) {
+    if (this.createNewTransferData) {
+      switch (mode) {
+        case "INGESTION":
+          this.createNewTransferData.editorMode = "INGESTION";
+          break;
+        case "EDITOR":
+          this.createNewTransferData.editorMode = "EDITOR";
+          break;
+        default:
+          console.error("Unknown mode");
+      }
+
+      // Clean selected file and selected method
+      this.createNewTransferData.selectedPath = "";
+      this.createNewTransferData.selectedMethod = null;
+      this.createNewTransferDataChange.emit(this.createNewTransferData);
+    }
   }
 }

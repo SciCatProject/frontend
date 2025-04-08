@@ -88,7 +88,7 @@ export class IngestorComponent implements OnInit {
     private apiManager: IngestorAPIManager,
     private sseService: IngestorMetadataSSEService,
     private store: Store,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
@@ -317,6 +317,13 @@ export class IngestorComponent implements OnInit {
     this.onClickNext(0); // Open first dialog to start the ingestion process
   }
 
+  resetExtractedMetadata(): void {
+    this.createNewTransferData.extractorMetaData = {
+      instrument: {},
+      acquisition: {},
+    };
+  }
+
   onClickNext(step: number): void {
     this.dialog.closeAll();
 
@@ -340,9 +347,15 @@ export class IngestorComponent implements OnInit {
 
         break;
       case 1:
-        this.startMetadataExtraction().catch((error) => {
-          console.error("Metadata extraction error", error);
-        });
+        this.resetExtractedMetadata();
+        if (this.createNewTransferData.editorMode === "INGESTION") {
+          this.startMetadataExtraction().catch((error) => {
+            console.error("Metadata extraction error", error);
+          });
+        } else if (this.createNewTransferData.editorMode === "EDITOR") {
+          this.createNewTransferData.apiInformation.extractorMetaDataReady =
+            true;
+        }
 
         dialogRef = this.dialog.open(IngestorUserMetadataDialogComponent, {
           data: {
