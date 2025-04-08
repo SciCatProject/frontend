@@ -79,6 +79,7 @@ export const initialDatasetState: DatasetState = {
     scientific: [],
     isPublished: "",
     pid: "",
+    instrumentIds: [],
   },
   pagination: {
     skip: 0,

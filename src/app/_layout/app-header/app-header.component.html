@@ -68,6 +68,26 @@
 
     <span class="spacer"></span>
 
+    <span *ngIf="isDatasetDetailPage">
+      <button
+        mat-icon-button
+        matTooltip="Nomad Logs"
+        (click)="openNomadLogs()"
+        class="icon-button"
+      >
+        <mat-icon>subject</mat-icon>
+      </button>
+
+      <button
+        mat-icon-button
+        matTooltip="Nomad Charts"
+        (click)="openNomadCharts()"
+        class="icon-button"
+      >
+        <mat-icon>bar_chart</mat-icon>
+      </button>
+    </span>
+
     <span>
       <h6>
         <a class="toplink" [routerLink]="['/help']">

@@ -1,5 +1,6 @@
 import {
   Component,
+  HostListener,
   OnDestroy,
   OnInit,
   Type,
@@ -43,6 +44,7 @@ import { Filters, FilterConfig } from "shared/modules/filters/filters.module";
 import { FilterComponentInterface } from "shared/modules/filters/interface/filter-component.interface";
 import { Subscription } from "rxjs";
 import { take } from "rxjs/operators";
+import { InstrumentFilterComponent } from "shared/modules/filters/instrument-filter.component";
 
 const COMPONENT_MAP: { [K in Filters]: Type<any> } = {
   PidFilter: PidFilterComponent,
@@ -55,6 +57,7 @@ const COMPONENT_MAP: { [K in Filters]: Type<any> } = {
   DateRangeFilter: DateRangeFilterComponent,
   TextFilter: TextFilterComponent,
   ConditionFilter: ConditionFilterComponent,
+  InstrumentFilter: InstrumentFilterComponent,
 };
 
 @Component({
@@ -87,6 +90,28 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private asyncPipe: AsyncPipe,
     private viewContainerRef: ViewContainerRef,
   ) {}
+
+  @HostListener("window:keydown", ["$event"])
+  handleKeyDown(event: KeyboardEvent): void {
+    // Check if the key pressed is Enter
+    if (event.key === "Enter") {
+      // Get the active element
+      const activeElement = document.activeElement;
+
+      // Instead of using closest(), check if the active element is within the component
+      const filterComponent = this.viewContainerRef.element.nativeElement;
+
+      // Check if active element is inside our filter component
+      if (filterComponent.contains(activeElement)) {
+        // Prevent default behavior (like form submission)
+        event.preventDefault();
+
+        console.log("Enter key pressed in filter component - applying filters");
+        // Apply the filters
+        this.applyFilters();
+      }
+    }
+  }
 
   ngOnInit() {
     this.getAllComponentLabels();
