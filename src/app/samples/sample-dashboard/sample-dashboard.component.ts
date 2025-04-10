@@ -28,6 +28,8 @@ import { filter, map, distinctUntilChanged, take } from "rxjs/operators";
 import { SampleFilters } from "state-management/models";
 import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AppConfigService } from "app-config.service";
+import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
+import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-config";
 
 @Component({
   selector: "sample-dashboard",
@@ -36,6 +38,48 @@ import { AppConfigService } from "app-config.service";
 })
 export class SampleDashboardComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectSampleDashboardPageViewModel);
+
+  tableDefaultSettingsConfig: ITableSetting = {
+    visibleActionMenu: actionMenu,
+    settingList: [
+      {
+        visibleActionMenu: actionMenu,
+        isDefaultSetting: true,
+        isCurrentSetting: true,
+        columnSetting: [
+          {
+            name: "sampleId",
+            icon: "fingerprint",
+            header: "Sample ID",
+          },
+          {
+            name: "description",
+            icon: "description",
+          },
+          {
+            name: "owner",
+            icon: "face",
+          },
+          {
+            name: "createdAt",
+            header: "Creation time",
+            icon: "date_range",
+            customRender: (column, row) => {
+              return this.datePipe.transform(row[column.name]);
+            },
+          },
+          {
+            name: "ownerGroup",
+            header: "Owner group",
+            icon: "group",
+          },
+        ],
+      },
+    ],
+    rowStyle: {
+      "border-bottom": "1px solid #d2d2d2",
+    },
+  };
 
   subscriptions: Subscription[] = [];
 

@@ -92,6 +92,7 @@ import { userReducer } from "state-management/reducers/user.reducer";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
+import { DatasetDynamicTableComponent } from "./dataset-table/dataset-dynamic-table.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -165,6 +166,7 @@ import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-w
     DatasetDetailComponent,
     DatasetDetailDynamicComponent,
     DatasetTableComponent,
+    DatasetDynamicTableComponent,
     DatasetsFilterComponent,
     PublishComponent,
     ReduceComponent,
