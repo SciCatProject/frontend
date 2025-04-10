@@ -40,17 +40,6 @@ jobs:
           WITHOUT_V=${TAG#v}
           echo "release_version=$WITHOUT_V" >> $GITHUB_OUTPUT
 
-      - name: Update release version
-        run: |
-          npm version --no-git-tag-version ${{ steps.release_version.output.release_version }}
-
-      - name: Commit package with new version
-        run: |
-          git config --global user.name 'SciCat FE Release Workflow'
-          git config --global user.email 'scicat.release.workflow@users.noreply.github.com'
-          git commit --amend -am "Set release"
-          git push
-
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:
