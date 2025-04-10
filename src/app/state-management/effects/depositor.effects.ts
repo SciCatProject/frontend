@@ -107,6 +107,12 @@ export class OneDepEffects {
             "Deposition Created Successfully. Deposition ID: " + deposition.id,
           duration: 5000,
         };
+        setTimeout(function () {
+          window.open(
+            `https://onedep-depui-test.wwpdb.org/deposition/api/v1/depositions/${deposition.id}/view`,
+            "_blank",
+          );
+        }, 1800);
         return of(showMessageAction({ message }));
       }),
     );
