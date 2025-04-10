@@ -130,9 +130,12 @@ export class IngestorNewTransferDialogComponent implements OnInit {
   validateNextButton(): void {
     const selectedPathReady =
       (this.createNewTransferData.editorMode === "INGESTION" &&
-        this.createNewTransferData.selectedPath) ||
+        this.createNewTransferData.selectedPath !== "") ||
       this.createNewTransferData.editorMode === "EDITOR";
-    const selectedMethodReady = this.createNewTransferData.selectedMethod?.name;
+    const selectedMethodReady =
+      this.selectedMethod !== null &&
+      this.selectedMethod !== undefined &&
+      this.selectedMethod.name !== "";
 
     this.uiNextButtonReady = !!selectedPathReady && !!selectedMethodReady;
   }
@@ -143,15 +146,21 @@ export class IngestorNewTransferDialogComponent implements OnInit {
   }
 
   onClickOpenFileBrowser(): void {
-    this.dialog.open(IngestorFileBrowserComponent, {
-      data: {
-        backendURL: this.backendURL,
-        createNewTransferData: this.createNewTransferData,
-      },
-    });
+    this.dialog
+      .open(IngestorFileBrowserComponent, {
+        data: {
+          backendURL: this.backendURL,
+          createNewTransferData: this.createNewTransferData,
+        },
+      })
+      .afterClosed()
+      .subscribe(() => {
+        this.validateNextButton();
+      });
   }
 
   onCreateNewTransferDataChange(updatedData: IngestionRequestInformation) {
     Object.assign(this.createNewTransferData, updatedData);
+    this.validateNextButton();
   }
 }
