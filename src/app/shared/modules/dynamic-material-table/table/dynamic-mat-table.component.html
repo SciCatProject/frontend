@@ -31,7 +31,7 @@
       >
         <mat-checkbox
           style="z-index: 10"
-          (change)="$event ? masterToggle() : null"
+          (change)="$event ? masterToggle($event) : null"
           [checked]="rowSelectionModel.hasValue() && isAllSelected()"
           [indeterminate]="rowSelectionModel.hasValue() && !isAllSelected()"
           *ngIf="rowSelectionMode === 'multi'"

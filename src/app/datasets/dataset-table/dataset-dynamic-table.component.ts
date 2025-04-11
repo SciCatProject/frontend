@@ -83,6 +83,8 @@ export class DatasetDynamicTableComponent
   currentPage$ = this.store.select(selectPage);
   datasetsPerPage$ = this.store.select(selectDatasetsPerPage);
   datasetCount$ = this.store.select(selectTotalSets);
+  currentUser$ = this.store.select(selectCurrentUser);
+  datasets$ = this.store.select(selectDatasets);
 
   @Input() tableColumns: TableColumn[] | null = null;
   displayedColumns: string[] = [];
@@ -94,7 +96,6 @@ export class DatasetDynamicTableComponent
 
   datasets: OutputDatasetObsoleteDto[] = [];
 
-  @Output() settingsClick = new EventEmitter<MouseEvent>();
   @Output() rowClick = new EventEmitter<OutputDatasetObsoleteDto>();
 
   tableDefaultSettingsConfig: ITableSetting = {
@@ -113,6 +114,7 @@ export class DatasetDynamicTableComponent
           },
           {
             name: "runNumber",
+            header: "Run Number",
           },
           {
             name: "sourceFolder",
@@ -197,10 +199,12 @@ export class DatasetDynamicTableComponent
   getTablePaginationConfig(dataCount = 0): TablePagination {
     const { queryParams } = this.route.snapshot;
 
+    const argsParsed = JSON.parse(queryParams.args);
+
     return {
       pageSizeOptions: this.defaultPageSizeOptions,
-      pageIndex: queryParams.pageIndex,
-      pageSize: queryParams.pageSize || this.defaultPageSize,
+      pageIndex: argsParsed.skip / argsParsed.limit || 0,
+      pageSize: argsParsed.limit || this.defaultPageSize,
       length: dataCount,
     };
   }
@@ -218,35 +222,32 @@ export class DatasetDynamicTableComponent
     this.pagination = paginationConfig;
   }
 
-  onPaginationChange(pagination: TablePagination) {
-    // this.router.navigate([], {
-    //   queryParams: {
-    //     pageIndex: pagination.pageIndex,
-    //     pageSize: pagination.pageSize,
-    //   },
-    //   queryParamsHandling: "merge",
-    // });
-  }
-
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
     const columnsSetting = setting.columnSetting.map((column) => {
-      const { name, display, index, width } = column;
+      const { name, display, index, width, type } = column;
 
-      return { name, display, index, width };
+      return {
+        name,
+        enabled: display === "visible" ? true : false,
+        order: index,
+        width,
+        type,
+      };
     });
 
-    const tablesSettings = {
-      ...this.tablesSettings,
-      [setting.settingName || this.tableName]: {
-        columns: columnsSetting,
-      },
-    };
+
+    // const tablesSettings = {
+    //   ...this.tablesSettings,
+    //   [setting.settingName || this.tableName]: {
+    //     columns: columnsSetting,
+    //   },
+    // };
 
     this.store.dispatch(
       updateUserSettingsAction({
         property: {
-          tablesSettings,
+          columns: columnsSetting,
         },
       }),
     );
@@ -264,10 +265,23 @@ export class DatasetDynamicTableComponent
     }
   }
 
-  onRowClick(event: IRowEvent<DatasetClass>) {
-    if (event.event === RowEventType.RowClick) {
-      const id = encodeURIComponent(event.sender.row.pid);
-      // this.router.navigateByUrl("/instruments/" + id);
+  onRowEvent({ event, sender }: IRowEvent<OutputDatasetObsoleteDto>) {
+    if (event === RowEventType.RowClick) {
+      const dataset = sender.row;
+      this.rowClick.emit(dataset);
+    } else if (event === RowEventType.RowSelectionChange) {
+      const dataset = sender.row;
+      if (sender.checked) {
+        this.store.dispatch(selectDatasetAction({ dataset }));
+      } else {
+        this.store.dispatch(deselectDatasetAction({ dataset }));
+      }
+    } else if (event === RowEventType.MasterSelectionChange) {
+      if (sender.checked) {
+        this.store.dispatch(selectAllDatasetsAction());
+      } else {
+        this.store.dispatch(clearSelectionAction());
+      }
     }
   }
 
@@ -286,18 +300,11 @@ export class DatasetDynamicTableComponent
     }
   }
 
-  onPageChange(event: PageEvent) {
+  onPageChange({ pageIndex, pageSize }: TablePagination) {
     this.pageChange.emit({
-      pageIndex: event.pageIndex,
-      pageSize: event.pageSize,
+      pageIndex,
+      pageSize,
     });
-  }
-  doSettingsClick(event: MouseEvent) {
-    this.settingsClick.emit(event);
-  }
-
-  doRowClick(dataset: OutputDatasetObsoleteDto): void {
-    this.rowClick.emit(dataset);
   }
 
   // conditional to asses dataset status and assign correct icon ArchViewMode.work_in_progress
@@ -399,15 +406,28 @@ export class DatasetDynamicTableComponent
   }
 
   convertSavedColumns(): TableField<any>[] {
-    console.log(this.tableColumns);
-
     return this.tableColumns.map((column) => {
-      return {
+      const convertedColumn: TableField<any> = {
         name: column.name,
+        header: column.header,
         index: column.order,
         display: column.enabled ? "visible" : "hidden",
         width: undefined,
+        type: column.type as any,
       };
+
+      if (column.name === "runNumber" && column.type !== "custom") {
+        // NOTE: This is for the saved columns in the database or the old config.
+        convertedColumn.customRender = (c, row) =>
+          this.lodashGet(row, "scientificMetadata.runNumber.value");
+      }
+      // NOTE: This is how we render the custom columns if new config is used.
+      if (column.type === "custom") {
+        convertedColumn.customRender = (c, row) =>
+          this.lodashGet(row, column.path || column.name);
+      }
+
+      return convertedColumn;
     });
   }
 
@@ -421,8 +441,8 @@ export class DatasetDynamicTableComponent
     );
 
     this.subscriptions.push(
-      this.store.select(selectDatasets).subscribe((datasets) => {
-        this.store.select(selectCurrentUser).subscribe((currentUser) => {
+      this.datasets$.subscribe((datasets) => {
+        this.currentUser$.subscribe((currentUser) => {
           this.datasetCount$.subscribe((count) => {
             const publishedDatasets = datasets.filter(
               (dataset) => dataset.isPublished,
@@ -437,18 +457,16 @@ export class DatasetDynamicTableComponent
               // const savedTableConfigColumns =
               //   tablesSettings?.[this.tableName]?.columns;
               const savedTableConfigColumns = this.convertSavedColumns();
+
               const tableSort = this.getTableSort();
               const paginationConfig = this.getTablePaginationConfig(count);
 
-              console.log(savedTableConfigColumns);
               const tableSettingsConfig = getTableSettingsConfig(
                 this.tableName,
                 this.tableDefaultSettingsConfig,
                 savedTableConfigColumns,
                 tableSort,
               );
-
-              console.log(tableSettingsConfig);
 
               if (tableSettingsConfig?.settingList.length) {
                 this.initTable(tableSettingsConfig, paginationConfig);

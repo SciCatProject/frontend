@@ -32,7 +32,6 @@
         <dataset-dynamic-table
           [tableColumns]="tableColumns$ | async"
           [selectedSets]="selectedSets$ | async"
-          (settingsClick)="onSettingsClick()"
           (rowClick)="onRowClick($event)"
           (pageChange)="onPageChange($event)"
         ></dataset-dynamic-table>
