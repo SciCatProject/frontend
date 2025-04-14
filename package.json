@@ -76,7 +76,7 @@
     "@types/node": "^22.0.0",
     "@types/shortid": "2.2.0",
     "@types/source-map-support": "^0.5.3",
-    "@typescript-eslint/eslint-plugin": "8.29.1",
+    "@typescript-eslint/eslint-plugin": "8.30.0",
     "@typescript-eslint/parser": "^8.0.0",
     "coveralls": "^3.0.7",
     "cypress": "^14.0.0",
