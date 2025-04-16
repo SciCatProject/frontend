@@ -61,14 +61,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   selectedSets$ = this.store.select(selectSelectedDatasets);
   selectColumns$ = this.store.select(selectColumns);
 
-  tableColumns$ = combineLatest([this.selectColumns$, this.loggedIn$]).pipe(
-    map(([columns, loggedIn]) =>
-      columns.filter((column) => loggedIn || column.name !== "select"),
-    ),
-  );
-  selectableColumns$ = this.selectColumns$.pipe(
-    map((columns) => columns.filter((column) => column.name !== "select")),
-  );
   public nonEmpty$ = this.store
     .select(selectDatasetsInBatch)
     .pipe(map((batch) => batch.length > 0));

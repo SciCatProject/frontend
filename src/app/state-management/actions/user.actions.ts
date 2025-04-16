@@ -13,9 +13,9 @@ import {
 import { AppConfig } from "app-config.service";
 import { AccessTokenInterface } from "shared/services/auth/auth.service";
 
-export const setDatasetTableColumnsAction = createAction(
+export const setDatasetTableDefaultColumnsAction = createAction(
   "[User] Set Dataset Table Columns",
-  props<{ columns: TableColumn[] }>(),
+  props<{ defaultColumns: TableColumn[] }>(),
 );
 
 export const loginOIDCAction = createAction(

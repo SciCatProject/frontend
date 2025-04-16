@@ -23,7 +23,8 @@ export interface UserState {
 
   isLoading: boolean;
 
-  columns: TableColumn[];
+  columns: TableColumn[] | null;
+  defaultColumns: TableColumn[] | null;
 
   tablesSettings: object;
 
@@ -59,7 +60,8 @@ export const initialUserState: UserState = {
 
   isLoading: false,
 
-  columns: [],
+  columns: null,
+  defaultColumns: null,
 
   filters: [
     { LocationFilter: true },

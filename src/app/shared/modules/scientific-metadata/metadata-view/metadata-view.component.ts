@@ -108,9 +108,8 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
               return row[column.name];
             },
-            contentIcon: "hub",
             renderContentIcon: (column, row) => {
-              return !!row.ontology_reference;
+              return row.ontology_reference ? "hub" : "";
             },
             contentIconLink: (column, row) => {
               return row.ontology_reference;
@@ -125,9 +124,8 @@ export class MetadataViewComponent implements OnInit, OnChanges {
                 : "--";
             },
             renderContentIcon: (column, row) => {
-              return row.validUnit === false;
+              return row.validUnit === false ? "error" : "";
             },
-            contentIcon: "error",
             contentIconTooltip: "Unrecognized unit, conversion disabled",
             contentIconClass: "general-warning",
             cellClass: "unit-input",

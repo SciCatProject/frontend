@@ -93,6 +93,8 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
 import { DatasetDynamicTableComponent } from "./dataset-table/dataset-dynamic-table.component";
+import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
+import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
 @NgModule({
   imports: [
     CommonModule,
@@ -188,6 +190,8 @@ import { DatasetDynamicTableComponent } from "./dataset-table/dataset-dynamic-ta
   providers: [
     ArchivingService,
     AsyncPipe,
+    JsonHeadPipe,
+    ThumbnailPipe,
     ADAuthService,
     SharedScicatFrontendModule,
     FileSizePipe,

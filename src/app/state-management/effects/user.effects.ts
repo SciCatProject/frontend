@@ -508,7 +508,7 @@ export class UserEffects {
 
         // NOTE: config.localColumns is for backward compatibility.
         //       it should be removed once no longer needed
-        const columns =
+        const defaultColumns =
           config.defaultDatasetsListSettings.columns ||
           config.localColumns ||
           initialUserState.columns;
@@ -519,8 +519,8 @@ export class UserEffects {
           }),
           fromActions.updateFilterConfigs({ filterConfigs: defaultFilters }),
 
-          fromActions.setDatasetTableColumnsAction({
-            columns: columns,
+          fromActions.setDatasetTableDefaultColumnsAction({
+            defaultColumns,
           }),
         ];
       }),

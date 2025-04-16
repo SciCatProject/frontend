@@ -94,6 +94,11 @@ export const selectColumns = createSelector(
   (state) => state.columns,
 );
 
+export const selectDefaultColumns = createSelector(
+  selectUserState,
+  (state) => state.defaultColumns,
+);
+
 export const selectTablesSettings = createSelector(
   selectUserState,
   (state) => state.tablesSettings,

@@ -29,36 +29,18 @@
       </div>
 
       <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
-        <dataset-dynamic-table
-          [tableColumns]="tableColumns$ | async"
-          [selectedSets]="selectedSets$ | async"
-          (rowClick)="onRowClick($event)"
-          (pageChange)="onPageChange($event)"
-        ></dataset-dynamic-table>
-
         <ng-template [ngIf]="this.loggedIn$ | async">
           <dataset-table-actions
             [selectedSets]="selectedSets$ | async"
           ></dataset-table-actions>
         </ng-template>
 
-        <dataset-table
-          [tableColumns]="tableColumns$ | async"
+        <dataset-dynamic-table
           [selectedSets]="selectedSets$ | async"
-          (settingsClick)="onSettingsClick()"
           (rowClick)="onRowClick($event)"
           (pageChange)="onPageChange($event)"
-        ></dataset-table>
+        ></dataset-dynamic-table>
       </div>
     </div>
   </mat-sidenav-content>
-
-  <mat-sidenav #settings position="end" mode="push">
-    <dataset-table-settings
-      [selectableColumns]="selectableColumns$ | async"
-      [clearSearchBar]="clearColumnSearch"
-      (closeClick)="onCloseClick()"
-      (selectColumn)="onSelectColumn($event)"
-    ></dataset-table-settings>
-  </mat-sidenav>
 </mat-sidenav-container>

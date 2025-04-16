@@ -6,10 +6,10 @@ import { TableColumn } from "state-management/models";
 const reducer = createReducer(
   initialUserState,
   on(
-    fromActions.setDatasetTableColumnsAction,
-    (state, { columns }): UserState => ({
+    fromActions.setDatasetTableDefaultColumnsAction,
+    (state, { defaultColumns }): UserState => ({
       ...state,
-      columns,
+      defaultColumns,
     }),
   ),
 

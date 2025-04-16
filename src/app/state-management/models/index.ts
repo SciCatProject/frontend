@@ -12,9 +12,12 @@ export interface Settings {
 
 export interface TableColumn {
   name: string;
+  header?: string;
+  path?: string;
   order: number;
   type: "standard" | "custom";
   enabled: boolean;
+  width?: number;
 }
 
 export interface LabelMaps {
