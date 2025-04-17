@@ -19,7 +19,6 @@
             <app-search-bar
               [prefilledValue]="vm.textFilter"
               (search)="onTextSearchChange($event)"
-              (searchBarFocus)="onTextSearchChange($event)"
             ></app-search-bar>
             <div *ngIf="appConfig.scienceSearchEnabled">
               <button
@@ -86,17 +85,24 @@
       </ng-template>
     </div>
     <div fxFlex="63" fxFlex.lt-xl="80">
-      <app-table
-        [data]="tableData"
-        [columns]="tableColumns"
-        [paginate]="tablePaginate"
-        [currentPage]="vm.samplesPagination.currentPage"
-        [dataCount]="vm.samplesPagination.samplesCount"
-        [dataPerPage]="vm.samplesPagination.samplesPerPage"
-        (pageChange)="onPageChange($event)"
-        (sortChange)="onSortChange($event)"
-        (rowClick)="onRowClick($event)"
-      ></app-table>
+      <dynamic-mat-table
+        [tableName]="tableName"
+        [columns]="columns"
+        [pending]="pending"
+        [setting]="setting"
+        [pagingMode]="paginationMode"
+        [dataSource]="dataSource"
+        [pagination]="pagination"
+        [rowSelectionMode]="rowSelectionMode"
+        [showGlobalTextSearch]="showGlobalTextSearch"
+        (paginationChange)="onPaginationChange($event)"
+        (onRowEvent)="onRowClick($event)"
+        (settingChange)="onSettingChange($event)"
+        (onTableEvent)="onTableEvent($event)"
+        style="height: 70vh"
+        class="mat-elevation-z2"
+      >
+      </dynamic-mat-table>
     </div>
   </div>
 </ng-container>
