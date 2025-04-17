@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RoutesRecognized } from "@angular/router";
 import { Store, ActionsSubject } from "@ngrx/store";
 
 import deepEqual from "deep-equal";
@@ -28,12 +28,13 @@ import { distinctUntilChanged, filter, map, take } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSidenav } from "@angular/material/sidenav";
 import { AddDatasetDialogComponent } from "datasets/add-dataset-dialog/add-dataset-dialog.component";
-import { combineLatest, Subscription } from "rxjs";
+import { combineLatest, Subscription, lastValueFrom } from "rxjs";
 import {
   selectProfile,
   selectCurrentUser,
   selectColumns,
   selectIsLoggedIn,
+  selectHasFetchedSettings,
 } from "state-management/selectors/user.selectors";
 import {
   OutputDatasetObsoleteDto,
@@ -60,6 +61,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   loggedIn$ = this.store.select(selectIsLoggedIn);
   selectedSets$ = this.store.select(selectSelectedDatasets);
   selectColumns$ = this.store.select(selectColumns);
+  selectHasFetchedSettings$ = this.store.select(selectHasFetchedSettings);
 
   public nonEmpty$ = this.store
     .select(selectDatasetsInBatch)
@@ -176,7 +178,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
           map(([pagination, , loggedIn]) => [pagination, loggedIn]),
           distinctUntilChanged(deepEqual),
         )
-        .subscribe(([pagination, loggedIn]) => {
+        .subscribe(async ([pagination, loggedIn]) => {
+          const hasFetchedSettings = await lastValueFrom(
+            this.selectHasFetchedSettings$.pipe(take(1)),
+          );
+
+          if (!hasFetchedSettings) {
+            return;
+          }
+
           this.store.dispatch(fetchDatasetsAction());
           this.store.dispatch(fetchFacetCountsAction());
           this.router.navigate(["/datasets"], {

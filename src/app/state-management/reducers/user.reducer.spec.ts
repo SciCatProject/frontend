@@ -12,11 +12,11 @@ import { SDKToken } from "shared/services/auth/auth.service";
 describe("UserReducer", () => {
   describe("on setDatasetTableColumnsAction", () => {
     it("should set the columns", () => {
-      const defaultColumns: TableColumn[] = [
+      const columns: TableColumn[] = [
         { name: "testColumn", order: 0, type: "standard", enabled: true },
       ];
-      const action = fromActions.setDatasetTableDefaultColumnsAction({
-        defaultColumns,
+      const action = fromActions.setDatasetTableColumnsAction({
+        columns,
       });
       const state = userReducer(initialUserState, action);
 

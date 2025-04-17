@@ -21,10 +21,11 @@ export interface UserState {
   isLoggingIn: boolean;
   isLoggedIn: boolean;
 
+  hasFetchedSettings: boolean;
+
   isLoading: boolean;
 
-  columns: TableColumn[] | null;
-  defaultColumns: TableColumn[] | null;
+  columns: TableColumn[];
 
   tablesSettings: object;
 
@@ -60,8 +61,9 @@ export const initialUserState: UserState = {
 
   isLoading: false,
 
-  columns: null,
-  defaultColumns: null,
+  hasFetchedSettings: false,
+
+  columns: [],
 
   filters: [
     { LocationFilter: true },

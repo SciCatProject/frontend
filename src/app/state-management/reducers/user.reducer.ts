@@ -6,10 +6,18 @@ import { TableColumn } from "state-management/models";
 const reducer = createReducer(
   initialUserState,
   on(
-    fromActions.setDatasetTableDefaultColumnsAction,
-    (state, { defaultColumns }): UserState => ({
+    fromActions.setDatasetTableColumnsAction,
+    (state, { columns }): UserState => ({
       ...state,
-      defaultColumns,
+      columns,
+    }),
+  ),
+
+  on(
+    fromActions.updateHasFetchedSettings,
+    (state, { hasFetchedSettings }): UserState => ({
+      ...state,
+      hasFetchedSettings,
     }),
   ),
 
@@ -19,6 +27,7 @@ const reducer = createReducer(
       ...state,
       isLoggingIn: true,
       isLoggedIn: false,
+      hasFetchedSettings: false,
     }),
   ),
 
@@ -30,6 +39,7 @@ const reducer = createReducer(
       accountType,
       isLoggingIn: false,
       isLoggedIn: true,
+      hasFetchedSettings: false,
     }),
   ),
   on(
@@ -74,12 +84,14 @@ const reducer = createReducer(
           settings,
           columns,
           tablesSettings: externalSettings?.tablesSettings,
+          hasFetchedSettings: true,
         };
       } else {
         return {
           ...state,
           settings,
           tablesSettings: externalSettings?.tablesSettings,
+          hasFetchedSettings: true,
         };
       }
     },

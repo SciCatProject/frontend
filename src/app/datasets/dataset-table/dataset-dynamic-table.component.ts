@@ -29,10 +29,8 @@ import {
 import { get } from "lodash-es";
 import { AppConfigService } from "app-config.service";
 import {
-  selectColumns,
+  selectColumnsWithHasFetchedSettings,
   selectCurrentUser,
-  selectDefaultColumns,
-  selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
 import {
   DatasetClass,
@@ -87,9 +85,10 @@ export class DatasetDynamicTableComponent implements OnInit, OnDestroy {
   datasetCount$ = this.store.select(selectTotalSets);
   currentUser$ = this.store.select(selectCurrentUser);
   datasets$ = this.store.select(selectDatasets);
-  selectColumns$ = this.store.select(selectColumns);
-  selectDefaultColumns$ = this.store.select(selectDefaultColumns);
-  loggedIn$ = this.store.select(selectIsLoggedIn);
+  datasetsInBatch$ = this.store.select(selectDatasetsInBatch);
+  selectColumnsWithFetchedSettings$ = this.store.select(
+    selectColumnsWithHasFetchedSettings,
+  );
 
   @Input() selectedSets: OutputDatasetObsoleteDto[] | null = null;
   @Output() pageChange = new EventEmitter<{
@@ -321,9 +320,9 @@ export class DatasetDynamicTableComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  isInBatch(dataset: DatasetClass): boolean {
-    return this.inBatchPids.indexOf(dataset.pid) !== -1;
-  }
+  // isInBatch(dataset: DatasetClass): boolean {
+  //   return this.inBatchPids.indexOf(dataset.pid) !== -1;
+  // }
 
   onSelect(event: MatCheckboxChange, dataset: OutputDatasetObsoleteDto): void {
     if (event.checked) {
@@ -436,7 +435,7 @@ export class DatasetDynamicTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.store.select(selectDatasetsInBatch).subscribe((datasets) => {
+      this.datasetsInBatch$.subscribe((datasets) => {
         this.inBatchPids = datasets.map((dataset) => {
           return dataset.pid;
         });
@@ -447,50 +446,43 @@ export class DatasetDynamicTableComponent implements OnInit, OnDestroy {
       this.datasets$.subscribe((datasets) => {
         this.currentUser$.subscribe((currentUser) => {
           this.datasetCount$.subscribe(async (count) => {
-            let tableColumns = [];
-            const isLoggedIn = await lastValueFrom(
-              this.loggedIn$.pipe(take(1)),
-            );
             const defaultTableColumns = await lastValueFrom(
-              this.selectDefaultColumns$.pipe(take(1)),
-            );
-            const userTableColumns = await lastValueFrom(
-              this.selectColumns$.pipe(take(1)),
+              this.selectColumnsWithFetchedSettings$.pipe(take(1)),
             );
 
-            if (!isLoggedIn) {
-              tableColumns = defaultTableColumns;
-            } else {
-              tableColumns = userTableColumns;
-            }
+            if (
+              defaultTableColumns.hasFetchedSettings &&
+              defaultTableColumns.columns.length
+            ) {
+              const tableColumns = defaultTableColumns.columns;
 
-            const publishedDatasets = datasets.filter(
-              (dataset) => dataset.isPublished,
-            );
-            this.datasets = currentUser ? datasets : publishedDatasets;
+              if (!currentUser) {
+                this.rowSelectionMode = "none";
+              }
 
-            if (tableColumns) {
-              this.dataSource.next(this.datasets);
-              this.pending = false;
+              if (tableColumns) {
+                this.dataSource.next(datasets);
+                this.pending = false;
 
-              const savedTableConfigColumns =
-                this.convertSavedColumns(tableColumns);
+                const savedTableConfigColumns =
+                  this.convertSavedColumns(tableColumns);
 
-              const tableSort = this.getTableSort();
-              const paginationConfig = this.getTablePaginationConfig(count);
+                const tableSort = this.getTableSort();
+                const paginationConfig = this.getTablePaginationConfig(count);
 
-              this.tableDefaultSettingsConfig.settingList[0].columnSetting =
-                savedTableConfigColumns;
+                this.tableDefaultSettingsConfig.settingList[0].columnSetting =
+                  savedTableConfigColumns;
 
-              const tableSettingsConfig = getTableSettingsConfig(
-                this.tableName,
-                this.tableDefaultSettingsConfig,
-                savedTableConfigColumns,
-                tableSort,
-              );
+                const tableSettingsConfig = getTableSettingsConfig(
+                  this.tableName,
+                  this.tableDefaultSettingsConfig,
+                  savedTableConfigColumns,
+                  tableSort,
+                );
 
-              if (tableSettingsConfig?.settingList.length) {
-                this.initTable(tableSettingsConfig, paginationConfig);
+                if (tableSettingsConfig?.settingList.length) {
+                  this.initTable(tableSettingsConfig, paginationConfig);
+                }
               }
             }
           });

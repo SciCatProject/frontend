@@ -13,9 +13,9 @@ import {
 import { AppConfig } from "app-config.service";
 import { AccessTokenInterface } from "shared/services/auth/auth.service";
 
-export const setDatasetTableDefaultColumnsAction = createAction(
+export const setDatasetTableColumnsAction = createAction(
   "[User] Set Dataset Table Columns",
-  props<{ defaultColumns: TableColumn[] }>(),
+  props<{ columns: TableColumn[] }>(),
 );
 
 export const loginOIDCAction = createAction(
@@ -174,6 +174,16 @@ export const loadingCompleteAction = createAction("[User] Loading Complete");
 export const updateFilterConfigs = createAction(
   "[User] Update Filter Configs",
   props<{ filterConfigs: FilterConfig[] }>(),
+);
+
+export const updateHasFetchedSettings = createAction(
+  "[User] Update Has Fetched User Settings",
+  props<{ hasFetchedSettings: boolean }>(),
+);
+
+export const updateIsPublishedAction = createAction(
+  "[User] Update Is Published",
+  props<{ isPublished: boolean }>(),
 );
 
 export const updateConditionsConfigs = createAction(

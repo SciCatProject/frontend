@@ -94,11 +94,6 @@ export const selectColumns = createSelector(
   (state) => state.columns,
 );
 
-export const selectDefaultColumns = createSelector(
-  selectUserState,
-  (state) => state.defaultColumns,
-);
-
 export const selectTablesSettings = createSelector(
   selectUserState,
   (state) => state.tablesSettings,
@@ -136,5 +131,18 @@ export const selectUserSettingsPageViewModel = createSelector(
     profile,
     scicatToken,
     settings,
+  }),
+);
+
+export const selectHasFetchedSettings = createSelector(
+  selectUserState,
+  (state) => state.hasFetchedSettings,
+);
+
+export const selectColumnsWithHasFetchedSettings = createSelector(
+  selectUserState,
+  (state) => ({
+    columns: state.columns,
+    hasFetchedSettings: state.hasFetchedSettings,
   }),
 );

@@ -94,6 +94,7 @@ export class UserEffects {
         });
         this.authService.setToken(token);
         this.apiConfigService.accessToken = token.id;
+        this.apiConfigService.credentials.bearer = token.id;
         return this.usersService
           .usersControllerFindById(oidcLoginResponse.userId)
           .pipe(
@@ -124,6 +125,7 @@ export class UserEffects {
         });
         this.authService.setToken(token);
         this.apiConfigService.accessToken = token.id;
+        this.apiConfigService.credentials.bearer = token.id;
         return this.usersService
           .usersControllerFindById(adLoginResponse.userId)
           .pipe(
@@ -152,6 +154,8 @@ export class UserEffects {
         this.sharedAuthService.authControllerLogin({ username, password }).pipe(
           switchMap((loginResponse) => {
             this.apiConfigService.accessToken = loginResponse.access_token;
+            this.apiConfigService.credentials.bearer =
+              loginResponse.access_token;
             this.authService.setToken({
               ...loginResponse,
               created: new Date(loginResponse.created),
@@ -236,23 +240,30 @@ export class UserEffects {
     );
   });
 
-  logoutNavigate$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        ofType(fromActions.logoutCompleteAction),
-        tap(({ logoutURL }) => {
-          if (logoutURL) {
-            window.location.href = logoutURL;
+  logoutNavigate$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.logoutCompleteAction),
+      tap(({ logoutURL }) => {
+        this.apiConfigService.accessToken = null;
+        this.apiConfigService.credentials.bearer = null;
+        if (logoutURL) {
+          window.location.href = logoutURL;
 
-            return null;
-          } else {
-            return this.router.navigate(["/login"]);
-          }
-        }),
-      );
-    },
-    { dispatch: false },
-  );
+          return null;
+        } else {
+          return this.router.navigate(["/login"]);
+        }
+      }),
+      switchMap(() => {
+        return [
+          fromActions.updateIsPublishedAction({ isPublished: true }),
+          fromActions.updateHasFetchedSettings({
+            hasFetchedSettings: true,
+          }),
+        ];
+      }),
+    );
+  });
 
   fetchCurrentUser$ = createEffect(() => {
     return this.actions$.pipe(
@@ -508,19 +519,22 @@ export class UserEffects {
 
         // NOTE: config.localColumns is for backward compatibility.
         //       it should be removed once no longer needed
-        const defaultColumns =
+        const columns =
           config.defaultDatasetsListSettings.columns ||
           config.localColumns ||
           initialUserState.columns;
+        const isAuthenticated = this.authService.isAuthenticated();
 
         return [
           fromActions.updateConditionsConfigs({
             conditionConfigs: defaultConditions,
           }),
+          fromActions.updateHasFetchedSettings({
+            hasFetchedSettings: !isAuthenticated,
+          }),
           fromActions.updateFilterConfigs({ filterConfigs: defaultFilters }),
-
-          fromActions.setDatasetTableDefaultColumnsAction({
-            defaultColumns,
+          fromActions.setDatasetTableColumnsAction({
+            columns,
           }),
         ];
       }),
