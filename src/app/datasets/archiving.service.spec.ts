@@ -73,10 +73,9 @@ describe("ArchivingService", () => {
         destinationPath,
       );
 
-      // expect(job).toBeInstanceOf(Job);
-      expect(job["emailJobInitiator"]).toEqual("test@email.com");
-      expect(job["jobParams"]["username"]).toEqual("testName");
-      expect(job["datasetList"]).toEqual(datasetList);
+      // expect(job).toBeInstanceOf(JobClass);
+      expect(job["createdBy"]).toEqual("testName");
+      expect(job["jobParams"]["datasetList"]).toEqual(datasetList);
       expect(job["type"]).toEqual("archive");
     });
   });
@@ -107,13 +106,9 @@ describe("ArchivingService", () => {
       }));
       const archive = true;
       const job = createMock<CreateJobDto>({
-        jobParams: { username: user.username },
-        emailJobInitiator: user.email,
-        datasetList,
+        jobParams: { datasetList },
+        contactEmail: user.email,
         type: "archive",
-        executionTime: "",
-        jobResultObject: {},
-        jobStatusMessage: "",
       });
       const createJobSpy = spyOn<any, string>(
         service,
