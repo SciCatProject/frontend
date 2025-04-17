@@ -283,7 +283,7 @@ export class DatafilesComponent
     }
     if (!this.jwt) {
       this.subscriptions.push(
-        this.usersService.usersControllerGetUserJWT().subscribe((jwt) => {
+        this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
           this.jwt = jwt;
           this[`${form}Element`].nativeElement.jwt.value = jwt.jwt;
           this[`${form}Element`].nativeElement.submit();
@@ -304,19 +304,20 @@ export class DatafilesComponent
     });
     dialogRef.afterClosed().subscribe((email) => {
       if (email) {
-        this.getSelectedFiles();
+        const selectedFiles = this.getSelectedFiles();
         const data = {
-          emailJobInitiator: email,
-          creationTime: new Date(),
+          contactEmail: email,
           type: "public",
-          datasetList: [
-            {
-              pid: this.datasetPid,
-              files: this.getSelectedFiles(),
-            },
-          ],
+          jobParams: {
+            datasetList: [
+              {
+                pid: this.datasetPid,
+                files: selectedFiles,
+              },
+            ],
+          },
         };
-        this.store.dispatch(submitJobAction({ job: data as any }));
+        this.store.dispatch(submitJobAction({ job: data }));
       }
     });
   }

@@ -47,26 +47,23 @@ export class AdminTabComponent implements OnInit, OnDestroy {
         .pipe(take(1))
         .subscribe((user) => {
           if (user && this.dataset) {
-            const job: any = {
-              emailJobInitiator: user.email,
-              type: "reset",
-              datasetList: [],
-              jobParams: {},
-            };
-            job.jobParams["username"] = user.username;
-            const fileObj: FileObject = {
-              pid: "",
-              files: [],
-            };
             const fileList: string[] = [];
-            fileObj.pid = this.dataset["pid"];
             if (this.dataset["datablocks"]) {
               this.dataset["datablocks"].map((d) => {
                 fileList.push(d["archiveId"]);
               });
             }
-            fileObj.files = fileList;
-            job.datasetList = [fileObj];
+            const fileObj: FileObject = {
+              pid: this.dataset["pid"],
+              files: fileList,
+            };
+            const job: CreateJobDto = {
+              contactEmail: user.email,
+              // ownerUser: user.username,
+              // ownerGroup: user.group,
+              type: "reset",
+              jobParams: { datasetList: [fileObj] },
+            };
             this.store.dispatch(submitJobAction({ job }));
           }
         });
