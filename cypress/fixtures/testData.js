@@ -61,6 +61,15 @@ export const testData = {
     ownerGroup: "20170251-group",
     accessGroups: [],
   },
+  instrument: {
+    uniqueName: "ESS1-1",
+    name: "ESS1",
+    customMetadata: {
+      institute: "An immaginary intitution #1",
+      department: "An immaginary department #1",
+      main_user: "ESS",
+    },
+  },
   rawDataset: {
     principalInvestigator: "string",
     endTime: "2019-10-31T14:44:46.143Z",

@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { InstrumentState } from "state-management/state/instruments.store";
+import { selectTablesSettings } from "./user.selectors";
 
 const selectInstrumentState =
   createFeatureSelector<InstrumentState>("instruments");
@@ -34,15 +35,15 @@ export const selectInstrumentsPerPage = createSelector(
   (filters) => filters.limit,
 );
 
-export const selectInstrumentsDashboardPageViewModel = createSelector(
+export const selectInstrumentsWithCountAndTableSettings = createSelector(
   selectInstruments,
-  selectPage,
   selectInstrumentsCount,
-  selectInstrumentsPerPage,
-  (instruments, currentPage, instrumentsCount, instrumentsPerPage) => ({
-    instruments,
-    currentPage,
-    instrumentsCount,
-    instrumentsPerPage,
-  }),
+  selectTablesSettings,
+  (instruments, count, tablesSettings) => {
+    return {
+      instruments,
+      count,
+      tablesSettings,
+    };
+  },
 );
