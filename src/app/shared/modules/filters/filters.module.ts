@@ -18,6 +18,7 @@ import { MatChipsModule } from "@angular/material/chips";
 import { MatIconModule } from "@angular/material/icon";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { InstrumentFilterComponent } from "./instrument-filter.component";
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     DateRangeFilterComponent,
     TextFilterComponent,
     ConditionFilterComponent,
+    InstrumentFilterComponent,
   ],
   imports: [
     MatTooltipModule,
@@ -55,6 +57,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     DateRangeFilterComponent,
     TextFilterComponent,
     ConditionFilterComponent,
+    InstrumentFilterComponent,
   ],
 })
 export class FiltersModule {}
@@ -70,6 +73,7 @@ export enum Filters {
   DateRangeFilter = "DateRangeFilter",
   TextFilter = "TextFilter",
   ConditionFilter = "ConditionFilter",
+  InstrumentFilter = "InstrumentFilter",
 }
 export type FilterConfig = Partial<{
   [K in Filters]: boolean;

@@ -67,7 +67,7 @@
           <div>
             <mat-icon>perm_identity</mat-icon>
           </div>
-          <div>Pid</div>
+          <div>Proposal Dataset</div>
         </div>
       </mat-header-cell>
       <mat-cell class="datasetName" *matCellDef="let dataset">
@@ -85,7 +85,7 @@
           <div>
             <mat-icon>fingerprint</mat-icon>
           </div>
-          <div>Name</div>
+          <div>Title</div>
         </div>
       </mat-header-cell>
       <mat-cell class="datasetName" *matCellDef="let dataset">
@@ -337,6 +337,54 @@
           <mat-icon> build </mat-icon>
           &nbsp;user error</ng-template
         >
+      </mat-cell>
+    </ng-container>
+
+    <!-- Instrument Name Column -->
+    <ng-container
+      matColumnDef="standard_instrumentName"
+      style="align-content: center"
+    >
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <mat-icon>developer_board</mat-icon>
+          </div>
+          <div>Instrument Name</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell class="datasetName" *matCellDef="let dataset">
+        <ng-container
+          *ngIf="
+            dataset.instrumentIds && dataset.instrumentIds.length;
+            else singleInstrument
+          "
+        >
+          <span *ngFor="let id of dataset.instrumentIds; let last = last">
+            {{ getInstrumentName(id) }}{{ !last ? ",\u00A0" : "" }}
+          </span>
+        </ng-container>
+        <ng-template #singleInstrument>
+          {{ getInstrumentName(dataset.instrumentId) || "-" }}
+        </ng-template>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Number of files Column -->
+    <ng-container
+      matColumnDef="standard_numberOfFiles"
+      style="align-content: center"
+    >
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <mat-icon>list_alt</mat-icon>
+          </div>
+          <div>Number of Files</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell class="datasetName" *matCellDef="let dataset">
+        {{ dataset.numberOfFiles || "-" }}
       </mat-cell>
     </ng-container>
 

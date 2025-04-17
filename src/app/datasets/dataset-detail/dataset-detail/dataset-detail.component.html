@@ -26,116 +26,161 @@
   <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
     <div [fxFlex]="(attachments$ | async)?.length > 0 ? '90%' : '100%'">
       <mat-card [formGroup]="form" data-cy="general-info">
-        <mat-card-header class="general-header">
+        <mat-card-header class="file-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> description </mat-icon>
           </div>
-          {{ "General Information" | translate }}
+          {{ "Dataset Information" | translate }}
+          <div
+            fxFlex
+            fxLayout="row"
+            fxLayoutAlign="end center"
+            fxLayoutGap="10px"
+          >
+            <mat-slide-toggle
+              class="public-toggle"
+              [checked]="dataset.isPublished"
+              (change)="onSlidePublic($event)"
+              *ngIf="editingAllowed"
+            >
+              Public
+            </mat-slide-toggle>
+          </div>
         </mat-card-header>
+
         <mat-card-content>
-          <table>
-            <tr>
-              <th>{{ "Dataset Name" | translate }}</th>
-              <td *ngIf="!editEnabled">{{ dataset.datasetName || "-" }}</td>
-              <td *ngIf="editEnabled && editingAllowed">
-                <mat-form-field class="full-width">
-                  <mat-label>{{ "Dataset Name" | translate }}</mat-label>
-                  <input matInput type="text" formControlName="datasetName" />
-                </mat-form-field>
-              </td>
-            </tr>
-            <tr>
-              <th>{{ "Description" | translate }}</th>
-              <td *ngIf="!editEnabled">
-                <span [innerHTML]="dataset.description || '-' | linky"></span>
-              </td>
-              <td *ngIf="editEnabled && editingAllowed">
-                <mat-form-field class="full-width">
-                  <mat-label>{{ "Description" | translate }}</mat-label>
-                  <textarea
-                    matInput
-                    rows="5"
-                    formControlName="description"
-                  ></textarea>
-                </mat-form-field>
-              </td>
-            </tr>
-            <tr>
-              <th>{{ "Pid" | translate }}</th>
-              <td>
-                {{ dataset.pid }}
-                <button
-                  mat-icon-button
-                  aria-label="copy"
-                  (click)="onCopy(dataset.pid)"
-                >
-                  <mat-icon class="copy-button">content_copy</mat-icon>
-                </button>
-              </td>
-            </tr>
-            <tr *ngIf="dataset.type as value">
-              <th>{{ "Type" | translate }}</th>
-              <td>{{ value }}</td>
-            </tr>
-            <tr *ngIf="dataset.creationTime as value">
-              <th>{{ "Creation time" | translate }}</th>
-              <td>{{ value | date }}</td>
-            </tr>
-            <tr class="keywords-row">
-              <th>{{ "Keywords" | translate }}</th>
-              <td *ngIf="!editEnabled">
-                <mat-chip-set role="list" #keywordChips>
-                  <mat-chip
-                    role="listitem"
-                    *ngFor="let keyword of dataset.keywords"
-                  >
-                    {{ keyword }}
-                  </mat-chip>
-                </mat-chip-set>
-              </td>
-              <td *ngIf="editEnabled && editingAllowed">
-                <mat-form-field class="full-width">
-                  <mat-chip-grid #keywordChips formArrayName="keywords">
-                    <mat-chip-row
-                      *ngFor="let keyword of keywords.value"
-                      [removable]="true"
-                      (removed)="onRemoveKeyword(keyword)"
-                      (click)="onClickKeyword(keyword)"
-                    >
-                      {{ keyword }}
-                      <button matChipRemove>
-                        <mat-icon>cancel</mat-icon>
-                      </button>
-                    </mat-chip-row>
-                    <input
-                      [matChipInputFor]="keywordChips"
-                      [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
-                      [matChipInputAddOnBlur]="true"
-                      (matChipInputTokenEnd)="onAddKeyword($event)"
-                    />
-                  </mat-chip-grid>
-                </mat-form-field>
-              </td>
-            </tr>
-            <tr *ngIf="dataset.sharedWith && dataset.sharedWith.length > 0">
-              <th>{{ "Shared With" | translate }}</th>
-              <td>
-                <mat-chip-listbox>
-                  <mat-chip-option
-                    *ngFor="let share of dataset.sharedWith"
-                    [removable]="true"
-                    (removed)="onRemoveShare(share)"
-                  >
-                    {{ share }}
-                    <button matChipRemove>
-                      <mat-icon>cancel</mat-icon>
-                    </button>
-                  </mat-chip-option>
-                </mat-chip-listbox>
-              </td>
-            </tr>
-          </table>
+          <!-- General Information Section - 2 columns -->
+          <h2>{{ "General Information" | translate }}</h2>
+          <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px">
+            <!-- Left column -->
+            <div fxFlex="50%">
+              <table>
+                <tr>
+                  <th>{{ "Dataset Name" | translate }}</th>
+                  <td>{{ dataset.pid || "-" }}</td>
+                </tr>
+                <tr>
+                  <th>{{ "Description" | translate }}</th>
+                  <td *ngIf="!editEnabled">{{ dataset.datasetName || "-" }}</td>
+                  <td *ngIf="editEnabled && editingAllowed">
+                    <mat-form-field class="full-width">
+                      <mat-label>{{ "Description" | translate }}</mat-label>
+                      <textarea
+                        matInput
+                        rows="5"
+                        formControlName="description"
+                      ></textarea>
+                    </mat-form-field>
+                  </td>
+                </tr>
+                <tr *ngIf="dataset.size as value">
+                  <th>{{ "Dataset Size" | translate }}</th>
+                  <td>{{ value | filesize }}</td>
+                </tr>
+              </table>
+            </div>
+
+            <!-- Right column -->
+            <div fxFlex="50%">
+              <table>
+                <tr class="keywords-row">
+                  <th>{{ "Keywords" | translate }}</th>
+                  <td *ngIf="!editEnabled">
+                    <mat-chip-set role="list" #keywordChips>
+                      <mat-chip
+                        role="listitem"
+                        *ngFor="let keyword of dataset.keywords"
+                      >
+                        {{ keyword }}
+                      </mat-chip>
+                    </mat-chip-set>
+                  </td>
+                  <td *ngIf="editEnabled && editingAllowed">
+                    <mat-form-field class="full-width">
+                      <mat-chip-grid #keywordChips formArrayName="keywords">
+                        <mat-chip-row
+                          *ngFor="let keyword of keywords.value"
+                          [removable]="true"
+                          (removed)="onRemoveKeyword(keyword)"
+                          (click)="onClickKeyword(keyword)"
+                        >
+                          {{ keyword }}
+                          <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                          </button>
+                        </mat-chip-row>
+                        <input
+                          [matChipInputFor]="keywordChips"
+                          [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
+                          [matChipInputAddOnBlur]="true"
+                          (matChipInputTokenEnd)="onAddKeyword($event)"
+                        />
+                      </mat-chip-grid>
+                    </mat-form-field>
+                  </td>
+                </tr>
+                <tr *ngIf="dataset.type as value">
+                  <th>{{ "Type" | translate }}</th>
+                  <td>{{ value }}</td>
+                </tr>
+                <tr *ngIf="dataset.creationTime as value">
+                  <th>{{ "Creation time" | translate }}</th>
+                  <td>{{ value | date }}</td>
+                </tr>
+                <tr *ngIf="dataset.sharedWith && dataset.sharedWith.length > 0">
+                  <th>{{ "Shared With" | translate }}</th>
+                  <td>
+                    <mat-chip-listbox>
+                      <mat-chip-option
+                        *ngFor="let share of dataset.sharedWith"
+                        [removable]="true"
+                        (removed)="onRemoveShare(share)"
+                      >
+                        {{ share }}
+                        <button matChipRemove>
+                          <mat-icon>cancel</mat-icon>
+                        </button>
+                      </mat-chip-option>
+                    </mat-chip-listbox>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <!-- Creator Information Section - 2 columns -->
+          <h2 style="margin-top: 20px">
+            {{ "Creator Information" | translate }}
+          </h2>
+          <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="20px">
+            <!-- Left column -->
+            <div fxFlex="50%">
+              <table>
+                <tr *ngIf="dataset.owner as value">
+                  <th>{{ "Owner" | translate }}</th>
+                  <td>{{ value }}</td>
+                </tr>
+                <tr *ngIf="dataset.orcidOfOwner as value">
+                  <th>{{ "Orcid" | translate }}</th>
+                  <td><span [innerHTML]="value | linky"></span></td>
+                </tr>
+              </table>
+            </div>
+
+            <!-- Right column -->
+            <div fxFlex="50%">
+              <table>
+                <tr *ngIf="dataset.contactEmail as value">
+                  <th>{{ "Local Contact" | translate }}</th>
+                  <td>
+                    {{ value.split("@")[0] }}
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
         </mat-card-content>
+
         <mat-card-actions align="end" *ngIf="editingAllowed">
           <button
             mat-raised-button
@@ -167,44 +212,576 @@
       </mat-card>
 
       <mat-card>
-        <mat-card-header class="creator-header">
+        <mat-card-header class="related-header">
           <div mat-card-avatar class="section-icon">
-            <mat-icon> person </mat-icon>
+            <mat-icon> developer_board </mat-icon>
           </div>
-          {{ "Creator Information" | translate }}
+          {{ "Instrument" | translate }}
         </mat-card-header>
 
         <mat-card-content>
           <table>
-            <tr *ngIf="dataset.owner as value">
-              <th>{{ "Owner" | translate }}</th>
-              <td>{{ value }}</td>
+            <tr
+              *ngIf="
+                dataset['instrumentId'] || dataset['instrumentIds']?.length
+              "
+            >
+              <th>{{ "Name" | translate }}</th>
+              <td>
+                <ng-container *ngIf="dataset['instrumentIds']?.length">
+                  <span
+                    *ngFor="let id of dataset['instrumentIds']; let last = last"
+                  >
+                    <a (click)="onClickInstrument(id)" class="instrument-link">
+                      {{ getInstrumentName(id) }} </a
+                    >{{ !last ? ", " : "" }}
+                  </span>
+                </ng-container>
+              </td>
             </tr>
-            <tr *ngIf="dataset['principalInvestigator'] as value">
-              <th>{{ "Principal Investigator" | translate }}</th>
-              <td><span [innerHTML]="value | linky"></span></td>
-            </tr>
-            <tr *ngIf="dataset['investigator'] as value">
-              <th>{{ "Investigator" | translate }}</th>
-              <td>{{ value }}</td>
-            </tr>
-            <tr *ngIf="dataset.orcidOfOwner as value">
-              <th>{{ "Orcid" | translate }}</th>
-              <td><span [innerHTML]="value | linky"></span></td>
-            </tr>
-            <tr *ngIf="dataset.contactEmail as value">
-              <th>{{ "Contact Email" | translate }}</th>
-              <td><span [innerHTML]="value | linky"></span></td>
-            </tr>
-            <tr *ngIf="dataset.ownerGroup as value">
-              <th>{{ "Owner Group" | translate }}</th>
-              <td>{{ value }}</td>
-            </tr>
-            <tr *ngIf="dataset.accessGroups as value">
-              <th>{{ "Access Groups" | translate }}</th>
-              <td>{{ value }}</td>
-            </tr>
+
+            <!-- Combine instrument properties into the same card but with subtitle -->
+            <ng-container
+              *ngIf="
+                dataset?.scientificMetadata?.[
+                  'instrumentProperties'
+                ] as instrumentPropsObj
+              "
+            >
+              <ng-container
+                *ngFor="
+                  let key of getObjectKeys(instrumentPropsObj.value || {})
+                "
+              >
+                <tr
+                  *ngIf="instrumentPropsObj.value[key] as prop"
+                  class="property-row"
+                >
+                  <!-- For properties with a complete structure -->
+                  <th
+                    *ngIf="
+                      prop.human_name !== undefined || prop.value !== undefined
+                    "
+                  >
+                    {{ prop.human_name || key }}
+                  </th>
+                  <td
+                    *ngIf="
+                      prop.human_name !== undefined || prop.value !== undefined
+                    "
+                  >
+                    {{ formatNumberWithDecimals(prop.value, 3) }}
+                    <span *ngIf="prop.unit">{{ prop.unit }}</span>
+                  </td>
+
+                  <!-- For simple key-value properties -->
+                  <th
+                    *ngIf="
+                      prop.human_name === undefined &&
+                      prop.value === undefined &&
+                      !isObject(prop)
+                    "
+                  >
+                    {{ key }}
+                  </th>
+                  <td
+                    *ngIf="
+                      prop.human_name === undefined &&
+                      prop.value === undefined &&
+                      !isObject(prop)
+                    "
+                  >
+                    {{ prop }}
+                  </td>
+
+                  <!-- For nested objects -->
+                  <th
+                    *ngIf="
+                      prop.human_name === undefined &&
+                      prop.value === undefined &&
+                      isObject(prop)
+                    "
+                  >
+                    {{ key }}
+                  </th>
+                  <td
+                    *ngIf="
+                      prop.human_name === undefined &&
+                      prop.value === undefined &&
+                      isObject(prop)
+                    "
+                  >
+                    {{ prop | json }}
+                  </td>
+                </tr>
+              </ng-container>
+            </ng-container>
           </table>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header class="general-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon>dashboard</mat-icon>
+          </div>
+          {{ "Dataset Overview" | translate }}
+        </mat-card-header>
+        <mat-card-content>
+          <div class="table-container">
+            <!-- Define the shared table template -->
+            <ng-template #tableTemplate let-dataSource="dataSource" let-stickyHeader="stickyHeader">
+              <mat-table [dataSource]="dataSource">
+                <!-- Numor Column -->
+                <ng-container matColumnDef="numor">
+                  <mat-header-cell *matHeaderCellDef class="filter-header-cell">
+                    <div class="header-with-filter">
+                      <span>{{ "Numor" | translate }}</span>
+                      <div class="search-container" (click)="$event.stopPropagation()">
+                        <input 
+                          type="text" 
+                          class="numor-search-input"
+                          placeholder="Search numors..."
+                          [value]="numorSearchTerm"
+                          (input)="onNumorSearch($event)" 
+                          aria-label="Search numors"
+                        />
+                        <div class="search-status" *ngIf="numorSearchTerm">
+                          <span *ngIf="isSearching" class="searching-indicator">
+                            <mat-spinner diameter="16"></mat-spinner>
+                            <span class="searching-text">Searching in background...</span>
+                          </span>
+                          <span *ngIf="!isSearching" class="results-count" [class.no-results]="searchResultCount === 0">
+                            {{ searchResultCount }} {{ searchResultCount === 1 ? 'result' : 'results' }}
+                          </span>
+                        </div>
+                        <button 
+                          *ngIf="numorSearchTerm" 
+                          class="clear-search-button" 
+                          (click)="clearNumorSearch($event)"
+                          [matTooltip]="'Clear search'"
+                          aria-label="Clear search"
+                        >
+                          <mat-icon class="clear-icon">clear</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{ row.numor }}</mat-cell>
+                </ng-container>
+
+                <!-- Measurement Type Column -->
+                <ng-container matColumnDef="measurementType">
+                  <mat-header-cell *matHeaderCellDef class="filter-header-cell">
+                    <div
+                      class="header-with-filter"
+                      [class.filtering]="activeFilters['measurementType']"
+                      (click)="toggleMeasurementTypeFilter($event)"
+                    >
+                      <span>{{ "Measurement Type" | translate }}</span>
+                      <div class="filter-controls">
+                        <mat-icon class="filter-icon">filter_list</mat-icon>
+                      </div>
+
+                      <div
+                        *ngIf="showMeasurementTypeFilter"
+                        class="filter-dropdown"
+                        (click)="$event.stopPropagation()"
+                      >
+                        <div
+                          class="filter-option"
+                          (click)="applyMeasurementTypeFilter(null, $event)"
+                        >
+                          <span
+                            [class.active-filter]="
+                              !activeFilters['measurementType']
+                            "
+                          >
+                            {{ "All" | translate }}
+                          </span>
+                        </div>
+                        <div
+                          class="filter-option"
+                          *ngFor="let type of uniqueMeasurementTypes"
+                          (click)="applyMeasurementTypeFilter(type, $event)"
+                        >
+                          <span
+                            [class.active-filter]="
+                              activeFilters['measurementType'] === type
+                            "
+                          >
+                            {{ type }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{
+                    row.measurementType
+                  }}</mat-cell>
+                </ng-container>
+
+                <!-- Sample Type Column -->
+                <ng-container matColumnDef="sampleType">
+                  <mat-header-cell *matHeaderCellDef class="filter-header-cell">
+                    <div
+                      class="header-with-filter"
+                      [class.filtering]="activeFilters['sampleType']"
+                      (click)="toggleSampleTypeFilter($event)"
+                    >
+                      <span>{{ "Sample Type" | translate }}</span>
+                      <div class="filter-controls">
+                        <mat-icon class="filter-icon">filter_list</mat-icon>
+                      </div>
+
+                      <div
+                        *ngIf="showSampleTypeFilter"
+                        class="filter-dropdown"
+                        (click)="$event.stopPropagation()"
+                      >
+                        <div
+                          class="filter-option"
+                          (click)="applySampleTypeFilter(null, $event)"
+                        >
+                          <span
+                            [class.active-filter]="
+                              !activeFilters['sampleType']
+                            "
+                          >
+                            {{ "All" | translate }}
+                          </span>
+                        </div>
+                        <div
+                          class="filter-option"
+                          *ngFor="let type of uniqueSampleTypes"
+                          (click)="applySampleTypeFilter(type, $event)"
+                        >
+                          <span
+                            [class.active-filter]="
+                              activeFilters['sampleType'] === type
+                            "
+                          >
+                            {{ type }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{
+                    row.sampleType
+                  }}</mat-cell>
+                </ng-container>
+
+                <!-- Sample Subtype Column -->
+                <ng-container matColumnDef="sampleSubtype">
+                  <mat-header-cell *matHeaderCellDef class="filter-header-cell">
+                    <div
+                      class="header-with-filter"
+                      [class.filtering]="activeFilters['sampleSubtype']"
+                      (click)="toggleSampleSubtypeFilter($event)"
+                    >
+                      <span>{{ "Sample Subtype" | translate }}</span>
+                      <div class="filter-controls">
+                        <mat-icon class="filter-icon">filter_list</mat-icon>
+                      </div>
+
+                      <div
+                        *ngIf="showSampleSubtypeFilter"
+                        class="filter-dropdown"
+                        (click)="$event.stopPropagation()"
+                      >
+                        <div
+                          class="filter-option"
+                          (click)="applySampleSubtypeFilter(null, $event)"
+                        >
+                          <span
+                            [class.active-filter]="
+                              !activeFilters['sampleSubtype']
+                            "
+                          >
+                            {{ "All" | translate }}
+                          </span>
+                        </div>
+                        <div
+                          class="filter-option"
+                          *ngFor="let subtype of uniqueSampleSubtypes"
+                          (click)="applySampleSubtypeFilter(subtype, $event)"
+                        >
+                          <span
+                            [class.active-filter]="
+                              activeFilters['sampleSubtype'] === subtype
+                            "
+                          >
+                            {{ subtype || "-" }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row">{{
+                    row.sampleSubtype || "-"
+                  }}</mat-cell>
+                </ng-container>
+
+                <!-- Duration Column -->
+                <ng-container matColumnDef="time">
+                  <mat-header-cell *matHeaderCellDef>{{
+                    "Duration" | translate
+                  }}</mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    {{ formatNumberWithDecimals(row.time, 0) }}
+                    {{ row.timeUnit }}
+                  </mat-cell>
+                </ng-container>
+
+                <!-- Loading indicator for virtual scroll -->
+                <ng-container matColumnDef="loading">
+                  <mat-footer-cell *matFooterCellDef colspan="5">
+                    <div *ngIf="isLoadingMore" class="loading-indicator">
+                      <span class="loading-text">Loading...</span>
+                    </div>
+                  </mat-footer-cell>
+                </ng-container>
+
+                <mat-header-row
+                  *matHeaderRowDef="displayedColumns; sticky: stickyHeader"
+                ></mat-header-row>
+                <mat-row
+                  *matRowDef="let row; columns: displayedColumns"
+                  (click)="openHDF5Viewer('https://myhdf5.hdfgroup.org/', row)"
+                  style="cursor: pointer"
+                >
+                </mat-row>
+                <mat-footer-row
+                  *matFooterRowDef="['loading']"
+                  [style.display]="isLoadingMore ? '' : 'none'"
+                ></mat-footer-row>
+              </mat-table>
+            </ng-template>
+
+            <!-- Apply conditional rendering based on number of rows -->
+            <ng-container *ngIf="sampleRows.length < 20; else virtualScroll">
+              <!-- Standard table for small datasets -->
+              <ng-container *ngTemplateOutlet="tableTemplate; context: { dataSource: filteredSampleRows, stickyHeader: false }"></ng-container>
+            </ng-container>
+
+            <!-- Virtual scrolling for large datasets -->
+            <ng-template #virtualScroll>
+              <cdk-virtual-scroll-viewport
+                class="virtual-scroll-viewport"
+                itemSize="48"
+                (scroll)="onVirtualScroll($event)"
+              >
+                <ng-container *ngTemplateOutlet="tableTemplate; context: { dataSource: filteredSampleRows, stickyHeader: true }"></ng-container>
+              </cdk-virtual-scroll-viewport>
+            </ng-template>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Sample Environment Card -->
+      <mat-card>
+        <mat-card-header class="scientific-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> science </mat-icon>
+          </div>
+          {{ "Sample Environment" | translate }}
+        </mat-card-header>
+        <mat-card-content>
+          <ng-container
+            *ngIf="
+              dataset?.scientificMetadata &&
+              (dataset?.scientificMetadata['sampleEnvType'] ||
+                dataset?.scientificMetadata['sampleHolderType'] ||
+                dataset?.scientificMetadata['sampleProperties']?.value?.[
+                  'additional_environment'
+                ])
+            "
+          >
+            <table>
+              <tr
+                *ngIf="
+                  dataset?.scientificMetadata['sampleEnvType'] as sampleEnv
+                "
+              >
+                <th>{{ "Environment Type" | translate }}</th>
+                <td>
+                  <span *ngIf="sampleEnv.value !== undefined">
+                    {{ sampleEnv.value }}
+                    <span *ngIf="sampleEnv.unit"> {{ sampleEnv.unit }}</span>
+                  </span>
+                  <span *ngIf="sampleEnv.value === undefined">
+                    {{ sampleEnv | json }}
+                  </span>
+                </td>
+              </tr>
+
+              <tr
+                *ngIf="
+                  dataset?.scientificMetadata[
+                    'sampleHolderType'
+                  ] as sampleHolder
+                "
+              >
+                <th>{{ "Sample Holder Type" | translate }}</th>
+                <td>
+                  <span *ngIf="sampleHolder.value !== undefined">
+                    {{ sampleHolder.value }}
+                    <span *ngIf="sampleHolder.unit">
+                      {{ sampleHolder.unit }}</span
+                    >
+                  </span>
+                  <span *ngIf="sampleHolder.value === undefined">
+                    {{ sampleHolder | json }}
+                  </span>
+                </td>
+              </tr>
+
+              <tr
+                *ngIf="
+                  dataset?.scientificMetadata['sampleProperties']?.value?.[
+                    'additional_environment'
+                  ]
+                "
+              >
+                <th>{{ "Additional Environment" | translate }}</th>
+                <td>
+                  {{
+                    getObjectKeys(
+                      dataset.scientificMetadata["sampleProperties"].value[
+                        "additional_environment"
+                      ]
+                    ).join(", ")
+                  }}
+                </td>
+              </tr>
+            </table>
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Sample Properties Card -->
+      <mat-card *ngIf="dataset?.scientificMetadata?.['sampleProperties']">
+        <mat-card-header class="creator-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> science </mat-icon>
+          </div>
+          {{ "Sample Properties" | translate }}
+        </mat-card-header>
+        <mat-card-content>
+          <table>
+            <ng-container
+              *ngIf="
+                dataset?.scientificMetadata?.['sampleProperties']
+                  ?.value as sampleProps
+              "
+            >
+              <ng-container *ngFor="let key of getObjectKeys(sampleProps)">
+                <tr
+                  *ngIf="
+                    sampleProps[key] !== ' ' &&
+                    sampleProps[key]?.value !== 0 &&
+                    key !== 'additional_environment' &&
+                    key !== 'sampleId' &&
+                    !(
+                      sampleProps[key]?.value !== undefined &&
+                      sampleProps[key]?.value.toString().trim() === ''
+                    )
+                  "
+                  class="property-row"
+                >
+                  <th>{{ key }}</th>
+
+                  <td>
+                    <ng-container
+                      *ngIf="
+                        sampleProps[key]?.value !== undefined;
+                        else simpleValue
+                      "
+                    >
+                      {{ formatNumberWithDecimals(sampleProps[key].value, 3) }}
+                      <span *ngIf="sampleProps[key].unit">
+                        {{ sampleProps[key].unit }}</span
+                      >
+                    </ng-container>
+                    <ng-template #simpleValue>
+                      {{ formatNumberWithDecimals(sampleProps[key], 3) }}
+                    </ng-template>
+                  </td>
+                </tr>
+              </ng-container>
+            </ng-container>
+          </table>
+        </mat-card-content>
+      </mat-card>
+
+      <!--mat-card>
+        <mat-card-header class="scientific-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> science </mat-icon>
+          </div>
+          {{ "Scientific Metadata" | translate }}
+        </mat-card-header>
+        <mat-card-content>
+          <ng-template
+            [ngIf]="appConfig.tableSciDataEnabled"
+            [ngIfElse]="jsonView"
+          >
+            <ng-template #metadataView>
+              <div [ngSwitch]="appConfig.metadataStructure">
+                <tree-view
+                  *ngSwitchCase="'tree'"
+                  [metadata]="dataset['scientificMetadata']"
+                ></tree-view>
+                <metadata-view
+                  *ngSwitchDefault
+                  [metadata]="dataset['scientificMetadata']"
+                >
+                </metadata-view>
+              </div>
+            </ng-template>
+            <mat-tab-group
+              class="metadataGroup"
+              *ngIf="editingAllowed; else metadataView"
+            >
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <mat-icon> list </mat-icon> View
+                </ng-template>
+                <ng-container *ngTemplateOutlet="metadataView"> </ng-container>
+              </mat-tab>
+              <mat-tab
+                class="editTab"
+                *ngIf="editingAllowed"
+                [hidden]="!appConfig.editMetadataEnabled"
+              >
+                <ng-template mat-tab-label>
+                  <mat-icon> edit </mat-icon> Edit
+                </ng-template>
+                <div [ngSwitch]="appConfig.metadataStructure">
+                  <tree-edit
+                    *ngSwitchCase="'tree'"
+                    [metadata]="dataset['scientificMetadata']"
+                    (save)="onSaveMetadata($event)"
+                  >
+                  </tree-edit>
+                  <metadata-edit
+                    *ngSwitchDefault
+                    [metadata]="dataset['scientificMetadata']"
+                    (save)="onSaveMetadata($event)"
+                  >
+                  </metadata-edit>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </ng-template>
+
+          <ng-template #jsonView>
+            <ngx-json-viewer
+              [json]="dataset['scientificMetadata']"
+              [expanded]="false"
+            ></ngx-json-viewer>
+          </ng-template>
         </mat-card-content>
       </mat-card>
 
@@ -442,7 +1019,7 @@
             </ngx-json-viewer>
           </div>
         </mat-card-content>
-      </mat-card>
+      </mat-card-->
     </div>
 
     <div
