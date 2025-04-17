@@ -21,6 +21,8 @@ export interface UserState {
   isLoggingIn: boolean;
   isLoggedIn: boolean;
 
+  hasFetchedSettings: boolean;
+
   isLoading: boolean;
 
   columns: TableColumn[];
@@ -58,6 +60,8 @@ export const initialUserState: UserState = {
   isLoggedIn: false,
 
   isLoading: false,
+
+  hasFetchedSettings: false,
 
   columns: [],
 

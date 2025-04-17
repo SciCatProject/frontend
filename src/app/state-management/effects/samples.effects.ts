@@ -53,10 +53,10 @@ export class SampleEffects {
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query }) =>
-        this.sampleApi.samplesControllerFullquery(query).pipe(
-          map((samples) =>
+        this.sampleApi.samplesControllerCount(query).pipe(
+          map(({ count }) =>
             fromActions.fetchSamplesCountCompleteAction({
-              count: samples.length,
+              count,
             }),
           ),
           catchError(() => of(fromActions.fetchSamplesCountFailedAction())),

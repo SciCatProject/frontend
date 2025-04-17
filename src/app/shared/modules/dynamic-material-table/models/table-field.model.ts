@@ -73,8 +73,8 @@ export interface AbstractField {
   toString?: (column: TableField<any>, row: TableRow) => string;
   customSort?: (column: TableField<any>, row: any) => string;
   customRender?: (column: TableField<any>, row: any) => string;
-  renderContentIcon?: (column: TableField<any>, row: any) => boolean;
-  contentIcon?: string;
+  renderImage?: boolean;
+  renderContentIcon?: (column: TableField<any>, row: any) => string;
   contentIconTooltip?: string;
   contentIconClass?: string;
   contentIconLink?: (column: TableField<any>, row: any) => string;
