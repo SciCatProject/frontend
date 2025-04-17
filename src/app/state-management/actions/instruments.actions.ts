@@ -3,6 +3,13 @@ import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
 
 export const fetchInstrumentsAction = createAction(
   "[Instrument] Fetch Instruments",
+  props<{
+    skip?: number;
+    limit?: number;
+    search?: string;
+    sortDirection?: string;
+    sortColumn?: string;
+  }>(),
 );
 export const fetchInstrumentsCompleteAction = createAction(
   "[Instrument] Fetch Instruments Complete",
@@ -43,16 +50,6 @@ export const saveCustomMetadataCompleteAction = createAction(
 );
 export const saveCustomMetadataFailedAction = createAction(
   "[Instrument] Save Custom Metadata Failed",
-);
-
-export const changePageAction = createAction(
-  "[Instrument] Change Page",
-  props<{ page: number; limit: number }>(),
-);
-
-export const sortByColumnAction = createAction(
-  "[Instrument] Sort By Column",
-  props<{ column: string; direction: string }>(),
 );
 
 export const clearInstrumentsStateAction = createAction(
