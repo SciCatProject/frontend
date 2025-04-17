@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { IngestorComponent } from "./ingestor/ingestor.component";
+import { IngestorComponent } from "./ingestor-page/ingestor.component";
 import { MatCardModule } from "@angular/material/card";
 import { RouterModule } from "@angular/router";
 import { IngestorMetadataEditorComponent } from "./ingestor-metadata-editor/ingestor-metadata-editor.component";
@@ -17,24 +17,24 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatSelectModule } from "@angular/material/select";
 import { MatOptionModule } from "@angular/material/core";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
-import { IngestorNewTransferDialogComponent } from "./ingestor/dialog/ingestor.new-transfer-dialog.component";
-import { IngestorUserMetadataDialogComponent } from "./ingestor/dialog/ingestor.user-metadata-dialog.component";
+import { IngestorNewTransferDialogComponent } from "./ingestor-dialogs/creation-dialog/ingestor.new-transfer-dialog.component";
+import { IngestorUserMetadataDialogComponent } from "./ingestor-dialogs/creation-dialog/ingestor.user-metadata-dialog.component";
 import { JsonFormsModule } from "@jsonforms/angular";
 import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
-import { IngestorExtractorMetadataDialogComponent } from "./ingestor/dialog/ingestor.extractor-metadata-dialog.component";
-import { IngestorConfirmTransferDialogComponent } from "./ingestor/dialog/ingestor.confirm-transfer-dialog.component";
+import { IngestorExtractorMetadataDialogComponent } from "./ingestor-dialogs/creation-dialog/ingestor.extractor-metadata-dialog.component";
+import { IngestorConfirmTransferDialogComponent } from "./ingestor-dialogs/creation-dialog/ingestor.confirm-transfer-dialog.component";
 import { MatStepperModule } from "@angular/material/stepper";
-import { IngestorDialogStepperComponent } from "./ingestor/dialog/dialog-mounting-components/ingestor.dialog-stepper.component";
+import { IngestorDialogStepperComponent } from "./ingestor-dialogs/dialog-mounting-components/ingestor.dialog-stepper.component";
 import { AnyOfRendererComponent } from "./ingestor-metadata-editor/customRenderer/any-of-renderer";
 import { MatRadioModule } from "@angular/material/radio";
 import { ArrayLayoutRendererCustom } from "./ingestor-metadata-editor/customRenderer/array-renderer";
 import { MatBadgeModule } from "@angular/material/badge";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { IngestorConfirmationDialogComponent } from "./ingestor/dialog/confirmation-dialog/ingestor.confirmation-dialog.component";
-import { ExportTemplateHelperComponent } from "./ingestor/dialog/dialog-mounting-components/ingestor.export-helper.component";
+import { IngestorConfirmationDialogComponent } from "./ingestor-dialogs/confirmation-dialog/ingestor.confirmation-dialog.component";
+import { ExportTemplateHelperComponent } from "./ingestor-dialogs/dialog-mounting-components/ingestor.export-helper.component";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { CustomObjectControlRendererComponent } from "./ingestor-metadata-editor/customRenderer/object-group-renderer";
-import { IngestorFileBrowserComponent } from "./ingestor-file-browser/ingestor.file-browser.component";
+import { IngestorFileBrowserComponent } from "./ingestor-dialogs/ingestor-file-browser/ingestor.file-browser.component";
 import { MatTreeModule } from "@angular/material/tree";
 import { OwnerGroupFieldComponent } from "./ingestor-metadata-editor/customRenderer/owner-group-field-renderer";
 import { QuantityValueObjectComponent } from "./ingestor-metadata-editor/customRenderer/quantity-value-renderer";
@@ -43,6 +43,10 @@ import {
   QuantityValueLayoutRendererComponent,
 } from "./ingestor-metadata-editor/customRenderer/quantity-value-layout-renderer";
 import { MatMenuModule } from "@angular/material/menu";
+import { EffectsModule } from "@ngrx/effects";
+import { IngestorEffects } from "state-management/effects/ingestor.effect";
+import { StoreModule } from "@ngrx/store";
+import { ingestorReducer } from "state-management/reducers/ingestor.reducer";
 
 @NgModule({
   declarations: [
@@ -91,6 +95,8 @@ import { MatMenuModule } from "@angular/material/menu";
     CommonModule,
     MatPaginatorModule,
     MatMenuModule,
+    EffectsModule.forFeature([IngestorEffects]),
+    StoreModule.forFeature("ingestor", ingestorReducer),
   ],
 })
 export class IngestorModule {}

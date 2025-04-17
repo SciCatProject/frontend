@@ -2,11 +2,11 @@ import { Component, inject, OnInit } from "@angular/core";
 import { HttpParams } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import { INGESTOR_API_ENDPOINTS_V1 } from "./helper/ingestor-api-endpoints";
-import { IngestorNewTransferDialogComponent } from "./dialog/ingestor.new-transfer-dialog.component";
+import { IngestorNewTransferDialogComponent } from "../ingestor-dialogs/creation-dialog/ingestor.new-transfer-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
-import { IngestorUserMetadataDialogComponent } from "./dialog/ingestor.user-metadata-dialog.component";
-import { IngestorExtractorMetadataDialogComponent } from "./dialog/ingestor.extractor-metadata-dialog.component";
-import { IngestorConfirmTransferDialogComponent } from "./dialog/ingestor.confirm-transfer-dialog.component";
+import { IngestorUserMetadataDialogComponent } from "../ingestor-dialogs/creation-dialog/ingestor.user-metadata-dialog.component";
+import { IngestorExtractorMetadataDialogComponent } from "../ingestor-dialogs/creation-dialog/ingestor.extractor-metadata-dialog.component";
+import { IngestorConfirmTransferDialogComponent } from "../ingestor-dialogs/creation-dialog/ingestor.confirm-transfer-dialog.component";
 import {
   IngestionRequestInformation,
   IngestorHelper,
@@ -21,7 +21,7 @@ import {
   PostDatasetRequest,
   GetTransferResponse,
   TransferItem,
-} from "ingestor/model/models";
+} from "shared/sdk/models/ingestor/models";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { Store } from "@ngrx/store";
 import {
@@ -32,6 +32,11 @@ import {
   fetchCurrentUserAction,
   fetchScicatTokenAction,
 } from "state-management/actions/user.actions";
+import * as fromActions from "state-management/actions/ingestor.actions";
+import {
+  selectIngestorStatus,
+  selectIngestorAuth,
+} from "state-management/selectors/ingestor.selector";
 
 @Component({
   selector: "ingestor",
@@ -43,6 +48,10 @@ export class IngestorComponent implements OnInit {
 
   vm$ = this.store.select(selectUserSettingsPageViewModel);
   sciCatLoggedIn$ = this.store.select(selectIsLoggedIn);
+
+  ingestorStatus$ = this.store.select(selectIngestorStatus);
+  ingestorAuthInfo$ = this.store.select(selectIngestorAuth);
+
   ingestorInitialized = false;
   tokenValue: string;
 
@@ -70,7 +79,7 @@ export class IngestorComponent implements OnInit {
   ];
 
   versionInfo: OtherVersionResponse = null;
-  userInfo: UserInfo = null;
+  userInfo: UserInfo | null = null;
   scicatUserProfile: any = null;
   authIsDisabled = false;
   healthInfo: OtherHealthResponse = null;
@@ -138,6 +147,7 @@ export class IngestorComponent implements OnInit {
   async initializeIngestorConnection(
     facilityBackendUrl: string,
   ): Promise<boolean> {
+    let returnValue = true;
     this.connectingToFacilityBackend = true;
     let facilityBackendUrlCleaned = facilityBackendUrl.slice();
     // Check if last symbol is a slash and add version endpoint
@@ -149,42 +159,36 @@ export class IngestorComponent implements OnInit {
 
     this.connectedFacilityBackend = facilityBackendUrlCleaned;
 
-    // Try to connect - get ingestor version
-    try {
-      this.versionInfo = await this.apiManager.getVersion();
-    } catch (error) {
-      this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
-      this.connectedFacilityBackend = "";
-      this.connectingToFacilityBackend = false;
-      this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
-      return false;
-    }
-
-    // If connected, get User Info
-    try {
-      this.userInfo = await this.apiManager.getUserInfo();
-    } catch (error) {
-      if (String(error.error).includes("disabled")) {
-        this.authIsDisabled = true;
-      } else {
-        this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+    this.store.dispatch(fromActions.connectIngestor());
+    this.ingestorStatus$.subscribe((ingestorStatus) => {
+      if (!ingestorStatus.validEndpoint) {
+        this.connectedFacilityBackend = "";
+        this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
+        returnValue = false;
+      } else if (
+        ingestorStatus.versionResponse &&
+        ingestorStatus.healthResponse
+      ) {
+        this.versionInfo = ingestorStatus.versionResponse;
+        this.healthInfo = ingestorStatus.healthResponse;
       }
-    }
+    });
+
+    this.ingestorAuthInfo$.subscribe((authInfo) => {
+      if (authInfo) {
+        this.userInfo = authInfo.userInfoResponse;
+        this.authIsDisabled = authInfo.authIsDisabled;
+        console.log(this.userInfo);
+      }
+    });
 
     // Only refresh if the user is logged in or the auth is disabled
     if (this.authIsDisabled || this.userInfo.logged_in) {
       this.doRefreshTransferList();
     }
 
-    // Get health state
-    try {
-      this.healthInfo = await this.apiManager.getHealth();
-    } catch (error) {
-      this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
-    }
-
     this.connectingToFacilityBackend = false;
-    return true;
+    return returnValue;
   }
 
   async ingestDataset(): Promise<boolean> {

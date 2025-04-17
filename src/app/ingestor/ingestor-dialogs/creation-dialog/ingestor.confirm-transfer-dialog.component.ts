@@ -5,13 +5,13 @@ import {
   IngestionRequestInformation,
   IngestorHelper,
   SciCatHeader,
-} from "../helper/ingestor.component-helper";
-import { IngestorConfirmationDialogComponent } from "./confirmation-dialog/ingestor.confirmation-dialog.component";
+} from "../../ingestor-page/helper/ingestor.component-helper";
+import { IngestorConfirmationDialogComponent } from "../confirmation-dialog/ingestor.confirmation-dialog.component";
 
 @Component({
   selector: "ingestor.confirm-transfer-dialog",
   templateUrl: "ingestor.confirm-transfer-dialog.html",
-  styleUrls: ["../ingestor.component.scss"],
+  styleUrls: ["../../ingestor-page/ingestor.component.scss"],
 })
 export class IngestorConfirmTransferDialogComponent implements OnInit {
   createNewTransferData: IngestionRequestInformation =

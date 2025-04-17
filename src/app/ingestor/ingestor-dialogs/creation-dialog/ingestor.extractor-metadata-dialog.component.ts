@@ -5,13 +5,13 @@ import {
   DialogDataObject,
   IngestionRequestInformation,
   IngestorHelper,
-} from "../helper/ingestor.component-helper";
+} from "../../ingestor-page/helper/ingestor.component-helper";
 import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 
 @Component({
   selector: "ingestor.extractor-metadata-dialog",
   templateUrl: "ingestor.extractor-metadata-dialog.html",
-  styleUrls: ["../ingestor.component.scss"],
+  styleUrls: ["../../ingestor-page/ingestor.component.scss"],
 })
 export class IngestorExtractorMetadataDialogComponent {
   metadataSchemaInstrument: JsonSchema;

@@ -10,7 +10,7 @@ import { MatDialog } from "@angular/material/dialog";
 import {
   IngestionRequestInformation,
   SciCatHeader,
-} from "../../helper/ingestor.component-helper";
+} from "../../ingestor-page/helper/ingestor.component-helper";
 import { IngestorConfirmationDialogComponent } from "../confirmation-dialog/ingestor.confirmation-dialog.component";
 import {
   ExportOptions,

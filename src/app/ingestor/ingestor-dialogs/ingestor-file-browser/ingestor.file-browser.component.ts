@@ -1,13 +1,13 @@
 import { ChangeDetectorRef, Component, Inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
-import { IngestorAPIManager } from "ingestor/ingestor/helper/ingestor-api-manager";
+import { IngestorAPIManager } from "ingestor/ingestor-page/helper/ingestor-api-manager";
 import {
   IngestionRequestInformation,
   IngestorHelper,
   DialogDataObject,
-} from "ingestor/ingestor/helper/ingestor.component-helper";
-import { FolderNode } from "ingestor/model/folderNode";
-import { GetBrowseDatasetResponse } from "ingestor/model/models";
+} from "ingestor/ingestor-page/helper/ingestor.component-helper";
+import { FolderNode } from "shared/sdk/models/ingestor/folderNode";
+import { GetBrowseDatasetResponse } from "shared/sdk/models/ingestor/models";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 
 export interface BrowsableNode extends FolderNode {
@@ -24,7 +24,7 @@ export interface GoBackNode extends FolderNode {
 @Component({
   selector: "ingestor.file-browser.component",
   templateUrl: "ingestor.file-browser.component.html",
-  styleUrls: ["../ingestor/ingestor.component.scss"],
+  styleUrls: ["../../ingestor-page/ingestor.component.scss"],
 })
 export class IngestorFileBrowserComponent implements OnInit {
   private _activeNode: BrowsableNode | null = null;

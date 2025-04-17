@@ -12,7 +12,7 @@ import {
   OtherVersionResponse,
   PostDatasetRequest,
   UserInfo,
-} from "ingestor/model/models";
+} from "shared/sdk/models/ingestor/models";
 
 @Injectable({
   providedIn: "root",

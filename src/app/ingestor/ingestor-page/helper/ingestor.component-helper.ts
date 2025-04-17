@@ -1,5 +1,5 @@
 import { JsonSchema } from "@jsonforms/core";
-import { UserInfo } from "ingestor/model/userInfo";
+import { UserInfo } from "shared/sdk/models/ingestor/userInfo";
 
 export interface ExtractionMethod {
   name: string;

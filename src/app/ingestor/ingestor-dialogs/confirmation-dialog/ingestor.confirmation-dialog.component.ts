@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 @Component({
   selector: "app-ingestor-confirmation-dialog",
   templateUrl: "./ingestor.confirmation-dialog.html",
-  styleUrls: ["../../ingestor.component.scss"],
+  styleUrls: ["../../ingestor-page/ingestor.component.scss"],
 })
 export class IngestorConfirmationDialogComponent {
   constructor(
