@@ -92,7 +92,6 @@ import { userReducer } from "state-management/reducers/user.reducer";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
-import { DatasetDynamicTableComponent } from "./dataset-table/dataset-dynamic-table.component";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
 @NgModule({
@@ -168,7 +167,6 @@ import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
     DatasetDetailComponent,
     DatasetDetailDynamicComponent,
     DatasetTableComponent,
-    DatasetDynamicTableComponent,
     DatasetsFilterComponent,
     PublishComponent,
     ReduceComponent,
