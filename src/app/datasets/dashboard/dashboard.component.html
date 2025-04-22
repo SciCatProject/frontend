@@ -35,11 +35,11 @@
           ></dataset-table-actions>
         </ng-template>
 
-        <dataset-dynamic-table
+        <dataset-table
           [selectedSets]="selectedSets$ | async"
           (rowClick)="onRowClick($event)"
           (pageChange)="onPageChange($event)"
-        ></dataset-dynamic-table>
+        ></dataset-table>
       </div>
     </div>
   </mat-sidenav-content>
