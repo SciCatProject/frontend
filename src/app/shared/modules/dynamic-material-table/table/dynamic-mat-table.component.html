@@ -44,7 +44,8 @@
         <mat-checkbox
           (click)="$event.stopPropagation()"
           (change)="onRowSelectionChange($event, row)"
-          [checked]="rowSelectionModel?.isSelected(row)"
+          [checked]="rowSelectionModel?.isSelected(row) || isInSelection(row)"
+          [disabled]="isInSelection(row)"
         >
         </mat-checkbox>
       </mat-cell>
@@ -129,7 +130,7 @@
         [ngStyle]="cellStyle(row?.option, column)"
         (contextmenu)="onContextMenu($event, column, row)"
       >
-      <!-- The render image is specific for the dataset table as the "thumbnail" pipe is designed to work only with datasets. Maybe this should be reviewed later and have a more general solution where we render images in columns -->
+        <!-- The render image is specific for the dataset table as the "thumbnail" pipe is designed to work only with datasets. Maybe this should be reviewed later and have a more general solution where we render images in columns -->
         <ng-container *ngIf="column.renderImage; else renderColumn">
           <img
             src="{{ row.pid | thumbnail | async }}"

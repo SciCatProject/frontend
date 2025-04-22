@@ -72,6 +72,7 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() showGlobalTextSearch = true;
   @Input() globalTextSearch = "";
   @Input() globalTextSearchPlaceholder = "Search";
+  @Input() selectionIds = [];
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onTableEvent: EventEmitter<ITableEvent> = new EventEmitter();
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
@@ -468,5 +469,11 @@ export class TableCoreDirective<T extends TableRow> {
         },
       });
     }
+  }
+
+  isInSelection(row: T) {
+    const id = row._id || row.pid;
+
+    return this.selectionIds.indexOf(id) !== -1;
   }
 }

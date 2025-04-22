@@ -74,8 +74,8 @@ export interface SortChangeEvent {
   encapsulation: ViewEncapsulation.None,
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
-  private inBatchPids: string[] = [];
   private subscriptions: Subscription[] = [];
+  selectionIds: string[] = [];
 
   appConfig = this.appConfigService.getConfig();
 
@@ -85,7 +85,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   datasetCount$ = this.store.select(selectTotalSets);
   currentUser$ = this.store.select(selectCurrentUser);
   datasets$ = this.store.select(selectDatasets);
-  datasetsInBatch$ = this.store.select(selectDatasetsInBatch);
+  selectedDatasets$ = this.store.select(selectDatasetsInBatch);
   selectColumnsWithFetchedSettings$ = this.store.select(
     selectColumnsWithHasFetchedSettings,
   );
@@ -435,8 +435,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriptions.push(
-      this.datasetsInBatch$.subscribe((datasets) => {
-        this.inBatchPids = datasets.map((dataset) => {
+      this.selectedDatasets$.subscribe((datasets) => {
+        // NOTE: In the selectionIds we are storing either _id or pid. Dynamic material table works only with these two.
+        this.selectionIds = datasets.map((dataset) => {
           return dataset.pid;
         });
       }),
