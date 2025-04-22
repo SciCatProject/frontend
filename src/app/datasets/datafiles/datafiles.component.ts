@@ -316,7 +316,7 @@ export class DatafilesComponent
             },
           ],
         };
-        this.store.dispatch(submitJobAction({ job: data as any }));
+        this.store.dispatch(submitJobAction({ job: data }));
       }
     });
   }

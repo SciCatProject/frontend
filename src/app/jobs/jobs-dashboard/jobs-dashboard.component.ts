@@ -91,7 +91,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  formatTableData(jobs: any[]): JobsTableData[] {
+  formatTableData(jobs: JobClass[]): JobsTableData[] {
     let tableData: JobsTableData[] = [];
     if (jobs) {
       tableData = jobs.map((job) => ({
