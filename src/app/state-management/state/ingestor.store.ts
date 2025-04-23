@@ -1,4 +1,5 @@
 import {
+  GetTransferResponse,
   OtherHealthResponse,
   OtherVersionResponse,
   UserInfo,
@@ -18,6 +19,9 @@ interface IngestorStatus {
 export interface IngestorState {
   ingestorStatus: IngestorStatus;
   ingestorAuth: IngestorAuthentication | null;
+  ingestorEndpoint: string | null;
+  ingestorTransferList: GetTransferResponse | null;
+  connectingBackend: boolean;
   error: any | null;
 }
 export const initialIngestorState: IngestorState = {
@@ -27,5 +31,8 @@ export const initialIngestorState: IngestorState = {
     validEndpoint: true,
   },
   ingestorAuth: null,
+  ingestorEndpoint: null,
+  ingestorTransferList: null,
+  connectingBackend: false,
   error: null,
 };

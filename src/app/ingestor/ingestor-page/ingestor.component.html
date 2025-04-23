@@ -163,12 +163,12 @@
                   </mat-list-item>
                   <mat-list-item>
                     <span matListItemTitle>Version</span>
-                    <span matListItemLine>{{ versionInfo.version ?? ""
+                    <span matListItemLine>{{ versionInfo ? versionInfo.version ?? "" : ""
                       }}</span>
                   </mat-list-item>
                   <mat-list-item>
                     <span matListItemTitle>Health Status</span>
-                    <span matListItemLine>{{ healthInfo.status }}</span>
+                    <span matListItemLine>{{ healthInfo ? healthInfo.status ?? "" : "" }}</span>
                   </mat-list-item>
                 </mat-list>
               </mat-tab>
@@ -191,23 +191,6 @@
           (click)="onClickAddIngestion()">
           <mat-icon>add</mat-icon>
         </button>
-      </mat-card-content>
-    </mat-card>
-  </p>
-
-  <p *ngIf="errorMessage !== ''">
-    <mat-card class="ingestor-card">
-      <mat-card-header class="ingestor-mixed-header">
-        <mat-card-title>Error message</mat-card-title>
-        <button mat-icon-button class="ingestor-close-button"
-          (click)="clearErrorMessage()">
-          <mat-icon>close</mat-icon>
-        </button>
-      </mat-card-header>
-      <mat-card-content class="ingestor-vertical-layout">
-        <div>
-          <p style="color: red" [innerHTML]="errorMessage"></p>
-        </div>
       </mat-card-content>
     </mat-card>
   </p>

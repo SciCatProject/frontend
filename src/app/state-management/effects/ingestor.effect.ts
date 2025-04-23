@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { of } from "rxjs";
-import { catchError, map, switchMap } from "rxjs/operators";
+import { catchError, map, switchMap, finalize } from "rxjs/operators"; // Import finalize
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Ingestor } from "shared/sdk/apis/ingestor.service";
 import {
@@ -18,47 +18,58 @@ export class IngestorEffects {
   connectToIngestor$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.connectIngestor),
-      switchMap(() => {
-        return this.ingestor.getVersion().pipe(
-          switchMap((versionResponse) =>
-            this.ingestor.getHealth().pipe(
-              switchMap((healthResponse) =>
-                this.ingestor.getUserInfo().pipe(
-                  map((userInfoResponse) =>
-                    fromActions.connectIngestorSuccess({
-                      versionResponse: versionResponse as OtherVersionResponse,
-                      healthResponse: healthResponse as OtherHealthResponse,
-                      userInfoResponse: userInfoResponse as UserInfo,
-                      authIsDisabled: false,
-                    }),
-                  ),
-                  catchError((err) => {
-                    const errorMessage =
-                      err instanceof HttpErrorResponse
-                        ? (err.error?.message ?? err.error ?? err.message)
-                        : err.message;
-
-                    if (errorMessage.includes("disabled")) {
-                      return of(
+      switchMap(() =>
+        of(fromActions.startConnectingIngestor()).pipe(
+          switchMap(() => {
+            return this.ingestor.getVersion().pipe(
+              switchMap((versionResponse) =>
+                this.ingestor.getHealth().pipe(
+                  switchMap((healthResponse) =>
+                    this.ingestor.getUserInfo().pipe(
+                      map((userInfoResponse) =>
                         fromActions.connectIngestorSuccess({
                           versionResponse:
                             versionResponse as OtherVersionResponse,
                           healthResponse: healthResponse as OtherHealthResponse,
-                          userInfoResponse: null, // Kein UserInfo verfügbar
-                          authIsDisabled: true,
+                          userInfoResponse: userInfoResponse as UserInfo,
+                          authIsDisabled: false,
                         }),
-                      );
-                    }
+                      ),
+                      catchError((err) => {
+                        const errorMessage =
+                          err instanceof HttpErrorResponse
+                            ? (err.error?.message ?? err.error ?? err.message)
+                            : err.message;
 
-                    return of(fromActions.connectIngestorFailure({ err }));
-                  }),
+                        if (errorMessage.includes("disabled")) {
+                          return of(
+                            fromActions.connectIngestorSuccess({
+                              versionResponse:
+                                versionResponse as OtherVersionResponse,
+                              healthResponse:
+                                healthResponse as OtherHealthResponse,
+                              userInfoResponse: null, // Kein UserInfo verfügbar
+                              authIsDisabled: true,
+                            }),
+                          );
+                        }
+                        return of(fromActions.connectIngestorFailure({ err }));
+                      }),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          catchError((err) => of(fromActions.connectIngestorFailure({ err }))),
-        );
-      }),
+              catchError((err) =>
+                of(fromActions.connectIngestorFailure({ err })),
+              ),
+              finalize(() => {
+                // Dispatch stopConnectingIngestor after the process is complete
+                of(fromActions.stopConnectingIngestor());
+              }),
+            );
+          }),
+        ),
+      ),
     );
   });
 
@@ -96,6 +107,20 @@ export class IngestorEffects {
         };
         return of(showMessageAction({ message }));
       }),
+    );
+  });
+
+  updateTransferList$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.updateTransferList),
+      switchMap(({ transferId, page, pageNumber }) =>
+        this.ingestor.getTransferList(page, pageNumber, transferId).pipe(
+          map((transferList) =>
+            fromActions.updateTransferListSuccess({ transferList }),
+          ),
+          catchError((err) => of(fromActions.updateTransferListFailure({ err }))),
+        ),
+      ),
     );
   });
 

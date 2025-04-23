@@ -4,6 +4,11 @@ import { IngestorState } from "state-management/state/ingestor.store";
 export const selectIngestorState =
   createFeatureSelector<IngestorState>("ingestor");
 
+export const selectIngestorEndpoint = createSelector(
+  selectIngestorState,
+  (state) => state.ingestorEndpoint,
+);
+
 export const selectIngestorStatus = createSelector(
   selectIngestorState,
   (state) => state.ingestorStatus,
@@ -17,4 +22,14 @@ export const selectIngestorAuth = createSelector(
 export const selectIngestorError = createSelector(
   selectIngestorState,
   (state) => state.error,
+);
+
+export const selectIngestorConnecting = createSelector(
+  selectIngestorState,
+  (state) => state.connectingBackend,
+);
+
+export const selectIngestorTransferList = createSelector(
+  selectIngestorState,
+  (state) => state.ingestorTransferList,
 );

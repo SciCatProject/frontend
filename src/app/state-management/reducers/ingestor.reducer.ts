@@ -14,6 +14,27 @@ export const ingestorReducer = (state: undefined, action: Action) => {
 const reducer = createReducer(
   initialIngestorState,
   on(
+    fromActions.setIngestorEndpoint,
+    (state, { ingestorEndpoint }): IngestorState => ({
+      ...state,
+      ingestorEndpoint,
+    }),
+  ),
+  on(
+    fromActions.startConnectingIngestor,
+    (state): IngestorState => ({
+      ...state,
+      connectingBackend: true,
+    }),
+  ),
+  on(
+    fromActions.stopConnectingIngestor,
+    (state): IngestorState => ({
+      ...state,
+      connectingBackend: false,
+    }),
+  ),
+  on(
     fromActions.connectIngestor,
     (state): IngestorState => ({
       ...state,
@@ -46,6 +67,13 @@ const reducer = createReducer(
         validEndpoint: false,
       },
       error: err,
+    }),
+  ),
+  on(
+    fromActions.updateTransferListSuccess,
+    (state, { transferList }): IngestorState => ({
+      ...state,
+      ingestorTransferList: transferList,
     }),
   ),
 );

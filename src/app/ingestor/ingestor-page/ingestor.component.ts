@@ -20,7 +20,6 @@ import {
   OtherVersionResponse,
   PostDatasetRequest,
   GetTransferResponse,
-  TransferItem,
 } from "shared/sdk/models/ingestor/models";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { Store } from "@ngrx/store";
@@ -36,6 +35,9 @@ import * as fromActions from "state-management/actions/ingestor.actions";
 import {
   selectIngestorStatus,
   selectIngestorAuth,
+  selectIngestorConnecting,
+  selectIngestorEndpoint,
+  selectIngestorTransferList,
 } from "state-management/selectors/ingestor.selector";
 
 @Component({
@@ -48,15 +50,15 @@ export class IngestorComponent implements OnInit {
 
   vm$ = this.store.select(selectUserSettingsPageViewModel);
   sciCatLoggedIn$ = this.store.select(selectIsLoggedIn);
-
   ingestorStatus$ = this.store.select(selectIngestorStatus);
   ingestorAuthInfo$ = this.store.select(selectIngestorAuth);
+  ingestorConnecting$ = this.store.select(selectIngestorConnecting);
+  ingestorBackend$ = this.store.select(selectIngestorEndpoint);
+  transferList$ = this.store.select(selectIngestorTransferList);
 
-  ingestorInitialized = false;
   tokenValue: string;
 
   sourceFolder = "";
-  loading = false;
   forwardFacilityBackend = "";
 
   connectedFacilityBackend = "";
@@ -65,7 +67,6 @@ export class IngestorComponent implements OnInit {
   lastUsedFacilityBackends: string[] = [];
 
   transferDataInformation: GetTransferResponse = null;
-  transferDetailInformation: TransferItem[] = [];
   transferAutoRefreshIntervalDetail = 3000;
   transferDataPageSize = 100;
   transferDataPageIndex = 0;
@@ -97,7 +98,7 @@ export class IngestorComponent implements OnInit {
     private apiManager: IngestorAPIManager,
     private sseService: IngestorMetadataSSEService,
     private store: Store,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
@@ -107,19 +108,28 @@ export class IngestorComponent implements OnInit {
       this.scicatUserProfile = settings.profile;
       this.tokenValue = settings.scicatToken;
 
-      if (!this.ingestorInitialized) {
-        this.ingestorInitialized = true;
-        this.loadIngestorConfiguration();
-      }
-
       if (this.tokenValue === "") {
         this.store.dispatch(fetchScicatTokenAction());
       }
     });
+
+    this.ingestorBackend$.subscribe((ingestorBackend) => {
+      if (ingestorBackend) {
+        this.connectedFacilityBackend = ingestorBackend;
+      }
+    });
+
+    this.transferList$.subscribe((transferList) => {
+      if (transferList) {
+        this.transferDataInformation = transferList;
+      }
+    });
+
+    this.loadIngestorConfiguration();
     this.store.dispatch(fetchCurrentUserAction());
   }
 
-  loadIngestorConfiguration(): void {
+  async loadIngestorConfiguration(): Promise<void> {
     // Get the GET parameter 'backendUrl' from the URL
     this.route.queryParams.subscribe(async (params) => {
       const backendUrl = params["backendUrl"];
@@ -137,34 +147,33 @@ export class IngestorComponent implements OnInit {
       }
 
       if (backendUrl) {
-        this.initializeIngestorConnection(backendUrl);
+        // backendUrl should not end with a slash
+        const facilityBackendUrlCleaned = backendUrl.replace(/\/$/, "");
+
+        await this.store.dispatch(
+          fromActions.setIngestorEndpoint({
+            ingestorEndpoint: facilityBackendUrlCleaned,
+          }),
+        );
+
+        this.initializeIngestorConnection();
       } else {
         this.connectingToFacilityBackend = false;
       }
     });
   }
 
-  async initializeIngestorConnection(
-    facilityBackendUrl: string,
-  ): Promise<boolean> {
-    let returnValue = true;
-    this.connectingToFacilityBackend = true;
-    let facilityBackendUrlCleaned = facilityBackendUrl.slice();
-    // Check if last symbol is a slash and add version endpoint
-    if (!facilityBackendUrlCleaned.endsWith("/")) {
-      facilityBackendUrlCleaned += "/";
-    }
-
-    this.apiManager.connect(facilityBackendUrlCleaned, !this.authIsDisabled);
-
-    this.connectedFacilityBackend = facilityBackendUrlCleaned;
-
+  async initializeIngestorConnection(): Promise<void> {
     this.store.dispatch(fromActions.connectIngestor());
+
+    this.ingestorConnecting$.subscribe((connecting) => {
+      this.connectingToFacilityBackend = connecting;
+    });
+
     this.ingestorStatus$.subscribe((ingestorStatus) => {
       if (!ingestorStatus.validEndpoint) {
         this.connectedFacilityBackend = "";
         this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
-        returnValue = false;
       } else if (
         ingestorStatus.versionResponse &&
         ingestorStatus.healthResponse
@@ -178,22 +187,16 @@ export class IngestorComponent implements OnInit {
       if (authInfo) {
         this.userInfo = authInfo.userInfoResponse;
         this.authIsDisabled = authInfo.authIsDisabled;
-        console.log(this.userInfo);
+
+        // Only refresh if the user is logged in or the auth is disabled
+        if (this.authIsDisabled || this.userInfo.logged_in) {
+          this.doRefreshTransferList();
+        }
       }
     });
-
-    // Only refresh if the user is logged in or the auth is disabled
-    if (this.authIsDisabled || this.userInfo.logged_in) {
-      this.doRefreshTransferList();
-    }
-
-    this.connectingToFacilityBackend = false;
-    return returnValue;
   }
 
   async ingestDataset(): Promise<boolean> {
-    this.loading = true;
-
     const payload: PostDatasetRequest = {
       metaData: this.createNewTransferData.mergedMetaDataString,
       userToken: this.tokenValue,
@@ -202,17 +205,14 @@ export class IngestorComponent implements OnInit {
     try {
       const result = await this.apiManager.startIngestion(payload);
       if (result) {
-        this.loading = false;
         this.doRefreshTransferList();
         return true;
       }
     } catch (error) {
       this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
-      this.loading = false;
       throw error;
     }
 
-    this.loading = false;
     return false;
   }
 
@@ -277,14 +277,6 @@ export class IngestorComponent implements OnInit {
 
   onClickForwardToIngestorPage() {
     if (this.forwardFacilityBackend) {
-      this.connectingToFacilityBackend = true;
-
-      // If current route is equal to the forward route, the router will not navigate to the new route
-      if (this.connectedFacilityBackend === this.forwardFacilityBackend) {
-        this.initializeIngestorConnection(this.forwardFacilityBackend);
-        return;
-      }
-
       this.router.navigate(["/ingestor"], {
         queryParams: { backendUrl: this.forwardFacilityBackend },
       });
@@ -292,7 +284,6 @@ export class IngestorComponent implements OnInit {
   }
 
   onClickDisconnectIngestor() {
-    this.connectedFacilityBackend = "";
     // Remove the GET parameter 'backendUrl' from the URL
     this.router.navigate(["/ingestor"]);
   }
@@ -310,10 +301,6 @@ export class IngestorComponent implements OnInit {
       return JSON.parse(lastUsedFacilityBackends);
     }
     return [];
-  }
-
-  clearErrorMessage(): void {
-    this.errorMessage = "";
   }
 
   onClickAddIngestion(): void {
@@ -404,22 +391,14 @@ export class IngestorComponent implements OnInit {
     if (dialogRef === null) return;
   }
 
-  async doRefreshTransferList(transferId?: string): Promise<void> {
-    try {
-      const response = await this.apiManager.getTransferList(
-        this.transferDataPageIndex + 1,
-        this.transferDataPageSize,
+  doRefreshTransferList(transferId?: string): void {
+    this.store.dispatch(
+      fromActions.updateTransferList({
         transferId,
-      );
-
-      if (transferId && response.transfers.length > 0) {
-        this.transferDetailInformation.push(response.transfers[0]);
-      } else {
-        this.transferDataInformation = response;
-      }
-    } catch (error) {
-      this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
-    }
+        page: this.transferDataPageIndex + 1,
+        pageNumber: this.transferDataPageSize,
+      }),
+    );
   }
 
   async onCancelTransfer(transferId: string) {
@@ -439,16 +418,20 @@ export class IngestorComponent implements OnInit {
 
   openIngestorLogin(): void {
     window.location.href =
-      this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.AUTH.LOGIN;
+      this.connectedFacilityBackend +
+      "/" +
+      INGESTOR_API_ENDPOINTS_V1.AUTH.LOGIN;
   }
 
   openIngestorLogout(): void {
     window.location.href =
-      this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.AUTH.LOGOUT;
+      this.connectedFacilityBackend +
+      "/" +
+      INGESTOR_API_ENDPOINTS_V1.AUTH.LOGOUT;
   }
 
   getTransferDetailInformation(transferId: string): string {
-    const detailItem = this.transferDetailInformation.find(
+    const detailItem = this.transferDataInformation.transfers?.find(
       (item) => item.transferId === transferId,
     );
     if (detailItem) {
@@ -484,15 +467,11 @@ export class IngestorComponent implements OnInit {
     return "No further information available.";
   }
 
-  reloadTransferDetailInformation(transferId: string): void {
-    this.doRefreshTransferList(transferId);
-  }
-
   startAutoRefresh(transferId: string): void {
-    this.reloadTransferDetailInformation(transferId);
+    this.doRefreshTransferList(transferId);
     this.stopAutoRefresh();
     this.autoRefreshInterval = setInterval(() => {
-      this.reloadTransferDetailInformation(transferId);
+      this.doRefreshTransferList(transferId);
     }, this.transferAutoRefreshIntervalDetail);
   }
 
