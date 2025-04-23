@@ -45,7 +45,7 @@ export class ShareDialogComponent {
   add = async (email: string): Promise<void> => {
     try {
       const isValidEmail = await this.userIdentititiesService
-        .userIdentitiesControllerIsValidEmail(
+        .userIdentitiesControllerIsValidEmailV3(
           JSON.stringify({
             where: { "profile.email": email.trim() },
           }),

@@ -283,7 +283,7 @@ export class DatafilesComponent
     }
     if (!this.jwt) {
       this.subscriptions.push(
-        this.usersService.usersControllerGetUserJWT().subscribe((jwt) => {
+        this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
           this.jwt = jwt;
           this[`${form}Element`].nativeElement.jwt.value = jwt.jwt;
           this[`${form}Element`].nativeElement.submit();
@@ -315,6 +315,7 @@ export class DatafilesComponent
               files: this.getSelectedFiles(),
             },
           ],
+          jobParams: {}, // TODO: replace with actual job parameters
         };
         this.store.dispatch(submitJobAction({ job: data }));
       }

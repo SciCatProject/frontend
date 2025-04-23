@@ -40,7 +40,7 @@ export class PolicyEffects {
       concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
       switchMap((params) =>
-        this.policiesService.policiesControllerFindAll(params).pipe(
+        this.policiesService.policiesControllerFindAllV3(params).pipe(
           mergeMap((policies) => [
             fromActions.fetchPoliciesCompleteAction({ policies }),
             fromActions.fetchCountAction(),
@@ -56,7 +56,7 @@ export class PolicyEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
       switchMap(() =>
-        this.policiesService.policiesControllerCount().pipe(
+        this.policiesService.policiesControllerCountV3().pipe(
           map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
           catchError(() => of(fromActions.fetchCountFailedAction())),
         ),
@@ -82,7 +82,7 @@ export class PolicyEffects {
           const { order, skip, limit } = params;
           filter = { where: { manager: email }, order, skip, limit };
         }
-        return this.policiesService.policiesControllerFindAll(filter).pipe(
+        return this.policiesService.policiesControllerFindAllV3(filter).pipe(
           mergeMap((policies) => [
             fromActions.fetchEditablePoliciesCompleteAction({ policies }),
             fromActions.fetchEditableCountAction(),
@@ -105,7 +105,7 @@ export class PolicyEffects {
           const email = profile.email.toLowerCase();
           filter = { manager: email };
         }
-        return this.policiesService.policiesControllerCount(filter).pipe(
+        return this.policiesService.policiesControllerCountV3(filter).pipe(
           map(({ count }) =>
             fromActions.fetchEditableCountCompleteAction({ count }),
           ),
@@ -120,7 +120,7 @@ export class PolicyEffects {
       ofType(fromActions.submitPolicyAction),
       switchMap(({ ownerList, policy }) =>
         this.policiesService
-          .policiesControllerUpdateWhere({
+          .policiesControllerUpdateWhereV3({
             data: policy,
             ownerGroupList: ownerList.join(),
           })

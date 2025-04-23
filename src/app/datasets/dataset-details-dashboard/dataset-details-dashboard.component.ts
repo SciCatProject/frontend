@@ -224,7 +224,7 @@ export class DatasetDetailsDashboardComponent
       }
     });
     this.subscriptions.push(datasetSub);
-    this.jwt$ = this.userService.usersControllerGetUserJWT();
+    this.jwt$ = this.userService.usersControllerGetUserJWTV3();
   }
   resetTabs() {
     Object.values(this.fetchDataActions).forEach((tab) => {

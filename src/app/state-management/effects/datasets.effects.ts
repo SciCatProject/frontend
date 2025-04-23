@@ -2,12 +2,12 @@ import { Injectable } from "@angular/core";
 import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
 import {
   Attachment,
-  CreateAttachmentDto,
+  CreateAttachmentV3Dto,
   Datablock,
   DatasetsService,
   OrigDatablock,
   OutputDatasetObsoleteDto,
-  UpdateAttachmentDto,
+  UpdateAttachmentV3Dto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import {
@@ -56,7 +56,10 @@ export class DatasetEffects {
       map(([, params]) => params),
       mergeMap(({ query, limits }) =>
         this.datasetsService
-          .datasetsControllerFullquery(JSON.stringify(limits), query)
+          .datasetsControllerFullqueryV3({
+            limits: JSON.stringify(limits),
+            fields: query,
+          })
           .pipe(
             map((datasets) =>
               fromActions.fetchDatasetsCompleteAction({ datasets }),
@@ -78,10 +81,10 @@ export class DatasetEffects {
       map(([, params]) => params),
       mergeMap(({ fields, facets }) =>
         this.datasetsService
-          .datasetsControllerFullfacet(
-            JSON.stringify(facets),
-            JSON.stringify(fields),
-          )
+          .datasetsControllerFullfacetV3({
+            facets: JSON.stringify(facets),
+            fields: JSON.stringify(fields),
+          })
           .pipe(
             map((res) => {
               const { all, ...facetCounts } = res[0];
@@ -105,7 +108,7 @@ export class DatasetEffects {
       mergeMap(({ query }) => {
         const parsedQuery = JSON.parse(query);
         return this.datasetsService
-          .datasetsControllerMetadataKeys(JSON.stringify(parsedQuery))
+          .datasetsControllerMetadataKeysV3(JSON.stringify(parsedQuery))
           .pipe(
             map((metadataKeys) =>
               fromActions.fetchMetadataKeysCompleteAction({ metadataKeys }),
@@ -140,7 +143,7 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchDatasetAction),
       switchMap(({ pid }) => {
-        return this.datasetsService.datasetsControllerFindById(pid).pipe(
+        return this.datasetsService.datasetsControllerFindByIdV3(pid).pipe(
           map((dataset) => fromActions.fetchDatasetCompleteAction({ dataset })),
           catchError(() => of(fromActions.fetchDatasetFailedAction())),
         );
@@ -152,7 +155,7 @@ export class DatasetEffects {
       ofType(fromActions.fetchDatablocksAction),
       switchMap(({ pid, filters }) => {
         return this.datasetsService
-          .datasetsControllerFindAllDatablocks(pid, filters)
+          .datasetsControllerFindAllDatablocksV3(pid, filters)
           .pipe(
             map((datablocks: Datablock[]) =>
               fromActions.fetchDatablocksCompleteAction({ datablocks }),
@@ -168,7 +171,7 @@ export class DatasetEffects {
       ofType(fromActions.fetchOrigDatablocksAction),
       switchMap(({ pid }) => {
         return this.datasetsService
-          .datasetsControllerFindAllOrigDatablocks(pid)
+          .datasetsControllerFindAllOrigDatablocksV3(pid)
           .pipe(
             map((origdatablocks: OrigDatablock[]) =>
               fromActions.fetchOrigDatablocksCompleteAction({ origdatablocks }),
@@ -184,7 +187,7 @@ export class DatasetEffects {
       ofType(fromActions.fetchAttachmentsAction),
       switchMap(({ pid, filters }) => {
         return this.datasetsService
-          .datasetsControllerFindAllAttachments(pid, filters)
+          .datasetsControllerFindAllAttachmentsV3(pid, filters)
           .pipe(
             map((attachments: Attachment[]) =>
               fromActions.fetchAttachmentsCompleteAction({ attachments }),
@@ -223,7 +226,7 @@ export class DatasetEffects {
           };
         }
         return this.datasetsService
-          .datasetsControllerFindAll(JSON.stringify(queryFilter))
+          .datasetsControllerFindAllV3(JSON.stringify(queryFilter))
           .pipe(
             map((relatedDatasets) =>
               fromActions.fetchRelatedDatasetsCompleteAction({
@@ -258,7 +261,7 @@ export class DatasetEffects {
           };
         }
         return this.datasetsService
-          .datasetsControllerCount(JSON.stringify(queryFilter))
+          .datasetsControllerCountV3(JSON.stringify(queryFilter))
           .pipe(
             map(({ count }) =>
               fromActions.fetchRelatedDatasetsCountCompleteAction({
@@ -277,7 +280,7 @@ export class DatasetEffects {
     return this.actions$.pipe(
       ofType(fromActions.addDatasetAction),
       mergeMap(({ dataset }) =>
-        this.datasetsService.datasetsControllerCreate(dataset).pipe(
+        this.datasetsService.datasetsControllerCreateV3(dataset).pipe(
           mergeMap((res) => [
             fromActions.addDatasetCompleteAction({
               dataset: res,
@@ -296,7 +299,7 @@ export class DatasetEffects {
       ofType(fromActions.updatePropertyAction),
       switchMap(({ pid, property }) =>
         this.datasetsService
-          .datasetsControllerFindByIdAndUpdate(pid, property)
+          .datasetsControllerFindByIdAndUpdateV3(pid, property)
           .pipe(
             switchMap(() => [
               fromActions.updatePropertyCompleteAction(),
@@ -314,9 +317,9 @@ export class DatasetEffects {
       switchMap(({ attachment }) => {
         const { id, proposalId, sampleId, ...theRest } = attachment;
         return this.datasetsService
-          .datasetsControllerCreateAttachment(
+          .datasetsControllerCreateAttachmentV3(
             theRest.datasetId,
-            theRest as CreateAttachmentDto,
+            theRest as CreateAttachmentV3Dto,
           )
           .pipe(
             map((res) =>
@@ -334,10 +337,10 @@ export class DatasetEffects {
       switchMap(({ datasetId, attachmentId, caption, ownerGroup }) => {
         const data = { caption, ownerGroup };
         return this.datasetsService
-          .datasetsControllerFindOneAttachmentAndUpdate(
+          .datasetsControllerFindOneAttachmentAndUpdateV3(
             datasetId,
             attachmentId,
-            data as UpdateAttachmentDto,
+            data as UpdateAttachmentV3Dto,
           )
           .pipe(
             map((attachment) =>
@@ -356,7 +359,10 @@ export class DatasetEffects {
       ofType(fromActions.removeAttachmentAction),
       switchMap(({ datasetId, attachmentId }) =>
         this.datasetsService
-          .datasetsControllerFindOneAttachmentAndRemove(datasetId, attachmentId)
+          .datasetsControllerFindOneAttachmentAndRemoveV3(
+            datasetId,
+            attachmentId,
+          )
           .pipe(
             map(() =>
               fromActions.removeAttachmentCompleteAction({ attachmentId }),
@@ -372,7 +378,7 @@ export class DatasetEffects {
       ofType(fromActions.appendToDatasetArrayFieldAction),
       mergeMap(({ pid, fieldName, data }) =>
         this.datasetsService
-          .datasetsControllerAppendToArrayField(pid, fieldName, data)
+          .datasetsControllerAppendToArrayFieldV3(pid, fieldName, data)
           .pipe(
             map(() => fromActions.appendToDatasetArrayFieldCompleteAction()),
             catchError(() =>

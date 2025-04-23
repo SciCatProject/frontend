@@ -38,7 +38,7 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
     private usersService: UsersService,
     private authService: AuthService,
   ) {
-    this.usersService.usersControllerGetUserJWT().subscribe((jwt) => {
+    this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
       this.jwt = jwt.jwt;
     });
   }

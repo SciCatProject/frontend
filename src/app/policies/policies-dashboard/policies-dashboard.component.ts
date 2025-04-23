@@ -196,7 +196,7 @@ export class PoliciesDashboardComponent implements OnInit {
       // if datasets already exist
       this.selectedGroups.forEach((group) => {
         this.datasetService
-          .datasetsControllerCount(`{ "ownerGroup": "${group}" }`)
+          .datasetsControllerCountV3(`{ "ownerGroup": "${group}" }`)
           .pipe(
             map((count) => {
               if (count) {

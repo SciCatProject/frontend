@@ -9,7 +9,10 @@ import {
 import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
 import saveAs from "file-saver";
-import { Attachment } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  Attachment,
+  OutputAttachmentV3Dto,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "shared/services/attachment.service";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
@@ -35,7 +38,7 @@ export class FileUploaderComponent {
   appConfig = this.appConfigService.getConfig();
   maxFileUploadSizeInMb = 16;
 
-  @Input() attachments: Attachment[] = [];
+  @Input() attachments: OutputAttachmentV3Dto[] = [];
   @Input() isOwner: boolean;
   @Output() filePicked = new EventEmitter<PickedFile>();
   @Output() submitCaption = new EventEmitter<SubmitCaptionEvent>();
@@ -132,7 +135,7 @@ export class FileUploaderComponent {
     this.attachmentService.openAttachment(encoded);
   }
 
-  onDownloadAttachment(attachment: Attachment) {
+  onDownloadAttachment(attachment: OutputAttachmentV3Dto) {
     const mimeType = this.base64MimeType(attachment.thumbnail);
     if (!mimeType) {
       throw new Error(

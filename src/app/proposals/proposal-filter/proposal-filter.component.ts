@@ -33,7 +33,7 @@ export class ProposalFilterComponent {
     this.searchChange.emit(query);
   }
 
-  doDateChange(value: MatDatepickerInputEvent<DateTime>) {
+  doDateChange(value: MatDatepickerInputEvent<any>) {
     this.dateChange.emit(value);
   }
 }
