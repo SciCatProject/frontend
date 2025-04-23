@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { Actions, ofType, createEffect, concatLatestFrom } from "@ngrx/effects";
+import { Actions, ofType, createEffect } from "@ngrx/effects";
+import { concatLatestFrom } from "@ngrx/operators";
 import { ADAuthService } from "users/adauth.service";
 import { AuthService, SDKToken } from "shared/services/auth/auth.service";
 import {
