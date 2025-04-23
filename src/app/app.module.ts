@@ -12,7 +12,10 @@ import { StoreModule } from "@ngrx/store";
 import { ApiModule, Configuration } from "@scicatproject/scicat-sdk-ts-angular";
 import { routerReducer } from "@ngrx/router-store";
 import { extModules } from "./build-specifics";
-import { MatNativeDateModule } from "@angular/material/core";
+import {
+  MatNativeDateModule,
+  provideNativeDateAdapter,
+} from "@angular/material/core";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import {
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -92,6 +95,7 @@ const apiConfigurationFn = (
   exports: [MatNativeDateModule],
   providers: [
     AppConfigService,
+    provideNativeDateAdapter(),
     {
       provide: APP_INITIALIZER,
       useFactory: appConfigInitializerFn,

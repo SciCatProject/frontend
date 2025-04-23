@@ -26,10 +26,13 @@ import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import {
-  NgxMatDatetimePickerModule,
-  NgxMatNativeDateModule,
-  NgxMatTimepickerModule,
-} from "@angular-material-components/datetime-picker";
+  NgxMatDatepickerActions,
+  NgxMatDatepickerApply,
+  NgxMatDatepickerCancel,
+  NgxMatDatepickerClear,
+  NgxMatDatepickerInput,
+  NgxMatDatetimepicker,
+} from "@ngxmc/datetime-picker";
 @NgModule({
   declarations: [
     TreeEditComponent,
@@ -61,9 +64,12 @@ import {
     MatMenuModule,
     MatSnackBarModule,
     MatDatepickerModule,
-    NgxMatDatetimePickerModule,
-    NgxMatTimepickerModule,
-    NgxMatNativeDateModule,
+    NgxMatDatetimepicker,
+    NgxMatDatepickerInput,
+    NgxMatDatepickerActions,
+    NgxMatDatepickerApply,
+    NgxMatDatepickerCancel,
+    NgxMatDatepickerClear,
   ],
   exports: [TreeEditComponent, TreeViewComponent],
   providers: [
