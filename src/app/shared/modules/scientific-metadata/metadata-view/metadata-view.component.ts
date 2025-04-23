@@ -16,13 +16,13 @@ import { ITableSetting } from "shared/modules/dynamic-material-table/models/tabl
 import { BehaviorSubject } from "rxjs";
 import { PrintConfig } from "shared/modules/dynamic-material-table/models/print-config.model";
 import { TableSelectionMode } from "shared/modules/dynamic-material-table/models/table-row.model";
-import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-config";
 import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
 import { DatePipe, TitleCasePipe } from "@angular/common";
 import { LinkyPipe } from "ngx-linky";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
 import { DateTime } from "luxon";
 import { MetadataTypes } from "../metadata-edit/metadata-edit.component";
+import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 
 @Component({
   selector: "metadata-view",
