@@ -6,10 +6,7 @@ import { HttpClient, HttpClientModule } from "@angular/common/http";
 describe("ConfigService", () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        ConfigService,
-        { provide: HttpClient, useClass: HttpClientModule },
-      ],
+      providers: [ConfigService, HttpClient],
     });
   });
 

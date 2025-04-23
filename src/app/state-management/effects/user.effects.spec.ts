@@ -35,9 +35,13 @@ import { clearProposalsStateAction } from "state-management/actions/proposals.ac
 import { clearPublishedDataStateAction } from "state-management/actions/published-data.actions";
 import { clearSamplesStateAction } from "state-management/actions/samples.actions";
 import { Type } from "@angular/core";
-import { HttpErrorResponse } from "@angular/common/http";
+import {
+  HttpErrorResponse,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
 import { AppConfigService } from "app-config.service";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { AuthService, SDKToken } from "shared/services/auth/auth.service";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import { mockUser } from "shared/MockStubs";
@@ -67,7 +71,7 @@ describe("UserEffects", () => {
   const error = new HttpErrorResponse({});
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule], // Import HttpClientTestingModule
+      imports: [],
       providers: [
         UserEffects,
         provideMockActions(() => actions),
@@ -126,6 +130,8 @@ describe("UserEffects", () => {
           provide: Router,
           useValue: jasmine.createSpyObj("router", ["navigate"]),
         },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
       ],
     });
 

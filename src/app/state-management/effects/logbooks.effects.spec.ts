@@ -13,7 +13,11 @@ import { selectFilters } from "state-management/selectors/logbooks.selectors";
 import { Type } from "@angular/core";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import { createMock } from "shared/MockStubs";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
 
 const logbook = createMock<Logbook>({
   name: "test",
@@ -28,7 +32,7 @@ describe("LogbookEffects", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [],
       providers: [
         LogbookEffects,
         provideMockActions(() => actions),
@@ -52,6 +56,8 @@ describe("LogbookEffects", () => {
             "logbooksControllerFindByName",
           ]),
         },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
       ],
     });
 

@@ -5,7 +5,11 @@ import { AppRoutingModule, routes } from "app-routing/app-routing.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule, Title } from "@angular/platform-browser";
 import { EffectsModule } from "@ngrx/effects";
-import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
 import { APP_INITIALIZER, NgModule } from "@angular/core";
 import { ExtraOptions, RouterModule } from "@angular/router";
 import { StoreModule } from "@ngrx/store";
@@ -55,6 +59,8 @@ const apiConfigurationFn = (
 
 @NgModule({
   declarations: [AppComponent],
+  exports: [MatNativeDateModule],
+  bootstrap: [AppComponent],
   imports: [
     AppConfigModule,
     AppRoutingModule,
@@ -67,7 +73,6 @@ const apiConfigurationFn = (
     }),
     BrowserAnimationsModule,
     BrowserModule,
-    HttpClientModule,
     LayoutModule,
     MatProgressSpinnerModule,
     MatFormFieldModule,
@@ -92,7 +97,6 @@ const apiConfigurationFn = (
     } as ExtraOptions),
     EffectsModule.forRoot([]),
   ],
-  exports: [MatNativeDateModule],
   providers: [
     AppConfigService,
     provideNativeDateAdapter(),
@@ -147,7 +151,7 @@ const apiConfigurationFn = (
       deps: [AuthService, AppConfigService],
       multi: false,
     },
+    provideHttpClient(withInterceptorsFromDi()),
   ],
-  bootstrap: [AppComponent],
 })
 export class AppModule {}
