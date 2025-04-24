@@ -105,16 +105,6 @@
             <th>Job Result Object</th>
             <td>{{ value | json }}</td>
           </tr>
-          <tr *ngIf="!job.datasetsValidation; elseBlockDatasetsValidation">
-            <th>Datasets Validation</th>
-            <td>No</td>
-          </tr>
-          <ng-template #elseBlockDatasetsValidation>
-            <tr>
-              <th>Datasets Validation</th>
-              <td>Yes</td>
-            </tr>
-          </ng-template>
           <tr *ngIf="!job.isPublished; elseBlockIsPublished">
             <th>Is Published</th>
             <td>No</td>

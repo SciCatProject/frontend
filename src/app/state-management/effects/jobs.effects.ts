@@ -33,7 +33,7 @@ export class JobEffects {
       concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
       switchMap((params) =>
-        this.jobsService.jobsControllerFindAllV4V4(JSON.stringify(params)).pipe(
+        this.jobsService.jobsControllerFindAllV4(JSON.stringify(params)).pipe(
           switchMap((jobs) => [
             fromActions.fetchJobsCompleteAction({ jobs: jobs as any }),
             fromActions.fetchCountAction(),
@@ -57,7 +57,7 @@ export class JobEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchJobAction),
       switchMap(({ jobId }) =>
-        this.jobsService.jobsControllerFindOneV4V4(jobId).pipe(
+        this.jobsService.jobsControllerFindOneV4(jobId).pipe(
           map((job) => fromActions.fetchJobCompleteAction({ job: job as any })),
           catchError(() => of(fromActions.fetchJobFailedAction())),
         ),
@@ -69,7 +69,7 @@ export class JobEffects {
     return this.actions$.pipe(
       ofType(fromActions.submitJobAction),
       switchMap(({ job }) =>
-        this.jobsService.jobsControllerCreateV4V4(job as any).pipe(
+        this.jobsService.jobsControllerCreateV4(job as any).pipe(
           map((res) =>
             fromActions.submitJobCompleteAction({ job: res as any }),
           ),
