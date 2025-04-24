@@ -98,10 +98,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
         id: job.id,
         initiator: job.createdBy,
         type: job.type,
-        createdAt: this.datePipe.transform(
-          job.createdAt,
-          "yyyy-MM-dd HH:mm",
-        ),
+        createdAt: this.datePipe.transform(job.createdAt, "yyyy-MM-dd HH:mm"),
         statusMessage: job.statusCode,
       }));
     }
