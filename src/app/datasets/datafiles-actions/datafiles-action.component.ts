@@ -97,7 +97,15 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
   get disabled() {
     this.update_status();
     this.prepare_disabled_condition();
-    return eval(this.disabled_condition);
+
+    const expr = this.disabled_condition;
+    const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);
+
+    return fn({
+      maxFileSize: this.maxFileSize,
+      selectedTotalFileSize: this.selectedTotalFileSize,
+      numberOfFileSelected: this.numberOfFileSelected,
+    });
   }
 
   add_input(name, value) {

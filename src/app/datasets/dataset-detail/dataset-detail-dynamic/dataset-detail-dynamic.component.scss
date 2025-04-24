@@ -127,3 +127,9 @@ mat-card {
   pointer-events: none;
   cursor: default;
 }
+
+.card-container {
+  mat-card-content {
+    padding: 0;
+  }
+}
