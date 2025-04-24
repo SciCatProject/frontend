@@ -10,7 +10,7 @@ import {
   provideHttpClient,
   withInterceptorsFromDi,
 } from "@angular/common/http";
-import { APP_INITIALIZER, NgModule } from "@angular/core";
+import { NgModule, inject, provideAppInitializer } from "@angular/core";
 import { ExtraOptions, RouterModule } from "@angular/router";
 import { StoreModule } from "@ngrx/store";
 import { ApiModule, Configuration } from "@scicatproject/scicat-sdk-ts-angular";
@@ -100,24 +100,18 @@ const apiConfigurationFn = (
   providers: [
     AppConfigService,
     provideNativeDateAdapter(),
-    {
-      provide: APP_INITIALIZER,
-      useFactory: appConfigInitializerFn,
-      multi: true,
-      deps: [AppConfigService],
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: appThemeInitializerFn,
-      multi: true,
-      deps: [AppThemeService],
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: () => () => {},
-      multi: true,
-      deps: [RouteTrackerService],
-    },
+    provideAppInitializer(() => {
+      const initializerFn = appConfigInitializerFn(inject(AppConfigService));
+      return initializerFn();
+    }),
+    provideAppInitializer(() => {
+      const initializerFn = appThemeInitializerFn(inject(AppThemeService));
+      return initializerFn();
+    }),
+    provideAppInitializer(() => {
+      const initializerFn = (() => () => {})(inject(RouteTrackerService));
+      return initializerFn();
+    }),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: SnackbarInterceptor,

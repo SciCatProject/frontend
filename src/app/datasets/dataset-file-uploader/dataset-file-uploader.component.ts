@@ -28,6 +28,7 @@ import { selectCurrentUser } from "state-management/selectors/user.selectors";
   selector: "app-dataset-file-uploader",
   templateUrl: "./dataset-file-uploader.component.html",
   styleUrls: ["./dataset-file-uploader.component.scss"],
+  standalone: false,
 })
 export class DatasetFileUploaderComponent implements OnInit, OnDestroy {
   attachments: OutputAttachmentV3Dto[] = [];

@@ -25,7 +25,6 @@ import { selectSearchTerms } from "../../../state-management/selectors/datasets.
   selector: "full-text-search-bar",
   templateUrl: "./full-text-search-bar.component.html",
   styleUrls: ["./full-text-search-bar.component.scss"],
-  standalone: true,
   imports: [
     MatFormFieldModule,
     MatSelectModule,

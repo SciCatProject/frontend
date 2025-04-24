@@ -11,6 +11,7 @@ export interface DateRange {
   selector: "proposal-filter",
   templateUrl: "./proposal-filter.component.html",
   styleUrls: ["./proposal-filter.component.scss"],
+  standalone: false,
 })
 export class ProposalFilterComponent {
   @Input() hasAppliedFilters: boolean | null = false;

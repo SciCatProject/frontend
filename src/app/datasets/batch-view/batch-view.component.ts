@@ -30,6 +30,7 @@ import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
   selector: "batch-view",
   templateUrl: "./batch-view.component.html",
   styleUrls: ["./batch-view.component.scss"],
+  standalone: false,
 })
 export class BatchViewComponent implements OnInit, OnDestroy {
   batch$: Observable<OutputDatasetObsoleteDto[]> = this.store.select(

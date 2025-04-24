@@ -46,6 +46,7 @@ export interface SortChangeEvent {
   templateUrl: "dataset-table.component.html",
   styleUrls: ["dataset-table.component.scss"],
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   private inBatchPids: string[] = [];

@@ -13,10 +13,9 @@ import { AuthService } from "shared/services/auth/auth.service";
 
 @Component({
   selector: "datafiles-action",
-  //standalone: true,
-  //imports: [],
   templateUrl: "./datafiles-action.component.html",
   styleUrls: ["./datafiles-action.component.scss"],
+  standalone: false,
 })
 export class DatafilesActionComponent implements OnInit, OnChanges {
   @Input({ required: true }) actionConfig: ActionConfig;

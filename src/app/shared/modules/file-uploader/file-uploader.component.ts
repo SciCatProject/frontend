@@ -33,6 +33,7 @@ export interface SubmitCaptionEvent {
   selector: "app-file-uploader",
   templateUrl: "./file-uploader.component.html",
   styleUrls: ["./file-uploader.component.scss"],
+  standalone: false,
 })
 export class FileUploaderComponent {
   appConfig = this.appConfigService.getConfig();

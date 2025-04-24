@@ -26,6 +26,7 @@ import { AppConfigService } from "app-config.service";
   selector: "publish",
   templateUrl: "./publish.component.html",
   styleUrls: ["./publish.component.scss"],
+  standalone: false,
 })
 export class PublishComponent implements OnInit, OnDestroy {
   private datasets$ = this.store.select(selectDatasetsInBatch);
