@@ -30,7 +30,7 @@
 @use "./app/shared/modules/table/table-theme" as table;
 @use "./app/users/user-settings/user-settings-theme" as user-settings;
 
-$custom-typography: mat.define-typography-config(
+$custom-typography: mat.m2-define-typography-config(
   $font-family: '"Titillium Web", Calibri, sans-serif;',
 );
 // Include the common styles for Angular Material. We include this here so that you only
@@ -204,17 +204,17 @@ $red: (
   ),
 );
 
-$primary: mat.define-palette($cyan, 1000, 400, 800);
-$accent: mat.define-palette($grass, 1000, 400, 800);
-$warn: mat.define-palette($red, 100, 50, 200);
-$warn-2: mat.define-palette($yellow, 100, 50, 200);
-$header-1: mat.define-palette($navy, 1000, 400, 800);
-$header-2: mat.define-palette($forest, 1000, 400, 800);
-$header-3: mat.define-palette($orange, 1000, 400, 800);
-$header-4: mat.define-palette($purple, 1000, 400, 800);
-$hover: mat.define-palette($grey, 500, 100, 300);
+$primary: mat.m2-define-palette($cyan, 1000, 400, 800);
+$accent: mat.m2-define-palette($grass, 1000, 400, 800);
+$warn: mat.m2-define-palette($red, 100, 50, 200);
+$warn-2: mat.m2-define-palette($yellow, 100, 50, 200);
+$header-1: mat.m2-define-palette($navy, 1000, 400, 800);
+$header-2: mat.m2-define-palette($forest, 1000, 400, 800);
+$header-3: mat.m2-define-palette($orange, 1000, 400, 800);
+$header-4: mat.m2-define-palette($purple, 1000, 400, 800);
+$hover: mat.m2-define-palette($grey, 500, 100, 300);
 
-$basetheme: mat.define-light-theme(
+$basetheme: mat.m2-define-light-theme(
   (
     color: (
       primary: $primary,
@@ -300,7 +300,7 @@ a:hover {
 }
 
 .snackbar-success {
-  background-color: mat.get-color-from-palette($primary, "default");
+  background-color: mat.m2-get-color-from-palette($primary, "default");
 
   button {
     color: white;
@@ -308,7 +308,7 @@ a:hover {
 }
 
 .snackbar-error {
-  background-color: mat.get-color-from-palette($warn, "default");
+  background-color: mat.m2-get-color-from-palette($warn, "default");
 
   button {
     color: white;
