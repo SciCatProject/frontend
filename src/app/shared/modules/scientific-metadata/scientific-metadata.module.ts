@@ -20,7 +20,6 @@ import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
 import { LinkyModule, LinkyPipe } from "ngx-linky";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import {
-  NgxMatNativeDateModule,
   NgxMatDatetimepicker,
   NgxMatDatepickerInput,
   NgxMatDatepickerActions,
@@ -50,7 +49,6 @@ import {
     DynamicMatTableModule.forRoot({}),
     LinkyModule,
     MatDatepickerModule,
-    NgxMatNativeDateModule,
     NgxMatDatetimepicker,
     NgxMatDatepickerInput,
     NgxMatDatepickerActions,

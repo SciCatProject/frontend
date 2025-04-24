@@ -35,6 +35,7 @@ import { selectSearchTerms } from "../../../state-management/selectors/datasets.
     MatCardModule,
     MatButtonModule,
   ],
+  standalone: true,
 })
 export class FullTextSearchBarComponent implements OnInit, OnDestroy {
   @Input() prefilledValue = "";

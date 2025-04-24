@@ -1,5 +1,6 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
+
 @use "@angular/material" as mat;
 @use "./app/app-theme" as app;
 @use "./app/_layout/app-header/app-header-theme" as app-header;
@@ -32,6 +33,12 @@
 @use "./app/shared/modules/shared-table/shared-table-theme" as shared-table;
 @use "./app/shared/modules/table/table-theme" as table;
 @use "./app/users/user-settings/user-settings-theme" as user-settings;
+
+/* You can add global styles to this file, and also import other style files */
+@use "assets/styles/titillium-web.scss";
+@use "assets/styles/material-icons";
+
+@use "sass:map";
 
 $my-custom-button-level: mat.m2-define-typography-level(
   $font-weight: 400,
@@ -161,10 +168,30 @@ $primary: mat.m2-define-palette($theme-primary, "default", "lighter", "darker");
 $accent: mat.m2-define-palette($theme-accent, "default", "lighter", "darker");
 $warn: mat.m2-define-palette($theme-warn, "default", "lighter", "darker");
 $warn-2: mat.m2-define-palette($theme-warn-2, "default", "lighter", "darker");
-$header-1: mat.m2-define-palette($theme-header-1, "default", "lighter", "darker");
-$header-2: mat.m2-define-palette($theme-header-2, "default", "lighter", "darker");
-$header-3: mat.m2-define-palette($theme-header-3, "default", "lighter", "darker");
-$header-4: mat.m2-define-palette($theme-header-4, "default", "lighter", "darker");
+$header-1: mat.m2-define-palette(
+  $theme-header-1,
+  "default",
+  "lighter",
+  "darker"
+);
+$header-2: mat.m2-define-palette(
+  $theme-header-2,
+  "default",
+  "lighter",
+  "darker"
+);
+$header-3: mat.m2-define-palette(
+  $theme-header-3,
+  "default",
+  "lighter",
+  "darker"
+);
+$header-4: mat.m2-define-palette(
+  $theme-header-4,
+  "default",
+  "lighter",
+  "darker"
+);
 $hover: mat.m2-define-palette($theme-hover, "default", "lighter", "darker");
 
 $basetheme: mat.m2-define-light-theme(
@@ -179,8 +206,8 @@ $basetheme: mat.m2-define-light-theme(
   )
 );
 
-$newcolor: map-merge(
-  map-get($basetheme, "color"),
+$newcolor: map.merge(
+  map.get($basetheme, "color"),
   (
     warn-2: $warn-2,
     header-1: $header-1,
@@ -191,7 +218,7 @@ $newcolor: map-merge(
   )
 );
 
-$theme: map-merge(
+$theme: map.merge(
   $basetheme,
   (
     color: $newcolor,
@@ -228,10 +255,6 @@ $theme: map-merge(
 @include user-settings.theme($theme);
 @include mat.button-density(0);
 @include mat.icon-button-density(0);
-
-/* You can add global styles to this file, and also import other style files */
-@import "assets/styles/titillium-web.scss";
-@import "assets/styles/material-icons.scss";
 
 html,
 body {

@@ -227,8 +227,8 @@ $basetheme: mat.m2-define-light-theme(
   )
 );
 
-$newcolor: map-merge(
-  map-get($basetheme, "color"),
+$newcolor: map.merge(
+  map.get($basetheme, "color"),
   (
     warn-2: $warn-2,
     header-1: $header-1,
@@ -239,7 +239,7 @@ $newcolor: map-merge(
   )
 );
 
-$theme: map-merge(
+$theme: map.merge(
   $basetheme,
   (
     color: $newcolor,

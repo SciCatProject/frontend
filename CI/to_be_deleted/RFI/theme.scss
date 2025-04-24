@@ -1,22 +1,27 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 @use "./app/app-theme" as app;
 @use "./app/_layout/app-header/app-header-theme" as app-header;
 @use "./app/datasets/batch-view/batch-view-theme" as batch-view;
 @use "./app/datasets/dashboard/dashboard-theme" as dashboard;
 @use "./app/datasets/datafiles/datafiles-theme" as datafiles;
 @use "./app/datasets/dataset-detail/dataset-detail-theme" as dataset-detail;
-@use "./app/datasets/dataset-details-dashboard/dataset-details-dashboard-theme" as dataset-details-dashboard;
-@use "./app/datasets/dataset-lifecycle/dataset-lifecycle-theme" as dataset-lifecycle;
+@use "./app/datasets/dataset-details-dashboard/dataset-details-dashboard-theme"
+  as dataset-details-dashboard;
+@use "./app/datasets/dataset-lifecycle/dataset-lifecycle-theme" as
+  dataset-lifecycle;
 @use "./app/datasets/dataset-table/dataset-table-theme" as dataset-table;
-@use "./app/datasets/dataset-table-settings/dataset-table-settings-theme" as dataset-table-settings;
+@use "./app/datasets/dataset-table-settings/dataset-table-settings-theme" as
+  dataset-table-settings;
 @use "./app/datasets/reduce/reduce-theme" as reduce;
-@use "./app/instruments/instrument-details/instrument-details-theme" as instrument-details;
+@use "./app/instruments/instrument-details/instrument-details-theme" as
+  instrument-details;
 @use "./app/logbooks/logbooks-detail/logbooks-detail-theme" as logbooks-detail;
 @use "./app/logbooks/logbooks-table/logbooks-table-theme" as logbooks-table;
 @use "./app/proposals/proposal-detail/proposal-detail-theme" as proposal-detail;
-@use "./app/publisheddata/publisheddata-details/publisheddata-details-theme" as publisheddata-details;
+@use "./app/publisheddata/publisheddata-details/publisheddata-details-theme" as
+  publisheddata-details;
 @use "./app/samples/sample-dashboard/sample-dashboard-theme" as sample-dashboard;
 @use "./app/samples/sample-detail/sample-detail-theme" as sample-detail;
 @use "./app/shared/modules/breadcrumb/breadcrumb-theme" as breadcrumb;
@@ -220,7 +225,7 @@ $hover: mat.m2-define-palette($grey, 500, 100, 300);
   $header-4,
   $hover
 ) {
-  @return map-merge(
+  @return map.merge(
     mat.m2-define-light-theme($primary, $accent, $warn),
     (
       warn-2: $warn-2,

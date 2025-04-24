@@ -32,7 +32,6 @@ import {
   NgxMatDatepickerClear,
   NgxMatDatepickerInput,
   NgxMatDatetimepicker,
-  NgxMatNativeDateModule,
 } from "@ngxmc/datetime-picker";
 @NgModule({
   declarations: [
@@ -65,7 +64,6 @@ import {
     MatMenuModule,
     MatSnackBarModule,
     MatDatepickerModule,
-    NgxMatNativeDateModule,
     NgxMatDatetimepicker,
     NgxMatDatepickerInput,
     NgxMatDatepickerActions,

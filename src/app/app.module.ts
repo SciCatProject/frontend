@@ -109,8 +109,7 @@ const apiConfigurationFn = (
       return initializerFn();
     }),
     provideAppInitializer(() => {
-      const initializerFn = (() => () => {})(inject(RouteTrackerService));
-      return initializerFn();
+      inject(RouteTrackerService);
     }),
     {
       provide: HTTP_INTERCEPTORS,

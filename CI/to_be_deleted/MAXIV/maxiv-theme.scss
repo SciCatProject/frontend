@@ -271,7 +271,7 @@ $hover: mat.m2-define-palette($grey, 500, 100, 300);
   $header-4,
   $hover
 ) {
-  @return map-merge(
+  @return map.merge(
     mat.m2-define-light-theme($primary, $accent, $warn),
     (
       warn-2: $warn-2,

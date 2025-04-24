@@ -9,10 +9,7 @@ import {
 import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
 import saveAs from "file-saver";
-import {
-  Attachment,
-  OutputAttachmentV3Dto,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputAttachmentV3Dto } from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "shared/services/attachment.service";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";

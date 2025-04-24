@@ -1,9 +1,10 @@
 @use "@angular/material" as mat;
+@use "sass:map";
 
 @mixin color($theme) {
-  $color-config: map-get($theme, "color");
-  $warn: map-get($color-config, "warn");
-  $header-3: map-get($color-config, "header-3");
+  $color-config: map.get($theme, "color");
+  $warn: map.get($color-config, "warn");
+  $header-3: map.get($color-config, "header-3");
 
   .jupyter-button {
     background-color: mat.m2-get-color-from-palette($header-3, "default");
@@ -11,8 +12,14 @@
   }
   mat-card {
     .reset-button {
-      background-color: mat.m2-get-color-from-palette($warn, "default") !important;
-      color: mat.m2-get-color-from-palette($warn, "default-contrast") !important;
+      background-color: mat.m2-get-color-from-palette(
+        $warn,
+        "default"
+      ) !important;
+      color: mat.m2-get-color-from-palette(
+        $warn,
+        "default-contrast"
+      ) !important;
     }
   }
 }
