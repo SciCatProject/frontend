@@ -73,8 +73,8 @@
               <mat-divider class="divider-down"></mat-divider>
             </div>
 
-            <mat-tab-group animationDuration="0ms">
-              <mat-tab *ngIf="authIsDisabled || userInfo?.logged_in"
+            <mat-tab-group animationDuration="0ms" [selectedIndex]="selectedTab">
+                <mat-tab [disabled]="!(authIsDisabled || userInfo?.logged_in)"
                 label="Transfers">
                 <button matTooltip="Refresh transfer list" mat-button
                   aria-label="Refresh transfer list"
@@ -82,7 +82,7 @@
                   <mat-icon>refresh</mat-icon>
                 </button>
                 <table
-                  *ngIf="transferDataInformation !== null && transferDataInformation.transfers.length > 0"
+                  *ngIf="transferDataInformation && transferDataInformation.transfers.length > 0"
                   mat-table [dataSource]="transferDataInformation.transfers">
 
                   <ng-container matColumnDef="transferId">
@@ -163,12 +163,14 @@
                   </mat-list-item>
                   <mat-list-item>
                     <span matListItemTitle>Version</span>
-                    <span matListItemLine>{{ versionInfo ? versionInfo.version ?? "" : ""
+                    <span matListItemLine>{{ versionInfo ? versionInfo.version
+                      ?? "" : ""
                       }}</span>
                   </mat-list-item>
                   <mat-list-item>
                     <span matListItemTitle>Health Status</span>
-                    <span matListItemLine>{{ healthInfo ? healthInfo.status ?? "" : "" }}</span>
+                    <span matListItemLine>{{ healthInfo ? healthInfo.status ??
+                      "" : "" }}</span>
                   </mat-list-item>
                 </mat-list>
               </mat-tab>

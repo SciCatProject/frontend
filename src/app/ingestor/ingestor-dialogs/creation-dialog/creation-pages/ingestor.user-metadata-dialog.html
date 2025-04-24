@@ -1,0 +1,88 @@
+<div class="ingestor-mixed-header">
+  <h2 mat-dialog-title>
+    Fill out user-specific metadata
+  </h2>
+  <button mat-icon-button mat-dialog-close aria-label="Close"
+    class="ingestor-close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<mat-dialog-content class="mat-typography" disableClose="true">
+  <ingestor-dialog-stepper [activeStep]="1" [createNewTransferData]="createNewTransferData" (createNewTransferDataChange)="onCreateNewTransferDataChange($event)"></ingestor-dialog-stepper>
+
+  <div fxLayout="row" fxLayout.xs="column">
+    <div fxFlex="80%">
+      <mat-card>
+        <mat-card-header class="scicat-header"
+          (click)="toggleCardContent('scicat')">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> info </mat-icon>
+          </div>
+          SciCat Information
+          <span class="spacer"></span>
+            <mat-icon
+            [matTooltip]="isSciCatHeaderOk ? 'Your input is correct.' : scicatHeaderErrors"
+            [ngClass]="isSciCatHeaderOk ? 'success-icon' : 'error-icon'">{{
+            isSciCatHeaderOk ? 'check_circle_outline' : 'error_outline'}}</mat-icon>
+          <mat-icon class="toggle-icon">{{ isCardContentVisible.scicat ?
+            'expand_less' : 'expand_more' }}</mat-icon>
+        </mat-card-header>
+        <mat-card-content *ngIf="isCardContentVisible.scicat">
+          <app-metadata-editor [schema]="scicatHeaderSchema"
+            [data]="createNewTransferData.scicatHeader"
+            (dataChange)="onDataChangeUserScicatHeader($event)" (errors)="scicatHeaderErrorsHandler($event)"></app-metadata-editor>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header class="organizational-header"
+          (click)="toggleCardContent('organizational')">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> person </mat-icon>
+          </div>
+          Organizational Information
+          <span class="spacer"></span>
+          <mat-icon
+            [matTooltip]="isOrganizationalMetadataOk ? 'Your input is correct.' : organizationalErrors"
+            [ngClass]="isOrganizationalMetadataOk ? 'success-icon' : 'error-icon'">{{
+            isOrganizationalMetadataOk ? 'check_circle_outline' : 'error_outline'}}</mat-icon>
+          <mat-icon class="toggle-icon">{{ isCardContentVisible.organizational ?
+            'expand_less' : 'expand_more' }}</mat-icon>
+        </mat-card-header>
+        <mat-card-content *ngIf="isCardContentVisible.organizational">
+          <app-metadata-editor [schema]="metadataSchemaOrganizational"
+            [data]="createNewTransferData.userMetaData['organizational']"
+            (dataChange)="onDataChangeUserMetadataOrganization($event)" (errors)="organizationalErrorsHandler($event)"></app-metadata-editor>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header class="sample-header"
+          (click)="toggleCardContent('sample')">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> description </mat-icon>
+          </div>
+          Sample Information
+          <span class="spacer"></span>
+          <mat-icon
+            [matTooltip]="isSampleInformationOk ? 'Your input is correct.' : sampleErrors"
+            [ngClass]="isSampleInformationOk ? 'success-icon' : 'error-icon'">{{
+            isSampleInformationOk ? 'check_circle_outline' : 'error_outline'}}</mat-icon>
+          <mat-icon class="toggle-icon">{{ isCardContentVisible.sample ?
+            'expand_less' : 'expand_more' }}</mat-icon>
+        </mat-card-header>
+        <mat-card-content *ngIf="isCardContentVisible.sample">
+          <app-metadata-editor [schema]="metadataSchemaSample"
+            [data]="createNewTransferData.userMetaData['sample']"
+            (dataChange)="onDataChangeUserMetadataSample($event)" (errors)="sampleErrorsHandler($event)"></app-metadata-editor>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="onClickBack()">Back</button>
+  <button mat-button color="primary" cdkFocusInitial [mat-dialog-close]="true"
+    [disabled]="!uiNextButtonReady" (click)="onClickNext()">Next</button>
+</mat-dialog-actions>

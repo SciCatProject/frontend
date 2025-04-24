@@ -1,35 +1,50 @@
-import { Component, Inject, OnInit } from "@angular/core";
-import { MatDialog, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { Component, inject, OnInit } from "@angular/core";
 import {
-  DialogDataObject,
   IngestionRequestInformation,
   IngestorHelper,
   SciCatHeader,
-} from "../../ingestor-page/helper/ingestor.component-helper";
-import { IngestorConfirmationDialogComponent } from "../confirmation-dialog/ingestor.confirmation-dialog.component";
+} from "../../../ingestor-page/helper/ingestor.component-helper";
+import { Store } from "@ngrx/store";
+import {
+  selectIngestionObject,
+  selectIngestorEndpoint,
+} from "state-management/selectors/ingestor.selector";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
-  selector: "ingestor.confirm-transfer-dialog",
-  templateUrl: "ingestor.confirm-transfer-dialog.html",
-  styleUrls: ["../../ingestor-page/ingestor.component.scss"],
+  selector: "ingestor-confirm-transfer-dialog-page",
+  templateUrl: "ingestor.confirm-transfer-dialog-page.html",
+  styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
 })
-export class IngestorConfirmTransferDialogComponent implements OnInit {
+export class IngestorConfirmTransferDialogPageComponent implements OnInit {
+  readonly dialog = inject(MatDialog);
+
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
+
+  ingestionObject$ = this.store.select(selectIngestionObject);
+  ingestorBackend$ = this.store.select(selectIngestorEndpoint);
+
   provideMergeMetaData = "";
-  backendURL = "";
+  connectedFacilityBackend = "";
+
   errorMessage = "";
   copiedToClipboard = false;
 
-  constructor(
-    public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: DialogDataObject,
-  ) {
-    this.createNewTransferData = data.createNewTransferData;
-    this.backendURL = data.backendURL;
-  }
+  constructor(private store: Store) {}
 
   ngOnInit() {
+    this.ingestionObject$.subscribe((ingestionObject) => {
+      if (ingestionObject) {
+        this.createNewTransferData = ingestionObject;
+      }
+    });
+
+    this.ingestorBackend$.subscribe((ingestorBackend) => {
+      if (ingestorBackend) {
+        this.connectedFacilityBackend = ingestorBackend;
+      }
+    });
     this.provideMergeMetaData = this.createMetaDataString();
   }
 
@@ -59,14 +74,12 @@ export class IngestorConfirmTransferDialogComponent implements OnInit {
   }
 
   onClickBack(): void {
-    if (this.data && this.data.onClickNext) {
-      this.data.onClickNext(2);
-    }
+    // TODO on click back
   }
 
   onClickConfirm(): void {
     this.errorMessage = "";
-    if (this.data && this.data.onClickNext) {
+    /*if (this.data && this.data.onClickNext) {
       const dialogRef = this.dialog.open(IngestorConfirmationDialogComponent, {
         data: {
           header: "Confirm ingestion",
@@ -91,7 +104,7 @@ export class IngestorConfirmTransferDialogComponent implements OnInit {
           }
         }
       });
-    }
+    }*/
   }
 
   onCopyMetadata(): void {

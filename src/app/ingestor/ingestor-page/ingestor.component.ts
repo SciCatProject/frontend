@@ -1,24 +1,16 @@
 import { Component, inject, OnInit } from "@angular/core";
-import { HttpParams } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import { INGESTOR_API_ENDPOINTS_V1 } from "./helper/ingestor-api-endpoints";
-import { IngestorNewTransferDialogComponent } from "../ingestor-dialogs/creation-dialog/ingestor.new-transfer-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
-import { IngestorUserMetadataDialogComponent } from "../ingestor-dialogs/creation-dialog/ingestor.user-metadata-dialog.component";
-import { IngestorExtractorMetadataDialogComponent } from "../ingestor-dialogs/creation-dialog/ingestor.extractor-metadata-dialog.component";
-import { IngestorConfirmTransferDialogComponent } from "../ingestor-dialogs/creation-dialog/ingestor.confirm-transfer-dialog.component";
 import {
   IngestionRequestInformation,
   IngestorHelper,
-  ScientificMetadata,
 } from "./helper/ingestor.component-helper";
-import { IngestorMetadataSSEService } from "./helper/ingestor.metadata-sse-service";
 import { IngestorAPIManager } from "./helper/ingestor-api-manager";
 import {
   UserInfo,
   OtherHealthResponse,
   OtherVersionResponse,
-  PostDatasetRequest,
   GetTransferResponse,
 } from "shared/sdk/models/ingestor/models";
 import { PageChangeEvent } from "shared/modules/table/table.component";
@@ -39,6 +31,7 @@ import {
   selectIngestorEndpoint,
   selectIngestorTransferList,
 } from "state-management/selectors/ingestor.selector";
+import { IngestorCreationDialogBaseComponent } from "ingestor/ingestor-dialogs/creation-dialog/ingestor.creation-dialog-base.component";
 
 @Component({
   selector: "ingestor",
@@ -60,6 +53,7 @@ export class IngestorComponent implements OnInit {
 
   sourceFolder = "";
   forwardFacilityBackend = "";
+  selectedTab = 1;
 
   connectedFacilityBackend = "";
   connectingToFacilityBackend = true;
@@ -85,8 +79,6 @@ export class IngestorComponent implements OnInit {
   authIsDisabled = false;
   healthInfo: OtherHealthResponse = null;
 
-  errorMessage = "";
-
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
 
@@ -96,7 +88,6 @@ export class IngestorComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private apiManager: IngestorAPIManager,
-    private sseService: IngestorMetadataSSEService,
     private store: Store,
   ) {}
 
@@ -190,89 +181,12 @@ export class IngestorComponent implements OnInit {
 
         // Only refresh if the user is logged in or the auth is disabled
         if (this.authIsDisabled || this.userInfo.logged_in) {
+          // Activate Transfer Tab when ingestor is ready for actions
+          this.selectedTab = 0;
           this.doRefreshTransferList();
         }
       }
     });
-  }
-
-  async ingestDataset(): Promise<boolean> {
-    const payload: PostDatasetRequest = {
-      metaData: this.createNewTransferData.mergedMetaDataString,
-      userToken: this.tokenValue,
-    };
-
-    try {
-      const result = await this.apiManager.startIngestion(payload);
-      if (result) {
-        this.doRefreshTransferList();
-        return true;
-      }
-    } catch (error) {
-      this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
-      throw error;
-    }
-
-    return false;
-  }
-
-  async startMetadataExtraction(): Promise<boolean> {
-    this.createNewTransferData.apiInformation.metaDataExtractionFailed = false;
-
-    if (this.createNewTransferData.apiInformation.extractMetaDataRequested) {
-      return false;
-    }
-
-    this.createNewTransferData.apiInformation.extractorMetaDataReady = false;
-    this.createNewTransferData.apiInformation.extractMetaDataRequested = true;
-
-    const params = new HttpParams()
-      .set("filePath", this.createNewTransferData.selectedPath)
-      .set("methodName", this.createNewTransferData.selectedMethod.name);
-
-    const sseUrl = `${this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.METADATA}?${params.toString()}`;
-    this.sseService.connect(sseUrl);
-    this.sseService.getMessages().subscribe({
-      next: (data) => {
-        //console.log("Received SSE data:", data);
-        this.createNewTransferData.apiInformation.extractorMetaDataStatus =
-          data.message;
-        this.createNewTransferData.apiInformation.extractorMetadataProgress =
-          data.progress;
-
-        if (data.result) {
-          this.createNewTransferData.apiInformation.extractorMetaDataReady =
-            true;
-          const extractedScientificMetadata = JSON.parse(
-            data.resultMessage,
-          ) as ScientificMetadata;
-
-          this.createNewTransferData.extractorMetaData.instrument =
-            extractedScientificMetadata.instrument ?? {};
-          this.createNewTransferData.extractorMetaData.acquisition =
-            extractedScientificMetadata.acquisition ?? {};
-        } else if (data.error) {
-          this.createNewTransferData.apiInformation.metaDataExtractionFailed =
-            true;
-          this.createNewTransferData.apiInformation.extractMetaDataRequested =
-            false;
-          this.createNewTransferData.apiInformation.extractorMetaDataStatus =
-            data.message;
-          this.createNewTransferData.apiInformation.extractorMetadataProgress =
-            data.progress;
-        }
-      },
-      error: (error) => {
-        console.error("Error receiving SSE data:", error);
-        this.errorMessage += `${new Date().toLocaleString()}: ${error.message}]<br>`;
-        this.createNewTransferData.apiInformation.metaDataExtractionFailed =
-          true;
-        this.createNewTransferData.apiInformation.extractMetaDataRequested =
-          false;
-      },
-    });
-
-    return true;
   }
 
   onClickForwardToIngestorPage() {
@@ -304,88 +218,19 @@ export class IngestorComponent implements OnInit {
   }
 
   onClickAddIngestion(): void {
-    this.createNewTransferData = IngestorHelper.createEmptyRequestInformation();
-    this.onClickNext(0); // Open first dialog to start the ingestion process
-  }
+    // Clean the current ingestion object
+    this.store.dispatch(
+      fromActions.updateIngestionObject({
+        ingestionObject: IngestorHelper.createEmptyRequestInformation(),
+      }),
+    );
 
-  resetExtractedMetadata(): void {
-    this.createNewTransferData.extractorMetaData = {
-      instrument: {},
-      acquisition: {},
-    };
-  }
-
-  onClickNext(step: number): void {
     this.dialog.closeAll();
 
     let dialogRef = null;
-
-    switch (step) {
-      case 0:
-        this.createNewTransferData.apiInformation.extractMetaDataRequested =
-          false;
-        this.createNewTransferData.apiInformation.extractorMetaDataReady =
-          false;
-        dialogRef = this.dialog.open(IngestorNewTransferDialogComponent, {
-          data: {
-            onClickNext: this.onClickNext.bind(this),
-            createNewTransferData: this.createNewTransferData,
-            backendURL: this.connectedFacilityBackend,
-            userInfo: this.userInfo,
-          },
-          disableClose: true,
-        });
-
-        break;
-      case 1:
-        this.resetExtractedMetadata();
-        if (this.createNewTransferData.editorMode === "INGESTION") {
-          this.startMetadataExtraction().catch((error) => {
-            console.error("Metadata extraction error", error);
-          });
-        } else if (this.createNewTransferData.editorMode === "EDITOR") {
-          this.createNewTransferData.apiInformation.extractorMetaDataReady =
-            true;
-        }
-
-        dialogRef = this.dialog.open(IngestorUserMetadataDialogComponent, {
-          data: {
-            onClickNext: this.onClickNext.bind(this),
-            createNewTransferData: this.createNewTransferData,
-            backendURL: this.connectedFacilityBackend,
-            userInfo: this.userInfo,
-          },
-          disableClose: true,
-        });
-        break;
-      case 2:
-        dialogRef = this.dialog.open(IngestorExtractorMetadataDialogComponent, {
-          data: {
-            onClickNext: this.onClickNext.bind(this),
-            createNewTransferData: this.createNewTransferData,
-            backendURL: this.connectedFacilityBackend,
-            userInfo: this.userInfo,
-          },
-          disableClose: true,
-        });
-        break;
-      case 3:
-        dialogRef = this.dialog.open(IngestorConfirmTransferDialogComponent, {
-          data: {
-            onClickNext: this.onClickNext.bind(this),
-            onStartUpload: this.ingestDataset.bind(this),
-            createNewTransferData: this.createNewTransferData,
-            backendURL: this.connectedFacilityBackend,
-            userInfo: this.userInfo,
-          },
-          disableClose: true,
-        });
-        break;
-      case 4:
-        break;
-      default:
-        console.error("Unknown step", step);
-    }
+    dialogRef = this.dialog.open(IngestorCreationDialogBaseComponent, {
+      disableClose: true,
+    });
 
     // Error if the dialog reference is not set
     if (dialogRef === null) return;
@@ -406,7 +251,7 @@ export class IngestorComponent implements OnInit {
       await this.apiManager.cancelTransfer(transferId);
       this.doRefreshTransferList();
     } catch (error) {
-      this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+      console.error("Error cancelling transfer", error);
     }
   }
 
@@ -497,7 +342,7 @@ export class IngestorComponent implements OnInit {
           return "http://localhost:8888";
         }
       } catch (error) {
-        this.errorMessage += `${new Date().toLocaleString()}: ${error.message}<br>`;
+        console.error("Error fetching autodiscovery list", error);
       }
     }
     return null;

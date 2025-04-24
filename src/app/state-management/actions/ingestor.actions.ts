@@ -1,5 +1,8 @@
 import { createAction, props } from "@ngrx/store";
+import { IngestionRequestInformation } from "ingestor/ingestor-page/helper/ingestor.component-helper";
 import {
+  GetBrowseDatasetResponse,
+  GetExtractorResponse,
   GetTransferResponse,
   OtherHealthResponse,
   OtherVersionResponse,
@@ -48,5 +51,40 @@ export const updateTransferListSuccess = createAction(
 
 export const updateTransferListFailure = createAction(
   "[Ingestor] Update Transfer List Failure",
+  props<{ err: Error }>(),
+);
+
+export const updateIngestionObject = createAction(
+  "[Ingestor] Update Ingestion Object",
+  props<{ ingestionObject: IngestionRequestInformation }>(),
+);
+
+export const getExtractionMethods = createAction(
+  "[Ingestor] Get Extraction Methods",
+  props<{ page: number; pageNumber: number }>(),
+);
+
+export const getExtractionMethodsSuccess = createAction(
+  "[Ingestor] Get Extraction Methods Success",
+  props<{ extractionMethods: GetExtractorResponse }>(),
+);
+
+export const getExtractionMethodsFailure = createAction(
+  "[Ingestor] Get Extraction Methods Failure",
+  props<{ err: Error }>(),
+);
+
+export const getBrowseFilePath = createAction(
+  "[Ingestor] Get Browse File Path",
+  props<{ path: string; page: number; pageNumber: number }>(),
+);
+
+export const getBrowseFilePathSuccess = createAction(
+  "[Ingestor] Get Browse File Path Success",
+  props<{ ingestorBrowserActiveNode: GetBrowseDatasetResponse }>(),
+);
+
+export const getBrowseFilePathFailure = createAction(
+  "[Ingestor] Get Browse File Path Failure",
   props<{ err: Error }>(),
 );

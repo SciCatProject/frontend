@@ -33,3 +33,18 @@ export const selectIngestorTransferList = createSelector(
   selectIngestorState,
   (state) => state.ingestorTransferList,
 );
+
+export const selectIngestionObject = createSelector(
+  selectIngestorState,
+  (state) => state.ingestionObject,
+);
+
+export const selectIngestorExtractionMethods = createSelector(
+  selectIngestorState,
+  (state) => state.ingestorExtractionMethods,
+);
+
+export const selectIngestorBrowserActiveNode = createSelector(
+  selectIngestorState,
+  (state) => state.ingestorBrowserActiveNode,
+);

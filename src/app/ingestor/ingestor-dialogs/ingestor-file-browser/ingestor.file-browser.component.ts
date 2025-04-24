@@ -1,6 +1,5 @@
-import { ChangeDetectorRef, Component, Inject, OnInit } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
-import { IngestorAPIManager } from "ingestor/ingestor-page/helper/ingestor-api-manager";
 import {
   IngestionRequestInformation,
   IngestorHelper,
@@ -9,6 +8,12 @@ import {
 import { FolderNode } from "shared/sdk/models/ingestor/folderNode";
 import { GetBrowseDatasetResponse } from "shared/sdk/models/ingestor/models";
 import { PageChangeEvent } from "shared/modules/table/table.component";
+import {
+  selectIngestionObject,
+  selectIngestorBrowserActiveNode,
+} from "state-management/selectors/ingestor.selector";
+import { Store } from "@ngrx/store";
+import * as fromActions from "state-management/actions/ingestor.actions";
 
 export interface BrowsableNode extends FolderNode {
   childrenNodes?: BrowsableNode[];
@@ -28,10 +33,16 @@ export interface GoBackNode extends FolderNode {
 })
 export class IngestorFileBrowserComponent implements OnInit {
   private _activeNode: BrowsableNode | null = null;
+
+  ingestionObject$ = this.store.select(selectIngestionObject);
+  selectIngestorBrowserActiveNode$ = this.store.select(
+    selectIngestorBrowserActiveNode,
+  );
+
   activeNodeChildrenTotal = 0;
+  nextNode: BrowsableNode | null = null;
 
   isListView = true;
-  backendURL = "";
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
 
@@ -45,13 +56,8 @@ export class IngestorFileBrowserComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: DialogDataObject,
-    private apiManager: IngestorAPIManager,
-    private cdr: ChangeDetectorRef,
-  ) {
-    this.createNewTransferData = data.createNewTransferData;
-    this.backendURL = data.backendURL;
-    this.apiManager.connect(this.backendURL);
-  }
+    private store: Store,
+  ) {}
 
   get activeNode(): BrowsableNode | null {
     return this._activeNode;
@@ -80,18 +86,34 @@ export class IngestorFileBrowserComponent implements OnInit {
     };
   }
 
-  async ngOnInit(): Promise<void> {
-    const rootNode: FolderNode = {
-      name: "",
-      path:
-        this.createNewTransferData.selectedPath !== ""
-          ? this.createNewTransferData.selectedPath
-          : "/",
-      children: false,
-    };
+  ngOnInit(): void {
+    this.ingestionObject$.subscribe((ingestionObject) => {
+      if (ingestionObject) {
+        this.createNewTransferData = ingestionObject;
 
-    const rootNodeChildren = await this.onLoadFilePath(rootNode.path);
-    this.setExtendedNodeActive(rootNode, rootNodeChildren);
+        const rootNode: FolderNode = {
+          name: "",
+          path:
+            this.createNewTransferData.selectedPath !== ""
+              ? this.createNewTransferData.selectedPath
+              : "/",
+          children: false,
+        };
+
+        this.selectIngestorBrowserActiveNode$.subscribe((newNode) => {
+          if (newNode) {
+            const newActiveNode: BrowsableNode = {
+              ...(this.nextNode ?? rootNode),
+              childrenNodes: [],
+              children: false,
+            };
+            this.setExtendedNodeActive(newActiveNode, newNode);
+          }
+        });
+
+        this.onLoadFolderNode(rootNode, true);
+      }
+    });
   }
 
   setExtendedNodeActive(
@@ -129,46 +151,25 @@ export class IngestorFileBrowserComponent implements OnInit {
     return item.id; // or any unique identifier for the items
   }
 
-  async onLoadFolderNode(item: BrowsableNode, resetPage = true): Promise<void> {
+  onLoadFolderNode(item: BrowsableNode, resetPage = true): void {
     if (resetPage) {
       // Reset Page, when clicking on an item
       this.browseFolderPage = 0;
     }
 
-    const newActiveNode: BrowsableNode = {
-      ...item,
-      childrenNodes: [],
-      children: false,
-    };
-    const newActiveNodeChildren = await this.onLoadFilePath(item.path);
-    this.setExtendedNodeActive(newActiveNode, newActiveNodeChildren);
-    //this.cdr.detectChanges();
-  }
+    this.nextNode = item;
 
-  async onLoadFilePath(path: string): Promise<GetBrowseDatasetResponse | null> {
-    try {
-      const folderNodeResponse = await this.apiManager.getBrowseFilePath(
-        this.browseFolderPage + 1, // 1-based
-        this.browseFolderPageSize,
-        path,
-      );
-
-      return folderNodeResponse;
-    } catch (error) {
-      console.error("Error loading path:", path, error);
-      return null;
-    }
+    this.store.dispatch(
+      fromActions.getBrowseFilePath({
+        page: this.browseFolderPage + 1, // 1-based
+        pageNumber: this.browseFolderPageSize,
+        path: item.path,
+      }),
+    );
   }
 
   onFileBrowserChildrenPageChange(event: PageChangeEvent) {
     this.browseFolderPage = event.pageIndex;
-
-    // Reload Active Node children
     this.onLoadFolderNode(this.activeNode, false);
   }
-}
-
-export interface Section {
-  name: string;
-  updated?: Date;
 }

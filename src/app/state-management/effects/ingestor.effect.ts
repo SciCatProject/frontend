@@ -118,7 +118,41 @@ export class IngestorEffects {
           map((transferList) =>
             fromActions.updateTransferListSuccess({ transferList }),
           ),
-          catchError((err) => of(fromActions.updateTransferListFailure({ err }))),
+          catchError((err) =>
+            of(fromActions.updateTransferListFailure({ err })),
+          ),
+        ),
+      ),
+    );
+  });
+
+  getExtractionMethods$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.getExtractionMethods),
+      switchMap(({ page, pageNumber }) =>
+        this.ingestor.getExtractionMethods(page, pageNumber).pipe(
+          map((extractionMethods) =>
+            fromActions.getExtractionMethodsSuccess({ extractionMethods }),
+          ),
+          catchError((err) =>
+            of(fromActions.getExtractionMethodsFailure({ err })),
+          ),
+        ),
+      ),
+    );
+  });
+
+  getBrowseFilePath$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.getBrowseFilePath),
+      switchMap(({ path, page, pageNumber }) =>
+        this.ingestor.getBrowseFilePath(page, pageNumber, path).pipe(
+          map((ingestorBrowserActiveNode) =>
+            fromActions.getBrowseFilePathSuccess({ ingestorBrowserActiveNode }),
+          ),
+          catchError((err) =>
+            of(fromActions.getBrowseFilePathFailure({ err })),
+          ),
         ),
       ),
     );

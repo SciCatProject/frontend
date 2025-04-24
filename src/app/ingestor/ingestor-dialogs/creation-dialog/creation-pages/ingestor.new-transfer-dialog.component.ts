@@ -6,9 +6,9 @@ import {
   ExtractionMethod,
   IngestionRequestInformation,
   IngestorHelper,
-} from "../../ingestor-page/helper/ingestor.component-helper";
+} from "../../../ingestor-page/helper/ingestor.component-helper";
 import { IngestorMetadataEditorHelper } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
-import { IngestorAPIManager } from "../../ingestor-page/helper/ingestor-api-manager";
+import { IngestorAPIManager } from "../../../ingestor-page/helper/ingestor-api-manager";
 import { GetExtractorResponse } from "shared/sdk/models/ingestor/models";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { IngestorFileBrowserComponent } from "ingestor/ingestor-dialogs/ingestor-file-browser/ingestor.file-browser.component";
@@ -16,7 +16,7 @@ import { IngestorFileBrowserComponent } from "ingestor/ingestor-dialogs/ingestor
 @Component({
   selector: "ingestor.new-transfer-dialog",
   templateUrl: "ingestor.new-transfer-dialog.html",
-  styleUrls: ["../../ingestor-page/ingestor.component.scss"],
+  styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
 })
 export class IngestorNewTransferDialogComponent implements OnInit {
   extractionMethods: GetExtractorResponse = null;

@@ -6,13 +6,13 @@ import {
   IngestionRequestInformation,
   IngestorHelper,
   SciCatHeader_Schema,
-} from "../../ingestor-page/helper/ingestor.component-helper";
+} from "../../../ingestor-page/helper/ingestor.component-helper";
 import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 
 @Component({
   selector: "ingestor.user-metadata-dialog",
   templateUrl: "ingestor.user-metadata-dialog.html",
-  styleUrls: ["../../ingestor-page/ingestor.component.scss"],
+  styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
 })
 export class IngestorUserMetadataDialogComponent {
   metadataSchemaOrganizational: JsonSchema;

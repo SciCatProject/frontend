@@ -8,7 +8,7 @@
   </button>
 </div>
 <mat-dialog-content class="mat-typography" disableClose="true">
-  <div class="file-browser-view-toggle">
+  <div *ngIf="false" class="file-browser-view-toggle">
     <button mat-button disabled="true" (click)="toggleView()" [matTooltip]="isListView ? 'Switch to Tree View' : 'Switch to List View'">
       <mat-icon *ngIf="isListView">account_tree</mat-icon>
       <mat-icon *ngIf="!isListView">list</mat-icon>

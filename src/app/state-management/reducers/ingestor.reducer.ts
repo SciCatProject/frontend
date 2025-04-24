@@ -14,6 +14,36 @@ export const ingestorReducer = (state: undefined, action: Action) => {
 const reducer = createReducer(
   initialIngestorState,
   on(
+    fromActions.getBrowseFilePathSuccess,
+    (state, { ingestorBrowserActiveNode }): IngestorState => ({
+      ...state,
+      ingestorBrowserActiveNode: ingestorBrowserActiveNode,
+    }),
+  ),
+  on(
+    fromActions.getBrowseFilePathFailure,
+    (state, { err }): IngestorState => ({
+      ...state,
+      ingestorBrowserActiveNode: null,
+      error: err,
+    }),
+  ),
+  on(
+    fromActions.getExtractionMethodsSuccess,
+    (state, { extractionMethods }): IngestorState => ({
+      ...state,
+      ingestorExtractionMethods: extractionMethods,
+    }),
+  ),
+  on(
+    fromActions.getExtractionMethodsFailure,
+    (state, { err }): IngestorState => ({
+      ...state,
+      ingestorExtractionMethods: null,
+      error: err,
+    }),
+  ),
+  on(
     fromActions.setIngestorEndpoint,
     (state, { ingestorEndpoint }): IngestorState => ({
       ...state,
@@ -32,12 +62,6 @@ const reducer = createReducer(
     (state): IngestorState => ({
       ...state,
       connectingBackend: false,
-    }),
-  ),
-  on(
-    fromActions.connectIngestor,
-    (state): IngestorState => ({
-      ...state,
     }),
   ),
   on(
@@ -74,6 +98,13 @@ const reducer = createReducer(
     (state, { transferList }): IngestorState => ({
       ...state,
       ingestorTransferList: transferList,
+    }),
+  ),
+  on(
+    fromActions.updateIngestionObject,
+    (state, { ingestionObject }): IngestorState => ({
+      ...state,
+      ingestionObject,
     }),
   ),
 );

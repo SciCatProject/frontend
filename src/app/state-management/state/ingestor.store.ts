@@ -1,4 +1,10 @@
 import {
+  IngestionRequestInformation,
+  IngestorHelper,
+} from "ingestor/ingestor-page/helper/ingestor.component-helper";
+import {
+  GetBrowseDatasetResponse,
+  GetExtractorResponse,
   GetTransferResponse,
   OtherHealthResponse,
   OtherVersionResponse,
@@ -21,6 +27,9 @@ export interface IngestorState {
   ingestorAuth: IngestorAuthentication | null;
   ingestorEndpoint: string | null;
   ingestorTransferList: GetTransferResponse | null;
+  ingestorExtractionMethods: GetExtractorResponse | null;
+  ingestionObject: IngestionRequestInformation;
+  ingestorBrowserActiveNode: GetBrowseDatasetResponse | null;
   connectingBackend: boolean;
   error: any | null;
 }
@@ -33,6 +42,9 @@ export const initialIngestorState: IngestorState = {
   ingestorAuth: null,
   ingestorEndpoint: null,
   ingestorTransferList: null,
+  ingestorExtractionMethods: null,
+  ingestionObject: IngestorHelper.createEmptyRequestInformation(),
+  ingestorBrowserActiveNode: null,
   connectingBackend: false,
   error: null,
 };
