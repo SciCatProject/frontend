@@ -1,25 +1,36 @@
-import { ChangeDetectorRef, Component, Inject } from "@angular/core";
-import { MatDialog, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { JsonSchema } from "@jsonforms/core";
 import {
-  DialogDataObject,
   IngestionRequestInformation,
   IngestorHelper,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
 import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
+import { Store } from "@ngrx/store";
+import { selectIngestionObject } from "state-management/selectors/ingestor.selector";
+import * as fromActions from "state-management/actions/ingestor.actions";
 
 @Component({
-  selector: "ingestor.extractor-metadata-dialog",
-  templateUrl: "ingestor.extractor-metadata-dialog.html",
+  selector: "ingestor-extractor-metadata-dialog-page",
+  templateUrl: "ingestor.extractor-metadata-dialog-page.html",
   styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
 })
-export class IngestorExtractorMetadataDialogComponent {
+export class IngestorExtractorMetadataDialogPageComponent implements OnInit {
   metadataSchemaInstrument: JsonSchema;
   metadataSchemaAcquisition: JsonSchema;
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
 
-  backendURL = "";
+  ingestionObject$ = this.store.select(selectIngestionObject);
+
+  @Output() nextStep = new EventEmitter<void>();
+  @Output() backStep = new EventEmitter<void>();
+
   extractorMetaDataReady = false;
   extractorMetaDataStatus = "";
   extractorMetaDataError = false;
@@ -37,41 +48,54 @@ export class IngestorExtractorMetadataDialogComponent {
   };
 
   constructor(
-    public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: DialogDataObject,
+    private store: Store,
     private cdr: ChangeDetectorRef,
-  ) {
-    this.createNewTransferData = data.createNewTransferData;
-    this.backendURL = data.backendURL;
-    const instrumentSchema =
-      this.createNewTransferData.selectedResolvedDecodedSchema.properties
-        .instrument;
-    const acqusitionSchema =
-      this.createNewTransferData.selectedResolvedDecodedSchema.properties
-        .acquisition;
+  ) {}
 
-    this.metadataSchemaInstrument = instrumentSchema;
-    this.metadataSchemaAcquisition = acqusitionSchema;
-    this.extractorMetaDataReady =
-      this.createNewTransferData.apiInformation.extractorMetaDataReady;
-    this.extractorMetaDataError =
-      this.createNewTransferData.apiInformation.metaDataExtractionFailed;
-    this.extractorMetaDataStatus =
-      this.createNewTransferData.apiInformation.extractorMetaDataStatus;
-    this.process =
-      this.createNewTransferData.apiInformation.extractorMetadataProgress;
+  ngOnInit() {
+    this.ingestionObject$.subscribe((ingestionObject) => {
+      if (ingestionObject) {
+        this.createNewTransferData = ingestionObject;
+
+        const instrumentSchema =
+          this.createNewTransferData.selectedResolvedDecodedSchema.properties
+            .instrument;
+        const acqusitionSchema =
+          this.createNewTransferData.selectedResolvedDecodedSchema.properties
+            .acquisition;
+
+        this.metadataSchemaInstrument = instrumentSchema;
+        this.metadataSchemaAcquisition = acqusitionSchema;
+        this.extractorMetaDataReady =
+          this.createNewTransferData.apiInformation.extractorMetaDataReady;
+        this.extractorMetaDataError =
+          this.createNewTransferData.apiInformation.metaDataExtractionFailed;
+        this.extractorMetaDataStatus =
+          this.createNewTransferData.apiInformation.extractorMetaDataStatus;
+        this.process =
+          this.createNewTransferData.apiInformation.extractorMetadataProgress;
+      }
+    });
   }
 
   onClickBack(): void {
-    if (this.data && this.data.onClickNext) {
-      this.data.onClickNext(1); // Beispielwert für den Schritt
-    }
+    this.store.dispatch(
+      fromActions.updateIngestionObject({
+        ingestionObject: this.createNewTransferData,
+      }),
+    );
+
+    this.backStep.emit(); // Open previous dialog
   }
 
   onClickNext(): void {
-    if (this.data && this.data.onClickNext) {
-      this.data.onClickNext(3); // Beispielwert für den Schritt
-    }
+    this.store.dispatch(
+      fromActions.updateIngestionObject({
+        ingestionObject: this.createNewTransferData,
+      }),
+    );
+
+    this.nextStep.emit(); // Open next dialog
   }
 
   onDataChangeExtractorMetadataInstrument(event: any) {

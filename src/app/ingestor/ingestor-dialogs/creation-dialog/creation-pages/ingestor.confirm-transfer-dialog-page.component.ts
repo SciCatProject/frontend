@@ -1,14 +1,11 @@
-import { Component, inject, OnInit } from "@angular/core";
+import { Component, EventEmitter, inject, OnInit, Output } from "@angular/core";
 import {
   IngestionRequestInformation,
   IngestorHelper,
   SciCatHeader,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
 import { Store } from "@ngrx/store";
-import {
-  selectIngestionObject,
-  selectIngestorEndpoint,
-} from "state-management/selectors/ingestor.selector";
+import { selectIngestionObject } from "state-management/selectors/ingestor.selector";
 import { MatDialog } from "@angular/material/dialog";
 
 @Component({
@@ -23,15 +20,16 @@ export class IngestorConfirmTransferDialogPageComponent implements OnInit {
     IngestorHelper.createEmptyRequestInformation();
 
   ingestionObject$ = this.store.select(selectIngestionObject);
-  ingestorBackend$ = this.store.select(selectIngestorEndpoint);
+
+  @Output() nextStep = new EventEmitter<void>();
+  @Output() backStep = new EventEmitter<void>();
 
   provideMergeMetaData = "";
-  connectedFacilityBackend = "";
 
   errorMessage = "";
   copiedToClipboard = false;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) { }
 
   ngOnInit() {
     this.ingestionObject$.subscribe((ingestionObject) => {
@@ -40,11 +38,6 @@ export class IngestorConfirmTransferDialogPageComponent implements OnInit {
       }
     });
 
-    this.ingestorBackend$.subscribe((ingestorBackend) => {
-      if (ingestorBackend) {
-        this.connectedFacilityBackend = ingestorBackend;
-      }
-    });
     this.provideMergeMetaData = this.createMetaDataString();
   }
 
@@ -74,10 +67,11 @@ export class IngestorConfirmTransferDialogPageComponent implements OnInit {
   }
 
   onClickBack(): void {
-    // TODO on click back
+    this.backStep.emit(); // Open previous dialog
   }
 
   onClickConfirm(): void {
+    this.nextStep.emit(); // Open previous dialog
     this.errorMessage = "";
     /*if (this.data && this.data.onClickNext) {
       const dialogRef = this.dialog.open(IngestorConfirmationDialogComponent, {

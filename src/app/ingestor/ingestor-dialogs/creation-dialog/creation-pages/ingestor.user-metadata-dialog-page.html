@@ -82,7 +82,7 @@
 
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close (click)="onClickBack()">Back</button>
-  <button mat-button color="primary" cdkFocusInitial [mat-dialog-close]="true"
+  <button mat-button (click)="onClickBack()">Back</button>
+  <button mat-button color="primary" cdkFocusInitial
     [disabled]="!uiNextButtonReady" (click)="onClickNext()">Next</button>
 </mat-dialog-actions>

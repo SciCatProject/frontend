@@ -1,26 +1,38 @@
-import { ChangeDetectorRef, Component, Inject } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { JsonSchema } from "@jsonforms/core";
 import {
-  DialogDataObject,
   IngestionRequestInformation,
   IngestorHelper,
   SciCatHeader_Schema,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
 import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
+import { selectIngestionObject } from "state-management/selectors/ingestor.selector";
+import * as fromActions from "state-management/actions/ingestor.actions";
+import { Store } from "@ngrx/store";
 
 @Component({
-  selector: "ingestor.user-metadata-dialog",
-  templateUrl: "ingestor.user-metadata-dialog.html",
+  selector: "ingestor-user-metadata-dialog",
+  templateUrl: "ingestor.user-metadata-dialog-page.html",
   styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
 })
-export class IngestorUserMetadataDialogComponent {
+export class IngestorUserMetadataDialogPageComponent implements OnInit {
+  ingestionObject$ = this.store.select(selectIngestionObject);
+
+  createNewTransferData: IngestionRequestInformation =
+    IngestorHelper.createEmptyRequestInformation();
+
+  @Output() nextStep = new EventEmitter<void>();
+  @Output() backStep = new EventEmitter<void>();
+
   metadataSchemaOrganizational: JsonSchema;
   metadataSchemaSample: JsonSchema;
   scicatHeaderSchema: JsonSchema;
-  createNewTransferData: IngestionRequestInformation =
-    IngestorHelper.createEmptyRequestInformation();
-  backendURL = "";
 
   uiNextButtonReady = false;
   isSciCatHeaderOk = false;
@@ -37,34 +49,42 @@ export class IngestorUserMetadataDialogComponent {
   };
 
   constructor(
-    public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: DialogDataObject,
+    private store: Store,
     private cdr: ChangeDetectorRef,
-  ) {
-    this.createNewTransferData = data.createNewTransferData;
-    this.backendURL = data.backendURL;
-    const organizationalSchema =
-      this.createNewTransferData.selectedResolvedDecodedSchema.properties
-        .organizational;
-    const sampleSchema =
-      this.createNewTransferData.selectedResolvedDecodedSchema.properties
-        .sample;
+  ) {}
 
-    this.metadataSchemaOrganizational = organizationalSchema;
-    this.metadataSchemaSample = sampleSchema;
-    this.scicatHeaderSchema = SciCatHeader_Schema;
+  ngOnInit() {
+    this.ingestionObject$.subscribe((ingestionObject) => {
+      if (ingestionObject) {
+        this.createNewTransferData = ingestionObject;
+
+        this.metadataSchemaOrganizational =
+          this.createNewTransferData.selectedResolvedDecodedSchema.properties.organizational;
+        this.metadataSchemaSample =
+          this.createNewTransferData.selectedResolvedDecodedSchema.properties.sample;
+        this.scicatHeaderSchema = SciCatHeader_Schema;
+      }
+    });
   }
 
   onClickBack(): void {
-    if (this.data && this.data.onClickNext) {
-      this.data.onClickNext(0); // Beispielwert für den Schritt
-    }
+    this.store.dispatch(
+      fromActions.updateIngestionObject({
+        ingestionObject: this.createNewTransferData,
+      }),
+    );
+
+    this.backStep.emit(); // Open previous dialog
   }
 
   onClickNext(): void {
-    if (this.data && this.data.onClickNext) {
-      this.data.onClickNext(2); // Beispielwert für den Schritt
-    }
+    this.store.dispatch(
+      fromActions.updateIngestionObject({
+        ingestionObject: this.createNewTransferData,
+      }),
+    );
+
+    this.nextStep.emit(); // Open next dialog
   }
 
   onDataChangeUserMetadataOrganization(event: any) {

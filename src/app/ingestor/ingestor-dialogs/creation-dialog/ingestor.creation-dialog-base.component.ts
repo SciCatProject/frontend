@@ -16,7 +16,7 @@ import { HttpParams } from "@angular/common/http";
 import { INGESTOR_API_ENDPOINTS_V1 } from "ingestor/ingestor-page/helper/ingestor-api-endpoints";
 import { PostDatasetRequest } from "shared/sdk/models/ingestor/models";
 
-type dialogStep =
+export type dialogStep =
   | "NEW_TRANSFER"
   | "USER_METADATA"
   | "EXTRACTOR_METADATA"
@@ -42,7 +42,7 @@ export class IngestorCreationDialogBaseComponent implements OnInit {
     private store: Store,
     private sseService: IngestorMetadataSSEService,
     @Inject(MAT_DIALOG_DATA) public data: DialogDataObject,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.ingestionObject$.subscribe((ingestionObject) => {
@@ -79,7 +79,7 @@ export class IngestorCreationDialogBaseComponent implements OnInit {
       .set("filePath", this.createNewTransferData.selectedPath)
       .set("methodName", this.createNewTransferData.selectedMethod.name);
 
-    const sseUrl = `${this.connectedFacilityBackend + INGESTOR_API_ENDPOINTS_V1.METADATA}?${params.toString()}`;
+    const sseUrl = `${this.connectedFacilityBackend + "/" + INGESTOR_API_ENDPOINTS_V1.METADATA}?${params.toString()}`;
     this.sseService.connect(sseUrl);
     this.sseService.getMessages().subscribe({
       next: (data) => {
@@ -123,19 +123,17 @@ export class IngestorCreationDialogBaseComponent implements OnInit {
     return true;
   }
 
-  onClickNext(step: dialogStep): void {
-    console.log("Next step clicked", step);
-
-    switch (step) {
+  onClickNext(nextStep: dialogStep): void {
+    switch (nextStep) {
       case "NEW_TRANSFER":
+        this.resetExtractedMetadata();
+        break;
+      case "USER_METADATA":
         this.createNewTransferData.apiInformation.extractMetaDataRequested =
           false;
         this.createNewTransferData.apiInformation.extractorMetaDataReady =
           false;
-        this.currentDialogStep = "USER_METADATA";
-        break;
-      case "USER_METADATA":
-        this.resetExtractedMetadata();
+
         if (this.createNewTransferData.editorMode === "INGESTION") {
           this.startMetadataExtraction().catch((error) => {
             console.error("Metadata extraction error", error);
@@ -145,26 +143,19 @@ export class IngestorCreationDialogBaseComponent implements OnInit {
             true;
         }
 
-        this.currentDialogStep = "EXTRACTOR_METADATA";
         break;
       case "EXTRACTOR_METADATA":
-        this.currentDialogStep = "CONFIRM_TRANSFER";
         break;
       case "CONFIRM_TRANSFER":
-        console.log("Confirm transfer step");
         break;
       default:
-        console.error("Unknown step", step);
+        console.error("Unknown step", nextStep);
+        return;
     }
+    this.currentDialogStep = nextStep;
   }
 
-  onClickBack(): void {
-    if (this.data && this.data.onClickNext) {
-      this.data.onClickNext(2);
-    }
-  }
-
-  onClickConfirm(): void {
+  onClickStartIngestion(): void {
     console.log("Confirm button clicked");
   }
 

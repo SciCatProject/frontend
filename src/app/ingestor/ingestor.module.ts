@@ -17,12 +17,8 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MatSelectModule } from "@angular/material/select";
 import { MatOptionModule } from "@angular/material/core";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
-import { IngestorNewTransferDialogComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.new-transfer-dialog.component";
-import { IngestorUserMetadataDialogComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.user-metadata-dialog.component";
 import { JsonFormsModule } from "@jsonforms/angular";
 import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
-import { IngestorExtractorMetadataDialogComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.extractor-metadata-dialog.component";
-import { IngestorConfirmTransferDialogComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.confirm-transfer-dialog.component";
 import { MatStepperModule } from "@angular/material/stepper";
 import { IngestorDialogStepperComponent } from "./ingestor-dialogs/dialog-mounting-components/ingestor.dialog-stepper.component";
 import { AnyOfRendererComponent } from "./ingestor-metadata-editor/customRenderer/any-of-renderer";
@@ -48,21 +44,19 @@ import { IngestorEffects } from "state-management/effects/ingestor.effect";
 import { StoreModule } from "@ngrx/store";
 import { ingestorReducer } from "state-management/reducers/ingestor.reducer";
 import { IngestorCreationDialogBaseComponent } from "./ingestor-dialogs/creation-dialog/ingestor.creation-dialog-base.component";
-import { IngestorConfirmTransferDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages-new/ingestor.confirm-transfer-dialog-page.component";
-import { IngestorNewTransferDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages-new/ingestor.new-transfer-dialog-page.component";
-import { IngestorUserMetadataDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages-new/ingestor.user-metadata-dialog-page.component";
+import { IngestorConfirmTransferDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.confirm-transfer-dialog-page.component";
+import { IngestorNewTransferDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.new-transfer-dialog-page.component";
+import { IngestorUserMetadataDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.user-metadata-dialog-page.component";
+import { IngestorExtractorMetadataDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.extractor-metadata-dialog-page.component";
 
 @NgModule({
   declarations: [
     IngestorComponent,
     IngestorMetadataEditorComponent,
-    IngestorNewTransferDialogComponent,
     IngestorConfirmTransferDialogPageComponent,
     IngestorNewTransferDialogPageComponent,
     IngestorUserMetadataDialogPageComponent,
-    IngestorUserMetadataDialogComponent,
-    IngestorExtractorMetadataDialogComponent,
-    IngestorConfirmTransferDialogComponent,
+    IngestorExtractorMetadataDialogPageComponent,
     IngestorCreationDialogBaseComponent,
     IngestorDialogStepperComponent,
     AnyOfRendererComponent,

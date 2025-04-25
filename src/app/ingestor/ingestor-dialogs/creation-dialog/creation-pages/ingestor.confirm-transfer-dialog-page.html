@@ -41,11 +41,11 @@
 
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close (click)="onClickBack()">Back</button>
+  <button mat-button (click)="onClickBack()">Back</button>
   <button *ngIf="createNewTransferData.editorMode === 'INGESTION'" mat-button color="primary" cdkFocusInitial
     (click)="onClickConfirm()">Ingest</button>
     <button *ngIf="createNewTransferData.editorMode === 'EDITOR'" mat-button color="primary" cdkFocusInitial (click)="onCopyMetadata()">
       {{!copiedToClipboard ? "Copy JSON" : "Copied!"}}
     </button>
-    <button *ngIf="copiedToClipboard" mat-dialog-close mat-button color="primary" cdkFocusInitial (click)="onCopyMetadata()">Close</button>
+    <button *ngIf="copiedToClipboard" mat-button color="primary" cdkFocusInitial (click)="onCopyMetadata()">Close</button>
 </mat-dialog-actions>

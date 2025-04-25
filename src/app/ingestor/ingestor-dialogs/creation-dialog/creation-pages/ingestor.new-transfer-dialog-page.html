@@ -49,6 +49,5 @@
   <button *ngIf="extractionMethodsError" mat-button
     color="warn" (click)="onClickRetryRequests()">Retry</button>
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button color="primary" cdkFocusInitial [mat-dialog-close]="true"
-    [disabled]="!uiNextButtonReady" (click)="onClickNext()">Next</button>
+  <button mat-button color="primary" cdkFocusInitial [disabled]="!uiNextButtonReady" (click)="onClickNext()">Next</button>
 </mat-dialog-actions>
