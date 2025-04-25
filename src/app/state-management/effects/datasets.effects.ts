@@ -59,7 +59,7 @@ export class DatasetEffects {
         this.datasetsService
           .datasetsControllerFullqueryV3({
             limits: JSON.stringify(limits),
-            fields: query,
+            fields: JSON.stringify(query),
           })
           .pipe(
             map((datasets) =>
@@ -107,9 +107,8 @@ export class DatasetEffects {
       concatLatestFrom(() => this.fullqueryParams$),
       map(([, params]) => params),
       mergeMap(({ query }) => {
-        const parsedQuery = JSON.parse(query);
         return this.datasetsService
-          .datasetsControllerMetadataKeysV3(JSON.stringify(parsedQuery))
+          .datasetsControllerMetadataKeysV3(JSON.stringify(query))
           .pipe(
             map((metadataKeys) =>
               fromActions.fetchMetadataKeysCompleteAction({ metadataKeys }),
