@@ -4,28 +4,39 @@
   <mat-form-field *ngIf="data.input">
     <input matInput tabindex="1" [(ngModel)]="data.input" />
   </mat-form-field>
-</div>
 
-<div *ngIf="data.choice?.options?.length > 0">
-  <mat-form-field>
-    <mat-select [(ngModel)]="data.option">
-      <mat-option
-        *ngFor="let choice of data.choice.options"
-        [value]="choice.option"
-        [matTooltip]="choice.tooltip"
-        >{{ choice.option }}</mat-option
-      >
-    </mat-select>
-  </mat-form-field>
-
-  <span *ngFor="let choice of data.choice.options">
-    <mat-form-field *ngIf="choice.option === data.option && choice.location">
-      <span matPrefix>{{ choice.location }}&nbsp;</span>
-      <input [(ngModel)]="data.location" matInput placeholder="Relative path" />
+  <div *ngIf="data.choice?.options?.length > 0">
+    <mat-form-field>
+      <mat-select [(ngModel)]="data.option">
+        <mat-option
+          *ngFor="let choice of data.choice.options"
+          [value]="choice.option"
+          [matTooltip]="choice.tooltip"
+          >{{ choice.option }}</mat-option
+        >
+      </mat-select>
     </mat-form-field>
-  </span>
-</div>
 
+    <span *ngFor="let choice of data.choice.options">
+      <mat-form-field *ngIf="choice.option === data.option && choice.location">
+        <span matPrefix>{{ choice.location }}&nbsp;</span>
+        <input [(ngModel)]="data.location" matInput placeholder="Relative path" />
+      </mat-form-field>
+    </span>
+  </div>
+
+  <div *ngIf="data.group?.options?.length > 0">
+    <mat-form-field>
+      <mat-select [(ngModel)]="data.groupOption">
+        <mat-option
+          *ngFor="let group of data.group.options"
+          [value]="group"
+          >{{ group }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
 <div mat-dialog-actions>
   <button mat-button [mat-dialog-close]="data" tabindex="2">Ok</button>
   <button mat-button (click)="onNoClick()" tabindex="-1">No Thanks</button>

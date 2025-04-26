@@ -13,11 +13,18 @@ import {
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  selectIsAdmin,
+  selectUserSettingsPageViewModel,
+} from "state-management/selectors/user.selectors";
 
 @Injectable()
 export class ArchivingService {
   private currentUser$ = this.store.select(selectCurrentUser);
   private tapeCopies$ = this.store.select(selectTapeCopies);
+  user$ = this.store.select(selectUserSettingsPageViewModel);
+  isAdmin$ = this.store.select(selectIsAdmin);
+  userGroups$: string[] = [];
 
   constructor(private store: Store) {}
 
@@ -26,6 +33,7 @@ export class ArchivingService {
     datasets: OutputDatasetObsoleteDto[],
     archive: boolean,
     destinationPath?: Record<string, string>,
+    ownerGroup?: string,
     // Do not specify tape copies here
   ) {
     const extra = archive ? {} : destinationPath;
@@ -43,6 +51,7 @@ export class ArchivingService {
 
     const data = {
       jobParams,
+      ownerGroup,
       contactEmail: user.email,
       type: archive ? "archive" : "retrieve",
     };
@@ -52,6 +61,7 @@ export class ArchivingService {
 
   private archiveOrRetrieve(
     datasets: OutputDatasetObsoleteDto[],
+    ownerGroup: string,
     archive: boolean,
     destPath?: Record<string, string>,
   ): Observable<void> {
@@ -70,7 +80,7 @@ export class ArchivingService {
             throw new Error("No datasets selected");
           }
 
-          const job = this.createJob(user, datasets, archive, destPath);
+          const job = this.createJob(user, datasets, archive, destPath, ownerGroup);
 
           this.store.dispatch(submitJobAction({ job: job as any }));
         }
@@ -78,15 +88,16 @@ export class ArchivingService {
     );
   }
 
-  public archive(datasets: OutputDatasetObsoleteDto[]): Observable<void> {
-    return this.archiveOrRetrieve(datasets, true);
+  public archive(datasets: OutputDatasetObsoleteDto[], ownerGroup: string): Observable<void> {
+    return this.archiveOrRetrieve(datasets, ownerGroup, true);
   }
 
   public retrieve(
     datasets: OutputDatasetObsoleteDto[],
     destinationPath: Record<string, string>,
+    ownerGroup: string,
   ): Observable<void> {
-    return this.archiveOrRetrieve(datasets, false, destinationPath);
+    return this.archiveOrRetrieve(datasets, ownerGroup, false, destinationPath);
   }
 
   public generateOptionLocation(
@@ -117,15 +128,23 @@ export class ArchivingService {
   public retriveDialogOptions(
     retrieveDestinations: RetrieveDestinations[] = [],
   ): object {
+    this.user$.subscribe((settings) => {
+      this.userGroups$ = settings.profile.accessGroups;
+    });
+
     return {
       width: "auto",
       data: {
         title: "Retrieve to",
-        question: "",
+        question: "Please select destination and ownerGroup for the retrieve job.",
         choice: {
           options: retrieveDestinations,
         },
         option: retrieveDestinations?.[0]?.option,
+        group: {
+          options: this.userGroups$,
+        },
+        groupOption: this.userGroups$?.[0],
       },
     };
   }
