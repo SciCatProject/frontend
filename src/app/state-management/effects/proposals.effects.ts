@@ -45,10 +45,10 @@ export class ProposalEffects {
         const queryParam = { text: search || undefined };
 
         return this.proposalsService
-          .proposalsControllerFullqueryV3({
-            limits: JSON.stringify(limitsParam),
-            fields: JSON.stringify(queryParam),
-          })
+          .proposalsControllerFullqueryV3(
+            JSON.stringify(limitsParam),
+            JSON.stringify(queryParam),
+          )
           .pipe(
             mergeMap((proposals) => [
               fromActions.fetchProposalsCompleteAction({ proposals }),

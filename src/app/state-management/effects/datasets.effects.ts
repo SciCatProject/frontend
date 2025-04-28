@@ -57,10 +57,10 @@ export class DatasetEffects {
       map(([, params]) => params),
       mergeMap(({ query, limits }) =>
         this.datasetsService
-          .datasetsControllerFullqueryV3({
-            limits: JSON.stringify(limits),
-            fields: JSON.stringify(query),
-          })
+          .datasetsControllerFullqueryV3(
+            JSON.stringify(limits),
+            JSON.stringify(query),
+          )
           .pipe(
             map((datasets) =>
               fromActions.fetchDatasetsCompleteAction({ datasets }),
@@ -82,10 +82,10 @@ export class DatasetEffects {
       map(([, params]) => params),
       mergeMap(({ fields, facets }) =>
         this.datasetsService
-          .datasetsControllerFullfacetV3({
-            facets: JSON.stringify(facets),
-            fields: JSON.stringify(fields),
-          })
+          .datasetsControllerFullfacetV3(
+            JSON.stringify(facets),
+            JSON.stringify(fields),
+          )
           .pipe(
             map((res) => {
               const { all, ...facetCounts } = res[0];

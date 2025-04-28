@@ -36,10 +36,10 @@ export class SampleEffects {
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
         this.sampleApi
-          .samplesControllerFullqueryV3({
-            limits: JSON.stringify(limits),
-            fields: query,
-          })
+          .samplesControllerFullqueryV3(
+            JSON.stringify(limits),
+            JSON.stringify(query),
+          )
           .pipe(
             mergeMap((samples) => [
               fromActions.fetchSamplesCompleteAction({ samples }),
@@ -57,7 +57,7 @@ export class SampleEffects {
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query }) =>
-        this.sampleApi.samplesControllerFullqueryV3({ fields: query }).pipe(
+        this.sampleApi.samplesControllerFullqueryV3(JSON.stringify(query)).pipe(
           map((samples) =>
             fromActions.fetchSamplesCountCompleteAction({
               count: samples.length,
@@ -75,10 +75,9 @@ export class SampleEffects {
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query }) => {
-        const parsedQuery = JSON.parse(query);
-        parsedQuery.metadataKey = "";
+        query["metadataKey"] = "";
         return this.sampleApi
-          .samplesControllerMetadataKeysV3(JSON.stringify(parsedQuery))
+          .samplesControllerMetadataKeysV3(JSON.stringify(query))
           .pipe(
             map((metadataKeys) =>
               fromActions.fetchMetadataKeysCompleteAction({ metadataKeys }),
