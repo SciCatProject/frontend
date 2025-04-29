@@ -20,6 +20,10 @@ import { showMessageAction } from "state-management/actions/user.actions";
 import { selectSubmitError } from "state-management/selectors/jobs.selectors";
 import { AppConfigService } from "app-config.service";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  selectIsAdmin,
+  selectUserSettingsPageViewModel,
+} from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "dataset-table-actions",
@@ -29,6 +33,9 @@ import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
   loading$ = this.store.select(selectIsLoading);
+  user$ = this.store.select(selectUserSettingsPageViewModel);
+  isAdmin$ = this.store.select(selectIsAdmin);
+  userGroups$: string[] = [];
 
   @Input() selectedSets: OutputDatasetObsoleteDto[] | null = [];
 
@@ -82,12 +89,22 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   archiveClickHandle(): void {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: "auto",
-      data: { title: "Really archive?", question: "" },
+      data: {
+        title: "Really archive?",
+        question: "Please select ownerGroup for the archive job.",
+        group: {
+          options: this.userGroups$,
+        },
+        groupOption: this.userGroups$?.[0],
+      },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result && this.selectedSets) {
-        this.archivingSrv.archive(this.selectedSets).subscribe(
+        this.archivingSrv.archive(
+          this.selectedSets,
+          result.groupOption,
+        ).subscribe(
           () => this.store.dispatch(clearSelectionAction()),
           (err) =>
             this.store.dispatch(
@@ -121,7 +138,7 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
           this.appConfig.retrieveDestinations,
         );
         const extra = { ...destPath, ...locationOption };
-        this.archivingSrv.retrieve(this.selectedSets, extra).subscribe(
+        this.archivingSrv.retrieve(this.selectedSets, extra, result.groupOption).subscribe(
           () => this.store.dispatch(clearSelectionAction()),
           (err) =>
             this.store.dispatch(
@@ -163,6 +180,12 @@ export class DatasetTableActionsComponent implements OnInit, OnDestroy {
         if (!err) {
           this.store.dispatch(clearSelectionAction());
         }
+      }),
+    );
+
+    this.subscriptions.push(
+      this.user$.subscribe((settings) => {
+        this.userGroups$ = settings.profile.accessGroups;
       }),
     );
   }

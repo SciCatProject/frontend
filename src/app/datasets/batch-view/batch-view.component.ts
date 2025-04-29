@@ -161,7 +161,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     this.batch$
       .pipe(
         first(),
-        switchMap((datasets) => this.archivingSrv.archive(datasets)),
+        switchMap((datasets) => this.archivingSrv.archive(datasets, "TODO")),
       )
       .subscribe(
         () => this.clearBatch(),
@@ -191,7 +191,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
           this.appConfig.retrieveDestinations,
         );
         const extra = { ...destPath, ...locationOption };
-        this.archivingSrv.retrieve(this.datasetList, extra).subscribe(
+        this.archivingSrv.retrieve(this.datasetList, extra, result.groupOption).subscribe(
           () => this.clearBatch(),
           (err) =>
             this.store.dispatch(

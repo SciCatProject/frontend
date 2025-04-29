@@ -100,8 +100,8 @@ describe("JobsDashboardComponent", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const mode = JobViewMode.myJobs;
-      component.email = "test@email.com";
-      const viewMode = { emailJobInitiator: component.email };
+      component.username = "testName";
+      const viewMode = { createdBy: component.username };
       component.onModeChange(mode);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);

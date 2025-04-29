@@ -5,16 +5,16 @@ import { createMock } from "shared/MockStubs";
 import { JobClass } from "@scicatproject/scicat-sdk-ts-angular";
 
 const job = createMock<JobClass>({
-  _id: "testId",
   id: "testId",
-  emailJobInitiator: "test@email.com",
   type: "archive",
-  datasetList: [],
-  creationTime: "",
-  executionTime: "",
-  jobParams: {},
+  contactEmail: "test@email.com",
+  createdBy: "testName",
+  createdAt: "",
+  jobParams: {
+    datasetList: [],
+  },
   jobResultObject: {},
-  jobStatusMessage: "",
+  statusCode: "",
   ownerGroup: "",
 });
 
