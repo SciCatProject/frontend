@@ -20,6 +20,7 @@ import {
   Logbook,
   Policy,
   ReturnedUserDto,
+  OrigDatablock,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { SDKToken } from "./services/auth/auth.service";
 
@@ -325,6 +326,7 @@ export const mockAttachment = createMock<Attachment>({});
 export const mockSample = createMock<SampleClass>({});
 export const mockProposal = createMock<ProposalClass>({});
 export const mockInstrument = createMock<Instrument>({});
+export const mockOrigDatablock = createMock<OrigDatablock>({});
 export const mockJob = createMock<JobClass>({});
 export const mockLogbook = createMock<Logbook>({});
 export const mockPolicy = createMock<Policy>({});

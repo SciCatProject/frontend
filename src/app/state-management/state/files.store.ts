@@ -1,9 +1,8 @@
-import { OrigDatablock } from "@scicatproject/scicat-sdk-ts-angular";
 import { GenericFilters } from "state-management/models";
 
 export interface FilesState {
-  origDatablocks: OrigDatablock[];
-  currentOrigDatablock: OrigDatablock | undefined;
+  origDatablocks: object[];
+  currentOrigDatablock: object | undefined;
 
   totalCount: number;
 

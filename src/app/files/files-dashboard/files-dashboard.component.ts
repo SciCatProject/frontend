@@ -52,9 +52,7 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
 
   paginationMode: TablePaginationMode = "server-side";
 
-  dataSource: BehaviorSubject<OrigDatablock[]> = new BehaviorSubject<
-    OrigDatablock[]
-  >([]);
+  dataSource: BehaviorSubject<object[]> = new BehaviorSubject<object[]>([]);
 
   pagination: TablePagination = {};
 
@@ -297,7 +295,7 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  onRowClick(event: IRowEvent<OrigDatablock>) {}
+  onRowClick(event: IRowEvent<object>) {}
 
   onTableEvent({ event, sender }: ITableEvent) {
     if (event === TableEventType.SortChanged) {

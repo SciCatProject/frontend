@@ -13,7 +13,7 @@ export const fetchAllOrigDatablocksAction = createAction(
 );
 export const fetchAllOrigDatablocksCompleteAction = createAction(
   "[OrigDatablock] Fetch All Orig Datablocks Complete",
-  props<{ origDatablocks: OrigDatablock[] }>(),
+  props<{ origDatablocks: object[] }>(),
 );
 export const fetchAllOrigDatablocksFailedAction = createAction(
   "[OrigDatablock] Fetch All Orig Datablocks Failed",
