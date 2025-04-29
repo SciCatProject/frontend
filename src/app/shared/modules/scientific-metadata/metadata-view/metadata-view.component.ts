@@ -108,6 +108,22 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
               return row[column.name];
             },
+            toExport: (column, row) => {
+              if (row.type === "date" || this.isDate(row)) {
+                return this.datePipe.transform(row[column.name]);
+              }
+
+              if (row.type === "link") {
+                return this.linkyPipe.transform(row[column.name] || "", {
+                  urls: true,
+                  newWindow: true,
+                  stripPrefix: false,
+                  sanitizeHtml: true,
+                });
+              }
+
+              return row[column.name];
+            },
             renderContentIcon: (column, row) => {
               return row.ontology_reference ? "hub" : "";
             },
@@ -122,6 +138,9 @@ export class MetadataViewComponent implements OnInit, OnChanges {
               return row[column.name]
                 ? this.prettyUnit.transform(row[column.name])
                 : "--";
+            },
+            toExport: (row) => {
+              return row.unit ? this.prettyUnit.transform(row.unit) : "--";
             },
             renderContentIcon: (column, row) => {
               return row.validUnit === false ? "error" : "";

@@ -364,20 +364,28 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           // NOTE: This is for the saved columns in the database or the old config.
           convertedColumn.customRender = (c, row) =>
             this.lodashGet(row, "scientificMetadata.runNumber.value");
+          convertedColumn.toExport = (row) =>
+            this.lodashGet(row, "scientificMetadata.runNumber.value");
         }
         // NOTE: This is how we render the custom columns if new config is used.
         if (column.type === "custom") {
           convertedColumn.customRender = (c, row) =>
+            this.lodashGet(row, column.path || column.name);
+          convertedColumn.toExport = (row) =>
             this.lodashGet(row, column.path || column.name);
         }
 
         if (column.name === "size") {
           convertedColumn.customRender = (column, row) =>
             this.fileSize.transform(row[column.name]);
+          convertedColumn.toExport = (row) =>
+            this.fileSize.transform(row[column.name]);
         }
 
         if (column.name === "creationTime") {
           convertedColumn.customRender = (column, row) =>
+            this.datePipe.transform(row[column.name]);
+          convertedColumn.toExport = (row) =>
             this.datePipe.transform(row[column.name]);
         }
 
@@ -387,6 +395,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         ) {
           convertedColumn.customRender = (column, row) => {
             // NOTE: Maybe here we should use the "scientificMetadata" as field name and not "metadata". This should be changed in the backend config.
+            return this.jsonHeadPipe.transform(row["scientificMetadata"]);
+          };
+          convertedColumn.toExport = (row) => {
             return this.jsonHeadPipe.transform(row["scientificMetadata"]);
           };
         }
@@ -409,6 +420,22 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           };
 
           convertedColumn.customRender = (column, row) => {
+            if (this.wipCondition(row)) {
+              return "Work in progress";
+            } else if (this.archivableCondition(row)) {
+              return "Archivable";
+            } else if (this.retrievableCondition(row)) {
+              return "Retrievable";
+            } else if (this.systemErrorCondition(row)) {
+              return "System error";
+            } else if (this.userErrorCondition(row)) {
+              return "User error";
+            }
+
+            return "";
+          };
+
+          convertedColumn.toExport = (row) => {
             if (this.wipCondition(row)) {
               return "Work in progress";
             } else if (this.archivableCondition(row)) {
