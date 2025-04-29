@@ -25,12 +25,7 @@ export class SampleEffects {
 
   fetchSamples$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(
-        fromActions.fetchSamplesAction,
-        fromActions.changePageAction,
-        fromActions.sortByColumnAction,
-        fromActions.setTextFilterAction,
-      ),
+      ofType(fromActions.fetchSamplesAction),
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
@@ -52,16 +47,26 @@ export class SampleEffects {
       ofType(fromActions.fetchSamplesCountAction),
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
-      mergeMap(({ query }) =>
-        this.sampleApi.samplesControllerFullquery(query).pipe(
-          map((samples) =>
-            fromActions.fetchSamplesCountCompleteAction({
-              count: samples.length,
-            }),
-          ),
-          catchError(() => of(fromActions.fetchSamplesCountFailedAction())),
-        ),
-      ),
+      mergeMap(({ query }) => {
+        const parsedQuery = JSON.parse(query);
+        if (parsedQuery.text) {
+          parsedQuery.where = {
+            ...parsedQuery.where,
+            $text: { $search: parsedQuery.text },
+          };
+        }
+
+        return this.sampleApi
+          .samplesControllerCount(JSON.stringify(parsedQuery))
+          .pipe(
+            map(({ count }) =>
+              fromActions.fetchSamplesCountCompleteAction({
+                count,
+              }),
+            ),
+            catchError(() => of(fromActions.fetchSamplesCountFailedAction())),
+          );
+      }),
     );
   });
 

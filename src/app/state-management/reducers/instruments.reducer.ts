@@ -40,24 +40,6 @@ const reducer = createReducer(
   ),
 
   on(
-    fromActions.changePageAction,
-    (state, { page, limit }): InstrumentState => {
-      const skip = page * limit;
-      const filters = { ...state.filters, skip, limit };
-      return { ...state, filters };
-    },
-  ),
-
-  on(
-    fromActions.sortByColumnAction,
-    (state, { column, direction }): InstrumentState => {
-      const sortField = column + (direction ? ":" + direction : "");
-      const filters = { ...state.filters, sortField, skip: 0 };
-      return { ...state, filters };
-    },
-  ),
-
-  on(
     fromActions.clearInstrumentsStateAction,
     (): InstrumentState => ({
       ...initialInstrumentState,
