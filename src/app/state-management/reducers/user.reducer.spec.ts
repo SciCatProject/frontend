@@ -15,7 +15,9 @@ describe("UserReducer", () => {
       const columns: TableColumn[] = [
         { name: "testColumn", order: 0, type: "standard", enabled: true },
       ];
-      const action = fromActions.setDatasetTableColumnsAction({ columns });
+      const action = fromActions.setDatasetTableColumnsAction({
+        columns,
+      });
       const state = userReducer(initialUserState, action);
 
       expect(state.columns.length).toEqual(1);

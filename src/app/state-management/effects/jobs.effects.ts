@@ -1,10 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import {
-  CreateJobDto,
-  JobClass,
-  JobsService,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { JobClass, JobsService } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import { selectQueryParams } from "state-management/selectors/jobs.selectors";
 import * as fromActions from "state-management/actions/jobs.actions";
