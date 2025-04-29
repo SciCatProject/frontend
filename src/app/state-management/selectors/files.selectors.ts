@@ -19,21 +19,6 @@ export const selectOrigDatablocksCount = createSelector(
   (state) => state.totalCount,
 );
 
-// export const selectFilters = createSelector(
-//   selectOrigDatablockState,
-//   (state) => state.filters,
-// );
-
-// export const selectPage = createSelector(selectFilters, (filters) => {
-//   const { skip, limit } = filters;
-//   return skip / limit;
-// });
-
-// export const selectOrigDatablocksPerPage = createSelector(
-//   selectFilters,
-//   (filters) => filters.limit,
-// );
-
 export const selectFilesWithCountAndTableSettings = createSelector(
   selectAllOrigDatablocks,
   selectOrigDatablocksCount,
@@ -44,8 +29,3 @@ export const selectFilesWithCountAndTableSettings = createSelector(
     tablesSettings,
   }),
 );
-
-// export const selectQueryParams = createSelector(selectFilters, (filters) => {
-//   const { sortField, skip, limit } = filters;
-//   return { order: sortField, skip, limit };
-// });
