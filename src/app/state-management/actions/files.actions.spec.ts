@@ -1,7 +1,7 @@
 import { mockOrigDatablock as origDatablock } from "shared/MockStubs";
 import * as fromActions from "./files.actions";
 
-describe("Instrument Actions", () => {
+describe("File Actions", () => {
   const origDatablocks = [origDatablock];
 
   describe("fetchAllOrigDatablocksAction", () => {
@@ -104,7 +104,7 @@ describe("Instrument Actions", () => {
     });
   });
 
-  describe("clearInstrumentsStateAction", () => {
+  describe("clearFilesStateAction", () => {
     it("should create an action", () => {
       const action = fromActions.clearOrigDatablockStateAction();
 
