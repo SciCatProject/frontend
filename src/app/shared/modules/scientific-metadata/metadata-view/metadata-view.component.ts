@@ -5,7 +5,6 @@ import {
   OnChanges,
   SimpleChange,
 } from "@angular/core";
-import { DateTime } from "luxon";
 import {
   ScientificMetadataTableData,
   ScientificMetadata,
@@ -22,6 +21,8 @@ import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
 import { DatePipe, TitleCasePipe } from "@angular/common";
 import { LinkyPipe } from "ngx-linky";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
+import { DateTime } from "luxon";
+import { MetadataTypes } from "../metadata-edit/metadata-edit.component";
 
 @Component({
   selector: "metadata-view",
@@ -82,14 +83,6 @@ export class MetadataViewComponent implements OnInit, OnChanges {
             header: "Name",
             name: "human_name",
             width: 250,
-            customRender: (column, row) => {
-              return (
-                row[column.name] ||
-                this.titleCase.transform(
-                  this.replaceUnderscore.transform(row.name),
-                )
-              );
-            },
           },
           {
             name: "name",
@@ -115,6 +108,13 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
               return row[column.name];
             },
+            contentIcon: "hub",
+            renderContentIcon: (column, row) => {
+              return !!row.ontology_reference;
+            },
+            contentIconLink: (column, row) => {
+              return row.ontology_reference;
+            },
             width: 500,
           },
           {
@@ -124,11 +124,12 @@ export class MetadataViewComponent implements OnInit, OnChanges {
                 ? this.prettyUnit.transform(row[column.name])
                 : "--";
             },
-            renderIcon: (column, row) => {
-              return !row.validUnit;
+            renderContentIcon: (column, row) => {
+              return row.validUnit === false;
             },
             contentIcon: "error",
-            warningIconTooltip: "Unrecognized unit, conversion disabled",
+            contentIconTooltip: "Unrecognized unit, conversion disabled",
+            contentIconClass: "general-warning",
             cellClass: "unit-input",
           },
           {
@@ -152,12 +153,19 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     public prettyUnit: PrettyUnitPipe,
   ) {}
 
+  getHumanReadableName(name: string): string {
+    return this.titleCase.transform(this.replaceUnderscore.transform(name));
+  }
+
   createMetadataArray(
     metadata: Record<string, any>,
   ): ScientificMetadataTableData[] {
     const metadataArray: ScientificMetadataTableData[] = [];
     Object.keys(metadata).forEach((key) => {
       let metadataObject: ScientificMetadataTableData;
+      const humanReadableName =
+        metadata[key]["human_name"] || this.getHumanReadableName(key);
+
       if (
         typeof metadata[key] === "object" &&
         "value" in (metadata[key] as ScientificMetadata)
@@ -166,8 +174,9 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           name: key,
           value: metadata[key]["value"],
           unit: metadata[key]["unit"],
-          human_name: metadata[key]["human_name"],
+          human_name: humanReadableName,
           type: metadata[key]["type"],
+          ontology_reference: metadata[key]["ontology_reference"],
         };
 
         const validUnit = this.unitsService.unitValidation(
@@ -176,12 +185,19 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
         metadataObject["validUnit"] = validUnit;
       } else {
+        const metadataValue =
+          typeof metadata[key] === MetadataTypes.string ||
+          typeof metadata[key] === MetadataTypes.number
+            ? metadata[key]
+            : JSON.stringify(metadata[key]);
+
         metadataObject = {
           name: key,
-          value: JSON.stringify(metadata[key]),
+          value: metadataValue,
           unit: "",
-          human_name: metadata[key]["human_name"],
+          human_name: humanReadableName,
           type: metadata[key]["type"],
+          ontology_reference: metadata[key]["ontology_reference"],
         };
       }
       metadataArray.push(metadataObject);
@@ -195,10 +211,12 @@ export class MetadataViewComponent implements OnInit, OnChanges {
       return true;
     }
 
-    if (
+    const isValidDate =
       typeof scientificMetadata.value !== "number" &&
-      DateTime.fromISO(scientificMetadata.value).isValid
-    ) {
+      new Date(scientificMetadata.value).toString() !== "Invalid Date" &&
+      DateTime.fromISO(scientificMetadata.value).isValid;
+
+    if (isValidDate) {
       return true;
     }
 
