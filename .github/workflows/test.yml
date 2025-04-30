@@ -122,14 +122,12 @@ jobs:
           docker compose build --no-cache
           docker compose up -d
 
-      - name: Wait for frontend to be ready
-        run: npx wait-on http://localhost:4200
-
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
           config-file: cypress.config.ts
           install-command: npm install --omit peer
+          start: npm start
           browser: chrome
 
       - name: docker logs
