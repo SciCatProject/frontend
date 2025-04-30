@@ -134,6 +134,7 @@ jobs:
         run: |
           docker compose logs es01
           docker compose logs backend
+          docker compose logs frontend
 
       - name: Stop docker-compose
         if: ${{ !cancelled() }}
