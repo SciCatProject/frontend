@@ -107,7 +107,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       # These settings optimize memory and file handling for Elasticsearch,
-      # preventing common issues related to system limits running on github workflow.
+      # preventing common issues related to system limits running on github workflow
       - name: Configure sysctl limits
         run: |
           sudo swapoff -a
