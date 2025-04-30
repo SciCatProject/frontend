@@ -1,4 +1,4 @@
-FROM node:18.18.0-alpine AS builder
+FROM node:22.15.0-alpine AS builder
 
 RUN apk add --update python3 make g++ && rm -rf /var/cache/apk/*
 
