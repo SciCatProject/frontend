@@ -16,19 +16,23 @@ import {
   ExportOptions,
   ExportTemplateHelperComponent,
 } from "./ingestor.export-helper.component";
+import { Store } from "@ngrx/store";
+import { selectIngestorRenderView } from "state-management/selectors/ingestor.selector";
 
 @Component({
   selector: "ingestor-dialog-stepper",
   templateUrl: "./ingestor.dialog-stepper.component.html",
   styleUrls: ["./ingestor.dialog-stepper.component.css"],
 })
-export class IngestorDialogStepperComponent {
+export class IngestorDialogStepperComponent implements OnInit {
   @Input() activeStep = 0;
   @Input() createNewTransferData: IngestionRequestInformation;
   @Output() createNewTransferDataChange =
     new EventEmitter<IngestionRequestInformation>();
 
   testMessageComponent = ExportTemplateHelperComponent;
+
+  renderView$ = this.store.select(selectIngestorRenderView);
 
   exportValueOptions: ExportOptions = {
     exportSciCat: true,
@@ -45,7 +49,19 @@ export class IngestorDialogStepperComponent {
     ],
   });
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private store: Store,
+  ) {}
+
+  ngOnInit() {
+    this.renderView$.subscribe((renderView) => {
+      if (renderView) {
+        // TODO: Handle the render view change
+        console.log("Render view changed:", renderView);
+      }
+    });
+  }
 
   // Save a template of metadata
   onSave() {

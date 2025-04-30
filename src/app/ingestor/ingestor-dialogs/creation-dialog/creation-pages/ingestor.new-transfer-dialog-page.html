@@ -18,7 +18,7 @@
   <div *ngIf="createNewTransferData.editorMode === 'INGESTION'">
     <mat-form-field class="form-full-width">
       <mat-label>File Path</mat-label>
-      <input matInput [(ngModel)]="selectedPath" (click)="onClickOpenFileBrowser()" readonly>
+      <input matInput [(ngModel)]="createNewTransferData.selectedPath" (click)="onClickOpenFileBrowser()" readonly>
       <!-- [matAutocomplete]="auto" -->
       <button mat-icon-button matSuffix (click)="onClickOpenFileBrowser()">
         <mat-icon>folder</mat-icon>

@@ -16,6 +16,8 @@ import {
   selectIngestorExtractionMethods,
 } from "state-management/selectors/ingestor.selector";
 import * as fromActions from "state-management/actions/ingestor.actions";
+import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
+import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts";
 
 @Component({
   selector: "ingestor-new-transfer-dialog-page",
@@ -26,6 +28,7 @@ export class IngestorNewTransferDialogPageComponent implements OnInit {
   readonly dialog = inject(MatDialog);
 
   ingestionObject$ = this.store.select(selectIngestionObject);
+  vm$ = this.store.select(selectUserSettingsPageViewModel);
   ingestorExtractionMethods$ = this.store.select(
     selectIngestorExtractionMethods,
   );
@@ -42,12 +45,18 @@ export class IngestorNewTransferDialogPageComponent implements OnInit {
   connectedFacilityBackend = "";
   extractionMethodsError = "";
 
+  userProfile: ReturnedUserDto | null = null;
   uiNextButtonReady = false;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) { }
 
   ngOnInit() {
     this.loadExtractionMethods();
+
+    // Fetch the API token that the ingestor can authenticate to scicat as the user
+    this.vm$.subscribe((settings) => {
+      this.userProfile = settings.user;
+    });
 
     this.ingestionObject$.subscribe((ingestionObject) => {
       if (ingestionObject) {
@@ -64,15 +73,6 @@ export class IngestorNewTransferDialogPageComponent implements OnInit {
           "No extraction methods available. Please check your connection.";
       }
     });
-  }
-
-  set selectedPath(value: string) {
-    this.createNewTransferData.selectedPath = value;
-    this.validateNextButton();
-  }
-
-  get selectedPath(): string {
-    return this.createNewTransferData.selectedPath;
   }
 
   set selectedMethod(value: ExtractionMethod) {
@@ -107,14 +107,14 @@ export class IngestorNewTransferDialogPageComponent implements OnInit {
     this.createNewTransferData.scicatHeader["dataFormat"] = "root";
     this.createNewTransferData.scicatHeader["owner"] = "User";
 
-    /*this.createNewTransferData.scicatHeader["principalInvestigator"] =
-      this.data.userInfo?.name ?? "";
+    this.createNewTransferData.scicatHeader["principalInvestigator"] =
+      this.userProfile.username;
     this.createNewTransferData.scicatHeader["investigator"] =
-      this.data.userInfo?.name ?? "";
+      this.userProfile.username;
     this.createNewTransferData.scicatHeader["ownerEmail"] =
-      this.data.userInfo?.email ?? "";
+      this.userProfile.email;
     this.createNewTransferData.scicatHeader["contactEmail"] =
-      this.data.userInfo?.email ?? "";*/
+      this.userProfile.email;
     const creationTime = new Date();
     const formattedCreationTime = creationTime.toISOString().split("T")[0];
     this.createNewTransferData.scicatHeader["creationTime"] =
@@ -169,9 +169,7 @@ export class IngestorNewTransferDialogPageComponent implements OnInit {
   onClickOpenFileBrowser(): void {
     this.dialog
       .open(IngestorFileBrowserComponent, {
-        data: {
-          createNewTransferData: this.createNewTransferData,
-        },
+        data: {},
       })
       .afterClosed()
       .subscribe(() => {

@@ -13,6 +13,7 @@ import {
   OtherHealthResponse,
   OtherVersionResponse,
   PostDatasetRequest,
+  PostDatasetResponse,
   UserInfo,
 } from "../models/ingestor/models";
 import { Store } from "@ngrx/store";
@@ -133,12 +134,12 @@ export class Ingestor {
       );
   }
 
-  startIngestion(payload: PostDatasetRequest): Observable<string> {
+  startIngestion(payload: PostDatasetRequest): Observable<PostDatasetResponse> {
     return this.store
       .select(selectIngestorEndpoint)
       .pipe(
         switchMap((ingestorEndpoint) =>
-          this.http.post<string>(
+          this.http.post<PostDatasetResponse>(
             `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.DATASET}`,
             payload,
             this.getRequestOptions(),

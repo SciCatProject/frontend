@@ -1,4 +1,5 @@
 import { JsonSchema } from "@jsonforms/core";
+import { PostDatasetResponse } from "shared/sdk/models/ingestor/postDatasetResponse";
 import { UserInfo } from "shared/sdk/models/ingestor/userInfo";
 
 export interface ExtractionMethod {
@@ -30,7 +31,10 @@ export interface IngestionRequestInformation {
     metaDataExtractionFailed: boolean;
     extractorMetadataProgress: number;
     extractorMetaDataStatus: string;
+    ingestionRequestErrorMessage: string;
   };
+
+  ingestionRequest: PostDatasetResponse | null;
 }
 
 export interface TransferDataListEntry {
@@ -102,7 +106,9 @@ export class IngestorHelper {
         extractorMetaDataReady: false,
         extractorMetadataProgress: 0,
         extractorMetaDataStatus: "",
+        ingestionRequestErrorMessage: "",
       },
+      ingestionRequest: null,
     };
   };
 

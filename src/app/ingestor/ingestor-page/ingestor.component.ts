@@ -19,10 +19,7 @@ import {
   selectIsLoggedIn,
   selectUserSettingsPageViewModel,
 } from "state-management/selectors/user.selectors";
-import {
-  fetchCurrentUserAction,
-  fetchScicatTokenAction,
-} from "state-management/actions/user.actions";
+import { fetchCurrentUserAction } from "state-management/actions/user.actions";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import {
   selectIngestorStatus,
@@ -48,8 +45,6 @@ export class IngestorComponent implements OnInit {
   ingestorConnecting$ = this.store.select(selectIngestorConnecting);
   ingestorBackend$ = this.store.select(selectIngestorEndpoint);
   transferList$ = this.store.select(selectIngestorTransferList);
-
-  tokenValue: string;
 
   sourceFolder = "";
   forwardFacilityBackend = "";
@@ -89,7 +84,7 @@ export class IngestorComponent implements OnInit {
     private router: Router,
     private apiManager: IngestorAPIManager,
     private store: Store,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
@@ -97,11 +92,6 @@ export class IngestorComponent implements OnInit {
     // Fetch the API token that the ingestor can authenticate to scicat as the user
     this.vm$.subscribe((settings) => {
       this.scicatUserProfile = settings.profile;
-      this.tokenValue = settings.scicatToken;
-
-      if (this.tokenValue === "") {
-        this.store.dispatch(fetchScicatTokenAction());
-      }
     });
 
     this.ingestorBackend$.subscribe((ingestorBackend) => {

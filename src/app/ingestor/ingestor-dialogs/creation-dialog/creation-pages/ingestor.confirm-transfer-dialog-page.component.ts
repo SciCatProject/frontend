@@ -7,6 +7,8 @@ import {
 import { Store } from "@ngrx/store";
 import { selectIngestionObject } from "state-management/selectors/ingestor.selector";
 import { MatDialog } from "@angular/material/dialog";
+import { IngestorConfirmationDialogComponent } from "ingestor/ingestor-dialogs/confirmation-dialog/ingestor.confirmation-dialog.component";
+import * as fromActions from "state-management/actions/ingestor.actions";
 
 @Component({
   selector: "ingestor-confirm-transfer-dialog-page",
@@ -26,10 +28,9 @@ export class IngestorConfirmTransferDialogPageComponent implements OnInit {
 
   provideMergeMetaData = "";
 
-  errorMessage = "";
   copiedToClipboard = false;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store) {}
 
   ngOnInit() {
     this.ingestionObject$.subscribe((ingestionObject) => {
@@ -37,6 +38,9 @@ export class IngestorConfirmTransferDialogPageComponent implements OnInit {
         this.createNewTransferData = ingestionObject;
       }
     });
+
+    //createNewTransferData.apiInformation.ingestionRequestFailed
+    //createNewTransferData.ingestionRequest
 
     this.provideMergeMetaData = this.createMetaDataString();
   }
@@ -62,43 +66,31 @@ export class IngestorConfirmTransferDialogPageComponent implements OnInit {
     Object.assign(this.createNewTransferData, updatedData);
   }
 
-  clearErrorMessage(): void {
-    this.errorMessage = "";
-  }
-
   onClickBack(): void {
+    // Reset the ingestion request
+    this.store.dispatch(fromActions.resetIngestDataset());
     this.backStep.emit(); // Open previous dialog
   }
 
   onClickConfirm(): void {
-    this.nextStep.emit(); // Open previous dialog
-    this.errorMessage = "";
-    /*if (this.data && this.data.onClickNext) {
-      const dialogRef = this.dialog.open(IngestorConfirmationDialogComponent, {
-        data: {
-          header: "Confirm ingestion",
-          message: "Create a new dataset and start data transfer?",
-        },
-      });
-      dialogRef.afterClosed().subscribe(async (result) => {
-        if (result) {
-          this.createNewTransferData.mergedMetaDataString =
-            this.provideMergeMetaData;
-          try {
-            const success = await this.data.onStartUpload();
-            if (success) {
-              this.data.onClickNext(4);
-            }
-          } catch (error) {
-            this.errorMessage = error.message;
+    const dialogRef = this.dialog.open(IngestorConfirmationDialogComponent, {
+      data: {
+        header: "Confirm ingestion",
+        message: "Create a new dataset and start data transfer?",
+      },
+    });
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        this.createNewTransferData.mergedMetaDataString =
+          this.provideMergeMetaData;
 
-            if (error.error) {
-              this.errorMessage += ": " + error.error;
-            }
-          }
-        }
-      });
-    }*/
+        this.nextStep.emit();
+      }
+    });
+  }
+
+  onClickRetryRequests(): void {
+    this.onClickConfirm();
   }
 
   onCopyMetadata(): void {

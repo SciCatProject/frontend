@@ -158,8 +158,56 @@ export class IngestorEffects {
     );
   });
 
+  ingestDataset$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.ingestDataset),
+      switchMap(({ ingestionDataset }) =>
+        this.ingestor.startIngestion(ingestionDataset).pipe(
+          map((response) => fromActions.ingestDatasetSuccess({ response })),
+          catchError((err) => of(fromActions.ingestDatasetFailure({ err }))),
+        ),
+      ),
+    );
+  });
+
+  ingestDatasetSuccess$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.ingestDatasetSuccess),
+      switchMap(({ response }) => {
+        const message = {
+          type: MessageType.Success,
+          content:
+            "Request ingestion dataset successfully: " + response.transferId,
+          duration: 5000,
+        };
+        return of(showMessageAction({ message }));
+      }),
+    );
+  });
+
+  ingestDatasetFailure$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.ingestDatasetFailure),
+      switchMap(({ err }) => {
+        const errorMessage =
+          err instanceof HttpErrorResponse
+            ? (err.error?.message ??
+              err.error ??
+              err.message ??
+              "Unknown error")
+            : err.message || "Unknown error";
+        const message = {
+          type: MessageType.Error,
+          content: "Failed to ingest dataset: " + errorMessage,
+          duration: 5000,
+        };
+        return of(showMessageAction({ message }));
+      }),
+    );
+  });
+
   constructor(
     private actions$: Actions,
     private ingestor: Ingestor,
-  ) {}
+  ) { }
 }

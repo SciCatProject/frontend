@@ -48,3 +48,8 @@ export const selectIngestorBrowserActiveNode = createSelector(
   selectIngestorState,
   (state) => state.ingestorBrowserActiveNode,
 );
+
+export const selectIngestorRenderView = createSelector(
+  selectIngestorState,
+  (state) => state.renderView,
+);

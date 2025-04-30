@@ -107,4 +107,46 @@ const reducer = createReducer(
       ingestionObject,
     }),
   ),
+  on(
+    fromActions.ingestDatasetSuccess,
+    (state, { response }): IngestorState => ({
+      ...state,
+      ingestionObject: {
+        ...state.ingestionObject,
+        ingestionRequest: response,
+        apiInformation: {
+          ...state.ingestionObject.apiInformation,
+          ingestionRequestErrorMessage: "",
+        },
+      },
+    }),
+  ),
+  on(
+    fromActions.ingestDatasetFailure,
+    (state, { err }): IngestorState => ({
+      ...state,
+      ingestionObject: {
+        ...state.ingestionObject,
+        apiInformation: {
+          ...state.ingestionObject.apiInformation,
+          ingestionRequestErrorMessage: (err as any).error ?? err.message,
+        },
+      },
+      error: err,
+    }),
+  ),
+  on(
+    fromActions.resetIngestDataset,
+    (state): IngestorState => ({
+      ...state,
+      ingestionObject: {
+        ...state.ingestionObject,
+        ingestionRequest: null,
+        apiInformation: {
+          ...state.ingestionObject.apiInformation,
+          ingestionRequestErrorMessage: "",
+        },
+      },
+    }),
+  ),
 );

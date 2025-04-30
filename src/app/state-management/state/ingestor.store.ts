@@ -22,6 +22,8 @@ interface IngestorStatus {
   validEndpoint: boolean;
 }
 
+type renderView = "requiredOnly" | "all";
+
 export interface IngestorState {
   ingestorStatus: IngestorStatus;
   ingestorAuth: IngestorAuthentication | null;
@@ -30,6 +32,7 @@ export interface IngestorState {
   ingestorExtractionMethods: GetExtractorResponse | null;
   ingestionObject: IngestionRequestInformation;
   ingestorBrowserActiveNode: GetBrowseDatasetResponse | null;
+  renderView: renderView;
   connectingBackend: boolean;
   error: any | null;
 }
@@ -47,4 +50,5 @@ export const initialIngestorState: IngestorState = {
   ingestorBrowserActiveNode: null,
   connectingBackend: false,
   error: null,
+  renderView: "all",
 };

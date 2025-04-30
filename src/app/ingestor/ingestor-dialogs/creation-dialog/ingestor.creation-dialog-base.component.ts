@@ -15,6 +15,9 @@ import { IngestorMetadataSSEService } from "ingestor/ingestor-page/helper/ingest
 import { HttpParams } from "@angular/common/http";
 import { INGESTOR_API_ENDPOINTS_V1 } from "ingestor/ingestor-page/helper/ingestor-api-endpoints";
 import { PostDatasetRequest } from "shared/sdk/models/ingestor/models";
+import * as fromActions from "state-management/actions/ingestor.actions";
+import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
+import { fetchScicatTokenAction } from "state-management/actions/user.actions";
 
 export type dialogStep =
   | "NEW_TRANSFER"
@@ -28,6 +31,8 @@ export type dialogStep =
   styleUrls: ["../../ingestor-page/ingestor.component.scss"],
 })
 export class IngestorCreationDialogBaseComponent implements OnInit {
+  vm$ = this.store.select(selectUserSettingsPageViewModel);
+
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
 
@@ -36,13 +41,14 @@ export class IngestorCreationDialogBaseComponent implements OnInit {
 
   currentDialogStep: dialogStep = "NEW_TRANSFER";
   connectedFacilityBackend = "";
+  tokenValue = "";
 
   constructor(
     public dialog: MatDialog,
     private store: Store,
     private sseService: IngestorMetadataSSEService,
     @Inject(MAT_DIALOG_DATA) public data: DialogDataObject,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.ingestionObject$.subscribe((ingestionObject) => {
@@ -54,6 +60,15 @@ export class IngestorCreationDialogBaseComponent implements OnInit {
     this.ingestorBackend$.subscribe((ingestorBackend) => {
       if (ingestorBackend) {
         this.connectedFacilityBackend = ingestorBackend;
+      }
+    });
+
+    // Fetch the API token that the ingestor can authenticate to scicat as the user
+    this.vm$.subscribe((settings) => {
+      this.tokenValue = settings.scicatToken;
+
+      if (this.tokenValue === "") {
+        this.store.dispatch(fetchScicatTokenAction());
       }
     });
   }
@@ -156,26 +171,15 @@ export class IngestorCreationDialogBaseComponent implements OnInit {
   }
 
   onClickStartIngestion(): void {
-    console.log("Confirm button clicked");
-  }
-
-  async ingestDataset(): Promise<boolean> {
     const payload: PostDatasetRequest = {
       metaData: this.createNewTransferData.mergedMetaDataString,
-      userToken: "", //this.tokenValue,
+      userToken: this.tokenValue,
     };
 
-    try {
-      const result = null; //await this.apiManager.startIngestion(payload);
-      if (result) {
-        // Somehow udpate transfer list
-        return true;
-      }
-    } catch (error) {
-      console.error("Error during ingestion", error);
-      throw error;
-    }
-
-    return false;
+    this.store.dispatch(
+      fromActions.ingestDataset({
+        ingestionDataset: payload,
+      }),
+    );
   }
 }

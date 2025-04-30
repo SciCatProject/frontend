@@ -12,40 +12,80 @@
     [createNewTransferData]="createNewTransferData"
     (createNewTransferDataChange)="onCreateNewTransferDataChange($event)"></ingestor-dialog-stepper>
 
-  <p *ngIf="errorMessage !== ''">
+  <p
+    *ngIf="createNewTransferData.apiInformation.ingestionRequestErrorMessage !== ''">
     <mat-card class="ingestor-card">
       <mat-card-header class="ingestor-mixed-header">
-        <mat-card-title>Error message</mat-card-title>
-        <button mat-icon-button class="ingestor-close-button"
-          (click)="clearErrorMessage()">
-          <mat-icon>close</mat-icon>
-        </button>
+        <mat-card-title>Transfer request failed</mat-card-title>
       </mat-card-header>
       <mat-card-content class="ingestor-vertical-layout">
-        <div>
-          <p style="color: red" [innerHTML]="errorMessage"></p>
+        <div class="confirm-message-ingestor">
+            <mat-icon class="confirm-message-ingestor-icon">error</mat-icon>
+            <p>The transfer request has failed.</p>
+            <p class="confirm-message-error">
+            {{createNewTransferData.apiInformation.ingestionRequestErrorMessage}}
+            </p>
         </div>
+
+
       </mat-card-content>
     </mat-card>
   </p>
 
-  <p>Confirm Metadata</p>
+  <div
+    *ngIf="createNewTransferData.ingestionRequest !== null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === ''">
+    <mat-card class="ingestor-card">
+      <mat-card-header class="ingestor-mixed-header">
+        <mat-card-title>Transfer requested</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="ingestor-vertical-layout">
+        <div class="confirm-message-ingestor">
+          <mat-icon
+            class="confirm-message-ingestor-icon">check_circle</mat-icon>
+            <p>The transfer request was successfully sent to the server.
+            You will receive an email as soon as the data transfer is complete.
+            </p>
+            <p>Transfer ID: {{createNewTransferData.ingestionRequest.transferId}}
+            </p>
+            <p>Transfer status: {{createNewTransferData.ingestionRequest.status}}
+            </p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 
-  <div class="code-editor">
-    <pre class="code">
-    <div *ngFor="let line of provideMergeMetaData.split('\n')">
-      <code>{{ line }}</code>
+  <div
+    *ngIf="createNewTransferData.ingestionRequest === null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === ''">
+    <p>Confirm Metadata</p>
+
+    <div class="code-editor">
+      <pre class="code">
+      <div *ngFor="let line of provideMergeMetaData.split('\n')">
+        <code>{{ line }}</code>
+      </div>
+      </pre>
     </div>
-    </pre>
   </div>
 
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button (click)="onClickBack()">Back</button>
-  <button *ngIf="createNewTransferData.editorMode === 'INGESTION'" mat-button color="primary" cdkFocusInitial
+  <button *ngIf="createNewTransferData.editorMode === 'EDITOR' ||
+  createNewTransferData.editorMode === 'INGESTION' &&
+  (createNewTransferData.ingestionRequest === null ||
+  createNewTransferData.apiInformation.ingestionRequestErrorMessage !== '')"
+    mat-button (click)="onClickBack()">Back</button>
+  <button
+    *ngIf="createNewTransferData.editorMode === 'INGESTION' && (createNewTransferData.ingestionRequest === null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === '')"
+    mat-button color="primary" cdkFocusInitial
     (click)="onClickConfirm()">Ingest</button>
-    <button *ngIf="createNewTransferData.editorMode === 'EDITOR'" mat-button color="primary" cdkFocusInitial (click)="onCopyMetadata()">
-      {{!copiedToClipboard ? "Copy JSON" : "Copied!"}}
-    </button>
-    <button *ngIf="copiedToClipboard" mat-button color="primary" cdkFocusInitial (click)="onCopyMetadata()">Close</button>
+  <button *ngIf="createNewTransferData.editorMode === 'EDITOR'" mat-button
+    color="primary" cdkFocusInitial (click)="onCopyMetadata()">
+    {{!copiedToClipboard ? "Copy JSON" : "Copied!"}}
+  </button>
+  <button
+    *ngIf="copiedToClipboard || (createNewTransferData.ingestionRequest !== null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === '')"
+    mat-button color="primary" cdkFocusInitial mat-dialog-close>Close</button>
+  <button
+    *ngIf="createNewTransferData.apiInformation.ingestionRequestErrorMessage !== ''"
+    mat-button color="warn" (click)="onClickRetryRequests()">Retry</button>
 </mat-dialog-actions>

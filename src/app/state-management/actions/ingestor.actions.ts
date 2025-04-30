@@ -6,6 +6,8 @@ import {
   GetTransferResponse,
   OtherHealthResponse,
   OtherVersionResponse,
+  PostDatasetRequest,
+  PostDatasetResponse,
   UserInfo,
 } from "shared/sdk/models/ingestor/models";
 
@@ -87,4 +89,23 @@ export const getBrowseFilePathSuccess = createAction(
 export const getBrowseFilePathFailure = createAction(
   "[Ingestor] Get Browse File Path Failure",
   props<{ err: Error }>(),
+);
+
+export const ingestDataset = createAction(
+  "[Ingestor] Ingest Dataset",
+  props<{ ingestionDataset: PostDatasetRequest }>(),
+);
+
+export const ingestDatasetSuccess = createAction(
+  "[Ingestor] Ingest Dataset Success",
+  props<{ response: PostDatasetResponse }>(),
+);
+
+export const ingestDatasetFailure = createAction(
+  "[Ingestor] Ingest Dataset Failure",
+  props<{ err: Error }>(),
+);
+
+export const resetIngestDataset = createAction(
+  "[Ingestor] Reset Ingest Dataset",
 );

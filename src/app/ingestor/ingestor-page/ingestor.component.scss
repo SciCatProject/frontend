@@ -77,11 +77,11 @@ mat-card {
 
 .code-editor pre.code {
   white-space: pre-wrap;
-  counter-reset: listing; 
+  counter-reset: listing;
   line-height: 0.1;
 }
 .code-editor pre.code code {
-  counter-increment: listing; 
+  counter-increment: listing;
   display: flex;
   line-height: 1;
 }
@@ -109,4 +109,25 @@ mat-card {
 .file-browser-view-toggle {
   display: flex;
   justify-content: flex-end;
+}
+
+.green-text {
+  color: #4caf50;
+}
+
+.confirm-message-ingestor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-message-ingestor-icon {
+  font-size: 4em;
+  width: auto;
+  height: auto;
+}
+
+.confirm-message-error {
+  color: red;
 }

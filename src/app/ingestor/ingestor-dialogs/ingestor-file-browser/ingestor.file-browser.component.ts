@@ -57,7 +57,7 @@ export class IngestorFileBrowserComponent implements OnInit {
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: DialogDataObject,
     private store: Store,
-  ) {}
+  ) { }
 
   get activeNode(): BrowsableNode | null {
     return this._activeNode;
@@ -135,11 +135,14 @@ export class IngestorFileBrowserComponent implements OnInit {
     }
   }
 
-  onCancel = (): void => {};
-
   onSelect = (): void => {
     if (this.activeNode) {
       this.createNewTransferData.selectedPath = this.activeNode.path;
+      this.store.dispatch(
+        fromActions.updateIngestionObject({
+          ingestionObject: this.createNewTransferData,
+        }),
+      );
     }
   };
 

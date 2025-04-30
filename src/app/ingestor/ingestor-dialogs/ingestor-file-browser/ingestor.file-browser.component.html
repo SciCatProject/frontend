@@ -21,7 +21,7 @@
         <mat-icon matListItemIcon>{{activeNode.probablyDataset ? 'folder_special' : 'folder'}}</mat-icon>
         <div matListItemTitle>{{activeNode.path}}</div>
       </mat-list-item>
-      <i *ngIf="activeNode.probablyDataset">This node is probably a valid data set.</i>
+      <i *ngIf="activeNode.probablyDataset" class="green-text">This node is probably a valid data set.</i>
       <div mat-subheader>Children</div>
 
       <mat-paginator *ngIf="true" [length]="activeNodeChildrenTotal" [pageSize]="browseFolderPageSize" aria-label="Select page"
@@ -51,7 +51,7 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close (click)="onCancel()">Cancel</button>
+  <button mat-button mat-dialog-close>Cancel</button>
   <button mat-button color="primary" cdkFocusInitial (click)="onSelect()"
     [mat-dialog-close]="true">Select</button>
 </mat-dialog-actions>
