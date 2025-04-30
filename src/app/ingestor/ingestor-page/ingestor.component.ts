@@ -1,12 +1,10 @@
 import { Component, inject, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { INGESTOR_API_ENDPOINTS_V1 } from "./helper/ingestor-api-endpoints";
 import { MatDialog } from "@angular/material/dialog";
 import {
   IngestionRequestInformation,
   IngestorHelper,
 } from "./helper/ingestor.component-helper";
-import { IngestorAPIManager } from "./helper/ingestor-api-manager";
 import {
   UserInfo,
   OtherHealthResponse,
@@ -29,6 +27,7 @@ import {
   selectIngestorTransferList,
 } from "state-management/selectors/ingestor.selector";
 import { IngestorCreationDialogBaseComponent } from "ingestor/ingestor-dialogs/creation-dialog/ingestor.creation-dialog-base.component";
+import { INGESTOR_API_ENDPOINTS_V1 } from "shared/sdk/apis/ingestor.service";
 
 @Component({
   selector: "ingestor",
@@ -82,7 +81,6 @@ export class IngestorComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private apiManager: IngestorAPIManager,
     private store: Store,
   ) { }
 
@@ -237,12 +235,11 @@ export class IngestorComponent implements OnInit {
   }
 
   async onCancelTransfer(transferId: string) {
-    try {
-      await this.apiManager.cancelTransfer(transferId);
-      this.doRefreshTransferList();
-    } catch (error) {
-      console.error("Error cancelling transfer", error);
-    }
+    this.store.dispatch(
+      fromActions.cancelTransfer({
+        transferId: transferId,
+      }),
+    );
   }
 
   onTransferPageChange(event: PageChangeEvent): void {
@@ -303,11 +300,11 @@ export class IngestorComponent implements OnInit {
   }
 
   startAutoRefresh(transferId: string): void {
-    this.doRefreshTransferList(transferId);
-    this.stopAutoRefresh();
+    //this.doRefreshTransferList(transferId);
+    /*this.stopAutoRefresh();
     this.autoRefreshInterval = setInterval(() => {
       this.doRefreshTransferList(transferId);
-    }, this.transferAutoRefreshIntervalDetail);
+    }, this.transferAutoRefreshIntervalDetail);*/
   }
 
   stopAutoRefresh(): void {

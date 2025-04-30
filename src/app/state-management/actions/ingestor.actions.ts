@@ -109,3 +109,8 @@ export const ingestDatasetFailure = createAction(
 export const resetIngestDataset = createAction(
   "[Ingestor] Reset Ingest Dataset",
 );
+
+export const cancelTransfer = createAction(
+  "[Ingestor] Cancel Transfer",
+  props<{ transferId: string }>(),
+);

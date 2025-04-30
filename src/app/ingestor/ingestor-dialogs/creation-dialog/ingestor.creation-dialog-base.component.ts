@@ -13,11 +13,11 @@ import {
 import { Store } from "@ngrx/store";
 import { IngestorMetadataSSEService } from "ingestor/ingestor-page/helper/ingestor.metadata-sse-service";
 import { HttpParams } from "@angular/common/http";
-import { INGESTOR_API_ENDPOINTS_V1 } from "ingestor/ingestor-page/helper/ingestor-api-endpoints";
 import { PostDatasetRequest } from "shared/sdk/models/ingestor/models";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
 import { fetchScicatTokenAction } from "state-management/actions/user.actions";
+import { INGESTOR_API_ENDPOINTS_V1 } from "shared/sdk/apis/ingestor.service";
 
 export type dialogStep =
   | "NEW_TRANSFER"

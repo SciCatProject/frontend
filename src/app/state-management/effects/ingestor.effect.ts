@@ -206,8 +206,35 @@ export class IngestorEffects {
     );
   });
 
+  cancelTransfer$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.cancelTransfer),
+      switchMap(({ transferId }) =>
+        this.ingestor.cancelTransfer(transferId).pipe(
+          map((response) => {
+            const message = {
+              type: MessageType.Success,
+              content: "Successfully cancelled transfer: " + transferId,
+              duration: 5000,
+            };
+            return showMessageAction({ message }); // Direkt die Aktion zurückgeben
+          }),
+          catchError((err) => {
+            const message = {
+              type: MessageType.Error,
+              content:
+                "Failed to cancel transfer: " + (err.error ?? err.message),
+              duration: 5000,
+            };
+            return of(showMessageAction({ message })); // Wrap the action in of()
+          }),
+        ),
+      ),
+    );
+  });
+
   constructor(
     private actions$: Actions,
     private ingestor: Ingestor,
-  ) { }
+  ) {}
 }

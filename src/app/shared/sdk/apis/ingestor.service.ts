@@ -19,7 +19,7 @@ import {
 import { Store } from "@ngrx/store";
 import { selectIngestorEndpoint } from "state-management/selectors/ingestor.selector";
 
-const INGESTOR_API_ENDPOINTS_V1 = {
+export const INGESTOR_API_ENDPOINTS_V1 = {
   AUTH: {
     LOGIN: "login",
     LOGOUT: "logout",
