@@ -127,7 +127,7 @@ jobs:
         with:
           config-file: cypress.config.ts
           install-command: npm install --omit peer
-          start: npm start
+          start: ""
           browser: chrome
 
       - name: docker logs
