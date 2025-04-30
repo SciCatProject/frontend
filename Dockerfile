@@ -8,7 +8,7 @@ RUN npm ci
 COPY . /frontend/
 RUN npx ng build
 
-FROM nginxinc/nginx-unprivileged
+FROM docker.io/nginxinc/nginx-unprivileged:1.26.3
 USER root
 RUN rm -rf /usr/share/nginx/html/*
 COPY scripts/nginx.conf /etc/nginx/nginx.conf
