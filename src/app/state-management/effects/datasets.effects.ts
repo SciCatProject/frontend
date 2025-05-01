@@ -20,7 +20,6 @@ import {
 } from "state-management/selectors/datasets.selectors";
 import * as fromActions from "state-management/actions/datasets.actions";
 import {
-  withLatestFrom,
   mergeMap,
   map,
   catchError,
@@ -464,7 +463,7 @@ export class DatasetEffects {
           fromActions.removeFromBatchAction,
           fromActions.clearBatchAction,
         ),
-        withLatestFrom(this.datasetsInBatch$, this.currentUser$),
+        concatLatestFrom(() => [this.datasetsInBatch$, this.currentUser$]),
         tap(([, batch, user]) => this.storeBatch(batch, user?.id)),
       );
     },

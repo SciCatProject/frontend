@@ -243,6 +243,11 @@ export const selectDatasetsInBatch = createSelector(
   (state) => state.batch,
 );
 
+export const selectIsBatchNonEmpty = createSelector(
+  selectDatasetsInBatch,
+  (batch) => batch.length > 0,
+);
+
 export const selectDatasetsInBatchIndicator = createSelector(
   selectDatasetsInBatch,
   (datasets) => {

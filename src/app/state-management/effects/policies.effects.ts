@@ -1,23 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatLatestFrom } from "@ngrx/operators";
-import {
-  PoliciesService,
-  UpdateWherePolicyDto,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { PoliciesService } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import {
   selectQueryParams,
   selectEditableQueryParams,
 } from "state-management/selectors/policies.selectors";
 import * as fromActions from "state-management/actions/policies.actions";
-import {
-  switchMap,
-  withLatestFrom,
-  map,
-  catchError,
-  mergeMap,
-} from "rxjs/operators";
+import { switchMap, map, catchError, mergeMap } from "rxjs/operators";
 import { of } from "rxjs";
 import { selectProfile } from "state-management/selectors/user.selectors";
 import {
@@ -72,7 +63,7 @@ export class PolicyEffects {
         fromActions.changeEditablePageAction,
         fromActions.sortEditableByColumnAction,
       ),
-      withLatestFrom(this.userProfile$, this.editableQueryParams$),
+      concatLatestFrom(() => [this.userProfile$, this.editableQueryParams$]),
       switchMap(([action, profile, params]) => {
         let filter;
         if (!profile) {
