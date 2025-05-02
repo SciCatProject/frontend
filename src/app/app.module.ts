@@ -16,10 +16,8 @@ import { StoreModule } from "@ngrx/store";
 import { ApiModule, Configuration } from "@scicatproject/scicat-sdk-ts-angular";
 import { routerReducer } from "@ngrx/router-store";
 import { extModules } from "./build-specifics";
-import {
-  MatNativeDateModule,
-  provideNativeDateAdapter,
-} from "@angular/material/core";
+import { MAT_DATE_FORMATS } from "@angular/material/core";
+
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import {
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -39,6 +37,7 @@ import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { CustomTranslateLoader } from "shared/loaders/custom-translate.loader";
 import { DATE_PIPE_DEFAULT_OPTIONS } from "@angular/common";
 import { RouteTrackerService } from "shared/services/route-tracker.service";
+import { provideLuxonDateAdapter } from "@angular/material-luxon-adapter";
 
 const appConfigInitializerFn = (appConfig: AppConfigService) => {
   return () => appConfig.loadAppConfig();
@@ -59,7 +58,7 @@ const apiConfigurationFn = (
 
 @NgModule({
   declarations: [AppComponent],
-  exports: [MatNativeDateModule],
+  exports: [],
   bootstrap: [AppComponent],
   imports: [
     AppConfigModule,
@@ -99,7 +98,8 @@ const apiConfigurationFn = (
   ],
   providers: [
     AppConfigService,
-    provideNativeDateAdapter(),
+    provideLuxonDateAdapter(),
+    provideHttpClient(withInterceptorsFromDi()),
     provideAppInitializer(() => {
       const initializerFn = appConfigInitializerFn(inject(AppConfigService));
       return initializerFn();
@@ -132,10 +132,26 @@ const apiConfigurationFn = (
       },
       deps: [AppConfigService],
     },
+    {
+      provide: MAT_DATE_FORMATS,
+      useFactory: (appConfigService: AppConfigService) => {
+        const base =
+          appConfigService.getConfig().dateFormat || "yyyy-MM-dd HH:mm";
+        return {
+          parse: { dateInput: base },
+          display: {
+            dateInput: base,
+            monthYearLabel: "MMM yyyy",
+            dateA11yLabel: "LL",
+            monthYearA11yLabel: "MMMM yyyy",
+          },
+        };
+      },
+      deps: [AppConfigService],
+    },
     AuthService,
     AppThemeService,
     Title,
-    MatNativeDateModule,
     { provide: InternalStorage, useClass: CookieService },
     { provide: SDKStorage, useClass: CookieService },
     {
@@ -144,7 +160,6 @@ const apiConfigurationFn = (
       deps: [AuthService, AppConfigService],
       multi: false,
     },
-    provideHttpClient(withInterceptorsFromDi()),
   ],
 })
 export class AppModule {}

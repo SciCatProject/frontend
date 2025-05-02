@@ -17,7 +17,7 @@ import { FlexModule } from "@ngbracket/ngx-layout";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { DynamicMatTableModule } from "../dynamic-material-table/table/dynamic-mat-table.module";
 import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
-import { LinkyModule, LinkyPipe } from "ngx-linky";
+import { LinkyPipe } from "ngx-linky";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import {
   NgxMatDatetimepicker,
@@ -47,14 +47,13 @@ import {
     PipesModule,
     ReactiveFormsModule,
     DynamicMatTableModule.forRoot({}),
-    LinkyModule,
     MatDatepickerModule,
-    NgxMatDatetimepicker,
-    NgxMatDatepickerInput,
     NgxMatDatepickerActions,
     NgxMatDatepickerApply,
     NgxMatDatepickerCancel,
     NgxMatDatepickerClear,
+    NgxMatDatepickerInput,
+    NgxMatDatetimepicker,
   ],
   exports: [MetadataEditComponent, MetadataViewComponent],
   providers: [ReplaceUnderscorePipe, TitleCasePipe, LinkyPipe],

@@ -33,6 +33,7 @@ import {
   NgxMatDatepickerInput,
   NgxMatDatetimepicker,
 } from "@ngxmc/datetime-picker";
+
 @NgModule({
   declarations: [
     TreeEditComponent,
@@ -72,11 +73,6 @@ import {
     NgxMatDatepickerClear,
   ],
   exports: [TreeEditComponent, TreeViewComponent],
-  providers: [
-    DatePipe,
-    PrettyUnitPipe,
-    FormatNumberPipe,
-    { provide: MAT_DATE_LOCALE, useValue: "sv-SE" },
-  ],
+  providers: [DatePipe, PrettyUnitPipe, FormatNumberPipe],
 })
 export class ScientificMetadataTreeModule {}
