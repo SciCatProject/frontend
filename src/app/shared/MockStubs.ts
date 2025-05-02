@@ -20,6 +20,7 @@ import {
   Logbook,
   Policy,
   ReturnedUserDto,
+  OutputAttachmentV3Dto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { SDKToken } from "./services/auth/auth.service";
 
@@ -153,7 +154,7 @@ export class MockActivatedRoute {
 
 export class MockRouter {
   events = new Observable((observer) => {
-    observer.next();
+    observer.next(null);
     observer.complete();
   });
   navigate = () => {};
@@ -321,11 +322,11 @@ export function createMock<T>(data?: Partial<T>): T {
 }
 
 export const mockDataset = createMock<OutputDatasetObsoleteDto>({});
-export const mockAttachment = createMock<Attachment>({});
+export const mockAttachment = createMock<OutputAttachmentV3Dto>({});
 export const mockSample = createMock<SampleClass>({});
 export const mockProposal = createMock<ProposalClass>({});
 export const mockInstrument = createMock<Instrument>({});
-export const mockJob = createMock<JobClass>({});
+export const mockJob = createMock<JobClass>({}); // TODO: job release back-ward compatibility issue
 export const mockLogbook = createMock<Logbook>({});
 export const mockPolicy = createMock<Policy>({});
 export const mockPublishedData = createMock<PublishedData>({});

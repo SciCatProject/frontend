@@ -15,13 +15,12 @@ import { MessageType } from "state-management/models";
 import { Type } from "@angular/core";
 import {
   CreateJobDto,
-  JobClass,
   JobsService,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import { createMock } from "shared/MockStubs";
 
-// TODO: check OutputJobV3Dto which is not set properly and fix any type
+// TODO: job release back-ward compatibility issue
 const job = createMock<any>({
   _id: "testId",
   id: "testId",

@@ -316,7 +316,7 @@ export class DatafilesComponent
               files: this.getSelectedFiles(),
             },
           ],
-          jobParams: {}, // TODO: replace with actual job parameters
+          jobParams: {}, // TODO: job release back-ward compatibility issue
         };
         this.store.dispatch(submitJobAction({ job: data }));
       }

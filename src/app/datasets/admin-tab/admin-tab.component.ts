@@ -66,7 +66,7 @@ export class AdminTabComponent implements OnInit, OnDestroy {
               });
             }
             fileObj.files = fileList;
-            // job.datasetList = [fileObj];   // TODO: check if this is needed
+            // job.datasetList = [fileObj];   // TODO: job release back-ward compatibility issue
             this.store.dispatch(submitJobAction({ job }));
           }
         });

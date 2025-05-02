@@ -137,7 +137,7 @@ describe("ShareDialogComponent", () => {
     it("should dispatch a showMessageAction with type `error` if user does not exist", fakeAsync(() => {
       spyOn(
         component.userIdentititiesService,
-        "userIdentitiesControllerIsValidEmail",
+        "userIdentitiesControllerIsValidEmailV3",
       ).and.throwError("Not found");
       const dispatchSpy = spyOn(component.store, "dispatch");
       const email = "test@email.com";
@@ -166,7 +166,7 @@ describe("ShareDialogComponent", () => {
       // TODO: Fix this any type casting here
       spyOn(
         component.userIdentititiesService,
-        "userIdentitiesControllerIsValidEmail",
+        "userIdentitiesControllerIsValidEmailV3",
       ).and.returnValue(of(true) as any);
       component.emailFormControl.setValue(email);
       expect(component.emailFormControl.value).toEqual(email);

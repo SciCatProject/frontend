@@ -41,7 +41,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import {
-  DatasetsControllerCreateRequest,
+  DatasetsControllerCreateV3Request,
   ReturnedUserDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 
@@ -241,7 +241,7 @@ describe("DashboardComponent", () => {
         authStrategy: "local",
       });
 
-      const dataset: DatasetsControllerCreateRequest = {
+      const dataset: DatasetsControllerCreateV3Request = {
         accessGroups: [],
         contactEmail: currentUser.email,
         creationTime: new Date().toISOString(),
