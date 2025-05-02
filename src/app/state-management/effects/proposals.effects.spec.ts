@@ -58,7 +58,7 @@ describe("ProposalEffects", () => {
             {
               selector: selectDatasetsQueryParams,
               value: {
-                query: JSON.stringify({ text: "" }),
+                query: { text: "" },
                 limits: { order: "", skip: 0, limit: 25 },
               },
             },
@@ -68,20 +68,20 @@ describe("ProposalEffects", () => {
         {
           provide: ProposalsService,
           useValue: jasmine.createSpyObj("proposalApi", [
-            "proposalsControllerFullquery",
-            "proposalsControllerCount",
-            "proposalsControllerFindById",
-            "proposalsControllerFindByIdAccess",
-            "proposalsControllerCreateAttachment",
-            "proposalsControllerFindOneAttachmentAndUpdate",
-            "proposalsControllerFindOneAttachmentAndRemove",
+            "proposalsControllerFullqueryV3",
+            "proposalsControllerCountV3",
+            "proposalsControllerFindByIdV3",
+            "proposalsControllerFindByIdAccessV3",
+            "proposalsControllerCreateAttachmentV3",
+            "proposalsControllerFindOneAttachmentAndUpdateV3",
+            "proposalsControllerFindOneAttachmentAndRemoveV3",
           ]),
         },
         {
           provide: DatasetsService,
           useValue: jasmine.createSpyObj("datasetApi", [
-            "datasetsControllerFindAll",
-            "datasetsControllerCount",
+            "datasetsControllerFindAllV3",
+            "datasetsControllerCountV3",
           ]),
         },
       ],

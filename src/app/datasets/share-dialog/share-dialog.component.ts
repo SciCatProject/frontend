@@ -24,7 +24,7 @@ export class ShareDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<ShareDialogComponent>,
     public store: Store,
-    public userIdentititiesService: UserIdentitiesService,
+    public userIdentitiesService: UserIdentitiesService,
     @Inject(MAT_DIALOG_DATA)
     data: {
       infoMessage: string;
@@ -42,7 +42,7 @@ export class ShareDialogComponent {
 
   add = async (email: string): Promise<void> => {
     try {
-      const isValidEmail = await this.userIdentititiesService
+      const isValidEmail = await this.userIdentitiesService
         .userIdentitiesControllerIsValidEmailV3(
           JSON.stringify({
             where: { "profile.email": email.trim() },

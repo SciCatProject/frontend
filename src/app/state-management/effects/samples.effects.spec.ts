@@ -52,7 +52,7 @@ describe("SampleEffects", () => {
           selectors: [
             {
               selector: selectFullqueryParams,
-              value: { query: JSON.stringify({ text: "" }) },
+              value: { query: { text: "" } },
             },
             { selector: selectDatasetsQueryParams, value: {} },
           ],
@@ -60,20 +60,20 @@ describe("SampleEffects", () => {
         {
           provide: SamplesService,
           useValue: jasmine.createSpyObj("sampleApi", [
-            "samplesControllerFullquery",
-            "samplesControllerFindById",
-            "samplesControllerFindByIdAccess",
-            "samplesControllerMetadataKeys",
-            "samplesControllerUpdate",
-            "samplesControllerCreate",
-            "samplesControllerCreateAttachments",
-            "samplesControllerFindOneAttachmentAndRemove",
+            "samplesControllerFullqueryV3",
+            "samplesControllerFindByIdV3",
+            "samplesControllerFindByIdAccessV3",
+            "samplesControllerMetadataKeysV3",
+            "samplesControllerUpdateV3",
+            "samplesControllerCreateV3",
+            "samplesControllerCreateAttachmentsV3",
+            "samplesControllerFindOneAttachmentAndRemoveV3",
           ]),
         },
         {
           provide: DatasetsService,
           useValue: jasmine.createSpyObj("datasetApi", [
-            "datasetsControllerFindAll",
+            "datasetsControllerFindAllV3",
           ]),
         },
       ],
@@ -247,10 +247,11 @@ describe("SampleEffects", () => {
       });
 
       actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: metadataKeys });
-      sampleApi.samplesControllerMetadataKeysV3.and.returnValue(response);
+      sampleApi.samplesControllerMetadataKeysV3.and.returnValue(
+        cold("-b|", { b: metadataKeys }),
+      );
 
-      const expected = cold("--b", { b: outcome });
+      const expected = cold("--c", { c: outcome });
       expect(effects.fetchMetadataKeys$).toBeObservable(expected);
     });
 

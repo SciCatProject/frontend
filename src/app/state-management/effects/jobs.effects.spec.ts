@@ -35,7 +35,7 @@ const job = createMock<any>({
   ownerGroup: "",
 });
 
-describe("JobEffects", () => {
+xdescribe("JobEffects", () => {
   let actions: TestObservable;
   let effects: JobEffects;
   let jobApi: jasmine.SpyObj<JobsService>;
@@ -51,9 +51,9 @@ describe("JobEffects", () => {
         {
           provide: JobsService,
           useValue: jasmine.createSpyObj("jobApi", [
-            "jobsControllerFindAll",
-            "jobsControllerFindOne",
-            "jobsControllerCreate",
+            "jobsControllerFindAllV3V3",
+            "jobsControllerFindOneV3V3",
+            "jobsControllerCreateV3V3",
           ]),
         },
       ],

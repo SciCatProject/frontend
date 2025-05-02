@@ -52,8 +52,8 @@ describe("LogbookEffects", () => {
         {
           provide: LogbooksService,
           useValue: jasmine.createSpyObj("logbookApi", [
-            "logbooksControllerFindAll",
-            "logbooksControllerFindByName",
+            "logbooksControllerFindAllV3",
+            "logbooksControllerFindByNameV3",
           ]),
         },
         provideHttpClient(withInterceptorsFromDi()),

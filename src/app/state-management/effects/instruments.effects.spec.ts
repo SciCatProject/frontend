@@ -37,9 +37,9 @@ describe("InstrumentEffects", () => {
         {
           provide: InstrumentsService,
           useValue: jasmine.createSpyObj("instrumentApi", [
-            "instrumentsControllerFindAll",
-            "instrumentsControllerFindById",
-            "instrumentsControllerUpdate",
+            "instrumentsControllerFindAllV3",
+            "instrumentsControllerFindByIdV3",
+            "instrumentsControllerUpdateV3",
           ]),
         },
       ],

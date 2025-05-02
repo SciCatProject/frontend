@@ -41,7 +41,7 @@ export class MockUserApi {
     return { username: "admin" };
   }
 
-  usersControllerGetUserJWT() {
+  usersControllerGetUserJWTV3() {
     return of("");
   }
 }
@@ -117,15 +117,15 @@ export class MockDatasetApi {
     return of([]);
   }
 
-  datasetsControllerFindAll() {
+  datasetsControllerFindAllV3() {
     return of([]);
   }
 
-  datasetsControllerFindById() {
+  datasetsControllerFindByIdV3() {
     return of([]);
   }
 
-  datasetsControllerCount(data?: any) {
+  datasetsControllerCountV3(data?: any) {
     return of(0);
   }
 }
@@ -211,7 +211,7 @@ export class MockArchivingService {
 }
 
 export class MockPublishedDataApi {
-  publishedDataControllerFindOne() {
+  publishedDataControllerFindOneV3() {
     return of({
       creator: "string",
       publicationYear: "string",
@@ -222,7 +222,7 @@ export class MockPublishedDataApi {
     });
   }
 
-  publishedDataControllerFindAll() {
+  publishedDataControllerFindAllV3() {
     return of([
       {
         creator: "string",
@@ -235,7 +235,7 @@ export class MockPublishedDataApi {
     ]);
   }
 
-  publishedDataControllerFormPopulate() {
+  publishedDataControllerFormPopulateV3() {
     return of({});
   }
 }

@@ -6,6 +6,7 @@ import {
 import { MockStore } from "shared/MockStubs";
 import { BreadcrumbComponent } from "./breadcrumb.component";
 import { Store } from "@ngrx/store";
+import { provideRouter } from "@angular/router";
 
 describe("BreadcrumbComponent", () => {
   let component: BreadcrumbComponent;
@@ -18,6 +19,7 @@ describe("BreadcrumbComponent", () => {
       providers: [
         { provide: Store, useClass: MockStore },
         provideHttpClient(withInterceptorsFromDi()),
+        provideRouter([]),
       ],
     }).compileComponents();
   }));

@@ -19,7 +19,7 @@ describe("ThumbnailService", () => {
 
   beforeEach(() => {
     const datasetApiSpy = jasmine.createSpyObj("DatasetApi", [
-      "datasetsControllerThumbnail",
+      "datasetsControllerThumbnailV3",
     ]);
 
     TestBed.configureTestingModule({

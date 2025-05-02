@@ -107,23 +107,23 @@ describe("UserEffects", () => {
         {
           provide: SharedAuthService,
           useValue: jasmine.createSpyObj("sharedAuthService", [
-            "authControllerLogin",
-            "authControllerLogout",
+            "authControllerLoginV3",
+            "authControllerLogoutV3",
           ]),
         },
         {
           provide: UsersService,
           useValue: jasmine.createSpyObj("userApi", [
-            "usersControllerFindById",
-            "usersControllerGetSettings",
-            "usersControllerPatchExternalSettings",
-            "usersControllerGetMyUser",
+            "usersControllerFindByIdV3",
+            "usersControllerGetSettingsV3",
+            "usersControllerPatchExternalSettingsV3",
+            "usersControllerGetMyUserV3",
           ]),
         },
         {
           provide: UserIdentitiesService,
           useValue: jasmine.createSpyObj("userIdentityApi", [
-            "userIdentitiesControllerFindOne",
+            "userIdentitiesControllerFindOneV3",
           ]),
         },
         {

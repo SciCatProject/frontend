@@ -11,7 +11,7 @@ import {
   withInterceptorsFromDi,
 } from "@angular/common/http";
 import { NgModule, inject, provideAppInitializer } from "@angular/core";
-import { ExtraOptions, RouterModule } from "@angular/router";
+import { ExtraOptions, provideRouter, RouterModule } from "@angular/router";
 import { StoreModule } from "@ngrx/store";
 import { ApiModule, Configuration } from "@scicatproject/scicat-sdk-ts-angular";
 import { routerReducer } from "@ngrx/router-store";
@@ -91,9 +91,6 @@ const apiConfigurationFn = (
       },
     ),
     extModules,
-    RouterModule.forRoot(routes, {
-      useHash: false,
-    } as ExtraOptions),
     EffectsModule.forRoot([]),
   ],
   providers: [
@@ -111,6 +108,7 @@ const apiConfigurationFn = (
     provideAppInitializer(() => {
       inject(RouteTrackerService);
     }),
+    provideRouter(routes),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: SnackbarInterceptor,

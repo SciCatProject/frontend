@@ -86,7 +86,7 @@ describe("DashboardComponent", () => {
         MatSidenavModule,
         StoreModule.forRoot({}),
       ],
-      declarations: [DashboardComponent, MatSidenav],
+      declarations: [DashboardComponent],
       providers: [
         provideMockStore({
           selectors: [

@@ -75,9 +75,13 @@ export class SampleEffects {
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query }) => {
+        const limits = {};
         query["metadataKey"] = "";
         return this.sampleApi
-          .samplesControllerMetadataKeysV3(JSON.stringify(query))
+          .samplesControllerMetadataKeysV3(
+            JSON.stringify(limits),
+            JSON.stringify(query),
+          )
           .pipe(
             map((metadataKeys) =>
               fromActions.fetchMetadataKeysCompleteAction({ metadataKeys }),
