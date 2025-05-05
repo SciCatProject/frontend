@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
 import { of } from "rxjs";
 import { catchError, map, switchMap, finalize } from "rxjs/operators"; // Import finalize
 import * as fromActions from "state-management/actions/ingestor.actions";
@@ -12,6 +12,8 @@ import {
 import { MessageType } from "state-management/models";
 import { HttpErrorResponse } from "@angular/common/http";
 import { showMessageAction } from "state-management/actions/user.actions";
+import { Store } from "@ngrx/store";
+import { selectIngestorTransferListRequestOptions } from "state-management/selectors/ingestor.selector";
 
 @Injectable()
 export class IngestorEffects {
@@ -113,16 +115,32 @@ export class IngestorEffects {
   updateTransferList$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.updateTransferList),
-      switchMap(({ transferId, page, pageNumber }) =>
-        this.ingestor.getTransferList(page, pageNumber, transferId).pipe(
-          map((transferList) =>
-            fromActions.updateTransferListSuccess({ transferList }),
-          ),
-          catchError((err) =>
-            of(fromActions.updateTransferListFailure({ err })),
-          ),
-        ),
+      concatLatestFrom(() =>
+        this.store.select(selectIngestorTransferListRequestOptions),
       ),
+      switchMap(([action, requestOptions]) => {
+        const { transferId, page, pageNumber } = action;
+        const { page: pageRO, pageNumber: pageNumberRO } = requestOptions;
+
+        return this.ingestor
+          .getTransferList(
+            page ?? pageRO,
+            pageNumber ?? pageNumberRO,
+            transferId,
+          )
+          .pipe(
+            map((transferList) =>
+              fromActions.updateTransferListSuccess({
+                transferList,
+                page: page ?? pageRO,
+                pageNumber: pageNumber ?? pageNumberRO,
+              }),
+            ),
+            catchError((err) =>
+              of(fromActions.updateTransferListFailure({ err })),
+            ),
+          );
+      }),
     );
   });
 
@@ -163,7 +181,10 @@ export class IngestorEffects {
       ofType(fromActions.ingestDataset),
       switchMap(({ ingestionDataset }) =>
         this.ingestor.startIngestion(ingestionDataset).pipe(
-          map((response) => fromActions.ingestDatasetSuccess({ response })),
+          switchMap((response) => [
+            fromActions.ingestDatasetSuccess({ response }),
+            fromActions.updateTransferList({}),
+          ]),
           catchError((err) => of(fromActions.ingestDatasetFailure({ err }))),
         ),
       ),
@@ -211,14 +232,16 @@ export class IngestorEffects {
       ofType(fromActions.cancelTransfer),
       switchMap(({ transferId }) =>
         this.ingestor.cancelTransfer(transferId).pipe(
-          map((response) => {
-            const message = {
-              type: MessageType.Success,
-              content: "Successfully cancelled transfer: " + transferId,
-              duration: 5000,
-            };
-            return showMessageAction({ message }); // Direkt die Aktion zurückgeben
-          }),
+          switchMap(() => [
+            showMessageAction({
+              message: {
+                type: MessageType.Success,
+                content: "Successfully cancelled transfer: " + transferId,
+                duration: 5000,
+              },
+            }),
+            fromActions.updateTransferList({}),
+          ]),
           catchError((err) => {
             const message = {
               type: MessageType.Error,
@@ -226,7 +249,7 @@ export class IngestorEffects {
                 "Failed to cancel transfer: " + (err.error ?? err.message),
               duration: 5000,
             };
-            return of(showMessageAction({ message })); // Wrap the action in of()
+            return of(showMessageAction({ message }));
           }),
         ),
       ),
@@ -236,5 +259,6 @@ export class IngestorEffects {
   constructor(
     private actions$: Actions,
     private ingestor: Ingestor,
-  ) {}
+    private store: Store,
+  ) { }
 }

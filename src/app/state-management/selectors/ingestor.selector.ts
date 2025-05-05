@@ -53,3 +53,8 @@ export const selectIngestorRenderView = createSelector(
   selectIngestorState,
   (state) => state.renderView,
 );
+
+export const selectIngestorTransferListRequestOptions = createSelector(
+  selectIngestorState,
+  (state) => state.transferListRequestOptions,
+);

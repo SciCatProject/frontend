@@ -95,9 +95,13 @@ const reducer = createReducer(
   ),
   on(
     fromActions.updateTransferListSuccess,
-    (state, { transferList }): IngestorState => ({
+    (state, { transferList, page, pageNumber }): IngestorState => ({
       ...state,
       ingestorTransferList: transferList,
+      transferListRequestOptions: {
+        page,
+        pageNumber,
+      },
     }),
   ),
   on(

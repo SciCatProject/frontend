@@ -2,6 +2,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  OnDestroy,
   OnInit,
   Output,
 } from "@angular/core";
@@ -14,13 +15,16 @@ import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor
 import { Store } from "@ngrx/store";
 import { selectIngestionObject } from "state-management/selectors/ingestor.selector";
 import * as fromActions from "state-management/actions/ingestor.actions";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "ingestor-extractor-metadata-dialog-page",
   templateUrl: "ingestor.extractor-metadata-dialog-page.html",
   styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
 })
-export class IngestorExtractorMetadataDialogPageComponent implements OnInit {
+export class IngestorExtractorMetadataDialogPageComponent
+  implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
   metadataSchemaInstrument: JsonSchema;
   metadataSchemaAcquisition: JsonSchema;
   createNewTransferData: IngestionRequestInformation =
@@ -50,32 +54,38 @@ export class IngestorExtractorMetadataDialogPageComponent implements OnInit {
   constructor(
     private store: Store,
     private cdr: ChangeDetectorRef,
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.ingestionObject$.subscribe((ingestionObject) => {
-      if (ingestionObject) {
-        this.createNewTransferData = ingestionObject;
+    this.subscriptions.push(
+      this.ingestionObject$.subscribe((ingestionObject) => {
+        if (ingestionObject) {
+          this.createNewTransferData = ingestionObject;
 
-        const instrumentSchema =
-          this.createNewTransferData.selectedResolvedDecodedSchema.properties
-            .instrument;
-        const acqusitionSchema =
-          this.createNewTransferData.selectedResolvedDecodedSchema.properties
-            .acquisition;
+          const instrumentSchema =
+            this.createNewTransferData.selectedResolvedDecodedSchema.properties
+              .instrument;
+          const acqusitionSchema =
+            this.createNewTransferData.selectedResolvedDecodedSchema.properties
+              .acquisition;
 
-        this.metadataSchemaInstrument = instrumentSchema;
-        this.metadataSchemaAcquisition = acqusitionSchema;
-        this.extractorMetaDataReady =
-          this.createNewTransferData.apiInformation.extractorMetaDataReady;
-        this.extractorMetaDataError =
-          this.createNewTransferData.apiInformation.metaDataExtractionFailed;
-        this.extractorMetaDataStatus =
-          this.createNewTransferData.apiInformation.extractorMetaDataStatus;
-        this.process =
-          this.createNewTransferData.apiInformation.extractorMetadataProgress;
-      }
-    });
+          this.metadataSchemaInstrument = instrumentSchema;
+          this.metadataSchemaAcquisition = acqusitionSchema;
+          this.extractorMetaDataReady =
+            this.createNewTransferData.apiInformation.extractorMetaDataReady;
+          this.extractorMetaDataError =
+            this.createNewTransferData.apiInformation.metaDataExtractionFailed;
+          this.extractorMetaDataStatus =
+            this.createNewTransferData.apiInformation.extractorMetaDataStatus;
+          this.process =
+            this.createNewTransferData.apiInformation.extractorMetadataProgress;
+        }
+      }),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   onClickBack(): void {
@@ -134,7 +144,6 @@ export class IngestorExtractorMetadataDialogPageComponent implements OnInit {
       this.isAcquisitionMetadataOk &&
       this.extractorMetaDataReady;*/
 
-    // TODO: Use upper line if schema values are fine
     this.uiNextButtonReady = this.extractorMetaDataReady;
   }
 }

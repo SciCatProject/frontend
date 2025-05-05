@@ -2,6 +2,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  OnDestroy,
   OnInit,
   Output,
 } from "@angular/core";
@@ -15,13 +16,16 @@ import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor
 import { selectIngestionObject } from "state-management/selectors/ingestor.selector";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Store } from "@ngrx/store";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "ingestor-user-metadata-dialog",
   templateUrl: "ingestor.user-metadata-dialog-page.html",
   styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
 })
-export class IngestorUserMetadataDialogPageComponent implements OnInit {
+export class IngestorUserMetadataDialogPageComponent
+  implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
   ingestionObject$ = this.store.select(selectIngestionObject);
 
   createNewTransferData: IngestionRequestInformation =
@@ -51,20 +55,26 @@ export class IngestorUserMetadataDialogPageComponent implements OnInit {
   constructor(
     private store: Store,
     private cdr: ChangeDetectorRef,
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.ingestionObject$.subscribe((ingestionObject) => {
-      if (ingestionObject) {
-        this.createNewTransferData = ingestionObject;
+    this.subscriptions.push(
+      this.ingestionObject$.subscribe((ingestionObject) => {
+        if (ingestionObject) {
+          this.createNewTransferData = ingestionObject;
 
-        this.metadataSchemaOrganizational =
-          this.createNewTransferData.selectedResolvedDecodedSchema.properties.organizational;
-        this.metadataSchemaSample =
-          this.createNewTransferData.selectedResolvedDecodedSchema.properties.sample;
-        this.scicatHeaderSchema = SciCatHeader_Schema;
-      }
-    });
+          this.metadataSchemaOrganizational =
+            this.createNewTransferData.selectedResolvedDecodedSchema.properties.organizational;
+          this.metadataSchemaSample =
+            this.createNewTransferData.selectedResolvedDecodedSchema.properties.sample;
+          this.scicatHeaderSchema = SciCatHeader_Schema;
+        }
+      }),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   onClickBack(): void {
@@ -135,11 +145,7 @@ export class IngestorUserMetadataDialogPageComponent implements OnInit {
   }
 
   validateNextButton(): void {
-    this.uiNextButtonReady = true;
-
-    // Uncomment if prod
-    /*this.uiNextButtonReady =
-      this.isSciCatHeaderOk &&
+    this.uiNextButtonReady = this.isSciCatHeaderOk; /* &&
       this.isOrganizationalMetadataOk &&
       this.isSampleInformationOk;*/
   }

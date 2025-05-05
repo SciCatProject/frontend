@@ -1,10 +1,16 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  OnDestroy,
+} from "@angular/core";
 import { JsonFormsAngularService, JsonFormsControl } from "@jsonforms/angular";
 import { RankedTester, rankWith, scopeEndsWith } from "@jsonforms/core";
 import { Store } from "@ngrx/store";
 import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
 import { fetchCurrentUserAction } from "state-management/actions/user.actions";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "owner-group-renderer",
@@ -68,8 +74,8 @@ import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 })
 export class OwnerGroupFieldComponent
   extends JsonFormsControl
-  implements OnInit
-{
+  implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
   focused = false;
   vm$ = this.store.select(selectUserSettingsPageViewModel);
   userOwnerGroups = [];
@@ -89,37 +95,44 @@ export class OwnerGroupFieldComponent
     super.ngOnInit();
 
     // Fetch the owner groups from the scicat user
-    this.vm$.subscribe((settings) => {
-      const getclaims = (profile: any): string[] => {
-        if (!profile) {
+    this.subscriptions.push(
+      this.vm$.subscribe((settings) => {
+        const getclaims = (profile: any): string[] => {
+          if (!profile) {
+            return [];
+          }
+
+          if (profile.oidcClaims !== undefined) {
+            return settings.profile.oidcClaims.accessGroups ?? [];
+          }
+
+          if (profile.accessGroups !== undefined) {
+            return settings.profile.accessGroups ?? [];
+          }
+
           return [];
+        };
+
+        const claims = getclaims(settings.profile);
+        if (claims.length > 0) {
+          this.userOwnerGroups = claims;
         }
 
-        if (profile.oidcClaims !== undefined) {
-          return settings.profile.oidcClaims.accessGroups ?? [];
+        if (!this.groupFieldInitialized) {
+          this.groupFieldInitialized = true;
+          this.store.dispatch(fetchCurrentUserAction());
         }
 
-        if (profile.accessGroups !== undefined) {
-          return settings.profile.accessGroups ?? [];
+        if (this.form.disabled) {
+          this.form.enable();
         }
+      }),
+    );
+  }
 
-        return [];
-      };
-
-      const claims = getclaims(settings.profile);
-      if (claims.length > 0) {
-        this.userOwnerGroups = claims;
-      }
-
-      if (!this.groupFieldInitialized) {
-        this.groupFieldInitialized = true;
-        this.store.dispatch(fetchCurrentUserAction());
-      }
-
-      if (this.form.disabled) {
-        this.form.enable();
-      }
-    });
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   onSelectAutocompleteValue($event: MatAutocompleteSelectedEvent) {

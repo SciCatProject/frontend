@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import {
   DialogDataObject,
@@ -18,6 +18,7 @@ import * as fromActions from "state-management/actions/ingestor.actions";
 import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
 import { fetchScicatTokenAction } from "state-management/actions/user.actions";
 import { INGESTOR_API_ENDPOINTS_V1 } from "shared/sdk/apis/ingestor.service";
+import { Subscription } from "rxjs";
 
 export type dialogStep =
   | "NEW_TRANSFER"
@@ -30,7 +31,8 @@ export type dialogStep =
   templateUrl: "ingestor.creation-dialog-base.html",
   styleUrls: ["../../ingestor-page/ingestor.component.scss"],
 })
-export class IngestorCreationDialogBaseComponent implements OnInit {
+export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
   vm$ = this.store.select(selectUserSettingsPageViewModel);
 
   createNewTransferData: IngestionRequestInformation =
@@ -48,28 +50,40 @@ export class IngestorCreationDialogBaseComponent implements OnInit {
     private store: Store,
     private sseService: IngestorMetadataSSEService,
     @Inject(MAT_DIALOG_DATA) public data: DialogDataObject,
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.ingestionObject$.subscribe((ingestionObject) => {
-      if (ingestionObject) {
-        this.createNewTransferData = ingestionObject;
-      }
-    });
+    this.subscriptions.push(
+      this.ingestionObject$.subscribe((ingestionObject) => {
+        if (ingestionObject) {
+          this.createNewTransferData = ingestionObject;
+        }
+      }),
+    );
 
-    this.ingestorBackend$.subscribe((ingestorBackend) => {
-      if (ingestorBackend) {
-        this.connectedFacilityBackend = ingestorBackend;
-      }
-    });
+    this.subscriptions.push(
+      this.ingestorBackend$.subscribe((ingestorBackend) => {
+        if (ingestorBackend) {
+          this.connectedFacilityBackend = ingestorBackend;
+        }
+      }),
+    );
 
     // Fetch the API token that the ingestor can authenticate to scicat as the user
-    this.vm$.subscribe((settings) => {
-      this.tokenValue = settings.scicatToken;
+    this.subscriptions.push(
+      this.vm$.subscribe((settings) => {
+        this.tokenValue = settings.scicatToken;
 
-      if (this.tokenValue === "") {
-        this.store.dispatch(fetchScicatTokenAction());
-      }
+        if (this.tokenValue === "") {
+          this.store.dispatch(fetchScicatTokenAction());
+        }
+      }),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
     });
   }
 
@@ -96,44 +110,46 @@ export class IngestorCreationDialogBaseComponent implements OnInit {
 
     const sseUrl = `${this.connectedFacilityBackend + "/" + INGESTOR_API_ENDPOINTS_V1.METADATA}?${params.toString()}`;
     this.sseService.connect(sseUrl);
-    this.sseService.getMessages().subscribe({
-      next: (data) => {
-        //console.log("Received SSE data:", data);
-        this.createNewTransferData.apiInformation.extractorMetaDataStatus =
-          data.message;
-        this.createNewTransferData.apiInformation.extractorMetadataProgress =
-          data.progress;
-
-        if (data.result) {
-          this.createNewTransferData.apiInformation.extractorMetaDataReady =
-            true;
-          const extractedScientificMetadata = JSON.parse(
-            data.resultMessage,
-          ) as ScientificMetadata;
-
-          this.createNewTransferData.extractorMetaData.instrument =
-            extractedScientificMetadata.instrument ?? {};
-          this.createNewTransferData.extractorMetaData.acquisition =
-            extractedScientificMetadata.acquisition ?? {};
-        } else if (data.error) {
-          this.createNewTransferData.apiInformation.metaDataExtractionFailed =
-            true;
-          this.createNewTransferData.apiInformation.extractMetaDataRequested =
-            false;
+    this.subscriptions.push(
+      this.sseService.getMessages().subscribe({
+        next: (data) => {
+          //console.log("Received SSE data:", data);
           this.createNewTransferData.apiInformation.extractorMetaDataStatus =
             data.message;
           this.createNewTransferData.apiInformation.extractorMetadataProgress =
             data.progress;
-        }
-      },
-      error: (error) => {
-        console.error("Error receiving SSE data:", error);
-        this.createNewTransferData.apiInformation.metaDataExtractionFailed =
-          true;
-        this.createNewTransferData.apiInformation.extractMetaDataRequested =
-          false;
-      },
-    });
+
+          if (data.result) {
+            this.createNewTransferData.apiInformation.extractorMetaDataReady =
+              true;
+            const extractedScientificMetadata = JSON.parse(
+              data.resultMessage,
+            ) as ScientificMetadata;
+
+            this.createNewTransferData.extractorMetaData.instrument =
+              extractedScientificMetadata.instrument ?? {};
+            this.createNewTransferData.extractorMetaData.acquisition =
+              extractedScientificMetadata.acquisition ?? {};
+          } else if (data.error) {
+            this.createNewTransferData.apiInformation.metaDataExtractionFailed =
+              true;
+            this.createNewTransferData.apiInformation.extractMetaDataRequested =
+              false;
+            this.createNewTransferData.apiInformation.extractorMetaDataStatus =
+              data.message;
+            this.createNewTransferData.apiInformation.extractorMetadataProgress =
+              data.progress;
+          }
+        },
+        error: (error) => {
+          console.error("Error receiving SSE data:", error);
+          this.createNewTransferData.apiInformation.metaDataExtractionFailed =
+            true;
+          this.createNewTransferData.apiInformation.extractMetaDataRequested =
+            false;
+        },
+      }),
+    );
 
     return true;
   }

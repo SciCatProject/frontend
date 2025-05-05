@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, OnInit, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  inject,
+  OnDestroy,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import {
   decodeBase64ToUTF8,
@@ -18,13 +25,16 @@ import {
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
 import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "ingestor-new-transfer-dialog-page",
   templateUrl: "ingestor.new-transfer-dialog-page.html",
   styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
 })
-export class IngestorNewTransferDialogPageComponent implements OnInit {
+export class IngestorNewTransferDialogPageComponent
+  implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
   readonly dialog = inject(MatDialog);
 
   ingestionObject$ = this.store.select(selectIngestionObject);
@@ -54,24 +64,36 @@ export class IngestorNewTransferDialogPageComponent implements OnInit {
     this.loadExtractionMethods();
 
     // Fetch the API token that the ingestor can authenticate to scicat as the user
-    this.vm$.subscribe((settings) => {
-      this.userProfile = settings.user;
-    });
+    this.subscriptions.push(
+      this.vm$.subscribe((settings) => {
+        this.userProfile = settings.user;
+      }),
+    );
 
-    this.ingestionObject$.subscribe((ingestionObject) => {
-      if (ingestionObject) {
-        this.createNewTransferData = ingestionObject;
-      }
-    });
+    this.subscriptions.push(
+      this.ingestionObject$.subscribe((ingestionObject) => {
+        if (ingestionObject) {
+          this.createNewTransferData = ingestionObject;
+        }
+      }),
+    );
 
-    this.ingestorExtractionMethods$.subscribe((extractionMethods) => {
-      if (extractionMethods) {
-        this.extractionMethods = extractionMethods;
-        this.extractionMethodsError = "";
-      } else {
-        this.extractionMethodsError =
-          "No extraction methods available. Please check your connection.";
-      }
+    this.subscriptions.push(
+      this.ingestorExtractionMethods$.subscribe((extractionMethods) => {
+        if (extractionMethods) {
+          this.extractionMethods = extractionMethods;
+          this.extractionMethodsError = "";
+        } else {
+          this.extractionMethodsError =
+            "No extraction methods available. Please check your connection.";
+        }
+      }),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
     });
   }
 
@@ -167,14 +189,14 @@ export class IngestorNewTransferDialogPageComponent implements OnInit {
   }
 
   onClickOpenFileBrowser(): void {
-    this.dialog
-      .open(IngestorFileBrowserComponent, {
-        data: {},
-      })
-      .afterClosed()
-      .subscribe(() => {
-        this.validateNextButton();
-      });
+    const dialogRef = this.dialog.open(IngestorFileBrowserComponent, {
+      data: {},
+    });
+
+    const dialogSub = dialogRef.afterClosed().subscribe(() => {
+      this.validateNextButton();
+      dialogSub.unsubscribe();
+    });
   }
 
   onCreateNewTransferDataChange(updatedData: IngestionRequestInformation) {

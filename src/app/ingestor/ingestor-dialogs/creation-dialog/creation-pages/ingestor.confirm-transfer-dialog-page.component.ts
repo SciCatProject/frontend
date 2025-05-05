@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, OnInit, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  inject,
+  OnDestroy,
+  OnInit,
+  Output,
+} from "@angular/core";
 import {
   IngestionRequestInformation,
   IngestorHelper,
@@ -9,13 +16,16 @@ import { selectIngestionObject } from "state-management/selectors/ingestor.selec
 import { MatDialog } from "@angular/material/dialog";
 import { IngestorConfirmationDialogComponent } from "ingestor/ingestor-dialogs/confirmation-dialog/ingestor.confirmation-dialog.component";
 import * as fromActions from "state-management/actions/ingestor.actions";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "ingestor-confirm-transfer-dialog-page",
   templateUrl: "ingestor.confirm-transfer-dialog-page.html",
   styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
 })
-export class IngestorConfirmTransferDialogPageComponent implements OnInit {
+export class IngestorConfirmTransferDialogPageComponent
+  implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
   readonly dialog = inject(MatDialog);
 
   createNewTransferData: IngestionRequestInformation =
@@ -30,19 +40,22 @@ export class IngestorConfirmTransferDialogPageComponent implements OnInit {
 
   copiedToClipboard = false;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) { }
 
   ngOnInit() {
-    this.ingestionObject$.subscribe((ingestionObject) => {
-      if (ingestionObject) {
-        this.createNewTransferData = ingestionObject;
-      }
-    });
-
-    //createNewTransferData.apiInformation.ingestionRequestFailed
-    //createNewTransferData.ingestionRequest
+    this.subscriptions.push(
+      this.ingestionObject$.subscribe((ingestionObject) => {
+        if (ingestionObject) {
+          this.createNewTransferData = ingestionObject;
+        }
+      }),
+    );
 
     this.provideMergeMetaData = this.createMetaDataString();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   createMetaDataString(): string {
@@ -79,13 +92,15 @@ export class IngestorConfirmTransferDialogPageComponent implements OnInit {
         message: "Create a new dataset and start data transfer?",
       },
     });
-    dialogRef.afterClosed().subscribe(async (result) => {
+
+    const dialogSub = dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
         this.createNewTransferData.mergedMetaDataString =
           this.provideMergeMetaData;
 
         this.nextStep.emit();
       }
+      dialogSub.unsubscribe();
     });
   }
 

@@ -29,6 +29,10 @@ export interface IngestorState {
   ingestorAuth: IngestorAuthentication | null;
   ingestorEndpoint: string | null;
   ingestorTransferList: GetTransferResponse | null;
+  transferListRequestOptions: {
+    page: number;
+    pageNumber: number;
+  };
   ingestorExtractionMethods: GetExtractorResponse | null;
   ingestionObject: IngestionRequestInformation;
   ingestorBrowserActiveNode: GetBrowseDatasetResponse | null;
@@ -45,6 +49,10 @@ export const initialIngestorState: IngestorState = {
   ingestorAuth: null,
   ingestorEndpoint: null,
   ingestorTransferList: null,
+  transferListRequestOptions: {
+    page: 0,
+    pageNumber: 100,
+  },
   ingestorExtractionMethods: null,
   ingestionObject: IngestorHelper.createEmptyRequestInformation(),
   ingestorBrowserActiveNode: null,

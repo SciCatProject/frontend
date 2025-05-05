@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialog } from "@angular/material/dialog";
 import {
   IngestionRequestInformation,
@@ -14,6 +14,7 @@ import {
 } from "state-management/selectors/ingestor.selector";
 import { Store } from "@ngrx/store";
 import * as fromActions from "state-management/actions/ingestor.actions";
+import { Subscription } from "rxjs";
 
 export interface BrowsableNode extends FolderNode {
   childrenNodes?: BrowsableNode[];
@@ -31,8 +32,9 @@ export interface GoBackNode extends FolderNode {
   templateUrl: "ingestor.file-browser.component.html",
   styleUrls: ["../../ingestor-page/ingestor.component.scss"],
 })
-export class IngestorFileBrowserComponent implements OnInit {
+export class IngestorFileBrowserComponent implements OnInit, OnDestroy {
   private _activeNode: BrowsableNode | null = null;
+  private subscriptions: Subscription[] = [];
 
   ingestionObject$ = this.store.select(selectIngestionObject);
   selectIngestorBrowserActiveNode$ = this.store.select(
@@ -57,7 +59,7 @@ export class IngestorFileBrowserComponent implements OnInit {
     public dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: DialogDataObject,
     private store: Store,
-  ) { }
+  ) {}
 
   get activeNode(): BrowsableNode | null {
     return this._activeNode;
@@ -87,33 +89,41 @@ export class IngestorFileBrowserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.ingestionObject$.subscribe((ingestionObject) => {
-      if (ingestionObject) {
-        this.createNewTransferData = ingestionObject;
+    this.subscriptions.push(
+      this.ingestionObject$.subscribe((ingestionObject) => {
+        if (ingestionObject) {
+          this.createNewTransferData = ingestionObject;
 
-        const rootNode: FolderNode = {
-          name: "",
-          path:
-            this.createNewTransferData.selectedPath !== ""
-              ? this.createNewTransferData.selectedPath
-              : "/",
-          children: false,
-        };
+          const rootNode: FolderNode = {
+            name: "",
+            path:
+              this.createNewTransferData.selectedPath !== ""
+                ? this.createNewTransferData.selectedPath
+                : "/",
+            children: false,
+          };
 
-        this.selectIngestorBrowserActiveNode$.subscribe((newNode) => {
-          if (newNode) {
-            const newActiveNode: BrowsableNode = {
-              ...(this.nextNode ?? rootNode),
-              childrenNodes: [],
-              children: false,
-            };
-            this.setExtendedNodeActive(newActiveNode, newNode);
-          }
-        });
+          this.subscriptions.push(
+            this.selectIngestorBrowserActiveNode$.subscribe((newNode) => {
+              if (newNode) {
+                const newActiveNode: BrowsableNode = {
+                  ...(this.nextNode ?? rootNode),
+                  childrenNodes: [],
+                  children: false,
+                };
+                this.setExtendedNodeActive(newActiveNode, newNode);
+              }
+            }),
+          );
 
-        this.onLoadFolderNode(rootNode, true);
-      }
-    });
+          this.onLoadFolderNode(rootNode, true);
+        }
+      }),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   setExtendedNodeActive(

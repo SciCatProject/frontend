@@ -43,12 +43,16 @@ export const stopConnectingIngestor = createAction(
 
 export const updateTransferList = createAction(
   "[Ingestor] Update transfer list",
-  props<{ transferId: string; page: number; pageNumber: number }>(),
+  props<{ transferId?: string; page?: number; pageNumber?: number }>(),
 );
 
 export const updateTransferListSuccess = createAction(
   "[Ingestor] Update Transfer List Success",
-  props<{ transferList: GetTransferResponse }>(),
+  props<{
+    transferList: GetTransferResponse;
+    page: number;
+    pageNumber: number;
+  }>(),
 );
 
 export const updateTransferListFailure = createAction(

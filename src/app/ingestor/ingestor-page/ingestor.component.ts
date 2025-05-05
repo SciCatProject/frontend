@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from "@angular/core";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import {
@@ -25,16 +25,19 @@ import {
   selectIngestorConnecting,
   selectIngestorEndpoint,
   selectIngestorTransferList,
+  selectIngestorTransferListRequestOptions,
 } from "state-management/selectors/ingestor.selector";
 import { IngestorCreationDialogBaseComponent } from "ingestor/ingestor-dialogs/creation-dialog/ingestor.creation-dialog-base.component";
 import { INGESTOR_API_ENDPOINTS_V1 } from "shared/sdk/apis/ingestor.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "ingestor",
   templateUrl: "./ingestor.component.html",
   styleUrls: ["./ingestor.component.scss"],
 })
-export class IngestorComponent implements OnInit {
+export class IngestorComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
   readonly dialog = inject(MatDialog);
 
   vm$ = this.store.select(selectUserSettingsPageViewModel);
@@ -44,6 +47,9 @@ export class IngestorComponent implements OnInit {
   ingestorConnecting$ = this.store.select(selectIngestorConnecting);
   ingestorBackend$ = this.store.select(selectIngestorEndpoint);
   transferList$ = this.store.select(selectIngestorTransferList);
+  selectIngestorTransferListRequestOptions$ = this.store.select(
+    selectIngestorTransferListRequestOptions,
+  );
 
   sourceFolder = "";
   forwardFacilityBackend = "";
@@ -88,93 +94,123 @@ export class IngestorComponent implements OnInit {
     this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
 
     // Fetch the API token that the ingestor can authenticate to scicat as the user
-    this.vm$.subscribe((settings) => {
-      this.scicatUserProfile = settings.profile;
-    });
+    this.subscriptions.push(
+      this.vm$.subscribe((settings) => {
+        this.scicatUserProfile = settings.profile;
+      }),
+    );
 
-    this.ingestorBackend$.subscribe((ingestorBackend) => {
-      if (ingestorBackend) {
-        this.connectedFacilityBackend = ingestorBackend;
-      }
-    });
+    this.subscriptions.push(
+      this.ingestorBackend$.subscribe((ingestorBackend) => {
+        if (ingestorBackend) {
+          this.connectedFacilityBackend = ingestorBackend;
+        }
+      }),
+    );
 
-    this.transferList$.subscribe((transferList) => {
-      if (transferList) {
-        this.transferDataInformation = transferList;
-      }
-    });
+    this.subscriptions.push(
+      this.transferList$.subscribe((transferList) => {
+        if (transferList) {
+          this.transferDataInformation = transferList;
+        }
+      }),
+    );
+
+    this.subscriptions.push(
+      this.selectIngestorTransferListRequestOptions$.subscribe(
+        (requestOptions) => {
+          if (requestOptions) {
+            this.transferDataPageIndex = requestOptions.page;
+            this.transferDataPageSize = requestOptions.pageNumber;
+          }
+        },
+      ),
+    );
 
     this.loadIngestorConfiguration();
     this.store.dispatch(fetchCurrentUserAction());
   }
 
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
   async loadIngestorConfiguration(): Promise<void> {
     // Get the GET parameter 'backendUrl' from the URL
-    this.route.queryParams.subscribe(async (params) => {
-      const backendUrl = params["backendUrl"];
-      const discovery = params["discovery"];
+    this.subscriptions.push(
+      this.route.queryParams.subscribe(async (params) => {
+        const backendUrl = params["backendUrl"];
+        const discovery = params["discovery"];
 
-      if (discovery === "true" && !backendUrl) {
-        const facilityUrl = await this.getFacilityURLByUserInfo();
-        if (facilityUrl != null) {
-          this.router.navigate([], {
-            relativeTo: this.route,
-            queryParams: { backendUrl: facilityUrl },
-            queryParamsHandling: "",
-          });
+        if (discovery === "true" && !backendUrl) {
+          const facilityUrl = await this.getFacilityURLByUserInfo();
+          if (facilityUrl != null) {
+            this.router.navigate([], {
+              relativeTo: this.route,
+              queryParams: { backendUrl: facilityUrl },
+              queryParamsHandling: "",
+            });
+          }
         }
-      }
 
-      if (backendUrl) {
-        // backendUrl should not end with a slash
-        const facilityBackendUrlCleaned = backendUrl.replace(/\/$/, "");
+        if (backendUrl) {
+          // backendUrl should not end with a slash
+          const facilityBackendUrlCleaned = backendUrl.replace(/\/$/, "");
 
-        await this.store.dispatch(
-          fromActions.setIngestorEndpoint({
-            ingestorEndpoint: facilityBackendUrlCleaned,
-          }),
-        );
+          await this.store.dispatch(
+            fromActions.setIngestorEndpoint({
+              ingestorEndpoint: facilityBackendUrlCleaned,
+            }),
+          );
 
-        this.initializeIngestorConnection();
-      } else {
-        this.connectingToFacilityBackend = false;
-      }
-    });
+          this.initializeIngestorConnection();
+        } else {
+          this.connectingToFacilityBackend = false;
+        }
+      }),
+    );
   }
 
   async initializeIngestorConnection(): Promise<void> {
     this.store.dispatch(fromActions.connectIngestor());
 
-    this.ingestorConnecting$.subscribe((connecting) => {
-      this.connectingToFacilityBackend = connecting;
-    });
+    this.subscriptions.push(
+      this.ingestorConnecting$.subscribe((connecting) => {
+        this.connectingToFacilityBackend = connecting;
+      }),
+    );
 
-    this.ingestorStatus$.subscribe((ingestorStatus) => {
-      if (!ingestorStatus.validEndpoint) {
-        this.connectedFacilityBackend = "";
-        this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
-      } else if (
-        ingestorStatus.versionResponse &&
-        ingestorStatus.healthResponse
-      ) {
-        this.versionInfo = ingestorStatus.versionResponse;
-        this.healthInfo = ingestorStatus.healthResponse;
-      }
-    });
-
-    this.ingestorAuthInfo$.subscribe((authInfo) => {
-      if (authInfo) {
-        this.userInfo = authInfo.userInfoResponse;
-        this.authIsDisabled = authInfo.authIsDisabled;
-
-        // Only refresh if the user is logged in or the auth is disabled
-        if (this.authIsDisabled || this.userInfo.logged_in) {
-          // Activate Transfer Tab when ingestor is ready for actions
-          this.selectedTab = 0;
-          this.doRefreshTransferList();
+    this.subscriptions.push(
+      this.ingestorStatus$.subscribe((ingestorStatus) => {
+        if (!ingestorStatus.validEndpoint) {
+          this.connectedFacilityBackend = "";
+          this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
+        } else if (
+          ingestorStatus.versionResponse &&
+          ingestorStatus.healthResponse
+        ) {
+          this.versionInfo = ingestorStatus.versionResponse;
+          this.healthInfo = ingestorStatus.healthResponse;
         }
-      }
-    });
+      }),
+    );
+
+    this.subscriptions.push(
+      this.ingestorAuthInfo$.subscribe((authInfo) => {
+        if (authInfo) {
+          this.userInfo = authInfo.userInfoResponse;
+          this.authIsDisabled = authInfo.authIsDisabled;
+
+          // Only refresh if the user is logged in or the auth is disabled
+          if (this.authIsDisabled || this.userInfo.logged_in) {
+            // Activate Transfer Tab when ingestor is ready for actions
+            this.selectedTab = 0;
+            this.doRefreshTransferList();
+          }
+        }
+      }),
+    );
   }
 
   onClickForwardToIngestorPage() {
@@ -224,28 +260,31 @@ export class IngestorComponent implements OnInit {
     if (dialogRef === null) return;
   }
 
-  doRefreshTransferList(transferId?: string): void {
+  doRefreshTransferList(
+    transferId?: string,
+    page?: number,
+    pageNumber?: number,
+  ): void {
     this.store.dispatch(
       fromActions.updateTransferList({
         transferId,
-        page: this.transferDataPageIndex + 1,
-        pageNumber: this.transferDataPageSize,
+        page: page ? page + 1 : undefined,
+        pageNumber: pageNumber,
       }),
     );
   }
 
-  async onCancelTransfer(transferId: string) {
+  onCancelTransfer(transferId: string) {
     this.store.dispatch(
       fromActions.cancelTransfer({
         transferId: transferId,
       }),
     );
+    this.doRefreshTransferList();
   }
 
   onTransferPageChange(event: PageChangeEvent): void {
-    this.transferDataPageIndex = event.pageIndex;
-    this.transferDataPageSize = event.pageSize;
-    this.doRefreshTransferList();
+    this.doRefreshTransferList(undefined, event.pageIndex, event.pageSize);
   }
 
   openIngestorLogin(): void {
