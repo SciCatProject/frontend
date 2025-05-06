@@ -33,7 +33,7 @@ if (isWindows()) {
    * This should not be a risk as after the generation we can get a feedback immediately if something is broken here when we run and test the frontend.
    */
   const generationOutput = execSync(
-    `docker run --rm --add-host host.docker.internal:host-gateway -v "${getCurrentDirectory()}:/local" openapitools/openapi-generator-cli:v7.9.0 generate -i http://host.docker.internal:3000/explorer-json -g typescript-angular -o local/@scicatproject/scicat-sdk-ts-angular --additional-properties=ngVersion=16.2.12,npmName=@scicatproject/scicat-sdk-ts-angular,supportsES6=true,npmVersion=10.8.2,withInterfaces=true,paramNaming=original,modelPropertyNaming=original,enumPropertyNaming=original --skip-validate-spec`,
+    `docker run --rm --add-host host.docker.internal:host-gateway -v "${getCurrentDirectory()}:/local" openapitools/openapi-generator-cli:v7.9.0 generate -i http://host.docker.internal:3000/explorer-json -g typescript-angular -o local/@scicatproject/scicat-sdk-ts-angular --additional-properties=ngVersion=19.0.0,npmName=@scicatproject/scicat-sdk-ts-angular,supportsES6=true,npmVersion=10.8.2,withInterfaces=true,paramNaming=original,modelPropertyNaming=original,enumPropertyNaming=original --skip-validate-spec`,
     { encoding: "utf-8" },
   );
   console.log(generationOutput);

@@ -13,7 +13,11 @@ import { selectFilters } from "state-management/selectors/logbooks.selectors";
 import { Type } from "@angular/core";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import { createMock } from "shared/MockStubs";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
 
 const logbook = createMock<Logbook>({
   name: "test",
@@ -28,7 +32,7 @@ describe("LogbookEffects", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [],
       providers: [
         LogbookEffects,
         provideMockActions(() => actions),
@@ -48,10 +52,12 @@ describe("LogbookEffects", () => {
         {
           provide: LogbooksService,
           useValue: jasmine.createSpyObj("logbookApi", [
-            "logbooksControllerFindAll",
-            "logbooksControllerFindByName",
+            "logbooksControllerFindAllV3",
+            "logbooksControllerFindByNameV3",
           ]),
         },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
       ],
     });
 
@@ -70,7 +76,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: logbooks });
-      logbookApi.logbooksControllerFindAll.and.returnValue(response);
+      logbookApi.logbooksControllerFindAllV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchLogbooks$).toBeObservable(expected);
@@ -82,7 +88,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      logbookApi.logbooksControllerFindAll.and.returnValue(response);
+      logbookApi.logbooksControllerFindAllV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchLogbooks$).toBeObservable(expected);
@@ -99,7 +105,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: logbook });
-      logbookApi.logbooksControllerFindByName.and.returnValue(response);
+      logbookApi.logbooksControllerFindByNameV3.and.returnValue(response);
 
       const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
       expect(effects.fetchLogbook$).toBeObservable(expected);
@@ -111,7 +117,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      logbookApi.logbooksControllerFindByName.and.returnValue(response);
+      logbookApi.logbooksControllerFindByNameV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchLogbook$).toBeObservable(expected);
@@ -127,7 +133,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: logbook });
-      logbookApi.logbooksControllerFindByName.and.returnValue(response);
+      logbookApi.logbooksControllerFindByNameV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
@@ -139,7 +145,7 @@ describe("LogbookEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      logbookApi.logbooksControllerFindByName.and.returnValue(response);
+      logbookApi.logbooksControllerFindByNameV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);

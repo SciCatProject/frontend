@@ -14,6 +14,7 @@ import { TableSetting } from "../../../models/table-setting.model";
   templateUrl: "./row-menu.component.html",
   styleUrls: ["./row-menu.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class RowMenuComponent<T> {
   @Output() rowActionChange: EventEmitter<ContextMenuItem> =

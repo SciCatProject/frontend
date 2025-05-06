@@ -5,6 +5,7 @@ import { Component } from "@angular/core";
   selector: "app-pid-startsWith-filter",
   templateUrl: "./pid-filter-startsWith.component.html",
   styleUrls: ["./pid-filter-startsWith.component.scss"],
+  standalone: false,
 })
 export class PidFilterStartsWithComponent extends PidFilterComponent {
   readonly componentName: string = "PidFilterStartsWith";

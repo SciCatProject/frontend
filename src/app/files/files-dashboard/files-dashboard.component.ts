@@ -9,6 +9,7 @@ import { AppConfigService } from "app-config.service";
   selector: "app-files-dashboard",
   templateUrl: "./files-dashboard.component.html",
   styleUrls: ["./files-dashboard.component.scss"],
+  standalone: false,
 })
 export class FilesDashboardComponent implements OnDestroy {
   columns: Column[] = [

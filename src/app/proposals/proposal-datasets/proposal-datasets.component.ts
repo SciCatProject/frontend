@@ -84,6 +84,7 @@ const tableDefaultSettingsConfig: ITableSetting = {
   selector: "app-proposal-datasets",
   templateUrl: "./proposal-datasets.component.html",
   styleUrls: ["./proposal-datasets.component.scss"],
+  standalone: false,
 })
 export class ProposalDatasetsComponent implements OnInit, OnDestroy {
   proposalDatasets$ = this.store.select(selectViewProposalPageViewModel);
