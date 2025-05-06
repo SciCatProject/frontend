@@ -30,6 +30,8 @@ import {
 import { IngestorCreationDialogBaseComponent } from "ingestor/ingestor-dialogs/creation-dialog/ingestor.creation-dialog-base.component";
 import { INGESTOR_API_ENDPOINTS_V1 } from "shared/sdk/apis/ingestor.service";
 import { Subscription } from "rxjs";
+import { IngestorConfirmationDialogComponent } from "ingestor/ingestor-dialogs/confirmation-dialog/ingestor.confirmation-dialog.component";
+import { IngestorTransferViewDialogComponent } from "ingestor/ingestor-dialogs/transfer-detail-view/ingestor.transfer-detail-view-dialog.component";
 
 @Component({
   selector: "ingestor",
@@ -61,7 +63,6 @@ export class IngestorComponent implements OnInit, OnDestroy {
   lastUsedFacilityBackends: string[] = [];
 
   transferDataInformation: GetTransferResponse = null;
-  transferAutoRefreshIntervalDetail = 3000;
   transferDataPageSize = 100;
   transferDataPageIndex = 0;
   transferDataPageSizeOptions = [5, 10, 25, 100];
@@ -81,8 +82,6 @@ export class IngestorComponent implements OnInit, OnDestroy {
 
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
-
-  autoRefreshInterval: NodeJS.Timeout = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -275,12 +274,23 @@ export class IngestorComponent implements OnInit, OnDestroy {
   }
 
   onCancelTransfer(transferId: string) {
-    this.store.dispatch(
-      fromActions.cancelTransfer({
-        transferId: transferId,
-      }),
-    );
-    this.doRefreshTransferList();
+    const dialogRef = this.dialog.open(IngestorConfirmationDialogComponent, {
+      data: {
+        header: "Confirm deletion",
+        message: "Cancel the transfer and remove it from the list?",
+      },
+    });
+
+    const dialogSub = dialogRef.afterClosed().subscribe(async (result) => {
+      if (result) {
+        this.store.dispatch(
+          fromActions.cancelTransfer({
+            transferId: transferId,
+          }),
+        );
+      }
+      dialogSub.unsubscribe();
+    });
   }
 
   onTransferPageChange(event: PageChangeEvent): void {
@@ -301,56 +311,16 @@ export class IngestorComponent implements OnInit, OnDestroy {
       INGESTOR_API_ENDPOINTS_V1.AUTH.LOGOUT;
   }
 
-  getTransferDetailInformation(transferId: string): string {
-    const detailItem = this.transferDataInformation.transfers?.find(
-      (item) => item.transferId === transferId,
-    );
-    if (detailItem) {
-      let progressState = "";
-      let progressPercent = 0;
-      let fileState = "";
+  onOpenDetailView(transferId: string): void {
+    const dialogRef = this.dialog.open(IngestorTransferViewDialogComponent, {
+      data: {
+        transferId: transferId,
+      },
+    });
 
-      if (detailItem.bytesTransferred && detailItem.bytesTotal) {
-        const bytesToGB = (bytes: number) => (bytes / 1024 ** 3).toFixed();
-        progressState = `${bytesToGB(detailItem.bytesTransferred)} / ${bytesToGB(detailItem.bytesTotal)} GB`;
-        progressPercent =
-          (detailItem.bytesTransferred / detailItem.bytesTotal) * 100;
-      }
-
-      if (
-        detailItem.filesTransferred &&
-        detailItem.filesTotal &&
-        detailItem.filesTotal > 0
-      ) {
-        fileState = `${detailItem.filesTransferred} / ${detailItem.filesTotal} Files`;
-      }
-
-      return (
-        "Progress: " +
-        progressPercent +
-        "%" +
-        " - Data: " +
-        progressState +
-        " - Files: " +
-        fileState
-      );
-    }
-    return "No further information available.";
-  }
-
-  startAutoRefresh(transferId: string): void {
-    //this.doRefreshTransferList(transferId);
-    /*this.stopAutoRefresh();
-    this.autoRefreshInterval = setInterval(() => {
-      this.doRefreshTransferList(transferId);
-    }, this.transferAutoRefreshIntervalDetail);*/
-  }
-
-  stopAutoRefresh(): void {
-    if (this.autoRefreshInterval) {
-      clearInterval(this.autoRefreshInterval);
-      this.autoRefreshInterval = null;
-    }
+    const dialogSub = dialogRef.afterClosed().subscribe(() => {
+      dialogSub.unsubscribe();
+    });
   }
 
   async getFacilityURLByUserInfo(): Promise<string | null> {
