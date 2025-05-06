@@ -64,7 +64,6 @@ export interface AppConfig {
   jupyterHubUrl: string | null;
   landingPage: string | null;
   lbBaseURL: string;
-  ingestorURL: string;
   localColumns?: TableColumn[]; // localColumns is deprecated and should be removed in the future
   logbookEnabled: boolean;
   loginFormEnabled: boolean;
