@@ -8,12 +8,12 @@
   <button
     *ngIf="this.createNewTransferData !== undefined && activeRenderView !== null"
     mat-button (click)="onChangeViewMode()" [matTooltip]="activeRenderView === 'requiredOnly'
-    ? 'Show all fields' : 'Show required fields only'"><mat-icon
+    ? 'Show all fields.' : 'Show required fields only.'"><mat-icon
       class="control-button-icon">{{activeRenderView === "requiredOnly" ?
       "visibility" : "visibility_off"}}</mat-icon></button>
   <button *ngIf="this.createNewTransferData !== undefined" mat-button
     [matMenuTriggerFor]="settingsMenu"
-    matTooltip="Customize the metadata editor"
+    matTooltip="Customize the metadata editor."
     [disabled]="activeStep > 0"><mat-icon
       class="control-button-icon">settings</mat-icon></button>
 </div>
