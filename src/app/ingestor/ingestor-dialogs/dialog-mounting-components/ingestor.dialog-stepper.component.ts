@@ -1,15 +1,8 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  Injector,
-  OnInit,
-  OnDestroy,
-} from "@angular/core";
+import { Component, Input, Injector, OnInit, OnDestroy } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import {
   IngestionRequestInformation,
+  IngestorHelper,
   SciCatHeader,
 } from "../../ingestor-page/helper/ingestor.component-helper";
 import { IngestorConfirmationDialogComponent } from "../confirmation-dialog/ingestor.confirmation-dialog.component";
@@ -18,7 +11,10 @@ import {
   ExportTemplateHelperComponent,
 } from "./ingestor.export-helper.component";
 import { Store } from "@ngrx/store";
-import { selectIngestorRenderView } from "state-management/selectors/ingestor.selector";
+import {
+  selectIngestionObject,
+  selectIngestorRenderView,
+} from "state-management/selectors/ingestor.selector";
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Subscription } from "rxjs";
@@ -31,13 +27,13 @@ import { Subscription } from "rxjs";
 export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   @Input() activeStep = 0;
-  @Input() createNewTransferData: IngestionRequestInformation;
-  @Output() createNewTransferDataChange =
-    new EventEmitter<IngestionRequestInformation>();
 
   testMessageComponent = ExportTemplateHelperComponent;
 
+  createNewTransferData: IngestionRequestInformation =
+    IngestorHelper.createEmptyRequestInformation();
   renderView$ = this.store.select(selectIngestorRenderView);
+  ingestionObject$ = this.store.select(selectIngestionObject);
   activeRenderView: renderView | null = null;
 
   exportValueOptions: ExportOptions = {
@@ -61,6 +57,14 @@ export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.subscriptions.push(
+      this.ingestionObject$.subscribe((ingestionObject) => {
+        if (ingestionObject) {
+          this.createNewTransferData = ingestionObject;
+        }
+      }),
+    );
+
     this.subscriptions.push(
       this.renderView$.subscribe((renderView) => {
         if (renderView) {
@@ -89,6 +93,14 @@ export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
           console.error("Unknown mode");
       }
     }
+  }
+
+  updateIngestionObject(updatedObject: IngestionRequestInformation) {
+    this.store.dispatch(
+      fromActions.updateIngestionObjectFromThirdParty({
+        ingestionObject: updatedObject,
+      }),
+    );
   }
 
   // Save a template of metadata
@@ -173,7 +185,7 @@ export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
             if (result) {
               try {
                 const parsedData = JSON.parse(content);
-                this.createNewTransferData = {
+                const newTransferData = {
                   ...this.createNewTransferData,
                   scicatHeader: {
                     ...this.createNewTransferData.scicatHeader,
@@ -184,9 +196,8 @@ export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
                     ...parsedData.userMetaData,
                   },
                 };
-                this.createNewTransferDataChange.emit(
-                  this.createNewTransferData,
-                );
+
+                this.updateIngestionObject(newTransferData);
               } catch (error) {
                 console.error("Error parsing JSON file:", error);
               }
@@ -212,10 +223,12 @@ export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
           console.error("Unknown mode");
       }
 
+      const newTransferData = { ...this.createNewTransferData };
       // Clean selected file and selected method
-      this.createNewTransferData.selectedPath = "";
-      this.createNewTransferData.selectedMethod = null;
-      this.createNewTransferDataChange.emit(this.createNewTransferData);
+      newTransferData.selectedPath = "";
+      newTransferData.selectedMethod = null;
+
+      this.updateIngestionObject(newTransferData);
     }
   }
 }

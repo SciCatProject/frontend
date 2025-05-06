@@ -8,9 +8,7 @@
   </button>
 </div>
 <mat-dialog-content class="mat-typography">
-  <ingestor-dialog-stepper [activeStep]="3"
-    [createNewTransferData]="createNewTransferData"
-    (createNewTransferDataChange)="onCreateNewTransferDataChange($event)"></ingestor-dialog-stepper>
+  <ingestor-dialog-stepper [activeStep]="3"></ingestor-dialog-stepper>
 
   <p
     *ngIf="createNewTransferData.apiInformation.ingestionRequestErrorMessage !== ''">
@@ -20,11 +18,11 @@
       </mat-card-header>
       <mat-card-content class="ingestor-vertical-layout">
         <div class="confirm-message-ingestor">
-            <mat-icon class="confirm-message-ingestor-icon">error</mat-icon>
-            <p>The transfer request has failed.</p>
-            <p class="confirm-message-error">
+          <mat-icon class="confirm-message-ingestor-icon">error</mat-icon>
+          <p>The transfer request has failed.</p>
+          <p class="confirm-message-error">
             {{createNewTransferData.apiInformation.ingestionRequestErrorMessage}}
-            </p>
+          </p>
         </div>
 
 
@@ -42,13 +40,13 @@
         <div class="confirm-message-ingestor">
           <mat-icon
             class="confirm-message-ingestor-icon">check_circle</mat-icon>
-            <p>The transfer request was successfully sent to the server.
+          <p>The transfer request was successfully sent to the server.
             You will receive an email as soon as the data transfer is complete.
-            </p>
-            <p>Transfer ID: {{createNewTransferData.ingestionRequest.transferId}}
-            </p>
-            <p>Transfer status: {{createNewTransferData.ingestionRequest.status}}
-            </p>
+          </p>
+          <p>Transfer ID: {{createNewTransferData.ingestionRequest.transferId}}
+          </p>
+          <p>Transfer status: {{createNewTransferData.ingestionRequest.status}}
+          </p>
         </div>
       </mat-card-content>
     </mat-card>

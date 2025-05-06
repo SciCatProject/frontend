@@ -8,7 +8,7 @@
   </button>
 </div>
 <mat-dialog-content class="mat-typography" disableClose="true">
-  <ingestor-dialog-stepper [activeStep]="1" [createNewTransferData]="createNewTransferData" (createNewTransferDataChange)="onCreateNewTransferDataChange($event)"></ingestor-dialog-stepper>
+  <ingestor-dialog-stepper [activeStep]="1"></ingestor-dialog-stepper>
 
   <div fxLayout="row" fxLayout.xs="column">
     <div fxFlex="80%">
@@ -20,17 +20,20 @@
           </div>
           SciCat Information
           <span class="spacer"></span>
-            <mat-icon
+          <mat-icon
             [matTooltip]="isSciCatHeaderOk ? 'Your input is correct.' : scicatHeaderErrors"
             [ngClass]="isSciCatHeaderOk ? 'success-icon' : 'error-icon'">{{
-            isSciCatHeaderOk ? 'check_circle_outline' : 'error_outline'}}</mat-icon>
+            isSciCatHeaderOk ? 'check_circle_outline' :
+            'error_outline'}}</mat-icon>
           <mat-icon class="toggle-icon">{{ isCardContentVisible.scicat ?
             'expand_less' : 'expand_more' }}</mat-icon>
         </mat-card-header>
         <mat-card-content *ngIf="isCardContentVisible.scicat">
-          <app-metadata-editor [schema]="scicatHeaderSchema" [renderView]="activeRenderView"
+          <app-metadata-editor *ngIf="!updateEditorFromThirdParty"
+            [schema]="scicatHeaderSchema" [renderView]="activeRenderView"
             [data]="createNewTransferData.scicatHeader"
-            (dataChange)="onDataChangeUserScicatHeader($event)" (errors)="scicatHeaderErrorsHandler($event)"></app-metadata-editor>
+            (dataChange)="onDataChangeUserScicatHeader($event)"
+            (errors)="scicatHeaderErrorsHandler($event)"></app-metadata-editor>
         </mat-card-content>
       </mat-card>
 
@@ -45,14 +48,18 @@
           <mat-icon
             [matTooltip]="isOrganizationalMetadataOk ? 'Your input is correct.' : organizationalErrors"
             [ngClass]="isOrganizationalMetadataOk ? 'success-icon' : 'error-icon'">{{
-            isOrganizationalMetadataOk ? 'check_circle_outline' : 'error_outline'}}</mat-icon>
+            isOrganizationalMetadataOk ? 'check_circle_outline' :
+            'error_outline'}}</mat-icon>
           <mat-icon class="toggle-icon">{{ isCardContentVisible.organizational ?
             'expand_less' : 'expand_more' }}</mat-icon>
         </mat-card-header>
         <mat-card-content *ngIf="isCardContentVisible.organizational">
-          <app-metadata-editor [schema]="metadataSchemaOrganizational" [renderView]="activeRenderView"
+          <app-metadata-editor *ngIf="!updateEditorFromThirdParty"
+            [schema]="metadataSchemaOrganizational"
+            [renderView]="activeRenderView"
             [data]="createNewTransferData.userMetaData['organizational']"
-            (dataChange)="onDataChangeUserMetadataOrganization($event)" (errors)="organizationalErrorsHandler($event)"></app-metadata-editor>
+            (dataChange)="onDataChangeUserMetadataOrganization($event)"
+            (errors)="organizationalErrorsHandler($event)"></app-metadata-editor>
         </mat-card-content>
       </mat-card>
 
@@ -67,14 +74,17 @@
           <mat-icon
             [matTooltip]="isSampleInformationOk ? 'Your input is correct.' : sampleErrors"
             [ngClass]="isSampleInformationOk ? 'success-icon' : 'error-icon'">{{
-            isSampleInformationOk ? 'check_circle_outline' : 'error_outline'}}</mat-icon>
+            isSampleInformationOk ? 'check_circle_outline' :
+            'error_outline'}}</mat-icon>
           <mat-icon class="toggle-icon">{{ isCardContentVisible.sample ?
             'expand_less' : 'expand_more' }}</mat-icon>
         </mat-card-header>
         <mat-card-content *ngIf="isCardContentVisible.sample">
-          <app-metadata-editor [schema]="metadataSchemaSample" [renderView]="activeRenderView"
+          <app-metadata-editor *ngIf="!updateEditorFromThirdParty"
+            [schema]="metadataSchemaSample" [renderView]="activeRenderView"
             [data]="createNewTransferData.userMetaData['sample']"
-            (dataChange)="onDataChangeUserMetadataSample($event)" (errors)="sampleErrorsHandler($event)"></app-metadata-editor>
+            (dataChange)="onDataChangeUserMetadataSample($event)"
+            (errors)="sampleErrorsHandler($event)"></app-metadata-editor>
         </mat-card-content>
       </mat-card>
     </div>

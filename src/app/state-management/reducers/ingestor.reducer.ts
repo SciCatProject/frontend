@@ -119,6 +119,21 @@ const reducer = createReducer(
     }),
   ),
   on(
+    fromActions.updateIngestionObjectFromThirdParty,
+    (state, { ingestionObject }): IngestorState => ({
+      ...state,
+      ingestionObject,
+      updateEditorFromThirdParty: true,
+    }),
+  ),
+  on(
+    fromActions.resetIngestionObjectFromThirdPartyFlag,
+    (state): IngestorState => ({
+      ...state,
+      updateEditorFromThirdParty: false,
+    }),
+  ),
+  on(
     fromActions.ingestDatasetSuccess,
     (state, { response }): IngestorState => ({
       ...state,

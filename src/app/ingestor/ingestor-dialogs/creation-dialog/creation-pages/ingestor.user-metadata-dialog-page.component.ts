@@ -16,6 +16,7 @@ import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor
 import {
   selectIngestionObject,
   selectIngestorRenderView,
+  selectUpdateEditorFromThirdParty,
 } from "state-management/selectors/ingestor.selector";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Store } from "@ngrx/store";
@@ -32,6 +33,9 @@ export class IngestorUserMetadataDialogPageComponent
   private subscriptions: Subscription[] = [];
   ingestionObject$ = this.store.select(selectIngestionObject);
   renderView$ = this.store.select(selectIngestorRenderView);
+  selectUpdateEditorFromThirdParty$ = this.store.select(
+    selectUpdateEditorFromThirdParty,
+  );
 
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
@@ -43,6 +47,7 @@ export class IngestorUserMetadataDialogPageComponent
   metadataSchemaSample: JsonSchema;
   scicatHeaderSchema: JsonSchema;
   activeRenderView: renderView | null = null;
+  updateEditorFromThirdParty = false;
 
   uiNextButtonReady = false;
   isSciCatHeaderOk = false;
@@ -74,6 +79,8 @@ export class IngestorUserMetadataDialogPageComponent
           this.metadataSchemaSample =
             this.createNewTransferData.selectedResolvedDecodedSchema.properties.sample;
           this.scicatHeaderSchema = SciCatHeader_Schema;
+
+          this.cdr.markForCheck();
         }
       }),
     );
@@ -82,6 +89,21 @@ export class IngestorUserMetadataDialogPageComponent
       this.renderView$.subscribe((renderView) => {
         if (renderView) {
           this.activeRenderView = renderView;
+        }
+      }),
+    );
+
+    this.subscriptions.push(
+      this.selectUpdateEditorFromThirdParty$.subscribe((updateEditor) => {
+        // We need to rerender the editor if the user has changed the metadata in the third party
+        // So we get a flag, if it is true we unrender the editor
+        // and then we set it to false to render it again
+        this.updateEditorFromThirdParty = updateEditor;
+        if (updateEditor) {
+          this.cdr.detectChanges(); // Force the change detection to unrender the editor
+          this.store.dispatch(
+            fromActions.resetIngestionObjectFromThirdPartyFlag(),
+          );
         }
       }),
     );

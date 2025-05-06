@@ -16,6 +16,7 @@ import { Store } from "@ngrx/store";
 import {
   selectIngestionObject,
   selectIngestorRenderView,
+  selectUpdateEditorFromThirdParty,
 } from "state-management/selectors/ingestor.selector";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Subscription } from "rxjs";
@@ -27,8 +28,7 @@ import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-
   styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
 })
 export class IngestorExtractorMetadataDialogPageComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   metadataSchemaInstrument: JsonSchema;
   metadataSchemaAcquisition: JsonSchema;
@@ -37,11 +37,15 @@ export class IngestorExtractorMetadataDialogPageComponent
 
   ingestionObject$ = this.store.select(selectIngestionObject);
   renderView$ = this.store.select(selectIngestorRenderView);
+  selectUpdateEditorFromThirdParty$ = this.store.select(
+    selectUpdateEditorFromThirdParty,
+  );
 
   @Output() nextStep = new EventEmitter<void>();
   @Output() backStep = new EventEmitter<void>();
 
   activeRenderView: renderView | null = null;
+  updateEditorFromThirdParty = false;
   extractorMetaDataReady = false;
   extractorMetaDataStatus = "";
   extractorMetaDataError = false;
@@ -94,6 +98,21 @@ export class IngestorExtractorMetadataDialogPageComponent
       this.renderView$.subscribe((renderView) => {
         if (renderView) {
           this.activeRenderView = renderView;
+        }
+      }),
+    );
+
+    this.subscriptions.push(
+      this.selectUpdateEditorFromThirdParty$.subscribe((updateEditor) => {
+        // We need to rerender the editor if the user has changed the metadata in the third party
+        // So we get a flag, if it is true we unrender the editor
+        // and then we set it to false to render it again
+        this.updateEditorFromThirdParty = updateEditor;
+        if (updateEditor) {
+          this.cdr.detectChanges(); // Force the change detection to unrender the editor
+          this.store.dispatch(
+            fromActions.resetIngestionObjectFromThirdPartyFlag(),
+          );
         }
       }),
     );

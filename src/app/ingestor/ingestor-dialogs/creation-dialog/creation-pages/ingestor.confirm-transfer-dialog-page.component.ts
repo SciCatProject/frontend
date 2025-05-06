@@ -75,10 +75,6 @@ export class IngestorConfirmTransferDialogPageComponent
     return JSON.stringify(scicatMetadata, null, space);
   }
 
-  onCreateNewTransferDataChange(updatedData: IngestionRequestInformation) {
-    Object.assign(this.createNewTransferData, updatedData);
-  }
-
   onClickBack(): void {
     // Reset the ingestion request
     this.store.dispatch(fromActions.resetIngestDataset());

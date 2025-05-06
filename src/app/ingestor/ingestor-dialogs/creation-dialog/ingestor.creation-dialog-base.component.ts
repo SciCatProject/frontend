@@ -87,11 +87,22 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
     });
   }
 
-  resetExtractedMetadata(): void {
+  resetScientificMetadata(): void {
     this.createNewTransferData.extractorMetaData = {
       instrument: {},
       acquisition: {},
     };
+
+    this.createNewTransferData.userMetaData = {
+      organizational: {},
+      sample: {},
+    };
+
+    this.store.dispatch(
+      fromActions.updateIngestionObject({
+        ingestionObject: this.createNewTransferData,
+      }),
+    );
   }
 
   async startMetadataExtraction(): Promise<boolean> {
@@ -157,7 +168,7 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
   onClickNext(nextStep: dialogStep): void {
     switch (nextStep) {
       case "NEW_TRANSFER":
-        this.resetExtractedMetadata();
+        this.resetScientificMetadata();
         break;
       case "USER_METADATA":
         this.createNewTransferData.apiInformation.extractMetaDataRequested =

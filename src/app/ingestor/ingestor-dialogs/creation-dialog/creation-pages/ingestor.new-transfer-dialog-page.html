@@ -8,9 +8,7 @@
   </button>
 </div>
 <mat-dialog-content class="mat-typography" disableClose="true">
-  <ingestor-dialog-stepper [activeStep]="0"
-  [createNewTransferData]="createNewTransferData"
-  (createNewTransferDataChange)="onCreateNewTransferDataChange($event)"></ingestor-dialog-stepper>
+  <ingestor-dialog-stepper [activeStep]="0"></ingestor-dialog-stepper>
 
   <p>Please select the dataset to be uploaded and the appropriate metadata
     extractor method.</p>
@@ -18,7 +16,8 @@
   <div *ngIf="createNewTransferData.editorMode === 'INGESTION'">
     <mat-form-field class="form-full-width">
       <mat-label>File Path</mat-label>
-      <input matInput [(ngModel)]="createNewTransferData.selectedPath" (click)="onClickOpenFileBrowser()" readonly>
+      <input matInput [(ngModel)]="createNewTransferData.selectedPath"
+        (click)="onClickOpenFileBrowser()" readonly>
       <!-- [matAutocomplete]="auto" -->
       <button mat-icon-button matSuffix (click)="onClickOpenFileBrowser()">
         <mat-icon>folder</mat-icon>
@@ -28,10 +27,14 @@
 
   <div *ngIf="extractionMethods !== null">
     <mat-form-field class="form-full-width">
-      <mat-label *ngIf="createNewTransferData.editorMode === 'INGESTION'">Extraction Method</mat-label>
-      <mat-label *ngIf="createNewTransferData.editorMode === 'EDITOR'">Editor schema</mat-label>
+      <mat-label
+        *ngIf="createNewTransferData.editorMode === 'INGESTION'">Extraction
+        Method</mat-label>
+      <mat-label *ngIf="createNewTransferData.editorMode === 'EDITOR'">Editor
+        schema</mat-label>
       <mat-select [(ngModel)]="selectedMethod">
-        <mat-option *ngFor="let method of extractionMethods.methods" [value]="method">
+        <mat-option *ngFor="let method of extractionMethods.methods"
+          [value]="method">
           {{ method.name }}
         </mat-option>
       </mat-select>
@@ -39,15 +42,19 @@
     <mat-error *ngIf="extractionMethodsError">{{ extractionMethodsError
       }}</mat-error>
 
-    <mat-paginator *ngIf="extractionMethods.total > dropdownPageSize" [length]="extractionMethods.total" [pageSize]="dropdownPageSize" aria-label="Select page"
-      [hidePageSize]="true" [showFirstLastButtons]="false" [pageIndex]="extractionMethodsPage" (page)="onExtractorMethodsPageChange($event)">
+    <mat-paginator *ngIf="extractionMethods.total > dropdownPageSize"
+      [length]="extractionMethods.total" [pageSize]="dropdownPageSize"
+      aria-label="Select page" [hidePageSize]="true"
+      [showFirstLastButtons]="false" [pageIndex]="extractionMethodsPage"
+      (page)="onExtractorMethodsPageChange($event)">
     </mat-paginator>
   </div>
 
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button *ngIf="extractionMethodsError" mat-button
-    color="warn" (click)="onClickRetryRequests()">Retry</button>
+  <button *ngIf="extractionMethodsError" mat-button color="warn"
+    (click)="onClickRetryRequests()">Retry</button>
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button color="primary" cdkFocusInitial [disabled]="!uiNextButtonReady" (click)="onClickNext()">Next</button>
+  <button mat-button color="primary" cdkFocusInitial
+    [disabled]="!uiNextButtonReady" (click)="onClickNext()">Next</button>
 </mat-dialog-actions>

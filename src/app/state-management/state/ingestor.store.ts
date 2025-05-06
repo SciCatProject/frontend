@@ -36,6 +36,7 @@ export interface IngestorState {
   ingestionObject: IngestionRequestInformation;
   ingestorBrowserActiveNode: GetBrowseDatasetResponse | null;
   renderView: renderView;
+  updateEditorFromThirdParty: boolean;
   connectingBackend: boolean;
   error: any | null;
 }
@@ -56,6 +57,7 @@ export const initialIngestorState: IngestorState = {
   ingestionObject: IngestorHelper.createEmptyRequestInformation(),
   ingestorBrowserActiveNode: null,
   connectingBackend: false,
+  updateEditorFromThirdParty: false,
   error: null,
   renderView: "all",
 };

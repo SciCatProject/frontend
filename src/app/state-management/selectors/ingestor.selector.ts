@@ -58,3 +58,8 @@ export const selectIngestorTransferListRequestOptions = createSelector(
   selectIngestorState,
   (state) => state.transferListRequestOptions,
 );
+
+export const selectUpdateEditorFromThirdParty = createSelector(
+  selectIngestorState,
+  (state) => state.updateEditorFromThirdParty,
+);

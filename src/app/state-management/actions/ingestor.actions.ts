@@ -66,6 +66,15 @@ export const updateIngestionObject = createAction(
   props<{ ingestionObject: IngestionRequestInformation }>(),
 );
 
+export const updateIngestionObjectFromThirdParty = createAction(
+  "[Ingestor] Update Ingestion Object from Third Party",
+  props<{ ingestionObject: IngestionRequestInformation }>(),
+);
+
+export const resetIngestionObjectFromThirdPartyFlag = createAction(
+  "[Ingestor] Reset Ingestion Object from Third Party Flag",
+);
+
 export const getExtractionMethods = createAction(
   "[Ingestor] Get Extraction Methods",
   props<{ page: number; pageNumber: number }>(),
