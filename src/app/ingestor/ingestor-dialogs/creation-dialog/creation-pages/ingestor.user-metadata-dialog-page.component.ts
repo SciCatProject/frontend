@@ -13,10 +13,14 @@ import {
   SciCatHeader_Schema,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
 import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
-import { selectIngestionObject } from "state-management/selectors/ingestor.selector";
+import {
+  selectIngestionObject,
+  selectIngestorRenderView,
+} from "state-management/selectors/ingestor.selector";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
+import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 
 @Component({
   selector: "ingestor-user-metadata-dialog",
@@ -27,6 +31,7 @@ export class IngestorUserMetadataDialogPageComponent
   implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   ingestionObject$ = this.store.select(selectIngestionObject);
+  renderView$ = this.store.select(selectIngestorRenderView);
 
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
@@ -37,6 +42,7 @@ export class IngestorUserMetadataDialogPageComponent
   metadataSchemaOrganizational: JsonSchema;
   metadataSchemaSample: JsonSchema;
   scicatHeaderSchema: JsonSchema;
+  activeRenderView: renderView | null = null;
 
   uiNextButtonReady = false;
   isSciCatHeaderOk = false;
@@ -68,6 +74,14 @@ export class IngestorUserMetadataDialogPageComponent
           this.metadataSchemaSample =
             this.createNewTransferData.selectedResolvedDecodedSchema.properties.sample;
           this.scicatHeaderSchema = SciCatHeader_Schema;
+        }
+      }),
+    );
+
+    this.subscriptions.push(
+      this.renderView$.subscribe((renderView) => {
+        if (renderView) {
+          this.activeRenderView = renderView;
         }
       }),
     );

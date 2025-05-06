@@ -13,9 +13,13 @@ import {
 } from "../../../ingestor-page/helper/ingestor.component-helper";
 import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 import { Store } from "@ngrx/store";
-import { selectIngestionObject } from "state-management/selectors/ingestor.selector";
+import {
+  selectIngestionObject,
+  selectIngestorRenderView,
+} from "state-management/selectors/ingestor.selector";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Subscription } from "rxjs";
+import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 
 @Component({
   selector: "ingestor-extractor-metadata-dialog-page",
@@ -23,7 +27,8 @@ import { Subscription } from "rxjs";
   styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
 })
 export class IngestorExtractorMetadataDialogPageComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   private subscriptions: Subscription[] = [];
   metadataSchemaInstrument: JsonSchema;
   metadataSchemaAcquisition: JsonSchema;
@@ -31,10 +36,12 @@ export class IngestorExtractorMetadataDialogPageComponent
     IngestorHelper.createEmptyRequestInformation();
 
   ingestionObject$ = this.store.select(selectIngestionObject);
+  renderView$ = this.store.select(selectIngestorRenderView);
 
   @Output() nextStep = new EventEmitter<void>();
   @Output() backStep = new EventEmitter<void>();
 
+  activeRenderView: renderView | null = null;
   extractorMetaDataReady = false;
   extractorMetaDataStatus = "";
   extractorMetaDataError = false;
@@ -79,6 +86,14 @@ export class IngestorExtractorMetadataDialogPageComponent
             this.createNewTransferData.apiInformation.extractorMetaDataStatus;
           this.process =
             this.createNewTransferData.apiInformation.extractorMetadataProgress;
+        }
+      }),
+    );
+
+    this.subscriptions.push(
+      this.renderView$.subscribe((renderView) => {
+        if (renderView) {
+          this.activeRenderView = renderView;
         }
       }),
     );

@@ -5,6 +5,7 @@ import {
   EventEmitter,
   Injector,
   OnInit,
+  OnDestroy,
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import {
@@ -18,13 +19,17 @@ import {
 } from "./ingestor.export-helper.component";
 import { Store } from "@ngrx/store";
 import { selectIngestorRenderView } from "state-management/selectors/ingestor.selector";
+import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
+import * as fromActions from "state-management/actions/ingestor.actions";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "ingestor-dialog-stepper",
   templateUrl: "./ingestor.dialog-stepper.component.html",
   styleUrls: ["./ingestor.dialog-stepper.component.css"],
 })
-export class IngestorDialogStepperComponent implements OnInit {
+export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
   @Input() activeStep = 0;
   @Input() createNewTransferData: IngestionRequestInformation;
   @Output() createNewTransferDataChange =
@@ -33,6 +38,7 @@ export class IngestorDialogStepperComponent implements OnInit {
   testMessageComponent = ExportTemplateHelperComponent;
 
   renderView$ = this.store.select(selectIngestorRenderView);
+  activeRenderView: renderView | null = null;
 
   exportValueOptions: ExportOptions = {
     exportSciCat: true,
@@ -52,15 +58,37 @@ export class IngestorDialogStepperComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private store: Store,
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.renderView$.subscribe((renderView) => {
-      if (renderView) {
-        // TODO: Handle the render view change
-        console.log("Render view changed:", renderView);
+    this.subscriptions.push(
+      this.renderView$.subscribe((renderView) => {
+        if (renderView) {
+          this.activeRenderView = renderView;
+        }
+      }),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
+  onChangeViewMode() {
+    if (this.activeRenderView) {
+      switch (this.activeRenderView) {
+        case "requiredOnly":
+          this.store.dispatch(fromActions.setRenderView({ renderView: "all" }));
+          break;
+        case "all":
+          this.store.dispatch(
+            fromActions.setRenderView({ renderView: "requiredOnly" }),
+          );
+          break;
+        default:
+          console.error("Unknown mode");
       }
-    });
+    }
   }
 
   // Save a template of metadata

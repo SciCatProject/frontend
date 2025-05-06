@@ -28,7 +28,7 @@
             'expand_less' : 'expand_more' }}</mat-icon>
         </mat-card-header>
         <mat-card-content *ngIf="isCardContentVisible.scicat">
-          <app-metadata-editor [schema]="scicatHeaderSchema"
+          <app-metadata-editor [schema]="scicatHeaderSchema" [renderView]="activeRenderView"
             [data]="createNewTransferData.scicatHeader"
             (dataChange)="onDataChangeUserScicatHeader($event)" (errors)="scicatHeaderErrorsHandler($event)"></app-metadata-editor>
         </mat-card-content>
@@ -50,7 +50,7 @@
             'expand_less' : 'expand_more' }}</mat-icon>
         </mat-card-header>
         <mat-card-content *ngIf="isCardContentVisible.organizational">
-          <app-metadata-editor [schema]="metadataSchemaOrganizational"
+          <app-metadata-editor [schema]="metadataSchemaOrganizational" [renderView]="activeRenderView"
             [data]="createNewTransferData.userMetaData['organizational']"
             (dataChange)="onDataChangeUserMetadataOrganization($event)" (errors)="organizationalErrorsHandler($event)"></app-metadata-editor>
         </mat-card-content>
@@ -72,7 +72,7 @@
             'expand_less' : 'expand_more' }}</mat-icon>
         </mat-card-header>
         <mat-card-content *ngIf="isCardContentVisible.sample">
-          <app-metadata-editor [schema]="metadataSchemaSample"
+          <app-metadata-editor [schema]="metadataSchemaSample" [renderView]="activeRenderView"
             [data]="createNewTransferData.userMetaData['sample']"
             (dataChange)="onDataChangeUserMetadataSample($event)" (errors)="sampleErrorsHandler($event)"></app-metadata-editor>
         </mat-card-content>

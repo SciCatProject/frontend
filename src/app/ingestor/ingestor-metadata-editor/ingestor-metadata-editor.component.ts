@@ -1,25 +1,54 @@
-import { Component, EventEmitter, Output, Input, OnInit } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Output,
+  Input,
+  OnInit,
+  OnChanges,
+  ChangeDetectorRef,
+} from "@angular/core";
 import { JsonSchema } from "@jsonforms/core";
-import { configuredRenderer } from "./ingestor-metadata-editor-helper";
+import {
+  configuredRenderer,
+  IngestorMetadataEditorHelper,
+} from "./ingestor-metadata-editor-helper";
 
+export type renderView = "requiredOnly" | "all";
+
+/* We need to jsonforms renderer here. If we change the view and we only use one instance, 
+it will produce errors when changing the schema. */
 @Component({
   selector: "app-metadata-editor",
-  template: `<jsonforms
-    [data]="visualData"
-    [schema]="schema"
-    [renderers]="combinedRenderers"
-    (dataChange)="onDataChange($event)"
-    (errors)="onErrors($event)"
-  ></jsonforms>`,
+  template: `<div>
+    <jsonforms
+      *ngIf="renderView === 'requiredOnly'"
+      [data]="visualData"
+      [schema]="reducedSchema"
+      [renderers]="combinedRenderers"
+      (dataChange)="onDataChange($event)"
+      (errors)="onErrors($event)"
+    ></jsonforms>
+
+    <jsonforms
+      *ngIf="renderView === 'all'"
+      [data]="visualData"
+      [schema]="schema"
+      [renderers]="combinedRenderers"
+      (dataChange)="onDataChange($event)"
+      (errors)="onErrors($event)"
+    ></jsonforms>
+  </div>`,
 })
 export class IngestorMetadataEditorComponent implements OnInit {
   @Input() data: object;
   @Input() schema: JsonSchema;
+  @Input() renderView: renderView;
 
   @Output() dataChange = new EventEmitter<string>();
   @Output() errors = new EventEmitter<any[]>();
 
   visualData: object = {};
+  reducedSchema: JsonSchema = {};
 
   ngOnInit() {
     // Do a deep clone
@@ -46,6 +75,8 @@ export class IngestorMetadataEditorComponent implements OnInit {
 
     initializeVisualData(this.schema, this.visualData);
 
+    this.reducedSchema =
+      IngestorMetadataEditorHelper.reduceToRequiredProperties(this.schema);
     //console.log(this.schema);
   }
 

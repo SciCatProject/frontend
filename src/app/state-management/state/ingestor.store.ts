@@ -1,3 +1,4 @@
+import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 import {
   IngestionRequestInformation,
   IngestorHelper,
@@ -21,8 +22,6 @@ interface IngestorStatus {
   healthResponse: OtherHealthResponse | null;
   validEndpoint: boolean;
 }
-
-type renderView = "requiredOnly" | "all";
 
 export interface IngestorState {
   ingestorStatus: IngestorStatus;

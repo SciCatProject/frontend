@@ -10,6 +10,7 @@ import {
   PostDatasetResponse,
   UserInfo,
 } from "shared/sdk/models/ingestor/models";
+import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 
 export const setIngestorEndpoint = createAction(
   "[Ingestor] Set ingestor endpoint",
@@ -117,4 +118,9 @@ export const resetIngestDataset = createAction(
 export const cancelTransfer = createAction(
   "[Ingestor] Cancel Transfer",
   props<{ transferId: string }>(),
+);
+
+export const setRenderView = createAction(
+  "[Ingestor] Set Render View",
+  props<{ renderView: renderView }>(),
 );

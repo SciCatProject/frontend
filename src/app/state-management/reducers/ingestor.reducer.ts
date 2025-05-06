@@ -14,6 +14,13 @@ export const ingestorReducer = (state: undefined, action: Action) => {
 const reducer = createReducer(
   initialIngestorState,
   on(
+    fromActions.setRenderView,
+    (state, { renderView }): IngestorState => ({
+      ...state,
+      renderView: renderView,
+    }),
+  ),
+  on(
     fromActions.getBrowseFilePathSuccess,
     (state, { ingestorBrowserActiveNode }): IngestorState => ({
       ...state,

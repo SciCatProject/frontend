@@ -32,6 +32,36 @@ export class IngestorMetadataEditorHelper {
     }
     return schema;
   }
+
+  static reduceToRequiredProperties(schema: any): any {
+    if (!schema || typeof schema !== "object") {
+      return schema;
+    }
+
+    // Kopiere das Schema und initialisiere die reduzierte Struktur
+    const reducedSchema: any = { ...schema };
+
+    // Entferne nicht benötigte Eigenschaften
+    if (schema.properties && Array.isArray(schema.required)) {
+      reducedSchema.properties = {};
+      for (const key of schema.required) {
+        if (schema.properties[key]) {
+          const property = schema.properties[key];
+          // Rekursiver Aufruf für verschachtelte Objekte
+          reducedSchema.properties[key] =
+            IngestorMetadataEditorHelper.reduceToRequiredProperties(property);
+        }
+      }
+    }
+
+    // Falls es sich um ein Array handelt, reduziere das Items-Schema
+    if (schema.type === "array" && schema.items) {
+      reducedSchema.items =
+        IngestorMetadataEditorHelper.reduceToRequiredProperties(schema.items);
+    }
+
+    return reducedSchema;
+  }
 }
 
 export const convertJSONFormsErrorToString = (error: any): string => {

@@ -256,6 +256,20 @@ export class IngestorEffects {
     );
   });
 
+  setRenderView$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.setRenderView),
+      switchMap(({ renderView }) => {
+        const message = {
+          type: MessageType.Success,
+          content: "Render view set to: " + renderView,
+          duration: 5000,
+        };
+        return of(showMessageAction({ message }));
+      }),
+    );
+  });
+
   constructor(
     private actions$: Actions,
     private ingestor: Ingestor,
