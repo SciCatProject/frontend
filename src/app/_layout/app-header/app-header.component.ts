@@ -1,5 +1,5 @@
 import { DOCUMENT } from "@angular/common";
-import { Component, OnInit, Inject } from "@angular/core";
+import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Store } from "@ngrx/store";
 import {
@@ -13,14 +13,19 @@ import {
 } from "state-management/selectors/user.selectors";
 import { selectDatasetsInBatchIndicator } from "state-management/selectors/datasets.selectors";
 import { AppConfigService, OAuth2Endpoint } from "app-config.service";
-import { Router } from "@angular/router";
+import { Router, NavigationEnd } from "@angular/router";
+import { NomadViewerService } from "shared/services/nomad-buttons-service";
+import { filter, Subscription } from "rxjs";
 
 @Component({
   selector: "app-app-header",
   templateUrl: "./app-header.component.html",
   styleUrls: ["./app-header.component.scss"],
 })
-export class AppHeaderComponent implements OnInit {
+export class AppHeaderComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
+  isDatasetDetailPage = false;
+
   config = this.appConfigService.getConfig();
   facility = this.config.facility ?? "";
   status = this.appConfig.production ? "" : "test";
@@ -38,6 +43,7 @@ export class AppHeaderComponent implements OnInit {
     @Inject(APP_CONFIG) public appConfig: AppConfig,
     private store: Store,
     @Inject(DOCUMENT) public document: Document,
+    private nomadViewerService: NomadViewerService,
   ) {}
 
   logout(): void {
@@ -58,5 +64,31 @@ export class AppHeaderComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(fetchCurrentUserAction());
     this.oAuth2Endpoints = this.config.oAuth2Endpoints;
+    this.isDatasetDetailPage = /\/datasets\/[^/]+(?:\/.*)?$/.test(
+      this.router.url,
+    );
+
+    this.subscriptions.push(
+      this.router.events
+        .pipe(filter((event) => event instanceof NavigationEnd))
+        .subscribe((event: NavigationEnd) => {
+          this.isDatasetDetailPage = /\/datasets\/[^/]+(?:\/.*)?$/.test(
+            event.url,
+          );
+        }),
+    );
+  }
+
+  ngOnDestroy() {
+    // existing cleanup code
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
+  }
+
+  openNomadLogs(): void {
+    this.nomadViewerService.openNomadLogs();
+  }
+
+  openNomadCharts(): void {
+    this.nomadViewerService.openNomadCharts();
   }
 }

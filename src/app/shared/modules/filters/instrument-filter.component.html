@@ -1,0 +1,33 @@
+<mat-form-field>
+  <mat-label>{{ label }}</mat-label>
+  <mat-chip-grid #instrumentChipList>
+    <mat-chip-row
+      *ngFor="let instrument of instrumentFilter$ | async"
+      [removable]="true"
+      (removed)="instrumentRemoved(instrument)"
+      >{{ getInstrumentName(instrument) }}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip-row>
+  </mat-chip-grid>
+  <input
+    #input
+    (input)="onInstrumentInput($event)"
+    [value]="instrumentInput$ | async"
+    matInput
+    class="instrument-input"
+    [matChipInputFor]="instrumentChipList"
+    [matAutocomplete]="inst"
+    matTooltip="{{ tooltipText }}"
+    matTooltipPosition="after"
+  />
+
+  <mat-autocomplete #inst="matAutocomplete">
+    <mat-option
+      (onSelectionChange)="instrumentSelected(getFacetId(fc))"
+      *ngFor="let fc of instrumentSuggestions$ | async"
+    >
+      <span>{{ getInstrumentName(getFacetId(fc, "No Instrument")) }} | </span>
+      <small>{{ getFacetCount(fc) }}</small>
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
