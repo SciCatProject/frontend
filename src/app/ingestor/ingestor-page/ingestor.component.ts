@@ -259,14 +259,10 @@ export class IngestorComponent implements OnInit, OnDestroy {
     if (dialogRef === null) return;
   }
 
-  doRefreshTransferList(
-    transferId?: string,
-    page?: number,
-    pageNumber?: number,
-  ): void {
+  doRefreshTransferList(page?: number, pageNumber?: number): void {
     this.store.dispatch(
       fromActions.updateTransferList({
-        transferId,
+        transferId: undefined,
         page: page ? page + 1 : undefined,
         pageNumber: pageNumber,
       }),
@@ -294,7 +290,7 @@ export class IngestorComponent implements OnInit, OnDestroy {
   }
 
   onTransferPageChange(event: PageChangeEvent): void {
-    this.doRefreshTransferList(undefined, event.pageIndex, event.pageSize);
+    this.doRefreshTransferList(event.pageIndex, event.pageSize);
   }
 
   openIngestorLogin(): void {
@@ -319,6 +315,7 @@ export class IngestorComponent implements OnInit, OnDestroy {
     });
 
     const dialogSub = dialogRef.afterClosed().subscribe(() => {
+      this.doRefreshTransferList();
       dialogSub.unsubscribe();
     });
   }

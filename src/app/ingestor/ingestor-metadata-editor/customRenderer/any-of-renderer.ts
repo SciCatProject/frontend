@@ -33,7 +33,7 @@ import { cloneDeep, isEmpty, startCase } from "lodash-es";
         <mat-tab-group *ngIf="tabAmount > 1">
           animationDuration="0ms" [selectedIndex]="selectedTabIndex" >
           <mat-tab *ngFor="let option of filteredOptions" label="{{ option }}">
-            <div *ngIf="option !== 'null'">
+            <div class="mat-tab-content-renderer" *ngIf="option !== 'null'">
               <jsonforms-outlet
                 [uischema]="getUISchema(option)"
                 [schema]="getTabSchema(option)"
