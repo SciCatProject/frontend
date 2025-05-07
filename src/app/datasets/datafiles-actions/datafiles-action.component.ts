@@ -15,10 +15,9 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "datafiles-action",
-  //standalone: true,
-  //imports: [],
   templateUrl: "./datafiles-action.component.html",
   styleUrls: ["./datafiles-action.component.scss"],
+  standalone: false,
 })
 export class DatafilesActionComponent implements OnInit, OnChanges {
   @Input({ required: true }) actionConfig: ActionConfig;
@@ -41,7 +40,7 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
     private authService: AuthService,
     private snackBar: MatSnackBar,
   ) {
-    this.usersService.usersControllerGetUserJWT().subscribe((jwt) => {
+    this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
       this.jwt = jwt.jwt;
     });
   }
@@ -100,7 +99,15 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
   get disabled() {
     this.update_status();
     this.prepare_disabled_condition();
-    return eval(this.disabled_condition);
+
+    const expr = this.disabled_condition;
+    const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);
+
+    return fn({
+      maxFileSize: this.maxFileSize,
+      selectedTotalFileSize: this.selectedTotalFileSize,
+      numberOfFileSelected: this.numberOfFileSelected,
+    });
   }
 
   add_input(name, value) {

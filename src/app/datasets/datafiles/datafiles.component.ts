@@ -41,6 +41,7 @@ import { AuthService } from "shared/services/auth/auth.service";
   selector: "datafiles",
   templateUrl: "./datafiles.component.html",
   styleUrls: ["./datafiles.component.scss"],
+  standalone: false,
 })
 export class DatafilesComponent
   implements OnDestroy, AfterViewInit, AfterViewChecked
@@ -283,7 +284,7 @@ export class DatafilesComponent
     }
     if (!this.jwt) {
       this.subscriptions.push(
-        this.usersService.usersControllerGetUserJWT().subscribe((jwt) => {
+        this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
           this.jwt = jwt;
           this[`${form}Element`].nativeElement.jwt.value = jwt.jwt;
           this[`${form}Element`].nativeElement.submit();
@@ -315,6 +316,7 @@ export class DatafilesComponent
               files: this.getSelectedFiles(),
             },
           ],
+          jobParams: {}, // TODO: job release back-ward compatibility issue
         };
         this.store.dispatch(submitJobAction({ job: data }));
       }

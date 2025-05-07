@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { createEffect, Actions, ofType, concatLatestFrom } from "@ngrx/effects";
+import { createEffect, Actions, ofType } from "@ngrx/effects";
+import { concatLatestFrom } from "@ngrx/operators";
 import {
   DatasetsService,
   Logbook,
@@ -24,7 +25,7 @@ export class LogbookEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchLogbooksAction),
       mergeMap(() =>
-        this.logbooksService.logbooksControllerFindAll().pipe(
+        this.logbooksService.logbooksControllerFindAllV3().pipe(
           map((logbooks: Logbook[]) =>
             fromActions.fetchLogbooksCompleteAction({ logbooks }),
           ),
@@ -40,7 +41,7 @@ export class LogbookEffects {
       concatLatestFrom(() => this.filters$),
       mergeMap(([{ name }, filters]) => {
         return this.logbooksService
-          .logbooksControllerFindByName(name, JSON.stringify(filters))
+          .logbooksControllerFindByNameV3(name, JSON.stringify(filters))
           .pipe(
             timeout(3000),
             mergeMap((logbook: Logbook) => [
@@ -59,7 +60,7 @@ export class LogbookEffects {
       concatLatestFrom(() => this.filters$),
       mergeMap(([{ pid }, filters]) =>
         this.datasetsService
-          .datasetsControllerFindLogbookByPid(pid, JSON.stringify(filters))
+          .datasetsControllerFindLogbookByPidV3(pid, JSON.stringify(filters))
           .pipe(
             timeout(3000),
             mergeMap((logbook) => [
@@ -80,11 +81,11 @@ export class LogbookEffects {
         const { skip, limit, sortField, ...theRest } = filters;
         return (
           name
-            ? this.logbooksService.logbooksControllerFindByName(
+            ? this.logbooksService.logbooksControllerFindByNameV3(
                 name,
                 JSON.stringify(theRest),
               )
-            : this.datasetsService.datasetsControllerFindLogbookByPid(
+            : this.datasetsService.datasetsControllerFindLogbookByPidV3(
                 pid,
                 JSON.stringify(theRest),
               )

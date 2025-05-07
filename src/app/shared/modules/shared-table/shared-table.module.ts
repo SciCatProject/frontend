@@ -31,12 +31,6 @@ import { ObjKeysPipe } from "shared/pipes/obj-keys.pipe";
 import { RouterModule } from "@angular/router";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from "@angular/material/core";
-import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from "ngx-material-luxon";
 import { MatMenuModule } from "@angular/material/menu";
 export interface Column {
   id: string;
@@ -90,12 +84,6 @@ export interface Column {
     SlicePipe,
     TitleCasePipe,
     UpperCasePipe,
-    {
-      provide: DateAdapter,
-      useClass: LuxonDateAdapter,
-      deps: [MAT_DATE_LOCALE],
-    },
-    { provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS },
   ],
 })
 export class SharedTableModule {}

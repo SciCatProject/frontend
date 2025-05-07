@@ -33,6 +33,7 @@ import { AppConfigService } from "app-config.service";
   selector: "sample-dashboard",
   templateUrl: "./sample-dashboard.component.html",
   styleUrls: ["./sample-dashboard.component.scss"],
+  standalone: false,
 })
 export class SampleDashboardComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectSampleDashboardPageViewModel);

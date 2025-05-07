@@ -17,6 +17,7 @@ import * as shortid from "shortid";
   selector: "app-sample-dialog",
   templateUrl: "./sample-dialog.component.html",
   styleUrls: ["./sample-dialog.component.scss"],
+  standalone: false,
 })
 export class SampleDialogComponent implements OnInit, OnDestroy {
   private vm$ = this.store.select(selectSampleDialogPageViewModel);

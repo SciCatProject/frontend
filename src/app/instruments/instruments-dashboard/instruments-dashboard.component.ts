@@ -20,6 +20,7 @@ import { Router } from "@angular/router";
   selector: "app-instruments-dashboard",
   templateUrl: "./instruments-dashboard.component.html",
   styleUrls: ["./instruments-dashboard.component.scss"],
+  standalone: false,
 })
 export class InstrumentsDashboardComponent implements OnInit {
   vm$ = this.store.select(selectInstrumentsDashboardPageViewModel).pipe(
