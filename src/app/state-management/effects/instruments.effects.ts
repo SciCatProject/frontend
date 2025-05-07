@@ -17,18 +17,20 @@ import {
 export class InstrumentEffects {
   fetchInstruments$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(
-        fromActions.fetchInstrumentsAction,
-        fromActions.changePageAction,
-        fromActions.sortByColumnAction,
-      ),
-      concatLatestFrom(() => this.filters$),
-      map(([action, filters]) => filters),
-      switchMap(({ sortField: order, skip, limit }) =>
-        this.instrumentsService
-          .instrumentsControllerFindAllV3(
-            JSON.stringify({ order, limit, skip }),
-          )
+      ofType(fromActions.fetchInstrumentsAction),
+      switchMap(({ limit, skip, sortColumn, sortDirection }) => {
+        const limitsParam = {
+          skip: skip,
+          limit: limit,
+          order: undefined,
+        };
+
+        if (sortColumn && sortDirection) {
+          limitsParam.order = `${sortColumn}:${sortDirection}`;
+        }
+
+        return this.instrumentsService
+          .instrumentsControllerFindAllV3(JSON.stringify({ limits: limitsParam }))
           .pipe(
             mergeMap((instruments: Instrument[]) => [
               fromActions.fetchInstrumentsCompleteAction({ instruments }),
