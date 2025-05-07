@@ -8,8 +8,6 @@ import {
 import * as fromActions from "state-management/actions/instruments.actions";
 import { switchMap, map, catchError, mergeMap } from "rxjs/operators";
 import { of } from "rxjs";
-import { Store } from "@ngrx/store";
-import { selectFilters } from "state-management/selectors/instruments.selectors";
 import {
   loadingAction,
   loadingCompleteAction,
@@ -17,30 +15,30 @@ import {
 
 @Injectable()
 export class InstrumentEffects {
-  filters$ = this.store.select(selectFilters);
-
   fetchInstruments$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(
-        fromActions.fetchInstrumentsAction,
-        fromActions.changePageAction,
-        fromActions.sortByColumnAction,
-      ),
-      concatLatestFrom(() => this.filters$),
-      map(([action, filters]) => filters),
-      switchMap(({ sortField: order, skip, limit }) =>
-        this.instrumentsService
-          .instrumentsControllerFindAllV3(
-            JSON.stringify({ order, limit, skip }),
-          )
+      ofType(fromActions.fetchInstrumentsAction),
+      switchMap(({ limit, skip, sortColumn, sortDirection }) => {
+        const limitsParam = {
+          skip: skip,
+          limit: limit,
+          order: undefined,
+        };
+
+        if (sortColumn && sortDirection) {
+          limitsParam.order = `${sortColumn}:${sortDirection}`;
+        }
+
+        return this.instrumentsService
+          .instrumentsControllerFindAllV3(JSON.stringify({ limits: limitsParam }))
           .pipe(
             mergeMap((instruments: Instrument[]) => [
               fromActions.fetchInstrumentsCompleteAction({ instruments }),
               fromActions.fetchCountAction(),
             ]),
             catchError(() => of(fromActions.fetchInstrumentsFailedAction())),
-          ),
-      ),
+          );
+      }),
     );
   });
 
@@ -121,6 +119,5 @@ export class InstrumentEffects {
   constructor(
     private actions$: Actions,
     private instrumentsService: InstrumentsService,
-    private store: Store,
   ) {}
 }

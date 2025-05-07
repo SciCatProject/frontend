@@ -21,10 +21,8 @@ import {
   Direction,
   ITableSetting,
 } from "shared/modules/dynamic-material-table/models/table-setting.model";
-import {
-  actionMenu,
-  getTableSettingsConfig,
-} from "shared/modules/dynamic-material-table/utilizes/default-table-config";
+import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
+import { TableConfigService } from "shared/services/table-config.service";
 import { fetchRelatedProposalsAction } from "state-management/actions/proposals.actions";
 import { selectRelatedProposalsPageViewModel } from "state-management/selectors/proposals.selectors";
 
@@ -126,6 +124,7 @@ export class RelatedProposalsComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private store: Store,
+    private tableConfigService: TableConfigService,
   ) {}
 
   ngOnInit() {
@@ -154,12 +153,13 @@ export class RelatedProposalsComponent implements OnInit, OnDestroy {
           };
         }
 
-        const tableSettingsConfig = getTableSettingsConfig(
-          this.tableName,
-          tableDefaultSettingsConfig,
-          null,
-          tableSort,
-        );
+        const tableSettingsConfig =
+          this.tableConfigService.getTableSettingsConfig(
+            this.tableName,
+            tableDefaultSettingsConfig,
+            null,
+            tableSort,
+          );
 
         const pagginationConfig = {
           pageSizeOptions: [5, 10, 25, 100],

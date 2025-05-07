@@ -20,11 +20,9 @@ import {
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { ITableSetting } from "shared/modules/dynamic-material-table/models/table-setting.model";
-import {
-  actionMenu,
-  getTableSettingsConfig,
-} from "shared/modules/dynamic-material-table/utilizes/default-table-config";
+import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { TableConfigService } from "shared/services/table-config.service";
 import { fetchProposalDatasetsAction } from "state-management/actions/proposals.actions";
 import { selectViewProposalPageViewModel } from "state-management/selectors/proposals.selectors";
 
@@ -137,6 +135,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private store: Store,
+    private tableConfigService: TableConfigService,
   ) {}
 
   ngOnInit(): void {
@@ -148,10 +147,11 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
       this.dataSource.next(this.formatTableData(data.datasets));
       this.pending = false;
 
-      const tableSettingsConfig = getTableSettingsConfig(
-        this.tableName,
-        tableDefaultSettingsConfig,
-      );
+      const tableSettingsConfig =
+        this.tableConfigService.getTableSettingsConfig(
+          this.tableName,
+          tableDefaultSettingsConfig,
+        );
       const pagginationConfig = {
         pageSizeOptions: [5, 10, 25, 100],
         pageIndex: data.currentPage || 0,
