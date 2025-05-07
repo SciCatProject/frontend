@@ -5,6 +5,7 @@ import { Component } from "@angular/core";
   selector: "app-pid-contains-filter",
   templateUrl: "./pid-filter-contains.component.html",
   styleUrls: ["./pid-filter-contains.component.scss"],
+  standalone: false,
 })
 export class PidFilterContainsComponent extends PidFilterComponent {
   readonly componentName: string = "PidFilterContains";

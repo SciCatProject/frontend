@@ -14,18 +14,14 @@ import {
 } from "../../../state-management/actions/datasets.actions";
 import { Store } from "@ngrx/store";
 import { BehaviorSubject, Subject, Subscription } from "rxjs";
-import {
-  debounceTime,
-  distinctUntilChanged,
-  withLatestFrom,
-} from "rxjs/operators";
+import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { selectSearchTerms } from "../../../state-management/selectors/datasets.selectors";
+import { concatLatestFrom } from "@ngrx/operators";
 
 @Component({
   selector: "full-text-search-bar",
   templateUrl: "./full-text-search-bar.component.html",
   styleUrls: ["./full-text-search-bar.component.scss"],
-  standalone: true,
   imports: [
     MatFormFieldModule,
     MatSelectModule,
@@ -36,6 +32,7 @@ import { selectSearchTerms } from "../../../state-management/selectors/datasets.
     MatCardModule,
     MatButtonModule,
   ],
+  standalone: true,
 })
 export class FullTextSearchBarComponent implements OnInit, OnDestroy {
   @Input() prefilledValue = "";
@@ -66,7 +63,10 @@ export class FullTextSearchBarComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.searchClickSubject
-        .pipe(debounceTime(250), withLatestFrom(searchTerms$))
+        .pipe(
+          debounceTime(250),
+          concatLatestFrom(() => [searchTerms$]),
+        )
         .subscribe(([_, terms]) => {
           this.store.dispatch(fetchDatasetsAction());
           this.store.dispatch(fetchFacetCountsAction());

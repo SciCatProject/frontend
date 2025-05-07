@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { AppConfigService } from "app-config.service";
@@ -9,6 +9,7 @@ import { ScientificCondition } from "../../../state-management/models";
 @Component({
   selector: "search-parameters-dialog",
   templateUrl: "./search-parameters-dialog.component.html",
+  standalone: false,
 })
 export class SearchParametersDialogComponent {
   appConfig = this.appConfigService.getConfig();

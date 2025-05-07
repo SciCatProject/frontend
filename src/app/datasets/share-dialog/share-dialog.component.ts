@@ -2,10 +2,7 @@ import { Component, Inject } from "@angular/core";
 import { FormControl, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
-import {
-  UserIdentitiesService,
-  UsersService,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { UserIdentitiesService } from "@scicatproject/scicat-sdk-ts-angular";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
 
@@ -13,6 +10,7 @@ import { Message, MessageType } from "state-management/models";
   selector: "app-share-dialog",
   templateUrl: "./share-dialog.component.html",
   styleUrls: ["./share-dialog.component.scss"],
+  standalone: false,
 })
 export class ShareDialogComponent {
   data: any;
@@ -26,7 +24,7 @@ export class ShareDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<ShareDialogComponent>,
     public store: Store,
-    public userIdentititiesService: UserIdentitiesService,
+    public userIdentitiesService: UserIdentitiesService,
     @Inject(MAT_DIALOG_DATA)
     data: {
       infoMessage: string;
@@ -44,8 +42,8 @@ export class ShareDialogComponent {
 
   add = async (email: string): Promise<void> => {
     try {
-      const isValidEmail = await this.userIdentititiesService
-        .userIdentitiesControllerIsValidEmail(
+      const isValidEmail = await this.userIdentitiesService
+        .userIdentitiesControllerIsValidEmailV3(
           JSON.stringify({
             where: { "profile.email": email.trim() },
           }),

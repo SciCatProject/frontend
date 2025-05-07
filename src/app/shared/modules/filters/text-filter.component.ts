@@ -12,6 +12,7 @@ import { getFilterLabel } from "./utils";
   selector: "app-text-filter",
   templateUrl: "text-filter.component.html",
   styleUrls: ["text-filter.component.scss"],
+  standalone: false,
 })
 export class TextFilterComponent
   extends ClearableInputComponent

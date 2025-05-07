@@ -9,6 +9,7 @@ import { Pipe, PipeTransform } from "@angular/core";
  */
 @Pipe({
   name: "objKeys",
+  standalone: false,
 })
 export class ObjKeysPipe implements PipeTransform {
   /**

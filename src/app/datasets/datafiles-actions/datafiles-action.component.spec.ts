@@ -122,7 +122,7 @@ describe("1000: DatafilesActionComponent", () => {
     notebook_selected = 3,
   }
 
-  const usersControllerGetUserJWT = () => ({
+  const usersControllerGetUserJWTV3 = () => ({
     subscribe: () => ({
       jwt: "9a2322a8-4a7d-11ef-a0f5-d7c40fcf1693",
     }),
@@ -170,7 +170,7 @@ describe("1000: DatafilesActionComponent", () => {
           { provide: MatDialogRef, useClass: MockMatDialogRef },
           {
             provide: UsersService,
-            useValue: { usersControllerGetUserJWT },
+            useValue: { usersControllerGetUserJWTV3 },
           },
           {
             provide: AuthService,

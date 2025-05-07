@@ -37,10 +37,9 @@ describe("InstrumentEffects", () => {
         {
           provide: InstrumentsService,
           useValue: jasmine.createSpyObj("instrumentApi", [
-            "instrumentsControllerFindAll",
-            "instrumentsControllerCount",
-            "instrumentsControllerFindById",
-            "instrumentsControllerUpdate",
+            "instrumentsControllerFindAllV3",
+            "instrumentsControllerFindByIdV3",
+            "instrumentsControllerUpdateV3",
           ]),
         },
       ],
@@ -64,21 +63,112 @@ describe("InstrumentEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: instruments });
-        instrumentApi.instrumentsControllerFindAll.and.returnValue(response);
+        instrumentApi.instrumentsControllerFindAllV3.and.returnValue(response);
 
         const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
         expect(effects.fetchInstruments$).toBeObservable(expected);
       });
 
       it("should result in a fetchInstrumentsFailedAction", () => {
-        const action = fromActions.fetchInstrumentsAction({});
+        const action = fromActions.fetchInstrumentsAction();
+        const outcome = fromActions.fetchInstrumentsFailedAction();
+
+        actions = hot("-a", { a: action });
+        const expected = cold("--b", { b: outcome });
+        expect(effects.fetchInstruments$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType changePageAction", () => {
+      const page = 0;
+      const limit = 25;
+
+      it("should result in a fetchInstrumentsCompleteAction and a fetchCountAction", () => {
+        const action = fromActions.changePageAction({ page, limit });
+        const outcome1 = fromActions.fetchInstrumentsCompleteAction({
+          instruments,
+        });
+        const outcome2 = fromActions.fetchCountAction();
+
+        actions = hot("-a", { a: action });
+        const response = cold("-a|", { a: instruments });
+        instrumentApi.instrumentsControllerFindAllV3.and.returnValue(response);
+
+        const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
+        expect(effects.fetchInstruments$).toBeObservable(expected);
+      });
+
+      it("should result in a fetchInstrumentsFailedAction", () => {
+        const action = fromActions.changePageAction({ page, limit });
         const outcome = fromActions.fetchInstrumentsFailedAction();
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        instrumentApi.instrumentsControllerFindAll.and.returnValue(response);
+        instrumentApi.instrumentsControllerFindAllV3.and.returnValue(response);
 
         const expected = cold("--b", { b: outcome });
+        expect(effects.fetchInstruments$).toBeObservable(expected);
+      });
+    });
+    describe("ofType changePageAction", () => {
+      const page = 0;
+      const limit = 25;
+
+      it("should result in a fetchInstrumentsCompleteAction and a fetchCountAction", () => {
+        const action = fromActions.changePageAction({ page, limit });
+        const outcome1 = fromActions.fetchInstrumentsCompleteAction({
+          instruments,
+        });
+        const outcome2 = fromActions.fetchCountAction();
+
+        actions = hot("-a", { a: action });
+        const response = cold("-a|", { a: instruments });
+        instrumentApi.instrumentsControllerFindAllV3.and.returnValue(response);
+
+        const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
+        expect(effects.fetchInstruments$).toBeObservable(expected);
+      });
+
+      it("should result in a fetchInstrumentsFailedAction", () => {
+        const action = fromActions.changePageAction({ page, limit });
+        const outcome = fromActions.fetchInstrumentsFailedAction();
+
+        actions = hot("-a", { a: action });
+        const response = cold("-#", {});
+        instrumentApi.instrumentsControllerFindAllV3.and.returnValue(response);
+
+        const expected = cold("--b", { b: outcome });
+        expect(effects.fetchInstruments$).toBeObservable(expected);
+      });
+    });
+
+    describe("ofType sortByColumnAction", () => {
+      const column = "test";
+      const direction = "asc";
+
+      it("should result in a fetchInstrumentsCompleteAction and a fetchCountAction", () => {
+        const action = fromActions.sortByColumnAction({ column, direction });
+        const outcome1 = fromActions.fetchInstrumentsCompleteAction({
+          instruments,
+        });
+        const outcome2 = fromActions.fetchCountAction();
+
+        actions = hot("-a", { a: action });
+        const response = cold("-a|", { a: instruments });
+        instrumentApi.instrumentsControllerFindAllV3.and.returnValue(response);
+
+        const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
+        expect(effects.fetchInstruments$).toBeObservable(expected);
+      });
+
+      it("should result in a fetchInstrumentsFailedAction", () => {
+        const action = fromActions.sortByColumnAction({ column, direction });
+        const outcome = fromActions.fetchInstrumentsFailedAction();
+
+        actions = hot("-a", { a: action });
+        const response = cold("-#", {});
+        instrumentApi.instrumentsControllerFindAllV3.and.returnValue(response);
+
         expect(effects.fetchInstruments$).toBeObservable(expected);
       });
     });
@@ -93,8 +183,8 @@ describe("InstrumentEffects", () => {
       });
 
       actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: { count } });
-      instrumentApi.instrumentsControllerCount.and.returnValue(response);
+      const response = cold("-a|", { a: instruments });
+      instrumentApi.instrumentsControllerFindAllV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
@@ -106,7 +196,7 @@ describe("InstrumentEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      instrumentApi.instrumentsControllerCount.and.returnValue(response);
+      instrumentApi.instrumentsControllerFindAllV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
@@ -122,7 +212,7 @@ describe("InstrumentEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: instrument });
-      instrumentApi.instrumentsControllerFindById.and.returnValue(response);
+      instrumentApi.instrumentsControllerFindByIdV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchInstrument$).toBeObservable(expected);
@@ -134,7 +224,7 @@ describe("InstrumentEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      instrumentApi.instrumentsControllerFindById.and.returnValue(response);
+      instrumentApi.instrumentsControllerFindByIdV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchInstrument$).toBeObservable(expected);
@@ -156,7 +246,7 @@ describe("InstrumentEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: instrument });
-      instrumentApi.instrumentsControllerUpdate.and.returnValue(response);
+      instrumentApi.instrumentsControllerUpdateV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.saveCustomMetadata$).toBeObservable(expected);
@@ -171,7 +261,7 @@ describe("InstrumentEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      instrumentApi.instrumentsControllerUpdate.and.returnValue(response);
+      instrumentApi.instrumentsControllerUpdateV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.saveCustomMetadata$).toBeObservable(expected);
