@@ -137,8 +137,9 @@ export class IngestorNewTransferDialogPageComponent
       this.userProfile.email;
     this.createNewTransferData.scicatHeader["contactEmail"] =
       this.userProfile.email;
+
     const creationTime = new Date();
-    const formattedCreationTime = creationTime.toISOString().split("T")[0];
+    const formattedCreationTime = creationTime.toISOString();
     this.createNewTransferData.scicatHeader["creationTime"] =
       formattedCreationTime;
   }

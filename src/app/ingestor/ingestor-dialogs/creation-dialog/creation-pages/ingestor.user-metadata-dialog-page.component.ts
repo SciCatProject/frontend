@@ -8,9 +8,9 @@ import {
 } from "@angular/core";
 import { JsonSchema } from "@jsonforms/core";
 import {
+  getJsonSchemaFromDto,
   IngestionRequestInformation,
   IngestorHelper,
-  SciCatHeader_Schema,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
 import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 import {
@@ -78,7 +78,7 @@ export class IngestorUserMetadataDialogPageComponent
             this.createNewTransferData.selectedResolvedDecodedSchema.properties.organizational;
           this.metadataSchemaSample =
             this.createNewTransferData.selectedResolvedDecodedSchema.properties.sample;
-          this.scicatHeaderSchema = SciCatHeader_Schema;
+          this.scicatHeaderSchema = getJsonSchemaFromDto();
 
           this.cdr.markForCheck();
         }
