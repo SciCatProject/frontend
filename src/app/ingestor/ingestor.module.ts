@@ -33,7 +33,6 @@ import { CustomObjectControlRendererComponent } from "./ingestor-metadata-editor
 import { IngestorFileBrowserComponent } from "./ingestor-dialogs/ingestor-file-browser/ingestor.file-browser.component";
 import { MatTreeModule } from "@angular/material/tree";
 import { OwnerGroupFieldComponent } from "./ingestor-metadata-editor/customRenderer/owner-group-field-renderer";
-import { QuantityValueObjectComponent } from "./ingestor-metadata-editor/customRenderer/quantity-value-renderer";
 import {
   CustomLayoutChildrenRenderPropsPipe,
   QuantityValueLayoutRendererComponent,
@@ -67,7 +66,6 @@ import { IngestorTransferViewDialogComponent } from "./ingestor-dialogs/transfer
     ExportTemplateHelperComponent,
     IngestorFileBrowserComponent,
     OwnerGroupFieldComponent,
-    QuantityValueObjectComponent,
     QuantityValueLayoutRendererComponent,
     CustomLayoutChildrenRenderPropsPipe,
     IngestorTransferViewDialogComponent,

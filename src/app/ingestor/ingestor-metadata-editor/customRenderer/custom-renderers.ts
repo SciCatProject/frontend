@@ -16,10 +16,6 @@ import {
   ownerGroupFieldTester,
 } from "./owner-group-field-renderer";
 import {
-  QuantityValueObjectComponent,
-  quantityValueTester,
-} from "./quantity-value-renderer";
-import {
   QuantityValueLayoutRendererComponent,
   quantityValueLayoutTester,
 } from "./quantity-value-layout-renderer";
@@ -30,21 +26,9 @@ export const customRenderers: JsonFormsRendererRegistryEntry[] = [
     renderer: OwnerGroupFieldComponent,
   },
   {
-    tester: quantityValueTester,
-    renderer: QuantityValueObjectComponent,
-  },
-  {
     tester: quantityValueLayoutTester,
     renderer: QuantityValueLayoutRendererComponent,
   },
-  /*{
-    tester: rankWith(4, isOneOfControl),
-    renderer: OneOfRendererComponent,
-  },
-  {
-    tester: rankWith(4, isAllOfControl),
-    renderer: AllOfRendererComponent,
-  },*/
   {
     tester: rankWith(4, isAnyOfControl),
     renderer: AnyOfRendererComponent,

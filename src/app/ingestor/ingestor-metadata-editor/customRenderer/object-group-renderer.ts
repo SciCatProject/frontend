@@ -79,6 +79,10 @@ export class CustomObjectControlRendererComponent extends JsonFormsControlWithDe
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
 
+    const isQuantityValue =
+      props.schema.title == "QuantityValue" ||
+      props.schema.title == "QuantitySI";
+
     this.detailUiSchema = findUISchema(
       undefined,
       props.schema,
@@ -88,7 +92,7 @@ export class CustomObjectControlRendererComponent extends JsonFormsControlWithDe
         const newSchema = cloneDeep(props.schema);
         return Generate.uiSchema(
           newSchema,
-          "VerticalLayout",
+          isQuantityValue ? "QuantityValueLayout" : "VerticalLayout",
           undefined,
           this.rootSchema,
         );
