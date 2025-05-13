@@ -70,7 +70,14 @@ export const convertJSONFormsErrorToString = (error: any): string => {
   error.forEach((error, number) => {
     if (error.message) {
       const ctrNum = number + 1;
-      errorString += ctrNum + ": " + error.message + "\n";
+      errorString +=
+        ctrNum +
+        ": " +
+        (error.instancePath && error.instancePath !== ""
+          ? "@" + error.instancePath + " "
+          : "") +
+        error.message +
+        "\n";
     }
   });
 

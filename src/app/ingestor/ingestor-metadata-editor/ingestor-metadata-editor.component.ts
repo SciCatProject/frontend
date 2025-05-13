@@ -87,6 +87,7 @@ export class IngestorMetadataEditorComponent implements OnInit {
   }
 
   onErrors(errors: any[]) {
+    console.log("Errors: ", errors);
     this.errors.emit(errors);
   }
 

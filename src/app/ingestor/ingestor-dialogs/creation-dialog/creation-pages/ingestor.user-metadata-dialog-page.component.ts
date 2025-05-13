@@ -175,13 +175,7 @@ export class IngestorUserMetadataDialogPageComponent
 
   sampleErrorsHandler(errors: any[]) {
     this.isSampleInformationOk = errors.length === 0;
-    this.sampleErrors = "";
-    errors.forEach((error, number) => {
-      if (error.message) {
-        const ctrNum = number + 1;
-        this.sampleErrors += ctrNum + ": " + error.message + "\n";
-      }
-    });
+    this.sampleErrors = convertJSONFormsErrorToString(errors);
     this.validateNextButton();
     this.cdr.detectChanges();
   }
