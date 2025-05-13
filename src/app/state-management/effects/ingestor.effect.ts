@@ -258,7 +258,7 @@ export class IngestorEffects {
 
   setRenderView$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.setRenderView),
+      ofType(fromActions.setRenderViewFromThirdParty),
       switchMap(({ renderView }) => {
         const message = {
           type: MessageType.Success,

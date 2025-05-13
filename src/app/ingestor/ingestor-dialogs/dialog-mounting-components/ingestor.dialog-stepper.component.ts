@@ -82,11 +82,11 @@ export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
     if (this.activeRenderView) {
       switch (this.activeRenderView) {
         case "requiredOnly":
-          this.store.dispatch(fromActions.setRenderView({ renderView: "all" }));
+          this.store.dispatch(fromActions.setRenderViewFromThirdParty({ renderView: "all" }));
           break;
         case "all":
           this.store.dispatch(
-            fromActions.setRenderView({ renderView: "requiredOnly" }),
+            fromActions.setRenderViewFromThirdParty({ renderView: "requiredOnly" }),
           );
           break;
         default:

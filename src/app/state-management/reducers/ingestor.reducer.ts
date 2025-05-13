@@ -14,10 +14,11 @@ export const ingestorReducer = (state: undefined, action: Action) => {
 const reducer = createReducer(
   initialIngestorState,
   on(
-    fromActions.setRenderView,
+    fromActions.setRenderViewFromThirdParty,
     (state, { renderView }): IngestorState => ({
       ...state,
       renderView: renderView,
+      updateEditorFromThirdParty: true,
     }),
   ),
   on(

@@ -47,13 +47,6 @@ export class IngestorUserMetadataDialogPageComponent
   @Output() nextStep = new EventEmitter<void>();
   @Output() backStep = new EventEmitter<void>();
 
-  @ViewChild("scicatHeaderEditor")
-  scicatHeaderEditor: IngestorMetadataEditorComponent;
-  @ViewChild("organizationalMetadataEditor")
-  organizationalMetadataEditor: IngestorMetadataEditorComponent;
-  @ViewChild("sampleMetadataEditor")
-  sampleMetadataEditor: IngestorMetadataEditorComponent;
-
   metadataSchemaOrganizational: JsonSchema;
   metadataSchemaSample: JsonSchema;
   scicatHeaderSchema: JsonSchema;
@@ -101,11 +94,6 @@ export class IngestorUserMetadataDialogPageComponent
           // Check if renderView changed
           if (this.activeRenderView !== renderView) {
             this.activeRenderView = renderView;
-
-            // Update visual data object with the new renderView (changes the schema)
-            this.scicatHeaderEditor?.updateVisualData();
-            this.organizationalMetadataEditor?.updateVisualData();
-            this.sampleMetadataEditor?.updateVisualData();
           }
         }
       }),

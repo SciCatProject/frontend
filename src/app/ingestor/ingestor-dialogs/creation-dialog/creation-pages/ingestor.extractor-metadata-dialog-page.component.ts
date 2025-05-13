@@ -48,11 +48,6 @@ export class IngestorExtractorMetadataDialogPageComponent
   @Output() nextStep = new EventEmitter<void>();
   @Output() backStep = new EventEmitter<void>();
 
-  @ViewChild("instrumentMetadataEditor")
-  instrumentMetadataEditor: IngestorMetadataEditorComponent;
-  @ViewChild("acquisitionMetadataEditor")
-  acquisitionMetadataEditor: IngestorMetadataEditorComponent;
-
   activeRenderView: renderView | null = null;
   updateEditorFromThirdParty = false;
   extractorMetaDataReady = false;
@@ -109,10 +104,6 @@ export class IngestorExtractorMetadataDialogPageComponent
           // Check if renderView changed
           if (this.activeRenderView !== renderView) {
             this.activeRenderView = renderView;
-
-            // Update visual data object with the new renderView (changes the schema)
-            this.instrumentMetadataEditor?.updateVisualData();
-            this.acquisitionMetadataEditor?.updateVisualData();
           }
         }
       }),

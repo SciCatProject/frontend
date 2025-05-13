@@ -129,7 +129,7 @@ export const cancelTransfer = createAction(
   props<{ transferId: string }>(),
 );
 
-export const setRenderView = createAction(
+export const setRenderViewFromThirdParty = createAction(
   "[Ingestor] Set Render View",
   props<{ renderView: renderView }>(),
 );
