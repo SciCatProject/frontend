@@ -85,6 +85,7 @@ export class IngestorFileBrowserComponent implements OnInit, OnDestroy {
       path: backNodePath,
       children: true,
       isRootNode: isRootNode,
+      probablyDataset: false,
     };
   }
 
@@ -101,6 +102,7 @@ export class IngestorFileBrowserComponent implements OnInit, OnDestroy {
                 ? this.createNewTransferData.selectedPath
                 : "/",
             children: false,
+            probablyDataset: false,
           };
 
           this.subscriptions.push(

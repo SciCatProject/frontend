@@ -10,44 +10,55 @@
 <mat-dialog-content class="mat-typography" disableClose="true">
   <ingestor-dialog-stepper [activeStep]="0"></ingestor-dialog-stepper>
 
-  <p>Please select the dataset to be uploaded and the appropriate metadata
-    extractor method.</p>
+  <div>
+    <mat-card class="ingestor-card">
+      <mat-card-header class="ingestor-mixed-header">
+        <mat-card-title>Select Options</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="ingestor-vertical-layout">
+        <p>Please select the dataset to be uploaded and the appropriate metadata
+          extractor method.</p>
 
-  <div *ngIf="createNewTransferData.editorMode === 'INGESTION'">
-    <mat-form-field class="form-full-width">
-      <mat-label>File Path</mat-label>
-      <input matInput [(ngModel)]="createNewTransferData.selectedPath"
-        (click)="onClickOpenFileBrowser()" readonly>
-      <!-- [matAutocomplete]="auto" -->
-      <button mat-icon-button matSuffix (click)="onClickOpenFileBrowser()">
-        <mat-icon>folder</mat-icon>
-      </button>
-    </mat-form-field>
-  </div>
+        <div *ngIf="createNewTransferData.editorMode === 'INGESTION'">
+          <mat-form-field class="form-full-width">
+            <mat-label>File Path</mat-label>
+            <input matInput [(ngModel)]="createNewTransferData.selectedPath"
+              (click)="onClickOpenFileBrowser()" readonly>
+            <!-- [matAutocomplete]="auto" -->
+            <button mat-icon-button matSuffix
+              (click)="onClickOpenFileBrowser()">
+              <mat-icon>folder</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
 
-  <div *ngIf="extractionMethods !== null">
-    <mat-form-field class="form-full-width">
-      <mat-label
-        *ngIf="createNewTransferData.editorMode === 'INGESTION'">Extraction
-        Method</mat-label>
-      <mat-label *ngIf="createNewTransferData.editorMode === 'EDITOR'">Editor
-        schema</mat-label>
-      <mat-select [(ngModel)]="selectedMethod">
-        <mat-option *ngFor="let method of extractionMethods.methods"
-          [value]="method">
-          {{ method.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-error *ngIf="extractionMethodsError">{{ extractionMethodsError
-      }}</mat-error>
+        <div *ngIf="extractionMethods !== null">
+          <mat-form-field class="form-full-width">
+            <mat-label
+              *ngIf="createNewTransferData.editorMode === 'INGESTION'">Extraction
+              Method</mat-label>
+            <mat-label
+              *ngIf="createNewTransferData.editorMode === 'EDITOR'">Editor
+              schema</mat-label>
+            <mat-select [(ngModel)]="selectedMethod">
+              <mat-option *ngFor="let method of extractionMethods.methods"
+                [value]="method">
+                {{ method.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error *ngIf="extractionMethodsError">{{ extractionMethodsError
+            }}</mat-error>
 
-    <mat-paginator *ngIf="extractionMethods.total > dropdownPageSize"
-      [length]="extractionMethods.total" [pageSize]="dropdownPageSize"
-      aria-label="Select page" [hidePageSize]="true"
-      [showFirstLastButtons]="false" [pageIndex]="extractionMethodsPage"
-      (page)="onExtractorMethodsPageChange($event)">
-    </mat-paginator>
+          <mat-paginator *ngIf="extractionMethods.total > dropdownPageSize"
+            [length]="extractionMethods.total" [pageSize]="dropdownPageSize"
+            aria-label="Select page" [hidePageSize]="true"
+            [showFirstLastButtons]="false" [pageIndex]="extractionMethodsPage"
+            (page)="onExtractorMethodsPageChange($event)">
+          </mat-paginator>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 
 </mat-dialog-content>

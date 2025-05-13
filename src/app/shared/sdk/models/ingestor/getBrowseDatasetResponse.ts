@@ -11,10 +11,10 @@ import { FolderNode } from './folderNode';
 
 
 export interface GetBrowseDatasetResponse { 
-    folders?: Array<FolderNode>;
+    folders: Array<FolderNode>;
     /**
      * Total number of folders.
      */
-    total?: number;
+    total: number;
 }
 

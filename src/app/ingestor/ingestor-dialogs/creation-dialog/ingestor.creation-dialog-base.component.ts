@@ -201,6 +201,7 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
     const payload: PostDatasetRequest = {
       metaData: this.createNewTransferData.mergedMetaDataString,
       userToken: this.tokenValue,
+      autoArchive: this.createNewTransferData.autoArchive,
     };
 
     this.store.dispatch(

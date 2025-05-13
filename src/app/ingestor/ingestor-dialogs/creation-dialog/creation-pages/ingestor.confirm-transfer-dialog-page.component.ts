@@ -14,6 +14,7 @@ import {
 import { Store } from "@ngrx/store";
 import { selectIngestionObject } from "state-management/selectors/ingestor.selector";
 import { MatDialog } from "@angular/material/dialog";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 import { IngestorConfirmationDialogComponent } from "ingestor/ingestor-dialogs/confirmation-dialog/ingestor.confirmation-dialog.component";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Subscription } from "rxjs";
@@ -56,6 +57,15 @@ export class IngestorConfirmTransferDialogPageComponent
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+  onAutoArchiveChange($event: MatCheckboxChange): void {
+    this.createNewTransferData.autoArchive = $event.checked;
+
+    this.store.dispatch(
+      fromActions.updateIngestionObject({
+        ingestionObject: this.createNewTransferData,
+      }),
+    );
   }
 
   createMetaDataString(): string {

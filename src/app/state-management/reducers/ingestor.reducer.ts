@@ -156,7 +156,7 @@ const reducer = createReducer(
         ...state.ingestionObject,
         apiInformation: {
           ...state.ingestionObject.apiInformation,
-          ingestionRequestErrorMessage: (err as any).error ?? err.message,
+          ingestionRequestErrorMessage: (err as any).error ?? (err as any).error?.error ?? err.message,
         },
       },
       error: err,

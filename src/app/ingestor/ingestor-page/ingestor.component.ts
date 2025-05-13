@@ -32,6 +32,7 @@ import { INGESTOR_API_ENDPOINTS_V1 } from "shared/sdk/apis/ingestor.service";
 import { Subscription } from "rxjs";
 import { IngestorConfirmationDialogComponent } from "ingestor/ingestor-dialogs/confirmation-dialog/ingestor.confirmation-dialog.component";
 import { IngestorTransferViewDialogComponent } from "ingestor/ingestor-dialogs/transfer-detail-view/ingestor.transfer-detail-view-dialog.component";
+import { fetchScicatTokenAction } from "state-management/actions/user.actions";
 
 @Component({
   selector: "ingestor",
@@ -79,6 +80,7 @@ export class IngestorComponent implements OnInit, OnDestroy {
   scicatUserProfile: any = null;
   authIsDisabled = false;
   healthInfo: OtherHealthResponse = null;
+  tokenValue = "";
 
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
@@ -96,6 +98,11 @@ export class IngestorComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.vm$.subscribe((settings) => {
         this.scicatUserProfile = settings.profile;
+        this.tokenValue = settings.scicatToken;
+
+        if (this.tokenValue === "") {
+          this.store.dispatch(fetchScicatTokenAction());
+        }
       }),
     );
 
@@ -281,7 +288,10 @@ export class IngestorComponent implements OnInit, OnDestroy {
       if (result) {
         this.store.dispatch(
           fromActions.cancelTransfer({
-            transferId: transferId,
+            requestBody: {
+              transferId: transferId,
+              scicatToken: this.tokenValue,
+            },
           }),
         );
       }

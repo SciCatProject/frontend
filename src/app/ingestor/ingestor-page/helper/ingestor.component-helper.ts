@@ -37,6 +37,7 @@ export interface IngestionRequestInformation {
   };
 
   ingestionRequest: PostDatasetResponse | null;
+  autoArchive: boolean;
 }
 
 export interface TransferDataListEntry {
@@ -111,6 +112,7 @@ export class IngestorHelper {
         ingestionRequestErrorMessage: "",
       },
       ingestionRequest: null,
+      autoArchive: true,
     };
   };
 

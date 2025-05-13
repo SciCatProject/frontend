@@ -7,7 +7,6 @@ import {
   DeleteTransferRequest,
   DeleteTransferResponse,
   GetBrowseDatasetResponse,
-  GetDatasetResponse,
   GetExtractorResponse,
   GetTransferResponse,
   OtherHealthResponse,
@@ -44,7 +43,7 @@ export class Ingestor {
     private http: HttpClient,
     public appConfigService: AppConfigService,
     private store: Store,
-  ) {}
+  ) { }
 
   private getRequestOptions() {
     return {
@@ -94,16 +93,16 @@ export class Ingestor {
       );
   }
 
-  cancelTransfer(transferId: string): Observable<DeleteTransferResponse> {
-    const body: DeleteTransferRequest = { transferId: transferId };
-
+  cancelTransfer(
+    requestBody: DeleteTransferRequest,
+  ): Observable<DeleteTransferResponse> {
     return this.store
       .select(selectIngestorEndpoint)
       .pipe(
         switchMap((ingestorEndpoint) =>
           this.http.delete<DeleteTransferResponse>(
             `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.TRANSFER}`,
-            { ...this.getRequestOptions(), body },
+            { ...this.getRequestOptions(), body: requestBody },
           ),
         ),
       );
@@ -162,26 +161,6 @@ export class Ingestor {
         switchMap((ingestorEndpoint) =>
           this.http.get<GetExtractorResponse>(
             `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.EXTRACTOR}`,
-            { ...this.getRequestOptions(), params },
-          ),
-        ),
-      );
-  }
-
-  getAvailableFilePaths(
-    page: number,
-    pageSize: number,
-  ): Observable<GetDatasetResponse> {
-    const params = new HttpParams()
-      .set("page", page.toString())
-      .set("pageSize", pageSize.toString());
-
-    return this.store
-      .select(selectIngestorEndpoint)
-      .pipe(
-        switchMap((ingestorEndpoint) =>
-          this.http.get<GetDatasetResponse>(
-            `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.DATASET}`,
             { ...this.getRequestOptions(), params },
           ),
         ),

@@ -16,6 +16,6 @@ export interface FolderNode {
     name: string;
     path: string;
     children: boolean;
-    probablyDataset?: boolean;
+    probablyDataset: boolean;
 }
 

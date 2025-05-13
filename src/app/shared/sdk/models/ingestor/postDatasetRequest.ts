@@ -18,5 +18,9 @@ export interface PostDatasetRequest {
      * the scicat token for acting on behalf of the user
      */
     userToken: string;
+    /**
+     * whether to autoarchive the dataset. Default is TRUE
+     */
+    autoArchive?: boolean;
 }
 

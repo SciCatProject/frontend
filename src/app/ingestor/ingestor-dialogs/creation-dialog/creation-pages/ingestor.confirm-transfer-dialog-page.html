@@ -53,16 +53,41 @@
   </div>
 
   <div
-    *ngIf="createNewTransferData.ingestionRequest === null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === ''">
-    <p>Confirm Metadata</p>
+    *ngIf="createNewTransferData.editorMode === 'INGESTION' && createNewTransferData.ingestionRequest === null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === ''">
+    <mat-card class="ingestor-card">
+      <mat-card-header class="ingestor-mixed-header">
+        <mat-card-title>Transfer Options</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="ingestor-vertical-layout">
+        <mat-checkbox [(ngModel)]="createNewTransferData.autoArchive"
+          (change)="onAutoArchiveChange($event)"
+          aria-label="Auto Archive">
+          Auto Archive
+        </mat-checkbox>
+        <p class="checkbox-description">
+          Automatically trigger archiving jobs after the data transfer has
+          finished.
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
 
-    <div class="code-editor">
-      <pre class="code">
+  <div
+    *ngIf="createNewTransferData.ingestionRequest === null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === ''">
+    <mat-card class="ingestor-card">
+      <mat-card-header class="ingestor-mixed-header">
+        <mat-card-title>Confirm Metadata</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="ingestor-vertical-layout">
+        <div class="code-editor">
+          <pre class="code">
       <div *ngFor="let line of provideMergeMetaData.split('\n')">
         <code>{{ line }}</code>
       </div>
       </pre>
-    </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 
 </mat-dialog-content>

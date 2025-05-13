@@ -14,5 +14,13 @@ export interface DeleteTransferRequest {
      * id of the transfer that should be cancelled
      */
     transferId: string;
+    /**
+     * if the ingestor is configured to use ExtGlobusService for transfer, this endpoint needs a SciCat token
+     */
+    scicatToken?: string;
+    /**
+     * if the entry needs to be deleted or not, in addition to cancelling it (by default false)
+     */
+    deleteTask?: boolean;
 }
 

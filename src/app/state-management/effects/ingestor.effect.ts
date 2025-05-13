@@ -230,13 +230,14 @@ export class IngestorEffects {
   cancelTransfer$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.cancelTransfer),
-      switchMap(({ transferId }) =>
-        this.ingestor.cancelTransfer(transferId).pipe(
+      switchMap(({ requestBody }) =>
+        this.ingestor.cancelTransfer(requestBody).pipe(
           switchMap(() => [
             showMessageAction({
               message: {
                 type: MessageType.Success,
-                content: "Successfully cancelled transfer: " + transferId,
+                content:
+                  "Successfully cancelled transfer: " + requestBody.transferId,
                 duration: 5000,
               },
             }),
@@ -274,5 +275,5 @@ export class IngestorEffects {
     private actions$: Actions,
     private ingestor: Ingestor,
     private store: Store,
-  ) { }
+  ) {}
 }

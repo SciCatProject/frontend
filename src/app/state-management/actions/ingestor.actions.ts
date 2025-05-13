@@ -8,6 +8,7 @@ import {
   OtherVersionResponse,
   PostDatasetRequest,
   PostDatasetResponse,
+  DeleteTransferRequest,
   UserInfo,
 } from "shared/sdk/models/ingestor/models";
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
@@ -126,7 +127,7 @@ export const resetIngestDataset = createAction(
 
 export const cancelTransfer = createAction(
   "[Ingestor] Cancel Transfer",
-  props<{ transferId: string }>(),
+  props<{ requestBody: DeleteTransferRequest }>(),
 );
 
 export const setRenderViewFromThirdParty = createAction(
