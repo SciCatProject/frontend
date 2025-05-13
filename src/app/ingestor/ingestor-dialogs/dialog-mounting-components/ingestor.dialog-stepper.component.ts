@@ -54,7 +54,7 @@ export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
   constructor(
     private dialog: MatDialog,
     private store: Store,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
@@ -82,11 +82,15 @@ export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
     if (this.activeRenderView) {
       switch (this.activeRenderView) {
         case "requiredOnly":
-          this.store.dispatch(fromActions.setRenderViewFromThirdParty({ renderView: "all" }));
+          this.store.dispatch(
+            fromActions.setRenderViewFromThirdParty({ renderView: "all" }),
+          );
           break;
         case "all":
           this.store.dispatch(
-            fromActions.setRenderViewFromThirdParty({ renderView: "requiredOnly" }),
+            fromActions.setRenderViewFromThirdParty({
+              renderView: "requiredOnly",
+            }),
           );
           break;
         default:

@@ -3,11 +3,20 @@ import {
   JsonFormsAngularService,
   JsonFormsControlWithDetail,
 } from "@jsonforms/angular";
-import { ControlProps } from "@jsonforms/core";
+import {
+  ControlProps,
+  findUISchema,
+  Generate,
+  GroupLayout,
+  setReadonly,
+  UISchemaElement,
+} from "@jsonforms/core";
 import {
   configuredRenderer,
   convertJSONFormsErrorToString,
 } from "../ingestor-metadata-editor-helper";
+import { cloneDeep, startCase } from "lodash-es";
+import isEmpty from "lodash/isEmpty";
 
 @Component({
   selector: "app-object-group-renderer",
@@ -18,10 +27,10 @@ import {
         >{{ objectTitle }}
         <span class="spacer"></span>
         <mat-icon
-          *ngIf="this.innerErrors?.length"
+          *ngIf="this.error !== null && this.error !== ''"
           color="warn"
           matBadgeColor="warn"
-          matTooltip="{{ this.innerErrors }}"
+          matTooltip="{{ this.error }}"
           matTooltipClass="error-message-tooltip"
         >
           error_outline
@@ -29,13 +38,12 @@ import {
       </mat-card-title>
       <mat-card-content>
         <div *ngIf="errorRecursiveStructure === false">
-          <jsonforms
+          <jsonforms-outlet
+            [uischema]="detailUiSchema"
             [schema]="scopedSchema"
-            [data]="data"
-            [renderers]="defaultRenderer"
-            (dataChange)="onInnerJsonFormsChange($event)"
-            (errors)="onInnerErrors($event)"
-          ></jsonforms>
+            [path]="propsPath"
+          >
+          </jsonforms-outlet>
         </div>
 
         <p *ngIf="errorRecursiveStructure">
@@ -48,16 +56,13 @@ import {
 })
 export class CustomObjectControlRendererComponent extends JsonFormsControlWithDetail {
   rendererService: JsonFormsAngularService;
+  detailUiSchema: UISchemaElement;
 
   defaultRenderer = configuredRenderer;
   objectTitle: string;
-  innerErrors: string;
   errorRecursiveStructure: boolean;
 
-  constructor(
-    service: JsonFormsAngularService,
-    private cdr: ChangeDetectorRef,
-  ) {
+  constructor(service: JsonFormsAngularService) {
     super(service);
     this.rendererService = service;
   }
@@ -72,28 +77,45 @@ export class CustomObjectControlRendererComponent extends JsonFormsControlWithDe
       .split(" ")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
-  }
 
-  public onInnerJsonFormsChange(event: any) {
-    if (event !== this.data) {
-      const updatedData =
-        this.rendererService.getState().jsonforms.core.data ?? {};
-
-      // Update the data in the correct path
-      const pathSegments = this.path.split(".");
-      let current = updatedData ?? {};
-      for (let i = 0; i < pathSegments.length - 1; i++) {
-        current = current[pathSegments[i]];
-      }
-      current[pathSegments[pathSegments.length - 1]] = event;
-
-      this.rendererService.setData(updatedData);
+    this.detailUiSchema = findUISchema(
+      undefined,
+      props.schema,
+      props.uischema.scope,
+      props.path,
+      () => {
+        const newSchema = cloneDeep(props.schema);
+        return Generate.uiSchema(
+          newSchema,
+          "VerticalLayout",
+          undefined,
+          this.rootSchema,
+        );
+      },
+      props.uischema,
+      props.rootSchema,
+    );
+    if (isEmpty(props.path)) {
+      this.detailUiSchema.type = "VerticalLayout";
+    } else {
+      (this.detailUiSchema as GroupLayout).label = startCase(props.path);
     }
-  }
+    if (!this.isEnabled()) {
+      setReadonly(this.detailUiSchema);
+    }
 
-  onInnerErrors(errors: any[]) {
-    this.innerErrors = convertJSONFormsErrorToString(errors);
-    this.cdr.detectChanges();
+    // Get error from child elements
+    const path = props.path || "";
+    const allErrors =
+      this.rendererService.getState().jsonforms.core.errors ?? [];
+    const filteredErrors = allErrors.filter(
+      (e) =>
+        e.instancePath === "" ||
+        e.instancePath === "/" + path ||
+        e.instancePath.startsWith("/" + path + "/"),
+    );
+
+    this.error = convertJSONFormsErrorToString(filteredErrors);
   }
 
   isRecursive(): boolean {
