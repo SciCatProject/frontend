@@ -1,0 +1,59 @@
+.ingestor-metadata-editor {
+  width: 100%;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+mat-card {
+  .mat-mdc-card-title {
+    display: flex;
+    padding: 16px;
+  }
+}
+
+.array-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.array-layout > * {
+  flex: 1 1 auto;
+}
+.array-layout-toolbar {
+  display: flex;
+  align-items: center;
+}
+.array-layout-title {
+  margin: 0;
+}
+.array-layout-toolbar > span {
+  flex: 1 1 auto;
+}
+.array-item {
+  padding: 16px;
+}
+::ng-deep .error-message-tooltip {
+  white-space: pre-line;
+}
+
+.custom-input-box {
+  width: 100%;
+}
+
+.quantity-value-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+
+.quantity-value-element {
+  flex: 1 1 calc(50% - 0.5em); /* Two elements per row with gap accounted for */
+  box-sizing: border-box;
+}
+
+.mat-tab-content-renderer {
+  margin-top: 0.5em;
+}

@@ -1,0 +1,31 @@
+.stepper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ingestor-stepper {
+  max-width: 100%;
+}
+
+.dialog-control-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1em;
+}
+
+.control-button-icon {
+  margin: auto;
+}
+
+@media (max-width: 768px) {
+  .stepper {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .stepper div {
+    width: 100%;
+    text-align: center;
+  }
+}
