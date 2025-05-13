@@ -66,20 +66,30 @@ export class IngestorMetadataEditorHelper {
 
 export const convertJSONFormsErrorToString = (error: any): string => {
   let errorString = "";
+  let displayIterNum = 1;
 
-  error.forEach((error, number) => {
-    if (error.message) {
-      const ctrNum = number + 1;
-      errorString +=
-        ctrNum +
-        ": " +
-        (error.instancePath && error.instancePath !== ""
-          ? "@" + error.instancePath + " "
-          : "") +
-        error.message +
-        "\n";
+  for (let counter = 0; counter < error.length; counter++) {
+    const currentError = error[counter];
+
+    if (currentError.message === undefined || currentError.message === null)
+      continue;
+
+    // Filter json forms internal errors
+    if (currentError.message === "must NOT have additional properties") {
+      continue;
     }
-  });
+
+    errorString +=
+      displayIterNum +
+      ". " +
+      (currentError.instancePath && currentError.instancePath !== ""
+        ? "@" + currentError.instancePath + " "
+        : "") +
+      currentError.message +
+      " ";
+
+    displayIterNum++;
+  }
 
   return errorString;
 };

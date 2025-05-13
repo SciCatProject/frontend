@@ -5,7 +5,6 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  ViewChild,
 } from "@angular/core";
 import { JsonSchema } from "@jsonforms/core";
 import {
@@ -21,10 +20,7 @@ import {
 } from "state-management/selectors/ingestor.selector";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Subscription } from "rxjs";
-import {
-  IngestorMetadataEditorComponent,
-  renderView,
-} from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
+import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 
 @Component({
   selector: "ingestor-extractor-metadata-dialog-page",
@@ -32,7 +28,8 @@ import {
   styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
 })
 export class IngestorExtractorMetadataDialogPageComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   private subscriptions: Subscription[] = [];
   metadataSchemaInstrument: JsonSchema;
   metadataSchemaAcquisition: JsonSchema;
@@ -69,7 +66,7 @@ export class IngestorExtractorMetadataDialogPageComponent
   constructor(
     private store: Store,
     private cdr: ChangeDetectorRef,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(

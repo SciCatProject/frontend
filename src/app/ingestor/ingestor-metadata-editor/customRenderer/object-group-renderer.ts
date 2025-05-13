@@ -73,6 +73,7 @@ export class CustomObjectControlRendererComponent extends JsonFormsControlWithDe
     this.errorRecursiveStructure = this.isRecursive();
 
     this.objectTitle = pathTitle
+      .replaceAll(".", " ")
       .replaceAll("_", " ")
       .split(" ")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -110,9 +111,9 @@ export class CustomObjectControlRendererComponent extends JsonFormsControlWithDe
       this.rendererService.getState().jsonforms.core.errors ?? [];
     const filteredErrors = allErrors.filter(
       (e) =>
-        e.instancePath === "" ||
-        e.instancePath === "/" + path ||
-        e.instancePath.startsWith("/" + path + "/"),
+        (e.instancePath === "" && path === "") ||
+        e.instancePath === "/" + path.replaceAll(".", "/") ||
+        e.instancePath.startsWith("/" + path.replaceAll(".", "/") + "/"),
     );
 
     this.error = convertJSONFormsErrorToString(filteredErrors);
