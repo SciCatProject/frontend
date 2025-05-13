@@ -130,8 +130,7 @@ export class IngestorNewTransferDialogPageComponent
     this.createNewTransferData.scicatHeader["dataFormat"] = "root";
     this.createNewTransferData.scicatHeader["owner"] = "User";
 
-    this.createNewTransferData.scicatHeader["principalInvestigator"] =
-      this.userProfile.username;
+    this.createNewTransferData.scicatHeader["principalInvestigators"] = [this.userProfile.username];
     this.createNewTransferData.scicatHeader["investigator"] =
       this.userProfile.username;
     this.createNewTransferData.scicatHeader["ownerEmail"] =

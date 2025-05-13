@@ -23,13 +23,13 @@ import { cloneDeep, isEmpty, startCase } from "lodash-es";
         <span class="spacer"></span>
         <mat-checkbox
           *ngIf="options.includes('null')"
-          [(ngModel)]="nullOptionSelected"
+          [(ngModel)]="notNullOptionSelected"
           (change)="onEnableCheckboxChange($event)"
         >
           Enabled
         </mat-checkbox></mat-card-title
       >
-      <mat-card-content *ngIf="!nullOptionSelected">
+      <mat-card-content *ngIf="notNullOptionSelected">
         <mat-tab-group *ngIf="tabAmount > 1">
           animationDuration="0ms" [selectedIndex]="selectedTabIndex" >
           <mat-tab *ngFor="let option of filteredOptions" label="{{ option }}">
@@ -62,7 +62,7 @@ export class AnyOfRendererComponent extends JsonFormsControl {
   options: string[] = [];
   filteredOptions: string[] = [];
   anyOfTitle: string;
-  nullOptionSelected = false;
+  notNullOptionSelected = false;
   selectedTabIndex = 0; // default value
   tabAmount = 0; // max tabs
 
@@ -85,7 +85,7 @@ export class AnyOfRendererComponent extends JsonFormsControl {
 
     if (this.options.includes("null") && !props.data) {
       this.selectedTabIndex = this.options.indexOf("null");
-      this.nullOptionSelected = true;
+      this.notNullOptionSelected = false;
     }
 
     this.filteredOptions = this.options.filter((option) => option !== "null");
@@ -140,7 +140,7 @@ export class AnyOfRendererComponent extends JsonFormsControl {
   }
 
   public onEnableCheckboxChange(event: MatCheckboxChange) {
-    this.nullOptionSelected = !event.checked;
+    this.notNullOptionSelected = event.checked;
 
     const updatedData =
       this.rendererService.getState().jsonforms.core.data ?? {};
@@ -151,7 +151,7 @@ export class AnyOfRendererComponent extends JsonFormsControl {
     for (let i = 0; i < pathSegments.length - 1; i++) {
       current = current[pathSegments[i]];
     }
-    current[pathSegments[pathSegments.length - 1]] = this.nullOptionSelected
+    current[pathSegments[pathSegments.length - 1]] = !this.notNullOptionSelected
       ? null
       : {};
 

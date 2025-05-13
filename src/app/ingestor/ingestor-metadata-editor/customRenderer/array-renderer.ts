@@ -4,10 +4,13 @@ import {
   JsonFormsAbstractControl,
 } from "@jsonforms/angular";
 import {
+  arrayDefaultTranslations,
   ArrayLayoutProps,
   ArrayTranslations,
   createDefaultValue,
+  defaultJsonFormsI18nState,
   findUISchema,
+  getArrayTranslations,
   JsonFormsState,
   mapDispatchToArrayControlProps,
   mapStateToArrayLayoutProps,
@@ -115,7 +118,7 @@ export class ArrayLayoutRendererCustom
   implements OnInit, OnDestroy {
   noData: boolean;
   minOne: boolean;
-  translations: ArrayTranslations;
+  translations: ArrayTranslations = {};
   addItem: (path: string, value: any) => () => void;
   moveItemUp: (path: string, index: number) => () => void;
   moveItemDown: (path: string, index: number) => () => void;
@@ -127,9 +130,17 @@ export class ArrayLayoutRendererCustom
   constructor(jsonFormsService: JsonFormsAngularService) {
     super(jsonFormsService);
   }
-  mapToProps(state: JsonFormsState): StatePropsOfArrayLayout {
+  mapToProps(state: JsonFormsState): StatePropsOfArrayLayout & { translations: ArrayTranslations } {
     const props = mapStateToArrayLayoutProps(state, this.getOwnProps());
-    return { ...props };
+    const t =
+      state.jsonforms.i18n?.translate ?? defaultJsonFormsI18nState.translate;
+    const translations = getArrayTranslations(
+      t,
+      arrayDefaultTranslations,
+      props.i18nKeyPrefix,
+      props.label
+    );
+    return { ...props, translations };
   }
   remove(index: number): void {
     this.removeItems(this.propsPath, [index])();
@@ -157,7 +168,8 @@ export class ArrayLayoutRendererCustom
     this.moveItemDown = moveDown;
     this.removeItems = removeItems;
   }
-  mapAdditionalProps(props: ArrayLayoutProps) {
+  mapAdditionalProps(props: ArrayLayoutProps & { translations: ArrayTranslations }) {
+    this.translations = props.translations;
     this.noData = !props.data || props.data === 0;
     this.uischemas = props.uischemas;
     this.minOne = props.required;

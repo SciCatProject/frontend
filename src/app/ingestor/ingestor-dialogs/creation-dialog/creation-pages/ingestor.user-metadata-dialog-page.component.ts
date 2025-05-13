@@ -5,7 +5,6 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  ViewChild,
 } from "@angular/core";
 import { JsonSchema } from "@jsonforms/core";
 import {
@@ -23,7 +22,6 @@ import * as fromActions from "state-management/actions/ingestor.actions";
 import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 import {
-  IngestorMetadataEditorComponent,
   renderView,
 } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 

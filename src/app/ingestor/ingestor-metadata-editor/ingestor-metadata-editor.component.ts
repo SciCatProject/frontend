@@ -49,7 +49,7 @@ export class IngestorMetadataEditorComponent implements OnInit {
     this.reducedSchema =
       IngestorMetadataEditorHelper.reduceToRequiredProperties(this.schema);
 
-    console.log(this.schema);
+    //console.log(this.schema);
   }
 
   updateVisualData() {
