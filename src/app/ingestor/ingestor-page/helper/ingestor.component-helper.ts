@@ -187,7 +187,7 @@ export const getJsonSchemaFromDto = () => {
     description: "--string --optional",
     license: "--string --optional",
     keywords: [],
-    principalInvestigators: [],
+    principalInvestigators: null, // skip
     scientificMetadata: {},
     ownerEmail: "--mail --optional",
 
