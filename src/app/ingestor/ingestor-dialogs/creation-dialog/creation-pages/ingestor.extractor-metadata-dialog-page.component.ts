@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from "@angular/core";
 import { JsonSchema } from "@jsonforms/core";
 import {
@@ -20,7 +21,10 @@ import {
 } from "state-management/selectors/ingestor.selector";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Subscription } from "rxjs";
-import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
+import {
+  IngestorMetadataEditorComponent,
+  renderView,
+} from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 
 @Component({
   selector: "ingestor-extractor-metadata-dialog-page",
@@ -43,6 +47,11 @@ export class IngestorExtractorMetadataDialogPageComponent
 
   @Output() nextStep = new EventEmitter<void>();
   @Output() backStep = new EventEmitter<void>();
+
+  @ViewChild("instrumentMetadataEditor")
+  instrumentMetadataEditor: IngestorMetadataEditorComponent;
+  @ViewChild("acquisitionMetadataEditor")
+  acquisitionMetadataEditor: IngestorMetadataEditorComponent;
 
   activeRenderView: renderView | null = null;
   updateEditorFromThirdParty = false;
@@ -97,7 +106,14 @@ export class IngestorExtractorMetadataDialogPageComponent
     this.subscriptions.push(
       this.renderView$.subscribe((renderView) => {
         if (renderView) {
-          this.activeRenderView = renderView;
+          // Check if renderView changed
+          if (this.activeRenderView !== renderView) {
+            this.activeRenderView = renderView;
+
+            // Update visual data object with the new renderView (changes the schema)
+            this.instrumentMetadataEditor.updateVisualData();
+            this.acquisitionMetadataEditor.updateVisualData();
+          }
         }
       }),
     );

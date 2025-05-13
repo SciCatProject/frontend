@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from "@angular/core";
 import { JsonSchema } from "@jsonforms/core";
 import {
@@ -21,7 +22,10 @@ import {
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
-import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
+import {
+  IngestorMetadataEditorComponent,
+  renderView,
+} from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 
 @Component({
   selector: "ingestor-user-metadata-dialog",
@@ -42,6 +46,13 @@ export class IngestorUserMetadataDialogPageComponent
 
   @Output() nextStep = new EventEmitter<void>();
   @Output() backStep = new EventEmitter<void>();
+
+  @ViewChild("scicatHeaderEditor")
+  scicatHeaderEditor: IngestorMetadataEditorComponent;
+  @ViewChild("organizationalMetadataEditor")
+  organizationalMetadataEditor: IngestorMetadataEditorComponent;
+  @ViewChild("sampleMetadataEditor")
+  sampleMetadataEditor: IngestorMetadataEditorComponent;
 
   metadataSchemaOrganizational: JsonSchema;
   metadataSchemaSample: JsonSchema;
@@ -79,8 +90,6 @@ export class IngestorUserMetadataDialogPageComponent
           this.metadataSchemaSample =
             this.createNewTransferData.selectedResolvedDecodedSchema.properties.sample;
           this.scicatHeaderSchema = getJsonSchemaFromDto();
-
-          this.cdr.markForCheck();
         }
       }),
     );
@@ -88,7 +97,16 @@ export class IngestorUserMetadataDialogPageComponent
     this.subscriptions.push(
       this.renderView$.subscribe((renderView) => {
         if (renderView) {
-          this.activeRenderView = renderView;
+          console.log(renderView);
+          // Check if renderView changed
+          if (this.activeRenderView !== renderView) {
+            this.activeRenderView = renderView;
+
+            // Update visual data object with the new renderView (changes the schema)
+            this.scicatHeaderEditor?.updateVisualData();
+            this.organizationalMetadataEditor?.updateVisualData();
+            this.sampleMetadataEditor?.updateVisualData();
+          }
         }
       }),
     );
@@ -181,8 +199,6 @@ export class IngestorUserMetadataDialogPageComponent
   }
 
   validateNextButton(): void {
-    this.uiNextButtonReady = this.isSciCatHeaderOk; /* &&
-      this.isOrganizationalMetadataOk &&
-      this.isSampleInformationOk;*/
+    this.uiNextButtonReady = this.isSciCatHeaderOk;
   }
 }

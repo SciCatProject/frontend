@@ -1,12 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Output,
-  Input,
-  OnInit,
-  OnChanges,
-  ChangeDetectorRef,
-} from "@angular/core";
+import { Component, EventEmitter, Output, Input, OnInit } from "@angular/core";
 import { JsonSchema } from "@jsonforms/core";
 import {
   configuredRenderer,
@@ -51,6 +43,14 @@ export class IngestorMetadataEditorComponent implements OnInit {
   reducedSchema: JsonSchema = {};
 
   ngOnInit() {
+    this.updateVisualData();
+
+    this.reducedSchema =
+      IngestorMetadataEditorHelper.reduceToRequiredProperties(this.schema);
+    //console.log(this.schema);
+  }
+
+  updateVisualData() {
     // Do a deep clone
     this.visualData = JSON.parse(JSON.stringify(this.data));
 
@@ -73,11 +73,9 @@ export class IngestorMetadataEditorComponent implements OnInit {
       });
     };
 
-    initializeVisualData(this.schema, this.visualData);
-
-    this.reducedSchema =
-      IngestorMetadataEditorHelper.reduceToRequiredProperties(this.schema);
-    //console.log(this.schema);
+    if (this.schema !== undefined && this.data !== undefined) {
+      initializeVisualData(this.schema, this.visualData);
+    }
   }
 
   get combinedRenderers() {

@@ -58,7 +58,7 @@
               'expand_less' : 'expand_more' }}</mat-icon>
           </mat-card-header>
           <mat-card-content *ngIf="isCardContentVisible.instrument">
-            <app-metadata-editor *ngIf="!updateEditorFromThirdParty"
+            <app-metadata-editor #instrumentMetadataEditor *ngIf="!updateEditorFromThirdParty"
               [schema]="metadataSchemaInstrument"
               [renderView]="activeRenderView"
               [data]="createNewTransferData.extractorMetaData['instrument']"
@@ -83,7 +83,7 @@
               'expand_less' : 'expand_more' }}</mat-icon>
           </mat-card-header>
           <mat-card-content *ngIf="isCardContentVisible.acquisition">
-            <app-metadata-editor *ngIf="!updateEditorFromThirdParty"
+            <app-metadata-editor #acquisitionMetadataEditor *ngIf="!updateEditorFromThirdParty"
               [schema]="metadataSchemaAcquisition"
               [renderView]="activeRenderView"
               [data]="createNewTransferData.extractorMetaData['acquisition']"
