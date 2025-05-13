@@ -24,12 +24,13 @@ import { OwnershipService } from "shared/services/ownership.service";
 import {
   DatasetClass,
   OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
   selector: "reduce",
   templateUrl: "./reduce.component.html",
   styleUrls: ["./reduce.component.scss"],
+  standalone: false,
 })
 export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
   dataset: OutputDatasetObsoleteDto | undefined;

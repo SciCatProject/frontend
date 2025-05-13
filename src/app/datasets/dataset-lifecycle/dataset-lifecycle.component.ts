@@ -2,7 +2,7 @@ import { Component, OnInit, OnChanges, SimpleChange } from "@angular/core";
 import {
   DatasetClass,
   OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import {
   trigger,
   state,
@@ -39,6 +39,7 @@ export interface HistoryItem {
       ),
     ]),
   ],
+  standalone: false,
 })
 export class DatasetLifecycleComponent implements OnInit, OnChanges {
   appConfig = this.appConfigService.getConfig();

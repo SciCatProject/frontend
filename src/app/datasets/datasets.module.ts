@@ -18,13 +18,7 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatCheckboxModule } from "@angular/material/checkbox";
-import {
-  DateAdapter,
-  MatNativeDateModule,
-  MatOptionModule,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from "@angular/material/core";
+import { MatOptionModule } from "@angular/material/core";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatGridListModule } from "@angular/material/grid-list";
@@ -51,7 +45,7 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { DatablocksComponent } from "./datablocks-table/datablocks-table.component";
 import { DatafilesComponent } from "./datafiles/datafiles.component";
 import { JsonScientificMetadataComponent } from "./jsonScientificMetadata/jsonScientificMetadata.component";
-import { DatasetDetailComponent } from "./dataset-detail/dataset-detail.component";
+import { DatasetDetailComponent } from "./dataset-detail/dataset-detail/dataset-detail.component";
 import { DatasetTableComponent } from "./dataset-table/dataset-table.component";
 import { DatasetsFilterComponent } from "./datasets-filter/datasets-filter.component";
 import { AddDatasetDialogComponent } from "./add-dataset-dialog/add-dataset-dialog.component";
@@ -59,7 +53,6 @@ import { DatasetTableSettingsComponent } from "./dataset-table-settings/dataset-
 import { DatasetTableActionsComponent } from "./dataset-table-actions/dataset-table-actions.component";
 import { DatasetLifecycleComponent } from "./dataset-lifecycle/dataset-lifecycle.component";
 import { SampleEditComponent } from "./sample-edit/sample-edit.component";
-import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from "ngx-material-luxon";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { ShareDialogComponent } from "./share-dialog/share-dialog.component";
 import { UserEffects } from "state-management/effects/user.effects";
@@ -90,7 +83,8 @@ import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
 import { FiltersModule } from "shared/modules/filters/filters.module";
 import { userReducer } from "state-management/reducers/user.reducer";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-
+import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
+import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
 @NgModule({
   imports: [
     CommonModule,
@@ -111,7 +105,6 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
     MatIconModule,
     MatInputModule,
     MatListModule,
-    MatNativeDateModule,
     MatOptionModule,
     MatPaginatorModule,
     MatRadioModule,
@@ -160,7 +153,9 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
     DatablocksComponent,
     JsonScientificMetadataComponent,
     DatafilesComponent,
+    DatasetDetailWrapperComponent,
     DatasetDetailComponent,
+    DatasetDetailDynamicComponent,
     DatasetTableComponent,
     DatasetsFilterComponent,
     PublishComponent,
@@ -184,21 +179,15 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
     ArchivingService,
     AsyncPipe,
     ADAuthService,
+    SharedScicatFrontendModule,
     FileSizePipe,
-    {
-      provide: DateAdapter,
-      useClass: LuxonDateAdapter,
-      deps: [MAT_DATE_LOCALE],
-    },
-    { provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS },
-    { provide: MAT_DATE_LOCALE, useValue: "sv-SE" },
   ],
   exports: [
     DashboardComponent,
     DatablocksComponent,
     JsonScientificMetadataComponent,
     DatafilesComponent,
-    DatasetDetailComponent,
+    DatasetDetailWrapperComponent,
     DatasetTableComponent,
     DatasetsFilterComponent,
   ],

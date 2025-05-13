@@ -1,0 +1,28 @@
+#print-section {
+  text-align: center;
+  margin: 30px;
+}
+
+h2 {
+  text-align: center;
+}
+
+.param-list {
+  width: 100%;
+  display: inline-block;
+  border: solid gray;
+  border-width: 0px 0px 2px 0;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+.param {
+  display: inline-block;
+  margin: 10px;
+}
+
+.print-table {
+  width: 100%;
+  th.mat-mdc-header-cell {
+    font-size: initial;
+  }
+}

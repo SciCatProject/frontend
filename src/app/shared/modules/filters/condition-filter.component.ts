@@ -6,6 +6,7 @@ import { ScientificCondition } from "state-management/models";
   selector: "app-condition-filter",
   templateUrl: "condition-filter.component.html",
   styleUrls: ["condition-filter.component.scss"],
+  standalone: false,
 })
 export class ConditionFilterComponent {
   @Input() condition: ScientificCondition;
@@ -35,6 +36,8 @@ export class ConditionFilterComponent {
         ? `"${condition.rhs}"`
         : condition.rhs;
 
-    return `${condition.lhs} ${relationSymbol} ${rhsValue} ${condition.unit}`;
+    const unit = condition.unit || "";
+
+    return `${condition.lhs} ${relationSymbol} ${rhsValue} ${unit}`;
   }
 }

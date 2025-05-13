@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { PublishedData } from "@scicatproject/scicat-sdk-ts";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
@@ -15,6 +15,7 @@ import { AppConfigService } from "app-config.service";
   selector: "publisheddata-details",
   templateUrl: "./publisheddata-details.component.html",
   styleUrls: ["./publisheddata-details.component.scss"],
+  standalone: false,
 })
 export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   currentData$ = this.store.select(selectCurrentPublishedData);

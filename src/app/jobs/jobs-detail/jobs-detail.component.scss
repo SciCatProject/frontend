@@ -1,20 +1,28 @@
-.job-detail {
-  mat-card {
-    margin: 1em;
+@use "sass:map";
+@use "@angular/material" as mat;
 
-    table {
-      td {
-        padding: 0.3em;
-      }
+mat-card {
+  margin: 1em;
 
-      th {
-        text-align: left;
-        padding-right: 0.5em;
+  .section-icon {
+    height: auto !important;
+    width: auto !important;
 
-        mat-icon {
-          vertical-align: middle;
-        }
-      }
+    mat-icon {
+      vertical-align: middle;
+    }
+  }
+
+  table {
+    th {
+      min-width: 10rem;
+      padding-right: 0.5rem;
+      text-align: left;
+    }
+
+    td {
+      width: 100%;
+      padding: 0.5rem 0;
     }
   }
 }

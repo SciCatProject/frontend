@@ -15,6 +15,7 @@ import { getFilterLabel } from "./utils";
   selector: "app-pid-filter",
   templateUrl: `./pid-filter.component.html`,
   styleUrls: [`./pid-filter.component.scss`],
+  standalone: false,
 })
 export class PidFilterComponent
   extends ClearableInputComponent<string>
@@ -24,6 +25,7 @@ export class PidFilterComponent
   private subscription: Subscription;
   readonly componentName: string = "PidFilter";
   readonly label: string = "Pid Filter";
+  readonly tooltipText: string = "Search by dataset's Persistent Identifier";
 
   appConfig = this.appConfigService.getConfig();
 

@@ -1,0 +1,15 @@
+{
+  "LABEL": {
+    "name": ""
+  },
+  "CHECKS": {
+    "NOTE": "You can test the regex here: https://regex101.com/r/nDeps5/1",
+    "regexp": "(^(?<type>build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test|BREAKING CHANGE)(?<scope>\\([\\w\\s*-]+\\))?(?<breaking_change>!?): (?<body>([a-z]).+[^.|\\s])$)",
+    "regexpFlags": "gm"
+  },
+  "MESSAGES": {
+    "success": "All OK",
+    "failure": "PR title not following the semantic-release guidelines (<type>(<scope>): <subject>). Please check https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines for more information.",
+    "notice": ""
+  }
+}

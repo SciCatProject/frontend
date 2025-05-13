@@ -31,7 +31,7 @@ import {
 } from "state-management/actions/samples.actions";
 
 import { SampleEditComponent } from "./sample-edit.component";
-import { SampleClass } from "@scicatproject/scicat-sdk-ts";
+import { SampleClass } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("SampleEditComponent", () => {
   let component: SampleEditComponent;

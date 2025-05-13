@@ -24,13 +24,14 @@ import {
 } from "state-management/selectors/user.selectors";
 import { MessageType } from "state-management/models";
 import { AppConfigService, AppConfig as Config } from "app-config.service";
-import { Configuration } from "@scicatproject/scicat-sdk-ts";
+import { Configuration } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
   loading$ = this.store.select(selectIsLoading);

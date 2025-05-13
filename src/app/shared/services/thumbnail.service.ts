@@ -3,7 +3,7 @@ import { Store } from "@ngrx/store";
 import { distinctUntilChanged, firstValueFrom } from "rxjs";
 import { selectDatasetsPerPage } from "state-management/selectors/datasets.selectors";
 import { AppConfigService } from "app-config.service";
-import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "./attachment.service";
 
 interface ThumbnailCache {
@@ -61,7 +61,7 @@ export class ThumbnailService {
 
     try {
       const res = await firstValueFrom(
-        this.datasetApi.datasetsControllerThumbnail(pid),
+        this.datasetApi.datasetsControllerThumbnailV3(pid),
       );
       const thumbnail = this.attachmentService.getImageUrl(res?.thumbnail);
 

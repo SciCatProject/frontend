@@ -4,6 +4,7 @@ import {
   Component,
   OnDestroy,
 } from "@angular/core";
+import { Router } from "@angular/router";
 import { SciCatDataSource } from "../../shared/services/scicat.datasource";
 import { ScicatDataService } from "../../shared/services/scicat-data-service";
 import { ExportExcelService } from "../../shared/services/export-excel.service";
@@ -15,6 +16,7 @@ import { JobsTableData } from "jobs/jobs-dashboard/jobs-dashboard.component";
   selector: "app-jobs-new-dashboard",
   templateUrl: "./jobs-dashboard-new.component.html",
   styleUrls: ["./jobs-dashboard-new.component.scss"],
+  standalone: false,
 })
 export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
   // not needed, date by default is shown in local time and using the locale of the browser (if installed, see app.module.ts)
@@ -61,6 +63,7 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
       label: "Parameters",
       format: "json",
       canSort: false,
+      matchMode: "contains",
       hideOrder: 4,
     },
     {
@@ -77,7 +80,8 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
       icon: "list",
       label: "Datasets",
       format: "json",
-      canSort: true,
+      canSort: false,
+      matchMode: "contains",
       hideOrder: 6,
     },
     {
@@ -85,7 +89,8 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
       icon: "work_outline",
       label: "Result",
       format: "json",
-      canSort: true,
+      canSort: false,
+      matchMode: "contains",
       hideOrder: 7,
     },
   ];
@@ -102,6 +107,7 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
     private cdRef: ChangeDetectorRef,
     private dataService: ScicatDataService,
     private exportService: ExportExcelService,
+    private router: Router,
   ) {
     this.dataSource = new SciCatDataSource(
       this.appConfigService,
@@ -120,9 +126,7 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
   }
 
   onRowClick(job: JobsTableData) {
-    // currently deactivated, no extra data available
-    /*     console.log("Row clicked:", job);
     const id = encodeURIComponent(job.id);
-    this.router.navigateByUrl("/user/jobs/" + id); */
+    this.router.navigateByUrl("/user/jobs/" + id);
   }
 }

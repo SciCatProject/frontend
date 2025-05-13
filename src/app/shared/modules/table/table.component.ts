@@ -39,6 +39,7 @@ export interface CheckboxEvent {
   templateUrl: "./table.component.html",
   styleUrls: ["./table.component.scss"],
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class TableComponent implements OnInit {
   @Input() data: any[] | null = [];

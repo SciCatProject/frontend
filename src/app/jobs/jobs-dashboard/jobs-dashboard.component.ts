@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { JobClass } from "@scicatproject/scicat-sdk-ts";
+import { JobClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { Subscription } from "rxjs";
 import {
   selectJobs,
@@ -40,6 +40,7 @@ export interface JobsTableData {
   selector: "app-jobs-dashboard",
   templateUrl: "./jobs-dashboard.component.html",
   styleUrls: ["./jobs-dashboard.component.scss"],
+  standalone: false,
 })
 export class JobsDashboardComponent implements OnInit, OnDestroy {
   jobsCount$ = this.store.select(selectJobsCount);
@@ -95,14 +96,11 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     let tableData: JobsTableData[] = [];
     if (jobs) {
       tableData = jobs.map((job) => ({
-        id: job._id,
-        initiator: job.emailJobInitiator,
+        id: job.id,
+        initiator: job.ownerUser,
         type: job.type,
-        createdAt: this.datePipe.transform(
-          job.creationTime,
-          "yyyy-MM-dd HH:mm",
-        ),
-        statusMessage: job.jobStatusMessage,
+        createdAt: this.datePipe.transform(job.createdAt, "yyyy-MM-dd HH:mm"),
+        statusMessage: job.statusMessage,
       }));
     }
     return tableData;

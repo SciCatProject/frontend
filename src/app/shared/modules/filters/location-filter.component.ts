@@ -23,6 +23,7 @@ import { AppConfigService } from "app-config.service";
   selector: "app-location-filter",
   templateUrl: "location-filter.component.html",
   styleUrls: ["location-filter.component.scss"],
+  standalone: false,
 })
 export class LocationFilterComponent
   extends ClearableInputComponent
@@ -32,6 +33,7 @@ export class LocationFilterComponent
   protected readonly getFacetCount = getFacetCount;
   readonly componentName: string = "LocationFilter";
   readonly label: string = "Location Filter";
+  readonly tooltipText: string = "Filters datasets by location";
 
   appConfig = this.appConfigService.getConfig();
 

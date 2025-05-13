@@ -23,6 +23,7 @@ import { AppConfigService } from "app-config.service";
   selector: "app-group-filter",
   templateUrl: "group-filter.component.html",
   styleUrls: ["group-filter.component.scss"],
+  standalone: false,
 })
 export class GroupFilterComponent
   extends ClearableInputComponent
@@ -32,6 +33,7 @@ export class GroupFilterComponent
   protected readonly getFacetCount = getFacetCount;
   readonly componentName: string = "GroupFilter";
   readonly label: string = "Group Filter";
+  readonly tooltipText: string = "Filters datasets by group";
 
   appConfig = this.appConfigService.getConfig();
 

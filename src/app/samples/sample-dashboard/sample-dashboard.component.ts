@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { SampleClass } from "@scicatproject/scicat-sdk-ts";
+import { SampleClass } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   changePageAction,
   fetchSamplesAction,
@@ -33,6 +33,7 @@ import { AppConfigService } from "app-config.service";
   selector: "sample-dashboard",
   templateUrl: "./sample-dashboard.component.html",
   styleUrls: ["./sample-dashboard.component.scss"],
+  standalone: false,
 })
 export class SampleDashboardComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectSampleDashboardPageViewModel);
@@ -100,7 +101,6 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         if (res) {
           const { data } = res;
-          console.log({ data });
           this.store.dispatch(
             addCharacteristicsFilterAction({ characteristic: data }),
           );

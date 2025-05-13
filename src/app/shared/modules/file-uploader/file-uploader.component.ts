@@ -1,8 +1,15 @@
-import { Component, Output, EventEmitter, Input } from "@angular/core";
+import {
+  Component,
+  Output,
+  EventEmitter,
+  Input,
+  ViewChild,
+  ElementRef,
+} from "@angular/core";
 import { Store } from "@ngrx/store";
 import { AppConfigService } from "app-config.service";
 import saveAs from "file-saver";
-import { Attachment } from "@scicatproject/scicat-sdk-ts";
+import { OutputAttachmentV3Dto } from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "shared/services/attachment.service";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Message, MessageType } from "state-management/models";
@@ -23,15 +30,19 @@ export interface SubmitCaptionEvent {
   selector: "app-file-uploader",
   templateUrl: "./file-uploader.component.html",
   styleUrls: ["./file-uploader.component.scss"],
+  standalone: false,
 })
 export class FileUploaderComponent {
   appConfig = this.appConfigService.getConfig();
   maxFileUploadSizeInMb = 16;
 
-  @Input() attachments: Attachment[] = [];
+  @Input() attachments: OutputAttachmentV3Dto[] = [];
+  @Input() isOwner: boolean;
   @Output() filePicked = new EventEmitter<PickedFile>();
   @Output() submitCaption = new EventEmitter<SubmitCaptionEvent>();
   @Output() deleteAttachment = new EventEmitter<string>();
+
+  @ViewChild("fileDropRef") fileDropRef: ElementRef<HTMLInputElement>;
 
   constructor(
     private store: Store,
@@ -92,6 +103,12 @@ export class FileUploaderComponent {
     this.onFileDropped(files);
   }
 
+  triggerFileDrop(): void {
+    if (this.fileDropRef) {
+      this.fileDropRef.nativeElement.click();
+    }
+  }
+
   onSubmitCaption(attachmentId: string, caption: string) {
     const event: SubmitCaptionEvent = {
       attachmentId,
@@ -116,7 +133,7 @@ export class FileUploaderComponent {
     this.attachmentService.openAttachment(encoded);
   }
 
-  onDownloadAttachment(attachment: Attachment) {
+  onDownloadAttachment(attachment: OutputAttachmentV3Dto) {
     const mimeType = this.base64MimeType(attachment.thumbnail);
     if (!mimeType) {
       throw new Error(

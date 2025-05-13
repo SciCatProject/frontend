@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Instrument } from "@scicatproject/scicat-sdk-ts";
+import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   fetchInstrumentsAction,
   changePageAction,
@@ -20,6 +20,7 @@ import { Router } from "@angular/router";
   selector: "app-instruments-dashboard",
   templateUrl: "./instruments-dashboard.component.html",
   styleUrls: ["./instruments-dashboard.component.scss"],
+  standalone: false,
 })
 export class InstrumentsDashboardComponent implements OnInit {
   vm$ = this.store.select(selectInstrumentsDashboardPageViewModel).pipe(

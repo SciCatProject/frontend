@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { DatasetsService, Policy } from "@scicatproject/scicat-sdk-ts";
+import { DatasetsService, Policy } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   TableColumn,
   PageChangeEvent,
@@ -33,6 +33,7 @@ import { GenericFilters } from "state-management/models";
   selector: "app-policies-dashboard",
   templateUrl: "./policies-dashboard.component.html",
   styleUrls: ["./policies-dashboard.component.scss"],
+  standalone: false,
 })
 export class PoliciesDashboardComponent implements OnInit {
   vm$ = this.store.select(selectPoliciesDashboardPageViewModel);
@@ -196,7 +197,7 @@ export class PoliciesDashboardComponent implements OnInit {
       // if datasets already exist
       this.selectedGroups.forEach((group) => {
         this.datasetService
-          .datasetsControllerCount(`{ "ownerGroup": "${group}" }`)
+          .datasetsControllerCountV3(`{ "ownerGroup": "${group}" }`)
           .pipe(
             map((count) => {
               if (count) {

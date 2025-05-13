@@ -24,6 +24,7 @@ import { AppConfigService } from "app-config.service";
   selector: "app-keyword-filter",
   templateUrl: "keyword-filter.component.html",
   styleUrls: ["keyword-filter.component.scss"],
+  standalone: false,
 })
 export class KeywordFilterComponent
   extends ClearableInputComponent
@@ -33,6 +34,7 @@ export class KeywordFilterComponent
   protected readonly getFacetId = getFacetId;
   readonly componentName: string = "KeywordFilter";
   readonly label: string = "Keyword Filter";
+  readonly tooltipText: string = "Filters datasets by keyword";
 
   appConfig = this.appConfigService.getConfig();
 

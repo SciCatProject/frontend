@@ -9,6 +9,7 @@ import { AppConfigService } from "app-config.service";
   selector: "app-files-dashboard",
   templateUrl: "./files-dashboard.component.html",
   styleUrls: ["./files-dashboard.component.scss"],
+  standalone: false,
 })
 export class FilesDashboardComponent implements OnDestroy {
   columns: Column[] = [
@@ -97,7 +98,5 @@ export class FilesDashboardComponent implements OnDestroy {
     this.dataSource.disconnectExportData();
   }
 
-  onRowClick(file: any) {
-    console.log("Row clicked:", file);
-  }
+  onRowClick(file: any) {}
 }

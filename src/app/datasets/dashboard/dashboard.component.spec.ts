@@ -41,9 +41,9 @@ import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import {
-  CreateDerivedDatasetObsoleteDto,
+  DatasetsControllerCreateV3Request,
   ReturnedUserDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 class MockMatDialog {
   open() {
@@ -86,7 +86,7 @@ describe("DashboardComponent", () => {
         MatSidenavModule,
         StoreModule.forRoot({}),
       ],
-      declarations: [DashboardComponent, MatSidenav],
+      declarations: [DashboardComponent],
       providers: [
         provideMockStore({
           selectors: [
@@ -241,10 +241,10 @@ describe("DashboardComponent", () => {
         authStrategy: "local",
       });
 
-      const dataset: CreateDerivedDatasetObsoleteDto = {
+      const dataset: DatasetsControllerCreateV3Request = {
         accessGroups: [],
         contactEmail: currentUser.email,
-        creationTime: new Date().toString(),
+        creationTime: new Date().toISOString(),
         datasetName: "Test Name",
         description: "Test description",
         isPublished: false,
@@ -261,6 +261,8 @@ describe("DashboardComponent", () => {
         scientificMetadata: {},
         usedSoftware: ["test software"],
         numberOfFilesArchived: 0,
+        creationLocation: undefined,
+        principalInvestigator: undefined,
       };
 
       component.currentUser = currentUser;
@@ -269,7 +271,11 @@ describe("DashboardComponent", () => {
       component.openDialog();
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(addDatasetAction({ dataset }));
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        addDatasetAction({
+          dataset: dataset,
+        }),
+      );
     });
   });
 

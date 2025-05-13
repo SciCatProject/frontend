@@ -22,7 +22,10 @@ import {
   selectIsLoading,
   selectIsLoggedIn,
 } from "state-management/selectors/user.selectors";
-import { CreateUserJWT, UsersService } from "@scicatproject/scicat-sdk-ts";
+import {
+  CreateUserJWT,
+  UsersService,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { MatDialog } from "@angular/material/dialog";
@@ -38,6 +41,7 @@ import { AuthService } from "shared/services/auth/auth.service";
   selector: "datafiles",
   templateUrl: "./datafiles.component.html",
   styleUrls: ["./datafiles.component.scss"],
+  standalone: false,
 })
 export class DatafilesComponent
   implements OnDestroy, AfterViewInit, AfterViewChecked
@@ -170,7 +174,6 @@ export class DatafilesComponent
       item.selected = selected.includes(item.path);
       return item;
     });
-    console.log(files);
     this.files = [...files];
   }
 
@@ -281,7 +284,7 @@ export class DatafilesComponent
     }
     if (!this.jwt) {
       this.subscriptions.push(
-        this.usersService.usersControllerGetUserJWT().subscribe((jwt) => {
+        this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
           this.jwt = jwt;
           this[`${form}Element`].nativeElement.jwt.value = jwt.jwt;
           this[`${form}Element`].nativeElement.submit();
@@ -313,6 +316,7 @@ export class DatafilesComponent
               files: this.getSelectedFiles(),
             },
           ],
+          jobParams: {}, // TODO: job release back-ward compatibility issue
         };
         this.store.dispatch(submitJobAction({ job: data }));
       }

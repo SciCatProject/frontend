@@ -1,11 +1,12 @@
 import { Component, Input } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
-import { Datablock } from "@scicatproject/scicat-sdk-ts";
+import { Datablock } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
   selector: "datablocks-table",
   templateUrl: "./datablocks-table.component.html",
   styleUrls: ["./datablocks-table.component.scss"],
+  standalone: false,
 })
 export class DatablocksComponent {
   @Input()
@@ -19,7 +20,5 @@ export class DatablocksComponent {
     this.blockSource = new MatTableDataSource(this.datablocks);
   }
 
-  onSelect(row: Record<string, unknown>) {
-    console.log(row);
-  }
+  onSelect(row: Record<string, unknown>) {}
 }

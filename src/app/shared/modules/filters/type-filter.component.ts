@@ -23,6 +23,7 @@ import { FilterComponentInterface } from "./interface/filter-component.interface
   selector: "app-type-filter",
   templateUrl: "type-filter.component.html",
   styleUrls: ["type-filter.component.scss"],
+  standalone: false,
 })
 export class TypeFilterComponent
   extends ClearableInputComponent
@@ -32,6 +33,7 @@ export class TypeFilterComponent
   protected readonly getFacetId = getFacetId;
   readonly componentName: string = "TypeFilter";
   readonly label: string = "Type Filter";
+  readonly tooltipText: string = "Filters datasets by type";
 
   appConfig = this.appConfigService.getConfig();
 

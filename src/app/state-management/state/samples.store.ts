@@ -1,13 +1,13 @@
 import {
-  Attachment,
+  OutputAttachmentV3Dto,
   OutputDatasetObsoleteDto,
   SampleClass,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { SampleFilters, GenericFilters } from "state-management/models";
 
 export interface SampleState {
   samples: SampleClass[];
-  attachments: Attachment[];
+  attachments: OutputAttachmentV3Dto[];
   currentSample: SampleClass | undefined;
   datasets: OutputDatasetObsoleteDto[];
   metadataKeys: string[];

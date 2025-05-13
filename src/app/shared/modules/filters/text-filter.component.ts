@@ -12,6 +12,7 @@ import { getFilterLabel } from "./utils";
   selector: "app-text-filter",
   templateUrl: "text-filter.component.html",
   styleUrls: ["text-filter.component.scss"],
+  standalone: false,
 })
 export class TextFilterComponent
   extends ClearableInputComponent
@@ -20,6 +21,7 @@ export class TextFilterComponent
   private textSubject = new Subject<string>();
   readonly componentName: string = "TextFilter";
   readonly label: string = "Text Filter";
+  readonly tooltipText: string = "Search across dataset name and description";
 
   appConfig = this.appConfigService.getConfig();
   subscription: Subscription;
@@ -35,7 +37,7 @@ export class TextFilterComponent
     this.subscription = this.textSubject
       .pipe(
         skipWhile((terms) => terms === ""),
-        debounceTime(500),
+        debounceTime(200),
         distinctUntilChanged(),
       )
       .subscribe((terms) => {

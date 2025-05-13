@@ -38,7 +38,10 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppConfigService } from "app-config.service";
-import { DatasetClass, DatasetsService } from "@scicatproject/scicat-sdk-ts";
+import {
+  DatasetClass,
+  DatasetsService,
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 const getConfig = () => ({});
 

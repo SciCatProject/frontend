@@ -10,6 +10,7 @@ import { AppConfigService } from "app-config.service";
   selector: "jsonScientificMetadata",
   templateUrl: "./jsonScientificMetadata.component.html",
   styleUrls: ["./jsonScientificMetadata.component.scss"],
+  standalone: false,
 })
 export class JsonScientificMetadataComponent implements AfterViewChecked {
   dataset$ = this.store.select(selectCurrentDataset);
@@ -25,10 +26,7 @@ export class JsonScientificMetadataComponent implements AfterViewChecked {
     public appConfigService: AppConfigService,
     private store: Store,
     private cdRef: ChangeDetectorRef,
-  ) {
-    console.log({ dataset: this.dataset$ });
-    console.log({ datasetWithout: this.datasetWithout$ });
-  }
+  ) {}
 
   ngAfterViewChecked() {
     this.cdRef.detectChanges();

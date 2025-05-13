@@ -10,6 +10,7 @@ import { Store } from "@ngrx/store";
   selector: "app-auth-callback",
   templateUrl: "./auth-callback.component.html",
   styleUrls: ["./auth-callback.component.scss"],
+  standalone: false,
 })
 export class AuthCallbackComponent implements OnInit {
   constructor(
@@ -63,7 +64,8 @@ export class AuthCallbackComponent implements OnInit {
         );
 
         // After the user is authenticated, we will redirect to the home page
-        const returnUrl = params["returnUrl"];
+        // or the value of returnUrl query param
+        const returnUrl: string = params["returnUrl"];
         this.router.navigateByUrl(returnUrl || "/");
       }
     });

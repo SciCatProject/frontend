@@ -34,7 +34,7 @@ import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import {
   DatasetClass,
   OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { PageEvent } from "@angular/material/paginator";
 export interface SortChangeEvent {
   active: string;
@@ -46,6 +46,7 @@ export interface SortChangeEvent {
   templateUrl: "dataset-table.component.html",
   styleUrls: ["dataset-table.component.scss"],
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   private inBatchPids: string[] = [];

@@ -1,4 +1,4 @@
-import { DatafilesComponent } from "../../datasets/datafiles/datafiles.component";
+import { DatafilesComponent } from "../../datafiles/datafiles.component";
 import { DatasetDetailComponent } from "./dataset-detail.component";
 import { LinkyPipe } from "ngx-linky";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
@@ -11,7 +11,7 @@ import {
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatTableModule } from "@angular/material/table";
 import { MatChipInputEvent, MatChipsModule } from "@angular/material/chips";
-import { of } from "rxjs";
+import { Observable, of } from "rxjs";
 import { MatDialogRef } from "@angular/material/dialog";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
@@ -33,20 +33,22 @@ import {
   MatSlideToggleChange,
 } from "@angular/material/slide-toggle";
 import { ActivatedRoute, Router } from "@angular/router";
-import {
-  createMock,
-  MockActivatedRoute,
-  mockDataset,
-  mockSample,
-} from "shared/MockStubs";
+import { MockActivatedRoute, mockDataset } from "shared/MockStubs";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { AppConfigService } from "app-config.service";
 import { AttachmentService } from "shared/services/attachment.service";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import {
-  OutputDatasetObsoleteDto,
-  ReturnedUserDto,
-} from "@scicatproject/scicat-sdk-ts";
+  TranslateLoader,
+  TranslateModule,
+  TranslationObject,
+} from "@ngx-translate/core";
 
+class MockTranslateLoader implements TranslateLoader {
+  getTranslation(): Observable<TranslationObject> {
+    return of({});
+  }
+}
 describe("DatasetDetailComponent", () => {
   let component: DatasetDetailComponent;
   let fixture: ComponentFixture<DatasetDetailComponent>;
@@ -55,9 +57,7 @@ describe("DatasetDetailComponent", () => {
     navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
 
-  const getConfig = () => ({
-    editMetadataEnabled: true,
-  });
+  const getConfig = () => ({});
 
   let store: MockStore;
 
@@ -76,6 +76,12 @@ describe("DatasetDetailComponent", () => {
         MatTabsModule,
         NgxJsonViewerModule,
         SharedScicatFrontendModule,
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useClass: MockTranslateLoader,
+          },
+        }),
         StoreModule.forRoot({}),
       ],
       providers: [AttachmentService],

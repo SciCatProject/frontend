@@ -26,13 +26,13 @@ import {
 import { EditableComponent } from "app-routing/pending-changes.guard";
 import { AppConfigService } from "app-config.service";
 import {
-  Attachment,
-  CreateAttachmentDto,
+  CreateAttachmentV3Dto,
   DatasetClass,
+  OutputAttachmentV3Dto,
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
   SampleClass,
-} from "@scicatproject/scicat-sdk-ts";
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 export interface TableData {
   pid: string;
@@ -48,6 +48,7 @@ export interface TableData {
   selector: "app-sample-detail",
   templateUrl: "./sample-detail.component.html",
   styleUrls: ["./sample-detail.component.scss"],
+  standalone: false,
 })
 export class SampleDetailComponent
   implements OnInit, OnDestroy, EditableComponent
@@ -59,8 +60,8 @@ export class SampleDetailComponent
 
   sample: SampleClass;
   user: ReturnedUserDto;
-  attachment: CreateAttachmentDto;
-  attachments: Attachment[] = [];
+  attachment: CreateAttachmentV3Dto;
+  attachments: OutputAttachmentV3Dto[] = [];
   show = false;
   subscriptions: Subscription[] = [];
 

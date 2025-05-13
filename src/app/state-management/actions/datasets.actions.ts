@@ -1,12 +1,12 @@
 import { createAction, props } from "@ngrx/store";
 import {
-  DatasetClass,
   Attachment,
   OrigDatablock,
   Datablock,
-  CreateDerivedDatasetObsoleteDto,
   OutputDatasetObsoleteDto,
-} from "@scicatproject/scicat-sdk-ts";
+  DatasetsControllerCreateV3Request,
+  OutputAttachmentV3Dto,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
   ArchViewMode,
@@ -135,7 +135,7 @@ export const clearBatchAction = createAction("[Dataset] Clear Batch");
 
 export const addDatasetAction = createAction(
   "[Dataset] Add Dataset",
-  props<{ dataset: CreateDerivedDatasetObsoleteDto }>(),
+  props<{ dataset: DatasetsControllerCreateV3Request }>(),
 );
 export const addDatasetCompleteAction = createAction(
   "[Dataset] Add Dataset Complete",
@@ -158,11 +158,11 @@ export const updatePropertyFailedAction = createAction(
 
 export const addAttachmentAction = createAction(
   "[Dataset] Add Attachment",
-  props<{ attachment: Partial<Attachment> }>(),
+  props<{ attachment: Partial<OutputAttachmentV3Dto> }>(),
 );
 export const addAttachmentCompleteAction = createAction(
   "[Dataset] Add Attachment Complete",
-  props<{ attachment: Attachment }>(),
+  props<{ attachment: OutputAttachmentV3Dto }>(),
 );
 export const addAttachmentFailedAction = createAction(
   "[Dataset] Add Attachment Failed",
@@ -179,7 +179,7 @@ export const updateAttachmentCaptionAction = createAction(
 );
 export const updateAttachmentCaptionCompleteAction = createAction(
   "[Dataset] Update Attachment Caption Complete",
-  props<{ attachment: Attachment }>(),
+  props<{ attachment: OutputAttachmentV3Dto }>(),
 );
 export const updateAttachmentCaptionFailedAction = createAction(
   "[Dataset] Update Attachment Action Failed",

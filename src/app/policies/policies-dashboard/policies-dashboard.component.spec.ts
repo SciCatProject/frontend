@@ -27,7 +27,7 @@ import {
   sortEditableByColumnAction,
 } from "state-management/actions/policies.actions";
 
-import { Router } from "@angular/router";
+import { provideRouter, Router } from "@angular/router";
 import { GenericFilters } from "state-management/models";
 
 import { RouterTestingModule } from "@angular/router/testing";
@@ -43,7 +43,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { DatasetsService } from "@scicatproject/scicat-sdk-ts";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("PoliciesDashboardComponent", () => {
   let component: PoliciesDashboardComponent;
@@ -65,11 +65,11 @@ describe("PoliciesDashboardComponent", () => {
         MatButtonModule,
         MatIconModule,
         MatTabsModule,
-        RouterTestingModule.withRoutes([]),
         SharedScicatFrontendModule,
         StoreModule.forRoot({}),
       ],
       providers: [
+        provideRouter([]),
         provideMockStore({
           selectors: [
             {

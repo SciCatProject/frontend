@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { PublishedData } from "@scicatproject/scicat-sdk-ts";
+import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
 import { Router } from "@angular/router";
 import { selectPublishedDataDashboardPageViewModel } from "state-management/selectors/published-data.selectors";
 import { CheckboxEvent } from "shared/modules/table/table.component";
@@ -21,6 +21,7 @@ import { SelectionModel } from "@angular/cdk/collections";
   selector: "app-publisheddata-dashboard",
   templateUrl: "./publisheddata-dashboard.component.html",
   styleUrls: ["./publisheddata-dashboard.component.scss"],
+  standalone: false,
 })
 export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   public vm$ = this.store.select(selectPublishedDataDashboardPageViewModel);

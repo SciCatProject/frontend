@@ -6,7 +6,8 @@
     >
       <div [formGroupName]="i">
         <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
-          <div class="formColumn">
+          <!-- Type Column -->
+          <div class="formColumn typeColumn">
             <mat-form-field class="selectField" fxFlex="100">
               <mat-label>Type</mat-label>
               <mat-select
@@ -23,9 +24,26 @@
               </mat-error>
             </mat-form-field>
           </div>
+          <!-- Displayed name Column -->
           <div class="formColumn">
             <mat-form-field class="inputField" fxFlex="100">
-              <mat-label>Name</mat-label>
+              <mat-label>Displayed Name</mat-label>
+              <input
+                id="humanNameInput{{ i }}"
+                matInput
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                formControlName="fieldHumanName"
+                data-cy="metadata-human-name-input"
+              />
+            </mat-form-field>
+          </div>
+          <!-- Raw property name Column -->
+          <div class="formColumn">
+            <mat-form-field class="inputField" fxFlex="100">
+              <mat-label>Raw property name</mat-label>
               <input
                 id="nameInput{{ i }}"
                 matInput
@@ -45,7 +63,8 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div class="formColumn">
+          <!-- Value Column -->
+          <div class="formColumn" *ngIf="getType(i) !== 'date'; else dateInput">
             <mat-form-field class="inputField" fxFlex="100">
               <mat-label>Value</mat-label>
               <input
@@ -63,8 +82,37 @@
               <mat-error *ngIf="fieldHasError(i, 'fieldValue')">
                 Value is required
               </mat-error>
+              <mat-error *ngIf="fieldHasLinkError(i, 'fieldValue')">
+                Invalid link
+              </mat-error>
+              <mat-error *ngIf="fieldHasRangeError(i, 'fieldValue')">
+                Invalid range
+              </mat-error>
             </mat-form-field>
           </div>
+          <ng-template #dateInput>
+            <mat-form-field class="inputField">
+              <input
+                matInput
+                formControlName="fieldValue"
+                placeholder="Value"
+                [ngxMatDatetimePicker]="picker"
+                data-cy="metadata-value-input"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="$any(picker)"
+              ></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker
+                #picker
+                [showSeconds]="true"
+              ></ngx-mat-datetime-picker>
+              <mat-error *ngIf="fieldHasDateError(i, 'fieldValue')">
+                Invalid date
+              </mat-error>
+            </mat-form-field>
+          </ng-template>
+          <!-- Unit Column -->
           <div class="formColumn">
             <mat-form-field class="inputField" fxFlex="100">
               <mat-label>Unit</mat-label>
@@ -104,7 +152,7 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div class="formColumn" fxFlexAlign="center">
+          <div class="formColumn deleteColumn" fxFlexAlign="center">
             <button
               mat-icon-button
               class="deleteButton"

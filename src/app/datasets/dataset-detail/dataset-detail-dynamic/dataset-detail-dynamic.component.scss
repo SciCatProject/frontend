@@ -1,0 +1,129 @@
+mat-card {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+
+  .section-icon {
+    height: auto;
+    width: auto;
+    display: flex;
+    align-items: center;
+  }
+  .caption-text {
+    word-break: break-all;
+  }
+
+  table {
+    th {
+      min-width: 10rem;
+      padding-right: 0.5rem;
+      text-align: left;
+    }
+
+    td {
+      width: 100%;
+      padding: 0.5rem 0;
+
+      .sample-edit {
+        padding-left: 0.5rem;
+
+        mat-icon {
+          font-size: medium;
+        }
+      }
+
+      .sample-edit:hover {
+        cursor: pointer;
+      }
+    }
+
+    .full-width {
+      width: 100%;
+    }
+
+    .keywords-row {
+      .add-keyword-chip:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.jupyter-button {
+  margin: 1em 0 0 1em;
+}
+.public-toggle {
+  margin: 1em 1em 0 0;
+  float: right;
+}
+.show-json-metadata-btn {
+  margin: 1em;
+}
+.json-view-overflow {
+  flex: 0 0 auto;
+  max-width: 80vw;
+  overflow: auto;
+}
+.truncated-text {
+  max-width: 40vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.attachments-wrapper {
+  display: flex;
+  padding-top: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.thumbnail-image {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  cursor: pointer;
+
+  &--small {
+    width: 50px;
+    height: 50px;
+  }
+  &--medium {
+    width: 100px;
+    height: 100px;
+  }
+  &--large {
+    width: 200px;
+    height: 200px;
+  }
+}
+.json-view {
+  margin: 0 1.8em;
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
+  line-height: 10px;
+  height: 42px;
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+.custom-grid {
+  margin-top: 16px;
+  display: grid;
+  grid-auto-rows: auto; /* Each row height is driven by its content */
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: default;
+}

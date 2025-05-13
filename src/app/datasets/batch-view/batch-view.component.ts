@@ -24,12 +24,13 @@ import {
   selectIsAdmin,
   selectProfile,
 } from "state-management/selectors/user.selectors";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts";
+import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
   selector: "batch-view",
   templateUrl: "./batch-view.component.html",
   styleUrls: ["./batch-view.component.scss"],
+  standalone: false,
 })
 export class BatchViewComponent implements OnInit, OnDestroy {
   batch$: Observable<OutputDatasetObsoleteDto[]> = this.store.select(
