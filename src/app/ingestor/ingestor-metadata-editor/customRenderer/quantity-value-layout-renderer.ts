@@ -73,20 +73,23 @@ export class CustomLayoutChildrenRenderPropsPipe implements PipeTransform {
         const scopeA = a.uischema.scope || "";
         const scopeB = b.uischema.scope || "";
 
-        // Check if one of the scopes contains "value" and the other contains "unit"
-        const isValueA = scopeA.includes("value");
-        const isUnitA = scopeA.includes("unit");
-        const isValueB = scopeB.includes("value");
-        const isUnitB = scopeB.includes("unit");
+        const order = ["value", "unit", "valueSI", "unitSI"];
 
-        if (isValueA && isUnitB) {
-          return -1; // a comes before b
-        }
-        if (isValueB && isUnitA) {
-          return 1; // b comes before a
+        const indexA = order.findIndex((key) => scopeA.endsWith(key));
+        const indexB = order.findIndex((key) => scopeB.endsWith(key));
+
+        if (indexA !== -1 && indexB !== -1) {
+          return indexA - indexB; // Sort based on the defined order
         }
 
-        // Fallback to localeCompare if neither condition is met
+        if (indexA !== -1) {
+          return -1; // a comes before b if a matches and b doesn't
+        }
+        if (indexB !== -1) {
+          return 1; // b comes before a if b matches and a doesn't
+        }
+
+        // Fallback to localeCompare if neither matches the order
         return scopeA.localeCompare(scopeB);
       });
 

@@ -102,6 +102,6 @@ export class QuantityValueObjectComponent
 export const quantityValueTester: RankedTester = rankWith(
   5,
   schemaMatches((schema: JsonSchema) => {
-    return schema.title === "QuantityValue";
+    return schema.title === "QuantityValue" || schema.title === "QuantitySI";
   }),
 );

@@ -47,7 +47,8 @@ export class IngestorMetadataEditorComponent implements OnInit {
 
     this.reducedSchema =
       IngestorMetadataEditorHelper.reduceToRequiredProperties(this.schema);
-    //console.log(this.schema);
+
+    console.log(this.schema);
   }
 
   updateVisualData() {
@@ -87,7 +88,6 @@ export class IngestorMetadataEditorComponent implements OnInit {
   }
 
   onErrors(errors: any[]) {
-    console.log("Errors: ", errors);
     this.errors.emit(errors);
   }
 
