@@ -38,6 +38,7 @@ import { fetchScicatTokenAction } from "state-management/actions/user.actions";
   selector: "ingestor",
   templateUrl: "./ingestor.component.html",
   styleUrls: ["./ingestor.component.scss"],
+  standalone: false,
 })
 export class IngestorComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];

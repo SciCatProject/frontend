@@ -26,6 +26,7 @@ import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-
   selector: "ingestor-extractor-metadata-dialog-page",
   templateUrl: "ingestor.extractor-metadata-dialog-page.html",
   styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
+  standalone: false,
 })
 export class IngestorExtractorMetadataDialogPageComponent
   implements OnInit, OnDestroy

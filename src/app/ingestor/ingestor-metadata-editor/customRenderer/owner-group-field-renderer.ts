@@ -70,12 +70,12 @@ import { Subscription } from "rxjs";
       </mat-form-field>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class OwnerGroupFieldComponent
   extends JsonFormsControl
   implements OnInit, OnDestroy {
-  private subscriptions: Subscription[] = [];
+  private componentSubscriptions: Subscription[] = [];
   focused = false;
   vm$ = this.store.select(selectUserSettingsPageViewModel);
   userOwnerGroups = [];
@@ -95,7 +95,7 @@ export class OwnerGroupFieldComponent
     super.ngOnInit();
 
     // Fetch the owner groups from the scicat user
-    this.subscriptions.push(
+    this.componentSubscriptions.push(
       this.vm$.subscribe((settings) => {
         const getclaims = (profile: any): string[] => {
           if (!profile) {
@@ -132,7 +132,7 @@ export class OwnerGroupFieldComponent
 
   ngOnDestroy(): void {
     // Unsubscribe from all subscriptions
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.componentSubscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   onSelectAutocompleteValue($event: MatAutocompleteSelectedEvent) {

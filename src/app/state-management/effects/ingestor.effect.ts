@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
+import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { of } from "rxjs";
 import { catchError, map, switchMap, finalize } from "rxjs/operators"; // Import finalize
 import * as fromActions from "state-management/actions/ingestor.actions";
@@ -14,6 +14,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Store } from "@ngrx/store";
 import { selectIngestorTransferListRequestOptions } from "state-management/selectors/ingestor.selector";
+import { concatLatestFrom } from "@ngrx/operators";
 
 @Injectable()
 export class IngestorEffects {

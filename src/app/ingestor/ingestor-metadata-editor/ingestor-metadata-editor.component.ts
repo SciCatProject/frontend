@@ -30,6 +30,7 @@ it will produce errors when changing the schema. */
       (errors)="onErrors($event)"
     ></jsonforms>
   </div>`,
+  standalone: false,
 })
 export class IngestorMetadataEditorComponent implements OnInit {
   @Input() data: object;

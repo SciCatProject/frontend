@@ -25,6 +25,7 @@ export interface ExportOptions {
       }
     `,
   ],
+  standalone: false,
 })
 export class ExportTemplateHelperComponent {
   data: ExportOptions;

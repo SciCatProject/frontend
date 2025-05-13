@@ -37,7 +37,7 @@ import { LayoutRenderer } from "@jsonforms/angular-material";
     </div>
   `,
   styleUrls: ["../ingestor-metadata-editor.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class QuantityValueLayoutRendererComponent extends LayoutRenderer<QuantityValueLayout> {
   constructor(
@@ -56,7 +56,7 @@ export interface QuantityValueLayout extends Layout {
   type: "QuantityValueLayout";
 }
 
-@Pipe({ name: "customLayoutChildrenRenderProps" })
+@Pipe({ name: "customLayoutChildrenRenderProps", standalone: false })
 export class CustomLayoutChildrenRenderPropsPipe implements PipeTransform {
   transform(
     uischema: Layout,

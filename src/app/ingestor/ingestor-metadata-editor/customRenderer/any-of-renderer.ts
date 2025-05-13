@@ -23,7 +23,7 @@ import { cloneDeep, isEmpty, startCase } from "lodash-es";
         <span class="spacer"></span>
         <mat-checkbox
           *ngIf="options.includes('null')"
-          [(ngModel)]="!nullOptionSelected"
+          [(ngModel)]="nullOptionSelected"
           (change)="onEnableCheckboxChange($event)"
         >
           Enabled
@@ -55,6 +55,7 @@ import { cloneDeep, isEmpty, startCase } from "lodash-es";
       </mat-card-content>
     </mat-card>
   `,
+  standalone: false,
 })
 export class AnyOfRendererComponent extends JsonFormsControl {
   dataAsString: string;

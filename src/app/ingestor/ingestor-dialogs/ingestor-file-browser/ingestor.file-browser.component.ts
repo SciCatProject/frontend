@@ -31,6 +31,7 @@ export interface GoBackNode extends FolderNode {
   selector: "ingestor.file-browser.component",
   templateUrl: "ingestor.file-browser.component.html",
   styleUrls: ["../../ingestor-page/ingestor.component.scss"],
+  standalone: false,
 })
 export class IngestorFileBrowserComponent implements OnInit, OnDestroy {
   private _activeNode: BrowsableNode | null = null;

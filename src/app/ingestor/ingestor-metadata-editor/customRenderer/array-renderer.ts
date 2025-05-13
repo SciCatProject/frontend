@@ -107,12 +107,12 @@ import {
       </mat-card-content>
     </mat-card>
   `,
+  standalone: false,
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class ArrayLayoutRendererCustom
   extends JsonFormsAbstractControl<StatePropsOfArrayLayout>
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   noData: boolean;
   minOne: boolean;
   translations: ArrayTranslations;
@@ -158,7 +158,6 @@ export class ArrayLayoutRendererCustom
     this.removeItems = removeItems;
   }
   mapAdditionalProps(props: ArrayLayoutProps) {
-    this.translations = props.translations;
     this.noData = !props.data || props.data === 0;
     this.uischemas = props.uischemas;
     this.minOne = props.required;

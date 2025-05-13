@@ -10,6 +10,7 @@ import { selectIngestorTransferList } from "state-management/selectors/ingestor.
   selector: "app-ingestor-transfer-view-dialog",
   templateUrl: "./ingestor.transfer-detail-view-dialog.html",
   styleUrls: ["../../ingestor-page/ingestor.component.scss"],
+  standalone: false,
 })
 export class IngestorTransferViewDialogComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];

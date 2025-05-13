@@ -30,6 +30,7 @@ export type dialogStep =
   selector: "ingestor.creation-dialog-base",
   templateUrl: "ingestor.creation-dialog-base.html",
   styleUrls: ["../../ingestor-page/ingestor.component.scss"],
+  standalone: false,
 })
 export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];

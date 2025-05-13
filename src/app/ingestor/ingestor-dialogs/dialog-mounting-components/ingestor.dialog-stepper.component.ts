@@ -23,6 +23,7 @@ import { Subscription } from "rxjs";
   selector: "ingestor-dialog-stepper",
   templateUrl: "./ingestor.dialog-stepper.component.html",
   styleUrls: ["./ingestor.dialog-stepper.component.css"],
+  standalone: false,
 })
 export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];

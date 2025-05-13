@@ -23,6 +23,7 @@ import { Subscription } from "rxjs";
   selector: "ingestor-confirm-transfer-dialog-page",
   templateUrl: "ingestor.confirm-transfer-dialog-page.html",
   styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
+  standalone: false,
 })
 export class IngestorConfirmTransferDialogPageComponent
   implements OnInit, OnDestroy {

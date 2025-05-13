@@ -31,6 +31,7 @@ import {
   selector: "ingestor-user-metadata-dialog",
   templateUrl: "ingestor.user-metadata-dialog-page.html",
   styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
+  standalone: false,
 })
 export class IngestorUserMetadataDialogPageComponent
   implements OnInit, OnDestroy {

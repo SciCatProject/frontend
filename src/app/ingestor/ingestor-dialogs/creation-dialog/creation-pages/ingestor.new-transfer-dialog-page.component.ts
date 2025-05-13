@@ -24,13 +24,14 @@ import {
 } from "state-management/selectors/ingestor.selector";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
-import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts";
 import { Subscription } from "rxjs";
+import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
   selector: "ingestor-new-transfer-dialog-page",
   templateUrl: "ingestor.new-transfer-dialog-page.html",
   styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
+  standalone: false,
 })
 export class IngestorNewTransferDialogPageComponent
   implements OnInit, OnDestroy {

@@ -53,6 +53,7 @@ import isEmpty from "lodash/isEmpty";
       </mat-card-content>
     </mat-card>
   `,
+  standalone: false,
 })
 export class CustomObjectControlRendererComponent extends JsonFormsControlWithDetail {
   rendererService: JsonFormsAngularService;
