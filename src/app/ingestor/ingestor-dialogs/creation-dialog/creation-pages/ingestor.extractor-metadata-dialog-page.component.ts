@@ -111,8 +111,8 @@ export class IngestorExtractorMetadataDialogPageComponent
             this.activeRenderView = renderView;
 
             // Update visual data object with the new renderView (changes the schema)
-            this.instrumentMetadataEditor.updateVisualData();
-            this.acquisitionMetadataEditor.updateVisualData();
+            this.instrumentMetadataEditor?.updateVisualData();
+            this.acquisitionMetadataEditor?.updateVisualData();
           }
         }
       }),
