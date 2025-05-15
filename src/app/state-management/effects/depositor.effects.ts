@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { of, from } from "rxjs";
-import { catchError, map, switchMap, concatMap, last } from "rxjs/operators";
+import { catchError, map, switchMap, concatMap, last, tap } from "rxjs/operators";
 import { HttpErrorResponse } from "@angular/common/http";
+import { Store } from "@ngrx/store";
 import { MessageType } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
 import * as fromActions from "state-management/actions/depositor.actions";
@@ -75,6 +76,14 @@ export class OneDepEffects {
       ofType(fromActions.submitDeposition),
       switchMap(({ deposition, files }) =>
         this.onedepDepositor.createDep(deposition).pipe(
+          tap((dep) => {
+          const message = {
+            type: MessageType.Success,
+            content: `Deposition entry created: ${dep.id}. Start uploading files.`,
+            duration: 10000,
+          };
+          this.store.dispatch(showMessageAction({ message }));
+          }),
           switchMap((dep) =>
             from(files).pipe(
               concatMap((file) =>
@@ -82,7 +91,7 @@ export class OneDepEffects {
                   ? this.onedepDepositor.sendCoordFile(dep.id, file.form)
                   : this.onedepDepositor.sendFile(dep.id, file.form),
               ),
-
+              
               last(),
               map(() =>
                 fromActions.submitDepositionSuccess({
@@ -350,5 +359,6 @@ export class OneDepEffects {
   constructor(
     private actions$: Actions,
     private onedepDepositor: Depositor,
+    private store: Store,
   ) {}
 }
