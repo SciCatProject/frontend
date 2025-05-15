@@ -35,6 +35,7 @@ interface DepositionRepository {
   selector: "depositor",
   templateUrl: "./depositor.component.html",
   styleUrls: ["./depositor.component.scss"],
+  standalone: false,
 })
 export class DepositorComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];

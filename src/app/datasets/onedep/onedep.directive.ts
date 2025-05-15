@@ -1,6 +1,9 @@
 import { Directive, HostListener, ElementRef } from "@angular/core";
 
-@Directive({ selector: "[orcidFormatter]" })
+@Directive({ 
+  selector: "[orcidFormatter]", 
+  standalone: false,
+})
 export class OrcidFormatterDirective {
   private readonly maxRawLength = 16;
 

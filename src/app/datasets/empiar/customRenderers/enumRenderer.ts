@@ -25,6 +25,7 @@ import {
       </mat-select>
     </mat-form-field>
   `,
+  standalone: false,
 })
 export class CustomEnumRendererComponent extends JsonFormsControl {
   transformedOptions = [];

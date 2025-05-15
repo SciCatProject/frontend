@@ -1,0 +1,49 @@
+<div class="ingestor-mixed-header">
+  <h2 mat-dialog-title>
+    {{ header }}
+  </h2>
+  <button mat-icon-button mat-dialog-close aria-label="Close"
+    class="ingestor-close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<mat-dialog-content class="mat-typography" disableClose="true">
+  <table>
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Transfer ID</td>
+        <td>{{transferId}}</td>
+      </tr>
+      <tr *ngIf="detailItem && detailItem.status !== undefined">
+        <td>Status</td>
+        <td>{{detailItem.status}}</td>
+      </tr>
+      <tr
+        *ngIf="detailItem && detailItem.bytesTransferred !== undefined && detailItem.bytesTotal !== undefined">
+        <td>GB transferred</td>
+        <td>{{getByteTransferRelative()}}</td>
+      </tr>
+      <tr
+        *ngIf="detailItem && detailItem.bytesTransferred !== undefined && detailItem.bytesTotal !== undefined">
+        <td>GB transferred (total)</td>
+        <td>{{getByteTransferTotal()}}</td>
+      </tr>
+      <tr
+        *ngIf="detailItem && detailItem.filesTransferred !== undefined && detailItem.filesTotal !== undefined">
+        <td>Files transferred (total)</td>
+        <td>{{getFileTransferTotal()}}</td>
+      </tr>
+    </tbody>
+  </table>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close cdkFocusInitial
+    (click)="onCancel()">Close</button>
+</mat-dialog-actions>

@@ -1,18 +1,16 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-} from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import {
   JsonFormsAngularService,
   JsonFormsAbstractControl,
 } from "@jsonforms/angular";
 import {
+  arrayDefaultTranslations,
   ArrayLayoutProps,
   ArrayTranslations,
   createDefaultValue,
+  defaultJsonFormsI18nState,
   findUISchema,
+  getArrayTranslations,
   JsonFormsState,
   mapDispatchToArrayControlProps,
   mapStateToArrayLayoutProps,
@@ -45,7 +43,6 @@ import {
         >
           error_outline
         </mat-icon>
-        <span></span>
         <button
           mat-button
           matTooltip="{{ translations.addTooltip }}"
@@ -98,6 +95,7 @@ import {
               <mat-icon>arrow_downward</mat-icon>
             </button>
             <button
+              *ngIf="(minOne && [].constructor(data).length > 1) || !minOne"
               mat-button
               color="warn"
               (click)="remove(idx)"
@@ -112,15 +110,15 @@ import {
       </mat-card-content>
     </mat-card>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class ArrayLayoutRendererCustom
   extends JsonFormsAbstractControl<StatePropsOfArrayLayout>
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   noData: boolean;
-  translations: ArrayTranslations;
+  minOne: boolean;
+  translations: ArrayTranslations = {};
   addItem: (path: string, value: any) => () => void;
   moveItemUp: (path: string, index: number) => () => void;
   moveItemDown: (path: string, index: number) => () => void;
@@ -132,9 +130,17 @@ export class ArrayLayoutRendererCustom
   constructor(jsonFormsService: JsonFormsAngularService) {
     super(jsonFormsService);
   }
-  mapToProps(state: JsonFormsState): StatePropsOfArrayLayout {
+  mapToProps(state: JsonFormsState): StatePropsOfArrayLayout & { translations: ArrayTranslations } {
     const props = mapStateToArrayLayoutProps(state, this.getOwnProps());
-    return { ...props };
+    const t =
+      state.jsonforms.i18n?.translate ?? defaultJsonFormsI18nState.translate;
+    const translations = getArrayTranslations(
+      t,
+      arrayDefaultTranslations,
+      props.i18nKeyPrefix,
+      props.label
+    );
+    return { ...props, translations };
   }
   remove(index: number): void {
     this.removeItems(this.propsPath, [index])();
@@ -142,7 +148,7 @@ export class ArrayLayoutRendererCustom
   add(): void {
     this.addItem(
       this.propsPath,
-      createDefaultValue(this.scopedSchema, this.rootSchema)
+      createDefaultValue(this.scopedSchema, this.rootSchema),
     )();
   }
   up(index: number): void {
@@ -162,10 +168,11 @@ export class ArrayLayoutRendererCustom
     this.moveItemDown = moveDown;
     this.removeItems = removeItems;
   }
-  mapAdditionalProps(props: ArrayLayoutProps) {
+  mapAdditionalProps(props: ArrayLayoutProps & { translations: ArrayTranslations }) {
     this.translations = props.translations;
     this.noData = !props.data || props.data === 0;
     this.uischemas = props.uischemas;
+    this.minOne = props.required;
   }
   getProps(index: number): OwnPropsOfRenderer {
     const uischema = findUISchema(

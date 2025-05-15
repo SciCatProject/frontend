@@ -29,6 +29,7 @@ import { customSemiEnumControlRenderer } from "./customRenderers/imagesSetRender
   selector: "app-empiar",
   templateUrl: "./empiar.component.html",
   styleUrls: ["./empiar.component.scss"],
+  standalone: false,
 })
 export class EmpiarComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];

@@ -1,0 +1,133 @@
+.ingestor-vertical-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.ingestor-mixed-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ingestor-close-button {
+  margin-left: auto;
+}
+
+.form-full-width {
+  width: 100%;
+}
+
+.metadata-preview {
+  height: 50vh !important;
+}
+
+mat-card {
+  margin: 1em;
+
+  .mat-mdc-card-content {
+    padding: 16px;
+  }
+
+  .section-icon {
+    height: auto !important;
+    width: auto !important;
+
+    mat-icon {
+      vertical-align: middle;
+    }
+  }
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.spinner-text {
+  margin-top: 10px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.user-info {
+  padding: 1em;
+}
+
+.user-info .user-icon-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.user-info .user-icon-container p {
+  margin: auto 0;
+}
+
+.divider-down {
+  margin-bottom: 1em;
+}
+
+.code-editor pre.code {
+  white-space: pre-wrap;
+  counter-reset: listing;
+  line-height: 0.1;
+}
+.code-editor pre.code code {
+  counter-increment: listing;
+  display: flex;
+  line-height: 1;
+}
+
+.code-editor pre.code code::before {
+  content: counter(listing) " ";
+  display: inline-block;
+  width: 2em; /* Breite für die Zeilennummern */
+  text-align: right; /* Rechtsbündige Zeilennummern */
+  margin-right: 0.5em; /* Abstand zwischen Zeilennummer und Code */
+}
+
+.transferPaginator {
+  margin-top: 1.5em;
+}
+
+.ingestor-file-list .mat-list-item-hover:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.ingestor-file-list .mat-list-item-hover:active {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.file-browser-view-toggle {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.green-text {
+  color: #4caf50;
+}
+
+.confirm-message-ingestor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-message-ingestor-icon {
+  font-size: 4em;
+  width: auto;
+  height: auto;
+}
+
+.confirm-message-error {
+  color: red;
+}

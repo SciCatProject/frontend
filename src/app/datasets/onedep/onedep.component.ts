@@ -41,6 +41,7 @@ import { isNumeric } from "mathjs";
   selector: "onedep",
   templateUrl: "./onedep.component.html",
   styleUrls: ["./onedep.component.scss"],
+  standalone: false,
 })
 export class OneDepComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];

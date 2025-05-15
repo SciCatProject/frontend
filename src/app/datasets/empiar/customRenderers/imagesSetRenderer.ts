@@ -45,6 +45,7 @@ import { ExtendedJsonSchema } from "../depositionEMPIAR";
       </mat-form-field>
     </div>
   `,
+  standalone: false,
 })
 export class CustomSemiEnumControlComponent extends JsonFormsControl {
   voxelOptions = [
