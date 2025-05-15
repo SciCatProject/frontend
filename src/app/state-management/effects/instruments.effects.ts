@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
+import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { concatLatestFrom } from "@ngrx/operators";
 import {
   Instrument,
   InstrumentsService,
@@ -29,7 +30,9 @@ export class InstrumentEffects {
       map(([action, filters]) => filters),
       switchMap(({ sortField: order, skip, limit }) =>
         this.instrumentsService
-          .instrumentsControllerFindAll(JSON.stringify({ order, limit, skip }))
+          .instrumentsControllerFindAllV3(
+            JSON.stringify({ order, limit, skip }),
+          )
           .pipe(
             mergeMap((instruments: Instrument[]) => [
               fromActions.fetchInstrumentsCompleteAction({ instruments }),
@@ -45,7 +48,7 @@ export class InstrumentEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
       switchMap(() =>
-        this.instrumentsService.instrumentsControllerFindAll().pipe(
+        this.instrumentsService.instrumentsControllerFindAllV3().pipe(
           map((instruments: Instrument[]) =>
             fromActions.fetchCountCompleteAction({ count: instruments.length }),
           ),
@@ -59,7 +62,7 @@ export class InstrumentEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchInstrumentAction),
       switchMap(({ pid }) =>
-        this.instrumentsService.instrumentsControllerFindById(pid).pipe(
+        this.instrumentsService.instrumentsControllerFindByIdV3(pid).pipe(
           map((instrument: Instrument) =>
             fromActions.fetchInstrumentCompleteAction({ instrument }),
           ),
@@ -74,7 +77,7 @@ export class InstrumentEffects {
       ofType(fromActions.saveCustomMetadataAction),
       switchMap(({ pid, customMetadata }) =>
         this.instrumentsService
-          .instrumentsControllerUpdate(pid, {
+          .instrumentsControllerUpdateV3(pid, {
             customMetadata,
           })
           .pipe(

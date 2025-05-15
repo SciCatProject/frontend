@@ -41,6 +41,7 @@ export enum MetadataTypes {
   selector: "metadata-edit",
   templateUrl: "./metadata-edit.component.html",
   styleUrls: ["./metadata-edit.component.scss"],
+  standalone: false,
 })
 export class MetadataEditComponent implements OnInit, OnChanges {
   metadataForm: FormGroup = this.formBuilder.group({
@@ -109,7 +110,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     this.setupFieldUnitValueChangeListeners();
   }
 
-  detectType(index: any) {
+  detectType(index: number) {
     const type = this.items.at(index).get("fieldType")?.value;
     if (
       type === MetadataTypes.quantity ||
@@ -173,6 +174,10 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     }
   }
 
+  getType(index: number) {
+    return this.items.at(index).get("fieldType")?.value;
+  }
+
   duplicateValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const duplicate = this.items.controls.filter(
@@ -187,18 +192,24 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
   dateValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      if (control.parent?.value.fieldType === MetadataTypes.date) {
-        if (
-          DateTime.fromISO(control.value).toUTC().isValid ||
-          DateTime.fromFormat(control.value, this.appConfig.dateFormat).isValid
-        ) {
-          return null;
-        } else {
-          return { dateValidator: { valid: false } };
-        }
+      const raw = control.value;
+
+      if (control.parent?.value.fieldType !== MetadataTypes.date) {
+        return null;
+      }
+      // If it’s already a Date instance, we assume it’s valid
+      if (control.value instanceof Date) {
+        return null;
       }
 
-      return null;
+      const str = raw == null ? "" : String(raw);
+
+      const iso = DateTime.fromISO(str);
+      const fmt = DateTime.fromFormat(str, this.appConfig.dateFormat);
+
+      return iso.isValid || fmt.isValid
+        ? null
+        : { dateValidator: { valid: false } };
     };
   }
 
@@ -256,7 +267,10 @@ export class MetadataEditComponent implements OnInit, OnChanges {
 
   formatFields() {
     for (const [key, value] of Object.entries(this.metadata)) {
-      if (value.type === MetadataTypes.date) {
+      if (
+        value.type === MetadataTypes.date &&
+        typeof value.value === "string"
+      ) {
         if (
           DateTime.fromFormat(value.value, this.appConfig.dateFormat).isValid
         ) {
@@ -382,17 +396,22 @@ export class MetadataEditComponent implements OnInit, OnChanges {
             });
           }
         } else {
+          const metadataType =
+            typeof this.metadata[key] === MetadataTypes.number
+              ? MetadataTypes.number
+              : MetadataTypes.string;
+          const metadataValue =
+            metadataType === "string" || metadataType === "number"
+              ? this.metadata[key]
+              : JSON.stringify(this.metadata[key]);
+
           field = this.formBuilder.group({
-            fieldType: this.formControlFields["fieldType"](
-              MetadataTypes.string,
-            ),
+            fieldType: this.formControlFields["fieldType"](metadataType),
             fieldName: this.formControlFields["fieldName"](key),
             fieldHumanName: this.formControlFields["fieldHumanName"](
               this.getHumanNameFieldValue(this.metadata[key], key),
             ),
-            fieldValue: this.formControlFields["fieldValue"](
-              JSON.stringify(this.metadata[key]),
-            ),
+            fieldValue: this.formControlFields["fieldValue"](metadataValue),
             fieldUnit: this.formControlFields["fieldUnit"](""),
           });
         }
@@ -422,6 +441,9 @@ export class MetadataEditComponent implements OnInit, OnChanges {
             : "",
         human_name: fieldHumanName,
         type: fieldType,
+        // NOTE: This is a temporary solution to keep the ontology reference in the metadata object.
+        // In the future if we need the ontology reference edit it can be added as a separate field like the other ones.
+        ontology_reference: this.metadata?.[fieldName]?.ontology_reference,
       };
     });
     return metadata;

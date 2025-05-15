@@ -10,6 +10,7 @@ import { selectLogbooks } from "state-management/selectors/logbooks.selectors";
   selector: "app-logbooks-table",
   templateUrl: "./logbooks-table.component.html",
   styleUrls: ["./logbooks-table.component.scss"],
+  standalone: false,
 })
 export class LogbooksTableComponent implements OnInit {
   logbooks$ = this.store.select(selectLogbooks);

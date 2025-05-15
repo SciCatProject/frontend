@@ -10,10 +10,7 @@ import {
 import { JobsState } from "state-management/state/jobs.store";
 import { ArchivingService } from "./archiving.service";
 import { createMock, mockDataset } from "shared/MockStubs";
-import {
-  CreateJobDto,
-  ReturnedUserDto,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("ArchivingService", () => {
   let service: ArchivingService;
@@ -105,10 +102,11 @@ describe("ArchivingService", () => {
         files: [],
       }));
       const archive = true;
-      const job = createMock<Job>({
-        jobParams: { datasetList },
-        createdBy: user.username,
-        createdAt: new Date().toDateString(),
+      // TODO: job release back-ward compatibility issue
+      const job = createMock<any>({
+        jobParams: { username: user.username },
+        emailJobInitiator: user.email,
+        datasetList,
         type: "archive",
         jobResultObject: {},
         statusMessage: "",

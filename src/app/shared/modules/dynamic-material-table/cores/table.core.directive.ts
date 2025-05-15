@@ -43,6 +43,7 @@ import { BehaviorSubject } from "rxjs";
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: "[core]",
+  standalone: false,
 })
 export class TableCoreDirective<T extends TableRow> {
   private _expandComponent: any;
@@ -59,15 +60,15 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() defaultWidth: number = null;
   @Input() minWidth = 120;
   @Input() printConfig: PrintConfig = {};
-  @Input() sticky: boolean;
+  @Input() sticky = true;
   @Input() pending: boolean;
-  @Input() rowHeight = 48;
+  @Input() rowHeight = 50;
   @Input() headerHeight = 56;
   @Input() footerHeight = 48;
   @Input() headerEnable = true;
   @Input() footerEnable = false;
-  @Input() showNoData: boolean;
-  @Input() showReload: boolean;
+  @Input() showNoData = true;
+  @Input() showReload = true;
   @Input() showGlobalTextSearch = true;
   @Input() globalTextSearch = "";
   @Input() globalTextSearchPlaceholder = "Search";

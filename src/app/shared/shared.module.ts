@@ -15,7 +15,7 @@ import { SearchParametersDialogModule } from "./modules/search-parameters-dialog
 import { CommonModule } from "@angular/common";
 import { SharedTableModule } from "./modules/shared-table/shared-table.module";
 import { ScicatDataService } from "./services/scicat-data-service";
-import { ScientificMetadataTreeModule } from "./modules/scientific-metadata-tree/scientific-metadata-tree.modules";
+import { ScientificMetadataTreeModule } from "./modules/scientific-metadata-tree/scientific-metadata-tree.module";
 import { FiltersModule } from "./modules/filters/filters.module";
 import { AttachmentService } from "./services/attachment.service";
 import { DynamicMatTableModule } from "./modules/dynamic-material-table/table/dynamic-mat-table.module";

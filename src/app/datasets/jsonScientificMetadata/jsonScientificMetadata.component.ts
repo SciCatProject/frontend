@@ -10,6 +10,7 @@ import { AppConfigService } from "app-config.service";
   selector: "jsonScientificMetadata",
   templateUrl: "./jsonScientificMetadata.component.html",
   styleUrls: ["./jsonScientificMetadata.component.scss"],
+  standalone: false,
 })
 export class JsonScientificMetadataComponent implements AfterViewChecked {
   dataset$ = this.store.select(selectCurrentDataset);

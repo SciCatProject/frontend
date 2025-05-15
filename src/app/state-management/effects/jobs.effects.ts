@@ -1,10 +1,7 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import {
-  CreateJobDto,
-  JobClass,
-  JobsService,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { concatLatestFrom } from "@ngrx/operators";
+import { JobsService } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import { selectQueryParams } from "state-management/selectors/jobs.selectors";
 import * as fromActions from "state-management/actions/jobs.actions";
@@ -33,7 +30,7 @@ export class JobEffects {
       concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
       switchMap((params) =>
-        this.jobsService.jobsControllerFindAll(JSON.stringify(params)).pipe(
+        this.jobsService.jobsControllerFindAllV4V4(JSON.stringify(params)).pipe(
           switchMap((jobs) => [
             fromActions.fetchJobsCompleteAction({ jobs }),
             fromActions.fetchCountAction(),
@@ -57,8 +54,8 @@ export class JobEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchJobAction),
       switchMap(({ jobId }) =>
-        this.jobsService.jobsControllerFindOne(jobId).pipe(
-          map((job: JobClass) => fromActions.fetchJobCompleteAction({ job })),
+        this.jobsService.jobsControllerFindOneV4V4(jobId).pipe(
+          map((job) => fromActions.fetchJobCompleteAction({ job })),
           catchError(() => of(fromActions.fetchJobFailedAction())),
         ),
       ),
@@ -69,7 +66,7 @@ export class JobEffects {
     return this.actions$.pipe(
       ofType(fromActions.submitJobAction),
       switchMap(({ job }) =>
-        this.jobsService.jobsControllerCreate(job).pipe(
+        this.jobsService.jobsControllerCreateV4V4(job).pipe(
           map((res) => fromActions.submitJobCompleteAction({ job: res })),
           catchError((err) => of(fromActions.submitJobFailedAction({ err }))),
         ),

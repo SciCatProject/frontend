@@ -88,6 +88,7 @@ export interface IDynamicCell {
 // (https://github.com/angular/angular/issues/43227#issuecomment-904173738)
 @Directive({
   selector: "[appDynamicCell]",
+  standalone: false,
 })
 export class DynamicCellDirective implements OnChanges, OnDestroy {
   @Input() component: any;
@@ -184,6 +185,7 @@ export const expandAnimation = trigger("detailExpand", [
   styleUrls: ["./dynamic-mat-table.component.scss"],
   animations: [tableAnimation, expandAnimation],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class DynamicMatTableComponent<T extends TableRow>
   extends TableCoreDirective<T>
@@ -517,12 +519,20 @@ export class DynamicMatTableComponent<T extends TableRow>
     return row[column.name];
   }
 
-  shouldRenderIcon(row: any, column: TableField<any>) {
-    if (column.renderIcon) {
-      return column.renderIcon(column, row);
+  shouldRenderContentIcon(row: any, column: TableField<any>) {
+    if (column.renderContentIcon) {
+      return column.renderContentIcon(column, row);
     }
 
     return false;
+  }
+
+  renderContentIconLink(row: any, column: TableField<any>) {
+    if (column.contentIconLink) {
+      return column.contentIconLink(column, row);
+    }
+
+    return null;
   }
 
   cellStyle(option: HashMap<any>, column) {

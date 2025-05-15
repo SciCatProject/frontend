@@ -2,17 +2,22 @@ import { jobsReducer } from "./jobs.reducer";
 import * as fromActions from "../actions/jobs.actions";
 import { initialJobsState } from "state-management/state/jobs.store";
 import { createMock } from "shared/MockStubs";
-import { JobClass } from "@scicatproject/scicat-sdk-ts-angular";
 
-const data: JobInterface = {
+
+// TODO: job release back-ward compatibility issue
+const job = createMock<any>({
+  _id: "testId",
   id: "testId",
-  createdBy: "testName",
+  emailJobInitiator: "test@email.com",
   type: "archive",
-  jobParams: {
-    datasetList: [],
-  },
-};
-const job = new Job(data);
+  datasetList: [],
+  creationTime: "",
+  executionTime: "",
+  jobParams: {},
+  jobResultObject: {},
+  jobStatusMessage: "",
+  ownerGroup: "",
+});
 
 describe("jobsReducer", () => {
   describe("on fetchJobsCompleteAction", () => {
