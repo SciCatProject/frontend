@@ -1,5 +1,11 @@
 <div class="header">
   <mat-menu #userMenu="matMenu">
+    <button mat-menu-item [routerLink]="['/ingestor']"
+      [queryParams]="{ discovery: true }">
+      <mat-icon> cloud_upload</mat-icon>
+      <span>Ingestor</span>
+    </button>
+
     <button mat-menu-item routerLink="/datasets/">
       <mat-icon> folder</mat-icon>
       <span>Datasets</span>
@@ -67,29 +73,27 @@
     </a>
 
     <span class="spacer"></span>
-    
+
     <span>
       <h6>
-        <a class="toplink" [routerLink]="['/ingestor']" [queryParams]="{ discovery: true }">
-          <mat-icon> cloud_upload  </mat-icon>
-          <span class="large-screen-text">Ingestor (OpenEM)</span></a
-        >
+        <a class="toplink" [routerLink]="['/ingestor']"
+          [queryParams]="{ discovery: true }">
+          <mat-icon> cloud_upload </mat-icon>
+          <span class="large-screen-text">Ingestor (OpenEM)</span></a>
       </h6>
     </span>
     <span>
       <h6>
         <a class="toplink" [routerLink]="['/help']">
           <mat-icon> help </mat-icon>
-          <span class="large-screen-text">Help</span></a
-        >
+          <span class="large-screen-text">Help</span></a>
       </h6>
     </span>
     <span>
       <h6>
         <a class="toplink" [routerLink]="['/about']">
           <mat-icon> info </mat-icon>
-          <span class="large-screen-text">About</span></a
-        >
+          <span class="large-screen-text">About</span></a>
       </h6>
     </span>
     <span *ngIf="(this.loggedIn$ | async) === false; else userButton">
@@ -103,12 +107,9 @@
     <ng-template #userButton>
       <span *ngIf="config.shoppingCartOnHeader" [matMenuTriggerFor]="cartMenu">
         <button id="cartOnHeaderButton" mat-icon-button>
-          <mat-icon
-            matBadge="{{ inBatchIndicator$ | async }}"
+          <mat-icon matBadge="{{ inBatchIndicator$ | async }}"
             matBadgeColor="accent"
-            matBadgeSize="medium"
-            >shopping_cart</mat-icon
-          >
+            matBadgeSize="medium">shopping_cart</mat-icon>
         </button>
       </span>
 
