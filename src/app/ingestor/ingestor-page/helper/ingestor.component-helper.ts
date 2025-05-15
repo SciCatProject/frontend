@@ -4,6 +4,12 @@ import { isArray } from "mathjs";
 import { PostDatasetResponse } from "shared/sdk/models/ingestor/postDatasetResponse";
 import { UserInfo } from "shared/sdk/models/ingestor/userInfo";
 
+export interface IngestorAutodiscovery {
+  mailDomain: string;
+  description?: string;
+  facilityBackend: string;
+}
+
 export interface ExtractionMethod {
   name: string;
   schema: string; // Base64 encoded JSON schema
@@ -40,11 +46,6 @@ export interface IngestionRequestInformation {
   autoArchive: boolean;
 }
 
-export interface TransferDataListEntry {
-  transferId: string;
-  status: string;
-}
-
 // There are many more... see DerivedDataset.ts
 export interface SciCatHeader {
   datasetName: string;
@@ -70,12 +71,6 @@ export interface ScientificMetadata {
   sample: object;
   acquisition: object;
   instrument: object;
-}
-
-export interface MetadataExtractorResult {
-  cmdStdErr: string;
-  cmdStdOut: string;
-  result: string;
 }
 
 export interface DialogDataObject {

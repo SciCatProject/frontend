@@ -33,6 +33,7 @@ import { Subscription } from "rxjs";
 import { IngestorConfirmationDialogComponent } from "ingestor/ingestor-dialogs/confirmation-dialog/ingestor.confirmation-dialog.component";
 import { IngestorTransferViewDialogComponent } from "ingestor/ingestor-dialogs/transfer-detail-view/ingestor.transfer-detail-view-dialog.component";
 import { fetchScicatTokenAction } from "state-management/actions/user.actions";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "ingestor",
@@ -43,6 +44,7 @@ import { fetchScicatTokenAction } from "state-management/actions/user.actions";
 export class IngestorComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   readonly dialog = inject(MatDialog);
+  appConfig = this.appConfigService.getConfig();
 
   vm$ = this.store.select(selectUserSettingsPageViewModel);
   sciCatLoggedIn$ = this.store.select(selectIsLoggedIn);
@@ -90,6 +92,7 @@ export class IngestorComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private store: Store,
+    public appConfigService: AppConfigService,
   ) { }
 
   ngOnInit() {
@@ -336,17 +339,15 @@ export class IngestorComponent implements OnInit, OnDestroy {
       const facilityEmail = this.scicatUserProfile.email;
       const facility = facilityEmail.split("@")[1] as string;
 
-      try {
-        const facilityName = facility.toLowerCase();
-        //const discoveryJson = await this.apiManager.getAutodiscoveryList();
-        //const discoveryList = JSON.parse(discoveryJson);
-        console.log(facilityName);
-        // TODO
-        if (facilityName === "unibe.ch") {
-          return "http://localhost:8888";
+      const facilityMailDomainName = facility.toLowerCase();
+      const discoveryList = this.appConfig.ingestorAutodiscoveryOptions;
+
+      if (discoveryList) {
+        for (const discovery of discoveryList) {
+          if (discovery.mailDomain.toLowerCase() === facilityMailDomainName) {
+            return discovery.facilityBackend;
+          }
         }
-      } catch (error) {
-        console.error("Error fetching autodiscovery list", error);
       }
     }
     return null;
