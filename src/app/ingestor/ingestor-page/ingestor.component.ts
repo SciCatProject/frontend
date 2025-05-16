@@ -137,6 +137,43 @@ export class IngestorComponent implements OnInit, OnDestroy {
       ),
     );
 
+    this.subscriptions.push(
+      this.ingestorConnecting$.subscribe((connecting) => {
+        this.connectingToFacilityBackend = connecting;
+      }),
+    );
+
+    this.subscriptions.push(
+      this.ingestorStatus$.subscribe((ingestorStatus) => {
+        if (!ingestorStatus.validEndpoint) {
+          this.connectedFacilityBackend = "";
+          this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
+        } else if (
+          ingestorStatus.versionResponse &&
+          ingestorStatus.healthResponse
+        ) {
+          this.versionInfo = ingestorStatus.versionResponse;
+          this.healthInfo = ingestorStatus.healthResponse;
+        }
+      }),
+    );
+
+    this.subscriptions.push(
+      this.ingestorAuthInfo$.subscribe((authInfo) => {
+        if (authInfo) {
+          this.userInfo = authInfo.userInfoResponse;
+          this.authIsDisabled = authInfo.authIsDisabled;
+
+          // Only refresh if the user is logged in or the auth is disabled
+          if (this.authIsDisabled || this.userInfo.logged_in) {
+            // Activate Transfer Tab when ingestor is ready for actions
+            this.selectedTab = 0;
+            this.doRefreshTransferList();
+          }
+        }
+      }),
+    );
+
     this.loadIngestorConfiguration();
     this.store.dispatch(fetchCurrentUserAction());
   }
@@ -174,50 +211,9 @@ export class IngestorComponent implements OnInit, OnDestroy {
             }),
           );
 
-          this.initializeIngestorConnection();
+          this.store.dispatch(fromActions.connectIngestor());
         } else {
           this.connectingToFacilityBackend = false;
-        }
-      }),
-    );
-  }
-
-  async initializeIngestorConnection(): Promise<void> {
-    this.store.dispatch(fromActions.connectIngestor());
-
-    this.subscriptions.push(
-      this.ingestorConnecting$.subscribe((connecting) => {
-        this.connectingToFacilityBackend = connecting;
-      }),
-    );
-
-    this.subscriptions.push(
-      this.ingestorStatus$.subscribe((ingestorStatus) => {
-        if (!ingestorStatus.validEndpoint) {
-          this.connectedFacilityBackend = "";
-          this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
-        } else if (
-          ingestorStatus.versionResponse &&
-          ingestorStatus.healthResponse
-        ) {
-          this.versionInfo = ingestorStatus.versionResponse;
-          this.healthInfo = ingestorStatus.healthResponse;
-        }
-      }),
-    );
-
-    this.subscriptions.push(
-      this.ingestorAuthInfo$.subscribe((authInfo) => {
-        if (authInfo) {
-          this.userInfo = authInfo.userInfoResponse;
-          this.authIsDisabled = authInfo.authIsDisabled;
-
-          // Only refresh if the user is logged in or the auth is disabled
-          if (this.authIsDisabled || this.userInfo.logged_in) {
-            // Activate Transfer Tab when ingestor is ready for actions
-            this.selectedTab = 0;
-            this.doRefreshTransferList();
-          }
         }
       }),
     );
@@ -232,6 +228,9 @@ export class IngestorComponent implements OnInit, OnDestroy {
   }
 
   onClickDisconnectIngestor() {
+    // Reset state of the ingestor component
+    this.store.dispatch(
+      fromActions.resetIngestorComponent());
     // Remove the GET parameter 'backendUrl' from the URL
     this.router.navigate(["/ingestor"]);
   }

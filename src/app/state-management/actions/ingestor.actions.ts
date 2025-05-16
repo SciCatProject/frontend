@@ -134,3 +134,7 @@ export const setRenderViewFromThirdParty = createAction(
   "[Ingestor] Set Render View",
   props<{ renderView: renderView }>(),
 );
+
+export const resetIngestorComponent = createAction(
+  "[Ingestor] Reset Ingestor Component",
+);

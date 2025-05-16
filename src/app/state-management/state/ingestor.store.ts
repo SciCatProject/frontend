@@ -26,7 +26,7 @@ interface IngestorStatus {
 export interface IngestorState {
   ingestorStatus: IngestorStatus;
   ingestorAuth: IngestorAuthentication | null;
-  ingestorEndpoint: string | null;
+  ingestorEndpoint: string;
   ingestorTransferList: GetTransferResponse | null;
   transferListRequestOptions: {
     page: number;
@@ -47,7 +47,7 @@ export const initialIngestorState: IngestorState = {
     validEndpoint: true,
   },
   ingestorAuth: null,
-  ingestorEndpoint: null,
+  ingestorEndpoint: "",
   ingestorTransferList: null,
   transferListRequestOptions: {
     page: 0,

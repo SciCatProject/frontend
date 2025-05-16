@@ -176,4 +176,11 @@ const reducer = createReducer(
       },
     }),
   ),
+  on(
+    fromActions.resetIngestorComponent,
+    (state): IngestorState => ({
+      ...state,
+      ...initialIngestorState,
+    }),
+  )
 );

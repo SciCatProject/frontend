@@ -24,6 +24,7 @@ export class IngestorEffects {
       switchMap(() =>
         of(fromActions.startConnectingIngestor()).pipe(
           switchMap(() => {
+            console.log("GET VERSION")
             return this.ingestor.getVersion().pipe(
               switchMap((versionResponse) =>
                 this.ingestor.getHealth().pipe(
