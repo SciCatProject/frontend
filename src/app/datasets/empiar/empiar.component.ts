@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
 import { JsonSchema } from "@jsonforms/core";
 import { angularMaterialRenderers } from "@jsonforms/angular-material";
 import { AppConfigService, AppConfig } from "app-config.service";
@@ -31,17 +31,23 @@ import { customSemiEnumControlRenderer } from "./customRenderers/imagesSetRender
   styleUrls: ["./empiar.component.scss"],
   standalone: false,
 })
-export class EmpiarComponent implements OnInit, OnDestroy {
-  private subscriptions: Subscription[] = [];
+export class EmpiarComponent implements OnChanges, OnDestroy {
+  @Input() dataset!: OutputDatasetObsoleteDto | undefined;
+  @Input() user!: ReturnedUserDto | undefined;
+  @Input() empiarSchemaEncoded!: string; 
+  @Input() showFirstCard = true;
+
+  // private subscriptions: Subscription[] = [];
+  // dataset: OutputDatasetObsoleteDto | undefined;
+  // user: ReturnedUserDto | undefined;
   form: FormGroup;
+  data: JsonSchema = createEmptyInstance();
+  schema: JsonSchema;
+
   config: AppConfig;
-  dataset: OutputDatasetObsoleteDto | undefined;
-  user: ReturnedUserDto | undefined;
 
   empiarSchema$: Observable<string>;
   empiarSchema: string;
-  data: JsonSchema = createEmptyInstance();
-  schema: JsonSchema;
 
   generalSchema = generalSchemaAsset;
   imageSets = imageSetsAssets;
@@ -58,52 +64,77 @@ export class EmpiarComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
-    public appConfigService: AppConfigService,
-    private store: Store,
+    // public appConfigService: AppConfigService,
+    // private store: Store,
     private fb: FormBuilder,
   ) {
-    this.config = this.appConfigService.getConfig();
+    // this.config = this.appConfigService.getConfig();
     this.form = this.fb.group({
       email: [""],
     });
   }
 
-  ngOnInit() {
-    // initialize an array for the files to be uploaded
-    const pid = history.state.pid;
-    this.store.dispatch(datasetActions.fetchDatasetAction({ pid }));
-    this.store.select(selectCurrentDataset).subscribe((dataset) => {
-      this.dataset = dataset;
-    });
-    this.subscriptions.push(
-      this.store.select(selectCurrentUser).subscribe((user) => {
-        if (user) {
-          this.user = user;
-        }
-      }),
-    );
-    this.store.dispatch(fromActions.accessEmpiarSchema());
-    this.empiarSchema$ = this.store.select(selectEmpiarSchema);
+  // ngOnInit() {
+  //   // initialize an array for the files to be uploaded
+  //   const pid = history.state.pid;
+  //   this.store.dispatch(datasetActions.fetchDatasetAction({ pid }));
+  //   this.store.select(selectCurrentDataset).subscribe((dataset) => {
+  //     this.dataset = dataset;
+  //   });
+  //   this.subscriptions.push(
+  //     this.store.select(selectCurrentUser).subscribe((user) => {
+  //       if (user) {
+  //         this.user = user;
+  //       }
+  //     }),
+  //   );
+  //   this.store.dispatch(fromActions.accessEmpiarSchema());
+  //   this.empiarSchema$ = this.store.select(selectEmpiarSchema);
 
-    this.empiarSchema$.subscribe((schema) => {
-      if (schema) {
-        this.empiarSchema = schema;
-        try {
-          const decodedSchema = atob(this.empiarSchema);
-          this.schema = JSON.parse(decodedSchema);
-        } catch (error) {
-          console.error("Failed to decode schema:", error);
-        }
+  //   this.empiarSchema$.subscribe((schema) => {
+  //     if (schema) {
+  //       this.empiarSchema = schema;
+  //       try {
+  //         const decodedSchema = atob(this.empiarSchema);
+  //         this.schema = JSON.parse(decodedSchema);
+  //       } catch (error) {
+  //         console.error("Failed to decode schema:", error);
+  //       }
+  //     }
+  //   });
+  //   this.data = { ...this.data };
+  //   this.data = camelToSnake(createEmptyInstance());
+  // }
+
+
+  ngOnChanges(changes: SimpleChanges) {
+      console.log( "show first card:", this.showFirstCard)
+    if (changes['dataset'] && this.dataset) {
+      this.form.patchValue({
+        metadata: this.dataset.scientificMetadata,
+      });
+    }
+
+    if (changes['user'] && this.user) {
+      this.form.patchValue({
+        email: this.user.email,
+      });
+    }
+
+    if (changes['empiarSchemaEncoded'] && this.empiarSchemaEncoded) {
+      try {
+        const decodedSchema = atob(this.empiarSchemaEncoded);
+        this.schema = JSON.parse(decodedSchema);
+      } catch (error) {
+        console.error("Failed to decode schema:", error);
       }
-    });
-    this.data = { ...this.data };
-    this.data = camelToSnake(createEmptyInstance());
+    }
   }
-
+  
   ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => {
-      subscription.unsubscribe();
-    });
+    // this.subscriptions.forEach((subscription) => {
+    //   subscription.unsubscribe();
+    // });
   }
   onDataChange(event: EmpiarJson) {
     this.data = event;

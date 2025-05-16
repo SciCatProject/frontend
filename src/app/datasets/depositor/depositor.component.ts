@@ -22,6 +22,8 @@ import { selectCurrentDataset } from "state-management/selectors/datasets.select
 // } from "state-management/selectors/user.selectors";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
 import * as fromActions from "state-management/actions/depositor.actions";
+import { accessEmpiarSchema } from "state-management/actions/depositor.actions";
+import { selectEmpiarSchema } from "state-management/selectors/depositor.selectors";
 
 import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
@@ -49,12 +51,15 @@ export class DepositorComponent implements OnInit, OnDestroy {
   depositionRepository: FormControl;
   dataset: OutputDatasetObsoleteDto | undefined;
   user: ReturnedUserDto | undefined;
+
+  
   selectedMethod: string | null = null;
   onedepLink: {
     location: string;
     enabled: boolean;
   } | null = null;
 
+  empiarSchemaEncoded:string | undefined;
   constructor(
     public appConfigService: AppConfigService,
     private store: Store,
@@ -82,6 +87,13 @@ export class DepositorComponent implements OnInit, OnDestroy {
         }
       }),
     );
+
+    this.store.dispatch(accessEmpiarSchema());
+    this.subscriptions.push(
+      this.store.select(selectEmpiarSchema).subscribe((schema) => {
+        this.empiarSchemaEncoded = schema;
+      })
+    );
   }
 
   ngOnDestroy() {
@@ -91,15 +103,16 @@ export class DepositorComponent implements OnInit, OnDestroy {
   }
 
   onChooseRepo() {
-    const id = encodeURIComponent(this.dataset.pid);
-    if (this.depositionRepository.value === "onedep") {
-      this.router.navigate(["/datasets", id, "onedep"], {
-        state: { pid: this.dataset.pid },
-      });
-    } else if (this.depositionRepository.value === "empiar") {
-      this.router.navigate(["/datasets", id, "empiar"], {
-        state: { pid: this.dataset.pid },
-      });
-    }
+    // const id = encodeURIComponent(this.dataset.pid);
+    // if (this.depositionRepository.value === "onedep") {
+    //   this.router.navigate(["/datasets", id, "onedep"], {
+    //     state: { pid: this.dataset.pid },
+    //   });
+    // } else if (this.depositionRepository.value === "empiar") {
+    //   this.router.navigate(["/datasets", id, "empiar"], {
+    //     state: { pid: this.dataset.pid },
+    //   });
+    // }
+    this.selectedMethod = this.depositionRepository.value;
   }
 }

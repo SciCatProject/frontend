@@ -88,6 +88,7 @@ import { OrcidFormatterDirective } from "./onedep/onedep.directive";
 import { EmpiarComponent } from "./empiar/empiar.component";
 import { OneDepEffects } from "state-management/effects/depositor.effects";
 import { DepositorComponent } from "./depositor/depositor.component";
+import { DepositorWrapperComponent } from "./depositor/methodWrapper.component"
 import { QuestionnaireComponent } from "./depositor/empiar/questionnaire/questionnaire.component";
 import { onedepReducer } from "state-management/reducers/onedep.reducer";
 import { empiarReducer } from "state-management/reducers/empiar.reducer";
@@ -194,10 +195,11 @@ import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-w
     DatafilesActionsComponent,
     DatafilesActionComponent,
     DatasetsFilterSettingsComponent,
+    DepositorComponent,
+    DepositorWrapperComponent, 
+    EmpiarComponent,
     OneDepComponent,
     OrcidFormatterDirective,
-    EmpiarComponent,
-    DepositorComponent,
     QuestionnaireComponent,
     CustomEnumRendererComponent,
     CustomAuthorNameControlComponent,

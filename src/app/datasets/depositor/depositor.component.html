@@ -64,6 +64,15 @@
          
         </mat-form-field>
       </mat-card>
+      <div class="deposition-cards">
+        <mat-card *ngIf="selectedMethod === 'onedep'">
+          <app-onedep [dataset]="dataset" [user]="user" [showFirstCard]=false></app-onedep>
+        </mat-card>
+        <mat-card *ngIf="selectedMethod === 'empiar'">
+          <app-empiar [dataset]="dataset" [user]="user" [empiarSchemaEncoded]="empiarSchemaEncoded" [showFirstCard]=false></app-empiar>
+        </mat-card>
+      </div>
+      
     </div>
   </div>
 </ng-template>

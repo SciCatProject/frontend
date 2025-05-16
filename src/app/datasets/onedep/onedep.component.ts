@@ -1,9 +1,11 @@
 import {
   Component,
-  OnInit,
+  Input,
+  OnChanges,
   ViewChild,
   ElementRef,
   OnDestroy,
+  SimpleChanges
 } from "@angular/core";
 import { MatRadioChange } from "@angular/material/radio";
 import { AppConfigService, AppConfig } from "app-config.service";
@@ -38,18 +40,21 @@ import { Observable, Subscription } from "rxjs";
 import { isNumeric } from "mathjs";
 
 @Component({
-  selector: "onedep",
+  selector: "app-onedep",
   templateUrl: "./onedep.component.html",
   styleUrls: ["./onedep.component.scss"],
   standalone: false,
 })
-export class OneDepComponent implements OnInit, OnDestroy {
+export class OneDepComponent implements OnChanges, OnDestroy {
+  @Input() dataset: OutputDatasetObsoleteDto | undefined;
+  @Input() user: ReturnedUserDto | undefined;
+  @Input() showFirstCard = true;
   private subscriptions: Subscription[] = [];
 
   config: AppConfig;
 
-  dataset: OutputDatasetObsoleteDto | undefined;
-  user: ReturnedUserDto | undefined;
+  // dataset: OutputDatasetObsoleteDto | undefined;
+  // user: ReturnedUserDto | undefined;
   form: FormGroup;
   showAssociatedMapQuestion = false;
   methodsList = createMethodsList();
@@ -101,34 +106,49 @@ export class OneDepComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
-    // initialize an array for the files to be uploaded
-    const pid = history.state.pid;
-    this.store.dispatch(datasetActions.fetchDatasetAction({ pid }));
-    this.fileTypes = [];
-    this.mainContour = 0.0;
-    //  connected in the depositor component
-    // this.store.dispatch(fromActions.connectToDepositor());
+  // ngOnInit() {
+  //   // initialize an array for the files to be uploaded
+  //   const pid = history.state.pid;
+  //   this.store.dispatch(datasetActions.fetchDatasetAction({ pid }));
+  //   this.fileTypes = [];
+  //   this.mainContour = 0.0;
+  //   //  connected in the depositor component
+  //   // this.store.dispatch(fromActions.connectToDepositor());
 
-    this.store.select(selectCurrentDataset).subscribe((dataset) => {
-      this.dataset = dataset;
-      if (dataset) {
-        this.form.patchValue({
-          metadata: this.dataset.scientificMetadata,
-        });
-      }
-    });
+  //   this.store.select(selectCurrentDataset).subscribe((dataset) => {
+  //     this.dataset = dataset;
+  //     if (dataset) {
+  //       this.form.patchValue({
+  //         metadata: this.dataset.scientificMetadata,
+  //       });
+  //     }
+  //   });
 
-    this.subscriptions.push(
-      this.store.select(selectCurrentUser).subscribe((user) => {
-        if (user) {
-          this.user = user;
-          this.form.patchValue({
-            email: this.user?.email || "",
-          });
-        }
-      }),
-    );
+  //   this.subscriptions.push(
+  //     this.store.select(selectCurrentUser).subscribe((user) => {
+  //       if (user) {
+  //         this.user = user;
+  //         this.form.patchValue({
+  //           email: this.user?.email || "",
+  //         });
+  //       }
+  //     }),
+  //   );
+  // }
+
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['dataset'] && this.dataset) {
+      this.form.patchValue({
+        metadata: this.dataset.scientificMetadata,
+      });
+    }
+
+    if (changes['user'] && this.user) {
+      this.form.patchValue({
+        email: this.user.email || '',
+      });
+    }
   }
 
   ngOnDestroy() {
