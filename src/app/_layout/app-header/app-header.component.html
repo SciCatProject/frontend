@@ -1,5 +1,5 @@
 <div class="header">
-  <mat-menu #userMenu="matMenu">
+  <mat-menu #mainMenu="matMenu">
     <button mat-menu-item routerLink="/datasets/">
       <mat-icon> folder</mat-icon>
       <span>Datasets</span>
@@ -43,7 +43,9 @@
       <mat-icon> center_focus_weak</mat-icon>
       <span>Samples</span>
     </button>
+  </mat-menu>
 
+  <mat-menu #userMenu="matMenu">
     <button mat-menu-item routerLink="/user/" data-cy="setting-button">
       <mat-icon> settings</mat-icon>
       <span>Settings</span>
@@ -56,18 +58,31 @@
   </mat-menu>
 
   <mat-toolbar class="mat-elevation-z1" color="primary">
+<!--
+    <span>
+      <button mat-button class="main-menu" [matMenuTriggerFor]="userMenu">
+        <img class="main-menu-image" src="../../../assets/images/hamburger.svg" />
+      </button>
+    </span>
     <a [routerLink]="['/datasets']">
-      <img class="logo" src="../../../assets/images/scicat-header-logo.png" />
+      <img class="logo" src="../../../assets/images/{{ siteSciCatLogo }}" />
     </a>
+-->    
+    <div mat-button class="main-menu" [matMenuTriggerFor]="mainMenu">
+      <img class="logo" src="../../../assets/images/{{ siteSciCatLogo }}" />
+    </div>
     <a [routerLink]="['/datasets']">
       <img class="logo" src="../../../assets/images/{{ siteHeaderLogo }}" />
     </a>
+    <!--
     <a class="toplink" [routerLink]="['/datasets']">
       <h3>{{ status }}</h3>
     </a>
-
-    <span class="spacer"></span>
-
+    -->
+    <span class="title">
+      <h3>{{ siteTitle }}</h3>
+    </span>
+    
     <span>
       <h6>
         <a class="toplink" [routerLink]="['/help']">
@@ -95,12 +110,20 @@
     <ng-template #userButton>
       <span *ngIf="config.shoppingCartOnHeader" [matMenuTriggerFor]="cartMenu">
         <button id="cartOnHeaderButton" mat-icon-button>
+<!--
           <mat-icon
             matBadge="{{ inBatchIndicator$ | async }}"
             matBadgeColor="accent"
             matBadgeSize="medium"
             >shopping_cart</mat-icon
           >
+-->
+          <img
+            matBadge="{{ inBatchIndicator$ | async }}"
+            matBadgeColor="accent"
+            matBadgeSize="medium"
+            src=""
+          />
         </button>
       </span>
 
