@@ -50,6 +50,7 @@ import {
   selector: "sample-dashboard",
   templateUrl: "./sample-dashboard.component.html",
   styleUrls: ["./sample-dashboard.component.scss"],
+  standalone: false,
 })
 export class SampleDashboardComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectSampleDashboardPageViewModel);
@@ -253,6 +254,11 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   getTableSort(): ITableSetting["tableSort"] {
     const { queryParams } = this.route.snapshot;
+
+    if (!queryParams.args) {
+      return null;
+    }
+
     const queryArgsParsed = JSON.parse(queryParams.args);
 
     if (queryArgsParsed.sortField) {
@@ -268,6 +274,11 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
 
   getTablePaginationConfig(dataCount = 0): TablePagination {
     const { queryParams } = this.route.snapshot;
+
+    if (!queryParams.args) {
+      return null;
+    }
+
     const queryArgsParsed = JSON.parse(queryParams.args);
 
     return {

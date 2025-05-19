@@ -37,10 +37,10 @@ describe("InstrumentEffects", () => {
         {
           provide: InstrumentsService,
           useValue: jasmine.createSpyObj("instrumentApi", [
-            "instrumentsControllerFindAll",
-            "instrumentsControllerCount",
-            "instrumentsControllerFindById",
-            "instrumentsControllerUpdate",
+            "instrumentsControllerFindAllV3",
+            "instrumentsControllerCountV3",
+            "instrumentsControllerFindByIdV3",
+            "instrumentsControllerUpdateV3",
           ]),
         },
       ],
@@ -64,7 +64,7 @@ describe("InstrumentEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: instruments });
-        instrumentApi.instrumentsControllerFindAll.and.returnValue(response);
+        instrumentApi.instrumentsControllerFindAllV3.and.returnValue(response);
 
         const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
         expect(effects.fetchInstruments$).toBeObservable(expected);
@@ -76,7 +76,7 @@ describe("InstrumentEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        instrumentApi.instrumentsControllerFindAll.and.returnValue(response);
+        instrumentApi.instrumentsControllerFindAllV3.and.returnValue(response);
 
         const expected = cold("--b", { b: outcome });
         expect(effects.fetchInstruments$).toBeObservable(expected);
@@ -94,7 +94,7 @@ describe("InstrumentEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: { count } });
-      instrumentApi.instrumentsControllerCount.and.returnValue(response);
+      instrumentApi.instrumentsControllerCountV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
@@ -106,7 +106,7 @@ describe("InstrumentEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      instrumentApi.instrumentsControllerCount.and.returnValue(response);
+      instrumentApi.instrumentsControllerCountV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
@@ -122,7 +122,7 @@ describe("InstrumentEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: instrument });
-      instrumentApi.instrumentsControllerFindById.and.returnValue(response);
+      instrumentApi.instrumentsControllerFindByIdV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchInstrument$).toBeObservable(expected);
@@ -134,7 +134,7 @@ describe("InstrumentEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      instrumentApi.instrumentsControllerFindById.and.returnValue(response);
+      instrumentApi.instrumentsControllerFindByIdV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchInstrument$).toBeObservable(expected);
@@ -156,7 +156,7 @@ describe("InstrumentEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: instrument });
-      instrumentApi.instrumentsControllerUpdate.and.returnValue(response);
+      instrumentApi.instrumentsControllerUpdateV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.saveCustomMetadata$).toBeObservable(expected);
@@ -171,7 +171,7 @@ describe("InstrumentEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      instrumentApi.instrumentsControllerUpdate.and.returnValue(response);
+      instrumentApi.instrumentsControllerUpdateV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.saveCustomMetadata$).toBeObservable(expected);

@@ -6,7 +6,7 @@ on:
       - release
 
 env:
-  NODE_VERSION: 20.x
+  NODE_VERSION: 22.x
   RELEASE_BRANCH: release
 
 jobs:

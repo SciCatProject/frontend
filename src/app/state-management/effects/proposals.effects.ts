@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
+import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { concatLatestFrom } from "@ngrx/operators";
 import {
   DatasetsService,
   ProposalClass,
@@ -44,7 +45,7 @@ export class ProposalEffects {
         const queryParam = { text: search || undefined };
 
         return this.proposalsService
-          .proposalsControllerFullquery(
+          .proposalsControllerFullqueryV3(
             JSON.stringify(limitsParam),
             JSON.stringify(queryParam),
           )
@@ -67,7 +68,7 @@ export class ProposalEffects {
       ofType(fromActions.fetchCountAction),
       switchMap(({ fields }) =>
         this.proposalsService
-          .proposalsControllerCount(JSON.stringify(fields))
+          .proposalsControllerCountV3({ fields: JSON.stringify(fields) })
           .pipe(
             map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
             catchError(() => of(fromActions.fetchCountFailedAction())),
@@ -95,7 +96,7 @@ export class ProposalEffects {
       ofType(fromActions.fetchProposalDatasetsAction),
       mergeMap(({ skip, limit, sortColumn, sortDirection, proposalId }) => {
         return this.datasetsService
-          .datasetsControllerFindAll(
+          .datasetsControllerFindAllV3(
             JSON.stringify({
               where: { proposalId },
               limits: {
@@ -125,7 +126,7 @@ export class ProposalEffects {
       ofType(fromActions.fetchProposalDatasetsCountAction),
       switchMap(({ proposalId }) =>
         this.datasetsService
-          .datasetsControllerCount(JSON.stringify({ where: { proposalId } }))
+          .datasetsControllerCountV3(JSON.stringify({ where: { proposalId } }))
           .pipe(
             map(({ count }) =>
               fromActions.fetchProposalDatasetsCountCompleteAction({
@@ -146,7 +147,7 @@ export class ProposalEffects {
       switchMap(({ attachment }) => {
         const { id, sampleId, ...theRest } = attachment;
         return this.proposalsService
-          .proposalsControllerCreateAttachment(theRest.proposalId, theRest)
+          .proposalsControllerCreateAttachmentV3(theRest.proposalId, theRest)
           .pipe(
             map((res) =>
               fromActions.addAttachmentCompleteAction({ attachment: res }),
@@ -163,7 +164,7 @@ export class ProposalEffects {
       switchMap(({ proposalId, attachmentId, caption }) => {
         const newCaption = { caption };
         return this.proposalsService
-          .proposalsControllerFindOneAttachmentAndUpdate(
+          .proposalsControllerFindOneAttachmentAndUpdateV3(
             proposalId,
             attachmentId,
             newCaption,
@@ -187,7 +188,7 @@ export class ProposalEffects {
       ofType(fromActions.updateProposalPropertyAction),
       switchMap(({ proposalId, property }) =>
         this.proposalsService
-          .proposalsControllerUpdate(proposalId, property)
+          .proposalsControllerUpdateV3(proposalId, property)
           .pipe(
             switchMap(() => [
               fromActions.updateProposalPropertyCompleteAction(),
@@ -206,7 +207,7 @@ export class ProposalEffects {
       ofType(fromActions.removeAttachmentAction),
       switchMap(({ proposalId, attachmentId }) =>
         this.proposalsService
-          .proposalsControllerFindOneAttachmentAndRemove(
+          .proposalsControllerFindOneAttachmentAndRemoveV3(
             proposalId,
             attachmentId,
           )
@@ -240,7 +241,7 @@ export class ProposalEffects {
         };
 
         return this.proposalsService
-          .proposalsControllerFindAll(JSON.stringify(queryFilter))
+          .proposalsControllerFindAllV3(JSON.stringify(queryFilter))
           .pipe(
             map((relatedProposals) => {
               const relatedProposalsWithRelations = relatedProposals.map(
@@ -280,10 +281,10 @@ export class ProposalEffects {
         };
 
         return this.proposalsService
-          .proposalsControllerCount(
-            JSON.stringify({}),
-            JSON.stringify(queryFilter),
-          )
+          .proposalsControllerCountV3({
+            fields: JSON.stringify({}),
+            filter: JSON.stringify(queryFilter),
+          })
           .pipe(
             map(({ count }) =>
               fromActions.fetchRelatedProposalsCountCompleteAction({
@@ -365,12 +366,12 @@ export class ProposalEffects {
         ofType(triggerAction),
         switchMap<ProposalClass, ObservableInput<Action>>(({ proposalId }) =>
           this.proposalsService
-            .proposalsControllerFindByIdAccess(proposalId)
+            .proposalsControllerFindByIdAccessV3(proposalId)
             .pipe(
               switchMap((permission) => {
                 if (permission.canAccess) {
                   return this.proposalsService
-                    .proposalsControllerFindById(proposalId)
+                    .proposalsControllerFindByIdV3(proposalId)
                     .pipe(
                       map((proposal) => completeAction({ proposal })),
                       catchError(() => of(failedAction())),

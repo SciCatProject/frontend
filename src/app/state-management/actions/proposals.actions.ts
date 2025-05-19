@@ -1,6 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import {
   Attachment,
+  OutputAttachmentV3Dto,
   OutputDatasetObsoleteDto,
   PartialUpdateProposalDto,
   ProposalClass,
@@ -102,11 +103,11 @@ export const fetchProposalDatasetsCountFailedAction = createAction(
 
 export const addAttachmentAction = createAction(
   "[Proposal] Add Attachment",
-  props<{ attachment: Attachment }>(),
+  props<{ attachment: OutputAttachmentV3Dto }>(),
 );
 export const addAttachmentCompleteAction = createAction(
   "[Proposal] Add Attachment Complete",
-  props<{ attachment: Attachment }>(),
+  props<{ attachment: OutputAttachmentV3Dto }>(),
 );
 export const addAttachmentFailedAction = createAction(
   "[Proposal] Add Attachment Failed",
@@ -118,7 +119,7 @@ export const updateAttachmentCaptionAction = createAction(
 );
 export const updateAttachmentCaptionCompleteAction = createAction(
   "[Proposal] Update Attachment Caption Complete",
-  props<{ attachment: Attachment }>(),
+  props<{ attachment: OutputAttachmentV3Dto }>(),
 );
 export const updateAttachmentCaptionFailedAction = createAction(
   "[Proposal] Update Attachment Caption Failed",

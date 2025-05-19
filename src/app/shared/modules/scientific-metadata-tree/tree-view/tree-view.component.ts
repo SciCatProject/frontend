@@ -20,6 +20,7 @@ import { DatePipe } from "@angular/common";
   selector: "tree-view",
   templateUrl: "./tree-view.component.html",
   styleUrls: ["./tree-view.component.scss"],
+  standalone: false,
 })
 export class TreeViewComponent
   extends TreeBaseComponent

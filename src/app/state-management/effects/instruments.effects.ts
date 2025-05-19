@@ -29,7 +29,7 @@ export class InstrumentEffects {
         }
 
         return this.instrumentsService
-          .instrumentsControllerFindAll(JSON.stringify({ limits: limitsParam }))
+          .instrumentsControllerFindAllV3(JSON.stringify({ limits: limitsParam }))
           .pipe(
             mergeMap((instruments: Instrument[]) => [
               fromActions.fetchInstrumentsCompleteAction({ instruments }),
@@ -45,7 +45,7 @@ export class InstrumentEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
       switchMap(() =>
-        this.instrumentsService.instrumentsControllerCount().pipe(
+        this.instrumentsService.instrumentsControllerCountV3().pipe(
           map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
           catchError(() => of(fromActions.fetchCountFailedAction())),
         ),
@@ -57,7 +57,7 @@ export class InstrumentEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchInstrumentAction),
       switchMap(({ pid }) =>
-        this.instrumentsService.instrumentsControllerFindById(pid).pipe(
+        this.instrumentsService.instrumentsControllerFindByIdV3(pid).pipe(
           map((instrument: Instrument) =>
             fromActions.fetchInstrumentCompleteAction({ instrument }),
           ),
@@ -72,7 +72,7 @@ export class InstrumentEffects {
       ofType(fromActions.saveCustomMetadataAction),
       switchMap(({ pid, customMetadata }) =>
         this.instrumentsService
-          .instrumentsControllerUpdate(pid, {
+          .instrumentsControllerUpdateV3(pid, {
             customMetadata,
           })
           .pipe(

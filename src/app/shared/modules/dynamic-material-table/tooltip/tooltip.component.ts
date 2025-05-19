@@ -19,6 +19,7 @@ import {
       transition(":leave", [animate(300, style({ opacity: 0 }))]),
     ]),
   ],
+  standalone: false,
 })
 export class TooltipComponent {
   @HostBinding("class") class = "cell-tooltip";

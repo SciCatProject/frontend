@@ -5,6 +5,7 @@ import { AppConfigService } from "app-config.service";
   selector: "about",
   templateUrl: "./about.component.html",
   styleUrls: ["./about.component.scss"],
+  standalone: false,
 })
 export class AboutComponent implements OnInit {
   appConfig = this.appConfigService.getConfig();

@@ -9,6 +9,7 @@ import { Policy } from "@scicatproject/scicat-sdk-ts-angular";
   selector: "edit-dialog",
   templateUrl: "./edit-dialog.component.html",
   styleUrls: ["./edit-dialog.component.scss"],
+  standalone: false,
 })
 export class EditDialogComponent implements /*OnChanges,*/ OnInit {
   data: any;
