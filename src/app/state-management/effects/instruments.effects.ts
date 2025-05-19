@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { concatLatestFrom } from "@ngrx/operators";
 import {
   Instrument,
   InstrumentsService,
@@ -30,7 +29,9 @@ export class InstrumentEffects {
         }
 
         return this.instrumentsService
-          .instrumentsControllerFindAllV3(JSON.stringify({ limits: limitsParam }))
+          .instrumentsControllerFindAllV3(
+            JSON.stringify({ limits: limitsParam }),
+          )
           .pipe(
             mergeMap((instruments: Instrument[]) => [
               fromActions.fetchInstrumentsCompleteAction({ instruments }),
@@ -46,10 +47,8 @@ export class InstrumentEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
       switchMap(() =>
-        this.instrumentsService.instrumentsControllerFindAllV3().pipe(
-          map((instruments: Instrument[]) =>
-            fromActions.fetchCountCompleteAction({ count: instruments.length }),
-          ),
+        this.instrumentsService.instrumentsControllerCountV3().pipe(
+          map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
           catchError(() => of(fromActions.fetchCountFailedAction())),
         ),
       ),
