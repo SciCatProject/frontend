@@ -83,9 +83,9 @@ import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
 import { FiltersModule } from "shared/modules/filters/filters.module";
 import { userReducer } from "state-management/reducers/user.reducer";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { OneDepComponent } from "./onedep/onedep.component";
-import { OrcidFormatterDirective } from "./onedep/onedep.directive";
-import { EmpiarComponent } from "./empiar/empiar.component";
+import { OneDepComponent } from "./depositor/onedep/onedep.component";
+import { OrcidFormatterDirective } from "./depositor/onedep/onedep.directive";
+import { EmpiarComponent } from "./depositor/empiar/empiar.component";
 import { OneDepEffects } from "state-management/effects/depositor.effects";
 import { DepositorComponent } from "./depositor/depositor.component";
 import { DepositorWrapperComponent } from "./depositor/methodWrapper.component"
@@ -94,10 +94,10 @@ import { onedepReducer } from "state-management/reducers/onedep.reducer";
 import { empiarReducer } from "state-management/reducers/empiar.reducer";
 import { JsonFormsModule } from "@jsonforms/angular";
 import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
-import { CustomEnumRendererComponent } from "./empiar/customRenderers/enumRenderer";
-import { CustomAuthorNameControlComponent } from "./empiar/customRenderers/authorRenderer";
-import { CustomReferenceControlComponent } from "./empiar/customRenderers/referenceRenderer";
-import { CustomSemiEnumControlComponent } from "./empiar/customRenderers/imagesSetRenderer";
+import { CustomEnumRendererComponent } from "./depositor/empiar/customRenderers/enumRenderer";
+import { CustomAuthorNameControlComponent } from "./depositor/empiar/customRenderers/authorRenderer";
+import { CustomReferenceControlComponent } from "./depositor/empiar/customRenderers/referenceRenderer";
+import { CustomSemiEnumControlComponent } from "./depositor/empiar/customRenderers/imagesSetRenderer";
 import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
 

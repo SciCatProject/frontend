@@ -1,4 +1,4 @@
-import { EmFile } from "../../../datasets/onedep/types/methods.enum";
+import { EmFile } from "../../../datasets/depositor/onedep/types/methods.enum";
 
 export interface DepBackendVersion {
   version: string;

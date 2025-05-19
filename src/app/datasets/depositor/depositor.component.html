@@ -53,16 +53,36 @@
           </div>
           Select Deposition Repository:
         </mat-card-header>
-      
-        <mat-form-field class="method-name">
-          <mat-label>Experimental Method</mat-label>
-          <mat-select required [formControl]="depositionRepository" (selectionChange)="onChooseRepo()">
-            <mat-option *ngFor="let repo of supportedDepositionList" [value]="repo.value">
-              {{ repo.viewValue }}
-            </mat-option>
-          </mat-select>
-         
-        </mat-form-field>
+
+        <mat-card-content>
+          <div class="deposition-info-container">
+            <p class="deposition-info">
+              Before proceeding with deposition, please ensure that the scientific metadata for this dataset is complete and accurate.
+              You can verify and adjust the metadata in the "Details" section or update it using the OpenEM schema.
+            </p>
+            <button
+              class="ingestor"
+              mat-raised-button
+              color="primary"
+              (click)="onChangeIngestorMetadata()"
+            >
+              Edit with OpenEM Schema
+            </button>
+          </div>
+
+          <mat-form-field class="method-name">
+            <mat-label>Experimental Method</mat-label>
+            <mat-select required [formControl]="depositionRepository" (selectionChange)="onChooseRepo()">
+              <mat-option *ngFor="let repo of supportedDepositionList" [value]="repo.value">
+                {{ repo.viewValue }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-card-content>
+
+    
+
+      <!------  here put scientific Metadata ------>
       </mat-card>
       <div class="deposition-cards">
         <mat-card *ngIf="selectedMethod === 'onedep'">

@@ -160,6 +160,7 @@ export class OneDepComponent implements OnChanges, OnDestroy {
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
+
   // custom validator of the ORCID ids
   orcidValidatorNumeric(): (
     control: AbstractControl,
@@ -610,6 +611,7 @@ export class OneDepComponent implements OnChanges, OnDestroy {
     }
     this.submit();
   }
+
   submit() {
     let body: OneDepUserInfo;
     if (this.form.value.password) {

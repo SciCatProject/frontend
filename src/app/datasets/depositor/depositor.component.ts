@@ -103,16 +103,11 @@ export class DepositorComponent implements OnInit, OnDestroy {
   }
 
   onChooseRepo() {
-    // const id = encodeURIComponent(this.dataset.pid);
-    // if (this.depositionRepository.value === "onedep") {
-    //   this.router.navigate(["/datasets", id, "onedep"], {
-    //     state: { pid: this.dataset.pid },
-    //   });
-    // } else if (this.depositionRepository.value === "empiar") {
-    //   this.router.navigate(["/datasets", id, "empiar"], {
-    //     state: { pid: this.dataset.pid },
-    //   });
-    // }
     this.selectedMethod = this.depositionRepository.value;
   }
+
+  onChangeIngestorMetadata(){
+    console.log("Ingestor metadata changes");
+  }
+
 }

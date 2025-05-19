@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { EmpiarComponent } from "./empiar.component";
+import { EmpiarComponent } from "../../empiar/empiar.component";
 
 describe("EmpiarComponent", () => {
   let component: EmpiarComponent;

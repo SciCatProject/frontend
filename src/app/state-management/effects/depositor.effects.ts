@@ -14,7 +14,7 @@ import {
   UploadedFile,
   DepBackendVersion,
 } from "shared/sdk/models/OneDep";
-import { EmFile } from "../../datasets/onedep/types/methods.enum";
+import { EmFile } from "../../datasets/depositor/onedep/types/methods.enum";
 @Injectable()
 export class OneDepEffects {
   connectToDepositor$ = createEffect(() => {
