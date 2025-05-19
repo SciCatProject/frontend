@@ -6,10 +6,6 @@ import {
   ITableSetting,
   TableSettingEventType,
 } from "shared/modules/dynamic-material-table/models/table-setting.model";
-import {
-  actionMenu,
-  getTableSettingsConfig,
-} from "shared/modules/dynamic-material-table/utilizes/default-table-config";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
@@ -27,6 +23,8 @@ import { fetchInstrumentsAction } from "state-management/actions/instruments.act
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { Sort } from "@angular/material/sort";
 import { selectInstrumentsWithCountAndTableSettings } from "state-management/selectors/instruments.selectors";
+import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
+import { TableConfigService } from "shared/services/table-config.service";
 
 const tableDefaultSettingsConfig: ITableSetting = {
   visibleActionMenu: actionMenu,
@@ -95,6 +93,7 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
     private store: Store,
     private router: Router,
     private route: ActivatedRoute,
+    private tableConfigService: TableConfigService,
   ) {}
 
   ngOnInit(): void {
@@ -110,12 +109,13 @@ export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
           const tableSort = this.getTableSort();
           const paginationConfig = this.getTablePaginationConfig(count);
 
-          const tableSettingsConfig = getTableSettingsConfig(
-            this.tableName,
-            tableDefaultSettingsConfig,
-            savedTableConfigColumns,
-            tableSort,
-          );
+          const tableSettingsConfig =
+            this.tableConfigService.getTableSettingsConfig(
+              this.tableName,
+              tableDefaultSettingsConfig,
+              savedTableConfigColumns,
+              tableSort,
+            );
 
           if (tableSettingsConfig?.settingList.length) {
             this.initTable(tableSettingsConfig, paginationConfig);

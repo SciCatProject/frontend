@@ -29,7 +29,9 @@ export class InstrumentEffects {
         }
 
         return this.instrumentsService
-          .instrumentsControllerFindAllV3(JSON.stringify({ limits: limitsParam }))
+          .instrumentsControllerFindAllV3(
+            JSON.stringify({ limits: limitsParam }),
+          )
           .pipe(
             mergeMap((instruments: Instrument[]) => [
               fromActions.fetchInstrumentsCompleteAction({ instruments }),
