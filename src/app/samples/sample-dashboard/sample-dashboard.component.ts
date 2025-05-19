@@ -41,10 +41,8 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { Sort } from "@angular/material/sort";
-import {
-  actionMenu,
-  getTableSettingsConfig,
-} from "shared/modules/dynamic-material-table/utilizes/default-table-config";
+import { TableConfigService } from "shared/services/table-config.service";
+import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 
 @Component({
   selector: "sample-dashboard",
@@ -141,6 +139,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private store: Store,
+    private tableConfigService: TableConfigService,
   ) {}
 
   ngOnInit() {
@@ -157,12 +156,13 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
         const tableSort = this.getTableSort();
         const paginationConfig = this.getTablePaginationConfig(count);
 
-        const tableSettingsConfig = getTableSettingsConfig(
-          this.tableName,
-          this.tableDefaultSettingsConfig,
-          savedTableConfigColumns,
-          tableSort,
-        );
+        const tableSettingsConfig =
+          this.tableConfigService.getTableSettingsConfig(
+            this.tableName,
+            this.tableDefaultSettingsConfig,
+            savedTableConfigColumns,
+            tableSort,
+          );
 
         if (tableSettingsConfig?.settingList.length) {
           this.initTable(tableSettingsConfig, paginationConfig);
