@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { of } from "rxjs";
-import { catchError, map, switchMap, finalize } from "rxjs/operators"; // Import finalize
+import { catchError, map, switchMap, takeUntil } from "rxjs/operators"; // Import finalize
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Ingestor } from "shared/sdk/apis/ingestor.service";
 import {
@@ -21,10 +21,7 @@ export class IngestorEffects {
   connectToIngestor$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.connectIngestor),
-      switchMap(() =>
-        of(fromActions.startConnectingIngestor()).pipe(
-          switchMap(() => {
-            console.log("GET VERSION")
+      switchMap(() =>{
             return this.ingestor.getVersion().pipe(
               switchMap((versionResponse) =>
                 this.ingestor.getHealth().pipe(
@@ -66,14 +63,9 @@ export class IngestorEffects {
               catchError((err) =>
                 of(fromActions.connectIngestorFailure({ err })),
               ),
-              finalize(() => {
-                // Dispatch stopConnectingIngestor after the process is complete
-                of(fromActions.stopConnectingIngestor());
-              }),
+              takeUntil(this.actions$.pipe(ofType(fromActions.resetIngestorComponent)))
             );
-          }),
-        ),
-      ),
+      }),
     );
   });
 

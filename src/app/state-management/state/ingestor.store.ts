@@ -44,7 +44,7 @@ export const initialIngestorState: IngestorState = {
   ingestorStatus: {
     versionResponse: null,
     healthResponse: null,
-    validEndpoint: true,
+    validEndpoint: false,
   },
   ingestorAuth: null,
   ingestorEndpoint: "",

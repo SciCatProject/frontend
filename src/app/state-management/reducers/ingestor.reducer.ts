@@ -59,17 +59,10 @@ const reducer = createReducer(
     }),
   ),
   on(
-    fromActions.startConnectingIngestor,
+    fromActions.connectIngestor,
     (state): IngestorState => ({
       ...state,
       connectingBackend: true,
-    }),
-  ),
-  on(
-    fromActions.stopConnectingIngestor,
-    (state): IngestorState => ({
-      ...state,
-      connectingBackend: false,
     }),
   ),
   on(
@@ -79,6 +72,7 @@ const reducer = createReducer(
       { versionResponse, userInfoResponse, authIsDisabled, healthResponse },
     ): IngestorState => ({
       ...state,
+      connectingBackend: false,
       ingestorStatus: {
         versionResponse,
         healthResponse,
@@ -94,6 +88,7 @@ const reducer = createReducer(
     fromActions.connectIngestorFailure,
     (state, { err }): IngestorState => ({
       ...state,
+      connectingBackend: false,
       ingestorStatus: {
         ...state.ingestorStatus,
         validEndpoint: false,
@@ -178,9 +173,6 @@ const reducer = createReducer(
   ),
   on(
     fromActions.resetIngestorComponent,
-    (state): IngestorState => ({
-      ...state,
-      ...initialIngestorState,
-    }),
+    (): IngestorState => initialIngestorState
   )
 );
