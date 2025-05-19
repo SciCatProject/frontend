@@ -3,9 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { AppConfigService } from "app-config.service";
 import {
   MockActivatedRoute,
-  MockAppConfigService,
   MockRouter,
-  MockScicatDataSource,
   MockStore,
   MockDatasetApi,
   MockHttp,
