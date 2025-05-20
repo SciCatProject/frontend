@@ -204,6 +204,8 @@ describe("Sample Selectors", () => {
           initialSampleState.sampleFilters.text,
           initialSampleState.metadataKeys,
           initialSampleState.sampleFilters.characteristics,
+          initialUserState.tablesSettings,
+          initialSampleState.samplesCount,
         ),
       ).toEqual({
         samples: [],
@@ -217,6 +219,8 @@ describe("Sample Selectors", () => {
         textFilter: "test",
         metadataKeys: [],
         characteristicsFilter: [],
+        tableSettings: {},
+        count: 0,
       });
     });
   });

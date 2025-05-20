@@ -26,12 +26,7 @@ export class SampleEffects {
 
   fetchSamples$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(
-        fromActions.fetchSamplesAction,
-        fromActions.changePageAction,
-        fromActions.sortByColumnAction,
-        fromActions.setTextFilterAction,
-      ),
+      ofType(fromActions.fetchSamplesAction),
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
@@ -57,10 +52,10 @@ export class SampleEffects {
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query }) =>
-        this.sampleApi.samplesControllerFullqueryV3(JSON.stringify(query)).pipe(
-          map((samples) =>
+        this.sampleApi.samplesControllerCountV3(JSON.stringify(query)).pipe(
+          map(({ count }) =>
             fromActions.fetchSamplesCountCompleteAction({
-              count: samples.length,
+              count,
             }),
           ),
           catchError(() => of(fromActions.fetchSamplesCountFailedAction())),
@@ -76,11 +71,11 @@ export class SampleEffects {
       map(([action, params]) => params),
       mergeMap(({ query }) => {
         const limits = {};
-        query["metadataKey"] = "";
+        const metadataKeysQuery = { ...query, metadataKey: "" };
         return this.sampleApi
           .samplesControllerMetadataKeysV3(
             JSON.stringify(limits),
-            JSON.stringify(query),
+            JSON.stringify(metadataKeysQuery),
           )
           .pipe(
             map((metadataKeys) =>
