@@ -131,3 +131,14 @@ mat-card {
 .confirm-message-error {
   color: red;
 }
+
+.vertical-center-list-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.last-used-facility-backends {
+  color: grey;
+  margin-top: 1em;
+}

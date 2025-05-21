@@ -3,7 +3,6 @@ import { MatDialog } from "@angular/material/dialog";
 import {
   IngestionRequestInformation,
   IngestorHelper,
-  SciCatHeader,
 } from "../../ingestor-page/helper/ingestor.component-helper";
 import { IngestorConfirmationDialogComponent } from "../confirmation-dialog/ingestor.confirmation-dialog.component";
 import {
@@ -18,6 +17,7 @@ import {
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Subscription } from "rxjs";
+import { CreateDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
   selector: "ingestor-dialog-stepper",
@@ -123,7 +123,7 @@ export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
         if (this.createNewTransferData) {
           const sciCatHeaderWithoutSourcePath = {
             ...this.createNewTransferData.scicatHeader,
-          } as SciCatHeader;
+          } as CreateDatasetDto;
           delete sciCatHeaderWithoutSourcePath.sourceFolder;
 
           const exportData = {};

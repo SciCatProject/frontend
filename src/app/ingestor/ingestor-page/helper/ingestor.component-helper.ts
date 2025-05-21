@@ -1,5 +1,5 @@
 import { JsonSchema, JsonSchema7 } from "@jsonforms/core";
-import { DatasetClass } from "@scicatproject/scicat-sdk-ts-angular";
+import { CreateDatasetDto, DatasetClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { isArray } from "mathjs";
 import { PostDatasetResponse } from "shared/sdk/models/ingestor/postDatasetResponse";
 import { UserInfo } from "shared/sdk/models/ingestor/userInfo";
@@ -46,26 +46,6 @@ export interface IngestionRequestInformation {
   autoArchive: boolean;
 }
 
-// There are many more... see DerivedDataset.ts
-export interface SciCatHeader {
-  datasetName: string;
-  description: string;
-  creationLocation: string;
-  dataFormat: string;
-  ownerGroup: string;
-  type: string;
-  license: string;
-  keywords: string[];
-  sourceFolder: string;
-  scientificMetadata: ScientificMetadata;
-  principalInvestigator: string;
-  ownerEmail: string;
-  contactEmail: string;
-  investigator: string;
-  creationTime: string;
-  owner: string;
-}
-
 export interface ScientificMetadata {
   organizational: object;
   sample: object;
@@ -82,6 +62,22 @@ export interface DialogDataObject {
 }
 
 export class IngestorHelper {
+  static saveConnectionsToLocalStorage = (connections: string[]) => {
+    // Remove duplicates
+    const uniqueConnections = Array.from(new Set(connections));
+    const connectionsString = JSON.stringify(uniqueConnections);
+    localStorage.setItem("ingestorConnections", connectionsString);
+  };
+
+  static loadConnectionsFromLocalStorage = (): string[] => {
+    const connectionsString = localStorage.getItem("ingestorConnections");
+    if (connectionsString) {
+      const connections = JSON.parse(connectionsString);
+      return connections;
+    }
+    return [];
+  };
+
   static createEmptyRequestInformation = (): IngestionRequestInformation => {
     return {
       selectedPath: "",
@@ -158,11 +154,7 @@ export const getJsonSchemaFromDto = () => {
   // 0 => number
   // -1 => skip number
   // -2 => optional number
-  const emptyDatasetForSchema: DatasetClass = {
-    createdBy: "--skip",
-    updatedBy: "--skip",
-    createdAt: "--dateTime",
-    updatedAt: "--dateTime --skip", // skip
+  const emptyDatasetForSchema: CreateDatasetDto = {
     ownerGroup: "--string",
     accessGroups: [],
     isPublished: false,
@@ -175,7 +167,6 @@ export const getJsonSchemaFromDto = () => {
     creationTime: "--dateTime",
     type: "raw",
     datasetName: "--string",
-    version: "--skip",
     creationLocation: "--string",
 
     // Optional fields

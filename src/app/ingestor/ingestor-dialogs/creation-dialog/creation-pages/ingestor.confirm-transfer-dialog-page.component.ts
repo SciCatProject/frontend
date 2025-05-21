@@ -9,7 +9,6 @@ import {
 import {
   IngestionRequestInformation,
   IngestorHelper,
-  SciCatHeader,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
 import { Store } from "@ngrx/store";
 import { selectIngestionObject } from "state-management/selectors/ingestor.selector";
@@ -18,6 +17,7 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { IngestorConfirmationDialogComponent } from "ingestor/ingestor-dialogs/confirmation-dialog/ingestor.confirmation-dialog.component";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Subscription } from "rxjs";
+import { CreateDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
   selector: "ingestor-confirm-transfer-dialog-page",
@@ -71,8 +71,8 @@ export class IngestorConfirmTransferDialogPageComponent
 
   createMetaDataString(): string {
     const space = 2;
-    const scicatMetadata: SciCatHeader = {
-      ...(this.createNewTransferData.scicatHeader as SciCatHeader),
+    const scicatMetadata: CreateDatasetDto = {
+      ...(this.createNewTransferData.scicatHeader as CreateDatasetDto),
       scientificMetadata: {
         organizational:
           this.createNewTransferData.userMetaData["organizational"],

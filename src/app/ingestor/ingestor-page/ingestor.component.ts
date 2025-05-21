@@ -96,7 +96,7 @@ export class IngestorComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
+    this.lastUsedFacilityBackends = IngestorHelper.loadConnectionsFromLocalStorage();
 
     // Fetch the API token that the ingestor can authenticate to scicat as the user
     this.subscriptions.push(
@@ -147,7 +147,7 @@ export class IngestorComponent implements OnInit, OnDestroy {
       this.ingestorStatus$.subscribe((ingestorStatus) => {
         if (!ingestorStatus.validEndpoint) {
           this.connectedFacilityBackend = "";
-          this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
+          this.lastUsedFacilityBackends = IngestorHelper.loadConnectionsFromLocalStorage();
           this.onClickForwardToIngestorPage();
         } else if (
           ingestorStatus.versionResponse &&
@@ -222,6 +222,8 @@ export class IngestorComponent implements OnInit, OnDestroy {
 
   onClickForwardToIngestorPage(nextFacilityBackend?: string) {
     if (nextFacilityBackend) {
+      IngestorHelper.saveConnectionsToLocalStorage([...this.lastUsedFacilityBackends, nextFacilityBackend]);
+
       this.router.navigate(["/ingestor"], {
         queryParams: { backendUrl: nextFacilityBackend },
       });
@@ -244,14 +246,13 @@ export class IngestorComponent implements OnInit, OnDestroy {
     this.forwardFacilityBackend = facilityBackend;
   }
 
-  loadLastUsedFacilityBackends(): string[] {
-    // Load the list from the local Storage
-    const lastUsedFacilityBackends =
-      '["https://ingestor.development.psi.ch", "http://localhost:8800", "http://localhost:8000", "http://localhost:8888" ]';
-    if (lastUsedFacilityBackends) {
-      return JSON.parse(lastUsedFacilityBackends);
-    }
-    return [];
+  onClickDeleteStoredFacilityBackend(facilityBackend: string) {
+    const filteredFacilityBackends = this.lastUsedFacilityBackends.filter(
+      (backend) => backend !== facilityBackend,
+    );
+
+    IngestorHelper.saveConnectionsToLocalStorage(filteredFacilityBackends);
+    this.lastUsedFacilityBackends = filteredFacilityBackends;
   }
 
   onClickAddIngestion(): void {
