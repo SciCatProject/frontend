@@ -161,7 +161,7 @@ export const getJsonSchemaFromDto = () => {
     pid: "--skip",
     owner: "--string",
     contactEmail: "--mail",
-    sourceFolder: "--readonly",
+    sourceFolder: "--string --readonly",
     size: -1, // skip
     numberOfFiles: -1, // skip
     creationTime: "--dateTime",
