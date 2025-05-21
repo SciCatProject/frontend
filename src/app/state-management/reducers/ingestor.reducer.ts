@@ -108,6 +108,13 @@ const reducer = createReducer(
     }),
   ),
   on(
+    fromActions.updateTransferListDetailSuccess,
+    (state, { transferListDetailView }): IngestorState => ({
+      ...state,
+      ingestorTransferListDetailView: transferListDetailView,
+    }),
+  ),
+  on(
     fromActions.updateIngestionObject,
     (state, { ingestionObject }): IngestorState => ({
       ...state,

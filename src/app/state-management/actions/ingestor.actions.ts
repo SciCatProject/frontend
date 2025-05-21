@@ -57,6 +57,11 @@ export const updateTransferListSuccess = createAction(
   }>(),
 );
 
+export const updateTransferListDetailSuccess = createAction(
+  "[Ingestor] Update Transfer List Detail Success",
+  props<{ transferListDetailView: GetTransferResponse }>(),
+);
+
 export const updateTransferListFailure = createAction(
   "[Ingestor] Update Transfer List Failure",
   props<{ err: Error }>(),

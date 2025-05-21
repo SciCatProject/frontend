@@ -28,6 +28,7 @@ export interface IngestorState {
   ingestorAuth: IngestorAuthentication | null;
   ingestorEndpoint: string;
   ingestorTransferList: GetTransferResponse | null;
+  ingestorTransferListDetailView: GetTransferResponse | null;
   transferListRequestOptions: {
     page: number;
     pageNumber: number;
@@ -49,6 +50,7 @@ export const initialIngestorState: IngestorState = {
   ingestorAuth: null,
   ingestorEndpoint: "",
   ingestorTransferList: null,
+  ingestorTransferListDetailView: null,
   transferListRequestOptions: {
     page: 0,
     pageNumber: 100,

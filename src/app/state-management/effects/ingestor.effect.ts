@@ -21,50 +21,50 @@ export class IngestorEffects {
   connectToIngestor$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.connectIngestor),
-      switchMap(() =>{
-            return this.ingestor.getVersion().pipe(
-              switchMap((versionResponse) =>
-                this.ingestor.getHealth().pipe(
-                  switchMap((healthResponse) =>
-                    this.ingestor.getUserInfo().pipe(
-                      map((userInfoResponse) =>
+      switchMap(() => {
+        return this.ingestor.getVersion().pipe(
+          switchMap((versionResponse) =>
+            this.ingestor.getHealth().pipe(
+              switchMap((healthResponse) =>
+                this.ingestor.getUserInfo().pipe(
+                  map((userInfoResponse) =>
+                    fromActions.connectIngestorSuccess({
+                      versionResponse:
+                        versionResponse as OtherVersionResponse,
+                      healthResponse: healthResponse as OtherHealthResponse,
+                      userInfoResponse: userInfoResponse as UserInfo,
+                      authIsDisabled: false,
+                    }),
+                  ),
+                  catchError((err) => {
+                    const errorMessage =
+                      err instanceof HttpErrorResponse
+                        ? (err.error?.message ?? err.error ?? err.message)
+                        : err.message;
+
+                    if (errorMessage.includes("disabled")) {
+                      return of(
                         fromActions.connectIngestorSuccess({
                           versionResponse:
                             versionResponse as OtherVersionResponse,
-                          healthResponse: healthResponse as OtherHealthResponse,
-                          userInfoResponse: userInfoResponse as UserInfo,
-                          authIsDisabled: false,
+                          healthResponse:
+                            healthResponse as OtherHealthResponse,
+                          userInfoResponse: null, // Kein UserInfo verfügbar
+                          authIsDisabled: true,
                         }),
-                      ),
-                      catchError((err) => {
-                        const errorMessage =
-                          err instanceof HttpErrorResponse
-                            ? (err.error?.message ?? err.error ?? err.message)
-                            : err.message;
-
-                        if (errorMessage.includes("disabled")) {
-                          return of(
-                            fromActions.connectIngestorSuccess({
-                              versionResponse:
-                                versionResponse as OtherVersionResponse,
-                              healthResponse:
-                                healthResponse as OtherHealthResponse,
-                              userInfoResponse: null, // Kein UserInfo verfügbar
-                              authIsDisabled: true,
-                            }),
-                          );
-                        }
-                        return of(fromActions.connectIngestorFailure({ err }));
-                      }),
-                    ),
-                  ),
+                      );
+                    }
+                    return of(fromActions.connectIngestorFailure({ err }));
+                  }),
                 ),
               ),
-              catchError((err) =>
-                of(fromActions.connectIngestorFailure({ err })),
-              ),
-              takeUntil(this.actions$.pipe(ofType(fromActions.resetIngestorComponent)))
-            );
+            ),
+          ),
+          catchError((err) =>
+            of(fromActions.connectIngestorFailure({ err })),
+          ),
+          takeUntil(this.actions$.pipe(ofType(fromActions.resetIngestorComponent)))
+        );
       }),
     );
   });
@@ -123,12 +123,17 @@ export class IngestorEffects {
             transferId,
           )
           .pipe(
-            map((transferList) =>
-              fromActions.updateTransferListSuccess({
+            map((transferList) => {
+              if (transferId) {
+                return fromActions.updateTransferListDetailSuccess({ transferListDetailView: transferList })
+              };
+
+              return fromActions.updateTransferListSuccess({
                 transferList,
                 page: page ?? pageRO,
                 pageNumber: pageNumber ?? pageNumberRO,
-              }),
+              })
+            },
             ),
             catchError((err) =>
               of(fromActions.updateTransferListFailure({ err })),
@@ -269,5 +274,5 @@ export class IngestorEffects {
     private actions$: Actions,
     private ingestor: Ingestor,
     private store: Store,
-  ) {}
+  ) { }
 }
