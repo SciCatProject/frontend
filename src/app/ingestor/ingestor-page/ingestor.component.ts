@@ -147,7 +147,6 @@ export class IngestorComponent implements OnInit, OnDestroy {
       this.ingestorStatus$.subscribe((ingestorStatus) => {
         if (!ingestorStatus.validEndpoint) {
           this.connectedFacilityBackend = "";
-          this.forwardFacilityBackend = "";
           this.lastUsedFacilityBackends = this.loadLastUsedFacilityBackends();
           this.onClickForwardToIngestorPage();
         } else if (
@@ -221,10 +220,10 @@ export class IngestorComponent implements OnInit, OnDestroy {
     );
   }
 
-  onClickForwardToIngestorPage() {
-    if (this.forwardFacilityBackend) {
+  onClickForwardToIngestorPage(nextFacilityBackend?: string) {
+    if (nextFacilityBackend) {
       this.router.navigate(["/ingestor"], {
-        queryParams: { backendUrl: this.forwardFacilityBackend },
+        queryParams: { backendUrl: nextFacilityBackend },
       });
     }
     else {
