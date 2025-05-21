@@ -4,10 +4,21 @@
   gap: 1em;
 }
 
+.ingestor-dialog-header {
+  display: flex;
+  flex-direction: column;
+}
+
 .ingestor-mixed-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
+}
+
+.ingestor-stepper-header {
+  flex: 1;
+  width: 95%;
+  align-self: center;
 }
 
 .ingestor-close-button {

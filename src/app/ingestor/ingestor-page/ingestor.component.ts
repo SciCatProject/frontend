@@ -268,6 +268,7 @@ export class IngestorComponent implements OnInit, OnDestroy {
     let dialogRef = null;
     dialogRef = this.dialog.open(IngestorCreationDialogBaseComponent, {
       disableClose: true,
+      width: "75vw",
     });
 
     // Error if the dialog reference is not set

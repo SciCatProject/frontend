@@ -11,7 +11,8 @@ export type renderView = "requiredOnly" | "all";
 it will produce errors when changing the schema. */
 @Component({
   selector: "app-metadata-editor",
-  template: `<div>
+  styleUrls: ["./ingestor-metadata-editor.component.scss"],
+  template: `<ng-container class="editor-container">
     <jsonforms
       *ngIf="renderView === 'requiredOnly'"
       [data]="visualData"
@@ -29,7 +30,7 @@ it will produce errors when changing the schema. */
       (dataChange)="onDataChange($event)"
       (errors)="onErrors($event)"
     ></jsonforms>
-  </div>`,
+  </ng-container>`,
   standalone: false,
 })
 export class IngestorMetadataEditorComponent implements OnInit {
