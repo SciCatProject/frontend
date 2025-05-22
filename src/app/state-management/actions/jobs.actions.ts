@@ -1,5 +1,8 @@
 import { createAction, props } from "@ngrx/store";
-import { CreateJobDtoV3, OutputJobV3Dto } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  CreateJobDtoV3,
+  OutputJobV3Dto,
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 export const fetchJobsAction = createAction("[Job] Fetch Jobs");
 export const fetchJobsCompleteAction = createAction(
