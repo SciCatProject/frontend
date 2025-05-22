@@ -41,7 +41,11 @@ import { AppConfigService } from "app-config.service";
 import {
   DatasetClass,
   DatasetsService,
+  Instrument,
 } from "@scicatproject/scicat-sdk-ts-angular";
+import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
+import { selectInstruments } from "state-management/selectors/instruments.selectors";
+import { of } from "rxjs";
 
 const getConfig = () => ({});
 
@@ -50,7 +54,7 @@ describe("DatasetTableComponent", () => {
   let fixture: ComponentFixture<DatasetTableComponent>;
 
   let store: MockStore;
-  let dispatchSpy;
+  let dispatchSpy: jasmine.Spy;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -67,7 +71,10 @@ describe("DatasetTableComponent", () => {
       ],
       providers: [
         provideMockStore({
-          selectors: [{ selector: selectDatasets, value: [] }],
+          selectors: [
+            { selector: selectDatasets, value: [] },
+            { selector: selectInstruments, value: [] },
+          ],
         }),
       ],
       declarations: [DatasetTableComponent],
@@ -95,6 +102,7 @@ describe("DatasetTableComponent", () => {
 
   beforeEach(inject([Store], (mockStore: MockStore) => {
     store = mockStore;
+    dispatchSpy = store.dispatch as jasmine.Spy;
   }));
 
   afterEach(() => {
@@ -428,6 +436,32 @@ describe("DatasetTableComponent", () => {
       // const dataset = mockDataset;
       // const numberOfDerivedDataset = component.countDerivedDatasets(dataset);
       // expect(numberOfDerivedDataset).toEqual(0);
+    });
+  });
+
+  describe("#getInstrumentName()", () => {
+    it("should return the instrument name if instrumentId exists", () => {
+      component.instruments = {
+        "inst1": { pid: "inst1", name: "Instrument 1" } as Instrument,
+      };
+      const instrumentName = component.getInstrumentName("inst1");
+      expect(instrumentName).toEqual("Instrument 1");
+    });
+
+    it("should return '-' if instrumentId does not exist", () => {
+      component.instruments = {
+        "inst1": { pid: "inst1", name: "Instrument 1" } as Instrument,
+      };
+      const instrumentName = component.getInstrumentName("inst2");
+      expect(instrumentName).toEqual("-");
+    });
+
+    it("should return '-' if instrumentId is null or undefined", () => {
+      component.instruments = {
+        "inst1": { pid: "inst1", name: "Instrument 1" } as Instrument,
+      };
+      expect(component.getInstrumentName(null as any)).toEqual("-");
+      expect(component.getInstrumentName(undefined as any)).toEqual("-");
     });
   });
 });

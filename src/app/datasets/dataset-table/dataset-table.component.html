@@ -340,6 +340,24 @@
       </mat-cell>
     </ng-container>
 
+    <!-- Instrument Name Column -->
+    <ng-container
+      matColumnDef="standard_instrumentName"
+      style="align-content: center"
+    >
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="column" style="align-items: center">
+          <div>
+            <mat-icon>developer_board</mat-icon>
+          </div>
+          <div>Instrument Name</div>
+        </div>
+      </mat-header-cell>
+      <mat-cell class="datasetName" *matCellDef="let dataset">
+        {{ getInstrumentName(dataset.instrumentId) || "-" }}
+      </mat-cell>
+    </ng-container>
+
     <!-- Derived Datasets Column -->
     <!-- <ng-container matColumnDef="standard_derivedDatasetsNum">
       <mat-header-cell *matHeaderCellDef>
