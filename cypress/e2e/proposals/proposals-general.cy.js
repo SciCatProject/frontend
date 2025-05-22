@@ -450,6 +450,9 @@ describe("Proposals general", () => {
       cy.get("dynamic-mat-table table-menu button").click();
       cy.get('[role="menu"] button').contains("Save table setting").click();
 
+      cy.get('[role="menu"]').should('not.exist');
+      cy.wait(1000);
+
       cy.reload();
 
       cy.get("dynamic-mat-table mat-header-row.header").should("exist");
