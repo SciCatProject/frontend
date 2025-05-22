@@ -39,6 +39,8 @@ import {
   OutputDatasetObsoleteDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { PageEvent } from "@angular/material/paginator";
+import { map } from "rxjs/operators";
+
 export interface SortChangeEvent {
   active: string;
   direction: "asc" | "desc" | "";
@@ -56,8 +58,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   private subscriptions: Subscription[] = [];
 
   appConfig = this.appConfigService.getConfig();
-  
-  instruments: { [id: string]: Instrument } = {};
 
   lodashGet = get;
   currentPage$ = this.store.select(selectPage);
@@ -76,6 +76,15 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
 
   @Output() settingsClick = new EventEmitter<MouseEvent>();
   @Output() rowClick = new EventEmitter<OutputDatasetObsoleteDto>();
+
+  instrumentsMap$ = this.store.select(selectInstruments).pipe(
+    map((list) =>
+      (list ?? []).reduce((acc, inst) => {
+        if (inst.pid) acc[inst.pid] = inst;
+        return acc;
+      }, {} as Record<string, Instrument>)
+    )
+  );
 
   constructor(
     public appConfigService: AppConfigService,
@@ -194,12 +203,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
     this.store.dispatch(sortByColumnAction({ column, direction }));
   }
 
-  getInstrumentName(instrumentId: string): string {
-    return instrumentId && this.instruments[instrumentId]
-      ? this.instruments[instrumentId].name
-      : "-";
-  }
-
   // countDerivedDatasets(dataset: Dataset): number {
   //   let derivedDatasetsNum = 0;
   //   if (dataset.history) {
@@ -217,18 +220,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit() {
     this.store.dispatch(fetchInstrumentsAction({}));
-    this.subscriptions.push(
-      this.store.select(selectInstruments).subscribe((instruments: Instrument[] | undefined) => {
-        if (instruments) {
-          this.instruments = instruments.reduce((acc, instrument) => {
-            if (instrument.pid) {
-              acc[instrument.pid] = instrument;
-            }
-            return acc;
-          }, {} as { [id: string]: Instrument });
-        }
-      }),
-    );
 
     this.subscriptions.push(
       this.store.select(selectDatasetsInBatch).subscribe((datasets) => {
