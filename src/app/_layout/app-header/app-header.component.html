@@ -110,20 +110,13 @@
     <ng-template #userButton>
       <span *ngIf="config.shoppingCartOnHeader" [matMenuTriggerFor]="cartMenu">
         <button id="cartOnHeaderButton" mat-icon-button>
-<!--
           <mat-icon
+            color = "primary"
             matBadge="{{ inBatchIndicator$ | async }}"
             matBadgeColor="accent"
             matBadgeSize="medium"
-            >shopping_cart</mat-icon
+            >filter_none</mat-icon
           >
--->
-          <img
-            matBadge="{{ inBatchIndicator$ | async }}"
-            matBadgeColor="accent"
-            matBadgeSize="medium"
-            src=""
-          />
         </button>
       </span>
 
@@ -134,7 +127,7 @@
       <span>
         <button mat-button class="user-button" [matMenuTriggerFor]="userMenu">
           <img class="user-image" src="{{ profileImage$ | async }}" />
-          <div class="large-screen-text">{{ username$ | async }}</div>
+          <div color="primary" class="large-screen-text">{{ username$ | async }}</div>
         </button>
       </span>
     </ng-template>
