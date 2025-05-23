@@ -99,10 +99,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
         id: job.id,
         initiator: job.emailJobInitiator,
         type: job.type,
-        createdAt: this.datePipe.transform(
-          job.creationTime,
-          "yyyy-MM-dd HH:mm",
-        ),
+        createdAt: job.creationTime,
         statusMessage: job.jobStatusMessage,
       }));
     }
