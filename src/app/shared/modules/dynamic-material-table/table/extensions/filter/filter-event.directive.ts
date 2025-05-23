@@ -2,6 +2,7 @@ import { Directive, HostListener } from "@angular/core";
 
 @Directive({
   selector: "[appFilterEvent]",
+  standalone: false,
 })
 export class FilterEventDirective {
   @HostListener("click", ["$event"])

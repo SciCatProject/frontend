@@ -19,11 +19,11 @@ docker run \
 	--rm \
 	--add-host host.docker.internal:host-gateway \
 	-v "`pwd`:/local" \
-	openapitools/openapi-generator-cli:v7.9.0 generate \
+	openapitools/openapi-generator-cli:v7.12.0 generate \
 	-i http://host.docker.internal:3000/explorer-json \
 	-g typescript-angular \
 	-o local/@scicatproject/scicat-sdk-ts-angular \
-	--additional-properties=ngVersion=16.2.12,npmName=@scicatproject/scicat-sdk-ts-angular,supportsES6=true,npmVersion=10.8.2,withInterfaces=true  --skip-validate-spec
+	--additional-properties=ngVersion=19.0.0,npmName=@scicatproject/scicat-sdk-ts-angular,supportsES6=true,withInterfaces=true  --skip-validate-spec
 
 REMOVE_NPM_LINK=0
 if ! command -v npm 2>&1 1>/dev/null

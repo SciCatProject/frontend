@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { Actions, ofType, createEffect, concatLatestFrom } from "@ngrx/effects";
+import { Actions, ofType, createEffect } from "@ngrx/effects";
+import { concatLatestFrom } from "@ngrx/operators";
 import { ADAuthService } from "users/adauth.service";
 import { AuthService, SDKToken } from "shared/services/auth/auth.service";
 import {
@@ -95,7 +96,7 @@ export class UserEffects {
         this.authService.setToken(token);
         this.apiConfigService.accessToken = token.id;
         return this.usersService
-          .usersControllerFindById(oidcLoginResponse.userId)
+          .usersControllerFindByIdV3(oidcLoginResponse.userId)
           .pipe(
             switchMap((user: ReturnedUserDto) => [
               fromActions.fetchUserCompleteAction(),
@@ -125,7 +126,7 @@ export class UserEffects {
         this.authService.setToken(token);
         this.apiConfigService.accessToken = token.id;
         return this.usersService
-          .usersControllerFindById(adLoginResponse.userId)
+          .usersControllerFindByIdV3(adLoginResponse.userId)
           .pipe(
             switchMap((user: ReturnedUserDto) => [
               fromActions.fetchUserCompleteAction(),
@@ -149,27 +150,29 @@ export class UserEffects {
       ofType(fromActions.funcLoginAction),
       map((action) => action.form),
       switchMap(({ username, password, rememberMe }) =>
-        this.sharedAuthService.authControllerLogin({ username, password }).pipe(
-          switchMap((loginResponse) => {
-            this.apiConfigService.accessToken = loginResponse.access_token;
-            this.authService.setToken({
-              ...loginResponse,
-              created: new Date(loginResponse.created),
-              rememberMe,
-              scopes: null,
-            });
-            return [
-              fromActions.funcLoginSuccessAction(),
-              fromActions.loginCompleteAction({
-                user: loginResponse.user,
-                accountType: "functional",
-              }),
-            ];
-          }),
-          catchError((error: HttpErrorResponse) => {
-            return of(fromActions.funcLoginFailedAction({ error }));
-          }),
-        ),
+        this.sharedAuthService
+          .authControllerLoginV3({ username, password })
+          .pipe(
+            switchMap((loginResponse) => {
+              this.apiConfigService.accessToken = loginResponse.access_token;
+              this.authService.setToken({
+                ...loginResponse,
+                created: new Date(loginResponse.created),
+                rememberMe,
+                scopes: null,
+              });
+              return [
+                fromActions.funcLoginSuccessAction(),
+                fromActions.loginCompleteAction({
+                  user: loginResponse.user,
+                  accountType: "functional",
+                }),
+              ];
+            }),
+            catchError((error: HttpErrorResponse) => {
+              return of(fromActions.funcLoginFailedAction({ error }));
+            }),
+          ),
       ),
     );
   });
@@ -218,7 +221,7 @@ export class UserEffects {
       filter(() => this.authService.isAuthenticated()),
       switchMap(() => {
         this.authService.clear();
-        return this.sharedAuthService.authControllerLogout().pipe(
+        return this.sharedAuthService.authControllerLogoutV3().pipe(
           switchMap(({ logoutURL }) => [
             clearDatasetsStateAction(),
             clearInstrumentsStateAction(),
@@ -272,7 +275,7 @@ export class UserEffects {
         return this.authService.isAuthenticated();
       }),
       switchMap(() =>
-        this.usersService.usersControllerGetMyUser().pipe(
+        this.usersService.usersControllerGetMyUserV3().pipe(
           switchMap((user: ReturnedUserDto) => [
             fromActions.fetchCurrentUserCompleteAction({ user }),
             fromActions.fetchUserIdentityAction({ id: user.id }),
@@ -289,7 +292,7 @@ export class UserEffects {
       ofType(fromActions.fetchUserIdentityAction),
       switchMap(({ id }) =>
         this.userIdentityService
-          .userIdentitiesControllerFindOne(
+          .userIdentitiesControllerFindOneV3(
             JSON.stringify({
               where: { userId: id },
             }),
@@ -308,7 +311,7 @@ export class UserEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchUserSettingsAction),
       switchMap(({ id }) =>
-        this.usersService.usersControllerGetSettings(id, null).pipe(
+        this.usersService.usersControllerGetSettingsV3(id, null).pipe(
           map((userSettings: UserSettings) => {
             const config = this.configService.getConfig();
             const externalSettings = userSettings.externalSettings || {};
@@ -454,11 +457,11 @@ export class UserEffects {
         //   using the partialUpdateExternalSettings API, which does not enforce validation.
 
         const apiCall$ = useExternalSettings
-          ? this.usersService.usersControllerPatchExternalSettings(
+          ? this.usersService.usersControllerPatchExternalSettingsV3(
               user?.id,
               JSON.stringify(newProperty) as any,
             )
-          : this.usersService.usersControllerPatchSettings(
+          : this.usersService.usersControllerPatchSettingsV3(
               user?.id,
               JSON.stringify(newProperty) as any,
             );

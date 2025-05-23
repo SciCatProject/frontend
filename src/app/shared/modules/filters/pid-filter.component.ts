@@ -15,6 +15,7 @@ import { getFilterLabel } from "./utils";
   selector: "app-pid-filter",
   templateUrl: `./pid-filter.component.html`,
   styleUrls: [`./pid-filter.component.scss`],
+  standalone: false,
 })
 export class PidFilterComponent
   extends ClearableInputComponent<string>

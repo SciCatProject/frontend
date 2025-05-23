@@ -34,6 +34,7 @@ import { DatePipe } from "@angular/common";
   selector: "app-files-dashboard",
   templateUrl: "./files-dashboard.component.html",
   styleUrls: ["./files-dashboard.component.scss"],
+  standalone: false,
 })
 export class FilesDashboardComponent implements OnInit, OnDestroy {
   filesWithCountAndTableSettings$ = this.store.select(

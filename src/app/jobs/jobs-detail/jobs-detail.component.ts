@@ -13,6 +13,7 @@ import { showMessageAction } from "state-management/actions/user.actions";
   selector: "app-jobs-detail",
   templateUrl: "./jobs-detail.component.html",
   styleUrls: ["./jobs-detail.component.scss"],
+  standalone: false,
 })
 export class JobsDetailComponent implements OnInit, OnDestroy {
   // TODO: We should extract the response dto with the right properties instead of using the schema for ApiResponse in the backend

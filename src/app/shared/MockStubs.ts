@@ -21,6 +21,7 @@ import {
   Policy,
   ReturnedUserDto,
   OrigDatablock,
+  OutputAttachmentV3Dto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { SDKToken } from "./services/auth/auth.service";
 
@@ -41,7 +42,7 @@ export class MockUserApi {
     return { username: "admin" };
   }
 
-  usersControllerGetUserJWT() {
+  usersControllerGetUserJWTV3() {
     return of("");
   }
 }
@@ -117,15 +118,15 @@ export class MockDatasetApi {
     return of([]);
   }
 
-  datasetsControllerFindAll() {
+  datasetsControllerFindAllV3() {
     return of([]);
   }
 
-  datasetsControllerFindById() {
+  datasetsControllerFindByIdV3() {
     return of([]);
   }
 
-  datasetsControllerCount(data?: any) {
+  datasetsControllerCountV3(data?: any) {
     return of(0);
   }
 }
@@ -154,7 +155,7 @@ export class MockActivatedRoute {
 
 export class MockRouter {
   events = new Observable((observer) => {
-    observer.next();
+    observer.next(null);
     observer.complete();
   });
   navigate = () => {};
@@ -211,7 +212,7 @@ export class MockArchivingService {
 }
 
 export class MockPublishedDataApi {
-  publishedDataControllerFindOne() {
+  publishedDataControllerFindOneV3() {
     return of({
       creator: "string",
       publicationYear: "string",
@@ -222,7 +223,7 @@ export class MockPublishedDataApi {
     });
   }
 
-  publishedDataControllerFindAll() {
+  publishedDataControllerFindAllV3() {
     return of([
       {
         creator: "string",
@@ -235,7 +236,7 @@ export class MockPublishedDataApi {
     ]);
   }
 
-  publishedDataControllerFormPopulate() {
+  publishedDataControllerFormPopulateV3() {
     return of({});
   }
 }
@@ -322,12 +323,12 @@ export function createMock<T>(data?: Partial<T>): T {
 }
 
 export const mockDataset = createMock<OutputDatasetObsoleteDto>({});
-export const mockAttachment = createMock<Attachment>({});
+export const mockAttachment = createMock<OutputAttachmentV3Dto>({});
 export const mockSample = createMock<SampleClass>({});
 export const mockProposal = createMock<ProposalClass>({});
 export const mockInstrument = createMock<Instrument>({});
 export const mockOrigDatablock = createMock<OrigDatablock>({});
-export const mockJob = createMock<JobClass>({});
+export const mockJob = createMock<JobClass>({}); // TODO: job release back-ward compatibility issue
 export const mockLogbook = createMock<Logbook>({});
 export const mockPolicy = createMock<Policy>({});
 export const mockPublishedData = createMock<PublishedData>({});

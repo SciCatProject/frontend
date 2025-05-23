@@ -27,6 +27,7 @@ import { TranslateService } from "@ngx-translate/core";
   selector: "proposal-detail",
   templateUrl: "proposal-detail.component.html",
   styleUrls: ["proposal-detail.component.scss"],
+  standalone: false,
 })
 export class ProposalDetailComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
