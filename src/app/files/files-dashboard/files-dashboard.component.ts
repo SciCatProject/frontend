@@ -17,11 +17,6 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
-import { OrigDatablock } from "@scicatproject/scicat-sdk-ts-angular";
-import {
-  actionMenu,
-  getTableSettingsConfig,
-} from "shared/modules/dynamic-material-table/utilizes/default-table-config";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { Sort } from "@angular/material/sort";
 import { selectFilesWithCountAndTableSettings } from "state-management/selectors/files.selectors";
@@ -29,6 +24,8 @@ import { fetchAllOrigDatablocksAction } from "state-management/actions/files.act
 import { get } from "lodash-es";
 import { LinkyPipe } from "ngx-linky";
 import { DatePipe } from "@angular/common";
+import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
+import { TableConfigService } from "shared/services/table-config.service";
 
 @Component({
   selector: "app-files-dashboard",
@@ -150,6 +147,7 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private linkyPipe: LinkyPipe,
     private datePipe: DatePipe,
+    private tableConfigService: TableConfigService,
   ) {}
 
   ngOnInit(): void {
@@ -165,12 +163,13 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
           const tableSort = this.getTableSort();
           const paginationConfig = this.getTablePaginationConfig(count);
 
-          const tableSettingsConfig = getTableSettingsConfig(
-            this.tableName,
-            this.tableDefaultSettingsConfig,
-            savedTableConfigColumns,
-            tableSort,
-          );
+          const tableSettingsConfig =
+            this.tableConfigService.getTableSettingsConfig(
+              this.tableName,
+              this.tableDefaultSettingsConfig,
+              savedTableConfigColumns,
+              tableSort,
+            );
 
           if (tableSettingsConfig?.settingList.length) {
             this.initTable(tableSettingsConfig, paginationConfig);

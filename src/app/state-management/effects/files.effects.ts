@@ -31,7 +31,7 @@ export class FilesEffects {
         const queryParams = { text: search || undefined };
 
         return this.origDataBlocksService
-          .origDatablocksControllerFullqueryFiles(
+          .origDatablocksControllerFullqueryFilesV3(
             JSON.stringify(limitsParam),
             JSON.stringify(queryParams),
           )
@@ -56,14 +56,10 @@ export class FilesEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
       switchMap(({ fields }) =>
-        // TODO: Fix and test this when we can generate the correct types from the API.
-        // At the moment this is blocked because of changes in the API that needs to be addressed after latest sdk update.
         this.origDataBlocksService
-          .origDatablocksControllerFullfacetFiles
-          // JSON.stringify({
-          //   fields,
-          // }) as any,
-          ()
+          .origDatablocksControllerFullfacetFilesV3({
+            fields: JSON.stringify(fields),
+          })
           .pipe(
             map((res) => {
               const { all } = res[0] as any;
