@@ -143,3 +143,8 @@ export const setRenderViewFromThirdParty = createAction(
 export const resetIngestorComponent = createAction(
   "[Ingestor] Reset Ingestor Component",
 );
+
+export const setNoRightsError = createAction(
+  "[Ingestor] Set No Rights Error",
+  props<{ noRightsError: boolean; err: Error }>(),
+);

@@ -1,5 +1,8 @@
 import { JsonSchema, JsonSchema7 } from "@jsonforms/core";
-import { CreateDatasetDto, DatasetClass } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  CreateDatasetDto,
+  DatasetClass,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { isArray } from "mathjs";
 import { PostDatasetResponse } from "shared/sdk/models/ingestor/postDatasetResponse";
 import { UserInfo } from "shared/sdk/models/ingestor/userInfo";
@@ -62,6 +65,23 @@ export interface DialogDataObject {
 }
 
 export class IngestorHelper {
+  static createMetaDataString(
+    transferData: IngestionRequestInformation,
+  ): string {
+    const space = 2;
+    const scicatMetadata: CreateDatasetDto = {
+      ...(transferData.scicatHeader as CreateDatasetDto),
+      scientificMetadata: {
+        organizational: transferData.userMetaData["organizational"],
+        sample: transferData.userMetaData["sample"],
+        acquisition: transferData.extractorMetaData["acquisition"],
+        instrument: transferData.extractorMetaData["instrument"],
+      },
+    };
+
+    return JSON.stringify(scicatMetadata, null, space);
+  }
+
   static saveConnectionsToLocalStorage = (connections: string[]) => {
     // Remove duplicates
     const uniqueConnections = Array.from(new Set(connections));

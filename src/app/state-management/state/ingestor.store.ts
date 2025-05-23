@@ -20,7 +20,7 @@ interface IngestorAuthentication {
 interface IngestorStatus {
   versionResponse: OtherVersionResponse | null;
   healthResponse: OtherHealthResponse | null;
-  validEndpoint: boolean;
+  validEndpoint: boolean | null;
 }
 
 export interface IngestorState {
@@ -39,13 +39,14 @@ export interface IngestorState {
   renderView: renderView;
   updateEditorFromThirdParty: boolean;
   connectingBackend: boolean;
+  noRightsError: boolean;
   error: any | null;
 }
 export const initialIngestorState: IngestorState = {
   ingestorStatus: {
     versionResponse: null,
     healthResponse: null,
-    validEndpoint: false,
+    validEndpoint: null,
   },
   ingestorAuth: null,
   ingestorEndpoint: "",
@@ -60,6 +61,7 @@ export const initialIngestorState: IngestorState = {
   ingestorBrowserActiveNode: null,
   connectingBackend: false,
   updateEditorFromThirdParty: false,
+  noRightsError: false,
   error: null,
   renderView: "all",
 };

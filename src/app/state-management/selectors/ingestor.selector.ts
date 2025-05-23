@@ -68,3 +68,8 @@ export const selectUpdateEditorFromThirdParty = createSelector(
   selectIngestorState,
   (state) => state.updateEditorFromThirdParty,
 );
+
+export const selectNoRightsError = createSelector(
+  selectIngestorState,
+  (state) => state.noRightsError,
+);

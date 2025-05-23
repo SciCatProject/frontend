@@ -17,7 +17,6 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { IngestorConfirmationDialogComponent } from "ingestor/ingestor-dialogs/confirmation-dialog/ingestor.confirmation-dialog.component";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Subscription } from "rxjs";
-import { CreateDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
   selector: "ingestor-confirm-transfer-dialog-page",
@@ -26,7 +25,8 @@ import { CreateDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
   standalone: false,
 })
 export class IngestorConfirmTransferDialogPageComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   private subscriptions: Subscription[] = [];
   readonly dialog = inject(MatDialog);
 
@@ -42,7 +42,7 @@ export class IngestorConfirmTransferDialogPageComponent
 
   copiedToClipboard = false;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store) {}
 
   ngOnInit() {
     this.subscriptions.push(
@@ -53,7 +53,9 @@ export class IngestorConfirmTransferDialogPageComponent
       }),
     );
 
-    this.provideMergeMetaData = this.createMetaDataString();
+    this.provideMergeMetaData = IngestorHelper.createMetaDataString(
+      this.createNewTransferData,
+    );
   }
 
   ngOnDestroy(): void {
@@ -67,23 +69,6 @@ export class IngestorConfirmTransferDialogPageComponent
         ingestionObject: this.createNewTransferData,
       }),
     );
-  }
-
-  createMetaDataString(): string {
-    const space = 2;
-    const scicatMetadata: CreateDatasetDto = {
-      ...(this.createNewTransferData.scicatHeader as CreateDatasetDto),
-      scientificMetadata: {
-        organizational:
-          this.createNewTransferData.userMetaData["organizational"],
-        sample: this.createNewTransferData.userMetaData["sample"],
-        acquisition:
-          this.createNewTransferData.extractorMetaData["acquisition"],
-        instrument: this.createNewTransferData.extractorMetaData["instrument"],
-      },
-    };
-
-    return JSON.stringify(scicatMetadata, null, space);
   }
 
   onClickBack(): void {

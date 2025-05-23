@@ -44,7 +44,7 @@
               <ul>
                 <li *ngFor="let backend of lastUsedFacilityBackends"
                   class="vertical-center-list-item">
-                  <a (click)="onClickSelectFacilityBackend(backend)">{{ backend
+                  <a (click)="onClickSelectFacilityBackend(backend)">{{"- " + backend
                     }}</a>
 
                   <a (click)="onClickDeleteStoredFacilityBackend(backend)">

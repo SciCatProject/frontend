@@ -63,6 +63,7 @@ export class IngestorComponent implements OnInit, OnDestroy {
 
   connectedFacilityBackend = "";
   connectingToFacilityBackend = true;
+  noRightsError = false;
 
   lastUsedFacilityBackends: string[] = [];
 
@@ -93,10 +94,11 @@ export class IngestorComponent implements OnInit, OnDestroy {
     private router: Router,
     private store: Store,
     public appConfigService: AppConfigService,
-  ) { }
+  ) {}
 
   ngOnInit() {
-    this.lastUsedFacilityBackends = IngestorHelper.loadConnectionsFromLocalStorage();
+    this.lastUsedFacilityBackends =
+      IngestorHelper.loadConnectionsFromLocalStorage();
 
     // Fetch the API token that the ingestor can authenticate to scicat as the user
     this.subscriptions.push(
@@ -145,9 +147,13 @@ export class IngestorComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.ingestorStatus$.subscribe((ingestorStatus) => {
-        if (!ingestorStatus.validEndpoint) {
+        if (
+          ingestorStatus.validEndpoint !== null &&
+          !ingestorStatus.validEndpoint
+        ) {
           this.connectedFacilityBackend = "";
-          this.lastUsedFacilityBackends = IngestorHelper.loadConnectionsFromLocalStorage();
+          this.lastUsedFacilityBackends =
+            IngestorHelper.loadConnectionsFromLocalStorage();
           this.onClickForwardToIngestorPage();
         } else if (
           ingestorStatus.versionResponse &&
@@ -170,6 +176,9 @@ export class IngestorComponent implements OnInit, OnDestroy {
             // Activate Transfer Tab when ingestor is ready for actions
             this.selectedTab = 0;
             this.doRefreshTransferList();
+          } // In case of loosing the connection to the ingestor, the user is logged out
+          else if (this.userInfo == null || this.userInfo.logged_in === false) {
+            this.selectedTab = 1;
           }
         }
       }),
@@ -222,21 +231,22 @@ export class IngestorComponent implements OnInit, OnDestroy {
 
   onClickForwardToIngestorPage(nextFacilityBackend?: string) {
     if (nextFacilityBackend) {
-      IngestorHelper.saveConnectionsToLocalStorage([...this.lastUsedFacilityBackends, nextFacilityBackend]);
+      IngestorHelper.saveConnectionsToLocalStorage([
+        ...this.lastUsedFacilityBackends,
+        nextFacilityBackend,
+      ]);
 
       this.router.navigate(["/ingestor"], {
         queryParams: { backendUrl: nextFacilityBackend },
       });
-    }
-    else {
+    } else {
       this.router.navigate(["/ingestor"]);
     }
   }
 
   onClickDisconnectIngestor() {
     // Reset state of the ingestor component
-    this.store.dispatch(
-      fromActions.resetIngestorComponent());
+    this.store.dispatch(fromActions.resetIngestorComponent());
     // Remove the GET parameter 'backendUrl' from the URL
     this.router.navigate(["/ingestor"]);
   }

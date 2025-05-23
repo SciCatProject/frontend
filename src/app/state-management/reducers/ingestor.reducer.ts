@@ -181,5 +181,18 @@ const reducer = createReducer(
   on(
     fromActions.resetIngestorComponent,
     (): IngestorState => initialIngestorState
-  )
+  ),
+  on(
+    fromActions.setNoRightsError,
+    (state, { noRightsError }): IngestorState => ({
+      ...state,
+      noRightsError,
+      ingestorAuth: {
+        ...state.ingestorAuth,
+        userInfoResponse: {
+          logged_in: false,
+        },
+      },
+    }),
+  ),
 );

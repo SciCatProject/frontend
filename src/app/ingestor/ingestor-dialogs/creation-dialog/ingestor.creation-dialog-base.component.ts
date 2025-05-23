@@ -9,6 +9,7 @@ import {
 import {
   selectIngestionObject,
   selectIngestorEndpoint,
+  selectNoRightsError,
 } from "state-management/selectors/ingestor.selector";
 import { Store } from "@ngrx/store";
 import { IngestorMetadataSSEService } from "ingestor/ingestor-page/helper/ingestor.metadata-sse-service";
@@ -41,7 +42,9 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
 
   ingestionObject$ = this.store.select(selectIngestionObject);
   ingestorBackend$ = this.store.select(selectIngestorEndpoint);
+  selectNoRightsError$ = this.store.select(selectNoRightsError);
 
+  showNoRightsDialog = false;
   currentDialogStep: dialogStep = "NEW_TRANSFER";
   connectedFacilityBackend = "";
   tokenValue = "";
@@ -51,7 +54,7 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
     private store: Store,
     private sseService: IngestorMetadataSSEService,
     @Inject(MAT_DIALOG_DATA) public data: DialogDataObject,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
@@ -78,6 +81,12 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
         if (this.tokenValue === "") {
           this.store.dispatch(fetchScicatTokenAction());
         }
+      }),
+    );
+
+    this.subscriptions.push(
+      this.selectNoRightsError$.subscribe((selectNoRightsError) => {
+        this.showNoRightsDialog = selectNoRightsError;
       }),
     );
   }

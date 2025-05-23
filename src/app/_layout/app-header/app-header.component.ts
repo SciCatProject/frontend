@@ -59,7 +59,5 @@ export class AppHeaderComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(fetchCurrentUserAction());
     this.oAuth2Endpoints = this.config.oAuth2Endpoints;
-
-    console.log(this.config);
   }
 }

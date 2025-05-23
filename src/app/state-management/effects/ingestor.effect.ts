@@ -29,8 +29,7 @@ export class IngestorEffects {
                 this.ingestor.getUserInfo().pipe(
                   map((userInfoResponse) =>
                     fromActions.connectIngestorSuccess({
-                      versionResponse:
-                        versionResponse as OtherVersionResponse,
+                      versionResponse: versionResponse as OtherVersionResponse,
                       healthResponse: healthResponse as OtherHealthResponse,
                       userInfoResponse: userInfoResponse as UserInfo,
                       authIsDisabled: false,
@@ -47,8 +46,7 @@ export class IngestorEffects {
                         fromActions.connectIngestorSuccess({
                           versionResponse:
                             versionResponse as OtherVersionResponse,
-                          healthResponse:
-                            healthResponse as OtherHealthResponse,
+                          healthResponse: healthResponse as OtherHealthResponse,
                           userInfoResponse: null, // Kein UserInfo verfügbar
                           authIsDisabled: true,
                         }),
@@ -60,10 +58,18 @@ export class IngestorEffects {
               ),
             ),
           ),
-          catchError((err) =>
-            of(fromActions.connectIngestorFailure({ err })),
+          catchError((err) => {
+            if (err.error?.error?.includes("login session has expired")) {
+              return of(
+                fromActions.setNoRightsError({ noRightsError: true, err: err }),
+              );
+            }
+
+            return of(fromActions.getExtractionMethodsFailure({ err }));
+          }),
+          takeUntil(
+            this.actions$.pipe(ofType(fromActions.resetIngestorComponent)),
           ),
-          takeUntil(this.actions$.pipe(ofType(fromActions.resetIngestorComponent)))
         );
       }),
     );
@@ -125,16 +131,17 @@ export class IngestorEffects {
           .pipe(
             map((transferList) => {
               if (transferId) {
-                return fromActions.updateTransferListDetailSuccess({ transferListDetailView: transferList })
-              };
+                return fromActions.updateTransferListDetailSuccess({
+                  transferListDetailView: transferList,
+                });
+              }
 
               return fromActions.updateTransferListSuccess({
                 transferList,
                 page: page ?? pageRO,
                 pageNumber: pageNumber ?? pageNumberRO,
-              })
-            },
-            ),
+              });
+            }),
             catchError((err) =>
               of(fromActions.updateTransferListFailure({ err })),
             ),
@@ -151,9 +158,15 @@ export class IngestorEffects {
           map((extractionMethods) =>
             fromActions.getExtractionMethodsSuccess({ extractionMethods }),
           ),
-          catchError((err) =>
-            of(fromActions.getExtractionMethodsFailure({ err })),
-          ),
+          catchError((err) => {
+            if (err.error?.error?.includes("login session has expired")) {
+              return of(
+                fromActions.setNoRightsError({ noRightsError: true, err: err }),
+              );
+            }
+
+            return of(fromActions.getExtractionMethodsFailure({ err }));
+          }),
         ),
       ),
     );
@@ -167,9 +180,15 @@ export class IngestorEffects {
           map((ingestorBrowserActiveNode) =>
             fromActions.getBrowseFilePathSuccess({ ingestorBrowserActiveNode }),
           ),
-          catchError((err) =>
-            of(fromActions.getBrowseFilePathFailure({ err })),
-          ),
+          catchError((err) => {
+            if (err.error?.error?.includes("login session has expired")) {
+              return of(
+                fromActions.setNoRightsError({ noRightsError: true, err: err }),
+              );
+            }
+
+            return of(fromActions.getExtractionMethodsFailure({ err }));
+          }),
         ),
       ),
     );
@@ -184,7 +203,15 @@ export class IngestorEffects {
             fromActions.ingestDatasetSuccess({ response }),
             fromActions.updateTransferList({}),
           ]),
-          catchError((err) => of(fromActions.ingestDatasetFailure({ err }))),
+          catchError((err) => {
+            if (err.error?.error?.includes("login session has expired")) {
+              return of(
+                fromActions.setNoRightsError({ noRightsError: true, err: err }),
+              );
+            }
+
+            return of(fromActions.getExtractionMethodsFailure({ err }));
+          }),
         ),
       ),
     );
@@ -274,5 +301,5 @@ export class IngestorEffects {
     private actions$: Actions,
     private ingestor: Ingestor,
     private store: Store,
-  ) { }
+  ) {}
 }

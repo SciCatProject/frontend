@@ -1,0 +1,43 @@
+<div class="ingestor-dialog-header">
+  <div class="ingestor-mixed-header">
+    <h2 mat-dialog-title>
+      Lost Connection
+    </h2>
+    <button mat-icon-button mat-dialog-close aria-label="Close"
+      class="ingestor-close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="ingestor-stepper-header">
+    <ingestor-dialog-stepper [activeStep]="-1"></ingestor-dialog-stepper>
+  </div>
+</div>
+
+<mat-dialog-content class="mat-typography">
+  <p>
+    <mat-card class="ingestor-card">
+      <mat-card-header class="ingestor-mixed-header">
+        <mat-card-title>Action forbidden</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="ingestor-vertical-layout">
+        <div class="confirm-message-ingestor">
+          <mat-icon class="confirm-message-ingestor-icon">lock</mat-icon>
+          <p>You do not have permission to continue. </p>
+          <p>Please check your user or login status.
+          </p>
+          <i>If you have lost the connection, use the save button at the top
+            right to save the data you have entered.</i>
+          <p class="confirm-message-error">
+            {{createNewTransferData.apiInformation.ingestionRequestErrorMessage}}
+          </p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </p>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button cdkFocusInitial mat-dialog-close>Cancel</button>
+</mat-dialog-actions>
