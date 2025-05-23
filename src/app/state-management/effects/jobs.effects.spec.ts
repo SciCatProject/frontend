@@ -43,7 +43,7 @@ const outputJob = createMock<OutputJobV3Dto>({
   jobResultObject: {},
 });
 
-xdescribe("JobEffects", () => {
+describe("JobEffects", () => {
   let actions: TestObservable;
   let effects: JobEffects;
   let jobApi: jasmine.SpyObj<JobsService>;
