@@ -4,7 +4,7 @@ import { Type } from "../base-classes/metadata-input-base";
 import { FlatNodeEdit } from "../tree-edit/tree-edit.component";
 import { MetadataInputComponent } from "../metadata-input/metadata-input.component";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
-import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.modules";
+import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("MetadataInputBase", () => {

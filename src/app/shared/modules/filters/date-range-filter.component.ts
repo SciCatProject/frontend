@@ -18,6 +18,7 @@ interface DateRange {
   selector: "app-date-range-filter",
   templateUrl: "date-range-filter.component.html",
   styleUrls: ["date-range-filter.component.scss"],
+  standalone: false,
 })
 export class DateRangeFilterComponent
   extends ClearableInputComponent
@@ -46,7 +47,7 @@ export class DateRangeFilterComponent
     this.label = getFilterLabel(filters, this.componentName, this.label);
   }
 
-  dateChanged(event: MatDatepickerInputEvent<DateTime>) {
+  dateChanged(event: MatDatepickerInputEvent<any>) {
     if (event.value) {
       const name = event.targetElement.getAttribute("name");
       if (name === "begin") {

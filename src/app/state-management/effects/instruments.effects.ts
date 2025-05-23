@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
+import { Actions, createEffect, ofType } from "@ngrx/effects";
 import {
   Instrument,
   InstrumentsService,
@@ -7,8 +7,6 @@ import {
 import * as fromActions from "state-management/actions/instruments.actions";
 import { switchMap, map, catchError, mergeMap } from "rxjs/operators";
 import { of } from "rxjs";
-import { Store } from "@ngrx/store";
-import { selectFilters } from "state-management/selectors/instruments.selectors";
 import {
   loadingAction,
   loadingCompleteAction,
@@ -16,28 +14,32 @@ import {
 
 @Injectable()
 export class InstrumentEffects {
-  filters$ = this.store.select(selectFilters);
-
   fetchInstruments$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(
-        fromActions.fetchInstrumentsAction,
-        fromActions.changePageAction,
-        fromActions.sortByColumnAction,
-      ),
-      concatLatestFrom(() => this.filters$),
-      map(([action, filters]) => filters),
-      switchMap(({ sortField: order, skip, limit }) =>
-        this.instrumentsService
-          .instrumentsControllerFindAll(JSON.stringify({ order, limit, skip }))
+      ofType(fromActions.fetchInstrumentsAction),
+      switchMap(({ limit, skip, sortColumn, sortDirection }) => {
+        const limitsParam = {
+          skip: skip,
+          limit: limit,
+          order: undefined,
+        };
+
+        if (sortColumn && sortDirection) {
+          limitsParam.order = `${sortColumn}:${sortDirection}`;
+        }
+
+        return this.instrumentsService
+          .instrumentsControllerFindAllV3(
+            JSON.stringify({ limits: limitsParam }),
+          )
           .pipe(
             mergeMap((instruments: Instrument[]) => [
               fromActions.fetchInstrumentsCompleteAction({ instruments }),
               fromActions.fetchCountAction(),
             ]),
             catchError(() => of(fromActions.fetchInstrumentsFailedAction())),
-          ),
-      ),
+          );
+      }),
     );
   });
 
@@ -45,10 +47,8 @@ export class InstrumentEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
       switchMap(() =>
-        this.instrumentsService.instrumentsControllerFindAll().pipe(
-          map((instruments: Instrument[]) =>
-            fromActions.fetchCountCompleteAction({ count: instruments.length }),
-          ),
+        this.instrumentsService.instrumentsControllerCountV3().pipe(
+          map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
           catchError(() => of(fromActions.fetchCountFailedAction())),
         ),
       ),
@@ -59,7 +59,7 @@ export class InstrumentEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchInstrumentAction),
       switchMap(({ pid }) =>
-        this.instrumentsService.instrumentsControllerFindById(pid).pipe(
+        this.instrumentsService.instrumentsControllerFindByIdV3(pid).pipe(
           map((instrument: Instrument) =>
             fromActions.fetchInstrumentCompleteAction({ instrument }),
           ),
@@ -74,7 +74,7 @@ export class InstrumentEffects {
       ofType(fromActions.saveCustomMetadataAction),
       switchMap(({ pid, customMetadata }) =>
         this.instrumentsService
-          .instrumentsControllerUpdate(pid, {
+          .instrumentsControllerUpdateV3(pid, {
             customMetadata,
           })
           .pipe(
@@ -118,6 +118,5 @@ export class InstrumentEffects {
   constructor(
     private actions$: Actions,
     private instrumentsService: InstrumentsService,
-    private store: Store,
   ) {}
 }

@@ -30,6 +30,7 @@ import {
   selector: "reduce",
   templateUrl: "./reduce.component.html",
   styleUrls: ["./reduce.component.scss"],
+  standalone: false,
 })
 export class ReduceComponent implements OnInit, OnChanges, OnDestroy {
   dataset: OutputDatasetObsoleteDto | undefined;

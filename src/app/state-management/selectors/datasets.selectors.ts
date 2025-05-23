@@ -182,7 +182,7 @@ export const selectFullqueryParams = createSelector(
     const { skip, limit, sortField, modeToggle, ...theRest } = filter;
     const limits = { ...pagination, order: sortField };
     const query = restrictFilter(theRest);
-    return { query: JSON.stringify(query), limits };
+    return { query, limits };
   },
 );
 
@@ -241,6 +241,11 @@ export const selectHasPrefilledFilters = createSelector(
 export const selectDatasetsInBatch = createSelector(
   selectDatasetState,
   (state) => state.batch,
+);
+
+export const selectIsBatchNonEmpty = createSelector(
+  selectDatasetsInBatch,
+  (batch) => batch.length > 0,
 );
 
 export const selectDatasetsInBatchIndicator = createSelector(

@@ -25,6 +25,7 @@ import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
   selector: "dataset-table-actions",
   templateUrl: "./dataset-table-actions.component.html",
   styleUrls: ["./dataset-table-actions.component.scss"],
+  standalone: false,
 })
 export class DatasetTableActionsComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();

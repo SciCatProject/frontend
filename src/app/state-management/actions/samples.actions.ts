@@ -1,7 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import {
-  Attachment,
-  CreateAttachmentDto,
+  CreateAttachmentV3Dto,
+  OutputAttachmentV3Dto,
   OutputDatasetObsoleteDto,
   SampleClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -58,7 +58,7 @@ export const fetchSampleAttachmentsAction = createAction(
 );
 export const fetchSampleAttachmentsCompleteAction = createAction(
   "[Sample] Fetch Sample Attachments Complete",
-  props<{ attachments: Attachment[] }>(),
+  props<{ attachments: OutputAttachmentV3Dto[] }>(),
 );
 export const fetchSampleAttachmentsFailedAction = createAction(
   "[Sample] Fetch Sample Attachments Failed",
@@ -112,11 +112,11 @@ export const saveCharacteristicsFailedAction = createAction(
 
 export const addAttachmentAction = createAction(
   "[Sample] Add Attachment",
-  props<{ attachment: CreateAttachmentDto }>(),
+  props<{ attachment: CreateAttachmentV3Dto }>(),
 );
 export const addAttachmentCompleteAction = createAction(
   "[Sample] Add Attachment Complete",
-  props<{ attachment: Attachment }>(),
+  props<{ attachment: OutputAttachmentV3Dto }>(),
 );
 export const addAttachmentFailedAction = createAction(
   "[Sample] Add Attachment Failed",
@@ -128,7 +128,7 @@ export const updateAttachmentCaptionAction = createAction(
 );
 export const updateAttachmentCaptionCompleteAction = createAction(
   "[Sample] Update Attachment Caption Complete",
-  props<{ attachment: Attachment }>(),
+  props<{ attachment: OutputAttachmentV3Dto }>(),
 );
 export const updateAttachmentCaptionFailedAction = createAction(
   "[Sample] Update Attachment Caption Failed",

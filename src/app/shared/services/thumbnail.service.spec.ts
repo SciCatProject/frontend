@@ -19,7 +19,7 @@ describe("ThumbnailService", () => {
 
   beforeEach(() => {
     const datasetApiSpy = jasmine.createSpyObj("DatasetApi", [
-      "datasetsControllerThumbnail",
+      "datasetsControllerThumbnailV3",
     ]);
 
     TestBed.configureTestingModule({
@@ -87,12 +87,12 @@ describe("ThumbnailService", () => {
     };
 
     // TODO: Try to fix any type casting here
-    datasetApi.datasetsControllerThumbnail.and.returnValue(
+    datasetApi.datasetsControllerThumbnailV3.and.returnValue(
       of({ thumbnail } as any),
     );
 
     const result = await service.getThumbnail(pid);
-    expect(datasetApi.datasetsControllerThumbnail).toHaveBeenCalledWith(
+    expect(datasetApi.datasetsControllerThumbnailV3).toHaveBeenCalledWith(
       encodeURIComponent(pid),
     );
     expect(result).toBe(thumbnail);
@@ -105,19 +105,19 @@ describe("ThumbnailService", () => {
     const result = await service.getThumbnail(pid);
 
     expect(result).toBeNull(); // Should return null when over limit
-    expect(datasetApi.datasetsControllerThumbnail).not.toHaveBeenCalled();
+    expect(datasetApi.datasetsControllerThumbnailV3).not.toHaveBeenCalled();
   });
 
   it("should fetch thumbnail and cache it if not already cached", async () => {
     const pid = "test-pid";
     const thumbnail = "http://thumbnail-url.com/image.jpg";
 
-    datasetApi.datasetsControllerThumbnail.and.returnValue(
+    datasetApi.datasetsControllerThumbnailV3.and.returnValue(
       of({ thumbnail } as any),
     );
 
     const result = await service.getThumbnail(pid);
-    expect(datasetApi.datasetsControllerThumbnail).toHaveBeenCalledWith(
+    expect(datasetApi.datasetsControllerThumbnailV3).toHaveBeenCalledWith(
       encodeURIComponent(pid),
     );
     expect(result).toBe(thumbnail);
@@ -127,7 +127,7 @@ describe("ThumbnailService", () => {
   it("should cache failed requests as null with isError=true", async () => {
     const pid = "test-pid";
     const err = new Error("Failed to fetch thumbnail");
-    datasetApi.datasetsControllerThumbnail.and.returnValue(
+    datasetApi.datasetsControllerThumbnailV3.and.returnValue(
       throwError(() => err),
     );
 

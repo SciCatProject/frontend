@@ -17,6 +17,7 @@ import { HttpClient } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { InternalStorage } from "shared/services/auth/base.storage";
 import { AuthService } from "shared/services/auth/auth.service";
+import { provideLuxonDateAdapter } from "@angular/material-luxon-adapter";
 
 describe("JobsDashboardNewComponent", () => {
   let component: JobsDashboardNewComponent;
@@ -42,6 +43,7 @@ describe("JobsDashboardNewComponent", () => {
         { provide: AppConfigService, useValue: appconfig },
         { provide: AuthService, useValue: authService },
         { provide: InternalStorage },
+        provideLuxonDateAdapter(),
       ],
     }).compileComponents();
   }));

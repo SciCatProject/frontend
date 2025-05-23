@@ -16,6 +16,7 @@ import { JobsTableData } from "jobs/jobs-dashboard/jobs-dashboard.component";
   selector: "app-jobs-new-dashboard",
   templateUrl: "./jobs-dashboard-new.component.html",
   styleUrls: ["./jobs-dashboard-new.component.scss"],
+  standalone: false,
 })
 export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
   // not needed, date by default is shown in local time and using the locale of the browser (if installed, see app.module.ts)

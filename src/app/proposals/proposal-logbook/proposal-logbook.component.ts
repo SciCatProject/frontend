@@ -37,6 +37,7 @@ export interface LogbookData {
   selector: "app-proposal-logbook",
   templateUrl: "./proposal-logbook.component.html",
   styleUrls: ["./proposal-logbook.component.scss"],
+  standalone: false,
 })
 export class ProposalLogbookComponent
   implements OnInit, OnDestroy, AfterViewChecked

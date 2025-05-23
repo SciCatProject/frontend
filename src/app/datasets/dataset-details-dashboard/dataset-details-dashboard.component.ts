@@ -67,6 +67,7 @@ enum TAB {
   selector: "dataset-details-dashboard",
   templateUrl: "./dataset-details-dashboard.component.html",
   styleUrls: ["./dataset-details-dashboard.component.scss"],
+  standalone: false,
 })
 export class DatasetDetailsDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked
@@ -224,7 +225,7 @@ export class DatasetDetailsDashboardComponent
       }
     });
     this.subscriptions.push(datasetSub);
-    this.jwt$ = this.userService.usersControllerGetUserJWT();
+    this.jwt$ = this.userService.usersControllerGetUserJWTV3();
   }
   resetTabs() {
     Object.values(this.fetchDataActions).forEach((tab) => {

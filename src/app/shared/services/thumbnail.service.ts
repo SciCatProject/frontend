@@ -61,7 +61,7 @@ export class ThumbnailService {
 
     try {
       const res = await firstValueFrom(
-        this.datasetApi.datasetsControllerThumbnail(pid),
+        this.datasetApi.datasetsControllerThumbnailV3(pid),
       );
       const thumbnail = this.attachmentService.getImageUrl(res?.thumbnail);
 

@@ -2,9 +2,9 @@ import * as fromSelectors from "./jobs.selectors";
 
 import { JobsState } from "../state/jobs.store";
 import { createMock } from "shared/MockStubs";
-import { JobClass } from "@scicatproject/scicat-sdk-ts-angular";
 
-const job = createMock<JobClass>({
+// TODO: job release back-ward compatibility issue
+const job = createMock<any>({
   emailJobInitiator: "test@email.com",
   type: "archive",
   _id: "",

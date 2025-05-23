@@ -56,11 +56,11 @@ describe("PublishedDataEffects", () => {
         {
           provide: PublishedDataService,
           useValue: jasmine.createSpyObj("publsihedDataApi", [
-            "publishedDataControllerFindAll",
-            "publishedDataControllerCount",
-            "publishedDataControllerFindOne",
-            "publishedDataControllerCreate",
-            "publishedDataControllerRegister",
+            "publishedDataControllerFindAllV3",
+            "publishedDataControllerCountV3",
+            "publishedDataControllerFindOneV3",
+            "publishedDataControllerCreateV3",
+            "publishedDataControllerRegisterV3",
           ]),
         },
         { provide: Router, useClass: MockRouter },
@@ -86,7 +86,7 @@ describe("PublishedDataEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: allPublishedData });
-        publishedDataApi.publishedDataControllerFindAll.and.returnValue(
+        publishedDataApi.publishedDataControllerFindAllV3.and.returnValue(
           response,
         );
 
@@ -100,7 +100,7 @@ describe("PublishedDataEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        publishedDataApi.publishedDataControllerFindAll.and.returnValue(
+        publishedDataApi.publishedDataControllerFindAllV3.and.returnValue(
           response,
         );
 
@@ -123,7 +123,7 @@ describe("PublishedDataEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: allPublishedData });
-        publishedDataApi.publishedDataControllerFindAll.and.returnValue(
+        publishedDataApi.publishedDataControllerFindAllV3.and.returnValue(
           response,
         );
 
@@ -137,7 +137,7 @@ describe("PublishedDataEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        publishedDataApi.publishedDataControllerFindAll.and.returnValue(
+        publishedDataApi.publishedDataControllerFindAllV3.and.returnValue(
           response,
         );
 
@@ -155,7 +155,7 @@ describe("PublishedDataEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: { count } });
-      publishedDataApi.publishedDataControllerCount.and.returnValue(response);
+      publishedDataApi.publishedDataControllerCountV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
@@ -167,7 +167,7 @@ describe("PublishedDataEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      publishedDataApi.publishedDataControllerCount.and.returnValue(response);
+      publishedDataApi.publishedDataControllerCountV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
@@ -184,7 +184,9 @@ describe("PublishedDataEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: publishedData });
-      publishedDataApi.publishedDataControllerFindOne.and.returnValue(response);
+      publishedDataApi.publishedDataControllerFindOneV3.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchPublishedData$).toBeObservable(expected);
@@ -197,7 +199,9 @@ describe("PublishedDataEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      publishedDataApi.publishedDataControllerFindOne.and.returnValue(response);
+      publishedDataApi.publishedDataControllerFindOneV3.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchPublishedData$).toBeObservable(expected);
@@ -215,7 +219,9 @@ describe("PublishedDataEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: publishedData });
-      publishedDataApi.publishedDataControllerCreate.and.returnValue(response);
+      publishedDataApi.publishedDataControllerCreateV3.and.returnValue(
+        response,
+      );
 
       const expected = cold("--(bc)", {
         b: outcome1,
@@ -230,7 +236,9 @@ describe("PublishedDataEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      publishedDataApi.publishedDataControllerCreate.and.returnValue(response);
+      publishedDataApi.publishedDataControllerCreateV3.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.publishDataset$).toBeObservable(expected);
@@ -284,7 +292,7 @@ describe("PublishedDataEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: publishedData });
-      publishedDataApi.publishedDataControllerRegister.and.returnValue(
+      publishedDataApi.publishedDataControllerRegisterV3.and.returnValue(
         response,
       );
 
@@ -299,7 +307,7 @@ describe("PublishedDataEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      publishedDataApi.publishedDataControllerRegister.and.returnValue(
+      publishedDataApi.publishedDataControllerRegisterV3.and.returnValue(
         response,
       );
 

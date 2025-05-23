@@ -1,8 +1,8 @@
 import { DatePipe } from "@angular/common";
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { waitForAsync, ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormatNumberPipe } from "shared/pipes/format-number.pipe";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
-import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.modules";
+import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.module";
 
 import { TreeViewComponent } from "./tree-view.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -11,7 +11,7 @@ describe("TreeViewComponent", () => {
   let component: TreeViewComponent;
   let fixture: ComponentFixture<TreeViewComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [TreeViewComponent],
       imports: [ScientificMetadataTreeModule, BrowserAnimationsModule],

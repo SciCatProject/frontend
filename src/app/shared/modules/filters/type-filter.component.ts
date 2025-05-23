@@ -23,6 +23,7 @@ import { FilterComponentInterface } from "./interface/filter-component.interface
   selector: "app-type-filter",
   templateUrl: "type-filter.component.html",
   styleUrls: ["type-filter.component.scss"],
+  standalone: false,
 })
 export class TypeFilterComponent
   extends ClearableInputComponent

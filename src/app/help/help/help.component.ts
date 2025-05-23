@@ -5,6 +5,7 @@ import { AppConfigService, HelpMessages } from "app-config.service";
   selector: "help",
   templateUrl: "./help.component.html",
   styleUrls: ["./help.component.scss"],
+  standalone: false,
 })
 export class HelpComponent implements OnInit {
   appConfig = this.appConfigService.getConfig();

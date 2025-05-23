@@ -29,6 +29,7 @@ interface Breadcrumb {
   selector: "breadcrumb",
   templateUrl: "./breadcrumb.component.html",
   styleUrls: ["breadcrumb.component.scss"],
+  standalone: false,
 })
 export class BreadcrumbComponent implements OnInit {
   // partially based on: http://brianflove.com/2016/10/23/angular2-breadcrumb-using-router/

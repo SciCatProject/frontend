@@ -40,6 +40,7 @@ import {
   selector: "app-sample-edit",
   templateUrl: "./sample-edit.component.html",
   styleUrls: ["./sample-edit.component.scss"],
+  standalone: false,
 })
 export class SampleEditComponent implements OnInit, OnDestroy {
   @ViewChild("searchBar", { static: true }) searchBar!: ElementRef;
@@ -79,7 +80,7 @@ export class SampleEditComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA)
     public data: { ownerGroup: string; sampleId: string },
     public dialogRef: MatDialogRef<SampleEditComponent>,
-    private store: Store<SampleClass>,
+    private store: Store,
   ) {
     this.store.dispatch(setTextFilterAction({ text: "" }));
     this.store.dispatch(changePageAction({ page: 0, limit: 10 }));

@@ -61,7 +61,7 @@ export class TableVirtualScrollDataSource<
     this.filterMap[fieldName] = filters;
     return new Observable((subscriber) => {
       this.refreshFilterPredicate();
-      subscriber.next();
+      subscriber.next(null);
       subscriber.complete();
     });
   }

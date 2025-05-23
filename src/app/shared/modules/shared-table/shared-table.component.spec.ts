@@ -7,21 +7,22 @@ import { MatTable } from "@angular/material/table";
 import { of } from "rxjs";
 
 import { SharedTableComponent } from "./shared-table.component";
-import { RouterTestingModule } from "@angular/router/testing";
 import { FormBuilder, FormControl } from "@angular/forms";
 import { Column, SharedTableModule } from "./shared-table.module";
 import { MockAppConfigService, MockScicatDataSource } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { provideLuxonDateAdapter } from "@angular/material-luxon-adapter";
+import { provideRouter } from "@angular/router";
 
 describe("SharedTableComponent", () => {
   let component: SharedTableComponent;
   let fixture: ComponentFixture<SharedTableComponent>;
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [],
-      imports: [SharedTableModule, RouterTestingModule],
-      providers: [FormBuilder],
+      declarations: [SharedTableComponent],
+      imports: [SharedTableModule, BrowserAnimationsModule],
+      providers: [FormBuilder, provideLuxonDateAdapter(), provideRouter([])],
     }).compileComponents();
   }));
 
@@ -32,7 +33,6 @@ describe("SharedTableComponent", () => {
     { collections: null, columns: null },
   );
 
-  // const dataTable = jasmine.createSpyObj("MatTable", ["_elementRef"]);
   const dataTable = {
     _elementRef: {
       nativeElement: {
@@ -73,18 +73,6 @@ describe("SharedTableComponent", () => {
   const paginator = {
     page: of({}),
   } as MatPaginator;
-
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        SharedTableModule,
-        RouterTestingModule,
-        BrowserAnimationsModule,
-      ],
-      declarations: [SharedTableComponent],
-      providers: [FormBuilder],
-    }).compileComponents();
-  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SharedTableComponent);

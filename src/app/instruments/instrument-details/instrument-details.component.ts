@@ -15,6 +15,7 @@ import { selectIsAdmin } from "state-management/selectors/user.selectors";
   selector: "app-instrument-details",
   templateUrl: "./instrument-details.component.html",
   styleUrls: ["./instrument-details.component.scss"],
+  standalone: false,
 })
 export class InstrumentDetailsComponent
   implements OnInit, OnDestroy, EditableComponent

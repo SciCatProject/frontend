@@ -23,6 +23,7 @@ import { AppConfigService } from "app-config.service";
   selector: "app-group-filter",
   templateUrl: "group-filter.component.html",
   styleUrls: ["group-filter.component.scss"],
+  standalone: false,
 })
 export class GroupFilterComponent
   extends ClearableInputComponent

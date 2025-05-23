@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
   name: "jsonHead",
+  standalone: false,
 })
 export class JsonHeadPipe implements PipeTransform {
   transform(value: Record<string, any>, args?: any): any {

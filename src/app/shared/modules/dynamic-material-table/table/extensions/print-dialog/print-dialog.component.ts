@@ -9,6 +9,7 @@ const styles =
   selector: "print-dialog",
   templateUrl: "./print-dialog.component.html",
   styleUrls: ["./print-dialog.component.scss"],
+  standalone: false,
 })
 export class PrintTableDialogComponent {
   @ViewChild("printContentRef", { static: true }) printContentRef!: ElementRef;

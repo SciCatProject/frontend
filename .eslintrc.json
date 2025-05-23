@@ -75,7 +75,16 @@
     },
     {
       "files": ["*.ts"],
-      "extends": ["plugin:ngrx/recommended"]
+      "plugins": ["@ngrx"],
+      "extends": ["plugin:@ngrx/all"],
+      "rules": {
+        "@ngrx/no-multiple-actions-in-effects": "warn",
+        "@ngrx/avoid-dispatching-multiple-actions-sequentially": "warn",
+        "@angular-eslint/prefer-standalone": "warn",
+        "@ngrx/on-function-explicit-return-type": "warn",
+        "@ngrx/no-store-subscription": "warn",
+        "@angular-eslint/no-output-native": "warn"
+      }
     }
   ]
 }

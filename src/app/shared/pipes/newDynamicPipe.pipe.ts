@@ -22,6 +22,7 @@ import { ThumbnailPipe } from "./thumbnail.pipe";
 
 @Pipe({
   name: "newDynamicPipe",
+  standalone: false,
 })
 export class NewDynamicPipe implements PipeTransform {
   public constructor(private injector: Injector) {}

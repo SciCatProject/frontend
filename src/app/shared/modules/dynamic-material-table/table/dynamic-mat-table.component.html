@@ -154,9 +154,7 @@
         </ng-template>
 
         <ng-container *ngIf="column.renderContentIcon">
-          <ng-container
-            *ngIf="column.contentIconLink; else regularIconRender"
-          >
+          <ng-container *ngIf="column.contentIconLink; else regularIconRender">
             <a
               *ngIf="renderContentIconLink(row, column)"
               [href]="renderContentIconLink(row, column)"

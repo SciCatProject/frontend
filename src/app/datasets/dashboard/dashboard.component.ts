@@ -19,10 +19,10 @@ import {
 
 import {
   selectHasPrefilledFilters,
-  selectDatasetsInBatch,
   selectCurrentDataset,
   selectSelectedDatasets,
   selectPagination,
+  selectIsBatchNonEmpty,
 } from "state-management/selectors/datasets.selectors";
 import { distinctUntilChanged, filter, map, take } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
@@ -51,6 +51,7 @@ import { AppConfigService } from "app-config.service";
   selector: "dashboard",
   templateUrl: "dashboard.component.html",
   styleUrls: ["dashboard.component.scss"],
+  standalone: false,
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private pagination$ = this.store.select(selectPagination);
@@ -69,9 +70,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   selectableColumns$ = this.selectColumns$.pipe(
     map((columns) => columns.filter((column) => column.name !== "select")),
   );
-  public nonEmpty$ = this.store
-    .select(selectDatasetsInBatch)
-    .pipe(map((batch) => batch.length > 0));
+  public nonEmpty$ = this.store.select(selectIsBatchNonEmpty);
 
   subscriptions: Subscription[] = [];
 

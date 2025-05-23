@@ -15,6 +15,7 @@ export interface InputObject {
   selector: "metadata-input-modal",
   templateUrl: "./metadata-input-modal.component.html",
   styleUrls: ["./metadata-input-modal.component.scss"],
+  standalone: false,
 })
 export class MetadataInputModalComponent
   extends MetadataInputBase

@@ -21,6 +21,7 @@ import { SelectionModel } from "@angular/cdk/collections";
   selector: "app-publisheddata-dashboard",
   templateUrl: "./publisheddata-dashboard.component.html",
   styleUrls: ["./publisheddata-dashboard.component.scss"],
+  standalone: false,
 })
 export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   public vm$ = this.store.select(selectPublishedDataDashboardPageViewModel);

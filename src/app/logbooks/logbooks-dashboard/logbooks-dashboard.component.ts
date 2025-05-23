@@ -45,6 +45,7 @@ export interface LogbookData {
   selector: "app-logbooks-dashboard",
   templateUrl: "./logbooks-dashboard.component.html",
   styleUrls: ["./logbooks-dashboard.component.scss"],
+  standalone: false,
 })
 export class LogbooksDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked

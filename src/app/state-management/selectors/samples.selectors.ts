@@ -158,7 +158,7 @@ export const selectFullqueryParams = createSelector(
     const { sortField, skip, limit, ...theRest } = filters;
     const limits = { order: sortField, skip, limit };
     const query = restrictFilter(theRest);
-    return { query: JSON.stringify(query), limits };
+    return { query, limits };
   },
 );
 

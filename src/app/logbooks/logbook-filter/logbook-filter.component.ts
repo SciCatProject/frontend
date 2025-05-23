@@ -6,6 +6,7 @@ import { LogbookFilters } from "state-management/models";
   selector: "logbook-filter",
   templateUrl: "./logbook-filter.component.html",
   styleUrls: ["./logbook-filter.component.scss"],
+  standalone: false,
 })
 export class LogbookFilterComponent {
   @Input() filters: LogbookFilters | null = {

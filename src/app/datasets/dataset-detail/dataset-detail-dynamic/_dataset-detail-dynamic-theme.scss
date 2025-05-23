@@ -12,24 +12,24 @@
   $warn: map.get($color-config, "warn");
 
   .dynamic-template-general-header {
-    background-color: mat.get-color-from-palette($primary, "lighter");
+    background-color: mat.m2-get-color-from-palette($primary, "lighter");
   }
 
   .dynamic-template-json-view-header {
-    background-color: mat.get-color-from-palette($header-1, "lighter");
+    background-color: mat.m2-get-color-from-palette($header-1, "lighter");
   }
   .dynamic-template-attachments-header {
-    background-color: mat.get-color-from-palette($accent, "lighter");
+    background-color: mat.m2-get-color-from-palette($accent, "lighter");
   }
 
   .general-warning {
-    color: mat.get-color-from-palette($warn, "default");
+    color: mat.m2-get-color-from-palette($warn, "default");
     font-weight: bold;
   }
 }
 
 @mixin theme($theme) {
-  $color-config: mat.get-color-config($theme);
+  $color-config: mat.m2-get-color-config($theme);
   @if $color-config != null {
     @include color($theme);
   }

@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
+import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { concatLatestFrom } from "@ngrx/operators";
 import {
   PublishedData,
   PublishedDataService,
@@ -42,7 +43,7 @@ export class PublishedDataEffects {
       map(([action, params]) => params),
       mergeMap((params) =>
         this.publishedDataService
-          .publishedDataControllerFindAll("", "", JSON.stringify(params))
+          .publishedDataControllerFindAllV3("", "", JSON.stringify(params))
           .pipe(
             mergeMap((publishedData) => [
               fromActions.fetchAllPublishedDataCompleteAction({
@@ -62,7 +63,7 @@ export class PublishedDataEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
       switchMap(() =>
-        this.publishedDataService.publishedDataControllerCount().pipe(
+        this.publishedDataService.publishedDataControllerCountV3().pipe(
           map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
           catchError(() => of(fromActions.fetchCountFailedAction())),
         ),
@@ -74,7 +75,7 @@ export class PublishedDataEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchPublishedDataAction),
       switchMap(({ id }) =>
-        this.publishedDataService.publishedDataControllerFindOne(id).pipe(
+        this.publishedDataService.publishedDataControllerFindOneV3(id).pipe(
           map((publishedData: PublishedData) =>
             fromActions.fetchPublishedDataCompleteAction({
               publishedData,
@@ -106,7 +107,7 @@ export class PublishedDataEffects {
     return this.actions$.pipe(
       ofType(fromActions.publishDatasetAction),
       switchMap(({ data }) =>
-        this.publishedDataService.publishedDataControllerCreate(data).pipe(
+        this.publishedDataService.publishedDataControllerCreateV3(data).pipe(
           mergeMap((publishedData) => [
             fromActions.publishDatasetCompleteAction({ publishedData }),
             fromActions.fetchPublishedDataAction({ id: publishedData.doi }),
@@ -149,7 +150,7 @@ export class PublishedDataEffects {
     return this.actions$.pipe(
       ofType(fromActions.registerPublishedDataAction),
       switchMap(({ doi }) =>
-        this.publishedDataService.publishedDataControllerRegister(doi).pipe(
+        this.publishedDataService.publishedDataControllerRegisterV3(doi).pipe(
           mergeMap((publishedData: PublishedData) => [
             fromActions.registerPublishedDataCompleteAction({
               publishedData,
@@ -166,13 +167,15 @@ export class PublishedDataEffects {
     return this.actions$.pipe(
       ofType(fromActions.resyncPublishedDataAction),
       switchMap(({ doi, data }) =>
-        this.publishedDataService.publishedDataControllerResync(doi, data).pipe(
-          mergeMap((publishedData) => [
-            fromActions.resyncPublishedDataCompleteAction(publishedData),
-            fromActions.fetchPublishedDataAction({ id: doi }),
-          ]),
-          catchError(() => of(fromActions.resyncPublishedDataFailedAction())),
-        ),
+        this.publishedDataService
+          .publishedDataControllerResyncV3(doi, data)
+          .pipe(
+            mergeMap((publishedData) => [
+              fromActions.resyncPublishedDataCompleteAction(publishedData),
+              fromActions.fetchPublishedDataAction({ id: doi }),
+            ]),
+            catchError(() => of(fromActions.resyncPublishedDataFailedAction())),
+          ),
       ),
     );
   });

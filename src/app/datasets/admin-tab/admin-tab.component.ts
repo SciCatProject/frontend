@@ -22,6 +22,7 @@ import {
   selector: "app-admin-tab",
   templateUrl: "./admin-tab.component.html",
   styleUrls: ["./admin-tab.component.scss"],
+  standalone: false,
 })
 export class AdminTabComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
@@ -48,9 +49,8 @@ export class AdminTabComponent implements OnInit, OnDestroy {
         .subscribe((user) => {
           if (user && this.dataset) {
             const job: CreateJobDto = {
-              emailJobInitiator: user.email,
+              ownerUser: user.email,
               type: "reset",
-              datasetList: [],
               jobParams: {},
             };
             job.jobParams["username"] = user.username;
@@ -66,7 +66,7 @@ export class AdminTabComponent implements OnInit, OnDestroy {
               });
             }
             fileObj.files = fileList;
-            job.datasetList = [fileObj];
+            // job.datasetList = [fileObj];   // TODO: job release back-ward compatibility issue
             this.store.dispatch(submitJobAction({ job }));
           }
         });

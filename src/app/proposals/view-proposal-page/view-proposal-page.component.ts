@@ -17,6 +17,7 @@ import { selectIsLoading } from "state-management/selectors/user.selectors";
   selector: "view-proposal-page",
   templateUrl: "view-proposal-page.component.html",
   styleUrls: ["view-proposal-page.component.scss"],
+  standalone: false,
 })
 export class ViewProposalPageComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectViewProposalPageViewModel);

@@ -26,6 +26,7 @@ import { AppConfigService } from "app-config.service";
   selector: "publish",
   templateUrl: "./publish.component.html",
   styleUrls: ["./publish.component.scss"],
+  standalone: false,
 })
 export class PublishComponent implements OnInit, OnDestroy {
   private datasets$ = this.store.select(selectDatasetsInBatch);
@@ -149,7 +150,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     });
 
     this.publishedDataApi
-      .publishedDataControllerFormPopulate(this.form.pidArray[0])
+      .publishedDataControllerFormPopulateV3(this.form.pidArray[0])
       .subscribe((result) => {
         this.form.abstract = result.abstract;
         this.form.title = result.title;

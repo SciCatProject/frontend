@@ -1,7 +1,9 @@
 import { InstrumentState } from "state-management/state/instruments.store";
 import * as fromSelectors from "./instruments.selectors";
+import * as fromUserSelectors from "./user.selectors";
 import { GenericFilters } from "state-management/models";
 import { mockInstrument as instrument } from "shared/MockStubs";
+import { initialUserState } from "./user.selectors.spec";
 
 const instrumentFilters: GenericFilters = {
   sortField: "name desc",
@@ -71,24 +73,20 @@ describe("Instrument Selectors", () => {
     });
   });
 
-  describe("selectInstrumentsDashboardPageViewModel", () => {
+  describe("selectInstrumentsWithCountAndTableSettings", () => {
     it("should select the instruments dashboard page view model", () => {
       expect(
-        fromSelectors.selectInstrumentsDashboardPageViewModel.projector(
+        fromSelectors.selectInstrumentsWithCountAndTableSettings.projector(
           fromSelectors.selectInstruments.projector(initialInstrumentState),
-          fromSelectors.selectPage.projector(initialInstrumentState.filters),
           fromSelectors.selectInstrumentsCount.projector(
             initialInstrumentState,
           ),
-          fromSelectors.selectInstrumentsPerPage.projector(
-            initialInstrumentState.filters,
-          ),
+          fromUserSelectors.selectTablesSettings.projector(initialUserState),
         ),
       ).toEqual({
         instruments: [],
-        currentPage: 0,
-        instrumentsCount: 0,
-        instrumentsPerPage: 25,
+        count: 0,
+        tablesSettings: {},
       });
     });
   });

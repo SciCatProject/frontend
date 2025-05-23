@@ -59,6 +59,7 @@ export interface CheckboxEvent {
       ),
     ]),
   ],
+  standalone: false,
 })
 export class SharedTableComponent
   implements

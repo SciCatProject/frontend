@@ -29,6 +29,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
   selector: "app-type-datasets-filter-settings",
   templateUrl: `./datasets-filter-settings.component.html`,
   styleUrls: [`./datasets-filter-settings.component.scss`],
+  standalone: false,
 })
 export class DatasetsFilterSettingsComponent {
   metadataKeys$ = this.store.select(selectMetadataKeys);

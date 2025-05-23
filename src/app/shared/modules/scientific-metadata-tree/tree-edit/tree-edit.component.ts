@@ -45,6 +45,7 @@ export class FlatNodeEdit implements FlatNode {
   selector: "tree-edit",
   templateUrl: "./tree-edit.component.html",
   styleUrls: ["./tree-edit.component.scss"],
+  standalone: false,
 })
 export class TreeEditComponent
   extends TreeBaseComponent

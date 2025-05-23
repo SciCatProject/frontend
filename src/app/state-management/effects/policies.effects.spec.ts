@@ -59,9 +59,9 @@ describe("PolicyEffects", () => {
         {
           provide: PoliciesService,
           useValue: jasmine.createSpyObj("policyApi", [
-            "policiesControllerFindAll",
-            "policiesControllerCount",
-            "policiesControllerUpdateWhere",
+            "policiesControllerFindAllV3",
+            "policiesControllerCountV3",
+            "policiesControllerUpdateWhereV3",
           ]),
         },
       ],
@@ -85,7 +85,7 @@ describe("PolicyEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: policies });
-        policyApi.policiesControllerFindAll.and.returnValue(response);
+        policyApi.policiesControllerFindAllV3.and.returnValue(response);
 
         const expected = cold("--(bcd)", {
           b: outcome1,
@@ -101,7 +101,7 @@ describe("PolicyEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        policyApi.policiesControllerFindAll.and.returnValue(response);
+        policyApi.policiesControllerFindAllV3.and.returnValue(response);
 
         const expected = cold("--b", { b: outcome });
         expect(effects.fetchPolicies$).toBeObservable(expected);
@@ -120,7 +120,7 @@ describe("PolicyEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: policies });
-        policyApi.policiesControllerFindAll.and.returnValue(response);
+        policyApi.policiesControllerFindAllV3.and.returnValue(response);
 
         const expected = cold("--(bcd)", {
           b: outcome1,
@@ -138,7 +138,7 @@ describe("PolicyEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        policyApi.policiesControllerFindAll.and.returnValue(response);
+        policyApi.policiesControllerFindAllV3.and.returnValue(response);
 
         const expected = cold("--b", { b: outcome });
         expect(effects.fetchPolicies$).toBeObservable(expected);
@@ -157,7 +157,7 @@ describe("PolicyEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: policies });
-        policyApi.policiesControllerFindAll.and.returnValue(response);
+        policyApi.policiesControllerFindAllV3.and.returnValue(response);
 
         const expected = cold("--(bcd)", {
           b: outcome1,
@@ -175,7 +175,7 @@ describe("PolicyEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        policyApi.policiesControllerFindAll.and.returnValue(response);
+        policyApi.policiesControllerFindAllV3.and.returnValue(response);
 
         const expected = cold("--b", { b: outcome });
         expect(effects.fetchPolicies$).toBeObservable(expected);
@@ -191,7 +191,7 @@ describe("PolicyEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: { count } });
-      policyApi.policiesControllerCount.and.returnValue(response);
+      policyApi.policiesControllerCountV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
@@ -203,7 +203,7 @@ describe("PolicyEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      policyApi.policiesControllerCount.and.returnValue(response);
+      policyApi.policiesControllerCountV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCount$).toBeObservable(expected);
@@ -222,7 +222,7 @@ describe("PolicyEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: policies });
-        policyApi.policiesControllerFindAll.and.returnValue(response);
+        policyApi.policiesControllerFindAllV3.and.returnValue(response);
 
         const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
         expect(effects.fetchEditablePolicies$).toBeObservable(expected);
@@ -234,7 +234,7 @@ describe("PolicyEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        policyApi.policiesControllerFindAll.and.returnValue(response);
+        policyApi.policiesControllerFindAllV3.and.returnValue(response);
 
         const expected = cold("--b", { b: outcome });
         expect(effects.fetchEditablePolicies$).toBeObservable(expected);
@@ -254,7 +254,7 @@ describe("PolicyEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: policies });
-        policyApi.policiesControllerFindAll.and.returnValue(response);
+        policyApi.policiesControllerFindAllV3.and.returnValue(response);
 
         const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
         expect(effects.fetchEditablePolicies$).toBeObservable(expected);
@@ -268,7 +268,7 @@ describe("PolicyEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        policyApi.policiesControllerFindAll.and.returnValue(response);
+        policyApi.policiesControllerFindAllV3.and.returnValue(response);
 
         const expected = cold("--b", { b: outcome });
         expect(effects.fetchEditablePolicies$).toBeObservable(expected);
@@ -291,7 +291,7 @@ describe("PolicyEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: policies });
-        policyApi.policiesControllerFindAll.and.returnValue(response);
+        policyApi.policiesControllerFindAllV3.and.returnValue(response);
 
         const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
         expect(effects.fetchEditablePolicies$).toBeObservable(expected);
@@ -308,7 +308,7 @@ describe("PolicyEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        policyApi.policiesControllerFindAll.and.returnValue(response);
+        policyApi.policiesControllerFindAllV3.and.returnValue(response);
 
         const expected = cold("--b", { b: outcome });
         expect(effects.fetchEditablePolicies$).toBeObservable(expected);
@@ -324,7 +324,7 @@ describe("PolicyEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: { count } });
-      policyApi.policiesControllerCount.and.returnValue(response);
+      policyApi.policiesControllerCountV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchEditableCount$).toBeObservable(expected);
@@ -336,7 +336,7 @@ describe("PolicyEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      policyApi.policiesControllerCount.and.returnValue(response);
+      policyApi.policiesControllerCountV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchEditableCount$).toBeObservable(expected);
@@ -352,7 +352,7 @@ describe("PolicyEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: { submissionResponse: policy } });
-      policyApi.policiesControllerUpdateWhere.and.returnValue(response);
+      policyApi.policiesControllerUpdateWhereV3.and.returnValue(response);
 
       const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
       expect(effects.submitPolicy$).toBeObservable(expected);
@@ -365,7 +365,7 @@ describe("PolicyEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      policyApi.policiesControllerUpdateWhere.and.returnValue(response);
+      policyApi.policiesControllerUpdateWhereV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.submitPolicy$).toBeObservable(expected);

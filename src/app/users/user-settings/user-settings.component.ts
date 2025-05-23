@@ -18,6 +18,7 @@ import { AppConfigService } from "app-config.service";
   selector: "app-user-settings",
   templateUrl: "./user-settings.component.html",
   styleUrls: ["./user-settings.component.scss"],
+  standalone: false,
 })
 export class UserSettingsComponent implements OnInit {
   vm$ = this.store.select(selectUserSettingsPageViewModel);

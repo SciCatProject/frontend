@@ -27,7 +27,7 @@ import {
   sortEditableByColumnAction,
 } from "state-management/actions/policies.actions";
 
-import { Router } from "@angular/router";
+import { provideRouter, Router } from "@angular/router";
 import { GenericFilters } from "state-management/models";
 
 import { RouterTestingModule } from "@angular/router/testing";
@@ -65,11 +65,11 @@ describe("PoliciesDashboardComponent", () => {
         MatButtonModule,
         MatIconModule,
         MatTabsModule,
-        RouterTestingModule.withRoutes([]),
         SharedScicatFrontendModule,
         StoreModule.forRoot({}),
       ],
       providers: [
+        provideRouter([]),
         provideMockStore({
           selectors: [
             {

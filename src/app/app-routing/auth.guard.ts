@@ -31,7 +31,7 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot,
   ): Promise<boolean> {
     return this.us
-      .usersControllerGetMyUser()
+      .usersControllerGetMyUserV3()
       .toPromise()
       .catch(() => {
         this.router.navigate(["/login"]);
