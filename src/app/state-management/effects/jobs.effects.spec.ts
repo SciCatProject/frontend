@@ -14,28 +14,36 @@ import {
 import { MessageType } from "state-management/models";
 import { Type } from "@angular/core";
 import {
-  CreateJobDto,
+  CreateJobDtoV3,
+  OutputJobV3Dto,
   JobsService,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import { createMock } from "shared/MockStubs";
 
-// TODO: job release back-ward compatibility issue
-const job = createMock<any>({
-  _id: "testId",
+const createJob = createMock<CreateJobDtoV3>({
+  emailJobInitiator: "test@email.com",
+  type: "archive",
+  jobParams: {},
+  datasetList: [],
+  executionTime: "",
+  jobStatusMessage: "",
+  jobResultObject: {},
+});
+
+const outputJob = createMock<OutputJobV3Dto>({
   id: "testId",
   emailJobInitiator: "test@email.com",
   type: "archive",
-  datasetList: [],
   creationTime: "",
   executionTime: "",
   jobParams: {},
-  jobResultObject: {},
   jobStatusMessage: "",
-  ownerGroup: "",
+  datasetList: [],
+  jobResultObject: {},
 });
 
-xdescribe("JobEffects", () => {
+describe("JobEffects", () => {
   let actions: TestObservable;
   let effects: JobEffects;
   let jobApi: jasmine.SpyObj<JobsService>;
@@ -69,7 +77,7 @@ xdescribe("JobEffects", () => {
   describe("fetchJobs$", () => {
     describe("on fetchJobsAction", () => {
       it("should result in a fetchJobsCompleteAction and a fetchCountAction", () => {
-        const jobs = [job];
+        const jobs = [outputJob];
         const action = fromActions.fetchJobsAction();
         const outcome1 = fromActions.fetchJobsCompleteAction({ jobs });
         const outcome2 = fromActions.fetchCountAction();
@@ -100,7 +108,7 @@ xdescribe("JobEffects", () => {
       const limit = 25;
 
       it("should result in a fetchJobsCompleteAction and a fetchCountAction", () => {
-        const jobs = [job];
+        const jobs = [outputJob];
         const action = fromActions.changePageAction({ page, limit });
         const outcome1 = fromActions.fetchJobsCompleteAction({ jobs });
         const outcome2 = fromActions.fetchCountAction();
@@ -131,7 +139,7 @@ xdescribe("JobEffects", () => {
       const direction = "desc";
 
       it("should result in a fetchJobsCompleteAction and a fetchCountAction", () => {
-        const jobs = [job];
+        const jobs = [outputJob];
         const action = fromActions.sortByColumnAction({ column, direction });
         const outcome1 = fromActions.fetchJobsCompleteAction({ jobs });
         const outcome2 = fromActions.fetchCountAction();
@@ -161,7 +169,7 @@ xdescribe("JobEffects", () => {
       const mode = null;
 
       it("should result in a fetchJobsCompleteAction and a fetchCountAction", () => {
-        const jobs = [job];
+        const jobs = [outputJob];
         const action = fromActions.setJobViewModeAction({ mode });
         const outcome1 = fromActions.fetchJobsCompleteAction({ jobs });
         const outcome2 = fromActions.fetchCountAction();
@@ -208,10 +216,10 @@ xdescribe("JobEffects", () => {
 
     it("should result in a fetchJobCompleteAction", () => {
       const action = fromActions.fetchJobAction({ jobId });
-      const outcome = fromActions.fetchJobCompleteAction({ job });
+      const outcome = fromActions.fetchJobCompleteAction({ job: outputJob });
 
       actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: job });
+      const response = cold("-a|", { a: outputJob });
       jobApi.jobsControllerFindOneV3V3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
@@ -233,11 +241,11 @@ xdescribe("JobEffects", () => {
 
   describe("submitJob$", () => {
     it("should result in a submitJobCompleteAction", () => {
-      const action = fromActions.submitJobAction({ job: job as CreateJobDto });
-      const outcome = fromActions.submitJobCompleteAction({ job });
+      const action = fromActions.submitJobAction({ job: createJob });
+      const outcome = fromActions.submitJobCompleteAction({ job: outputJob });
 
       actions = hot("-a", { a: action });
-      const response = cold("-a|", { a: job });
+      const response = cold("-a|", { a: outputJob });
       jobApi.jobsControllerCreateV3V3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
@@ -252,7 +260,7 @@ xdescribe("JobEffects", () => {
         content: "Job Created Successfully",
         duration: 5000,
       };
-      const action = fromActions.submitJobCompleteAction({ job });
+      const action = fromActions.submitJobCompleteAction({ job: outputJob });
       const outcome = showMessageAction({ message });
 
       actions = hot("-a", { a: action });
@@ -321,7 +329,7 @@ xdescribe("JobEffects", () => {
     describe("ofType submitJobAction", () => {
       it("should dispatch a loadingAction", () => {
         const action = fromActions.submitJobAction({
-          job: job as CreateJobDto,
+          job: createJob,
         });
         const outcome = loadingAction();
 
@@ -385,7 +393,7 @@ xdescribe("JobEffects", () => {
 
     describe("ofType submitJobCompleteAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
-        const action = fromActions.submitJobCompleteAction({ job });
+        const action = fromActions.submitJobCompleteAction({ job: outputJob });
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });

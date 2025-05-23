@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { Store } from "@ngrx/store";
-import { JobClass } from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputJobV3Dto } from "@scicatproject/scicat-sdk-ts-angular";
 import { Subscription } from "rxjs";
 import {
   selectJobs,
@@ -92,15 +92,15 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
-  formatTableData(jobs: JobClass[]): JobsTableData[] {
+  formatTableData(jobs: OutputJobV3Dto[]): JobsTableData[] {
     let tableData: JobsTableData[] = [];
     if (jobs) {
       tableData = jobs.map((job) => ({
         id: job.id,
-        initiator: job.ownerUser,
+        initiator: job.emailJobInitiator,
         type: job.type,
-        createdAt: this.datePipe.transform(job.createdAt, "yyyy-MM-dd HH:mm"),
-        statusMessage: job.statusMessage,
+        createdAt: job.creationTime,
+        statusMessage: job.jobStatusMessage,
       }));
     }
     return tableData;
