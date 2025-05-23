@@ -31,7 +31,7 @@ export class ProposalEffects {
   fetchProposals$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchProposalsAction),
-      mergeMap(({ skip, limit, search, sortColumn, sortDirection }) => {
+      switchMap(({ skip, limit, search, sortColumn, sortDirection }) => {
         const limitsParam = {
           skip: skip,
           limit: limit,
