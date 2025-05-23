@@ -203,4 +203,41 @@ export class DatasetDetailDynamicComponent implements OnInit {
         break;
     }
   }
+
+  getScientificMetadata(dataset: OutputDatasetObsoleteDto, source?: string): any {
+    if (!dataset || !dataset.scientificMetadata) {
+      return null;
+    }
+
+    // If no source is specified, return the entire scientificMetadata
+    if (!source) {
+      return dataset.scientificMetadata;
+    }
+
+    // Handle nested path like "scientificMetadata.sampleProperties"
+    const pathParts = source.split('.');
+    
+    // Remove 'scientificMetadata' from the beginning if present
+    if (pathParts[0] === 'scientificMetadata') {
+      pathParts.shift();
+    }
+
+    // If no remaining path, return entire scientificMetadata
+    if (pathParts.length === 0) {
+      return dataset.scientificMetadata;
+    }
+
+    // Navigate through the nested path
+    let result = dataset.scientificMetadata;
+    for (const part of pathParts) {
+      if (result && typeof result === 'object' && part in result) {
+        result = result[part];
+      } else {
+        return null;
+      }
+    }
+
+    // Ensure the result is a valid object for metadata display
+    return result && typeof result === 'object' ? result : null;
+  }
 }
