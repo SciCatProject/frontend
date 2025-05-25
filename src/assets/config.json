@@ -8,15 +8,18 @@
   "editPublishedData": true,
   "editSampleEnabled": true,
   "facility": "SAMPLE-SITE",
+  "editPublishedData": true,
+  "editSampleEnabled": true,
+  "facility": "SAMPLE-SITE",
   "fileColorEnabled": true,
   "fileDownloadEnabled": true,
   "gettingStarted": null,
   "ingestManual": null,
-  "jobsEnabled": true,
+  "jobsEnabled": false,
   "jsonMetadataEnabled": true,
   "jupyterHubUrl": "",
   "landingPage": "",
-  "lbBaseURL": "http://127.0.0.1:3000",
+  "lbBaseURL": "http://backend.localhost",
   "depositorURL": "http://127.0.0.1:8080",
   "localColumns": [
     {
@@ -69,6 +72,11 @@
   "metadataStructure": "tree",
   "multipleDownloadAction": "",
   "multipleDownloadEnabled": false,
+  "maxDirectDownloadSize": 5000000000,
+  "metadataPreviewEnabled": true,
+  "metadataStructure": "tree",
+  "multipleDownloadAction": "",
+  "multipleDownloadEnabled": false,
   "policiesEnabled": true,
   "retrieveDestinations": [],
   "riotBaseUrl": "",
@@ -76,6 +84,10 @@
   "scienceSearchUnitsEnabled": true,
   "searchPublicDataEnabled": true,
   "searchSamples": true,
+  "sftpHost": "",
+  "shareEnabled": false,
+  "shoppingCartEnabled": false,
+  "shoppingCartOnHeader": false,
   "sftpHost": "",
   "shareEnabled": false,
   "shoppingCartEnabled": false,
@@ -164,5 +176,14 @@
     ]
   },
   "accessTokenPrefix": "Bearer ",
-  "externalAuthEndpoint": "/api/v3/auth/ldap"
+  "externalAuthEndpoint": "/api/v3/auth/ldap",
+  "ingestorEnabled": true,
+  "ingestorMode": "standard",
+  "ingestorAutodiscoveryOptions": [
+    {
+      "mailDomain": "unibe.ch",
+      "description": "University of Bern",
+      "facilityBackend": "http://localhost:8888"
+    }
+  ]
 }

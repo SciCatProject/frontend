@@ -28,7 +28,7 @@
         </div>
         <div *ngIf="!connectingToFacilityBackend">
           <ng-container *ngIf="connectedFacilityBackend === ''">
-            <p style="color: red;">No Backend connected</p>
+            <p class="confirm-message-error">No Backend connected</p>
 
             <p>Please provide a valid Backend URL</p>
             <mat-form-field>
@@ -36,13 +36,20 @@
                 [(ngModel)]="forwardFacilityBackend">
             </mat-form-field>
             <button mat-raised-button color="primary"
-              (click)="onClickForwardToIngestorPage()">Connect</button>
+              (click)="onClickForwardToIngestorPage(forwardFacilityBackend)">Connect</button>
 
-            <div>
+            <div *ngIf="lastUsedFacilityBackends.length > 0"
+              class="last-used-facility-backends">
+              <p>Last used facility backends:</p>
               <ul>
-                <li *ngFor="let backend of lastUsedFacilityBackends">
-                  <a (click)="onClickSelectFacilityBackend(backend)">{{ backend
+                <li *ngFor="let backend of lastUsedFacilityBackends"
+                  class="vertical-center-list-item">
+                  <a (click)="onClickSelectFacilityBackend(backend)">{{"- " + backend
                     }}</a>
+
+                  <a (click)="onClickDeleteStoredFacilityBackend(backend)">
+                    <mat-icon>remove_circle</mat-icon>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -108,7 +115,9 @@
                   </ng-container>
 
                   <ng-container matColumnDef="progress">
-                    <th mat-header-cell *matHeaderCellDef class="text-right"><b>Progress</b> </th>
+                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                      <b>Progress</b>
+                    </th>
                     <td mat-cell *matCellDef="let element" class="text-right">
                       <button mat-button aria-label="Delete transfer"
                         (click)="onOpenDetailView(element.transferId)">
@@ -178,7 +187,7 @@
     </mat-card>
   </p>
 
-  <p *ngIf="connectedFacilityBackend !== '' && (authIsDisabled ||
+  <p *ngIf="!connectingToFacilityBackend && connectedFacilityBackend !== '' && (authIsDisabled ||
     userInfo?.logged_in)">
     <mat-card class="ingestor-card">
       <mat-card-header>

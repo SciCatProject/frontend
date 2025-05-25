@@ -48,6 +48,7 @@ import { IngestorNewTransferDialogPageComponent } from "./ingestor-dialogs/creat
 import { IngestorUserMetadataDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.user-metadata-dialog-page.component";
 import { IngestorExtractorMetadataDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.extractor-metadata-dialog-page.component";
 import { IngestorTransferViewDialogComponent } from "./ingestor-dialogs/transfer-detail-view/ingestor.transfer-detail-view-dialog.component";
+import { IngestorNoRightsDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.no-rights-dialog-page.component";
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { IngestorTransferViewDialogComponent } from "./ingestor-dialogs/transfer
     QuantityValueLayoutRendererComponent,
     CustomLayoutChildrenRenderPropsPipe,
     IngestorTransferViewDialogComponent,
+    IngestorNoRightsDialogPageComponent,
   ],
   imports: [
     CommonModule,

@@ -34,7 +34,8 @@ import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
   standalone: false,
 })
 export class IngestorNewTransferDialogPageComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   private subscriptions: Subscription[] = [];
   readonly dialog = inject(MatDialog);
 
@@ -59,7 +60,7 @@ export class IngestorNewTransferDialogPageComponent
   userProfile: ReturnedUserDto | null = null;
   uiNextButtonReady = false;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store) {}
 
   ngOnInit() {
     this.loadExtractionMethods();
@@ -131,8 +132,6 @@ export class IngestorNewTransferDialogPageComponent
     this.createNewTransferData.scicatHeader["owner"] = "User";
 
     //this.createNewTransferData.scicatHeader["principalInvestigators"] = [this.userProfile.username];
-    this.createNewTransferData.scicatHeader["investigator"] =
-      this.userProfile.username;
     this.createNewTransferData.scicatHeader["ownerEmail"] =
       this.userProfile.email;
     this.createNewTransferData.scicatHeader["contactEmail"] =

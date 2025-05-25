@@ -1,8 +1,17 @@
 import { JsonSchema, JsonSchema7 } from "@jsonforms/core";
-import { DatasetClass } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  CreateDatasetDto,
+  DatasetClass,
+} from "@scicatproject/scicat-sdk-ts-angular";
 import { isArray } from "mathjs";
 import { PostDatasetResponse } from "shared/sdk/models/ingestor/postDatasetResponse";
 import { UserInfo } from "shared/sdk/models/ingestor/userInfo";
+
+export interface IngestorAutodiscovery {
+  mailDomain: string;
+  description?: string;
+  facilityBackend: string;
+}
 
 export interface ExtractionMethod {
   name: string;
@@ -40,42 +49,11 @@ export interface IngestionRequestInformation {
   autoArchive: boolean;
 }
 
-export interface TransferDataListEntry {
-  transferId: string;
-  status: string;
-}
-
-// There are many more... see DerivedDataset.ts
-export interface SciCatHeader {
-  datasetName: string;
-  description: string;
-  creationLocation: string;
-  dataFormat: string;
-  ownerGroup: string;
-  type: string;
-  license: string;
-  keywords: string[];
-  sourceFolder: string;
-  scientificMetadata: ScientificMetadata;
-  principalInvestigator: string;
-  ownerEmail: string;
-  contactEmail: string;
-  investigator: string;
-  creationTime: string;
-  owner: string;
-}
-
 export interface ScientificMetadata {
   organizational: object;
   sample: object;
   acquisition: object;
   instrument: object;
-}
-
-export interface MetadataExtractorResult {
-  cmdStdErr: string;
-  cmdStdOut: string;
-  result: string;
 }
 
 export interface DialogDataObject {
@@ -87,6 +65,39 @@ export interface DialogDataObject {
 }
 
 export class IngestorHelper {
+  static createMetaDataString(
+    transferData: IngestionRequestInformation,
+  ): string {
+    const space = 2;
+    const scicatMetadata: CreateDatasetDto = {
+      ...(transferData.scicatHeader as CreateDatasetDto),
+      scientificMetadata: {
+        organizational: transferData.userMetaData["organizational"],
+        sample: transferData.userMetaData["sample"],
+        acquisition: transferData.extractorMetaData["acquisition"],
+        instrument: transferData.extractorMetaData["instrument"],
+      },
+    };
+
+    return JSON.stringify(scicatMetadata, null, space);
+  }
+
+  static saveConnectionsToLocalStorage = (connections: string[]) => {
+    // Remove duplicates
+    const uniqueConnections = Array.from(new Set(connections));
+    const connectionsString = JSON.stringify(uniqueConnections);
+    localStorage.setItem("ingestorConnections", connectionsString);
+  };
+
+  static loadConnectionsFromLocalStorage = (): string[] => {
+    const connectionsString = localStorage.getItem("ingestorConnections");
+    if (connectionsString) {
+      const connections = JSON.parse(connectionsString);
+      return connections;
+    }
+    return [];
+  };
+
   static createEmptyRequestInformation = (): IngestionRequestInformation => {
     return {
       selectedPath: "",
@@ -163,24 +174,19 @@ export const getJsonSchemaFromDto = () => {
   // 0 => number
   // -1 => skip number
   // -2 => optional number
-  const emptyDatasetForSchema: DatasetClass = {
-    createdBy: "--skip",
-    updatedBy: "--skip",
-    createdAt: "--dateTime",
-    updatedAt: "--dateTime --skip", // skip
+  const emptyDatasetForSchema: CreateDatasetDto = {
     ownerGroup: "--string",
     accessGroups: [],
     isPublished: false,
     pid: "--skip",
     owner: "--string",
     contactEmail: "--mail",
-    sourceFolder: "--readonly",
+    sourceFolder: "--string --readonly",
     size: -1, // skip
     numberOfFiles: -1, // skip
     creationTime: "--dateTime",
     type: "raw",
     datasetName: "--string",
-    version: "--skip",
     creationLocation: "--string",
 
     // Optional fields

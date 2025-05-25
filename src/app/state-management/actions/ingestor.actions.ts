@@ -57,6 +57,11 @@ export const updateTransferListSuccess = createAction(
   }>(),
 );
 
+export const updateTransferListDetailSuccess = createAction(
+  "[Ingestor] Update Transfer List Detail Success",
+  props<{ transferListDetailView: GetTransferResponse }>(),
+);
+
 export const updateTransferListFailure = createAction(
   "[Ingestor] Update Transfer List Failure",
   props<{ err: Error }>(),
@@ -133,4 +138,13 @@ export const cancelTransfer = createAction(
 export const setRenderViewFromThirdParty = createAction(
   "[Ingestor] Set Render View",
   props<{ renderView: renderView }>(),
+);
+
+export const resetIngestorComponent = createAction(
+  "[Ingestor] Reset Ingestor Component",
+);
+
+export const setNoRightsError = createAction(
+  "[Ingestor] Set No Rights Error",
+  props<{ noRightsError: boolean; err: Error }>(),
 );

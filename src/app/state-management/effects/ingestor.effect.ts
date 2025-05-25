@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { of } from "rxjs";
-import { catchError, map, switchMap, finalize } from "rxjs/operators"; // Import finalize
+import { catchError, map, switchMap, takeUntil } from "rxjs/operators"; // Import finalize
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Ingestor } from "shared/sdk/apis/ingestor.service";
 import {
@@ -21,58 +21,57 @@ export class IngestorEffects {
   connectToIngestor$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.connectIngestor),
-      switchMap(() =>
-        of(fromActions.startConnectingIngestor()).pipe(
-          switchMap(() => {
-            return this.ingestor.getVersion().pipe(
-              switchMap((versionResponse) =>
-                this.ingestor.getHealth().pipe(
-                  switchMap((healthResponse) =>
-                    this.ingestor.getUserInfo().pipe(
-                      map((userInfoResponse) =>
+      switchMap(() => {
+        return this.ingestor.getVersion().pipe(
+          switchMap((versionResponse) =>
+            this.ingestor.getHealth().pipe(
+              switchMap((healthResponse) =>
+                this.ingestor.getUserInfo().pipe(
+                  map((userInfoResponse) =>
+                    fromActions.connectIngestorSuccess({
+                      versionResponse: versionResponse as OtherVersionResponse,
+                      healthResponse: healthResponse as OtherHealthResponse,
+                      userInfoResponse: userInfoResponse as UserInfo,
+                      authIsDisabled: false,
+                    }),
+                  ),
+                  catchError((err) => {
+                    const errorMessage =
+                      err instanceof HttpErrorResponse
+                        ? (err.error?.message ?? err.error ?? err.message)
+                        : err.message;
+
+                    if (errorMessage.includes("disabled")) {
+                      return of(
                         fromActions.connectIngestorSuccess({
                           versionResponse:
                             versionResponse as OtherVersionResponse,
                           healthResponse: healthResponse as OtherHealthResponse,
-                          userInfoResponse: userInfoResponse as UserInfo,
-                          authIsDisabled: false,
+                          userInfoResponse: null, // Kein UserInfo verfügbar
+                          authIsDisabled: true,
                         }),
-                      ),
-                      catchError((err) => {
-                        const errorMessage =
-                          err instanceof HttpErrorResponse
-                            ? (err.error?.message ?? err.error ?? err.message)
-                            : err.message;
-
-                        if (errorMessage.includes("disabled")) {
-                          return of(
-                            fromActions.connectIngestorSuccess({
-                              versionResponse:
-                                versionResponse as OtherVersionResponse,
-                              healthResponse:
-                                healthResponse as OtherHealthResponse,
-                              userInfoResponse: null, // Kein UserInfo verfügbar
-                              authIsDisabled: true,
-                            }),
-                          );
-                        }
-                        return of(fromActions.connectIngestorFailure({ err }));
-                      }),
-                    ),
-                  ),
+                      );
+                    }
+                    return of(fromActions.connectIngestorFailure({ err }));
+                  }),
                 ),
               ),
-              catchError((err) =>
-                of(fromActions.connectIngestorFailure({ err })),
-              ),
-              finalize(() => {
-                // Dispatch stopConnectingIngestor after the process is complete
-                of(fromActions.stopConnectingIngestor());
-              }),
-            );
+            ),
+          ),
+          catchError((err) => {
+            if (err.error?.error?.includes("login session has expired")) {
+              return of(
+                fromActions.setNoRightsError({ noRightsError: true, err: err }),
+              );
+            }
+
+            return of(fromActions.getExtractionMethodsFailure({ err }));
           }),
-        ),
-      ),
+          takeUntil(
+            this.actions$.pipe(ofType(fromActions.resetIngestorComponent)),
+          ),
+        );
+      }),
     );
   });
 
@@ -130,13 +129,19 @@ export class IngestorEffects {
             transferId,
           )
           .pipe(
-            map((transferList) =>
-              fromActions.updateTransferListSuccess({
+            map((transferList) => {
+              if (transferId) {
+                return fromActions.updateTransferListDetailSuccess({
+                  transferListDetailView: transferList,
+                });
+              }
+
+              return fromActions.updateTransferListSuccess({
                 transferList,
                 page: page ?? pageRO,
                 pageNumber: pageNumber ?? pageNumberRO,
-              }),
-            ),
+              });
+            }),
             catchError((err) =>
               of(fromActions.updateTransferListFailure({ err })),
             ),
@@ -153,9 +158,15 @@ export class IngestorEffects {
           map((extractionMethods) =>
             fromActions.getExtractionMethodsSuccess({ extractionMethods }),
           ),
-          catchError((err) =>
-            of(fromActions.getExtractionMethodsFailure({ err })),
-          ),
+          catchError((err) => {
+            if (err.error?.error?.includes("login session has expired")) {
+              return of(
+                fromActions.setNoRightsError({ noRightsError: true, err: err }),
+              );
+            }
+
+            return of(fromActions.getExtractionMethodsFailure({ err }));
+          }),
         ),
       ),
     );
@@ -169,9 +180,15 @@ export class IngestorEffects {
           map((ingestorBrowserActiveNode) =>
             fromActions.getBrowseFilePathSuccess({ ingestorBrowserActiveNode }),
           ),
-          catchError((err) =>
-            of(fromActions.getBrowseFilePathFailure({ err })),
-          ),
+          catchError((err) => {
+            if (err.error?.error?.includes("login session has expired")) {
+              return of(
+                fromActions.setNoRightsError({ noRightsError: true, err: err }),
+              );
+            }
+
+            return of(fromActions.getExtractionMethodsFailure({ err }));
+          }),
         ),
       ),
     );
@@ -186,7 +203,15 @@ export class IngestorEffects {
             fromActions.ingestDatasetSuccess({ response }),
             fromActions.updateTransferList({}),
           ]),
-          catchError((err) => of(fromActions.ingestDatasetFailure({ err }))),
+          catchError((err) => {
+            if (err.error?.error?.includes("login session has expired")) {
+              return of(
+                fromActions.setNoRightsError({ noRightsError: true, err: err }),
+              );
+            }
+
+            return of(fromActions.getExtractionMethodsFailure({ err }));
+          }),
         ),
       ),
     );

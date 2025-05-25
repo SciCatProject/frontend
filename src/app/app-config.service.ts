@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { IngestorAutodiscovery } from "ingestor/ingestor-page/helper/ingestor.component-helper";
 import { timeout } from "rxjs/operators";
 import {
   DatasetDetailComponentConfig,
@@ -108,13 +109,16 @@ export interface AppConfig {
   datasetDetailComponent?: DatasetDetailComponentConfig;
   labelsLocalization?: LabelsLocalization;
   dateFormat?: string;
+  ingestorEnabled?: boolean;
+  ingestorMode?: string;
+  ingestorAutodiscoveryOptions?: IngestorAutodiscovery[];
 }
 
 @Injectable()
 export class AppConfigService {
   private appConfig: object = {};
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   async loadAppConfig(): Promise<void> {
     try {

@@ -1,14 +1,20 @@
-<div class="ingestor-mixed-header">
-  <h2 mat-dialog-title>
-    Confirm transfer
-  </h2>
-  <button mat-icon-button mat-dialog-close aria-label="Close"
-    class="ingestor-close-button">
-    <mat-icon>close</mat-icon>
-  </button>
+<div class="ingestor-dialog-header">
+  <div class="ingestor-mixed-header">
+    <h2 mat-dialog-title>
+      Confirm transfer
+    </h2>
+    <button mat-icon-button mat-dialog-close aria-label="Close"
+      class="ingestor-close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="ingestor-stepper-header">
+    <ingestor-dialog-stepper [activeStep]="3"></ingestor-dialog-stepper>
+  </div>
 </div>
+
 <mat-dialog-content class="mat-typography">
-  <ingestor-dialog-stepper [activeStep]="3"></ingestor-dialog-stepper>
 
   <p
     *ngIf="createNewTransferData.apiInformation.ingestionRequestErrorMessage !== ''">
@@ -60,8 +66,7 @@
       </mat-card-header>
       <mat-card-content class="ingestor-vertical-layout">
         <mat-checkbox [(ngModel)]="createNewTransferData.autoArchive"
-          (change)="onAutoArchiveChange($event)"
-          aria-label="Auto Archive">
+          (change)="onAutoArchiveChange($event)" aria-label="Auto Archive">
           Auto Archive
         </mat-checkbox>
         <p class="checkbox-description">

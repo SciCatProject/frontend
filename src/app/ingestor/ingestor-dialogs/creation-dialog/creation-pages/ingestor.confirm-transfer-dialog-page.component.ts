@@ -9,7 +9,6 @@ import {
 import {
   IngestionRequestInformation,
   IngestorHelper,
-  SciCatHeader,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
 import { Store } from "@ngrx/store";
 import { selectIngestionObject } from "state-management/selectors/ingestor.selector";
@@ -26,7 +25,8 @@ import { Subscription } from "rxjs";
   standalone: false,
 })
 export class IngestorConfirmTransferDialogPageComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   private subscriptions: Subscription[] = [];
   readonly dialog = inject(MatDialog);
 
@@ -42,7 +42,7 @@ export class IngestorConfirmTransferDialogPageComponent
 
   copiedToClipboard = false;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store) {}
 
   ngOnInit() {
     this.subscriptions.push(
@@ -53,7 +53,9 @@ export class IngestorConfirmTransferDialogPageComponent
       }),
     );
 
-    this.provideMergeMetaData = this.createMetaDataString();
+    this.provideMergeMetaData = IngestorHelper.createMetaDataString(
+      this.createNewTransferData,
+    );
   }
 
   ngOnDestroy(): void {
@@ -67,23 +69,6 @@ export class IngestorConfirmTransferDialogPageComponent
         ingestionObject: this.createNewTransferData,
       }),
     );
-  }
-
-  createMetaDataString(): string {
-    const space = 2;
-    const scicatMetadata: SciCatHeader = {
-      ...(this.createNewTransferData.scicatHeader as SciCatHeader),
-      scientificMetadata: {
-        organizational:
-          this.createNewTransferData.userMetaData["organizational"],
-        sample: this.createNewTransferData.userMetaData["sample"],
-        acquisition:
-          this.createNewTransferData.extractorMetaData["acquisition"],
-        instrument: this.createNewTransferData.extractorMetaData["instrument"],
-      },
-    };
-
-    return JSON.stringify(scicatMetadata, null, space);
   }
 
   onClickBack(): void {

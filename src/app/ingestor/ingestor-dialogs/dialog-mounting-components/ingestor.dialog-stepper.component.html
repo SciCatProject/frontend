@@ -1,6 +1,6 @@
 <div class="dialog-control-buttons">
   <button mat-button matTooltip="Save the current values."
-    [disabled]="activeStep < 1" (click)="onSave()"><mat-icon
+    [disabled]="activeStep === 0" (click)="onSave()"><mat-icon
       class="control-button-icon">save</mat-icon></button>
   <button mat-button matTooltip="Upload a template." [disabled]="activeStep < 1"
     (click)="onUpload()"><mat-icon
@@ -30,7 +30,7 @@
     JSON-Mode</button>
 </mat-menu>
 
-<div class="stepper">
+<div class="stepper" *ngIf="activeStep >= 0">
   <mat-stepper [linear]="true" [selectedIndex]="activeStep"
     class="ingestor-stepper">
     <mat-step [completed]="activeStep > 0" [editable]="false"

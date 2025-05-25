@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { switchMap } from "rxjs/operators";
+import { switchMap, take } from "rxjs/operators";
 import { AppConfigService } from "app-config.service";
 import {
   DeleteTransferRequest,
@@ -55,22 +55,22 @@ export class Ingestor {
   }
 
   getVersion(): Observable<OtherVersionResponse> {
-    return this.store
-      .select(selectIngestorEndpoint)
-      .pipe(
-        switchMap((ingestorEndpoint) =>
-          this.http.get<OtherVersionResponse>(
-            `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.OTHER.VERSION}`,
-            this.getRequestOptions(),
-          ),
-        ),
-      );
+    return this.store.select(selectIngestorEndpoint).pipe(
+      take(1),
+      switchMap((endpoint) =>
+        this.http.get<OtherVersionResponse>(
+          `${endpoint}/${INGESTOR_API_ENDPOINTS_V1.OTHER.VERSION}`,
+          this.getRequestOptions(),
+        )
+      )
+    );
   }
 
   getUserInfo(): Observable<UserInfo> {
     return this.store
       .select(selectIngestorEndpoint)
       .pipe(
+        take(1),
         switchMap((ingestorEndpoint) =>
           this.http.get<UserInfo>(
             `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.AUTH.USERINFO}`,
@@ -84,6 +84,7 @@ export class Ingestor {
     return this.store
       .select(selectIngestorEndpoint)
       .pipe(
+        take(1),
         switchMap((ingestorEndpoint) =>
           this.http.get<OtherHealthResponse>(
             `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.OTHER.HEALTH}`,
@@ -99,6 +100,7 @@ export class Ingestor {
     return this.store
       .select(selectIngestorEndpoint)
       .pipe(
+        take(1),
         switchMap((ingestorEndpoint) =>
           this.http.delete<DeleteTransferResponse>(
             `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.TRANSFER}`,
@@ -124,6 +126,7 @@ export class Ingestor {
     return this.store
       .select(selectIngestorEndpoint)
       .pipe(
+        take(1),
         switchMap((ingestorEndpoint) =>
           this.http.get<GetTransferResponse>(
             `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.TRANSFER}`,
@@ -137,6 +140,7 @@ export class Ingestor {
     return this.store
       .select(selectIngestorEndpoint)
       .pipe(
+        take(1),
         switchMap((ingestorEndpoint) =>
           this.http.post<PostDatasetResponse>(
             `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.DATASET}`,
@@ -158,6 +162,7 @@ export class Ingestor {
     return this.store
       .select(selectIngestorEndpoint)
       .pipe(
+        take(1),
         switchMap((ingestorEndpoint) =>
           this.http.get<GetExtractorResponse>(
             `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.EXTRACTOR}`,
@@ -180,6 +185,7 @@ export class Ingestor {
     return this.store
       .select(selectIngestorEndpoint)
       .pipe(
+        take(1),
         switchMap((ingestorEndpoint) =>
           this.http.get<GetBrowseDatasetResponse>(
             `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.DATASET_BROWSE}`,
