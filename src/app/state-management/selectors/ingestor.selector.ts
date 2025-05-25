@@ -73,3 +73,9 @@ export const selectNoRightsError = createSelector(
   selectIngestorState,
   (state) => state.noRightsError,
 );
+
+
+export const selectExtractionMethods = createSelector(
+  selectIngestorState,
+  (state) => state.ingestorExtractionMethods.methods 
+);

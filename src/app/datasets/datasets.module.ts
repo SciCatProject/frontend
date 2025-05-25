@@ -101,6 +101,8 @@ import { CustomSemiEnumControlComponent } from "./depositor/empiar/customRendere
 import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
 
+import { IngestorModule } from "../ingestor/ingestor.module"
+
 @NgModule({
   imports: [
     CommonModule,
@@ -167,6 +169,7 @@ import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-w
     CdkDrag,
     CdkDragHandle,
     FiltersModule,
+    IngestorModule,
   ],
   declarations: [
     BatchViewComponent,

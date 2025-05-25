@@ -70,6 +70,16 @@
             </button>
           </div>
 
+          <!-- Display the metadata editor if clicked-->
+          <app-metadata-editor
+            *ngIf="showMetadataEditor"
+            [data]="metadata"
+            [schema]="metadataSchema"
+            [renderView]="'all'"
+            (dataChange)="onMetadataChange($event)"
+            (errors)="onMetadataErrors($event)"
+          ></app-metadata-editor>
+
           <mat-form-field class="method-name">
             <mat-label>Experimental Method</mat-label>
             <mat-select required [formControl]="depositionRepository" (selectionChange)="onChooseRepo()">

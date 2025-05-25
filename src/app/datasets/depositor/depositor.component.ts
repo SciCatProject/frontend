@@ -7,7 +7,7 @@ import {
 } from "@angular/forms";
 import { AppConfigService, AppConfig } from "app-config.service";
 import { ActivatedRoute } from "@angular/router";
-
+import { JsonSchema } from "@jsonforms/core";
 import { Store } from "@ngrx/store";
 import {
   OutputDatasetObsoleteDto,
@@ -25,7 +25,11 @@ import * as fromActions from "state-management/actions/depositor.actions";
 import { accessEmpiarSchema } from "state-management/actions/depositor.actions";
 import { selectEmpiarSchema } from "state-management/selectors/depositor.selectors";
 
-import { Subscription } from "rxjs";
+import * as ingestorActions from "state-management/actions/ingestor.actions";
+import { MethodItem } from "../../shared/sdk/models/ingestor/models"
+import { selectExtractionMethods} from "state-management/selectors/ingestor.selector";
+
+import { Observable, Subscription, take, find } from "rxjs";
 import { Router } from "@angular/router";
 
 interface DepositionRepository {
@@ -60,6 +64,13 @@ export class DepositorComponent implements OnInit, OnDestroy {
   } | null = null;
 
   empiarSchemaEncoded:string | undefined;
+  showMetadataEditor = false;
+
+  metadata: any = {}; 
+  metadataSchema: JsonSchema = null// ideally i get the schema by uid?
+
+  methods$: Observable<MethodItem[]> = this.store.select(selectExtractionMethods);
+
   constructor(
     public appConfigService: AppConfigService,
     private store: Store,
@@ -87,6 +98,12 @@ export class DepositorComponent implements OnInit, OnDestroy {
         }
       }),
     );
+    this.store.select(selectCurrentDataset).subscribe((dataset) => {
+      this.dataset = dataset;
+      if (dataset) {
+        this.metadata = this.dataset.scientificMetadata;
+      }
+    });
 
     this.store.dispatch(accessEmpiarSchema());
     this.subscriptions.push(
@@ -107,7 +124,29 @@ export class DepositorComponent implements OnInit, OnDestroy {
   }
 
   onChangeIngestorMetadata(){
+    this.store.dispatch(ingestorActions.getExtractionMethods({ page: 1, pageNumber: 10 }));
+
+    this.methods$.pipe(
+      take(1),
+    ).subscribe(methods => {
+      const selectedMethod = methods.find(m => m.name === 'spa');
+      if (selectedMethod) {
+        const parsedSchema: JsonSchema = JSON.parse(selectedMethod.schema);
+        this.metadataSchema = parsedSchema;
+        this.showMetadataEditor = false; //needs tuning
+      }
+    });
+
+    this.showMetadataEditor = true
     console.log("Ingestor metadata changes");
+  }
+
+  onMetadataChange(newData: any) {
+    this.metadata= newData;
+  }
+
+  onMetadataErrors(errors: any[]) {
+    console.warn('Metadata validation errors:', errors);
   }
 
 }
