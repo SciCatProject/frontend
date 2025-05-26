@@ -58,19 +58,20 @@
   </mat-menu>
 
   <mat-toolbar class="mat-elevation-z1" color="primary">
-<!--
-    <span>
-      <button mat-button class="main-menu" [matMenuTriggerFor]="userMenu">
-        <img class="main-menu-image" src="../../../assets/images/hamburger.svg" />
-      </button>
-    </span>
+    <div class="main-menu" [matMenuTriggerFor]="userMenu">
+      <mat-icon [inline]="true">menu</mat-icon>
+      <!--
+      <img class="main-menu-image" src="../../../assets/images/hamburger.svg" />
+      -->
+    </div>
     <a [routerLink]="['/datasets']">
       <img class="logo" src="../../../assets/images/{{ siteSciCatLogo }}" />
     </a>
--->    
+<!--   
     <div mat-button class="main-menu" [matMenuTriggerFor]="mainMenu">
       <img class="logo" src="../../../assets/images/{{ siteSciCatLogo }}" />
     </div>
+-->
     <a [routerLink]="['/datasets']">
       <img class="logo" src="../../../assets/images/{{ siteHeaderLogo }}" />
     </a>
