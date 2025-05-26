@@ -23,6 +23,7 @@ import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
 import { DateTime } from "luxon";
 import { MetadataTypes } from "../metadata-edit/metadata-edit.component";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
+import { TablePaginationMode } from "shared/modules/dynamic-material-table/models/table-pagination.model";
 
 @Component({
   selector: "metadata-view",
@@ -57,6 +58,8 @@ export class MetadataViewComponent implements OnInit, OnChanges {
   stickyHeader = true;
 
   pagination = null;
+
+  pagingMode: TablePaginationMode = "none";
 
   printConfig: PrintConfig = {};
 
