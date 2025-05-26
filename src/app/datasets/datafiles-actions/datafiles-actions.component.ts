@@ -10,6 +10,7 @@ import { AppConfigService } from "app-config.service";
   //imports: [DatafilesActionComponent],
   templateUrl: "./datafiles-actions.component.html",
   styleUrls: ["./datafiles-actions.component.scss"],
+  standalone: false,
 })
 export class DatafilesActionsComponent {
   private _sortedActionsConfig: ActionConfig[];

@@ -15,6 +15,7 @@ import { distinctUntilChanged, debounceTime } from "rxjs/operators";
   selector: "app-search-bar",
   templateUrl: "./search-bar.component.html",
   styleUrls: ["./search-bar.component.scss"],
+  standalone: false,
 })
 export class SearchBarComponent implements OnChanges {
   private searchDebounce = 300;

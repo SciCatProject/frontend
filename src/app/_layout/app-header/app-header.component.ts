@@ -19,6 +19,7 @@ import { Router } from "@angular/router";
   selector: "app-app-header",
   templateUrl: "./app-header.component.html",
   styleUrls: ["./app-header.component.scss"],
+  standalone: false,
 })
 export class AppHeaderComponent implements OnInit {
   config = this.appConfigService.getConfig();

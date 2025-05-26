@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { ActivatedRoute, Router, RoutesRecognized } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { Store, ActionsSubject } from "@ngrx/store";
 
 import deepEqual from "deep-equal";
@@ -19,10 +19,10 @@ import {
 
 import {
   selectHasPrefilledFilters,
-  selectDatasetsInBatch,
   selectCurrentDataset,
   selectSelectedDatasets,
   selectPagination,
+  selectIsBatchNonEmpty,
 } from "state-management/selectors/datasets.selectors";
 import { distinctUntilChanged, filter, map, take } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
@@ -40,18 +40,14 @@ import {
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
-import {
-  selectColumnAction,
-  deselectColumnAction,
-  loadDefaultSettings,
-} from "state-management/actions/user.actions";
-import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
+import { loadDefaultSettings } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "dashboard",
   templateUrl: "dashboard.component.html",
   styleUrls: ["dashboard.component.scss"],
+  standalone: false,
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private pagination$ = this.store.select(selectPagination);
@@ -63,9 +59,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   selectColumns$ = this.store.select(selectColumns);
   selectHasFetchedSettings$ = this.store.select(selectHasFetchedSettings);
 
-  public nonEmpty$ = this.store
-    .select(selectDatasetsInBatch)
-    .pipe(map((batch) => batch.length > 0));
+  public nonEmpty$ = this.store.select(selectIsBatchNonEmpty);
 
   subscriptions: Subscription[] = [];
 
@@ -90,33 +84,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       changePageAction({ page: event.pageIndex, limit: event.pageSize }),
     );
-  }
-
-  onSettingsClick(): void {
-    this.sideNav.toggle();
-    if (this.sideNav.opened) {
-      this.clearColumnSearch = false;
-    } else {
-      this.clearColumnSearch = true;
-    }
-  }
-
-  onCloseClick(): void {
-    this.clearColumnSearch = true;
-    this.sideNav.close();
-  }
-
-  onSelectColumn(event: SelectColumnEvent): void {
-    const { checkBoxChange, column } = event;
-    if (checkBoxChange.checked) {
-      this.store.dispatch(
-        selectColumnAction({ name: column.name, columnType: column.type }),
-      );
-    } else if (!checkBoxChange.checked) {
-      this.store.dispatch(
-        deselectColumnAction({ name: column.name, columnType: column.type }),
-      );
-    }
   }
 
   onRowClick(dataset: OutputDatasetObsoleteDto): void {

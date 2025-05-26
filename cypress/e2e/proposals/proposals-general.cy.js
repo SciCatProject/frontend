@@ -362,8 +362,8 @@ describe("Proposals general", () => {
         defaultPageSize,
       );
 
-      cy.get("mat-paginator mat-select").click();
-      cy.get("mat-option").contains(newPageSize).click();
+      cy.get("mat-paginator mat-select").click({ force: true });
+      cy.get("mat-option").contains(newPageSize).click({ force: true });
 
       cy.reload();
 
@@ -443,9 +443,7 @@ describe("Proposals general", () => {
         .find("input[type=checkbox]")
         .uncheck();
 
-      cy.get('[role="menu"] .column-config-apply .done-setting')
-        .contains("done")
-        .click();
+      cy.contains(".column-config-apply button.done-setting", "done").click();
 
       cy.get("dynamic-mat-table table-menu button").click();
       cy.get('[role="menu"] button').contains("Save table setting").click();
@@ -495,8 +493,8 @@ describe("Proposals general", () => {
 
       cy.visit("/proposals");
 
-      cy.get("mat-paginator mat-select").click();
-      cy.get("mat-option").contains("25").click();
+      cy.get("mat-paginator mat-select").click({ force: true });
+      cy.get("mat-option").contains("25").click({ force: true });
 
       cy.get("dynamic-mat-table table-menu button").click();
 
@@ -531,8 +529,8 @@ describe("Proposals general", () => {
 
       cy.visit("/proposals");
 
-      cy.get("mat-paginator mat-select").click();
-      cy.get("mat-option").contains("25").click();
+      cy.get("mat-paginator mat-select").click({ force: true });
+      cy.get("mat-option").contains("25").click({ force: true });
 
       cy.get("dynamic-mat-table table-menu button").click();
 

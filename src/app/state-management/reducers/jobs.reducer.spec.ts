@@ -2,20 +2,18 @@ import { jobsReducer } from "./jobs.reducer";
 import * as fromActions from "../actions/jobs.actions";
 import { initialJobsState } from "state-management/state/jobs.store";
 import { createMock } from "shared/MockStubs";
-import { JobClass } from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputJobV3Dto } from "@scicatproject/scicat-sdk-ts-angular";
 
-const job = createMock<JobClass>({
-  _id: "testId",
+const job = createMock<OutputJobV3Dto>({
   id: "testId",
   emailJobInitiator: "test@email.com",
   type: "archive",
-  datasetList: [],
   creationTime: "",
   executionTime: "",
   jobParams: {},
-  jobResultObject: {},
   jobStatusMessage: "",
-  ownerGroup: "",
+  datasetList: [],
+  jobResultObject: {},
 });
 
 describe("jobsReducer", () => {

@@ -4,7 +4,7 @@ import { FileObject } from "datasets/dataset-details-dashboard/dataset-details-d
 import { Subscription } from "rxjs";
 import { take } from "rxjs/operators";
 import {
-  CreateJobDto,
+  CreateJobDtoV3,
   OutputDatasetObsoleteDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { submitJobAction } from "state-management/actions/jobs.actions";
@@ -22,6 +22,7 @@ import {
   selector: "app-admin-tab",
   templateUrl: "./admin-tab.component.html",
   styleUrls: ["./admin-tab.component.scss"],
+  standalone: false,
 })
 export class AdminTabComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
@@ -47,13 +48,6 @@ export class AdminTabComponent implements OnInit, OnDestroy {
         .pipe(take(1))
         .subscribe((user) => {
           if (user && this.dataset) {
-            const job: CreateJobDto = {
-              emailJobInitiator: user.email,
-              type: "reset",
-              datasetList: [],
-              jobParams: {},
-            };
-            job.jobParams["username"] = user.username;
             const fileObj: FileObject = {
               pid: "",
               files: [],
@@ -66,7 +60,14 @@ export class AdminTabComponent implements OnInit, OnDestroy {
               });
             }
             fileObj.files = fileList;
-            job.datasetList = [fileObj];
+            const job: CreateJobDtoV3 = {
+              emailJobInitiator: user.email,
+              type: "reset",
+              datasetList: [fileObj],
+              jobParams: {},
+              jobStatusMessage: "jobCreated",
+            };
+            job.jobParams["username"] = user.username;
             this.store.dispatch(submitJobAction({ job }));
           }
         });

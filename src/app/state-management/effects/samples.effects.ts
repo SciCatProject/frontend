@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
+import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { concatLatestFrom } from "@ngrx/operators";
 import {
-  CreateSubAttachmentDto,
+  CreateSubAttachmentV3Dto,
   DatasetsService,
   SamplesService,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -25,17 +26,15 @@ export class SampleEffects {
 
   fetchSamples$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(
-        fromActions.fetchSamplesAction,
-        fromActions.changePageAction,
-        fromActions.sortByColumnAction,
-        fromActions.setTextFilterAction,
-      ),
+      ofType(fromActions.fetchSamplesAction),
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query, limits }) =>
         this.sampleApi
-          .samplesControllerFullquery(JSON.stringify(limits), query)
+          .samplesControllerFullqueryV3(
+            JSON.stringify(limits),
+            JSON.stringify(query),
+          )
           .pipe(
             mergeMap((samples) => [
               fromActions.fetchSamplesCompleteAction({ samples }),
@@ -53,7 +52,7 @@ export class SampleEffects {
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query }) =>
-        this.sampleApi.samplesControllerCount(query).pipe(
+        this.sampleApi.samplesControllerCountV3(JSON.stringify(query)).pipe(
           map(({ count }) =>
             fromActions.fetchSamplesCountCompleteAction({
               count,
@@ -71,10 +70,13 @@ export class SampleEffects {
       concatLatestFrom(() => this.fullqueryParams$),
       map(([action, params]) => params),
       mergeMap(({ query }) => {
-        const parsedQuery = JSON.parse(query);
-        parsedQuery.metadataKey = "";
+        const limits = {};
+        const metadataKeysQuery = { ...query, metadataKey: "" };
         return this.sampleApi
-          .samplesControllerMetadataKeys(JSON.stringify(parsedQuery))
+          .samplesControllerMetadataKeysV3(
+            JSON.stringify(limits),
+            JSON.stringify(metadataKeysQuery),
+          )
           .pipe(
             map((metadataKeys) =>
               fromActions.fetchMetadataKeysCompleteAction({ metadataKeys }),
@@ -89,10 +91,10 @@ export class SampleEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchSampleAction),
       switchMap(({ sampleId }) => {
-        return this.sampleApi.samplesControllerFindByIdAccess(sampleId).pipe(
+        return this.sampleApi.samplesControllerFindByIdAccessV3(sampleId).pipe(
           filter((permission) => permission.canAccess),
           switchMap(() =>
-            this.sampleApi.samplesControllerFindById(sampleId).pipe(
+            this.sampleApi.samplesControllerFindByIdV3(sampleId).pipe(
               map((sample) =>
                 fromActions.fetchSampleCompleteAction({ sample }),
               ),
@@ -110,7 +112,7 @@ export class SampleEffects {
       ofType(fromActions.fetchSampleAttachmentsAction),
       switchMap(({ sampleId }) => {
         return this.sampleApi
-          .samplesControllerFindAllAttachments(sampleId)
+          .samplesControllerFindAllAttachmentsV3(sampleId)
           .pipe(
             map((attachments) =>
               fromActions.fetchSampleAttachmentsCompleteAction({ attachments }),
@@ -129,7 +131,7 @@ export class SampleEffects {
       concatLatestFrom(() => this.datasetsQueryParams$),
       mergeMap(([{ sampleId }, { order, skip, limit }]) =>
         this.datasetApi
-          .datasetsControllerFindAll(
+          .datasetsControllerFindAllV3(
             JSON.stringify({
               where: { sampleId },
               order,
@@ -153,7 +155,7 @@ export class SampleEffects {
       ofType(fromActions.fetchSampleDatasetsCountAction),
       switchMap(({ sampleId }) =>
         this.datasetApi
-          .datasetsControllerFindAll(JSON.stringify({ where: { sampleId } }))
+          .datasetsControllerFindAllV3(JSON.stringify({ where: { sampleId } }))
           .pipe(
             map((datasets) =>
               fromActions.fetchSampleDatasetsCountCompleteAction({
@@ -173,7 +175,7 @@ export class SampleEffects {
       ofType(fromActions.saveCharacteristicsAction),
       switchMap(({ sampleId, characteristics }) =>
         this.sampleApi
-          .samplesControllerUpdate(sampleId, {
+          .samplesControllerUpdateV3(sampleId, {
             sampleCharacteristics: characteristics,
           })
           .pipe(
@@ -190,7 +192,7 @@ export class SampleEffects {
     return this.actions$.pipe(
       ofType(fromActions.addSampleAction),
       mergeMap(({ sample }) =>
-        this.sampleApi.samplesControllerCreate(sample).pipe(
+        this.sampleApi.samplesControllerCreateV3(sample).pipe(
           mergeMap((res) => [
             fromActions.addSampleCompleteAction({ sample: res }),
             fromActions.fetchSamplesAction(),
@@ -207,9 +209,9 @@ export class SampleEffects {
       switchMap(({ attachment }) => {
         const { id, datasetId, proposalId, ...theRest } = attachment;
         return this.sampleApi
-          .samplesControllerCreateAttachments(
+          .samplesControllerCreateAttachmentsV3(
             theRest.sampleId,
-            theRest as CreateSubAttachmentDto,
+            theRest as CreateSubAttachmentV3Dto,
           )
           .pipe(
             map((res) =>
@@ -226,7 +228,7 @@ export class SampleEffects {
       ofType(fromActions.removeAttachmentAction),
       switchMap(({ sampleId, attachmentId }) =>
         this.sampleApi
-          .samplesControllerFindOneAttachmentAndRemove(sampleId, attachmentId)
+          .samplesControllerFindOneAttachmentAndRemoveV3(sampleId, attachmentId)
           .pipe(
             map(() =>
               fromActions.removeAttachmentCompleteAction({ attachmentId }),

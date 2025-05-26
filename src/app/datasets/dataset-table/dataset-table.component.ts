@@ -55,13 +55,11 @@ import {
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { Sort } from "@angular/material/sort";
 import { ActivatedRoute } from "@angular/router";
-import {
-  actionMenu,
-  getTableSettingsConfig,
-} from "shared/modules/dynamic-material-table/utilizes/default-table-config";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { DatePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
+import { TableConfigService } from "shared/services/table-config.service";
 export interface SortChangeEvent {
   active: string;
   direction: "asc" | "desc" | "";
@@ -72,6 +70,7 @@ export interface SortChangeEvent {
   templateUrl: "dataset-table.component.html",
   styleUrls: ["dataset-table.component.scss"],
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class DatasetTableComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
@@ -148,6 +147,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private jsonHeadPipe: JsonHeadPipe,
     private datePipe: DatePipe,
     private fileSize: FileSizePipe,
+    private tableConfigService: TableConfigService,
   ) {}
 
   getTableSort(): ITableSetting["tableSort"] {
@@ -501,12 +501,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
                 this.tableDefaultSettingsConfig.settingList[0].columnSetting =
                   savedTableConfigColumns;
 
-                const tableSettingsConfig = getTableSettingsConfig(
-                  this.tableName,
-                  this.tableDefaultSettingsConfig,
-                  savedTableConfigColumns,
-                  tableSort,
-                );
+                const tableSettingsConfig =
+                  this.tableConfigService.getTableSettingsConfig(
+                    this.tableName,
+                    this.tableDefaultSettingsConfig,
+                    savedTableConfigColumns,
+                    tableSort,
+                  );
 
                 if (tableSettingsConfig?.settingList.length) {
                   this.initTable(tableSettingsConfig, paginationConfig);
