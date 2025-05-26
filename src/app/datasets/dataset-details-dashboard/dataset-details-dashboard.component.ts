@@ -150,7 +150,7 @@ export class DatasetDetailsDashboardComponent
             const hasAccessToLogbook =
               isInOwnerGroup ||
               this.dataset.accessGroups.some((g) => groups.includes(g));
-            const hasOpenEMKeyword = this.dataset.keywords.some(
+            const hasAccessToDepositor = isInOwnerGroup && this.dataset.keywords.some(
               (k) => k.toLowerCase() === "openem",
             );
             this.navLinks = [
@@ -219,7 +219,7 @@ export class DatasetDetailsDashboardComponent
                 location: "./depositor",
                 label: TAB.depositor,
                 icon: "file_upload",
-                enabled: isLoggedIn && hasOpenEMKeyword,
+                enabled: isLoggedIn && hasAccessToDepositor,
               },
             ];
           })
