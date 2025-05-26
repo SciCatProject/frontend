@@ -222,7 +222,6 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
           return response.blob();
         } else {
           // http error
-          console.log(`HTTP Error code: ${response.status}`);
           return Promise.reject(
             new Error(`HTTP Error code: ${response.status}`),
           );
