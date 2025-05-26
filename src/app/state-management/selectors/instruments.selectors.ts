@@ -47,3 +47,16 @@ export const selectInstrumentsWithCountAndTableSettings = createSelector(
     };
   },
 );
+
+export const selectInstrumentsMap = createSelector(
+  selectInstruments,
+  (instruments) => {
+    return (instruments ?? []).reduce(
+      (acc, inst) => {
+        if (inst.pid) acc[inst.pid] = inst;
+        return acc;
+      },
+      {} as Record<string, any>,
+    );
+  },
+);

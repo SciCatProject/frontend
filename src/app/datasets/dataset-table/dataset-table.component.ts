@@ -29,7 +29,7 @@ import {
   selectTotalSets,
   selectDatasetsInBatch,
 } from "state-management/selectors/datasets.selectors";
-import { selectInstruments } from "state-management/selectors/instruments.selectors";
+import { selectInstrumentsMap } from "state-management/selectors/instruments.selectors";
 import { get } from "lodash-es";
 import { AppConfigService } from "app-config.service";
 import { selectCurrentUser } from "state-management/selectors/user.selectors";
@@ -39,7 +39,6 @@ import {
   OutputDatasetObsoleteDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { PageEvent } from "@angular/material/paginator";
-import { map } from "rxjs/operators";
 
 export interface SortChangeEvent {
   active: string;
@@ -77,14 +76,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
   @Output() settingsClick = new EventEmitter<MouseEvent>();
   @Output() rowClick = new EventEmitter<OutputDatasetObsoleteDto>();
 
-  instrumentsMap$ = this.store.select(selectInstruments).pipe(
-    map((list) =>
-      (list ?? []).reduce((acc, inst) => {
-        if (inst.pid) acc[inst.pid] = inst;
-        return acc;
-      }, {} as Record<string, Instrument>)
-    )
-  );
+  instrumentsMap$ = this.store.select(selectInstrumentsMap);
 
   constructor(
     public appConfigService: AppConfigService,

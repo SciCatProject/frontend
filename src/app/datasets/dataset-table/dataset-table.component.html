@@ -354,7 +354,7 @@
         </div>
       </mat-header-cell>
       <mat-cell class="datasetName" *matCellDef="let dataset">
-        {{ (instrumentsMap$ | async)?.[dataset.instrumentId]?.name || '-' }}
+        {{ (instrumentsMap$ | async)?.[dataset.instrumentId]?.name || "-" }}
       </mat-cell>
     </ng-container>
 
