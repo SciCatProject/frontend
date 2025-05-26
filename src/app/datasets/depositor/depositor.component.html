@@ -58,7 +58,10 @@
           <div class="deposition-info-container">
             <p class="deposition-info">
               Before proceeding with deposition, please ensure that the scientific metadata for this dataset is complete and accurate.
-              You can verify and adjust the metadata in the "Details" section or update it using the OpenEM schema.
+              You can verify look through the scientific metadata in the "Details" tab. 
+              If it requires changes you can update it using the OpenEM schema.
+              Please note, when SI values and units are present, you only need to make changes to the initially provided values and units, 
+              convertion to SI will be done automatically, after submitting. 
             </p>
             <button
               class="ingestor"
@@ -70,16 +73,27 @@
             </button>
           </div>
 
-          <!-- Display the metadata editor if clicked-->
-          <app-metadata-editor
-            *ngIf="showMetadataEditor"
-            [data]="metadata"
-            [schema]="metadataSchema"
-            [renderView]="'all'"
-            (dataChange)="onMetadataChange($event)"
-            (errors)="onMetadataErrors($event)"
-          ></app-metadata-editor>
 
+          <div class="includeIngestor">
+            <!-- Display the metadata editor if clicked-->
+            <app-metadata-editor
+              *ngIf="showMetadataEditor"
+              [data]="metadata"
+              [schema]="metadataSchema"
+              [renderView]="'all'"
+              (dataChange)="onMetadataChange($event)"
+              (errors)="onMetadataErrors($event)"
+            ></app-metadata-editor>
+            <button
+              *ngIf="showMetadataEditor"
+              class="ingestor"
+              mat-raised-button
+              color="primary"
+              (click)="onUpdateIngestorMetadata()"
+            >
+              Re-submit metadata
+            </button>
+          </div>
           <mat-form-field class="method-name">
             <mat-label>Experimental Method</mat-label>
             <mat-select required [formControl]="depositionRepository" (selectionChange)="onChooseRepo()">

@@ -108,7 +108,6 @@ export class EmpiarComponent implements OnChanges, OnDestroy {
 
 
   ngOnChanges(changes: SimpleChanges) {
-      console.log( "show first card:", this.showFirstCard)
     if (changes['dataset'] && this.dataset) {
       this.form.patchValue({
         metadata: this.dataset.scientificMetadata,

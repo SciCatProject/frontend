@@ -102,5 +102,6 @@ import { IngestorNoRightsDialogPageComponent } from "./ingestor-dialogs/creation
     EffectsModule.forFeature([IngestorEffects]),
     StoreModule.forFeature("ingestor", ingestorReducer),
   ],
+  exports: [IngestorMetadataEditorComponent]
 })
 export class IngestorModule {}

@@ -25,9 +25,13 @@ import * as fromActions from "state-management/actions/depositor.actions";
 import { accessEmpiarSchema } from "state-management/actions/depositor.actions";
 import { selectEmpiarSchema } from "state-management/selectors/depositor.selectors";
 
+import { updatePropertyAction } from "state-management/actions/datasets.actions";
+
 import * as ingestorActions from "state-management/actions/ingestor.actions";
 import { MethodItem } from "../../shared/sdk/models/ingestor/models"
 import { selectExtractionMethods} from "state-management/selectors/ingestor.selector";
+
+// import { IngestorMetadataEditorComponent} from "../../ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component"
 
 import { Observable, Subscription, take, find } from "rxjs";
 import { Router } from "@angular/router";
@@ -124,21 +128,18 @@ export class DepositorComponent implements OnInit, OnDestroy {
   }
 
   onChangeIngestorMetadata(){
-    this.store.dispatch(ingestorActions.getExtractionMethods({ page: 1, pageNumber: 10 }));
-
+    this.store.dispatch(ingestorActions.getExtractionMethods({ page: 0, pageNumber: 50 }));
     this.methods$.pipe(
       take(1),
     ).subscribe(methods => {
-      const selectedMethod = methods.find(m => m.name === 'spa');
+      const selectedMethod = methods.find(m => m.name === 'Single Particle'); // that's bad, need to find an actual schema!
       if (selectedMethod) {
         const parsedSchema: JsonSchema = JSON.parse(selectedMethod.schema);
         this.metadataSchema = parsedSchema;
-        this.showMetadataEditor = false; //needs tuning
       }
     });
-
+    // now it uses metadata tructure in place of schema 
     this.showMetadataEditor = true
-    console.log("Ingestor metadata changes");
   }
 
   onMetadataChange(newData: any) {
@@ -147,6 +148,15 @@ export class DepositorComponent implements OnInit, OnDestroy {
 
   onMetadataErrors(errors: any[]) {
     console.warn('Metadata validation errors:', errors);
+  }
+
+
+  onUpdateIngestorMetadata() {
+    const pid = this.dataset.pid;
+    const property = { scientificMetadata: this.metadata };
+    this.store.dispatch(updatePropertyAction({ pid, property }));
+
+    this.showMetadataEditor = false // hide again after the form was submitted
   }
 
 }

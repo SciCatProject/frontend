@@ -63,7 +63,19 @@ mat-card {
 
     min-width: 12rem;
     align-self: left;
-    width: 40%;
+    width: 70%;
+  }
+  .includeIngestor{
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    margin: 1.5rem 3rem 1.5rem 3rem;
+
+    min-width: 12rem;
+    align-self: left;
+    width: 70%;
+
   }
 
   .deposition-info {
