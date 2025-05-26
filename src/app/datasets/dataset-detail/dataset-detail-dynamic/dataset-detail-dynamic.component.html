@@ -158,7 +158,7 @@
               </div>
               {{ section.label | translate }}
             </mat-card-header>
-            <mat-card-content>
+            <mat-card-content class="scientific-metadata-content">
               <ng-container *ngIf="appConfig.tableSciDataEnabled">
                 <div [ngSwitch]="section.viewMode">
                   <tree-view
