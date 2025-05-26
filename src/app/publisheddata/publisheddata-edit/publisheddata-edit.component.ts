@@ -30,19 +30,21 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
   form: FormGroup = this.formBuilder.group({
     doi: [""],
     title: ["", Validators.required],
-    creator: [[""], Validators.minLength(1)],
+    creators: [[""], Validators.minLength(1)],
     publisher: ["", Validators.required],
     resourceType: ["", Validators.required],
     abstract: ["", Validators.required],
-    pidArray: [[""], Validators.minLength(1)],
+    datasetPids: [[""], Validators.minLength(1)],
     publicationYear: [0, Validators.required],
     url: [""],
-    dataDescription: ["", Validators.required],
-    thumbnail: [""],
-    numberOfFiles: [0],
-    sizeOfArchive: [0],
-    downloadLink: [""],
+    contributors: [[""]],
+    // dataDescription: ["", Validators.required],
+    // thumbnail: [""],
+    // numberOfFiles: [0],
+    // sizeOfArchive: [0],
+    // downloadLink: [""],
     relatedPublications: [[]],
+    keywords: [[""]],
   });
 
   public separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -57,7 +59,7 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
   addCreator(event: MatChipInputEvent) {
     const value = (event.value || "").trim();
     if (value) {
-      this.creator!.value.push(value);
+      this.creators!.value.push(value);
     }
 
     if (event.chipInput && event.chipInput.inputElement.value) {
@@ -67,7 +69,7 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
 
   removeCreator(index: number) {
     if (index >= 0) {
-      this.creator!.value.splice(index, 1);
+      this.creators!.value.splice(index, 1);
     }
   }
 
@@ -107,25 +109,25 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  onFileUploaderFilePicked(file: PickedFile) {
-    this.form.get("thumbnail")!.setValue(file.content);
-  }
+  // onFileUploaderFilePicked(file: PickedFile) {
+  //   this.form.get("thumbnail")!.setValue(file.content);
+  // }
 
-  deleteAttachment(attachmentId: string) {
-    this.form.get("thumbnail")!.setValue("");
-  }
+  // deleteAttachment(attachmentId: string) {
+  //   this.form.get("thumbnail")!.setValue("");
+  // }
 
-  get creator() {
-    return this.form.get("creator");
+  get creators() {
+    return this.form.get("creators");
   }
 
   get relatedPublications() {
     return this.form.get("relatedPublications");
   }
 
-  get thumbnail() {
-    return this.form.get("thumbail");
-  }
+  // get thumbnail() {
+  //   return this.form.get("thumbail");
+  // }
 
   ngOnInit() {
     this.routeSubscription = this.route.params.subscribe(({ id }) =>

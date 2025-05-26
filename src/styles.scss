@@ -332,6 +332,14 @@ a:hover {
   input.mat-mdc-chip-input {
     margin-left: 0;
   }
+
+  .mdc-evolution-chip-set__chips {
+    margin-left: 0 !important;
+
+    input.mat-mdc-chip-input {
+      margin-left: 8px;
+    }
+  }
 }
 
 .mat-mdc-form-field {

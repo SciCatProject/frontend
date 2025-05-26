@@ -88,7 +88,7 @@
             ></textarea>
           </mat-form-field>
 
-          <mat-form-field>
+          <!-- <mat-form-field>
             <mat-label>Download link</mat-label>
             <input
               matInput
@@ -96,7 +96,7 @@
               [(ngModel)]="form.downloadLink"
               name="downloadLink"
             />
-          </mat-form-field>
+          </mat-form-field> -->
 
           <mat-form-field>
             <mat-label>Related publications</mat-label>
@@ -109,7 +109,6 @@
                 <mat-icon matChipRemove>cancel</mat-icon>
               </mat-chip-row>
               <input
-                matInput
                 [matChipInputFor]="chipListRelatedPub"
                 [matChipInputAddOnBlur]="true"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
@@ -125,15 +124,15 @@
             color="primary"
             [disabled]="!formIsValid()"
           >
-            Publish
+            Create data publication
           </button>
         </form>
       </mat-card-content>
     </mat-card>
   </div>
-  <div fxFlex="30">
+  <!-- <div fxFlex="30">
     <mat-card *ngIf="form.thumbnail">
       <img mat-card-image src="{{ form.thumbnail }}" />
     </mat-card>
-  </div>
+  </div> -->
 </div>

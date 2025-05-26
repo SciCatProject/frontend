@@ -28,8 +28,8 @@
           <mat-form-field>
             <mat-chip-grid required #chipList>
               <mat-chip-row
-                formArrayName="creator"
-                *ngFor="let item of creator.value; let i = index"
+                formArrayName="creators"
+                *ngFor="let item of creators.value; let i = index"
                 (removed)="removeCreator(i)"
               >
                 {{ item }}
@@ -58,6 +58,17 @@
           </mat-form-field>
 
           <mat-form-field>
+            <input
+              required
+              matInput
+              placeholder="Resource Type"
+              autocomplete="off"
+              formControlName="resourceType"
+              name="resourceType"
+            />
+          </mat-form-field>
+
+          <!-- <mat-form-field>
             <mat-select
               required
               matInput
@@ -68,9 +79,9 @@
               <mat-option value="raw"> raw </mat-option>
               <mat-option value="derived"> derived </mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
 
-          <mat-form-field>
+          <!-- <mat-form-field>
             <textarea
               required
               matInput
@@ -80,7 +91,7 @@
               name="Description"
               rows="5"
             ></textarea>
-          </mat-form-field>
+          </mat-form-field> -->
 
           <mat-form-field>
             <textarea
@@ -95,7 +106,7 @@
             ></textarea>
           </mat-form-field>
 
-          <mat-form-field>
+          <!-- <mat-form-field>
             <input
               matInput
               placeholder="download link"
@@ -103,7 +114,7 @@
               formControlName="downloadLink"
               name="downloadLink"
             />
-          </mat-form-field>
+          </mat-form-field> -->
 
           <mat-form-field>
             <mat-chip-grid #chipListRelatedPub>
@@ -136,7 +147,7 @@
       </mat-card-content>
     </mat-card>
   </div>
-  <div fxFlex="30">
+  <!-- <div fxFlex="30">
     <div class="file-uploader">
       <app-file-uploader
         [attachments]="attachments"
@@ -147,5 +158,5 @@
     <mat-card *ngIf="thumbnail">
       <img mat-card-image src="{{ thumbnail.value }}" />
     </mat-card>
-  </div>
+  </div> -->
 </div>

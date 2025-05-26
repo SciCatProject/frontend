@@ -46,14 +46,14 @@ export class PublishComponent implements OnInit, OnDestroy {
     resourceType: "",
     description: "",
     abstract: "",
-    pidArray: [],
+    datasetPids: [],
     publicationYear: null,
     url: "",
-    dataDescription: "",
-    thumbnail: "",
-    numberOfFiles: null,
-    sizeOfArchive: null,
-    downloadLink: "",
+    // dataDescription: "",
+    // thumbnail: "",
+    // numberOfFiles: null,
+    // sizeOfArchive: null,
+    // downloadLink: "",
     relatedPublications: [],
   };
 
@@ -132,12 +132,12 @@ export class PublishComponent implements OnInit, OnDestroy {
               (item, i) => creator.indexOf(item) === i,
             );
             this.form.creators = unique;
-            this.form.pidArray = datasets.map((dataset) => dataset.pid);
-            let size = 0;
-            datasets.forEach((dataset) => {
-              size += dataset.size;
-            });
-            this.form.sizeOfArchive = size;
+            this.form.datasetPids = datasets.map((dataset) => dataset.pid);
+            // let size = 0;
+            // datasets.forEach((dataset) => {
+            //   size += dataset.size;
+            // });
+            // this.form.sizeOfArchive = size;
           }
         }),
       )
@@ -150,13 +150,13 @@ export class PublishComponent implements OnInit, OnDestroy {
     });
 
     this.publishedDataApi
-      .publishedDataControllerFormPopulateV3(this.form.pidArray[0])
+      .publishedDataControllerFormPopulateV3(this.form.datasetPids[0])
       .subscribe((result) => {
         this.form.abstract = result.abstract;
         this.form.title = result.title;
         this.form.description = result.description;
         this.form.resourceType = "raw";
-        this.form.thumbnail = result.thumbnail ?? "";
+        // this.form.thumbnail = result.thumbnail ?? "";
       });
 
     this.actionSubjectSubscription = this.actionsSubj.subscribe((data) => {
@@ -184,30 +184,31 @@ export class PublishComponent implements OnInit, OnDestroy {
       description,
       creators,
       resourceType,
-      pidArray,
+      datasetPids,
       publisher,
       url,
-      thumbnail,
-      numberOfFiles,
-      sizeOfArchive,
-      downloadLink,
+      // thumbnail,
+      // numberOfFiles,
+      // sizeOfArchive,
+      // downloadLink,
       relatedPublications,
     } = this.form;
 
-    const publishedData: CreatePublishedDataDto = {
+    // TODO: Fix the types here
+    const publishedData: any = {
       title: title,
       abstract: abstract,
       dataDescription: description,
       creator: creators,
       resourceType: resourceType,
-      pidArray: pidArray,
+      datasetPids: datasetPids,
       publisher: publisher,
       publicationYear: parseInt(formatDate(this.today, "yyyy", "en_GB"), 10),
       url: url,
-      thumbnail: thumbnail,
-      numberOfFiles: numberOfFiles,
-      sizeOfArchive: sizeOfArchive,
-      downloadLink: downloadLink,
+      // thumbnail: thumbnail,
+      // numberOfFiles: numberOfFiles,
+      // sizeOfArchive: sizeOfArchive,
+      // downloadLink: downloadLink,
       relatedPublications: relatedPublications,
     };
 
