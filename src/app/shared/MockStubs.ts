@@ -12,7 +12,7 @@ import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import {
   Attachment,
   Instrument,
-  JobClass,
+  OutputJobV3Dto,
   OutputDatasetObsoleteDto,
   ProposalClass,
   PublishedData,
@@ -328,7 +328,7 @@ export const mockSample = createMock<SampleClass>({});
 export const mockProposal = createMock<ProposalClass>({});
 export const mockInstrument = createMock<Instrument>({});
 export const mockOrigDatablock = createMock<OrigDatablock>({});
-export const mockJob = createMock<JobClass>({}); // TODO: job release back-ward compatibility issue
+export const mockJob = createMock<OutputJobV3Dto>({});
 export const mockLogbook = createMock<Logbook>({});
 export const mockPolicy = createMock<Policy>({});
 export const mockPublishedData = createMock<PublishedData>({});
