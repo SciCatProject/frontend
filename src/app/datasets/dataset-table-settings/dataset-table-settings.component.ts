@@ -11,6 +11,7 @@ export interface SelectColumnEvent {
   selector: "dataset-table-settings",
   templateUrl: "./dataset-table-settings.component.html",
   styleUrls: ["./dataset-table-settings.component.scss"],
+  standalone: false,
 })
 export class DatasetTableSettingsComponent {
   @Input() clearSearchBar = false;

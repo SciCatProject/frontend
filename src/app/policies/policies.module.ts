@@ -9,7 +9,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatChipsModule } from "@angular/material/chips";
-import { MatNativeDateModule, MatOptionModule } from "@angular/material/core";
+import { MatOptionModule } from "@angular/material/core";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -44,8 +44,6 @@ import { FlexModule } from "@ngbracket/ngx-layout";
     MatIconModule,
     MatInputModule,
     MatListModule,
-    MatNativeDateModule,
-    MatOptionModule,
     MatPaginatorModule,
     MatSelectModule,
     MatSortModule,
@@ -56,7 +54,6 @@ import { FlexModule } from "@ngbracket/ngx-layout";
     SharedScicatFrontendModule,
     MatSelectModule,
     MatOptionModule,
-    MatNativeDateModule,
     MatIconModule,
     MatListModule,
     MatTooltipModule,

@@ -54,7 +54,7 @@ const settings: Settings = {
   darkTheme: false,
 };
 
-const initialUserState: UserState = {
+export const initialUserState: UserState = {
   currentUser: user,
   profile: userIdentity.profile,
   accountType: "testType",
