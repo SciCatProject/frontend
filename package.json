@@ -37,7 +37,7 @@
     "@ngrx/store": "^19.1.0",
     "@ngx-translate/core": "^16.0.4",
     "@ngxmc/datetime-picker": "^19.3.1",
-    "@scicatproject/scicat-sdk-ts-angular": "^4.16.0",
+    "@scicatproject/scicat-sdk-ts-angular": "^4.17.0",
     "autolinker": "^4.0.0",
     "deep-equal": "^2.0.5",
     "exceljs": "^4.3.0",
