@@ -28,6 +28,10 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatChipsModule } from "@angular/material/chips";
 import { AppConfigService } from "app-config.service";
+import {
+  RowEventType,
+  TableEventType,
+} from "shared/modules/dynamic-material-table/models/table-row.model";
 
 const getConfig = () => ({
   addSampleEnabled: true,
@@ -142,7 +146,7 @@ describe("SampleDashboardComponent", () => {
         pageSize: 25,
         length: 25,
       };
-      component.onPageChange(event);
+      component.onPaginationChange(event);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
@@ -155,17 +159,17 @@ describe("SampleDashboardComponent", () => {
     it("should dispatch a SampleSortByColumnAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const event: SortChangeEvent = {
+      const sender: SortChangeEvent = {
         active: "test",
         direction: "asc",
       };
-      component.onSortChange(event);
+      component.onTableEvent({ event: TableEventType.SortChanged, sender });
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
         sortByColumnAction({
-          column: event.active,
-          direction: event.direction,
+          column: sender.active,
+          direction: sender.direction,
         }),
       );
     });
@@ -175,7 +179,10 @@ describe("SampleDashboardComponent", () => {
     it("should navigate to a sample", () => {
       const sample = mockSample;
 
-      component.onRowClick(sample);
+      component.onRowClick({
+        event: RowEventType.RowClick,
+        sender: { row: sample },
+      });
 
       expect(router.navigateByUrl).toHaveBeenCalledTimes(1);
       expect(router.navigateByUrl).toHaveBeenCalledWith(
