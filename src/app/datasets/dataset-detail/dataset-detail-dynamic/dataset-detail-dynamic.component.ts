@@ -4,12 +4,14 @@ import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
 
 import { showMessageAction } from "state-management/actions/user.actions";
+import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
 import {
   selectCurrentAttachments,
   selectCurrentDataset,
   selectCurrentDatasetWithoutFileInfo,
 } from "state-management/selectors/datasets.selectors";
 import { selectIsLoading } from "state-management/selectors/user.selectors";
+import { selectInstruments } from "state-management/selectors/instruments.selectors";
 
 import { AppConfigService } from "app-config.service";
 
@@ -26,8 +28,10 @@ import { AttachmentService } from "shared/services/attachment.service";
 import { TranslateService } from "@ngx-translate/core";
 import { DatePipe } from "@angular/common";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular/model/outputDatasetObsoleteDto";
+import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { Subscription } from "rxjs";
 
 /**
  * Component to show customizable details for a dataset, using the
@@ -42,6 +46,8 @@ import { MatSnackBar } from "@angular/material/snack-bar";
   standalone: false,
 })
 export class DatasetDetailDynamicComponent implements OnInit {
+  private subscriptions: Subscription[] = [];
+
   datasetView: CustomizationItem[];
   form: FormGroup;
   cols = 10;
@@ -54,6 +60,8 @@ export class DatasetDetailDynamicComponent implements OnInit {
   attachments$ = this.store.select(selectCurrentAttachments);
   loading$ = this.store.select(selectIsLoading);
   show = false;
+
+  instruments: { [id: string]: Instrument } = {};
 
   constructor(
     public appConfigService: AppConfigService,
@@ -82,6 +90,19 @@ export class DatasetDetailDynamicComponent implements OnInit {
     });
 
     this.datasetView = sortedDatasetView;
+
+    this.store.dispatch(fetchInstrumentsAction({}));
+
+    this.subscriptions.push(
+      this.store.select(selectInstruments).subscribe((instruments) => {
+        this.instruments = {};
+        instruments.forEach((instrument) => {
+          if (instrument && instrument.pid) {
+            this.instruments[instrument.pid] = instrument;
+          }
+        });
+      }),
+    );
   }
 
   onCopy(value: string) {
@@ -175,9 +196,35 @@ export class DatasetDetailDynamicComponent implements OnInit {
       return null;
     }
 
-    return path
+    const value = path
       .split(".")
       .reduce((prev, curr) => (prev ? prev[curr] : undefined), obj);
+
+    // Handle instrument name resolution
+    if (path === "instrumentName" && obj.instrumentId) {
+      return this.getInstrumentName(obj.instrumentId);
+    }
+
+    return value;
+  }
+
+  getInternalLinkValue(
+    obj: OutputDatasetObsoleteDto,
+    path: string,
+  ): string | string[] {
+    // For instrumentName internal links, return the instrument ID instead of the name
+    if (path === "instrumentName" && obj.instrumentId) {
+      return obj.instrumentId;
+    }
+
+    // For other cases, use the regular nested value
+    return this.getNestedValue(obj, path);
+  }
+
+  getInstrumentName(instrumentId: string): string {
+    return instrumentId && this.instruments[instrumentId]
+      ? this.instruments[instrumentId].name
+      : "-";
   }
 
   onClickInternalLink(internalLinkType: string, id: string): void {
@@ -194,6 +241,7 @@ export class DatasetDetailDynamicComponent implements OnInit {
         this.router.navigateByUrl("/proposals/" + encodedId);
         break;
       case InternalLinkType.INSTRUMENTS:
+      case "instrumentName":
         this.router.navigateByUrl("/instruments/" + encodedId);
         break;
       default:
@@ -220,5 +268,9 @@ export class DatasetDetailDynamicComponent implements OnInit {
 
     // Ensure the result is a valid object for metadata display
     return result && typeof result === "object" ? result : null;
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }
