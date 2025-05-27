@@ -24,7 +24,8 @@ import { Router } from "@angular/router";
 export class AppHeaderComponent implements OnInit {
   config = this.appConfigService.getConfig();
   facility = this.config.facility ?? "";
-  status = this.appConfig.production ? "" : "test";
+  siteTitle = this.config.siteTitle ?? "Vanilla SciCat";  
+  siteSciCatLogo = this.config.siteSciCatLogo == "icon" ? "scicat-header-logo-icon.png" : "scicat-header-logo-full.png";
   siteHeaderLogo = this.config.siteHeaderLogo ?? "site-header-logo.png";
 
   oAuth2Endpoints: OAuth2Endpoint[] = [];

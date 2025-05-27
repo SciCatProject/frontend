@@ -40,7 +40,7 @@ export const selectThumbnailPhoto = createSelector(selectProfile, (profile) => {
     return profile.thumbnailPhoto;
   }
 
-  return "assets/images/user.png";
+  return "assets/images/user_main_color.png";
 });
 
 export const selectIsAdmin = createSelector(
