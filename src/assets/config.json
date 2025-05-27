@@ -57,24 +57,24 @@
   "datafilesActions": [
     {
       "id": "eed8efec-4354-11ef-a3b5-d75573a5d37f",
-      "order": 4,
+      "order": 5,
       "label": "Download All",
       "files": "all",
       "mat_icon": "download",
       "type": "form",
-      "url": "https://www.scicat.info/download/all",
+      "url": "https://zip.scicatproject.org/download/all",
       "target": "_blank",
       "enabled": "#SizeLimit",
       "authorization": ["#datasetAccess", "#datasetPublic"]
     },
     {
       "id": "3072fafc-4363-11ef-b9f9-ebf568222d26",
-      "order": 3,
+      "order": 4,
       "label": "Download Selected",
       "files": "selected",
       "mat_icon": "download",
       "type": "form",
-      "url": "https://www.scicat.info/download/selected",
+      "url": "https://zip.scicatproject.org/download/selected",
       "target": "_blank",
       "enabled": "#Selected && #SizeLimit",
       "authorization": ["#datasetAccess", "#datasetPublic"]
@@ -82,13 +82,26 @@
     {
       "id": "4f974f0e-4364-11ef-9c63-03d19f813f4e",
       "order": 2,
-      "label": "Notebook All",
+      "label": "Notebook All (Form)",
       "files": "all",
       "icon": "/assets/icons/jupyter_logo.png",
       "type": "form",
       "url": "https://www.scicat.info/notebook/all",
       "target": "_blank",
       "authorization": ["#datasetAccess", "#datasetPublic"]
+    },
+    {
+      "id": "0cd5b592-0b1a-11f0-a42c-23e177127ee7",
+      "order": 3,
+      "label": "Notebook All (Download JSON)",
+      "files": "all",
+      "type": "json-download",
+      "icon": "/assets/icons/jupyter_logo.png",
+      "url": "https://www.sciwyrm.info/notebook",
+      "target": "_blank",
+      "authorization": ["#datasetAccess", "#datasetPublic"],
+      "payload": "{\"template_id\":\"c975455e-ede3-11ef-94fb-138c9cd51fc0\",\"parameters\":{\"dataset\":\"{{ datasetPid }}\",\"directory\":\"{{ sourceFolder }}\",\"files\": {{ filesPath }},\"jwt\":\"{{ jwt }}\",\"scicat_url\":\"https://staging.scicat.ess.url\",\"file_server_url\":\"sftserver2.esss.dk\",\"file_server_port\":\"22\"}}",
+      "filename": "{{ uuid }}.ipynb"
     },
     {
       "id": "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
@@ -222,7 +235,6 @@
         },
         "proposal" : {
           "General Information": "Proposal Information",
-          //"Title" : "Proposal Title",
           "Abstract" : "Abstract",
           "Proposal Id" : "Proposal Id",
           "Proposal Type" : "Proposal Type",
