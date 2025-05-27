@@ -160,22 +160,34 @@
             </mat-card-header>
             <mat-card-content class="scientific-metadata-content">
               <ng-container *ngIf="appConfig.tableSciDataEnabled">
-                <div [ngSwitch]="section.viewMode">
-                  <tree-view
-                    *ngSwitchCase="'tree'"
-                    [metadata]="dataset['scientificMetadata']"
-                  ></tree-view>
-                  <metadata-view
-                    *ngSwitchDefault
-                    [metadata]="dataset['scientificMetadata']"
-                  ></metadata-view>
-                  <div class="json-view" *ngSwitchCase="'json'">
-                    <ngx-json-viewer
-                      [json]="dataset['scientificMetadata']"
-                      [expanded]="false"
-                    ></ngx-json-viewer>
+                <ng-container
+                  *ngIf="
+                    getScientificMetadata(dataset, section.source) as metadata;
+                    else noMetadata
+                  "
+                >
+                  <div [ngSwitch]="section.viewMode">
+                    <tree-view
+                      *ngSwitchCase="'tree'"
+                      [metadata]="metadata"
+                    ></tree-view>
+                    <metadata-view
+                      *ngSwitchDefault
+                      [metadata]="metadata"
+                    ></metadata-view>
+                    <div class="json-view" *ngSwitchCase="'json'">
+                      <ngx-json-viewer
+                        [json]="metadata"
+                        [expanded]="false"
+                      ></ngx-json-viewer>
+                    </div>
                   </div>
-                </div>
+                </ng-container>
+                <ng-template #noMetadata>
+                  <p class="no-metadata-message">
+                    No scientific metadata found for this section
+                  </p>
+                </ng-template>
               </ng-container>
             </mat-card-content>
           </mat-card>
