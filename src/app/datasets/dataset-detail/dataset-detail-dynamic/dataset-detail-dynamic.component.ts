@@ -219,7 +219,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
     return path
       .split(".")
-      .reduce((prev, curr) => (prev ? prev[curr] : undefined), obj);
+      .reduce((prev, curr) => (prev != null ? prev[curr] : undefined), obj);
   }
 
   getInternalLinkValue(obj: OutputDatasetObsoleteDto, path: string): string {
