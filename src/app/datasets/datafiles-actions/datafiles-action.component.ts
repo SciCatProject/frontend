@@ -10,6 +10,8 @@ import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 import { ActionConfig, ActionDataset } from "./datafiles-action.interfaces";
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
+import { v4 } from "uuid";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "datafiles-action",
@@ -36,6 +38,7 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
   constructor(
     private usersService: UsersService,
     private authService: AuthService,
+    private snackBar: MatSnackBar,
   ) {
     this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
       this.jwt = jwt.jwt;
@@ -118,6 +121,8 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
   perform_action() {
     const action_type = this.actionConfig.type || "form";
     switch (action_type) {
+      case "json-download":
+        return this.type_json_download();
       case "form":
       default:
         return this.type_form();
@@ -166,21 +171,81 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
     return true;
   }
 
-  /*
-   * future development
-   *
-  type_fetch() {
-    const data = new URLSearchParams();
-    for (const pair of new FormData(formElement)) {
-      data.append(pair[0], pair[1]);
+  type_json_download() {
+    let payload = "";
+    if (this.actionConfig.payload) {
+      payload = this.actionConfig.payload
+        .replace(/{{ auth_token }}/, `Bearer ${this.authService.getToken().id}`)
+        .replace(/{{ jwt }}/, this.jwt)
+        .replace(/{{ datasetPid }}/, this.actionDataset.pid)
+        .replace(/{{ sourceFolder }}/, this.actionDataset.sourceFolder)
+        .replace(
+          /{{ filesPath }}/,
+          JSON.stringify(
+            this.files
+              .filter(
+                (item) =>
+                  this.actionConfig.files === "all" ||
+                  (this.actionConfig.files === "selected" && item.selected),
+              )
+              .map((item) => item.path),
+          ),
+        );
+    } else {
+      const data = {
+        auth_token: `Bearer ${this.authService.getToken().id}`,
+        jwt: this.jwt,
+        dataset: this.actionDataset.pid,
+        directory: this.actionDataset.sourceFolder,
+        files: this.files
+          .filter(
+            (item) =>
+              this.actionConfig.files === "all" ||
+              (this.actionConfig.files === "selected" && item.selected),
+          )
+          .map((item) => item.path),
+      };
+      payload = JSON.stringify(data);
     }
 
-    fetch(url, {
-      method: 'post',
-      body: data,
+    const filename = this.actionConfig.filename.replace(/{{ uuid }}/, v4());
+
+    fetch(this.actionConfig.url, {
+      method: this.actionConfig.method || "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: payload,
     })
-    .then(…);
-    }
+      .then((response) => {
+        if (response.ok) {
+          return response.blob();
+        } else {
+          // http error
+          return Promise.reject(
+            new Error(`HTTP Error code: ${response.status}`),
+          );
+        }
+      })
+      .then((blob) => URL.createObjectURL(blob))
+      .then((url) => {
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      })
+      .catch((error) => {
+        console.log("Datafile action error : ", error);
+        this.snackBar.open(
+          "There has been an error performing the action",
+          "Close",
+          {
+            duration: 2000,
+          },
+        );
+      });
+
+    return true;
   }
-   */
 }
