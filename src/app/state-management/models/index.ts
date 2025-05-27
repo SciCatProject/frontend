@@ -63,6 +63,7 @@ export interface CustomizationItem {
   row: number;
   col: number;
   fields?: Field[];
+  source?: string;
   options?: AttachmentOptions;
   viewMode?: viewModeOptions;
 }
