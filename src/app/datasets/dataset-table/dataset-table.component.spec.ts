@@ -9,6 +9,7 @@ import {
   MockDatasetApi,
   mockDataset,
   createMock,
+  MockActivatedRoute,
 } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import {
@@ -43,6 +44,10 @@ import {
   DatasetsService,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { RowEventType } from "shared/modules/dynamic-material-table/models/table-row.model";
+import { ActivatedRoute } from "@angular/router";
+import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
+import { DatePipe } from "@angular/common";
+import { FileSizePipe } from "shared/pipes/filesize.pipe";
 
 const getConfig = () => ({});
 
@@ -70,6 +75,9 @@ describe("DatasetTableComponent", () => {
         provideMockStore({
           selectors: [{ selector: selectDatasets, value: [] }],
         }),
+        JsonHeadPipe,
+        DatePipe,
+        FileSizePipe,
       ],
       declarations: [DatasetTableComponent],
     });
@@ -81,6 +89,7 @@ describe("DatasetTableComponent", () => {
             useValue: { getConfig },
           },
           { provide: DatasetsService, useClass: MockDatasetApi },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
         ],
       },
     });
@@ -90,7 +99,6 @@ describe("DatasetTableComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetTableComponent);
     component = fixture.componentInstance;
-    // component.tableColumns = [];
     fixture.detectChanges();
   });
 

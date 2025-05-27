@@ -257,14 +257,11 @@ export class UserEffects {
           return this.router.navigate(["/login"]);
         }
       }),
-      switchMap(() => {
-        return [
-          fromActions.updateIsPublishedAction({ isPublished: true }),
-          fromActions.updateHasFetchedSettings({
-            hasFetchedSettings: true,
-          }),
-        ];
-      }),
+      map(() =>
+        fromActions.updateHasFetchedSettings({
+          hasFetchedSettings: true,
+        }),
+      ),
     );
   });
 
