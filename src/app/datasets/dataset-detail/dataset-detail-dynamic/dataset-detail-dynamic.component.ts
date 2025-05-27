@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 
 import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
@@ -31,7 +31,8 @@ import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular/m
 import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { Subscription } from "rxjs";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 /**
  * Component to show customizable details for a dataset, using the
@@ -45,8 +46,8 @@ import { Subscription } from "rxjs";
   styleUrls: ["./dataset-detail-dynamic.component.scss"],
   standalone: false,
 })
-export class DatasetDetailDynamicComponent implements OnInit {
-  private subscriptions: Subscription[] = [];
+export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
 
   datasetView: CustomizationItem[];
   form: FormGroup;
@@ -77,6 +78,16 @@ export class DatasetDetailDynamicComponent implements OnInit {
     this.translateService.use("datasetCustom");
   }
 
+  private resolveInstrumentName(
+    obj: OutputDatasetObsoleteDto,
+    path: string,
+  ): string | undefined {
+    if (path === "instrumentName" && obj.instrumentId) {
+      return this.getInstrumentName(obj.instrumentId);
+    }
+    return undefined;
+  }
+
   ngOnInit() {
     this.form = this.fb.group({});
 
@@ -93,16 +104,17 @@ export class DatasetDetailDynamicComponent implements OnInit {
 
     this.store.dispatch(fetchInstrumentsAction({}));
 
-    this.subscriptions.push(
-      this.store.select(selectInstruments).subscribe((instruments) => {
+    this.store
+      .select(selectInstruments)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((instruments) => {
         this.instruments = {};
         instruments.forEach((instrument) => {
           if (instrument && instrument.pid) {
             this.instruments[instrument.pid] = instrument;
           }
         });
-      }),
-    );
+      });
   }
 
   onCopy(value: string) {
@@ -126,6 +138,7 @@ export class DatasetDetailDynamicComponent implements OnInit {
       },
     );
   }
+
   base64MimeType(encoded: string): string {
     return this.attachmentService.base64MimeType(encoded);
   }
@@ -172,6 +185,7 @@ export class DatasetDetailDynamicComponent implements OnInit {
         return "Unsupported data type";
     }
   }
+
   transformDate(value: unknown, errorElement: string): string {
     if (typeof value !== "string") {
       return errorElement;
@@ -182,9 +196,11 @@ export class DatasetDetailDynamicComponent implements OnInit {
       return errorElement;
     }
   }
+
   getThumbnailSize(value: string): string {
     return value ? `thumbnail-image--${value}` : "";
   }
+
   getNestedValue(
     obj: OutputDatasetObsoleteDto,
     path: string,
@@ -196,29 +212,24 @@ export class DatasetDetailDynamicComponent implements OnInit {
       return null;
     }
 
-    const value = path
-      .split(".")
-      .reduce((prev, curr) => (prev ? prev[curr] : undefined), obj);
-
-    // Handle instrument name resolution
-    if (path === "instrumentName" && obj.instrumentId) {
-      return this.getInstrumentName(obj.instrumentId);
+    const instrumentName = this.resolveInstrumentName(obj, path);
+    if (instrumentName !== undefined) {
+      return instrumentName;
     }
 
-    return value;
+    return path
+      .split(".")
+      .reduce((prev, curr) => (prev ? prev[curr] : undefined), obj);
   }
 
-  getInternalLinkValue(
-    obj: OutputDatasetObsoleteDto,
-    path: string,
-  ): string | string[] {
+  getInternalLinkValue(obj: OutputDatasetObsoleteDto, path: string): string {
     // For instrumentName internal links, return the instrument ID instead of the name
     if (path === "instrumentName" && obj.instrumentId) {
       return obj.instrumentId;
     }
 
-    // For other cases, use the regular nested value
-    return this.getNestedValue(obj, path);
+    const value = this.getNestedValue(obj, path);
+    return Array.isArray(value) ? value[0] || "" : (value as string) || "";
   }
 
   getInstrumentName(instrumentId: string): string {
@@ -271,6 +282,7 @@ export class DatasetDetailDynamicComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
