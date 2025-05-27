@@ -443,12 +443,16 @@ describe("Proposals general", () => {
         .find("input[type=checkbox]")
         .uncheck();
 
+      cy.contains(".column-config-apply button.done-setting", "done").click();
+
       cy.get("dynamic-mat-table table-menu button").click();
       cy.get('[role="menu"] button').contains("Save table setting").click();
 
       cy.reload();
 
       cy.get("dynamic-mat-table mat-header-row.header").should("exist");
+
+      cy.finishedLoading();
 
       cy.get("dynamic-mat-table mat-header-row.header").should(
         "not.contain",
