@@ -452,6 +452,8 @@ describe("Proposals general", () => {
 
       cy.get("dynamic-mat-table mat-header-row.header").should("exist");
 
+      cy.finishedLoading();
+
       cy.get("dynamic-mat-table mat-header-row.header").should(
         "not.contain",
         "First Name",
