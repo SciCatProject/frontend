@@ -42,6 +42,7 @@ import {
   DatasetClass,
   DatasetsService,
 } from "@scicatproject/scicat-sdk-ts-angular";
+import { selectInstruments } from "state-management/selectors/instruments.selectors";
 
 const getConfig = () => ({});
 
@@ -67,7 +68,10 @@ describe("DatasetTableComponent", () => {
       ],
       providers: [
         provideMockStore({
-          selectors: [{ selector: selectDatasets, value: [] }],
+          selectors: [
+            { selector: selectDatasets, value: [] },
+            { selector: selectInstruments, value: [] },
+          ],
         }),
       ],
       declarations: [DatasetTableComponent],
