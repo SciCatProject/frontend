@@ -164,10 +164,10 @@ describe("DatasetDetailDynamicComponent", () => {
       expect(result).toBe("instrument1");
     });
 
-    it("should return undefined when path is 'instrumentName' but no instrumentId", () => {
+    it("should return empty string when path is 'instrumentName' but no instrumentId", () => {
       const dataset = {} as any;
       const result = component.getInternalLinkValue(dataset, "instrumentName");
-      expect(result).toBeUndefined();
+      expect(result).toBe("");
     });
 
     it("should use getNestedValue for non-instrumentName paths", () => {
@@ -183,6 +183,12 @@ describe("DatasetDetailDynamicComponent", () => {
       } as any;
       const result = component.getInternalLinkValue(dataset, "nested.value");
       expect(result).toBe("test-value");
+    });
+
+    it("should return empty string for null/undefined values", () => {
+      const dataset = {} as any;
+      const result = component.getInternalLinkValue(dataset, "nonexistent");
+      expect(result).toBe("");
     });
   });
 
@@ -200,7 +206,10 @@ describe("DatasetDetailDynamicComponent", () => {
     });
 
     it("should navigate to instruments page when internalLinkType is 'instruments'", () => {
-      component.onClickInternalLink(InternalLinkType.INSTRUMENTS, "instrument123");
+      component.onClickInternalLink(
+        InternalLinkType.INSTRUMENTS,
+        "instrument123",
+      );
       expect(component["router"].navigateByUrl).toHaveBeenCalledWith(
         "/instruments/instrument123",
       );
