@@ -203,4 +203,22 @@ export class DatasetDetailDynamicComponent implements OnInit {
         break;
     }
   }
+
+  getScientificMetadata(
+    dataset: OutputDatasetObsoleteDto,
+    source?: string,
+  ): any {
+    const meta = dataset?.scientificMetadata;
+    if (!meta) return null;
+    if (!source) return meta;
+
+    const path = source.replace(/^scientificMetadata\./, "");
+    if (!path || source === "scientificMetadata") return meta;
+
+    const result =
+      path.split(".").reduce((acc, key) => (acc as any)?.[key], meta) ?? null;
+
+    // Ensure the result is a valid object for metadata display
+    return result && typeof result === "object" ? result : null;
+  }
 }
