@@ -5,14 +5,19 @@ import { AppRoutingModule, routes } from "app-routing/app-routing.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule, Title } from "@angular/platform-browser";
 import { EffectsModule } from "@ngrx/effects";
-import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
-import { APP_INITIALIZER, NgModule } from "@angular/core";
-import { ExtraOptions, RouterModule } from "@angular/router";
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
+import { NgModule, inject, provideAppInitializer } from "@angular/core";
+import { ExtraOptions, provideRouter, RouterModule } from "@angular/router";
 import { StoreModule } from "@ngrx/store";
 import { ApiModule, Configuration } from "@scicatproject/scicat-sdk-ts-angular";
 import { routerReducer } from "@ngrx/router-store";
 import { extModules } from "./build-specifics";
-import { MatNativeDateModule } from "@angular/material/core";
+import { MAT_DATE_FORMATS } from "@angular/material/core";
+
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import {
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -32,6 +37,7 @@ import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { CustomTranslateLoader } from "shared/loaders/custom-translate.loader";
 import { DATE_PIPE_DEFAULT_OPTIONS } from "@angular/common";
 import { RouteTrackerService } from "shared/services/route-tracker.service";
+import { provideLuxonDateAdapter } from "@angular/material-luxon-adapter";
 
 const appConfigInitializerFn = (appConfig: AppConfigService) => {
   return () => appConfig.loadAppConfig();
@@ -52,6 +58,8 @@ const apiConfigurationFn = (
 
 @NgModule({
   declarations: [AppComponent],
+  exports: [],
+  bootstrap: [AppComponent],
   imports: [
     AppConfigModule,
     AppRoutingModule,
@@ -64,7 +72,6 @@ const apiConfigurationFn = (
     }),
     BrowserAnimationsModule,
     BrowserModule,
-    HttpClientModule,
     LayoutModule,
     MatProgressSpinnerModule,
     MatFormFieldModule,
@@ -84,32 +91,24 @@ const apiConfigurationFn = (
       },
     ),
     extModules,
-    RouterModule.forRoot(routes, {
-      useHash: false,
-    } as ExtraOptions),
     EffectsModule.forRoot([]),
   ],
-  exports: [MatNativeDateModule],
   providers: [
     AppConfigService,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: appConfigInitializerFn,
-      multi: true,
-      deps: [AppConfigService],
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: appThemeInitializerFn,
-      multi: true,
-      deps: [AppThemeService],
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: () => () => {},
-      multi: true,
-      deps: [RouteTrackerService],
-    },
+    provideLuxonDateAdapter(),
+    provideHttpClient(withInterceptorsFromDi()),
+    provideAppInitializer(() => {
+      const initializerFn = appConfigInitializerFn(inject(AppConfigService));
+      return initializerFn();
+    }),
+    provideAppInitializer(() => {
+      const initializerFn = appThemeInitializerFn(inject(AppThemeService));
+      return initializerFn();
+    }),
+    provideAppInitializer(() => {
+      inject(RouteTrackerService);
+    }),
+    provideRouter(routes),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: SnackbarInterceptor,
@@ -131,10 +130,26 @@ const apiConfigurationFn = (
       },
       deps: [AppConfigService],
     },
+    {
+      provide: MAT_DATE_FORMATS,
+      useFactory: (appConfigService: AppConfigService) => {
+        const base =
+          appConfigService.getConfig().dateFormat || "yyyy-MM-dd HH:mm";
+        return {
+          parse: { dateInput: base },
+          display: {
+            dateInput: base,
+            monthYearLabel: "MMM yyyy",
+            dateA11yLabel: "LL",
+            monthYearA11yLabel: "MMMM yyyy",
+          },
+        };
+      },
+      deps: [AppConfigService],
+    },
     AuthService,
     AppThemeService,
     Title,
-    MatNativeDateModule,
     { provide: InternalStorage, useClass: CookieService },
     { provide: SDKStorage, useClass: CookieService },
     {
@@ -144,6 +159,5 @@ const apiConfigurationFn = (
       multi: false,
     },
   ],
-  bootstrap: [AppComponent],
 })
 export class AppModule {}

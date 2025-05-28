@@ -1,4 +1,4 @@
-@import "../.././dynamic-mat-table.style.scss";
+@use "../.././dynamic-mat-table.style.scss" as *;
 
 @include context-menu;
 

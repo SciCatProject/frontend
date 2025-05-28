@@ -6,6 +6,7 @@
     >
       <div [formGroupName]="i">
         <div class="formRow" fxLayout="row" fxLayout.lt-lg="column">
+          <!-- Type Column -->
           <div class="formColumn typeColumn">
             <mat-form-field class="selectField" fxFlex="100">
               <mat-label>Type</mat-label>
@@ -23,6 +24,7 @@
               </mat-error>
             </mat-form-field>
           </div>
+          <!-- Displayed name Column -->
           <div class="formColumn">
             <mat-form-field class="inputField" fxFlex="100">
               <mat-label>Displayed Name</mat-label>
@@ -38,6 +40,7 @@
               />
             </mat-form-field>
           </div>
+          <!-- Raw property name Column -->
           <div class="formColumn">
             <mat-form-field class="inputField" fxFlex="100">
               <mat-label>Raw property name</mat-label>
@@ -60,7 +63,8 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div class="formColumn">
+          <!-- Value Column -->
+          <div class="formColumn" *ngIf="getType(i) !== 'date'; else dateInput">
             <mat-form-field class="inputField" fxFlex="100">
               <mat-label>Value</mat-label>
               <input
@@ -78,9 +82,6 @@
               <mat-error *ngIf="fieldHasError(i, 'fieldValue')">
                 Value is required
               </mat-error>
-              <mat-error *ngIf="fieldHasDateError(i, 'fieldValue')">
-                Invalid date
-              </mat-error>
               <mat-error *ngIf="fieldHasLinkError(i, 'fieldValue')">
                 Invalid link
               </mat-error>
@@ -89,6 +90,29 @@
               </mat-error>
             </mat-form-field>
           </div>
+          <ng-template #dateInput>
+            <mat-form-field class="inputField">
+              <input
+                matInput
+                formControlName="fieldValue"
+                placeholder="Value"
+                [ngxMatDatetimePicker]="picker"
+                data-cy="metadata-value-input"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="$any(picker)"
+              ></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker
+                #picker
+                [showSeconds]="true"
+              ></ngx-mat-datetime-picker>
+              <mat-error *ngIf="fieldHasDateError(i, 'fieldValue')">
+                Invalid date
+              </mat-error>
+            </mat-form-field>
+          </ng-template>
+          <!-- Unit Column -->
           <div class="formColumn">
             <mat-form-field class="inputField" fxFlex="100">
               <mat-label>Unit</mat-label>

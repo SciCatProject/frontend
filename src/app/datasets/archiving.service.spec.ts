@@ -11,8 +11,8 @@ import { JobsState } from "state-management/state/jobs.store";
 import { ArchivingService } from "./archiving.service";
 import { createMock, mockDataset } from "shared/MockStubs";
 import {
-  CreateJobDto,
   ReturnedUserDto,
+  CreateJobDtoV3,
 } from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("ArchivingService", () => {
@@ -73,7 +73,7 @@ describe("ArchivingService", () => {
         destinationPath,
       );
 
-      // expect(job).toBeInstanceOf(Job);
+      expect(job).toBeDefined();
       expect(job["emailJobInitiator"]).toEqual("test@email.com");
       expect(job["jobParams"]["username"]).toEqual("testName");
       expect(job["datasetList"]).toEqual(datasetList);
@@ -106,7 +106,8 @@ describe("ArchivingService", () => {
         files: [],
       }));
       const archive = true;
-      const job = createMock<CreateJobDto>({
+
+      const job = createMock<CreateJobDtoV3>({
         jobParams: { username: user.username },
         emailJobInitiator: user.email,
         datasetList,

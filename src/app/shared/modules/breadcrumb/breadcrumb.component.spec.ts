@@ -1,9 +1,12 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
-import { HttpClientModule } from "@angular/common/http";
-import { RouterTestingModule } from "@angular/router/testing";
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
 import { MockStore } from "shared/MockStubs";
 import { BreadcrumbComponent } from "./breadcrumb.component";
 import { Store } from "@ngrx/store";
+import { provideRouter } from "@angular/router";
 
 describe("BreadcrumbComponent", () => {
   let component: BreadcrumbComponent;
@@ -11,9 +14,13 @@ describe("BreadcrumbComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientModule],
       declarations: [BreadcrumbComponent],
-      providers: [{ provide: Store, useClass: MockStore }],
+      imports: [],
+      providers: [
+        { provide: Store, useClass: MockStore },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideRouter([]),
+      ],
     }).compileComponents();
   }));
 

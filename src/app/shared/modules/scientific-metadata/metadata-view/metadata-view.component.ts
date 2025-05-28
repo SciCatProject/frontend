@@ -5,7 +5,6 @@ import {
   OnChanges,
   SimpleChange,
 } from "@angular/core";
-import { DateTime } from "luxon";
 import {
   ScientificMetadataTableData,
   ScientificMetadata,
@@ -17,17 +16,20 @@ import { ITableSetting } from "shared/modules/dynamic-material-table/models/tabl
 import { BehaviorSubject } from "rxjs";
 import { PrintConfig } from "shared/modules/dynamic-material-table/models/print-config.model";
 import { TableSelectionMode } from "shared/modules/dynamic-material-table/models/table-row.model";
-import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-config";
 import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
 import { DatePipe, TitleCasePipe } from "@angular/common";
 import { LinkyPipe } from "ngx-linky";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
+import { DateTime } from "luxon";
 import { MetadataTypes } from "../metadata-edit/metadata-edit.component";
+import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
+import { TablePaginationMode } from "shared/modules/dynamic-material-table/models/table-pagination.model";
 
 @Component({
   selector: "metadata-view",
   templateUrl: "./metadata-view.component.html",
   styleUrls: ["./metadata-view.component.scss"],
+  standalone: false,
 })
 export class MetadataViewComponent implements OnInit, OnChanges {
   @Input() metadata: object = {};
@@ -57,6 +59,8 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
   pagination = null;
 
+  pagingMode: TablePaginationMode = "none";
+
   printConfig: PrintConfig = {};
 
   showProgress = true;
@@ -83,14 +87,6 @@ export class MetadataViewComponent implements OnInit, OnChanges {
             header: "Name",
             name: "human_name",
             width: 250,
-            customRender: (column, row) => {
-              return (
-                row[column.name] ||
-                this.titleCase.transform(
-                  this.replaceUnderscore.transform(row.name),
-                )
-              );
-            },
           },
           {
             name: "name",
@@ -161,12 +157,19 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     public prettyUnit: PrettyUnitPipe,
   ) {}
 
+  getHumanReadableName(name: string): string {
+    return this.titleCase.transform(this.replaceUnderscore.transform(name));
+  }
+
   createMetadataArray(
     metadata: Record<string, any>,
   ): ScientificMetadataTableData[] {
     const metadataArray: ScientificMetadataTableData[] = [];
     Object.keys(metadata).forEach((key) => {
       let metadataObject: ScientificMetadataTableData;
+      const humanReadableName =
+        metadata[key]["human_name"] || this.getHumanReadableName(key);
+
       if (
         typeof metadata[key] === "object" &&
         "value" in (metadata[key] as ScientificMetadata)
@@ -175,7 +178,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           name: key,
           value: metadata[key]["value"],
           unit: metadata[key]["unit"],
-          human_name: metadata[key]["human_name"],
+          human_name: humanReadableName,
           type: metadata[key]["type"],
           ontology_reference: metadata[key]["ontology_reference"],
         };
@@ -196,7 +199,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           name: key,
           value: metadataValue,
           unit: "",
-          human_name: metadata[key]["human_name"],
+          human_name: humanReadableName,
           type: metadata[key]["type"],
           ontology_reference: metadata[key]["ontology_reference"],
         };
@@ -212,10 +215,12 @@ export class MetadataViewComponent implements OnInit, OnChanges {
       return true;
     }
 
-    if (
+    const isValidDate =
       typeof scientificMetadata.value !== "number" &&
-      DateTime.fromISO(scientificMetadata.value).isValid
-    ) {
+      new Date(scientificMetadata.value).toString() !== "Invalid Date" &&
+      DateTime.fromISO(scientificMetadata.value).isValid;
+
+    if (isValidDate) {
       return true;
     }
 

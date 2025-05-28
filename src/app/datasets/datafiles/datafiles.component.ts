@@ -25,6 +25,7 @@ import {
 import {
   CreateUserJWT,
   UsersService,
+  CreateJobDtoV3,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { MatCheckboxChange } from "@angular/material/checkbox";
@@ -41,6 +42,7 @@ import { AuthService } from "shared/services/auth/auth.service";
   selector: "datafiles",
   templateUrl: "./datafiles.component.html",
   styleUrls: ["./datafiles.component.scss"],
+  standalone: false,
 })
 export class DatafilesComponent
   implements OnDestroy, AfterViewInit, AfterViewChecked
@@ -283,7 +285,7 @@ export class DatafilesComponent
     }
     if (!this.jwt) {
       this.subscriptions.push(
-        this.usersService.usersControllerGetUserJWT().subscribe((jwt) => {
+        this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
           this.jwt = jwt;
           this[`${form}Element`].nativeElement.jwt.value = jwt.jwt;
           this[`${form}Element`].nativeElement.submit();
@@ -305,16 +307,17 @@ export class DatafilesComponent
     dialogRef.afterClosed().subscribe((email) => {
       if (email) {
         this.getSelectedFiles();
-        const data = {
+        const data: CreateJobDtoV3 = {
           emailJobInitiator: email,
-          creationTime: new Date(),
           type: "public",
+          jobParams: {},
           datasetList: [
             {
               pid: this.datasetPid,
               files: this.getSelectedFiles(),
             },
           ],
+          jobStatusMessage: "jobCreated",
         };
         this.store.dispatch(submitJobAction({ job: data }));
       }

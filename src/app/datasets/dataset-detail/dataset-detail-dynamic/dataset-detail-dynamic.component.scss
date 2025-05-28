@@ -127,3 +127,11 @@ mat-card {
   pointer-events: none;
   cursor: default;
 }
+
+.scientific-metadata-content {
+  height: 100%;
+  
+  > div {
+    height: 100%;
+  }
+}

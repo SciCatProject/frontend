@@ -18,6 +18,7 @@ import {
 import { ActionDataset } from "./datafiles-action.interfaces";
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 import { AuthService } from "shared/services/auth/auth.service";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 describe("1000: DatafilesActionComponent", () => {
   let component: DatafilesActionComponent;
@@ -122,7 +123,7 @@ describe("1000: DatafilesActionComponent", () => {
     notebook_selected = 3,
   }
 
-  const usersControllerGetUserJWT = () => ({
+  const usersControllerGetUserJWTV3 = () => ({
     subscribe: () => ({
       jwt: "9a2322a8-4a7d-11ef-a0f5-d7c40fcf1693",
     }),
@@ -157,6 +158,7 @@ describe("1000: DatafilesActionComponent", () => {
         PipesModule,
         ReactiveFormsModule,
         MatDialogModule,
+        MatSnackBarModule,
         RouterModule,
         RouterModule.forRoot([]),
         StoreModule.forRoot({}),
@@ -170,7 +172,7 @@ describe("1000: DatafilesActionComponent", () => {
           { provide: MatDialogRef, useClass: MockMatDialogRef },
           {
             provide: UsersService,
-            useValue: { usersControllerGetUserJWT },
+            useValue: { usersControllerGetUserJWTV3 },
           },
           {
             provide: AuthService,

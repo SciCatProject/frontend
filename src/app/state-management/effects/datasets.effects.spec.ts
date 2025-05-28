@@ -19,7 +19,7 @@ import {
 import { ScientificCondition } from "state-management/models";
 import { Type } from "@angular/core";
 import {
-  DatasetsControllerCreateRequest,
+  DatasetsControllerCreateV3Request,
   DatasetsService,
   OutputDatasetObsoleteDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -82,18 +82,18 @@ describe("DatasetEffects", () => {
         {
           provide: DatasetsService,
           useValue: jasmine.createSpyObj("datasetApi", [
-            "datasetsControllerCreate",
-            "datasetsControllerFullquery",
-            "datasetsControllerFullfacet",
-            "datasetsControllerMetadataKeys",
-            "datasetsControllerFindAll",
-            "datasetsControllerFindById",
-            "datasetsControllerFindByIdAndUpdate",
-            "datasetsControllerCreateAttachment",
-            "datasetsControllerFindOneAttachmentAndUpdate",
-            "datasetsControllerFindOneAttachmentAndRemove",
-            "datasetsControllerAppendToArrayField",
-            "datasetsControllerCount",
+            "datasetsControllerCreateV3",
+            "datasetsControllerFullqueryV3",
+            "datasetsControllerFullfacetV3",
+            "datasetsControllerMetadataKeysV3",
+            "datasetsControllerFindAllV3",
+            "datasetsControllerFindByIdV3",
+            "datasetsControllerFindByIdAndUpdateV3",
+            "datasetsControllerCreateAttachmentV3",
+            "datasetsControllerFindOneAttachmentAndUpdateV3",
+            "datasetsControllerFindOneAttachmentAndRemoveV3",
+            "datasetsControllerAppendToArrayFieldV3",
+            "datasetsControllerCountV3",
           ]),
         },
       ],
@@ -114,7 +114,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: datasets });
-      datasetApi.datasetsControllerFullquery.and.returnValue(response);
+      datasetApi.datasetsControllerFullqueryV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchDatasets$).toBeObservable(expected);
@@ -126,7 +126,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFullquery.and.returnValue(response);
+      datasetApi.datasetsControllerFullqueryV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchDatasets$).toBeObservable(expected);
@@ -161,7 +161,7 @@ describe("DatasetEffects", () => {
       ];
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: responseArray });
-      datasetApi.datasetsControllerFullfacet.and.returnValue(response);
+      datasetApi.datasetsControllerFullfacetV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchFacetCounts$).toBeObservable(expected);
@@ -173,7 +173,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFullfacet.and.returnValue(response);
+      datasetApi.datasetsControllerFullfacetV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchFacetCounts$).toBeObservable(expected);
@@ -190,7 +190,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: metadataKeys });
-      datasetApi.datasetsControllerMetadataKeys.and.returnValue(response);
+      datasetApi.datasetsControllerMetadataKeysV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchMetadataKeys$).toBeObservable(expected);
@@ -202,7 +202,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerMetadataKeys.and.returnValue(response);
+      datasetApi.datasetsControllerMetadataKeysV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchMetadataKeys$).toBeObservable(expected);
@@ -285,7 +285,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: dataset });
-      datasetApi.datasetsControllerFindById.and.returnValue(response);
+      datasetApi.datasetsControllerFindByIdV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchDataset$).toBeObservable(expected);
@@ -297,7 +297,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFindById.and.returnValue(response);
+      datasetApi.datasetsControllerFindByIdV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchDataset$).toBeObservable(expected);
@@ -314,7 +314,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: relatedDatasets });
-      datasetApi.datasetsControllerFindAll.and.returnValue(response);
+      datasetApi.datasetsControllerFindAllV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchRelatedDatasets$).toBeObservable(expected);
@@ -325,7 +325,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFindAll.and.returnValue(response);
+      datasetApi.datasetsControllerFindAllV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchRelatedDatasets$).toBeObservable(expected);
@@ -342,7 +342,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: { count } });
-      datasetApi.datasetsControllerCount.and.returnValue(response);
+      datasetApi.datasetsControllerCountV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchRelatedDatasetsCount$).toBeObservable(expected);
@@ -353,7 +353,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerCount.and.returnValue(response);
+      datasetApi.datasetsControllerCountV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchRelatedDatasetsCount$).toBeObservable(expected);
@@ -363,7 +363,7 @@ describe("DatasetEffects", () => {
   describe("addDataset$", () => {
     it("should result in an addDatasetCompleteAction, a fetchDatasetsAction and a fetchDatasetAction", () => {
       const action = fromActions.addDatasetAction({
-        dataset: derivedDataset as DatasetsControllerCreateRequest,
+        dataset: derivedDataset as DatasetsControllerCreateV3Request,
       });
       const outcome1 = fromActions.addDatasetCompleteAction({
         dataset: derivedDataset,
@@ -375,7 +375,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: derivedDataset });
-      datasetApi.datasetsControllerCreate.and.returnValue(response);
+      datasetApi.datasetsControllerCreateV3.and.returnValue(response);
 
       const expected = cold("--(bcd)", {
         b: outcome1,
@@ -387,13 +387,13 @@ describe("DatasetEffects", () => {
 
     it("should result in an addDatasetFailedAction", () => {
       const action = fromActions.addDatasetAction({
-        dataset: derivedDataset as DatasetsControllerCreateRequest,
+        dataset: derivedDataset as DatasetsControllerCreateV3Request,
       });
       const outcome = fromActions.addDatasetFailedAction();
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerCreate.and.returnValue(response);
+      datasetApi.datasetsControllerCreateV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.addDataset$).toBeObservable(expected);
@@ -413,7 +413,9 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: dataset });
-      datasetApi.datasetsControllerFindByIdAndUpdate.and.returnValue(response);
+      datasetApi.datasetsControllerFindByIdAndUpdateV3.and.returnValue(
+        response,
+      );
 
       const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
       expect(effects.updateProperty$).toBeObservable(expected);
@@ -428,7 +430,9 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFindByIdAndUpdate.and.returnValue(response);
+      datasetApi.datasetsControllerFindByIdAndUpdateV3.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.updateProperty$).toBeObservable(expected);
@@ -442,7 +446,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: attachment });
-      datasetApi.datasetsControllerCreateAttachment.and.returnValue(response);
+      datasetApi.datasetsControllerCreateAttachmentV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.addAttachment$).toBeObservable(expected);
@@ -454,7 +458,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerCreateAttachment.and.returnValue(response);
+      datasetApi.datasetsControllerCreateAttachmentV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.addAttachment$).toBeObservable(expected);
@@ -480,7 +484,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: attachment });
-      datasetApi.datasetsControllerFindOneAttachmentAndUpdate.and.returnValue(
+      datasetApi.datasetsControllerFindOneAttachmentAndUpdateV3.and.returnValue(
         response,
       );
 
@@ -499,7 +503,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFindOneAttachmentAndUpdate.and.returnValue(
+      datasetApi.datasetsControllerFindOneAttachmentAndUpdateV3.and.returnValue(
         response,
       );
 
@@ -523,7 +527,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: attachmentId });
-      datasetApi.datasetsControllerFindOneAttachmentAndRemove.and.returnValue(
+      datasetApi.datasetsControllerFindOneAttachmentAndRemoveV3.and.returnValue(
         response,
       );
 
@@ -540,7 +544,7 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerFindOneAttachmentAndRemove.and.returnValue(
+      datasetApi.datasetsControllerFindOneAttachmentAndRemoveV3.and.returnValue(
         response,
       );
 
@@ -563,7 +567,9 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", {});
-      datasetApi.datasetsControllerAppendToArrayField.and.returnValue(response);
+      datasetApi.datasetsControllerAppendToArrayFieldV3.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.appendToArrayField$).toBeObservable(expected);
@@ -582,7 +588,9 @@ describe("DatasetEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      datasetApi.datasetsControllerAppendToArrayField.and.returnValue(response);
+      datasetApi.datasetsControllerAppendToArrayFieldV3.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.appendToArrayField$).toBeObservable(expected);
@@ -642,7 +650,7 @@ describe("DatasetEffects", () => {
     describe("ofType addDatasetAction", () => {
       it("should dispatch a loadingAction", () => {
         const action = fromActions.addDatasetAction({
-          dataset: derivedDataset as DatasetsControllerCreateRequest,
+          dataset: derivedDataset as DatasetsControllerCreateV3Request,
         });
         const outcome = loadingAction();
 

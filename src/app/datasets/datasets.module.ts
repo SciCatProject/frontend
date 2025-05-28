@@ -18,13 +18,7 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatCheckboxModule } from "@angular/material/checkbox";
-import {
-  DateAdapter,
-  MatNativeDateModule,
-  MatOptionModule,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from "@angular/material/core";
+import { MatOptionModule } from "@angular/material/core";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatGridListModule } from "@angular/material/grid-list";
@@ -59,7 +53,6 @@ import { DatasetTableSettingsComponent } from "./dataset-table-settings/dataset-
 import { DatasetTableActionsComponent } from "./dataset-table-actions/dataset-table-actions.component";
 import { DatasetLifecycleComponent } from "./dataset-lifecycle/dataset-lifecycle.component";
 import { SampleEditComponent } from "./sample-edit/sample-edit.component";
-import { LuxonDateAdapter, MAT_LUXON_DATE_FORMATS } from "ngx-material-luxon";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { ShareDialogComponent } from "./share-dialog/share-dialog.component";
 import { UserEffects } from "state-management/effects/user.effects";
@@ -112,7 +105,6 @@ import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-w
     MatIconModule,
     MatInputModule,
     MatListModule,
-    MatNativeDateModule,
     MatOptionModule,
     MatPaginatorModule,
     MatRadioModule,
@@ -189,13 +181,6 @@ import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-w
     ADAuthService,
     SharedScicatFrontendModule,
     FileSizePipe,
-    {
-      provide: DateAdapter,
-      useClass: LuxonDateAdapter,
-      deps: [MAT_DATE_LOCALE],
-    },
-    { provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS },
-    { provide: MAT_DATE_LOCALE, useValue: "sv-SE" },
   ],
   exports: [
     DashboardComponent,
