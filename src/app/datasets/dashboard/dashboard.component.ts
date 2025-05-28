@@ -140,9 +140,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchMetadataKeysAction());
 
     this.subscriptions.push(
-      combineLatest([this.pagination$, this.readyToFetch$, this.loggedIn$])
+      combineLatest([
+        this.pagination$,
+        this.readyToFetch$,
+        this.loggedIn$,
+        this.selectHasFetchedSettings$,
+      ])
         .pipe(
-          map(([pagination, , loggedIn]) => [pagination, loggedIn]),
+          map(([pagination, , loggedIn, hasFetchedSettings]) => [
+            pagination,
+            loggedIn,
+            hasFetchedSettings,
+          ]),
           distinctUntilChanged(deepEqual),
         )
         .subscribe(async ([pagination, loggedIn]) => {

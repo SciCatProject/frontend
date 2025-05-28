@@ -451,12 +451,7 @@ describe("UserEffects", () => {
 
       actions = hot("-a", { a: action });
 
-      const outcome = fromActions.updateHasFetchedSettings({
-        hasFetchedSettings: true,
-      });
-      const expected = cold("-b", { b: outcome });
-
-      expect(effects.logoutNavigate$).toBeObservable(expected);
+      expect(effects.logoutNavigate$).toBeObservable(actions);
       expect(router.navigate).toHaveBeenCalledTimes(1);
       expect(router.navigate).toHaveBeenCalledWith(["/login"]);
     });

@@ -243,27 +243,25 @@ export class UserEffects {
     );
   });
 
-  logoutNavigate$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.logoutCompleteAction),
-      tap(({ logoutURL }) => {
-        this.apiConfigService.accessToken = null;
-        this.apiConfigService.credentials.bearer = null;
-        if (logoutURL) {
-          window.location.href = logoutURL;
+  logoutNavigate$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(fromActions.logoutCompleteAction),
+        tap(({ logoutURL }) => {
+          this.apiConfigService.accessToken = null;
+          this.apiConfigService.credentials.bearer = null;
+          if (logoutURL) {
+            window.location.href = logoutURL;
 
-          return null;
-        } else {
-          return this.router.navigate(["/login"]);
-        }
-      }),
-      map(() =>
-        fromActions.updateHasFetchedSettings({
-          hasFetchedSettings: true,
+            return null;
+          } else {
+            return this.router.navigate(["/login"]);
+          }
         }),
-      ),
-    );
-  });
+      );
+    },
+    { dispatch: false },
+  );
 
   fetchCurrentUser$ = createEffect(() => {
     return this.actions$.pipe(
