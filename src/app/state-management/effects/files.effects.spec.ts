@@ -82,7 +82,7 @@ describe("FileEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-a|", { a: origDatablockFiles });
-        origDatablocksApi.origDatablocksControllerFullqueryFiles.and.returnValue(
+        origDatablocksApi.origDatablocksControllerFullqueryFilesV3.and.returnValue(
           response,
         );
 
@@ -96,7 +96,7 @@ describe("FileEffects", () => {
 
         actions = hot("-a", { a: action });
         const response = cold("-#", {});
-        origDatablocksApi.origDatablocksControllerFullqueryFiles.and.returnValue(
+        origDatablocksApi.origDatablocksControllerFullqueryFilesV3.and.returnValue(
           response,
         );
 
@@ -118,7 +118,7 @@ describe("FileEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: responseArray });
-      origDatablocksApi.origDatablocksControllerFullfacetFiles.and.returnValue(
+      origDatablocksApi.origDatablocksControllerFullfacetFilesV3.and.returnValue(
         response,
       );
 
@@ -132,7 +132,7 @@ describe("FileEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      origDatablocksApi.origDatablocksControllerFullfacetFiles.and.returnValue(
+      origDatablocksApi.origDatablocksControllerFullfacetFilesV3.and.returnValue(
         response,
       );
 
