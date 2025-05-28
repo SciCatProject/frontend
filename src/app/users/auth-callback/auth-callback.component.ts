@@ -39,11 +39,13 @@ export class AuthCallbackComponent implements OnInit {
       // External authentication will redirect to this component with a access-token and user-id query parameter
       const accessToken = params["access-token"];
       const userId = params["user-id"];
-      const parsedToken = this.parseJwt(params["access-token"]);
-      const ttl = parsedToken.exp - parsedToken.iat;
-      const created = new Date(parsedToken.iat * 1000);
+      const returnUrl: string = params["returnUrl"];
 
       if (accessToken && userId) {
+        const parsedToken = this.parseJwt(accessToken);
+        const ttl = parsedToken.exp - parsedToken.iat;
+        const created = new Date(parsedToken.iat * 1000);
+
         // If the user is authenticated, we will store the access token and user id in the store
         this.store.dispatch(
           loginOIDCAction({
@@ -65,7 +67,6 @@ export class AuthCallbackComponent implements OnInit {
 
         // After the user is authenticated, we will redirect to the home page
         // or the value of returnUrl query param
-        const returnUrl: string = params["returnUrl"];
         this.router.navigateByUrl(returnUrl || "/");
       }
     });
