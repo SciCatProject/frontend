@@ -26,7 +26,7 @@ import {
   selectTotalSets,
   selectDatasetsInBatch,
 } from "state-management/selectors/datasets.selectors";
-import { get } from "lodash-es";
+import { get as lodashGet } from "lodash-es";
 import { AppConfigService } from "app-config.service";
 import {
   selectColumnsWithHasFetchedSettings,
@@ -77,8 +77,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   selectionIds: string[] = [];
 
   appConfig = this.appConfigService.getConfig();
-
-  lodashGet = get;
   currentPage$ = this.store.select(selectPage);
   datasetsPerPage$ = this.store.select(selectDatasetsPerPage);
   datasetCount$ = this.store.select(selectTotalSets);
@@ -180,9 +178,13 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     settingConfig: ITableSetting,
     paginationConfig: TablePagination,
   ): void {
-    const currentColumnSetting = settingConfig.settingList.find(
+    let currentColumnSetting = settingConfig.settingList.find(
       (s) => s.isCurrentSetting,
     )?.columnSetting;
+
+    if (!currentColumnSetting && settingConfig.settingList.length > 0) {
+      currentColumnSetting = settingConfig.settingList[0].columnSetting;
+    }
 
     this.columns = currentColumnSetting;
     this.setting = settingConfig;
@@ -196,7 +198,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
       return {
         name,
-        enabled: display === "visible" ? true : false,
+        enabled: !!(display === "visible"),
         order: index,
         width,
         type,
@@ -250,7 +252,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       const { active, direction } = sender as Sort;
 
       let column = active;
-      if (column === "runNumber") column = "scientificMetadata.runNumber.value";
+      if (column === "runNumber") {
+        column = "scientificMetadata.runNumber.value";
+      }
+
       this.store.dispatch(sortByColumnAction({ column, direction }));
     }
   }
@@ -363,16 +368,16 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         if (column.name === "runNumber" && column.type !== "custom") {
           // NOTE: This is for the saved columns in the database or the old config.
           convertedColumn.customRender = (c, row) =>
-            this.lodashGet(row, "scientificMetadata.runNumber.value");
+            lodashGet(row, "scientificMetadata.runNumber.value");
           convertedColumn.toExport = (row) =>
-            this.lodashGet(row, "scientificMetadata.runNumber.value");
+            lodashGet(row, "scientificMetadata.runNumber.value");
         }
         // NOTE: This is how we render the custom columns if new config is used.
         if (column.type === "custom") {
           convertedColumn.customRender = (c, row) =>
-            this.lodashGet(row, column.path || column.name);
+            lodashGet(row, column.path || column.name);
           convertedColumn.toExport = (row) =>
-            this.lodashGet(row, column.path || column.name);
+            lodashGet(row, column.path || column.name);
         }
 
         if (column.name === "size") {
