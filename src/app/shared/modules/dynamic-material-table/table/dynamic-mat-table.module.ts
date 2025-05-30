@@ -36,6 +36,7 @@ import { TooltipDirective } from "../tooltip/tooltip.directive";
 import { TemplateOrStringDirective } from "../tooltip/template-or-string.directive";
 import { FormsModule } from "@angular/forms";
 import { ITableSetting, TableSetting } from "../models/table-setting.model";
+import { PipesModule } from "shared/pipes/pipes.module";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
@@ -64,6 +65,7 @@ const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
     MatRippleModule,
     OverlayModule,
     ExtensionsModule,
+    PipesModule,
   ],
   exports: [DynamicMatTableComponent],
   declarations: [

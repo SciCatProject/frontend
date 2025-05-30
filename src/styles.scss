@@ -16,8 +16,6 @@
 @use "./app/datasets/dataset-lifecycle/dataset-lifecycle-theme" as
   dataset-lifecycle;
 @use "./app/datasets/dataset-table/dataset-table-theme" as dataset-table;
-@use "./app/datasets/dataset-table-settings/dataset-table-settings-theme" as
-  dataset-table-settings;
 @use "./app/datasets/reduce/reduce-theme" as reduce;
 @use "./app/instruments/instrument-details/instrument-details-theme" as
   instrument-details;
@@ -239,7 +237,6 @@ $theme: map.merge(
 @include dataset-details-dashboard.theme($theme);
 @include dataset-lifecycle.theme($theme);
 @include dataset-table.theme($theme);
-@include dataset-table-settings.theme($theme);
 @include reduce.theme($theme);
 @include instrument-details.theme($theme);
 @include logbooks-detail.theme($theme);

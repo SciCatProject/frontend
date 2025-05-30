@@ -28,23 +28,19 @@ import { distinctUntilChanged, filter, map, take } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSidenav } from "@angular/material/sidenav";
 import { AddDatasetDialogComponent } from "datasets/add-dataset-dialog/add-dataset-dialog.component";
-import { combineLatest, Subscription } from "rxjs";
+import { combineLatest, Subscription, lastValueFrom } from "rxjs";
 import {
   selectProfile,
   selectCurrentUser,
   selectColumns,
   selectIsLoggedIn,
+  selectHasFetchedSettings,
 } from "state-management/selectors/user.selectors";
 import {
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
-import {
-  selectColumnAction,
-  deselectColumnAction,
-  loadDefaultSettings,
-} from "state-management/actions/user.actions";
-import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
+import { loadDefaultSettings } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
 
 @Component({
@@ -61,15 +57,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   loggedIn$ = this.store.select(selectIsLoggedIn);
   selectedSets$ = this.store.select(selectSelectedDatasets);
   selectColumns$ = this.store.select(selectColumns);
+  selectHasFetchedSettings$ = this.store.select(selectHasFetchedSettings);
 
-  tableColumns$ = combineLatest([this.selectColumns$, this.loggedIn$]).pipe(
-    map(([columns, loggedIn]) =>
-      columns.filter((column) => loggedIn || column.name !== "select"),
-    ),
-  );
-  selectableColumns$ = this.selectColumns$.pipe(
-    map((columns) => columns.filter((column) => column.name !== "select")),
-  );
   public nonEmpty$ = this.store.select(selectIsBatchNonEmpty);
 
   subscriptions: Subscription[] = [];
@@ -95,33 +84,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       changePageAction({ page: event.pageIndex, limit: event.pageSize }),
     );
-  }
-
-  onSettingsClick(): void {
-    this.sideNav.toggle();
-    if (this.sideNav.opened) {
-      this.clearColumnSearch = false;
-    } else {
-      this.clearColumnSearch = true;
-    }
-  }
-
-  onCloseClick(): void {
-    this.clearColumnSearch = true;
-    this.sideNav.close();
-  }
-
-  onSelectColumn(event: SelectColumnEvent): void {
-    const { checkBoxChange, column } = event;
-    if (checkBoxChange.checked) {
-      this.store.dispatch(
-        selectColumnAction({ name: column.name, columnType: column.type }),
-      );
-    } else if (!checkBoxChange.checked) {
-      this.store.dispatch(
-        deselectColumnAction({ name: column.name, columnType: column.type }),
-      );
-    }
   }
 
   onRowClick(dataset: OutputDatasetObsoleteDto): void {
@@ -178,12 +140,29 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchMetadataKeysAction());
 
     this.subscriptions.push(
-      combineLatest([this.pagination$, this.readyToFetch$, this.loggedIn$])
+      combineLatest([
+        this.pagination$,
+        this.readyToFetch$,
+        this.loggedIn$,
+        this.selectHasFetchedSettings$,
+      ])
         .pipe(
-          map(([pagination, , loggedIn]) => [pagination, loggedIn]),
+          map(([pagination, , loggedIn, hasFetchedSettings]) => [
+            pagination,
+            loggedIn,
+            hasFetchedSettings,
+          ]),
           distinctUntilChanged(deepEqual),
         )
-        .subscribe(([pagination, loggedIn]) => {
+        .subscribe(async ([pagination, loggedIn]) => {
+          const hasFetchedSettings = await lastValueFrom(
+            this.selectHasFetchedSettings$.pipe(take(1)),
+          );
+
+          if (!hasFetchedSettings) {
+            return;
+          }
+
           this.store.dispatch(fetchDatasetsAction());
           this.store.dispatch(fetchFacetCountsAction());
           this.router.navigate(["/datasets"], {

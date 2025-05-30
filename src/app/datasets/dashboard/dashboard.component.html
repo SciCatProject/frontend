@@ -1,10 +1,10 @@
 <breadcrumb></breadcrumb>
-  <full-text-search-bar
-    #searchBar
-    data-cy="text-search"
-    [placeholder]="'Text Search'"
-  >
-  </full-text-search-bar>
+<full-text-search-bar
+  #searchBar
+  data-cy="text-search"
+  [placeholder]="'Text Search'"
+>
+</full-text-search-bar>
 <mat-sidenav-container [hasBackdrop]="false">
   <mat-sidenav-content>
     <div fxLayout="row" fxLayout.xs="column">
@@ -36,22 +36,11 @@
         </ng-template>
 
         <dataset-table
-          [tableColumns]="tableColumns$ | async"
           [selectedSets]="selectedSets$ | async"
-          (settingsClick)="onSettingsClick()"
           (rowClick)="onRowClick($event)"
           (pageChange)="onPageChange($event)"
         ></dataset-table>
       </div>
     </div>
   </mat-sidenav-content>
-
-  <mat-sidenav #settings position="end" mode="push">
-    <dataset-table-settings
-      [selectableColumns]="selectableColumns$ | async"
-      [clearSearchBar]="clearColumnSearch"
-      (closeClick)="onCloseClick()"
-      (selectColumn)="onSelectColumn($event)"
-    ></dataset-table-settings>
-  </mat-sidenav>
 </mat-sidenav-container>
