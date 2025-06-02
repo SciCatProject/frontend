@@ -7,55 +7,172 @@
     <ng-container *ngIf="filterConfigs$ | async as filterConfigs">
       <ng-container *ngFor="let filterConfig of filterConfigs">
         <ng-container *ngIf="filterConfig">
-          <ng-container
-            *ngComponentOutlet="
+          <ng-container *ngComponentOutlet="
               renderComponent(filterConfig);
               inputs: { clear: clearSearchBar }
-            "
-          ></ng-container>
+            "></ng-container>
         </ng-container>
       </ng-container>
     </ng-container>
 
-    <div
-      class="section-container"
-      *ngIf="appConfig.scienceSearchEnabled"
-      data-cy="scientific-condition-filter-list"
-    >
-      <ng-container *ngFor="let condition of scientificConditions$ | async">
-        <ng-container
-          *ngComponentOutlet="ConditionFilterComponent; inputs: { condition }"
-        ></ng-container>
-      </ng-container>
+    <!-- Outgassing Filters Section -->
+    <div class="section-container outgassing-filters">
+      <!-- Outgassing Filter 1h -->
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="expandedPanels.outgassing1h">
+          <mat-expansion-panel-header class="custom-panel-header">
+            <mat-panel-title>
+              Outgassing values after 1h
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ getFilterDisplayText(outgassingForm1h) }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <form [formGroup]="outgassingForm1h" class="outgassing-form">
+            <mat-form-field class="form-field-full-width">
+              <mat-label>Operator</mat-label>
+              <mat-select formControlName="relation">
+                <mat-option value="GREATER_THAN">is greater than</mat-option>
+                <mat-option value="LESS_THAN">is less than</mat-option>
+                <mat-option value="EQUAL_TO_NUMERIC">is equal to</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="form-field-full-width">
+              <mat-label>Value</mat-label>
+              <input matInput autocomplete="off" autocorrect="off"
+                autocapitalize="off" spellcheck="false" formControlName="rhs" />
+            </mat-form-field>
+
+            <mat-form-field class="form-field-full-width" *ngIf="unitsEnabled">
+              <mat-label>Unit</mat-label>
+              <input matInput formControlName="unit" />
+            </mat-form-field>
+          </form>
+        </mat-expansion-panel>
+
+        <!-- Outgassing Filter 10h -->
+        <mat-expansion-panel [expanded]="expandedPanels.outgassing10h">
+          <mat-expansion-panel-header class="custom-panel-header">
+            <mat-panel-title>
+              Outgassing values after 10h
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ getFilterDisplayText(outgassingForm10h) }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <form [formGroup]="outgassingForm10h" class="outgassing-form">
+            <mat-form-field class="form-field-full-width">
+              <mat-label>Operator</mat-label>
+              <mat-select formControlName="relation">
+                <mat-option value="GREATER_THAN">is greater than</mat-option>
+                <mat-option value="LESS_THAN">is less than</mat-option>
+                <mat-option value="EQUAL_TO_NUMERIC">is equal to</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="form-field-full-width">
+              <mat-label>Value</mat-label>
+              <input matInput autocomplete="off" autocorrect="off"
+                autocapitalize="off" spellcheck="false" formControlName="rhs" />
+            </mat-form-field>
+
+            <mat-form-field class="form-field-full-width" *ngIf="unitsEnabled">
+              <mat-label>Unit</mat-label>
+              <input matInput formControlName="unit" />
+            </mat-form-field>
+          </form>
+        </mat-expansion-panel>
+
+        <!-- Outgassing Filter 100h -->
+        <mat-expansion-panel [expanded]="expandedPanels.outgassing100h">
+          <mat-expansion-panel-header class="custom-panel-header">
+            <mat-panel-title>
+              Outgassing values after 100h
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ getFilterDisplayText(outgassingForm100h) }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <form [formGroup]="outgassingForm100h" class="outgassing-form">
+            <mat-form-field class="form-field-full-width">
+              <mat-label>Operator</mat-label>
+              <mat-select formControlName="relation">
+                <mat-option value="GREATER_THAN">is greater than</mat-option>
+                <mat-option value="LESS_THAN">is less than</mat-option>
+                <mat-option value="EQUAL_TO_NUMERIC">is equal to</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="form-field-full-width">
+              <mat-label>Value</mat-label>
+              <input matInput autocomplete="off" autocorrect="off"
+                autocapitalize="off" spellcheck="false" formControlName="rhs" />
+            </mat-form-field>
+
+            <mat-form-field class="form-field-full-width" *ngIf="unitsEnabled">
+              <mat-label>Unit</mat-label>
+              <input matInput formControlName="unit" />
+            </mat-form-field>
+          </form>
+        </mat-expansion-panel>
+
+        <!-- Outgassing Filter >100h -->
+        <mat-expansion-panel [expanded]="expandedPanels.outgassingGreater100h">
+          <mat-expansion-panel-header class="custom-panel-header">
+            <mat-panel-title>
+              Outgassing values after >100h
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ getFilterDisplayText(outgassingFormGreater100h) }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <form [formGroup]="outgassingFormGreater100h" class="outgassing-form">
+            <mat-form-field class="form-field-full-width">
+              <mat-label>Operator</mat-label>
+              <mat-select formControlName="relation">
+                <mat-option value="GREATER_THAN">is greater than</mat-option>
+                <mat-option value="LESS_THAN">is less than</mat-option>
+                <mat-option value="EQUAL_TO_NUMERIC">is equal to</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="form-field-full-width">
+              <mat-label>Value</mat-label>
+              <input matInput autocomplete="off" autocorrect="off"
+                autocapitalize="off" spellcheck="false" formControlName="rhs" />
+            </mat-form-field>
+
+            <mat-form-field class="form-field-full-width" *ngIf="unitsEnabled">
+              <mat-label>Unit</mat-label>
+              <input matInput formControlName="unit" />
+            </mat-form-field>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
+    <!-- End Outgassing Filters Section -->
 
     <div class="section-container" data-cy="more-filters-button">
-      <button
-        mat-button
-        class="full-width-button"
-        (click)="showDatasetsFilterSettingsDialog()"
-      >
+      <button mat-button class="full-width-button"
+        (click)="showDatasetsFilterSettingsDialog()">
         <mat-icon>tune</mat-icon>More Filters...
       </button>
     </div>
 
     <div class="section-container">
-      <button
-        mat-raised-button
-        color="primary"
-        class="datasets-filters-search-button"
-        (click)="applyFilters()"
-      >
+      <button mat-raised-button color="primary"
+        class="datasets-filters-search-button" (click)="applyFilters()">
         <mat-icon>search</mat-icon>
         Apply
       </button>
-      <button
-        [disabled]="(hasAppliedFilters$ | async) === false"
-        mat-raised-button
-        color="primary"
-        class="datasets-filters-clear-all-button"
-        (click)="reset()"
-      >
+      <button [disabled]="(hasAppliedFilters$ | async) === false"
+        mat-raised-button color="primary"
+        class="datasets-filters-clear-all-button" (click)="reset()">
         <mat-icon>undo</mat-icon>
         Reset Filters
       </button>
