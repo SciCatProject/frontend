@@ -5,18 +5,22 @@ import {
   Type,
   ViewContainerRef,
 } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Store } from "@ngrx/store";
 import { cloneDeep, isEqual } from "lodash-es";
 import {
   selectHasAppliedFilters,
   selectScientificConditions,
 } from "state-management/selectors/datasets.selectors";
+import { ScientificCondition } from "state-management/models";
 
 import {
   clearFacetsAction,
   fetchDatasetsAction,
   fetchFacetCountsAction,
+  addScientificConditionAction,
 } from "state-management/actions/datasets.actions";
 import {
   deselectAllCustomColumnsAction,
@@ -74,12 +78,51 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   scientificConditions$ = this.store.select(selectScientificConditions);
 
   appConfig = this.appConfigService.getConfig();
-
+  unitsEnabled = this.appConfig.scienceSearchUnitsEnabled;
   clearSearchBar = false;
+
+  // Track the expanded state of each outgassing filter panel
+  expandedPanels: { [key: string]: boolean } = {
+    outgassing1h: false,
+    outgassing10h: false,
+    outgassing100h: false,
+    outgassingGreater100h: false,
+  };
 
   hasAppliedFilters$ = this.store.select(selectHasAppliedFilters);
 
   labelMaps: { [key: string]: string } = {};
+
+  // Add form groups for the outgassing filters
+  outgassingForm1h = new FormGroup({
+    lhs: new FormControl("Outgassing values after 1h", [Validators.required]),
+    relation: new FormControl("GREATER_THAN", [Validators.required]),
+    rhs: new FormControl("", [Validators.required, Validators.minLength(1)]),
+    unit: new FormControl(""),
+  });
+
+  outgassingForm10h = new FormGroup({
+    lhs: new FormControl("Outgassing values after 10h", [Validators.required]),
+    relation: new FormControl("GREATER_THAN", [Validators.required]),
+    rhs: new FormControl("", [Validators.required, Validators.minLength(1)]),
+    unit: new FormControl(""),
+  });
+
+  outgassingForm100h = new FormGroup({
+    lhs: new FormControl("Outgassing values after 100h", [Validators.required]),
+    relation: new FormControl("GREATER_THAN", [Validators.required]),
+    rhs: new FormControl("", [Validators.required, Validators.minLength(1)]),
+    unit: new FormControl(""),
+  });
+
+  outgassingFormGreater100h = new FormGroup({
+    lhs: new FormControl("Outgassing values after >100h", [
+      Validators.required,
+    ]),
+    relation: new FormControl("GREATER_THAN", [Validators.required]),
+    rhs: new FormControl("", [Validators.required, Validators.minLength(1)]),
+    unit: new FormControl(""),
+  });
 
   constructor(
     public appConfigService: AppConfigService,
@@ -87,6 +130,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private store: Store,
     private asyncPipe: AsyncPipe,
     private viewContainerRef: ViewContainerRef,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit() {
@@ -175,8 +219,75 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   applyFilters() {
+    // Apply all outgassing filters that have values
+    this.applyOutgassingFilters();
+
+    // Fetch datasets with applied filters
     this.store.dispatch(fetchDatasetsAction());
     this.store.dispatch(fetchFacetCountsAction());
+  }
+
+  // Apply all outgassing filters at once
+  private applyOutgassingFilters() {
+    const forms = [
+      { type: "1h", form: this.outgassingForm1h },
+      { type: "10h", form: this.outgassingForm10h },
+      { type: "100h", form: this.outgassingForm100h },
+      { type: "greater100h", form: this.outgassingFormGreater100h },
+    ];
+    // Process each form that has a value
+    forms.forEach(({ type, form }) => {
+      console.log(`Processing outgassing filter for: ${type}`, form);
+      // Only process if the form has a value
+      if (form.get("rhs")?.value) {
+        this.processOutgassingFilter(
+          type as "1h" | "10h" | "100h" | "greater100h",
+        );
+      }
+    });
+  }
+
+  // Process a single outgassing filter
+  private processOutgassingFilter(
+    filterType: "1h" | "10h" | "100h" | "greater100h",
+  ): void {
+    let form: FormGroup;
+
+    // Select the appropriate form based on the filter type
+    switch (filterType) {
+      case "1h":
+        form = this.outgassingForm1h;
+        break;
+      case "10h":
+        form = this.outgassingForm10h;
+        break;
+      case "100h":
+        form = this.outgassingForm100h;
+        break;
+      case "greater100h":
+        form = this.outgassingFormGreater100h;
+        break;
+      default:
+        return;
+    }
+
+    // Check if form is valid
+    if (form.invalid || !form.get("rhs")?.value) {
+      return;
+    }
+
+    const { lhs, relation, unit } = form.value;
+    const rawRhs = form.get("rhs")?.value;
+
+    // Parse the value based on the relation
+    const rhs =
+      relation === "EQUAL_TO_STRING" ? String(rawRhs) : Number(rawRhs);
+
+    // Create the condition
+    const condition = { lhs, relation, rhs, unit };
+    console.log({ condition });
+    // Dispatch the action to add the scientific condition
+    this.store.dispatch(addScientificConditionAction({ condition }));
   }
 
   renderComponent(filterObj: FilterConfig): any {
@@ -189,6 +300,95 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
     return COMPONENT_MAP[key];
   }
+
+  // Method to apply outgassing filters
+  applyOutgassingFilter(
+    filterType: "1h" | "10h" | "100h" | "greater100h",
+  ): void {
+    let form: FormGroup;
+
+    // Select the appropriate form based on the filter type
+    switch (filterType) {
+      case "1h":
+        form = this.outgassingForm1h;
+        break;
+      case "10h":
+        form = this.outgassingForm10h;
+        break;
+      case "100h":
+        form = this.outgassingForm100h;
+        break;
+      case "greater100h":
+        form = this.outgassingFormGreater100h;
+        break;
+      default:
+        return;
+    }
+
+    // Check if form is valid
+    if (form.invalid) {
+      return;
+    }
+
+    const { lhs, relation, unit } = form.value;
+    const rawRhs = form.get("rhs")?.value;
+
+    // Parse the value based on the relation
+    const rhs =
+      relation === "EQUAL_TO_STRING" ? String(rawRhs) : Number(rawRhs);
+
+    // Create the condition
+    const condition = { lhs, relation, rhs, unit };
+
+    // Dispatch the action to add the scientific condition
+    this.store.dispatch(addScientificConditionAction({ condition }));
+
+    // Show success message
+    this.snackBar.open(
+      `Added filter: ${lhs} ${this.formatRelation(relation)} ${rhs} ${unit || ""}`,
+      "Close",
+      {
+        duration: 2000,
+      },
+    );
+
+    // Reset the value field after applying
+    form.get("rhs")?.reset("");
+  }
+
+  // Helper method to format relation for display
+  private formatRelation(relation: string): string {
+    switch (relation) {
+      case "GREATER_THAN":
+        return ">";
+      case "LESS_THAN":
+        return "<";
+      case "EQUAL_TO_NUMERIC":
+      case "EQUAL_TO_STRING":
+        return "=";
+      default:
+        return relation;
+    }
+  }
+
+  // Helper method to get filter display text
+  getFilterDisplayText(formGroup: FormGroup): string {
+    const relation = formGroup.get("relation")?.value;
+    const rhs = formGroup.get("rhs")?.value;
+    const unit = formGroup.get("unit")?.value;
+
+    if (!rhs) {
+      return "No value set";
+    }
+
+    return `${this.formatRelation(relation)} ${rhs} ${unit || ""}`.trim();
+  }
+
+  // Toggle panel expansion
+  togglePanel(panel: string): void {
+    this.expandedPanels[panel] = !this.expandedPanels[panel];
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }

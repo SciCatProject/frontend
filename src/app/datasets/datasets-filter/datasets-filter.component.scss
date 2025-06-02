@@ -69,4 +69,73 @@ mat-card {
   .section-container:first-child {
     margin-top: unset;
   }
+
+  .outgassing-filters {
+    padding: 0.5rem;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.02);
+    margin-bottom: 1rem;
+
+    h4 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    // Accordion styling
+    mat-expansion-panel {
+      margin-bottom: 0.5rem;
+      border-radius: 4px;
+      overflow: hidden;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    .custom-panel-header {
+      height: auto !important;
+      padding: 8px 16px;
+
+      .panel-header-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
+
+      ::ng-deep .mat-content {
+        flex-direction: column;
+        align-items: flex-start;
+        overflow: visible;
+      }
+
+      ::ng-deep .mat-expansion-panel-header-title {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.8);
+        margin-bottom: 4px;
+        white-space: normal;
+      }
+
+      ::ng-deep .mat-expansion-panel-header-description {
+        font-size: 0.85rem;
+        color: rgba(0, 0, 0, 0.6);
+        margin: 0;
+        white-space: normal;
+        margin-top: 2px;
+      }
+    }    .outgassing-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      
+      // Make the form fields stack vertically
+      .form-field-full-width {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
 }
