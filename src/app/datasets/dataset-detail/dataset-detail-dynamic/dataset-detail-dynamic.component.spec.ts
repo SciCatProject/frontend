@@ -78,7 +78,10 @@ describe("DatasetDetailDynamicComponent", () => {
 
   describe("getNestedValue with instrument name resolution", () => {
     it("should return instrument name when path is 'instrumentName' and instrument exists", () => {
-      component.instrument = { pid: "instrument1", name: "Test Instrument" } as any;
+      component.instrument = {
+        pid: "instrument1",
+        name: "Test Instrument",
+      } as any;
       const dataset = {} as any;
       const result = component.getNestedValue(dataset, "instrumentName");
       expect(result).toBe("Test Instrument");
@@ -99,7 +102,10 @@ describe("DatasetDetailDynamicComponent", () => {
     });
 
     it("should work normally for non-instrumentName paths", () => {
-      component.instrument = { pid: "instrument1", name: "Test Instrument" } as any;
+      component.instrument = {
+        pid: "instrument1",
+        name: "Test Instrument",
+      } as any;
       const dataset = { pid: "test-pid" } as any;
       const result = component.getNestedValue(dataset, "pid");
       expect(result).toBe("test-pid");
@@ -135,7 +141,10 @@ describe("DatasetDetailDynamicComponent", () => {
 
   describe("getInternalLinkValue", () => {
     it("should return instrument pid when path is 'instrumentName' and instrument exists", () => {
-      component.instrument = { pid: "instrument1", name: "Test Instrument" } as any;
+      component.instrument = {
+        pid: "instrument1",
+        name: "Test Instrument",
+      } as any;
       const dataset = {} as any;
       const result = component.getInternalLinkValue(dataset, "instrumentName");
       expect(result).toBe("instrument1");
@@ -156,7 +165,10 @@ describe("DatasetDetailDynamicComponent", () => {
     });
 
     it("should use getNestedValue for non-instrumentName paths", () => {
-      component.instrument = { pid: "instrument1", name: "Test Instrument" } as any;
+      component.instrument = {
+        pid: "instrument1",
+        name: "Test Instrument",
+      } as any;
       const dataset = { pid: "test-pid" } as any;
       const result = component.getInternalLinkValue(dataset, "pid");
       expect(result).toBe("test-pid");
@@ -206,7 +218,10 @@ describe("DatasetDetailDynamicComponent", () => {
     });
 
     it("should encode special characters in instrument ID", () => {
-      component.onClickInternalLink(InternalLinkType.INSTRUMENTS, "instrument with spaces");
+      component.onClickInternalLink(
+        InternalLinkType.INSTRUMENTS,
+        "instrument with spaces",
+      );
       expect(component["router"].navigateByUrl).toHaveBeenCalledWith(
         "/instruments/instrument%20with%20spaces",
       );
