@@ -44,6 +44,7 @@ export enum InternalLinkType {
   DATASETS = "inputDatasets",
   SAMPLES = "sampleIds",
   INSTRUMENTS = "instrumentIds",
+  INSTRUMENTS_NAME = "instrumentName",
   PROPOSALS = "proposalIds",
 }
 

@@ -2,16 +2,16 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 
 import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
+import { Subscription } from "rxjs";
 
 import { showMessageAction } from "state-management/actions/user.actions";
-import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
 import {
   selectCurrentAttachments,
   selectCurrentDataset,
   selectCurrentDatasetWithoutFileInfo,
 } from "state-management/selectors/datasets.selectors";
 import { selectIsLoading } from "state-management/selectors/user.selectors";
-import { selectInstruments } from "state-management/selectors/instruments.selectors";
+import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
 
 import { AppConfigService } from "app-config.service";
 
@@ -31,8 +31,6 @@ import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular/m
 import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
 
 /**
  * Component to show customizable details for a dataset, using the
@@ -47,7 +45,7 @@ import { takeUntil } from "rxjs/operators";
   standalone: false,
 })
 export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
+  private subscriptions: Subscription[] = [];
 
   datasetView: CustomizationItem[];
   form: FormGroup;
@@ -62,7 +60,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   loading$ = this.store.select(selectIsLoading);
   show = false;
 
-  instruments: { [id: string]: Instrument } = {};
+  instrument: Instrument | undefined;
 
   constructor(
     public appConfigService: AppConfigService,
@@ -76,16 +74,6 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
   ) {
     this.translateService.use("datasetCustom");
-  }
-
-  private resolveInstrumentName(
-    obj: OutputDatasetObsoleteDto,
-    path: string,
-  ): string | undefined {
-    if (path === "instrumentName" && obj.instrumentId) {
-      return this.getInstrumentName(obj.instrumentId);
-    }
-    return undefined;
   }
 
   ngOnInit() {
@@ -102,19 +90,11 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
     this.datasetView = sortedDatasetView;
 
-    this.store.dispatch(fetchInstrumentsAction({}));
-
-    this.store
-      .select(selectInstruments)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((instruments) => {
-        this.instruments = {};
-        instruments.forEach((instrument) => {
-          if (instrument && instrument.pid) {
-            this.instruments[instrument.pid] = instrument;
-          }
-        });
-      });
+    this.subscriptions.push(
+      this.store.select(selectCurrentInstrument).subscribe((instrument) => {
+        this.instrument = instrument;
+      }),
+    );
   }
 
   onCopy(value: string) {
@@ -138,7 +118,6 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
       },
     );
   }
-
   base64MimeType(encoded: string): string {
     return this.attachmentService.base64MimeType(encoded);
   }
@@ -185,7 +164,6 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
         return "Unsupported data type";
     }
   }
-
   transformDate(value: unknown, errorElement: string): string {
     if (typeof value !== "string") {
       return errorElement;
@@ -196,11 +174,9 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
       return errorElement;
     }
   }
-
   getThumbnailSize(value: string): string {
     return value ? `thumbnail-image--${value}` : "";
   }
-
   getNestedValue(
     obj: OutputDatasetObsoleteDto,
     path: string,
@@ -212,9 +188,8 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
       return null;
     }
 
-    const instrumentName = this.resolveInstrumentName(obj, path);
-    if (instrumentName !== undefined) {
-      return instrumentName;
+    if (path === "instrumentName" && this.instrument) {
+      return this.instrument.name || "-";
     }
 
     return path
@@ -232,12 +207,6 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     return Array.isArray(value) ? value[0] || "" : (value as string) || "";
   }
 
-  getInstrumentName(instrumentId: string): string {
-    return instrumentId && this.instruments[instrumentId]
-      ? this.instruments[instrumentId].name
-      : "-";
-  }
-
   onClickInternalLink(internalLinkType: string, id: string): void {
     const encodedId = encodeURIComponent(id);
 
@@ -252,7 +221,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl("/proposals/" + encodedId);
         break;
       case InternalLinkType.INSTRUMENTS:
-      case "instrumentName":
+      case InternalLinkType.INSTRUMENTS_NAME:
         this.router.navigateByUrl("/instruments/" + encodedId);
         break;
       default:
@@ -282,7 +251,8 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    });
   }
 }

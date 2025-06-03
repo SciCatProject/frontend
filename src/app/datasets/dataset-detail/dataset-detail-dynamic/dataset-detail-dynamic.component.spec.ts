@@ -76,45 +76,9 @@ describe("DatasetDetailDynamicComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("getInstrumentName", () => {
-    beforeEach(() => {
-      component.instruments = {
-        instrument1: { pid: "instrument1", name: "Test Instrument 1" },
-        instrument2: { pid: "instrument2", name: "Test Instrument 2" },
-      } as any;
-    });
-
-    it("should return instrument name when instrument exists", () => {
-      const result = component.getInstrumentName("instrument1");
-      expect(result).toBe("Test Instrument 1");
-    });
-
-    it("should return '-' when instrument does not exist", () => {
-      const result = component.getInstrumentName("nonexistent");
-      expect(result).toBe("-");
-    });
-
-    it("should return '-' when instrumentId is null", () => {
-      const result = component.getInstrumentName(null as any);
-      expect(result).toBe("-");
-    });
-
-    it("should return '-' when instrumentId is undefined", () => {
-      const result = component.getInstrumentName(undefined as any);
-      expect(result).toBe("-");
-    });
-
-    it("should return '-' when instrumentId is empty string", () => {
-      const result = component.getInstrumentName("");
-      expect(result).toBe("-");
-    });
-  });
-
   describe("getNestedValue with instrument name resolution", () => {
     beforeEach(() => {
-      component.instruments = {
-        instrument1: { pid: "instrument1", name: "Test Instrument" },
-      } as any;
+      component.instrument = { pid: "instrument1", name: "Test Instrument" } as any;
     });
 
     it("should return instrument name when path is 'instrumentName' and instrumentId exists", () => {
@@ -123,14 +87,16 @@ describe("DatasetDetailDynamicComponent", () => {
       expect(result).toBe("Test Instrument");
     });
 
-    it("should return '-' when path is 'instrumentName' but instrument not found", () => {
-      const dataset = { instrumentId: "nonexistent" } as any;
+    it("should return '-' when path is 'instrumentName' but instrument has no name", () => {
+      component.instrument = { pid: "instrument1" } as any;
+      const dataset = { instrumentId: "instrument1" } as any;
       const result = component.getNestedValue(dataset, "instrumentName");
       expect(result).toBe("-");
     });
 
-    it("should return undefined when path is 'instrumentName' but no instrumentId", () => {
-      const dataset = {} as any;
+    it("should return undefined when path is 'instrumentName' but no instrument", () => {
+      component.instrument = undefined;
+      const dataset = { instrumentId: "instrument1" } as any;
       const result = component.getNestedValue(dataset, "instrumentName");
       expect(result).toBeUndefined();
     });
@@ -144,9 +110,7 @@ describe("DatasetDetailDynamicComponent", () => {
 
   describe("getInternalLinkValue", () => {
     beforeEach(() => {
-      component.instruments = {
-        instrument1: { pid: "instrument1", name: "Test Instrument" },
-      } as any;
+      component.instrument = { pid: "instrument1", name: "Test Instrument" } as any;
     });
 
     it("should return instrumentId when path is 'instrumentName'", () => {
@@ -198,13 +162,6 @@ describe("DatasetDetailDynamicComponent", () => {
       spyOn(component["snackBar"], "open");
     });
 
-    it("should navigate to instruments page when internalLinkType is 'instrumentName'", () => {
-      component.onClickInternalLink("instrumentName", "instrument123");
-      expect(component["router"].navigateByUrl).toHaveBeenCalledWith(
-        "/instruments/instrument123",
-      );
-    });
-
     it("should navigate to instruments page when internalLinkType is 'instruments'", () => {
       component.onClickInternalLink(
         InternalLinkType.INSTRUMENTS,
@@ -215,8 +172,18 @@ describe("DatasetDetailDynamicComponent", () => {
       );
     });
 
+    it("should navigate to instruments page when internalLinkType is 'instrumentsName'", () => {
+      component.onClickInternalLink(
+        InternalLinkType.INSTRUMENTS_NAME,
+        "instrument123",
+      );
+      expect(component["router"].navigateByUrl).toHaveBeenCalledWith(
+        "/instruments/instrument123",
+      );
+    });
+
     it("should encode special characters in instrument ID", () => {
-      component.onClickInternalLink("instrumentName", "instrument with spaces");
+      component.onClickInternalLink(InternalLinkType.INSTRUMENTS, "instrument with spaces");
       expect(component["router"].navigateByUrl).toHaveBeenCalledWith(
         "/instruments/instrument%20with%20spaces",
       );
