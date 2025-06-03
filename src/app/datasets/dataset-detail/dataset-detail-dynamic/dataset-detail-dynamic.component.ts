@@ -199,8 +199,8 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
   getInternalLinkValue(obj: OutputDatasetObsoleteDto, path: string): string {
     // For instrumentName internal links, return the instrument ID instead of the name
-    if (path === "instrumentName" && obj.instrumentId) {
-      return obj.instrumentId;
+    if (path === "instrumentName" && this.instrument) {
+      return this.instrument.pid || "";
     }
 
     const value = this.getNestedValue(obj, path);

@@ -77,79 +77,102 @@ describe("DatasetDetailDynamicComponent", () => {
   });
 
   describe("getNestedValue with instrument name resolution", () => {
-    beforeEach(() => {
+    it("should return instrument name when path is 'instrumentName' and instrument exists", () => {
       component.instrument = { pid: "instrument1", name: "Test Instrument" } as any;
-    });
-
-    it("should return instrument name when path is 'instrumentName' and instrumentId exists", () => {
-      const dataset = { instrumentId: "instrument1" } as any;
+      const dataset = {} as any;
       const result = component.getNestedValue(dataset, "instrumentName");
       expect(result).toBe("Test Instrument");
     });
 
     it("should return '-' when path is 'instrumentName' but instrument has no name", () => {
       component.instrument = { pid: "instrument1" } as any;
-      const dataset = { instrumentId: "instrument1" } as any;
+      const dataset = {} as any;
       const result = component.getNestedValue(dataset, "instrumentName");
       expect(result).toBe("-");
     });
 
     it("should return undefined when path is 'instrumentName' but no instrument", () => {
       component.instrument = undefined;
-      const dataset = { instrumentId: "instrument1" } as any;
+      const dataset = {} as any;
       const result = component.getNestedValue(dataset, "instrumentName");
       expect(result).toBeUndefined();
     });
 
     it("should work normally for non-instrumentName paths", () => {
-      const dataset = { pid: "test-pid", instrumentId: "instrument1" } as any;
+      component.instrument = { pid: "instrument1", name: "Test Instrument" } as any;
+      const dataset = { pid: "test-pid" } as any;
       const result = component.getNestedValue(dataset, "pid");
       expect(result).toBe("test-pid");
+    });
+
+    it("should handle nested property paths", () => {
+      component.instrument = undefined;
+      const dataset = { nested: { property: "nested-value" } } as any;
+      const result = component.getNestedValue(dataset, "nested.property");
+      expect(result).toBe("nested-value");
+    });
+
+    it("should return undefined for non-existent paths", () => {
+      component.instrument = undefined;
+      const dataset = { pid: "test-pid" } as any;
+      const result = component.getNestedValue(dataset, "nonexistent.path");
+      expect(result).toBeUndefined();
+    });
+
+    it("should return error message when path is missing", () => {
+      component.instrument = undefined;
+      const dataset = {} as any;
+      const result = component.getNestedValue(dataset, "");
+      expect(result).toBe("field source is missing");
+    });
+
+    it("should return null when dataset is null", () => {
+      component.instrument = undefined;
+      const result = component.getNestedValue(null, "any.path");
+      expect(result).toBeNull();
     });
   });
 
   describe("getInternalLinkValue", () => {
-    beforeEach(() => {
+    it("should return instrument pid when path is 'instrumentName' and instrument exists", () => {
       component.instrument = { pid: "instrument1", name: "Test Instrument" } as any;
-    });
-
-    it("should return instrumentId when path is 'instrumentName'", () => {
-      const dataset = { instrumentId: "instrument1" } as any;
+      const dataset = {} as any;
       const result = component.getInternalLinkValue(dataset, "instrumentName");
       expect(result).toBe("instrument1");
     });
 
-    it("should return instrumentId even when instrument name is available", () => {
-      const dataset = {
-        instrumentId: "instrument1",
-        instrumentName: "Test Instrument",
-      } as any;
+    it("should return empty string when path is 'instrumentName' but instrument has no pid", () => {
+      component.instrument = { name: "Test Instrument" } as any;
+      const dataset = {} as any;
       const result = component.getInternalLinkValue(dataset, "instrumentName");
-      expect(result).toBe("instrument1");
+      expect(result).toBe("");
     });
 
-    it("should return empty string when path is 'instrumentName' but no instrumentId", () => {
+    it("should return empty string when path is 'instrumentName' but no instrument", () => {
+      component.instrument = undefined;
       const dataset = {} as any;
       const result = component.getInternalLinkValue(dataset, "instrumentName");
       expect(result).toBe("");
     });
 
     it("should use getNestedValue for non-instrumentName paths", () => {
-      const dataset = { pid: "test-pid", instrumentId: "instrument1" } as any;
+      component.instrument = { pid: "instrument1", name: "Test Instrument" } as any;
+      const dataset = { pid: "test-pid" } as any;
       const result = component.getInternalLinkValue(dataset, "pid");
       expect(result).toBe("test-pid");
     });
 
     it("should handle nested paths correctly", () => {
+      component.instrument = undefined;
       const dataset = {
         nested: { value: "test-value" },
-        instrumentId: "instrument1",
       } as any;
       const result = component.getInternalLinkValue(dataset, "nested.value");
       expect(result).toBe("test-value");
     });
 
     it("should return empty string for null/undefined values", () => {
+      component.instrument = undefined;
       const dataset = {} as any;
       const result = component.getInternalLinkValue(dataset, "nonexistent");
       expect(result).toBe("");
