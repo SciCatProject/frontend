@@ -16,6 +16,7 @@ import {
   TranslationObject,
 } from "@ngx-translate/core";
 import { DatasetDetailDynamicComponent } from "./dataset-detail-dynamic.component";
+import { InternalLinkType } from "state-management/models";
 class MockTranslateLoader implements TranslateLoader {
   getTranslation(): Observable<TranslationObject> {
     return of({});
@@ -73,6 +74,176 @@ describe("DatasetDetailDynamicComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+
+  describe("getNestedValue with instrument name resolution", () => {
+    it("should return instrument name when path is 'instrumentName' and instrument exists", () => {
+      component.instrument = {
+        pid: "instrument1",
+        name: "Test Instrument",
+      } as any;
+      const dataset = {} as any;
+      const result = component.getNestedValue(dataset, "instrumentName");
+      expect(result).toBe("Test Instrument");
+    });
+
+    it("should return '-' when path is 'instrumentName' but instrument has no name", () => {
+      component.instrument = { pid: "instrument1" } as any;
+      const dataset = {} as any;
+      const result = component.getNestedValue(dataset, "instrumentName");
+      expect(result).toBe("-");
+    });
+
+    it("should return undefined when path is 'instrumentName' but no instrument", () => {
+      component.instrument = undefined;
+      const dataset = {} as any;
+      const result = component.getNestedValue(dataset, "instrumentName");
+      expect(result).toBeUndefined();
+    });
+
+    it("should work normally for non-instrumentName paths", () => {
+      component.instrument = {
+        pid: "instrument1",
+        name: "Test Instrument",
+      } as any;
+      const dataset = { pid: "test-pid" } as any;
+      const result = component.getNestedValue(dataset, "pid");
+      expect(result).toBe("test-pid");
+    });
+
+    it("should handle nested property paths", () => {
+      component.instrument = undefined;
+      const dataset = { nested: { property: "nested-value" } } as any;
+      const result = component.getNestedValue(dataset, "nested.property");
+      expect(result).toBe("nested-value");
+    });
+
+    it("should return undefined for non-existent paths", () => {
+      component.instrument = undefined;
+      const dataset = { pid: "test-pid" } as any;
+      const result = component.getNestedValue(dataset, "nonexistent.path");
+      expect(result).toBeUndefined();
+    });
+
+    it("should return error message when path is missing", () => {
+      component.instrument = undefined;
+      const dataset = {} as any;
+      const result = component.getNestedValue(dataset, "");
+      expect(result).toBe("field source is missing");
+    });
+
+    it("should return null when dataset is null", () => {
+      component.instrument = undefined;
+      const result = component.getNestedValue(null, "any.path");
+      expect(result).toBeNull();
+    });
+  });
+
+  describe("getInternalLinkValue", () => {
+    it("should return instrument pid when path is 'instrumentName' and instrument exists", () => {
+      component.instrument = {
+        pid: "instrument1",
+        name: "Test Instrument",
+      } as any;
+      const dataset = {} as any;
+      const result = component.getInternalLinkValue(dataset, "instrumentName");
+      expect(result).toBe("instrument1");
+    });
+
+    it("should return empty string when path is 'instrumentName' but instrument has no pid", () => {
+      component.instrument = { name: "Test Instrument" } as any;
+      const dataset = {} as any;
+      const result = component.getInternalLinkValue(dataset, "instrumentName");
+      expect(result).toBe("");
+    });
+
+    it("should return empty string when path is 'instrumentName' but no instrument", () => {
+      component.instrument = undefined;
+      const dataset = {} as any;
+      const result = component.getInternalLinkValue(dataset, "instrumentName");
+      expect(result).toBe("");
+    });
+
+    it("should use getNestedValue for non-instrumentName paths", () => {
+      component.instrument = {
+        pid: "instrument1",
+        name: "Test Instrument",
+      } as any;
+      const dataset = { pid: "test-pid" } as any;
+      const result = component.getInternalLinkValue(dataset, "pid");
+      expect(result).toBe("test-pid");
+    });
+
+    it("should handle nested paths correctly", () => {
+      component.instrument = undefined;
+      const dataset = {
+        nested: { value: "test-value" },
+      } as any;
+      const result = component.getInternalLinkValue(dataset, "nested.value");
+      expect(result).toBe("test-value");
+    });
+
+    it("should return empty string for null/undefined values", () => {
+      component.instrument = undefined;
+      const dataset = {} as any;
+      const result = component.getInternalLinkValue(dataset, "nonexistent");
+      expect(result).toBe("");
+    });
+  });
+
+  describe("onClickInternalLink with instrument support", () => {
+    beforeEach(() => {
+      (component["router"].navigateByUrl as jasmine.Spy).calls.reset();
+      spyOn(component["snackBar"], "open");
+    });
+
+    it("should navigate to instruments page when internalLinkType is 'instruments'", () => {
+      component.onClickInternalLink(
+        InternalLinkType.INSTRUMENTS,
+        "instrument123",
+      );
+      expect(component["router"].navigateByUrl).toHaveBeenCalledWith(
+        "/instruments/instrument123",
+      );
+    });
+
+    it("should navigate to instruments page when internalLinkType is 'instrumentsName'", () => {
+      component.onClickInternalLink(
+        InternalLinkType.INSTRUMENTS_NAME,
+        "instrument123",
+      );
+      expect(component["router"].navigateByUrl).toHaveBeenCalledWith(
+        "/instruments/instrument123",
+      );
+    });
+
+    it("should encode special characters in instrument ID", () => {
+      component.onClickInternalLink(
+        InternalLinkType.INSTRUMENTS,
+        "instrument with spaces",
+      );
+      expect(component["router"].navigateByUrl).toHaveBeenCalledWith(
+        "/instruments/instrument%20with%20spaces",
+      );
+    });
+
+    it("should navigate to datasets page for dataset links", () => {
+      component.onClickInternalLink(InternalLinkType.DATASETS, "dataset123");
+      expect(component["router"].navigateByUrl).toHaveBeenCalledWith(
+        "/datasets/dataset123",
+      );
+    });
+
+    it("should show error message for invalid link types", () => {
+      component.onClickInternalLink("invalid", "test123");
+      expect(component["snackBar"].open).toHaveBeenCalledWith(
+        "The URL is not valid",
+        "Close",
+        {
+          duration: 2000,
+        },
+      );
+    });
   });
 
   describe("getScientificMetadata", () => {
