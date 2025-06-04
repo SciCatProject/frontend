@@ -35,9 +35,13 @@ import { clearProposalsStateAction } from "state-management/actions/proposals.ac
 import { clearPublishedDataStateAction } from "state-management/actions/published-data.actions";
 import { clearSamplesStateAction } from "state-management/actions/samples.actions";
 import { Type } from "@angular/core";
-import { HttpErrorResponse } from "@angular/common/http";
+import {
+  HttpErrorResponse,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
 import { AppConfigService } from "app-config.service";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { AuthService, SDKToken } from "shared/services/auth/auth.service";
 import { TestObservable } from "jasmine-marbles/src/test-observables";
 import { mockUser } from "shared/MockStubs";
@@ -67,7 +71,7 @@ describe("UserEffects", () => {
   const error = new HttpErrorResponse({});
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule], // Import HttpClientTestingModule
+      imports: [],
       providers: [
         UserEffects,
         provideMockActions(() => actions),
@@ -103,29 +107,31 @@ describe("UserEffects", () => {
         {
           provide: SharedAuthService,
           useValue: jasmine.createSpyObj("sharedAuthService", [
-            "authControllerLogin",
-            "authControllerLogout",
+            "authControllerLoginV3",
+            "authControllerLogoutV3",
           ]),
         },
         {
           provide: UsersService,
           useValue: jasmine.createSpyObj("userApi", [
-            "usersControllerFindById",
-            "usersControllerGetSettings",
-            "usersControllerPatchExternalSettings",
-            "usersControllerGetMyUser",
+            "usersControllerFindByIdV3",
+            "usersControllerGetSettingsV3",
+            "usersControllerPatchExternalSettingsV3",
+            "usersControllerGetMyUserV3",
           ]),
         },
         {
           provide: UserIdentitiesService,
           useValue: jasmine.createSpyObj("userIdentityApi", [
-            "userIdentitiesControllerFindOne",
+            "userIdentitiesControllerFindOneV3",
           ]),
         },
         {
           provide: Router,
           useValue: jasmine.createSpyObj("router", ["navigate"]),
         },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
       ],
     });
 
@@ -230,7 +236,7 @@ describe("UserEffects", () => {
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: user });
       authService.setToken(token);
-      userApi.usersControllerFindById.and.returnValue(response);
+      userApi.usersControllerFindByIdV3.and.returnValue(response);
 
       const expected = cold("--(bcde)", {
         b: outcome1,
@@ -248,7 +254,7 @@ describe("UserEffects", () => {
       actions = hot("-a", { a: action });
       const response = cold("-#", {}, error);
       authService.setToken(token);
-      userApi.usersControllerFindById.and.returnValue(response);
+      userApi.usersControllerFindByIdV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchUser$).toBeObservable(expected);
@@ -272,7 +278,7 @@ describe("UserEffects", () => {
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: user });
       authService.setToken(token);
-      userApi.usersControllerFindById.and.returnValue(response);
+      userApi.usersControllerFindByIdV3.and.returnValue(response);
 
       const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
       expect(effects.oidcFetchUser$).toBeObservable(expected);
@@ -285,7 +291,7 @@ describe("UserEffects", () => {
       actions = hot("-a", { a: action });
       const response = cold("-#", {}, error);
       authService.setToken(token);
-      userApi.usersControllerFindById.and.returnValue(response);
+      userApi.usersControllerFindByIdV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.oidcFetchUser$).toBeObservable(expected);
@@ -312,7 +318,7 @@ describe("UserEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: { user } });
-      sharedAuthService.authControllerLogin.and.returnValue(response);
+      sharedAuthService.authControllerLoginV3.and.returnValue(response);
 
       const expected = cold("--(bc)", { b: outcome1, c: outcome2 });
       expect(effects.funcLogin$).toBeObservable(expected);
@@ -324,7 +330,7 @@ describe("UserEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {}, error);
-      sharedAuthService.authControllerLogin.and.returnValue(response);
+      sharedAuthService.authControllerLoginV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.funcLogin$).toBeObservable(expected);
@@ -409,7 +415,7 @@ describe("UserEffects", () => {
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: { logoutURL: "" } });
       authService.isAuthenticated.and.returnValue(true);
-      sharedAuthService.authControllerLogout.and.returnValue(response);
+      sharedAuthService.authControllerLogoutV3.and.returnValue(response);
 
       const expected = cold("--(bcdefghij)", {
         b: outcome1,
@@ -432,7 +438,7 @@ describe("UserEffects", () => {
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
       authService.isAuthenticated.and.returnValue(true);
-      sharedAuthService.authControllerLogout.and.returnValue(response);
+      sharedAuthService.authControllerLogoutV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.logout$).toBeObservable(expected);
@@ -474,7 +480,7 @@ describe("UserEffects", () => {
       authService.getToken.and.returnValue(token);
       authService.isAuthenticated.and.returnValue(true);
       authService.getCurrentUserId.and.returnValue(user.id);
-      userApi.usersControllerGetMyUser.and.returnValue(response);
+      userApi.usersControllerGetMyUserV3.and.returnValue(response);
 
       const expected = cold("--(bcd)", {
         b: outcome1,
@@ -503,7 +509,7 @@ describe("UserEffects", () => {
       authService.getToken.and.returnValue(token);
       authService.isAuthenticated.and.returnValue(true);
       authService.getCurrentUserId.and.returnValue(user.id);
-      userApi.usersControllerGetMyUser.and.returnValue(response);
+      userApi.usersControllerGetMyUserV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchCurrentUser$).toBeObservable(expected);
@@ -562,7 +568,9 @@ describe("UserEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: userIdentity });
-      userIdentityApi.userIdentitiesControllerFindOne.and.returnValue(response);
+      userIdentityApi.userIdentitiesControllerFindOneV3.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchUserIdentity$).toBeObservable(expected);
@@ -575,7 +583,9 @@ describe("UserEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      userIdentityApi.userIdentitiesControllerFindOne.and.returnValue(response);
+      userIdentityApi.userIdentitiesControllerFindOneV3.and.returnValue(
+        response,
+      );
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchUserIdentity$).toBeObservable(expected);
@@ -600,7 +610,7 @@ describe("UserEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: userSettings });
-      userApi.usersControllerGetSettings.and.returnValue(response);
+      userApi.usersControllerGetSettingsV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchUserSettings$).toBeObservable(expected);
@@ -612,7 +622,7 @@ describe("UserEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      userApi.usersControllerGetSettings.and.returnValue(response);
+      userApi.usersControllerGetSettingsV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchUserSettings$).toBeObservable(expected);
@@ -738,7 +748,7 @@ describe("UserEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: apiResponse });
-      userApi.usersControllerPatchExternalSettings.and.returnValue(response);
+      userApi.usersControllerPatchExternalSettingsV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.updateUserSettings$).toBeObservable(expected);
@@ -750,7 +760,7 @@ describe("UserEffects", () => {
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
-      userApi.usersControllerPatchExternalSettings.and.returnValue(response);
+      userApi.usersControllerPatchExternalSettingsV3.and.returnValue(response);
 
       const expected = cold("--b", { b: outcome });
       expect(effects.updateUserSettings$).toBeObservable(expected);

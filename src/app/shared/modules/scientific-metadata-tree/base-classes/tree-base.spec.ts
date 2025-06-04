@@ -5,7 +5,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { DateTime } from "luxon";
 import { FlatNode, TreeNode } from "../base-classes/tree-base";
 import { TreeEditComponent } from "../tree-edit/tree-edit.component";
-import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.modules";
+import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("TreeBaseComponent", () => {

@@ -1,22 +1,14 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType, concatLatestFrom } from "@ngrx/effects";
-import {
-  PoliciesService,
-  UpdateWherePolicyDto,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { concatLatestFrom } from "@ngrx/operators";
+import { PoliciesService } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import {
   selectQueryParams,
   selectEditableQueryParams,
 } from "state-management/selectors/policies.selectors";
 import * as fromActions from "state-management/actions/policies.actions";
-import {
-  switchMap,
-  withLatestFrom,
-  map,
-  catchError,
-  mergeMap,
-} from "rxjs/operators";
+import { switchMap, map, catchError, mergeMap } from "rxjs/operators";
 import { of } from "rxjs";
 import { selectProfile } from "state-management/selectors/user.selectors";
 import {
@@ -40,7 +32,7 @@ export class PolicyEffects {
       concatLatestFrom(() => this.queryParams$),
       map(([action, params]) => params),
       switchMap((params) =>
-        this.policiesService.policiesControllerFindAll(params).pipe(
+        this.policiesService.policiesControllerFindAllV3(params).pipe(
           mergeMap((policies) => [
             fromActions.fetchPoliciesCompleteAction({ policies }),
             fromActions.fetchCountAction(),
@@ -56,7 +48,7 @@ export class PolicyEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchCountAction),
       switchMap(() =>
-        this.policiesService.policiesControllerCount().pipe(
+        this.policiesService.policiesControllerCountV3().pipe(
           map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
           catchError(() => of(fromActions.fetchCountFailedAction())),
         ),
@@ -71,7 +63,7 @@ export class PolicyEffects {
         fromActions.changeEditablePageAction,
         fromActions.sortEditableByColumnAction,
       ),
-      withLatestFrom(this.userProfile$, this.editableQueryParams$),
+      concatLatestFrom(() => [this.userProfile$, this.editableQueryParams$]),
       switchMap(([action, profile, params]) => {
         let filter;
         if (!profile) {
@@ -82,7 +74,7 @@ export class PolicyEffects {
           const { order, skip, limit } = params;
           filter = { where: { manager: email }, order, skip, limit };
         }
-        return this.policiesService.policiesControllerFindAll(filter).pipe(
+        return this.policiesService.policiesControllerFindAllV3(filter).pipe(
           mergeMap((policies) => [
             fromActions.fetchEditablePoliciesCompleteAction({ policies }),
             fromActions.fetchEditableCountAction(),
@@ -105,7 +97,7 @@ export class PolicyEffects {
           const email = profile.email.toLowerCase();
           filter = { manager: email };
         }
-        return this.policiesService.policiesControllerCount(filter).pipe(
+        return this.policiesService.policiesControllerCountV3(filter).pipe(
           map(({ count }) =>
             fromActions.fetchEditableCountCompleteAction({ count }),
           ),
@@ -120,7 +112,7 @@ export class PolicyEffects {
       ofType(fromActions.submitPolicyAction),
       switchMap(({ ownerList, policy }) =>
         this.policiesService
-          .policiesControllerUpdateWhere({
+          .policiesControllerUpdateWhereV3({
             data: policy,
             ownerGroupList: ownerList.join(),
           })

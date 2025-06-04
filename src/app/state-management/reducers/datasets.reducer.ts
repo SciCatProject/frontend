@@ -5,7 +5,6 @@ import {
 } from "state-management/state/datasets.store";
 import * as fromActions from "state-management/actions/datasets.actions";
 import { ArchViewMode, ScientificCondition } from "state-management/models";
-import { DatasetClass } from "@scicatproject/scicat-sdk-ts-angular";
 
 const reducer = createReducer(
   initialDatasetState,

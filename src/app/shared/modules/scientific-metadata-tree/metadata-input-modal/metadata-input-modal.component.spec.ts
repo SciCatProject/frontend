@@ -4,7 +4,7 @@ import { MetadataInputModalComponent } from "./metadata-input-modal.component";
 import { FormBuilder } from "@angular/forms";
 import { MatDialogRef } from "@angular/material/dialog";
 import { MockMatDialogRef } from "shared/MockStubs";
-import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.modules";
+import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 describe("MetadataInputModalComponent", () => {

@@ -42,7 +42,7 @@ import {
 import { AuthService } from "shared/services/auth/auth.service";
 import { InternalStorage } from "shared/services/auth/base.storage";
 import { cold } from "jasmine-marbles";
-import { of } from "rxjs";
+import { Observable, of } from "rxjs";
 
 const data = {
   infoMessage: "",
@@ -87,7 +87,7 @@ describe("ShareDialogComponent", () => {
         },
         {
           provide: UserIdentitiesService,
-          useValue: { userIdentitiesControllerIsValidEmail: () => {} },
+          useValue: { userIdentitiesControllerIsValidEmailV3: () => {} },
         },
         InternalStorage,
       ],
@@ -136,8 +136,8 @@ describe("ShareDialogComponent", () => {
   describe("#add()", () => {
     it("should dispatch a showMessageAction with type `error` if user does not exist", fakeAsync(() => {
       spyOn(
-        component.userIdentititiesService,
-        "userIdentitiesControllerIsValidEmail",
+        component.userIdentitiesService,
+        "userIdentitiesControllerIsValidEmailV3",
       ).and.throwError("Not found");
       const dispatchSpy = spyOn(component.store, "dispatch");
       const email = "test@email.com";
@@ -165,8 +165,8 @@ describe("ShareDialogComponent", () => {
       };
       // TODO: Fix this any type casting here
       spyOn(
-        component.userIdentititiesService,
-        "userIdentitiesControllerIsValidEmail",
+        component.userIdentitiesService,
+        "userIdentitiesControllerIsValidEmailV3",
       ).and.returnValue(of(true) as any);
       component.emailFormControl.setValue(email);
       expect(component.emailFormControl.value).toEqual(email);

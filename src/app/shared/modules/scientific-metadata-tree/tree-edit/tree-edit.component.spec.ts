@@ -6,7 +6,7 @@ import { DateTime } from "luxon";
 import { Type } from "../base-classes/metadata-input-base";
 import { TreeNode } from "../base-classes/tree-base";
 import { InputData } from "../metadata-input/metadata-input.component";
-import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.modules";
+import { ScientificMetadataTreeModule } from "../scientific-metadata-tree.module";
 
 import { FlatNodeEdit, TreeEditComponent } from "./tree-edit.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";

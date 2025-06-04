@@ -88,6 +88,7 @@ export interface IDynamicCell {
 // (https://github.com/angular/angular/issues/43227#issuecomment-904173738)
 @Directive({
   selector: "[appDynamicCell]",
+  standalone: false,
 })
 export class DynamicCellDirective implements OnChanges, OnDestroy {
   @Input() component: any;
@@ -184,6 +185,7 @@ export const expandAnimation = trigger("detailExpand", [
   styleUrls: ["./dynamic-mat-table.component.scss"],
   animations: [tableAnimation, expandAnimation],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class DynamicMatTableComponent<T extends TableRow>
   extends TableCoreDirective<T>
