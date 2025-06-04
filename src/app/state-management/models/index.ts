@@ -44,6 +44,7 @@ export enum InternalLinkType {
   DATASETS = "inputDatasets",
   SAMPLES = "sampleIds",
   INSTRUMENTS = "instrumentIds",
+  INSTRUMENTS_NAME = "instrumentName",
   PROPOSALS = "proposalIds",
 }
 
@@ -60,6 +61,7 @@ export interface CustomizationItem {
   row: number;
   col: number;
   fields?: Field[];
+  source?: string;
   options?: AttachmentOptions;
   viewMode?: viewModeOptions;
 }
