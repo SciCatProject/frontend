@@ -83,10 +83,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   redirectOIDC(authURL: string) {
-    const returnURL = this.returnUrl
+    const returnUrl = this.returnUrl
       ? encodeURIComponent(this.returnUrl)
       : "/datasets";
-    this.document.location.href = `${this.appConfig.lbBaseURL}/${authURL}?returnURL=${returnURL}`;
+    this.document.location.href = `${this.appConfig.lbBaseURL}/${authURL}?returnUrl=${returnUrl}`;
   }
 
   openPrivacyDialog() {
@@ -134,16 +134,22 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.route.queryParams.subscribe((params) => {
       // OIDC logins eventually redirect to this componenet, adding information about user
       // which are parsed here.
-      if (params.returnUrl) {
+      if (params["returnUrl"]) {
         // dispatching to the loginOIDCAction passes information to eventually be added to Loopback AccessToken
         let accessToken = params["access-token"];
         let userId = params["user-id"];
+
         // Required for backend v3 compatibility (access-token and user-id are encoded in returnUrl)
         if (!accessToken && !userId) {
           const urlqp = new URLSearchParams(params.returnUrl.split("?")[1]);
           accessToken = urlqp.get("access-token");
           userId = urlqp.get("user-id");
+        } else {
+          // A returnUrl coming from v4 should be respected as the destination redirect
+          //  after login and user info fetching.
+          this.returnUrl = params["returnUrl"];
         }
+
         this.store.dispatch(
           loginOIDCAction({ oidcLoginResponse: { accessToken, userId } }),
         );
