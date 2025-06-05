@@ -9,6 +9,7 @@ import {
   MockDatasetApi,
   mockDataset,
   createMock,
+  MockActivatedRoute,
 } from "shared/MockStubs";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import {
@@ -42,6 +43,11 @@ import {
   DatasetClass,
   DatasetsService,
 } from "@scicatproject/scicat-sdk-ts-angular";
+import { RowEventType } from "shared/modules/dynamic-material-table/models/table-row.model";
+import { ActivatedRoute } from "@angular/router";
+import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
+import { DatePipe } from "@angular/common";
+import { FileSizePipe } from "shared/pipes/filesize.pipe";
 
 const getConfig = () => ({});
 
@@ -69,6 +75,9 @@ describe("DatasetTableComponent", () => {
         provideMockStore({
           selectors: [{ selector: selectDatasets, value: [] }],
         }),
+        JsonHeadPipe,
+        DatePipe,
+        FileSizePipe,
       ],
       declarations: [DatasetTableComponent],
     });
@@ -80,6 +89,7 @@ describe("DatasetTableComponent", () => {
             useValue: { getConfig },
           },
           { provide: DatasetsService, useClass: MockDatasetApi },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
         ],
       },
     });
@@ -89,7 +99,6 @@ describe("DatasetTableComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DatasetTableComponent);
     component = fixture.componentInstance;
-    component.tableColumns = [];
     fixture.detectChanges();
   });
 
@@ -105,24 +114,15 @@ describe("DatasetTableComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("#doSettingsClick()", () => {
-    it("should emit a MouseEvent on click", () => {
-      const emitSpy = spyOn(component.settingsClick, "emit");
-
-      const event = {} as MouseEvent;
-      component.doSettingsClick(event);
-
-      expect(emitSpy).toHaveBeenCalledTimes(1);
-      expect(emitSpy).toHaveBeenCalledWith(event);
-    });
-  });
-
   describe("#doRowClick()", () => {
     it("should emit the dataset clicked", () => {
       const emitSpy = spyOn(component.rowClick, "emit");
 
       const dataset = mockDataset;
-      component.doRowClick(dataset);
+      component.onRowEvent({
+        event: RowEventType.RowClick,
+        sender: { row: dataset },
+      });
 
       expect(emitSpy).toHaveBeenCalledTimes(1);
       expect(emitSpy).toHaveBeenCalledWith(dataset);
@@ -317,40 +317,6 @@ describe("DatasetTableComponent", () => {
     });
   });
 
-  describe("#isSelected()", () => {
-    it("should return false if dataset is not selected", () => {
-      const dataset = createMock<DatasetClass>({});
-      const selected = component.isSelected(dataset);
-
-      expect(selected).toEqual(false);
-    });
-  });
-
-  describe("#isAllSelected()", () => {
-    it("should return false if length of datasets and length of selectedSets are not equal", () => {
-      component.datasets = [mockDataset];
-
-      const allSelected = component.isAllSelected();
-
-      expect(allSelected).toEqual(false);
-    });
-
-    it("should return true if length of datasets and length of selectedSets are equal", () => {
-      const allSelected = component.isAllSelected();
-
-      expect(allSelected).toEqual(true);
-    });
-  });
-
-  describe("#isInBatch()", () => {
-    it("should return false if dataset is not in batch", () => {
-      const dataset = createMock<DatasetClass>({});
-      const inBatch = component.isInBatch(dataset);
-
-      expect(inBatch).toEqual(false);
-    });
-  });
-
   describe("#onSelect()", () => {
     it("should dispatch a selectDatasetAction if checked is true", () => {
       dispatchSpy = spyOn(store, "dispatch");
@@ -420,14 +386,6 @@ describe("DatasetTableComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         sortByColumnAction({ column, direction: event.direction }),
       );
-    });
-  });
-
-  describe("#countDerivedDatasets()", () => {
-    xit("should return the number of derived datasets for a dataset", () => {
-      // const dataset = mockDataset;
-      // const numberOfDerivedDataset = component.countDerivedDatasets(dataset);
-      // expect(numberOfDerivedDataset).toEqual(0);
     });
   });
 });

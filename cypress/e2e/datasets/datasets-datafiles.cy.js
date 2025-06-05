@@ -44,7 +44,7 @@ describe("Dataset datafiles", () => {
 
       cy.isLoading();
 
-      cy.contains("mat-row", "Cypress Dataset").first().click();
+      cy.get("mat-row").contains("Cypress Dataset").first().click();
 
       cy.wait("@fetch");
 
@@ -101,7 +101,7 @@ describe("Dataset datafiles", () => {
 
       cy.isLoading();
 
-      cy.contains("mat-row", "Cypress Dataset").first().click();
+      cy.get("mat-row").contains("Cypress Dataset").first().click();
 
       cy.wait("@fetch");
 

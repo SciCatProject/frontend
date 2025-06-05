@@ -9,6 +9,7 @@ import {
   loginAction,
   funcLoginAction,
   loginOIDCAction,
+  updateHasFetchedSettings,
 } from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
@@ -160,6 +161,13 @@ export class LoginComponent implements OnInit, OnDestroy {
         );
       }
     });
+
+    // If user is not logged in, hasFetchedSettings is set to true to allow fettcing of the public datasets
+    this.store.dispatch(
+      updateHasFetchedSettings({
+        hasFetchedSettings: true,
+      }),
+    );
   }
 
   ngOnDestroy() {
