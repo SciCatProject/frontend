@@ -86,6 +86,8 @@ import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-d
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
+import { TitleCasePipe } from "shared/pipes/title-case.pipe";
+
 @NgModule({
   imports: [
     CommonModule,
@@ -183,6 +185,7 @@ import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
     ADAuthService,
     SharedScicatFrontendModule,
     FileSizePipe,
+    TitleCasePipe,
   ],
   exports: [
     DashboardComponent,

@@ -48,6 +48,7 @@ import { ActivatedRoute } from "@angular/router";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { DatePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 
 const getConfig = () => ({});
 
@@ -78,6 +79,7 @@ describe("DatasetTableComponent", () => {
         JsonHeadPipe,
         DatePipe,
         FileSizePipe,
+        TitleCasePipe,
       ],
       declarations: [DatasetTableComponent],
     });
