@@ -355,7 +355,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   convertSavedColumns(columns: TableColumn[]): TableField<any>[] {
-    console.log(columns);
     return columns
       .filter((column) => column.name !== "select")
       .map((column) => {
