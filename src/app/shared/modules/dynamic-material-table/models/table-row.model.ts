@@ -6,6 +6,8 @@ import { TableField } from "./table-field.model";
 // this fields are for each row data
 export interface TableRow {
   id?: number;
+  _id?: string;
+  pid?: string;
   rowActionMenu?: { [key: string]: ContextMenuItem };
   option?: RowOption;
 }

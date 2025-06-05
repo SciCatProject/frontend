@@ -95,6 +95,7 @@ export class UserEffects {
         });
         this.authService.setToken(token);
         this.apiConfigService.accessToken = token.id;
+        this.apiConfigService.credentials.bearer = token.id;
         return this.usersService
           .usersControllerFindByIdV3(oidcLoginResponse.userId)
           .pipe(
@@ -125,6 +126,7 @@ export class UserEffects {
         });
         this.authService.setToken(token);
         this.apiConfigService.accessToken = token.id;
+        this.apiConfigService.credentials.bearer = token.id;
         return this.usersService
           .usersControllerFindByIdV3(adLoginResponse.userId)
           .pipe(
@@ -155,6 +157,8 @@ export class UserEffects {
           .pipe(
             switchMap((loginResponse) => {
               this.apiConfigService.accessToken = loginResponse.access_token;
+              this.apiConfigService.credentials.bearer =
+                loginResponse.access_token;
               this.authService.setToken({
                 ...loginResponse,
                 created: new Date(loginResponse.created),
@@ -244,6 +248,8 @@ export class UserEffects {
       return this.actions$.pipe(
         ofType(fromActions.logoutCompleteAction),
         tap(({ logoutURL }) => {
+          this.apiConfigService.accessToken = null;
+          this.apiConfigService.credentials.bearer = null;
           if (logoutURL) {
             window.location.href = logoutURL;
 
@@ -515,15 +521,18 @@ export class UserEffects {
           config.defaultDatasetsListSettings.columns ||
           config.localColumns ||
           initialUserState.columns;
+        const isAuthenticated = this.authService.isAuthenticated();
 
         return [
           fromActions.updateConditionsConfigs({
             conditionConfigs: defaultConditions,
           }),
+          fromActions.updateHasFetchedSettings({
+            hasFetchedSettings: !isAuthenticated,
+          }),
           fromActions.updateFilterConfigs({ filterConfigs: defaultFilters }),
-
           fromActions.setDatasetTableColumnsAction({
-            columns: columns,
+            columns,
           }),
         ];
       }),
