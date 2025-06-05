@@ -58,6 +58,7 @@ import { ActivatedRoute } from "@angular/router";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { DatePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
+import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableConfigService } from "shared/services/table-config.service";
 export interface SortChangeEvent {
@@ -145,6 +146,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private jsonHeadPipe: JsonHeadPipe,
     private datePipe: DatePipe,
     private fileSize: FileSizePipe,
+    private titleCase: TitleCasePipe,
     private tableConfigService: TableConfigService,
   ) {}
 
@@ -353,6 +355,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }
 
   convertSavedColumns(columns: TableColumn[]): TableField<any>[] {
+    console.log(columns);
     return columns
       .filter((column) => column.name !== "select")
       .map((column) => {
@@ -460,6 +463,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         if (column.name === "image") {
           convertedColumn.renderImage = true;
         }
+
+        convertedColumn.header =
+          column.header || this.titleCase.transform(column.name);
 
         return convertedColumn;
       });
