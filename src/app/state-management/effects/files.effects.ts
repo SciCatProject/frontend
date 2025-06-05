@@ -17,7 +17,7 @@ export class FilesEffects {
   fetchAllOrigDatablocks$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchAllOrigDatablocksAction),
-      mergeMap(({ limit, search, skip, sortColumn, sortDirection }) => {
+      switchMap(({ limit, search, skip, sortColumn, sortDirection }) => {
         const limitsParam = {
           skip: skip,
           limit: limit,

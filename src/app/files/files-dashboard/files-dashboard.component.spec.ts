@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MockActivatedRoute, MockRouter, MockStore } from "shared/MockStubs";
 import { FilesDashboardComponent } from "./files-dashboard.component";
 import { DatePipe } from "@angular/common";
-import { LinkyPipe } from "ngx-linky";
 import { Store } from "@ngrx/store";
 
 describe("FilesDashboardComponent", () => {
@@ -20,7 +19,6 @@ describe("FilesDashboardComponent", () => {
         { provide: Router, useClass: MockRouter },
         { provide: Store, useClass: MockStore },
         DatePipe,
-        LinkyPipe,
       ],
     }).compileComponents();
   }));

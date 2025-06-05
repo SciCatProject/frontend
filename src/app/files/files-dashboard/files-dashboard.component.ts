@@ -22,7 +22,6 @@ import { Sort } from "@angular/material/sort";
 import { selectFilesWithCountAndTableSettings } from "state-management/selectors/files.selectors";
 import { fetchAllOrigDatablocksAction } from "state-management/actions/files.actions";
 import { get } from "lodash-es";
-import { LinkyPipe } from "ngx-linky";
 import { DatePipe } from "@angular/common";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableConfigService } from "shared/services/table-config.service";
@@ -121,17 +120,8 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
             name: "datasetId",
             icon: "list",
             header: "Dataset PID",
-            customRender: (column, row) => {
-              return this.linkyPipe.transform(
-                `${window.location.origin}/datasets/${row[column.name]}`,
-                {
-                  replaceFn: () => {
-                    return `<a href="${window.location.origin}/datasets/${encodeURIComponent(row[column.name])}">${row[column.name]}</a>`;
-                  },
-                  newWindow: true,
-                },
-              );
-            },
+            customRender: (column, row) =>
+              `<a href="/datasets/${encodeURIComponent(row[column.name])}" target="_blank">${row[column.name]}</a>`,
           },
         ],
       },
@@ -145,7 +135,6 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
     private store: Store,
     private router: Router,
     private route: ActivatedRoute,
-    private linkyPipe: LinkyPipe,
     private datePipe: DatePipe,
     private tableConfigService: TableConfigService,
   ) {}
