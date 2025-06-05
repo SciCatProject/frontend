@@ -55,8 +55,8 @@ describe("FileEffects", () => {
         {
           provide: OrigdatablocksService,
           useValue: jasmine.createSpyObj("origDatablocksApi", [
-            "origDatablocksControllerFullqueryFiles",
-            "origDatablocksControllerFullfacetFiles",
+            "origDatablocksControllerFullqueryFilesV3",
+            "origDatablocksControllerFullfacetFilesV3",
           ]),
         },
       ],
