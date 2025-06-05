@@ -126,7 +126,7 @@ export class FilesDashboardComponent implements OnInit, OnDestroy {
                 `${window.location.origin}/datasets/${row[column.name]}`,
                 {
                   replaceFn: () => {
-                    return `<a href="${window.location.origin}/datasets/${row[column.name]}">${row[column.name]}</a>`;
+                    return `<a href="${window.location.origin}/datasets/${encodeURIComponent(row[column.name])}">${row[column.name]}</a>`;
                   },
                   newWindow: true,
                 },
