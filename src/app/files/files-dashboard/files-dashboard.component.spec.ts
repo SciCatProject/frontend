@@ -1,17 +1,14 @@
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AppConfigService } from "app-config.service";
-import { MockActivatedRoute, MockRouter } from "shared/MockStubs";
-import { ExportExcelService } from "shared/services/export-excel.service";
-import { ScicatDataService } from "shared/services/scicat-data-service";
+import { MockActivatedRoute, MockRouter, MockStore } from "shared/MockStubs";
 import { FilesDashboardComponent } from "./files-dashboard.component";
+import { DatePipe } from "@angular/common";
+import { Store } from "@ngrx/store";
 
 describe("FilesDashboardComponent", () => {
   let component: FilesDashboardComponent;
   let fixture: ComponentFixture<FilesDashboardComponent>;
-
-  const getConfig = () => ({});
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -19,10 +16,9 @@ describe("FilesDashboardComponent", () => {
       declarations: [FilesDashboardComponent],
       providers: [
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
-        { provide: AppConfigService, useValue: { getConfig } },
-        { provide: ExportExcelService, useValue: {} },
         { provide: Router, useClass: MockRouter },
-        { provide: ScicatDataService, useValue: {} },
+        { provide: Store, useClass: MockStore },
+        DatePipe,
       ],
     }).compileComponents();
   }));
