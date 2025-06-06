@@ -18,6 +18,7 @@ import {
   selectAllDatasetsAction,
   sortByColumnAction,
 } from "state-management/actions/datasets.actions";
+import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
 
 import {
   selectDatasets,
@@ -35,6 +36,7 @@ import {
 import {
   DatasetClass,
   OutputDatasetObsoleteDto,
+  Instrument,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
@@ -60,6 +62,8 @@ import { DatePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableConfigService } from "shared/services/table-config.service";
+import { selectInstruments } from "state-management/selectors/instruments.selectors";
+
 export interface SortChangeEvent {
   active: string;
   direction: "asc" | "desc" | "";
@@ -86,6 +90,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   selectColumnsWithFetchedSettings$ = this.store.select(
     selectColumnsWithHasFetchedSettings,
   );
+  instruments$ = this.store.select(selectInstruments);
 
   @Input() selectedSets: OutputDatasetObsoleteDto[] | null = null;
   @Output() pageChange = new EventEmitter<{
@@ -94,6 +99,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }>();
 
   datasets: OutputDatasetObsoleteDto[] = [];
+  instruments: Instrument[] = [];
+  instrumentMap: Map<string, Instrument> = new Map();
 
   @Output() rowClick = new EventEmitter<OutputDatasetObsoleteDto>();
 
@@ -147,6 +154,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private fileSize: FileSizePipe,
     private tableConfigService: TableConfigService,
   ) {}
+
+  private getInstrumentName(row: OutputDatasetObsoleteDto): string {
+    const instrument = this.instrumentMap.get(row.instrumentId);
+    if (instrument?.name) {
+      return instrument.name;
+    }
+    if (row.instrumentId != null) {
+      return row.instrumentId === "" ? "-" : row.instrumentId;
+    }
+    return "-";
+  }
 
   getTableSort(): ITableSetting["tableSort"] {
     const { queryParams } = this.route.snapshot;
@@ -461,17 +479,35 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           convertedColumn.renderImage = true;
         }
 
+        if (column.name === "instrumentName") {
+          convertedColumn.customRender = (column, row) =>
+            this.getInstrumentName(row);
+          convertedColumn.toExport = (row, column) =>
+            this.getInstrumentName(row);
+        }
+
         return convertedColumn;
       });
   }
 
   ngOnInit() {
+    this.store.dispatch(fetchInstrumentsAction({ limit: 1000, skip: 0 }));
+
     this.subscriptions.push(
       this.selectedDatasets$.subscribe((datasets) => {
         // NOTE: In the selectionIds we are storing either _id or pid. Dynamic material table works only with these two.
         this.selectionIds = datasets.map((dataset) => {
           return dataset.pid;
         });
+      }),
+    );
+
+    this.subscriptions.push(
+      this.instruments$.subscribe((instruments) => {
+        this.instruments = instruments;
+        this.instrumentMap = new Map(
+          instruments.map((instrument) => [instrument.pid, instrument]),
+        );
       }),
     );
 
