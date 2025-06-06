@@ -23,7 +23,6 @@ import {
   selectDatasets,
   selectDatasetsPerPage,
   selectPage,
-  selectTotalSets,
   selectDatasetsInBatch,
 } from "state-management/selectors/datasets.selectors";
 import { get as lodashGet } from "lodash-es";
@@ -79,7 +78,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   appConfig = this.appConfigService.getConfig();
   currentPage$ = this.store.select(selectPage);
   datasetsPerPage$ = this.store.select(selectDatasetsPerPage);
-  datasetCount$ = this.store.select(selectTotalSets);
   currentUser$ = this.store.select(selectCurrentUser);
   datasets$ = this.store.select(selectDatasets);
   selectedDatasets$ = this.store.select(selectDatasetsInBatch);
@@ -147,6 +145,53 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private fileSize: FileSizePipe,
     private tableConfigService: TableConfigService,
   ) {}
+
+  private async processDatasets(
+    datasets: OutputDatasetObsoleteDto[],
+    currentUser: any,
+  ) {
+    const defaultTableColumns = await lastValueFrom(
+      this.selectColumnsWithFetchedSettings$.pipe(take(1)),
+    );
+
+    if (
+      defaultTableColumns.hasFetchedSettings &&
+      defaultTableColumns.columns.length
+    ) {
+      const tableColumns = defaultTableColumns.columns;
+
+      if (!currentUser) {
+        this.rowSelectionMode = "none";
+      }
+
+      if (tableColumns) {
+        this.dataSource.next(datasets);
+        this.pending = false;
+
+        const savedTableConfigColumns = this.convertSavedColumns(tableColumns);
+
+        const tableSort = this.getTableSort();
+        const paginationConfig = this.getTablePaginationConfig(
+          datasets?.length || 0,
+        );
+
+        this.tableDefaultSettingsConfig.settingList[0].columnSetting =
+          savedTableConfigColumns;
+
+        const tableSettingsConfig =
+          this.tableConfigService.getTableSettingsConfig(
+            this.tableName,
+            this.tableDefaultSettingsConfig,
+            savedTableConfigColumns,
+            tableSort,
+          );
+
+        if (tableSettingsConfig?.settingList.length) {
+          this.initTable(tableSettingsConfig, paginationConfig);
+        }
+      }
+    }
+  }
 
   getTableSort(): ITableSetting["tableSort"] {
     const { queryParams } = this.route.snapshot;
@@ -478,48 +523,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.datasets$.subscribe((datasets) => {
         this.currentUser$.subscribe((currentUser) => {
-          this.datasetCount$.subscribe(async (count) => {
-            const defaultTableColumns = await lastValueFrom(
-              this.selectColumnsWithFetchedSettings$.pipe(take(1)),
-            );
-
-            if (
-              defaultTableColumns.hasFetchedSettings &&
-              defaultTableColumns.columns.length
-            ) {
-              const tableColumns = defaultTableColumns.columns;
-
-              if (!currentUser) {
-                this.rowSelectionMode = "none";
-              }
-
-              if (tableColumns) {
-                this.dataSource.next(datasets);
-                this.pending = false;
-
-                const savedTableConfigColumns =
-                  this.convertSavedColumns(tableColumns);
-
-                const tableSort = this.getTableSort();
-                const paginationConfig = this.getTablePaginationConfig(count);
-
-                this.tableDefaultSettingsConfig.settingList[0].columnSetting =
-                  savedTableConfigColumns;
-
-                const tableSettingsConfig =
-                  this.tableConfigService.getTableSettingsConfig(
-                    this.tableName,
-                    this.tableDefaultSettingsConfig,
-                    savedTableConfigColumns,
-                    tableSort,
-                  );
-
-                if (tableSettingsConfig?.settingList.length) {
-                  this.initTable(tableSettingsConfig, paginationConfig);
-                }
-              }
-            }
-          });
+          this.processDatasets(datasets, currentUser);
         });
       }),
     );
