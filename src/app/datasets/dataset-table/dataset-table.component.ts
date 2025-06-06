@@ -18,6 +18,7 @@ import {
   selectAllDatasetsAction,
   sortByColumnAction,
 } from "state-management/actions/datasets.actions";
+import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
 
 import {
   selectDatasets,
@@ -61,7 +62,6 @@ import { DatePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableConfigService } from "shared/services/table-config.service";
-import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
 
 export interface SortChangeEvent {
