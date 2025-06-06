@@ -35,6 +35,7 @@ import {
 import {
   DatasetClass,
   OutputDatasetObsoleteDto,
+  Instrument,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
@@ -60,6 +61,9 @@ import { DatePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableConfigService } from "shared/services/table-config.service";
+import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
+import { selectInstruments } from "state-management/selectors/instruments.selectors";
+
 export interface SortChangeEvent {
   active: string;
   direction: "asc" | "desc" | "";
@@ -86,6 +90,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   selectColumnsWithFetchedSettings$ = this.store.select(
     selectColumnsWithHasFetchedSettings,
   );
+  instruments$ = this.store.select(selectInstruments);
 
   @Input() selectedSets: OutputDatasetObsoleteDto[] | null = null;
   @Output() pageChange = new EventEmitter<{
@@ -94,6 +99,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   }>();
 
   datasets: OutputDatasetObsoleteDto[] = [];
+  instruments: Instrument[] = [];
 
   @Output() rowClick = new EventEmitter<OutputDatasetObsoleteDto>();
 
@@ -461,17 +467,38 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           convertedColumn.renderImage = true;
         }
 
+        if (column.name === "instrumentName") {
+          const getInstrumentName = (row: OutputDatasetObsoleteDto) => {
+            const instrument = this.instruments.find(
+              (inst) => inst.pid === row.instrumentId,
+            );
+            return instrument?.name || row.instrumentId || "-";
+          };
+
+          convertedColumn.customRender = (column, row) =>
+            getInstrumentName(row);
+          convertedColumn.toExport = (row) => getInstrumentName(row);
+        }
+
         return convertedColumn;
       });
   }
 
   ngOnInit() {
+    this.store.dispatch(fetchInstrumentsAction({ limit: 1000, skip: 0 }));
+
     this.subscriptions.push(
       this.selectedDatasets$.subscribe((datasets) => {
         // NOTE: In the selectionIds we are storing either _id or pid. Dynamic material table works only with these two.
         this.selectionIds = datasets.map((dataset) => {
           return dataset.pid;
         });
+      }),
+    );
+
+    this.subscriptions.push(
+      this.instruments$.subscribe((instruments) => {
+        this.instruments = instruments;
       }),
     );
 
