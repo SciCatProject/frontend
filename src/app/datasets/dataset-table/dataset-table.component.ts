@@ -100,6 +100,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   datasets: OutputDatasetObsoleteDto[] = [];
   instruments: Instrument[] = [];
+  instrumentMap: Map<string, Instrument> = new Map();
 
   @Output() rowClick = new EventEmitter<OutputDatasetObsoleteDto>();
 
@@ -153,6 +154,17 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private fileSize: FileSizePipe,
     private tableConfigService: TableConfigService,
   ) {}
+
+  private getInstrumentName(row: OutputDatasetObsoleteDto): string {
+    const instrument = this.instrumentMap.get(row.instrumentId);
+    if (instrument?.name) {
+      return instrument.name;
+    }
+    if (row.instrumentId != null) {
+      return row.instrumentId === "" ? "-" : row.instrumentId;
+    }
+    return "-";
+  }
 
   getTableSort(): ITableSetting["tableSort"] {
     const { queryParams } = this.route.snapshot;
@@ -468,16 +480,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         }
 
         if (column.name === "instrumentName") {
-          const getInstrumentName = (row: OutputDatasetObsoleteDto) => {
-            const instrument = this.instruments.find(
-              (inst) => inst.pid === row.instrumentId,
-            );
-            return instrument?.name || row.instrumentId || "-";
-          };
-
           convertedColumn.customRender = (column, row) =>
-            getInstrumentName(row);
-          convertedColumn.toExport = (row) => getInstrumentName(row);
+            this.getInstrumentName(row);
+          convertedColumn.toExport = (row, column) =>
+            this.getInstrumentName(row);
         }
 
         return convertedColumn;
@@ -499,6 +505,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.instruments$.subscribe((instruments) => {
         this.instruments = instruments;
+        this.instrumentMap = new Map(
+          instruments.map((instrument) => [instrument.pid, instrument]),
+        );
       }),
     );
 
