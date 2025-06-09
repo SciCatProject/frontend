@@ -132,7 +132,7 @@ export class DepositorComponent implements OnInit, OnDestroy {
     this.methods$.pipe(
       take(1),
     ).subscribe(methods => {
-      const selectedMethod = methods.find(m => m.name === 'Single Particle'); // that's bad, need to find an actual schema!
+      const selectedMethod = methods.find(m => m.name === 'Single Particle'); // that's bad, need to use an actual schema from elsewhere!
       if (selectedMethod) {
         const parsedSchema: JsonSchema = JSON.parse(selectedMethod.schema);
         this.metadataSchema = parsedSchema;
