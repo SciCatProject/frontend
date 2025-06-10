@@ -1,6 +1,7 @@
 import { JsonSchema, JsonSchema7 } from "@jsonforms/core";
 import {
   CreateDatasetDto,
+  CreateRawDatasetObsoleteDto,
   DatasetClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { isArray } from "mathjs";
@@ -174,7 +175,7 @@ export const getJsonSchemaFromDto = () => {
   // 0 => number
   // -1 => skip number
   // -2 => optional number
-  const emptyDatasetForSchema: CreateDatasetDto = {
+  const emptyDatasetForSchema: CreateRawDatasetObsoleteDto = {
     ownerGroup: "--string",
     accessGroups: [],
     isPublished: false,
@@ -193,7 +194,7 @@ export const getJsonSchemaFromDto = () => {
     description: "--string --optional",
     license: "--string --optional",
     keywords: [],
-    principalInvestigators: null, // skip [],
+    principalInvestigator: "--string", // skip [],
     scientificMetadata: {},
     ownerEmail: "--mail --optional",
 
@@ -212,9 +213,9 @@ export const getJsonSchemaFromDto = () => {
     runNumber: "--optional",
     datasetlifecycle: undefined,
 
-    proposalIds: [],
-    sampleIds: [],
-    instrumentIds: [],
+    proposalId: "--string --optional",
+    sampleId: "--string --optional",
+    instrumentId: "--string --optional",
     inputDatasets: [],
     usedSoftware: [],
     jobLogData: "--string --optional",
@@ -310,6 +311,9 @@ export const getJsonSchemaFromDto = () => {
       "The creation process of the derived data will usually depend on input job parameters. The full structure of these input parameters are stored here.",
     jobLogData:
       "The output job logfile. Keep the size of this log data well below 15 MB.",
+    proposalId: "The ID of the proposal to which the dataset belongs.",
+    sampleId: "ID of the sample used when collecting the data.",
+    instrumentId: "ID of the instrument where the data was created.",
   };
 
   const schema = {
