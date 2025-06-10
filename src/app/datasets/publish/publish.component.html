@@ -15,66 +15,10 @@
               matInput
               autocomplete="off"
               [(ngModel)]="form.title"
+              (change)="onFormFieldChange()"
               name="title"
             />
           </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Creators</mat-label>
-            <mat-chip-grid required #chipListCreators>
-              <mat-chip-row
-                *ngFor="let name of form.creators"
-                (removed)="removeCreator(name)"
-              >
-                {{ name }}
-                <mat-icon matChipRemove>cancel</mat-icon>
-              </mat-chip-row>
-              <input
-                matInput
-                [matChipInputFor]="chipListCreators"
-                [matChipInputAddOnBlur]="true"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                (matChipInputTokenEnd)="addCreator($event)"
-              />
-            </mat-chip-grid>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Publisher</mat-label>
-            <input
-              required
-              matInput
-              autocomplete="off"
-              [(ngModel)]="form.publisher"
-              name="publisher"
-            />
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Resource Type</mat-label>
-            <mat-select
-              required
-              matInput
-              name="resourceType"
-              [(ngModel)]="form.resourceType"
-            >
-              <mat-option value="raw"> raw </mat-option>
-              <mat-option value="derived"> derived </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>Description</mat-label>
-            <textarea
-              required
-              matInput
-              autocomplete="off"
-              [(ngModel)]="form.description"
-              name="Description"
-              rows="5"
-            ></textarea>
-          </mat-form-field>
-
           <mat-form-field>
             <mat-label>Abstract</mat-label>
             <textarea
@@ -85,44 +29,38 @@
               [(ngModel)]="form.abstract"
               name="abstract"
               rows="5"
+              (change)="onFormFieldChange()"
             ></textarea>
           </mat-form-field>
 
-          <!-- <mat-form-field>
-            <mat-label>Download link</mat-label>
-            <input
-              matInput
-              autocomplete="off"
-              [(ngModel)]="form.downloadLink"
-              name="downloadLink"
-            />
-          </mat-form-field> -->
-
-          <mat-form-field>
-            <mat-label>Related publications</mat-label>
-            <mat-chip-grid #chipListRelatedPub>
-              <mat-chip-row
-                *ngFor="let relatedPublication of form.relatedPublications"
-                (removed)="removeRelatedPublication(relatedPublication)"
-              >
-                {{ relatedPublication }}
-                <mat-icon matChipRemove>cancel</mat-icon>
-              </mat-chip-row>
-              <input
-                [matChipInputFor]="chipListRelatedPub"
-                [matChipInputAddOnBlur]="true"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                (matChipInputTokenEnd)="addRelatedPublication($event)"
-              />
-            </mat-chip-grid>
-          </mat-form-field>
+          <mat-expansion-panel
+            *ngIf="schema.properties"
+            (opened)="panelOpenState.set(true)"
+            (closed)="panelOpenState.set(false)"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title> Metadata </mat-panel-title>
+              <mat-panel-description>
+                Here you can add metadata to your published data.
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <jsonforms
+              [data]="metadataData"
+              [schema]="schema"
+              [renderers]="renderers"
+              (errors)="onErrors($event)"
+              (dataChange)="onMetadataChange($event)"
+            ></jsonforms>
+          </mat-expansion-panel>
 
           <button
-            id="publishButton"
-            (click)="onPublish()"
+            id="createDataPublicationButton"
+            (click)="onCreateDataPublication()"
             mat-raised-button
             color="primary"
-            [disabled]="!formIsValid()"
+            [disabled]="
+              !formIsValid() || (panelOpenState() && !metadataDataIsValid())
+            "
           >
             Create data publication
           </button>
@@ -130,9 +68,4 @@
       </mat-card-content>
     </mat-card>
   </div>
-  <!-- <div fxFlex="30">
-    <mat-card *ngIf="form.thumbnail">
-      <img mat-card-image src="{{ form.thumbnail }}" />
-    </mat-card>
-  </div> -->
 </div>

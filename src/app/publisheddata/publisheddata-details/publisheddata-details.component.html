@@ -63,7 +63,7 @@
             <th>URL</th>
             <td><span [innerHTML]="landingPageUrl | linky"></span></td>
           </tr>
-          <tr *ngIf="publishedData.publicationYear as value">
+          <tr *ngIf="publishedData.metadata.publicationYear as value">
             <th>Publication Year</th>
             <td>{{ value }}</td>
           </tr>
@@ -81,19 +81,19 @@
 
       <mat-card-content>
         <table>
-          <tr *ngIf="publishedData.creator as value">
+          <tr *ngIf="publishedData.metadata.creators as value">
             <th>Creator</th>
             <td>{{ value }}</td>
           </tr>
-          <tr *ngIf="publishedData.authors as value">
+          <tr *ngIf="publishedData.metadata.contributors as value">
             <th>Authors</th>
             <td>{{ value }}</td>
           </tr>
-          <tr *ngIf="publishedData.affiliation as value">
+          <tr *ngIf="publishedData.metadata.affiliation as value">
             <th>Affiliation</th>
             <td>{{ value }}</td>
           </tr>
-          <tr *ngIf="publishedData.publisher as value">
+          <tr *ngIf="publishedData.metadata.publisher as value">
             <th>Publisher</th>
             <td>{{ value }}</td>
           </tr>
@@ -111,7 +111,7 @@
 
       <mat-card-content>
         <table>
-          <tr *ngIf="publishedData.downloadLink as value">
+          <tr *ngIf="publishedData.metadata.downloadLink as value">
             <th>Download Link</th>
             <td>{{ value }}</td>
           </tr>
@@ -123,11 +123,11 @@
             <th>Number of Files</th>
             <td>{{ value }}</td>
           </tr>
-          <tr *ngIf="publishedData.resourceType as value">
+          <tr *ngIf="publishedData.metadata.resourceType as value">
             <th>Resource Type</th>
             <td>{{ value }}</td>
           </tr>
-          <tr *ngIf="publishedData.dataDescription as value">
+          <tr *ngIf="publishedData.metadata.dataDescription as value">
             <th>Data Description</th>
             <td *ngIf="isUrl(value); else notUrl">
               <a href="{{ value }}" target="_blank" rel="noopener">
@@ -154,14 +154,14 @@
         <table>
           <tr
             *ngIf="
-              publishedData.relatedPublications &&
-              publishedData.relatedPublications.length > 0
+              publishedData.metadata.relatedPublications &&
+              publishedData.metadata.relatedPublications.length > 0
             "
           >
             <th>Related Publications</th>
-            <td>{{ publishedData.relatedPublications }}</td>
+            <td>{{ publishedData.metadata.relatedPublications }}</td>
           </tr>
-          <tr *ngIf="publishedData.pidArray as pidArray">
+          <tr *ngIf="publishedData.datasetPids as pidArray">
             <th>Dataset IDs</th>
             <td>
               <ng-container *ngFor="let pid of pidArray">
@@ -212,7 +212,7 @@
   </div>
 
   <div fxFlex="40">
-    <ng-container *ngIf="publishedData.thumbnail as thumbnail">
+    <ng-container *ngIf="publishedData.metadata.thumbnail as thumbnail">
       <mat-card>
         <img mat-card-image src="{{ thumbnail }}" />
       </mat-card>

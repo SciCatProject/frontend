@@ -9,6 +9,14 @@ const reducer = createReducer(
   initialPublishedDataState,
 
   on(
+    fromActions.fetchPublishedDataConfigCompleteAction,
+    (state, { publishedDataConfig }): PublishedDataState => ({
+      ...state,
+      publishedDataConfig,
+    }),
+  ),
+
+  on(
     fromActions.fetchAllPublishedDataCompleteAction,
     (state, { publishedData }): PublishedDataState => ({
       ...state,

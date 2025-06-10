@@ -87,6 +87,24 @@ export class PublishedDataEffects {
     );
   });
 
+  fetchPublishedDataConfig$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchPublishedDataConfigAction),
+      switchMap(() =>
+        this.publishedDataService.publishedDataControllerGetConfigV3().pipe(
+          map((publishedDataConfig) =>
+            fromActions.fetchPublishedDataConfigCompleteAction({
+              publishedDataConfig,
+            }),
+          ),
+          catchError(() =>
+            of(fromActions.fetchPublishedDataConfigFailedAction()),
+          ),
+        ),
+      ),
+    );
+  });
+
   navigateToResyncedPublishedData$ = createEffect(
     () => {
       return this.actions$.pipe(

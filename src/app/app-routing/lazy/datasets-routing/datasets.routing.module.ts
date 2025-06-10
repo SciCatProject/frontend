@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AuthGuard } from "app-routing/auth.guard";
+import { leavingPageGuard } from 'app-routing/pending-changes.guard';
 import { BatchViewComponent } from "datasets/batch-view/batch-view.component";
 import { DashboardComponent } from "datasets/dashboard/dashboard.component";
 import { DatablocksComponent } from "datasets/datablocks-table/datablocks-table.component";
@@ -21,6 +22,7 @@ const routes: Routes = [
     path: "batch/publish",
     component: PublishComponent,
     canActivate: [AuthGuard],
+    canDeactivate: [leavingPageGuard],
   },
   {
     path: ":id",

@@ -16,6 +16,17 @@ export const fetchAllPublishedDataFailedAction = createAction(
   "[PublishedData] Fetch All Published Datas Failed",
 );
 
+export const fetchPublishedDataConfigAction = createAction(
+  "[PublishedData] Fetch Published Data Config",
+);
+export const fetchPublishedDataConfigCompleteAction = createAction(
+  "[PublishedData] Fetch Published Data Config Complete",
+  props<{ publishedDataConfig: any }>(),
+);
+export const fetchPublishedDataConfigFailedAction = createAction(
+  "[PublishedData] Fetch Published Data Config Failed",
+);
+
 export const fetchCountAction = createAction("[PublishedData] Fetch Count");
 export const fetchCountCompleteAction = createAction(
   "[PublishedData] Fetch Count Complete",
