@@ -81,9 +81,14 @@
 
       <mat-card-content>
         <table>
-          <tr *ngIf="publishedData.metadata.creators as value">
-            <th>Creator</th>
-            <td>{{ value }}</td>
+          <tr *ngIf="publishedData.metadata.creators as creators">
+            <th>Creators</th>
+
+            <td>
+              <ng-container *ngFor="let creator of creators; last as isLast">
+                {{ creator.name }}{{ isLast ? "" : ", " }}
+              </ng-container>
+            </td>
           </tr>
           <tr *ngIf="publishedData.metadata.contributors as value">
             <th>Authors</th>
@@ -95,7 +100,7 @@
           </tr>
           <tr *ngIf="publishedData.metadata.publisher as value">
             <th>Publisher</th>
-            <td>{{ value }}</td>
+            <td>{{ value.name }}</td>
           </tr>
         </table>
       </mat-card-content>

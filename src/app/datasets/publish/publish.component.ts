@@ -7,7 +7,7 @@ import { first, tap } from "rxjs/operators";
 import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { prefillBatchAction } from "state-management/actions/datasets.actions";
 import {
-  publishDatasetAction,
+  createDataPublicationAction,
   fetchPublishedDataCompleteAction,
   fetchPublishedDataConfigAction,
 } from "state-management/actions/published-data.actions";
@@ -41,7 +41,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
   private datasets$ = this.store.select(selectDatasetsInBatch);
   private publishedDataConfig$ = this.store.select(selectPublishedDataConfig);
   private countSubscription: Subscription;
-  private publishedDataSubscription: Subscription;
+  private publishedDataConfigSubscription: Subscription;
   private beforeUnloadSubscription: Subscription;
   readonly panelOpenState = signal(false);
 
@@ -112,7 +112,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
       )
       .subscribe();
 
-    this.publishedDataSubscription = this.publishedDataConfig$.subscribe(
+    this.publishedDataConfigSubscription = this.publishedDataConfig$.subscribe(
       (publishedDataConfig) => {
         if (!isEmpty(publishedDataConfig)) {
           this.schema = publishedDataConfig.metadataSchema;
@@ -159,7 +159,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
   ngOnDestroy() {
     this.actionSubjectSubscription.unsubscribe();
     this.countSubscription.unsubscribe();
-    this.publishedDataSubscription.unsubscribe();
+    this.publishedDataConfigSubscription.unsubscribe();
     this.beforeUnloadSubscription.unsubscribe();
   }
 
@@ -176,7 +176,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
 
     this._hasUnsavedChanges = false;
 
-    this.store.dispatch(publishDatasetAction({ data: publishedData }));
+    this.store.dispatch(createDataPublicationAction({ data: publishedData }));
   }
 
   hasUnsavedChanges() {

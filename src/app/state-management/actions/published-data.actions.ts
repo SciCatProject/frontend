@@ -48,16 +48,16 @@ export const fetchPublishedDataFailedAction = createAction(
   "[PublishedData] Fetch Published Data Failed",
 );
 
-export const publishDatasetAction = createAction(
-  "[PublishedData] Publish Dataset",
+export const createDataPublicationAction = createAction(
+  "[PublishedData] Create Data Publication",
   props<{ data: CreatePublishedDataDto }>(),
 );
-export const publishDatasetCompleteAction = createAction(
-  "[PublishedData] Publish Dataset Complete",
+export const createDataPublicationCompleteAction = createAction(
+  "[PublishedData] Create Data Publication Complete",
   props<{ publishedData: PublishedData }>(),
 );
-export const publishDatasetFailedAction = createAction(
-  "[PublishedData] Publish Dataset Failed",
+export const createDataPublicationFailedAction = createAction(
+  "[PublishedData] Create Data Publication Failed",
 );
 
 export const registerPublishedDataAction = createAction(

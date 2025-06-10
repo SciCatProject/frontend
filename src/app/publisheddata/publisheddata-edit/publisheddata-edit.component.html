@@ -26,74 +26,6 @@
           </mat-form-field>
 
           <mat-form-field>
-            <mat-chip-grid required #chipList>
-              <mat-chip-row
-                formArrayName="creators"
-                *ngFor="let item of creators.value; let i = index"
-                (removed)="removeCreator(i)"
-              >
-                {{ item }}
-                <mat-icon matChipRemove>cancel</mat-icon>
-              </mat-chip-row>
-              <input
-                matInput
-                placeholder="Creators"
-                [matChipInputFor]="chipList"
-                [matChipInputAddOnBlur]="true"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                (matChipInputTokenEnd)="addCreator($event)"
-              />
-            </mat-chip-grid>
-          </mat-form-field>
-
-          <mat-form-field>
-            <input
-              required
-              matInput
-              placeholder="Publisher"
-              autocomplete="off"
-              formControlName="publisher"
-              name="publisher"
-            />
-          </mat-form-field>
-
-          <mat-form-field>
-            <input
-              required
-              matInput
-              placeholder="Resource Type"
-              autocomplete="off"
-              formControlName="resourceType"
-              name="resourceType"
-            />
-          </mat-form-field>
-
-          <!-- <mat-form-field>
-            <mat-select
-              required
-              matInput
-              placeholder="Resource Type"
-              name="resourceType"
-              formControlName="resourceType"
-            >
-              <mat-option value="raw"> raw </mat-option>
-              <mat-option value="derived"> derived </mat-option>
-            </mat-select>
-          </mat-form-field> -->
-
-          <!-- <mat-form-field>
-            <textarea
-              required
-              matInput
-              placeholder="Description"
-              autocomplete="off"
-              formControlName="dataDescription"
-              name="Description"
-              rows="5"
-            ></textarea>
-          </mat-form-field> -->
-
-          <mat-form-field>
             <textarea
               id="abstractInput"
               required
@@ -106,38 +38,33 @@
             ></textarea>
           </mat-form-field>
 
-          <!-- <mat-form-field>
-            <input
-              matInput
-              placeholder="download link"
-              autocomplete="off"
-              formControlName="downloadLink"
-              name="downloadLink"
-            />
-          </mat-form-field> -->
+          <mat-expansion-panel
+            *ngIf="schema.properties"
+            (opened)="panelOpenState.set(true)"
+            (closed)="panelOpenState.set(false)"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title> Metadata </mat-panel-title>
+              <mat-panel-description>
+                Here you can edit the metadata.
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <jsonforms
+              [data]="metadataData"
+              [schema]="schema"
+              [renderers]="renderers"
+              (errors)="onErrors($event)"
+              (dataChange)="onMetadataChange($event)"
+            ></jsonforms>
+          </mat-expansion-panel>
 
-          <mat-form-field>
-            <mat-chip-grid #chipListRelatedPub>
-              <mat-chip-row
-                formArrayName="relatedPublications"
-                *ngFor="let item of relatedPublications.value; let i = index"
-                (removed)="removeRelatedPublication(i)"
-              >
-                {{ item }}
-                <mat-icon matChipRemove>cancel</mat-icon>
-              </mat-chip-row>
-              <input
-                matInput
-                placeholder="related publications"
-                [matChipInputFor]="chipListRelatedPub"
-                [matChipInputAddOnBlur]="true"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                (matChipInputTokenEnd)="addRelatedPublication($event)"
-              />
-            </mat-chip-grid>
-          </mat-form-field>
-
-          <button mat-raised-button color="primary" [disabled]="!form.valid">
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="
+              !form.valid || (panelOpenState() && !metadataDataIsValid())
+            "
+          >
             Update Published Data
           </button>
           <button (click)="onCancel()" mat-raised-button color="white">

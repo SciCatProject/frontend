@@ -23,6 +23,9 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { RouterModule } from "@angular/router";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { JsonFormsModule } from "@jsonforms/angular";
+import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 
 @NgModule({
   declarations: [
@@ -50,6 +53,9 @@ import { RouterModule } from "@angular/router";
     MatFormFieldModule,
     MatChipsModule,
     MatOptionModule,
+    MatExpansionModule,
+    JsonFormsModule,
+    JsonFormsAngularMaterialModule,
   ],
 })
 export class PublisheddataModule {}
