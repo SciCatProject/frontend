@@ -1,16 +1,19 @@
 import * as fromSelectors from "./jobs.selectors";
+import { OutputJobV3Dto } from "@scicatproject/scicat-sdk-ts-angular";
 import { JobsState } from "../state/jobs.store";
 import { createMock } from "shared/MockStubs";
 
-// TODO: job release back-ward compatibility issue
-const job = createMock<any>({
+const job = createMock<OutputJobV3Dto>({
+  id: "",
   emailJobInitiator: "test@email.com",
   type: "archive",
-  jobParams: {
-    datasetList: [],
-  },
-};
-const job = new Job(data);
+  creationTime: "",
+  executionTime: "",
+  jobParams: {},
+  jobStatusMessage: "",
+  datasetList: [],
+  jobResultObject: {},
+});
 
 const jobFilters = {
   mode: null,

@@ -21,12 +21,10 @@ import { selectProposalsWithCountAndTableSettings } from "state-management/selec
 import { fetchProposalsAction } from "state-management/actions/proposals.actions";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
-import {
-  actionMenu,
-  getTableSettingsConfig,
-} from "shared/modules/dynamic-material-table/utilizes/default-table-config";
 import { updateUserSettingsAction } from "state-management/actions/user.actions";
 import { Sort } from "@angular/material/sort";
+import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
+import { TableConfigService } from "shared/services/table-config.service";
 
 const tableDefaultSettingsConfig: ITableSetting = {
   visibleActionMenu: actionMenu,
@@ -134,6 +132,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     private store: Store,
     private router: Router,
     private route: ActivatedRoute,
+    private tableConfigService: TableConfigService,
   ) {}
 
   ngOnInit(): void {
@@ -149,12 +148,13 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
           const tableSort = this.getTableSort();
           const paginationConfig = this.getTablePaginationConfig(count);
 
-          const tableSettingsConfig = getTableSettingsConfig(
-            this.tableName,
-            tableDefaultSettingsConfig,
-            savedTableConfigColumns,
-            tableSort,
-          );
+          const tableSettingsConfig =
+            this.tableConfigService.getTableSettingsConfig(
+              this.tableName,
+              tableDefaultSettingsConfig,
+              savedTableConfigColumns,
+              tableSort,
+            );
 
           if (tableSettingsConfig?.settingList.length) {
             this.initTable(tableSettingsConfig, paginationConfig);

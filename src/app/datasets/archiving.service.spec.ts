@@ -10,7 +10,10 @@ import {
 import { JobsState } from "state-management/state/jobs.store";
 import { ArchivingService } from "./archiving.service";
 import { createMock, mockDataset } from "shared/MockStubs";
-import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  ReturnedUserDto,
+  CreateJobDtoV3,
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 describe("ArchivingService", () => {
   let service: ArchivingService;
@@ -70,9 +73,10 @@ describe("ArchivingService", () => {
         destinationPath,
       );
 
-      expect(job).toBeInstanceOf(Job);
-      expect(job["createdBy"]).toEqual("testName");
-      expect(job["jobParams"]["datasetList"]).toEqual(datasetList);
+      expect(job).toBeDefined();
+      expect(job["emailJobInitiator"]).toEqual("test@email.com");
+      expect(job["jobParams"]["username"]).toEqual("testName");
+      expect(job["datasetList"]).toEqual(datasetList);
       expect(job["type"]).toEqual("archive");
     });
   });
@@ -102,8 +106,8 @@ describe("ArchivingService", () => {
         files: [],
       }));
       const archive = true;
-      // TODO: job release back-ward compatibility issue
-      const job = createMock<any>({
+
+      const job = createMock<CreateJobDtoV3>({
         jobParams: { username: user.username },
         emailJobInitiator: user.email,
         datasetList,

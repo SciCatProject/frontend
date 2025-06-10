@@ -54,7 +54,7 @@ const settings: Settings = {
   darkTheme: false,
 };
 
-const initialUserState: UserState = {
+export const initialUserState: UserState = {
   currentUser: user,
   profile: userIdentity.profile,
   accountType: "testType",
@@ -86,6 +86,7 @@ const initialUserState: UserState = {
 
   conditions: [],
   tablesSettings: {},
+  hasFetchedSettings: false,
 };
 
 describe("User Selectors", () => {

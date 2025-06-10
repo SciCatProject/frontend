@@ -1,12 +1,12 @@
 import { TableScrollStrategy } from "../cores/fixed-size-table-virtual-scroll-strategy";
-import { AbstractField } from "./table-field.model";
+import { TableField } from "./table-field.model";
 
 export type Direction = "rtl" | "ltr";
 export type DisplayMode = "visible" | "hidden" | "none";
 export interface ITableSetting {
   pageSize?: number;
   direction?: Direction;
-  columnSetting?: AbstractField[] | null;
+  columnSetting?: TableField<any>[] | null;
   visibleActionMenu?: VisibleActionMenu | null;
   visibleTableMenu?: boolean;
   alternativeRowStyle?: any;
