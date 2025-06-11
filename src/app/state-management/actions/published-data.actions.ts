@@ -72,6 +72,18 @@ export const registerPublishedDataFailedAction = createAction(
   "[PublishedData] Register Published Data Failed",
 );
 
+export const publishPublishedDataAction = createAction(
+  "[PublishedData] Publish Published Data",
+  props<{ doi: string }>(),
+);
+export const publishPublishedDataCompleteAction = createAction(
+  "[PublishedData] Publish Published Data Complete",
+  props<{ publishedData: PublishedData }>(),
+);
+export const publishPublishedDataFailedAction = createAction(
+  "[PublishedData] Publish Published Data Failed",
+);
+
 export const resyncPublishedDataAction = createAction(
   "[PublishedData] Resync Published Data",
   props<{ doi: string; data: UpdatePublishedDataDto }>(),

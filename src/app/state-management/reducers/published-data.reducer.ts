@@ -41,6 +41,14 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.publishPublishedDataCompleteAction,
+    (state, { publishedData }): PublishedDataState => ({
+      ...state,
+      currentPublishedData: publishedData,
+    }),
+  ),
+
+  on(
     fromActions.changePageAction,
     (state, { page, limit }): PublishedDataState => {
       const skip = page * limit;

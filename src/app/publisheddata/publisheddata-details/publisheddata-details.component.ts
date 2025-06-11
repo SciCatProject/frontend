@@ -4,6 +4,7 @@ import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   fetchPublishedDataAction,
+  publishPublishedDataAction,
   registerPublishedDataAction,
 } from "state-management/actions/published-data.actions";
 import { Subscription } from "rxjs";
@@ -19,7 +20,7 @@ import { AppConfigService } from "app-config.service";
 })
 export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   currentData$ = this.store.select(selectCurrentPublishedData);
-  publishedData: PublishedData;
+  publishedData: PublishedData & { metadata?: any };
   subscriptions: Subscription[] = [];
   appConfig = this.appConfigService.getConfig();
   show = false;
@@ -61,6 +62,10 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
 
   onRegisterClick(doi: string) {
     this.store.dispatch(registerPublishedDataAction({ doi }));
+  }
+
+  onPublishClick(doi: string) {
+    this.store.dispatch(publishPublishedDataAction({ doi }));
   }
 
   onEditClick() {

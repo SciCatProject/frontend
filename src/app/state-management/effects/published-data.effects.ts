@@ -136,6 +136,20 @@ export class PublishedDataEffects {
     );
   });
 
+  publishPublishedData$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.publishPublishedDataAction),
+      switchMap(({ doi }) =>
+        this.publishedDataService.publishedDataControllerPublishV3(doi).pipe(
+          mergeMap((publishedData) => [
+            fromActions.publishPublishedDataCompleteAction({ publishedData }),
+          ]),
+          catchError(() => of(fromActions.publishPublishedDataFailedAction())),
+        ),
+      ),
+    );
+  });
+
   createDataPublicationCompleteMessage$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.createDataPublicationCompleteAction),
@@ -220,6 +234,7 @@ export class PublishedDataEffects {
         fromActions.sortByColumnAction,
         fromActions.fetchPublishedDataAction,
         fromActions.createDataPublicationAction,
+        fromActions.publishPublishedDataAction,
         fromActions.registerPublishedDataAction,
         fromActions.resyncPublishedDataCompleteAction,
       ),
@@ -238,6 +253,8 @@ export class PublishedDataEffects {
         fromActions.fetchPublishedDataFailedAction,
         fromActions.createDataPublicationCompleteAction,
         fromActions.createDataPublicationFailedAction,
+        fromActions.publishPublishedDataCompleteAction,
+        fromActions.publishPublishedDataFailedAction,
         fromActions.registerPublishedDataCompleteAction,
         fromActions.registerPublishedDataFailedAction,
         fromActions.resyncPublishedDataCompleteAction,
