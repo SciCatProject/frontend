@@ -11,7 +11,10 @@ import {
   IngestorHelper,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
 import { Store } from "@ngrx/store";
-import { selectIngestionObject } from "state-management/selectors/ingestor.selector";
+import {
+  selectIngestionObject,
+  selectIsIngestDatasetLoading,
+} from "state-management/selectors/ingestor.selector";
 import { MatDialog } from "@angular/material/dialog";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { IngestorConfirmationDialogComponent } from "ingestor/ingestor-dialogs/confirmation-dialog/ingestor.confirmation-dialog.component";
@@ -34,6 +37,7 @@ export class IngestorConfirmTransferDialogPageComponent
     IngestorHelper.createEmptyRequestInformation();
 
   ingestionObject$ = this.store.select(selectIngestionObject);
+  ingestDatasetLoading$ = this.store.select(selectIsIngestDatasetLoading);
 
   @Output() nextStep = new EventEmitter<void>();
   @Output() backStep = new EventEmitter<void>();
@@ -41,6 +45,7 @@ export class IngestorConfirmTransferDialogPageComponent
   provideMergeMetaData = "";
 
   copiedToClipboard = false;
+  ingestionDatasetIsLoading = false;
 
   constructor(private store: Store) {}
 
@@ -50,6 +55,13 @@ export class IngestorConfirmTransferDialogPageComponent
         if (ingestionObject) {
           this.createNewTransferData = ingestionObject;
         }
+      }),
+    );
+
+    this.subscriptions.push(
+      this.ingestDatasetLoading$.subscribe((loading) => {
+        console.log(loading);
+        this.ingestionDatasetIsLoading = loading;
       }),
     );
 

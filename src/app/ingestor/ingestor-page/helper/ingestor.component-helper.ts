@@ -44,6 +44,7 @@ export interface IngestionRequestInformation {
     extractorMetadataProgress: number;
     extractorMetaDataStatus: string;
     ingestionRequestErrorMessage: string;
+    ingestionDatasetLoading: boolean;
   };
 
   ingestionRequest: PostDatasetResponse | null;
@@ -122,6 +123,7 @@ export class IngestorHelper {
         extractorMetadataProgress: 0,
         extractorMetaDataStatus: "",
         ingestionRequestErrorMessage: "",
+        ingestionDatasetLoading: false,
       },
       ingestionRequest: null,
       autoArchive: true,

@@ -1,7 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { of } from "rxjs";
-import { catchError, map, switchMap, takeUntil } from "rxjs/operators"; // Import finalize
+import { from, of } from "rxjs";
+import {
+  catchError,
+  map,
+  mergeMap,
+  switchMap,
+  takeUntil,
+} from "rxjs/operators"; // Import finalize
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Ingestor } from "shared/sdk/apis/ingestor.service";
 import {
@@ -194,28 +200,48 @@ export class IngestorEffects {
     );
   });
 
-  ingestDataset$ = createEffect(() => {
-    return this.actions$.pipe(
+  setLoadingBeforeIngestion$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.ingestDataset),
+      map(() =>
+        fromActions.setIngestDatasetLoading({ ingestionDatasetLoading: true }),
+      ),
+    ),
+  );
+
+  ingestDataset$ = createEffect(() =>
+    this.actions$.pipe(
       ofType(fromActions.ingestDataset),
       switchMap(({ ingestionDataset }) =>
         this.ingestor.startIngestion(ingestionDataset).pipe(
-          switchMap((response) => [
-            fromActions.ingestDatasetSuccess({ response }),
-            fromActions.updateTransferList({}),
-          ]),
-          catchError((err) => {
-            if (err.error?.error?.includes("login session has expired")) {
-              return of(
-                fromActions.setNoRightsError({ noRightsError: true, err: err }),
-              );
-            }
-
-            return of(fromActions.getExtractionMethodsFailure({ err }));
-          }),
+          mergeMap((response) =>
+            from([
+              fromActions.ingestDatasetSuccess({ response }),
+              fromActions.updateTransferList({}),
+              fromActions.setIngestDatasetLoading({
+                ingestionDatasetLoading: false,
+              }),
+            ]),
+          ),
+          catchError((err) =>
+            from([
+              ...(err.error?.error?.includes("login session has expired")
+                ? [
+                    fromActions.setNoRightsError({
+                      noRightsError: true,
+                      err,
+                    }),
+                  ]
+                : [fromActions.getExtractionMethodsFailure({ err })]),
+              fromActions.setIngestDatasetLoading({
+                ingestionDatasetLoading: false,
+              }),
+            ]),
+          ),
         ),
       ),
-    );
-  });
+    ),
+  );
 
   ingestDatasetSuccess$ = createEffect(() => {
     return this.actions$.pipe(
@@ -258,17 +284,20 @@ export class IngestorEffects {
       ofType(fromActions.cancelTransfer),
       switchMap(({ requestBody }) =>
         this.ingestor.cancelTransfer(requestBody).pipe(
-          switchMap(() => [
-            showMessageAction({
-              message: {
-                type: MessageType.Success,
-                content:
-                  "Successfully cancelled transfer: " + requestBody.transferId,
-                duration: 5000,
-              },
-            }),
-            fromActions.updateTransferList({}),
-          ]),
+          mergeMap(() =>
+            from([
+              showMessageAction({
+                message: {
+                  type: MessageType.Success,
+                  content:
+                    "Successfully cancelled transfer: " +
+                    requestBody.transferId,
+                  duration: 5000,
+                },
+              }),
+              fromActions.updateTransferList({}),
+            ]),
+          ),
           catchError((err) => {
             const message = {
               type: MessageType.Error,

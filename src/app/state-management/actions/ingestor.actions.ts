@@ -116,6 +116,11 @@ export const ingestDataset = createAction(
   props<{ ingestionDataset: PostDatasetRequest }>(),
 );
 
+export const setIngestDatasetLoading = createAction(
+  "[Ingestor] Set Ingest Dataset Loading",
+  props<{ ingestionDatasetLoading: boolean }>(),
+);
+
 export const ingestDatasetSuccess = createAction(
   "[Ingestor] Ingest Dataset Success",
   props<{ response: PostDatasetResponse }>(),

@@ -54,12 +54,19 @@ export class IngestorMetadataSSEService {
 
       const progressMessage = data.std_out.toLowerCase();
       let progress = 0;
-      // Check if data contains the string progress
+      // Check if the string "progress" is present in the message
       if (progressMessage.includes("progress")) {
-        // extract numbers, point and komma from string using regex
-        const extractedNumbers =
-          progressMessage.match(/[\d.,]+/g)?.join("") || "0";
-        progress = parseFloat(extractedNumbers);
+        // Find all occurrences of "progress" followed by a number, use the last one
+        const progressRegex = /progress[^\d]*(?<number>[\d.,]+)/gi;
+        let match: RegExpExecArray | null;
+        let lastNumber = "0";
+        while ((match = progressRegex.exec(progressMessage)) !== null) {
+          if (match.groups?.number) {
+            lastNumber = match.groups.number;
+          }
+        }
+
+        progress = parseFloat(lastNumber.replace(",", "."));
         progress = isNaN(progress) ? 0 : progress;
       }
 

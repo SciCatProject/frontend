@@ -118,7 +118,9 @@ const reducer = createReducer(
     fromActions.updateIngestionObject,
     (state, { ingestionObject }): IngestorState => ({
       ...state,
-      ingestionObject,
+      ingestionObject: {
+        ...ingestionObject,
+      },
     }),
   ),
   on(
@@ -158,7 +160,8 @@ const reducer = createReducer(
         ...state.ingestionObject,
         apiInformation: {
           ...state.ingestionObject.apiInformation,
-          ingestionRequestErrorMessage: (err as any).error ?? (err as any).error?.error ?? err.message,
+          ingestionRequestErrorMessage:
+            (err as any).error ?? (err as any).error?.error ?? err.message,
         },
       },
       error: err,
@@ -180,7 +183,7 @@ const reducer = createReducer(
   ),
   on(
     fromActions.resetIngestorComponent,
-    (): IngestorState => initialIngestorState
+    (): IngestorState => initialIngestorState,
   ),
   on(
     fromActions.setNoRightsError,
@@ -191,6 +194,19 @@ const reducer = createReducer(
         ...state.ingestorAuth,
         userInfoResponse: {
           logged_in: false,
+        },
+      },
+    }),
+  ),
+  on(
+    fromActions.setIngestDatasetLoading,
+    (state, { ingestionDatasetLoading }): IngestorState => ({
+      ...state,
+      ingestionObject: {
+        ...state.ingestionObject,
+        apiInformation: {
+          ...state.ingestionObject.apiInformation,
+          ingestionDatasetLoading,
         },
       },
     }),

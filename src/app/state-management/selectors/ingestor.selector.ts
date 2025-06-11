@@ -73,3 +73,8 @@ export const selectNoRightsError = createSelector(
   selectIngestorState,
   (state) => state.noRightsError,
 );
+
+export const selectIsIngestDatasetLoading = createSelector(
+  selectIngestorState,
+  (state) => state.ingestionObject.apiInformation.ingestionDatasetLoading,
+);

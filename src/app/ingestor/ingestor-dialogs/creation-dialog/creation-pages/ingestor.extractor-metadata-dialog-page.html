@@ -19,9 +19,10 @@
   <div *ngIf="!extractorMetaDataReady || extractorMetaDataError"
     class="spinner-container">
     <ng-container *ngIf="!extractorMetaDataError; else errorIcon">
+      <p>Wait for data extraction to finish...</p>
       <mat-progress-spinner diameter="20"
         mode="indeterminate"></mat-progress-spinner>
-      <div *ngIf="process > 0" class="progress-percentage">
+      <div *ngIf="process > -1" class="progress-percentage">
         <span>{{process}}%</span>
       </div>
     </ng-container>

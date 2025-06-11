@@ -161,6 +161,12 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
             this.createNewTransferData.apiInformation.extractorMetadataProgress =
               data.progress;
           }
+
+          this.store.dispatch(
+            fromActions.updateIngestionObject({
+              ingestionObject: this.createNewTransferData,
+            }),
+          );
         },
         error: (error) => {
           console.error("Error receiving SSE data:", error);
@@ -168,6 +174,12 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
             true;
           this.createNewTransferData.apiInformation.extractMetaDataRequested =
             false;
+
+          this.store.dispatch(
+            fromActions.updateIngestionObject({
+              ingestionObject: this.createNewTransferData,
+            }),
+          );
         },
       }),
     );

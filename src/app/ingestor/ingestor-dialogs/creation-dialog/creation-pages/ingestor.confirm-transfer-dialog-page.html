@@ -16,87 +16,101 @@
 
 <mat-dialog-content class="mat-typography">
 
-  <p
-    *ngIf="createNewTransferData.apiInformation.ingestionRequestErrorMessage !== ''">
-    <mat-card class="ingestor-card">
-      <mat-card-header class="ingestor-mixed-header">
-        <mat-card-title>Transfer request failed</mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="ingestor-vertical-layout">
-        <div class="confirm-message-ingestor">
-          <mat-icon class="confirm-message-ingestor-icon">error</mat-icon>
-          <p>The transfer request has failed.</p>
-          <p class="confirm-message-error">
-            {{createNewTransferData.apiInformation.ingestionRequestErrorMessage}}
-          </p>
-        </div>
-
-
-      </mat-card-content>
-    </mat-card>
-  </p>
-
-  <div
-    *ngIf="createNewTransferData.ingestionRequest !== null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === ''">
-    <mat-card class="ingestor-card">
-      <mat-card-header class="ingestor-mixed-header">
-        <mat-card-title>Transfer requested</mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="ingestor-vertical-layout">
-        <div class="confirm-message-ingestor">
-          <mat-icon
-            class="confirm-message-ingestor-icon">check_circle</mat-icon>
-          <p>The transfer request was successfully sent to the server.
-            You will receive an email as soon as the data transfer is complete.
-          </p>
-          <p>Transfer ID: {{createNewTransferData.ingestionRequest.transferId}}
-          </p>
-          <p>Transfer status: {{createNewTransferData.ingestionRequest.status}}
-          </p>
-        </div>
-      </mat-card-content>
-    </mat-card>
+  <div *ngIf="ingestionDatasetIsLoading" class="spinner-container">
+    <mat-progress-spinner diameter="20"
+      mode="indeterminate"></mat-progress-spinner>
+    <div class="progress-percentage">
+      <span>Wait for the response from the server...</span>
+    </div>
   </div>
 
-  <div
-    *ngIf="createNewTransferData.editorMode === 'INGESTION' && createNewTransferData.ingestionRequest === null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === ''">
-    <mat-card class="ingestor-card">
-      <mat-card-header class="ingestor-mixed-header">
-        <mat-card-title>Transfer Options</mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="ingestor-vertical-layout">
-        <mat-checkbox [(ngModel)]="createNewTransferData.autoArchive"
-          (change)="onAutoArchiveChange($event)" aria-label="Auto Archive">
-          Auto Archive
-        </mat-checkbox>
-        <p class="checkbox-description">
-          Automatically trigger archiving jobs after the data transfer has
-          finished.
-        </p>
-      </mat-card-content>
-    </mat-card>
-  </div>
+  <div *ngIf="!ingestionDatasetIsLoading">
+    <p
+      *ngIf="createNewTransferData.apiInformation.ingestionRequestErrorMessage !== ''">
+      <mat-card class="ingestor-card">
+        <mat-card-header class="ingestor-mixed-header">
+          <mat-card-title>Transfer request failed</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="ingestor-vertical-layout">
+          <div class="confirm-message-ingestor">
+            <mat-icon class="confirm-message-ingestor-icon">error</mat-icon>
+            <p>The transfer request has failed.</p>
+            <p class="confirm-message-error">
+              {{createNewTransferData.apiInformation.ingestionRequestErrorMessage}}
+            </p>
+          </div>
 
-  <div
-    *ngIf="createNewTransferData.ingestionRequest === null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === ''">
-    <mat-card class="ingestor-card">
-      <mat-card-header class="ingestor-mixed-header">
-        <mat-card-title>Confirm Metadata</mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="ingestor-vertical-layout">
-        <div class="code-editor">
-          <pre class="code">
+
+        </mat-card-content>
+      </mat-card>
+    </p>
+
+    <div
+      *ngIf="createNewTransferData.ingestionRequest !== null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === ''">
+      <mat-card class="ingestor-card">
+        <mat-card-header class="ingestor-mixed-header">
+          <mat-card-title>Transfer requested</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="ingestor-vertical-layout">
+          <div class="confirm-message-ingestor">
+            <mat-icon
+              class="confirm-message-ingestor-icon">check_circle</mat-icon>
+            <p>The transfer request was successfully sent to the server.
+              You will receive an email as soon as the data transfer is
+              complete.
+            </p>
+            <p>Transfer ID:
+              {{createNewTransferData.ingestionRequest.transferId}}
+            </p>
+            <p>Transfer status:
+              {{createNewTransferData.ingestionRequest.status}}
+            </p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div
+      *ngIf="createNewTransferData.editorMode === 'INGESTION' && createNewTransferData.ingestionRequest === null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === ''">
+      <mat-card class="ingestor-card">
+        <mat-card-header class="ingestor-mixed-header">
+          <mat-card-title>Transfer Options</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="ingestor-vertical-layout">
+          <mat-checkbox [(ngModel)]="createNewTransferData.autoArchive"
+            (change)="onAutoArchiveChange($event)" aria-label="Auto Archive">
+            Auto Archive
+          </mat-checkbox>
+          <p class="checkbox-description">
+            Automatically trigger archiving jobs after the data transfer has
+            finished.
+          </p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div
+      *ngIf="createNewTransferData.ingestionRequest === null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === ''">
+      <mat-card class="ingestor-card">
+        <mat-card-header class="ingestor-mixed-header">
+          <mat-card-title>Confirm Metadata</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="ingestor-vertical-layout">
+          <div class="code-editor">
+            <pre class="code">
       <div *ngFor="let line of provideMergeMetaData.split('\n')">
         <code>{{ line }}</code>
       </div>
       </pre>
-        </div>
-      </mat-card-content>
-    </mat-card>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
 
+
 </mat-dialog-content>
-<mat-dialog-actions align="end">
+<mat-dialog-actions align="end" *ngIf="!ingestionDatasetIsLoading">
   <button *ngIf="createNewTransferData.editorMode === 'EDITOR' ||
   createNewTransferData.editorMode === 'INGESTION' &&
   (createNewTransferData.ingestionRequest === null ||
