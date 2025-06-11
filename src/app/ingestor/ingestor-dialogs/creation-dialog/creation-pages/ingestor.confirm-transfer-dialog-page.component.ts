@@ -60,7 +60,6 @@ export class IngestorConfirmTransferDialogPageComponent
 
     this.subscriptions.push(
       this.ingestDatasetLoading$.subscribe((loading) => {
-        console.log(loading);
         this.ingestionDatasetIsLoading = loading;
       }),
     );
