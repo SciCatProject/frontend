@@ -29,6 +29,7 @@ import {
 } from "state-management/actions/datasets.actions";
 import { provideMockStore } from "@ngrx/store/testing";
 import { selectDatasets } from "state-management/selectors/datasets.selectors";
+import { selectInstruments } from "state-management/selectors/instruments.selectors";
 import { MatTableModule } from "@angular/material/table";
 import {
   MatCheckboxChange,
@@ -73,7 +74,10 @@ describe("DatasetTableComponent", () => {
       ],
       providers: [
         provideMockStore({
-          selectors: [{ selector: selectDatasets, value: [] }],
+          selectors: [
+            { selector: selectDatasets, value: [] },
+            { selector: selectInstruments, value: [] },
+          ],
         }),
         JsonHeadPipe,
         DatePipe,
@@ -386,6 +390,286 @@ describe("DatasetTableComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         sortByColumnAction({ column, direction: event.direction }),
       );
+    });
+  });
+
+  describe("#convertSavedColumns() with instrumentName", () => {
+    beforeEach(() => {
+      component.instruments = [
+        {
+          pid: "instrument1",
+          uniqueName: "unique1",
+          name: "Test Instrument 1",
+        },
+        {
+          pid: "instrument2",
+          uniqueName: "unique2",
+          name: "Test Instrument 2",
+        },
+        { pid: "instrument3", uniqueName: "unique3", name: "" },
+      ] as any[];
+
+      component.instrumentMap = new Map(
+        component.instruments.map((instrument) => [instrument.pid, instrument]),
+      );
+    });
+
+    it("should render instrument name when instrument is found", () => {
+      const columns = [
+        {
+          name: "instrumentName",
+          order: 0,
+          enabled: true,
+          width: 200,
+          type: "standard" as const,
+        },
+      ];
+
+      const convertedColumns = component.convertSavedColumns(columns);
+      const instrumentColumn = convertedColumns[0];
+
+      const mockRow = { instrumentId: "instrument1" };
+      const result = instrumentColumn.customRender(instrumentColumn, mockRow);
+
+      expect(result).toBe("Test Instrument 1");
+    });
+
+    it("should render instrumentId when instrument is not found", () => {
+      const columns = [
+        {
+          name: "instrumentName",
+          order: 0,
+          enabled: true,
+          width: 200,
+          type: "standard" as const,
+        },
+      ];
+
+      const convertedColumns = component.convertSavedColumns(columns);
+      const instrumentColumn = convertedColumns[0];
+
+      const mockRow = { instrumentId: "nonexistent" };
+      const result = instrumentColumn.customRender(instrumentColumn, mockRow);
+
+      expect(result).toBe("nonexistent");
+    });
+
+    it("should render '-' when instrumentId is not present", () => {
+      const columns = [
+        {
+          name: "instrumentName",
+          order: 0,
+          enabled: true,
+          width: 200,
+          type: "standard" as const,
+        },
+      ];
+
+      const convertedColumns = component.convertSavedColumns(columns);
+      const instrumentColumn = convertedColumns[0];
+
+      const mockRow = {};
+      const result = instrumentColumn.customRender(instrumentColumn, mockRow);
+
+      expect(result).toBe("-");
+    });
+
+    it("should render instrumentId when instrument has empty name", () => {
+      const columns = [
+        {
+          name: "instrumentName",
+          order: 0,
+          enabled: true,
+          width: 200,
+          type: "standard" as const,
+        },
+      ];
+
+      const convertedColumns = component.convertSavedColumns(columns);
+      const instrumentColumn = convertedColumns[0];
+
+      const mockRow = { instrumentId: "instrument3" };
+      const result = instrumentColumn.customRender(instrumentColumn, mockRow);
+
+      expect(result).toBe("instrument3");
+    });
+
+    it("should export instrument name when instrument is found", () => {
+      const columns = [
+        {
+          name: "instrumentName",
+          order: 0,
+          enabled: true,
+          width: 200,
+          type: "standard" as const,
+        },
+      ];
+
+      const convertedColumns = component.convertSavedColumns(columns);
+      const instrumentColumn = convertedColumns[0];
+
+      const mockRow = { instrumentId: "instrument2" };
+      const result = instrumentColumn.toExport(mockRow, instrumentColumn);
+
+      expect(result).toBe("Test Instrument 2");
+    });
+
+    it("should export instrumentId when instrument is not found", () => {
+      const columns = [
+        {
+          name: "instrumentName",
+          order: 0,
+          enabled: true,
+          width: 200,
+          type: "standard" as const,
+        },
+      ];
+
+      const convertedColumns = component.convertSavedColumns(columns);
+      const instrumentColumn = convertedColumns[0];
+
+      const mockRow = { instrumentId: "unknown-instrument" };
+      const result = instrumentColumn.toExport(mockRow, instrumentColumn);
+
+      expect(result).toBe("unknown-instrument");
+    });
+
+    it("should not affect other column types", () => {
+      const columns = [
+        {
+          name: "datasetName",
+          order: 0,
+          enabled: true,
+          width: 200,
+          type: "standard" as const,
+        },
+        {
+          name: "instrumentName",
+          order: 1,
+          enabled: true,
+          width: 200,
+          type: "standard" as const,
+        },
+      ];
+
+      const convertedColumns = component.convertSavedColumns(columns);
+
+      expect(convertedColumns.length).toBe(2);
+      expect(convertedColumns[0].name).toBe("datasetName");
+      expect(convertedColumns[0].customRender).toBeUndefined();
+      expect(convertedColumns[1].name).toBe("instrumentName");
+      expect(convertedColumns[1].customRender).toBeDefined();
+    });
+  });
+
+  describe("instruments subscription with Map optimization", () => {
+    it("should update both instruments array and instrumentMap when instruments observable changes", () => {
+      const mockInstruments = [
+        { pid: "inst1", uniqueName: "unique1", name: "Instrument 1" },
+        { pid: "inst2", uniqueName: "unique2", name: "Instrument 2" },
+      ];
+
+      component.instruments = mockInstruments;
+      component.instrumentMap = new Map(
+        mockInstruments.map((instrument) => [instrument.pid, instrument]),
+      );
+
+      expect(component.instruments).toEqual(mockInstruments);
+      expect(component.instrumentMap.size).toBe(2);
+      expect(component.instrumentMap.get("inst1")).toEqual(mockInstruments[0]);
+      expect(component.instrumentMap.get("inst2")).toEqual(mockInstruments[1]);
+    });
+
+    it("should handle empty instruments array and clear instrumentMap", () => {
+      component.instruments = [];
+      component.instrumentMap = new Map();
+
+      expect(component.instruments).toEqual([]);
+      expect(component.instrumentMap.size).toBe(0);
+    });
+
+    it("should provide O(1) lookup performance for instrument retrieval", () => {
+      const mockInstruments = [
+        { pid: "fast-lookup", uniqueName: "unique1", name: "Fast Instrument" },
+      ];
+
+      component.instrumentMap = new Map(
+        mockInstruments.map((instrument) => [instrument.pid, instrument]),
+      );
+
+      const foundInstrument = component.instrumentMap.get("fast-lookup");
+      expect(foundInstrument).toEqual(mockInstruments[0]);
+
+      const notFoundInstrument = component.instrumentMap.get("nonexistent");
+      expect(notFoundInstrument).toBeUndefined();
+    });
+  });
+
+  describe("#getInstrumentName() private method", () => {
+    beforeEach(() => {
+      const mockInstruments = [
+        { pid: "inst1", uniqueName: "unique1", name: "Test Instrument 1" },
+        { pid: "inst2", uniqueName: "unique2", name: "Test Instrument 2" },
+        { pid: "inst3", uniqueName: "unique3", name: "" },
+      ];
+
+      component.instrumentMap = new Map(
+        mockInstruments.map((instrument) => [instrument.pid, instrument]),
+      );
+    });
+
+    it("should return instrument name when instrument is found", () => {
+      const mockRow = { instrumentId: "inst1" } as any;
+      const result = component["getInstrumentName"](mockRow);
+      expect(result).toBe("Test Instrument 1");
+    });
+
+    it("should return instrumentId when instrument is not found", () => {
+      const mockRow = { instrumentId: "nonexistent" } as any;
+      const result = component["getInstrumentName"](mockRow);
+      expect(result).toBe("nonexistent");
+    });
+
+    it("should return '-' when instrumentId is not present", () => {
+      const mockRow = {} as any;
+      const result = component["getInstrumentName"](mockRow);
+      expect(result).toBe("-");
+    });
+
+    it("should return instrumentId when instrument has empty name", () => {
+      const mockRow = { instrumentId: "inst3" } as any;
+      const result = component["getInstrumentName"](mockRow);
+      expect(result).toBe("inst3");
+    });
+
+    it("should handle undefined instrumentId gracefully", () => {
+      const mockRow = { instrumentId: undefined } as any;
+      const result = component["getInstrumentName"](mockRow);
+      expect(result).toBe("-");
+    });
+
+    it("should handle null instrumentId gracefully", () => {
+      const mockRow = { instrumentId: null } as any;
+      const result = component["getInstrumentName"](mockRow);
+      expect(result).toBe("-");
+    });
+
+    it("should handle empty string instrumentId gracefully", () => {
+      const mockRow = { instrumentId: "" } as any;
+      const result = component["getInstrumentName"](mockRow);
+      expect(result).toBe("-");
+    });
+
+    it("should return instrument name even when instrumentId is empty but instrument exists", () => {
+      // Add an instrument with empty string pid to test edge case
+      component.instrumentMap.set("", {
+        pid: "",
+        name: "Empty PID Instrument",
+      } as any);
+
+      const mockRow = { instrumentId: "" } as any;
+      const result = component["getInstrumentName"](mockRow);
+      expect(result).toBe("Empty PID Instrument");
     });
   });
 });
