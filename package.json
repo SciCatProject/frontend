@@ -36,7 +36,7 @@
     "@ngrx/router-store": "^19.1.0",
     "@ngrx/store": "^19.1.0",
     "@ngx-translate/core": "^16.0.4",
-    "@ngxmc/datetime-picker": "^19.3.1",
+    "@ngxmc/datetime-picker": "^20.0.0",
     "@scicatproject/scicat-sdk-ts-angular": "^4.17.1",
     "autolinker": "^4.0.0",
     "deep-equal": "^2.0.5",
