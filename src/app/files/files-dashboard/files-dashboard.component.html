@@ -1,8 +1,20 @@
-<shared-table
+<dynamic-mat-table
+  [tableName]="tableName"
+  [columns]="columns"
+  [pending]="pending"
+  [setting]="setting"
+  [pagingMode]="paginationMode"
   [dataSource]="dataSource"
-  [isFilesDashboard]="true"
-  [columnsdef]="columns"
-  [pageSize]="5"
-  (rowClick)="onRowClick($event)"
+  [pagination]="pagination"
+  [rowSelectionMode]="rowSelectionMode"
+  [globalTextSearch]="globalTextSearch"
+  globalTextSearchPlaceholder="Global text search"
+  (paginationChange)="onPaginationChange($event)"
+  (globalTextSearchChange)="onGlobalTextSearchChange($event)"
+  (onRowEvent)="onRowClick($event)"
+  (settingChange)="onSettingChange($event)"
+  (onTableEvent)="onTableEvent($event)"
+  style="height: 70vh"
+  class="mat-elevation-z2"
 >
-</shared-table>
+</dynamic-mat-table>
