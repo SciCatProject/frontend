@@ -71,7 +71,7 @@ export class IngestorEffects {
               );
             }
 
-            return of(fromActions.getExtractionMethodsFailure({ err }));
+            return of(fromActions.connectIngestorFailure({ err }));
           }),
           takeUntil(
             this.actions$.pipe(ofType(fromActions.resetIngestorComponent)),
@@ -193,7 +193,7 @@ export class IngestorEffects {
               );
             }
 
-            return of(fromActions.getExtractionMethodsFailure({ err }));
+            return of(fromActions.getBrowseFilePathFailure({ err }));
           }),
         ),
       ),
@@ -232,7 +232,7 @@ export class IngestorEffects {
                       err,
                     }),
                   ]
-                : [fromActions.getExtractionMethodsFailure({ err })]),
+                : [fromActions.ingestDatasetFailure({ err })]),
               fromActions.setIngestDatasetLoading({
                 ingestionDatasetLoading: false,
               }),
