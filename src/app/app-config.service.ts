@@ -192,6 +192,8 @@ export interface AppConfigInterface {
   aboutSettings?: AboutSettings;
   batchActionsEnabled?: boolean;
   batchActions?: ActionConfig[];
+  imprintUrl?: string;
+  privacyUrl?: string;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
