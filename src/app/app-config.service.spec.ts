@@ -55,6 +55,8 @@ const appConfig: AppConfigInterface = {
   multipleDownloadAction: "http://localhost:3012/zip",
   multipleDownloadEnabled: true,
   multipleDownloadUseAuthToken: false,
+  imprintUrl = "https://example.com/imprint",
+  privacyUrl = "https://example.com/privacy",
   oAuth2Endpoints: [],
   policiesEnabled: true,
   retrieveDestinations: [],

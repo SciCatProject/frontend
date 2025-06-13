@@ -1,0 +1,26 @@
+@use "@angular/material" as mat;
+
+@mixin color($theme) {
+  $color-config: map-get($theme, "color");
+  $primary: map-get($color-config, "primary");
+
+  .footer {
+    // Invert colors: background gets contrast color, text gets main color
+    background-color: mat.get-color-from-palette($primary, "default-contrast");
+    color: mat.get-color-from-palette($primary);
+
+    a,
+    .toplink,
+    .footer-copy,
+    mat-icon {
+      color: mat.get-color-from-palette($primary);
+    }
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}

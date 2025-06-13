@@ -12,12 +12,14 @@ import { AppMainLayoutComponent } from "./app-main-layout/app-main-layout.compon
 import { BatchCardModule } from "datasets/batch-card/batch-card.module";
 import { BreadcrumbModule } from "shared/modules/breadcrumb/breadcrumb.module";
 import { UsersModule } from "../users/users.module";
+import { AppFooterComponent } from './app-footer/app-footer.component';
 
 @NgModule({
   declarations: [
     AppLayoutComponent,
     AppHeaderComponent,
     AppMainLayoutComponent,
+    AppFooterComponent,
   ],
   imports: [
     CommonModule,
