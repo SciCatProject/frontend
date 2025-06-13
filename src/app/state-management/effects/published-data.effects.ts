@@ -189,7 +189,9 @@ export class PublishedDataEffects {
             }),
             fromActions.fetchPublishedDataAction({ id: doi }),
           ]),
-          catchError(() => of(fromActions.registerPublishedDataFailedAction())),
+          catchError((error) =>
+            of(fromActions.registerPublishedDataFailedAction(error)),
+          ),
         ),
       ),
     );
@@ -215,10 +217,11 @@ export class PublishedDataEffects {
   registerPublishedDataFailedMessage$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.registerPublishedDataFailedAction),
-      switchMap(() => {
+      switchMap((errors) => {
+        debugger;
         const message = {
           type: MessageType.Error,
-          content: "Registration Failed",
+          content: `Registration Failed. ${errors.error.map((e) => e.replaceAll("instance.", "metadata.")).join(", ")}`,
           duration: 5000,
         };
         return of(showMessageAction({ message }));

@@ -21,6 +21,7 @@ import { fromEvent, Observable, Subscription } from "rxjs";
 import { angularMaterialRenderers } from "@jsonforms/angular-material";
 import { EditableComponent } from "app-routing/pending-changes.guard";
 import { isEmpty } from "lodash-es";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "publisheddata-edit",
@@ -53,18 +54,27 @@ export class PublisheddataEditComponent
   publishedDataConfigSubscription: Subscription;
   beforeUnloadSubscription: Subscription;
   initialMetadata: string;
+  appConfig = this.appConfigService.getConfig();
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store,
+    private appConfigService: AppConfigService,
   ) {}
 
-  public onUpdate() {
+  public onPublishedDataUpdate() {
     if (this.form.valid) {
       const { doi, ...rest } = this.form.value;
-      const metadata = this.metadataData;
+      const metadata = {
+        ...this.metadataData,
+        landingPage: this.appConfig.landingPage,
+      };
+
+      if (this.panelOpenState() && !this.metadataDataIsValid()) {
+        return;
+      }
 
       if (doi) {
         this.store.dispatch(

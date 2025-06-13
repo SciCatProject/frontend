@@ -70,6 +70,7 @@ export const registerPublishedDataCompleteAction = createAction(
 );
 export const registerPublishedDataFailedAction = createAction(
   "[PublishedData] Register Published Data Failed",
+  props<{ error: string[] }>(),
 );
 
 export const publishPublishedDataAction = createAction(

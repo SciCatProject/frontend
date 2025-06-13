@@ -165,13 +165,17 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
 
   public onCreateDataPublication() {
     const { title, abstract, datasetPids } = this.form;
+    const metadata = {
+      ...this.metadataData,
+      landingPage: this.appConfig.landingPage,
+    };
 
     // TODO: Fix the types here
     const publishedData: any = {
       title: title,
       abstract: abstract,
       datasetPids: datasetPids,
-      metadata: this.metadataData,
+      metadata: metadata,
     };
 
     this._hasUnsavedChanges = false;

@@ -8,11 +8,7 @@
       >
 
       <mat-card-content>
-        <form
-          *ngIf="publishedData$ | async"
-          [formGroup]="form"
-          (ngSubmit)="onUpdate()"
-        >
+        <form *ngIf="publishedData$ | async" [formGroup]="form">
           <mat-form-field>
             <input
               id="titleInput"
@@ -61,6 +57,7 @@
           <button
             mat-raised-button
             color="primary"
+            (click)="onPublishedDataUpdate()"
             [disabled]="
               !form.valid || (panelOpenState() && !metadataDataIsValid())
             "
@@ -74,16 +71,4 @@
       </mat-card-content>
     </mat-card>
   </div>
-  <!-- <div fxFlex="30">
-    <div class="file-uploader">
-      <app-file-uploader
-        [attachments]="attachments"
-        (filePicked)="onFileUploaderFilePicked($event)"
-        (deleteAttachment)="deleteAttachment($event)"
-      ></app-file-uploader>
-    </div>
-    <mat-card *ngIf="thumbnail">
-      <img mat-card-image src="{{ thumbnail.value }}" />
-    </mat-card>
-  </div> -->
 </div>
