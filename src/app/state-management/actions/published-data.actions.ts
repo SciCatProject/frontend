@@ -16,6 +16,17 @@ export const fetchAllPublishedDataFailedAction = createAction(
   "[PublishedData] Fetch All Published Datas Failed",
 );
 
+export const fetchPublishedDataConfigAction = createAction(
+  "[PublishedData] Fetch Published Data Config",
+);
+export const fetchPublishedDataConfigCompleteAction = createAction(
+  "[PublishedData] Fetch Published Data Config Complete",
+  props<{ publishedDataConfig: any }>(),
+);
+export const fetchPublishedDataConfigFailedAction = createAction(
+  "[PublishedData] Fetch Published Data Config Failed",
+);
+
 export const fetchCountAction = createAction("[PublishedData] Fetch Count");
 export const fetchCountCompleteAction = createAction(
   "[PublishedData] Fetch Count Complete",
@@ -37,16 +48,16 @@ export const fetchPublishedDataFailedAction = createAction(
   "[PublishedData] Fetch Published Data Failed",
 );
 
-export const publishDatasetAction = createAction(
-  "[PublishedData] Publish Dataset",
+export const createDataPublicationAction = createAction(
+  "[PublishedData] Create Data Publication",
   props<{ data: CreatePublishedDataDto }>(),
 );
-export const publishDatasetCompleteAction = createAction(
-  "[PublishedData] Publish Dataset Complete",
+export const createDataPublicationCompleteAction = createAction(
+  "[PublishedData] Create Data Publication Complete",
   props<{ publishedData: PublishedData }>(),
 );
-export const publishDatasetFailedAction = createAction(
-  "[PublishedData] Publish Dataset Failed",
+export const createDataPublicationFailedAction = createAction(
+  "[PublishedData] Create Data Publication Failed",
 );
 
 export const registerPublishedDataAction = createAction(
@@ -59,6 +70,19 @@ export const registerPublishedDataCompleteAction = createAction(
 );
 export const registerPublishedDataFailedAction = createAction(
   "[PublishedData] Register Published Data Failed",
+  props<{ error: string[] }>(),
+);
+
+export const publishPublishedDataAction = createAction(
+  "[PublishedData] Publish Published Data",
+  props<{ doi: string }>(),
+);
+export const publishPublishedDataCompleteAction = createAction(
+  "[PublishedData] Publish Published Data Complete",
+  props<{ publishedData: PublishedData }>(),
+);
+export const publishPublishedDataFailedAction = createAction(
+  "[PublishedData] Publish Published Data Failed",
 );
 
 export const resyncPublishedDataAction = createAction(

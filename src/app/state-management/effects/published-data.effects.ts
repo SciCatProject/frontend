@@ -87,6 +87,24 @@ export class PublishedDataEffects {
     );
   });
 
+  fetchPublishedDataConfig$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchPublishedDataConfigAction),
+      switchMap(() =>
+        this.publishedDataService.publishedDataControllerGetConfigV3().pipe(
+          map((publishedDataConfig) =>
+            fromActions.fetchPublishedDataConfigCompleteAction({
+              publishedDataConfig,
+            }),
+          ),
+          catchError(() =>
+            of(fromActions.fetchPublishedDataConfigFailedAction()),
+          ),
+        ),
+      ),
+    );
+  });
+
   navigateToResyncedPublishedData$ = createEffect(
     () => {
       return this.actions$.pipe(
@@ -103,24 +121,38 @@ export class PublishedDataEffects {
     { dispatch: false },
   );
 
-  publishDataset$ = createEffect(() => {
+  createDataPublication$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.publishDatasetAction),
+      ofType(fromActions.createDataPublicationAction),
       switchMap(({ data }) =>
         this.publishedDataService.publishedDataControllerCreateV3(data).pipe(
           mergeMap((publishedData) => [
-            fromActions.publishDatasetCompleteAction({ publishedData }),
+            fromActions.createDataPublicationCompleteAction({ publishedData }),
             fromActions.fetchPublishedDataAction({ id: publishedData.doi }),
           ]),
-          catchError(() => of(fromActions.publishDatasetFailedAction())),
+          catchError(() => of(fromActions.createDataPublicationFailedAction())),
         ),
       ),
     );
   });
 
-  publishDatasetCompleteMessage$ = createEffect(() => {
+  publishPublishedData$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.publishDatasetCompleteAction),
+      ofType(fromActions.publishPublishedDataAction),
+      switchMap(({ doi }) =>
+        this.publishedDataService.publishedDataControllerPublishV3(doi).pipe(
+          mergeMap((publishedData) => [
+            fromActions.publishPublishedDataCompleteAction({ publishedData }),
+          ]),
+          catchError(() => of(fromActions.publishPublishedDataFailedAction())),
+        ),
+      ),
+    );
+  });
+
+  createDataPublicationCompleteMessage$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.createDataPublicationCompleteAction),
       switchMap(() => {
         const message = {
           type: MessageType.Success,
@@ -132,9 +164,9 @@ export class PublishedDataEffects {
     );
   });
 
-  publishDatasetFailedMessage$ = createEffect(() => {
+  createDataPublicationFailedMessage$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.publishDatasetFailedAction),
+      ofType(fromActions.createDataPublicationFailedAction),
       switchMap(() => {
         const message = {
           type: MessageType.Error,
@@ -157,7 +189,9 @@ export class PublishedDataEffects {
             }),
             fromActions.fetchPublishedDataAction({ id: doi }),
           ]),
-          catchError(() => of(fromActions.registerPublishedDataFailedAction())),
+          catchError((error) =>
+            of(fromActions.registerPublishedDataFailedAction(error)),
+          ),
         ),
       ),
     );
@@ -183,10 +217,11 @@ export class PublishedDataEffects {
   registerPublishedDataFailedMessage$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.registerPublishedDataFailedAction),
-      switchMap(() => {
+      switchMap((errors) => {
+        debugger;
         const message = {
           type: MessageType.Error,
-          content: "Registration Failed",
+          content: `Registration Failed. ${errors.error.map((e) => e.replaceAll("instance.", "metadata.")).join(", ")}`,
           duration: 5000,
         };
         return of(showMessageAction({ message }));
@@ -201,7 +236,8 @@ export class PublishedDataEffects {
         fromActions.fetchCountAction,
         fromActions.sortByColumnAction,
         fromActions.fetchPublishedDataAction,
-        fromActions.publishDatasetAction,
+        fromActions.createDataPublicationAction,
+        fromActions.publishPublishedDataAction,
         fromActions.registerPublishedDataAction,
         fromActions.resyncPublishedDataCompleteAction,
       ),
@@ -218,8 +254,10 @@ export class PublishedDataEffects {
         fromActions.fetchCountFailedAction,
         fromActions.fetchPublishedDataCompleteAction,
         fromActions.fetchPublishedDataFailedAction,
-        fromActions.publishDatasetCompleteAction,
-        fromActions.publishDatasetFailedAction,
+        fromActions.createDataPublicationCompleteAction,
+        fromActions.createDataPublicationFailedAction,
+        fromActions.publishPublishedDataCompleteAction,
+        fromActions.publishPublishedDataFailedAction,
         fromActions.registerPublishedDataCompleteAction,
         fromActions.registerPublishedDataFailedAction,
         fromActions.resyncPublishedDataCompleteAction,
