@@ -210,6 +210,8 @@ export interface AppConfigInterface {
   batchActionsEnabled?: boolean;
   batchActions?: ActionConfig[];
   realTimeUpdatesEnabled?: boolean;
+  imprintUrl?: string;
+  privacyUrl?: string;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
