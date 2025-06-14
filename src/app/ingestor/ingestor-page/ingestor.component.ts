@@ -114,7 +114,7 @@ export class IngestorComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.ingestorBackend$.subscribe((ingestorBackend) => {
-        if (ingestorBackend) {
+        if (ingestorBackend !== null && ingestorBackend !== undefined) {
           this.connectedFacilityBackend = ingestorBackend;
         }
       }),
@@ -122,7 +122,7 @@ export class IngestorComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.transferList$.subscribe((transferList) => {
-        if (transferList) {
+        if (transferList !== null && transferList !== undefined) {
           this.transferDataInformation = transferList;
         }
       }),
@@ -131,7 +131,7 @@ export class IngestorComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.selectIngestorTransferListRequestOptions$.subscribe(
         (requestOptions) => {
-          if (requestOptions) {
+          if (requestOptions !== null && requestOptions !== undefined) {
             this.transferDataPageIndex = requestOptions.page;
             this.transferDataPageSize = requestOptions.pageNumber;
           }
