@@ -76,7 +76,7 @@
     "@types/jasmine": "^5.1.0",
     "@types/lodash-es": "^4.17.12",
     "@types/luxon": "^3.3.0",
-    "@types/node": "^22.0.0",
+    "@types/node": "^24.0.3",
     "@types/shortid": "2.2.0",
     "@types/source-map-support": "^0.5.3",
     "@typescript-eslint/eslint-plugin": "^8.32.0",
