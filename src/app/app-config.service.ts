@@ -35,6 +35,13 @@ export class HelpMessages {
   }
 }
 
+export enum MainPageOptions {
+  DATASETS = "/datasets",
+  PROPOSALS = "/proposals",
+  INSTRUMENTS = "/instruments",
+  SAMPLES = "/samples"
+}
+
 export interface AppConfigInterface {
   skipSciCatLoginPageEnabled?: boolean;
   accessTokenPrefix: string;
@@ -106,6 +113,7 @@ export interface AppConfigInterface {
   datasetDetailComponent?: DatasetDetailComponentConfig;
   labelsLocalization?: LabelsLocalization;
   dateFormat?: string;
+  defaultMainPage?: string;
 }
 
 @Injectable({
@@ -132,6 +140,15 @@ export class AppConfigService {
         console.error("No config provided.");
       }
     }
+
+    const config: AppConfigInterface = (this.appConfig as AppConfigInterface);
+    if ("defaultMainPage" in config && Object.keys(MainPageOptions).includes(config.defaultMainPage)) {
+      config.defaultMainPage = MainPageOptions[config.defaultMainPage];
+    } else {
+      config.defaultMainPage = MainPageOptions.DATASETS;
+    }
+
+    this.appConfig = config;
   }
 
   getConfig(): AppConfigInterface {
