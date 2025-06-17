@@ -109,7 +109,7 @@ export interface AppConfigInterface {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class AppConfigService {
   private appConfig: object = {};
