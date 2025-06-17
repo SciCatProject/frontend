@@ -1,10 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
-import { AppConfig, AppConfigService, HelpMessages } from "app-config.service";
+import { AppConfigInterface, AppConfigService, HelpMessages } from "app-config.service";
 import { of } from "rxjs";
 import { MockHttp } from "shared/MockStubs";
 
-const appConfig: AppConfig = {
+const appConfig: AppConfigInterface = {
+  defaultMainPage: "DATASETS",
   skipSciCatLoginPageEnabled: false,
   accessTokenPrefix: "",
   addDatasetEnabled: true,
