@@ -39,7 +39,7 @@ export enum MainPageOptions {
   DATASETS = "/datasets",
   PROPOSALS = "/proposals",
   INSTRUMENTS = "/instruments",
-  SAMPLES = "/samples"
+  SAMPLES = "/samples",
 }
 
 export interface AppConfigInterface {
@@ -141,7 +141,7 @@ export class AppConfigService {
       }
     }
 
-    const config: AppConfigInterface = (this.appConfig as AppConfigInterface);
+    const config: AppConfigInterface = this.appConfig as AppConfigInterface;
     if ("defaultMainPage" in config && Object.keys(MainPageOptions).includes(config.defaultMainPage)) {
       config.defaultMainPage = MainPageOptions[config.defaultMainPage];
     } else {
