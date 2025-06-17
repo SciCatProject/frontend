@@ -142,7 +142,10 @@ export class AppConfigService {
     }
 
     const config: AppConfigInterface = this.appConfig as AppConfigInterface;
-    if ("defaultMainPage" in config && Object.keys(MainPageOptions).includes(config.defaultMainPage)) {
+    if (
+      "defaultMainPage" in config &&
+      Object.keys(MainPageOptions).includes(config.defaultMainPage)
+    ) {
       config.defaultMainPage = MainPageOptions[config.defaultMainPage];
     } else {
       config.defaultMainPage = MainPageOptions.DATASETS;

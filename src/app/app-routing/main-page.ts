@@ -6,7 +6,7 @@ import { AppConfigService } from "app-config.service";
 export class MainPageGuard implements CanActivate {
   constructor(
     private router: Router,
-    private appConfigService: AppConfigService 
+    private appConfigService: AppConfigService,
   ) {}
 
   canActivate(): boolean {
