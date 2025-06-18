@@ -1,6 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
-import { AppConfigInterface, AppConfigService, HelpMessages } from "app-config.service";
+import {
+  AppConfigInterface,
+  AppConfigService,
+  HelpMessages,
+} from "app-config.service";
 import { of } from "rxjs";
 import { MockHttp } from "shared/MockStubs";
 
