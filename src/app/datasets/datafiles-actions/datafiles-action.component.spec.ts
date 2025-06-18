@@ -29,7 +29,7 @@ describe("1000: DatafilesActionComponent", () => {
   const actionsConfig = [
     {
       id: "eed8efec-4354-11ef-a3b5-d75573a5d37f",
-      order: 4,
+      order: 0,
       label: "Download All",
       files: "all",
       mat_icon: "download",
@@ -40,7 +40,7 @@ describe("1000: DatafilesActionComponent", () => {
     },
     {
       id: "3072fafc-4363-11ef-b9f9-ebf568222d26",
-      order: 3,
+      order: 1,
       label: "Download Selected",
       files: "selected",
       mat_icon: "download",
@@ -61,7 +61,7 @@ describe("1000: DatafilesActionComponent", () => {
     },
     {
       id: "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
-      order: 1,
+      order: 3,
       label: "Notebook Selected",
       files: "selected",
       icon: "/assets/icons/jupyter_logo.png",
@@ -69,6 +69,46 @@ describe("1000: DatafilesActionComponent", () => {
       target: "_blank",
       enabled: "#Selected",
       authorization: ["#datasetAccess", "#datasetPublic"],
+    },
+    {
+      id: "fa3ce6ee-482d-11ef-95e9-ff2c80ddnews",
+      order: 4,
+      label: "Notebook Selected",
+      files: "selected",
+      type: "json-download",
+      icon: "/assets/icons/jupyter_logo.png",
+      url: "https://notebook.scicat.org",
+      target: "_blank",
+      enabled: "#Selected",
+      authorization: ["#datasetAccess", "#datasetPublic"],
+      filename: "{{ uuid }}.ipynb",
+    },
+    {
+      id: "test-test-test-test-1",
+      order: 5,
+      label: "Notebook Selected",
+      files: "selected",
+      type: "json-download",
+      icon: "/assets/icons/jupyter_logo.png",
+      url: "https://notebook.scicat.org",
+      target: "_blank",
+      enabled: "#Selected",
+      authorization: ["#datasetAccess", "#datasetPublic"],
+      payload: "",
+      filename: "{{ uuid }}.ipynb",
+    },
+    {
+      id: "test-test-test-test-2",
+      order: 6,
+      label: "Notebook Selected",
+      files: "selected",
+      type: "json-download",
+      icon: "/assets/icons/jupyter_logo.png",
+      url: "https://notebook.scicat.org",
+      target: "_blank",
+      enabled: "#Selected",
+      authorization: ["#datasetAccess", "#datasetPublic"],
+      filename: "{{ uuid }}.ipynb",
     },
   ];
 
@@ -121,6 +161,8 @@ describe("1000: DatafilesActionComponent", () => {
     download_selected = 1,
     notebook_all = 2,
     notebook_selected = 3,
+    json_download_with_payload = 4,
+    json_download_without_payload = 5,
   }
 
   const usersControllerGetUserJWTV3 = () => ({
@@ -731,5 +773,70 @@ describe("1000: DatafilesActionComponent", () => {
     expect(actionButton.innerHTML).toContain(
       actionsConfig[actionSelectorType.notebook_selected].label,
     );
+  });
+
+  it("0600: JSON-download action should fetch with customized payload fields when provided", async () => {
+    selectTestCase(
+      actionSelectorType.json_download_with_payload,
+      maxSizeType.higher,
+      selectedFilesType.none,
+    );
+    actionsConfig[actionSelectorType.json_download_with_payload].payload =
+      '{"test_id":"test-id","parameters":{"testField1":"{{ datasetPid }}","testField2":"{{ sourceFolder }}","files": {{ filesPath }},"jwt":"{{ jwt }}","scicat_url":"https://staging.scicat.ess.url","file_server_url":"sftserver2.esss.dk","file_server_port":"22"}}';
+    component.jwt = "TEST_JWT";
+    spyOn(window, "fetch").and.returnValue(
+      Promise.resolve(
+        new Response(new Blob(), {
+          status: 200,
+          statusText: "OK",
+          headers: { "Content-Type": "application/json" },
+        }),
+      ),
+    );
+    component.perform_action();
+
+    const [url, opts] = (window.fetch as jasmine.Spy).calls.mostRecent().args;
+    expect(url).toBe(
+      actionsConfig[actionSelectorType.json_download_with_payload].url,
+    );
+    expect(opts.method).toBe("POST");
+    expect(opts.headers["Content-Type"]).toBe("application/json");
+
+    const body = JSON.parse(opts.body);
+    expect(body.test_id).toBe("test-id");
+    expect(body.parameters.jwt).toBe("TEST_JWT");
+    expect(body.parameters.testField1).toBe(actionDataset.pid);
+    expect(body.parameters.testField2).toBe(actionDataset.sourceFolder);
+  });
+
+  it("0610: JSON-download action should fetch with default fields if payload is not provided", async () => {
+    selectTestCase(
+      actionSelectorType.json_download_without_payload,
+      maxSizeType.higher,
+      selectedFilesType.none,
+    );
+    component.jwt = "TEST_JWT2";
+    spyOn(window, "fetch").and.returnValue(
+      Promise.resolve(
+        new Response(new Blob(), {
+          status: 200,
+          statusText: "OK",
+          headers: { "Content-Type": "application/json" },
+        }),
+      ),
+    );
+    component.perform_action();
+
+    const [url, opts] = (window.fetch as jasmine.Spy).calls.mostRecent().args;
+    expect(url).toBe(
+      actionsConfig[actionSelectorType.json_download_without_payload].url,
+    );
+    expect(opts.method).toBe("POST");
+    expect(opts.headers["Content-Type"]).toBe("application/json");
+
+    const body = JSON.parse(opts.body);
+    expect(body.jwt).toBe("TEST_JWT2");
+    expect(body.dataset).toBe(actionDataset.pid);
+    expect(body.directory).toBe(actionDataset.sourceFolder);
   });
 });
