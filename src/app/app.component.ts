@@ -23,7 +23,7 @@ import {
   selectUserMessage,
 } from "state-management/selectors/user.selectors";
 import { MessageType } from "state-management/models";
-import { AppConfigService, AppConfig as Config } from "app-config.service";
+import { AppConfigService, AppConfigInterface } from "app-config.service";
 import { Configuration } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
@@ -36,7 +36,7 @@ import { Configuration } from "@scicatproject/scicat-sdk-ts-angular";
 export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
   loading$ = this.store.select(selectIsLoading);
 
-  config: Config;
+  config: AppConfigInterface;
 
   title: string;
   facility: string;
