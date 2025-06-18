@@ -218,7 +218,6 @@ export class PublishedDataEffects {
     return this.actions$.pipe(
       ofType(fromActions.registerPublishedDataFailedAction),
       switchMap((errors) => {
-        debugger;
         const message = {
           type: MessageType.Error,
           content: `Registration Failed. ${errors.error.map((e) => e.replaceAll("instance.", "metadata.")).join(", ")}`,
