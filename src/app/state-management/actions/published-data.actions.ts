@@ -59,6 +59,24 @@ export const createDataPublicationCompleteAction = createAction(
 export const createDataPublicationFailedAction = createAction(
   "[PublishedData] Create Data Publication Failed",
 );
+export const saveDataPublicationAction = createAction(
+  "[PublishedData] Save Data Publication",
+  props<{ data: CreatePublishedDataDto }>(),
+);
+export const saveDataPublicationCompleteAction = createAction(
+  "[PublishedData] Save Data Publication Complete",
+  props<{ publishedData: PublishedData }>(),
+);
+export const saveDataPublicationFailedAction = createAction(
+  "[PublishedData] Save Data Publication Failed",
+);
+export const saveDataPublicationInLocalStorage = createAction(
+  "[PublishedData] Save Data Publication In Local Storage",
+  props<{ publishedData: PublishedData }>(),
+);
+export const clearDataPublicationFromLocalStorage = createAction(
+  "[PublishedData] Clear Data Publication In Local Storage",
+);
 
 export const registerPublishedDataAction = createAction(
   "[PublishedData] Register Published Data",
@@ -95,6 +113,18 @@ export const resyncPublishedDataCompleteAction = createAction(
 );
 export const resyncPublishedDataFailedAction = createAction(
   "[PublishedData] Resync Published Data Failed",
+);
+
+export const updatePublishedDataAction = createAction(
+  "[PublishedData] Update Published Data",
+  props<{ doi: string; data: UpdatePublishedDataDto }>(),
+);
+export const updatePublishedDataCompleteAction = createAction(
+  "[PublishedData] Update Published Data Complete",
+  props<{ publishedData: PublishedData }>(),
+);
+export const updatePublishedDataFailedAction = createAction(
+  "[PublishedData] Update Published Data Failed",
 );
 
 export const changePageAction = createAction(

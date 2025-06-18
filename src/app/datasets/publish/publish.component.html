@@ -55,15 +55,32 @@
           </mat-expansion-panel>
 
           <button
-            id="createDataPublicationButton"
-            (click)="onCreateDataPublication()"
+            id="saveButton"
+            (click)="onSaveChanges()"
+            mat-raised-button
+            color="primary"
+          >
+            Save changes
+          </button>
+          <button
+            id="saveAndContinueButton"
+            (click)="onSaveAndContinue()"
+            class="save-and-continue"
             mat-raised-button
             color="primary"
             [disabled]="
               !formIsValid() || (panelOpenState() && !metadataDataIsValid())
             "
           >
-            Create data publication
+            Save and Continue
+          </button>
+          <button
+            id="cancelButton"
+            (click)="onCancel()"
+            class="cancel"
+            mat-raised-button
+          >
+            Cancel
           </button>
         </form>
       </mat-card-content>

@@ -8,12 +8,16 @@ import { selectDatasetsInBatch } from "state-management/selectors/datasets.selec
 import { prefillBatchAction } from "state-management/actions/datasets.actions";
 import {
   createDataPublicationAction,
-  fetchPublishedDataCompleteAction,
+  createDataPublicationCompleteAction,
+  fetchPublishedDataAction,
   fetchPublishedDataConfigAction,
+  resyncPublishedDataAction,
+  saveDataPublicationAction,
+  updatePublishedDataAction,
 } from "state-management/actions/published-data.actions";
 
 import {
-  OutputDatasetObsoleteDto,
+  CreatePublishedDataDto,
   PublishedDataService,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { Router } from "@angular/router";
@@ -50,9 +54,10 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
 
   public separatorKeysCodes: number[] = [ENTER, COMMA];
   public datasetCount: number;
-  public datasets: OutputDatasetObsoleteDto[] = [];
   today: number = Date.now();
   public metadataFormErrors = [];
+  savedPublishedDataDoi: string | null = null;
+  initialMetadata = JSON.stringify({});
 
   public form = {
     title: undefined,
@@ -89,13 +94,51 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
 
   onMetadataChange(data: any) {
     this.metadataData = data;
-    if (JSON.stringify(data) !== "{}") {
+
+    if (JSON.stringify(data) !== this.initialMetadata) {
       this._hasUnsavedChanges = true;
     }
   }
 
   onFormFieldChange() {
     this._hasUnsavedChanges = true;
+  }
+
+  checkForSavedData() {
+    const savedPublishedData = JSON.parse(
+      localStorage.getItem("publishedData"),
+    );
+
+    if (savedPublishedData && savedPublishedData.id) {
+      this.savedPublishedDataDoi = savedPublishedData.doi;
+      this.store
+        .select(selectCurrentPublishedData)
+        .subscribe((publishedData) => {
+          if (publishedData) {
+            this.form.title = publishedData.title;
+            this.form.abstract = publishedData.abstract;
+
+            if (publishedData.metadata) {
+              this.metadataData = publishedData.metadata;
+
+              this.initialMetadata = JSON.stringify(publishedData.metadata);
+            }
+          }
+
+          this._hasUnsavedChanges = false;
+        });
+
+      this.store.dispatch(
+        fetchPublishedDataAction({ id: this.savedPublishedDataDoi }),
+      );
+    } else {
+      this.publishedDataApi
+        .publishedDataControllerFormPopulateV3(this.form.datasetPids[0])
+        .subscribe((result) => {
+          this.form.abstract = result.abstract;
+          this.form.title = result.title;
+        });
+    }
   }
 
   ngOnInit() {
@@ -112,6 +155,8 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
         }),
       )
       .subscribe();
+
+    this.checkForSavedData();
 
     this.publishedDataConfigSubscription = this.publishedDataConfig$.subscribe(
       (publishedDataConfig) => {
@@ -130,19 +175,11 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
     this.countSubscription = this.datasets$.subscribe((datasets) => {
       if (datasets) {
         this.datasetCount = datasets.length;
-        this.datasets = datasets;
       }
     });
 
-    this.publishedDataApi
-      .publishedDataControllerFormPopulateV3(this.form.datasetPids[0])
-      .subscribe((result) => {
-        this.form.abstract = result.abstract;
-        this.form.title = result.title;
-      });
-
     this.actionSubjectSubscription = this.actionsSubj.subscribe((data) => {
-      if (data.type === fetchPublishedDataCompleteAction.type) {
+      if (data.type === createDataPublicationCompleteAction.type) {
         this.store
           .select(selectCurrentPublishedData)
           .subscribe((publishedData) => {
@@ -170,24 +207,58 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
     this.beforeUnloadSubscription.unsubscribe();
   }
 
-  public onCreateDataPublication() {
+  getPublishedDataForCreation() {
     const { title, abstract, datasetPids } = this.form;
     const metadata = {
       ...this.metadataData,
       landingPage: this.appConfig.landingPage,
     };
-
-    // TODO: Fix the types here
-    const publishedData: any = {
+    return {
       title: title,
       abstract: abstract,
       datasetPids: datasetPids,
       metadata: metadata,
-    };
+    } as CreatePublishedDataDto;
+  }
+
+  public onSaveAndContinue() {
+    const publishedData = this.getPublishedDataForCreation();
 
     this._hasUnsavedChanges = false;
 
-    this.store.dispatch(createDataPublicationAction({ data: publishedData }));
+    if (this.savedPublishedDataDoi) {
+      this.store.dispatch(
+        resyncPublishedDataAction({
+          doi: this.savedPublishedDataDoi,
+          data: publishedData,
+        }),
+      );
+    } else {
+      this.store.dispatch(createDataPublicationAction({ data: publishedData }));
+    }
+  }
+
+  public onSaveChanges() {
+    const publishedData = this.getPublishedDataForCreation();
+
+    if (this.savedPublishedDataDoi) {
+      this.store.dispatch(
+        updatePublishedDataAction({
+          doi: this.savedPublishedDataDoi,
+          data: publishedData,
+        }),
+      );
+    } else {
+      this.store.dispatch(saveDataPublicationAction({ data: publishedData }));
+    }
+
+    this._hasUnsavedChanges = false;
+  }
+
+  public onCancel() {
+    this._hasUnsavedChanges = false;
+
+    this.router.navigateByUrl("/datasets/batch");
   }
 
   hasUnsavedChanges() {

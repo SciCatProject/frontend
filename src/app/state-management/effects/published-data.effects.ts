@@ -11,6 +11,7 @@ import {
   selectQueryParams,
 } from "state-management/selectors/published-data.selectors";
 import * as fromActions from "state-management/actions/published-data.actions";
+import * as datasetActions from "state-management/actions/datasets.actions";
 import {
   mergeMap,
   map,
@@ -18,6 +19,7 @@ import {
   switchMap,
   exhaustMap,
   filter,
+  tap,
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
@@ -121,14 +123,55 @@ export class PublishedDataEffects {
     { dispatch: false },
   );
 
+  saveDataPublicationInLocalStorage$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(fromActions.saveDataPublicationInLocalStorage),
+        tap(({ publishedData }) =>
+          localStorage.setItem("publishedData", JSON.stringify(publishedData)),
+        ),
+      );
+    },
+    { dispatch: false },
+  );
+
+  clearDataPublicationFromLocalStorage$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(fromActions.clearDataPublicationFromLocalStorage),
+        tap(() => localStorage.removeItem("publishedData")),
+      );
+    },
+    { dispatch: false },
+  );
+
+  saveDataPublication$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.saveDataPublicationAction),
+      switchMap(({ data }) =>
+        this.publishedDataService.publishedDataControllerCreateV3(data).pipe(
+          mergeMap((publishedData) => [
+            fromActions.saveDataPublicationCompleteAction({ publishedData }),
+            fromActions.saveDataPublicationInLocalStorage({ publishedData }),
+          ]),
+          catchError(() => of(fromActions.saveDataPublicationFailedAction())),
+        ),
+      ),
+    );
+  });
+
   createDataPublication$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.createDataPublicationAction),
       switchMap(({ data }) =>
         this.publishedDataService.publishedDataControllerCreateV3(data).pipe(
           mergeMap((publishedData) => [
-            fromActions.createDataPublicationCompleteAction({ publishedData }),
+            fromActions.createDataPublicationCompleteAction({
+              publishedData,
+            }),
             fromActions.fetchPublishedDataAction({ id: publishedData.doi }),
+            datasetActions.clearBatchAction(),
+            fromActions.clearDataPublicationFromLocalStorage(),
           ]),
           catchError(() => of(fromActions.createDataPublicationFailedAction())),
         ),
@@ -197,6 +240,22 @@ export class PublishedDataEffects {
     );
   });
 
+  updatePublishedData$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.updatePublishedDataAction),
+      switchMap(({ doi, data }) =>
+        this.publishedDataService
+          .publishedDataControllerUpdateV3(doi, data)
+          .pipe(
+            mergeMap((publishedData) => [
+              fromActions.updatePublishedDataCompleteAction({ publishedData }),
+            ]),
+            catchError(() => of(fromActions.updatePublishedDataFailedAction())),
+          ),
+      ),
+    );
+  });
+
   resyncPublishedData$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.resyncPublishedDataAction),
@@ -207,6 +266,8 @@ export class PublishedDataEffects {
             mergeMap((publishedData) => [
               fromActions.resyncPublishedDataCompleteAction(publishedData),
               fromActions.fetchPublishedDataAction({ id: doi }),
+              datasetActions.clearBatchAction(),
+              fromActions.clearDataPublicationFromLocalStorage(),
             ]),
             catchError(() => of(fromActions.resyncPublishedDataFailedAction())),
           ),
@@ -236,9 +297,11 @@ export class PublishedDataEffects {
         fromActions.sortByColumnAction,
         fromActions.fetchPublishedDataAction,
         fromActions.createDataPublicationAction,
+        fromActions.saveDataPublicationAction,
         fromActions.publishPublishedDataAction,
         fromActions.registerPublishedDataAction,
-        fromActions.resyncPublishedDataCompleteAction,
+        fromActions.resyncPublishedDataAction,
+        fromActions.updatePublishedDataAction,
       ),
       switchMap(() => of(loadingAction())),
     );
@@ -254,12 +317,15 @@ export class PublishedDataEffects {
         fromActions.fetchPublishedDataCompleteAction,
         fromActions.fetchPublishedDataFailedAction,
         fromActions.createDataPublicationCompleteAction,
+        fromActions.saveDataPublicationCompleteAction,
         fromActions.createDataPublicationFailedAction,
+        fromActions.saveDataPublicationFailedAction,
         fromActions.publishPublishedDataCompleteAction,
         fromActions.publishPublishedDataFailedAction,
         fromActions.registerPublishedDataCompleteAction,
         fromActions.registerPublishedDataFailedAction,
         fromActions.resyncPublishedDataCompleteAction,
+        fromActions.updatePublishedDataCompleteAction,
       ),
       switchMap(() => of(loadingCompleteAction())),
     );

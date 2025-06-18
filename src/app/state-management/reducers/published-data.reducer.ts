@@ -33,6 +33,14 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.saveDataPublicationCompleteAction,
+    (state, { publishedData }): PublishedDataState => ({
+      ...state,
+      currentPublishedData: publishedData,
+    }),
+  ),
+
+  on(
     fromActions.fetchPublishedDataCompleteAction,
     (state, { publishedData }): PublishedDataState => ({
       ...state,
