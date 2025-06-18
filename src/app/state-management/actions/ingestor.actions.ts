@@ -12,6 +12,10 @@ import {
   UserInfo,
 } from "shared/sdk/models/ingestor/models";
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
+import {
+  DatasetsControllerCreateV3Request,
+  OutputDatasetObsoleteDto,
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 export const setIngestorEndpoint = createAction(
   "[Ingestor] Set ingestor endpoint",
@@ -152,4 +156,14 @@ export const resetIngestorComponent = createAction(
 export const setNoRightsError = createAction(
   "[Ingestor] Set No Rights Error",
   props<{ noRightsError: boolean; err: Error }>(),
+);
+
+export const createDatasetAction = createAction(
+  "[Ingestor] Create Dataset",
+  props<{ dataset: DatasetsControllerCreateV3Request }>(),
+);
+
+export const createDatasetSuccess = createAction(
+  "[Ingestor] Create Dataset Success",
+  props<{ dataset: OutputDatasetObsoleteDto }>(),
 );

@@ -1,12 +1,12 @@
 import { JsonSchema, JsonSchema7 } from "@jsonforms/core";
-import {
-  CreateDatasetDto,
-  CreateRawDatasetObsoleteDto,
-  DatasetClass,
-} from "@scicatproject/scicat-sdk-ts-angular";
+import { CreateRawDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
 import { isArray } from "mathjs";
 import { PostDatasetResponse } from "shared/sdk/models/ingestor/postDatasetResponse";
 import { UserInfo } from "shared/sdk/models/ingestor/userInfo";
+
+export type IngestorMode = "default" | "transfer" | "creation";
+
+export type IngestorEditorMode = "INGESTION" | "EDITOR" | "CREATION";
 
 export interface IngestorAutodiscovery {
   mailDomain: string;
@@ -33,10 +33,11 @@ export interface IngestionRequestInformation {
     instrument: object;
     acquisition: object;
   };
+  customMetaData: object; // Custom metadata in creation mode
 
   mergedMetaDataString: string;
 
-  editorMode: string;
+  editorMode: IngestorEditorMode;
   apiInformation: {
     extractMetaDataRequested: boolean;
     extractorMetaDataReady: boolean;
@@ -69,17 +70,26 @@ export interface DialogDataObject {
 export class IngestorHelper {
   static createMetaDataString(
     transferData: IngestionRequestInformation,
+    useCustomMetadata?: boolean,
   ): string {
     const space = 2;
-    const scicatMetadata: CreateDatasetDto = {
-      ...(transferData.scicatHeader as CreateDatasetDto),
-      scientificMetadata: {
-        organizational: transferData.userMetaData["organizational"],
-        sample: transferData.userMetaData["sample"],
-        acquisition: transferData.extractorMetaData["acquisition"],
-        instrument: transferData.extractorMetaData["instrument"],
-      },
+    const scicatMetadata: CreateRawDatasetObsoleteDto = {
+      ...(transferData.scicatHeader as CreateRawDatasetObsoleteDto),
     };
+
+    if (useCustomMetadata) {
+      scicatMetadata.scientificMetadata = { ...transferData.customMetaData };
+    } else {
+      // EM DATA INGESTOR MODE
+      scicatMetadata.scientificMetadata = {
+        ...{
+          organizational: transferData.userMetaData["organizational"],
+          sample: transferData.userMetaData["sample"],
+          acquisition: transferData.extractorMetaData["acquisition"],
+          instrument: transferData.extractorMetaData["instrument"],
+        },
+      };
+    }
 
     return JSON.stringify(scicatMetadata, null, space);
   }
@@ -114,6 +124,7 @@ export class IngestorHelper {
         instrument: {},
         acquisition: {},
       },
+      customMetaData: {},
       mergedMetaDataString: "",
       editorMode: "INGESTION",
       apiInformation: {
@@ -162,7 +173,7 @@ export const decodeBase64ToUTF8 = (base64: string) => {
   return decoder.decode(bytes);
 };
 
-export const getJsonSchemaFromDto = () => {
+export const getJsonSchemaFromDto = (sourceFolderEditable?: boolean) => {
   // Currently there is no valid schema which can be used. So we create one from the dataset class.
   // --string => string
   // --mail => string with regex
@@ -184,7 +195,7 @@ export const getJsonSchemaFromDto = () => {
     pid: "--skip",
     owner: "--string",
     contactEmail: "--mail",
-    sourceFolder: "--string --readonly",
+    sourceFolder: sourceFolderEditable ? "--string" : "--string --readonly",
     size: -1, // skip
     numberOfFiles: -1, // skip
     creationTime: "--dateTime",

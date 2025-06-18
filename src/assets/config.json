@@ -164,7 +164,7 @@
   "accessTokenPrefix": "Bearer ",
   "externalAuthEndpoint": "/api/v3/auth/ldap",
   "ingestorEnabled": true,
-  "ingestorMode": "standard",
+  "ingestorMode": "transfer",
   "ingestorAutodiscoveryOptions": [
     {
       "mailDomain": "unibe.ch",

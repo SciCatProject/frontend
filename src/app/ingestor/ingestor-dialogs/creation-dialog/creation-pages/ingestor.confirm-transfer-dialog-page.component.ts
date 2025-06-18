@@ -66,6 +66,7 @@ export class IngestorConfirmTransferDialogPageComponent
 
     this.provideMergeMetaData = IngestorHelper.createMetaDataString(
       this.createNewTransferData,
+      this.createNewTransferData.editorMode === "CREATION",
     );
   }
 
@@ -91,8 +92,14 @@ export class IngestorConfirmTransferDialogPageComponent
   onClickConfirm(): void {
     const dialogRef = this.dialog.open(IngestorConfirmationDialogComponent, {
       data: {
-        header: "Confirm ingestion",
-        message: "Create a new dataset and start data transfer?",
+        header:
+          this.createNewTransferData.editorMode === "CREATION"
+            ? "Confirm creation"
+            : "Confirm ingestion",
+        message:
+          this.createNewTransferData.editorMode === "CREATION"
+            ? "Create a new dataset?"
+            : "Create a new dataset and start data transfer?",
       },
     });
 

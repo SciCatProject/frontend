@@ -49,10 +49,16 @@ import { IngestorUserMetadataDialogPageComponent } from "./ingestor-dialogs/crea
 import { IngestorExtractorMetadataDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.extractor-metadata-dialog-page.component";
 import { IngestorTransferViewDialogComponent } from "./ingestor-dialogs/transfer-detail-view/ingestor.transfer-detail-view-dialog.component";
 import { IngestorNoRightsDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.no-rights-dialog-page.component";
+import { IngestorTransferComponent } from "./ingestor-page/ingestor-transfer.component";
+import { IngestorCreationComponent } from "./ingestor-page/ingestor-creation.component";
+import { IngestorScicatMetadataDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.scicat-metadata-dialog-page.component";
+import { IngestorCustomMetadataDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.custom-metadata-dialog-page.component";
 
 @NgModule({
   declarations: [
     IngestorComponent,
+    IngestorTransferComponent,
+    IngestorCreationComponent,
     IngestorMetadataEditorComponent,
     IngestorConfirmTransferDialogPageComponent,
     IngestorNewTransferDialogPageComponent,
@@ -71,6 +77,8 @@ import { IngestorNoRightsDialogPageComponent } from "./ingestor-dialogs/creation
     CustomLayoutChildrenRenderPropsPipe,
     IngestorTransferViewDialogComponent,
     IngestorNoRightsDialogPageComponent,
+    IngestorScicatMetadataDialogPageComponent,
+    IngestorCustomMetadataDialogPageComponent,
   ],
   imports: [
     CommonModule,

@@ -25,7 +25,9 @@ export type dialogStep =
   | "NEW_TRANSFER"
   | "USER_METADATA"
   | "EXTRACTOR_METADATA"
-  | "CONFIRM_TRANSFER";
+  | "CONFIRM_TRANSFER"
+  | "CUSTOM_METADATA" // Only in Creation Editor Mode
+  | "SCICAT_METADATA"; // Only in Creation Editor Mode
 
 @Component({
   selector: "ingestor.creation-dialog-base",
@@ -202,7 +204,10 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
           this.startMetadataExtraction().catch((error) => {
             console.error("Metadata extraction error", error);
           });
-        } else if (this.createNewTransferData.editorMode === "EDITOR") {
+        } else if (
+          this.createNewTransferData.editorMode === "EDITOR" ||
+          this.createNewTransferData.editorMode === "CREATION"
+        ) {
           this.createNewTransferData.apiInformation.extractorMetaDataReady =
             true;
         }
@@ -212,6 +217,10 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
         break;
       case "CONFIRM_TRANSFER":
         break;
+      case "SCICAT_METADATA":
+        break;
+      case "CUSTOM_METADATA":
+        break;
       default:
         console.error("Unknown step", nextStep);
         return;
@@ -220,16 +229,24 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
   }
 
   onClickStartIngestion(): void {
-    const payload: PostDatasetRequest = {
-      metaData: this.createNewTransferData.mergedMetaDataString,
-      userToken: this.tokenValue,
-      autoArchive: this.createNewTransferData.autoArchive,
-    };
+    if (this.createNewTransferData.editorMode === "CREATION") {
+      this.store.dispatch(
+        fromActions.createDatasetAction({
+          dataset: JSON.parse(this.createNewTransferData.mergedMetaDataString),
+        }),
+      );
+    } else if (this.createNewTransferData.editorMode === "INGESTION") {
+      const payload: PostDatasetRequest = {
+        metaData: this.createNewTransferData.mergedMetaDataString,
+        userToken: this.tokenValue,
+        autoArchive: this.createNewTransferData.autoArchive,
+      };
 
-    this.store.dispatch(
-      fromActions.ingestDataset({
-        ingestionDataset: payload,
-      }),
-    );
+      this.store.dispatch(
+        fromActions.ingestDataset({
+          ingestionDataset: payload,
+        }),
+      );
+    }
   }
 }

@@ -26,6 +26,7 @@ import * as fromActions from "state-management/actions/ingestor.actions";
 import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
 import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { IngestorConfirmationDialogComponent } from "ingestor/ingestor-dialogs/confirmation-dialog/ingestor.confirmation-dialog.component";
 
 @Component({
   selector: "ingestor-new-transfer-dialog-page",
@@ -56,15 +57,19 @@ export class IngestorNewTransferDialogPageComponent
 
   connectedFacilityBackend = "";
   extractionMethodsError = "";
+  extractionMethodsInitialized = false;
 
   userProfile: ReturnedUserDto | null = null;
   uiNextButtonReady = false;
 
+  // Creation Mode Options
+  _selectedSchemaOption: "free" | "upload" = "free";
+  selectedSchemaFileName = "";
+  selectedSchemaFileContent = "";
+
   constructor(private store: Store) {}
 
   ngOnInit() {
-    this.loadExtractionMethods();
-
     // Fetch the API token that the ingestor can authenticate to scicat as the user
     this.subscriptions.push(
       this.vm$.subscribe((settings) => {
@@ -76,18 +81,33 @@ export class IngestorNewTransferDialogPageComponent
       this.ingestionObject$.subscribe((ingestionObject) => {
         if (ingestionObject) {
           this.createNewTransferData = ingestionObject;
-        }
-      }),
-    );
+          this.validateNextButton();
 
-    this.subscriptions.push(
-      this.ingestorExtractionMethods$.subscribe((extractionMethods) => {
-        if (extractionMethods) {
-          this.extractionMethods = extractionMethods;
-          this.extractionMethodsError = "";
-        } else {
-          this.extractionMethodsError =
-            "No extraction methods available. Please check your connection.";
+          if (!this.extractionMethodsInitialized) {
+            this.extractionMethodsInitialized = true;
+
+            if (
+              // Only load extraction methods if the editor mode is set to INGESTION or EDITOR
+              this.createNewTransferData.editorMode === "INGESTION" ||
+              this.createNewTransferData.editorMode === "EDITOR"
+            ) {
+              this.loadExtractionMethods();
+
+              this.subscriptions.push(
+                this.ingestorExtractionMethods$.subscribe(
+                  (extractionMethods) => {
+                    if (extractionMethods) {
+                      this.extractionMethods = extractionMethods;
+                      this.extractionMethodsError = "";
+                    } else {
+                      this.extractionMethodsError =
+                        "No extraction methods available. Please check your connection.";
+                    }
+                  },
+                ),
+              );
+            }
+          }
         }
       }),
     );
@@ -97,6 +117,15 @@ export class IngestorNewTransferDialogPageComponent
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });
+  }
+
+  set selectedSchemaOption(value: "free" | "upload") {
+    this._selectedSchemaOption = value;
+    this.validateNextButton();
+  }
+
+  get selectedSchemaOption(): "free" | "upload" {
+    return this._selectedSchemaOption;
   }
 
   set selectedMethod(value: ExtractionMethod) {
@@ -118,14 +147,25 @@ export class IngestorNewTransferDialogPageComponent
   }
 
   generateExampleDataForSciCatHeader(): void {
-    this.createNewTransferData.scicatHeader["sourceFolder"] =
-      this.createNewTransferData.selectedPath;
-    this.createNewTransferData.scicatHeader["keywords"] = ["OpenEM"];
+    if (this.createNewTransferData.editorMode === "INGESTION") {
+      this.createNewTransferData.scicatHeader["sourceFolder"] =
+        this.createNewTransferData.selectedPath;
 
-    const nameWithoutPath =
-      this.createNewTransferData.selectedPath.split("/|\\")[-1] ??
-      this.createNewTransferData.selectedPath;
-    this.createNewTransferData.scicatHeader["datasetName"] = nameWithoutPath;
+      const pathParts = this.createNewTransferData.selectedPath.split(/[/\\]/);
+      const nameWithoutPath =
+        pathParts[pathParts.length - 1] ||
+        this.createNewTransferData.selectedPath;
+
+      this.createNewTransferData.scicatHeader["datasetName"] = nameWithoutPath;
+    }
+
+    if (
+      this.createNewTransferData.editorMode === "INGESTION" ||
+      this.createNewTransferData.editorMode === "EDITOR"
+    ) {
+      this.createNewTransferData.scicatHeader["keywords"] = ["OpenEM"];
+    }
+
     this.createNewTransferData.scicatHeader["license"] = "MIT License";
     this.createNewTransferData.scicatHeader["type"] = "raw";
     this.createNewTransferData.scicatHeader["dataFormat"] = "root";
@@ -145,14 +185,31 @@ export class IngestorNewTransferDialogPageComponent
   }
 
   prepareSchemaForProcessing(): void {
-    const encodedSchema = this.createNewTransferData.selectedMethod.schema;
-    const decodedSchema = decodeBase64ToUTF8(encodedSchema);
-    const schema = JSON.parse(decodedSchema);
-    const resolvedSchema = IngestorMetadataEditorHelper.resolveRefs(
-      schema,
-      schema,
-    );
-    this.createNewTransferData.selectedResolvedDecodedSchema = resolvedSchema;
+    if (
+      this.createNewTransferData.editorMode === "INGESTION" ||
+      this.createNewTransferData.editorMode === "EDITOR"
+    ) {
+      const encodedSchema = this.createNewTransferData.selectedMethod.schema;
+      const decodedSchema = decodeBase64ToUTF8(encodedSchema);
+      const schema = JSON.parse(decodedSchema);
+      const resolvedSchema = IngestorMetadataEditorHelper.resolveRefs(
+        schema,
+        schema,
+      );
+      this.createNewTransferData.selectedResolvedDecodedSchema = resolvedSchema;
+    } else if (this.createNewTransferData.editorMode === "CREATION") {
+      if (this.selectedSchemaOption === "upload") {
+        const schema = JSON.parse(this.selectedSchemaFileContent);
+        const resolvedSchema = IngestorMetadataEditorHelper.resolveRefs(
+          schema,
+          schema,
+        );
+        this.createNewTransferData.selectedResolvedDecodedSchema =
+          resolvedSchema;
+      }
+    } else {
+      console.error("Unknown editor mode");
+    }
   }
 
   onClickRetryRequests(): void {
@@ -168,20 +225,35 @@ export class IngestorNewTransferDialogPageComponent
 
     this.generateExampleDataForSciCatHeader();
     this.prepareSchemaForProcessing();
+
     this.nextStep.emit(); // Open next dialog
   }
 
   validateNextButton(): void {
     const selectedPathReady =
-      (this.createNewTransferData.editorMode === "INGESTION" &&
-        this.createNewTransferData.selectedPath !== "") ||
-      this.createNewTransferData.editorMode === "EDITOR";
+      this.createNewTransferData.editorMode === "INGESTION" &&
+      this.createNewTransferData.selectedPath !== "";
+
     const selectedMethodReady =
       this.selectedMethod !== null &&
       this.selectedMethod !== undefined &&
       this.selectedMethod.name !== "";
 
-    this.uiNextButtonReady = !!selectedPathReady && !!selectedMethodReady;
+    const creationModeParameterReady =
+      this.selectedSchemaOption === "free" ||
+      (this.selectedSchemaOption === "upload" &&
+        this.selectedSchemaFileName !== "");
+
+    if (
+      this.createNewTransferData.editorMode === "INGESTION" ||
+      this.createNewTransferData.editorMode === "EDITOR"
+    ) {
+      this.uiNextButtonReady = !!selectedPathReady && !!selectedMethodReady;
+    } else if (this.createNewTransferData.editorMode === "CREATION") {
+      this.uiNextButtonReady = !!creationModeParameterReady;
+    } else {
+      this.uiNextButtonReady = false;
+    }
   }
 
   onExtractorMethodsPageChange(event: PageChangeEvent) {
@@ -200,8 +272,39 @@ export class IngestorNewTransferDialogPageComponent
     });
   }
 
-  onCreateNewTransferDataChange(updatedData: IngestionRequestInformation) {
-    Object.assign(this.createNewTransferData, updatedData);
-    this.validateNextButton();
+  onUploadSchema(): void {
+    // Upload a template of metadata
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".ingestor.schema,.json";
+    input.onchange = (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      const file = target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target?.result as string;
+
+          const dialogRef = this.dialog.open(
+            IngestorConfirmationDialogComponent,
+            {
+              data: {
+                header: "Confirm template",
+                message: "Do you really want to apply the following values?",
+              },
+            },
+          );
+          dialogRef.afterClosed().subscribe((result) => {
+            if (result) {
+              this.selectedSchemaFileName = file.name;
+              this.selectedSchemaFileContent = content;
+              this.validateNextButton();
+            }
+          });
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
   }
 }

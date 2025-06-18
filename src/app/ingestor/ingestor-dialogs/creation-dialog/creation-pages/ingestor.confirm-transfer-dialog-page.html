@@ -46,7 +46,31 @@
     </p>
 
     <div
-      *ngIf="createNewTransferData.ingestionRequest !== null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === ''">
+      *ngIf="createNewTransferData.ingestionRequest !== null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === '' && createNewTransferData.editorMode === 'CREATION'">
+      <mat-card class="ingestor-card">
+        <mat-card-header class="ingestor-mixed-header">
+          <mat-card-title>Dataset created</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="ingestor-vertical-layout">
+          <div class="confirm-message-ingestor">
+            <mat-icon
+              class="confirm-message-ingestor-icon">check_circle</mat-icon>
+            <p>The data set was successfully created. You can find the data set
+              with the recorded metadata under the following details:
+            </p>
+            <p>Dataset ID:
+              {{createNewTransferData.ingestionRequest.transferId}}
+            </p>
+            <p>Dataset Name:
+              {{createNewTransferData.ingestionRequest.status}}
+            </p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div
+      *ngIf="createNewTransferData.ingestionRequest !== null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === '' && createNewTransferData.editorMode === 'INGESTION'">
       <mat-card class="ingestor-card">
         <mat-card-header class="ingestor-mixed-header">
           <mat-card-title>Transfer requested</mat-card-title>
@@ -111,7 +135,7 @@
 
 </mat-dialog-content>
 <mat-dialog-actions align="end" *ngIf="!ingestionDatasetIsLoading">
-  <button *ngIf="createNewTransferData.editorMode === 'EDITOR' ||
+  <button *ngIf="createNewTransferData.editorMode === 'EDITOR' || createNewTransferData.editorMode === 'CREATION' ||
   createNewTransferData.editorMode === 'INGESTION' &&
   (createNewTransferData.ingestionRequest === null ||
   createNewTransferData.apiInformation.ingestionRequestErrorMessage !== '')"
@@ -120,12 +144,17 @@
     *ngIf="createNewTransferData.editorMode === 'INGESTION' && (createNewTransferData.ingestionRequest === null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === '')"
     mat-button color="primary" cdkFocusInitial
     (click)="onClickConfirm()">Ingest</button>
-  <button *ngIf="createNewTransferData.editorMode === 'EDITOR'" mat-button
-    color="primary" cdkFocusInitial (click)="onCopyMetadata()">
+  <button
+    *ngIf="createNewTransferData.editorMode === 'EDITOR' || createNewTransferData.editorMode === 'CREATION'"
+    mat-button color="primary" cdkFocusInitial (click)="onCopyMetadata()">
     {{!copiedToClipboard ? "Copy JSON" : "Copied!"}}
   </button>
   <button
-    *ngIf="copiedToClipboard || (createNewTransferData.ingestionRequest !== null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === '')"
+    *ngIf="createNewTransferData.editorMode === 'CREATION' && (createNewTransferData.ingestionRequest === null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === '')"
+    mat-button color="primary" cdkFocusInitial (click)="onClickConfirm()">Create
+    Dataset</button>
+  <button
+    *ngIf="copiedToClipboard && createNewTransferData.editorMode === 'EDITOR' || (createNewTransferData.ingestionRequest !== null && createNewTransferData.apiInformation.ingestionRequestErrorMessage === '')"
     mat-button color="primary" cdkFocusInitial mat-dialog-close>Close</button>
   <button
     *ngIf="createNewTransferData.apiInformation.ingestionRequestErrorMessage !== ''"

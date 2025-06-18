@@ -8,7 +8,6 @@ import {
 } from "@angular/core";
 import { JsonSchema } from "@jsonforms/core";
 import {
-  getJsonSchemaFromDto,
   IngestionRequestInformation,
   IngestorHelper,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
@@ -24,12 +23,12 @@ import { Subscription } from "rxjs";
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 
 @Component({
-  selector: "ingestor-user-metadata-dialog",
-  templateUrl: "ingestor.user-metadata-dialog-page.html",
+  selector: "ingestor-custom-metadata-dialog",
+  templateUrl: "ingestor.custom-metadata-dialog-page.html",
   styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
   standalone: false,
 })
-export class IngestorUserMetadataDialogPageComponent
+export class IngestorCustomMetadataDialogPageComponent
   implements OnInit, OnDestroy
 {
   private subscriptions: Subscription[] = [];
@@ -45,24 +44,16 @@ export class IngestorUserMetadataDialogPageComponent
   @Output() nextStep = new EventEmitter<void>();
   @Output() backStep = new EventEmitter<void>();
 
-  metadataSchemaOrganizational: JsonSchema;
-  metadataSchemaSample: JsonSchema;
-  scicatHeaderSchema: JsonSchema;
+  customMetadataSchema: JsonSchema;
   activeRenderView: renderView | null = null;
   updateEditorFromThirdParty = false;
 
   uiNextButtonReady = false;
-  isSciCatHeaderOk = false;
-  scicatHeaderErrors = "";
-  isOrganizationalMetadataOk = false;
-  organizationalErrors = "";
-  isSampleInformationOk = false;
-  sampleErrors = "";
+  isCustomMetadataOk = false;
+  customMetadataErrors = "";
 
   isCardContentVisible = {
-    scicat: true,
-    organizational: true,
-    sample: true,
+    scientific: true,
   };
 
   constructor(
@@ -76,11 +67,23 @@ export class IngestorUserMetadataDialogPageComponent
         if (ingestionObject) {
           this.createNewTransferData = ingestionObject;
 
-          this.metadataSchemaOrganizational =
-            this.createNewTransferData.selectedResolvedDecodedSchema.properties.organizational;
-          this.metadataSchemaSample =
-            this.createNewTransferData.selectedResolvedDecodedSchema.properties.sample;
-          this.scicatHeaderSchema = getJsonSchemaFromDto();
+          const customSchema =
+            this.createNewTransferData.selectedResolvedDecodedSchema;
+
+          if (
+            // Remove all keys which start with $. Json Forms can't handle this. When preparing $refs are already resolved.
+            customSchema &&
+            typeof customSchema === "object" &&
+            !Array.isArray(customSchema)
+          ) {
+            Object.keys(customSchema)
+              .filter((key) => key.startsWith("$"))
+              .forEach((key) => {
+                delete customSchema[key];
+              });
+          }
+
+          this.customMetadataSchema = customSchema;
         }
       }),
     );
@@ -136,16 +139,8 @@ export class IngestorUserMetadataDialogPageComponent
     this.nextStep.emit(); // Open next dialog
   }
 
-  onDataChangeUserMetadataOrganization(event: any) {
-    this.createNewTransferData.userMetaData["organizational"] = event;
-  }
-
-  onDataChangeUserMetadataSample(event: any) {
-    this.createNewTransferData.userMetaData["sample"] = event;
-  }
-
-  onDataChangeUserScicatHeader(event: any) {
-    this.createNewTransferData.scicatHeader = event;
+  onDataChangeCustomMetadata(event: any) {
+    this.createNewTransferData.customMetaData = event;
   }
 
   onCreateNewTransferDataChange(updatedData: IngestionRequestInformation) {
@@ -156,28 +151,15 @@ export class IngestorUserMetadataDialogPageComponent
     this.isCardContentVisible[card] = !this.isCardContentVisible[card];
   }
 
-  scicatHeaderErrorsHandler(errors: any[]) {
-    this.isSciCatHeaderOk = errors.length === 0;
-    this.scicatHeaderErrors = convertJSONFormsErrorToString(errors);
-    this.validateNextButton();
-    this.cdr.detectChanges();
-  }
-
-  organizationalErrorsHandler(errors: any[]) {
-    this.isOrganizationalMetadataOk = errors.length === 0;
-    this.organizationalErrors = convertJSONFormsErrorToString(errors);
-    this.validateNextButton();
-    this.cdr.detectChanges();
-  }
-
-  sampleErrorsHandler(errors: any[]) {
-    this.isSampleInformationOk = errors.length === 0;
-    this.sampleErrors = convertJSONFormsErrorToString(errors);
+  customMetadataErrorsHandler(errors: any[]) {
+    this.isCustomMetadataOk = errors.length === 0;
+    this.customMetadataErrors = convertJSONFormsErrorToString(errors);
     this.validateNextButton();
     this.cdr.detectChanges();
   }
 
   validateNextButton(): void {
-    this.uiNextButtonReady = this.isSciCatHeaderOk;
+    // Don't force the user to fix all required entries
+    this.uiNextButtonReady = true; //this.isCustomMetadataOk;
   }
 }

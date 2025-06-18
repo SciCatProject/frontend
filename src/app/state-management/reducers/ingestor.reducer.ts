@@ -153,6 +153,23 @@ const reducer = createReducer(
     }),
   ),
   on(
+    fromActions.createDatasetSuccess,
+    (state, { dataset }): IngestorState => ({
+      ...state,
+      ingestionObject: {
+        ...state.ingestionObject,
+        ingestionRequest: {
+          transferId: dataset.pid,
+          status: dataset.datasetName,
+        },
+        apiInformation: {
+          ...state.ingestionObject.apiInformation,
+          ingestionRequestErrorMessage: "",
+        },
+      },
+    }),
+  ),
+  on(
     fromActions.ingestDatasetFailure,
     (state, { err }): IngestorState => ({
       ...state,

@@ -24,12 +24,12 @@ import { Subscription } from "rxjs";
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 
 @Component({
-  selector: "ingestor-user-metadata-dialog",
-  templateUrl: "ingestor.user-metadata-dialog-page.html",
+  selector: "ingestor-scicat-metadata-dialog",
+  templateUrl: "ingestor.scicat-metadata-dialog-page.html",
   styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
   standalone: false,
 })
-export class IngestorUserMetadataDialogPageComponent
+export class IngestorScicatMetadataDialogPageComponent
   implements OnInit, OnDestroy
 {
   private subscriptions: Subscription[] = [];
@@ -45,8 +45,6 @@ export class IngestorUserMetadataDialogPageComponent
   @Output() nextStep = new EventEmitter<void>();
   @Output() backStep = new EventEmitter<void>();
 
-  metadataSchemaOrganizational: JsonSchema;
-  metadataSchemaSample: JsonSchema;
   scicatHeaderSchema: JsonSchema;
   activeRenderView: renderView | null = null;
   updateEditorFromThirdParty = false;
@@ -54,15 +52,9 @@ export class IngestorUserMetadataDialogPageComponent
   uiNextButtonReady = false;
   isSciCatHeaderOk = false;
   scicatHeaderErrors = "";
-  isOrganizationalMetadataOk = false;
-  organizationalErrors = "";
-  isSampleInformationOk = false;
-  sampleErrors = "";
 
   isCardContentVisible = {
     scicat: true,
-    organizational: true,
-    sample: true,
   };
 
   constructor(
@@ -75,12 +67,7 @@ export class IngestorUserMetadataDialogPageComponent
       this.ingestionObject$.subscribe((ingestionObject) => {
         if (ingestionObject) {
           this.createNewTransferData = ingestionObject;
-
-          this.metadataSchemaOrganizational =
-            this.createNewTransferData.selectedResolvedDecodedSchema.properties.organizational;
-          this.metadataSchemaSample =
-            this.createNewTransferData.selectedResolvedDecodedSchema.properties.sample;
-          this.scicatHeaderSchema = getJsonSchemaFromDto();
+          this.scicatHeaderSchema = getJsonSchemaFromDto(true);
         }
       }),
     );
@@ -136,20 +123,8 @@ export class IngestorUserMetadataDialogPageComponent
     this.nextStep.emit(); // Open next dialog
   }
 
-  onDataChangeUserMetadataOrganization(event: any) {
-    this.createNewTransferData.userMetaData["organizational"] = event;
-  }
-
-  onDataChangeUserMetadataSample(event: any) {
-    this.createNewTransferData.userMetaData["sample"] = event;
-  }
-
   onDataChangeUserScicatHeader(event: any) {
     this.createNewTransferData.scicatHeader = event;
-  }
-
-  onCreateNewTransferDataChange(updatedData: IngestionRequestInformation) {
-    Object.assign(this.createNewTransferData, updatedData);
   }
 
   toggleCardContent(card: string): void {
@@ -159,20 +134,6 @@ export class IngestorUserMetadataDialogPageComponent
   scicatHeaderErrorsHandler(errors: any[]) {
     this.isSciCatHeaderOk = errors.length === 0;
     this.scicatHeaderErrors = convertJSONFormsErrorToString(errors);
-    this.validateNextButton();
-    this.cdr.detectChanges();
-  }
-
-  organizationalErrorsHandler(errors: any[]) {
-    this.isOrganizationalMetadataOk = errors.length === 0;
-    this.organizationalErrors = convertJSONFormsErrorToString(errors);
-    this.validateNextButton();
-    this.cdr.detectChanges();
-  }
-
-  sampleErrorsHandler(errors: any[]) {
-    this.isSampleInformationOk = errors.length === 0;
-    this.sampleErrors = convertJSONFormsErrorToString(errors);
     this.validateNextButton();
     this.cdr.detectChanges();
   }

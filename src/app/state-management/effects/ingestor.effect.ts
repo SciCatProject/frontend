@@ -21,6 +21,7 @@ import { showMessageAction } from "state-management/actions/user.actions";
 import { Store } from "@ngrx/store";
 import { selectIngestorTransferListRequestOptions } from "state-management/selectors/ingestor.selector";
 import { concatLatestFrom } from "@ngrx/operators";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Injectable()
 export class IngestorEffects {
@@ -326,9 +327,43 @@ export class IngestorEffects {
     );
   });
 
+  createDataset$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.createDatasetAction),
+      mergeMap(({ dataset }) =>
+        this.datasetsService.datasetsControllerCreateV3(dataset).pipe(
+          mergeMap((response) =>
+            from([
+              fromActions.createDatasetSuccess({ dataset: response }),
+              fromActions.setIngestDatasetLoading({
+                ingestionDatasetLoading: false,
+              }),
+            ]),
+          ),
+          catchError((err) =>
+            from([
+              ...(err.error?.error?.includes("login session has expired")
+                ? [
+                    fromActions.setNoRightsError({
+                      noRightsError: true,
+                      err,
+                    }),
+                  ]
+                : [fromActions.ingestDatasetFailure({ err })]),
+              fromActions.setIngestDatasetLoading({
+                ingestionDatasetLoading: false,
+              }),
+            ]),
+          ),
+        ),
+      ),
+    );
+  });
+
   constructor(
     private actions$: Actions,
     private ingestor: Ingestor,
+    private datasetsService: DatasetsService,
     private store: Store,
   ) {}
 }
