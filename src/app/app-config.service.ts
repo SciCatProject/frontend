@@ -89,6 +89,8 @@ export interface AppConfigInterface {
   shareEnabled: boolean;
   shoppingCartEnabled: boolean;
   shoppingCartOnHeader: boolean;
+  siteTitle: string | null;
+  siteSciCatLogo: string | null;
   siteHeaderLogo: string | null;
   siteLoginBackground: string | null;
   siteLoginLogo: string | null;
