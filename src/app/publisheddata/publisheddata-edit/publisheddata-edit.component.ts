@@ -35,6 +35,7 @@ export class PublisheddataEditComponent
   private _hasUnsavedChanges = false;
   renderers = angularMaterialRenderers;
   schema: any = {};
+  uiSchema: any = {};
   metadataData: any = {};
   public metadataFormErrors = [];
   readonly panelOpenState = signal(false);
@@ -127,6 +128,12 @@ export class PublisheddataEditComponent
       (publishedDataConfig) => {
         if (!isEmpty(publishedDataConfig)) {
           this.schema = publishedDataConfig.metadataSchema;
+          // NOTE: We set the publicationYear by the system, so we remove it from the required fields in the frontend
+          this.schema.required.splice(
+            this.schema.required.indexOf("publicationYear"),
+            1,
+          );
+          this.uiSchema = publishedDataConfig.uiSchema;
         }
       },
     );

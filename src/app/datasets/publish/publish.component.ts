@@ -37,6 +37,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
   private _hasUnsavedChanges = false;
   renderers = angularMaterialRenderers;
   schema: any = {};
+  uiSchema: any = {};
   metadataData: any = {};
   private datasets$ = this.store.select(selectDatasetsInBatch);
   private publishedDataConfig$ = this.store.select(selectPublishedDataConfig);
@@ -116,6 +117,12 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
       (publishedDataConfig) => {
         if (!isEmpty(publishedDataConfig)) {
           this.schema = publishedDataConfig.metadataSchema;
+          // NOTE: We set the publicationYear by the system, so we remove it from the required fields in the frontend
+          this.schema.required.splice(
+            this.schema.required.indexOf("publicationYear"),
+            1,
+          );
+          this.uiSchema = publishedDataConfig.uiSchema;
         }
       },
     );
