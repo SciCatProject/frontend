@@ -11,6 +11,7 @@ import {
   selectQueryParams,
 } from "state-management/selectors/published-data.selectors";
 import * as fromActions from "state-management/actions/published-data.actions";
+import * as datasetActions from "state-management/actions/datasets.actions";
 import {
   mergeMap,
   map,
@@ -18,6 +19,7 @@ import {
   switchMap,
   exhaustMap,
   filter,
+  tap,
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
@@ -87,6 +89,24 @@ export class PublishedDataEffects {
     );
   });
 
+  fetchPublishedDataConfig$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchPublishedDataConfigAction),
+      switchMap(() =>
+        this.publishedDataService.publishedDataControllerGetConfigV3().pipe(
+          map((publishedDataConfig) =>
+            fromActions.fetchPublishedDataConfigCompleteAction({
+              publishedDataConfig,
+            }),
+          ),
+          catchError(() =>
+            of(fromActions.fetchPublishedDataConfigFailedAction()),
+          ),
+        ),
+      ),
+    );
+  });
+
   navigateToResyncedPublishedData$ = createEffect(
     () => {
       return this.actions$.pipe(
@@ -103,24 +123,81 @@ export class PublishedDataEffects {
     { dispatch: false },
   );
 
-  publishDataset$ = createEffect(() => {
+  saveDataPublicationInLocalStorage$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(fromActions.saveDataPublicationInLocalStorage),
+        tap(({ publishedData }) =>
+          localStorage.setItem("publishedData", JSON.stringify(publishedData)),
+        ),
+      );
+    },
+    { dispatch: false },
+  );
+
+  clearDataPublicationFromLocalStorage$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(fromActions.clearDataPublicationFromLocalStorage),
+        tap(() => localStorage.removeItem("publishedData")),
+      );
+    },
+    { dispatch: false },
+  );
+
+  saveDataPublication$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.publishDatasetAction),
+      ofType(fromActions.saveDataPublicationAction),
       switchMap(({ data }) =>
         this.publishedDataService.publishedDataControllerCreateV3(data).pipe(
           mergeMap((publishedData) => [
-            fromActions.publishDatasetCompleteAction({ publishedData }),
-            fromActions.fetchPublishedDataAction({ id: publishedData.doi }),
+            fromActions.saveDataPublicationCompleteAction({ publishedData }),
+            fromActions.saveDataPublicationInLocalStorage({ publishedData }),
           ]),
-          catchError(() => of(fromActions.publishDatasetFailedAction())),
+          catchError(() => of(fromActions.saveDataPublicationFailedAction())),
         ),
       ),
     );
   });
 
-  publishDatasetCompleteMessage$ = createEffect(() => {
+  createDataPublication$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.publishDatasetCompleteAction),
+      ofType(fromActions.createDataPublicationAction),
+      switchMap(({ data }) =>
+        this.publishedDataService.publishedDataControllerCreateV3(data).pipe(
+          mergeMap((publishedData) => [
+            fromActions.createDataPublicationCompleteAction({
+              publishedData,
+            }),
+            fromActions.fetchPublishedDataAction({ id: publishedData.doi }),
+            datasetActions.clearBatchAction(),
+            fromActions.clearDataPublicationFromLocalStorage(),
+          ]),
+          catchError(() => of(fromActions.createDataPublicationFailedAction())),
+        ),
+      ),
+    );
+  });
+
+  publishPublishedData$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.publishPublishedDataAction),
+      switchMap(({ doi }) =>
+        this.publishedDataService.publishedDataControllerPublishV3(doi).pipe(
+          mergeMap((publishedData) => [
+            fromActions.publishPublishedDataCompleteAction({ publishedData }),
+          ]),
+          catchError((error) =>
+            of(fromActions.publishPublishedDataFailedAction(error)),
+          ),
+        ),
+      ),
+    );
+  });
+
+  createDataPublicationCompleteMessage$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.createDataPublicationCompleteAction),
       switchMap(() => {
         const message = {
           type: MessageType.Success,
@@ -132,9 +209,9 @@ export class PublishedDataEffects {
     );
   });
 
-  publishDatasetFailedMessage$ = createEffect(() => {
+  createDataPublicationFailedMessage$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.publishDatasetFailedAction),
+      ofType(fromActions.createDataPublicationFailedAction),
       switchMap(() => {
         const message = {
           type: MessageType.Error,
@@ -157,8 +234,26 @@ export class PublishedDataEffects {
             }),
             fromActions.fetchPublishedDataAction({ id: doi }),
           ]),
-          catchError(() => of(fromActions.registerPublishedDataFailedAction())),
+          catchError((error) =>
+            of(fromActions.registerPublishedDataFailedAction(error)),
+          ),
         ),
+      ),
+    );
+  });
+
+  updatePublishedData$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.updatePublishedDataAction),
+      switchMap(({ doi, data }) =>
+        this.publishedDataService
+          .publishedDataControllerUpdateV3(doi, data)
+          .pipe(
+            mergeMap((publishedData) => [
+              fromActions.updatePublishedDataCompleteAction({ publishedData }),
+            ]),
+            catchError(() => of(fromActions.updatePublishedDataFailedAction())),
+          ),
       ),
     );
   });
@@ -173,6 +268,8 @@ export class PublishedDataEffects {
             mergeMap((publishedData) => [
               fromActions.resyncPublishedDataCompleteAction(publishedData),
               fromActions.fetchPublishedDataAction({ id: doi }),
+              datasetActions.clearBatchAction(),
+              fromActions.clearDataPublicationFromLocalStorage(),
             ]),
             catchError(() => of(fromActions.resyncPublishedDataFailedAction())),
           ),
@@ -183,10 +280,24 @@ export class PublishedDataEffects {
   registerPublishedDataFailedMessage$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.registerPublishedDataFailedAction),
-      switchMap(() => {
+      switchMap((errors) => {
         const message = {
           type: MessageType.Error,
-          content: "Registration Failed",
+          content: `Registration Failed. ${errors.error.map((e) => e.replaceAll("instance", "metadata")).join(", ")}`,
+          duration: 5000,
+        };
+        return of(showMessageAction({ message }));
+      }),
+    );
+  });
+
+  publishPublishedDataFailedMessage$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.publishPublishedDataFailedAction),
+      switchMap((errors) => {
+        const message = {
+          type: MessageType.Error,
+          content: `Publishing Failed. ${errors.error.map((e) => e.replaceAll("instance", "metadata")).join(", ")}`,
           duration: 5000,
         };
         return of(showMessageAction({ message }));
@@ -201,9 +312,12 @@ export class PublishedDataEffects {
         fromActions.fetchCountAction,
         fromActions.sortByColumnAction,
         fromActions.fetchPublishedDataAction,
-        fromActions.publishDatasetAction,
+        fromActions.createDataPublicationAction,
+        fromActions.saveDataPublicationAction,
+        fromActions.publishPublishedDataAction,
         fromActions.registerPublishedDataAction,
-        fromActions.resyncPublishedDataCompleteAction,
+        fromActions.resyncPublishedDataAction,
+        fromActions.updatePublishedDataAction,
       ),
       switchMap(() => of(loadingAction())),
     );
@@ -218,11 +332,16 @@ export class PublishedDataEffects {
         fromActions.fetchCountFailedAction,
         fromActions.fetchPublishedDataCompleteAction,
         fromActions.fetchPublishedDataFailedAction,
-        fromActions.publishDatasetCompleteAction,
-        fromActions.publishDatasetFailedAction,
+        fromActions.createDataPublicationCompleteAction,
+        fromActions.saveDataPublicationCompleteAction,
+        fromActions.createDataPublicationFailedAction,
+        fromActions.saveDataPublicationFailedAction,
+        fromActions.publishPublishedDataCompleteAction,
+        fromActions.publishPublishedDataFailedAction,
         fromActions.registerPublishedDataCompleteAction,
         fromActions.registerPublishedDataFailedAction,
         fromActions.resyncPublishedDataCompleteAction,
+        fromActions.updatePublishedDataCompleteAction,
       ),
       switchMap(() => of(loadingCompleteAction())),
     );
