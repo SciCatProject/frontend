@@ -35,7 +35,7 @@ export class HelpMessages {
   }
 }
 
-export interface AppConfig {
+export interface AppConfigInterface {
   skipSciCatLoginPageEnabled?: boolean;
   accessTokenPrefix: string;
   addDatasetEnabled: boolean;
@@ -108,7 +108,9 @@ export interface AppConfig {
   dateFormat?: string;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: "root",
+})
 export class AppConfigService {
   private appConfig: object = {};
 
@@ -132,11 +134,11 @@ export class AppConfigService {
     }
   }
 
-  getConfig(): AppConfig {
+  getConfig(): AppConfigInterface {
     if (!this.appConfig) {
       console.error("AppConfigService: Configuration not loaded!");
     }
 
-    return this.appConfig as AppConfig;
+    return this.appConfig as AppConfigInterface;
   }
 }
