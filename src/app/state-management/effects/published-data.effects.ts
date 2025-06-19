@@ -187,7 +187,9 @@ export class PublishedDataEffects {
           mergeMap((publishedData) => [
             fromActions.publishPublishedDataCompleteAction({ publishedData }),
           ]),
-          catchError(() => of(fromActions.publishPublishedDataFailedAction())),
+          catchError((error) =>
+            of(fromActions.publishPublishedDataFailedAction(error)),
+          ),
         ),
       ),
     );
@@ -281,7 +283,21 @@ export class PublishedDataEffects {
       switchMap((errors) => {
         const message = {
           type: MessageType.Error,
-          content: `Registration Failed. ${errors.error.map((e) => e.replaceAll("instance.", "metadata.")).join(", ")}`,
+          content: `Registration Failed. ${errors.error.map((e) => e.replaceAll("instance", "metadata")).join(", ")}`,
+          duration: 5000,
+        };
+        return of(showMessageAction({ message }));
+      }),
+    );
+  });
+
+  publishPublishedDataFailedMessage$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.publishPublishedDataFailedAction),
+      switchMap((errors) => {
+        const message = {
+          type: MessageType.Error,
+          content: `Publishing Failed. ${errors.error.map((e) => e.replaceAll("instance", "metadata")).join(", ")}`,
           duration: 5000,
         };
         return of(showMessageAction({ message }));

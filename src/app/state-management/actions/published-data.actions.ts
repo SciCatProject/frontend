@@ -101,6 +101,7 @@ export const publishPublishedDataCompleteAction = createAction(
 );
 export const publishPublishedDataFailedAction = createAction(
   "[PublishedData] Publish Published Data Failed",
+  props<{ error: string[] }>(),
 );
 
 export const resyncPublishedDataAction = createAction(

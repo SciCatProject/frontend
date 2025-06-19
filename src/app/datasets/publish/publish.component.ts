@@ -18,6 +18,7 @@ import {
 
 import {
   CreatePublishedDataDto,
+  PublishedData,
   PublishedDataService,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { Router } from "@angular/router";
@@ -180,13 +181,12 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
 
     this.actionSubjectSubscription = this.actionsSubj.subscribe((data) => {
       if (data.type === createDataPublicationCompleteAction.type) {
-        this.store
-          .select(selectCurrentPublishedData)
-          .subscribe((publishedData) => {
-            const doi = encodeURIComponent(publishedData.doi);
-            this.router.navigateByUrl("/publishedDatasets/" + doi);
-          })
-          .unsubscribe();
+        const publishedData = (
+          data as { type: string; publishedData: PublishedData }
+        ).publishedData;
+
+        const doi = encodeURIComponent(publishedData.doi);
+        this.router.navigateByUrl("/publishedDatasets/" + doi);
       }
     });
 
