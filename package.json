@@ -9,6 +9,7 @@
     "watch": "ng build --watch --configuration default",
     "test": "ng test --watch=false --source-map=false",
     "lint": "ng lint",
+    "lint:errors": "ng lint --quiet",
     "lint:fix": "ng lint --fix",
     "betterer": "betterer",
     "cypress:open": "cypress open",

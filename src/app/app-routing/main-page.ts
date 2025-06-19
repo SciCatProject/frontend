@@ -1,23 +1,33 @@
 import { Injectable } from "@angular/core";
 import { CanActivate, Router } from "@angular/router";
-import { AppConfigService, MainPageConfiguration, MainPageOptions } from "app-config.service";
-import { Store } from "@ngrx/store";
-import { selectIsLoggedIn } from "state-management/selectors/user.selectors";
+import {
+  AppConfigService,
+  MainPageConfiguration,
+  MainPageOptions,
+} from "app-config.service";
+import { AuthService } from "shared/services/auth/auth.service";
 
 @Injectable({ providedIn: "root" })
 export class MainPageGuard implements CanActivate {
   constructor(
     private router: Router,
     private appConfigService: AppConfigService,
-    private store: Store,
+    private authService: AuthService,
   ) {}
 
   canActivate(): boolean {
-    const defaultMainPage: MainPageConfiguration = this.appConfigService.getConfig().defaultMainPage;
+    const defaultMainPage: MainPageConfiguration =
+      this.appConfigService.getConfig().defaultMainPage;
 
-    this.router.navigate([MainPageOptions[
-      this.store.select(selectIsLoggedIn) ? defaultMainPage.authenticatedUser : defaultMainPage.unauthenticatedUser
-    ]]);
+    const userLoggedIn = this.authService.isAuthenticated();
+
+    this.router.navigate([
+      MainPageOptions[
+        userLoggedIn
+          ? defaultMainPage.authenticatedUser
+          : defaultMainPage.nonAuthenticatedUser
+      ],
+    ]);
     return false;
   }
 }

@@ -43,7 +43,7 @@ export enum MainPageOptions {
 }
 
 export class MainPageConfiguration {
-  unauthenticatedUser: keyof typeof MainPageOptions;
+  nonAuthenticatedUser: keyof typeof MainPageOptions;
   authenticatedUser: keyof typeof MainPageOptions;
 }
 
@@ -121,6 +121,16 @@ export interface AppConfigInterface {
   defaultMainPage?: MainPageConfiguration;
 }
 
+function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
+  const validKeys = Object.keys(MainPageOptions);
+  return (
+    obj &&
+    typeof obj === "object" &&
+    validKeys.includes(obj.nonAuthenticatedUser) &&
+    validKeys.includes(obj.authenticatedUser)
+  );
+}
+
 @Injectable({
   providedIn: "root",
 })
@@ -149,13 +159,21 @@ export class AppConfigService {
     const config: AppConfigInterface = this.appConfig as AppConfigInterface;
     if (
       "defaultMainPage" in config &&
-      config.defaultMainPage instanceof MainPageConfiguration
+      isMainPageConfiguration(config.defaultMainPage)
     ) {
-      config.defaultMainPage.unauthenticatedUser = Object.keys(MainPageOptions).includes(config.defaultMainPage.unauthenticatedUser) ? config.defaultMainPage.unauthenticatedUser : "DATASETS"; 
-      config.defaultMainPage.authenticatedUser = Object.keys(MainPageOptions).includes(config.defaultMainPage.authenticatedUser) ? config.defaultMainPage.authenticatedUser : "DATASETS";
+      config.defaultMainPage.nonAuthenticatedUser = Object.keys(
+        MainPageOptions,
+      ).includes(config.defaultMainPage.nonAuthenticatedUser)
+        ? config.defaultMainPage.nonAuthenticatedUser
+        : "DATASETS";
+      config.defaultMainPage.authenticatedUser = Object.keys(
+        MainPageOptions,
+      ).includes(config.defaultMainPage.authenticatedUser)
+        ? config.defaultMainPage.authenticatedUser
+        : "DATASETS";
     } else {
       config.defaultMainPage = {
-        unauthenticatedUser: "DATASETS",
+        nonAuthenticatedUser: "DATASETS",
         authenticatedUser: "DATASETS",
       } as MainPageConfiguration;
     }

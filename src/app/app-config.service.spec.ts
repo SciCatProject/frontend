@@ -10,8 +10,8 @@ import { MockHttp } from "shared/MockStubs";
 
 const appConfig: AppConfigInterface = {
   defaultMainPage: {
-    unauthenticatedUser: "DATASETS",
-    authenticatedUser: "DATASETS"
+    nonAuthenticatedUser: "DATASETS",
+    authenticatedUser: "DATASETS",
   },
   skipSciCatLoginPageEnabled: false,
   accessTokenPrefix: "",
