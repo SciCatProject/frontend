@@ -6,7 +6,7 @@ import { AppLayoutComponent } from "_layout/app-layout/app-layout.component";
 import { AppMainLayoutComponent } from "_layout/app-main-layout/app-main-layout.component";
 import { ServiceGuard } from "./service.guard";
 import { MainPageGuard } from "./main-page";
-import { DummyComponent } from "./dummy.component";
+import { RedirectingComponent } from "./redirecting.component";
 
 export const routes: Routes = [
   {
@@ -16,7 +16,7 @@ export const routes: Routes = [
       {
         path: "",
         canActivate: [MainPageGuard],
-        component: DummyComponent,
+        component: RedirectingComponent,
         pathMatch: "full",
       },
       {

@@ -42,6 +42,11 @@ export enum MainPageOptions {
   SAMPLES = "/samples",
 }
 
+export class MainPageConfiguration {
+  unauthenticatedUser: keyof typeof MainPageOptions;
+  authenticatedUser: keyof typeof MainPageOptions;
+}
+
 export interface AppConfigInterface {
   skipSciCatLoginPageEnabled?: boolean;
   accessTokenPrefix: string;
@@ -113,7 +118,7 @@ export interface AppConfigInterface {
   datasetDetailComponent?: DatasetDetailComponentConfig;
   labelsLocalization?: LabelsLocalization;
   dateFormat?: string;
-  defaultMainPage?: string;
+  defaultMainPage?: MainPageConfiguration;
 }
 
 @Injectable({
@@ -144,11 +149,15 @@ export class AppConfigService {
     const config: AppConfigInterface = this.appConfig as AppConfigInterface;
     if (
       "defaultMainPage" in config &&
-      Object.keys(MainPageOptions).includes(config.defaultMainPage)
+      config.defaultMainPage instanceof MainPageConfiguration
     ) {
-      config.defaultMainPage = MainPageOptions[config.defaultMainPage];
+      config.defaultMainPage.unauthenticatedUser = Object.keys(MainPageOptions).includes(config.defaultMainPage.unauthenticatedUser) ? config.defaultMainPage.unauthenticatedUser : "DATASETS"; 
+      config.defaultMainPage.authenticatedUser = Object.keys(MainPageOptions).includes(config.defaultMainPage.authenticatedUser) ? config.defaultMainPage.authenticatedUser : "DATASETS";
     } else {
-      config.defaultMainPage = MainPageOptions.DATASETS;
+      config.defaultMainPage = {
+        unauthenticatedUser: "DATASETS",
+        authenticatedUser: "DATASETS",
+      } as MainPageConfiguration;
     }
 
     this.appConfig = config;

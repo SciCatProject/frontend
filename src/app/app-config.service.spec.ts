@@ -9,7 +9,10 @@ import { of } from "rxjs";
 import { MockHttp } from "shared/MockStubs";
 
 const appConfig: AppConfigInterface = {
-  defaultMainPage: "/datasets",
+  defaultMainPage: {
+    unauthenticatedUser: "DATASETS",
+    authenticatedUser: "DATASETS"
+  },
   skipSciCatLoginPageEnabled: false,
   accessTokenPrefix: "",
   addDatasetEnabled: true,
