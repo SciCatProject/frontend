@@ -3,56 +3,41 @@
   <div fxLayout="row" fxLayoutAlign="space-evenly end">
     <div style="flex: 1"></div>
 
-    <mat-paginator
-      [pageSizeOptions]="[10, 25, 50, 100, 500, 1000]"
-      [pageIndex]="currentPage$ | async"
-      [length]="datasetCount$ | async"
-      [pageSize]="datasetsPerPage$ | async"
-      (page)="onPageChange($event)"
-    >
+    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100, 500, 1000]"
+      [pageIndex]="currentPage$ | async" [length]="datasetCount$ | async"
+      [pageSize]="datasetsPerPage$ | async" (page)="onPageChange($event)">
     </mat-paginator>
 
-    <button
+    <!-- <button
       mat-icon-button
       class="settings-button"
       matTooltip="Table Settings"
       (click)="doSettingsClick($event)"
     >
       <mat-icon>settings</mat-icon>
-    </button>
+    </button> -->
   </div>
 
-  <mat-table
-    [dataSource]="datasets"
-    class="mat-elevation-z2"
-    matSort
-    (matSortChange)="onSortChange($event)"
-  >
+  <mat-table [dataSource]="datasets" class="mat-elevation-z2" matSort
+    (matSortChange)="onSortChange($event)">
     <!-- Column Definitions -->
 
     <!-- Select Column -->
     <ng-container matColumnDef="standard_select">
       <mat-header-cell *matHeaderCellDef>
-        <mat-checkbox
-          [checked]="
+        <mat-checkbox [checked]="
             !!selectedSets && selectedSets.length > 0 && isAllSelected()
-          "
-          [indeterminate]="
+          " [indeterminate]="
             selectedSets && selectedSets.length > 0 && !isAllSelected()
-          "
-          (change)="onSelectAll($event)"
-        >
+          " (change)="onSelectAll($event)">
         </mat-checkbox>
       </mat-header-cell>
 
       <mat-cell *matCellDef="let dataset">
-        <mat-checkbox
-          data-cy="checkboxInput"
+        <mat-checkbox data-cy="checkboxInput"
           *ngIf="!isInBatch(dataset); else in_batch"
-          [checked]="isSelected(dataset)"
-          (change)="onSelect($event, dataset)"
-          (click)="$event.stopPropagation()"
-        >
+          [checked]="isSelected(dataset)" (change)="onSelect($event, dataset)"
+          (click)="$event.stopPropagation()">
         </mat-checkbox>
         <ng-template #in_batch>
           <mat-icon> shopping_cart </mat-icon>
@@ -76,10 +61,8 @@
     </ng-container>
 
     <!-- Name Column -->
-    <ng-container
-      matColumnDef="standard_datasetName"
-      style="align-content: center"
-    >
+    <ng-container matColumnDef="standard_datasetName"
+      style="align-content: center">
       <mat-header-cell *matHeaderCellDef mat-sort-header>
         <div fxLayout="column" style="align-items: center">
           <div>
@@ -103,10 +86,8 @@
           <div>Source&nbsp;Folder</div>
         </div>
       </mat-header-cell>
-      <mat-cell
-        *matCellDef="let dataset"
-        matTooltip="{{ dataset.sourceFolder }}"
-      >
+      <mat-cell *matCellDef="let dataset"
+        matTooltip="{{ dataset.sourceFolder }}">
         ...{{ dataset.sourceFolder | slice: -10 }}
       </mat-cell>
     </ng-container>
@@ -122,13 +103,11 @@
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
-        <div
-          *ngIf="
+        <div *ngIf="
             dataset.scientificMetadata &&
             dataset.scientificMetadata.runNumber &&
             dataset.scientificMetadata.runNumber.value
-          "
-        >
+          ">
           {{ dataset.scientificMetadata.runNumber.value }}
         </div>
       </mat-cell>
@@ -147,17 +126,14 @@
       <mat-cell *matCellDef="let dataset">
         <div fxLayout="column">
           <div>{{ dataset.size | filesize }}</div>
-          <div
-            *ngIf="appConfig.fileColorEnabled"
-            [ngStyle]="{
+          <div *ngIf="appConfig.fileColorEnabled" [ngStyle]="{
               'height.px': '4',
               'width.px':
                 dataset.size >= 4000000000
                   ? 35 + (5 * dataset.size) / 40000000000
                   : 5 + (15 * dataset.size) / 4000000000,
               background: dataset.size >= 4000000000 ? 'red' : 'green',
-            }"
-          >
+            }">
             &nbsp;
           </div>
         </div>
@@ -205,11 +181,8 @@
         </div>
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">
-        <img
-          src="{{ dataset.pid | thumbnail | async }}"
-          height="42px"
-          loading="lazy"
-        />
+        <img src="{{ dataset.pid | thumbnail | async }}" height="42px"
+          loading="lazy" />
       </mat-cell>
     </ng-container>
 
@@ -223,25 +196,19 @@
           <div>Science&nbsp;Metadata</div>
         </div>
       </mat-header-cell>
-      <mat-cell
-        *matCellDef="let dataset"
-        matTooltip="{{ dataset.scientificMetadata | jsonHead }}"
-      >
-        <div
-          *ngIf="
+      <mat-cell *matCellDef="let dataset"
+        matTooltip="{{ dataset.scientificMetadata | jsonHead }}">
+        <div *ngIf="
             dataset.scientificMetadata && appConfig.metadataPreviewEnabled;
             then thenBlock;
             else elseBlock
-          "
-        ></div>
+          "></div>
         <ng-template #thenBlock>{{
           dataset.scientificMetadata | jsonHead
-        }}</ng-template>
-        <ng-template #elseBlock
-          >{{
-            dataset.scientificMetadata | json | slice: 0 : 100
-          }}...</ng-template
-        >
+          }}</ng-template>
+        <ng-template #elseBlock>{{
+          dataset.scientificMetadata | json | slice: 0 : 100
+          }}...</ng-template>
       </mat-cell>
     </ng-container>
 
@@ -257,7 +224,7 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let dataset">{{
         dataset.proposalId | StripProposalPrefix
-      }}</mat-cell>
+        }}</mat-cell>
     </ng-container>
 
     <!-- Group Column -->
@@ -284,59 +251,45 @@
         </div>
       </mat-header-cell>
 
-      <mat-cell
-        *matCellDef="let dataset"
-        [matTooltip]="
+      <mat-cell *matCellDef="let dataset" [matTooltip]="
           [
             (dataset.datasetlifecycle || {}).archiveStatusMessage,
             (dataset.datasetlifecycle || {}).retrieveStatus,
           ].join('\n')
-        "
-      >
+        ">
         <ng-container
-          *ngIf="wipCondition(dataset); then wip; else second"
-        ></ng-container>
+          *ngIf="wipCondition(dataset); then wip; else second"></ng-container>
 
-        <ng-template #wip
-          ><mat-icon> hourglass_empty </mat-icon> &nbsp;work in
-          progress</ng-template
-        >
+        <ng-template #wip><mat-icon> hourglass_empty </mat-icon> &nbsp;work in
+          progress</ng-template>
         <ng-template #second>
           <ng-container
-            *ngIf="archivableCondition(dataset); then arch; else third"
-          ></ng-container>
+            *ngIf="archivableCondition(dataset); then arch; else third"></ng-container>
         </ng-template>
         <ng-template #arch>
           <mat-icon> archive </mat-icon>
-          &nbsp;archivable</ng-template
-        >
+          &nbsp;archivable</ng-template>
         <ng-template #third>
           <ng-container
-            *ngIf="retrievableCondition(dataset); then ret; else fourth"
-          ></ng-container>
+            *ngIf="retrievableCondition(dataset); then ret; else fourth"></ng-container>
         </ng-template>
         <ng-template #ret>
           <mat-icon> cloud_upload </mat-icon>
-          &nbsp;retrievable</ng-template
-        >
+          &nbsp;retrievable</ng-template>
         <ng-template #fourth>
           <ng-container
-            *ngIf="systemErrorCondition(dataset); then sysErr; else fifth"
-          ></ng-container>
+            *ngIf="systemErrorCondition(dataset); then sysErr; else fifth"></ng-container>
         </ng-template>
         <ng-template #sysErr>
           <mat-icon> error </mat-icon>
-          &nbsp;system error</ng-template
-        >
+          &nbsp;system error</ng-template>
         <ng-template #fifth>
           <ng-container
-            *ngIf="userErrorCondition(dataset); then userErr"
-          ></ng-container>
+            *ngIf="userErrorCondition(dataset); then userErr"></ng-container>
         </ng-template>
         <ng-template #userErr>
           <mat-icon> build </mat-icon>
-          &nbsp;user error</ng-template
-        >
+          &nbsp;user error</ng-template>
       </mat-cell>
     </ng-container>
 
@@ -372,15 +325,13 @@
             </div>
           </mat-header-cell>
           <mat-cell *matCellDef="let dataset">
-            <div
-              *ngIf="
+            <div *ngIf="
                 lodashGet(dataset.scientificMetadata, column.name) as value
-              "
-            >
+              ">
               <!-- This can show 3 type of value like this {value: 2, unit: mm} || {v: 2, u: mm} || 2
                 First match rule-->
               {{ value.value || value.v || value }}&nbsp;{{
-                value.unit || value.u | prettyUnit
+              value.unit || value.u | prettyUnit
               }}
             </div>
           </mat-cell>
@@ -390,17 +341,13 @@
 
     <!-- End of Column Definitions -->
 
-    <mat-header-row
-      class="datasets-header"
-      *matHeaderRowDef="displayedColumns; sticky: true"
-    >
+    <mat-header-row class="datasets-header"
+      *matHeaderRowDef="displayedColumns; sticky: true">
     </mat-header-row>
 
-    <mat-row
-      class="row-generic"
+    <mat-row class="row-generic"
       *matRowDef="let dataset; columns: displayedColumns"
-      (click)="doRowClick(dataset)"
-    >
+      (click)="doRowClick(dataset)">
     </mat-row>
   </mat-table>
 </div>

@@ -128,7 +128,7 @@ const appConfig: AppConfig = {
         name: "select",
         order: 0,
         type: "standard",
-        enabled: true,
+        enabled: false,
       },
       {
         name: "pid",

@@ -212,7 +212,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy, OnChanges {
         });
       }),
     );
-
     if (this.tableColumns) {
       this.displayedColumns = this.tableColumns
         .filter((column) => column.enabled)

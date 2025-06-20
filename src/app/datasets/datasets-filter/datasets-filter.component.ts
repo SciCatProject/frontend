@@ -83,6 +83,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   // Track the expanded state of each outgassing filter panel
   expandedPanels: { [key: string]: boolean } = {
+    typeOfCleaning: false,
     outgassing1h: false,
     outgassing10h: false,
     outgassing100h: false,
@@ -94,6 +95,13 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   labelMaps: { [key: string]: string } = {};
 
   // Add form groups for the outgassing filters
+  typeOfCleaningForm = new FormGroup({
+    lhs: new FormControl("Type of Cleaning", [Validators.required]),
+    relation: new FormControl("EQUAL_TO_STRING", [Validators.required]),
+    rhs: new FormControl("", [Validators.required, Validators.minLength(1)]),
+    unit: new FormControl(""),
+  });
+
   outgassingForm1h = new FormGroup({
     lhs: new FormControl("Outgassing values after 1h", [Validators.required]),
     relation: new FormControl("GREATER_THAN", [Validators.required]),
@@ -230,6 +238,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   // Apply all outgassing filters at once
   private applyOutgassingFilters() {
     const forms = [
+      { type: "typeOfCleaning", form: this.typeOfCleaningForm },
       { type: "1h", form: this.outgassingForm1h },
       { type: "10h", form: this.outgassingForm10h },
       { type: "100h", form: this.outgassingForm100h },
@@ -237,7 +246,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     ];
     // Process each form that has a value
     forms.forEach(({ type, form }) => {
-      console.log(`Processing outgassing filter for: ${type}`, form);
       // Only process if the form has a value
       if (form.get("rhs")?.value) {
         this.processOutgassingFilter(
@@ -249,12 +257,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   // Process a single outgassing filter
   private processOutgassingFilter(
-    filterType: "1h" | "10h" | "100h" | "greater100h",
+    filterType: "typeOfCleaning" | "1h" | "10h" | "100h" | "greater100h",
   ): void {
     let form: FormGroup;
 
     // Select the appropriate form based on the filter type
     switch (filterType) {
+      case "typeOfCleaning":
+        form = this.typeOfCleaningForm;
+        break;
       case "1h":
         form = this.outgassingForm1h;
         break;
@@ -303,12 +314,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   // Method to apply outgassing filters
   applyOutgassingFilter(
-    filterType: "1h" | "10h" | "100h" | "greater100h",
+    filterType: "typeOfCleaning" | "1h" | "10h" | "100h" | "greater100h",
   ): void {
     let form: FormGroup;
 
     // Select the appropriate form based on the filter type
     switch (filterType) {
+      case "typeOfCleaning":
+        form = this.typeOfCleaningForm;
+        break;
       case "1h":
         form = this.outgassingForm1h;
         break;
