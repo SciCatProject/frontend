@@ -129,7 +129,7 @@
         "name": "pid",
         "order": 1,
         "type": "standard",
-        "enabled": true
+        "enabled": false
       },
       {
         "name": "datasetName",

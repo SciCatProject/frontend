@@ -86,6 +86,7 @@ export const initialUserState: UserState = {
 
   conditions: [],
   tablesSettings: {},
+  hasFetchedSettings: false,
 };
 
 describe("User Selectors", () => {

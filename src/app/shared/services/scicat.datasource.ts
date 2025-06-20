@@ -4,7 +4,7 @@ import { ScicatDataService } from "./scicat-data-service";
 import { catchError, finalize } from "rxjs/operators";
 import { ExportExcelService } from "./export-excel.service";
 import { Column } from "shared/modules/shared-table/shared-table.module";
-import { AppConfig, AppConfigService } from "app-config.service";
+import { AppConfigInterface, AppConfigService } from "app-config.service";
 
 // For each different table type one instance of this class should be created
 
@@ -12,7 +12,7 @@ const resolvePath = (object: any, path: string, defaultValue: unknown) =>
   path.split(".").reduce((o, p) => (o ? o[p] : defaultValue), object);
 
 export class SciCatDataSource implements DataSource<any> {
-  private appConfig: AppConfig;
+  private appConfig: AppConfigInterface;
   private exportSubscription: Subscription;
   private dataForExcel: unknown[] = [];
   private columnsdef: Column[] = [];

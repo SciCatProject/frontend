@@ -76,7 +76,12 @@
                         <ng-container *ngIf="fieldType === 'internalLink'">
                           <ng-container *ngFor="let value of fieldValue">
                             <a
-                              (click)="onClickInternalLink(field.source, value)"
+                              (click)="
+                                onClickInternalLink(
+                                  field.source,
+                                  getInternalLinkValue(dataset, field.source)
+                                )
+                              "
                               [title]="value"
                               [ngClass]="{ disabled: !value }"
                               >{{ value ?? "-" }}

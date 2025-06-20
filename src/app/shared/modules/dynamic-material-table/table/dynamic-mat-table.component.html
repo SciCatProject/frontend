@@ -31,7 +31,7 @@
       >
         <mat-checkbox
           style="z-index: 10"
-          (change)="$event ? masterToggle() : null"
+          (change)="$event ? masterToggle($event) : null"
           [checked]="rowSelectionModel.hasValue() && isAllSelected()"
           [indeterminate]="rowSelectionModel.hasValue() && !isAllSelected()"
           *ngIf="rowSelectionMode === 'multi'"
@@ -44,7 +44,8 @@
         <mat-checkbox
           (click)="$event.stopPropagation()"
           (change)="onRowSelectionChange($event, row)"
-          [checked]="rowSelectionModel?.isSelected(row)"
+          [checked]="rowSelectionModel?.isSelected(row) || isInSelection(row)"
+          [disabled]="isInSelection(row)"
         >
         </mat-checkbox>
       </mat-cell>
@@ -129,28 +130,38 @@
         [ngStyle]="cellStyle(row?.option, column)"
         (contextmenu)="onContextMenu($event, column, row)"
       >
-        <ng-container *ngIf="column.customRender; else regularColumnRender">
-          <label
-            *ngIf="!column.dynamicCellComponent"
-            (click)="onLabelClick($event, row, column)"
-            [class.rtl-cell]="direction === 'rtl'"
-            [class.ltr-cell]="direction === 'ltr'"
-            [ngStyle]="ellipsis(column)"
-            class="label-cell"
-            [innerHTML]="columnName(row, column)"
-          >
-          </label>
+        <!-- The render image is specific for the dataset table as the "thumbnail" pipe is designed to work only with datasets. Maybe this should be reviewed later and have a more general solution where we render images in columns -->
+        <ng-container *ngIf="column.renderImage; else renderColumn">
+          <img
+            src="{{ row.pid | thumbnail | async }}"
+            height="42px"
+            loading="lazy"
+          />
         </ng-container>
-        <ng-template #regularColumnRender>
-          <label
-            *ngIf="!column.dynamicCellComponent"
-            (click)="onLabelClick($event, row, column)"
-            [class.rtl-cell]="direction === 'rtl'"
-            [class.ltr-cell]="direction === 'ltr'"
-            [ngStyle]="ellipsis(column)"
-            class="label-cell"
-            >{{ row[column.name] }}
-          </label>
+        <ng-template #renderColumn>
+          <ng-container *ngIf="column.customRender; else regularColumnRender">
+            <label
+              *ngIf="!column.dynamicCellComponent"
+              (click)="onLabelClick($event, row, column)"
+              [class.rtl-cell]="direction === 'rtl'"
+              [class.ltr-cell]="direction === 'ltr'"
+              [ngStyle]="ellipsis(column)"
+              class="label-cell"
+              [innerHTML]="columnName(row, column)"
+            >
+            </label>
+          </ng-container>
+          <ng-template #regularColumnRender>
+            <label
+              *ngIf="!column.dynamicCellComponent"
+              (click)="onLabelClick($event, row, column)"
+              [class.rtl-cell]="direction === 'rtl'"
+              [class.ltr-cell]="direction === 'ltr'"
+              [ngStyle]="ellipsis(column)"
+              class="label-cell"
+              >{{ row[column.name] }}
+            </label>
+          </ng-template>
         </ng-template>
 
         <ng-container *ngIf="column.renderContentIcon">
@@ -164,16 +175,16 @@
               <mat-icon
                 [ngClass]="column.contentIconClass"
                 [matTooltip]="column.contentIconTooltip"
-                >{{ column.contentIcon }}</mat-icon
+                >{{ column.renderContentIcon(column, row) }}</mat-icon
               ></a
             >
           </ng-container>
           <ng-template #regularIconRender>
             <mat-icon
               [ngClass]="column.contentIconClass"
-              *ngIf="shouldRenderContentIcon(row, column)"
+              *ngIf="!!column.renderContentIcon(column, row)"
               [matTooltip]="column.contentIconTooltip"
-              >{{ column.contentIcon }}</mat-icon
+              >{{ column.renderContentIcon(column, row) }}</mat-icon
             >
           </ng-template>
         </ng-container>

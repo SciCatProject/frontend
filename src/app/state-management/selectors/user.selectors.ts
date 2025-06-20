@@ -133,3 +133,16 @@ export const selectUserSettingsPageViewModel = createSelector(
     settings,
   }),
 );
+
+export const selectHasFetchedSettings = createSelector(
+  selectUserState,
+  (state) => state.hasFetchedSettings,
+);
+
+export const selectColumnsWithHasFetchedSettings = createSelector(
+  selectUserState,
+  (state) => ({
+    columns: state.columns,
+    hasFetchedSettings: state.hasFetchedSettings,
+  }),
+);

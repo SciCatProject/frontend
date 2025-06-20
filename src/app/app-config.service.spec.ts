@@ -1,10 +1,14 @@
 import { HttpClient } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
-import { AppConfig, AppConfigService, HelpMessages } from "app-config.service";
+import {
+  AppConfigInterface,
+  AppConfigService,
+  HelpMessages,
+} from "app-config.service";
 import { of } from "rxjs";
 import { MockHttp } from "shared/MockStubs";
 
-const appConfig: AppConfig = {
+const appConfig: AppConfigInterface = {
   skipSciCatLoginPageEnabled: false,
   accessTokenPrefix: "",
   addDatasetEnabled: true,
@@ -128,7 +132,7 @@ const appConfig: AppConfig = {
         name: "select",
         order: 0,
         type: "standard",
-        enabled: true,
+        enabled: false,
       },
       {
         name: "pid",

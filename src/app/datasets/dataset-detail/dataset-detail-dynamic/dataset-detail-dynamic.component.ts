@@ -1,7 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 
 import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
+import { Subscription } from "rxjs";
 
 import { showMessageAction } from "state-management/actions/user.actions";
 import {
@@ -10,6 +11,7 @@ import {
   selectCurrentDatasetWithoutFileInfo,
 } from "state-management/selectors/datasets.selectors";
 import { selectIsLoading } from "state-management/selectors/user.selectors";
+import { selectCurrentInstrument } from "state-management/selectors/instruments.selectors";
 
 import { AppConfigService } from "app-config.service";
 
@@ -26,6 +28,7 @@ import { AttachmentService } from "shared/services/attachment.service";
 import { TranslateService } from "@ngx-translate/core";
 import { DatePipe } from "@angular/common";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular/model/outputDatasetObsoleteDto";
+import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
@@ -41,7 +44,9 @@ import { MatSnackBar } from "@angular/material/snack-bar";
   styleUrls: ["./dataset-detail-dynamic.component.scss"],
   standalone: false,
 })
-export class DatasetDetailDynamicComponent implements OnInit {
+export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
+
   datasetView: CustomizationItem[];
   form: FormGroup;
   cols = 10;
@@ -54,6 +59,8 @@ export class DatasetDetailDynamicComponent implements OnInit {
   attachments$ = this.store.select(selectCurrentAttachments);
   loading$ = this.store.select(selectIsLoading);
   show = false;
+
+  instrument: Instrument | undefined;
 
   constructor(
     public appConfigService: AppConfigService,
@@ -82,6 +89,12 @@ export class DatasetDetailDynamicComponent implements OnInit {
     });
 
     this.datasetView = sortedDatasetView;
+
+    this.subscriptions.push(
+      this.store.select(selectCurrentInstrument).subscribe((instrument) => {
+        this.instrument = instrument;
+      }),
+    );
   }
 
   onCopy(value: string) {
@@ -175,9 +188,23 @@ export class DatasetDetailDynamicComponent implements OnInit {
       return null;
     }
 
+    if (path === "instrumentName" && this.instrument) {
+      return this.instrument.name || "-";
+    }
+
     return path
       .split(".")
-      .reduce((prev, curr) => (prev ? prev[curr] : undefined), obj);
+      .reduce((prev, curr) => (prev != null ? prev[curr] : undefined), obj);
+  }
+
+  getInternalLinkValue(obj: OutputDatasetObsoleteDto, path: string): string {
+    // For instrumentName internal links, return the instrument ID instead of the name
+    if (path === "instrumentName" && this.instrument) {
+      return this.instrument.pid || "";
+    }
+
+    const value = this.getNestedValue(obj, path);
+    return Array.isArray(value) ? value[0] || "" : (value as string) || "";
   }
 
   onClickInternalLink(internalLinkType: string, id: string): void {
@@ -194,6 +221,7 @@ export class DatasetDetailDynamicComponent implements OnInit {
         this.router.navigateByUrl("/proposals/" + encodedId);
         break;
       case InternalLinkType.INSTRUMENTS:
+      case InternalLinkType.INSTRUMENTS_NAME:
         this.router.navigateByUrl("/instruments/" + encodedId);
         break;
       default:
@@ -220,5 +248,11 @@ export class DatasetDetailDynamicComponent implements OnInit {
 
     // Ensure the result is a valid object for metadata display
     return result && typeof result === "object" ? result : null;
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    });
   }
 }
