@@ -28,17 +28,10 @@
             [selectedSets]="selectedSets$ | async"></dataset-table-actions>
         </ng-template>
 
-        <dataset-table [tableColumns]="tableColumns$ | async"
-          [selectedSets]="selectedSets$ | async"
-          (settingsClick)="onSettingsClick()" (rowClick)="onRowClick($event)"
+        <dataset-table [selectedSets]="selectedSets$ | async"
+          (rowClick)="onRowClick($event)"
           (pageChange)="onPageChange($event)"></dataset-table>
       </div>
     </div>
   </mat-sidenav-content>
-
-  <mat-sidenav #settings position="end" mode="push">
-    <dataset-table-settings [selectableColumns]="selectableColumns$ | async"
-      [clearSearchBar]="clearColumnSearch" (closeClick)="onCloseClick()"
-      (selectColumn)="onSelectColumn($event)"></dataset-table-settings>
-  </mat-sidenav>
 </mat-sidenav-container>

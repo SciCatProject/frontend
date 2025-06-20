@@ -519,14 +519,6 @@ export class DynamicMatTableComponent<T extends TableRow>
     return row[column.name];
   }
 
-  shouldRenderContentIcon(row: any, column: TableField<any>) {
-    if (column.renderContentIcon) {
-      return column.renderContentIcon(column, row);
-    }
-
-    return false;
-  }
-
   renderContentIconLink(row: any, column: TableField<any>) {
     if (column.contentIconLink) {
       return column.contentIconLink(column, row);
