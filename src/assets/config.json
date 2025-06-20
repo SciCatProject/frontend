@@ -248,5 +248,9 @@
         }
       }
     }
-  }
+  },
+  "defaultMainPage": {
+    "nonAuthenticatedUser": "DATASETS",
+    "authenticatedUser": "DATASETS"
+  },
 }

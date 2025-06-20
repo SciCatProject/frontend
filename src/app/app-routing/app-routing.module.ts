@@ -5,6 +5,8 @@ import { ErrorPageComponent } from "shared/modules/error-page/error-page.compone
 import { AppLayoutComponent } from "_layout/app-layout/app-layout.component";
 import { AppMainLayoutComponent } from "_layout/app-main-layout/app-main-layout.component";
 import { ServiceGuard } from "./service.guard";
+import { MainPageGuard } from "./main-page";
+import { RedirectingComponent } from "./redirecting.component";
 
 export const routes: Routes = [
   {
@@ -13,7 +15,8 @@ export const routes: Routes = [
     children: [
       {
         path: "",
-        redirectTo: "/datasets",
+        canActivate: [MainPageGuard],
+        component: RedirectingComponent,
         pathMatch: "full",
       },
       {
