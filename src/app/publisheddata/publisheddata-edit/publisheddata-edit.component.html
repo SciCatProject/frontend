@@ -58,14 +58,30 @@
           <button
             mat-raised-button
             color="primary"
-            (click)="onPublishedDataUpdate()"
+            (click)="onPublishedDataUpdate(false)"
             [disabled]="
               !form.valid || (panelOpenState() && !metadataDataIsValid())
             "
           >
-            Update Published Data
+            Save changes
           </button>
-          <button (click)="onCancel()" mat-raised-button color="white">
+          <button
+            mat-raised-button
+            color="primary"
+            class="save-and-continue"
+            (click)="onPublishedDataUpdate(true)"
+            [disabled]="
+              !form.valid || (panelOpenState() && !metadataDataIsValid())
+            "
+          >
+            Save and continue
+          </button>
+          <button
+            (click)="onCancel()"
+            class="cancel"
+            mat-raised-button
+            color="white"
+          >
             Cancel
           </button>
         </form>

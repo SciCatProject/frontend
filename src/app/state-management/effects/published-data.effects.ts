@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatLatestFrom } from "@ngrx/operators";
 import {
+  DatasetsV4Service,
+  OutputDatasetObsoleteDto,
   PublishedData,
   PublishedDataService,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -112,8 +114,8 @@ export class PublishedDataEffects {
       return this.actions$.pipe(
         ofType(fromActions.resyncPublishedDataCompleteAction),
         concatLatestFrom(() => this.store.select(selectCurrentPublishedData)),
-        filter(([_, publishedData]) => !!publishedData),
-        exhaustMap(([_, publishedData]) =>
+        filter(([{ redirect }, publishedData]) => !!publishedData && redirect),
+        exhaustMap(([, publishedData]) =>
           this.router.navigateByUrl(
             "/publishedDatasets/" + encodeURIComponent(publishedData.doi),
           ),
@@ -128,7 +130,7 @@ export class PublishedDataEffects {
       return this.actions$.pipe(
         ofType(fromActions.saveDataPublicationInLocalStorage),
         tap(({ publishedData }) =>
-          localStorage.setItem("publishedData", JSON.stringify(publishedData)),
+          localStorage.setItem("editingPublishedDataDoi", publishedData.doi),
         ),
       );
     },
@@ -139,7 +141,7 @@ export class PublishedDataEffects {
     () => {
       return this.actions$.pipe(
         ofType(fromActions.clearDataPublicationFromLocalStorage),
-        tap(() => localStorage.removeItem("publishedData")),
+        tap(() => localStorage.removeItem("editingPublishedDataDoi")),
       );
     },
     { dispatch: false },
@@ -261,13 +263,15 @@ export class PublishedDataEffects {
   resyncPublishedData$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.resyncPublishedDataAction),
-      switchMap(({ doi, data }) =>
+      switchMap(({ doi, data, redirect }) =>
         this.publishedDataService
           .publishedDataControllerResyncV3(doi, data)
           .pipe(
             mergeMap((publishedData) => [
-              fromActions.resyncPublishedDataCompleteAction(publishedData),
-              fromActions.fetchPublishedDataAction({ id: doi }),
+              fromActions.resyncPublishedDataCompleteAction({
+                publishedData,
+                redirect,
+              }),
               datasetActions.clearBatchAction(),
               fromActions.clearDataPublicationFromLocalStorage(),
             ]),
@@ -305,6 +309,56 @@ export class PublishedDataEffects {
     );
   });
 
+  fetchRelatedDatasetsAndAddToBatch$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchRelatedDatasetsAndAddToBatchAction),
+      switchMap(({ datasetPids, publishedDataDoi }) =>
+        this.datasetsV4Service
+          .datasetsV4ControllerFindAllV4({
+            filter: { where: { pid: { $in: datasetPids } } },
+          })
+          .pipe(
+            mergeMap((datasets) => [
+              datasetActions.clearBatchAction(),
+              datasetActions.selectDatasetsAction({
+                datasets: datasets as OutputDatasetObsoleteDto[],
+              }),
+              datasetActions.addToBatchAction(),
+              fromActions.fetchRelatedDatasetsAndAddToBatchCompleteAction(),
+              fromActions.storeEditingPublishedDataDoiAction({
+                publishedDataDoi,
+              }),
+            ]),
+            catchError(() =>
+              of(fromActions.fetchRelatedDatasetsAndAddToBatchFailedAction()),
+            ),
+          ),
+      ),
+    );
+  });
+
+  storeEditingPublishedDataDoi$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(fromActions.storeEditingPublishedDataDoiAction),
+        tap(({ publishedDataDoi }) =>
+          localStorage.setItem("editingPublishedDataDoi", publishedDataDoi),
+        ),
+      );
+    },
+    { dispatch: false },
+  );
+
+  navigateToBatch$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(fromActions.fetchRelatedDatasetsAndAddToBatchCompleteAction),
+        tap(() => this.router.navigateByUrl("/datasets/batch")),
+      );
+    },
+    { dispatch: false },
+  );
+
   loading$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(
@@ -318,6 +372,7 @@ export class PublishedDataEffects {
         fromActions.registerPublishedDataAction,
         fromActions.resyncPublishedDataAction,
         fromActions.updatePublishedDataAction,
+        fromActions.fetchRelatedDatasetsAndAddToBatchAction,
       ),
       switchMap(() => of(loadingAction())),
     );
@@ -342,6 +397,8 @@ export class PublishedDataEffects {
         fromActions.registerPublishedDataFailedAction,
         fromActions.resyncPublishedDataCompleteAction,
         fromActions.updatePublishedDataCompleteAction,
+        fromActions.fetchRelatedDatasetsAndAddToBatchCompleteAction,
+        fromActions.fetchRelatedDatasetsAndAddToBatchFailedAction,
       ),
       switchMap(() => of(loadingCompleteAction())),
     );
@@ -350,6 +407,7 @@ export class PublishedDataEffects {
   constructor(
     private actions$: Actions,
     private publishedDataService: PublishedDataService,
+    private datasetsV4Service: DatasetsV4Service,
     private router: Router,
     private store: Store,
   ) {}

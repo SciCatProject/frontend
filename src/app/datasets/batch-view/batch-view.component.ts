@@ -25,6 +25,7 @@ import {
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { resyncPublishedDataAction } from "state-management/actions/published-data.actions";
 
 @Component({
   selector: "batch-view",
@@ -41,6 +42,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   isAdmin = false;
   userProfile: any = {};
   subscriptions: Subscription[] = [];
+  editingPublishedDataDoi = null;
 
   appConfig = this.appConfigService.getConfig();
   shareEnabled = this.appConfig.shareEnabled;
@@ -209,7 +211,38 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     });
   }
 
+  onSaveChanges() {
+    this.store.dispatch(
+      resyncPublishedDataAction({
+        doi: this.editingPublishedDataDoi,
+        redirect: true,
+        data: { datasetPids: this.datasetList.map((d) => d.pid) },
+      }),
+    );
+    this.store.dispatch(clearBatchAction());
+    localStorage.removeItem("editingPublishedDataDoi");
+    this.router.navigateByUrl(
+      `/publishedDatasets/${this.getPublishingDataUrl()}`,
+    );
+  }
+
+  onCancelEdit() {
+    this.store.dispatch(clearBatchAction());
+    localStorage.removeItem("editingPublishedDataDoi");
+    this.router.navigateByUrl(
+      `/publishedDatasets/${this.getPublishingDataUrl()}`,
+    );
+  }
+
+  getPublishingDataUrl() {
+    return encodeURIComponent(this.editingPublishedDataDoi);
+  }
+
   ngOnInit() {
+    this.editingPublishedDataDoi = localStorage.getItem(
+      "editingPublishedDataDoi",
+    );
+
     combineLatest([this.isAdmin$, this.userProfile$])
       .subscribe(([isAdmin, userProfile]) => {
         this.isAdmin = isAdmin;

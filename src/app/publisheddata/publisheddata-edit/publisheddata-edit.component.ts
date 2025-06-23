@@ -65,7 +65,7 @@ export class PublisheddataEditComponent
     private appConfigService: AppConfigService,
   ) {}
 
-  public onPublishedDataUpdate() {
+  public onPublishedDataUpdate(shouldRedirect: boolean = false) {
     if (this.form.valid) {
       const { doi, ...rest } = this.form.value;
       const metadata = {
@@ -82,6 +82,7 @@ export class PublisheddataEditComponent
           resyncPublishedDataAction({
             doi,
             data: { ...rest, metadata },
+            redirect: shouldRedirect,
           }),
         );
       }

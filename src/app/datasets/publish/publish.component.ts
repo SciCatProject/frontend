@@ -13,6 +13,7 @@ import {
   fetchPublishedDataConfigAction,
   resyncPublishedDataAction,
   saveDataPublicationAction,
+  saveDataPublicationCompleteAction,
   updatePublishedDataAction,
 } from "state-management/actions/published-data.actions";
 
@@ -105,43 +106,6 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
     this._hasUnsavedChanges = true;
   }
 
-  checkForSavedData() {
-    const savedPublishedData = JSON.parse(
-      localStorage.getItem("publishedData"),
-    );
-
-    if (savedPublishedData && savedPublishedData.id) {
-      this.savedPublishedDataDoi = savedPublishedData.doi;
-      this.store
-        .select(selectCurrentPublishedData)
-        .subscribe((publishedData) => {
-          if (publishedData) {
-            this.form.title = publishedData.title;
-            this.form.abstract = publishedData.abstract;
-
-            if (publishedData.metadata) {
-              this.metadataData = publishedData.metadata;
-
-              this.initialMetadata = JSON.stringify(publishedData.metadata);
-            }
-          }
-
-          this._hasUnsavedChanges = false;
-        });
-
-      this.store.dispatch(
-        fetchPublishedDataAction({ id: this.savedPublishedDataDoi }),
-      );
-    } else {
-      this.publishedDataApi
-        .publishedDataControllerFormPopulateV3(this.form.datasetPids[0])
-        .subscribe((result) => {
-          this.form.abstract = result.abstract;
-          this.form.title = result.title;
-        });
-    }
-  }
-
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());
     this.store.dispatch(fetchPublishedDataConfigAction());
@@ -156,8 +120,6 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
         }),
       )
       .subscribe();
-
-    this.checkForSavedData();
 
     this.publishedDataConfigSubscription = this.publishedDataConfig$.subscribe(
       (publishedDataConfig) => {
@@ -179,6 +141,13 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
       }
     });
 
+    this.publishedDataApi
+      .publishedDataControllerFormPopulateV3(this.form.datasetPids[0])
+      .subscribe((result) => {
+        this.form.abstract = result.abstract;
+        this.form.title = result.title;
+      });
+
     this.actionSubjectSubscription = this.actionsSubj.subscribe((data) => {
       if (data.type === createDataPublicationCompleteAction.type) {
         const publishedData = (
@@ -187,6 +156,14 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
 
         const doi = encodeURIComponent(publishedData.doi);
         this.router.navigateByUrl("/publishedDatasets/" + doi);
+      }
+
+      if (data.type === saveDataPublicationCompleteAction.type) {
+        const publishedData = (
+          data as { type: string; publishedData: PublishedData }
+        ).publishedData;
+
+        this.savedPublishedDataDoi = publishedData.doi;
       }
     });
 
@@ -231,6 +208,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
         resyncPublishedDataAction({
           doi: this.savedPublishedDataDoi,
           data: publishedData,
+          redirect: true,
         }),
       );
     } else {

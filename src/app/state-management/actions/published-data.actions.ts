@@ -1,8 +1,8 @@
 import { createAction, props } from "@ngrx/store";
 import {
   CreatePublishedDataDto,
+  PartialUpdatePublishedDataDto,
   PublishedData,
-  UpdatePublishedDataDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 
 export const fetchAllPublishedDataAction = createAction(
@@ -106,11 +106,15 @@ export const publishPublishedDataFailedAction = createAction(
 
 export const resyncPublishedDataAction = createAction(
   "[PublishedData] Resync Published Data",
-  props<{ doi: string; data: UpdatePublishedDataDto }>(),
+  props<{
+    doi: string;
+    data: PartialUpdatePublishedDataDto;
+    redirect: boolean;
+  }>(),
 );
 export const resyncPublishedDataCompleteAction = createAction(
   "[PublishedData] Resync Published Data Complete",
-  props<{ publishedData: PublishedData }>(),
+  props<{ publishedData: PublishedData; redirect: boolean }>(),
 );
 export const resyncPublishedDataFailedAction = createAction(
   "[PublishedData] Resync Published Data Failed",
@@ -118,7 +122,7 @@ export const resyncPublishedDataFailedAction = createAction(
 
 export const updatePublishedDataAction = createAction(
   "[PublishedData] Update Published Data",
-  props<{ doi: string; data: UpdatePublishedDataDto }>(),
+  props<{ doi: string; data: PartialUpdatePublishedDataDto }>(),
 );
 export const updatePublishedDataCompleteAction = createAction(
   "[PublishedData] Update Published Data Complete",
@@ -140,4 +144,22 @@ export const sortByColumnAction = createAction(
 
 export const clearPublishedDataStateAction = createAction(
   "[PublischedData] Clear State",
+);
+
+export const storeEditingPublishedDataDoiAction = createAction(
+  "[PublishedData] Store Editing Published Data DOI",
+  props<{ publishedDataDoi: string }>(),
+);
+
+export const fetchRelatedDatasetsAndAddToBatchAction = createAction(
+  "[PublishedData] Fetch Related Datasets And Add To Batch",
+  props<{ datasetPids: string[]; publishedDataDoi: string }>(),
+);
+
+export const fetchRelatedDatasetsAndAddToBatchCompleteAction = createAction(
+  "[PublishedData] Fetch Related Datasets And Add To Batch Complete",
+);
+
+export const fetchRelatedDatasetsAndAddToBatchFailedAction = createAction(
+  "[PublishedData] Fetch Related Datasets And Add To Batch Failed",
 );

@@ -4,6 +4,7 @@ import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   fetchPublishedDataAction,
+  fetchRelatedDatasetsAndAddToBatchAction,
   publishPublishedDataAction,
   registerPublishedDataAction,
 } from "state-management/actions/published-data.actions";
@@ -71,6 +72,15 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   onEditClick() {
     const id = encodeURIComponent(this.doi);
     this.router.navigateByUrl("/publishedDatasets/" + id + "/edit");
+  }
+
+  onEditDatasetList() {
+    this.store.dispatch(
+      fetchRelatedDatasetsAndAddToBatchAction({
+        datasetPids: this.publishedData.datasetPids,
+        publishedDataDoi: this.publishedData.doi,
+      }),
+    );
   }
 
   isUrl(dataDescription: string): boolean {

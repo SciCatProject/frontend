@@ -192,6 +192,15 @@
                 </span>
               </ng-container>
             </td>
+            <td *ngIf="publishedData.status === 'private'">
+              <button
+                mat-stroked-button
+                aria-label="Edit dataset list"
+                (click)="onEditDatasetList()"
+              >
+                <mat-icon>edit</mat-icon> Edit
+              </button>
+            </td>
           </tr>
         </table>
       </mat-card-content>
