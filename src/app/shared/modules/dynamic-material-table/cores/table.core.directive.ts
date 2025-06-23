@@ -39,6 +39,7 @@ import { clone, getObjectProp, isNullorUndefined } from "./type";
 import { TableScrollStrategy } from "./fixed-size-table-virtual-scroll-strategy";
 import { ContextMenuItem } from "../models/context-menu.model";
 import { BehaviorSubject } from "rxjs";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
@@ -72,6 +73,7 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() showGlobalTextSearch = true;
   @Input() globalTextSearch = "";
   @Input() globalTextSearchPlaceholder = "Search";
+  @Input() selectionIds = [];
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onTableEvent: EventEmitter<ITableEvent> = new EventEmitter();
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
@@ -438,7 +440,7 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
+  masterToggle(e: MatCheckboxChange) {
     const isAllSelected = this.isAllSelected();
     if (isAllSelected === false) {
       this.tvsDataSource.filteredData.forEach((row) =>
@@ -449,11 +451,14 @@ export class TableCoreDirective<T extends TableRow> {
     }
     this.onRowEvent.emit({
       event: RowEventType.MasterSelectionChange,
-      sender: { selectionModel: this._rowSelectionModel },
+      sender: {
+        selectionModel: this._rowSelectionModel,
+        checked: e.checked,
+      },
     });
   }
 
-  onRowSelectionChange(e: any, row: T) {
+  onRowSelectionChange(e: MatCheckboxChange, row: T) {
     if (e) {
       this._rowSelectionModel.toggle(row);
       this.onRowEvent.emit({
@@ -461,8 +466,15 @@ export class TableCoreDirective<T extends TableRow> {
         sender: {
           selectionModel: this._rowSelectionModel,
           row: row,
+          checked: e.checked,
         },
       });
     }
+  }
+
+  isInSelection(row: T) {
+    const id = row._id || row.pid;
+
+    return this.selectionIds.indexOf(id) !== -1;
   }
 }

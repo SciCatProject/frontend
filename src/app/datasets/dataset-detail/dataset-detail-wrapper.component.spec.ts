@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { AppConfig, AppConfigService } from "app-config.service";
+import { AppConfigInterface, AppConfigService } from "app-config.service";
 import { DatasetDetailWrapperComponent } from "./dataset-detail-wrapper.component";
 import { DatasetDetailComponent } from "./dataset-detail/dataset-detail.component";
 import { DatasetDetailDynamicComponent } from "./dataset-detail-dynamic/dataset-detail-dynamic.component";
@@ -69,7 +69,7 @@ describe("DatasetDetailWrapperComponent", () => {
       datasetDetailComponent: {
         enableCustomizedComponent: true,
       },
-    } as AppConfig);
+    } as AppConfigInterface);
 
     fixture.detectChanges();
 
@@ -82,7 +82,7 @@ describe("DatasetDetailWrapperComponent", () => {
       datasetDetailComponent: {
         enableCustomizedComponent: false,
       },
-    } as AppConfig);
+    } as AppConfigInterface);
 
     fixture.detectChanges();
 

@@ -23,7 +23,7 @@ describe("Datasets", () => {
 
       cy.isLoading();
 
-      cy.get("[data-cy=checkboxInput]").first().click();
+      cy.get(".dataset-table input[type='checkbox']").first().click();
 
       cy.get("#addToBatchButton").click();
 

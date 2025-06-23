@@ -84,6 +84,7 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
           },
           {
             name: "ownerGroup",
+            header: "Owner group",
             icon: "group",
           },
         ],
