@@ -22,7 +22,7 @@
             <th>Type</th>
             <td>{{ value }}</td>
           </tr>
-          <tr *ngIf="job.createdAt as value">
+          <tr *ngIf="job.creationTime as value">
             <th>Created At</th>
             <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
           </tr>
@@ -38,12 +38,8 @@
       </mat-card-header>
       <mat-card-content>
         <table>
-          <tr *ngIf="job.ownerUser as value">
-            <th>Created By</th>
-            <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="job.ownerGroup as value">
-            <th>Owner Group</th>
+          <tr *ngIf="job.emailJobInitiator as value">
+            <th>Contact Email</th>
             <td>{{ value }}</td>
           </tr>
         </table>
@@ -58,13 +54,9 @@
       </mat-card-header>
       <mat-card-content>
         <table>
-          <tr *ngIf="job.statusMessage as value">
+          <tr *ngIf="job.jobStatusMessage as value">
             <th>Status Message</th>
             <td>{{ value }}</td>
-          </tr>
-          <tr *ngIf="job.updatedAt as value">
-            <th>Updated At</th>
-            <td>{{ value | date: "yyyy-MM-dd HH:mm" }}</td>
           </tr>
         </table>
       </mat-card-content>
@@ -74,17 +66,29 @@
         <div mat-card-avatar class="section-icon">
           <mat-icon> settings </mat-icon>
         </div>
-        Job Parameters and Datasets
+        Parameters and Datasets
       </mat-card-header>
       <mat-card-content>
-        <ngx-json-viewer
-          [json]="job.jobParams"
-          [expanded]="false"
-        ></ngx-json-viewer>
-        <!-- <ngx-json-viewer
-            [json]="job.datasetList"
-            [expanded]="false"
-          ></ngx-json-viewer> -->
+        <table>
+          <tr *ngIf="job.jobParams as value">
+            <th>Job Params</th>
+            <td>
+              <ngx-json-viewer
+                [json]="value"
+                [expanded]="false"
+              ></ngx-json-viewer>
+            </td>
+          </tr>
+          <tr *ngIf="job.datasetList as value">
+            <th>Dataset List</th>
+            <td>
+              <ngx-json-viewer
+                [json]="value"
+                [expanded]="false"
+              ></ngx-json-viewer>
+            </td>
+          </tr>
+        </table>
       </mat-card-content>
     </mat-card>
     <mat-card>

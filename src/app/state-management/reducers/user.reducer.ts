@@ -14,11 +14,20 @@ const reducer = createReducer(
   ),
 
   on(
+    fromActions.updateHasFetchedSettings,
+    (state, { hasFetchedSettings }): UserState => ({
+      ...state,
+      hasFetchedSettings,
+    }),
+  ),
+
+  on(
     fromActions.loginAction,
     (state): UserState => ({
       ...state,
       isLoggingIn: true,
       isLoggedIn: false,
+      hasFetchedSettings: false,
     }),
   ),
 
@@ -30,6 +39,7 @@ const reducer = createReducer(
       accountType,
       isLoggingIn: false,
       isLoggedIn: true,
+      hasFetchedSettings: false,
     }),
   ),
   on(
@@ -74,12 +84,14 @@ const reducer = createReducer(
           settings,
           columns,
           tablesSettings: externalSettings?.tablesSettings,
+          hasFetchedSettings: true,
         };
       } else {
         return {
           ...state,
           settings,
           tablesSettings: externalSettings?.tablesSettings,
+          hasFetchedSettings: true,
         };
       }
     },

@@ -12,7 +12,7 @@ import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import {
   Attachment,
   Instrument,
-  JobClass,
+  OutputJobV3Dto,
   OutputDatasetObsoleteDto,
   ProposalClass,
   PublishedData,
@@ -20,6 +20,7 @@ import {
   Logbook,
   Policy,
   ReturnedUserDto,
+  OrigDatablock,
   OutputAttachmentV3Dto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { SDKToken } from "./services/auth/auth.service";
@@ -326,7 +327,8 @@ export const mockAttachment = createMock<OutputAttachmentV3Dto>({});
 export const mockSample = createMock<SampleClass>({});
 export const mockProposal = createMock<ProposalClass>({});
 export const mockInstrument = createMock<Instrument>({});
-export const mockJob = createMock<JobClass>({}); // TODO: job release back-ward compatibility issue
+export const mockOrigDatablock = createMock<OrigDatablock>({});
+export const mockJob = createMock<OutputJobV3Dto>({});
 export const mockLogbook = createMock<Logbook>({});
 export const mockPolicy = createMock<Policy>({});
 export const mockPublishedData = createMock<PublishedData>({});
