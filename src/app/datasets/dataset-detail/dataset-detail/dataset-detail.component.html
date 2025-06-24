@@ -353,6 +353,98 @@
       </mat-card>
 
       <mat-card>
+        <mat-card-header class="dataset-links-header">
+          <div mat-card-avatar class="section-icon">
+            <mat-icon> link </mat-icon>
+          </div>
+          {{ "Links" | translate }}
+        </mat-card-header>
+
+        <mat-card-content>
+          <table>
+            <tr *ngIf="dataset['proposalId'] && proposal">
+              <th>{{ "Proposal" | translate }}</th>
+              <td>
+                <a (click)="onClickProposal(proposal.proposalId)">{{
+                  proposal.title
+                }}</a>
+              </td>
+            </tr>
+            <tr
+              *ngIf="
+                dataset['proposalId'] &&
+                !proposal &&
+                appConfig.datasetDetailsShowMissingProposalId
+              "
+            >
+              <th>{{ "Proposal Id" | translate }}</th>
+              <td>{{ dataset["proposalId"] }}</td>
+            </tr>
+            <tr *ngIf="dataset['sampleId'] && sample">
+              <th>{{ "Sample" | translate }}</th>
+              <td>
+                <a (click)="onClickSample(sample.sampleId)">
+                  <span>{{ sample.description }}</span>
+                </a>
+              </td>
+            </tr>
+            <tr *ngIf="dataset['instrumentId'] && instrument">
+              <th>{{ "Instrument" | translate }}</th>
+              <td>
+                <a (click)="onClickInstrument(instrument.pid)">
+                  {{ instrument.name }}
+                </a>
+              </td>
+            </tr>
+            <tr *ngIf="dataset['creationLocation'] as value">
+              <th>{{ "Creation Location" | translate }}</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="dataset.techniques && dataset.techniques.length > 0">
+              <th>{{ "Techniques" | translate }}</th>
+              <td>
+                <div *ngFor="let technique of dataset.techniques">
+                  <span>
+                    {{ technique.name }}
+                  </span>
+                  <span
+                    *ngIf="
+                      dataset.techniques.indexOf(technique) <
+                      dataset.techniques.length - 1
+                    "
+                    >,
+                  </span>
+                </div>
+              </td>
+            </tr>
+            <tr
+              *ngIf="
+                dataset['inputDatasets'] && dataset['inputDatasets'].length > 0
+              "
+            >
+              <th>{{ "Input Datasets" | translate }}</th>
+              <td>
+                <div *ngFor="let datasetPid of dataset['inputDatasets']">
+                  <span>
+                    <a [routerLink]="['/datasets/', datasetPid]">
+                      {{ datasetPid }}
+                    </a>
+                  </span>
+                  <span
+                    *ngIf="
+                      dataset['inputDatasets'].indexOf(datasetPid) <
+                      dataset['inputDatasets'].length - 1
+                    "
+                    >,
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
         <mat-card-header class="dataset-scientific-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> science </mat-icon>
