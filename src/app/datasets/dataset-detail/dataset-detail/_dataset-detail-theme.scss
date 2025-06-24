@@ -30,8 +30,12 @@
       background-color: mat.m2-get-color-from-palette($header-3, "lighter");
     }
 
-    .dataset-scientific-header {
+    .dataset-links-header {
       background-color: mat.m2-get-color-from-palette($header-4, "lighter");
+    }
+
+    .dataset-scientific-header {
+      background-color: mat.m2-get-color-from-palette($header-1, "lighter");
     }
   }
 }
