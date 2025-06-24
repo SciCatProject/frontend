@@ -35,4 +35,4 @@ import { AppFooterComponent } from './app-footer/app-footer.component';
   ],
   exports: [],
 })
-export class LayoutModule {}
+export class LayoutModule { }
