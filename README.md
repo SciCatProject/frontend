@@ -20,6 +20,13 @@ For the full documentation please go to the [SciCat home page](https://scicatpro
 
 - [Site logo related images](SITE-LOGO-CONFIGURATION.md)
 
+## Get started
+
+1. Ensure you have up-to-date LTS versions of Node.js and npm installed (https://nodejs.org/en).
+2. `git clone https://github.com/SciCatProject/frontend.git`
+3. `npm install`
+4. `npm run start`
+
 ## License
 
 See the [LICENSE](LICENSE) file for details.
