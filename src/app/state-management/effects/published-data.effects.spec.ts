@@ -4,6 +4,7 @@ import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";
 import { selectQueryParams } from "state-management/selectors/published-data.selectors";
 import * as fromActions from "state-management/actions/published-data.actions";
+import { clearBatchAction } from "state-management/actions/datasets.actions";
 import { hot, cold } from "jasmine-marbles";
 import { MessageType } from "state-management/models";
 import {
@@ -15,6 +16,7 @@ import { Type } from "@angular/core";
 import { Router } from "@angular/router";
 import { MockRouter, createMock } from "shared/MockStubs";
 import {
+  DatasetsV4Service,
   PublishedData,
   PublishedDataService,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -61,6 +63,12 @@ describe("PublishedDataEffects", () => {
             "publishedDataControllerFindOneV3",
             "publishedDataControllerCreateV3",
             "publishedDataControllerRegisterV3",
+          ]),
+        },
+        {
+          provide: DatasetsV4Service,
+          useValue: jasmine.createSpyObj("datasetsV4Service", [
+            "datasetsV4ControllerFindAllV4",
           ]),
         },
         { provide: Router, useClass: MockRouter },
@@ -218,6 +226,8 @@ describe("PublishedDataEffects", () => {
         publishedData,
       });
       const outcome2 = fromActions.fetchPublishedDataAction({ id });
+      const outcome3 = clearBatchAction();
+      const outcome4 = fromActions.clearDataPublicationFromLocalStorage();
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: publishedData });
@@ -225,9 +235,11 @@ describe("PublishedDataEffects", () => {
         response,
       );
 
-      const expected = cold("--(bc)", {
+      const expected = cold("--(bcde)", {
         b: outcome1,
         c: outcome2,
+        d: outcome3,
+        e: outcome4,
       });
       expect(effects.createDataPublication$).toBeObservable(expected);
     });
@@ -309,20 +321,23 @@ describe("PublishedDataEffects", () => {
     });
 
     it("should result in a registerPublishedDataFailedAction", () => {
-      const doi = "testDOI";
-      const action = fromActions.registerPublishedDataAction({ doi });
-      const outcome = fromActions.registerPublishedDataFailedAction({
-        error: [],
+      const error = new Error("Test");
+      const message = {
+        type: MessageType.Error,
+        content: "Registration Failed. " + error.message,
+        duration: 5000,
+      };
+      const action = fromActions.registerPublishedDataFailedAction({
+        error: [error.message],
       });
+      const outcome = showMessageAction({ message });
 
       actions = hot("-a", { a: action });
-      const response = cold("-#", {});
-      publishedDataApi.publishedDataControllerRegisterV3.and.returnValue(
-        response,
-      );
 
-      const expected = cold("--b", { b: outcome });
-      expect(effects.registerPublishedData$).toBeObservable(expected);
+      const expected = cold("-b", { b: outcome });
+      expect(effects.registerPublishedDataFailedMessage$).toBeObservable(
+        expected,
+      );
     });
   });
 
