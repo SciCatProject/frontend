@@ -341,9 +341,10 @@ export class PublishedDataEffects {
     () => {
       return this.actions$.pipe(
         ofType(fromActions.storeEditingPublishedDataDoiAction),
-        tap(({ publishedDataDoi }) =>
-          localStorage.setItem("editingPublishedDataDoi", publishedDataDoi),
-        ),
+        tap(({ publishedDataDoi }) => {
+          localStorage.setItem("editingPublishedDataDoi", publishedDataDoi);
+          localStorage.setItem("editingDatasetList", "true");
+        }),
       );
     },
     { dispatch: false },

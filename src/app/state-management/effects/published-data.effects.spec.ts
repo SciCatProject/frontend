@@ -22,22 +22,22 @@ import { TestObservable } from "jasmine-marbles/src/test-observables";
 
 const publishedData = createMock<PublishedData>({
   doi: "testDOI",
-  affiliation: "test affiliation",
-  creator: ["test creator"],
-  publisher: "test publisher",
-  publicationYear: 2019,
   title: "test title",
   abstract: "test abstract",
-  dataDescription: "test description",
-  resourceType: "test type",
-  pidArray: ["testPid"],
+  datasetPids: ["testPid"],
   createdAt: "",
   registeredTime: "",
   updatedAt: "",
-  url: "",
   numberOfFiles: 1,
   sizeOfArchive: 1,
-  status: "pending_registration",
+  metadata: {
+    creators: ["test creator"],
+    affiliation: "test affiliation",
+    publisher: { name: "test publisher" },
+    resourceType: "test type",
+    url: "",
+  },
+  status: PublishedData.StatusEnum.private,
 });
 
 describe("PublishedDataEffects", () => {
@@ -211,8 +211,10 @@ describe("PublishedDataEffects", () => {
   describe("publishDataset$", () => {
     it("should result in a publishDatasetCompleteAction, a fetchPublishedDataAction", () => {
       const id = "testDOI";
-      const action = fromActions.publishDatasetAction({ data: publishedData });
-      const outcome1 = fromActions.publishDatasetCompleteAction({
+      const action = fromActions.createDataPublicationAction({
+        data: publishedData,
+      });
+      const outcome1 = fromActions.createDataPublicationCompleteAction({
         publishedData,
       });
       const outcome2 = fromActions.fetchPublishedDataAction({ id });
@@ -227,12 +229,14 @@ describe("PublishedDataEffects", () => {
         b: outcome1,
         c: outcome2,
       });
-      expect(effects.publishDataset$).toBeObservable(expected);
+      expect(effects.createDataPublication$).toBeObservable(expected);
     });
 
     it("should result in a publishDatasetFailedAction", () => {
-      const action = fromActions.publishDatasetAction({ data: publishedData });
-      const outcome = fromActions.publishDatasetFailedAction();
+      const action = fromActions.createDataPublicationAction({
+        data: publishedData,
+      });
+      const outcome = fromActions.createDataPublicationFailedAction();
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
@@ -241,7 +245,7 @@ describe("PublishedDataEffects", () => {
       );
 
       const expected = cold("--b", { b: outcome });
-      expect(effects.publishDataset$).toBeObservable(expected);
+      expect(effects.createDataPublication$).toBeObservable(expected);
     });
   });
 
@@ -252,7 +256,7 @@ describe("PublishedDataEffects", () => {
         content: "Publication Successful",
         duration: 5000,
       };
-      const action = fromActions.publishDatasetCompleteAction({
+      const action = fromActions.createDataPublicationCompleteAction({
         publishedData,
       });
       const outcome = showMessageAction({ message });
@@ -260,7 +264,9 @@ describe("PublishedDataEffects", () => {
       actions = hot("-a", { a: action });
 
       const expected = cold("-b", { b: outcome });
-      expect(effects.publishDatasetCompleteMessage$).toBeObservable(expected);
+      expect(effects.createDataPublicationCompleteMessage$).toBeObservable(
+        expected,
+      );
     });
   });
 
@@ -271,13 +277,15 @@ describe("PublishedDataEffects", () => {
         content: "Publication Failed",
         duration: 5000,
       };
-      const action = fromActions.publishDatasetFailedAction();
+      const action = fromActions.createDataPublicationFailedAction();
       const outcome = showMessageAction({ message });
 
       actions = hot("-a", { a: action });
 
       const expected = cold("-b", { b: outcome });
-      expect(effects.publishDatasetFailedMessage$).toBeObservable(expected);
+      expect(effects.createDataPublicationFailedMessage$).toBeObservable(
+        expected,
+      );
     });
   });
 
@@ -303,7 +311,9 @@ describe("PublishedDataEffects", () => {
     it("should result in a registerPublishedDataFailedAction", () => {
       const doi = "testDOI";
       const action = fromActions.registerPublishedDataAction({ doi });
-      const outcome = fromActions.registerPublishedDataFailedAction();
+      const outcome = fromActions.registerPublishedDataFailedAction({
+        error: [],
+      });
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
@@ -356,7 +366,7 @@ describe("PublishedDataEffects", () => {
 
     describe("ofType publishedDatasetAction", () => {
       it("should dispatch a loadingAction", () => {
-        const action = fromActions.publishDatasetAction({
+        const action = fromActions.createDataPublicationAction({
           data: publishedData,
         });
         const outcome = loadingAction();
@@ -437,7 +447,7 @@ describe("PublishedDataEffects", () => {
 
     describe("ofType publishDatasetCompleteAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
-        const action = fromActions.publishDatasetCompleteAction({
+        const action = fromActions.createDataPublicationCompleteAction({
           publishedData,
         });
         const outcome = loadingCompleteAction();
@@ -451,7 +461,7 @@ describe("PublishedDataEffects", () => {
 
     describe("ofType publishDatasetFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
-        const action = fromActions.publishDatasetFailedAction();
+        const action = fromActions.createDataPublicationFailedAction();
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
@@ -477,7 +487,9 @@ describe("PublishedDataEffects", () => {
 
     describe("ofType registerPublishedDataFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
-        const action = fromActions.registerPublishedDataFailedAction();
+        const action = fromActions.registerPublishedDataFailedAction({
+          error: [],
+        });
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });

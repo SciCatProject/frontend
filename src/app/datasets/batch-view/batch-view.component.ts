@@ -215,27 +215,30 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       resyncPublishedDataAction({
         doi: this.editingPublishedDataDoi,
-        redirect: true,
+        redirect: false,
         data: { datasetPids: this.datasetList.map((d) => d.pid) },
       }),
     );
+
+    this.router.navigateByUrl(this.getPublishingDataUrl());
     this.store.dispatch(clearBatchAction());
     localStorage.removeItem("editingPublishedDataDoi");
-    this.router.navigateByUrl(
-      `/publishedDatasets/${this.getPublishingDataUrl()}`,
-    );
+    localStorage.removeItem("editingDatasetList");
   }
 
   onCancelEdit() {
+    this.router.navigateByUrl(this.getPublishingDataUrl());
     this.store.dispatch(clearBatchAction());
     localStorage.removeItem("editingPublishedDataDoi");
-    this.router.navigateByUrl(
-      `/publishedDatasets/${this.getPublishingDataUrl()}`,
-    );
+    localStorage.removeItem("editingDatasetList");
   }
 
-  getPublishingDataUrl() {
-    return encodeURIComponent(this.editingPublishedDataDoi);
+  getPublishingDataUrl(): string {
+    const isEditingDatasetList =
+      localStorage.getItem("editingDatasetList") === "true";
+    const encodedDoi = encodeURIComponent(this.editingPublishedDataDoi);
+
+    return `/publishedDatasets/${encodedDoi}${isEditingDatasetList ? "" : "/edit"}`;
   }
 
   ngOnInit() {

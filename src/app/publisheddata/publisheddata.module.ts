@@ -26,6 +26,7 @@ import { RouterModule } from "@angular/router";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { JsonFormsModule } from "@jsonforms/angular";
 import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
+import { DatasetEffects } from "state-management/effects/datasets.effects";
 
 @NgModule({
   declarations: [
@@ -35,7 +36,7 @@ import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
   ],
   imports: [
     CommonModule,
-    EffectsModule.forFeature([PublishedDataEffects]),
+    EffectsModule.forFeature([PublishedDataEffects, DatasetEffects]),
     FlexLayoutModule,
     LinkyModule,
     MatButtonModule,

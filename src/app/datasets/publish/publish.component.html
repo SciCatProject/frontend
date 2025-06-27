@@ -59,6 +59,7 @@
             (click)="onSaveChanges()"
             mat-raised-button
             color="primary"
+            [disabled]="!formIsValid()"
           >
             Save changes
           </button>

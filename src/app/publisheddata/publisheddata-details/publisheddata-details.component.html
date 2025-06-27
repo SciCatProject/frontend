@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayout.xs="column" *ngIf="publishedData">
-  <div fxFlex="60">
+  <div fxFlex="80">
     <mat-card>
       <mat-card-header class="status-header">
         <div mat-card-avatar class="section-icon">
@@ -239,7 +239,7 @@
     </mat-card>
   </div>
 
-  <div fxFlex="40">
+  <div fxFlex="20">
     <ng-container *ngIf="publishedData.metadata?.thumbnail as thumbnail">
       <mat-card>
         <img mat-card-image src="{{ thumbnail }}" />
