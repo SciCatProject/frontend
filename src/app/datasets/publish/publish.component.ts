@@ -41,10 +41,6 @@ import { EditableComponent } from "app-routing/pending-changes.guard";
 })
 export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
   private _hasUnsavedChanges = false;
-  renderers = angularMaterialRenderers;
-  schema: any = {};
-  uiSchema: any = {};
-  metadataData: any = {};
   private datasets$ = this.store.select(selectDatasetsInBatch);
   private publishedDataConfig$ = this.store.select(selectPublishedDataConfig);
   private countSubscription: Subscription;
@@ -53,6 +49,10 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
   readonly panelOpenState = signal(false);
 
   appConfig = this.appConfigService.getConfig();
+  renderers = angularMaterialRenderers;
+  schema: any = {};
+  uiSchema: any = {};
+  metadataData: any = {};
 
   public separatorKeysCodes: number[] = [ENTER, COMMA];
   public datasetCount: number;

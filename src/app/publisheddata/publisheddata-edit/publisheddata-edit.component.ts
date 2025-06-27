@@ -33,13 +33,13 @@ export class PublisheddataEditComponent
   implements OnInit, OnDestroy, EditableComponent
 {
   private _hasUnsavedChanges = false;
+  private publishedDataConfig$ = this.store.select(selectPublishedDataConfig);
   renderers = angularMaterialRenderers;
   schema: any = {};
   uiSchema: any = {};
   metadataData: any = {};
   public metadataFormErrors = [];
   readonly panelOpenState = signal(false);
-  private publishedDataConfig$ = this.store.select(selectPublishedDataConfig);
   routeSubscription = new Subscription();
   publishedData$: Observable<PublishedData> = new Observable();
   attachments: Attachment[] = [];
@@ -65,7 +65,7 @@ export class PublisheddataEditComponent
     private appConfigService: AppConfigService,
   ) {}
 
-  public onPublishedDataUpdate(shouldRedirect: boolean = false) {
+  public onPublishedDataUpdate(shouldRedirect = false) {
     if (this.form.valid) {
       const { doi, ...rest } = this.form.value;
       const metadata = {
