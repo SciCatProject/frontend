@@ -4,6 +4,8 @@ import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   fetchPublishedDataAction,
+  fetchRelatedDatasetsAndAddToBatchAction,
+  publishPublishedDataAction,
   registerPublishedDataAction,
 } from "state-management/actions/published-data.actions";
 import { Subscription } from "rxjs";
@@ -19,7 +21,7 @@ import { AppConfigService } from "app-config.service";
 })
 export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   currentData$ = this.store.select(selectCurrentPublishedData);
-  publishedData: PublishedData;
+  publishedData: PublishedData & { metadata?: any };
   subscriptions: Subscription[] = [];
   appConfig = this.appConfigService.getConfig();
   show = false;
@@ -63,9 +65,22 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
     this.store.dispatch(registerPublishedDataAction({ doi }));
   }
 
+  onPublishClick(doi: string) {
+    this.store.dispatch(publishPublishedDataAction({ doi }));
+  }
+
   onEditClick() {
     const id = encodeURIComponent(this.doi);
     this.router.navigateByUrl("/publishedDatasets/" + id + "/edit");
+  }
+
+  onEditDatasetList() {
+    this.store.dispatch(
+      fetchRelatedDatasetsAndAddToBatchAction({
+        datasetPids: this.publishedData.datasetPids,
+        publishedDataDoi: this.publishedData.doi,
+      }),
+    );
   }
 
   isUrl(dataDescription: string): boolean {

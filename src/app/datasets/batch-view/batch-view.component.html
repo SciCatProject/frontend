@@ -1,11 +1,45 @@
 <div style="margin-top: 1em">
   <div *ngIf="hasBatch; else empty_batch">
     <div style="text-align: right; margin-bottom: 1em">
-      <button (click)="onEmpty()" mat-button class="button" color="primary">
+      <div *ngIf="editingPublishedDataDoi">
+        You are currently editing
+        <a (click)="onCancelEdit()">{{ editingPublishedDataDoi }}</a>
+        dataset list.
+      </div>
+      <button
+        *ngIf="editingPublishedDataDoi"
+        mat-button
+        id="publishButton"
+        (click)="onSaveChanges()"
+        class="button"
+        color="primary"
+      >
+        <mat-icon> save </mat-icon>
+        Save Changes
+      </button>
+      <button
+        *ngIf="editingPublishedDataDoi"
+        mat-button
+        id="publishButton"
+        (click)="onCancelEdit()"
+        class="button"
+        color="warn"
+      >
+        <mat-icon> close </mat-icon>
+        Cancel
+      </button>
+      <button
+        *ngIf="!editingPublishedDataDoi"
+        (click)="onEmpty()"
+        mat-button
+        class="button"
+        color="primary"
+      >
         <mat-icon> remove_shopping_cart </mat-icon>
         Empty Cart
       </button>
       <button
+        *ngIf="!editingPublishedDataDoi"
         mat-button
         id="publishButton"
         (click)="onPublish()"
@@ -17,6 +51,7 @@
       </button>
       <ng-container *ngIf="shareEnabled">
         <button
+          *ngIf="!editingPublishedDataDoi"
           mat-button
           (click)="onShare()"
           id="shareButton"

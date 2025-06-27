@@ -6,22 +6,22 @@ import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
 
 const publishedData = createMock<PublishedData>({
   doi: "testDOI",
-  affiliation: "test affiliation",
-  creator: ["test creator"],
-  publisher: "test publisher",
-  publicationYear: 2019,
   title: "test title",
   abstract: "test abstract",
-  dataDescription: "test description",
-  resourceType: "test type",
-  pidArray: ["testPid"],
+  datasetPids: ["testPid"],
   createdAt: "",
   registeredTime: "",
   updatedAt: "",
-  url: "",
   numberOfFiles: 1,
   sizeOfArchive: 1,
-  status: "pending_registration",
+  metadata: {
+    creators: ["test creator"],
+    affiliation: "test affiliation",
+    publisher: { name: "test publisher" },
+    resourceType: "test type",
+    url: "",
+  },
+  status: PublishedData.StatusEnum.private,
 });
 
 const filters: GenericFilters = {
