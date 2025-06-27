@@ -35,6 +35,18 @@ export class HelpMessages {
   }
 }
 
+export enum MainPageOptions {
+  DATASETS = "/datasets",
+  PROPOSALS = "/proposals",
+  INSTRUMENTS = "/instruments",
+  SAMPLES = "/samples",
+}
+
+export class MainPageConfiguration {
+  nonAuthenticatedUser: keyof typeof MainPageOptions;
+  authenticatedUser: keyof typeof MainPageOptions;
+}
+
 export interface AppConfigInterface {
   skipSciCatLoginPageEnabled?: boolean;
   accessTokenPrefix: string;
@@ -106,6 +118,17 @@ export interface AppConfigInterface {
   datasetDetailComponent?: DatasetDetailComponentConfig;
   labelsLocalization?: LabelsLocalization;
   dateFormat?: string;
+  defaultMainPage?: MainPageConfiguration;
+}
+
+function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
+  const validKeys = Object.keys(MainPageOptions);
+  return (
+    obj &&
+    typeof obj === "object" &&
+    validKeys.includes(obj.nonAuthenticatedUser) &&
+    validKeys.includes(obj.authenticatedUser)
+  );
 }
 
 @Injectable({
@@ -132,6 +155,30 @@ export class AppConfigService {
         console.error("No config provided.");
       }
     }
+
+    const config: AppConfigInterface = this.appConfig as AppConfigInterface;
+    if (
+      "defaultMainPage" in config &&
+      isMainPageConfiguration(config.defaultMainPage)
+    ) {
+      config.defaultMainPage.nonAuthenticatedUser = Object.keys(
+        MainPageOptions,
+      ).includes(config.defaultMainPage.nonAuthenticatedUser)
+        ? config.defaultMainPage.nonAuthenticatedUser
+        : "DATASETS";
+      config.defaultMainPage.authenticatedUser = Object.keys(
+        MainPageOptions,
+      ).includes(config.defaultMainPage.authenticatedUser)
+        ? config.defaultMainPage.authenticatedUser
+        : "DATASETS";
+    } else {
+      config.defaultMainPage = {
+        nonAuthenticatedUser: "DATASETS",
+        authenticatedUser: "DATASETS",
+      } as MainPageConfiguration;
+    }
+
+    this.appConfig = config;
   }
 
   getConfig(): AppConfigInterface {
