@@ -37,7 +37,7 @@ describe("Datasets", () => {
 
       cy.get("#abstractInput").type("some abstract text");
 
-      cy.get("#createDataPublicationButton").click();
+      cy.get("#saveAndContinueButton").click();
 
       cy.get("#doiRow").should("exist");
     });
