@@ -22,7 +22,7 @@ For the full documentation please go to the [SciCat home page](https://scicatpro
 
 ## Get started
 
-1. Ensure you have up-to-date LTS versions of Node.js and npm installed (https://nodejs.org/en).
+1. Ensure you have Node.js 18+ and npm installed (https://nodejs.org/en).
 2. `git clone https://github.com/SciCatProject/frontend.git`
 3. `npm install`
 4. `npm run start`
