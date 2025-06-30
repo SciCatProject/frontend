@@ -244,6 +244,25 @@ export class PublishedDataEffects {
     );
   });
 
+  amendPublishedData$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.amendPublishedDataAction),
+      switchMap(({ doi }) =>
+        this.publishedDataService.publishedDataControllerAmendV3(doi).pipe(
+          mergeMap((publishedData: PublishedData) => [
+            fromActions.amendPublishedDataCompleteAction({
+              publishedData,
+            }),
+            fromActions.fetchPublishedDataAction({ id: doi }),
+          ]),
+          catchError((error) =>
+            of(fromActions.amendPublishedDataFailedAction(error)),
+          ),
+        ),
+      ),
+    );
+  });
+
   updatePublishedData$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.updatePublishedDataAction),
@@ -373,6 +392,7 @@ export class PublishedDataEffects {
         fromActions.registerPublishedDataAction,
         fromActions.resyncPublishedDataAction,
         fromActions.updatePublishedDataAction,
+        fromActions.amendPublishedDataAction,
         fromActions.fetchRelatedDatasetsAndAddToBatchAction,
       ),
       switchMap(() => of(loadingAction())),
@@ -397,9 +417,13 @@ export class PublishedDataEffects {
         fromActions.registerPublishedDataCompleteAction,
         fromActions.registerPublishedDataFailedAction,
         fromActions.resyncPublishedDataCompleteAction,
+        fromActions.resyncPublishedDataFailedAction,
         fromActions.updatePublishedDataCompleteAction,
+        fromActions.updatePublishedDataFailedAction,
         fromActions.fetchRelatedDatasetsAndAddToBatchCompleteAction,
         fromActions.fetchRelatedDatasetsAndAddToBatchFailedAction,
+        fromActions.amendPublishedDataCompleteAction,
+        fromActions.amendPublishedDataFailedAction,
       ),
       switchMap(() => of(loadingCompleteAction())),
     );

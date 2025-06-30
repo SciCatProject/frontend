@@ -30,6 +30,14 @@
         <button
           mat-raised-button
           color="primary"
+          *ngIf="publishedData.status === 'registered'"
+          (click)="onAmendClick(publishedData.doi)"
+        >
+          Amend
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
           *ngIf="publishedData.status === 'public'"
           (click)="onRegisterClick(publishedData.doi)"
         >
@@ -214,7 +222,11 @@
           class="edit-button"
           color="primary"
           *ngIf="
-            appConfig.editPublishedData && publishedData.status === 'private'
+            (appConfig.editPublishedData &&
+              publishedData.status === 'private') ||
+            (appConfig.editPublishedData &&
+              publishedData.status === 'public' &&
+              isAdmin$ | async)
           "
           (click)="onEditClick()"
         >

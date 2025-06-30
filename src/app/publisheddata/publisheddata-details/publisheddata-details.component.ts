@@ -3,6 +3,7 @@ import { PublishedData } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
+  amendPublishedDataAction,
   fetchPublishedDataAction,
   fetchRelatedDatasetsAndAddToBatchAction,
   publishPublishedDataAction,
@@ -12,6 +13,7 @@ import { Subscription } from "rxjs";
 import { pluck } from "rxjs/operators";
 import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
 import { AppConfigService } from "app-config.service";
+import { selectIsAdmin } from "state-management/selectors/user.selectors";
 
 @Component({
   selector: "publisheddata-details",
@@ -21,6 +23,7 @@ import { AppConfigService } from "app-config.service";
 })
 export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   currentData$ = this.store.select(selectCurrentPublishedData);
+  isAdmin$ = this.store.select(selectIsAdmin);
   publishedData: PublishedData & { metadata?: any };
   subscriptions: Subscription[] = [];
   appConfig = this.appConfigService.getConfig();
@@ -63,6 +66,10 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
 
   onRegisterClick(doi: string) {
     this.store.dispatch(registerPublishedDataAction({ doi }));
+  }
+
+  onAmendClick(doi: string) {
+    this.store.dispatch(amendPublishedDataAction({ doi }));
   }
 
   onPublishClick(doi: string) {

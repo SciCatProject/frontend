@@ -91,6 +91,19 @@ export const registerPublishedDataFailedAction = createAction(
   props<{ error: string[] }>(),
 );
 
+export const amendPublishedDataAction = createAction(
+  "[PublishedData] Amend Published Data",
+  props<{ doi: string }>(),
+);
+export const amendPublishedDataCompleteAction = createAction(
+  "[PublishedData] Amend Published Data Complete",
+  props<{ publishedData: PublishedData }>(),
+);
+export const amendPublishedDataFailedAction = createAction(
+  "[PublishedData] Amend Published Data Failed",
+  props<{ error: string[] }>(),
+);
+
 export const publishPublishedDataAction = createAction(
   "[PublishedData] Publish Published Data",
   props<{ doi: string }>(),
