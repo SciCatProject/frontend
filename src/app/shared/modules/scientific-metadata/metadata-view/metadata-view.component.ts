@@ -112,9 +112,24 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
               return row[column.name];
             },
-            contentIcon: "hub",
+            toExport: (column, row) => {
+              if (row.type === "date" || this.isDate(row)) {
+                return this.datePipe.transform(row[column.name]);
+              }
+
+              if (row.type === "link") {
+                return this.linkyPipe.transform(row[column.name] || "", {
+                  urls: true,
+                  newWindow: true,
+                  stripPrefix: false,
+                  sanitizeHtml: true,
+                });
+              }
+
+              return row[column.name];
+            },
             renderContentIcon: (column, row) => {
-              return !!row.ontology_reference;
+              return row.ontology_reference ? "hub" : "";
             },
             contentIconLink: (column, row) => {
               return row.ontology_reference;
@@ -128,10 +143,12 @@ export class MetadataViewComponent implements OnInit, OnChanges {
                 ? this.prettyUnit.transform(row[column.name])
                 : "--";
             },
-            renderContentIcon: (column, row) => {
-              return row.validUnit === false;
+            toExport: (row) => {
+              return row.unit ? this.prettyUnit.transform(row.unit) : "--";
             },
-            contentIcon: "error",
+            renderContentIcon: (column, row) => {
+              return row.validUnit === false ? "error" : "";
+            },
             contentIconTooltip: "Unrecognized unit, conversion disabled",
             contentIconClass: "general-warning",
             cellClass: "unit-input",

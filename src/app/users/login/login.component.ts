@@ -9,6 +9,7 @@ import {
   loginAction,
   funcLoginAction,
   loginOIDCAction,
+  updateHasFetchedSettings,
 } from "state-management/actions/user.actions";
 import { Subscription } from "rxjs";
 import { filter } from "rxjs/operators";
@@ -16,7 +17,7 @@ import { selectLoginPageViewModel } from "state-management/selectors/user.select
 import { MatDialog } from "@angular/material/dialog";
 import { PrivacyDialogComponent } from "users/privacy-dialog/privacy-dialog.component";
 import {
-  AppConfig,
+  AppConfigInterface,
   AppConfigService,
   OAuth2Endpoint,
 } from "app-config.service";
@@ -45,7 +46,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private proceedSubscription = new Subscription();
   vm$ = this.store.select(selectLoginPageViewModel);
 
-  appConfig: AppConfig = this.appConfigService.getConfig();
+  appConfig: AppConfigInterface = this.appConfigService.getConfig();
   facility: string | null = null;
   loginFormEnabled = false;
   loginFacilityEnabled = false;
@@ -160,6 +161,13 @@ export class LoginComponent implements OnInit, OnDestroy {
         );
       }
     });
+
+    // If user is not logged in, hasFetchedSettings is set to true to allow fettcing of the public datasets
+    this.store.dispatch(
+      updateHasFetchedSettings({
+        hasFetchedSettings: true,
+      }),
+    );
   }
 
   ngOnDestroy() {
