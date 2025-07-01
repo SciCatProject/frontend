@@ -263,6 +263,32 @@ export class PublishedDataEffects {
     );
   });
 
+  navigateToPublishedDatasets$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(fromActions.deletePublishedDataCompleteAction),
+        tap(() => this.router.navigateByUrl("/publishedDatasets")),
+      );
+    },
+    { dispatch: false },
+  );
+
+  deletePublishedData$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.deletePublishedDataAction),
+      switchMap(({ doi }) =>
+        this.publishedDataService.publishedDataControllerRemoveV3(doi).pipe(
+          mergeMap(() => [
+            fromActions.deletePublishedDataCompleteAction({ doi }),
+          ]),
+          catchError((error) =>
+            of(fromActions.deletePublishedDataFailedAction(error)),
+          ),
+        ),
+      ),
+    );
+  });
+
   updatePublishedData$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.updatePublishedDataAction),
@@ -393,6 +419,7 @@ export class PublishedDataEffects {
         fromActions.resyncPublishedDataAction,
         fromActions.updatePublishedDataAction,
         fromActions.amendPublishedDataAction,
+        fromActions.deletePublishedDataAction,
         fromActions.fetchRelatedDatasetsAndAddToBatchAction,
       ),
       switchMap(() => of(loadingAction())),
@@ -424,6 +451,8 @@ export class PublishedDataEffects {
         fromActions.fetchRelatedDatasetsAndAddToBatchFailedAction,
         fromActions.amendPublishedDataCompleteAction,
         fromActions.amendPublishedDataFailedAction,
+        fromActions.deletePublishedDataCompleteAction,
+        fromActions.deletePublishedDataFailedAction,
       ),
       switchMap(() => of(loadingCompleteAction())),
     );

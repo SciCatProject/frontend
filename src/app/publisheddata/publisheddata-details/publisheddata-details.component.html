@@ -232,6 +232,19 @@
         >
           Edit
         </button>
+        <button
+          mat-raised-button
+          color="warn"
+          id="deleteBtn"
+          class="delete-button"
+          *ngIf="
+            publishedData.status === 'private' ||
+            (publishedData.status === 'public' && isAdmin$ | async)
+          "
+          (click)="onDeleteClick(publishedData.doi)"
+        >
+          Delete
+        </button>
         <ng-container
           id="jsonMetadataContainer"
           *ngIf="appConfig.jsonMetadataEnabled"

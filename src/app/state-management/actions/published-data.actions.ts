@@ -104,6 +104,19 @@ export const amendPublishedDataFailedAction = createAction(
   props<{ error: string[] }>(),
 );
 
+export const deletePublishedDataAction = createAction(
+  "[PublishedData] Delete Published Data",
+  props<{ doi: string }>(),
+);
+export const deletePublishedDataCompleteAction = createAction(
+  "[PublishedData] Delete Published Data Complete",
+  props<{ doi: string }>(),
+);
+export const deletePublishedDataFailedAction = createAction(
+  "[PublishedData] Delete Published Data Failed",
+  props<{ error: string[] }>(),
+);
+
 export const publishPublishedDataAction = createAction(
   "[PublishedData] Publish Published Data",
   props<{ doi: string }>(),
