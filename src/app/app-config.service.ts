@@ -179,6 +179,10 @@ export class AppConfigService {
       } as MainPageConfiguration;
     }
 
+    if (!config.dateFormat) {
+      config.dateFormat = "yyyy-MM-dd HH:mm";
+    }
+
     this.appConfig = config;
   }
 

@@ -205,10 +205,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
       const str = raw == null ? "" : String(raw);
 
       const iso = DateTime.fromISO(str);
-      const fmt = DateTime.fromFormat(
-        str,
-        this.appConfig.dateFormat || "yyyy-MM-dd HH:mm",
-      );
+      const fmt = DateTime.fromFormat(str, this.appConfig.dateFormat);
 
       return iso.isValid || fmt.isValid
         ? null
