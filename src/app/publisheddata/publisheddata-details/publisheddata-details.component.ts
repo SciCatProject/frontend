@@ -66,7 +66,11 @@ export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   }
 
   onRegisterClick(doi: string) {
-    if (confirm("Are you sure you want to register this published data? Keep in mind that no further changes can be made after this action.")) {
+    if (
+      confirm(
+        "Are you sure you want to register this published data? Keep in mind that no further changes can be made after this action.",
+      )
+    ) {
       this.store.dispatch(registerPublishedDataAction({ doi }));
     }
   }
