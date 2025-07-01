@@ -4,6 +4,7 @@
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
   "datasetJsonScientificMetadata": true,
+  "editDatasetEnabled": true,
   "editDatasetSampleEnabled": true,
   "editMetadataEnabled": true,
   "editPublishedData": false,
@@ -224,7 +225,7 @@
     "labelSets": {
       "ess": {
         "dataset-default": {},
-        "dataset-custom" : {
+        "dataset-custom": {
           "pid": "PID",
           "description": "Description",
           "principalInvestigator": "Principal Investigator",
@@ -233,17 +234,17 @@
           "scientificMetadata": "Scientific Metadata",
           "metadataJsonView": "Metadata JsonView"
         },
-        "proposal" : {
+        "proposal": {
           "General Information": "Proposal Information",
-          "Abstract" : "Abstract",
-          "Proposal Id" : "Proposal Id",
-          "Proposal Type" : "Proposal Type",
-          "Parent Proposal" : "Parent Proposal",
-          "Start Time" : "Start Time",
-          "End Time" : "End Time",
-          "Creator Information" : "People",
+          "Abstract": "Abstract",
+          "Proposal Id": "Proposal Id",
+          "Proposal Type": "Proposal Type",
+          "Parent Proposal": "Parent Proposal",
+          "Start Time": "Start Time",
+          "End Time": "End Time",
+          "Creator Information": "People",
           "Main Proposer": "Proposal Submitted By",
-          "Principal Investigator" : "Principal Investigator",
+          "Principal Investigator": "Principal Investigator",
           "Metadata": "Additional Information"
         }
       }
@@ -252,5 +253,5 @@
   "defaultMainPage": {
     "nonAuthenticatedUser": "DATASETS",
     "authenticatedUser": "DATASETS"
-  },
+  }
 }

@@ -114,7 +114,9 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
           combineLatest([this.accessGroups$, this.isAdmin$]).subscribe(
             ([groups, isAdmin]) => {
               this.editingAllowed =
-                groups.indexOf(this.dataset.ownerGroup) !== -1 || isAdmin;
+                (this.appConfig.editDatasetEnabled &&
+                  groups.indexOf(this.dataset.ownerGroup) !== -1) ||
+                isAdmin;
             },
           );
         }

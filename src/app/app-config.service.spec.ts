@@ -19,6 +19,7 @@ const appConfig: AppConfigInterface = {
   archiveWorkflowEnabled: true,
   datasetReduceEnabled: true,
   datasetJsonScientificMetadata: true,
+  editDatasetEnabled: true,
   editDatasetSampleEnabled: true,
   editMetadataEnabled: true,
   editPublishedData: true,
