@@ -1,14 +1,30 @@
 mat-card {
   margin: 1em;
 
+  .scientific-header, .related-header, .creator-header, .file-header, .general-header {
+    display: flex;
+    align-items: center;
+    padding: 1em;
+  }
+
   .section-icon {
     height: auto !important;
     width: auto !important;
+    margin-right: 4px;
+    order: -1;
+    display: flex;
+    align-self: center;
 
     mat-icon {
       vertical-align: middle;
     }
   }
+  .section-title {
+    font-size: small;
+    font-weight: bold;
+    line-height: 1;
+  }
+
   .caption-text {
     word-break: break-all;
   }
