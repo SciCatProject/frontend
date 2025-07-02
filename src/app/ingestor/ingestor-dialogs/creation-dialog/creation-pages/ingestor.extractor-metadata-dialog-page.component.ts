@@ -8,12 +8,14 @@ import {
 } from "@angular/core";
 import { JsonSchema } from "@jsonforms/core";
 import {
+  APIInformation,
   IngestionRequestInformation,
   IngestorHelper,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
 import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 import { Store } from "@ngrx/store";
 import {
+  ingestionObjectAPIInformation,
   selectIngestionObject,
   selectIngestorRenderView,
   selectUpdateEditorFromThirdParty,
@@ -36,7 +38,12 @@ export class IngestorExtractorMetadataDialogPageComponent
   metadataSchemaAcquisition: JsonSchema;
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
+  createNewTransferDataApiInformation: APIInformation =
+    IngestorHelper.createEmptyAPIInformation();
 
+  ingestionObjectApiInformation$ = this.store.select(
+    ingestionObjectAPIInformation,
+  );
   ingestionObject$ = this.store.select(selectIngestionObject);
   renderView$ = this.store.select(selectIngestorRenderView);
   selectUpdateEditorFromThirdParty$ = this.store.select(
@@ -84,14 +91,23 @@ export class IngestorExtractorMetadataDialogPageComponent
 
           this.metadataSchemaInstrument = instrumentSchema;
           this.metadataSchemaAcquisition = acqusitionSchema;
+        }
+      }),
+    );
+
+    this.subscriptions.push(
+      this.ingestionObjectApiInformation$.subscribe((apiInformation) => {
+        if (apiInformation) {
+          this.createNewTransferDataApiInformation = apiInformation;
+
           this.extractorMetaDataReady =
-            this.createNewTransferData.apiInformation.extractorMetaDataReady;
+            this.createNewTransferDataApiInformation.extractorMetaDataReady;
           this.extractorMetaDataError =
-            this.createNewTransferData.apiInformation.metaDataExtractionFailed;
+            this.createNewTransferDataApiInformation.metaDataExtractionFailed;
           this.extractorMetaDataStatus =
-            this.createNewTransferData.apiInformation.extractorMetaDataStatus;
+            this.createNewTransferDataApiInformation.extractorMetaDataStatus;
           this.process =
-            this.createNewTransferData.apiInformation.extractorMetadataProgress;
+            this.createNewTransferDataApiInformation.extractorMetadataProgress;
         }
       }),
     );

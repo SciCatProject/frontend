@@ -124,6 +124,16 @@ const reducer = createReducer(
     }),
   ),
   on(
+    fromActions.updateIngestionObjectAPIInformation,
+    (state, { ingestionObjectApiInformation }): IngestorState => ({
+      ...state,
+      ingestionObjectApiInformation: {
+        ...state.ingestionObjectApiInformation,
+        ...ingestionObjectApiInformation,
+      },
+    }),
+  ),
+  on(
     fromActions.updateIngestionObjectFromThirdParty,
     (state, { ingestionObject }): IngestorState => ({
       ...state,
@@ -142,13 +152,13 @@ const reducer = createReducer(
     fromActions.ingestDatasetSuccess,
     (state, { response }): IngestorState => ({
       ...state,
+      ingestionObjectApiInformation: {
+        ...state.ingestionObjectApiInformation,
+        ingestionRequestErrorMessage: "",
+      },
       ingestionObject: {
         ...state.ingestionObject,
         ingestionRequest: response,
-        apiInformation: {
-          ...state.ingestionObject.apiInformation,
-          ingestionRequestErrorMessage: "",
-        },
       },
     }),
   ),
@@ -156,15 +166,15 @@ const reducer = createReducer(
     fromActions.createDatasetSuccess,
     (state, { dataset }): IngestorState => ({
       ...state,
+      ingestionObjectApiInformation: {
+        ...state.ingestionObjectApiInformation,
+        ingestionRequestErrorMessage: "",
+      },
       ingestionObject: {
         ...state.ingestionObject,
         ingestionRequest: {
           transferId: dataset.pid,
           status: dataset.datasetName,
-        },
-        apiInformation: {
-          ...state.ingestionObject.apiInformation,
-          ingestionRequestErrorMessage: "",
         },
       },
     }),
@@ -173,16 +183,13 @@ const reducer = createReducer(
     fromActions.ingestDatasetFailure,
     (state, { err }): IngestorState => ({
       ...state,
-      ingestionObject: {
-        ...state.ingestionObject,
-        apiInformation: {
-          ...state.ingestionObject.apiInformation,
-          ingestionRequestErrorMessage:
-            (err as any).error ??
-            (err as any).error?.error ??
-            err.message ??
-            JSON.stringify(err),
-        },
+      ingestionObjectApiInformation: {
+        ...state.ingestionObjectApiInformation,
+        ingestionRequestErrorMessage:
+          (err as any).error ??
+          (err as any).error?.error ??
+          err.message ??
+          JSON.stringify(err),
       },
       error: JSON.stringify(err),
     }),
@@ -194,10 +201,10 @@ const reducer = createReducer(
       ingestionObject: {
         ...state.ingestionObject,
         ingestionRequest: null,
-        apiInformation: {
-          ...state.ingestionObject.apiInformation,
-          ingestionRequestErrorMessage: "",
-        },
+      },
+      ingestionObjectApiInformation: {
+        ...state.ingestionObjectApiInformation,
+        ingestionRequestErrorMessage: "",
       },
     }),
   ),
@@ -222,12 +229,9 @@ const reducer = createReducer(
     fromActions.setIngestDatasetLoading,
     (state, { ingestionDatasetLoading }): IngestorState => ({
       ...state,
-      ingestionObject: {
-        ...state.ingestionObject,
-        apiInformation: {
-          ...state.ingestionObject.apiInformation,
-          ingestionDatasetLoading,
-        },
+      ingestionObjectApiInformation: {
+        ...state.ingestionObjectApiInformation,
+        ingestionDatasetLoading,
       },
     }),
   ),

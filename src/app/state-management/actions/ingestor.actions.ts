@@ -1,5 +1,8 @@
 import { createAction, props } from "@ngrx/store";
-import { IngestionRequestInformation } from "ingestor/ingestor-page/helper/ingestor.component-helper";
+import {
+  APIInformation,
+  IngestionRequestInformation,
+} from "ingestor/ingestor-page/helper/ingestor.component-helper";
 import {
   GetBrowseDatasetResponse,
   GetExtractorResponse,
@@ -79,6 +82,11 @@ export const updateIngestionObject = createAction(
 export const updateIngestionObjectFromThirdParty = createAction(
   "[Ingestor] Update Ingestion Object from Third Party",
   props<{ ingestionObject: IngestionRequestInformation }>(),
+);
+
+export const updateIngestionObjectAPIInformation = createAction(
+  "[Ingestor] Update Ingestion Object API Information",
+  props<{ ingestionObjectApiInformation: APIInformation }>(),
 );
 
 export const resetIngestionObjectFromThirdPartyFlag = createAction(

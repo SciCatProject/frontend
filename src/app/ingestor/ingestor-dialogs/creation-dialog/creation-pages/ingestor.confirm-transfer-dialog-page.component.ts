@@ -7,11 +7,13 @@ import {
   Output,
 } from "@angular/core";
 import {
+  APIInformation,
   IngestionRequestInformation,
   IngestorHelper,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
 import { Store } from "@ngrx/store";
 import {
+  ingestionObjectAPIInformation,
   selectIngestionObject,
   selectIsIngestDatasetLoading,
 } from "state-management/selectors/ingestor.selector";
@@ -35,6 +37,12 @@ export class IngestorConfirmTransferDialogPageComponent
 
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
+  createNewTransferDataApiInformation: APIInformation =
+    IngestorHelper.createEmptyAPIInformation();
+
+  ingestionObjectApiInformation$ = this.store.select(
+    ingestionObjectAPIInformation,
+  );
 
   ingestionObject$ = this.store.select(selectIngestionObject);
   ingestDatasetLoading$ = this.store.select(selectIsIngestDatasetLoading);
@@ -54,6 +62,14 @@ export class IngestorConfirmTransferDialogPageComponent
       this.ingestionObject$.subscribe((ingestionObject) => {
         if (ingestionObject) {
           this.createNewTransferData = ingestionObject;
+        }
+      }),
+    );
+
+    this.subscriptions.push(
+      this.ingestionObjectApiInformation$.subscribe((apiInformation) => {
+        if (apiInformation) {
+          this.createNewTransferDataApiInformation = apiInformation;
         }
       }),
     );

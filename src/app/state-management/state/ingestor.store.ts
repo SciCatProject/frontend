@@ -1,5 +1,6 @@
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 import {
+  APIInformation,
   IngestionRequestInformation,
   IngestorHelper,
 } from "ingestor/ingestor-page/helper/ingestor.component-helper";
@@ -34,7 +35,10 @@ export interface IngestorState {
     pageNumber: number;
   };
   ingestorExtractionMethods: GetExtractorResponse | null;
+
   ingestionObject: IngestionRequestInformation;
+  ingestionObjectApiInformation: APIInformation;
+
   ingestorBrowserActiveNode: GetBrowseDatasetResponse | null;
   renderView: renderView;
   updateEditorFromThirdParty: boolean;
@@ -58,6 +62,8 @@ export const initialIngestorState: IngestorState = {
   },
   ingestorExtractionMethods: null,
   ingestionObject: IngestorHelper.createEmptyRequestInformation(),
+  ingestionObjectApiInformation: IngestorHelper.createEmptyAPIInformation(),
+
   ingestorBrowserActiveNode: null,
   connectingBackend: false,
   updateEditorFromThirdParty: false,

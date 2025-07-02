@@ -1,12 +1,14 @@
 import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import {
+  APIInformation,
   DialogDataObject,
   IngestionRequestInformation,
   IngestorHelper,
   ScientificMetadata,
 } from "../../ingestor-page/helper/ingestor.component-helper";
 import {
+  ingestionObjectAPIInformation,
   selectIngestionObject,
   selectIngestorEndpoint,
   selectNoRightsError,
@@ -41,8 +43,13 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
 
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
+  createNewTransferDataApiInformation: APIInformation =
+    IngestorHelper.createEmptyAPIInformation();
 
   ingestionObject$ = this.store.select(selectIngestionObject);
+  ingestionObjectApiInformation$ = this.store.select(
+    ingestionObjectAPIInformation,
+  );
   ingestorBackend$ = this.store.select(selectIngestorEndpoint);
   selectNoRightsError$ = this.store.select(selectNoRightsError);
 
@@ -63,6 +70,14 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
       this.ingestionObject$.subscribe((ingestionObject) => {
         if (ingestionObject) {
           this.createNewTransferData = ingestionObject;
+        }
+      }),
+    );
+
+    this.subscriptions.push(
+      this.ingestionObjectApiInformation$.subscribe((apiInformation) => {
+        if (apiInformation) {
+          this.createNewTransferDataApiInformation = apiInformation;
         }
       }),
     );
@@ -110,6 +125,8 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
       sample: {},
     };
 
+    this.createNewTransferData.selectedMethod = { name: "", schema: "" };
+
     this.store.dispatch(
       fromActions.updateIngestionObject({
         ingestionObject: this.createNewTransferData,
@@ -118,14 +135,20 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
   }
 
   async startMetadataExtraction(): Promise<boolean> {
-    this.createNewTransferData.apiInformation.metaDataExtractionFailed = false;
+    this.createNewTransferDataApiInformation.metaDataExtractionFailed = false;
 
-    if (this.createNewTransferData.apiInformation.extractMetaDataRequested) {
+    if (this.createNewTransferDataApiInformation.extractMetaDataRequested) {
       return false;
     }
 
-    this.createNewTransferData.apiInformation.extractorMetaDataReady = false;
-    this.createNewTransferData.apiInformation.extractMetaDataRequested = true;
+    this.createNewTransferDataApiInformation.extractorMetaDataReady = false;
+    this.createNewTransferDataApiInformation.extractMetaDataRequested = true;
+
+    this.store.dispatch(
+      fromActions.updateIngestionObjectAPIInformation({
+        ingestionObjectApiInformation: this.createNewTransferDataApiInformation,
+      }),
+    );
 
     const params = new HttpParams()
       .set("filePath", this.createNewTransferData.selectedPath)
@@ -137,13 +160,13 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
       this.sseService.getMessages().subscribe({
         next: (data) => {
           //console.log("Received SSE data:", data);
-          this.createNewTransferData.apiInformation.extractorMetaDataStatus =
+          this.createNewTransferDataApiInformation.extractorMetaDataStatus =
             data.message;
-          this.createNewTransferData.apiInformation.extractorMetadataProgress =
+          this.createNewTransferDataApiInformation.extractorMetadataProgress =
             data.progress;
 
           if (data.result) {
-            this.createNewTransferData.apiInformation.extractorMetaDataReady =
+            this.createNewTransferDataApiInformation.extractorMetaDataReady =
               true;
             const extractedScientificMetadata = JSON.parse(
               data.resultMessage,
@@ -153,33 +176,41 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
               extractedScientificMetadata.instrument ?? {};
             this.createNewTransferData.extractorMetaData.acquisition =
               extractedScientificMetadata.acquisition ?? {};
+
+            this.store.dispatch(
+              fromActions.updateIngestionObject({
+                ingestionObject: this.createNewTransferData,
+              }),
+            );
           } else if (data.error) {
-            this.createNewTransferData.apiInformation.metaDataExtractionFailed =
+            this.createNewTransferDataApiInformation.metaDataExtractionFailed =
               true;
-            this.createNewTransferData.apiInformation.extractMetaDataRequested =
+            this.createNewTransferDataApiInformation.extractMetaDataRequested =
               false;
-            this.createNewTransferData.apiInformation.extractorMetaDataStatus =
+            this.createNewTransferDataApiInformation.extractorMetaDataStatus =
               data.message;
-            this.createNewTransferData.apiInformation.extractorMetadataProgress =
+            this.createNewTransferDataApiInformation.extractorMetadataProgress =
               data.progress;
           }
 
           this.store.dispatch(
-            fromActions.updateIngestionObject({
-              ingestionObject: this.createNewTransferData,
+            fromActions.updateIngestionObjectAPIInformation({
+              ingestionObjectApiInformation:
+                this.createNewTransferDataApiInformation,
             }),
           );
         },
         error: (error) => {
           console.error("Error receiving SSE data:", error);
-          this.createNewTransferData.apiInformation.metaDataExtractionFailed =
+          this.createNewTransferDataApiInformation.metaDataExtractionFailed =
             true;
-          this.createNewTransferData.apiInformation.extractMetaDataRequested =
+          this.createNewTransferDataApiInformation.extractMetaDataRequested =
             false;
 
           this.store.dispatch(
-            fromActions.updateIngestionObject({
-              ingestionObject: this.createNewTransferData,
+            fromActions.updateIngestionObjectAPIInformation({
+              ingestionObjectApiInformation:
+                this.createNewTransferDataApiInformation,
             }),
           );
         },
@@ -195,10 +226,16 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
         this.resetScientificMetadata();
 
         // Reset metadata extractor
-        this.createNewTransferData.apiInformation.extractMetaDataRequested =
+        this.sseService.disconnect();
+        this.createNewTransferDataApiInformation.extractMetaDataRequested =
           false;
-        this.createNewTransferData.apiInformation.extractorMetaDataReady =
-          false;
+        this.createNewTransferDataApiInformation.extractorMetaDataReady = false;
+        this.store.dispatch(
+          fromActions.updateIngestionObjectAPIInformation({
+            ingestionObjectApiInformation:
+              this.createNewTransferDataApiInformation,
+          }),
+        );
         break;
       case "USER_METADATA":
         if (this.createNewTransferData.editorMode === "INGESTION") {
@@ -209,8 +246,14 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
           this.createNewTransferData.editorMode === "EDITOR" ||
           this.createNewTransferData.editorMode === "CREATION"
         ) {
-          this.createNewTransferData.apiInformation.extractorMetaDataReady =
+          this.createNewTransferDataApiInformation.extractorMetaDataReady =
             true;
+          this.store.dispatch(
+            fromActions.updateIngestionObjectAPIInformation({
+              ingestionObjectApiInformation:
+                this.createNewTransferDataApiInformation,
+            }),
+          );
         }
 
         break;

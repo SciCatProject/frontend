@@ -8,11 +8,15 @@ import {
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import {
+  APIInformation,
   IngestionRequestInformation,
   IngestorHelper,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
 import { Store } from "@ngrx/store";
-import { selectIngestionObject } from "state-management/selectors/ingestor.selector";
+import {
+  ingestionObjectAPIInformation,
+  selectIngestionObject,
+} from "state-management/selectors/ingestor.selector";
 import { Subscription } from "rxjs";
 
 @Component({
@@ -31,6 +35,12 @@ export class IngestorNoRightsDialogPageComponent implements OnInit, OnDestroy {
 
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
+  createNewTransferDataApiInformation: APIInformation =
+    IngestorHelper.createEmptyAPIInformation();
+
+  ingestionObjectApiInformation$ = this.store.select(
+    ingestionObjectAPIInformation,
+  );
 
   constructor(private store: Store) {}
 
@@ -39,6 +49,14 @@ export class IngestorNoRightsDialogPageComponent implements OnInit, OnDestroy {
       this.ingestionObject$.subscribe((ingestionObject) => {
         if (ingestionObject) {
           this.createNewTransferData = ingestionObject;
+        }
+      }),
+    );
+
+    this.subscriptions.push(
+      this.ingestionObjectApiInformation$.subscribe((apiInformation) => {
+        if (apiInformation) {
+          this.createNewTransferDataApiInformation = apiInformation;
         }
       }),
     );

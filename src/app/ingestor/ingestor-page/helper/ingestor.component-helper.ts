@@ -48,7 +48,6 @@ export interface IngestionRequestInformation {
   mergedMetaDataString: string;
 
   editorMode: IngestorEditorMode;
-  apiInformation: APIInformation;
 
   ingestionRequest: PostDatasetResponse | null;
   autoArchive: boolean;
@@ -129,17 +128,20 @@ export class IngestorHelper {
       customMetaData: {},
       mergedMetaDataString: "",
       editorMode: "INGESTION",
-      apiInformation: {
-        metaDataExtractionFailed: false,
-        extractMetaDataRequested: false,
-        extractorMetaDataReady: false,
-        extractorMetadataProgress: 0,
-        extractorMetaDataStatus: "",
-        ingestionRequestErrorMessage: "",
-        ingestionDatasetLoading: false,
-      },
       ingestionRequest: null,
       autoArchive: true,
+    };
+  };
+
+  static createEmptyAPIInformation = (): APIInformation => {
+    return {
+      metaDataExtractionFailed: false,
+      extractMetaDataRequested: false,
+      extractorMetaDataReady: false,
+      extractorMetadataProgress: 0,
+      extractorMetaDataStatus: "",
+      ingestionRequestErrorMessage: "",
+      ingestionDatasetLoading: false,
     };
   };
 
