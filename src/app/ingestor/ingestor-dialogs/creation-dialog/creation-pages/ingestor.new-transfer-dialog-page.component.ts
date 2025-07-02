@@ -63,7 +63,7 @@ export class IngestorNewTransferDialogPageComponent
   uiNextButtonReady = false;
 
   // Creation Mode Options
-  _selectedSchemaOption: "free" | "upload" = "free";
+  _selectedSchemaOption: "free" | "upload" = "upload";
   selectedSchemaFileName = "";
   selectedSchemaFileContent = "";
 
