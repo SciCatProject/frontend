@@ -9,7 +9,7 @@
       <button
         *ngIf="editingPublishedDataDoi"
         mat-button
-        id="publishButton"
+        id="saveChangesButton"
         (click)="onSaveChanges()"
         class="button"
         color="primary"
@@ -20,7 +20,7 @@
       <button
         *ngIf="editingPublishedDataDoi"
         mat-button
-        id="publishButton"
+        id="cancelButton"
         (click)="onCancelEdit()"
         class="button"
         color="warn"
@@ -83,6 +83,7 @@
       [dataSource]="batch$"
       class="mat-elevation-z2"
       style="margin-left: 1em"
+      data-cy="batch-table"
     >
       <ng-container matColumnDef="remove">
         <mat-header-cell *matHeaderCellDef>

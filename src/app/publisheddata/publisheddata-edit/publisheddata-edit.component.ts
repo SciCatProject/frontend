@@ -73,7 +73,11 @@ export class PublisheddataEditComponent
         landingPage: this.appConfig.landingPage,
       };
 
-      if (this.panelOpenState() && !this.metadataDataIsValid()) {
+      if (
+        shouldRedirect &&
+        this.panelOpenState() &&
+        !this.metadataDataIsValid()
+      ) {
         return;
       }
 

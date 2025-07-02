@@ -234,8 +234,6 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
   }
 
   public onCancel() {
-    this._hasUnsavedChanges = false;
-
     this.router.navigateByUrl("/datasets/batch");
   }
 

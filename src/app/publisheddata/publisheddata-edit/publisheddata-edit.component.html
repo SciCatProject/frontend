@@ -8,7 +8,11 @@
       >
 
       <mat-card-content>
-        <form *ngIf="publishedData$ | async" [formGroup]="form">
+        <form
+          *ngIf="publishedData$ | async"
+          [formGroup]="form"
+          data-cy="editPublishedDataForm"
+        >
           <mat-form-field>
             <input
               id="titleInput"
@@ -38,6 +42,7 @@
             *ngIf="schema.properties"
             (opened)="panelOpenState.set(true)"
             (closed)="panelOpenState.set(false)"
+            data-cy="metadata"
           >
             <mat-expansion-panel-header>
               <mat-panel-title> Metadata </mat-panel-title>
@@ -59,9 +64,7 @@
             mat-raised-button
             color="primary"
             (click)="onPublishedDataUpdate(false)"
-            [disabled]="
-              !form.valid || (panelOpenState() && !metadataDataIsValid())
-            "
+            [disabled]="!form.valid"
           >
             Save changes
           </button>

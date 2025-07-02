@@ -9,7 +9,7 @@
       </mat-card-header>
       <mat-card-content>
         <table>
-          <tr *ngIf="publishedData.status as value">
+          <tr *ngIf="publishedData.status as value" data-cy="status">
             <th>Status</th>
             <td>{{ value }}</td>
           </tr>
@@ -40,6 +40,7 @@
           color="primary"
           *ngIf="publishedData.status === 'public'"
           (click)="onRegisterClick(publishedData.doi)"
+          data-cy="registerButton"
         >
           Register
         </button>
@@ -48,6 +49,7 @@
           color="primary"
           *ngIf="publishedData.status === 'private'"
           (click)="onPublishClick(publishedData.doi)"
+          data-cy="publishButton"
         >
           Publish
         </button>
@@ -205,6 +207,7 @@
                 mat-stroked-button
                 aria-label="Edit dataset list"
                 (click)="onEditDatasetList()"
+                data-cy="editDatasetList"
               >
                 <mat-icon>edit</mat-icon> Edit
               </button>
@@ -249,7 +252,11 @@
           id="jsonMetadataContainer"
           *ngIf="appConfig.jsonMetadataEnabled"
         >
-          <button mat-stroked-button (click)="show = !show">
+          <button
+            mat-stroked-button
+            (click)="show = !show"
+            data-cy="showHideMetadata"
+          >
             {{ show ? "Hide MetaData" : "Show Metadata" }}
           </button>
           <br />
