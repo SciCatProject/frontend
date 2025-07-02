@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { JsonFormsAngularService, JsonFormsControl } from "@jsonforms/angular";
 import {
   ControlProps,
@@ -56,6 +56,7 @@ import { cloneDeep, isEmpty, startCase } from "lodash-es";
     </mat-card>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnyOfRendererComponent extends JsonFormsControl {
   dataAsString: string;

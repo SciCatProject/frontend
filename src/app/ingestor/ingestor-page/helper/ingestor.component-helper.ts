@@ -19,6 +19,16 @@ export interface ExtractionMethod {
   schema: string; // Base64 encoded JSON schema
 }
 
+export interface APIInformation {
+  extractMetaDataRequested: boolean;
+  extractorMetaDataReady: boolean;
+  metaDataExtractionFailed: boolean;
+  extractorMetadataProgress: number;
+  extractorMetaDataStatus: string;
+  ingestionRequestErrorMessage: string;
+  ingestionDatasetLoading: boolean;
+}
+
 export interface IngestionRequestInformation {
   selectedPath: string;
   selectedMethod: ExtractionMethod;
@@ -38,15 +48,7 @@ export interface IngestionRequestInformation {
   mergedMetaDataString: string;
 
   editorMode: IngestorEditorMode;
-  apiInformation: {
-    extractMetaDataRequested: boolean;
-    extractorMetaDataReady: boolean;
-    metaDataExtractionFailed: boolean;
-    extractorMetadataProgress: number;
-    extractorMetaDataStatus: string;
-    ingestionRequestErrorMessage: string;
-    ingestionDatasetLoading: boolean;
-  };
+  apiInformation: APIInformation;
 
   ingestionRequest: PostDatasetResponse | null;
   autoArchive: boolean;

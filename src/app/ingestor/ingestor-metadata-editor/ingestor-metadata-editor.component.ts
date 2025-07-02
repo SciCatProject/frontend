@@ -12,7 +12,7 @@ it will produce errors when changing the schema. */
 @Component({
   selector: "app-metadata-editor",
   styleUrls: ["./ingestor-metadata-editor.component.scss"],
-  template: `<ng-container class="editor-container">
+  template: `<ng-container class="editor-container" *ngIf="editorInitialized">
     <jsonforms
       *ngIf="renderView === 'requiredOnly'"
       [data]="visualData"
@@ -43,6 +43,7 @@ export class IngestorMetadataEditorComponent implements OnInit {
 
   visualData: object = {};
   reducedSchema: JsonSchema = {};
+  editorInitialized = false;
 
   ngOnInit() {
     this.updateVisualData();
@@ -50,7 +51,7 @@ export class IngestorMetadataEditorComponent implements OnInit {
     this.reducedSchema =
       IngestorMetadataEditorHelper.reduceToRequiredProperties(this.schema);
 
-    //console.log(this.schema);
+    this.editorInitialized = true;
   }
 
   updateVisualData() {

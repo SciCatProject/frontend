@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from "@angular/core";
 import {
   JsonFormsAngularService,
   JsonFormsAbstractControl,
@@ -111,6 +111,7 @@ import {
     </mat-card>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class ArrayLayoutRendererCustom

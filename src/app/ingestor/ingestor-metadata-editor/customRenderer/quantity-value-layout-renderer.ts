@@ -38,6 +38,7 @@ import { LayoutRenderer } from "@jsonforms/angular-material";
   `,
   styleUrls: ["../ingestor-metadata-editor.component.scss"],
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuantityValueLayoutRendererComponent extends LayoutRenderer<QuantityValueLayout> {
   constructor(

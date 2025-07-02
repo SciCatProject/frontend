@@ -193,13 +193,14 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
     switch (nextStep) {
       case "NEW_TRANSFER":
         this.resetScientificMetadata();
-        break;
-      case "USER_METADATA":
+
+        // Reset metadata extractor
         this.createNewTransferData.apiInformation.extractMetaDataRequested =
           false;
         this.createNewTransferData.apiInformation.extractorMetaDataReady =
           false;
-
+        break;
+      case "USER_METADATA":
         if (this.createNewTransferData.editorMode === "INGESTION") {
           this.startMetadataExtraction().catch((error) => {
             console.error("Metadata extraction error", error);

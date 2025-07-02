@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from "@angular/core";
 import {
   JsonFormsAngularService,
   JsonFormsControlWithDetail,
@@ -54,6 +54,7 @@ import isEmpty from "lodash/isEmpty";
     </mat-card>
   `,
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomObjectControlRendererComponent extends JsonFormsControlWithDetail {
   rendererService: JsonFormsAngularService;
