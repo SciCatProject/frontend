@@ -33,7 +33,7 @@ const reducer = createReducer(
     (state, { err }): IngestorState => ({
       ...state,
       ingestorBrowserActiveNode: null,
-      error: err,
+      error: JSON.stringify(err),
     }),
   ),
   on(
@@ -48,7 +48,7 @@ const reducer = createReducer(
     (state, { err }): IngestorState => ({
       ...state,
       ingestorExtractionMethods: null,
-      error: err,
+      error: JSON.stringify(err),
     }),
   ),
   on(
@@ -93,7 +93,7 @@ const reducer = createReducer(
         ...state.ingestorStatus,
         validEndpoint: false,
       },
-      error: err,
+      error: JSON.stringify(err),
     }),
   ),
   on(
@@ -178,10 +178,13 @@ const reducer = createReducer(
         apiInformation: {
           ...state.ingestionObject.apiInformation,
           ingestionRequestErrorMessage:
-            (err as any).error ?? (err as any).error?.error ?? err.message,
+            (err as any).error ??
+            (err as any).error?.error ??
+            err.message ??
+            JSON.stringify(err),
         },
       },
-      error: err,
+      error: JSON.stringify(err),
     }),
   ),
   on(
