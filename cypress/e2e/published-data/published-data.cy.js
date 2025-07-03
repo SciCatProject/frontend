@@ -470,8 +470,6 @@ describe("Datasets general", () => {
 
       cy.get("[data-cy='status']").contains("private");
 
-      cy.get("#deleteBtn").should("exist");
-
       cy.get("#editBtn").click();
 
       cy.get('[data-cy="editPublishedDataForm"]').should("exist");
@@ -518,10 +516,9 @@ describe("Datasets general", () => {
       cy.get('[data-cy="status"]').contains("public");
 
       cy.get("#editBtn").should("not.exist");
-      cy.get("#deleteBtn").should("not.exist");
     });
 
-    it.only("admins should be able to edit public published data", () => {
+    it("admins should be able to edit public published data", () => {
       const newCreatorName = "new creator name";
       cy.visit("/publishedDatasets");
 

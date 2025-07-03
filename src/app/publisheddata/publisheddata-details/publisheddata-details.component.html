@@ -235,7 +235,8 @@
         >
           Edit
         </button>
-        <button
+        <!-- NOTE: For now we will keep the delete button hidden until it is fully decided how to handle it in the frontend. -->
+        <!-- <button
           mat-raised-button
           color="warn"
           id="deleteBtn"
@@ -247,7 +248,7 @@
           (click)="onDeleteClick(publishedData.doi)"
         >
           Delete
-        </button>
+        </button> -->
         <ng-container
           id="jsonMetadataContainer"
           *ngIf="appConfig.jsonMetadataEnabled"
