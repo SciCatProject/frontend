@@ -25,9 +25,19 @@ export class IngestorMetadataSSEService {
   private messageSubject: Subject<IngestorMetadataEvent> =
     new Subject<IngestorMetadataEvent>();
 
-  constructor() {}
+  constructor() {
+    // Close previous connection if it exists
+    this.disconnect();
+  }
+
+  destroy(): void {
+    this.disconnect();
+  }
 
   public connect(url: string, withCredentials = true): void {
+    // Close previous connection if it exists
+    this.disconnect();
+
     this.eventSource = new EventSource(url, { withCredentials });
 
     this.eventSource.onmessage = (event) => {

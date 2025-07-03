@@ -1,4 +1,5 @@
 import { createReducer, Action, on } from "@ngrx/store";
+import { IngestorHelper } from "ingestor/ingestor-page/helper/ingestor.component-helper";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import {
   IngestorState,
@@ -131,6 +132,15 @@ const reducer = createReducer(
         ...state.ingestionObjectApiInformation,
         ...ingestionObjectApiInformation,
       },
+    }),
+  ),
+  on(
+    fromActions.resetIngestionObject,
+    (state, { ingestionObject }): IngestorState => ({
+      ...state,
+      ingestionObject:
+        ingestionObject ?? IngestorHelper.createEmptyRequestInformation(),
+      ingestionObjectApiInformation: IngestorHelper.createEmptyAPIInformation(),
     }),
   ),
   on(

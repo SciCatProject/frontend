@@ -267,12 +267,7 @@ export class IngestorTransferComponent implements OnInit, OnDestroy {
 
   onClickAddIngestion(): void {
     // Clean the current ingestion object
-    this.store.dispatch(
-      fromActions.updateIngestionObject({
-        ingestionObject: IngestorHelper.createEmptyRequestInformation(),
-      }),
-    );
-
+    this.store.dispatch(fromActions.resetIngestionObject({}));
     this.dialog.closeAll();
 
     let dialogRef = null;

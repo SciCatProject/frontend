@@ -24,9 +24,7 @@ export class IngestorCreationComponent {
     newTransferObject.editorMode = "CREATION";
 
     this.store.dispatch(
-      fromActions.updateIngestionObject({
-        ingestionObject: newTransferObject,
-      }),
+      fromActions.resetIngestionObject({ ingestionObject: newTransferObject }),
     );
 
     this.dialog.closeAll();

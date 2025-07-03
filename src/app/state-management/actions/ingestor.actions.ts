@@ -74,6 +74,12 @@ export const updateTransferListFailure = createAction(
   props<{ err: Error }>(),
 );
 
+/* Optional pass an ingestionObject to set custom properties */
+export const resetIngestionObject = createAction(
+  "[Ingestor] Reset Ingestion Object",
+  props<{ ingestionObject?: IngestionRequestInformation }>(),
+);
+
 export const updateIngestionObject = createAction(
   "[Ingestor] Update Ingestion Object",
   props<{ ingestionObject: IngestionRequestInformation }>(),
