@@ -11,7 +11,7 @@ import {
 import { ExportExcelService } from "shared/services/export-excel.service";
 import { Store, StoreModule } from "@ngrx/store";
 
-import { ProposalDashboardComponent } from "./proposal-dashboard.component";
+import { ProposalTableComponent } from "./proposal-table.component";
 import { ProposalsModule } from "proposals/proposals.module";
 import { EffectsModule } from "@ngrx/effects";
 import { HttpClient } from "@angular/common/http";
@@ -24,15 +24,15 @@ import {
 import { BehaviorSubject } from "rxjs";
 
 describe("ProposalDashboardComponent", () => {
-  let component: ProposalDashboardComponent;
-  let fixture: ComponentFixture<ProposalDashboardComponent>;
+  let component: ProposalTableComponent;
+  let fixture: ComponentFixture<ProposalTableComponent>;
 
   const getConfig = () => ({});
   const dataSource = new BehaviorSubject<ProposalClass[]>([]);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ProposalDashboardComponent],
+      declarations: [ProposalTableComponent],
       imports: [
         ProposalsModule,
         EffectsModule.forRoot([]),
@@ -53,7 +53,7 @@ describe("ProposalDashboardComponent", () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProposalDashboardComponent);
+    fixture = TestBed.createComponent(ProposalTableComponent);
     component = fixture.componentInstance;
     component.dataSource = dataSource;
     fixture.detectChanges();
