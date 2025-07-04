@@ -1,20 +1,13 @@
-<dynamic-mat-table
-  [tableName]="tableName"
-  [columns]="columns"
-  [pending]="pending"
-  [setting]="setting"
-  [pagingMode]="paginationMode"
-  [dataSource]="dataSource"
-  [pagination]="pagination"
-  [rowSelectionMode]="rowSelectionMode"
-  [globalTextSearch]="globalTextSearch"
-  globalTextSearchPlaceholder="Global text search"
-  (paginationChange)="onPaginationChange($event)"
-  (globalTextSearchChange)="onGlobalTextSearchChange($event)"
-  (onRowEvent)="onRowClick($event)"
-  (settingChange)="onSettingChange($event)"
-  (onTableEvent)="onTableEvent($event)"
-  style="height: 70vh"
-  class="mat-elevation-z2"
+<breadcrumb></breadcrumb>
+<full-text-search-bar
+  #searchBar
+  data-cy="proposal-text-search"
+  [placeholder]="'Text Search'"
+  (textChange)="onTextChange($event)"
+  (searchAction)="onSearchAction()"
 >
-</dynamic-mat-table>
+</full-text-search-bar>
+<app-proposal-table
+  (rowClick)="onRowClick($event)"
+  (pageChange)="onPageChange($event)"
+></app-proposal-table>

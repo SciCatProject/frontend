@@ -20,6 +20,7 @@ import { FiltersModule } from "./modules/filters/filters.module";
 import { AttachmentService } from "./services/attachment.service";
 import { DynamicMatTableModule } from "./modules/dynamic-material-table/table/dynamic-mat-table.module";
 import { TranslateModule } from "@ngx-translate/core";
+import { FullTextSearchBarModule } from "./modules/full-text-search-bar/full-text-search-bar.module";
 @NgModule({
   imports: [
     BreadcrumbModule,
@@ -31,6 +32,7 @@ import { TranslateModule } from "@ngx-translate/core";
     PipesModule,
     ScientificMetadataModule,
     SearchBarModule,
+    FullTextSearchBarModule,
     TableModule,
     SearchParametersDialogModule,
     CommonModule,
@@ -55,6 +57,7 @@ import { TranslateModule } from "@ngx-translate/core";
     PipesModule,
     ScientificMetadataModule,
     SearchBarModule,
+    FullTextSearchBarModule,
     TableModule,
     CommonModule,
     FormsModule,
