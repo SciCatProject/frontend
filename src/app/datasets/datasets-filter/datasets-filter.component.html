@@ -61,7 +61,7 @@
           </mat-expansion-panel-header>
 
           <div class="condition-details">
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" class="condition-fields">
               <mat-label>Operator</mat-label>
               <mat-select
                 [value]="conditionConfig.condition.relation"
@@ -78,7 +78,7 @@
               </mat-select>
             </mat-form-field>
 
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" class="condition-fields">
               <mat-label>Value</mat-label>
               <input
                 matInput
@@ -88,7 +88,7 @@
             </mat-form-field>
 
             <ng-template [ngIf]="appConfig.scienceSearchUnitsEnabled">
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="outline" class="condition-fields">
                 <mat-label>Unit</mat-label>
                 <input
                   matInput
