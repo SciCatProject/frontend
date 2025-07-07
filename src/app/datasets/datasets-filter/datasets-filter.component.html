@@ -1,6 +1,15 @@
 <mat-card>
   <mat-card-header class="section-container">
-    <mat-card-title>Filters and Conditions</mat-card-title>
+    <mat-card-title>Filters</mat-card-title>
+    <div class="section-container" data-cy="more-filters-button">
+      <button
+        mat-button
+        class="settings-button"
+        (click)="showDatasetsFilterSettingsDialog()"
+      >
+        <mat-icon>settings</mat-icon>
+      </button>
+    </div>
   </mat-card-header>
 
   <mat-card-content>
@@ -16,27 +25,125 @@
         </ng-container>
       </ng-container>
     </ng-container>
-
     <div
-      class="section-container"
+      class="section-container scientific-conditions"
       *ngIf="appConfig.scienceSearchEnabled"
       data-cy="scientific-condition-filter-list"
     >
-      <ng-container *ngFor="let condition of scientificConditions$ | async">
-        <ng-container
-          *ngComponentOutlet="ConditionFilterComponent; inputs: { condition }"
-        ></ng-container>
-      </ng-container>
-    </div>
-
-    <div class="section-container" data-cy="more-filters-button">
-      <button
-        mat-button
-        class="full-width-button"
-        (click)="showDatasetsFilterSettingsDialog()"
+      <mat-card-title>Conditions</mat-card-title>
+      <mat-accordion
+        multi="true"
+        *ngIf="conditionConfigs$ | async as conditionConfigs"
       >
-        <mat-icon>tune</mat-icon>More Filters...
-      </button>
+        <mat-expansion-panel
+          *ngFor="
+            let conditionConfig of conditionConfigs;
+            let i = index;
+            trackBy: trackByCondition
+          "
+          class="condition-panel"
+          [class.disabled]="!conditionConfig.enabled"
+        >
+          <mat-expansion-panel-header class="custom-panel-header">
+            <mat-panel-title>
+              <div class="condition-title-section">
+                <div class="condition-field-name">
+                  {{ conditionConfig.condition.lhs }}
+                </div>
+                <div class="condition-description">
+                  {{ getConditionDisplayText(conditionConfig.condition) }}
+                </div>
+              </div>
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ getConditionDisplayText(conditionConfig.condition) }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div class="condition-details">
+            <mat-form-field appearance="outline">
+              <mat-label>Operator</mat-label>
+              <mat-select
+                [value]="conditionConfig.condition.relation"
+                (selectionChange)="updateConditionOperator(i, $event.value)"
+              >
+                <mat-option value="GREATER_THAN">is greater than</mat-option>
+                <mat-option value="LESS_THAN">is less than</mat-option>
+                <mat-option value="EQUAL_TO_NUMERIC"
+                  >is equal to (numeric)</mat-option
+                >
+                <mat-option value="EQUAL_TO_STRING"
+                  >is equal to (string)</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Value</mat-label>
+              <input
+                matInput
+                [value]="conditionConfig.condition.rhs"
+                (input)="updateConditionValue(i, $event)"
+              />
+            </mat-form-field>
+
+            <ng-template [ngIf]="appConfig.scienceSearchUnitsEnabled">
+              <mat-form-field appearance="outline">
+                <mat-label>Unit</mat-label>
+                <input
+                  matInput
+                  autocomplete="off"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  [value]="conditionConfig.condition.unit || ''"
+                  (input)="updateConditionUnit(i, $event)"
+                  [matAutocomplete]="rhsUnits"
+                  [disabled]="
+                    conditionConfig.condition.relation === 'EQUAL_TO_STRING'
+                  "
+                />
+                <mat-autocomplete #rhsUnits="matAutocomplete">
+                  <mat-option
+                    *ngFor="let unit of getUnits(conditionConfig.condition.lhs)"
+                    [value]="unit"
+                  >
+                    {{ unit }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </ng-template>
+
+            <div class="condition-actions-section">
+              <mat-slide-toggle
+                [checked]="conditionConfig.enabled"
+                (change)="toggleConditionEnabled(i, $event.checked)"
+                matTooltip="Enable/Disable condition"
+                class="condition-toggle"
+              >
+                {{ conditionConfig.enabled ? "Enabled" : "Disabled" }}
+              </mat-slide-toggle>
+
+              <button
+                class="condition-remove"
+                mat-button
+                color="warn"
+                (click)="removeCondition(conditionConfig, i)"
+                matTooltip="Remove condition"
+              >
+                <mat-icon>delete</mat-icon>
+                Remove
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <div class="conditions-header">
+        <button mat-button class="condition-button" (click)="addCondition()">
+          <mat-icon>add</mat-icon>Add Conditions
+        </button>
+      </div>
     </div>
 
     <div class="section-container">

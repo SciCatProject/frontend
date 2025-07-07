@@ -86,6 +86,7 @@ import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-d
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
+import { MatExpansionModule } from '@angular/material/expansion';
 @NgModule({
   imports: [
     CommonModule,
@@ -147,6 +148,7 @@ import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
     CdkDrag,
     CdkDragHandle,
     FiltersModule,
+    MatExpansionModule,
   ],
   declarations: [
     BatchViewComponent,

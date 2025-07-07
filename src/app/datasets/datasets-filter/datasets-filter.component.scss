@@ -67,6 +67,90 @@ mat-card {
   }
 
   .section-container:first-child {
+    padding-top: 0.1rem;
     margin-top: unset;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .settings-button {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.condition-title-section {
+  display: flex;
+  flex-direction: column;
+
+  .condition-field-name {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+
+  .condition-description {
+    font-size: 0.9em;
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.mat-accordion .mat-expansion-panel {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.condition-panel {
+  &.disabled {
+    background-color: #f5f5f5;
+    opacity: 0.7;
+  }
+  .mat-expansion-panel-header {
+    height: auto !important;
+    padding: 0.5rem !important;
+
+    .mat-expansion-panel-header-title {
+      white-space: normal !important;
+      overflow: visible !important;
+    }
+    .mat-expansion-panel-header-description {
+      display: none !important;
+    }
+  }
+
+  .condition-details {
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .condition-actions-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 0.5rem;
+
+      .condition-toggle {
+        margin: 0;
+      }
+
+      .condition-remove {
+        display: flex;
+        align-items: center;
+        margin-left: 1rem;
+        color: #d32f2f;
+        font-size: 1rem;
+        line-height: 1;
+
+        mat-icon {
+          margin-right: 4px;
+        }
+
+        &:hover {
+          background-color: #ffebee;
+          color: #b71c1c;
+        }
+      }
+    }
   }
 }

@@ -20,6 +20,7 @@ import {
 } from "state-management/actions/datasets.actions";
 import {
   deselectAllCustomColumnsAction,
+  updateConditionsConfigs,
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
@@ -43,6 +44,19 @@ import { Filters, FilterConfig } from "shared/modules/filters/filters.module";
 import { FilterComponentInterface } from "shared/modules/filters/interface/filter-component.interface";
 import { Subscription } from "rxjs";
 import { take } from "rxjs/operators";
+import { SearchParametersDialogComponent } from "../../shared/modules/search-parameters-dialog/search-parameters-dialog.component";
+import { selectMetadataKeys } from "state-management/selectors/datasets.selectors";
+import { ConditionConfig } from "shared/modules/filters/filters.module";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import {
+  addScientificConditionAction,
+  removeScientificConditionAction,
+} from "state-management/actions/datasets.actions";
+import {
+  selectColumnAction,
+  deselectColumnAction,
+} from "state-management/actions/user.actions";
+import { UnitsService } from "shared/services/units.service";
 
 const COMPONENT_MAP: { [K in Filters]: Type<any> } = {
   PidFilter: PidFilterComponent,
@@ -81,12 +95,16 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   labelMaps: { [key: string]: string } = {};
 
+  metadataKeys$ = this.store.select(selectMetadataKeys);
+
   constructor(
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
     private store: Store,
     private asyncPipe: AsyncPipe,
     private viewContainerRef: ViewContainerRef,
+    private snackBar: MatSnackBar,
+    private unitsService: UnitsService,
   ) {}
 
   ngOnInit() {
@@ -112,6 +130,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(clearFacetsAction());
     this.store.dispatch(deselectAllCustomColumnsAction());
+    this.store.dispatch(
+      updateConditionsConfigs({
+        conditionConfigs: [],
+      }),
+    );
+
     this.applyFilters();
     // we need to treat JS event loop here, otherwise this.clearSearchBar is false for the components
     setTimeout(() => {
@@ -135,12 +159,13 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     const initialConditionConfigsCopy = cloneDeep(initialConditionConfigs);
 
     const dialogRef = this.dialog.open(DatasetsFilterSettingsComponent, {
-      width: "60vw",
+      width: "400px",
       data: {
         filterConfigs: this.asyncPipe.transform(this.filterConfigs$),
         conditionConfigs: this.asyncPipe.transform(this.conditionConfigs$),
         labelMaps: this.labelMaps,
       },
+      restoreFocus: false,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -177,6 +202,229 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   applyFilters() {
     this.store.dispatch(fetchDatasetsAction());
     this.store.dispatch(fetchFacetCountsAction());
+  }
+
+  trackByCondition(index: number, conditionConfig: ConditionConfig): string {
+    const condition = conditionConfig.condition;
+    return `${condition.lhs}-${index}`;
+  }
+
+  getConditionDisplayText(condition: any): string {
+    if (!condition.lhs || !condition.rhs) return "Configure condition...";
+
+    let relationSymbol = "";
+    switch (condition.relation) {
+      case "EQUAL_TO_NUMERIC":
+      case "EQUAL_TO_STRING":
+        relationSymbol = "=";
+        break;
+      case "LESS_THAN":
+        relationSymbol = "<";
+        break;
+      case "GREATER_THAN":
+        relationSymbol = ">";
+        break;
+      default:
+        relationSymbol = "";
+    }
+
+    const rhsValue =
+      condition.relation === "EQUAL_TO_STRING"
+        ? `"${condition.rhs}"`
+        : condition.rhs;
+
+    const unit = condition.unit ? ` ${condition.unit}` : "";
+    return `${relationSymbol} ${rhsValue}${unit}`;
+  }
+
+  toggleConditionEnabled(index: number, enabled: boolean) {
+    const currentConditions =
+      this.asyncPipe.transform(this.conditionConfigs$) || [];
+    const updatedConditions = [...currentConditions];
+    updatedConditions[index] = { ...updatedConditions[index], enabled };
+    const condition = updatedConditions[index].condition;
+
+    if (enabled && condition.lhs && condition.rhs) {
+      this.store.dispatch(addScientificConditionAction({ condition }));
+      this.store.dispatch(
+        selectColumnAction({ name: condition.lhs, columnType: "custom" }),
+      );
+    } else {
+      this.store.dispatch(removeScientificConditionAction({ condition }));
+      this.store.dispatch(
+        deselectColumnAction({ name: condition.lhs, columnType: "custom" }),
+      );
+    }
+
+    this.store.dispatch(
+      updateUserSettingsAction({ property: { conditions: updatedConditions } }),
+    );
+
+    this.updateConditionInStore(updatedConditions);
+  }
+
+  addCondition() {
+    this.dialog
+      .open(SearchParametersDialogComponent, {
+        data: {
+          parameterKeys: this.asyncPipe.transform(this.metadataKeys$),
+        },
+        restoreFocus: false,
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          const { data } = res;
+
+          this.conditionConfigs$
+            .pipe(take(1))
+            .subscribe((currentConditions) => {
+              const existingConditionIndex = currentConditions.findIndex(
+                (config) => isEqual(config.condition, data),
+              );
+              if (existingConditionIndex !== -1) {
+                this.snackBar.open("Condition already exists", "Close", {
+                  duration: 2000,
+                  panelClass: ["snackbar-warning"],
+                });
+                return;
+              }
+
+              const newCondition: ConditionConfig = {
+                condition: data,
+                enabled: true,
+              };
+
+              const updatedConditions = [
+                ...(currentConditions || []),
+                newCondition,
+              ];
+
+              this.store.dispatch(
+                updateConditionsConfigs({
+                  conditionConfigs: updatedConditions,
+                }),
+              );
+
+              this.store.dispatch(
+                updateUserSettingsAction({
+                  property: { conditions: updatedConditions },
+                }),
+              );
+
+              this.store.dispatch(
+                addScientificConditionAction({ condition: data }),
+              );
+              this.store.dispatch(
+                selectColumnAction({
+                  name: data.lhs,
+                  columnType: "custom",
+                }),
+              );
+
+              this.snackBar.open("Condition added successfully", "Close", {
+                duration: 2000,
+                panelClass: ["snackbar-success"],
+              });
+            });
+        }
+      });
+  }
+
+  getUnits(parameterKey: string): string[] {
+    return this.unitsService.getUnits(parameterKey);
+  }
+
+  private updateCondition(index: number, updates: Partial<any>) {
+    const currentConditions =
+      this.asyncPipe.transform(this.conditionConfigs$) || [];
+    const updatedConditions = [...currentConditions];
+    const condition = updatedConditions[index];
+    const oldCondition = condition.condition;
+
+    // Removes the old condition if enabled
+    if (condition.enabled) {
+      this.store.dispatch(
+        removeScientificConditionAction({ condition: oldCondition }),
+      );
+      this.store.dispatch(
+        deselectColumnAction({ name: oldCondition.lhs, columnType: "custom" }),
+      );
+    }
+
+    // Updates the condition
+    updatedConditions[index] = {
+      ...condition,
+      condition: { ...oldCondition, ...updates },
+    };
+
+    // Adds the updated condition if enabled
+    if (condition.enabled) {
+      this.store.dispatch(
+        addScientificConditionAction({
+          condition: updatedConditions[index].condition,
+        }),
+      );
+      this.store.dispatch(
+        selectColumnAction({
+          name: updatedConditions[index].condition.lhs,
+          columnType: "custom",
+        }),
+      );
+    }
+
+    this.updateConditionInStore(updatedConditions);
+  }
+
+  updateConditionOperator(index: number, newOperator: string) {
+    this.updateCondition(index, {
+      relation: newOperator as any,
+      unit: newOperator === "EQUAL_TO_STRING" ? "" : undefined,
+    });
+  }
+
+  updateConditionValue(index: number, event: Event) {
+    const newValue = (event.target as HTMLInputElement).value;
+    this.updateCondition(index, { rhs: newValue });
+  }
+
+  updateConditionUnit(index: number, event: Event) {
+    const newUnit = (event.target as HTMLInputElement).value;
+    this.updateCondition(index, { unit: newUnit || undefined });
+  }
+
+  private updateConditionInStore(updatedConditions: ConditionConfig[]) {
+    this.store.dispatch(
+      updateConditionsConfigs({
+        conditionConfigs: updatedConditions,
+      }),
+    );
+  }
+
+  removeCondition(condition: ConditionConfig, index: number) {
+    const currentConditions =
+      this.asyncPipe.transform(this.conditionConfigs$) || [];
+    const updatedConditions = [...currentConditions];
+
+    // Removes the condition from the array
+    updatedConditions.splice(index, 1);
+
+    if (condition.enabled) {
+      this.store.dispatch(
+        removeScientificConditionAction({ condition: condition.condition }),
+      );
+      this.store.dispatch(
+        deselectColumnAction({
+          name: condition.condition.lhs,
+          columnType: "custom",
+        }),
+      );
+    }
+
+    this.updateConditionInStore(updatedConditions);
+    this.store.dispatch(
+      updateUserSettingsAction({ property: { conditions: updatedConditions } }),
+    );
   }
 
   renderComponent(filterObj: FilterConfig): any {
