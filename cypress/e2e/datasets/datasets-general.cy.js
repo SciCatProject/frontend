@@ -112,16 +112,18 @@ describe("Datasets general", () => {
 
       cy.visit("/datasets");
 
-      cy.get('[data-cy="more-filters-button"]').click();
-
-      cy.get('[data-cy="add-scientific-condition-button"]').click();
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('button').contains('Add Conditions').click();
+      });
 
       cy.get('input[name="lhs"]').type("test");
       cy.get('input[name="rhs"]').type("1");
 
       cy.get('button[type="submit"]').click();
 
-      cy.get('[data-cy="add-scientific-condition-button"]').click();
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('button').contains('Add Conditions').click();
+      });
 
       cy.get('input[name="lhs"]').type("test");
       cy.get('input[name="rhs"]').type("1");
@@ -133,12 +135,13 @@ describe("Datasets general", () => {
         .contains("Close")
         .click();
 
-      cy.get('[data-cy="scientific-condition-filter-list"').should(
-        "have.length",
-        1,
-      );
+      cy.get('[data-cy="scientific-condition-filter-list"]')
+        .find('.condition-panel')
+        .should("have.length", 1);
 
-      cy.get('[data-cy="add-scientific-condition-button"]').click();
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('button').contains('Add Conditions').click();
+      });
 
       cy.get('input[name="lhs"]').type("test");
       cy.get('input[name="rhs"]').type("2");
@@ -146,8 +149,59 @@ describe("Datasets general", () => {
       cy.get('button[type="submit"]').click();
 
       cy.get('[data-cy="scientific-condition-filter-list"]')
-        .find("input")
+        .find('.condition-panel')
         .should("have.length", 2);
     });
+
+    it("should be able to manage conditions using expansion panels", () => {
+      cy.visit("/datasets");
+
+      cy.get(".user-button").click();
+
+      cy.get("[data-cy=logout-button]").click();
+
+      cy.finishedLoading();
+
+      cy.visit("/datasets");
+
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('button').contains('Add Conditions').click();
+      });
+
+      cy.get('input[name="lhs"]').type("test 3");
+      cy.get('input[name="rhs"]').type("3");
+
+      cy.get('button[type="submit"]').click();
+
+      cy.get('[data-cy="scientific-condition-filter-list"]')
+        .find('.condition-panel')
+        .should("have.length", 1);
+
+      cy.get('.condition-panel').first().click();
+
+      cy.get('.condition-details').should('be.visible');
+
+      cy.get('.condition-details').within(() => {
+        cy.get('mat-select').should('exist');
+        cy.get('input[matInput]').should('exist');
+        cy.get('mat-slide-toggle').should('exist');
+        cy.get('button').contains('Remove').should('exist');
+      });
+
+      cy.get('.condition-details').within(() => {
+        cy.get('mat-slide-toggle').click();
+      });
+
+      cy.get('.condition-panel').should('have.class', 'disabled');
+
+      cy.get('.condition-details').within(() => {
+        cy.get('button').contains('Remove').click();
+      });
+
+      cy.get('[data-cy="scientific-condition-filter-list"]')
+        .find('.condition-panel')
+        .should("have.length", 0);
+    });
+
   });
 });
