@@ -57,6 +57,7 @@ import {
   deselectColumnAction,
 } from "state-management/actions/user.actions";
 import { UnitsService } from "shared/services/units.service";
+import { ScientificCondition } from "state-management/models";
 
 const COMPONENT_MAP: { [K in Filters]: Type<any> } = {
   PidFilter: PidFilterComponent,
@@ -209,7 +210,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     return `${condition.lhs}-${index}`;
   }
 
-  getConditionDisplayText(condition: any): string {
+  getConditionDisplayText(condition: ScientificCondition): string {
     if (!condition.lhs || !condition.rhs) return "Configure condition...";
 
     let relationSymbol = "";
@@ -378,7 +379,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   updateConditionOperator(index: number, newOperator: string) {
     this.updateCondition(index, {
-      relation: newOperator as any,
+      relation: newOperator,
       unit: newOperator === "EQUAL_TO_STRING" ? "" : undefined,
     });
   }
