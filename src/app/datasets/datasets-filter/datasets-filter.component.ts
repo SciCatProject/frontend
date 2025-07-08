@@ -335,7 +335,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     return this.unitsService.getUnits(parameterKey);
   }
 
-  private updateCondition(index: number, updates: Partial<any>) {
+  updateCondition(index: number, updates: Partial<any>) {
     const currentConditions =
       this.asyncPipe.transform(this.conditionConfigs$) || [];
     const updatedConditions = [...currentConditions];
@@ -393,7 +393,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.updateCondition(index, { unit: newUnit || undefined });
   }
 
-  private updateConditionInStore(updatedConditions: ConditionConfig[]) {
+  updateConditionInStore(updatedConditions: ConditionConfig[]) {
     this.store.dispatch(
       updateConditionsConfigs({
         conditionConfigs: updatedConditions,
