@@ -35,7 +35,19 @@ export class HelpMessages {
   }
 }
 
-export interface AppConfig {
+export enum MainPageOptions {
+  DATASETS = "/datasets",
+  PROPOSALS = "/proposals",
+  INSTRUMENTS = "/instruments",
+  SAMPLES = "/samples",
+}
+
+export class MainPageConfiguration {
+  nonAuthenticatedUser: keyof typeof MainPageOptions;
+  authenticatedUser: keyof typeof MainPageOptions;
+}
+
+export interface AppConfigInterface {
   skipSciCatLoginPageEnabled?: boolean;
   accessTokenPrefix: string;
   addDatasetEnabled: boolean;
@@ -45,6 +57,7 @@ export interface AppConfig {
   datasetDetailsShowMissingProposalId: boolean;
   datafilesActionsEnabled: boolean;
   datafilesActions: any[];
+  editDatasetEnabled: boolean;
   editDatasetSampleEnabled: boolean;
   editMetadataEnabled: boolean;
   editPublishedData: boolean;
@@ -106,9 +119,22 @@ export interface AppConfig {
   datasetDetailComponent?: DatasetDetailComponentConfig;
   labelsLocalization?: LabelsLocalization;
   dateFormat?: string;
+  defaultMainPage?: MainPageConfiguration;
 }
 
-@Injectable()
+function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
+  const validKeys = Object.keys(MainPageOptions);
+  return (
+    obj &&
+    typeof obj === "object" &&
+    validKeys.includes(obj.nonAuthenticatedUser) &&
+    validKeys.includes(obj.authenticatedUser)
+  );
+}
+
+@Injectable({
+  providedIn: "root",
+})
 export class AppConfigService {
   private appConfig: object = {};
 
@@ -130,13 +156,41 @@ export class AppConfigService {
         console.error("No config provided.");
       }
     }
+
+    const config: AppConfigInterface = this.appConfig as AppConfigInterface;
+    if (
+      "defaultMainPage" in config &&
+      isMainPageConfiguration(config.defaultMainPage)
+    ) {
+      config.defaultMainPage.nonAuthenticatedUser = Object.keys(
+        MainPageOptions,
+      ).includes(config.defaultMainPage.nonAuthenticatedUser)
+        ? config.defaultMainPage.nonAuthenticatedUser
+        : "DATASETS";
+      config.defaultMainPage.authenticatedUser = Object.keys(
+        MainPageOptions,
+      ).includes(config.defaultMainPage.authenticatedUser)
+        ? config.defaultMainPage.authenticatedUser
+        : "DATASETS";
+    } else {
+      config.defaultMainPage = {
+        nonAuthenticatedUser: "DATASETS",
+        authenticatedUser: "DATASETS",
+      } as MainPageConfiguration;
+    }
+
+    if (!config.dateFormat) {
+      config.dateFormat = "yyyy-MM-dd HH:mm";
+    }
+
+    this.appConfig = config;
   }
 
-  getConfig(): AppConfig {
+  getConfig(): AppConfigInterface {
     if (!this.appConfig) {
       console.error("AppConfigService: Configuration not loaded!");
     }
 
-    return this.appConfig as AppConfig;
+    return this.appConfig as AppConfigInterface;
   }
 }
