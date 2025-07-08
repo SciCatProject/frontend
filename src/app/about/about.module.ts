@@ -8,6 +8,12 @@ import { RouterModule } from "@angular/router";
 
 @NgModule({
   declarations: [AboutComponent],
-  imports: [CommonModule, FlexLayoutModule, LinkyModule, MatCardModule, RouterModule],
+  imports: [
+    CommonModule,
+    FlexLayoutModule,
+    LinkyModule,
+    MatCardModule,
+    RouterModule,
+  ],
 })
 export class AboutModule {}
