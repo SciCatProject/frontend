@@ -20,7 +20,6 @@ export class AboutComponent implements OnInit {
   SNFLink = "";
   PSIDataPolicy = "";
   facility = "";
-  supportEmail = "";
 
   constructor(public appConfigService: AppConfigService) {}
 
@@ -37,7 +36,6 @@ export class AboutComponent implements OnInit {
       "Scicat allows users to access data and metadata from experiments";
     this.accessText = "Users must comply with access policy of instruments";
     this.termsText = "Data can be used freely under the CC-BY-4.0 licence";
-    this.supportEmail = this.appConfig.supportEmail;
     if (this.facility === "ESS") {
       this.aboutText =
         "Scicat is a metadata catalogue allows users to access information about experimental results, " +
