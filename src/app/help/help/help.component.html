@@ -92,3 +92,15 @@
     <a routerLink="/samples" routerLinkActive="active">Samples</a>
   </mat-card>
 </p>
+
+<p *ngIf="supportEmail">
+  <mat-card class="help-card">
+    <mat-card-header>
+      <mat-card-title> Questions or issues? </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      If you have any questions or need help, please contact
+      <a href="mailto:{{ supportEmail }}">{{ supportEmail }}</a>.
+    </mat-card-content>
+  </mat-card>
+</p>

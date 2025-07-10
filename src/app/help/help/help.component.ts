@@ -13,6 +13,7 @@ export class HelpComponent implements OnInit {
   gettingStarted: string | null = null;
   shoppingCartEnabled = false;
   helpMessages: HelpMessages;
+  supportEmail: string | undefined;
   constructor(public appConfigService: AppConfigService) {}
 
   ngOnInit() {
@@ -24,5 +25,6 @@ export class HelpComponent implements OnInit {
       );
     this.gettingStarted = this.appConfig.gettingStarted;
     this.shoppingCartEnabled = this.appConfig.shoppingCartEnabled;
+    this.supportEmail = this.appConfig.supportEmail;
   }
 }
