@@ -120,6 +120,7 @@ export interface AppConfigInterface {
   labelsLocalization?: LabelsLocalization;
   dateFormat?: string;
   defaultMainPage?: MainPageConfiguration;
+  supportEmail?: string;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
