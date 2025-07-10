@@ -1,17 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { MatSelectModule } from "@angular/material/select";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
-import { MatCardModule } from "@angular/material/card";
-import { MatIconModule } from "@angular/material/icon";
-import { MatButtonModule } from "@angular/material/button";
 import {
-  fetchDatasetsAction,
-  fetchFacetCountsAction,
-  setSearchTermsAction,
-  setTextFilterAction,
-} from "../../../state-management/actions/datasets.actions";
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { Store } from "@ngrx/store";
 import { BehaviorSubject, Subject, Subscription } from "rxjs";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
@@ -22,22 +16,16 @@ import { concatLatestFrom } from "@ngrx/operators";
   selector: "full-text-search-bar",
   templateUrl: "./full-text-search-bar.component.html",
   styleUrls: ["./full-text-search-bar.component.scss"],
-  imports: [
-    MatFormFieldModule,
-    MatSelectModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatInputModule,
-    MatIconModule,
-    MatCardModule,
-    MatButtonModule,
-  ],
-  standalone: true,
+  standalone: false,
 })
 export class FullTextSearchBarComponent implements OnInit, OnDestroy {
   @Input() prefilledValue = "";
   @Input() placeholder = "Text Search";
   @Input() clear: boolean;
+
+  @Output() textChange = new EventEmitter<string>();
+
+  @Output() searchAction = new EventEmitter<void>();
 
   searchTerm = "";
 
@@ -54,8 +42,7 @@ export class FullTextSearchBarComponent implements OnInit, OnDestroy {
       this.searchTermSubject
         .pipe(debounceTime(200), distinctUntilChanged())
         .subscribe((terms) => {
-          this.store.dispatch(setSearchTermsAction({ terms }));
-          this.store.dispatch(setTextFilterAction({ text: terms }));
+          this.textChange.emit(terms);
         }),
     );
 
@@ -68,8 +55,7 @@ export class FullTextSearchBarComponent implements OnInit, OnDestroy {
           concatLatestFrom(() => [searchTerms$]),
         )
         .subscribe(([_, terms]) => {
-          this.store.dispatch(fetchDatasetsAction());
-          this.store.dispatch(fetchFacetCountsAction());
+          this.searchAction.emit();
         }),
     );
   }
