@@ -204,4 +204,38 @@ describe("Datasets general", () => {
     });
 
   });
+
+  describe.only("Pre-configured filters test", () => {
+    beforeEach(() => {
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const testConfig = {
+          ...baseConfig,
+          defaultDatasetsListSettings: {
+            ...baseConfig.defaultDatasetsListSettings,
+            filters: [
+              { "TypeFilter": true },
+              { "TextFilter": true }
+            ]
+          }
+        };
+
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+      });
+
+      cy.login(Cypress.env("username"), Cypress.env("password"));
+      cy.visit("/datasets");
+      cy.wait("@getConfig");
+      cy.finishedLoading();
+    });
+
+    it("should automatically apply pre-configured filters from config", () => {
+      cy.contains("Type").should("exist");
+
+      cy.get('[data-cy="text-search"]').should("exist");
+
+      cy.contains("Location").should("not.exist");
+      cy.contains("Pid").should("not.exist");
+      cy.contains("Keyword").should("not.exist");
+    });
+  });
 });
