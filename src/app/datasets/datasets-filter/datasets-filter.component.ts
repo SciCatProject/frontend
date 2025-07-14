@@ -106,7 +106,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private viewContainerRef: ViewContainerRef,
     private snackBar: MatSnackBar,
     private unitsService: UnitsService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getAllComponentLabels();
@@ -127,16 +127,16 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     });
   }
 
-  applyEnabledConditions(){
+  applyEnabledConditions() {
     this.conditionConfigs$.pipe(take(1)).subscribe((conditionConfigs) => {
       (conditionConfigs || []).forEach((config) => {
-        if(
+        if (
           config.enabled &&
           config.condition.lhs &&
           config.condition.rhs
-        ){
+        ) {
           this.store.dispatch(addScientificConditionAction({ condition: config.condition }));
-           this.store.dispatch(selectColumnAction({ name: config.condition.lhs, columnType: "custom" }),
+          this.store.dispatch(selectColumnAction({ name: config.condition.lhs, columnType: "custom" }),
           );
         }
       });
