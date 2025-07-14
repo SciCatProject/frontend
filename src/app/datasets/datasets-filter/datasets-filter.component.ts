@@ -106,7 +106,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private viewContainerRef: ViewContainerRef,
     private snackBar: MatSnackBar,
     private unitsService: UnitsService,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.getAllComponentLabels();
@@ -134,7 +134,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           this.store.dispatch(
             addScientificConditionAction({
               condition: config.condition,
-            })
+            }),
           );
         }
       });

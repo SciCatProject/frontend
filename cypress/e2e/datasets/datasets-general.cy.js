@@ -8,16 +8,16 @@ describe("Datasets general", () => {
   after(() => {
     cy.removeDatasets();
     cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
-        const testConfig = {
-          ...baseConfig,
-          defaultDatasetsListSettings: {
-            ...baseConfig.defaultDatasetsListSettings,
-            conditions: []
-          }
-        };
+      const testConfig = {
+        ...baseConfig,
+        defaultDatasetsListSettings: {
+          ...baseConfig.defaultDatasetsListSettings,
+          conditions: []
+        }
+      };
 
-        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
-      });
+      cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+    });
   });
 
   describe("Show dataset table after logout and login", () => {
@@ -270,11 +270,10 @@ describe("Datasets general", () => {
         };
 
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+        cy.visit("/datasets");
+        cy.wait("@getConfig");
+        cy.finishedLoading();
       });
-
-      cy.visit("/datasets");
-      cy.wait("@getConfig");
-      cy.finishedLoading();
     });
 
     it("should check if pre-configured conditions are applied", () => {
