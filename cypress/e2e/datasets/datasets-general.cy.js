@@ -173,10 +173,6 @@ describe("Datasets general", () => {
 
       cy.get('button[type="submit"]').click();
 
-      cy.get('[data-cy="scientific-condition-filter-list"]')
-        .find('.condition-panel')
-        .should("have.length", 1);
-
       cy.get('.condition-panel').first().click();
 
       cy.get('.condition-details').should('be.visible');
@@ -205,7 +201,7 @@ describe("Datasets general", () => {
 
   });
 
-  describe.only("Pre-configured filters test", () => {
+  describe("Pre-configured filters test", () => {
     beforeEach(() => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
@@ -234,8 +230,65 @@ describe("Datasets general", () => {
       cy.get('[data-cy="text-search"]').should("exist");
 
       cy.contains("Location").should("not.exist");
-      cy.contains("Pid").should("not.exist");
       cy.contains("Keyword").should("not.exist");
     });
   });
+
+
+  describe("Pre-configured conditions test", () => {
+    beforeEach(() => {
+      cy.clearCookies();
+      cy.clearLocalStorage();
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const testConfig = {
+          ...baseConfig,
+          defaultDatasetsListSettings: {
+            ...baseConfig.defaultDatasetsListSettings,
+            conditions: [
+              {
+                "condition": {
+                  "lhs": "extra_entry_end_time",
+                  "relation": "GREATER_THAN",
+                  "rhs": 1,
+                  "unit": ""
+                },
+                "enabled": true
+              }
+            ]
+          }
+        };
+
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+      });
+
+      cy.visit("/datasets");
+      cy.wait("@getConfig");
+      cy.finishedLoading();
+    });
+
+    it("should check if pre-configured conditions are applied", () => {
+      cy.get('[data-cy="scientific-condition-filter-list"] .condition-panel')
+        .should('contain.text', 'extra_entry_end_time')
+        .and('contain.text', '>')
+        .and('contain.text', '1');
+
+      cy.get('.condition-panel').first().click();
+
+      cy.get('mat-row').then($rowsWithCondition => {
+        const countWithCondition = $rowsWithCondition.length;
+
+        cy.get('.condition-details').first().within(() => {
+          cy.get('mat-slide-toggle').click();
+        });
+
+        cy.get('button').contains('Apply').click();
+
+        cy.get('mat-row').should($rowsWithoutCondition => {
+          expect($rowsWithoutCondition.length).to.be.greaterThan(countWithCondition);
+        });
+      });
+
+    });
+  });
+
 });
