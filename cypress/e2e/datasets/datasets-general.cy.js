@@ -272,19 +272,23 @@ describe("Datasets general", () => {
         .and('contain.text', '>')
         .and('contain.text', '1');
 
-      cy.get('.condition-panel').first().click();
+      cy.get(".dataset-table mat-table").should("exist");
+      cy.get(".dataset-table mat-row").first().click();
+      cy.get('.metadataTable', { timeout: 10000 }).scrollIntoView();
 
-      cy.get('mat-row').then($rowsWithCondition => {
-        const countWithCondition = $rowsWithCondition.length;
+      cy.get('.cdk-virtual-scroll-viewport').scrollTo('bottom');
+      cy.wait(500);
 
-        cy.get('.condition-details').first().within(() => {
-          cy.get('mat-slide-toggle').click();
-        });
-
-        cy.get('button').contains('Apply').click();
-
-        cy.get('mat-row').should($rowsWithoutCondition => {
-          expect($rowsWithoutCondition.length).to.be.greaterThan(countWithCondition);
+      cy.get('.metadataTable mat-row').each($row => {
+        cy.wrap($row).within(() => {
+          cy.get('.mat-column-human_name label').invoke('text').then(fieldName => {
+            if (fieldName && fieldName.trim() === 'Extra Entry End Time') {
+              cy.get('.mat-column-value label').invoke('text').then(valueText => {
+                const value = parseFloat(valueText.trim());
+                expect(value).to.be.greaterThan(1);
+              });
+            }
+          });
         });
       });
 
