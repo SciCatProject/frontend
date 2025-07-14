@@ -207,7 +207,17 @@
       { "DateRangeFilter": true },
       { "TextFilter": true }
     ],
-    "conditions": []
+    "conditions": [
+      {
+        "condition": {
+          "lhs": "extra_entry_end_time",
+          "relation": "GREATER_THAN",
+          "rhs": 1,
+          "unit": ""
+        },
+        "enabled": true
+      }
+    ]
   },
 
   "labelsLocalization": {
