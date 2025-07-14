@@ -7,6 +7,17 @@ describe("Datasets general", () => {
 
   after(() => {
     cy.removeDatasets();
+    cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const testConfig = {
+          ...baseConfig,
+          defaultDatasetsListSettings: {
+            ...baseConfig.defaultDatasetsListSettings,
+            conditions: []
+          }
+        };
+
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+      });
   });
 
   describe("Show dataset table after logout and login", () => {

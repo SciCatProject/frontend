@@ -131,7 +131,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.conditionConfigs$.pipe(take(1)).subscribe((conditionConfigs) => {
       (conditionConfigs || []).forEach((config) => {
         if (config.enabled && config.condition.lhs && config.condition.rhs) {
-          this.store.dispatch(addScientificConditionAction({ condition: config.condition }));
+          this.store.dispatch(
+            addScientificConditionAction({
+              condition: config.condition,
+            })
+          );
         }
       });
     });
