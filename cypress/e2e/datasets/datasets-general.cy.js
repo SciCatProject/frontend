@@ -201,7 +201,7 @@ describe("Datasets general", () => {
 
   });
 
-  describe.only("Pre-configured filters test", () => {
+  describe("Pre-configured filters test", () => {
     beforeEach(() => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
