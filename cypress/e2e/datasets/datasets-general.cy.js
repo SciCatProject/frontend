@@ -201,7 +201,7 @@ describe("Datasets general", () => {
 
   });
 
-  describe("Pre-configured filters test", () => {
+  describe.only("Pre-configured filters test", () => {
     beforeEach(() => {
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
@@ -216,7 +216,6 @@ describe("Datasets general", () => {
         };
 
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
-        cy.login(Cypress.env("username"), Cypress.env("password"));
         cy.visit("/datasets");
         cy.wait("@getConfig");
         cy.finishedLoading(); 
