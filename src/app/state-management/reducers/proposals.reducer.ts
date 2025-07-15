@@ -17,10 +17,11 @@ const reducer = createReducer(
   ),
 
   on(
-    fromActions.fetchCountCompleteAction,
-    (state, { count }): ProposalsState => ({
+    fromActions.fetchFacetCountsCompleteAction,
+    (state, { facetCounts, allCounts }): ProposalsState => ({
       ...state,
-      proposalsCount: count,
+      facetCounts,
+      proposalsCount: allCounts,
     }),
   ),
 

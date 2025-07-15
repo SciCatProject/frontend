@@ -126,39 +126,6 @@ describe("Proposal Selectors", () => {
     });
   });
 
-  describe("selectTextFilter", () => {
-    it("should select the proposal text filter", () => {
-      expect(
-        fromSelectors.selectTextFilter.projector(
-          initialProposalsState.proposalFilters,
-        ),
-      ).toEqual("test");
-    });
-  });
-
-  describe("selectDateRangeFilter", () => {
-    it("should select dateRange from proposalFilters", () => {
-      expect(
-        fromSelectors.selectDateRangeFilter.projector(
-          initialProposalsState.proposalFilters,
-        ),
-      ).toEqual({
-        begin: new Date(2019, 11, 1).toISOString(),
-        end: new Date(2019, 11, 2).toISOString(),
-      });
-    });
-  });
-
-  describe("selectHasAppliedFilters", () => {
-    it("should return true if text or dateRange filter has value", () => {
-      expect(
-        fromSelectors.selectHasAppliedFilters.projector(
-          initialProposalsState.proposalFilters,
-        ),
-      ).toEqual(true);
-    });
-  });
-
   describe("selectDatasetFilters", () => {
     it("should select the dataset filters", () => {
       expect(

@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { BehaviorSubject, Subscription } from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
@@ -25,7 +18,6 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { Store } from "@ngrx/store";
 import { selectProposalsWithCountAndTableSettings } from "state-management/selectors/proposals.selectors";
-import { fetchProposalsAction } from "state-management/actions/proposals.actions";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   Instrument,
@@ -101,7 +93,7 @@ const tableDefaultSettingsConfig: ITableSetting = {
 };
 
 @Component({
-  selector: "app-proposal-table",
+  selector: "proposal-table",
   templateUrl: "./proposal-table.component.html",
   styleUrls: ["./proposal-table.component.scss"],
   standalone: false,
@@ -123,34 +115,25 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
 
   paginationMode: TablePaginationMode = "server-side";
 
-  dataSource: BehaviorSubject<ProposalClass[]> = new BehaviorSubject<
-    ProposalClass[]
-  >([]);
-
   pagination: TablePagination = {};
 
   rowSelectionMode: TableSelectionMode = "none";
 
-  globalTextSearch = "";
-
   showGlobalTextSearch = false;
-
-  defaultPageSize = 10;
 
   defaultPageSizeOptions = [5, 10, 25, 100];
 
   tablesSettings: object;
 
-  @Output() pageChange = new EventEmitter<{
-    pageIndex: number;
-    pageSize: number;
-  }>();
-
   datasets: OutputDatasetObsoleteDto[] = [];
   instruments: Instrument[] = [];
   instrumentMap: Map<string, Instrument> = new Map();
 
-  @Output() rowClick = new EventEmitter<ProposalClass>();
+  @Input()
+  dataSource!: BehaviorSubject<ProposalClass[]>;
+
+  @Input()
+  defaultPageSize: number;
 
   constructor(
     private store: Store,
@@ -185,29 +168,6 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
           }
         },
       ),
-    );
-
-    this.subscriptions.push(
-      this.route.queryParams.subscribe((queryParams) => {
-        this.pending = true;
-        const limit = queryParams.pageSize
-          ? +queryParams.pageSize
-          : this.defaultPageSize;
-        const skip = queryParams.pageIndex ? +queryParams.pageIndex * limit : 0;
-        if (queryParams.textSearch) {
-          this.globalTextSearch = queryParams.textSearch;
-        }
-
-        this.store.dispatch(
-          fetchProposalsAction({
-            limit: limit,
-            skip: skip,
-            search: queryParams.textSearch,
-            sortColumn: queryParams.sortColumn,
-            sortDirection: queryParams.sortDirection,
-          }),
-        );
-      }),
     );
   }
 
@@ -248,17 +208,21 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
     this.pagination = paginationConfig;
   }
 
-  onRowClick(event: IRowEvent<ProposalClass>) {
-    if (event.event === RowEventType.RowClick) {
-      this.rowClick.emit(event.sender.row);
-    }
+  onPageChange(pagination: TablePagination) {
+    this.router.navigate([], {
+      queryParams: {
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
+      },
+      queryParamsHandling: "merge",
+    });
   }
 
-  onPageChange({ pageIndex, pageSize }: TablePagination) {
-    this.pageChange.emit({
-      pageIndex,
-      pageSize,
-    });
+  onRowClick(event: IRowEvent<ProposalClass>) {
+    if (event.event === RowEventType.RowClick) {
+      const id = encodeURIComponent(event.sender.row!.proposalId);
+      this.router.navigateByUrl(`/proposals/${id}`);
+    }
   }
 
   onGlobalTextSearchChange(text: string) {

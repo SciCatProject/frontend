@@ -7,8 +7,8 @@ import {
   Output,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { BehaviorSubject, Subject, Subscription } from "rxjs";
-import { debounceTime, distinctUntilChanged } from "rxjs/operators";
+import { BehaviorSubject, merge, Subject, Subscription } from "rxjs";
+import { debounceTime, distinctUntilChanged, tap } from "rxjs/operators";
 import { selectSearchTerms } from "../../../state-management/selectors/datasets.selectors";
 import { concatLatestFrom } from "@ngrx/operators";
 
@@ -31,33 +31,29 @@ export class FullTextSearchBarComponent implements OnInit, OnDestroy {
 
   searchTermSubject = new BehaviorSubject<string>("");
   searchClickSubject = new Subject<void>();
-  subscriptions: Subscription[] = [];
 
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.searchTermSubject.next(this.prefilledValue);
-
-    this.subscriptions.push(
-      this.searchTermSubject
-        .pipe(debounceTime(200), distinctUntilChanged())
-        .subscribe((terms) => {
-          this.textChange.emit(terms);
-        }),
-    );
-
+    this.searchTerm = this.prefilledValue;
+    this.searchTermSubject.next(this.searchTerm);
     const searchTerms$ = this.store.select(selectSearchTerms);
 
-    this.subscriptions.push(
-      this.searchClickSubject
-        .pipe(
-          debounceTime(250),
-          concatLatestFrom(() => [searchTerms$]),
-        )
-        .subscribe(([_, terms]) => {
-          this.searchAction.emit();
-        }),
-    );
+    merge(
+      // 1) Debounced text changes
+      this.searchTermSubject.pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
+        tap((term) => this.textChange.emit(term)),
+      ),
+
+      // 2) Debounced “search” clicks
+      this.searchClickSubject.pipe(
+        debounceTime(250),
+        concatLatestFrom(() => searchTerms$),
+        tap(() => this.searchAction.emit()),
+      ),
+    ).subscribe();
   }
 
   onSearch(): void {
@@ -74,7 +70,5 @@ export class FullTextSearchBarComponent implements OnInit, OnDestroy {
     this.searchClickSubject.next();
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((s) => s.unsubscribe());
-  }
+  ngOnDestroy(): void {}
 }
