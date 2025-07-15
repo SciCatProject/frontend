@@ -5,9 +5,9 @@ describe("Datasets general", () => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
   });
 
-  // after(() => {
-  //   cy.removeDatasets();
-  // });
+   after(() => {
+     cy.removeDatasets();
+   });
 
   describe("Show dataset table after logout and login", () => {
     it("should be able to see datasets after visiting details page logout and login again", () => {
