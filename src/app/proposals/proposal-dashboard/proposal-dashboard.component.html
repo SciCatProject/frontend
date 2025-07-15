@@ -1,13 +1,21 @@
 <breadcrumb></breadcrumb>
-<full-text-search-bar
-  #searchBar
-  data-cy="proposal-text-search"
-  [placeholder]="'Text Search'"
-  (textChange)="onTextChange($event)"
-  (searchAction)="onSearchAction()"
->
-</full-text-search-bar>
-<app-proposal-table
-  (rowClick)="onRowClick($event)"
-  (pageChange)="onPageChange($event)"
-></app-proposal-table>
+
+<proposal-search-bar></proposal-search-bar>
+<mat-sidenav-container [hasBackdrop]="false">
+  <mat-sidenav-content>
+    <div fxLayout="row" fxLayout.xs="column">
+      <div class="action-column" fxFlex="14" fxFlex.lt-xl="20">
+        <proposal-side-filter
+          [filterLists]="filterLists"
+        ></proposal-side-filter>
+      </div>
+
+      <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
+        <proposal-table
+          [dataSource]="dataSource$"
+          [defaultPageSize]="defaultPageSize"
+        ></proposal-table>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

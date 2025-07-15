@@ -1,8 +1,9 @@
 <breadcrumb></breadcrumb>
+<!-- TODO: Refactor it to use common full-text-search-bar -->
 <full-text-search-bar
   #searchBar
   data-cy="dataset-text-search"
-  [placeholder]="'Text Search'"
+  [placeholder]="'Type to search...'"
   (textChange)="onTextChange($event)"
   (searchAction)="onSearchAction()"
 >

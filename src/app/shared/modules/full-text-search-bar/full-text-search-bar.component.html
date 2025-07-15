@@ -4,7 +4,7 @@
       <mat-label>Search</mat-label>
       <input
         matInput
-        placeholder="Type to search..."
+        [placeholder]="'Type to search...'"
         type="search"
         [(ngModel)]="searchTerm"
         (ngModelChange)="onSearchTermChange($event)"

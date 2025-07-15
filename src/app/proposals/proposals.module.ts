@@ -27,7 +27,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
-import { ProposalFilterComponent } from "./proposal-filter/proposal-filter.component";
+import { ProposalSideFilterComponent } from "./proposal-filters/side-bar-filter/proposal-side-filter.component";
 import { LogbooksModule } from "logbooks/logbooks.module";
 import { ProposalTableComponent } from "./proposal-table/proposal-table.component";
 import { MatDatepickerModule } from "@angular/material/datepicker";
@@ -38,6 +38,8 @@ import { RelatedProposalsComponent } from "./related-proposals/related-proposals
 import { ProposalDatasetsComponent } from "./proposal-datasets/proposal-datasets.component";
 import { TranslateModule } from "@ngx-translate/core";
 import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { ProposalSearchBarComponent } from "./proposal-filters/search-bar/proposal-search-bar.component";
 
 @NgModule({
   imports: [
@@ -57,6 +59,7 @@ import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashbo
     MatTableModule,
     MatTabsModule,
     MatTooltipModule,
+    MatSidenavModule,
     NgxJsonViewerModule,
     RouterModule,
     SharedScicatFrontendModule,
@@ -68,7 +71,8 @@ import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashbo
     ProposalDashboardComponent,
     ViewProposalPageComponent,
     ProposalDetailComponent,
-    ProposalFilterComponent,
+    ProposalSideFilterComponent,
+    ProposalSearchBarComponent,
     ProposalTableComponent,
     ProposalLogbookComponent,
     RelatedProposalsComponent,
