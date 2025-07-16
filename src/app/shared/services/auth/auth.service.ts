@@ -39,7 +39,8 @@ export class AuthService {
     this.token.id = this.load("id");
     this.token.user = JSON.parse(this.load("user") || null);
     this.token.userId = this.load("userId");
-    this.token.created = new Date(this.load("created"));
+    const date = new Date(this.load("created"));
+    this.token.created = !isNaN(date.getTime()) ? date : null;
     this.token.ttl = parseInt(this.load("ttl"));
     this.token.rememberMe = this.load("rememberMe") === "true";
   }
