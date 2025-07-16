@@ -46,14 +46,17 @@ const initialProposalsState: ProposalsState = {
 
   proposalsCount: 0,
   datasetsCount: 0,
+  facetCounts: {},
 
   hasPrefilledFilters: true,
 
   proposalFilters: {
-    text: "test",
-    dateRange: {
-      begin: new Date(2019, 11, 1).toISOString(),
-      end: new Date(2019, 11, 2).toISOString(),
+    fields: {
+      text: "test",
+      dateRange: {
+        begin: new Date(2019, 11, 1).toISOString(),
+        end: new Date(2019, 11, 2).toISOString(),
+      },
     },
     sortField: "test asc",
     skip: 0,
