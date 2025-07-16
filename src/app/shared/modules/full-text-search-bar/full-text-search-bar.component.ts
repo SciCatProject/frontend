@@ -7,7 +7,7 @@ import {
   Output,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { BehaviorSubject, merge, Subject } from "rxjs";
+import { BehaviorSubject, merge, Subject, Subscription } from "rxjs";
 import { debounceTime, distinctUntilChanged, tap } from "rxjs/operators";
 import { selectSearchTerms } from "../../../state-management/selectors/datasets.selectors";
 import { concatLatestFrom } from "@ngrx/operators";
@@ -18,7 +18,9 @@ import { concatLatestFrom } from "@ngrx/operators";
   styleUrls: ["./full-text-search-bar.component.scss"],
   standalone: false,
 })
-export class FullTextSearchBarComponent implements OnInit {
+export class FullTextSearchBarComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
+
   @Input() prefilledValue = "";
   @Input() placeholder = "Text Search";
   @Input() clear: boolean;
@@ -37,22 +39,23 @@ export class FullTextSearchBarComponent implements OnInit {
     this.searchTerm = this.prefilledValue;
     this.searchTermSubject.next(this.searchTerm);
     const searchTerms$ = this.store.select(selectSearchTerms);
+    this.subscriptions.push(
+      merge(
+        // 1) Debounced text changes
+        this.searchTermSubject.pipe(
+          debounceTime(200),
+          distinctUntilChanged(),
+          tap((term) => this.textChange.emit(term)),
+        ),
 
-    merge(
-      // 1) Debounced text changes
-      this.searchTermSubject.pipe(
-        debounceTime(200),
-        distinctUntilChanged(),
-        tap((term) => this.textChange.emit(term)),
-      ),
-
-      // 2) Debounced “search” clicks
-      this.searchClickSubject.pipe(
-        debounceTime(250),
-        concatLatestFrom(() => searchTerms$),
-        tap(() => this.searchAction.emit()),
-      ),
-    ).subscribe();
+        // 2) Debounced “search” clicks
+        this.searchClickSubject.pipe(
+          debounceTime(250),
+          concatLatestFrom(() => searchTerms$),
+          tap(() => this.searchAction.emit()),
+        ),
+      ).subscribe(),
+    );
   }
 
   onSearch(): void {
@@ -67,5 +70,8 @@ export class FullTextSearchBarComponent implements OnInit {
     this.searchTerm = "";
     this.searchTermSubject.next(undefined);
     this.searchClickSubject.next();
+  }
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

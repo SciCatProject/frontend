@@ -3,8 +3,6 @@ import {
   ElementRef,
   Input,
   ViewChild,
-  OnInit,
-  OnDestroy,
   EventEmitter,
   Output,
   OnChanges,
@@ -31,8 +29,8 @@ export class SharedFilterComponent implements OnChanges {
   filterForm = new FormGroup({
     textField: new FormControl(""),
     dateRangeField: new FormGroup({
-      start: new FormControl<Date | null>(null),
-      end: new FormControl<Date | null>(null),
+      start: new FormControl<Date>(null),
+      end: new FormControl<Date>(null),
     }),
   });
 
@@ -44,7 +42,7 @@ export class SharedFilterComponent implements OnChanges {
   @Input() currentFilter$!: Observable<string[]>;
   @Input() dispatchAction!: () => void;
   @Input() filterType: "text" | "dateRange";
-  @Input() prefilled: string | DateRange | null = null;
+  @Input() prefilled: string | DateRange = undefined;
   @Input()
   set clear(value: boolean) {
     if (value) {
