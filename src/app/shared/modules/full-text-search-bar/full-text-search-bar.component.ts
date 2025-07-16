@@ -18,7 +18,7 @@ import { concatLatestFrom } from "@ngrx/operators";
   styleUrls: ["./full-text-search-bar.component.scss"],
   standalone: false,
 })
-export class FullTextSearchBarComponent implements OnInit, OnDestroy {
+export class FullTextSearchBarComponent implements OnInit {
   @Input() prefilledValue = "";
   @Input() placeholder = "Text Search";
   @Input() clear: boolean;
@@ -68,6 +68,4 @@ export class FullTextSearchBarComponent implements OnInit, OnDestroy {
     this.searchTermSubject.next(undefined);
     this.searchClickSubject.next();
   }
-
-  ngOnDestroy(): void {}
 }
