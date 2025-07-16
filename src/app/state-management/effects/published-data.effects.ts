@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { concatLatestFrom } from "@ngrx/operators";
 import {
+  DatasetsV4Service,
+  OutputDatasetObsoleteDto,
   PublishedData,
   PublishedDataService,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -11,6 +13,7 @@ import {
   selectQueryParams,
 } from "state-management/selectors/published-data.selectors";
 import * as fromActions from "state-management/actions/published-data.actions";
+import * as datasetActions from "state-management/actions/datasets.actions";
 import {
   mergeMap,
   map,
@@ -18,6 +21,7 @@ import {
   switchMap,
   exhaustMap,
   filter,
+  tap,
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
@@ -87,13 +91,31 @@ export class PublishedDataEffects {
     );
   });
 
+  fetchPublishedDataConfig$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchPublishedDataConfigAction),
+      switchMap(() =>
+        this.publishedDataService.publishedDataControllerGetConfigV3().pipe(
+          map((publishedDataConfig) =>
+            fromActions.fetchPublishedDataConfigCompleteAction({
+              publishedDataConfig,
+            }),
+          ),
+          catchError(() =>
+            of(fromActions.fetchPublishedDataConfigFailedAction()),
+          ),
+        ),
+      ),
+    );
+  });
+
   navigateToResyncedPublishedData$ = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(fromActions.resyncPublishedDataCompleteAction),
         concatLatestFrom(() => this.store.select(selectCurrentPublishedData)),
-        filter(([_, publishedData]) => !!publishedData),
-        exhaustMap(([_, publishedData]) =>
+        filter(([{ redirect }, publishedData]) => !!publishedData && redirect),
+        exhaustMap(([, publishedData]) =>
           this.router.navigateByUrl(
             "/publishedDatasets/" + encodeURIComponent(publishedData.doi),
           ),
@@ -103,24 +125,81 @@ export class PublishedDataEffects {
     { dispatch: false },
   );
 
-  publishDataset$ = createEffect(() => {
+  saveDataPublicationInLocalStorage$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(fromActions.saveDataPublicationInLocalStorage),
+        tap(({ publishedData }) =>
+          localStorage.setItem("editingPublishedDataDoi", publishedData.doi),
+        ),
+      );
+    },
+    { dispatch: false },
+  );
+
+  clearDataPublicationFromLocalStorage$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(fromActions.clearDataPublicationFromLocalStorage),
+        tap(() => localStorage.removeItem("editingPublishedDataDoi")),
+      );
+    },
+    { dispatch: false },
+  );
+
+  saveDataPublication$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.publishDatasetAction),
+      ofType(fromActions.saveDataPublicationAction),
       switchMap(({ data }) =>
         this.publishedDataService.publishedDataControllerCreateV3(data).pipe(
           mergeMap((publishedData) => [
-            fromActions.publishDatasetCompleteAction({ publishedData }),
-            fromActions.fetchPublishedDataAction({ id: publishedData.doi }),
+            fromActions.saveDataPublicationCompleteAction({ publishedData }),
+            fromActions.saveDataPublicationInLocalStorage({ publishedData }),
           ]),
-          catchError(() => of(fromActions.publishDatasetFailedAction())),
+          catchError(() => of(fromActions.saveDataPublicationFailedAction())),
         ),
       ),
     );
   });
 
-  publishDatasetCompleteMessage$ = createEffect(() => {
+  createDataPublication$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.publishDatasetCompleteAction),
+      ofType(fromActions.createDataPublicationAction),
+      switchMap(({ data }) =>
+        this.publishedDataService.publishedDataControllerCreateV3(data).pipe(
+          mergeMap((publishedData) => [
+            fromActions.createDataPublicationCompleteAction({
+              publishedData,
+            }),
+            fromActions.fetchPublishedDataAction({ id: publishedData.doi }),
+            datasetActions.clearBatchAction(),
+            fromActions.clearDataPublicationFromLocalStorage(),
+          ]),
+          catchError(() => of(fromActions.createDataPublicationFailedAction())),
+        ),
+      ),
+    );
+  });
+
+  publishPublishedData$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.publishPublishedDataAction),
+      switchMap(({ doi }) =>
+        this.publishedDataService.publishedDataControllerPublishV3(doi).pipe(
+          mergeMap((publishedData) => [
+            fromActions.publishPublishedDataCompleteAction({ publishedData }),
+          ]),
+          catchError((error) =>
+            of(fromActions.publishPublishedDataFailedAction(error)),
+          ),
+        ),
+      ),
+    );
+  });
+
+  createDataPublicationCompleteMessage$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.createDataPublicationCompleteAction),
       switchMap(() => {
         const message = {
           type: MessageType.Success,
@@ -132,9 +211,9 @@ export class PublishedDataEffects {
     );
   });
 
-  publishDatasetFailedMessage$ = createEffect(() => {
+  createDataPublicationFailedMessage$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.publishDatasetFailedAction),
+      ofType(fromActions.createDataPublicationFailedAction),
       switchMap(() => {
         const message = {
           type: MessageType.Error,
@@ -157,8 +236,71 @@ export class PublishedDataEffects {
             }),
             fromActions.fetchPublishedDataAction({ id: doi }),
           ]),
-          catchError(() => of(fromActions.registerPublishedDataFailedAction())),
+          catchError((error) =>
+            of(fromActions.registerPublishedDataFailedAction(error)),
+          ),
         ),
+      ),
+    );
+  });
+
+  amendPublishedData$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.amendPublishedDataAction),
+      switchMap(({ doi }) =>
+        this.publishedDataService.publishedDataControllerAmendV3(doi).pipe(
+          mergeMap((publishedData: PublishedData) => [
+            fromActions.amendPublishedDataCompleteAction({
+              publishedData,
+            }),
+            fromActions.fetchPublishedDataAction({ id: doi }),
+          ]),
+          catchError((error) =>
+            of(fromActions.amendPublishedDataFailedAction(error)),
+          ),
+        ),
+      ),
+    );
+  });
+
+  navigateToPublishedDatasets$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(fromActions.deletePublishedDataCompleteAction),
+        tap(() => this.router.navigateByUrl("/publishedDatasets")),
+      );
+    },
+    { dispatch: false },
+  );
+
+  deletePublishedData$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.deletePublishedDataAction),
+      switchMap(({ doi }) =>
+        this.publishedDataService.publishedDataControllerRemoveV3(doi).pipe(
+          mergeMap(() => [
+            fromActions.deletePublishedDataCompleteAction({ doi }),
+          ]),
+          catchError((error) =>
+            of(fromActions.deletePublishedDataFailedAction(error)),
+          ),
+        ),
+      ),
+    );
+  });
+
+  updatePublishedData$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.updatePublishedDataAction),
+      switchMap(({ doi, data }) =>
+        this.publishedDataService
+          .publishedDataControllerUpdateV3(doi, data)
+          .pipe(
+            mergeMap((publishedData) => [
+              fromActions.updatePublishedDataCompleteAction({ publishedData }),
+            ]),
+            catchError(() => of(fromActions.updatePublishedDataFailedAction())),
+          ),
       ),
     );
   });
@@ -166,13 +308,17 @@ export class PublishedDataEffects {
   resyncPublishedData$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.resyncPublishedDataAction),
-      switchMap(({ doi, data }) =>
+      switchMap(({ doi, data, redirect }) =>
         this.publishedDataService
           .publishedDataControllerResyncV3(doi, data)
           .pipe(
             mergeMap((publishedData) => [
-              fromActions.resyncPublishedDataCompleteAction(publishedData),
-              fromActions.fetchPublishedDataAction({ id: doi }),
+              fromActions.resyncPublishedDataCompleteAction({
+                publishedData,
+                redirect,
+              }),
+              datasetActions.clearBatchAction(),
+              fromActions.clearDataPublicationFromLocalStorage(),
             ]),
             catchError(() => of(fromActions.resyncPublishedDataFailedAction())),
           ),
@@ -183,16 +329,81 @@ export class PublishedDataEffects {
   registerPublishedDataFailedMessage$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.registerPublishedDataFailedAction),
-      switchMap(() => {
+      switchMap((errors) => {
         const message = {
           type: MessageType.Error,
-          content: "Registration Failed",
+          content: `Registration Failed. ${errors.error.map((e) => e.replaceAll("instance", "metadata")).join(", ")}`,
           duration: 5000,
         };
         return of(showMessageAction({ message }));
       }),
     );
   });
+
+  publishPublishedDataFailedMessage$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.publishPublishedDataFailedAction),
+      switchMap((errors) => {
+        const message = {
+          type: MessageType.Error,
+          content: `Publishing Failed. ${errors.error.map((e) => e.replaceAll("instance", "metadata")).join(", ")}`,
+          duration: 5000,
+        };
+        return of(showMessageAction({ message }));
+      }),
+    );
+  });
+
+  fetchRelatedDatasetsAndAddToBatch$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchRelatedDatasetsAndAddToBatchAction),
+      switchMap(({ datasetPids, publishedDataDoi }) =>
+        this.datasetsV4Service
+          .datasetsV4ControllerFindAllV4({
+            filter: { where: { pid: { $in: datasetPids } } },
+          })
+          .pipe(
+            mergeMap((datasets) => [
+              datasetActions.clearBatchAction(),
+              datasetActions.selectDatasetsAction({
+                datasets: datasets as OutputDatasetObsoleteDto[],
+              }),
+              datasetActions.addToBatchAction(),
+              fromActions.fetchRelatedDatasetsAndAddToBatchCompleteAction(),
+              fromActions.storeEditingPublishedDataDoiAction({
+                publishedDataDoi,
+              }),
+            ]),
+            catchError(() =>
+              of(fromActions.fetchRelatedDatasetsAndAddToBatchFailedAction()),
+            ),
+          ),
+      ),
+    );
+  });
+
+  storeEditingPublishedDataDoi$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(fromActions.storeEditingPublishedDataDoiAction),
+        tap(({ publishedDataDoi }) => {
+          localStorage.setItem("editingPublishedDataDoi", publishedDataDoi);
+          localStorage.setItem("editingDatasetList", "true");
+        }),
+      );
+    },
+    { dispatch: false },
+  );
+
+  navigateToBatch$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(fromActions.fetchRelatedDatasetsAndAddToBatchCompleteAction),
+        tap(() => this.router.navigateByUrl("/datasets/batch")),
+      );
+    },
+    { dispatch: false },
+  );
 
   loading$ = createEffect(() => {
     return this.actions$.pipe(
@@ -201,9 +412,15 @@ export class PublishedDataEffects {
         fromActions.fetchCountAction,
         fromActions.sortByColumnAction,
         fromActions.fetchPublishedDataAction,
-        fromActions.publishDatasetAction,
+        fromActions.createDataPublicationAction,
+        fromActions.saveDataPublicationAction,
+        fromActions.publishPublishedDataAction,
         fromActions.registerPublishedDataAction,
-        fromActions.resyncPublishedDataCompleteAction,
+        fromActions.resyncPublishedDataAction,
+        fromActions.updatePublishedDataAction,
+        fromActions.amendPublishedDataAction,
+        fromActions.deletePublishedDataAction,
+        fromActions.fetchRelatedDatasetsAndAddToBatchAction,
       ),
       switchMap(() => of(loadingAction())),
     );
@@ -218,11 +435,24 @@ export class PublishedDataEffects {
         fromActions.fetchCountFailedAction,
         fromActions.fetchPublishedDataCompleteAction,
         fromActions.fetchPublishedDataFailedAction,
-        fromActions.publishDatasetCompleteAction,
-        fromActions.publishDatasetFailedAction,
+        fromActions.createDataPublicationCompleteAction,
+        fromActions.saveDataPublicationCompleteAction,
+        fromActions.createDataPublicationFailedAction,
+        fromActions.saveDataPublicationFailedAction,
+        fromActions.publishPublishedDataCompleteAction,
+        fromActions.publishPublishedDataFailedAction,
         fromActions.registerPublishedDataCompleteAction,
         fromActions.registerPublishedDataFailedAction,
         fromActions.resyncPublishedDataCompleteAction,
+        fromActions.resyncPublishedDataFailedAction,
+        fromActions.updatePublishedDataCompleteAction,
+        fromActions.updatePublishedDataFailedAction,
+        fromActions.fetchRelatedDatasetsAndAddToBatchCompleteAction,
+        fromActions.fetchRelatedDatasetsAndAddToBatchFailedAction,
+        fromActions.amendPublishedDataCompleteAction,
+        fromActions.amendPublishedDataFailedAction,
+        fromActions.deletePublishedDataCompleteAction,
+        fromActions.deletePublishedDataFailedAction,
       ),
       switchMap(() => of(loadingCompleteAction())),
     );
@@ -231,6 +461,7 @@ export class PublishedDataEffects {
   constructor(
     private actions$: Actions,
     private publishedDataService: PublishedDataService,
+    private datasetsV4Service: DatasetsV4Service,
     private router: Router,
     private store: Store,
   ) {}
