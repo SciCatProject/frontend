@@ -7,15 +7,13 @@ import { ActivatedRoute, Router } from "@angular/router";
   styleUrls: ["./proposal-search-bar.component.scss"],
   standalone: false,
 })
-export class ProposalSearchBarComponent implements OnInit, OnDestroy {
+export class ProposalSearchBarComponent {
   textSearch = "";
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
   ) {}
-
-  ngOnInit(): void {}
 
   onTextChange(term: string) {
     this.textSearch = term;
@@ -42,6 +40,4 @@ export class ProposalSearchBarComponent implements OnInit, OnDestroy {
       queryParamsHandling: "merge",
     });
   }
-
-  ngOnDestroy() {}
 }

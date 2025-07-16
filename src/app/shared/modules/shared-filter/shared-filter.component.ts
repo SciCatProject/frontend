@@ -22,7 +22,7 @@ import { DateRange } from "state-management/state/proposals.store";
   styleUrls: ["./shared-filter.component.scss"],
   standalone: false,
 })
-export class SharedFilterComponent implements OnInit, OnChanges, OnDestroy {
+export class SharedFilterComponent implements OnChanges {
   private dateRange: DateRange = {
     begin: null,
     end: null,
@@ -63,8 +63,6 @@ export class SharedFilterComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor() {}
 
-  ngOnInit(): void {}
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes["prefilled"] || changes["filterType"]) {
       if (this.filterType === "text") {
@@ -98,6 +96,4 @@ export class SharedFilterComponent implements OnInit, OnChanges, OnDestroy {
 
     this.dateRangeChange.emit(this.dateRange);
   }
-
-  ngOnDestroy(): void {}
 }

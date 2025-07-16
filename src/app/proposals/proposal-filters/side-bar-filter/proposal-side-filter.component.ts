@@ -17,7 +17,7 @@ import { DateRange } from "state-management/state/proposals.store";
 })
 export class ProposalSideFilterComponent implements OnInit {
   activeFilters: Record<string, string | DateRange> = {};
-  collapsed: boolean = false;
+  collapsed = false;
 
   fullfacetCounts$ = this.store.select(selectProposalsfacetCounts);
 
