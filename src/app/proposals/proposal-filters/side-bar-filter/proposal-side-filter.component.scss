@@ -1,45 +1,15 @@
 mat-card {
   margin-top: 0.5rem;
 
-  .mat-mdc-form-field {
-    width: 100%;
-  }
-
-  .filter-container {
-    display: flex;
-    align-items: center;
-
-    :first-child {
-      flex-grow: 1;
-    }
-  }
-
   .section-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-size: 1.25rem;
     font-weight: 425;
     margin-bottom: 0.5rem;
     position: relative;
     margin-top: 1rem;
-
-    .title {
-      float: left;
-    }
-
-    .clear-button {
-      margin-left: auto;
-    }
-
-    .full-width-button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      padding: 0;
-
-      mat-icon {
-        margin-right: 8px;
-      }
-    }
 
     .proposal-filters-search-button {
       width: 49%;
@@ -54,4 +24,16 @@ mat-card {
   .section-container:first-child {
     margin-top: unset;
   }
+}
+
+.small-btn {
+  padding: 2px;
+
+  width: 24px;
+  height: 24px;
+
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

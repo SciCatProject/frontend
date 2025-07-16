@@ -7,7 +7,7 @@ import {
   Output,
 } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { BehaviorSubject, merge, Subject, Subscription } from "rxjs";
+import { BehaviorSubject, merge, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, tap } from "rxjs/operators";
 import { selectSearchTerms } from "../../../state-management/selectors/datasets.selectors";
 import { concatLatestFrom } from "@ngrx/operators";
@@ -24,7 +24,6 @@ export class FullTextSearchBarComponent implements OnInit, OnDestroy {
   @Input() clear: boolean;
 
   @Output() textChange = new EventEmitter<string>();
-
   @Output() searchAction = new EventEmitter<void>();
 
   searchTerm = "";

@@ -1,7 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
-import { Subscription, BehaviorSubject } from "rxjs";
 
 @Component({
   selector: "proposal-search-bar",

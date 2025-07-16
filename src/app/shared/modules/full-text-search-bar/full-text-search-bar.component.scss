@@ -12,12 +12,19 @@ mat-card {
     flex-shrink: 0.6;
     margin: 0 0.5em;
   }
+  .left-toggle-btn {
+    margin-right: 0.4em;
+
+    mat-icon {
+      margin: 0;
+    }
+  }
 
   mat-form-field.full-text-search-field {
     flex: 1;
   }
   .full-text-search-button,
   .full-text-clear-button {
-    margin:0 2px;
+    margin: 0 2px;
   }
 }
