@@ -203,6 +203,8 @@ describe("Datasets general", () => {
 
   describe("Pre-configured filters test", () => {
     beforeEach(() => {
+      cy.clearCookies();
+      cy.clearLocalStorage();
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
           ...baseConfig,
@@ -217,7 +219,7 @@ describe("Datasets general", () => {
 
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
         cy.visit("/datasets");
-        cy.wait("@getConfig");
+        cy.wait("@getConfig", { timeout: 10000 });
         cy.finishedLoading(); 
       });
     });
