@@ -86,18 +86,6 @@ export class ProposalSideFilterComponent implements OnInit {
     );
   }
 
-  prefilledValue(filter: FilterLists): string | string[] | DateRange | null {
-    switch (filter.type) {
-      case "text":
-        return this.activeFilters[filter.key] || "";
-      case "dateRange":
-        return this.activeFilters[filter.key] || null;
-      default:
-        console.error("Unknown filter type:", filter.type);
-        return "";
-    }
-  }
-
   toggleCollapse() {
     this.collapsed = !this.collapsed;
   }

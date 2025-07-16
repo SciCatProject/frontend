@@ -4,7 +4,6 @@ import { ScientificCondition } from "state-management/models";
 import { MatInputModule } from "@angular/material/input";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { CommonModule } from "@angular/common";
-import { MatChipsModule } from "@angular/material/chips";
 import { MatIconModule } from "@angular/material/icon";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -32,12 +31,10 @@ export interface ConditionConfig {
     CommonModule,
     MatTooltipModule,
     MatInputModule,
-    MatChipsModule,
     MatDatepickerModule,
     MatIconModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatAutocompleteModule,
   ],
   exports: [SharedFilterComponent],
 })
