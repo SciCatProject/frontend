@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { DateTime } from "luxon";
 import { FilterLists } from "proposals/proposal-dashboard/proposal-dashboard.component";
-import { distinctUntilChanged, map, Observable, Subscription } from "rxjs";
+import { distinctUntilChanged, map, Observable } from "rxjs";
 import { selectProposalsfacetCounts } from "state-management/selectors/proposals.selectors";
 
 import { DateRange } from "state-management/state/proposals.store";
@@ -17,6 +17,8 @@ import { DateRange } from "state-management/state/proposals.store";
 })
 export class ProposalSideFilterComponent implements OnInit {
   activeFilters: Record<string, string | DateRange> = {};
+  collapsed: boolean = false;
+
   fullfacetCounts$ = this.store.select(selectProposalsfacetCounts);
 
   @Input() clearFilters = false;
@@ -42,7 +44,7 @@ export class ProposalSideFilterComponent implements OnInit {
     this.activeFilters = { ...searchQuery };
   }
 
-  applyFilter(filterKey: string, value: string) {
+  setFilter(filterKey: string, value: string) {
     if (value) {
       this.activeFilters[filterKey] = value;
     } else {
@@ -50,7 +52,7 @@ export class ProposalSideFilterComponent implements OnInit {
     }
   }
 
-  applyDateFilter(filterKey: string, value: DateRange) {
+  setDateFilter(filterKey: string, value: DateRange) {
     if (value.begin || value.end) {
       this.activeFilters[filterKey] = {
         begin: value.begin,
@@ -94,6 +96,10 @@ export class ProposalSideFilterComponent implements OnInit {
         console.error("Unknown filter type:", filter.type);
         return "";
     }
+  }
+
+  toggleCollapse() {
+    this.collapsed = !this.collapsed;
   }
 
   reset() {

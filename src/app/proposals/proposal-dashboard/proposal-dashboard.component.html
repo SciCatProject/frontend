@@ -4,13 +4,13 @@
 <mat-sidenav-container [hasBackdrop]="false">
   <mat-sidenav-content>
     <div fxLayout="row" fxLayout.xs="column">
-      <div class="action-column" fxFlex="14" fxFlex.lt-xl="20">
+      <div class="action-column" fxFlex="0" fxFlex.lt-xl="0">
         <proposal-side-filter
           [filterLists]="filterLists"
         ></proposal-side-filter>
       </div>
 
-      <div class="table-column" fxFlex="85" fxFlex.lt-xl="80">
+      <div class="table-column" fxFlex="100" fxFlex.lt-xl="100">
         <proposal-table
           [dataSource]="dataSource$"
           [defaultPageSize]="defaultPageSize"
