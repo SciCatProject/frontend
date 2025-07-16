@@ -276,7 +276,7 @@ export class UserEffects {
 
         if (id && ttl && isTokenExpired) {
           this.authService.clear();
-          window.location.reload()
+          window.location.reload();
         }
 
         return this.authService.isAuthenticated();
@@ -465,13 +465,13 @@ export class UserEffects {
 
         const apiCall$ = useExternalSettings
           ? this.usersService.usersControllerPatchExternalSettingsV3(
-            user?.id,
-            JSON.stringify(newProperty) as any,
-          )
+              user?.id,
+              JSON.stringify(newProperty) as any,
+            )
           : this.usersService.usersControllerPatchSettingsV3(
-            user?.id,
-            JSON.stringify(newProperty) as any,
-          );
+              user?.id,
+              JSON.stringify(newProperty) as any,
+            );
         return apiCall$.pipe(
           map((userSettings: UserSettings) => {
             userSettings["conditions"] = (
@@ -552,5 +552,5 @@ export class UserEffects {
     private usersService: UsersService,
     private sharedAuthService: SharedAuthService,
     private userIdentityService: UserIdentitiesService,
-  ) { }
+  ) {}
 }
