@@ -31,6 +31,7 @@
 
 .label-cell {
   width: 100%;
+  cursor: inherit;
 }
 
 mat-cell .label-cell {
@@ -106,8 +107,9 @@ mat-header-cell {
 @include header-sort;
 
 cdk-virtual-scroll-viewport {
-  min-height: 100px;
-  height: inherit;
+  min-height: 0;
+  height: 100%;
+  flex: auto;
   overflow: auto;
 }
 

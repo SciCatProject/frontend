@@ -17,7 +17,7 @@ import { selectLoginPageViewModel } from "state-management/selectors/user.select
 import { MatDialog } from "@angular/material/dialog";
 import { PrivacyDialogComponent } from "users/privacy-dialog/privacy-dialog.component";
 import {
-  AppConfig,
+  AppConfigInterface,
   AppConfigService,
   OAuth2Endpoint,
 } from "app-config.service";
@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private proceedSubscription = new Subscription();
   vm$ = this.store.select(selectLoginPageViewModel);
 
-  appConfig: AppConfig = this.appConfigService.getConfig();
+  appConfig: AppConfigInterface = this.appConfigService.getConfig();
   facility: string | null = null;
   loginFormEnabled = false;
   loginFacilityEnabled = false;
