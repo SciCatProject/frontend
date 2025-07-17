@@ -1,0 +1,33 @@
+.custom-dropdown {
+  width: 100%; 
+}
+
+.option-text {
+  white-space: normal;
+  display: block;
+  max-width:100%;
+  overflow-wrap: break-word;
+}
+
+::ng-deep .mat-option {
+  white-space: normal !important;
+}
+
+.voxel-type-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.voxel-type-label {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+.voxel-type-radio-group {
+  gap: 5px;
+}
+.voxel-type-radio-button {
+  margin-bottom: 5px;
+}
+.voxel-type-input {
+  width: 100%;
+}

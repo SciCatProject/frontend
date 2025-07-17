@@ -62,6 +62,7 @@ enum TAB {
   attachments = "Attachments",
   admin = "Admin",
   lifecycle = "Lifecycle",
+  depositor = "Depositor",
 }
 @Component({
   selector: "dataset-details-dashboard",
@@ -105,6 +106,7 @@ export class DatasetDetailsDashboardComponent
     [TAB.logbook]: { action: fetchDatasetLogbookAction, loaded: false },
     [TAB.attachments]: { action: fetchAttachmentsAction, loaded: false },
     [TAB.admin]: { action: fetchDatablocksAction, loaded: false },
+    [TAB.depositor]: { action: fetchDatasetAction, loaded: false },
   };
   userProfile$ = this.store.select(selectProfile);
   isAdmin$ = this.store.select(selectIsAdmin);
@@ -148,6 +150,9 @@ export class DatasetDetailsDashboardComponent
             const hasAccessToLogbook =
               isInOwnerGroup ||
               this.dataset.accessGroups.some((g) => groups.includes(g));
+            const hasAccessToDepositor = isInOwnerGroup && this.dataset.keywords.some(
+              (k) => k.toLowerCase() === "openem",
+            );
             this.navLinks = [
               {
                 location: "./",
@@ -209,6 +214,12 @@ export class DatasetDetailsDashboardComponent
                 label: TAB.admin,
                 icon: "settings",
                 enabled: isLoggedIn && isAdmin,
+              },
+              {
+                location: "./depositor",
+                label: TAB.depositor,
+                icon: "file_upload",
+                enabled: isLoggedIn && hasAccessToDepositor,
               },
             ];
           })

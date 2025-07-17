@@ -35,6 +35,8 @@ import {
   loadingCompleteAction,
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
+import { MessageType } from "state-management/models";
+import { showMessageAction } from "state-management/actions/user.actions";
 
 @Injectable()
 export class DatasetEffects {
@@ -302,6 +304,7 @@ export class DatasetEffects {
           .pipe(
             switchMap(() => [
               fromActions.updatePropertyCompleteAction(),
+              fromActions.updateScientificMetadataCompleteAction({pid}),
               fromActions.fetchDatasetAction({ pid }),
             ]),
             catchError(() => of(fromActions.updatePropertyFailedAction())),
@@ -309,6 +312,20 @@ export class DatasetEffects {
       ),
     );
   });
+
+  updatePropertySuccessMessage$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(fromActions.updateScientificMetadataCompleteAction),
+    map(({ pid }) => {
+      const message = {
+        type: MessageType.Success,
+        content: `Updated scientific Metadata of dataset ${pid}`,
+        duration: 5000,
+      };
+      return showMessageAction({ message });
+    })
+  )
+);
 
   addAttachment$ = createEffect(() => {
     return this.actions$.pipe(
@@ -403,6 +420,7 @@ export class DatasetEffects {
         fromActions.addAttachmentAction,
         fromActions.updateAttachmentCaptionAction,
         fromActions.removeAttachmentAction,
+        fromActions.setPublicViewModeAction,
       ),
       switchMap(() => of(loadingAction())),
     );

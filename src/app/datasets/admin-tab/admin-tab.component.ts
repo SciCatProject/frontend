@@ -4,7 +4,7 @@ import { FileObject } from "datasets/dataset-details-dashboard/dataset-details-d
 import { Subscription } from "rxjs";
 import { take } from "rxjs/operators";
 import {
-  CreateJobDto,
+  CreateJobDtoV3,
   OutputDatasetObsoleteDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { submitJobAction } from "state-management/actions/jobs.actions";
@@ -48,12 +48,6 @@ export class AdminTabComponent implements OnInit, OnDestroy {
         .pipe(take(1))
         .subscribe((user) => {
           if (user && this.dataset) {
-            const job: CreateJobDto = {
-              ownerUser: user.email,
-              type: "reset",
-              jobParams: {},
-            };
-            job.jobParams["username"] = user.username;
             const fileObj: FileObject = {
               pid: "",
               files: [],
@@ -66,12 +60,20 @@ export class AdminTabComponent implements OnInit, OnDestroy {
               });
             }
             fileObj.files = fileList;
-            // job.datasetList = [fileObj];   // TODO: job release back-ward compatibility issue
+            const job: CreateJobDtoV3 = {
+              emailJobInitiator: user.email,
+              type: "reset",
+              datasetList: [fileObj],
+              jobParams: {},
+              jobStatusMessage: "jobCreated",
+            };
+            job.jobParams["username"] = user.username;
             this.store.dispatch(submitJobAction({ job }));
           }
         });
     }
   }
+
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => {
       sub.unsubscribe();

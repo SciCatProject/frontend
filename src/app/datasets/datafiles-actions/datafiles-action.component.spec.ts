@@ -18,6 +18,7 @@ import {
 import { ActionDataset } from "./datafiles-action.interfaces";
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 import { AuthService } from "shared/services/auth/auth.service";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 describe("1000: DatafilesActionComponent", () => {
   let component: DatafilesActionComponent;
@@ -157,6 +158,7 @@ describe("1000: DatafilesActionComponent", () => {
         PipesModule,
         ReactiveFormsModule,
         MatDialogModule,
+        MatSnackBarModule,
         RouterModule,
         RouterModule.forRoot([]),
         StoreModule.forRoot({}),
@@ -185,7 +187,7 @@ describe("1000: DatafilesActionComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DatafilesActionComponent);
     component = fixture.componentInstance;
-    component.files = structuredClone(actionFiles);
+    component.files = JSON.parse(JSON.stringify(actionFiles));
     component.actionConfig = actionsConfig[0];
     component.actionDataset = actionDataset;
     component.maxFileSize = lowerMaxFileSizeLimit;
@@ -484,7 +486,7 @@ describe("1000: DatafilesActionComponent", () => {
         component.maxFileSize = lowerMaxFileSizeLimit;
         break;
     }
-    component.files = structuredClone(actionFiles);
+    component.files = JSON.parse(JSON.stringify(actionFiles));
     switch (selectedFiles) {
       case selectedFilesType.file1:
         component.files[0].selected = true;

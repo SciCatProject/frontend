@@ -9,6 +9,7 @@ import { JsonScientificMetadataComponent } from "datasets/jsonScientificMetadata
 import { DatasetFileUploaderComponent } from "datasets/dataset-file-uploader/dataset-file-uploader.component";
 import { DatasetLifecycleComponent } from "datasets/dataset-lifecycle/dataset-lifecycle.component";
 import { ReduceComponent } from "datasets/reduce/reduce.component";
+import { DepositorComponent } from "datasets/depositor/depositor.component";
 import { RelatedDatasetsComponent } from "datasets/related-datasets/related-datasets.component";
 import { LogbooksDashboardComponent } from "logbooks/logbooks-dashboard/logbooks-dashboard.component";
 import { DatasetDetailWrapperComponent } from "datasets/dataset-detail/dataset-detail-wrapper.component";
@@ -68,6 +69,18 @@ const routes: Routes = [
     path: "admin",
     component: AdminTabComponent,
     canActivate: [AuthGuard, AdminGuard],
+  },
+  {
+    path: "depositor",
+    canActivate: [ServiceGuard],
+    children: [
+      {
+        path: "",
+        component: DepositorComponent,
+        canActivate: [AuthGuard],
+      },
+    ],
+    data: { service: "depositor" },
   },
 ];
 @NgModule({

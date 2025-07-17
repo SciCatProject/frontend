@@ -32,11 +32,11 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
       hideOrder: 0,
     },
     {
-      id: "emailJobInitiator",
-      label: "Initiator",
+      id: "createdBy",
+      label: "Creator",
       icon: "person",
       canSort: true,
-      matchMode: "contains",
+      matchMode: "is",
       hideOrder: 1,
     },
     {
@@ -48,7 +48,7 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
       hideOrder: 2,
     },
     {
-      id: "creationTime",
+      id: "createdAt",
       icon: "schedule",
       label: "Created at local time",
       format: "date medium ",
@@ -67,10 +67,9 @@ export class JobsDashboardNewComponent implements OnDestroy, AfterViewChecked {
       hideOrder: 4,
     },
     {
-      id: "jobStatusMessage",
+      id: "statusCode",
       icon: "traffic",
       label: "Status",
-      format: "json",
       canSort: true,
       matchMode: "contains",
       hideOrder: 5,

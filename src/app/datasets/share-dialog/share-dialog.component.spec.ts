@@ -77,6 +77,7 @@ describe("ShareDialogComponent", () => {
         { provide: UsersService, useClass: MockUserApi },
         { provide: InstrumentsService, useValue: {} },
         { provide: JobsService, useValue: {} },
+        { provide: JobsServiceV4, useValue: {} },
         { provide: ProposalsService, useValue: {} },
         { provide: SamplesService, useValue: {} },
         { provide: PublishedDataService, useClass: MockPublishedDataApi },
