@@ -27,10 +27,8 @@
     <div [fxFlex]="(attachments$ | async)?.length > 0 ? '90%' : '100%'">
       <mat-card [formGroup]="form" data-cy="general-info">
         <mat-card-header class="dataset-general-header">
-          <div mat-card-avatar class="section-icon">
-            <mat-icon> description </mat-icon>
-          </div>
-          {{ "General Information" | translate }}
+          <mat-icon class="section-icon"> description </mat-icon>
+          <mat-card-title class="section-title">{{ "General Information" | translate }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <table>
@@ -168,10 +166,8 @@
 
       <mat-card>
         <mat-card-header class="dataset-creator-header">
-          <div mat-card-avatar class="section-icon">
-            <mat-icon> person </mat-icon>
-          </div>
-          {{ "Creator Information" | translate }}
+          <mat-icon class="section-icon"> person </mat-icon>
+          <mat-card-title class="section-title">{{ "Creator Information" | translate }}</mat-card-title>
         </mat-card-header>
 
         <mat-card-content>
@@ -210,10 +206,8 @@
 
       <mat-card>
         <mat-card-header class="dataset-file-header">
-          <div mat-card-avatar class="section-icon">
-            <mat-icon> folder </mat-icon>
-          </div>
-          {{ "File Information" | translate }}
+            <mat-icon class="section-icon"> folder </mat-icon>
+          <mat-card-title class="section-title">{{ "File Information" | translate }}</mat-card-title>
         </mat-card-header>
 
         <mat-card-content>
@@ -236,10 +230,8 @@
 
       <mat-card>
         <mat-card-header class="dataset-related-header">
-          <div mat-card-avatar class="section-icon">
-            <mat-icon> library_books </mat-icon>
-          </div>
-          {{ "Related Documents" | translate }}
+          <mat-icon class="section-icon"> library_books </mat-icon>
+          <mat-card-title class="section-title">{{ "Related Documents" | translate }}</mat-card-title>
         </mat-card-header>
 
         <mat-card-content>
@@ -354,10 +346,8 @@
 
       <mat-card>
         <mat-card-header class="dataset-links-header">
-          <div mat-card-avatar class="section-icon">
-            <mat-icon> link </mat-icon>
-          </div>
-          {{ "Links" | translate }}
+          <mat-icon class="section-icon"> link </mat-icon>
+          <mat-card-title class="section-title">{{ "Links" | translate }}</mat-card-title>
         </mat-card-header>
 
         <mat-card-content>
@@ -446,10 +436,8 @@
 
       <mat-card>
         <mat-card-header class="dataset-scientific-header">
-          <div mat-card-avatar class="section-icon">
-            <mat-icon> science </mat-icon>
-          </div>
-          {{ "Scientific Metadata" | translate }}
+          <mat-icon class="section-icon"> science </mat-icon>
+          <mat-card-title class="section-title">{{ "Scientific Metadata" | translate }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <ng-template
