@@ -1,5 +1,8 @@
 import { createAction, props } from "@ngrx/store";
-import { IngestionRequestInformation } from "ingestor/ingestor-page/helper/ingestor.component-helper";
+import {
+  APIInformation,
+  IngestionRequestInformation,
+} from "ingestor/ingestor-page/helper/ingestor.component-helper";
 import {
   GetBrowseDatasetResponse,
   GetExtractorResponse,
@@ -12,6 +15,10 @@ import {
   UserInfo,
 } from "shared/sdk/models/ingestor/models";
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
+import {
+  DatasetsControllerCreateV3Request,
+  OutputDatasetObsoleteDto,
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 export const setIngestorEndpoint = createAction(
   "[Ingestor] Set ingestor endpoint",
@@ -57,9 +64,20 @@ export const updateTransferListSuccess = createAction(
   }>(),
 );
 
+export const updateTransferListDetailSuccess = createAction(
+  "[Ingestor] Update Transfer List Detail Success",
+  props<{ transferListDetailView: GetTransferResponse }>(),
+);
+
 export const updateTransferListFailure = createAction(
   "[Ingestor] Update Transfer List Failure",
   props<{ err: Error }>(),
+);
+
+/* Optional pass an ingestionObject to set custom properties */
+export const resetIngestionObject = createAction(
+  "[Ingestor] Reset Ingestion Object",
+  props<{ ingestionObject?: IngestionRequestInformation }>(),
 );
 
 export const updateIngestionObject = createAction(
@@ -70,6 +88,11 @@ export const updateIngestionObject = createAction(
 export const updateIngestionObjectFromThirdParty = createAction(
   "[Ingestor] Update Ingestion Object from Third Party",
   props<{ ingestionObject: IngestionRequestInformation }>(),
+);
+
+export const updateIngestionObjectAPIInformation = createAction(
+  "[Ingestor] Update Ingestion Object API Information",
+  props<{ ingestionObjectApiInformation: APIInformation }>(),
 );
 
 export const resetIngestionObjectFromThirdPartyFlag = createAction(
@@ -111,6 +134,11 @@ export const ingestDataset = createAction(
   props<{ ingestionDataset: PostDatasetRequest }>(),
 );
 
+export const setIngestDatasetLoading = createAction(
+  "[Ingestor] Set Ingest Dataset Loading",
+  props<{ ingestionDatasetLoading: boolean }>(),
+);
+
 export const ingestDatasetSuccess = createAction(
   "[Ingestor] Ingest Dataset Success",
   props<{ response: PostDatasetResponse }>(),
@@ -133,4 +161,23 @@ export const cancelTransfer = createAction(
 export const setRenderViewFromThirdParty = createAction(
   "[Ingestor] Set Render View",
   props<{ renderView: renderView }>(),
+);
+
+export const resetIngestorComponent = createAction(
+  "[Ingestor] Reset Ingestor Component",
+);
+
+export const setNoRightsError = createAction(
+  "[Ingestor] Set No Rights Error",
+  props<{ noRightsError: boolean; err: Error }>(),
+);
+
+export const createDatasetAction = createAction(
+  "[Ingestor] Create Dataset",
+  props<{ dataset: DatasetsControllerCreateV3Request }>(),
+);
+
+export const createDatasetSuccess = createAction(
+  "[Ingestor] Create Dataset Success",
+  props<{ dataset: OutputDatasetObsoleteDto }>(),
 );

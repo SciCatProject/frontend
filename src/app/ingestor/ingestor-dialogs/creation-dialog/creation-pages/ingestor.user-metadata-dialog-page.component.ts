@@ -21,9 +21,7 @@ import {
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
-import {
-  renderView,
-} from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
+import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 
 @Component({
   selector: "ingestor-user-metadata-dialog",
@@ -32,7 +30,8 @@ import {
   standalone: false,
 })
 export class IngestorUserMetadataDialogPageComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   private subscriptions: Subscription[] = [];
   ingestionObject$ = this.store.select(selectIngestionObject);
   renderView$ = this.store.select(selectIngestorRenderView);
@@ -69,7 +68,7 @@ export class IngestorUserMetadataDialogPageComponent
   constructor(
     private store: Store,
     private cdr: ChangeDetectorRef,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
@@ -89,7 +88,6 @@ export class IngestorUserMetadataDialogPageComponent
     this.subscriptions.push(
       this.renderView$.subscribe((renderView) => {
         if (renderView) {
-          console.log(renderView);
           // Check if renderView changed
           if (this.activeRenderView !== renderView) {
             this.activeRenderView = renderView;

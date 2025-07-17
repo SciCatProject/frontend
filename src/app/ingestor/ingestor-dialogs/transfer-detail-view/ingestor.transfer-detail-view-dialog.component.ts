@@ -4,7 +4,7 @@ import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 import { TransferItem } from "shared/sdk/models/ingestor/transferItem";
 import * as fromActions from "state-management/actions/ingestor.actions";
-import { selectIngestorTransferList } from "state-management/selectors/ingestor.selector";
+import { selectIngestorTransferDetailList } from "state-management/selectors/ingestor.selector";
 
 @Component({
   selector: "app-ingestor-transfer-view-dialog",
@@ -16,7 +16,7 @@ export class IngestorTransferViewDialogComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   transferAutoRefreshIntervalDetail = 3000;
   autoRefreshInterval: NodeJS.Timeout = null;
-  transferList$ = this.store.select(selectIngestorTransferList);
+  transferDetailList$ = this.store.select(selectIngestorTransferDetailList);
   detailItem: TransferItem | null = null;
 
   constructor(
@@ -24,14 +24,32 @@ export class IngestorTransferViewDialogComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<IngestorTransferViewDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) { }
+  // Define tables
+  displayedColumns: string[] = ['property', 'value'];
+  tableData: { property: string; value: string }[] = [];
 
   ngOnInit() {
     this.subscriptions.push(
-      this.transferList$.subscribe((transferList) => {
+      this.transferDetailList$.subscribe((transferList) => {
         if (transferList) {
           this.detailItem = transferList.transfers?.find(
             (item) => item.transferId === this.transferId,
           );
+
+          this.tableData = [
+            { property: 'Transfer ID', value: this.transferId },
+            ...(this.detailItem?.status !== undefined ? [{ property: 'Status', value: this.detailItem.status }] : []),
+            ...(this.detailItem?.message !== undefined ? [{ property: 'Message', value: this.detailItem.message }] : []),
+            ...(this.detailItem?.bytesTransferred !== undefined && this.detailItem?.bytesTotal !== undefined
+              ? [
+                { property: 'GB transferred', value: this.getByteTransferRelative() },
+                { property: 'GB transferred (total)', value: this.getByteTransferTotal() }
+              ]
+              : []),
+            ...(this.detailItem?.filesTransferred !== undefined && this.detailItem?.filesTotal !== undefined
+              ? [{ property: 'Files transferred (total)', value: this.getFileTransferTotal() }]
+              : [])
+          ];
         }
       }),
     );

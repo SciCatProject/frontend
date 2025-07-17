@@ -3,7 +3,6 @@ import { MatDialog } from "@angular/material/dialog";
 import {
   IngestionRequestInformation,
   IngestorHelper,
-  SciCatHeader,
 } from "../../ingestor-page/helper/ingestor.component-helper";
 import { IngestorConfirmationDialogComponent } from "../confirmation-dialog/ingestor.confirmation-dialog.component";
 import {
@@ -18,6 +17,7 @@ import {
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Subscription } from "rxjs";
+import { CreateDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
   selector: "ingestor-dialog-stepper",
@@ -41,6 +41,8 @@ export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
     exportSciCat: true,
     exportOrganizational: false,
     exportSample: false,
+    exportAll: false,
+    exportAsJSON: false,
   };
 
   injector = Injector.create({
@@ -123,7 +125,7 @@ export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
         if (this.createNewTransferData) {
           const sciCatHeaderWithoutSourcePath = {
             ...this.createNewTransferData.scicatHeader,
-          } as SciCatHeader;
+          } as CreateDatasetDto;
           delete sciCatHeaderWithoutSourcePath.sourceFolder;
 
           const exportData = {};
@@ -138,6 +140,10 @@ export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
             exportData["userMetaData"] = {};
           }
 
+          if (this.exportValueOptions.exportAll) {
+            exportData["extractorMetaData"] = {};
+          }
+
           if (this.exportValueOptions.exportOrganizational) {
             exportData["userMetaData"]["organizational"] = {
               ...this.createNewTransferData.userMetaData.organizational,
@@ -150,12 +156,43 @@ export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
             };
           }
 
+          if (this.exportValueOptions.exportAll) {
+            exportData["extractorMetaData"]["instrument"] = {
+              ...this.createNewTransferData.extractorMetaData.instrument,
+            };
+            exportData["extractorMetaData"]["acquisition"] = {
+              ...this.createNewTransferData.extractorMetaData.acquisition,
+            };
+          }
+
+          let exportString = "";
+          if (this.exportValueOptions.exportAsJSON) {
+            exportString = IngestorHelper.createMetaDataString(
+              exportData as IngestionRequestInformation,
+            );
+          } else {
+            exportString = JSON.stringify(exportData);
+          }
+
+          // Default file name is the current date and method name
+          const currentDate = new Date();
+          const formattedDate = currentDate
+            .toISOString()
+            .replace(/:/g, "-")
+            .replace(/\..+/, "");
+          const methodName =
+            this.createNewTransferData.selectedMethod.name ?? "no_method";
+          const ending = this.exportValueOptions.exportAsJSON
+            ? ".json"
+            : ".ingestor.template";
+
+          const fileName = formattedDate + "_" + methodName + ending;
+
           const dataStr =
-            "data:text/json;charset=utf-8," +
-            encodeURIComponent(JSON.stringify(exportData));
+            "data:text/json;charset=utf-8," + encodeURIComponent(exportString);
           const downloadAnchorNode = document.createElement("a");
           downloadAnchorNode.setAttribute("href", dataStr);
-          downloadAnchorNode.setAttribute("download", "ingestor-template.json");
+          downloadAnchorNode.setAttribute("download", fileName);
           document.body.appendChild(downloadAnchorNode);
           downloadAnchorNode.click();
           downloadAnchorNode.remove();
@@ -168,7 +205,7 @@ export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
   onUpload() {
     const input = document.createElement("input");
     input.type = "file";
-    input.accept = ".json";
+    input.accept = ".ingestor.template,.json";
     input.onchange = (event: Event) => {
       const target = event.target as HTMLInputElement;
       const file = target.files?.[0];

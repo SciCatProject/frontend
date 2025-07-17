@@ -8,67 +8,52 @@ import {
 } from "@angular/core";
 import { JsonSchema } from "@jsonforms/core";
 import {
-  APIInformation,
   IngestionRequestInformation,
   IngestorHelper,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
 import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
-import { Store } from "@ngrx/store";
 import {
-  ingestionObjectAPIInformation,
   selectIngestionObject,
   selectIngestorRenderView,
   selectUpdateEditorFromThirdParty,
 } from "state-management/selectors/ingestor.selector";
 import * as fromActions from "state-management/actions/ingestor.actions";
+import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 
 @Component({
-  selector: "ingestor-extractor-metadata-dialog-page",
-  templateUrl: "ingestor.extractor-metadata-dialog-page.html",
+  selector: "ingestor-custom-metadata-dialog",
+  templateUrl: "ingestor.custom-metadata-dialog-page.html",
   styleUrls: ["../../../ingestor-page/ingestor.component.scss"],
   standalone: false,
 })
-export class IngestorExtractorMetadataDialogPageComponent
+export class IngestorCustomMetadataDialogPageComponent
   implements OnInit, OnDestroy
 {
   private subscriptions: Subscription[] = [];
-  metadataSchemaInstrument: JsonSchema;
-  metadataSchemaAcquisition: JsonSchema;
-  createNewTransferData: IngestionRequestInformation =
-    IngestorHelper.createEmptyRequestInformation();
-  createNewTransferDataApiInformation: APIInformation =
-    IngestorHelper.createEmptyAPIInformation();
-
-  ingestionObjectApiInformation$ = this.store.select(
-    ingestionObjectAPIInformation,
-  );
   ingestionObject$ = this.store.select(selectIngestionObject);
   renderView$ = this.store.select(selectIngestorRenderView);
   selectUpdateEditorFromThirdParty$ = this.store.select(
     selectUpdateEditorFromThirdParty,
   );
 
+  createNewTransferData: IngestionRequestInformation =
+    IngestorHelper.createEmptyRequestInformation();
+
   @Output() nextStep = new EventEmitter<void>();
   @Output() backStep = new EventEmitter<void>();
 
+  customMetadataSchema: JsonSchema;
   activeRenderView: renderView | null = null;
   updateEditorFromThirdParty = false;
-  extractorMetaDataReady = false;
-  extractorMetaDataStatus = "";
-  extractorMetaDataError = false;
-  process = 0;
 
   uiNextButtonReady = false;
-  isAcquisitionMetadataOk = false;
-  acquisitionErrors = "";
-  isInstrumentMetadataOk = false;
-  instrumentErrors = "";
+  isCustomMetadataOk = false;
+  customMetadataErrors = "";
 
   isCardContentVisible = {
-    instrument: true,
-    acquisition: true,
+    scientific: true,
   };
 
   constructor(
@@ -82,32 +67,23 @@ export class IngestorExtractorMetadataDialogPageComponent
         if (ingestionObject) {
           this.createNewTransferData = ingestionObject;
 
-          const instrumentSchema =
-            this.createNewTransferData.selectedResolvedDecodedSchema.properties
-              .instrument;
-          const acqusitionSchema =
-            this.createNewTransferData.selectedResolvedDecodedSchema.properties
-              .acquisition;
+          const customSchema =
+            this.createNewTransferData.selectedResolvedDecodedSchema;
 
-          this.metadataSchemaInstrument = instrumentSchema;
-          this.metadataSchemaAcquisition = acqusitionSchema;
-        }
-      }),
-    );
+          if (
+            // Remove all keys which start with $. Json Forms can't handle this. When preparing $refs are already resolved.
+            customSchema &&
+            typeof customSchema === "object" &&
+            !Array.isArray(customSchema)
+          ) {
+            Object.keys(customSchema)
+              .filter((key) => key.startsWith("$"))
+              .forEach((key) => {
+                delete customSchema[key];
+              });
+          }
 
-    this.subscriptions.push(
-      this.ingestionObjectApiInformation$.subscribe((apiInformation) => {
-        if (apiInformation) {
-          this.createNewTransferDataApiInformation = apiInformation;
-
-          this.extractorMetaDataReady =
-            this.createNewTransferDataApiInformation.extractorMetaDataReady;
-          this.extractorMetaDataError =
-            this.createNewTransferDataApiInformation.metaDataExtractionFailed;
-          this.extractorMetaDataStatus =
-            this.createNewTransferDataApiInformation.extractorMetaDataStatus;
-          this.process =
-            this.createNewTransferDataApiInformation.extractorMetadataProgress;
+          this.customMetadataSchema = customSchema;
         }
       }),
     );
@@ -163,12 +139,8 @@ export class IngestorExtractorMetadataDialogPageComponent
     this.nextStep.emit(); // Open next dialog
   }
 
-  onDataChangeExtractorMetadataInstrument(event: any) {
-    this.createNewTransferData.extractorMetaData["instrument"] = event;
-  }
-
-  onDataChangeExtractorMetadataAcquisition(event: any) {
-    this.createNewTransferData.extractorMetaData["acquisition"] = event;
+  onDataChangeCustomMetadata(event: any) {
+    this.createNewTransferData.customMetaData = event;
   }
 
   onCreateNewTransferDataChange(updatedData: IngestionRequestInformation) {
@@ -179,26 +151,15 @@ export class IngestorExtractorMetadataDialogPageComponent
     this.isCardContentVisible[card] = !this.isCardContentVisible[card];
   }
 
-  instrumentErrorsHandler(errors: any[]) {
-    this.isInstrumentMetadataOk = errors.length === 0;
-    this.instrumentErrors = convertJSONFormsErrorToString(errors);
-    this.validateNextButton();
-    this.cdr.detectChanges();
-  }
-
-  acquisitionErrorsHandler(errors: any[]) {
-    this.isAcquisitionMetadataOk = errors.length === 0;
-    this.acquisitionErrors = convertJSONFormsErrorToString(errors);
+  customMetadataErrorsHandler(errors: any[]) {
+    this.isCustomMetadataOk = errors.length === 0;
+    this.customMetadataErrors = convertJSONFormsErrorToString(errors);
     this.validateNextButton();
     this.cdr.detectChanges();
   }
 
   validateNextButton(): void {
-    /*this.uiNextButtonReady =
-      this.isInstrumentMetadataOk &&
-      this.isAcquisitionMetadataOk &&
-      this.extractorMetaDataReady;*/
-
-    this.uiNextButtonReady = this.extractorMetaDataReady;
+    // Don't force the user to fix all required entries
+    this.uiNextButtonReady = true; //this.isCustomMetadataOk;
   }
 }

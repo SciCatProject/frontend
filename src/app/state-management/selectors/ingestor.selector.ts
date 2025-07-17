@@ -34,6 +34,11 @@ export const selectIngestorTransferList = createSelector(
   (state) => state.ingestorTransferList,
 );
 
+export const selectIngestorTransferDetailList = createSelector(
+  selectIngestorState,
+  (state) => state.ingestorTransferListDetailView,
+);
+
 export const selectIngestionObject = createSelector(
   selectIngestorState,
   (state) => state.ingestionObject,
@@ -62,4 +67,19 @@ export const selectIngestorTransferListRequestOptions = createSelector(
 export const selectUpdateEditorFromThirdParty = createSelector(
   selectIngestorState,
   (state) => state.updateEditorFromThirdParty,
+);
+
+export const selectNoRightsError = createSelector(
+  selectIngestorState,
+  (state) => state.noRightsError,
+);
+
+export const selectIsIngestDatasetLoading = createSelector(
+  selectIngestorState,
+  (state) => state.ingestionObjectApiInformation.ingestionDatasetLoading,
+);
+
+export const ingestionObjectAPIInformation = createSelector(
+  selectIngestorState,
+  (state) => state.ingestionObjectApiInformation,
 );

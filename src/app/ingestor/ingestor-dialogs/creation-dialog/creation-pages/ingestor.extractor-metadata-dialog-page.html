@@ -1,20 +1,28 @@
-<div class="ingestor-mixed-header">
-  <h2 mat-dialog-title>
-    Correct dataset-specific metadata
-  </h2>
-  <button mat-icon-button mat-dialog-close aria-label="Close"
-    class="ingestor-close-button">
-    <mat-icon>close</mat-icon>
-  </button>
+<div class="ingestor-dialog-header">
+  <div class="ingestor-mixed-header">
+    <h2 mat-dialog-title>
+      Correct dataset-specific metadata
+    </h2>
+    <button mat-icon-button mat-dialog-close aria-label="Close"
+      class="ingestor-close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="ingestor-stepper-header">
+    <ingestor-dialog-stepper [activeStep]="2"></ingestor-dialog-stepper>
+  </div>
 </div>
+
 <mat-dialog-content class="mat-typography">
 
   <div *ngIf="!extractorMetaDataReady || extractorMetaDataError"
     class="spinner-container">
     <ng-container *ngIf="!extractorMetaDataError; else errorIcon">
+      <p>Wait for data extraction to finish...</p>
       <mat-progress-spinner diameter="20"
         mode="indeterminate"></mat-progress-spinner>
-      <div *ngIf="process > 0" class="progress-percentage">
+      <div *ngIf="process > -1" class="progress-percentage">
         <span>{{process}}%</span>
       </div>
     </ng-container>
@@ -27,7 +35,6 @@
   </div>
 
   <div *ngIf="extractorMetaDataReady">
-    <ingestor-dialog-stepper [activeStep]="2"></ingestor-dialog-stepper>
     <div *ngIf="extractorMetaDataError" class="error-message">
       <mat-card class="error-card">
         <mat-card-header>
@@ -58,7 +65,8 @@
               'expand_less' : 'expand_more' }}</mat-icon>
           </mat-card-header>
           <mat-card-content *ngIf="isCardContentVisible.instrument">
-            <app-metadata-editor #instrumentMetadataEditor *ngIf="!updateEditorFromThirdParty"
+            <app-metadata-editor #instrumentMetadataEditor
+              *ngIf="!updateEditorFromThirdParty"
               [schema]="metadataSchemaInstrument"
               [renderView]="activeRenderView"
               [data]="createNewTransferData.extractorMetaData['instrument']"
@@ -83,7 +91,8 @@
               'expand_less' : 'expand_more' }}</mat-icon>
           </mat-card-header>
           <mat-card-content *ngIf="isCardContentVisible.acquisition">
-            <app-metadata-editor #acquisitionMetadataEditor *ngIf="!updateEditorFromThirdParty"
+            <app-metadata-editor #acquisitionMetadataEditor
+              *ngIf="!updateEditorFromThirdParty"
               [schema]="metadataSchemaAcquisition"
               [renderView]="activeRenderView"
               [data]="createNewTransferData.extractorMetaData['acquisition']"

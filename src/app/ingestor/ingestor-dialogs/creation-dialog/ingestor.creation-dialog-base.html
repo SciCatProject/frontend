@@ -1,16 +1,32 @@
-<ingestor-new-transfer-dialog-page *ngIf="currentDialogStep === 'NEW_TRANSFER'"
-  (nextStep)="onClickNext('USER_METADATA')"></ingestor-new-transfer-dialog-page>
+<ingestor-new-transfer-dialog-page
+  *ngIf="currentDialogStep === 'NEW_TRANSFER' && !showNoRightsDialog"
+  (nextStep)="onClickNext(createNewTransferData.editorMode === 'CREATION' ? 'SCICAT_METADATA' : 'USER_METADATA')"></ingestor-new-transfer-dialog-page>
 
-<ingestor-user-metadata-dialog *ngIf="currentDialogStep === 'USER_METADATA'"
+<ingestor-user-metadata-dialog
+  *ngIf="currentDialogStep === 'USER_METADATA' && !showNoRightsDialog"
   (nextStep)="onClickNext('EXTRACTOR_METADATA')"
   (backStep)="onClickNext('NEW_TRANSFER')"></ingestor-user-metadata-dialog>
 
 <ingestor-extractor-metadata-dialog-page
-  *ngIf="currentDialogStep === 'EXTRACTOR_METADATA'"
+  *ngIf="currentDialogStep === 'EXTRACTOR_METADATA' && !showNoRightsDialog"
   (nextStep)="onClickNext('CONFIRM_TRANSFER')"
   (backStep)="onClickNext('USER_METADATA')"></ingestor-extractor-metadata-dialog-page>
 
 <ingestor-confirm-transfer-dialog-page
-  *ngIf="currentDialogStep === 'CONFIRM_TRANSFER'"
+  *ngIf="currentDialogStep === 'CONFIRM_TRANSFER' && !showNoRightsDialog"
   (nextStep)="onClickStartIngestion()"
-  (backStep)="onClickNext('EXTRACTOR_METADATA')"></ingestor-confirm-transfer-dialog-page>
+  (backStep)="onClickNext(createNewTransferData.editorMode === 'CREATION' ? 'CUSTOM_METADATA' : 'EXTRACTOR_METADATA')"></ingestor-confirm-transfer-dialog-page>
+
+<ingestor-no-rights-dialog-page *ngIf="showNoRightsDialog"
+  (nextStep)="onClickStartIngestion()"
+  (backStep)="onClickNext('EXTRACTOR_METADATA')"></ingestor-no-rights-dialog-page>
+
+<ingestor-scicat-metadata-dialog
+  *ngIf="currentDialogStep === 'SCICAT_METADATA' && !showNoRightsDialog"
+  (nextStep)="onClickNext('CUSTOM_METADATA')"
+  (backStep)="onClickNext('NEW_TRANSFER')"></ingestor-scicat-metadata-dialog>
+
+<ingestor-custom-metadata-dialog
+  *ngIf="currentDialogStep === 'CUSTOM_METADATA' && !showNoRightsDialog"
+  (nextStep)="onClickNext('CONFIRM_TRANSFER')"
+  (backStep)="onClickNext('SCICAT_METADATA')"></ingestor-custom-metadata-dialog>

@@ -1,8 +1,10 @@
 <div class="dialog-control-buttons">
-  <button mat-button matTooltip="Save the current values."
-    [disabled]="activeStep < 1" (click)="onSave()"><mat-icon
+  <button *ngIf="this.createNewTransferData.editorMode !== 'CREATION'"
+    mat-button matTooltip="Save the current values."
+    [disabled]="activeStep === 0" (click)="onSave()"><mat-icon
       class="control-button-icon">save</mat-icon></button>
-  <button mat-button matTooltip="Upload a template." [disabled]="activeStep < 1"
+  <button *ngIf="this.createNewTransferData.editorMode !== 'CREATION'"
+    mat-button matTooltip="Upload a template." [disabled]="activeStep < 1"
     (click)="onUpload()"><mat-icon
       class="control-button-icon">upload</mat-icon></button>
   <button
@@ -11,8 +13,9 @@
     ? 'Show all fields.' : 'Show required fields only.'"><mat-icon
       class="control-button-icon">{{activeRenderView === "requiredOnly" ?
       "visibility" : "visibility_off"}}</mat-icon></button>
-  <button *ngIf="this.createNewTransferData !== undefined" mat-button
-    [matMenuTriggerFor]="settingsMenu"
+  <button
+    *ngIf="this.createNewTransferData !== undefined && this.createNewTransferData.editorMode !== 'CREATION'"
+    mat-button [matMenuTriggerFor]="settingsMenu"
     matTooltip="Customize the metadata editor."
     [disabled]="activeStep > 0"><mat-icon
       class="control-button-icon">settings</mat-icon></button>
@@ -30,7 +33,7 @@
     JSON-Mode</button>
 </mat-menu>
 
-<div class="stepper">
+<div class="stepper" *ngIf="activeStep >= 0">
   <mat-stepper [linear]="true" [selectedIndex]="activeStep"
     class="ingestor-stepper">
     <mat-step [completed]="activeStep > 0" [editable]="false"
@@ -39,11 +42,19 @@
     </mat-step>
     <mat-step [completed]="activeStep > 1" [editable]="false"
       [stepControl]="null">
-      <ng-template matStepLabel>Fill out user-specific metadata</ng-template>
+      <ng-template
+        *ngIf="this.createNewTransferData.editorMode === 'INGESTION' || this.createNewTransferData.editorMode === 'EDITOR'"
+        matStepLabel>Fill out user-specific metadata</ng-template>
+      <ng-template *ngIf="this.createNewTransferData.editorMode === 'CREATION'"
+        matStepLabel>Fill out scicat specific metadata</ng-template>
     </mat-step>
     <mat-step [completed]="activeStep > 2" [editable]="false"
       [stepControl]="null">
-      <ng-template matStepLabel>Correct dataset-specific metadata</ng-template>
+      <ng-template
+        *ngIf="this.createNewTransferData.editorMode === 'INGESTION' || this.createNewTransferData.editorMode === 'EDITOR'"
+        matStepLabel>Correct dataset-specific metadata</ng-template>
+      <ng-template *ngIf="this.createNewTransferData.editorMode === 'CREATION'"
+        matStepLabel>Fill out custom scientific metadata</ng-template>
     </mat-step>
     <mat-step [completed]="activeStep > 3" [editable]="false"
       [stepControl]="null">

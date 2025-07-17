@@ -1,16 +1,48 @@
-<div class="ingestor-mixed-header">
-  <h2 mat-dialog-title>
-    Select your ingestion method
-  </h2>
-  <button mat-icon-button mat-dialog-close aria-label="Close"
-    class="ingestor-close-button">
-    <mat-icon>close</mat-icon>
-  </button>
-</div>
-<mat-dialog-content class="mat-typography" disableClose="true">
-  <ingestor-dialog-stepper [activeStep]="0"></ingestor-dialog-stepper>
+<div class="ingestor-dialog-header">
+  <div class="ingestor-mixed-header">
+    <h2 mat-dialog-title>
+      Select your ingestion method
+    </h2>
+    <button mat-icon-button mat-dialog-close aria-label="Close"
+      class="ingestor-close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
 
-  <div>
+  <div class="ingestor-stepper-header">
+    <ingestor-dialog-stepper [activeStep]="0"></ingestor-dialog-stepper>
+  </div>
+</div>
+
+<mat-dialog-content class="mat-typography" disableClose="true">
+  <div *ngIf="createNewTransferData.editorMode === 'CREATION'">
+    <mat-card class="ingestor-card">
+      <mat-card-header>
+        <mat-card-title>Scientific Metadata Schema</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="ingestor-vertical-layout">
+        <!-- <mat-radio-group class="ingestor-radio-group"
+          [(ngModel)]="selectedSchemaOption">
+          <mat-radio-button value="free">Free Input</mat-radio-button>
+          <mat-radio-button value="upload">Upload Schema</mat-radio-button>
+        </mat-radio-group> -->
+
+        <div *ngIf="selectedSchemaOption === 'upload'"
+          class="ingestor-upload-section">
+          <label for="schema-upload">Upload your schema file: </label>
+          <button mat-raised-button color="primary"
+            (click)="onUploadSchema()">Choose File</button>
+
+          <p *ngIf="selectedSchemaFileName !== ''">
+            Selected file: {{ selectedSchemaFileName }}
+          </p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div
+    *ngIf="createNewTransferData.editorMode === 'INGESTION' || createNewTransferData.editorMode === 'EDITOR'">
     <mat-card class="ingestor-card">
       <mat-card-header class="ingestor-mixed-header">
         <mat-card-title>Select Options</mat-card-title>

@@ -1,7 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { of } from "rxjs";
-import { catchError, map, switchMap, finalize } from "rxjs/operators"; // Import finalize
+import { from, of } from "rxjs";
+import {
+  catchError,
+  map,
+  mergeMap,
+  switchMap,
+  takeUntil,
+} from "rxjs/operators"; // Import finalize
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Ingestor } from "shared/sdk/apis/ingestor.service";
 import {
@@ -15,64 +21,64 @@ import { showMessageAction } from "state-management/actions/user.actions";
 import { Store } from "@ngrx/store";
 import { selectIngestorTransferListRequestOptions } from "state-management/selectors/ingestor.selector";
 import { concatLatestFrom } from "@ngrx/operators";
+import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Injectable()
 export class IngestorEffects {
   connectToIngestor$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.connectIngestor),
-      switchMap(() =>
-        of(fromActions.startConnectingIngestor()).pipe(
-          switchMap(() => {
-            return this.ingestor.getVersion().pipe(
-              switchMap((versionResponse) =>
-                this.ingestor.getHealth().pipe(
-                  switchMap((healthResponse) =>
-                    this.ingestor.getUserInfo().pipe(
-                      map((userInfoResponse) =>
+      switchMap(() => {
+        return this.ingestor.getVersion().pipe(
+          switchMap((versionResponse) =>
+            this.ingestor.getHealth().pipe(
+              switchMap((healthResponse) =>
+                this.ingestor.getUserInfo().pipe(
+                  map((userInfoResponse) =>
+                    fromActions.connectIngestorSuccess({
+                      versionResponse: versionResponse as OtherVersionResponse,
+                      healthResponse: healthResponse as OtherHealthResponse,
+                      userInfoResponse: userInfoResponse as UserInfo,
+                      authIsDisabled: false,
+                    }),
+                  ),
+                  catchError((err) => {
+                    const errorMessage =
+                      err instanceof HttpErrorResponse
+                        ? (err.error?.message ?? err.error ?? err.message)
+                        : err.message;
+
+                    if (errorMessage.includes("disabled")) {
+                      return of(
                         fromActions.connectIngestorSuccess({
                           versionResponse:
                             versionResponse as OtherVersionResponse,
                           healthResponse: healthResponse as OtherHealthResponse,
-                          userInfoResponse: userInfoResponse as UserInfo,
-                          authIsDisabled: false,
+                          userInfoResponse: null, // Kein UserInfo verfügbar
+                          authIsDisabled: true,
                         }),
-                      ),
-                      catchError((err) => {
-                        const errorMessage =
-                          err instanceof HttpErrorResponse
-                            ? (err.error?.message ?? err.error ?? err.message)
-                            : err.message;
-
-                        if (errorMessage.includes("disabled")) {
-                          return of(
-                            fromActions.connectIngestorSuccess({
-                              versionResponse:
-                                versionResponse as OtherVersionResponse,
-                              healthResponse:
-                                healthResponse as OtherHealthResponse,
-                              userInfoResponse: null, // Kein UserInfo verfügbar
-                              authIsDisabled: true,
-                            }),
-                          );
-                        }
-                        return of(fromActions.connectIngestorFailure({ err }));
-                      }),
-                    ),
-                  ),
+                      );
+                    }
+                    return of(fromActions.connectIngestorFailure({ err }));
+                  }),
                 ),
               ),
-              catchError((err) =>
-                of(fromActions.connectIngestorFailure({ err })),
-              ),
-              finalize(() => {
-                // Dispatch stopConnectingIngestor after the process is complete
-                of(fromActions.stopConnectingIngestor());
-              }),
-            );
+            ),
+          ),
+          catchError((err) => {
+            if (err.error?.error?.includes("login session has expired")) {
+              return of(
+                fromActions.setNoRightsError({ noRightsError: true, err: err }),
+              );
+            }
+
+            return of(fromActions.connectIngestorFailure({ err }));
           }),
-        ),
-      ),
+          takeUntil(
+            this.actions$.pipe(ofType(fromActions.resetIngestorComponent)),
+          ),
+        );
+      }),
     );
   });
 
@@ -130,13 +136,19 @@ export class IngestorEffects {
             transferId,
           )
           .pipe(
-            map((transferList) =>
-              fromActions.updateTransferListSuccess({
+            map((transferList) => {
+              if (transferId) {
+                return fromActions.updateTransferListDetailSuccess({
+                  transferListDetailView: transferList,
+                });
+              }
+
+              return fromActions.updateTransferListSuccess({
                 transferList,
                 page: page ?? pageRO,
                 pageNumber: pageNumber ?? pageNumberRO,
-              }),
-            ),
+              });
+            }),
             catchError((err) =>
               of(fromActions.updateTransferListFailure({ err })),
             ),
@@ -153,9 +165,15 @@ export class IngestorEffects {
           map((extractionMethods) =>
             fromActions.getExtractionMethodsSuccess({ extractionMethods }),
           ),
-          catchError((err) =>
-            of(fromActions.getExtractionMethodsFailure({ err })),
-          ),
+          catchError((err) => {
+            if (err.error?.error?.includes("login session has expired")) {
+              return of(
+                fromActions.setNoRightsError({ noRightsError: true, err: err }),
+              );
+            }
+
+            return of(fromActions.getExtractionMethodsFailure({ err }));
+          }),
         ),
       ),
     );
@@ -169,28 +187,62 @@ export class IngestorEffects {
           map((ingestorBrowserActiveNode) =>
             fromActions.getBrowseFilePathSuccess({ ingestorBrowserActiveNode }),
           ),
-          catchError((err) =>
-            of(fromActions.getBrowseFilePathFailure({ err })),
-          ),
+          catchError((err) => {
+            if (err.error?.error?.includes("login session has expired")) {
+              return of(
+                fromActions.setNoRightsError({ noRightsError: true, err: err }),
+              );
+            }
+
+            return of(fromActions.getBrowseFilePathFailure({ err }));
+          }),
         ),
       ),
     );
   });
 
-  ingestDataset$ = createEffect(() => {
-    return this.actions$.pipe(
+  setLoadingBeforeIngestion$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fromActions.ingestDataset),
+      map(() =>
+        fromActions.setIngestDatasetLoading({ ingestionDatasetLoading: true }),
+      ),
+    ),
+  );
+
+  ingestDataset$ = createEffect(() =>
+    this.actions$.pipe(
       ofType(fromActions.ingestDataset),
       switchMap(({ ingestionDataset }) =>
         this.ingestor.startIngestion(ingestionDataset).pipe(
-          switchMap((response) => [
-            fromActions.ingestDatasetSuccess({ response }),
-            fromActions.updateTransferList({}),
-          ]),
-          catchError((err) => of(fromActions.ingestDatasetFailure({ err }))),
+          mergeMap((response) =>
+            from([
+              fromActions.ingestDatasetSuccess({ response }),
+              fromActions.updateTransferList({}),
+              fromActions.setIngestDatasetLoading({
+                ingestionDatasetLoading: false,
+              }),
+            ]),
+          ),
+          catchError((err) =>
+            from([
+              ...(err.error?.error?.includes("login session has expired")
+                ? [
+                    fromActions.setNoRightsError({
+                      noRightsError: true,
+                      err,
+                    }),
+                  ]
+                : [fromActions.ingestDatasetFailure({ err })]),
+              fromActions.setIngestDatasetLoading({
+                ingestionDatasetLoading: false,
+              }),
+            ]),
+          ),
         ),
       ),
-    );
-  });
+    ),
+  );
 
   ingestDatasetSuccess$ = createEffect(() => {
     return this.actions$.pipe(
@@ -233,17 +285,20 @@ export class IngestorEffects {
       ofType(fromActions.cancelTransfer),
       switchMap(({ requestBody }) =>
         this.ingestor.cancelTransfer(requestBody).pipe(
-          switchMap(() => [
-            showMessageAction({
-              message: {
-                type: MessageType.Success,
-                content:
-                  "Successfully cancelled transfer: " + requestBody.transferId,
-                duration: 5000,
-              },
-            }),
-            fromActions.updateTransferList({}),
-          ]),
+          mergeMap(() =>
+            from([
+              showMessageAction({
+                message: {
+                  type: MessageType.Success,
+                  content:
+                    "Successfully cancelled transfer: " +
+                    requestBody.transferId,
+                  duration: 5000,
+                },
+              }),
+              fromActions.updateTransferList({}),
+            ]),
+          ),
           catchError((err) => {
             const message = {
               type: MessageType.Error,
@@ -272,9 +327,43 @@ export class IngestorEffects {
     );
   });
 
+  createDataset$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.createDatasetAction),
+      mergeMap(({ dataset }) =>
+        this.datasetsService.datasetsControllerCreateV3(dataset).pipe(
+          mergeMap((response) =>
+            from([
+              fromActions.createDatasetSuccess({ dataset: response }),
+              fromActions.setIngestDatasetLoading({
+                ingestionDatasetLoading: false,
+              }),
+            ]),
+          ),
+          catchError((err) =>
+            from([
+              ...(err.error?.error?.includes("login session has expired")
+                ? [
+                    fromActions.setNoRightsError({
+                      noRightsError: true,
+                      err,
+                    }),
+                  ]
+                : [fromActions.ingestDatasetFailure({ err })]),
+              fromActions.setIngestDatasetLoading({
+                ingestionDatasetLoading: false,
+              }),
+            ]),
+          ),
+        ),
+      ),
+    );
+  });
+
   constructor(
     private actions$: Actions,
     private ingestor: Ingestor,
+    private datasetsService: DatasetsService,
     private store: Store,
   ) {}
 }

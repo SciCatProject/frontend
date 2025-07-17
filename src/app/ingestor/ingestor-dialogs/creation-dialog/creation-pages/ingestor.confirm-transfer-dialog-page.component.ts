@@ -7,12 +7,16 @@ import {
   Output,
 } from "@angular/core";
 import {
+  APIInformation,
   IngestionRequestInformation,
   IngestorHelper,
-  SciCatHeader,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
 import { Store } from "@ngrx/store";
-import { selectIngestionObject } from "state-management/selectors/ingestor.selector";
+import {
+  ingestionObjectAPIInformation,
+  selectIngestionObject,
+  selectIsIngestDatasetLoading,
+} from "state-management/selectors/ingestor.selector";
 import { MatDialog } from "@angular/material/dialog";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { IngestorConfirmationDialogComponent } from "ingestor/ingestor-dialogs/confirmation-dialog/ingestor.confirmation-dialog.component";
@@ -26,14 +30,22 @@ import { Subscription } from "rxjs";
   standalone: false,
 })
 export class IngestorConfirmTransferDialogPageComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   private subscriptions: Subscription[] = [];
   readonly dialog = inject(MatDialog);
 
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
+  createNewTransferDataApiInformation: APIInformation =
+    IngestorHelper.createEmptyAPIInformation();
+
+  ingestionObjectApiInformation$ = this.store.select(
+    ingestionObjectAPIInformation,
+  );
 
   ingestionObject$ = this.store.select(selectIngestionObject);
+  ingestDatasetLoading$ = this.store.select(selectIsIngestDatasetLoading);
 
   @Output() nextStep = new EventEmitter<void>();
   @Output() backStep = new EventEmitter<void>();
@@ -41,8 +53,9 @@ export class IngestorConfirmTransferDialogPageComponent
   provideMergeMetaData = "";
 
   copiedToClipboard = false;
+  ingestionDatasetIsLoading = false;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store) {}
 
   ngOnInit() {
     this.subscriptions.push(
@@ -53,7 +66,24 @@ export class IngestorConfirmTransferDialogPageComponent
       }),
     );
 
-    this.provideMergeMetaData = this.createMetaDataString();
+    this.subscriptions.push(
+      this.ingestionObjectApiInformation$.subscribe((apiInformation) => {
+        if (apiInformation) {
+          this.createNewTransferDataApiInformation = apiInformation;
+        }
+      }),
+    );
+
+    this.subscriptions.push(
+      this.ingestDatasetLoading$.subscribe((loading) => {
+        this.ingestionDatasetIsLoading = loading;
+      }),
+    );
+
+    this.provideMergeMetaData = IngestorHelper.createMetaDataString(
+      this.createNewTransferData,
+      this.createNewTransferData.editorMode === "CREATION",
+    );
   }
 
   ngOnDestroy(): void {
@@ -69,23 +99,6 @@ export class IngestorConfirmTransferDialogPageComponent
     );
   }
 
-  createMetaDataString(): string {
-    const space = 2;
-    const scicatMetadata: SciCatHeader = {
-      ...(this.createNewTransferData.scicatHeader as SciCatHeader),
-      scientificMetadata: {
-        organizational:
-          this.createNewTransferData.userMetaData["organizational"],
-        sample: this.createNewTransferData.userMetaData["sample"],
-        acquisition:
-          this.createNewTransferData.extractorMetaData["acquisition"],
-        instrument: this.createNewTransferData.extractorMetaData["instrument"],
-      },
-    };
-
-    return JSON.stringify(scicatMetadata, null, space);
-  }
-
   onClickBack(): void {
     // Reset the ingestion request
     this.store.dispatch(fromActions.resetIngestDataset());
@@ -95,8 +108,14 @@ export class IngestorConfirmTransferDialogPageComponent
   onClickConfirm(): void {
     const dialogRef = this.dialog.open(IngestorConfirmationDialogComponent, {
       data: {
-        header: "Confirm ingestion",
-        message: "Create a new dataset and start data transfer?",
+        header:
+          this.createNewTransferData.editorMode === "CREATION"
+            ? "Confirm creation"
+            : "Confirm ingestion",
+        message:
+          this.createNewTransferData.editorMode === "CREATION"
+            ? "Create a new dataset?"
+            : "Create a new dataset and start data transfer?",
       },
     });
 
