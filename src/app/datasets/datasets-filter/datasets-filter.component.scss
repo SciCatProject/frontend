@@ -76,6 +76,12 @@ mat-card {
     .settings-button {
       display: flex;
       align-items: center;
+      justify-content: end;
+    }
+    .condition-button {
+      display: flex;
+      align-items: center;
+      justify-content: end;
     }
   }
 }
@@ -156,6 +162,13 @@ mat-card {
     .condition-fields {
       margin-left: -20px;
       width: calc(100% + 40px);
+    }
+
+    .operator-symbol {
+      color: gray;
+      margin-left: 8px;
+      font-size: 1.1em;
+      vertical-align: middle;
     }
   }
 }

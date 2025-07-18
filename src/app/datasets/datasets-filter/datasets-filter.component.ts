@@ -175,7 +175,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     const initialConditionConfigsCopy = cloneDeep(initialConditionConfigs);
 
     const dialogRef = this.dialog.open(DatasetsFilterSettingsComponent, {
-      width: "400px",
       data: {
         filterConfigs: this.asyncPipe.transform(this.filterConfigs$),
         conditionConfigs: this.asyncPipe.transform(this.conditionConfigs$),
@@ -239,6 +238,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         break;
       case "GREATER_THAN":
         relationSymbol = ">";
+        break;
+      case "GREATER_THAN_OR_EQUAL":
+        relationSymbol = "≥";
+        break;
+      case "LESS_THAN_OR_EQUAL":
+        relationSymbol = "≤";
+        break;
+      case "RANGE":
+        relationSymbol = "<->";
         break;
       default:
         relationSymbol = "";
@@ -395,14 +403,42 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   updateConditionOperator(index: number, newOperator: string) {
     this.updateCondition(index, {
       relation: newOperator,
+      rhs: newOperator === "RANGE" ? [undefined, undefined] : "",
       unit: newOperator === "EQUAL_TO_STRING" ? "" : undefined,
     });
   }
 
   updateConditionValue(index: number, event: Event) {
     const newValue = (event.target as HTMLInputElement).value;
-    this.updateCondition(index, { rhs: newValue });
+    const currentRelation = this.asyncPipe.transform(this.conditionConfigs$)?.[index]?.condition.relation;
+    if (
+      currentRelation === "EQUAL_TO" ||
+      currentRelation === "EQUAL_TO_NUMERIC" ||
+      currentRelation === "EQUAL_TO_STRING"
+    ) {
+      const isNumeric = newValue !== "" && !isNaN(Number(newValue));
+      this.updateCondition(index, {
+        rhs: newValue,
+        relation: isNumeric ? "EQUAL_TO_NUMERIC" : "EQUAL_TO_STRING"
+      })
+    } else {
+      this.updateCondition(index, { rhs: newValue });
+    }
   }
+
+  updateConditionRangeValue(index: number, event: Event, rangeIndex: 0 | 1) {
+    const newValue = (event.target as HTMLInputElement).value;
+    const currentRhs = this.asyncPipe.transform(this.conditionConfigs$)?.[index]?.condition.rhs;
+    const rhs = Array.isArray(currentRhs) ? [...currentRhs] : [undefined, undefined];
+    rhs[rangeIndex] = newValue;
+    this.updateCondition(index, { rhs })
+  }
+
+  getOperatorUIValue(relation: string): string {
+  return relation === "EQUAL_TO_NUMERIC" || relation === "EQUAL_TO_STRING"
+    ? "EQUAL_TO"
+    : relation;
+  } 
 
   updateConditionUnit(index: number, event: Event) {
     const newUnit = (event.target as HTMLInputElement).value;

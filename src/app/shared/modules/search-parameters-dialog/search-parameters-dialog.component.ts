@@ -9,6 +9,7 @@ import { ScientificCondition } from "../../../state-management/models";
 @Component({
   selector: "search-parameters-dialog",
   templateUrl: "./search-parameters-dialog.component.html",
+  styleUrls: ["./search-parameters-dialog.component.scss"],
   standalone: false,
 })
 export class SearchParametersDialogComponent {
@@ -94,18 +95,6 @@ export class SearchParametersDialogComponent {
     }
   };
 
-  isInvalid = (): boolean => {
-    const { invalid } = this.parametersForm;
-    const { lhs, relation, rhs } = this.parametersForm.value;
-
-    if (invalid) {
-      return invalid;
-    }
-    if (relation !== "EQUAL_TO_STRING" && isNaN(Number(rhs))) {
-      return true;
-    }
-    return lhs.length * (rhs as string).length === 0;
-  };
 
   get lhs(): string {
     return this.parametersForm.get("lhs")?.value;

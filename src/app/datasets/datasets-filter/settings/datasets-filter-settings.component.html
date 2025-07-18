@@ -1,12 +1,7 @@
 <h2 mat-dialog-title>Configure Filters</h2>
 <mat-dialog-content class="filter-dialog-content">
-  <!-- Filters  -->
   <div class="filters-container">
-    <span layout="row"
-      ><hr flex />
-      Filters
-      <hr flex
-    /></span>
+    <span layout="row"></span>
     <mat-nav-list cdkDropList (cdkDropListDropped)="drop($event)">
       <mat-list-item
         class="filter-item"
@@ -43,7 +38,7 @@
   </div>
 </mat-dialog-content>
 
-<mat-dialog-actions>
+<mat-dialog-actions [attr.align]="'end'">
   <button mat-button (click)="onCancel()">Cancel</button>
   <button mat-button color="primary" (click)="onApply()">Apply</button>
 </mat-dialog-actions>
