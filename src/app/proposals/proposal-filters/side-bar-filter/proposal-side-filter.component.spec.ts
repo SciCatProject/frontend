@@ -77,7 +77,7 @@ describe("ProposalSideFilterComponent", () => {
   it("should remove a filter when value is empty", () => {
     component.activeFilters = { proposalId: "test123" };
     component.setFilter("status", "");
-    expect(component.activeFilters.hasOwnProperty("status")).toBeFalse();
+    expect("status" in component.activeFilters).toBeFalse();
   });
 
   it("should set a date filter when begin or end is provided", () => {
@@ -95,7 +95,7 @@ describe("ProposalSideFilterComponent", () => {
       created: { begin: DateTime.now().toISO(), end: DateTime.now().toISO() },
     };
     component.setDateFilter("created", { begin: null, end: null });
-    expect(component.activeFilters.hasOwnProperty("created")).toBeFalse();
+    expect("created" in component.activeFilters).toBeFalse();
   });
 
   it("should apply filters and navigate with correct queryParams", () => {
