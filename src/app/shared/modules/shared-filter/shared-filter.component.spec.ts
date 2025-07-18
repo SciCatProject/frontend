@@ -51,7 +51,6 @@ describe("SharedFilterComponent", () => {
   });
 
   it("should reset form when clear is set to true", () => {
-    // prefill with some values
     component.filterForm.setValue({
       textField: "test",
       dateRangeField: { start: new Date(), end: new Date() },
