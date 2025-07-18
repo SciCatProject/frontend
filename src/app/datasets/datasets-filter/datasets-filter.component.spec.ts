@@ -201,7 +201,7 @@ describe("DatasetsFilterComponent", () => {
 
       component.reset();
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(4);
+      expect(dispatchSpy).toHaveBeenCalledTimes(5);
       expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
       expect(dispatchSpy).toHaveBeenCalledWith(
         deselectAllCustomColumnsAction(),
@@ -222,12 +222,13 @@ describe("DatasetsFilterComponent", () => {
       expect(component.dialog.open).toHaveBeenCalledWith(
         DatasetsFilterSettingsComponent,
         {
-          width: "60vw",
+          width: "400px",
           data: {
             filterConfigs: filterConfigs,
             conditionConfigs: [],
             labelMaps: labelMaps,
           },
+          restoreFocus: false,
         },
       );
     });
