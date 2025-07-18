@@ -5,9 +5,9 @@ describe("Datasets general", () => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
   });
 
-  after(() => {
-    cy.removeDatasets();
-  });
+   after(() => {
+     cy.removeDatasets();
+   });
 
   describe("Show dataset table after logout and login", () => {
     it("should be able to see datasets after visiting details page logout and login again", () => {
@@ -112,16 +112,18 @@ describe("Datasets general", () => {
 
       cy.visit("/datasets");
 
-      cy.get('[data-cy="more-filters-button"]').click();
-
-      cy.get('[data-cy="add-scientific-condition-button"]').click();
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('button').contains('Add Conditions').click();
+      });
 
       cy.get('input[name="lhs"]').type("test");
       cy.get('input[name="rhs"]').type("1");
 
       cy.get('button[type="submit"]').click();
 
-      cy.get('[data-cy="add-scientific-condition-button"]').click();
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('button').contains('Add Conditions').click();
+      });
 
       cy.get('input[name="lhs"]').type("test");
       cy.get('input[name="rhs"]').type("1");
@@ -133,12 +135,13 @@ describe("Datasets general", () => {
         .contains("Close")
         .click();
 
-      cy.get('[data-cy="scientific-condition-filter-list"').should(
-        "have.length",
-        1,
-      );
+      cy.get('[data-cy="scientific-condition-filter-list"]')
+        .find('.condition-panel')
+        .should("have.length", 1);
 
-      cy.get('[data-cy="add-scientific-condition-button"]').click();
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('button').contains('Add Conditions').click();
+      });
 
       cy.get('input[name="lhs"]').type("test");
       cy.get('input[name="rhs"]').type("2");
@@ -146,8 +149,160 @@ describe("Datasets general", () => {
       cy.get('button[type="submit"]').click();
 
       cy.get('[data-cy="scientific-condition-filter-list"]')
-        .find("input")
+        .find('.condition-panel')
         .should("have.length", 2);
+    });
+
+    it("should be able to manage conditions using expansion panels", () => {
+      cy.visit("/datasets");
+
+      cy.get(".user-button").click();
+
+      cy.get("[data-cy=logout-button]").click();
+
+      cy.finishedLoading();
+
+      cy.visit("/datasets");
+
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('button').contains('Add Conditions').click();
+      });
+
+      cy.get('input[name="lhs"]').type("test 3");
+      cy.get('input[name="rhs"]').type("3");
+
+      cy.get('button[type="submit"]').click();
+
+      cy.get('.condition-panel').first().click();
+
+      cy.get('.condition-details').should('be.visible');
+
+      cy.get('.condition-details').within(() => {
+        cy.get('mat-select').should('exist');
+        cy.get('input[matInput]').should('exist');
+        cy.get('mat-slide-toggle').should('exist');
+        cy.get('button').contains('Remove').should('exist');
+      });
+
+      cy.get('.condition-details').within(() => {
+        cy.get('mat-slide-toggle').click();
+      });
+
+      cy.get('.condition-panel').should('have.class', 'disabled');
+
+      cy.get('.condition-details').within(() => {
+        cy.get('button').contains('Remove').click();
+      });
+
+      cy.get('[data-cy="scientific-condition-filter-list"]')
+        .find('.condition-panel')
+        .should("have.length", 0);
+    });
+
+  });
+
+  describe("Pre-configured filters test", () => {
+    beforeEach(() => {
+      cy.clearCookies();
+      cy.clearLocalStorage();
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const testConfig = {
+          ...baseConfig,
+          defaultDatasetsListSettings: {
+            ...baseConfig.defaultDatasetsListSettings,
+            filters: [
+              { "TypeFilter": true },
+              { "TextFilter": true }
+            ]
+          }
+        };
+
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+        cy.visit("/datasets");
+        cy.wait("@getConfig", { timeout: 10000 });
+        cy.finishedLoading(); 
+      });
+    });
+
+    it("should automatically apply pre-configured filters from config", () => {
+      cy.contains("Type").should("exist");
+
+      cy.get('[data-cy="text-search"]').should("exist");
+
+      cy.contains("Location").should("not.exist");
+      cy.contains("Keyword").should("not.exist");
+    });
+  });
+
+  describe("Pre-configured conditions test", () => {
+    beforeEach(() => {
+      cy.login(Cypress.env("username"), Cypress.env("password"));
+      cy.createDataset(
+        "raw",
+        testData.rawDataset.datasetName,
+        undefined,
+        "small",
+        {
+          scientificMetadata: {
+            extra_entry_end_time: { value: "2", unit: "" },
+          },
+          isPublished: true,
+        },
+      ).then(() => {
+        cy.clearCookies();
+        cy.clearLocalStorage();
+
+        cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+          const testConfig = {
+            ...baseConfig,
+            defaultDatasetsListSettings: {
+              ...baseConfig.defaultDatasetsListSettings,
+              conditions: [
+                {
+                  condition: {
+                    lhs: "extra_entry_end_time",
+                    relation: "GREATER_THAN",
+                    rhs: 1,
+                    unit: "",
+                  },
+                  enabled: true,
+                },
+              ],
+            },
+          };
+
+          cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+          cy.visit("/datasets");
+          cy.wait("@getConfig");
+          cy.finishedLoading();
+        });
+      });
+    });
+
+    it("should check if pre-configured conditions are applied", () => {
+      cy.get('[data-cy="scientific-condition-filter-list"] .condition-panel')
+        .should("contain.text", "extra_entry_end_time")
+        .and("contain.text", ">")
+        .and("contain.text", "1");
+
+      cy.get(".dataset-table mat-table").should("exist");
+      cy.get(".dataset-table mat-row").first().click();
+      cy.get(".metadataTable", { timeout: 10000 }).scrollIntoView();
+
+      cy.get(".metadataTable mat-row").within(() => {
+        cy.get(".mat-column-human_name label")
+          .invoke("text")
+          .then((fieldName) => {
+            if (fieldName && fieldName.trim() === "Extra Entry End Time") {
+              cy.get(".mat-column-value label")
+                .invoke("text")
+                .then((valueText) => {
+                  const value = parseFloat(valueText.trim());
+                  expect(value).to.be.greaterThan(1);
+                });
+            }
+          });
+      });
     });
   });
 });
