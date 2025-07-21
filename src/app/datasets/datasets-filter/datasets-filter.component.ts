@@ -418,11 +418,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     ) {
       const isNumeric = newValue !== "" && !isNaN(Number(newValue));
       this.updateCondition(index, {
-        rhs: newValue,
+        rhs: isNumeric ? Number(newValue) : newValue,
         relation: isNumeric ? "EQUAL_TO_NUMERIC" : "EQUAL_TO_STRING"
       })
     } else {
-      this.updateCondition(index, { rhs: newValue });
+      this.updateCondition(index, { rhs: Number(newValue) });
     }
   }
 
@@ -430,7 +430,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     const newValue = (event.target as HTMLInputElement).value;
     const currentRhs = this.asyncPipe.transform(this.conditionConfigs$)?.[index]?.condition.rhs;
     const rhs = Array.isArray(currentRhs) ? [...currentRhs] : [undefined, undefined];
-    rhs[rangeIndex] = newValue;
+    rhs[rangeIndex] = Number(newValue);
     this.updateCondition(index, { rhs })
   }
 
