@@ -12,6 +12,7 @@ rm local-api-for-generator.json
 
 echo -e "\nFetching the API from local instance of back end..."
 
+# For when developing with a backend running directly on localhost:
 curl http://host.docker.internal:3000/explorer-json > local-api-for-generator.json
 
 # For when developing with SciCat Live:
