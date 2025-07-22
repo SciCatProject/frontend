@@ -8,6 +8,14 @@ echo -e "\nUser running the script: ${USER}"
 echo -e "\nCleanup old files..."
 rm -rf node_modules/@scicatproject/scicat-sdk-ts-angular
 rm -rf @scicatproject/scicat-sdk-ts-angular
+rm local-api-for-generator.json
+
+echo -e "\nFetching the API from local instance of back end..."
+
+curl http://host.docker.internal:3000/explorer-json > local-api-for-generator.json
+
+# For when developing with SciCat Live:
+#curl http://backend.localhost/explorer-json > local-api-for-generator.json
 
 echo -e "\nGenerating the new sdk..."
 
@@ -17,10 +25,9 @@ echo -e "\nGenerating the new sdk..."
 ##
 docker run \
 	--rm \
-	--add-host host.docker.internal:host-gateway \
 	-v "`pwd`:/local" \
 	openapitools/openapi-generator-cli:v7.13.0 generate \
-	-i http://host.docker.internal:3000/explorer-json \
+	-i /local/local-api-for-generator.json \
 	-g typescript-angular \
 	-o local/@scicatproject/scicat-sdk-ts-angular \
 	--additional-properties=ngVersion=19.0.0,npmName=@scicatproject/scicat-sdk-ts-angular,supportsES6=true,withInterfaces=true  --skip-validate-spec
@@ -64,4 +71,6 @@ then
 	rm -fv "/usr/local/bin/npm"
 	rm -fv "/usr/local/bin/node"
 fi
+
+rm local-api-for-generator.json
 
