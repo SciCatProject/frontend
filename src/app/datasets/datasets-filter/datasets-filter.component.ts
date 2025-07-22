@@ -288,71 +288,83 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   addCondition() {
-    this.dialog
-      .open(SearchParametersDialogComponent, {
-        data: {
-          parameterKeys: this.asyncPipe.transform(this.metadataKeys$),
-        },
-        restoreFocus: false,
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          const { data } = res;
+    this.metadataKeys$.pipe(take(1)).subscribe((allKeys) => {
+      this.conditionConfigs$.pipe(take(1)).subscribe((currentConditions) => {
+        const usedFields = (currentConditions || []).map(
+          (config) => config.condition.lhs,
+        );
+        const availableKeys = (allKeys || []).filter(
+          (key) => !usedFields.includes(key),
+        );
 
-          this.conditionConfigs$
-            .pipe(take(1))
-            .subscribe((currentConditions) => {
-              const existingConditionIndex = currentConditions.findIndex(
-                (config) => isEqual(config.condition, data),
-              );
-              if (existingConditionIndex !== -1) {
-                this.snackBar.open("Condition already exists", "Close", {
-                  duration: 2000,
-                  panelClass: ["snackbar-warning"],
+        this.dialog
+          .open(SearchParametersDialogComponent, {
+            data: {
+              usedFields: usedFields,
+              parameterKeys: availableKeys,
+            },
+            restoreFocus: false,
+          })
+          .afterClosed()
+          .subscribe((res) => {
+            if (res) {
+              const { data } = res;
+
+              this.conditionConfigs$
+                .pipe(take(1))
+                .subscribe((currentConditions) => {
+                  const existingConditionIndex = currentConditions.findIndex(
+                    (config) => isEqual(config.condition, data),
+                  );
+                  if (existingConditionIndex !== -1) {
+                    this.snackBar.open("Condition already exists", "Close", {
+                      duration: 2000,
+                      panelClass: ["snackbar-warning"],
+                    });
+                    return;
+                  }
+
+                  const newCondition: ConditionConfig = {
+                    condition: data,
+                    enabled: true,
+                  };
+
+                  const updatedConditions = [
+                    ...(currentConditions || []),
+                    newCondition,
+                  ];
+
+                  this.store.dispatch(
+                    updateConditionsConfigs({
+                      conditionConfigs: updatedConditions,
+                    }),
+                  );
+
+                  this.store.dispatch(
+                    updateUserSettingsAction({
+                      property: { conditions: updatedConditions },
+                    }),
+                  );
+
+                  this.store.dispatch(
+                    addScientificConditionAction({ condition: data }),
+                  );
+                  this.store.dispatch(
+                    selectColumnAction({
+                      name: data.lhs,
+                      columnType: "custom",
+                    }),
+                  );
+
+                  this.snackBar.open("Condition added successfully", "Close", {
+                    duration: 2000,
+                    panelClass: ["snackbar-success"],
+                  });
                 });
-                return;
-              }
-
-              const newCondition: ConditionConfig = {
-                condition: data,
-                enabled: true,
-              };
-
-              const updatedConditions = [
-                ...(currentConditions || []),
-                newCondition,
-              ];
-
-              this.store.dispatch(
-                updateConditionsConfigs({
-                  conditionConfigs: updatedConditions,
-                }),
-              );
-
-              this.store.dispatch(
-                updateUserSettingsAction({
-                  property: { conditions: updatedConditions },
-                }),
-              );
-
-              this.store.dispatch(
-                addScientificConditionAction({ condition: data }),
-              );
-              this.store.dispatch(
-                selectColumnAction({
-                  name: data.lhs,
-                  columnType: "custom",
-                }),
-              );
-
-              this.snackBar.open("Condition added successfully", "Close", {
-                duration: 2000,
-                panelClass: ["snackbar-success"],
-              });
-            });
-        }
+            }
+          });
       });
+    });
   }
 
   getUnits(parameterKey: string): string[] {
@@ -410,7 +422,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   updateConditionValue(index: number, event: Event) {
     const newValue = (event.target as HTMLInputElement).value;
-    const currentRelation = this.asyncPipe.transform(this.conditionConfigs$)?.[index]?.condition.relation;
+    const currentRelation = this.asyncPipe.transform(this.conditionConfigs$)?.[
+      index
+    ]?.condition.relation;
     if (
       currentRelation === "EQUAL_TO" ||
       currentRelation === "EQUAL_TO_NUMERIC" ||
@@ -419,8 +433,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       const isNumeric = newValue !== "" && !isNaN(Number(newValue));
       this.updateCondition(index, {
         rhs: isNumeric ? Number(newValue) : newValue,
-        relation: isNumeric ? "EQUAL_TO_NUMERIC" : "EQUAL_TO_STRING"
-      })
+        relation: isNumeric ? "EQUAL_TO_NUMERIC" : "EQUAL_TO_STRING",
+      });
     } else {
       this.updateCondition(index, { rhs: Number(newValue) });
     }
@@ -428,17 +442,20 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   updateConditionRangeValue(index: number, event: Event, rangeIndex: 0 | 1) {
     const newValue = (event.target as HTMLInputElement).value;
-    const currentRhs = this.asyncPipe.transform(this.conditionConfigs$)?.[index]?.condition.rhs;
-    const rhs = Array.isArray(currentRhs) ? [...currentRhs] : [undefined, undefined];
+    const currentRhs = this.asyncPipe.transform(this.conditionConfigs$)?.[index]
+      ?.condition.rhs;
+    const rhs = Array.isArray(currentRhs)
+      ? [...currentRhs]
+      : [undefined, undefined];
     rhs[rangeIndex] = Number(newValue);
-    this.updateCondition(index, { rhs })
+    this.updateCondition(index, { rhs });
   }
 
   getOperatorUIValue(relation: string): string {
-  return relation === "EQUAL_TO_NUMERIC" || relation === "EQUAL_TO_STRING"
-    ? "EQUAL_TO"
-    : relation;
-  } 
+    return relation === "EQUAL_TO_NUMERIC" || relation === "EQUAL_TO_STRING"
+      ? "EQUAL_TO"
+      : relation;
+  }
 
   updateConditionUnit(index: number, event: Event) {
     const newUnit = (event.target as HTMLInputElement).value;

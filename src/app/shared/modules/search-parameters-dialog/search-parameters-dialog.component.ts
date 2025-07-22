@@ -5,7 +5,7 @@ import { AppConfigService } from "app-config.service";
 import { map, startWith } from "rxjs/operators";
 import { UnitsService } from "shared/services/units.service";
 import { ScientificCondition } from "../../../state-management/models";
-
+import { MatSnackBar } from "@angular/material/snack-bar";
 @Component({
   selector: "search-parameters-dialog",
   templateUrl: "./search-parameters-dialog.component.html",
@@ -58,10 +58,12 @@ export class SearchParametersDialogComponent {
     @Inject(MAT_DIALOG_DATA)
     public data: {
       parameterKeys: string[];
+      usedFields: string[];
       condition?: ScientificCondition;
     },
     public dialogRef: MatDialogRef<SearchParametersDialogComponent>,
     private unitsService: UnitsService,
+    private snackBar: MatSnackBar,
   ) {
     if (this.data.condition?.lhs) {
       this.getUnits(this.data.condition.lhs);
@@ -70,6 +72,23 @@ export class SearchParametersDialogComponent {
 
   add = (): void => {
     const { lhs, relation, unit } = this.parametersForm.value;
+    console.log("usedFields: ", JSON.stringify(this.data.usedFields));
+    if (this.data.usedFields && this.data.usedFields.includes(lhs)) {
+      this.snackBar.open("Field already used", "Close", {
+        duration: 2000,
+        panelClass: ["snackbar-warning"],
+    });
+      return;
+    }
+
+    else if (!this.parameterKeys.includes(lhs)) {
+      this.snackBar.open("Field does not exist", "Close", {
+        duration: 2000,
+        panelClass: ["snackbar-warning"],
+    });
+      return;
+    }
+
     const rawRhs = this.parametersForm.get("rhs")?.value;
     const rhs =
       relation === "EQUAL_TO_STRING" ? String(rawRhs) : Number(rawRhs);
