@@ -38,6 +38,7 @@
           class="condition-button"
           (click)="addCondition()"
           matTooltip="Add condition"
+          data-cy="add-condition-button"
         >
           <mat-icon>add</mat-icon>
         </button>
@@ -59,7 +60,7 @@
             <mat-panel-title>
               <div class="condition-title-section">
                 <div class="condition-field-name">
-                  {{ conditionConfig.condition.lhs }}
+                  {{ getHumanName(conditionConfig.condition.lhs) }}
                 </div>
                 <div class="condition-description">
                   {{ getConditionDisplayText(conditionConfig.condition) }}
@@ -85,19 +86,19 @@
                         ? "is greater than"
                         : conditionConfig.condition.relation === "LESS_THAN"
                           ? "is less than"
-                          : getOperatorUIValue(conditionConfig.condition.relation) ===
-                                "EQUAL_TO"
-                              ? "is equal to"
+                          : getOperatorUIValue(
+                                conditionConfig.condition.relation
+                              ) === "EQUAL_TO"
+                            ? "is equal to"
+                            : conditionConfig.condition.relation ===
+                                "GREATER_THAN_OR_EQUAL"
+                              ? "is greater than or equal to"
                               : conditionConfig.condition.relation ===
-                                  "GREATER_THAN_OR_EQUAL"
-                                ? "is greater than or equal to"
-                                : conditionConfig.condition.relation ===
-                                    "LESS_THAN_OR_EQUAL"
-                                  ? "is less than or equal to"
-                                  : conditionConfig.condition.relation ===
-                                      "RANGE"
-                                    ? "is in range"
-                                    : ""
+                                  "LESS_THAN_OR_EQUAL"
+                                ? "is less than or equal to"
+                                : conditionConfig.condition.relation === "RANGE"
+                                  ? "is in range"
+                                  : ""
                     }}
                     <span class="operator-symbol">
                       {{
@@ -105,8 +106,9 @@
                           ? "( > )"
                           : conditionConfig.condition.relation === "LESS_THAN"
                             ? "( < )"
-                            : getOperatorUIValue(conditionConfig.condition.relation) ===
-                                  "EQUAL_TO"
+                            : getOperatorUIValue(
+                                  conditionConfig.condition.relation
+                                ) === "EQUAL_TO"
                               ? "( = )"
                               : conditionConfig.condition.relation ===
                                   "GREATER_THAN_OR_EQUAL"
@@ -122,27 +124,38 @@
                     </span>
                   </span>
                 </mat-select-trigger>
-                <mat-option value="GREATER_THAN">
-                  is greater than <span class="operator-symbol">( &gt; )</span>
-                </mat-option>
-                <mat-option value="LESS_THAN">
-                  is less than <span class="operator-symbol">( &lt; )</span>
-                </mat-option>
-                <mat-option value="EQUAL_TO">
-                  is equal to
-                  <span class="operator-symbol">( = )</span>
-                </mat-option>
-                <mat-option value="GREATER_THAN_OR_EQUAL">
-                  is greater than or equal to
-                  <span class="operator-symbol">( ≥ )</span>
-                </mat-option>
-                <mat-option value="LESS_THAN_OR_EQUAL">
-                  is less than or equal to
-                  <span class="operator-symbol">( ≤ )</span>
-                </mat-option>
-                <mat-option value="RANGE">
-                  is in range
-                  <span class="operator-symbol">( &lt;-&gt; )</span>
+                <mat-option
+                  *ngFor="
+                    let operator of getAllowedOperators(conditionConfig.condition.lhs)
+                  "
+                  [value]="operator"
+                >
+                  <ng-container [ngSwitch]="operator">
+                    <span *ngSwitchCase="'EQUAL_TO'"
+                      >is equal to
+                      <span class="operator-symbol">( = )</span></span
+                    >
+                    <span *ngSwitchCase="'GREATER_THAN'"
+                      >is greater than
+                      <span class="operator-symbol">( &gt; )</span></span
+                    >
+                    <span *ngSwitchCase="'LESS_THAN'"
+                      >is less than
+                      <span class="operator-symbol">( &lt; )</span></span
+                    >
+                    <span *ngSwitchCase="'GREATER_THAN_OR_EQUAL'"
+                      >is greater than or equal to
+                      <span class="operator-symbol">( ≥ )</span></span
+                    >
+                    <span *ngSwitchCase="'LESS_THAN_OR_EQUAL'"
+                      >is less than or equal to
+                      <span class="operator-symbol">( ≤ )</span></span
+                    >
+                    <span *ngSwitchCase="'RANGE'"
+                      >is in range
+                      <span class="operator-symbol">( &lt;-&gt; )</span></span
+                    >
+                  </ng-container>
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -150,7 +163,10 @@
             <mat-form-field
               appearance="outline"
               class="condition-fields"
-              *ngIf="getOperatorUIValue(conditionConfig.condition.relation) !== 'RANGE'"
+              *ngIf="
+                getOperatorUIValue(conditionConfig.condition.relation) !==
+                'RANGE'
+              "
             >
               <mat-label>Value</mat-label>
               <input
@@ -163,7 +179,10 @@
             <mat-form-field
               appearance="outline"
               class="condition-fields"
-              *ngIf="getOperatorUIValue(conditionConfig.condition.relation) === 'RANGE'"
+              *ngIf="
+                getOperatorUIValue(conditionConfig.condition.relation) ===
+                'RANGE'
+              "
             >
               <mat-label>Min</mat-label>
               <input
@@ -176,7 +195,10 @@
             <mat-form-field
               appearance="outline"
               class="condition-fields"
-              *ngIf="getOperatorUIValue(conditionConfig.condition.relation) === 'RANGE'"
+              *ngIf="
+                getOperatorUIValue(conditionConfig.condition.relation) ===
+                'RANGE'
+              "
             >
               <mat-label>Max</mat-label>
               <input

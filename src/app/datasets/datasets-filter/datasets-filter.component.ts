@@ -45,7 +45,10 @@ import { FilterComponentInterface } from "shared/modules/filters/interface/filte
 import { Subscription } from "rxjs";
 import { take } from "rxjs/operators";
 import { SearchParametersDialogComponent } from "../../shared/modules/search-parameters-dialog/search-parameters-dialog.component";
-import { selectMetadataKeys } from "state-management/selectors/datasets.selectors";
+import {
+  selectMetadataKeys,
+  selectDatasets,
+} from "state-management/selectors/datasets.selectors";
 import { ConditionConfig } from "shared/modules/filters/filters.module";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import {
@@ -97,6 +100,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   labelMaps: { [key: string]: string } = {};
 
   metadataKeys$ = this.store.select(selectMetadataKeys);
+
+  datasets$ = this.store.select(selectDatasets);
+
+  humanNameMap: { [key: string]: string } = {};
+
+  fieldTypeMap: { [key: string]: string } = {};
 
   constructor(
     public appConfigService: AppConfigService,
@@ -288,6 +297,22 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   addCondition() {
+    this.datasets$.pipe(take(1)).subscribe((datasets) => {
+      if (datasets && datasets.length > 0 && datasets[0].scientificMetadata) {
+        const metadata = datasets[0].scientificMetadata;
+        this.humanNameMap = {};
+        this.fieldTypeMap = {};
+        Object.keys(metadata).forEach((key) => {
+          if (metadata[key]?.human_name) {
+            this.humanNameMap[key] = metadata[key].human_name;
+          }
+          if (metadata[key]?.type) {
+            this.fieldTypeMap[key] = metadata[key].type;
+          }
+        });
+      }
+    });
+
     this.metadataKeys$.pipe(take(1)).subscribe((allKeys) => {
       this.conditionConfigs$.pipe(take(1)).subscribe((currentConditions) => {
         const usedFields = (currentConditions || []).map(
@@ -494,6 +519,36 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       updateUserSettingsAction({ property: { conditions: updatedConditions } }),
     );
+  }
+
+  getHumanName(key: string): string {
+    return this.humanNameMap[key] || key;
+  }
+
+  getAllowedOperators(key: string): string[] {
+    const type = this.fieldTypeMap[key];
+    if (type === "string") {
+      return ["EQUAL_TO"];
+    }
+    if (type === "quantity" || type === "number") {
+      return [
+        "EQUAL_TO",
+        "GREATER_THAN",
+        "LESS_THAN",
+        "GREATER_THAN_OR_EQUAL",
+        "LESS_THAN_OR_EQUAL",
+        "RANGE",
+      ];
+    }
+    // Default: allow all
+    return [
+      "EQUAL_TO",
+      "GREATER_THAN",
+      "LESS_THAN",
+      "GREATER_THAN_OR_EQUAL",
+      "LESS_THAN_OR_EQUAL",
+      "RANGE",
+    ];
   }
 
   renderComponent(filterObj: FilterConfig): any {
