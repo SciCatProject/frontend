@@ -8,7 +8,7 @@ import {
   SimpleChanges
 } from "@angular/core";
 import { MatRadioChange } from "@angular/material/radio";
-import { AppConfigService, AppConfig } from "app-config.service";
+import { AppConfigService, AppConfigInterface } from "app-config.service";
 import {
   FormBuilder,
   FormControl,
@@ -51,7 +51,7 @@ export class OneDepComponent implements OnChanges, OnDestroy {
   @Input() showFirstCard = true;
   private subscriptions: Subscription[] = [];
 
-  config: AppConfig;
+  config: AppConfigInterface;
 
   // dataset: OutputDatasetObsoleteDto | undefined;
   // user: ReturnedUserDto | undefined;

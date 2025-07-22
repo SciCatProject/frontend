@@ -123,6 +123,9 @@ export interface AppConfigInterface {
   labelsLocalization?: LabelsLocalization;
   dateFormat?: string;
   defaultMainPage?: MainPageConfiguration;
+  ingestorEnabled?: boolean;
+  ingestorMode?: string;
+  ingestorAutodiscoveryOptions?: IngestorAutodiscovery[];
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
@@ -133,9 +136,6 @@ function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
     validKeys.includes(obj.nonAuthenticatedUser) &&
     validKeys.includes(obj.authenticatedUser)
   );
-  ingestorEnabled?: boolean;
-  ingestorMode?: string;
-  ingestorAutodiscoveryOptions?: IngestorAutodiscovery[];
 }
 
 @Injectable({

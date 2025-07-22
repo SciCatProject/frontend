@@ -5,7 +5,7 @@ import {
   FormBuilder,
   Validators,
 } from "@angular/forms";
-import { AppConfigService, AppConfig } from "app-config.service";
+import { AppConfigService, AppConfigInterface } from "app-config.service";
 import { ActivatedRoute } from "@angular/router";
 import { JsonSchema } from "@jsonforms/core";
 import { Store } from "@ngrx/store";
@@ -28,8 +28,8 @@ import { selectEmpiarSchema } from "state-management/selectors/depositor.selecto
 import { updatePropertyAction } from "state-management/actions/datasets.actions";
 
 import * as ingestorActions from "state-management/actions/ingestor.actions";
-import { MethodItem } from "../../shared/sdk/models/ingestor/models"
-import { selectExtractionMethods} from "state-management/selectors/ingestor.selector";
+import { GetExtractorResponse, MethodItem } from "../../shared/sdk/models/ingestor/models"
+import { selectIngestorExtractionMethods} from "state-management/selectors/ingestor.selector";
 
 // import { IngestorMetadataEditorComponent} from "../../ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component"
 
@@ -51,7 +51,7 @@ export class DepositorComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   form: FormGroup;
 
-  config: AppConfig;
+  config: AppConfigInterface;
   supportedDepositionList: DepositionRepository[] = [
     { value: "onedep", viewValue: "OneDep" },
     { value: "empiar", viewValue: "EMPIAR" },
@@ -73,7 +73,7 @@ export class DepositorComponent implements OnInit, OnDestroy {
   metadata: any = {}; 
   metadataSchema: JsonSchema = null// ideally i get the schema by uid?
 
-  methods$: Observable<MethodItem[]> = this.store.select(selectExtractionMethods);
+  methods$: Observable<MethodItem[]> = this.store.select(selectIngestorExtractionMethods)["methods"];
 
   constructor(
     public appConfigService: AppConfigService,

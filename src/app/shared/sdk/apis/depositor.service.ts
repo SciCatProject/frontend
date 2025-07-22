@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { AppConfigService, AppConfig } from "app-config.service";
+import { AppConfigService, AppConfigInterface } from "app-config.service";
 import {
   DepBackendVersion,
   OneDepUserInfo,
@@ -13,7 +13,7 @@ import {
   providedIn: "root",
 })
 export class Depositor {
-  config: AppConfig;
+  config: AppConfigInterface;
   constructor(
     private http: HttpClient,
     public appConfigService: AppConfigService,
