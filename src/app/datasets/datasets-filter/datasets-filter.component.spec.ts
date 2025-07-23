@@ -222,7 +222,6 @@ describe("DatasetsFilterComponent", () => {
       expect(component.dialog.open).toHaveBeenCalledWith(
         DatasetsFilterSettingsComponent,
         {
-          width: "400px",
           data: {
             filterConfigs: filterConfigs,
             conditionConfigs: [],

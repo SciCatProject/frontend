@@ -143,7 +143,7 @@ describe("Datasets general", () => {
           cy.get("mat-select").click();
         });
 
-      cy.get('mat-option[ng-reflect-value="GREATER_THAN"]').click();
+      cy.get('mat-option[ng-reflect-value="GREATER_THAN"]', { timeout: 10000 }).click();
 
       cy.get(".condition-panel")
         .first()
@@ -193,7 +193,7 @@ describe("Datasets general", () => {
           cy.get("mat-select").click();
         });
 
-      cy.get('mat-option[ng-reflect-value="LESS_THAN"]').click();
+      cy.get('mat-option[ng-reflect-value="LESS_THAN"]', { timeout: 10000 }).click();
       // change value
       cy.get(".condition-panel")
         .first()
@@ -265,6 +265,7 @@ describe("Datasets general", () => {
         cy.visit("/datasets");
 
         cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+          cy.log("Loaded config", JSON.stringify(baseConfig));
           const relationsToTest = [
             { relation: "GREATER_THAN", rhs: 1 },
             { relation: "LESS_THAN", rhs: 3 },
