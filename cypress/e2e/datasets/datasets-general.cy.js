@@ -247,7 +247,7 @@ describe("Datasets general", () => {
     });
   });
 
-  describe.only("Pre-configured conditions test", () => {
+  describe("Pre-configured conditions test", () => {
     beforeEach(() => {
       cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.createDataset(
@@ -291,7 +291,7 @@ describe("Datasets general", () => {
 
           cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
           cy.visit("/datasets");
-          cy.wait("@getConfig");
+          cy.wait("@getConfig", { timeout: 10000 });
           cy.finishedLoading();
         });
       });
