@@ -77,15 +77,13 @@ export class SearchParametersDialogComponent {
       this.snackBar.open("Field already used", "Close", {
         duration: 2000,
         panelClass: ["snackbar-warning"],
-    });
+      });
       return;
-    }
-
-    else if (!this.parameterKeys.includes(lhs)) {
+    } else if (!this.parameterKeys.includes(lhs)) {
       this.snackBar.open("Field does not exist", "Close", {
         duration: 2000,
         panelClass: ["snackbar-warning"],
-    });
+      });
       return;
     }
 
@@ -113,7 +111,6 @@ export class SearchParametersDialogComponent {
       unitField?.disable();
     }
   };
-
 
   get lhs(): string {
     return this.parametersForm.get("lhs")?.value;

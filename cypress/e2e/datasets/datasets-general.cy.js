@@ -100,7 +100,22 @@ describe("Datasets general", () => {
     });
   });
 
-  describe.only("Dataset page filter and scientific condition UI test", () => {
+  describe("Dataset page filter and scientific condition UI test", () => {
+    beforeEach(() => {
+      cy.createDataset(
+        "raw",
+        testData.rawDataset.datasetName,
+        undefined,
+        "small",
+        {
+          scientificMetadata: {
+            extra_entry_end_time: { type: "number", value: 2, unit: "" },
+          },
+          isPublished: true,
+        },
+      );
+    });
+
     it("should not be able to add duplicated conditions ", () => {
       cy.visit("/datasets");
 
@@ -116,10 +131,9 @@ describe("Datasets general", () => {
         cy.get('[data-cy="add-condition-button"]').click();
       });
 
-      cy.get('input[name="lhs"]').type("test");
+      cy.get('input[name="lhs"]').type("extra_entry_end_time");
 
-      cy.get('mat-dialog-container').find('button[type="submit"]').click();
-
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
 
       cy.get(".condition-panel").first().click();
 
@@ -128,110 +142,78 @@ describe("Datasets general", () => {
         .within(() => {
           cy.get("mat-select").click();
         });
-      cy.get('mat-option[value="GREATER_THAN"]').click();
+
+      cy.get('mat-option[ng-reflect-value="GREATER_THAN"]').click();
 
       cy.get(".condition-panel")
         .first()
         .within(() => {
           cy.get("input[matInput]").eq(0).clear().type("1");
         });
-      
-      
 
       cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
         cy.get('[data-cy="add-condition-button"]').click();
       });
 
-      cy.get('input[name="lhs"]').type("test");
+      cy.get('input[name="lhs"]').type("extra_entry_end_time");
 
-      cy.get('mat-dialog-container').find('button[type="submit"]').click();
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
 
-      cy.get(".condition-panel").eq(1).click();
+      cy.get(".snackbar-warning")
+        .should("contain", "Field already used")
+        .contains("Close")
+        .click();
+    });
 
+    it("should be able to manage conditions using expansion panels", () => {
+      cy.visit("/datasets");
+
+      cy.get(".user-button").click();
+
+      cy.get("[data-cy=logout-button]").click();
+
+      cy.finishedLoading();
+
+      cy.visit("/datasets");
+
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('[data-cy="add-condition-button"]').click();
+      });
+
+      cy.get('input[name="lhs"]').type("extra_entry_end_time");
+
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      // expand the condition
+      cy.get(".condition-panel").first().click();
+      // change operator
       cy.get(".condition-panel")
-        .eq(1)
+        .first()
         .within(() => {
           cy.get("mat-select").click();
         });
-      cy.get('mat-option[value="GREATER_THAN"]').click();
 
-      cy.get(".condition-panel")
-        .eq(1)
-        .within(() => {
-          cy.get("input[matInput]").eq(0).clear().type("1");
-        });
-      
-
-    //   cy.get(".snackbar-warning")
-    //     .should("contain", "Condition already exists")
-    //     .contains("Close")
-    //     .click();
-
-    //   cy.get('[data-cy="scientific-condition-filter-list"]')
-    //     .find(".condition-panel")
-    //     .should("have.length", 1);
-
-    //   cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
-    //     cy.get('[data-cy="add-condition-button"]').click();
-    //   });
-
-    //   cy.get('input[name="lhs"]').type("test");
-    //   cy.get('input[name="rhs"]').type("2");
-
-    //   cy.get('button[type="submit"]').click();
-
-    //   cy.get('[data-cy="scientific-condition-filter-list"]')
-    //     .find(".condition-panel")
-    //     .should("have.length", 2);
-    // });
-
-    // it("should be able to manage conditions using expansion panels", () => {
-    //   cy.visit("/datasets");
-
-    //   cy.get(".user-button").click();
-
-    //   cy.get("[data-cy=logout-button]").click();
-
-    //   cy.finishedLoading();
-
-    //   cy.visit("/datasets");
-
-    //   cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
-    //     cy.get('[data-cy="add-condition-button"]').click();
-    //   });
-
-    //   cy.get('input[name="lhs"]').type("test 3");
-
-    //   cy.get('button[type="submit"]').click();
-
-      // expand the condition
-      // change operator
+      cy.get('mat-option[ng-reflect-value="LESS_THAN"]').click();
       // change value
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("input[matInput]").eq(0).clear().type("3");
+        });
 
-      // cy.get(".condition-panel").first().click();
+      // disable the condition
+      cy.get("mat-slide-toggle").click();
+      cy.get(".condition-panel").should("have.class", "disabled");
 
-      // cy.get(".condition-details").should("be.visible");
+      // enable it again
+      cy.get("mat-slide-toggle").click();
 
-      // cy.get(".condition-details").within(() => {
-      //   cy.get("mat-select").should("exist");
-      //   cy.get("input[matInput]").should("exist");
-      //   cy.get("mat-slide-toggle").should("exist");
-      //   cy.get("button").contains("Remove").should("exist");
-      // });
+      // remove the condition
+      cy.get("button").contains("Remove").click();
 
-      // cy.get(".condition-details").within(() => {
-      //   cy.get("mat-slide-toggle").click();
-      // });
-
-      // cy.get(".condition-panel").should("have.class", "disabled");
-
-      // cy.get(".condition-details").within(() => {
-      //   cy.get("button").contains("Remove").click();
-      // });
-
-      // cy.get('[data-cy="scientific-condition-filter-list"]')
-      //   .find(".condition-panel")
-      //   .should("have.length", 0);
+      cy.get('[data-cy="scientific-condition-filter-list"]')
+        .find(".condition-panel")
+        .should("have.length", 0);
     });
   });
 
@@ -265,7 +247,7 @@ describe("Datasets general", () => {
     });
   });
 
-  describe("Pre-configured conditions test", () => {
+  describe.only("Pre-configured conditions test", () => {
     beforeEach(() => {
       cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.createDataset(
@@ -275,13 +257,12 @@ describe("Datasets general", () => {
         "small",
         {
           scientificMetadata: {
-            extra_entry_end_time: { value: "2", unit: "" },
+            extra_entry_end_time: { type: "number", value: 2, unit: "" },
           },
           isPublished: true,
         },
       ).then(() => {
-        cy.clearCookies();
-        cy.clearLocalStorage();
+        cy.visit("/datasets");
 
         cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
           const relationsToTest = [
