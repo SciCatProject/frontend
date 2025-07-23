@@ -2,6 +2,20 @@
 #
 #
 
+USING_SCICAT_LIVE=0
+while [[ "$#" -gt 0 ]]; do
+	case "$1" in
+		--scicatlive)
+			USING_SCICAT_LIVE=1
+			shift
+			;;
+		*)
+			echo "Unknown argument: $1"
+			exit 1
+			;;
+	esac
+done
+
 USER=`who am i | cut -d\  -f1`
 echo -e "\nUser running the script: ${USER}"
 
@@ -12,11 +26,14 @@ rm local-api-for-generator.json
 
 echo -e "\nFetching the API from local instance of back end..."
 
-# For when developing with a backend running directly on localhost:
-curl http://host.docker.internal:3000/explorer-json > local-api-for-generator.json
-
-# For when developing with SciCat Live:
-#curl http://backend.localhost/explorer-json > local-api-for-generator.json
+if [ $USING_SCICAT_LIVE -eq 1 ];
+then
+	# For when developing with SciCat Live:
+	curl http://backend.localhost/explorer-json > local-api-for-generator.json
+else
+	# For when developing with a backend running directly on localhost:
+	curl http://host.docker.internal:3000/explorer-json > local-api-for-generator.json
+fi
 
 echo -e "\nGenerating the new sdk..."
 
@@ -32,6 +49,16 @@ docker run \
 	-g typescript-angular \
 	-o local/@scicatproject/scicat-sdk-ts-angular \
 	--additional-properties=ngVersion=19.0.0,npmName=@scicatproject/scicat-sdk-ts-angular,supportsES6=true,withInterfaces=true  --skip-validate-spec
+
+# Check if the docker command resulted in any output.
+# If we don't do this, we'll try to cd into a missing folder,
+# and then we'd be invoking 'npm run build' as root in the main project folder,
+# which would create a bunch of stuff in ./dist belonging to root,
+# causing problems for things like SciCat Live.
+if [ ! -d "@scicatproject/scicat-sdk-ts-angular" ]; then
+  echo "Error: OpenApi output not found."
+  exit 1
+fi
 
 REMOVE_NPM_LINK=0
 if ! command -v npm 2>&1 1>/dev/null
