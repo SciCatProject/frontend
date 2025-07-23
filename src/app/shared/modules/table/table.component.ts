@@ -9,6 +9,8 @@ import {
 import { SelectionModel } from "@angular/cdk/collections";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 
+// Accessory types and definition for Angular component TableComponent
+
 export interface TableColumn {
   name: string;
   icon: string;
