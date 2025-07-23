@@ -263,9 +263,9 @@ describe("Datasets general", () => {
         },
       ).then(() => {
         cy.visit("/datasets");
-
+        cy.clearCookies();
+        cy.clearLocalStorage();
         cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
-          cy.log("Loaded config", JSON.stringify(baseConfig));
           const relationsToTest = [
             { relation: "GREATER_THAN", rhs: 1 },
             { relation: "LESS_THAN", rhs: 3 },

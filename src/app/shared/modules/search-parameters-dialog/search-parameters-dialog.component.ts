@@ -72,7 +72,6 @@ export class SearchParametersDialogComponent {
 
   add = (): void => {
     const { lhs, relation, unit } = this.parametersForm.value;
-    console.log("usedFields: ", JSON.stringify(this.data.usedFields));
     if (this.data.usedFields && this.data.usedFields.includes(lhs)) {
       this.snackBar.open("Field already used", "Close", {
         duration: 2000,
