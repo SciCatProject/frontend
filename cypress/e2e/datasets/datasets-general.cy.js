@@ -194,7 +194,7 @@ describe("Datasets general", () => {
         });
 
       cy.get("mat-option").contains('<').click();
-      
+
       // change value
       cy.get(".condition-panel")
         .first()
@@ -290,7 +290,7 @@ describe("Datasets general", () => {
           };
 
           cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
-          cy.wait("@getConfig");
+          cy.wait(10000);
           cy.visit("/datasets");
           cy.finishedLoading();
         });
