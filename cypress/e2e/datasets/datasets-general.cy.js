@@ -100,7 +100,7 @@ describe("Datasets general", () => {
     });
   });
 
-  describe("Dataset page filter and scientific condition UI test", () => {
+  describe.only("Dataset page filter and scientific condition UI test", () => {
     beforeEach(() => {
       cy.createDataset(
         "raw",
@@ -249,7 +249,7 @@ describe("Datasets general", () => {
     });
   });
 
-  describe("Pre-configured conditions test", () => {
+  describe.only("Pre-configured conditions test", () => {
     beforeEach(() => {
       cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.createDataset(
