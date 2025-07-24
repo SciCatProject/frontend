@@ -298,8 +298,7 @@ describe("Datasets general", () => {
     });
 
     it("should check if pre-configured conditions are applied", () => {
-      cy.wait(10000);
-      cy.get('[data-cy="scientific-condition-filter-list"] .condition-panel')
+      cy.get('[data-cy="scientific-condition-filter-list"] .condition-panel', { timeout: 10000 })
         .should("contain.text", "extra_entry_end_time")
         .and("contain.text", ">")
         .and("contain.text", "1");
