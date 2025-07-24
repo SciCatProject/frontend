@@ -1,18 +1,18 @@
 import { createAction, props } from "@ngrx/store";
 import {
-  Attachment,
   OutputAttachmentV3Dto,
   OutputDatasetObsoleteDto,
   PartialUpdateProposalDto,
   ProposalClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
+import { DateRange, FacetCounts } from "state-management/state/proposals.store";
 
 export const fetchProposalsAction = createAction(
   "[Proposal] Fetch Proposals",
   props<{
     skip?: number;
     limit?: number;
-    search?: string;
+    search?: Record<string, string | DateRange>;
     sortDirection?: string;
     sortColumn?: string;
   }>(),
@@ -28,10 +28,21 @@ export const fetchProposalsFailedAction = createAction(
   "[Proposal] Fetch Proposals Failed",
 );
 
-export const fetchCountAction = createAction(
-  "[Proposal] Fetch Count",
-  props<{ fields?: Record<string, unknown> }>(),
+export const fetchFacetCountsAction = createAction(
+  "[Proposal] Fetch Facet Counts",
+  props<{
+    fields?: object;
+    facets?: string[];
+  }>(),
 );
+export const fetchFacetCountsCompleteAction = createAction(
+  "[Proposal] Fetch Facet Counts Complete",
+  props<{ facetCounts: FacetCounts; allCounts: number }>(),
+);
+export const fetchFacetCountsFailedAction = createAction(
+  "[Proposal] Fetch Facet Counts Failed",
+);
+
 export const fetchCountCompleteAction = createAction(
   "[Proposal] Fetch Count Complete",
   props<{ count: number }>(),

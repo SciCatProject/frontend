@@ -1,0 +1,42 @@
+<!-- shared-filter.component.html -->
+<form [formGroup]="filterForm">
+  <ng-container [ngSwitch]="filterType">
+    <ng-container *ngSwitchDefault>
+      <mat-form-field>
+        <mat-label>{{ label }}</mat-label>
+        <input
+          matInput
+          #input
+          type="text"
+          (input)="onInput($event)"
+          [matTooltip]="tooltip"
+          matTooltipPosition="after"
+          formControlName="textField"
+        />
+      </mat-form-field>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'dateRange'">
+      <mat-form-field [matTooltip]="tooltip" matTooltipPosition="after">
+        <mat-label>{{ label }}</mat-label>
+        <mat-date-range-input
+          formGroupName="dateRangeField"
+          [rangePicker]="picker"
+        >
+          <input
+            matStartDate
+            (dateChange)="dateChanged($event, 'begin')"
+            formControlName="start"
+          />
+          <input
+            matEndDate
+            (dateChange)="dateChanged($event, 'end')"
+            formControlName="end"
+          />
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </ng-container>
+  </ng-container>
+</form>
