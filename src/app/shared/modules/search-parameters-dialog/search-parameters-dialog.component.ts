@@ -62,9 +62,7 @@ export class SearchParametersDialogComponent {
     public dialogRef: MatDialogRef<SearchParametersDialogComponent>,
     private unitsService: UnitsService,
   ) {
-    if (this.data.condition?.lhs) {
-      this.getUnits(this.data.condition.lhs);
-    }
+    this.applyUnitsOptions();
   }
 
   add = (): void => {
@@ -78,8 +76,18 @@ export class SearchParametersDialogComponent {
 
   cancel = (): void => this.dialogRef.close();
 
+  applyUnitsOptions(): void {
+    if (this.data.condition?.unitsOptions?.length) {
+      this.units = this.data.condition.unitsOptions;
+    } else if (this.data.condition?.lhs) {
+      this.getUnits(this.data.condition.lhs);
+    }
+  }
+
   getUnits = (parameterKey: string): void => {
-    this.units = this.unitsService.getUnits(parameterKey);
+    if (!this.data.condition?.unitsOptions?.length) {
+      this.units = this.unitsService.getUnits(parameterKey);
+    }
     this.toggleUnitField();
   };
 

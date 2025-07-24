@@ -135,6 +135,7 @@ export interface ScientificCondition {
   relation: ScientificConditionRelation;
   rhs: string | number;
   unit: string;
+  unitsOptions?: string[];
 }
 
 export interface GenericFilters {
