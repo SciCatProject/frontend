@@ -143,8 +143,7 @@ describe("Datasets general", () => {
           cy.get("mat-select").click();
         });
       
-      cy.wait(10000);
-      cy.get('mat-option[ng-reflect-value="GREATER_THAN"]').click();
+      cy.get('mat-option').contains('>').click();
 
       cy.get(".condition-panel")
         .first()
@@ -193,9 +192,9 @@ describe("Datasets general", () => {
         .within(() => {
           cy.get("mat-select").click();
         });
-      
-      cy.wait(10000);
-      cy.get('mat-option[ng-reflect-value="LESS_THAN"]').click();
+
+      cy.get("mat-option").contains('<').click();
+
       // change value
       cy.get(".condition-panel")
         .first()
