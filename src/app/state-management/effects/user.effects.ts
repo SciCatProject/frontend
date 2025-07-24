@@ -276,6 +276,7 @@ export class UserEffects {
 
         if (id && ttl && isTokenExpired) {
           this.authService.clear();
+          window.location.reload();
         }
 
         return this.authService.isAuthenticated();
