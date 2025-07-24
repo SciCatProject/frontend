@@ -1,9 +1,9 @@
 name: Test
 
 on:
-  pull_request:
+  push:
     branches:
-      - master
+      - debug/e2e-pipeline
 env:
   NODE_VERSION: 22.x
 
