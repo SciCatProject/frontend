@@ -16,9 +16,7 @@ export default defineConfig({
   e2e: {
     baseUrl: "http://localhost:4200",
     viewportWidth: 1280,
-    viewportHeight: 800, 
     defaultCommandTimeout: 10000,
     retries: 1,
-    video: true,
   },
 });
