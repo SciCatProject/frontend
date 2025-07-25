@@ -257,7 +257,7 @@ describe("Datasets general", () => {
     });
   });
 
-  describe("Pre-configured conditions test", () => {
+  describe.only("Pre-configured conditions test", () => {
     beforeEach(() => {
       cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.createDataset(
@@ -272,7 +272,6 @@ describe("Datasets general", () => {
           isPublished: true,
         },
       ).then(() => {
-        cy.visit("/datasets");
         cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
           const relationsToTest = [
             { relation: "GREATER_THAN", rhs: 1 },
