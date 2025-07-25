@@ -299,16 +299,16 @@ describe("Datasets general", () => {
           };
 
           cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
-          cy.wait(10000);
           cy.visit("/datasets");
+          cy.wait("@getConfig", { timeout: 20000 });
           cy.finishedLoading();
         });
       });
     });
 
-    it.only("should check if pre-configured conditions are applied", () => {
+    it("should check if pre-configured conditions are applied", () => {
       cy.scrollTo('bottom');
-      cy.get('[data-cy="scientific-condition-filter-list"] .condition-panel', { timeout: 20000 })
+      cy.get('[data-cy="scientific-condition-filter-list"] .condition-panel')
         .should("contain.text", "extra_entry_end_time")
         .and("contain.text", ">")
         .and("contain.text", "1");
