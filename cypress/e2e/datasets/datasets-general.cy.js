@@ -61,6 +61,9 @@ describe("Datasets general", () => {
 
       cy.get("mat-row").contains("Cypress Dataset").click();
     });
+    afterEach(() => {
+      cy.removeDatasets();
+    });
   });
 
   describe("Proposal connection and link from dataset details", () => {
@@ -97,6 +100,9 @@ describe("Datasets general", () => {
       );
 
       cy.deleteProposal(proposalId);
+    });
+    afterEach(() => {
+      cy.removeDatasets();
     });
   });
 
@@ -216,6 +222,9 @@ describe("Datasets general", () => {
         .find(".condition-panel")
         .should("have.length", 0);
     });
+    afterEach(() => {
+      cy.removeDatasets();
+    });
   });
 
   describe("Pre-configured filters test", () => {
@@ -323,4 +332,7 @@ describe("Datasets general", () => {
       });
     });
   });
+  afterEach(() => {
+      cy.removeDatasets();
+    });
 });
