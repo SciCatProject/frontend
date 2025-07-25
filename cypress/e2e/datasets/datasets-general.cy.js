@@ -257,7 +257,7 @@ describe("Datasets general", () => {
     });
   });
 
-  describe.only("Pre-configured conditions test", () => {
+  describe("Pre-configured conditions test", () => {
     beforeEach(() => {
       cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.createDataset(
