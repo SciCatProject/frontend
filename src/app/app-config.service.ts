@@ -57,6 +57,7 @@ export interface AppConfigInterface {
   datasetDetailsShowMissingProposalId: boolean;
   datafilesActionsEnabled: boolean;
   datafilesActions: any[];
+  editDatasetEnabled: boolean;
   editDatasetSampleEnabled: boolean;
   editMetadataEnabled: boolean;
   editPublishedData: boolean;
@@ -121,6 +122,7 @@ export interface AppConfigInterface {
   labelsLocalization?: LabelsLocalization;
   dateFormat?: string;
   defaultMainPage?: MainPageConfiguration;
+  supportEmail?: string;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
@@ -178,6 +180,10 @@ export class AppConfigService {
         nonAuthenticatedUser: "DATASETS",
         authenticatedUser: "DATASETS",
       } as MainPageConfiguration;
+    }
+
+    if (!config.dateFormat) {
+      config.dateFormat = "yyyy-MM-dd HH:mm";
     }
 
     this.appConfig = config;
