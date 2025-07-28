@@ -1,48 +1,60 @@
 <div class="header">
   <mat-menu #mainMenu="matMenu">
-    <button mat-menu-item routerLink="/datasets/">
-      <mat-icon> folder</mat-icon>
-      <span>Datasets</span>
-    </button>
+    <ng-container *ngIf="mainMenu.datasets">
+      <button mat-menu-item routerLink="/datasets/">
+        <mat-icon> folder</mat-icon>
+        <span>Datasets</span>
+      </button>
+    </ng-container>
 
-    <button mat-menu-item routerLink="/files/">
-      <mat-icon> text_snippet</mat-icon>
-      <span>Files</span>
-    </button>
+    <ng-container *ngIf="mainMenu.files">
+      <button mat-menu-item routerLink="/files/">
+        <mat-icon> text_snippet</mat-icon>
+        <span>Files</span>
+      </button>
+    </ng-container>
 
-    <button mat-menu-item routerLink="/instruments/">
-      <mat-icon>scanner</mat-icon>
-      <span>Instruments</span>
-    </button>
+    <ng-container *ngIf="mainMenu.instruments">
+      <button mat-menu-item routerLink="/instruments/">
+        <mat-icon>scanner</mat-icon>
+        <span>Instruments</span>
+      </button>
+    </ng-container>
 
-    <ng-container *ngIf="config.jobsEnabled">
+    <ng-container *ngIf="config.jobsEnabled && mainMenu.jobs">
       <button mat-menu-item routerLink="/user/jobs">
         <mat-icon> transfer_within_a_station</mat-icon>
         <span>Jobs</span>
       </button>
     </ng-container>
 
-    <ng-container *ngIf="config.policiesEnabled">
+    <ng-container *ngIf="config.policiesEnabled && mainMenu.policies">
       <button mat-menu-item routerLink="/policies/">
         <mat-icon> cloud_download</mat-icon>
         <span>Policies</span>
       </button>
     </ng-container>
 
-    <button mat-menu-item routerLink="/proposals/">
-      <mat-icon> spa</mat-icon>
-      <span>Proposals</span>
-    </button>
+    <ng-container *ngIf="mainMenu.proposals">
+      <button mat-menu-item routerLink="/proposals/">
+        <mat-icon> spa</mat-icon>
+        <span>Proposals</span>
+      </button>
+    </ng-container>
 
-    <button mat-menu-item routerLink="/publishedDatasets/">
-      <mat-icon> chrome_reader_mode</mat-icon>
-      <span>Published Data</span>
-    </button>
+    <ng-container *ngIf="mainMenu.publishedData">
+      <button mat-menu-item routerLink="/publishedDatasets/">
+        <mat-icon> chrome_reader_mode</mat-icon>
+        <span>Published Data</span>
+      </button>
+    </ng-container>
 
-    <button mat-menu-item routerLink="/samples/">
-      <mat-icon> center_focus_weak</mat-icon>
-      <span>Samples</span>
-    </button>
+    <ng-container *ngIf="mainMenu.samples">
+      <button mat-menu-item routerLink="/samples/">
+        <mat-icon> center_focus_weak</mat-icon>
+        <span>Samples</span>
+      </button>
+    </ng-container>
   </mat-menu>
 
   <mat-menu #userMenu="matMenu">
