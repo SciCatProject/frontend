@@ -5,6 +5,7 @@ import { AppConfigService } from "app-config.service";
 import { map, startWith } from "rxjs/operators";
 import { UnitsService } from "shared/services/units.service";
 import { ScientificCondition } from "../../../state-management/models";
+import { UnitsOptionsService } from "shared/services/units-options.service";
 
 @Component({
   selector: "search-parameters-dialog",
@@ -61,6 +62,7 @@ export class SearchParametersDialogComponent {
     },
     public dialogRef: MatDialogRef<SearchParametersDialogComponent>,
     private unitsService: UnitsService,
+    private unitsOptionsService: UnitsOptionsService,
   ) {
     this.applyUnitsOptions();
   }
@@ -77,15 +79,31 @@ export class SearchParametersDialogComponent {
   cancel = (): void => this.dialogRef.close();
 
   applyUnitsOptions(): void {
-    if (this.data.condition?.unitsOptions?.length) {
-      this.units = this.data.condition.unitsOptions;
-    } else if (this.data.condition?.lhs) {
-      this.getUnits(this.data.condition.lhs);
+    const lhs = this.data.condition?.lhs;
+    const unitsOptions = this.data.condition?.unitsOptions;
+
+    // if pre-configured condition has unitsOptions, store and use them.
+    if (lhs && unitsOptions?.length) {
+      this.unitsOptionsService.setUnitsOptions(lhs, unitsOptions);
+      this.units = unitsOptions;
+    } else if (lhs) {
+      this.units =
+        this.unitsOptionsService.getUnitsOptions(lhs) ??
+        this.unitsService.getUnits(lhs);
     }
   }
 
   getUnits = (parameterKey: string): void => {
-    if (!this.data.condition?.unitsOptions?.length) {
+    const stored = this.unitsOptionsService.getUnitsOptions(parameterKey);
+    if (stored?.length) {
+      this.units = stored;
+    } else if (this.data.condition?.unitsOptions?.length) {
+      this.unitsOptionsService.setUnitsOptions(
+        parameterKey,
+        this.data.condition.unitsOptions,
+      );
+      this.units = this.data.condition.unitsOptions;
+    } else {
       this.units = this.unitsService.getUnits(parameterKey);
     }
     this.toggleUnitField();
