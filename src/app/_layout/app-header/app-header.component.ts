@@ -12,8 +12,10 @@ import {
   selectThumbnailPhoto,
 } from "state-management/selectors/user.selectors";
 import { selectDatasetsInBatchIndicator } from "state-management/selectors/datasets.selectors";
-import { AppConfigService, OAuth2Endpoint } from "app-config.service";
+import { AppConfigService, MainMenuConfiguration, MainMenuOptions, OAuth2Endpoint } from "app-config.service";
 import { Router } from "@angular/router";
+import { AppState } from "state-management/state/app.store";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-app-header",
@@ -34,11 +36,15 @@ export class AppHeaderComponent implements OnInit {
   inBatchIndicator$ = this.store.select(selectDatasetsInBatchIndicator);
   loggedIn$ = this.store.select(selectIsLoggedIn);
 
+  mainMenu: MainMenuOptions = this.config.mainMenu["nonAuthorizedUser"];
+
+  private sub: Subscription;
+  
   constructor(
     public appConfigService: AppConfigService,
     private router: Router,
     @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private store: Store,
+    private store: Store<AppState>,
     @Inject(DOCUMENT) public document: Document,
   ) {}
 
@@ -60,5 +66,10 @@ export class AppHeaderComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(fetchCurrentUserAction());
     this.oAuth2Endpoints = this.config.oAuth2Endpoints;
+
+    this.sub = this.store.select(selectIsLoggedIn).subscribe(isLoggedIn => {
+      this.mainMenu = this.config["mainMenu"][isLoggedIn?"authorizedUser":"nonAuthorizedUser"];
+      console.log(this.mainMenu);
+    });
   }
 }
