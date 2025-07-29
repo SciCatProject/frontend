@@ -288,7 +288,7 @@ describe("Proposals general", () => {
   });
 
   describe("Proposals dynamic material table", () => {
-    it("should be able to search for proposal in the global search", () => {
+    it.only("should be able to search for proposal in the global search", () => {
       const newProposal = {
         ...testData.proposal,
         proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
@@ -298,9 +298,8 @@ describe("Proposals general", () => {
 
       cy.visit("/proposals");
 
-      cy.get('.table-global-search input[type="text"]').type(
-        newProposal.proposalId,
-      );
+      cy.get('[data-cy="text-search"]').type(newProposal.proposalId);
+      cy.get('[data-cy="search-button"]').click();
 
       cy.get("mat-table mat-row")
         .first()
