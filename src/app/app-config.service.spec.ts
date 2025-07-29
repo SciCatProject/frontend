@@ -40,6 +40,7 @@ const appConfig: AppConfigInterface = {
   gettingStarted: null,
   ingestManual: null,
   jobsEnabled: true,
+  dateFormat: "yyyy-MM-dd HH:mm",
   jsonMetadataEnabled: true,
   jupyterHubUrl: "https://jupyterhub.esss.lu.se/",
   landingPage: "doi2.psi.ch/detail/",
