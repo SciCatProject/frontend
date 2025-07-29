@@ -1,0 +1,57 @@
+<mat-card *ngIf="!collapsed">
+  <mat-card-header class="section-container">
+    <mat-card-title>{{ collapsed ? "" : "Filters" }} </mat-card-title>
+    <button
+      mat-icon-button
+      (click)="toggleCollapse()"
+      [matTooltip]="'Collapse Side Filters'"
+    >
+      <mat-icon color="primary">keyboard_arrow_left</mat-icon>
+    </button>
+  </mat-card-header>
+
+  <mat-card-content>
+    <ng-container *ngFor="let filter of filterLists">
+      <shared-filter
+        [label]="filter.label"
+        [clear]="clearFilters"
+        [tooltip]="filter.description"
+        [filterType]="filter.type"
+        [prefilled]="activeFilters[filter.key] || null"
+        (textChange)="setFilter(filter.key, $event)"
+        [facetCounts$]="getFacetCounts$(filter.key)"
+        (dateRangeChange)="setDateFilter(filter.key, $event)"
+      ></shared-filter>
+    </ng-container>
+    <div class="section-container">
+      <button
+        mat-raised-button
+        color="primary"
+        class="proposal-filters-search-button"
+        (click)="applyFilters()"
+      >
+        <mat-icon>search</mat-icon>
+        Apply
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="proposal-filters-clear-all-button"
+        (click)="reset()"
+      >
+        <mat-icon>undo</mat-icon>
+        Reset Filters
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<button
+  class="small-btn"
+  *ngIf="collapsed"
+  mat-icon-button
+  (click)="toggleCollapse()"
+  [matTooltip]="'Expand Side Filters'"
+>
+  <mat-icon color="primary">keyboard_arrow_right</mat-icon>
+</button>

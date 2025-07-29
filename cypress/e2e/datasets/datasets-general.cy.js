@@ -22,9 +22,8 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type("Cypress");
+      cy.get('[data-cy="text-search"]').clear().type("Cypress");
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
@@ -75,9 +74,8 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type("Cypress");
+      cy.get('[data-cy="text-search"]').clear().type("Cypress");
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 

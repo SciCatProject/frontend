@@ -36,8 +36,8 @@ describe("Proposal Actions", () => {
 
   describe("fetchCountAction", () => {
     it("should create an action", () => {
-      const action = fromActions.fetchCountAction({});
-      expect({ ...action }).toEqual({ type: "[Proposal] Fetch Count" });
+      const action = fromActions.fetchFacetCountsAction({});
+      expect({ ...action }).toEqual({ type: "[Proposal] Fetch Facet Counts" });
     });
   });
 

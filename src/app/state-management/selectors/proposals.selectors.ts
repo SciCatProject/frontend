@@ -35,6 +35,11 @@ export const selectProposalsCount = createSelector(
   (state) => state.proposalsCount,
 );
 
+export const selectProposalsfacetCounts = createSelector(
+  selectProposalsState,
+  (state) => state.facetCounts,
+);
+
 export const selectDatasetsCount = createSelector(
   selectProposalsState,
   (state) => state.datasetsCount,
@@ -48,24 +53,6 @@ export const selectHasPrefilledFilters = createSelector(
 export const selectFilters = createSelector(
   selectProposalsState,
   (state) => state.proposalFilters,
-);
-
-export const selectTextFilter = createSelector(
-  selectFilters,
-  (filters) => filters.text,
-);
-
-export const selectDateRangeFilter = createSelector(
-  selectFilters,
-  (filters) => filters.dateRange,
-);
-
-export const selectHasAppliedFilters = createSelector(
-  selectFilters,
-  (filters) =>
-    filters.text !== "" ||
-    (filters.dateRange &&
-      (filters.dateRange.begin !== null || filters.dateRange.end !== null)),
 );
 
 export const selectDatasetFilters = createSelector(
