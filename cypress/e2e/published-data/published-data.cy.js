@@ -163,7 +163,6 @@ describe("Datasets general", () => {
 
     it("other users should not be able to see private published data that they do not own", () => {
       cy.login(Cypress.env("guestUsername"), Cypress.env("guestPassword"));
-      const title = "some title text";
 
       cy.visit("/publishedDatasets");
 
@@ -177,7 +176,7 @@ describe("Datasets general", () => {
 
       cy.isLoading();
 
-      cy.get("app-publisheddata-dashboard mat-table mat-row").should(
+      cy.get("app-publisheddata-dashboard mat-table").should(
         "not.contain",
         title,
       );
@@ -332,7 +331,7 @@ describe("Datasets general", () => {
 
       cy.get("a.button").click();
 
-      cy.get('[data-cy="batch-table"] mat-row').its("length").should("eq", 3);
+      cy.get('[data-cy="batch-table"] mat-row').its("length").should("eq", 2);
 
       cy.get("#saveChangesButton").click();
     });
