@@ -5,6 +5,7 @@
       <input
         matInput
         [placeholder]="placeholder"
+        data-cy="text-search"
         type="search"
         [(ngModel)]="searchTerm"
         (ngModelChange)="onSearchTermChange($event)"
