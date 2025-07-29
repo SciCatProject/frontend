@@ -1,60 +1,70 @@
 <div class="header">
   <mat-menu #mainMenu="matMenu">
-    <ng-container *ngIf="mainMenu.datasets">
-      <button mat-menu-item routerLink="/datasets/">
-        <mat-icon> folder</mat-icon>
-        <span>Datasets</span>
-      </button>
-    </ng-container>
+    <ng-container *ngIf="mainMenuConfig; else noMenuItems">
+      <ng-container *ngIf="mainMenuConfig?.datasets ?? false">
+        <button mat-menu-item routerLink="/datasets/">
+          <mat-icon> folder</mat-icon>
+          <span>Datasets</span>
+        </button>
+      </ng-container>
 
-    <ng-container *ngIf="mainMenu.files">
-      <button mat-menu-item routerLink="/files/">
-        <mat-icon> text_snippet</mat-icon>
-        <span>Files</span>
-      </button>
-    </ng-container>
+      <ng-container *ngIf="mainMenuConfig?.files ?? false">
+        <button mat-menu-item routerLink="/files/">
+          <mat-icon> text_snippet</mat-icon>
+          <span>Files</span>
+        </button>
+      </ng-container>
 
-    <ng-container *ngIf="mainMenu.instruments">
-      <button mat-menu-item routerLink="/instruments/">
-        <mat-icon>scanner</mat-icon>
-        <span>Instruments</span>
-      </button>
-    </ng-container>
+      <ng-container *ngIf="mainMenuConfig?.instruments ?? false">
+        <button mat-menu-item routerLink="/instruments/">
+          <mat-icon>scanner</mat-icon>
+          <span>Instruments</span>
+        </button>
+      </ng-container>
 
-    <ng-container *ngIf="config.jobsEnabled && mainMenu.jobs">
-      <button mat-menu-item routerLink="/user/jobs">
-        <mat-icon> transfer_within_a_station</mat-icon>
-        <span>Jobs</span>
-      </button>
-    </ng-container>
+      <ng-container *ngIf="config.jobsEnabled && mainMenuConfig?.jobs">
+        <button mat-menu-item routerLink="/user/jobs">
+          <mat-icon> transfer_within_a_station</mat-icon>
+          <span>Jobs</span>
+        </button>
+      </ng-container>
 
-    <ng-container *ngIf="config.policiesEnabled && mainMenu.policies">
-      <button mat-menu-item routerLink="/policies/">
-        <mat-icon> cloud_download</mat-icon>
-        <span>Policies</span>
-      </button>
-    </ng-container>
+      <ng-container *ngIf="config.policiesEnabled && mainMenuConfig?.policies">
+        <button mat-menu-item routerLink="/policies/">
+          <mat-icon> cloud_download</mat-icon>
+          <span>Policies</span>
+        </button>
+      </ng-container>
 
-    <ng-container *ngIf="mainMenu.proposals">
-      <button mat-menu-item routerLink="/proposals/">
-        <mat-icon> spa</mat-icon>
-        <span>Proposals</span>
-      </button>
-    </ng-container>
+      <ng-container *ngIf="mainMenuConfig?.proposals ?? false">
+        <button mat-menu-item routerLink="/proposals/">
+          <mat-icon> spa</mat-icon>
+          <span>Proposals</span>
+        </button>
+      </ng-container>
 
-    <ng-container *ngIf="mainMenu.publishedData">
-      <button mat-menu-item routerLink="/publishedDatasets/">
-        <mat-icon> chrome_reader_mode</mat-icon>
-        <span>Published Data</span>
-      </button>
-    </ng-container>
+      <ng-container *ngIf="mainMenuConfig?.publishedData ?? false">
+        <button mat-menu-item routerLink="/publishedDatasets/">
+          <mat-icon> chrome_reader_mode</mat-icon>
+          <span>Published Data</span>
+        </button>
+      </ng-container>
 
-    <ng-container *ngIf="mainMenu.samples">
-      <button mat-menu-item routerLink="/samples/">
-        <mat-icon> center_focus_weak</mat-icon>
-        <span>Samples</span>
-      </button>
+      <ng-container *ngIf="mainMenuConfig?.samples && false">
+        <button mat-menu-item routerLink="/samples/">
+          <mat-icon> center_focus_weak</mat-icon>
+          <span>Samples</span>
+        </button>
+      </ng-container>
     </ng-container>
+    <ng-template #noMenuItems>
+      <ng-container>
+        <button mat-menu-item>
+          <mat-icon>block</mat-icon>
+          <span>No Menu Items</span>
+        </button>
+      </ng-container>
+    </ng-template>
   </mat-menu>
 
   <mat-menu #userMenu="matMenu">
@@ -112,7 +122,8 @@
         >
       </h6>
     </span>
-    <span *ngIf="(this.loggedIn$ | async) === false; else userButton">
+    <!--<span *ngIf="(this.isLoggedIn | async) === false; else userButton">-->
+    <span *ngIf="!isLoggedIn; else userButton">
       <h6>
         <a class="toplink" (click)="login()" data-cy="login-button">
           <mat-icon> account_circle </mat-icon>

@@ -1,5 +1,5 @@
 import { DOCUMENT } from "@angular/common";
-import { Component, OnInit, Inject } from "@angular/core";
+import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Store } from "@ngrx/store";
 import {
@@ -23,7 +23,7 @@ import { Subscription } from "rxjs";
   styleUrls: ["./app-header.component.scss"],
   standalone: false,
 })
-export class AppHeaderComponent implements OnInit {
+export class AppHeaderComponent implements OnInit, OnDestroy {
   config = this.appConfigService.getConfig();
   facility = this.config.facility ?? "";
   siteTitle = this.config.siteTitle ?? "Vanilla SciCat";  
@@ -34,9 +34,10 @@ export class AppHeaderComponent implements OnInit {
   username$ = this.store.select(selectCurrentUserName);
   profileImage$ = this.store.select(selectThumbnailPhoto);
   inBatchIndicator$ = this.store.select(selectDatasetsInBatchIndicator);
-  loggedIn$ = this.store.select(selectIsLoggedIn);
+  //loggedIn$ = this.store.select(selectIsLoggedIn);
+  isLoggedIn = false;
 
-  mainMenu: MainMenuOptions = this.config.mainMenu["nonAuthorizedUser"];
+  mainMenuConfig: MainMenuOptions | null = this.config.mainMenu?.nonAuthenticatedUser || null;
 
   private sub: Subscription;
   
@@ -68,8 +69,16 @@ export class AppHeaderComponent implements OnInit {
     this.oAuth2Endpoints = this.config.oAuth2Endpoints;
 
     this.sub = this.store.select(selectIsLoggedIn).subscribe(isLoggedIn => {
-      this.mainMenu = this.config["mainMenu"][isLoggedIn?"authorizedUser":"nonAuthorizedUser"];
-      console.log(this.mainMenu);
+      this.isLoggedIn = isLoggedIn;
+      if (this.isLoggedIn) {
+        this.mainMenuConfig = this.config.mainMenu?.authenticatedUser || null;
+      } else {
+        this.mainMenuConfig = this.config.mainMenu?.nonAuthenticatedUser || null;
+      };
     });
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 }
