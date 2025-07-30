@@ -120,18 +120,19 @@ describe("PublisheddataDashboardComponent", () => {
     it("should add all DOI's to selectedDOIs if checked is true", () => {
       const published = createMock<PublishedData>({
         doi: "test",
-        creator: ["test"],
-        publisher: "test",
-        publicationYear: 2021,
         title: "test",
         abstract: "test",
-        dataDescription: "test",
-        resourceType: "test",
-        pidArray: [],
+        datasetPids: [],
         createdAt: "",
         registeredTime: "",
-        status: "",
+        status: PublishedData.StatusEnum.private,
         updatedAt: "",
+        metadata: {
+          creators: ["test creator"],
+          publisher: { name: "test" },
+          publicationYear: 2021,
+          resourceType: "test",
+        },
       });
 
       spyOn(component.vm$, "pipe").and.returnValue(

@@ -4,6 +4,7 @@ import { provideMockActions } from "@ngrx/effects/testing";
 import { provideMockStore } from "@ngrx/store/testing";
 import { selectQueryParams } from "state-management/selectors/published-data.selectors";
 import * as fromActions from "state-management/actions/published-data.actions";
+import { clearBatchAction } from "state-management/actions/datasets.actions";
 import { hot, cold } from "jasmine-marbles";
 import { MessageType } from "state-management/models";
 import {
@@ -15,6 +16,7 @@ import { Type } from "@angular/core";
 import { Router } from "@angular/router";
 import { MockRouter, createMock } from "shared/MockStubs";
 import {
+  DatasetsV4Service,
   PublishedData,
   PublishedDataService,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -22,22 +24,22 @@ import { TestObservable } from "jasmine-marbles/src/test-observables";
 
 const publishedData = createMock<PublishedData>({
   doi: "testDOI",
-  affiliation: "test affiliation",
-  creator: ["test creator"],
-  publisher: "test publisher",
-  publicationYear: 2019,
   title: "test title",
   abstract: "test abstract",
-  dataDescription: "test description",
-  resourceType: "test type",
-  pidArray: ["testPid"],
+  datasetPids: ["testPid"],
   createdAt: "",
   registeredTime: "",
   updatedAt: "",
-  url: "",
   numberOfFiles: 1,
   sizeOfArchive: 1,
-  status: "pending_registration",
+  metadata: {
+    creators: ["test creator"],
+    affiliation: "test affiliation",
+    publisher: { name: "test publisher" },
+    resourceType: "test type",
+    url: "",
+  },
+  status: PublishedData.StatusEnum.private,
 });
 
 describe("PublishedDataEffects", () => {
@@ -61,6 +63,12 @@ describe("PublishedDataEffects", () => {
             "publishedDataControllerFindOneV3",
             "publishedDataControllerCreateV3",
             "publishedDataControllerRegisterV3",
+          ]),
+        },
+        {
+          provide: DatasetsV4Service,
+          useValue: jasmine.createSpyObj("datasetsV4Service", [
+            "datasetsV4ControllerFindAllV4",
           ]),
         },
         { provide: Router, useClass: MockRouter },
@@ -211,11 +219,15 @@ describe("PublishedDataEffects", () => {
   describe("publishDataset$", () => {
     it("should result in a publishDatasetCompleteAction, a fetchPublishedDataAction", () => {
       const id = "testDOI";
-      const action = fromActions.publishDatasetAction({ data: publishedData });
-      const outcome1 = fromActions.publishDatasetCompleteAction({
+      const action = fromActions.createDataPublicationAction({
+        data: publishedData,
+      });
+      const outcome1 = fromActions.createDataPublicationCompleteAction({
         publishedData,
       });
       const outcome2 = fromActions.fetchPublishedDataAction({ id });
+      const outcome3 = clearBatchAction();
+      const outcome4 = fromActions.clearDataPublicationFromLocalStorage();
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: publishedData });
@@ -223,16 +235,20 @@ describe("PublishedDataEffects", () => {
         response,
       );
 
-      const expected = cold("--(bc)", {
+      const expected = cold("--(bcde)", {
         b: outcome1,
         c: outcome2,
+        d: outcome3,
+        e: outcome4,
       });
-      expect(effects.publishDataset$).toBeObservable(expected);
+      expect(effects.createDataPublication$).toBeObservable(expected);
     });
 
     it("should result in a publishDatasetFailedAction", () => {
-      const action = fromActions.publishDatasetAction({ data: publishedData });
-      const outcome = fromActions.publishDatasetFailedAction();
+      const action = fromActions.createDataPublicationAction({
+        data: publishedData,
+      });
+      const outcome = fromActions.createDataPublicationFailedAction();
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
@@ -241,7 +257,7 @@ describe("PublishedDataEffects", () => {
       );
 
       const expected = cold("--b", { b: outcome });
-      expect(effects.publishDataset$).toBeObservable(expected);
+      expect(effects.createDataPublication$).toBeObservable(expected);
     });
   });
 
@@ -252,7 +268,7 @@ describe("PublishedDataEffects", () => {
         content: "Publication Successful",
         duration: 5000,
       };
-      const action = fromActions.publishDatasetCompleteAction({
+      const action = fromActions.createDataPublicationCompleteAction({
         publishedData,
       });
       const outcome = showMessageAction({ message });
@@ -260,7 +276,9 @@ describe("PublishedDataEffects", () => {
       actions = hot("-a", { a: action });
 
       const expected = cold("-b", { b: outcome });
-      expect(effects.publishDatasetCompleteMessage$).toBeObservable(expected);
+      expect(effects.createDataPublicationCompleteMessage$).toBeObservable(
+        expected,
+      );
     });
   });
 
@@ -271,13 +289,15 @@ describe("PublishedDataEffects", () => {
         content: "Publication Failed",
         duration: 5000,
       };
-      const action = fromActions.publishDatasetFailedAction();
+      const action = fromActions.createDataPublicationFailedAction();
       const outcome = showMessageAction({ message });
 
       actions = hot("-a", { a: action });
 
       const expected = cold("-b", { b: outcome });
-      expect(effects.publishDatasetFailedMessage$).toBeObservable(expected);
+      expect(effects.createDataPublicationFailedMessage$).toBeObservable(
+        expected,
+      );
     });
   });
 
@@ -301,18 +321,23 @@ describe("PublishedDataEffects", () => {
     });
 
     it("should result in a registerPublishedDataFailedAction", () => {
-      const doi = "testDOI";
-      const action = fromActions.registerPublishedDataAction({ doi });
-      const outcome = fromActions.registerPublishedDataFailedAction();
+      const error = new Error("Test");
+      const message = {
+        type: MessageType.Error,
+        content: "Registration Failed. " + error.message,
+        duration: 5000,
+      };
+      const action = fromActions.registerPublishedDataFailedAction({
+        error: [error.message],
+      });
+      const outcome = showMessageAction({ message });
 
       actions = hot("-a", { a: action });
-      const response = cold("-#", {});
-      publishedDataApi.publishedDataControllerRegisterV3.and.returnValue(
-        response,
-      );
 
-      const expected = cold("--b", { b: outcome });
-      expect(effects.registerPublishedData$).toBeObservable(expected);
+      const expected = cold("-b", { b: outcome });
+      expect(effects.registerPublishedDataFailedMessage$).toBeObservable(
+        expected,
+      );
     });
   });
 
@@ -356,7 +381,7 @@ describe("PublishedDataEffects", () => {
 
     describe("ofType publishedDatasetAction", () => {
       it("should dispatch a loadingAction", () => {
-        const action = fromActions.publishDatasetAction({
+        const action = fromActions.createDataPublicationAction({
           data: publishedData,
         });
         const outcome = loadingAction();
@@ -437,7 +462,7 @@ describe("PublishedDataEffects", () => {
 
     describe("ofType publishDatasetCompleteAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
-        const action = fromActions.publishDatasetCompleteAction({
+        const action = fromActions.createDataPublicationCompleteAction({
           publishedData,
         });
         const outcome = loadingCompleteAction();
@@ -451,7 +476,7 @@ describe("PublishedDataEffects", () => {
 
     describe("ofType publishDatasetFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
-        const action = fromActions.publishDatasetFailedAction();
+        const action = fromActions.createDataPublicationFailedAction();
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
@@ -477,7 +502,9 @@ describe("PublishedDataEffects", () => {
 
     describe("ofType registerPublishedDataFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
-        const action = fromActions.registerPublishedDataFailedAction();
+        const action = fromActions.registerPublishedDataFailedAction({
+          error: [],
+        });
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });
