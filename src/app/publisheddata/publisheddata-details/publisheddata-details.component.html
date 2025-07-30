@@ -89,7 +89,7 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card>
+    <mat-card *ngIf="publishedData.metadata?.creators as creators">
       <mat-card-header class="creator-header">
         <div mat-card-avatar class="section-icon">
           <mat-icon> person </mat-icon>
@@ -99,7 +99,7 @@
 
       <mat-card-content>
         <table>
-          <tr *ngIf="publishedData.metadata?.creators as creators">
+          <tr>
             <th>Creators</th>
 
             <td>
@@ -130,7 +130,15 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card>
+    <mat-card
+      *ngIf="
+        publishedData.metadata?.downloadLink ||
+        publishedData.sizeOfArchive ||
+        publishedData.numberOfFiles ||
+        publishedData.metadata?.resourceType ||
+        publishedData.metadata?.dataDescription
+      "
+    >
       <mat-card-header class="file-header">
         <div mat-card-avatar class="section-icon">
           <mat-icon> folder </mat-icon>
@@ -256,6 +264,7 @@
           <button
             mat-stroked-button
             (click)="show = !show"
+            class="show-hide-metadata-button"
             data-cy="showHideMetadata"
           >
             {{ show ? "Hide MetaData" : "Show Metadata" }}

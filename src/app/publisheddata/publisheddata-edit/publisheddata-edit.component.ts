@@ -54,6 +54,7 @@ export class PublisheddataEditComponent
   public separatorKeysCodes: number[] = [ENTER, COMMA];
   publishedDataConfigSubscription: Subscription;
   beforeUnloadSubscription: Subscription;
+  formValueChangesSubscription: Subscription;
   initialMetadata: string;
   appConfig = this.appConfigService.getConfig();
 
@@ -134,7 +135,7 @@ export class PublisheddataEditComponent
         if (!isEmpty(publishedDataConfig)) {
           this.schema = publishedDataConfig.metadataSchema;
           // NOTE: We set the publicationYear by the system, so we remove it from the required fields in the frontend
-          this.schema.required.splice(
+          this.schema?.required.splice(
             this.schema.required.indexOf("publicationYear"),
             1,
           );
@@ -164,7 +165,7 @@ export class PublisheddataEditComponent
       },
     );
 
-    this.form.valueChanges.subscribe(() => {
+    this.formValueChangesSubscription = this.form.valueChanges.subscribe(() => {
       if (this.form.dirty) {
         this._hasUnsavedChanges = true;
       }
@@ -175,5 +176,6 @@ export class PublisheddataEditComponent
     this.routeSubscription.unsubscribe();
     this.publishedDataConfigSubscription.unsubscribe();
     this.beforeUnloadSubscription.unsubscribe();
+    this.formValueChangesSubscription.unsubscribe();
   }
 }

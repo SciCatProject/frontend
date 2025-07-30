@@ -126,7 +126,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
         if (!isEmpty(publishedDataConfig)) {
           this.schema = publishedDataConfig.metadataSchema;
           // NOTE: We set the publicationYear by the system, so we remove it from the required fields in the frontend
-          this.schema.required.splice(
+          this.schema?.required.splice(
             this.schema.required.indexOf("publicationYear"),
             1,
           );
@@ -150,18 +150,20 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
 
     this.actionSubjectSubscription = this.actionsSubj.subscribe((data) => {
       if (data.type === createDataPublicationCompleteAction.type) {
-        const publishedData = (
-          data as { type: string; publishedData: PublishedData }
-        ).publishedData;
+        const { publishedData } = data as {
+          type: string;
+          publishedData: PublishedData;
+        };
 
         const doi = encodeURIComponent(publishedData.doi);
         this.router.navigateByUrl("/publishedDatasets/" + doi);
       }
 
       if (data.type === saveDataPublicationCompleteAction.type) {
-        const publishedData = (
-          data as { type: string; publishedData: PublishedData }
-        ).publishedData;
+        const { publishedData } = data as {
+          type: string;
+          publishedData: PublishedData;
+        };
 
         this.savedPublishedDataDoi = publishedData.doi;
       }
