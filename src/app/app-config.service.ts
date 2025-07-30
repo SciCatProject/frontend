@@ -138,6 +138,7 @@ export interface AppConfigInterface {
   labelsLocalization?: LabelsLocalization;
   dateFormat?: string;
   defaultMainPage?: MainPageConfiguration;
+  headerSiteLogoLink?: string;
   mainMenu?: MainMenuConfiguration;
   supportEmail?: string;
 }
