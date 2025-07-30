@@ -54,6 +54,7 @@ export enum InternalLinkType {
 interface AttachmentOptions {
   limit: number;
   size: "small" | "medium" | "large";
+  view?: any,
 }
 type viewModeOptions = "table" | "json" | "tree";
 

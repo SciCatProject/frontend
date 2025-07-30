@@ -227,6 +227,11 @@
                           | slice: 0 : section.options.limit
                       "
                     >
+                    <ng-container [ngSwitch]="section.options.view.type">
+                      <div *ngSwitchCase="'customElement'">
+                        <custom-element-viewer [tagName]="section.options.view.name" [scriptUrl]="section.options.view.source" [props]="getProps(section.options.view.props, item)"/>
+                      </div>
+                      <div  *ngSwitchDefault>
                       <img
                         mat-card-image
                         [class]="
@@ -240,6 +245,8 @@
                         (click)="openAttachment(item.thumbnail)"
                         [title]="item.caption"
                       />
+                      </div>
+                    </ng-container>
                     </ng-container>
                   </ng-container>
                 </ng-container>

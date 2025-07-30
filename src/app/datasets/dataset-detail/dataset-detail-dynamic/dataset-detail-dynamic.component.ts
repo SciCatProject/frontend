@@ -31,6 +31,7 @@ import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular/m
 import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import _ from "lodash";
 
 /**
  * Component to show customizable details for a dataset, using the
@@ -254,5 +255,11 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });
+  }
+
+  getProps(props: string, item: Record<string, any>) {
+    return Object.fromEntries(
+      Object.entries(props).map(([key, path]) => [key, _.get(item, path as string)])
+    );
   }
 }
