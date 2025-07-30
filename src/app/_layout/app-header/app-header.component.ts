@@ -12,7 +12,12 @@ import {
   selectThumbnailPhoto,
 } from "state-management/selectors/user.selectors";
 import { selectDatasetsInBatchIndicator } from "state-management/selectors/datasets.selectors";
-import { AppConfigService, MainMenuConfiguration, MainMenuOptions, MainPageOptions, OAuth2Endpoint } from "app-config.service";
+import {
+  AppConfigService,
+  MainMenuOptions,
+  MainPageOptions,
+  OAuth2Endpoint,
+} from "app-config.service";
 import { Router } from "@angular/router";
 import { AppState } from "state-management/state/app.store";
 import { Subscription } from "rxjs";
@@ -24,10 +29,15 @@ import { Subscription } from "rxjs";
   standalone: false,
 })
 export class AppHeaderComponent implements OnInit, OnDestroy {
+  private sub: Subscription;
+
   config = this.appConfigService.getConfig();
   facility = this.config.facility ?? "";
-  siteTitle = this.config.siteTitle ?? "Vanilla SciCat";  
-  siteSciCatLogo = this.config.siteSciCatLogo == "icon" ? "scicat-header-logo-icon.png" : "scicat-header-logo-full.png";
+  siteTitle = this.config.siteTitle ?? "Vanilla SciCat";
+  siteSciCatLogo =
+    this.config.siteSciCatLogo == "icon"
+      ? "scicat-header-logo-icon.png"
+      : "scicat-header-logo-full.png";
   siteHeaderLogo = this.config.siteHeaderLogo ?? "site-header-logo.png";
 
   oAuth2Endpoints: OAuth2Endpoint[] = [];
@@ -37,20 +47,19 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   //loggedIn$ = this.store.select(selectIsLoggedIn);
   isLoggedIn = false;
 
-  mainMenuConfig: MainMenuOptions | null = this.config.mainMenu?.nonAuthenticatedUser || null;
+  mainMenuConfig: MainMenuOptions | null =
+    this.config.mainMenu?.nonAuthenticatedUser || null;
   defaultMainPage: MainPageOptions = MainPageOptions.DATASETS;
-  headerLogoLink: string = "/datasets";
+  headerLogoLink = "/datasets";
 
-  private sub: Subscription;
-  
   constructor(
     public appConfigService: AppConfigService,
     private router: Router,
     @Inject(APP_CONFIG) public appConfig: AppConfig,
-    private store: Store<AppState>,
+    private store: Store,
     @Inject(DOCUMENT) public document: Document,
   ) {}
-  
+
   logout(): void {
     this.store.dispatch(logoutAction());
   }
@@ -70,20 +79,26 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchCurrentUserAction());
     this.oAuth2Endpoints = this.config.oAuth2Endpoints;
 
-    this.sub = this.store.select(selectIsLoggedIn).subscribe(isLoggedIn => {
+    this.sub = this.store.select(selectIsLoggedIn).subscribe((isLoggedIn) => {
       this.isLoggedIn = isLoggedIn;
       if (this.isLoggedIn) {
         this.mainMenuConfig = this.config.mainMenu?.authenticatedUser || null;
-        this.defaultMainPage = MainPageOptions[this.config.defaultMainPage?.authenticatedUser || "DATASETS"];
+        this.defaultMainPage =
+          MainPageOptions[
+            this.config.defaultMainPage?.authenticatedUser || "DATASETS"
+          ];
       } else {
-        this.mainMenuConfig = this.config.mainMenu?.nonAuthenticatedUser || null;
-        this.defaultMainPage = MainPageOptions[this.config.defaultMainPage?.nonAuthenticatedUser || "DATASETS"];
-      };
-      this.headerLogoLink = (this.config.headerSiteLogoLink?this.config.headerSiteLogoLink:this.defaultMainPage);
-
+        this.mainMenuConfig =
+          this.config.mainMenu?.nonAuthenticatedUser || null;
+        this.defaultMainPage =
+          MainPageOptions[
+            this.config.defaultMainPage?.nonAuthenticatedUser || "DATASETS"
+          ];
       }
-
-    );
+      this.headerLogoLink = this.config.headerSiteLogoLink
+        ? this.config.headerSiteLogoLink
+        : this.defaultMainPage;
+    });
   }
 
   ngOnDestroy(): void {
