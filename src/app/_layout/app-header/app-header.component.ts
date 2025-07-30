@@ -12,7 +12,7 @@ import {
   selectThumbnailPhoto,
 } from "state-management/selectors/user.selectors";
 import { selectDatasetsInBatchIndicator } from "state-management/selectors/datasets.selectors";
-import { AppConfigService, MainMenuConfiguration, MainMenuOptions, OAuth2Endpoint } from "app-config.service";
+import { AppConfigService, MainMenuConfiguration, MainMenuOptions, MainPageOptions, OAuth2Endpoint } from "app-config.service";
 import { Router } from "@angular/router";
 import { AppState } from "state-management/state/app.store";
 import { Subscription } from "rxjs";
@@ -38,6 +38,8 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
 
   mainMenuConfig: MainMenuOptions | null = this.config.mainMenu?.nonAuthenticatedUser || null;
+  defaultMainPage: MainPageOptions = MainPageOptions.DATASETS;
+  headerLogoLink: string = "/datasets";
 
   private sub: Subscription;
   
@@ -48,7 +50,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     @Inject(DOCUMENT) public document: Document,
   ) {}
-
+  
   logout(): void {
     this.store.dispatch(logoutAction());
   }
@@ -72,13 +74,19 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
       this.isLoggedIn = isLoggedIn;
       if (this.isLoggedIn) {
         this.mainMenuConfig = this.config.mainMenu?.authenticatedUser || null;
+        this.defaultMainPage = MainPageOptions[this.config.defaultMainPage?.authenticatedUser || "DATASETS"];
       } else {
         this.mainMenuConfig = this.config.mainMenu?.nonAuthenticatedUser || null;
+        this.defaultMainPage = MainPageOptions[this.config.defaultMainPage?.nonAuthenticatedUser || "DATASETS"];
       };
-    });
+      this.headerLogoLink = (this.config.headerSiteLogoLink?this.config.headerSiteLogoLink:this.defaultMainPage);
+
+      }
+
+    );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
 }
