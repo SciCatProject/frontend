@@ -237,7 +237,7 @@
     }
   },
   "dateFormat": "yyyy-MM-dd HH:mm",
-    "datasetDetailComponent": {
+  "datasetDetailComponent": {
     "enableCustomizedComponent": false,
     "customization": [
       {
@@ -426,7 +426,7 @@
     "nonAuthenticatedUser": "DATASETS",
     "authenticatedUser": "PROPOSALS"
   },
-  "headerSiteLogoLink": "https://my.facility.eu",
+  "headerSiteLogoURL": "https://my.facility.site",
   "mainMenu": {
     "nonAuthenticatedUser": {
       "datasets": true,
