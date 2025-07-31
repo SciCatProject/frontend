@@ -108,6 +108,6 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   }
 
   isFullUrl(url: string): boolean {
-    return url.startsWith('http://') || url.startsWith('https://');
+    return url.startsWith("http://") || url.startsWith("https://");
   }
 }
