@@ -82,26 +82,20 @@
   <mat-toolbar class="mat-elevation-z1" color="primary">
     <div class="main-menu" [matMenuTriggerFor]="mainMenu">
       <mat-icon [inline]="true">menu</mat-icon>
-      <!--
-      <img class="main-menu-image" src="../../../assets/images/hamburger.svg" />
-      -->
     </div>
     <a [routerLink]="[defaultMainPage]">
       <img class="logo" src="../../../assets/images/{{ siteSciCatLogo }}" />
     </a>
-<!--   
-    <div mat-button class="main-menu" [matMenuTriggerFor]="mainMenu">
-      <img class="logo" src="../../../assets/images/{{ siteSciCatLogo }}" />
-    </div>
--->
-    <a [routerLink]="[headerLogoLink]">
-      <img class="logo" src="../../../assets/images/{{ siteHeaderLogo }}" />
-    </a>
-    <!--
-    <a class="toplink" [routerLink]="['/datasets']">
-      <h3>{{ status }}</h3>
-    </a>
-    -->
+    <ng-container *ngIf="isSiteHeaderLogoUrlExternal; else siteHeaderLogoUrlInternal">
+      <a [href]="siteHeaderLogoUrl">
+        <img class="logo" src="../../../assets/images/{{ siteHeaderLogo }}" />
+      </a>
+    </ng-container>
+    <ng-template #siteHeaderLogoUrlInternal>
+      <a [routerLink]="[siteHeaderLogoUrl]">
+        <img class="logo" src="../../../assets/images/{{ siteHeaderLogo }}" />
+      </a>
+    </ng-template>
     <span class="title">
       <h3>{{ siteTitle }}</h3>
     </span>
