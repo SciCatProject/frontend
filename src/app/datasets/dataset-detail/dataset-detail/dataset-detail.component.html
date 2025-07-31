@@ -26,7 +26,7 @@
   <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
     <div [fxFlex]="(attachments$ | async)?.length > 0 ? '90%' : '100%'">
       <mat-card [formGroup]="form" data-cy="general-info">
-        <mat-card-header class="general-header">
+        <mat-card-header class="dataset-general-header">
           <mat-icon class="section-icon"> description </mat-icon>
           <mat-card-title class="section-title">{{ "General Information" | translate }}</mat-card-title>
         </mat-card-header>
@@ -165,7 +165,7 @@
       </mat-card>
 
       <mat-card>
-        <mat-card-header class="creator-header">
+        <mat-card-header class="dataset-creator-header">
           <mat-icon class="section-icon"> person </mat-icon>
           <mat-card-title class="section-title">{{ "Creator Information" | translate }}</mat-card-title>
         </mat-card-header>
@@ -205,7 +205,7 @@
       </mat-card>
 
       <mat-card>
-        <mat-card-header class="file-header">
+        <mat-card-header class="dataset-file-header">
             <mat-icon class="section-icon"> folder </mat-icon>
           <mat-card-title class="section-title">{{ "File Information" | translate }}</mat-card-title>
         </mat-card-header>
@@ -229,7 +229,7 @@
       </mat-card>
 
       <mat-card>
-        <mat-card-header class="related-header">
+        <mat-card-header class="dataset-related-header">
           <mat-icon class="section-icon"> library_books </mat-icon>
           <mat-card-title class="section-title">{{ "Related Documents" | translate }}</mat-card-title>
         </mat-card-header>
@@ -319,7 +319,7 @@
       </mat-card>
 
       <mat-card *ngIf="dataset.type === 'derived'">
-        <mat-card-header class="derived-header">
+        <mat-card-header class="dataset-derived-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> analytics </mat-icon>
           </div>
@@ -345,10 +345,99 @@
       </mat-card>
 
       <mat-card>
-        <mat-card-header   
-        class="scientific-header">
-         <mat-icon class="section-icon"> science </mat-icon>
-         <mat-card-title class="section-title">{{ "Scientific Metadata" | translate }}</mat-card-title>
+        <mat-card-header class="dataset-links-header">
+          <mat-icon class="section-icon"> link </mat-icon>
+          <mat-card-title class="section-title">{{ "Links" | translate }}</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+          <table>
+            <tr *ngIf="dataset['proposalId'] && proposal">
+              <th>{{ "Proposal" | translate }}</th>
+              <td>
+                <a (click)="onClickProposal(proposal.proposalId)">{{
+                  proposal.title
+                }}</a>
+              </td>
+            </tr>
+            <tr
+              *ngIf="
+                dataset['proposalId'] &&
+                !proposal &&
+                appConfig.datasetDetailsShowMissingProposalId
+              "
+            >
+              <th>{{ "Proposal Id" | translate }}</th>
+              <td>{{ dataset["proposalId"] }}</td>
+            </tr>
+            <tr *ngIf="dataset['sampleId'] && sample">
+              <th>{{ "Sample" | translate }}</th>
+              <td>
+                <a (click)="onClickSample(sample.sampleId)">
+                  <span>{{ sample.description }}</span>
+                </a>
+              </td>
+            </tr>
+            <tr *ngIf="dataset['instrumentId'] && instrument">
+              <th>{{ "Instrument" | translate }}</th>
+              <td>
+                <a (click)="onClickInstrument(instrument.pid)">
+                  {{ instrument.name }}
+                </a>
+              </td>
+            </tr>
+            <tr *ngIf="dataset['creationLocation'] as value">
+              <th>{{ "Creation Location" | translate }}</th>
+              <td>{{ value }}</td>
+            </tr>
+            <tr *ngIf="dataset.techniques && dataset.techniques.length > 0">
+              <th>{{ "Techniques" | translate }}</th>
+              <td>
+                <div *ngFor="let technique of dataset.techniques">
+                  <span>
+                    {{ technique.name }}
+                  </span>
+                  <span
+                    *ngIf="
+                      dataset.techniques.indexOf(technique) <
+                      dataset.techniques.length - 1
+                    "
+                    >,
+                  </span>
+                </div>
+              </td>
+            </tr>
+            <tr
+              *ngIf="
+                dataset['inputDatasets'] && dataset['inputDatasets'].length > 0
+              "
+            >
+              <th>{{ "Input Datasets" | translate }}</th>
+              <td>
+                <div *ngFor="let datasetPid of dataset['inputDatasets']">
+                  <span>
+                    <a [routerLink]="['/datasets/', datasetPid]">
+                      {{ datasetPid }}
+                    </a>
+                  </span>
+                  <span
+                    *ngIf="
+                      dataset['inputDatasets'].indexOf(datasetPid) <
+                      dataset['inputDatasets'].length - 1
+                    "
+                    >,
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header class="dataset-scientific-header">
+          <mat-icon class="section-icon"> science </mat-icon>
+          <mat-card-title class="section-title">{{ "Scientific Metadata" | translate }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <ng-template
