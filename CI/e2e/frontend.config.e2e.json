@@ -426,7 +426,7 @@
     "nonAuthenticatedUser": "DATASETS",
     "authenticatedUser": "PROPOSALS"
   },
-  "headerSiteLogoURL": "https://my.facility.site",
+  "siteHeaderLogoUrl": "https://my.facility.site",
   "mainMenu": {
     "nonAuthenticatedUser": {
       "datasets": true,
