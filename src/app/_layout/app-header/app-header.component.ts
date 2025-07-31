@@ -50,7 +50,8 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   mainMenuConfig: MainMenuOptions | null =
     this.config.mainMenu?.nonAuthenticatedUser || null;
   defaultMainPage: MainPageOptions = MainPageOptions.DATASETS;
-  headerLogoLink = "/datasets";
+  siteHeaderLogoUrl = "/datasets";
+  isSiteHeaderLogoUrlExternal = false;
 
   constructor(
     public appConfigService: AppConfigService,
@@ -95,13 +96,18 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
             this.config.defaultMainPage?.nonAuthenticatedUser || "DATASETS"
           ];
       }
-      this.headerLogoLink = this.config.headerSiteLogoLink
-        ? this.config.headerSiteLogoLink
+      this.siteHeaderLogoUrl = this.config.siteHeaderLogoUrl
+        ? this.config.siteHeaderLogoUrl
         : this.defaultMainPage;
+      this.isSiteHeaderLogoUrlExternal = this.isFullUrl(this.siteHeaderLogoUrl);
     });
   }
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
+  }
+
+  isFullUrl(url: string): boolean {
+    return url.startsWith('http://') || url.startsWith('https://');
   }
 }
