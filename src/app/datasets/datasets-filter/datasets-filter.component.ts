@@ -435,6 +435,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     }
 
     this.updateConditionInStore(updatedConditions);
+
+    this.store.dispatch(
+      updateUserSettingsAction({ property: { conditions: updatedConditions } }),
+    );
   }
 
   updateConditionOperator(index: number, newOperator: string) {
