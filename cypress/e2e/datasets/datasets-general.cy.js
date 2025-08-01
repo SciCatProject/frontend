@@ -150,4 +150,75 @@ describe("Datasets general", () => {
         .should("have.length", 2);
     });
   });
+
+  describe("Units options in add condition dialog units dropdown", () => {
+    beforeEach(() => {
+      cy.login(Cypress.env("username"), Cypress.env("password"));
+      cy.createDataset(
+        "raw",
+        testData.rawDataset.datasetName,
+        undefined,
+        "small",
+        {
+          scientificMetadata: {
+            outgassing_values_after_1h: {
+              type: "quantity",
+              value: 2,
+              unit: "mbar l/s/cm^2",
+            },
+          },
+          isPublished: true,
+        },
+      ).then(() => {
+        cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+          const testConfig = {
+            ...baseConfig,
+            defaultDatasetsListSettings: {
+              ...baseConfig.defaultDatasetsListSettings,
+              conditions: [
+                {
+                condition: {
+                  lhs: "outgassing_values_after_1h",
+                  relation: "GREATER_THAN",
+                  rhs: 1,
+                  unit: "mbar l/s/cm^2",
+                  unitsOptions: [
+                    "mbar l/s/cm^2",
+                    "Pa m^3/s/m^2",
+                    "Pa m^3/s/m^2",
+                    "mbar l/s/cm^2",
+                  ],
+                },
+                enabled: false,
+              },
+              ],
+            },
+          };
+
+          cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+          cy.visit("/datasets");
+          cy.wait("@getConfig", { timeout: 20000 }).then((interception) => {
+            const settings = interception.response.body.defaultDatasetsListSettings;
+            cy.log("defaultDatasetsListSettings:", JSON.stringify(settings));
+          });
+          cy.finishedLoading();
+        });
+      });
+    });
+
+    it("should display limited options in units dropdown", () => {
+      
+      cy.get('[data-cy="more-filters-button"]').click();
+
+      
+
+      cy.get('[data-cy="edit-condition"]').first().click();
+
+      cy.get('input[name="lhs"]').type("outgassing_values_after_1h");
+
+      cy.get('[data-cy="unit-dropdown"]').click();
+
+      cy.get('mat-option').should('have.length', 4);
+    });
+  });
 });
