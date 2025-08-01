@@ -86,6 +86,7 @@ import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-d
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
+import { MatExpansionModule } from "@angular/material/expansion";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 
 @NgModule({
@@ -149,6 +150,7 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
     CdkDrag,
     CdkDragHandle,
     FiltersModule,
+    MatExpansionModule,
   ],
   declarations: [
     BatchViewComponent,
