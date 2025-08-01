@@ -1,5 +1,5 @@
 import { DOCUMENT } from "@angular/common";
-import { Component, OnInit, Inject } from "@angular/core";
+import { Component, OnInit, Inject, OnDestroy } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Store } from "@ngrx/store";
 import {
@@ -12,8 +12,15 @@ import {
   selectThumbnailPhoto,
 } from "state-management/selectors/user.selectors";
 import { selectDatasetsInBatchIndicator } from "state-management/selectors/datasets.selectors";
-import { AppConfigService, OAuth2Endpoint } from "app-config.service";
+import {
+  AppConfigService,
+  MainMenuOptions,
+  MainPageOptions,
+  OAuth2Endpoint,
+} from "app-config.service";
 import { Router } from "@angular/router";
+import { AppState } from "state-management/state/app.store";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-app-header",
@@ -21,17 +28,30 @@ import { Router } from "@angular/router";
   styleUrls: ["./app-header.component.scss"],
   standalone: false,
 })
-export class AppHeaderComponent implements OnInit {
+export class AppHeaderComponent implements OnInit, OnDestroy {
+  private sub: Subscription;
+
   config = this.appConfigService.getConfig();
   facility = this.config.facility ?? "";
-  status = this.appConfig.production ? "" : "test";
+  siteTitle = this.config.siteTitle ?? "Vanilla SciCat";
+  siteSciCatLogo =
+    this.config.siteSciCatLogo == "icon"
+      ? "scicat-header-logo-icon.png"
+      : "scicat-header-logo-full.png";
   siteHeaderLogo = this.config.siteHeaderLogo ?? "site-header-logo.png";
 
   oAuth2Endpoints: OAuth2Endpoint[] = [];
   username$ = this.store.select(selectCurrentUserName);
   profileImage$ = this.store.select(selectThumbnailPhoto);
   inBatchIndicator$ = this.store.select(selectDatasetsInBatchIndicator);
-  loggedIn$ = this.store.select(selectIsLoggedIn);
+  //loggedIn$ = this.store.select(selectIsLoggedIn);
+  isLoggedIn = false;
+
+  mainMenuConfig: MainMenuOptions | null =
+    this.config.mainMenu?.nonAuthenticatedUser || null;
+  defaultMainPage: MainPageOptions = MainPageOptions.DATASETS;
+  siteHeaderLogoUrl = "/datasets";
+  isSiteHeaderLogoUrlExternal = false;
 
   constructor(
     public appConfigService: AppConfigService,
@@ -59,5 +79,35 @@ export class AppHeaderComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(fetchCurrentUserAction());
     this.oAuth2Endpoints = this.config.oAuth2Endpoints;
+
+    this.sub = this.store.select(selectIsLoggedIn).subscribe((isLoggedIn) => {
+      this.isLoggedIn = isLoggedIn;
+      if (this.isLoggedIn) {
+        this.mainMenuConfig = this.config.mainMenu?.authenticatedUser || null;
+        this.defaultMainPage =
+          MainPageOptions[
+            this.config.defaultMainPage?.authenticatedUser || "DATASETS"
+          ];
+      } else {
+        this.mainMenuConfig =
+          this.config.mainMenu?.nonAuthenticatedUser || null;
+        this.defaultMainPage =
+          MainPageOptions[
+            this.config.defaultMainPage?.nonAuthenticatedUser || "DATASETS"
+          ];
+      }
+      this.siteHeaderLogoUrl = this.config.siteHeaderLogoUrl
+        ? this.config.siteHeaderLogoUrl
+        : this.defaultMainPage;
+      this.isSiteHeaderLogoUrlExternal = this.isFullUrl(this.siteHeaderLogoUrl);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
+
+  isFullUrl(url: string): boolean {
+    return url.startsWith("http://") || url.startsWith("https://");
   }
 }
