@@ -276,7 +276,9 @@ export class UserEffects {
 
         if (id && ttl && isTokenExpired) {
           this.authService.clear();
+          if (!(window as any).__karma__) {
           window.location.reload();
+          }
         }
 
         return this.authService.isAuthenticated();
