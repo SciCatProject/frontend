@@ -51,7 +51,6 @@ describe("Main Page", () => {
 
       cy.get('[data-cy="login-button"]').should('exist');
 
-      //cy.get("mat-row").contains("Main Page Dataset Public").click();
     });
   });
 
@@ -59,19 +58,6 @@ describe("Main Page", () => {
     it("should visit main page correctly configured", () => {
       const username = Cypress.env("username");
       const password = Cypress.env("password");
-
-      // cy.visit("/login");
-
-      // cy.finishedLoading();
-
-      // cy.url().should("include", "/login");
-
-      // cy.get('mat-tab-group [role="tab"]').contains("Local").click();
-
-      // cy.get("#usernameInput").type(username).should("have.value", username);
-      // cy.get("#passwordInput").type(password).should("have.value", password);
-
-      // cy.get("button[type=submit]").click();
 
       cy.visit("/");
       cy.finishedLoading();

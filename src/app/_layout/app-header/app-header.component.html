@@ -1,6 +1,6 @@
 <div class="header">
   <mat-menu #mainMenu="matMenu">
-    <ng-container *ngIf="mainMenuConfig; else noMenuItems">
+    <ng-container *ngIf="mainMenuConfig$ | async as mainMenuConfig; else noMenuItems">
       <ng-container *ngIf="mainMenuConfig?.datasets ?? false">
         <button mat-menu-item routerLink="/datasets/">
           <mat-icon> folder</mat-icon>
@@ -50,7 +50,7 @@
         </button>
       </ng-container>
 
-      <ng-container *ngIf="mainMenuConfig?.samples && false">
+      <ng-container *ngIf="mainMenuConfig?.samples ?? false">
         <button mat-menu-item routerLink="/samples/">
           <mat-icon> center_focus_weak</mat-icon>
           <span>Samples</span>
@@ -83,16 +83,16 @@
     <div class="main-menu" [matMenuTriggerFor]="mainMenu">
       <mat-icon [inline]="true">menu</mat-icon>
     </div>
-    <a [routerLink]="[defaultMainPage]">
+    <a [routerLink]="[defaultMainPage$ | async]">
       <img class="logo" src="../../../assets/images/{{ siteSciCatLogo }}" />
     </a>
-    <ng-container *ngIf="isSiteHeaderLogoUrlExternal; else siteHeaderLogoUrlInternal">
-      <a [href]="siteHeaderLogoUrl">
+    <ng-container *ngIf="isSiteHeaderLogoUrlExternal$ | async; else siteHeaderLogoUrlInternal">
+      <a [href]="siteHeaderLogoUrl$ | async">
         <img class="logo" src="../../../assets/images/{{ siteHeaderLogo }}" />
       </a>
     </ng-container>
     <ng-template #siteHeaderLogoUrlInternal>
-      <a [routerLink]="[siteHeaderLogoUrl]">
+      <a [routerLink]="[siteHeaderLogoUrl$ | async]">
         <img class="logo" src="../../../assets/images/{{ siteHeaderLogo }}" />
       </a>
     </ng-template>
