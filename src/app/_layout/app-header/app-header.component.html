@@ -117,15 +117,7 @@
       </h6>
     </span>
     <!--<span *ngIf="(this.isLoggedIn | async) === false; else userButton">-->
-    <span *ngIf="!isLoggedIn; else userButton">
-      <h6>
-        <a class="toplink" (click)="login()" data-cy="login-button">
-          <mat-icon> account_circle </mat-icon>
-          <span class="large-screen-text">Sign in</span>
-        </a>
-      </h6>
-    </span>
-    <ng-template #userButton>
+    <span *ngIf="isLoggedIn$ | async; else loginButton">
       <span *ngIf="config.shoppingCartOnHeader" [matMenuTriggerFor]="cartMenu">
         <button id="cartOnHeaderButton" mat-icon-button>
           <mat-icon
@@ -148,6 +140,14 @@
           <div color="primary" class="large-screen-text">{{ username$ | async }}</div>
         </button>
       </span>
+    </span>
+    <ng-template #loginButton>
+      <h6>
+        <a class="toplink" (click)="login()" data-cy="login-button">
+          <mat-icon> account_circle </mat-icon>
+          <span class="large-screen-text">Sign in</span>
+        </a>
+      </h6>
     </ng-template>
   </mat-toolbar>
 </div>

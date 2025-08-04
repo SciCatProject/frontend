@@ -58,7 +58,6 @@ export class AppHeaderComponent implements OnInit {
   siteHeaderLogoUrl$: Observable<string>;
   isSiteHeaderLogoUrlExternal$: Observable<boolean>;
 
-
   constructor(
     public appConfigService: AppConfigService,
     private router: Router,
@@ -66,7 +65,7 @@ export class AppHeaderComponent implements OnInit {
     private store: Store,
     @Inject(DOCUMENT) public document: Document,
   ) {
-        // Select the logged-in state as an observable
+    // Select the logged-in state as an observable
     this.isLoggedIn$ = this.store.select(selectIsLoggedIn);
 
     // Compute derived observables
@@ -74,32 +73,32 @@ export class AppHeaderComponent implements OnInit {
       map((isLoggedIn) =>
         isLoggedIn
           ? this.config.mainMenu?.authenticatedUser || null
-          : this.config.mainMenu?.nonAuthenticatedUser || null
-      )
+          : this.config.mainMenu?.nonAuthenticatedUser || null,
+      ),
     );
 
     this.defaultMainPage$ = this.isLoggedIn$.pipe(
       map((isLoggedIn) =>
         isLoggedIn
           ? MainPageOptions[
-              this.config.defaultMainPage?.authenticatedUser || 'DATASETS'
+              this.config.defaultMainPage?.authenticatedUser || "DATASETS"
             ]
           : MainPageOptions[
-              this.config.defaultMainPage?.nonAuthenticatedUser || 'DATASETS'
-            ]
-      )
+              this.config.defaultMainPage?.nonAuthenticatedUser || "DATASETS"
+            ],
+      ),
     );
 
     this.siteHeaderLogoUrl$ = this.defaultMainPage$.pipe(
       map((defaultMainPage) =>
         this.config.siteHeaderLogoUrl
           ? this.config.siteHeaderLogoUrl
-          : defaultMainPage
-      )
+          : defaultMainPage,
+      ),
     );
 
     this.isSiteHeaderLogoUrlExternal$ = this.siteHeaderLogoUrl$.pipe(
-      map((siteHeaderLogoUrl) => this.isFullUrl(siteHeaderLogoUrl))
+      map((siteHeaderLogoUrl) => this.isFullUrl(siteHeaderLogoUrl)),
     );
   }
 
