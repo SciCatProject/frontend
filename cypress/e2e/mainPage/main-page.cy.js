@@ -8,14 +8,18 @@ describe("Main Page", () => {
       "Main Page Dataset Public",
       "20150729",
       "small",
-      true,
+      {
+        isPublished: true,
+      },
     );
     cy.createDataset(
       "raw",
       "Main Page Dataset Non Public",
       "20150729",
       "small",
-      false,
+      {
+        isPublished: true,
+      },
     );
   });
 

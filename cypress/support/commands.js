@@ -113,7 +113,6 @@ Cypress.Commands.add(
     datasetName = testData.rawDataset.datasetName,
     proposalId = "20170266",
     dataFileSize = "small",
-    isPublished = false,
     overrides = {}
   ) => {
     cy.getCookie("user").then((userCookie) => {
