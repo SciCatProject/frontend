@@ -1,10 +1,6 @@
 <div class="header">
   <mat-menu #mainMenu="matMenu">
-<<<<<<< HEAD
     <ng-container *ngIf="mainMenuConfig$ | async as mainMenuConfig; else noMenuItems">
-=======
-    <ng-container *ngIf="mainMenuConfig; else noMenuItems">
->>>>>>> c03fe0cca39277b14a0470f24ee3611cd80a3384
       <ng-container *ngIf="mainMenuConfig?.datasets ?? false">
         <button mat-menu-item routerLink="/datasets/">
           <mat-icon> folder</mat-icon>
@@ -54,11 +50,7 @@
         </button>
       </ng-container>
 
-<<<<<<< HEAD
       <ng-container *ngIf="mainMenuConfig?.samples ?? false">
-=======
-      <ng-container *ngIf="mainMenuConfig?.samples && false">
->>>>>>> c03fe0cca39277b14a0470f24ee3611cd80a3384
         <button mat-menu-item routerLink="/samples/">
           <mat-icon> center_focus_weak</mat-icon>
           <span>Samples</span>
@@ -91,28 +83,16 @@
     <div class="main-menu" [matMenuTriggerFor]="mainMenu">
       <mat-icon [inline]="true">menu</mat-icon>
     </div>
-<<<<<<< HEAD
     <a [routerLink]="[defaultMainPage$ | async]">
       <img class="logo" src="../../../assets/images/{{ siteSciCatLogo }}" />
     </a>
     <ng-container *ngIf="isSiteHeaderLogoUrlExternal$ | async; else siteHeaderLogoUrlInternal">
       <a [href]="siteHeaderLogoUrl$ | async">
-=======
-    <a [routerLink]="[defaultMainPage]">
-      <img class="logo" src="../../../assets/images/{{ siteSciCatLogo }}" />
-    </a>
-    <ng-container *ngIf="isSiteHeaderLogoUrlExternal; else siteHeaderLogoUrlInternal">
-      <a [href]="siteHeaderLogoUrl">
->>>>>>> c03fe0cca39277b14a0470f24ee3611cd80a3384
         <img class="logo" src="../../../assets/images/{{ siteHeaderLogo }}" />
       </a>
     </ng-container>
     <ng-template #siteHeaderLogoUrlInternal>
-<<<<<<< HEAD
       <a [routerLink]="[siteHeaderLogoUrl$ | async]">
-=======
-      <a [routerLink]="[siteHeaderLogoUrl]">
->>>>>>> c03fe0cca39277b14a0470f24ee3611cd80a3384
         <img class="logo" src="../../../assets/images/{{ siteHeaderLogo }}" />
       </a>
     </ng-template>
