@@ -288,7 +288,7 @@ describe("Proposals general", () => {
   });
 
   describe("Proposals dynamic material table", () => {
-    it.only("should be able to search for proposal in the global search", () => {
+    it("should be able to search for proposal in the global search", () => {
       const newProposal = {
         ...testData.proposal,
         proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
