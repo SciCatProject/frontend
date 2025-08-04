@@ -41,7 +41,7 @@ const scicatToken: SDKToken = {
   id: "testId",
   ttl: 100,
   scopes: ["string"],
-  created: new Date(),
+  created: new Date().toDateString(),
   userId: "testId",
   user: null,
   rememberMe: false,
