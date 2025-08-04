@@ -43,10 +43,9 @@ echo -e "\nGenerating the new sdk..."
 ##
 docker run \
 	--rm \
-	--add-host host.docker.internal:host-gateway \
 	-v "`pwd`:/local" \
 	openapitools/openapi-generator-cli:v7.13.0 generate \
-	-i http://host.docker.internal:3000/explorer-json \
+	-i /local/local-api-for-generator.json \
 	-g typescript-angular \
 	-o local/@scicatproject/scicat-sdk-ts-angular \
 	--additional-properties=ngVersion=19.0.0,npmName=@scicatproject/scicat-sdk-ts-angular,supportsES6=true,withInterfaces=true  --skip-validate-spec
