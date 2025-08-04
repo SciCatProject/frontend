@@ -1,0 +1,78 @@
+<div [style]="{ display: hidden ? 'none' : '' }" class="array-layout">
+  <div class="array-layout-toolbar">
+    <h2 class="mat-h2 array-layout-title">{{ label }}</h2>
+    <span></span>
+    <mat-icon
+      *ngIf="this.error?.length"
+      color="warn"
+      matBadge="{{ this.error.split('\n').length }}"
+      matBadgeColor="warn"
+      matTooltip="{{ this.error }}"
+      matTooltipClass="error-message-tooltip"
+    >
+      error_outline
+    </mat-icon>
+    <span></span>
+    <button
+      mat-button
+      matTooltip="{{ translations.addTooltip }}"
+      [disabled]="!isEnabled()"
+      (click)="add()"
+      attr.aria-label="{{ translations.addAriaLabel }}"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <p *ngIf="noData">{{ translations.noDataMessage }}</p>
+  <div
+    *ngFor="
+      let item of [].constructor(data);
+      let idx = index;
+      trackBy: trackByFn;
+      last as last;
+      first as first
+    "
+  >
+    <mat-card class="array-item" appearance="outlined">
+      <mat-card-content>
+        <jsonforms-outlet [renderProps]="getProps(idx)"></jsonforms-outlet>
+      </mat-card-content>
+      <mat-card-actions *ngIf="isEnabled()">
+        <button
+          *ngIf="uischema?.options?.showSortButtons"
+          class="item-up"
+          mat-button
+          [disabled]="first"
+          (click)="up(idx)"
+          attr.aria-label="{{ translations.upAriaLabel }}"
+          matTooltip="{{ translations.up }}"
+          matTooltipPosition="right"
+        >
+          <mat-icon>arrow_upward</mat-icon>
+        </button>
+        <button
+          *ngIf="uischema?.options?.showSortButtons"
+          class="item-down"
+          mat-button
+          [disabled]="last"
+          (click)="down(idx)"
+          attr.aria-label="{{ translations.downAriaLabel }}"
+          matTooltip="{{ translations.down }}"
+          matTooltipPosition="right"
+        >
+          <mat-icon>arrow_downward</mat-icon>
+        </button>
+        <button
+          mat-button
+          color="warn"
+          (click)="remove(idx)"
+          attr.aria-label="{{ translations.removeAriaLabel }}"
+          matTooltip="{{ translations.removeTooltip }}"
+          matTooltipPosition="right"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

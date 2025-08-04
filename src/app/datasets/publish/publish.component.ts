@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, signal } from "@angular/core";
-import { COMMA, ENTER } from "@angular/cdk/keycodes";
+import { Component, OnInit, OnDestroy, signal } from "@angular/core";
 
 import { Store, ActionsSubject } from "@ngrx/store";
 import { first, tap } from "rxjs/operators";
@@ -9,7 +8,6 @@ import { prefillBatchAction } from "state-management/actions/datasets.actions";
 import {
   createDataPublicationAction,
   createDataPublicationCompleteAction,
-  fetchPublishedDataAction,
   fetchPublishedDataConfigAction,
   resyncPublishedDataAction,
   saveDataPublicationAction,
@@ -23,15 +21,16 @@ import {
   PublishedDataService,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { Router } from "@angular/router";
-import {
-  selectCurrentPublishedData,
-  selectPublishedDataConfig,
-} from "state-management/selectors/published-data.selectors";
+import { selectPublishedDataConfig } from "state-management/selectors/published-data.selectors";
 import { fromEvent, Subscription } from "rxjs";
 import { AppConfigService } from "app-config.service";
 import { angularMaterialRenderers } from "@jsonforms/angular-material";
 import { isEmpty } from "lodash-es";
 import { EditableComponent } from "app-routing/pending-changes.guard";
+import {
+  ArrayLayoutRenderer,
+  ArrayLayoutRendererTester,
+} from "../../shared/modules/jsonforms-custom-renderers/custom-array-renderer/custom-array-layout-renderer.component";
 
 @Component({
   selector: "publish",
@@ -49,12 +48,16 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
   readonly panelOpenState = signal(false);
 
   appConfig = this.appConfigService.getConfig();
-  renderers = angularMaterialRenderers;
+  renderers = [
+    ...angularMaterialRenderers,
+    {
+      tester: ArrayLayoutRendererTester,
+      renderer: ArrayLayoutRenderer,
+    },
+  ];
   schema: any = {};
   uiSchema: any = {};
-  metadataData: any = {};
-
-  public separatorKeysCodes: number[] = [ENTER, COMMA];
+  metadata: any = {};
   public datasetCount: number;
   today: number = Date.now();
   public metadataFormErrors = [];
@@ -86,7 +89,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
     }
   }
 
-  public metadataDataIsValid() {
+  public metadataIsValid() {
     return this.metadataFormErrors.length === 0;
   }
 
@@ -95,7 +98,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
   }
 
   onMetadataChange(data: any) {
-    this.metadataData = data;
+    this.metadata = data;
 
     if (JSON.stringify(data) !== this.initialMetadata) {
       this._hasUnsavedChanges = true;
@@ -189,7 +192,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
   getPublishedDataForCreation() {
     const { title, abstract, datasetPids } = this.form;
     const metadata = {
-      ...this.metadataData,
+      ...this.metadata,
       landingPage: this.appConfig.landingPage,
     };
     return {

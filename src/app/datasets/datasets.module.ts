@@ -89,6 +89,8 @@ import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
 import { JsonFormsModule } from "@jsonforms/angular";
 import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 import { MatExpansionModule } from "@angular/material/expansion";
+import { ArrayLayoutRenderer } from "../shared/modules/jsonforms-custom-renderers/custom-array-renderer/custom-array-layout-renderer.component";
+import { MatBadgeModule } from "@angular/material/badge";
 
 @NgModule({
   imports: [
@@ -154,6 +156,7 @@ import { MatExpansionModule } from "@angular/material/expansion";
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
     MatExpansionModule,
+    MatBadgeModule,
   ],
   declarations: [
     BatchViewComponent,
@@ -181,6 +184,7 @@ import { MatExpansionModule } from "@angular/material/expansion";
     DatafilesActionsComponent,
     DatafilesActionComponent,
     DatasetsFilterSettingsComponent,
+    ArrayLayoutRenderer,
   ],
   providers: [
     ArchivingService,
