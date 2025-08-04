@@ -1,3 +1,10 @@
+mat-dialog-content {
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  width: 50vh;
+}
+
 mat-dialog-title {
   background-color: #1976d2; /* Example: Material Indigo 500 */
   color: white;
@@ -5,52 +12,12 @@ mat-dialog-title {
   width: 60%;
 }
 
-.filter-dialog-content {
-  display: flex;
-  gap: 20px;
-  background-color: #f0f0f0; /* Light grey background for contrast */
-}
-
 .filters-container {
   flex: 1 0 26%;
 }
 
-.conditions-container {
-  flex: 1 0 70%;
-  overflow-y: auto;
-  max-height: 100%;
-}
-
-.scientific-chip-text {
-  margin-left: 12px;
-  line-height: 17px;
-}
-
-.scientific-chip-text-shrink-left {
-  display: inline-block;
-  max-width: 36%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.scientific-chip-text-shrink-right {
-  display: inline-block;
-  max-width: 32%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.condition-action-items {
-  position: relative;
-  top: 5px;
-  margin-right: 12px;
-}
 mat-nav-list {
   width: 100%;
-  max-height: 400px;
-  overflow: auto;
 }
 
 mat-list-item {

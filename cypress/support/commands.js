@@ -114,6 +114,7 @@ Cypress.Commands.add(
     proposalId = "20170266",
     dataFileSize = "small",
     isPublished = false,
+    overrides = {}
   ) => {
     cy.getCookie("user").then((userCookie) => {
       const user = JSON.parse(decodeURIComponent(userCookie.value));
@@ -125,6 +126,7 @@ Cypress.Commands.add(
             datasetName, 
             proposalId,
             isPublished,
+            ...overrides,
           };
           cy.log("Raw Dataset 1: " + JSON.stringify(dataset, null, 2));
           cy.log("User: " + JSON.stringify(user, null, 2));
