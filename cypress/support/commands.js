@@ -113,14 +113,14 @@ Cypress.Commands.add(
     datasetName = testData.rawDataset.datasetName,
     proposalId = "20170266",
     dataFileSize = "small",
-    overrides = {}
+    overwrites = {}
   ) => {
     cy.getCookie("user").then((userCookie) => {
       const user = JSON.parse(decodeURIComponent(userCookie.value));
 
       cy.getToken().then((token) => {
         if (type === "raw") {
-          const dataset = { ...testData.rawDataset, datasetName, proposalId, ...overrides, };
+          const dataset = { ...testData.rawDataset, proposalId, ...overwrites };
           cy.log("Raw Dataset 1: " + JSON.stringify(dataset, null, 2));
           cy.log("User: " + JSON.stringify(user, null, 2));
 
