@@ -42,7 +42,7 @@ export const initialUserState: UserState = {
     id: "",
     ttl: 0,
     scopes: ["string"],
-    created: new Date().toDateString(),
+    created: new Date().toISOString(),
     userId: "",
     user: { id: "", username: "", email: "", authStrategy: "" },
   },
