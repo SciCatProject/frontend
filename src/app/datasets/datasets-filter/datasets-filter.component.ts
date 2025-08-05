@@ -120,7 +120,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   ngOnInit() { 
     this.getAllComponentLabels(); 
     this.applyEnabledConditions();
-    console.log("debug------- inside ngOnInit!!!!");
   }
 
   getAllComponentLabels() {
@@ -433,7 +432,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
     // Removes the old condition if enabled
     if (oldCondition.enabled) {
-      //this triggers the metadataKeys endpoint when changing input values
       this.store.dispatch(
         removeScientificConditionAction({ condition: oldCondition.condition }),
       );
