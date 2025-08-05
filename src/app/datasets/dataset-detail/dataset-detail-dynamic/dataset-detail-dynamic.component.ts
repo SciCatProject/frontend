@@ -257,7 +257,8 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     });
   }
 
-  getProps(props: string, item: Record<string, any>) {
+  getProps(props: string, item: Record<string, any> = {}) {
+    if (!props) return {};
     return Object.fromEntries(
       Object.entries(props).map(([key, path]) => [key, _.get(item, path as string)])
     );

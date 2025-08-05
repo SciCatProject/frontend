@@ -2,11 +2,10 @@ import {
   Component,
   ElementRef,
   Input,
-  OnChanges,
   OnDestroy,
+  ViewChild,
+  AfterViewInit,
   Renderer2,
-  SimpleChanges,
-  ViewChild
 } from '@angular/core';
 
 @Component({
@@ -14,7 +13,7 @@ import {
   template: `<div #container></div>`,
   standalone: true,
 })
-export class CustomElementViewerComponent implements OnChanges, OnDestroy {
+export class CustomElementViewerComponent implements AfterViewInit, OnDestroy {
   @Input() tagName!: string;
   @Input() scriptUrl!: string;
   @Input() props: Record<string, any> = {};
@@ -26,18 +25,11 @@ export class CustomElementViewerComponent implements OnChanges, OnDestroy {
 
   constructor(private renderer: Renderer2) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if ('scriptUrl' in changes && this.scriptUrl) {
-      this.loadScript(this.scriptUrl).then(() => {
-        this.renderCustomElement();
-      });
-    } else if ('tagName' in changes && this.tagName) {
+  ngAfterViewInit(): void {
+    this.loadScript(this.scriptUrl).then(() => {
+      console.log(this.props)
       this.renderCustomElement();
-    }
-
-    if (this.customElementInstance && 'props' in changes) {
-      this.updateProps();
-    }
+    });
   }
 
   ngOnDestroy(): void {
@@ -60,28 +52,20 @@ export class CustomElementViewerComponent implements OnChanges, OnDestroy {
       this.scriptElement.onload = () => resolve();
       this.scriptElement.onerror = () =>
         reject(new Error(`Failed to load script: ${src}`));
-
       this.renderer.appendChild(document.body, this.scriptElement);
     });
   }
 
-  private renderCustomElement() {
+  private async renderCustomElement() {
     if (!this.tagName || !this.containerRef) return;
-
-    if (this.customElementInstance) {
-      this.customElementInstance.remove();
-    }
+    await customElements.whenDefined(this.tagName);
 
     this.customElementInstance = document.createElement(this.tagName);
-    this.containerRef.nativeElement.appendChild(this.customElementInstance);
-    this.updateProps();
-  }
-
-  private updateProps() {
-    if (!this.customElementInstance) return;
 
     for (const [key, value] of Object.entries(this.props)) {
       (this.customElementInstance as any)[key] = value;
     }
+
+    this.containerRef.nativeElement.appendChild(this.customElementInstance);
   }
 }

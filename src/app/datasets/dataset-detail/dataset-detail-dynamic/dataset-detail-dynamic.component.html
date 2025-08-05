@@ -33,6 +33,11 @@
           [style.gridColumn]="'span ' + (section.col || 10)"
           [style.gridRow]="'span ' + (section.row || 1)"
         >
+        <ng-container [ngSwitch]="section.options?.view?.type">
+          <div *ngSwitchCase="'customElement'">
+            <custom-element-viewer [tagName]="section.options.view.name" [scriptUrl]="section.options.view.source" [props]="getProps(section.options.view.props)"/>
+          </div>
+          <div  *ngSwitchDefault>
           <mat-card>
             <!-- Section Header -->
             <mat-card-header
@@ -144,6 +149,8 @@
               </table>
             </mat-card-content>
           </mat-card>
+          </div>
+        </ng-container>
         </div>
 
         <!-- Scientific Metadata Section -->
@@ -227,7 +234,7 @@
                           | slice: 0 : section.options.limit
                       "
                     >
-                    <ng-container [ngSwitch]="section.options.view.type">
+                    <ng-container [ngSwitch]="section.options?.view?.type">
                       <div *ngSwitchCase="'customElement'">
                         <custom-element-viewer [tagName]="section.options.view.name" [scriptUrl]="section.options.view.source" [props]="getProps(section.options.view.props, item)"/>
                       </div>
