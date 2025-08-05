@@ -124,7 +124,6 @@ Cypress.Commands.add(
             ...testData.rawDataset, 
             datasetName, 
             proposalId,
-            isPublished,
             ...overrides,
           };
           cy.log("Raw Dataset 1: " + JSON.stringify(dataset, null, 2));
