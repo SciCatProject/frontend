@@ -7,7 +7,7 @@ import {
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
-import { cloneDeep, isEqual } from "lodash-es";
+import { cloneDeep, cond, isEqual } from "lodash-es";
 import {
   selectHasAppliedFilters,
   selectScientificConditions,
@@ -117,9 +117,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private unitsService: UnitsService,
   ) {}
 
-  ngOnInit() {
-    this.getAllComponentLabels();
+  ngOnInit() { 
+    this.getAllComponentLabels(); 
     this.applyEnabledConditions();
+    console.log("debug------- inside ngOnInit!!!!");
   }
 
   getAllComponentLabels() {
@@ -224,6 +225,30 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   applyFilters() {
+    this.conditionConfigs$.pipe(take(1)).subscribe((oldConditions) => {
+      (oldConditions || []).forEach((oldCondition) => {
+        this.store.dispatch(
+          removeScientificConditionAction({
+            condition: oldCondition.condition,
+          }),
+        );
+      });
+    });
+
+    this.conditionConfigs$.pipe(take(1)).subscribe((conditionConfigs) => {
+      (conditionConfigs || []).forEach((config) => {
+        if (config.enabled && config.condition.lhs && config.condition.rhs) {
+          this.store.dispatch(
+            addScientificConditionAction({ condition: config.condition }),
+          );
+        }
+      });
+      this.store.dispatch(
+        updateUserSettingsAction({
+          property: { conditions: conditionConfigs },
+        }),
+      );
+    });
     this.store.dispatch(fetchDatasetsAction());
     this.store.dispatch(fetchFacetCountsAction());
   }
@@ -298,17 +323,21 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   addCondition() {
     this.datasets$.pipe(take(1)).subscribe((datasets) => {
-      if (datasets && datasets.length > 0 && datasets[0].scientificMetadata) {
-        const metadata = datasets[0].scientificMetadata;
+      if (datasets && datasets.length > 0) {
         this.humanNameMap = {};
         this.fieldTypeMap = {};
-        Object.keys(metadata).forEach((key) => {
-          if (metadata[key]?.human_name) {
-            this.humanNameMap[key] = metadata[key].human_name;
-          }
-          if (metadata[key]?.type) {
-            this.fieldTypeMap[key] = metadata[key].type;
-          }
+
+        datasets.forEach((dataset) => {
+          const metadata = dataset.scientificMetadata;
+
+          Object.keys(metadata).forEach((key) => {
+            if (metadata[key]?.human_name) {
+              this.humanNameMap[key] = metadata[key].human_name;
+            }
+            if (metadata[key]?.type) {
+              this.fieldTypeMap[key] = metadata[key].type;
+            }
+          });
         });
       }
     });
@@ -365,14 +394,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
                     }),
                   );
 
+                  console.log("updatedConditions: ", updatedConditions);
+
                   this.store.dispatch(
                     updateUserSettingsAction({
                       property: { conditions: updatedConditions },
                     }),
-                  );
-
-                  this.store.dispatch(
-                    addScientificConditionAction({ condition: data }),
                   );
                   this.store.dispatch(
                     selectColumnAction({
@@ -396,42 +423,43 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     return this.unitsService.getUnits(parameterKey);
   }
 
-  updateCondition(index: number, updates: Partial<any>) {
+  updateCondition(newCondition: ConditionConfig, index: number) {
     const currentConditions =
       this.asyncPipe.transform(this.conditionConfigs$) || [];
     const updatedConditions = [...currentConditions];
-    const condition = updatedConditions[index];
-    const oldCondition = condition.condition;
+
+    const oldCondition = updatedConditions[index];
+    updatedConditions.splice(index, 1);
 
     // Removes the old condition if enabled
-    if (condition.enabled) {
+    if (oldCondition.enabled) {
+      //this triggers the metadataKeys endpoint when changing input values
       this.store.dispatch(
-        removeScientificConditionAction({ condition: oldCondition }),
+        removeScientificConditionAction({ condition: oldCondition.condition }),
       );
       this.store.dispatch(
-        deselectColumnAction({ name: oldCondition.lhs, columnType: "custom" }),
-      );
-    }
-
-    // Updates the condition
-    updatedConditions[index] = {
-      ...condition,
-      condition: { ...oldCondition, ...updates },
-    };
-
-    // Adds the updated condition if enabled
-    if (condition.enabled) {
-      this.store.dispatch(
-        addScientificConditionAction({
-          condition: updatedConditions[index].condition,
-        }),
-      );
-      this.store.dispatch(
-        selectColumnAction({
-          name: updatedConditions[index].condition.lhs,
+        deselectColumnAction({
+          name: oldCondition.condition.lhs,
           columnType: "custom",
         }),
       );
+    }
+
+    // Adds the new condition if enabled
+    if (newCondition) {
+      updatedConditions.splice(index, 0, newCondition);
+
+      if (newCondition.enabled) {
+        this.store.dispatch(
+          addScientificConditionAction({ condition: newCondition.condition }),
+        );
+        this.store.dispatch(
+          selectColumnAction({
+            name: newCondition.condition.lhs,
+            columnType: "custom",
+          }),
+        );
+      }
     }
 
     this.updateConditionInStore(updatedConditions);
@@ -441,12 +469,33 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     );
   }
 
-  updateConditionOperator(index: number, newOperator: string) {
-    this.updateCondition(index, {
+  updateConditionField(index: number, updates: Partial<ScientificCondition>) {
+    const currentConditions =
+      this.asyncPipe.transform(this.conditionConfigs$) || [];
+    const updatedConditions = [...currentConditions];
+    const conditionConfig = updatedConditions[index];
+
+    updatedConditions[index] = {
+      ...conditionConfig,
+      condition: {
+        ...conditionConfig.condition,
+        ...updates,
+      },
+    };
+
+    this.updateConditionInStore(updatedConditions);
+  }
+
+  updateConditionOperator(
+    index: number,
+    newOperator: ScientificCondition["relation"],
+  ) {
+    let updates: Partial<ScientificCondition> = {
       relation: newOperator,
       rhs: newOperator === "RANGE" ? [undefined, undefined] : "",
       unit: newOperator === "EQUAL_TO_STRING" ? "" : undefined,
-    });
+    };
+    this.updateConditionField(index, updates);
   }
 
   updateConditionValue(index: number, event: Event) {
@@ -460,12 +509,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       currentRelation === "EQUAL_TO_STRING"
     ) {
       const isNumeric = newValue !== "" && !isNaN(Number(newValue));
-      this.updateCondition(index, {
+      this.updateConditionField(index, {
         rhs: isNumeric ? Number(newValue) : newValue,
         relation: isNumeric ? "EQUAL_TO_NUMERIC" : "EQUAL_TO_STRING",
       });
     } else {
-      this.updateCondition(index, { rhs: Number(newValue) });
+      this.updateConditionField(index, { rhs: Number(newValue) });
     }
   }
 
@@ -477,7 +526,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       ? [...currentRhs]
       : [undefined, undefined];
     rhs[rangeIndex] = Number(newValue);
-    this.updateCondition(index, { rhs });
+    this.updateConditionField(index, { rhs });
   }
 
   getOperatorUIValue(relation: string): string {
@@ -488,7 +537,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   updateConditionUnit(index: number, event: Event) {
     const newUnit = (event.target as HTMLInputElement).value;
-    this.updateCondition(index, { unit: newUnit || undefined });
+    this.updateConditionField(index, { unit: newUnit || undefined });
   }
 
   updateConditionInStore(updatedConditions: ConditionConfig[]) {
