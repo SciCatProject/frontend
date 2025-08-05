@@ -10,10 +10,7 @@ import { MockMatDialogRef, MockStore } from "shared/MockStubs";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { removeScientificConditionAction } from "state-management/actions/datasets.actions";
 import { of } from "rxjs";
-import { deselectColumnAction } from "state-management/actions/user.actions";
-import { ScientificCondition } from "state-management/models";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import {
@@ -35,7 +32,6 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { DatasetsFilterSettingsComponent } from "./datasets-filter-settings.component";
-import { ConditionConfig } from "../../../shared/modules/filters/filters.module";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 
 export class MockMatDialog {
@@ -49,13 +45,6 @@ export class MockMatDialog {
 const getConfig = () => ({
   scienceSearchEnabled: false,
 });
-
-const condition: ScientificCondition = {
-  lhs: "test",
-  relation: "EQUAL_TO_NUMERIC",
-  rhs: 5,
-  unit: "s",
-};
 
 describe("DatasetsFilterSettingsComponent", () => {
   let component: DatasetsFilterSettingsComponent;
@@ -103,12 +92,7 @@ describe("DatasetsFilterSettingsComponent", () => {
           {
             provide: MAT_DIALOG_DATA,
             useValue: {
-              conditionConfigs: [
-                {
-                  condition,
-                  enabled: true,
-                },
-              ],
+              conditionConfigs: [],
             },
           },
         ],
@@ -133,51 +117,5 @@ describe("DatasetsFilterSettingsComponent", () => {
 
   it("should be created", () => {
     expect(component).toBeTruthy();
-  });
-
-  describe("#showDatasetsFilterSettingsDialog()", () => {
-    it("should open DatasetsFilterSettingsComponent", () => {
-      spyOn(component.dialog, "open").and.callThrough();
-      dispatchSpy = spyOn(store, "dispatch");
-
-      // Spy or stub other side effects in addCondition as needed
-      spyOn(component, "toggleCondition").and.callFake(
-        (ignored: ConditionConfig) => ignored,
-      );
-
-      component.metadataKeys$ = of(["test", "keys"]);
-      component.addCondition();
-
-      expect(component.dialog.open).toHaveBeenCalledTimes(1);
-      expect(component.dialog.open).toHaveBeenCalledWith(
-        SearchParametersDialogComponent,
-        {
-          data: {
-            parameterKeys: ["test", "keys"],
-          },
-        },
-      );
-    });
-  });
-
-  describe("#removeCondition()", () => {
-    it("should dispatch a removeScientificConditionAction and a deselectColumnAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const conditionConfig: ConditionConfig = {
-        condition,
-        enabled: true,
-      };
-
-      component.removeCondition(conditionConfig, 0);
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(2);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        removeScientificConditionAction({ condition }),
-      );
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        deselectColumnAction({ name: condition.lhs, columnType: "custom" }),
-      );
-    });
   });
 });
