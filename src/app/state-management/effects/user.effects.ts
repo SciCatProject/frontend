@@ -23,6 +23,7 @@ import {
   mergeMap,
   takeWhile,
   concatMap,
+  withLatestFrom,
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
@@ -30,6 +31,7 @@ import { Store } from "@ngrx/store";
 import {
   selectColumns,
   selectCurrentUser,
+  selectConditions,
 } from "state-management/selectors/user.selectors";
 import {
   addScientificConditionAction,
@@ -510,7 +512,8 @@ export class UserEffects {
   loadDefaultSettings$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.loadDefaultSettings),
-      map(({ config }) => {
+      withLatestFrom(this.store.select(selectConditions)),
+      map(([{ config }, existingConditions]) => {
         const defaultFilters =
           config.defaultDatasetsListSettings.filters ||
           initialUserState.filters;
@@ -525,19 +528,34 @@ export class UserEffects {
           config.localColumns ||
           initialUserState.columns;
         const isAuthenticated = this.authService.isAuthenticated();
+        
+        const actions = [];
 
-        return [
-          fromActions.updateConditionsConfigs({
-            conditionConfigs: defaultConditions,
-          }),
+        if (!existingConditions || existingConditions.length === 0) {
+          actions.push(
+            fromActions.updateConditionsConfigs({
+              conditionConfigs: defaultConditions,
+            }),
+          );
+        }
+
+        actions.push(
           fromActions.updateHasFetchedSettings({
             hasFetchedSettings: !isAuthenticated,
           }),
+        );
+
+        actions.push(
           fromActions.updateFilterConfigs({ filterConfigs: defaultFilters }),
+        );
+
+        actions.push(
           fromActions.setDatasetTableColumnsAction({
             columns,
           }),
-        ];
+        );
+
+        return actions;
       }),
       concatMap((actions) => actions),
     );
