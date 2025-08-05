@@ -264,6 +264,16 @@
 
     <div class="section-container">
       <button
+        [disabled]="(hasAppliedFilters$ | async) === false"
+        mat-raised-button
+        color="secondary"
+        class="datasets-filters-clear-all-button"
+        (click)="reset()"
+      >
+        <mat-icon>undo</mat-icon>
+        Clear
+      </button>
+      <button
         mat-raised-button
         color="primary"
         class="datasets-filters-search-button"
@@ -271,16 +281,6 @@
       >
         <mat-icon>search</mat-icon>
         Apply
-      </button>
-      <button
-        [disabled]="(hasAppliedFilters$ | async) === false"
-        mat-raised-button
-        color="primary"
-        class="datasets-filters-clear-all-button"
-        (click)="reset()"
-      >
-        <mat-icon>undo</mat-icon>
-        Reset Filters
       </button>
     </div>
   </mat-card-content>
