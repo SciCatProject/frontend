@@ -126,7 +126,9 @@
                 </mat-select-trigger>
                 <mat-option
                   *ngFor="
-                    let operator of getAllowedOperators(conditionConfig.condition.lhs)
+                    let operator of getAllowedOperators(
+                      conditionConfig.condition.lhs
+                    )
                   "
                   [value]="operator"
                 >
