@@ -179,6 +179,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.store.dispatch(fetchFacetCountsAction());
           this.router.navigate(["/datasets"], {
             queryParams: { args: JSON.stringify(pagination) },
+            queryParamsHandling: "merge",
           });
           if (!loggedIn) {
             this.store.dispatch(

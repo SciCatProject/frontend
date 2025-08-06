@@ -13,6 +13,8 @@ import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { DateTime } from "luxon";
 import { Observable } from "rxjs";
 import { DateRange } from "state-management/state/proposals.store";
+import { MultiSelectFilterValue } from "../filters/multiselect-filter.component";
+import { FacetCount } from "state-management/state/datasets.store";
 
 @Component({
   selector: "shared-filter",
@@ -32,17 +34,19 @@ export class SharedFilterComponent implements OnChanges {
       start: new FormControl<Date>(null),
       end: new FormControl<Date>(null),
     }),
+    multiSelectField: new FormControl([]),
   });
 
   @ViewChild("input", { static: true }) input!: ElementRef<HTMLInputElement>;
 
+  @Input() key = "";
   @Input() label = "Filter";
   @Input() tooltip = "";
-  @Input() facetCounts$!: Observable<{ key: string; count: number }[]>;
+  @Input() facetCounts$!: Observable<FacetCount[]>;
   @Input() currentFilter$!: Observable<string[]>;
   @Input() dispatchAction!: () => void;
-  @Input() filterType: "text" | "dateRange";
-  @Input() prefilled: string | DateRange = undefined;
+  @Input() filterType: "text" | "dateRange" | "multiSelect" | "number";
+  @Input() prefilled: string | DateRange | string[] = undefined;
   @Input()
   set clear(value: boolean) {
     if (value) {
@@ -54,6 +58,7 @@ export class SharedFilterComponent implements OnChanges {
   }
 
   @Output() textChange = new EventEmitter<string>();
+  @Output() selectionChange = new EventEmitter<MultiSelectFilterValue>();
   @Output() dateRangeChange = new EventEmitter<{
     begin: string;
     end: string;
@@ -93,5 +98,9 @@ export class SharedFilterComponent implements OnChanges {
     if (side === "end") this.dateRange.end = isoDate;
 
     this.dateRangeChange.emit(this.dateRange);
+  }
+
+  onSelectionChange(value: MultiSelectFilterValue) {
+    this.selectionChange.emit(value);
   }
 }

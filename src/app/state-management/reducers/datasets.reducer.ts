@@ -358,64 +358,34 @@ const reducer = createReducer(
     return { ...state, filters };
   }),
 
-  on(fromActions.setPidTermsFilterAction, (state, { pid }): DatasetState => {
-    const filters = { ...state.filters, pid, skip: 0 };
-    return { ...state, filters };
-  }),
+  on(
+    fromActions.setMultiselectFilterAction,
+    (state, { multiSelectFilters }): DatasetState => {
+      const filters = { ...state.filters, ...multiSelectFilters };
+
+      return { ...state, filters };
+    },
+  ),
 
   on(
-    fromActions.addLocationFilterAction,
-    (state, { location }): DatasetState => {
-      const creationLocation = state.filters.creationLocation
-        .concat(location)
+    fromActions.addMultiselectFilterAction,
+    (state, { key, value }): DatasetState => {
+      const newValue = state.filters[key]
+        .concat(value)
         .filter((val, i, self) => self.indexOf(val) === i); // Unique
-      const filters = { ...state.filters, creationLocation, skip: 0 };
-      return { ...state, filters };
-    },
-  ),
-  on(
-    fromActions.removeLocationFilterAction,
-    (state, { location }): DatasetState => {
-      const creationLocation = state.filters.creationLocation.filter(
-        (existingLocation) => existingLocation !== location,
-      );
-      const filters = { ...state.filters, creationLocation, skip: 0 };
-      return { ...state, filters };
-    },
-  ),
+      const filters = { ...state.filters, [key]: newValue, skip: 0 };
 
-  on(fromActions.addGroupFilterAction, (state, { group }): DatasetState => {
-    const ownerGroup = state.filters.ownerGroup
-      .concat(group)
-      .filter((val, i, self) => self.indexOf(val) === i); // Unique
-    const filters = { ...state.filters, ownerGroup, skip: 0 };
-    return { ...state, filters };
-  }),
-  on(fromActions.removeGroupFilterAction, (state, { group }): DatasetState => {
-    const ownerGroup = state.filters.ownerGroup.filter(
-      (existingGroup) => existingGroup !== group,
-    );
-    const filters = { ...state.filters, ownerGroup, skip: 0 };
-    return { ...state, filters };
-  }),
-
-  on(
-    fromActions.addTypeFilterAction,
-    (state, { datasetType }): DatasetState => {
-      const type = state.filters.type
-        .concat(datasetType)
-        .filter((val, i, self) => self.indexOf(val) === i); // Unique
-      const filters = { ...state.filters, type, skip: 0 };
       return { ...state, filters };
     },
   ),
   on(
-    fromActions.removeTypeFilterAction,
-    (state, { datasetType }): DatasetState => {
-      const type = state.filters.type.filter(
-        (existingType) => existingType !== datasetType,
+    fromActions.removeMultiselectFilterAction,
+    (state, { key, value }): DatasetState => {
+      const newValue = state.filters[key].filter(
+        (existingValue) => existingValue !== value,
       );
-      const filters = { ...state.filters, type, skip: 0 };
+      const filters = { ...state.filters, [key]: newValue, skip: 0 };
+
       return { ...state, filters };
     },
   ),
@@ -427,26 +397,6 @@ const reducer = createReducer(
     const filters = { ...state.filters, keywords, skip: 0 };
     return { ...state, filters };
   }),
-  on(
-    fromActions.removeKeywordFilterAction,
-    (state, { keyword }): DatasetState => {
-      const keywords = state.filters.keywords.filter(
-        (existingKeyword) => existingKeyword !== keyword,
-      );
-      const filters = { ...state.filters, keywords, skip: 0 };
-      return { ...state, filters };
-    },
-  ),
-
-  on(
-    fromActions.setDateRangeFilterAction,
-    (state, { begin, end }): DatasetState => {
-      const oldTime = state.filters.creationTime;
-      const creationTime = begin && end ? { ...oldTime, begin, end } : null;
-      const filters = { ...state.filters, creationTime };
-      return { ...state, filters };
-    },
-  ),
 
   on(
     fromActions.addScientificConditionAction,

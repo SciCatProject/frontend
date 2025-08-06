@@ -105,20 +105,24 @@ const reducer = createReducer(
         jobCount,
         columns = [],
         externalSettings,
+        filters,
       } = userSettings as any;
       const settings = { ...state.settings, datasetCount, jobCount };
+
       if (columns.length > 0) {
         return {
           ...state,
           settings,
           columns,
           tablesSettings: externalSettings?.tablesSettings,
+          filters: filters || state.filters,
         };
       } else {
         return {
           ...state,
           settings,
           tablesSettings: externalSettings?.tablesSettings,
+          filters: filters || state.filters,
         };
       }
     },

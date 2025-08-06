@@ -13,6 +13,7 @@ import {
   DatasetFilters,
   ScientificCondition,
 } from "state-management/models";
+import { DateRange } from "state-management/state/proposals.store";
 
 // === Effects ===
 
@@ -279,49 +280,24 @@ export const setTextFilterAction = createAction(
   props<{ text: string }>(),
 );
 
-export const setPidTermsFilterAction = createAction(
-  "[Dataset] Set Text Filter",
-  props<{ pid: string | { $regex: string } }>(),
+export const setMultiselectFilterAction = createAction(
+  "[Dataset] Set Multi Select Filter",
+  props<{
+    multiSelectFilters: Record<string, string | DateRange | string[]>;
+  }>(),
 );
-export const addLocationFilterAction = createAction(
-  "[Dataset] Add Location Filter",
-  props<{ location: string }>(),
+export const addMultiselectFilterAction = createAction(
+  "[Dataset] Add Multi Select Filter",
+  props<{ key: string; value: string }>(),
 );
-export const removeLocationFilterAction = createAction(
-  "[Dataset] Remove Location Filter",
-  props<{ location: string }>(),
-);
-
-export const addGroupFilterAction = createAction(
-  "[Dataset] Add Group Filter",
-  props<{ group: string }>(),
-);
-export const removeGroupFilterAction = createAction(
-  "[Dataset] Remove Group Filter",
-  props<{ group: string }>(),
-);
-
-export const addTypeFilterAction = createAction(
-  "[Dataset] Add Type Filter",
-  props<{ datasetType: string }>(),
-);
-export const removeTypeFilterAction = createAction(
-  "[Dataset] Remove Type Filter",
-  props<{ datasetType: string }>(),
+export const removeMultiselectFilterAction = createAction(
+  "[Dataset] Remove Multi Select Filter",
+  props<{ key: string; value: string }>(),
 );
 
 export const addKeywordFilterAction = createAction(
   "[Dataset] Add Keyword Filter",
   props<{ keyword: string }>(),
-);
-export const removeKeywordFilterAction = createAction(
-  "[Dataset] Remove Keyword Filter",
-  props<{ keyword: string }>(),
-);
-
-export const setDateRangeFilterAction = createAction(
-  "[Dataset] Set Date Range Filter",
-  props<{ begin: string; end: string }>(),
 );
 
 export const addScientificConditionAction = createAction(

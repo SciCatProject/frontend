@@ -8,7 +8,7 @@ import { AppConfigService } from "app-config.service";
 import { Store } from "@ngrx/store";
 import { selectMetadataKeys } from "../../../state-management/selectors/datasets.selectors";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
-import { FilterConfig } from "../../../shared/modules/filters/filters.module";
+import { FilterConfig } from "state-management/state/user.store";
 
 @Component({
   selector: "app-type-datasets-filter-settings",
@@ -32,13 +32,7 @@ export class DatasetsFilterSettingsComponent {
   ) {}
 
   toggleVisibility(filter: FilterConfig): void {
-    const key = this.getFilterKey(filter);
-    filter[key] = !filter[key];
-  }
-
-  getChecked(filter: FilterConfig): boolean {
-    const key = this.getFilterKey(filter);
-    return filter[key];
+    filter.enabled = !filter.enabled;
   }
 
   drop(event: CdkDragDrop<string[]>): void {
@@ -61,11 +55,6 @@ export class DatasetsFilterSettingsComponent {
     labelMaps: Record<string, string>,
     filter: FilterConfig,
   ): string {
-    const key = this.getFilterKey(filter);
-    return labelMaps[key] || "Unknown filter";
-  }
-
-  getFilterKey(filter: FilterConfig): string {
-    return Object.keys(filter)[0];
+    return labelMaps[filter.key] || "Unknown filter";
   }
 }

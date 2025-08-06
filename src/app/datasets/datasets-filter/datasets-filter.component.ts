@@ -1,22 +1,21 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-  Type,
-  ViewContainerRef,
-} from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
 import { cloneDeep, isEqual } from "lodash-es";
 import {
+  selectFacetCountByKey,
+  selectFilterByKey,
   selectHasAppliedFilters,
   selectScientificConditions,
 } from "state-management/selectors/datasets.selectors";
 
 import {
+  addMultiselectFilterAction,
   clearFacetsAction,
   fetchDatasetsAction,
   fetchFacetCountsAction,
+  removeMultiselectFilterAction,
+  setMultiselectFilterAction,
 } from "state-management/actions/datasets.actions";
 import {
   deselectAllCustomColumnsAction,
@@ -30,18 +29,6 @@ import {
   selectFilters,
 } from "state-management/selectors/user.selectors";
 import { AsyncPipe } from "@angular/common";
-import { ConditionFilterComponent } from "../../shared/modules/filters/condition-filter.component";
-import { PidFilterComponent } from "../../shared/modules/filters/pid-filter.component";
-import { PidFilterContainsComponent } from "../../shared/modules/filters/pid-filter-contains.component";
-import { PidFilterStartsWithComponent } from "../../shared/modules/filters/pid-filter-startsWith.component";
-import { LocationFilterComponent } from "../../shared/modules/filters/location-filter.component";
-import { GroupFilterComponent } from "../../shared/modules/filters/group-filter.component";
-import { TypeFilterComponent } from "../../shared/modules/filters/type-filter.component";
-import { KeywordFilterComponent } from "../../shared/modules/filters/keyword-filter.component";
-import { DateRangeFilterComponent } from "../../shared/modules/filters/date-range-filter.component";
-import { TextFilterComponent } from "../../shared/modules/filters/text-filter.component";
-import { Filters, FilterConfig } from "shared/modules/filters/filters.module";
-import { FilterComponentInterface } from "shared/modules/filters/interface/filter-component.interface";
 import { Subscription } from "rxjs";
 import { take } from "rxjs/operators";
 import { SearchParametersDialogComponent } from "../../shared/modules/search-parameters-dialog/search-parameters-dialog.component";
@@ -49,7 +36,6 @@ import {
   selectMetadataKeys,
   selectDatasets,
 } from "state-management/selectors/datasets.selectors";
-import { ConditionConfig } from "shared/modules/filters/filters.module";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import {
   addScientificConditionAction,
@@ -61,19 +47,13 @@ import {
 } from "state-management/actions/user.actions";
 import { UnitsService } from "shared/services/units.service";
 import { ScientificCondition } from "state-management/models";
-
-const COMPONENT_MAP: { [K in Filters]: Type<any> } = {
-  PidFilter: PidFilterComponent,
-  PidFilterContains: PidFilterContainsComponent,
-  PidFilterStartsWith: PidFilterStartsWithComponent,
-  LocationFilter: LocationFilterComponent,
-  GroupFilter: GroupFilterComponent,
-  TypeFilter: TypeFilterComponent,
-  KeywordFilter: KeywordFilterComponent,
-  DateRangeFilter: DateRangeFilterComponent,
-  TextFilter: TextFilterComponent,
-  ConditionFilter: ConditionFilterComponent,
-};
+import {
+  FilterConfig,
+  ConditionConfig,
+} from "state-management/state/user.store";
+import { DateRange } from "state-management/state/proposals.store";
+import { ActivatedRoute, Router } from "@angular/router";
+import { MultiSelectFilterValue } from "shared/modules/filters/multiselect-filter.component";
 
 @Component({
   selector: "datasets-filter",
@@ -83,7 +63,8 @@ const COMPONENT_MAP: { [K in Filters]: Type<any> } = {
 })
 export class DatasetsFilterComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
-  protected readonly ConditionFilterComponent = ConditionFilterComponent;
+  activeFilters: Record<string, string | DateRange | string[]> = {};
+  filtersList: FilterConfig[];
 
   filterConfigs$ = this.store.select(selectFilters);
 
@@ -96,8 +77,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   clearSearchBar = false;
 
   hasAppliedFilters$ = this.store.select(selectHasAppliedFilters);
-
-  labelMaps: { [key: string]: string } = {};
 
   metadataKeys$ = this.store.select(selectMetadataKeys);
 
@@ -112,28 +91,52 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private store: Store,
     private asyncPipe: AsyncPipe,
-    private viewContainerRef: ViewContainerRef,
     private snackBar: MatSnackBar,
     private unitsService: UnitsService,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {}
 
   ngOnInit() {
-    this.getAllComponentLabels();
     this.applyEnabledConditions();
-  }
 
-  getAllComponentLabels() {
-    Object.entries(COMPONENT_MAP).forEach(([key, component]) => {
-      const componentRef = this.viewContainerRef.createComponent(component);
+    this.filterConfigs$.subscribe((filterConfigs) => {
+      if (filterConfigs) {
+        this.filtersList = filterConfigs;
 
-      const instance = componentRef.instance as FilterComponentInterface;
+        const { queryParams } = this.route.snapshot;
 
-      if (instance.label) {
-        this.labelMaps[key] = instance.label;
+        const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
+
+        this.filtersList.forEach((filter) => {
+          if (!filter.enabled && searchQuery[filter.key]) {
+            delete searchQuery[filter.key];
+            delete this.activeFilters[filter.key];
+          }
+
+          filter.facetCounts$ = this.store.select(
+            selectFacetCountByKey(filter.key),
+          );
+          filter.filter$ = this.store.select(selectFilterByKey(filter.key));
+        });
+
+        this.router.navigate([], {
+          queryParams: {
+            searchQuery: JSON.stringify(searchQuery),
+          },
+          queryParamsHandling: "merge",
+        });
       }
-
-      componentRef.destroy();
     });
+
+    const { queryParams } = this.route.snapshot;
+
+    const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
+    this.activeFilters = { ...searchQuery };
+
+    this.store.dispatch(
+      setMultiselectFilterAction({ multiSelectFilters: this.activeFilters }),
+    );
   }
 
   applyEnabledConditions() {
@@ -161,6 +164,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       }),
     );
 
+    this.activeFilters = {};
+
     this.applyFilters();
     // we need to treat JS event loop here, otherwise this.clearSearchBar is false for the components
     setTimeout(() => {
@@ -186,8 +191,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(DatasetsFilterSettingsComponent, {
       data: {
         filterConfigs: this.asyncPipe.transform(this.filterConfigs$),
-        conditionConfigs: this.asyncPipe.transform(this.conditionConfigs$),
-        labelMaps: this.labelMaps,
       },
       restoreFocus: false,
     });
@@ -219,6 +222,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             }),
           );
         }
+
+        if (filtersChanged) {
+          this.store.dispatch(fetchFacetCountsAction());
+        }
       }
     });
   }
@@ -226,6 +233,68 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   applyFilters() {
     this.store.dispatch(fetchDatasetsAction());
     this.store.dispatch(fetchFacetCountsAction());
+
+    const { queryParams } = this.route.snapshot;
+    const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
+
+    this.router.navigate([], {
+      queryParams: {
+        searchQuery: JSON.stringify({
+          ...this.activeFilters,
+          text: searchQuery.text,
+        }),
+      },
+      queryParamsHandling: "merge",
+    });
+  }
+
+  setDateFilter(filterKey: string, value: DateRange) {
+    if (value.begin || value.end) {
+      this.activeFilters[filterKey] = {
+        begin: value.begin,
+        end: value.end,
+      };
+    } else {
+      delete this.activeFilters[filterKey];
+    }
+  }
+
+  setFilter(filterKey: string, value: string) {
+    if (value) {
+      this.activeFilters[filterKey] = value;
+    } else {
+      delete this.activeFilters[filterKey];
+    }
+  }
+
+  addMultiSelectFilterToActiveFilters(key: string, value: string) {
+    if (this.activeFilters[key] && Array.isArray(this.activeFilters[key])) {
+      this.activeFilters[key] = [...this.activeFilters[key], value];
+    } else {
+      this.activeFilters[key] = [value];
+    }
+  }
+
+  removeMultiSelectFilterFromActiveFilters(key: string, value: string) {
+    if (this.activeFilters[key] && Array.isArray(this.activeFilters[key])) {
+      if (this.activeFilters[key].length > 1) {
+        this.activeFilters[key] = this.activeFilters[key].filter(
+          (item: string) => item !== value,
+        );
+      } else {
+        delete this.activeFilters[key];
+      }
+    }
+  }
+
+  selectionChange({ event, key, value }: MultiSelectFilterValue) {
+    if (event === "add") {
+      this.addMultiSelectFilterToActiveFilters(key, value);
+      this.store.dispatch(addMultiselectFilterAction({ key, value }));
+    } else {
+      this.removeMultiSelectFilterFromActiveFilters(key, value);
+      this.store.dispatch(removeMultiselectFilterAction({ key, value }));
+    }
   }
 
   trackByCondition(index: number, conditionConfig: ConditionConfig): string {
@@ -555,16 +624,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     ];
   }
 
-  renderComponent(filterObj: FilterConfig): any {
-    const key = Object.keys(filterObj)[0];
-    const isEnabled = filterObj[key];
-
-    if (!isEnabled || !COMPONENT_MAP[key]) {
-      return null;
-    }
-
-    return COMPONENT_MAP[key];
-  }
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }

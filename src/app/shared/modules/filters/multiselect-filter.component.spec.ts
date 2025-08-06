@@ -1,18 +1,19 @@
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { isDevMode, NO_ERRORS_SCHEMA } from "@angular/core";
 import {
   ComponentFixture,
   TestBed,
   inject,
   waitForAsync,
-  fakeAsync,
-  tick,
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
 import { MockHttp, MockStore } from "shared/MockStubs";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { setPidTermsFilterAction } from "state-management/actions/datasets.actions";
+import {
+  addMultiselectFilterAction,
+  removeMultiselectFilterAction,
+} from "state-management/actions/datasets.actions";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatDialogModule } from "@angular/material/dialog";
@@ -27,17 +28,13 @@ import { MatNativeDateModule, MatOptionModule } from "@angular/material/core";
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
-import { AppConfigService } from "app-config.service";
-import { PidFilterComponent } from "./pid-filter.component";
+import { MultiSelectFilterComponent } from "./multiselect-filter.component";
 import { HttpClient } from "@angular/common/http";
+import { AppConfigService } from "app-config.service";
 
-const getConfig = () => ({
-  scienceSearchEnabled: false,
-});
-
-describe("PidFilterComponent", () => {
-  let component: PidFilterComponent;
-  let fixture: ComponentFixture<PidFilterComponent>;
+describe("MultiSelectFilterComponent", () => {
+  let component: MultiSelectFilterComponent;
+  let fixture: ComponentFixture<MultiSelectFilterComponent>;
 
   let store: MockStore;
   let dispatchSpy;
@@ -62,32 +59,35 @@ describe("PidFilterComponent", () => {
         MatNativeDateModule,
         ReactiveFormsModule,
         SharedScicatFrontendModule,
-        StoreModule.forRoot({}),
+        StoreModule.forRoot(
+          {},
+          {
+            runtimeChecks: {
+              strictActionImmutability: false,
+              strictActionSerializability: false,
+              strictActionTypeUniqueness: false,
+              strictActionWithinNgZone: false,
+              strictStateImmutability: false,
+              strictStateSerializability: false,
+            },
+          },
+        ),
       ],
-      declarations: [PidFilterComponent, SearchParametersDialogComponent],
+      declarations: [
+        MultiSelectFilterComponent,
+        SearchParametersDialogComponent,
+      ],
       providers: [
         AsyncPipe,
         AppConfigService,
         { provide: HttpClient, useClass: MockHttp },
       ],
     });
-    TestBed.overrideComponent(PidFilterComponent, {
-      set: {
-        providers: [
-          {
-            provide: AppConfigService,
-            useValue: {
-              getConfig,
-            },
-          },
-        ],
-      },
-    });
     TestBed.compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PidFilterComponent);
+    fixture = TestBed.createComponent(MultiSelectFilterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -100,36 +100,47 @@ describe("PidFilterComponent", () => {
     fixture.destroy();
   });
 
-  describe("#onPidInput()", () => {
-    it("should dispatch a SetSearchTermsAction", fakeAsync(() => {
+  describe("#onInput()", () => {
+    it("should call next on input$", () => {
+      const nextSpy = spyOn(component.input$, "next");
+
+      const event = {
+        target: {
+          value: "testValue",
+        },
+      };
+
+      component.onInput(event);
+
+      expect(nextSpy).toHaveBeenCalledOnceWith(event.target.value);
+    });
+  });
+
+  describe("#itemSelected()", () => {
+    it("should dispatch an AddMultiSelectFilterAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
-      const pid = "xxxxxx";
-      const event = { target: { value: pid } };
-      component.onPidInput(event);
-
-      tick(500); //wait for it
+      const value = "test";
+      component.itemSelected(value);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        setPidTermsFilterAction({ pid }),
+        addMultiselectFilterAction({ key: component.key, value: value }),
       );
-    }));
+    });
   });
 
-  describe("#buildPidTermsCondition()", () => {
-    const tests = [
-      { input: "", method: "", expected: "" },
-      { input: "1", method: "equals", expected: "1" },
-      { input: "1", method: "", expected: "1" },
-    ];
+  describe("#itemRemoved()", () => {
+    it("should dispatch a RemoveMultiSelectFilterAction", () => {
+      dispatchSpy = spyOn(store, "dispatch");
 
-    tests.forEach((test, index) => {
-      it(`should return correct condition for test case #${index + 1}`, () => {
-        component.appConfig.pidSearchMethod = test.method;
-        const condition = component.buildPidTermsCondition(test.input);
-        expect(condition).toEqual(test.expected);
-      });
+      const value = "test";
+      component.itemRemoved(value);
+
+      expect(dispatchSpy).toHaveBeenCalledTimes(1);
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        removeMultiselectFilterAction({ key: component.key, value: value }),
+      );
     });
   });
 });

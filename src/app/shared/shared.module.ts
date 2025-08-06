@@ -16,7 +16,6 @@ import { CommonModule } from "@angular/common";
 import { SharedTableModule } from "./modules/shared-table/shared-table.module";
 import { ScicatDataService } from "./services/scicat-data-service";
 import { ScientificMetadataTreeModule } from "./modules/scientific-metadata-tree/scientific-metadata-tree.module";
-import { FiltersModule } from "./modules/filters/filters.module";
 import { AttachmentService } from "./services/attachment.service";
 import { DynamicMatTableModule } from "./modules/dynamic-material-table/table/dynamic-mat-table.module";
 import { TranslateModule } from "@ngx-translate/core";
@@ -66,7 +65,6 @@ import { SharedFilterModule } from "./modules/shared-filter/shared-filter.module
     SharedFilterModule,
     SharedTableModule,
     ScientificMetadataTreeModule,
-    FiltersModule,
     DynamicMatTableModule,
     TranslateModule,
   ],
