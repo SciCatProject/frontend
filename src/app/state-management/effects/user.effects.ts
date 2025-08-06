@@ -23,7 +23,6 @@ import {
   mergeMap,
   takeWhile,
   concatMap,
-  withLatestFrom,
 } from "rxjs/operators";
 import { of } from "rxjs";
 import { MessageType } from "state-management/models";
@@ -513,7 +512,7 @@ export class UserEffects {
   loadDefaultSettings$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.loadDefaultSettings),
-      withLatestFrom(this.store.select(selectConditions)),
+      concatLatestFrom(() => this.store.select(selectConditions)),
       map(([{ config }, existingConditions]) => {
         const defaultFilters =
           config.defaultDatasetsListSettings.filters ||
@@ -529,7 +528,7 @@ export class UserEffects {
           config.localColumns ||
           initialUserState.columns;
         const isAuthenticated = this.authService.isAuthenticated();
-        
+
         const actions = [];
 
         if (!existingConditions || existingConditions.length === 0) {
