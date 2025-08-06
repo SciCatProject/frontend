@@ -69,6 +69,8 @@ const appConfig: AppConfigInterface = {
   shareEnabled: true,
   shoppingCartEnabled: true,
   shoppingCartOnHeader: true,
+  siteTitle: "Local Ng Testing",
+  siteSciCatLogo: "full",
   tableSciDataEnabled: true,
   fileserverBaseURL: "",
   fileserverButtonLabel: "",

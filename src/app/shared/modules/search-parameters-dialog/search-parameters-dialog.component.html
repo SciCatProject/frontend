@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Add Characteristic</h2>
-<form [formGroup]="parametersForm">
+<form [formGroup]="parametersForm" class="search-parameters-form">
   <mat-dialog-content>
-    <mat-form-field>
+    <mat-form-field class="search-field">
       <mat-label>Field</mat-label>
       <input
         matInput
@@ -11,82 +11,34 @@
         spellcheck="false"
         name="lhs"
         formControlName="lhs"
-        [matAutocomplete]="parameterKeys"
         (blur)="getUnits(lhs)"
         (focus)="toggleUnitField()"
       />
-      <mat-autocomplete #parameterKeys="matAutocomplete">
-        <mat-option
-          *ngFor="let key of filteredKeys$ | async"
-          [value]="key"
-          [matTooltip]="key"
-        >
-          {{ key }}
-        </mat-option>
-      </mat-autocomplete>
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Operator</mat-label>
-      <mat-select
-        name="operator"
-        formControlName="relation"
-        (focus)="toggleUnitField()"
-        (selectionChange)="toggleUnitField()"
+    <div class="scroll-table-container">
+      <table
+        mat-table
+        [dataSource]="filteredKeys$ | async"
+        class="mat-elevation-z1 mat-table"
       >
-        <mat-option value="GREATER_THAN">is greater than</mat-option>
-        <mat-option value="LESS_THAN">is less than</mat-option>
-        <mat-option value="EQUAL_TO_NUMERIC">is equal to (numeric)</mat-option>
-        <mat-option value="EQUAL_TO_STRING">is equal to (string)</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Value</mat-label>
-      <input
-        matInput
-        autocomplete="off"
-        autocorrect="off"
-        autocapitalize="off"
-        spellcheck="false"
-        name="rhs"
-        formControlName="rhs"
-      />
-    </mat-form-field>
-
-    <ng-template [ngIf]="unitsEnabled">
-      <mat-form-field>
-        <mat-label>Unit</mat-label>
-        <input
-          matInput
-          autocomplete="off"
-          autocorrect="off"
-          autocapitalize="off"
-          spellcheck="false"
-          name="rhsUnit"
-          formControlName="unit"
-          [matAutocomplete]="rhsUnits"
-        />
-        <mat-autocomplete #rhsUnits="matAutocomplete">
-          <mat-option
-            *ngFor="let unit of filteredUnits$ | async"
-            [value]="unit"
+        <ng-container matColumnDef="field">
+          <td
+            mat-cell
+            *matCellDef="let key"
+            (click)="parametersForm.get('lhs').setValue(key); getUnits(key)"
+            style="cursor: pointer"
           >
-            {{ unit }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
-    </ng-template>
+            {{ key }}
+          </td>
+        </ng-container>
+        <tr mat-row *matRowDef="let row; columns: ['field']"></tr>
+      </table>
+    </div>
   </mat-dialog-content>
   <mat-dialog-actions [attr.align]="'end'">
     <button mat-button (click)="cancel()">Cancel</button>
-    <button
-      mat-button
-      type="submit"
-      (click)="add()"
-      color="primary"
-      [disabled]="isInvalid()"
-    >
+    <button mat-button type="submit" (click)="add()" color="primary">
       Apply
     </button>
   </mat-dialog-actions>

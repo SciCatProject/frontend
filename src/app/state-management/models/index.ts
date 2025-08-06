@@ -128,7 +128,11 @@ type ScientificConditionRelation =
   | "EQUAL_TO_NUMERIC"
   | "EQUAL_TO_STRING"
   | "GREATER_THAN"
-  | "LESS_THAN";
+  | "LESS_THAN"
+  | "GREATER_THAN_OR_EQUAL"
+  | "LESS_THAN_OR_EQUAL"
+  | "RANGE"
+  | "EQUAL_TO";
 
 export interface ScientificCondition {
   lhs: string;
