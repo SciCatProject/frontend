@@ -7,7 +7,7 @@ import {
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { Store } from "@ngrx/store";
-import { cloneDeep, cond, isEqual } from "lodash-es";
+import { cloneDeep, isEqual } from "lodash-es";
 import {
   selectHasAppliedFilters,
   selectScientificConditions,
@@ -117,8 +117,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private unitsService: UnitsService,
   ) {}
 
-  ngOnInit() { 
-    this.getAllComponentLabels(); 
+  ngOnInit() {
+    this.getAllComponentLabels();
     this.applyEnabledConditions();
   }
 
@@ -393,7 +393,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
                     }),
                   );
 
-                  console.log("updatedConditions: ", updatedConditions);
 
                   this.store.dispatch(
                     updateUserSettingsAction({
