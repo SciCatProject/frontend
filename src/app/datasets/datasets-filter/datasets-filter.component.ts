@@ -393,7 +393,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
                     }),
                   );
 
-
                   this.store.dispatch(
                     updateUserSettingsAction({
                       property: { conditions: updatedConditions },
@@ -487,7 +486,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     index: number,
     newOperator: ScientificCondition["relation"],
   ) {
-    let updates: Partial<ScientificCondition> = {
+    const updates: Partial<ScientificCondition> = {
       relation: newOperator,
       rhs: newOperator === "RANGE" ? [undefined, undefined] : "",
       unit: newOperator === "EQUAL_TO_STRING" ? "" : undefined,
