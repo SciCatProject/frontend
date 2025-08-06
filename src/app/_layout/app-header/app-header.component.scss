@@ -7,7 +7,7 @@
   mat-toolbar {
     height: 3.5rem;
 
-    a {
+    a, .main-menu {
       height: 2.5rem;
       padding: 0.5rem;
 
@@ -16,9 +16,18 @@
         margin-right: 0.5rem;
       }
     }
+    .main-menu mat-icon {
+      font-size: 32px;
+      padding-top: 5px;
+      cursor: pointer;
+    }
 
-    .spacer {
+    .spacer, .title {
       flex: 1 1 auto;
+    }
+
+    .title h3 {
+      text-align: center;
     }
 
     .toplink {
