@@ -224,17 +224,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   applyFilters() {
-    this.conditionConfigs$.pipe(take(1)).subscribe((oldConditions) => {
-      (oldConditions || []).forEach((oldCondition) => {
+    this.conditionConfigs$.pipe(take(1)).subscribe((conditionConfigs) => {
+      (conditionConfigs || []).forEach((oldCondition) => {
         this.store.dispatch(
           removeScientificConditionAction({
             condition: oldCondition.condition,
           }),
         );
       });
-    });
 
-    this.conditionConfigs$.pipe(take(1)).subscribe((conditionConfigs) => {
       (conditionConfigs || []).forEach((config) => {
         if (config.enabled && config.condition.lhs && config.condition.rhs) {
           this.store.dispatch(
@@ -242,14 +240,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           );
         }
       });
+
       this.store.dispatch(
         updateUserSettingsAction({
           property: { conditions: conditionConfigs },
         }),
       );
+      this.store.dispatch(fetchDatasetsAction());
+      this.store.dispatch(fetchFacetCountsAction());
     });
-    this.store.dispatch(fetchDatasetsAction());
-    this.store.dispatch(fetchFacetCountsAction());
   }
 
   trackByCondition(index: number, conditionConfig: ConditionConfig): string {
@@ -442,20 +441,18 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     }
 
     // Adds the new condition if enabled
-    if (newCondition) {
+    if (newCondition.enabled) {
       updatedConditions.splice(index, 0, newCondition);
 
-      if (newCondition.enabled) {
-        this.store.dispatch(
-          addScientificConditionAction({ condition: newCondition.condition }),
-        );
-        this.store.dispatch(
-          selectColumnAction({
-            name: newCondition.condition.lhs,
-            columnType: "custom",
-          }),
-        );
-      }
+      this.store.dispatch(
+        addScientificConditionAction({ condition: newCondition.condition }),
+      );
+      this.store.dispatch(
+        selectColumnAction({
+          name: newCondition.condition.lhs,
+          columnType: "custom",
+        }),
+      );
     }
 
     this.updateConditionInStore(updatedConditions);
