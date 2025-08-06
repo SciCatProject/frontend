@@ -205,7 +205,7 @@ describe("Datasets general", () => {
       cy.get("mat-slide-toggle").click();
 
       // remove the condition
-      cy.get("button").contains("Remove").click();
+      cy.get('[data-cy="remove-condition-button"]').click();
 
       cy.get('[data-cy="scientific-condition-filter-list"]')
         .find(".condition-panel")
