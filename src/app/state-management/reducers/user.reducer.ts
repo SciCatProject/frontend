@@ -216,18 +216,6 @@ const reducer = createReducer(
       return { ...state, columns };
     },
   ),
-  on(fromActions.deselectAllCustomColumnsAction, (state): UserState => {
-    const customColumns = [...state.columns].filter(
-      (column) => column.type !== "standard",
-    );
-    customColumns.forEach((column) => (column.enabled = false));
-    const customColumnNames = customColumns.map((column) => column.name);
-
-    const columns = [...state.columns]
-      .filter((column) => !customColumnNames.includes(column.name))
-      .concat(customColumns);
-    return { ...state, columns };
-  }),
 
   on(
     fromActions.showMessageAction,

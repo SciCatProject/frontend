@@ -18,7 +18,6 @@ import {
   setMultiselectFilterAction,
 } from "state-management/actions/datasets.actions";
 import {
-  deselectAllCustomColumnsAction,
   updateConditionsConfigs,
   updateUserSettingsAction,
 } from "state-management/actions/user.actions";
@@ -113,11 +112,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             delete searchQuery[filter.key];
             delete this.activeFilters[filter.key];
           }
-
-          filter.facetCounts$ = this.store.select(
-            selectFacetCountByKey(filter.key),
-          );
-          filter.filter$ = this.store.select(selectFilterByKey(filter.key));
         });
 
         this.router.navigate([], {
@@ -157,10 +151,14 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.clearSearchBar = true;
 
     this.store.dispatch(clearFacetsAction());
-    this.store.dispatch(deselectAllCustomColumnsAction());
     this.store.dispatch(
       updateConditionsConfigs({
         conditionConfigs: [],
+      }),
+    );
+    this.store.dispatch(
+      updateUserSettingsAction({
+        property: { conditions: [] },
       }),
     );
 
@@ -178,15 +176,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     // to compare with the updated ones
     // and dispatch the updated ones if they changed
     // This is to prevent unnecessary API calls
-    const initialFilterConfigs = await this.filterConfigs$
-      .pipe(take(1))
-      .toPromise();
-    const initialConditionConfigs = await this.conditionConfigs$
-      .pipe(take(1))
-      .toPromise();
-
-    const initialFilterConfigsCopy = cloneDeep(initialFilterConfigs);
-    const initialConditionConfigsCopy = cloneDeep(initialConditionConfigs);
+    const initialFilterConfigsCopy = cloneDeep(
+      this.asyncPipe.transform(this.filterConfigs$),
+    );
 
     const dialogRef = this.dialog.open(DatasetsFilterSettingsComponent, {
       data: {
@@ -201,29 +193,14 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           initialFilterConfigsCopy,
           result.filterConfigs,
         );
-        const conditionsChanged = !isEqual(
-          initialConditionConfigsCopy,
-          result.conditionConfigs,
-        );
-
-        if (filtersChanged || conditionsChanged) {
-          const updatedProperty = {};
-
-          if (filtersChanged) {
-            updatedProperty["filters"] = result.filterConfigs;
-          }
-
-          if (conditionsChanged) {
-            updatedProperty["conditions"] = result.conditionConfigs;
-          }
-          this.store.dispatch(
-            updateUserSettingsAction({
-              property: updatedProperty,
-            }),
-          );
-        }
 
         if (filtersChanged) {
+          this.store.dispatch(
+            updateUserSettingsAction({
+              property: { filters: result.filterConfigs },
+            }),
+          );
+
           this.store.dispatch(fetchFacetCountsAction());
         }
       }
@@ -303,6 +280,14 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       this.removeMultiSelectFilterFromActiveFilters(key, value);
       this.store.dispatch(removeMultiselectFilterAction({ key, value }));
     }
+  }
+
+  getFilterFacetCounts$(key: string) {
+    return this.store.select(selectFacetCountByKey(key));
+  }
+
+  getFilterByKey$(key: string) {
+    return this.store.select(selectFilterByKey(key));
   }
 
   trackByCondition(index: number, conditionConfig: ConditionConfig): string {

@@ -370,7 +370,7 @@ const reducer = createReducer(
   on(
     fromActions.addMultiselectFilterAction,
     (state, { key, value }): DatasetState => {
-      const newValue = state.filters[key]
+      const newValue = (state.filters[key] || [])
         .concat(value)
         .filter((val, i, self) => self.indexOf(val) === i); // Unique
       const filters = { ...state.filters, [key]: newValue, skip: 0 };

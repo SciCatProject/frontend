@@ -17,7 +17,6 @@ import {
   fetchFacetCountsAction,
 } from "state-management/actions/datasets.actions";
 import { of } from "rxjs";
-import { deselectAllCustomColumnsAction } from "state-management/actions/user.actions";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatDialogModule, MatDialog } from "@angular/material/dialog";
@@ -218,16 +217,13 @@ describe("DatasetsFilterComponent", () => {
   });
 
   describe("#reset()", () => {
-    it("should dispatch a ClearFacetsAction and a deselectAllCustomColumnsAction", () => {
+    it("should dispatch a ClearFacetsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       component.reset();
 
       expect(dispatchSpy).toHaveBeenCalledTimes(5);
       expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        deselectAllCustomColumnsAction(),
-      );
       expect(dispatchSpy).toHaveBeenCalledWith(fetchDatasetsAction());
       expect(dispatchSpy).toHaveBeenCalledWith(fetchFacetCountsAction());
     });

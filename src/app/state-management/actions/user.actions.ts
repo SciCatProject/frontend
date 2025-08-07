@@ -153,9 +153,6 @@ export const deselectColumnAction = createAction(
   "[User] Deselect Column",
   props<{ name: string; columnType: "standard" | "custom" }>(),
 );
-export const deselectAllCustomColumnsAction = createAction(
-  "[User] Deselect All Custom Columns",
-);
 
 export const showMessageAction = createAction(
   "[User] Show Message",
