@@ -161,7 +161,6 @@ export class UserEffects {
                 loginResponse.access_token;
               this.authService.setToken({
                 ...loginResponse,
-                created: new Date(loginResponse.created),
                 rememberMe,
                 scopes: null,
               });
@@ -276,6 +275,11 @@ export class UserEffects {
 
         if (id && ttl && isTokenExpired) {
           this.authService.clear();
+          this.apiConfigService.accessToken = null;
+          this.apiConfigService.credentials.bearer = null;
+          if (!(window as any).__karma__) {
+            window.location.reload();
+          }
         }
 
         return this.authService.isAuthenticated();

@@ -194,6 +194,7 @@ import { MatBadgeModule } from "@angular/material/badge";
     ADAuthService,
     SharedScicatFrontendModule,
     FileSizePipe,
+    TitleCasePipe,
   ],
   exports: [
     DashboardComponent,

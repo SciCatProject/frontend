@@ -205,7 +205,7 @@ describe("UserReducer", () => {
         id: "testId",
         ttl: 100,
         scopes: ["string"],
-        created: new Date(),
+        created: new Date().toISOString(),
         userId: "testId",
         rememberMe: false,
         user: {
