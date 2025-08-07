@@ -20,10 +20,6 @@ export interface TableColumn {
   width?: number;
 }
 
-export interface LabelMaps {
-  [key: string]: Record<string, string>;
-}
-
 export interface LabelsLocalization {
   datasetDefault: Record<string, string>;
   datasetCustom: Record<string, string>;

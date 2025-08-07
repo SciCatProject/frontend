@@ -50,11 +50,4 @@ export class DatasetsFilterSettingsComponent {
   onCancel() {
     this.dialogRef.close();
   }
-
-  resolveFilterLabel(
-    labelMaps: Record<string, string>,
-    filter: FilterConfig,
-  ): string {
-    return labelMaps[filter.key] || "Unknown filter";
-  }
 }

@@ -86,14 +86,6 @@ const filterConfigs: FilterConfig[] = [
   },
 ];
 
-const labelMaps = {
-  creationLocation: "Location Filter",
-  pid: "Pid Filter",
-  ownerGroup: "Group Filter",
-  type: "Type Filter",
-  keywords: "Keyword Filter",
-  creationTime: "Start Date - End Date",
-};
 export class MockStoreWithFilters extends MockStore {
   public select(selector) {
     if (selector === selectFilters) {
@@ -254,8 +246,6 @@ describe("DatasetsFilterComponent", () => {
         {
           data: {
             filterConfigs: filterConfigs,
-            conditionConfigs: [],
-            labelMaps: labelMaps,
           },
           restoreFocus: false,
         },

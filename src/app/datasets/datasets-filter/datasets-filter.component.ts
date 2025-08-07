@@ -231,9 +231,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   applyFilters() {
-    this.store.dispatch(fetchDatasetsAction());
-    this.store.dispatch(fetchFacetCountsAction());
-
     const { queryParams } = this.route.snapshot;
     const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
 
@@ -246,6 +243,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       },
       queryParamsHandling: "merge",
     });
+
+    this.store.dispatch(fetchDatasetsAction());
+    this.store.dispatch(fetchFacetCountsAction());
   }
 
   setDateFilter(filterKey: string, value: DateRange) {
@@ -257,6 +257,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     } else {
       delete this.activeFilters[filterKey];
     }
+
+    this.store.dispatch(
+      setMultiselectFilterAction({ multiSelectFilters: this.activeFilters }),
+    );
   }
 
   setFilter(filterKey: string, value: string) {
@@ -265,6 +269,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     } else {
       delete this.activeFilters[filterKey];
     }
+
+    this.store.dispatch(
+      setMultiselectFilterAction({ multiSelectFilters: this.activeFilters }),
+    );
   }
 
   addMultiSelectFilterToActiveFilters(key: string, value: string) {
