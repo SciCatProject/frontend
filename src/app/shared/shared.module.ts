@@ -21,6 +21,7 @@ import { DynamicMatTableModule } from "./modules/dynamic-material-table/table/dy
 import { TranslateModule } from "@ngx-translate/core";
 import { FullTextSearchBarModule } from "./modules/full-text-search-bar/full-text-search-bar.module";
 import { SharedFilterModule } from "./modules/shared-filter/shared-filter.module";
+import { NgxNumericRangeFormFieldModule } from "./modules/numeric-range/ngx-numeric-range-form-field.module";
 @NgModule({
   imports: [
     BreadcrumbModule,
@@ -42,6 +43,7 @@ import { SharedFilterModule } from "./modules/shared-filter/shared-filter.module
     ScientificMetadataTreeModule,
     DynamicMatTableModule.forRoot({}),
     TranslateModule,
+    NgxNumericRangeFormFieldModule,
   ],
   providers: [
     ConfigService,
@@ -67,6 +69,7 @@ import { SharedFilterModule } from "./modules/shared-filter/shared-filter.module
     ScientificMetadataTreeModule,
     DynamicMatTableModule,
     TranslateModule,
+    NgxNumericRangeFormFieldModule,
   ],
 })
 export class SharedScicatFrontendModule {}

@@ -14,6 +14,7 @@ import {
   ScientificCondition,
 } from "state-management/models";
 import { DateRange } from "state-management/state/proposals.store";
+import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-range-field.model";
 
 // === Effects ===
 
@@ -283,7 +284,10 @@ export const setTextFilterAction = createAction(
 export const setMultiselectFilterAction = createAction(
   "[Dataset] Set Multi Select Filter",
   props<{
-    multiSelectFilters: Record<string, string | DateRange | string[]>;
+    multiSelectFilters: Record<
+      string,
+      string | DateRange | string[] | INumericRange
+    >;
   }>(),
 );
 export const addMultiselectFilterAction = createAction(

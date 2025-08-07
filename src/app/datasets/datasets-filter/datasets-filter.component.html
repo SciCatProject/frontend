@@ -28,6 +28,7 @@
         (textChange)="setFilter(filter.key, $event)"
         (dateRangeChange)="setDateFilter(filter.key, $event)"
         (selectionChange)="selectionChange($event)"
+        (numericRangeChange)="numericRangeChange(filter.key, $event)"
       ></shared-filter>
     </ng-container>
     <div

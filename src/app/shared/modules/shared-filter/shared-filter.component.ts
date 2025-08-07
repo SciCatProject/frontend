@@ -15,6 +15,7 @@ import { Observable } from "rxjs";
 import { DateRange } from "state-management/state/proposals.store";
 import { MultiSelectFilterValue } from "../filters/multiselect-filter.component";
 import { FacetCount } from "state-management/state/datasets.store";
+import { INumericRange } from "../numeric-range/form/model/numeric-range-field.model";
 
 @Component({
   selector: "shared-filter",
@@ -35,6 +36,7 @@ export class SharedFilterComponent implements OnChanges {
       end: new FormControl<Date>(null),
     }),
     multiSelectField: new FormControl([]),
+    numberRange: new FormControl({ min: null, max: null }),
   });
 
   @ViewChild("input", { static: true }) input!: ElementRef<HTMLInputElement>;
@@ -59,6 +61,7 @@ export class SharedFilterComponent implements OnChanges {
 
   @Output() textChange = new EventEmitter<string>();
   @Output() selectionChange = new EventEmitter<MultiSelectFilterValue>();
+  @Output() numericRangeChange = new EventEmitter<INumericRange>();
   @Output() dateRangeChange = new EventEmitter<{
     begin: string;
     end: string;
@@ -72,6 +75,12 @@ export class SharedFilterComponent implements OnChanges {
         this.filterForm
           .get("textField")!
           .setValue((this.prefilled as string) || "");
+      } else if (this.filterType === "number") {
+        const range = this.prefilled as unknown as INumericRange;
+        this.filterForm.get("numberRange")!.setValue({
+          min: range.min || null,
+          max: range.max || null,
+        });
       } else {
         const range = (this.prefilled as DateRange) || {
           begin: null,
@@ -102,5 +111,9 @@ export class SharedFilterComponent implements OnChanges {
 
   onSelectionChange(value: MultiSelectFilterValue) {
     this.selectionChange.emit(value);
+  }
+
+  onNumericRangeChange(value: INumericRange) {
+    this.numericRangeChange.emit(value);
   }
 }

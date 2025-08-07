@@ -53,6 +53,7 @@ import {
 import { DateRange } from "state-management/state/proposals.store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MultiSelectFilterValue } from "shared/modules/filters/multiselect-filter.component";
+import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-range-field.model";
 
 @Component({
   selector: "datasets-filter",
@@ -62,7 +63,8 @@ import { MultiSelectFilterValue } from "shared/modules/filters/multiselect-filte
 })
 export class DatasetsFilterComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
-  activeFilters: Record<string, string | DateRange | string[]> = {};
+  activeFilters: Record<string, string | DateRange | string[] | INumericRange> =
+    {};
   filtersList: FilterConfig[];
 
   filterConfigs$ = this.store.select(selectFilters);
@@ -280,6 +282,18 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       this.removeMultiSelectFilterFromActiveFilters(key, value);
       this.store.dispatch(removeMultiselectFilterAction({ key, value }));
     }
+  }
+
+  numericRangeChange(filterKey: string, { min, max }: INumericRange) {
+    if (min !== null && max !== null) {
+      this.activeFilters[filterKey] = { min, max };
+    } else {
+      delete this.activeFilters[filterKey];
+    }
+
+    this.store.dispatch(
+      setMultiselectFilterAction({ multiSelectFilters: this.activeFilters }),
+    );
   }
 
   getFilterFacetCounts$(key: string) {
