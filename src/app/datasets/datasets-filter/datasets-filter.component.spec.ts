@@ -216,7 +216,7 @@ describe("DatasetsFilterComponent", () => {
   it("should contain a clear all button", () => {
     const compiled = fixture.debugElement.nativeElement;
     const btn = compiled.querySelector(".datasets-filters-clear-all-button");
-    expect(btn.textContent).toContain("undo Reset");
+    expect(btn.textContent).toContain("undo Clear");
   });
 
   it("should contain a search button", () => {
