@@ -184,7 +184,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
     const dialogRef = this.dialog.open(DatasetsFilterSettingsComponent, {
       data: {
-        filterConfigs: this.asyncPipe.transform(this.filterConfigs$),
+        filterConfigs: this.filtersList,
       },
       restoreFocus: false,
     });

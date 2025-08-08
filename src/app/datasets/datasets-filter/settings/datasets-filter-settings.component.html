@@ -5,7 +5,7 @@
     <mat-nav-list cdkDropList (cdkDropListDropped)="drop($event)">
       <mat-list-item
         class="filter-item"
-        *ngFor="let filter of data.filterConfigs"
+        *ngFor="let filter of mergedFilters"
         cdkDrag
         cdkDragHandle
       >

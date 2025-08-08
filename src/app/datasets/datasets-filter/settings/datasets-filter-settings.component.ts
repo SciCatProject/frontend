@@ -23,6 +23,11 @@ export class DatasetsFilterSettingsComponent {
 
   filterValidationStatus = {};
 
+  defaultFilters = [];
+  userSavedFilters = [];
+
+  mergedFilters = [];
+
   constructor(
     public dialogRef: MatDialogRef<DatasetsFilterSettingsComponent>,
     public dialog: MatDialog,
@@ -31,20 +36,38 @@ export class DatasetsFilterSettingsComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {}
 
+  ngOnInit() {
+    this.defaultFilters = this.appConfig.defaultDatasetsListSettings.filters;
+    this.userSavedFilters = this.data.filterConfigs || [];
+
+    const newFilters = this.defaultFilters.reduce((filtered, item) => {
+      if (
+        !this.userSavedFilters.some((userFilter) => userFilter.key === item.key)
+      ) {
+        filtered.push({ ...item, enabled: false });
+      }
+      return filtered;
+    }, []);
+
+    this.mergedFilters = [...this.userSavedFilters].concat(newFilters);
+  }
+
   toggleVisibility(filter: FilterConfig): void {
     filter.enabled = !filter.enabled;
   }
 
   drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(
-      this.data.filterConfigs,
+      this.mergedFilters,
       event.previousIndex,
       event.currentIndex,
     );
   }
 
   onApply() {
-    this.dialogRef.close(this.data);
+    this.dialogRef.close({
+      filterConfigs: this.mergedFilters,
+    });
   }
 
   onCancel() {
