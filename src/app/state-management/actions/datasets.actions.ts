@@ -281,22 +281,30 @@ export const setTextFilterAction = createAction(
   props<{ text: string }>(),
 );
 
-export const setMultiselectFilterAction = createAction(
-  "[Dataset] Set Multi Select Filter",
+export const setFiltersAction = createAction(
+  "[Dataset] Set Filters",
   props<{
-    multiSelectFilters: Record<
+    datasetFilters: Record<
       string,
       string | DateRange | string[] | INumericRange
     >;
   }>(),
 );
-export const addMultiselectFilterAction = createAction(
-  "[Dataset] Add Multi Select Filter",
-  props<{ key: string; value: string }>(),
+export const addDatasetFilterAction = createAction(
+  "[Dataset] Add Dataset Filter",
+  props<{
+    key: string;
+    value: string | DateRange | string[] | INumericRange;
+    filterType: "text" | "dateRange" | "number" | "multiSelect";
+  }>(),
 );
-export const removeMultiselectFilterAction = createAction(
-  "[Dataset] Remove Multi Select Filter",
-  props<{ key: string; value: string }>(),
+export const removeDatasetFilterAction = createAction(
+  "[Dataset] Remove Dataset Filter",
+  props<{
+    key: string;
+    value?: string;
+    filterType: "text" | "dateRange" | "number" | "multiSelect";
+  }>(),
 );
 
 export const addKeywordFilterAction = createAction(

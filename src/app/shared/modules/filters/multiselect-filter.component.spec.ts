@@ -11,8 +11,8 @@ import { MockHttp, MockStore } from "shared/MockStubs";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {
-  addMultiselectFilterAction,
-  removeMultiselectFilterAction,
+  addDatasetFilterAction,
+  removeDatasetFilterAction,
 } from "state-management/actions/datasets.actions";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
@@ -125,7 +125,11 @@ describe("MultiSelectFilterComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        addMultiselectFilterAction({ key: component.key, value: value }),
+        addDatasetFilterAction({
+          key: component.key,
+          value: value,
+          filterType: "multiSelect",
+        }),
       );
     });
   });
@@ -139,7 +143,11 @@ describe("MultiSelectFilterComponent", () => {
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith(
-        removeMultiselectFilterAction({ key: component.key, value: value }),
+        removeDatasetFilterAction({
+          key: component.key,
+          value: value,
+          filterType: "multiSelect",
+        }),
       );
     });
   });

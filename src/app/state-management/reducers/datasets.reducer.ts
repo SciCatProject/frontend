@@ -359,32 +359,47 @@ const reducer = createReducer(
   }),
 
   on(
-    fromActions.setMultiselectFilterAction,
-    (state, { multiSelectFilters }): DatasetState => {
-      const filters = { ...state.filters, ...multiSelectFilters };
+    fromActions.setFiltersAction,
+    (state, { datasetFilters }): DatasetState => {
+      const filters = { ...state.filters, ...datasetFilters };
 
       return { ...state, filters };
     },
   ),
 
   on(
-    fromActions.addMultiselectFilterAction,
-    (state, { key, value }): DatasetState => {
-      const newValue = (state.filters[key] || [])
-        .concat(value)
-        .filter((val, i, self) => self.indexOf(val) === i); // Unique
-      const filters = { ...state.filters, [key]: newValue, skip: 0 };
+    fromActions.addDatasetFilterAction,
+    (state, { key, value, filterType }): DatasetState => {
+      const filters = {
+        ...state.filters,
+      };
+      if (filterType === "multiSelect") {
+        const newValue = (state.filters[key] || [])
+          .concat(value)
+          .filter((val, i, self) => self.indexOf(val) === i); // Unique
+
+        filters[key] = newValue;
+      } else {
+        filters[key] = value;
+      }
 
       return { ...state, filters };
     },
   ),
   on(
-    fromActions.removeMultiselectFilterAction,
-    (state, { key, value }): DatasetState => {
-      const newValue = state.filters[key].filter(
-        (existingValue) => existingValue !== value,
-      );
-      const filters = { ...state.filters, [key]: newValue, skip: 0 };
+    fromActions.removeDatasetFilterAction,
+    (state, { key, value, filterType }): DatasetState => {
+      const filters = { ...state.filters };
+
+      if (filterType === "multiSelect") {
+        const newValue = state.filters[key].filter(
+          (existingValue) => existingValue !== value,
+        );
+
+        filters[key] = newValue;
+      } else {
+        delete filters[key];
+      }
 
       return { ...state, filters };
     },

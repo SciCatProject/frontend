@@ -10,12 +10,12 @@ import {
 } from "state-management/selectors/datasets.selectors";
 
 import {
-  addMultiselectFilterAction,
+  addDatasetFilterAction,
   clearFacetsAction,
   fetchDatasetsAction,
   fetchFacetCountsAction,
-  removeMultiselectFilterAction,
-  setMultiselectFilterAction,
+  removeDatasetFilterAction,
+  setFiltersAction,
 } from "state-management/actions/datasets.actions";
 import {
   updateConditionsConfigs,
@@ -131,7 +131,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     this.activeFilters = { ...searchQuery };
 
     this.store.dispatch(
-      setMultiselectFilterAction({ multiSelectFilters: this.activeFilters }),
+      setFiltersAction({ datasetFilters: this.activeFilters }),
     );
   }
 
@@ -233,25 +233,47 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         begin: value.begin,
         end: value.end,
       };
+
+      this.store.dispatch(
+        addDatasetFilterAction({
+          key: filterKey,
+          value: this.activeFilters[filterKey],
+          filterType: "dateRange",
+        }),
+      );
     } else {
       delete this.activeFilters[filterKey];
-    }
 
-    this.store.dispatch(
-      setMultiselectFilterAction({ multiSelectFilters: this.activeFilters }),
-    );
+      this.store.dispatch(
+        removeDatasetFilterAction({
+          key: filterKey,
+          filterType: "dateRange",
+        }),
+      );
+    }
   }
 
   setFilter(filterKey: string, value: string) {
     if (value) {
       this.activeFilters[filterKey] = value;
+
+      this.store.dispatch(
+        addDatasetFilterAction({
+          key: filterKey,
+          value: this.activeFilters[filterKey],
+          filterType: "text",
+        }),
+      );
     } else {
       delete this.activeFilters[filterKey];
-    }
 
-    this.store.dispatch(
-      setMultiselectFilterAction({ multiSelectFilters: this.activeFilters }),
-    );
+      this.store.dispatch(
+        removeDatasetFilterAction({
+          key: filterKey,
+          filterType: "text",
+        }),
+      );
+    }
   }
 
   addMultiSelectFilterToActiveFilters(key: string, value: string) {
@@ -277,23 +299,35 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   selectionChange({ event, key, value }: MultiSelectFilterValue) {
     if (event === "add") {
       this.addMultiSelectFilterToActiveFilters(key, value);
-      this.store.dispatch(addMultiselectFilterAction({ key, value }));
+      this.store.dispatch(
+        addDatasetFilterAction({ key, value, filterType: "multiSelect" }),
+      );
     } else {
       this.removeMultiSelectFilterFromActiveFilters(key, value);
-      this.store.dispatch(removeMultiselectFilterAction({ key, value }));
+      this.store.dispatch(
+        removeDatasetFilterAction({ key, value, filterType: "multiSelect" }),
+      );
     }
   }
 
   numericRangeChange(filterKey: string, { min, max }: INumericRange) {
     if (min !== null && max !== null) {
       this.activeFilters[filterKey] = { min, max };
+
+      this.store.dispatch(
+        addDatasetFilterAction({
+          key: filterKey,
+          value: this.activeFilters[filterKey],
+          filterType: "number",
+        }),
+      );
     } else {
       delete this.activeFilters[filterKey];
-    }
 
-    this.store.dispatch(
-      setMultiselectFilterAction({ multiSelectFilters: this.activeFilters }),
-    );
+      this.store.dispatch(
+        removeDatasetFilterAction({ key: filterKey, filterType: "number" }),
+      );
+    }
   }
 
   getFilterFacetCounts$(key: string) {

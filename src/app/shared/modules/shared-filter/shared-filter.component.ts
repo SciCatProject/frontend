@@ -78,8 +78,8 @@ export class SharedFilterComponent implements OnChanges {
       } else if (this.filterType === "number") {
         const range = this.prefilled as unknown as INumericRange;
         this.filterForm.get("numberRange")!.setValue({
-          min: range?.min || null,
-          max: range?.max || null,
+          min: range?.min ?? null,
+          max: range?.max ?? null,
         });
       } else {
         const range = (this.prefilled as DateRange) || {
