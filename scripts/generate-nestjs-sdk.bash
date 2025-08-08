@@ -1,12 +1,13 @@
 #!/bin/bash
 #
-#
 
-USING_SCICAT_LIVE=0
+# This default is for when developing with a backend running directly on localhost
+SWAGGER_API_URL="http://localhost:3000/explorer-json"
 while [[ "$#" -gt 0 ]]; do
 	case "$1" in
-		--scicatlive)
-			USING_SCICAT_LIVE=1
+		--swagger-url)
+			shift
+			SWAGGER_API_URL=$1
 			shift
 			;;
 		*)
@@ -24,16 +25,8 @@ rm -rf node_modules/@scicatproject/scicat-sdk-ts-angular
 rm -rf @scicatproject/scicat-sdk-ts-angular
 rm local-api-for-generator.json
 
-echo -e "\nFetching the API from local instance of back end..."
-
-if [ $USING_SCICAT_LIVE -eq 1 ];
-then
-	# For when developing with SciCat Live:
-	curl http://backend.localhost/explorer-json > local-api-for-generator.json
-else
-	# For when developing with a backend running directly on localhost:
-	curl http://host.docker.internal:3000/explorer-json > local-api-for-generator.json
-fi
+echo -e "\nFetching the Swagger API from the back end..."
+curl ${SWAGGER_API_URL} > local-api-for-generator.json
 
 echo -e "\nGenerating the new sdk..."
 
@@ -49,6 +42,8 @@ docker run \
 	-g typescript-angular \
 	-o local/@scicatproject/scicat-sdk-ts-angular \
 	--additional-properties=ngVersion=19.0.0,npmName=@scicatproject/scicat-sdk-ts-angular,supportsES6=true,withInterfaces=true  --skip-validate-spec
+
+rm local-api-for-generator.json
 
 # Check if the docker command resulted in any output.
 # If we don't do this, we'll try to cd into a missing folder,
@@ -99,6 +94,3 @@ then
 	rm -fv "/usr/local/bin/npm"
 	rm -fv "/usr/local/bin/node"
 fi
-
-rm local-api-for-generator.json
-
