@@ -160,6 +160,7 @@ export class NumericRangeFormFieldContainerComponent
 
   onReset(): void {
     this.formGroup.reset();
+    this.numericRangeChanged.emit({ min: null, max: null });
   }
 
   private setSyncValidator(validator: ValidatorFn): void {

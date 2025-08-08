@@ -48,7 +48,7 @@ export class SharedFilterComponent implements OnChanges {
   @Input() currentFilter$!: Observable<string[]>;
   @Input() dispatchAction!: () => void;
   @Input() filterType: "text" | "dateRange" | "multiSelect" | "number";
-  @Input() prefilled: string | DateRange | string[] = undefined;
+  @Input() prefilled: string | DateRange | string[] | INumericRange = undefined;
   @Input()
   set clear(value: boolean) {
     if (value) {
@@ -78,8 +78,8 @@ export class SharedFilterComponent implements OnChanges {
       } else if (this.filterType === "number") {
         const range = this.prefilled as unknown as INumericRange;
         this.filterForm.get("numberRange")!.setValue({
-          min: range.min || null,
-          max: range.max || null,
+          min: range?.min || null,
+          max: range?.max || null,
         });
       } else {
         const range = (this.prefilled as DateRange) || {
