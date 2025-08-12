@@ -7,7 +7,7 @@ import {
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
 import { DatasetsFilterComponent } from "datasets/datasets-filter/datasets-filter.component";
-import { MockHttp, MockStore } from "shared/MockStubs";
+import { MockActivatedRoute, MockHttp, MockStore } from "shared/MockStubs";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -39,6 +39,7 @@ import {
 } from "../../state-management/selectors/user.selectors";
 import { HttpClient } from "@angular/common/http";
 import { FilterConfig } from "state-management/state/user.store";
+import { ActivatedRoute } from "@angular/router";
 
 const filterConfigs: FilterConfig[] = [
   {
@@ -144,6 +145,7 @@ describe("DatasetsFilterComponent", () => {
         AppConfigService,
         { provide: HttpClient, useClass: MockHttp },
         { provide: Store, useClass: MockStoreWithFilters },
+        { provide: ActivatedRoute, useClass: MockActivatedRoute },
       ],
     });
     TestBed.overrideComponent(DatasetsFilterComponent, {
@@ -182,25 +184,25 @@ describe("DatasetsFilterComponent", () => {
 
   it("should contain a date range field", () => {
     const compiled = fixture.debugElement.nativeElement;
-    const beamline = compiled.querySelector(".date-input");
+    const beamline = compiled.querySelector("#creationTime");
     expect(beamline).toBeTruthy();
   });
 
   it("should contain a beamline input", () => {
     const compiled = fixture.debugElement.nativeElement;
-    const beamline = compiled.querySelector(".location-input");
+    const beamline = compiled.querySelector("#creationLocation");
     expect(beamline).toBeTruthy();
   });
 
   it("should contain a groups input", () => {
     const compiled = fixture.debugElement.nativeElement;
-    const group = compiled.querySelector(".group-input");
+    const group = compiled.querySelector("#ownerGroup");
     expect(group).toBeTruthy();
   });
 
   it("should contain a type input", () => {
     const compiled = fixture.debugElement.nativeElement;
-    const type = compiled.querySelector(".type-input");
+    const type = compiled.querySelector("#type");
     expect(type).toBeTruthy();
   });
 

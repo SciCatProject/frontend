@@ -405,14 +405,6 @@ const reducer = createReducer(
     },
   ),
 
-  on(fromActions.addKeywordFilterAction, (state, { keyword }): DatasetState => {
-    const keywords = state.filters.keywords
-      .concat(keyword)
-      .filter((val, i, self) => self.indexOf(val) === i); // Unique
-    const filters = { ...state.filters, keywords, skip: 0 };
-    return { ...state, filters };
-  }),
-
   on(
     fromActions.addScientificConditionAction,
     (state, { condition }): DatasetState => {

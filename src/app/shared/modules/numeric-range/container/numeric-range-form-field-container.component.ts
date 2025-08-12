@@ -46,6 +46,7 @@ export class NumericRangeFormFieldContainerComponent
   implements OnChanges, OnInit, OnDestroy, ControlValueAccessor, Validator
 {
   @Input() label: string;
+  @Input() key: string;
   @Input() appearance: MatFormFieldAppearance = "fill";
   @Input() floatLabel: FloatLabelType = "always";
 

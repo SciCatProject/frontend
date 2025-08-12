@@ -118,37 +118,33 @@ describe("MultiSelectFilterComponent", () => {
 
   describe("#itemSelected()", () => {
     it("should dispatch an AddMultiSelectFilterAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
+      dispatchSpy = spyOn(component.onSelectionChange, "emit");
 
       const value = "test";
       component.itemSelected(value);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        addDatasetFilterAction({
-          key: component.key,
-          value: value,
-          filterType: "multiSelect",
-        }),
-      );
+      expect(dispatchSpy).toHaveBeenCalledWith({
+        key: component.key,
+        value: value,
+        event: "add",
+      });
     });
   });
 
   describe("#itemRemoved()", () => {
     it("should dispatch a RemoveMultiSelectFilterAction", () => {
-      dispatchSpy = spyOn(store, "dispatch");
+      dispatchSpy = spyOn(component.onSelectionChange, "emit");
 
       const value = "test";
       component.itemRemoved(value);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        removeDatasetFilterAction({
-          key: component.key,
-          value: value,
-          filterType: "multiSelect",
-        }),
-      );
+      expect(dispatchSpy).toHaveBeenCalledWith({
+        key: component.key,
+        value: value,
+        event: "remove",
+      });
     });
   });
 });

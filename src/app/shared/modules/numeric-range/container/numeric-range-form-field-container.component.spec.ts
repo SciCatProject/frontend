@@ -26,6 +26,7 @@ import { NumericRangeFormFieldContainerComponent } from "./numeric-range-form-fi
     >
     </ngx-numeric-range-form-field>
   `,
+  standalone: false,
 })
 class HostComponent {
   form: FormGroup;

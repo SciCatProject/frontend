@@ -307,11 +307,6 @@ export const removeDatasetFilterAction = createAction(
   }>(),
 );
 
-export const addKeywordFilterAction = createAction(
-  "[Dataset] Add Keyword Filter",
-  props<{ keyword: string }>(),
-);
-
 export const addScientificConditionAction = createAction(
   "[Dataset] Add Scientific Condition",
   props<{ condition: ScientificCondition }>(),

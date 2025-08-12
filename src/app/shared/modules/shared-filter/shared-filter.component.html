@@ -2,7 +2,7 @@
 <form [formGroup]="filterForm">
   <ng-container [ngSwitch]="filterType">
     <ng-container *ngSwitchDefault>
-      <mat-form-field>
+      <mat-form-field [id]="key">
         <mat-label>{{ label }}</mat-label>
         <input
           matInput
@@ -17,7 +17,11 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="'dateRange'">
-      <mat-form-field [matTooltip]="tooltip" matTooltipPosition="after">
+      <mat-form-field
+        [matTooltip]="tooltip"
+        matTooltipPosition="after"
+        [id]="key"
+      >
         <mat-label>{{ label }}</mat-label>
         <mat-date-range-input
           formGroupName="dateRangeField"
@@ -52,6 +56,7 @@
       <ngx-numeric-range-form-field
         formControlName="numberRange"
         [label]="label"
+        [key]="key"
         (numericRangeChanged)="onNumericRangeChange($event)"
       ></ngx-numeric-range-form-field>
     </ng-container>
