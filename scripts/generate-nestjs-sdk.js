@@ -32,8 +32,12 @@ if (isWindows()) {
    * NOTE: parameter --skip-validate-spec is passed to avoid some errors like not supporting the "content" in the @ApiQuery() parameter that we use in the dataset v4 controller.
    * This should not be a risk as after the generation we can get a feedback immediately if something is broken here when we run and test the frontend.
    */
+
+  const backendUrl = process.env.BACKEND_URL ?? "http://host.docker.internal:3000";
+  const backendHost = new URL(backendUrl).hostname;
+  const sdkMountPath = process.env.SDK_MOUNT_PATH ?? getCurrentDirectory();
   const generationOutput = execSync(
-    `docker run --rm --add-host host.docker.internal:host-gateway -v "${getCurrentDirectory()}:/local" openapitools/openapi-generator-cli:v7.13.0 generate -i http://host.docker.internal:3000/explorer-json -g typescript-angular -o local/@scicatproject/scicat-sdk-ts-angular --additional-properties=ngVersion=19.0.0,npmName=@scicatproject/scicat-sdk-ts-angular,supportsES6=true,withInterfaces=true,paramNaming=original,modelPropertyNaming=original,enumPropertyNaming=original --skip-validate-spec`,
+    `docker run --rm --add-host ${backendHost}:host-gateway -v "${sdkMountPath}:/local" openapitools/openapi-generator-cli:v7.13.0 generate -i ${backendUrl}/explorer-json -g typescript-angular -o local/@scicatproject/scicat-sdk-ts-angular --additional-properties=ngVersion=19.0.0,npmName=@scicatproject/scicat-sdk-ts-angular,supportsES6=true,withInterfaces=true,paramNaming=original,modelPropertyNaming=original,enumPropertyNaming=original --skip-validate-spec`,
     { encoding: "utf-8" },
   );
   console.log(generationOutput);
@@ -59,12 +63,16 @@ if (isWindows()) {
 
   console.log("Local SDK generation completed");
 } else {
-  console.log("Your environment is a linux/unix");
-  console.log("Please run the following command on your terminal:");
-  console.log("> sudo -E ./scripts/generate-nestjs-sdk.bash");
-  console.log("");
-  console.log(
-    "IMPORTANT: the script runs under sudo. You will be asked your password.",
-  );
-  console.log("");
+  if (process.getuid && process.getuid() === 0) {
+      execSync('. ./scripts/generate-nestjs-sdk.bash', { stdio: 'inherit' });
+  } else {
+    console.log("Your environment is a linux/unix");
+    console.log("Please run the following command on your terminal:");
+    console.log("> sudo -E ./scripts/generate-nestjs-sdk.bash");
+    console.log("");
+    console.log(
+      "IMPORTANT: the script runs under sudo. You will be asked your password.",
+    );
+    console.log("");
+  }
 }

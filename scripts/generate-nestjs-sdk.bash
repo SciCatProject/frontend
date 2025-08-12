@@ -15,12 +15,16 @@ echo -e "\nGenerating the new sdk..."
 # NOTE: parameter --skip-validate-spec is passed to avoid some errors like not supporting the "content" in the @ApiQuery() parameter that we use in the dataset v4 controller.
 # This should not be a risk as after the generation we can get a feedback immediately if something is broken here when we run and test the frontend.
 ##
+URL=${BACKEND_URL:-http://host.docker.internal:3000}
+HOST=${URL#*://}
+HOST=${HOST%%:*}
+
 docker run \
 	--rm \
-	--add-host host.docker.internal:host-gateway \
-	-v "`pwd`:/local" \
+	--add-host ${HOST}:host-gateway \
+	-v "${SDK_MOUNT_PATH:-`pwd`}:/local" \
 	openapitools/openapi-generator-cli:v7.13.0 generate \
-	-i http://host.docker.internal:3000/explorer-json \
+	-i ${URL}/explorer-json \
 	-g typescript-angular \
 	-o local/@scicatproject/scicat-sdk-ts-angular \
 	--additional-properties=ngVersion=19.0.0,npmName=@scicatproject/scicat-sdk-ts-angular,supportsES6=true,withInterfaces=true  --skip-validate-spec
