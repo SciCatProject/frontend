@@ -31,7 +31,7 @@
     "@angular/platform-server": "^19.2.8",
     "@angular/router": "^19.2.8",
     "@angular/service-worker": "^19.2.8",
-    "@ngbracket/ngx-layout": "^16.0.0",
+    "@ngbracket/ngx-layout": "^20.0.1",
     "@ngrx/effects": "^19.1.0",
     "@ngrx/operators": "^19.1.0",
     "@ngrx/router-store": "^19.1.0",
