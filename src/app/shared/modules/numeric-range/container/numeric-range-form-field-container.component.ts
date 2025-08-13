@@ -76,16 +76,6 @@ export class NumericRangeFormFieldContainerComponent
   formGroup: NumericRangeFormGroup = this.formService.formGroup;
   control = new FormControl();
 
-  constructor(
-    @Self() private controlDirective: NgControl,
-    @Host() private formService: NumericRangeFormService,
-    private changeDetectorRef: ChangeDetectorRef,
-  ) {
-    this.controlDirective.valueAccessor = this;
-  }
-
-  onTouched = () => {};
-
   private setSyncValidator(validator: ValidatorFn): void {
     if (!validator) {
       return;
@@ -103,6 +93,16 @@ export class NumericRangeFormFieldContainerComponent
     this.control.addAsyncValidators(asyncValidator);
     this.control.updateValueAndValidity();
   }
+
+  constructor(
+    @Self() private controlDirective: NgControl,
+    @Host() private formService: NumericRangeFormService,
+    private changeDetectorRef: ChangeDetectorRef,
+  ) {
+    this.controlDirective.valueAccessor = this;
+  }
+
+  onTouched = () => {};
 
   get minControl(): FormControl<number> {
     return this.formService.minControl;

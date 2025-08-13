@@ -63,13 +63,6 @@ export class NumericRangeFormFieldControlComponent
   private unsubscribe$ = new Subject<void>();
   private _placeholder: string;
 
-  constructor(
-    @Self() public ngControl: NgControl,
-    @SkipSelf() private formService: NumericRangeFormService,
-  ) {
-    this.ngControl.valueAccessor = this;
-  }
-
   @Input() minPlaceholder: string;
   @Input() maxPlaceholder: string;
   @Input() readonly = false;
@@ -95,6 +88,20 @@ export class NumericRangeFormFieldControlComponent
 
   numericRangeErrorMatcher = new NumericRangeStateMatcher();
 
+  @HostBinding("attr.aria-describedby")
+  userAriaDescribedBy = "";
+
+  @HostBinding()
+  id =
+    `numeric-range-form-control-id-${NumericRangeFormFieldControlComponent.nextId++}`;
+
+  constructor(
+    @Self() public ngControl: NgControl,
+    @SkipSelf() private formService: NumericRangeFormService,
+  ) {
+    this.ngControl.valueAccessor = this;
+  }
+
   get value() {
     return this.formGroup.getRawValue();
   }
@@ -118,13 +125,6 @@ export class NumericRangeFormFieldControlComponent
   get shouldLabelFloat(): boolean {
     return true;
   }
-
-  @HostBinding("attr.aria-describedby")
-  userAriaDescribedBy = "";
-
-  @HostBinding()
-  id =
-    `numeric-range-form-control-id-${NumericRangeFormFieldControlComponent.nextId++}`;
 
   get empty(): boolean {
     return !this.value.min && !this.value.max;

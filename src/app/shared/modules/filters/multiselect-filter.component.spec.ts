@@ -1,4 +1,4 @@
-import { isDevMode, NO_ERRORS_SCHEMA } from "@angular/core";
+import { NO_ERRORS_SCHEMA } from "@angular/core";
 import {
   ComponentFixture,
   TestBed,
@@ -10,10 +10,6 @@ import { MockHttp, MockStore } from "shared/MockStubs";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import {
-  addDatasetFilterAction,
-  removeDatasetFilterAction,
-} from "state-management/actions/datasets.actions";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatDialogModule } from "@angular/material/dialog";
@@ -118,7 +114,7 @@ describe("MultiSelectFilterComponent", () => {
 
   describe("#itemSelected()", () => {
     it("should dispatch an AddMultiSelectFilterAction", () => {
-      dispatchSpy = spyOn(component.onSelectionChange, "emit");
+      dispatchSpy = spyOn(component.selectionChange, "emit");
 
       const value = "test";
       component.itemSelected(value);
@@ -134,7 +130,7 @@ describe("MultiSelectFilterComponent", () => {
 
   describe("#itemRemoved()", () => {
     it("should dispatch a RemoveMultiSelectFilterAction", () => {
-      dispatchSpy = spyOn(component.onSelectionChange, "emit");
+      dispatchSpy = spyOn(component.selectionChange, "emit");
 
       const value = "test";
       component.itemRemoved(value);
