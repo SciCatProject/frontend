@@ -91,6 +91,7 @@ import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { ArrayLayoutRenderer } from "../shared/modules/jsonforms-custom-renderers/custom-array-renderer/custom-array-layout-renderer.component";
 import { MatBadgeModule } from "@angular/material/badge";
+import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 
 @NgModule({
   imports: [
