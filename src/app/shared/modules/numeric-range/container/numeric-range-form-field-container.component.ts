@@ -47,14 +47,6 @@ export class NumericRangeFormFieldContainerComponent
 {
   private unsubscribe$ = new Subject<void>();
 
-  constructor(
-    @Self() private controlDirective: NgControl,
-    @Host() private formService: NumericRangeFormService,
-    private changeDetectorRef: ChangeDetectorRef,
-  ) {
-    this.controlDirective.valueAccessor = this;
-  }
-
   @Input() label: string;
   @Input() key: string;
   @Input() appearance: MatFormFieldAppearance = "fill";
@@ -84,7 +76,33 @@ export class NumericRangeFormFieldContainerComponent
   formGroup: NumericRangeFormGroup = this.formService.formGroup;
   control = new FormControl();
 
+  constructor(
+    @Self() private controlDirective: NgControl,
+    @Host() private formService: NumericRangeFormService,
+    private changeDetectorRef: ChangeDetectorRef,
+  ) {
+    this.controlDirective.valueAccessor = this;
+  }
+
   onTouched = () => {};
+
+  private setSyncValidator(validator: ValidatorFn): void {
+    if (!validator) {
+      return;
+    }
+
+    this.control.addValidators(validator); // sets the validators from parent control
+    this.control.updateValueAndValidity();
+  }
+
+  private setAsyncValidator(asyncValidator: AsyncValidatorFn): void {
+    if (!asyncValidator) {
+      return;
+    }
+
+    this.control.addAsyncValidators(asyncValidator);
+    this.control.updateValueAndValidity();
+  }
 
   get minControl(): FormControl<number> {
     return this.formService.minControl;
@@ -168,23 +186,5 @@ export class NumericRangeFormFieldContainerComponent
   onReset(): void {
     this.formGroup.reset();
     this.numericRangeChanged.emit({ min: null, max: null });
-  }
-
-  private setSyncValidator(validator: ValidatorFn): void {
-    if (!validator) {
-      return;
-    }
-
-    this.control.addValidators(validator); // sets the validators from parent control
-    this.control.updateValueAndValidity();
-  }
-
-  private setAsyncValidator(asyncValidator: AsyncValidatorFn): void {
-    if (!asyncValidator) {
-      return;
-    }
-
-    this.control.addAsyncValidators(asyncValidator);
-    this.control.updateValueAndValidity();
   }
 }

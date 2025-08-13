@@ -25,7 +25,7 @@ export class MultiSelectFilterComponent extends ClearableInputComponent {
   @Input() tooltip = "";
   @Input() facetCounts$: Observable<FacetCount[]>;
   @Input() currentFilter$: Observable<string[]>;
-  @Output() onSelectionChange = new EventEmitter<MultiSelectFilterValue>();
+  @Output() selectionChange = new EventEmitter<MultiSelectFilterValue>();
 
   appConfig = this.appConfigService.getConfig();
 
@@ -45,12 +45,12 @@ export class MultiSelectFilterComponent extends ClearableInputComponent {
   }
 
   itemSelected(value: string | null) {
-    this.onSelectionChange.emit({ key: this.key, value: value, event: "add" });
+    this.selectionChange.emit({ key: this.key, value: value, event: "add" });
     this.input$.next("");
   }
 
   itemRemoved(value: string) {
-    this.onSelectionChange.emit({
+    this.selectionChange.emit({
       key: this.key,
       value: value,
       event: "remove",

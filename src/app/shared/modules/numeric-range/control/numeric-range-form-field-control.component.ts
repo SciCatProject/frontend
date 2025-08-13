@@ -70,6 +70,31 @@ export class NumericRangeFormFieldControlComponent
     this.ngControl.valueAccessor = this;
   }
 
+  @Input() minPlaceholder: string;
+  @Input() maxPlaceholder: string;
+  @Input() readonly = false;
+  @Input() minReadonly = false;
+  @Input() maxReadonly = false;
+  @Input() required: boolean;
+  @Input() disabled: boolean;
+  @Input() errorStateMatcher: ErrorStateMatcher;
+  @Input() autofilled?: boolean;
+  @Input() dynamicSyncValidators: ValidatorFn | ValidatorFn[];
+
+  @Output() blurred = new EventEmitter<void>();
+  @Output() enterPressed = new EventEmitter<void>();
+  @Output() numericRangeChanged = new EventEmitter<INumericRange>();
+
+  formGroup: NumericRangeFormGroup = this.formService.formGroup;
+
+  stateChanges = new Subject<void>();
+
+  focused = false;
+
+  controlType = "numeric-range-form-control";
+
+  numericRangeErrorMatcher = new NumericRangeStateMatcher();
+
   get value() {
     return this.formGroup.getRawValue();
   }
@@ -88,21 +113,6 @@ export class NumericRangeFormFieldControlComponent
     this._placeholder = value;
     this.stateChanges.next();
   }
-
-  @Input() minPlaceholder: string;
-  @Input() maxPlaceholder: string;
-  @Input() readonly = false;
-  @Input() minReadonly = false;
-  @Input() maxReadonly = false;
-  @Input() required: boolean;
-  @Input() disabled: boolean;
-  @Input() errorStateMatcher: ErrorStateMatcher;
-  @Input() autofilled?: boolean;
-  @Input() dynamicSyncValidators: ValidatorFn | ValidatorFn[];
-
-  @Output() blurred = new EventEmitter<void>();
-  @Output() enterPressed = new EventEmitter<void>();
-  @Output() numericRangeChanged = new EventEmitter<INumericRange>();
 
   @HostBinding("class.floated")
   get shouldLabelFloat(): boolean {
@@ -134,16 +144,6 @@ export class NumericRangeFormFieldControlComponent
   get maxControl(): FormControl<number> {
     return this.formService.maxControl;
   }
-
-  formGroup: NumericRangeFormGroup = this.formService.formGroup;
-
-  stateChanges = new Subject<void>();
-
-  focused = false;
-
-  controlType = "numeric-range-form-control";
-
-  numericRangeErrorMatcher = new NumericRangeStateMatcher();
 
   onTouched = () => {};
 
