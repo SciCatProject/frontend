@@ -113,18 +113,18 @@ Cypress.Commands.add(
     datasetName = testData.rawDataset.datasetName,
     proposalId = "20170266",
     dataFileSize = "small",
-    overrides = {}
+    overwrites = {},
   ) => {
     cy.getCookie("user").then((userCookie) => {
       const user = JSON.parse(decodeURIComponent(userCookie.value));
 
       cy.getToken().then((token) => {
         if (type === "raw") {
-          const dataset = { 
-            ...testData.rawDataset, 
-            datasetName, 
+          const dataset = {
+            ...testData.rawDataset,
             proposalId,
-            ...overrides,
+            datasetName,
+            ...overwrites,
           };
           cy.log("Raw Dataset 1: " + JSON.stringify(dataset, null, 2));
           cy.log("User: " + JSON.stringify(user, null, 2));
@@ -368,9 +368,7 @@ Cypress.Commands.add("removeInstruments", () => {
           cy.request({
             method: "DELETE",
             url:
-              lbBaseUrl +
-              "/instruments/" +
-              encodeURIComponent(instrument.pid),
+              lbBaseUrl + "/instruments/" + encodeURIComponent(instrument.pid),
             headers: {
               Authorization: token,
               Accept: "application/json",

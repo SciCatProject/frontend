@@ -127,7 +127,6 @@ jobs:
         with:
           config-file: cypress.config.ts
           install-command: npm install --omit peer
-          
       - name: docker logs
         if: ${{ failure() }}
         run: |
