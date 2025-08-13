@@ -44,6 +44,19 @@ const tableDefaultSettingsConfig: ITableSetting = {
           type: "text",
         },
         {
+          name: "startTime",
+          header: "Start Time",
+          icon: "date_range",
+          width: 250,
+        },
+        {
+          name: "endTime",
+          header: "End Time",
+          icon: "date_range",
+          width: 250,
+        },
+        { name: "type", icon: "badge", width: 200 },
+        {
           name: "title",
           icon: "description",
           width: 250,
@@ -63,7 +76,6 @@ const tableDefaultSettingsConfig: ITableSetting = {
           header: "Last Name",
         },
         { name: "email", icon: "email", width: 200 },
-        { name: "type", icon: "badge", width: 200 },
         {
           name: "parentProposalId",
           header: "Parent Proposal",
