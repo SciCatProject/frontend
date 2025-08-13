@@ -7,10 +7,11 @@
 
   .header {
     mat-toolbar {
-      background-color: mat.m2-get-color-from-palette($primary, "darker");
+      background-color: mat.m2-get-color-from-palette($primary, "default-contrast");
+      border-bottom: 2px solid mat.m2-get-color-from-palette($primary, "default");
     }
-    a {
-      color: mat.m2-get-color-from-palette($primary, "default-contrast");
+    a, h3, div {
+      color: mat.m2-get-color-from-palette($primary, "default");
     }
   }
 }
