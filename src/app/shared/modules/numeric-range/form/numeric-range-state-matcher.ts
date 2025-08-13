@@ -7,6 +7,10 @@ import {
 import { ErrorStateMatcher } from "@angular/material/core";
 
 export class NumericRangeStateMatcher implements ErrorStateMatcher {
+  private isControlTouchedInvalid(control: FormControl): boolean {
+    return control.touched && control.invalid;
+  }
+
   isErrorState(
     control: FormControl<number> | null,
     form: FormGroup | FormGroupDirective | NgForm | null,
@@ -24,10 +28,6 @@ export class NumericRangeStateMatcher implements ErrorStateMatcher {
       return isFormInvalid || areFormControlsInvalid;
     }
 
-    return control.touched && control.invalid;
-  }
-
-  private isControlTouchedInvalid(control: FormControl): boolean {
     return control.touched && control.invalid;
   }
 }

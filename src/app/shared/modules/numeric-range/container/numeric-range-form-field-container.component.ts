@@ -45,6 +45,8 @@ import { NumericRangeFormService } from "../form/numeric-range-form.service";
 export class NumericRangeFormFieldContainerComponent
   implements OnChanges, OnInit, OnDestroy, ControlValueAccessor, Validator
 {
+  private unsubscribe$ = new Subject<void>();
+
   @Input() label: string;
   @Input() key: string;
   @Input() appearance: MatFormFieldAppearance = "fill";
@@ -73,8 +75,6 @@ export class NumericRangeFormFieldContainerComponent
 
   formGroup: NumericRangeFormGroup = this.formService.formGroup;
   control = new FormControl();
-
-  private unsubscribe$ = new Subject<void>();
 
   onTouched = () => {};
 

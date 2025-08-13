@@ -59,6 +59,10 @@ export class NumericRangeFormFieldControlComponent
     ControlValueAccessor,
     Validator
 {
+  private unsubscribe$ = new Subject<void>();
+
+  private _placeholder: string;
+
   static nextId = 0;
 
   get value() {
@@ -135,10 +139,6 @@ export class NumericRangeFormFieldControlComponent
   controlType = "numeric-range-form-control";
 
   numericRangeErrorMatcher = new NumericRangeStateMatcher();
-
-  private unsubscribe$ = new Subject<void>();
-
-  private _placeholder: string;
 
   onTouched = () => {};
 
