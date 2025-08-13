@@ -28,8 +28,8 @@ import { angularMaterialRenderers } from "@jsonforms/angular-material";
 import { isEmpty } from "lodash-es";
 import { EditableComponent } from "app-routing/pending-changes.guard";
 import {
-  ArrayLayoutRenderer,
-  ArrayLayoutRendererTester,
+  ArrayLayoutRendererComponent,
+  arrayLayoutRendererTester,
 } from "../../shared/modules/jsonforms-custom-renderers/custom-array-renderer/custom-array-layout-renderer.component";
 
 @Component({
@@ -51,8 +51,8 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
   renderers = [
     ...angularMaterialRenderers,
     {
-      tester: ArrayLayoutRendererTester,
-      renderer: ArrayLayoutRenderer,
+      tester: arrayLayoutRendererTester,
+      renderer: ArrayLayoutRendererComponent,
     },
   ];
   schema: any = {};

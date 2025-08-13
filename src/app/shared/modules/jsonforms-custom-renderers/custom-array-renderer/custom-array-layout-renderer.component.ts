@@ -35,7 +35,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class ArrayLayoutRenderer
+export class ArrayLayoutRendererComponent
   extends JsonFormsAbstractControl<StatePropsOfArrayLayout>
   implements OnInit
 {
@@ -125,7 +125,7 @@ export class ArrayLayoutRenderer
   }
 }
 
-export const ArrayLayoutRendererTester: RankedTester = rankWith(
+export const arrayLayoutRendererTester: RankedTester = rankWith(
   4,
   uiTypeIs("CustomArrayLayout"),
 );
