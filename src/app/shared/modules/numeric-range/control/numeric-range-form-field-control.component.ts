@@ -59,11 +59,16 @@ export class NumericRangeFormFieldControlComponent
     ControlValueAccessor,
     Validator
 {
+  static nextId = 0;
   private unsubscribe$ = new Subject<void>();
-
   private _placeholder: string;
 
-  static nextId = 0;
+  constructor(
+    @Self() public ngControl: NgControl,
+    @SkipSelf() private formService: NumericRangeFormService,
+  ) {
+    this.ngControl.valueAccessor = this;
+  }
 
   get value() {
     return this.formGroup.getRawValue();
@@ -142,13 +147,6 @@ export class NumericRangeFormFieldControlComponent
 
   onTouched = () => {};
 
-  constructor(
-    @Self() public ngControl: NgControl,
-    @SkipSelf() private formService: NumericRangeFormService,
-  ) {
-    this.ngControl.valueAccessor = this;
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.dynamicSyncValidators) {
       this.formService.setDynamicValidators(this.dynamicSyncValidators);
@@ -174,9 +172,11 @@ export class NumericRangeFormFieldControlComponent
   }
 
   writeValue(value: INumericRange): void {
-    value === null
-      ? this.formGroup.reset()
-      : this.formGroup.setValue(value, { emitEvent: false });
+    if (value === null) {
+      this.formGroup.reset();
+    } else {
+      this.formGroup.setValue(value, { emitEvent: false });
+    }
   }
 
   registerOnChange(fn: any): void {
@@ -189,9 +189,14 @@ export class NumericRangeFormFieldControlComponent
     this.onTouched = fn;
   }
 
-  setDisabledState?(isDisabled: boolean): void {
+  setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
-    isDisabled ? this.formGroup.disable() : this.formGroup.enable();
+
+    if (isDisabled) {
+      this.formGroup.disable();
+    } else {
+      this.formGroup.enable();
+    }
 
     this.stateChanges.next();
   }
@@ -222,28 +227,46 @@ export class NumericRangeFormFieldControlComponent
   }
 
   onRangeValuesChanged(): void {
-    this.formGroup.errors || this.minControl.errors || this.maxControl.errors
-      ? this.numericRangeChanged.emit(null)
-      : this.numericRangeChanged.emit(this.formGroup.getRawValue());
+    if (
+      this.formGroup.errors ||
+      this.minControl.errors ||
+      this.maxControl.errors
+    ) {
+      this.numericRangeChanged.emit(null);
+    } else {
+      this.numericRangeChanged.emit(this.formGroup.getRawValue());
+    }
   }
 
   onMinValuesChanged(event: Event): void {
     const value = (event.target as HTMLInputElement).valueAsNumber;
-    this.formGroup.errors || this.minControl.errors || this.maxControl.errors
-      ? this.numericRangeChanged.emit(null)
-      : this.numericRangeChanged.emit({
-          min: value,
-          max: this.formGroup.get("max")?.value,
-        });
+    if (
+      this.formGroup.errors ||
+      this.minControl.errors ||
+      this.maxControl.errors
+    ) {
+      this.numericRangeChanged.emit(null);
+    } else {
+      this.numericRangeChanged.emit({
+        min: value,
+        max: this.formGroup.get("max")?.value,
+      });
+    }
   }
 
   onMaxValuesChanged(event: Event): void {
     const value = (event.target as HTMLInputElement).valueAsNumber;
-    this.formGroup.errors || this.minControl.errors || this.maxControl.errors
-      ? this.numericRangeChanged.emit(null)
-      : this.numericRangeChanged.emit({
-          min: this.formGroup.get("min")?.value,
-          max: value,
-        });
+    if (
+      this.formGroup.errors ||
+      this.minControl.errors ||
+      this.maxControl.errors
+    ) {
+      this.numericRangeChanged.emit(null);
+    } else {
+      this.numericRangeChanged.emit({
+        min: this.formGroup.get("min")?.value,
+        max: value,
+      });
+    }
   }
 }

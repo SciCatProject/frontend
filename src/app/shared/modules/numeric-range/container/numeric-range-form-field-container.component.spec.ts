@@ -57,9 +57,11 @@ class HostComponent {
   }
 
   disableRange(disable: boolean): void {
-    disable
-      ? this.numericRangeControl.disable()
-      : this.numericRangeControl.enable();
+    if (disable) {
+      this.numericRangeControl.disable();
+    } else {
+      this.numericRangeControl.enable();
+    }
   }
 }
 

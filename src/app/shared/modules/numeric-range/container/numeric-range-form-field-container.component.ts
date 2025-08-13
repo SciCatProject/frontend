@@ -47,6 +47,14 @@ export class NumericRangeFormFieldContainerComponent
 {
   private unsubscribe$ = new Subject<void>();
 
+  constructor(
+    @Self() private controlDirective: NgControl,
+    @Host() private formService: NumericRangeFormService,
+    private changeDetectorRef: ChangeDetectorRef,
+  ) {
+    this.controlDirective.valueAccessor = this;
+  }
+
   @Input() label: string;
   @Input() key: string;
   @Input() appearance: MatFormFieldAppearance = "fill";
@@ -86,14 +94,6 @@ export class NumericRangeFormFieldContainerComponent
     return this.formService.maxControl;
   }
 
-  constructor(
-    @Self() private controlDirective: NgControl,
-    @Host() private formService: NumericRangeFormService,
-    private changeDetectorRef: ChangeDetectorRef,
-  ) {
-    this.controlDirective.valueAccessor = this;
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.dynamicSyncValidators) {
       this.control.setErrors(null);
@@ -118,11 +118,13 @@ export class NumericRangeFormFieldContainerComponent
   }
 
   writeValue(value: INumericRange): void {
-    value === null
-      ? this.control.reset()
-      : this.control.setValue(value, {
-          emitEvent: false,
-        });
+    if (value === null) {
+      this.control.reset();
+    } else {
+      this.control.setValue(value, {
+        emitEvent: false,
+      });
+    }
   }
 
   registerOnChange(fn: any): void {
@@ -134,7 +136,11 @@ export class NumericRangeFormFieldContainerComponent
   }
 
   setDisabledState(isDisabled: boolean): void {
-    isDisabled ? this.control.disable() : this.control.enable();
+    if (isDisabled) {
+      this.control.disable();
+    } else {
+      this.control.enable();
+    }
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
