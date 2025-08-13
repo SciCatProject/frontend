@@ -41,7 +41,7 @@
     "@scicatproject/scicat-sdk-ts-angular": "^4.19.0",
     "autolinker": "^4.0.0",
     "deep-equal": "^2.0.5",
-    "exceljs": "^4.3.0",
+    "exceljs": "^4.4.0",
     "file-saver": "^2.0.5",
     "filesize": "^11.0.1",
     "lodash-es": "^4.17.21",
