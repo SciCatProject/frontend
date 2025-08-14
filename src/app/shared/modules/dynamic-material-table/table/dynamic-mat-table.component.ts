@@ -1008,4 +1008,13 @@ export class DynamicMatTableComponent<T extends TableRow>
       }
     });
   }
+
+  getColumnValue(data: Record<string, unknown>, fieldName: string) {
+    // if fieldName includes "." return nested object value
+    if (fieldName.includes(".")) {
+      return fieldName.split(".").reduce((acc, key) => acc?.[key], data) ?? "";
+    }
+
+    return data?.[fieldName] || "";
+  }
 }
