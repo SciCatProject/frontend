@@ -28,6 +28,9 @@ import {
 
 // TODO: This component is a copy of the original ArrayLayoutRenderer and fix for the known issue with the error count in the icon badge.
 // It can be removed once the issue is fixed in the original library. https://github.com/eclipsesource/jsonforms/issues/2473
+// The issue is closed and the fix is merged, but not yet released in the npm package. Once a new version is released, we can remove this component and use the original one.
+// And also the type in the configuration file should be changed from "CustomArrayLayout" to "Control".
+// Follow up here: https://github.com/eclipsesource/jsonforms/releases
 @Component({
   selector: "app-array-layout-renderer",
   templateUrl: "./custom-array-layout-renderer.component.html",
