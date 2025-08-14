@@ -21,3 +21,8 @@ button.save-and-continue {
 button.cancel {
   margin-left: 1em;
 }
+
+jsonforms .mat-mdc-form-field .mat-mdc-form-field-subscript-dynamic-size {
+  min-height: unset !important ;
+  display: none !important;
+}

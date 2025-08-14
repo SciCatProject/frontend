@@ -20,6 +20,9 @@ import { FiltersModule } from "./modules/filters/filters.module";
 import { AttachmentService } from "./services/attachment.service";
 import { DynamicMatTableModule } from "./modules/dynamic-material-table/table/dynamic-mat-table.module";
 import { TranslateModule } from "@ngx-translate/core";
+import { JsonFormsModule } from "@jsonforms/angular";
+import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
+import { JsonFormsCustomRenderersModule } from "./modules/jsonforms-custom-renderers/jsonforms-custom-renderers.module";
 @NgModule({
   imports: [
     BreadcrumbModule,
@@ -39,6 +42,9 @@ import { TranslateModule } from "@ngx-translate/core";
     ScientificMetadataTreeModule,
     DynamicMatTableModule.forRoot({}),
     TranslateModule,
+    JsonFormsModule,
+    JsonFormsAngularMaterialModule,
+    JsonFormsCustomRenderersModule,
   ],
   providers: [
     ConfigService,
@@ -63,6 +69,9 @@ import { TranslateModule } from "@ngx-translate/core";
     FiltersModule,
     DynamicMatTableModule,
     TranslateModule,
+    JsonFormsModule,
+    JsonFormsAngularMaterialModule,
+    JsonFormsCustomRenderersModule,
   ],
 })
 export class SharedScicatFrontendModule {}

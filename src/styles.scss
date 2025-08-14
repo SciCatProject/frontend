@@ -386,3 +386,12 @@ a:hover {
 .mat-mdc-tab-header {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
+
+jsonforms .mat-mdc-form-field {
+  .mat-mdc-form-field-subscript-dynamic-size {
+    min-height: unset !important;
+  }
+  .mat-mdc-form-field-hint-wrapper {
+    display: none !important;
+  }
+}

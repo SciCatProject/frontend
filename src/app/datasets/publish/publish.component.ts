@@ -28,9 +28,9 @@ import { angularMaterialRenderers } from "@jsonforms/angular-material";
 import { isEmpty } from "lodash-es";
 import { EditableComponent } from "app-routing/pending-changes.guard";
 import {
-  ArrayLayoutRendererComponent,
-  arrayLayoutRendererTester,
-} from "../../shared/modules/jsonforms-custom-renderers/custom-array-renderer/custom-array-layout-renderer.component";
+  AccordionArrayLayoutRendererComponent,
+  accordionArrayLayoutRendererTester,
+} from "shared/modules/jsonforms-custom-renderers/expand-panel-renderer/accordion-array-layout-renderer.component";
 
 @Component({
   selector: "publish",
@@ -51,8 +51,8 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
   renderers = [
     ...angularMaterialRenderers,
     {
-      tester: arrayLayoutRendererTester,
-      renderer: ArrayLayoutRendererComponent,
+      tester: accordionArrayLayoutRendererTester,
+      renderer: AccordionArrayLayoutRendererComponent,
     },
   ];
   schema: any = {};

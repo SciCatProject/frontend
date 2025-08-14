@@ -22,3 +22,11 @@
 ::ng-deep .error-message-tooltip {
   white-space: pre-line;
 }
+
+.expand-panel-layout {
+  margin: 1em 0;
+
+  mat-panel-description {
+    flex-grow: 0;
+  }
+}

@@ -86,10 +86,7 @@ import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-d
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
-import { JsonFormsModule } from "@jsonforms/angular";
-import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 import { MatExpansionModule } from "@angular/material/expansion";
-import { ArrayLayoutRendererComponent } from "../shared/modules/jsonforms-custom-renderers/custom-array-renderer/custom-array-layout-renderer.component";
 import { MatBadgeModule } from "@angular/material/badge";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 
@@ -154,8 +151,6 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
     CdkDrag,
     CdkDragHandle,
     FiltersModule,
-    JsonFormsModule,
-    JsonFormsAngularMaterialModule,
     MatExpansionModule,
     MatBadgeModule,
   ],
@@ -185,7 +180,6 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
     DatafilesActionsComponent,
     DatafilesActionComponent,
     DatasetsFilterSettingsComponent,
-    ArrayLayoutRendererComponent,
   ],
   providers: [
     ArchivingService,

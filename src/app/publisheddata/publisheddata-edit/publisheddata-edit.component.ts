@@ -22,6 +22,10 @@ import { angularMaterialRenderers } from "@jsonforms/angular-material";
 import { EditableComponent } from "app-routing/pending-changes.guard";
 import { isEmpty } from "lodash-es";
 import { AppConfigService } from "app-config.service";
+import {
+  AccordionArrayLayoutRendererComponent,
+  accordionArrayLayoutRendererTester,
+} from "shared/modules/jsonforms-custom-renderers/expand-panel-renderer/accordion-array-layout-renderer.component";
 
 @Component({
   selector: "publisheddata-edit",
@@ -34,7 +38,13 @@ export class PublisheddataEditComponent
 {
   private _hasUnsavedChanges = false;
   private publishedDataConfig$ = this.store.select(selectPublishedDataConfig);
-  renderers = angularMaterialRenderers;
+  renderers = [
+    ...angularMaterialRenderers,
+    {
+      tester: accordionArrayLayoutRendererTester,
+      renderer: AccordionArrayLayoutRendererComponent,
+    },
+  ];
   schema: any = {};
   uiSchema: any = {};
   metadataData: any = {};

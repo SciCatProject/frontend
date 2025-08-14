@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  signal,
+} from "@angular/core";
 import {
   JsonFormsAngularService,
   JsonFormsAbstractControl,
@@ -14,6 +19,7 @@ import {
   JsonFormsState,
   mapDispatchToArrayControlProps,
   mapStateToArrayLayoutProps,
+  mapStateToLayoutProps,
   OwnPropsOfRenderer,
   Paths,
   RankedTester,
@@ -25,20 +31,16 @@ import {
   uiTypeIs,
   unsetReadonly,
 } from "@jsonforms/core";
+import { get } from "lodash-es";
 
-// TODO: This component is a copy of the original ArrayLayoutRenderer and fix for the known issue with the error count in the icon badge.
-// It can be removed once the issue is fixed in the original library. https://github.com/eclipsesource/jsonforms/issues/2473
-// The issue is closed and the fix is merged, but not yet released in the npm package. Once a new version is released, we can remove this component and use the original one.
-// And also the type in the configuration file should be changed from "CustomArrayLayout" to "Control".
-// Follow up here: https://github.com/eclipsesource/jsonforms/releases
 @Component({
-  selector: "app-array-layout-renderer",
-  templateUrl: "./custom-array-layout-renderer.component.html",
-  styleUrls: ["./custom-array-layout-renderer.component.scss"],
+  selector: "app-accordion-array-layout-renderer",
+  templateUrl: "./accordion-array-layout-renderer.component.html",
+  styleUrls: ["./accordion-array-layout-renderer.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class ArrayLayoutRendererComponent
+export class AccordionArrayLayoutRendererComponent
   extends JsonFormsAbstractControl<StatePropsOfArrayLayout>
   implements OnInit
 {
@@ -52,6 +54,8 @@ export class ArrayLayoutRendererComponent
     tester: UISchemaTester;
     uischema: UISchemaElement;
   }[];
+  stateData: object;
+  readonly panelOpenState = signal(true);
   constructor(jsonFormsService: JsonFormsAngularService) {
     super(jsonFormsService);
   }
@@ -78,10 +82,12 @@ export class ArrayLayoutRendererComponent
       createDefaultValue(this.scopedSchema, this.rootSchema),
     )();
   }
-  up(index: number): void {
+  up(event: MouseEvent, index: number): void {
+    event.stopPropagation();
     this.moveItemUp(this.propsPath, index)();
   }
-  down(index: number): void {
+  down(event: MouseEvent, index: number): void {
+    event.stopPropagation();
     this.moveItemDown(this.propsPath, index)();
   }
   ngOnInit() {
@@ -94,6 +100,14 @@ export class ArrayLayoutRendererComponent
     this.moveItemUp = moveUp;
     this.moveItemDown = moveDown;
     this.removeItems = removeItems;
+
+    this.addSubscription(
+      this.jsonFormsService.$state.subscribe({
+        next: (state: JsonFormsState) => {
+          this.stateData = state.jsonforms.core.data;
+        },
+      }),
+    );
   }
   mapAdditionalProps(
     props: ArrayLayoutProps & { translations: ArrayTranslations },
@@ -123,12 +137,22 @@ export class ArrayLayoutRendererComponent
       uischema,
     };
   }
+  getDisplayPropertyData(index: number): string {
+    const displayProperty = this.uischema.options?.displayProperty || "name";
+
+    const displayValue = get(this.stateData, this.getProps(index).path);
+
+    if (displayProperty && displayValue?.[displayProperty]) {
+      return displayValue?.[displayProperty];
+    }
+    return this.getProps(index).path;
+  }
   trackByFn(index: number) {
     return index;
   }
 }
 
-export const arrayLayoutRendererTester: RankedTester = rankWith(
+export const accordionArrayLayoutRendererTester: RankedTester = rankWith(
   4,
-  uiTypeIs("CustomArrayLayout"),
+  uiTypeIs("AccordionArrayLayout"),
 );
