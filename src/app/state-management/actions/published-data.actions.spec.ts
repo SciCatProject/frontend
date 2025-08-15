@@ -95,11 +95,11 @@ describe("Published Data Actions", () => {
 
   describe("publishDatasetAction", () => {
     it("should create an action", () => {
-      const action = fromActions.createDataPublicationAction({
+      const action = fromActions.createPublishedDataAction({
         data: publishedData,
       });
       expect({ ...action }).toEqual({
-        type: "[PublishedData] Create Data Publication",
+        type: "[PublishedData] Create Published Data",
         data: publishedData,
       });
     });
@@ -107,11 +107,11 @@ describe("Published Data Actions", () => {
 
   describe("publishDatasetCompleteAction", () => {
     it("should create an action", () => {
-      const action = fromActions.createDataPublicationCompleteAction({
+      const action = fromActions.createPublishedDataCompleteAction({
         publishedData,
       });
       expect({ ...action }).toEqual({
-        type: "[PublishedData] Create Data Publication Complete",
+        type: "[PublishedData] Create Published Data Complete",
         publishedData,
       });
     });
@@ -119,9 +119,9 @@ describe("Published Data Actions", () => {
 
   describe("publishDatasetFailedAction", () => {
     it("should create an action", () => {
-      const action = fromActions.createDataPublicationFailedAction();
+      const action = fromActions.createPublishedDataFailedAction();
       expect({ ...action }).toEqual({
-        type: "[PublishedData] Create Data Publication Failed",
+        type: "[PublishedData] Create Published Data Failed",
       });
     });
   });

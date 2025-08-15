@@ -33,7 +33,7 @@ const reducer = createReducer(
   ),
 
   on(
-    fromActions.saveDataPublicationCompleteAction,
+    fromActions.savePublishedDataCompleteAction,
     (state, { publishedData }): PublishedDataState => ({
       ...state,
       currentPublishedData: publishedData,

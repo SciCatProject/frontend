@@ -6,12 +6,12 @@ import { first, tap } from "rxjs/operators";
 import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { prefillBatchAction } from "state-management/actions/datasets.actions";
 import {
-  createDataPublicationAction,
-  createDataPublicationCompleteAction,
+  createPublishedDataAction,
+  createPublishedDataCompleteAction,
   fetchPublishedDataConfigAction,
   resyncPublishedDataAction,
-  saveDataPublicationAction,
-  saveDataPublicationCompleteAction,
+  savePublishedDataAction,
+  savePublishedDataCompleteAction,
   updatePublishedDataAction,
 } from "state-management/actions/published-data.actions";
 
@@ -152,7 +152,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
       });
 
     this.actionSubjectSubscription = this.actionsSubj.subscribe((data) => {
-      if (data.type === createDataPublicationCompleteAction.type) {
+      if (data.type === createPublishedDataCompleteAction.type) {
         const { publishedData } = data as {
           type: string;
           publishedData: PublishedData;
@@ -162,7 +162,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
         this.router.navigateByUrl("/publishedDatasets/" + doi);
       }
 
-      if (data.type === saveDataPublicationCompleteAction.type) {
+      if (data.type === savePublishedDataCompleteAction.type) {
         const { publishedData } = data as {
           type: string;
           publishedData: PublishedData;
@@ -217,7 +217,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
         }),
       );
     } else {
-      this.store.dispatch(createDataPublicationAction({ data: publishedData }));
+      this.store.dispatch(createPublishedDataAction({ data: publishedData }));
     }
   }
 
@@ -232,7 +232,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
         }),
       );
     } else {
-      this.store.dispatch(saveDataPublicationAction({ data: publishedData }));
+      this.store.dispatch(savePublishedDataAction({ data: publishedData }));
     }
 
     this._hasUnsavedChanges = false;

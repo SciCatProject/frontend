@@ -219,15 +219,15 @@ describe("PublishedDataEffects", () => {
   describe("publishDataset$", () => {
     it("should result in a publishDatasetCompleteAction, a fetchPublishedDataAction", () => {
       const id = "testDOI";
-      const action = fromActions.createDataPublicationAction({
+      const action = fromActions.createPublishedDataAction({
         data: publishedData,
       });
-      const outcome1 = fromActions.createDataPublicationCompleteAction({
+      const outcome1 = fromActions.createPublishedDataCompleteAction({
         publishedData,
       });
       const outcome2 = fromActions.fetchPublishedDataAction({ id });
       const outcome3 = clearBatchAction();
-      const outcome4 = fromActions.clearDataPublicationFromLocalStorage();
+      const outcome4 = fromActions.clearPublishedDataFromLocalStorage();
 
       actions = hot("-a", { a: action });
       const response = cold("-a|", { a: publishedData });
@@ -241,14 +241,14 @@ describe("PublishedDataEffects", () => {
         d: outcome3,
         e: outcome4,
       });
-      expect(effects.createDataPublication$).toBeObservable(expected);
+      expect(effects.createPublishedData$).toBeObservable(expected);
     });
 
     it("should result in a publishDatasetFailedAction", () => {
-      const action = fromActions.createDataPublicationAction({
+      const action = fromActions.createPublishedDataAction({
         data: publishedData,
       });
-      const outcome = fromActions.createDataPublicationFailedAction();
+      const outcome = fromActions.createPublishedDataFailedAction();
 
       actions = hot("-a", { a: action });
       const response = cold("-#", {});
@@ -257,7 +257,7 @@ describe("PublishedDataEffects", () => {
       );
 
       const expected = cold("--b", { b: outcome });
-      expect(effects.createDataPublication$).toBeObservable(expected);
+      expect(effects.createPublishedData$).toBeObservable(expected);
     });
   });
 
@@ -268,7 +268,7 @@ describe("PublishedDataEffects", () => {
         content: "Publication Successful",
         duration: 5000,
       };
-      const action = fromActions.createDataPublicationCompleteAction({
+      const action = fromActions.createPublishedDataCompleteAction({
         publishedData,
       });
       const outcome = showMessageAction({ message });
@@ -276,7 +276,7 @@ describe("PublishedDataEffects", () => {
       actions = hot("-a", { a: action });
 
       const expected = cold("-b", { b: outcome });
-      expect(effects.createDataPublicationCompleteMessage$).toBeObservable(
+      expect(effects.createPublishedDataCompleteMessage$).toBeObservable(
         expected,
       );
     });
@@ -289,13 +289,13 @@ describe("PublishedDataEffects", () => {
         content: "Publication Failed",
         duration: 5000,
       };
-      const action = fromActions.createDataPublicationFailedAction();
+      const action = fromActions.createPublishedDataFailedAction();
       const outcome = showMessageAction({ message });
 
       actions = hot("-a", { a: action });
 
       const expected = cold("-b", { b: outcome });
-      expect(effects.createDataPublicationFailedMessage$).toBeObservable(
+      expect(effects.createPublishedDataFailedMessage$).toBeObservable(
         expected,
       );
     });
@@ -381,7 +381,7 @@ describe("PublishedDataEffects", () => {
 
     describe("ofType publishedDatasetAction", () => {
       it("should dispatch a loadingAction", () => {
-        const action = fromActions.createDataPublicationAction({
+        const action = fromActions.createPublishedDataAction({
           data: publishedData,
         });
         const outcome = loadingAction();
@@ -462,7 +462,7 @@ describe("PublishedDataEffects", () => {
 
     describe("ofType publishDatasetCompleteAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
-        const action = fromActions.createDataPublicationCompleteAction({
+        const action = fromActions.createPublishedDataCompleteAction({
           publishedData,
         });
         const outcome = loadingCompleteAction();
@@ -476,7 +476,7 @@ describe("PublishedDataEffects", () => {
 
     describe("ofType publishDatasetFailedAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
-        const action = fromActions.createDataPublicationFailedAction();
+        const action = fromActions.createPublishedDataFailedAction();
         const outcome = loadingCompleteAction();
 
         actions = hot("-a", { a: action });

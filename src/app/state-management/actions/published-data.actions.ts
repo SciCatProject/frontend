@@ -48,34 +48,34 @@ export const fetchPublishedDataFailedAction = createAction(
   "[PublishedData] Fetch Published Data Failed",
 );
 
-export const createDataPublicationAction = createAction(
-  "[PublishedData] Create Data Publication",
+export const createPublishedDataAction = createAction(
+  "[PublishedData] Create Published Data",
   props<{ data: CreatePublishedDataDto }>(),
 );
-export const createDataPublicationCompleteAction = createAction(
-  "[PublishedData] Create Data Publication Complete",
+export const createPublishedDataCompleteAction = createAction(
+  "[PublishedData] Create Published Data Complete",
   props<{ publishedData: PublishedData }>(),
 );
-export const createDataPublicationFailedAction = createAction(
-  "[PublishedData] Create Data Publication Failed",
+export const createPublishedDataFailedAction = createAction(
+  "[PublishedData] Create Published Data Failed",
 );
-export const saveDataPublicationAction = createAction(
-  "[PublishedData] Save Data Publication",
+export const savePublishedDataAction = createAction(
+  "[PublishedData] Save Published Data",
   props<{ data: CreatePublishedDataDto }>(),
 );
-export const saveDataPublicationCompleteAction = createAction(
-  "[PublishedData] Save Data Publication Complete",
+export const savePublishedDataCompleteAction = createAction(
+  "[PublishedData] Save Published Data Complete",
   props<{ publishedData: PublishedData }>(),
 );
-export const saveDataPublicationFailedAction = createAction(
-  "[PublishedData] Save Data Publication Failed",
+export const savePublishedDataFailedAction = createAction(
+  "[PublishedData] Save Published Data Failed",
 );
-export const saveDataPublicationInLocalStorage = createAction(
-  "[PublishedData] Save Data Publication In Local Storage",
+export const savePublishedDataInLocalStorage = createAction(
+  "[PublishedData] Save Published Data In Local Storage",
   props<{ publishedData: PublishedData }>(),
 );
-export const clearDataPublicationFromLocalStorage = createAction(
-  "[PublishedData] Clear Data Publication In Local Storage",
+export const clearPublishedDataFromLocalStorage = createAction(
+  "[PublishedData] Clear Published Data In Local Storage",
 );
 
 export const registerPublishedDataAction = createAction(
