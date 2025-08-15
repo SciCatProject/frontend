@@ -1,7 +1,7 @@
 import { EffectsModule } from "@ngrx/effects";
 import { PublishedDataEffects } from "./../state-management/effects/published-data.effects";
 import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { AsyncPipe, CommonModule } from "@angular/common";
 import { PublisheddataDetailsComponent } from "./publisheddata-details/publisheddata-details.component";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -23,6 +23,9 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { RouterModule } from "@angular/router";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { DatasetEffects } from "state-management/effects/datasets.effects";
+import { DatasetsModule } from "datasets/datasets.module";
 
 @NgModule({
   declarations: [
@@ -32,7 +35,7 @@ import { RouterModule } from "@angular/router";
   ],
   imports: [
     CommonModule,
-    EffectsModule.forFeature([PublishedDataEffects]),
+    EffectsModule.forFeature([PublishedDataEffects, DatasetEffects]),
     FlexLayoutModule,
     LinkyModule,
     MatButtonModule,
@@ -50,6 +53,8 @@ import { RouterModule } from "@angular/router";
     MatFormFieldModule,
     MatChipsModule,
     MatOptionModule,
+    MatExpansionModule,
+    DatasetsModule,
   ],
 })
 export class PublisheddataModule {}

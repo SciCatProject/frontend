@@ -20,6 +20,9 @@ import { FiltersModule } from "./modules/filters/filters.module";
 import { AttachmentService } from "./services/attachment.service";
 import { DynamicMatTableModule } from "./modules/dynamic-material-table/table/dynamic-mat-table.module";
 import { TranslateModule } from "@ngx-translate/core";
+import { JsonFormsModule } from "@jsonforms/angular";
+import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
+import { JsonFormsCustomRenderersModule } from "./modules/jsonforms-custom-renderers/jsonforms-custom-renderers.module";
 import { FullTextSearchBarModule } from "./modules/full-text-search-bar/full-text-search-bar.module";
 import { SharedFilterModule } from "./modules/shared-filter/shared-filter.module";
 @NgModule({
@@ -43,6 +46,9 @@ import { SharedFilterModule } from "./modules/shared-filter/shared-filter.module
     ScientificMetadataTreeModule,
     DynamicMatTableModule.forRoot({}),
     TranslateModule,
+    JsonFormsModule,
+    JsonFormsAngularMaterialModule,
+    JsonFormsCustomRenderersModule,
   ],
   providers: [
     ConfigService,
@@ -69,6 +75,9 @@ import { SharedFilterModule } from "./modules/shared-filter/shared-filter.module
     FiltersModule,
     DynamicMatTableModule,
     TranslateModule,
+    JsonFormsModule,
+    JsonFormsAngularMaterialModule,
+    JsonFormsCustomRenderersModule,
   ],
 })
 export class SharedScicatFrontendModule {}
