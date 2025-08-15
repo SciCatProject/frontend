@@ -23,6 +23,8 @@ import { TranslateModule } from "@ngx-translate/core";
 import { JsonFormsModule } from "@jsonforms/angular";
 import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 import { JsonFormsCustomRenderersModule } from "./modules/jsonforms-custom-renderers/jsonforms-custom-renderers.module";
+import { FullTextSearchBarModule } from "./modules/full-text-search-bar/full-text-search-bar.module";
+import { SharedFilterModule } from "./modules/shared-filter/shared-filter.module";
 @NgModule({
   imports: [
     BreadcrumbModule,
@@ -34,10 +36,12 @@ import { JsonFormsCustomRenderersModule } from "./modules/jsonforms-custom-rende
     PipesModule,
     ScientificMetadataModule,
     SearchBarModule,
+    FullTextSearchBarModule,
     TableModule,
     SearchParametersDialogModule,
     CommonModule,
     FormsModule,
+    SharedFilterModule,
     SharedTableModule,
     ScientificMetadataTreeModule,
     DynamicMatTableModule.forRoot({}),
@@ -61,9 +65,11 @@ import { JsonFormsCustomRenderersModule } from "./modules/jsonforms-custom-rende
     PipesModule,
     ScientificMetadataModule,
     SearchBarModule,
+    FullTextSearchBarModule,
     TableModule,
     CommonModule,
     FormsModule,
+    SharedFilterModule,
     SharedTableModule,
     ScientificMetadataTreeModule,
     FiltersModule,
