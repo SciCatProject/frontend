@@ -77,6 +77,11 @@ cd @scicatproject/scicat-sdk-ts-angular
 npm install
 npm run build
 
+if [ ! -d "@scicatproject/scicat-sdk-ts-angular/dist" ]; then
+  echo "Error: Build ouput not found."
+  exit 1
+fi
+
 echo -e "\nCopying the build files in node_modules..."
 cd ../..
 cp -rv @scicatproject/scicat-sdk-ts-angular/dist node_modules/@scicatproject/scicat-sdk-ts-angular
