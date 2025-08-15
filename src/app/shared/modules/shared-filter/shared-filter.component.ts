@@ -16,6 +16,7 @@ import { DateRange } from "state-management/state/proposals.store";
 import { MultiSelectFilterValue } from "../filters/multiselect-filter.component";
 import { FacetCount } from "state-management/state/datasets.store";
 import { INumericRange } from "../numeric-range/form/model/numeric-range-field.model";
+import { FilterType } from "state-management/state/user.store";
 
 @Component({
   selector: "shared-filter",
@@ -47,7 +48,7 @@ export class SharedFilterComponent implements OnChanges {
   @Input() facetCounts$!: Observable<FacetCount[]>;
   @Input() currentFilter$!: Observable<string[]>;
   @Input() dispatchAction!: () => void;
-  @Input() filterType: "text" | "dateRange" | "multiSelect" | "number";
+  @Input() filterType: FilterType;
   @Input() prefilled: string | DateRange | string[] | INumericRange = undefined;
   @Input()
   set clear(value: boolean) {

@@ -23,7 +23,7 @@ import {
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { BehaviorSubject } from "rxjs";
 
-describe("ProposalDashboardComponent", () => {
+describe("ProposalTableComponent", () => {
   let component: ProposalTableComponent;
   let fixture: ComponentFixture<ProposalTableComponent>;
 
