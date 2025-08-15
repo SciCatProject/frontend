@@ -14,12 +14,12 @@ const routes: Routes = [
     component: DashboardComponent,
   },
   {
-    path: "batch",
+    path: "selection",
     component: BatchViewComponent,
     canActivate: [AuthGuard],
   },
   {
-    path: "batch/publish",
+    path: "selection/publish",
     component: PublishComponent,
     canActivate: [AuthGuard],
     canDeactivate: [leavingPageGuard],

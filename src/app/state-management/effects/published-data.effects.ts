@@ -385,7 +385,9 @@ export class PublishedDataEffects {
                 datasets: datasets as OutputDatasetObsoleteDto[],
               }),
               datasetActions.addToBatchAction(),
-              fromActions.fetchRelatedDatasetsAndAddToBatchCompleteAction(),
+              fromActions.fetchRelatedDatasetsAndAddToBatchCompleteAction({
+                publishedDataDoi,
+              }),
               fromActions.storeEditingPublishedDataDoiAction({
                 publishedDataDoi,
               }),
@@ -411,11 +413,15 @@ export class PublishedDataEffects {
     { dispatch: false },
   );
 
-  navigateToBatch$ = createEffect(
+  navigateToPublishedDataEditDatasetList$ = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(fromActions.fetchRelatedDatasetsAndAddToBatchCompleteAction),
-        tap(() => this.router.navigateByUrl("/datasets/batch")),
+        tap(({ publishedDataDoi }) =>
+          this.router.navigateByUrl(
+            `/publishedDatasets/${encodeURIComponent(publishedDataDoi)}/datasetList/edit`,
+          ),
+        ),
       );
     },
     { dispatch: false },

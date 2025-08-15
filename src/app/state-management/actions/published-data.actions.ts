@@ -184,6 +184,7 @@ export const fetchRelatedDatasetsAndAddToBatchAction = createAction(
 
 export const fetchRelatedDatasetsAndAddToBatchCompleteAction = createAction(
   "[PublishedData] Fetch Related Datasets And Add To Batch Complete",
+  props<{ publishedDataDoi: string }>(),
 );
 
 export const fetchRelatedDatasetsAndAddToBatchFailedAction = createAction(
