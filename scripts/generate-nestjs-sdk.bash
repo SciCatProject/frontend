@@ -1,6 +1,21 @@
 #!/bin/bash
 #
-#
+
+# This default is for when developing with a backend running directly on localhost
+SWAGGER_API_URL="http://localhost:3000/explorer-json"
+while [[ "$#" -gt 0 ]]; do
+	case "$1" in
+		--swagger-url)
+			shift
+			SWAGGER_API_URL=$1
+			shift
+			;;
+		*)
+			echo "Unknown argument: $1"
+			exit 1
+			;;
+	esac
+done
 
 USER=`who am i | cut -d\  -f1`
 echo -e "\nUser running the script: ${USER}"
@@ -8,6 +23,10 @@ echo -e "\nUser running the script: ${USER}"
 echo -e "\nCleanup old files..."
 rm -rf node_modules/@scicatproject/scicat-sdk-ts-angular
 rm -rf @scicatproject/scicat-sdk-ts-angular
+rm local-api-for-generator.json
+
+echo -e "\nFetching the Swagger API from the back end..."
+curl ${SWAGGER_API_URL} > local-api-for-generator.json
 
 echo -e "\nGenerating the new sdk..."
 
@@ -17,13 +36,24 @@ echo -e "\nGenerating the new sdk..."
 ##
 docker run \
 	--rm \
-	--add-host host.docker.internal:host-gateway \
 	-v "`pwd`:/local" \
-	openapitools/openapi-generator-cli:v7.13.0 generate \
-	-i http://host.docker.internal:3000/explorer-json \
+	openapitools/openapi-generator-cli:v7.14.0 generate \
+	-i /local/local-api-for-generator.json \
 	-g typescript-angular \
 	-o local/@scicatproject/scicat-sdk-ts-angular \
 	--additional-properties=ngVersion=19.0.0,npmName=@scicatproject/scicat-sdk-ts-angular,supportsES6=true,withInterfaces=true  --skip-validate-spec
+
+rm local-api-for-generator.json
+
+# Check if the docker command resulted in any output.
+# If we don't do this, we'll try to cd into a missing folder,
+# and then we'd be invoking 'npm run build' as root in the main project folder,
+# which would create a bunch of stuff in ./dist belonging to root,
+# causing problems for things like SciCat Live.
+if [ ! -d "@scicatproject/scicat-sdk-ts-angular" ]; then
+  echo "Error: OpenApi output not found."
+  exit 1
+fi
 
 REMOVE_NPM_LINK=0
 if ! command -v npm 2>&1 1>/dev/null
@@ -44,8 +74,14 @@ fi
 
 echo -e "\nInstalling dependencies and building the sdk..."
 cd @scicatproject/scicat-sdk-ts-angular 
+# If this fails mysteriously you may need to run 'npm cache verify'.
 npm install
 npm run build
+
+if [ ! -d "@scicatproject/scicat-sdk-ts-angular/dist" ]; then
+  echo "Error: Build ouput not found."
+  exit 1
+fi
 
 echo -e "\nCopying the build files in node_modules..."
 cd ../..
@@ -64,4 +100,3 @@ then
 	rm -fv "/usr/local/bin/npm"
 	rm -fv "/usr/local/bin/node"
 fi
-
