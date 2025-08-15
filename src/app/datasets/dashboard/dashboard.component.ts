@@ -15,6 +15,8 @@ import {
   fetchDatasetCompleteAction,
   fetchMetadataKeysAction,
   changePageAction,
+  setSearchTermsAction,
+  setTextFilterAction,
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -79,6 +81,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
   ) {}
+
+  onTextChange(term: string) {
+    this.store.dispatch(setSearchTermsAction({ terms: term }));
+    this.store.dispatch(setTextFilterAction({ text: term }));
+  }
+
+  onSearchAction() {
+    this.store.dispatch(fetchDatasetsAction());
+    this.store.dispatch(fetchFacetCountsAction());
+  }
 
   onPageChange(event: { pageIndex: number; pageSize: number }) {
     this.store.dispatch(

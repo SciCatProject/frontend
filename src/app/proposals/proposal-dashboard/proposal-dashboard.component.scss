@@ -1,0 +1,37 @@
+mat-sidenav-container {
+  mat-sidenav-content {
+    padding: 0.5rem;
+    background-color: #ffffff;
+
+    :host-context(.anonymous-site) .action-column {
+      margin-top: 3.5rem;
+    }
+    .action-column {
+      margin-right: 0.5rem;
+
+      .add-card {
+        margin: 1rem 0 1rem;
+        text-align: center;
+
+        mat-icon {
+          vertical-align: middle;
+        }
+      }
+
+      .add-card:hover {
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .table-column {
+      margin-top: 0.5rem;
+      padding-bottom: 1rem;
+    }
+  }
+
+  mat-sidenav.mat-drawer-opened,
+  mat-sidenav.mat-drawer-opening {
+    box-shadow: 0 0 0 0 !important;
+  }
+}

@@ -58,11 +58,11 @@ describe("ProposalsReducer", () => {
 
   describe("on fetchCountCompletAction", () => {
     it("should set proposalsCount", () => {
-      const count = 100;
-      const action = fromActions.fetchCountCompleteAction({ count });
+      const count = { facetCounts: {}, allCounts: 100 };
+      const action = fromActions.fetchFacetCountsCompleteAction(count);
       const state = proposalsReducer(initialProposalsState, action);
 
-      expect(state.proposalsCount).toEqual(count);
+      expect(state.proposalsCount).toEqual(count.allCounts);
     });
   });
 

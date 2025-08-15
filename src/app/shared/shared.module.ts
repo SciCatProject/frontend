@@ -20,6 +20,8 @@ import { FiltersModule } from "./modules/filters/filters.module";
 import { AttachmentService } from "./services/attachment.service";
 import { DynamicMatTableModule } from "./modules/dynamic-material-table/table/dynamic-mat-table.module";
 import { TranslateModule } from "@ngx-translate/core";
+import { FullTextSearchBarModule } from "./modules/full-text-search-bar/full-text-search-bar.module";
+import { SharedFilterModule } from "./modules/shared-filter/shared-filter.module";
 @NgModule({
   imports: [
     BreadcrumbModule,
@@ -31,10 +33,12 @@ import { TranslateModule } from "@ngx-translate/core";
     PipesModule,
     ScientificMetadataModule,
     SearchBarModule,
+    FullTextSearchBarModule,
     TableModule,
     SearchParametersDialogModule,
     CommonModule,
     FormsModule,
+    SharedFilterModule,
     SharedTableModule,
     ScientificMetadataTreeModule,
     DynamicMatTableModule.forRoot({}),
@@ -55,9 +59,11 @@ import { TranslateModule } from "@ngx-translate/core";
     PipesModule,
     ScientificMetadataModule,
     SearchBarModule,
+    FullTextSearchBarModule,
     TableModule,
     CommonModule,
     FormsModule,
+    SharedFilterModule,
     SharedTableModule,
     ScientificMetadataTreeModule,
     FiltersModule,
