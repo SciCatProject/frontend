@@ -37,7 +37,7 @@ echo -e "\nGenerating the new sdk..."
 docker run \
 	--rm \
 	-v "`pwd`:/local" \
-	openapitools/openapi-generator-cli:v7.13.0 generate \
+	openapitools/openapi-generator-cli:v7.14.0 generate \
 	-i /local/local-api-for-generator.json \
 	-g typescript-angular \
 	-o local/@scicatproject/scicat-sdk-ts-angular \
