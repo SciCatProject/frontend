@@ -44,6 +44,9 @@ export class MockMatDialog {
 
 const getConfig = () => ({
   scienceSearchEnabled: false,
+  defaultDatasetsListSettings: {
+    filters: [],
+  },
 });
 
 describe("DatasetsFilterSettingsComponent", () => {
@@ -92,7 +95,7 @@ describe("DatasetsFilterSettingsComponent", () => {
           {
             provide: MAT_DIALOG_DATA,
             useValue: {
-              conditionConfigs: [],
+              filterConfigs: [],
             },
           },
         ],

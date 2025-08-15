@@ -3,11 +3,11 @@ import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { DateTime } from "luxon";
-import { FilterLists } from "proposals/proposal-dashboard/proposal-dashboard.component";
 import { distinctUntilChanged, map, Observable } from "rxjs";
 import { selectProposalsfacetCounts } from "state-management/selectors/proposals.selectors";
 
 import { DateRange } from "state-management/state/proposals.store";
+import { FilterConfig } from "state-management/state/user.store";
 
 @Component({
   selector: "proposal-side-filter",
@@ -26,7 +26,7 @@ export class ProposalSideFilterComponent implements OnInit {
     begin: null,
     end: null,
   };
-  @Input() filterLists: FilterLists[];
+  @Input() filterLists: FilterConfig[];
 
   @Output() searchChange = new EventEmitter<string>();
   @Output() dateChange = new EventEmitter<MatDatepickerInputEvent<DateTime>>();

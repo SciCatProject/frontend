@@ -78,7 +78,6 @@ import { DatafilesActionComponent } from "./datafiles-actions/datafiles-action.c
 import { MatMenuModule } from "@angular/material/menu";
 import { DatasetsFilterSettingsComponent } from "./datasets-filter/settings/datasets-filter-settings.component";
 import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
-import { FiltersModule } from "shared/modules/filters/filters.module";
 import { userReducer } from "state-management/reducers/user.reducer";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
@@ -147,7 +146,7 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
     CdkDropList,
     CdkDrag,
     CdkDragHandle,
-    FiltersModule,
+    // FiltersModule,
     MatExpansionModule,
   ],
   declarations: [

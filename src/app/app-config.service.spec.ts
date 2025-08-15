@@ -123,17 +123,6 @@ const appConfig: AppConfigInterface = {
       authorization: ["#datasetAccess", "#datasetPublic"],
     },
   ],
-  labelMaps: {
-    filters: {
-      LocationFilter: "Location",
-      PidFilter: "Pid",
-      GroupFilter: "Group",
-      TypeFilter: "Type",
-      KeywordFilter: "Keyword",
-      DateRangeFilter: "Start Date - End Date",
-      TextFilter: "Text",
-    },
-  },
   defaultDatasetsListSettings: {
     columns: [
       {
@@ -216,13 +205,48 @@ const appConfig: AppConfigInterface = {
       },
     ],
     filters: [
-      { LocationFilter: true },
-      { PidFilter: true },
-      { GroupFilter: true },
-      { TypeFilter: true },
-      { KeywordFilter: true },
-      { DateRangeFilter: true },
-      { TextFilter: true },
+      {
+        key: "creationLocation",
+        label: "Location",
+        type: "multiSelect",
+        description: "Filter by creation location on the dataset",
+        enabled: true,
+      },
+      {
+        key: "pid",
+        label: "Pid",
+        type: "text",
+        description: "Filter by dataset pid",
+        enabled: true,
+      },
+      {
+        key: "ownerGroup",
+        label: "Group",
+        type: "multiSelect",
+        description: "Filter by owner group of the dataset",
+        enabled: true,
+      },
+      {
+        key: "type",
+        label: "Type",
+        type: "multiSelect",
+        description: "Filter by dataset type",
+        enabled: true,
+      },
+      {
+        key: "keywords",
+        label: "Keyword",
+        type: "multiSelect",
+        description: "Filter by keywords in the dataset",
+        enabled: true,
+      },
+      {
+        key: "creationTime",
+        label: "Creation Time",
+        type: "dateRange",
+        description: "Filter by creation time of the dataset",
+        enabled: true,
+      },
     ],
     conditions: [],
   },

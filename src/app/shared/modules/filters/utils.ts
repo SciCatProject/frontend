@@ -30,15 +30,3 @@ export function getFacetId(facetCount: FacetCount, fallback = ""): string {
 export function getFacetCount(facetCount: FacetCount): number {
   return facetCount.count;
 }
-
-export function getFilterLabel(
-  filters: Record<string, string> | undefined,
-  componentName: string,
-  defaultLabel: string,
-): string {
-  if (!filters || !componentName || !filters[componentName]) {
-    return defaultLabel;
-  }
-
-  return filters[componentName];
-}

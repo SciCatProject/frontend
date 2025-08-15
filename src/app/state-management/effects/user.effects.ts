@@ -418,11 +418,7 @@ export class UserEffects {
 
   updateUserColumns$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(
-        fromActions.selectColumnAction,
-        fromActions.deselectColumnAction,
-        fromActions.deselectAllCustomColumnsAction,
-      ),
+      ofType(fromActions.selectColumnAction, fromActions.deselectColumnAction),
       concatLatestFrom(() => this.columns$),
       map(([action, columns]) => columns),
       distinctUntilChanged(
