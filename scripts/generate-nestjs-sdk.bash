@@ -74,6 +74,7 @@ fi
 
 echo -e "\nInstalling dependencies and building the sdk..."
 cd @scicatproject/scicat-sdk-ts-angular 
+# If this fails mysteriously you may need to run 'npm cache verify'.
 npm install
 npm run build
 
