@@ -80,7 +80,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   }
 
   onPublish() {
-    this.router.navigate(["datasets", "batch", "publish"]);
+    this.router.navigate(["datasets", "selection", "publish"]);
   }
 
   onShare() {
