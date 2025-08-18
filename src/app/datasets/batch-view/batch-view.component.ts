@@ -226,6 +226,12 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     localStorage.removeItem("editingDatasetList");
   }
 
+  onChangeSelection() {
+    const encodedDoi = encodeURIComponent(this.editingPublishedDataDoi);
+
+    this.router.navigateByUrl(`/publishedDatasets/${encodedDoi}/datasetList`);
+  }
+
   onCancelEdit() {
     this.router.navigateByUrl(this.getPublishingDataUrl());
     this.store.dispatch(clearBatchAction());

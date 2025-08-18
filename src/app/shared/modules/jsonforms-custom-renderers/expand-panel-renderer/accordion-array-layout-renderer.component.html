@@ -20,7 +20,7 @@
       mat-button
       matTooltip="{{ translations.addTooltip }}"
       [disabled]="!isEnabled()"
-      (click)="add()"
+      (click)="add([].constructor(data).length)"
       attr.aria-label="{{ translations.addAriaLabel }}"
     >
       <mat-icon>add</mat-icon>
@@ -39,13 +39,22 @@
   >
     <mat-accordion>
       <mat-expansion-panel
-        [expanded]="panelOpenState"
-        (opened)="panelOpenState.set(true)"
-        (closed)="panelOpenState.set(false)"
+        [expanded]="getEpandedState(idx)"
+        (opened)="onPanelOpen(idx)"
+        (closed)="onPanelClose(idx)"
       >
         <mat-expansion-panel-header>
           <mat-panel-title>{{ getDisplayPropertyData(idx) }}</mat-panel-title>
           <mat-panel-description>
+            <mat-icon
+              *ngIf="getError(idx)"
+              color="warn"
+              matBadgeColor="warn"
+              matTooltip="{{ getError(idx) }}"
+              matTooltipClass="error-message-tooltip"
+            >
+              error_outline
+            </mat-icon>
             <button
               class="item-up"
               mat-button

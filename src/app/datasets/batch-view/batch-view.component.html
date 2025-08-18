@@ -9,6 +9,17 @@
       <button
         *ngIf="editingPublishedDataDoi"
         mat-button
+        id="changeSelectionButton"
+        (click)="onChangeSelection()"
+        class="button"
+        color="primary"
+      >
+        <mat-icon> edit </mat-icon>
+        Change dataset selection
+      </button>
+      <button
+        *ngIf="editingPublishedDataDoi"
+        mat-button
         id="saveChangesButton"
         (click)="onSaveChanges()"
         class="button"
