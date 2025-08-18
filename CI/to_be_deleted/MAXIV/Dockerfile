@@ -18,7 +18,7 @@ COPY CI/MAXIV/google-fonts/css /frontend/src/assets/css
 COPY CI/MAXIV/google-fonts/fonts /frontend/src/assets/fonts
 RUN npx ng build
 
-FROM nginx:1.21-alpine
+FROM nginx:1.29.1-alpine
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /frontend/dist/ /usr/share/nginx/html
