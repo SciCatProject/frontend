@@ -13,10 +13,10 @@ import {
   EventEmitter,
   HostBinding,
   ChangeDetectorRef,
+  ElementRef,
 } from "@angular/core";
 import { TableField } from "../models/table-field.model";
 import { titleCase } from "../utilizes/utilizes";
-import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { moveItemInArray } from "@angular/cdk/drag-drop";
 import { SelectionModel } from "@angular/cdk/collections";
 import { TableService } from "../table/dynamic-mat-table.service";
@@ -106,8 +106,8 @@ export class TableCoreDirective<T extends TableRow> {
 
   /**************************************** Reference Variables ***************************************/
   @ViewChild(MatTable, { static: true }) table!: MatTable<any>;
-  @ViewChild(CdkVirtualScrollViewport, { static: true })
-  viewport!: CdkVirtualScrollViewport;
+  @ViewChild("tbl", { static: true })
+  tableContainer!: ElementRef<any>;
   /**************************************** Methods **********************************************/
 
   constructor(
@@ -140,7 +140,6 @@ export class TableCoreDirective<T extends TableRow> {
     return this.tableSetting.scrollStrategy;
   }
   set ScrollStrategyType(value: TableScrollStrategy) {
-    this.viewport["_scrollStrategy"].scrollStrategyMode = value;
     this.tableSetting.scrollStrategy = value;
   }
 
@@ -353,8 +352,8 @@ export class TableCoreDirective<T extends TableRow> {
 
   public clear() {
     if (!isNullorUndefined(this.tvsDataSource)) {
-      if (this.viewport) {
-        this.viewport.scrollTo({ top: 0, behavior: "auto" });
+      if (this.tableContainer) {
+        this.tableContainer.nativeElement.scrollTop = 0;
       }
       this.tvsDataSource.clearData();
       this.expandedElement = null;
@@ -397,7 +396,6 @@ export class TableCoreDirective<T extends TableRow> {
     this.cdr.detectChanges();
     this.refreshColumn(this.tableColumns);
     this.table.renderRows();
-    this.viewport.checkViewportSize();
   }
 
   public moveRow(from: number, to: number) {
@@ -420,14 +418,12 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   refreshColumn(columns: TableField<T>[]) {
-    if (this.viewport) {
-      const currentOffset = this.viewport.measureScrollOffset();
-      this.columns = columns;
-      setTimeout(
-        () => this.viewport.scrollTo({ top: currentOffset, behavior: "auto" }),
-        0,
-      );
-    }
+    const currentOffset = this.tableContainer.nativeElement.scrollTop;
+    this.columns = columns;
+    
+    setTimeout(() => {
+      this.tableContainer.nativeElement.scrollTop = currentOffset;
+    }, 0);
   }
 
   /************************************ Selection Table Row *******************************************/

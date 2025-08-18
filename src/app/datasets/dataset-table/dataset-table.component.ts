@@ -161,14 +161,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
   ) {}
 
-  getViewportHeight(): string {
-    const rowsOnPage = this.dataSource.value.length;
-    const rowHeight = 48;
-    const headerHeight = 56;
-    const footerHeight = 56;
-    return `${headerHeight + rowsOnPage * rowHeight + footerHeight}px`;
-  }
-
   private getInstrumentName(row: OutputDatasetObsoleteDto): string {
     const instrument = this.instrumentMap.get(row.instrumentId);
     if (instrument?.name) {
@@ -550,8 +542,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
                 this.dataSource.next(datasets);
                 this.pending = false;
                 this.cdr.detectChanges();
-                this.viewport.checkViewportSize();
-                console.log("DEBUG----- check viewport size", this.viewport.checkViewportSize());
 
                 const savedTableConfigColumns =
                   this.convertSavedColumns(tableColumns);
