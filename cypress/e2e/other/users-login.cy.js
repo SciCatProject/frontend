@@ -180,4 +180,76 @@ describe("Users Login", () => {
 
     cy.get("[data-cy=auth-strategy]").contains("local");
   });
+
+  it("user should stay logged in after page reload if the token is valid", () => {
+    cy.visit("/");
+
+    cy.url().should("include", "/datasets");
+
+    cy.wait("@fetch");
+
+    cy.finishedLoading();
+
+    cy.get("[data-cy=login-button]").click();
+
+    cy.finishedLoading();
+
+    cy.url().should("include", "/login");
+
+    cy.get('mat-tab-group [role="tab"]').contains("Local").click();
+
+    cy.get("#usernameInput").type(username).should("have.value", username);
+
+    cy.get("#passwordInput").type(password).should("have.value", password);
+
+    cy.get("button[type=submit]").click();
+
+    cy.url().should("include", "/datasets");
+
+    cy.get(".user-button").should("contain.text", username);
+
+    cy.reload();
+
+    cy.finishedLoading();
+
+    cy.get(".user-button").should("contain.text", username);
+  });
+
+  it("user should be logged out if token has expired", () => {
+    cy.visit("/");
+
+    cy.url().should("include", "/datasets");
+
+    cy.wait("@fetch");
+
+    cy.finishedLoading();
+
+    cy.get("[data-cy=login-button]").click();
+
+    cy.finishedLoading();
+
+    cy.url().should("include", "/login");
+
+    cy.get('mat-tab-group [role="tab"]').contains("Local").click();
+
+    cy.get("#usernameInput").type(username).should("have.value", username);
+
+    cy.get("#passwordInput").type(password).should("have.value", password);
+
+    cy.get("button[type=submit]").click();
+
+    cy.url().should("include", "/datasets");
+
+    cy.get(".user-button").should("contain.text", username);
+
+    // NOTE: Some date in the past to simulate token expiration
+    cy.setCookie("created", encodeURIComponent("2025-08-02T11:36:37.845Z"));
+
+    cy.reload();
+
+    cy.finishedLoading();
+
+    cy.get('[data-cy="login-button"]').should("exist");
+    cy.get(".user-button").should("not.exist");
+  });
 });

@@ -73,7 +73,6 @@ import { AdminTabComponent } from "./admin-tab/admin-tab.component";
 import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
 import { InstrumentEffects } from "state-management/effects/instruments.effects";
 import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.component";
-import { FullTextSearchBarComponent } from "./dashboard/full-text-search/full-text-search-bar.component";
 import { DatafilesActionsComponent } from "./datafiles-actions/datafiles-actions.component";
 import { DatafilesActionComponent } from "./datafiles-actions/datafiles-action.component";
 import { MatMenuModule } from "@angular/material/menu";
@@ -86,6 +85,9 @@ import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-d
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { TitleCasePipe } from "shared/pipes/title-case.pipe";
+
 @NgModule({
   imports: [
     CommonModule,
@@ -141,12 +143,12 @@ import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
     StoreModule.forFeature("logbooks", logbooksReducer),
     StoreModule.forFeature("users", userReducer),
     LogbooksModule,
-    FullTextSearchBarComponent,
     MatMenuModule,
     CdkDropList,
     CdkDrag,
     CdkDragHandle,
     FiltersModule,
+    MatExpansionModule,
   ],
   declarations: [
     BatchViewComponent,
@@ -183,6 +185,7 @@ import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
     ADAuthService,
     SharedScicatFrontendModule,
     FileSizePipe,
+    TitleCasePipe,
   ],
   exports: [
     DashboardComponent,

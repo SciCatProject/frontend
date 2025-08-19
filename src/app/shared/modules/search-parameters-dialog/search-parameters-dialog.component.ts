@@ -6,10 +6,12 @@ import { map, startWith } from "rxjs/operators";
 import { UnitsService } from "shared/services/units.service";
 import { ScientificCondition } from "../../../state-management/models";
 import { UnitsOptionsService } from "shared/services/units-options.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "search-parameters-dialog",
   templateUrl: "./search-parameters-dialog.component.html",
+  styleUrls: ["./search-parameters-dialog.component.scss"],
   standalone: false,
 })
 export class SearchParametersDialogComponent {
@@ -58,17 +60,33 @@ export class SearchParametersDialogComponent {
     @Inject(MAT_DIALOG_DATA)
     public data: {
       parameterKeys: string[];
+      usedFields: string[];
       condition?: ScientificCondition;
     },
     public dialogRef: MatDialogRef<SearchParametersDialogComponent>,
     private unitsService: UnitsService,
     private unitsOptionsService: UnitsOptionsService,
+    private snackBar: MatSnackBar,
   ) {
     this.applyUnitsOptions();
   }
 
   add = (): void => {
     const { lhs, relation, unit } = this.parametersForm.value;
+    if (this.data.usedFields && this.data.usedFields.includes(lhs)) {
+      this.snackBar.open("Field already used", "Close", {
+        duration: 2000,
+        panelClass: ["snackbar-warning"],
+      });
+      return;
+    } else if (!this.parameterKeys.includes(lhs)) {
+      this.snackBar.open("Field does not exist", "Close", {
+        duration: 2000,
+        panelClass: ["snackbar-warning"],
+      });
+      return;
+    }
+
     const rawRhs = this.parametersForm.get("rhs")?.value;
     const rhs =
       relation === "EQUAL_TO_STRING" ? String(rawRhs) : Number(rawRhs);
@@ -118,19 +136,6 @@ export class SearchParametersDialogComponent {
     if (lhsInvalid || isStringRelation) {
       unitField?.disable();
     }
-  };
-
-  isInvalid = (): boolean => {
-    const { invalid } = this.parametersForm;
-    const { lhs, relation, rhs } = this.parametersForm.value;
-
-    if (invalid) {
-      return invalid;
-    }
-    if (relation !== "EQUAL_TO_STRING" && isNaN(Number(rhs))) {
-      return true;
-    }
-    return lhs.length * (rhs as string).length === 0;
   };
 
   get lhs(): string {
