@@ -27,9 +27,9 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
-import { ProposalFilterComponent } from "./proposal-filter/proposal-filter.component";
+import { ProposalSideFilterComponent } from "./proposal-filters/side-bar-filter/proposal-side-filter.component";
 import { LogbooksModule } from "logbooks/logbooks.module";
-import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
+import { ProposalTableComponent } from "./proposal-table/proposal-table.component";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { LogbookEffects } from "state-management/effects/logbooks.effects";
 import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
@@ -37,6 +37,9 @@ import { ProposalLogbookComponent } from "./proposal-logbook/proposal-logbook.co
 import { RelatedProposalsComponent } from "./related-proposals/related-proposals.component";
 import { ProposalDatasetsComponent } from "./proposal-datasets/proposal-datasets.component";
 import { TranslateModule } from "@ngx-translate/core";
+import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { ProposalSearchBarComponent } from "./proposal-filters/search-bar/proposal-search-bar.component";
 
 @NgModule({
   imports: [
@@ -56,6 +59,7 @@ import { TranslateModule } from "@ngx-translate/core";
     MatTableModule,
     MatTabsModule,
     MatTooltipModule,
+    MatSidenavModule,
     NgxJsonViewerModule,
     RouterModule,
     SharedScicatFrontendModule,
@@ -64,10 +68,12 @@ import { TranslateModule } from "@ngx-translate/core";
     TranslateModule,
   ],
   declarations: [
+    ProposalDashboardComponent,
     ViewProposalPageComponent,
     ProposalDetailComponent,
-    ProposalFilterComponent,
-    ProposalDashboardComponent,
+    ProposalSideFilterComponent,
+    ProposalSearchBarComponent,
+    ProposalTableComponent,
     ProposalLogbookComponent,
     RelatedProposalsComponent,
     ProposalDatasetsComponent,

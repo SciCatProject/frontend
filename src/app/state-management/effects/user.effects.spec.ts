@@ -465,7 +465,7 @@ describe("UserEffects", () => {
         id: "testId",
         ttl: 100,
         scopes: ["string"],
-        created: new Date(),
+        created: new Date().toISOString(),
         userId: "testId",
         user: "testUser",
         rememberMe: false,
@@ -497,7 +497,7 @@ describe("UserEffects", () => {
         id: "testId",
         ttl: 3600,
         scopes: ["string"],
-        created: new Date(),
+        created: new Date().toISOString(),
         userId: "testId",
         user: "testUser",
       } as unknown as SDKToken;
@@ -522,7 +522,7 @@ describe("UserEffects", () => {
         id: "testId",
         ttl: 100,
         scopes: ["string"],
-        created: new Date(1611438651),
+        created: new Date(1611438651).toISOString(),
         userId: "testId",
         user: "testUser",
       } as unknown as SDKToken;
@@ -773,7 +773,7 @@ describe("UserEffects", () => {
         id: "testId",
         ttl: 100,
         scopes: ["string"],
-        created: new Date(),
+        created: new Date().toISOString(),
         userId: "testId",
         user: "testUser",
       } as unknown as SDKToken;

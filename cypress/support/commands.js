@@ -120,7 +120,12 @@ Cypress.Commands.add(
 
       cy.getToken().then((token) => {
         if (type === "raw") {
-          const dataset = { ...testData.rawDataset, datasetName, proposalId, ...overrides, };
+          const dataset = { 
+            ...testData.rawDataset, 
+            datasetName, 
+            proposalId,
+            ...overrides,
+          };
           cy.log("Raw Dataset 1: " + JSON.stringify(dataset, null, 2));
           cy.log("User: " + JSON.stringify(user, null, 2));
 

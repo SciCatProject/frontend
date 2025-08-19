@@ -298,9 +298,8 @@ describe("Proposals general", () => {
 
       cy.visit("/proposals");
 
-      cy.get('.table-global-search input[type="text"]').type(
-        newProposal.proposalId,
-      );
+      cy.get('[data-cy="text-search"]').type(newProposal.proposalId);
+      cy.get('[data-cy="search-button"]').click();
 
       cy.get("mat-table mat-row")
         .first()
@@ -410,14 +409,15 @@ describe("Proposals general", () => {
       cy.get('[role="menu"] button').contains("Default setting").click();
       cy.get("body").type("{esc}");
 
-      cy.contains(
-        "dynamic-mat-table mat-header-row.header mat-header-cell",
-        "First Name",
-      );
-      cy.contains(
-        "dynamic-mat-table mat-header-row.header mat-header-cell",
-        "Last Name",
-      );
+      cy.get("dynamic-mat-table")
+        .scrollTo("right", { ensureScrollable: false })
+        .get("mat-header-row")
+        .should("contain", "First Name");
+
+      cy.get("dynamic-mat-table")
+        .scrollTo("right", { ensureScrollable: false })
+        .get("mat-header-row")
+        .should("contain", "Last Name");
 
       cy.get("dynamic-mat-table table-menu button").click();
 
@@ -454,14 +454,15 @@ describe("Proposals general", () => {
 
       cy.finishedLoading();
 
-      cy.get("dynamic-mat-table mat-header-row.header").should(
-        "not.contain",
-        "First Name",
-      );
-      cy.get("dynamic-mat-table mat-header-row.header").should(
-        "not.contain",
-        "Last Name",
-      );
+      cy.get("dynamic-mat-table")
+        .scrollTo("right", { ensureScrollable: false })
+        .get("mat-header-row")
+        .should("not.contain", "First Name");
+
+      cy.get("dynamic-mat-table")
+        .scrollTo("right", { ensureScrollable: false })
+        .get("mat-header-row")
+        .should("not.contain", "Last Name");
 
       cy.get("dynamic-mat-table table-menu button").click();
       cy.get('[role="menu"] button').contains("Default setting").click();
@@ -475,14 +476,15 @@ describe("Proposals general", () => {
 
       cy.get("dynamic-mat-table mat-header-row.header").should("exist");
 
-      cy.contains(
-        "dynamic-mat-table mat-header-row.header mat-header-cell",
-        "First Name",
-      );
-      cy.contains(
-        "dynamic-mat-table mat-header-row.header mat-header-cell",
-        "Last Name",
-      );
+      cy.get("dynamic-mat-table")
+        .scrollTo("right", { ensureScrollable: false })
+        .get("mat-header-row")
+        .should("contain", "First Name");
+
+      cy.get("dynamic-mat-table")
+        .scrollTo("right", { ensureScrollable: false })
+        .get("mat-header-row")
+        .should("contain", "Last Name");
     });
 
     it("should be able to download table data as a json", () => {
