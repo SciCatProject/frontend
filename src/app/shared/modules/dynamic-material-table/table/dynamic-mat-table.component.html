@@ -159,7 +159,8 @@
               [class.ltr-cell]="direction === 'ltr'"
               [ngStyle]="ellipsis(column)"
               class="label-cell"
-              >{{ row[column.name] }}
+            >
+              {{ getColumnValue(row, column.name) }}
             </label>
           </ng-template>
         </ng-template>
