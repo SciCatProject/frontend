@@ -404,14 +404,14 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   applyUnitsOptions(condition: ScientificCondition): void {
-      const lhs = condition?.lhs;
-      const unitsOptions = condition?.unitsOptions;
+    const lhs = condition?.lhs;
+    const unitsOptions = condition?.unitsOptions;
 
-      // if pre-configured condition has unitsOptions, store and use them.
-      if (lhs && unitsOptions?.length) {
-        this.unitsOptionsService.setUnitsOptions(lhs, unitsOptions);
-      }
+    // if pre-configured condition has unitsOptions, store and use them.
+    if (lhs && unitsOptions?.length) {
+      this.unitsOptionsService.setUnitsOptions(lhs, unitsOptions);
     }
+  }
 
   updateCondition(index: number, updates: Partial<any>) {
     const currentConditions =
@@ -504,7 +504,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   updateConditionUnit(index: number, event: any) {
-    const newUnit = event.target ? (event.target as HTMLInputElement).value : event.option.value;
+    const newUnit = event.target
+      ? (event.target as HTMLInputElement).value
+      : event.option.value;
     this.updateCondition(index, { unit: newUnit || undefined });
   }
 
