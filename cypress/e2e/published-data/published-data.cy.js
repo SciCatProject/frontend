@@ -23,9 +23,8 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type("Cypress");
+      cy.get('[data-cy="text-search"]').clear().type("Cypress");
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
@@ -59,9 +58,8 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type("Cypress");
+      cy.get('[data-cy="text-search"]').clear().type("Cypress");
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
@@ -106,9 +104,8 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type("Cypress");
+      cy.get('[data-cy="text-search"]').clear().type("Cypress");
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
@@ -138,9 +135,8 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type("Cypress");
+      cy.get('[data-cy="text-search"]').clear().type("Cypress");
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
@@ -246,7 +242,7 @@ describe("Datasets general", () => {
       cy.get('[aria-label="Add to Creators button"]').click();
 
       cy.get('[aria-label="Add to Creators button"]')
-        .closest(".array-layout")
+        .closest(".expand-panel-array-layout")
         .find('input[id^="#/properties/name"]')
         .first()
         .clear()
@@ -311,15 +307,17 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="batch-table"] mat-row').should("exist");
 
-      cy.visit("/datasets");
+      cy.get('button[id="changeSelectionButton"]').click();
+
+      cy.url().should("include", "publishedDatasets");
+      cy.url().should("include", "datasetList");
 
       cy.get(".dataset-table mat-table mat-header-row").should("exist");
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type(newDatasetName);
+      cy.get('[data-cy="text-search"]').clear().type(newDatasetName);
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
@@ -329,7 +327,7 @@ describe("Datasets general", () => {
 
       cy.get("#cartOnHeaderButton").click();
 
-      cy.get("a.button").click();
+      cy.get("batch-card a.button").click();
 
       cy.get('[data-cy="batch-table"] mat-row').its("length").should("eq", 2);
 
@@ -443,9 +441,8 @@ describe("Datasets general", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type("Cypress");
+      cy.get('[data-cy="text-search"]').clear().type("Cypress");
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
@@ -481,7 +478,7 @@ describe("Datasets general", () => {
       cy.get('[aria-label="Add to Creators button"]').click();
 
       cy.get('[aria-label="Add to Creators button"]')
-        .closest(".array-layout")
+        .closest(".expand-panel-array-layout")
         .find('input[id^="#/properties/name"]')
         .first()
         .clear()
@@ -550,7 +547,12 @@ describe("Datasets general", () => {
       cy.get("button.save-and-continue").should("not.be.disabled");
 
       cy.get('[aria-label="Add to Creators button"]')
-        .closest(".array-layout")
+        .closest(".expand-panel-array-layout")
+        .find("mat-accordion")
+        .click();
+
+      cy.get('[aria-label="Add to Creators button"]')
+        .closest(".expand-panel-array-layout")
         .find('input[id^="#/properties/name"]')
         .first()
         .clear()

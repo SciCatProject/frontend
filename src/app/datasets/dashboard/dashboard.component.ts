@@ -239,7 +239,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         if (
           event instanceof NavigationStart &&
           event.url !== currentUrl + "/edit" &&
-          !decodeURIComponent(event.url).startsWith(currentUrl)
+          !this.fullyDecodeURI(event.url).startsWith(
+            this.fullyDecodeURI(currentUrl),
+          )
         ) {
           localStorage.removeItem("editingPublishedDataDoi");
           localStorage.removeItem("editingDatasetList");
@@ -247,6 +249,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       }),
     );
+  }
+
+  isEncoded(uri: string | undefined): boolean {
+    uri = uri || "";
+
+    return uri !== decodeURIComponent(uri);
+  }
+
+  fullyDecodeURI(uri: string | undefined): string {
+    while (this.isEncoded(uri)) {
+      uri = decodeURIComponent(uri);
+    }
+
+    return uri;
   }
 
   ngOnDestroy() {
