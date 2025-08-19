@@ -51,7 +51,6 @@ import {
   distinctUntilChanged,
   filter,
 } from "rxjs/operators";
-import { FixedSizeTableVirtualScrollStrategy } from "../cores/fixed-size-table-virtual-scroll-strategy";
 import { Subject, Subscription } from "rxjs";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ContextMenuItem } from "../models/context-menu.model";
@@ -76,7 +75,7 @@ import {
   TableMenuAction,
   TableMenuActionChange,
 } from "../models/table-menu.model";
-import { MatTableDataSource } from "@angular/material/table";
+import { TableDataSource } from "../cores/table-data-source";
 
 export interface IDynamicCell {
   row: TableRow;
@@ -258,7 +257,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   /* Tooltip */
   overlayRef: OverlayRef = null;
 
-  standardDataSource: MatTableDataSource<T>;
+  standardDataSource: TableDataSource<T>;
 
   constructor(
     public dialog: MatDialog,
@@ -271,7 +270,7 @@ export class DynamicMatTableComponent<T extends TableRow>
     public readonly config: TableSetting,
   ) {
     super(tableService, cdr, config);
-    this.standardDataSource = new MatTableDataSource<T>([]);
+    this.standardDataSource = new TableDataSource<T>([]);
     this.overlayContainer
       .getContainerElement()
       .addEventListener("contextmenu", (e) => {
@@ -290,6 +289,7 @@ export class DynamicMatTableComponent<T extends TableRow>
           const visibleColumns = this.columns.filter(
             (c) => c.display !== "hidden" && c.index < data.e.columnIndex,
           );
+          console.log("DEBUG visibleColumns:", visibleColumns);
           i = visibleColumns[visibleColumns.length - 1].index;
         }
         const unit = this.columns[i].widthUnit || "px";
@@ -460,7 +460,7 @@ export class DynamicMatTableComponent<T extends TableRow>
     }, 1000);
 
     if (this.dataSource) {
-      this.dataSource.subscribe(data => {
+      this.dataSource.subscribe((data) => {
         if (this.standardDataSource) {
           this.standardDataSource.data = data;
         }
@@ -539,7 +539,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   filter_onChanged(column: TableField<T>, filter: AbstractFilter[]) {
-    this.tvsDataSource.setFilter(column.name, filter).subscribe(() => {
+    this.standardDataSource.setFilter(column.name, filter).subscribe(() => {
       this.clearSelection();
     });
   }
@@ -744,8 +744,7 @@ export class DynamicMatTableComponent<T extends TableRow>
         );
       }
     } else if (e.type === TableMenuAction.FilterClear) {
-      console.log("DEBUG filter_clear");
-      this.tvsDataSource.clearFilter();
+      this.standardDataSource.clearFilter();
       this.headerFilterList.forEach((hf) => hf.clearColumn_OnClick());
     } else if (e.type === TableMenuAction.Print) {
       this.onTableEvent.emit({
