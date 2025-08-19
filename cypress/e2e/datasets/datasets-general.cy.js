@@ -146,8 +146,8 @@ describe("Datasets general", () => {
         .within(() => {
           cy.get("mat-select").click();
         });
-      
-      cy.get('mat-option').contains('>').click();
+
+      cy.get("mat-option").contains(">").click();
 
       cy.get(".condition-panel")
         .first()
@@ -197,7 +197,7 @@ describe("Datasets general", () => {
           cy.get("mat-select").click();
         });
 
-      cy.get("mat-option").contains('<').click();
+      cy.get("mat-option").contains("<").click();
 
       // change value
       cy.get(".condition-panel")
@@ -225,7 +225,7 @@ describe("Datasets general", () => {
     });
   });
 
-describe("Units options in add condition dialog units dropdown", () => {
+  describe("Units options in condition panel units dropdown", () => {
     beforeEach(() => {
       cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.createDataset(
@@ -251,48 +251,53 @@ describe("Units options in add condition dialog units dropdown", () => {
               ...baseConfig.defaultDatasetsListSettings,
               conditions: [
                 {
-                condition: {
-                  lhs: "outgassing_values_after_1h",
-                  relation: "GREATER_THAN",
-                  rhs: 1,
-                  unit: "mbar l/s/cm^2",
-                  unitsOptions: [
-                    "mbar l/s/cm^2",
-                    "Pa m^3/s/m^2",
-                    "Pa m^3/s/m^2",
-                    "mbar l/s/cm^2",
-                  ],
+                  condition: {
+                    lhs: "outgassing_values_after_1h",
+                    relation: "GREATER_THAN",
+                    rhs: 1,
+                    unit: "",
+                    unitsOptions: [
+                      "mbar l/s/cm^2",
+                      "Pa m^3/s/m^2",
+                      "bar m^3/s/m^2",
+                    ],
+                  },
+                  enabled: false,
                 },
-                enabled: false,
-              },
               ],
             },
           };
 
           cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
           cy.visit("/datasets");
-          cy.wait("@getConfig", { timeout: 20000 }).then((interception) => {
-            const settings = interception.response.body.defaultDatasetsListSettings;
-            cy.log("defaultDatasetsListSettings:", JSON.stringify(settings));
-          });
+          cy.wait("@getConfig", { timeout: 20000 });
           cy.finishedLoading();
         });
       });
     });
 
     it("should display limited options in units dropdown", () => {
-      
-      cy.get('[data-cy="more-filters-button"]').click();
+      cy.get(".condition-panel").first().click();
 
-      
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("input[matInput]").last().click();
+        });
 
-      cy.get('[data-cy="edit-condition"]').first().click();
+      cy.get("mat-option").eq(0).should("contain.text", "mbar l/s/cm^2");
+      cy.get("mat-option").eq(1).should("contain.text", "Pa m^3/s/m^2");
+      cy.get("mat-option").eq(2).should("contain.text", "bar m^3/s/m^2");
 
-      cy.get('input[name="lhs"]').type("outgassing_values_after_1h");
+      cy.get("mat-option").eq(0).click();
 
-      cy.get('[data-cy="unit-dropdown"]').click();
+      cy.get("mat-slide-toggle").click();
 
-      cy.get('mat-option').should('have.length', 4);
+      cy.get('[data-cy="search-button"]').click();
+
+      cy.get(".condition-panel").first().click();
+
+      cy.get("button").contains("Remove").click();
     });
   });
 
@@ -375,7 +380,7 @@ describe("Units options in add condition dialog units dropdown", () => {
     });
 
     it("should check if pre-configured conditions are applied", () => {
-      cy.scrollTo('bottom');
+      cy.scrollTo("bottom");
       cy.get('[data-cy="scientific-condition-filter-list"] .condition-panel')
         .should("contain.text", "extra_entry_end_time")
         .and("contain.text", ">")
@@ -402,6 +407,6 @@ describe("Units options in add condition dialog units dropdown", () => {
     });
   });
   afterEach(() => {
-      cy.removeDatasets();
-    });
+    cy.removeDatasets();
+  });
 });
