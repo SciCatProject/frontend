@@ -5,9 +5,7 @@ import { AppConfigService } from "app-config.service";
 import { map, startWith } from "rxjs/operators";
 import { UnitsService } from "shared/services/units.service";
 import { ScientificCondition } from "../../../state-management/models";
-import { UnitsOptionsService } from "shared/services/units-options.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
-
 @Component({
   selector: "search-parameters-dialog",
   templateUrl: "./search-parameters-dialog.component.html",
@@ -65,10 +63,11 @@ export class SearchParametersDialogComponent {
     },
     public dialogRef: MatDialogRef<SearchParametersDialogComponent>,
     private unitsService: UnitsService,
-    private unitsOptionsService: UnitsOptionsService,
     private snackBar: MatSnackBar,
   ) {
-    this.applyUnitsOptions();
+    if (this.data.condition?.lhs) {
+      this.getUnits(this.data.condition.lhs);
+    }
   }
 
   add = (): void => {
@@ -96,34 +95,8 @@ export class SearchParametersDialogComponent {
 
   cancel = (): void => this.dialogRef.close();
 
-  applyUnitsOptions(): void {
-    const lhs = this.data.condition?.lhs;
-    const unitsOptions = this.data.condition?.unitsOptions;
-
-    // if pre-configured condition has unitsOptions, store and use them.
-    if (lhs && unitsOptions?.length) {
-      this.unitsOptionsService.setUnitsOptions(lhs, unitsOptions);
-      this.units = unitsOptions;
-    } else if (lhs) {
-      this.units =
-        this.unitsOptionsService.getUnitsOptions(lhs) ??
-        this.unitsService.getUnits(lhs);
-    }
-  }
-
   getUnits = (parameterKey: string): void => {
-    const stored = this.unitsOptionsService.getUnitsOptions(parameterKey);
-    if (stored?.length) {
-      this.units = stored;
-    } else if (this.data.condition?.unitsOptions?.length) {
-      this.unitsOptionsService.setUnitsOptions(
-        parameterKey,
-        this.data.condition.unitsOptions,
-      );
-      this.units = this.data.condition.unitsOptions;
-    } else {
-      this.units = this.unitsService.getUnits(parameterKey);
-    }
+    this.units = this.unitsService.getUnits(parameterKey);
     this.toggleUnitField();
   };
 

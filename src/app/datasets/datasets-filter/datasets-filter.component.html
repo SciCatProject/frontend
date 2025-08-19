@@ -225,7 +225,7 @@
                     conditionConfig.condition.relation === 'EQUAL_TO_STRING'
                   "
                 />
-                <mat-autocomplete #rhsUnits="matAutocomplete">
+                <mat-autocomplete #rhsUnits="matAutocomplete" (optionSelected)="updateConditionUnit(i, $event)">
                   <mat-option
                     *ngFor="let unit of getUnits(conditionConfig.condition.lhs)"
                     [value]="unit"

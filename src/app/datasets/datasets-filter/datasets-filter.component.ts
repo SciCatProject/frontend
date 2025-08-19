@@ -61,6 +61,7 @@ import {
 } from "state-management/actions/user.actions";
 import { UnitsService } from "shared/services/units.service";
 import { ScientificCondition } from "state-management/models";
+import { UnitsOptionsService } from "shared/services/units-options.service";
 
 const COMPONENT_MAP: { [K in Filters]: Type<any> } = {
   PidFilter: PidFilterComponent,
@@ -115,6 +116,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private viewContainerRef: ViewContainerRef,
     private snackBar: MatSnackBar,
     private unitsService: UnitsService,
+    private unitsOptionsService: UnitsOptionsService,
   ) {}
 
   ngOnInit() {
@@ -139,6 +141,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   applyEnabledConditions() {
     this.conditionConfigs$.pipe(take(1)).subscribe((conditionConfigs) => {
       (conditionConfigs || []).forEach((config) => {
+        this.applyUnitsOptions(config.condition);
         if (config.enabled && config.condition.lhs && config.condition.rhs) {
           this.store.dispatch(
             addScientificConditionAction({
@@ -393,8 +396,22 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   getUnits(parameterKey: string): string[] {
+    const stored = this.unitsOptionsService.getUnitsOptions(parameterKey);
+    if (stored?.length) {
+      return stored;
+    }
     return this.unitsService.getUnits(parameterKey);
   }
+
+  applyUnitsOptions(condition: ScientificCondition): void {
+      const lhs = condition?.lhs;
+      const unitsOptions = condition?.unitsOptions;
+
+      // if pre-configured condition has unitsOptions, store and use them.
+      if (lhs && unitsOptions?.length) {
+        this.unitsOptionsService.setUnitsOptions(lhs, unitsOptions);
+      }
+    }
 
   updateCondition(index: number, updates: Partial<any>) {
     const currentConditions =
@@ -486,8 +503,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       : relation;
   }
 
-  updateConditionUnit(index: number, event: Event) {
-    const newUnit = (event.target as HTMLInputElement).value;
+  updateConditionUnit(index: number, event: any) {
+    const newUnit = event.target ? (event.target as HTMLInputElement).value : event.option.value;
     this.updateCondition(index, { unit: newUnit || undefined });
   }
 
