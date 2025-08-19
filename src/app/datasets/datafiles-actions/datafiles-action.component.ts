@@ -101,6 +101,8 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
     this.prepare_disabled_condition();
 
     const expr = this.disabled_condition;
+    // Note: 'with' has been deprecated and is considered harmful.
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with
     const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);
 
     return fn({
