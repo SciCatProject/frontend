@@ -213,7 +213,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     this.columns = currentColumnSetting;
     const translated$ = forkJoin(
       currentColumnSetting.map((i) =>
-        this.translateService.get(i.name).pipe(
+        this.translateService.get(i.header || i.name).pipe(
           map((translated) => ({
             ...i,
             header: translated,
