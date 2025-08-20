@@ -420,7 +420,7 @@ export class TableCoreDirective<T extends TableRow> {
   refreshColumn(columns: TableField<T>[]) {
     const currentOffset = this.tableContainer.nativeElement.scrollTop;
     this.columns = columns;
-    
+
     setTimeout(() => {
       this.tableContainer.nativeElement.scrollTop = currentOffset;
     }, 0);
