@@ -75,7 +75,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private router: Router,
     private snackBar: MatSnackBar,
   ) {
-    this.translateService.use(this.localization);
+    this.translateService.use("dataset");
   }
 
   ngOnInit() {

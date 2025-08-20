@@ -9,7 +9,14 @@ import {
 } from "@angular/core";
 import { TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
-import { BehaviorSubject, Subscription, lastValueFrom, take } from "rxjs";
+import {
+  BehaviorSubject,
+  Subscription,
+  forkJoin,
+  lastValueFrom,
+  map,
+  take,
+} from "rxjs";
 import { Store } from "@ngrx/store";
 import {
   clearSelectionAction,
@@ -65,6 +72,7 @@ import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/defau
 import { TableConfigService } from "shared/services/table-config.service";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
 import { TranslateService } from "@ngx-translate/core";
+
 export interface SortChangeEvent {
   active: string;
   direction: "asc" | "desc" | "";
@@ -159,7 +167,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private tableConfigService: TableConfigService,
     private translateService: TranslateService,
   ) {
-    this.translateService.use(this.localization);
+    this.translateService.use("dataset");
   }
 
   private getInstrumentName(row: OutputDatasetObsoleteDto): string {
@@ -212,6 +220,21 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     }
 
     this.columns = currentColumnSetting;
+    const translated$ = forkJoin(
+      currentColumnSetting.map((i) =>
+        this.translateService.get(i.name).pipe(
+          map((translated) => ({
+            ...i,
+            header: translated,
+          })),
+        ),
+      ),
+    );
+
+    translated$.subscribe((result) => {
+      this.columns = result;
+    });
+
     this.setting = settingConfig;
     this.pagination = paginationConfig;
   }
