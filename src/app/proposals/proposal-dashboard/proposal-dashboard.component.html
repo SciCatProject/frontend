@@ -1,19 +1,22 @@
-<dynamic-mat-table
-  [tableName]="tableName"
-  [columns]="columns"
-  [pending]="pending"
-  [setting]="setting"
-  [pagingMode]="paginationMode"
-  [dataSource]="dataSource"
-  [pagination]="pagination"
-  [rowSelectionMode]="rowSelectionMode"
-  [globalTextSearch]="globalTextSearch"
-  globalTextSearchPlaceholder="Global text search"
-  (paginationChange)="onPaginationChange($event)"
-  (globalTextSearchChange)="onGlobalTextSearchChange($event)"
-  (onRowEvent)="onRowClick($event)"
-  (settingChange)="onSettingChange($event)"
-  (onTableEvent)="onTableEvent($event)"
-  class="mat-elevation-z2"
->
-</dynamic-mat-table>
+<breadcrumb></breadcrumb>
+
+<proposal-search-bar></proposal-search-bar>
+<mat-sidenav-container [hasBackdrop]="false">
+  <mat-sidenav-content>
+    <div fxLayout="row" fxLayout.xs="column">
+      <div class="action-column" fxFlex="0" fxFlex.lt-xl="0">
+        <proposal-side-filter
+          [filterLists]="filterLists"
+        ></proposal-side-filter>
+      </div>
+
+      <div class="table-column" fxFlex="100" fxFlex.lt-xl="100">
+        <proposal-table
+          [dataSource]="dataSource$"
+          [defaultPageSize]="defaultPageSize"
+        ></proposal-table>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

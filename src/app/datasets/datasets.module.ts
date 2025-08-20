@@ -73,7 +73,6 @@ import { AdminTabComponent } from "./admin-tab/admin-tab.component";
 import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
 import { InstrumentEffects } from "state-management/effects/instruments.effects";
 import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.component";
-import { FullTextSearchBarComponent } from "./dashboard/full-text-search/full-text-search-bar.component";
 import { DatafilesActionsComponent } from "./datafiles-actions/datafiles-actions.component";
 import { DatafilesActionComponent } from "./datafiles-actions/datafiles-action.component";
 import { MatMenuModule } from "@angular/material/menu";
@@ -144,7 +143,6 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
     StoreModule.forFeature("logbooks", logbooksReducer),
     StoreModule.forFeature("users", userReducer),
     LogbooksModule,
-    FullTextSearchBarComponent,
     MatMenuModule,
     CdkDropList,
     CdkDrag,
