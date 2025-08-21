@@ -538,6 +538,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       );
     }
 
+    if (condition.condition.lhs) {
+      this.unitsOptionsService.clearUnitsOptions(condition.condition.lhs);
+    }
+
     this.updateConditionInStore(updatedConditions);
     this.store.dispatch(
       updateUserSettingsAction({ property: { conditions: updatedConditions } }),
