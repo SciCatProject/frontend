@@ -5,6 +5,10 @@ describe("Datasets general", () => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
   });
 
+  afterEach(() => {
+      cy.removeDatasets();
+    });
+
   describe("Show dataset table after logout and login", () => {
     it("should be able to see datasets after visiting details page logout and login again", () => {
       const username = Cypress.env("username");
@@ -62,7 +66,9 @@ describe("Datasets general", () => {
     it("should be able to see and click proposal connection link from dataset details page", () => {
       const proposalId = Math.floor(100000 + Math.random() * 900000).toString();
       cy.createProposal({ ...testData.proposal, proposalId });
-      cy.createDataset("raw", undefined, proposalId);
+      cy.createDataset("raw", "small", {
+        proposalId
+      });
       cy.visit("/datasets");
 
       cy.get(".dataset-table mat-table mat-header-row").should("exist");
@@ -97,8 +103,6 @@ describe("Datasets general", () => {
     beforeEach(() => {
       cy.createDataset(
         "raw",
-        testData.rawDataset.datasetName,
-        undefined,
         "small",
         {
           scientificMetadata: {
@@ -246,8 +250,6 @@ describe("Datasets general", () => {
       cy.login(Cypress.env("username"), Cypress.env("password"));
       cy.createDataset(
         "raw",
-        testData.rawDataset.datasetName,
-        undefined,
         "small",
         {
           scientificMetadata: {
@@ -316,7 +318,4 @@ describe("Datasets general", () => {
       });
     });
   });
-  afterEach(() => {
-      cy.removeDatasets();
-    });
 });

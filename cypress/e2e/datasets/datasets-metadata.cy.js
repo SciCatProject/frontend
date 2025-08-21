@@ -410,7 +410,9 @@ describe("Datasets", () => {
         human_name: "Date test",
         type: "date",
       };
-      cy.createDataset("raw", newMetadataName);
+      cy.createDataset("raw", "small", {
+        datasetName: newMetadataName
+      });
 
       cy.visit("/datasets");
 
@@ -488,7 +490,9 @@ describe("Datasets", () => {
         human_name: "Link test",
         type: "link",
       };
-      cy.createDataset("raw", newMetadataName);
+      cy.createDataset("raw", "small", {
+        datasetName: newMetadataName
+      });
 
       cy.visit("/datasets");
 
@@ -566,7 +570,9 @@ describe("Datasets", () => {
         human_name: "Number range test",
         type: "number_range",
       };
-      cy.createDataset("raw", newMetadataName);
+      cy.createDataset("raw", "small", {
+        datasetName: newMetadataName
+      });
 
       cy.visit("/datasets");
 
@@ -647,7 +653,9 @@ describe("Datasets", () => {
         valueSI: "0.01,0.02",
         unitSI: "m",
       };
-      cy.createDataset("raw", newMetadataName);
+      cy.createDataset("raw", "small", {
+        datasetName: newMetadataName
+      });
 
       cy.visit("/datasets");
 

@@ -5,21 +5,19 @@ describe("Main Page", () => {
     cy.login(Cypress.env("username"), Cypress.env("password"));
     cy.createDataset(
       "raw",
-      "Main Page Dataset Public",
-      "20150729",
-      "small",
-      {
-        isPublished: true,
-      },
+      "small", {
+        datasetName: "Main Page Dataset Public",
+        proposalId: "20150729",
+        isPublished: true
+      }
     );
     cy.createDataset(
       "raw",
-      "Main Page Dataset Non Public",
-      "20150729",
-      "small",
-      {
-        isPublished: true,
-      },
+      "small", {
+        datasetName: "Main Page Dataset Non Public",
+        proposalId: "20150729",
+        isPublished: true
+      }
     );
   });
 

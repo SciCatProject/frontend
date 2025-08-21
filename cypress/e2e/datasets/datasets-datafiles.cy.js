@@ -27,8 +27,6 @@ describe("Dataset datafiles", () => {
     it("Should be able to download/notebook with selected/all", () => {
       cy.createDataset(
         "raw",
-        testData.rawDataset.datasetName,
-        undefined,
         "small",
       );
 
@@ -83,8 +81,6 @@ describe("Dataset datafiles", () => {
     it("Should not be able to download selected/all file that is exceeding size limit", () => {
       cy.createDataset(
         "raw",
-        testData.rawDataset.datasetName,
-        undefined,
         "large",
       );
 

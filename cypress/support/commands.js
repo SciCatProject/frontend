@@ -110,8 +110,6 @@ Cypress.Commands.add(
   "createDataset",
   (
     type,
-    datasetName = testData.rawDataset.datasetName,
-    proposalId = "20170266",
     dataFileSize = "small",
     overwrites = {},
   ) => {
@@ -122,8 +120,6 @@ Cypress.Commands.add(
         if (type === "raw") {
           const dataset = {
             ...testData.rawDataset,
-            proposalId,
-            datasetName,
             ...overwrites,
           };
           cy.log("Raw Dataset 1: " + JSON.stringify(dataset, null, 2));
