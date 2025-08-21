@@ -15,7 +15,7 @@ import { IngestorMode } from "./helper/ingestor.component-helper";
 })
 export class IngestorComponent implements OnInit {
   appConfig = this.appConfigService.getConfig();
-  ingestorMode: IngestorMode = "default";
+  ingestorMode: IngestorMode = "creation";
 
   constructor(public appConfigService: AppConfigService) {}
 
@@ -23,17 +23,10 @@ export class IngestorComponent implements OnInit {
     // Render the ingestor component based on the mode
     const mode = this.appConfig.ingestorMode;
 
-    if (mode === undefined || mode === null || mode === "default") {
+    if (mode === "transfer") {
       this.ingestorMode = "transfer";
-    } else if (mode === "creation") {
+    } else{
       this.ingestorMode = "creation";
-    } else if (mode === "transfer") {
-      this.ingestorMode = "transfer";
-    } else {
-      console.error(
-        `Unknown ingestor mode: ${mode} - Falling back to transfer mode.`,
-      );
-      this.ingestorMode = "transfer"; // Fallback to transfer mode
     }
   }
 }

@@ -12,9 +12,12 @@ export interface Settings {
 
 export interface TableColumn {
   name: string;
+  header?: string;
+  path?: string;
   order: number;
   type: "standard" | "custom";
   enabled: boolean;
+  width?: number;
 }
 
 export interface LabelMaps {
@@ -44,6 +47,7 @@ export enum InternalLinkType {
   DATASETS = "inputDatasets",
   SAMPLES = "sampleIds",
   INSTRUMENTS = "instrumentIds",
+  INSTRUMENTS_NAME = "instrumentName",
   PROPOSALS = "proposalIds",
 }
 
@@ -60,6 +64,7 @@ export interface CustomizationItem {
   row: number;
   col: number;
   fields?: Field[];
+  source?: string;
   options?: AttachmentOptions;
   viewMode?: viewModeOptions;
 }
@@ -123,7 +128,11 @@ type ScientificConditionRelation =
   | "EQUAL_TO_NUMERIC"
   | "EQUAL_TO_STRING"
   | "GREATER_THAN"
-  | "LESS_THAN";
+  | "LESS_THAN"
+  | "GREATER_THAN_OR_EQUAL"
+  | "LESS_THAN_OR_EQUAL"
+  | "RANGE"
+  | "EQUAL_TO";
 
 export interface ScientificCondition {
   lhs: string;

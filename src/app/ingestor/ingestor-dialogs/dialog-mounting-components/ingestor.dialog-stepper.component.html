@@ -36,19 +36,21 @@
 <div class="stepper" *ngIf="activeStep >= 0">
   <mat-stepper [linear]="true" [selectedIndex]="activeStep"
     class="ingestor-stepper">
+    <!-- STEP 1 -->
     <mat-step [completed]="activeStep > 0" [editable]="false"
       [stepControl]="null">
-      <ng-template matStepLabel>Select your ingestion method</ng-template>
+      <ng-template *ngIf="this.createNewTransferData.editorMode === 'CREATION'"matStepLabel> Fill out Dataset information </ng-template>
+      <ng-template *ngIf="this.createNewTransferData.editorMode !== 'CREATION'"matStepLabel>Select your ingestion method</ng-template>
     </mat-step>
-    <mat-step [completed]="activeStep > 1" [editable]="false"
+    <!-- STEP 2 -->
+    <mat-step *ngIf="this.createNewTransferData.editorMode !== 'CREATION'" 
+      [completed]="activeStep > 1" [editable]="false"
       [stepControl]="null">
-      <ng-template
-        *ngIf="this.createNewTransferData.editorMode === 'INGESTION' || this.createNewTransferData.editorMode === 'EDITOR'"
-        matStepLabel>Fill out user-specific metadata</ng-template>
-      <ng-template *ngIf="this.createNewTransferData.editorMode === 'CREATION'"
-        matStepLabel>Fill out scicat specific metadata</ng-template>
+      <ng-template matStepLabel>Fill out user-specific metadata</ng-template>
     </mat-step>
-    <mat-step [completed]="activeStep > 2" [editable]="false"
+    <!-- Step 2 for CREATION, Step 3 for others -->
+    <mat-step [completed]="activeStep> (this.createNewTransferData.editorMode === 'CREATION' ? 1 : 2)" 
+      [editable]="false"
       [stepControl]="null">
       <ng-template
         *ngIf="this.createNewTransferData.editorMode === 'INGESTION' || this.createNewTransferData.editorMode === 'EDITOR'"
@@ -56,7 +58,10 @@
       <ng-template *ngIf="this.createNewTransferData.editorMode === 'CREATION'"
         matStepLabel>Fill out custom scientific metadata</ng-template>
     </mat-step>
-    <mat-step [completed]="activeStep > 3" [editable]="false"
+
+    <!-- Step 3 for CREATION, Step 4 for others -->
+    <mat-step [completed]="activeStep >  (this.createNewTransferData.editorMode === 'CREATION' ? 2 : 3)"
+      [editable]="false"
       [stepControl]="null">
       <ng-template matStepLabel>Confirm inputs</ng-template>
     </mat-step>

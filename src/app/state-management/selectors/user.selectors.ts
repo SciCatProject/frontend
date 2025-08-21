@@ -40,7 +40,7 @@ export const selectThumbnailPhoto = createSelector(selectProfile, (profile) => {
     return profile.thumbnailPhoto;
   }
 
-  return "assets/images/user.png";
+  return "assets/images/user_main_color.png";
 });
 
 export const selectIsAdmin = createSelector(
@@ -131,5 +131,18 @@ export const selectUserSettingsPageViewModel = createSelector(
     profile,
     scicatToken,
     settings,
+  }),
+);
+
+export const selectHasFetchedSettings = createSelector(
+  selectUserState,
+  (state) => state.hasFetchedSettings,
+);
+
+export const selectColumnsWithHasFetchedSettings = createSelector(
+  selectUserState,
+  (state) => ({
+    columns: state.columns,
+    hasFetchedSettings: state.hasFetchedSettings,
   }),
 );

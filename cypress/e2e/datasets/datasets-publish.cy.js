@@ -17,13 +17,12 @@ describe("Datasets", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type("Cypress");
+      cy.get('[data-cy="text-search"]').clear().type("Cypress");
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
-      cy.get("[data-cy=checkboxInput]").first().click();
+      cy.get(".dataset-table input[type='checkbox']").first().click();
 
       cy.get("#addToBatchButton").click();
 

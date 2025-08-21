@@ -403,6 +403,7 @@ export class DatasetEffects {
         fromActions.addAttachmentAction,
         fromActions.updateAttachmentCaptionAction,
         fromActions.removeAttachmentAction,
+        fromActions.setPublicViewModeAction,
       ),
       switchMap(() => of(loadingAction())),
     );

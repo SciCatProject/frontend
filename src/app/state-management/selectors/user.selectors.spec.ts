@@ -23,8 +23,8 @@ const userIdentity: UserIdentity = {
   externalId: "testId",
   credentials: null,
   userId: "testId",
-  created: new Date().toDateString(),
-  modified: new Date().toDateString(),
+  created: new Date().toISOString(),
+  modified: new Date().toISOString(),
   profile: {
     id: "testId",
     displayName: "testName",
@@ -41,7 +41,7 @@ const scicatToken: SDKToken = {
   id: "testId",
   ttl: 100,
   scopes: ["string"],
-  created: new Date(),
+  created: new Date().toISOString(),
   userId: "testId",
   user: null,
   rememberMe: false,
@@ -54,7 +54,7 @@ const settings: Settings = {
   darkTheme: false,
 };
 
-const initialUserState: UserState = {
+export const initialUserState: UserState = {
   currentUser: user,
   profile: userIdentity.profile,
   accountType: "testType",
@@ -86,6 +86,7 @@ const initialUserState: UserState = {
 
   conditions: [],
   tablesSettings: {},
+  hasFetchedSettings: false,
 };
 
 describe("User Selectors", () => {

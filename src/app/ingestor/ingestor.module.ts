@@ -51,7 +51,6 @@ import { IngestorTransferViewDialogComponent } from "./ingestor-dialogs/transfer
 import { IngestorNoRightsDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.no-rights-dialog-page.component";
 import { IngestorTransferComponent } from "./ingestor-page/ingestor-transfer.component";
 import { IngestorCreationComponent } from "./ingestor-page/ingestor-creation.component";
-import { IngestorScicatMetadataDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.scicat-metadata-dialog-page.component";
 import { IngestorCustomMetadataDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.custom-metadata-dialog-page.component";
 
 @NgModule({
@@ -77,7 +76,6 @@ import { IngestorCustomMetadataDialogPageComponent } from "./ingestor-dialogs/cr
     CustomLayoutChildrenRenderPropsPipe,
     IngestorTransferViewDialogComponent,
     IngestorNoRightsDialogPageComponent,
-    IngestorScicatMetadataDialogPageComponent,
     IngestorCustomMetadataDialogPageComponent,
   ],
   imports: [
@@ -110,5 +108,6 @@ import { IngestorCustomMetadataDialogPageComponent } from "./ingestor-dialogs/cr
     EffectsModule.forFeature([IngestorEffects]),
     StoreModule.forFeature("ingestor", ingestorReducer),
   ],
+  exports: [IngestorMetadataEditorComponent, IngestorCreationComponent]
 })
 export class IngestorModule {}

@@ -15,6 +15,8 @@ import {
   fetchDatasetCompleteAction,
   fetchMetadataKeysAction,
   changePageAction,
+  setSearchTermsAction,
+  setTextFilterAction,
 } from "state-management/actions/datasets.actions";
 
 import {
@@ -28,24 +30,21 @@ import { distinctUntilChanged, filter, map, take } from "rxjs/operators";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSidenav } from "@angular/material/sidenav";
 import { AddDatasetDialogComponent } from "datasets/add-dataset-dialog/add-dataset-dialog.component";
-import { combineLatest, Subscription } from "rxjs";
+import { combineLatest, Subscription, lastValueFrom } from "rxjs";
 import {
   selectProfile,
   selectCurrentUser,
   selectColumns,
   selectIsLoggedIn,
+  selectHasFetchedSettings,
 } from "state-management/selectors/user.selectors";
 import {
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
-import {
-  selectColumnAction,
-  deselectColumnAction,
-  loadDefaultSettings,
-} from "state-management/actions/user.actions";
-import { SelectColumnEvent } from "datasets/dataset-table-settings/dataset-table-settings.component";
+import { loadDefaultSettings } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
+import {IngestorCreationComponent} from "ingestor/ingestor-page/ingestor-creation.component";
 
 @Component({
   selector: "dashboard",
@@ -61,15 +60,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   loggedIn$ = this.store.select(selectIsLoggedIn);
   selectedSets$ = this.store.select(selectSelectedDatasets);
   selectColumns$ = this.store.select(selectColumns);
+  selectHasFetchedSettings$ = this.store.select(selectHasFetchedSettings);
 
-  tableColumns$ = combineLatest([this.selectColumns$, this.loggedIn$]).pipe(
-    map(([columns, loggedIn]) =>
-      columns.filter((column) => loggedIn || column.name !== "select"),
-    ),
-  );
-  selectableColumns$ = this.selectColumns$.pipe(
-    map((columns) => columns.filter((column) => column.name !== "select")),
-  );
   public nonEmpty$ = this.store.select(selectIsBatchNonEmpty);
 
   subscriptions: Subscription[] = [];
@@ -81,6 +73,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   clearColumnSearch = false;
 
   @ViewChild(MatSidenav, { static: false }) sideNav!: MatSidenav;
+  @ViewChild('ingestor') ingestor: IngestorCreationComponent;
 
   constructor(
     public appConfigService: AppConfigService,
@@ -91,37 +84,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
   ) {}
 
+  onTextChange(term: string) {
+    this.store.dispatch(setSearchTermsAction({ terms: term }));
+    this.store.dispatch(setTextFilterAction({ text: term }));
+  }
+
+  onSearchAction() {
+    this.store.dispatch(fetchDatasetsAction());
+    this.store.dispatch(fetchFacetCountsAction());
+  }
+
   onPageChange(event: { pageIndex: number; pageSize: number }) {
     this.store.dispatch(
       changePageAction({ page: event.pageIndex, limit: event.pageSize }),
     );
-  }
-
-  onSettingsClick(): void {
-    this.sideNav.toggle();
-    if (this.sideNav.opened) {
-      this.clearColumnSearch = false;
-    } else {
-      this.clearColumnSearch = true;
-    }
-  }
-
-  onCloseClick(): void {
-    this.clearColumnSearch = true;
-    this.sideNav.close();
-  }
-
-  onSelectColumn(event: SelectColumnEvent): void {
-    const { checkBoxChange, column } = event;
-    if (checkBoxChange.checked) {
-      this.store.dispatch(
-        selectColumnAction({ name: column.name, columnType: column.type }),
-      );
-    } else if (!checkBoxChange.checked) {
-      this.store.dispatch(
-        deselectColumnAction({ name: column.name, columnType: column.type }),
-      );
-    }
   }
 
   onRowClick(dataset: OutputDatasetObsoleteDto): void {
@@ -130,47 +106,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(AddDatasetDialogComponent, {
-      width: "500px",
-      data: { userGroups: this.userGroups },
-    });
-
-    dialogRef.afterClosed().subscribe((res) => {
-      if (res) {
-        const { username, email } = this.currentUser;
-        const dataset = {
-          accessGroups: [],
-          contactEmail: email, // Required
-          creationTime: new Date().toISOString(), // Required
-          datasetName: res.datasetName,
-          description: res.description,
-          isPublished: false,
-          keywords: [],
-          owner: username.replace("ldap.", ""), // Required
-          ownerEmail: email,
-          ownerGroup: res.ownerGroup, // Required
-          packedSize: 0,
-          size: 0,
-          sourceFolder: res.sourceFolder, // Required
-          type: "derived", // Required
-          inputDatasets: [], // Required
-          investigator: email, // Required
-          scientificMetadata: {},
-          numberOfFilesArchived: 0, // Required
-          principalInvestigator: undefined, // Required
-          creationLocation: undefined, // Required
-          usedSoftware: res.usedSoftware
-            .split(",")
-            .map((entry: string) => entry.trim())
-            .filter((entry: string) => entry !== ""), // Required
-        };
-        this.store.dispatch(
-          addDatasetAction({
-            dataset: dataset,
-          }),
-        );
-      }
-    });
+    if (this.ingestor) {
+      this.ingestor.onClickAddIngestion();
+    }
   }
 
   ngOnInit() {
@@ -178,12 +116,29 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.store.dispatch(fetchMetadataKeysAction());
 
     this.subscriptions.push(
-      combineLatest([this.pagination$, this.readyToFetch$, this.loggedIn$])
+      combineLatest([
+        this.pagination$,
+        this.readyToFetch$,
+        this.loggedIn$,
+        this.selectHasFetchedSettings$,
+      ])
         .pipe(
-          map(([pagination, , loggedIn]) => [pagination, loggedIn]),
+          map(([pagination, , loggedIn, hasFetchedSettings]) => [
+            pagination,
+            loggedIn,
+            hasFetchedSettings,
+          ]),
           distinctUntilChanged(deepEqual),
         )
-        .subscribe(([pagination, loggedIn]) => {
+        .subscribe(async ([pagination, loggedIn]) => {
+          const hasFetchedSettings = await lastValueFrom(
+            this.selectHasFetchedSettings$.pipe(take(1)),
+          );
+
+          if (!hasFetchedSettings) {
+            return;
+          }
+
           this.store.dispatch(fetchDatasetsAction());
           this.store.dispatch(fetchFacetCountsAction());
           this.router.navigate(["/datasets"], {

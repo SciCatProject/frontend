@@ -49,7 +49,6 @@ import { DatasetDetailComponent } from "./dataset-detail/dataset-detail/dataset-
 import { DatasetTableComponent } from "./dataset-table/dataset-table.component";
 import { DatasetsFilterComponent } from "./datasets-filter/datasets-filter.component";
 import { AddDatasetDialogComponent } from "./add-dataset-dialog/add-dataset-dialog.component";
-import { DatasetTableSettingsComponent } from "./dataset-table-settings/dataset-table-settings.component";
 import { DatasetTableActionsComponent } from "./dataset-table-actions/dataset-table-actions.component";
 import { DatasetLifecycleComponent } from "./dataset-lifecycle/dataset-lifecycle.component";
 import { SampleEditComponent } from "./sample-edit/sample-edit.component";
@@ -74,7 +73,6 @@ import { AdminTabComponent } from "./admin-tab/admin-tab.component";
 import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
 import { InstrumentEffects } from "state-management/effects/instruments.effects";
 import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.component";
-import { FullTextSearchBarComponent } from "./dashboard/full-text-search/full-text-search-bar.component";
 import { DatafilesActionsComponent } from "./datafiles-actions/datafiles-actions.component";
 import { DatafilesActionComponent } from "./datafiles-actions/datafiles-action.component";
 import { MatMenuModule } from "@angular/material/menu";
@@ -85,6 +83,12 @@ import { userReducer } from "state-management/reducers/user.reducer";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
+import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
+import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { TitleCasePipe } from "shared/pipes/title-case.pipe";
+import { IngestorModule } from "ingestor/ingestor.module";
+
 @NgModule({
   imports: [
     CommonModule,
@@ -140,12 +144,13 @@ import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-w
     StoreModule.forFeature("logbooks", logbooksReducer),
     StoreModule.forFeature("users", userReducer),
     LogbooksModule,
-    FullTextSearchBarComponent,
     MatMenuModule,
     CdkDropList,
     CdkDrag,
     CdkDragHandle,
     FiltersModule,
+    MatExpansionModule,
+    IngestorModule,
   ],
   declarations: [
     BatchViewComponent,
@@ -162,7 +167,6 @@ import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-w
     ReduceComponent,
     DatasetDetailsDashboardComponent,
     AddDatasetDialogComponent,
-    DatasetTableSettingsComponent,
     DatasetTableActionsComponent,
     DatasetLifecycleComponent,
     SampleEditComponent,
@@ -178,9 +182,12 @@ import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-w
   providers: [
     ArchivingService,
     AsyncPipe,
+    JsonHeadPipe,
+    ThumbnailPipe,
     ADAuthService,
     SharedScicatFrontendModule,
     FileSizePipe,
+    TitleCasePipe,
   ],
   exports: [
     DashboardComponent,

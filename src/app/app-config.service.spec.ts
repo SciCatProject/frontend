@@ -1,16 +1,25 @@
 import { HttpClient } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
-import { AppConfig, AppConfigService, HelpMessages } from "app-config.service";
+import {
+  AppConfigInterface,
+  AppConfigService,
+  HelpMessages,
+} from "app-config.service";
 import { of } from "rxjs";
 import { MockHttp } from "shared/MockStubs";
 
-const appConfig: AppConfig = {
+const appConfig: AppConfigInterface = {
+  defaultMainPage: {
+    nonAuthenticatedUser: "DATASETS",
+    authenticatedUser: "DATASETS",
+  },
   skipSciCatLoginPageEnabled: false,
   accessTokenPrefix: "",
   addDatasetEnabled: true,
   archiveWorkflowEnabled: true,
   datasetReduceEnabled: true,
   datasetJsonScientificMetadata: true,
+  editDatasetEnabled: true,
   editDatasetSampleEnabled: true,
   editMetadataEnabled: true,
   editPublishedData: true,
@@ -31,6 +40,7 @@ const appConfig: AppConfig = {
   gettingStarted: null,
   ingestManual: null,
   jobsEnabled: true,
+  dateFormat: "yyyy-MM-dd HH:mm",
   jsonMetadataEnabled: true,
   jupyterHubUrl: "https://jupyterhub.esss.lu.se/",
   landingPage: "doi2.psi.ch/detail/",
@@ -59,6 +69,8 @@ const appConfig: AppConfig = {
   shareEnabled: true,
   shoppingCartEnabled: true,
   shoppingCartOnHeader: true,
+  siteTitle: "Local Ng Testing",
+  siteSciCatLogo: "full",
   tableSciDataEnabled: true,
   fileserverBaseURL: "",
   fileserverButtonLabel: "",

@@ -1,16 +1,19 @@
 <breadcrumb></breadcrumb>
-  <full-text-search-bar
-    #searchBar
-    data-cy="text-search"
-    [placeholder]="'Text Search'"
-  >
-  </full-text-search-bar>
+<full-text-search-bar
+  #searchBar
+  data-cy="dataset-text-search"
+  [placeholder]="'Type to search...'"
+  (textChange)="onTextChange($event)"
+  (searchAction)="onSearchAction()"
+>
+</full-text-search-bar>
 <mat-sidenav-container [hasBackdrop]="false">
   <mat-sidenav-content>
     <div fxLayout="row" fxLayout.xs="column">
       <div class="action-column" fxFlex="14" fxFlex.lt-xl="20">
         <datasets-filter></datasets-filter>
         <ng-template [ngIf]="this.loggedIn$ | async">
+          <ingestor-creation #ingestor style="display:none"></ingestor-creation>
           <mat-card
             *ngIf="appConfig.addDatasetEnabled"
             class="add-card"
@@ -36,22 +39,11 @@
         </ng-template>
 
         <dataset-table
-          [tableColumns]="tableColumns$ | async"
           [selectedSets]="selectedSets$ | async"
-          (settingsClick)="onSettingsClick()"
           (rowClick)="onRowClick($event)"
           (pageChange)="onPageChange($event)"
         ></dataset-table>
       </div>
     </div>
   </mat-sidenav-content>
-
-  <mat-sidenav #settings position="end" mode="push">
-    <dataset-table-settings
-      [selectableColumns]="selectableColumns$ | async"
-      [clearSearchBar]="clearColumnSearch"
-      (closeClick)="onCloseClick()"
-      (selectColumn)="onSelectColumn($event)"
-    ></dataset-table-settings>
-  </mat-sidenav>
 </mat-sidenav-container>

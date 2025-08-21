@@ -38,13 +38,12 @@ describe("Dataset datafiles", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type("Cypress");
+      cy.get('[data-cy="text-search"]').clear().type("Cypress");
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
-      cy.contains("mat-row", "Cypress Dataset").first().click();
+      cy.get("mat-row").contains("Cypress Dataset").first().click();
 
       cy.wait("@fetch");
 
@@ -95,13 +94,12 @@ describe("Dataset datafiles", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type("Cypress");
+      cy.get('[data-cy="text-search"]').clear().type("Cypress");
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
-      cy.contains("mat-row", "Cypress Dataset").first().click();
+      cy.get("mat-row").contains("Cypress Dataset").first().click();
 
       cy.wait("@fetch");
 

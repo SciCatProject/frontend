@@ -31,7 +31,7 @@ export class ProposalEffects {
   fetchProposals$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchProposalsAction),
-      mergeMap(({ skip, limit, search, sortColumn, sortDirection }) => {
+      switchMap(({ skip, limit, search, sortColumn, sortDirection }) => {
         const limitsParam = {
           skip: skip,
           limit: limit,
@@ -42,7 +42,7 @@ export class ProposalEffects {
           limitsParam.order = `${sortColumn}:${sortDirection}`;
         }
 
-        const queryParam = { text: search || undefined };
+        const queryParam = search || {};
 
         return this.proposalsService
           .proposalsControllerFullqueryV3(
@@ -52,10 +52,6 @@ export class ProposalEffects {
           .pipe(
             mergeMap((proposals) => [
               fromActions.fetchProposalsCompleteAction({ proposals }),
-              // TODO: Maybe this part should be refactored. Now we need to send 2 separate requests to get the data and count
-              fromActions.fetchCountAction({
-                fields: queryParam,
-              }),
             ]),
             catchError(() => of(fromActions.fetchProposalsFailedAction())),
           );
@@ -63,17 +59,27 @@ export class ProposalEffects {
     );
   });
 
-  fetchCount$ = createEffect(() => {
+  fetchFacetCount$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.fetchCountAction),
-      switchMap(({ fields }) =>
-        this.proposalsService
-          .proposalsControllerCountV3({ fields: JSON.stringify(fields) })
+      ofType(fromActions.fetchFacetCountsAction),
+      switchMap(({ fields, facets }) => {
+        return this.proposalsService
+          .proposalsControllerFullfacetV3(
+            JSON.stringify(facets),
+            JSON.stringify(fields),
+          )
           .pipe(
-            map(({ count }) => fromActions.fetchCountCompleteAction({ count })),
-            catchError(() => of(fromActions.fetchCountFailedAction())),
-          ),
-      ),
+            map((res) => {
+              const { all, ...facetCounts } = res[0];
+              const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
+              return fromActions.fetchFacetCountsCompleteAction({
+                facetCounts,
+                allCounts,
+              });
+            }),
+            catchError(() => of(fromActions.fetchFacetCountsFailedAction())),
+          );
+      }),
     );
   });
 
@@ -304,7 +310,7 @@ export class ProposalEffects {
       ofType(
         fromActions.fetchProposalsAction,
         fromActions.fetchParentProposalAction,
-        fromActions.fetchCountAction,
+        fromActions.fetchFacetCountsAction,
         fromActions.fetchProposalAction,
         fromActions.fetchProposalDatasetsAction,
         fromActions.fetchProposalDatasetsCountAction,
@@ -324,8 +330,8 @@ export class ProposalEffects {
         fromActions.fetchProposalsFailedAction,
         fromActions.fetchParentProposalCompleteAction,
         fromActions.fetchParentProposalFailedAction,
-        fromActions.fetchCountCompleteAction,
-        fromActions.fetchCountFailedAction,
+        fromActions.fetchFacetCountsCompleteAction,
+        fromActions.fetchFacetCountsFailedAction,
         fromActions.fetchProposalCompleteAction,
         fromActions.fetchProposalFailedAction,
         fromActions.fetchProposalAccessFailedAction,

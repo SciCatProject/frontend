@@ -19,7 +19,7 @@ docker run \
 	--rm \
 	--add-host host.docker.internal:host-gateway \
 	-v "`pwd`:/local" \
-	openapitools/openapi-generator-cli:v7.12.0 generate \
+	openapitools/openapi-generator-cli:v7.13.0 generate \
 	-i http://host.docker.internal:3000/explorer-json \
 	-g typescript-angular \
 	-o local/@scicatproject/scicat-sdk-ts-angular \

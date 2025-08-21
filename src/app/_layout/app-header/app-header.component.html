@@ -1,57 +1,81 @@
 <div class="header">
+  <mat-menu #mainMenu="matMenu">
+    <ng-container *ngIf="mainMenuConfig$ | async as mainMenuConfig; else noMenuItems">
+      <ng-container *ngIf="mainMenuConfig?.datasets ?? false">
+        <button mat-menu-item routerLink="/datasets/">
+          <mat-icon> folder</mat-icon>
+          <span>Datasets</span>
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="config.ingestorEnabled">
+        <button mat-menu-item [routerLink]="['/ingestor']"
+          [queryParams]="{ discovery: true }">
+          <mat-icon> cloud_upload</mat-icon>
+          <span>Ingestor</span>
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="mainMenuConfig?.files ?? false">
+        <button mat-menu-item routerLink="/files/">
+          <mat-icon> text_snippet</mat-icon>
+          <span>Files</span>
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="mainMenuConfig?.instruments ?? false">
+        <button mat-menu-item routerLink="/instruments/">
+          <mat-icon>scanner</mat-icon>
+          <span>Instruments</span>
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="config.jobsEnabled && mainMenuConfig?.jobs">
+        <button mat-menu-item routerLink="/user/jobs">
+          <mat-icon> transfer_within_a_station</mat-icon>
+          <span>Jobs</span>
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="config.policiesEnabled && mainMenuConfig?.policies">
+        <button mat-menu-item routerLink="/policies/">
+          <mat-icon> cloud_download</mat-icon>
+          <span>Policies</span>
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="mainMenuConfig?.proposals ?? false">
+        <button mat-menu-item routerLink="/proposals/">
+          <mat-icon> spa</mat-icon>
+          <span>Proposals</span>
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="mainMenuConfig?.publishedData ?? false">
+        <button mat-menu-item routerLink="/publishedDatasets/">
+          <mat-icon> chrome_reader_mode</mat-icon>
+          <span>Published Data</span>
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="mainMenuConfig?.samples ?? false">
+        <button mat-menu-item routerLink="/samples/">
+          <mat-icon> center_focus_weak</mat-icon>
+          <span>Samples</span>
+        </button>
+      </ng-container>
+    </ng-container>
+    <ng-template #noMenuItems>
+      <ng-container>
+        <button mat-menu-item>
+          <mat-icon>block</mat-icon>
+          <span>No Menu Items</span>
+        </button>
+      </ng-container>
+    </ng-template>
+  </mat-menu>
+
   <mat-menu #userMenu="matMenu">
-    <ng-container *ngIf="config.ingestorEnabled">
-      <button mat-menu-item [routerLink]="['/ingestor']"
-        [queryParams]="{ discovery: true }">
-        <mat-icon> cloud_upload</mat-icon>
-        <span>Ingestor</span>
-      </button>
-    </ng-container>
-
-    <button mat-menu-item routerLink="/datasets/">
-      <mat-icon> folder</mat-icon>
-      <span>Datasets</span>
-    </button>
-
-    <button mat-menu-item routerLink="/files/">
-      <mat-icon> text_snippet</mat-icon>
-      <span>Files</span>
-    </button>
-
-    <button mat-menu-item routerLink="/instruments/">
-      <mat-icon>scanner</mat-icon>
-      <span>Instruments</span>
-    </button>
-
-    <ng-container *ngIf="config.jobsEnabled">
-      <button mat-menu-item routerLink="/user/jobs">
-        <mat-icon> transfer_within_a_station</mat-icon>
-        <span>Jobs</span>
-      </button>
-    </ng-container>
-
-    <ng-container *ngIf="config.policiesEnabled">
-      <button mat-menu-item routerLink="/policies/">
-        <mat-icon> cloud_download</mat-icon>
-        <span>Policies</span>
-      </button>
-    </ng-container>
-
-    <button mat-menu-item routerLink="/proposals/">
-      <mat-icon> spa</mat-icon>
-      <span>Proposals</span>
-    </button>
-
-    <button mat-menu-item routerLink="/publishedDatasets/">
-      <mat-icon> chrome_reader_mode</mat-icon>
-      <span>Published Data</span>
-    </button>
-
-    <button mat-menu-item routerLink="/samples/">
-      <mat-icon> center_focus_weak</mat-icon>
-      <span>Samples</span>
-    </button>
-
     <button mat-menu-item routerLink="/user/" data-cy="setting-button">
       <mat-icon> settings</mat-icon>
       <span>Settings</span>
@@ -64,18 +88,26 @@
   </mat-menu>
 
   <mat-toolbar class="mat-elevation-z1" color="primary">
-    <a [routerLink]="['/datasets']">
-      <img class="logo" src="../../../assets/images/scicat-header-logo.png" />
+    <div class="main-menu" [matMenuTriggerFor]="mainMenu">
+      <mat-icon [inline]="true">menu</mat-icon>
+    </div>
+    <a [routerLink]="[defaultMainPage$ | async]">
+      <img class="logo" src="../../../assets/images/{{ siteSciCatLogo }}" />
     </a>
-    <a [routerLink]="['/datasets']">
-      <img class="logo" src="../../../assets/images/{{ siteHeaderLogo }}" />
-    </a>
-    <a class="toplink" [routerLink]="['/datasets']">
-      <h3>{{ status }}</h3>
-    </a>
-
-    <span class="spacer"></span>
-
+    <ng-container *ngIf="isSiteHeaderLogoUrlExternal$ | async; else siteHeaderLogoUrlInternal">
+      <a [href]="siteHeaderLogoUrl$ | async">
+        <img class="logo" src="../../../assets/images/{{ siteHeaderLogo }}" />
+      </a>
+    </ng-container>
+    <ng-template #siteHeaderLogoUrlInternal>
+      <a [routerLink]="[siteHeaderLogoUrl$ | async]">
+        <img class="logo" src="../../../assets/images/{{ siteHeaderLogo }}" />
+      </a>
+    </ng-template>
+    <span class="title">
+      <h3>{{ siteTitle }}</h3>
+    </span>
+    
     <span>
       <h6>
         <a class="toplink" [routerLink]="['/help']">
@@ -90,20 +122,17 @@
           <span class="large-screen-text">About</span></a>
       </h6>
     </span>
-    <span *ngIf="(this.loggedIn$ | async) === false; else userButton">
-      <h6>
-        <a class="toplink" (click)="login()" data-cy="login-button">
-          <mat-icon> account_circle </mat-icon>
-          <span class="large-screen-text">Sign in</span>
-        </a>
-      </h6>
-    </span>
-    <ng-template #userButton>
+    <!--<span *ngIf="(this.isLoggedIn | async) === false; else userButton">-->
+    <span *ngIf="isLoggedIn$ | async; else loginButton">
       <span *ngIf="config.shoppingCartOnHeader" [matMenuTriggerFor]="cartMenu">
         <button id="cartOnHeaderButton" mat-icon-button>
-          <mat-icon matBadge="{{ inBatchIndicator$ | async }}"
+          <mat-icon
+            color = "primary"
+            matBadge="{{ inBatchIndicator$ | async }}"
             matBadgeColor="accent"
-            matBadgeSize="medium">shopping_cart</mat-icon>
+            matBadgeSize="medium"
+            >filter_none</mat-icon
+          >
         </button>
       </span>
 
@@ -114,9 +143,17 @@
       <span>
         <button mat-button class="user-button" [matMenuTriggerFor]="userMenu">
           <img class="user-image" src="{{ profileImage$ | async }}" />
-          <div class="large-screen-text">{{ username$ | async }}</div>
+          <div color="primary" class="large-screen-text">{{ username$ | async }}</div>
         </button>
       </span>
+    </span>
+    <ng-template #loginButton>
+      <h6>
+        <a class="toplink" (click)="login()" data-cy="login-button">
+          <mat-icon> account_circle </mat-icon>
+          <span class="large-screen-text">Sign in</span>
+        </a>
+      </h6>
     </ng-template>
   </mat-toolbar>
 </div>

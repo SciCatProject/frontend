@@ -15,7 +15,9 @@ describe("UserReducer", () => {
       const columns: TableColumn[] = [
         { name: "testColumn", order: 0, type: "standard", enabled: true },
       ];
-      const action = fromActions.setDatasetTableColumnsAction({ columns });
+      const action = fromActions.setDatasetTableColumnsAction({
+        columns,
+      });
       const state = userReducer(initialUserState, action);
 
       expect(state.columns.length).toEqual(1);
@@ -203,7 +205,7 @@ describe("UserReducer", () => {
         id: "testId",
         ttl: 100,
         scopes: ["string"],
-        created: new Date(),
+        created: new Date().toISOString(),
         userId: "testId",
         rememberMe: false,
         user: {
