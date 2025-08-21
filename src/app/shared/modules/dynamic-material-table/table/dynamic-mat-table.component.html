@@ -71,6 +71,7 @@
         [cdkDragData]="{ name: column.name, columnIndex: i }"
         [ngStyle]="column.style"
         [class.active-resize]="resizeColumn.columnIndex === i"
+        [class.active-sort]="sort.direction && sort.active === column.name"
         cdkDragBoundary="mat-header-row"
       >
         <!-- class="left-resize-handler" -->
