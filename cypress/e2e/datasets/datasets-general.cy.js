@@ -289,6 +289,82 @@ describe("Datasets general", () => {
     });
   });
 
+  describe("Units options in condition panel units dropdown", () => {
+    beforeEach(() => {
+      cy.login(Cypress.env("username"), Cypress.env("password"));
+      cy.createDataset(
+        "raw",
+        testData.rawDataset.datasetName,
+        undefined,
+        "small",
+        {
+          scientificMetadata: {
+            outgassing_values_after_1h: {
+              type: "quantity",
+              value: 2,
+              unit: "mbar l/s/cm^2",
+            },
+          },
+          isPublished: true,
+        },
+      ).then(() => {
+        cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+          const testConfig = {
+            ...baseConfig,
+            defaultDatasetsListSettings: {
+              ...baseConfig.defaultDatasetsListSettings,
+              conditions: [
+                {
+                  condition: {
+                    lhs: "outgassing_values_after_1h",
+                    relation: "GREATER_THAN",
+                    rhs: 1,
+                    unit: "",
+                    unitsOptions: [
+                      "mbar l/s/cm^2",
+                      "Pa m^3/s/m^2",
+                      "bar m^3/s/m^2",
+                    ],
+                  },
+                  enabled: false,
+                },
+              ],
+            },
+          };
+
+          cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+          cy.visit("/datasets");
+          cy.wait("@getConfig", { timeout: 20000 });
+          cy.finishedLoading();
+        });
+      });
+    });
+
+    it("should display limited options in units dropdown", () => {
+      cy.get(".condition-panel").first().click();
+
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("input[matInput]").last().click();
+        });
+
+      cy.get("mat-option").eq(0).should("contain.text", "mbar l/s/cm^2");
+      cy.get("mat-option").eq(1).should("contain.text", "Pa m^3/s/m^2");
+      cy.get("mat-option").eq(2).should("contain.text", "bar m^3/s/m^2");
+
+      cy.get("mat-option").eq(0).click();
+
+      cy.get("mat-slide-toggle").click();
+
+      cy.get('[data-cy="search-button"]').click();
+
+      cy.get(".condition-panel").first().click();
+
+      cy.get("button").contains("Remove").click();
+    });
+  });
+
   describe("Pre-configured filters test", () => {
     beforeEach(() => {
       cy.clearCookies();
@@ -389,5 +465,8 @@ describe("Datasets general", () => {
           });
       });
     });
+  });
+  afterEach(() => {
+    cy.removeDatasets();
   });
 });
