@@ -312,3 +312,7 @@ cdk-virtual-scroll-viewport {
   cursor: pointer;
   padding-right: 0.5em;
 }
+
+::ng-deep .active-sort .mat-sort-header-arrow svg {
+  color: var(--theme-warn-default) !important;
+}
