@@ -9,7 +9,7 @@ describe("Datasets", () => {
 
   describe("Add item to cart and publish", () => {
     it("should add dataset to cart, share it with another user and remove the share", () => {
-      cy.createDataset("raw");
+      cy.createDataset({ type: "raw" });
 
       cy.visit("/datasets");
 
