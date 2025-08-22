@@ -28,10 +28,10 @@ export class SearchParametersDialogComponent {
       Validators.required,
       Validators.minLength(9),
     ]),
-    rhs: new FormControl<string | number>(this.data.condition?.rhs || "", [
-      Validators.required,
-      Validators.minLength(1),
-    ]),
+    rhs: new FormControl<string | number | number[]>(
+      this.data.condition?.rhs || "",
+      [Validators.required, Validators.minLength(1)],
+    ),
     unit: new FormControl(""),
   });
 
