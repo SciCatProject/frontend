@@ -436,7 +436,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateCondition(index: number, updates: Partial<any>) {
+  updateCondition(newCondition: ConditionConfig, index: number) {
     const currentConditions =
       this.asyncPipe.transform(this.conditionConfigs$) || [];
     const updatedConditions = [...currentConditions];
@@ -549,7 +549,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     const newUnit = event.target
       ? (event.target as HTMLInputElement).value
       : event.option.value;
-    this.updateCondition(index, { unit: newUnit || undefined });
+    this.updateConditionField(index, { unit: newUnit || undefined });
   }
 
   updateConditionInStore(updatedConditions: ConditionConfig[]) {
