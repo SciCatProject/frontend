@@ -22,7 +22,7 @@ describe("Datasets", () => {
 
   describe("Add metadata item", () => {
     it("should go to dataset details and add a metadata entry", () => {
-      cy.createDataset("raw");
+      cy.createDataset({ type: "raw" });
 
       cy.visit("/datasets");
 
@@ -89,7 +89,7 @@ describe("Datasets", () => {
     });
 
     it("should not be able to create a metadata with duplicate name", () => {
-      cy.createDataset("raw");
+      cy.createDataset({ type: "raw" });
 
       cy.visit("/datasets");
 
@@ -159,7 +159,7 @@ describe("Datasets", () => {
     });
 
     it("should not be able to edit the existing metadata with a duplicate name", () => {
-      cy.createDataset("raw");
+      cy.createDataset({ type: "raw" });
 
       cy.visit("/datasets");
 
@@ -238,7 +238,7 @@ describe("Datasets", () => {
     });
 
     it("should show warning icon in the edit and view table if the metadata unit is invalid or cannot be converted", () => {
-      cy.createDataset("raw");
+      cy.createDataset({ type: "raw" });
 
       cy.visit("/datasets");
 
@@ -333,7 +333,7 @@ describe("Datasets", () => {
     });
 
     it("added metadata entry should be visible from the Scientific Metadata(JSON) table", () => {
-      cy.createDataset("raw");
+      cy.createDataset({ type: "raw" });
 
       cy.visit("/datasets");
 
@@ -410,8 +410,10 @@ describe("Datasets", () => {
         human_name: "Date test",
         type: "date",
       };
-      cy.createDataset("raw", "small", {
-        datasetName: newMetadataName
+      cy.createDataset({
+        type: "raw",
+        dataFileSize: "small",
+        datasetName: newMetadataName,
       });
 
       cy.visit("/datasets");
@@ -490,8 +492,10 @@ describe("Datasets", () => {
         human_name: "Link test",
         type: "link",
       };
-      cy.createDataset("raw", "small", {
-        datasetName: newMetadataName
+      cy.createDataset({
+        type: "raw",
+        dataFileSize: "small",
+        datasetName: newMetadataName,
       });
 
       cy.visit("/datasets");
@@ -570,8 +574,10 @@ describe("Datasets", () => {
         human_name: "Number range test",
         type: "number_range",
       };
-      cy.createDataset("raw", "small", {
-        datasetName: newMetadataName
+      cy.createDataset({
+        type: "raw",
+        dataFileSize: "small",
+        datasetName: newMetadataName,
       });
 
       cy.visit("/datasets");
@@ -653,8 +659,10 @@ describe("Datasets", () => {
         valueSI: "0.01,0.02",
         unitSI: "m",
       };
-      cy.createDataset("raw", "small", {
-        datasetName: newMetadataName
+      cy.createDataset({
+        type: "raw",
+        dataFileSize: "small",
+        datasetName: newMetadataName,
       });
 
       cy.visit("/datasets");

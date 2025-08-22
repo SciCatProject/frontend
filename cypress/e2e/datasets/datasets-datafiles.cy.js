@@ -25,10 +25,7 @@ describe("Dataset datafiles", () => {
       notebookAll: "http://localhost:4200/notebook/all",
     };
     it("Should be able to download/notebook with selected/all", () => {
-      cy.createDataset(
-        "raw",
-        "small",
-      );
+      cy.createDataset({ type: "raw", dataFileSize: "small" });
 
       cy.visit("/datasets");
 
@@ -79,10 +76,7 @@ describe("Dataset datafiles", () => {
     });
 
     it("Should not be able to download selected/all file that is exceeding size limit", () => {
-      cy.createDataset(
-        "raw",
-        "large",
-      );
+      cy.createDataset({ type: "raw", dataFileSize: "large" });
 
       cy.visit("/datasets");
 
