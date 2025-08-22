@@ -55,10 +55,9 @@
         <mat-card-title>Scientific Metadata Schema</mat-card-title>
       </mat-card-header>
       <mat-card-content class="ingestor-vertical-layout">
-        <div *ngIf="selectedSchemaOption === 'upload'"
-          class="ingestor-upload-section">
-          <label for="schema-upload">Upload your schema file: </label>
-          <button mat-raised-button color="primary"
+        <div class="ingestor-upload-section">
+          <label for="schema-upload">You can provide a schema for your scientific metadata. We only accept schemas in json format. </label>
+          <button mat-raised-button class="block-button" color="primary"
             (click)="onUploadSchema()">Choose File</button>
 
           <p *ngIf="selectedSchemaFileName !== ''">

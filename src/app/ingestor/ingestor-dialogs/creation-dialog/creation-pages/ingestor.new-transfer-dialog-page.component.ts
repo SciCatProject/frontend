@@ -68,8 +68,6 @@ export class IngestorNewTransferDialogPageComponent
   userProfile: ReturnedUserDto | null = null;
   uiNextButtonReady = false;
 
-  // Creation Mode Options
-  _selectedSchemaOption: "free" | "upload" = "upload";
   selectedSchemaFileName = "";
   selectedSchemaFileContent = "";
   renderView$ = this.store.select(selectIngestorRenderView);
@@ -169,15 +167,6 @@ export class IngestorNewTransferDialogPageComponent
     });
   }
 
-  set selectedSchemaOption(value: "free" | "upload") {
-    this._selectedSchemaOption = value;
-    this.validateNextButton();
-  }
-
-  get selectedSchemaOption(): "free" | "upload" {
-    return this._selectedSchemaOption;
-  }
-
   set selectedMethod(value: ExtractionMethod) {
     this.createNewTransferData.selectedMethod = value;
     this.validateNextButton();
@@ -247,8 +236,8 @@ export class IngestorNewTransferDialogPageComponent
         schema,
       );
       this.createNewTransferData.selectedResolvedDecodedSchema = resolvedSchema;
-    } else if (this.createNewTransferData.editorMode === "CREATION") {
-      if (this.selectedSchemaOption === "upload") {
+    } else {
+      if (this.selectedSchemaFileContent) {
         const schema = JSON.parse(this.selectedSchemaFileContent);
         const resolvedSchema = IngestorMetadataEditorHelper.resolveRefs(
           schema,
@@ -257,8 +246,6 @@ export class IngestorNewTransferDialogPageComponent
         this.createNewTransferData.selectedResolvedDecodedSchema =
           resolvedSchema;
       }
-    } else {
-      console.error("Unknown editor mode");
     }
   }
 
@@ -272,11 +259,9 @@ export class IngestorNewTransferDialogPageComponent
         ingestionObject: this.createNewTransferData,
       }),
     );
-
     this.generateExampleDataForSciCatHeader();
     this.prepareSchemaForProcessing();
-
-    this.nextStep.emit(); // Open next dialog
+    this.nextStep.emit(); 
   }
 
   onDataChangeUserScicatHeader(event: any) {
@@ -304,18 +289,13 @@ export class IngestorNewTransferDialogPageComponent
       this.selectedMethod !== undefined &&
       this.selectedMethod.name !== "";
 
-    const creationModeParameterReady =
-      this.selectedSchemaOption === "free" ||
-      (this.selectedSchemaOption === "upload" &&
-        this.selectedSchemaFileName !== "");
-
     if (
       this.createNewTransferData.editorMode === "INGESTION" ||
       this.createNewTransferData.editorMode === "EDITOR"
     ) {
       this.uiNextButtonReady = !!selectedPathReady && !!selectedMethodReady;
-    } else if (this.createNewTransferData.editorMode === "CREATION") {
-      this.uiNextButtonReady = !!creationModeParameterReady && this.isSciCatHeaderOk;
+    } else if (this.createNewTransferData.editorMode === "CREATION") { // user can proceed without the schema
+      this.uiNextButtonReady = this.isSciCatHeaderOk;
     } else {
       this.uiNextButtonReady = false;
     }
