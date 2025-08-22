@@ -17,7 +17,7 @@ describe("Datasets Detail View Dynamic", () => {
     });
 
     cy.login(Cypress.env("username"), Cypress.env("password"));
-    cy.createDataset("raw");
+    cy.createDataset({ type: "raw" });
     cy.visit("/datasets");
     cy.wait("@getFrontendConfig");
   });
