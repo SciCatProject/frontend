@@ -6,15 +6,15 @@ describe("Datasets general", () => {
   });
 
   afterEach(() => {
-      cy.removeDatasets();
-    });
+    cy.removeDatasets();
+  });
 
   describe("Show dataset table after logout and login", () => {
     it("should be able to see datasets after visiting details page logout and login again", () => {
       const username = Cypress.env("username");
       const password = Cypress.env("password");
 
-      cy.createDataset("raw");
+      cy.createDataset({ type: "raw" });
 
       cy.visit("/datasets");
 
@@ -66,8 +66,10 @@ describe("Datasets general", () => {
     it("should be able to see and click proposal connection link from dataset details page", () => {
       const proposalId = Math.floor(100000 + Math.random() * 900000).toString();
       cy.createProposal({ ...testData.proposal, proposalId });
-      cy.createDataset("raw", "small", {
-        proposalId
+      cy.createDataset({
+        type: "raw",
+        dataFileSize: "small",
+        proposalId,
       });
       cy.visit("/datasets");
 
@@ -101,16 +103,14 @@ describe("Datasets general", () => {
 
   describe("Dataset page filter and scientific condition UI test", () => {
     beforeEach(() => {
-      cy.createDataset(
-        "raw",
-        "small",
-        {
-          scientificMetadata: {
-            extra_entry_end_time: { type: "number", value: 2, unit: "" },
-          },
-          isPublished: true,
+      cy.createDataset({
+        type: "raw",
+        dataFileSize: "small",
+        scientificMetadata: {
+          extra_entry_end_time: { type: "number", value: 2, unit: "" },
         },
-      );
+        isPublished: true,
+      });
     });
 
     it("should not be able to add duplicated conditions ", () => {
@@ -218,22 +218,20 @@ describe("Datasets general", () => {
   describe("Units options in condition panel units dropdown", () => {
     beforeEach(() => {
       cy.login(Cypress.env("username"), Cypress.env("password"));
-      cy.createDataset(
-        "raw",
-        testData.rawDataset.datasetName,
-        undefined,
-        "small",
-        {
-          scientificMetadata: {
-            outgassing_values_after_1h: {
-              type: "quantity",
-              value: 2,
-              unit: "mbar l/s/cm^2",
-            },
+      cy.createDataset({
+        type: "raw",
+        datasetName: testData.rawDataset.datasetName,
+        dataFileSize: "small",
+
+        scientificMetadata: {
+          outgassing_values_after_1h: {
+            type: "quantity",
+            value: 2,
+            unit: "mbar l/s/cm^2",
           },
-          isPublished: true,
         },
-      ).then(() => {
+        isPublished: true,
+      }).then(() => {
         cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
           const testConfig = {
             ...baseConfig,
@@ -324,16 +322,14 @@ describe("Datasets general", () => {
   describe("Pre-configured conditions test", () => {
     beforeEach(() => {
       cy.login(Cypress.env("username"), Cypress.env("password"));
-      cy.createDataset(
-        "raw",
-        "small",
-        {
-          scientificMetadata: {
-            extra_entry_end_time: { type: "number", value: 2, unit: "" },
-          },
-          isPublished: true,
+      cy.createDataset({
+        type: "raw",
+        dataFileSize: "small",
+        scientificMetadata: {
+          extra_entry_end_time: { type: "number", value: 2, unit: "" },
         },
-      ).then(() => {
+        isPublished: true,
+      }).then(() => {
         cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
           const relationsToTest = [
             { relation: "GREATER_THAN", rhs: 1 },
