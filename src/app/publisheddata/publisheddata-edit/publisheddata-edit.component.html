@@ -11,7 +11,7 @@
         <form
           *ngIf="publishedData$ | async"
           [formGroup]="form"
-          (ngSubmit)="onUpdate()"
+          data-cy="editPublishedDataForm"
         >
           <mat-form-field>
             <input
@@ -23,63 +23,6 @@
               formControlName="title"
               name="title"
             />
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-chip-grid required #chipList>
-              <mat-chip-row
-                formArrayName="creator"
-                *ngFor="let item of creator.value; let i = index"
-                (removed)="removeCreator(i)"
-              >
-                {{ item }}
-                <mat-icon matChipRemove>cancel</mat-icon>
-              </mat-chip-row>
-              <input
-                matInput
-                placeholder="Creators"
-                [matChipInputFor]="chipList"
-                [matChipInputAddOnBlur]="true"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                (matChipInputTokenEnd)="addCreator($event)"
-              />
-            </mat-chip-grid>
-          </mat-form-field>
-
-          <mat-form-field>
-            <input
-              required
-              matInput
-              placeholder="Publisher"
-              autocomplete="off"
-              formControlName="publisher"
-              name="publisher"
-            />
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-select
-              required
-              matInput
-              placeholder="Resource Type"
-              name="resourceType"
-              formControlName="resourceType"
-            >
-              <mat-option value="raw"> raw </mat-option>
-              <mat-option value="derived"> derived </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field>
-            <textarea
-              required
-              matInput
-              placeholder="Description"
-              autocomplete="off"
-              formControlName="dataDescription"
-              name="Description"
-              rows="5"
-            ></textarea>
           </mat-form-field>
 
           <mat-form-field>
@@ -95,57 +38,57 @@
             ></textarea>
           </mat-form-field>
 
-          <mat-form-field>
-            <input
-              matInput
-              placeholder="download link"
-              autocomplete="off"
-              formControlName="downloadLink"
-              name="downloadLink"
-            />
-          </mat-form-field>
+          <mat-expansion-panel
+            *ngIf="schema.properties"
+            (opened)="panelOpenState.set(true)"
+            (closed)="panelOpenState.set(false)"
+            data-cy="metadata"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title> Metadata </mat-panel-title>
+              <mat-panel-description>
+                Here you can edit the metadata.
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <jsonforms
+              [data]="metadataData"
+              [schema]="schema"
+              [uischema]="uiSchema"
+              [renderers]="renderers"
+              (errors)="onErrors($event)"
+              (dataChange)="onMetadataChange($event)"
+            ></jsonforms>
+          </mat-expansion-panel>
 
-          <mat-form-field>
-            <mat-chip-grid #chipListRelatedPub>
-              <mat-chip-row
-                formArrayName="relatedPublications"
-                *ngFor="let item of relatedPublications.value; let i = index"
-                (removed)="removeRelatedPublication(i)"
-              >
-                {{ item }}
-                <mat-icon matChipRemove>cancel</mat-icon>
-              </mat-chip-row>
-              <input
-                matInput
-                placeholder="related publications"
-                [matChipInputFor]="chipListRelatedPub"
-                [matChipInputAddOnBlur]="true"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                (matChipInputTokenEnd)="addRelatedPublication($event)"
-              />
-            </mat-chip-grid>
-          </mat-form-field>
-
-          <button mat-raised-button color="primary" [disabled]="!form.valid">
-            Update Published Data
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onPublishedDataUpdate(false)"
+            [disabled]="!form.valid"
+          >
+            Save changes
           </button>
-          <button (click)="onCancel()" mat-raised-button color="white">
+          <button
+            mat-raised-button
+            color="primary"
+            class="save-and-continue"
+            (click)="onPublishedDataUpdate(true)"
+            [disabled]="
+              !form.valid || (panelOpenState() && !metadataDataIsValid())
+            "
+          >
+            Save and continue
+          </button>
+          <button
+            (click)="onCancel()"
+            class="cancel"
+            mat-raised-button
+            color="white"
+          >
             Cancel
           </button>
         </form>
       </mat-card-content>
-    </mat-card>
-  </div>
-  <div fxFlex="30">
-    <div class="file-uploader">
-      <app-file-uploader
-        [attachments]="attachments"
-        (filePicked)="onFileUploaderFilePicked($event)"
-        (deleteAttachment)="deleteAttachment($event)"
-      ></app-file-uploader>
-    </div>
-    <mat-card *ngIf="thumbnail">
-      <img mat-card-image src="{{ thumbnail.value }}" />
     </mat-card>
   </div>
 </div>
