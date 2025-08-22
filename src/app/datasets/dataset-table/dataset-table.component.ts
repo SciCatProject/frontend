@@ -6,7 +6,6 @@ import {
   EventEmitter,
   Input,
   ViewEncapsulation,
-  ViewChild,
 } from "@angular/core";
 import { TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
@@ -65,8 +64,6 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableConfigService } from "shared/services/table-config.service";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
-import { ChangeDetectorRef } from "@angular/core";
-import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 export interface SortChangeEvent {
   active: string;
   direction: "asc" | "desc" | "";
@@ -94,7 +91,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     selectColumnsWithHasFetchedSettings,
   );
   instruments$ = this.store.select(selectInstruments);
-  @ViewChild(CdkVirtualScrollViewport) viewport: CdkVirtualScrollViewport;
 
   @Input() selectedSets: OutputDatasetObsoleteDto[] | null = null;
   @Output() pageChange = new EventEmitter<{
@@ -158,7 +154,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private fileSize: FileSizePipe,
     private titleCase: TitleCasePipe,
     private tableConfigService: TableConfigService,
-    private cdr: ChangeDetectorRef,
   ) {}
 
   private getInstrumentName(row: OutputDatasetObsoleteDto): string {
@@ -541,7 +536,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
               if (tableColumns) {
                 this.dataSource.next(datasets);
                 this.pending = false;
-                this.cdr.detectChanges();
 
                 const savedTableConfigColumns =
                   this.convertSavedColumns(tableColumns);

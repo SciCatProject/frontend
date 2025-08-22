@@ -289,7 +289,6 @@ export class DynamicMatTableComponent<T extends TableRow>
           const visibleColumns = this.columns.filter(
             (c) => c.display !== "hidden" && c.index < data.e.columnIndex,
           );
-          console.log("DEBUG visibleColumns:", visibleColumns);
           i = visibleColumns[visibleColumns.length - 1].index;
         }
         const unit = this.columns[i].widthUnit || "px";
