@@ -18,25 +18,8 @@ import { TableField } from "../models/table-field.model";
 import { TableRow } from "../models/table-row.model";
 import { AbstractFilter } from "../table/extensions/filter/compare/abstract-filter";
 
-export class TableVirtualScrollDataSource<
-  T extends TableRow,
-> extends MatTableDataSource<T> {
-  private streamsReady: boolean;
+export class TableDataSource<T extends TableRow> extends MatTableDataSource<T> {
   private filterMap: HashMap<AbstractFilter[]> = {};
-  public dataToRender$: Subject<T[]>;
-  public dataOfRange$: Subject<T[]>;
-  public columns: TableField<T>[] = [];
-  get allData(): T[] {
-    return this.data;
-  }
-
-  private initStreams() {
-    if (!this.streamsReady) {
-      this.dataToRender$ = new ReplaySubject<T[]>(1);
-      this.dataOfRange$ = new ReplaySubject<T[]>(1);
-      this.streamsReady = true;
-    }
-  }
 
   toTranslate(): any[] {
     const tranList = [];
@@ -75,10 +58,6 @@ export class TableVirtualScrollDataSource<
     this.refreshFilterPredicate();
   }
 
-  clearData() {
-    this.data = [];
-  }
-
   public refreshFilterPredicate() {
     let conditionsString = "";
     Object.keys(this.filterMap).forEach((key) => {
@@ -104,6 +83,31 @@ export class TableVirtualScrollDataSource<
       this.filterPredicate = (data: T, filter: string) => true;
     }
     this.filter = conditionsString;
+  }
+}
+
+export class TableVirtualScrollDataSource<
+  T extends TableRow,
+> extends TableDataSource<T> {
+  private streamsReady: boolean;
+  public dataToRender$: Subject<T[]>;
+  public dataOfRange$: Subject<T[]>;
+  public columns: TableField<T>[] = [];
+
+  get allData(): T[] {
+    return this.data;
+  }
+
+  private initStreams() {
+    if (!this.streamsReady) {
+      this.dataToRender$ = new ReplaySubject<T[]>(1);
+      this.dataOfRange$ = new ReplaySubject<T[]>(1);
+      this.streamsReady = true;
+    }
+  }
+
+  clearData() {
+    this.data = [];
   }
 
   // When client paging active use for retrieve paging data
