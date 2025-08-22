@@ -287,7 +287,7 @@ describe("Datasets general", () => {
 
       cy.get(".condition-panel").first().click();
 
-      cy.get("button").contains("Remove").click();
+      cy.get('[data-cy="remove-condition-button"]').click();
     });
   });
 

@@ -223,9 +223,6 @@
                   [value]="conditionConfig.condition.unit || ''"
                   (input)="updateConditionUnit(i, $event)"
                   [matAutocomplete]="rhsUnits"
-                  [disabled]="
-                    fieldTypeMap[conditionConfig.condition.lhs] !== 'quantity'
-                  "
                 />
                 <mat-autocomplete #rhsUnits="matAutocomplete" (optionSelected)="updateConditionUnit(i, $event)">
                   <mat-option
