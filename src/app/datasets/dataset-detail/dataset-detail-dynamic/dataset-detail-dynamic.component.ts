@@ -73,7 +73,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private router: Router,
     private snackBar: MatSnackBar,
   ) {
-    this.translateService.use("datasetCustom");
+    this.translateService.use("dataset");
   }
 
   ngOnInit() {
