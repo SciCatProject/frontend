@@ -18,7 +18,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { AppConfigService } from "app-config.service";
 import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
-import { DatafilesActionsComponent } from "datasets/datafiles-actions/datafiles-actions.component";
+import { DatafilesActionsComponent } from "shared/modules/configurable-actions/configurable-actions.component";
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 import { AuthService } from "shared/services/auth/auth.service";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";

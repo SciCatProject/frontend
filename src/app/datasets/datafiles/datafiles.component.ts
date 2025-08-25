@@ -35,7 +35,7 @@ import { submitJobAction } from "state-management/actions/jobs.actions";
 import { AppConfigService } from "app-config.service";
 import { NgForm } from "@angular/forms";
 import { DataFiles_File } from "./datafiles.interfaces";
-import { ActionDataset } from "datasets/datafiles-actions/datafiles-action.interfaces";
+import { ActionDataset } from "shared/modules/configurable-actions/configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 
 @Component({

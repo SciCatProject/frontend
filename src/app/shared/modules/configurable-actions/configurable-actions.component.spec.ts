@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
-import { DatafilesActionsComponent } from "./datafiles-actions.component";
+import { ConfigurableActionsComponent } from "./configurable-actions.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
@@ -14,9 +14,9 @@ import { MockMatDialogRef, MockUserApi } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 
-describe("DatafilesActionsComponent", () => {
-  let component: DatafilesActionsComponent;
-  let fixture: ComponentFixture<DatafilesActionsComponent>;
+describe("ConfigurableActionsComponent", () => {
+  let component: ConfigurableActionsComponent;
+  let fixture: ComponentFixture<ConfigurableActionsComponent>;
   const mockAppConfigService = {
     getConfig: () => {
       return {
@@ -86,9 +86,9 @@ describe("DatafilesActionsComponent", () => {
         RouterModule.forRoot([]),
         StoreModule.forRoot({}),
       ],
-      declarations: [DatafilesActionsComponent],
+      declarations: [ConfigurableActionsComponent],
     });
-    TestBed.overrideComponent(DatafilesActionsComponent, {
+    TestBed.overrideComponent(ConfigurableActionsComponent, {
       set: {
         providers: [
           { provide: UsersService, useClass: MockUserApi },
@@ -102,7 +102,7 @@ describe("DatafilesActionsComponent", () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DatafilesActionsComponent);
+    fixture = TestBed.createComponent(ConfigurableActionsComponent);
     component = fixture.componentInstance;
     component.files = [
       {
@@ -189,7 +189,7 @@ describe("DatafilesActionsComponent", () => {
   it("there should be 4 actions as defined in default configuration", async () => {
     expect(component.sortedActionsConfig.length).toEqual(actionsConfig.length);
     const htmlElement: HTMLElement = fixture.nativeElement;
-    const htmlActions = htmlElement.querySelectorAll("datafiles-action");
+    const htmlActions = htmlElement.querySelectorAll("configurable-action");
     expect(htmlActions.length).toEqual(actionsConfig.length);
   });
 
@@ -198,7 +198,7 @@ describe("DatafilesActionsComponent", () => {
     fixture.detectChanges();
     expect(component.sortedActionsConfig.length).toEqual(0);
     const htmlElement: HTMLElement = fixture.nativeElement;
-    const htmlActions = htmlElement.querySelectorAll("datafiles-action");
+    const htmlActions = htmlElement.querySelectorAll("configurable-action");
     expect(htmlActions.length).toEqual(0);
   });
 });
