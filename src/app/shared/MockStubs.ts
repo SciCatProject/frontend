@@ -7,7 +7,7 @@ import { SciCatDataSource } from "./services/scicat.datasource";
 import {
   ActionConfig,
   ActionDataset,
-} from "datasets/datafiles-actions/datafiles-action.interfaces";
+} from "shared/modules/configurable-actions/configurable-action.interfaces";
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import {
   Attachment,

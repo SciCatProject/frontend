@@ -7,22 +7,22 @@ import {
 } from "@angular/core";
 
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
-import { ActionConfig, ActionDataset } from "./datafiles-action.interfaces";
+import { ActionConfig, ActionDataset } from "./configurable-action.interfaces";
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 import { v4 } from "uuid";
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
-  selector: "datafiles-action",
-  templateUrl: "./datafiles-action.component.html",
-  styleUrls: ["./datafiles-action.component.scss"],
+  selector: "configurable-action",
+  templateUrl: "./configurable-action.component.html",
+  styleUrls: ["./configurable-action.component.scss"],
   standalone: false,
 })
-export class DatafilesActionComponent implements OnInit, OnChanges {
+export class ConfigurableActionComponent implements OnInit, OnChanges {
   @Input({ required: true }) actionConfig: ActionConfig;
   @Input({ required: true }) actionDataset: ActionDataset;
-  @Input({ required: true }) files: DataFiles_File[];
+  @Input({ required: true }) files?: DataFiles_File[];
   @Input({ required: true }) maxFileSize: number;
 
   jwt = "";
@@ -77,21 +77,19 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
     this.use_icon = this.actionConfig.icon !== undefined;
     this.prepare_disabled_condition();
     this.update_status();
-    //this.compute_disabled();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes["files"]) {
       this.update_status();
-      //this.compute_disabled();
     }
   }
 
   update_status() {
     this.selectedTotalFileSize = this.files
-      .filter((item) => item.selected || this.actionConfig.files === "all")
+      ?.filter((item) => item.selected || this.actionConfig.files === "all")
       .reduce((sum, item) => sum + item.size, 0);
-    this.numberOfFileSelected = this.files.filter(
+    this.numberOfFileSelected = this.files?.filter(
       (item) => item.selected,
     ).length;
   }
@@ -110,7 +108,7 @@ export class DatafilesActionComponent implements OnInit, OnChanges {
     });
   }
 
-  add_input(name, value) {
+  add_input(name: string, value: string) {
     const input = document.createElement("input");
     input.type = "hidden";
     input.name = name;
