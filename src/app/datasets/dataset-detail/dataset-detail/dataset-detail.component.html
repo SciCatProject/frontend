@@ -86,6 +86,7 @@
                   <mat-chip
                     role="listitem"
                     *ngFor="let keyword of dataset.keywords"
+                    (click)="onClickKeyword(keyword)"
                   >
                     {{ keyword }}
                   </mat-chip>
