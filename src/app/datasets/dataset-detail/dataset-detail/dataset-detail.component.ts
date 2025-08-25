@@ -174,7 +174,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     const value = event.value;
 
     if ((value || "").trim() && this.dataset) {
-      const keyword = value.trim().toLowerCase();
+      const keyword = value.trim();
       if (this.keywords.value.indexOf(keyword) === -1) {
         this.keywords.push(this.fb.control(keyword));
 

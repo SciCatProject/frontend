@@ -86,6 +86,7 @@
                   <mat-chip
                     role="listitem"
                     *ngFor="let keyword of dataset.keywords"
+                    (click)="onClickKeyword(keyword)"
                   >
                     {{ keyword }}
                   </mat-chip>
@@ -110,6 +111,7 @@
                       [matChipInputSeparatorKeyCodes]="separatorKeyCodes"
                       [matChipInputAddOnBlur]="true"
                       (matChipInputTokenEnd)="onAddKeyword($event)"
+                      class="keyword-input"
                     />
                   </mat-chip-grid>
                 </mat-form-field>
