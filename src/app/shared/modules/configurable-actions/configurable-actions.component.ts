@@ -15,12 +15,9 @@ export class ConfigurableActionsComponent {
   @Input({ required: true }) actionsConfig: ActionConfig[];
   @Input({ required: true }) actionItems: ActionItem[];
   @Input() files?: DataFiles_File[];
+  @Input() visible = true;
 
   constructor(public appConfigService: AppConfigService) {}
-
-  get visible(): boolean {
-    return this.appConfigService.getConfig().datafilesActionsEnabled;
-  }
 
   get maxFileSize(): number {
     return this.appConfigService.getConfig().maxDirectDownloadSize || 0;

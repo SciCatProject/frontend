@@ -14,6 +14,8 @@ import { v4 } from "uuid";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Store } from "@ngrx/store";
 import { updatePropertyAction } from "state-management/actions/datasets.actions";
+import { Router } from "@angular/router";
+import { AppConfigService } from "app-config.service";
 
 @Component({
   selector: "configurable-action",
@@ -39,8 +41,10 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   constructor(
     private usersService: UsersService,
     private authService: AuthService,
+    private configService: AppConfigService,
     private snackBar: MatSnackBar,
     private store: Store,
+    private router: Router,
   ) {
     this.usersService.usersControllerGetUserJWTV3().subscribe((jwt) => {
       this.jwt = jwt.jwt;
@@ -141,6 +145,8 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
 
       return fn({
         isPublished: this.actionItems[0]?.isPublished === true,
+        archiveWorkflowEnabled:
+          this.configService.getConfig().archiveWorkflowEnabled,
       });
     }
   }
@@ -160,6 +166,8 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         return this.type_json_download();
       case "xhr":
         return this.type_xhr();
+      case "link":
+        return this.type_link();
       case "form":
       default:
         return this.type_form();
@@ -331,5 +339,9 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     }
 
     return true;
+  }
+
+  type_link() {
+    this.router.navigateByUrl(this.actionConfig.url);
   }
 }
