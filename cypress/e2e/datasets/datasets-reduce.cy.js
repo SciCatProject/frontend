@@ -12,7 +12,7 @@ describe("Datasets", () => {
 
   describe("Reduce dataset", () => {
     it("should go to dataset details reduce tab and step through the workflow", () => {
-      cy.createDataset("raw");
+      cy.createDataset({ type: "raw" });
 
       cy.visit("/datasets");
 
