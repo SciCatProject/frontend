@@ -46,6 +46,7 @@ export class KeywordFilterComponent
   keywordFacetCounts$ = this.store.select(selectKeywordFacetCounts);
 
   subscription = undefined;
+  typedKeyword: string = "";
 
   keywordsSuggestions$ = createSuggestionObserver(
     this.keywordFacetCounts$,
@@ -75,15 +76,29 @@ export class KeywordFilterComponent
   onKeywordInput(event: any) {
     const value = (<HTMLInputElement>event.target).value;
     this.keywordsInput$.next(value);
+    this.typedKeyword = value;
   }
 
   keywordSelected(keyword: string) {
     this.store.dispatch(addKeywordFilterAction({ keyword }));
     this.keywordsInput$.next("");
+    this.typedKeyword = "";
   }
 
   keywordRemoved(keyword: string) {
     this.store.dispatch(removeKeywordFilterAction({ keyword }));
+  }
+
+  onKeywordKeyEnter() {
+    if (this.typedKeyword) {
+      this.keywordSelected(this.typedKeyword);
+    }
+  }
+
+  onKeywordBlur() {
+    if (this.typedKeyword) {
+      this.keywordSelected(this.typedKeyword);
+    }
   }
 
   ngOnDestroy() {

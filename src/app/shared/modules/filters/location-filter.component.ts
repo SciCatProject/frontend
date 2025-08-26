@@ -42,6 +42,8 @@ export class LocationFilterComponent
 
   locationInput$ = new BehaviorSubject<string>("");
 
+  typedLocation: string = "";
+
   locationSuggestions$ = createSuggestionObserver(
     this.locationFacetCounts$,
     this.locationInput$,
@@ -62,6 +64,7 @@ export class LocationFilterComponent
     const loc = location || "";
     this.store.dispatch(addLocationFilterAction({ location: loc }));
     this.locationInput$.next("");
+    this.typedLocation = "";
   }
 
   locationRemoved(location: string) {
@@ -71,5 +74,18 @@ export class LocationFilterComponent
   onLocationInput(event: any) {
     const value = (<HTMLInputElement>event.target).value;
     this.locationInput$.next(value);
+    this.typedLocation = value;
+  }
+
+  onLocationKeyEnter() {
+    if (this.typedLocation) {
+      this.locationSelected(this.typedLocation);
+    }
+  }
+
+  onLocationBlur() {
+    if (this.typedLocation) {
+      this.locationSelected(this.typedLocation);
+    }
   }
 }
