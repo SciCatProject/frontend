@@ -41,7 +41,7 @@ export class GroupFilterComponent
 
   groupFacetCounts$ = this.store.select(selectGroupFacetCounts);
   groupInput$ = new BehaviorSubject<string>("");
-  typedGroup: string = "";
+  typedGroup = "";
 
   groupSuggestions$ = createSuggestionObserver(
     this.groupFacetCounts$,

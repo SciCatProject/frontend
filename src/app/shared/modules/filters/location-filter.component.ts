@@ -42,7 +42,7 @@ export class LocationFilterComponent
 
   locationInput$ = new BehaviorSubject<string>("");
 
-  typedLocation: string = "";
+  typedLocation = "";
 
   locationSuggestions$ = createSuggestionObserver(
     this.locationFacetCounts$,

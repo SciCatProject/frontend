@@ -41,7 +41,7 @@ export class TypeFilterComponent
 
   typeFilter$ = this.store.select(selectTypeFilter);
   typeInput$ = new BehaviorSubject<string>("");
-  typedType: string = "";
+  typedType = "";
 
   typeSuggestions$ = createSuggestionObserver(
     this.typeFacetCounts$,

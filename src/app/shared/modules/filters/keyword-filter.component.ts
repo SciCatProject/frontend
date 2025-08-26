@@ -46,7 +46,7 @@ export class KeywordFilterComponent
   keywordFacetCounts$ = this.store.select(selectKeywordFacetCounts);
 
   subscription = undefined;
-  typedKeyword: string = "";
+  typedKeyword = "";
 
   keywordsSuggestions$ = createSuggestionObserver(
     this.keywordFacetCounts$,
