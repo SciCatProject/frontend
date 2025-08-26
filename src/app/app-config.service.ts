@@ -73,6 +73,8 @@ export interface AppConfigInterface {
   datasetDetailsShowMissingProposalId: boolean;
   datafilesActionsEnabled: boolean;
   datafilesActions: any[];
+  datasetSelectionActionsEnabled: boolean;
+  datasetSelectionActions: any[];
   editDatasetEnabled: boolean;
   editDatasetSampleEnabled: boolean;
   editMetadataEnabled: boolean;

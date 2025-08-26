@@ -15,9 +15,11 @@ export interface ActionConfig {
   disabled?: string;
   payload?: string;
   filename?: string;
+  hidden?: string;
 }
 
-export interface ActionDataset {
+export interface ActionItem {
   pid: string;
-  sourceFolder: string;
+  sourceFolder?: string;
+  isPublished?: boolean;
 }

@@ -35,7 +35,7 @@ import { submitJobAction } from "state-management/actions/jobs.actions";
 import { AppConfigService } from "app-config.service";
 import { NgForm } from "@angular/forms";
 import { DataFiles_File } from "./datafiles.interfaces";
-import { ActionDataset } from "shared/modules/configurable-actions/configurable-action.interfaces";
+import { ActionItem } from "shared/modules/configurable-actions/configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 
 @Component({
@@ -69,7 +69,7 @@ export class DatafilesComponent
 
   files: Array<DataFiles_File> = [];
   datasetPid = "";
-  actionDataset: ActionDataset;
+  actionDatasets: ActionItem[];
 
   count = 0;
   pageSize = 25;
@@ -96,7 +96,6 @@ export class DatafilesComponent
       icon: "save",
       sort: false,
       inList: true,
-      // pipe: FilePathTruncate,
     },
     {
       name: "size",
@@ -250,7 +249,7 @@ export class DatafilesComponent
         if (dataset) {
           this.sourceFolder = dataset.sourceFolder;
           this.datasetPid = dataset.pid;
-          this.actionDataset = <ActionDataset>dataset;
+          this.actionDatasets = <ActionItem[]>[dataset];
         }
       }),
     );

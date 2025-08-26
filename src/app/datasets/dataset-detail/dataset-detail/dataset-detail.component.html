@@ -1,4 +1,8 @@
 <ng-template [ngIf]="dataset">
+  <configurable-actions
+    [actionsConfig]="appConfig.datasetSelectionActions"
+    [actionItems]="[dataset]"
+  ></configurable-actions>
   <div fxLayout="row">
     <div fxFlex="auto">
       <a
@@ -28,7 +32,9 @@
       <mat-card [formGroup]="form" data-cy="general-info">
         <mat-card-header class="general-header">
           <mat-icon class="section-icon"> description </mat-icon>
-          <mat-card-title class="section-title">{{ "General Information" | translate }}</mat-card-title>
+          <mat-card-title class="section-title">{{
+            "General Information" | translate
+          }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <table>
@@ -167,7 +173,9 @@
       <mat-card>
         <mat-card-header class="creator-header">
           <mat-icon class="section-icon"> person </mat-icon>
-          <mat-card-title class="section-title">{{ "Creator Information" | translate }}</mat-card-title>
+          <mat-card-title class="section-title">{{
+            "Creator Information" | translate
+          }}</mat-card-title>
         </mat-card-header>
 
         <mat-card-content>
@@ -206,8 +214,10 @@
 
       <mat-card>
         <mat-card-header class="file-header">
-            <mat-icon class="section-icon"> folder </mat-icon>
-          <mat-card-title class="section-title">{{ "File Information" | translate }}</mat-card-title>
+          <mat-icon class="section-icon"> folder </mat-icon>
+          <mat-card-title class="section-title">{{
+            "File Information" | translate
+          }}</mat-card-title>
         </mat-card-header>
 
         <mat-card-content>
@@ -231,7 +241,9 @@
       <mat-card>
         <mat-card-header class="related-header">
           <mat-icon class="section-icon"> library_books </mat-icon>
-          <mat-card-title class="section-title">{{ "Related Documents" | translate }}</mat-card-title>
+          <mat-card-title class="section-title">{{
+            "Related Documents" | translate
+          }}</mat-card-title>
         </mat-card-header>
 
         <mat-card-content>
@@ -345,10 +357,11 @@
       </mat-card>
 
       <mat-card>
-        <mat-card-header   
-        class="scientific-header">
-         <mat-icon class="section-icon"> science </mat-icon>
-         <mat-card-title class="section-title">{{ "Scientific Metadata" | translate }}</mat-card-title>
+        <mat-card-header class="scientific-header">
+          <mat-icon class="section-icon"> science </mat-icon>
+          <mat-card-title class="section-title">{{
+            "Scientific Metadata" | translate
+          }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <ng-template

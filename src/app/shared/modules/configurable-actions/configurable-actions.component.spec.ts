@@ -129,10 +129,12 @@ describe("ConfigurableActionsComponent", () => {
       },
     ];
     component.actionsConfig = actionsConfig;
-    component.actionDataset = {
-      pid: "57eb0ad6-48d4-11ef-814b-df221a8e3571",
-      sourceFolder: "/level_1/level_2/level3",
-    };
+    component.actionItems = [
+      {
+        pid: "57eb0ad6-48d4-11ef-814b-df221a8e3571",
+        sourceFolder: "/level_1/level_2/level3",
+      },
+    ];
     fixture.detectChanges();
   });
 

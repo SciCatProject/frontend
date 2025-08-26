@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { ActionConfig, ActionDataset } from "./configurable-action.interfaces";
+import { ActionConfig, ActionItem } from "./configurable-action.interfaces";
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import { AppConfigService } from "app-config.service";
 
@@ -13,16 +13,13 @@ export class ConfigurableActionsComponent {
   private _sortedActionsConfig: ActionConfig[];
 
   @Input({ required: true }) actionsConfig: ActionConfig[];
-  @Input({ required: true }) actionDataset: ActionDataset;
-  @Input({ required: true }) files?: DataFiles_File[];
+  @Input({ required: true }) actionItems: ActionItem[];
+  @Input() files?: DataFiles_File[];
 
   constructor(public appConfigService: AppConfigService) {}
 
   get visible(): boolean {
-    return (
-      this.appConfigService.getConfig().datafilesActionsEnabled &&
-      this.files?.length > 0
-    );
+    return this.appConfigService.getConfig().datafilesActionsEnabled;
   }
 
   get maxFileSize(): number {
