@@ -61,7 +61,7 @@ export class TypeFilterComponent
   onTypeInput(event: any) {
     const value = (<HTMLInputElement>event.target).value;
     this.typeInput$.next(value);
-    this.typedType = value;
+    this.typedType = value.trim();
   }
 
   typeSelected(type: string) {

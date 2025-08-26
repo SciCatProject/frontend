@@ -62,7 +62,7 @@ export class GroupFilterComponent
   onGroupInput(event: any) {
     const value = (<HTMLInputElement>event.target).value;
     this.groupInput$.next(value);
-    this.typedGroup = value;
+    this.typedGroup = value.trim();
   }
   groupSelected(group: string) {
     this.store.dispatch(addGroupFilterAction({ group }));

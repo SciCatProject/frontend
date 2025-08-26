@@ -74,7 +74,7 @@ export class LocationFilterComponent
   onLocationInput(event: any) {
     const value = (<HTMLInputElement>event.target).value;
     this.locationInput$.next(value);
-    this.typedLocation = value;
+    this.typedLocation = value.trim();
   }
 
   onLocationKeyEnter() {

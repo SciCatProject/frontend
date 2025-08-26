@@ -76,7 +76,7 @@ export class KeywordFilterComponent
   onKeywordInput(event: any) {
     const value = (<HTMLInputElement>event.target).value;
     this.keywordsInput$.next(value);
-    this.typedKeyword = value;
+    this.typedKeyword = value.trim();
   }
 
   keywordSelected(keyword: string) {
