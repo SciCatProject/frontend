@@ -412,7 +412,7 @@ describe("Proposals general", () => {
         defaultPageSize,
       );
 
-      cy.get("mat-paginator mat-select").click({ force: true });
+      cy.get("mat-paginator").first().find("mat-select").click({ force: true });
       cy.get("mat-option").contains(newPageSize).click({ force: true });
 
       cy.reload();
@@ -425,7 +425,7 @@ describe("Proposals general", () => {
         `1 – ${newPageSize}`,
       );
 
-      cy.get("mat-paginator [aria-label='Next page']").click();
+      cy.get("mat-paginator").first().find("[aria-label='Next page']").click();
 
       cy.get("mat-paginator .mat-mdc-paginator-range-actions").should(
         "not.contain",
@@ -548,7 +548,7 @@ describe("Proposals general", () => {
 
       cy.visit("/proposals");
 
-      cy.get("mat-paginator mat-select").click({ force: true });
+      cy.get("mat-paginator").first().find("mat-select").click({ force: true });
       cy.get("mat-option").contains("25").click({ force: true });
 
       cy.get("dynamic-mat-table table-menu button").click();
@@ -584,7 +584,7 @@ describe("Proposals general", () => {
 
       cy.visit("/proposals");
 
-      cy.get("mat-paginator mat-select").click({ force: true });
+      cy.get("mat-paginator").first().find("mat-select").click({ force: true });
       cy.get("mat-option").contains("25").click({ force: true });
 
       cy.get("dynamic-mat-table table-menu button").click();

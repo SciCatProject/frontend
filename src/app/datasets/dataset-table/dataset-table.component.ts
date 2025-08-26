@@ -64,7 +64,6 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableConfigService } from "shared/services/table-config.service";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
-
 export interface SortChangeEvent {
   active: string;
   direction: "asc" | "desc" | "";
