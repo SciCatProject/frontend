@@ -1,11 +1,15 @@
-<cdk-virtual-scroll-viewport
+<mat-paginator
+  [pageSizeOptions]="pagination.pageSizeOptions"
+  [pageIndex]="pagination.pageIndex"
+  [length]="pagination.length"
+  [pageSize]="pagination.pageSize"
+  (page)="pagination_onChange($event)"
+  *ngIf="pagination"
+>
+</mat-paginator>
+<div
   #tbl
   [ngClass]="viewportClass"
-  [tvsItemSize]="rowHeight || 48"
-  [headerHeight]="headerHeight || 56"
-  [footerHeight]="headerHeight || 56"
-  [headerEnabled]="headerEnable || true"
-  [footerEnabled]="footerEnable || false"
   [ngStyle]="{ 'background-color': backgroundColor || 'white' }"
   [class.print-preview]="printing"
 >
@@ -19,7 +23,7 @@
     (cdkDragStarted)="dragStarted($event)"
     (cdkDropListDropped)="dropListDropped($event)"
     [trackBy]="indexTrackFn"
-    [dataSource]="tvsDataSource"
+    [dataSource]="standardDataSource"
   >
     <!-- Select Checkbox Column -->
     <ng-container matColumnDef="row-checkbox">
@@ -317,14 +321,12 @@
         class="global-search"
         [@tableAnimation]
         *matHeaderRowDef="searchRowColumns; sticky: sticky"
-        [style.top.px]="inverseOfTranslation"
       ></mat-header-row>
     </ng-container>
     <mat-header-row
       class="header"
       [@tableAnimation]
       *matHeaderRowDef="displayedColumns; sticky: sticky"
-      [style.top.px]="inverseOfTranslation"
     ></mat-header-row>
     <ng-container *ngIf="displayedFooter.length > 0">
       <mat-footer-row
@@ -336,10 +338,10 @@
     <mat-header-row
       class="progress"
       *matHeaderRowDef="progressColumn; sticky: sticky"
-      [style.top.px]="inverseOfTranslation + headerHeight - 5"
+      [style.top.px]="headerHeight - 5"
     ></mat-header-row>
   </mat-table>
-</cdk-virtual-scroll-viewport>
+</div>
 <mat-paginator
   [pageSizeOptions]="pagination.pageSizeOptions"
   [pageIndex]="pagination.pageIndex"
@@ -350,7 +352,7 @@
 >
 </mat-paginator>
 <ng-container *ngIf="showNoData && init === true">
-  <div class="no-records" *ngIf="tvsDataSource.data.length === 0">
+  <div class="no-records" *ngIf="standardDataSource.data.length === 0">
     No data
     <br />
     <button
