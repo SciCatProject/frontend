@@ -15,7 +15,7 @@ describe("Datasets general", () => {
 
   describe("Published data creation, update and registration", () => {
     it("should be able to create new published data in private state", () => {
-      cy.createDataset("raw");
+      cy.createDataset({ type: "raw" });
 
       cy.visit("/datasets");
 
@@ -50,7 +50,7 @@ describe("Datasets general", () => {
     });
 
     it("should prevent leaving published data form unsaved", () => {
-      cy.createDataset("raw");
+      cy.createDataset({ type: "raw" });
 
       cy.visit("/datasets");
 
@@ -95,8 +95,8 @@ describe("Datasets general", () => {
     });
 
     it("should be able to edit dataset list after creating the published data", () => {
-      cy.createDataset("raw");
-      cy.createDataset("raw");
+      cy.createDataset({ type: "raw" });
+      cy.createDataset({ type: "raw" });
 
       cy.visit("/datasets");
 
@@ -283,7 +283,7 @@ describe("Datasets general", () => {
 
     it("should be able to edit dataset list after creating the published data", () => {
       const newDatasetName = "Test dataset name";
-      cy.createDataset("raw", newDatasetName);
+      cy.createDataset({ type: "raw", datasetName: newDatasetName });
       cy.visit("/publishedDatasets");
 
       cy.get("app-publisheddata-dashboard mat-table mat-header-row").should(
@@ -433,7 +433,7 @@ describe("Datasets general", () => {
       const resourceType = "resource type";
       const publisherName = "publisher name";
       const publisherIndetifierScheme = "publisher identifier scheme";
-      cy.createDataset("raw");
+      cy.createDataset({ type: "raw" });
 
       cy.visit("/datasets");
 
