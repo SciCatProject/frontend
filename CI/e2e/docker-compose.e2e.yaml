@@ -31,6 +31,7 @@ services:
       - "./CI/e2e/functionalAccounts.e2e.json:/home/node/app/functionalAccounts.json"
       - "./CI/e2e/proposalTypes.e2e.json:/home/node/app/proposalTypes.json"
       - "./CI/e2e/frontend.config.e2e.json:/home/node/app/dist/config/frontend.config.json"
+      - "./CI/e2e/publishedDataConfig.e2e:/home/node/app/publishedDataConfig.json"
     depends_on:
       mongodb:
         condition: service_healthy
