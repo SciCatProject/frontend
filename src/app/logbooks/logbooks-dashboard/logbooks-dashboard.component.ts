@@ -125,6 +125,7 @@ export class LogbooksDashboardComponent
       this.store.select(selectCurrentDataset).subscribe((dataset) => {
         if (dataset) {
           this.dataset = dataset;
+          this.store.dispatch(fetchDatasetLogbookAction({ pid: dataset.pid }));
           this.ownershipService.checkDatasetAccess(
             dataset,
             this.store,
