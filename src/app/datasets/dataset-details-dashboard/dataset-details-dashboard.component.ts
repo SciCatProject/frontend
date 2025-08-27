@@ -238,11 +238,17 @@ export class DatasetDetailsDashboardComponent
   fetchDataForTab(tab: string) {
     if (tab in this.fetchDataActions) {
       const args: { [key: string]: any } = { pid: this.dataset?.pid };
-      // load related data for tab.details
-      const { action, loaded } = this.fetchDataActions[TAB.attachments];
-      if (!loaded) {
-        this.store.dispatch(action(args));
-        this.fetchDataActions[TAB.attachments].loaded = true;
+      // load related data for selected tab
+      switch (tab) {
+        case TAB.details:
+          {
+            const { action, loaded } = this.fetchDataActions[TAB.attachments];
+            if (!loaded) {
+              this.store.dispatch(action(args));
+              this.fetchDataActions[TAB.attachments].loaded = true;
+            }
+          }
+          break;
       }
     }
   }
