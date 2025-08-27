@@ -12,6 +12,8 @@
     #input
     (input)="onGroupInput($event)"
     [value]="groupInput$ | async"
+    (blur)="onGroupBlur()"
+    (keydown.enter)="onGroupKeyEnter()"
     matInput
     class="group-input"
     [matChipInputFor]="groupChipList"
