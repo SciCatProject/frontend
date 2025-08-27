@@ -65,6 +65,7 @@ export class LogbookEffects {
             timeout(3000),
             mergeMap((logbook) => [
               fromActions.fetchLogbookCompleteAction({ logbook }),
+              fromActions.fetchCountAction({ pid }),
             ]),
             catchError(() => of(fromActions.fetchDatasetLogbookFailedAction())),
           ),
