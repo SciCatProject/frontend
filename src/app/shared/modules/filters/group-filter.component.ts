@@ -41,6 +41,7 @@ export class GroupFilterComponent
 
   groupFacetCounts$ = this.store.select(selectGroupFacetCounts);
   groupInput$ = new BehaviorSubject<string>("");
+  typedGroup = "";
 
   groupSuggestions$ = createSuggestionObserver(
     this.groupFacetCounts$,
@@ -61,13 +62,27 @@ export class GroupFilterComponent
   onGroupInput(event: any) {
     const value = (<HTMLInputElement>event.target).value;
     this.groupInput$.next(value);
+    this.typedGroup = value.trim();
   }
   groupSelected(group: string) {
     this.store.dispatch(addGroupFilterAction({ group }));
     this.groupInput$.next("");
+    this.typedGroup = "";
   }
 
   groupRemoved(group: string) {
     this.store.dispatch(removeGroupFilterAction({ group }));
+  }
+
+  onGroupKeyEnter() {
+    if (this.typedGroup) {
+      this.groupSelected(this.typedGroup);
+    }
+  }
+
+  onGroupBlur() {
+    if (this.typedGroup) {
+      this.groupSelected(this.typedGroup);
+    }
   }
 }

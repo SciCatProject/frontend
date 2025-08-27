@@ -12,6 +12,8 @@
     #input
     (input)="onKeywordInput($event)"
     [value]="keywordsInput$ | async"
+    (blur)="onKeywordBlur()"
+    (keydown.enter)="onKeywordKeyEnter()"
     matInput
     class="keyword-input"
     [matChipInputFor]="keywordChipList"
