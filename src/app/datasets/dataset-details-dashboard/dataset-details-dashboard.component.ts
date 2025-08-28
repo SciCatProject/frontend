@@ -251,7 +251,7 @@ export class DatasetDetailsDashboardComponent
           break;
         default: {
           const { action, loaded } = this.fetchDataActions[tab];
-          if (!loaded) {
+          if (!loaded && tab !== TAB.logbook) {
             this.fetchDataActions[tab].loaded = true;
             this.store.dispatch(action(args));
           }
