@@ -67,8 +67,8 @@ export class IngestorNewTransferDialogPageComponent
 
   userProfile: ReturnedUserDto | null = null;
   uiNextButtonReady = false;
-
-  selectedSchemaFileName = "";
+  schemaUrl = "";
+  // selectedSchemaFileName = "";
   selectedSchemaFileContent = "";
   renderView$ = this.store.select(selectIngestorRenderView);
   selectUpdateEditorFromThirdParty$ = this.store.select(
@@ -317,39 +317,47 @@ export class IngestorNewTransferDialogPageComponent
     });
   }
 
-  onUploadSchema(): void {
-    // Upload a template of metadata
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".ingestor.schema,.json";
-    input.onchange = (event: Event) => {
-      const target = event.target as HTMLInputElement;
-      const file = target.files?.[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const content = e.target?.result as string;
-
-          const dialogRef = this.dialog.open(
-            IngestorConfirmationDialogComponent,
-            {
-              data: {
-                header: "Confirm template",
-                message: "Do you really want to apply the following values?",
-              },
-            },
-          );
-          dialogRef.afterClosed().subscribe((result) => {
-            if (result) {
-              this.selectedSchemaFileName = file.name;
-              this.selectedSchemaFileContent = content;
-              this.validateNextButton();
-            }
-          });
-        };
-        reader.readAsText(file);
-      }
-    };
-    input.click();
+  async onUploadSchema(): Promise<void> {
+  if (!this.schemaUrl) {
+    alert("Please enter a schema URL.");
+    return;
   }
+  console.log("Fetching schema from URL:", this.schemaUrl);
+  let content: string;
+  let parsedJson: any;
+
+  try {
+    const response = await fetch(this.schemaUrl);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch schema: ${response.statusText}`);
+    }
+    content = await response.text();
+    try {
+      parsedJson = JSON.parse(content);
+    } catch (e) {
+      alert("The provided URL does not contain valid JSON.");
+      return;
+    }
+  } catch (error: any) {
+    alert(`Error fetching schema: ${error.message}`);
+    return;
+  }
+
+  // If we reach here, we have valid JSON
+  const dialogRef = this.dialog.open(
+    IngestorConfirmationDialogComponent,
+    {
+      data: {
+        header: "Confirm template",
+        message: "Do you really want to apply the following values?",
+      },
+    },
+  );
+  dialogRef.afterClosed().subscribe((result) => {
+    if (result) {
+      this.selectedSchemaFileContent = content;
+      this.validateNextButton();
+    }
+  });
+}
 }

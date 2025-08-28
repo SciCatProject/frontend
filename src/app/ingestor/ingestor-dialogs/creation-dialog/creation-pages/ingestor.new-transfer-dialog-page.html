@@ -51,21 +51,26 @@
 
     
     <mat-card class="ingestor-card">
-      <mat-card-header>
-        <mat-card-title>Scientific Metadata Schema</mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="ingestor-vertical-layout">
-        <div class="ingestor-upload-section">
-          <label for="schema-upload">You can provide a schema for your scientific metadata. We only accept schemas in json format. </label>
-          <button mat-raised-button class="block-button" color="primary"
-            (click)="onUploadSchema()">Choose File</button>
+  <mat-card-header>
+    <mat-card-title>Scientific Metadata Schema</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="ingestor-vertical-layout">
+    <div class="ingestor-upload-section">
+      <label for="schemaUrl">
+        You can provide a schema for your scientific metadata. We only accept schemas in json format.
+      </label>
+      <mat-form-field class="form-full-width">
+        <input matInput id="schemaUrl" placeholder="Paste schema URL here" [(ngModel)]="schemaUrl" />
+       <button mat-raised-button class="block-button" color="primary"
+            (click)="onUploadSchema()">Validate</button>
 
-          <p *ngIf="selectedSchemaFileName !== ''">
-            Selected file: {{ selectedSchemaFileName }}
-          </p>
-        </div>
-      </mat-card-content>
-    </mat-card>
+      </mat-form-field>
+      <p *ngIf="selectedSchemaFileContent">
+        Loaded schema from: {{ schemaUrl }}
+      </p>
+    </div>
+  </mat-card-content>
+</mat-card>
   </div>
 
   <div
