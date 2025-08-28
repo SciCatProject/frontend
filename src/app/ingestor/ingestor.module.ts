@@ -108,6 +108,6 @@ import { IngestorCustomMetadataDialogPageComponent } from "./ingestor-dialogs/cr
     EffectsModule.forFeature([IngestorEffects]),
     StoreModule.forFeature("ingestor", ingestorReducer),
   ],
-  exports: [IngestorMetadataEditorComponent, IngestorCreationComponent]
+  exports: [IngestorMetadataEditorComponent, IngestorCreationComponent],
 })
 export class IngestorModule {}

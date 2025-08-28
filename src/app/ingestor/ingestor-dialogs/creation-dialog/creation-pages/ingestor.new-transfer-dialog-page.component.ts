@@ -8,6 +8,7 @@ import {
   Output,
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
+import Ajv, {JSONSchemaType} from "ajv"
 import { JsonSchema } from "@jsonforms/core";
 import {
   decodeBase64ToUTF8,
@@ -85,8 +86,10 @@ export class IngestorNewTransferDialogPageComponent
     scicat: true,
   };
 
-  constructor(private store: Store,
-    private cdr: ChangeDetectorRef,) {}
+  constructor(
+    private store: Store,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit() {
     // Fetch the API token that the ingestor can authenticate to scicat as the user
@@ -125,14 +128,14 @@ export class IngestorNewTransferDialogPageComponent
                   },
                 ),
               );
-            }else{
+            } else {
               this.scicatHeaderSchema = getJsonSchemaFromDto(true);
             }
           }
         }
       }),
     );
-    if (this.createNewTransferData.editorMode === "CREATION"){
+    if (this.createNewTransferData.editorMode === "CREATION") {
       this.subscriptions.push(
         this.renderView$.subscribe((renderView) => {
           if (renderView) {
@@ -261,7 +264,7 @@ export class IngestorNewTransferDialogPageComponent
     );
     this.generateExampleDataForSciCatHeader();
     this.prepareSchemaForProcessing();
-    this.nextStep.emit(); 
+    this.nextStep.emit();
   }
 
   onDataChangeUserScicatHeader(event: any) {
@@ -294,7 +297,8 @@ export class IngestorNewTransferDialogPageComponent
       this.createNewTransferData.editorMode === "EDITOR"
     ) {
       this.uiNextButtonReady = !!selectedPathReady && !!selectedMethodReady;
-    } else if (this.createNewTransferData.editorMode === "CREATION") { // user can proceed without the schema
+    } else if (this.createNewTransferData.editorMode === "CREATION") {
+      // user can proceed without the schema
       this.uiNextButtonReady = this.isSciCatHeaderOk;
     } else {
       this.uiNextButtonReady = false;
@@ -318,46 +322,38 @@ export class IngestorNewTransferDialogPageComponent
   }
 
   async onUploadSchema(): Promise<void> {
-  if (!this.schemaUrl) {
-    alert("Please enter a schema URL.");
-    return;
-  }
-  console.log("Fetching schema from URL:", this.schemaUrl);
-  let content: string;
-  let parsedJson: any;
-
-  try {
-    const response = await fetch(this.schemaUrl);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch schema: ${response.statusText}`);
-    }
-    content = await response.text();
-    try {
-      parsedJson = JSON.parse(content);
-    } catch (e) {
-      alert("The provided URL does not contain valid JSON.");
+    if (!this.schemaUrl) {
+      alert("Please enter a schema URL.");
       return;
     }
-  } catch (error: any) {
-    alert(`Error fetching schema: ${error.message}`);
-    return;
-  }
+    console.log("Fetching schema from URL:", this.schemaUrl);
+    let content: string;
+    let parsedJson: any;
+    const ajv = new Ajv()
 
-  // If we reach here, we have valid JSON
-  const dialogRef = this.dialog.open(
-    IngestorConfirmationDialogComponent,
-    {
-      data: {
-        header: "Confirm template",
-        message: "Do you really want to apply the following values?",
-      },
-    },
-  );
-  dialogRef.afterClosed().subscribe((result) => {
-    if (result) {
-      this.selectedSchemaFileContent = content;
+    try {
+      const response = await fetch(this.schemaUrl);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch schema: ${response.statusText}`);
+      }
+      content = await response.text();
+      try {
+        parsedJson = JSON.parse(content);
+      } catch (e) {
+        alert("The provided URL does not contain valid JSON.");
+        return;
+      }
+    } catch (error: any) {
+      alert(`Error fetching schema: ${error.message}`);
+      return;
+    }
+    this.selectedSchemaFileContent = content;
+    const valid = ajv.compile(this.selectedSchemaFileContent as JSONSchemaType<any>);
+    if (!valid) {
+      this.schemaUrl = "";
+      this.selectedSchemaFileContent = "";
+    }else{
       this.validateNextButton();
     }
-  });
-}
+  }
 }

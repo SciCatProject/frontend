@@ -63,11 +63,12 @@
   </mat-stepper>
 </div>
 
+<div class="field-toggle">
   <mat-slide-toggle
     *ngIf="this.createNewTransferData !== undefined && activeRenderView !== null"
     [checked]="activeRenderView === 'requiredOnly'"
     (change)="onChangeViewMode()"
-    color="primary"
-  >
+    color="primary">
     {{ activeRenderView === 'requiredOnly' ? 'Required Only' : 'All Fields' }}
   </mat-slide-toggle>
+</div>

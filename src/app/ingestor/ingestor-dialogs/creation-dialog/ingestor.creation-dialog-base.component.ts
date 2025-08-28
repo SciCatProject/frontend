@@ -166,8 +166,7 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
             data.progress;
 
           if (data.result) {
-            this.createNewTransferDataApiInformation.extractorMetaDataReady =
-              true;
+            this.createNewTransferDataApiInformation.extractorMetaDataReady = true;
             const extractedScientificMetadata = JSON.parse(
               data.resultMessage,
             ) as ScientificMetadata;
@@ -183,10 +182,8 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
               }),
             );
           } else if (data.error) {
-            this.createNewTransferDataApiInformation.metaDataExtractionFailed =
-              true;
-            this.createNewTransferDataApiInformation.extractMetaDataRequested =
-              false;
+            this.createNewTransferDataApiInformation.metaDataExtractionFailed = true;
+            this.createNewTransferDataApiInformation.extractMetaDataRequested = false;
             this.createNewTransferDataApiInformation.extractorMetaDataStatus =
               data.message;
             this.createNewTransferDataApiInformation.extractorMetadataProgress =
@@ -202,10 +199,8 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error("Error receiving SSE data:", error);
-          this.createNewTransferDataApiInformation.metaDataExtractionFailed =
-            true;
-          this.createNewTransferDataApiInformation.extractMetaDataRequested =
-            false;
+          this.createNewTransferDataApiInformation.metaDataExtractionFailed = true;
+          this.createNewTransferDataApiInformation.extractMetaDataRequested = false;
 
           this.store.dispatch(
             fromActions.updateIngestionObjectAPIInformation({
@@ -227,8 +222,7 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
 
         // Reset metadata extractor
         this.sseService.disconnect();
-        this.createNewTransferDataApiInformation.extractMetaDataRequested =
-          false;
+        this.createNewTransferDataApiInformation.extractMetaDataRequested = false;
         this.createNewTransferDataApiInformation.extractorMetaDataReady = false;
         this.store.dispatch(
           fromActions.updateIngestionObjectAPIInformation({
@@ -246,8 +240,7 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
           this.createNewTransferData.editorMode === "EDITOR" ||
           this.createNewTransferData.editorMode === "CREATION"
         ) {
-          this.createNewTransferDataApiInformation.extractorMetaDataReady =
-            true;
+          this.createNewTransferDataApiInformation.extractorMetaDataReady = true;
           this.store.dispatch(
             fromActions.updateIngestionObjectAPIInformation({
               ingestionObjectApiInformation:

@@ -163,7 +163,7 @@ function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
 export class AppConfigService {
   private appConfig: object = {};
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   async loadAppConfig(): Promise<void> {
     try {

@@ -25,7 +25,7 @@ export class IngestorComponent implements OnInit {
 
     if (mode === "transfer") {
       this.ingestorMode = "transfer";
-    } else{
+    } else {
       this.ingestorMode = "creation";
     }
   }

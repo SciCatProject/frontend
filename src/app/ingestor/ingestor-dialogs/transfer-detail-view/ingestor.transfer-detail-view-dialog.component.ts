@@ -23,9 +23,9 @@ export class IngestorTransferViewDialogComponent implements OnInit, OnDestroy {
     private store: Store,
     public dialogRef: MatDialogRef<IngestorTransferViewDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-  ) { }
+  ) {}
   // Define tables
-  displayedColumns: string[] = ['property', 'value'];
+  displayedColumns: string[] = ["property", "value"];
   tableData: { property: string; value: string }[] = [];
 
   ngOnInit() {
@@ -37,18 +37,35 @@ export class IngestorTransferViewDialogComponent implements OnInit, OnDestroy {
           );
 
           this.tableData = [
-            { property: 'Transfer ID', value: this.transferId },
-            ...(this.detailItem?.status !== undefined ? [{ property: 'Status', value: this.detailItem.status }] : []),
-            ...(this.detailItem?.message !== undefined ? [{ property: 'Message', value: this.detailItem.message }] : []),
-            ...(this.detailItem?.bytesTransferred !== undefined && this.detailItem?.bytesTotal !== undefined
-              ? [
-                { property: 'GB transferred', value: this.getByteTransferRelative() },
-                { property: 'GB transferred (total)', value: this.getByteTransferTotal() }
-              ]
+            { property: "Transfer ID", value: this.transferId },
+            ...(this.detailItem?.status !== undefined
+              ? [{ property: "Status", value: this.detailItem.status }]
               : []),
-            ...(this.detailItem?.filesTransferred !== undefined && this.detailItem?.filesTotal !== undefined
-              ? [{ property: 'Files transferred (total)', value: this.getFileTransferTotal() }]
-              : [])
+            ...(this.detailItem?.message !== undefined
+              ? [{ property: "Message", value: this.detailItem.message }]
+              : []),
+            ...(this.detailItem?.bytesTransferred !== undefined &&
+            this.detailItem?.bytesTotal !== undefined
+              ? [
+                  {
+                    property: "GB transferred",
+                    value: this.getByteTransferRelative(),
+                  },
+                  {
+                    property: "GB transferred (total)",
+                    value: this.getByteTransferTotal(),
+                  },
+                ]
+              : []),
+            ...(this.detailItem?.filesTransferred !== undefined &&
+            this.detailItem?.filesTotal !== undefined
+              ? [
+                  {
+                    property: "Files transferred (total)",
+                    value: this.getFileTransferTotal(),
+                  },
+                ]
+              : []),
           ];
         }
       }),
