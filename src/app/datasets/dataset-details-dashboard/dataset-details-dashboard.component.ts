@@ -249,9 +249,17 @@ export class DatasetDetailsDashboardComponent
             }
           }
           break;
+        case TAB.logbook:
+          {
+            const { loaded } = this.fetchDataActions[TAB.logbook];
+            if (!loaded) {
+              this.fetchDataActions[TAB.logbook].loaded = true;
+            }
+          }
+          break;
         default: {
           const { action, loaded } = this.fetchDataActions[tab];
-          if (!loaded && tab !== TAB.logbook) {
+          if (!loaded) {
             this.fetchDataActions[tab].loaded = true;
             this.store.dispatch(action(args));
           }
