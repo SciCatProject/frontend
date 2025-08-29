@@ -90,10 +90,10 @@
   </div>
 
   <ng-template [ngIf]="!(logbook.logbook | keyvalue)?.length">
-    <mat-card class="no-logbook-message">
-      <mat-card-content>
-        <mat-icon>info</mat-icon> No logbook available.
-      </mat-card-content>
-    </mat-card>
+    <app-empty-content
+    message="No logbook available."
+    icon="book"
+  >
+  </app-empty-content>
   </ng-template>
 </ng-container>
