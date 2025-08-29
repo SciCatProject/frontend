@@ -1,7 +1,7 @@
 import { createAction, props } from "@ngrx/store";
 import {
-  CreatePublishedDataDto,
-  PartialUpdatePublishedDataDto,
+  CreatePublishedDataV4Dto,
+  PartialUpdatePublishedDataV4Dto,
   PublishedData,
 } from "@scicatproject/scicat-sdk-ts-angular";
 
@@ -50,7 +50,7 @@ export const fetchPublishedDataFailedAction = createAction(
 
 export const createPublishedDataAction = createAction(
   "[PublishedData] Create Published Data",
-  props<{ data: CreatePublishedDataDto }>(),
+  props<{ data: CreatePublishedDataV4Dto }>(),
 );
 export const createPublishedDataCompleteAction = createAction(
   "[PublishedData] Create Published Data Complete",
@@ -61,7 +61,7 @@ export const createPublishedDataFailedAction = createAction(
 );
 export const savePublishedDataAction = createAction(
   "[PublishedData] Save Published Data",
-  props<{ data: CreatePublishedDataDto }>(),
+  props<{ data: CreatePublishedDataV4Dto }>(),
 );
 export const savePublishedDataCompleteAction = createAction(
   "[PublishedData] Save Published Data Complete",
@@ -134,7 +134,7 @@ export const resyncPublishedDataAction = createAction(
   "[PublishedData] Resync Published Data",
   props<{
     doi: string;
-    data: PartialUpdatePublishedDataDto;
+    data: PartialUpdatePublishedDataV4Dto;
     redirect: boolean;
   }>(),
 );
@@ -148,7 +148,7 @@ export const resyncPublishedDataFailedAction = createAction(
 
 export const updatePublishedDataAction = createAction(
   "[PublishedData] Update Published Data",
-  props<{ doi: string; data: PartialUpdatePublishedDataDto }>(),
+  props<{ doi: string; data: PartialUpdatePublishedDataV4Dto }>(),
 );
 export const updatePublishedDataCompleteAction = createAction(
   "[PublishedData] Update Published Data Complete",

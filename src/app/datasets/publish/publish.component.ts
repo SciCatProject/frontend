@@ -16,7 +16,7 @@ import {
 } from "state-management/actions/published-data.actions";
 
 import {
-  CreatePublishedDataDto,
+  CreatePublishedDataV4Dto,
   PublishedData,
   PublishedDataService,
 } from "@scicatproject/scicat-sdk-ts-angular";
@@ -200,7 +200,7 @@ export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
       abstract: abstract,
       datasetPids: datasetPids,
       metadata: metadata,
-    } as CreatePublishedDataDto;
+    } as CreatePublishedDataV4Dto;
   }
 
   public onSaveAndContinue() {
