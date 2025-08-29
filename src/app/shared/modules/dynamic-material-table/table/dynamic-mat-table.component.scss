@@ -6,7 +6,7 @@
   table-layout: fixed;
   min-height: 200px;
   position: relative;
-  overflow: auto;
+  overflow: hidden;
   transition: 0.3s cubic-bezier(0.46, -0.72, 0.46, 1.54);
   border: 2px rgb(0, 150, 136);
 
@@ -19,6 +19,10 @@
     }
   }
 }
+  .dynamic-table {
+    min-width: 100%;
+    width: max-content;
+  }
 
 /* Fixed Scroll */
 ::ng-deep .cdk-virtual-scroll-content-wrapper {
@@ -54,12 +58,10 @@ mat-footer-cell:first-of-type {
   padding-left: 20px;
 }
 
-.viewport {
+.viewport, .viewport-with-pagination  {
   height: calc(100% - 0px);
-}
-
-.viewport-with-pagination {
-  height: calc(100% - 48px);
+  overflow-x: auto;
+  width: 100%
 }
 
 .table-paginator {

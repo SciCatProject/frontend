@@ -13,6 +13,8 @@
     #input
     (input)="onLocationInput($event)"
     [value]="locationInput$ | async"
+    (blur)="onLocationBlur()"
+    (keydown.enter)="onLocationKeyEnter()"
     matInput
     class="location-input"
     [matChipInputFor]="locationChipList"
