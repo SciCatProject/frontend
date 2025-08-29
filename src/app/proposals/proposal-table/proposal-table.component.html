@@ -1,0 +1,17 @@
+<dynamic-mat-table
+  [tableName]="tableName"
+  [columns]="columns"
+  [pending]="pending"
+  [setting]="setting"
+  [pagingMode]="paginationMode"
+  [dataSource]="dataSource"
+  [pagination]="pagination"
+  [rowSelectionMode]="rowSelectionMode"
+  [showGlobalTextSearch]="showGlobalTextSearch"
+  (paginationChange)="onPageChange($event)"
+  (onRowEvent)="onRowClick($event)"
+  (settingChange)="onSettingChange($event)"
+  (onTableEvent)="onTableEvent($event)"
+  class="mat-elevation-z2"
+>
+</dynamic-mat-table>

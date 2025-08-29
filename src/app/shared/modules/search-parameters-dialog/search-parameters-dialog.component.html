@@ -32,7 +32,8 @@
             {{ key }}
           </td>
         </ng-container>
-        <tr mat-row *matRowDef="let row; columns: ['field']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['field']"
+        [class.selected_row]="row === parametersForm.get('lhs').value"></tr>
       </table>
     </div>
   </mat-dialog-content>
