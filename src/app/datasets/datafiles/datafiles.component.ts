@@ -116,7 +116,7 @@ export class DatafilesComponent
   tableData: DataFiles_File[] = [];
 
   private static cachedDatablocks: any[] = [];
-  private static cachedDatasetId: string = '';
+  private static cachedDatasetId: string = "";
 
   constructor(
     public appConfigService: AppConfigService,
@@ -264,14 +264,14 @@ export class DatafilesComponent
     );
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
+        this.totalFileSize = 0;
+
         if (datablocks && datablocks.length > 0) {
           DatafilesComponent.cachedDatablocks = datablocks;
           this.processDataBlocks(datablocks);
-        }
-        else if (DatafilesComponent.cachedDatablocks.length > 0) {
+        } else if (DatafilesComponent.cachedDatablocks.length > 0) {
           this.processDataBlocks(DatafilesComponent.cachedDatablocks);
-        }
-        else {
+        } else {
           this.files = [];
           this.tableData = [];
           this.count = 0;
@@ -291,12 +291,12 @@ export class DatafilesComponent
         this.totalFileSize += file.size;
         file.selected = false;
         files.push(file);
-            });
-          });
-          this.count = files.length;
-          this.tableData = files.slice(0, this.pageSize);
-          this.files = files;
-          this.tooLargeFile = this.hasTooLargeFiles(this.files);
+      });
+    });
+    this.count = files.length;
+    this.tableData = files.slice(0, this.pageSize);
+    this.files = files;
+    this.tooLargeFile = this.hasTooLargeFiles(this.files);
   }
 
   downloadFiles(form: "downloadAllForm" | "downloadSelectedForm") {
