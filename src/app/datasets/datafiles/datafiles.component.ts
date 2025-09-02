@@ -47,6 +47,9 @@ import { AuthService } from "shared/services/auth/auth.service";
 export class DatafilesComponent
   implements OnDestroy, AfterViewInit, AfterViewChecked
 {
+  static cachedDatablocks: any[] = [];
+  static cachedDatasetId = "";
+
   @ViewChild("downloadAllForm") downloadAllFormElement: ElementRef<NgForm>;
   @ViewChild("downloadSelectedForm") downloadSelectedFormElement;
   datablocks$ = this.store.select(selectCurrentOrigDatablocks);
@@ -114,9 +117,6 @@ export class DatafilesComponent
     },
   ];
   tableData: DataFiles_File[] = [];
-
-  static cachedDatablocks: any[] = [];
-  static cachedDatasetId: string = "";
 
   constructor(
     public appConfigService: AppConfigService,
