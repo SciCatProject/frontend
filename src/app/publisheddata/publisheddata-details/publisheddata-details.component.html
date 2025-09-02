@@ -233,11 +233,8 @@
           class="edit-button"
           color="primary"
           *ngIf="
-            (appConfig.editPublishedData &&
-              publishedData.status === 'private') ||
-            (appConfig.editPublishedData &&
-              publishedData.status === 'public' &&
-              isAdmin$ | async)
+            publishedData.status === 'private' ||
+            (publishedData.status === 'public' && isAdmin$ | async)
           "
           (click)="onEditClick()"
         >
