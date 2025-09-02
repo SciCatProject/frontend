@@ -115,8 +115,8 @@ export class DatafilesComponent
   ];
   tableData: DataFiles_File[] = [];
 
-  private static cachedDatablocks: any[] = [];
-  private static cachedDatasetId: string = "";
+  static cachedDatablocks: any[] = [];
+  static cachedDatasetId: string = "";
 
   constructor(
     public appConfigService: AppConfigService,
