@@ -12,6 +12,8 @@
     #input
     (input)="onTypeInput($event)"
     [value]="typeInput$ | async"
+    (blur)="onTypeBlur()"
+    (keydown.enter)="onTypeKeyEnter()"
     matInput
     class="type-input"
     [matChipInputFor]="typeChipList"

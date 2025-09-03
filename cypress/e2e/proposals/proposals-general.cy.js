@@ -334,11 +334,62 @@ describe("Proposals general", () => {
 
       cy.get(".mat-sort-header-container").contains("Proposal ID").click();
 
+      cy.get(".mat-sort-header-container")
+        .contains("Proposal ID")
+        .closest("mat-header-cell")
+        .should("have.class", "active-sort");
+
+      cy.get("mat-header-cell.active-sort .mat-sort-header-arrow svg").should(
+        ($el) => {
+          expect($el).to.have.css("color", "rgb(200, 25, 25)"); // warn color
+        },
+      );
+
       cy.get("mat-table mat-row")
         .first()
         .should("contain", newProposal.proposalId);
 
       cy.reload();
+
+      cy.get("mat-table mat-row")
+        .first()
+        .should("contain", newProposal.proposalId);
+    });
+
+    it("should be able to filter by column", () => {
+      const newProposal = {
+        ...testData.proposal,
+        proposalId: "100100",
+      };
+
+      cy.createProposal(newProposal);
+
+      cy.visit("/proposals");
+
+      cy.get(".mat-sort-header-container").contains("Proposal ID").click();
+
+      cy.get(".mat-sort-header-container")
+        .contains("Proposal ID")
+        .closest("header-filter")
+        .find(".mat-mdc-menu-trigger")
+        .click();
+
+      cy.get(
+        ".cdk-overlay-container .mat-mdc-menu-panel .filter-panel mat-form-field.input-field input",
+      )
+        .clear()
+        .type(newProposal.proposalId);
+      cy.get(
+        ".cdk-overlay-container .mat-mdc-menu-panel .menu-action button[color='primary']",
+      ).click();
+
+      cy.get(".mat-sort-header-container")
+        .contains("Proposal ID")
+        .closest("header-filter")
+        .find(".mat-mdc-menu-trigger mat-icon")
+        .should(($el) => {
+          expect($el).to.have.css("color", "rgb(200, 25, 25)"); // warn color
+        });
 
       cy.get("mat-table mat-row")
         .first()
@@ -361,7 +412,7 @@ describe("Proposals general", () => {
         defaultPageSize,
       );
 
-      cy.get("mat-paginator mat-select").click({ force: true });
+      cy.get("mat-paginator").first().find("mat-select").click({ force: true });
       cy.get("mat-option").contains(newPageSize).click({ force: true });
 
       cy.reload();
@@ -374,7 +425,7 @@ describe("Proposals general", () => {
         `1 – ${newPageSize}`,
       );
 
-      cy.get("mat-paginator [aria-label='Next page']").click();
+      cy.get("mat-paginator").first().find("[aria-label='Next page']").click();
 
       cy.get("mat-paginator .mat-mdc-paginator-range-actions").should(
         "not.contain",
@@ -497,7 +548,7 @@ describe("Proposals general", () => {
 
       cy.visit("/proposals");
 
-      cy.get("mat-paginator mat-select").click({ force: true });
+      cy.get("mat-paginator").first().find("mat-select").click({ force: true });
       cy.get("mat-option").contains("25").click({ force: true });
 
       cy.get("dynamic-mat-table table-menu button").click();
@@ -533,7 +584,7 @@ describe("Proposals general", () => {
 
       cy.visit("/proposals");
 
-      cy.get("mat-paginator mat-select").click({ force: true });
+      cy.get("mat-paginator").first().find("mat-select").click({ force: true });
       cy.get("mat-option").contains("25").click({ force: true });
 
       cy.get("dynamic-mat-table table-menu button").click();
