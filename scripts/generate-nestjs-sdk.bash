@@ -93,7 +93,7 @@ fi
 
 echo -e "\nCopying the build files into node_modules..."
 mkdir -p node_modules/@scicatproject/scicat-sdk-ts-angular
-cp -rv @scicatproject/scicat-sdk-ts-angular/dist node_modules/@scicatproject/scicat-sdk-ts-angular
+cp -rv @scicatproject/scicat-sdk-ts-angular/dist/ node_modules/@scicatproject/scicat-sdk-ts-angular/
 
 echo -e "\nAdjusting ownership to user ${USER}"
 chown -Rv ${USER} node_modules/@scicatproject/scicat-sdk-ts-angular
