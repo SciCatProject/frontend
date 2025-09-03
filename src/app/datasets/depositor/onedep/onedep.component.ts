@@ -622,6 +622,7 @@ export class OneDepComponent implements OnChanges, OnDestroy {
         method: this.form.value.emMethod,
         jwtToken: this.form.value.jwtToken,
         password: this.form.value.password,
+        coordinates: this.form.value.deposingCoordinates === "true",
       };
     } else {
       body = {
@@ -630,6 +631,7 @@ export class OneDepComponent implements OnChanges, OnDestroy {
         country: "United States",
         method: this.form.value.emMethod,
         jwtToken: this.form.value.jwtToken,
+        coordinates: this.form.value.deposingCoordinates === "true",
       };
     }
     let metadataAdded = false;

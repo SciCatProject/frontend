@@ -37,6 +37,7 @@ export interface OneDepUserInfo {
   method: string;
   jwtToken: string;
   password?: string;
+  coordinates:boolean;
 }
 
 export interface OneDepCreate {
