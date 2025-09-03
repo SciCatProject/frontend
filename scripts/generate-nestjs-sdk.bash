@@ -1,6 +1,13 @@
 #!/bin/bash
 #
 
+# Note: This script is meant to be run from the project root, e.g.
+# ./scripts/generate-nestjs-sdk.bash
+if [ ! -d "node_modules" ]; then
+  echo "Error: No node_modules folder found. This script is means to be run from the project root."
+  exit 1
+fi
+
 # This default is for when developing with a backend running directly on localhost
 SWAGGER_API_URL="http://localhost:3000/explorer-json"
 while [[ "$#" -gt 0 ]]; do
@@ -37,7 +44,7 @@ echo -e "\nGenerating the new sdk..."
 docker run \
 	--rm \
 	-v "`pwd`:/local" \
-	openapitools/openapi-generator-cli:v7.13.0 generate \
+	openapitools/openapi-generator-cli:v7.14.0 generate \
 	-i /local/local-api-for-generator.json \
 	-g typescript-angular \
 	-o local/@scicatproject/scicat-sdk-ts-angular \
@@ -76,9 +83,15 @@ echo -e "\nInstalling dependencies and building the sdk..."
 cd @scicatproject/scicat-sdk-ts-angular 
 npm install
 npm run build
-
-echo -e "\nCopying the build files in node_modules..."
 cd ../..
+
+if [ ! -d "@scicatproject/scicat-sdk-ts-angular/dist" ]; then
+  echo "Error: Build ouput not found."
+  exit 1
+fi
+
+echo -e "\nCopying the build files into node_modules..."
+mkdir -p node_modules/@scicatproject/scicat-sdk-ts-angular
 cp -rv @scicatproject/scicat-sdk-ts-angular/dist node_modules/@scicatproject/scicat-sdk-ts-angular
 
 echo -e "\nAdjusting ownership to user ${USER}"
@@ -86,7 +99,7 @@ chown -Rv ${USER} node_modules/@scicatproject/scicat-sdk-ts-angular
 
 echo -e "\nFinal cleanup..."
 echo -e "Removing sdk folder"
-rm -rfv @scicatproject
+rm -rf @scicatproject
 
 if [ $REMOVE_NPM_LINK -eq 1 ];
 then
@@ -94,3 +107,5 @@ then
 	rm -fv "/usr/local/bin/npm"
 	rm -fv "/usr/local/bin/node"
 fi
+
+echo -e "\nDone."
