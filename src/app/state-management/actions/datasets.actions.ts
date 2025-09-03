@@ -6,6 +6,7 @@ import {
   OutputDatasetObsoleteDto,
   DatasetsControllerCreateV3Request,
   OutputAttachmentV3Dto,
+  ExternalLinkClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { FacetCounts } from "state-management/state/datasets.store";
 import {
@@ -115,6 +116,18 @@ export const fetchRelatedDatasetsCountFailedAction = createAction(
 export const changeRelatedDatasetsPageAction = createAction(
   "[Dataset] Change Related Datasets Page",
   props<{ page: number; limit: number }>(),
+);
+
+export const fetchExternalLinksAction = createAction(
+  "[Dataset] Fetch External Links",
+  props<{ pid: string }>(),
+);
+export const fetchExternalLinksCompleteAction = createAction(
+  "[Dataset] Fetch External Links Complete",
+  props<{ externallinks: ExternalLinkClass[] }>(),
+);
+export const fetchExternalLinksFailedAction = createAction(
+  "[Dataset] Fetch External Links Failed",
 );
 
 export const prefillBatchAction = createAction("[Dataset] Prefill Batch");

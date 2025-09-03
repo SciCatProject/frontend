@@ -61,6 +61,16 @@ const reducer = createReducer(
     },
   ),
 
+  on(
+    fromActions.fetchExternalLinksCompleteAction,
+    (state, { externallinks }) => {
+      return {
+        ...state,
+        currentSetExternalLinks: externallinks
+      };
+    },
+  ),
+
   on(fromActions.fetchAttachmentsCompleteAction, (state, { attachments }) => {
     return {
       ...state,

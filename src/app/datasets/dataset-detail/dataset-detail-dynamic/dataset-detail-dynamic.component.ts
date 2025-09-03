@@ -7,6 +7,7 @@ import { Subscription } from "rxjs";
 import { showMessageAction } from "state-management/actions/user.actions";
 import {
   selectCurrentAttachments,
+  selectCurrentDatasetExternalLinks,
   selectCurrentDataset,
   selectCurrentDatasetWithoutFileInfo,
 } from "state-management/selectors/datasets.selectors";
@@ -57,6 +58,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   dataset$ = this.store.select(selectCurrentDataset);
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
+  externalLinks$ = this.store.select(selectCurrentDatasetExternalLinks);
   loading$ = this.store.select(selectIsLoading);
   show = false;
 

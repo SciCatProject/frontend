@@ -346,14 +346,14 @@
         </mat-card-content>
       </mat-card>
 
-      <mat-card *ngIf="dataset.externalLinks && dataset.externalLinks.length > 0">
+      <mat-card *ngIf="externalLinks$ | async as externalLinks">
         <mat-card-header class="dataset-links-header">
           <mat-icon class="section-icon"> link </mat-icon>
           <mat-card-title class="section-title">{{ "Links" | translate }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <table>
-            <tr *ngFor="let externalLink of dataset.externalLinks">
+            <tr *ngFor="let externalLink of externalLinks">
               <th>{{ externalLink.title }}</th>
               <td>
                 <a href="{{ externalLink.url }}" target="blank"

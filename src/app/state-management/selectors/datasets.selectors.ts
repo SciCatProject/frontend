@@ -23,6 +23,11 @@ export const selectCurrentDataset = createSelector(
   (state) => state.currentSet,
 );
 
+export const selectCurrentDatasetExternalLinks = createSelector(
+  selectDatasetState,
+  (state) => state.currentSetExternalLinks,
+);
+
 export const selectCurrentDatasetWithoutFileInfo = createSelector(
   selectCurrentDataset,
   (currentSet) => {
