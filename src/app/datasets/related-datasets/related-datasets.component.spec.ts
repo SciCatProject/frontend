@@ -14,6 +14,7 @@ import { RelatedDatasetsComponent } from "./related-datasets.component";
 import { TableModule } from "shared/modules/table/table.module";
 import { createMock } from "shared/MockStubs";
 import { DatasetClass } from "@scicatproject/scicat-sdk-ts-angular";
+import { EmptyContentModule } from "shared/modules/generic-empty-content/empty-content.module";
 
 describe("RelatedDatasetsComponent", () => {
   let component: RelatedDatasetsComponent;
@@ -28,7 +29,7 @@ describe("RelatedDatasetsComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RelatedDatasetsComponent],
-      imports: [TableModule],
+      imports: [TableModule, EmptyContentModule],
       providers: [
         DatePipe,
         provideMockStore({

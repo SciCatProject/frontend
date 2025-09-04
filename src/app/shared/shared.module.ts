@@ -22,6 +22,7 @@ import { DynamicMatTableModule } from "./modules/dynamic-material-table/table/dy
 import { TranslateModule } from "@ngx-translate/core";
 import { FullTextSearchBarModule } from "./modules/full-text-search-bar/full-text-search-bar.module";
 import { SharedFilterModule } from "./modules/shared-filter/shared-filter.module";
+import { EmptyContentModule } from "./modules/generic-empty-content/empty-content.module";
 @NgModule({
   imports: [
     BreadcrumbModule,
@@ -43,6 +44,7 @@ import { SharedFilterModule } from "./modules/shared-filter/shared-filter.module
     ScientificMetadataTreeModule,
     DynamicMatTableModule.forRoot({}),
     TranslateModule,
+    EmptyContentModule,
   ],
   providers: [
     ConfigService,
@@ -69,6 +71,7 @@ import { SharedFilterModule } from "./modules/shared-filter/shared-filter.module
     FiltersModule,
     DynamicMatTableModule,
     TranslateModule,
+    EmptyContentModule,
   ],
 })
 export class SharedScicatFrontendModule {}
