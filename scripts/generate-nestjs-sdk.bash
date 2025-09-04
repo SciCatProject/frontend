@@ -4,12 +4,12 @@
 # Note: This script is meant to be run from the project root, e.g.
 # ./scripts/generate-nestjs-sdk.bash
 if [ ! -d "node_modules" ]; then
-  echo "Error: No node_modules folder found. This script is means to be run from the project root."
+  echo "Error: No node_modules folder found. This script is meant to be run from the project root."
   exit 1
 fi
 
 # This default is for when developing with a backend running directly on localhost
-SWAGGER_API_URL="http://localhost:3000/explorer-json"
+SWAGGER_API_URL=${SWAGGER_API_URL:-"http://localhost:3000/explorer-json"}
 while [[ "$#" -gt 0 ]]; do
 	case "$1" in
 		--swagger-url)
