@@ -2,6 +2,7 @@ mat-sidenav-container {
   mat-sidenav-content {
     padding: 0.5rem;
     background-color: #ffffff;
+    overflow-x: hidden;
 
     :host-context(.anonymous-site) .action-column {
       margin-top: 3.5rem;
@@ -27,6 +28,8 @@ mat-sidenav-container {
     .table-column {
       margin-top: 0.5rem;
       padding-bottom: 1rem;
+      overflow-x: auto;
+      width: 100%;
     }
   }
 

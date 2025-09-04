@@ -42,6 +42,7 @@ const tableDefaultSettingsConfig: ITableSetting = {
           header: "Proposal ID",
           icon: "perm_device_information",
           type: "text",
+          style: { "min-width": "250px" },
         },
         {
           name: "startTime",
