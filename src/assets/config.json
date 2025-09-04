@@ -1,3 +1,4 @@
+
 {
   "addDatasetEnabled": true,
   "archiveWorkflowEnabled": false,
@@ -30,6 +31,8 @@
   
   "accessTokenPrefix": "Bearer ",
   "externalAuthEndpoint": "/api/v3/auth/ldap",
+  "datasetOneDepIntegration": true,
+  "depositorURL": "http://127.0.0.1:8080",
   "ingestorEnabled": true,
   "ingestorMode": "transfer",
   "ingestorAutodiscoveryOptions": [
