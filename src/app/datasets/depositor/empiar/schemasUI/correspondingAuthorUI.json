@@ -1,0 +1,85 @@
+{
+  "type": "Group",
+  "elements": [
+    {
+      "type": "Control",
+      "label": "Corresponding Author",
+      "scope": "#/properties/corresponding_author",
+      "options": {
+        "elementLabelProp": "last_name",
+        
+        "detail": {
+          "type": "VerticalLayout",
+          "elements": [
+            {
+              "type": "Control",
+              "label": "ORCID",
+              "scope": "#/properties/author_orcid",
+              "description": "ORCID identifier of the author (format: 0000-0000-0000-000X)"
+            },
+            {
+              "type": "Control",
+              "label": "First Name",
+              "scope": "#/properties/first_name"
+            },
+            {
+              "type": "Control",
+              "label": "Middle Name",
+              "scope": "#/properties/middle_name"
+            },
+            {
+              "type": "Control",
+              "label": "Last Name",
+              "scope": "#/properties/last_name"
+            },
+            {
+              "type": "Control",
+              "label": "Organization",
+              "scope": "#/properties/organization"
+            },
+            {
+              "type": "Control",
+              "label": "Street",
+              "scope": "#/properties/street"
+            },
+            {
+              "type": "Control",
+              "label": "Town/City",
+              "scope": "#/properties/town_or_city"
+            },
+            {
+              "type": "Control",
+              "label": "State/Province",
+              "scope": "#/properties/state_or_province"
+            },
+            {
+              "type": "Control",
+              "label": "Postal/ZIP Code",
+              "scope": "#/properties/post_or_zip"
+            },
+            {
+              "type": "Control",
+              "label": "Telephone",
+              "scope": "#/properties/telephone"
+            },
+            {
+              "type": "Control",
+              "label": "Fax",
+              "scope": "#/properties/fax"
+            },
+            {
+              "type": "Control",
+              "label": "Email",
+              "scope": "#/properties/email"
+            },
+            {
+              "type": "Control",
+              "label": "Country",
+              "scope": "#/properties/country"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

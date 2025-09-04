@@ -112,9 +112,8 @@ describe("ArchivingService", () => {
         emailJobInitiator: user.email,
         datasetList,
         type: "archive",
-        executionTime: "",
         jobResultObject: {},
-        jobStatusMessage: "",
+        statusMessage: "",
       });
       const createJobSpy = spyOn<any, string>(
         service,

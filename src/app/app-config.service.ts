@@ -72,6 +72,7 @@ export interface AppConfigInterface {
   datasetJsonScientificMetadata: boolean;
   datasetReduceEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
+  datasetOneDepIntegration: boolean;
   datafilesActionsEnabled: boolean;
   datafilesActions: any[];
   editDatasetEnabled: boolean;
@@ -96,6 +97,7 @@ export interface AppConfigInterface {
   jupyterHubUrl: string | null;
   landingPage: string | null;
   lbBaseURL: string;
+  depositorURL: string;
   localColumns?: TableColumn[]; // localColumns is deprecated and should be removed in the future
   logbookEnabled: boolean;
   loginFormEnabled: boolean;
