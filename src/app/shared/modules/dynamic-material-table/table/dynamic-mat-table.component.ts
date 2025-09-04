@@ -51,7 +51,6 @@ import {
   distinctUntilChanged,
   filter,
 } from "rxjs/operators";
-import { FixedSizeTableVirtualScrollStrategy } from "../cores/fixed-size-table-virtual-scroll-strategy";
 import { Subject, Subscription } from "rxjs";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ContextMenuItem } from "../models/context-menu.model";
@@ -76,6 +75,7 @@ import {
   TableMenuAction,
   TableMenuActionChange,
 } from "../models/table-menu.model";
+import { TableDataSource } from "../cores/table-data-source";
 
 export interface IDynamicCell {
   row: TableRow;
@@ -196,7 +196,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   currentContextMenuSender: any = {};
   globalSearchUpdate = new Subject<string>();
 
-  @ViewChild("tbl", { static: true }) tbl;
+  @ViewChild("tbl", { static: true }) tbl: ElementRef;
   @Input()
   get setting() {
     return this.tableSetting;
@@ -257,6 +257,8 @@ export class DynamicMatTableComponent<T extends TableRow>
   /* Tooltip */
   overlayRef: OverlayRef = null;
 
+  standardDataSource: TableDataSource<T>;
+
   constructor(
     public dialog: MatDialog,
     private renderer: Renderer2,
@@ -268,6 +270,7 @@ export class DynamicMatTableComponent<T extends TableRow>
     public readonly config: TableSetting,
   ) {
     super(tableService, cdr, config);
+    this.standardDataSource = new TableDataSource<T>([]);
     this.overlayContainer
       .getContainerElement()
       .addEventListener("contextmenu", (e) => {
@@ -320,7 +323,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   ngAfterViewInit(): void {
-    this.tvsDataSource.paginator = this.paginator;
+    this.standardDataSource.paginator = this.paginator;
     if (this.tableSetting.tableSort) {
       this.sort.sort({
         id: this.tableSetting.tableSort.sortColumn,
@@ -328,17 +331,17 @@ export class DynamicMatTableComponent<T extends TableRow>
         disableClear: false,
       });
     }
-    this.tvsDataSource.sort = this.sort;
+    this.standardDataSource.sort = this.sort;
     this.dataSource.subscribe((x) => {
       x = x || [];
       this.rowSelectionModel.clear();
-      this.tvsDataSource.data = [];
+      this.standardDataSource.data = [];
       this.initSystemField(x);
-      this.tvsDataSource.data = x;
+      this.standardDataSource.data = x;
       this.refreshUI();
     });
 
-    this.tvsDataSource.sort.sortChange.subscribe((sort) => {
+    this.standardDataSource.sort.sortChange.subscribe((sort) => {
       if (this.pagination) {
         this.pagination.pageIndex = 0;
       }
@@ -446,10 +449,7 @@ export class DynamicMatTableComponent<T extends TableRow>
     }
     this.refreshColumn(this.tableColumns);
     this.tvsDataSource.columns = this.columns;
-    const scrollStrategy: FixedSizeTableVirtualScrollStrategy =
-      this.viewport["_scrollStrategy"];
-    scrollStrategy?.viewport?.checkViewportSize();
-    scrollStrategy?.viewport?.scrollToOffset(0);
+
     this.cdr.detectChanges();
   }
 
@@ -457,29 +457,18 @@ export class DynamicMatTableComponent<T extends TableRow>
     setTimeout(() => {
       this.init = true;
     }, 1000);
-    const scrollStrategy: FixedSizeTableVirtualScrollStrategy =
-      this.viewport["_scrollStrategy"];
 
-    scrollStrategy.offsetChange.subscribe((offset) => {});
-    this.viewport.renderedRangeStream.subscribe((t) => {
-      // in expanding row scrolling make not good appearance therefor close it.
-      if (
-        this.expandedElement &&
-        this.expandedElement.option &&
-        this.expandedElement.option.expand
-      ) {
-        // this.expandedElement.option.expand = false;
-        // this.expandedElement = null;
-      }
-    });
+    if (this.dataSource) {
+      this.dataSource.subscribe((data) => {
+        if (this.standardDataSource) {
+          this.standardDataSource.data = data;
+        }
+      });
+    }
   }
 
   public get inverseOfTranslation(): number {
-    if (!this.viewport || !this.viewport["_renderedContentOffset"]) {
-      return -0;
-    }
-    const offset = this.viewport["_renderedContentOffset"];
-    return -offset;
+    return 0;
   }
 
   headerClass(column: TableField<T>) {
@@ -555,7 +544,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   filter_onChanged(column: TableField<T>, filter: AbstractFilter[]) {
-    this.tvsDataSource.setFilter(column.name, filter).subscribe(() => {
+    this.standardDataSource.setFilter(column.name, filter).subscribe(() => {
       this.clearSelection();
     });
   }
@@ -736,31 +725,31 @@ export class DynamicMatTableComponent<T extends TableRow>
         this.refreshUI();
       }
     } else if (e.type === TableMenuAction.FullScreenMode) {
-      requestFullscreen(this.tbl.elementRef);
+      requestFullscreen(this.tbl);
     } else if (e.type === TableMenuAction.Download) {
       this.onTableEvent.emit({
         event: TableEventType.ExportData,
         sender: {
           type: e.data,
           columns: this.columns,
-          data: this.tvsDataSource.filteredData,
+          data: this.standardDataSource.filteredData,
           dataSelection: this.rowSelectionModel,
         },
       });
       if (e.data === "CSV") {
         this.tableService.exportToCsv<T>(
           this.columns,
-          this.tvsDataSource.filteredData,
+          this.standardDataSource.filteredData,
           this.rowSelectionModel,
         );
       } else if (e.data === "JSON") {
         this.tableService.exportToJson(
-          this.tvsDataSource.filteredData,
+          this.standardDataSource.filteredData,
           this.rowSelectionModel,
         );
       }
     } else if (e.type === TableMenuAction.FilterClear) {
-      this.tvsDataSource.clearFilter();
+      this.standardDataSource.clearFilter();
       this.headerFilterList.forEach((hf) => hf.clearColumn_OnClick());
     } else if (e.type === TableMenuAction.Print) {
       this.onTableEvent.emit({

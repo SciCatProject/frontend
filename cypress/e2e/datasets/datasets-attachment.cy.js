@@ -13,7 +13,7 @@ describe("Dataset attachments", () => {
 
   describe("Attachment tests", () => {
     it("should go to dataset details and add an attachment using the dropzone", () => {
-      cy.createDataset("raw");
+      cy.createDataset({ type: "raw" });
       cy.visit("/datasets");
 
       cy.get(".dataset-table mat-table mat-header-row").should("exist");
