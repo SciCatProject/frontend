@@ -17,6 +17,14 @@
         </button>
       </ng-container>
 
+      <ng-container *ngIf="config.ingestorEnabled">
+        <button mat-menu-item [routerLink]="['/ingestor']"
+          [queryParams]="{ discovery: true }">
+          <mat-icon> cloud_upload</mat-icon>
+          <span>Ingestor</span>
+        </button>
+      </ng-container>
+
       <ng-container *ngIf="mainMenuConfig?.files ?? false">
         <button mat-menu-item routerLink="/files/">
           <mat-icon> text_snippet</mat-icon>

@@ -13,6 +13,7 @@
       <div class="action-column" fxFlex="14" fxFlex.lt-xl="20">
         <datasets-filter></datasets-filter>
         <ng-template [ngIf]="this.loggedIn$ | async">
+          <ingestor-creation #ingestor style="display:none"></ingestor-creation>
           <mat-card
             *ngIf="appConfig.addDatasetEnabled"
             class="add-card"

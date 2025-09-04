@@ -1,25 +1,14 @@
+
 {
-  "accessTokenPrefix": "Bearer ",
-  "externalAuthEndpoint": "/api/v3/auth/ldap",
-  "ingestorEnabled": true,
-  "ingestorMode": "transfer",
-  "ingestorAutodiscoveryOptions": [
-    {
-      "mailDomain": "unibe.ch",
-      "description": "University of Bern",
-      "facilityBackend": "http://localhost:8888"
-    }
-  ],
-  "addDatasetEnabled": false,
-  "archiveWorkflowEnabled": true,
-  "datasetReduceEnabled": false,
-  "datasetOneDepIntegration": true,
-  "editDatasetSampleEnabled": true,
+  "addDatasetEnabled": true,
+  "archiveWorkflowEnabled": false,
+  "datasetReduceEnabled": true,
+  "datasetJsonScientificMetadata": true,
   "editDatasetEnabled": true,
+  "editDatasetSampleEnabled": true,
   "editMetadataEnabled": true,
   "editPublishedData": false,
   "addSampleEnabled": true,
-  "externalAuthEndpoint": "/auth/msad",
   "facility": "Local",
   "siteIcon": "site-header-logo.png",
   "sitetitle" : "",
@@ -38,8 +27,22 @@
   "jsonMetadataEnabled": true,
   "jupyterHubUrl": "",
   "landingPage": "",
-  "lbBaseURL": "http://localhost:3000",
+  "lbBaseURL": "http://backend.localhost",
+  
+  "accessTokenPrefix": "Bearer ",
+  "externalAuthEndpoint": "/api/v3/auth/ldap",
+  "datasetOneDepIntegration": true,
   "depositorURL": "http://127.0.0.1:8080",
+  "ingestorEnabled": true,
+  "ingestorMode": "transfer",
+  "ingestorAutodiscoveryOptions": [
+    {
+      "mailDomain": "unibe.ch",
+      "description": "University of Bern",
+      "facilityBackend": "http://localhost:8888"
+    }
+  ],
+
   "localColumns": [
     {
       "name": "datasetName",
@@ -90,11 +93,6 @@
       "displayText": "Login with OIDC"
     }
   ],
-  "maxDirectDownloadSize": 5000000000,
-  "metadataPreviewEnabled": true,
-  "metadataStructure": "tree",
-  "multipleDownloadAction": "",
-  "multipleDownloadEnabled": false,
   "policiesEnabled": true,
   "retrieveDestinations": [],
   "riotBaseUrl": "",
@@ -102,8 +100,8 @@
   "scienceSearchUnitsEnabled": true,
   "searchPublicDataEnabled": true,
   "searchSamples": true,
-  "sftpHost": "",
-  "shareEnabled": false,
+  "sftpHost": "login.esss.dk",
+  "shareEnabled": true,
   "sourceFolder": "/data/ess",
   "maxDirectDownloadSize": 5000000000,
   "maxFileSizeWarning": "Some files are above <maxDirectDownloadSize> and cannot be downloaded directly. These file can be downloaded via sftp host: <sftpHost> in directory: <sourceFolder>",

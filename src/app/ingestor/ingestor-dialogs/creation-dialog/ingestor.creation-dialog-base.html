@@ -1,6 +1,6 @@
 <ingestor-new-transfer-dialog-page
   *ngIf="currentDialogStep === 'NEW_TRANSFER' && !showNoRightsDialog"
-  (nextStep)="onClickNext(createNewTransferData.editorMode === 'CREATION' ? 'SCICAT_METADATA' : 'USER_METADATA')"></ingestor-new-transfer-dialog-page>
+  (nextStep)="onClickNext(createNewTransferData.editorMode === 'CREATION' ? 'CUSTOM_METADATA' : 'USER_METADATA')"></ingestor-new-transfer-dialog-page>
 
 <ingestor-user-metadata-dialog
   *ngIf="currentDialogStep === 'USER_METADATA' && !showNoRightsDialog"
@@ -21,12 +21,7 @@
   (nextStep)="onClickStartIngestion()"
   (backStep)="onClickNext('EXTRACTOR_METADATA')"></ingestor-no-rights-dialog-page>
 
-<ingestor-scicat-metadata-dialog
-  *ngIf="currentDialogStep === 'SCICAT_METADATA' && !showNoRightsDialog"
-  (nextStep)="onClickNext('CUSTOM_METADATA')"
-  (backStep)="onClickNext('NEW_TRANSFER')"></ingestor-scicat-metadata-dialog>
-
 <ingestor-custom-metadata-dialog
   *ngIf="currentDialogStep === 'CUSTOM_METADATA' && !showNoRightsDialog"
   (nextStep)="onClickNext('CONFIRM_TRANSFER')"
-  (backStep)="onClickNext('SCICAT_METADATA')"></ingestor-custom-metadata-dialog>
+  (backStep)="onClickNext('NEW_TRANSFER')"></ingestor-custom-metadata-dialog>

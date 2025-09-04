@@ -171,6 +171,7 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
     FiltersModule,
     IngestorModule,
     MatExpansionModule,
+    IngestorModule,
   ],
   declarations: [
     BatchViewComponent,

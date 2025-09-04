@@ -1,6 +1,10 @@
 <div class="ingestor-dialog-header">
   <div class="ingestor-mixed-header">
-    <h2 mat-dialog-title>
+    <h2 *ngIf="createNewTransferData.editorMode === 'CREATION'" mat-dialog-title>
+      Fill out Dataset information
+    </h2>
+
+    <h2 *ngIf="createNewTransferData.editorMode !== 'CREATION'" mat-dialog-title>
       Select your ingestion method
     </h2>
     <button mat-icon-button mat-dialog-close aria-label="Close"
@@ -16,29 +20,57 @@
 
 <mat-dialog-content class="mat-typography" disableClose="true">
   <div *ngIf="createNewTransferData.editorMode === 'CREATION'">
+
+
+  <mat-card>
+    <mat-card-header class="scicat-header"
+      (click)="toggleCardContent('scicat')">
+      <div mat-card-avatar class="section-icon">
+        <mat-icon> info </mat-icon>
+      </div>
+      SciCat Information
+      <span class="spacer"></span>
+      <mat-icon
+        [matTooltip]="isSciCatHeaderOk ? 'Your input is correct.' : scicatHeaderErrors"
+        [ngClass]="isSciCatHeaderOk ? 'success-icon' : 'error-icon'">{{
+        isSciCatHeaderOk ? 'check_circle_outline' :
+        'error_outline'}}</mat-icon>
+      <mat-icon class="toggle-icon">{{ isCardContentVisible.scicat ?
+        'expand_less' : 'expand_more' }}</mat-icon>
+    </mat-card-header>
+    <mat-card-content *ngIf="isCardContentVisible.scicat">
+      <app-metadata-editor #scicatHeaderEditor
+        *ngIf="!updateEditorFromThirdParty" [schema]="scicatHeaderSchema"
+        [renderView]="activeRenderView"
+        [data]="createNewTransferData.scicatHeader"
+        (dataChange)="onDataChangeUserScicatHeader($event)"
+        (errors)="scicatHeaderErrorsHandler($event)"></app-metadata-editor>
+    </mat-card-content>
+  </mat-card>
+
+
+    
     <mat-card class="ingestor-card">
-      <mat-card-header>
-        <mat-card-title>Scientific Metadata Schema</mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="ingestor-vertical-layout">
-        <!-- <mat-radio-group class="ingestor-radio-group"
-          [(ngModel)]="selectedSchemaOption">
-          <mat-radio-button value="free">Free Input</mat-radio-button>
-          <mat-radio-button value="upload">Upload Schema</mat-radio-button>
-        </mat-radio-group> -->
+  <mat-card-header>
+    <mat-card-title>Scientific Metadata Schema</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="ingestor-vertical-layout">
+    <div class="ingestor-upload-section">
+      <label for="schemaUrl">
+        You can provide a schema for your scientific metadata. We only accept schemas in json format.
+      </label>
+      <mat-form-field class="form-full-width">
+        <input matInput id="schemaUrl" placeholder="Paste schema URL here" [(ngModel)]="schemaUrl" />
+       <button mat-raised-button class="block-button" color="primary"
+            (click)="onUploadSchema()">Validate</button>
 
-        <div *ngIf="selectedSchemaOption === 'upload'"
-          class="ingestor-upload-section">
-          <label for="schema-upload">Upload your schema file: </label>
-          <button mat-raised-button color="primary"
-            (click)="onUploadSchema()">Choose File</button>
-
-          <p *ngIf="selectedSchemaFileName !== ''">
-            Selected file: {{ selectedSchemaFileName }}
-          </p>
-        </div>
-      </mat-card-content>
-    </mat-card>
+      </mat-form-field>
+      <p *ngIf="selectedSchemaFileContent">
+        Loaded schema is valid!
+      </p>
+    </div>
+  </mat-card-content>
+</mat-card>
   </div>
 
   <div

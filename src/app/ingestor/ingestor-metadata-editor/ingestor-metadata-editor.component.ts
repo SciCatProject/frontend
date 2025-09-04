@@ -56,8 +56,7 @@ export class IngestorMetadataEditorComponent implements OnInit {
 
   updateVisualData() {
     // Do a deep clone
-    this.visualData = JSON.parse(JSON.stringify(this.data));
-
+    this.visualData = structuredClone(this.data);
     // Update the data with the same keys as the schema, including nested properties
     // This is necessary, otherwise the error checks will not work correctly
     // Fill empty boolean with false to avoid undefined errors

@@ -201,17 +201,17 @@ export class IngestorEffects {
     );
   });
 
-  setLoadingBeforeIngestion$ = createEffect(() =>
-    this.actions$.pipe(
+  setLoadingBeforeIngestion$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.ingestDataset),
       map(() =>
         fromActions.setIngestDatasetLoading({ ingestionDatasetLoading: true }),
       ),
-    ),
-  );
+    );
+  });
 
-  ingestDataset$ = createEffect(() =>
-    this.actions$.pipe(
+  ingestDataset$ = createEffect(() => {
+    return this.actions$.pipe(
       ofType(fromActions.ingestDataset),
       switchMap(({ ingestionDataset }) =>
         this.ingestor.startIngestion(ingestionDataset).pipe(
@@ -241,8 +241,8 @@ export class IngestorEffects {
           ),
         ),
       ),
-    ),
-  );
+    );
+  });
 
   ingestDatasetSuccess$ = createEffect(() => {
     return this.actions$.pipe(

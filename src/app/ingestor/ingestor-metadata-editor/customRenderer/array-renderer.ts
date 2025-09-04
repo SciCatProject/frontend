@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+} from "@angular/core";
 import {
   JsonFormsAngularService,
   JsonFormsAbstractControl,
@@ -111,12 +116,14 @@ import {
     </mat-card>
   `,
   standalone: false,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
 export class ArrayLayoutRendererCustom
   extends JsonFormsAbstractControl<StatePropsOfArrayLayout>
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   noData: boolean;
   minOne: boolean;
   translations: ArrayTranslations = {};
@@ -131,7 +138,9 @@ export class ArrayLayoutRendererCustom
   constructor(jsonFormsService: JsonFormsAngularService) {
     super(jsonFormsService);
   }
-  mapToProps(state: JsonFormsState): StatePropsOfArrayLayout & { translations: ArrayTranslations } {
+  mapToProps(
+    state: JsonFormsState,
+  ): StatePropsOfArrayLayout & { translations: ArrayTranslations } {
     const props = mapStateToArrayLayoutProps(state, this.getOwnProps());
     const t =
       state.jsonforms.i18n?.translate ?? defaultJsonFormsI18nState.translate;
@@ -139,7 +148,7 @@ export class ArrayLayoutRendererCustom
       t,
       arrayDefaultTranslations,
       props.i18nKeyPrefix,
-      props.label
+      props.label,
     );
     return { ...props, translations };
   }
@@ -169,7 +178,9 @@ export class ArrayLayoutRendererCustom
     this.moveItemDown = moveDown;
     this.removeItems = removeItems;
   }
-  mapAdditionalProps(props: ArrayLayoutProps & { translations: ArrayTranslations }) {
+  mapAdditionalProps(
+    props: ArrayLayoutProps & { translations: ArrayTranslations },
+  ) {
     this.translations = props.translations;
     this.noData = !props.data || props.data === 0;
     this.uischemas = props.uischemas;

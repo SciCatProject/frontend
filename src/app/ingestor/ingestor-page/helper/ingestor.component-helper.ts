@@ -4,7 +4,7 @@ import { isArray } from "mathjs";
 import { PostDatasetResponse } from "shared/sdk/models/ingestor/postDatasetResponse";
 import { UserInfo } from "shared/sdk/models/ingestor/userInfo";
 
-export type IngestorMode = "default" | "transfer" | "creation";
+export type IngestorMode = "transfer" | "creation";
 
 export type IngestorEditorMode = "INGESTION" | "EDITOR" | "CREATION";
 

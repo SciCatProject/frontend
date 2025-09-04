@@ -1,59 +1,373 @@
 .ingestor-metadata-editor {
   width: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 .spacer {
   flex: 1 1 auto;
 }
 
+// Modern glassmorphism card styling
 mat-card {
   .mat-mdc-card-title {
     display: flex;
-    padding: 16px;
+    padding: 24px;
+    font-weight: 700;
+    font-size: 1.2em;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 16px 16px 0 0;
+    color: #1a1a1a;
+    letter-spacing: -0.02em;
   }
 }
 
+// Modern form sections with subtle shadows and gradients
+.form-section {
+  margin-bottom: 32px;
+  padding: 32px;
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  border-radius: 20px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.05),
+    0 10px 30px rgba(0, 0, 0, 0.02);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.08),
+      0 20px 40px rgba(0, 0, 0, 0.04);
+  }
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Bold, modern section headers
+.section-header {
+  font-size: 1.25em;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(90deg, #667eea, #764ba2) 1;
+  letter-spacing: -0.03em;
+  
+  &.major-section {
+    font-size: 1.5em;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 32px;
+  }
+}
+
+// Elevated field groups with modern aesthetics
+.field-group {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #d946ef);
+    border-radius: 16px 16px 0 0;
+  }
+  
+  &.related-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    align-items: start;
+  }
+}
+
+// Ultra-modern form controls
+.jsonforms-control {
+  margin-bottom: 24px;
+  
+  .mat-mdc-form-field {
+    width: 100%;
+    
+    .mat-mdc-text-field-wrapper {
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.95);
+        transform: translateY(-1px);
+      }
+    }
+    
+    &.mat-focused .mat-mdc-text-field-wrapper {
+      box-shadow: 
+        0 0 0 2px rgba(99, 102, 241, 0.2),
+        0 8px 25px rgba(99, 102, 241, 0.15);
+    }
+  }
+  
+  label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+    display: block;
+    font-size: 0.95em;
+    letter-spacing: -0.01em;
+  }
+}
+
+// Modern grid layouts
+.two-column-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+// Subtle dividers and spacers
+.form-spacer {
+  height: 32px;
+}
+
+.form-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+  margin: 40px 0;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -4px;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 50%;
+  }
+}
+
+// Futuristic array layouts
 .array-layout {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
+  background: linear-gradient(145deg, #f8fafc, #f1f5f9);
+  border-radius: 20px;
+  padding: 24px;
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #6366f1, transparent);
+    animation: shimmer 3s infinite;
+  }
 }
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
 .array-layout > * {
   flex: 1 1 auto;
 }
+
 .array-layout-toolbar {
   display: flex;
   align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  margin-bottom: 20px;
 }
+
 .array-layout-title {
   margin: 0;
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 1.1em;
+  letter-spacing: -0.02em;
 }
+
 .array-layout-toolbar > span {
   flex: 1 1 auto;
 }
+
 .array-item {
-  padding: 16px;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  }
 }
+
+// Modern toggle styling
+.field-view-toggle {
+  margin-bottom: 32px;
+  display: block;
+  
+  .mat-slide-toggle-bar {
+    background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+  }
+  
+  &.mat-checked .mat-slide-toggle-bar {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  }
+}
+
+// Enhanced error styling
 ::ng-deep .error-message-tooltip {
   white-space: pre-line;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border-radius: 8px;
 }
 
+// Modern input styling
 .custom-input-box {
   width: 100%;
+  
+  .mat-mdc-form-field {
+    .mat-mdc-text-field-wrapper {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+    }
+  }
 }
 
+// Futuristic quantity value boxes
 .quantity-value-box {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(248,250,252,0.9));
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
 }
 
 .quantity-value-element {
-  flex: 1 1 calc(50% - 0.5em); /* Two elements per row with gap accounted for */
-  box-sizing: border-box;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.02);
+  }
 }
 
+// Modern tab styling
 .mat-tab-content-renderer {
-  margin-top: 0.5em;
+  margin-top: 20px;
+}
+
+// Cutting-edge step indicator
+.step-indicator {
+  margin-bottom: 32px;
+  text-align: center;
+  
+  .step-title {
+    font-size: 2em;
+    font-weight: 900;
+    background: linear-gradient(135deg, #1f2937 0%, #4f46e5 50%, #7c3aed 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+    letter-spacing: -0.04em;
+  }
+  
+  .step-description {
+    color: #6b7280;
+    font-size: 1em;
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .form-section {
+    background: linear-gradient(145deg, #1f2937, #111827);
+    border-color: rgba(75, 85, 99, 0.3);
+    color: #f9fafb;
+  }
+  
+  .field-group {
+    background: rgba(17, 24, 39, 0.7);
+    border-color: rgba(75, 85, 99, 0.2);
+  }
+  
+  .jsonforms-control label {
+    color: #d1d5db;
+  }
+}
+
+// Responsive modern design
+@media (max-width: 768px) {
+  .form-section {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 16px;
+  }
+  
+  .field-group.related-fields {
+    grid-template-columns: 1fr;
+  }
+  
+  .step-indicator .step-title {
+    font-size: 1.5em;
+  }
+}
+
+// Micro-animations for enhanced UX
+.jsonforms-control {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

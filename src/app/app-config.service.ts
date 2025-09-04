@@ -141,12 +141,12 @@ export interface AppConfigInterface {
   labelsLocalization?: LabelsLocalization;
   dateFormat?: string;
   defaultMainPage?: MainPageConfiguration;
-  ingestorEnabled?: boolean;
-  ingestorMode?: string;
-  ingestorAutodiscoveryOptions?: IngestorAutodiscovery[];
   siteHeaderLogoUrl?: string;
   mainMenu?: MainMenuConfiguration;
   supportEmail?: string;
+  ingestorEnabled?: boolean;
+  ingestorMode?: string;
+  ingestorAutodiscoveryOptions?: IngestorAutodiscovery[];
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
@@ -165,7 +165,7 @@ function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
 export class AppConfigService {
   private appConfig: object = {};
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   async loadAppConfig(): Promise<void> {
     try {

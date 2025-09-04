@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   inject,
@@ -7,13 +8,18 @@ import {
   Output,
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
+import Ajv, {JSONSchemaType} from "ajv"
+import { JsonSchema } from "@jsonforms/core";
 import {
   decodeBase64ToUTF8,
+  getJsonSchemaFromDto,
   ExtractionMethod,
   IngestionRequestInformation,
   IngestorHelper,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
+import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 import { IngestorMetadataEditorHelper } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
+import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 import { GetExtractorResponse } from "shared/sdk/models/ingestor/models";
 import { PageChangeEvent } from "shared/modules/table/table.component";
 import { IngestorFileBrowserComponent } from "ingestor/ingestor-dialogs/ingestor-file-browser/ingestor.file-browser.component";
@@ -21,6 +27,8 @@ import { Store } from "@ngrx/store";
 import {
   selectIngestionObject,
   selectIngestorExtractionMethods,
+  selectIngestorRenderView,
+  selectUpdateEditorFromThirdParty,
 } from "state-management/selectors/ingestor.selector";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
@@ -55,19 +63,33 @@ export class IngestorNewTransferDialogPageComponent
   dropdownPageSize = 50;
   extractionMethodsPage = 0;
 
-  connectedFacilityBackend = "";
   extractionMethodsError = "";
   extractionMethodsInitialized = false;
 
   userProfile: ReturnedUserDto | null = null;
   uiNextButtonReady = false;
-
-  // Creation Mode Options
-  _selectedSchemaOption: "free" | "upload" = "upload";
-  selectedSchemaFileName = "";
+  schemaUrl = "";
+  // selectedSchemaFileName = "";
   selectedSchemaFileContent = "";
+  renderView$ = this.store.select(selectIngestorRenderView);
+  selectUpdateEditorFromThirdParty$ = this.store.select(
+    selectUpdateEditorFromThirdParty,
+  );
+  scicatHeaderSchema: JsonSchema;
+  activeRenderView: renderView | null = null;
+  updateEditorFromThirdParty = false;
 
-  constructor(private store: Store) {}
+  isSciCatHeaderOk = false;
+  scicatHeaderErrors = "";
+
+  isCardContentVisible = {
+    scicat: true,
+  };
+
+  constructor(
+    private store: Store,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit() {
     // Fetch the API token that the ingestor can authenticate to scicat as the user
@@ -106,26 +128,46 @@ export class IngestorNewTransferDialogPageComponent
                   },
                 ),
               );
+            } else {
+              this.scicatHeaderSchema = getJsonSchemaFromDto(true);
             }
           }
         }
       }),
     );
+    if (this.createNewTransferData.editorMode === "CREATION") {
+      this.subscriptions.push(
+        this.renderView$.subscribe((renderView) => {
+          if (renderView) {
+            // Check if renderView changed
+            if (this.activeRenderView !== renderView) {
+              this.activeRenderView = renderView;
+            }
+          }
+        }),
+      );
+
+      this.subscriptions.push(
+        this.selectUpdateEditorFromThirdParty$.subscribe((updateEditor) => {
+          // We need to rerender the editor if the user has changed the metadata in the third party
+          // So we get a flag, if it is true we unrender the editor
+          // and then we set it to false to render it again
+          this.updateEditorFromThirdParty = updateEditor;
+          if (updateEditor) {
+            this.cdr.detectChanges(); // Force the change detection to unrender the editor
+            this.store.dispatch(
+              fromActions.resetIngestionObjectFromThirdPartyFlag(),
+            );
+          }
+        }),
+      );
+    }
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
     });
-  }
-
-  set selectedSchemaOption(value: "free" | "upload") {
-    this._selectedSchemaOption = value;
-    this.validateNextButton();
-  }
-
-  get selectedSchemaOption(): "free" | "upload" {
-    return this._selectedSchemaOption;
   }
 
   set selectedMethod(value: ExtractionMethod) {
@@ -197,8 +239,8 @@ export class IngestorNewTransferDialogPageComponent
         schema,
       );
       this.createNewTransferData.selectedResolvedDecodedSchema = resolvedSchema;
-    } else if (this.createNewTransferData.editorMode === "CREATION") {
-      if (this.selectedSchemaOption === "upload") {
+    } else {
+      if (this.selectedSchemaFileContent) {
         const schema = JSON.parse(this.selectedSchemaFileContent);
         const resolvedSchema = IngestorMetadataEditorHelper.resolveRefs(
           schema,
@@ -207,8 +249,6 @@ export class IngestorNewTransferDialogPageComponent
         this.createNewTransferData.selectedResolvedDecodedSchema =
           resolvedSchema;
       }
-    } else {
-      console.error("Unknown editor mode");
     }
   }
 
@@ -222,11 +262,24 @@ export class IngestorNewTransferDialogPageComponent
         ingestionObject: this.createNewTransferData,
       }),
     );
-
     this.generateExampleDataForSciCatHeader();
     this.prepareSchemaForProcessing();
+    this.nextStep.emit();
+  }
 
-    this.nextStep.emit(); // Open next dialog
+  onDataChangeUserScicatHeader(event: any) {
+    this.createNewTransferData.scicatHeader = event;
+  }
+
+  toggleCardContent(card: string): void {
+    this.isCardContentVisible[card] = !this.isCardContentVisible[card];
+  }
+
+  scicatHeaderErrorsHandler(errors: any[]) {
+    this.isSciCatHeaderOk = errors.length === 0;
+    this.scicatHeaderErrors = convertJSONFormsErrorToString(errors);
+    this.validateNextButton();
+    this.cdr.detectChanges();
   }
 
   validateNextButton(): void {
@@ -239,18 +292,14 @@ export class IngestorNewTransferDialogPageComponent
       this.selectedMethod !== undefined &&
       this.selectedMethod.name !== "";
 
-    const creationModeParameterReady =
-      this.selectedSchemaOption === "free" ||
-      (this.selectedSchemaOption === "upload" &&
-        this.selectedSchemaFileName !== "");
-
     if (
       this.createNewTransferData.editorMode === "INGESTION" ||
       this.createNewTransferData.editorMode === "EDITOR"
     ) {
       this.uiNextButtonReady = !!selectedPathReady && !!selectedMethodReady;
     } else if (this.createNewTransferData.editorMode === "CREATION") {
-      this.uiNextButtonReady = !!creationModeParameterReady;
+      // user can proceed without the schema
+      this.uiNextButtonReady = this.isSciCatHeaderOk;
     } else {
       this.uiNextButtonReady = false;
     }
@@ -272,39 +321,39 @@ export class IngestorNewTransferDialogPageComponent
     });
   }
 
-  onUploadSchema(): void {
-    // Upload a template of metadata
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".ingestor.schema,.json";
-    input.onchange = (event: Event) => {
-      const target = event.target as HTMLInputElement;
-      const file = target.files?.[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const content = e.target?.result as string;
+  async onUploadSchema(): Promise<void> {
+    if (!this.schemaUrl) {
+      alert("Please enter a schema URL.");
+      return;
+    }
+    console.log("Fetching schema from URL:", this.schemaUrl);
+    let content: string;
+    let parsedJson: any;
+    const ajv = new Ajv()
 
-          const dialogRef = this.dialog.open(
-            IngestorConfirmationDialogComponent,
-            {
-              data: {
-                header: "Confirm template",
-                message: "Do you really want to apply the following values?",
-              },
-            },
-          );
-          dialogRef.afterClosed().subscribe((result) => {
-            if (result) {
-              this.selectedSchemaFileName = file.name;
-              this.selectedSchemaFileContent = content;
-              this.validateNextButton();
-            }
-          });
-        };
-        reader.readAsText(file);
+    try {
+      const response = await fetch(this.schemaUrl);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch schema: ${response.statusText}`);
       }
-    };
-    input.click();
+      content = await response.text();
+      try {
+        parsedJson = JSON.parse(content);
+      } catch (e) {
+        alert("The provided URL does not contain valid JSON.");
+        return;
+      }
+    } catch (error: any) {
+      alert(`Error fetching schema: ${error.message}`);
+      return;
+    }
+    this.selectedSchemaFileContent = content;
+    const valid = ajv.compile(this.selectedSchemaFileContent as JSONSchemaType<any>);
+    if (!valid) {
+      this.schemaUrl = "";
+      this.selectedSchemaFileContent = "";
+    }else{
+      this.validateNextButton();
+    }
   }
 }
