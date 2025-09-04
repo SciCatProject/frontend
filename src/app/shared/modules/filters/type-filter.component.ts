@@ -41,6 +41,7 @@ export class TypeFilterComponent
 
   typeFilter$ = this.store.select(selectTypeFilter);
   typeInput$ = new BehaviorSubject<string>("");
+  typedType = "";
 
   typeSuggestions$ = createSuggestionObserver(
     this.typeFacetCounts$,
@@ -60,14 +61,28 @@ export class TypeFilterComponent
   onTypeInput(event: any) {
     const value = (<HTMLInputElement>event.target).value;
     this.typeInput$.next(value);
+    this.typedType = value.trim();
   }
 
   typeSelected(type: string) {
     this.store.dispatch(addTypeFilterAction({ datasetType: type }));
     this.typeInput$.next("");
+    this.typedType = "";
   }
 
   typeRemoved(type: string) {
     this.store.dispatch(removeTypeFilterAction({ datasetType: type }));
+  }
+
+  onTypeKeyEnter() {
+    if (this.typedType) {
+      this.typeSelected(this.typedType);
+    }
+  }
+
+  onTypeBlur() {
+    if (this.typedType) {
+      this.typeSelected(this.typedType);
+    }
   }
 }

@@ -48,6 +48,22 @@ export class MainPageConfiguration {
   authenticatedUser: keyof typeof MainPageOptions;
 }
 
+export class MainMenuOptions {
+  datasets: boolean;
+  files: boolean;
+  instruments: boolean;
+  jobs: boolean;
+  policies: boolean;
+  proposals: boolean;
+  publishedData: boolean;
+  samples: boolean;
+}
+
+export class MainMenuConfiguration {
+  nonAuthenticatedUser: MainMenuOptions;
+  authenticatedUser: MainMenuOptions;
+}
+
 export interface AppConfigInterface {
   skipSciCatLoginPageEnabled?: boolean;
   accessTokenPrefix: string;
@@ -105,6 +121,8 @@ export interface AppConfigInterface {
   shareEnabled: boolean;
   shoppingCartEnabled: boolean;
   shoppingCartOnHeader: boolean;
+  siteTitle: string | null;
+  siteSciCatLogo: string | null;
   siteHeaderLogo: string | null;
   siteLoginBackground: string | null;
   siteLoginLogo: string | null;
@@ -126,6 +144,9 @@ export interface AppConfigInterface {
   ingestorEnabled?: boolean;
   ingestorMode?: string;
   ingestorAutodiscoveryOptions?: IngestorAutodiscovery[];
+  siteHeaderLogoUrl?: string;
+  mainMenu?: MainMenuConfiguration;
+  supportEmail?: string;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {

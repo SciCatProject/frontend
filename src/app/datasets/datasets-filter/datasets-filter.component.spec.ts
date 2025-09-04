@@ -186,7 +186,7 @@ describe("DatasetsFilterComponent", () => {
   it("should contain a clear all button", () => {
     const compiled = fixture.debugElement.nativeElement;
     const btn = compiled.querySelector(".datasets-filters-clear-all-button");
-    expect(btn.textContent).toContain("undo Reset");
+    expect(btn.textContent).toContain("undo Clear");
   });
 
   it("should contain a search button", () => {
@@ -201,7 +201,7 @@ describe("DatasetsFilterComponent", () => {
 
       component.reset();
 
-      expect(dispatchSpy).toHaveBeenCalledTimes(4);
+      expect(dispatchSpy).toHaveBeenCalledTimes(6);
       expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
       expect(dispatchSpy).toHaveBeenCalledWith(
         deselectAllCustomColumnsAction(),
@@ -222,12 +222,12 @@ describe("DatasetsFilterComponent", () => {
       expect(component.dialog.open).toHaveBeenCalledWith(
         DatasetsFilterSettingsComponent,
         {
-          width: "60vw",
           data: {
             filterConfigs: filterConfigs,
             conditionConfigs: [],
             labelMaps: labelMaps,
           },
+          restoreFocus: false,
         },
       );
     });
