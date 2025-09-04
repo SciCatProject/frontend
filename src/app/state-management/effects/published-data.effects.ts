@@ -47,7 +47,7 @@ export class PublishedDataEffects {
       map(([action, params]) => params),
       mergeMap((params) =>
         this.publishedDataService
-          .publishedDataV4ControllerFindAllV4("", "", JSON.stringify(params))
+          .publishedDataV4ControllerFindAllV4(JSON.stringify(params))
           .pipe(
             mergeMap((publishedData) => [
               fromActions.fetchAllPublishedDataCompleteAction({
