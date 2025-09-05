@@ -7,7 +7,7 @@
   "editDatasetEnabled": true,
   "editDatasetSampleEnabled": true,
   "editMetadataEnabled": true,
-  "editPublishedData": false,
+  "editPublishedData": true,
   "addSampleEnabled": false,
   "externalAuthEndpoint": "/api/v3/auth/msad",
   "facility": "SciCat Vanilla",

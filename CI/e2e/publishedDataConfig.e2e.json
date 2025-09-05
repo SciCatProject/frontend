@@ -1,0 +1,1632 @@
+{
+  "metadataSchema": {
+    "type": "object",
+    "properties": {
+      "creators": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "title": "Name",
+              "$dataciteRequired": true
+            },
+            "nameType": {
+              "type": "string",
+              "title": "Name Type",
+              "$dataciteRequired": false,
+              "enum": ["Personal", "Organizational"]
+            },
+            "givenName": {
+              "type": "string",
+              "title": "Given Name",
+              "$dataciteRequired": false
+            },
+            "familyName": {
+              "type": "string",
+              "title": "Family Name",
+              "$dataciteRequired": false
+            },
+            "nameIdentifiers": {
+              "type": "array",
+              "title": "Name Identifiers",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "nameIdentifier": {
+                    "type": "string",
+                    "title": "Identifier",
+                    "$dataciteRequired": false
+                  },
+                  "nameIdentifierScheme": {
+                    "type": "string",
+                    "title": "Identifier Scheme",
+                    "$dataciteRequired": true
+                  },
+                  "schemeUri": {
+                    "type": "string",
+                    "title": "Scheme URI",
+                    "$dataciteRequired": false
+                  }
+                },
+                "required": ["nameIdentifierScheme"]
+              },
+              "$dataciteRequired": false
+            },
+            "affiliation": {
+              "type": "array",
+              "title": "Affiliations",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "Affiliation Name",
+                    "$dataciteRequired": true
+                  },
+                  "affiliationIdentifier": {
+                    "type": "string",
+                    "title": "Affiliation Identifier",
+                    "$dataciteRequired": false
+                  },
+                  "affiliationIdentifierScheme": {
+                    "type": "string",
+                    "title": "Affiliation Identifier Scheme",
+                    "$dataciteRequired": true
+                  },
+                  "schemeUri": {
+                    "type": "string",
+                    "title": "Scheme URI",
+                    "$dataciteRequired": false
+                  }
+                },
+                "required": ["name", "affiliationIdentifierScheme"]
+              },
+              "$dataciteRequired": false
+            }
+          },
+          "required": ["name"]
+        },
+        "$dataciteRequired": true
+      },
+      "publisher": {
+        "type:": "object",
+        "title": "Publisher",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Publisher Name",
+            "$dataciteRequired": true
+          },
+          "publisherIdentifier": {
+            "type": "string",
+            "title": "Publisher Identifier",
+            "$dataciteRequired": false
+          },
+          "publisherIdentifierScheme": {
+            "type": "string",
+            "title": "Publisher Identifier Scheme",
+            "$dataciteRequired": false
+          },
+          "schemeUri": {
+            "type": "string",
+            "title": "Scheme URI",
+            "$dataciteRequired": false
+          }
+        },
+        "required": ["name", "publisherIdentifierScheme"],
+        "$dataciteRequired": true
+      },
+      "publicationYear": {
+        "type": "integer",
+        "title": "Publication Year",
+        "$dataciteRequired": true
+      },
+      "contributors": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "contributorType": {
+              "type": "string",
+              "title": "Contributor Type",
+              "$dataciteRequired": true,
+              "enum": [
+                "ContactPerson",
+                "DataCollector",
+                "DataCurator",
+                "DataManager",
+                "Distributor",
+                "Editor",
+                "HostingInstitution",
+                "Producer",
+                "ProjectLeader",
+                "ProjectManager",
+                "RegistrationAgency",
+                "RegistrationAuthority",
+                "RelatedPerson",
+                "Researcher",
+                "RightsHolder",
+                "Sponsor",
+                "Supervisor",
+                "Translator",
+                "WorkPackageLeader",
+                "Other"
+              ]
+            },
+            "name": {
+              "type": "string",
+              "title": "Contributor Name",
+              "$dataciteRequired": true
+            },
+            "nameType": {
+              "type": "string",
+              "title": "Name Type",
+              "$dataciteRequired": false,
+              "enum": ["Personal", "Organizational"]
+            },
+            "givenName": {
+              "type": "string",
+              "title": "Given Name",
+              "$dataciteRequired": false
+            },
+            "familyName": {
+              "type": "string",
+              "title": "Family Name",
+              "$dataciteRequired": false
+            },
+            "nameIdentifiers": {
+              "type": "array",
+              "title": "Name Identifiers",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "nameIdentifier": {
+                    "type": "string",
+                    "title": "Identifier",
+                    "$dataciteRequired": false
+                  },
+                  "nameIdentifierScheme": {
+                    "type": "string",
+                    "title": "Identifier Scheme",
+                    "$dataciteRequired": true
+                  },
+                  "schemeUri": {
+                    "type": "string",
+                    "title": "Scheme URI",
+                    "$dataciteRequired": false
+                  }
+                },
+                "required": ["nameIdentifierScheme"]
+              },
+              "$dataciteRequired": false
+            },
+            "affiliation": {
+              "type": "array",
+              "title": "Affiliations",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "Affiliation Name",
+                    "$dataciteRequired": true
+                  },
+                  "affiliationIdentifier": {
+                    "type": "string",
+                    "title": "Affiliation Identifier",
+                    "$dataciteRequired": false
+                  },
+                  "affiliationIdentifierScheme": {
+                    "type": "string",
+                    "title": "Affiliation Identifier Scheme",
+                    "$dataciteRequired": true
+                  },
+                  "schemeUri": {
+                    "type": "string",
+                    "title": "Scheme URI",
+                    "$dataciteRequired": false
+                  }
+                },
+                "required": ["name", "affiliationIdentifierScheme"]
+              },
+              "$dataciteRequired": false
+            }
+          },
+          "required": ["name", "contributorType"],
+          "$dataciteRequired": false
+        }
+      },
+      "subjects": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "subject": {
+              "type": "string",
+              "title": "Subject",
+              "$dataciteRequired": false
+            },
+            "subjectScheme": {
+              "type": "string",
+              "title": "Subject Scheme",
+              "$dataciteRequired": false
+            },
+            "schemeUri": {
+              "type": "string",
+              "title": "Subject URI",
+              "$dataciteRequired": false
+            },
+            "valueUri": {
+              "type": "string",
+              "title": "Value URI",
+              "$dataciteRequired": false
+            },
+            "lang": {
+              "type": "string",
+              "title": "Language",
+              "$dataciteRequired": false
+            },
+            "classificationCode": {
+              "type": "string",
+              "title": "Classification Code",
+              "$dataciteRequired": false
+            }
+          },
+          "$dataciteRequired": false
+        }
+      },
+      "dates": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "date": {
+              "type": "string",
+              "format": "date-time",
+              "title": "Date",
+              "$dataciteRequired": true
+            },
+            "dateType": {
+              "type": "string",
+              "title": "Date Type",
+              "$dataciteRequired": true,
+              "enum": [
+                "Accepted",
+                "Available",
+                "Copyrighted",
+                "Collected",
+                "Coverage",
+                "Created",
+                "Issued",
+                "Submitted",
+                "Updated",
+                "Valid",
+                "Withdrawn",
+                "Other"
+              ]
+            },
+            "dateInformation": {
+              "type": "string",
+              "title": "Date Information",
+              "$dataciteRequired": false
+            }
+          },
+          "required": ["date", "dateType"]
+        },
+        "$dataciteRequired": false
+      },
+      "language": {
+        "type": "string",
+        "title": "Language",
+        "$dataciteRequired": false
+      },
+      "resourceType": {
+        "type": "string",
+        "title": "Resource Type",
+        "$dataciteRequired": true
+      },
+      "alternateIdentifiers": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "alternateIdentifier": {
+              "type": "string",
+              "title": "Alternate Identifier",
+              "$dataciteRequired": true
+            },
+            "alternateIdentifierType": {
+              "type": "string",
+              "title": "Alternate Identifier Type",
+              "$dataciteRequired": true
+            }
+          },
+          "required": ["alternateIdentifier", "alternateIdentifierType"]
+        },
+        "$dataciteRequired": false
+      },
+      "relatedIdentifiers": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "relatedIdentifier": {
+              "type": "string",
+              "title": "Related Identifier",
+              "$dataciteRequired": true
+            },
+            "relatedIdentifierType": {
+              "type": "string",
+              "title": "Related Identifier Type",
+              "$dataciteRequired": true,
+              "enum": [
+                "ARK",
+                "DOI",
+                "Handle",
+                "ISBN",
+                "ISSN",
+                "ISTC",
+                "LSID",
+                "PURL",
+                "URL",
+                "arXiv",
+                "bibcode",
+                "CSTR",
+                "EAN13",
+                "EISSN",
+                "PMID",
+                "UPC",
+                "URN",
+                "w3id",
+                "RRID",
+                "LISSN",
+                "IGSN"
+              ]
+            },
+            "relationType": {
+              "type": "string",
+              "title": "Relation Type",
+              "$dataciteRequired": true,
+              "enum": [
+                "IsCitedBy",
+                "Cites",
+                "IsSupplementTo",
+                "IsSupplementedBy",
+                "IsContinuedBy",
+                "Continues",
+                "IsDescribedBy",
+                "Describes",
+                "IsMetadataFor",
+                "HasMetadata",
+                "IsVersionOf",
+                "HasVersion",
+                "IsNewVersionOf",
+                "IsPreviousVersionOf",
+                "IsPartOf",
+                "HasPart",
+                "IsPublishedIn",
+                "IsReferencedBy",
+                "References",
+                "IsDocumentedBy",
+                "Documents",
+                "IsCompiledBy",
+                "Compiles",
+                "IsVariantFormOf",
+                "IsOriginalFormOf",
+                "IsIdenticalTo",
+                "IsReviewedBy",
+                "Reviews",
+                "IsDerivedFrom",
+                "IsSourceOf",
+                "IsRequiredBy",
+                "Requires",
+                "IsObsoletedBy",
+                "Obsoletes",
+                "IsCollectedBy",
+                "Collects",
+                "IsTranslationOf",
+                "HasTranslation"
+              ]
+            },
+            "relatedMetadataScheme": {
+              "type": "string",
+              "title": "Related Metadata Scheme",
+              "$dataciteRequired": false
+            },
+            "schemeUri": {
+              "type": "string",
+              "title": "Scheme URI",
+              "$dataciteRequired": false
+            },
+            "schemeType": {
+              "type": "string",
+              "title": "Scheme Type",
+              "$dataciteRequired": false,
+              "enum": ["DOI", "Handle", "URL", "Other"]
+            }
+          },
+          "required": [
+            "relatedIdentifier",
+            "relatedIdentifierType",
+            "relationType"
+          ]
+        },
+        "$dataciteRequired": false
+      },
+      "sizes": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "title": "Size",
+          "$dataciteRequired": false
+        },
+        "$dataciteRequired": false
+      },
+      "formats": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "title": "Format",
+          "$dataciteRequired": false
+        }
+      },
+      "rightsList": {
+        "title": "Rights",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "rights": {
+              "type": "string",
+              "title": "Rights",
+              "$dataciteRequired": false
+            },
+            "rightsUri": {
+              "type": "string",
+              "title": "Rights URI",
+              "$dataciteRequired": false
+            },
+            "rightsIdentifier": {
+              "type": "string",
+              "title": "Rights Identifier",
+              "$dataciteRequired": false
+            },
+            "rightsIdentifierScheme": {
+              "type": "string",
+              "title": "Rights Identifier Scheme",
+              "$dataciteRequired": false
+            },
+            "schemeUri": {
+              "type": "string",
+              "title": "Scheme URI",
+              "$dataciteRequired": false
+            }
+          }
+        },
+        "$dataciteRequired": false
+      },
+      "descriptions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "description": {
+              "type": "string",
+              "title": "Description",
+              "$dataciteRequired": true
+            },
+            "descriptionType": {
+              "type": "string",
+              "title": "Description Type",
+              "$dataciteRequired": true,
+              "enum": [
+                "Abstract",
+                "Methods",
+                "SeriesInformation",
+                "TableOfContents",
+                "TechnicalInfo",
+                "Other"
+              ]
+            }
+          },
+          "required": ["description", "descriptionType"]
+        },
+        "$dataciteRequired": false
+      },
+      "geoLocations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "geoLocationPlace": {
+              "type": "string",
+              "title": "Geolocation Place",
+              "$dataciteRequired": false
+            },
+            "geoLocationPoint": {
+              "type": "object",
+              "properties": {
+                "pointLongitude": {
+                  "type": "number",
+                  "title": "Longitude",
+                  "$dataciteRequired": false,
+                  "minimum": -180,
+                  "maximum": 180
+                },
+                "pointLatitude": {
+                  "type": "number",
+                  "title": "Latitude",
+                  "$dataciteRequired": false,
+                  "minimum": -90,
+                  "maximum": 90
+                }
+              },
+              "required": ["pointLongitude", "pointLatitude"],
+              "$dataciteRequired": false
+            },
+            "geoLocationBox": {
+              "type": "object",
+              "properties": {
+                "westBoundLongitude": {
+                  "type": "number",
+                  "title": "West Bound Longitude",
+                  "$dataciteRequired": false,
+                  "minimum": -180,
+                  "maximum": 180
+                },
+                "eastBoundLongitude": {
+                  "type": "number",
+                  "title": "East Bound Longitude",
+                  "$dataciteRequired": false,
+                  "minimum": -180,
+                  "maximum": 180
+                },
+                "southBoundLatitude": {
+                  "type": "number",
+                  "title": "South Bound Latitude",
+                  "$dataciteRequired": false,
+                  "minimum": -90,
+                  "maximum": 90
+                },
+                "northBoundLatitude": {
+                  "type": "number",
+                  "title": "North Bound Latitude",
+                  "$dataciteRequired": false,
+                  "minimum": -90,
+                  "maximum": 90
+                }
+              },
+              "required": [
+                "westBoundLongitude",
+                "eastBoundLongitude",
+                "southBoundLatitude",
+                "northBoundLatitude"
+              ],
+              "$dataciteRequired": false
+            }
+          },
+          "$dataciteRequired": false
+        }
+      },
+      "fundingReferences": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "funderName": {
+              "type": "string",
+              "title": "Funder Name",
+              "$dataciteRequired": true
+            },
+            "funderIdentifier": {
+              "type": "string",
+              "title": "Funder Identifier",
+              "$dataciteRequired": false
+            },
+            "funderIdentifierType": {
+              "type": "string",
+              "title": "Funder Identifier Type",
+              "$dataciteRequired": true,
+              "enum": ["ROR", "GRID", "Crossref Funder ID", "ISNI", "Other"]
+            },
+            "awardTitle": {
+              "type": "string",
+              "title": "Award Title",
+              "$dataciteRequired": false
+            },
+            "awardNumber": {
+              "type": "string",
+              "title": "Award Number",
+              "$dataciteRequired": false
+            },
+            "awardUri": {
+              "type": "string",
+              "title": "Award URI",
+              "$dataciteRequired": false
+            }
+          },
+          "required": ["funderName", "funderIdentifierType"],
+          "$dataciteRequired": false
+        }
+      },
+      "relatedItems": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "relatedItemType": {
+              "type": "string",
+              "title": "Related Item Type",
+              "$dataciteRequired": true,
+              "enum": [
+                "Audiovisual",
+                "Award",
+                "Book",
+                "BookChapter",
+                "Collection",
+                "ComputationalNotebook",
+                "ConferencePaper",
+                "ConferenceProceeding",
+                "DataPaper",
+                "Dataset",
+                "Dissertation",
+                "Event",
+                "Image",
+                "InteractiveResource",
+                "Instrument",
+                "Journal",
+                "JournalArticle",
+                "Model",
+                "OutputManagementPlan",
+                "PeerReview",
+                "PhysicalObject",
+                "Preprint",
+                "Project",
+                "Report",
+                "Service",
+                "Software",
+                "Sound",
+                "Standard",
+                "StudyRegistration",
+                "Text",
+                "Workflow",
+                "Other"
+              ]
+            },
+            "relationType": {
+              "type": "string",
+              "title": "Relation Type",
+              "$dataciteRequired": true,
+              "enum": [
+                "IsCitedBy",
+                "Cites",
+                "IsSupplementTo",
+                "IsSupplementedBy",
+                "IsContinuedBy",
+                "Continues",
+                "IsDescribedBy",
+                "Describes",
+                "HasMetadata",
+                "IsMetadataFor",
+                "HasVersion",
+                "IsVersionOf",
+                "IsNewVersionOf",
+                "IsPreviousVersionOf",
+                "IsPartOf",
+                "HasPart",
+                "IsPublishedIn",
+                "IsReferencedBy",
+                "References",
+                "IsDocumentedBy",
+                "Documents",
+                "IsCompiledBy",
+                "Compiles",
+                "IsVariantFormOf",
+                "IsOriginalFormOf",
+                "IsIdenticalTo",
+                "IsReviewedBy",
+                "Reviews",
+                "IsDerivedFrom",
+                "IsSourceOf",
+                "IsRequiredBy",
+                "Requires",
+                "IsObsoletedBy",
+                "Obsoletes",
+                "IsCollectedBy",
+                "Collects",
+                "IsTranslationOf",
+                "HasTranslation"
+              ]
+            },
+            "relatedItemIdentifier": {
+              "type": "object",
+              "properties": {
+                "relatedItemIdentifier": {
+                  "type": "string",
+                  "title": "Related Item Identifier",
+                  "$dataciteRequired": true
+                },
+                "relatedItemIdentifierType": {
+                  "type": "string",
+                  "title": "Related Item Identifier Type",
+                  "$dataciteRequired": true,
+                  "enum": [
+                    "ARK",
+                    "DOI",
+                    "Handle",
+                    "ISBN",
+                    "ISSN",
+                    "ISTC",
+                    "LSID",
+                    "PURL",
+                    "URL",
+                    "arXiv",
+                    "bibcode",
+                    "CSTR",
+                    "EAN13",
+                    "EISSN",
+                    "PMID",
+                    "UPC",
+                    "URN",
+                    "w3id",
+                    "RRID",
+                    "LISSN",
+                    "IGSN"
+                  ]
+                },
+                "relatedMetadataScheme": {
+                  "type": "string",
+                  "title": "Related Metadata Scheme",
+                  "$dataciteRequired": false
+                },
+                "schemeUri": {
+                  "type": "string",
+                  "title": "Scheme URI",
+                  "$dataciteRequired": false
+                },
+                "schemeType": {
+                  "type": "string",
+                  "title": "Scheme Type",
+                  "$dataciteRequired": false
+                }
+              }
+            },
+            "creators": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "Creator Name",
+                    "$dataciteRequired": true
+                  },
+                  "nameType": {
+                    "type": "string",
+                    "title": "Name Type",
+                    "$dataciteRequired": false,
+                    "enum": ["Personal", "Organizational"]
+                  },
+                  "givenName": {
+                    "type": "string",
+                    "title": "Given Name",
+                    "$dataciteRequired": false
+                  },
+                  "familyName": {
+                    "type": "string",
+                    "title": "Family Name",
+                    "$dataciteRequired": false
+                  }
+                },
+                "required": ["name"]
+              },
+              "$dataciteRequired": false
+            },
+            "titles": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "title": "Title",
+                    "$dataciteRequired": true
+                  },
+                  "titleType": {
+                    "type": "string",
+                    "title": "Title Type",
+                    "$dataciteRequired": false,
+                    "enum": [
+                      "AlternativeTitle",
+                      "Subtitle",
+                      "TranslatedTitle",
+                      "Other"
+                    ]
+                  }
+                },
+                "required": ["title"]
+              },
+              "$dataciteRequired": false
+            },
+            "publicationYear": {
+              "type": "string",
+              "title": "Publication Year",
+              "$dataciteRequired": false
+            },
+            "volume": {
+              "type": "string",
+              "title": "Volume",
+              "$dataciteRequired": false
+            },
+            "issue": {
+              "type": "string",
+              "title": "Issue",
+              "$dataciteRequired": false
+            },
+            "number": {
+              "type": "string",
+              "title": "Number",
+              "$dataciteRequired": false
+            },
+            "numberType": {
+              "type": "string",
+              "title": "Number Type",
+              "$dataciteRequired": false,
+              "enum": ["Article", "Chapter", "Report", "Other"]
+            },
+            "firstPage": {
+              "type": "string",
+              "title": "First Page",
+              "$dataciteRequired": false
+            },
+            "lastPage": {
+              "type": "string",
+              "title": "Last Page",
+              "$dataciteRequired": false
+            },
+            "publisher": {
+              "type": "string",
+              "title": "Publisher",
+              "$dataciteRequired": false
+            },
+            "edition": {
+              "type": "string",
+              "title": "Edition",
+              "$dataciteRequired": false
+            },
+            "contributors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "contributorType": {
+                    "type": "string",
+                    "title": "Contributor Type",
+                    "$dataciteRequired": true,
+                    "enum": [
+                      "ContactPerson",
+                      "DataCollector",
+                      "DataCurator",
+                      "DataManager",
+                      "Distributor",
+                      "Editor",
+                      "HostingInstitution",
+                      "Producer",
+                      "ProjectLeader",
+                      "ProjectManager",
+                      "RegistrationAgency",
+                      "RegistrationAuthority",
+                      "RelatedPerson",
+                      "Researcher",
+                      "RightsHolder",
+                      "Sponsor",
+                      "Supervisor",
+                      "Translator",
+                      "WorkPackageLeader",
+                      "Other"
+                    ]
+                  },
+                  "name": {
+                    "type": "string",
+                    "title": "Contributor Name",
+                    "$dataciteRequired": true
+                  },
+                  "nameType": {
+                    "type": "string",
+                    "title": "Name Type",
+                    "$dataciteRequired": false,
+                    "enum": ["Personal", "Organizational"]
+                  },
+                  "givenName": {
+                    "type": "string",
+                    "title": "Given Name",
+                    "$dataciteRequired": false
+                  },
+                  "familyName": {
+                    "type": "string",
+                    "title": "Family Name",
+                    "$dataciteRequired": false
+                  }
+                },
+                "required": ["name", "contributorType"]
+              },
+              "$dataciteRequired": false
+            }
+          },
+          "required": [
+            "relatedItemType",
+            "relationType",
+            "relatedItemIdentifier"
+          ],
+          "$dataciteRequired": false
+        }
+      }
+    },
+    "required": ["creators", "publisher", "publicationYear", "resourceType"]
+  },
+
+  "uiSchema": {
+    "type": "VerticalLayout",
+    "elements": [
+      {
+        "type": "AccordionArrayLayout",
+        "scope": "#/properties/creators",
+        "options": {
+          "detail": {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/name"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/nameType"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/givenName"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/familyName"
+              },
+              {
+                "type": "AccordionArrayLayout",
+                "scope": "#/properties/nameIdentifiers",
+                "options": {
+                  "displayProperty": "nameIdentifier",
+                  "detail": {
+                    "type": "HorizontalLayout",
+                    "elements": [
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/nameIdentifier"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/nameIdentifierScheme"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/schemeUri"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "AccordionArrayLayout",
+                "scope": "#/properties/affiliation",
+                "options": {
+                  "detail": {
+                    "type": "HorizontalLayout",
+                    "elements": [
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/name"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/affiliationIdentifier"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/affiliationIdentifierScheme"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/schemeUri"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "Control",
+        "scope": "#/properties/publisher",
+        "options": {
+          "detail": {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "Label",
+                "text": "Publisher"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/name"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/publisherIdentifier"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/publisherIdentifierScheme"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/schemeUri"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "Control",
+        "scope": "#/properties/publicationYear",
+        "rule": { "effect": "HIDE", "condition": {} }
+      },
+      {
+        "type": "AccordionArrayLayout",
+        "scope": "#/properties/contributors",
+        "options": {
+          "detail": {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/contributorType"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/name"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/nameType"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/givenName"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/familyName"
+              },
+              {
+                "type": "AccordionArrayLayout",
+                "scope": "#/properties/nameIdentifiers",
+                "options": {
+                  "displayProperty": "nameIdentifier",
+                  "detail": {
+                    "type": "HorizontalLayout",
+                    "elements": [
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/nameIdentifier"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/nameIdentifierScheme"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/schemeUri"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "AccordionArrayLayout",
+                "scope": "#/properties/affiliation",
+                "options": {
+                  "detail": {
+                    "type": "HorizontalLayout",
+                    "elements": [
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/name"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/affiliationIdentifier"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/affiliationIdentifierScheme"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/schemeUri"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "AccordionArrayLayout",
+        "scope": "#/properties/subjects",
+        "options": {
+          "displayProperty": "subject",
+          "detail": {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/subject"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/subjectScheme"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/schemeUri"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/valueUri"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/lang"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/classificationCode"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "AccordionArrayLayout",
+        "scope": "#/properties/dates",
+        "options": {
+          "displayProperty": "date",
+          "detail": {
+            "type": "HorizontalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/date"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/dateType"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/dateInformation"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "Control",
+        "scope": "#/properties/language"
+      },
+      {
+        "type": "Control",
+        "scope": "#/properties/resourceType"
+      },
+      {
+        "type": "AccordionArrayLayout",
+        "scope": "#/properties/alternateIdentifiers",
+        "options": {
+          "displayProperty": "alternateIdentifier",
+          "detail": {
+            "type": "HorizontalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/alternateIdentifier"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/alternateIdentifierType"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "AccordionArrayLayout",
+        "scope": "#/properties/relatedIdentifiers",
+        "options": {
+          "displayProperty": "relatedIdentifier",
+          "detail": {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/relatedIdentifier"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/relatedIdentifierType"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/relationType"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/relatedMetadataScheme"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/schemeUri"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/schemeType"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "Control",
+        "scope": "#/properties/sizes"
+      },
+      {
+        "type": "Control",
+        "scope": "#/properties/formats"
+      },
+      {
+        "type": "AccordionArrayLayout",
+        "scope": "#/properties/rightsList",
+        "options": {
+          "displayProperty": "rights",
+          "detail": {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/rights"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/rightsUri"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/rightsIdentifier"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/rightsIdentifierScheme"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/schemeUri"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "AccordionArrayLayout",
+        "scope": "#/properties/descriptions",
+        "options": {
+          "displayProperty": "description",
+          "detail": {
+            "type": "HorizontalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/description"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/descriptionType"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "AccordionArrayLayout",
+        "scope": "#/properties/geoLocations",
+        "options": {
+          "displayProperty": "geoLocationPlace",
+          "detail": {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/geoLocationPlace"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/geoLocationPoint",
+                "options": {
+                  "detail": {
+                    "type": "VerticalLayout",
+                    "elements": [
+                      {
+                        "type": "Label",
+                        "text": "Geo location point"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/pointLongitude"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/pointLatitude"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/geoLocationBox",
+                "options": {
+                  "detail": {
+                    "type": "VerticalLayout",
+                    "elements": [
+                      {
+                        "type": "Label",
+                        "text": "Geo location box"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/westBoundLongitude"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/eastBoundLongitude"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/southBoundLatitude"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/northBoundLatitude"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "AccordionArrayLayout",
+        "scope": "#/properties/fundingReferences",
+        "options": {
+          "displayProperty": "funderName",
+          "detail": {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/funderName"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/funderIdentifier"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/funderIdentifierType"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/awardTitle"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/awardNumber"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/awardUri"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "AccordionArrayLayout",
+        "scope": "#/properties/relatedItems",
+        "options": {
+          "displayProperty": "relatedItemType",
+          "detail": {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/relatedItemType"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/relationType"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/relatedItemIdentifier",
+                "options": {
+                  "detail": {
+                    "type": "VerticalLayout",
+                    "elements": [
+                      {
+                        "type": "Label",
+                        "text": "Related Item Identifier"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/relatedItemIdentifier"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/relatedItemIdentifierType"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/relatedMetadataScheme"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/schemeUri"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/schemeType"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "AccordionArrayLayout",
+                "scope": "#/properties/creators",
+                "options": {
+                  "detail": {
+                    "type": "VerticalLayout",
+                    "elements": [
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/name"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/nameType"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/givenName"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/familyName"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "AccordionArrayLayout",
+                "scope": "#/properties/titles",
+                "options": {
+                  "displayProperty": "title",
+                  "detail": {
+                    "type": "HorizontalLayout",
+                    "elements": [
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/title"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/titleType"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/publicationYear"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/volume"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/issue"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/number"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/numberType"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/firstPage"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/lastPage"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/publisher"
+              },
+              {
+                "type": "Control",
+                "scope": "#/properties/edition"
+              },
+              {
+                "type": "AccordionArrayLayout",
+                "scope": "#/properties/contributors",
+                "options": {
+                  "detail": {
+                    "type": "VerticalLayout",
+                    "elements": [
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/contributorType"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/name"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/nameType"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/givenName"
+                      },
+                      {
+                        "type": "Control",
+                        "scope": "#/properties/familyName"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

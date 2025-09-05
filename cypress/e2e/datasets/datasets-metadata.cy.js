@@ -403,7 +403,7 @@ describe("Datasets", () => {
   describe("Different metadata types", () => {
     it("should be able to add a metadata entry with type 'date'", () => {
       const newMetadataName = "Cypress dataset date metadata";
-      const metaDataInvalidValue = "2021-";
+      const metaDataInvalidValue = "20";
       const metadata = {
         value: "2025-03-05 10:48",
         name: "date_metadata",

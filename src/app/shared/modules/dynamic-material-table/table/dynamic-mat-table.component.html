@@ -44,7 +44,11 @@
         <!-- <mat-icon *ngIf="rowSelectionMode === 'single'">indeterminate_check_box</mat-icon> -->
       </mat-header-cell>
       <!-- DATA -->
-      <mat-cell *matCellDef="let row" class="row-checkbox">
+      <mat-cell
+        *matCellDef="let row"
+        class="row-checkbox"
+        (click)="$event.stopPropagation()"
+      >
         <mat-checkbox
           (click)="$event.stopPropagation()"
           (change)="onRowSelectionChange($event, row)"

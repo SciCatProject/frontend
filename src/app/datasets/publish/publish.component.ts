@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { COMMA, ENTER } from "@angular/cdk/keycodes";
+import { Component, OnInit, OnDestroy, signal } from "@angular/core";
 
 import { Store, ActionsSubject } from "@ngrx/store";
 import { first, tap } from "rxjs/operators";
@@ -7,20 +6,31 @@ import { first, tap } from "rxjs/operators";
 import { selectDatasetsInBatch } from "state-management/selectors/datasets.selectors";
 import { prefillBatchAction } from "state-management/actions/datasets.actions";
 import {
-  publishDatasetAction,
-  fetchPublishedDataCompleteAction,
+  createPublishedDataAction,
+  createPublishedDataCompleteAction,
+  fetchPublishedDataConfigAction,
+  resyncPublishedDataAction,
+  savePublishedDataAction,
+  savePublishedDataCompleteAction,
+  updatePublishedDataAction,
 } from "state-management/actions/published-data.actions";
 
 import {
-  CreatePublishedDataDto,
+  CreatePublishedDataV4Dto,
+  PublishedData,
   PublishedDataService,
 } from "@scicatproject/scicat-sdk-ts-angular";
-import { formatDate } from "@angular/common";
 import { Router } from "@angular/router";
-import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
-import { Subscription } from "rxjs";
-import { selectCurrentUserName } from "state-management/selectors/user.selectors";
+import { selectPublishedDataConfig } from "state-management/selectors/published-data.selectors";
+import { fromEvent, Subscription } from "rxjs";
 import { AppConfigService } from "app-config.service";
+import { angularMaterialRenderers } from "@jsonforms/angular-material";
+import { isEmpty } from "lodash-es";
+import { EditableComponent } from "app-routing/pending-changes.guard";
+import {
+  AccordionArrayLayoutRendererComponent,
+  accordionArrayLayoutRendererTester,
+} from "shared/modules/jsonforms-custom-renderers/expand-panel-renderer/accordion-array-layout-renderer.component";
 
 @Component({
   selector: "publish",
@@ -28,33 +38,36 @@ import { AppConfigService } from "app-config.service";
   styleUrls: ["./publish.component.scss"],
   standalone: false,
 })
-export class PublishComponent implements OnInit, OnDestroy {
+export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
+  private _hasUnsavedChanges = false;
   private datasets$ = this.store.select(selectDatasetsInBatch);
-  private userName$ = this.store.select(selectCurrentUserName);
+  private publishedDataConfig$ = this.store.select(selectPublishedDataConfig);
   private countSubscription: Subscription;
+  private publishedDataConfigSubscription: Subscription;
+  private beforeUnloadSubscription: Subscription;
+  readonly panelOpenState = signal(false);
 
   appConfig = this.appConfigService.getConfig();
-
-  public separatorKeysCodes: number[] = [ENTER, COMMA];
+  renderers = [
+    ...angularMaterialRenderers,
+    {
+      tester: accordionArrayLayoutRendererTester,
+      renderer: AccordionArrayLayoutRendererComponent,
+    },
+  ];
+  schema: any = {};
+  uiSchema: any = {};
+  metadata: any = {};
   public datasetCount: number;
   today: number = Date.now();
+  public metadataFormErrors = [];
+  savedPublishedDataDoi: string | null = null;
+  initialMetadata = JSON.stringify({});
 
   public form = {
-    title: "",
-    creators: [],
-    publisher: this.appConfig.facility,
-    resourceType: "",
-    description: "",
-    abstract: "",
-    pidArray: [],
-    publicationYear: null,
-    url: "",
-    dataDescription: "",
-    thumbnail: "",
-    numberOfFiles: null,
-    sizeOfArchive: null,
-    downloadLink: "",
-    relatedPublications: [],
+    title: undefined,
+    abstract: undefined,
+    datasetPids: [],
   };
 
   public formData = null;
@@ -68,80 +81,62 @@ export class PublishComponent implements OnInit, OnDestroy {
     private router: Router,
   ) {}
 
-  addCreator(event) {
-    if ((event.value || "").trim()) {
-      this.form.creators.push(event.value);
-    }
-
-    if (event.input) {
-      event.input.value = "";
-    }
-  }
-
-  removeCreator(creator) {
-    const index = this.form.creators.indexOf(creator);
-
-    if (index >= 0) {
-      this.form.creators.splice(index, 1);
-    }
-  }
-
-  addRelatedPublication(event) {
-    if ((event.value || "").trim()) {
-      this.form.relatedPublications.push(event.value);
-    }
-
-    if (event.input) {
-      event.input.value = "";
-    }
-  }
-
-  removeRelatedPublication(relatedPublication) {
-    const index = this.form.relatedPublications.indexOf(relatedPublication);
-
-    if (index >= 0) {
-      this.form.relatedPublications.splice(index, 1);
-    }
-  }
-
   public formIsValid() {
     if (!Object.values(this.form).includes(undefined)) {
-      return (
-        this.form.title.length > 0 &&
-        this.form.resourceType.length > 0 &&
-        this.form.creators.length > 0 &&
-        this.form.publisher.length > 0 &&
-        this.form.description.length > 0 &&
-        this.form.abstract.length > 0
-      );
+      return this.form.title.length > 0 && this.form.abstract.length > 0;
     } else {
       return false;
     }
   }
 
+  public metadataIsValid() {
+    return this.metadataFormErrors.length === 0;
+  }
+
+  onErrors(errors) {
+    this.metadataFormErrors = errors;
+  }
+
+  onMetadataChange(data: any) {
+    this.metadata = data;
+
+    if (JSON.stringify(data) !== this.initialMetadata) {
+      this._hasUnsavedChanges = true;
+    }
+  }
+
+  onFormFieldChange() {
+    this._hasUnsavedChanges = true;
+  }
+
   ngOnInit() {
     this.store.dispatch(prefillBatchAction());
+    this.store.dispatch(fetchPublishedDataConfigAction());
 
     this.datasets$
       .pipe(
         first(),
         tap((datasets) => {
           if (datasets) {
-            const creator = datasets.map((dataset) => dataset.owner);
-            const unique = creator.filter(
-              (item, i) => creator.indexOf(item) === i,
-            );
-            this.form.creators = unique;
-            this.form.pidArray = datasets.map((dataset) => dataset.pid);
-            let size = 0;
-            datasets.forEach((dataset) => {
-              size += dataset.size;
-            });
-            this.form.sizeOfArchive = size;
+            this.form.datasetPids = datasets.map((dataset) => dataset.pid);
           }
         }),
       )
       .subscribe();
+
+    this.publishedDataConfigSubscription = this.publishedDataConfig$.subscribe(
+      (publishedDataConfig) => {
+        if (!isEmpty(publishedDataConfig)) {
+          this.schema = publishedDataConfig.metadataSchema;
+          // NOTE: We set the publicationYear by the system, so we remove it from the required fields in the frontend
+          this.schema?.required.splice(
+            this.schema.required.indexOf("publicationYear"),
+            1,
+          );
+          this.uiSchema = publishedDataConfig.uiSchema;
+        }
+      },
+    );
 
     this.countSubscription = this.datasets$.subscribe((datasets) => {
       if (datasets) {
@@ -150,67 +145,104 @@ export class PublishComponent implements OnInit, OnDestroy {
     });
 
     this.publishedDataApi
-      .publishedDataControllerFormPopulateV3(this.form.pidArray[0])
+      .publishedDataControllerFormPopulateV3(this.form.datasetPids[0])
       .subscribe((result) => {
         this.form.abstract = result.abstract;
         this.form.title = result.title;
-        this.form.description = result.description;
-        this.form.resourceType = "raw";
-        this.form.thumbnail = result.thumbnail ?? "";
       });
 
     this.actionSubjectSubscription = this.actionsSubj.subscribe((data) => {
-      if (data.type === fetchPublishedDataCompleteAction.type) {
-        this.store
-          .select(selectCurrentPublishedData)
-          .subscribe((publishedData) => {
-            const doi = encodeURIComponent(publishedData.doi);
-            this.router.navigateByUrl("/publishedDatasets/" + doi);
-          })
-          .unsubscribe();
+      if (data.type === createPublishedDataCompleteAction.type) {
+        const { publishedData } = data as {
+          type: string;
+          publishedData: PublishedData;
+        };
+
+        const doi = encodeURIComponent(publishedData.doi);
+        this.router.navigateByUrl("/publishedDatasets/" + doi);
+      }
+
+      if (data.type === savePublishedDataCompleteAction.type) {
+        const { publishedData } = data as {
+          type: string;
+          publishedData: PublishedData;
+        };
+
+        this.savedPublishedDataDoi = publishedData.doi;
       }
     });
+
+    // Prevent user from reloading page if there are unsave changes
+    this.beforeUnloadSubscription = fromEvent(window, "beforeunload").subscribe(
+      (event) => {
+        if (this.hasUnsavedChanges()) {
+          event.preventDefault();
+        }
+      },
+    );
   }
 
   ngOnDestroy() {
     this.actionSubjectSubscription.unsubscribe();
     this.countSubscription.unsubscribe();
+    this.publishedDataConfigSubscription.unsubscribe();
+    this.beforeUnloadSubscription.unsubscribe();
   }
 
-  public onPublish() {
-    const {
-      title,
-      abstract,
-      description,
-      creators,
-      resourceType,
-      pidArray,
-      publisher,
-      url,
-      thumbnail,
-      numberOfFiles,
-      sizeOfArchive,
-      downloadLink,
-      relatedPublications,
-    } = this.form;
-
-    const publishedData: CreatePublishedDataDto = {
+  getPublishedDataForCreation() {
+    const { title, abstract, datasetPids } = this.form;
+    const metadata = {
+      ...this.metadata,
+      landingPage: this.appConfig.landingPage,
+    };
+    return {
       title: title,
       abstract: abstract,
-      dataDescription: description,
-      creator: creators,
-      resourceType: resourceType,
-      pidArray: pidArray,
-      publisher: publisher,
-      publicationYear: parseInt(formatDate(this.today, "yyyy", "en_GB"), 10),
-      url: url,
-      thumbnail: thumbnail,
-      numberOfFiles: numberOfFiles,
-      sizeOfArchive: sizeOfArchive,
-      downloadLink: downloadLink,
-      relatedPublications: relatedPublications,
-    };
+      datasetPids: datasetPids,
+      metadata: metadata,
+    } as CreatePublishedDataV4Dto;
+  }
 
-    this.store.dispatch(publishDatasetAction({ data: publishedData }));
+  public onSaveAndContinue() {
+    const publishedData = this.getPublishedDataForCreation();
+
+    this._hasUnsavedChanges = false;
+
+    if (this.savedPublishedDataDoi) {
+      this.store.dispatch(
+        resyncPublishedDataAction({
+          doi: this.savedPublishedDataDoi,
+          data: publishedData,
+          redirect: true,
+        }),
+      );
+    } else {
+      this.store.dispatch(createPublishedDataAction({ data: publishedData }));
+    }
+  }
+
+  public onSaveChanges() {
+    const publishedData = this.getPublishedDataForCreation();
+
+    if (this.savedPublishedDataDoi) {
+      this.store.dispatch(
+        updatePublishedDataAction({
+          doi: this.savedPublishedDataDoi,
+          data: publishedData,
+        }),
+      );
+    } else {
+      this.store.dispatch(savePublishedDataAction({ data: publishedData }));
+    }
+
+    this._hasUnsavedChanges = false;
+  }
+
+  public onCancel() {
+    this.router.navigateByUrl("/datasets/selection");
+  }
+
+  hasUnsavedChanges() {
+    return this._hasUnsavedChanges;
   }
 }
