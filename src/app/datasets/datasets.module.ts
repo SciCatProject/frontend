@@ -73,8 +73,6 @@ import { AdminTabComponent } from "./admin-tab/admin-tab.component";
 import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
 import { InstrumentEffects } from "state-management/effects/instruments.effects";
 import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.component";
-import { DatafilesActionsComponent } from "./datafiles-actions/datafiles-actions.component";
-import { DatafilesActionComponent } from "./datafiles-actions/datafiles-action.component";
 import { MatMenuModule } from "@angular/material/menu";
 import { DatasetsFilterSettingsComponent } from "./datasets-filter/settings/datasets-filter-settings.component";
 import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
@@ -173,8 +171,6 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
     DatasetFileUploaderComponent,
     AdminTabComponent,
     RelatedDatasetsComponent,
-    DatafilesActionsComponent,
-    DatafilesActionComponent,
     DatasetsFilterSettingsComponent,
   ],
   providers: [

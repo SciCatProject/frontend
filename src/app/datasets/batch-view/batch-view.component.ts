@@ -14,7 +14,7 @@ import { Message, MessageType } from "state-management/models";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { DialogComponent } from "shared/modules/dialog/dialog.component";
 
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ArchivingService } from "../archiving.service";
 import { Observable, Subscription, combineLatest } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
@@ -38,6 +38,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   );
   userProfile$ = this.store.select(selectProfile);
   isAdmin$ = this.store.select(selectIsAdmin);
+  params$ = this.route.queryParams;
   isAdmin = false;
   userProfile: any = {};
   subscriptions: Subscription[] = [];
@@ -55,6 +56,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     private store: Store,
     private archivingSrv: ArchivingService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   private clearBatch() {
@@ -79,6 +81,13 @@ export class BatchViewComponent implements OnInit, OnDestroy {
 
   onPublish() {
     this.router.navigate(["datasets", "batch", "publish"]);
+  }
+
+  onShareClick() {
+    this.router.navigate([], {
+      queryParams: { share: "true" },
+      queryParamsHandling: "merge",
+    });
   }
 
   onShare() {
@@ -155,6 +164,11 @@ export class BatchViewComponent implements OnInit, OnDestroy {
         );
         this.store.dispatch(showMessageAction({ message }));
       }
+
+      this.router.navigate([], {
+        queryParams: { share: null },
+        queryParamsHandling: "merge",
+      });
     });
   }
 
@@ -206,6 +220,11 @@ export class BatchViewComponent implements OnInit, OnDestroy {
             ),
         );
       }
+
+      this.router.navigate([], {
+        queryParams: { retrieve: null },
+        queryParamsHandling: "merge",
+      });
     });
   }
 
@@ -222,6 +241,17 @@ export class BatchViewComponent implements OnInit, OnDestroy {
         if (result) {
           this.datasetList = result;
           this.hasBatch = result.length > 0;
+        }
+      }),
+    );
+
+    this.subscriptions.push(
+      combineLatest([this.params$]).subscribe(([queryParams]) => {
+        if (queryParams["share"] === "true") {
+          this.onShare();
+        }
+        if (queryParams["retrieve"] === "true") {
+          this.onRetrieve();
         }
       }),
     );

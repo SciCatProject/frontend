@@ -24,7 +24,6 @@
   "ingestManual": null,
   "jobsEnabled": true,
   "jsonMetadataEnabled": true,
-  "jupyterHubUrl": "",
   "landingPage": "doi.ess.eu/detail/",
   "lbBaseURL": "http://localhost:3000",
   "logbookEnabled": true,
@@ -104,6 +103,75 @@
       "target": "_blank",
       "enabled": "#Selected",
       "authorization": ["#datasetAccess", "#datasetPublic"]
+    }
+  ],
+  "datasetDetailsActionsEnabled": true,
+  "datasetDetailsActions": [
+    {
+      "id": "01",
+      "order": 1,
+      "type": "xhr",
+      "method": "PATCH",
+      "description": "Publish dataset",
+      "label": "Publish",
+      "hidden": "#isPublished",
+      "mat_icon": "",
+      "url": "/api/v3/datasets/{{id}}",
+      "payload": "{\"isPublished\": true}"
+    },
+    {
+      "id": "02",
+      "order": 2,
+      "type": "xhr",
+      "method": "PATCH",
+      "description": "Unpublish published dataset",
+      "label": "Unpublish",
+      "hidden": "#!isPublished",
+      "mat_icon": "",
+      "url": "/api/v3/datasets/{{id}}",
+      "payload": "{\"isPublished\": false}"
+    },
+    {
+      "id": "03",
+      "order": 3,
+      "type": "form",
+      "method": "GET",
+      "description": "Jupyter hub",
+      "label": "Jupyter hub",
+      "mat_icon": "",
+      "url": "https://jupyterhub.esss.lu.se/",
+      "target": "_blank"
+    }
+  ],
+  "datasetSelectionActionsEnabled": true,
+  "datasetSelectionActions": [
+    {
+      "id": "01",
+      "order": 1,
+      "type": "link",
+      "description": "Publish datasets",
+      "label": "Publish",
+      "mat_icon": "school",
+      "url": "/datasets/batch/publish"
+    },
+    {
+      "id": "02",
+      "order": 2,
+      "type": "link",
+      "description": "Share datasets",
+      "label": "Share",
+      "mat_icon": "share",
+      "url": "/datasets/batch?share=true"
+    },
+    {
+      "id": "03",
+      "order": 3,
+      "type": "link",
+      "hidden": "!archiveWorkflowEnabled",
+      "description": "Retrieve datasets",
+      "label": "Retrieve",
+      "mat_icon": "cloud_download",
+      "url": "/datasets/batch?retrieve=true"
     }
   ],
   "labelMaps": {
