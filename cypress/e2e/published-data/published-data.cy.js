@@ -250,17 +250,23 @@ describe("Datasets general", () => {
 
       cy.get('[id="#/properties/resourceType"]').clear().type(resourceType);
 
-      cy.get('[ng-reflect-path="publisher"]')
-        .parent()
+      cy.get("label")
+        .contains("Publisher")
+        .first()
+        .closest("mat-card")
         .find('[id="#/properties/name"]')
         .clear()
         .type(publisherName);
 
-      cy.get('[ng-reflect-path="publisher"]')
-        .parent()
+      cy.get("label")
+        .contains("Publisher")
+        .first()
+        .closest("mat-card")
         .should("contain", "is a required property");
-      cy.get('[ng-reflect-path="publisher"]')
-        .parent()
+      cy.get("label")
+        .contains("Publisher")
+        .first()
+        .closest("mat-card")
         .find('input[id="#/properties/publisherIdentifierScheme"]')
         .clear()
         .type(publisherIndetifierScheme);
@@ -486,17 +492,23 @@ describe("Datasets general", () => {
 
       cy.get('[id="#/properties/resourceType"]').clear().type(resourceType);
 
-      cy.get('[ng-reflect-path="publisher"]')
-        .parent()
+      cy.get("label")
+        .contains("Publisher")
+        .first()
+        .closest("mat-card")
         .find('[id="#/properties/name"]')
         .clear()
         .type(publisherName);
 
-      cy.get('[ng-reflect-path="publisher"]')
-        .parent()
+      cy.get("label")
+        .contains("Publisher")
+        .first()
+        .closest("mat-card")
         .should("contain", "is a required property");
-      cy.get('[ng-reflect-path="publisher"]')
-        .parent()
+      cy.get("label")
+        .contains("Publisher")
+        .first()
+        .closest("mat-card")
         .find('input[id="#/properties/publisherIdentifierScheme"]')
         .clear()
         .type(publisherIndetifierScheme);
