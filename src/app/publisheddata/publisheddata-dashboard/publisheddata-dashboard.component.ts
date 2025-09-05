@@ -79,6 +79,7 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   tableDefinition = {
     collection: "publishedData",
     columns: this.columns,
+    apiVersion: "v4",
   };
   dataSource: SciCatDataSource;
   select = true;
