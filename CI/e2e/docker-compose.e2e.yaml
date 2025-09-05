@@ -24,9 +24,6 @@ services:
 
   backend:
     image: ghcr.io/scicatproject/backend-next:latest
-    env:
-      DOI_USERNAME: ${{ secrets.DOI_TEST_USERNAME }}
-      DOI_PASSWORD: ${{ secrets.DOI_TEST_PASSWORD }}
     ports:
       - 3000:3000
     volumes:
