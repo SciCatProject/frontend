@@ -133,8 +133,9 @@ type ScientificConditionRelation =
 export interface ScientificCondition {
   lhs: string;
   relation: ScientificConditionRelation;
-  rhs: string | number;
+  rhs: string | number | number[];
   unit: string;
+  unitsOptions?: string[];
 }
 
 export interface GenericFilters {

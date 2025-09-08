@@ -106,80 +106,71 @@ Cypress.Commands.add("isLoading", (type) => {
   cy.get('[data-cy="spinner"]').should("not.exist");
 });
 
-Cypress.Commands.add(
-  "createDataset",
-  (
-    type,
-    datasetName = testData.rawDataset.datasetName,
-    proposalId = "20170266",
-    dataFileSize = "small",
-    overrides = {}
-  ) => {
-    cy.getCookie("user").then((userCookie) => {
-      const user = JSON.parse(decodeURIComponent(userCookie.value));
+Cypress.Commands.add("createDataset", (overwrites = {}) => {
+  const { type = "raw", dataFileSize = "small", ...rest } = overwrites;
 
-      cy.getToken().then((token) => {
-        if (type === "raw") {
-          const dataset = { 
-            ...testData.rawDataset, 
-            datasetName, 
-            proposalId,
-            ...overrides,
-          };
-          cy.log("Raw Dataset 1: " + JSON.stringify(dataset, null, 2));
-          cy.log("User: " + JSON.stringify(user, null, 2));
+  cy.getCookie("user").then((userCookie) => {
+    const user = JSON.parse(decodeURIComponent(userCookie.value));
+
+    cy.getToken().then((token) => {
+      if (type === "raw") {
+        const dataset = {
+          ...testData.rawDataset,
+          ...rest,
+        };
+        cy.log("Raw Dataset 1: " + JSON.stringify(dataset, null, 2));
+        cy.log("User: " + JSON.stringify(user, null, 2));
+
+        cy.request({
+          method: "POST",
+          url: lbBaseUrl + "/datasets",
+          headers: {
+            Authorization: token,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: dataset,
+        }).then((response) => {
+          const origDataBlock =
+            dataFileSize === "small"
+              ? testData.origDataBlockSmall
+              : testData.origDataBlockLarge;
+          origDataBlock.datasetId = response.body.pid;
 
           cy.request({
             method: "POST",
-            url: lbBaseUrl + "/datasets",
+            url: lbBaseUrl + `/OrigDatablocks`,
             headers: {
               Authorization: token,
               Accept: "application/json",
               "Content-Type": "application/json",
             },
-            body: dataset,
-          }).then((response) => {
-            const origDataBlock =
-              dataFileSize === "small"
-                ? testData.origDataBlockSmall
-                : testData.origDataBlockLarge;
-            origDataBlock.datasetId = response.body.pid;
-
-            cy.request({
-              method: "POST",
-              url: lbBaseUrl + `/OrigDatablocks`,
-              headers: {
-                Authorization: token,
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-              body: origDataBlock,
-            });
+            body: origDataBlock,
           });
-        } else if (type === "derived") {
-          const dataset = testData.derivedDataset;
-          dataset.investigator = user.email;
-          dataset.owner = user.username;
-          dataset.ownerEmail = user.email;
-          dataset.contactEmail = user.email;
-          dataset.createdBy = user.username;
-          dataset.updatedBy = user.username;
+        });
+      } else if (type === "derived") {
+        const dataset = { ...testData.derivedDataset, ...rest };
+        dataset.investigator = user.email;
+        dataset.owner = user.username;
+        dataset.ownerEmail = user.email;
+        dataset.contactEmail = user.email;
+        dataset.createdBy = user.username;
+        dataset.updatedBy = user.username;
 
-          cy.request({
-            method: "POST",
-            url: lbBaseUrl + "/datasets",
-            headers: {
-              Authorization: token,
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: dataset,
-          });
-        }
-      });
+        cy.request({
+          method: "POST",
+          url: lbBaseUrl + "/datasets",
+          headers: {
+            Authorization: token,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: dataset,
+        });
+      }
     });
-  },
-);
+  });
+});
 Cypress.Commands.add("createProposal", (proposal) => {
   return cy.getCookie("user").then((userCookie) => {
     const user = JSON.parse(decodeURIComponent(userCookie.value));
@@ -368,9 +359,7 @@ Cypress.Commands.add("removeInstruments", () => {
           cy.request({
             method: "DELETE",
             url:
-              lbBaseUrl +
-              "/instruments/" +
-              encodeURIComponent(instrument.pid),
+              lbBaseUrl + "/instruments/" + encodeURIComponent(instrument.pid),
             headers: {
               Authorization: token,
               Accept: "application/json",

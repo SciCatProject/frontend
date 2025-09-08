@@ -17,4 +17,9 @@ mat-dialog-content {
   .mat-table {
     width: 100%;
   }
+
+  .selected_row {
+    font-weight: bold;
+    background-color: rgba(0, 255, 64, 0.1);
+  }
 }
