@@ -47,7 +47,6 @@ import { AuthService } from "shared/services/auth/auth.service";
 export class DatafilesComponent
   implements OnDestroy, AfterViewInit, AfterViewChecked
 {
-
   @ViewChild("downloadAllForm") downloadAllFormElement: ElementRef<NgForm>;
   @ViewChild("downloadSelectedForm") downloadSelectedFormElement;
   datablocks$ = this.store.select(selectCurrentOrigDatablocks);
@@ -252,13 +251,12 @@ export class DatafilesComponent
           this.sourceFolder = dataset.sourceFolder;
           this.datasetPid = dataset.pid;
           this.actionDataset = <ActionDataset>dataset;
-
         }
       }),
     );
     this.subscriptions.push(
       this.datablocks$.subscribe((datablocks) => {
-                if (datablocks) {
+        if (datablocks) {
           const files: DataFiles_File[] = [];
           datablocks.forEach((block) => {
             block.dataFileList.map((file: DataFiles_File) => {
@@ -279,7 +277,6 @@ export class DatafilesComponent
   ngAfterViewChecked() {
     this.cdRef.detectChanges();
   }
-
 
   downloadFiles(form: "downloadAllForm" | "downloadSelectedForm") {
     if (this.appConfig.multipleDownloadUseAuthToken) {
