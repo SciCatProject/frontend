@@ -3,7 +3,7 @@
     <mat-card-title>Filters</mat-card-title>
     <div class="section-container" data-cy="more-filters-button">
       <button
-        mat-button
+        mat-icon-button
         class="settings-button"
         (click)="showDatasetsFilterSettingsDialog()"
         matTooltip="Filter settings"
@@ -34,7 +34,7 @@
       <div class="section-container conditions-header">
         <mat-card-title>Conditions</mat-card-title>
         <button
-          mat-button
+          mat-icon-button
           class="condition-button"
           (click)="addCondition()"
           matTooltip="Add condition"
@@ -126,7 +126,9 @@
                 </mat-select-trigger>
                 <mat-option
                   *ngFor="
-                    let operator of getAllowedOperators(conditionConfig.condition.lhs)
+                    let operator of getAllowedOperators(
+                      conditionConfig.condition.lhs
+                    )
                   "
                   [value]="operator"
                 >
@@ -221,11 +223,8 @@
                   [value]="conditionConfig.condition.unit || ''"
                   (input)="updateConditionUnit(i, $event)"
                   [matAutocomplete]="rhsUnits"
-                  [disabled]="
-                    conditionConfig.condition.relation === 'EQUAL_TO_STRING'
-                  "
                 />
-                <mat-autocomplete #rhsUnits="matAutocomplete">
+                <mat-autocomplete #rhsUnits="matAutocomplete" (optionSelected)="updateConditionUnit(i, $event)">
                   <mat-option
                     *ngFor="let unit of getUnits(conditionConfig.condition.lhs)"
                     [value]="unit"
@@ -248,13 +247,13 @@
 
               <button
                 class="condition-remove"
-                mat-button
+                mat-icon-button
                 color="warn"
                 (click)="removeCondition(conditionConfig, i)"
                 matTooltip="Remove condition"
+                data-cy="remove-condition-button"
               >
                 <mat-icon>delete</mat-icon>
-                Remove
               </button>
             </div>
           </div>

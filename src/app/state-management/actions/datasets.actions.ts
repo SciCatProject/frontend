@@ -226,6 +226,10 @@ export const selectDatasetAction = createAction(
   "[Dataset] Select Dataset",
   props<{ dataset: OutputDatasetObsoleteDto }>(),
 );
+export const selectDatasetsAction = createAction(
+  "[Dataset] Select Datasets",
+  props<{ datasets: OutputDatasetObsoleteDto[] }>(),
+);
 export const deselectDatasetAction = createAction(
   "[Dataset] Deselect Dataset",
   props<{ dataset: OutputDatasetObsoleteDto }>(),

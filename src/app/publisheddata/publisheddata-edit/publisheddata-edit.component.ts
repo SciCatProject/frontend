@@ -1,21 +1,31 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { Store } from "@ngrx/store";
 import {
   fetchPublishedDataAction,
+  fetchPublishedDataConfigAction,
   resyncPublishedDataAction,
 } from "state-management/actions/published-data.actions";
 import { ActivatedRoute, Router } from "@angular/router";
-import { selectCurrentPublishedData } from "state-management/selectors/published-data.selectors";
-import { MatChipInputEvent } from "@angular/material/chips";
+import {
+  selectCurrentPublishedData,
+  selectPublishedDataConfig,
+} from "state-management/selectors/published-data.selectors";
 import {
   Attachment,
   PublishedData,
 } from "@scicatproject/scicat-sdk-ts-angular";
-import { PickedFile } from "shared/modules/file-uploader/file-uploader.component";
 import { tap } from "rxjs/operators";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Observable, Subscription } from "rxjs";
+import { fromEvent, Observable, Subscription } from "rxjs";
+import { angularMaterialRenderers } from "@jsonforms/angular-material";
+import { EditableComponent } from "app-routing/pending-changes.guard";
+import { isEmpty } from "lodash-es";
+import { AppConfigService } from "app-config.service";
+import {
+  AccordionArrayLayoutRendererComponent,
+  accordionArrayLayoutRendererTester,
+} from "shared/modules/jsonforms-custom-renderers/expand-panel-renderer/accordion-array-layout-renderer.component";
 
 @Component({
   selector: "publisheddata-edit",
@@ -23,79 +33,76 @@ import { Observable, Subscription } from "rxjs";
   styleUrls: ["./publisheddata-edit.component.scss"],
   standalone: false,
 })
-export class PublisheddataEditComponent implements OnInit, OnDestroy {
+export class PublisheddataEditComponent
+  implements OnInit, OnDestroy, EditableComponent
+{
+  private _hasUnsavedChanges = false;
+  private publishedDataConfig$ = this.store.select(selectPublishedDataConfig);
+  renderers = [
+    ...angularMaterialRenderers,
+    {
+      tester: accordionArrayLayoutRendererTester,
+      renderer: AccordionArrayLayoutRendererComponent,
+    },
+  ];
+  schema: any = {};
+  uiSchema: any = {};
+  metadataData: any = {};
+  public metadataFormErrors = [];
+  readonly panelOpenState = signal(false);
   routeSubscription = new Subscription();
   publishedData$: Observable<PublishedData> = new Observable();
   attachments: Attachment[] = [];
+
   form: FormGroup = this.formBuilder.group({
     doi: [""],
     title: ["", Validators.required],
-    creator: [[""], Validators.minLength(1)],
-    publisher: ["", Validators.required],
-    resourceType: ["", Validators.required],
     abstract: ["", Validators.required],
-    pidArray: [[""], Validators.minLength(1)],
-    publicationYear: [0, Validators.required],
-    url: [""],
-    dataDescription: ["", Validators.required],
-    thumbnail: [""],
-    numberOfFiles: [0],
-    sizeOfArchive: [0],
-    downloadLink: [""],
-    relatedPublications: [[]],
+    datasetPids: [[""], Validators.minLength(1)],
   });
 
   public separatorKeysCodes: number[] = [ENTER, COMMA];
+  publishedDataConfigSubscription: Subscription;
+  beforeUnloadSubscription: Subscription;
+  formValueChangesSubscription: Subscription;
+  initialMetadata: string;
+  appConfig = this.appConfigService.getConfig();
 
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store,
+    private appConfigService: AppConfigService,
   ) {}
 
-  addCreator(event: MatChipInputEvent) {
-    const value = (event.value || "").trim();
-    if (value) {
-      this.creator!.value.push(value);
-    }
-
-    if (event.chipInput && event.chipInput.inputElement.value) {
-      event.chipInput.inputElement.value = "";
-    }
-  }
-
-  removeCreator(index: number) {
-    if (index >= 0) {
-      this.creator!.value.splice(index, 1);
-    }
-  }
-
-  addRelatedPublication(event: MatChipInputEvent) {
-    const value = (event.value || "").trim();
-    if (value) {
-      this.relatedPublications!.value.push(value);
-    }
-
-    if (event.chipInput && event.chipInput.inputElement.value) {
-      event.chipInput.inputElement.value = "";
-    }
-  }
-
-  removeRelatedPublication(index: number) {
-    if (index >= 0) {
-      this.relatedPublications!.value.splice(index, 1);
-    }
-  }
-
-  public onUpdate() {
+  public onPublishedDataUpdate(shouldRedirect = false) {
     if (this.form.valid) {
-      const doi = this.form.get("doi")!.value;
+      const { doi, ...rest } = this.form.value;
+      const metadata = {
+        ...this.metadataData,
+        landingPage: this.appConfig.landingPage,
+      };
+
+      if (
+        shouldRedirect &&
+        this.panelOpenState() &&
+        !this.metadataDataIsValid()
+      ) {
+        return;
+      }
+
       if (doi) {
         this.store.dispatch(
-          resyncPublishedDataAction({ doi, data: this.form.value }),
+          resyncPublishedDataAction({
+            doi,
+            data: { ...rest, metadata },
+            redirect: shouldRedirect,
+          }),
         );
       }
+
+      this._hasUnsavedChanges = false;
     }
   }
 
@@ -107,37 +114,78 @@ export class PublisheddataEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  onFileUploaderFilePicked(file: PickedFile) {
-    this.form.get("thumbnail")!.setValue(file.content);
+  public metadataDataIsValid() {
+    return this.metadataFormErrors.length === 0;
   }
 
-  deleteAttachment(attachmentId: string) {
-    this.form.get("thumbnail")!.setValue("");
+  onErrors(errors) {
+    this.metadataFormErrors = errors;
   }
 
-  get creator() {
-    return this.form.get("creator");
+  onMetadataChange(data: any) {
+    this.metadataData = data;
+    if (JSON.stringify(data) !== this.initialMetadata) {
+      this._hasUnsavedChanges = true;
+    }
   }
 
-  get relatedPublications() {
-    return this.form.get("relatedPublications");
-  }
-
-  get thumbnail() {
-    return this.form.get("thumbail");
+  hasUnsavedChanges() {
+    return this._hasUnsavedChanges;
   }
 
   ngOnInit() {
+    this.store.dispatch(fetchPublishedDataConfigAction());
+
     this.routeSubscription = this.route.params.subscribe(({ id }) =>
       this.store.dispatch(fetchPublishedDataAction({ id })),
     );
 
-    this.publishedData$ = this.store
-      .select(selectCurrentPublishedData)
-      .pipe(tap((publishedData) => this.form.patchValue(publishedData)));
+    this.publishedDataConfigSubscription = this.publishedDataConfig$.subscribe(
+      (publishedDataConfig) => {
+        if (!isEmpty(publishedDataConfig)) {
+          this.schema = publishedDataConfig.metadataSchema;
+          // NOTE: We set the publicationYear by the system, so we remove it from the required fields in the frontend
+          this.schema?.required.splice(
+            this.schema.required.indexOf("publicationYear"),
+            1,
+          );
+          this.uiSchema = publishedDataConfig.uiSchema;
+        }
+      },
+    );
+
+    this.publishedData$ = this.store.select(selectCurrentPublishedData).pipe(
+      tap((publishedData) => {
+        this.form.patchValue(publishedData);
+        this.initialMetadata = JSON.stringify(this.form.value);
+
+        if (publishedData?.metadata) {
+          this.initialMetadata = JSON.stringify(publishedData.metadata);
+          this.metadataData = publishedData.metadata;
+        }
+      }),
+    );
+
+    // Prevent user from reloading page if there are unsave changes
+    this.beforeUnloadSubscription = fromEvent(window, "beforeunload").subscribe(
+      (event) => {
+        if (this.hasUnsavedChanges()) {
+          event.preventDefault();
+        }
+      },
+    );
+
+    this.formValueChangesSubscription = this.form.valueChanges.subscribe(() => {
+      if (this.form.dirty) {
+        this._hasUnsavedChanges = true;
+      }
+    });
   }
 
   ngOnDestroy() {
     this.routeSubscription.unsubscribe();
+    this.publishedDataConfigSubscription.unsubscribe();
+    this.beforeUnloadSubscription.unsubscribe();
+    this.formValueChangesSubscription.unsubscribe();
   }
 }
