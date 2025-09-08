@@ -9,7 +9,14 @@ import {
 } from "@angular/core";
 import { TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
-import { BehaviorSubject, Subscription, forkJoin, lastValueFrom, map, take } from "rxjs";
+import {
+  BehaviorSubject,
+  Subscription,
+  forkJoin,
+  lastValueFrom,
+  map,
+  take
+} from "rxjs";
 import { Store } from "@ngrx/store";
 import {
   clearSelectionAction,
@@ -156,7 +163,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private fileSize: FileSizePipe,
     private titleCase: TitleCasePipe,
     private tableConfigService: TableConfigService,
-    private translateService: TranslateService,    
+    private translateService: TranslateService,
   ) {
     this.translateService.use("dataset");
   }
@@ -217,9 +224,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           map((translated) => ({
             ...i,
             header: translated,
-          })
-        ))
-      )
+          })),
+        ),
+      ),
     );
 
     translated$.subscribe((result) => {
