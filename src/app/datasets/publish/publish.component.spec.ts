@@ -84,31 +84,6 @@ describe("PublishComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("#addCreator()", () => {
-    it("should push a creator to the creator property in the form", () => {
-      const event = {
-        input: {
-          value: "",
-        },
-        value: "testCreator",
-      };
-      component.addCreator(event);
-
-      expect(component.form.creators).toContain(event.value);
-    });
-  });
-
-  describe("#removeCreator()", () => {
-    it("should remove a creator from the creator property in the form", () => {
-      const creator = "testCreator";
-      component.form.creators = [creator];
-
-      component.removeCreator(creator);
-
-      expect(component.form.creators).not.toContain(creator);
-    });
-  });
-
   describe("#formIsValid()", () => {
     it("should return false if form has undefined properties", () => {
       component.form.title = undefined;
@@ -121,20 +96,8 @@ describe("PublishComponent", () => {
     it("should return true if form has no undefined properties and their lengths > 0", () => {
       component.form = {
         title: "testTitle",
-        creators: ["testCreator"],
-        publisher: "testPublisher",
-        resourceType: "testType",
-        description: "testDescription",
         abstract: "testAbstract",
-        pidArray: ["testPid"],
-        publicationYear: 2019,
-        url: "testUrl",
-        dataDescription: "testDataDescription",
-        thumbnail: "testThumbnail",
-        numberOfFiles: 1,
-        sizeOfArchive: 100,
-        relatedPublications: ["testpub"],
-        downloadLink: "testlink",
+        datasetPids: ["testPid"],
       };
 
       const isValid = component.formIsValid();

@@ -14,6 +14,11 @@ export const selectCurrentPublishedData = createSelector(
   (state) => state.currentPublishedData,
 );
 
+export const selectPublishedDataConfig = createSelector(
+  selectPublishedDataState,
+  (state) => state.publishedDataConfig,
+);
+
 export const selectPublishedDataCount = createSelector(
   selectPublishedDataState,
   (state) => state.totalCount,
