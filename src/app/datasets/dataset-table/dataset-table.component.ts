@@ -537,6 +537,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
               if (!currentUser) {
                 this.rowSelectionMode = "none";
+              } else {
+                this.rowSelectionMode = "multi";
               }
 
               if (tableColumns) {
