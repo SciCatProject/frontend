@@ -9,7 +9,7 @@ import {
 } from "@angular/core";
 import { TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
-import { BehaviorSubject, Subscription, lastValueFrom, map, take } from "rxjs";
+import { BehaviorSubject, Subscription, lastValueFrom, take } from "rxjs";
 import { Store } from "@ngrx/store";
 import {
   clearSelectionAction,
