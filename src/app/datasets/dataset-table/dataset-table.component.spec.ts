@@ -50,7 +50,11 @@ import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { DatePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
-import { TranslationObject, TranslateLoader, TranslateModule } from "@ngx-translate/core";
+import {
+  TranslationObject,
+  TranslateLoader,
+  TranslateModule,
+} from "@ngx-translate/core";
 import { Observable, of } from "rxjs";
 
 const getConfig = () => ({});

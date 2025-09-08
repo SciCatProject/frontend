@@ -15,7 +15,7 @@ import {
   forkJoin,
   lastValueFrom,
   map,
-  take
+  take,
 } from "rxjs";
 import { Store } from "@ngrx/store";
 import {
