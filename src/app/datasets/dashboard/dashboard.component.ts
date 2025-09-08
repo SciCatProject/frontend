@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
 import { Store, ActionsSubject } from "@ngrx/store";
 
 import deepEqual from "deep-equal";
@@ -15,6 +15,7 @@ import {
   fetchDatasetCompleteAction,
   fetchMetadataKeysAction,
   changePageAction,
+  clearBatchAction,
   setSearchTermsAction,
   setTextFilterAction,
 } from "state-management/actions/datasets.actions";
@@ -177,7 +178,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
           this.store.dispatch(fetchDatasetsAction());
           this.store.dispatch(fetchFacetCountsAction());
-          this.router.navigate(["/datasets"], {
+          this.router.navigate([this.router.url.split("?")[0]], {
             queryParams: { args: JSON.stringify(pagination) },
           });
           if (!loggedIn) {
@@ -231,6 +232,37 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       }),
     );
+
+    this.subscriptions.push(
+      this.router.events.subscribe((event) => {
+        const currentUrl = this.router.url.split("?")[0];
+        if (
+          event instanceof NavigationStart &&
+          event.url !== currentUrl + "/edit" &&
+          !this.fullyDecodeURI(event.url).startsWith(
+            this.fullyDecodeURI(currentUrl),
+          )
+        ) {
+          localStorage.removeItem("editingPublishedDataDoi");
+          localStorage.removeItem("editingDatasetList");
+          this.store.dispatch(clearBatchAction());
+        }
+      }),
+    );
+  }
+
+  isEncoded(uri: string | undefined): boolean {
+    uri = uri || "";
+
+    return uri !== decodeURIComponent(uri);
+  }
+
+  fullyDecodeURI(uri: string | undefined): string {
+    while (this.isEncoded(uri)) {
+      uri = decodeURIComponent(uri);
+    }
+
+    return uri;
   }
 
   ngOnDestroy() {
