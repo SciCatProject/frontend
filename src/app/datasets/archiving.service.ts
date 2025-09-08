@@ -12,6 +12,7 @@ import { RetrieveDestinations } from "app-config.service";
 import {
   OutputDatasetObsoleteDto,
   ReturnedUserDto,
+  CreateJobDtoV3,
 } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Injectable()
@@ -27,13 +28,10 @@ export class ArchivingService {
     archive: boolean,
     destinationPath?: Record<string, string>,
     // Do not specify tape copies here
-  ) {
+  ): CreateJobDtoV3 {
     const extra = archive ? {} : destinationPath;
     const jobParams = {
-      datasetList: datasets.map((dataset) => ({
-        pid: dataset.pid,
-        files: [],
-      })),
+      username: user.username,
       ...extra,
     };
 
@@ -41,11 +39,18 @@ export class ArchivingService {
       user.email = profile.email;
     });
 
-    const data = {
+    // TODO remove jobStatusMessage when issue #2174 is resolved
+    // https://github.com/SciCatProject/scicat-backend-next/issues/2174
+    const data: CreateJobDtoV3 = {
       jobParams,
-      createdBy: user.username,
+      emailJobInitiator: user.email,
       // Revise this, files == []...? See earlier version of this method in dataset-table component for context
+      datasetList: datasets.map((dataset) => ({
+        pid: dataset.pid,
+        files: [],
+      })),
       type: archive ? "archive" : "retrieve",
+      jobStatusMessage: "jobSubmitted",
     };
 
     return data;

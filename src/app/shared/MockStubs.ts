@@ -24,7 +24,6 @@ import {
   OutputAttachmentV3Dto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { SDKToken } from "./services/auth/auth.service";
-import { JobInterface } from "./sdk/models/Job";
 
 export class MockUserApi {
   getCurrentId() {

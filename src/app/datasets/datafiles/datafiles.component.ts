@@ -317,7 +317,7 @@ export class DatafilesComponent
               files: this.getSelectedFiles(),
             },
           ],
-          jobStatusMessage: "jobCreated",
+          jobStatusMessage: "jobSubmitted",
         };
         this.store.dispatch(submitJobAction({ job: data }));
       }

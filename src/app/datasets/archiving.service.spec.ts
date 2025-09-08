@@ -113,7 +113,7 @@ describe("ArchivingService", () => {
         datasetList,
         type: "archive",
         jobResultObject: {},
-        statusMessage: "",
+        jobStatusMessage: "jobSubmitted",
       });
       const createJobSpy = spyOn<any, string>(
         service,
