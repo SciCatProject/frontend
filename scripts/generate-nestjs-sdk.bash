@@ -27,9 +27,9 @@ done
 USER=`who am i | cut -d\  -f1`
 echo -e "\nUser running the script: ${USER}"
 
-echo -e "\nCleanup old files..."
-rm -rf node_modules/@scicatproject/scicat-sdk-ts-angular
+echo -e "\nCleaning up from any previous run..."
 rm -rf @scicatproject/scicat-sdk-ts-angular
+mkdir -p @scicatproject/scicat-sdk-ts-angular
 rm local-api-for-generator.json
 
 echo -e "\nFetching the Swagger API from the back end..."
@@ -44,12 +44,14 @@ echo -e "\nGenerating the new sdk..."
 docker run \
 	--rm \
 	-v "`pwd`:/local" \
-	openapitools/openapi-generator-cli:v7.14.0 generate \
+	openapitools/openapi-generator-cli:v7.13.0 generate \
 	-i /local/local-api-for-generator.json \
+	-c /local/scripts/typescript-angular-config.json \
 	-g typescript-angular \
 	-o local/@scicatproject/scicat-sdk-ts-angular \
-	--additional-properties=ngVersion=19.0.0,npmName=@scicatproject/scicat-sdk-ts-angular,supportsES6=true,withInterfaces=true  --skip-validate-spec
+	--additional-properties=supportsES6=true  --skip-validate-spec
 
+# Clean this up immediately after use, in case subsequent steps fail.
 rm local-api-for-generator.json
 
 # Check if the docker command resulted in any output.
@@ -57,7 +59,7 @@ rm local-api-for-generator.json
 # and then we'd be invoking 'npm run build' as root in the main project folder,
 # which would create a bunch of stuff in ./dist belonging to root,
 # causing problems for things like SciCat Live.
-if [ ! -d "@scicatproject/scicat-sdk-ts-angular" ]; then
+if [ ! -d "@scicatproject/scicat-sdk-ts-angular/api" ]; then
   echo "Error: OpenApi output not found."
   exit 1
 fi
@@ -91,6 +93,8 @@ if [ ! -d "@scicatproject/scicat-sdk-ts-angular/dist" ]; then
   exit 1
 fi
 
+echo -e "\nRemoving existing version from node_modules..."
+rm -rf node_modules/@scicatproject/scicat-sdk-ts-angular
 echo -e "\nCopying the build files into node_modules..."
 mkdir -p node_modules/@scicatproject/scicat-sdk-ts-angular
 cp -rv @scicatproject/scicat-sdk-ts-angular/dist/ node_modules/@scicatproject/scicat-sdk-ts-angular/
