@@ -212,6 +212,12 @@ const reducer = createReducer(
       return { ...state, selectedSets };
     }
   }),
+
+  on(fromActions.selectDatasetsAction, (state, { datasets }) => ({
+    ...state,
+    selectedSets: datasets,
+  })),
+
   on(fromActions.deselectDatasetAction, (state, { dataset }): DatasetState => {
     const selectedSets = state.selectedSets.filter(
       (selectedSet) => selectedSet.pid !== dataset.pid,

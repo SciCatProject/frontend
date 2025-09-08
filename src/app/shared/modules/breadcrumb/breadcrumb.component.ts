@@ -132,7 +132,6 @@ export class BreadcrumbComponent implements OnInit {
         .navigateByUrl(url + crumb.url)
         .catch((error) => this.router.navigateByUrl(url + crumb.fallback));
     }
-    // });
   }
 }
 

@@ -51,6 +51,14 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
       hideOrder: 2,
     },
     {
+      id: "status",
+      label: "Status",
+      icon: "face",
+      canSort: true,
+      matchMode: "contains",
+      hideOrder: 3,
+    },
+    {
       id: "createdBy",
       icon: "account_circle",
       label: "Created by",
@@ -71,6 +79,7 @@ export class PublisheddataDashboardComponent implements OnInit, OnDestroy {
   tableDefinition = {
     collection: "publishedData",
     columns: this.columns,
+    apiVersion: "v4",
   };
   dataSource: SciCatDataSource;
   select = true;
