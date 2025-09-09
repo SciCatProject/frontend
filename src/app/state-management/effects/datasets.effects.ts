@@ -51,6 +51,7 @@ export class DatasetEffects {
         fromActions.fetchDatasetsAction,
         fromActions.setPublicViewModeAction,
         fromActions.sortByColumnAction,
+        fromActions.setArchiveViewModeAction,
       ),
       concatLatestFrom(() => this.fullqueryParams$),
       map(([, params]) => params),
