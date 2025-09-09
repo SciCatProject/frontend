@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
+import { TranslateService } from "@ngx-translate/core";
 import { DateTime } from "luxon";
 import { FilterLists } from "proposals/proposal-dashboard/proposal-dashboard.component";
 import { distinctUntilChanged, map, Observable } from "rxjs";
@@ -20,6 +21,7 @@ export class ProposalSideFilterComponent implements OnInit {
   collapsed = false;
 
   fullfacetCounts$ = this.store.select(selectProposalsfacetCounts);
+  localization = "proposalDefault";
 
   @Input() clearFilters = false;
   @Input() dateRangeValue: DateRange = {
@@ -35,7 +37,10 @@ export class ProposalSideFilterComponent implements OnInit {
     private store: Store,
     private route: ActivatedRoute,
     private router: Router,
-  ) {}
+    private translateService: TranslateService,
+  ) {
+    this.translateService.use(this.localization);
+  }
 
   ngOnInit(): void {
     const { queryParams } = this.route.snapshot;

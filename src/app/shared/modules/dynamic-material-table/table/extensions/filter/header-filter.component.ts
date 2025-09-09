@@ -132,7 +132,7 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case "date": {
-        // this.compare = new DateCompare(service);
+        this.filterList.push(new TextFilter());
         break;
       }
       case "boolean": {

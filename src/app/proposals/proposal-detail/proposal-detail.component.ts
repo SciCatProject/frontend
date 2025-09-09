@@ -44,6 +44,8 @@ export class ProposalDetailComponent implements OnInit, OnDestroy {
 
   appConfig = this.appConfigService.getConfig();
 
+  localization = "proposalDefault";
+
   show = false;
 
   constructor(
@@ -52,7 +54,7 @@ export class ProposalDetailComponent implements OnInit, OnDestroy {
     private store: Store,
     private router: Router,
   ) {
-    this.translateService.use("proposalDefault");
+    this.translateService.use(this.localization);
   }
 
   ngOnInit(): void {

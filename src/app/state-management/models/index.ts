@@ -15,8 +15,9 @@ export interface TableColumn {
   header?: string;
   path?: string;
   order: number;
-  type: "standard" | "custom";
+  type: "standard" | "custom" | "date" | "hoverContent";
   enabled: boolean;
+  format?: string;
   width?: number;
 }
 
@@ -86,10 +87,10 @@ type CustomizationType =
 // Type alias for allowed field types
 type FieldType = "text" | "copy" | "linky" | "tag" | "date";
 
-export interface DatasetsListSettings {
-  columns: TableColumn[];
-  filters: FilterConfig[];
-  conditions: ConditionConfig[];
+export interface ListSettings {
+  columns?: TableColumn[];
+  filters?: FilterConfig[];
+  conditions?: ConditionConfig[];
 }
 
 export enum MessageType {

@@ -27,6 +27,8 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   public selectedTabIndex = 0;
 
+  localization = "proposalDefault";
+
   constructor(
     public appConfigService: AppConfigService,
     private route: ActivatedRoute,
@@ -34,7 +36,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     private router: Router,
     private translateService: TranslateService,
   ) {
-    this.translateService.use("proposalDefault");
+    this.translateService.use(this.localization);
   }
 
   ngOnInit() {

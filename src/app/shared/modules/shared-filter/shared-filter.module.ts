@@ -5,7 +5,6 @@ import { MatInputModule } from "@angular/material/input";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { CommonModule } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
-import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { SharedFilterComponent } from "./shared-filter.component";
 import { ReactiveFormsModule } from "@angular/forms";

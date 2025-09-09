@@ -105,12 +105,12 @@
           >
           <div
             mat-sort-header
-            [matTooltip]="column.header"
+            [matTooltip]="column.name | translate"
             matTooltipClass="cell-tooltip"
             [disabled]="column.sort === 'none'"
             class="header-caption"
           >
-            {{ column.header }}
+            {{ column.name | translate }}
           </div>
         </header-filter>
         <!-- class="right-resize-handler" -->
@@ -146,7 +146,7 @@
         <ng-template #renderColumn>
           <ng-container *ngIf="column.customRender; else regularColumnRender">
             <label
-              *ngIf="!column.dynamicCellComponent"
+              *ngIf="!column.dynamicCellComponent && !column.hoverContent"
               (click)="onLabelClick($event, row, column)"
               [class.rtl-cell]="direction === 'rtl'"
               [class.ltr-cell]="direction === 'ltr'"
@@ -158,13 +158,14 @@
           </ng-container>
           <ng-template #regularColumnRender>
             <label
-              *ngIf="!column.dynamicCellComponent"
+              *ngIf="!column.dynamicCellComponent && !column.hoverContent"
               (click)="onLabelClick($event, row, column)"
               [class.rtl-cell]="direction === 'rtl'"
               [class.ltr-cell]="direction === 'ltr'"
               [ngStyle]="ellipsis(column)"
               class="label-cell"
-              >{{ row[column.name] }}
+            >
+              {{ getColumnValue(row, column) }}
             </label>
           </ng-template>
         </ng-template>
@@ -202,6 +203,35 @@
           [row]="row"
           [onRowEvent]="onRowEvent"
         >
+        </ng-container>
+
+        <!-- Hover Content Cell-->
+        <ng-container *ngIf="column.hoverContent">
+          <span
+            class="icon-wrapper"
+            #hoverOrigin="cdkOverlayOrigin"
+            cdkOverlayOrigin
+            (mouseenter)="hoverKey = makeKey(row, column)"
+            (mouseleave)="hoverKey = null"
+          >
+            <mat-icon class="hover-icon" fontIcon="description"></mat-icon>
+
+            <ng-template
+              cdkConnectedOverlay
+              [cdkConnectedOverlayOrigin]="hoverOrigin"
+              [cdkConnectedOverlayOpen]="hoverKey === makeKey(row, column)"
+              [cdkConnectedOverlayPositions]="overlayPositions"
+            >
+              <mat-card class="hover-card">
+                <mat-card-title class="hover-card-title"
+                  >{{ column.name | translate }}
+                </mat-card-title>
+                <div mat-card-content class="hover-card-content">
+                  {{ getColumnValue(row, column) || "No content" }}
+                </div>
+              </mat-card>
+            </ng-template>
+          </span>
         </ng-container>
       </mat-cell>
       <!-- FOOTER -->

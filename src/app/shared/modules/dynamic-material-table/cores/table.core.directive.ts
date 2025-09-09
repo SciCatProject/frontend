@@ -71,6 +71,7 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() showNoData = true;
   @Input() showReload = true;
   @Input() showGlobalTextSearch = true;
+  @Input() localization: string;
   @Input() globalTextSearch = "";
   @Input() globalTextSearchPlaceholder = "Search";
   @Input() selectionIds = [];
@@ -121,6 +122,7 @@ export class TableCoreDirective<T extends TableRow> {
       columnSetting: null,
       visibleActionMenu: null,
     };
+
     if (this.config) {
       this.tableSetting = { ...this.tableSetting, ...this.config };
     }

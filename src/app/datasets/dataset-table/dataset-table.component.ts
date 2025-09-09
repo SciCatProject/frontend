@@ -64,6 +64,7 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableConfigService } from "shared/services/table-config.service";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
+import { TranslateService } from "@ngx-translate/core";
 export interface SortChangeEvent {
   active: string;
   direction: "asc" | "desc" | "";
@@ -121,6 +122,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   tableName = "datasetsTable";
 
+  localization = "datasetDefault";
+
   columns: TableField<any>[];
 
   pending = true;
@@ -154,7 +157,10 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private fileSize: FileSizePipe,
     private titleCase: TitleCasePipe,
     private tableConfigService: TableConfigService,
-  ) {}
+    private translateService: TranslateService,
+  ) {
+    this.translateService.use(this.localization);
+  }
 
   private getInstrumentName(row: OutputDatasetObsoleteDto): string {
     const instrument = this.instrumentMap.get(row.instrumentId);

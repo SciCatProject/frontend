@@ -55,6 +55,7 @@ import { Subject, Subscription } from "rxjs";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ContextMenuItem } from "../models/context-menu.model";
 import {
+  ConnectedPosition,
   Overlay,
   OverlayContainer,
   OverlayPositionBuilder,
@@ -76,6 +77,8 @@ import {
   TableMenuActionChange,
 } from "../models/table-menu.model";
 import { TableDataSource } from "../cores/table-data-source";
+import { TranslateService } from "@ngx-translate/core";
+import { DatePipe } from "@angular/common";
 
 export interface IDynamicCell {
   row: TableRow;
@@ -193,6 +196,9 @@ export class DynamicMatTableComponent<T extends TableRow>
 {
   private dragDropData = { dragColumnIndex: -1, dropColumnIndex: -1 };
   private eventsSubscription: Subscription;
+  hoverKey: string | null = null;
+  makeKey = (row: any, col: any) => (row?.id ?? row) + "::" + col?.name;
+
   currentContextMenuSender: any = {};
   globalSearchUpdate = new Subject<string>();
 
@@ -256,6 +262,37 @@ export class DynamicMatTableComponent<T extends TableRow>
   resizableMouseup: () => void;
   /* Tooltip */
   overlayRef: OverlayRef = null;
+  /** Overlay positions for hover */
+  overlayPositions: ConnectedPosition[] = [
+    {
+      originX: "center",
+      originY: "top",
+      overlayX: "center",
+      overlayY: "bottom",
+      offsetY: -4,
+    },
+    {
+      originX: "center",
+      originY: "bottom",
+      overlayX: "center",
+      overlayY: "top",
+      offsetY: 4,
+    },
+    {
+      originX: "start",
+      originY: "center",
+      overlayX: "end",
+      overlayY: "center",
+      offsetX: -4,
+    },
+    {
+      originX: "end",
+      originY: "center",
+      overlayX: "start",
+      overlayY: "center",
+      offsetX: 4,
+    },
+  ];
 
   standardDataSource: TableDataSource<T>;
 
@@ -268,8 +305,11 @@ export class DynamicMatTableComponent<T extends TableRow>
     private overlayContainer: OverlayContainer,
     private overlayPositionBuilder: OverlayPositionBuilder,
     public readonly config: TableSetting,
+    private translateService: TranslateService,
+    private datePipe: DatePipe,
   ) {
     super(tableService, cdr, config);
+
     this.standardDataSource = new TableDataSource<T>([]);
     this.overlayContainer
       .getContainerElement()
@@ -465,6 +505,7 @@ export class DynamicMatTableComponent<T extends TableRow>
         }
       });
     }
+    this.translateService.use(this.localization);
   }
 
   public get inverseOfTranslation(): number {
@@ -765,6 +806,7 @@ export class DynamicMatTableComponent<T extends TableRow>
       );
       this.printConfig.data = this.tvsDataSource.filteredData;
       const params = this.tvsDataSource.toTranslate();
+
       this.printConfig.tablePrintParameters = [];
       params.forEach((item) => {
         this.printConfig.tablePrintParameters.push(item);
@@ -963,6 +1005,30 @@ export class DynamicMatTableComponent<T extends TableRow>
       event: RowEventType.RowClick,
       sender: { row: row, e: e },
     });
+  }
+
+  getColumnValue(data: Record<string, unknown>, column: TableField<any>) {
+    const fieldName = column.name;
+
+    // get nested value if name has dots
+    const value = fieldName.includes(".")
+      ? fieldName.split(".").reduce((acc, key) => acc?.[key], data)
+      : data[fieldName];
+
+    if (!value) {
+      return "";
+    }
+
+    if (column.type === "date" && column.format) {
+      try {
+        return this.datePipe.transform(value as string, column.format);
+      } catch (e) {
+        console.error("Date format error:", e);
+        return value;
+      }
+    }
+
+    return value;
   }
 
   /************************************ Drag & Drop Column *******************************************/

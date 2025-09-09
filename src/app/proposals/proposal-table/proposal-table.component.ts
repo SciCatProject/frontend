@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { BehaviorSubject, Subscription } from "rxjs";
+import { BehaviorSubject, combineLatestWith, filter, Subscription } from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
   ITableSetting,
@@ -17,7 +17,10 @@ import {
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { Store } from "@ngrx/store";
-import { selectProposalsWithCountAndTableSettings } from "state-management/selectors/proposals.selectors";
+import {
+  selectProposalsWithCountAndTableSettings,
+  selelctDefaultProposalColumns,
+} from "state-management/selectors/proposals.selectors";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   Instrument,
@@ -28,82 +31,9 @@ import { updateUserSettingsAction } from "state-management/actions/user.actions"
 import { Sort } from "@angular/material/sort";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableConfigService } from "shared/services/table-config.service";
-
-const tableDefaultSettingsConfig: ITableSetting = {
-  visibleActionMenu: actionMenu,
-  settingList: [
-    {
-      visibleActionMenu: actionMenu,
-      isDefaultSetting: true,
-      isCurrentSetting: true,
-      columnSetting: [
-        {
-          name: "proposalId",
-          header: "Proposal ID",
-          icon: "perm_device_information",
-          type: "text",
-          style: { "min-width": "250px" },
-        },
-        {
-          name: "startTime",
-          header: "Start Time",
-          icon: "date_range",
-          width: 250,
-        },
-        {
-          name: "endTime",
-          header: "End Time",
-          icon: "date_range",
-          width: 250,
-        },
-        { name: "type", icon: "badge", width: 200 },
-        {
-          name: "title",
-          icon: "description",
-          width: 250,
-        },
-        {
-          name: "abstract",
-          icon: "chrome_reader_mode",
-          width: 250,
-        },
-        {
-          name: "firstname",
-          header: "First Name",
-          icon: "person",
-        },
-        {
-          name: "lastname",
-          header: "Last Name",
-        },
-        { name: "email", icon: "email", width: 200 },
-        {
-          name: "parentProposalId",
-          header: "Parent Proposal",
-          icon: "badge",
-        },
-        {
-          name: "pi_firstname",
-          header: "PI First Name",
-          icon: "person_pin",
-        },
-        {
-          name: "pi_lastname",
-          header: "PI Last Name",
-          icon: "person_pin",
-        },
-        {
-          name: "pi_email",
-          header: "PI Email",
-          icon: "email",
-        },
-      ],
-    },
-  ],
-  rowStyle: {
-    "border-bottom": "1px solid #d2d2d2",
-  },
-};
+import { AppConfigService } from "app-config.service";
+import { TableColumn } from "state-management/models";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "proposal-table",
@@ -112,13 +42,32 @@ const tableDefaultSettingsConfig: ITableSetting = {
   standalone: false,
 })
 export class ProposalTableComponent implements OnInit, OnDestroy {
+  subscriptions: Subscription[] = [];
+
   proposalsWithCountAndTableSettings$ = this.store.select(
     selectProposalsWithCountAndTableSettings,
   );
+  defaultStoreColumns$ = this.store.select(selelctDefaultProposalColumns);
+  appConfig = this.appConfigService.getConfig();
 
-  subscriptions: Subscription[] = [];
+  tableDefaultSettingsConfig: ITableSetting = {
+    visibleActionMenu: actionMenu,
+    settingList: [
+      {
+        visibleActionMenu: actionMenu,
+        isDefaultSetting: true,
+        isCurrentSetting: true,
+        columnSetting: [],
+      },
+    ],
+    rowStyle: {
+      "border-bottom": "1px solid #d2d2d2",
+    },
+  };
 
   tableName = "proposalsTable";
+
+  localization = "proposalDefault";
 
   columns: TableField<any>[];
 
@@ -149,38 +98,72 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
   defaultPageSize: number;
 
   constructor(
+    private appConfigService: AppConfigService,
     private store: Store,
     private router: Router,
     private route: ActivatedRoute,
     private tableConfigService: TableConfigService,
-  ) {}
+    private translateService: TranslateService,
+  ) {
+    this.translateService.use(this.localization);
+  }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.subscriptions.push(
-      this.proposalsWithCountAndTableSettings$.subscribe(
-        ({ proposals, count, tablesSettings }) => {
-          this.tablesSettings = tablesSettings;
-          this.dataSource.next(proposals);
-          this.pending = false;
+      this.proposalsWithCountAndTableSettings$
+        .pipe(
+          combineLatestWith(this.defaultStoreColumns$),
+          filter(([{ hasFetchedSettings }]) => hasFetchedSettings),
+        )
+        .subscribe(
+          async ([
+            { proposals, count, tablesSettings },
+            defaultStoreColumns,
+          ]) => {
+            const userSettingColumns =
+              tablesSettings?.[this.tableName]?.columns || [];
 
-          const savedTableConfigColumns =
-            tablesSettings?.[this.tableName]?.columns;
-          const tableSort = this.getTableSort();
-          const paginationConfig = this.getTablePaginationConfig(count);
+            this.dataSource.next(proposals);
+            this.pending = false;
 
-          const tableSettingsConfig =
-            this.tableConfigService.getTableSettingsConfig(
-              this.tableName,
-              tableDefaultSettingsConfig,
-              savedTableConfigColumns,
-              tableSort,
-            );
+            // Checks if there are any custom columns defined in the app config
+            // If it's defined and not empty, use it as the effective columns
+            // Otherwise use the default columns from the proposals store
+            const configColumns =
+              this.appConfig?.defaultProposalsListSettings?.columns;
+            const defaultColumns =
+              Array.isArray(configColumns) && configColumns.length > 0
+                ? configColumns
+                : defaultStoreColumns;
 
-          if (tableSettingsConfig?.settingList.length) {
-            this.initTable(tableSettingsConfig, paginationConfig);
-          }
-        },
-      ),
+            const savedTableConfigColumns =
+              this.convertSavedColumns(userSettingColumns);
+
+            // If there are user defined columns, use them
+            // Otherwise use the default columns from the proposals store/config
+            if (userSettingColumns.length) {
+              this.tableDefaultSettingsConfig.settingList[0].columnSetting =
+                savedTableConfigColumns;
+            } else {
+              this.tableDefaultSettingsConfig.settingList[0].columnSetting =
+                this.convertSavedColumns(defaultColumns as TableColumn[]);
+            }
+
+            const tableSort = this.getTableSort();
+            const paginationConfig = this.getTablePaginationConfig(count);
+            const tableSettingsConfig =
+              this.tableConfigService.getTableSettingsConfig(
+                this.tableName,
+                this.tableDefaultSettingsConfig,
+                savedTableConfigColumns,
+                tableSort,
+              );
+
+            if (tableSettingsConfig?.settingList.length) {
+              this.initTable(tableSettingsConfig, paginationConfig);
+            }
+          },
+        ),
     );
   }
 
@@ -248,12 +231,35 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
     });
   }
 
+  convertSavedColumns(columns: TableColumn[]): TableField<any>[] {
+    return columns.map((column) => {
+      const convertedColumn: TableField<any> = {
+        name: column.name,
+        header: column.header,
+        display: column.enabled ? "visible" : "hidden",
+        width: column.width,
+        type: column.type as any,
+        format: column.format as any,
+      };
+      if (column.type === "hoverContent") {
+        convertedColumn.hoverContent = true;
+      }
+
+      return convertedColumn;
+    });
+  }
+
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
     const columnsSetting = setting.columnSetting.map((column) => {
       const { name, display, index, width } = column;
 
-      return { name, display, index, width };
+      return {
+        name,
+        enabled: !!(display === "visible"),
+        order: index,
+        width,
+      };
     });
 
     const tablesSettings = {
@@ -270,6 +276,8 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
         },
       }),
     );
+
+    this.pending = false;
   }
 
   onSettingChange(event: {
