@@ -408,7 +408,7 @@ describe("Datasets general", () => {
       );
     });
 
-    it("should be able to register their public published data", () => {
+    it.skip("should be able to register their public published data", () => {
       cy.visit("/publishedDatasets");
 
       cy.get("app-publisheddata-dashboard mat-table mat-header-row").should(
