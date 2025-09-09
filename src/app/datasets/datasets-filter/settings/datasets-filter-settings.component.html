@@ -5,13 +5,9 @@
     <mat-nav-list cdkDropList (cdkDropListDropped)="drop($event)">
       <mat-list-item
         class="filter-item"
-        *ngFor="let filter of data.filterConfigs"
+        *ngFor="let filter of mergedFilters"
         cdkDrag
         cdkDragHandle
-        [cdkDragDisabled]="!data.labelMaps[getFilterKey(filter)]"
-        [ngClass]="{
-          'filter-item-disabled': !data.labelMaps[getFilterKey(filter)],
-        }"
       >
         <span
           class="drag-handle"
@@ -23,15 +19,12 @@
         </span>
         <mat-slide-toggle
           class="filter-toggle"
-          [checked]="getChecked(filter)"
+          [checked]="filter.enabled"
           (change)="toggleVisibility(filter)"
           aria-label="Toggle visibility"
-          [disabled]="!data.labelMaps[getFilterKey(filter)]"
         >
         </mat-slide-toggle>
-        <span class="filter-name">{{
-          resolveFilterLabel(data.labelMaps, filter)
-        }}</span>
+        <span class="filter-name">{{ filter.label || filter.key }}</span>
         <span class="spacer"></span>
       </mat-list-item>
     </mat-nav-list>

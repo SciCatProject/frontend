@@ -7,7 +7,7 @@ import {
 } from "@angular/core/testing";
 import { Store, StoreModule } from "@ngrx/store";
 import { DatasetsFilterComponent } from "datasets/datasets-filter/datasets-filter.component";
-import { MockHttp, MockStore } from "shared/MockStubs";
+import { MockActivatedRoute, MockHttp, MockStore } from "shared/MockStubs";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -17,7 +17,6 @@ import {
   fetchFacetCountsAction,
 } from "state-management/actions/datasets.actions";
 import { of } from "rxjs";
-import { deselectAllCustomColumnsAction } from "state-management/actions/user.actions";
 import { SharedScicatFrontendModule } from "shared/shared.module";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatDialogModule, MatDialog } from "@angular/material/dialog";
@@ -34,36 +33,59 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { DatasetsFilterSettingsComponent } from "./settings/datasets-filter-settings.component";
-import { FilterConfig } from "../../shared/modules/filters/filters.module";
 import {
   selectConditions,
   selectFilters,
 } from "../../state-management/selectors/user.selectors";
 import { HttpClient } from "@angular/common/http";
+import { FilterConfig } from "state-management/state/user.store";
+import { ActivatedRoute } from "@angular/router";
 
 const filterConfigs: FilterConfig[] = [
-  { LocationFilter: true },
-  { PidFilter: true },
-  { GroupFilter: true },
-  { TypeFilter: true },
-  { KeywordFilter: true },
-  { DateRangeFilter: true },
-  { TextFilter: true },
-  { PidFilterContains: false },
-  { PidFilterStartsWith: false },
+  {
+    key: "creationLocation",
+    label: "Location",
+    type: "multiSelect",
+    description: "Filter by creation location on the dataset",
+    enabled: true,
+  },
+  {
+    key: "pid",
+    label: "Pid",
+    type: "text",
+    description: "Filter by dataset pid",
+    enabled: true,
+  },
+  {
+    key: "ownerGroup",
+    label: "Group",
+    type: "multiSelect",
+    description: "Filter by owner group of the dataset",
+    enabled: true,
+  },
+  {
+    key: "type",
+    label: "Type",
+    type: "multiSelect",
+    description: "Filter by dataset type",
+    enabled: true,
+  },
+  {
+    key: "keywords",
+    label: "Keyword",
+    type: "multiSelect",
+    description: "Filter by keywords in the dataset",
+    enabled: true,
+  },
+  {
+    key: "creationTime",
+    label: "Creation Time",
+    type: "dateRange",
+    description: "Filter by creation time of the dataset",
+    enabled: true,
+  },
 ];
 
-const labelMaps = {
-  LocationFilter: "Location Filter",
-  PidFilter: "Pid Filter",
-  GroupFilter: "Group Filter",
-  TypeFilter: "Type Filter",
-  KeywordFilter: "Keyword Filter",
-  DateRangeFilter: "Start Date - End Date",
-  TextFilter: "Text Filter",
-  PidFilterContains: "PID filter (Contains)- Not implemented",
-  PidFilterStartsWith: "PID filter (Starts With)- Not implemented",
-};
 export class MockStoreWithFilters extends MockStore {
   public select(selector) {
     if (selector === selectFilters) {
@@ -123,6 +145,7 @@ describe("DatasetsFilterComponent", () => {
         AppConfigService,
         { provide: HttpClient, useClass: MockHttp },
         { provide: Store, useClass: MockStoreWithFilters },
+        { provide: ActivatedRoute, useClass: MockActivatedRoute },
       ],
     });
     TestBed.overrideComponent(DatasetsFilterComponent, {
@@ -161,25 +184,25 @@ describe("DatasetsFilterComponent", () => {
 
   it("should contain a date range field", () => {
     const compiled = fixture.debugElement.nativeElement;
-    const beamline = compiled.querySelector(".date-input");
+    const beamline = compiled.querySelector("#creationTime");
     expect(beamline).toBeTruthy();
   });
 
   it("should contain a beamline input", () => {
     const compiled = fixture.debugElement.nativeElement;
-    const beamline = compiled.querySelector(".location-input");
+    const beamline = compiled.querySelector("#creationLocation");
     expect(beamline).toBeTruthy();
   });
 
   it("should contain a groups input", () => {
     const compiled = fixture.debugElement.nativeElement;
-    const group = compiled.querySelector(".group-input");
+    const group = compiled.querySelector("#ownerGroup");
     expect(group).toBeTruthy();
   });
 
   it("should contain a type input", () => {
     const compiled = fixture.debugElement.nativeElement;
-    const type = compiled.querySelector(".type-input");
+    const type = compiled.querySelector("#type");
     expect(type).toBeTruthy();
   });
 
@@ -196,16 +219,13 @@ describe("DatasetsFilterComponent", () => {
   });
 
   describe("#reset()", () => {
-    it("should dispatch a ClearFacetsAction and a deselectAllCustomColumnsAction", () => {
+    it("should dispatch a ClearFacetsAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       component.reset();
 
       expect(dispatchSpy).toHaveBeenCalledTimes(6);
       expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        deselectAllCustomColumnsAction(),
-      );
       expect(dispatchSpy).toHaveBeenCalledWith(fetchDatasetsAction());
       expect(dispatchSpy).toHaveBeenCalledWith(fetchFacetCountsAction());
     });
@@ -224,8 +244,6 @@ describe("DatasetsFilterComponent", () => {
         {
           data: {
             filterConfigs: filterConfigs,
-            conditionConfigs: [],
-            labelMaps: labelMaps,
           },
           restoreFocus: false,
         },
