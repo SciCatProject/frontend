@@ -140,7 +140,7 @@ describe("Datasets general", () => {
 
       cy.isLoading();
 
-      cy.get(".dataset-table mat-row input[type='checkbox']").last().click();
+      cy.get(".dataset-table mat-row input[type='checkbox']").second().click();
 
       cy.get("#addToBatchButton").click();
 
