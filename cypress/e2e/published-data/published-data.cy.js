@@ -94,7 +94,7 @@ describe("Datasets general", () => {
       cy.get('[data-cy="batch-table"] mat-row').should("exist");
     });
 
-    it("should be able to edit dataset list after creating the published data", () => {
+    it("should be able to edit dataset list after creating the published data - 1", () => {
       cy.createDataset({ type: "raw" });
       cy.createDataset({ type: "raw" });
 
@@ -287,7 +287,7 @@ describe("Datasets general", () => {
       cy.get("ngx-json-viewer section").contains(resourceType);
     });
 
-    it("should be able to edit dataset list after creating the published data", () => {
+    it("should be able to edit dataset list after creating the published data - 2", () => {
       const newDatasetName = "Test dataset name";
       cy.createDataset({ type: "raw", datasetName: newDatasetName });
       cy.visit("/publishedDatasets");
