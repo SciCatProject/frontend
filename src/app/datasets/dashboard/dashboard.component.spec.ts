@@ -5,7 +5,7 @@ import {
   inject,
   waitForAsync,
 } from "@angular/core/testing";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, NavigationStart, Router } from "@angular/router";
 import { Store, StoreModule } from "@ngrx/store";
 
 import {
@@ -59,6 +59,7 @@ describe("DashboardComponent", () => {
 
   const router = {
     navigateByUrl: jasmine.createSpy("navigateByUrl"),
+    events: of(new NavigationStart(1, "/datasets")),
   };
 
   const getConfig = () => ({
