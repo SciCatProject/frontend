@@ -210,8 +210,7 @@
     "conditions": []
   },
   "labelsLocalization": {
-    "datasetDefault": {},
-    "datasetCustom": {
+    "dataset": {
       "pid": "PID",
       "description": "Description",
       "principalInvestigator": "Principal Investigator",
