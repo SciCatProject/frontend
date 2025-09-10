@@ -50,8 +50,20 @@ import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { DatePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
+import {
+  TranslationObject,
+  TranslateLoader,
+  TranslateModule,
+} from "@ngx-translate/core";
+import { Observable, of } from "rxjs";
 
 const getConfig = () => ({});
+
+class MockTranslateLoader implements TranslateLoader {
+  getTranslation(): Observable<TranslationObject> {
+    return of({});
+  }
+}
 
 describe("DatasetTableComponent", () => {
   let component: DatasetTableComponent;
@@ -71,6 +83,12 @@ describe("DatasetTableComponent", () => {
         MatPaginatorModule,
         MatTableModule,
         SharedScicatFrontendModule,
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useClass: MockTranslateLoader,
+          },
+        }),
         StoreModule.forRoot({}),
       ],
       providers: [
