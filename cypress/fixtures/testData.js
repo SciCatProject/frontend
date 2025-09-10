@@ -162,7 +162,7 @@ export const testData = {
 export const testConfig = {
   dynamicDetialViewComponent: {
     labelsLocalization: {
-      datasetCustom: {
+      dataset: {
         datasetName: "Test String",
         description: "Test Copy",
         ownerEmail: "Test Linky",
@@ -254,7 +254,7 @@ export const testConfig = {
   },
   defaultDetailViewComponent: {
     labelsLocalization: {
-      datasetDefault: {
+      dataset: {
         "Dataset Name": "Test Dataset name",
         Description: "Test Description",
         "Creation time": "Test Creation time",

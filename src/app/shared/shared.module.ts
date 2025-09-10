@@ -20,9 +20,13 @@ import { FiltersModule } from "./modules/filters/filters.module";
 import { AttachmentService } from "./services/attachment.service";
 import { DynamicMatTableModule } from "./modules/dynamic-material-table/table/dynamic-mat-table.module";
 import { TranslateModule } from "@ngx-translate/core";
+import { JsonFormsModule } from "@jsonforms/angular";
+import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
+import { JsonFormsCustomRenderersModule } from "./modules/jsonforms-custom-renderers/jsonforms-custom-renderers.module";
 import { FullTextSearchBarModule } from "./modules/full-text-search-bar/full-text-search-bar.module";
 import { SharedFilterModule } from "./modules/shared-filter/shared-filter.module";
 import { EmptyContentModule } from "./modules/generic-empty-content/empty-content.module";
+import { JsonformsAccordionRendererService } from "./services/jsonforms-accordion-renderer.service";
 @NgModule({
   imports: [
     BreadcrumbModule,
@@ -45,6 +49,9 @@ import { EmptyContentModule } from "./modules/generic-empty-content/empty-conten
     DynamicMatTableModule.forRoot({}),
     TranslateModule,
     EmptyContentModule,
+    JsonFormsModule,
+    JsonFormsAngularMaterialModule,
+    JsonFormsCustomRenderersModule,
   ],
   providers: [
     ConfigService,
@@ -52,6 +59,7 @@ import { EmptyContentModule } from "./modules/generic-empty-content/empty-conten
     FilePathTruncate,
     ScicatDataService,
     AttachmentService,
+    JsonformsAccordionRendererService,
   ],
   exports: [
     BreadcrumbModule,
@@ -72,6 +80,9 @@ import { EmptyContentModule } from "./modules/generic-empty-content/empty-conten
     DynamicMatTableModule,
     TranslateModule,
     EmptyContentModule,
+    JsonFormsModule,
+    JsonFormsAngularMaterialModule,
+    JsonFormsCustomRenderersModule,
   ],
 })
 export class SharedScicatFrontendModule {}
