@@ -130,7 +130,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   tableName = "datasetsTable";
 
-  localization = "datasetDefault";
+  localization = "dataset";
 
   columns: TableField<any>[];
 
@@ -167,7 +167,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private tableConfigService: TableConfigService,
     private translateService: TranslateService,
   ) {
-    this.translateService.use("dataset");
+    this.translateService.use(this.localization);
   }
 
   private getInstrumentName(row: OutputDatasetObsoleteDto): string {
@@ -220,21 +220,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     }
 
     this.columns = currentColumnSetting;
-    const translated$ = forkJoin(
-      currentColumnSetting.map((i) =>
-        this.translateService.get(i.header || i.name).pipe(
-          map((translated) => ({
-            ...i,
-            header: translated,
-          })),
-        ),
-      ),
-    );
-
-    translated$.subscribe((result) => {
-      this.columns = result;
-    });
-
     this.setting = settingConfig;
     this.pagination = paginationConfig;
   }

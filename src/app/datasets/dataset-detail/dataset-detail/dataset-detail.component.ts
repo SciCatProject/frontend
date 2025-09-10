@@ -74,7 +74,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   appConfig = this.appConfigService.getConfig();
 
-  localization = "datasetDefault";
+  localization = "dataset";
   dataset: OutputDatasetObsoleteDto | undefined;
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
@@ -98,7 +98,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
   ) {
-    this.translateService.use("dataset");
+    this.translateService.use(this.localization);
   }
 
   ngOnInit() {

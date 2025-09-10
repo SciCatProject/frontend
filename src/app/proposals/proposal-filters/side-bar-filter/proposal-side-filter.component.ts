@@ -21,7 +21,7 @@ export class ProposalSideFilterComponent implements OnInit {
   collapsed = false;
 
   fullfacetCounts$ = this.store.select(selectProposalsfacetCounts);
-  localization = "proposalDefault";
+  localization = "proposal";
 
   @Input() clearFilters = false;
   @Input() dateRangeValue: DateRange = {

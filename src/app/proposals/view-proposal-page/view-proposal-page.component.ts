@@ -27,7 +27,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   public selectedTabIndex = 0;
 
-  localization = "proposalDefault";
+  localization = "proposal";
 
   constructor(
     public appConfigService: AppConfigService,

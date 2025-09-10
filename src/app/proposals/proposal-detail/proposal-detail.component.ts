@@ -44,7 +44,7 @@ export class ProposalDetailComponent implements OnInit, OnDestroy {
 
   appConfig = this.appConfigService.getConfig();
 
-  localization = "proposalDefault";
+  localization = "proposal";
 
   show = false;
 

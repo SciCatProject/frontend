@@ -67,7 +67,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
 
   tableName = "proposalsTable";
 
-  localization = "proposalDefault";
+  localization = "proposal";
 
   columns: TableField<any>[];
 

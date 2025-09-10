@@ -54,7 +54,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
   appConfig = this.appConfigService.getConfig();
 
-  localization = "datasetCustom";
+  localization = "dataset";
 
   dataset$ = this.store.select(selectCurrentDataset);
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
@@ -75,7 +75,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     private router: Router,
     private snackBar: MatSnackBar,
   ) {
-    this.translateService.use("dataset");
+    this.translateService.use(this.localization);
   }
 
   ngOnInit() {
