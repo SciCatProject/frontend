@@ -84,6 +84,7 @@ import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-w
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
 import { MatExpansionModule } from "@angular/material/expansion";
+import { MatBadgeModule } from "@angular/material/badge";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 
 @NgModule({
@@ -147,6 +148,7 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
     CdkDragHandle,
     FiltersModule,
     MatExpansionModule,
+    MatBadgeModule,
   ],
   declarations: [
     BatchViewComponent,

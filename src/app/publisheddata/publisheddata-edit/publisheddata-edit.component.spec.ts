@@ -25,10 +25,14 @@ import { MatOptionModule } from "@angular/material/core";
 import { MatButtonModule } from "@angular/material/button";
 import { FlexLayoutModule } from "@ngbracket/ngx-layout";
 import { PublishedDataService } from "@scicatproject/scicat-sdk-ts-angular";
+import { AppConfigService } from "app-config.service";
 
 describe("PublisheddataEditComponent", () => {
   let component: PublisheddataEditComponent;
   let fixture: ComponentFixture<PublisheddataEditComponent>;
+  const getConfig = () => ({
+    landingPage: "https://test-landing-page.com",
+  });
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -62,6 +66,7 @@ describe("PublisheddataEditComponent", () => {
           { provide: PublishedDataService, useClass: MockPublishedDataApi },
           { provide: Router, useClass: MockRouter },
           { provide: Store, useClass: MockStore },
+          { provide: AppConfigService, useValue: { getConfig } },
         ],
       },
     });
@@ -76,66 +81,5 @@ describe("PublisheddataEditComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
-  });
-
-  describe("#addCreator()", () => {
-    it("should push a creator to the creator property in the form", () => {
-      const event = {
-        chipInput: {
-          inputElement: {
-            value: "testCreator",
-          },
-        },
-        value: "testCreator",
-      } as MatChipInputEvent;
-      component.addCreator(event);
-
-      expect(component.creator!.value).toContain(event.value);
-    });
-  });
-
-  describe("#removeCreator()", () => {
-    it("should remove a creator from the creator property in the form", () => {
-      const creator = "testCreator";
-      component.creator!.setValue([]);
-      component.creator!.value.push("firstCreator", creator);
-
-      component.removeCreator(1);
-
-      expect(component.creator!.value).not.toContain(creator);
-    });
-  });
-
-  describe("#addRelatedPublication()", () => {
-    it("should push a related publication to the relatedPublications property in the form", () => {
-      const event = {
-        chipInput: {
-          inputElement: {
-            value: "testRelatedPublication",
-          },
-        },
-        value: "testRelatedPublication",
-      } as MatChipInputEvent;
-      component.addRelatedPublication(event);
-
-      expect(component.relatedPublications!.value).toContain(event.value);
-    });
-  });
-
-  describe("#removeRelatedPublication()", () => {
-    it("should remove a related publication from the relatedPublications property in the form", () => {
-      const relatedPublication = "testRelatedPublication";
-      component.relatedPublications!.setValue([]);
-      component.relatedPublications!.value.push(
-        "firstRelatedPublication",
-        relatedPublication,
-      );
-
-      component.removeRelatedPublication(1);
-
-      expect(component.relatedPublications!.value).not.toContain(
-        relatedPublication,
-      );
-    });
   });
 });

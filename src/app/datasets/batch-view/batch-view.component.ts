@@ -25,6 +25,7 @@ import {
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { resyncPublishedDataAction } from "state-management/actions/published-data.actions";
 
 @Component({
   selector: "batch-view",
@@ -42,6 +43,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   isAdmin = false;
   userProfile: any = {};
   subscriptions: Subscription[] = [];
+  editingPublishedDataDoi = null;
 
   appConfig = this.appConfigService.getConfig();
   shareEnabled = this.appConfig.shareEnabled;
@@ -80,7 +82,7 @@ export class BatchViewComponent implements OnInit, OnDestroy {
   }
 
   onPublish() {
-    this.router.navigate(["datasets", "batch", "publish"]);
+    this.router.navigate(["datasets", "selection", "publish"]);
   }
 
   onShareClick() {
@@ -228,7 +230,47 @@ export class BatchViewComponent implements OnInit, OnDestroy {
     });
   }
 
+  onSaveChanges() {
+    this.store.dispatch(
+      resyncPublishedDataAction({
+        doi: this.editingPublishedDataDoi,
+        redirect: false,
+        data: { datasetPids: this.datasetList.map((d) => d.pid) },
+      }),
+    );
+
+    this.router.navigateByUrl(this.getPublishingDataUrl());
+    this.store.dispatch(clearBatchAction());
+    localStorage.removeItem("editingPublishedDataDoi");
+    localStorage.removeItem("editingDatasetList");
+  }
+
+  onChangeSelection() {
+    const encodedDoi = encodeURIComponent(this.editingPublishedDataDoi);
+
+    this.router.navigateByUrl(`/publishedDatasets/${encodedDoi}/datasetList`);
+  }
+
+  onCancelEdit() {
+    this.router.navigateByUrl(this.getPublishingDataUrl());
+    this.store.dispatch(clearBatchAction());
+    localStorage.removeItem("editingPublishedDataDoi");
+    localStorage.removeItem("editingDatasetList");
+  }
+
+  getPublishingDataUrl(): string {
+    const isEditingDatasetList =
+      localStorage.getItem("editingDatasetList") === "true";
+    const encodedDoi = encodeURIComponent(this.editingPublishedDataDoi);
+
+    return `/publishedDatasets/${encodedDoi}${isEditingDatasetList ? "" : "/edit"}`;
+  }
+
   ngOnInit() {
+    this.editingPublishedDataDoi = localStorage.getItem(
+      "editingPublishedDataDoi",
+    );
+
     combineLatest([this.isAdmin$, this.userProfile$])
       .subscribe(([isAdmin, userProfile]) => {
         this.isAdmin = isAdmin;
