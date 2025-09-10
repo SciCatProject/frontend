@@ -141,6 +141,8 @@ export interface AppConfigInterface {
   siteHeaderLogoUrl?: string;
   mainMenu?: MainMenuConfiguration;
   supportEmail?: string;
+  imprintUrl?: string;
+  privacyUrl?: string;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
