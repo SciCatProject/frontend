@@ -7,7 +7,7 @@ import {
 } from "@angular/core";
 
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
-import { ActionConfig, ActionItem } from "./configurable-action.interfaces";
+import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 import { v4 } from "uuid";
@@ -25,8 +25,7 @@ import { AppConfigService } from "app-config.service";
 })
 export class ConfigurableActionComponent implements OnInit, OnChanges {
   @Input({ required: true }) actionConfig: ActionConfig;
-  @Input({ required: true }) actionItems: ActionItem[];
-  @Input() files?: DataFiles_File[];
+  @Input({ required: true }) actionItems: ActionItems;
   @Input({ required: true }) maxFileSize: number;
 
   jwt = "";
@@ -344,4 +343,99 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   type_link() {
     this.router.navigateByUrl(this.actionConfig.url);
   }
+
+// type JSONValue = string | number | boolean | null | { [key: string]: JSONValue } | JSONValue[];
+
+// function selectFromJsonWithFilter(jsonObject: JSONValue, selector: string): string[] {
+//   const results: string[] = [];
+
+//   // Parse the selector into main selection and optional filter
+//   const [mainSelector, filterSelector] = selector.split('|').map(part => part.trim());
+//   const mainKeys = mainSelector
+//     .replace(/^\./, "") // Remove leading dot
+//     .split(".")         // Split into keys
+//     .map(key => key.trim());
+
+//   let filterKeys: string[] | null = null;
+//   if (filterSelector) {
+//     if (!filterSelector.startsWith("select ")) {
+//       throw new Error("Invalid syntax: Filter part must start with 'select'.");
+//     }
+//     filterKeys = filterSelector
+//       .slice(7)          // Remove "select " prefix
+//       .replace(/^\./, "") // Remove leading dot
+//       .split(".")         // Split into keys
+//       .map(key => key.trim());
+//   }
+
+//   const traverse = (obj: JSONValue, keys: string[], filterKeys?: string[], filterObj?: JSONValue) => {
+//     if (keys.length === 0) {
+//       // If no more main keys to process, and if optional filter keys exist, evaluate the filter
+//       if (filterKeys && filterObj !== undefined) {
+//         const filterPasses = evaluateFilter(filterObj, filterKeys);
+//         if (!filterPasses) return;
+//       }
+      
+//       // Add the current value if it's a string
+//       if (typeof obj === "string") {
+//         results.push(obj);
+//       }
+//       return;
+//     }
+
+//     const key = keys[0];
+
+//     if (Array.isArray(obj)) {
+//       // If the current object is an array, process each item
+//       if (key.startsWith("[") && key.endsWith("]")) {
+//         const index = parseInt(key.slice(1, -1));
+//         if (!isNaN(index) && obj[index] !== undefined) {
+//           traverse(obj[index], keys.slice(1), filterKeys, obj[index]);
+//         }
+//       } else {
+//         obj.forEach((item) => traverse(item, keys, filterKeys, item));
+//       }
+//     } else if (typeof obj === "object" && obj !== null) {
+//       traverse(obj[key], keys.slice(1), filterKeys, obj);
+//     }
+//   };
+
+//   const evaluateFilter = (obj: JSONValue, filterKeys: string[]): boolean => {
+//     let current = obj;
+//     for (const key of filterKeys) {
+//       if (Array.isArray(current)) {
+//         // Return false for arrays within a filter (unsupported case)
+//         return false;
+//       } else if (typeof current === "object" && current !== null && key in current) {
+//         current = current[key];
+//       } else {
+//         return false; // If the key does not exist or is invalid
+//       }
+//     }
+
+//     return current === true; // Assume filter checks for a `true` value
+//   };
+
+//   // Begin traversing the JSON object
+//   traverse(jsonObject, mainKeys, filterKeys || undefined, jsonObject);
+
+//   return results;
+// }
+
+// // Example usage
+// const jsonExample = {
+//   datasets: [
+//     { files: { selected: true, path: "/path/to/file1" } },
+//     { files: { selected: false, path: "/path/to/file2" } },
+//     { files: { selected: true, path: "/path/to/file3" } }
+//   ]
+// };
+
+// const selector = ".datasets[].files.path | select .datasets[].files.selected";
+// const selectedPaths = selectFromJsonWithFilter(jsonExample, selector);
+
+// console.log(selectedPaths); // Output: ["/path/to/file1", "/path/to/file3"]
+
+
+
 }

@@ -1,3 +1,5 @@
+import { DatasetClass } from "@scicatproject/scicat-sdk-ts-angular";
+
 export interface ActionConfig {
   id: string;
   description?: string;
@@ -18,8 +20,17 @@ export interface ActionConfig {
   hidden?: string;
 }
 
-export interface ActionItem {
-  pid: string;
-  sourceFolder?: string;
-  isPublished?: boolean;
+// export interface ActionItem {
+//   pid: string;
+//   sourceFolder?: string;
+//   isPublished?: boolean;
+// }
+
+export interface ActionItems {
+  datasets: {
+    pid: string;
+    sourceFolder?: string;
+    isPublished?: boolean;
+    files?: DataFiles_File[];
+  }[],
 }
