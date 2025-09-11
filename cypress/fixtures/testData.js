@@ -271,7 +271,7 @@ export const testConfig = {
   },
   proposalViewCustomLabels: {
     labelsLocalization: {
-      proposalDefault: {
+      proposal: {
         "General Information": "Test Proposal Information",
         Title: "Test Proposal Title",
         Abstract: "Test Abstract",
