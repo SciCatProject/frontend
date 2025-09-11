@@ -212,7 +212,10 @@
         (click)="$event.stopPropagation(); $event.preventDefault()"
         class="dragable-row"
         cdkDrag
-        [cdkDragData]="{ columnIndex: i, columnTitle: column.header }"
+        [cdkDragData]="{
+          columnIndex: i,
+          columnTitle: column.header || column.name | translate,
+        }"
         (cdkDragDropped)="columnMenuDropped($event)"
       >
         <mat-icon cdkDragHandle>drag_indicator</mat-icon>
@@ -226,7 +229,7 @@
           (click)="$event.stopPropagation()"
           (change)="toggleSelectedColumn(column)"
         >
-          {{ column.header }}
+          {{ column.header || column.name | translate }}
         </mat-checkbox>
         <mat-icon
           class="column-setting-button"
@@ -239,7 +242,7 @@
         <div class="va-mat-table-drag-preview" *cdkDragPreview>
           <mat-icon>drag_indicator</mat-icon>
           <mat-checkbox [checked]="column?.display === 'visible'">
-            {{ column.header }}
+            {{ column.header || column.name | translate }}
           </mat-checkbox>
         </div>
       </div>

@@ -109,12 +109,12 @@
           >
           <div
             mat-sort-header
-            [matTooltip]="column.name | translate"
+            [matTooltip]="column.header || column.name | translate"
             matTooltipClass="cell-tooltip"
             [disabled]="column.sort === 'none'"
             class="header-caption"
           >
-            {{ column.name | translate }}
+            {{ column.header || column.name | translate }}
           </div>
         </header-filter>
         <!-- class="right-resize-handler" -->
@@ -228,7 +228,7 @@
             >
               <mat-card class="hover-card">
                 <mat-card-title class="hover-card-title"
-                  >{{ column.name | translate }}
+                  >{{ column.header || column.name | translate }}
                 </mat-card-title>
                 <div mat-card-content class="hover-card-content">
                   {{ getColumnValue(row, column) || "No content" }}

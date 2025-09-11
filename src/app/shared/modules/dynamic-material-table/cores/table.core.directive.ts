@@ -289,7 +289,6 @@ export class TableCoreDirective<T extends TableRow> {
         ((row, type) => (typeof row === "object" ? row[f.name] : ""));
       f.toPrint = (row) => (typeof row === "object" ? row[f.name] : "");
       f.enableContextMenu = f.enableContextMenu || true;
-      f.header = f.header || titleCase(f.name);
       f.display = getObjectProp("display", "visible", settingField, f);
       f.filter = getObjectProp("filter", "client-side", settingField, f);
       f.sort = getObjectProp("sort", "client-side", settingField, f);

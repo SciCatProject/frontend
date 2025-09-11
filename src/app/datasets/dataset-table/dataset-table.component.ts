@@ -501,9 +501,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
             this.getInstrumentName(row);
         }
 
-        convertedColumn.header =
-          column.header || this.titleCase.transform(column.name);
-
         return convertedColumn;
       });
   }

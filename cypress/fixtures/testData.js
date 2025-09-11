@@ -275,8 +275,47 @@ export const testConfig = {
         "General Information": "Test Proposal Information",
         Title: "Test Proposal Title",
         Abstract: "Test Abstract",
+        proposalId: "Proposal ID",
         "Proposal Id": "Test Proposal Id",
+        firstname: "First Name",
+        lastname: "Last Name",
+        pi_firstname: "PI First Name",
+        pi_lastname: "PI Last Name",
       },
+    },
+    defaultProposalsListSettings: {
+      columns: [
+        {
+          name: "proposalId",
+          width: 140,
+          enabled: true,
+        },
+        {
+          name: "title",
+          width: 300,
+          enabled: true,
+        },
+        {
+          name: "startTime",
+          format: "yyyy-MM-dd",
+          type: "date",
+          width: 200,
+          enabled: true,
+        },
+        {
+          name: "abstract",
+          width: 140,
+          type: "hoverContent",
+          enabled: true,
+        },
+        {
+          name: "pi_lastname",
+          width: 300,
+          enabled: true,
+        },
+      ],
+      filters: [],
+      conditions: [],
     },
   },
 };

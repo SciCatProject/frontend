@@ -139,15 +139,8 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
             const savedTableConfigColumns =
               this.convertSavedColumns(userSettingColumns);
 
-            // If there are user defined columns, use them
-            // Otherwise use the default columns from the proposals store/config
-            if (userSettingColumns.length) {
-              this.tableDefaultSettingsConfig.settingList[0].columnSetting =
-                savedTableConfigColumns;
-            } else {
-              this.tableDefaultSettingsConfig.settingList[0].columnSetting =
-                this.convertSavedColumns(defaultColumns as TableColumn[]);
-            }
+            this.tableDefaultSettingsConfig.settingList[0].columnSetting =
+              this.convertSavedColumns(defaultColumns as TableColumn[]);
 
             const tableSort = this.getTableSort();
             const paginationConfig = this.getTablePaginationConfig(count);
