@@ -10,6 +10,7 @@ import { Store } from "@ngrx/store";
 import { showMessageAction } from "state-management/actions/user.actions";
 import {
   selectCurrentAttachments,
+  selectCurrentDatasetExternalLinks,
   selectCurrentDataset,
   selectCurrentDatasetWithoutFileInfo,
 } from "state-management/selectors/datasets.selectors";
@@ -77,6 +78,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   dataset: OutputDatasetObsoleteDto | undefined;
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
+  externalLinks$ = this.store.select(selectCurrentDatasetExternalLinks);
   loading$ = this.store.select(selectIsLoading);
   instrument: Instrument | undefined;
   proposal: ProposalClass | undefined;
