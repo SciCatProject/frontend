@@ -15,5 +15,7 @@
   (settingChange)="onSettingChange($event)"
   (onTableEvent)="onTableEvent($event)"
   class="mat-elevation-z2"
+  [emptyMessage]="'No files available'"
+  [emptyIcon]="'description'"
 >
 </dynamic-mat-table>

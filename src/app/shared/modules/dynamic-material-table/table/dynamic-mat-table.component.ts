@@ -259,6 +259,9 @@ export class DynamicMatTableComponent<T extends TableRow>
 
   standardDataSource: TableDataSource<T>;
 
+  @Input() emptyMessage = "No data available";
+  @Input() emptyIcon = "info";
+
   constructor(
     public dialog: MatDialog,
     private renderer: Renderer2,
@@ -456,7 +459,8 @@ export class DynamicMatTableComponent<T extends TableRow>
   ngOnInit() {
     setTimeout(() => {
       this.init = true;
-    }, 1000);
+      this.cdr.detectChanges();
+    }, 10);
 
     if (this.dataSource) {
       this.dataSource.subscribe((data) => {

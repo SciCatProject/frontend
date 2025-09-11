@@ -9,4 +9,11 @@
     (pageChange)="onPageChange($event)"
     (rowClick)="onRowClick($event)"
   ></app-table>
+
+  <app-empty-content
+    *ngIf="!vm.relatedDatasets?.length"
+    message="No related datasets available."
+    icon="folder"
+  >
+  </app-empty-content>
 </div>

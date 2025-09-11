@@ -19,5 +19,7 @@
   (onRowEvent)="onRowClick($event)"
   (onTableEvent)="onTableEvent($event)"
   class="mat-elevation-z2"
+  [emptyMessage]="'No related proposals available'"
+  [emptyIcon]="'folder'"
 >
 </dynamic-mat-table>
