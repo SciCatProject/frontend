@@ -63,7 +63,7 @@ export const selectDatasetFilters = createSelector(
   (state) => state.datasetFilters,
 );
 
-export const selelctDefaultProposalColumns = createSelector(
+export const selectDefaultProposalColumns = createSelector(
   selectProposalsState,
   (state) => state.columns,
 );

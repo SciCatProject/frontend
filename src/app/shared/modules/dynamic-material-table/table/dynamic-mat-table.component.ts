@@ -194,64 +194,29 @@ export class DynamicMatTableComponent<T extends TableRow>
   extends TableCoreDirective<T>
   implements OnInit, AfterViewInit, OnDestroy
 {
+  // Private fields
   private dragDropData = { dragColumnIndex: -1, dropColumnIndex: -1 };
   private eventsSubscription: Subscription;
-  hoverKey: string | null = null;
-  makeKey = (row: any, col: any) => (row?.id ?? row) + "::" + col?.name;
 
-  currentContextMenuSender: any = {};
+  // Public fields
   globalSearchUpdate = new Subject<string>();
-
-  @ViewChild("tbl", { static: true }) tbl: ElementRef;
-  @Input()
-  get setting() {
-    return this.tableSetting;
-  }
-  set setting(value: ITableSetting) {
-    if (!isNullorUndefined(value)) {
-      value.alternativeRowStyle =
-        value.alternativeRowStyle || this.tableSetting.alternativeRowStyle;
-      value.columnSetting =
-        value.columnSetting || this.tableSetting.columnSetting;
-      value.direction = value.direction || this.tableSetting.direction;
-      value.normalRowStyle =
-        value.normalRowStyle || this.tableSetting.normalRowStyle;
-      value.visibleActionMenu =
-        value.visibleActionMenu || this.tableSetting.visibleActionMenu;
-      value.visibleTableMenu =
-        value.visibleTableMenu || this.tableSetting.visibleTableMenu;
-      value.autoHeight = value.autoHeight || this.tableSetting.autoHeight;
-      value.saveSettingMode =
-        value.saveSettingMode || this.tableSetting.saveSettingMode || "simple";
-      if (this.pagination) {
-        this.pagination.pageSize =
-          value.pageSize ||
-          this.tableSetting.pageSize ||
-          this.pagination.pageSize;
-      }
-      /* Dynamic Cell must update when setting change */
-      value?.columnSetting?.forEach((column) => {
-        const originalColumn = this.columns?.find(
-          (c) => c.name === column.name,
-        );
-        if (originalColumn) {
-          column = { ...originalColumn, ...column };
-        }
-      });
-      this.tableSetting = value;
-      this.setDisplayedColumns();
-    }
-  }
   init = false;
+  hoverKey: string | null = null;
+  currentContextMenuSender: any = {};
 
   @HostBinding("style.height.px") height = null;
 
+  // View/Content refs
   @ViewChild("tooltip") tooltipRef!: TemplateRef<any>;
   @ViewChild(MatMenuTrigger) contextMenu: MatMenuTrigger;
   public contextMenuPosition = { x: "0px", y: "0px" };
   @ViewChild("printRef", { static: true }) printRef!: TemplateRef<any>;
   @ViewChild("printContentRef", { static: true }) printContentRef!: ElementRef;
+  @ViewChild("tbl", { static: true }) tbl: ElementRef;
+
   @ContentChildren(HeaderFilterComponent)
+
+  // Other public fields
   headerFilterList!: QueryList<HeaderFilterComponent>;
 
   printing = true;
@@ -295,6 +260,46 @@ export class DynamicMatTableComponent<T extends TableRow>
   ];
 
   standardDataSource: TableDataSource<T>;
+
+  @Input()
+  get setting() {
+    return this.tableSetting;
+  }
+  set setting(value: ITableSetting) {
+    if (!isNullorUndefined(value)) {
+      value.alternativeRowStyle =
+        value.alternativeRowStyle || this.tableSetting.alternativeRowStyle;
+      value.columnSetting =
+        value.columnSetting || this.tableSetting.columnSetting;
+      value.direction = value.direction || this.tableSetting.direction;
+      value.normalRowStyle =
+        value.normalRowStyle || this.tableSetting.normalRowStyle;
+      value.visibleActionMenu =
+        value.visibleActionMenu || this.tableSetting.visibleActionMenu;
+      value.visibleTableMenu =
+        value.visibleTableMenu || this.tableSetting.visibleTableMenu;
+      value.autoHeight = value.autoHeight || this.tableSetting.autoHeight;
+      value.saveSettingMode =
+        value.saveSettingMode || this.tableSetting.saveSettingMode || "simple";
+      if (this.pagination) {
+        this.pagination.pageSize =
+          value.pageSize ||
+          this.tableSetting.pageSize ||
+          this.pagination.pageSize;
+      }
+      /* Dynamic Cell must update when setting change */
+      value?.columnSetting?.forEach((column) => {
+        const originalColumn = this.columns?.find(
+          (c) => c.name === column.name,
+        );
+        if (originalColumn) {
+          column = { ...originalColumn, ...column };
+        }
+      });
+      this.tableSetting = value;
+      this.setDisplayedColumns();
+    }
+  }
 
   constructor(
     public dialog: MatDialog,
@@ -361,6 +366,8 @@ export class DynamicMatTableComponent<T extends TableRow>
         this.globalTextSearch_onChange(value);
       });
   }
+
+  makeKey = (row: any, col: any) => (row?.id ?? row) + "::" + col?.name;
 
   ngAfterViewInit(): void {
     this.standardDataSource.paginator = this.paginator;

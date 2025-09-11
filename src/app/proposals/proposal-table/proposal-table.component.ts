@@ -19,7 +19,7 @@ import {
 import { Store } from "@ngrx/store";
 import {
   selectProposalsWithCountAndTableSettings,
-  selelctDefaultProposalColumns,
+  selectDefaultProposalColumns,
 } from "state-management/selectors/proposals.selectors";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
@@ -47,7 +47,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
   proposalsWithCountAndTableSettings$ = this.store.select(
     selectProposalsWithCountAndTableSettings,
   );
-  defaultStoreColumns$ = this.store.select(selelctDefaultProposalColumns);
+  defaultStoreColumns$ = this.store.select(selectDefaultProposalColumns);
   appConfig = this.appConfigService.getConfig();
 
   tableDefaultSettingsConfig: ITableSetting = {
