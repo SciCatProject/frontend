@@ -5,11 +5,22 @@ import {
   tick,
 } from "@angular/core/testing";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { of } from "rxjs";
+import { Observable, of } from "rxjs";
 import { ProposalSideFilterComponent } from "./proposal-side-filter.component";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DateTime } from "luxon";
+import {
+  TranslateLoader,
+  TranslateModule,
+  TranslationObject,
+} from "@ngx-translate/core";
+
+class MockTranslateLoader implements TranslateLoader {
+  getTranslation(): Observable<TranslationObject> {
+    return of({});
+  }
+}
 
 describe("ProposalSideFilterComponent", () => {
   let component: ProposalSideFilterComponent;
@@ -26,6 +37,14 @@ describe("ProposalSideFilterComponent", () => {
     mockRouter = { navigate: jasmine.createSpy("navigate") };
 
     await TestBed.configureTestingModule({
+      imports: [
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useClass: MockTranslateLoader,
+          },
+        }),
+      ],
       declarations: [ProposalSideFilterComponent],
       providers: [
         { provide: Store, useValue: mockStore },
