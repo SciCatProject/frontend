@@ -314,6 +314,7 @@
         <table-menu
           [(tableSetting)]="tableSetting"
           (menuActionChange)="tableMenuActionChange($event)"
+          [localization]="localization"
         ></table-menu>
       </mat-header-cell>
       <mat-cell *matCellDef="let row" class="table-menu">

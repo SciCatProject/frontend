@@ -214,7 +214,7 @@
         cdkDrag
         [cdkDragData]="{
           columnIndex: i,
-          columnTitle: column.header || column.name | translate,
+          columnTitle: column.header || column.name | translate: localization,
         }"
         (cdkDragDropped)="columnMenuDropped($event)"
       >
@@ -229,7 +229,7 @@
           (click)="$event.stopPropagation()"
           (change)="toggleSelectedColumn(column)"
         >
-          {{ column.header || column.name | translate }}
+          {{ column.header || column.name | translate: localization }}
         </mat-checkbox>
         <mat-icon
           class="column-setting-button"
@@ -242,7 +242,7 @@
         <div class="va-mat-table-drag-preview" *cdkDragPreview>
           <mat-icon>drag_indicator</mat-icon>
           <mat-checkbox [checked]="column?.display === 'visible'">
-            {{ column.header || column.name | translate }}
+            {{ column.header || column.name | translate: localization }}
           </mat-checkbox>
         </div>
       </div>
