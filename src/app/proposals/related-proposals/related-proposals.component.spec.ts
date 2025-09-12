@@ -13,18 +13,7 @@ import { fetchRelatedProposalsAction } from "state-management/actions/proposals.
 import { RowEventType } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { DynamicMatTableModule } from "shared/modules/dynamic-material-table/table/dynamic-mat-table.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import {
-  TranslateLoader,
-  TranslationObject,
-  TranslateModule,
-} from "@ngx-translate/core";
-import { Observable, of } from "rxjs";
-
-class MockTranslateLoader implements TranslateLoader {
-  getTranslation(): Observable<TranslationObject> {
-    return of({});
-  }
-}
+import { TranslateService } from "@ngx-translate/core";
 
 describe("RelatedProposalsComponent", () => {
   let component: RelatedProposalsComponent;
@@ -40,16 +29,7 @@ describe("RelatedProposalsComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RelatedProposalsComponent],
-      imports: [
-        BrowserAnimationsModule,
-        DynamicMatTableModule.forRoot({}),
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: MockTranslateLoader,
-          },
-        }),
-      ],
+      imports: [BrowserAnimationsModule, DynamicMatTableModule.forRoot({})],
       providers: [
         DatePipe,
         provideMockStore({
@@ -70,6 +50,7 @@ describe("RelatedProposalsComponent", () => {
         }),
         { provide: Router, useValue: router },
         { provide: ActivatedRoute, useClass: MockActivatedRoute },
+        { provide: TranslateService, useValue: { instant: (k: string) => k } },
       ],
     }).compileComponents();
 

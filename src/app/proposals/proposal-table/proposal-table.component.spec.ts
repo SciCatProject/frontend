@@ -21,18 +21,9 @@ import {
   DatasetsService,
   ProposalClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
-import { BehaviorSubject, Observable, of } from "rxjs";
-import {
-  TranslateLoader,
-  TranslationObject,
-  TranslateModule,
-} from "@ngx-translate/core";
+import { BehaviorSubject } from "rxjs";
+import { TranslateService } from "@ngx-translate/core";
 
-class MockTranslateLoader implements TranslateLoader {
-  getTranslation(): Observable<TranslationObject> {
-    return of({});
-  }
-}
 describe("ProposalTableComponent", () => {
   let component: ProposalTableComponent;
   let fixture: ComponentFixture<ProposalTableComponent>;
@@ -48,12 +39,6 @@ describe("ProposalTableComponent", () => {
         EffectsModule.forRoot([]),
         StoreModule.forRoot({}),
         BrowserAnimationsModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: MockTranslateLoader,
-          },
-        }),
       ],
       providers: [
         { provide: HttpClient, useClass: MockHttp },
@@ -64,6 +49,7 @@ describe("ProposalTableComponent", () => {
         { provide: Store, useClass: MockStore },
         { provide: DatasetsService, useClass: MockDatasetApi },
         { provide: ScicatDataService, useValue: {} },
+        { provide: TranslateService, useValue: { instant: (k: string) => k } },
       ],
     }).compileComponents();
   });

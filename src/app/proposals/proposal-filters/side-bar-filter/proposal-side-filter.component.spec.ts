@@ -10,17 +10,7 @@ import { ProposalSideFilterComponent } from "./proposal-side-filter.component";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DateTime } from "luxon";
-import {
-  TranslateLoader,
-  TranslateModule,
-  TranslationObject,
-} from "@ngx-translate/core";
-
-class MockTranslateLoader implements TranslateLoader {
-  getTranslation(): Observable<TranslationObject> {
-    return of({});
-  }
-}
+import { TranslateService } from "@ngx-translate/core";
 
 describe("ProposalSideFilterComponent", () => {
   let component: ProposalSideFilterComponent;
@@ -37,19 +27,13 @@ describe("ProposalSideFilterComponent", () => {
     mockRouter = { navigate: jasmine.createSpy("navigate") };
 
     await TestBed.configureTestingModule({
-      imports: [
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: MockTranslateLoader,
-          },
-        }),
-      ],
+      imports: [],
       declarations: [ProposalSideFilterComponent],
       providers: [
         { provide: Store, useValue: mockStore },
         { provide: ActivatedRoute, useValue: mockRoute },
         { provide: Router, useValue: mockRouter },
+        { provide: TranslateService, useValue: { instant: (k: string) => k } },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

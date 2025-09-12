@@ -15,18 +15,7 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { TablePagination } from "shared/modules/dynamic-material-table/models/table-pagination.model";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import {
-  TranslateLoader,
-  TranslationObject,
-  TranslateModule,
-} from "@ngx-translate/core";
-import { Observable, of } from "rxjs";
-
-class MockTranslateLoader implements TranslateLoader {
-  getTranslation(): Observable<TranslationObject> {
-    return of({});
-  }
-}
+import { TranslateService } from "@ngx-translate/core";
 
 describe("InstrumentsDashboardComponent", () => {
   let component: InstrumentsDashboardComponent;
@@ -45,12 +34,6 @@ describe("InstrumentsDashboardComponent", () => {
         FlexLayoutModule,
         SharedScicatFrontendModule,
         BrowserAnimationsModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: MockTranslateLoader,
-          },
-        }),
       ],
       providers: [
         provideMockStore({
@@ -65,6 +48,7 @@ describe("InstrumentsDashboardComponent", () => {
             },
           ],
         }),
+        { provide: TranslateService, useValue: { instant: (k: string) => k } },
       ],
     });
     TestBed.overrideComponent(InstrumentsDashboardComponent, {
