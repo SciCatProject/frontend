@@ -34,7 +34,10 @@ const reducer = createReducer(
     fromActions.fetchDatasetCompleteAction,
     (state, { dataset }): DatasetState => ({
       ...state,
-      currentSet: dataset,
+      currentSet: {
+        ...dataset,
+        origdatablocks: state.currentSet?.origdatablocks,
+      },
     }),
   ),
 
