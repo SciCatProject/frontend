@@ -5,11 +5,13 @@ import {
   tick,
 } from "@angular/core/testing";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { of } from "rxjs";
+import { Observable, of } from "rxjs";
 import { ProposalSideFilterComponent } from "./proposal-side-filter.component";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DateTime } from "luxon";
+import { TranslateService } from "@ngx-translate/core";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 
 describe("ProposalSideFilterComponent", () => {
   let component: ProposalSideFilterComponent;
@@ -26,11 +28,13 @@ describe("ProposalSideFilterComponent", () => {
     mockRouter = { navigate: jasmine.createSpy("navigate") };
 
     await TestBed.configureTestingModule({
+      imports: [SharedScicatFrontendModule],
       declarations: [ProposalSideFilterComponent],
       providers: [
         { provide: Store, useValue: mockStore },
         { provide: ActivatedRoute, useValue: mockRoute },
         { provide: Router, useValue: mockRouter },
+        { provide: TranslateService, useValue: { instant: (k: string) => k } },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

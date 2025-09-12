@@ -33,6 +33,7 @@ export class TableMenuComponent {
   get tableSetting(): ITableSetting {
     return this.currentTableSetting;
   }
+  @Input() localization: string;
 
   set tableSetting(value: ITableSetting) {
     value.settingList =

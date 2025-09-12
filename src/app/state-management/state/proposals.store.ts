@@ -2,6 +2,7 @@ import {
   OutputDatasetObsoleteDto,
   ProposalClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
+import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 
 export interface DateRange {
   begin: string;
@@ -38,6 +39,7 @@ export interface ProposalsState {
   relatedProposalsCount: number;
   datasets: OutputDatasetObsoleteDto[];
 
+  columns: TableField<any>[];
   proposalsCount: number;
   datasetsCount: number;
   facetCounts: FacetCounts;
@@ -87,4 +89,68 @@ export const initialProposalsState: ProposalsState = {
     limit: 25,
     sortField: "creationTime:desc",
   },
+
+  columns: [
+    {
+      name: "proposalId",
+      icon: "perm_device_information",
+      width: 250,
+      enabled: true,
+    },
+    {
+      name: "startTime",
+      icon: "date_range",
+      width: 250,
+      enabled: true,
+    },
+    {
+      name: "endTime",
+      icon: "date_range",
+      width: 250,
+      enabled: true,
+    },
+    { name: "type", icon: "badge", width: 200, enabled: true },
+    {
+      name: "title",
+      icon: "description",
+      width: 250,
+      enabled: true,
+    },
+    {
+      name: "abstract",
+      icon: "chrome_reader_mode",
+      width: 250,
+      enabled: true,
+    },
+    {
+      name: "firstname",
+      icon: "person",
+      enabled: true,
+    },
+    {
+      name: "lastname",
+      enabled: true,
+    },
+    { name: "email", icon: "email", width: 200, enabled: true },
+    {
+      name: "parentProposalId",
+      icon: "badge",
+      enabled: true,
+    },
+    {
+      name: "pi_firstname",
+      icon: "person_pin",
+      enabled: true,
+    },
+    {
+      name: "pi_lastname",
+      icon: "person_pin",
+      enabled: true,
+    },
+    {
+      name: "pi_email",
+      icon: "email",
+      enabled: true,
+    },
+  ],
 };

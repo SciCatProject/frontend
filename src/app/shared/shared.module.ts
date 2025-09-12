@@ -19,7 +19,6 @@ import { ScientificMetadataTreeModule } from "./modules/scientific-metadata-tree
 import { FiltersModule } from "./modules/filters/filters.module";
 import { AttachmentService } from "./services/attachment.service";
 import { DynamicMatTableModule } from "./modules/dynamic-material-table/table/dynamic-mat-table.module";
-import { TranslateModule } from "@ngx-translate/core";
 import { JsonFormsModule } from "@jsonforms/angular";
 import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 import { JsonFormsCustomRenderersModule } from "./modules/jsonforms-custom-renderers/jsonforms-custom-renderers.module";
@@ -46,7 +45,6 @@ import { JsonformsAccordionRendererService } from "./services/jsonforms-accordio
     SharedTableModule,
     ScientificMetadataTreeModule,
     DynamicMatTableModule.forRoot({}),
-    TranslateModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
     JsonFormsCustomRenderersModule,
@@ -76,7 +74,6 @@ import { JsonformsAccordionRendererService } from "./services/jsonforms-accordio
     ScientificMetadataTreeModule,
     FiltersModule,
     DynamicMatTableModule,
-    TranslateModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
     JsonFormsCustomRenderersModule,

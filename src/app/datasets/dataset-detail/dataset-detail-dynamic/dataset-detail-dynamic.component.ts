@@ -25,7 +25,6 @@ import {
 } from "state-management/models";
 
 import { AttachmentService } from "shared/services/attachment.service";
-import { TranslateService } from "@ngx-translate/core";
 import { DatePipe } from "@angular/common";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular/model/outputDatasetObsoleteDto";
 import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
@@ -54,6 +53,8 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
   appConfig = this.appConfigService.getConfig();
 
+  localization = "dataset";
+
   dataset$ = this.store.select(selectCurrentDataset);
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
@@ -66,15 +67,12 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
     private attachmentService: AttachmentService,
-    private translateService: TranslateService,
     private datePipe: DatePipe,
     private store: Store,
     private fb: FormBuilder,
     private router: Router,
     private snackBar: MatSnackBar,
-  ) {
-    this.translateService.use("dataset");
-  }
+  ) {}
 
   ngOnInit() {
     this.form = this.fb.group({});

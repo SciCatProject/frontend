@@ -37,6 +37,7 @@ import { TemplateOrStringDirective } from "../tooltip/template-or-string.directi
 import { FormsModule } from "@angular/forms";
 import { ITableSetting, TableSetting } from "../models/table-setting.model";
 import { PipesModule } from "shared/pipes/pipes.module";
+import { MatCardModule } from "@angular/material/card";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
@@ -59,6 +60,7 @@ const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
     MatPaginatorModule,
     MatDialogModule,
     MatButtonModule,
+    MatCardModule,
     MatMenuModule,
     MatDividerModule,
     MatTooltipModule,
@@ -84,6 +86,11 @@ const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
     },
   ],
 })
+
+/**
+ * This module is customization on top of dynamic-mat-table
+ * https://www.npmjs.com/package/dynamic-mat-table
+ */
 export class DynamicMatTableModule {
   static forRoot(
     config: ITableSetting,

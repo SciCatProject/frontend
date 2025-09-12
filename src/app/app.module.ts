@@ -11,7 +11,7 @@ import {
   withInterceptorsFromDi,
 } from "@angular/common/http";
 import { NgModule, inject, provideAppInitializer } from "@angular/core";
-import { ExtraOptions, provideRouter, RouterModule } from "@angular/router";
+import { provideRouter } from "@angular/router";
 import { StoreModule } from "@ngrx/store";
 import { ApiModule, Configuration } from "@scicatproject/scicat-sdk-ts-angular";
 import { routerReducer } from "@ngrx/router-store";

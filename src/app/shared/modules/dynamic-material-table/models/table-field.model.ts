@@ -14,7 +14,12 @@ export declare type AtFilterFunc<R extends TableRow> = (
 ) => string;
 export declare type ToPrint = (row: any) => any;
 export declare type ToExport = (row: any, type: any) => any;
-export declare type FieldType = "text" | "number" | "date" | "category";
+export declare type FieldType =
+  | "text"
+  | "number"
+  | "date"
+  | "category"
+  | "hoverContent";
 export declare type FieldDisplay = "visible" | "hidden" | "prevent-hidden";
 export declare type FieldSticky = "start" | "end" | "none";
 export declare type FieldFilter = "client-side" | "server-side" | "none";
@@ -60,9 +65,12 @@ export interface AbstractField {
   exportable?: boolean;
   enableContextMenu?: boolean;
   rowSelectable?: boolean;
+  enabled?: boolean;
+  order?: number /* Explicitly set the order of the column */;
   /* Footer */
   footer?: FooterCell[];
   /* For Ellipsis Text */
+  format?: string; // for date format like'yyyy-MM-dd HH:mm:ss'
   cellEllipsisRow?: number;
   cellTooltipEnable?: boolean;
   headerEllipsisRow?: number;
@@ -78,4 +86,5 @@ export interface AbstractField {
   contentIconTooltip?: string;
   contentIconClass?: string;
   contentIconLink?: (column: TableField<any>, row: any) => string;
+  hoverContent?: boolean;
 }

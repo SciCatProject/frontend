@@ -36,10 +36,10 @@ import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
 import { ProposalLogbookComponent } from "./proposal-logbook/proposal-logbook.component";
 import { RelatedProposalsComponent } from "./related-proposals/related-proposals.component";
 import { ProposalDatasetsComponent } from "./proposal-datasets/proposal-datasets.component";
-import { TranslateModule } from "@ngx-translate/core";
 import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { ProposalSearchBarComponent } from "./proposal-filters/search-bar/proposal-search-bar.component";
+import { PipesModule } from "shared/pipes/pipes.module";
 
 @NgModule({
   imports: [
@@ -63,9 +63,9 @@ import { ProposalSearchBarComponent } from "./proposal-filters/search-bar/propos
     NgxJsonViewerModule,
     RouterModule,
     SharedScicatFrontendModule,
+    PipesModule,
     StoreModule.forFeature("proposals", proposalsReducer),
     StoreModule.forFeature("logbooks", logbooksReducer),
-    TranslateModule,
   ],
   declarations: [
     ProposalDashboardComponent,
