@@ -23,6 +23,7 @@ import {
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { BehaviorSubject } from "rxjs";
 import { TranslateService } from "@ngx-translate/core";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 
 describe("ProposalTableComponent", () => {
   let component: ProposalTableComponent;
@@ -39,6 +40,7 @@ describe("ProposalTableComponent", () => {
         EffectsModule.forRoot([]),
         StoreModule.forRoot({}),
         BrowserAnimationsModule,
+        SharedScicatFrontendModule,
       ],
       providers: [
         { provide: HttpClient, useClass: MockHttp },

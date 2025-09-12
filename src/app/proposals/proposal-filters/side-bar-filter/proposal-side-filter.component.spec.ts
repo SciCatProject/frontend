@@ -11,6 +11,7 @@ import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DateTime } from "luxon";
 import { TranslateService } from "@ngx-translate/core";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 
 describe("ProposalSideFilterComponent", () => {
   let component: ProposalSideFilterComponent;
@@ -27,7 +28,7 @@ describe("ProposalSideFilterComponent", () => {
     mockRouter = { navigate: jasmine.createSpy("navigate") };
 
     await TestBed.configureTestingModule({
-      imports: [],
+      imports: [SharedScicatFrontendModule],
       declarations: [ProposalSideFilterComponent],
       providers: [
         { provide: Store, useValue: mockStore },

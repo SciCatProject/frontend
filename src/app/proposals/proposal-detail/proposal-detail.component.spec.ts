@@ -8,6 +8,7 @@ import { NgxJsonViewerModule } from "ngx-json-viewer";
 import { AppConfigService } from "app-config.service";
 import { StoreModule } from "@ngrx/store";
 import { TranslateService } from "@ngx-translate/core";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 
 const getConfig = () => ({
   jsonMetadataEnabled: true,
@@ -25,6 +26,7 @@ describe("ProposalsDetailComponent", () => {
         MatCardModule,
         MatIconModule,
         NgxJsonViewerModule,
+        SharedScicatFrontendModule,
         StoreModule.forRoot({}),
       ],
       providers: [

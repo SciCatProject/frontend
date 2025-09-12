@@ -14,6 +14,7 @@ import { RowEventType } from "shared/modules/dynamic-material-table/models/table
 import { DynamicMatTableModule } from "shared/modules/dynamic-material-table/table/dynamic-mat-table.module";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { TranslateService } from "@ngx-translate/core";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 
 describe("RelatedProposalsComponent", () => {
   let component: RelatedProposalsComponent;
@@ -29,7 +30,11 @@ describe("RelatedProposalsComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RelatedProposalsComponent],
-      imports: [BrowserAnimationsModule, DynamicMatTableModule.forRoot({})],
+      imports: [
+        BrowserAnimationsModule,
+        DynamicMatTableModule.forRoot({}),
+        SharedScicatFrontendModule,
+      ],
       providers: [
         DatePipe,
         provideMockStore({

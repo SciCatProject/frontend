@@ -11,6 +11,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppConfigService } from "app-config.service";
 import { TranslateService } from "@ngx-translate/core";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 
 const getConfig = () => ({
   logbookEnabled: true,
@@ -30,6 +31,7 @@ describe("ViewProposalPageComponent", () => {
       declarations: [ViewProposalPageComponent],
       imports: [
         BrowserAnimationsModule,
+        SharedScicatFrontendModule,
         MatIconModule,
         MatTabsModule,
         StoreModule.forRoot({}),
