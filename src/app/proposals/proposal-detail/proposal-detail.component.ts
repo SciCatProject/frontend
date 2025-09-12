@@ -21,7 +21,6 @@ import {
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { clearProposalsStateAction } from "state-management/actions/proposals.actions";
-import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "proposal-detail",
@@ -50,12 +49,9 @@ export class ProposalDetailComponent implements OnInit, OnDestroy {
 
   constructor(
     public appConfigService: AppConfigService,
-    private translateService: TranslateService,
     private store: Store,
     private router: Router,
-  ) {
-    this.translateService.use(this.localization);
-  }
+  ) {}
 
   ngOnInit(): void {
     // Prevent user from reloading page if there are unsave changes

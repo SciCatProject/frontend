@@ -33,7 +33,6 @@ import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/defau
 import { TableConfigService } from "shared/services/table-config.service";
 import { AppConfigService } from "app-config.service";
 import { TableColumn } from "state-management/models";
-import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "proposal-table",
@@ -103,10 +102,7 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private tableConfigService: TableConfigService,
-    private translateService: TranslateService,
-  ) {
-    this.translateService.use(this.localization);
-  }
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(

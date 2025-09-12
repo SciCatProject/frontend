@@ -77,7 +77,6 @@ import {
   TableMenuActionChange,
 } from "../models/table-menu.model";
 import { TableDataSource } from "../cores/table-data-source";
-import { TranslateService } from "@ngx-translate/core";
 import { DatePipe } from "@angular/common";
 
 export interface IDynamicCell {
@@ -310,7 +309,6 @@ export class DynamicMatTableComponent<T extends TableRow>
     private overlayContainer: OverlayContainer,
     private overlayPositionBuilder: OverlayPositionBuilder,
     public readonly config: TableSetting,
-    private translateService: TranslateService,
     private datePipe: DatePipe,
   ) {
     super(tableService, cdr, config);
@@ -512,7 +510,6 @@ export class DynamicMatTableComponent<T extends TableRow>
         }
       });
     }
-    this.translateService.use(this.localization);
   }
 
   public get inverseOfTranslation(): number {

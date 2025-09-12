@@ -26,9 +26,8 @@ export interface LabelMaps {
 }
 
 export interface LabelsLocalization {
-  datasetDefault: Record<string, string>;
-  datasetCustom: Record<string, string>;
-  proposalDefault: Record<string, string>;
+  dataset: Record<string, string>;
+  proposal: Record<string, string>;
 }
 
 export interface DatasetDetailComponentConfig {

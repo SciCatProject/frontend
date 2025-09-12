@@ -10,7 +10,6 @@ import {
 import { selectViewProposalPageViewModel } from "state-management/selectors/proposals.selectors";
 import { AppConfigService } from "app-config.service";
 import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
-import { TranslateService } from "@ngx-translate/core";
 import { selectIsLoading } from "state-management/selectors/user.selectors";
 
 @Component({
@@ -34,10 +33,7 @@ export class ViewProposalPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private store: Store,
     private router: Router,
-    private translateService: TranslateService,
-  ) {
-    this.translateService.use(this.localization);
-  }
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(

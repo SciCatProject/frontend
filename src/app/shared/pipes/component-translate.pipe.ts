@@ -10,7 +10,9 @@ export class ComponentTranslatePipe implements PipeTransform {
 
   transform(value: any, component = "", ...args: any[]): string {
     const valueToBeTranslated = component ? component + "." + value : value;
+
     const translatedValue = this.translateService.instant(valueToBeTranslated);
+
     return translatedValue !== valueToBeTranslated ? translatedValue : value;
   }
 }
