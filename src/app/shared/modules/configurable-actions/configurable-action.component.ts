@@ -17,6 +17,137 @@ import { updatePropertyAction } from "state-management/actions/datasets.actions"
 import { Router } from "@angular/router";
 import { AppConfigService } from "app-config.service";
 
+type JSONValue = string | number | boolean | null | { [key: string]: JSONValue } | JSONValue[];
+
+function processSelector(
+  jsonObject: JSONValue,
+  selector: string
+): string | string[] | number | number[] {
+  const results: string[] = [];
+  const numericResults: number[] = [];
+  let sum = 0;
+
+  // Support for wrapping selector in "[ ... ] | operation"
+  const [coreSelectorPart, operationPart] = selector.includes("|")
+    ? selector.split("|").map(part => part.trim())
+    : [selector.trim(), null];
+
+  // Parse the core selector and optional filter
+  const coreSelector = coreSelectorPart.replace(/^\[|\]$/g, ""); // Remove enclosing brackets, if present
+  const [mainSelector, filterSelector] = coreSelector.split('|').map(part => part.trim());
+  const mainKeys = mainSelector
+    .replace(/^\./, "") // Remove leading dot
+    .split(".")         // Split into keys
+    .map(key => key.trim());
+
+  let filterKeys: string[] | null = null;
+  if (filterSelector) {
+    if (!filterSelector.startsWith("select ")) {
+      throw new Error("Invalid syntax: Filter part must start with 'select'.");
+    }
+    filterKeys = filterSelector
+      .slice(7)          // Remove "select " prefix
+      .replace(/^\./, "") // Remove leading dot
+      .split(".")         // Split into keys
+      .map(key => key.trim());
+  }
+
+  const traverse = (obj: JSONValue, keys: string[], filterKeys?: string[], filterObj?: JSONValue) => {
+    if (keys.length === 0) {
+      // If no more main keys to process, evaluate the filter (if provided)
+      if (filterKeys && filterObj !== undefined) {
+        const filterPasses = evaluateFilter(filterObj, filterKeys);
+        if (!filterPasses) return;
+      }
+
+      // Add the current value to the appropriate collection
+      if (typeof obj === "string") {
+        results.push(obj);
+      } else if (typeof obj === "number") {
+        numericResults.push(obj);
+        sum += obj;
+      }
+
+      return;
+    }
+
+    const key = keys[0];
+
+    if (Array.isArray(obj)) {
+      // If the current object is an array, process each item
+      if (key.startsWith("[") && key.endsWith("]")) {
+        const index = parseInt(key.slice(1, -1));
+        if (!isNaN(index) && obj[index] !== undefined) {
+          traverse(obj[index], keys.slice(1), filterKeys, obj[index]);
+        }
+      } else {
+        obj.forEach((item) => traverse(item, keys, filterKeys, item));
+      }
+    } else if (typeof obj === "object" && obj !== null) {
+      traverse(obj[key], keys.slice(1), filterKeys, obj);
+    }
+  };
+
+  const evaluateFilter = (obj: JSONValue, filterKeys: string[]): boolean => {
+    let current = obj;
+    for (const key of filterKeys) {
+      if (Array.isArray(current)) {
+        // Return false for arrays within a filter (unsupported case)
+        return false;
+      } else if (typeof current === "object" && current !== null && key in current) {
+        current = current[key];
+      } else {
+        return false;
+      }
+    }
+    return current === true; // Assume filter checks for a `true` value
+  };
+
+  // Begin traversing the JSON object
+  traverse(jsonObject, mainKeys, filterKeys || undefined, jsonObject);
+
+  // Handle post-processing commands like `count` or others
+  let count = 0;
+  if (operationPart) {
+    switch (operationPart) {
+      case "count":
+        return (results.length > 0 ? results.length : numericResults.length);
+        break;
+      case "sum":
+        return numericResults.reduce((total, value) => total + value, 0); // Defensive to ensure correct computation
+        break;
+      default:
+        throw new Error(`Unsupported operation: ${operationPart}`);
+    }
+  } 
+
+  return results;
+}
+
+// Example usage
+const jsonExample = {
+  datasets: [
+    { files: { selected: true, path: "/path/to/file1", size: 100 } },
+    { files: { selected: false, path: "/path/to/file2", size: 200 } },
+    { files: { selected: true, path: "/path/to/file3", size: 300 } }
+  ]
+};
+
+// // Example 1: Count all selected items
+// const selectorCount = "[.datasets[].files.size | select .datasets[].files.selected] | count";
+// const countResult = processSelector(jsonExample, selectorCount);
+// console.log(countResult); // Output: 2
+
+// // Example 2: Sum all selected sizes
+// const selectorSum = "[.datasets[].files.size | select .datasets[].files.selected] | sum";
+// const sumResult = processSelector(jsonExample, selectorSum);
+// console.log(sumResult); // Output: 400
+
+// // Example 3: Retrieve all paths
+// const selectorPaths = "[.datasets[].files.path | select .datasets[].files.selected] | count";
+// const pathsResult = processSelector(jsonExample, selectorPaths);
+// console.log(pathsResult); // Output: ["/path/to/file1", "/path/to/file3"]
+
 @Component({
   selector: "configurable-action",
   templateUrl: "./configurable-action.component.html",
@@ -26,14 +157,15 @@ import { AppConfigService } from "app-config.service";
 export class ConfigurableActionComponent implements OnInit, OnChanges {
   @Input({ required: true }) actionConfig: ActionConfig;
   @Input({ required: true }) actionItems: ActionItems;
-  @Input({ required: true }) maxFileSize: number;
+  @Input({ required: true }) maxDownloadableSize: number;
 
   jwt = "";
   use_mat_icon = false;
   use_icon = false;
   disabled_condition = "false";
-  selectedTotalFileSize = 0;
-  numberOfFileSelected = 0;
+  #selectedTotalFileSize = 0;
+  #numberOfFileSelected = 0;
+  variables: Record<string, any> = {};
 
   form: HTMLFormElement = null;
 
@@ -50,18 +182,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     });
   }
 
-  private evaluate_disabled_condition(condition: string) {
-    return condition
-      .replaceAll(
-        "#SizeLimit",
-        String(
-          this.maxFileSize > 0 &&
-            this.selectedTotalFileSize <= this.maxFileSize,
-        ),
-      )
-      .replaceAll("#Selected", String(this.numberOfFileSelected > 0));
-  }
-
   private evaluate_hidden_condition(condition: string) {
     return condition
       .replaceAll(
@@ -74,14 +194,30 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       );
   }
 
+  private prepare_action_condition(condition: string) {
+    // Define replacements for specific functions and variables
+    return condition
+      // Handle #Length({{ files }})
+      .replace(
+        /#Length\(\{\{\s(\w+)\s\}\}\)/g,
+        (_, variableName) => `variables.${variableName}.length`)
+      // Handle #MaxDownloadableSize({{ totalSize }})
+      .replace(
+        /#MaxDownloadableSize\(\{\{\s(\w+)\s\}\}\)/g,
+        (_, variableName) => `variables.${variableName} <= maxDownloadableSize`)
+      .replace(
+        /\{\{\s(\w+)\s\}\}/g, 
+        (_, variableName) => `variables.${variableName}`);
+  }
+
   private prepare_disabled_condition() {
     if (this.actionConfig.enabled) {
       this.disabled_condition =
         "!(" +
-        this.evaluate_disabled_condition(this.actionConfig.enabled) +
+        this.prepare_action_condition(this.actionConfig.enabled) +
         ")";
     } else if (this.actionConfig.disabled) {
-      this.disabled_condition = this.evaluate_disabled_condition(
+      this.disabled_condition = this.prepare_action_condition(
         this.actionConfig.disabled,
       );
     } else {
@@ -107,31 +243,28 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes["files"]) {
+    if (changes["actionItems"]) {
       this.update_status();
     }
   }
 
   update_status() {
-    this.selectedTotalFileSize = this.files
-      ?.filter((item) => item.selected || this.actionConfig.files === "all")
-      .reduce((sum, item) => sum + item.size, 0);
-    this.numberOfFileSelected = this.files?.filter(
-      (item) => item.selected,
-    ).length;
+    Object.entries(this.actionConfig.variables).forEach(([key,selector]) => {
+      this.variables[key] = processSelector(
+        this.actionItems as unknown as JSONValue,
+        selector)
+    })
   }
 
   get disabled() {
     this.update_status();
-    this.prepare_disabled_condition();
 
     const expr = this.disabled_condition;
     const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);
 
     return fn({
-      maxFileSize: this.maxFileSize,
-      selectedTotalFileSize: this.selectedTotalFileSize,
-      numberOfFileSelected: this.numberOfFileSelected,
+      variables: this.variables,
+      maxDownloadableSize: this.maxDownloadableSize,
     });
   }
 
@@ -343,99 +476,5 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   type_link() {
     this.router.navigateByUrl(this.actionConfig.url);
   }
-
-// type JSONValue = string | number | boolean | null | { [key: string]: JSONValue } | JSONValue[];
-
-// function selectFromJsonWithFilter(jsonObject: JSONValue, selector: string): string[] {
-//   const results: string[] = [];
-
-//   // Parse the selector into main selection and optional filter
-//   const [mainSelector, filterSelector] = selector.split('|').map(part => part.trim());
-//   const mainKeys = mainSelector
-//     .replace(/^\./, "") // Remove leading dot
-//     .split(".")         // Split into keys
-//     .map(key => key.trim());
-
-//   let filterKeys: string[] | null = null;
-//   if (filterSelector) {
-//     if (!filterSelector.startsWith("select ")) {
-//       throw new Error("Invalid syntax: Filter part must start with 'select'.");
-//     }
-//     filterKeys = filterSelector
-//       .slice(7)          // Remove "select " prefix
-//       .replace(/^\./, "") // Remove leading dot
-//       .split(".")         // Split into keys
-//       .map(key => key.trim());
-//   }
-
-//   const traverse = (obj: JSONValue, keys: string[], filterKeys?: string[], filterObj?: JSONValue) => {
-//     if (keys.length === 0) {
-//       // If no more main keys to process, and if optional filter keys exist, evaluate the filter
-//       if (filterKeys && filterObj !== undefined) {
-//         const filterPasses = evaluateFilter(filterObj, filterKeys);
-//         if (!filterPasses) return;
-//       }
-      
-//       // Add the current value if it's a string
-//       if (typeof obj === "string") {
-//         results.push(obj);
-//       }
-//       return;
-//     }
-
-//     const key = keys[0];
-
-//     if (Array.isArray(obj)) {
-//       // If the current object is an array, process each item
-//       if (key.startsWith("[") && key.endsWith("]")) {
-//         const index = parseInt(key.slice(1, -1));
-//         if (!isNaN(index) && obj[index] !== undefined) {
-//           traverse(obj[index], keys.slice(1), filterKeys, obj[index]);
-//         }
-//       } else {
-//         obj.forEach((item) => traverse(item, keys, filterKeys, item));
-//       }
-//     } else if (typeof obj === "object" && obj !== null) {
-//       traverse(obj[key], keys.slice(1), filterKeys, obj);
-//     }
-//   };
-
-//   const evaluateFilter = (obj: JSONValue, filterKeys: string[]): boolean => {
-//     let current = obj;
-//     for (const key of filterKeys) {
-//       if (Array.isArray(current)) {
-//         // Return false for arrays within a filter (unsupported case)
-//         return false;
-//       } else if (typeof current === "object" && current !== null && key in current) {
-//         current = current[key];
-//       } else {
-//         return false; // If the key does not exist or is invalid
-//       }
-//     }
-
-//     return current === true; // Assume filter checks for a `true` value
-//   };
-
-//   // Begin traversing the JSON object
-//   traverse(jsonObject, mainKeys, filterKeys || undefined, jsonObject);
-
-//   return results;
-// }
-
-// // Example usage
-// const jsonExample = {
-//   datasets: [
-//     { files: { selected: true, path: "/path/to/file1" } },
-//     { files: { selected: false, path: "/path/to/file2" } },
-//     { files: { selected: true, path: "/path/to/file3" } }
-//   ]
-// };
-
-// const selector = ".datasets[].files.path | select .datasets[].files.selected";
-// const selectedPaths = selectFromJsonWithFilter(jsonExample, selector);
-
-// console.log(selectedPaths); // Output: ["/path/to/file1", "/path/to/file3"]
-
-
 
 }

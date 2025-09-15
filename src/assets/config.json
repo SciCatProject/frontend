@@ -71,7 +71,18 @@
       "type": "form",
       "url": "https://zip.scicatproject.org/download/all",
       "target": "_blank",
-      "enabled": "#SizeLimit",
+      "variables" : {
+        "pid": ".datasets[0].pid",
+        "files": ".datasets[0].files.path",
+        "totalSize": "[.datasets[0].files.size] | add",
+        "folder": ".datasets[0].sourceFolder"
+      },
+      "enabled": "#MaxDownloadableSize(@totalSize)",
+      "inputs" : {
+        "item[]" : "@pid",
+        "directory[]" : "@folder",
+        "files[]": "@files"
+      },
       "authorization": ["#datasetAccess", "#datasetPublic"]
     },
     {
@@ -84,7 +95,19 @@
       "type": "form",
       "url": "https://zip.scicatproject.org/download/selected",
       "target": "_blank",
-      "enabled": "#Selected && #SizeLimit",
+      "variables" : {
+        "pid": ".datasets[0].pid",
+        "files": ".datasets[0].files.path | select(.datasets[0].files.selected)",
+        "selected": "[.datasets[0].files.path | select(.datasets[0].files.selected)] | count",
+        "totalSize": "[.datasets[0].files.size | select(.datasets[0].files.selected)] | sum",
+        "folder": ".datasets[0].sourceFolder"
+      },
+      "inputs" : {
+        "item[]" : "@pid",
+        "directory[]" : "@folder",
+        "files[]": "@files"
+      },
+      "enabled": "#Length(@files) && #MaxDownloadableSize(@totalSize)",
       "authorization": ["#datasetAccess", "#datasetPublic"]
     },
     {
@@ -101,7 +124,7 @@
     },
     {
       "id": "0cd5b592-0b1a-11f0-a42c-23e177127ee7",
-      "description": "This action let users download jupyter notebook properly populated with dataset pid and selected files using an instance of sciwyrm",
+      "description": "This action let users download jupyter notebook properly populated with dataset pid and all files using an instance of sciwyrm",
       "order": 3,
       "label": "Notebook All (Download JSON)",
       "files": "all",
@@ -110,9 +133,35 @@
       "url": "https://www.sciwyrm.info/notebook",
       "target": "_blank",
       "authorization": ["#datasetAccess", "#datasetPublic"],
-      "payload": "{\"template_id\":\"c975455e-ede3-11ef-94fb-138c9cd51fc0\",\"parameters\":{\"dataset\":\"{{ datasetPid }}\",\"directory\":\"{{ sourceFolder }}\",\"files\": {{ filesPath }},\"jwt\":\"{{ jwt }}\",\"scicat_url\":\"https://staging.scicat.ess.url\",\"file_server_url\":\"sftserver2.esss.dk\",\"file_server_port\":\"22\"}}",
+      "variables" : {
+        "datasetPid": ".datasets[0].pid",
+        "files": ".datasets[0].files.path",
+        "folder": ".datasets[0].sourceFolder"
+      },
+      "payload": "{\"template_id\":\"c975455e-ede3-11ef-94fb-138c9cd51fc0\",\"parameters\":{\"dataset\":\"{{ datasetPid }}\",\"directory\":\"{{ sourceFolder }}\",\"files\": {{ files }},\"jwt\":\"{{ jwt }}\",\"scicat_url\":\"https://staging.scicat.ess.url\",\"file_server_url\":\"sftserver2.esss.dk\",\"file_server_port\":\"22\"}}",
       "filename": "{{ uuid }}.ipynb"
     },
+    {
+      "id": "224d8cb0-9233-11f0-991a-bfa2461d77ff",
+      "description": "This action let users download jupyter notebook properly populated with dataset pid and selected files using an instance of sciwyrm",
+      "order": 4,
+      "label": "Notebook Selected (Download JSON)",
+      "files": "all",
+      "type": "json-download",
+      "icon": "/assets/icons/jupyter_logo.png",
+      "url": "https://www.sciwyrm.info/notebook",
+      "target": "_blank",
+      "enabled": "@selected > 0",
+      "authorization": ["#datasetAccess", "#datasetPublic"],
+      "variables" : {
+        "pid": ".datasets[0].pid",
+        "files": ".datasets[0].files.path | select(.datasets[0].files.selected)",
+        "selected": "[.datasets[0].files.path | select(.datasets[0].files.selected)] | count",
+        "folder": ".datasets[0].sourceFolder"
+      },
+      "payload": "{\"template_id\":\"c975455e-ede3-11ef-94fb-138c9cd51fc0\",\"parameters\":{\"dataset\":\"{{ pid }}\",\"directory\":\"{{ sourceFolder }}\",\"files\": {{ files }},\"jwt\":\"{{ jwt }}\",\"scicat_url\":\"https://staging.scicat.ess.url\",\"file_server_url\":\"sftserver2.esss.dk\",\"file_server_port\":\"22\"}}",
+      "filename": "{{ uuid }}.ipynb"
+    },    
     {
       "id": "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
       "order": 1,

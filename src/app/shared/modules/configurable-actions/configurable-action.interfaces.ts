@@ -1,4 +1,4 @@
-import { DatasetClass } from "@scicatproject/scicat-sdk-ts-angular";
+import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 
 export interface ActionConfig {
   id: string;
@@ -18,6 +18,8 @@ export interface ActionConfig {
   payload?: string;
   filename?: string;
   hidden?: string;
+  variables?: Record<string, string>;
+  inputs?: Record<string, string>
 }
 
 // export interface ActionItem {
