@@ -1,13 +1,12 @@
 import { Component, Input } from "@angular/core";
 import { ClearableInputComponent } from "./clearable-input.component";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
-import { DateTime } from "luxon";
 import { setDateRangeFilterAction } from "state-management/actions/datasets.actions";
 import { selectCreationTimeFilter } from "state-management/selectors/datasets.selectors";
 import { Store } from "@ngrx/store";
 import { FilterComponentInterface } from "./interface/filter-component.interface";
 import { AppConfigService } from "app-config.service";
-import { getFilterLabel } from "./utils";
+import { getFilterLabel, toIsoUtc } from "./utils";
 
 interface DateRange {
   begin: string;
@@ -51,15 +50,20 @@ export class DateRangeFilterComponent
     if (event.value) {
       const name = event.targetElement.getAttribute("name");
       if (name === "begin") {
-        this.dateRange.begin = event.value.toUTC().toISO();
-        this.dateRange.end = "";
+        this.dateRange.begin = toIsoUtc(event.value);
+        if (!this.dateRange.end) {
+          this.dateRange.end = "";
+        }
       }
       if (name === "end") {
-        this.dateRange.end = event.value.toUTC().plus({ days: 1 }).toISO();
+        this.dateRange.end = toIsoUtc(event.value);
+        if (!this.dateRange.begin) {
+          this.dateRange.begin = "";
+        }
       }
-      if (this.dateRange.begin.length > 0 && this.dateRange.end.length > 0) {
-        this.store.dispatch(setDateRangeFilterAction(this.dateRange));
-      }
+    }
+    if (this.dateRange.begin.length > 0 && this.dateRange.end.length > 0) {
+      this.store.dispatch(setDateRangeFilterAction(this.dateRange));
     } else {
       this.store.dispatch(setDateRangeFilterAction({ begin: "", end: "" }));
     }

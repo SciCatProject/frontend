@@ -93,64 +93,31 @@ export const initialProposalsState: ProposalsState = {
   columns: [
     {
       name: "proposalId",
-      icon: "perm_device_information",
-      width: 250,
+      width: 180,
       enabled: true,
     },
-    {
-      name: "startTime",
-      icon: "date_range",
-      width: 250,
-      enabled: true,
-    },
-    {
-      name: "endTime",
-      icon: "date_range",
-      width: 250,
-      enabled: true,
-    },
-    { name: "type", icon: "badge", width: 200, enabled: true },
     {
       name: "title",
-      icon: "description",
       width: 250,
       enabled: true,
     },
     {
       name: "abstract",
-      icon: "chrome_reader_mode",
-      width: 250,
+      type: "hoverContent",
+      width: 150,
       enabled: true,
     },
     {
-      name: "firstname",
-      icon: "person",
-      enabled: true,
-    },
-    {
-      name: "lastname",
-      enabled: true,
-    },
-    { name: "email", icon: "email", width: 200, enabled: true },
-    {
-      name: "parentProposalId",
-      icon: "badge",
-      enabled: true,
-    },
-    {
-      name: "pi_firstname",
-      icon: "person_pin",
+      name: "startTime",
+      type: "date",
+      format: "yyyy/MM/dd",
+      width: 200,
       enabled: true,
     },
     {
       name: "pi_lastname",
-      icon: "person_pin",
       enabled: true,
     },
-    {
-      name: "pi_email",
-      icon: "email",
-      enabled: true,
-    },
+    { name: "type", width: 200, enabled: true },
   ],
 };
