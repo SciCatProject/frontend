@@ -28,7 +28,7 @@
     "@angular/material-luxon-adapter": "^19.2.14",
     "@angular/platform-browser": "^19.2.8",
     "@angular/platform-browser-dynamic": "^19.2.8",
-    "@angular/platform-server": "^19.2.8",
+    "@angular/platform-server": "^19.2.15",
     "@angular/router": "^19.2.8",
     "@angular/service-worker": "^19.2.8",
     "@jsonforms/angular": "^3.5.1",
