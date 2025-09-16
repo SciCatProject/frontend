@@ -88,6 +88,7 @@
   </div>
 
   <ng-template [ngIf]="!(vm.logbook | keyvalue)?.length">
-    <app-empty-content message="No logbook available." icon="book" />
+    <app-empty-content message="No logbook available." icon="book">
+    </app-empty-content>
   </ng-template>
 </ng-container>
