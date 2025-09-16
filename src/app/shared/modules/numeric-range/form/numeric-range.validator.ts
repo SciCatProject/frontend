@@ -6,10 +6,8 @@ export const numericRangeValues: ValidatorFn = (
   const max = group.get("max").value ? Number(group.get("max").value) : null;
   const min = group.get("min").value ? Number(group.get("min").value) : null;
 
-  if (max !== null && min !== null) {
-    if (max < min) {
-      return { notValidRange: true };
-    }
+  if (max !== null && min !== null && max < min) {
+    return { notValidRange: true };
   }
   return null;
 };

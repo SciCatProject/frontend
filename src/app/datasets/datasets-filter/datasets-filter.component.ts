@@ -98,34 +98,35 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private unitsOptionsService: UnitsOptionsService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.applyEnabledConditions();
 
-    this.filterConfigs$.subscribe((filterConfigs) => {
-      if (filterConfigs) {
-        this.filtersList = filterConfigs;
+    this.subscriptions.push(
+      this.filterConfigs$.subscribe((filterConfigs) => {
+        if (filterConfigs) {
+          this.filtersList = filterConfigs;
 
-        const { queryParams } = this.route.snapshot;
+          const { queryParams } = this.route.snapshot;
 
-        const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
+          const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
 
-        this.filtersList.forEach((filter) => {
-          if (!filter.enabled && searchQuery[filter.key]) {
-            delete searchQuery[filter.key];
-            delete this.activeFilters[filter.key];
-          }
-        });
+          this.filtersList.forEach((filter) => {
+            if (!filter.enabled && searchQuery[filter.key]) {
+              delete searchQuery[filter.key];
+              delete this.activeFilters[filter.key];
+            }
+          });
 
-        this.router.navigate([], {
-          queryParams: {
-            searchQuery: JSON.stringify(searchQuery),
-          },
-          queryParamsHandling: "merge",
-        });
-      }
-    });
+          this.router.navigate([], {
+            queryParams: {
+              searchQuery: JSON.stringify(searchQuery),
+            },
+            queryParamsHandling: "merge",
+          });
+        }
+      }));
 
     const { queryParams } = this.route.snapshot;
 
@@ -304,7 +305,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   addMultiSelectFilterToActiveFilters(key: string, value: string) {
     if (this.activeFilters[key] && Array.isArray(this.activeFilters[key])) {
-      this.activeFilters[key] = [...this.activeFilters[key], value];
+      if (!this.activeFilters[key].includes(value)) {
+        this.activeFilters[key] = [...this.activeFilters[key], value];
+      }
+      // If value already exists, do nothing
     } else {
       this.activeFilters[key] = [value];
     }
@@ -337,9 +341,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   numericRangeChange(filterKey: string, { min, max }: INumericRange) {
-    if (min !== null && max !== null) {
+    if (min !== null || max !== null) {
       this.activeFilters[filterKey] = { min, max };
-
       this.store.dispatch(
         addDatasetFilterAction({
           key: filterKey,
@@ -349,7 +352,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       );
     } else {
       delete this.activeFilters[filterKey];
-
       this.store.dispatch(
         removeDatasetFilterAction({ key: filterKey, filterType: "number" }),
       );
