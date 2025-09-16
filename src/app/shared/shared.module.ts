@@ -26,6 +26,7 @@ import { JsonFormsCustomRenderersModule } from "./modules/jsonforms-custom-rende
 import { FullTextSearchBarModule } from "./modules/full-text-search-bar/full-text-search-bar.module";
 import { SharedFilterModule } from "./modules/shared-filter/shared-filter.module";
 import { ConfigurableActionsModule } from "./modules/configurable-actions/configurable-actions.module";
+import { EmptyContentModule } from "./modules/generic-empty-content/empty-content.module";
 import { JsonformsAccordionRendererService } from "./services/jsonforms-accordion-renderer.service";
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { JsonformsAccordionRendererService } from "./services/jsonforms-accordio
     DynamicMatTableModule.forRoot({}),
     TranslateModule,
     ConfigurableActionsModule,
+    EmptyContentModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
     JsonFormsCustomRenderersModule,
@@ -80,6 +82,7 @@ import { JsonformsAccordionRendererService } from "./services/jsonforms-accordio
     DynamicMatTableModule,
     TranslateModule,
     ConfigurableActionsModule,
+    EmptyContentModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
     JsonFormsCustomRenderersModule,
