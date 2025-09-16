@@ -98,7 +98,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private unitsOptionsService: UnitsOptionsService,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.applyEnabledConditions();
@@ -126,7 +126,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             queryParamsHandling: "merge",
           });
         }
-      }));
+      }),
+    );
 
     const { queryParams } = this.route.snapshot;
 
