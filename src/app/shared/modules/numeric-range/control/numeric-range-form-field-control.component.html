@@ -1,0 +1,21 @@
+<input
+  (blur)="onBlur()"
+  (change)="onMinValuesChanged($event)"
+  (keyup.enter)="onEnterPressed()"
+  [readonly]="readonly || minReadonly"
+  [formControl]="minControl"
+  matInput
+  [placeholder]="minPlaceholder"
+  type="number"
+/>
+<span class="spacer">&ndash;</span>
+<input
+  (blur)="onBlur()"
+  (change)="onMaxValuesChanged($event)"
+  (keyup.enter)="onEnterPressed()"
+  [formControl]="maxControl"
+  [readonly]="readonly || maxReadonly"
+  matInput
+  [placeholder]="maxPlaceholder"
+  type="number"
+/>

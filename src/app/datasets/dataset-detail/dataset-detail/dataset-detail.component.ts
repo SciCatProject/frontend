@@ -21,7 +21,7 @@ import {
 } from "state-management/selectors/user.selectors";
 import { map } from "rxjs/operators";
 import {
-  addKeywordFilterAction,
+  addDatasetFilterAction,
   clearFacetsAction,
   updatePropertyAction,
 } from "state-management/actions/datasets.actions";
@@ -158,7 +158,13 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   onClickKeyword(keyword: string) {
     this.store.dispatch(clearFacetsAction());
-    this.store.dispatch(addKeywordFilterAction({ keyword }));
+    this.store.dispatch(
+      addDatasetFilterAction({
+        filterType: "multiSelect",
+        key: "keywords",
+        value: keyword,
+      }),
+    );
     this.router.navigateByUrl("/datasets");
   }
 

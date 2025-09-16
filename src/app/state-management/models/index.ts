@@ -1,7 +1,7 @@
 import {
-  ConditionConfig,
   FilterConfig,
-} from "shared/modules/filters/filters.module";
+  ConditionConfig,
+} from "state-management/state/user.store";
 
 export interface Settings {
   tapeCopies: string;
@@ -19,10 +19,6 @@ export interface TableColumn {
   enabled: boolean;
   format?: string;
   width?: number;
-}
-
-export interface LabelMaps {
-  [key: string]: Record<string, string>;
 }
 
 export interface LabelsLocalization {

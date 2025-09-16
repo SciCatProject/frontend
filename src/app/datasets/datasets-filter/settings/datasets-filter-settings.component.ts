@@ -8,7 +8,7 @@ import { AppConfigService } from "app-config.service";
 import { Store } from "@ngrx/store";
 import { selectMetadataKeys } from "../../../state-management/selectors/datasets.selectors";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
-import { FilterConfig } from "../../../shared/modules/filters/filters.module";
+import { FilterConfig } from "state-management/state/user.store";
 
 @Component({
   selector: "app-type-datasets-filter-settings",
@@ -23,6 +23,11 @@ export class DatasetsFilterSettingsComponent {
 
   filterValidationStatus = {};
 
+  defaultFilters = [];
+  userSavedFilters = [];
+
+  mergedFilters = [];
+
   constructor(
     public dialogRef: MatDialogRef<DatasetsFilterSettingsComponent>,
     public dialog: MatDialog,
@@ -31,41 +36,41 @@ export class DatasetsFilterSettingsComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {}
 
-  toggleVisibility(filter: FilterConfig): void {
-    const key = this.getFilterKey(filter);
-    filter[key] = !filter[key];
+  ngOnInit() {
+    this.defaultFilters = this.appConfig.defaultDatasetsListSettings.filters;
+    this.userSavedFilters = this.data.filterConfigs || [];
+
+    const newFilters = this.defaultFilters.reduce((filtered, item) => {
+      if (
+        !this.userSavedFilters.some((userFilter) => userFilter.key === item.key)
+      ) {
+        filtered.push({ ...item, enabled: false });
+      }
+      return filtered;
+    }, []);
+
+    this.mergedFilters = [...this.userSavedFilters].concat(newFilters);
   }
 
-  getChecked(filter: FilterConfig): boolean {
-    const key = this.getFilterKey(filter);
-    return filter[key];
+  toggleVisibility(filter: FilterConfig): void {
+    filter.enabled = !filter.enabled;
   }
 
   drop(event: CdkDragDrop<string[]>): void {
     moveItemInArray(
-      this.data.filterConfigs,
+      this.mergedFilters,
       event.previousIndex,
       event.currentIndex,
     );
   }
 
   onApply() {
-    this.dialogRef.close(this.data);
+    this.dialogRef.close({
+      filterConfigs: this.mergedFilters,
+    });
   }
 
   onCancel() {
     this.dialogRef.close();
-  }
-
-  resolveFilterLabel(
-    labelMaps: Record<string, string>,
-    filter: FilterConfig,
-  ): string {
-    const key = this.getFilterKey(filter);
-    return labelMaps[key] || "Unknown filter";
-  }
-
-  getFilterKey(filter: FilterConfig): string {
-    return Object.keys(filter)[0];
   }
 }
