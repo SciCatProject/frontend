@@ -66,7 +66,7 @@ mat-card {
     }
   }
 
-  .section-container:first-child {
+  .filters-header {
     padding-top: 0.1rem;
     margin-top: unset;
     display: flex;
@@ -78,6 +78,13 @@ mat-card {
       align-items: center;
       justify-content: end;
     }
+  }
+
+  .conditions-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
     .condition-button {
       display: flex;
       align-items: center;

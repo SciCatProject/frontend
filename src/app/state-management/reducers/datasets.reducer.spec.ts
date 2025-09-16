@@ -33,6 +33,7 @@ const derivedDataset = createMock<OutputDatasetObsoleteDto>({
 const dataset = createMock<OutputDatasetObsoleteDto>({
   ...derivedDataset,
   type: "raw",
+  origdatablocks: undefined,
 });
 
 describe("DatasetsReducer", () => {
