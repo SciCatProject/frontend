@@ -39,6 +39,7 @@ import { ITableSetting, TableSetting } from "../models/table-setting.model";
 import { PipesModule } from "shared/pipes/pipes.module";
 import { MatCardModule } from "@angular/material/card";
 
+import { EmptyContentModule } from "shared/modules/generic-empty-content/empty-content.module";
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
 
@@ -68,6 +69,7 @@ const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
     OverlayModule,
     ExtensionsModule,
     PipesModule,
+    EmptyContentModule,
   ],
   exports: [DynamicMatTableComponent],
   declarations: [

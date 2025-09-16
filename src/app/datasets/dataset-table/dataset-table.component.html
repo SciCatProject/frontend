@@ -15,5 +15,7 @@
   (settingChange)="onSettingChange($event)"
   (onTableEvent)="onTableEvent($event)"
   class="mat-elevation-z2 dataset-table"
+  [emptyMessage]="'No datasets available'"
+  [emptyIcon]="'folder'"
 >
 </dynamic-mat-table>
