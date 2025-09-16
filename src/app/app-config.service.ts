@@ -4,7 +4,6 @@ import { timeout } from "rxjs/operators";
 import {
   DatasetDetailComponentConfig,
   DatasetsListSettings,
-  LabelMaps,
   LabelsLocalization,
   TableColumn,
 } from "state-management/models";
@@ -131,7 +130,6 @@ export interface AppConfigInterface {
   pidSearchMethod?: string;
   metadataEditingUnitListDisabled?: boolean;
   defaultDatasetsListSettings: DatasetsListSettings;
-  labelMaps: LabelMaps;
   thumbnailFetchLimitPerPage: number;
   maxFileUploadSizeInMb?: string;
   datasetDetailComponent?: DatasetDetailComponentConfig;
