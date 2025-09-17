@@ -32,7 +32,7 @@
     "@angular/router": "^19.2.8",
     "@angular/service-worker": "^19.2.8",
     "@jsonforms/angular": "^3.5.1",
-    "@jsonforms/angular-material": "^3.5.1",
+    "@jsonforms/angular-material": "^3.6.0",
     "@jsonforms/core": "^3.5.1",
     "@ngbracket/ngx-layout": "^16.0.0",
     "@ngrx/effects": "^19.1.0",
