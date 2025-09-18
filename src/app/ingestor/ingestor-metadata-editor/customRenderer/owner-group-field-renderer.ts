@@ -98,25 +98,19 @@ export class OwnerGroupFieldComponent
     // Fetch the owner groups from the scicat user
     this.componentSubscriptions.push(
       this.vm$.subscribe((settings) => {
-        const getclaims = (profile: any): string[] | null => {
+        const getPossibleOwnerGroups = (profile: any): string[] | null => {
           if (!profile) {
             return null;
           }
 
-          if (profile.oidcClaims !== undefined) {
-            return settings.profile.oidcClaims.accessGroups ?? null;
-          }
+          var accessGroups = profile.accessGroups ?? null;
 
-          if (profile.accessGroups !== undefined) {
-            return settings.profile.accessGroups ?? null;
-          }
-
-          return null;
+          return accessGroups;
         };
 
-        const claims = getclaims(settings.profile);
-        if (claims !== null && claims.length > 0) {
-          this.userOwnerGroups = claims;
+        const ownerGroups = getPossibleOwnerGroups(settings.profile);
+        if (ownerGroups !== null && ownerGroups.length > 0) {
+          this.userOwnerGroups = ownerGroups;
         } else {
           this.userOwnerGroups = [];
 
