@@ -378,6 +378,16 @@
       [style.top.px]="headerHeight - 5"
     ></mat-header-row>
   </mat-table>
+  <ng-container *ngIf="showNoData && init === true">
+    <app-empty-content
+      *ngIf="standardDataSource.data.length === 0"
+      [message]="emptyMessage"
+      [icon]="emptyIcon"
+      [showReload]="showReload"
+      (reload)="reload_onClick()"
+    >
+    </app-empty-content>
+  </ng-container>
 </div>
 <mat-paginator
   [pageSizeOptions]="pagination.pageSizeOptions"
@@ -388,22 +398,6 @@
   *ngIf="pagination"
 >
 </mat-paginator>
-<ng-container *ngIf="showNoData && init === true">
-  <div class="no-records" *ngIf="standardDataSource.data.length === 0">
-    No data
-    <br />
-    <button
-      mat-icon-button
-      type="button"
-      *ngIf="showReload === true"
-      color="primary"
-      (click)="reload_onClick()"
-    >
-      <mat-icon>autorenew</mat-icon>
-    </button>
-  </div>
-</ng-container>
-
 <!-- Context Menu -->
 <div
   style="visibility: hidden; position: fixed"

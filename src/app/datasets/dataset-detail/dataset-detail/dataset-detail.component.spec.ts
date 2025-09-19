@@ -24,7 +24,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MockStore } from "@ngrx/store/testing";
 import { Store, StoreModule } from "@ngrx/store";
 import {
-  addKeywordFilterAction,
+  addDatasetFilterAction,
   clearFacetsAction,
   updatePropertyAction,
 } from "state-management/actions/datasets.actions";
@@ -119,7 +119,11 @@ describe("DatasetDetailComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
       expect(dispatchSpy).toHaveBeenCalledWith(
-        addKeywordFilterAction({ keyword }),
+        addDatasetFilterAction({
+          filterType: "multiSelect",
+          key: "keywords",
+          value: keyword,
+        }),
       );
       expect(router.navigateByUrl).toHaveBeenCalledWith("/datasets");
     });
