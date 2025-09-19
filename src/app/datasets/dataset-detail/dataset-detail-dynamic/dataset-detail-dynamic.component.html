@@ -42,7 +42,7 @@
               <div mat-card-avatar class="section-icon">
                 <mat-icon>description</mat-icon>
               </div>
-              {{ section.label | translate }}
+              {{ section.label | translate: localization }}
             </mat-card-header>
             <!-- Section Content -->
             <mat-card-content>
@@ -50,7 +50,7 @@
                 <ng-container *ngFor="let field of section.fields">
                   <tr *ngIf="getNestedValue(dataset, field.source)">
                     <th data-cy="field-label">
-                      {{ field.source | translate }}
+                      {{ field.source | translate: localization }}
                     </th>
                     <td>
                       <!-- Render based on field type using a dynamic template -->
@@ -161,7 +161,7 @@
               <div mat-card-avatar class="section-icon">
                 <mat-icon>science</mat-icon>
               </div>
-              {{ section.label | translate }}
+              <span>{{ section.label | translate: localization }}</span>
             </mat-card-header>
             <mat-card-content class="scientific-metadata-content">
               <ng-container *ngIf="appConfig.tableSciDataEnabled">
@@ -213,7 +213,7 @@
               <div mat-card-avatar class="section-icon">
                 <mat-icon>photo_library</mat-icon>
               </div>
-              {{ section.label | translate }}
+              {{ section.label | translate: localization }}
             </mat-card-header>
             <mat-card-content>
               <div class="attachments-wrapper">
@@ -266,7 +266,7 @@
               <div mat-card-avatar class="section-icon">
                 <mat-icon>data_object</mat-icon>
               </div>
-              {{ section.label | translate }}
+              {{ section.label | translate: localization }}
             </mat-card-header>
             <mat-card-content>
               <ng-container *ngIf="appConfig.jsonMetadataEnabled">
@@ -276,7 +276,10 @@
                   color="primary"
                   (click)="show = !show"
                 >
-                  {{ (show ? "Hide JSON View" : "Show JSON View") | translate }}
+                  {{
+                    (show ? "Hide JSON View" : "Show JSON View")
+                      | translate: localization
+                  }}
                 </button>
                 <br />
                 <div *ngIf="show" class="json-view-overflow">

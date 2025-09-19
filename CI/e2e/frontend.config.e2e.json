@@ -244,7 +244,7 @@
       "metadataJsonView": "Metadata JsonView",
       "datasetName": "Dataset Name"
     },
-    "proposalDefault": {
+    "proposal": {
       "General Information": "Proposal Information",
       "Title": "Proposal Title",
       "Abstract": "Abstract",

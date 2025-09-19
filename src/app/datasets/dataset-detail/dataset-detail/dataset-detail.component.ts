@@ -48,7 +48,6 @@ import {
   SampleClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "shared/services/attachment.service";
-import { TranslateService } from "@ngx-translate/core";
 
 /**
  * Component to show details for a data set, using the
@@ -74,6 +73,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   appConfig = this.appConfigService.getConfig();
 
+  localization = "dataset";
   dataset: OutputDatasetObsoleteDto | undefined;
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
@@ -92,13 +92,10 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
     private attachmentService: AttachmentService,
-    private translateService: TranslateService,
     private store: Store,
     private router: Router,
     private fb: FormBuilder,
-  ) {
-    this.translateService.use("dataset");
-  }
+  ) {}
 
   ngOnInit() {
     this.form = this.fb.group({

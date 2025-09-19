@@ -36,10 +36,12 @@ const tableDefaultSettingsConfig: ITableSetting = {
       columnSetting: [
         {
           name: "uniqueName",
+          header: "Unique Name",
           icon: "scanner",
         },
         {
           name: "name",
+          header: "Name",
           icon: "fingerprint",
         },
       ],

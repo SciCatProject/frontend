@@ -132,7 +132,7 @@ describe("Instruments general", () => {
         .first()
         .should("not.contain", newInstrument.name);
 
-      cy.get(".mat-sort-header-container").contains("Name").click();
+      cy.get(".mat-sort-header-container").eq(1).click();
 
       cy.get("mat-table mat-row").first().should("contain", newInstrument.name);
 
