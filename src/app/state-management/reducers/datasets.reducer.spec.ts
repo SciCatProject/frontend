@@ -33,6 +33,7 @@ const derivedDataset = createMock<OutputDatasetObsoleteDto>({
 const dataset = createMock<OutputDatasetObsoleteDto>({
   ...derivedDataset,
   type: "raw",
+  origdatablocks: undefined,
 });
 
 describe("DatasetsReducer", () => {
@@ -384,11 +385,15 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on addLocationFilterAction", () => {
+  describe("on addDatasetFilterAction", () => {
     it("should set location filter and set skip to 0", () => {
       const location = "test";
 
-      const action = fromActions.addLocationFilterAction({ location });
+      const action = fromActions.addDatasetFilterAction({
+        filterType: "multiSelect",
+        key: "creationLocation",
+        value: location,
+      });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.filters.creationLocation).toContain(location);
@@ -396,86 +401,18 @@ describe("DatasetsReducer", () => {
     });
   });
 
-  describe("on removeLocationFilterAction", () => {
+  describe("on removeDatasetFilterAction", () => {
     it("should remove location filter and set skip to 0", () => {
       const location = "test";
 
-      const action = fromActions.removeLocationFilterAction({ location });
+      const action = fromActions.removeDatasetFilterAction({
+        filterType: "multiSelect",
+        key: "creationLocation",
+        value: location,
+      });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.filters.creationLocation).not.toContain(location);
-      expect(state.filters.skip).toEqual(0);
-    });
-  });
-
-  describe("on addGroupFilterAction", () => {
-    it("should set  ownergroup filter and set skip to 0", () => {
-      const group = "test";
-
-      const action = fromActions.addGroupFilterAction({ group });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.filters.ownerGroup).toContain(group);
-      expect(state.filters.skip).toEqual(0);
-    });
-  });
-
-  describe("on removeGroupFilterAction", () => {
-    it("should remove ownergroup filter and set skip to 0", () => {
-      const group = "test";
-
-      const action = fromActions.removeGroupFilterAction({ group });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.filters.ownerGroup).not.toContain(group);
-      expect(state.filters.skip).toEqual(0);
-    });
-  });
-
-  describe("on addTypeFilterAction", () => {
-    it("should set type filter and set skip to 0", () => {
-      const datasetType = "test";
-
-      const action = fromActions.addTypeFilterAction({ datasetType });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.filters.type).toContain(datasetType);
-      expect(state.filters.skip).toEqual(0);
-    });
-  });
-
-  describe("on removeTypeFilterAction", () => {
-    it("should remove type filter and set skip to 0", () => {
-      const datasetType = "test";
-
-      const action = fromActions.removeTypeFilterAction({ datasetType });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.filters.type).not.toContain(datasetType);
-      expect(state.filters.skip).toEqual(0);
-    });
-  });
-
-  describe("on addKeywordFilterAction", () => {
-    it("should set keyword filter and set skip to 0", () => {
-      const keyword = "test";
-
-      const action = fromActions.addKeywordFilterAction({ keyword });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.filters.keywords).toContain(keyword);
-      expect(state.filters.skip).toEqual(0);
-    });
-  });
-
-  describe("on removeKeywordFilterAction", () => {
-    it("should remove keyword filter and set skip to 0", () => {
-      const keyword = "test";
-
-      const action = fromActions.removeKeywordFilterAction({ keyword });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.filters.keywords).not.toContain(keyword);
       expect(state.filters.skip).toEqual(0);
     });
   });
@@ -485,7 +422,11 @@ describe("DatasetsReducer", () => {
       const begin = new Date(2018, 1, 2).toISOString();
       const end = new Date(2018, 1, 3).toISOString();
 
-      const action = fromActions.setDateRangeFilterAction({ begin, end });
+      const action = fromActions.addDatasetFilterAction({
+        filterType: "dateRange",
+        key: "creationTime",
+        value: { begin, end },
+      });
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.filters.creationTime).toEqual({ begin, end });
@@ -544,16 +485,6 @@ describe("DatasetsReducer", () => {
       const state = fromDatasets.datasetsReducer(initialDatasetState, action);
 
       expect(state.pidTerms).toEqual(pid);
-    });
-  });
-
-  describe("on setPidTermsFilterAction", () => {
-    it("should set dataset state to initialDatasetStata", () => {
-      const pid = { $regex: "1" };
-      const action = fromActions.setPidTermsFilterAction({ pid });
-      const state = fromDatasets.datasetsReducer(initialDatasetState, action);
-
-      expect(state.filters.pid).toEqual(pid);
     });
   });
 });

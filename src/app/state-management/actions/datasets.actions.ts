@@ -13,6 +13,8 @@ import {
   DatasetFilters,
   ScientificCondition,
 } from "state-management/models";
+import { DateRange } from "state-management/state/proposals.store";
+import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-range-field.model";
 
 // === Effects ===
 
@@ -287,49 +289,30 @@ export const setTextFilterAction = createAction(
   props<{ text: string }>(),
 );
 
-export const setPidTermsFilterAction = createAction(
-  "[Dataset] Set Text Filter",
-  props<{ pid: string | { $regex: string } }>(),
+export const setFiltersAction = createAction(
+  "[Dataset] Set Filters",
+  props<{
+    datasetFilters: Record<
+      string,
+      string | DateRange | string[] | INumericRange
+    >;
+  }>(),
 );
-export const addLocationFilterAction = createAction(
-  "[Dataset] Add Location Filter",
-  props<{ location: string }>(),
+export const addDatasetFilterAction = createAction(
+  "[Dataset] Add Dataset Filter",
+  props<{
+    key: string;
+    value: string | DateRange | string[] | INumericRange;
+    filterType: "text" | "dateRange" | "number" | "multiSelect";
+  }>(),
 );
-export const removeLocationFilterAction = createAction(
-  "[Dataset] Remove Location Filter",
-  props<{ location: string }>(),
-);
-
-export const addGroupFilterAction = createAction(
-  "[Dataset] Add Group Filter",
-  props<{ group: string }>(),
-);
-export const removeGroupFilterAction = createAction(
-  "[Dataset] Remove Group Filter",
-  props<{ group: string }>(),
-);
-
-export const addTypeFilterAction = createAction(
-  "[Dataset] Add Type Filter",
-  props<{ datasetType: string }>(),
-);
-export const removeTypeFilterAction = createAction(
-  "[Dataset] Remove Type Filter",
-  props<{ datasetType: string }>(),
-);
-
-export const addKeywordFilterAction = createAction(
-  "[Dataset] Add Keyword Filter",
-  props<{ keyword: string }>(),
-);
-export const removeKeywordFilterAction = createAction(
-  "[Dataset] Remove Keyword Filter",
-  props<{ keyword: string }>(),
-);
-
-export const setDateRangeFilterAction = createAction(
-  "[Dataset] Set Date Range Filter",
-  props<{ begin: string; end: string }>(),
+export const removeDatasetFilterAction = createAction(
+  "[Dataset] Remove Dataset Filter",
+  props<{
+    key: string;
+    value?: string;
+    filterType: "text" | "dateRange" | "number" | "multiSelect";
+  }>(),
 );
 
 export const addScientificConditionAction = createAction(

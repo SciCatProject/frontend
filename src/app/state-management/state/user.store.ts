@@ -1,10 +1,25 @@
-import { Settings, Message, TableColumn } from "../models";
+import { Settings, Message, TableColumn, ScientificCondition } from "../models";
 import { AccessTokenInterface } from "shared/services/auth/auth.service";
 import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
-import {
-  ConditionConfig,
-  FilterConfig,
-} from "../../shared/modules/filters/filters.module";
+import { Observable } from "rxjs";
+import { FacetCount } from "./datasets.store";
+
+export type FilterType = "text" | "dateRange" | "multiSelect" | "number";
+
+export interface FilterConfig {
+  key: string;
+  label: string;
+  description?: string;
+  type?: FilterType;
+  enabled: boolean;
+  facetCounts$?: Observable<FacetCount[]>;
+  filter$?: Observable<string[]>;
+}
+
+export interface ConditionConfig {
+  condition: ScientificCondition;
+  enabled: boolean;
+}
 
 // NOTE It IS ok to make up a state of other sub states
 export interface UserState {
@@ -66,13 +81,48 @@ export const initialUserState: UserState = {
   columns: [],
 
   filters: [
-    { LocationFilter: true },
-    { PidFilter: true },
-    { GroupFilter: true },
-    { TypeFilter: true },
-    { KeywordFilter: true },
-    { DateRangeFilter: true },
-    { TextFilter: true },
+    {
+      key: "creationLocation",
+      label: "Location",
+      type: "multiSelect",
+      description: "Filter by creation location on the dataset",
+      enabled: true,
+    },
+    {
+      key: "pid",
+      label: "Pid",
+      type: "text",
+      description: "Filter by dataset pid",
+      enabled: true,
+    },
+    {
+      key: "ownerGroup",
+      label: "Group",
+      type: "multiSelect",
+      description: "Filter by owner group of the dataset",
+      enabled: true,
+    },
+    {
+      key: "type",
+      label: "Type",
+      type: "multiSelect",
+      description: "Filter by dataset type",
+      enabled: true,
+    },
+    {
+      key: "keywords",
+      label: "Keyword",
+      type: "multiSelect",
+      description: "Filter by keywords in the dataset",
+      enabled: true,
+    },
+    {
+      key: "creationTime",
+      label: "Creation Time",
+      type: "dateRange",
+      description: "Filter by creation time of the dataset",
+      enabled: true,
+    },
   ],
 
   conditions: [],

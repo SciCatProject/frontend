@@ -696,18 +696,6 @@ describe("UserEffects", () => {
         expect(effects.updateUserColumns$).toBeObservable(expected);
       });
     });
-
-    describe("ofType deselectAllCustomColumnsAction", () => {
-      it("should dispatch an updateUserSettingsAction", () => {
-        const action = fromActions.deselectAllCustomColumnsAction();
-        const outcome = fromActions.updateUserSettingsAction({ property });
-
-        actions = hot("-a", { a: action });
-
-        const expected = cold("-b", { b: outcome });
-        expect(effects.updateUserColumns$).toBeObservable(expected);
-      });
-    });
   });
 
   describe("updateUserSettings$", () => {
