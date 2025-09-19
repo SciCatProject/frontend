@@ -9,3 +9,20 @@ mat-form-field {
 mat-card {
   margin: 1em;
 }
+
+mat-expansion-panel {
+  margin: 1em 0;
+}
+
+button.save-and-continue {
+  margin-left: 1em;
+}
+
+button.cancel {
+  margin-left: 1em;
+}
+
+jsonforms .mat-mdc-form-field .mat-mdc-form-field-subscript-dynamic-size {
+  min-height: unset !important ;
+  display: none !important;
+}

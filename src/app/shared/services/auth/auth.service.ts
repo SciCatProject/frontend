@@ -6,7 +6,7 @@ export interface AccessTokenInterface {
   id?: string;
   ttl?: number;
   scopes?: [string];
-  created?: Date;
+  created?: string;
   userId?: string;
   user?: ReturnedUserDto;
 }
@@ -15,7 +15,7 @@ export class SDKToken implements AccessTokenInterface {
   id: string = null;
   ttl: number = null;
   scopes: [string] = null;
-  created: Date = null;
+  created: string = null;
   userId: string = null;
   user: ReturnedUserDto = null;
   rememberMe: boolean = null;
@@ -39,7 +39,9 @@ export class AuthService {
     this.token.id = this.load("id");
     this.token.user = JSON.parse(this.load("user") || null);
     this.token.userId = this.load("userId");
-    this.token.created = new Date(this.load("created"));
+    const created = this.load("created");
+    const date = new Date(created);
+    this.token.created = isNaN(date.getTime()) ? null : created;
     this.token.ttl = parseInt(this.load("ttl"));
     this.token.rememberMe = this.load("rememberMe") === "true";
   }

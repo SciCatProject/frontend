@@ -21,7 +21,7 @@ import {
 } from "state-management/selectors/user.selectors";
 import { map } from "rxjs/operators";
 import {
-  addKeywordFilterAction,
+  addDatasetFilterAction,
   clearFacetsAction,
   updatePropertyAction,
 } from "state-management/actions/datasets.actions";
@@ -97,7 +97,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
   ) {
-    this.translateService.use("datasetDefault");
+    this.translateService.use("dataset");
   }
 
   ngOnInit() {
@@ -161,7 +161,13 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   onClickKeyword(keyword: string) {
     this.store.dispatch(clearFacetsAction());
-    this.store.dispatch(addKeywordFilterAction({ keyword }));
+    this.store.dispatch(
+      addDatasetFilterAction({
+        filterType: "multiSelect",
+        key: "keywords",
+        value: keyword,
+      }),
+    );
     this.router.navigateByUrl("/datasets");
   }
 
@@ -174,7 +180,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     const value = event.value;
 
     if ((value || "").trim() && this.dataset) {
-      const keyword = value.trim().toLowerCase();
+      const keyword = value.trim();
       if (this.keywords.value.indexOf(keyword) === -1) {
         this.keywords.push(this.fb.control(keyword));
 

@@ -1,11 +1,15 @@
-<cdk-virtual-scroll-viewport
+<mat-paginator
+  [pageSizeOptions]="pagination.pageSizeOptions"
+  [pageIndex]="pagination.pageIndex"
+  [length]="pagination.length"
+  [pageSize]="pagination.pageSize"
+  (page)="pagination_onChange($event)"
+  *ngIf="pagination"
+>
+</mat-paginator>
+<div
   #tbl
   [ngClass]="viewportClass"
-  [tvsItemSize]="rowHeight || 48"
-  [headerHeight]="headerHeight || 56"
-  [footerHeight]="headerHeight || 56"
-  [headerEnabled]="headerEnable || true"
-  [footerEnabled]="footerEnable || false"
   [ngStyle]="{ 'background-color': backgroundColor || 'white' }"
   [class.print-preview]="printing"
 >
@@ -19,7 +23,7 @@
     (cdkDragStarted)="dragStarted($event)"
     (cdkDropListDropped)="dropListDropped($event)"
     [trackBy]="indexTrackFn"
-    [dataSource]="tvsDataSource"
+    [dataSource]="standardDataSource"
   >
     <!-- Select Checkbox Column -->
     <ng-container matColumnDef="row-checkbox">
@@ -40,7 +44,11 @@
         <!-- <mat-icon *ngIf="rowSelectionMode === 'single'">indeterminate_check_box</mat-icon> -->
       </mat-header-cell>
       <!-- DATA -->
-      <mat-cell *matCellDef="let row" class="row-checkbox">
+      <mat-cell
+        *matCellDef="let row"
+        class="row-checkbox"
+        (click)="$event.stopPropagation()"
+      >
         <mat-checkbox
           (click)="$event.stopPropagation()"
           (change)="onRowSelectionChange($event, row)"
@@ -71,6 +79,7 @@
         [cdkDragData]="{ name: column.name, columnIndex: i }"
         [ngStyle]="column.style"
         [class.active-resize]="resizeColumn.columnIndex === i"
+        [class.active-sort]="sort.direction && sort.active === column.name"
         cdkDragBoundary="mat-header-row"
       >
         <!-- class="left-resize-handler" -->
@@ -316,14 +325,12 @@
         class="global-search"
         [@tableAnimation]
         *matHeaderRowDef="searchRowColumns; sticky: sticky"
-        [style.top.px]="inverseOfTranslation"
       ></mat-header-row>
     </ng-container>
     <mat-header-row
       class="header"
       [@tableAnimation]
       *matHeaderRowDef="displayedColumns; sticky: sticky"
-      [style.top.px]="inverseOfTranslation"
     ></mat-header-row>
     <ng-container *ngIf="displayedFooter.length > 0">
       <mat-footer-row
@@ -335,10 +342,20 @@
     <mat-header-row
       class="progress"
       *matHeaderRowDef="progressColumn; sticky: sticky"
-      [style.top.px]="inverseOfTranslation + headerHeight - 5"
+      [style.top.px]="headerHeight - 5"
     ></mat-header-row>
   </mat-table>
-</cdk-virtual-scroll-viewport>
+  <ng-container *ngIf="showNoData && init === true">
+    <app-empty-content
+      *ngIf="standardDataSource.data.length === 0"
+      [message]="emptyMessage"
+      [icon]="emptyIcon"
+      [showReload]="showReload"
+      (reload)="reload_onClick()"
+    >
+    </app-empty-content>
+  </ng-container>
+</div>
 <mat-paginator
   [pageSizeOptions]="pagination.pageSizeOptions"
   [pageIndex]="pagination.pageIndex"
@@ -348,22 +365,6 @@
   *ngIf="pagination"
 >
 </mat-paginator>
-<ng-container *ngIf="showNoData && init === true">
-  <div class="no-records" *ngIf="tvsDataSource.data.length === 0">
-    No data
-    <br />
-    <button
-      mat-icon-button
-      type="button"
-      *ngIf="showReload === true"
-      color="primary"
-      (click)="reload_onClick()"
-    >
-      <mat-icon>autorenew</mat-icon>
-    </button>
-  </div>
-</ng-container>
-
 <!-- Context Menu -->
 <div
   style="visibility: hidden; position: fixed"

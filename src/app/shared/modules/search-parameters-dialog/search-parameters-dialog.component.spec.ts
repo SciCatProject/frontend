@@ -67,24 +67,6 @@ describe("SearchParametersDialogComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("#add()", () => {
-    it("should close dialog and emit data", () => {
-      const dialogCloseSpy = spyOn(component.dialogRef, "close");
-      const formValues = {
-        lhs: "mass",
-        relation: "LESS_THAN",
-        rhs: 5,
-        unit: "gram",
-      };
-      component.parametersForm.setValue(formValues as ScientificCondition);
-
-      component.add();
-
-      expect(dialogCloseSpy).toHaveBeenCalledTimes(1);
-      expect(dialogCloseSpy).toHaveBeenCalledWith({ data: formValues });
-    });
-  });
-
   describe("#cancel()", () => {
     it("should close the dialog", () => {
       const dialogCloseSpy = spyOn(component.dialogRef, "close");
@@ -146,61 +128,6 @@ describe("SearchParametersDialogComponent", () => {
       component.toggleUnitField();
 
       expect(component.parametersForm.get("unit").disabled).toEqual(true);
-    });
-  });
-
-  describe("#isInvalid()", () => {
-    it("should return true if form is invalid", () => {
-      const formValues = {
-        lhs: "m",
-        relation: "LESS_THAN",
-        rhs: 5,
-        unit: "",
-      };
-      component.parametersForm.setValue(formValues as ScientificCondition);
-
-      const isInvalid = component.isInvalid();
-
-      expect(isInvalid).toEqual(true);
-    });
-    it("should return true if relation is not EQUAL_TO_STRING and rhs is a string", () => {
-      const formValues = {
-        lhs: "mass",
-        relation: "LESS_THAN",
-        rhs: "test",
-        unit: "gram",
-      };
-      component.parametersForm.setValue(formValues as ScientificCondition);
-
-      const isInvalid = component.isInvalid();
-
-      expect(isInvalid).toEqual(true);
-    });
-    it("should return true if lhs and rhs are empty", () => {
-      const formValues = {
-        lhs: "",
-        relation: "LESS_THAN",
-        rhs: "",
-        unit: "gram",
-      };
-      component.parametersForm.setValue(formValues as ScientificCondition);
-
-      const isInvalid = component.isInvalid();
-
-      expect(isInvalid).toEqual(true);
-    });
-    it("should return false if lhs and rhs are not empty", () => {
-      const formValues = {
-        lhs: "mass",
-        relation: "LESS_THAN",
-        rhs: 5,
-        unit: "gram",
-      };
-      component.parametersForm.setValue(formValues as ScientificCondition);
-
-      const isInvalid = component.isInvalid();
-
-      expect(isInvalid).toEqual(false);
     });
   });
 });

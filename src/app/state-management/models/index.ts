@@ -1,7 +1,7 @@
 import {
-  ConditionConfig,
   FilterConfig,
-} from "shared/modules/filters/filters.module";
+  ConditionConfig,
+} from "state-management/state/user.store";
 
 export interface Settings {
   tapeCopies: string;
@@ -18,10 +18,6 @@ export interface TableColumn {
   type: "standard" | "custom";
   enabled: boolean;
   width?: number;
-}
-
-export interface LabelMaps {
-  [key: string]: Record<string, string>;
 }
 
 export interface LabelsLocalization {
@@ -128,13 +124,18 @@ type ScientificConditionRelation =
   | "EQUAL_TO_NUMERIC"
   | "EQUAL_TO_STRING"
   | "GREATER_THAN"
-  | "LESS_THAN";
+  | "LESS_THAN"
+  | "GREATER_THAN_OR_EQUAL"
+  | "LESS_THAN_OR_EQUAL"
+  | "RANGE"
+  | "EQUAL_TO";
 
 export interface ScientificCondition {
   lhs: string;
   relation: ScientificConditionRelation;
-  rhs: string | number;
+  rhs: string | number | number[];
   unit: string;
+  unitsOptions?: string[];
 }
 
 export interface GenericFilters {

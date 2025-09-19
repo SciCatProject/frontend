@@ -1,0 +1,39 @@
+<mat-card>
+  <div class="search-card-container">
+    <mat-form-field appearance="fill" class="full-text-search-field">
+      <mat-label>Search</mat-label>
+      <input
+        matInput
+        [placeholder]="placeholder"
+        data-cy="text-search"
+        type="search"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchTermChange($event)"
+        (keydown.enter)="onSearch()"
+        (keydown.escape)="onClear()"
+      />
+    </mat-form-field>
+    <div class="search-button-group">
+      <button
+        mat-raised-button
+        color="secondary"
+        class="full-text-clear-button"
+        data-cy="search-clear-button"
+        (click)="onClear()"
+      >
+        <mat-icon>undo</mat-icon>
+        Clear
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        class="full-text-search-button"
+        data-cy="search-button"
+        (click)="onSearch()"
+      >
+        <mat-icon>search</mat-icon>
+        Search
+      </button>
+    </div>
+  </div>
+</mat-card>

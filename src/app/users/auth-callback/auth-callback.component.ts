@@ -44,7 +44,7 @@ export class AuthCallbackComponent implements OnInit {
       if (accessToken && userId) {
         const parsedToken = this.parseJwt(accessToken);
         const ttl = parsedToken.exp - parsedToken.iat;
-        const created = new Date(parsedToken.iat * 1000);
+        const created = new Date(parsedToken.iat * 1000).toISOString();
 
         // If the user is authenticated, we will store the access token and user id in the store
         this.store.dispatch(

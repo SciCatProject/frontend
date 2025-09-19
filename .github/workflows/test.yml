@@ -14,10 +14,10 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 18.x
 
@@ -39,10 +39,10 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -62,10 +62,10 @@ jobs:
     needs: [install-and-cache]
     steps:
       - name: Check out
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -99,10 +99,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -116,6 +116,9 @@ jobs:
           sudo sysctl -w vm.max_map_count=262144
 
       - name: Run docker-compose
+        env:
+          DOI_USERNAME: ${{ secrets.DOI_TEST_USERNAME }}
+          DOI_PASSWORD: ${{ secrets.DOI_TEST_PASSWORD }}
         run: |
           cp CI/e2e/docker-compose.e2e.yaml docker-compose.yaml
           docker compose pull
@@ -127,7 +130,6 @@ jobs:
         with:
           config-file: cypress.config.ts
           install-command: npm install --omit peer
-
       - name: docker logs
         if: ${{ failure() }}
         run: |

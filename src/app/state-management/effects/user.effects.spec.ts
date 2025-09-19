@@ -465,7 +465,7 @@ describe("UserEffects", () => {
         id: "testId",
         ttl: 100,
         scopes: ["string"],
-        created: new Date(),
+        created: new Date().toISOString(),
         userId: "testId",
         user: "testUser",
         rememberMe: false,
@@ -497,7 +497,7 @@ describe("UserEffects", () => {
         id: "testId",
         ttl: 3600,
         scopes: ["string"],
-        created: new Date(),
+        created: new Date().toISOString(),
         userId: "testId",
         user: "testUser",
       } as unknown as SDKToken;
@@ -522,7 +522,7 @@ describe("UserEffects", () => {
         id: "testId",
         ttl: 100,
         scopes: ["string"],
-        created: new Date(1611438651),
+        created: new Date(1611438651).toISOString(),
         userId: "testId",
         user: "testUser",
       } as unknown as SDKToken;
@@ -696,18 +696,6 @@ describe("UserEffects", () => {
         expect(effects.updateUserColumns$).toBeObservable(expected);
       });
     });
-
-    describe("ofType deselectAllCustomColumnsAction", () => {
-      it("should dispatch an updateUserSettingsAction", () => {
-        const action = fromActions.deselectAllCustomColumnsAction();
-        const outcome = fromActions.updateUserSettingsAction({ property });
-
-        actions = hot("-a", { a: action });
-
-        const expected = cold("-b", { b: outcome });
-        expect(effects.updateUserColumns$).toBeObservable(expected);
-      });
-    });
   });
 
   describe("updateUserSettings$", () => {
@@ -773,7 +761,7 @@ describe("UserEffects", () => {
         id: "testId",
         ttl: 100,
         scopes: ["string"],
-        created: new Date(),
+        created: new Date().toISOString(),
         userId: "testId",
         user: "testUser",
       } as unknown as SDKToken;

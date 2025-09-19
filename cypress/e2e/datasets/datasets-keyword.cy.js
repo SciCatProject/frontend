@@ -14,7 +14,7 @@ describe("Datasets", () => {
     it("should be able to edit dataset details", () => {
       const newName = "Test changing dataset name";
       const newDescription = "Test changing dataset description";
-      cy.createDataset("raw");
+      cy.createDataset({ type: "raw" });
 
       cy.visit("/datasets");
 
@@ -22,9 +22,8 @@ describe("Datasets", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type("Cypress");
+      cy.get('[data-cy="text-search"]').clear().type("Cypress");
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
@@ -54,7 +53,7 @@ describe("Datasets", () => {
         .should("contain.text", newDescription);
     });
     it("should go to dataset details and add a keyword", () => {
-      cy.createDataset("raw");
+      cy.createDataset({ type: "raw" });
 
       cy.visit("/datasets");
 
@@ -62,9 +61,8 @@ describe("Datasets", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type("Cypress");
+      cy.get('[data-cy="text-search"]').clear().type("Cypress");
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 
@@ -93,9 +91,8 @@ describe("Datasets", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type("Cypress");
+      cy.get('[data-cy="text-search"]').clear().type("Cypress");
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 

@@ -8,6 +8,8 @@ export interface PublishedDataState {
   totalCount: number;
 
   filters: GenericFilters;
+
+  publishedDataConfig?: any;
 }
 
 export const initialPublishedDataState: PublishedDataState = {
@@ -21,4 +23,6 @@ export const initialPublishedDataState: PublishedDataState = {
     skip: 0,
     limit: 25,
   },
+
+  publishedDataConfig: {},
 };

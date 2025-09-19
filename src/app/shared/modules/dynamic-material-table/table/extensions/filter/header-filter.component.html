@@ -89,5 +89,5 @@
   [matMenuTriggerFor]="filterMenu"
   *ngIf="field.filter !== 'none'"
 >
-  <mat-icon>filter_list</mat-icon>
+  <mat-icon [color]="hasValue ? 'warn' : ''">filter_list</mat-icon>
 </span>
