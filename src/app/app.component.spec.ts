@@ -8,6 +8,8 @@ import { APP_CONFIG } from "./app-config.module";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { AppConfigService } from "app-config.service";
 import { Configuration } from "@scicatproject/scicat-sdk-ts-angular";
+import { TranslateService } from "@ngx-translate/core";
+import { of } from "rxjs";
 
 describe("AppComponent", () => {
   const getConfig = () => ({
@@ -22,6 +24,12 @@ describe("AppComponent", () => {
         MatProgressSpinnerModule,
         MatSnackBarModule,
         StoreModule.forRoot({}),
+      ],
+      providers: [
+        {
+          provide: TranslateService,
+          useValue: { instant: (k: string) => k, use: () => of({}) },
+        },
       ],
       declarations: [AppComponent],
     });

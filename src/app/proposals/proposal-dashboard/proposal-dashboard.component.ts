@@ -23,45 +23,17 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
 
   filterLists: FilterConfig[] = [
     {
-      key: "proposalId",
-      label: "Proposal ID",
+      key: "instrumentIds",
+      label: "Instrument",
       type: "text",
-      description: "Filter by Unique identifier for the proposal",
-      enabled: true,
-    },
-    {
-      key: "firstname",
-      label: "First Name",
-      type: "text",
-      description: "Filter by First name of the proposal submitter",
-      enabled: true,
-    },
-    {
-      key: "email",
-      label: "Email",
-      type: "text",
-      description: "Filter by Email of the proposal submitter",
-      enabled: true,
-    },
-    {
-      key: "pi_firstname",
-      label: "PI First Name",
-      type: "text",
-      description: "Filter by First name of the Principal Investigator",
+      description: "Filter by instrument ofthe proposal",
       enabled: true,
     },
     {
       key: "startTime",
-      label: "Start Time",
+      label: "Start Date",
       type: "dateRange",
       description: "Filter by Start time of the proposal",
-      enabled: true,
-    },
-    {
-      key: "endTime",
-      label: "End Time",
-      type: "dateRange",
-      description: "Filter by End time of the proposal",
       enabled: true,
     },
   ];
@@ -75,9 +47,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     // TODO: Shoule we hardcode the facet counts list here?
     const facetCountsList = [
       "proposalId",
-      "firstname",
-      "email",
-      "pi_firstname",
+      "pi_lastname",
       "startTime",
       "endTime",
     ];

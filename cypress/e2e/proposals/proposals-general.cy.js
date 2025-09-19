@@ -463,31 +463,12 @@ describe("Proposals general", () => {
       cy.get("dynamic-mat-table")
         .scrollTo("right", { ensureScrollable: false })
         .get("mat-header-row")
-        .should("contain", "First Name");
-
-      cy.get("dynamic-mat-table")
-        .scrollTo("right", { ensureScrollable: false })
-        .get("mat-header-row")
-        .should("contain", "Last Name");
+        .should("contain", "PI Last Name");
 
       cy.get("dynamic-mat-table table-menu button").click();
 
       cy.get('[role="menu"] button').contains("Column setting").click();
-      cy.get('[role="menu"]')
-        .contains("First Name")
-        .parent()
-        .find("input[type=checkbox]")
-        .uncheck();
-      cy.get('[role="menu"]')
-        .contains("Last Name")
-        .parent()
-        .find("input[type=checkbox]")
-        .uncheck();
-      cy.get('[role="menu"]')
-        .contains("PI First Name")
-        .parent()
-        .find("input[type=checkbox]")
-        .uncheck();
+
       cy.get('[role="menu"]')
         .contains("PI Last Name")
         .parent()
@@ -508,12 +489,7 @@ describe("Proposals general", () => {
       cy.get("dynamic-mat-table")
         .scrollTo("right", { ensureScrollable: false })
         .get("mat-header-row")
-        .should("not.contain", "First Name");
-
-      cy.get("dynamic-mat-table")
-        .scrollTo("right", { ensureScrollable: false })
-        .get("mat-header-row")
-        .should("not.contain", "Last Name");
+        .should("not.contain", "PI Last Name");
 
       cy.get("dynamic-mat-table table-menu button").click();
       cy.get('[role="menu"] button').contains("Default setting").click();
@@ -530,12 +506,7 @@ describe("Proposals general", () => {
       cy.get("dynamic-mat-table")
         .scrollTo("right", { ensureScrollable: false })
         .get("mat-header-row")
-        .should("contain", "First Name");
-
-      cy.get("dynamic-mat-table")
-        .scrollTo("right", { ensureScrollable: false })
-        .get("mat-header-row")
-        .should("contain", "Last Name");
+        .should("contain", "PI Last Name");
     });
 
     it("should be able to download table data as a json", () => {

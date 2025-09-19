@@ -22,6 +22,8 @@ import {
   ProposalClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { BehaviorSubject } from "rxjs";
+import { TranslateService } from "@ngx-translate/core";
+import { SharedScicatFrontendModule } from "shared/shared.module";
 
 describe("ProposalTableComponent", () => {
   let component: ProposalTableComponent;
@@ -38,6 +40,7 @@ describe("ProposalTableComponent", () => {
         EffectsModule.forRoot([]),
         StoreModule.forRoot({}),
         BrowserAnimationsModule,
+        SharedScicatFrontendModule,
       ],
       providers: [
         { provide: HttpClient, useClass: MockHttp },
@@ -48,6 +51,7 @@ describe("ProposalTableComponent", () => {
         { provide: Store, useClass: MockStore },
         { provide: DatasetsService, useClass: MockDatasetApi },
         { provide: ScicatDataService, useValue: {} },
+        { provide: TranslateService, useValue: { instant: (k: string) => k } },
       ],
     }).compileComponents();
   });

@@ -17,6 +17,7 @@ import { MultiSelectFilterValue } from "../filters/multiselect-filter.component"
 import { FacetCount } from "state-management/state/datasets.store";
 import { INumericRange } from "../numeric-range/form/model/numeric-range-field.model";
 import { FilterType } from "state-management/state/user.store";
+import { toIsoUtc } from "../filters/utils";
 
 @Component({
   selector: "shared-filter",
@@ -103,10 +104,13 @@ export class SharedFilterComponent implements OnChanges {
   }
 
   dateChanged(evt: MatDatepickerInputEvent<DateTime>, side: "begin" | "end") {
-    const isoDate = evt.value ? evt.value.toUTC().toISO() : null;
-    if (side === "begin") this.dateRange.begin = isoDate;
-    if (side === "end") this.dateRange.end = isoDate;
-
+    const isoDate = toIsoUtc(evt.value);
+    if (side === "begin") {
+      this.dateRange.begin = isoDate;
+    }
+    if (side === "end") {
+      this.dateRange.end = isoDate;
+    }
     this.dateRangeChange.emit(this.dateRange);
   }
 

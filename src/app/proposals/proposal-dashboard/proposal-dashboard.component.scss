@@ -27,9 +27,8 @@ mat-sidenav-container {
 
     .table-column {
       margin-top: 0.5rem;
-      padding-bottom: 1rem;
-      overflow-x: auto;
-      width: 100%;
+      min-width: 0;
+      overflow: visible;
     }
   }
 

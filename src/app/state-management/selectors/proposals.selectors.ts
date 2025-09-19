@@ -1,6 +1,9 @@
 import { createSelector, createFeatureSelector } from "@ngrx/store";
 import { ProposalsState } from "../state/proposals.store";
-import { selectTablesSettings } from "./user.selectors";
+import {
+  selectHasFetchedSettings,
+  selectTablesSettings,
+} from "./user.selectors";
 
 const selectProposalsState = createFeatureSelector<ProposalsState>("proposals");
 
@@ -58,6 +61,11 @@ export const selectFilters = createSelector(
 export const selectDatasetFilters = createSelector(
   selectProposalsState,
   (state) => state.datasetFilters,
+);
+
+export const selectDefaultProposalColumns = createSelector(
+  selectProposalsState,
+  (state) => state.columns,
 );
 
 export const selectPage = createSelector(selectFilters, (filters) => {
@@ -157,11 +165,13 @@ export const selectProposalsWithCountAndTableSettings = createSelector(
   selectProposals,
   selectProposalsCount,
   selectTablesSettings,
-  (proposals, count, tablesSettings) => {
+  selectHasFetchedSettings,
+  (proposals, count, tablesSettings, hasFetchedSettings) => {
     return {
       proposals,
       count,
       tablesSettings,
+      hasFetchedSettings,
     };
   },
 );
