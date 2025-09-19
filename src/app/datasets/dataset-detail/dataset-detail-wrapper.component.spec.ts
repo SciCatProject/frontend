@@ -6,20 +6,9 @@ import { DatasetDetailComponent } from "./dataset-detail/dataset-detail.componen
 import { DatasetDetailDynamicComponent } from "./dataset-detail-dynamic/dataset-detail-dynamic.component";
 import { MatDialogModule } from "@angular/material/dialog";
 import { StoreModule } from "@ngrx/store";
-import {
-  TranslateModule,
-  TranslateLoader,
-  TranslationObject,
-} from "@ngx-translate/core";
+import { TranslateService } from "@ngx-translate/core";
 import { SharedScicatFrontendModule } from "shared/shared.module";
-import { Observable, of } from "rxjs";
 import { LinkyPipe } from "ngx-linky";
-
-class MockTranslateLoader implements TranslateLoader {
-  getTranslation(): Observable<TranslationObject> {
-    return of({});
-  }
-}
 
 describe("DatasetDetailWrapperComponent", () => {
   let component: DatasetDetailWrapperComponent;
@@ -35,12 +24,6 @@ describe("DatasetDetailWrapperComponent", () => {
       imports: [
         MatDialogModule,
         SharedScicatFrontendModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: MockTranslateLoader,
-          },
-        }),
         StoreModule.forRoot({}),
       ],
       declarations: [
@@ -49,7 +32,10 @@ describe("DatasetDetailWrapperComponent", () => {
         DatasetDetailDynamicComponent,
         LinkyPipe,
       ],
-      providers: [{ provide: AppConfigService, useValue: appConfigServiceSpy }],
+      providers: [
+        { provide: AppConfigService, useValue: appConfigServiceSpy },
+        { provide: TranslateService, useValue: { instant: (k: string) => k } },
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 

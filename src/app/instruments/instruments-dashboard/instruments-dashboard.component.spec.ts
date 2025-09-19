@@ -15,6 +15,7 @@ import {
 } from "shared/modules/dynamic-material-table/models/table-row.model";
 import { TablePagination } from "shared/modules/dynamic-material-table/models/table-pagination.model";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { TranslateService } from "@ngx-translate/core";
 
 describe("InstrumentsDashboardComponent", () => {
   let component: InstrumentsDashboardComponent;
@@ -47,6 +48,7 @@ describe("InstrumentsDashboardComponent", () => {
             },
           ],
         }),
+        { provide: TranslateService, useValue: { instant: (k: string) => k } },
       ],
     });
     TestBed.overrideComponent(InstrumentsDashboardComponent, {

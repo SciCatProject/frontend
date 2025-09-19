@@ -68,6 +68,23 @@ const initialProposalsState: ProposalsState = {
     skip: 0,
     limit: 25,
   },
+  columns: [
+    {
+      name: "proposalId",
+      width: 250,
+      enabled: true,
+    },
+    {
+      name: "startTime",
+      width: 250,
+      enabled: true,
+    },
+    {
+      name: "abstract",
+      width: 250,
+      enabled: true,
+    },
+  ],
 };
 
 describe("Proposal Selectors", () => {

@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from "@angular/core";
 import { TranslateService } from "@ngx-translate/core";
 
 @Pipe({
-  name: "componentTranslate",
+  name: "translate",
   standalone: false,
 })
 export class ComponentTranslatePipe implements PipeTransform {
@@ -10,7 +10,9 @@ export class ComponentTranslatePipe implements PipeTransform {
 
   transform(value: any, component = "", ...args: any[]): string {
     const valueToBeTranslated = component ? component + "." + value : value;
+
     const translatedValue = this.translateService.instant(valueToBeTranslated);
+
     return translatedValue !== valueToBeTranslated ? translatedValue : value;
   }
 }

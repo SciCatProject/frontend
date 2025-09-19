@@ -10,18 +10,10 @@ import { StoreModule } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MockActivatedRoute } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
-import {
-  TranslateLoader,
-  TranslateModule,
-  TranslationObject,
-} from "@ngx-translate/core";
+
 import { DatasetDetailDynamicComponent } from "./dataset-detail-dynamic.component";
 import { InternalLinkType } from "state-management/models";
-class MockTranslateLoader implements TranslateLoader {
-  getTranslation(): Observable<TranslationObject> {
-    return of({});
-  }
-}
+import { TranslateService } from "@ngx-translate/core";
 
 describe("DatasetDetailDynamicComponent", () => {
   let component: DatasetDetailDynamicComponent;
@@ -36,15 +28,9 @@ describe("DatasetDetailDynamicComponent", () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        SharedScicatFrontendModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: MockTranslateLoader,
-          },
-        }),
-        StoreModule.forRoot({}),
+      imports: [SharedScicatFrontendModule, StoreModule.forRoot({})],
+      providers: [
+        { provide: TranslateService, useValue: { instant: (k: string) => k } },
       ],
       declarations: [DatasetDetailDynamicComponent, LinkyPipe],
     });
