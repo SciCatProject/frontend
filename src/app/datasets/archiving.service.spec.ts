@@ -114,7 +114,6 @@ describe("ArchivingService", () => {
         type: "archive",
         executionTime: "",
         jobResultObject: {},
-        statusMessage: "",
         jobStatusMessage: "",
       });
       const createJobSpy = spyOn<any, string>(

@@ -71,7 +71,6 @@ export interface AppConfigInterface {
   datasetJsonScientificMetadata: boolean;
   datasetReduceEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
-  datasetOneDepIntegration: boolean;
   datafilesActionsEnabled: boolean;
   datafilesActions: any[];
   editDatasetEnabled: boolean;

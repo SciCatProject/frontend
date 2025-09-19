@@ -148,9 +148,6 @@ export class DatasetDetailsDashboardComponent
             const hasAccessToLogbook =
               isInOwnerGroup ||
               this.dataset.accessGroups.some((g) => groups.includes(g));
-            const hasAccessToDepositor = isInOwnerGroup && this.dataset.keywords.some(
-              (k) => k.toLowerCase() === "openem",
-            );
             this.navLinks = [
               {
                 location: "./",
