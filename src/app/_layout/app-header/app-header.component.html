@@ -9,7 +9,7 @@
         </button>
       </ng-container>
 
-      <ng-container *ngIf="config.ingestorEnabled">
+      <ng-container *ngIf="config.ingestorComponent.ingestorEnabled">
         <button mat-menu-item [routerLink]="['/ingestor']"
           [queryParams]="{ discovery: true }">
           <mat-icon> cloud_upload</mat-icon>

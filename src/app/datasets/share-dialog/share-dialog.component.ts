@@ -32,7 +32,7 @@ export class ShareDialogComponent {
       sharedUsersList: string[];
     },
   ) {
-    this.data = structuredClone(data);
+    this.data = JSON.parse(JSON.stringify(data));
     this.users = this.data.sharedUsersList;
   }
 
