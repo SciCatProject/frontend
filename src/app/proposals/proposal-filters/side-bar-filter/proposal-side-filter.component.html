@@ -13,7 +13,6 @@
   <mat-card-content>
     <ng-container *ngFor="let filter of filterLists">
       <shared-filter
-        [label]="filter.key | translate: localization"
         [key]="filter.key"
         [label]="filter.label"
         [clear]="clearFilters"
