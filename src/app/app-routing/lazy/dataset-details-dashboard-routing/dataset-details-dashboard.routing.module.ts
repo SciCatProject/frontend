@@ -68,7 +68,7 @@ const routes: Routes = [
     path: "admin",
     component: AdminTabComponent,
     canActivate: [AuthGuard, AdminGuard],
-  }
+  },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

@@ -1,21 +1,34 @@
 {
+  "accessTokenPrefix": "Bearer ",
   "addDatasetEnabled": true,
-  "archiveWorkflowEnabled": true,
+  "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
+  "datasetJsonScientificMetadata": true,
+  "editDatasetEnabled": true,
   "editDatasetSampleEnabled": true,
   "editMetadataEnabled": true,
   "editPublishedData": true,
-  "editSampleEnabled": true,
-  "facility": "SAMPLE-SITE",
+  "addSampleEnabled": true,
+  "externalAuthEndpoint": "/auth/msad",
+  "facility": "Local",
+  "siteIcon": "site-header-logo.png",
+  "sitetitle": "",
+  "siteSciCatLogo": "",
+  "loginFacilityLabel": "ESS",
+  "loginLdapLabel": "Ldap",
+  "loginLocalLabel": "Local",
+  "loginFacilityEnabled": true,
+  "loginLdapEnabled": false,
+  "loginLocalEnabled": true,
   "fileColorEnabled": true,
   "fileDownloadEnabled": true,
   "gettingStarted": null,
   "ingestManual": null,
-  "jobsEnabled": false,
+  "jobsEnabled": true,
   "jsonMetadataEnabled": true,
-  "jupyterHubUrl": "",
-  "landingPage": "",
-  "lbBaseURL": "http://localhost:3001",
+  "jupyterHubUrl": "https://jupyterhub.esss.lu.se/",
+  "landingPage": "doi.ess.eu/detail/",
+  "lbBaseURL": "http://127.0.0.1:3000",
   "ingestorComponent":{
     "ingestorEnabled": true,
     "ingestorInTransferMode": true,
@@ -27,69 +40,103 @@
       }
     ]
   },
-  "localColumns": [
-    {
-      "name": "datasetName",
-      "order": 1,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "type",
-      "order": 2,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "creationTime",
-      "order": 3,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "proposalId",
-      "order": 6,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "image",
-      "order": 7,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "sourceFolder",
-      "order": 8,
-      "type": "standard",
-      "enabled": true
-    }
-  ],
-  "logbookEnabled": false,
+  "logbookEnabled": true,
   "loginFormEnabled": true,
+  "metadataPreviewEnabled": true,
+  "metadataStructure": "",
+  "multipleDownloadAction": "http://localhost:3012/zip",
+  "multipleDownloadEnabled": true,
   "oAuth2Endpoints": [
     {
       "authURL": "api/v3/auth/oidc",
-      "displayText": "Login with OIDC"
+      "displayText": "ESS One Identity"
     }
   ],
-  "maxDirectDownloadSize": 5000000000,
-  "metadataPreviewEnabled": true,
-  "metadataStructure": "tree",
-  "multipleDownloadAction": "",
-  "multipleDownloadEnabled": false,
   "policiesEnabled": true,
   "retrieveDestinations": [],
-  "riotBaseUrl": "",
-  "scienceSearchEnabled": true,
+  "riotBaseUrl": "http://scichat.swap.ess.eu",
+  "scienceSearchEnabled": false,
   "scienceSearchUnitsEnabled": true,
   "searchPublicDataEnabled": true,
   "searchSamples": true,
-  "sftpHost": "",
-  "shareEnabled": false,
-  "shoppingCartEnabled": false,
-  "shoppingCartOnHeader": false,
+  "sftpHost": "login.esss.dk",
+  "shareEnabled": true,
+  "sourceFolder": "/data/ess",
+  "maxDirectDownloadSize": 5000000000,
+  "maxFileSizeWarning": "Some files are above <maxDirectDownloadSize> and cannot be downloaded directly. These file can be downloaded via sftp host: <sftpHost> in directory: <sourceFolder>",
+  "shoppingCartEnabled": true,
+  "shoppingCartOnHeader": true,
   "tableSciDataEnabled": true,
+  "datasetDetailsShowMissingProposalId": false,
+  "notificationInterceptorEnabled": true,
+  "metadataEditingUnitListDisabled": true,
+  "datafilesActionsEnabled": true,
+  "datafilesActions": [
+    {
+      "id": "eed8efec-4354-11ef-a3b5-d75573a5d37f",
+      "description": "This action let users download all files using the zip service",
+      "order": 5,
+      "label": "Download All",
+      "files": "all",
+      "mat_icon": "download",
+      "type": "form",
+      "url": "https://zip.scicatproject.org/download/all",
+      "target": "_blank",
+      "enabled": "#SizeLimit",
+      "authorization": ["#datasetAccess", "#datasetPublic"]
+    },
+    {
+      "id": "3072fafc-4363-11ef-b9f9-ebf568222d26",
+      "description": "This action let users download selected files using the zip service",
+      "order": 4,
+      "label": "Download Selected",
+      "files": "selected",
+      "mat_icon": "download",
+      "type": "form",
+      "url": "https://zip.scicatproject.org/download/selected",
+      "target": "_blank",
+      "enabled": "#Selected && #SizeLimit",
+      "authorization": ["#datasetAccess", "#datasetPublic"]
+    },
+    {
+      "id": "4f974f0e-4364-11ef-9c63-03d19f813f4e",
+      "description": "This action let users download jupyter notebook properly populated with dataset pid and all files using an instance of sciwyrm",
+      "order": 2,
+      "label": "Notebook All (Form)",
+      "files": "all",
+      "icon": "/assets/icons/jupyter_logo.png",
+      "type": "form",
+      "url": "https://www.scicat.info/notebook/all",
+      "target": "_blank",
+      "authorization": ["#datasetAccess", "#datasetPublic"]
+    },
+    {
+      "id": "0cd5b592-0b1a-11f0-a42c-23e177127ee7",
+      "description": "This action let users download jupyter notebook properly populated with dataset pid and selected files using an instance of sciwyrm",
+      "order": 3,
+      "label": "Notebook All (Download JSON)",
+      "files": "all",
+      "type": "json-download",
+      "icon": "/assets/icons/jupyter_logo.png",
+      "url": "https://www.sciwyrm.info/notebook",
+      "target": "_blank",
+      "authorization": ["#datasetAccess", "#datasetPublic"],
+      "payload": "{\"template_id\":\"c975455e-ede3-11ef-94fb-138c9cd51fc0\",\"parameters\":{\"dataset\":\"{{ datasetPid }}\",\"directory\":\"{{ sourceFolder }}\",\"files\": {{ filesPath }},\"jwt\":\"{{ jwt }}\",\"scicat_url\":\"https://staging.scicat.ess.url\",\"file_server_url\":\"sftserver2.esss.dk\",\"file_server_port\":\"22\"}}",
+      "filename": "{{ uuid }}.ipynb"
+    },
+    {
+      "id": "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
+      "order": 1,
+      "label": "Notebook Selected",
+      "files": "selected",
+      "icon": "/assets/icons/jupyter_logo.png",
+      "type": "form",
+      "url": "https://www.scicat.info/notebook/selected",
+      "target": "_blank",
+      "enabled": "#Selected",
+      "authorization": ["#datasetAccess", "#datasetPublic"]
+    }
+  ],
   "defaultDatasetsListSettings": {
     "columns": [
       {
@@ -170,8 +217,292 @@
         "type": "standard",
         "enabled": false
       }
+    ],
+    "filters": [
+      {
+        "key": "creationLocation",
+        "label": "Location",
+        "type": "multiSelect",
+        "description": "Filter by creation location on the dataset",
+        "enabled": true
+      },
+      {
+        "key": "pid",
+        "label": "Pid",
+        "type": "text",
+        "description": "Filter by dataset pid",
+        "enabled": true
+      },
+      {
+        "key": "ownerGroup",
+        "label": "Group",
+        "type": "multiSelect",
+        "description": "Filter by owner group of the dataset",
+        "enabled": true
+      },
+      {
+        "key": "type",
+        "label": "Type",
+        "type": "multiSelect",
+        "description": "Filter by dataset type",
+        "enabled": true
+      },
+      {
+        "key": "keywords",
+        "label": "Keyword",
+        "type": "multiSelect",
+        "description": "Filter by keywords in the dataset",
+        "enabled": true
+      },
+      {
+        "key": "creationTime",
+        "label": "Creation Time",
+        "type": "dateRange",
+        "description": "Filter by creation time of the dataset",
+        "enabled": true
+      }
+    ],
+    "conditions": []
+  },
+  "labelsLocalization": {
+    "datasetDefault": {},
+    "datasetCustom": {
+      "pid": "PID",
+      "description": "Description",
+      "principalInvestigator": "Principal Investigator",
+      "keywords": "Keywords",
+      "creationTime": "Creation Time",
+      "scientificMetadata": "Scientific Metadata",
+      "metadataJsonView": "Metadata Json View",
+      "datasetName": "Dataset Name",
+      "scientificMetadata.run_number.value": "Run Number",
+      "scientificMetadata.start_time": "Start Time"
+    },
+    "proposalDefault": {
+      "General Information": "Proposal Information",
+      "Title": "Proposal Title",
+      "Abstract": "Abstract",
+      "Proposal Id": "Proposal Id",
+      "Proposal Type": "Proposal Type",
+      "Parent Proposal": "Parent Proposal",
+      "Start Time": "Start Time",
+      "End Time": "End Time",
+      "Creator Information": "People",
+      "Main Proposer": "Proposal Submitted By",
+      "Principal Investigator": "Principal Investigator",
+      "Metadata": "Additional Information"
+    }
+  },
+  "dateFormat": "yyyy-MM-dd HH:mm",
+  "datasetDetailComponent": {
+    "enableCustomizedComponent": false,
+    "customization": [
+      {
+        "type": "regular",
+        "label": "General Information",
+        "order": 0,
+        "row": 1,
+        "col": 8,
+        "fields": [
+          {
+            "element": "text",
+            "source": "scientificMetadata.start_time",
+            "order": 0
+          },
+          {
+            "element": "copy",
+            "source": "scientificMetadata.run_number.value",
+            "order": 1
+          },
+          {
+            "element": "text",
+            "source": "creationTime",
+            "order": 2
+          },
+          {
+            "element": "text",
+            "source": "type",
+            "order": 3
+          },
+          {
+            "element": "text",
+            "source": "datasetName",
+            "order": 4
+          },
+          {
+            "element": "tag",
+            "source": "keywords",
+            "order": 5
+          }
+        ]
+      },
+      {
+        "type": "attachments",
+        "label": "Gallery",
+        "order": 1,
+        "col": 2,
+        "row": 2,
+        "options": {
+          "limit": 5,
+          "size": "medium"
+        }
+      },
+      {
+        "type": "regular",
+        "label": "Contact Information",
+        "order": 2,
+        "col": 2,
+        "row": 1,
+        "fields": [
+          {
+            "element": "text",
+            "source": "principalInvestigator",
+            "order": 0
+          },
+          {
+            "element": "linky",
+            "source": "contactEmail",
+            "order": 1
+          }
+        ]
+      },
+      {
+        "type": "regular",
+        "label": "Files Information",
+        "order": 3,
+        "col": 2,
+        "row": 1,
+        "fields": [
+          {
+            "element": "text",
+            "source": "scientificMetadata.runnumber",
+            "order": 0
+          },
+          {
+            "element": "text",
+            "source": "sourceFolderHost",
+            "order": 1
+          },
+          {
+            "element": "text",
+            "source": "numberOfFiles",
+            "order": 2
+          },
+          {
+            "element": "text",
+            "source": "size",
+            "order": 3
+          },
+          {
+            "element": "text",
+            "source": "numberOfFilesArchived",
+            "order": 4
+          },
+          {
+            "element": "text",
+            "source": "packedSize",
+            "order": 5
+          }
+        ]
+      },
+      {
+        "type": "regular",
+        "label": "Related Documents",
+        "order": 4,
+        "col": 4,
+        "row": 1,
+        "fields": [
+          {
+            "element": "internalLink",
+            "source": "proposalIds",
+            "order": 0
+          },
+          {
+            "element": "internalLink",
+            "source": "instrumentIds",
+            "order": 1
+          },
+          {
+            "element": "tag",
+            "source": "sampleIds",
+            "order": 2
+          },
+          {
+            "element": "tag",
+            "source": "inputDatasets",
+            "order": 3
+          },
+          {
+            "element": "internalLink",
+            "source": "creationLocation",
+            "order": 4
+          }
+        ]
+      },
+      {
+        "type": "attachments",
+        "label": "Gallery",
+        "order": 5,
+        "col": 1,
+        "row": 1,
+        "options": {
+          "limit": 2,
+          "size": "small"
+        }
+      },
+      {
+        "type": "scientificMetadata",
+        "label": "Scientific Metadata Table",
+        "viewMode": "table",
+        "order": 6,
+        "col": 9,
+        "row": 1
+      },
+      {
+        "type": "scientificMetadata",
+        "label": "Scientific Metadata JSON",
+        "viewMode": "json",
+        "order": 6
+      },
+      {
+        "type": "scientificMetadata",
+        "label": "Scientific Metadata Tree",
+        "viewMode": "tree",
+        "order": 6
+      },
+      {
+        "type": "datasetJsonView",
+        "label": "Dataset Json View",
+        "order": 7,
+        "col": 10,
+        "row": 2
+      }
     ]
   },
-  "accessTokenPrefix": "Bearer ",
-  "externalAuthEndpoint": "/api/v3/auth/ldap"
+  "defaultMainPage": {
+    "nonAuthenticatedUser": "DATASETS",
+    "authenticatedUser": "DATASETS"
+  },
+  "mainMenu": {
+    "nonAuthenticatedUser": {
+      "datasets": true,
+      "files": false,
+      "instruments": true,
+      "jobs": false,
+      "policies": false,
+      "proposals": true,
+      "publishedData": true,
+      "samples": false
+    },
+    "authenticatedUser": {
+      "datasets": true,
+      "files": true,
+      "instruments": true,
+      "jobs": true,
+      "policies": false,
+      "proposals": true,
+      "publishedData": true,
+      "samples": true
+    }
+  }
 }

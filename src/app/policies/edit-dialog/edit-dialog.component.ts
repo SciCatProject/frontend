@@ -28,7 +28,7 @@ export class EditDialogComponent implements /*OnChanges,*/ OnInit {
   ) {
     this.multiEdit = data.multiSelect;
     // clone input, do not mutate
-    this.data = structuredClone(data);
+    this.data = JSON.parse(JSON.stringify(data));
 
     // should make selected policy null is multi select, need to preserve group?
     if (this.multiEdit) {

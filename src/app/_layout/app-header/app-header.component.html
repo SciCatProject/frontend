@@ -1,7 +1,6 @@
 <div class="header">
   <mat-menu #mainMenu="matMenu">
     <ng-container *ngIf="mainMenuConfig$ | async as mainMenuConfig; else noMenuItems">
-
       <ng-container *ngIf="mainMenuConfig?.datasets ?? false">
         <button mat-menu-item routerLink="/datasets/">
           <mat-icon> folder</mat-icon>
@@ -16,7 +15,6 @@
           <span>Ingestor</span>
         </button>
       </ng-container>
-
       <ng-container *ngIf="mainMenuConfig?.files ?? false">
         <button mat-menu-item routerLink="/files/">
           <mat-icon> text_snippet</mat-icon>
@@ -108,19 +106,20 @@
     <span class="title">
       <h3>{{ siteTitle }}</h3>
     </span>
-
     <span>
       <h6>
         <a class="toplink" [routerLink]="['/help']">
           <mat-icon> help </mat-icon>
-          <span class="large-screen-text">Help</span></a>
+          <span class="large-screen-text">Help</span></a
+        >
       </h6>
     </span>
     <span>
       <h6>
         <a class="toplink" [routerLink]="['/about']">
           <mat-icon> info </mat-icon>
-          <span class="large-screen-text">About</span></a>
+          <span class="large-screen-text">About</span></a
+        >
       </h6>
     </span>
     <!--<span *ngIf="(this.isLoggedIn | async) === false; else userButton">-->
