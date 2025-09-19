@@ -12,6 +12,7 @@ import { MultiSelectFilterComponent } from "../filters/multiselect-filter.compon
 import { MatOptionModule } from "@angular/material/core";
 import { MatChipsModule } from "@angular/material/chips";
 import { NgxNumericRangeFormFieldModule } from "../numeric-range/ngx-numeric-range-form-field.module";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
 
 @NgModule({
   declarations: [SharedFilterComponent, MultiSelectFilterComponent],

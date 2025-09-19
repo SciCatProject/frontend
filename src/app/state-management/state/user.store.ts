@@ -8,7 +8,7 @@ export type FilterType = "text" | "dateRange" | "multiSelect" | "number";
 
 export interface FilterConfig {
   key: string;
-  label: string;
+  label?: string;
   description?: string;
   type?: FilterType;
   enabled: boolean;

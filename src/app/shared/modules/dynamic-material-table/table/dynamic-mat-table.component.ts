@@ -303,9 +303,6 @@ export class DynamicMatTableComponent<T extends TableRow>
   @Input() emptyMessage = "No data available";
   @Input() emptyIcon = "info";
 
-  @Input() emptyMessage = "No data available";
-  @Input() emptyIcon = "info";
-
   constructor(
     public dialog: MatDialog,
     private renderer: Renderer2,
