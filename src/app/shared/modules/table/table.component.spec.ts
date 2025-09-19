@@ -11,6 +11,8 @@ import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { TableModule } from "./table.module";
 
+// Jasmine testing framework descriptions for Angular component TableComponent
+
 describe("TableComponent", () => {
   let component: TableComponent;
   let fixture: ComponentFixture<TableComponent>;

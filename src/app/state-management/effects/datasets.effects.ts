@@ -9,6 +9,7 @@ import {
   OrigDatablock,
   OutputDatasetObsoleteDto,
   UpdateAttachmentV3Dto,
+  ExternalLinkClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { Store } from "@ngrx/store";
 import {
@@ -161,6 +162,22 @@ export class DatasetEffects {
               fromActions.fetchDatablocksCompleteAction({ datablocks }),
             ),
             catchError(() => of(fromActions.fetchDatablocksFailedAction())),
+          );
+      }),
+    );
+  });
+
+  fetchExternalLinksOfDataset$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.fetchExternalLinksAction),
+      switchMap(({ pid }) => {
+        return this.datasetsService
+          .datasetsControllerFindExternalLinksByIdV3(pid)
+          .pipe(
+            map((externallinks: ExternalLinkClass[]) =>
+              fromActions.fetchExternalLinksCompleteAction({ externallinks }),
+            ),
+            catchError(() => of(fromActions.fetchExternalLinksFailedAction())),
           );
       }),
     );
@@ -399,6 +416,7 @@ export class DatasetEffects {
         fromActions.fetchOrigDatablocksAction,
         fromActions.fetchDatablocksAction,
         fromActions.fetchAttachmentsAction,
+        fromActions.fetchExternalLinksAction,
         fromActions.addDatasetAction,
         fromActions.updatePropertyAction,
         fromActions.addAttachmentAction,
@@ -427,8 +445,8 @@ export class DatasetEffects {
         fromActions.fetchOrigDatablocksFailedAction,
         fromActions.fetchDatablocksCompleteAction,
         fromActions.fetchDatablocksFailedAction,
-        fromActions.fetchOrigDatablocksCompleteAction,
-        fromActions.fetchOrigDatablocksFailedAction,
+        fromActions.fetchExternalLinksCompleteAction,
+        fromActions.fetchExternalLinksFailedAction,
         fromActions.fetchAttachmentsCompleteAction,
         fromActions.fetchAttachmentsFailedAction,
         fromActions.addDatasetCompleteAction,

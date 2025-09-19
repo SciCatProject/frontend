@@ -1,6 +1,6 @@
 import { DatasetClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { DatasetFilters, ArchViewMode } from "state-management/models";
-import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
+import { OutputDatasetObsoleteDto, ExternalLinkClass } from "@scicatproject/scicat-sdk-ts-angular";
 
 export interface DateTriple {
   year: number;
@@ -26,6 +26,7 @@ export interface DatasetState {
   datasets: OutputDatasetObsoleteDto[];
   selectedSets: OutputDatasetObsoleteDto[];
   currentSet: OutputDatasetObsoleteDto | undefined;
+  currentSetExternalLinks: ExternalLinkClass[];
   relatedDatasets: OutputDatasetObsoleteDto[];
   relatedDatasetsCount: number;
   totalCount: number;
@@ -54,6 +55,7 @@ export const initialDatasetState: DatasetState = {
   datasets: [],
   selectedSets: [],
   currentSet: undefined,
+  currentSetExternalLinks: [],
   relatedDatasets: [],
   relatedDatasetsCount: 0,
   totalCount: 0,

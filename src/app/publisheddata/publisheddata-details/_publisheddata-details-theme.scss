@@ -9,24 +9,24 @@
   $accent: map.get($color-config, "accent");
   $header-2: map.get($color-config, "header-2");
   mat-card {
-    .status-header {
+    .publisheddata-status-header {
       background-color: mat.m2-get-color-from-palette($warn, "lighter");
     }
 
-    .general-header {
+    .publisheddata-general-header {
       background-color: mat.m2-get-color-from-palette($primary, "lighter");
     }
 
-    .creator-header {
+    .publisheddata-creator-header {
       background-color: mat.m2-get-color-from-palette($header-1, "lighter");
     }
 
-    .file-header {
-      background-color: mat.m2-get-color-from-palette($accent, "lighter");
+    .publisheddata-file-header {
+      background-color: mat.m2-get-color-from-palette($header-2, "lighter");
     }
 
-    .related-header {
-      background-color: mat.m2-get-color-from-palette($header-2, "lighter");
+    .publisheddata-related-header {
+      background-color: mat.m2-get-color-from-palette($accent, "lighter");
     }
   }
 }
