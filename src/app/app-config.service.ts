@@ -5,7 +5,6 @@ import { firstValueFrom, forkJoin, of } from "rxjs";
 import { catchError, timeout } from "rxjs/operators";
 import {
   DatasetDetailComponentConfig,
-  LabelMaps,
   LabelsLocalization,
   ListSettings,
   TableColumn,
@@ -134,7 +133,6 @@ export interface AppConfigInterface {
   metadataEditingUnitListDisabled?: boolean;
   defaultDatasetsListSettings?: ListSettings;
   defaultProposalsListSettings?: ListSettings;
-  labelMaps: LabelMaps;
   thumbnailFetchLimitPerPage: number;
   maxFileUploadSizeInMb?: string;
   datasetDetailComponent?: DatasetDetailComponentConfig;

@@ -76,7 +76,7 @@ import { JsonformsAccordionRendererService } from "./services/jsonforms-accordio
     SharedTableModule,
     ScientificMetadataTreeModule,
     DynamicMatTableModule,
-    TranslateModule,
+    EmptyContentModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
     JsonFormsCustomRenderersModule,
