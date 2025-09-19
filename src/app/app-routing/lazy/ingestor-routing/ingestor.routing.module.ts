@@ -1,11 +1,11 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { IngestorComponent } from "ingestor/ingestor-page/ingestor.component";
+import { IngestorWrapperComponent } from "ingestor/ingestor-page/ingestor.component";
 
 const routes: Routes = [
   {
     path: "",
-    component: IngestorComponent,
+    component: IngestorWrapperComponent,
   },
 ];
 @NgModule({

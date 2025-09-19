@@ -31,18 +31,17 @@
   
   "accessTokenPrefix": "Bearer ",
   "externalAuthEndpoint": "/api/v3/auth/ldap",
-  "datasetOneDepIntegration": true,
-  "depositorURL": "http://127.0.0.1:8080",
-  "ingestorEnabled": true,
-  "ingestorMode": "transfer",
-  "ingestorAutodiscoveryOptions": [
-    {
-      "mailDomain": "unibe.ch",
-      "description": "University of Bern",
-      "facilityBackend": "http://localhost:8888"
-    }
-  ],
-
+  "ingestorComponent":{
+    "ingestorEnabled": true,
+    "ingestorInTransferMode": true,
+    "ingestorAutodiscoveryOptions": [
+      {
+        "mailDomain": "unibe.ch",
+        "description": "University of Bern",
+        "facilityBackend": "http://localhost:8888"
+      }
+    ]
+  },
   "localColumns": [
     {
       "name": "datasetName",

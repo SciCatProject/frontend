@@ -2,6 +2,7 @@ import {
   FilterConfig,
   ConditionConfig,
 } from "state-management/state/user.store";
+import { IngestorAutodiscovery } from "ingestor/ingestor-page/helper/ingestor.component-helper";
 
 export interface Settings {
   tapeCopies: string;
@@ -30,6 +31,13 @@ export interface DatasetDetailComponentConfig {
   enableCustomizedComponent: boolean;
   customization: CustomizationItem[];
 }
+
+export interface IngestorComponentConfig {
+  ingestorEnabled: boolean;
+  ingestorInTransferMode: boolean; // otherwise in creation mode
+  ingestorAutodiscoveryOptions?: IngestorAutodiscovery[];
+}
+
 export enum DatasetViewFieldType {
   TEXT = "text",
   DATE = "date",

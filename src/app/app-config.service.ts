@@ -1,10 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { IngestorAutodiscovery } from "ingestor/ingestor-page/helper/ingestor.component-helper";
 import { timeout } from "rxjs/operators";
 import {
   DatasetDetailComponentConfig,
   DatasetsListSettings,
+  IngestorComponentConfig,
   LabelsLocalization,
   TableColumn,
 } from "state-management/models";
@@ -96,7 +96,6 @@ export interface AppConfigInterface {
   jupyterHubUrl: string | null;
   landingPage: string | null;
   lbBaseURL: string;
-  depositorURL: string;
   localColumns?: TableColumn[]; // localColumns is deprecated and should be removed in the future
   logbookEnabled: boolean;
   loginFormEnabled: boolean;
@@ -142,9 +141,7 @@ export interface AppConfigInterface {
   siteHeaderLogoUrl?: string;
   mainMenu?: MainMenuConfiguration;
   supportEmail?: string;
-  ingestorEnabled?: boolean;
-  ingestorMode?: string;
-  ingestorAutodiscoveryOptions?: IngestorAutodiscovery[];
+  ingestorComponent?: IngestorComponentConfig;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {

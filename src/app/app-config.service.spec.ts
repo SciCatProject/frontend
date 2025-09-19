@@ -250,8 +250,6 @@ const appConfig: AppConfigInterface = {
     ],
     conditions: [],
   },
-  datasetOneDepIntegration: true,
-  depositorURL: "http://localhost:4201",
   ingestorEnabled: true,
   ingestorMode: "creation",
 };

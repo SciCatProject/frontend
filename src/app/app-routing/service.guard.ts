@@ -31,9 +31,6 @@ export class ServiceGuard implements CanActivate {
       case "reduce":
         shouldActivate = this.appConfig.datasetReduceEnabled;
         break;
-      case "depositor":
-        shouldActivate = this.appConfig.datasetOneDepIntegration;
-        break;
     }
     if (!shouldActivate) {
       this.router.navigate(["/404"], {
