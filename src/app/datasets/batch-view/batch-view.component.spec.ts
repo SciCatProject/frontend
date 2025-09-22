@@ -114,12 +114,12 @@ describe("BatchViewComponent", () => {
   });
 
   describe("#onPublish()", () => {
-    it("should navigate to datasets/batch/publish", () => {
+    it("should navigate to datasets/selection/publish", () => {
       component.onPublish();
 
       expect(component["router"].navigate).toHaveBeenCalledOnceWith([
         "datasets",
-        "batch",
+        "selection",
         "publish",
       ]);
     });

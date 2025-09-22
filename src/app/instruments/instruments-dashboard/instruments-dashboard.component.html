@@ -12,7 +12,8 @@
   (onRowEvent)="onRowClick($event)"
   (settingChange)="onSettingChange($event)"
   (onTableEvent)="onTableEvent($event)"
-  style="height: 70vh"
   class="mat-elevation-z2"
+  [emptyMessage]="'No instruments available'"
+  [emptyIcon]="'info'"
 >
 </dynamic-mat-table>

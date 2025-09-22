@@ -8,8 +8,13 @@ RUN npm ci
 COPY . /frontend/
 RUN npx ng build
 
-FROM nginx:1.28-alpine
+# NOTE: As of Sept 22, frontend is served on port 8080 (previously 80).
+# Make sure deployments, ingress, and services reference 8080 instead of 80.
+FROM docker.io/nginxinc/nginx-unprivileged:1.26.3
+USER root
 RUN rm -rf /usr/share/nginx/html/*
 COPY --from=builder /frontend/dist/browser/ /usr/share/nginx/html/
 COPY scripts/nginx.conf /etc/nginx/nginx.conf
-EXPOSE 80
+USER 101
+COPY --from=builder /frontend/dist/ /usr/share/nginx/html/
+EXPOSE 8080

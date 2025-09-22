@@ -30,6 +30,7 @@ import { Store } from "@ngrx/store";
 import {
   selectColumns,
   selectCurrentUser,
+  selectConditions,
 } from "state-management/selectors/user.selectors";
 import {
   addScientificConditionAction,
@@ -161,7 +162,6 @@ export class UserEffects {
                 loginResponse.access_token;
               this.authService.setToken({
                 ...loginResponse,
-                created: new Date(loginResponse.created),
                 rememberMe,
                 scopes: null,
               });
@@ -276,6 +276,11 @@ export class UserEffects {
 
         if (id && ttl && isTokenExpired) {
           this.authService.clear();
+          this.apiConfigService.accessToken = null;
+          this.apiConfigService.credentials.bearer = null;
+          if (!(window as any).__karma__) {
+            window.location.reload();
+          }
         }
 
         return this.authService.isAuthenticated();
@@ -414,11 +419,7 @@ export class UserEffects {
 
   updateUserColumns$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(
-        fromActions.selectColumnAction,
-        fromActions.deselectColumnAction,
-        fromActions.deselectAllCustomColumnsAction,
-      ),
+      ofType(fromActions.selectColumnAction, fromActions.deselectColumnAction),
       concatLatestFrom(() => this.columns$),
       map(([action, columns]) => columns),
       distinctUntilChanged(
@@ -507,7 +508,8 @@ export class UserEffects {
   loadDefaultSettings$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.loadDefaultSettings),
-      map(({ config }) => {
+      concatLatestFrom(() => this.store.select(selectConditions)),
+      map(([{ config }, existingConditions]) => {
         const defaultFilters =
           config.defaultDatasetsListSettings.filters ||
           initialUserState.filters;
@@ -523,18 +525,33 @@ export class UserEffects {
           initialUserState.columns;
         const isAuthenticated = this.authService.isAuthenticated();
 
-        return [
-          fromActions.updateConditionsConfigs({
-            conditionConfigs: defaultConditions,
-          }),
+        const actions = [];
+
+        if (!existingConditions || existingConditions.length === 0) {
+          actions.push(
+            fromActions.updateConditionsConfigs({
+              conditionConfigs: defaultConditions,
+            }),
+          );
+        }
+
+        actions.push(
           fromActions.updateHasFetchedSettings({
             hasFetchedSettings: !isAuthenticated,
           }),
+        );
+
+        actions.push(
           fromActions.updateFilterConfigs({ filterConfigs: defaultFilters }),
+        );
+
+        actions.push(
           fromActions.setDatasetTableColumnsAction({
             columns,
           }),
-        ];
+        );
+
+        return actions;
       }),
       concatMap((actions) => actions),
     );

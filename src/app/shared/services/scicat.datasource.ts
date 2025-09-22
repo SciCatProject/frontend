@@ -33,8 +33,7 @@ export class SciCatDataSource implements DataSource<any> {
   ) {
     this.appConfig = this.appConfigService.getConfig();
     // TODO: Check if we can get the api version somehow or add it in the configuration instеad.
-    this.url =
-      this.appConfig.lbBaseURL + "/api/v3/" + this.tableDefinition.collection;
+    this.url = `${this.appConfig.lbBaseURL}/api/${this.tableDefinition.apiVersion || "v3"}/${this.tableDefinition.collection}`;
     this.collection = this.tableDefinition.collection;
     this.columnsdef = this.tableDefinition.columns;
 

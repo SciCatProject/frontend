@@ -12,7 +12,7 @@ describe("Datasets", () => {
 
   describe("Reduce dataset", () => {
     it("should go to dataset details reduce tab and step through the workflow", () => {
-      cy.createDataset("raw");
+      cy.createDataset({ type: "raw" });
 
       cy.visit("/datasets");
 
@@ -20,9 +20,8 @@ describe("Datasets", () => {
 
       cy.finishedLoading();
 
-      cy.get('[data-cy="text-search"] input[type="search"]')
-        .clear()
-        .type("Cypress");
+      cy.get('[data-cy="text-search"]').clear().type("Cypress");
+      cy.get('[data-cy="search-button"]').click();
 
       cy.isLoading();
 

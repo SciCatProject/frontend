@@ -18,7 +18,8 @@
   (paginationChange)="onPaginationChange($event)"
   (onRowEvent)="onRowClick($event)"
   (onTableEvent)="onTableEvent($event)"
-  style="height: 60vh"
   class="mat-elevation-z2"
+  [emptyMessage]="'No related proposals available'"
+  [emptyIcon]="'folder'"
 >
 </dynamic-mat-table>

@@ -6,12 +6,12 @@ import {
   UserSettings,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { Message, Settings, TableColumn } from "state-management/models";
+import { AppConfigInterface } from "app-config.service";
+import { AccessTokenInterface } from "shared/services/auth/auth.service";
 import {
   ConditionConfig,
   FilterConfig,
-} from "../../shared/modules/filters/filters.module";
-import { AppConfigInterface } from "app-config.service";
-import { AccessTokenInterface } from "shared/services/auth/auth.service";
+} from "state-management/state/user.store";
 
 export const setDatasetTableColumnsAction = createAction(
   "[User] Set Dataset Table Columns",
@@ -152,9 +152,6 @@ export const selectColumnAction = createAction(
 export const deselectColumnAction = createAction(
   "[User] Deselect Column",
   props<{ name: string; columnType: "standard" | "custom" }>(),
-);
-export const deselectAllCustomColumnsAction = createAction(
-  "[User] Deselect All Custom Columns",
 );
 
 export const showMessageAction = createAction(

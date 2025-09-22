@@ -298,9 +298,8 @@ describe("Proposals general", () => {
 
       cy.visit("/proposals");
 
-      cy.get('.table-global-search input[type="text"]').type(
-        newProposal.proposalId,
-      );
+      cy.get('[data-cy="text-search"]').type(newProposal.proposalId);
+      cy.get('[data-cy="search-button"]').click();
 
       cy.get("mat-table mat-row")
         .first()
@@ -335,11 +334,62 @@ describe("Proposals general", () => {
 
       cy.get(".mat-sort-header-container").contains("Proposal ID").click();
 
+      cy.get(".mat-sort-header-container")
+        .contains("Proposal ID")
+        .closest("mat-header-cell")
+        .should("have.class", "active-sort");
+
+      cy.get("mat-header-cell.active-sort .mat-sort-header-arrow svg").should(
+        ($el) => {
+          expect($el).to.have.css("color", "rgb(200, 25, 25)"); // warn color
+        },
+      );
+
       cy.get("mat-table mat-row")
         .first()
         .should("contain", newProposal.proposalId);
 
       cy.reload();
+
+      cy.get("mat-table mat-row")
+        .first()
+        .should("contain", newProposal.proposalId);
+    });
+
+    it("should be able to filter by column", () => {
+      const newProposal = {
+        ...testData.proposal,
+        proposalId: "100100",
+      };
+
+      cy.createProposal(newProposal);
+
+      cy.visit("/proposals");
+
+      cy.get(".mat-sort-header-container").contains("Proposal ID").click();
+
+      cy.get(".mat-sort-header-container")
+        .contains("Proposal ID")
+        .closest("header-filter")
+        .find(".mat-mdc-menu-trigger")
+        .click();
+
+      cy.get(
+        ".cdk-overlay-container .mat-mdc-menu-panel .filter-panel mat-form-field.input-field input",
+      )
+        .clear()
+        .type(newProposal.proposalId);
+      cy.get(
+        ".cdk-overlay-container .mat-mdc-menu-panel .menu-action button[color='primary']",
+      ).click();
+
+      cy.get(".mat-sort-header-container")
+        .contains("Proposal ID")
+        .closest("header-filter")
+        .find(".mat-mdc-menu-trigger mat-icon")
+        .should(($el) => {
+          expect($el).to.have.css("color", "rgb(200, 25, 25)"); // warn color
+        });
 
       cy.get("mat-table mat-row")
         .first()
@@ -362,7 +412,7 @@ describe("Proposals general", () => {
         defaultPageSize,
       );
 
-      cy.get("mat-paginator mat-select").click({ force: true });
+      cy.get("mat-paginator").first().find("mat-select").click({ force: true });
       cy.get("mat-option").contains(newPageSize).click({ force: true });
 
       cy.reload();
@@ -375,7 +425,7 @@ describe("Proposals general", () => {
         `1 – ${newPageSize}`,
       );
 
-      cy.get("mat-paginator [aria-label='Next page']").click();
+      cy.get("mat-paginator").first().find("[aria-label='Next page']").click();
 
       cy.get("mat-paginator .mat-mdc-paginator-range-actions").should(
         "not.contain",
@@ -410,14 +460,15 @@ describe("Proposals general", () => {
       cy.get('[role="menu"] button').contains("Default setting").click();
       cy.get("body").type("{esc}");
 
-      cy.contains(
-        "dynamic-mat-table mat-header-row.header mat-header-cell",
-        "First Name",
-      );
-      cy.contains(
-        "dynamic-mat-table mat-header-row.header mat-header-cell",
-        "Last Name",
-      );
+      cy.get("dynamic-mat-table")
+        .scrollTo("right", { ensureScrollable: false })
+        .get("mat-header-row")
+        .should("contain", "First Name");
+
+      cy.get("dynamic-mat-table")
+        .scrollTo("right", { ensureScrollable: false })
+        .get("mat-header-row")
+        .should("contain", "Last Name");
 
       cy.get("dynamic-mat-table table-menu button").click();
 
@@ -454,14 +505,15 @@ describe("Proposals general", () => {
 
       cy.finishedLoading();
 
-      cy.get("dynamic-mat-table mat-header-row.header").should(
-        "not.contain",
-        "First Name",
-      );
-      cy.get("dynamic-mat-table mat-header-row.header").should(
-        "not.contain",
-        "Last Name",
-      );
+      cy.get("dynamic-mat-table")
+        .scrollTo("right", { ensureScrollable: false })
+        .get("mat-header-row")
+        .should("not.contain", "First Name");
+
+      cy.get("dynamic-mat-table")
+        .scrollTo("right", { ensureScrollable: false })
+        .get("mat-header-row")
+        .should("not.contain", "Last Name");
 
       cy.get("dynamic-mat-table table-menu button").click();
       cy.get('[role="menu"] button').contains("Default setting").click();
@@ -475,14 +527,15 @@ describe("Proposals general", () => {
 
       cy.get("dynamic-mat-table mat-header-row.header").should("exist");
 
-      cy.contains(
-        "dynamic-mat-table mat-header-row.header mat-header-cell",
-        "First Name",
-      );
-      cy.contains(
-        "dynamic-mat-table mat-header-row.header mat-header-cell",
-        "Last Name",
-      );
+      cy.get("dynamic-mat-table")
+        .scrollTo("right", { ensureScrollable: false })
+        .get("mat-header-row")
+        .should("contain", "First Name");
+
+      cy.get("dynamic-mat-table")
+        .scrollTo("right", { ensureScrollable: false })
+        .get("mat-header-row")
+        .should("contain", "Last Name");
     });
 
     it("should be able to download table data as a json", () => {
@@ -495,7 +548,7 @@ describe("Proposals general", () => {
 
       cy.visit("/proposals");
 
-      cy.get("mat-paginator mat-select").click({ force: true });
+      cy.get("mat-paginator").first().find("mat-select").click({ force: true });
       cy.get("mat-option").contains("25").click({ force: true });
 
       cy.get("dynamic-mat-table table-menu button").click();
@@ -531,7 +584,7 @@ describe("Proposals general", () => {
 
       cy.visit("/proposals");
 
-      cy.get("mat-paginator mat-select").click({ force: true });
+      cy.get("mat-paginator").first().find("mat-select").click({ force: true });
       cy.get("mat-option").contains("25").click({ force: true });
 
       cy.get("dynamic-mat-table table-menu button").click();
