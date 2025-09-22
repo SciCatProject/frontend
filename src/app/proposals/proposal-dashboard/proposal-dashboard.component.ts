@@ -30,6 +30,13 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
       enabled: true,
     },
     {
+      key: "pi_lastname",
+      label: "PI Last Name",
+      type: "text",
+      description: "Filter by principal investigator last name",
+      enabled: true,
+    },
+    {
       key: "startTime",
       label: "Start Date",
       type: "dateRange",
