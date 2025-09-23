@@ -1,0 +1,27 @@
+.footer {
+  // background: white;
+  // width: 100%;
+  // padding: 1rem;
+  // text-align: center;
+
+  background-color: white;
+
+  mat-toolbar {
+    background: white !important;
+    height: 3.5rem;
+
+    .spacer {
+      flex: 1 1 auto;
+    }
+
+    .toplink {
+      padding: 0.5rem 1rem;
+      font: bold;
+      font-size: 11pt;
+
+      mat-icon {
+        vertical-align: middle;
+      }
+    }
+  }
+}
