@@ -1,7 +1,7 @@
 <full-text-search-bar
   #searchBar
   data-cy="proposal-text-search"
-  [placeholder]="'Title, Abstract, Name...'"
+  [placeholder]="'Proposal id, Title, Abstract, Name...'"
   (textChange)="onTextChange($event)"
   (searchAction)="onSearchAction()"
   [prefilledValue]="getTextSearchParam()"
