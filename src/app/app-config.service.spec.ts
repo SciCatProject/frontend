@@ -250,8 +250,11 @@ const appConfig: AppConfigInterface = {
     ],
     conditions: [],
   },
+  ingestorComponent:{
   ingestorEnabled: true,
-  ingestorMode: "creation",
+  ingestorInTransferMode: true,
+
+  }
 };
 
 describe("AppConfigService", () => {

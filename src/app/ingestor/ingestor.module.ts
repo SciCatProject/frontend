@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { IngestorWrapperComponent } from "./ingestor-page/ingestor.component";
+import { IngestorWrapperComponent } from "./ingestor-page/ingestor-wrapper.component";
 import { MatCardModule } from "@angular/material/card";
 import { RouterModule } from "@angular/router";
 import { IngestorMetadataEditorComponent } from "./ingestor-metadata-editor/ingestor-metadata-editor.component";

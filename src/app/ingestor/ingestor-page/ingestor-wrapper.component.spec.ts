@@ -1,4 +1,4 @@
-mport { IngestorWrapperComponent } from "./ingestor.component";
+import { IngestorWrapperComponent } from "./ingestor-wrapper.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { AppConfigInterface, AppConfigService } from "app-config.service";
 import { IngestorTransferComponent } from "./ingestor-transfer.component";
