@@ -1027,13 +1027,8 @@ export class DynamicMatTableComponent<T extends TableRow>
       return "";
     }
 
-    if (column.type === "date" && column.format) {
-      try {
-        return this.datePipe.transform(value as string, column.format);
-      } catch (e) {
-        console.error("Date format error:", e);
-        return value;
-      }
+    if (column.type === "date") {
+      this.datePipe.transform(value as string, column.format);
     }
 
     return value;
