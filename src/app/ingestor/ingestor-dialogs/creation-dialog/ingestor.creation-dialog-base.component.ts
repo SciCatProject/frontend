@@ -18,6 +18,7 @@ import { IngestorMetadataSSEService } from "ingestor/ingestor-page/helper/ingest
 import { HttpParams } from "@angular/common/http";
 import { PostDatasetRequest } from "shared/sdk/models/ingestor/models";
 import * as fromActions from "state-management/actions/ingestor.actions";
+import * as datasetActions from "state-management/actions/datasets.actions";
 import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
 import { fetchScicatTokenAction } from "state-management/actions/user.actions";
 import { INGESTOR_API_ENDPOINTS_V1 } from "shared/sdk/apis/ingestor.service";
@@ -268,7 +269,7 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
   onClickStartIngestion(): void {
     if (this.createNewTransferData.editorMode === "CREATION") {
       this.store.dispatch(
-        fromActions.createDatasetAction({
+        datasetActions.addDatasetAction({
           dataset: JSON.parse(this.createNewTransferData.mergedMetaDataString),
         }),
       );

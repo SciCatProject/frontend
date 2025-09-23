@@ -22,6 +22,7 @@ import {
 } from "state-management/actions/datasets.actions";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { provideMockStore } from "@ngrx/store/testing";
+import {resetIngestionObject} from "state-management/actions/ingestor.actions";
 import { selectSelectedDatasets } from "state-management/selectors/datasets.selectors";
 import {
   selectColumns,
@@ -33,6 +34,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { AppConfigService } from "app-config.service";
 import { PageChangeEvent } from "shared/modules/table/table.component";
+import { IngestionRequestInformation } from "ingestor/ingestor-page/helper/ingestor.component-helper";
 import {
   DatasetsControllerCreateV3Request,
   ReturnedUserDto,
@@ -135,61 +137,18 @@ describe("DashboardComponent", () => {
   });
 
   describe("#openDialog()", () => {
-    it("should dispatch an addDatasetAction when dialog returns a value", () => {
-      jasmine.clock().install();
-      jasmine.clock().mockDate(new Date(2019, 12, 17, 12, 0, 0));
+    it("should call Ingestor method", () => {
+      const mockIngestor = jasmine.createSpyObj('IngestorCreationComponent', ['onClickAddIngestion']);
 
-      dispatchSpy = spyOn(store, "dispatch");
-
-      const currentUser = createMock<ReturnedUserDto>({
-        id: "testId",
-        username: "ldap.Test User",
-        email: "test@email.com",
-        realm: "test",
-        emailVerified: true,
-        authStrategy: "local",
-      });
-
-      const dataset: DatasetsControllerCreateV3Request = {
-        accessGroups: [],
-        contactEmail: currentUser.email,
-        creationTime: new Date().toISOString(),
-        datasetName: "Test Name",
-        description: "Test description",
-        isPublished: false,
-        keywords: [],
-        owner: currentUser.username.replace("ldap.", ""),
-        ownerEmail: currentUser.email,
-        ownerGroup: "test",
-        packedSize: 0,
-        size: 0,
-        sourceFolder: "/nfs/test",
-        type: "derived",
-        inputDatasets: [],
-        investigator: currentUser.email,
-        scientificMetadata: {},
-        usedSoftware: ["test software"],
-        numberOfFilesArchived: 0,
-        creationLocation: undefined,
-        principalInvestigator: undefined,
-      };
-
-      component.currentUser = currentUser;
-      component.userGroups = ["test"];
-
+      component.ingestor = mockIngestor;
       component.openDialog();
-
-      expect(dispatchSpy).toHaveBeenCalledTimes(1);
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        addDatasetAction({
-          dataset: dataset,
-        }),
-      );
+      
+      expect(mockIngestor.onClickAddIngestion).toHaveBeenCalledTimes(1);
     });
   });
-
+  
   describe("#onPageChange()", () => {
-    it("should dispatch a changePangeAction", () => {
+    it("should dispatch a changePageAction", () => {
       dispatchSpy = spyOn(store, "dispatch");
 
       const event: PageChangeEvent = {
