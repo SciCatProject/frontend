@@ -2,7 +2,7 @@
   <div fxLayout="row" fxLayout.xs="column">
     <div fxFlex="70">
       <mat-card>
-        <mat-card-header class="action-header"> New Action </mat-card-header>
+        <mat-card-header class="reduce-action-header"> New Action </mat-card-header>
 
         <mat-card-content>
           <ng-template [ngIf]="(result$ | async) || derivedDatasets.length > 0">
@@ -176,7 +176,7 @@
       </mat-card>
 
       <mat-card *ngIf="derivedDatasets">
-        <mat-card-header class="derived-header">
+        <mat-card-header class="reduce-derived-header">
           Derived Datasets
         </mat-card-header>
 
