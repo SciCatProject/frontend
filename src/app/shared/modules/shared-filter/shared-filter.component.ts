@@ -77,7 +77,12 @@ export class SharedFilterComponent implements OnChanges {
   }>();
 
   constructor() {}
-
+  ngOnInit() {
+    // Reset checkbox display limit when the search term changes
+    this.filterForm.get("textField")!.valueChanges.subscribe(() => {
+      this.checkboxDisplaylimit = 10;
+    });
+  }
   ngOnChanges(changes: SimpleChanges) {
     if (changes["prefilled"] || changes["filterType"]) {
       if (this.filterType === "text") {
@@ -137,29 +142,20 @@ export class SharedFilterComponent implements OnChanges {
   }
 
   /** Checkbox filter helpers */
-  get visibleFacetCounts(): FacetItem[] {
+  private filteredFacetCounts(): FacetItem[] {
     const term = (this.filterForm.get("textField")?.value ?? "")
       .toLowerCase()
       .trim();
-    const selected = new Set(this.filterForm.get("selectedIds")?.value ?? []);
 
-    const base = this.checkboxFacetCounts;
-
-    // always include checked items
-    const pinned = base.filter((x) => selected.has(x._id));
-
-    // apply text filter to the rest
-    const filtered = term
-      ? base.filter((x) => (x.label ?? x._id).toLowerCase().includes(term))
-      : base;
-
-    // merge (checked/pinned to the top), de-duplicate by _id
-    const merged = [...pinned, ...filtered].filter(
-      (x, i, arr) => arr.findIndex((y) => y._id === x._id) === i,
+    return this.checkboxFacetCounts.filter((x) =>
+      (x.label ?? x._id).toLowerCase().includes(term),
     );
-
-    // slice based on display limit
-    return merged.slice(0, this.checkboxDisplaylimit);
+  }
+  get visibleFacetCounts(): FacetItem[] {
+    return this.filteredFacetCounts().slice(0, this.checkboxDisplaylimit);
+  }
+  get hasMore(): boolean {
+    return this.filteredFacetCounts().length > this.checkboxDisplaylimit;
   }
   onShowMore() {
     this.checkboxDisplaylimit += 10;
@@ -171,9 +167,5 @@ export class SharedFilterComponent implements OnChanges {
     ctrl.setValue(next);
     this.checkBoxChange.emit(next);
   }
-  get hasMore(): boolean {
-    return this.checkboxFacetCounts.length > this.checkboxDisplaylimit;
-  }
-
   trackById = (_: number, x: FacetItem) => x._id;
 }
