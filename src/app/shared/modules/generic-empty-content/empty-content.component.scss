@@ -1,5 +1,7 @@
 .empty-content {
   margin: 16px 0;
+  display: flex;
+  overflow: hidden;
 }
 
 ::ng-deep app-empty-content .mat-mdc-card {
@@ -8,6 +10,7 @@
 
 .content-wrapper {
   display: flex;
+  width: auto;
   flex-direction: column;
   align-items: center;
   justify-content: center;

@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { ProposalClass } from "@scicatproject/scicat-sdk-ts-angular";
 import { Subscription, BehaviorSubject, combineLatest } from "rxjs";
+import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
 import {
   fetchFacetCountsAction,
   fetchProposalsAction,
@@ -25,14 +26,14 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
     {
       key: "instrumentIds",
       label: "Instrument",
-      type: "text",
+      type: "checkbox",
       description: "Filter by instrument ofthe proposal",
       enabled: true,
     },
     {
       key: "pi_lastname",
       label: "PI Last Name",
-      type: "text",
+      type: "checkbox",
       description: "Filter by principal investigator last name",
       enabled: true,
     },
@@ -44,6 +45,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
       enabled: true,
     },
   ];
+  facetLists: string[] = ["pi_lastname", "instrumentIds"];
 
   constructor(
     private store: Store,
@@ -51,13 +53,9 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.store.dispatch(fetchInstrumentsAction({ skip: 0, limit: 1000 }));
+
     // TODO: Shoule we hardcode the facet counts list here?
-    const facetCountsList = [
-      "proposalId",
-      "pi_lastname",
-      "startTime",
-      "endTime",
-    ];
     this.subscriptions.push(
       combineLatest([this.params$]).subscribe(([queryParams]) => {
         const limit = queryParams.pageSize
@@ -79,7 +77,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
         this.store.dispatch(
           fetchFacetCountsAction({
             fields: searchQuery,
-            facets: facetCountsList,
+            facets: this.facetLists,
           }),
         );
       }),

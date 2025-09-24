@@ -19,7 +19,9 @@ export declare type FieldType =
   | "number"
   | "date"
   | "category"
-  | "hoverContent";
+  | "hoverContent"
+  | "custom" // It's from old code, remove it in the future if possible
+  | "standard"; // It's from old code, remove it in the future if possible
 export declare type FieldDisplay = "visible" | "hidden" | "prevent-hidden";
 export declare type FieldSticky = "start" | "end" | "none";
 export declare type FieldFilter = "client-side" | "server-side" | "none";

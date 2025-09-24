@@ -227,8 +227,8 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
         header: column.header,
         display: column.enabled ? "visible" : "hidden",
         width: column.width,
-        type: column.type as any,
-        format: column.format as any,
+        type: column.type,
+        format: column.format,
       };
       if (column.type === "hoverContent") {
         convertedColumn.hoverContent = true;

@@ -3,8 +3,8 @@ import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { DateTime } from "luxon";
-import { distinctUntilChanged, map, Observable } from "rxjs";
-import { selectProposalsfacetCounts } from "state-management/selectors/proposals.selectors";
+import { distinctUntilChanged, map, Observable, shareReplay } from "rxjs";
+import { selectProposalsfacetCountsWithInstrumentName } from "state-management/selectors/proposals.selectors";
 
 import { DateRange } from "state-management/state/proposals.store";
 import { FilterConfig } from "state-management/state/user.store";
@@ -16,10 +16,13 @@ import { FilterConfig } from "state-management/state/user.store";
   standalone: false,
 })
 export class ProposalSideFilterComponent implements OnInit {
-  activeFilters: Record<string, string | DateRange> = {};
+  activeFilters: Record<string, string[] | DateRange> = {};
   collapsed = false;
 
-  fullfacetCounts$ = this.store.select(selectProposalsfacetCounts);
+  facetCounts$ = this.store.select(
+    selectProposalsfacetCountsWithInstrumentName,
+  );
+
   localization = "proposal";
 
   @Input() clearFilters = false;
@@ -45,7 +48,7 @@ export class ProposalSideFilterComponent implements OnInit {
     this.activeFilters = { ...searchQuery };
   }
 
-  setFilter(filterKey: string, value: string) {
+  setFilter(filterKey: string, value: string[]) {
     if (value) {
       this.activeFilters[filterKey] = value;
     } else {
@@ -81,7 +84,7 @@ export class ProposalSideFilterComponent implements OnInit {
   }
 
   getFacetCounts$(key: string): Observable<any> {
-    return this.fullfacetCounts$.pipe(
+    return this.facetCounts$.pipe(
       map((all) => all[key] || []),
       distinctUntilChanged(),
     );

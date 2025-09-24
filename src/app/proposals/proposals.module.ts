@@ -40,11 +40,17 @@ import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashbo
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { ProposalSearchBarComponent } from "./proposal-filters/search-bar/proposal-search-bar.component";
 import { PipesModule } from "shared/pipes/pipes.module";
+import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
+import { InstrumentEffects } from "state-management/effects/instruments.effects";
 
 @NgModule({
   imports: [
     CommonModule,
-    EffectsModule.forFeature([ProposalEffects, LogbookEffects]),
+    EffectsModule.forFeature([
+      ProposalEffects,
+      LogbookEffects,
+      InstrumentEffects,
+    ]),
     FlexLayoutModule,
     LogbooksModule,
     MatButtonModule,
@@ -66,6 +72,7 @@ import { PipesModule } from "shared/pipes/pipes.module";
     PipesModule,
     StoreModule.forFeature("proposals", proposalsReducer),
     StoreModule.forFeature("logbooks", logbooksReducer),
+    StoreModule.forFeature("instruments", instrumentsReducer),
   ],
   declarations: [
     ProposalDashboardComponent,

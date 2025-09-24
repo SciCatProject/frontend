@@ -14,7 +14,9 @@
   (settingChange)="onSettingChange($event)"
   (onTableEvent)="onTableEvent($event)"
   class="mat-elevation-z2"
-  [emptyMessage]="'No proposals available'"
+  [emptyMessage]="
+    'No proposals available. Please reset the filters and try again'
+  "
   [emptyIcon]="'folder'"
 >
 </dynamic-mat-table>

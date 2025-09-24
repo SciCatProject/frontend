@@ -865,8 +865,6 @@ export class DynamicMatTableComponent<T extends TableRow>
     this.onTableEvent.emit({ sender: null, event: TableEventType.ReloadData });
   }
 
-  /////////////////////////////////////////////////////////////////
-
   onResizeColumn(event: MouseEvent, index: number, type: "left" | "right") {
     this.resizeColumn.resizeHandler = type;
     this.resizeColumn.startX = event.pageX;
@@ -1027,8 +1025,16 @@ export class DynamicMatTableComponent<T extends TableRow>
       return "";
     }
 
+    // If column format for date is provided, format the value
+    // Currently only supports date formatting, if there are other types in the future,
+    // we should refactor this to a more generic solution
     if (column.type === "date") {
-      this.datePipe.transform(value as string, column.format);
+      try {
+        return this.datePipe.transform(value as string, column.format);
+      } catch (e) {
+        console.error("Date format error:", e);
+        return value;
+      }
     }
 
     return value;

@@ -4,6 +4,7 @@ import {
   selectHasFetchedSettings,
   selectTablesSettings,
 } from "./user.selectors";
+import { selectInstrumentWithIdAndName } from "./instruments.selectors";
 
 const selectProposalsState = createFeatureSelector<ProposalsState>("proposals");
 
@@ -174,4 +175,16 @@ export const selectProposalsWithCountAndTableSettings = createSelector(
       hasFetchedSettings,
     };
   },
+);
+
+export const selectProposalsfacetCountsWithInstrumentName = createSelector(
+  selectProposalsfacetCounts,
+  selectInstrumentWithIdAndName,
+  (facets, instrumentName) => ({
+    ...facets,
+    instrumentIds: (facets.instrumentIds ?? []).map((f) => ({
+      ...f,
+      label: instrumentName.get(f._id) ?? f._id,
+    })),
+  }),
 );

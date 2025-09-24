@@ -16,7 +16,6 @@ import {
   ElementRef,
 } from "@angular/core";
 import { TableField } from "../models/table-field.model";
-import { titleCase } from "../utilizes/utilizes";
 import { moveItemInArray } from "@angular/cdk/drag-drop";
 import { SelectionModel } from "@angular/cdk/collections";
 import { TableService } from "../table/dynamic-mat-table.service";
