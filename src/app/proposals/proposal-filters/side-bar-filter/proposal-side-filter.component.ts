@@ -49,7 +49,7 @@ export class ProposalSideFilterComponent implements OnInit {
   }
 
   setFilter(filterKey: string, value: string[]) {
-    if (value) {
+    if (value && value.length > 0) {
       this.activeFilters[filterKey] = value;
     } else {
       delete this.activeFilters[filterKey];

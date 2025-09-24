@@ -5,7 +5,7 @@ import {
   tick,
 } from "@angular/core/testing";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { Observable, of } from "rxjs";
+import { of } from "rxjs";
 import { ProposalSideFilterComponent } from "./proposal-side-filter.component";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -65,7 +65,7 @@ describe("ProposalSideFilterComponent", () => {
   });
 
   it("should initialize activeFilters from queryParams.searchQuery in ngOnInit", () => {
-    const data = { alpha: "beta" };
+    const data = { alpha: ["beta"] };
     mockRoute.snapshot.queryParams = { searchQuery: JSON.stringify(data) };
     component.activeFilters = {};
     component.ngOnInit();
@@ -74,13 +74,13 @@ describe("ProposalSideFilterComponent", () => {
 
   it("should set a filter when value is provided", () => {
     component.activeFilters = {};
-    component.setFilter("proposalId", "test123");
-    expect(component.activeFilters.proposalId).toBe("test123");
+    component.setFilter("proposalId", ["test123"]);
+    expect(component.activeFilters.proposalId).toEqual(["test123"]);
   });
 
   it("should remove a filter when value is empty", () => {
-    component.activeFilters = { proposalId: "test123" };
-    component.setFilter("status", "");
+    component.activeFilters = { proposalId: ["test123"] };
+    component.setFilter("status", []);
     expect("status" in component.activeFilters).toBeFalse();
   });
 
@@ -103,14 +103,14 @@ describe("ProposalSideFilterComponent", () => {
   });
 
   it("should apply filters and navigate with correct queryParams", () => {
-    component.activeFilters = { a: "1" };
+    component.activeFilters = { a: ["1"] };
     mockRoute.snapshot.queryParams = {
       searchQuery: JSON.stringify({ text: "hello" }),
     };
     component.applyFilters();
     expect(mockRouter.navigate).toHaveBeenCalledWith([], {
       queryParams: {
-        searchQuery: JSON.stringify({ a: "1", text: "hello" }),
+        searchQuery: JSON.stringify({ a: ["1"], text: "hello" }),
         pageIndex: 0,
       },
       queryParamsHandling: "merge",
@@ -132,7 +132,7 @@ describe("ProposalSideFilterComponent", () => {
   });
 
   it("should reset filters, call applyFilters and toggle clearFilters flag", fakeAsync(() => {
-    component.activeFilters = { x: "y" };
+    component.activeFilters = { x: ["y"] };
     spyOn(component, "applyFilters");
     component.clearFilters = false;
 

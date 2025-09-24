@@ -29,21 +29,25 @@ describe("ProposalDashboardComponent", () => {
         key: "test1",
         type: "text",
         description: "Filter by Unique identifier for the proposal",
+        enabled: true,
       },
       {
         key: "pi_lastname",
         type: "text",
         description: "Filter by First name of the Principal Investigator",
+        enabled: true,
       },
       {
         key: "startTime",
         type: "dateRange",
         description: "Filter by Start time of the proposal",
+        enabled: true,
       },
       {
         key: "endTime",
         type: "dateRange",
         description: "Filter by End time of the proposal",
+        enabled: true,
       },
     ];
   });

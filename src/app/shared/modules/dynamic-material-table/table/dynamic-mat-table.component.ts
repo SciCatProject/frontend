@@ -1030,6 +1030,12 @@ export class DynamicMatTableComponent<T extends TableRow>
     // we should refactor this to a more generic solution
     if (column.type === "date") {
       try {
+        if (!column.format) {
+          console.log(
+            "Default date format will be applied for column:",
+            column,
+          );
+        }
         return this.datePipe.transform(value as string, column.format);
       } catch (e) {
         console.error("Date format error:", e);
