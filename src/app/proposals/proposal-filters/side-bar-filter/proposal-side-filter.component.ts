@@ -54,6 +54,7 @@ export class ProposalSideFilterComponent implements OnInit {
     } else {
       delete this.activeFilters[filterKey];
     }
+    this.applyFilters();
   }
 
   setDateFilter(filterKey: string, value: DateRange) {
