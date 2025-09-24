@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
+import { AppConfigService } from "app-config.service";
 import { DateTime } from "luxon";
 import { distinctUntilChanged, map, Observable, shareReplay } from "rxjs";
 import { selectProposalsfacetCountsWithInstrumentName } from "state-management/selectors/proposals.selectors";
@@ -16,6 +17,7 @@ import { FilterConfig } from "state-management/state/user.store";
   standalone: false,
 })
 export class ProposalSideFilterComponent implements OnInit {
+  appConfig = this.appConfigService.getConfig();
   activeFilters: Record<string, string[] | DateRange> = {};
   collapsed = false;
 
@@ -39,6 +41,7 @@ export class ProposalSideFilterComponent implements OnInit {
     private store: Store,
     private route: ActivatedRoute,
     private router: Router,
+    public appConfigService: AppConfigService,
   ) {}
 
   ngOnInit(): void {
@@ -54,7 +57,9 @@ export class ProposalSideFilterComponent implements OnInit {
     } else {
       delete this.activeFilters[filterKey];
     }
-    this.applyFilters();
+    if (this.appConfig.checkBoxFilterClickTrigger) {
+      this.applyFilters();
+    }
   }
 
   setDateFilter(filterKey: string, value: DateRange) {

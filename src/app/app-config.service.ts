@@ -142,6 +142,7 @@ export interface AppConfigInterface {
   siteHeaderLogoUrl?: string;
   mainMenu?: MainMenuConfiguration;
   supportEmail?: string;
+  checkBoxFilterClickTrigger?: boolean;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
