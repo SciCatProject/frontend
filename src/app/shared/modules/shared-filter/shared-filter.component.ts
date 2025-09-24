@@ -26,12 +26,12 @@ type FacetItem = { _id?: string; label?: string; count: number };
   standalone: false,
 })
 export class SharedFilterComponent implements OnChanges {
-  checkboxDisplaylimit = 10;
-  checkboxFacetCounts: FacetItem[] = [];
   private dateRange: DateRange = {
     begin: null,
     end: null,
   };
+  checkboxDisplaylimit = 10;
+  checkboxFacetCounts: FacetItem[] = [];
 
   filterForm = new FormGroup({
     textField: new FormControl(""),
