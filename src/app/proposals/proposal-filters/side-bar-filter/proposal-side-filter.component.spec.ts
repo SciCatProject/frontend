@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { DateTime } from "luxon";
 import { TranslateService } from "@ngx-translate/core";
 import { SharedScicatFrontendModule } from "shared/shared.module";
+import { AppConfigService } from "app-config.service";
 
 describe("ProposalSideFilterComponent", () => {
   let component: ProposalSideFilterComponent;
@@ -26,6 +27,7 @@ describe("ProposalSideFilterComponent", () => {
     };
     mockRoute = { snapshot: { queryParams: {} } };
     mockRouter = { navigate: jasmine.createSpy("navigate") };
+    const getConfig = () => ({ checkBoxFilterClickTrigger: false });
 
     await TestBed.configureTestingModule({
       imports: [SharedScicatFrontendModule],
@@ -35,6 +37,7 @@ describe("ProposalSideFilterComponent", () => {
         { provide: ActivatedRoute, useValue: mockRoute },
         { provide: Router, useValue: mockRouter },
         { provide: TranslateService, useValue: { instant: (k: string) => k } },
+        { provide: AppConfigService, useValue: { getConfig } },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
@@ -144,4 +147,12 @@ describe("ProposalSideFilterComponent", () => {
     tick(0);
     expect(component.clearFilters).toBeFalse();
   }));
+
+  it("should call applyFilters on setFilter if checkBoxFilterClickTrigger is true", () => {
+    component.appConfig.checkBoxFilterClickTrigger = true;
+
+    spyOn(component, "applyFilters");
+    component.setFilter("proposalId", ["test123"]);
+    expect(component.applyFilters).toHaveBeenCalled();
+  });
 });

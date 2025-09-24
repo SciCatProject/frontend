@@ -142,7 +142,7 @@ export class SharedFilterComponent implements OnChanges {
   }
 
   /** Checkbox filter helpers */
-  private filteredFacetCounts(): FacetItem[] {
+  filteredFacetCounts(): FacetItem[] {
     const term = (this.filterForm.get("textField")?.value ?? "")
       .toLowerCase()
       .trim();
