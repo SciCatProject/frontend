@@ -49,6 +49,7 @@ export interface AbstractField {
   widthUnit?: "px" | "%" /* width unit */;
   style?: any /* private property used only in html */;
   header?: string /* The title of the column */;
+  tooltip?: string /* The tooltip of the column */;
   isKey?: boolean;
   inlineEdit?: boolean;
   display?: FieldDisplay /* Hide and visible this column */;

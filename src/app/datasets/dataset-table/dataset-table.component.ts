@@ -383,6 +383,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           display: column.enabled ? "visible" : "hidden",
           width: column.width,
           type: column.type,
+          format: column.format,
+          tooltip: column.tooltip,
         };
 
         if (column.name === "runNumber" && column.type !== "custom") {

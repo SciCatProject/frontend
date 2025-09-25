@@ -110,7 +110,8 @@
           <div
             mat-sort-header
             [matTooltip]="
-              column.header || column.name | translate: localization
+              column.tooltip || column.header || column.name
+                | translate: localization
             "
             matTooltipClass="cell-tooltip"
             [disabled]="column.sort === 'none'"

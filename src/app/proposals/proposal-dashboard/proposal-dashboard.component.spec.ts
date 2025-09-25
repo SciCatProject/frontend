@@ -34,7 +34,7 @@ describe("ProposalDashboardComponent", () => {
       {
         key: "pi_lastname",
         type: "text",
-        description: "Filter by First name of the Principal Investigator",
+        description: "Filter by Last name of the Principal Investigator",
         enabled: true,
       },
       {

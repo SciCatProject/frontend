@@ -27,7 +27,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
       key: "instrumentIds",
       label: "Instrument",
       type: "checkbox",
-      description: "Filter by instrument ofthe proposal",
+      description: "Filter by instrument of the proposal",
       enabled: true,
     },
     {

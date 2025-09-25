@@ -18,6 +18,7 @@ export interface TableColumn {
   type: "standard" | "custom" | "date" | "hoverContent";
   enabled: boolean;
   format?: string;
+  tooltip?: string;
   width?: number;
 }
 
