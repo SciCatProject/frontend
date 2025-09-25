@@ -5,7 +5,7 @@ import {
   AppConfigService,
   HelpMessages,
 } from "app-config.service";
-import { of } from "rxjs";
+import { Observable, of } from "rxjs";
 import { MockHttp } from "shared/MockStubs";
 
 const appConfig: AppConfigInterface = {
@@ -285,6 +285,47 @@ describe("AppConfigService", () => {
   });
 
   describe("#getConfig()", () => {
+    const mockConfigResponses: Record<string, object> = {
+      "/assets/config.json": {
+        accessTokenPrefix: "",
+        lbBaseURL: "http://127.0.0.1:3000",
+        gettingStarted: null,
+        mainMenu: { nonAuthenticatedUser: { datasets: true } },
+      },
+      "/assets/config.0.json": { accessTokenPrefix: "Bearer " },
+      "/assets/config.override.json": {
+        gettingStarted: "aGettingStarted",
+        addDatasetEnabled: true,
+        mainMenu: { nonAuthenticatedUser: { files: true } },
+      },
+      "/assets/config.override.0.json": { siteTitle: "Test title" },
+    };
+
+    const mergedConfig = {
+      accessTokenPrefix: "Bearer ",
+      lbBaseURL: "http://127.0.0.1:3000",
+      gettingStarted: "aGettingStarted",
+      addDatasetEnabled: true,
+      siteTitle: "Test title",
+      mainMenu: { nonAuthenticatedUser: { datasets: true, files: true } },
+    };
+
+    const mockHttpGet = (backendError = false) => {
+      spyOn(service["http"], "get").and.callFake(
+        (url: string): Observable<any> => {
+          if (url === "/api/v3/admin/config") {
+            if (backendError) {
+              return new Observable((sub) =>
+                sub.error(new Error("No config in backend")),
+              );
+            }
+            return of(mergedConfig);
+          }
+          return of(mockConfigResponses[url] || {});
+        },
+      );
+    };
+
     it("should return the AppConfig object", async () => {
       spyOn(service["http"], "get").and.returnValue(of(appConfig));
       await service.loadAppConfig();
@@ -292,6 +333,30 @@ describe("AppConfigService", () => {
       const config = service.getConfig();
 
       expect(config).toEqual(appConfig);
+    });
+
+    it("should merge multiple config JSONs", async () => {
+      mockHttpGet();
+      const config = await service["mergeConfig"]();
+      expect(config).toEqual(mergedConfig);
+    });
+
+    it("should return the merged appConfig", async () => {
+      mockHttpGet(true);
+      await service.loadAppConfig();
+
+      expect(service["appConfig"]).toEqual(
+        jasmine.objectContaining(mergedConfig),
+      );
+      expect(service["http"].get).toHaveBeenCalledWith("/api/v3/admin/config");
+      expect(service["http"].get).toHaveBeenCalledWith("/assets/config.json");
+      expect(service["http"].get).toHaveBeenCalledWith("/assets/config.0.json");
+      expect(service["http"].get).toHaveBeenCalledWith(
+        "/assets/config.override.json",
+      );
+      expect(service["http"].get).toHaveBeenCalledWith(
+        "/assets/config.override.0.json",
+      );
     });
   });
 });

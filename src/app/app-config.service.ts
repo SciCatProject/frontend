@@ -1,6 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { timeout } from "rxjs/operators";
+import { merge } from "lodash-es";
+import { firstValueFrom, forkJoin, of } from "rxjs";
+import { catchError, timeout } from "rxjs/operators";
 import {
   DatasetDetailComponentConfig,
   DatasetsListSettings,
@@ -158,8 +160,34 @@ function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
 })
 export class AppConfigService {
   private appConfig: object = {};
+  private configsSize = 4;
 
   constructor(private http: HttpClient) {}
+
+  private async loadAndMerge(files: string[]): Promise<object> {
+    const requests = files.map((f) =>
+      this.http.get(`/assets/${f}`).pipe(catchError(() => of({}))),
+    );
+    const configs = await firstValueFrom(forkJoin(requests));
+    return configs.reduce((acc, cfg) => merge(acc, cfg), {});
+  }
+
+  private async mergeConfig(): Promise<object> {
+    const normalConfigFiles = Array.from(
+      { length: this.configsSize },
+      (_, i) => `config.${i}.json`,
+    );
+    const overrideConfigFiles = Array.from(
+      { length: this.configsSize },
+      (_, i) => `config.override.${i}.json`,
+    );
+    return await this.loadAndMerge([
+      "config.json",
+      ...normalConfigFiles,
+      "config.override.json",
+      ...overrideConfigFiles,
+    ]);
+  }
 
   async loadAppConfig(): Promise<void> {
     try {
@@ -171,7 +199,7 @@ export class AppConfigService {
     } catch (err) {
       console.log("No config available in backend, trying with local config.");
       try {
-        const config = await this.http.get("/assets/config.json").toPromise();
+        const config = await this.mergeConfig();
         this.appConfig = Object.assign({}, this.appConfig, config);
       } catch (err) {
         console.error("No config provided.");
