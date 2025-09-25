@@ -11,7 +11,7 @@ import {
   IngestionRequestInformation,
   IngestorHelper,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
-import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
+import { IngestorMetadataEditorHelper } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 import {
   selectIngestionObject,
   selectIngestorRenderView,
@@ -152,8 +152,14 @@ export class IngestorCustomMetadataDialogPageComponent
   }
 
   customMetadataErrorsHandler(errors: any[]) {
-    this.isCustomMetadataOk = errors.length === 0;
-    this.customMetadataErrors = convertJSONFormsErrorToString(errors);
+    const result = IngestorMetadataEditorHelper.processMetadataErrors(
+      errors,
+      this.customMetadataSchema,
+      this.activeRenderView
+    );
+    
+    this.isCustomMetadataOk = result.isValid;
+    this.customMetadataErrors = result.errorString;
     this.validateNextButton();
     this.cdr.detectChanges();
   }

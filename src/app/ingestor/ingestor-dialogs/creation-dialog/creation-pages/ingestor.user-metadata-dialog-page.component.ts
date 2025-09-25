@@ -12,7 +12,7 @@ import {
   IngestionRequestInformation,
   IngestorHelper,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
-import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
+import { IngestorMetadataEditorHelper } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 import {
   selectIngestionObject,
   selectIngestorRenderView,
@@ -157,22 +157,40 @@ export class IngestorUserMetadataDialogPageComponent
   }
 
   scicatHeaderErrorsHandler(errors: any[]) {
-    this.isSciCatHeaderOk = errors.length === 0;
-    this.scicatHeaderErrors = convertJSONFormsErrorToString(errors);
+    const result = IngestorMetadataEditorHelper.processMetadataErrors(
+      errors,
+      this.scicatHeaderSchema,
+      this.activeRenderView
+    );
+    
+    this.isSciCatHeaderOk = result.isValid;
+    this.scicatHeaderErrors = result.errorString;
     this.validateNextButton();
     this.cdr.detectChanges();
   }
 
   organizationalErrorsHandler(errors: any[]) {
-    this.isOrganizationalMetadataOk = errors.length === 0;
-    this.organizationalErrors = convertJSONFormsErrorToString(errors);
+    const result = IngestorMetadataEditorHelper.processMetadataErrors(
+      errors,
+      this.metadataSchemaOrganizational,
+      this.activeRenderView
+    );
+    
+    this.isOrganizationalMetadataOk = result.isValid;
+    this.organizationalErrors = result.errorString;
     this.validateNextButton();
     this.cdr.detectChanges();
   }
 
   sampleErrorsHandler(errors: any[]) {
-    this.isSampleInformationOk = errors.length === 0;
-    this.sampleErrors = convertJSONFormsErrorToString(errors);
+    const result = IngestorMetadataEditorHelper.processMetadataErrors(
+      errors,
+      this.metadataSchemaSample,
+      this.activeRenderView
+    );
+    
+    this.isSampleInformationOk = result.isValid;
+    this.sampleErrors = result.errorString;
     this.validateNextButton();
     this.cdr.detectChanges();
   }
