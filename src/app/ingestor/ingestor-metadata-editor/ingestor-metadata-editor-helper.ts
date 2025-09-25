@@ -153,67 +153,6 @@ export class IngestorMetadataEditorHelper {
         errorString: convertJSONFormsErrorToString(filteredErrors)
       };
     }
-
-/**
- * Removes SI-related fields from a JSON schema
- * @param schema - The original JSON schema
- * @returns A new schema with SI fields removed
- */
-static removeSIFieldsFromSchema(schema: JsonSchema): JsonSchema {
-  if (!schema || typeof schema !== 'object') {
-    return schema;
-  }
-
-  // Deep clone the schema to avoid mutating the original
-  const cleanedSchema = JSON.parse(JSON.stringify(schema));
-
-  // Recursively clean properties
-  if (cleanedSchema.properties) {
-    cleanedSchema.properties = this.cleanProperties(cleanedSchema.properties);
-  }
-
-  // Clean required array if it exists
-  if (cleanedSchema.required && Array.isArray(cleanedSchema.required)) {
-    cleanedSchema.required = cleanedSchema.required.filter(
-      (field: string) => !this.isSIField(field)
-    );
-  }
-
-  return cleanedSchema;
-}
-
-private static cleanProperties(properties: any): any {
-  const cleaned = {};
-  
-  for (const [key, value] of Object.entries(properties)) {
-    // Skip SI fields entirely
-    if (this.isSIField(key)) {
-      continue;
-    }
-
-    // If it's an object with nested properties, recursively clean it
-    if (value && typeof value === 'object' && (value as any).properties) {
-      cleaned[key] = {
-        ...value,
-        properties: this.cleanProperties((value as any).properties),
-        // Also clean nested required arrays
-        ...(((value as any).required && Array.isArray((value as any).required)) && {
-          required: (value as any).required.filter((field: string) => !this.isSIField(field))
-        })
-      };
-    } else {
-      cleaned[key] = value;
-    }
-  }
-
-  return cleaned;
-}
-
-private static isSIField(fieldName: string): boolean {
-  // Define patterns for SI fields
-  const siPatterns = ['unitSI', 'valueSI'];
-  return siPatterns.some(pattern => fieldName.includes(pattern));
-}
 }
 
 export const convertJSONFormsErrorToString = (error: any): string => {

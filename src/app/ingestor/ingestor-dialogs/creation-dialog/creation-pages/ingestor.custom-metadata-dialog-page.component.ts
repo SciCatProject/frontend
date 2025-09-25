@@ -82,7 +82,8 @@ export class IngestorCustomMetadataDialogPageComponent
                 delete customSchema[key];
               });
           }
-          this.customMetadataSchema = IngestorMetadataEditorHelper.removeSIFieldsFromSchema(customSchema);
+
+          this.customMetadataSchema = customSchema;
         }
       }),
     );
