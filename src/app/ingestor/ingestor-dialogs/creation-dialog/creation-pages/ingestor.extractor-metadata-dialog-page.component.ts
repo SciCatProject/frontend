@@ -12,7 +12,7 @@ import {
   IngestionRequestInformation,
   IngestorHelper,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
-import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
+import { IngestorMetadataEditorHelper } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 import { Store } from "@ngrx/store";
 import {
   ingestionObjectAPIInformation,
@@ -89,8 +89,8 @@ export class IngestorExtractorMetadataDialogPageComponent
             this.createNewTransferData.selectedResolvedDecodedSchema.properties
               .acquisition;
 
-          this.metadataSchemaInstrument = instrumentSchema;
-          this.metadataSchemaAcquisition = acqusitionSchema;
+          this.metadataSchemaInstrument = IngestorMetadataEditorHelper.removeSIFieldsFromSchema(instrumentSchema);
+          this.metadataSchemaAcquisition = IngestorMetadataEditorHelper.removeSIFieldsFromSchema(acqusitionSchema);
         }
       }),
     );
@@ -180,15 +180,27 @@ export class IngestorExtractorMetadataDialogPageComponent
   }
 
   instrumentErrorsHandler(errors: any[]) {
-    this.isInstrumentMetadataOk = errors.length === 0;
-    this.instrumentErrors = convertJSONFormsErrorToString(errors);
+    const result = IngestorMetadataEditorHelper.processMetadataErrors(
+      errors,
+      this.metadataSchemaInstrument,
+      this.activeRenderView
+    );
+    
+    this.isInstrumentMetadataOk = result.isValid;
+    this.instrumentErrors = result.errorString;
     this.validateNextButton();
     this.cdr.detectChanges();
   }
 
   acquisitionErrorsHandler(errors: any[]) {
-    this.isAcquisitionMetadataOk = errors.length === 0;
-    this.acquisitionErrors = convertJSONFormsErrorToString(errors);
+    const result = IngestorMetadataEditorHelper.processMetadataErrors(
+      errors,
+      this.metadataSchemaAcquisition,
+      this.activeRenderView
+    );
+    
+    this.isAcquisitionMetadataOk = result.isValid;
+    this.acquisitionErrors = result.errorString;
     this.validateNextButton();
     this.cdr.detectChanges();
   }

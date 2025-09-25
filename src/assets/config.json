@@ -1,5 +1,5 @@
-
 {
+  "accessTokenPrefix": "Bearer ",
   "addDatasetEnabled": true,
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
@@ -9,6 +9,7 @@
   "editMetadataEnabled": true,
   "editPublishedData": true,
   "addSampleEnabled": true,
+  "externalAuthEndpoint": "/auth/msad",
   "facility": "Local",
   "siteIcon": "site-header-logo.png",
   "sitetitle": "",
@@ -23,65 +24,23 @@
   "fileDownloadEnabled": true,
   "gettingStarted": null,
   "ingestManual": null,
-  "jobsEnabled": false,
+  "jobsEnabled": true,
   "jsonMetadataEnabled": true,
-  "jupyterHubUrl": "",
-  "landingPage": "",
-  "lbBaseURL": "http://backend.localhost",
-  
-  "accessTokenPrefix": "Bearer ",
-  "externalAuthEndpoint": "/api/v3/auth/ldap",
-  "datasetOneDepIntegration": true,
-  "depositorURL": "http://127.0.0.1:8080",
-  "ingestorEnabled": true,
-  "ingestorMode": "transfer",
-  "ingestorAutodiscoveryOptions": [
-    {
-      "mailDomain": "unibe.ch",
-      "description": "University of Bern",
-      "facilityBackend": "http://localhost:8888"
-    }
-  ],
-
-  "localColumns": [
-    {
-      "name": "datasetName",
-      "order": 1,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "type",
-      "order": 2,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "creationTime",
-      "order": 3,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "proposalId",
-      "order": 6,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "image",
-      "order": 7,
-      "type": "standard",
-      "enabled": true
-    },
-    {
-      "name": "sourceFolder",
-      "order": 8,
-      "type": "standard",
-      "enabled": true
-    }
-  ],
-  "logbookEnabled": false,
+  "jupyterHubUrl": "https://jupyterhub.esss.lu.se/",
+  "landingPage": "doi.ess.eu/detail/",
+  "lbBaseURL": "http://127.0.0.1:3000",
+  "ingestorComponent":{
+    "ingestorEnabled": true,
+    "ingestorInTransferMode": true,
+    "ingestorAutodiscoveryOptions": [
+      {
+        "mailDomain": "unibe.ch",
+        "description": "University of Bern",
+        "facilityBackend": "http://localhost:8888"
+      }
+    ]
+  },
+  "logbookEnabled": true,
   "loginFormEnabled": true,
   "metadataPreviewEnabled": true,
   "metadataStructure": "",
@@ -90,13 +49,13 @@
   "oAuth2Endpoints": [
     {
       "authURL": "api/v3/auth/oidc",
-      "displayText": "Login with OIDC"
+      "displayText": "ESS One Identity"
     }
   ],
   "policiesEnabled": true,
   "retrieveDestinations": [],
-  "riotBaseUrl": "",
-  "scienceSearchEnabled": true,
+  "riotBaseUrl": "http://scichat.swap.ess.eu",
+  "scienceSearchEnabled": false,
   "scienceSearchUnitsEnabled": true,
   "searchPublicDataEnabled": true,
   "searchSamples": true,

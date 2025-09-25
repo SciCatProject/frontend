@@ -49,7 +49,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
 
   jobs: JobsTableData[] = [];
   profile: any;
-  username = "";
+  email = "";
 
   subscriptions: Subscription[] = [];
 
@@ -127,7 +127,7 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
         break;
       }
       case JobViewMode.myJobs: {
-        viewMode = { createdBy: this.username };
+        viewMode = { emailJobInitiator: this.email };
         break;
       }
       default: {
@@ -152,11 +152,11 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     // map column names back to original names
     switch (event.active) {
       case "statusMessage": {
-        event.active = "statusMessage";
+        event.active = "jobStatusMessage";
         break;
       }
       case "initiator": {
-        event.active = "createdBy";
+        event.active = "emailJobInitiator";
         break;
       }
       default: {
@@ -179,13 +179,13 @@ export class JobsDashboardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.store.select(selectCurrentUser).subscribe((current) => {
         if (current) {
-          this.username = current.username;
+          this.email = current.email;
 
           if (!current.realm) {
             this.store.select(selectProfile).subscribe((profile) => {
               if (profile) {
                 this.profile = profile;
-                this.username = profile.username;
+                this.email = profile.email;
               }
               this.onModeChange(JobViewMode.myJobs);
             });

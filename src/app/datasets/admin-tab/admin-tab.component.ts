@@ -65,7 +65,7 @@ export class AdminTabComponent implements OnInit, OnDestroy {
               type: "reset",
               datasetList: [fileObj],
               jobParams: {},
-              jobStatusMessage: "jobSubmitted",
+              jobStatusMessage: "jobCreated",
             };
             job.jobParams["username"] = user.username;
             this.store.dispatch(submitJobAction({ job }));
@@ -73,7 +73,6 @@ export class AdminTabComponent implements OnInit, OnDestroy {
         });
     }
   }
-
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => {
       sub.unsubscribe();

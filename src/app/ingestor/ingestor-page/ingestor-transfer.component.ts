@@ -215,7 +215,7 @@ export class IngestorTransferComponent implements OnInit, OnDestroy {
           // backendUrl should not end with a slash
           const facilityBackendUrlCleaned = backendUrl.replace(/\/$/, "");
 
-          await this.store.dispatch(
+          this.store.dispatch(
             fromActions.setIngestorEndpoint({
               ingestorEndpoint: facilityBackendUrlCleaned,
             }),
@@ -350,7 +350,7 @@ export class IngestorTransferComponent implements OnInit, OnDestroy {
       const facility = facilityEmail.split("@")[1] as string;
 
       const facilityMailDomainName = facility.toLowerCase();
-      const discoveryList = this.appConfig.ingestorAutodiscoveryOptions;
+      const discoveryList = this.appConfig.ingestorComponent.ingestorAutodiscoveryOptions;
 
       if (discoveryList) {
         for (const discovery of discoveryList) {

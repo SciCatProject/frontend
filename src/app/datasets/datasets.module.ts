@@ -80,21 +80,8 @@ import { DatasetsFilterSettingsComponent } from "./datasets-filter/settings/data
 import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
 import { userReducer } from "state-management/reducers/user.reducer";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { OneDepComponent } from "./depositor/onedep/onedep.component";
-import { OrcidFormatterDirective } from "./depositor/onedep/onedep.directive";
-import { EmpiarComponent } from "./depositor/empiar/empiar.component";
-import { OneDepEffects } from "state-management/effects/depositor.effects";
-import { DepositorComponent } from "./depositor/depositor.component";
-import { DepositorWrapperComponent } from "./depositor/methodWrapper.component"
-import { QuestionnaireComponent } from "./depositor/empiar/questionnaire/questionnaire.component";
-import { onedepReducer } from "state-management/reducers/onedep.reducer";
-import { empiarReducer } from "state-management/reducers/empiar.reducer";
 import { JsonFormsModule } from "@jsonforms/angular";
 import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
-import { CustomEnumRendererComponent } from "./depositor/empiar/customRenderers/enumRenderer";
-import { CustomAuthorNameControlComponent } from "./depositor/empiar/customRenderers/authorRenderer";
-import { CustomReferenceControlComponent } from "./depositor/empiar/customRenderers/referenceRenderer";
-import { CustomSemiEnumControlComponent } from "./depositor/empiar/customRenderers/imagesSetRenderer";
 import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
@@ -151,7 +138,6 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
       SampleEffects,
       PublishedDataEffects,
       LogbookEffects,
-      OneDepEffects,
     ]),
     StoreModule.forFeature("datasets", datasetsReducer),
     StoreModule.forFeature("instruments", instrumentsReducer),
@@ -161,8 +147,6 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
     StoreModule.forFeature("publishedData", publishedDataReducer),
     StoreModule.forFeature("logbooks", logbooksReducer),
     StoreModule.forFeature("users", userReducer),
-    StoreModule.forFeature("onedep", onedepReducer),
-    StoreModule.forFeature("empiar", empiarReducer),
     LogbooksModule,
     MatMenuModule,
     CdkDropList,
@@ -200,16 +184,6 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
     DatafilesActionsComponent,
     DatafilesActionComponent,
     DatasetsFilterSettingsComponent,
-    DepositorComponent,
-    DepositorWrapperComponent,
-    EmpiarComponent,
-    OneDepComponent,
-    OrcidFormatterDirective,
-    QuestionnaireComponent,
-    CustomEnumRendererComponent,
-    CustomAuthorNameControlComponent,
-    CustomReferenceControlComponent,
-    CustomSemiEnumControlComponent,
   ],
   providers: [
     ArchivingService,

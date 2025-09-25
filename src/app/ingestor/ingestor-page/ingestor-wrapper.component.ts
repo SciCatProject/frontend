@@ -1,32 +1,28 @@
 import { Component, OnInit } from "@angular/core";
 import { AppConfigService } from "app-config.service";
 import { IngestorMode } from "./helper/ingestor.component-helper";
+import { IngestorTransferComponent } from "./ingestor-transfer.component";
+import { IngestorCreationComponent } from "./ingestor-creation.component";
 
 @Component({
   selector: "ingestor",
   styleUrls: ["./ingestor.component.scss"],
   template: `
     <div>
-      <ingestor-transfer *ngIf="ingestorMode === 'transfer'" />
-      <ingestor-creation *ngIf="ingestorMode === 'creation'" />
+      <ng-container *ngComponentOutlet="getIngestorComponent()" />
     </div>
   `,
   standalone: false,
 })
-export class IngestorComponent implements OnInit {
+export class IngestorWrapperComponent{
   appConfig = this.appConfigService.getConfig();
   ingestorMode: IngestorMode = "creation";
 
   constructor(public appConfigService: AppConfigService) {}
-
-  ngOnInit() {
-    // Render the ingestor component based on the mode
-    const mode = this.appConfig.ingestorMode;
-
-    if (mode === "transfer") {
-      this.ingestorMode = "transfer";
-    } else {
-      this.ingestorMode = "creation";
-    }
+  getIngestorComponent() {
+      return this.appConfigService.getConfig().ingestorComponent
+        ?.ingestorInTransferMode
+        ? IngestorTransferComponent
+        : IngestorCreationComponent;
   }
 }
