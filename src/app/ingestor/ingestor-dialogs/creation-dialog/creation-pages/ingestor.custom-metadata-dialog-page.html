@@ -33,7 +33,8 @@
     </mat-card-header>
     <mat-card-content *ngIf="isCardContentVisible.scientific">
       <app-metadata-editor #customMetadataEditor
-        *ngIf="!updateEditorFromThirdParty" [schema]="customMetadataSchema"
+        *ngIf="!updateEditorFromThirdParty" 
+        [schema]="customMetadataSchema"
         [renderView]="activeRenderView"
         [data]="createNewTransferData.customMetaData"
         (dataChange)="onDataChangeCustomMetadata($event)"

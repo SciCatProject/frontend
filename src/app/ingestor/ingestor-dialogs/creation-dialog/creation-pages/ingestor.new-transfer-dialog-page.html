@@ -40,7 +40,8 @@
     </mat-card-header>
     <mat-card-content *ngIf="isCardContentVisible.scicat">
       <app-metadata-editor #scicatHeaderEditor
-        *ngIf="!updateEditorFromThirdParty" [schema]="scicatHeaderSchema"
+        *ngIf="!updateEditorFromThirdParty" 
+        [schema]="scicatHeaderSchema"
         [renderView]="activeRenderView"
         [data]="createNewTransferData.scicatHeader"
         (dataChange)="onDataChangeUserScicatHeader($event)"

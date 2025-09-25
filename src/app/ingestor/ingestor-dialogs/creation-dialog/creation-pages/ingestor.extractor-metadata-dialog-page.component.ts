@@ -89,8 +89,8 @@ export class IngestorExtractorMetadataDialogPageComponent
             this.createNewTransferData.selectedResolvedDecodedSchema.properties
               .acquisition;
 
-          this.metadataSchemaInstrument = instrumentSchema;
-          this.metadataSchemaAcquisition = acqusitionSchema;
+          this.metadataSchemaInstrument = IngestorMetadataEditorHelper.removeSIFieldsFromSchema(instrumentSchema);
+          this.metadataSchemaAcquisition = IngestorMetadataEditorHelper.removeSIFieldsFromSchema(acqusitionSchema);
         }
       }),
     );

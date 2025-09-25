@@ -79,7 +79,7 @@ export class IngestorUserMetadataDialogPageComponent
           this.metadataSchemaOrganizational =
             this.createNewTransferData.selectedResolvedDecodedSchema.properties.organizational;
           this.metadataSchemaSample =
-            this.createNewTransferData.selectedResolvedDecodedSchema.properties.sample;
+            IngestorMetadataEditorHelper.removeSIFieldsFromSchema(this.createNewTransferData.selectedResolvedDecodedSchema.properties.sample);
           this.scicatHeaderSchema = getJsonSchemaFromDto();
         }
       }),
