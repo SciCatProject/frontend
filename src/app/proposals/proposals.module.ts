@@ -36,15 +36,21 @@ import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
 import { ProposalLogbookComponent } from "./proposal-logbook/proposal-logbook.component";
 import { RelatedProposalsComponent } from "./related-proposals/related-proposals.component";
 import { ProposalDatasetsComponent } from "./proposal-datasets/proposal-datasets.component";
-import { TranslateModule } from "@ngx-translate/core";
 import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { ProposalSearchBarComponent } from "./proposal-filters/search-bar/proposal-search-bar.component";
+import { PipesModule } from "shared/pipes/pipes.module";
+import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
+import { InstrumentEffects } from "state-management/effects/instruments.effects";
 
 @NgModule({
   imports: [
     CommonModule,
-    EffectsModule.forFeature([ProposalEffects, LogbookEffects]),
+    EffectsModule.forFeature([
+      ProposalEffects,
+      LogbookEffects,
+      InstrumentEffects,
+    ]),
     FlexLayoutModule,
     LogbooksModule,
     MatButtonModule,
@@ -63,9 +69,10 @@ import { ProposalSearchBarComponent } from "./proposal-filters/search-bar/propos
     NgxJsonViewerModule,
     RouterModule,
     SharedScicatFrontendModule,
+    PipesModule,
     StoreModule.forFeature("proposals", proposalsReducer),
     StoreModule.forFeature("logbooks", logbooksReducer),
-    TranslateModule,
+    StoreModule.forFeature("instruments", instrumentsReducer),
   ],
   declarations: [
     ProposalDashboardComponent,

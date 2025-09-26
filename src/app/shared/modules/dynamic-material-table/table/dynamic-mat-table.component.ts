@@ -55,6 +55,7 @@ import { Subject, Subscription } from "rxjs";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { ContextMenuItem } from "../models/context-menu.model";
 import {
+  ConnectedPosition,
   Overlay,
   OverlayContainer,
   OverlayPositionBuilder,
@@ -76,6 +77,7 @@ import {
   TableMenuActionChange,
 } from "../models/table-menu.model";
 import { TableDataSource } from "../cores/table-data-source";
+import { DatePipe } from "@angular/common";
 
 export interface IDynamicCell {
   row: TableRow;
@@ -191,12 +193,73 @@ export class DynamicMatTableComponent<T extends TableRow>
   extends TableCoreDirective<T>
   implements OnInit, AfterViewInit, OnDestroy
 {
+  // Private fields
   private dragDropData = { dragColumnIndex: -1, dropColumnIndex: -1 };
   private eventsSubscription: Subscription;
-  currentContextMenuSender: any = {};
-  globalSearchUpdate = new Subject<string>();
 
+  // Public fields
+  globalSearchUpdate = new Subject<string>();
+  init = false;
+  hoverKey: string | null = null;
+  currentContextMenuSender: any = {};
+
+  @HostBinding("style.height.px") height = null;
+
+  // View/Content refs
+  @ViewChild("tooltip") tooltipRef!: TemplateRef<any>;
+  @ViewChild(MatMenuTrigger) contextMenu: MatMenuTrigger;
+  public contextMenuPosition = { x: "0px", y: "0px" };
+  @ViewChild("printRef", { static: true }) printRef!: TemplateRef<any>;
+  @ViewChild("printContentRef", { static: true }) printContentRef!: ElementRef;
   @ViewChild("tbl", { static: true }) tbl: ElementRef;
+
+  @ContentChildren(HeaderFilterComponent)
+
+  // Other public fields
+  headerFilterList!: QueryList<HeaderFilterComponent>;
+
+  printing = true;
+  printTemplate: TemplateRef<any> = null;
+  public resizeColumn: ResizeColumn = new ResizeColumn();
+  /* mouse resize */
+  resizableMousemove: () => void;
+  resizableMouseup: () => void;
+  /* Tooltip */
+  overlayRef: OverlayRef = null;
+  /** Overlay positions for hover */
+  overlayPositions: ConnectedPosition[] = [
+    {
+      originX: "center",
+      originY: "top",
+      overlayX: "center",
+      overlayY: "bottom",
+      offsetY: -4,
+    },
+    {
+      originX: "center",
+      originY: "bottom",
+      overlayX: "center",
+      overlayY: "top",
+      offsetY: 4,
+    },
+    {
+      originX: "start",
+      originY: "center",
+      overlayX: "end",
+      overlayY: "center",
+      offsetX: -4,
+    },
+    {
+      originX: "end",
+      originY: "center",
+      overlayX: "start",
+      overlayY: "center",
+      offsetX: 4,
+    },
+  ];
+
+  standardDataSource: TableDataSource<T>;
+
   @Input()
   get setting() {
     return this.tableSetting;
@@ -236,28 +299,6 @@ export class DynamicMatTableComponent<T extends TableRow>
       this.setDisplayedColumns();
     }
   }
-  init = false;
-
-  @HostBinding("style.height.px") height = null;
-
-  @ViewChild("tooltip") tooltipRef!: TemplateRef<any>;
-  @ViewChild(MatMenuTrigger) contextMenu: MatMenuTrigger;
-  public contextMenuPosition = { x: "0px", y: "0px" };
-  @ViewChild("printRef", { static: true }) printRef!: TemplateRef<any>;
-  @ViewChild("printContentRef", { static: true }) printContentRef!: ElementRef;
-  @ContentChildren(HeaderFilterComponent)
-  headerFilterList!: QueryList<HeaderFilterComponent>;
-
-  printing = true;
-  printTemplate: TemplateRef<any> = null;
-  public resizeColumn: ResizeColumn = new ResizeColumn();
-  /* mouse resize */
-  resizableMousemove: () => void;
-  resizableMouseup: () => void;
-  /* Tooltip */
-  overlayRef: OverlayRef = null;
-
-  standardDataSource: TableDataSource<T>;
 
   @Input() emptyMessage = "No data available";
   @Input() emptyIcon = "info";
@@ -271,8 +312,10 @@ export class DynamicMatTableComponent<T extends TableRow>
     private overlayContainer: OverlayContainer,
     private overlayPositionBuilder: OverlayPositionBuilder,
     public readonly config: TableSetting,
+    private datePipe: DatePipe,
   ) {
     super(tableService, cdr, config);
+
     this.standardDataSource = new TableDataSource<T>([]);
     this.overlayContainer
       .getContainerElement()
@@ -324,6 +367,8 @@ export class DynamicMatTableComponent<T extends TableRow>
         this.globalTextSearch_onChange(value);
       });
   }
+
+  makeKey = (row: any, col: any) => (row?.id ?? row) + "::" + col?.name;
 
   ngAfterViewInit(): void {
     this.standardDataSource.paginator = this.paginator;
@@ -769,6 +814,7 @@ export class DynamicMatTableComponent<T extends TableRow>
       );
       this.printConfig.data = this.tvsDataSource.filteredData;
       const params = this.tvsDataSource.toTranslate();
+
       this.printConfig.tablePrintParameters = [];
       params.forEach((item) => {
         this.printConfig.tablePrintParameters.push(item);
@@ -818,8 +864,6 @@ export class DynamicMatTableComponent<T extends TableRow>
   reload_onClick() {
     this.onTableEvent.emit({ sender: null, event: TableEventType.ReloadData });
   }
-
-  /////////////////////////////////////////////////////////////////
 
   onResizeColumn(event: MouseEvent, index: number, type: "left" | "right") {
     this.resizeColumn.resizeHandler = type;
@@ -967,6 +1011,39 @@ export class DynamicMatTableComponent<T extends TableRow>
       event: RowEventType.RowClick,
       sender: { row: row, e: e },
     });
+  }
+
+  getColumnValue(data: Record<string, unknown>, column: TableField<any>) {
+    const fieldName = column.name;
+
+    // get nested value if name has dots
+    const value = fieldName.includes(".")
+      ? fieldName.split(".").reduce((acc, key) => acc?.[key], data)
+      : data[fieldName];
+
+    if (!value) {
+      return "";
+    }
+
+    // If column format for date is provided, format the value
+    // Currently only supports date formatting, if there are other types in the future,
+    // we should refactor this to a more generic solution
+    if (column.type === "date") {
+      try {
+        if (!column.format) {
+          console.log(
+            "Default date format will be applied for column:",
+            column,
+          );
+        }
+        return this.datePipe.transform(value as string, column.format);
+      } catch (e) {
+        console.error("Date format error:", e);
+        return value;
+      }
+    }
+
+    return value;
   }
 
   /************************************ Drag & Drop Column *******************************************/

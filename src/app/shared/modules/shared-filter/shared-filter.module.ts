@@ -4,7 +4,6 @@ import { MatInputModule } from "@angular/material/input";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { CommonModule } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
-import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { SharedFilterComponent } from "./shared-filter.component";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -13,6 +12,11 @@ import { MultiSelectFilterComponent } from "../filters/multiselect-filter.compon
 import { MatOptionModule } from "@angular/material/core";
 import { MatChipsModule } from "@angular/material/chips";
 import { NgxNumericRangeFormFieldModule } from "../numeric-range/ngx-numeric-range-form-field.module";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatButtonModule } from "@angular/material/button";
+import { PipesModule } from "shared/pipes/pipes.module";
 
 @NgModule({
   declarations: [SharedFilterComponent, MultiSelectFilterComponent],
@@ -25,7 +29,12 @@ import { NgxNumericRangeFormFieldModule } from "../numeric-range/ngx-numeric-ran
     ReactiveFormsModule,
     MatFormFieldModule,
     MatOptionModule,
+    MatDividerModule,
     MatAutocompleteModule,
+    MatCheckboxModule,
+    MatDividerModule,
+    MatButtonModule,
+    PipesModule,
     MatChipsModule,
     NgxNumericRangeFormFieldModule,
   ],

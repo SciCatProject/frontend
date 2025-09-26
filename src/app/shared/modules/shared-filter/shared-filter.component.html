@@ -42,6 +42,44 @@
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>
     </ng-container>
+
+    <ng-container *ngSwitchCase="'checkbox'">
+      <ng-container *ngIf="checkboxFacetCounts?.length > 0">
+        <div class="filter-group">
+          <mat-label class="filter-title">{{
+            label | translate: localization
+          }}</mat-label>
+          <mat-form-field
+            appearance="outline"
+            class="facet-search"
+            floatLabel="always"
+          >
+            <mat-label>Type to filter</mat-label>
+            <input
+              matInput
+              type="search"
+              formControlName="textField"
+              placeholder="{{ placeholder }}"
+            />
+          </mat-form-field>
+          <div class="checkbox-list">
+            <mat-checkbox
+              *ngFor="let field of visibleFacetCounts; trackBy: trackById"
+              [checked]="
+                filterForm.get('selectedIds')!.value?.includes(field._id)
+              "
+              (change)="onToggleCheckbox(field._id, $event.checked)"
+            >
+              {{ field.label ?? field._id }} ({{ field.count }})
+            </mat-checkbox>
+          </div>
+          <div class="show-more-btn" *ngIf="hasMore">
+            <button mat-button (click)="onShowMore()">Show more...</button>
+          </div>
+        </div>
+        <mat-divider />
+      </ng-container>
+    </ng-container>
     <ng-container *ngSwitchCase="'multiSelect'">
       <multiselect-filter
         [key]="key"

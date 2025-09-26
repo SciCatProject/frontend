@@ -14,10 +14,11 @@ import { DateTime } from "luxon";
 import { Observable } from "rxjs";
 import { DateRange } from "state-management/state/proposals.store";
 import { MultiSelectFilterValue } from "../filters/multiselect-filter.component";
-import { FacetCount } from "state-management/state/datasets.store";
 import { INumericRange } from "../numeric-range/form/model/numeric-range-field.model";
 import { FilterType } from "state-management/state/user.store";
+import { toIsoUtc } from "../filters/utils";
 
+type FacetItem = { _id?: string; label?: string; count: number };
 @Component({
   selector: "shared-filter",
   templateUrl: "./shared-filter.component.html",
@@ -29,6 +30,8 @@ export class SharedFilterComponent implements OnChanges {
     begin: null,
     end: null,
   };
+  checkboxDisplaylimit = 10;
+  checkboxFacetCounts: FacetItem[] = [];
 
   filterForm = new FormGroup({
     textField: new FormControl(""),
@@ -38,6 +41,7 @@ export class SharedFilterComponent implements OnChanges {
     }),
     multiSelectField: new FormControl([]),
     numberRange: new FormControl({ min: null, max: null }),
+    selectedIds: new FormControl<string[]>([]),
   });
 
   @ViewChild("input", { static: true }) input!: ElementRef<HTMLInputElement>;
@@ -45,13 +49,16 @@ export class SharedFilterComponent implements OnChanges {
   @Input() key = "";
   @Input() label = "Filter";
   @Input() tooltip = "";
-  @Input() facetCounts$!: Observable<FacetCount[]>;
+  @Input() placeholder = "";
+  @Input() facetCounts$!: Observable<FacetItem[]>;
+  @Input() localization = "";
   @Input() currentFilter$!: Observable<string[]>;
   @Input() dispatchAction!: () => void;
   @Input() filterType: FilterType;
   @Input() prefilled: string | DateRange | string[] | INumericRange = undefined;
   @Input()
   set clear(value: boolean) {
+    this.checkboxDisplaylimit = 10;
     if (value) {
       this.filterForm.reset({
         textField: "",
@@ -61,6 +68,7 @@ export class SharedFilterComponent implements OnChanges {
   }
 
   @Output() textChange = new EventEmitter<string>();
+  @Output() checkBoxChange = new EventEmitter<string[]>();
   @Output() selectionChange = new EventEmitter<MultiSelectFilterValue>();
   @Output() numericRangeChange = new EventEmitter<INumericRange>();
   @Output() dateRangeChange = new EventEmitter<{
@@ -69,13 +77,25 @@ export class SharedFilterComponent implements OnChanges {
   }>();
 
   constructor() {}
-
+  ngOnInit() {
+    // Reset display limit whenever the text search changes
+    this.filterForm.get("textField")!.valueChanges.subscribe(() => {
+      this.checkboxDisplaylimit = 10;
+    });
+  }
   ngOnChanges(changes: SimpleChanges) {
     if (changes["prefilled"] || changes["filterType"]) {
       if (this.filterType === "text") {
         this.filterForm
           .get("textField")!
           .setValue((this.prefilled as string) || "");
+      } else if (this.filterType === "checkbox") {
+        this.facetCounts$.subscribe((facets) => {
+          this.checkboxFacetCounts = facets;
+        });
+        this.filterForm
+          .get("selectedIds")!
+          .setValue((this.prefilled as string[]) || []);
       } else if (this.filterType === "number") {
         const range = this.prefilled as unknown as INumericRange;
         this.filterForm.get("numberRange")!.setValue({
@@ -103,10 +123,13 @@ export class SharedFilterComponent implements OnChanges {
   }
 
   dateChanged(evt: MatDatepickerInputEvent<DateTime>, side: "begin" | "end") {
-    const isoDate = evt.value ? evt.value.toUTC().toISO() : null;
-    if (side === "begin") this.dateRange.begin = isoDate;
-    if (side === "end") this.dateRange.end = isoDate;
-
+    const isoDate = toIsoUtc(evt.value);
+    if (side === "begin") {
+      this.dateRange.begin = isoDate;
+    }
+    if (side === "end") {
+      this.dateRange.end = isoDate;
+    }
     this.dateRangeChange.emit(this.dateRange);
   }
 
@@ -117,4 +140,49 @@ export class SharedFilterComponent implements OnChanges {
   onNumericRangeChange(value: INumericRange) {
     this.numericRangeChange.emit(value);
   }
+
+  /** Checkbox filter helpers */
+  filteredFacetCounts(): FacetItem[] {
+    const term = (this.filterForm.get("textField")?.value ?? "")
+      .toLowerCase()
+      .trim();
+    const selected = new Set(this.filterForm.get("selectedIds")?.value ?? []);
+
+    const base = this.checkboxFacetCounts;
+
+    // always include checked items
+    const pinned = base.filter((x) => selected.has(x._id));
+
+    // apply text filter to the rest
+    const filtered = term
+      ? base.filter((x) => (x.label ?? x._id).toLowerCase().includes(term))
+      : base;
+
+    // merge (checked/pinned to the top), de-duplicate by _id
+    const merged = [...pinned, ...filtered].filter(
+      (x, i, arr) => arr.findIndex((y) => y._id === x._id) === i,
+    );
+
+    return merged;
+  }
+  onShowMore() {
+    this.checkboxDisplaylimit += 10;
+  }
+
+  onToggleCheckbox(id: string, checked: boolean) {
+    const ctrl = this.filterForm.get("selectedIds")!;
+    const arr = ctrl.value ?? [];
+    const next = checked ? [...arr, id] : arr.filter((x: string) => x !== id);
+    ctrl.setValue(next);
+    this.checkBoxChange.emit(next);
+  }
+
+  get visibleFacetCounts(): FacetItem[] {
+    return this.filteredFacetCounts().slice(0, this.checkboxDisplaylimit);
+  }
+  get hasMore(): boolean {
+    return this.filteredFacetCounts().length > this.checkboxDisplaylimit;
+  }
+
+  trackById = (_: number, x: FacetItem) => x._id;
 }

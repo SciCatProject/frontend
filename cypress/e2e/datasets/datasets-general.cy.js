@@ -298,7 +298,22 @@ describe("Datasets general", () => {
           ...baseConfig,
           defaultDatasetsListSettings: {
             ...baseConfig.defaultDatasetsListSettings,
-            filters: [{ TypeFilter: true }, { TextFilter: true }],
+            filters: [
+              {
+                key: "type",
+                label: "Type",
+                type: "multiSelect",
+                description: "Filter by dataset type",
+                enabled: true,
+              },
+              {
+                key: "keywords",
+                label: "Keyword",
+                type: "multiSelect",
+                description: "Filter by keywords in the dataset",
+                enabled: false,
+              },
+            ],
           },
         };
 
@@ -311,8 +326,6 @@ describe("Datasets general", () => {
 
     it("should automatically apply pre-configured filters from config", () => {
       cy.contains("Type").should("exist");
-
-      cy.get('[data-cy="text-search"]').should("exist");
 
       cy.contains("Location").should("not.exist");
       cy.contains("Keyword").should("not.exist");
