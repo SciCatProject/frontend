@@ -56,7 +56,7 @@ describe("ProposalsReducer", () => {
     });
   });
 
-  describe("on fetchCountCompletAction", () => {
+  describe("on fetchCountCompleteAction", () => {
     it("should set proposalsCount", () => {
       const count = { facetCounts: {}, allCounts: 100 };
       const action = fromActions.fetchFacetCountsCompleteAction(count);
@@ -78,16 +78,23 @@ describe("ProposalsReducer", () => {
   describe("on fetchProposalDatasetsCompleteAction", () => {
     it("should set datasets", () => {
       const datasets = [dataset];
+      const skip = 50;
+      const limit = 50;
+
       const action = fromActions.fetchProposalDatasetsCompleteAction({
         datasets,
+        skip,
+        limit,
       });
       const state = proposalsReducer(initialProposalsState, action);
 
       expect(state.datasets).toEqual(datasets);
+      expect(state.datasetFilters.skip).toBe(skip);
+      expect(state.datasetFilters.limit).toBe(limit);
     });
   });
 
-  describe("on fetchProposalDatasetsCountCompletAction", () => {
+  describe("on fetchProposalDatasetsCountCompleteAction", () => {
     it("should set datasetsCount", () => {
       const count = 100;
       const action = fromActions.fetchProposalDatasetsCountCompleteAction({
