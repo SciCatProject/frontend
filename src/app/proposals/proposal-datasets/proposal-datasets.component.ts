@@ -124,6 +124,8 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
 
   defaultPageSize = 10;
 
+  defaultPageSizeOptions = [5, 10, 25, 100];
+
   tablesSettings: object;
 
   showGlobalTextSearch = false;
@@ -140,31 +142,40 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.dispatch(
-      fetchProposalDatasetsAction({ proposalId: this.proposalId }),
+      fetchProposalDatasetsAction({
+        proposalId: this.proposalId,
+        limit: this.defaultPageSize,
+        skip: 0,
+      }),
     );
 
     this.subscription = this.proposalDatasets$.subscribe((data) => {
       this.dataSource.next(this.formatTableData(data.datasets));
       this.pending = false;
 
+      const paginationConfig = this.getTablePaginationConfig(data.datasetCount);
+
       const tableSettingsConfig =
         this.tableConfigService.getTableSettingsConfig(
           this.tableName,
           tableDefaultSettingsConfig,
         );
-      const pagginationConfig = {
-        pageSizeOptions: [5, 10, 25, 100],
-        pageIndex: data.currentPage || 0,
-        pageSize: data.datasetsPerPage || this.defaultPageSize,
-        length: data.datasetCount,
-      };
 
       if (tableSettingsConfig?.settingList.length) {
-        this.initTable(tableSettingsConfig, pagginationConfig);
+        this.initTable(tableSettingsConfig, paginationConfig);
       }
     });
   }
+  getTablePaginationConfig(dataCount = 0): TablePagination {
+    const { queryParams } = this.route.snapshot;
 
+    return {
+      pageSizeOptions: this.defaultPageSizeOptions,
+      pageIndex: queryParams.pageIndex || 0,
+      pageSize: queryParams.pageSize || this.defaultPageSize,
+      length: dataCount,
+    };
+  }
   initTable(
     settingConfig: ITableSetting,
     paginationConfig: TablePagination,
@@ -201,6 +212,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
       pageIndex: pagination.pageIndex,
       pageSize: pagination.pageSize,
     };
+
     const { sortColumn, sortDirection } = this.route.snapshot.queryParams;
 
     this.router.navigate([], {
