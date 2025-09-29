@@ -346,15 +346,18 @@ export class IngestorTransferComponent implements OnInit, OnDestroy {
 
   async getFacilityURLByUserInfo(): Promise<string | null> {
     if (this.scicatUserProfile && this.scicatUserProfile.email) {
-      const facilityEmail = this.scicatUserProfile.email;
-      const facility = facilityEmail.split("@")[1] as string;
+      const userEmail = this.scicatUserProfile.email;
+      const facility = userEmail.split("@")[1]?.toLowerCase();
 
-      const facilityMailDomainName = facility.toLowerCase();
       const discoveryList = this.appConfig.ingestorComponent.ingestorAutodiscoveryOptions;
 
       if (discoveryList) {
         for (const discovery of discoveryList) {
-          if (discovery.mailDomain.toLowerCase() === facilityMailDomainName) {
+          const escapedDomain = discovery.mailDomain
+            .toLowerCase()
+            .replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const domainPattern = new RegExp(`^([\\w-]+\\.)*${escapedDomain}$`); // <any.sub.domain.uni.ch>
+          if (domainPattern.test(facility)) {
             return discovery.facilityBackend;
           }
         }
