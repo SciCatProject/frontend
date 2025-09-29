@@ -16,7 +16,7 @@ import { Store } from "@ngrx/store";
 import {
   ingestionObjectAPIInformation,
   selectIngestionObject,
-} from "state-management/selectors/ingestor.selector";
+} from "state-management/selectors/ingestor.selectors";
 import { Subscription } from "rxjs";
 
 @Component({

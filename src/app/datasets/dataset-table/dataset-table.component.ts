@@ -9,14 +9,7 @@ import {
 } from "@angular/core";
 import { TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
-import {
-  BehaviorSubject,
-  Subscription,
-  forkJoin,
-  lastValueFrom,
-  map,
-  take,
-} from "rxjs";
+import { BehaviorSubject, Subscription, lastValueFrom, take } from "rxjs";
 import { Store } from "@ngrx/store";
 import {
   clearSelectionAction,
@@ -67,11 +60,9 @@ import { ActivatedRoute } from "@angular/router";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { DatePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
-import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TableConfigService } from "shared/services/table-config.service";
 import { selectInstruments } from "state-management/selectors/instruments.selectors";
-import { TranslateService } from "@ngx-translate/core";
 
 export interface SortChangeEvent {
   active: string;
@@ -130,6 +121,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   tableName = "datasetsTable";
 
+  localization = "dataset";
+
   columns: TableField<any>[];
 
   pending = true;
@@ -161,12 +154,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     private jsonHeadPipe: JsonHeadPipe,
     private datePipe: DatePipe,
     private fileSize: FileSizePipe,
-    private titleCase: TitleCasePipe,
     private tableConfigService: TableConfigService,
-    private translateService: TranslateService,
-  ) {
-    this.translateService.use("dataset");
-  }
+  ) {}
 
   private getInstrumentName(row: OutputDatasetObsoleteDto): string {
     const instrument = this.instrumentMap.get(row.instrumentId);
@@ -218,21 +207,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     }
 
     this.columns = currentColumnSetting;
-    const translated$ = forkJoin(
-      currentColumnSetting.map((i) =>
-        this.translateService.get(i.header || i.name).pipe(
-          map((translated) => ({
-            ...i,
-            header: translated,
-          })),
-        ),
-      ),
-    );
-
-    translated$.subscribe((result) => {
-      this.columns = result;
-    });
-
     this.setting = settingConfig;
     this.pagination = paginationConfig;
   }
@@ -408,7 +382,9 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           index: column.order,
           display: column.enabled ? "visible" : "hidden",
           width: column.width,
-          type: column.type as any,
+          type: column.type,
+          format: column.format,
+          tooltip: column.tooltip,
         };
 
         if (column.name === "runNumber" && column.type !== "custom") {
@@ -513,9 +489,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           convertedColumn.toExport = (row, column) =>
             this.getInstrumentName(row);
         }
-
-        convertedColumn.header =
-          column.header || this.titleCase.transform(column.name);
 
         return convertedColumn;
       });

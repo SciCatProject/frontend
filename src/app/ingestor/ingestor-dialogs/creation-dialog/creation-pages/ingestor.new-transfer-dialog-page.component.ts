@@ -29,7 +29,7 @@ import {
   selectIngestorExtractionMethods,
   selectIngestorRenderView,
   selectUpdateEditorFromThirdParty,
-} from "state-management/selectors/ingestor.selector";
+} from "state-management/selectors/ingestor.selectors";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";

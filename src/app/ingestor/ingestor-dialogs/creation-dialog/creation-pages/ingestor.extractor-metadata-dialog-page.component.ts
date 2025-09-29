@@ -19,7 +19,7 @@ import {
   selectIngestionObject,
   selectIngestorRenderView,
   selectUpdateEditorFromThirdParty,
-} from "state-management/selectors/ingestor.selector";
+} from "state-management/selectors/ingestor.selectors";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Subscription } from "rxjs";
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";

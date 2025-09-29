@@ -16,7 +16,7 @@ import {
   UserInfo,
 } from "../models/ingestor/models";
 import { Store } from "@ngrx/store";
-import { selectIngestorEndpoint } from "state-management/selectors/ingestor.selector";
+import { selectIngestorEndpoint } from "state-management/selectors/ingestor.selectors";
 
 export const INGESTOR_API_ENDPOINTS_V1 = {
   AUTH: {

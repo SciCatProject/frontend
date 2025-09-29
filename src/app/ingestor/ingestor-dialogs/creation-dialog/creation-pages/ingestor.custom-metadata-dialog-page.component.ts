@@ -16,7 +16,7 @@ import {
   selectIngestionObject,
   selectIngestorRenderView,
   selectUpdateEditorFromThirdParty,
-} from "state-management/selectors/ingestor.selector";
+} from "state-management/selectors/ingestor.selectors";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";

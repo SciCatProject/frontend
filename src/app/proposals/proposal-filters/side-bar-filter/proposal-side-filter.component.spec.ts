@@ -10,6 +10,9 @@ import { ProposalSideFilterComponent } from "./proposal-side-filter.component";
 import { Store } from "@ngrx/store";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DateTime } from "luxon";
+import { TranslateService } from "@ngx-translate/core";
+import { SharedScicatFrontendModule } from "shared/shared.module";
+import { AppConfigService } from "app-config.service";
 
 describe("ProposalSideFilterComponent", () => {
   let component: ProposalSideFilterComponent;
@@ -24,13 +27,17 @@ describe("ProposalSideFilterComponent", () => {
     };
     mockRoute = { snapshot: { queryParams: {} } };
     mockRouter = { navigate: jasmine.createSpy("navigate") };
+    const getConfig = () => ({ checkBoxFilterClickTrigger: false });
 
     await TestBed.configureTestingModule({
+      imports: [SharedScicatFrontendModule],
       declarations: [ProposalSideFilterComponent],
       providers: [
         { provide: Store, useValue: mockStore },
         { provide: ActivatedRoute, useValue: mockRoute },
         { provide: Router, useValue: mockRouter },
+        { provide: TranslateService, useValue: { instant: (k: string) => k } },
+        { provide: AppConfigService, useValue: { getConfig } },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
@@ -61,7 +68,7 @@ describe("ProposalSideFilterComponent", () => {
   });
 
   it("should initialize activeFilters from queryParams.searchQuery in ngOnInit", () => {
-    const data = { alpha: "beta" };
+    const data = { alpha: ["beta"] };
     mockRoute.snapshot.queryParams = { searchQuery: JSON.stringify(data) };
     component.activeFilters = {};
     component.ngOnInit();
@@ -70,13 +77,13 @@ describe("ProposalSideFilterComponent", () => {
 
   it("should set a filter when value is provided", () => {
     component.activeFilters = {};
-    component.setFilter("proposalId", "test123");
-    expect(component.activeFilters.proposalId).toBe("test123");
+    component.setFilter("proposalId", ["test123"]);
+    expect(component.activeFilters.proposalId).toEqual(["test123"]);
   });
 
   it("should remove a filter when value is empty", () => {
-    component.activeFilters = { proposalId: "test123" };
-    component.setFilter("status", "");
+    component.activeFilters = { proposalId: ["test123"] };
+    component.setFilter("status", []);
     expect("status" in component.activeFilters).toBeFalse();
   });
 
@@ -99,14 +106,14 @@ describe("ProposalSideFilterComponent", () => {
   });
 
   it("should apply filters and navigate with correct queryParams", () => {
-    component.activeFilters = { a: "1" };
+    component.activeFilters = { a: ["1"] };
     mockRoute.snapshot.queryParams = {
       searchQuery: JSON.stringify({ text: "hello" }),
     };
     component.applyFilters();
     expect(mockRouter.navigate).toHaveBeenCalledWith([], {
       queryParams: {
-        searchQuery: JSON.stringify({ a: "1", text: "hello" }),
+        searchQuery: JSON.stringify({ a: ["1"], text: "hello" }),
         pageIndex: 0,
       },
       queryParamsHandling: "merge",
@@ -128,7 +135,7 @@ describe("ProposalSideFilterComponent", () => {
   });
 
   it("should reset filters, call applyFilters and toggle clearFilters flag", fakeAsync(() => {
-    component.activeFilters = { x: "y" };
+    component.activeFilters = { x: ["y"] };
     spyOn(component, "applyFilters");
     component.clearFilters = false;
 
@@ -140,4 +147,12 @@ describe("ProposalSideFilterComponent", () => {
     tick(0);
     expect(component.clearFilters).toBeFalse();
   }));
+
+  it("should call applyFilters on setFilter if checkBoxFilterClickTrigger is true", () => {
+    component.appConfig.checkBoxFilterClickTrigger = true;
+
+    spyOn(component, "applyFilters");
+    component.setFilter("proposalId", ["test123"]);
+    expect(component.applyFilters).toHaveBeenCalled();
+  });
 });

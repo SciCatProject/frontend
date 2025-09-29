@@ -11,7 +11,7 @@ import { PageChangeEvent } from "shared/modules/table/table.component";
 import {
   selectIngestionObject,
   selectIngestorBrowserActiveNode,
-} from "state-management/selectors/ingestor.selector";
+} from "state-management/selectors/ingestor.selectors";
 import { Store } from "@ngrx/store";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { Subscription } from "rxjs";

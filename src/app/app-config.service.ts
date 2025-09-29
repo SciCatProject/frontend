@@ -5,9 +5,9 @@ import { firstValueFrom, forkJoin, of } from "rxjs";
 import { catchError, timeout } from "rxjs/operators";
 import {
   DatasetDetailComponentConfig,
-  DatasetsListSettings,
   IngestorComponentConfig,
   LabelsLocalization,
+  ListSettings,
   TableColumn,
 } from "state-management/models";
 
@@ -132,7 +132,8 @@ export interface AppConfigInterface {
   notificationInterceptorEnabled: boolean;
   pidSearchMethod?: string;
   metadataEditingUnitListDisabled?: boolean;
-  defaultDatasetsListSettings: DatasetsListSettings;
+  defaultDatasetsListSettings?: ListSettings;
+  defaultProposalsListSettings?: ListSettings;
   thumbnailFetchLimitPerPage: number;
   maxFileUploadSizeInMb?: string;
   datasetDetailComponent?: DatasetDetailComponentConfig;
@@ -142,6 +143,7 @@ export interface AppConfigInterface {
   siteHeaderLogoUrl?: string;
   mainMenu?: MainMenuConfiguration;
   supportEmail?: string;
+  checkBoxFilterClickTrigger?: boolean;
   ingestorComponent?: IngestorComponentConfig;
 }
 

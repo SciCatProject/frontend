@@ -16,7 +16,7 @@ import {
   ingestionObjectAPIInformation,
   selectIngestionObject,
   selectIsIngestDatasetLoading,
-} from "state-management/selectors/ingestor.selector";
+} from "state-management/selectors/ingestor.selectors";
 import { MatDialog } from "@angular/material/dialog";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { IngestorConfirmationDialogComponent } from "ingestor/ingestor-dialogs/confirmation-dialog/ingestor.confirmation-dialog.component";

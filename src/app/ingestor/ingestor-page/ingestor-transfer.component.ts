@@ -26,7 +26,7 @@ import {
   selectIngestorEndpoint,
   selectIngestorTransferList,
   selectIngestorTransferListRequestOptions,
-} from "state-management/selectors/ingestor.selector";
+} from "state-management/selectors/ingestor.selectors";
 import { IngestorCreationDialogBaseComponent } from "ingestor/ingestor-dialogs/creation-dialog/ingestor.creation-dialog-base.component";
 import { INGESTOR_API_ENDPOINTS_V1 } from "shared/sdk/apis/ingestor.service";
 import { Subscription } from "rxjs";

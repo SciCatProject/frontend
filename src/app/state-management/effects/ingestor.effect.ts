@@ -19,7 +19,7 @@ import { MessageType } from "state-management/models";
 import { HttpErrorResponse } from "@angular/common/http";
 import { showMessageAction } from "state-management/actions/user.actions";
 import { Store } from "@ngrx/store";
-import { selectIngestorTransferListRequestOptions } from "state-management/selectors/ingestor.selector";
+import { selectIngestorTransferListRequestOptions } from "state-management/selectors/ingestor.selectors";
 import { concatLatestFrom } from "@ngrx/operators";
 import { DatasetsService } from "@scicatproject/scicat-sdk-ts-angular";
 

@@ -84,8 +84,8 @@ export class MetadataViewComponent implements OnInit, OnChanges {
         isCurrentSetting: true,
         columnSetting: [
           {
-            header: "Name",
             name: "human_name",
+            header: "Name",
             width: 250,
           },
           {
@@ -96,6 +96,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           },
           {
             name: "value",
+            header: "Value",
             customRender: (column, row) => {
               if (row.type === "date" || this.isDate(row)) {
                 return this.datePipe.transform(row[column.name]);
@@ -138,6 +139,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           },
           {
             name: "unit",
+            header: "Unit",
             customRender: (column, row) => {
               return row[column.name]
                 ? this.prettyUnit.transform(row[column.name])
@@ -155,6 +157,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
           },
           {
             name: "type",
+            header: "Type",
             display: "hidden",
           },
         ],

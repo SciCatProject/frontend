@@ -39,23 +39,23 @@ export class IngestorMetadataEditorHelper {
       return schema;
     }
 
-    // Kopiere das Schema und initialisiere die reduzierte Struktur
+    // Copy the schema and initialize a reduced structure
     const reducedSchema: any = { ...schema };
 
-    // Entferne nicht benötigte Eigenschaften
+    // remove not required properties
     if (schema.properties && Array.isArray(schema.required)) {
       reducedSchema.properties = {};
       for (const key of schema.required) {
         if (schema.properties[key]) {
           const property = schema.properties[key];
-          // Rekursiver Aufruf für verschachtelte Objekte
+          // recursive call for the nested structur
           reducedSchema.properties[key] =
             IngestorMetadataEditorHelper.reduceToRequiredProperties(property);
         }
       }
     }
 
-    // Falls es sich um ein Array handelt, reduziere das Items-Schema
+    // when type is an array, reduce the items as well
     if (schema.type === "array" && schema.items) {
       reducedSchema.items =
         IngestorMetadataEditorHelper.reduceToRequiredProperties(schema.items);
@@ -74,34 +74,24 @@ export class IngestorMetadataEditorHelper {
       if (!schema || !errorPath) {
         return false;
       }
-  
-      // Remove leading slash and split the path
       const pathSegments = errorPath.replace(/^\//, '').split('/');
-      
-      // If empty path, return false
       if (pathSegments.length === 0 || pathSegments[0] === '') {
         return false;
       }
-  
-      // Start from the root schema
       let currentSchema = schema;
   
-      // Navigate through nested objects if the path is nested
       for (let i = 0; i < pathSegments.length - 1; i++) {
         const segment = pathSegments[i];
         
         if (currentSchema.properties && currentSchema.properties[segment]) {
           currentSchema = currentSchema.properties[segment];
         } else {
-          // Path doesn't exist in schema
           return false;
         }
       }
   
-      // Get the final field name
       const fieldName = pathSegments[pathSegments.length - 1];
   
-      // Check if the field is in the required array of the current schema level
       if (currentSchema.required && Array.isArray(currentSchema.required)) {
         return currentSchema.required.includes(fieldName);
       }
@@ -128,7 +118,6 @@ export class IngestorMetadataEditorHelper {
       }
   
       return errors.filter(error => {
-        // Try different possible error path properties
         const errorPath = error.instancePath || error.dataPath || error.schemaPath || '';
         return this.isRequiredField(errorPath, schema);
       });

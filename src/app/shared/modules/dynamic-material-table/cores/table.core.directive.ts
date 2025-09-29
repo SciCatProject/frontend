@@ -16,7 +16,6 @@ import {
   ElementRef,
 } from "@angular/core";
 import { TableField } from "../models/table-field.model";
-import { titleCase } from "../utilizes/utilizes";
 import { moveItemInArray } from "@angular/cdk/drag-drop";
 import { SelectionModel } from "@angular/cdk/collections";
 import { TableService } from "../table/dynamic-mat-table.service";
@@ -71,6 +70,7 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() showNoData = true;
   @Input() showReload = true;
   @Input() showGlobalTextSearch = true;
+  @Input() localization: string;
   @Input() globalTextSearch = "";
   @Input() globalTextSearchPlaceholder = "Search";
   @Input() selectionIds = [];
@@ -121,6 +121,7 @@ export class TableCoreDirective<T extends TableRow> {
       columnSetting: null,
       visibleActionMenu: null,
     };
+
     if (this.config) {
       this.tableSetting = { ...this.tableSetting, ...this.config };
     }
@@ -287,7 +288,6 @@ export class TableCoreDirective<T extends TableRow> {
         ((row, type) => (typeof row === "object" ? row[f.name] : ""));
       f.toPrint = (row) => (typeof row === "object" ? row[f.name] : "");
       f.enableContextMenu = f.enableContextMenu || true;
-      f.header = f.header || titleCase(f.name);
       f.display = getObjectProp("display", "visible", settingField, f);
       f.filter = getObjectProp("filter", "client-side", settingField, f);
       f.sort = getObjectProp("sort", "client-side", settingField, f);

@@ -4,7 +4,7 @@ import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 import { TransferItem } from "shared/sdk/models/ingestor/transferItem";
 import * as fromActions from "state-management/actions/ingestor.actions";
-import { selectIngestorTransferDetailList } from "state-management/selectors/ingestor.selector";
+import { selectIngestorTransferDetailList } from "state-management/selectors/ingestor.selectors";
 
 @Component({
   selector: "app-ingestor-transfer-view-dialog",

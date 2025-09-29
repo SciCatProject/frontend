@@ -12,7 +12,7 @@ import {
   selectIngestionObject,
   selectIngestorEndpoint,
   selectNoRightsError,
-} from "state-management/selectors/ingestor.selector";
+} from "state-management/selectors/ingestor.selectors";
 import { Store } from "@ngrx/store";
 import { IngestorMetadataSSEService } from "ingestor/ingestor-page/helper/ingestor.metadata-sse-service";
 import { HttpParams } from "@angular/common/http";
