@@ -8,7 +8,6 @@ const routes: Routes = [
   {
     path: "",
     component: ProposalDashboardComponent,
-    canActivate: [AuthGuard],
   },
   {
     path: ":id",

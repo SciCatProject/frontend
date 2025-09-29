@@ -329,6 +329,14 @@ a:hover {
   input.mat-mdc-chip-input {
     margin-left: 0;
   }
+
+  .mdc-evolution-chip-set__chips {
+    margin-left: 0 !important;
+
+    input.mat-mdc-chip-input {
+      margin-left: 8px;
+    }
+  }
 }
 
 .mat-mdc-form-field {
@@ -374,7 +382,43 @@ a:hover {
   --mdc-switch-selected-focus-track-color: var(--theme-accent-default);
 }
 
+// Mat Tab customizations
 .mat-mdc-tab-nav-bar,
 .mat-mdc-tab-header {
+  margin: 1em 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.mat-mdc-tab-header .mat-mdc-tab,
+.mat-mdc-tab-nav-bar .mat-mdc-tab-link {
+  margin-right: 2px;
+  background: rgba(17, 62, 151, 0.1);
+  border-radius: 4px 4px 0 0;
+}
+
+.mat-mdc-tab-header .mat-mdc-tab:last-of-type,
+.mat-mdc-tab-nav-bar .mat-mdc-tab-link:last-of-type {
+  margin-right: 0;
+}
+
+.mat-mdc-tab:hover .mdc-tab__ripple::before,
+.mat-mdc-tab-link:hover .mdc-tab__ripple::before {
+  border-radius: 4px 4px 0 0;
+  opacity: 0.25 !important;
+  transition: opacity 100ms ease-out;
+}
+
+.mat-mdc-tab.mdc-tab--active,
+.mat-mdc-tab-link.mdc-tab--active {
+  background: none;
+}
+
+// Jsonforms customizations
+jsonforms .mat-mdc-form-field {
+  .mat-mdc-form-field-subscript-dynamic-size {
+    min-height: unset !important;
+  }
+  .mat-mdc-form-field-hint-wrapper {
+    display: none !important;
+  }
 }

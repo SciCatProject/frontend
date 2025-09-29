@@ -13,12 +13,13 @@
   <mat-card-content>
     <ng-container *ngFor="let filter of filterLists">
       <shared-filter
+        [key]="filter.key"
         [label]="filter.label"
         [clear]="clearFilters"
         [tooltip]="filter.description"
         [filterType]="filter.type"
         [prefilled]="activeFilters[filter.key] || null"
-        (textChange)="setFilter(filter.key, $event)"
+        (checkBoxChange)="setFilter(filter.key, $event)"
         [facetCounts$]="getFacetCounts$(filter.key)"
         (dateRangeChange)="setDateFilter(filter.key, $event)"
       ></shared-filter>
@@ -40,7 +41,7 @@
         (click)="reset()"
       >
         <mat-icon>undo</mat-icon>
-        Reset Filters
+        Reset
       </button>
     </div>
   </mat-card-content>

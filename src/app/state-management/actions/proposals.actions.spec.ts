@@ -103,12 +103,19 @@ describe("Proposal Actions", () => {
   describe("fetchProposalDatasetsCompleteAction", () => {
     it("should create an action", () => {
       const datasets = [mockDataset];
+      const skip = 50;
+      const limit = 50;
+
       const action = fromActions.fetchProposalDatasetsCompleteAction({
         datasets,
+        skip,
+        limit,
       });
       expect({ ...action }).toEqual({
         type: "[Proposal] Fetch Datasets Complete",
         datasets,
+        skip,
+        limit,
       });
     });
   });

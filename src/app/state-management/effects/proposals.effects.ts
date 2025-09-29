@@ -116,7 +116,11 @@ export class ProposalEffects {
           )
           .pipe(
             mergeMap((datasets) => [
-              fromActions.fetchProposalDatasetsCompleteAction({ datasets }),
+              fromActions.fetchProposalDatasetsCompleteAction({
+                datasets,
+                limit,
+                skip,
+              }),
               fromActions.fetchProposalDatasetsCountAction({ proposalId }),
             ]),
             catchError(() =>

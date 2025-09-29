@@ -9,6 +9,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { TableMenuComponent } from "./table-menu.component";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatDividerModule } from "@angular/material/divider";
+import { PipesModule } from "shared/pipes/pipes.module";
 
 const components = [TableMenuComponent];
 
@@ -25,6 +26,7 @@ const components = [TableMenuComponent];
     MatMenuModule,
     MatRadioModule,
     MatDividerModule,
+    PipesModule,
   ],
 })
 export class TableMenuModule {}

@@ -44,7 +44,11 @@
         <!-- <mat-icon *ngIf="rowSelectionMode === 'single'">indeterminate_check_box</mat-icon> -->
       </mat-header-cell>
       <!-- DATA -->
-      <mat-cell *matCellDef="let row" class="row-checkbox">
+      <mat-cell
+        *matCellDef="let row"
+        class="row-checkbox"
+        (click)="$event.stopPropagation()"
+      >
         <mat-checkbox
           (click)="$event.stopPropagation()"
           (change)="onRowSelectionChange($event, row)"
@@ -105,12 +109,15 @@
           >
           <div
             mat-sort-header
-            [matTooltip]="column.header"
+            [matTooltip]="
+              column.tooltip || column.header || column.name
+                | translate: localization
+            "
             matTooltipClass="cell-tooltip"
             [disabled]="column.sort === 'none'"
             class="header-caption"
           >
-            {{ column.header }}
+            {{ column.header || column.name | translate: localization }}
           </div>
         </header-filter>
         <!-- class="right-resize-handler" -->
@@ -146,7 +153,7 @@
         <ng-template #renderColumn>
           <ng-container *ngIf="column.customRender; else regularColumnRender">
             <label
-              *ngIf="!column.dynamicCellComponent"
+              *ngIf="!column.dynamicCellComponent && !column.hoverContent"
               (click)="onLabelClick($event, row, column)"
               [class.rtl-cell]="direction === 'rtl'"
               [class.ltr-cell]="direction === 'ltr'"
@@ -158,13 +165,14 @@
           </ng-container>
           <ng-template #regularColumnRender>
             <label
-              *ngIf="!column.dynamicCellComponent"
+              *ngIf="!column.dynamicCellComponent && !column.hoverContent"
               (click)="onLabelClick($event, row, column)"
               [class.rtl-cell]="direction === 'rtl'"
               [class.ltr-cell]="direction === 'ltr'"
               [ngStyle]="ellipsis(column)"
               class="label-cell"
-              >{{ row[column.name] }}
+            >
+              {{ getColumnValue(row, column) }}
             </label>
           </ng-template>
         </ng-template>
@@ -202,6 +210,35 @@
           [row]="row"
           [onRowEvent]="onRowEvent"
         >
+        </ng-container>
+
+        <!-- Hover Content Cell-->
+        <ng-container *ngIf="column.hoverContent">
+          <span
+            class="icon-wrapper"
+            #hoverOrigin="cdkOverlayOrigin"
+            cdkOverlayOrigin
+            (mouseenter)="hoverKey = makeKey(row, column)"
+            (mouseleave)="hoverKey = null"
+          >
+            <mat-icon class="hover-icon" fontIcon="description"></mat-icon>
+
+            <ng-template
+              cdkConnectedOverlay
+              [cdkConnectedOverlayOrigin]="hoverOrigin"
+              [cdkConnectedOverlayOpen]="hoverKey === makeKey(row, column)"
+              [cdkConnectedOverlayPositions]="overlayPositions"
+            >
+              <mat-card class="hover-card">
+                <mat-card-title class="hover-card-title"
+                  >{{ column.header || column.name | translate: localization }}
+                </mat-card-title>
+                <div mat-card-content class="hover-card-content">
+                  {{ getColumnValue(row, column) || "No content" }}
+                </div>
+              </mat-card>
+            </ng-template>
+          </span>
         </ng-container>
       </mat-cell>
       <!-- FOOTER -->
@@ -278,6 +315,7 @@
         <table-menu
           [(tableSetting)]="tableSetting"
           (menuActionChange)="tableMenuActionChange($event)"
+          [localization]="localization"
         ></table-menu>
       </mat-header-cell>
       <mat-cell *matCellDef="let row" class="table-menu">
@@ -341,6 +379,16 @@
       [style.top.px]="headerHeight - 5"
     ></mat-header-row>
   </mat-table>
+  <ng-container *ngIf="showNoData && init === true">
+    <app-empty-content
+      *ngIf="standardDataSource.data.length === 0"
+      [message]="emptyMessage"
+      [icon]="emptyIcon"
+      [showReload]="showReload"
+      (reload)="reload_onClick()"
+    >
+    </app-empty-content>
+  </ng-container>
 </div>
 <mat-paginator
   [pageSizeOptions]="pagination.pageSizeOptions"
@@ -351,22 +399,6 @@
   *ngIf="pagination"
 >
 </mat-paginator>
-<ng-container *ngIf="showNoData && init === true">
-  <div class="no-records" *ngIf="standardDataSource.data.length === 0">
-    No data
-    <br />
-    <button
-      mat-icon-button
-      type="button"
-      *ngIf="showReload === true"
-      color="primary"
-      (click)="reload_onClick()"
-    >
-      <mat-icon>autorenew</mat-icon>
-    </button>
-  </div>
-</ng-container>
-
 <!-- Context Menu -->
 <div
   style="visibility: hidden; position: fixed"

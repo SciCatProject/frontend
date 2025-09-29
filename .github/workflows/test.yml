@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 18.x
 
@@ -42,7 +42,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -65,7 +65,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -102,7 +102,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -116,6 +116,9 @@ jobs:
           sudo sysctl -w vm.max_map_count=262144
 
       - name: Run docker-compose
+        env:
+          DOI_USERNAME: ${{ secrets.DOI_TEST_USERNAME }}
+          DOI_PASSWORD: ${{ secrets.DOI_TEST_PASSWORD }}
         run: |
           cp CI/e2e/docker-compose.e2e.yaml docker-compose.yaml
           docker compose pull

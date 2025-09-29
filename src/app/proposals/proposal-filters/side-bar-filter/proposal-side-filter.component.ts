@@ -2,12 +2,13 @@ import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Store } from "@ngrx/store";
+import { AppConfigService } from "app-config.service";
 import { DateTime } from "luxon";
-import { FilterLists } from "proposals/proposal-dashboard/proposal-dashboard.component";
-import { distinctUntilChanged, map, Observable } from "rxjs";
-import { selectProposalsfacetCounts } from "state-management/selectors/proposals.selectors";
+import { distinctUntilChanged, map, Observable, shareReplay } from "rxjs";
+import { selectProposalsfacetCountsWithInstrumentName } from "state-management/selectors/proposals.selectors";
 
 import { DateRange } from "state-management/state/proposals.store";
+import { FilterConfig } from "state-management/state/user.store";
 
 @Component({
   selector: "proposal-side-filter",
@@ -16,17 +17,22 @@ import { DateRange } from "state-management/state/proposals.store";
   standalone: false,
 })
 export class ProposalSideFilterComponent implements OnInit {
-  activeFilters: Record<string, string | DateRange> = {};
+  appConfig = this.appConfigService.getConfig();
+  activeFilters: Record<string, string[] | DateRange> = {};
   collapsed = false;
 
-  fullfacetCounts$ = this.store.select(selectProposalsfacetCounts);
+  facetCounts$ = this.store.select(
+    selectProposalsfacetCountsWithInstrumentName,
+  );
+
+  localization = "proposal";
 
   @Input() clearFilters = false;
   @Input() dateRangeValue: DateRange = {
     begin: null,
     end: null,
   };
-  @Input() filterLists: FilterLists[];
+  @Input() filterLists: FilterConfig[];
 
   @Output() searchChange = new EventEmitter<string>();
   @Output() dateChange = new EventEmitter<MatDatepickerInputEvent<DateTime>>();
@@ -35,6 +41,7 @@ export class ProposalSideFilterComponent implements OnInit {
     private store: Store,
     private route: ActivatedRoute,
     private router: Router,
+    public appConfigService: AppConfigService,
   ) {}
 
   ngOnInit(): void {
@@ -44,11 +51,14 @@ export class ProposalSideFilterComponent implements OnInit {
     this.activeFilters = { ...searchQuery };
   }
 
-  setFilter(filterKey: string, value: string) {
-    if (value) {
+  setFilter(filterKey: string, value: string[]) {
+    if (value && value.length > 0) {
       this.activeFilters[filterKey] = value;
     } else {
       delete this.activeFilters[filterKey];
+    }
+    if (this.appConfig.checkBoxFilterClickTrigger) {
+      this.applyFilters();
     }
   }
 
@@ -80,7 +90,7 @@ export class ProposalSideFilterComponent implements OnInit {
   }
 
   getFacetCounts$(key: string): Observable<any> {
-    return this.fullfacetCounts$.pipe(
+    return this.facetCounts$.pipe(
       map((all) => all[key] || []),
       distinctUntilChanged(),
     );

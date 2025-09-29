@@ -54,6 +54,9 @@ describe("SharedFilterComponent", () => {
     component.filterForm.setValue({
       textField: "test",
       dateRangeField: { start: new Date(), end: new Date() },
+      multiSelectField: [],
+      numberRange: { min: null, max: null },
+      selectedIds: [],
     });
     component.clear = true;
     const text = component.filterForm.get("textField")!.value;

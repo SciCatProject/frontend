@@ -242,9 +242,18 @@ describe("ProposalEffects", () => {
 
     it("should result in a fetchProposalDatasetsCompleteAction and a fetchProposalDatasetsCountAction", () => {
       const datasets = [dataset];
-      const action = fromActions.fetchProposalDatasetsAction({ proposalId });
+      const skip = 0;
+      const limit = 50;
+
+      const action = fromActions.fetchProposalDatasetsAction({
+        proposalId,
+        skip: skip,
+        limit: limit,
+      });
       const outcome1 = fromActions.fetchProposalDatasetsCompleteAction({
         datasets,
+        skip: skip,
+        limit: limit,
       });
       const outcome2 = fromActions.fetchProposalDatasetsCountAction({
         proposalId,
@@ -620,6 +629,8 @@ describe("ProposalEffects", () => {
         const datasets = [dataset];
         const action = fromActions.fetchProposalDatasetsCompleteAction({
           datasets,
+          skip: 25,
+          limit: 25,
         });
         const outcome = loadingCompleteAction();
 

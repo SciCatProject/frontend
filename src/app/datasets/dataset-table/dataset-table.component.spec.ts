@@ -50,6 +50,7 @@ import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { DatePipe } from "@angular/common";
 import { FileSizePipe } from "shared/pipes/filesize.pipe";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
+import { TranslateService } from "@ngx-translate/core";
 
 const getConfig = () => ({});
 
@@ -80,6 +81,7 @@ describe("DatasetTableComponent", () => {
             { selector: selectInstruments, value: [] },
           ],
         }),
+        { provide: TranslateService, useValue: { instant: (k: string) => k } },
         JsonHeadPipe,
         DatePipe,
         FileSizePipe,
