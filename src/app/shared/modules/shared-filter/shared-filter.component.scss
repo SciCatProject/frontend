@@ -45,7 +45,13 @@
   }
 }
 
+.empty-text {
+  font-size: 0.765em;
+  color: rgba($color: #000000, $alpha: 0.5);
+  text-align: center;
+}
+
 mat-divider {
-  margin: 0.8em 0;
+  margin: 0.4em 0;
   opacity: 0.4;
 }
