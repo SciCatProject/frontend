@@ -9,14 +9,7 @@ import {
 } from "@angular/core";
 import { TableColumn } from "state-management/models";
 import { MatCheckboxChange } from "@angular/material/checkbox";
-import {
-  BehaviorSubject,
-  Subscription,
-  forkJoin,
-  lastValueFrom,
-  map,
-  take,
-} from "rxjs";
+import { BehaviorSubject, Subscription, lastValueFrom, take } from "rxjs";
 import { Store } from "@ngrx/store";
 import {
   clearSelectionAction,
@@ -278,7 +271,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     if (event === TableEventType.SortChanged) {
       const { active, direction } = sender as Sort;
 
-      let column = active;
+      const column = active;
 
       this.store.dispatch(sortByColumnAction({ column, direction }));
     }
@@ -371,7 +364,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   onSortChange(event: SortChangeEvent): void {
     const { active, direction } = event;
-    let column = active.split("_")[1];
+    const column = active.split("_")[1];
     this.store.dispatch(sortByColumnAction({ column, direction }));
   }
 
