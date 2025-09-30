@@ -6,6 +6,14 @@
   @include mat.form-field-density(-5);
 }
 
+::ng-deep .mat-date-range-input-wrapper {
+  min-width: 100px;
+}
+
+::ng-deep .mat-date-range-input-separator {
+  color: var(--theme-primary-default) !important;
+}
+
 .mat-mdc-form-field {
   width: 100%;
 }

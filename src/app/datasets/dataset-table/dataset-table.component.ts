@@ -214,7 +214,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
     const columnsSetting = setting.columnSetting.map((column, index) => {
-      const { name, display, width, type } = column;
+      const { name, display, width, type, format } = column;
 
       return {
         name,
@@ -222,6 +222,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         order: index,
         width,
         type,
+        format,
       };
     });
     this.store.dispatch(
