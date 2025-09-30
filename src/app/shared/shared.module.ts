@@ -42,7 +42,6 @@ import { JsonformsAccordionRendererService } from "./services/jsonforms-accordio
     SearchParametersDialogModule,
     CommonModule,
     FormsModule,
-    SharedFilterModule,
     SharedTableModule,
     ScientificMetadataTreeModule,
     DynamicMatTableModule.forRoot({}),
@@ -51,6 +50,7 @@ import { JsonformsAccordionRendererService } from "./services/jsonforms-accordio
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
     JsonFormsCustomRenderersModule,
+    SharedFilterModule,
   ],
   providers: [
     ConfigService,
@@ -72,7 +72,6 @@ import { JsonformsAccordionRendererService } from "./services/jsonforms-accordio
     TableModule,
     CommonModule,
     FormsModule,
-    SharedFilterModule,
     SharedTableModule,
     ScientificMetadataTreeModule,
     DynamicMatTableModule,
@@ -81,6 +80,7 @@ import { JsonformsAccordionRendererService } from "./services/jsonforms-accordio
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
     JsonFormsCustomRenderersModule,
+    SharedFilterModule,
   ],
 })
 export class SharedScicatFrontendModule {}

@@ -16,8 +16,6 @@ import { StoreModule } from "@ngrx/store";
 import { ApiModule, Configuration } from "@scicatproject/scicat-sdk-ts-angular";
 import { routerReducer } from "@ngrx/router-store";
 import { extModules } from "./build-specifics";
-import { MAT_DATE_FORMATS } from "@angular/material/core";
-
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import {
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -126,23 +124,6 @@ const apiConfigurationFn = (
         return {
           dateFormat:
             appConfigService.getConfig().dateFormat || "yyyy-MM-dd HH:mm",
-        };
-      },
-      deps: [AppConfigService],
-    },
-    {
-      provide: MAT_DATE_FORMATS,
-      useFactory: (appConfigService: AppConfigService) => {
-        const base =
-          appConfigService.getConfig().dateFormat || "yyyy-MM-dd HH:mm";
-        return {
-          parse: { dateInput: base },
-          display: {
-            dateInput: base,
-            monthYearLabel: "MMM yyyy",
-            dateA11yLabel: "LL",
-            monthYearA11yLabel: "MMMM yyyy",
-          },
         };
       },
       deps: [AppConfigService],
