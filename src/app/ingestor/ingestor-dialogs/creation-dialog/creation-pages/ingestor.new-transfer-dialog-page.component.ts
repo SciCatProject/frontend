@@ -8,7 +8,6 @@ import {
   Output,
 } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import Ajv, {JSONSchemaType} from "ajv"
 import { JsonSchema } from "@jsonforms/core";
 import {
   decodeBase64ToUTF8,
@@ -34,7 +33,6 @@ import * as fromActions from "state-management/actions/ingestor.actions";
 import { selectUserSettingsPageViewModel } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
 import { ReturnedUserDto } from "@scicatproject/scicat-sdk-ts-angular";
-import { IngestorConfirmationDialogComponent } from "ingestor/ingestor-dialogs/confirmation-dialog/ingestor.confirmation-dialog.component";
 
 @Component({
   selector: "ingestor-new-transfer-dialog-page",
@@ -329,7 +327,6 @@ export class IngestorNewTransferDialogPageComponent
     console.log("Fetching schema from URL:", this.schemaUrl);
     let content: string;
     let parsedJson: any;
-    const ajv = new Ajv()
 
     try {
       const response = await fetch(this.schemaUrl);
@@ -348,12 +345,6 @@ export class IngestorNewTransferDialogPageComponent
       return;
     }
     this.selectedSchemaFileContent = content;
-    const valid = ajv.compile(this.selectedSchemaFileContent as JSONSchemaType<any>);
-    if (!valid) {
-      this.schemaUrl = "";
-      this.selectedSchemaFileContent = "";
-    }else{
-      this.validateNextButton();
-    }
+    this.validateNextButton();
   }
 }

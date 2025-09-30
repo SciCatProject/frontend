@@ -39,7 +39,7 @@ import {
 } from "./ingestor-metadata-editor/customRenderer/quantity-value-layout-renderer";
 import { MatMenuModule } from "@angular/material/menu";
 import { EffectsModule } from "@ngrx/effects";
-import { IngestorEffects } from "state-management/effects/ingestor.effect";
+import { IngestorEffects } from "state-management/effects/ingestor.effects";
 import { StoreModule } from "@ngrx/store";
 import { ingestorReducer } from "state-management/reducers/ingestor.reducer";
 import { IngestorCreationDialogBaseComponent } from "./ingestor-dialogs/creation-dialog/ingestor.creation-dialog-base.component";

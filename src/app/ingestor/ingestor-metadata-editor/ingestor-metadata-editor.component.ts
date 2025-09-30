@@ -61,6 +61,9 @@ export class IngestorMetadataEditorComponent implements OnInit {
     // This is necessary, otherwise the error checks will not work correctly
     // Fill empty boolean with false to avoid undefined errors
     const initializeVisualData = (schema: JsonSchema, target: any) => {
+      if (!schema.properties || Object.keys(schema.properties).length === 0) {
+        return;
+      }
       Object.keys(schema.properties).forEach((key) => {
         const property = schema.properties[key];
         if (property.type === "object") {

@@ -407,7 +407,7 @@ export const getJsonSchemaFromDto = (sourceFolderEditable?: boolean) => {
       }
 
       // Add to required fields if it is not optional
-      // Wenn string ohne --optional oder --skip, wenn number > 0, the rest always required
+      // When string without --optional or --skip, when number > 0, the rest always required
       if (typeof value === "string") {
         if (
           value.includes("--string") &&
