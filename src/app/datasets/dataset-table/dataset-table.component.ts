@@ -279,9 +279,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
       const { active, direction } = sender as Sort;
 
       let column = active;
-      if (column === "runNumber") {
-        column = "scientificMetadata.runNumber.value";
-      }
 
       this.store.dispatch(sortByColumnAction({ column, direction }));
     }
@@ -375,7 +372,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   onSortChange(event: SortChangeEvent): void {
     const { active, direction } = event;
     let column = active.split("_")[1];
-    if (column === "runNumber") column = "scientificMetadata.runNumber.value";
     this.store.dispatch(sortByColumnAction({ column, direction }));
   }
 
