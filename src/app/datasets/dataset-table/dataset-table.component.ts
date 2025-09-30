@@ -394,13 +394,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           tooltip: column.tooltip,
         };
 
-        // if (column.name === "runNumber" && column.type !== "custom") {
-        //   // NOTE: This is for the saved columns in the database or the old config.
-        //   convertedColumn.customRender = (c, row) =>
-        //     lodashGet(row, "scientificMetadata.runNumber.value");
-        //   convertedColumn.toExport = (row) =>
-        //     lodashGet(row, "scientificMetadata.runNumber.value");
-        // }
         // NOTE: This is how we render the custom columns if new config is used.
         if (column.type === "custom") {
           convertedColumn.customRender = (c, row) =>

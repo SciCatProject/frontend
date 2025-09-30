@@ -550,16 +550,9 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   columnName(row: any, column: TableField<any>) {
-    console.log("------");
-    console.log(row);
-    console.log(column);
     if (column.customRender) {
-      console.log("Custom");
-      console.log(column.customRender(column, row));
       return column.customRender(column, row);
     }
-    console.log("standard");
-    console.log(row[column.name]);
     return row[column.name];
   }
 
