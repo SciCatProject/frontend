@@ -1,6 +1,10 @@
 mat-card {
   margin-top: 0.5rem;
 
+  &.side-gap {
+    margin-right: 0.5rem;
+  }
+
   .section-container {
     display: flex;
     justify-content: space-between;
@@ -27,13 +31,11 @@ mat-card {
 }
 
 .small-btn {
-  padding: 2px;
-
-  width: 24px;
-  height: 24px;
-
-  margin-top: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: absolute;
+  z-index: 10;
+  background: none;
+  top: 1.125rem;
+  left: 0.625rem;
+  scale: 0.9;
+  background: rgba($color: #000000, $alpha: 0.05);
 }
