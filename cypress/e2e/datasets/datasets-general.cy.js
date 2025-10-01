@@ -40,7 +40,7 @@ describe("Datasets general", () => {
       cy.get("login-form").should("exist");
 
       cy.reload();
-      // Without reloading, the user will land on last visited page before logout
+      // Without reloading, the user will land on last visited page before logout,
       // i.e. the dataset detail page, because the login page "remembers" the previousRoute.
 
       cy.url().should("include", "/login");
