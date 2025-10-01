@@ -132,6 +132,7 @@ jobs:
           DBUS_SYSTEM_BUS_ADDRESS: "disabled:"
         with:
           config-file: cypress.config.ts
+          browser: chrome
           install-command: npm install --omit peer
       - name: docker logs
         if: ${{ failure() }}
