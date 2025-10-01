@@ -95,7 +95,6 @@ describe("Datasets general", () => {
     });
 
     it("should be able to edit dataset list after creating the published data - 1", () => {
-      // flaky test
       cy.createDataset({ type: "raw" });
       cy.createDataset({ type: "raw" });
 
@@ -141,7 +140,10 @@ describe("Datasets general", () => {
 
       cy.isLoading();
 
-      cy.get(".dataset-table mat-row input[type='checkbox']").last().click();
+      cy.get(".dataset-table mat-row input[type='checkbox']")
+        .last()
+        .and("not.be.disabled")
+        .click();
 
       cy.get("#addToBatchButton").click();
 
