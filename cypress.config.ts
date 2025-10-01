@@ -1,5 +1,6 @@
 import { defineConfig } from "cypress";
 import fs from "fs";
+import path from "path";
 
 export default defineConfig({
   env: {
@@ -34,8 +35,19 @@ export default defineConfig({
             test.attempts.some((attempt) => attempt.state === "failed"),
           );
           if (!failures) {
-            // delete the video if the spec passed and no tests retried
-            fs.unlinkSync(results.video);
+            const videosDir = path.resolve(
+              config.projectRoot,
+              config.videosFolder,
+            );
+            const target = path.resolve(results.video);
+            const rel = path.relative(videosDir, target);
+
+            // Ensure the video is inside the videos folder
+            if (!rel.startsWith("..") && !path.isAbsolute(rel)) {
+              try {
+                fs.unlinkSync(target);
+              } catch {}
+            }
           }
         }
       },
