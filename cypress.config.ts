@@ -37,10 +37,14 @@ export default defineConfig({
           if (!failures) {
             const safeVideoPath = path.resolve(results.video);
             const videosDir = path.resolve(config.videosFolder);
-            // delete the video if the spec passed and no tests retried
-            if (safeVideoPath.startsWith(videosDir)) {
-              fs.unlinkSync(safeVideoPath);
+
+            if (!safeVideoPath.startsWith(videosDir)) {
+              console.warn(
+                `Path Traversal blocked: Attempted to delete file outside of videos folder: ${safeVideoPath}`,
+              );
+              return; // Stop execution if validation fails
             }
+            fs.unlinkSync(safeVideoPath);
           }
         }
       },
