@@ -35,19 +35,9 @@ export default defineConfig({
             test.attempts.some((attempt) => attempt.state === "failed"),
           );
           if (!failures) {
-            const videosDir = path.resolve(
-              config.projectRoot,
-              config.videosFolder,
-            );
-            const target = path.resolve(results.video);
-            const rel = path.relative(videosDir, target);
-
-            // Ensure the video is inside the videos folder
-            if (!rel.startsWith("..") && !path.isAbsolute(rel)) {
-              try {
-                fs.unlinkSync(target);
-              } catch {}
-            }
+            const safeVideoPath = path.resolve(results.video);
+            // delete the video if the spec passed and no tests retried
+            fs.unlinkSync(safeVideoPath);
           }
         }
       },
