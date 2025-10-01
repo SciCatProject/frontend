@@ -231,37 +231,36 @@ describe("Datasets general", () => {
           },
         },
         isPublished: true,
-      }).then(() => {
-        cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
-          const testConfig = {
-            ...baseConfig,
-            defaultDatasetsListSettings: {
-              ...baseConfig.defaultDatasetsListSettings,
-              conditions: [
-                {
-                  condition: {
-                    lhs: "outgassing_values_after_1h",
-                    relation: "GREATER_THAN",
-                    rhs: 1,
-                    unit: "",
-                    unitsOptions: [
-                      "mbar l/s/cm^2",
-                      "Pa m^3/s/m^2",
-                      "bar m^3/s/m^2",
-                    ],
-                  },
-                  enabled: false,
-                },
-              ],
-            },
-          };
-
-          cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
-          cy.visit("/datasets");
-          cy.wait("@getConfig", { timeout: 20000 });
-          cy.finishedLoading();
-        });
       });
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const testConfig = {
+          ...baseConfig,
+          defaultDatasetsListSettings: {
+            ...baseConfig.defaultDatasetsListSettings,
+            conditions: [
+              {
+                condition: {
+                  lhs: "outgassing_values_after_1h",
+                  relation: "GREATER_THAN",
+                  rhs: 1,
+                  unit: "",
+                  unitsOptions: [
+                    "mbar l/s/cm^2",
+                    "Pa m^3/s/m^2",
+                    "bar m^3/s/m^2",
+                  ],
+                },
+                enabled: false,
+              },
+            ],
+          },
+        };
+
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+      });
+      cy.visit("/datasets");
+      cy.wait("@getConfig", { timeout: 20000 });
+      cy.finishedLoading();
     });
 
     it("should display limited options in units dropdown", () => {
@@ -319,7 +318,7 @@ describe("Datasets general", () => {
 
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
         cy.visit("/datasets");
-        cy.wait("@getConfig", { timeout: 10000 });
+        cy.wait("@getConfig");
         cy.finishedLoading();
       });
     });
@@ -342,38 +341,37 @@ describe("Datasets general", () => {
           extra_entry_end_time: { type: "number", value: 2, unit: "" },
         },
         isPublished: true,
-      }).then(() => {
-        cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
-          const relationsToTest = [
-            { relation: "GREATER_THAN", rhs: 1 },
-            { relation: "LESS_THAN", rhs: 3 },
-            { relation: "EQUAL_TO_NUMERIC", rhs: 2 },
-            { relation: "GREATER_THAN_OR_EQUAL", rhs: 2 },
-            { relation: "LESS_THAN_OR_EQUAL", rhs: 2 },
-            { relation: "RANGE", rhs: [1, 3] },
-          ];
-          const testConfig = {
-            ...baseConfig,
-            defaultDatasetsListSettings: {
-              ...baseConfig.defaultDatasetsListSettings,
-              conditions: relationsToTest.map(({ relation, rhs }) => ({
-                condition: {
-                  lhs: "extra_entry_end_time",
-                  relation,
-                  rhs,
-                  unit: "",
-                },
-                enabled: true,
-              })),
-            },
-          };
-
-          cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
-          cy.visit("/datasets");
-          cy.wait("@getConfig", { timeout: 20000 });
-          cy.finishedLoading();
-        });
       });
+
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const relationsToTest = [
+          { relation: "GREATER_THAN", rhs: 1 },
+          { relation: "LESS_THAN", rhs: 3 },
+          { relation: "EQUAL_TO_NUMERIC", rhs: 2 },
+          { relation: "GREATER_THAN_OR_EQUAL", rhs: 2 },
+          { relation: "LESS_THAN_OR_EQUAL", rhs: 2 },
+          { relation: "RANGE", rhs: [1, 3] },
+        ];
+        const testConfig = {
+          ...baseConfig,
+          defaultDatasetsListSettings: {
+            ...baseConfig.defaultDatasetsListSettings,
+            conditions: relationsToTest.map(({ relation, rhs }) => ({
+              condition: {
+                lhs: "extra_entry_end_time",
+                relation,
+                rhs,
+                unit: "",
+              },
+              enabled: true,
+            })),
+          },
+        };
+
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+      });
+      cy.visit("/datasets");
+      cy.wait("@getConfig");
     });
 
     it("should check if pre-configured conditions are applied", () => {

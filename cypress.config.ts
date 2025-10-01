@@ -1,6 +1,4 @@
 import { defineConfig } from "cypress";
-import fs from "fs";
-import path from "path";
 
 export default defineConfig({
   env: {
@@ -20,34 +18,5 @@ export default defineConfig({
     viewportWidth: 1280,
     defaultCommandTimeout: 10000,
     retries: 1,
-  },
-  video: true,
-  videosFolder: "cypress/videos",
-  // workaround to delete videos of passed tests
-  // https://docs.cypress.io/app/guides/screenshots-and-videos#Only-upload-videos-for-specs-with-failing-or-retried-tests
-  setupNodeEvents(on, config) {
-    on(
-      "after:spec",
-      (spec: Cypress.Spec, results: CypressCommandLine.RunResult) => {
-        if (results && results.video) {
-          // Do we have failures for any retry attempts?
-          const failures = results.tests.some((test) =>
-            test.attempts.some((attempt) => attempt.state === "failed"),
-          );
-          if (!failures) {
-            const safeVideoPath = path.resolve(results.video);
-            const videosDir = path.resolve(config.videosFolder);
-
-            if (!safeVideoPath.startsWith(videosDir)) {
-              console.warn(
-                `Path Traversal blocked: Attempted to delete file outside of videos folder: ${safeVideoPath}`,
-              );
-              return; // Stop execution if validation fails
-            }
-            fs.unlinkSync(safeVideoPath);
-          }
-        }
-      },
-    );
   },
 });
