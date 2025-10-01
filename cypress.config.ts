@@ -36,8 +36,11 @@ export default defineConfig({
           );
           if (!failures) {
             const safeVideoPath = path.resolve(results.video);
+            const videosDir = path.resolve(config.videosFolder);
             // delete the video if the spec passed and no tests retried
-            fs.unlinkSync(safeVideoPath);
+            if (safeVideoPath.startsWith(videosDir)) {
+              fs.unlinkSync(safeVideoPath);
+            }
           }
         }
       },
