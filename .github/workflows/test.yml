@@ -127,6 +127,9 @@ jobs:
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
+        env:
+          DBUS_SESSION_BUS_ADDRESS: "disabled:"
+          DBUS_SYSTEM_BUS_ADDRESS: "disabled:"
         with:
           config-file: cypress.config.ts
           install-command: npm install --omit peer

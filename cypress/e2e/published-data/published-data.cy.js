@@ -95,6 +95,7 @@ describe("Datasets general", () => {
     });
 
     it("should be able to edit dataset list after creating the published data - 1", () => {
+      // flaky test
       cy.createDataset({ type: "raw" });
       cy.createDataset({ type: "raw" });
 
@@ -148,7 +149,11 @@ describe("Datasets general", () => {
 
       cy.get("a.button").click();
 
+      cy.pause();
+
       cy.get('[data-cy="batch-table"] mat-row').its("length").should("eq", 2);
+
+      cy.pause();
 
       cy.get("#saveChangesButton").click();
 
