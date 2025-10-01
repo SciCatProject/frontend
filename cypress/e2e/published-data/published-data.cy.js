@@ -149,11 +149,7 @@ describe("Datasets general", () => {
 
       cy.get("a.button").click();
 
-      cy.pause();
-
       cy.get('[data-cy="batch-table"] mat-row').its("length").should("eq", 2);
-
-      cy.pause();
 
       cy.get("#saveChangesButton").click();
 

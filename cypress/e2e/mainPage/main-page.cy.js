@@ -67,9 +67,6 @@ describe("Main Page", () => {
 
   describe("Main page configuration as authenticated user", () => {
     it("should visit main page correctly configured", () => {
-      const username = Cypress.env("username");
-      const password = Cypress.env("password");
-
       cy.visit("/");
       cy.finishedLoading();
 
@@ -94,7 +91,7 @@ describe("Main Page", () => {
         "button.mat-mdc-menu-item:nth-child(2) > span:nth-child(2) > span:nth-child(1)",
       ).should("contain", "Files");
 
-      cy.get("div.main-menu").click();
+      cy.get("body").type("{esc}");
 
       cy.get('[data-cy="login-button"]').should("not.exist");
       cy.get(".user-button").should("exist");
