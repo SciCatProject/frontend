@@ -12,12 +12,8 @@ describe("IngestorUserMetadataDialogPageComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [IngestorUserMetadataDialogPageComponent],
-      imports: [
-        StoreModule.forRoot({}),
-      ],
-      providers: [
-        provideMockStore(),
-      ],
+      imports: [StoreModule.forRoot({})],
+      providers: [provideMockStore()],
     });
 
     TestBed.compileComponents();

@@ -1,6 +1,11 @@
 .ingestor-metadata-editor {
   width: 100%;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 }
 
 .spacer {
@@ -14,9 +19,13 @@ mat-card {
     padding: 24px;
     font-weight: 700;
     font-size: 1.2em;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.05)
+    );
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.18);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 16px 16px 0 0;
     color: #1a1a1a;
     letter-spacing: -0.02em;
@@ -30,18 +39,18 @@ mat-card {
   background: linear-gradient(145deg, #ffffff, #f8fafc);
   border-radius: 20px;
   border: 1px solid rgba(226, 232, 240, 0.8);
-  box-shadow: 
+  box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.05),
     0 10px 30px rgba(0, 0, 0, 0.02);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 
+    box-shadow:
       0 4px 12px rgba(0, 0, 0, 0.08),
       0 20px 40px rgba(0, 0, 0, 0.04);
   }
-  
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -60,7 +69,7 @@ mat-card {
   border-bottom: 2px solid transparent;
   border-image: linear-gradient(90deg, #667eea, #764ba2) 1;
   letter-spacing: -0.03em;
-  
+
   &.major-section {
     font-size: 1.5em;
     background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
@@ -81,9 +90,9 @@ mat-card {
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
   position: relative;
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -92,7 +101,7 @@ mat-card {
     background: linear-gradient(90deg, #6366f1, #8b5cf6, #d946ef);
     border-radius: 16px 16px 0 0;
   }
-  
+
   &.related-fields {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -104,29 +113,29 @@ mat-card {
 // Ultra-modern form controls
 .jsonforms-control {
   margin-bottom: 24px;
-  
+
   .mat-mdc-form-field {
     width: 100%;
-    
+
     .mat-mdc-text-field-wrapper {
       border-radius: 12px;
       background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(10px);
       transition: all 0.3s ease;
-      
+
       &:hover {
         background: rgba(255, 255, 255, 0.95);
         transform: translateY(-1px);
       }
     }
-    
+
     &.mat-focused .mat-mdc-text-field-wrapper {
-      box-shadow: 
+      box-shadow:
         0 0 0 2px rgba(99, 102, 241, 0.2),
         0 8px 25px rgba(99, 102, 241, 0.15);
     }
   }
-  
+
   label {
     font-weight: 600;
     color: #374151;
@@ -155,9 +164,9 @@ mat-card {
   background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
   margin: 40px 0;
   position: relative;
-  
+
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     left: 50%;
     top: -4px;
@@ -180,9 +189,9 @@ mat-card {
   border: 1px solid rgba(226, 232, 240, 0.6);
   position: relative;
   overflow: hidden;
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: -100%;
@@ -194,8 +203,12 @@ mat-card {
 }
 
 @keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 100%; }
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
 }
 
 .array-layout > * {
@@ -230,7 +243,7 @@ mat-card {
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   &:hover {
     transform: translateY(-4px) scale(1.02);
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
@@ -241,11 +254,11 @@ mat-card {
 .field-view-toggle {
   margin-bottom: 32px;
   display: block;
-  
+
   .mat-slide-toggle-bar {
     background: linear-gradient(135deg, #e5e7eb, #d1d5db);
   }
-  
+
   &.mat-checked .mat-slide-toggle-bar {
     background: linear-gradient(135deg, #6366f1, #8b5cf6);
   }
@@ -261,7 +274,7 @@ mat-card {
 // Modern input styling
 .custom-input-box {
   width: 100%;
-  
+
   .mat-mdc-form-field {
     .mat-mdc-text-field-wrapper {
       background: rgba(255, 255, 255, 0.8);
@@ -277,7 +290,11 @@ mat-card {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
   padding: 20px;
-  background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(248,250,252,0.9));
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.9),
+    rgba(248, 250, 252, 0.9)
+  );
   backdrop-filter: blur(20px);
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -286,7 +303,7 @@ mat-card {
 
 .quantity-value-element {
   transition: transform 0.3s ease;
-  
+
   &:hover {
     transform: scale(1.02);
   }
@@ -301,7 +318,7 @@ mat-card {
 .step-indicator {
   margin-bottom: 32px;
   text-align: center;
-  
+
   .step-title {
     font-size: 2em;
     font-weight: 900;
@@ -312,7 +329,7 @@ mat-card {
     margin-bottom: 12px;
     letter-spacing: -0.04em;
   }
-  
+
   .step-description {
     color: #6b7280;
     font-size: 1em;
@@ -328,12 +345,12 @@ mat-card {
     border-color: rgba(75, 85, 99, 0.3);
     color: #f9fafb;
   }
-  
+
   .field-group {
     background: rgba(17, 24, 39, 0.7);
     border-color: rgba(75, 85, 99, 0.2);
   }
-  
+
   .jsonforms-control label {
     color: #d1d5db;
   }
@@ -346,11 +363,11 @@ mat-card {
     margin-bottom: 20px;
     border-radius: 16px;
   }
-  
+
   .field-group.related-fields {
     grid-template-columns: 1fr;
   }
-  
+
   .step-indicator .step-title {
     font-size: 1.5em;
   }

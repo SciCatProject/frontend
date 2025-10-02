@@ -18,11 +18,7 @@ describe("IngestorDialogStepperComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [IngestorDialogStepperComponent],
-      imports: [
-        MatDialogModule,
-        MatMenuModule,
-        StoreModule.forRoot({}),
-      ],
+      imports: [MatDialogModule, MatMenuModule, StoreModule.forRoot({})],
       providers: [
         provideMockStore(),
         { provide: MatDialog, useValue: mockDialog },

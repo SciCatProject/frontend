@@ -58,7 +58,7 @@ export interface QuantityValueLayout extends Layout {
   type: "QuantityValueLayout";
 }
 
-@Pipe({ name: "customLayoutChildrenRenderProps", standalone: false  })
+@Pipe({ name: "customLayoutChildrenRenderProps", standalone: false })
 export class CustomLayoutChildrenRenderPropsPipe implements PipeTransform {
   transform(
     uischema: Layout,

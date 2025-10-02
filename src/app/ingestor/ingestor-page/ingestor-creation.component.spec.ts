@@ -1,7 +1,7 @@
 import { IngestorCreationComponent } from "./ingestor-creation.component";
 import { IngestorHelper } from "./helper/ingestor.component-helper";
 import * as fromActions from "state-management/actions/ingestor.actions";
-import { MatCardModule} from "@angular/material/card";
+import { MatCardModule } from "@angular/material/card";
 import { MatListModule } from "@angular/material/list";
 import { MatIconModule } from "@angular/material/icon";
 import { MockActivatedRoute, MockUserApi } from "shared/MockStubs";
@@ -32,27 +32,28 @@ describe("IngestorCreationComponent", () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [IngestorCreationComponent],
-      imports:[
+      imports: [
         MatCardModule,
         MatListModule,
         MatIconModule,
-        StoreModule.forRoot({})],
-      })
-      TestBed.overrideComponent(IngestorCreationComponent, {
-        set: {
-          providers: [
-            { provide: Router, useValue: router },
-            {
-              provide: AppConfigService,
-              useValue: {
-                getConfig,
-              },
+        StoreModule.forRoot({}),
+      ],
+    });
+    TestBed.overrideComponent(IngestorCreationComponent, {
+      set: {
+        providers: [
+          { provide: Router, useValue: router },
+          {
+            provide: AppConfigService,
+            useValue: {
+              getConfig,
             },
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-            { provide: UsersService, useClass: MockUserApi },
-          ],
-        },
-      });      
+          },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: UsersService, useClass: MockUserApi },
+        ],
+      },
+    });
     TestBed.compileComponents();
   }));
 
@@ -84,7 +85,7 @@ describe("IngestorCreationComponent", () => {
     expectedObject.editorMode = "CREATION";
 
     expect(store.dispatch).toHaveBeenCalledWith(
-      fromActions.resetIngestionObject({ ingestionObject: expectedObject })
+      fromActions.resetIngestionObject({ ingestionObject: expectedObject }),
     );
   });
 });

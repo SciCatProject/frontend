@@ -19,7 +19,10 @@ import {
   QuantityValueLayoutRendererComponent,
   quantityValueLayoutTester,
 } from "./quantity-value-layout-renderer";
-import { SIFieldHiderRenderer, isSIFieldTester } from "./quantity-field-renderer";
+import {
+  SIFieldHiderRenderer,
+  isSIFieldTester,
+} from "./quantity-field-renderer";
 
 export const customRenderers: JsonFormsRendererRegistryEntry[] = [
   {
@@ -44,7 +47,7 @@ export const customRenderers: JsonFormsRendererRegistryEntry[] = [
     renderer: CustomObjectControlRendererComponent,
   },
   {
-    tester: isSIFieldTester, 
+    tester: isSIFieldTester,
     renderer: SIFieldHiderRenderer,
   },
 ];

@@ -338,50 +338,50 @@ export const mockPolicy = createMock<Policy>({});
 export const mockPublishedData = createMock<PublishedData>({});
 export const mockUser = createMock<ReturnedUserDto>({});
 
-
-export  const mockIngestionRequestInformation = createMock<IngestionRequestInformation>({
-  selectedPath: "/test/path",
-  selectedMethod: {
-    name: "test-method",
-    schema: "base64-encoded-schema",
-  },
-  selectedResolvedDecodedSchema: {
-    type: "object",
-    properties: {
-      organizational: { type: "object" },
-      sample: { type: "object" },
-      instrument: { type: "object" },
-      acquisition: { type: "object" },
+export const mockIngestionRequestInformation =
+  createMock<IngestionRequestInformation>({
+    selectedPath: "/test/path",
+    selectedMethod: {
+      name: "test-method",
+      schema: "base64-encoded-schema",
     },
-  },
-  scicatHeader: {
-    datasetName: "test-dataset",
-    sourceFolder: "/test/path",
-    type: "raw",
-    owner: "testuser",
-  },
-  userMetaData: {
-    organizational: {
-      experimentId: "EXP-001",
+    selectedResolvedDecodedSchema: {
+      type: "object",
+      properties: {
+        organizational: { type: "object" },
+        sample: { type: "object" },
+        instrument: { type: "object" },
+        acquisition: { type: "object" },
+      },
     },
-    sample: {
-      sampleId: "SAMPLE-001",
+    scicatHeader: {
+      datasetName: "test-dataset",
+      sourceFolder: "/test/path",
+      type: "raw",
+      owner: "testuser",
     },
-  },
-  extractorMetaData: {
-    instrument: {
-      name: "Test Instrument",
+    userMetaData: {
+      organizational: {
+        experimentId: "EXP-001",
+      },
+      sample: {
+        sampleId: "SAMPLE-001",
+      },
     },
-    acquisition: {
-      date: "2024-01-01",
+    extractorMetaData: {
+      instrument: {
+        name: "Test Instrument",
+      },
+      acquisition: {
+        date: "2024-01-01",
+      },
     },
-  },
-  customMetaData: {},
-  mergedMetaDataString: "{}",
-  editorMode: "INGESTION",
-  ingestionRequest: null,
-  autoArchive: false,
-});
+    customMetaData: {},
+    mergedMetaDataString: "{}",
+    editorMode: "INGESTION",
+    ingestionRequest: null,
+    autoArchive: false,
+  });
 
 export const mockMethodItem = createMock<MethodItem>({
   name: "test-extraction-method",
@@ -393,10 +393,7 @@ export const mockMethodItem2 = createMock<MethodItem>({
   schema: "eyJwcm9wZXJ0aWVzIjp7Imluc3RydW1lbnQiOnt9fX0=",
 });
 
-export const mockMethodItems: MethodItem[] = [
-  mockMethodItem,
-  mockMethodItem2,
-];
+export const mockMethodItems: MethodItem[] = [mockMethodItem, mockMethodItem2];
 
 export const mockFolderNode = createMock<FolderNode>({
   name: "test-folder",

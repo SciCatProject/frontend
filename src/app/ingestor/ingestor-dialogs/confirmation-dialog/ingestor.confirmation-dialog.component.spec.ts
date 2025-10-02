@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { IngestorConfirmationDialogComponent } from "./ingestor.confirmation-dialog.component";
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+} from "@angular/material/dialog";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 
 describe("IngestorConfirmationDialogComponent", () => {

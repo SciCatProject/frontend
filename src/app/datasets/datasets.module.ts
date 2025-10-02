@@ -86,7 +86,7 @@ import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-d
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
-import { IngestorModule } from "../ingestor/ingestor.module"
+import { IngestorModule } from "../ingestor/ingestor.module";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatBadgeModule } from "@angular/material/badge";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";

@@ -56,7 +56,9 @@ describe("IngestorEffects", () => {
 
     effects = TestBed.inject(IngestorEffects);
     ingestorService = TestBed.inject(Ingestor) as jasmine.SpyObj<Ingestor>;
-    datasetsService = TestBed.inject(DatasetsService) as jasmine.SpyObj<DatasetsService>;
+    datasetsService = TestBed.inject(
+      DatasetsService,
+    ) as jasmine.SpyObj<DatasetsService>;
     store = TestBed.inject(MockStore);
   });
 
@@ -75,7 +77,7 @@ describe("IngestorEffects", () => {
             healthResponse: mockHealthResponse,
             userInfoResponse: mockUserInfoResponse,
             authIsDisabled: false,
-          })
+          }),
         );
         done();
       });
@@ -96,7 +98,7 @@ describe("IngestorEffects", () => {
             healthResponse: mockHealthResponse,
             userInfoResponse: null,
             authIsDisabled: true,
-          })
+          }),
         );
         done();
       });
@@ -135,7 +137,7 @@ describe("IngestorEffects", () => {
           healthResponse: mockHealthResponse,
           userInfoResponse: mockUserInfoResponse,
           authIsDisabled: false,
-        })
+        }),
       );
 
       effects.connectToIngestorSuccess$.subscribe((action) => {
@@ -174,7 +176,7 @@ describe("IngestorEffects", () => {
             transferList,
             page: 1,
             pageNumber: 50,
-          })
+          }),
         );
         done();
       });
@@ -190,7 +192,7 @@ describe("IngestorEffects", () => {
         expect(action).toEqual(
           fromActions.updateTransferListDetailSuccess({
             transferListDetailView: transferList,
-          })
+          }),
         );
         done();
       });
@@ -214,11 +216,15 @@ describe("IngestorEffects", () => {
       const methods = { methods: [], total: 0 };
       ingestorService.getExtractionMethods.and.returnValue(of(methods));
 
-      actions$ = of(fromActions.getExtractionMethods({ page: 1, pageNumber: 50 }));
+      actions$ = of(
+        fromActions.getExtractionMethods({ page: 1, pageNumber: 50 }),
+      );
 
       effects.getExtractionMethods$.subscribe((action) => {
         expect(action).toEqual(
-          fromActions.getExtractionMethodsSuccess({ extractionMethods: methods })
+          fromActions.getExtractionMethodsSuccess({
+            extractionMethods: methods,
+          }),
         );
         done();
       });
@@ -226,9 +232,13 @@ describe("IngestorEffects", () => {
 
     it("should dispatch setNoRightsError when session expired", (done) => {
       const error = { error: { error: "login session has expired" } };
-      ingestorService.getExtractionMethods.and.returnValue(throwError(() => error));
+      ingestorService.getExtractionMethods.and.returnValue(
+        throwError(() => error),
+      );
 
-      actions$ = of(fromActions.getExtractionMethods({ page: 1, pageNumber: 50 }));
+      actions$ = of(
+        fromActions.getExtractionMethods({ page: 1, pageNumber: 50 }),
+      );
 
       effects.getExtractionMethods$.subscribe((action) => {
         expect(action.type).toBe(fromActions.setNoRightsError.type);
@@ -238,9 +248,13 @@ describe("IngestorEffects", () => {
 
     it("should dispatch getExtractionMethodsFailure on error", (done) => {
       const error = new Error("Failed");
-      ingestorService.getExtractionMethods.and.returnValue(throwError(() => error));
+      ingestorService.getExtractionMethods.and.returnValue(
+        throwError(() => error),
+      );
 
-      actions$ = of(fromActions.getExtractionMethods({ page: 1, pageNumber: 50 }));
+      actions$ = of(
+        fromActions.getExtractionMethods({ page: 1, pageNumber: 50 }),
+      );
 
       effects.getExtractionMethods$.subscribe((action) => {
         expect(action.type).toBe(fromActions.getExtractionMethodsFailure.type);
@@ -255,14 +269,18 @@ describe("IngestorEffects", () => {
       ingestorService.getBrowseFilePath.and.returnValue(of(browseResult));
 
       actions$ = of(
-        fromActions.getBrowseFilePath({ path: "/test", page: 1, pageNumber: 50 })
+        fromActions.getBrowseFilePath({
+          path: "/test",
+          page: 1,
+          pageNumber: 50,
+        }),
       );
 
       effects.getBrowseFilePath$.subscribe((action) => {
         expect(action).toEqual(
           fromActions.getBrowseFilePathSuccess({
             ingestorBrowserActiveNode: browseResult,
-          })
+          }),
         );
         done();
       });
@@ -270,10 +288,16 @@ describe("IngestorEffects", () => {
 
     it("should dispatch getBrowseFilePathFailure on error", (done) => {
       const error = new Error("Browse failed");
-      ingestorService.getBrowseFilePath.and.returnValue(throwError(() => error));
+      ingestorService.getBrowseFilePath.and.returnValue(
+        throwError(() => error),
+      );
 
       actions$ = of(
-        fromActions.getBrowseFilePath({ path: "/test", page: 1, pageNumber: 50 })
+        fromActions.getBrowseFilePath({
+          path: "/test",
+          page: 1,
+          pageNumber: 50,
+        }),
       );
 
       effects.getBrowseFilePath$.subscribe((action) => {
@@ -294,7 +318,9 @@ describe("IngestorEffects", () => {
 
       effects.setLoadingBeforeIngestion$.subscribe((action) => {
         expect(action).toEqual(
-          fromActions.setIngestDatasetLoading({ ingestionDatasetLoading: true })
+          fromActions.setIngestDatasetLoading({
+            ingestionDatasetLoading: true,
+          }),
         );
         done();
       });
@@ -319,7 +345,9 @@ describe("IngestorEffects", () => {
         if (actions.length === 3) {
           expect(actions[0].type).toBe(fromActions.ingestDatasetSuccess.type);
           expect(actions[1].type).toBe(fromActions.updateTransferList.type);
-          expect(actions[2].type).toBe(fromActions.setIngestDatasetLoading.type);
+          expect(actions[2].type).toBe(
+            fromActions.setIngestDatasetLoading.type,
+          );
           done();
         }
       });
@@ -341,7 +369,9 @@ describe("IngestorEffects", () => {
         actions.push(action);
         if (actions.length === 2) {
           expect(actions[0].type).toBe(fromActions.ingestDatasetFailure.type);
-          expect(actions[1].type).toBe(fromActions.setIngestDatasetLoading.type);
+          expect(actions[1].type).toBe(
+            fromActions.setIngestDatasetLoading.type,
+          );
           done();
         }
       });
@@ -375,7 +405,7 @@ describe("IngestorEffects", () => {
       });
     });
   });
-  
+
   describe("cancelTransfer$", () => {
     it("should dispatch success actions on successful cancel", (done) => {
       const deleteResponse = { transferId: "123" };
@@ -414,7 +444,7 @@ describe("IngestorEffects", () => {
   describe("setRenderView$", () => {
     it("should dispatch showMessageAction", (done) => {
       actions$ = of(
-        fromActions.setRenderViewFromThirdParty({ renderView: "requiredOnly" })
+        fromActions.setRenderViewFromThirdParty({ renderView: "requiredOnly" }),
       );
 
       effects.setRenderView$.subscribe((action) => {
@@ -437,7 +467,9 @@ describe("IngestorEffects", () => {
         actions.push(action);
         if (actions.length === 2) {
           expect(actions[0].type).toBe(fromActions.createDatasetSuccess.type);
-          expect(actions[1].type).toBe(fromActions.setIngestDatasetLoading.type);
+          expect(actions[1].type).toBe(
+            fromActions.setIngestDatasetLoading.type,
+          );
           done();
         }
       });
@@ -446,7 +478,7 @@ describe("IngestorEffects", () => {
     it("should dispatch failure actions on error", (done) => {
       const error = new Error("Create failed");
       datasetsService.datasetsControllerCreateV3.and.returnValue(
-        throwError(() => error)
+        throwError(() => error),
       );
 
       const dataset = { datasetName: "Test" } as any;
@@ -457,7 +489,9 @@ describe("IngestorEffects", () => {
         actions.push(action);
         if (actions.length === 2) {
           expect(actions[0].type).toBe(fromActions.ingestDatasetFailure.type);
-          expect(actions[1].type).toBe(fromActions.setIngestDatasetLoading.type);
+          expect(actions[1].type).toBe(
+            fromActions.setIngestDatasetLoading.type,
+          );
           done();
         }
       });

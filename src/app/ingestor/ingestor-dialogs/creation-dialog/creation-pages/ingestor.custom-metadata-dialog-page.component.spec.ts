@@ -12,19 +12,17 @@ describe("IngestorCustomMetadataDialogPageComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [IngestorCustomMetadataDialogPageComponent],
-      imports: [
-        StoreModule.forRoot({}),
-      ],
-      providers: [
-        provideMockStore(),
-      ],
+      imports: [StoreModule.forRoot({})],
+      providers: [provideMockStore()],
     });
 
     TestBed.compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(IngestorCustomMetadataDialogPageComponent);
+    fixture = TestBed.createComponent(
+      IngestorCustomMetadataDialogPageComponent,
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

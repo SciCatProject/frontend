@@ -64,84 +64,88 @@ export class IngestorMetadataEditorHelper {
     return reducedSchema;
   }
 
-    /**
-     * Checks if a field at the given error path is marked as required in the JSON schema
-     * @param errorPath - The path to the field (e.g., "/instrument/name" or "/acquisition/voltage")
-     * @param schema - The JSON schema to check against
-     * @returns true if the field is required, false otherwise
-     */
-    static isRequiredField(errorPath: string, schema: JsonSchema): boolean {
-      if (!schema || !errorPath) {
-        return false;
-      }
-      const pathSegments = errorPath.replace(/^\//, '').split('/');
-      if (pathSegments.length === 0 || pathSegments[0] === '') {
-        return false;
-      }
-      let currentSchema = schema;
-  
-      for (let i = 0; i < pathSegments.length - 1; i++) {
-        const segment = pathSegments[i];
-        
-        if (currentSchema.properties && currentSchema.properties[segment]) {
-          currentSchema = currentSchema.properties[segment];
-        } else {
-          return false;
-        }
-      }
-  
-      const fieldName = pathSegments[pathSegments.length - 1];
-  
-      if (currentSchema.required && Array.isArray(currentSchema.required)) {
-        return currentSchema.required.includes(fieldName);
-      }
-  
-      // If no required array found, field is not required
+  /**
+   * Checks if a field at the given error path is marked as required in the JSON schema
+   * @param errorPath - The path to the field (e.g., "/instrument/name" or "/acquisition/voltage")
+   * @param schema - The JSON schema to check against
+   * @returns true if the field is required, false otherwise
+   */
+  static isRequiredField(errorPath: string, schema: JsonSchema): boolean {
+    if (!schema || !errorPath) {
       return false;
     }
-  
-  
-    /**
-     * Filters validation errors to only include those for required fields when in 'requiredOnly' render mode
-     * @param errors - Array of validation errors from JSONForms
-     * @param schema - The JSON schema to validate against
-     * @param renderView - The current render view mode
-     * @returns Filtered array of errors (only required field errors if renderView is 'requiredOnly')
-     */
-    static filterErrorsForRenderView(
-      errors: any[], 
-      schema: JsonSchema, 
-      renderView: string
-    ): any[] {
-      if (renderView !== 'requiredOnly' || !errors || errors.length === 0) {
-        return errors;
+    const pathSegments = errorPath.replace(/^\//, "").split("/");
+    if (pathSegments.length === 0 || pathSegments[0] === "") {
+      return false;
+    }
+    let currentSchema = schema;
+
+    for (let i = 0; i < pathSegments.length - 1; i++) {
+      const segment = pathSegments[i];
+
+      if (currentSchema.properties && currentSchema.properties[segment]) {
+        currentSchema = currentSchema.properties[segment];
+      } else {
+        return false;
       }
-  
-      return errors.filter(error => {
-        const errorPath = error.instancePath || error.dataPath || error.schemaPath || '';
-        return this.isRequiredField(errorPath, schema);
-      });
     }
-  
-    /**
-     * Processes validation errors for metadata forms
-     * @param errors - Array of validation errors from JSONForms
-     * @param schema - The JSON schema to validate against
-     * @param renderView - The current render view mode
-     * @returns Object containing processed validation results
-     */
-    static processMetadataErrors(
-      errors: any[], 
-      schema: JsonSchema, 
-      renderView: string
-    ): { isValid: boolean; errorString: string } {
-      const filteredErrors = this.filterErrorsForRenderView(errors, schema, renderView || 'all');
-      
-      return {
-        isValid: filteredErrors.length === 0,
-        errorString: convertJSONFormsErrorToString(filteredErrors)
-      };
+
+    const fieldName = pathSegments[pathSegments.length - 1];
+
+    if (currentSchema.required && Array.isArray(currentSchema.required)) {
+      return currentSchema.required.includes(fieldName);
     }
+
+    // If no required array found, field is not required
+    return false;
+  }
+
+  /**
+   * Filters validation errors to only include those for required fields when in 'requiredOnly' render mode
+   * @param errors - Array of validation errors from JSONForms
+   * @param schema - The JSON schema to validate against
+   * @param renderView - The current render view mode
+   * @returns Filtered array of errors (only required field errors if renderView is 'requiredOnly')
+   */
+  static filterErrorsForRenderView(
+    errors: any[],
+    schema: JsonSchema,
+    renderView: string,
+  ): any[] {
+    if (renderView !== "requiredOnly" || !errors || errors.length === 0) {
+      return errors;
+    }
+
+    return errors.filter((error) => {
+      const errorPath =
+        error.instancePath || error.dataPath || error.schemaPath || "";
+      return this.isRequiredField(errorPath, schema);
+    });
+  }
+
+  /**
+   * Processes validation errors for metadata forms
+   * @param errors - Array of validation errors from JSONForms
+   * @param schema - The JSON schema to validate against
+   * @param renderView - The current render view mode
+   * @returns Object containing processed validation results
+   */
+  static processMetadataErrors(
+    errors: any[],
+    schema: JsonSchema,
+    renderView: string,
+  ): { isValid: boolean; errorString: string } {
+    const filteredErrors = this.filterErrorsForRenderView(
+      errors,
+      schema,
+      renderView || "all",
+    );
+
+    return {
+      isValid: filteredErrors.length === 0,
+      errorString: convertJSONFormsErrorToString(filteredErrors),
+    };
+  }
 }
 
 export const convertJSONFormsErrorToString = (error: any): string => {

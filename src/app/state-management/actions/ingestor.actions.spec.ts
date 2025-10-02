@@ -119,7 +119,9 @@ describe("Ingestor Actions", () => {
         transferListDetailView,
       });
 
-      expect(action.type).toBe("[Ingestor] Update Transfer List Detail Success");
+      expect(action.type).toBe(
+        "[Ingestor] Update Transfer List Detail Success",
+      );
       expect(action.transferListDetailView).toEqual(transferListDetailView);
     });
   });
@@ -169,7 +171,9 @@ describe("Ingestor Actions", () => {
         ingestionObject: mockIngestionRequestInformation,
       });
 
-      expect(action.type).toBe("[Ingestor] Update Ingestion Object from Third Party");
+      expect(action.type).toBe(
+        "[Ingestor] Update Ingestion Object from Third Party",
+      );
       expect(action.ingestionObject).toEqual(mockIngestionRequestInformation);
     });
   });
@@ -180,7 +184,9 @@ describe("Ingestor Actions", () => {
         ingestionObjectApiInformation: mockAPIInformation,
       });
 
-      expect(action.type).toBe("[Ingestor] Update Ingestion Object API Information");
+      expect(action.type).toBe(
+        "[Ingestor] Update Ingestion Object API Information",
+      );
       expect(action.ingestionObjectApiInformation).toEqual(mockAPIInformation);
     });
   });
@@ -189,7 +195,9 @@ describe("Ingestor Actions", () => {
     it("should create an action", () => {
       const action = fromActions.resetIngestionObjectFromThirdPartyFlag();
 
-      expect(action.type).toBe("[Ingestor] Reset Ingestion Object from Third Party Flag");
+      expect(action.type).toBe(
+        "[Ingestor] Reset Ingestion Object from Third Party Flag",
+      );
     });
   });
 

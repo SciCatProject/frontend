@@ -1,103 +1,132 @@
 <div class="ingestor-dialog-header">
   <div class="ingestor-mixed-header">
-    <h2 *ngIf="createNewTransferData.editorMode === 'CREATION'" mat-dialog-title>
+    <h2
+      *ngIf="createNewTransferData.editorMode === 'CREATION'"
+      mat-dialog-title
+    >
       Fill out Dataset information
     </h2>
 
-    <h2 *ngIf="createNewTransferData.editorMode !== 'CREATION'" mat-dialog-title>
+    <h2
+      *ngIf="createNewTransferData.editorMode !== 'CREATION'"
+      mat-dialog-title
+    >
       Select your ingestion method
     </h2>
-    <button mat-icon-button mat-dialog-close aria-label="Close"
-      class="ingestor-close-button">
+    <button
+      mat-icon-button
+      mat-dialog-close
+      aria-label="Close"
+      class="ingestor-close-button"
+    >
       <mat-icon>close</mat-icon>
     </button>
   </div>
 
   <div class="ingestor-stepper-header">
-    <ingestor-dialog-stepper 
-      [activeStep]="0"
-    ></ingestor-dialog-stepper>
+    <ingestor-dialog-stepper [activeStep]="0"></ingestor-dialog-stepper>
   </div>
 </div>
 
 <mat-dialog-content class="mat-typography" disableClose="true">
   <div *ngIf="createNewTransferData.editorMode === 'CREATION'">
+    <mat-card>
+      <mat-card-header
+        class="scicat-header"
+        (click)="toggleCardContent('scicat')"
+      >
+        <div mat-card-avatar class="section-icon">
+          <mat-icon> info </mat-icon>
+        </div>
+        SciCat Information
+        <span class="spacer"></span>
+        <mat-icon
+          [matTooltip]="isSciCatHeaderOk ? 'Your input is correct.' : scicatHeaderErrors"
+          [ngClass]="isSciCatHeaderOk ? 'success-icon' : 'error-icon'"
+          >{{ isSciCatHeaderOk ? 'check_circle_outline' :
+          'error_outline'}}</mat-icon
+        >
+        <mat-icon class="toggle-icon"
+          >{{ isCardContentVisible.scicat ? 'expand_less' : 'expand_more'
+          }}</mat-icon
+        >
+      </mat-card-header>
+      <mat-card-content *ngIf="isCardContentVisible.scicat">
+        <app-metadata-editor
+          #scicatHeaderEditor
+          *ngIf="!updateEditorFromThirdParty"
+          [schema]="scicatHeaderSchema"
+          [renderView]="activeRenderView"
+          [data]="createNewTransferData.scicatHeader"
+          (dataChange)="onDataChangeUserScicatHeader($event)"
+          (errors)="scicatHeaderErrorsHandler($event)"
+        ></app-metadata-editor>
+      </mat-card-content>
+    </mat-card>
 
-
-  <mat-card>
-    <mat-card-header class="scicat-header"
-      (click)="toggleCardContent('scicat')">
-      <div mat-card-avatar class="section-icon">
-        <mat-icon> info </mat-icon>
-      </div>
-      SciCat Information
-      <span class="spacer"></span>
-      <mat-icon
-        [matTooltip]="isSciCatHeaderOk ? 'Your input is correct.' : scicatHeaderErrors"
-        [ngClass]="isSciCatHeaderOk ? 'success-icon' : 'error-icon'">{{
-        isSciCatHeaderOk ? 'check_circle_outline' :
-        'error_outline'}}</mat-icon>
-      <mat-icon class="toggle-icon">{{ isCardContentVisible.scicat ?
-        'expand_less' : 'expand_more' }}</mat-icon>
-    </mat-card-header>
-    <mat-card-content *ngIf="isCardContentVisible.scicat">
-      <app-metadata-editor #scicatHeaderEditor
-        *ngIf="!updateEditorFromThirdParty" [schema]="scicatHeaderSchema"
-        [renderView]="activeRenderView"
-        [data]="createNewTransferData.scicatHeader"
-        (dataChange)="onDataChangeUserScicatHeader($event)"
-        (errors)="scicatHeaderErrorsHandler($event)"></app-metadata-editor>
-    </mat-card-content>
-  </mat-card>
-
-
-    
     <mat-card class="ingestor-card">
-    <mat-card-header>
-      <mat-card-title>Scientific Metadata Schema</mat-card-title>
-    </mat-card-header>
-    <mat-card-content class="ingestor-vertical-layout">
-    <div class="ingestor-upload-section">
-      <label for="schemaUrl">
-        You can provide a schema for your scientific metadata. We only accept schemas in json format.
-      </label>
-      <mat-form-field class="form-full-width">
-        <input matInput 
-              id="schemaUrl" 
-              placeholder="Paste schema URL here" 
+      <mat-card-header>
+        <mat-card-title>Scientific Metadata Schema</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="ingestor-vertical-layout">
+        <div class="ingestor-upload-section">
+          <label for="schemaUrl">
+            You can provide a schema for your scientific metadata. We only
+            accept schemas in json format.
+          </label>
+          <mat-form-field class="form-full-width">
+            <input
+              matInput
+              id="schemaUrl"
+              placeholder="Paste schema URL here"
               [ngModel]="createNewTransferData.schemaUrl"
-              (ngModelChange)="onSchemaUrlChange($event)" />
-        <button mat-raised-button 
-                class="block-button" 
-                color="primary"
-                (click)="onUploadSchema()">Validate</button>
-      </mat-form-field>
-      <p *ngIf="this.createNewTransferData.selectedSchemaFileContent">
-        Loaded schema is valid!
-      </p>
-    </div>
-  </mat-card-content>
-</mat-card>
+              (ngModelChange)="onSchemaUrlChange($event)"
+            />
+            <button
+              mat-raised-button
+              class="block-button"
+              color="primary"
+              (click)="onUploadSchema()"
+            >
+              Validate
+            </button>
+          </mat-form-field>
+          <p *ngIf="this.createNewTransferData.selectedSchemaFileContent">
+            Loaded schema is valid!
+          </p>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 
   <div
-    *ngIf="createNewTransferData.editorMode === 'INGESTION' || createNewTransferData.editorMode === 'EDITOR'">
+    *ngIf="createNewTransferData.editorMode === 'INGESTION' || createNewTransferData.editorMode === 'EDITOR'"
+  >
     <mat-card class="ingestor-card">
       <mat-card-header class="ingestor-mixed-header">
         <mat-card-title>Select Options</mat-card-title>
       </mat-card-header>
       <mat-card-content class="ingestor-vertical-layout">
-        <p>Please select the dataset to be uploaded and the appropriate metadata
-          extractor method.</p>
+        <p>
+          Please select the dataset to be uploaded and the appropriate metadata
+          extractor method.
+        </p>
 
         <div *ngIf="createNewTransferData.editorMode === 'INGESTION'">
           <mat-form-field class="form-full-width">
             <mat-label>File Path</mat-label>
-            <input matInput [(ngModel)]="createNewTransferData.selectedPath"
-              (click)="onClickOpenFileBrowser()" readonly>
+            <input
+              matInput
+              [(ngModel)]="createNewTransferData.selectedPath"
+              (click)="onClickOpenFileBrowser()"
+              readonly
+            />
             <!-- [matAutocomplete]="auto" -->
-            <button mat-icon-button matSuffix
-              (click)="onClickOpenFileBrowser()">
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="onClickOpenFileBrowser()"
+            >
               <mat-icon>folder</mat-icon>
             </button>
           </mat-form-field>
@@ -105,38 +134,58 @@
 
         <div *ngIf="extractionMethods !== null">
           <mat-form-field class="form-full-width">
-            <mat-label
-              *ngIf="createNewTransferData.editorMode === 'INGESTION'">Extraction
-              Method</mat-label>
-            <mat-label
-              *ngIf="createNewTransferData.editorMode === 'EDITOR'">Editor
-              schema</mat-label>
+            <mat-label *ngIf="createNewTransferData.editorMode === 'INGESTION'"
+              >Extraction Method</mat-label
+            >
+            <mat-label *ngIf="createNewTransferData.editorMode === 'EDITOR'"
+              >Editor schema</mat-label
+            >
             <mat-select [(ngModel)]="selectedMethod">
-              <mat-option *ngFor="let method of extractionMethods.methods"
-                [value]="method">
+              <mat-option
+                *ngFor="let method of extractionMethods.methods"
+                [value]="method"
+              >
                 {{ method.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-error *ngIf="extractionMethodsError">{{ extractionMethodsError
-            }}</mat-error>
+          <mat-error *ngIf="extractionMethodsError"
+            >{{ extractionMethodsError }}</mat-error
+          >
 
-          <mat-paginator *ngIf="extractionMethods.total > dropdownPageSize"
-            [length]="extractionMethods.total" [pageSize]="dropdownPageSize"
-            aria-label="Select page" [hidePageSize]="true"
-            [showFirstLastButtons]="false" [pageIndex]="extractionMethodsPage"
-            (page)="onExtractorMethodsPageChange($event)">
+          <mat-paginator
+            *ngIf="extractionMethods.total > dropdownPageSize"
+            [length]="extractionMethods.total"
+            [pageSize]="dropdownPageSize"
+            aria-label="Select page"
+            [hidePageSize]="true"
+            [showFirstLastButtons]="false"
+            [pageIndex]="extractionMethodsPage"
+            (page)="onExtractorMethodsPageChange($event)"
+          >
           </mat-paginator>
         </div>
       </mat-card-content>
     </mat-card>
   </div>
-
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button *ngIf="extractionMethodsError" mat-button color="warn"
-    (click)="onClickRetryRequests()">Retry</button>
+  <button
+    *ngIf="extractionMethodsError"
+    mat-button
+    color="warn"
+    (click)="onClickRetryRequests()"
+  >
+    Retry
+  </button>
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button color="primary" cdkFocusInitial
-    [disabled]="!uiNextButtonReady" (click)="onClickNext()">Next</button>
+  <button
+    mat-button
+    color="primary"
+    cdkFocusInitial
+    [disabled]="!uiNextButtonReady"
+    (click)="onClickNext()"
+  >
+    Next
+  </button>
 </mat-dialog-actions>

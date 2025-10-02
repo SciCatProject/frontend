@@ -1,17 +1,17 @@
 import { IngestorTransferViewDialogComponent } from "./ingestor.transfer-detail-view-dialog.component";
-import { MatCardModule} from "@angular/material/card";
+import { MatCardModule } from "@angular/material/card";
 import { MatListModule } from "@angular/material/list";
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import {
+  MatDialogModule,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from "@angular/material/dialog";
 import { MockActivatedRoute, MockUserApi } from "shared/MockStubs";
 import { StoreModule } from "@ngrx/store";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { provideMockStore } from "@ngrx/store/testing";
 import { Router, ActivatedRoute } from "@angular/router";
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { AppConfigService } from "app-config.service";
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
 
@@ -39,11 +39,11 @@ describe("IngestorTransferViewDialogComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [IngestorTransferViewDialogComponent],
-      imports:[
+      imports: [
         MatCardModule,
         MatListModule,
         MatDialogModule,
-        StoreModule.forRoot({})
+        StoreModule.forRoot({}),
       ],
       providers: [
         provideMockStore(),
@@ -58,7 +58,7 @@ describe("IngestorTransferViewDialogComponent", () => {
         { provide: UsersService, useClass: MockUserApi },
       ],
     });
-    
+
     TestBed.compileComponents();
   }));
 

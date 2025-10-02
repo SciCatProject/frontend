@@ -10,14 +10,14 @@ describe("IngestorMetadataEditorComponent", () => {
     type: "object",
     properties: {
       name: { type: "string" },
-      age: { type: "number" }
+      age: { type: "number" },
     },
-    required: ["name"]
+    required: ["name"],
   };
 
   const mockData = {
     name: "Test",
-    age: 25
+    age: 25,
   };
 
   beforeEach(waitForAsync(() => {
@@ -32,11 +32,11 @@ describe("IngestorMetadataEditorComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(IngestorMetadataEditorComponent);
     component = fixture.componentInstance;
-    
+
     component.data = mockData;
     component.schema = mockSchema;
     component.renderView = "all";
-    
+
     fixture.detectChanges();
   });
 

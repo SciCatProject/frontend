@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { IngestorFileBrowserComponent } from "./ingestor.file-browser.component";
-import { MatDialog, MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
+import {
+  MatDialog,
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+} from "@angular/material/dialog";
 import { StoreModule } from "@ngrx/store";
 import { provideMockStore } from "@ngrx/store/testing";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
@@ -21,10 +25,7 @@ describe("IngestorFileBrowserComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [IngestorFileBrowserComponent],
-      imports: [
-        MatDialogModule,
-        StoreModule.forRoot({}),
-      ],
+      imports: [MatDialogModule, StoreModule.forRoot({})],
       providers: [
         provideMockStore(),
         { provide: MatDialog, useValue: mockDialog },

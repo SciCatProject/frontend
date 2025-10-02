@@ -1,7 +1,10 @@
 import { ingestorReducer } from "./ingestor.reducer";
 import * as fromActions from "state-management/actions/ingestor.actions";
 import { initialIngestorState } from "state-management/state/ingestor.store";
-import { mockIngestionRequestInformation, mockMethodItems } from "shared/MockStubs";
+import {
+  mockIngestionRequestInformation,
+  mockMethodItems,
+} from "shared/MockStubs";
 
 describe("IngestorReducer", () => {
   describe("undefined action", () => {
@@ -15,7 +18,9 @@ describe("IngestorReducer", () => {
 
   describe("setRenderViewFromThirdParty", () => {
     it("should set render view and update flag", () => {
-      const action = fromActions.setRenderViewFromThirdParty({ renderView: "requiredOnly" });
+      const action = fromActions.setRenderViewFromThirdParty({
+        renderView: "requiredOnly",
+      });
       const result = ingestorReducer(undefined, action);
 
       expect(result.renderView).toBe("requiredOnly");
@@ -26,10 +31,19 @@ describe("IngestorReducer", () => {
   describe("getBrowseFilePathSuccess", () => {
     it("should set active node on success", () => {
       const mockNode = {
-        folders: [{ name: "test", path: "/test", children: true, probablyDataset: false }],
+        folders: [
+          {
+            name: "test",
+            path: "/test",
+            children: true,
+            probablyDataset: false,
+          },
+        ],
         total: 1,
       };
-      const action = fromActions.getBrowseFilePathSuccess({ ingestorBrowserActiveNode: mockNode });
+      const action = fromActions.getBrowseFilePathSuccess({
+        ingestorBrowserActiveNode: mockNode,
+      });
       const result = ingestorReducer(undefined, action);
 
       expect(result.ingestorBrowserActiveNode).toEqual(mockNode);
@@ -50,7 +64,9 @@ describe("IngestorReducer", () => {
   describe("getExtractionMethodsSuccess", () => {
     it("should set extraction methods on success", () => {
       const mockMethods = { methods: mockMethodItems, total: 2 };
-      const action = fromActions.getExtractionMethodsSuccess({ extractionMethods: mockMethods });
+      const action = fromActions.getExtractionMethodsSuccess({
+        extractionMethods: mockMethods,
+      });
       const result = ingestorReducer(undefined, action);
 
       expect(result.ingestorExtractionMethods).toEqual(mockMethods);
@@ -71,7 +87,9 @@ describe("IngestorReducer", () => {
   describe("setIngestorEndpoint", () => {
     it("should set ingestor endpoint", () => {
       const endpoint = "http://localhost:3000";
-      const action = fromActions.setIngestorEndpoint({ ingestorEndpoint: endpoint });
+      const action = fromActions.setIngestorEndpoint({
+        ingestorEndpoint: endpoint,
+      });
       const result = ingestorReducer(undefined, action);
 
       expect(result.ingestorEndpoint).toBe(endpoint);
@@ -129,7 +147,11 @@ describe("IngestorReducer", () => {
       const page = 1;
       const pageNumber = 50;
 
-      const action = fromActions.updateTransferListSuccess({ transferList, page, pageNumber });
+      const action = fromActions.updateTransferListSuccess({
+        transferList,
+        page,
+        pageNumber,
+      });
       const result = ingestorReducer(undefined, action);
 
       expect(result.ingestorTransferList).toEqual(transferList);
@@ -141,16 +163,22 @@ describe("IngestorReducer", () => {
   describe("updateTransferListDetailSuccess", () => {
     it("should update transfer detail list", () => {
       const transferListDetailView = { transfers: [] };
-      const action = fromActions.updateTransferListDetailSuccess({ transferListDetailView });
+      const action = fromActions.updateTransferListDetailSuccess({
+        transferListDetailView,
+      });
       const result = ingestorReducer(undefined, action);
 
-      expect(result.ingestorTransferListDetailView).toEqual(transferListDetailView);
+      expect(result.ingestorTransferListDetailView).toEqual(
+        transferListDetailView,
+      );
     });
   });
 
   describe("updateIngestionObject", () => {
     it("should update ingestion object", () => {
-      const action = fromActions.updateIngestionObject({ ingestionObject: mockIngestionRequestInformation });
+      const action = fromActions.updateIngestionObject({
+        ingestionObject: mockIngestionRequestInformation,
+      });
       const result = ingestorReducer(undefined, action);
 
       expect(result.ingestionObject).toEqual(mockIngestionRequestInformation);
@@ -168,25 +196,38 @@ describe("IngestorReducer", () => {
         extractorMetaDataStatus: "",
         ingestionRequestErrorMessage: "",
       };
-      const action = fromActions.updateIngestionObjectAPIInformation({ ingestionObjectApiInformation: apiInfo });
+      const action = fromActions.updateIngestionObjectAPIInformation({
+        ingestionObjectApiInformation: apiInfo,
+      });
       const result = ingestorReducer(undefined, action);
 
-      expect(result.ingestionObjectApiInformation.ingestionDatasetLoading).toBe(true);
-      expect(result.ingestionObjectApiInformation.extractorMetaDataReady).toBe(true);
+      expect(result.ingestionObjectApiInformation.ingestionDatasetLoading).toBe(
+        true,
+      );
+      expect(result.ingestionObjectApiInformation.extractorMetaDataReady).toBe(
+        true,
+      );
     });
   });
 
   describe("resetIngestionObject", () => {
     it("should reset ingestion object to provided value", () => {
-      const customObject = { ...mockIngestionRequestInformation, selectedPath: "/custom" };
-      const action = fromActions.resetIngestionObject({ ingestionObject: customObject });
+      const customObject = {
+        ...mockIngestionRequestInformation,
+        selectedPath: "/custom",
+      };
+      const action = fromActions.resetIngestionObject({
+        ingestionObject: customObject,
+      });
       const result = ingestorReducer(undefined, action);
 
       expect(result.ingestionObject.selectedPath).toBe("/custom");
     });
 
     it("should reset to empty when no object provided", () => {
-      const action = fromActions.resetIngestionObject({ ingestionObject: null });
+      const action = fromActions.resetIngestionObject({
+        ingestionObject: null,
+      });
       const result = ingestorReducer(undefined, action);
 
       expect(result.ingestionObject).toBeDefined();
@@ -195,7 +236,9 @@ describe("IngestorReducer", () => {
 
   describe("updateIngestionObjectFromThirdParty", () => {
     it("should update object and set third party flag", () => {
-      const action = fromActions.updateIngestionObjectFromThirdParty({ ingestionObject: mockIngestionRequestInformation });
+      const action = fromActions.updateIngestionObjectFromThirdParty({
+        ingestionObject: mockIngestionRequestInformation,
+      });
       const result = ingestorReducer(undefined, action);
 
       expect(result.ingestionObject).toEqual(mockIngestionRequestInformation);
@@ -206,7 +249,9 @@ describe("IngestorReducer", () => {
   describe("resetIngestionObjectFromThirdPartyFlag", () => {
     it("should reset third party update flag", () => {
       // First set the flag to true
-      const setFlagAction = fromActions.setRenderViewFromThirdParty({ renderView: "all" });
+      const setFlagAction = fromActions.setRenderViewFromThirdParty({
+        renderView: "all",
+      });
       ingestorReducer(undefined, setFlagAction);
 
       // Then reset it
@@ -224,28 +269,39 @@ describe("IngestorReducer", () => {
       const result = ingestorReducer(undefined, action);
 
       expect(result.ingestionObject.ingestionRequest).toEqual(response);
-      expect(result.ingestionObjectApiInformation.ingestionRequestErrorMessage).toBe("");
+      expect(
+        result.ingestionObjectApiInformation.ingestionRequestErrorMessage,
+      ).toBe("");
     });
   });
 
   describe("createDatasetSuccess", () => {
     it("should set dataset creation response", () => {
-      const dataset = { pid: "dataset-123", datasetName: "Test Dataset" } as any;
+      const dataset = {
+        pid: "dataset-123",
+        datasetName: "Test Dataset",
+      } as any;
       const action = fromActions.createDatasetSuccess({ dataset });
       const result = ingestorReducer(undefined, action);
 
-      expect(result.ingestionObject.ingestionRequest.transferId).toBe("dataset-123");
-      expect(result.ingestionObject.ingestionRequest.status).toBe("Test Dataset");
+      expect(result.ingestionObject.ingestionRequest.transferId).toBe(
+        "dataset-123",
+      );
+      expect(result.ingestionObject.ingestionRequest.status).toBe(
+        "Test Dataset",
+      );
     });
   });
 
   describe("ingestDatasetFailure", () => {
     it("should set error message on failure", () => {
-      const error = new Error( "Bad request");
+      const error = new Error("Bad request");
       const action = fromActions.ingestDatasetFailure({ err: error });
       const result = ingestorReducer(undefined, action);
 
-      expect(result.ingestionObjectApiInformation.ingestionRequestErrorMessage).toBeDefined();
+      expect(
+        result.ingestionObjectApiInformation.ingestionRequestErrorMessage,
+      ).toBeDefined();
       expect(result.error).toBe(JSON.stringify(error));
     });
   });
@@ -253,8 +309,8 @@ describe("IngestorReducer", () => {
   describe("resetIngestDataset", () => {
     it("should clear ingestion request and errors", () => {
       // First set up state with a request and error
-      const successAction = fromActions.ingestDatasetSuccess({ 
-        response: { transferId: "123", status: "done" } 
+      const successAction = fromActions.ingestDatasetSuccess({
+        response: { transferId: "123", status: "done" },
       });
       ingestorReducer(undefined, successAction);
 
@@ -263,14 +319,18 @@ describe("IngestorReducer", () => {
       const result = ingestorReducer(undefined, resetAction);
 
       expect(result.ingestionObject.ingestionRequest).toBeNull();
-      expect(result.ingestionObjectApiInformation.ingestionRequestErrorMessage).toBe("");
+      expect(
+        result.ingestionObjectApiInformation.ingestionRequestErrorMessage,
+      ).toBe("");
     });
   });
 
   describe("resetIngestorComponent", () => {
     it("should reset entire state to initial", () => {
       // Build up some modified state
-      const setEndpointAction = fromActions.setIngestorEndpoint({ ingestorEndpoint: "http://test.com" });
+      const setEndpointAction = fromActions.setIngestorEndpoint({
+        ingestorEndpoint: "http://test.com",
+      });
       const connectAction = fromActions.connectIngestor();
       ingestorReducer(undefined, setEndpointAction);
       ingestorReducer(undefined, connectAction);
@@ -286,7 +346,10 @@ describe("IngestorReducer", () => {
   describe("setNoRightsError", () => {
     it("should set no rights error and update auth status", () => {
       const error = new Error("No rights");
-      const action = fromActions.setNoRightsError({ noRightsError: true, err: error });
+      const action = fromActions.setNoRightsError({
+        noRightsError: true,
+        err: error,
+      });
       const result = ingestorReducer(undefined, action);
 
       expect(result.noRightsError).toBe(true);
@@ -296,10 +359,14 @@ describe("IngestorReducer", () => {
 
   describe("setIngestDatasetLoading", () => {
     it("should set loading state", () => {
-      const action = fromActions.setIngestDatasetLoading({ ingestionDatasetLoading: true });
+      const action = fromActions.setIngestDatasetLoading({
+        ingestionDatasetLoading: true,
+      });
       const result = ingestorReducer(undefined, action);
 
-      expect(result.ingestionObjectApiInformation.ingestionDatasetLoading).toBe(true);
+      expect(result.ingestionObjectApiInformation.ingestionDatasetLoading).toBe(
+        true,
+      );
     });
   });
 });

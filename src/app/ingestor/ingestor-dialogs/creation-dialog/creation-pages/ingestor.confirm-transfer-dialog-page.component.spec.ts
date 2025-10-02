@@ -17,10 +17,7 @@ describe("IngestorConfirmTransferDialogPageComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [IngestorConfirmTransferDialogPageComponent],
-      imports: [
-        MatDialogModule,
-        StoreModule.forRoot({}),
-      ],
+      imports: [MatDialogModule, StoreModule.forRoot({})],
       providers: [
         provideMockStore(),
         { provide: MatDialog, useValue: mockDialog },
@@ -31,7 +28,9 @@ describe("IngestorConfirmTransferDialogPageComponent", () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(IngestorConfirmTransferDialogPageComponent);
+    fixture = TestBed.createComponent(
+      IngestorConfirmTransferDialogPageComponent,
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

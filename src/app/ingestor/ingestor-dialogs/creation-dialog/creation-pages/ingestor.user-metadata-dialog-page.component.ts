@@ -160,9 +160,9 @@ export class IngestorUserMetadataDialogPageComponent
     const result = IngestorMetadataEditorHelper.processMetadataErrors(
       errors,
       this.scicatHeaderSchema,
-      this.activeRenderView
+      this.activeRenderView,
     );
-    
+
     this.isSciCatHeaderOk = result.isValid;
     this.scicatHeaderErrors = result.errorString;
     this.validateNextButton();
@@ -173,9 +173,9 @@ export class IngestorUserMetadataDialogPageComponent
     const result = IngestorMetadataEditorHelper.processMetadataErrors(
       errors,
       this.metadataSchemaOrganizational,
-      this.activeRenderView
+      this.activeRenderView,
     );
-    
+
     this.isOrganizationalMetadataOk = result.isValid;
     this.organizationalErrors = result.errorString;
     this.validateNextButton();
@@ -186,9 +186,9 @@ export class IngestorUserMetadataDialogPageComponent
     const result = IngestorMetadataEditorHelper.processMetadataErrors(
       errors,
       this.metadataSchemaSample,
-      this.activeRenderView
+      this.activeRenderView,
     );
-    
+
     this.isSampleInformationOk = result.isValid;
     this.sampleErrors = result.errorString;
     this.validateNextButton();

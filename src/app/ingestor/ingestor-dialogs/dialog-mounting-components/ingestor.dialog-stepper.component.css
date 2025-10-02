@@ -32,7 +32,7 @@
 .field-toggle {
   margin-bottom: 24px;
   display: block;
-  
+
   mat-slide-toggle {
     margin-bottom: 0;
   }

@@ -1,5 +1,5 @@
 import { IngestorTransferComponent } from "./ingestor-transfer.component";
-import { MatCardModule} from "@angular/material/card";
+import { MatCardModule } from "@angular/material/card";
 import { MatListModule } from "@angular/material/list";
 import { MockActivatedRoute, MockUserApi } from "shared/MockStubs";
 import { Store, StoreModule } from "@ngrx/store";
@@ -32,26 +32,23 @@ describe("IngestorTransferComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [IngestorTransferComponent],
-      imports:[
-        MatCardModule,
-        MatListModule,
-        StoreModule.forRoot({})],
-      })
-      TestBed.overrideComponent(IngestorTransferComponent, {
-        set: {
-          providers: [
-            { provide: Router, useValue: router },
-            {
-              provide: AppConfigService,
-              useValue: {
-                getConfig,
-              },
+      imports: [MatCardModule, MatListModule, StoreModule.forRoot({})],
+    });
+    TestBed.overrideComponent(IngestorTransferComponent, {
+      set: {
+        providers: [
+          { provide: Router, useValue: router },
+          {
+            provide: AppConfigService,
+            useValue: {
+              getConfig,
             },
-            { provide: ActivatedRoute, useClass: MockActivatedRoute },
-            { provide: UsersService, useClass: MockUserApi },
-          ],
-        },
-      });      
+          },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
+          { provide: UsersService, useClass: MockUserApi },
+        ],
+      },
+    });
     TestBed.compileComponents();
   }));
 
@@ -71,5 +68,4 @@ describe("IngestorTransferComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
-
 });

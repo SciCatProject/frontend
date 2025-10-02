@@ -14,15 +14,15 @@ import { IngestorCreationComponent } from "./ingestor-creation.component";
   `,
   standalone: false,
 })
-export class IngestorWrapperComponent{
+export class IngestorWrapperComponent {
   appConfig = this.appConfigService.getConfig();
   ingestorMode: IngestorMode = "creation";
 
   constructor(public appConfigService: AppConfigService) {}
   getIngestorComponent() {
-      return this.appConfigService.getConfig().ingestorComponent
-        ?.ingestorInTransferMode
-        ? IngestorTransferComponent
-        : IngestorCreationComponent;
+    return this.appConfigService.getConfig().ingestorComponent
+      ?.ingestorInTransferMode
+      ? IngestorTransferComponent
+      : IngestorCreationComponent;
   }
 }

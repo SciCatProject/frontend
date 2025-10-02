@@ -50,9 +50,9 @@ export interface IngestionRequestInformation {
   ingestionRequest: PostDatasetResponse | null;
   autoArchive: boolean;
   // Custom metadata in creation mode
-  schemaUrl?: string;  
-  selectedSchemaFileContent?: string; 
-  customMetaData: object; 
+  schemaUrl?: string;
+  selectedSchemaFileContent?: string;
+  customMetaData: object;
 }
 
 export interface ScientificMetadata {
@@ -134,7 +134,7 @@ export class IngestorHelper {
       autoArchive: true,
 
       schemaUrl: "",
-      selectedSchemaFileContent: "", 
+      selectedSchemaFileContent: "",
     };
   };
 
@@ -162,7 +162,6 @@ export class IngestorHelper {
     );
   }
 }
-
 
 export const isBase64 = (str: string) => {
   try {

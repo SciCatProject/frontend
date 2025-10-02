@@ -12,19 +12,17 @@ describe("IngestorExtractorMetadataDialogPageComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [IngestorExtractorMetadataDialogPageComponent],
-      imports: [
-        StoreModule.forRoot({}),
-      ],
-      providers: [
-        provideMockStore(),
-      ],
+      imports: [StoreModule.forRoot({})],
+      providers: [provideMockStore()],
     });
 
     TestBed.compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(IngestorExtractorMetadataDialogPageComponent);
+    fixture = TestBed.createComponent(
+      IngestorExtractorMetadataDialogPageComponent,
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

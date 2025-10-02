@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
-import { ExportTemplateHelperComponent, ExportOptions } from "./ingestor.export-helper.component";
+import {
+  ExportTemplateHelperComponent,
+  ExportOptions,
+} from "./ingestor.export-helper.component";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatDividerModule } from "@angular/material/divider";
 import { FormsModule } from "@angular/forms";
@@ -21,14 +24,8 @@ describe("ExportTemplateHelperComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [ExportTemplateHelperComponent],
-      imports: [
-        MatCheckboxModule,
-        MatDividerModule,
-        FormsModule,
-      ],
-      providers: [
-        { provide: "data", useValue: mockData },
-      ],
+      imports: [MatCheckboxModule, MatDividerModule, FormsModule],
+      providers: [{ provide: "data", useValue: mockData }],
     });
 
     TestBed.compileComponents();

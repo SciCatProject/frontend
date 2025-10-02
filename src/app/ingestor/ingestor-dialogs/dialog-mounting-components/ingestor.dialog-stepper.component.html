@@ -1,78 +1,172 @@
 <div class="dialog-control-buttons">
-  <button *ngIf="this.createNewTransferData.editorMode !== 'CREATION'"
-    mat-button matTooltip="Save the current values."
-    [disabled]="activeStep === 0" (click)="onSave()"><mat-icon
-      class="control-button-icon">save</mat-icon></button>
-  <button *ngIf="this.createNewTransferData.editorMode !== 'CREATION'"
-    mat-button matTooltip="Upload a template." [disabled]="activeStep < 1"
-    (click)="onUpload()"><mat-icon
-      class="control-button-icon">upload</mat-icon></button>
+  <button
+    *ngIf="this.createNewTransferData.editorMode !== 'CREATION'"
+    mat-button
+    matTooltip="Save the current values."
+    [disabled]="activeStep === 0"
+    (click)="onSave()"
+  >
+    <mat-icon class="control-button-icon">save</mat-icon>
+  </button>
+  <button
+    *ngIf="this.createNewTransferData.editorMode !== 'CREATION'"
+    mat-button
+    matTooltip="Upload a template."
+    [disabled]="activeStep < 1"
+    (click)="onUpload()"
+  >
+    <mat-icon class="control-button-icon">upload</mat-icon>
+  </button>
 
   <button
-    *ngIf="this.createNewTransferData !== undefined && this.createNewTransferData.editorMode !== 'CREATION'"
-    mat-button [matMenuTriggerFor]="settingsMenu"
+    *ngIf="
+      this.createNewTransferData !== undefined &&
+      this.createNewTransferData.editorMode !== 'CREATION'
+    "
+    mat-button
+    [matMenuTriggerFor]="settingsMenu"
     matTooltip="Customize the metadata editor."
-    [disabled]="activeStep > 0"><mat-icon
-      class="control-button-icon">settings</mat-icon></button>
+    [disabled]="activeStep > 0"
+  >
+    <mat-icon class="control-button-icon">settings</mat-icon>
+  </button>
 </div>
 
 <mat-menu #settingsMenu="matMenu">
-  <button *ngIf="this.createNewTransferData !== undefined" mat-menu-item
-    (click)="onSwitchEditorMode('INGESTION')">
-    <mat-icon
-      *ngIf="this.createNewTransferData.editorMode === 'INGESTION'">check</mat-icon>Ingestion-Mode</button>
-  <button *ngIf="this.createNewTransferData !== undefined" mat-menu-item
-    (click)="onSwitchEditorMode('EDITOR')">
-    <mat-icon
-      *ngIf="this.createNewTransferData.editorMode === 'EDITOR'">check</mat-icon>Create
-    JSON-Mode</button>
+  <button
+    *ngIf="this.createNewTransferData !== undefined"
+    mat-menu-item
+    (click)="onSwitchEditorMode('INGESTION')"
+  >
+    <mat-icon *ngIf="this.createNewTransferData.editorMode === 'INGESTION'"
+      >check</mat-icon
+    >Ingestion-Mode
+  </button>
+  <button
+    *ngIf="this.createNewTransferData !== undefined"
+    mat-menu-item
+    (click)="onSwitchEditorMode('EDITOR')"
+  >
+    <mat-icon *ngIf="this.createNewTransferData.editorMode === 'EDITOR'"
+      >check</mat-icon
+    >Create JSON-Mode
+  </button>
 </mat-menu>
 
 <!-- EDITOR/INGESTION MODE (4 steps) -->
-<div class="stepper" *ngIf="activeStep >= 0 && this.createNewTransferData.editorMode !== 'CREATION'">
-  <mat-stepper [linear]="true" [selectedIndex]="activeStep" class="ingestor-stepper">
-    <mat-step [completed]="activeStep > 0" [editable]="false" [stepControl]="null">
+<div
+  class="stepper"
+  *ngIf="
+    activeStep >= 0 && this.createNewTransferData.editorMode !== 'CREATION'
+  "
+>
+  <mat-stepper
+    [linear]="true"
+    [selectedIndex]="activeStep"
+    class="ingestor-stepper"
+  >
+    <mat-step
+      [completed]="activeStep > 0"
+      [editable]="false"
+      [stepControl]="null"
+    >
       <ng-template matStepLabel>Select your ingestion method</ng-template>
     </mat-step>
-    
-    <mat-step [completed]="activeStep > 1" [editable]="false" [stepControl]="null">
+
+    <mat-step
+      [completed]="activeStep > 1"
+      [editable]="false"
+      [stepControl]="null"
+    >
       <ng-template matStepLabel>Fill out user-specific metadata</ng-template>
     </mat-step>
-    
-    <mat-step [completed]="activeStep > 2" [editable]="false" [stepControl]="null">
+
+    <mat-step
+      [completed]="activeStep > 2"
+      [editable]="false"
+      [stepControl]="null"
+    >
       <ng-template matStepLabel>Correct dataset-specific metadata</ng-template>
     </mat-step>
-    
-    <mat-step [completed]="activeStep > 3" [editable]="false" [stepControl]="null">
+
+    <mat-step
+      [completed]="activeStep > 3"
+      [editable]="false"
+      [stepControl]="null"
+    >
       <ng-template matStepLabel>Confirm inputs</ng-template>
     </mat-step>
   </mat-stepper>
 </div>
 <!-- CREATION MODE WITH SCHEMA (3 steps) -->
-<div class="stepper" *ngIf="activeStep >= 0 && this.createNewTransferData.editorMode === 'CREATION' && this.createNewTransferData.selectedSchemaFileContent !== ''">
-  <mat-stepper [linear]="true" [selectedIndex]="activeStep === 0 ? 0 : activeStep - 1" class="ingestor-stepper">
-    <mat-step [completed]="activeStep > 0" [editable]="false" [stepControl]="null">
+<div
+  class="stepper"
+  *ngIf="
+    activeStep >= 0 &&
+    this.createNewTransferData.editorMode === 'CREATION' &&
+    this.createNewTransferData.selectedSchemaFileContent !== ''
+  "
+>
+  <mat-stepper
+    [linear]="true"
+    [selectedIndex]="activeStep === 0 ? 0 : activeStep - 1"
+    class="ingestor-stepper"
+  >
+    <mat-step
+      [completed]="activeStep > 0"
+      [editable]="false"
+      [stepControl]="null"
+    >
       <ng-template matStepLabel>Fill out Dataset information</ng-template>
     </mat-step>
-    
-    <mat-step [completed]="activeStep > 2" [editable]="false" [stepControl]="null">
-      <ng-template matStepLabel>Fill out custom scientific metadata</ng-template>
+
+    <mat-step
+      [completed]="activeStep > 2"
+      [editable]="false"
+      [stepControl]="null"
+    >
+      <ng-template matStepLabel
+        >Fill out custom scientific metadata</ng-template
+      >
     </mat-step>
-    
-    <mat-step [completed]="activeStep > 3" [editable]="false" [stepControl]="null">
+
+    <mat-step
+      [completed]="activeStep > 3"
+      [editable]="false"
+      [stepControl]="null"
+    >
       <ng-template matStepLabel>Confirm inputs</ng-template>
     </mat-step>
   </mat-stepper>
 </div>
 
 <!-- CREATION MODE WITHOUT SCHEMA (2 steps) -->
-<div class="stepper" *ngIf="activeStep >= 0 && this.createNewTransferData.editorMode === 'CREATION' && this.createNewTransferData.selectedSchemaFileContent === ''">
-  <mat-stepper [linear]="true" [selectedIndex]="activeStep === 0 ? 0 : 1" class="ingestor-stepper">
-    <mat-step [completed]="activeStep > 0" [editable]="false" [stepControl]="null">
+<div
+  class="stepper"
+  *ngIf="
+    activeStep >= 0 &&
+    this.createNewTransferData.editorMode === 'CREATION' &&
+    this.createNewTransferData.selectedSchemaFileContent === ''
+  "
+>
+  <mat-stepper
+    [linear]="true"
+    [selectedIndex]="activeStep === 0 ? 0 : 1"
+    class="ingestor-stepper"
+  >
+    <mat-step
+      [completed]="activeStep > 0"
+      [editable]="false"
+      [stepControl]="null"
+    >
       <ng-template matStepLabel>Fill out Dataset information</ng-template>
     </mat-step>
-    
-    <mat-step [completed]="activeStep > 3" [editable]="false" [stepControl]="null">
+
+    <mat-step
+      [completed]="activeStep > 3"
+      [editable]="false"
+      [stepControl]="null"
+    >
       <ng-template matStepLabel>Confirm inputs</ng-template>
     </mat-step>
   </mat-stepper>
@@ -80,10 +174,13 @@
 
 <div class="field-toggle">
   <mat-slide-toggle
-    *ngIf="this.createNewTransferData !== undefined && activeRenderView !== null"
+    *ngIf="
+      this.createNewTransferData !== undefined && activeRenderView !== null
+    "
     [checked]="activeRenderView === 'requiredOnly'"
     (change)="onChangeViewMode()"
-    color="primary">
-    {{ activeRenderView === 'requiredOnly' ? 'Required Only' : 'All Fields' }}
+    color="primary"
+  >
+    {{ activeRenderView === "requiredOnly" ? "Required Only" : "All Fields" }}
   </mat-slide-toggle>
 </div>

@@ -1,10 +1,12 @@
 import * as fromSelectors from "./ingestor.selectors";
 import { IngestorState } from "state-management/state/ingestor.store";
-import { mockIngestionRequestInformation, mockMethodItems, mockFolderNodes } from "shared/MockStubs";
+import {
+  mockIngestionRequestInformation,
+  mockMethodItems,
+  mockFolderNodes,
+} from "shared/MockStubs";
 
 describe("Ingestor Selectors", () => {
-
-
   const mockIngestorState: IngestorState = {
     ingestorEndpoint: "http://localhost:3000",
     ingestorStatus: {
@@ -12,7 +14,7 @@ describe("Ingestor Selectors", () => {
       healthResponse: { status: "ok" },
       validEndpoint: true,
     },
-    ingestorAuth:{
+    ingestorAuth: {
       userInfoResponse: null,
       authIsDisabled: false,
     },
@@ -21,10 +23,10 @@ describe("Ingestor Selectors", () => {
     ingestorTransferList: { transfers: [] },
     ingestorTransferListDetailView: { transfers: [] },
     ingestionObject: mockIngestionRequestInformation,
-    ingestorExtractionMethods: { methods: mockMethodItems, total:2 },
-    ingestorBrowserActiveNode: { folders: mockFolderNodes, total:3 },
+    ingestorExtractionMethods: { methods: mockMethodItems, total: 2 },
+    ingestorBrowserActiveNode: { folders: mockFolderNodes, total: 3 },
     renderView: "all",
-    transferListRequestOptions: { page: 1, pageNumber:5 },
+    transferListRequestOptions: { page: 1, pageNumber: 5 },
     updateEditorFromThirdParty: false,
     noRightsError: false,
     ingestionObjectApiInformation: {
@@ -36,7 +38,6 @@ describe("Ingestor Selectors", () => {
       extractorMetadataProgress: 0,
     },
   } as any;
-
 
   const mockState = {
     ingestor: mockIngestorState,
@@ -63,7 +64,7 @@ describe("Ingestor Selectors", () => {
 
   it("should select ingestorAuth", () => {
     const result = fromSelectors.selectIngestorAuth(mockState);
-    expect(result).toEqual({ 
+    expect(result).toEqual({
       userInfoResponse: null,
       authIsDisabled: false,
     });
@@ -96,12 +97,12 @@ describe("Ingestor Selectors", () => {
 
   it("should select ingestorExtractionMethods", () => {
     const result = fromSelectors.selectIngestorExtractionMethods(mockState);
-    expect(result).toEqual({ methods: mockMethodItems, total:2 });
+    expect(result).toEqual({ methods: mockMethodItems, total: 2 });
   });
 
   it("should select ingestorBrowserActiveNode", () => {
     const result = fromSelectors.selectIngestorBrowserActiveNode(mockState);
-    expect(result).toEqual({ folders: mockFolderNodes, total:3 });
+    expect(result).toEqual({ folders: mockFolderNodes, total: 3 });
   });
 
   it("should select ingestorRenderView", () => {
@@ -110,7 +111,8 @@ describe("Ingestor Selectors", () => {
   });
 
   it("should select ingestorTransferListRequestOptions", () => {
-    const result = fromSelectors.selectIngestorTransferListRequestOptions(mockState);
+    const result =
+      fromSelectors.selectIngestorTransferListRequestOptions(mockState);
     expect(result).toEqual({ page: 1, pageNumber: 5 });
   });
 

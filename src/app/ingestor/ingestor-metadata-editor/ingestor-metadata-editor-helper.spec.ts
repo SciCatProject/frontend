@@ -1,20 +1,25 @@
-import { IngestorMetadataEditorHelper, convertJSONFormsErrorToString } from "./ingestor-metadata-editor-helper";
+import {
+  IngestorMetadataEditorHelper,
+  convertJSONFormsErrorToString,
+} from "./ingestor-metadata-editor-helper";
 import { JsonSchema } from "@jsonforms/core";
 
 describe("IngestorMetadataEditorHelper", () => {
-  
   describe("resolveRefs", () => {
     it("should resolve a simple $ref", () => {
       const schema = {
         definitions: {
-          name: { type: "string" }
+          name: { type: "string" },
         },
         properties: {
-          userName: { $ref: "#/definitions/name" }
-        }
+          userName: { $ref: "#/definitions/name" },
+        },
       };
 
-      const resolved = IngestorMetadataEditorHelper.resolveRefs(schema.properties.userName, schema);
+      const resolved = IngestorMetadataEditorHelper.resolveRefs(
+        schema.properties.userName,
+        schema,
+      );
       expect(resolved.type).toBe("string");
     });
 
@@ -26,7 +31,9 @@ describe("IngestorMetadataEditorHelper", () => {
 
     it("should handle null or undefined schemas", () => {
       expect(IngestorMetadataEditorHelper.resolveRefs(null, {})).toBeNull();
-      expect(IngestorMetadataEditorHelper.resolveRefs(undefined, {})).toBeUndefined();
+      expect(
+        IngestorMetadataEditorHelper.resolveRefs(undefined, {}),
+      ).toBeUndefined();
     });
   });
 
@@ -38,31 +45,51 @@ describe("IngestorMetadataEditorHelper", () => {
           type: "object",
           properties: {
             name: { type: "string" },
-            voltage: { type: "number" }
+            voltage: { type: "number" },
           },
-          required: ["name"]
-        }
+          required: ["name"],
+        },
       },
-      required: ["instrument"]
+      required: ["instrument"],
     };
 
     it("should return true for required fields", () => {
-      expect(IngestorMetadataEditorHelper.isRequiredField("/instrument", schema)).toBe(true);
-      expect(IngestorMetadataEditorHelper.isRequiredField("/instrument/name", schema)).toBe(true);
+      expect(
+        IngestorMetadataEditorHelper.isRequiredField("/instrument", schema),
+      ).toBe(true);
+      expect(
+        IngestorMetadataEditorHelper.isRequiredField(
+          "/instrument/name",
+          schema,
+        ),
+      ).toBe(true);
     });
 
     it("should return false for non-required fields", () => {
-      expect(IngestorMetadataEditorHelper.isRequiredField("/instrument/voltage", schema)).toBe(false);
+      expect(
+        IngestorMetadataEditorHelper.isRequiredField(
+          "/instrument/voltage",
+          schema,
+        ),
+      ).toBe(false);
     });
 
     it("should return false for invalid paths", () => {
-      expect(IngestorMetadataEditorHelper.isRequiredField("/nonexistent", schema)).toBe(false);
-      expect(IngestorMetadataEditorHelper.isRequiredField("", schema)).toBe(false);
+      expect(
+        IngestorMetadataEditorHelper.isRequiredField("/nonexistent", schema),
+      ).toBe(false);
+      expect(IngestorMetadataEditorHelper.isRequiredField("", schema)).toBe(
+        false,
+      );
     });
 
     it("should handle null or undefined inputs", () => {
-      expect(IngestorMetadataEditorHelper.isRequiredField(null, schema)).toBe(false);
-      expect(IngestorMetadataEditorHelper.isRequiredField("/test", null)).toBe(false);
+      expect(IngestorMetadataEditorHelper.isRequiredField(null, schema)).toBe(
+        false,
+      );
+      expect(IngestorMetadataEditorHelper.isRequiredField("/test", null)).toBe(
+        false,
+      );
     });
   });
 
@@ -71,29 +98,41 @@ describe("IngestorMetadataEditorHelper", () => {
       type: "object",
       properties: {
         name: { type: "string" },
-        age: { type: "number" }
+        age: { type: "number" },
       },
-      required: ["name"]
+      required: ["name"],
     };
 
     const errors = [
       { instancePath: "/name", message: "is required" },
-      { instancePath: "/age", message: "must be a number" }
+      { instancePath: "/age", message: "must be a number" },
     ];
 
     it("should return all errors when renderView is 'all'", () => {
-      const filtered = IngestorMetadataEditorHelper.filterErrorsForRenderView(errors, schema, "all");
+      const filtered = IngestorMetadataEditorHelper.filterErrorsForRenderView(
+        errors,
+        schema,
+        "all",
+      );
       expect(filtered.length).toBe(2);
     });
 
     it("should filter to only required field errors when renderView is 'requiredOnly'", () => {
-      const filtered = IngestorMetadataEditorHelper.filterErrorsForRenderView(errors, schema, "requiredOnly");
+      const filtered = IngestorMetadataEditorHelper.filterErrorsForRenderView(
+        errors,
+        schema,
+        "requiredOnly",
+      );
       expect(filtered.length).toBe(1);
       expect(filtered[0].instancePath).toBe("/name");
     });
 
     it("should return empty array when errors is empty", () => {
-      const filtered = IngestorMetadataEditorHelper.filterErrorsForRenderView([], schema, "requiredOnly");
+      const filtered = IngestorMetadataEditorHelper.filterErrorsForRenderView(
+        [],
+        schema,
+        "requiredOnly",
+      );
       expect(filtered.length).toBe(0);
     });
   });
@@ -102,20 +141,28 @@ describe("IngestorMetadataEditorHelper", () => {
     const schema: JsonSchema = {
       type: "object",
       properties: {
-        name: { type: "string" }
+        name: { type: "string" },
       },
-      required: ["name"]
+      required: ["name"],
     };
 
     it("should return valid when no errors", () => {
-      const result = IngestorMetadataEditorHelper.processMetadataErrors([], schema, "all");
+      const result = IngestorMetadataEditorHelper.processMetadataErrors(
+        [],
+        schema,
+        "all",
+      );
       expect(result.isValid).toBe(true);
       expect(result.errorString).toBe("");
     });
 
     it("should return invalid with error string when errors exist", () => {
       const errors = [{ instancePath: "/name", message: "is required" }];
-      const result = IngestorMetadataEditorHelper.processMetadataErrors(errors, schema, "all");
+      const result = IngestorMetadataEditorHelper.processMetadataErrors(
+        errors,
+        schema,
+        "all",
+      );
       expect(result.isValid).toBe(false);
       expect(result.errorString).toContain("is required");
     });
@@ -126,7 +173,7 @@ describe("convertJSONFormsErrorToString", () => {
   it("should convert errors to string format", () => {
     const errors = [
       { instancePath: "/name", message: "is required" },
-      { instancePath: "/age", message: "must be a number" }
+      { instancePath: "/age", message: "must be a number" },
     ];
     const result = convertJSONFormsErrorToString(errors);
     expect(result).toContain("1. @/name is required");
@@ -136,7 +183,7 @@ describe("convertJSONFormsErrorToString", () => {
   it("should skip errors with 'must NOT have additional properties' message", () => {
     const errors = [
       { message: "must NOT have additional properties" },
-      { instancePath: "/name", message: "is required" }
+      { instancePath: "/name", message: "is required" },
     ];
     const result = convertJSONFormsErrorToString(errors);
     expect(result).not.toContain("additional properties");

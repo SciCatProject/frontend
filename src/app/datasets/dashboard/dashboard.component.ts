@@ -45,7 +45,7 @@ import {
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { loadDefaultSettings } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
-import {IngestorCreationComponent} from "ingestor/ingestor-page/ingestor-creation.component";
+import { IngestorCreationComponent } from "ingestor/ingestor-page/ingestor-creation.component";
 
 @Component({
   selector: "dashboard",
@@ -74,7 +74,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   clearColumnSearch = false;
 
   @ViewChild(MatSidenav, { static: false }) sideNav!: MatSidenav;
-  @ViewChild('ingestor') ingestor: IngestorCreationComponent;
+  @ViewChild("ingestor") ingestor: IngestorCreationComponent;
 
   constructor(
     public appConfigService: AppConfigService,

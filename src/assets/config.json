@@ -29,7 +29,7 @@
   "jupyterHubUrl": "https://jupyterhub.esss.lu.se/",
   "landingPage": "doi.ess.eu/detail/",
   "lbBaseURL": "http://127.0.0.1:3001",
-  "ingestorComponent":{
+  "ingestorComponent": {
     "ingestorEnabled": true,
     "ingestorInTransferMode": true,
     "ingestorAutodiscoveryOptions": [

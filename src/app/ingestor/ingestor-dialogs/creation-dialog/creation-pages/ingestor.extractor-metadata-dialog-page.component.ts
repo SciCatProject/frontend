@@ -183,9 +183,9 @@ export class IngestorExtractorMetadataDialogPageComponent
     const result = IngestorMetadataEditorHelper.processMetadataErrors(
       errors,
       this.metadataSchemaInstrument,
-      this.activeRenderView
+      this.activeRenderView,
     );
-    
+
     this.isInstrumentMetadataOk = result.isValid;
     this.instrumentErrors = result.errorString;
     this.validateNextButton();
@@ -196,9 +196,9 @@ export class IngestorExtractorMetadataDialogPageComponent
     const result = IngestorMetadataEditorHelper.processMetadataErrors(
       errors,
       this.metadataSchemaAcquisition,
-      this.activeRenderView
+      this.activeRenderView,
     );
-    
+
     this.isAcquisitionMetadataOk = result.isValid;
     this.acquisitionErrors = result.errorString;
     this.validateNextButton();

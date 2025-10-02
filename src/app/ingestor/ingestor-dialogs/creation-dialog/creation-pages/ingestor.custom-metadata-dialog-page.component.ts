@@ -155,9 +155,9 @@ export class IngestorCustomMetadataDialogPageComponent
     const result = IngestorMetadataEditorHelper.processMetadataErrors(
       errors,
       this.customMetadataSchema,
-      this.activeRenderView
+      this.activeRenderView,
     );
-    
+
     this.isCustomMetadataOk = result.isValid;
     this.customMetadataErrors = result.errorString;
     this.validateNextButton();

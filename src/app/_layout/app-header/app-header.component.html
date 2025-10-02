@@ -1,6 +1,8 @@
 <div class="header">
   <mat-menu #mainMenu="matMenu">
-    <ng-container *ngIf="mainMenuConfig$ | async as mainMenuConfig; else noMenuItems">
+    <ng-container
+      *ngIf="mainMenuConfig$ | async as mainMenuConfig; else noMenuItems"
+    >
       <ng-container *ngIf="mainMenuConfig?.datasets ?? false">
         <button mat-menu-item routerLink="/datasets/">
           <mat-icon> folder</mat-icon>
@@ -9,8 +11,11 @@
       </ng-container>
 
       <ng-container *ngIf="config.ingestorComponent.ingestorEnabled">
-        <button mat-menu-item [routerLink]="['/ingestor']"
-          [queryParams]="{ discovery: true }">
+        <button
+          mat-menu-item
+          [routerLink]="['/ingestor']"
+          [queryParams]="{ discovery: true }"
+        >
           <mat-icon> cloud_upload</mat-icon>
           <span>Ingestor</span>
         </button>
@@ -93,7 +98,12 @@
     <a [routerLink]="[defaultMainPage$ | async]">
       <img class="logo" src="../../../assets/images/{{ siteSciCatLogo }}" />
     </a>
-    <ng-container *ngIf="isSiteHeaderLogoUrlExternal$ | async; else siteHeaderLogoUrlInternal">
+    <ng-container
+      *ngIf="
+        isSiteHeaderLogoUrlExternal$ | async;
+        else siteHeaderLogoUrlInternal
+      "
+    >
       <a [href]="siteHeaderLogoUrl$ | async">
         <img class="logo" src="../../../assets/images/{{ siteHeaderLogo }}" />
       </a>
@@ -127,7 +137,7 @@
       <span *ngIf="config.shoppingCartOnHeader" [matMenuTriggerFor]="cartMenu">
         <button id="cartOnHeaderButton" mat-icon-button>
           <mat-icon
-            color = "primary"
+            color="primary"
             matBadge="{{ inBatchIndicator$ | async }}"
             matBadgeColor="accent"
             matBadgeSize="medium"
@@ -143,7 +153,9 @@
       <span>
         <button mat-button class="user-button" [matMenuTriggerFor]="userMenu">
           <img class="user-image" src="{{ profileImage$ | async }}" />
-          <div color="primary" class="large-screen-text">{{ username$ | async }}</div>
+          <div color="primary" class="large-screen-text">
+            {{ username$ | async }}
+          </div>
         </button>
       </span>
     </span>

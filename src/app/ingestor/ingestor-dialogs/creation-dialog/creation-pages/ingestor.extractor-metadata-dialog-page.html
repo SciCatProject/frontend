@@ -1,10 +1,12 @@
 <div class="ingestor-dialog-header">
   <div class="ingestor-mixed-header">
-    <h2 mat-dialog-title>
-      Correct dataset-specific metadata
-    </h2>
-    <button mat-icon-button mat-dialog-close aria-label="Close"
-      class="ingestor-close-button">
+    <h2 mat-dialog-title>Correct dataset-specific metadata</h2>
+    <button
+      mat-icon-button
+      mat-dialog-close
+      aria-label="Close"
+      class="ingestor-close-button"
+    >
       <mat-icon>close</mat-icon>
     </button>
   </div>
@@ -15,13 +17,16 @@
 </div>
 
 <mat-dialog-content class="mat-typography">
-
-  <div *ngIf="!extractorMetaDataReady || extractorMetaDataError"
-    class="spinner-container">
+  <div
+    *ngIf="!extractorMetaDataReady || extractorMetaDataError"
+    class="spinner-container"
+  >
     <ng-container *ngIf="!extractorMetaDataError; else errorIcon">
       <p>Wait for data extraction to finish...</p>
-      <mat-progress-spinner diameter="20"
-        mode="indeterminate"></mat-progress-spinner>
+      <mat-progress-spinner
+        diameter="20"
+        mode="indeterminate"
+      ></mat-progress-spinner>
       <div *ngIf="process > -1" class="progress-percentage">
         <span>{{process}}%</span>
       </div>
@@ -41,70 +46,86 @@
           <div mat-card-avatar class="section-icon">
             <mat-icon> error </mat-icon>
           </div>
-          The automatic metadata extraction was not successful. Please enter
-          the data manually.
+          The automatic metadata extraction was not successful. Please enter the
+          data manually.
         </mat-card-header>
       </mat-card>
     </div>
     <div fxLayout="row" fxLayout.xs="column">
       <div fxFlex="80%">
         <mat-card>
-          <mat-card-header class="instrument-header"
-            (click)="toggleCardContent('instrument')">
+          <mat-card-header
+            class="instrument-header"
+            (click)="toggleCardContent('instrument')"
+          >
             <div mat-card-avatar class="section-icon">
               <mat-icon> biotech </mat-icon>
             </div>
-            
+
             <mat-card-title>Instrument Information</mat-card-title>
             <mat-card-subtitle>
-              Fields in Red Are Required By The Schema. You can proceed with ingestion without filling them out.
+              Fields in Red Are Required By The Schema. You can proceed with
+              ingestion without filling them out.
             </mat-card-subtitle>
             <span class="spacer"></span>
             <mat-icon
               [matTooltip]="isInstrumentMetadataOk ? 'Your input is correct.' : instrumentErrors"
-              [ngClass]="isInstrumentMetadataOk ? 'success-icon' : 'error-icon'">{{
-              isInstrumentMetadataOk ? 'check_circle_outline' :
-              'error_outline'}}</mat-icon>
-            <mat-icon class="toggle-icon">{{ isCardContentVisible.instrument ?
-              'expand_less' : 'expand_more' }}</mat-icon>
+              [ngClass]="isInstrumentMetadataOk ? 'success-icon' : 'error-icon'"
+              >{{ isInstrumentMetadataOk ? 'check_circle_outline' :
+              'error_outline'}}</mat-icon
+            >
+            <mat-icon class="toggle-icon"
+              >{{ isCardContentVisible.instrument ? 'expand_less' :
+              'expand_more' }}</mat-icon
+            >
           </mat-card-header>
           <mat-card-content *ngIf="isCardContentVisible.instrument">
-            <app-metadata-editor #instrumentMetadataEditor
+            <app-metadata-editor
+              #instrumentMetadataEditor
               *ngIf="!updateEditorFromThirdParty"
               [schema]="metadataSchemaInstrument"
               [renderView]="activeRenderView"
               [data]="createNewTransferData.extractorMetaData['instrument']"
               (dataChange)="onDataChangeExtractorMetadataInstrument($event)"
-              (errors)="instrumentErrorsHandler($event)"></app-metadata-editor>
+              (errors)="instrumentErrorsHandler($event)"
+            ></app-metadata-editor>
           </mat-card-content>
         </mat-card>
         <mat-card>
-          <mat-card-header class="acquisition-header"
-            (click)="toggleCardContent('acquisition')">
+          <mat-card-header
+            class="acquisition-header"
+            (click)="toggleCardContent('acquisition')"
+          >
             <div mat-card-avatar class="section-icon">
               <mat-icon> category-search </mat-icon>
             </div>
             <mat-card-title>Acquisition Information</mat-card-title>
             <mat-card-subtitle>
-              Fields in Red Are Required By The Schema. You can proceed with ingestion without filling them out.
+              Fields in Red Are Required By The Schema. You can proceed with
+              ingestion without filling them out.
             </mat-card-subtitle>
             <span class="spacer"></span>
             <mat-icon
               [matTooltip]="isAcquisitionMetadataOk ? 'Your input is correct.' : acquisitionErrors"
-              [ngClass]="isAcquisitionMetadataOk ? 'success-icon' : 'error-icon'">{{
-              isAcquisitionMetadataOk ? 'check_circle_outline' :
-              'error_outline'}}</mat-icon>
-            <mat-icon class="toggle-icon">{{ isCardContentVisible.acquisition ?
-              'expand_less' : 'expand_more' }}</mat-icon>
+              [ngClass]="isAcquisitionMetadataOk ? 'success-icon' : 'error-icon'"
+              >{{ isAcquisitionMetadataOk ? 'check_circle_outline' :
+              'error_outline'}}</mat-icon
+            >
+            <mat-icon class="toggle-icon"
+              >{{ isCardContentVisible.acquisition ? 'expand_less' :
+              'expand_more' }}</mat-icon
+            >
           </mat-card-header>
           <mat-card-content *ngIf="isCardContentVisible.acquisition">
-            <app-metadata-editor #acquisitionMetadataEditor
+            <app-metadata-editor
+              #acquisitionMetadataEditor
               *ngIf="!updateEditorFromThirdParty"
               [schema]="metadataSchemaAcquisition"
               [renderView]="activeRenderView"
               [data]="createNewTransferData.extractorMetaData['acquisition']"
               (dataChange)="onDataChangeExtractorMetadataAcquisition($event)"
-              (errors)="acquisitionErrorsHandler($event)"></app-metadata-editor>
+              (errors)="acquisitionErrorsHandler($event)"
+            ></app-metadata-editor>
           </mat-card-content>
         </mat-card>
       </div>
@@ -113,6 +134,13 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button (click)="onClickBack()">Back</button>
-  <button mat-button color="primary" cdkFocusInitial (click)="onClickNext()"
-    [disabled]="!uiNextButtonReady">Next</button>
+  <button
+    mat-button
+    color="primary"
+    cdkFocusInitial
+    (click)="onClickNext()"
+    [disabled]="!uiNextButtonReady"
+  >
+    Next
+  </button>
 </mat-dialog-actions>

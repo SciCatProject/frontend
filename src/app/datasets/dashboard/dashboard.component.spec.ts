@@ -22,7 +22,7 @@ import {
 } from "state-management/actions/datasets.actions";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { provideMockStore } from "@ngrx/store/testing";
-import {resetIngestionObject} from "state-management/actions/ingestor.actions";
+import { resetIngestionObject } from "state-management/actions/ingestor.actions";
 import { selectSelectedDatasets } from "state-management/selectors/datasets.selectors";
 import {
   selectColumns,
@@ -138,15 +138,17 @@ describe("DashboardComponent", () => {
 
   describe("#openDialog()", () => {
     it("should call Ingestor method", () => {
-      const mockIngestor = jasmine.createSpyObj('IngestorCreationComponent', ['onClickAddIngestion']);
+      const mockIngestor = jasmine.createSpyObj("IngestorCreationComponent", [
+        "onClickAddIngestion",
+      ]);
 
       component.ingestor = mockIngestor;
       component.openDialog();
-      
+
       expect(mockIngestor.onClickAddIngestion).toHaveBeenCalledTimes(1);
     });
   });
-  
+
   describe("#onPageChange()", () => {
     it("should dispatch a changePageAction", () => {
       dispatchSpy = spyOn(store, "dispatch");

@@ -6,27 +6,34 @@
          ? 'CUSTOM_METADATA' 
          : 'CONFIRM_TRANSFER')
       : 'USER_METADATA'
-  )"></ingestor-new-transfer-dialog-page>
+  )"
+></ingestor-new-transfer-dialog-page>
 <ingestor-user-metadata-dialog
   *ngIf="currentDialogStep === 'USER_METADATA' && !showNoRightsDialog"
   (nextStep)="onClickNext('EXTRACTOR_METADATA')"
-  (backStep)="onClickNext('NEW_TRANSFER')"></ingestor-user-metadata-dialog>
+  (backStep)="onClickNext('NEW_TRANSFER')"
+></ingestor-user-metadata-dialog>
 
 <ingestor-extractor-metadata-dialog-page
   *ngIf="currentDialogStep === 'EXTRACTOR_METADATA' && !showNoRightsDialog"
   (nextStep)="onClickNext('CONFIRM_TRANSFER')"
-  (backStep)="onClickNext('USER_METADATA')"></ingestor-extractor-metadata-dialog-page>
+  (backStep)="onClickNext('USER_METADATA')"
+></ingestor-extractor-metadata-dialog-page>
 
 <ingestor-confirm-transfer-dialog-page
   *ngIf="currentDialogStep === 'CONFIRM_TRANSFER' && !showNoRightsDialog"
   (nextStep)="onClickStartIngestion()"
-  (backStep)="onClickNext(createNewTransferData.editorMode === 'CREATION' ? 'CUSTOM_METADATA' : 'EXTRACTOR_METADATA')"></ingestor-confirm-transfer-dialog-page>
+  (backStep)="onClickNext(createNewTransferData.editorMode === 'CREATION' ? 'CUSTOM_METADATA' : 'EXTRACTOR_METADATA')"
+></ingestor-confirm-transfer-dialog-page>
 
-<ingestor-no-rights-dialog-page *ngIf="showNoRightsDialog"
+<ingestor-no-rights-dialog-page
+  *ngIf="showNoRightsDialog"
   (nextStep)="onClickStartIngestion()"
-  (backStep)="onClickNext('EXTRACTOR_METADATA')"></ingestor-no-rights-dialog-page>
+  (backStep)="onClickNext('EXTRACTOR_METADATA')"
+></ingestor-no-rights-dialog-page>
 
 <ingestor-custom-metadata-dialog
   *ngIf="currentDialogStep === 'CUSTOM_METADATA' && !showNoRightsDialog"
   (nextStep)="onClickNext('CONFIRM_TRANSFER')"
-  (backStep)="onClickNext('NEW_TRANSFER')"></ingestor-custom-metadata-dialog>
+  (backStep)="onClickNext('NEW_TRANSFER')"
+></ingestor-custom-metadata-dialog>

@@ -237,7 +237,9 @@ export class IngestorNewTransferDialogPageComponent
       this.createNewTransferData.selectedResolvedDecodedSchema = resolvedSchema;
     } else {
       if (this.createNewTransferData.selectedSchemaFileContent) {
-        const schema = JSON.parse(this.createNewTransferData.selectedSchemaFileContent);
+        const schema = JSON.parse(
+          this.createNewTransferData.selectedSchemaFileContent,
+        );
         const resolvedSchema = IngestorMetadataEditorHelper.resolveRefs(
           schema,
           schema,
@@ -260,21 +262,21 @@ export class IngestorNewTransferDialogPageComponent
     );
     this.generateExampleDataForSciCatHeader();
     this.prepareSchemaForProcessing();
-    
+
     // Emit once to go to next step
     this.nextStep.emit();
-    
+
     // In CREATION mode with no schema, skip the scientific metadata page
     if (
-      this.createNewTransferData.editorMode === 'CREATION' && 
-      (!this.createNewTransferData.selectedSchemaFileContent || this.createNewTransferData.selectedSchemaFileContent === '')
+      this.createNewTransferData.editorMode === "CREATION" &&
+      (!this.createNewTransferData.selectedSchemaFileContent ||
+        this.createNewTransferData.selectedSchemaFileContent === "")
     ) {
       // Emit again to skip scientific metadata and go straight to confirm
       this.nextStep.emit();
       this.nextStep.emit();
     }
   }
-
 
   onDataChangeUserScicatHeader(event: any) {
     this.createNewTransferData.scicatHeader = event;
@@ -344,7 +346,10 @@ export class IngestorNewTransferDialogPageComponent
       alert("Please enter a schema URL.");
       return;
     }
-    console.log("Fetching schema from URL:", this.createNewTransferData.schemaUrl);
+    console.log(
+      "Fetching schema from URL:",
+      this.createNewTransferData.schemaUrl,
+    );
     let content: string;
     let parsedJson: any;
 
@@ -364,9 +369,9 @@ export class IngestorNewTransferDialogPageComponent
       alert(`Error fetching schema: ${error.message}`);
       return;
     }
-    
+
     this.createNewTransferData.selectedSchemaFileContent = content;
-    
+
     // Update the store with both the URL and content
     this.createNewTransferData.selectedSchemaFileContent = content;
     this.store.dispatch(
@@ -374,7 +379,7 @@ export class IngestorNewTransferDialogPageComponent
         ingestionObject: this.createNewTransferData,
       }),
     );
-    
+
     this.validateNextButton();
   }
 }

@@ -349,13 +349,14 @@ export class IngestorTransferComponent implements OnInit, OnDestroy {
       const userEmail = this.scicatUserProfile.email;
       const facility = userEmail.split("@")[1]?.toLowerCase();
 
-      const discoveryList = this.appConfig.ingestorComponent.ingestorAutodiscoveryOptions;
+      const discoveryList =
+        this.appConfig.ingestorComponent.ingestorAutodiscoveryOptions;
 
       if (discoveryList) {
         for (const discovery of discoveryList) {
           const escapedDomain = discovery.mailDomain
             .toLowerCase()
-            .replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
           const domainPattern = new RegExp(`^([\\w-]+\\.)*${escapedDomain}$`); // <any.sub.domain.uni.ch>
           if (domainPattern.test(facility)) {
             return discovery.facilityBackend;

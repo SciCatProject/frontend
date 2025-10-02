@@ -1,15 +1,22 @@
 <div class="ingestor-mixed-header">
-  <h2 mat-dialog-title>
-    Ingestor Dataset Browser
-  </h2>
-  <button mat-icon-button mat-dialog-close aria-label="Close"
-    class="ingestor-close-button">
+  <h2 mat-dialog-title>Ingestor Dataset Browser</h2>
+  <button
+    mat-icon-button
+    mat-dialog-close
+    aria-label="Close"
+    class="ingestor-close-button"
+  >
     <mat-icon>close</mat-icon>
   </button>
 </div>
 <mat-dialog-content class="mat-typography" disableClose="true">
   <div *ngIf="false" class="file-browser-view-toggle">
-    <button mat-button disabled="true" (click)="toggleView()" [matTooltip]="isListView ? 'Switch to Tree View' : 'Switch to List View'">
+    <button
+      mat-button
+      disabled="true"
+      (click)="toggleView()"
+      [matTooltip]="isListView ? 'Switch to Tree View' : 'Switch to List View'"
+    >
       <mat-icon *ngIf="isListView">account_tree</mat-icon>
       <mat-icon *ngIf="!isListView">list</mat-icon>
     </button>
@@ -18,29 +25,49 @@
     <mat-list class="ingestor-file-list">
       <div mat-subheader>Selected Path</div>
       <mat-list-item class="mat-elevation-z2">
-        <mat-icon matListItemIcon>{{activeNode.probablyDataset ? 'folder_special' : 'folder'}}</mat-icon>
-        <div matListItemTitle>{{activeNode.path}}</div>
+        <mat-icon matListItemIcon>{{
+          activeNode.probablyDataset ? "folder_special" : "folder"
+        }}</mat-icon>
+        <div matListItemTitle>{{ activeNode.path }}</div>
       </mat-list-item>
-      <i *ngIf="activeNode.probablyDataset" class="green-text">This node is probably a valid data set.</i>
+      <i *ngIf="activeNode.probablyDataset" class="green-text"
+        >This node is probably a valid data set.</i
+      >
       <div mat-subheader>Children</div>
 
-      <mat-paginator *ngIf="true" [length]="activeNodeChildrenTotal" [pageSize]="browseFolderPageSize" aria-label="Select page"
-        [hidePageSize]="true" [showFirstLastButtons]="false" [pageIndex]="browseFolderPage" (page)="onFileBrowserChildrenPageChange($event)">
+      <mat-paginator
+        *ngIf="true"
+        [length]="activeNodeChildrenTotal"
+        [pageSize]="browseFolderPageSize"
+        aria-label="Select page"
+        [hidePageSize]="true"
+        [showFirstLastButtons]="false"
+        [pageIndex]="browseFolderPage"
+        (page)="onFileBrowserChildrenPageChange($event)"
+      >
       </mat-paginator>
 
-      <mat-list-item *ngIf="!goBackNode.isRootNode" (click)='onLoadFolderNode(goBackNode)' 
-        class="mat-elevation-z2 mat-list-item-hover">
+      <mat-list-item
+        *ngIf="!goBackNode.isRootNode"
+        (click)="onLoadFolderNode(goBackNode)"
+        class="mat-elevation-z2 mat-list-item-hover"
+      >
         <mat-icon matListItemIcon>folder</mat-icon>
-        <div matListItemTitle>{{goBackNode.name}}</div>
-        <div matListItemLine>{{goBackNode.path}}</div>
+        <div matListItemTitle>{{ goBackNode.name }}</div>
+        <div matListItemLine>{{ goBackNode.path }}</div>
       </mat-list-item>
       <ng-container
-        *ngFor="let folder of activeNode.childrenNodes; trackBy: trackByFn">
-        <mat-list-item (click)="onLoadFolderNode(folder)"
-          class="mat-elevation-z2 mat-list-item-hover">
-          <mat-icon matListItemIcon>{{folder.probablyDataset ? 'folder_special' : 'folder'}}</mat-icon>
-          <div matListItemTitle>{{folder.name}}</div>
-          <div matListItemLine>{{folder.path}}</div>
+        *ngFor="let folder of activeNode.childrenNodes; trackBy: trackByFn"
+      >
+        <mat-list-item
+          (click)="onLoadFolderNode(folder)"
+          class="mat-elevation-z2 mat-list-item-hover"
+        >
+          <mat-icon matListItemIcon>{{
+            folder.probablyDataset ? "folder_special" : "folder"
+          }}</mat-icon>
+          <div matListItemTitle>{{ folder.name }}</div>
+          <div matListItemLine>{{ folder.path }}</div>
         </mat-list-item>
       </ng-container>
     </mat-list>
@@ -52,6 +79,13 @@
 
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button color="primary" cdkFocusInitial (click)="onSelect()"
-    [mat-dialog-close]="true">Select</button>
+  <button
+    mat-button
+    color="primary"
+    cdkFocusInitial
+    (click)="onSelect()"
+    [mat-dialog-close]="true"
+  >
+    Select
+  </button>
 </mat-dialog-actions>

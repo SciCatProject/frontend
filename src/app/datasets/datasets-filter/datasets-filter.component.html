@@ -229,7 +229,10 @@
                   (input)="updateConditionUnit(i, $event)"
                   [matAutocomplete]="rhsUnits"
                 />
-                <mat-autocomplete #rhsUnits="matAutocomplete" (optionSelected)="updateConditionUnit(i, $event)">
+                <mat-autocomplete
+                  #rhsUnits="matAutocomplete"
+                  (optionSelected)="updateConditionUnit(i, $event)"
+                >
                   <mat-option
                     *ngFor="let unit of getUnits(conditionConfig.condition.lhs)"
                     [value]="unit"

@@ -17,10 +17,7 @@ describe("IngestorNoRightsDialogPageComponent", () => {
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       declarations: [IngestorNoRightsDialogPageComponent],
-      imports: [
-        MatDialogModule,
-        StoreModule.forRoot({}),
-      ],
+      imports: [MatDialogModule, StoreModule.forRoot({})],
       providers: [
         provideMockStore(),
         { provide: MatDialog, useValue: mockDialog },
