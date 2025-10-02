@@ -6,7 +6,10 @@
   >
     <mat-tab>
       <ng-template mat-tab-label>
-        <span matTooltip="Shows Details" matTooltipPosition="above">
+        <span
+          matTooltip="Complete information about the proposal"
+          matTooltipPosition="above"
+        >
           <mat-icon> details </mat-icon>
           {{ "Details" | translate: localization }}
         </span>
@@ -18,7 +21,10 @@
 
     <mat-tab>
       <ng-template mat-tab-label>
-        <span matTooltip="Shows Dataset lists" matTooltipPosition="above">
+        <span
+          matTooltip="List of all datasets acquired under this proposal and all the children proposals"
+          matTooltipPosition="above"
+        >
           <mat-icon> folder </mat-icon>
           {{ "Datasets" | translate: localization }}
         </span>
@@ -34,7 +40,10 @@
 
     <mat-tab>
       <ng-template mat-tab-label>
-        <span matTooltip="Shows related proposals" matTooltipPosition="above">
+        <span
+          matTooltip="List of all proposals that are directly related to the current proposal, both parent and children"
+          matTooltipPosition="above"
+        >
           <mat-icon data-cy="related-proposals"> folder </mat-icon>
           {{ "Related Proposals" | translate: localization }}
         </span>
@@ -47,7 +56,10 @@
 
     <mat-tab *ngIf="appConfig.logbookEnabled">
       <ng-template mat-tab-label>
-        <span matTooltip="Shows logbook" matTooltipPosition="above">
+        <span
+          matTooltip="All the entries recorded in the logbook related to this proposal"
+          matTooltipPosition="above"
+        >
           <mat-icon> book </mat-icon>
           {{ "Logbook" | translate: localization }}
         </span>
