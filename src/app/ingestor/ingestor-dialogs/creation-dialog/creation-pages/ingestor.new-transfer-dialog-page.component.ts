@@ -266,16 +266,6 @@ export class IngestorNewTransferDialogPageComponent
     // Emit once to go to next step
     this.nextStep.emit();
 
-    // In CREATION mode with no schema, skip the scientific metadata page
-    if (
-      this.createNewTransferData.editorMode === "CREATION" &&
-      (!this.createNewTransferData.selectedSchemaFileContent ||
-        this.createNewTransferData.selectedSchemaFileContent === "")
-    ) {
-      // Emit again to skip scientific metadata and go straight to confirm
-      this.nextStep.emit();
-      this.nextStep.emit();
-    }
   }
 
   onDataChangeUserScicatHeader(event: any) {

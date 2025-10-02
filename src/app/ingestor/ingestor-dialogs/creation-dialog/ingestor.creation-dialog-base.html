@@ -23,8 +23,13 @@
 <ingestor-confirm-transfer-dialog-page
   *ngIf="currentDialogStep === 'CONFIRM_TRANSFER' && !showNoRightsDialog"
   (nextStep)="onClickStartIngestion()"
-  (backStep)="onClickNext(createNewTransferData.editorMode === 'CREATION' ? 'CUSTOM_METADATA' : 'EXTRACTOR_METADATA')"
-></ingestor-confirm-transfer-dialog-page>
+  (backStep)="onClickNext(
+    createNewTransferData.editorMode === 'CREATION' 
+      ? (createNewTransferData.selectedSchemaFileContent && createNewTransferData.selectedSchemaFileContent !== '' 
+         ? 'CUSTOM_METADATA' 
+         : 'NEW_TRANSFER')
+      : 'EXTRACTOR_METADATA'
+  )"></ingestor-confirm-transfer-dialog-page>
 
 <ingestor-no-rights-dialog-page
   *ngIf="showNoRightsDialog"

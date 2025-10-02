@@ -22,6 +22,8 @@ import * as fromActions from "state-management/actions/ingestor.actions";
 import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
+import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
+
 
 @Component({
   selector: "ingestor-user-metadata-dialog",
@@ -157,14 +159,9 @@ export class IngestorUserMetadataDialogPageComponent
   }
 
   scicatHeaderErrorsHandler(errors: any[]) {
-    const result = IngestorMetadataEditorHelper.processMetadataErrors(
-      errors,
-      this.scicatHeaderSchema,
-      this.activeRenderView,
-    );
+    this.isSciCatHeaderOk = errors.length === 0;
+    this.scicatHeaderErrors = convertJSONFormsErrorToString(errors);
 
-    this.isSciCatHeaderOk = result.isValid;
-    this.scicatHeaderErrors = result.errorString;
     this.validateNextButton();
     this.cdr.detectChanges();
   }

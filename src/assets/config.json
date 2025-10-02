@@ -28,15 +28,15 @@
   "jsonMetadataEnabled": true,
   "jupyterHubUrl": "https://jupyterhub.esss.lu.se/",
   "landingPage": "doi.ess.eu/detail/",
-  "lbBaseURL": "http://127.0.0.1:3001",
+  "lbBaseURL": "http://127.0.0.1:3000",
   "ingestorComponent": {
     "ingestorEnabled": true,
-    "ingestorInTransferMode": true,
+    "ingestorInTransferMode": false,
     "ingestorAutodiscoveryOptions": [
       {
-        "mailDomain": "unibe.ch",
-        "description": "University of Bern",
-        "facilityBackend": "https://dci-ingestor.unil.ch"
+        "mailDomain": "university.ch",
+        "description": "University/facility of Choice",
+        "facilityBackend": "http://localhost:8888"
       }
     ]
   },
