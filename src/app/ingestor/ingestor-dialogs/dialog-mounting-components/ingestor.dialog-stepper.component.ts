@@ -28,7 +28,6 @@ import { CreateDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 export class IngestorDialogStepperComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   @Input() activeStep = 0;
-  @Input() selectedSchemaFileContent: string = '';
   
   testMessageComponent = ExportTemplateHelperComponent;
 

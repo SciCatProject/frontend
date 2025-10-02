@@ -66,9 +66,7 @@ export class IngestorNewTransferDialogPageComponent
 
   userProfile: ReturnedUserDto | null = null;
   uiNextButtonReady = false;
-  schemaUrl = "";
-  // selectedSchemaFileName = "";
-  selectedSchemaFileContent = "";
+
   renderView$ = this.store.select(selectIngestorRenderView);
   selectUpdateEditorFromThirdParty$ = this.store.select(
     selectUpdateEditorFromThirdParty,
@@ -238,8 +236,8 @@ export class IngestorNewTransferDialogPageComponent
       );
       this.createNewTransferData.selectedResolvedDecodedSchema = resolvedSchema;
     } else {
-      if (this.selectedSchemaFileContent) {
-        const schema = JSON.parse(this.selectedSchemaFileContent);
+      if (this.createNewTransferData.selectedSchemaFileContent) {
+        const schema = JSON.parse(this.createNewTransferData.selectedSchemaFileContent);
         const resolvedSchema = IngestorMetadataEditorHelper.resolveRefs(
           schema,
           schema,
@@ -262,8 +260,21 @@ export class IngestorNewTransferDialogPageComponent
     );
     this.generateExampleDataForSciCatHeader();
     this.prepareSchemaForProcessing();
+    
+    // Emit once to go to next step
     this.nextStep.emit();
+    
+    // In CREATION mode with no schema, skip the scientific metadata page
+    if (
+      this.createNewTransferData.editorMode === 'CREATION' && 
+      (!this.createNewTransferData.selectedSchemaFileContent || this.createNewTransferData.selectedSchemaFileContent === '')
+    ) {
+      // Emit again to skip scientific metadata and go straight to confirm
+      this.nextStep.emit();
+      this.nextStep.emit();
+    }
   }
+
 
   onDataChangeUserScicatHeader(event: any) {
     this.createNewTransferData.scicatHeader = event;
@@ -319,17 +330,26 @@ export class IngestorNewTransferDialogPageComponent
     });
   }
 
+  onSchemaUrlChange(url: string): void {
+    this.createNewTransferData.schemaUrl = url;
+    this.store.dispatch(
+      fromActions.updateIngestionObject({
+        ingestionObject: this.createNewTransferData,
+      }),
+    );
+  }
+
   async onUploadSchema(): Promise<void> {
-    if (!this.schemaUrl) {
+    if (!this.createNewTransferData.schemaUrl) {
       alert("Please enter a schema URL.");
       return;
     }
-    console.log("Fetching schema from URL:", this.schemaUrl);
+    console.log("Fetching schema from URL:", this.createNewTransferData.schemaUrl);
     let content: string;
     let parsedJson: any;
 
     try {
-      const response = await fetch(this.schemaUrl);
+      const response = await fetch(this.createNewTransferData.schemaUrl);
       if (!response.ok) {
         throw new Error(`Failed to fetch schema: ${response.statusText}`);
       }
@@ -344,7 +364,17 @@ export class IngestorNewTransferDialogPageComponent
       alert(`Error fetching schema: ${error.message}`);
       return;
     }
-    this.selectedSchemaFileContent = content;
+    
+    this.createNewTransferData.selectedSchemaFileContent = content;
+    
+    // Update the store with both the URL and content
+    this.createNewTransferData.selectedSchemaFileContent = content;
+    this.store.dispatch(
+      fromActions.updateIngestionObject({
+        ingestionObject: this.createNewTransferData,
+      }),
+    );
+    
     this.validateNextButton();
   }
 }

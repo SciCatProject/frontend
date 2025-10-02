@@ -48,27 +48,26 @@
     </mat-step>
   </mat-stepper>
 </div>
-
 <!-- CREATION MODE WITH SCHEMA (3 steps) -->
-<div class="stepper" *ngIf="activeStep >= 0 && this.createNewTransferData.editorMode === 'CREATION' && this.selectedSchemaFileContent !== ''">
-  <mat-stepper [linear]="true" [selectedIndex]="activeStep" class="ingestor-stepper">
+<div class="stepper" *ngIf="activeStep >= 0 && this.createNewTransferData.editorMode === 'CREATION' && this.createNewTransferData.selectedSchemaFileContent !== ''">
+  <mat-stepper [linear]="true" [selectedIndex]="activeStep === 0 ? 0 : activeStep - 1" class="ingestor-stepper">
     <mat-step [completed]="activeStep > 0" [editable]="false" [stepControl]="null">
       <ng-template matStepLabel>Fill out Dataset information</ng-template>
     </mat-step>
     
-    <mat-step [completed]="activeStep > 1" [editable]="false" [stepControl]="null">
+    <mat-step [completed]="activeStep > 2" [editable]="false" [stepControl]="null">
       <ng-template matStepLabel>Fill out custom scientific metadata</ng-template>
     </mat-step>
     
-    <mat-step [completed]="activeStep > 2" [editable]="false" [stepControl]="null">
+    <mat-step [completed]="activeStep > 3" [editable]="false" [stepControl]="null">
       <ng-template matStepLabel>Confirm inputs</ng-template>
     </mat-step>
   </mat-stepper>
 </div>
 
 <!-- CREATION MODE WITHOUT SCHEMA (2 steps) -->
-<div class="stepper" *ngIf="activeStep >= 0 && this.createNewTransferData.editorMode === 'CREATION' && this.selectedSchemaFileContent === ''">
-  <mat-stepper [linear]="true" [selectedIndex]="activeStep" class="ingestor-stepper">
+<div class="stepper" *ngIf="activeStep >= 0 && this.createNewTransferData.editorMode === 'CREATION' && this.createNewTransferData.selectedSchemaFileContent === ''">
+  <mat-stepper [linear]="true" [selectedIndex]="activeStep === 0 ? 0 : 1" class="ingestor-stepper">
     <mat-step [completed]="activeStep > 0" [editable]="false" [stepControl]="null">
       <ng-template matStepLabel>Fill out Dataset information</ng-template>
     </mat-step>

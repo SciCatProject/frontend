@@ -16,7 +16,6 @@
   <div class="ingestor-stepper-header">
     <ingestor-dialog-stepper 
       [activeStep]="0"
-      [selectedSchemaFileContent]="selectedSchemaFileContent"
     ></ingestor-dialog-stepper>
   </div>
 </div>
@@ -54,21 +53,26 @@
 
     
     <mat-card class="ingestor-card">
-  <mat-card-header>
-    <mat-card-title>Scientific Metadata Schema</mat-card-title>
-  </mat-card-header>
-  <mat-card-content class="ingestor-vertical-layout">
+    <mat-card-header>
+      <mat-card-title>Scientific Metadata Schema</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="ingestor-vertical-layout">
     <div class="ingestor-upload-section">
       <label for="schemaUrl">
         You can provide a schema for your scientific metadata. We only accept schemas in json format.
       </label>
       <mat-form-field class="form-full-width">
-        <input matInput id="schemaUrl" placeholder="Paste schema URL here" [(ngModel)]="schemaUrl" />
-       <button mat-raised-button class="block-button" color="primary"
-            (click)="onUploadSchema()">Validate</button>
-
+        <input matInput 
+              id="schemaUrl" 
+              placeholder="Paste schema URL here" 
+              [ngModel]="createNewTransferData.schemaUrl"
+              (ngModelChange)="onSchemaUrlChange($event)" />
+        <button mat-raised-button 
+                class="block-button" 
+                color="primary"
+                (click)="onUploadSchema()">Validate</button>
       </mat-form-field>
-      <p *ngIf="selectedSchemaFileContent">
+      <p *ngIf="this.createNewTransferData.selectedSchemaFileContent">
         Loaded schema is valid!
       </p>
     </div>

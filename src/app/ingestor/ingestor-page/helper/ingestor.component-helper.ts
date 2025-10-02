@@ -34,7 +34,6 @@ export interface IngestionRequestInformation {
   selectedMethod: ExtractionMethod;
   selectedResolvedDecodedSchema: JsonSchema;
   scicatHeader: object;
-
   userMetaData: {
     organizational: object;
     sample: object;
@@ -43,7 +42,6 @@ export interface IngestionRequestInformation {
     instrument: object;
     acquisition: object;
   };
-  customMetaData: object; // Custom metadata in creation mode
 
   mergedMetaDataString: string;
 
@@ -51,6 +49,10 @@ export interface IngestionRequestInformation {
 
   ingestionRequest: PostDatasetResponse | null;
   autoArchive: boolean;
+  // Custom metadata in creation mode
+  schemaUrl?: string;  
+  selectedSchemaFileContent?: string; 
+  customMetaData: object; 
 }
 
 export interface ScientificMetadata {
@@ -130,6 +132,9 @@ export class IngestorHelper {
       editorMode: "INGESTION",
       ingestionRequest: null,
       autoArchive: true,
+
+      schemaUrl: "",
+      selectedSchemaFileContent: "", 
     };
   };
 

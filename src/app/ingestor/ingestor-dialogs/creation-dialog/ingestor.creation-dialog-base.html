@@ -1,7 +1,12 @@
 <ingestor-new-transfer-dialog-page
   *ngIf="currentDialogStep === 'NEW_TRANSFER' && !showNoRightsDialog"
-  (nextStep)="onClickNext(createNewTransferData.editorMode === 'CREATION' ? 'CUSTOM_METADATA' : 'USER_METADATA')"></ingestor-new-transfer-dialog-page>
-
+  (nextStep)="onClickNext(
+    createNewTransferData.editorMode === 'CREATION' 
+      ? (createNewTransferData.selectedSchemaFileContent && createNewTransferData.selectedSchemaFileContent !== '' 
+         ? 'CUSTOM_METADATA' 
+         : 'CONFIRM_TRANSFER')
+      : 'USER_METADATA'
+  )"></ingestor-new-transfer-dialog-page>
 <ingestor-user-metadata-dialog
   *ngIf="currentDialogStep === 'USER_METADATA' && !showNoRightsDialog"
   (nextStep)="onClickNext('EXTRACTOR_METADATA')"
