@@ -214,7 +214,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   saveTableSettings(setting: ITableSetting) {
     this.pending = true;
     const columnsSetting = setting.columnSetting.map((column, index) => {
-      const { name, display, width, type } = column;
+      const { name, display, width, type, format } = column;
 
       return {
         name,
@@ -222,6 +222,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         order: index,
         width,
         type,
+        format,
       };
     });
     this.store.dispatch(
@@ -271,10 +272,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
     if (event === TableEventType.SortChanged) {
       const { active, direction } = sender as Sort;
 
-      let column = active;
-      if (column === "runNumber") {
-        column = "scientificMetadata.runNumber.value";
-      }
+      const column = active;
 
       this.store.dispatch(sortByColumnAction({ column, direction }));
     }
@@ -367,8 +365,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
   onSortChange(event: SortChangeEvent): void {
     const { active, direction } = event;
-    let column = active.split("_")[1];
-    if (column === "runNumber") column = "scientificMetadata.runNumber.value";
+    const column = active.split("_")[1];
     this.store.dispatch(sortByColumnAction({ column, direction }));
   }
 
@@ -387,13 +384,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           tooltip: column.tooltip,
         };
 
-        if (column.name === "runNumber" && column.type !== "custom") {
-          // NOTE: This is for the saved columns in the database or the old config.
-          convertedColumn.customRender = (c, row) =>
-            lodashGet(row, "scientificMetadata.runNumber.value");
-          convertedColumn.toExport = (row) =>
-            lodashGet(row, "scientificMetadata.runNumber.value");
-        }
         // NOTE: This is how we render the custom columns if new config is used.
         if (column.type === "custom") {
           convertedColumn.customRender = (c, row) =>

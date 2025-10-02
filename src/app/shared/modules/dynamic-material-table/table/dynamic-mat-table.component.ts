@@ -553,7 +553,6 @@ export class DynamicMatTableComponent<T extends TableRow>
     if (column.customRender) {
       return column.customRender(column, row);
     }
-
     return row[column.name];
   }
 
