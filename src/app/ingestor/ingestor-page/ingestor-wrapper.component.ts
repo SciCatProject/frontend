@@ -21,7 +21,7 @@ export class IngestorWrapperComponent {
   constructor(public appConfigService: AppConfigService) {}
   getIngestorComponent() {
     return this.appConfigService.getConfig().ingestorComponent
-      ?.ingestorInTransferMode
+      ?.ingestorEnabled
       ? IngestorTransferComponent
       : IngestorCreationComponent;
   }

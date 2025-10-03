@@ -35,7 +35,6 @@ export interface DatasetDetailComponentConfig {
 
 export interface IngestorComponentConfig {
   ingestorEnabled: boolean;
-  ingestorInTransferMode: boolean; // otherwise in creation mode
   ingestorAutodiscoveryOptions?: IngestorAutodiscovery[];
 }
 

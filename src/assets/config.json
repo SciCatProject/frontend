@@ -30,8 +30,7 @@
   "landingPage": "doi.ess.eu/detail/",
   "lbBaseURL": "http://127.0.0.1:3000",
   "ingestorComponent": {
-    "ingestorEnabled": true,
-    "ingestorInTransferMode": false,
+    "ingestorEnabled": false,
     "ingestorAutodiscoveryOptions": [
       {
         "mailDomain": "university.ch",

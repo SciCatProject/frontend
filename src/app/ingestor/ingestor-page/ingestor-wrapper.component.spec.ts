@@ -10,9 +10,9 @@ describe("IngestorComponent", () => {
   let fixture: ComponentFixture<IngestorWrapperComponent>;
   let appConfigService: jasmine.SpyObj<AppConfigService>;
 
-  // const getConfig = () => ({
-  //   ingestorInTransferMode: false,
-  // });
+  const getConfig = () => ({
+    ingestorEnabled: false,
+  });
 
   beforeEach(() => {
     const appConfigServiceSpy = jasmine.createSpyObj("AppConfigService", [
@@ -46,22 +46,10 @@ describe("IngestorComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should load IngestorTransferComponent when config specifies ingestorInTransferMode as true", () => {
+  it("should load IngestorCreationComponent when config specifies ingestoEnabled as false", () => {
     appConfigService.getConfig.and.returnValue({
       ingestorComponent: {
-        ingestorEnabled: true,
-        ingestorInTransferMode: true,
-      },
-    } as AppConfigInterface);
-
-    const componentInstance = component.getIngestorComponent();
-    expect(componentInstance).toBe(IngestorTransferComponent);
-  });
-
-  it("should load IngestorCreationComponent when config specifies ingestorInTransferMode as false", () => {
-    appConfigService.getConfig.and.returnValue({
-      ingestorComponent: {
-        ingestorInTransferMode: false,
+        ingestorEnabled: false,
       },
     } as AppConfigInterface);
 

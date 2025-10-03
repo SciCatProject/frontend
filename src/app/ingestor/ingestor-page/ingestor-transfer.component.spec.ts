@@ -25,7 +25,7 @@ describe("IngestorTransferComponent", () => {
   };
 
   const getConfig = () => ({
-    ingestorInTransferMode: true,
+    ingestorEnabled: true,
   });
 
   beforeEach(waitForAsync(() => {

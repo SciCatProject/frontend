@@ -252,7 +252,6 @@ const appConfig: AppConfigInterface = {
   },
   ingestorComponent: {
     ingestorEnabled: true,
-    ingestorInTransferMode: true,
   },
 };
 

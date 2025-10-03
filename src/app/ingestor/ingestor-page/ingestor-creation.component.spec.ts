@@ -26,7 +26,7 @@ describe("IngestorCreationComponent", () => {
     navigateByUrl: jasmine.createSpy("navigateByUrl"),
   };
   const getConfig = () => ({
-    ingestorInTransferMode: false,
+    ingestorEnabled: false,
   });
 
   beforeEach(waitForAsync(() => {
