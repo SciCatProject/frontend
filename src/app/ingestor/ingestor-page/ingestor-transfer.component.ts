@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import {
   IngestionRequestInformation,
+  IngestorAutodiscovery,
   IngestorHelper,
 } from "./helper/ingestor.component-helper";
 import {
@@ -115,7 +116,7 @@ export class IngestorTransferComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.ingestorBackend$.subscribe((ingestorBackend) => {
         if (ingestorBackend !== null && ingestorBackend !== undefined) {
-          this.connectedFacilityBackend = ingestorBackend;
+          this.connectedFacilityBackend = ingestorBackend.facilityBackend;
         }
       }),
     );
@@ -199,32 +200,39 @@ export class IngestorTransferComponent implements OnInit, OnDestroy {
       this.route.queryParams.subscribe(async (params) => {
         const backendUrl = params["backendUrl"];
         const discovery = params["discovery"];
-
-        if (discovery === "true" && !backendUrl) {
-          const facilityUrl = await this.getFacilityURLByUserInfo();
-          if (facilityUrl != null) {
-            this.router.navigate([], {
-              relativeTo: this.route,
-              queryParams: { backendUrl: facilityUrl },
-              queryParamsHandling: "",
-            });
+        let facility = null;
+        if (discovery === "true") {
+            facility = await this.getFacilityByUserInfo();
+            if (facility != null && !backendUrl) {
+              this.router.navigate([], {
+                relativeTo: this.route,
+                queryParams: { 
+                  backendUrl: facility.facilityBackend,
+                  discovery: "true",
+                },
+                queryParamsHandling: "merge",
+              });
+              return;
+            }
           }
-        }
 
-        if (backendUrl) {
-          // backendUrl should not end with a slash
-          const facilityBackendUrlCleaned = backendUrl.replace(/\/$/, "");
+          if (backendUrl) {
+            // backendUrl should not end with a slash
+            const facilityBackendUrlCleaned = backendUrl.replace(/\/$/, "");
+            this.store.dispatch(
+              fromActions.setIngestorEndpoint({
+                ingestorEndpoint: { 
+                  mailDomain:"",
+                  facilityBackend: facilityBackendUrlCleaned,
+                  description: facility?.description ?? "",
+                }
+              }),
+            );
 
-          this.store.dispatch(
-            fromActions.setIngestorEndpoint({
-              ingestorEndpoint: facilityBackendUrlCleaned,
-            }),
-          );
-
-          this.store.dispatch(fromActions.connectIngestor());
-        } else {
-          this.connectingToFacilityBackend = false;
-        }
+            this.store.dispatch(fromActions.connectIngestor());
+          } else {
+            this.connectingToFacilityBackend = false;
+          }
       }),
     );
   }
@@ -344,7 +352,7 @@ export class IngestorTransferComponent implements OnInit, OnDestroy {
     });
   }
 
-  async getFacilityURLByUserInfo(): Promise<string | null> {
+  async getFacilityByUserInfo(): Promise<IngestorAutodiscovery | null> {
     if (this.scicatUserProfile && this.scicatUserProfile.email) {
       const userEmail = this.scicatUserProfile.email;
       const facility = userEmail.split("@")[1]?.toLowerCase();
@@ -359,7 +367,7 @@ export class IngestorTransferComponent implements OnInit, OnDestroy {
             .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
           const domainPattern = new RegExp(`^([\\w-]+\\.)*${escapedDomain}$`); // <any.sub.domain.uni.ch>
           if (domainPattern.test(facility)) {
-            return discovery.facilityBackend;
+            return discovery;
           }
         }
       }

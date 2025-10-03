@@ -86,13 +86,17 @@ describe("IngestorReducer", () => {
 
   describe("setIngestorEndpoint", () => {
     it("should set ingestor endpoint", () => {
-      const endpoint = "http://localhost:3000";
+      const endpoint =  {
+        mailDomain:"",
+        description: "",
+        facilityBackend:"http://localhost:3000",
+      };
       const action = fromActions.setIngestorEndpoint({
         ingestorEndpoint: endpoint,
       });
       const result = ingestorReducer(undefined, action);
 
-      expect(result.ingestorEndpoint).toBe(endpoint);
+      expect(result.ingestorEndpoint).toEqual(endpoint);
     });
   });
 
@@ -329,7 +333,11 @@ describe("IngestorReducer", () => {
     it("should reset entire state to initial", () => {
       // Build up some modified state
       const setEndpointAction = fromActions.setIngestorEndpoint({
-        ingestorEndpoint: "http://test.com",
+        ingestorEndpoint: {
+          mailDomain:"",
+          description: "",
+          facilityBackend:"http://test.com",
+        }, 
       });
       const connectAction = fromActions.connectIngestor();
       ingestorReducer(undefined, setEndpointAction);

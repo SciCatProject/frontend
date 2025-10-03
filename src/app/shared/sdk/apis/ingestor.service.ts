@@ -57,9 +57,9 @@ export class Ingestor {
   getVersion(): Observable<OtherVersionResponse> {
     return this.store.select(selectIngestorEndpoint).pipe(
       take(1),
-      switchMap((endpoint) =>
+      switchMap((ingestorEndpoint) =>
         this.http.get<OtherVersionResponse>(
-          `${endpoint}/${INGESTOR_API_ENDPOINTS_V1.OTHER.VERSION}`,
+          `${ingestorEndpoint.facilityBackend}/${INGESTOR_API_ENDPOINTS_V1.OTHER.VERSION}`,
           this.getRequestOptions(),
         ),
       ),
@@ -71,7 +71,7 @@ export class Ingestor {
       take(1),
       switchMap((ingestorEndpoint) =>
         this.http.get<UserInfo>(
-          `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.AUTH.USERINFO}`,
+          `${ingestorEndpoint.facilityBackend}/${INGESTOR_API_ENDPOINTS_V1.AUTH.USERINFO}`,
           this.getRequestOptions(),
         ),
       ),
@@ -83,7 +83,7 @@ export class Ingestor {
       take(1),
       switchMap((ingestorEndpoint) =>
         this.http.get<OtherHealthResponse>(
-          `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.OTHER.HEALTH}`,
+          `${ingestorEndpoint.facilityBackend}/${INGESTOR_API_ENDPOINTS_V1.OTHER.HEALTH}`,
           this.getRequestOptions(),
         ),
       ),
@@ -97,7 +97,7 @@ export class Ingestor {
       take(1),
       switchMap((ingestorEndpoint) =>
         this.http.delete<DeleteTransferResponse>(
-          `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.TRANSFER}`,
+          `${ingestorEndpoint.facilityBackend}/${INGESTOR_API_ENDPOINTS_V1.TRANSFER}`,
           { ...this.getRequestOptions(), body: requestBody },
         ),
       ),
@@ -121,7 +121,7 @@ export class Ingestor {
       take(1),
       switchMap((ingestorEndpoint) =>
         this.http.get<GetTransferResponse>(
-          `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.TRANSFER}`,
+          `${ingestorEndpoint.facilityBackend}/${INGESTOR_API_ENDPOINTS_V1.TRANSFER}`,
           { ...this.getRequestOptions(), params },
         ),
       ),
@@ -133,7 +133,7 @@ export class Ingestor {
       take(1),
       switchMap((ingestorEndpoint) =>
         this.http.post<PostDatasetResponse>(
-          `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.DATASET}`,
+          `${ingestorEndpoint.facilityBackend}/${INGESTOR_API_ENDPOINTS_V1.DATASET}`,
           payload,
           this.getRequestOptions(),
         ),
@@ -153,7 +153,7 @@ export class Ingestor {
       take(1),
       switchMap((ingestorEndpoint) =>
         this.http.get<GetExtractorResponse>(
-          `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.EXTRACTOR}`,
+          `${ingestorEndpoint.facilityBackend}/${INGESTOR_API_ENDPOINTS_V1.EXTRACTOR}`,
           { ...this.getRequestOptions(), params },
         ),
       ),
@@ -174,7 +174,7 @@ export class Ingestor {
       take(1),
       switchMap((ingestorEndpoint) =>
         this.http.get<GetBrowseDatasetResponse>(
-          `${ingestorEndpoint}/${INGESTOR_API_ENDPOINTS_V1.DATASET_BROWSE}`,
+          `${ingestorEndpoint.facilityBackend}/${INGESTOR_API_ENDPOINTS_V1.DATASET_BROWSE}`,
           { ...this.getRequestOptions(), params },
         ),
       ),

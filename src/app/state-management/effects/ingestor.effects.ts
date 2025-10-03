@@ -54,7 +54,7 @@ export class IngestorEffects {
                           versionResponse:
                             versionResponse as OtherVersionResponse,
                           healthResponse: healthResponse as OtherHealthResponse,
-                          userInfoResponse: null, // Kein UserInfo verfügbar
+                          userInfoResponse: null, // no UserInfo available
                           authIsDisabled: true,
                         }),
                       );

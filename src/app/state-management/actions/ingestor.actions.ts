@@ -2,6 +2,7 @@ import { createAction, props } from "@ngrx/store";
 import {
   APIInformation,
   IngestionRequestInformation,
+  IngestorAutodiscovery,
 } from "ingestor/ingestor-page/helper/ingestor.component-helper";
 import {
   GetBrowseDatasetResponse,
@@ -14,6 +15,7 @@ import {
   DeleteTransferRequest,
   UserInfo,
 } from "shared/sdk/models/ingestor/models";
+
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 import {
   DatasetsControllerCreateV3Request,
@@ -22,7 +24,7 @@ import {
 
 export const setIngestorEndpoint = createAction(
   "[Ingestor] Set ingestor endpoint",
-  props<{ ingestorEndpoint: string }>(),
+  props<{ ingestorEndpoint: IngestorAutodiscovery }>(),
 );
 
 export const connectIngestor = createAction("[Ingestor] Connect Ingestor");

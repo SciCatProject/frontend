@@ -86,7 +86,7 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.ingestorBackend$.subscribe((ingestorBackend) => {
         if (ingestorBackend) {
-          this.connectedFacilityBackend = ingestorBackend;
+          this.connectedFacilityBackend = ingestorBackend.facilityBackend;
         }
       }),
     );

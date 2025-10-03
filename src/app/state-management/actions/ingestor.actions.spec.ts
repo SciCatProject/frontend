@@ -10,11 +10,19 @@ describe("Ingestor Actions", () => {
   describe("setIngestorEndpoint", () => {
     it("should create an action with endpoint", () => {
       const action = fromActions.setIngestorEndpoint({
-        ingestorEndpoint: "http://localhost:3000",
+        ingestorEndpoint:  {
+          mailDomain:"",
+          description: "",
+          facilityBackend:"http://localhost:3000",
+        },
       });
 
       expect(action.type).toBe("[Ingestor] Set ingestor endpoint");
-      expect(action.ingestorEndpoint).toBe("http://localhost:3000");
+      expect(action.ingestorEndpoint).toEqual( {
+        mailDomain:"",
+        description: "",
+        facilityBackend:"http://localhost:3000",
+      },);
     });
   });
 

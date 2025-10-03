@@ -1,6 +1,7 @@
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 import {
   APIInformation,
+  IngestorAutodiscovery,
   IngestionRequestInformation,
   IngestorHelper,
 } from "ingestor/ingestor-page/helper/ingestor.component-helper";
@@ -24,10 +25,11 @@ interface IngestorStatus {
   validEndpoint: boolean | null;
 }
 
+
 export interface IngestorState {
   ingestorStatus: IngestorStatus;
   ingestorAuth: IngestorAuthentication | null;
-  ingestorEndpoint: string;
+  ingestorEndpoint: IngestorAutodiscovery | null;
   ingestorTransferList: GetTransferResponse | null;
   ingestorTransferListDetailView: GetTransferResponse | null;
   transferListRequestOptions: {
@@ -53,7 +55,11 @@ export const initialIngestorState: IngestorState = {
     validEndpoint: null,
   },
   ingestorAuth: null,
-  ingestorEndpoint: "",
+  ingestorEndpoint: {
+    mailDomain:"",
+    description: "",
+    facilityBackend:"",
+  },
   ingestorTransferList: null,
   ingestorTransferListDetailView: null,
   transferListRequestOptions: {

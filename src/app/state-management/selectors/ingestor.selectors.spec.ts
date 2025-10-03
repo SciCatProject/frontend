@@ -8,7 +8,11 @@ import {
 
 describe("Ingestor Selectors", () => {
   const mockIngestorState: IngestorState = {
-    ingestorEndpoint: "http://localhost:3000",
+    ingestorEndpoint:  {
+      mailDomain:"",
+      description: "example facility",
+      facilityBackend:"http://localhost:3000",
+    },
     ingestorStatus: {
       versionResponse: { version: "1.0.0" },
       healthResponse: { status: "ok" },
@@ -50,7 +54,11 @@ describe("Ingestor Selectors", () => {
 
   it("should select ingestorEndpoint", () => {
     const result = fromSelectors.selectIngestorEndpoint(mockState);
-    expect(result).toBe("http://localhost:3000");
+    expect(result).toEqual( {
+    mailDomain:"",
+    description: "example facility",
+    facilityBackend:"http://localhost:3000",
+    },);
   });
 
   it("should select ingestorStatus", () => {

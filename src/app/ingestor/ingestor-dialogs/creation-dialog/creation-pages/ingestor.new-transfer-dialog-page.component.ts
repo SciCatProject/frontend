@@ -15,6 +15,7 @@ import {
   ExtractionMethod,
   IngestionRequestInformation,
   IngestorHelper,
+  IngestorAutodiscovery,
 } from "../../../ingestor-page/helper/ingestor.component-helper";
 import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 import { IngestorMetadataEditorHelper } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
@@ -24,6 +25,7 @@ import { PageChangeEvent } from "shared/modules/table/table.component";
 import { IngestorFileBrowserComponent } from "ingestor/ingestor-dialogs/ingestor-file-browser/ingestor.file-browser.component";
 import { Store } from "@ngrx/store";
 import {
+  selectIngestorEndpoint,
   selectIngestionObject,
   selectIngestorExtractionMethods,
   selectIngestorRenderView,
@@ -46,6 +48,7 @@ export class IngestorNewTransferDialogPageComponent
   private subscriptions: Subscription[] = [];
   readonly dialog = inject(MatDialog);
 
+  facilityBackend$ = this.store.select(selectIngestorEndpoint);
   ingestionObject$ = this.store.select(selectIngestionObject);
   vm$ = this.store.select(selectUserSettingsPageViewModel);
   ingestorExtractionMethods$ = this.store.select(
@@ -57,6 +60,7 @@ export class IngestorNewTransferDialogPageComponent
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
 
+  facilityInfo: IngestorAutodiscovery | null = null;  
   extractionMethods: GetExtractorResponse = null;
   dropdownPageSize = 50;
   extractionMethodsPage = 0;
@@ -124,6 +128,14 @@ export class IngestorNewTransferDialogPageComponent
                   },
                 ),
               );
+                this.subscriptions.push(
+                this.facilityBackend$.subscribe((ingestorEndpoint) => {
+                  if (ingestorEndpoint) {
+                    console.log("Ingestor endpoint changed:", ingestorEndpoint);
+                    this.facilityInfo = ingestorEndpoint;
+                  }
+                })
+              );
             } else {
               this.scicatHeaderSchema = getJsonSchemaFromDto(true);
             }
@@ -159,6 +171,7 @@ export class IngestorNewTransferDialogPageComponent
       );
     }
   }
+
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription) => {
@@ -208,6 +221,7 @@ export class IngestorNewTransferDialogPageComponent
     this.createNewTransferData.scicatHeader["type"] = "raw";
     this.createNewTransferData.scicatHeader["dataFormat"] = "root";
     this.createNewTransferData.scicatHeader["owner"] = "User";
+    this.createNewTransferData.scicatHeader["creationLocation"] = this.facilityInfo.description || "";
 
     this.createNewTransferData.scicatHeader["principalInvestigator"] =
       this.userProfile.username;
