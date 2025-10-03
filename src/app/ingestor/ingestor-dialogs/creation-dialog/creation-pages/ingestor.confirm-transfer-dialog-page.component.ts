@@ -13,7 +13,7 @@ import {
 } from "../../../ingestor-page/helper/ingestor.component-helper";
 import { Store } from "@ngrx/store";
 import {
-  ingestionObjectAPIInformation,
+  selectIngestionObjectAPIInformation,
   selectIngestionObject,
   selectIsIngestDatasetLoading,
 } from "state-management/selectors/ingestor.selectors";
@@ -41,7 +41,7 @@ export class IngestorConfirmTransferDialogPageComponent
     IngestorHelper.createEmptyAPIInformation();
 
   ingestionObjectApiInformation$ = this.store.select(
-    ingestionObjectAPIInformation,
+    selectIngestionObjectAPIInformation,
   );
 
   ingestionObject$ = this.store.select(selectIngestionObject);

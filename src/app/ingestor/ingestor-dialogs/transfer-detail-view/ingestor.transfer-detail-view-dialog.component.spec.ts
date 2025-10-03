@@ -24,7 +24,7 @@ describe("IngestorTransferViewDialogComponent", () => {
   };
 
   const getConfig = () => ({
-    ingestorEnabled:true,
+    ingestorEnabled: true,
   });
 
   const mockDialogRef = {

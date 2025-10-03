@@ -20,8 +20,7 @@ export class IngestorWrapperComponent {
 
   constructor(public appConfigService: AppConfigService) {}
   getIngestorComponent() {
-    return this.appConfigService.getConfig().ingestorComponent
-      ?.ingestorEnabled
+    return this.appConfigService.getConfig().ingestorComponent?.ingestorEnabled
       ? IngestorTransferComponent
       : IngestorCreationComponent;
   }

@@ -25,7 +25,6 @@ interface IngestorStatus {
   validEndpoint: boolean | null;
 }
 
-
 export interface IngestorState {
   ingestorStatus: IngestorStatus;
   ingestorAuth: IngestorAuthentication | null;
@@ -56,9 +55,9 @@ export const initialIngestorState: IngestorState = {
   },
   ingestorAuth: null,
   ingestorEndpoint: {
-    mailDomain:"",
+    mailDomain: "",
     description: "",
-    facilityBackend:"",
+    facilityBackend: "",
   },
   ingestorTransferList: null,
   ingestorTransferListDetailView: null,

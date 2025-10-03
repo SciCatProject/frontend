@@ -60,7 +60,7 @@ export class IngestorNewTransferDialogPageComponent
   createNewTransferData: IngestionRequestInformation =
     IngestorHelper.createEmptyRequestInformation();
 
-  facilityInfo: IngestorAutodiscovery | null = null;  
+  facilityInfo: IngestorAutodiscovery | null = null;
   extractionMethods: GetExtractorResponse = null;
   dropdownPageSize = 50;
   extractionMethodsPage = 0;
@@ -128,13 +128,13 @@ export class IngestorNewTransferDialogPageComponent
                   },
                 ),
               );
-                this.subscriptions.push(
+              this.subscriptions.push(
                 this.facilityBackend$.subscribe((ingestorEndpoint) => {
                   if (ingestorEndpoint) {
                     console.log("Ingestor endpoint changed:", ingestorEndpoint);
                     this.facilityInfo = ingestorEndpoint;
                   }
-                })
+                }),
               );
             } else {
               this.scicatHeaderSchema = getJsonSchemaFromDto(true);
@@ -171,7 +171,6 @@ export class IngestorNewTransferDialogPageComponent
       );
     }
   }
-
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription) => {
@@ -221,7 +220,8 @@ export class IngestorNewTransferDialogPageComponent
     this.createNewTransferData.scicatHeader["type"] = "raw";
     this.createNewTransferData.scicatHeader["dataFormat"] = "root";
     this.createNewTransferData.scicatHeader["owner"] = "User";
-    this.createNewTransferData.scicatHeader["creationLocation"] = this.facilityInfo.description || "";
+    this.createNewTransferData.scicatHeader["creationLocation"] =
+      this.facilityInfo.description || "";
 
     this.createNewTransferData.scicatHeader["principalInvestigator"] =
       this.userProfile.username;
@@ -279,7 +279,6 @@ export class IngestorNewTransferDialogPageComponent
 
     // Emit once to go to next step
     this.nextStep.emit();
-
   }
 
   onDataChangeUserScicatHeader(event: any) {

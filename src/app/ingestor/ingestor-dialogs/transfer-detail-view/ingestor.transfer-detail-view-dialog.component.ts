@@ -18,15 +18,15 @@ export class IngestorTransferViewDialogComponent implements OnInit, OnDestroy {
   autoRefreshInterval: NodeJS.Timeout = null;
   transferDetailList$ = this.store.select(selectIngestorTransferDetailList);
   detailItem: TransferItem | null = null;
+  // Define tables
+  displayedColumns: string[] = ["property", "value"];
+  tableData: { property: string; value: string }[] = [];
 
   constructor(
     private store: Store,
     public dialogRef: MatDialogRef<IngestorTransferViewDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {}
-  // Define tables
-  displayedColumns: string[] = ["property", "value"];
-  tableData: { property: string; value: string }[] = [];
 
   ngOnInit() {
     this.subscriptions.push(

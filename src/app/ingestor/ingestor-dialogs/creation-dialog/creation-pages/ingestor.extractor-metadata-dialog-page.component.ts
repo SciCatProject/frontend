@@ -15,7 +15,7 @@ import {
 import { IngestorMetadataEditorHelper } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 import { Store } from "@ngrx/store";
 import {
-  ingestionObjectAPIInformation,
+  selectIngestionObjectAPIInformation,
   selectIngestionObject,
   selectIngestorRenderView,
   selectUpdateEditorFromThirdParty,
@@ -42,7 +42,7 @@ export class IngestorExtractorMetadataDialogPageComponent
     IngestorHelper.createEmptyAPIInformation();
 
   ingestionObjectApiInformation$ = this.store.select(
-    ingestionObjectAPIInformation,
+    selectIngestionObjectAPIInformation,
   );
   ingestionObject$ = this.store.select(selectIngestionObject);
   renderView$ = this.store.select(selectIngestorRenderView);

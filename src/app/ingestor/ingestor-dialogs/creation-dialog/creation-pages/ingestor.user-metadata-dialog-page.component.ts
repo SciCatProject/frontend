@@ -24,7 +24,6 @@ import { Subscription } from "rxjs";
 import { renderView } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component";
 import { convertJSONFormsErrorToString } from "ingestor/ingestor-metadata-editor/ingestor-metadata-editor-helper";
 
-
 @Component({
   selector: "ingestor-user-metadata-dialog",
   templateUrl: "ingestor.user-metadata-dialog-page.html",

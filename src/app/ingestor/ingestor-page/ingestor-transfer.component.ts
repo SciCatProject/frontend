@@ -202,37 +202,37 @@ export class IngestorTransferComponent implements OnInit, OnDestroy {
         const discovery = params["discovery"];
         let facility = null;
         if (discovery === "true") {
-            facility = await this.getFacilityByUserInfo();
-            if (facility != null && !backendUrl) {
-              this.router.navigate([], {
-                relativeTo: this.route,
-                queryParams: { 
-                  backendUrl: facility.facilityBackend,
-                  discovery: "true",
-                },
-                queryParamsHandling: "merge",
-              });
-              return;
-            }
+          facility = await this.getFacilityByUserInfo();
+          if (facility != null && !backendUrl) {
+            this.router.navigate([], {
+              relativeTo: this.route,
+              queryParams: {
+                backendUrl: facility.facilityBackend,
+                discovery: "true",
+              },
+              queryParamsHandling: "merge",
+            });
+            return;
           }
+        }
 
-          if (backendUrl) {
-            // backendUrl should not end with a slash
-            const facilityBackendUrlCleaned = backendUrl.replace(/\/$/, "");
-            this.store.dispatch(
-              fromActions.setIngestorEndpoint({
-                ingestorEndpoint: { 
-                  mailDomain:"",
-                  facilityBackend: facilityBackendUrlCleaned,
-                  description: facility?.description ?? "",
-                }
-              }),
-            );
+        if (backendUrl) {
+          // backendUrl should not end with a slash
+          const facilityBackendUrlCleaned = backendUrl.replace(/\/$/, "");
+          this.store.dispatch(
+            fromActions.setIngestorEndpoint({
+              ingestorEndpoint: {
+                mailDomain: "",
+                facilityBackend: facilityBackendUrlCleaned,
+                description: facility?.description ?? "",
+              },
+            }),
+          );
 
-            this.store.dispatch(fromActions.connectIngestor());
-          } else {
-            this.connectingToFacilityBackend = false;
-          }
+          this.store.dispatch(fromActions.connectIngestor());
+        } else {
+          this.connectingToFacilityBackend = false;
+        }
       }),
     );
   }

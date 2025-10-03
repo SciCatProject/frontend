@@ -79,7 +79,7 @@ export const selectIsIngestDatasetLoading = createSelector(
   (state) => state.ingestionObjectApiInformation.ingestionDatasetLoading,
 );
 
-export const ingestionObjectAPIInformation = createSelector(
+export const selectIngestionObjectAPIInformation = createSelector(
   selectIngestorState,
   (state) => state.ingestionObjectApiInformation,
 );

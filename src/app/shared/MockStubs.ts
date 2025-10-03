@@ -25,7 +25,7 @@ import {
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { SDKToken } from "./services/auth/auth.service";
 import { IngestionRequestInformation } from "ingestor/ingestor-page/helper/ingestor.component-helper";
-import { MethodItem } from "/frontend/src/app/shared/sdk/models/ingestor/methodItem";
+import { MethodItem } from "./sdk/models/ingestor/methodItem";
 import { FolderNode } from "./sdk/models/ingestor/folderNode";
 import { APIInformation } from "ingestor/ingestor-page/helper/ingestor.component-helper";
 

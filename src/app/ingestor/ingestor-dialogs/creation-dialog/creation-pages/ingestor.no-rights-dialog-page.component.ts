@@ -14,7 +14,7 @@ import {
 } from "../../../ingestor-page/helper/ingestor.component-helper";
 import { Store } from "@ngrx/store";
 import {
-  ingestionObjectAPIInformation,
+  selectIngestionObjectAPIInformation,
   selectIngestionObject,
 } from "state-management/selectors/ingestor.selectors";
 import { Subscription } from "rxjs";
@@ -39,7 +39,7 @@ export class IngestorNoRightsDialogPageComponent implements OnInit, OnDestroy {
     IngestorHelper.createEmptyAPIInformation();
 
   ingestionObjectApiInformation$ = this.store.select(
-    ingestionObjectAPIInformation,
+    selectIngestionObjectAPIInformation,
   );
 
   constructor(private store: Store) {}

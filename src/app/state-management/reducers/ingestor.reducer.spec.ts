@@ -86,10 +86,10 @@ describe("IngestorReducer", () => {
 
   describe("setIngestorEndpoint", () => {
     it("should set ingestor endpoint", () => {
-      const endpoint =  {
-        mailDomain:"",
+      const endpoint = {
+        mailDomain: "",
         description: "",
-        facilityBackend:"http://localhost:3000",
+        facilityBackend: "http://localhost:3000",
       };
       const action = fromActions.setIngestorEndpoint({
         ingestorEndpoint: endpoint,
@@ -334,10 +334,10 @@ describe("IngestorReducer", () => {
       // Build up some modified state
       const setEndpointAction = fromActions.setIngestorEndpoint({
         ingestorEndpoint: {
-          mailDomain:"",
+          mailDomain: "",
           description: "",
-          facilityBackend:"http://test.com",
-        }, 
+          facilityBackend: "http://test.com",
+        },
       });
       const connectAction = fromActions.connectIngestor();
       ingestorReducer(undefined, setEndpointAction);

@@ -8,7 +8,7 @@ import {
   ScientificMetadata,
 } from "../../ingestor-page/helper/ingestor.component-helper";
 import {
-  ingestionObjectAPIInformation,
+  selectIngestionObjectAPIInformation,
   selectIngestionObject,
   selectIngestorEndpoint,
   selectNoRightsError,
@@ -49,7 +49,7 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
 
   ingestionObject$ = this.store.select(selectIngestionObject);
   ingestionObjectApiInformation$ = this.store.select(
-    ingestionObjectAPIInformation,
+    selectIngestionObjectAPIInformation,
   );
   ingestorBackend$ = this.store.select(selectIngestorEndpoint);
   selectNoRightsError$ = this.store.select(selectNoRightsError);
