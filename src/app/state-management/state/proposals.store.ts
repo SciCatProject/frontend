@@ -120,7 +120,9 @@ export const initialProposalsState: ProposalsState = {
     },
     { name: "type", width: 200, enabled: true },
     {
-      name: "numberOfDatasets", width: 150, enabled: true
-    }
+      name: "numberOfDatasets",
+      width: 150,
+      enabled: true,
+    },
   ],
 };
