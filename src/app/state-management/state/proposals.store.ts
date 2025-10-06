@@ -119,5 +119,8 @@ export const initialProposalsState: ProposalsState = {
       enabled: true,
     },
     { name: "type", width: 200, enabled: true },
+    {
+      name: "numberOfDatasets", width: 150, enabled: true
+    }
   ],
 };
