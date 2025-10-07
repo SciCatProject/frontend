@@ -221,7 +221,7 @@ export class IngestorNewTransferDialogPageComponent
     this.createNewTransferData.scicatHeader["dataFormat"] = "root";
     this.createNewTransferData.scicatHeader["owner"] = "User";
     this.createNewTransferData.scicatHeader["creationLocation"] =
-      this.facilityInfo.description || "";
+      this.facilityInfo.description || null;
 
     this.createNewTransferData.scicatHeader["principalInvestigator"] =
       this.userProfile.username;

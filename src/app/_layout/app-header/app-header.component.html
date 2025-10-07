@@ -10,7 +10,7 @@
         </button>
       </ng-container>
 
-      <ng-container *ngIf="config.ingestorComponent.ingestorEnabled">
+      <ng-container *ngIf="ingestorEnabled">
         <button
           mat-menu-item
           [routerLink]="['/ingestor']"
