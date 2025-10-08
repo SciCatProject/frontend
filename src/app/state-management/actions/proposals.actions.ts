@@ -94,7 +94,11 @@ export const fetchProposalDatasetsAction = createAction(
 );
 export const fetchProposalDatasetsCompleteAction = createAction(
   "[Proposal] Fetch Datasets Complete",
-  props<{ datasets: OutputDatasetObsoleteDto[] }>(),
+  props<{
+    datasets: OutputDatasetObsoleteDto[];
+    limit: number;
+    skip: number;
+  }>(),
 );
 export const fetchProposalDatasetsFailedAction = createAction(
   "[Proposal] Fetch Datasets Failed",

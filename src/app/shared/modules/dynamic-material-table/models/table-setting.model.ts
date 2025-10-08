@@ -6,7 +6,7 @@ export type DisplayMode = "visible" | "hidden" | "none";
 export interface ITableSetting {
   pageSize?: number;
   direction?: Direction;
-  columnSetting?: TableField<any>[] | null;
+  columnSetting?: TableField<any>[];
   visibleActionMenu?: VisibleActionMenu | null;
   visibleTableMenu?: boolean;
   alternativeRowStyle?: any;

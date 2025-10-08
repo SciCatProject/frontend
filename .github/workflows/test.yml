@@ -129,6 +129,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           config-file: cypress.config.ts
+          browser: chrome
           install-command: npm install --omit peer
       - name: docker logs
         if: ${{ failure() }}

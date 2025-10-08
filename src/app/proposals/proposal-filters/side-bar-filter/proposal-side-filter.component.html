@@ -1,4 +1,4 @@
-<mat-card *ngIf="!collapsed">
+<mat-card *ngIf="!collapsed" [class.side-gap]="!collapsed">
   <mat-card-header class="section-container">
     <mat-card-title>{{ collapsed ? "" : "Filters" }} </mat-card-title>
     <button
@@ -19,7 +19,7 @@
         [tooltip]="filter.description"
         [filterType]="filter.type"
         [prefilled]="activeFilters[filter.key] || null"
-        (textChange)="setFilter(filter.key, $event)"
+        (checkBoxChange)="setFilter(filter.key, $event)"
         [facetCounts$]="getFacetCounts$(filter.key)"
         (dateRangeChange)="setDateFilter(filter.key, $event)"
       ></shared-filter>
@@ -41,7 +41,7 @@
         (click)="reset()"
       >
         <mat-icon>undo</mat-icon>
-        Reset Filters
+        Reset
       </button>
     </div>
   </mat-card-content>

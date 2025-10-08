@@ -51,7 +51,15 @@ const reducer = createReducer(
 
   on(
     fromActions.fetchProposalDatasetsCompleteAction,
-    (state, { datasets }): ProposalsState => ({ ...state, datasets }),
+    (state, { datasets, limit, skip }): ProposalsState => ({
+      ...state,
+      datasets,
+      datasetFilters: {
+        ...state.datasetFilters,
+        skip,
+        limit,
+      },
+    }),
   ),
 
   on(

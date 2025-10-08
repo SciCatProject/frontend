@@ -1,19 +1,18 @@
 <mat-card class="empty-content">
   <mat-card-content>
     <div class="content-wrapper">
-      <mat-icon>{{ icon }}</mat-icon>
+      <mat-icon class="content-icon">{{ icon }}</mat-icon>
       <span class="message">{{ message }}</span>
-      
       <div class="actions" *ngIf="showReload || actionButtons.length > 0">
-        <button 
-          mat-icon-button 
+        <button
+          mat-icon-button
           color="primary"
           (click)="onReload()"
           matTooltip="Reload"
         >
           <mat-icon>autorenew</mat-icon>
         </button>
-        
+
         <ng-container *ngFor="let button of actionButtons; let i = index">
           <button
             mat-button
