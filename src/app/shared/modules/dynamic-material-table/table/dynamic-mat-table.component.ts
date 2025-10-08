@@ -1020,7 +1020,7 @@ export class DynamicMatTableComponent<T extends TableRow>
       ? fieldName.split(".").reduce((acc, key) => acc?.[key], data)
       : data[fieldName];
 
-    if (!value) {
+    if (value === null || value === undefined) {
       return "";
     }
 
