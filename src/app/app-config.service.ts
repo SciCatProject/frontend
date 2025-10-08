@@ -143,6 +143,8 @@ export interface AppConfigInterface {
   mainMenu?: MainMenuConfiguration;
   supportEmail?: string;
   checkBoxFilterClickTrigger?: boolean;
+  imprintUrl?: string;
+  privacyUrl?: string;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
