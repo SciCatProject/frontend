@@ -48,7 +48,7 @@
     "file-saver": "^2.0.5",
     "filesize": "^11.0.1",
     "lodash-es": "^4.17.21",
-    "luxon": "^3.3.0",
+    "luxon": "^3.7.2",
     "mathjs": "^14.0.0",
     "ngx-cookie-service": "^19.1.2",
     "ngx-json-viewer": "^3",
