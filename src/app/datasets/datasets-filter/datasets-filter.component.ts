@@ -469,7 +469,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           .open(SearchParametersDialogComponent, {
             data: {
               usedFields: usedFields,
-              parameterKeys: availableKeys,
+              parameterKeys: availableKeys.map((key) => this.humanNameMap[key] || key),
             },
             restoreFocus: false,
           })
