@@ -39,6 +39,7 @@
       }
     ]
   },
+  "depositorURL": "http://localhost:8888",
   "logbookEnabled": true,
   "loginFormEnabled": true,
   "metadataPreviewEnabled": true,

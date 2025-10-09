@@ -145,6 +145,7 @@ export interface AppConfigInterface {
   supportEmail?: string;
   checkBoxFilterClickTrigger?: boolean;
   ingestorComponent?: IngestorComponentConfig;
+  depositorURL: string;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
