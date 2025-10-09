@@ -35,7 +35,7 @@ import { submitJobAction } from "state-management/actions/jobs.actions";
 import { AppConfigService } from "app-config.service";
 import { NgForm } from "@angular/forms";
 import { DataFiles_File } from "./datafiles.interfaces";
-import { ActionItem } from "shared/modules/configurable-actions/configurable-action.interfaces";
+import { ActionItemDataset, ActionItems } from "shared/modules/configurable-actions/configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 
 @Component({
@@ -69,7 +69,7 @@ export class DatafilesComponent
 
   files: Array<DataFiles_File> = [];
   datasetPid = "";
-  actionDatasets: ActionItem[];
+  actionItems: ActionItems;
 
   count = 0;
   pageSize = 25;
@@ -247,9 +247,7 @@ export class DatafilesComponent
     this.subscriptions.push(
       this.dataset$.subscribe((dataset) => {
         if (dataset) {
-          this.sourceFolder = dataset.sourceFolder;
-          this.datasetPid = dataset.pid;
-          this.actionDatasets = <ActionItem[]>[dataset];
+          this.actionItems.datasets = <ActionItemDataset[]>[dataset];
         }
       }),
     );
@@ -268,6 +266,7 @@ export class DatafilesComponent
           this.tableData = files.slice(0, this.pageSize);
           this.files = files;
           this.tooLargeFile = this.hasTooLargeFiles(this.files);
+          this.actionItems.datasets[0].files = files;
         }
       }),
     );

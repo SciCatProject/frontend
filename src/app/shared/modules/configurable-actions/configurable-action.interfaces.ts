@@ -19,7 +19,8 @@ export interface ActionConfig {
   filename?: string;
   hidden?: string;
   variables?: Record<string, string>;
-  inputs?: Record<string, string>
+  inputs?: Record<string, string>;
+  headers?: Record<string, string>;
 }
 
 // export interface ActionItem {
@@ -28,11 +29,13 @@ export interface ActionConfig {
 //   isPublished?: boolean;
 // }
 
+export interface ActionItemDataset {
+  pid: string;
+  sourceFolder?: string;
+  isPublished?: boolean;
+  files?: DataFiles_File[];
+}
+
 export interface ActionItems {
-  datasets: {
-    pid: string;
-    sourceFolder?: string;
-    isPublished?: boolean;
-    files?: DataFiles_File[];
-  }[],
+  datasets: ActionItemDataset[],
 }

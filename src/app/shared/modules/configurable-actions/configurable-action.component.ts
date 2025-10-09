@@ -17,7 +17,13 @@ import { updatePropertyAction } from "state-management/actions/datasets.actions"
 import { Router } from "@angular/router";
 import { AppConfigService } from "app-config.service";
 
-type JSONValue = string | number | boolean | null | { [key: string]: JSONValue } | JSONValue[];
+type JSONValue =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: JSONValue }
+  | JSONValue[];
 
 function processSelector(
   jsonObject: JSONValue,
@@ -38,7 +44,7 @@ function processSelector(
   const mainKeys = mainSelector
     .replace(/^\./, "") // Remove leading dot
     .split(".")         // Split into keys
-    .map(key => key.trim());
+    .map((key) => key.trim());
 
   let filterKeys: string[] | null = null;
   if (filterSelector) {
@@ -52,7 +58,12 @@ function processSelector(
       .map(key => key.trim());
   }
 
-  const traverse = (obj: JSONValue, keys: string[], filterKeys?: string[], filterObj?: JSONValue) => {
+  const traverse = (
+    obj: JSONValue,
+    keys: string[],
+    filterKeys?: string[],
+    filterObj?: JSONValue
+  ) => {
     if (keys.length === 0) {
       // If no more main keys to process, evaluate the filter (if provided)
       if (filterKeys && filterObj !== undefined) {
@@ -157,7 +168,7 @@ const jsonExample = {
 export class ConfigurableActionComponent implements OnInit, OnChanges {
   @Input({ required: true }) actionConfig: ActionConfig;
   @Input({ required: true }) actionItems: ActionItems;
-  @Input({ required: true }) maxDownloadableSize: number;
+  @Input() files?: DataFiles_File[];
 
   jwt = "";
   use_mat_icon = false;
@@ -264,7 +275,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
 
     return fn({
       variables: this.variables,
-      maxDownloadableSize: this.maxDownloadableSize,
+      maxDownloadableSize: this.configService.getConfig().maxDirectDownloadSize,
     });
   }
 
@@ -276,9 +287,8 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);
 
       return fn({
-        isPublished: this.actionItems[0]?.isPublished === true,
-        archiveWorkflowEnabled:
-          this.configService.getConfig().archiveWorkflowEnabled,
+        variables: this.variables,
+        maxDownloadableSize: this.configService.getConfig().maxDirectDownloadSize,
       });
     }
   }
@@ -294,8 +304,8 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   perform_action() {
     const action_type = this.actionConfig.type || "form";
     switch (action_type) {
-      case "json-download":
-        return this.type_json_download();
+      case "json-to-download":
+        return this.type_json_to_download();
       case "xhr":
         return this.type_xhr();
       case "link":
@@ -304,6 +314,21 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       default:
         return this.type_form();
     }
+  }
+
+  get_value_from_definition(definition: string) {
+    if (definition == "#token" || definition == "#tokenSimple") {
+      return this.authService.getToken().id;
+    } else if (definition == "#tokenBearer") {
+      return `Bearer ${this.authService.getToken().id}`;
+    } else if (definition == "#jwt") {
+      return this.jwt;
+    } else if (definition == "#uuid") {
+      return v4();
+    } else if (definition.startsWith("@")) {
+      return this.variables[definition.slice(1)];
+    }
+    return definition;
   }
 
   type_form() {
@@ -317,25 +342,21 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     this.form.action = this.actionConfig.url;
     this.form.style.display = "none";
 
-    this.form.appendChild(
-      this.add_input("auth_token", `Bearer ${this.authService.getToken().id}`),
-    );
+    // use the configuration under inputs to create the form
+    Object.entries(this.actionConfig.inputs).forEach(([input, definition]) => {
 
-    this.form.appendChild(this.add_input("jwt", this.jwt));
+      const value = this.get_value_from_definition(definition);
 
-    this.actionItems.forEach((actionItem, index) => {
-      this.form.appendChild(this.add_input(`item[${index}]`, actionItem.pid));
-      this.form.appendChild(
-        this.add_input(`directory[${index}]`, actionItem.sourceFolder),
-      );
-    });
-
-    this.files?.forEach((item, index) => {
-      if (
-        this.actionConfig.files === "all" ||
-        (this.actionConfig.files === "selected" && item.selected)
-      ) {
-        this.form.appendChild(this.add_input(`files[${index}]`, item.path));
+      if (input.endsWith("[]")) {
+        const itemInput = input.slice(-2);
+        const iteratable = Array.isArray(value)?value:[value];
+        iteratable.forEach((itemValue, itemIndex) => {
+          this.form.appendChild(
+            this.add_input(`${itemInput}[${itemIndex}]`, value)
+          );
+        })
+      } else {
+        this.form.appendChild(this.add_input(input, value));
       }
     });
 
@@ -345,131 +366,127 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     return true;
   }
 
-  type_json_download() {
+  get_payload() {
     let payload = "";
-    if (this.actionConfig.payload) {
+    if (this.actionConfig.payload == "#dump" ) {
+      payload = JSON.stringify(this.variables);
+    } else if (this.actionConfig.payload != "#empty" && this.actionConfig.payload) {
       payload = this.actionConfig.payload
-        .replace(/{{ auth_token }}/, `Bearer ${this.authService.getToken().id}`)
-        .replace(/{{ jwt }}/, this.jwt)
-        .replace(/{{ pid }}/, this.actionItems.map((i) => i.pid).join(","))
-        .replace(
-          /{{ sourceFolder }}/,
-          this.actionItems.map((i) => i.sourceFolder).join(","),
-        )
-        .replace(
-          /{{ filesPath }}/,
-          JSON.stringify(
-            this.files
-              ?.filter(
-                (item) =>
-                  this.actionConfig.files === "all" ||
-                  (this.actionConfig.files === "selected" && item.selected),
-              )
-              .map((item) => item.path),
-          ),
-        );
-    } else {
-      const data = {
-        auth_token: `Bearer ${this.authService.getToken().id}`,
-        jwt: this.jwt,
-        items: this.actionItems.map((i) => i.pid),
-        directories: this.actionItems.map((i) => i.sourceFolder),
-        files: this.files
-          .filter(
-            (item) =>
-              this.actionConfig.files === "all" ||
-              (this.actionConfig.files === "selected" && item.selected),
-          )
-          .map((item) => item.path),
-      };
-      payload = JSON.stringify(data);
     }
 
-    const filename = this.actionConfig.filename.replace(/{{ uuid }}/, v4());
+    return payload.replace(
+      /{{\s*(\w+)\s*}}/g,
+      (_, variableName) => {
+        if (variableName.endsWith("[]")) {
+          const variableNameClean = variableName.slice(-2);
+          const value = this.get_value_from_definition(variableNameClean);
+          const iteratable = Array.isArray(value) ? value : [value];
+          return JSON.stringify(iteratable);
+        } else {
+          return this.get_value_from_definition(variableName);
+        }
+      }
+    );
+  }
+
+  type_json_to_download() {
+
+    const filename = this.actionConfig.filename
+      .replace(
+        /{{\s*(\w+)\s*}}/g,
+        (_, variableName) => this.get_value_from_definition(variableName),
+      );
 
     fetch(this.actionConfig.url, {
       method: this.actionConfig.method || "POST",
       headers: {
-        "Content-Type": "application/json",
+        ...{
+          "Content-Type": "application/json",
+        },
+        ...(this.actionConfig.headers || {})
       },
-      body: payload,
+      body: this.get_payload(),
     })
-      .then((response) => {
-        if (response.ok) {
-          return response.blob();
-        } else {
-          // http error
-          return Promise.reject(
-            new Error(`HTTP Error code: ${response.status}`),
-          );
-        }
-      })
-      .then((blob) => URL.createObjectURL(blob))
-      .then((url) => {
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = filename;
-        a.click();
-        URL.revokeObjectURL(url);
-      })
-      .catch((error) => {
-        console.log("Datafile action error : ", error);
-        this.snackBar.open(
-          "There has been an error performing the action",
-          "Close",
-          {
-            duration: 2000,
-          },
+    .then((response) => {
+      if (response.ok) {
+        return response.blob();
+      } else {
+        // http error
+        return Promise.reject(
+          new Error(`HTTP Error code: ${response.status}`),
         );
-      });
+      }
+    })
+    .then((blob) => URL.createObjectURL(blob))
+    .then((url) => {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    })
+    .catch((error) => {
+      console.log("Datafile action error : ", error);
+      this.snackBar.open(
+        "There has been an error performing the action",
+        "Close",
+        {
+          duration: 2000,
+        },
+      );
+    });
 
     return true;
   }
 
   type_xhr() {
-    for (const element of this.actionItems) {
-      const payload = this.actionConfig.payload || "";
-      const url = this.actionConfig.url.replace(
-        /{{id}}/,
-        encodeURIComponent(element.pid),
+
+    const url = this.actionConfig.url
+      .replace(
+        /{{\s*(\w+)\s*}}/g,
+        (_, variableName) => encodeURIComponent(this.get_value_from_definition(variableName)),
       );
 
-      fetch(url, {
-        method: this.actionConfig.method || "POST",
-        headers: {
+    fetch(url, {
+      method: this.actionConfig.method || "POST",
+      headers: {
+        ...{
           "Content-Type": "application/json",
-          Authorization: `Bearer ${this.authService.getToken().id}`,
         },
-        body: payload,
-      })
-        .then((response) => {
-          if (!response.ok) {
-            return Promise.reject(
-              new Error(`HTTP Error code: ${response.status}`),
-            );
-          }
+        ...(this.actionConfig.headers || {})
+      },
+      body: this.get_payload(),
+    })
+    .then((response) => {
+      if (!response.ok) {
+        return Promise.reject(
+          new Error(`HTTP Error code: ${response.status}`),
+        );
+      }
 
-          this.store.dispatch(
-            updatePropertyAction({
-              pid: element.pid,
-              property: JSON.parse(this.actionConfig.payload),
-            }),
-          );
+      // specific only for datasets
+      // cannot be used
+      // this.store.dispatch(
+      //   updatePropertyAction({
+      //     method: this.actionConfig.method,
+      //     pid: element.pid,
+      //     property: JSON.parse(this.actionConfig.payload),
+      //   }),
+      // );
 
-          return response;
-        })
-        .catch((error) => {
-          console.log("Error: ", error);
-          this.snackBar.open(
-            "There has been an error performing the action",
-            "Close",
-            {
-              duration: 2000,
-            },
-          );
-        });
-    }
-
+      return response;
+    })
+    .catch((error) => {
+      console.log("Error: ", error);
+      this.snackBar.open(
+        "There has been an error performing the action",
+        "Close",
+        {
+          duration: 2000,
+        },
+      );
+    });
+  
     return true;
   }
 
