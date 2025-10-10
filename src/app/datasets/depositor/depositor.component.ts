@@ -5,7 +5,7 @@ import {
   FormBuilder,
   Validators,
 } from "@angular/forms";
-import { AppConfigService, AppConfig } from "app-config.service";
+import { AppConfigService } from "app-config.service";
 import { ActivatedRoute } from "@angular/router";
 import { JsonSchema } from "@jsonforms/core";
 import { Store } from "@ngrx/store";
@@ -50,8 +50,8 @@ interface DepositionRepository {
 export class DepositorComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   form: FormGroup;
-
-  config: AppConfig;
+  
+  appConfig = this.appConfigService.getConfig();
   supportedDepositionList: DepositionRepository[] = [
     { value: "onedep", viewValue: "OneDep" },
     { value: "empiar", viewValue: "EMPIAR" },
@@ -81,7 +81,7 @@ export class DepositorComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private router: Router,
   ) {
-    this.config = this.appConfigService.getConfig();
+    this.appConfig = this.appConfigService.getConfig();
     this.depositionRepository = new FormControl("");
     this.form = this.fb.group({
       datasetName: new FormControl("", [Validators.required]),
