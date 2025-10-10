@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { AppConfigService } from "app-config.service";
+import { AppConfigService, AppConfig } from "app-config.service";
 import {
   DepBackendVersion,
   OneDepUserInfo,
@@ -13,22 +13,22 @@ import {
   providedIn: "root",
 })
 export class Depositor {
-  appConfig = this.appConfigService.getConfig();
-
+  config: AppConfig;
   constructor(
     private http: HttpClient,
     public appConfigService: AppConfigService,
   ) {
+    this.config = this.appConfigService.getConfig();
   }
 
   getVersion(): Observable<DepBackendVersion> {
     return this.http.get<DepBackendVersion>(
-      `${this.appConfig.depositorURL}/version`,
+      `${this.config.depositorURL}/version`,
     );
   }
   createDep(body: OneDepUserInfo): Observable<OneDepCreated> {
     return this.http.post<OneDepCreated>(
-      `${this.appConfig.depositorURL}/onedep`,
+      `${this.config.depositorURL}/onedep`,
       body,
       {
         headers: { "Content-Type": "application/json" },
@@ -37,19 +37,19 @@ export class Depositor {
   }
   sendFile(depID: string, form: FormData): Observable<UploadedFile> {
     return this.http.post<UploadedFile>(
-      `${this.appConfig.depositorURL}/onedep/${depID}/file`,
+      `${this.config.depositorURL}/onedep/${depID}/file`,
       form,
     );
   }
   sendCoordFile(depID: string, form: FormData): Observable<UploadedFile> {
     return this.http.post<UploadedFile>(
-      `${this.appConfig.depositorURL}/onedep/${depID}/pdb`,
+      `${this.config.depositorURL}/onedep/${depID}/pdb`,
       form,
     );
   }
   sendMetadata(depID: string, form: FormData): Observable<UploadedFile> {
     return this.http.post<UploadedFile>(
-      `${this.appConfig.depositorURL}/onedep/${depID}/metadata`,
+      `${this.config.depositorURL}/onedep/${depID}/metadata`,
       form,
     );
   }
@@ -60,7 +60,7 @@ export class Depositor {
     formDataFile.append("scientificMetadata", JSON.stringify(metadata));
 
     return this.http.post(
-      `${this.appConfig.depositorURL}/onedep/pdb`,
+      `${this.config.depositorURL}/onedep/pdb`,
       formDataFile,
       {
         responseType: "blob",
@@ -72,7 +72,7 @@ export class Depositor {
     const headers = new HttpHeaders({ "Content-Type": "application/json" });
     const body = JSON.stringify(metadata);
 
-    return this.http.post(`${this.appConfig.depositorURL}/onedep/metadata`, body, {
+    return this.http.post(`${this.config.depositorURL}/onedep/metadata`, body, {
       headers,
       responseType: "blob",
     });
@@ -80,7 +80,7 @@ export class Depositor {
 
   getEmpiarSchema() {
     return this.http.get<{ schema: string }>(
-      `${this.appConfig.depositorURL}/empiar/schema`,
+      `${this.config.depositorURL}/empiar/schema`,
     );
   }
 }

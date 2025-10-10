@@ -63,27 +63,27 @@
               Please note, when SI values and units are present, you only need to make changes to the initially provided values and units, 
               convertion to SI will be done automatically, after submitting. 
             </p>
-            <!-- <button
+            <button
               class="ingestor"
               mat-raised-button
               color="primary"
               (click)="onChangeIngestorMetadata()"
-            > -->
+            >
               Edit with OpenEM Schema
-            <!-- </button> -->
+            </button>
           </div>
 
 
           <div class="includeIngestor">
             <!-- Display the metadata editor if clicked-->
-            <!-- <app-metadata-editor
+            <app-metadata-editor
               *ngIf="showMetadataEditor"
               [data]="metadata"
               [schema]="metadataSchema"
               [renderView]="'all'"
               (dataChange)="onMetadataChange($event)"
               (errors)="onMetadataErrors($event)"
-            ></app-metadata-editor> -->
+            ></app-metadata-editor>
             <button
               *ngIf="showMetadataEditor"
               class="ingestor"

@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
 import { JsonSchema } from "@jsonforms/core";
 import { angularMaterialRenderers } from "@jsonforms/angular-material";
-import { AppConfigService } from "app-config.service";
+import { AppConfigService, AppConfig } from "app-config.service";
 import { Store, select } from "@ngrx/store";
 import {
   OutputDatasetObsoleteDto,
@@ -44,7 +44,7 @@ export class EmpiarComponent implements OnChanges, OnDestroy {
   data: JsonSchema = createEmptyInstance();
   schema: JsonSchema;
 
-  appConfig = this.appConfigService.getConfig();
+  config: AppConfig;
 
   empiarSchema$: Observable<string>;
   empiarSchema: string;
@@ -64,7 +64,7 @@ export class EmpiarComponent implements OnChanges, OnDestroy {
   ];
 
   constructor(
-    public appConfigService: AppConfigService,
+    // public appConfigService: AppConfigService,
     // private store: Store,
     private fb: FormBuilder,
   ) {

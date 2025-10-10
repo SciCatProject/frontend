@@ -8,7 +8,7 @@ import {
   SimpleChanges
 } from "@angular/core";
 import { MatRadioChange } from "@angular/material/radio";
-import { AppConfigService } from "app-config.service";
+import { AppConfigService, AppConfig } from "app-config.service";
 import {
   FormBuilder,
   FormControl,
@@ -51,7 +51,7 @@ export class OneDepComponent implements OnChanges, OnDestroy {
   @Input() showFirstCard = true;
   private subscriptions: Subscription[] = [];
 
-  appConfig = this.appConfigService.getConfig();
+  config: AppConfig;
 
   // dataset: OutputDatasetObsoleteDto | undefined;
   // user: ReturnedUserDto | undefined;
@@ -78,6 +78,7 @@ export class OneDepComponent implements OnChanges, OnDestroy {
     private fb: FormBuilder,
     private depositor: Depositor,
   ) {
+    this.config = this.appConfigService.getConfig();
     this.form = this.fb.group({
       privacyTermsTicked: new FormControl(false, Validators.requiredTrue),
       email: ["", [Validators.required, Validators.email]],

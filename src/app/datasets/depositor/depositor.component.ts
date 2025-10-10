@@ -5,7 +5,7 @@ import {
   FormBuilder,
   Validators,
 } from "@angular/forms";
-import { AppConfigService } from "app-config.service";
+import { AppConfigService, AppConfig } from "app-config.service";
 import { ActivatedRoute } from "@angular/router";
 import { JsonSchema } from "@jsonforms/core";
 import { Store } from "@ngrx/store";
@@ -27,6 +27,10 @@ import { selectEmpiarSchema } from "state-management/selectors/depositor.selecto
 
 import { updatePropertyAction } from "state-management/actions/datasets.actions";
 
+import * as ingestorActions from "state-management/actions/ingestor.actions";
+import { MethodItem } from "../../shared/sdk/models/ingestor/models"
+import { selectExtractionMethods} from "state-management/selectors/ingestor.selector";
+
 // import { IngestorMetadataEditorComponent} from "../../ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component"
 
 import { Observable, Subscription, take, find } from "rxjs";
@@ -47,7 +51,7 @@ export class DepositorComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   form: FormGroup;
 
-  appConfig = this.appConfigService.getConfig();
+  config: AppConfig;
   supportedDepositionList: DepositionRepository[] = [
     { value: "onedep", viewValue: "OneDep" },
     { value: "empiar", viewValue: "EMPIAR" },
@@ -69,7 +73,7 @@ export class DepositorComponent implements OnInit, OnDestroy {
   metadata: any = {}; 
   metadataSchema: JsonSchema = null// ideally i get the schema by uid?
 
-  // methods$: Observable<MethodItem[]> = this.store.select(selectExtractionMethods);
+  methods$: Observable<MethodItem[]> = this.store.select(selectExtractionMethods);
 
   constructor(
     public appConfigService: AppConfigService,
@@ -77,6 +81,7 @@ export class DepositorComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private router: Router,
   ) {
+    this.config = this.appConfigService.getConfig();
     this.depositionRepository = new FormControl("");
     this.form = this.fb.group({
       datasetName: new FormControl("", [Validators.required]),
@@ -122,20 +127,20 @@ export class DepositorComponent implements OnInit, OnDestroy {
     this.selectedMethod = this.depositionRepository.value;
   }
 
-  // onChangeIngestorMetadata(){
-  //   this.store.dispatch(ingestorActions.getExtractionMethods({ page: 0, pageNumber: 50 }));
-  //   this.methods$.pipe(
-  //     take(1),
-  //   ).subscribe(methods => {
-  //     const selectedMethod = methods.find(m => m.name === 'Single Particle'); // that's bad, need to use an actual schema from elsewhere!
-  //     if (selectedMethod) {
-  //       const parsedSchema: JsonSchema = JSON.parse(selectedMethod.schema);
-  //       this.metadataSchema = parsedSchema;
-  //     }
-  //   });
-  //   // now it uses metadata tructure in place of schema 
-  //   this.showMetadataEditor = true
-  // }
+  onChangeIngestorMetadata(){
+    this.store.dispatch(ingestorActions.getExtractionMethods({ page: 0, pageNumber: 50 }));
+    this.methods$.pipe(
+      take(1),
+    ).subscribe(methods => {
+      const selectedMethod = methods.find(m => m.name === 'Single Particle'); // that's bad, need to use an actual schema from elsewhere!
+      if (selectedMethod) {
+        const parsedSchema: JsonSchema = JSON.parse(selectedMethod.schema);
+        this.metadataSchema = parsedSchema;
+      }
+    });
+    // now it uses metadata tructure in place of schema 
+    this.showMetadataEditor = true
+  }
 
   onMetadataChange(newData: any) {
     this.metadata= newData;
