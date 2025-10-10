@@ -8,7 +8,7 @@ import {
   SimpleChanges
 } from "@angular/core";
 import { MatRadioChange } from "@angular/material/radio";
-import { AppConfigService, AppConfig } from "app-config.service";
+import { AppConfigService, AppConfigInterface } from "app-config.service";
 import {
   FormBuilder,
   FormControl,
@@ -51,7 +51,7 @@ export class OneDepComponent implements OnChanges, OnDestroy {
   @Input() showFirstCard = true;
   private subscriptions: Subscription[] = [];
 
-  config: AppConfig;
+  config: AppConfigInterface;
 
   // dataset: OutputDatasetObsoleteDto | undefined;
   // user: ReturnedUserDto | undefined;
@@ -622,6 +622,7 @@ export class OneDepComponent implements OnChanges, OnDestroy {
         method: this.form.value.emMethod,
         jwtToken: this.form.value.jwtToken,
         password: this.form.value.password,
+        coordinates: this.form.value.deposingCoordinates === "true",
       };
     } else {
       body = {
@@ -630,6 +631,7 @@ export class OneDepComponent implements OnChanges, OnDestroy {
         country: "United States",
         method: this.form.value.emMethod,
         jwtToken: this.form.value.jwtToken,
+        coordinates: this.form.value.deposingCoordinates === "true",
       };
     }
     let metadataAdded = false;

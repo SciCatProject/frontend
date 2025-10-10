@@ -146,6 +146,7 @@ export interface AppConfigInterface {
   checkBoxFilterClickTrigger?: boolean;
   ingestorComponent?: IngestorComponentConfig;
   depositorURL: string;
+  datasetOneDepIntegration?: boolean;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {

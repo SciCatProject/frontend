@@ -28,9 +28,9 @@
   "jsonMetadataEnabled": true,
   "jupyterHubUrl": "https://jupyterhub.esss.lu.se/",
   "landingPage": "doi.ess.eu/detail/",
-  "lbBaseURL": "http://127.0.0.1:3000",
+  "lbBaseURL": "http://127.0.0.1:3001",
   "ingestorComponent": {
-    "ingestorEnabled": false,
+    "ingestorEnabled": true,
     "ingestorAutodiscoveryOptions": [
       {
         "mailDomain": "university.ch",
@@ -40,6 +40,7 @@
     ]
   },
   "depositorURL": "http://localhost:8888",
+  "datasetOneDepIntegration": true,
   "logbookEnabled": true,
   "loginFormEnabled": true,
   "metadataPreviewEnabled": true,

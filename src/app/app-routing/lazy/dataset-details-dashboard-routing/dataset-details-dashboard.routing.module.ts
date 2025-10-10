@@ -4,6 +4,7 @@ import { AdminGuard } from "app-routing/admin.guard";
 import { AuthGuard } from "app-routing/auth.guard";
 import { ServiceGuard } from "app-routing/service.guard";
 import { AdminTabComponent } from "datasets/admin-tab/admin-tab.component";
+import { DepositorComponent } from "datasets/depositor/depositor.component";
 import { DatafilesComponent } from "datasets/datafiles/datafiles.component";
 import { JsonScientificMetadataComponent } from "datasets/jsonScientificMetadata/jsonScientificMetadata.component";
 import { DatasetFileUploaderComponent } from "datasets/dataset-file-uploader/dataset-file-uploader.component";
@@ -68,6 +69,18 @@ const routes: Routes = [
     path: "admin",
     component: AdminTabComponent,
     canActivate: [AuthGuard, AdminGuard],
+  },
+  {
+    path: "depositor",
+    canActivate: [ServiceGuard],
+    children: [
+      {
+        path: "",
+        component: DepositorComponent,
+        canActivate: [AuthGuard],
+      },
+    ],
+    data: { service: "depositor" },
   },
 ];
 @NgModule({

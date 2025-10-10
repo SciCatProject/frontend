@@ -91,6 +91,18 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { MatBadgeModule } from "@angular/material/badge";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 
+import { OneDepComponent } from "./depositor/onedep/onedep.component";
+import { EmpiarComponent } from "./depositor/empiar/empiar.component";
+import { OneDepEffects } from "state-management/effects/depositor.effects";
+import { DepositorComponent } from "./depositor/depositor.component";
+import { DepositorWrapperComponent } from "./depositor/methodWrapper.component"
+import { QuestionnaireComponent } from "./depositor/empiar/questionnaire/questionnaire.component";
+import { depositorReducer } from "state-management/reducers/depositor.reducer";
+import { CustomAuthorNameControlComponent } from "./depositor/empiar/customRenderers/authorRenderer";
+import { CustomEnumRendererComponent } from "./depositor/empiar/customRenderers/enumRenderer";
+import { CustomSemiEnumControlComponent } from "./depositor/empiar/customRenderers/imageSetRenderer";
+import { CustomReferenceControlComponent } from "./depositor/empiar/customRenderers/referenceRenderer";
+
 @NgModule({
   imports: [
     CommonModule,
@@ -138,8 +150,10 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
       SampleEffects,
       PublishedDataEffects,
       LogbookEffects,
+      OneDepEffects,
     ]),
     StoreModule.forFeature("datasets", datasetsReducer),
+    StoreModule.forFeature("depositor", depositorReducer),
     StoreModule.forFeature("instruments", instrumentsReducer),
     StoreModule.forFeature("jobs", jobsReducer),
     StoreModule.forFeature("proposals", proposalsReducer),
@@ -184,6 +198,15 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
     DatafilesActionsComponent,
     DatafilesActionComponent,
     DatasetsFilterSettingsComponent,
+    DepositorComponent,
+    DepositorWrapperComponent, 
+    EmpiarComponent,
+    OneDepComponent,
+    QuestionnaireComponent,
+    CustomAuthorNameControlComponent,
+    CustomEnumRendererComponent,
+    CustomSemiEnumControlComponent,
+    CustomReferenceControlComponent, 
   ],
   providers: [
     ArchivingService,

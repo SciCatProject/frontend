@@ -23,6 +23,7 @@ export class ServiceGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): boolean | UrlTree {
+    console.log("service guard", route.data.service); 
     let shouldActivate = false;
     switch (route.data.service) {
       case "logbook":
@@ -30,6 +31,10 @@ export class ServiceGuard implements CanActivate {
         break;
       case "reduce":
         shouldActivate = this.appConfig.datasetReduceEnabled;
+        break;
+      case "depositor":
+        shouldActivate = this.appConfig.datasetOneDepIntegration;
+        console.log("depositor guard", shouldActivate);
         break;
     }
     if (!shouldActivate) {
