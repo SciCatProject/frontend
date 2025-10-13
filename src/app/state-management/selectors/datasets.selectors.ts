@@ -187,8 +187,12 @@ export const selectFullqueryParams = createSelector(
     const pagination = state.pagination;
     // don't query with modeToggle, it's only in filters for persistent routing
     const { skip, limit, sortField, modeToggle, ...theRest } = filter;
+    let modifiedFilters = {...theRest};
+    if (modifiedFilters.creationTime?.begin && modifiedFilters.creationTime.end === null) {
+      modifiedFilters.creationTime.end = new Date().toISOString();
+    }
     const limits = { ...pagination, order: sortField };
-    const query = restrictFilter(theRest);
+    const query = restrictFilter(modifiedFilters);
     return { query, limits };
   },
 );
