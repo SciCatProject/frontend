@@ -42,6 +42,17 @@ import { ProposalSearchBarComponent } from "./proposal-filters/search-bar/propos
 import { PipesModule } from "shared/pipes/pipes.module";
 import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
 import { InstrumentEffects } from "state-management/effects/instruments.effects";
+import { MAT_DATE_FORMATS } from "@angular/material/core";
+
+export const PROPOSAL_DATE_FORMATS = {
+  parse: { dateInput: "yyyy-MM-dd" },
+  display: {
+    dateInput: "yyyy-MM-dd",
+    monthYearLabel: "MMM yyyy",
+    dateA11yLabel: "LL",
+    monthYearA11yLabel: "MMMM yyyy",
+  },
+};
 
 @NgModule({
   imports: [
@@ -86,6 +97,6 @@ import { InstrumentEffects } from "state-management/effects/instruments.effects"
     ProposalDatasetsComponent,
   ],
   exports: [],
-  providers: [DatePipe, FileSizePipe, SlicePipe],
+  providers: [DatePipe, FileSizePipe, SlicePipe, { provide: MAT_DATE_FORMATS, useValue: PROPOSAL_DATE_FORMATS }],
 })
 export class ProposalsModule {}
