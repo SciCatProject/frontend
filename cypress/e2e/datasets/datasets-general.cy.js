@@ -401,4 +401,29 @@ describe("Datasets general", () => {
       });
     });
   });
+
+  describe("Dataset filter end date auto-set", () => {
+    it("should set end date to today if only start date is provided", () => {
+      cy.createDataset({
+        type: "raw",
+        creationTime: "2025-10-08T15:00:00.000Z",
+      });
+      cy.visit("/datasets");
+
+      cy.get('[data-cy="creation-time-begin"]').type("2025-10-07");
+      cy.get('[data-cy="search-button"]').click();
+
+      cy.intercept("GET", "/api/v3/datasets/fullquery*").as("fullquery");
+
+      cy.wait("@fullquery").then((interception) => {
+        const url = interception.request.url;
+        expect(url).to.contain("/api/v3/datasets/fullquery");
+        expect(url).to.contain("creationTime");
+
+        const today = new Date().toISOString().slice(0, 10);
+        expect(url).to.include(today);
+        cy.log("Fullquery URL:", url);
+      });
+    });
+  });
 });
