@@ -598,7 +598,7 @@ describe("Proposals general", () => {
 
       cy.wait("@fullquery");
       cy.wait("@fullquery").then((interception) => {
-        const url = interception.request.url;
+        const {url} = interception.request;
         expect(url).to.contain("/api/v3/proposals/fullquery");
         expect(url).to.contain("startTime");
 

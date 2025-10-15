@@ -43,7 +43,7 @@ export class ProposalEffects {
         }
 
         const queryParam = search ? { ...search } : {};
-        const startTime = queryParam.startTime;
+        const { startTime } = queryParam;
         if (
           startTime &&
           typeof startTime === "object" &&

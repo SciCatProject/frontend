@@ -416,7 +416,7 @@ describe("Datasets general", () => {
       cy.intercept("GET", "/api/v3/datasets/fullquery*").as("fullquery");
 
       cy.wait("@fullquery").then((interception) => {
-        const url = interception.request.url;
+        const {url} = interception.request;
         expect(url).to.contain("/api/v3/datasets/fullquery");
         expect(url).to.contain("creationTime");
 
