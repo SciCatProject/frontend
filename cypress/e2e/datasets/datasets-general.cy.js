@@ -101,7 +101,7 @@ describe("Datasets general", () => {
     });
   });
 
-  describe("Dataset page filter and scientific condition UI test", () => {
+  describe.only("Dataset page filter and scientific condition UI test", () => {
     beforeEach(() => {
       cy.createDataset({
         type: "raw",
@@ -128,7 +128,7 @@ describe("Datasets general", () => {
         cy.get('[data-cy="add-condition-button"]').click();
       });
 
-      cy.get('input[name="lhs"]').type("extra_entry_end_time");
+      cy.get('input[name="lhs"]').type("Extra Entry End Time");
 
       cy.get("mat-dialog-container").find('button[type="submit"]').click();
 
@@ -152,7 +152,7 @@ describe("Datasets general", () => {
         cy.get('[data-cy="add-condition-button"]').click();
       });
 
-      cy.get('input[name="lhs"]').type("extra_entry_end_time");
+      cy.get('input[name="lhs"]').type("Extra Entry End Time");
 
       cy.get("mat-dialog-container").find('button[type="submit"]').click();
 
@@ -177,7 +177,7 @@ describe("Datasets general", () => {
         cy.get('[data-cy="add-condition-button"]').click();
       });
 
-      cy.get('input[name="lhs"]').type("extra_entry_end_time");
+      cy.get('input[name="lhs"]').type("Extra Entry End Time");
 
       cy.get("mat-dialog-container").find('button[type="submit"]').click();
 
