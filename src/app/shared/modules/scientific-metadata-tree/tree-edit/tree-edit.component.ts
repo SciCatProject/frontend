@@ -29,6 +29,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { DatePipe } from "@angular/common";
 import { Type } from "../base-classes/metadata-input-base";
 import { DateTime } from "luxon";
+import { AppConfigService } from "app-config.service";
 
 export class FlatNodeEdit implements FlatNode {
   key: string;
@@ -64,8 +65,9 @@ export class TreeEditComponent
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
     datePipe: DatePipe,
+    configService: AppConfigService,
   ) {
-    super();
+    super(configService);
     this.datePipe = datePipe;
     this.treeFlattener = new MatTreeFlattener(
       this.transformer,
