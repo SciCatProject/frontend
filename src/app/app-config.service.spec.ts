@@ -50,6 +50,12 @@ const appConfig: AppConfigInterface = {
   thumbnailFetchLimitPerPage: 500,
   maxFileUploadSizeInMb: "16mb",
   maxDirectDownloadSize: 5000000000,
+  metadataFloatFormatEnabled: true,
+  metadataFloatFormat: {
+    significantDigits: 3,
+    minCutoff: 0.001,
+    maxCutoff: 1000,
+  },
   metadataPreviewEnabled: true,
   metadataStructure: "",
   multipleDownloadAction: "http://localhost:3012/zip",

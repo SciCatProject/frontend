@@ -24,6 +24,7 @@ import { DateTime } from "luxon";
 import { MetadataTypes } from "../metadata-edit/metadata-edit.component";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
 import { TablePaginationMode } from "shared/modules/dynamic-material-table/models/table-pagination.model";
+import { MetadataValueService } from "shared/services/metadata-value.service";
 
 @Component({
   selector: "metadata-view",
@@ -173,6 +174,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     private replaceUnderscore: ReplaceUnderscorePipe,
     private titleCase: TitleCasePipe,
     private datePipe: DatePipe,
+    private metadataValueService: MetadataValueService,
     public linkyPipe: LinkyPipe,
     public prettyUnit: PrettyUnitPipe,
   ) {}
@@ -194,9 +196,13 @@ export class MetadataViewComponent implements OnInit, OnChanges {
         typeof metadata[key] === "object" &&
         "value" in (metadata[key] as ScientificMetadata)
       ) {
+        const formattedValue = this.metadataValueService.valueFormat(
+          metadata[key]["value"],
+        );
+
         metadataObject = {
           name: key,
-          value: metadata[key]["value"],
+          value: formattedValue,
           unit: metadata[key]["unit"],
           human_name: humanReadableName,
           type: metadata[key]["type"],
@@ -215,9 +221,12 @@ export class MetadataViewComponent implements OnInit, OnChanges {
             ? metadata[key]
             : JSON.stringify(metadata[key]);
 
+        const formattedValue =
+          this.metadataValueService.valueFormat(metadataValue);
+
         metadataObject = {
           name: key,
-          value: metadataValue,
+          value: formattedValue,
           unit: "",
           human_name: humanReadableName,
           type: metadata[key]["type"],
