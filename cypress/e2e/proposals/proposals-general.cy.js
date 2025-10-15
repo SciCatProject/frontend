@@ -577,4 +577,35 @@ describe("Proposals general", () => {
       });
     });
   });
+
+  describe("Proposals filter end date auto-set", () => {
+    it("should auto-set end date when start date is set and end date is empty", () => {
+      const newProposal = {
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+        startTime: "2025-10-08T15:00:00.000Z",
+      };
+
+      cy.createProposal(newProposal);
+
+      cy.visit("/proposals");
+
+      cy.intercept("GET", "/api/v3/proposals/fullquery*").as("fullquery");
+
+      cy.get('[data-cy="creation-time-begin"]').type("2025-10-08");
+
+      cy.get('[data-cy="apply-button-filter"]').click();
+
+      cy.wait("@fullquery");
+      cy.wait("@fullquery").then((interception) => {
+        const url = interception.request.url;
+        expect(url).to.contain("/api/v3/proposals/fullquery");
+        expect(url).to.contain("startTime");
+
+        const today = new Date().toISOString().slice(0, 10);
+        expect(url).to.include(today);
+        cy.log("Fullquery URL:", url);
+      });
+    });
+  });
 });
