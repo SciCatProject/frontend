@@ -55,6 +55,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MultiSelectFilterValue } from "shared/modules/filters/multiselect-filter.component";
 import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-range-field.model";
 import { UnitsOptionsService } from "shared/services/units-options.service";
+import { TitleCasePipe } from "@angular/common";
+import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
 
 @Component({
   selector: "datasets-filter",
@@ -98,6 +100,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private unitsOptionsService: UnitsOptionsService,
+    private titleCase: TitleCasePipe,
+    private replaceUnderscore: ReplaceUnderscorePipe,
   ) {}
 
   ngOnInit() {
@@ -470,7 +474,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             data: {
               usedFields: usedFields,
               parameterKeys: availableKeys.map(
-                (key) => this.humanNameMap[key] || key,
+                (key) =>
+                  this.humanNameMap[key] ||
+                  this.titleCase.transform(
+                    this.replaceUnderscore.transform(key),
+                  ),
               ),
             },
             restoreFocus: false,
