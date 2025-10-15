@@ -1,0 +1,17 @@
+name: Deploy docs
+
+on:  # yamllint disable-line rule:truthy
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: SciCatProject/docs-template/.github/actions/mkdocs-pages@main
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          push: true
