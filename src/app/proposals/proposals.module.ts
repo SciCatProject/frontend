@@ -97,6 +97,11 @@ export const PROPOSAL_DATE_FORMATS = {
     ProposalDatasetsComponent,
   ],
   exports: [],
-  providers: [DatePipe, FileSizePipe, SlicePipe, { provide: MAT_DATE_FORMATS, useValue: PROPOSAL_DATE_FORMATS }],
+  providers: [
+    DatePipe,
+    FileSizePipe,
+    SlicePipe,
+    { provide: MAT_DATE_FORMATS, useValue: PROPOSAL_DATE_FORMATS },
+  ],
 })
 export class ProposalsModule {}
