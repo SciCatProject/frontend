@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { createSuggestionObserver, getFacetCount } from "./utils";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, of } from "rxjs";
 import { ClearableInputComponent } from "./clearable-input.component";
 import { AppConfigService } from "app-config.service";
 import { FacetCount } from "state-management/state/datasets.store";
@@ -22,8 +22,8 @@ export class MultiSelectFilterComponent extends ClearableInputComponent {
   @Input() key = "";
   @Input() label = "";
   @Input() tooltip = "";
-  @Input() facetCounts$: Observable<FacetCount[]>;
-  @Input() currentFilter$: Observable<string[]>;
+  @Input() facetCounts$: Observable<FacetCount[]> = of([]);
+  @Input() currentFilter$: Observable<string[]> = of([]);
   @Output() selectionChange = new EventEmitter<MultiSelectFilterValue>();
 
   appConfig = this.appConfigService.getConfig();
@@ -53,14 +53,17 @@ export class MultiSelectFilterComponent extends ClearableInputComponent {
   }
 
   itemSelected(value: { _id: string; label?: string } | null) {
-    this.selectionChange.emit({ key: this.key, value: value, event: "add" });
+    this.selectionChange.emit({ key: this.key, value, event: "add" });
     this.input$.next("");
   }
 
   itemRemoved(value: string | null) {
+    // This is workaround since the currentFilter$ only contains the id string
+    const valueObj = { _id: value };
+
     this.selectionChange.emit({
       key: this.key,
-      value: { _id: value },
+      value: valueObj,
       event: "remove",
     });
   }

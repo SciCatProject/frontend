@@ -115,9 +115,8 @@ describe("MultiSelectFilterComponent", () => {
   describe("#itemSelected()", () => {
     it("should dispatch an AddMultiSelectFilterAction", () => {
       dispatchSpy = spyOn(component.selectionChange, "emit");
-
-      const value = "test";
-      component.itemSelected({ _id: value });
+      const value = { _id: "test" };
+      component.itemSelected(value);
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith({
@@ -132,8 +131,8 @@ describe("MultiSelectFilterComponent", () => {
     it("should dispatch a RemoveMultiSelectFilterAction", () => {
       dispatchSpy = spyOn(component.selectionChange, "emit");
 
-      const value = "test";
-      component.itemRemoved(value);
+      const value = { _id: "test" };
+      component.itemRemoved("test");
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith({
