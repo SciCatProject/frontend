@@ -22,31 +22,6 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   params$ = this.route.queryParams;
   defaultPageSize = 10;
 
-  filterLists: FilterConfig[] = [
-    {
-      key: "instrumentIds",
-      label: "Instrument",
-      type: "checkbox",
-      description: "Filter by instrument of the proposal",
-      enabled: true,
-    },
-    {
-      key: "pi_lastname",
-      label: "PI Last Name",
-      type: "checkbox",
-      description: "Filter by principal investigator last name",
-      enabled: true,
-    },
-    {
-      key: "startTime",
-      label: "Start Date",
-      type: "dateRange",
-      description: "Filter by Start time of the proposal",
-      enabled: true,
-    },
-  ];
-  facetLists: string[] = ["pi_lastname", "instrumentIds"];
-
   constructor(
     private store: Store,
     private route: ActivatedRoute,
@@ -74,12 +49,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
           }),
         );
 
-        this.store.dispatch(
-          fetchFacetCountsAction({
-            fields: searchQuery,
-            facets: this.facetLists,
-          }),
-        );
+        this.store.dispatch(fetchFacetCountsAction());
       }),
     );
   }

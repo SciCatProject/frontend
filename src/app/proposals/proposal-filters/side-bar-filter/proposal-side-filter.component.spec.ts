@@ -44,6 +44,26 @@ describe("ProposalSideFilterComponent", () => {
 
     fixture = TestBed.createComponent(ProposalSideFilterComponent);
     component = fixture.componentInstance;
+    component.filterLists = [
+      {
+        key: "instrumentIds",
+        type: "checkbox",
+        description: "Filter by Unique identifier for the proposal",
+        enabled: true,
+      },
+      {
+        key: "pi_lastname",
+        type: "checkbox",
+        description: "Filter by Last name of the Principal Investigator",
+        enabled: true,
+      },
+      {
+        key: "startTime",
+        type: "dateRange",
+        description: "Filter by Start time of the proposal",
+        enabled: true,
+      },
+    ];
     fixture.detectChanges();
   });
 
@@ -53,6 +73,12 @@ describe("ProposalSideFilterComponent", () => {
 
   it("should have collapsed false by default", () => {
     expect(component.collapsed).toBeFalse();
+  });
+
+  it("should initialize filterLists correctly", () => {
+    expect(component.filterLists.length).toBe(4);
+    expect(component.filterLists[0].key).toBe("instrumentIds");
+    expect(component.filterLists[2].type).toBe("dateRange");
   });
 
   it("should toggle collapsed from false to true", () => {

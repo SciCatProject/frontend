@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { createSuggestionObserver, getFacetCount, getFacetId } from "./utils";
+import { createSuggestionObserver, getFacetCount } from "./utils";
 import { BehaviorSubject, Observable } from "rxjs";
 import { ClearableInputComponent } from "./clearable-input.component";
 import { AppConfigService } from "app-config.service";
@@ -7,7 +7,7 @@ import { FacetCount } from "state-management/state/datasets.store";
 
 export type MultiSelectFilterValue = {
   key: string;
-  value: string;
+  value: { _id: string; label?: string };
   event: "add" | "remove";
 };
 
@@ -18,7 +18,6 @@ export type MultiSelectFilterValue = {
   standalone: false,
 })
 export class MultiSelectFilterComponent extends ClearableInputComponent {
-  protected readonly getFacetId = getFacetId;
   protected readonly getFacetCount = getFacetCount;
   @Input() key = "";
   @Input() label = "";
@@ -32,6 +31,8 @@ export class MultiSelectFilterComponent extends ClearableInputComponent {
   input$ = new BehaviorSubject<string>("");
   suggestions$: Observable<FacetCount[]>;
 
+  labelById = new Map<string, string>();
+
   constructor(public appConfigService: AppConfigService) {
     super();
   }
@@ -42,17 +43,24 @@ export class MultiSelectFilterComponent extends ClearableInputComponent {
       this.input$,
       this.currentFilter$,
     );
+
+    this.facetCounts$.subscribe((facets) => {
+      this.labelById.clear();
+      facets?.forEach((fc) => {
+        this.labelById.set(fc._id, fc.label ?? fc._id);
+      });
+    });
   }
 
-  itemSelected(value: string | null) {
+  itemSelected(value: { _id: string; label?: string } | null) {
     this.selectionChange.emit({ key: this.key, value: value, event: "add" });
     this.input$.next("");
   }
 
-  itemRemoved(value: string) {
+  itemRemoved(value: string | null) {
     this.selectionChange.emit({
       key: this.key,
-      value: value,
+      value: { _id: value },
       event: "remove",
     });
   }
@@ -60,5 +68,9 @@ export class MultiSelectFilterComponent extends ClearableInputComponent {
   onInput(event: any) {
     const value = (<HTMLInputElement>event.target).value;
     this.input$.next(value);
+  }
+
+  getLabel(id: string): string {
+    return this.labelById.get(id) ?? id;
   }
 }

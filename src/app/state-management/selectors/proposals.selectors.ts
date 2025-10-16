@@ -58,6 +58,11 @@ export const selectFilters = createSelector(
   selectProposalsState,
   (state) => state.proposalFilters,
 );
+export const selectFilterByKey = (key: string) =>
+  createSelector(
+    selectProposalsState,
+    (state) => state.proposalFilters.fields[key] || [],
+  );
 
 export const selectDatasetFilters = createSelector(
   selectProposalsState,
@@ -149,7 +154,21 @@ export const selectFullqueryParams = createSelector(
     const { skip, limit, sortField, ...theRest } = filters;
     const limits = { order: sortField, skip, limit };
     const query = restrictFilter(theRest);
+
     return { query: JSON.stringify(query), limits };
+  },
+);
+
+export const selectFullfacetParams = createSelector(
+  selectFilters,
+  (filters) => {
+    const { skip, limit, sortField, ...theRest } = filters;
+
+    const fields = restrictFilter(theRest.fields);
+    // TODO: Replace with dynamic facet generation
+    const facets = ["instrumentIds", "pi_lastname"];
+
+    return { fields, facets };
   },
 );
 
@@ -188,3 +207,11 @@ export const selectProposalsfacetCountsWithInstrumentName = createSelector(
     })),
   }),
 );
+
+export const selectProposalsfacetCountsWithInstrumentNameByKey = (
+  key: string,
+) =>
+  createSelector(
+    selectProposalsfacetCountsWithInstrumentName,
+    (facets) => facets[key] || [],
+  );

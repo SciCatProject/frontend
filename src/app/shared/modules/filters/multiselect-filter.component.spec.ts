@@ -117,7 +117,7 @@ describe("MultiSelectFilterComponent", () => {
       dispatchSpy = spyOn(component.selectionChange, "emit");
 
       const value = "test";
-      component.itemSelected(value);
+      component.itemSelected({ _id: value });
 
       expect(dispatchSpy).toHaveBeenCalledTimes(1);
       expect(dispatchSpy).toHaveBeenCalledWith({

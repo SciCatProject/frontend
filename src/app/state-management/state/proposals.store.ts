@@ -10,7 +10,8 @@ export interface DateRange {
 }
 
 export interface FacetCount {
-  _id?: string;
+  _id: string;
+  label?: string;
   count: number;
 }
 export interface FacetCounts {
@@ -18,7 +19,11 @@ export interface FacetCounts {
 }
 
 export interface ProposalFilters {
-  fields: Record<string, string | DateRange>;
+  fields: {
+    startTime?: DateRange | null;
+    instrumentIds?: string[];
+    pi_lastname?: string[];
+  };
   skip: number;
   limit: number;
   sortField: string;
@@ -71,7 +76,11 @@ export const initialProposalsState: ProposalsState = {
   hasPrefilledFilters: false,
 
   proposalFilters: {
-    fields: {},
+    fields: {
+      startTime: null,
+      instrumentIds: [],
+      pi_lastname: [],
+    },
     skip: 0,
     limit: 25,
     sortField: "createdAt:desc",
