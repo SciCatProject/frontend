@@ -247,4 +247,8 @@ export class ProposalSideFilterComponent implements OnInit {
       this.clearFilters = false; // reset value so it will be triggered again
     }, 0);
   }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
 }
