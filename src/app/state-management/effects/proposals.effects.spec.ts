@@ -7,6 +7,7 @@ import {
   selectFullqueryParams,
   selectDatasetsQueryParams,
   selectCurrentProposal,
+  selectFullfacetParams,
 } from "state-management/selectors/proposals.selectors";
 import * as fromActions from "state-management/actions/proposals.actions";
 import { hot, cold } from "jasmine-marbles";
@@ -55,6 +56,7 @@ describe("ProposalEffects", () => {
         provideMockStore({
           selectors: [
             { selector: selectFullqueryParams, value: {} },
+            { selector: selectFullfacetParams, value: {} },
             {
               selector: selectDatasetsQueryParams,
               value: {
