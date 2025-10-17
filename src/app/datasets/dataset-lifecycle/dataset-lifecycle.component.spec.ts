@@ -141,7 +141,7 @@ describe("DatasetLifecycleComponent", () => {
 
       expect(parsedHistoryItems.length).toEqual(1);
       parsedHistoryItems.forEach((item) => {
-        expect(Object.keys(item).includes("id")).toEqual(false);
+        expect("id" in item).toBe(false);
         expect(item.property).toEqual("keywords");
         expect(item.value).toEqual(keywords);
       });
