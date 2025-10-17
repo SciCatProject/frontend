@@ -74,7 +74,7 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
             property,
             value: properties[property],
             updatedBy: updatedBy.replace("ldap.", ""),
-            updatedAt: this.datePipe.transform(updatedAt, "yyyy-MM-dd HH:mm"),
+            updatedAt: this.datePipe.transform(updatedAt),
           })),
       );
       // flatten array before return
