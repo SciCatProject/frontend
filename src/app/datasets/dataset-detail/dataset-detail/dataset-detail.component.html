@@ -357,7 +357,7 @@
           </table>
         </mat-card-content>
       </mat-card>
-
+      <ng-container *ngIf="emptyMetadataTable()">
       <mat-card>
         <mat-card-header class="scientific-header">
           <mat-icon class="section-icon"> science </mat-icon>
@@ -432,6 +432,7 @@
           </ng-template>
         </mat-card-content>
       </mat-card>
+      </ng-container>
       <mat-card *ngIf="appConfig.jsonMetadataEnabled">
         <mat-card-content>
           <button mat-stroked-button (click)="show = !show">
