@@ -51,7 +51,7 @@ export class MainPageConfiguration {
 
 export class MainMenuOptions {
   datasets: boolean;
-  ingestor:boolean;
+  ingestor: boolean;
   files: boolean;
   instruments: boolean;
   jobs: boolean;
