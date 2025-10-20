@@ -70,10 +70,13 @@ export class InstrumentDetailsComponent
   }
 
   emptyMetadataTable(): boolean {
-    if ( this.appConfig.showEmptyMetadataTable === false ) {
-      return !!this.currentInstrument?.customMetadata && Object.keys(this.currentInstrument.customMetadata).length > 0;
+    if (this.appConfig.showEmptyMetadataTable === false) {
+      return (
+        !!this.currentInstrument?.customMetadata &&
+        Object.keys(this.currentInstrument.customMetadata).length > 0
+      );
     }
-      return true;
+    return true;
   }
 
   ngOnDestroy() {

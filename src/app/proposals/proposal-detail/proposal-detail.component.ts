@@ -112,8 +112,11 @@ export class ProposalDetailComponent implements OnInit, OnDestroy {
   }
 
   emptyMetadataTable(): boolean {
-    if ( this.appConfig.showEmptyMetadataTable === false ) {
-      return !!this.proposal?.metadata && Object.keys(this.proposal.metadata).length > 0;
+    if (this.appConfig.showEmptyMetadataTable === false) {
+      return (
+        !!this.proposal?.metadata &&
+        Object.keys(this.proposal.metadata).length > 0
+      );
     }
     return true;
   }

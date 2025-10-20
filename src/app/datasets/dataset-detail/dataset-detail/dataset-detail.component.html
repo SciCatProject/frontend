@@ -358,80 +358,80 @@
         </mat-card-content>
       </mat-card>
       <ng-container *ngIf="emptyMetadataTable()">
-      <mat-card>
-        <mat-card-header class="scientific-header">
-          <mat-icon class="section-icon"> science </mat-icon>
-          <mat-card-title class="section-title">{{
-            "Scientific Metadata" | translate: localization
-          }}</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <ng-template
-            [ngIf]="appConfig.tableSciDataEnabled"
-            [ngIfElse]="jsonView"
-          >
-            <ng-template #metadataView>
-              <div [ngSwitch]="appConfig.metadataStructure">
-                <tree-view
-                  *ngSwitchCase="'tree'"
-                  [metadata]="dataset['scientificMetadata']"
-                ></tree-view>
-                <metadata-view
-                  *ngSwitchDefault
-                  [metadata]="dataset['scientificMetadata']"
-                >
-                </metadata-view>
-              </div>
-            </ng-template>
-            <mat-tab-group
-              class="metadataGroup"
-              *ngIf="editingAllowed; else metadataView"
+        <mat-card>
+          <mat-card-header class="scientific-header">
+            <mat-icon class="section-icon"> science </mat-icon>
+            <mat-card-title class="section-title">{{
+              "Scientific Metadata" | translate: localization
+            }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <ng-template
+              [ngIf]="appConfig.tableSciDataEnabled"
+              [ngIfElse]="jsonView"
             >
-              <mat-tab>
-                <ng-template mat-tab-label>
-                  <mat-icon> list </mat-icon> View
-                </ng-template>
-                <ng-template matTabContent>
-                  <ng-container *ngTemplateOutlet="metadataView">
-                  </ng-container>
-                </ng-template>
-              </mat-tab>
-              <mat-tab
-                class="editTab"
-                *ngIf="editingAllowed"
-                [hidden]="!appConfig.editMetadataEnabled"
+              <ng-template #metadataView>
+                <div [ngSwitch]="appConfig.metadataStructure">
+                  <tree-view
+                    *ngSwitchCase="'tree'"
+                    [metadata]="dataset['scientificMetadata']"
+                  ></tree-view>
+                  <metadata-view
+                    *ngSwitchDefault
+                    [metadata]="dataset['scientificMetadata']"
+                  >
+                  </metadata-view>
+                </div>
+              </ng-template>
+              <mat-tab-group
+                class="metadataGroup"
+                *ngIf="editingAllowed; else metadataView"
               >
-                <ng-template mat-tab-label>
-                  <mat-icon> edit </mat-icon> Edit
-                </ng-template>
-                <ng-template matTabContent>
-                  <div [ngSwitch]="appConfig.metadataStructure">
-                    <tree-edit
-                      *ngSwitchCase="'tree'"
-                      [metadata]="dataset['scientificMetadata']"
-                      (save)="onSaveMetadata($event)"
-                    >
-                    </tree-edit>
-                    <metadata-edit
-                      *ngSwitchDefault
-                      [metadata]="dataset['scientificMetadata']"
-                      (save)="onSaveMetadata($event)"
-                    >
-                    </metadata-edit>
-                  </div>
-                </ng-template>
-              </mat-tab>
-            </mat-tab-group>
-          </ng-template>
+                <mat-tab>
+                  <ng-template mat-tab-label>
+                    <mat-icon> list </mat-icon> View
+                  </ng-template>
+                  <ng-template matTabContent>
+                    <ng-container *ngTemplateOutlet="metadataView">
+                    </ng-container>
+                  </ng-template>
+                </mat-tab>
+                <mat-tab
+                  class="editTab"
+                  *ngIf="editingAllowed"
+                  [hidden]="!appConfig.editMetadataEnabled"
+                >
+                  <ng-template mat-tab-label>
+                    <mat-icon> edit </mat-icon> Edit
+                  </ng-template>
+                  <ng-template matTabContent>
+                    <div [ngSwitch]="appConfig.metadataStructure">
+                      <tree-edit
+                        *ngSwitchCase="'tree'"
+                        [metadata]="dataset['scientificMetadata']"
+                        (save)="onSaveMetadata($event)"
+                      >
+                      </tree-edit>
+                      <metadata-edit
+                        *ngSwitchDefault
+                        [metadata]="dataset['scientificMetadata']"
+                        (save)="onSaveMetadata($event)"
+                      >
+                      </metadata-edit>
+                    </div>
+                  </ng-template>
+                </mat-tab>
+              </mat-tab-group>
+            </ng-template>
 
-          <ng-template #jsonView>
-            <ngx-json-viewer
-              [json]="dataset['scientificMetadata']"
-              [expanded]="false"
-            ></ngx-json-viewer>
-          </ng-template>
-        </mat-card-content>
-      </mat-card>
+            <ng-template #jsonView>
+              <ngx-json-viewer
+                [json]="dataset['scientificMetadata']"
+                [expanded]="false"
+              ></ngx-json-viewer>
+            </ng-template>
+          </mat-card-content>
+        </mat-card>
       </ng-container>
       <mat-card *ngIf="appConfig.jsonMetadataEnabled">
         <mat-card-content>

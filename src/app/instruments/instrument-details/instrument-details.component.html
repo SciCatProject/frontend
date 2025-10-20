@@ -29,62 +29,62 @@
       </mat-card>
 
       <ng-container *ngIf="emptyMetadataTable()">
-      <mat-card
-        data-cy="instrument-metadata-card"
-        *ngIf="instrument.customMetadata as value"
-      >
-        <mat-card-header class="customMetadata-header">
-          <div mat-card-avatar class="section-icon">
-            <mat-icon> science </mat-icon>
-          </div>
-          Custom Metadata
-        </mat-card-header>
+        <mat-card
+          data-cy="instrument-metadata-card"
+          *ngIf="instrument.customMetadata as value"
+        >
+          <mat-card-header class="customMetadata-header">
+            <div mat-card-avatar class="section-icon">
+              <mat-icon> science </mat-icon>
+            </div>
+            Custom Metadata
+          </mat-card-header>
 
-        <mat-card-content>
-          <mat-tab-group>
-            <mat-tab>
-              <ng-template mat-tab-label>
-                <mat-icon>list</mat-icon> View
-              </ng-template>
+          <mat-card-content>
+            <mat-tab-group>
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <mat-icon>list</mat-icon> View
+                </ng-template>
 
-              <ng-template matTabContent>
-                <div [ngSwitch]="appConfig.metadataStructure">
-                  <tree-view
-                    *ngSwitchCase="'tree'"
-                    [metadata]="value"
-                  ></tree-view>
-                  <metadata-view
-                    *ngSwitchDefault
-                    [metadata]="value"
-                  ></metadata-view>
-                </div>
-              </ng-template>
-            </mat-tab>
+                <ng-template matTabContent>
+                  <div [ngSwitch]="appConfig.metadataStructure">
+                    <tree-view
+                      *ngSwitchCase="'tree'"
+                      [metadata]="value"
+                    ></tree-view>
+                    <metadata-view
+                      *ngSwitchDefault
+                      [metadata]="value"
+                    ></metadata-view>
+                  </div>
+                </ng-template>
+              </mat-tab>
 
-            <mat-tab *ngIf="isAdmin$ | async">
-              <ng-template mat-tab-label>
-                <mat-icon>edit</mat-icon> Edit
-              </ng-template>
+              <mat-tab *ngIf="isAdmin$ | async">
+                <ng-template mat-tab-label>
+                  <mat-icon>edit</mat-icon> Edit
+                </ng-template>
 
-              <ng-template matTabContent>
-                <div [ngSwitch]="appConfig.metadataStructure">
-                  <tree-edit
-                    *ngSwitchCase="'tree'"
-                    [metadata]="value"
-                    (save)="onSaveCustomMetadata(instrument.pid, $event)"
-                    (hasUnsavedChanges)="onHasUnsavedChanges($event)"
-                  ></tree-edit>
-                  <metadata-edit
-                    *ngSwitchDefault
-                    [metadata]="value"
-                    (save)="onSaveCustomMetadata(instrument.pid, $event)"
-                  ></metadata-edit>
-                </div>
-              </ng-template>
-            </mat-tab>
-          </mat-tab-group>
-        </mat-card-content>
-      </mat-card>
+                <ng-template matTabContent>
+                  <div [ngSwitch]="appConfig.metadataStructure">
+                    <tree-edit
+                      *ngSwitchCase="'tree'"
+                      [metadata]="value"
+                      (save)="onSaveCustomMetadata(instrument.pid, $event)"
+                      (hasUnsavedChanges)="onHasUnsavedChanges($event)"
+                    ></tree-edit>
+                    <metadata-edit
+                      *ngSwitchDefault
+                      [metadata]="value"
+                      (save)="onSaveCustomMetadata(instrument.pid, $event)"
+                    ></metadata-edit>
+                  </div>
+                </ng-template>
+              </mat-tab>
+            </mat-tab-group>
+          </mat-card-content>
+        </mat-card>
       </ng-container>
     </div>
   </div>

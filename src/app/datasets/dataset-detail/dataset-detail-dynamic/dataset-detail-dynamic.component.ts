@@ -257,7 +257,10 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
   emptyMetadataTable(): boolean {
     if (this.appConfig.showEmptyMetadataTable === false) {
-      return !!this.dataset?.scientificMetadata && Object.keys(this.dataset.scientificMetadata).length > 0;
+      return (
+        !!this.dataset?.scientificMetadata &&
+        Object.keys(this.dataset.scientificMetadata).length > 0
+      );
     }
     return true;
   }
