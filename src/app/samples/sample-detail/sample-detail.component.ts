@@ -216,8 +216,11 @@ export class SampleDetailComponent
   }
 
   emptyMetadataTable(): boolean {
-    if ( this.appConfig.showEmptyMetadataTable === false ) {
-      return !!this.sample?.sampleCharacteristics && Object.keys(this.sample.sampleCharacteristics).length > 0;
+    if (this.appConfig.showEmptyMetadataTable === false) {
+      return (
+        !!this.sample?.sampleCharacteristics &&
+        Object.keys(this.sample.sampleCharacteristics).length > 0
+      );
     }
     return true;
   }

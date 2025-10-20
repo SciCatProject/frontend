@@ -57,80 +57,80 @@
           </mat-card-content>
         </mat-card>
         <ng-container *ngIf="emptyMetadataTable()">
-        <mat-card *ngIf="sample.sampleCharacteristics as value">
-          <mat-card-header class="characteristics-header">
-            <div mat-card-avatar class="section-icon">
-              <mat-icon> science </mat-icon>
-            </div>
-            Characteristics
-          </mat-card-header>
+          <mat-card *ngIf="sample.sampleCharacteristics as value">
+            <mat-card-header class="characteristics-header">
+              <div mat-card-avatar class="section-icon">
+                <mat-icon> science </mat-icon>
+              </div>
+              Characteristics
+            </mat-card-header>
 
-          <mat-card-content>
-            <ng-template
-              [ngIf]="appConfig.tableSciDataEnabled"
-              [ngIfElse]="jsonView"
-            >
-              <mat-tab-group>
-                <mat-tab>
-                  <ng-template mat-tab-label>
-                    <mat-icon> list </mat-icon> View
-                  </ng-template>
-                  <div [ngSwitch]="appConfig.metadataStructure">
-                    <tree-view
-                      *ngSwitchCase="'tree'"
-                      [metadata]="value"
-                    ></tree-view>
-                    <metadata-view
-                      *ngSwitchDefault
-                      [metadata]="value"
-                    ></metadata-view>
-                  </div>
-                </mat-tab>
-                <mat-tab>
-                  <ng-template mat-tab-label>
-                    <mat-icon> edit </mat-icon> Edit
-                  </ng-template>
-                  <div [ngSwitch]="appConfig.metadataStructure">
-                    <tree-edit
-                      *ngSwitchCase="'tree'"
-                      [metadata]="value"
-                      (save)="onSaveCharacteristics($event)"
-                      (hasUnsavedChanges)="onHasUnsavedChanges($event)"
-                    ></tree-edit>
-                    <metadata-edit
-                      *ngSwitchDefault
-                      [metadata]="value"
-                      (save)="onSaveCharacteristics($event)"
-                    >
-                    </metadata-edit>
-                  </div>
-                </mat-tab>
-              </mat-tab-group>
-            </ng-template>
+            <mat-card-content>
+              <ng-template
+                [ngIf]="appConfig.tableSciDataEnabled"
+                [ngIfElse]="jsonView"
+              >
+                <mat-tab-group>
+                  <mat-tab>
+                    <ng-template mat-tab-label>
+                      <mat-icon> list </mat-icon> View
+                    </ng-template>
+                    <div [ngSwitch]="appConfig.metadataStructure">
+                      <tree-view
+                        *ngSwitchCase="'tree'"
+                        [metadata]="value"
+                      ></tree-view>
+                      <metadata-view
+                        *ngSwitchDefault
+                        [metadata]="value"
+                      ></metadata-view>
+                    </div>
+                  </mat-tab>
+                  <mat-tab>
+                    <ng-template mat-tab-label>
+                      <mat-icon> edit </mat-icon> Edit
+                    </ng-template>
+                    <div [ngSwitch]="appConfig.metadataStructure">
+                      <tree-edit
+                        *ngSwitchCase="'tree'"
+                        [metadata]="value"
+                        (save)="onSaveCharacteristics($event)"
+                        (hasUnsavedChanges)="onHasUnsavedChanges($event)"
+                      ></tree-edit>
+                      <metadata-edit
+                        *ngSwitchDefault
+                        [metadata]="value"
+                        (save)="onSaveCharacteristics($event)"
+                      >
+                      </metadata-edit>
+                    </div>
+                  </mat-tab>
+                </mat-tab-group>
+              </ng-template>
 
-            <ng-template #jsonView>
-              <ngx-json-viewer
-                [json]="value"
-                [expanded]="false"
-              ></ngx-json-viewer>
-            </ng-template>
-          </mat-card-content>
-        </mat-card>
+              <ng-template #jsonView>
+                <ngx-json-viewer
+                  [json]="value"
+                  [expanded]="false"
+                ></ngx-json-viewer>
+              </ng-template>
+            </mat-card-content>
+          </mat-card>
 
-        <mat-card *ngIf="appConfig.jsonMetadataEnabled">
-          <mat-card-content>
-            <button mat-stroked-button (click)="show = !show">
-              {{ show ? "Hide MetaData" : "Show Metadata" }}
-            </button>
-            <br />
-            <div *ngIf="show">
-              <ngx-json-viewer
-                [json]="sample"
-                [expanded]="false"
-              ></ngx-json-viewer>
-            </div>
-          </mat-card-content>
-        </mat-card>
+          <mat-card *ngIf="appConfig.jsonMetadataEnabled">
+            <mat-card-content>
+              <button mat-stroked-button (click)="show = !show">
+                {{ show ? "Hide MetaData" : "Show Metadata" }}
+              </button>
+              <br />
+              <div *ngIf="show">
+                <ngx-json-viewer
+                  [json]="sample"
+                  [expanded]="false"
+                ></ngx-json-viewer>
+              </div>
+            </mat-card-content>
+          </mat-card>
         </ng-container>
       </div>
 
