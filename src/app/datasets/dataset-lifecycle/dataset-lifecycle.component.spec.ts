@@ -5,7 +5,10 @@ import {
   waitForAsync,
 } from "@angular/core/testing";
 
-import { DatasetLifecycleComponent } from "./dataset-lifecycle.component";
+import {
+  DatasetLifecycleComponent,
+  HistoryWithProperties,
+} from "./dataset-lifecycle.component";
 
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { PipesModule } from "shared/pipes/pipes.module";
@@ -121,31 +124,28 @@ describe("DatasetLifecycleComponent", () => {
       expect(parsedHistoryItems.length).toEqual(0);
     });
 
-    // it("should parse dataset.history into a HistoryItem array if dataset is defined", () => {
-    //   const keywords = ["test", "parse"];
-    //   const dataset = createMock<
-    //     OutputDatasetObsoleteDto & { history: HistoryClass[] }
-    //   >({ ...mockDataset });
-    //   // TODO: Check the types here and see if we need the keywords at all or not as it doesn't exist on the HistoryClass.
-    //   dataset.history = [
-    //     {
-    //       id: "testId",
-    //       keywords,
-    //       updatedBy: "Test User",
-    //       updatedAt: new Date().toISOString(),
-    //     },
-    //   ] as unknown as HistoryClass[];
+    it("should parse dataset.history into a HistoryItem array if dataset is defined", () => {
+      const keywords = ["test", "parse"];
+      const dataset = createMock<OutputDatasetObsoleteDto>({ ...mockDataset });
+      dataset.history = [
+        {
+          id: "testId",
+          keywords,
+          updatedBy: "Test User",
+          updatedAt: new Date().toISOString(),
+        },
+      ] as HistoryWithProperties[];
 
-    //   component.dataset = dataset;
-    //   const parsedHistoryItems = component["parseHistoryItems"]();
+      component.dataset = dataset;
+      const parsedHistoryItems = component["parseHistoryItems"]();
 
-    //   expect(parsedHistoryItems.length).toEqual(1);
-    //   parsedHistoryItems.forEach((item) => {
-    //     expect(Object.keys(item).includes("id")).toEqual(false);
-    //     expect(item.property).toEqual("keywords");
-    //     expect(item.value).toEqual(keywords);
-    //   });
-    // });
+      expect(parsedHistoryItems.length).toEqual(1);
+      parsedHistoryItems.forEach((item) => {
+        expect("id" in item).toBe(false);
+        expect(item.property).toEqual("keywords");
+        expect(item.value).toEqual(keywords);
+      });
+    });
   });
 
   describe("#downloadCsv()", () => {
