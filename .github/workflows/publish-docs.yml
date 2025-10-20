@@ -3,7 +3,7 @@ name: Deploy docs
 on:  # yamllint disable-line rule:truthy
   push:
     branches:
-      - main
+      - master
     tags:
       - v*
 
