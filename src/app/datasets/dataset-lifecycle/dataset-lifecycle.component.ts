@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges, SimpleChange } from "@angular/core";
 import {
-  DatasetClass,
+  HistoryClass,
   OutputDatasetObsoleteDto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import {
@@ -24,6 +24,9 @@ export interface HistoryItem {
   updatedAt: string;
   [key: string]: any;
 }
+
+// unfortunately the index signature in HistoryClass is not exported by the openapi sdk generator
+export type HistoryWithProperties = HistoryClass & { [key: string]: unknown };
 
 @Component({
   selector: "dataset-lifecycle",
@@ -63,22 +66,20 @@ export class DatasetLifecycleComponent implements OnInit, OnChanges {
   ) {}
 
   private parseHistoryItems(): HistoryItem[] {
-    // TODO: This should be checked because something is wrong with the types
-    // TODO: The following code is commented out and should be refactored because the history is no longer part of the dataset object anymore due to this PR from Scicat BE: "feat: implements history for many entities #1939"
-    // const dataset = this.dataset as DatasetClass;
-    // if (dataset && dataset.history) {
-    //   const history = dataset.history.map(
-    //     ({ updatedAt, updatedBy, id, ...properties }) =>
-    //       Object.keys(properties).map((property) => ({
-    //         property,
-    //         value: properties[property],
-    //         updatedBy: updatedBy.replace("ldap.", ""),
-    //         updatedAt: this.datePipe.transform(updatedAt, "yyyy-MM-dd HH:mm"),
-    //       })),
-    //   );
-    //   // flatten and reverse array before return
-    //   return [].concat(...history).reverse();
-    // }
+    const dataset = this.dataset;
+    if (dataset && dataset.history) {
+      const history = (dataset.history as HistoryWithProperties[]).map(
+        ({ updatedAt, updatedBy, id, _id, ...properties }) =>
+          Object.keys(properties).map((property) => ({
+            property,
+            value: properties[property],
+            updatedBy: updatedBy.replace("ldap.", ""),
+            updatedAt: this.datePipe.transform(updatedAt),
+          })),
+      );
+      // flatten array before return
+      return [].concat(...history);
+    }
     return [];
   }
 
