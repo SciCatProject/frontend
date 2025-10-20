@@ -56,7 +56,7 @@
             </table>
           </mat-card-content>
         </mat-card>
-
+        <ng-container *ngIf="emptyMetadataTable()">
         <mat-card *ngIf="sample.sampleCharacteristics as value">
           <mat-card-header class="characteristics-header">
             <div mat-card-avatar class="section-icon">
@@ -131,6 +131,7 @@
             </div>
           </mat-card-content>
         </mat-card>
+        </ng-container>
       </div>
 
       <div fxFlex="30%" *ngIf="vm.attachments as attachments">

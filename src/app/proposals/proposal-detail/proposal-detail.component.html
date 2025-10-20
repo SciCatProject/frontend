@@ -118,6 +118,7 @@
     </mat-card-content>
   </mat-card>
 
+  <ng-container *ngIf="emptyMetadataTable()">
   <mat-card
     *ngIf="appConfig.jsonMetadataEnabled"
     data-cy="proposal-metadata-card"
@@ -189,4 +190,5 @@
       </ng-template>
     </mat-card-content>
   </mat-card>
+  </ng-container>
 </div>
