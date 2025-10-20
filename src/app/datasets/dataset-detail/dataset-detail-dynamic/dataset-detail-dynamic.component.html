@@ -153,6 +153,7 @@
           [style.gridColumn]="'span ' + (section.col || 10)"
           [style.gridRow]="'span ' + (section.row || 1)"
         >
+        <ng-container *ngIf="emptyMetadataTable()">
           <mat-card>
             <mat-card-header
               class="scientific-header sticky-header"
@@ -196,6 +197,7 @@
               </ng-container>
             </mat-card-content>
           </mat-card>
+          </ng-container>
         </div>
 
         <!-- Attachments Section -->

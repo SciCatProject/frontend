@@ -28,6 +28,7 @@
         </mat-card-content>
       </mat-card>
 
+      <ng-container *ngIf="emptyMetadataTable()">
       <mat-card
         data-cy="instrument-metadata-card"
         *ngIf="instrument.customMetadata as value"
@@ -84,6 +85,7 @@
           </mat-tab-group>
         </mat-card-content>
       </mat-card>
+      </ng-container>
     </div>
   </div>
 </ng-container>

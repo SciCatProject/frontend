@@ -62,6 +62,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   show = false;
 
   instrument: Instrument | undefined;
+  dataset: OutputDatasetObsoleteDto | undefined;
 
   constructor(
     public appConfigService: AppConfigService,
@@ -91,6 +92,12 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.store.select(selectCurrentInstrument).subscribe((instrument) => {
         this.instrument = instrument;
+      }),
+    );
+
+    this.subscriptions.push(
+      this.store.select(selectCurrentDataset).subscribe((dataset) => {
+        this.dataset = dataset;
       }),
     );
   }
@@ -246,6 +253,13 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
     // Ensure the result is a valid object for metadata display
     return result && typeof result === "object" ? result : null;
+  }
+
+  emptyMetadataTable(): boolean {
+    if (this.appConfig.showEmptyMetadataTable === false) {
+      return !!this.dataset?.scientificMetadata && Object.keys(this.dataset.scientificMetadata).length > 0;
+    }
+    return true;
   }
 
   ngOnDestroy() {

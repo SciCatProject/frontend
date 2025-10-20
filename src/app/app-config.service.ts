@@ -143,6 +143,7 @@ export interface AppConfigInterface {
   mainMenu?: MainMenuConfiguration;
   supportEmail?: string;
   checkBoxFilterClickTrigger?: boolean;
+  showEmptyMetadataTable?: boolean;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
