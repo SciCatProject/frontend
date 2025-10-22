@@ -218,6 +218,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     const { queryParams } = this.route.snapshot;
     const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
 
+    if (
+      this.activeFilters.creationTime["begin"] &&
+      !this.activeFilters.creationTime["end"]
+    ) {
+      this.activeFilters.creationTime["end"] = new Date().toISOString();
+    }
     this.router.navigate([], {
       queryParams: {
         searchQuery: JSON.stringify({

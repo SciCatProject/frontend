@@ -72,8 +72,8 @@ export class SharedFilterComponent implements OnChanges {
   @Output() selectionChange = new EventEmitter<MultiSelectFilterValue>();
   @Output() numericRangeChange = new EventEmitter<INumericRange>();
   @Output() dateRangeChange = new EventEmitter<{
-    begin: string;
-    end: string;
+    begin?: string;
+    end?: string;
   }>();
 
   constructor() {}

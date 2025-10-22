@@ -411,9 +411,8 @@ describe("Datasets general", () => {
       cy.visit("/datasets");
 
       cy.get('[data-cy="creation-time-begin"]').type("2025-10-07");
-      cy.get('[data-cy="search-button"]').click();
-
       cy.intercept("GET", "/api/v3/datasets/fullquery*").as("fullquery");
+      cy.get('[data-cy="filter-search-button"]').click();
 
       cy.wait("@fullquery").then((interception) => {
         const {url} = interception.request;

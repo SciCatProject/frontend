@@ -42,22 +42,7 @@ export class ProposalEffects {
           limitsParam.order = `${sortColumn}:${sortDirection}`;
         }
 
-        const queryParam = search ? { ...search } : {};
-        const { startTime } = queryParam;
-        if (
-          startTime &&
-          typeof startTime === "object" &&
-          startTime !== null &&
-          "begin" in startTime &&
-          "end" in startTime &&
-          startTime.begin &&
-          startTime.end == null
-        ) {
-          queryParam.startTime = {
-            ...startTime,
-            end: new Date().toISOString(),
-          };
-        }
+        const queryParam = search || {};
 
         return this.proposalsService
           .proposalsControllerFullqueryV3(

@@ -5,8 +5,8 @@ import {
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 
 export interface DateRange {
-  begin: string;
-  end: string;
+  begin?: string;
+  end?: string;
 }
 
 export interface FacetCount {

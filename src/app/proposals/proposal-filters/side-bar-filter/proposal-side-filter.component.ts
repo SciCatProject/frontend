@@ -77,6 +77,12 @@ export class ProposalSideFilterComponent implements OnInit {
     const { queryParams } = this.route.snapshot;
     const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
 
+    if (
+      this.activeFilters.startTime["begin"] &&
+      !this.activeFilters.startTime["end"]
+    ) {
+      this.activeFilters.startTime["end"] = new Date().toISOString();
+    }
     this.router.navigate([], {
       queryParams: {
         searchQuery: JSON.stringify({
