@@ -219,7 +219,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
 
     if (
-      this.activeFilters.creationTime["begin"] &&
+      this.activeFilters.creationTime &&
       !this.activeFilters.creationTime["end"]
     ) {
       this.activeFilters.creationTime["end"] = new Date().toISOString();
