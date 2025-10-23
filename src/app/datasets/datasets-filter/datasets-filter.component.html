@@ -28,6 +28,7 @@
         (textChange)="setFilter(filter.key, $event)"
         (dateRangeChange)="setDateFilter(filter.key, $event)"
         (selectionChange)="selectionChange($event)"
+        (checkBoxChange)="setFilter(filter.key, $event)"
         (numericRangeChange)="numericRangeChange(filter.key, $event)"
       ></shared-filter>
     </ng-container>
@@ -229,7 +230,10 @@
                   (input)="updateConditionUnit(i, $event)"
                   [matAutocomplete]="rhsUnits"
                 />
-                <mat-autocomplete #rhsUnits="matAutocomplete" (optionSelected)="updateConditionUnit(i, $event)">
+                <mat-autocomplete
+                  #rhsUnits="matAutocomplete"
+                  (optionSelected)="updateConditionUnit(i, $event)"
+                >
                   <mat-option
                     *ngFor="let unit of getUnits(conditionConfig.condition.lhs)"
                     [value]="unit"

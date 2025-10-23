@@ -18,7 +18,7 @@ import { INumericRange } from "../numeric-range/form/model/numeric-range-field.m
 import { FilterType } from "state-management/state/user.store";
 import { toIsoUtc } from "../filters/utils";
 
-type FacetItem = { _id?: string; label?: string; count: number };
+type FacetItem = { _id: string; label?: string; count: number };
 @Component({
   selector: "shared-filter",
   templateUrl: "./shared-filter.component.html",
@@ -141,7 +141,7 @@ export class SharedFilterComponent implements OnChanges {
     this.numericRangeChange.emit(value);
   }
 
-  /** Checkbox filter helpers */
+  /** Checkbox filter helpers START*/
   filteredFacetCounts(): FacetItem[] {
     const term = (this.filterForm.get("textField")?.value ?? "")
       .toLowerCase()
@@ -155,7 +155,7 @@ export class SharedFilterComponent implements OnChanges {
 
     // apply text filter to the rest
     const filtered = term
-      ? base.filter((x) => (x.label ?? x._id).toLowerCase().includes(term))
+      ? base.filter((x) => (x.label || x._id).toLowerCase().includes(term))
       : base;
 
     // merge (checked/pinned to the top), de-duplicate by _id
@@ -165,6 +165,7 @@ export class SharedFilterComponent implements OnChanges {
 
     return merged;
   }
+
   onShowMore() {
     this.checkboxDisplaylimit += 10;
   }
@@ -185,4 +186,5 @@ export class SharedFilterComponent implements OnChanges {
   }
 
   trackById = (_: number, x: FacetItem) => x._id;
+  /** Checkbox filter helpers END*/
 }

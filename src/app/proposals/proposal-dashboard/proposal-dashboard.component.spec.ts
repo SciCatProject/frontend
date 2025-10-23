@@ -24,42 +24,10 @@ describe("ProposalDashboardComponent", () => {
       storeSpy as Store<any>,
       activatedRouteStub as ActivatedRoute,
     );
-    component.filterLists = [
-      {
-        key: "test1",
-        type: "text",
-        description: "Filter by Unique identifier for the proposal",
-        enabled: true,
-      },
-      {
-        key: "pi_lastname",
-        type: "text",
-        description: "Filter by Last name of the Principal Investigator",
-        enabled: true,
-      },
-      {
-        key: "startTime",
-        type: "dateRange",
-        description: "Filter by Start time of the proposal",
-        enabled: true,
-      },
-      {
-        key: "endTime",
-        type: "dateRange",
-        description: "Filter by End time of the proposal",
-        enabled: true,
-      },
-    ];
   });
 
   it("should create", () => {
     expect(component).toBeTruthy();
-  });
-
-  it("should initialize filterLists correctly", () => {
-    expect(component.filterLists.length).toBe(4);
-    expect(component.filterLists[0].key).toBe("test1");
-    expect(component.filterLists[3].type).toBe("dateRange");
   });
 
   it("should dispatch fetchProposalsAction and fetchFacetCountsAction on ngOnInit", () => {

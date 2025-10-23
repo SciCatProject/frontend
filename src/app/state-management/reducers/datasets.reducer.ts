@@ -391,10 +391,10 @@ const reducer = createReducer(
       } else {
         filters[key] = value;
       }
-
       return { ...state, filters };
     },
   ),
+
   on(
     fromActions.removeDatasetFilterAction,
     (state, { key, value, filterType }): DatasetState => {

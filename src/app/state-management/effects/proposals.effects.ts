@@ -13,6 +13,7 @@ import {
   selectDatasetsQueryParams,
   selectCurrentProposal,
   selectRelatedProposalsFilters,
+  selectFullfacetParams,
 } from "state-management/selectors/proposals.selectors";
 import { map, mergeMap, catchError, switchMap, filter } from "rxjs/operators";
 import { ObservableInput, of } from "rxjs";
@@ -26,6 +27,7 @@ export class ProposalEffects {
   currentProposal$ = this.store.select(selectCurrentProposal);
   relatedProposalFilters$ = this.store.select(selectRelatedProposalsFilters);
   fullqueryParams$ = this.store.select(selectFullqueryParams);
+  fullfacetParams$ = this.store.select(selectFullfacetParams);
   datasetQueryParams$ = this.store.select(selectDatasetsQueryParams);
 
   fetchProposals$ = createEffect(() => {
@@ -62,6 +64,8 @@ export class ProposalEffects {
   fetchFacetCount$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.fetchFacetCountsAction),
+      concatLatestFrom(() => this.fullfacetParams$),
+      map(([, params]) => params),
       switchMap(({ fields, facets }) => {
         return this.proposalsService
           .proposalsControllerFullfacetV3(

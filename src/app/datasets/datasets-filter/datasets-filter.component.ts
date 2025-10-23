@@ -113,6 +113,16 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
 
           this.filtersList.forEach((filter) => {
+            // Apply default filter type from app config if available
+            // This is to handle the case when site admin changed the filter type
+            // whereas user settings still have the old filter type
+            this.appConfig.defaultDatasetsListSettings?.filters?.forEach(
+              (defaultFilter) => {
+                if (filter.key === defaultFilter.key) {
+                  filter.type = defaultFilter.type;
+                }
+              },
+            );
             if (!filter.enabled && searchQuery[filter.key]) {
               delete searchQuery[filter.key];
               delete this.activeFilters[filter.key];
@@ -281,7 +291,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     }
   }
 
-  setFilter(filterKey: string, value: string) {
+  setFilter(filterKey: string, value: string | string[]) {
     if (value) {
       this.activeFilters[filterKey] = value;
 
@@ -301,6 +311,14 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           filterType: "text",
         }),
       );
+    }
+
+    // Auto-trigger for array values or checkbox filter
+    // This applies to both multiselect type and checkBoxFilter
+    // skip PID text input to avoid triggering on keystrokes
+    // Array check can be removed when we remove text input filter type
+    if (Array.isArray(value) && this.appConfig.checkBoxFilterClickTrigger) {
+      this.applyFilters();
     }
   }
 
@@ -329,14 +347,22 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   selectionChange({ event, key, value }: MultiSelectFilterValue) {
     if (event === "add") {
-      this.addMultiSelectFilterToActiveFilters(key, value);
+      this.addMultiSelectFilterToActiveFilters(key, value._id);
       this.store.dispatch(
-        addDatasetFilterAction({ key, value, filterType: "multiSelect" }),
+        addDatasetFilterAction({
+          key,
+          value: value._id,
+          filterType: "multiSelect",
+        }),
       );
     } else {
-      this.removeMultiSelectFilterFromActiveFilters(key, value);
+      this.removeMultiSelectFilterFromActiveFilters(key, value._id);
       this.store.dispatch(
-        removeDatasetFilterAction({ key, value, filterType: "multiSelect" }),
+        removeDatasetFilterAction({
+          key,
+          value: value._id,
+          filterType: "multiSelect",
+        }),
       );
     }
   }

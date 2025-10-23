@@ -132,12 +132,68 @@ const reducer = createReducer(
       relatedProposals,
     }),
   ),
+
   on(
     fromActions.fetchRelatedProposalsCountCompleteAction,
     (state, { count }): ProposalsState => ({
       ...state,
       relatedProposalsCount: count,
     }),
+  ),
+
+  on(
+    fromActions.clearProposalsFiltersAction,
+    (state): ProposalsState => ({
+      ...state,
+      proposalFilters: {
+        ...state.proposalFilters,
+        fields: {},
+      },
+    }),
+  ),
+
+  on(
+    fromActions.addProposalFilterAction,
+    (state, { key, value, filterType }): ProposalsState => {
+      const filters = {
+        ...state.proposalFilters.fields,
+      };
+      if (filterType === "multiSelect") {
+        const newValue = (state.proposalFilters.fields[key] || [])
+          .concat(value)
+          .filter((val, i, self) => self.indexOf(val) === i); // Unique
+
+        filters[key] = newValue;
+      } else {
+        filters[key] = value;
+      }
+      return {
+        ...state,
+        proposalFilters: { ...state.proposalFilters, fields: filters },
+      };
+    },
+  ),
+
+  on(
+    fromActions.removeProposalFilterAction,
+    (state, { key, value, filterType }): ProposalsState => {
+      const filters = { ...state.proposalFilters.fields };
+
+      if (filterType === "multiSelect") {
+        const newValue = state.proposalFilters.fields[key].filter(
+          (existingValue) => existingValue !== value,
+        );
+
+        filters[key] = newValue;
+      } else {
+        delete filters[key];
+      }
+
+      return {
+        ...state,
+        proposalFilters: { ...state.proposalFilters, fields: filters },
+      };
+    },
   ),
 );
 

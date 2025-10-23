@@ -299,7 +299,7 @@ export const addDatasetFilterAction = createAction(
   props<{
     key: string;
     value: string | DateRange | string[] | INumericRange;
-    filterType: "text" | "dateRange" | "number" | "multiSelect";
+    filterType: "text" | "dateRange" | "number" | "multiSelect" | "checkbox";
   }>(),
 );
 export const removeDatasetFilterAction = createAction(
@@ -307,7 +307,7 @@ export const removeDatasetFilterAction = createAction(
   props<{
     key: string;
     value?: string;
-    filterType: "text" | "dateRange" | "number" | "multiSelect";
+    filterType: "text" | "dateRange" | "number" | "multiSelect" | "checkbox";
   }>(),
 );
 
