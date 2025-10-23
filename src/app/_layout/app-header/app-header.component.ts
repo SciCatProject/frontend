@@ -38,6 +38,7 @@ export class AppHeaderComponent implements OnInit {
       ? "scicat-header-logo-icon.png"
       : "scicat-header-logo-full.png";
   siteHeaderLogo = this.config.siteHeaderLogo ?? "site-header-logo.png";
+  ingestorEnabled = this.config.ingestorComponent?.ingestorEnabled ?? false;
 
   oAuth2Endpoints: OAuth2Endpoint[] = [];
   username$ = this.store.select(selectCurrentUserName);

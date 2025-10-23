@@ -5,6 +5,7 @@ import { firstValueFrom, forkJoin, of } from "rxjs";
 import { catchError, timeout } from "rxjs/operators";
 import {
   DatasetDetailComponentConfig,
+  IngestorComponentConfig,
   LabelsLocalization,
   ListSettings,
   TableColumn,
@@ -50,6 +51,7 @@ export class MainPageConfiguration {
 
 export class MainMenuOptions {
   datasets: boolean;
+  ingestor: boolean;
   files: boolean;
   instruments: boolean;
   jobs: boolean;
@@ -143,6 +145,7 @@ export interface AppConfigInterface {
   mainMenu?: MainMenuConfiguration;
   supportEmail?: string;
   checkBoxFilterClickTrigger?: boolean;
+  ingestorComponent?: IngestorComponentConfig;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
