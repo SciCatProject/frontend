@@ -88,6 +88,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   fieldTypeMap: { [key: string]: string } = {};
 
+  tempConditionValues: string[] = [];
+
   constructor(
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
@@ -239,7 +241,39 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     });
 
     this.conditionConfigs$.pipe(take(1)).subscribe((conditionConfigs) => {
-      (conditionConfigs || []).forEach((oldCondition) => {
+      const updatedConditions = (conditionConfigs || []).map((config, i) => {
+        if (this.tempConditionValues[i] !== undefined) {
+          const value = this.tempConditionValues[i];
+          const isNumeric = value !== "" && !isNaN(Number(value));
+          if (
+            config.condition.relation === "EQUAL_TO" ||
+            config.condition.relation === "EQUAL_TO_NUMERIC" ||
+            config.condition.relation === "EQUAL_TO_STRING"
+          ) {
+            return {
+              ...config,
+              condition: {
+                ...config.condition,
+                rhs: isNumeric ? Number(value) : value,
+                relation: isNumeric
+                  ? ("EQUAL_TO_NUMERIC" as ScientificCondition["relation"])
+                  : ("EQUAL_TO_STRING" as ScientificCondition["relation"]),
+              },
+            };
+          } else {
+            return {
+              ...config,
+              condition: {
+                ...config.condition,
+                rhs: isNumeric ? Number(value) : value,
+              },
+            };
+          }
+        }
+        return config;
+      });
+
+      updatedConditions.forEach((oldCondition) => {
         this.store.dispatch(
           removeScientificConditionAction({
             condition: oldCondition.condition,
@@ -247,7 +281,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         );
       });
 
-      (conditionConfigs || []).forEach((config) => {
+      updatedConditions.forEach((config) => {
         if (config.enabled && config.condition.lhs && config.condition.rhs) {
           this.store.dispatch(
             addScientificConditionAction({ condition: config.condition }),
@@ -257,7 +291,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
       this.store.dispatch(
         updateUserSettingsAction({
-          property: { conditions: conditionConfigs },
+          property: { conditions: updatedConditions },
         }),
       );
       this.store.dispatch(fetchDatasetsAction());
@@ -649,22 +683,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   updateConditionValue(index: number, event: Event) {
     const newValue = (event.target as HTMLInputElement).value;
-    const currentRelation = this.asyncPipe.transform(this.conditionConfigs$)?.[
-      index
-    ]?.condition.relation;
-    if (
-      currentRelation === "EQUAL_TO" ||
-      currentRelation === "EQUAL_TO_NUMERIC" ||
-      currentRelation === "EQUAL_TO_STRING"
-    ) {
-      const isNumeric = newValue !== "" && !isNaN(Number(newValue));
-      this.updateConditionField(index, {
-        rhs: isNumeric ? Number(newValue) : newValue,
-        relation: isNumeric ? "EQUAL_TO_NUMERIC" : "EQUAL_TO_STRING",
-      });
-    } else {
-      this.updateConditionField(index, { rhs: Number(newValue) });
-    }
+    this.tempConditionValues[index] = newValue;
   }
 
   updateConditionRangeValue(index: number, event: Event, rangeIndex: 0 | 1) {
