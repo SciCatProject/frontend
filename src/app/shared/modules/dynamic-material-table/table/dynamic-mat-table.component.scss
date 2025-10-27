@@ -348,6 +348,8 @@ cdk-virtual-scroll-viewport {
   background: white;
   color: var(--theme-header-1-lighter-contrast);
   border-radius: 0 0 4px 4px;
+  white-space: pre-line;
+  font-family: "Gill Sans", sans-serif;
 }
 
 /* zebra stripes */

@@ -257,6 +257,23 @@ export class DynamicMatTableComponent<T extends TableRow>
       offsetX: 4,
     },
   ];
+  /** Overlay positions for metadata hover */
+  metadataOverlayPositions: ConnectedPosition[] = [
+    {
+      originX: "end",
+      originY: "center",
+      overlayX: "start",
+      overlayY: "center",
+      offsetX: 8,
+    },
+    {
+      originX: "start",
+      originY: "center",
+      overlayX: "end",
+      overlayY: "center",
+      offsetX: -8,
+    },
+  ];
 
   standardDataSource: TableDataSource<T>;
 
@@ -1043,6 +1060,15 @@ export class DynamicMatTableComponent<T extends TableRow>
     }
 
     return value;
+  }
+
+  metadataNameHoverContent(row: any) {
+    return (
+      "<strong>Human readable name: </strong>" +
+      (row.human_name || row.name) +
+      "\n <strong>Raw name: </strong>" +
+      row.name
+    );
   }
 
   /************************************ Drag & Drop Column *******************************************/
