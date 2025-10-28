@@ -58,8 +58,8 @@
           <div class="deposition-info-container">
             <p class="deposition-info">
               Before proceeding with deposition, please ensure that the scientific metadata for this dataset is complete and accurate.
-              You can verify look through the scientific metadata in the "Details" tab. 
-              If it requires changes you can update it using the OpenEM schema.
+              You can verify it by looking through the scientific metadata in the "Details" tab. 
+              If it requires changes you can update it using the metadata schema (when provided).
               Please note, when SI values and units are present, you only need to make changes to the initially provided values and units, 
               convertion to SI will be done automatically, after submitting. 
             </p>
@@ -67,9 +67,9 @@
               class="ingestor"
               mat-raised-button
               color="primary"
-              (click)="onChangeIngestorMetadata()"
+              (click)="onChangeScientificMetadata()"
             >
-              Edit with OpenEM Schema
+              Edit with schema
             </button>
           </div>
 

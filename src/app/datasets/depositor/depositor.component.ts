@@ -29,7 +29,6 @@ import { updatePropertyAction } from "state-management/actions/datasets.actions"
 
 import * as ingestorActions from "state-management/actions/ingestor.actions";
 import { GetExtractorResponse, MethodItem } from "../../shared/sdk/models/ingestor/models"
-import { selectIngestorExtractionMethods} from "state-management/selectors/ingestor.selector";
 
 // import { IngestorMetadataEditorComponent} from "../../ingestor/ingestor-metadata-editor/ingestor-metadata-editor.component"
 
@@ -71,15 +70,13 @@ export class DepositorComponent implements OnInit, OnDestroy {
   showMetadataEditor = false;
 
   metadata: any = {}; 
-  metadataSchema: JsonSchema = null// ideally i get the schema by uid?
+  metadataSchema: JsonSchema = null
 
-  methods$: Observable<MethodItem[]> = this.store.select(selectIngestorExtractionMethods)["methods"];
 
   constructor(
     public appConfigService: AppConfigService,
     private store: Store,
     private fb: FormBuilder,
-    private router: Router,
   ) {
     this.config = this.appConfigService.getConfig();
     this.depositionRepository = new FormControl("");
@@ -107,6 +104,7 @@ export class DepositorComponent implements OnInit, OnDestroy {
       if (dataset) {
         this.metadata = this.dataset.scientificMetadata;
       }
+        // this.metadataSchema = this.dataset.scientificMetadataSchema?||null;
     });
 
     this.store.dispatch(accessEmpiarSchema());
@@ -126,22 +124,22 @@ export class DepositorComponent implements OnInit, OnDestroy {
   onChooseRepo() {
     this.selectedMethod = this.depositionRepository.value;
   }
-
-  onChangeIngestorMetadata(){
-    this.store.dispatch(ingestorActions.getExtractionMethods({ page: 0, pageNumber: 50 }));
-    this.methods$.pipe(
-      take(1),
-    ).subscribe(methods => {
-      const selectedMethod = methods.find(m => m.name === 'Single Particle'); // that's bad, need to use an actual schema from elsewhere!
-      if (selectedMethod) {
-        const parsedSchema: JsonSchema = JSON.parse(selectedMethod.schema);
-        this.metadataSchema = parsedSchema;
-      }
-    });
-    // now it uses metadata tructure in place of schema 
-    this.showMetadataEditor = true
+ async onChangeScientificMetadata() {
+  const selectedMethod = "https://raw.githubusercontent.com/osc-em/OSCEM_Schemas/refs/heads/main/project/spa/jsonschema/oscem_schemas_spa.schema.json";
+  
+  try {
+    // Fetch the JSON file
+    const response = await fetch(selectedMethod);
+    const parsedSchema: JsonSchema = await response.json();
+    this.metadataSchema = parsedSchema;
+    
+    // now it uses metadata structure in place of schema 
+    this.showMetadataEditor = true;
+  } catch (error) {
+    console.error('Failed to load schema:', error);
+    // Handle error appropriately
   }
-
+}
   onMetadataChange(newData: any) {
     this.metadata= newData;
   }
