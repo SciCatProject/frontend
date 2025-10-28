@@ -31,11 +31,13 @@
             matStartDate
             (dateChange)="dateChanged($event, 'begin')"
             formControlName="start"
+            data-cy="creation-time-begin"
           />
           <input
             matEndDate
             (dateChange)="dateChanged($event, 'end')"
             formControlName="end"
+            data-cy="creation-time-end"
           />
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
