@@ -1,6 +1,7 @@
 {
   "accessTokenPrefix": "Bearer ",
   "addDatasetEnabled": true,
+  "allowConfigOverrides": true,
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
   "datasetJsonScientificMetadata": true,
