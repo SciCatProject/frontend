@@ -283,7 +283,6 @@ describe("AppConfigService", () => {
     const mockConfigResponses: Record<string, object> = {
       "/assets/config.json": {
         accessTokenPrefix: "",
-        allowConfigOverrides: true,
         lbBaseURL: "http://127.0.0.1:3000",
         gettingStarted: null,
         defaultMainPage: {
@@ -309,7 +308,6 @@ describe("AppConfigService", () => {
 
     const mergedConfig = {
       accessTokenPrefix: "Bearer ",
-      allowConfigOverrides: true,
       lbBaseURL: "http://127.0.0.1:3000",
       gettingStarted: "aGettingStarted",
       addDatasetEnabled: true,
@@ -336,8 +334,11 @@ describe("AppConfigService", () => {
             }
             return of(mergedConfig);
           }
-          mockConfigResponses["/assets/config.json"]["allowConfigOverrides"] =
-            configOverrideEnabled;
+          if (url === "/assets/config.json")
+            return of({
+              ...(mockConfigResponses[url] || {}),
+              allowConfigOverrides: configOverrideEnabled,
+            });
           return of(mockConfigResponses[url] || {});
         },
       );
@@ -356,11 +357,12 @@ describe("AppConfigService", () => {
       it(`should merge ${configOverrideEnabled} multiple config JSONs`, async () => {
         mockHttpGet(configOverrideEnabled);
         const config = await service["mergeConfig"]();
-        expect(config).toEqual(
-          configOverrideEnabled
+        expect(config).toEqual({
+          ...(configOverrideEnabled
             ? mergedConfig
-            : mockConfigResponses["/assets/config.json"],
-        );
+            : mockConfigResponses["/assets/config.json"]),
+          allowConfigOverrides: configOverrideEnabled,
+        });
       });
     });
 
@@ -369,11 +371,12 @@ describe("AppConfigService", () => {
         mockHttpGet(configOverrideEnabled, true);
         await service.loadAppConfig();
 
-        expect(service["appConfig"]).toEqual(
-          configOverrideEnabled
+        expect(service["appConfig"]).toEqual({
+          ...(configOverrideEnabled
             ? mergedConfig
-            : mockConfigResponses["/assets/config.json"],
-        );
+            : mockConfigResponses["/assets/config.json"]),
+          allowConfigOverrides: configOverrideEnabled,
+        });
         expect(service["http"].get).toHaveBeenCalledTimes(
           configOverrideEnabled ? 3 : 2,
         );

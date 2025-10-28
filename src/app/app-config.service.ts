@@ -166,20 +166,35 @@ export class AppConfigService {
 
   private async mergeConfig(): Promise<object> {
     const config = await firstValueFrom(
-      this.http
-        .get<Partial<AppConfigInterface>>("/assets/config.json")
-        .pipe(catchError(() => of({} as Partial<AppConfigInterface>))),
+      this.http.get<Partial<AppConfigInterface>>("/assets/config.json").pipe(
+        catchError(() => {
+          console.error("No config provided.");
+          return of({} as Partial<AppConfigInterface>);
+        }),
+      ),
     );
     let configOverrideRequest: Partial<AppConfigInterface> = {};
     if (config?.allowConfigOverrides) {
       configOverrideRequest = await firstValueFrom(
         this.http
           .get<Partial<AppConfigInterface>>("/assets/config.override.json")
-          .pipe(catchError(() => of({} as Partial<AppConfigInterface>))),
+          .pipe(
+            catchError(() => {
+              console.error(
+                "allowConfigOverrides set to true but no config.override provided.",
+              );
+              return of({} as Partial<AppConfigInterface>);
+            }),
+          ),
       );
     }
-    return mergeWith({}, config, configOverrideRequest, (objVal, srcVal) =>
-      Array.isArray(objVal) && Array.isArray(srcVal) ? srcVal : undefined,
+    // Custom merge to replace arrays instead of merging them
+    return mergeWith(
+      {},
+      config ?? {},
+      configOverrideRequest ?? {},
+      (objVal, srcVal) =>
+        Array.isArray(objVal) && Array.isArray(srcVal) ? srcVal : undefined,
     );
   }
 
@@ -192,12 +207,8 @@ export class AppConfigService {
       this.appConfig = Object.assign({}, this.appConfig, config);
     } catch (err) {
       console.log("No config available in backend, trying with local config.");
-      try {
-        const config = await this.mergeConfig();
-        this.appConfig = Object.assign({}, this.appConfig, config);
-      } catch (err) {
-        console.error("No config provided.");
-      }
+      const config = await this.mergeConfig();
+      this.appConfig = Object.assign({}, this.appConfig, config);
     }
 
     const config: AppConfigInterface = this.appConfig as AppConfigInterface;
