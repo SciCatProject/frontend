@@ -37,7 +37,7 @@
                   (mouseenter)="hoverKey = key"
                   (mouseleave)="hoverKey = null"
                 >
-                  {{ getHumanName(key) }}
+                  {{getHumanName(key) || key}}
                 </span>
 
                 <!-- Hover overlay -->
@@ -52,15 +52,20 @@
                       Name Details
                     </mat-card-title>
                     <div mat-card-content class="hover-card-content">
+                      <ng-container *ngIf="getHumanName(key); else rawNameOnly">
                       <strong>Human readable name:</strong>
                       {{ getHumanName(key) }}
                       <br />
                       <strong>Raw name:</strong> {{ key }}
+                      </ng-container>
                     </div>
+                    <ng-template #rawNameOnly>
+                      <strong>Raw name:</strong> {{ key }}
+                    </ng-template>
                   </mat-card>
                 </ng-template>
               </div>
-              <div class="raw-name" *ngIf="getHumanName(key) !== key">
+              <div class="raw-name" *ngIf="getHumanName(key)">
                 {{ key }}
               </div>
             </div>

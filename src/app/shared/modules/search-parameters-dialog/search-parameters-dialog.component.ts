@@ -141,6 +141,6 @@ export class SearchParametersDialogComponent {
   }
 
   getHumanName(key: string): string {
-    return this.humanNameMap[key] || key;
+    return this.humanNameMap[key] || "";
   }
 }

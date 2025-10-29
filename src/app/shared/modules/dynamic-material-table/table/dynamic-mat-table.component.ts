@@ -1063,9 +1063,12 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   metadataNameHoverContent(row: any) {
+    if (!row.human_name) {
+      return "<strong>Raw name : </strong>" + row.name;
+    }
     return (
       "<strong>Human readable name: </strong>" +
-      (row.human_name || row.name) +
+      (row.human_name || "") +
       "\n <strong>Raw name: </strong>" +
       row.name
     );

@@ -94,7 +94,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
               if (row.human_name && row.name) {
                 return `
                   <div class="metadata-name-wrapper">
-                    <div class="metadata-human-name">${displayName}</div>
+                    <div class="metadata-human-name">${row.human_name}</div>
                     <div class="metadata-raw-name">${row.name}</div>
                   </div>
                 `;
