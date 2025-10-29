@@ -216,7 +216,7 @@ export class SampleDetailComponent
   }
 
   emptyMetadataTable(): boolean {
-    if (this.appConfig.showEmptyMetadataTable === false) {
+    if (this.appConfig.hideEmptyMetadataTable) {
       return (
         !!this.sample?.sampleCharacteristics &&
         Object.keys(this.sample.sampleCharacteristics).length > 0

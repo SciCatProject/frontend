@@ -70,7 +70,7 @@ export class InstrumentDetailsComponent
   }
 
   emptyMetadataTable(): boolean {
-    if (this.appConfig.showEmptyMetadataTable === false) {
+    if (this.appConfig.hideEmptyMetadataTable) {
       return (
         !!this.currentInstrument?.customMetadata &&
         Object.keys(this.currentInstrument.customMetadata).length > 0

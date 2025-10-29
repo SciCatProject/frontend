@@ -96,7 +96,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     );
 
     this.subscriptions.push(
-      this.store.select(selectCurrentDataset).subscribe((dataset) => {
+      this.dataset$.subscribe((dataset) => {
         this.dataset = dataset;
       }),
     );
@@ -256,7 +256,7 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   }
 
   emptyMetadataTable(): boolean {
-    if (this.appConfig.showEmptyMetadataTable === false) {
+    if (this.appConfig.hideEmptyMetadataTable) {
       return (
         !!this.dataset?.scientificMetadata &&
         Object.keys(this.dataset.scientificMetadata).length > 0

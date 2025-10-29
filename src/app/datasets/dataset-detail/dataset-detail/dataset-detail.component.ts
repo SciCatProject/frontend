@@ -303,7 +303,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     this.attachmentService.openAttachment(encoded);
   }
   emptyMetadataTable(): boolean {
-    if (this.appConfig.showEmptyMetadataTable === false) {
+    if (this.appConfig.hideEmptyMetadataTable) {
       return (
         !!this.dataset?.scientificMetadata &&
         Object.keys(this.dataset.scientificMetadata).length > 0
