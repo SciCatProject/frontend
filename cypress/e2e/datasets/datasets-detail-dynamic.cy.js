@@ -3,8 +3,7 @@ import { mergeConfig } from "../../support/utils";
 
 describe("Datasets Detail View Dynamic", () => {
   const dynamicComponentConfig = testConfig.dynamicDetialViewComponent;
-  const customizedLabelSets =
-    dynamicComponentConfig.labelsLocalization.dataset;
+  const customizedLabelSets = dynamicComponentConfig.labelsLocalization.dataset;
   const customizedComponents =
     dynamicComponentConfig.datasetDetailComponent.customization;
 
@@ -135,5 +134,16 @@ describe("Datasets Detail View Dynamic", () => {
       .each(($img) => {
         cy.wrap($img).should("have.attr", "class").and("contain", expectedSize);
       });
+  });
+
+  it("should render tabs correctly on reload", () => {
+    cy.get("mat-row").contains("Cypress Dataset").click();
+
+    cy.reload();
+
+    cy.get(".mat-mdc-tab-link").contains("Details").should("exist");
+    cy.get(".mat-mdc-tab-link").contains("Attachments").should("exist");
+    cy.get(".mat-mdc-tab-link").contains("Logbook").should("exist");
+    cy.get(".mat-mdc-tab-link").contains("Datafiles").should("exist");
   });
 });
