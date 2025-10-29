@@ -295,7 +295,6 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     this.items.removeAt(index);
   }
 
-
   addCurrentMetadata() {
     if (this.metadata) {
       Object.keys(this.metadata).forEach((key, index) => {
