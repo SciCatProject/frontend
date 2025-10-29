@@ -214,6 +214,17 @@ export class SampleDetailComponent
   onHasUnsavedChanges($event: boolean) {
     this._hasUnsavedChanges = $event;
   }
+
+  emptyMetadataTable(): boolean {
+    if (this.appConfig.hideEmptyMetadataTable) {
+      return (
+        !!this.sample?.sampleCharacteristics &&
+        Object.keys(this.sample.sampleCharacteristics).length > 0
+      );
+    }
+    return true;
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
