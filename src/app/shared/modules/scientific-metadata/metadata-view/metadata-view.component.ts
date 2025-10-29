@@ -84,7 +84,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
         columnSetting: [
           {
             name: "human_name",
-            header: "Name",
+            header: "Name Details",
             width: 250,
             hoverContent: true,
             hoverOnCell: true,
