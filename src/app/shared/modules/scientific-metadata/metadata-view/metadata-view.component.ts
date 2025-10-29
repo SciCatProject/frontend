@@ -88,9 +88,17 @@ export class MetadataViewComponent implements OnInit, OnChanges {
             width: 250,
             hoverContent: true,
             hoverOnCell: true,
-            cellEllipsisRow: 1,
             customRender: (column, row) => {
               const displayName = row.human_name || row.name || "";
+
+              if (row.human_name && row.name) {
+                return `
+                  <div class="metadata-name-wrapper">
+                    <div class="metadata-human-name">${displayName}</div>
+                    <div class="metadata-raw-name">${row.name}</div>
+                  </div>
+                `;
+              }
               return `<span class="metadata-name">${displayName}</span>`;
             },
           },

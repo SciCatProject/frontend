@@ -29,11 +29,48 @@
             (click)="parametersForm.get('lhs').setValue(key); getUnits(key)"
             style="cursor: pointer"
           >
-            {{ key }}
+            <div class="parameter-option">
+              <div class="human-name">
+                <span
+                  #hoverOriginSpan="cdkOverlayOrigin"
+                  cdkOverlayOrigin
+                  (mouseenter)="hoverKey = key"
+                  (mouseleave)="hoverKey = null"
+                >
+                  {{ getHumanName(key) }}
+                </span>
+
+                <!-- Hover overlay -->
+                <ng-template
+                  cdkConnectedOverlay
+                  [cdkConnectedOverlayOrigin]="hoverOriginSpan"
+                  [cdkConnectedOverlayOpen]="hoverKey === key"
+                  [cdkConnectedOverlayPositions]="overlayPositions"
+                >
+                  <mat-card class="hover-card">
+                    <mat-card-title class="hover-card-title">
+                      Name Details
+                    </mat-card-title>
+                    <div mat-card-content class="hover-card-content">
+                      <strong>Human readable name:</strong>
+                      {{ getHumanName(key) }}
+                      <br />
+                      <strong>Raw name:</strong> {{ key }}
+                    </div>
+                  </mat-card>
+                </ng-template>
+              </div>
+              <div class="raw-name" *ngIf="getHumanName(key) !== key">
+                {{ key }}
+              </div>
+            </div>
           </td>
         </ng-container>
-        <tr mat-row *matRowDef="let row; columns: ['field']"
-        [class.selected_row]="row === parametersForm.get('lhs').value"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: ['field']"
+          [class.selected_row]="row === parametersForm.get('lhs').value"
+        ></tr>
       </table>
     </div>
   </mat-dialog-content>

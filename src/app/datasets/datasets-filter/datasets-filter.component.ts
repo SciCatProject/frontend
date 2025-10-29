@@ -30,7 +30,10 @@ import {
 import { AsyncPipe } from "@angular/common";
 import { Subscription } from "rxjs";
 import { take } from "rxjs/operators";
-import { SearchParametersDialogComponent } from "../../shared/modules/search-parameters-dialog/search-parameters-dialog.component";
+import {
+  SearchParametersDialogComponent,
+  SearchParametersDialogData,
+} from "../../shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import {
   selectMetadataKeys,
   selectDatasets,
@@ -466,13 +469,17 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         );
 
         this.dialog
-          .open(SearchParametersDialogComponent, {
-            data: {
-              usedFields: usedFields,
-              parameterKeys: availableKeys,
+          .open<SearchParametersDialogComponent, SearchParametersDialogData>(
+            SearchParametersDialogComponent,
+            {
+              data: {
+                usedFields: usedFields,
+                parameterKeys: availableKeys,
+                humanNameMap: this.humanNameMap,
+              },
+              restoreFocus: false,
             },
-            restoreFocus: false,
-          })
+          )
           .afterClosed()
           .subscribe((res) => {
             if (res) {

@@ -6,6 +6,15 @@ import { map, startWith } from "rxjs/operators";
 import { UnitsService } from "shared/services/units.service";
 import { ScientificCondition } from "../../../state-management/models";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { ConnectedPosition } from "@angular/cdk/overlay";
+
+export interface SearchParametersDialogData {
+  parameterKeys: string[];
+  usedFields: string[];
+  condition?: ScientificCondition;
+  humanNameMap?: { [key: string]: string };
+}
+
 @Component({
   selector: "search-parameters-dialog",
   templateUrl: "./search-parameters-dialog.component.html",
@@ -18,6 +27,25 @@ export class SearchParametersDialogComponent {
 
   parameterKeys = this.data.parameterKeys;
   units: string[] = [];
+  humanNameMap: { [key: string]: string } = {};
+  hoverKey: string | null = null;
+
+  overlayPositions: ConnectedPosition[] = [
+    {
+      originX: "end",
+      originY: "center",
+      overlayX: "start",
+      overlayY: "center",
+      offsetX: 8,
+    },
+    {
+      originX: "center",
+      originY: "center",
+      overlayX: "end",
+      overlayY: "top",
+      offsetY: 8,
+    },
+  ];
 
   parametersForm = new FormGroup({
     lhs: new FormControl(this.data.condition?.lhs || "", [
@@ -56,11 +84,7 @@ export class SearchParametersDialogComponent {
   constructor(
     public appConfigService: AppConfigService,
     @Inject(MAT_DIALOG_DATA)
-    public data: {
-      parameterKeys: string[];
-      usedFields: string[];
-      condition?: ScientificCondition;
-    },
+    public data: SearchParametersDialogData,
     public dialogRef: MatDialogRef<SearchParametersDialogComponent>,
     private unitsService: UnitsService,
     private snackBar: MatSnackBar,
@@ -68,6 +92,7 @@ export class SearchParametersDialogComponent {
     if (this.data.condition?.lhs) {
       this.getUnits(this.data.condition.lhs);
     }
+    this.humanNameMap = data.humanNameMap || {};
   }
 
   add = (): void => {
@@ -113,5 +138,9 @@ export class SearchParametersDialogComponent {
 
   get lhs(): string {
     return this.parametersForm.get("lhs")?.value;
+  }
+
+  getHumanName(key: string): string {
+    return this.humanNameMap[key] || key;
   }
 }
