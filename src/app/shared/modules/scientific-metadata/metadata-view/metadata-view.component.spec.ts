@@ -8,6 +8,8 @@ import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
 import { LinkyPipe } from "ngx-linky";
 import { DatePipe, TitleCasePipe } from "@angular/common";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
+import { AppConfigService } from "app-config.service";
+import { provideHttpClient } from "@angular/common/http";
 
 describe("MetadataViewComponent", () => {
   let component: MetadataViewComponent;
@@ -23,12 +25,24 @@ describe("MetadataViewComponent", () => {
         DatePipe,
         LinkyPipe,
         PrettyUnitPipe,
+        AppConfigService,
+        provideHttpClient(),
       ],
       declarations: [MetadataViewComponent],
     }).compileComponents();
   }));
 
   beforeEach(() => {
+    const appConfigService = TestBed.inject(AppConfigService);
+    spyOn(appConfigService as any, "getConfig").and.returnValue({
+      metadataFloatFormatEnabled: true,
+      metadataFloatFormat: {
+        significantDigits: 3,
+        minCutoff: 0.001,
+        maxCutoff: 1000,
+      },
+    });
+
     fixture = TestBed.createComponent(MetadataViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -51,6 +65,19 @@ describe("MetadataViewComponent", () => {
       expect(metadataArray[0]["name"]).toEqual("typedTestName");
       expect(metadataArray[0]["value"]).toEqual("test");
       expect(metadataArray[0]["unit"]).toEqual("");
+    });
+
+    it("should round float value if float formatting enabled", () => {
+      const testMetadata = {
+        someMetadata: {
+          value: 12.39421321511,
+          unit: "m",
+        },
+      };
+      const metadataArray = component.createMetadataArray(testMetadata);
+
+      expect(metadataArray[0]["value"]).toEqual("12.4");
+      expect(metadataArray[0]["unit"]).toEqual("m");
     });
 
     it("should parse an untyped metadata object to an array", () => {
