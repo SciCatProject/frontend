@@ -24,20 +24,26 @@
       >
         <ng-container matColumnDef="field">
           <td
+            class="cell-content"
             mat-cell
             *matCellDef="let key"
             (click)="parametersForm.get('lhs').setValue(key); getUnits(key)"
             style="cursor: pointer"
           >
+            <div>
+              <mat-icon
+                class="cell-icon"
+                fontIcon="description"
+                #hoverOriginSpan="cdkOverlayOrigin"
+                cdkOverlayOrigin
+                (mouseenter)="hoverKey = key"
+                (mouseleave)="hoverKey = null"
+              ></mat-icon>
+            </div>
             <div class="parameter-option">
               <div class="human-name">
-                <span
-                  #hoverOriginSpan="cdkOverlayOrigin"
-                  cdkOverlayOrigin
-                  (mouseenter)="hoverKey = key"
-                  (mouseleave)="hoverKey = null"
-                >
-                  {{getHumanName(key) || key}}
+                <span>
+                  {{ getHumanName(key) || key }}
                 </span>
 
                 <!-- Hover overlay -->
@@ -53,10 +59,10 @@
                     </mat-card-title>
                     <div mat-card-content class="hover-card-content">
                       <ng-container *ngIf="getHumanName(key); else rawNameOnly">
-                      <strong>Human readable name:</strong>
-                      {{ getHumanName(key) }}
-                      <br />
-                      <strong>Raw name:</strong> {{ key }}
+                        <strong>Human readable name: </strong>
+                        {{ getHumanName(key) }}
+                        <br />
+                        <strong>Raw name:</strong> {{ key }}
                       </ng-container>
                     </div>
                     <ng-template #rawNameOnly>
@@ -72,6 +78,7 @@
           </td>
         </ng-container>
         <tr
+          class="row-content"
           mat-row
           *matRowDef="let row; columns: ['field']"
           [class.selected_row]="row === parametersForm.get('lhs').value"

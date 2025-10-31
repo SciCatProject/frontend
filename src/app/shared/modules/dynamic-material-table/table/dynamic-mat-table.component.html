@@ -164,13 +164,20 @@
               class="label-cell"
             >
               <ng-container *ngIf="column.hoverOnCell; else noHoverCell">
-                <span
-                  #hoverOriginSpan="cdkOverlayOrigin"
-                  cdkOverlayOrigin
-                  (mouseenter)="hoverKey = makeKey(row, column)"
-                  (mouseleave)="hoverKey = null"
-                  [innerHTML]="columnName(row, column)"
-                ></span>
+                <span class="cell-with-icon">
+                  <mat-icon
+                    class="cell-icon"
+                    fontIcon="description"
+                    #hoverOriginSpan="cdkOverlayOrigin"
+                    cdkOverlayOrigin
+                    (mouseenter)="hoverKey = makeKey(row, column)"
+                    (mouseleave)="hoverKey = null"
+                  ></mat-icon>
+                  <span
+                    class="cell-text"
+                    [innerHTML]="columnName(row, column)"
+                  ></span>
+                </span>
                 <ng-template
                   cdkConnectedOverlay
                   [cdkConnectedOverlayOrigin]="hoverOriginSpan"
@@ -183,8 +190,11 @@
                         column.header || column.name | translate: localization
                       }}
                     </mat-card-title>
-                    <div mat-card-content class="hover-card-content" [innerHTML]="metadataNameHoverContent(row)">
-                    </div>
+                    <div
+                      mat-card-content
+                      class="hover-card-content"
+                      [innerHTML]="metadataNameHoverContent(row)"
+                    ></div>
                   </mat-card>
                 </ng-template>
               </ng-container>

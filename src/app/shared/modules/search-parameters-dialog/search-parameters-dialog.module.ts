@@ -13,6 +13,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatTableModule } from "@angular/material/table";
 import { MatCardModule } from "@angular/material/card";
 import { OverlayModule } from "@angular/cdk/overlay";
+import { MatIconModule } from "@angular/material/icon";
 
 @NgModule({
   declarations: [SearchParametersDialogComponent],
@@ -23,6 +24,7 @@ import { OverlayModule } from "@angular/cdk/overlay";
     MatButtonModule,
     MatDialogModule,
     MatFormFieldModule,
+    MatIconModule,
     MatInputModule,
     MatOptionModule,
     MatSelectModule,

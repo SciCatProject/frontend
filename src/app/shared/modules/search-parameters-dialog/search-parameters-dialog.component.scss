@@ -4,6 +4,22 @@ mat-dialog-content {
   flex-direction: column;
   width: 100vh;
 
+  .row-content {
+    height: fit-content;
+  }
+
+  .cell-content {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .cell-icon {
+    color: var(--theme-primary-default);
+    flex-shrink: 0; /* prevent icon from being hidden */
+    font-size: 20px;
+    transform: translateY(4px);
+  }
   .search-field {
     width: 100%;
   }
@@ -27,14 +43,11 @@ mat-dialog-content {
   .parameter-option {
     display: flex;
     flex-direction: column;
-    line-height: 1.3;
+    min-width: 0;
     max-width: 100%;
 
     .human-name {
       font-size: 16px;
-      font-weight: 500;
-      display: block;
-      max-width: 400px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -45,8 +58,6 @@ mat-dialog-content {
       margin-top: 2px;
       font-style: italic;
       color: rgba(0, 0, 0, 0.54);
-      display: block;
-      max-width: 400px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -57,16 +68,14 @@ mat-dialog-content {
 .hover-card {
   min-width: 300px;
   max-width: 620px;
-  overflow: hidden;
 }
 
 .hover-card-title {
-  padding: 6px 16px;
+  padding: 0 16px;
+  font-size: 14px;
   border-radius: 4px 4px 0 0;
   color: white;
   background: var(--theme-header-1-lighter);
-  word-wrap: break-word;
-  overflow-wrap: break-word;
 }
 
 .hover-card-content {
@@ -74,14 +83,6 @@ mat-dialog-content {
   background: white;
   color: var(--theme-header-1-lighter-contrast);
   border-radius: 0 0 4px 4px;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  font-size: 14px;
-  line-height: 1.5;
+  white-space: pre-line;
   word-wrap: break-word;
-  overflow-wrap: break-word;
-  word-break: break-word;
-
-  strong {
-    font-weight: 600;
-  }
 }
