@@ -237,9 +237,13 @@ export class ProposalSideFilterComponent implements OnInit {
   reset() {
     this.clearFilters = true;
 
-    this.store.dispatch(clearProposalsFiltersAction());
+    if (this.activeFilters.text) {
+      this.activeFilters = { text: this.activeFilters.text };
+    } else {
+      this.activeFilters = {};
+    }
 
-    this.activeFilters = {};
+    this.store.dispatch(clearProposalsFiltersAction());
 
     this.applyFilters();
 

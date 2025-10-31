@@ -20,9 +20,20 @@ export interface FacetCounts {
 
 export interface ProposalFilters {
   fields: {
+    proposalId?: string[];
+    title?: string[];
+    abstract?: string[];
     startTime?: DateRange | null;
+    endTime?: DateRange | null;
     instrumentIds?: string[];
+    pi_firstname?: string[];
     pi_lastname?: string[];
+    pi_email?: string[];
+    ownerGroup?: string[];
+    accessGroups?: string[];
+    isPublished?: boolean | null;
+    type?: string[];
+    text?: string;
   };
   skip: number;
   limit: number;

@@ -87,8 +87,6 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
   tablesSettings: object;
 
   datasets: OutputDatasetObsoleteDto[] = [];
-  instruments: Instrument[] = [];
-  instrumentMap: Map<string, Instrument> = new Map();
 
   @Input()
   dataSource!: BehaviorSubject<ProposalClass[]>;

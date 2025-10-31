@@ -21,6 +21,7 @@ import {
   loadingAction,
   loadingCompleteAction,
 } from "state-management/actions/user.actions";
+import { AppConfigService } from "app-config.service";
 
 @Injectable()
 export class ProposalEffects {
@@ -65,7 +66,16 @@ export class ProposalEffects {
     return this.actions$.pipe(
       ofType(fromActions.fetchFacetCountsAction),
       concatLatestFrom(() => this.fullfacetParams$),
-      map(([, params]) => params),
+      map(([, params]) => {
+        const config = this.appConfigService.getConfig();
+        const filters = config.defaultProposalsListSettings?.filters ?? [];
+        const facets = filters.map((f) => f.key);
+
+        return {
+          ...params,
+          facets,
+        };
+      }),
       switchMap(({ fields, facets }) => {
         return this.proposalsService
           .proposalsControllerFullfacetV3(
@@ -366,6 +376,7 @@ export class ProposalEffects {
     private actions$: Actions,
     private datasetsService: DatasetsService,
     private proposalsService: ProposalsService,
+    private appConfigService: AppConfigService,
     private store: Store,
   ) {}
 
