@@ -27,6 +27,7 @@ import {
   loadingAction,
   loadingCompleteAction,
 } from "state-management/actions/user.actions";
+import { AppConfigService } from "app-config.service";
 
 const proposal = createMock<ProposalClass>({
   proposalId: "testId",
@@ -47,6 +48,12 @@ describe("ProposalEffects", () => {
   let effects: ProposalEffects;
   let proposalApi: jasmine.SpyObj<ProposalsService>;
   let datasetApi: jasmine.SpyObj<DatasetsService>;
+
+  const getConfig = () => ({
+    defaultProposalsListSettings: {
+      filters: [],
+    },
+  });
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -86,6 +93,7 @@ describe("ProposalEffects", () => {
             "datasetsControllerCountV3",
           ]),
         },
+        { provide: AppConfigService, useValue: { getConfig } },
       ],
     });
 

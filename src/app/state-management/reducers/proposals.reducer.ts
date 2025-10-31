@@ -147,10 +147,15 @@ const reducer = createReducer(
       ...state,
       proposalFilters: {
         ...state.proposalFilters,
-        fields: {},
+        fields: { text: state.proposalFilters.fields.text },
       },
     }),
   ),
+
+  on(fromActions.setInitialProposalsFiltersAction, (state, { fields }) => ({
+    ...state,
+    proposalFilters: { ...state.proposalFilters, fields },
+  })),
 
   on(
     fromActions.addProposalFilterAction,
@@ -167,6 +172,7 @@ const reducer = createReducer(
       } else {
         filters[key] = value;
       }
+
       return {
         ...state,
         proposalFilters: { ...state.proposalFilters, fields: filters },
