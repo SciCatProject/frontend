@@ -285,15 +285,25 @@ describe("AppConfigService", () => {
         accessTokenPrefix: "",
         lbBaseURL: "http://127.0.0.1:3000",
         gettingStarted: null,
+        defaultMainPage: {
+          nonAuthenticatedUser: "DATASETS",
+          authenticatedUser: "DATASETS",
+        },
         mainMenu: { nonAuthenticatedUser: { datasets: true } },
+        dateFormat: "yyyy-MM-dd HH:mm",
+        oAuth2Endpoints: [
+          {
+            authURL: "abcd",
+          },
+        ],
       },
-      "/assets/config.0.json": { accessTokenPrefix: "Bearer " },
       "/assets/config.override.json": {
+        accessTokenPrefix: "Bearer ",
         gettingStarted: "aGettingStarted",
         addDatasetEnabled: true,
         mainMenu: { nonAuthenticatedUser: { files: true } },
+        oAuth2Endpoints: [],
       },
-      "/assets/config.override.0.json": { siteTitle: "Test title" },
     };
 
     const mergedConfig = {
@@ -301,11 +311,19 @@ describe("AppConfigService", () => {
       lbBaseURL: "http://127.0.0.1:3000",
       gettingStarted: "aGettingStarted",
       addDatasetEnabled: true,
-      siteTitle: "Test title",
+      defaultMainPage: {
+        nonAuthenticatedUser: "DATASETS",
+        authenticatedUser: "DATASETS",
+      },
       mainMenu: { nonAuthenticatedUser: { datasets: true, files: true } },
+      oAuth2Endpoints: [],
+      dateFormat: "yyyy-MM-dd HH:mm",
     };
 
-    const mockHttpGet = (backendError = false) => {
+    const mockHttpGet = (
+      configOverrideEnabled: boolean,
+      backendError = false,
+    ) => {
       spyOn(service["http"], "get").and.callFake(
         (url: string): Observable<any> => {
           if (url === "/api/v3/admin/config") {
@@ -316,6 +334,11 @@ describe("AppConfigService", () => {
             }
             return of(mergedConfig);
           }
+          if (url === "/assets/config.json")
+            return of({
+              ...(mockConfigResponses[url] || {}),
+              allowConfigOverrides: configOverrideEnabled,
+            });
           return of(mockConfigResponses[url] || {});
         },
       );
@@ -330,28 +353,42 @@ describe("AppConfigService", () => {
       expect(config).toEqual(appConfig);
     });
 
-    it("should merge multiple config JSONs", async () => {
-      mockHttpGet();
-      const config = await service["mergeConfig"]();
-      expect(config).toEqual(mergedConfig);
+    [true, false].forEach((configOverrideEnabled) => {
+      it(`should merge ${configOverrideEnabled} multiple config JSONs`, async () => {
+        mockHttpGet(configOverrideEnabled);
+        const config = await service["mergeConfig"]();
+        expect(config).toEqual({
+          ...(configOverrideEnabled
+            ? mergedConfig
+            : mockConfigResponses["/assets/config.json"]),
+          allowConfigOverrides: configOverrideEnabled,
+        });
+      });
     });
 
-    it("should return the merged appConfig", async () => {
-      mockHttpGet(true);
-      await service.loadAppConfig();
+    [true, false].forEach((configOverrideEnabled) => {
+      it(`should return the merged ${configOverrideEnabled} appConfig`, async () => {
+        mockHttpGet(configOverrideEnabled, true);
+        await service.loadAppConfig();
 
-      expect(service["appConfig"]).toEqual(
-        jasmine.objectContaining(mergedConfig),
-      );
-      expect(service["http"].get).toHaveBeenCalledWith("/api/v3/admin/config");
-      expect(service["http"].get).toHaveBeenCalledWith("/assets/config.json");
-      expect(service["http"].get).toHaveBeenCalledWith("/assets/config.0.json");
-      expect(service["http"].get).toHaveBeenCalledWith(
-        "/assets/config.override.json",
-      );
-      expect(service["http"].get).toHaveBeenCalledWith(
-        "/assets/config.override.0.json",
-      );
+        expect(service["appConfig"]).toEqual({
+          ...(configOverrideEnabled
+            ? mergedConfig
+            : mockConfigResponses["/assets/config.json"]),
+          allowConfigOverrides: configOverrideEnabled,
+        });
+        expect(service["http"].get).toHaveBeenCalledTimes(
+          configOverrideEnabled ? 3 : 2,
+        );
+        expect(service["http"].get).toHaveBeenCalledWith(
+          "/api/v3/admin/config",
+        );
+        expect(service["http"].get).toHaveBeenCalledWith("/assets/config.json");
+        if (configOverrideEnabled)
+          expect(service["http"].get).toHaveBeenCalledWith(
+            "/assets/config.override.json",
+          );
+      });
     });
   });
 });

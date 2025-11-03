@@ -52,8 +52,8 @@ const initialProposalsState: ProposalsState = {
 
   proposalFilters: {
     fields: {
-      text: "test",
-      dateRange: {
+      instrumentIds: ["test"],
+      startTime: {
         begin: new Date(2019, 11, 1).toISOString(),
         end: new Date(2019, 11, 2).toISOString(),
       },

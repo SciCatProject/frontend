@@ -417,4 +417,52 @@ describe("Datasets general", () => {
       cy.get(".dataset-table mat-row").contains("Cypress Dataset").should("exist");
     });
   });
+
+  describe("Scientific notation in condition panel test", () => {
+    beforeEach(() => {
+      cy.login(Cypress.env("username"), Cypress.env("password"));
+      cy.createDataset({
+        type: "raw",
+        dataFileSize: "small",
+        scientificMetadata: {
+          extra_entry_end_time: { type: "number", value: 310000, unit: "" },
+        },
+        isPublished: true,
+      });
+
+      cy.visit("/datasets");
+    });
+    it("should be able to add condition with scientific notation value", () => {
+
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('[data-cy="add-condition-button"]').click();
+      });
+
+      cy.get('input[name="lhs"]').type("extra_entry_end_time");
+
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      cy.get(".condition-panel").first().click();
+
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("mat-select").click();
+        });
+
+      cy.get("mat-option").contains("=").click();
+
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("input[matInput]").eq(0).clear().type("3.1e4");
+        });
+
+      cy.get('[data-cy="search-button"]').click();
+
+      cy.get(".dataset-table mat-table").should("exist");
+
+      cy.get('[data-cy="remove-condition-button"]').click();
+    });
+  })
 });

@@ -22,6 +22,7 @@ const proposal = createMock<ProposalClass>({
   type: "",
   updatedAt: "",
   updatedBy: "",
+  instrumentIds: [],
 });
 
 const dataset = createMock<OutputDatasetObsoleteDto>({
@@ -112,6 +113,58 @@ describe("ProposalsReducer", () => {
       const state = proposalsReducer(initialProposalsState, action);
 
       expect(state).toEqual(initialProposalsState);
+    });
+  });
+
+  describe("on addDatasetFilterAction", () => {
+    it("should set instrumentIds filter and set skip to 0", () => {
+      const instrumentId = "test";
+
+      const action = fromActions.addProposalFilterAction({
+        filterType: "multiSelect",
+        key: "instrumentIds",
+        value: instrumentId,
+      });
+      const state = proposalsReducer(initialProposalsState, action);
+
+      expect(state.proposalFilters.fields.instrumentIds).toContain(
+        instrumentId,
+      );
+      expect(state.proposalFilters.skip).toEqual(0);
+    });
+  });
+
+  describe("on removeDatasetFilterAction", () => {
+    it("should remove instrumentIds filter and set skip to 0", () => {
+      const instrumentId = "test";
+
+      const action = fromActions.removeProposalFilterAction({
+        filterType: "checkbox",
+        key: "instrumentIds",
+        value: instrumentId,
+      });
+      const state = proposalsReducer(initialProposalsState, action);
+
+      expect(state.proposalFilters.fields.instrumentIds).not.toContain(
+        instrumentId,
+      );
+      expect(state.proposalFilters.skip).toEqual(0);
+    });
+  });
+
+  describe("on setDateRangeFilterAction", () => {
+    it("should set startTime filter", () => {
+      const begin = new Date(2018, 1, 2).toISOString();
+      const end = new Date(2018, 1, 3).toISOString();
+
+      const action = fromActions.addProposalFilterAction({
+        filterType: "dateRange",
+        key: "startTime",
+        value: { begin, end },
+      });
+      const state = proposalsReducer(initialProposalsState, action);
+
+      expect(state.proposalFilters.fields.startTime).toEqual({ begin, end });
     });
   });
 });
