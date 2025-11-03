@@ -7,6 +7,7 @@ import {
   selectFullqueryParams,
   selectDatasetsQueryParams,
   selectCurrentProposal,
+  selectFullfacetParams,
 } from "state-management/selectors/proposals.selectors";
 import * as fromActions from "state-management/actions/proposals.actions";
 import { hot, cold } from "jasmine-marbles";
@@ -55,6 +56,7 @@ describe("ProposalEffects", () => {
         provideMockStore({
           selectors: [
             { selector: selectFullqueryParams, value: {} },
+            { selector: selectFullfacetParams, value: {} },
             {
               selector: selectDatasetsQueryParams,
               value: {
@@ -129,10 +131,7 @@ describe("ProposalEffects", () => {
   describe("fetchFacetCount$", () => {
     it("should result in a fetchFacetCountCompleteAction", () => {
       const totalSets = 1;
-      const action = fromActions.fetchFacetCountsAction({
-        fields: {},
-        facets: [],
-      });
+      const action = fromActions.fetchFacetCountsAction();
       const apiResponse = [
         {
           all: [{ totalSets }],
@@ -152,7 +151,7 @@ describe("ProposalEffects", () => {
     });
 
     it("should result in a fetchCountFailedAction", () => {
-      const action = fromActions.fetchFacetCountsAction({});
+      const action = fromActions.fetchFacetCountsAction();
       const outcome = fromActions.fetchFacetCountsFailedAction();
 
       actions = hot("-a", { a: action });
@@ -445,7 +444,7 @@ describe("ProposalEffects", () => {
 
     describe("ofType fetchCountAction", () => {
       it("should dispatch a loadingAction", () => {
-        const action = fromActions.fetchFacetCountsAction({});
+        const action = fromActions.fetchFacetCountsAction();
         const outcome = loadingAction();
 
         actions = hot("-a", { a: action });

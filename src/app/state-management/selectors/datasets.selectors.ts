@@ -189,6 +189,7 @@ export const selectFullqueryParams = createSelector(
     const { skip, limit, sortField, modeToggle, ...theRest } = filter;
     const limits = { ...pagination, order: sortField };
     const query = restrictFilter(theRest);
+
     return { query, limits };
   },
 );
@@ -205,7 +206,9 @@ export const selectFullfacetParams = createSelector(
     };
     const fields = restrictFilter(theRest);
     const facets = userFilters
-      .filter((f) => f.enabled && f.type === "multiSelect")
+      .filter(
+        (f) => f.enabled && (f.type === "multiSelect" || f.type === "checkbox"),
+      )
       .map((f) => f.key);
 
     return { fields, facets };

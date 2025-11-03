@@ -48,8 +48,7 @@ import { AppConfigService } from "app-config.service";
     {
       provide: MAT_DATE_FORMATS,
       useFactory: (appConfigService: AppConfigService) => {
-        const base =
-          appConfigService.getConfig().dateFormat || "yyyy-MM-dd HH:mm";
+        const base = appConfigService.getConfig().dateFormat;
         return {
           parse: { dateInput: base },
           display: {

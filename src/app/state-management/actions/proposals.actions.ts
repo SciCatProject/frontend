@@ -30,10 +30,6 @@ export const fetchProposalsFailedAction = createAction(
 
 export const fetchFacetCountsAction = createAction(
   "[Proposal] Fetch Facet Counts",
-  props<{
-    fields?: object;
-    facets?: string[];
-  }>(),
 );
 export const fetchFacetCountsCompleteAction = createAction(
   "[Proposal] Fetch Facet Counts Complete",
@@ -164,6 +160,9 @@ export const removeAttachmentFailedAction = createAction(
 );
 
 export const clearProposalsStateAction = createAction("[Proposal] Clear State");
+export const clearProposalsFiltersAction = createAction(
+  "[Proposal] Clear Filters",
+);
 export const clearCurrentProposalStateAction = createAction(
   "[Proposal] Clear Current Proposal State",
 );
@@ -194,4 +193,21 @@ export const fetchRelatedProposalsCountCompleteAction = createAction(
 );
 export const fetchRelatedProposalsCountFailedAction = createAction(
   "[Proposal] Fetch Related Proposals Count Failed",
+);
+
+export const addProposalFilterAction = createAction(
+  "[Proposal] Add Proposal Filter",
+  props<{
+    key: string;
+    value: string | DateRange | string[];
+    filterType: "text" | "dateRange" | "number" | "multiSelect" | "checkbox";
+  }>(),
+);
+export const removeProposalFilterAction = createAction(
+  "[Proposal] Remove Proposal Filter",
+  props<{
+    key: string;
+    value?: string;
+    filterType: "text" | "dateRange" | "number" | "multiSelect" | "checkbox";
+  }>(),
 );

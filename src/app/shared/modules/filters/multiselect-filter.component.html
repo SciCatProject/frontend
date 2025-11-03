@@ -5,7 +5,7 @@
       *ngFor="let item of currentFilter$ | async"
       [removable]="true"
       (removed)="itemRemoved(item)"
-      >{{ item || "No item" }}
+      >{{ getLabel(item) || "No item" }}
       <mat-icon matChipRemove>cancel</mat-icon>
     </mat-chip-row>
   </mat-chip-grid>
@@ -23,10 +23,10 @@
 
   <mat-autocomplete #mutiselection="matAutocomplete">
     <mat-option
-      (onSelectionChange)="itemSelected(getFacetId(fc))"
+      (onSelectionChange)="itemSelected(fc)"
       *ngFor="let fc of suggestions$ | async"
     >
-      <span>{{ getFacetId(fc, "No items") }} | </span>
+      <span>{{ getLabel(fc._id) }} | </span>
       <small>{{ getFacetCount(fc) }}</small>
     </mat-option>
   </mat-autocomplete>

@@ -13,6 +13,7 @@
   <mat-card-content>
     <ng-container *ngFor="let filter of filterLists">
       <shared-filter
+        *ngIf="filter.enabled"
         [key]="filter.key"
         [label]="filter.label"
         [clear]="clearFilters"
@@ -20,7 +21,9 @@
         [filterType]="filter.type"
         [prefilled]="activeFilters[filter.key] || null"
         (checkBoxChange)="setFilter(filter.key, $event)"
+        [currentFilter$]="getFilterByKey$(filter.key)"
         [facetCounts$]="getFacetCounts$(filter.key)"
+        (selectionChange)="selectionChange($event)"
         (dateRangeChange)="setDateFilter(filter.key, $event)"
       ></shared-filter>
     </ng-container>
