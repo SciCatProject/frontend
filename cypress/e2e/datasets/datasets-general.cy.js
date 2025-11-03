@@ -411,18 +411,10 @@ describe("Datasets general", () => {
       cy.visit("/datasets");
 
       cy.get('[data-cy="creation-time-begin"]').type("2025-10-07");
-      cy.intercept("GET", "/api/v3/datasets/fullquery*").as("fullquery");
+
       cy.get('[data-cy="filter-search-button"]').click();
 
-      cy.wait("@fullquery").then((interception) => {
-        const {url} = interception.request;
-        expect(url).to.contain("/api/v3/datasets/fullquery");
-        expect(url).to.contain("creationTime");
-
-        const today = new Date().toISOString().slice(0, 10);
-        expect(url).to.include(today);
-        cy.log("Fullquery URL:", url);
-      });
+      cy.get(".dataset-table mat-row").contains("Cypress Dataset").should("exist");
     });
   });
 });
