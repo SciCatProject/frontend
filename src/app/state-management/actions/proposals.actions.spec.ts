@@ -36,7 +36,7 @@ describe("Proposal Actions", () => {
 
   describe("fetchCountAction", () => {
     it("should create an action", () => {
-      const action = fromActions.fetchFacetCountsAction({});
+      const action = fromActions.fetchFacetCountsAction();
       expect({ ...action }).toEqual({ type: "[Proposal] Fetch Facet Counts" });
     });
   });
@@ -189,6 +189,40 @@ describe("Proposal Actions", () => {
       const action = fromActions.addAttachmentFailedAction();
       expect({ ...action }).toEqual({
         type: "[Proposal] Add Attachment Failed",
+      });
+    });
+  });
+
+  describe("addProposalFilterAction", () => {
+    it("should create an action", () => {
+      const value = "test";
+      const action = fromActions.addProposalFilterAction({
+        filterType: "checkbox",
+        key: "instrumentIds",
+        value: value,
+      });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Add Proposal Filter",
+        key: "instrumentIds",
+        value: value,
+        filterType: "checkbox",
+      });
+    });
+  });
+
+  describe("removeProposalFilterAction", () => {
+    it("should create an action", () => {
+      const value = "test";
+      const action = fromActions.removeProposalFilterAction({
+        filterType: "checkbox",
+        key: "instrumentIds",
+        value: value,
+      });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Remove Proposal Filter",
+        key: "instrumentIds",
+        value: value,
+        filterType: "checkbox",
       });
     });
   });
