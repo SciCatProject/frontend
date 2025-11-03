@@ -15,7 +15,6 @@ export const selectProposals = createSelector(
 
 // selectEnrichedProposals enhances proposals with additional derived fields
 // e.g. adds `instrumentName` (from instruments using `instrumentIds[0]`)
-// and `pi_fullname` (combined from `pi_firstname` and `pi_lastname`)
 // for table display (configurable via frontend.config.json)
 export const selectEnrichedProposals = createSelector(
   selectProposals,
@@ -26,7 +25,6 @@ export const selectEnrichedProposals = createSelector(
       instrumentName:
         instrumentName.get(proposal.instrumentIds[0]) ??
         proposal.instrumentIds[0],
-      pi_fullname: `${proposal.pi_lastname}, ${proposal.pi_firstname}`,
     })),
 );
 
