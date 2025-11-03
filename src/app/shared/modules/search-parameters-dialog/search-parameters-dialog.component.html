@@ -27,7 +27,7 @@
             class="cell-content"
             mat-cell
             *matCellDef="let key"
-            (click)="parametersForm.get('lhs').setValue(key); getUnits(key)"
+            (click)="parametersForm.get('lhs').setValue(getHumanName(key) || key); getUnits(key)"
             style="cursor: pointer"
           >
             <div>
@@ -62,11 +62,11 @@
                         <strong>Human readable name: </strong>
                         {{ getHumanName(key) }}
                         <br />
-                        <strong>Raw name:</strong> {{ key }}
+                        <strong>Metadata name:</strong> {{ key }}
                       </ng-container>
                     </div>
                     <ng-template #rawNameOnly>
-                      <strong>Raw name:</strong> {{ key }}
+                      <strong>Metadata name:</strong> {{ key }}
                     </ng-template>
                   </mat-card>
                 </ng-template>
@@ -81,7 +81,7 @@
           class="row-content"
           mat-row
           *matRowDef="let row; columns: ['field']"
-          [class.selected_row]="row === parametersForm.get('lhs').value"
+          [class.selected_row]="(getHumanName(row) || row) === parametersForm.get('lhs').value || row === parametersForm.get('lhs').value"
         ></tr>
       </table>
     </div>

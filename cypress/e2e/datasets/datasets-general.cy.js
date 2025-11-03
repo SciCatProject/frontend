@@ -108,6 +108,12 @@ describe("Datasets general", () => {
         dataFileSize: "small",
         scientificMetadata: {
           extra_entry_end_time: { type: "number", value: 2, unit: "" },
+          temperature: {
+            type: "number",
+            value: 25,
+            unit: "celsius",
+            human_name: "Temperature Human Name",
+          },
         },
         isPublished: true,
       });
@@ -213,6 +219,55 @@ describe("Datasets general", () => {
         .find(".condition-panel")
         .should("have.length", 0);
     });
+
+    it("should search by human name", () => {
+      cy.visit("/datasets");
+
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('[data-cy="add-condition-button"]').click();
+      });
+
+      cy.get('input[name="lhs"]').type("Temperature Human Name");
+
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      cy.get(".condition-panel").first().click();
+
+      cy.get('[data-cy="remove-condition-button"]').click();
+    });
+
+    it("should search by metadata name", () => {
+      cy.visit("/datasets");
+
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('[data-cy="add-condition-button"]').click();
+      });
+
+      cy.get('input[name="lhs"]').type("temperature");
+
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      cy.get(".condition-panel").first().click();
+
+      cy.get('[data-cy="remove-condition-button"]').click();
+    });
+
+    it("should not be able to add invalid field", () => {
+      cy.visit("/datasets");
+
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('[data-cy="add-condition-button"]').click();
+      });
+
+      cy.get('input[name="lhs"]').type("invalid_field_name");
+
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      cy.get(".snackbar-warning")
+        .should("contain", "Please select a valid field from the list")
+        .contains("Close")
+        .click();
+    })
   });
 
   describe("Units options in condition panel units dropdown", () => {

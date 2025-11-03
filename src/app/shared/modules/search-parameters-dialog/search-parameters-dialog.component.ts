@@ -74,11 +74,15 @@ export class SearchParametersDialogComponent {
 
   filteredKeys$ = this.parametersForm.get("lhs")?.valueChanges.pipe(
     startWith(""),
-    map((value: string) =>
-      this.parameterKeys.filter((key) =>
-        key.toLowerCase().includes(value.toLowerCase()),
-      ),
-    ),
+    map((value: string) => {
+      const searchTerm = value.toLowerCase();
+      return this.parameterKeys.filter((key) => {
+        const keyMatches = key.toLowerCase().includes(searchTerm);
+        const humanName = this.humanNameMap[key]?.toLowerCase() || "";
+        const humanNameMatches = humanName.includes(searchTerm);
+        return keyMatches || humanNameMatches;
+      });
+    }),
   );
 
   constructor(
@@ -97,13 +101,31 @@ export class SearchParametersDialogComponent {
 
   add = (): void => {
     const { lhs, relation, unit } = this.parametersForm.value;
-    if (this.data.usedFields && this.data.usedFields.includes(lhs)) {
+
+    const metadataKey =
+      Object.keys(this.humanNameMap).find(
+        (key) => this.humanNameMap[key] === lhs,
+      ) || lhs;
+
+    const isValidSelection = this.parameterKeys.some(
+      (key) => key === metadataKey || this.humanNameMap[key] === lhs,
+    );
+
+    if (!isValidSelection) {
+      this.snackBar.open("Please select a valid field from the list", "Close", {
+        duration: 2000,
+        panelClass: ["snackbar-warning"],
+      });
+      return;
+    }
+
+    if (this.data.usedFields && this.data.usedFields.includes(metadataKey)) {
       this.snackBar.open("Field already used", "Close", {
         duration: 2000,
         panelClass: ["snackbar-warning"],
       });
       return;
-    } else if (!this.parameterKeys.includes(lhs)) {
+    } else if (!this.parameterKeys.includes(metadataKey)) {
       this.snackBar.open("Field does not exist", "Close", {
         duration: 2000,
         panelClass: ["snackbar-warning"],
