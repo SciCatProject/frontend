@@ -51,7 +51,22 @@ describe("ProposalEffects", () => {
 
   const getConfig = () => ({
     defaultProposalsListSettings: {
-      filters: [],
+      filters: [
+        {
+          key: "instrumentIds",
+          label: "Instrument",
+          type: "checkbox",
+          description: "Filter by instrument name",
+          enabled: true,
+        },
+        {
+          key: "proposalId",
+          label: "Proposal Id",
+          type: "checkbox",
+          description: "Filter by proposal id",
+          enabled: true,
+        },
+      ],
     },
   });
 
@@ -63,7 +78,7 @@ describe("ProposalEffects", () => {
         provideMockStore({
           selectors: [
             { selector: selectFullqueryParams, value: {} },
-            { selector: selectFullfacetParams, value: {} },
+            { selector: selectFullfacetParams, value: { fields: {} } },
             {
               selector: selectDatasetsQueryParams,
               value: {
@@ -156,6 +171,11 @@ describe("ProposalEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchFacetCount$).toBeObservable(expected);
+
+      expect(proposalApi.proposalsControllerFullfacetV3).toHaveBeenCalledWith(
+        JSON.stringify(["instrumentIds", "proposalId"]),
+        JSON.stringify({}),
+      );
     });
 
     it("should result in a fetchCountFailedAction", () => {

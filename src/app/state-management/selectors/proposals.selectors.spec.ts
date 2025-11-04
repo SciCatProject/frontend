@@ -246,4 +246,179 @@ describe("Proposal Selectors", () => {
       ).toEqual(params);
     });
   });
+
+  describe("selectParentProposal", () => {
+    it("should select parent proposal", () => {
+      expect(
+        fromSelectors.selectParentProposal.projector(initialProposalsState),
+      ).toEqual(parentProposal);
+    });
+  });
+
+  describe("selectCurrentAttachments", () => {
+    it("should return empty array when no proposal", () => {
+      expect(fromSelectors.selectCurrentAttachments.projector(null)).toEqual(
+        [],
+      );
+    });
+
+    it("should return attachments when present on proposal", () => {
+      const proposalWithAttachments = {
+        ...proposal,
+        attachments: [{ id: "a1" }, { id: "a2" }],
+      } as any;
+      expect(
+        fromSelectors.selectCurrentAttachments.projector(
+          proposalWithAttachments,
+        ),
+      ).toEqual([{ id: "a1" }, { id: "a2" }]);
+    });
+  });
+
+  describe("selectDefaultProposalColumns", () => {
+    it("should select default proposal columns", () => {
+      expect(
+        fromSelectors.selectDefaultProposalColumns.projector(
+          initialProposalsState,
+        ),
+      ).toEqual(initialProposalsState.columns);
+    });
+  });
+
+  describe("selectFilterByKey", () => {
+    it("should select a specific filter field by key", () => {
+      expect(
+        fromSelectors
+          .selectFilterByKey("instrumentIds")
+          .projector(initialProposalsState),
+      ).toEqual(["test"]);
+    });
+
+    it("should return empty array when key not present", () => {
+      expect(
+        fromSelectors
+          .selectFilterByKey("nonExistingKey")
+          .projector(initialProposalsState),
+      ).toEqual([]);
+    });
+  });
+
+  describe("selectFullfacetParams", () => {
+    it("should return filtered fields for facets", () => {
+      const result = fromSelectors.selectFullfacetParams.projector(
+        initialProposalsState.proposalFilters,
+      );
+      expect(result).toEqual({
+        fields: initialProposalsState.proposalFilters.fields,
+      });
+    });
+  });
+
+  describe("selectProposalsWithCountAndTableSettings", () => {
+    it("should combine proposals, count and table settings into view model", () => {
+      const proposalsSample = [
+        { proposalId: "p1", instrumentIds: ["i1"] } as any,
+      ];
+      const count = 1;
+      const tablesSettings = { col: "v" };
+      const hasFetchedSettings = true;
+
+      expect(
+        fromSelectors.selectProposalsWithCountAndTableSettings.projector(
+          proposalsSample,
+          count,
+          tablesSettings,
+          hasFetchedSettings,
+        ),
+      ).toEqual({
+        proposals: proposalsSample,
+        count,
+        tablesSettings,
+        hasFetchedSettings,
+      });
+    });
+  });
+
+  describe("selectEnrichedProposals", () => {
+    it("should enrich proposals with instrumentName from map", () => {
+      const proposalsSample = [
+        { proposalId: "p1", instrumentIds: ["i1"] } as any,
+      ];
+      const instrumentMap = new Map([["i1", "Instrument One"]]);
+      const enriched = fromSelectors.selectEnrichedProposals.projector(
+        proposalsSample,
+        instrumentMap,
+      );
+      expect(enriched[0].instrumentName).toEqual("Instrument One");
+    });
+
+    it("should fallback to id when instrument name missing", () => {
+      const proposalsSample = [
+        { proposalId: "p2", instrumentIds: ["iX"] } as any,
+      ];
+      const instrumentMap = new Map<string, string>();
+      const enriched = fromSelectors.selectEnrichedProposals.projector(
+        proposalsSample,
+        instrumentMap,
+      );
+      expect(enriched[0].instrumentName).toEqual("iX");
+    });
+  });
+
+  describe("proposals facet counts with instrument name", () => {
+    it("should map instrument facet labels using instrument name map", () => {
+      const facets = {
+        instrumentIds: [{ _id: "test", count: 2 }],
+      } as any;
+      const instrumentMap = new Map([["test", "Nice Instrument"]]);
+      const result =
+        fromSelectors.selectProposalsfacetCountsWithInstrumentName.projector(
+          facets,
+          instrumentMap,
+        );
+      expect(result.instrumentIds[0].label).toEqual("Nice Instrument");
+    });
+
+    it("factory selector should return facet array by key", () => {
+      const facets = {
+        instrumentIds: [{ _id: "x", count: 1 }],
+      } as any;
+      const selector =
+        fromSelectors.selectProposalsfacetCountsWithInstrumentNameByKey(
+          "instrumentIds",
+        );
+      expect(selector.projector(facets)).toEqual(facets.instrumentIds);
+    });
+  });
+
+  describe("related proposals selectors", () => {
+    it("should select related proposals page view model", () => {
+      expect(
+        fromSelectors.selectRelatedProposalsPageViewModel.projector(
+          initialProposalsState,
+        ),
+      ).toEqual({
+        relatedProposals: initialProposalsState.relatedProposals,
+        relatedProposalsCount: initialProposalsState.relatedProposalsCount,
+      });
+    });
+
+    it("should select related proposals filters", () => {
+      expect(
+        fromSelectors.selectRelatedProposalsFilters.projector(
+          initialProposalsState,
+        ),
+      ).toEqual(initialProposalsState.relatedProposalsFilters);
+    });
+
+    it("should compute related proposals current page and per page", () => {
+      const filters = initialProposalsState.relatedProposalsFilters;
+      expect(
+        fromSelectors.selectRelatedProposalsCurrentPage.projector(filters),
+      ).toEqual(filters.skip / filters.limit);
+      expect(
+        fromSelectors.selectRelatedProposalsPerPage.projector(filters),
+      ).toEqual(filters.limit);
+    });
+  });
 });
