@@ -7,8 +7,8 @@ import { fetchInstrumentsAction } from "state-management/actions/instruments.act
 import {
   fetchFacetCountsAction,
   fetchProposalsAction,
+  setInitialProposalsFiltersAction,
 } from "state-management/actions/proposals.actions";
-import { FilterConfig } from "state-management/state/user.store";
 
 @Component({
   selector: "app-proposal-dashboard",
@@ -30,7 +30,6 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.dispatch(fetchInstrumentsAction({ skip: 0, limit: 1000 }));
 
-    // TODO: Shoule we hardcode the facet counts list here?
     this.subscriptions.push(
       combineLatest([this.params$]).subscribe(([queryParams]) => {
         const limit = queryParams.pageSize
@@ -38,7 +37,9 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
           : this.defaultPageSize;
         const skip = queryParams.pageIndex ? +queryParams.pageIndex * limit : 0;
         const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
-
+        this.store.dispatch(
+          setInitialProposalsFiltersAction({ fields: searchQuery }),
+        );
         this.store.dispatch(
           fetchProposalsAction({
             limit,

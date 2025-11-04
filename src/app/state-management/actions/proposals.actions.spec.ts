@@ -311,5 +311,44 @@ describe("Proposal Actions", () => {
 
       expect({ ...action }).toEqual({ type: "[Proposal] Clear State" });
     });
+
+    describe("clearProposalsFiltersAction", () => {
+      it("should create an action", () => {
+        const action = fromActions.clearProposalsFiltersAction();
+        expect({ ...action }).toEqual({ type: "[Proposal] Clear Filters" });
+      });
+    });
+
+    describe("clearCurrentProposalStateAction", () => {
+      it("should create an action", () => {
+        const action = fromActions.clearCurrentProposalStateAction();
+        expect({ ...action }).toEqual({
+          type: "[Proposal] Clear Current Proposal State",
+        });
+      });
+    });
+
+    describe("setInitialProposalsFiltersAction", () => {
+      it("should create an action", () => {
+        const fields = {
+          instrumentIds: ["inst1", "inst2"],
+          title: "test title",
+        };
+        const action = fromActions.setInitialProposalsFiltersAction({ fields });
+        expect({ ...action }).toEqual({
+          type: "[Proposal] Set Initial Proposals Filters",
+          fields,
+        });
+      });
+
+      it("should create an action with empty fields as {}", () => {
+        const fields = {};
+        const action = fromActions.setInitialProposalsFiltersAction({ fields });
+        expect({ ...action }).toEqual({
+          type: "[Proposal] Set Initial Proposals Filters",
+          fields: {},
+        });
+      });
+    });
   });
 });
