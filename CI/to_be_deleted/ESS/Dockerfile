@@ -9,7 +9,7 @@ RUN npm ci
 COPY . /frontend/
 RUN npx ng build
 
-FROM nginx:1.29.0-alpine
+FROM nginx:1.29.3-alpine
 RUN sed -i -e 's/^root::/root:!:/' /etc/shadow
 RUN rm -rf /usr/share/nginx/html/*
 
