@@ -17,6 +17,7 @@ import { MultiSelectFilterValue } from "../filters/multiselect-filter.component"
 import { INumericRange } from "../numeric-range/form/model/numeric-range-field.model";
 import { FilterType } from "state-management/state/user.store";
 import { toIsoUtc } from "../filters/utils";
+import { orderBy } from "lodash-es";
 
 type FacetItem = { _id: string; label?: string; count: number };
 @Component({
@@ -155,7 +156,7 @@ export class SharedFilterComponent implements OnChanges {
       .trim();
     const selected = new Set(this.filterForm.get("selectedIds")?.value ?? []);
 
-    const base = this.checkboxFacetCounts;
+    const base = orderBy(this.checkboxFacetCounts, ["count"], ["desc"]);
 
     // always include checked items
     const pinned = base.filter((x) => selected.has(x._id));
