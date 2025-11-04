@@ -9,7 +9,6 @@ import {
   fetchProposalsAction,
   setInitialProposalsFiltersAction,
 } from "state-management/actions/proposals.actions";
-import { FilterConfig } from "state-management/state/user.store";
 
 @Component({
   selector: "app-proposal-dashboard",
@@ -31,7 +30,6 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.dispatch(fetchInstrumentsAction({ skip: 0, limit: 1000 }));
 
-    // TODO: Shoule we hardcode the facet counts list here?
     this.subscriptions.push(
       combineLatest([this.params$]).subscribe(([queryParams]) => {
         const limit = queryParams.pageSize
