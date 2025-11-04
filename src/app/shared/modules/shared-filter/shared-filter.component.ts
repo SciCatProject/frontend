@@ -98,12 +98,7 @@ export class SharedFilterComponent implements OnChanges {
           .get("textField")!
           .setValue((this.prefilled as string) || "");
       } else if (this.filterType === "checkbox") {
-        this.facetCounts$.subscribe((facets) => {
-          this.checkboxFacetCounts = facets;
-        });
-        this.filterForm
-          .get("selectedIds")!
-          .setValue((this.prefilled as string[]) || []);
+        this.handleCheckboxFacets(this.prefilled as string[]);
       } else if (this.filterType === "number") {
         const range = this.prefilled as unknown as INumericRange;
         this.filterForm.get("numberRange")!.setValue({
@@ -167,9 +162,9 @@ export class SharedFilterComponent implements OnChanges {
       : base;
 
     // merge (checked/pinned to the top), de-duplicate by _id
-    const merged = [...pinned, ...filtered].filter(
-      (x, i, arr) => arr.findIndex((y) => y._id === x._id) === i,
-    );
+    const merged = [...pinned, ...filtered]
+      .filter((x, i, arr) => arr.findIndex((y) => y._id === x._id) === i)
+      .filter((x) => x.count > 0 || selected.has(x._id));
 
     return merged;
   }
@@ -194,5 +189,29 @@ export class SharedFilterComponent implements OnChanges {
   }
 
   trackById = (_: number, x: FacetItem) => x._id;
+
+  private handleCheckboxFacets(prefilledValue: string[]) {
+    this.facetCounts$.subscribe((facets) => {
+      const prefilled = [prefilledValue].flat().filter(Boolean);
+      const selectedIds = new Set(prefilled);
+      this.filterForm.get("selectedIds")!.setValue([...selectedIds]);
+
+      const selectedItems = [...selectedIds].map(
+        (id) => facets.find((f) => f._id === id) || { _id: id, count: 0 },
+      );
+
+      const merged = orderBy(
+        [...facets, ...selectedItems].filter(
+          (x, i, arr) => arr.findIndex((y) => y._id === x._id) === i,
+        ),
+        ["count"],
+        ["desc"],
+      );
+
+      this.checkboxFacetCounts = merged.filter(
+        (x) => selectedIds.has(x._id) || x.count > 0,
+      );
+    });
+  }
   /** Checkbox filter helpers END*/
 }

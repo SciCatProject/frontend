@@ -114,6 +114,7 @@ describe("SharedFilterComponent", () => {
       { _id: "a", label: "Alpha", count: 1 },
       { _id: "b", count: 2 },
     ];
+
     component.facetCounts$ = of(facets);
     component.filterType = "checkbox";
     component.prefilled = ["b"];
@@ -121,7 +122,14 @@ describe("SharedFilterComponent", () => {
       filterType: new SimpleChange(undefined, component.filterType, true),
       prefilled: new SimpleChange(undefined, component.prefilled, true),
     });
-    expect(component.checkboxFacetCounts).toEqual(facets);
+
+    // ensure both facets are present (order may vary) and no duplicate _id values exist
+    const ids = component.checkboxFacetCounts.map((f) => f._id);
+    expect(ids).toContain("a");
+    expect(ids).toContain("b");
+
+    expect(new Set(ids).size).toBe(ids.length);
+
     expect(component.filterForm.get("selectedIds")!.value).toEqual(["b"]);
   });
 
@@ -161,7 +169,7 @@ describe("SharedFilterComponent", () => {
     component.checkboxFacetCounts = Array.from({ length: 3 }, (_, i) => ({
       _id: `id${i}`,
       label: `Label${i}`,
-      count: i,
+      count: i + 1,
     }));
     component.checkboxDisplaylimit = 1;
     component.filterForm.get("textField")!.setValue("");
@@ -237,5 +245,38 @@ describe("SharedFilterComponent", () => {
     component.checkboxDisplaylimit = 10;
     component.ngOnChanges({} as any);
     expect(component.showCheckboxSearch).toBeFalse();
+  });
+
+  it("should include prefilled id not present in facets with count 0 and set selectedIds", () => {
+    const facets = [{ _id: "a", label: "Alpha", count: 1 }];
+    component.facetCounts$ = of(facets);
+    component.filterType = "checkbox";
+    component.prefilled = ["TEST_INSTRUMENT"]; // not present in facets
+    component.ngOnChanges({
+      filterType: new SimpleChange(undefined, component.filterType, true),
+      prefilled: new SimpleChange(undefined, component.prefilled, true),
+    });
+
+    const found = component.checkboxFacetCounts.find(
+      (f) => f._id === "TEST_INSTRUMENT",
+    );
+    expect(found).toBeTruthy();
+    expect(found!.count).toBe(0);
+    expect(component.filterForm.get("selectedIds")!.value).toEqual([
+      "TEST_INSTRUMENT",
+    ]);
+  });
+
+  it("visibleFacetCounts should return top N items sorted by count desc", () => {
+    component.checkboxFacetCounts = [
+      { _id: "a", label: "A", count: 1 },
+      { _id: "b", label: "B", count: 3 },
+      { _id: "c", label: "C", count: 2 },
+    ];
+    component.checkboxDisplaylimit = 2;
+    component.filterForm.get("textField")!.setValue("");
+    const visible = component.visibleFacetCounts;
+    expect(visible.length).toBe(2);
+    expect(visible.map((v) => v._id)).toEqual(["b", "c"]);
   });
 });
