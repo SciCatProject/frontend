@@ -32,6 +32,7 @@ export class SharedFilterComponent implements OnChanges {
   };
   checkboxDisplaylimit = 10;
   checkboxFacetCounts: FacetItem[] = [];
+  showCheckboxSearch = false;
 
   filterForm = new FormGroup({
     textField: new FormControl(""),
@@ -84,6 +85,12 @@ export class SharedFilterComponent implements OnChanges {
     });
   }
   ngOnChanges(changes: SimpleChanges) {
+    if (this.checkboxFacetCounts.length > this.checkboxDisplaylimit) {
+      this.showCheckboxSearch = true;
+    } else {
+      this.showCheckboxSearch = false;
+    }
+
     if (changes["prefilled"] || changes["filterType"]) {
       if (this.filterType === "text") {
         this.filterForm

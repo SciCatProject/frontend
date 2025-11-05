@@ -13,6 +13,21 @@ export const selectProposals = createSelector(
   (state) => state.proposals,
 );
 
+// selectEnrichedProposals enhances proposals with additional derived fields
+// e.g. adds `instrumentName` (from instruments using `instrumentIds[0]`)
+// for table display (configurable via frontend.config.json)
+export const selectEnrichedProposals = createSelector(
+  selectProposals,
+  selectInstrumentWithIdAndName,
+  (proposals, instrumentName) =>
+    proposals.map((proposal) => ({
+      ...proposal,
+      instrumentName:
+        instrumentName.get(proposal.instrumentIds[0]) ??
+        proposal.instrumentIds[0],
+    })),
+);
+
 export const selectCurrentProposal = createSelector(
   selectProposalsState,
   (state) => state.currentProposal,
@@ -165,10 +180,8 @@ export const selectFullfacetParams = createSelector(
     const { skip, limit, sortField, ...theRest } = filters;
 
     const fields = restrictFilter(theRest.fields);
-    // TODO: Replace with dynamic facet generation
-    const facets = ["instrumentIds", "pi_lastname"];
 
-    return { fields, facets };
+    return { fields };
   },
 );
 
@@ -182,7 +195,7 @@ export const selectDatasetsQueryParams = createSelector(
 );
 
 export const selectProposalsWithCountAndTableSettings = createSelector(
-  selectProposals,
+  selectEnrichedProposals,
   selectProposalsCount,
   selectTablesSettings,
   selectHasFetchedSettings,
