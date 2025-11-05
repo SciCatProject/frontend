@@ -36,7 +36,7 @@ describe("Proposal Actions", () => {
 
   describe("fetchCountAction", () => {
     it("should create an action", () => {
-      const action = fromActions.fetchFacetCountsAction({});
+      const action = fromActions.fetchFacetCountsAction();
       expect({ ...action }).toEqual({ type: "[Proposal] Fetch Facet Counts" });
     });
   });
@@ -193,6 +193,40 @@ describe("Proposal Actions", () => {
     });
   });
 
+  describe("addProposalFilterAction", () => {
+    it("should create an action", () => {
+      const value = "test";
+      const action = fromActions.addProposalFilterAction({
+        filterType: "checkbox",
+        key: "instrumentIds",
+        value: value,
+      });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Add Proposal Filter",
+        key: "instrumentIds",
+        value: value,
+        filterType: "checkbox",
+      });
+    });
+  });
+
+  describe("removeProposalFilterAction", () => {
+    it("should create an action", () => {
+      const value = "test";
+      const action = fromActions.removeProposalFilterAction({
+        filterType: "checkbox",
+        key: "instrumentIds",
+        value: value,
+      });
+      expect({ ...action }).toEqual({
+        type: "[Proposal] Remove Proposal Filter",
+        key: "instrumentIds",
+        value: value,
+        filterType: "checkbox",
+      });
+    });
+  });
+
   describe("updateAttachmentCaptionAction", () => {
     it("should create an action", () => {
       const proposalId = "123abc";
@@ -276,6 +310,45 @@ describe("Proposal Actions", () => {
       const action = fromActions.clearProposalsStateAction();
 
       expect({ ...action }).toEqual({ type: "[Proposal] Clear State" });
+    });
+
+    describe("clearProposalsFiltersAction", () => {
+      it("should create an action", () => {
+        const action = fromActions.clearProposalsFiltersAction();
+        expect({ ...action }).toEqual({ type: "[Proposal] Clear Filters" });
+      });
+    });
+
+    describe("clearCurrentProposalStateAction", () => {
+      it("should create an action", () => {
+        const action = fromActions.clearCurrentProposalStateAction();
+        expect({ ...action }).toEqual({
+          type: "[Proposal] Clear Current Proposal State",
+        });
+      });
+    });
+
+    describe("setInitialProposalsFiltersAction", () => {
+      it("should create an action", () => {
+        const fields = {
+          instrumentIds: ["inst1", "inst2"],
+          title: "test title",
+        };
+        const action = fromActions.setInitialProposalsFiltersAction({ fields });
+        expect({ ...action }).toEqual({
+          type: "[Proposal] Set Initial Proposals Filters",
+          fields,
+        });
+      });
+
+      it("should create an action with empty fields as {}", () => {
+        const fields = {};
+        const action = fromActions.setInitialProposalsFiltersAction({ fields });
+        expect({ ...action }).toEqual({
+          type: "[Proposal] Set Initial Proposals Filters",
+          fields: {},
+        });
+      });
     });
   });
 });

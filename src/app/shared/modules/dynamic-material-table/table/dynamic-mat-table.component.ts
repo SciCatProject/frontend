@@ -1030,7 +1030,15 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   getColumnValue(data: Record<string, unknown>, column: TableField<any>) {
-    const fieldName = column.name;
+    const fieldName = column.name.trim();
+
+    if (fieldName.includes(",")) {
+      const fields = fieldName.split(",").map((f) => f.trim());
+      const values = fields.map((field) =>
+        this.getColumnValue(data, { name: field }),
+      );
+      return values.filter((value) => value !== "").join(", ");
+    }
 
     // get nested value if name has dots
     const value = fieldName.includes(".")

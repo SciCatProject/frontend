@@ -109,6 +109,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       offsetY: 8,
     },
   ];
+  tempConditionValues: string[] = [];
 
   constructor(
     public appConfigService: AppConfigService,
@@ -135,6 +136,16 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
 
           this.filtersList.forEach((filter) => {
+            // Apply default filter type from app config if available
+            // This is to handle the case when site admin changed the filter type
+            // whereas user settings still have the old filter type
+            this.appConfig.defaultDatasetsListSettings?.filters?.forEach(
+              (defaultFilter) => {
+                if (filter.key === defaultFilter.key) {
+                  filter.type = defaultFilter.type;
+                }
+              },
+            );
             if (!filter.enabled && searchQuery[filter.key]) {
               delete searchQuery[filter.key];
               delete this.activeFilters[filter.key];
@@ -251,7 +262,39 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     });
 
     this.conditionConfigs$.pipe(take(1)).subscribe((conditionConfigs) => {
-      (conditionConfigs || []).forEach((oldCondition) => {
+      const updatedConditions = (conditionConfigs || []).map((config, i) => {
+        if (this.tempConditionValues[i] !== undefined) {
+          const value = this.tempConditionValues[i];
+          const isNumeric = value !== "" && !isNaN(Number(value));
+          if (
+            config.condition.relation === "EQUAL_TO" ||
+            config.condition.relation === "EQUAL_TO_NUMERIC" ||
+            config.condition.relation === "EQUAL_TO_STRING"
+          ) {
+            return {
+              ...config,
+              condition: {
+                ...config.condition,
+                rhs: isNumeric ? Number(value) : value,
+                relation: isNumeric
+                  ? ("EQUAL_TO_NUMERIC" as ScientificCondition["relation"])
+                  : ("EQUAL_TO_STRING" as ScientificCondition["relation"]),
+              },
+            };
+          } else {
+            return {
+              ...config,
+              condition: {
+                ...config.condition,
+                rhs: isNumeric ? Number(value) : value,
+              },
+            };
+          }
+        }
+        return config;
+      });
+
+      updatedConditions.forEach((oldCondition) => {
         this.store.dispatch(
           removeScientificConditionAction({
             condition: oldCondition.condition,
@@ -259,7 +302,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         );
       });
 
-      (conditionConfigs || []).forEach((config) => {
+      updatedConditions.forEach((config) => {
         if (config.enabled && config.condition.lhs && config.condition.rhs) {
           this.store.dispatch(
             addScientificConditionAction({ condition: config.condition }),
@@ -269,7 +312,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
       this.store.dispatch(
         updateUserSettingsAction({
-          property: { conditions: conditionConfigs },
+          property: { conditions: updatedConditions },
         }),
       );
       this.store.dispatch(fetchDatasetsAction());
@@ -303,7 +346,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     }
   }
 
-  setFilter(filterKey: string, value: string) {
+  setFilter(filterKey: string, value: string | string[]) {
     if (value) {
       this.activeFilters[filterKey] = value;
 
@@ -323,6 +366,14 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           filterType: "text",
         }),
       );
+    }
+
+    // Auto-trigger for array values or checkbox filter
+    // This applies to both multiselect type and checkBoxFilter
+    // skip PID text input to avoid triggering on keystrokes
+    // Array check can be removed when we remove text input filter type
+    if (Array.isArray(value) && this.appConfig.checkBoxFilterClickTrigger) {
+      this.applyFilters();
     }
   }
 
@@ -351,14 +402,22 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   selectionChange({ event, key, value }: MultiSelectFilterValue) {
     if (event === "add") {
-      this.addMultiSelectFilterToActiveFilters(key, value);
+      this.addMultiSelectFilterToActiveFilters(key, value._id);
       this.store.dispatch(
-        addDatasetFilterAction({ key, value, filterType: "multiSelect" }),
+        addDatasetFilterAction({
+          key,
+          value: value._id,
+          filterType: "multiSelect",
+        }),
       );
     } else {
-      this.removeMultiSelectFilterFromActiveFilters(key, value);
+      this.removeMultiSelectFilterFromActiveFilters(key, value._id);
       this.store.dispatch(
-        removeDatasetFilterAction({ key, value, filterType: "multiSelect" }),
+        removeDatasetFilterAction({
+          key,
+          value: value._id,
+          filterType: "multiSelect",
+        }),
       );
     }
   }
@@ -653,22 +712,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   updateConditionValue(index: number, event: Event) {
     const newValue = (event.target as HTMLInputElement).value;
-    const currentRelation = this.asyncPipe.transform(this.conditionConfigs$)?.[
-      index
-    ]?.condition.relation;
-    if (
-      currentRelation === "EQUAL_TO" ||
-      currentRelation === "EQUAL_TO_NUMERIC" ||
-      currentRelation === "EQUAL_TO_STRING"
-    ) {
-      const isNumeric = newValue !== "" && !isNaN(Number(newValue));
-      this.updateConditionField(index, {
-        rhs: isNumeric ? Number(newValue) : newValue,
-        relation: isNumeric ? "EQUAL_TO_NUMERIC" : "EQUAL_TO_STRING",
-      });
-    } else {
-      this.updateConditionField(index, { rhs: Number(newValue) });
-    }
+    this.tempConditionValues[index] = newValue;
   }
 
   updateConditionRangeValue(index: number, event: Event, rangeIndex: 0 | 1) {
