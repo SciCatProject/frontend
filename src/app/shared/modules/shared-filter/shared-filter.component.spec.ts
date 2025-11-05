@@ -279,4 +279,19 @@ describe("SharedFilterComponent", () => {
     expect(visible.length).toBe(2);
     expect(visible.map((v) => v._id)).toEqual(["b", "c"]);
   });
+
+  it("should exclude items with empty or null _id", () => {
+    component.checkboxFacetCounts = [
+      { _id: "valid", label: "Valid", count: 1 },
+      { _id: "" as any, label: "EmptyId", count: 5 },
+      { _id: null as any, label: "NullId", count: 3 },
+    ];
+    component.filterForm.get("selectedIds")!.setValue([]);
+    component.filterForm.get("textField")!.setValue("");
+    const res = component.filteredFacetCounts();
+    const ids = res.map((r) => r._id);
+    expect(ids).toContain("valid");
+    expect(ids).not.toContain("");
+    expect(ids).not.toContain(null);
+  });
 });

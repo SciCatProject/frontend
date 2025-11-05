@@ -32,6 +32,7 @@ export class SharedFilterComponent implements OnChanges {
     end: null,
   };
   checkboxDisplaylimit = 10;
+  searchInputDisplayThreshold = 10;
   checkboxFacetCounts: FacetItem[] = [];
   showCheckboxSearch = false;
 
@@ -86,7 +87,7 @@ export class SharedFilterComponent implements OnChanges {
     });
   }
   ngOnChanges(changes: SimpleChanges) {
-    if (this.checkboxFacetCounts.length > this.checkboxDisplaylimit) {
+    if (this.checkboxFacetCounts.length > this.searchInputDisplayThreshold) {
       this.showCheckboxSearch = true;
     } else {
       this.showCheckboxSearch = false;
@@ -151,14 +152,19 @@ export class SharedFilterComponent implements OnChanges {
       .trim();
     const selected = new Set(this.filterForm.get("selectedIds")?.value ?? []);
 
-    const base = orderBy(this.checkboxFacetCounts, ["count"], ["desc"]);
+    // the filter is to prevent showing items with empty _id or null which should not be selected anyway
+    const base = orderBy(this.checkboxFacetCounts, ["count"], ["desc"]).filter(
+      (item) => item._id,
+    );
 
     // always include checked items
     const pinned = base.filter((x) => selected.has(x._id));
 
     // apply text filter to the rest
     const filtered = term
-      ? base.filter((x) => (x.label || x._id).toLowerCase().includes(term))
+      ? base.filter((x) =>
+          (x.label ?? x._id ?? "").toLowerCase().includes(term),
+        )
       : base;
 
     // merge (checked/pinned to the top), de-duplicate by _id
