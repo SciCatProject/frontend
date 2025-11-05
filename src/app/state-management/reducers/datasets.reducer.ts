@@ -69,7 +69,7 @@ const reducer = createReducer(
     (state, { externallinks }) => {
       return {
         ...state,
-        currentSetExternalLinks: externallinks
+        currentSetExternalLinks: externallinks,
       };
     },
   ),

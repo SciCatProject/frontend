@@ -1,5 +1,8 @@
 import { DatasetFilters, ArchViewMode } from "state-management/models";
-import { OutputDatasetObsoleteDto, ExternalLinkClass } from "@scicatproject/scicat-sdk-ts-angular";
+import {
+  OutputDatasetObsoleteDto,
+  ExternalLinkClass,
+} from "@scicatproject/scicat-sdk-ts-angular";
 
 export interface FacetCount {
   _id: string;
