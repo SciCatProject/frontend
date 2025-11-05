@@ -508,7 +508,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
                 .pipe(take(1))
                 .subscribe((currentConditions) => {
                   const existingConditionIndex = currentConditions.findIndex(
-                    (config) => isEqual(this.humanNameMap[config.condition.lhs], data.lhs),
+                    (config) =>
+                      isEqual(
+                        this.humanNameMap[config.condition.lhs],
+                        data.lhs,
+                      ),
                   );
                   if (existingConditionIndex !== -1) {
                     this.snackBar.open("Condition already exists", "Close", {
