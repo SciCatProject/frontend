@@ -4,7 +4,7 @@ import {
   selectHasFetchedSettings,
   selectTablesSettings,
 } from "./user.selectors";
-import { selectInstrumentWithIdAndName } from "./instruments.selectors";
+import { selectInstrumentWithIdAndLabel } from "./instruments.selectors";
 
 const selectProposalsState = createFeatureSelector<ProposalsState>("proposals");
 
@@ -18,13 +18,13 @@ export const selectProposals = createSelector(
 // for table display (configurable via frontend.config.json)
 export const selectEnrichedProposals = createSelector(
   selectProposals,
-  selectInstrumentWithIdAndName,
-  (proposals, instrumentName) =>
+  selectInstrumentWithIdAndLabel,
+  (proposals, instruments) =>
     proposals.map((proposal) => ({
       ...proposal,
       instrumentName:
-        instrumentName.get(proposal.instrumentIds[0]) ??
-        proposal.instrumentIds[0],
+        instruments.find((inst) => inst._id === proposal.instrumentIds[0])
+          ?.label || proposal.instrumentIds[0],
     })),
 );
 
@@ -209,22 +209,29 @@ export const selectProposalsWithCountAndTableSettings = createSelector(
   },
 );
 
-export const selectProposalsfacetCountsWithInstrumentName = createSelector(
+export const selectProposalsFacetCountsWithInstrumentName = createSelector(
   selectProposalsfacetCounts,
-  selectInstrumentWithIdAndName,
-  (facets, instrumentName) => ({
-    ...facets,
-    instrumentIds: (facets.instrumentIds ?? []).map((f) => ({
-      ...f,
-      label: instrumentName.get(f._id) ?? f._id,
-    })),
-  }),
+  selectInstrumentWithIdAndLabel,
+  (facets, instruments) => {
+    const instrumentIds = instruments.map((inst) => {
+      const matched = (facets.instrumentIds ?? []).find(
+        (f) => f._id === inst._id,
+      );
+      return {
+        _id: inst._id,
+        label: inst.label ?? inst._id,
+        count: matched?.count ?? 0,
+      };
+    });
+
+    return { ...facets, instrumentIds };
+  },
 );
 
-export const selectProposalsfacetCountsWithInstrumentNameByKey = (
+export const selectProposalsFacetCountsWithInstrumentNameByKey = (
   key: string,
 ) =>
   createSelector(
-    selectProposalsfacetCountsWithInstrumentName,
+    selectProposalsFacetCountsWithInstrumentName,
     (facets) => facets[key] || [],
   );
