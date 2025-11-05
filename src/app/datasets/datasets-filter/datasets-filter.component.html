@@ -122,13 +122,13 @@
                 </div>
                 <div class="condition-description">
                   <span class="condition-chip">{{
-                    getConditionDisplayText(conditionConfig.condition)
+                    getConditionDisplayText(conditionConfig.condition, i)
                   }}</span>
                 </div>
               </div>
             </mat-panel-title>
             <mat-panel-description>
-              {{ getConditionDisplayText(conditionConfig.condition) }}
+              {{ getConditionDisplayText(conditionConfig.condition, i) }}
             </mat-panel-description>
           </mat-expansion-panel-header>
 

@@ -453,8 +453,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     return `${condition.lhs}-${index}`;
   }
 
-  getConditionDisplayText(condition: ScientificCondition): string {
-    if (!condition.lhs || !condition.rhs) return "Configure condition...";
+  getConditionDisplayText(
+    condition: ScientificCondition,
+    index?: number,
+  ): string {
+    const rhsValue = this.tempConditionValues[index] || condition.rhs;
+
+    if (!condition.lhs || !rhsValue) {
+      return "Configure condition...";
+    }
 
     let relationSymbol = "";
     switch (condition.relation) {
@@ -481,13 +488,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         relationSymbol = "";
     }
 
-    const rhsValue =
-      condition.relation === "EQUAL_TO_STRING"
-        ? `"${condition.rhs}"`
-        : condition.rhs;
+    const displayValue =
+      condition.relation === "EQUAL_TO_STRING" ? `"${rhsValue}"` : rhsValue;
 
     const unit = condition.unit ? ` ${condition.unit}` : "";
-    return `${relationSymbol} ${rhsValue}${unit}`;
+    return `${relationSymbol} ${displayValue}${unit}`;
   }
 
   toggleConditionEnabled(index: number, enabled: boolean) {
@@ -582,7 +587,10 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
                   }
 
                   const newCondition: ConditionConfig = {
-                    condition: data,
+                    condition: {
+                      ...data,
+                      rhs: "",
+                    },
                     enabled: true,
                   };
 
@@ -754,6 +762,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
     // Removes the condition from the array
     updatedConditions.splice(index, 1);
+
+    this.tempConditionValues.splice(index, 1);
 
     if (condition.enabled) {
       this.store.dispatch(
