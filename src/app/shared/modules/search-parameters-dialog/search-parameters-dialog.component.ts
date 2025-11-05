@@ -137,7 +137,7 @@ export class SearchParametersDialogComponent {
     const rhs =
       relation === "EQUAL_TO_STRING" ? String(rawRhs) : Number(rawRhs);
     this.parametersForm.patchValue({ rhs });
-    this.dialogRef.close({ data: { lhs, relation, rhs, unit } });
+    this.dialogRef.close({ data: { lhs: metadataKey, relation, rhs, unit } });
   };
 
   cancel = (): void => this.dialogRef.close();

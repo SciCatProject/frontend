@@ -65,10 +65,64 @@
             <mat-panel-title>
               <div class="condition-title-section">
                 <div class="condition-field-name">
-                  {{ getHumanName(conditionConfig.condition.lhs) }}
+                  <mat-icon
+                    class="cell-icon"
+                    fontIcon="description"
+                    #hoverOriginSpan="cdkOverlayOrigin"
+                    cdkOverlayOrigin
+                    (mouseenter)="hoverKey = conditionConfig.condition.lhs"
+                    (mouseleave)="hoverKey = null"
+                  ></mat-icon>
+                  <div class="field-name-wrapper">
+                    <div class="human-name">
+                      {{ getHumanName(conditionConfig.condition.lhs) }}
+                    </div>
+                    <div
+                      class="metadata-name"
+                      *ngIf="humanNameMap[conditionConfig.condition.lhs]"
+                    >
+                      {{ conditionConfig.condition.lhs }}
+                    </div>
+                  </div>
+
+                  <!-- Hover overlay -->
+                  <ng-template
+                    cdkConnectedOverlay
+                    [cdkConnectedOverlayOrigin]="hoverOriginSpan"
+                    [cdkConnectedOverlayOpen]="
+                      hoverKey === conditionConfig.condition.lhs
+                    "
+                    [cdkConnectedOverlayPositions]="overlayPositions"
+                  >
+                    <mat-card class="hover-card">
+                      <mat-card-title class="hover-card-title">
+                        Name Details
+                      </mat-card-title>
+                      <div mat-card-content class="hover-card-content">
+                        <ng-container
+                          *ngIf="
+                            getHumanName(conditionConfig.condition.lhs);
+                            else rawNameOnly
+                          "
+                        >
+                          <strong>Human readable name: </strong>
+                          {{ getHumanName(conditionConfig.condition.lhs) }}
+                          <br />
+                          <strong>Metadata name:</strong>
+                          {{ conditionConfig.condition.lhs }}
+                        </ng-container>
+                      </div>
+                      <ng-template #rawNameOnly>
+                        <strong>Metadata name:</strong>
+                        {{ conditionConfig.condition.lhs }}
+                      </ng-template>
+                    </mat-card>
+                  </ng-template>
                 </div>
                 <div class="condition-description">
-                  {{ getConditionDisplayText(conditionConfig.condition) }}
+                  <span class="condition-chip">{{
+                    getConditionDisplayText(conditionConfig.condition)
+                  }}</span>
                 </div>
               </div>
             </mat-panel-title>
@@ -229,7 +283,10 @@
                   (input)="updateConditionUnit(i, $event)"
                   [matAutocomplete]="rhsUnits"
                 />
-                <mat-autocomplete #rhsUnits="matAutocomplete" (optionSelected)="updateConditionUnit(i, $event)">
+                <mat-autocomplete
+                  #rhsUnits="matAutocomplete"
+                  (optionSelected)="updateConditionUnit(i, $event)"
+                >
                   <mat-option
                     *ngFor="let unit of getUnits(conditionConfig.condition.lhs)"
                     [value]="unit"

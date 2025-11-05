@@ -58,7 +58,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MultiSelectFilterValue } from "shared/modules/filters/multiselect-filter.component";
 import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-range-field.model";
 import { UnitsOptionsService } from "shared/services/units-options.service";
-
+import { ConnectedPosition } from "@angular/cdk/overlay";
 @Component({
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
@@ -90,6 +90,25 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   humanNameMap: { [key: string]: string } = {};
 
   fieldTypeMap: { [key: string]: string } = {};
+
+  hoverKey: string | null = null;
+
+  overlayPositions: ConnectedPosition[] = [
+    {
+      originX: "end",
+      originY: "center",
+      overlayX: "start",
+      overlayY: "center",
+      offsetX: 8,
+    },
+    {
+      originX: "center",
+      originY: "center",
+      overlayX: "end",
+      overlayY: "top",
+      offsetY: 8,
+    },
+  ];
 
   constructor(
     public appConfigService: AppConfigService,
@@ -489,7 +508,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
                 .pipe(take(1))
                 .subscribe((currentConditions) => {
                   const existingConditionIndex = currentConditions.findIndex(
-                    (config) => isEqual(config.condition, data),
+                    (config) => isEqual(this.humanNameMap[config.condition.lhs], data.lhs),
                   );
                   if (existingConditionIndex !== -1) {
                     this.snackBar.open("Condition already exists", "Close", {
