@@ -339,58 +339,6 @@ describe("Proposal Selectors", () => {
     });
   });
 
-  describe("selectEnrichedProposals", () => {
-    it("should enrich proposals with instrumentName from map", () => {
-      const proposalsSample = [
-        { proposalId: "p1", instrumentIds: ["i1"] } as any,
-      ];
-      const instrumentMap = new Map([["i1", "Instrument One"]]);
-      const enriched = fromSelectors.selectEnrichedProposals.projector(
-        proposalsSample,
-        instrumentMap,
-      );
-      expect(enriched[0].instrumentName).toEqual("Instrument One");
-    });
-
-    it("should fallback to id when instrument name missing", () => {
-      const proposalsSample = [
-        { proposalId: "p2", instrumentIds: ["iX"] } as any,
-      ];
-      const instrumentMap = new Map<string, string>();
-      const enriched = fromSelectors.selectEnrichedProposals.projector(
-        proposalsSample,
-        instrumentMap,
-      );
-      expect(enriched[0].instrumentName).toEqual("iX");
-    });
-  });
-
-  describe("proposals facet counts with instrument name", () => {
-    it("should map instrument facet labels using instrument name map", () => {
-      const facets = {
-        instrumentIds: [{ _id: "test", count: 2 }],
-      } as any;
-      const instrumentMap = new Map([["test", "Nice Instrument"]]);
-      const result =
-        fromSelectors.selectProposalsfacetCountsWithInstrumentName.projector(
-          facets,
-          instrumentMap,
-        );
-      expect(result.instrumentIds[0].label).toEqual("Nice Instrument");
-    });
-
-    it("factory selector should return facet array by key", () => {
-      const facets = {
-        instrumentIds: [{ _id: "x", count: 1 }],
-      } as any;
-      const selector =
-        fromSelectors.selectProposalsfacetCountsWithInstrumentNameByKey(
-          "instrumentIds",
-        );
-      expect(selector.projector(facets)).toEqual(facets.instrumentIds);
-    });
-  });
-
   describe("related proposals selectors", () => {
     it("should select related proposals page view model", () => {
       expect(
@@ -419,6 +367,105 @@ describe("Proposal Selectors", () => {
       expect(
         fromSelectors.selectRelatedProposalsPerPage.projector(filters),
       ).toEqual(filters.limit);
+    });
+  });
+
+  describe("selectEntityProposals", () => {
+    it("selectEnrichedProposals should map instrumentIds[0] to instrumentName using instruments labels and fallback to id", () => {
+      const proposalsSample = [
+        { proposalId: "p1", instrumentIds: ["inst1"] } as any,
+        { proposalId: "p2", instrumentIds: ["instX"] } as any,
+        { proposalId: "p3", instrumentIds: ["inst3"] } as any,
+      ];
+
+      const instruments = [
+        { _id: "inst1", label: "Instrument One" } as any,
+        { _id: "inst2", label: "Instrument Two" } as any,
+        { _id: "inst3" } as any, // no label -> fallback to id
+      ];
+
+      const result = fromSelectors.selectEnrichedProposals.projector(
+        proposalsSample,
+        instruments,
+      );
+
+      expect(result).toEqual([
+        {
+          proposalId: "p1",
+          instrumentIds: ["inst1"],
+          instrumentName: "Instrument One",
+        } as any,
+        {
+          proposalId: "p2",
+          instrumentIds: ["instX"],
+          instrumentName: "instX",
+        } as any,
+        {
+          proposalId: "p3",
+          instrumentIds: ["inst3"],
+          instrumentName: "inst3",
+        } as any,
+      ]);
+    });
+  });
+
+  describe("selectProposalsFacetCountsWithInstrumentName", () => {
+    it("should map instrument ids to labels and counts", () => {
+      const facets = {
+        instrumentIds: [
+          { _id: "inst1", count: 2 },
+          { _id: "instX", count: 7 },
+        ],
+        otherField: ["a"],
+      } as any;
+
+      const instruments = [
+        { _id: "inst1", label: "Instrument One" },
+        { _id: "inst2", label: "Instrument Two" },
+        { _id: "inst3" }, // no label -> fallback to id
+      ] as any[];
+
+      const result =
+        fromSelectors.selectProposalsFacetCountsWithInstrumentName.projector(
+          facets,
+          instruments,
+        );
+
+      expect(result).toEqual({
+        ...facets,
+        instrumentIds: [
+          { _id: "inst1", label: "Instrument One", count: 2 },
+          { _id: "inst2", label: "Instrument Two", count: 0 },
+          { _id: "inst3", label: "inst3", count: 0 },
+        ],
+      });
+    });
+  });
+  describe("selectProposalsFacetCountsWithInstrumentNameByKey", () => {
+    it("selectProposalsFacetCountsWithInstrumentNameByKey should return the requested key or empty array", () => {
+      const facetsWithInstrumentName = {
+        instrumentIds: [
+          { _id: "i1", label: "L1", count: 1 },
+          { _id: "i2", label: "L2", count: 0 },
+        ],
+        other: ["x"],
+      } as any;
+
+      const selector =
+        fromSelectors.selectProposalsFacetCountsWithInstrumentNameByKey(
+          "instrumentIds",
+        );
+      expect(selector.projector(facetsWithInstrumentName)).toEqual(
+        facetsWithInstrumentName.instrumentIds,
+      );
+
+      const nonExistingSelector =
+        fromSelectors.selectProposalsFacetCountsWithInstrumentNameByKey(
+          "doesNotExist",
+        );
+      expect(nonExistingSelector.projector(facetsWithInstrumentName)).toEqual(
+        [],
+      );
     });
   });
 });
