@@ -8,8 +8,6 @@ mat-sidenav-container {
       margin-top: 3.5rem;
     }
     .action-column {
-      margin-right: 0.5rem;
-
       .add-card {
         margin: 1rem 0 1rem;
         text-align: center;
@@ -27,9 +25,8 @@ mat-sidenav-container {
 
     .table-column {
       margin-top: 0.5rem;
-      padding-bottom: 1rem;
-      overflow-x: auto;
-      width: 100%;
+      min-width: 0;
+      overflow: visible;
     }
   }
 

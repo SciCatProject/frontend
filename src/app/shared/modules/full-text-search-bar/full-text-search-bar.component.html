@@ -1,11 +1,16 @@
 <mat-card>
   <div class="search-card-container">
-    <mat-form-field appearance="fill" class="full-text-search-field">
+    <mat-form-field
+      appearance="fill"
+      class="full-text-search-field"
+      floatLabel="always"
+    >
       <mat-label>Search</mat-label>
       <input
         matInput
         [placeholder]="placeholder"
         data-cy="text-search"
+        autofocus
         type="search"
         [(ngModel)]="searchTerm"
         (ngModelChange)="onSearchTermChange($event)"

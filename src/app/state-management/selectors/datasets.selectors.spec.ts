@@ -2,6 +2,7 @@ import * as fromDatasetSelectors from "./datasets.selectors";
 import { ArchViewMode } from "../models";
 import { DatasetState } from "../state/datasets.store";
 import { mockDataset as dataset } from "shared/MockStubs";
+import { initialUserState } from "./user.selectors.spec";
 
 const initialDatasetState: DatasetState = {
   datasets: [],
@@ -298,15 +299,15 @@ describe("test dataset selectors", () => {
 
   describe("selectFullfacetParams", () => {
     it("should return the fullfacet params", () => {
-      const fullfacet =
-        fromDatasetSelectors.selectFullfacetParams.projector(
-          initialDatasetState,
-        );
+      const fullfacet = fromDatasetSelectors.selectFullfacetParams.projector(
+        initialDatasetState,
+        initialUserState.filters,
+      );
       const fullfacetKeys = Object.keys(fullfacet);
       expect(fullfacet.facets).toEqual([
-        "type",
         "creationLocation",
         "ownerGroup",
+        "type",
         "keywords",
       ]);
       expect(fullfacetKeys).toContain("facets");

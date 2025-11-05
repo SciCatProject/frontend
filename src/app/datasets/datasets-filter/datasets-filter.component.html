@@ -1,5 +1,5 @@
 <mat-card>
-  <mat-card-header class="section-container">
+  <mat-card-header class="section-container filters-header">
     <mat-card-title>Filters</mat-card-title>
     <div class="section-container" data-cy="more-filters-button">
       <button
@@ -14,17 +14,23 @@
   </mat-card-header>
 
   <mat-card-content>
-    <ng-container *ngIf="filterConfigs$ | async as filterConfigs">
-      <ng-container *ngFor="let filterConfig of filterConfigs">
-        <ng-container *ngIf="filterConfig">
-          <ng-container
-            *ngComponentOutlet="
-              renderComponent(filterConfig);
-              inputs: { clear: clearSearchBar }
-            "
-          ></ng-container>
-        </ng-container>
-      </ng-container>
+    <ng-container *ngFor="let filter of filtersList">
+      <shared-filter
+        *ngIf="filter.enabled"
+        [key]="filter.key"
+        [label]="filter.label"
+        [clear]="clearSearchBar"
+        [tooltip]="filter.description"
+        [filterType]="filter.type"
+        [prefilled]="activeFilters[filter.key] || null"
+        [currentFilter$]="getFilterByKey$(filter.key)"
+        [facetCounts$]="getFilterFacetCounts$(filter.key)"
+        (textChange)="setFilter(filter.key, $event)"
+        (dateRangeChange)="setDateFilter(filter.key, $event)"
+        (selectionChange)="selectionChange($event)"
+        (checkBoxChange)="setFilter(filter.key, $event)"
+        (numericRangeChange)="numericRangeChange(filter.key, $event)"
+      ></shared-filter>
     </ng-container>
     <div
       class="section-container scientific-conditions"
@@ -224,7 +230,10 @@
                   (input)="updateConditionUnit(i, $event)"
                   [matAutocomplete]="rhsUnits"
                 />
-                <mat-autocomplete #rhsUnits="matAutocomplete" (optionSelected)="updateConditionUnit(i, $event)">
+                <mat-autocomplete
+                  #rhsUnits="matAutocomplete"
+                  (optionSelected)="updateConditionUnit(i, $event)"
+                >
                   <mat-option
                     *ngFor="let unit of getUnits(conditionConfig.condition.lhs)"
                     [value]="unit"

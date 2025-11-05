@@ -24,7 +24,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MockStore } from "@ngrx/store/testing";
 import { Store, StoreModule } from "@ngrx/store";
 import {
-  addKeywordFilterAction,
+  addDatasetFilterAction,
   clearFacetsAction,
   updatePropertyAction,
 } from "state-management/actions/datasets.actions";
@@ -38,17 +38,8 @@ import { DialogComponent } from "shared/modules/dialog/dialog.component";
 import { AppConfigService } from "app-config.service";
 import { AttachmentService } from "shared/services/attachment.service";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular";
-import {
-  TranslateLoader,
-  TranslateModule,
-  TranslationObject,
-} from "@ngx-translate/core";
+import { TranslateService } from "@ngx-translate/core";
 
-class MockTranslateLoader implements TranslateLoader {
-  getTranslation(): Observable<TranslationObject> {
-    return of({});
-  }
-}
 describe("DatasetDetailComponent", () => {
   let component: DatasetDetailComponent;
   let fixture: ComponentFixture<DatasetDetailComponent>;
@@ -58,7 +49,6 @@ describe("DatasetDetailComponent", () => {
   };
 
   const getConfig = () => ({});
-
   let store: MockStore;
 
   beforeEach(waitForAsync(() => {
@@ -76,15 +66,12 @@ describe("DatasetDetailComponent", () => {
         MatTabsModule,
         NgxJsonViewerModule,
         SharedScicatFrontendModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: MockTranslateLoader,
-          },
-        }),
         StoreModule.forRoot({}),
       ],
-      providers: [AttachmentService],
+      providers: [
+        AttachmentService,
+        { provide: TranslateService, useValue: { instant: (k: string) => k } },
+      ],
       declarations: [DatasetDetailComponent, DatafilesComponent, LinkyPipe],
     });
     TestBed.overrideComponent(DatasetDetailComponent, {
@@ -132,7 +119,11 @@ describe("DatasetDetailComponent", () => {
       expect(dispatchSpy).toHaveBeenCalledTimes(2);
       expect(dispatchSpy).toHaveBeenCalledWith(clearFacetsAction());
       expect(dispatchSpy).toHaveBeenCalledWith(
-        addKeywordFilterAction({ keyword }),
+        addDatasetFilterAction({
+          filterType: "multiSelect",
+          key: "keywords",
+          value: keyword,
+        }),
       );
       expect(router.navigateByUrl).toHaveBeenCalledWith("/datasets");
     });

@@ -22,7 +22,7 @@ import {
 } from "state-management/selectors/user.selectors";
 import { map } from "rxjs/operators";
 import {
-  addKeywordFilterAction,
+  addDatasetFilterAction,
   clearFacetsAction,
   updatePropertyAction,
 } from "state-management/actions/datasets.actions";
@@ -49,7 +49,6 @@ import {
   SampleClass,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { AttachmentService } from "shared/services/attachment.service";
-import { TranslateService } from "@ngx-translate/core";
 
 /**
  * Component to show details for a data set, using the
@@ -75,6 +74,7 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   appConfig = this.appConfigService.getConfig();
 
+  localization = "dataset";
   dataset: OutputDatasetObsoleteDto | undefined;
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
@@ -94,13 +94,10 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
     private attachmentService: AttachmentService,
-    private translateService: TranslateService,
     private store: Store,
     private router: Router,
     private fb: FormBuilder,
-  ) {
-    this.translateService.use("datasetDefault");
-  }
+  ) {}
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -163,7 +160,13 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   onClickKeyword(keyword: string) {
     this.store.dispatch(clearFacetsAction());
-    this.store.dispatch(addKeywordFilterAction({ keyword }));
+    this.store.dispatch(
+      addDatasetFilterAction({
+        filterType: "multiSelect",
+        key: "keywords",
+        value: keyword,
+      }),
+    );
     this.router.navigateByUrl("/datasets");
   }
 
@@ -300,5 +303,14 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
 
   openAttachment(encoded: string) {
     this.attachmentService.openAttachment(encoded);
+  }
+  emptyMetadataTable(): boolean {
+    if (this.appConfig.hideEmptyMetadataTable) {
+      return (
+        !!this.dataset?.scientificMetadata &&
+        Object.keys(this.dataset.scientificMetadata).length > 0
+      );
+    }
+    return true;
   }
 }

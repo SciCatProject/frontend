@@ -26,7 +26,6 @@ import {
 } from "state-management/models";
 
 import { AttachmentService } from "shared/services/attachment.service";
-import { TranslateService } from "@ngx-translate/core";
 import { DatePipe } from "@angular/common";
 import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular/model/outputDatasetObsoleteDto";
 import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
@@ -55,6 +54,8 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
   appConfig = this.appConfigService.getConfig();
 
+  localization = "dataset";
+
   dataset$ = this.store.select(selectCurrentDataset);
   datasetWithout$ = this.store.select(selectCurrentDatasetWithoutFileInfo);
   attachments$ = this.store.select(selectCurrentAttachments);
@@ -63,20 +64,18 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   show = false;
 
   instrument: Instrument | undefined;
+  dataset: OutputDatasetObsoleteDto | undefined;
 
   constructor(
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
     private attachmentService: AttachmentService,
-    private translateService: TranslateService,
     private datePipe: DatePipe,
     private store: Store,
     private fb: FormBuilder,
     private router: Router,
     private snackBar: MatSnackBar,
-  ) {
-    this.translateService.use("datasetCustom");
-  }
+  ) {}
 
   ngOnInit() {
     this.form = this.fb.group({});
@@ -95,6 +94,12 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.store.select(selectCurrentInstrument).subscribe((instrument) => {
         this.instrument = instrument;
+      }),
+    );
+
+    this.subscriptions.push(
+      this.dataset$.subscribe((dataset) => {
+        this.dataset = dataset;
       }),
     );
   }
@@ -250,6 +255,16 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
     // Ensure the result is a valid object for metadata display
     return result && typeof result === "object" ? result : null;
+  }
+
+  emptyMetadataTable(): boolean {
+    if (this.appConfig.hideEmptyMetadataTable) {
+      return (
+        !!this.dataset?.scientificMetadata &&
+        Object.keys(this.dataset.scientificMetadata).length > 0
+      );
+    }
+    return true;
   }
 
   ngOnDestroy() {

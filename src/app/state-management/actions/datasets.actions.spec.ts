@@ -640,103 +640,36 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("addLocationFilterAction", () => {
+  describe("addDatasetFilterAction", () => {
     it("should create an action", () => {
       const location = "test";
-      const action = fromActions.addLocationFilterAction({ location });
+      const action = fromActions.addDatasetFilterAction({
+        filterType: "multiSelect",
+        key: "creationLocation",
+        value: location,
+      });
       expect({ ...action }).toEqual({
-        type: "[Dataset] Add Location Filter",
-        location,
+        type: "[Dataset] Add Dataset Filter",
+        key: "creationLocation",
+        value: location,
+        filterType: "multiSelect",
       });
     });
   });
 
-  describe("removeLocationFilterAction", () => {
+  describe("removeDatasetFilterAction", () => {
     it("should create an action", () => {
       const location = "test";
-      const action = fromActions.removeLocationFilterAction({ location });
-      expect({ ...action }).toEqual({
-        type: "[Dataset] Remove Location Filter",
-        location,
+      const action = fromActions.removeDatasetFilterAction({
+        filterType: "multiSelect",
+        key: "creationLocation",
+        value: location,
       });
-    });
-  });
-
-  describe("addGroupFilterAction", () => {
-    it("should create an action", () => {
-      const group = "test";
-      const action = fromActions.addGroupFilterAction({ group });
       expect({ ...action }).toEqual({
-        type: "[Dataset] Add Group Filter",
-        group,
-      });
-    });
-  });
-
-  describe("removeGroupFilterAction", () => {
-    it("should create an action", () => {
-      const group = "test";
-      const action = fromActions.removeGroupFilterAction({ group });
-      expect({ ...action }).toEqual({
-        type: "[Dataset] Remove Group Filter",
-        group,
-      });
-    });
-  });
-
-  describe("addTypeFilterAction", () => {
-    it("should create an action", () => {
-      const datasetType = "test";
-      const action = fromActions.addTypeFilterAction({ datasetType });
-      expect({ ...action }).toEqual({
-        type: "[Dataset] Add Type Filter",
-        datasetType,
-      });
-    });
-  });
-
-  describe("removeTypeFilterAction", () => {
-    it("should create an action", () => {
-      const datasetType = "test";
-      const action = fromActions.removeTypeFilterAction({ datasetType });
-      expect({ ...action }).toEqual({
-        type: "[Dataset] Remove Type Filter",
-        datasetType,
-      });
-    });
-  });
-
-  describe("addKeywordFilterAction", () => {
-    it("should create an action", () => {
-      const keyword = "test";
-      const action = fromActions.addKeywordFilterAction({ keyword });
-      expect({ ...action }).toEqual({
-        type: "[Dataset] Add Keyword Filter",
-        keyword,
-      });
-    });
-  });
-
-  describe("removeKeywordFilterAction", () => {
-    it("should create an action", () => {
-      const keyword = "test";
-      const action = fromActions.removeKeywordFilterAction({ keyword });
-      expect({ ...action }).toEqual({
-        type: "[Dataset] Remove Keyword Filter",
-        keyword,
-      });
-    });
-  });
-
-  describe("setDateRangeFilterAction", () => {
-    it("should create an action", () => {
-      const begin = "testBegin";
-      const end = "testEnd";
-      const action = fromActions.setDateRangeFilterAction({ begin, end });
-      expect({ ...action }).toEqual({
-        type: "[Dataset] Set Date Range Filter",
-        begin,
-        end,
+        type: "[Dataset] Remove Dataset Filter",
+        key: "creationLocation",
+        value: location,
+        filterType: "multiSelect",
       });
     });
   });
@@ -785,14 +718,6 @@ describe("Dataset Actions", () => {
       const pid = "1";
       const action = fromActions.setPidTermsAction({ pid });
       expect({ ...action }).toEqual({ type: "[Dataset] Set Pid Terms", pid });
-    });
-  });
-
-  describe("setPidTermsFilterAction", () => {
-    it("should create an action", () => {
-      const pid = { $regex: "1" };
-      const action = fromActions.setPidTermsFilterAction({ pid });
-      expect({ ...action }).toEqual({ type: "[Dataset] Set Text Filter", pid });
     });
   });
 });

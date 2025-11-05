@@ -52,6 +52,7 @@ export class DatasetEffects {
         fromActions.fetchDatasetsAction,
         fromActions.setPublicViewModeAction,
         fromActions.sortByColumnAction,
+        fromActions.setArchiveViewModeAction,
       ),
       concatLatestFrom(() => this.fullqueryParams$),
       map(([, params]) => params),
@@ -89,6 +90,7 @@ export class DatasetEffects {
           .pipe(
             map((res) => {
               const { all, ...facetCounts } = res[0];
+
               const allCounts = all && all.length > 0 ? all[0].totalSets : 0;
               return fromActions.fetchFacetCountsCompleteAction({
                 facetCounts,
