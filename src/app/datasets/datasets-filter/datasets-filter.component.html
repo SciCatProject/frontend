@@ -75,15 +75,27 @@
                     (mouseleave)="hoverKey = null"
                   ></mat-icon>
                   <div class="field-name-wrapper">
-                    <div class="human-name">
-                      {{ getHumanName(conditionConfig.condition.lhs) }}
-                    </div>
-                    <div
-                      class="metadata-name"
-                      *ngIf="humanNameMap[conditionConfig.condition.lhs]"
+                    <ng-container
+                      *ngIf="
+                        getHumanName(conditionConfig.condition.lhs);
+                        else rawNameOnlyHeader
+                      "
                     >
-                      {{ conditionConfig.condition.lhs }}
-                    </div>
+                      <div class="primary-name">
+                        {{ getHumanName(conditionConfig.condition.lhs) }}
+                      </div>
+                      <div
+                        class="secondary-name"
+                        *ngIf="humanNameMap[conditionConfig.condition.lhs]"
+                      >
+                        {{ conditionConfig.condition.lhs }}
+                      </div>
+                    </ng-container>
+                    <ng-template #rawNameOnlyHeader>
+                      <div class="primary-name">
+                        {{ conditionConfig.condition.lhs }}
+                      </div>
+                    </ng-template>
                   </div>
 
                   <!-- Hover overlay -->
@@ -109,12 +121,12 @@
                           <strong>Human readable name: </strong>
                           {{ getHumanName(conditionConfig.condition.lhs) }}
                           <br />
-                          <strong>Metadata name:</strong>
+                          <strong>Metadata key:</strong>
                           {{ conditionConfig.condition.lhs }}
                         </ng-container>
                       </div>
                       <ng-template #rawNameOnly>
-                        <strong>Metadata name:</strong>
+                        <strong>Metadata key:</strong>
                         {{ conditionConfig.condition.lhs }}
                       </ng-template>
                     </mat-card>

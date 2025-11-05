@@ -788,7 +788,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   getHumanName(key: string): string {
-    return this.humanNameMap[key] || key;
+    return this.humanNameMap[key];
   }
 
   getAllowedOperators(key: string): string[] {

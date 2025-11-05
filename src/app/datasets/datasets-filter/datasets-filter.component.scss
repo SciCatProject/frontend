@@ -103,7 +103,6 @@ mat-card {
     font-weight: 500;
     font-size: 1rem;
     margin-bottom: 0.25rem;
-    word-break: break-word;
     display: flex;
     align-items: center;
 
@@ -119,16 +118,19 @@ mat-card {
       min-width: 0;
       flex: 1;
 
-      .human-name {
+      .primary-name {
         font-size: 1rem;
         font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
-      .metadata-name {
+      .secondary-name {
         font-size: 0.875rem;
         font-style: italic;
-        color: rgba(0, 0, 0, 0.54);
         margin-top: 2px;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }
