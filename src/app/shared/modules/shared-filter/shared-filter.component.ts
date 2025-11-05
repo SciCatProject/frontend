@@ -190,7 +190,7 @@ export class SharedFilterComponent implements OnChanges {
 
   trackById = (_: number, x: FacetItem) => x._id;
 
-  private handleCheckboxFacets(prefilledValue: string[]) {
+  handleCheckboxFacets(prefilledValue: string[]) {
     this.facetCounts$.subscribe((facets) => {
       const prefilled = [prefilledValue].flat().filter(Boolean);
       const selectedIds = new Set(prefilled);
