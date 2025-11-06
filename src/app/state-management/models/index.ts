@@ -1,7 +1,7 @@
 import {
-  ConditionConfig,
   FilterConfig,
-} from "shared/modules/filters/filters.module";
+  ConditionConfig,
+} from "state-management/state/user.store";
 
 export interface Settings {
   tapeCopies: string;
@@ -15,19 +15,16 @@ export interface TableColumn {
   header?: string;
   path?: string;
   order: number;
-  type: "standard" | "custom";
+  type: "standard" | "custom" | "date" | "hoverContent";
   enabled: boolean;
+  format?: string;
+  tooltip?: string;
   width?: number;
 }
 
-export interface LabelMaps {
-  [key: string]: Record<string, string>;
-}
-
 export interface LabelsLocalization {
-  datasetDefault: Record<string, string>;
-  datasetCustom: Record<string, string>;
-  proposalDefault: Record<string, string>;
+  dataset: Record<string, string>;
+  proposal: Record<string, string>;
 }
 
 export interface DatasetDetailComponentConfig {
@@ -86,10 +83,10 @@ type CustomizationType =
 // Type alias for allowed field types
 type FieldType = "text" | "copy" | "linky" | "tag" | "date";
 
-export interface DatasetsListSettings {
-  columns: TableColumn[];
-  filters: FilterConfig[];
-  conditions: ConditionConfig[];
+export interface ListSettings {
+  columns?: TableColumn[];
+  filters?: FilterConfig[];
+  conditions?: ConditionConfig[];
 }
 
 export enum MessageType {

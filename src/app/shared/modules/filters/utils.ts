@@ -1,6 +1,7 @@
 import { BehaviorSubject, combineLatest, Observable } from "rxjs";
 import { FacetCount } from "../../../state-management/state/datasets.store";
 import { map } from "rxjs/operators";
+import { DateTime } from "luxon";
 
 export function createSuggestionObserver(
   facetCounts$: Observable<FacetCount[]>,
@@ -22,11 +23,6 @@ export function createSuggestionObserver(
   );
 }
 
-export function getFacetId(facetCount: FacetCount, fallback = ""): string {
-  const id = facetCount._id;
-  return id ? String(id) : fallback;
-}
-
 export function getFacetCount(facetCount: FacetCount): number {
   return facetCount.count;
 }
@@ -41,4 +37,19 @@ export function getFilterLabel(
   }
 
   return filters[componentName];
+}
+
+export function toIsoUtc(d: Date | DateTime | null | undefined): string | null {
+  if (!d) return null;
+  // Luxon Date
+  if (
+    typeof (d as DateTime).toISO === "function" &&
+    typeof (d as DateTime).toUTC === "function"
+  ) {
+    return (d as DateTime).toUTC().toISO();
+  }
+  // Native Date
+  return DateTime.fromJSDate(d as Date)
+    .toUTC()
+    .toISO();
 }

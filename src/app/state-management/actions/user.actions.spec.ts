@@ -387,15 +387,6 @@ describe("User Actions", () => {
     });
   });
 
-  describe("deselectAllCustomColumnsAction", () => {
-    it("should create an action", () => {
-      const action = fromActions.deselectAllCustomColumnsAction();
-      expect({ ...action }).toEqual({
-        type: "[User] Deselect All Custom Columns",
-      });
-    });
-  });
-
   describe("showMessageAction", () => {
     it("should create an action", () => {
       const message = new Message("Test", MessageType.Success, 5000);

@@ -34,7 +34,10 @@ const reducer = createReducer(
     fromActions.fetchDatasetCompleteAction,
     (state, { dataset }): DatasetState => ({
       ...state,
-      currentSet: dataset,
+      currentSet: {
+        ...dataset,
+        origdatablocks: state.currentSet?.origdatablocks,
+      },
     }),
   ),
 
@@ -364,92 +367,49 @@ const reducer = createReducer(
     return { ...state, filters };
   }),
 
-  on(fromActions.setPidTermsFilterAction, (state, { pid }): DatasetState => {
-    const filters = { ...state.filters, pid, skip: 0 };
-    return { ...state, filters };
-  }),
+  on(
+    fromActions.setFiltersAction,
+    (state, { datasetFilters }): DatasetState => {
+      const filters = { ...state.filters, ...datasetFilters };
 
-  on(
-    fromActions.addLocationFilterAction,
-    (state, { location }): DatasetState => {
-      const creationLocation = state.filters.creationLocation
-        .concat(location)
-        .filter((val, i, self) => self.indexOf(val) === i); // Unique
-      const filters = { ...state.filters, creationLocation, skip: 0 };
-      return { ...state, filters };
-    },
-  ),
-  on(
-    fromActions.removeLocationFilterAction,
-    (state, { location }): DatasetState => {
-      const creationLocation = state.filters.creationLocation.filter(
-        (existingLocation) => existingLocation !== location,
-      );
-      const filters = { ...state.filters, creationLocation, skip: 0 };
-      return { ...state, filters };
-    },
-  ),
-
-  on(fromActions.addGroupFilterAction, (state, { group }): DatasetState => {
-    const ownerGroup = state.filters.ownerGroup
-      .concat(group)
-      .filter((val, i, self) => self.indexOf(val) === i); // Unique
-    const filters = { ...state.filters, ownerGroup, skip: 0 };
-    return { ...state, filters };
-  }),
-  on(fromActions.removeGroupFilterAction, (state, { group }): DatasetState => {
-    const ownerGroup = state.filters.ownerGroup.filter(
-      (existingGroup) => existingGroup !== group,
-    );
-    const filters = { ...state.filters, ownerGroup, skip: 0 };
-    return { ...state, filters };
-  }),
-
-  on(
-    fromActions.addTypeFilterAction,
-    (state, { datasetType }): DatasetState => {
-      const type = state.filters.type
-        .concat(datasetType)
-        .filter((val, i, self) => self.indexOf(val) === i); // Unique
-      const filters = { ...state.filters, type, skip: 0 };
-      return { ...state, filters };
-    },
-  ),
-  on(
-    fromActions.removeTypeFilterAction,
-    (state, { datasetType }): DatasetState => {
-      const type = state.filters.type.filter(
-        (existingType) => existingType !== datasetType,
-      );
-      const filters = { ...state.filters, type, skip: 0 };
-      return { ...state, filters };
-    },
-  ),
-
-  on(fromActions.addKeywordFilterAction, (state, { keyword }): DatasetState => {
-    const keywords = state.filters.keywords
-      .concat(keyword)
-      .filter((val, i, self) => self.indexOf(val) === i); // Unique
-    const filters = { ...state.filters, keywords, skip: 0 };
-    return { ...state, filters };
-  }),
-  on(
-    fromActions.removeKeywordFilterAction,
-    (state, { keyword }): DatasetState => {
-      const keywords = state.filters.keywords.filter(
-        (existingKeyword) => existingKeyword !== keyword,
-      );
-      const filters = { ...state.filters, keywords, skip: 0 };
       return { ...state, filters };
     },
   ),
 
   on(
-    fromActions.setDateRangeFilterAction,
-    (state, { begin, end }): DatasetState => {
-      const oldTime = state.filters.creationTime;
-      const creationTime = begin && end ? { ...oldTime, begin, end } : null;
-      const filters = { ...state.filters, creationTime };
+    fromActions.addDatasetFilterAction,
+    (state, { key, value, filterType }): DatasetState => {
+      const filters = {
+        ...state.filters,
+      };
+      if (filterType === "multiSelect") {
+        const newValue = (state.filters[key] || [])
+          .concat(value)
+          .filter((val, i, self) => self.indexOf(val) === i); // Unique
+
+        filters[key] = newValue;
+      } else {
+        filters[key] = value;
+      }
+      return { ...state, filters };
+    },
+  ),
+
+  on(
+    fromActions.removeDatasetFilterAction,
+    (state, { key, value, filterType }): DatasetState => {
+      const filters = { ...state.filters };
+
+      if (filterType === "multiSelect") {
+        const newValue = state.filters[key].filter(
+          (existingValue) => existingValue !== value,
+        );
+
+        filters[key] = newValue;
+      } else {
+        delete filters[key];
+      }
+
       return { ...state, filters };
     },
   ),

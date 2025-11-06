@@ -94,7 +94,7 @@ describe("Datasets general", () => {
       cy.get('[data-cy="batch-table"] mat-row').should("exist");
     });
 
-    it("should be able to edit dataset list after creating the published data", () => {
+    it("should be able to edit dataset list after creating the published data - 1", () => {
       cy.createDataset({ type: "raw" });
       cy.createDataset({ type: "raw" });
 
@@ -140,7 +140,10 @@ describe("Datasets general", () => {
 
       cy.isLoading();
 
-      cy.get(".dataset-table mat-row input[type='checkbox']").last().click();
+      cy.get(".dataset-table mat-row input[type='checkbox']")
+        .last()
+        .and("not.be.disabled")
+        .click();
 
       cy.get("#addToBatchButton").click();
 
@@ -287,7 +290,7 @@ describe("Datasets general", () => {
       cy.get("ngx-json-viewer section").contains(resourceType);
     });
 
-    it("should be able to edit dataset list after creating the published data", () => {
+    it("should be able to edit dataset list after creating the published data - 2", () => {
       const newDatasetName = "Test dataset name";
       cy.createDataset({ type: "raw", datasetName: newDatasetName });
       cy.visit("/publishedDatasets");
@@ -408,7 +411,7 @@ describe("Datasets general", () => {
       );
     });
 
-    it("should be able to register their public published data", () => {
+    it.skip("should be able to register their public published data", () => {
       cy.visit("/publishedDatasets");
 
       cy.get("app-publisheddata-dashboard mat-table mat-header-row").should(

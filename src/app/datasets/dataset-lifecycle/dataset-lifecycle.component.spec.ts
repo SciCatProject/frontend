@@ -5,7 +5,10 @@ import {
   waitForAsync,
 } from "@angular/core/testing";
 
-import { DatasetLifecycleComponent } from "./dataset-lifecycle.component";
+import {
+  DatasetLifecycleComponent,
+  HistoryWithProperties,
+} from "./dataset-lifecycle.component";
 
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { PipesModule } from "shared/pipes/pipes.module";
@@ -123,10 +126,7 @@ describe("DatasetLifecycleComponent", () => {
 
     it("should parse dataset.history into a HistoryItem array if dataset is defined", () => {
       const keywords = ["test", "parse"];
-      const dataset = createMock<
-        OutputDatasetObsoleteDto & { history: HistoryClass[] }
-      >({ ...mockDataset });
-      // TODO: Check the types here and see if we need the keywords at all or not as it doesn't exist on the HistoryClass.
+      const dataset = createMock<OutputDatasetObsoleteDto>({ ...mockDataset });
       dataset.history = [
         {
           id: "testId",
@@ -134,14 +134,14 @@ describe("DatasetLifecycleComponent", () => {
           updatedBy: "Test User",
           updatedAt: new Date().toISOString(),
         },
-      ] as unknown as HistoryClass[];
+      ] as HistoryWithProperties[];
 
       component.dataset = dataset;
       const parsedHistoryItems = component["parseHistoryItems"]();
 
       expect(parsedHistoryItems.length).toEqual(1);
       parsedHistoryItems.forEach((item) => {
-        expect(Object.keys(item).includes("id")).toEqual(false);
+        expect("id" in item).toBe(false);
         expect(item.property).toEqual("keywords");
         expect(item.value).toEqual(keywords);
       });

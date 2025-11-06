@@ -30,12 +30,6 @@ describe("ProposalDashboardComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("should initialize filterLists correctly", () => {
-    expect(component.filterLists.length).toBe(6);
-    expect(component.filterLists[0].key).toBe("proposalId");
-    expect(component.filterLists[4].type).toBe("dateRange");
-  });
-
   it("should dispatch fetchProposalsAction and fetchFacetCountsAction on ngOnInit", () => {
     component.ngOnInit();
 

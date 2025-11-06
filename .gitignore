@@ -57,3 +57,7 @@ Thumbs.db
 
 # karma
 karma-junit.xml
+
+# config files overrides
+config.override.json
+config.override.*.json
