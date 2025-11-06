@@ -14,7 +14,7 @@ export class ConfigurableActionsComponent {
 
   @Input({ required: true }) actionsConfig: ActionConfig[];
   @Input({ required: true }) actionItems: ActionItems;
-  @Input() files?: DataFiles_File[];
+  @Input() files?: DataFiles_File[]; // to be removed
   @Input() visible = true;
 
   constructor(public appConfigService: AppConfigService) {}

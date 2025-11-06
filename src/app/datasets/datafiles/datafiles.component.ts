@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   OnDestroy,
   AfterViewInit,
+  OnInit,
   AfterViewChecked,
   ViewChild,
   ElementRef,
@@ -45,7 +46,7 @@ import { AuthService } from "shared/services/auth/auth.service";
   standalone: false,
 })
 export class DatafilesComponent
-  implements OnDestroy, AfterViewInit, AfterViewChecked
+  implements OnDestroy, OnInit, AfterViewChecked
 {
   @ViewChild("downloadAllForm") downloadAllFormElement: ElementRef<NgForm>;
   @ViewChild("downloadSelectedForm") downloadSelectedFormElement;
@@ -69,7 +70,9 @@ export class DatafilesComponent
 
   files: Array<DataFiles_File> = [];
   datasetPid = "";
-  actionItems: ActionItems;
+  actionItems: ActionItems = {
+    datasets: [],
+  };
 
   count = 0;
   pageSize = 25;
@@ -243,7 +246,8 @@ export class DatafilesComponent
 
     return warning;
   }
-  ngAfterViewInit() {
+  //ngAfterViewInit() {
+  ngOnInit() {
     this.subscriptions.push(
       this.dataset$.subscribe((dataset) => {
         if (dataset) {

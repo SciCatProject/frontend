@@ -30,6 +30,7 @@ export interface ActionConfig {
 // }
 
 export interface ActionItemDataset {
+  ownerGroup: string;
   pid: string;
   sourceFolder?: string;
   isPublished?: boolean;

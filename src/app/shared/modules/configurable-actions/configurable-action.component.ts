@@ -16,6 +16,8 @@ import { Store } from "@ngrx/store";
 import { updatePropertyAction } from "state-management/actions/datasets.actions";
 import { Router } from "@angular/router";
 import { AppConfigService } from "app-config.service";
+import { selectProfile } from "state-management/selectors/user.selectors";
+import { Subscription } from "rxjs";
 
 type JSONValue =
   | string
@@ -29,33 +31,79 @@ function processSelector(
   jsonObject: JSONValue,
   selector: string
 ): string | string[] | number | number[] {
+  console.log("---> processSelector");
+  console.log(jsonObject);
+  console.log(selector);
   const results: string[] = [];
   const numericResults: number[] = [];
   let sum = 0;
 
-  // Support for wrapping selector in "[ ... ] | operation"
-  const [coreSelectorPart, operationPart] = selector.includes("|")
-    ? selector.split("|").map(part => part.trim())
-    : [selector.trim(), null];
+  // Remove leading/trailing whitespace
+  selector = selector.trim();
 
-  // Parse the core selector and optional filter
-  const coreSelector = coreSelectorPart.replace(/^\[|\]$/g, ""); // Remove enclosing brackets, if present
+  var coreSelector = null;
+  var operationPart = null;
+
+  // Match pattern: [ ... ] | operation  
+  // Supports spaces between parts.
+  const match = selector.match(/^\[(.+)\]\s*\|\s*(.+)$/);
+  if (match) {
+    // There is an operation after the brackets
+    coreSelector = match[1].trim();
+    operationPart = match[2].trim();
+  } else {
+    // no operation
+    coreSelector = selector.trim();
+  }
+
+  if (coreSelector.startsWith('[') && coreSelector.endsWith(']')) {
+    // Only coreSelector with brackets, no operation
+    coreSelector = coreSelector.slice(1, -1).trim();
+  }
+
+  const parsePath = (path: string): string[] => {
+    const result: string[] = [];
+    // Remove starting dot, if any
+    if (path.startsWith('.')) {
+      path = path.slice(1);
+    }
+    // Split on dot to extract properties (with possible [index] after them)
+    const segments = path.split('.');
+
+    for (const segment of segments) {
+      // Match property and possible [index]
+      const regex = /([a-zA-Z0-9_]+)|(\[\d+\])/g;
+      let match;
+      while ((match = regex.exec(segment)) !== null) {
+        if (match[1] !== undefined) {
+          // Property name
+          result.push(match[1].trim());
+        } else if (match[2] !== undefined) {
+          // Array index
+          result.push(match[2].trim());
+        }
+      }
+    }
+
+    return result;
+  }
+
+  // extract main field selector and filter
   const [mainSelector, filterSelector] = coreSelector.split('|').map(part => part.trim());
-  const mainKeys = mainSelector
-    .replace(/^\./, "") // Remove leading dot
-    .split(".")         // Split into keys
-    .map((key) => key.trim());
+  const mainKeys = parsePath(mainSelector)
+//    .replace(/^\./, "") // Remove leading dot
+//    .split(".")         // Split into keys
+//    .map((key) => key.trim());
 
   let filterKeys: string[] | null = null;
   if (filterSelector) {
     if (!filterSelector.startsWith("select ")) {
       throw new Error("Invalid syntax: Filter part must start with 'select'.");
     }
-    filterKeys = filterSelector
-      .slice(7)          // Remove "select " prefix
-      .replace(/^\./, "") // Remove leading dot
-      .split(".")         // Split into keys
-      .map(key => key.trim());
+    filterKeys = parsePath(filterSelector.slice(7));          // Remove "select " prefix
+      //.replace(/^\./, "") // Remove leading dot
+      //.split(".")         // Split into keys
+      //.map(key => key.trim());
   }
 
   const traverse = (
@@ -136,13 +184,13 @@ function processSelector(
 }
 
 // Example usage
-const jsonExample = {
-  datasets: [
-    { files: { selected: true, path: "/path/to/file1", size: 100 } },
-    { files: { selected: false, path: "/path/to/file2", size: 200 } },
-    { files: { selected: true, path: "/path/to/file3", size: 300 } }
-  ]
-};
+// const jsonExample = {
+//   datasets: [
+//     { files: { selected: true, path: "/path/to/file1", size: 100 } },
+//     { files: { selected: false, path: "/path/to/file2", size: 200 } },
+//     { files: { selected: true, path: "/path/to/file3", size: 300 } }
+//   ]
+// };
 
 // // Example 1: Count all selected items
 // const selectorCount = "[.datasets[].files.size | select .datasets[].files.selected] | count";
@@ -168,7 +216,8 @@ const jsonExample = {
 export class ConfigurableActionComponent implements OnInit, OnChanges {
   @Input({ required: true }) actionConfig: ActionConfig;
   @Input({ required: true }) actionItems: ActionItems;
-  @Input() files?: DataFiles_File[];
+  //@Input() files?: DataFiles_File[];
+  userProfile$ = this.store.select(selectProfile);
 
   jwt = "";
   use_mat_icon = false;
@@ -179,6 +228,10 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   variables: Record<string, any> = {};
 
   form: HTMLFormElement = null;
+
+  subscriptions: Subscription[] = [];
+
+  userProfile: any = {};
 
   constructor(
     private usersService: UsersService,
@@ -210,18 +263,23 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     return condition
       // Handle #Length({{ files }})
       .replace(
-        /#Length\(\{\{\s(\w+)\s\}\}\)/g,
+        /\#Length\(\s*\@(\w+)\s*\)/g,
         (_, variableName) => `variables.${variableName}.length`)
       // Handle #MaxDownloadableSize({{ totalSize }})
       .replace(
-        /#MaxDownloadableSize\(\{\{\s(\w+)\s\}\}\)/g,
+        ///#MaxDownloadableSize\(\{\{\s(\w+)\s\}\}\)/g,
+        /\#MaxDownloadableSize\(@*(\w+)\)/g,
         (_, variableName) => `variables.${variableName} <= maxDownloadableSize`)
       .replace(
-        /\{\{\s(\w+)\s\}\}/g, 
+        /\#datasetOwner/g,
+        (_) => `datasetOwner`)        
+      .replace(
+        /\@(\w+)/g, 
         (_, variableName) => `variables.${variableName}`);
   }
 
   private prepare_disabled_condition() {
+    console.log("---> prepare_disabled_condition");
     if (this.actionConfig.enabled) {
       this.disabled_condition =
         "!(" +
@@ -234,6 +292,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     } else {
       this.disabled_condition = "false";
     }
+    console.log(this.disabled_condition);
   }
 
   private prepare_hidden_condition() {
@@ -247,6 +306,13 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.subscriptions.push(
+      this.userProfile$.subscribe((userProfile) => {
+        if (userProfile) {
+          this.userProfile = userProfile;
+        }
+      }),
+    );
     this.use_mat_icon = !!this.actionConfig.mat_icon;
     this.use_icon = this.actionConfig.icon !== undefined;
     this.prepare_disabled_condition();
@@ -260,23 +326,37 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   update_status() {
-    Object.entries(this.actionConfig.variables).forEach(([key,selector]) => {
+    console.log("---> update_status");
+    console.log(this.actionConfig);
+    console.log(this.actionItems);
+    Object.entries(this.actionConfig.variables ?? {}).forEach(([key,selector]) => {
       this.variables[key] = processSelector(
         this.actionItems as unknown as JSONValue,
         selector)
     })
   }
 
+  get context() {
+    const user = this.authService.getCurrentUserData();
+    return {
+      variables: this.variables,
+      maxDownloadableSize: this.configService.getConfig().maxDirectDownloadSize,
+      datasetOwner: (this.actionItems.datasets.map( (d) : Boolean => {
+        return this.userProfile.accessGroups?.includes(d.ownerGroup) || false;
+      }) as Array<Boolean>).every(Boolean),
+    }
+  }
+
   get disabled() {
     this.update_status();
 
     const expr = this.disabled_condition;
+    console.log(expr);
     const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);
 
-    return fn({
-      variables: this.variables,
-      maxDownloadableSize: this.configService.getConfig().maxDirectDownloadSize,
-    });
+    const res = fn(this.context);
+    console.log(res);
+    return res;
   }
 
   get visible() {

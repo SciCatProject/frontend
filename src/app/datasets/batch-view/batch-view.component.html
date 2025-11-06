@@ -1,11 +1,13 @@
 <div style="margin-top: 1em">
   <div *ngIf="hasBatch; else empty_batch">
     <div class="batch-actions" fxLayout="row" fxLayoutAlign="end center">
+<!--
       <configurable-actions
         [actionsConfig]="appConfig.datasetSelectionActions"
         [actionItems]="datasetList"
         [visible]="appConfig.datasetSelectionActionsEnabled"
       ></configurable-actions>
+-->
       <button (click)="onEmpty()" mat-button class="button" color="primary">
         <mat-icon> remove_shopping_cart </mat-icon>
         Empty Cart
