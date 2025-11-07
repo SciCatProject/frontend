@@ -111,6 +111,16 @@ export class ProposalDetailComponent implements OnInit, OnDestroy {
     this._hasUnsavedChanges = $event;
   }
 
+  emptyMetadataTable(): boolean {
+    if (this.appConfig.hideEmptyMetadataTable) {
+      return (
+        !!this.proposal?.metadata &&
+        Object.keys(this.proposal.metadata).length > 0
+      );
+    }
+    return true;
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }

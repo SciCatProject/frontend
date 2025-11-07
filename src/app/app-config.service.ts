@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { merge } from "lodash-es";
-import { firstValueFrom, forkJoin, of } from "rxjs";
+import { mergeWith } from "lodash-es";
+import { firstValueFrom, of } from "rxjs";
 import { catchError, timeout } from "rxjs/operators";
 import {
   DatasetDetailComponentConfig,
@@ -67,6 +67,7 @@ export class MainMenuConfiguration {
 }
 
 export interface AppConfigInterface {
+  allowConfigOverrides?: boolean;
   skipSciCatLoginPageEnabled?: boolean;
   accessTokenPrefix: string;
   addDatasetEnabled: boolean;
@@ -145,6 +146,7 @@ export interface AppConfigInterface {
   mainMenu?: MainMenuConfiguration;
   supportEmail?: string;
   checkBoxFilterClickTrigger?: boolean;
+  hideEmptyMetadataTable?: boolean;
   ingestorComponent?: IngestorComponentConfig;
 }
 
@@ -163,33 +165,41 @@ function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {
 })
 export class AppConfigService {
   private appConfig: object = {};
-  private configsSize = 4;
 
   constructor(private http: HttpClient) {}
 
-  private async loadAndMerge(files: string[]): Promise<object> {
-    const requests = files.map((f) =>
-      this.http.get(`/assets/${f}`).pipe(catchError(() => of({}))),
-    );
-    const configs = await firstValueFrom(forkJoin(requests));
-    return configs.reduce((acc, cfg) => merge(acc, cfg), {});
-  }
-
   private async mergeConfig(): Promise<object> {
-    const normalConfigFiles = Array.from(
-      { length: this.configsSize },
-      (_, i) => `config.${i}.json`,
+    const config = await firstValueFrom(
+      this.http.get<Partial<AppConfigInterface>>("/assets/config.json").pipe(
+        catchError(() => {
+          console.error("No config provided.");
+          return of({} as Partial<AppConfigInterface>);
+        }),
+      ),
     );
-    const overrideConfigFiles = Array.from(
-      { length: this.configsSize },
-      (_, i) => `config.override.${i}.json`,
+    let configOverrideRequest: Partial<AppConfigInterface> = {};
+    if (config?.allowConfigOverrides) {
+      configOverrideRequest = await firstValueFrom(
+        this.http
+          .get<Partial<AppConfigInterface>>("/assets/config.override.json")
+          .pipe(
+            catchError(() => {
+              console.error(
+                "allowConfigOverrides set to true but no config.override provided.",
+              );
+              return of({} as Partial<AppConfigInterface>);
+            }),
+          ),
+      );
+    }
+    // Custom merge to replace arrays instead of merging them
+    return mergeWith(
+      {},
+      config ?? {},
+      configOverrideRequest ?? {},
+      (objVal, srcVal) =>
+        Array.isArray(objVal) && Array.isArray(srcVal) ? srcVal : undefined,
     );
-    return await this.loadAndMerge([
-      "config.json",
-      ...normalConfigFiles,
-      "config.override.json",
-      ...overrideConfigFiles,
-    ]);
   }
 
   async loadAppConfig(): Promise<void> {
@@ -201,12 +211,8 @@ export class AppConfigService {
       this.appConfig = Object.assign({}, this.appConfig, config);
     } catch (err) {
       console.log("No config available in backend, trying with local config.");
-      try {
-        const config = await this.mergeConfig();
-        this.appConfig = Object.assign({}, this.appConfig, config);
-      } catch (err) {
-        console.error("No config provided.");
-      }
+      const config = await this.mergeConfig();
+      this.appConfig = Object.assign({}, this.appConfig, config);
     }
 
     const config: AppConfigInterface = this.appConfig as AppConfigInterface;

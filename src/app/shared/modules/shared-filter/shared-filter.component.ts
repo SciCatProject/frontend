@@ -17,8 +17,9 @@ import { MultiSelectFilterValue } from "../filters/multiselect-filter.component"
 import { INumericRange } from "../numeric-range/form/model/numeric-range-field.model";
 import { FilterType } from "state-management/state/user.store";
 import { toIsoUtc } from "../filters/utils";
+import { orderBy } from "lodash-es";
 
-type FacetItem = { _id?: string; label?: string; count: number };
+type FacetItem = { _id: string; label?: string; count: number };
 @Component({
   selector: "shared-filter",
   templateUrl: "./shared-filter.component.html",
@@ -31,7 +32,9 @@ export class SharedFilterComponent implements OnChanges {
     end: null,
   };
   checkboxDisplaylimit = 10;
+  searchInputDisplayThreshold = 10;
   checkboxFacetCounts: FacetItem[] = [];
+  showCheckboxSearch = false;
 
   filterForm = new FormGroup({
     textField: new FormControl(""),
@@ -84,18 +87,19 @@ export class SharedFilterComponent implements OnChanges {
     });
   }
   ngOnChanges(changes: SimpleChanges) {
+    if (this.checkboxFacetCounts.length > this.searchInputDisplayThreshold) {
+      this.showCheckboxSearch = true;
+    } else {
+      this.showCheckboxSearch = false;
+    }
+
     if (changes["prefilled"] || changes["filterType"]) {
       if (this.filterType === "text") {
         this.filterForm
           .get("textField")!
           .setValue((this.prefilled as string) || "");
       } else if (this.filterType === "checkbox") {
-        this.facetCounts$.subscribe((facets) => {
-          this.checkboxFacetCounts = facets;
-        });
-        this.filterForm
-          .get("selectedIds")!
-          .setValue((this.prefilled as string[]) || []);
+        this.handleCheckboxFacets(this.prefilled as string[]);
       } else if (this.filterType === "number") {
         const range = this.prefilled as unknown as INumericRange;
         this.filterForm.get("numberRange")!.setValue({
@@ -141,30 +145,36 @@ export class SharedFilterComponent implements OnChanges {
     this.numericRangeChange.emit(value);
   }
 
-  /** Checkbox filter helpers */
+  /** Checkbox filter helpers START*/
   filteredFacetCounts(): FacetItem[] {
     const term = (this.filterForm.get("textField")?.value ?? "")
       .toLowerCase()
       .trim();
     const selected = new Set(this.filterForm.get("selectedIds")?.value ?? []);
 
-    const base = this.checkboxFacetCounts;
+    // the filter is to prevent showing items with empty _id or null which should not be selected anyway
+    const base = orderBy(this.checkboxFacetCounts, ["count"], ["desc"]).filter(
+      (item) => item._id,
+    );
 
     // always include checked items
     const pinned = base.filter((x) => selected.has(x._id));
 
     // apply text filter to the rest
     const filtered = term
-      ? base.filter((x) => (x.label ?? x._id).toLowerCase().includes(term))
+      ? base.filter((x) =>
+          (x.label ?? x._id ?? "").toLowerCase().includes(term),
+        )
       : base;
 
     // merge (checked/pinned to the top), de-duplicate by _id
-    const merged = [...pinned, ...filtered].filter(
-      (x, i, arr) => arr.findIndex((y) => y._id === x._id) === i,
-    );
+    const merged = [...pinned, ...filtered]
+      .filter((x, i, arr) => arr.findIndex((y) => y._id === x._id) === i)
+      .filter((x) => x.count > 0 || selected.has(x._id));
 
     return merged;
   }
+
   onShowMore() {
     this.checkboxDisplaylimit += 10;
   }
@@ -185,4 +195,29 @@ export class SharedFilterComponent implements OnChanges {
   }
 
   trackById = (_: number, x: FacetItem) => x._id;
+
+  handleCheckboxFacets(prefilledValue: string[]) {
+    this.facetCounts$.subscribe((facets) => {
+      const prefilled = [prefilledValue].flat().filter(Boolean);
+      const selectedIds = new Set(prefilled);
+      this.filterForm.get("selectedIds")!.setValue([...selectedIds]);
+
+      const selectedItems = [...selectedIds].map(
+        (id) => facets.find((f) => f._id === id) || { _id: id, count: 0 },
+      );
+
+      const merged = orderBy(
+        [...facets, ...selectedItems].filter(
+          (x, i, arr) => arr.findIndex((y) => y._id === x._id) === i,
+        ),
+        ["count"],
+        ["desc"],
+      );
+
+      this.checkboxFacetCounts = merged.filter(
+        (x) => selectedIds.has(x._id) || x.count > 0,
+      );
+    });
+  }
+  /** Checkbox filter helpers END*/
 }

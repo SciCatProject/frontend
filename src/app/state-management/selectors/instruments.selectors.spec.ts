@@ -89,5 +89,14 @@ describe("Instrument Selectors", () => {
         tablesSettings: {},
       });
     });
+
+    describe("selectInstrumentWithIdAndLabel", () => {
+      it("should map instruments to objects with _id and label", () => {
+        const instruments = [instrument];
+        expect(
+          fromSelectors.selectInstrumentWithIdAndLabel.projector(instruments),
+        ).toEqual([{ _id: instrument.pid, label: instrument.name }]);
+      });
+    });
   });
 });

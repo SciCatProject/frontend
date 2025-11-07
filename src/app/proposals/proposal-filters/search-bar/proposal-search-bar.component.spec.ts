@@ -1,11 +1,16 @@
 import { TestBed } from "@angular/core/testing";
 import { Router, ActivatedRoute } from "@angular/router";
 import { ProposalSearchBarComponent } from "./proposal-search-bar.component";
+import { MockStore, provideMockStore } from "@ngrx/store/testing";
+import { ProposalsState } from "state-management/state/proposals.store";
+import { addProposalFilterAction } from "state-management/actions/proposals.actions";
 
 describe("ProposalSearchBarComponent", () => {
   let component: ProposalSearchBarComponent;
   let routerSpy: jasmine.SpyObj<Router>;
   let activatedRouteStub: Partial<ActivatedRoute>;
+  let store: MockStore<ProposalsState>;
+  let dispatchSpy;
 
   beforeEach(() => {
     routerSpy = jasmine.createSpyObj("Router", ["navigate"]);
@@ -17,12 +22,14 @@ describe("ProposalSearchBarComponent", () => {
 
     TestBed.configureTestingModule({
       providers: [
+        provideMockStore({}),
         ProposalSearchBarComponent,
         { provide: Router, useValue: routerSpy },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
       ],
     });
 
+    store = TestBed.inject(MockStore);
     component = TestBed.inject(ProposalSearchBarComponent);
   });
 
@@ -49,7 +56,8 @@ describe("ProposalSearchBarComponent", () => {
   });
 
   it("onSearchAction should navigate with merged query params including textSearch", () => {
-    // existing query params
+    dispatchSpy = spyOn(store, "dispatch");
+
     const existing = { foo: "bar" };
     activatedRouteStub.snapshot.queryParams = {
       searchQuery: JSON.stringify(existing),
@@ -69,9 +77,18 @@ describe("ProposalSearchBarComponent", () => {
       },
       queryParamsHandling: "merge",
     });
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      addProposalFilterAction({
+        key: "text",
+        value: "new-text",
+        filterType: "text",
+      }),
+    );
   });
 
   it("onSearchAction should omit text when textSearch is empty", () => {
+    dispatchSpy = spyOn(store, "dispatch");
+
     const existing = { foo: "bar" };
     activatedRouteStub.snapshot.queryParams = {
       searchQuery: JSON.stringify(existing),
@@ -88,5 +105,12 @@ describe("ProposalSearchBarComponent", () => {
       },
       queryParamsHandling: "merge",
     });
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      addProposalFilterAction({
+        key: "text",
+        value: undefined,
+        filterType: "text",
+      }),
+    );
   });
 });

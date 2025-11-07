@@ -1,5 +1,7 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { Store } from "@ngrx/store";
+import { addProposalFilterAction } from "state-management/actions/proposals.actions";
 
 @Component({
   selector: "proposal-search-bar",
@@ -11,6 +13,7 @@ export class ProposalSearchBarComponent {
   textSearch = "";
 
   constructor(
+    private store: Store,
     private router: Router,
     private route: ActivatedRoute,
   ) {}
@@ -39,5 +42,12 @@ export class ProposalSearchBarComponent {
       },
       queryParamsHandling: "merge",
     });
+    this.store.dispatch(
+      addProposalFilterAction({
+        key: "text",
+        value: this.textSearch || undefined,
+        filterType: "text",
+      }),
+    );
   }
 }

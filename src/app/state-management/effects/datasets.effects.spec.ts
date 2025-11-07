@@ -136,11 +136,11 @@ describe("DatasetEffects", () => {
   describe("fetchFacetCounts$", () => {
     it("should result in a fetchFacetCountsCompleteAction", () => {
       const facetCounts: FacetCounts = {
-        creationLocation: [{ count: 0 }],
-        creationTime: [{ count: 0 }],
-        keywords: [{ count: 0 }],
-        ownerGroup: [{ count: 0 }],
-        type: [{ count: 0 }],
+        creationLocation: [],
+        creationTime: [],
+        keywords: [],
+        ownerGroup: [],
+        type: [],
       };
       const allCounts = 0;
       const action = fromActions.fetchFacetCountsAction();
@@ -152,11 +152,11 @@ describe("DatasetEffects", () => {
       const responseArray = [
         {
           all: [{ totalSets: 0 }],
-          creationLocation: [{ count: 0 }],
-          creationTime: [{ count: 0 }],
-          keywords: [{ count: 0 }],
-          ownerGroup: [{ count: 0 }],
-          type: [{ count: 0 }],
+          creationLocation: [],
+          creationTime: [],
+          keywords: [],
+          ownerGroup: [],
+          type: [],
         },
       ];
       actions = hot("-a", { a: action });
@@ -759,11 +759,11 @@ describe("DatasetEffects", () => {
     describe("ofType fetchFacetCountsCompleteAction", () => {
       it("should dispatch a loadingCompleteAction", () => {
         const facetCounts: FacetCounts = {
-          creationLocation: [{ count: 0 }],
-          creationTime: [{ count: 0 }],
-          keywords: [{ count: 0 }],
-          ownerGroup: [{ count: 0 }],
-          type: [{ count: 0 }],
+          creationLocation: [],
+          creationTime: [],
+          keywords: [],
+          ownerGroup: [],
+          type: [],
         };
         const allCounts = 0;
         const action = fromActions.fetchFacetCountsCompleteAction({

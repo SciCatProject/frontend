@@ -657,7 +657,7 @@ describe("Dataset Actions", () => {
     });
   });
 
-  describe("removeLocationFilterAction", () => {
+  describe("removeDatasetFilterAction", () => {
     it("should create an action", () => {
       const location = "test";
       const action = fromActions.removeDatasetFilterAction({

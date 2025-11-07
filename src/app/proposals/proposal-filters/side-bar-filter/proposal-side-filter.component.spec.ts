@@ -23,11 +23,41 @@ describe("ProposalSideFilterComponent", () => {
 
   beforeEach(async () => {
     mockStore = {
-      select: jasmine.createSpy("select").and.returnValue(of({ foo: [1, 2] })),
+      select: jasmine.createSpy("select").and.returnValue(
+        of([
+          { _id: "1", label: "A", count: 2 },
+          { _id: "2", label: "B", count: 1 },
+        ]),
+      ),
+      dispatch: jasmine.createSpy("dispatch"),
     };
     mockRoute = { snapshot: { queryParams: {} } };
     mockRouter = { navigate: jasmine.createSpy("navigate") };
-    const getConfig = () => ({ checkBoxFilterClickTrigger: false });
+    const getConfig = () => ({
+      checkBoxFilterClickTrigger: false,
+      defaultProposalsListSettings: {
+        filters: [
+          {
+            key: "instrumentIds",
+            type: "checkbox",
+            description: "Filter by Unique identifier for the proposal",
+            enabled: true,
+          },
+          {
+            key: "pi_lastname",
+            type: "checkbox",
+            description: "Filter by Last name of the Principal Investigator",
+            enabled: true,
+          },
+          {
+            key: "startTime",
+            type: "dateRange",
+            description: "Filter by Start time of the proposal",
+            enabled: true,
+          },
+        ],
+      },
+    });
 
     await TestBed.configureTestingModule({
       imports: [SharedScicatFrontendModule],
@@ -55,6 +85,12 @@ describe("ProposalSideFilterComponent", () => {
     expect(component.collapsed).toBeFalse();
   });
 
+  it("should initialize filterLists correctly", () => {
+    expect(component.filterLists.length).toBe(3);
+    expect(component.filterLists[0].key).toBe("instrumentIds");
+    expect(component.filterLists[2].type).toBe("dateRange");
+  });
+
   it("should toggle collapsed from false to true", () => {
     component.collapsed = false;
     component.toggleCollapse();
@@ -77,14 +113,14 @@ describe("ProposalSideFilterComponent", () => {
 
   it("should set a filter when value is provided", () => {
     component.activeFilters = {};
-    component.setFilter("proposalId", ["test123"]);
-    expect(component.activeFilters.proposalId).toEqual(["test123"]);
+    component.setFilter("instrumentIds", ["test123"]);
+    expect(component.activeFilters.instrumentIds).toEqual(["test123"]);
   });
 
   it("should remove a filter when value is empty", () => {
-    component.activeFilters = { proposalId: ["test123"] };
-    component.setFilter("status", []);
-    expect("status" in component.activeFilters).toBeFalse();
+    component.activeFilters = { instrumentIds: ["test123"] };
+    component.setFilter("instrumentIds", []);
+    expect("instrumentIds" in component.activeFilters).toBeFalse();
   });
 
   it("should set a date filter when begin or end is provided", () => {
@@ -99,10 +135,10 @@ describe("ProposalSideFilterComponent", () => {
 
   it("should remove a date filter when neither begin nor end is provided", () => {
     component.activeFilters = {
-      created: { begin: DateTime.now().toISO(), end: DateTime.now().toISO() },
+      startTime: { begin: DateTime.now().toISO(), end: DateTime.now().toISO() },
     };
-    component.setDateFilter("created", { begin: null, end: null });
-    expect("created" in component.activeFilters).toBeFalse();
+    component.setDateFilter("startTime", { begin: null, end: null });
+    expect("startTime" in component.activeFilters).toBeFalse();
   });
 
   it("should apply filters and navigate with correct queryParams", () => {
@@ -120,14 +156,18 @@ describe("ProposalSideFilterComponent", () => {
     });
   });
 
-  it("getFacetCounts$ should return counts array for existing key", (done) => {
-    component.getFacetCounts$("foo").subscribe((counts) => {
-      expect(counts).toEqual([1, 2]);
+  it("getFacetCounts$ should return counts array if selector has values", (done) => {
+    component.getFacetCounts$("instrumentIds").subscribe((counts) => {
+      expect(counts).toEqual([
+        { _id: "1", label: "A", count: 2 },
+        { _id: "2", label: "B", count: 1 },
+      ]);
       done();
     });
   });
 
-  it("getFacetCounts$ should return empty array for missing key", (done) => {
+  it("getFacetCounts$ should return empty array if selector has no values", (done) => {
+    mockStore.select.and.returnValue(of([]));
     component.getFacetCounts$("bar").subscribe((counts) => {
       expect(counts).toEqual([]);
       done();

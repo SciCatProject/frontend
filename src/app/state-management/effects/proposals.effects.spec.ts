@@ -7,6 +7,7 @@ import {
   selectFullqueryParams,
   selectDatasetsQueryParams,
   selectCurrentProposal,
+  selectFullfacetParams,
 } from "state-management/selectors/proposals.selectors";
 import * as fromActions from "state-management/actions/proposals.actions";
 import { hot, cold } from "jasmine-marbles";
@@ -26,6 +27,7 @@ import {
   loadingAction,
   loadingCompleteAction,
 } from "state-management/actions/user.actions";
+import { AppConfigService } from "app-config.service";
 
 const proposal = createMock<ProposalClass>({
   proposalId: "testId",
@@ -47,6 +49,27 @@ describe("ProposalEffects", () => {
   let proposalApi: jasmine.SpyObj<ProposalsService>;
   let datasetApi: jasmine.SpyObj<DatasetsService>;
 
+  const getConfig = () => ({
+    defaultProposalsListSettings: {
+      filters: [
+        {
+          key: "instrumentIds",
+          label: "Instrument",
+          type: "checkbox",
+          description: "Filter by instrument name",
+          enabled: true,
+        },
+        {
+          key: "proposalId",
+          label: "Proposal Id",
+          type: "checkbox",
+          description: "Filter by proposal id",
+          enabled: true,
+        },
+      ],
+    },
+  });
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -55,6 +78,7 @@ describe("ProposalEffects", () => {
         provideMockStore({
           selectors: [
             { selector: selectFullqueryParams, value: {} },
+            { selector: selectFullfacetParams, value: { fields: {} } },
             {
               selector: selectDatasetsQueryParams,
               value: {
@@ -84,6 +108,7 @@ describe("ProposalEffects", () => {
             "datasetsControllerCountV3",
           ]),
         },
+        { provide: AppConfigService, useValue: { getConfig } },
       ],
     });
 
@@ -129,10 +154,7 @@ describe("ProposalEffects", () => {
   describe("fetchFacetCount$", () => {
     it("should result in a fetchFacetCountCompleteAction", () => {
       const totalSets = 1;
-      const action = fromActions.fetchFacetCountsAction({
-        fields: {},
-        facets: [],
-      });
+      const action = fromActions.fetchFacetCountsAction();
       const apiResponse = [
         {
           all: [{ totalSets }],
@@ -149,10 +171,15 @@ describe("ProposalEffects", () => {
 
       const expected = cold("--b", { b: outcome });
       expect(effects.fetchFacetCount$).toBeObservable(expected);
+
+      expect(proposalApi.proposalsControllerFullfacetV3).toHaveBeenCalledWith(
+        JSON.stringify(["instrumentIds", "proposalId"]),
+        JSON.stringify({}),
+      );
     });
 
     it("should result in a fetchCountFailedAction", () => {
-      const action = fromActions.fetchFacetCountsAction({});
+      const action = fromActions.fetchFacetCountsAction();
       const outcome = fromActions.fetchFacetCountsFailedAction();
 
       actions = hot("-a", { a: action });
@@ -445,7 +472,7 @@ describe("ProposalEffects", () => {
 
     describe("ofType fetchCountAction", () => {
       it("should dispatch a loadingAction", () => {
-        const action = fromActions.fetchFacetCountsAction({});
+        const action = fromActions.fetchFacetCountsAction();
         const outcome = loadingAction();
 
         actions = hot("-a", { a: action });

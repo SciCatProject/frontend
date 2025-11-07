@@ -7,8 +7,8 @@ import { fetchInstrumentsAction } from "state-management/actions/instruments.act
 import {
   fetchFacetCountsAction,
   fetchProposalsAction,
+  setInitialProposalsFiltersAction,
 } from "state-management/actions/proposals.actions";
-import { FilterConfig } from "state-management/state/user.store";
 
 @Component({
   selector: "app-proposal-dashboard",
@@ -22,31 +22,6 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   params$ = this.route.queryParams;
   defaultPageSize = 10;
 
-  filterLists: FilterConfig[] = [
-    {
-      key: "instrumentIds",
-      label: "Instrument",
-      type: "checkbox",
-      description: "Filter by instrument of the proposal",
-      enabled: true,
-    },
-    {
-      key: "pi_lastname",
-      label: "PI Last Name",
-      type: "checkbox",
-      description: "Filter by principal investigator last name",
-      enabled: true,
-    },
-    {
-      key: "startTime",
-      label: "Start Date",
-      type: "dateRange",
-      description: "Filter by Start time of the proposal",
-      enabled: true,
-    },
-  ];
-  facetLists: string[] = ["pi_lastname", "instrumentIds"];
-
   constructor(
     private store: Store,
     private route: ActivatedRoute,
@@ -55,7 +30,6 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.dispatch(fetchInstrumentsAction({ skip: 0, limit: 1000 }));
 
-    // TODO: Shoule we hardcode the facet counts list here?
     this.subscriptions.push(
       combineLatest([this.params$]).subscribe(([queryParams]) => {
         const limit = queryParams.pageSize
@@ -63,7 +37,9 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
           : this.defaultPageSize;
         const skip = queryParams.pageIndex ? +queryParams.pageIndex * limit : 0;
         const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
-
+        this.store.dispatch(
+          setInitialProposalsFiltersAction({ fields: searchQuery }),
+        );
         this.store.dispatch(
           fetchProposalsAction({
             limit,
@@ -74,12 +50,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
           }),
         );
 
-        this.store.dispatch(
-          fetchFacetCountsAction({
-            fields: searchQuery,
-            facets: this.facetLists,
-          }),
-        );
+        this.store.dispatch(fetchFacetCountsAction());
       }),
     );
   }

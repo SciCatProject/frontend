@@ -23,11 +23,6 @@ export function createSuggestionObserver(
   );
 }
 
-export function getFacetId(facetCount: FacetCount, fallback = ""): string {
-  const id = facetCount._id;
-  return id ? String(id) : fallback;
-}
-
 export function getFacetCount(facetCount: FacetCount): number {
   return facetCount.count;
 }
