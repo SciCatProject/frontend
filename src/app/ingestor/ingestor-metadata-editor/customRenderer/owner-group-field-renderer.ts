@@ -15,61 +15,7 @@ import { Subscription } from "rxjs";
 @Component({
   selector: "owner-group-renderer",
   styleUrls: ["../ingestor-metadata-editor.component.scss"],
-  template: `
-    <div>
-      <mat-form-field
-        [ngStyle]="{ display: hidden ? 'none' : '' }"
-        *ngIf="userOwnerGroups && userOwnerGroups.length > 0"
-        class="custom-input-box"
-      >
-        <mat-label>{{ label }}</mat-label>
-        <input
-          type="text"
-          class="custom-input-box"
-          matInput
-          [id]="id"
-          [matAutocomplete]="auto"
-          [formControl]="form"
-          (input)="onChange($event)"
-          (focus)="focused = true"
-          (focusout)="focused = false"
-        />
-        <mat-autocomplete
-          #auto="matAutocomplete"
-          (optionSelected)="onSelectAutocompleteValue($event)"
-        >
-          <mat-option
-            *ngFor="let ownerGroup of userOwnerGroups"
-            [value]="ownerGroup"
-          >
-            {{ ownerGroup }}
-          </mat-option>
-        </mat-autocomplete>
-        <mat-hint *ngIf="shouldShowUnfocusedDescription() || focused">{{
-          description
-        }}</mat-hint>
-        <mat-error>{{ error }}</mat-error>
-      </mat-form-field>
-
-      <mat-form-field
-        [ngStyle]="{ display: hidden ? 'none' : '' }"
-        *ngIf="!userOwnerGroups || userOwnerGroups.length === 0"
-        class="custom-input-box"
-      >
-        <mat-label>{{ label }}</mat-label>
-        <input
-          type="text"
-          class="custom-input-box"
-          matInput
-          [id]="id"
-          [formControl]="form"
-          (input)="onChange($event)"
-          (focus)="focused = true"
-          (focusout)="focused = false"
-        />
-      </mat-form-field>
-    </div>
-  `,
+  templateUrl: "./owner-group-field-renderer.html",
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -22,7 +22,7 @@ import { CreateDatasetDto } from "@scicatproject/scicat-sdk-ts-angular";
 @Component({
   selector: "ingestor-dialog-stepper",
   templateUrl: "./ingestor.dialog-stepper.component.html",
-  styleUrls: ["./ingestor.dialog-stepper.component.css"],
+  styleUrls: ["./ingestor.dialog-stepper.component.scss"],
   standalone: false,
 })
 export class IngestorDialogStepperComponent implements OnInit, OnDestroy {

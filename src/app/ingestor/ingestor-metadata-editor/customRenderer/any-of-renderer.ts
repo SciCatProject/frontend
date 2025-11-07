@@ -5,7 +5,10 @@ import {
   findUISchema,
   Generate,
   GroupLayout,
+  isAnyOfControl,
   JsonSchema,
+  RankedTester,
+  rankWith,
   setReadonly,
   UISchemaElement,
 } from "@jsonforms/core";
@@ -16,45 +19,7 @@ import { cloneDeep, isEmpty, startCase } from "lodash-es";
 @Component({
   selector: "app-anyof-renderer",
   styleUrls: ["../ingestor-metadata-editor.component.scss"],
-  template: `
-    <mat-card class="anyof-group">
-      <mat-card-title
-        >{{ anyOfTitle }}
-        <span class="spacer"></span>
-        <mat-checkbox
-          *ngIf="options.includes('null')"
-          [(ngModel)]="notNullOptionSelected"
-          (change)="onEnableCheckboxChange($event)"
-        >
-          Enabled
-        </mat-checkbox></mat-card-title
-      >
-      <mat-card-content *ngIf="notNullOptionSelected">
-        <mat-tab-group *ngIf="tabAmount > 1">
-          animationDuration="0ms" [selectedIndex]="selectedTabIndex" >
-          <mat-tab *ngFor="let option of filteredOptions" label="{{ option }}">
-            <div class="mat-tab-content-renderer" *ngIf="option !== 'null'">
-              <jsonforms-outlet
-                [uischema]="getUISchema(option)"
-                [schema]="getTabSchema(option)"
-                [path]="propsPath"
-              >
-              </jsonforms-outlet>
-            </div>
-          </mat-tab>
-        </mat-tab-group>
-
-        <div *ngIf="tabAmount === 1">
-          <jsonforms-outlet
-            [uischema]="getUISchema(options[0])"
-            [schema]="getTabSchema(options[0])"
-            [path]="propsPath"
-          >
-          </jsonforms-outlet>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  `,
+  templateUrl: "./any-of-renderer.html",
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -159,3 +124,5 @@ export class AnyOfRendererComponent extends JsonFormsControl {
     this.rendererService.setData(updatedData);
   }
 }
+
+export const anyOfRendererTester: RankedTester = rankWith(4, isAnyOfControl);

@@ -30,19 +30,19 @@
 }
 
 .metadata-preview {
-  height: 50vh !important;
+  height: 50vh;
 }
 
 mat-card {
   margin: 1em;
 
   .mat-mdc-card-content {
-    padding: 16px;
+    padding: 1em;
   }
 
   .section-icon {
-    height: auto !important;
-    width: auto !important;
+    height: auto;
+    width: auto;
 
     mat-icon {
       vertical-align: middle;
@@ -59,8 +59,8 @@ mat-card {
 }
 
 .spinner-text {
-  margin-top: 10px;
-  font-size: 16px;
+  margin-top: 0.5em;
+  font-size: 1em;
   text-align: center;
 }
 
@@ -109,21 +109,9 @@ mat-card {
   margin-top: 1.5em;
 }
 
-.ingestor-file-list .mat-list-item-hover:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-}
-
-.ingestor-file-list .mat-list-item-hover:active {
-  background-color: rgba(0, 0, 0, 0.08);
-}
-
 .file-browser-view-toggle {
   display: flex;
   justify-content: flex-end;
-}
-
-.green-text {
-  color: #4caf50;
 }
 
 .confirm-message-ingestor {
@@ -139,10 +127,6 @@ mat-card {
   height: auto;
 }
 
-.confirm-message-error {
-  color: red;
-}
-
 .vertical-center-list-item {
   display: flex;
   align-items: center;
@@ -150,11 +134,10 @@ mat-card {
 }
 
 .last-used-facility-backends {
-  color: grey;
   margin-top: 1em;
 }
 
 .block-button {
   display: block;
-  margin-top: 8px;
+  margin-top: 0.5em;
 }

@@ -1,16 +1,17 @@
+import { JsonFormsRendererRegistryEntry } from "@jsonforms/core";
+import { TableRendererTester } from "@jsonforms/angular-material";
 import {
-  isAnyOfControl,
-  isObjectArrayWithNesting,
-  JsonFormsRendererRegistryEntry,
-} from "@jsonforms/core";
-import { AnyOfRendererComponent } from "ingestor/ingestor-metadata-editor/customRenderer/any-of-renderer";
-import { rankWith } from "@jsonforms/core";
+  AnyOfRendererComponent,
+  anyOfRendererTester,
+} from "./any-of-renderer";
 import {
-  ObjectControlRendererTester,
-  TableRendererTester,
-} from "@jsonforms/angular-material";
-import { ArrayLayoutRendererCustom } from "./array-renderer";
-import { CustomObjectControlRendererComponent } from "./object-group-renderer";
+  ArrayLayoutRendererCustom,
+  arrayLayoutRendererTester,
+} from "./array-renderer";
+import {
+  CustomObjectControlRendererComponent,
+  objectGroupRendererTester,
+} from "./object-group-renderer";
 import {
   OwnerGroupFieldComponent,
   ownerGroupFieldTester,
@@ -34,16 +35,19 @@ export const customRenderers: JsonFormsRendererRegistryEntry[] = [
     renderer: QuantityValueLayoutRendererComponent,
   },
   {
-    tester: rankWith(4, isAnyOfControl),
+    tester: anyOfRendererTester,
     renderer: AnyOfRendererComponent,
   },
   {
-    tester: rankWith(4, isObjectArrayWithNesting),
+    tester: arrayLayoutRendererTester,
     renderer: ArrayLayoutRendererCustom,
   },
-  { tester: TableRendererTester, renderer: ArrayLayoutRendererCustom },
   {
-    tester: ObjectControlRendererTester,
+    tester: TableRendererTester,
+    renderer: ArrayLayoutRendererCustom,
+  },
+  {
+    tester: objectGroupRendererTester,
     renderer: CustomObjectControlRendererComponent,
   },
   {

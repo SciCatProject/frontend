@@ -52,6 +52,7 @@ import { IngestorNoRightsDialogPageComponent } from "./ingestor-dialogs/creation
 import { IngestorTransferComponent } from "./ingestor-page/ingestor-transfer.component";
 import { IngestorCreationComponent } from "./ingestor-page/ingestor-creation.component";
 import { IngestorCustomMetadataDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.custom-metadata-dialog-page.component";
+import { SIFieldHiderRendererComponent } from "./ingestor-metadata-editor/customRenderer/quantity-field-renderer";
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { IngestorCustomMetadataDialogPageComponent } from "./ingestor-dialogs/cr
     AnyOfRendererComponent,
     ArrayLayoutRendererCustom,
     CustomObjectControlRendererComponent,
+    SIFieldHiderRendererComponent,
     IngestorConfirmationDialogComponent,
     ExportTemplateHelperComponent,
     IngestorFileBrowserComponent,

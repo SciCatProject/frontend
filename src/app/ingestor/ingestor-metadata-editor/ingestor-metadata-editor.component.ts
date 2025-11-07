@@ -37,7 +37,6 @@ export class IngestorMetadataEditorComponent implements OnInit {
   @Input() data: object;
   @Input() schema: JsonSchema;
   @Input() renderView: renderView;
-
   @Output() dataChange = new EventEmitter<string>();
   @Output() errors = new EventEmitter<any[]>();
 

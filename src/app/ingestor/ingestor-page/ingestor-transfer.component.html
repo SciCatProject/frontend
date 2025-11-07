@@ -17,7 +17,7 @@
   <p>
     <mat-card class="ingestor-card">
       <mat-card-header>
-        <mat-card-title>Control center</mat-card-title>
+        <mat-card-title>Connect to Ingestor Service</mat-card-title>
       </mat-card-header>
       <mat-card-content class="ingestor-vertical-layout">
         <div *ngIf="connectingToFacilityBackend">
@@ -28,13 +28,13 @@
         </div>
         <div *ngIf="!connectingToFacilityBackend">
           <ng-container *ngIf="connectedFacilityBackend === ''">
-            <p class="confirm-message-error">No Backend connected</p>
+            <p class="confirm-message-error">Not connected</p>
 
-            <p>Please provide a valid Backend URL</p>
+            <p>Please provide a valid Ingestor URL of the facility</p>
             <mat-form-field>
               <input
                 matInput
-                placeholder="Backend URL"
+                placeholder="Ingestor URL"
                 [(ngModel)]="forwardFacilityBackend"
               />
             </mat-form-field>
@@ -50,7 +50,7 @@
               *ngIf="lastUsedFacilityBackends.length > 0"
               class="last-used-facility-backends"
             >
-              <p>Last used facility backends:</p>
+              <p>Last used facilities:</p>
               <ul>
                 <li
                   *ngFor="let backend of lastUsedFacilityBackends"

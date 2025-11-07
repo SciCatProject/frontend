@@ -16,11 +16,14 @@ import {
   defaultJsonFormsI18nState,
   findUISchema,
   getArrayTranslations,
+  isObjectArrayWithNesting,
   JsonFormsState,
   mapDispatchToArrayControlProps,
   mapStateToArrayLayoutProps,
   OwnPropsOfRenderer,
   Paths,
+  RankedTester,
+  rankWith,
   setReadonly,
   StatePropsOfArrayLayout,
   UISchemaElement,
@@ -31,90 +34,7 @@ import {
 @Component({
   selector: "app-array-layout-renderer-custom",
   styleUrls: ["../ingestor-metadata-editor.component.scss"],
-  template: `
-    <mat-card
-      [ngStyle]="{ display: hidden ? 'none' : '' }"
-      class="array-layout"
-    >
-      <mat-card-title class="array-layout-toolbar">
-        <h2 class="mat-h2 array-layout-title">{{ label }}</h2>
-        <span></span>
-        <mat-icon
-          *ngIf="this.error?.length"
-          color="warn"
-          matBadgeColor="warn"
-          matTooltip="{{ this.error }}"
-          matTooltipClass="error-message-tooltip"
-        >
-          error_outline
-        </mat-icon>
-        <button
-          mat-button
-          matTooltip="{{ translations.addTooltip }}"
-          [disabled]="!isEnabled()"
-          (click)="add()"
-          attr.aria-label="{{ translations.addAriaLabel }}"
-        >
-          <mat-icon>add</mat-icon>
-        </button>
-      </mat-card-title>
-      <mat-card-content *ngIf="noData">
-        <p>{{ translations.noDataMessage }}</p>
-      </mat-card-content>
-      <mat-card-content
-        *ngFor="
-          let item of [].constructor(data);
-          let idx = index;
-          trackBy: trackByFn;
-          last as last;
-          first as first
-        "
-      >
-        <mat-card class="array-item" appearance="outlined">
-          <mat-card-content>
-            <jsonforms-outlet [renderProps]="getProps(idx)"></jsonforms-outlet>
-          </mat-card-content>
-          <mat-card-actions *ngIf="isEnabled()">
-            <button
-              *ngIf="uischema?.options?.showSortButtons"
-              class="item-up"
-              mat-button
-              [disabled]="first"
-              (click)="up(idx)"
-              attr.aria-label="{{ translations.upAriaLabel }}"
-              matTooltip="{{ translations.up }}"
-              matTooltipPosition="right"
-            >
-              <mat-icon>arrow_upward</mat-icon>
-            </button>
-            <button
-              *ngIf="uischema?.options?.showSortButtons"
-              class="item-down"
-              mat-button
-              [disabled]="last"
-              (click)="down(idx)"
-              attr.aria-label="{{ translations.downAriaLabel }}"
-              matTooltip="{{ translations.down }}"
-              matTooltipPosition="right"
-            >
-              <mat-icon>arrow_downward</mat-icon>
-            </button>
-            <button
-              *ngIf="(minOne && [].constructor(data).length > 1) || !minOne"
-              mat-button
-              color="warn"
-              (click)="remove(idx)"
-              attr.aria-label="{{ translations.removeAriaLabel }}"
-              matTooltip="{{ translations.removeTooltip }}"
-              matTooltipPosition="right"
-            >
-              <mat-icon>delete</mat-icon>
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      </mat-card-content>
-    </mat-card>
-  `,
+  templateUrl: "./array-renderer.html",
   standalone: false,
 
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -211,3 +131,8 @@ export class ArrayLayoutRendererCustom
     return index;
   }
 }
+
+export const arrayLayoutRendererTester: RankedTester = rankWith(
+  4,
+  isObjectArrayWithNesting,
+);

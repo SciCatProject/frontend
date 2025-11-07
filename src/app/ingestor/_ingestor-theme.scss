@@ -40,7 +40,24 @@
   }
 
   .success-icon {
-    color: green;
+    color: mat.m2-get-color-from-palette($primary, 'default');
+  }
+
+  .green-text,
+  .success-text {
+    color: mat.m2-get-color-from-palette($primary, 'default');
+  }
+
+  .last-used-facility-backends {
+    opacity: 0.6;
+  }
+
+  .ingestor-file-list .mat-list-item-hover:hover {
+    background-color: mat.m2-get-color-from-palette($primary, 'lighter', 0.1);
+  }
+
+  .ingestor-file-list .mat-list-item-hover:active {
+    background-color: mat.m2-get-color-from-palette($primary, 'lighter', 0.2);
   }
 }
 
