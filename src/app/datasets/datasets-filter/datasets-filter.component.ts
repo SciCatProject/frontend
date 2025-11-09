@@ -125,6 +125,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.applyEnabledConditions();
+    this.buildMetadataMaps();
 
     this.subscriptions.push(
       this.filterConfigs$.subscribe((filterConfigs) => {
@@ -265,20 +266,19 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       const updatedConditions = (conditionConfigs || []).map((config, i) => {
         if (this.tempConditionValues[i] !== undefined) {
           const value = this.tempConditionValues[i];
+          const fieldType = this.fieldTypeMap[config.condition.lhs];
           const isNumeric = value !== "" && !isNaN(Number(value));
-          if (
-            config.condition.relation === "EQUAL_TO" ||
-            config.condition.relation === "EQUAL_TO_NUMERIC" ||
-            config.condition.relation === "EQUAL_TO_STRING"
-          ) {
+
+          if (config.condition.relation === "EQUAL_TO") {
             return {
               ...config,
               condition: {
                 ...config.condition,
                 rhs: isNumeric ? Number(value) : value,
-                relation: isNumeric
-                  ? ("EQUAL_TO_NUMERIC" as ScientificCondition["relation"])
-                  : ("EQUAL_TO_STRING" as ScientificCondition["relation"]),
+                relation:
+                  fieldType === "string" || !isNumeric
+                    ? ("EQUAL_TO_STRING" as ScientificCondition["relation"])
+                    : ("EQUAL_TO_NUMERIC" as ScientificCondition["relation"]),
               },
             };
           } else {
@@ -303,7 +303,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       });
 
       updatedConditions.forEach((config) => {
-        if (config.enabled && config.condition.lhs && config.condition.rhs) {
+        if (
+          config.enabled &&
+          config.condition.lhs &&
+          config.condition.rhs != null &&
+          config.condition.rhs !== ""
+        ) {
           this.store.dispatch(
             addScientificConditionAction({ condition: config.condition }),
           );
@@ -457,9 +462,25 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     condition: ScientificCondition,
     index?: number,
   ): string {
-    const rhsValue = this.tempConditionValues[index] || condition.rhs;
+    if (condition.relation === "RANGE") {
+      if (!condition.lhs || !condition.rhs) {
+        return "Configure condition...";
+      }
+      const rangeValues = Array.isArray(condition.rhs)
+        ? condition.rhs
+        : [undefined, undefined];
+      const min = rangeValues[0] !== undefined ? rangeValues[0] : "?";
+      const max = rangeValues[1] !== undefined ? rangeValues[1] : "?";
+      const unit = condition.unit ? ` ${condition.unit}` : "";
+      return `${min} <-> ${max}${unit}`;
+    }
 
-    if (!condition.lhs || !rhsValue) {
+    const rhsValue =
+      this.tempConditionValues[index] != undefined
+        ? this.tempConditionValues[index]
+        : condition.rhs;
+
+    if (!condition.lhs || rhsValue == null || rhsValue === "") {
       return "Configure condition...";
     }
 
@@ -467,6 +488,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     switch (condition.relation) {
       case "EQUAL_TO_NUMERIC":
       case "EQUAL_TO_STRING":
+      case "EQUAL_TO":
         relationSymbol = "=";
         break;
       case "LESS_THAN":
@@ -481,18 +503,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       case "LESS_THAN_OR_EQUAL":
         relationSymbol = "≤";
         break;
-      case "RANGE":
-        relationSymbol = "<->";
-        break;
       default:
         relationSymbol = "";
     }
 
-    const displayValue =
-      condition.relation === "EQUAL_TO_STRING" ? `"${rhsValue}"` : rhsValue;
-
     const unit = condition.unit ? ` ${condition.unit}` : "";
-    return `${relationSymbol} ${displayValue}${unit}`;
+    return `${relationSymbol} ${rhsValue}${unit}`;
   }
 
   toggleConditionEnabled(index: number, enabled: boolean) {
@@ -522,25 +538,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   addCondition() {
-    this.datasets$.pipe(take(1)).subscribe((datasets) => {
-      if (datasets && datasets.length > 0) {
-        this.humanNameMap = {};
-        this.fieldTypeMap = {};
-
-        datasets.forEach((dataset) => {
-          const metadata = dataset.scientificMetadata;
-
-          Object.keys(metadata).forEach((key) => {
-            if (metadata[key]?.human_name) {
-              this.humanNameMap[key] = metadata[key].human_name;
-            }
-            if (metadata[key]?.type) {
-              this.fieldTypeMap[key] = metadata[key].type;
-            }
-          });
-        });
-      }
-    });
+    this.buildMetadataMaps();
 
     this.metadataKeys$.pipe(take(1)).subscribe((allKeys) => {
       this.conditionConfigs$.pipe(take(1)).subscribe((currentConditions) => {
@@ -710,6 +708,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     index: number,
     newOperator: ScientificCondition["relation"],
   ) {
+    delete this.tempConditionValues[index];
+
     const updates: Partial<ScientificCondition> = {
       relation: newOperator,
       rhs: newOperator === "RANGE" ? [undefined, undefined] : "",
@@ -796,16 +796,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     if (type === "string") {
       return ["EQUAL_TO"];
     }
-    if (type === "quantity" || type === "number") {
-      return [
-        "EQUAL_TO",
-        "GREATER_THAN",
-        "LESS_THAN",
-        "GREATER_THAN_OR_EQUAL",
-        "LESS_THAN_OR_EQUAL",
-        "RANGE",
-      ];
-    }
     // Default: allow all
     return [
       "EQUAL_TO",
@@ -815,6 +805,28 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       "LESS_THAN_OR_EQUAL",
       "RANGE",
     ];
+  }
+
+  buildMetadataMaps() {
+    this.datasets$.pipe(take(1)).subscribe((datasets) => {
+      if (datasets && datasets.length > 0) {
+        this.humanNameMap = {};
+        this.fieldTypeMap = {};
+
+        datasets.forEach((dataset) => {
+          const metadata = dataset.scientificMetadata;
+
+          Object.keys(metadata).forEach((key) => {
+            if (metadata[key]?.human_name) {
+              this.humanNameMap[key] = metadata[key].human_name;
+            }
+            if (metadata[key]?.type) {
+              this.fieldTypeMap[key] = metadata[key].type;
+            }
+          });
+        });
+      }
+    });
   }
 
   ngOnDestroy() {
