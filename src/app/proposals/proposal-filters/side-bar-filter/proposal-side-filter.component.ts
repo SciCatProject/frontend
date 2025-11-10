@@ -13,8 +13,8 @@ import {
 } from "state-management/actions/proposals.actions";
 import {
   selectFilterByKey,
-  selectProposalsfacetCountsWithInstrumentName,
-  selectProposalsfacetCountsWithInstrumentNameByKey,
+  selectProposalsFacetCountsWithInstrumentName,
+  selectProposalsFacetCountsWithInstrumentNameByKey,
 } from "state-management/selectors/proposals.selectors";
 import { selectFilters } from "state-management/selectors/user.selectors";
 
@@ -37,7 +37,7 @@ export class ProposalSideFilterComponent implements OnInit {
 
   filterConfigs$ = this.store.select(selectFilters);
   facetCounts$ = this.store.select(
-    selectProposalsfacetCountsWithInstrumentName,
+    selectProposalsFacetCountsWithInstrumentName,
   );
 
   localization = "proposal";
@@ -225,7 +225,7 @@ export class ProposalSideFilterComponent implements OnInit {
 
   getFacetCounts$(key: string): Observable<any> {
     return this.store.select(
-      selectProposalsfacetCountsWithInstrumentNameByKey(key),
+      selectProposalsFacetCountsWithInstrumentNameByKey(key),
     );
   }
 
@@ -240,9 +240,13 @@ export class ProposalSideFilterComponent implements OnInit {
   reset() {
     this.clearFilters = true;
 
-    this.store.dispatch(clearProposalsFiltersAction());
+    if (this.activeFilters.text) {
+      this.activeFilters = { text: this.activeFilters.text };
+    } else {
+      this.activeFilters = {};
+    }
 
-    this.activeFilters = {};
+    this.store.dispatch(clearProposalsFiltersAction());
 
     this.applyFilters();
 

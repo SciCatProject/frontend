@@ -51,6 +51,7 @@
           label | translate: localization
         }}</mat-label>
         <mat-form-field
+          *ngIf="showCheckboxSearch"
           appearance="outline"
           class="facet-search"
           floatLabel="always"
