@@ -4,6 +4,7 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  Optional,
   Output,
 } from "@angular/core";
 import {
@@ -17,7 +18,7 @@ import {
   selectIngestionObject,
   selectIsIngestDatasetLoading,
 } from "state-management/selectors/ingestor.selectors";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { IngestorConfirmationDialogComponent } from "ingestor/ingestor-dialogs/confirmation-dialog/ingestor.confirmation-dialog.component";
 import * as fromActions from "state-management/actions/ingestor.actions";
@@ -55,7 +56,11 @@ export class IngestorConfirmTransferDialogPageComponent
   copiedToClipboard = false;
   ingestionDatasetIsLoading = false;
 
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    @Optional()
+    private dialogRef: MatDialogRef<IngestorConfirmTransferDialogPageComponent>,
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
@@ -106,28 +111,36 @@ export class IngestorConfirmTransferDialogPageComponent
   }
 
   onClickConfirm(): void {
-    const dialogRef = this.dialog.open(IngestorConfirmationDialogComponent, {
-      data: {
-        header:
-          this.createNewTransferData.editorMode === "CREATION"
-            ? "Confirm creation"
-            : "Confirm ingestion",
-        message:
-          this.createNewTransferData.editorMode === "CREATION"
-            ? "Create a new dataset?"
-            : "Create a new dataset and start data transfer?",
+    const confirmDialogRef = this.dialog.open(
+      IngestorConfirmationDialogComponent,
+      {
+        data: {
+          header:
+            this.createNewTransferData.editorMode === "CREATION"
+              ? "Confirm creation"
+              : "Confirm ingestion",
+          message:
+            this.createNewTransferData.editorMode === "CREATION"
+              ? "Create a new dataset?"
+              : "Create a new dataset and start data transfer?",
+        },
       },
-    });
+    );
 
-    const dialogSub = dialogRef.afterClosed().subscribe(async (result) => {
-      if (result) {
-        this.createNewTransferData.mergedMetaDataString =
-          this.provideMergeMetaData;
+    const dialogSub = confirmDialogRef
+      .afterClosed()
+      .subscribe(async (result) => {
+        if (result) {
+          this.createNewTransferData.mergedMetaDataString =
+            this.provideMergeMetaData;
 
-        this.nextStep.emit();
-      }
-      dialogSub.unsubscribe();
-    });
+          this.nextStep.emit();
+
+          // Close the parent dialog
+          this.dialogRef?.close(result);
+        }
+        dialogSub.unsubscribe();
+      });
   }
 
   onClickRetryRequests(): void {

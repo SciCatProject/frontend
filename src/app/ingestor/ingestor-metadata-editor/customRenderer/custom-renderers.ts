@@ -1,9 +1,6 @@
 import { JsonFormsRendererRegistryEntry } from "@jsonforms/core";
 import { TableRendererTester } from "@jsonforms/angular-material";
-import {
-  AnyOfRendererComponent,
-  anyOfRendererTester,
-} from "./any-of-renderer";
+import { AnyOfRendererComponent, anyOfRendererTester } from "./any-of-renderer";
 import {
   ArrayLayoutRendererCustom,
   arrayLayoutRendererTester,

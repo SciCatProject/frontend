@@ -119,4 +119,5 @@ export class CustomObjectControlRendererComponent extends JsonFormsControlWithDe
   }
 }
 
-export const objectGroupRendererTester: RankedTester = ObjectControlRendererTester;
+export const objectGroupRendererTester: RankedTester =
+  ObjectControlRendererTester;
