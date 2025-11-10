@@ -264,6 +264,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
     this.conditionConfigs$.pipe(take(1)).subscribe((conditionConfigs) => {
       const updatedConditions = (conditionConfigs || []).map((config, i) => {
+        const lhs = config.condition.lhs;
+        const baseCondition = {
+          ...config.condition,
+          type: this.fieldTypeMap[lhs],
+          human_name: this.humanNameMap[lhs],
+        }
         if (this.tempConditionValues[i] !== undefined) {
           const value = this.tempConditionValues[i];
           const fieldType = this.fieldTypeMap[config.condition.lhs];
@@ -273,7 +279,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             return {
               ...config,
               condition: {
-                ...config.condition,
+                ...baseCondition,
                 rhs: isNumeric ? Number(value) : value,
                 relation:
                   fieldType === "string" || !isNumeric
@@ -285,13 +291,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             return {
               ...config,
               condition: {
-                ...config.condition,
+                ...baseCondition,
                 rhs: isNumeric ? Number(value) : value,
               },
             };
           }
         }
-        return config;
+        return {...config,
+          condition: baseCondition,
+        };
       });
 
       updatedConditions.forEach((oldCondition) => {
@@ -588,6 +596,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
                     condition: {
                       ...data,
                       rhs: "",
+                      type: this.fieldTypeMap[data.lhs],
+                      human_name: this.humanNameMap[data.lhs],
                     },
                     enabled: true,
                   };
@@ -698,6 +708,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       condition: {
         ...conditionConfig.condition,
         ...updates,
+        type: this.fieldTypeMap[conditionConfig.condition.lhs],
+        human_name: this.humanNameMap[conditionConfig.condition.lhs],
       },
     };
 
@@ -808,6 +820,17 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   buildMetadataMaps() {
+    this.conditionConfigs$.pipe(take(1)).subscribe((conditionConfigs) => {
+      (conditionConfigs || []).forEach((config) => {
+        const { lhs, type, human_name } = config.condition;
+        if (lhs && type) {
+          this.fieldTypeMap[lhs] = type;
+        }
+        if (lhs && human_name) {
+          this.humanNameMap[lhs] = human_name;
+        }
+      });
+    });
     this.datasets$.pipe(take(1)).subscribe((datasets) => {
       if (datasets && datasets.length > 0) {
         this.humanNameMap = {};
