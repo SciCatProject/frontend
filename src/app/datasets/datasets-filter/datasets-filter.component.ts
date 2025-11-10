@@ -269,7 +269,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
           ...config.condition,
           type: this.fieldTypeMap[lhs],
           human_name: this.humanNameMap[lhs],
-        }
+        };
         if (this.tempConditionValues[i] !== undefined) {
           const value = this.tempConditionValues[i];
           const fieldType = this.fieldTypeMap[config.condition.lhs];
@@ -297,9 +297,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
             };
           }
         }
-        return {...config,
-          condition: baseCondition,
-        };
+        return { ...config, condition: baseCondition };
       });
 
       updatedConditions.forEach((oldCondition) => {
