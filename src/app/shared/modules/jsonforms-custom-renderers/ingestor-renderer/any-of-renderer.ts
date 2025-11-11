@@ -12,13 +12,12 @@ import {
   setReadonly,
   UISchemaElement,
 } from "@jsonforms/core";
-import { configuredRenderer } from "../ingestor-metadata-editor-helper";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { cloneDeep, isEmpty, startCase } from "lodash-es";
 
 @Component({
   selector: "app-anyof-renderer",
-  styleUrls: ["../ingestor-metadata-editor.component.scss"],
+  styleUrls: ["./ingestor-renderer.component.scss"],
   templateUrl: "./any-of-renderer.html",
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,7 +33,6 @@ export class AnyOfRendererComponent extends JsonFormsControl {
 
   rendererService: JsonFormsAngularService;
 
-  defaultRenderer = configuredRenderer;
   passedProps: ControlProps;
 
   constructor(service: JsonFormsAngularService) {

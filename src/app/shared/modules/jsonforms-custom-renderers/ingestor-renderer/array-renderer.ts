@@ -33,10 +33,9 @@ import {
 
 @Component({
   selector: "app-array-layout-renderer-custom",
-  styleUrls: ["../ingestor-metadata-editor.component.scss"],
+  styleUrls: ["./ingestor-renderer.component.scss"],
   templateUrl: "./array-renderer.html",
   standalone: false,
-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix

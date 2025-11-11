@@ -141,3 +141,104 @@ mat-card {
   display: block;
   margin-top: 0.5em;
 }
+
+.experimental-warning-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  margin: 0 0 16px 0;
+  background-color: #fff3cd;
+  border-left: 4px solid #ff9800;
+  border-radius: 4px;
+
+  .warning-icon {
+    color: #ff9800;
+    flex-shrink: 0;
+  }
+
+  .warning-text {
+    flex: 1;
+    font-size: 14px;
+    color: #856404;
+
+    strong {
+      font-weight: 600;
+    }
+  }
+
+  .close-btn {
+    flex-shrink: 0;
+    color: #856404;
+  }
+}
+
+// Schema upload options styling
+.ingestor-upload-section {
+  padding: 1.5em 0;
+
+  &:first-of-type {
+    padding-top: 0;
+  }
+
+  .schema-option-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+    margin-bottom: 0.75em;
+
+    .option-icon {
+      color: #1976d2;
+      font-size: 1.5em;
+      width: 1.5em;
+      height: 1.5em;
+    }
+
+    h4 {
+      margin: 0;
+      font-size: 1.1em;
+      font-weight: 500;
+      color: #333;
+    }
+  }
+
+  .option-description {
+    margin: 0 0 1em 0;
+    color: #666;
+    font-size: 0.9em;
+    line-height: 1.5;
+    padding-left: 2.25em; // Align with header text
+  }
+
+  .schema-action-button {
+    margin-left: 2.25em; // Align with description
+    min-width: 180px;
+
+    mat-icon {
+      margin-right: 0.5em;
+    }
+  }
+}
+
+mat-divider {
+  margin: 0.5em 0;
+}
+
+.schema-status-success {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-top: 1.5em;
+  padding: 1em;
+  background-color: #e8f5e9;
+  border-left: 4px solid #4caf50;
+  border-radius: 4px;
+  color: #2e7d32;
+  font-weight: 500;
+
+  &::before {
+    content: '✓';
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+}

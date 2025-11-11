@@ -33,6 +33,7 @@ export class IngestorCreationComponent {
     dialogRef = this.dialog.open(IngestorCreationDialogBaseComponent, {
       disableClose: true,
       width: "auto",
+      minWidth: "40%",
       maxWidth: "1400px",
     });
 

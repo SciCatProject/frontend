@@ -20,9 +20,8 @@ import { LayoutRenderer } from "@jsonforms/angular-material";
 @Component({
   selector: "QuantityValueLayoutRendererComponent",
   templateUrl: "./quantity-value-layout-renderer.html",
-  styleUrls: ["../ingestor-metadata-editor.component.scss"],
+  styleUrls: ["./ingestor-renderer.component.scss"],
   standalone: false,
-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuantityValueLayoutRendererComponent extends LayoutRenderer<QuantityValueLayout> {

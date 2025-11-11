@@ -282,6 +282,7 @@ export class IngestorTransferComponent implements OnInit, OnDestroy {
     dialogRef = this.dialog.open(IngestorCreationDialogBaseComponent, {
       disableClose: true,
       width: "auto",
+      minWidth: "60%",
       maxWidth: "1400px",
     });
 

@@ -21,8 +21,16 @@ import {
   SIFieldHiderRendererComponent,
   isSIFieldTester,
 } from "./quantity-field-renderer";
+import {
+  DynamicObjectRendererComponent,
+  dynamicObjectRendererTester,
+} from "./dynamic-object-renderer";
 
 export const customRenderers: JsonFormsRendererRegistryEntry[] = [
+  {
+    tester: dynamicObjectRendererTester,
+    renderer: DynamicObjectRendererComponent,
+  },
   {
     tester: ownerGroupFieldTester,
     renderer: OwnerGroupFieldComponent,

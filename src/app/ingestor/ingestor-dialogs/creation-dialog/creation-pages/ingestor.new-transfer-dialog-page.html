@@ -1,4 +1,23 @@
-<div class="ingestor-dialog-header">
+
+  <!-- Experimental Feature Warning Banner -->
+  <div
+    *ngIf="createNewTransferData.editorMode === 'CREATION' && !experimentalBannerDismissed"
+    class="experimental-warning-banner"
+  >
+    <mat-icon class="warning-icon">warning</mat-icon>
+    <span class="warning-text">
+      <strong>Experimental Feature:</strong> This feature is experimental. Use at your own risk.
+    </span>
+    <button
+      mat-icon-button
+      class="close-btn"
+      (click)="dismissExperimentalBanner()"
+      aria-label="Dismiss warning"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="ingestor-dialog-header">
   <div class="ingestor-mixed-header">
     <h2
       *ngIf="createNewTransferData.editorMode === 'CREATION'"
@@ -69,32 +88,82 @@
         <mat-card-title>Scientific Metadata Schema</mat-card-title>
       </mat-card-header>
       <mat-card-content class="ingestor-vertical-layout">
+        <p>
+          You can provide a schema for your scientific metadata. We only
+          accept schemas in JSON format.
+        </p>
+
+        <!-- Option 1: Load from URL -->
         <div class="ingestor-upload-section">
-          <label for="schemaUrl">
-            You can provide a schema for your scientific metadata. We only
-            accept schemas in json format.
-          </label>
+          <div class="schema-option-header">
+            <mat-icon class="option-icon">link</mat-icon>
+            <h4>Load from URL</h4>
+          </div>
+          <p class="option-description">
+            Provide a URL to a JSON schema file. The schema will be validated automatically when you finish typing.
+          </p>
           <mat-form-field class="form-full-width">
+            <mat-label>Schema URL</mat-label>
             <input
               matInput
               id="schemaUrl"
-              placeholder="Paste schema URL here"
+              placeholder="https://example.com/schema.json"
               [ngModel]="createNewTransferData.schemaUrl"
               (ngModelChange)="onSchemaUrlChange($event)"
+              (blur)="onUploadSchema()"
             />
-            <button
-              mat-raised-button
-              class="block-button"
-              color="primary"
-              (click)="onUploadSchema()"
-            >
-              Validate
-            </button>
+            <mat-icon matPrefix>language</mat-icon>
           </mat-form-field>
-          <p *ngIf="this.createNewTransferData.selectedSchemaFileContent">
-            Loaded schema is valid!
-          </p>
         </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Option 2: Upload from file -->
+        <div class="ingestor-upload-section">
+          <div class="schema-option-header">
+            <mat-icon class="option-icon">upload_file</mat-icon>
+            <h4>Upload from File</h4>
+          </div>
+          <p class="option-description">
+            Select a JSON schema file from your local computer.
+          </p>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onUploadSchemaFile()"
+            class="schema-action-button"
+          >
+            <mat-icon>folder_open</mat-icon>
+            Choose File
+          </button>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Option 3: Use default schema -->
+        <div class="ingestor-upload-section">
+          <div class="schema-option-header">
+            <mat-icon class="option-icon">file_present</mat-icon>
+            <h4>Use Default Schema</h4>
+          </div>
+          <p class="option-description">
+            Load the pre-configured default metadata schema for standard datasets.
+          </p>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onLoadDefaultSchema()"
+            class="schema-action-button"
+          >
+            <mat-icon>check_circle</mat-icon>
+            Load Default
+          </button>
+        </div>
+
+        <!-- Status message -->
+        <p *ngIf="this.createNewTransferData.selectedSchemaFileContent" class="schema-status-success">
+          Schema loaded successfully!
+        </p>
       </mat-card-content>
     </mat-card>
   </div>

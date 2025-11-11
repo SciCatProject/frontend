@@ -1,9 +1,13 @@
+import { angularMaterialRenderers } from "@jsonforms/angular-material";
+import { customRenderers } from "./custom-renderers";
 import { JsonSchema } from "@jsonforms/core";
-import { configuredRenderer } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/ingestor-renderer-helper";
 
-export { configuredRenderer };
+export const configuredRenderer = [
+  ...customRenderers,
+  ...angularMaterialRenderers,
+];
 
-export class IngestorMetadataEditorHelper {
+export class IngestorRendererHelper {
   // Resolve all $ref in a schema
   static resolveRefs(schema: any, rootSchema: any): any {
     if (schema === null || schema === undefined) {
@@ -16,11 +20,11 @@ export class IngestorMetadataEditorHelper {
       refPath.forEach((part) => {
         ref = ref[part];
       });
-      return IngestorMetadataEditorHelper.resolveRefs(ref, rootSchema);
+      return IngestorRendererHelper.resolveRefs(ref, rootSchema);
     } else if (typeof schema === "object") {
       for (const key in schema) {
         if (Object.prototype.hasOwnProperty.call(schema, key)) {
-          schema[key] = IngestorMetadataEditorHelper.resolveRefs(
+          schema[key] = IngestorRendererHelper.resolveRefs(
             schema[key],
             rootSchema,
           );
@@ -46,15 +50,16 @@ export class IngestorMetadataEditorHelper {
           const property = schema.properties[key];
           // recursive call for the nested structur
           reducedSchema.properties[key] =
-            IngestorMetadataEditorHelper.reduceToRequiredProperties(property);
+            IngestorRendererHelper.reduceToRequiredProperties(property);
         }
       }
     }
 
     // when type is an array, reduce the items as well
     if (schema.type === "array" && schema.items) {
-      reducedSchema.items =
-        IngestorMetadataEditorHelper.reduceToRequiredProperties(schema.items);
+      reducedSchema.items = IngestorRendererHelper.reduceToRequiredProperties(
+        schema.items,
+      );
     }
 
     return reducedSchema;

@@ -17,16 +17,13 @@ import {
   UISchemaElement,
 } from "@jsonforms/core";
 import { ObjectControlRendererTester } from "@jsonforms/angular-material";
-import {
-  configuredRenderer,
-  convertJSONFormsErrorToString,
-} from "../ingestor-metadata-editor-helper";
+import { convertJSONFormsErrorToString } from "./ingestor-renderer-helper";
 import { cloneDeep, startCase } from "lodash-es";
 import isEmpty from "lodash/isEmpty";
 
 @Component({
   selector: "app-object-group-renderer",
-  styleUrls: ["../ingestor-metadata-editor.component.scss"],
+  styleUrls: ["./ingestor-renderer.component.scss"],
   templateUrl: "./object-group-renderer.html",
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,7 +32,6 @@ export class CustomObjectControlRendererComponent extends JsonFormsControlWithDe
   rendererService: JsonFormsAngularService;
   detailUiSchema: UISchemaElement;
 
-  defaultRenderer = configuredRenderer;
   objectTitle: string;
   errorRecursiveStructure: boolean;
 

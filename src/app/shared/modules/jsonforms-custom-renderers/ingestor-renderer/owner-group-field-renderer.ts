@@ -14,7 +14,7 @@ import { Subscription } from "rxjs";
 
 @Component({
   selector: "owner-group-renderer",
-  styleUrls: ["../ingestor-metadata-editor.component.scss"],
+  styleUrls: ["./ingestor-renderer.component.scss"],
   templateUrl: "./owner-group-field-renderer.html",
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
