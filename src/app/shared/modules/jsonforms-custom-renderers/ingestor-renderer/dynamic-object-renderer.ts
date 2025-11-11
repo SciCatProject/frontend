@@ -35,7 +35,7 @@ export class DynamicObjectRendererComponent extends JsonFormsControl {
   }
 
   get keys(): string[] {
-    return this.data && typeof this.data === 'object'
+    return this.data && typeof this.data === "object"
       ? Object.keys(this.data)
       : [];
   }
