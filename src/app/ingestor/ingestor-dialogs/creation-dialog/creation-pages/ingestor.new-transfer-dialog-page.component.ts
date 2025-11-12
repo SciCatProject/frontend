@@ -133,7 +133,6 @@ export class IngestorNewTransferDialogPageComponent
               this.subscriptions.push(
                 this.facilityBackend$.subscribe((ingestorEndpoint) => {
                   if (ingestorEndpoint) {
-                    console.log("Ingestor endpoint changed:", ingestorEndpoint);
                     this.facilityInfo = ingestorEndpoint;
                   }
                 }),
@@ -187,9 +186,10 @@ export class IngestorNewTransferDialogPageComponent
   set selectedMethod(value: ExtractionMethod) {
     this.createNewTransferData.selectedMethod = value;
 
-    // Set the scientifcMetadataSchema in scicatHeader when a method is selected
+    // Set the scientificMetadataSchema in scicatHeader when a method is selected
     if (value && value.url) {
-      this.createNewTransferData.scicatHeader["scientifcMetadataSchema"] = value.url;
+      this.createNewTransferData.scicatHeader["scientificMetadataSchema"] =
+        value.url;
     }
 
     this.validateNextButton();
@@ -292,7 +292,14 @@ export class IngestorNewTransferDialogPageComponent
   }
 
   onDataChangeUserScicatHeader(event: any) {
+    // Preserve scientificMetadataSchema if it exists
+    const existingSchema =
+      this.createNewTransferData.scicatHeader["scientificMetadataSchema"];
     this.createNewTransferData.scicatHeader = event;
+    if (existingSchema) {
+      this.createNewTransferData.scicatHeader["scientificMetadataSchema"] =
+        existingSchema;
+    }
   }
 
   toggleCardContent(card: string): void {
@@ -366,11 +373,6 @@ export class IngestorNewTransferDialogPageComponent
       return;
     }
 
-    console.log(
-      "Fetching schema from URL:",
-      this.createNewTransferData.schemaUrl,
-    );
-
     try {
       // Fetch the schema from the URL
       const response = await fetch(this.createNewTransferData.schemaUrl);
@@ -385,7 +387,8 @@ export class IngestorNewTransferDialogPageComponent
 
       // Store the schema content
       this.createNewTransferData.selectedSchemaFileContent = content;
-
+      this.createNewTransferData.scicatHeader["scientificMetadataSchema"] =
+        this.createNewTransferData.schemaUrl;
       // Update the store
       this.store.dispatch(
         fromActions.updateIngestionObject({

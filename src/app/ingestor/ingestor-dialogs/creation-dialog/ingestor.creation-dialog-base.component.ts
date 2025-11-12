@@ -126,7 +126,11 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
       sample: {},
     };
 
-    this.createNewTransferData.selectedMethod = { name: "", schema: "", url: "" };
+    this.createNewTransferData.selectedMethod = {
+      name: "",
+      schema: "",
+      url: "",
+    };
 
     this.store.dispatch(
       fromActions.updateIngestionObject({
@@ -160,7 +164,6 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.sseService.getMessages().subscribe({
         next: (data) => {
-          //console.log("Received SSE data:", data);
           this.createNewTransferDataApiInformation.extractorMetaDataStatus =
             data.message;
           this.createNewTransferDataApiInformation.extractorMetadataProgress =
