@@ -829,25 +829,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         }
       });
     });
-    this.datasets$.pipe(take(1)).subscribe((datasets) => {
-      if (datasets && datasets.length > 0) {
-        this.humanNameMap = {};
-        this.fieldTypeMap = {};
-
-        datasets.forEach((dataset) => {
-          const metadata = dataset.scientificMetadata;
-
-          Object.keys(metadata).forEach((key) => {
-            if (metadata[key]?.human_name) {
-              this.humanNameMap[key] = metadata[key].human_name;
-            }
-            if (metadata[key]?.type) {
-              this.fieldTypeMap[key] = metadata[key].type;
-            }
-          });
-        });
-      }
-    });
   }
 
   ngOnDestroy() {

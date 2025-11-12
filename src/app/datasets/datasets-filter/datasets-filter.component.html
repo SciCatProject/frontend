@@ -92,7 +92,7 @@
                       </div>
                     </ng-container>
                     <ng-template #rawNameOnlyHeader>
-                      <div class="primary-name">
+                      <div class="primary-name" style="font-style: italic;">
                         {{ conditionConfig.condition.lhs }}
                       </div>
                     </ng-template>
@@ -126,8 +126,7 @@
                         </ng-container>
                       </div>
                       <ng-template #rawNameOnly>
-                        <strong>Metadata key:</strong>
-                        {{ conditionConfig.condition.lhs }}
+                        <strong>Metadata key: </strong><span style="font-style: italic;">{{ conditionConfig.condition.lhs }}</span>
                       </ng-template>
                     </mat-card>
                   </ng-template>

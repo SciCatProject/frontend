@@ -73,3 +73,7 @@ mat-row {
     }
   }
 }
+
+::ng-deep .metadata-name {
+  font-style: italic;
+}

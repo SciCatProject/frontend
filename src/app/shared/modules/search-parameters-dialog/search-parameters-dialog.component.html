@@ -27,7 +27,10 @@
             class="cell-content"
             mat-cell
             *matCellDef="let key"
-            (click)="parametersForm.get('lhs').setValue(getHumanName(key) || key); getUnits(key)"
+            (click)="
+              parametersForm.get('lhs').setValue(getHumanName(key) || key);
+              getUnits(key)
+            "
             style="cursor: pointer"
           >
             <div>
@@ -42,9 +45,12 @@
             </div>
             <div class="parameter-option">
               <div class="human-name">
-                <span>
-                  {{ getHumanName(key) || key }}
+                <span *ngIf="getHumanName(key); else metadataKey">
+                  {{ getHumanName(key) }}
                 </span>
+                <ng-template #metadataKey>
+                  <span style="font-style: italic">{{ key }}</span>
+                </ng-template>
 
                 <!-- Hover overlay -->
                 <ng-template
@@ -66,7 +72,8 @@
                       </ng-container>
                     </div>
                     <ng-template #rawNameOnly>
-                      <strong>Metadata name:</strong> {{ key }}
+                      <strong>Metadata name:</strong>
+                      <span style="font-style: italic">{{ key }}</span>
                     </ng-template>
                   </mat-card>
                 </ng-template>
@@ -81,7 +88,10 @@
           class="row-content"
           mat-row
           *matRowDef="let row; columns: ['field']"
-          [class.selected_row]="(getHumanName(row) || row) === parametersForm.get('lhs').value || row === parametersForm.get('lhs').value"
+          [class.selected_row]="
+            (getHumanName(row) || row) === parametersForm.get('lhs').value ||
+            row === parametersForm.get('lhs').value
+          "
         ></tr>
       </table>
     </div>
