@@ -48,7 +48,11 @@ export const selectInstrumentsWithCountAndTableSettings = createSelector(
   },
 );
 
-export const selectInstrumentWithIdAndName = createSelector(
+export const selectInstrumentWithIdAndLabel = createSelector(
   selectInstruments,
-  (arr) => new Map(arr.map((i) => [i.pid, i.name])),
+  (arr) =>
+    arr.map((inst) => ({
+      _id: inst.pid,
+      label: inst.name,
+    })),
 );
