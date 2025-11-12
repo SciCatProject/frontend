@@ -302,4 +302,13 @@ export class DatasetDetailComponent implements OnInit, OnDestroy {
   openAttachment(encoded: string) {
     this.attachmentService.openAttachment(encoded);
   }
+  emptyMetadataTable(): boolean {
+    if (this.appConfig.hideEmptyMetadataTable) {
+      return (
+        !!this.dataset?.scientificMetadata &&
+        Object.keys(this.dataset.scientificMetadata).length > 0
+      );
+    }
+    return true;
+  }
 }
