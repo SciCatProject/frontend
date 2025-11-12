@@ -153,17 +153,6 @@ cdk-virtual-scroll-viewport {
   }
 }
 
-// table action menu
-.table-global-search {
-  max-width: 300px;
-  min-width: initial;
-  padding: 0 !important;
-  background-color: inherit;
-
-  .global-search-wrapper {
-    width: 100%;
-  }
-}
 
 .table-menu {
   max-width: 42px;
@@ -266,32 +255,6 @@ cdk-virtual-scroll-viewport {
   margin-right: -20px;
 }
 
-/* Custom Tooltip */
-.tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black;
-}
-
-.tooltip .tooltiptext {
-  visibility: hidden;
-  min-width: 120px;
-  background-color: #e91e63;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  left: 0;
-  top: 43px;
-  margin-left: -86%;
-}
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  white-space: pre;
-}
 ::ng-deep .mat-mdc-footer-cell {
   flex-direction: column !important;
 }
