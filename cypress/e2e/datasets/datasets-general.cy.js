@@ -221,8 +221,8 @@ describe("Datasets general", () => {
         .find(".condition-panel")
         .should("have.length", 0);
     });
-
-    it("should search by human name", () => {
+    // skipping for now but will be relevant when we can fetch human-readable names from metadataKeys endpoint in the future
+    it.skip("should search by human name", () => {
       cy.visit("/datasets");
 
       cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
