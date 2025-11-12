@@ -4,7 +4,6 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
   selector: "app-empty-content",
   templateUrl: "./empty-content.component.html",
   styleUrls: ["./empty-content.component.scss"],
-  standalone: false,
 })
 export class EmptyContentComponent {
   @Input() message = "No data available";

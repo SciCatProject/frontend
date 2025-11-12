@@ -48,7 +48,6 @@ export interface TableData {
   selector: "app-sample-detail",
   templateUrl: "./sample-detail.component.html",
   styleUrls: ["./sample-detail.component.scss"],
-  standalone: false,
 })
 export class SampleDetailComponent
   implements OnInit, OnDestroy, EditableComponent

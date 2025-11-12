@@ -30,7 +30,6 @@ import { TableConfigService } from "shared/services/table-config.service";
   selector: "app-files-dashboard",
   templateUrl: "./files-dashboard.component.html",
   styleUrls: ["./files-dashboard.component.scss"],
-  standalone: false,
 })
 export class FilesDashboardComponent implements OnInit, OnDestroy {
   filesWithCountAndTableSettings$ = this.store.select(

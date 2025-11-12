@@ -5,7 +5,7 @@ export interface ActionConfig {
   description?: string;
   order: number;
   label: string;
-  files: string;
+  files?: string;
   mat_icon?: string;
   icon?: string;
   type?: string;
@@ -38,5 +38,5 @@ export interface ActionItemDataset {
 }
 
 export interface ActionItems {
-  datasets: ActionItemDataset[],
+  datasets: ActionItemDataset[];
 }

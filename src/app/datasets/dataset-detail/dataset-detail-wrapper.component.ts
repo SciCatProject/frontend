@@ -8,7 +8,6 @@ import { DatasetDetailDynamicComponent } from "./dataset-detail-dynamic/dataset-
   template: `
     <ng-container *ngComponentOutlet="getDatasetDetailsComponent()" />
   `,
-  standalone: false,
 })
 export class DatasetDetailWrapperComponent {
   constructor(private appConfigService: AppConfigService) {}

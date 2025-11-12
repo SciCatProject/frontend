@@ -40,7 +40,6 @@ interface LoginForm {
   selector: "login-form",
   templateUrl: "./login.component.html",
   styleUrls: ["login.component.scss"],
-  standalone: false,
 })
 export class LoginComponent implements OnInit, OnDestroy {
   private proceedSubscription = new Subscription();

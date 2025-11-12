@@ -18,7 +18,6 @@ import { TooltipComponent } from "./tooltip.component";
 
 @Directive({
   selector: "[appTooltip]:not([click-to-open])",
-  standalone: false,
 })
 export class TooltipDirective implements OnInit, OnDestroy {
   private overlayRef: OverlayRef;

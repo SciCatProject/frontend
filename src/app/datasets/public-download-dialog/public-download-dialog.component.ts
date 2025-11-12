@@ -6,7 +6,6 @@ import { MatDialogRef } from "@angular/material/dialog";
   selector: "app-public-download-dialog",
   templateUrl: "./public-download-dialog.component.html",
   styleUrls: ["./public-download-dialog.component.scss"],
-  standalone: false,
 })
 export class PublicDownloadDialogComponent {
   emailFormControl = new FormControl("", [

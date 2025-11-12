@@ -5,7 +5,6 @@ import { ThumbnailService } from "shared/services/thumbnail.service";
 @Pipe({
   name: "thumbnail",
   pure: true,
-  standalone: false,
 })
 export class ThumbnailPipe implements PipeTransform {
   constructor(private thumbnailService: ThumbnailService) {}

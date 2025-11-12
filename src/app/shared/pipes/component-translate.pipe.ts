@@ -3,7 +3,6 @@ import { TranslateService } from "@ngx-translate/core";
 
 @Pipe({
   name: "componentTranslate",
-  standalone: false,
 })
 export class ComponentTranslatePipe implements PipeTransform {
   constructor(private translateService: TranslateService) {}

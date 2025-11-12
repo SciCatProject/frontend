@@ -24,7 +24,6 @@ import { AppConfigService } from "app-config.service";
   selector: "app-keyword-filter",
   templateUrl: "keyword-filter.component.html",
   styleUrls: ["keyword-filter.component.scss"],
-  standalone: false,
 })
 export class KeywordFilterComponent
   extends ClearableInputComponent

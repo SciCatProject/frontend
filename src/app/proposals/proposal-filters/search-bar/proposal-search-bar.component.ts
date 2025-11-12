@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from "@angular/router";
   selector: "proposal-search-bar",
   templateUrl: "./proposal-search-bar.component.html",
   styleUrls: ["./proposal-search-bar.component.scss"],
-  standalone: false,
 })
 export class ProposalSearchBarComponent {
   textSearch = "";

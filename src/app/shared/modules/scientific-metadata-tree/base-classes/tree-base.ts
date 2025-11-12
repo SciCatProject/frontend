@@ -27,7 +27,6 @@ export class FlatNode {
 @Component({
   template: "",
   providers: [DatePipe],
-  standalone: false,
 })
 export class TreeBaseComponent {
   treeControl: FlatTreeControl<FlatNode>;

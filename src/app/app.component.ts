@@ -31,7 +31,6 @@ import { Configuration } from "@scicatproject/scicat-sdk-ts-angular";
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
   encapsulation: ViewEncapsulation.None,
-  standalone: false,
 })
 export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
   loading$ = this.store.select(selectIsLoading);

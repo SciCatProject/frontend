@@ -60,7 +60,6 @@ import { TranslateService } from "@ngx-translate/core";
   selector: "dataset-detail",
   templateUrl: "./dataset-detail.component.html",
   styleUrls: ["./dataset-detail.component.scss"],
-  standalone: false,
 })
 export class DatasetDetailComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];

@@ -6,7 +6,6 @@ import { Datablock } from "@scicatproject/scicat-sdk-ts-angular";
   selector: "datablocks-table",
   templateUrl: "./datablocks-table.component.html",
   styleUrls: ["./datablocks-table.component.scss"],
-  standalone: false,
 })
 export class DatablocksComponent {
   @Input()

@@ -18,7 +18,6 @@ interface DateRange {
   selector: "app-date-range-filter",
   templateUrl: "date-range-filter.component.html",
   styleUrls: ["date-range-filter.component.scss"],
-  standalone: false,
 })
 export class DateRangeFilterComponent
   extends ClearableInputComponent

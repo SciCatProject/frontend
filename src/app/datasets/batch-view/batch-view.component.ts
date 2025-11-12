@@ -31,7 +31,6 @@ import { resyncPublishedDataAction } from "state-management/actions/published-da
   selector: "batch-view",
   templateUrl: "./batch-view.component.html",
   styleUrls: ["./batch-view.component.scss"],
-  standalone: false,
 })
 export class BatchViewComponent implements OnInit, OnDestroy {
   batch$: Observable<OutputDatasetObsoleteDto[]> = this.store.select(

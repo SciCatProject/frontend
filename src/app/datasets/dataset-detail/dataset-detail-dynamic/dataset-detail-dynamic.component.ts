@@ -31,7 +31,10 @@ import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular/m
 import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { ActionItemDataset, ActionItems } from "shared/modules/configurable-actions/configurable-action.interfaces";
+import {
+  ActionItemDataset,
+  ActionItems,
+} from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 /**
  * Component to show customizable details for a dataset, using the
@@ -43,7 +46,6 @@ import { ActionItemDataset, ActionItems } from "shared/modules/configurable-acti
   selector: "dataset-detail-dynamic",
   templateUrl: "./dataset-detail-dynamic.component.html",
   styleUrls: ["./dataset-detail-dynamic.component.scss"],
-  standalone: false,
 })
 export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];

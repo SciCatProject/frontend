@@ -25,7 +25,6 @@ import {
   selector: "app-related-datasets",
   templateUrl: "./related-datasets.component.html",
   styleUrls: ["./related-datasets.component.scss"],
-  standalone: false,
 })
 export class RelatedDatasetsComponent {
   vm$ = this.store.select(selectRelatedDatasetsPageViewModel).pipe(

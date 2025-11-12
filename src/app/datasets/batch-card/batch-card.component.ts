@@ -11,7 +11,6 @@ import { Router } from "@angular/router";
   selector: "batch-card",
   templateUrl: "./batch-card.component.html",
   styleUrls: ["./batch-card.component.scss"],
-  standalone: false,
 })
 export class BatchCardComponent implements OnInit, OnDestroy {
   private batch$ = this.store.select(selectDatasetsInBatch);

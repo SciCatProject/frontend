@@ -23,7 +23,6 @@ import {
   templateUrl: "./table-menu.component.html",
   styleUrls: ["./table-menu.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: false,
 })
 export class TableMenuComponent {
   @Output() menuActionChange: EventEmitter<TableMenuActionChange> =

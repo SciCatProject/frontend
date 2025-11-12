@@ -22,7 +22,6 @@ import {
   selector: "app-admin-tab",
   templateUrl: "./admin-tab.component.html",
   styleUrls: ["./admin-tab.component.scss"],
-  standalone: false,
 })
 export class AdminTabComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];

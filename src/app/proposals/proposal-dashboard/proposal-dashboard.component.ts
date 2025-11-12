@@ -21,7 +21,6 @@ export interface FilterLists {
   selector: "app-proposal-dashboard",
   templateUrl: "./proposal-dashboard.component.html",
   styleUrls: ["./proposal-dashboard.component.scss"],
-  standalone: false,
 })
 export class ProposalDashboardComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];

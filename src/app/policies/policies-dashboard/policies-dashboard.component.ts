@@ -33,7 +33,6 @@ import { GenericFilters } from "state-management/models";
   selector: "app-policies-dashboard",
   templateUrl: "./policies-dashboard.component.html",
   styleUrls: ["./policies-dashboard.component.scss"],
-  standalone: false,
 })
 export class PoliciesDashboardComponent implements OnInit {
   vm$ = this.store.select(selectPoliciesDashboardPageViewModel);

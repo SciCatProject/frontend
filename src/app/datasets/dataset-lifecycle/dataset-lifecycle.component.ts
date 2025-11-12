@@ -39,7 +39,6 @@ export interface HistoryItem {
       ),
     ]),
   ],
-  standalone: false,
 })
 export class DatasetLifecycleComponent implements OnInit, OnChanges {
   appConfig = this.appConfigService.getConfig();

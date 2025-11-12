@@ -2,7 +2,6 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from "@angular/core";
 
 @Directive({
   selector: "[appTemplateOrString]",
-  standalone: false,
 })
 export class TemplateOrStringDirective {
   @Input() set templateOrString(content: string | TemplateRef<any>) {

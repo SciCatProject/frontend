@@ -16,7 +16,6 @@ import { concatLatestFrom } from "@ngrx/operators";
   selector: "full-text-search-bar",
   templateUrl: "./full-text-search-bar.component.html",
   styleUrls: ["./full-text-search-bar.component.scss"],
-  standalone: false,
 })
 export class FullTextSearchBarComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];

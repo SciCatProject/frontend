@@ -15,7 +15,6 @@ import {
   templateUrl: "./logbooks-detail.component.html",
   styleUrls: ["./logbooks-detail.component.scss"],
   encapsulation: ViewEncapsulation.None,
-  standalone: false,
 })
 export class LogbooksDetailComponent {
   @Input() logbook: any;

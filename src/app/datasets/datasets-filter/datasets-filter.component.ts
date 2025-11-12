@@ -80,7 +80,6 @@ const COMPONENT_MAP: { [K in Filters]: Type<any> } = {
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
   styleUrls: ["datasets-filter.component.scss"],
-  standalone: false,
 })
 export class DatasetsFilterComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];

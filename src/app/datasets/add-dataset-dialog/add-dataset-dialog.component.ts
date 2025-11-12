@@ -11,7 +11,6 @@ import {
   selector: "app-add-dataset-dialog",
   templateUrl: "./add-dataset-dialog.component.html",
   styleUrls: ["./add-dataset-dialog.component.scss"],
-  standalone: false,
 })
 export class AddDatasetDialogComponent {
   form: FormGroup;

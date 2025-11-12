@@ -48,7 +48,6 @@ import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/defau
   selector: "sample-dashboard",
   templateUrl: "./sample-dashboard.component.html",
   styleUrls: ["./sample-dashboard.component.scss"],
-  standalone: false,
 })
 export class SampleDashboardComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectSampleDashboardPageViewModel);

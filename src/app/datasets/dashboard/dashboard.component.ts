@@ -50,7 +50,6 @@ import { AppConfigService } from "app-config.service";
   selector: "dashboard",
   templateUrl: "dashboard.component.html",
   styleUrls: ["dashboard.component.scss"],
-  standalone: false,
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private pagination$ = this.store.select(selectPagination);

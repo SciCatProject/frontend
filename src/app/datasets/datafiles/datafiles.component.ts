@@ -36,18 +36,18 @@ import { submitJobAction } from "state-management/actions/jobs.actions";
 import { AppConfigService } from "app-config.service";
 import { NgForm } from "@angular/forms";
 import { DataFiles_File } from "./datafiles.interfaces";
-import { ActionItemDataset, ActionItems } from "shared/modules/configurable-actions/configurable-action.interfaces";
+import {
+  ActionItemDataset,
+  ActionItems,
+} from "shared/modules/configurable-actions/configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 
 @Component({
   selector: "datafiles",
   templateUrl: "./datafiles.component.html",
   styleUrls: ["./datafiles.component.scss"],
-  standalone: false,
 })
-export class DatafilesComponent
-  implements OnDestroy, OnInit, AfterViewChecked
-{
+export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
   @ViewChild("downloadAllForm") downloadAllFormElement: ElementRef<NgForm>;
   @ViewChild("downloadSelectedForm") downloadSelectedFormElement;
   datablocks$ = this.store.select(selectCurrentOrigDatablocks);

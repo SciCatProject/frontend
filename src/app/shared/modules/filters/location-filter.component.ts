@@ -23,7 +23,6 @@ import { AppConfigService } from "app-config.service";
   selector: "app-location-filter",
   templateUrl: "location-filter.component.html",
   styleUrls: ["location-filter.component.scss"],
-  standalone: false,
 })
 export class LocationFilterComponent
   extends ClearableInputComponent

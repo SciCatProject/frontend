@@ -57,7 +57,6 @@ const listAnimation = trigger("listAnimation", [
   styleUrls: ["./header-filter.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [listAnimation],
-  standalone: false,
 })
 export class HeaderFilterComponent implements OnInit, AfterViewInit, OnDestroy {
   private filterList: AbstractFilter[] = [];

@@ -75,10 +75,10 @@
       "url": "https://zip.scicatproject.org/download/all",
       "target": "_blank",
       "variables" : {
-        "pid": ".datasets[0].pid",
-        "files": ".datasets[0].files.path",
-        "totalSize": "[.datasets[0].files.size] | add",
-        "folder": ".datasets[0].sourceFolder"
+        "pid": "#Dataset0Pid",
+        "files": "#Dataset0FilesPath",
+        "totalSize": "#Dataset0FilesTotalSize",
+        "folder": "#Dataset0SourceFolder"
       },
       "enabled": "#MaxDownloadableSize(@totalSize)",
       "inputs" : {
@@ -99,11 +99,11 @@
       "url": "https://zip.scicatproject.org/download/selected",
       "target": "_blank",
       "variables" : {
-        "pid": ".datasets[0].pid",
-        "files": ".datasets[0].files.path | select(.datasets[0].files.selected)",
-        "selected": "[.datasets[0].files.path | select(.datasets[0].files.selected)] | count",
-        "totalSize": "[.datasets[0].files.size | select(.datasets[0].files.selected)] | sum",
-        "folder": ".datasets[0].sourceFolder"
+        "pid": "#Dataset0Pid",
+        "files": "#Dataset0SelectedFilesPath",
+        "selected": "#Dataset0SelectedFilesCount",
+        "totalSize": "#Dataset0SelectedFilesTotalSize",
+        "folder": "#Dataset0SourceFolder"
       },
       "inputs" : {
         "auth_token" : "#tokenBearer",
@@ -126,10 +126,10 @@
       "url": "https://www.scicat.info/notebook/all",
       "target": "_blank",
       "variables" : {
-        "pid": ".datasets[0].pid",
-        "files": ".datasets[0].files.path",
-        "totalSize": "[.datasets[0].files.size] | add",
-        "folder": ".datasets[0].sourceFolder"
+        "pid": "#Dataset0Pid",
+        "files": "#Dataset0FilesPath",
+        "totalSize": "#Dataset0FilesTotalSize",
+        "folder": "#Dataset0SourceFolder"
       },
       "enabled": "",
       "inputs" : {
@@ -151,11 +151,11 @@
       "url": "https://www.scicat.info/notebook/selected",
       "target": "_blank",
       "variables" : {
-        "pid": ".datasets[0].pid",
-        "files": ".datasets[0].files.path | select(.datasets[0].files.selected)",
-        "selected": "[.datasets[0].files.path | select(.datasets[0].files.selected)] | count",
-        "totalSize": "[.datasets[0].files.size | select(.datasets[0].files.selected)] | sum",
-        "folder": ".datasets[0].sourceFolder"
+        "pid": "#Dataset0Pid",
+        "files": "#Dataset0SelectedFilesPath",
+        "selected": "#Dataset0SelectedFiles",
+        "totalSize": "#Dataset0SelectedFilesTotalSize",
+        "folder": "#Dataset0SourceFolder"
       },
       "inputs" : {
         "auth_token" : "#token",
@@ -164,7 +164,7 @@
         "directory[]" : "@folder",
         "files[]": "@files"
       },
-      "enabled": "#Length(@files)",
+      "enabled": "@selected",
       "authorization": ["#datasetAccess", "#datasetPublic"]
     },
     {
@@ -179,9 +179,9 @@
       "target": "_blank",
       "authorization": ["#datasetAccess", "#datasetPublic"],
       "variables" : {
-        "pid": ".datasets[0].pid",
-        "files": ".datasets[0].files.path",
-        "folder": ".datasets[0].sourceFolder"
+        "pid": "#Dataset0Pid",
+        "files": "#Dataset0FilesPath",
+        "folder": "#Dataset0SourceFolder"
       },
       "payload": "{\"template_id\":\"c975455e-ede3-11ef-94fb-138c9cd51fc0\",\"parameters\":{\"dataset\":\"{{ @pid }}\",\"directory\":\"{{ @folder }}\",\"files\": {{ @files[] }},\"jwt\":\"{{ #jwt }}\",\"scicat_url\":\"https://staging.scicat.ess.url\",\"file_server_url\":\"sftserver2.esss.dk\",\"file_server_port\":\"22\"}}",
       "filename": "{{ #uuid }}.ipynb"
@@ -198,10 +198,10 @@
       "enabled": "@selected > 0",
       "authorization": ["#datasetAccess", "#datasetPublic"],
       "variables" : {
-        "pid": ".datasets[0].pid",
-        "files": ".datasets[0].files.path | select(.datasets[0].files.selected)",
-        "selected": "[.datasets[0].files.path | select(.datasets[0].files.selected)] | count",
-        "folder": ".datasets[0].sourceFolder"
+        "pid": "#Dataset0Pid",
+        "files": "#Dataset0SelectedFilesPath",
+        "selected": "#Dataset0SelectedFiles",
+        "folder": "#Dataset0SourceFolder"
       },
       "payload": "{\"template_id\":\"c975455e-ede3-11ef-94fb-138c9cd51fc0\",\"parameters\":{\"dataset\":\"{{ pid }}\",\"directory\":\"{{ sourceFolder }}\",\"files\": {{ files }},\"jwt\":\"{{ jwt }}\",\"scicat_url\":\"https://staging.scicat.ess.url\",\"file_server_url\":\"sftserver2.esss.dk\",\"file_server_port\":\"22\"}}",
       "filename": "{{ uuid }}.ipynb"
@@ -219,8 +219,8 @@
       "enabled": "#datasetOwner && @isPublished",
       "authorization": "#datasetOwner && !@isPublished",
       "variables" : {
-        "pid": ".datasets[0].pid",
-        "isPublished" : ".datasets[0].isPublished"
+        "pid": "@Dataset0Pid",
+        "isPublished" : "#Dataset[0]Field[isPublished]"
       },
       "payload": "{\"isPublished\":\"true\"}",
       "headers": {
@@ -241,8 +241,8 @@
       "enabled": "#datasetOwner && !@isPublished",
       "authorization": "#datasetOwner && @isPublished",
       "variables" : {
-        "pid": ".datasets[0].pid",
-        "isPublished" : ".datasets[0].isPublished"
+        "pid": "#Dataset0Pid",
+        "isPublished" : "#Dataset[0]Field[isPublished]"
       },
       "payload": "{\"isPublished\":\"false\"}",
       "headers": {

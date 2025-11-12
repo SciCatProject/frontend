@@ -54,7 +54,6 @@ const tableDefaultSettingsConfig: ITableSetting = {
   selector: "app-instruments-dashboard",
   templateUrl: "./instruments-dashboard.component.html",
   styleUrls: ["./instruments-dashboard.component.scss"],
-  standalone: false,
 })
 export class InstrumentsDashboardComponent implements OnInit, OnDestroy {
   instrumentsWithCountAndTableSettings$ = this.store.select(

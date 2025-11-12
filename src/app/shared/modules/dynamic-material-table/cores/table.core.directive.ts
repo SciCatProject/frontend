@@ -44,7 +44,6 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector
   selector: "[core]",
-  standalone: false,
 })
 export class TableCoreDirective<T extends TableRow> {
   private _expandComponent: any;

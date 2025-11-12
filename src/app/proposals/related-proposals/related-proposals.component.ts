@@ -73,7 +73,6 @@ const tableDefaultSettingsConfig: ITableSetting = {
   selector: "app-related-proposals",
   templateUrl: "./related-proposals.component.html",
   styleUrls: ["./related-proposals.component.scss"],
-  standalone: false,
 })
 export class RelatedProposalsComponent implements OnInit, OnDestroy {
   relatedProposalsWithCount$ = this.store.select(

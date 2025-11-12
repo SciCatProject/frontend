@@ -67,7 +67,6 @@ enum TAB {
   selector: "dataset-details-dashboard",
   templateUrl: "./dataset-details-dashboard.component.html",
   styleUrls: ["./dataset-details-dashboard.component.scss"],
-  standalone: false,
 })
 export class DatasetDetailsDashboardComponent
   implements OnInit, OnDestroy, AfterViewChecked

@@ -7,7 +7,6 @@ import { AppConfigService } from "app-config.service";
   selector: "configurable-actions",
   templateUrl: "./configurable-actions.component.html",
   styleUrls: ["./configurable-actions.component.scss"],
-  standalone: false,
 })
 export class ConfigurableActionsComponent {
   private _sortedActionsConfig: ActionConfig[];

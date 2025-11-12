@@ -13,7 +13,6 @@ import { DateRange } from "state-management/state/proposals.store";
   selector: "proposal-side-filter",
   templateUrl: "./proposal-side-filter.component.html",
   styleUrls: ["./proposal-side-filter.component.scss"],
-  standalone: false,
 })
 export class ProposalSideFilterComponent implements OnInit {
   activeFilters: Record<string, string | DateRange> = {};
