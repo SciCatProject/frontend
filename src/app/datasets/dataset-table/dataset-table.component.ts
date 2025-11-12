@@ -17,6 +17,10 @@ import {
   deselectDatasetAction,
   selectAllDatasetsAction,
   sortByColumnAction,
+  setSearchTermsAction,
+  setTextFilterAction,
+  fetchFacetCountsAction,
+  fetchDatasetsAction,
 } from "state-management/actions/datasets.actions";
 import { fetchInstrumentsAction } from "state-management/actions/instruments.actions";
 
@@ -103,6 +107,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   instrumentMap: Map<string, Instrument> = new Map();
 
   @Output() rowClick = new EventEmitter<OutputDatasetObsoleteDto>();
+  @Output() textSearch = new EventEmitter<string>();
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
@@ -146,6 +151,8 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
   defaultPageSizeOptions = [5, 10, 25, 100];
 
   tablesSettings: object;
+
+  globalTextSearch = "";
 
   constructor(
     public appConfigService: AppConfigService,
@@ -555,6 +562,24 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
         });
       }),
     );
+
+    this.subscriptions.push(
+      this.route.queryParams.subscribe((queryParams) => {
+        const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
+        this.globalTextSearch = searchQuery.text || "";
+      }),
+    );
+  }
+
+  onTextSearchChange(term: string) {
+    this.globalTextSearch = term;
+    this.store.dispatch(setSearchTermsAction({ terms: term }));
+    this.store.dispatch(setTextFilterAction({ text: term }));
+  }
+
+  onTextSearchAction() {
+    this.store.dispatch(fetchDatasetsAction());
+    this.store.dispatch(fetchFacetCountsAction());
   }
 
   ngOnDestroy() {
