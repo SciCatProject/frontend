@@ -6,8 +6,13 @@
   >
     <mat-tab>
       <ng-template mat-tab-label>
-        <mat-icon> details </mat-icon>
-        {{ "Details" | translate }}
+        <span
+          matTooltip="Complete information about the proposal"
+          matTooltipPosition="above"
+        >
+          <mat-icon> details </mat-icon>
+          {{ "Details" | translate: localization }}
+        </span>
       </ng-template>
       <ng-template matTabContent
         ><proposal-detail [proposal]="proposal"></proposal-detail
@@ -16,8 +21,13 @@
 
     <mat-tab>
       <ng-template mat-tab-label>
-        <mat-icon> folder </mat-icon>
-        {{ "Datasets" | translate }}
+        <span
+          matTooltip="List of all datasets acquired under this proposal and all the children proposals"
+          matTooltipPosition="above"
+        >
+          <mat-icon> folder </mat-icon>
+          {{ "Datasets" | translate: localization }}
+        </span>
       </ng-template>
 
       <ng-template matTabContent>
@@ -30,8 +40,13 @@
 
     <mat-tab>
       <ng-template mat-tab-label>
-        <mat-icon data-cy="related-proposals"> folder </mat-icon>
-        {{ "Related Proposals" | translate }}
+        <span
+          matTooltip="List of all proposals that are directly related to the current proposal, both parent and children"
+          matTooltipPosition="above"
+        >
+          <mat-icon data-cy="related-proposals"> folder </mat-icon>
+          {{ "Related Proposals" | translate: localization }}
+        </span>
       </ng-template>
 
       <ng-template matTabContent>
@@ -41,8 +56,13 @@
 
     <mat-tab *ngIf="appConfig.logbookEnabled">
       <ng-template mat-tab-label>
-        <mat-icon> book </mat-icon>
-        {{ "Logbook" | translate }}
+        <span
+          matTooltip="All the entries recorded in the logbook related to this proposal"
+          matTooltipPosition="above"
+        >
+          <mat-icon> book </mat-icon>
+          {{ "Logbook" | translate: localization }}
+        </span>
       </ng-template>
 
       <ng-template matTabContent>

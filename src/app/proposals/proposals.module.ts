@@ -36,15 +36,32 @@ import { logbooksReducer } from "state-management/reducers/logbooks.reducer";
 import { ProposalLogbookComponent } from "./proposal-logbook/proposal-logbook.component";
 import { RelatedProposalsComponent } from "./related-proposals/related-proposals.component";
 import { ProposalDatasetsComponent } from "./proposal-datasets/proposal-datasets.component";
-import { TranslateModule } from "@ngx-translate/core";
 import { ProposalDashboardComponent } from "./proposal-dashboard/proposal-dashboard.component";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { ProposalSearchBarComponent } from "./proposal-filters/search-bar/proposal-search-bar.component";
+import { PipesModule } from "shared/pipes/pipes.module";
+import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
+import { InstrumentEffects } from "state-management/effects/instruments.effects";
+import { MAT_DATE_FORMATS } from "@angular/material/core";
+
+export const PROPOSAL_DATE_FORMATS = {
+  parse: { dateInput: "yyyy-MM-dd" },
+  display: {
+    dateInput: "yyyy-MM-dd",
+    monthYearLabel: "MMM yyyy",
+    dateA11yLabel: "LL",
+    monthYearA11yLabel: "MMMM yyyy",
+  },
+};
 
 @NgModule({
   imports: [
     CommonModule,
-    EffectsModule.forFeature([ProposalEffects, LogbookEffects]),
+    EffectsModule.forFeature([
+      ProposalEffects,
+      LogbookEffects,
+      InstrumentEffects,
+    ]),
     FlexLayoutModule,
     LogbooksModule,
     MatButtonModule,
@@ -63,9 +80,10 @@ import { ProposalSearchBarComponent } from "./proposal-filters/search-bar/propos
     NgxJsonViewerModule,
     RouterModule,
     SharedScicatFrontendModule,
+    PipesModule,
     StoreModule.forFeature("proposals", proposalsReducer),
     StoreModule.forFeature("logbooks", logbooksReducer),
-    TranslateModule,
+    StoreModule.forFeature("instruments", instrumentsReducer),
   ],
   declarations: [
     ProposalDashboardComponent,
@@ -79,6 +97,11 @@ import { ProposalSearchBarComponent } from "./proposal-filters/search-bar/propos
     ProposalDatasetsComponent,
   ],
   exports: [],
-  providers: [DatePipe, FileSizePipe, SlicePipe],
+  providers: [
+    DatePipe,
+    FileSizePipe,
+    SlicePipe,
+    { provide: MAT_DATE_FORMATS, useValue: PROPOSAL_DATE_FORMATS },
+  ],
 })
 export class ProposalsModule {}

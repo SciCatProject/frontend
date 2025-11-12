@@ -10,6 +10,7 @@ import { selectCurrentInstrument } from "state-management/selectors/instruments.
 import { EditableComponent } from "app-routing/pending-changes.guard";
 import { AppConfigService } from "app-config.service";
 import { selectIsAdmin } from "state-management/selectors/user.selectors";
+import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
 
 @Component({
   selector: "app-instrument-details",
@@ -25,6 +26,7 @@ export class InstrumentDetailsComponent
   isAdmin$ = this.store.select(selectIsAdmin);
   appConfig = this.appConfigService.getConfig();
   subscriptions: Subscription[] = [];
+  currentInstrument: Instrument | undefined;
 
   constructor(
     private appConfigService: AppConfigService,
@@ -51,6 +53,12 @@ export class InstrumentDetailsComponent
         }
       }),
     );
+
+    this.subscriptions.push(
+      this.instrument$.subscribe((instrument) => {
+        this.currentInstrument = instrument;
+      }),
+    );
   }
 
   hasUnsavedChanges() {
@@ -59,6 +67,17 @@ export class InstrumentDetailsComponent
   onHasUnsavedChanges($event: boolean) {
     this._hasUnsavedChanges = $event;
   }
+
+  emptyMetadataTable(): boolean {
+    if (this.appConfig.hideEmptyMetadataTable) {
+      return (
+        !!this.currentInstrument?.customMetadata &&
+        Object.keys(this.currentInstrument.customMetadata).length > 0
+      );
+    }
+    return true;
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }

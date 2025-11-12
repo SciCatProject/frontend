@@ -1,12 +1,31 @@
 import { createSelector, createFeatureSelector } from "@ngrx/store";
 import { ProposalsState } from "../state/proposals.store";
-import { selectTablesSettings } from "./user.selectors";
+import {
+  selectHasFetchedSettings,
+  selectTablesSettings,
+} from "./user.selectors";
+import { selectInstrumentWithIdAndLabel } from "./instruments.selectors";
 
 const selectProposalsState = createFeatureSelector<ProposalsState>("proposals");
 
 export const selectProposals = createSelector(
   selectProposalsState,
   (state) => state.proposals,
+);
+
+// selectEnrichedProposals enhances proposals with additional derived fields
+// e.g. adds `instrumentName` (from instruments using `instrumentIds[0]`)
+// for table display (configurable via frontend.config.json)
+export const selectEnrichedProposals = createSelector(
+  selectProposals,
+  selectInstrumentWithIdAndLabel,
+  (proposals, instruments) =>
+    proposals.map((proposal) => ({
+      ...proposal,
+      instrumentName:
+        instruments.find((inst) => inst._id === proposal.instrumentIds[0])
+          ?.label || proposal.instrumentIds[0],
+    })),
 );
 
 export const selectCurrentProposal = createSelector(
@@ -54,10 +73,20 @@ export const selectFilters = createSelector(
   selectProposalsState,
   (state) => state.proposalFilters,
 );
+export const selectFilterByKey = (key: string) =>
+  createSelector(
+    selectProposalsState,
+    (state) => state.proposalFilters.fields[key] || [],
+  );
 
 export const selectDatasetFilters = createSelector(
   selectProposalsState,
   (state) => state.datasetFilters,
+);
+
+export const selectDefaultProposalColumns = createSelector(
+  selectProposalsState,
+  (state) => state.columns,
 );
 
 export const selectPage = createSelector(selectFilters, (filters) => {
@@ -140,7 +169,19 @@ export const selectFullqueryParams = createSelector(
     const { skip, limit, sortField, ...theRest } = filters;
     const limits = { order: sortField, skip, limit };
     const query = restrictFilter(theRest);
+
     return { query: JSON.stringify(query), limits };
+  },
+);
+
+export const selectFullfacetParams = createSelector(
+  selectFilters,
+  (filters) => {
+    const { skip, limit, sortField, ...theRest } = filters;
+
+    const fields = restrictFilter(theRest.fields);
+
+    return { fields };
   },
 );
 
@@ -154,14 +195,43 @@ export const selectDatasetsQueryParams = createSelector(
 );
 
 export const selectProposalsWithCountAndTableSettings = createSelector(
-  selectProposals,
+  selectEnrichedProposals,
   selectProposalsCount,
   selectTablesSettings,
-  (proposals, count, tablesSettings) => {
+  selectHasFetchedSettings,
+  (proposals, count, tablesSettings, hasFetchedSettings) => {
     return {
       proposals,
       count,
       tablesSettings,
+      hasFetchedSettings,
     };
   },
 );
+
+export const selectProposalsFacetCountsWithInstrumentName = createSelector(
+  selectProposalsfacetCounts,
+  selectInstrumentWithIdAndLabel,
+  (facets, instruments) => {
+    const instrumentIds = instruments.map((inst) => {
+      const matched = (facets.instrumentIds ?? []).find(
+        (f) => f._id === inst._id,
+      );
+      return {
+        _id: inst._id,
+        label: inst.label ?? inst._id,
+        count: matched?.count ?? 0,
+      };
+    });
+
+    return { ...facets, instrumentIds };
+  },
+);
+
+export const selectProposalsFacetCountsWithInstrumentNameByKey = (
+  key: string,
+) =>
+  createSelector(
+    selectProposalsFacetCountsWithInstrumentName,
+    (facets) => facets[key] || [],
+  );

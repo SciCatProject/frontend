@@ -139,7 +139,11 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.dispatch(
-      fetchProposalDatasetsAction({ proposalId: this.proposalId }),
+      fetchProposalDatasetsAction({
+        proposalId: this.proposalId,
+        skip: 0,
+        limit: this.defaultPageSize,
+      }),
     );
 
     this.subscription = this.proposalDatasets$.subscribe((data) => {
@@ -151,7 +155,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
           this.tableName,
           tableDefaultSettingsConfig,
         );
-      const pagginationConfig = {
+      const paginationConfig = {
         pageSizeOptions: [5, 10, 25, 100],
         pageIndex: data.currentPage || 0,
         pageSize: data.datasetsPerPage || this.defaultPageSize,
@@ -159,7 +163,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
       };
 
       if (tableSettingsConfig?.settingList.length) {
-        this.initTable(tableSettingsConfig, pagginationConfig);
+        this.initTable(tableSettingsConfig, paginationConfig);
       }
     });
   }

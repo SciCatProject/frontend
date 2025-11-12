@@ -25,6 +25,7 @@ import {
 import { MessageType } from "state-management/models";
 import { AppConfigService, AppConfigInterface } from "app-config.service";
 import { Configuration } from "@scicatproject/scicat-sdk-ts-angular";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-root",
@@ -49,6 +50,7 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
     private cdRef: ChangeDetectorRef,
     private metaService: Meta,
     public snackBar: MatSnackBar,
+    public translateService: TranslateService,
     private titleService: Title,
     private store: Store,
   ) {
@@ -61,6 +63,11 @@ export class AppComponent implements OnDestroy, OnInit, AfterViewChecked {
       name: "description",
       content: "SciCat metadata catalogue at" + this.facility,
     });
+    // ngx-translate requires a "currentLang" to be set with .use(...).
+    // We don't actually have multiple real languages, instead we load the full
+    // labelsLocalization object (dataset/proposal...) and scope keys in the pipe.
+    // So we just pick a dummy lang token ("en") to satisfy ngx-translate.
+    this.translateService.use("en");
   }
 
   /**

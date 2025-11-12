@@ -2,7 +2,7 @@
 <form [formGroup]="filterForm">
   <ng-container [ngSwitch]="filterType">
     <ng-container *ngSwitchDefault>
-      <mat-form-field>
+      <mat-form-field [id]="key">
         <mat-label>{{ label }}</mat-label>
         <input
           matInput
@@ -17,7 +17,11 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="'dateRange'">
-      <mat-form-field [matTooltip]="tooltip" matTooltipPosition="after">
+      <mat-form-field
+        [matTooltip]="tooltip"
+        matTooltipPosition="after"
+        [id]="key"
+      >
         <mat-label>{{ label }}</mat-label>
         <mat-date-range-input
           formGroupName="dateRangeField"
@@ -27,16 +31,80 @@
             matStartDate
             (dateChange)="dateChanged($event, 'begin')"
             formControlName="start"
+            data-cy="creation-time-begin"
           />
           <input
             matEndDate
             (dateChange)="dateChanged($event, 'end')"
             formControlName="end"
+            data-cy="creation-time-end"
           />
         </mat-date-range-input>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'checkbox'">
+      <div class="filter-group">
+        <mat-label class="filter-title">{{
+          label | translate: localization
+        }}</mat-label>
+        <mat-form-field
+          *ngIf="showCheckboxSearch"
+          appearance="outline"
+          class="facet-search"
+          floatLabel="always"
+        >
+          <mat-label>Type to filter</mat-label>
+          <input
+            matInput
+            type="search"
+            formControlName="textField"
+            placeholder="{{ placeholder }}"
+          />
+        </mat-form-field>
+        <ng-container *ngIf="visibleFacetCounts?.length > 0; else noItems">
+          <div class="checkbox-list">
+            <mat-checkbox
+              *ngFor="let field of visibleFacetCounts; trackBy: trackById"
+              [checked]="
+                filterForm.get('selectedIds')!.value?.includes(field._id)
+              "
+              (change)="onToggleCheckbox(field._id, $event.checked)"
+            >
+              {{ field.label ?? field._id }} ({{ field.count }})
+            </mat-checkbox>
+          </div>
+          <div class="show-more-btn" *ngIf="hasMore">
+            <button mat-button (click)="onShowMore()">Show more...</button>
+          </div>
+        </ng-container>
+        <ng-template #noItems>
+          <div class="empty-text">No options found</div>
+        </ng-template>
+      </div>
+
+      <mat-divider />
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'multiSelect'">
+      <multiselect-filter
+        [key]="key"
+        [label]="label"
+        [tooltip]="tooltip"
+        (selectionChange)="onSelectionChange($event)"
+        [facetCounts$]="facetCounts$"
+        [currentFilter$]="currentFilter$"
+      ></multiselect-filter>
+    </ng-container>
+    <ng-container *ngSwitchCase="'number'">
+      <ngx-numeric-range-form-field
+        formControlName="numberRange"
+        [label]="label"
+        [key]="key"
+        (numericRangeChanged)="onNumericRangeChange($event)"
+      ></ngx-numeric-range-form-field>
     </ng-container>
   </ng-container>
 </form>

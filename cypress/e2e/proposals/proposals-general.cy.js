@@ -463,31 +463,12 @@ describe("Proposals general", () => {
       cy.get("dynamic-mat-table")
         .scrollTo("right", { ensureScrollable: false })
         .get("mat-header-row")
-        .should("contain", "First Name");
-
-      cy.get("dynamic-mat-table")
-        .scrollTo("right", { ensureScrollable: false })
-        .get("mat-header-row")
-        .should("contain", "Last Name");
+        .should("contain", "PI Last Name");
 
       cy.get("dynamic-mat-table table-menu button").click();
 
       cy.get('[role="menu"] button').contains("Column setting").click();
-      cy.get('[role="menu"]')
-        .contains("First Name")
-        .parent()
-        .find("input[type=checkbox]")
-        .uncheck();
-      cy.get('[role="menu"]')
-        .contains("Last Name")
-        .parent()
-        .find("input[type=checkbox]")
-        .uncheck();
-      cy.get('[role="menu"]')
-        .contains("PI First Name")
-        .parent()
-        .find("input[type=checkbox]")
-        .uncheck();
+
       cy.get('[role="menu"]')
         .contains("PI Last Name")
         .parent()
@@ -508,12 +489,7 @@ describe("Proposals general", () => {
       cy.get("dynamic-mat-table")
         .scrollTo("right", { ensureScrollable: false })
         .get("mat-header-row")
-        .should("not.contain", "First Name");
-
-      cy.get("dynamic-mat-table")
-        .scrollTo("right", { ensureScrollable: false })
-        .get("mat-header-row")
-        .should("not.contain", "Last Name");
+        .should("not.contain", "PI Last Name");
 
       cy.get("dynamic-mat-table table-menu button").click();
       cy.get('[role="menu"] button').contains("Default setting").click();
@@ -530,12 +506,7 @@ describe("Proposals general", () => {
       cy.get("dynamic-mat-table")
         .scrollTo("right", { ensureScrollable: false })
         .get("mat-header-row")
-        .should("contain", "First Name");
-
-      cy.get("dynamic-mat-table")
-        .scrollTo("right", { ensureScrollable: false })
-        .get("mat-header-row")
-        .should("contain", "Last Name");
+        .should("contain", "PI Last Name");
     });
 
     it("should be able to download table data as a json", () => {
@@ -604,6 +575,27 @@ describe("Proposals general", () => {
       ).then((actualExport) => {
         expect(actualExport).to.contain(newProposal.proposalId);
       });
+    });
+  });
+
+  describe("Proposals filter end date auto-set", () => {
+    it("should auto-set end date when start date is set and end date is empty", () => {
+      const newProposal = {
+        ...testData.proposal,
+        proposalId: Math.floor(100000 + Math.random() * 900000).toString(),
+        startTime: "2025-10-08T15:00:00.000Z",
+      };
+
+      cy.createProposal(newProposal);
+
+      cy.visit("/proposals");
+
+      cy.get('[data-cy="creation-time-begin"]').type("2025-10-08");
+
+      cy.get('[data-cy="apply-button-filter"]').click();
+
+      cy.get("mat-table mat-row").should("contain", newProposal.proposalId);
+
     });
   });
 });

@@ -1,5 +1,6 @@
 import { DatasetState } from "state-management/state/datasets.store";
 import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { selectFilters as selectUserFilters } from "state-management/selectors/user.selectors";
 
 const selectDatasetState = createFeatureSelector<DatasetState>("datasets");
 
@@ -76,6 +77,9 @@ export const selectTextFilter = createSelector(
   (filters) => filters.text || "",
 );
 
+export const selectFilterByKey = (key: string) =>
+  createSelector(selectFilters, (filters) => filters[key] || []);
+
 export const selectLocationFilter = createSelector(
   selectFilters,
   (filters) => filters.creationLocation,
@@ -137,6 +141,9 @@ const selectFacetCounts = createSelector(
   (state) => state.facetCounts || {},
 );
 
+export const selectFacetCountByKey = (key: string) =>
+  createSelector(selectFacetCounts, (counts) => counts[key] || []);
+
 export const selectLocationFacetCounts = createSelector(
   selectFacetCounts,
   (counts) => counts.creationLocation || [],
@@ -180,15 +187,18 @@ export const selectFullqueryParams = createSelector(
     const pagination = state.pagination;
     // don't query with modeToggle, it's only in filters for persistent routing
     const { skip, limit, sortField, modeToggle, ...theRest } = filter;
+
     const limits = { ...pagination, order: sortField };
     const query = restrictFilter(theRest);
+
     return { query, limits };
   },
 );
 
 export const selectFullfacetParams = createSelector(
   selectDatasetState,
-  (state) => {
+  selectUserFilters,
+  (state, userFilters) => {
     const filter = state.filters;
     const pagination = state.pagination;
     const { skip, limit, sortField, modeToggle, ...theRest } = {
@@ -196,7 +206,12 @@ export const selectFullfacetParams = createSelector(
       ...pagination,
     };
     const fields = restrictFilter(theRest);
-    const facets = ["type", "creationLocation", "ownerGroup", "keywords"];
+    const facets = userFilters
+      .filter(
+        (f) => f.enabled && (f.type === "multiSelect" || f.type === "checkbox"),
+      )
+      .map((f) => f.key);
+
     return { fields, facets };
   },
 );
