@@ -17,6 +17,7 @@ export interface IngestorAutodiscovery {
 export interface ExtractionMethod {
   name: string;
   schema: string; // Base64 encoded JSON schema
+  url: string;
 }
 
 export interface APIInformation {
@@ -116,7 +117,7 @@ export class IngestorHelper {
   static createEmptyRequestInformation = (): IngestionRequestInformation => {
     return {
       selectedPath: "",
-      selectedMethod: { name: "", schema: "" },
+      selectedMethod: { name: "", schema: "", url: "" },
       selectedResolvedDecodedSchema: {},
       scicatHeader: {},
       userMetaData: {

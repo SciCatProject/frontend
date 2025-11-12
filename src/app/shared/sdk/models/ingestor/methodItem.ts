@@ -15,5 +15,6 @@
 export interface MethodItem { 
     name: string;
     schema: string;
+    url:string;
 }
 

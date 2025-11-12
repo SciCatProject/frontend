@@ -126,7 +126,7 @@ export class IngestorCreationDialogBaseComponent implements OnInit, OnDestroy {
       sample: {},
     };
 
-    this.createNewTransferData.selectedMethod = { name: "", schema: "" };
+    this.createNewTransferData.selectedMethod = { name: "", schema: "", url: "" };
 
     this.store.dispatch(
       fromActions.updateIngestionObject({

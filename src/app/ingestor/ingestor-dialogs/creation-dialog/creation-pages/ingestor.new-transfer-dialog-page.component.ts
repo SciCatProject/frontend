@@ -186,6 +186,12 @@ export class IngestorNewTransferDialogPageComponent
 
   set selectedMethod(value: ExtractionMethod) {
     this.createNewTransferData.selectedMethod = value;
+
+    // Set the scientifcMetadataSchema in scicatHeader when a method is selected
+    if (value && value.url) {
+      this.createNewTransferData.scicatHeader["scientifcMetadataSchema"] = value.url;
+    }
+
     this.validateNextButton();
   }
 
