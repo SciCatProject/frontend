@@ -554,6 +554,22 @@ describe("Datasets general", () => {
     });
   });
 
+  describe("Dataset filter end date auto-set", () => {
+    it("should set end date to today if only start date is provided", () => {
+      cy.createDataset({
+        type: "raw",
+        creationTime: "2025-10-08T15:00:00.000Z",
+      });
+      cy.visit("/datasets");
+
+      cy.get('[data-cy="creation-time-begin"]').type("2025-10-07");
+
+      cy.get('[data-cy="filter-search-button"]').click();
+
+      cy.get(".dataset-table mat-row").contains("Cypress Dataset").should("exist");
+    });
+  });
+
   describe("Scientific notation in condition panel test", () => {
     beforeEach(() => {
       cy.login(Cypress.env("username"), Cypress.env("password"));
