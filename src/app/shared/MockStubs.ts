@@ -6,7 +6,7 @@ import { AppConfig } from "app-config.module";
 import { SciCatDataSource } from "./services/scicat.datasource";
 import {
   ActionConfig,
-  ActionItem,
+  ActionItems,
 } from "shared/modules/configurable-actions/configurable-action.interfaces";
 import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import {
@@ -261,7 +261,7 @@ export class MockScicatDataSource extends SciCatDataSource {
 
 export class MockDatafilesActionsComponent {
   actionsConfig: ActionConfig[];
-  actionItems: ActionItem[];
+  actionItems: ActionItems;
   files: DataFiles_File[];
   visible: boolean;
 }
