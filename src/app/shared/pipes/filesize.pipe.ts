@@ -3,6 +3,7 @@ import { filesize } from "filesize";
 
 @Pipe({
   name: "filesize",
+  standalone: false,
 })
 export class FileSizePipe implements PipeTransform {
   transform(value: number): any {
