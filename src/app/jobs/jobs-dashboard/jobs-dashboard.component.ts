@@ -40,6 +40,7 @@ export interface JobsTableData {
   selector: "app-jobs-dashboard",
   templateUrl: "./jobs-dashboard.component.html",
   styleUrls: ["./jobs-dashboard.component.scss"],
+  standalone: false,
 })
 export class JobsDashboardComponent implements OnInit, OnDestroy {
   jobsCount$ = this.store.select(selectJobsCount);

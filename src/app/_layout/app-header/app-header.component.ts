@@ -25,6 +25,7 @@ import { map, Observable, Subscription } from "rxjs";
   selector: "app-app-header",
   templateUrl: "./app-header.component.html",
   styleUrls: ["./app-header.component.scss"],
+  standalone: false,
 })
 export class AppHeaderComponent implements OnInit {
   private sub: Subscription;

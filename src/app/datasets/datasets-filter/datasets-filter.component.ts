@@ -60,6 +60,7 @@ import { UnitsOptionsService } from "shared/services/units-options.service";
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
   styleUrls: ["datasets-filter.component.scss"],
+  standalone: false,
 })
 export class DatasetsFilterComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];

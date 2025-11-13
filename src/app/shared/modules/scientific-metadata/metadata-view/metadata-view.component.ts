@@ -29,6 +29,7 @@ import { TablePaginationMode } from "shared/modules/dynamic-material-table/model
   selector: "metadata-view",
   templateUrl: "./metadata-view.component.html",
   styleUrls: ["./metadata-view.component.scss"],
+  standalone: false,
 })
 export class MetadataViewComponent implements OnInit, OnChanges {
   @Input() metadata: object = {};

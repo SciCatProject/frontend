@@ -25,6 +25,7 @@ import { FilterConfig } from "state-management/state/user.store";
   selector: "proposal-side-filter",
   templateUrl: "./proposal-side-filter.component.html",
   styleUrls: ["./proposal-side-filter.component.scss"],
+  standalone: false,
 })
 export class ProposalSideFilterComponent implements OnInit {
   private subscriptions: Subscription[] = [];

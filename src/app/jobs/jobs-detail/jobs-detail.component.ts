@@ -13,6 +13,7 @@ import { showMessageAction } from "state-management/actions/user.actions";
   selector: "app-jobs-detail",
   templateUrl: "./jobs-detail.component.html",
   styleUrls: ["./jobs-detail.component.scss"],
+  standalone: false,
 })
 export class JobsDetailComponent implements OnInit, OnDestroy {
   job$ = this.store.select(selectCurrentJob) as Observable<OutputJobV3Dto>;

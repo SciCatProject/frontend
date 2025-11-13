@@ -20,6 +20,7 @@ import { selectIsAdmin } from "state-management/selectors/user.selectors";
   selector: "publisheddata-details",
   templateUrl: "./publisheddata-details.component.html",
   styleUrls: ["./publisheddata-details.component.scss"],
+  standalone: false,
 })
 export class PublisheddataDetailsComponent implements OnInit, OnDestroy {
   currentData$ = this.store.select(selectCurrentPublishedData);

@@ -6,6 +6,7 @@ import { ScientificCondition } from "state-management/models";
   selector: "app-condition-filter",
   templateUrl: "condition-filter.component.html",
   styleUrls: ["condition-filter.component.scss"],
+  standalone: false,
 })
 export class ConditionFilterComponent {
   @Input() condition: ScientificCondition;

@@ -22,7 +22,7 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 //import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import { AppConfigService } from "app-config.service";
 //import { boolean } from "mathjs";
-import { higherMaxFileSizeLimit, lowerMaxFileSizeLimit, maxSizeType, mockActionItems, mockActionsConfig, selectedFilesType } from "./configurable-actions.test.data";
+import { higherMaxFileSizeLimit, lowerMaxFileSizeLimit, maxSizeType, mockActionItems, mockActionsConfig, mockAppConfigService, selectedFilesType } from "./configurable-actions.test.data";
 
 describe("1000: ConfigurableActionComponent", () => {
   let component: ConfigurableActionComponent;
@@ -58,16 +58,7 @@ describe("1000: ConfigurableActionComponent", () => {
     htmlInput = document.createElement("input");
   });
 
-  let mockConfigService: any;
   beforeEach(waitForAsync(() => {
-    mockConfigService = {
-      appConfig: {
-        maxDirectDownloadSize: 0,
-      },
-      getConfig() {
-        return this.appConfig;
-      },
-    };
     TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
@@ -97,7 +88,7 @@ describe("1000: ConfigurableActionComponent", () => {
             provide: AuthService,
             useValue: { getToken: getCurrentToken },
           },
-          { provide: AppConfigService, useValue: mockConfigService },
+          { provide: AppConfigService, useValue: mockAppConfigService },
         ],
       },
     });
@@ -116,7 +107,7 @@ describe("1000: ConfigurableActionComponent", () => {
     fixture.destroy();
   });
 
-  it("should create", () => {
+  it("0000: should create", () => {
     expect(component).toBeTruthy();
   });
 
@@ -476,12 +467,12 @@ describe("1000: ConfigurableActionComponent", () => {
     )[0];
     switch (testCase.limit) {
       case maxSizeType.higher:
-        mockConfigService.appConfig.maxDirectDownloadSize =
+        mockAppConfigService.appConfig.maxDirectDownloadSize =
           higherMaxFileSizeLimit;
         break;
       case maxSizeType.lower:
       default:
-        mockConfigService.appConfig.maxDirectDownloadSize =
+        mockAppConfigService.appConfig.maxDirectDownloadSize =
           lowerMaxFileSizeLimit;
         break;
     }

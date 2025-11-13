@@ -26,6 +26,7 @@ import { clearProposalsStateAction } from "state-management/actions/proposals.ac
   selector: "proposal-detail",
   templateUrl: "proposal-detail.component.html",
   styleUrls: ["proposal-detail.component.scss"],
+  standalone: false,
 })
 export class ProposalDetailComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];

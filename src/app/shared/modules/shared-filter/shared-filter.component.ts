@@ -24,6 +24,7 @@ type FacetItem = { _id: string; label?: string; count: number };
   selector: "shared-filter",
   templateUrl: "./shared-filter.component.html",
   styleUrls: ["./shared-filter.component.scss"],
+  standalone: false,
 })
 export class SharedFilterComponent implements OnChanges {
   private dateRange: DateRange = {

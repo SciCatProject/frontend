@@ -45,6 +45,7 @@ import {
   selector: "dataset-detail-dynamic",
   templateUrl: "./dataset-detail-dynamic.component.html",
   styleUrls: ["./dataset-detail-dynamic.component.scss"],
+  standalone: false,
 })
 export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];

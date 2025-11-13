@@ -40,6 +40,7 @@ import {
   selector: "app-sample-edit",
   templateUrl: "./sample-edit.component.html",
   styleUrls: ["./sample-edit.component.scss"],
+  standalone: false,
 })
 export class SampleEditComponent implements OnInit, OnDestroy {
   @ViewChild("searchBar", { static: true }) searchBar!: ElementRef;

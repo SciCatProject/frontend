@@ -41,6 +41,7 @@ export enum MetadataTypes {
   selector: "metadata-edit",
   templateUrl: "./metadata-edit.component.html",
   styleUrls: ["./metadata-edit.component.scss"],
+  standalone: false,
 })
 export class MetadataEditComponent implements OnInit, OnChanges {
   metadataForm: FormGroup = this.formBuilder.group({

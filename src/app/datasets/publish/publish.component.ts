@@ -36,6 +36,7 @@ import {
   selector: "publish",
   templateUrl: "./publish.component.html",
   styleUrls: ["./publish.component.scss"],
+  standalone: false,
 })
 export class PublishComponent implements OnInit, OnDestroy, EditableComponent {
   private _hasUnsavedChanges = false;

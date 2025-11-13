@@ -7,6 +7,7 @@ import { addProposalFilterAction } from "state-management/actions/proposals.acti
   selector: "proposal-search-bar",
   templateUrl: "./proposal-search-bar.component.html",
   styleUrls: ["./proposal-search-bar.component.scss"],
+  standalone: false,
 })
 export class ProposalSearchBarComponent {
   textSearch = "";

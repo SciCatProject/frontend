@@ -42,6 +42,7 @@ export type HistoryWithProperties = HistoryClass & { [key: string]: unknown };
       ),
     ]),
   ],
+  standalone: false,
 })
 export class DatasetLifecycleComponent implements OnInit, OnChanges {
   appConfig = this.appConfigService.getConfig();

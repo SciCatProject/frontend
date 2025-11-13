@@ -40,6 +40,7 @@ import { JsonformsAccordionRendererService } from "shared/services/jsonforms-acc
   templateUrl: "./accordion-array-layout-renderer.component.html",
   styleUrls: ["./accordion-array-layout-renderer.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false,
 })
 export class AccordionArrayLayoutRendererComponent
   extends JsonFormsAbstractControl<StatePropsOfArrayLayout>

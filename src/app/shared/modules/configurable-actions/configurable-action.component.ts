@@ -113,6 +113,7 @@ function processSelector(
   selector: "configurable-action",
   templateUrl: "./configurable-action.component.html",
   styleUrls: ["./configurable-action.component.scss"],
+  standalone: false,
 })
 export class ConfigurableActionComponent implements OnInit, OnChanges {
   @Input({ required: true }) actionConfig: ActionConfig;

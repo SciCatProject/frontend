@@ -46,6 +46,7 @@ import { AuthService } from "shared/services/auth/auth.service";
   selector: "datafiles",
   templateUrl: "./datafiles.component.html",
   styleUrls: ["./datafiles.component.scss"],
+  standalone: false,
 })
 export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
   @ViewChild("downloadAllForm") downloadAllFormElement: ElementRef<NgForm>;

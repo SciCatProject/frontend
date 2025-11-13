@@ -38,6 +38,7 @@ import { TableColumn } from "state-management/models";
   selector: "proposal-table",
   templateUrl: "./proposal-table.component.html",
   styleUrls: ["./proposal-table.component.scss"],
+  standalone: false,
 })
 export class ProposalTableComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];

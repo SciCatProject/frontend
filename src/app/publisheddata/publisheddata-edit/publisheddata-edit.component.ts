@@ -31,6 +31,7 @@ import {
   selector: "publisheddata-edit",
   templateUrl: "./publisheddata-edit.component.html",
   styleUrls: ["./publisheddata-edit.component.scss"],
+  standalone: false,
 })
 export class PublisheddataEditComponent
   implements OnInit, OnDestroy, EditableComponent

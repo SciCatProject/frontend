@@ -16,6 +16,7 @@ import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
   selector: "app-instrument-details",
   templateUrl: "./instrument-details.component.html",
   styleUrls: ["./instrument-details.component.scss"],
+  standalone: false,
 })
 export class InstrumentDetailsComponent
   implements OnInit, OnDestroy, EditableComponent
