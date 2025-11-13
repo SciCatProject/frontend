@@ -23,13 +23,11 @@ import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 import { JsonFormsCustomRenderersModule } from "./modules/jsonforms-custom-renderers/jsonforms-custom-renderers.module";
 import { FullTextSearchBarModule } from "./modules/full-text-search-bar/full-text-search-bar.module";
 import { SharedFilterModule } from "./modules/shared-filter/shared-filter.module";
-<<<<<<< HEAD
 import { ConfigurableActionsModule } from "./modules/configurable-actions/configurable-actions.module";
-=======
 import { NgxNumericRangeFormFieldModule } from "./modules/numeric-range/ngx-numeric-range-form-field.module";
->>>>>>> 519f1de881b8452f3f0d2d0f1749f10642e8d4e9
 import { EmptyContentModule } from "./modules/generic-empty-content/empty-content.module";
 import { JsonformsAccordionRendererService } from "./services/jsonforms-accordion-renderer.service";
+import { TranslateModule } from "@ngx-translate/core";
 @NgModule({
   imports: [
     BreadcrumbModule,
@@ -49,12 +47,9 @@ import { JsonformsAccordionRendererService } from "./services/jsonforms-accordio
     SharedTableModule,
     ScientificMetadataTreeModule,
     DynamicMatTableModule.forRoot({}),
-<<<<<<< HEAD
     TranslateModule,
     ConfigurableActionsModule,
-=======
     NgxNumericRangeFormFieldModule,
->>>>>>> 519f1de881b8452f3f0d2d0f1749f10642e8d4e9
     EmptyContentModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
@@ -84,12 +79,7 @@ import { JsonformsAccordionRendererService } from "./services/jsonforms-accordio
     SharedTableModule,
     ScientificMetadataTreeModule,
     DynamicMatTableModule,
-<<<<<<< HEAD
-    TranslateModule,
-    ConfigurableActionsModule,
-=======
     NgxNumericRangeFormFieldModule,
->>>>>>> 519f1de881b8452f3f0d2d0f1749f10642e8d4e9
     EmptyContentModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
