@@ -1,0 +1,35 @@
+<div class="ingestor-mixed-header">
+  <h2 mat-dialog-title>{{ header }}</h2>
+  <button
+    mat-icon-button
+    mat-dialog-close
+    aria-label="Close"
+    class="ingestor-close-button"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<mat-dialog-content class="mat-typography" disableClose="true">
+  <table mat-table [dataSource]="tableData">
+    <!-- Property Column -->
+    <ng-container matColumnDef="property">
+      <th mat-header-cell *matHeaderCellDef><b>Property</b></th>
+      <td mat-cell *matCellDef="let element">{{element.property}}</td>
+    </ng-container>
+
+    <!-- Value Column -->
+    <ng-container matColumnDef="value">
+      <th mat-header-cell *matHeaderCellDef><b>Value</b></th>
+      <td mat-cell *matCellDef="let element">{{element.value}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close cdkFocusInitial (click)="onCancel()">
+    Close
+  </button>
+</mat-dialog-actions>
