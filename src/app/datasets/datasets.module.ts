@@ -87,6 +87,7 @@ import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatBadgeModule } from "@angular/material/badge";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
+import { OverlayModule } from "@angular/cdk/overlay";
 
 @NgModule({
   imports: [
@@ -150,6 +151,7 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
     // FiltersModule,
     MatExpansionModule,
     MatBadgeModule,
+    OverlayModule,
   ],
   declarations: [
     BatchViewComponent,

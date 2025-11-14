@@ -153,19 +153,62 @@
         <ng-template #renderColumn>
           <ng-container *ngIf="column.customRender; else regularColumnRender">
             <label
-              *ngIf="!column.dynamicCellComponent && !column.hoverContent"
+              *ngIf="
+                !column.dynamicCellComponent &&
+                (column.hoverContent ? column.hoverOnCell === true : true)
+              "
               (click)="onLabelClick($event, row, column)"
               [class.rtl-cell]="direction === 'rtl'"
               [class.ltr-cell]="direction === 'ltr'"
               [ngStyle]="ellipsis(column)"
               class="label-cell"
-              [innerHTML]="columnName(row, column)"
             >
+              <ng-container *ngIf="column.hoverOnCell; else noHoverCell">
+                <span class="cell-with-icon">
+                  <mat-icon
+                    class="cell-icon"
+                    fontIcon="description"
+                    #hoverOriginSpan="cdkOverlayOrigin"
+                    cdkOverlayOrigin
+                    (mouseenter)="hoverKey = makeKey(row, column)"
+                    (mouseleave)="hoverKey = null"
+                  ></mat-icon>
+                  <span
+                    class="cell-text"
+                    [innerHTML]="columnName(row, column)"
+                  ></span>
+                </span>
+                <ng-template
+                  cdkConnectedOverlay
+                  [cdkConnectedOverlayOrigin]="hoverOriginSpan"
+                  [cdkConnectedOverlayOpen]="hoverKey === makeKey(row, column)"
+                  [cdkConnectedOverlayPositions]="metadataOverlayPositions"
+                >
+                  <mat-card class="hover-card">
+                    <mat-card-title class="hover-card-title">
+                      {{
+                        column.header || column.name | translate: localization
+                      }}
+                    </mat-card-title>
+                    <div
+                      mat-card-content
+                      class="hover-card-content"
+                      [innerHTML]="metadataNameHoverContent(row)"
+                    ></div>
+                  </mat-card>
+                </ng-template>
+              </ng-container>
+              <ng-template #noHoverCell>
+                <span [innerHTML]="columnName(row, column)"></span>
+              </ng-template>
             </label>
           </ng-container>
           <ng-template #regularColumnRender>
             <label
-              *ngIf="!column.dynamicCellComponent && !column.hoverContent"
+              *ngIf="
+                !column.dynamicCellComponent &&
+                (column.hoverContent ? column.hoverOnCell === true : true)
+              "
               (click)="onLabelClick($event, row, column)"
               [class.rtl-cell]="direction === 'rtl'"
               [class.ltr-cell]="direction === 'ltr'"
@@ -212,8 +255,8 @@
         >
         </ng-container>
 
-        <!-- Hover Content Cell-->
-        <ng-container *ngIf="column.hoverContent">
+        <!-- Hover Content Cell for abstract and other cells -->
+        <ng-container *ngIf="column.hoverContent && !column.hoverOnCell">
           <span
             class="icon-wrapper"
             #hoverOrigin="cdkOverlayOrigin"
@@ -222,7 +265,6 @@
             (mouseleave)="hoverKey = null"
           >
             <mat-icon class="hover-icon" fontIcon="description"></mat-icon>
-
             <ng-template
               cdkConnectedOverlay
               [cdkConnectedOverlayOrigin]="hoverOrigin"
@@ -230,8 +272,8 @@
               [cdkConnectedOverlayPositions]="overlayPositions"
             >
               <mat-card class="hover-card">
-                <mat-card-title class="hover-card-title"
-                  >{{ column.header || column.name | translate: localization }}
+                <mat-card-title class="hover-card-title">
+                  {{ column.header || column.name | translate: localization }}
                 </mat-card-title>
                 <div mat-card-content class="hover-card-content">
                   {{ getColumnValue(row, column) || "No content" }}
