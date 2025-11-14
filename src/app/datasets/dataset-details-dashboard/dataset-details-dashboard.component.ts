@@ -27,6 +27,7 @@ import {
   fetchDatasetAction,
   fetchOrigDatablocksAction,
   fetchRelatedDatasetsAction,
+  fetchExternalLinksAction,
 } from "state-management/actions/datasets.actions";
 import {
   clearLogbookAction,
@@ -130,6 +131,7 @@ export class DatasetDetailsDashboardComponent
             this.resetTabs();
             // Fetch dataset details
             this.store.dispatch(fetchDatasetAction({ pid: id }));
+            this.store.dispatch(fetchExternalLinksAction({ pid: id }));
             this.fetchDataActions[TAB.details].loaded = true;
           }
         }),

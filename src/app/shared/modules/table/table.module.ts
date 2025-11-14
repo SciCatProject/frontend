@@ -11,6 +11,8 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
 
+// NgModule declaration for Angular component TableComponent
+
 @NgModule({
   declarations: [TableComponent],
   imports: [

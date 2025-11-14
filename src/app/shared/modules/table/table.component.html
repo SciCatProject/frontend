@@ -53,16 +53,19 @@
             </div>
           </div>
         </mat-header-cell>
+        <!-- If we have a date format, use it to pipe the data value through the date formatter.  -->
         <div *ngIf="column.dateFormat">
           <mat-cell *matCellDef="let data">
             {{ data[column.name] | date: column.dateFormat }}</mat-cell
           >
         </div>
+        <!-- If we have a pipe (but no date format), pipe the data value through it.  -->
         <div *ngIf="!column.dateFormat && column.pipe">
           <mat-cell *matCellDef="let data">
             {{ data[column.name] | dynamicPipe: column.pipe : [] }}</mat-cell
           >
         </div>
+        <!-- If we have neither, render the data as-is.  -->
         <div *ngIf="!column.dateFormat && !column.pipe">
           <mat-cell *matCellDef="let data"> {{ data[column.name] }}</mat-cell>
         </div>

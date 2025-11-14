@@ -26,7 +26,7 @@
   <div fxLayout="row" fxLayout.xs="column" *ngIf="dataset">
     <div [fxFlex]="(attachments$ | async)?.length > 0 ? '90%' : '100%'">
       <mat-card [formGroup]="form" data-cy="general-info">
-        <mat-card-header class="general-header">
+        <mat-card-header class="dataset-general-header">
           <mat-icon class="section-icon"> description </mat-icon>
           <mat-card-title class="section-title">{{
             "General Information" | translate: localization
@@ -173,7 +173,7 @@
       </mat-card>
 
       <mat-card>
-        <mat-card-header class="creator-header">
+        <mat-card-header class="dataset-creator-header">
           <mat-icon class="section-icon"> person </mat-icon>
           <mat-card-title class="section-title">{{
             "Creator Information" | translate: localization
@@ -215,7 +215,7 @@
       </mat-card>
 
       <mat-card>
-        <mat-card-header class="file-header">
+        <mat-card-header class="dataset-file-header">
           <mat-icon class="section-icon"> folder </mat-icon>
           <mat-card-title class="section-title">{{
             "File Information" | translate: localization
@@ -241,7 +241,7 @@
       </mat-card>
 
       <mat-card>
-        <mat-card-header class="related-header">
+        <mat-card-header class="dataset-related-header">
           <mat-icon class="section-icon"> library_books </mat-icon>
           <mat-card-title class="section-title">{{
             "Related Documents" | translate: localization
@@ -333,7 +333,7 @@
       </mat-card>
 
       <mat-card *ngIf="dataset.type === 'derived'">
-        <mat-card-header class="derived-header">
+        <mat-card-header class="dataset-derived-header">
           <div mat-card-avatar class="section-icon">
             <mat-icon> analytics </mat-icon>
           </div>
@@ -357,9 +357,29 @@
           </table>
         </mat-card-content>
       </mat-card>
+
+      <mat-card *ngIf="externalLinks$ | async as externalLinks">
+        <mat-card-header class="dataset-links-header">
+          <mat-icon class="section-icon"> link </mat-icon>
+          <mat-card-title class="section-title">{{ "Links" | translate }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table>
+            <tr *ngFor="let externalLink of externalLinks">
+              <th>{{ externalLink.title }}</th>
+              <td>
+                <a href="{{ externalLink.url }}" target="blank"
+                  >{{ externalLink.description }}</a
+                >
+              </td>
+            </tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+
       <ng-container *ngIf="emptyMetadataTable()">
         <mat-card>
-          <mat-card-header class="scientific-header">
+          <mat-card-header class="dataset-scientific-header">
             <mat-icon class="section-icon"> science </mat-icon>
             <mat-card-title class="section-title">{{
               "Scientific Metadata" | translate: localization
