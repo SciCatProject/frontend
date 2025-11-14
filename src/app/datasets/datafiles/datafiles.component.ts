@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   OnDestroy,
   AfterViewInit,
+  OnInit,
   AfterViewChecked,
   ViewChild,
   ElementRef,
@@ -35,7 +36,10 @@ import { submitJobAction } from "state-management/actions/jobs.actions";
 import { AppConfigService } from "app-config.service";
 import { NgForm } from "@angular/forms";
 import { DataFiles_File } from "./datafiles.interfaces";
-import { ActionDataset } from "datasets/datafiles-actions/datafiles-action.interfaces";
+import {
+  ActionItemDataset,
+  ActionItems,
+} from "shared/modules/configurable-actions/configurable-action.interfaces";
 import { AuthService } from "shared/services/auth/auth.service";
 
 @Component({
@@ -44,9 +48,7 @@ import { AuthService } from "shared/services/auth/auth.service";
   styleUrls: ["./datafiles.component.scss"],
   standalone: false,
 })
-export class DatafilesComponent
-  implements OnDestroy, AfterViewInit, AfterViewChecked
-{
+export class DatafilesComponent implements OnDestroy, OnInit, AfterViewChecked {
   @ViewChild("downloadAllForm") downloadAllFormElement: ElementRef<NgForm>;
   @ViewChild("downloadSelectedForm") downloadSelectedFormElement;
   datablocks$ = this.store.select(selectCurrentOrigDatablocks);
@@ -69,7 +71,9 @@ export class DatafilesComponent
 
   files: Array<DataFiles_File> = [];
   datasetPid = "";
-  actionDataset: ActionDataset;
+  actionItems: ActionItems = {
+    datasets: [],
+  };
 
   count = 0;
   pageSize = 25;
@@ -96,7 +100,6 @@ export class DatafilesComponent
       icon: "save",
       sort: false,
       inList: true,
-      // pipe: FilePathTruncate,
     },
     {
       name: "size",
@@ -244,13 +247,12 @@ export class DatafilesComponent
 
     return warning;
   }
-  ngAfterViewInit() {
+  //ngAfterViewInit() {
+  ngOnInit() {
     this.subscriptions.push(
       this.dataset$.subscribe((dataset) => {
         if (dataset) {
-          this.sourceFolder = dataset.sourceFolder;
-          this.datasetPid = dataset.pid;
-          this.actionDataset = <ActionDataset>dataset;
+          this.actionItems.datasets = <ActionItemDataset[]>[dataset];
         }
       }),
     );
@@ -269,6 +271,7 @@ export class DatafilesComponent
           this.tableData = files.slice(0, this.pageSize);
           this.files = files;
           this.tooLargeFile = this.hasTooLargeFiles(this.files);
+          this.actionItems.datasets[0].files = files;
         }
       }),
     );

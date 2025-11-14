@@ -13,6 +13,11 @@
         Jupyter Hub
       </a>
     </div>
+    <configurable-actions
+      [actionsConfig]="appConfig.datasetActions"
+      [actionItems]="actionItems"
+      [visible]="appConfig.datasetActionsEnabled"
+    ></configurable-actions>
   </div>
   <div style="clear: both"></div>
 

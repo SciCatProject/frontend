@@ -1,0 +1,10 @@
+<ng-template [ngIf]="visible">
+  <div class="configurable-actions">
+    <configurable-action
+      *ngFor="let actionConfig of sortedActionsConfig"
+      [actionConfig]="actionConfig"
+      [actionItems]="actionItems"
+    >
+    </configurable-action>
+  </div>
+</ng-template>
