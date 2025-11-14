@@ -64,6 +64,12 @@ export class MainMenuConfiguration {
   authenticatedUser: MainMenuOptions;
 }
 
+export class MetadataFloatFormat {
+  significantDigits: number;
+  minCutoff: number; // using scientific notation below this cutoff
+  maxCutoff: number; // using scientific notation above this cutoff
+}
+
 export interface AppConfigInterface {
   allowConfigOverrides?: boolean;
   skipSciCatLoginPageEnabled?: boolean;
@@ -103,6 +109,8 @@ export interface AppConfigInterface {
   maxDirectDownloadSize: number | null;
   metadataPreviewEnabled: boolean;
   metadataStructure: string;
+  metadataFloatFormat?: MetadataFloatFormat;
+  metadataFloatFormatEnabled?: boolean;
   multipleDownloadAction: string | null;
   multipleDownloadEnabled: boolean;
   multipleDownloadUseAuthToken: boolean;
@@ -236,6 +244,14 @@ export class AppConfigService {
 
     if (!config.dateFormat) {
       config.dateFormat = "yyyy-MM-dd HH:mm";
+    }
+
+    if (!config.metadataFloatFormat) {
+      config.metadataFloatFormat = {
+        significantDigits: 3,
+        minCutoff: 0.001,
+        maxCutoff: 1000,
+      };
     }
 
     this.appConfig = config;
