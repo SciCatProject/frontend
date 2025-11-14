@@ -114,7 +114,7 @@
                 | translate: localization
             "
             matTooltipClass="cell-tooltip"
-            [disabled]="column.sort === 'none' || column.name === 'image'"
+            [disabled]="column.sort === 'none'"
             class="header-caption"
           >
             {{ column.header || column.name | translate: localization }}
