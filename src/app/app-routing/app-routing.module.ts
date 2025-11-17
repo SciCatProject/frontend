@@ -5,6 +5,7 @@ import { ErrorPageComponent } from "shared/modules/error-page/error-page.compone
 import { AppLayoutComponent } from "_layout/app-layout/app-layout.component";
 import { AppMainLayoutComponent } from "_layout/app-main-layout/app-main-layout.component";
 import { ServiceGuard } from "./service.guard";
+import { IngestorGuard } from "./ingestor.guard";
 import { MainPageGuard } from "./main-page";
 import { RedirectingComponent } from "./redirecting.component";
 
@@ -107,6 +108,14 @@ export const routes: Routes = [
               import("./lazy/help-routing/help.feature.module").then(
                 (m) => m.HelpFeatureModule,
               ),
+          },
+          {
+            path: "ingestor",
+            loadChildren: () =>
+              import("./lazy/ingestor-routing/ingestor.feature.module").then(
+                (m) => m.IngestorFeatureModule,
+              ),
+            canActivate: [IngestorGuard],
           },
           {
             path: "logbooks",
