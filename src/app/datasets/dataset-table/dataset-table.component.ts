@@ -471,6 +471,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
 
         if (column.name === "image") {
           convertedColumn.renderImage = true;
+          convertedColumn.sort = "none";
         }
 
         if (column.name === "instrumentName") {
