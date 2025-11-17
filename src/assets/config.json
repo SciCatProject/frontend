@@ -1,6 +1,6 @@
 {
   "accessTokenPrefix": "Bearer ",
-  "addDatasetEnabled": true,
+  "addDatasetEnabled": false,
   "allowConfigOverrides": true,
   "archiveWorkflowEnabled": false,
   "datasetReduceEnabled": true,
@@ -29,9 +29,9 @@
   "jsonMetadataEnabled": true,
   "jupyterHubUrl": "https://jupyterhub.esss.lu.se/",
   "landingPage": "doi.ess.eu/detail/",
-  "lbBaseURL": "http://localhost:3000",
+  "lbBaseURL": "http://127.0.0.1:3000",
   "ingestorComponent": {
-    "ingestorEnabled": true,
+    "ingestorEnabled": false,
     "ingestorAutodiscoveryOptions": [
       {
         "mailDomain": "university.ch",
