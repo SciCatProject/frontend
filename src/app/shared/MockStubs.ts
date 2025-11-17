@@ -387,13 +387,13 @@ export const mockIngestionRequestInformation =
 export const mockMethodItem = createMock<MethodItem>({
   name: "test-extraction-method",
   schema: "eyJ0eXBlIjoib2JqZWN0IiwicHJvcGVydGllcyI6e319",
-  url: "https://json-schema.org/draft/2020-12/schema"
+  url: "https://json-schema.org/draft/2020-12/schema",
 });
 
 export const mockMethodItem2 = createMock<MethodItem>({
   name: "another-method",
   schema: "eyJwcm9wZXJ0aWVzIjp7Imluc3RydW1lbnQiOnt9fX0=",
-  url: "https://json-schema.org/draft/2020-12/schema2"
+  url: "https://json-schema.org/draft/2020-12/schema2",
 });
 
 export const mockMethodItems: MethodItem[] = [mockMethodItem, mockMethodItem2];
