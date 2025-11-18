@@ -1,7 +1,12 @@
 mat-card {
   margin: 1em;
 
-  .dataset-scientific-header, .dataset-related-header, .dataset-creator-header, .dataset-file-header, .dataset-links-header, .dataset-general-header {
+  .dataset-scientific-header,
+  .dataset-related-header,
+  .dataset-creator-header,
+  .dataset-file-header,
+  .dataset-links-header,
+  .dataset-general-header {
     display: flex;
     align-items: center;
     padding: 1em;
