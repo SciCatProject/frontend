@@ -14,10 +14,15 @@ export class ConfigurableActionsComponent {
 
   @Input({ required: true }) actionsConfig: ActionConfig[];
   @Input({ required: true }) actionItems: ActionItems;
-  @Input() files?: DataFiles_File[]; // to be removed
-  @Input() visible = true;
 
   constructor(public appConfigService: AppConfigService) {}
+
+  get visible(): boolean {
+    return (
+      this.appConfigService.getConfig().datafilesActionsEnabled
+    );
+  }
+
 
   get maxFileSize(): number {
     return this.appConfigService.getConfig().maxDirectDownloadSize || 0;

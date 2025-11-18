@@ -1,4 +1,4 @@
-import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
+import { ActionConfig, ActionItemDataset, ActionItems } from "./configurable-action.interfaces";
 
 export let mockAppConfigService = {
   appConfig: {
@@ -43,7 +43,7 @@ export const mockActionsConfig: ActionConfig[] = [
     },
     enabled: "#MaxDownloadableSize(@totalSize)",
     inputs: {
-      "item[]": "@pid",
+      "dataset[]": "@pid",
       "directory[]": "@folder",
       "files[]": "@files",
     },
@@ -70,7 +70,7 @@ export const mockActionsConfig: ActionConfig[] = [
     inputs: {
       auth_token: "#tokenBearer",
       jwt: "#jwt",
-      "item[]": "@pid",
+      "dataset[]": "@pid",
       "directory[]": "@folder",
       "files[]": "@files",
     },
@@ -98,7 +98,7 @@ export const mockActionsConfig: ActionConfig[] = [
     inputs: {
       auth_token: "#token",
       jwt: "#jwt",
-      "item[]": "@pid",
+      "dataset[]": "@pid",
       "directory[]": "@folder",
       "files[]": "@files",
     },
@@ -116,18 +116,17 @@ export const mockActionsConfig: ActionConfig[] = [
     variables: {
       pid: "#Dataset0Pid",
       files: "#Dataset0SelectedFilesPath",
-      selected: "#Dataset0SelectedFiles",
       totalSize: "#Dataset0SelectedFilesTotalSize",
       folder: "#Dataset0SourceFolder",
     },
     inputs: {
       auth_token: "#token",
       jwt: "#jwt",
-      "item[]": "@pid",
+      "dataset[]": "@pid",
       "directory[]": "@folder",
       "files[]": "@files",
     },
-    enabled: "@selected",
+    enabled: "#Length(@files) > 0",
     authorization: ["#datasetAccess", "#datasetPublic"],
   },
   {
@@ -139,7 +138,7 @@ export const mockActionsConfig: ActionConfig[] = [
     files: "all",
     type: "json-download",
     icon: "/assets/icons/jupyter_logo.png",
-    url: "https://www.sciwyrm.info/notebook",
+    url: "https://www.sciwyrm.info/notebook/all",
     target: "_blank",
     authorization: ["#datasetAccess", "#datasetPublic"],
     variables: {
@@ -158,26 +157,25 @@ export const mockActionsConfig: ActionConfig[] = [
     order: 6,
     label: "Notebook Selected (Download JSON)",
     files: "selected",
-    type: "json-to-download",
+    type: "json-download",
     icon: "/assets/icons/jupyter_logo.png",
-    url: "https://www.sciwyrm.info/notebook",
+    url: "https://www.sciwyrm.info/notebook/selected",
     target: "_blank",
-    enabled: "@selected > 0",
+    enabled: "#Length(@files)",
     authorization: ["#datasetAccess", "#datasetPublic"],
     variables: {
       pid: "#Dataset0Pid",
       files: "#Dataset0SelectedFilesPath",
-      selected: "#Dataset0SelectedFiles",
       folder: "#Dataset0SourceFolder",
     },
     payload:
-      '{"template_id":"c975455e-ede3-11ef-94fb-138c9cd51fc0","parameters":{"dataset":"{{ pid }}","directory":"{{ sourceFolder }}","files": {{ files }},"jwt":"{{ jwt }}","scicat_url":"https://staging.scicat.ess.url","file_server_url":"sftserver2.esss.dk","file_server_port":"22"}}',
-    filename: "{{ uuid }}.ipynb",
+      '{"template_id":"c975455e-ede3-11ef-94fb-138c9cd51fc0","parameters":{"dataset":"{{ @pid }}","directory":"{{ @folder }}","files": {{ @files[] }},"jwt":"{{ #jwt }}","scicat_url":"https://staging.scicat.ess.url","file_server_url":"sftserver2.esss.dk","file_server_port":"22"}}',
+    filename: "{{ #uuid }}.ipynb",
   },
   {
     id: "9c6a11b6-a526-11f0-8795-6f025b320cc3",
     description:
-      "This action let users make a call an arbitrary URL and store the reply in the store",
+      "This action let user, who owns the dataset, to make it public",
     order: 7,
     label: "Publish",
     type: "xhr",
@@ -185,7 +183,7 @@ export const mockActionsConfig: ActionConfig[] = [
     method: "PATCH",
     url: "http://localhost:3000/dataset/{{ @pid }}/",
     target: "_blank",
-    enabled: "#datasetOwner && @isPublished",
+    enabled: "#datasetOwner && !@isPublished",
     authorization: ["#datasetOwner && !@isPublished"],
     variables: {
       pid: "@Dataset0Pid",
@@ -200,7 +198,7 @@ export const mockActionsConfig: ActionConfig[] = [
   {
     id: "94a1d694-a526-11f0-947b-038d53cd837a",
     description:
-      "This action let users make a call an arbitrary URL and store the reply in the store",
+      "This action let user, who owns the dataset, to make it private",
     order: 8,
     label: "Unpublish",
     type: "xhr",
@@ -208,7 +206,7 @@ export const mockActionsConfig: ActionConfig[] = [
     method: "PATCH",
     url: "http://localhost:3000/dataset/{{ @pid }}/",
     target: "_blank",
-    enabled: "#datasetOwner && !@isPublished",
+    enabled: "#datasetOwner && @isPublished",
     authorization: ["#datasetOwner && @isPublished"],
     variables: {
       pid: "#Dataset0Pid",
@@ -254,6 +252,7 @@ export const mockActionItems: ActionItems = {
       pid: "48217db2-bee2-11f0-ace4-b7a1618f0eba",
       sourceFolder: "/source/folder/2",
       ownerGroup: "group2",
+      isPublished: false,
       files: [
         {
           path: "/file/4",
@@ -265,6 +264,39 @@ export const mockActionItems: ActionItems = {
     },
   ],
 };
+
+/*
+ * selection should be the number which the file path ends with. It can be expressed as string or integer
+ */
+function filesSelection(
+  inDatasets: ActionItemDataset[],
+  selection: number[],
+): ActionItemDataset[] {
+  const outDatasets: ActionItemDataset[] = structuredClone(inDatasets);
+  //console.log("Files selection 1",JSON.stringify(outDatasets));
+  outDatasets.forEach((d) => {
+    d.files.forEach((f) => {
+      f.selected = selection.includes(Number(f.path.slice(-1)))
+    });
+    return d;
+  })
+  //console.log("Files selection 2",JSON.stringify(outDatasets));
+  return outDatasets;
+}
+
+export const mockActionItems_datafiles_nofiles = {
+  datasets: filesSelection(mockActionItems.datasets.slice(0,1),[]),
+}
+export const mockActionItems_datafiles_file1 = {
+  datasets: filesSelection(mockActionItems.datasets.slice(0,1),[1]),
+}
+export const mockActionItems_datafiles_file2 = {
+  datasets: filesSelection(mockActionItems.datasets.slice(0,1),[2]),
+}
+export const mockActionItems_datafiles_allfiles = {
+  datasets: filesSelection(mockActionItems.datasets.slice(0,1),[1,2,3]),
+}
+
 
 export const lowerMaxFileSizeLimit = 5000;
 export const higherMaxFileSizeLimit = 20000;
@@ -279,4 +311,14 @@ export enum selectedFilesType {
   file2 = "file2",
   all = "all",
 }
+
+export const mockUserProfiles = [
+  {},
+  {
+    accessGroups: ["group1", "group3"],
+  },
+  {
+    accessGroups: ["group2", "group3"],
+  }
+]
 

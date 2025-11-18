@@ -13,7 +13,7 @@ import { StoreModule } from "@ngrx/store";
 import { MockMatDialogRef, MockUserApi } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
-import { lowerMaxFileSizeLimit, mockActionItems, mockActionsConfig, mockAppConfigService } from "./configurable-actions.test.data";
+import { higherMaxFileSizeLimit, lowerMaxFileSizeLimit, mockActionItems, mockActionsConfig, mockAppConfigService } from "./configurable-actions.test.data";
 
 describe("1010: ConfigurableActionsComponent", () => {
   let component: ConfigurableActionsComponent;
@@ -86,6 +86,8 @@ describe("1010: ConfigurableActionsComponent", () => {
   });
 
   it("0040: max file size should be the same as set in configuration, aka 10000", () => {
+    mockAppConfigService.appConfig.maxDirectDownloadSize = higherMaxFileSizeLimit;
+
     expect(component.maxFileSize).toEqual(10000);
   });
 

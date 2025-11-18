@@ -18,6 +18,7 @@ import { Router } from "@angular/router";
 import { AppConfigService } from "app-config.service";
 import { selectProfile } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
+import { result } from "lodash-es";
 
 type JSONValue =
   | string
@@ -31,9 +32,9 @@ function processSelector(
   jsonObject: ActionItems,
   selector: string,
 ): string | string[] | number | number[] {
-  console.log("---> processSelector");
-  console.log(jsonObject);
-  console.log(selector);
+
+
+
 
   let match: RegExpMatchArray | null;
 
@@ -59,7 +60,7 @@ function processSelector(
         .map((i) => Number(i.size))
         .reduce((acc, val) => acc + val, 0),
     // eslint-disable-next-line no-useless-escape
-    "#Dataset\[(\d+)\]Field\[(\w+)\]/)))": (m) =>
+    "#Dataset\\[(\\d+)\\]Field\\[(\\w+)\\]": (m) =>
       jsonObject.datasets[Number(m[1])][m[2]],
     "#DatasetsPid": (m) => jsonObject.datasets?.map((i) => i.pid),
     "#DatasetsFilesPath": (m) =>
@@ -94,14 +95,19 @@ function processSelector(
         .map((i) => Number(i.size))
         .reduce((acc, val) => acc + val, 0),
     // eslint-disable-next-line no-useless-escape
-    "#DatasetsField\[(\w+)\]/)))": (m) =>
+    "#DatasetsField\\[(\\w+)\\]": (m) =>
       jsonObject.datasets.map((i) => i[m[1]]),
   };
 
   // Check for direct pattern matches
   for (const [pattern, fn] of Object.entries(keywordMap)) {
-    if ((match = selector.match(new RegExp(pattern)))) {
-      return fn(match);
+
+    const match = selector.match(new RegExp(pattern));
+
+    if (match) {
+      const res = fn(match);
+
+      return res;
     }
   }
 
@@ -184,7 +190,8 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   private prepare_disabled_condition() {
-    console.log("---> prepare_disabled_condition");
+
+
     if (this.actionConfig.enabled) {
       this.disabled_condition =
         "!(" + this.prepare_action_condition(this.actionConfig.enabled) + ")";
@@ -195,7 +202,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     } else {
       this.disabled_condition = "false";
     }
-    console.log(this.disabled_condition);
+
   }
 
   private prepare_hidden_condition() {
@@ -229,9 +236,9 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   update_status() {
-    console.log("---> update_status");
-    console.log(this.actionConfig);
-    console.log(this.actionItems);
+
+
+
     Object.entries(this.actionConfig.variables ?? {}).forEach(
       ([key, selector]) => {
         this.variables[key] = processSelector(this.actionItems, selector);
@@ -240,27 +247,32 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   get context() {
-    const user = this.authService.getCurrentUserData();
+
     return {
       variables: this.variables,
       maxDownloadableSize: this.configService.getConfig().maxDirectDownloadSize,
       datasetOwner: (
         this.actionItems.datasets.map((d): boolean => {
+
           return this.userProfile.accessGroups?.includes(d.ownerGroup) || false;
         }) as Array<boolean>
-      ).every(Boolean),
+      ).some(Boolean),
     };
   }
 
   get disabled() {
+
     this.update_status();
 
+
     const expr = this.disabled_condition;
-    console.log(expr);
+
     const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);
 
-    const res = fn(this.context);
-    console.log(res);
+    const context = this.context; 
+
+    const res = fn(context);
+
     return res;
   }
 
@@ -290,7 +302,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   perform_action() {
     const action_type = this.actionConfig.type || "form";
     switch (action_type) {
-      case "json-to-download":
+      case "json-download":
         return this.type_json_to_download();
       case "xhr":
         return this.type_xhr();
@@ -312,6 +324,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     } else if (definition == "#uuid") {
       return v4();
     } else if (definition.startsWith("@")) {
+
       return this.variables[definition.slice(1)];
     }
     return definition;
@@ -333,11 +346,12 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       const value = this.get_value_from_definition(definition);
 
       if (input.endsWith("[]")) {
-        const itemInput = input.slice(-2);
+        const itemInput = input.slice(0,-2);
+
         const iteratable = Array.isArray(value) ? value : [value];
         iteratable.forEach((itemValue, itemIndex) => {
           this.form.appendChild(
-            this.add_input(`${itemInput}[${itemIndex}]`, value),
+            this.add_input(`${itemInput}[${itemIndex}]`, itemValue),
           );
         });
       } else {
@@ -362,16 +376,22 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       payload = this.actionConfig.payload;
     }
 
-    return payload.replace(/{{\s*(\w+)\s*}}/g, (_, variableName) => {
+
+
+    const readyPayload = payload.replace(/\{\{\s*([@#]\w+(\[\])?)\s*\}\}/g, (_, variableName) => {
+
       if (variableName.endsWith("[]")) {
-        const variableNameClean = variableName.slice(-2);
+        const variableNameClean = variableName.slice(0,-2);
         const value = this.get_value_from_definition(variableNameClean);
-        const iteratable = Array.isArray(value) ? value : [value];
+
+        const iteratable = !value ? [] : Array.isArray(value) ? value : [value];
         return JSON.stringify(iteratable);
       } else {
         return this.get_value_from_definition(variableName);
       }
     });
+
+    return readyPayload;
   }
 
   type_json_to_download() {
@@ -391,6 +411,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       body: this.get_payload(),
     })
       .then((response) => {
+
         if (response.ok) {
           return response.blob();
         } else {
@@ -409,7 +430,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         URL.revokeObjectURL(url);
       })
       .catch((error) => {
-        console.log("Datafile action error : ", error);
+
         this.snackBar.open(
           "There has been an error performing the action",
           "Close",
@@ -459,7 +480,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         return response;
       })
       .catch((error) => {
-        console.log("Error: ", error);
+
         this.snackBar.open(
           "There has been an error performing the action",
           "Close",
@@ -473,6 +494,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   type_link() {
-    this.router.navigateByUrl(this.actionConfig.url);
+    window.open(this.actionConfig.url, this.actionConfig.target || "_self");
   }
 }
