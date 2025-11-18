@@ -1,6 +1,10 @@
-import { ActionConfig, ActionItemDataset, ActionItems } from "./configurable-action.interfaces";
+import {
+  ActionConfig,
+  ActionItemDataset,
+  ActionItems,
+} from "./configurable-action.interfaces";
 
-export let mockAppConfigService = {
+export const mockAppConfigService = {
   appConfig: {
     maxDirectDownloadSize: 0,
     datafilesActionsEnabled: true,
@@ -9,7 +13,6 @@ export let mockAppConfigService = {
     return this.appConfig;
   },
 };
-
 
 export const mockActionsConfig: ActionConfig[] = [
   {
@@ -276,27 +279,26 @@ function filesSelection(
   //console.log("Files selection 1",JSON.stringify(outDatasets));
   outDatasets.forEach((d) => {
     d.files.forEach((f) => {
-      f.selected = selection.includes(Number(f.path.slice(-1)))
+      f.selected = selection.includes(Number(f.path.slice(-1)));
     });
     return d;
-  })
+  });
   //console.log("Files selection 2",JSON.stringify(outDatasets));
   return outDatasets;
 }
 
-export const mockActionItems_datafiles_nofiles = {
-  datasets: filesSelection(mockActionItems.datasets.slice(0,1),[]),
-}
-export const mockActionItems_datafiles_file1 = {
-  datasets: filesSelection(mockActionItems.datasets.slice(0,1),[1]),
-}
-export const mockActionItems_datafiles_file2 = {
-  datasets: filesSelection(mockActionItems.datasets.slice(0,1),[2]),
-}
-export const mockActionItems_datafiles_allfiles = {
-  datasets: filesSelection(mockActionItems.datasets.slice(0,1),[1,2,3]),
-}
-
+export const mockActionItemsDatafilesNofiles = {
+  datasets: filesSelection(mockActionItems.datasets.slice(0, 1), []),
+};
+export const mockActionItemsDatafilesFile1 = {
+  datasets: filesSelection(mockActionItems.datasets.slice(0, 1), [1]),
+};
+export const mockActionItemsDatafilesFile2 = {
+  datasets: filesSelection(mockActionItems.datasets.slice(0, 1), [2]),
+};
+export const mockActionItemsDatafilesAllfiles = {
+  datasets: filesSelection(mockActionItems.datasets.slice(0, 1), [1, 2, 3]),
+};
 
 export const lowerMaxFileSizeLimit = 5000;
 export const higherMaxFileSizeLimit = 20000;
@@ -319,6 +321,5 @@ export const mockUserProfiles = [
   },
   {
     accessGroups: ["group2", "group3"],
-  }
-]
-
+  },
+];

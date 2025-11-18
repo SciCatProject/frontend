@@ -23,7 +23,19 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 //import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
 import { AppConfigService } from "app-config.service";
 //import { boolean } from "mathjs";
-import { higherMaxFileSizeLimit, lowerMaxFileSizeLimit, maxSizeType, mockActionItems, mockActionItems_datafiles_allfiles, mockActionItems_datafiles_file1, mockActionItems_datafiles_file2, mockActionItems_datafiles_nofiles, mockActionsConfig, mockAppConfigService, mockUserProfiles, selectedFilesType } from "./configurable-actions.test.data";
+import {
+  higherMaxFileSizeLimit,
+  lowerMaxFileSizeLimit,
+  maxSizeType,
+  mockActionItems,
+  mockActionItemsDatafilesAllfiles,
+  mockActionItemsDatafilesFile1,
+  mockActionItemsDatafilesFile2,
+  mockActionItemsDatafilesNofiles,
+  mockActionsConfig,
+  mockAppConfigService,
+  mockUserProfiles,
+} from "./configurable-actions.test.data";
 import { Subject } from "rxjs";
 import { MockStore, provideMockStore } from "@ngrx/store/testing";
 import { selectProfile } from "state-management/selectors/user.selectors";
@@ -87,9 +99,7 @@ describe("1000: ConfigurableActionComponent", () => {
         StoreModule.forRoot({}),
       ],
       declarations: [ConfigurableActionComponent],
-      providers: [
-        provideMockStore(),
-      ]
+      providers: [provideMockStore()],
     });
     TestBed.overrideComponent(ConfigurableActionComponent, {
       set: {
@@ -221,56 +231,56 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "0010: Download All should be disabled with lowest max size limit and no files are selected",
       action: "eed8efec-4354-11ef-a3b5-d75573a5d37f",
       limit: maxSizeType.lower,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       result: false,
     },
     {
       test: "0020: Download All should be disabled with lowest max size limit and file 1 selected",
       action: "eed8efec-4354-11ef-a3b5-d75573a5d37f",
       limit: maxSizeType.lower,
-      actionItems: mockActionItems_datafiles_file1,
+      actionItems: mockActionItemsDatafilesFile1,
       result: false,
     },
     {
       test: "0030: Download All should be disabled with lowest max size limit and file 2 selected",
       action: "eed8efec-4354-11ef-a3b5-d75573a5d37f",
       limit: maxSizeType.lower,
-      actionItems: mockActionItems_datafiles_file2,
+      actionItems: mockActionItemsDatafilesFile2,
       result: false,
     },
     {
       test: "0040: Download All should be disabled with lowest max size limit and all files selected",
       action: "eed8efec-4354-11ef-a3b5-d75573a5d37f",
       limit: maxSizeType.lower,
-      actionItems: mockActionItems_datafiles_allfiles,
+      actionItems: mockActionItemsDatafilesAllfiles,
       result: false,
     },
     {
       test: "0050: Download All should be enabled with highest max size limit and no files selected",
       action: "eed8efec-4354-11ef-a3b5-d75573a5d37f",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       result: true,
     },
     {
       test: "0060: Download All should be enabled with highest max size limit and file 1 selected",
       action: "eed8efec-4354-11ef-a3b5-d75573a5d37f",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_file1,
+      actionItems: mockActionItemsDatafilesFile1,
       result: true,
     },
     {
       test: "0070: Download All should be enabled with highest max size limit and file 2 selected",
       action: "eed8efec-4354-11ef-a3b5-d75573a5d37f",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_file2,
+      actionItems: mockActionItemsDatafilesFile2,
       result: true,
     },
     {
       test: "0080: Download All should be enabled with highest max size limit and all files selected",
       action: "eed8efec-4354-11ef-a3b5-d75573a5d37f",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_allfiles,
+      actionItems: mockActionItemsDatafilesAllfiles,
       result: true,
     },
     
@@ -279,56 +289,56 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "0110: Download Selected should be disabled with lowest max size and no files selected",
       action: "3072fafc-4363-11ef-b9f9-ebf568222d26",
       limit: maxSizeType.lower,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       result: false,
     },
     {
       test: "0120: Download Selected should be enabled with lowest max size and file 1 selected",
       action: "3072fafc-4363-11ef-b9f9-ebf568222d26",
       limit: maxSizeType.lower,
-      actionItems: mockActionItems_datafiles_file1,
+      actionItems: mockActionItemsDatafilesFile1,
       result: true,
     },
     {
       test: "0130: Download Selected should be enabled with lowest max size and file 2 selected",
       action: "3072fafc-4363-11ef-b9f9-ebf568222d26",
       limit: maxSizeType.lower,
-      actionItems: mockActionItems_datafiles_file2,
+      actionItems: mockActionItemsDatafilesFile2,
       result: true,
     },
     {
       test: "0140: Download Selected should be disabled with lowest max size and all files selected",
       action: "3072fafc-4363-11ef-b9f9-ebf568222d26",
       limit: maxSizeType.lower,
-      actionItems: mockActionItems_datafiles_allfiles,
+      actionItems: mockActionItemsDatafilesAllfiles,
       result: false,
     },
     {
       test: "0150: Download Selected should be disabled with highest max size and no files selected",
       action: "3072fafc-4363-11ef-b9f9-ebf568222d26",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       result: false,
     },
     {
       test: "0160: Download Selected should be enabled with highest max size and file 1 selected",
       action: "3072fafc-4363-11ef-b9f9-ebf568222d26",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_file1,
+      actionItems: mockActionItemsDatafilesFile1,
       result: true,
     },
     {
       test: "0170: Download Selected should be enabled with highest max size and file 2 selected",
       action: "3072fafc-4363-11ef-b9f9-ebf568222d26",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_file2,
+      actionItems: mockActionItemsDatafilesFile2,
       result: true,
     },
     {
       test: "0180: Download Selected should be enabled with highest max size and all files selected",
       action: "3072fafc-4363-11ef-b9f9-ebf568222d26",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_allfiles,
+      actionItems: mockActionItemsDatafilesAllfiles,
       result: true,
     },
     
@@ -337,56 +347,56 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "0210: Notebook All should be enabled with lowest max size and no files selected",
       action: "4f974f0e-4364-11ef-9c63-03d19f813f4e",
       limit: maxSizeType.lower,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       result: true,
     },
     {
       test: "0220: Notebook All should be enabled with lowest max size and file 1 selected",
       action: "4f974f0e-4364-11ef-9c63-03d19f813f4e",
       limit: maxSizeType.lower,
-      actionItems: mockActionItems_datafiles_file1,
+      actionItems: mockActionItemsDatafilesFile1,
       result: true,
     },
     {
       test: "0230: Notebook All should be enabled with lowest max size and file 2 selected",
       action: "4f974f0e-4364-11ef-9c63-03d19f813f4e",
       limit: maxSizeType.lower,
-      actionItems: mockActionItems_datafiles_file2,
+      actionItems: mockActionItemsDatafilesFile2,
       result: true,
     },
     {
       test: "0240: Notebook All should be enabled with lowest max size and all files selected",
       action: "4f974f0e-4364-11ef-9c63-03d19f813f4e",
       limit: maxSizeType.lower,
-      actionItems: mockActionItems_datafiles_allfiles,
+      actionItems: mockActionItemsDatafilesAllfiles,
       result: true,
     },
     {
       test: "0250: Notebook All should be enabled with highest max size and no files selected",
       action: "4f974f0e-4364-11ef-9c63-03d19f813f4e",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       result: true,
     },
     {
       test: "0260: Notebook All should be enabled with highest max size and file 1 selected",
       action: "4f974f0e-4364-11ef-9c63-03d19f813f4e",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_file1,
+      actionItems: mockActionItemsDatafilesFile1,
       result: true,
     },
     {
       test: "0270: Notebook All should be enabled with highest max size and file 2 selected",
       action: "4f974f0e-4364-11ef-9c63-03d19f813f4e",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_file2,
+      actionItems: mockActionItemsDatafilesFile2,
       result: true,
     },
     {
       test: "0280: Notebook All should be enabled with highest max size and all files selected",
       action: "4f974f0e-4364-11ef-9c63-03d19f813f4e",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_allfiles,
+      actionItems: mockActionItemsDatafilesAllfiles,
       result: true,
     },
     
@@ -395,56 +405,56 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "0310: Notebook Selected should be disabled with lowest max size and no files selected",
       action: "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
       limit: maxSizeType.lower,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       result: false,
     },
     {
       test: "0320: Notebook Selected should be enabled with lowest max size and file 1 selected",
       action: "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
       limit: maxSizeType.lower,
-      actionItems: mockActionItems_datafiles_file1,
+      actionItems: mockActionItemsDatafilesFile1,
       result: true,
     },
     {
       test: "0330: Notebook Selected should be enabled with lowest max size and file 2 selected",
       action: "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
       limit: maxSizeType.lower,
-      actionItems: mockActionItems_datafiles_file2,
+      actionItems: mockActionItemsDatafilesFile2,
       result: true,
     },
     {
       test: "0340: Notebook Selected should be enabled with lowest max size and all files selected",
       action: "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
       limit: maxSizeType.lower,
-      actionItems: mockActionItems_datafiles_allfiles,
+      actionItems: mockActionItemsDatafilesAllfiles,
       result: true,
     },
     {
       test: "0350: Notebook Selected should be disabled with highest max size and no files selected",
       action: "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       result: false,
     },
     {
       test: "0360: Notebook Selected should be enabled with highest max size and file 1 selected",
       action: "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_file1,
+      actionItems: mockActionItemsDatafilesFile1,
       result: true,
     },
     {
       test: "0370: Notebook Selected should be enabled with highest max size and file 2 selected",
       action: "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_file2,
+      actionItems: mockActionItemsDatafilesFile2,
       result: true,
     },
     {
       test: "0380: Notebook Selected should be enabled with highest max size and all files selected",
       action: "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_allfiles,
+      actionItems: mockActionItemsDatafilesAllfiles,
       result: true,
     },
     
@@ -453,7 +463,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "0410: Publish should be enabled when a single dataset is not already published and user is owner",
       action: "9c6a11b6-a526-11f0-8795-6f025b320cc3",
       limit: undefined,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       published: false,
       result: true,
       user: 1,
@@ -462,7 +472,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "0420: Publish should be disabled when a single dataset is already published and user is an owner",
       action: "9c6a11b6-a526-11f0-8795-6f025b320cc3",
       limit: undefined,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       published: true,
       result: false,
       user: 1,
@@ -471,7 +481,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "0430: Publish should be disabled when a single dataset is not already published and user is not owner",
       action: "9c6a11b6-a526-11f0-8795-6f025b320cc3",
       limit: undefined,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       published: false,
       result: false,
       user: 2,
@@ -480,7 +490,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "0440: Publish should be disabled when a single dataset is already published and user is not owner",
       action: "9c6a11b6-a526-11f0-8795-6f025b320cc3",
       limit: undefined,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       published: true,
       result: false,
       user: 2,
@@ -491,7 +501,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "0510: Unpublish should be disabled when a single dataset is not already published and user is an owner",
       action: "94a1d694-a526-11f0-947b-038d53cd837a",
       limit: undefined,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       published: false,
       result: false,
       user: 1,
@@ -500,7 +510,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "0520: Unpublish should be enabled when a single dataset is already published and user is an owner",
       action: "94a1d694-a526-11f0-947b-038d53cd837a",
       limit: undefined,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       published: true,
       result: true,
       user: 1,
@@ -509,7 +519,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "0530: Unpublish should be disabled when a single dataset is not already published and users is not an owner",
       action: "94a1d694-a526-11f0-947b-038d53cd837a",
       limit: undefined,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       published: false,
       result: false,
       user: 2,
@@ -518,7 +528,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "0540: Unpublish should be disabled when a single dataset is already published and users is not an owner",
       action: "94a1d694-a526-11f0-947b-038d53cd837a",
       limit: undefined,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       published: true,
       result: false,
       user: 2,
@@ -529,7 +539,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "0610: ESS link should always be enabled, with lower download limit and anonymous user",
       action: "c3bcbd40-a526-11f0-915a-93eeff0860ab",
       limit: maxSizeType.lower,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       published: undefined,
       result: true,
     },
@@ -537,7 +547,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "0620: ESS link should always be enabled, with higher download limit and anonymous user",
       action: "c3bcbd40-a526-11f0-915a-93eeff0860ab",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       published: undefined,
       result: true,
     },
@@ -545,7 +555,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "0630: ESS link should always be enabled, with user who is an owner",
       action: "c3bcbd40-a526-11f0-915a-93eeff0860ab",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       published: undefined,
       result: true,
       user: 1,
@@ -554,7 +564,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "0610: ESS link should always be enabled, with user who is not an owner",
       action: "c3bcbd40-a526-11f0-915a-93eeff0860ab",
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       published: undefined,
       result: true,
       user: 2,
@@ -627,7 +637,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "n/a",
       action: actionSelectorType.download_all,
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       result: false,
     } as TestCase);
 
@@ -643,7 +653,7 @@ describe("1000: ConfigurableActionComponent", () => {
       item.name.includes("files"),
     );
 
-    expect(formFiles.length).toEqual(mockActionItems_datafiles_nofiles.datasets[0].files?.length);
+    expect(formFiles.length).toEqual(mockActionItemsDatafilesNofiles.datasets[0].files?.length);
   });
 
   it("1010: Form submission should have correct url when Download All is clicked", async () => {
@@ -651,7 +661,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "n/a",
       action: actionSelectorType.download_all,
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       result: false,
     } as TestCase);
     const action_url = mockActionsConfig
@@ -669,7 +679,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "n/a",
       action: actionSelectorType.download_all,
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       result: false,
     } as TestCase);
     spyOn(document, "createElement").and.callFake(createFakeElement);
@@ -694,7 +704,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "n/a",
       action: actionSelectorType.download_selected,
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_file1,
+      actionItems: mockActionItemsDatafilesFile1,
       result: false,
     } as TestCase);
     spyOn(document, "createElement").and.callFake(createFakeElement);
@@ -709,7 +719,7 @@ describe("1000: ConfigurableActionComponent", () => {
     );
     expect(formFiles.length).toEqual(1);
     const formFilePath = formFiles[0].value;
-    const selectedFiles = mockActionItems_datafiles_file1.datasets[0].files.filter(
+    const selectedFiles = mockActionItemsDatafilesFile1.datasets[0].files.filter(
       (f) => f.selected,
     );
     expect(selectedFiles.length).toEqual(1);
@@ -722,7 +732,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "n/a",
       action: actionSelectorType.notebook_all_form,
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       result: false,
     } as TestCase);
     spyOn(document, "createElement").and.callFake(createFakeElement);
@@ -743,7 +753,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "n/a",
       action: actionSelectorType.notebook_all_form,
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       result: false,
     } as TestCase);
     const action_url = mockActionsConfig
@@ -761,7 +771,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "n/a",
       action: actionSelectorType.notebook_selected_form,
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_file2,
+      actionItems: mockActionItemsDatafilesFile2,
       result: false,
     } as TestCase);
     spyOn(document, "createElement").and.callFake(createFakeElement);
@@ -776,7 +786,7 @@ describe("1000: ConfigurableActionComponent", () => {
     );
     expect(formFiles.length).toEqual(1);
     const formFilePath = formFiles[0].value;
-    const selectedFiles = mockActionItems_datafiles_file2.datasets[0].files.filter(
+    const selectedFiles = mockActionItemsDatafilesFile2.datasets[0].files.filter(
       (f) => f.selected,
     );
     expect(selectedFiles.length).toEqual(1);
@@ -790,7 +800,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "n/a",
       action: actionSelectorType.download_all,
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       result: false,
     } as TestCase);
 
@@ -807,7 +817,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "n/a",
       action: actionSelectorType.download_selected,
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_allfiles,
+      actionItems: mockActionItemsDatafilesAllfiles,
       result: false,
     } as TestCase);
 
@@ -825,7 +835,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "n/a",
       action: actionSelectorType.notebook_all_form,
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_allfiles,
+      actionItems: mockActionItemsDatafilesAllfiles,
       result: false,
     } as TestCase);
 
@@ -843,7 +853,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "n/a",
       action: actionSelectorType.notebook_selected_form,
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_allfiles,
+      actionItems: mockActionItemsDatafilesAllfiles,
       result: false,
     } as TestCase);
 
@@ -861,7 +871,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "n/a",
       action: actionSelectorType.notebook_all_json,
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       result: false,
     } as TestCase);
 
@@ -903,12 +913,12 @@ describe("1000: ConfigurableActionComponent", () => {
 
     expect(body.template_id).toBe("c975455e-ede3-11ef-94fb-138c9cd51fc0");
     expect(body.parameters.jwt).toBe("TEST_JWT");
-    expect(body.parameters.dataset).toBe(mockActionItems_datafiles_nofiles.datasets[0].pid);
+    expect(body.parameters.dataset).toBe(mockActionItemsDatafilesNofiles.datasets[0].pid);
     expect(body.parameters.directory).toBe(
-      mockActionItems_datafiles_nofiles.datasets[0].sourceFolder,
+      mockActionItemsDatafilesNofiles.datasets[0].sourceFolder,
     );
     expect(body.parameters.files.length).toBe(
-      mockActionItems_datafiles_nofiles.datasets[0].files.length,
+      mockActionItemsDatafilesNofiles.datasets[0].files.length,
     );
   });
 
@@ -917,7 +927,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "n/a",
       action: actionSelectorType.notebook_selected_json,
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_file2,
+      actionItems: mockActionItemsDatafilesFile2,
       result: false,
     } as TestCase);
 
@@ -957,13 +967,13 @@ describe("1000: ConfigurableActionComponent", () => {
     const body = JSON.parse(opts.body);
     expect(body.template_id).toBe("c975455e-ede3-11ef-94fb-138c9cd51fc0");
     expect(body.parameters.jwt).toBe("TEST_JWT");
-    expect(body.parameters.dataset).toBe(mockActionItems_datafiles_file2.datasets[0].pid);
+    expect(body.parameters.dataset).toBe(mockActionItemsDatafilesFile2.datasets[0].pid);
     expect(body.parameters.directory).toBe(
-      mockActionItems_datafiles_file2.datasets[0].sourceFolder,
+      mockActionItemsDatafilesFile2.datasets[0].sourceFolder,
     );
     expect(body.parameters.files.length).toBe(1);
     expect(body.parameters.files[0]).toBe(
-      mockActionItems_datafiles_file2.datasets[0].files.filter((f) => f.selected)[0].path,
+      mockActionItemsDatafilesFile2.datasets[0].files.filter((f) => f.selected)[0].path,
     );
   });
 
@@ -972,7 +982,7 @@ describe("1000: ConfigurableActionComponent", () => {
       test: "n/a",
       action: actionSelectorType.link,
       limit: maxSizeType.higher,
-      actionItems: mockActionItems_datafiles_nofiles,
+      actionItems: mockActionItemsDatafilesNofiles,
       result: false,
     } as TestCase);
     spyOn(window, "open");

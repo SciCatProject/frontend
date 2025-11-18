@@ -13,12 +13,17 @@ import { StoreModule } from "@ngrx/store";
 import { MockMatDialogRef, MockUserApi } from "shared/MockStubs";
 import { AppConfigService } from "app-config.service";
 import { UsersService } from "@scicatproject/scicat-sdk-ts-angular";
-import { higherMaxFileSizeLimit, lowerMaxFileSizeLimit, mockActionItems, mockActionsConfig, mockAppConfigService } from "./configurable-actions.test.data";
+import {
+  higherMaxFileSizeLimit,
+  lowerMaxFileSizeLimit,
+  mockActionItems,
+  mockActionsConfig,
+  mockAppConfigService,
+} from "./configurable-actions.test.data";
 
 describe("1010: ConfigurableActionsComponent", () => {
   let component: ConfigurableActionsComponent;
   let fixture: ComponentFixture<ConfigurableActionsComponent>;
-
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -86,7 +91,8 @@ describe("1010: ConfigurableActionsComponent", () => {
   });
 
   it("0040: max file size should be the same as set in configuration, aka 10000", () => {
-    mockAppConfigService.appConfig.maxDirectDownloadSize = higherMaxFileSizeLimit;
+    mockAppConfigService.appConfig.maxDirectDownloadSize =
+      higherMaxFileSizeLimit;
 
     expect(component.maxFileSize).toEqual(10000);
   });
@@ -95,13 +101,16 @@ describe("1010: ConfigurableActionsComponent", () => {
     // const localConfig = mockAppConfigService.getConfig();
     // localConfig.maxDirectDownloadSize = lowerMaxFileSizeLimit;
     // spyOn(mockAppConfigService, "getConfig").and.returnValue(localConfig);
-    mockAppConfigService.appConfig.maxDirectDownloadSize = lowerMaxFileSizeLimit;
+    mockAppConfigService.appConfig.maxDirectDownloadSize =
+      lowerMaxFileSizeLimit;
 
     expect(component.maxFileSize).toEqual(5000);
   });
 
   it("0060: there should be as many actions as defined in default configuration", async () => {
-    expect(component.sortedActionsConfig.length).toEqual(mockActionsConfig.length);
+    expect(component.sortedActionsConfig.length).toEqual(
+      mockActionsConfig.length,
+    );
     const htmlElement: HTMLElement = fixture.nativeElement;
     const htmlActions = htmlElement.querySelectorAll("configurable-action");
     expect(htmlActions.length).toEqual(mockActionsConfig.length);

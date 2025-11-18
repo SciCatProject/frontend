@@ -33,9 +33,6 @@ function processSelector(
   selector: string,
 ): string | string[] | number | number[] {
 
-
-
-
   let match: RegExpMatchArray | null;
 
   // Map of static patterns to processing functions
@@ -190,8 +187,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   private prepare_disabled_condition() {
-
-
     if (this.actionConfig.enabled) {
       this.disabled_condition =
         "!(" + this.prepare_action_condition(this.actionConfig.enabled) + ")";
@@ -202,7 +197,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     } else {
       this.disabled_condition = "false";
     }
-
   }
 
   private prepare_hidden_condition() {
@@ -237,8 +231,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
 
   update_status() {
 
-
-
     Object.entries(this.actionConfig.variables ?? {}).forEach(
       ([key, selector]) => {
         this.variables[key] = processSelector(this.actionItems, selector);
@@ -247,13 +239,11 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   get context() {
-
     return {
       variables: this.variables,
       maxDownloadableSize: this.configService.getConfig().maxDirectDownloadSize,
       datasetOwner: (
         this.actionItems.datasets.map((d): boolean => {
-
           return this.userProfile.accessGroups?.includes(d.ownerGroup) || false;
         }) as Array<boolean>
       ).some(Boolean),
@@ -261,15 +251,13 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   get disabled() {
-
     this.update_status();
-
 
     const expr = this.disabled_condition;
 
     const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);
 
-    const context = this.context; 
+    const context = this.context;
 
     const res = fn(context);
 
@@ -324,7 +312,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     } else if (definition == "#uuid") {
       return v4();
     } else if (definition.startsWith("@")) {
-
       return this.variables[definition.slice(1)];
     }
     return definition;
@@ -346,7 +333,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       const value = this.get_value_from_definition(definition);
 
       if (input.endsWith("[]")) {
-        const itemInput = input.slice(0,-2);
+        const itemInput = input.slice(0, -2);
 
         const iteratable = Array.isArray(value) ? value : [value];
         iteratable.forEach((itemValue, itemIndex) => {
@@ -376,20 +363,24 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       payload = this.actionConfig.payload;
     }
 
+    const readyPayload = payload.replace(
+      /\{\{\s*([@#]\w+(\[\])?)\s*\}\}/g,
+      (_, variableName) => {
+        if (variableName.endsWith("[]")) {
+          const variableNameClean = variableName.slice(0, -2);
+          const value = this.get_value_from_definition(variableNameClean);
 
-
-    const readyPayload = payload.replace(/\{\{\s*([@#]\w+(\[\])?)\s*\}\}/g, (_, variableName) => {
-
-      if (variableName.endsWith("[]")) {
-        const variableNameClean = variableName.slice(0,-2);
-        const value = this.get_value_from_definition(variableNameClean);
-
-        const iteratable = !value ? [] : Array.isArray(value) ? value : [value];
-        return JSON.stringify(iteratable);
-      } else {
-        return this.get_value_from_definition(variableName);
+          const iteratable = !value
+            ? []
+            : Array.isArray(value) ?
+              value :
+              [value];
+          return JSON.stringify(iteratable);
+        } else {
+          return this.get_value_from_definition(variableName);
+        }
       }
-    });
+    );
 
     return readyPayload;
   }
@@ -411,7 +402,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       body: this.get_payload(),
     })
       .then((response) => {
-
         if (response.ok) {
           return response.blob();
         } else {
@@ -430,7 +420,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         URL.revokeObjectURL(url);
       })
       .catch((error) => {
-
         this.snackBar.open(
           "There has been an error performing the action",
           "Close",
@@ -480,7 +469,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         return response;
       })
       .catch((error) => {
-
         this.snackBar.open(
           "There has been an error performing the action",
           "Close",
