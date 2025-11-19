@@ -7,7 +7,8 @@
   mat-toolbar {
     height: 3.5rem;
 
-    a, .main-menu {
+    a,
+    .main-menu {
       height: 2.5rem;
       padding: 0.5rem;
 
@@ -22,7 +23,8 @@
       cursor: pointer;
     }
 
-    .spacer, .title {
+    .spacer,
+    .title {
       flex: 1 1 auto;
     }
 
