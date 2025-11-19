@@ -26,6 +26,7 @@ export class ConfigurableActionsComponent {
   }
 
   sortedActionsConfig(): ActionConfig[] {
+    if (!this.actionsConfig) return [];
     this._sortedActionsConfig = this.actionsConfig;
     this._sortedActionsConfig.sort((a: ActionConfig, b: ActionConfig) =>
       a.order && b.order ? a.order - b.order : 0,
