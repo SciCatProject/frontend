@@ -853,6 +853,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   onGlobalTextSearchApply() {
+    this.globalTextSearch_onChange(this.globalTextSearch);
     this.globalTextSearchApply.emit(this.globalTextSearch);
   }
 
