@@ -1,7 +1,12 @@
-<div class="table-header-controls" [class.with-side-filter]="localization === 'proposal'">
+<div
+  class="table-header-controls"
+  [class.with-side-filter]="localization === 'proposal'"
+>
   <div class="global-search-wrapper" *ngIf="showGlobalTextSearch">
     <mat-form-field>
-      <mat-icon matPrefix style="color: gray" *ngIf="!globalTextSearch">search</mat-icon>
+      <mat-icon matPrefix style="color: gray" *ngIf="!globalTextSearch"
+        >search</mat-icon
+      >
       <input
         [(ngModel)]="globalTextSearch"
         type="text"
@@ -10,6 +15,7 @@
         (ngModelChange)="this.globalSearchUpdate.next($event)"
         (keydown.enter)="onGlobalTextSearchApply()"
         (keydown.escape)="onGlobalTextSearchClear()"
+        data-cy="text-search"
       />
       <button
         mat-icon-button
@@ -18,6 +24,7 @@
         (click)="onGlobalTextSearchClear()"
         type="button"
         matTooltip="Clear search"
+        data-cy="search-clear-button"
       >
         <mat-icon>close</mat-icon>
       </button>
@@ -28,6 +35,7 @@
         (click)="onGlobalTextSearchApply()"
         type="button"
         matTooltip="Apply search"
+        data-cy="search-button"
       >
         <mat-icon>search</mat-icon>
       </button>
