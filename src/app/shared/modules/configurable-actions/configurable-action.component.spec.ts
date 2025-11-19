@@ -111,7 +111,8 @@ describe("1000: ConfigurableActionComponent", () => {
             useValue: { usersControllerGetUserJWTV3 },
           },
           {
-            provide: AuthService, useValue: mockAuthService,
+            provide: AuthService,
+            useValue: mockAuthService,
           },
           { provide: AppConfigService, useValue: mockAppConfigService },
           //{ provide: Store, useClass: MockStore }
@@ -123,10 +124,7 @@ describe("1000: ConfigurableActionComponent", () => {
     store = TestBed.inject(MockStore);
   }));
 
-  function createComponent(
-    componentActionConfig,
-    componentsActionItems,
-  ) {
+  function createComponent(componentActionConfig, componentsActionItems) {
     fixture = TestBed.createComponent(ConfigurableActionComponent);
     component = fixture.componentInstance;
     component.actionConfig = componentActionConfig;
@@ -283,7 +281,6 @@ describe("1000: ConfigurableActionComponent", () => {
       actionItems: mockActionItemsDatafilesAllfiles,
       result: true,
     },
-    
     // -------- Download Selected
     {
       test: "0110: Download Selected should be disabled with lowest max size and no files selected",
@@ -341,7 +338,6 @@ describe("1000: ConfigurableActionComponent", () => {
       actionItems: mockActionItemsDatafilesAllfiles,
       result: true,
     },
-    
     // -------- Notebook All (Form and JSON)
     {
       test: "0210: Notebook All should be enabled with lowest max size and no files selected",
@@ -399,7 +395,6 @@ describe("1000: ConfigurableActionComponent", () => {
       actionItems: mockActionItemsDatafilesAllfiles,
       result: true,
     },
-    
     // -------- Notebook Selected (Form and JSON)
     {
       test: "0310: Notebook Selected should be disabled with lowest max size and no files selected",
@@ -457,7 +452,6 @@ describe("1000: ConfigurableActionComponent", () => {
       actionItems: mockActionItemsDatafilesAllfiles,
       result: true,
     },
-    
     // -------- Publish
     {
       test: "0410: Publish should be enabled when a single dataset is not already published and user is owner",
@@ -572,13 +566,10 @@ describe("1000: ConfigurableActionComponent", () => {
   ];
 
   function selectTestCase(testCase: TestCase) {
-
-
     const userProfile = mockUserProfiles[testCase.user] || {};
 
-    store.overrideSelector(selectProfile,userProfile);
+    store.overrideSelector(selectProfile, userProfile);
     store.refreshState();
-
 
     const currentActionConfig = mockActionsConfig.filter(
       (a) => a.id == testCase.action,
@@ -596,14 +587,14 @@ describe("1000: ConfigurableActionComponent", () => {
         break;
     }
 
-    const published: Boolean | String = testCase.published || false;
-    if (typeof published === 'boolean') {
+    const published: boolean | string = testCase.published || false;
+    if (typeof published === "boolean") {
       testCase.actionItems.datasets.forEach((dataset) => {
         dataset.isPublished = published;
-      })
+      });
     }
 
-    createComponent(currentActionConfig,testCase.actionItems);
+    createComponent(currentActionConfig, testCase.actionItems);
   }
 
   testEnabledDisabledCases.forEach((testCase) => {
@@ -611,8 +602,6 @@ describe("1000: ConfigurableActionComponent", () => {
       selectTestCase(testCase);
 
       expect(component.disabled).toEqual(!testCase.result);
-
-
     });
   });
 
@@ -653,7 +642,9 @@ describe("1000: ConfigurableActionComponent", () => {
       item.name.includes("files"),
     );
 
-    expect(formFiles.length).toEqual(mockActionItemsDatafilesNofiles.datasets[0].files?.length);
+    expect(formFiles.length).toEqual(
+      mockActionItemsDatafilesNofiles.datasets[0].files?.length,
+    );
   });
 
   it("1010: Form submission should have correct url when Download All is clicked", async () => {
@@ -719,9 +710,8 @@ describe("1000: ConfigurableActionComponent", () => {
     );
     expect(formFiles.length).toEqual(1);
     const formFilePath = formFiles[0].value;
-    const selectedFiles = mockActionItemsDatafilesFile1.datasets[0].files.filter(
-      (f) => f.selected,
-    );
+    const selectedFiles =
+      mockActionItemsDatafilesFile1.datasets[0].files.filter((f) => f.selected);
     expect(selectedFiles.length).toEqual(1);
     const selectedFilePath = selectedFiles[0].path;
     expect(formFilePath).toEqual(selectedFilePath);
@@ -786,13 +776,11 @@ describe("1000: ConfigurableActionComponent", () => {
     );
     expect(formFiles.length).toEqual(1);
     const formFilePath = formFiles[0].value;
-    const selectedFiles = mockActionItemsDatafilesFile2.datasets[0].files.filter(
-      (f) => f.selected,
-    );
+    const selectedFiles =
+      mockActionItemsDatafilesFile2.datasets[0].files.filter((f) => f.selected);
     expect(selectedFiles.length).toEqual(1);
     const selectedFilePath = selectedFiles[0].path;
     expect(formFilePath).toEqual(selectedFilePath);
-
   });
 
   it("1070: Download All action button should contain the correct label", () => {
@@ -807,8 +795,9 @@ describe("1000: ConfigurableActionComponent", () => {
     const componentElement: HTMLElement = fixture.nativeElement;
     const actionButton = componentElement.querySelector(".action-button");
     expect(actionButton.innerHTML).toContain(
-      mockActionsConfig.filter((a) => a.id == actionSelectorType.download_all)[0]
-        .label,
+      mockActionsConfig.filter(
+        (a) => a.id == actionSelectorType.download_all,
+      )[0].label,
     );
   });
 
@@ -889,7 +878,6 @@ describe("1000: ConfigurableActionComponent", () => {
 
     component.perform_action();
 
-
     const spy = window.fetch as jasmine.Spy;
     expect(spy.calls.any()).toBeTrue();
     const call = spy.calls.mostRecent();
@@ -900,20 +888,19 @@ describe("1000: ConfigurableActionComponent", () => {
     const currentAction = mockActionsConfig.filter(
       (a) => a.id == actionSelectorType.notebook_all_json,
     )[0];
-    expect(url).toBe(
-      currentAction.url,
-    );
+    expect(url).toBe(currentAction.url);
     expect(opts.method).toBe("POST");
     expect(opts.headers["Content-Type"]).toBe("application/json");
 
     //{\"template_id\":\"c975455e-ede3-11ef-94fb-138c9cd51fc0\",\"parameters\":{\"dataset\":\"{{ @pid }}\",\"directory\":\"{{ @folder }}\",\"files\": {{ @files[] }},\"jwt\":\"{{ #jwt }}\",\"scicat_url\":\"https://staging.scicat.ess.url\",\"file_server_url\":\"sftserver2.esss.dk\",\"file_server_port\":\"22\"}}
-    
 
     const body = JSON.parse(opts.body);
 
     expect(body.template_id).toBe("c975455e-ede3-11ef-94fb-138c9cd51fc0");
     expect(body.parameters.jwt).toBe("TEST_JWT");
-    expect(body.parameters.dataset).toBe(mockActionItemsDatafilesNofiles.datasets[0].pid);
+    expect(body.parameters.dataset).toBe(
+      mockActionItemsDatafilesNofiles.datasets[0].pid,
+    );
     expect(body.parameters.directory).toBe(
       mockActionItemsDatafilesNofiles.datasets[0].sourceFolder,
     );
@@ -931,7 +918,6 @@ describe("1000: ConfigurableActionComponent", () => {
       result: false,
     } as TestCase);
 
-
     component.jwt = "TEST_JWT";
     spyOn(window, "fetch").and.returnValue(
       Promise.resolve(
@@ -945,7 +931,6 @@ describe("1000: ConfigurableActionComponent", () => {
 
     component.perform_action();
 
-
     const spy = window.fetch as jasmine.Spy;
 
     expect(spy.calls.any()).toBeTrue();
@@ -957,9 +942,7 @@ describe("1000: ConfigurableActionComponent", () => {
       (a) => a.id == actionSelectorType.notebook_selected_json,
     )[0];
 
-    expect(url).toBe(
-      currentAction.url,
-    );
+    expect(url).toBe(currentAction.url);
     expect(opts.method).toBe("POST");
     expect(opts.headers["Content-Type"]).toBe("application/json");
 
@@ -967,13 +950,17 @@ describe("1000: ConfigurableActionComponent", () => {
     const body = JSON.parse(opts.body);
     expect(body.template_id).toBe("c975455e-ede3-11ef-94fb-138c9cd51fc0");
     expect(body.parameters.jwt).toBe("TEST_JWT");
-    expect(body.parameters.dataset).toBe(mockActionItemsDatafilesFile2.datasets[0].pid);
+    expect(body.parameters.dataset).toBe(
+      mockActionItemsDatafilesFile2.datasets[0].pid,
+    );
     expect(body.parameters.directory).toBe(
       mockActionItemsDatafilesFile2.datasets[0].sourceFolder,
     );
     expect(body.parameters.files.length).toBe(1);
     expect(body.parameters.files[0]).toBe(
-      mockActionItemsDatafilesFile2.datasets[0].files.filter((f) => f.selected)[0].path,
+      mockActionItemsDatafilesFile2.datasets[0].files.filter(
+        (f) => f.selected,
+      )[0].path,
     );
   });
 

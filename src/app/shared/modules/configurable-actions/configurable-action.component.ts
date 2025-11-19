@@ -32,7 +32,6 @@ function processSelector(
   jsonObject: ActionItems,
   selector: string,
 ): string | string[] | number | number[] {
-
   let match: RegExpMatchArray | null;
 
   // Map of static patterns to processing functions
@@ -98,7 +97,6 @@ function processSelector(
 
   // Check for direct pattern matches
   for (const [pattern, fn] of Object.entries(keywordMap)) {
-
     const match = selector.match(new RegExp(pattern));
 
     if (match) {
@@ -230,7 +228,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   update_status() {
-
     Object.entries(this.actionConfig.variables ?? {}).forEach(
       ([key, selector]) => {
         this.variables[key] = processSelector(this.actionItems, selector);
@@ -372,14 +369,14 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
 
           const iteratable = !value
             ? []
-            : Array.isArray(value) ?
-              value :
-              [value];
+            : Array.isArray(value)
+              ? value
+              : [value];
           return JSON.stringify(iteratable);
         } else {
           return this.get_value_from_definition(variableName);
         }
-      }
+      },
     );
 
     return readyPayload;

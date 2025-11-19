@@ -82,8 +82,7 @@ const appConfig: AppConfigInterface = {
   datasetDetailsActionsEnabled: false,
   datasetDetailsActions: [],
   datafilesActionsEnabled: false,
-  datafilesActions: [
-  ],
+  datafilesActions: [],
   datasetSelectionActionsEnabled: false,
   datasetSelectionActions: [],
   defaultDatasetsListSettings: {
