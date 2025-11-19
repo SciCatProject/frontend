@@ -12,7 +12,7 @@ import { AppConfigService } from "app-config.service";
 export class ConfigurableActionsComponent {
   private _sortedActionsConfig: ActionConfig[];
 
-  @Input({ required: true }) actionsConfig: ActionConfig[];
+  @Input({ required: true }) actionsConfig: ActionConfig[] = [];
   @Input({ required: true }) actionItems: ActionItems;
 
   constructor(public appConfigService: AppConfigService) {}
@@ -25,10 +25,9 @@ export class ConfigurableActionsComponent {
     return this.appConfigService.getConfig().maxDirectDownloadSize || 0;
   }
 
-  sortedActionsConfig(): ActionConfig[] {
-    if (!this.actionsConfig) return [];
+  get sortedActionsConfig(): ActionConfig[] {
     this._sortedActionsConfig = this.actionsConfig;
-    this._sortedActionsConfig.sort((a: ActionConfig, b: ActionConfig) =>
+    this.actionsConfig.sort((a: ActionConfig, b: ActionConfig) =>
       a.order && b.order ? a.order - b.order : 0,
     );
     return this._sortedActionsConfig;
