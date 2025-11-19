@@ -20,3 +20,6 @@
 | headers       | object    | No       | HTTP headers (for `"xhr"`, `"json-download"`)          |
 | payload       | string    | No       | Request body (`"xhr"`/`"json-download"` only)          |
 | filename      | string    | No       | Download filename (`"json-download"` only)             |
+
+---
+> **Note:** This document has been generated with the help of AI using Neutro, the ESS dedicated AI app.

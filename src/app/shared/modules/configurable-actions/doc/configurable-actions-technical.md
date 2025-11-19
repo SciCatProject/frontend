@@ -177,3 +177,7 @@ Below are supported configuration properties, their types, and descriptions.
   },
   "authorization": ["#datasetAccess", "#datasetPublic"]
 }
+```
+
+---
+> **Note:** This document has been generated with the help of AI using Neutro, the ESS dedicated AI app.

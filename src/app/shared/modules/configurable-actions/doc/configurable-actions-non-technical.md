@@ -48,3 +48,5 @@ For more info:
 - Contact [dataportal@ess.eu](mailto:dataportal@ess.eu)
 
 ---
+
+> **Note:** This document has been generated with the help of AI using Neutro, the ESS dedicated AI app.
