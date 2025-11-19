@@ -25,7 +25,6 @@ import { TableVirtualScrollModule } from "../cores/table-virtual-scroll.module";
 import { PrintTableDialogComponent } from "./extensions/print-dialog/print-dialog.component";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { MatRippleModule } from "@angular/material/core";
 import { TooltipComponent } from "../tooltip/tooltip.component";
 import {
   FullscreenOverlayContainer,
@@ -58,6 +57,7 @@ const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
     MatIconModule,
     DragDropModule,
     TableMenuModule,
+    MatDividerModule,
     MatPaginatorModule,
     MatDialogModule,
     MatButtonModule,
@@ -66,6 +66,8 @@ const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
     ExtensionsModule,
     PipesModule,
     EmptyContentModule,
+    OverlayModule,
+    MatTooltipModule,
   ],
   exports: [DynamicMatTableComponent],
   declarations: [

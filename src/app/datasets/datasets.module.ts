@@ -88,6 +88,7 @@ import { IngestorModule } from "../ingestor/ingestor.module";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatBadgeModule } from "@angular/material/badge";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
+import { ConfigurableActionsModule } from "shared/modules/configurable-actions/configurable-actions.module";
 
 @NgModule({
   imports: [
@@ -154,7 +155,7 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
     IngestorModule,
     MatExpansionModule,
     MatBadgeModule,
-    IngestorModule,
+    ConfigurableActionsModule,
   ],
   declarations: [
     BatchViewComponent,

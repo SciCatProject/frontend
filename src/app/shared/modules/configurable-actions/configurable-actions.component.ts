@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { ActionConfig, ActionItems } from "./configurable-action.interfaces";
-import { DataFiles_File } from "datasets/datafiles/datafiles.interfaces";
+
 import { AppConfigService } from "app-config.service";
 
 @Component({
@@ -17,15 +17,15 @@ export class ConfigurableActionsComponent {
 
   constructor(public appConfigService: AppConfigService) {}
 
-  get visible(): boolean {
+  visible(): boolean {
     return this.appConfigService.getConfig().datafilesActionsEnabled;
   }
 
-  get maxFileSize(): number {
+  maxFileSize(): number {
     return this.appConfigService.getConfig().maxDirectDownloadSize || 0;
   }
 
-  get sortedActionsConfig(): ActionConfig[] {
+  sortedActionsConfig(): ActionConfig[] {
     this._sortedActionsConfig = this.actionsConfig;
     this._sortedActionsConfig.sort((a: ActionConfig, b: ActionConfig) =>
       a.order && b.order ? a.order - b.order : 0,
