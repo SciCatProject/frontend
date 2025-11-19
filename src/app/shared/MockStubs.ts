@@ -23,6 +23,10 @@ import {
   OutputAttachmentV3Dto,
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { SDKToken } from "./services/auth/auth.service";
+import { IngestionRequestInformation } from "ingestor/ingestor-page/helper/ingestor.component-helper";
+import { MethodItem } from "./sdk/models/ingestor/methodItem";
+import { FolderNode } from "./sdk/models/ingestor/folderNode";
+import { APIInformation } from "ingestor/ingestor-page/helper/ingestor.component-helper";
 
 export class MockUserApi {
   getCurrentId() {
@@ -333,3 +337,100 @@ export const mockLogbook = createMock<Logbook>({});
 export const mockPolicy = createMock<Policy>({});
 export const mockPublishedData = createMock<PublishedData>({});
 export const mockUser = createMock<ReturnedUserDto>({});
+
+export const mockIngestionRequestInformation =
+  createMock<IngestionRequestInformation>({
+    selectedPath: "/test/path",
+    selectedMethod: {
+      name: "test-method",
+      schema: "base64-encoded-schema",
+      url: "https://json-schema.org/draft/2020-12/schema",
+    },
+    selectedResolvedDecodedSchema: {
+      type: "object",
+      properties: {
+        organizational: { type: "object" },
+        sample: { type: "object" },
+        instrument: { type: "object" },
+        acquisition: { type: "object" },
+      },
+    },
+    scicatHeader: {
+      datasetName: "test-dataset",
+      sourceFolder: "/test/path",
+      type: "raw",
+      owner: "testuser",
+    },
+    userMetaData: {
+      organizational: {
+        experimentId: "EXP-001",
+      },
+      sample: {
+        sampleId: "SAMPLE-001",
+      },
+    },
+    extractorMetaData: {
+      instrument: {
+        name: "Test Instrument",
+      },
+      acquisition: {
+        date: "2024-01-01",
+      },
+    },
+    customMetaData: {},
+    mergedMetaDataString: "{}",
+    editorMode: "INGESTION",
+    ingestionRequest: null,
+    autoArchive: false,
+  });
+
+export const mockMethodItem = createMock<MethodItem>({
+  name: "test-extraction-method",
+  schema: "eyJ0eXBlIjoib2JqZWN0IiwicHJvcGVydGllcyI6e319",
+  url: "https://json-schema.org/draft/2020-12/schema",
+});
+
+export const mockMethodItem2 = createMock<MethodItem>({
+  name: "another-method",
+  schema: "eyJwcm9wZXJ0aWVzIjp7Imluc3RydW1lbnQiOnt9fX0=",
+  url: "https://json-schema.org/draft/2020-12/schema2",
+});
+
+export const mockMethodItems: MethodItem[] = [mockMethodItem, mockMethodItem2];
+
+export const mockFolderNode = createMock<FolderNode>({
+  name: "test-folder",
+  path: "/test/path/test-folder",
+  children: true,
+  probablyDataset: false,
+});
+
+export const mockDatasetFolderNode = createMock<FolderNode>({
+  name: "dataset-folder",
+  path: "/test/path/dataset-folder",
+  children: false,
+  probablyDataset: true,
+});
+
+export const mockRootFolderNode = createMock<FolderNode>({
+  name: "",
+  path: "/",
+  children: true,
+  probablyDataset: false,
+});
+
+export const mockFolderNodes: FolderNode[] = [
+  mockFolderNode,
+  mockDatasetFolderNode,
+  mockRootFolderNode,
+];
+
+export const mockAPIInformation = createMock<APIInformation>({
+  ingestionDatasetLoading: false,
+  extractorMetaDataReady: false,
+  extractMetaDataRequested: false,
+  metaDataExtractionFailed: false,
+  extractorMetadataProgress: 0,
+  extractorMetaDataStatus: "",
+  ingestionRequestErrorMessage: "",
+});

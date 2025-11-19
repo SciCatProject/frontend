@@ -45,6 +45,7 @@ import {
 } from "@scicatproject/scicat-sdk-ts-angular";
 import { loadDefaultSettings } from "state-management/actions/user.actions";
 import { AppConfigService } from "app-config.service";
+import { IngestorCreationComponent } from "ingestor/ingestor-page/ingestor-creation.component";
 
 @Component({
   selector: "dashboard",
@@ -73,6 +74,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   clearColumnSearch = false;
 
   @ViewChild(MatSidenav, { static: false }) sideNav!: MatSidenav;
+  @ViewChild("ingestor") ingestor: IngestorCreationComponent;
 
   constructor(
     public appConfigService: AppConfigService,
@@ -105,47 +107,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(AddDatasetDialogComponent, {
-      width: "500px",
-      data: { userGroups: this.userGroups },
-    });
-
-    dialogRef.afterClosed().subscribe((res) => {
-      if (res) {
-        const { username, email } = this.currentUser;
-        const dataset = {
-          accessGroups: [],
-          contactEmail: email, // Required
-          creationTime: new Date().toISOString(), // Required
-          datasetName: res.datasetName,
-          description: res.description,
-          isPublished: false,
-          keywords: [],
-          owner: username.replace("ldap.", ""), // Required
-          ownerEmail: email,
-          ownerGroup: res.ownerGroup, // Required
-          packedSize: 0,
-          size: 0,
-          sourceFolder: res.sourceFolder, // Required
-          type: "derived", // Required
-          inputDatasets: [], // Required
-          investigator: email, // Required
-          scientificMetadata: {},
-          numberOfFilesArchived: 0, // Required
-          principalInvestigator: undefined, // Required
-          creationLocation: undefined, // Required
-          usedSoftware: res.usedSoftware
-            .split(",")
-            .map((entry: string) => entry.trim())
-            .filter((entry: string) => entry !== ""), // Required
-        };
-        this.store.dispatch(
-          addDatasetAction({
-            dataset: dataset,
-          }),
-        );
-      }
-    });
+    if (this.ingestor) {
+      this.ingestor.onClickAddIngestion();
+    }
   }
 
   ngOnInit() {

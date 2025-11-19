@@ -1,0 +1,126 @@
+import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { JsonFormsAngularService, JsonFormsControl } from "@jsonforms/angular";
+import {
+  ControlProps,
+  findUISchema,
+  Generate,
+  GroupLayout,
+  isAnyOfControl,
+  JsonSchema,
+  RankedTester,
+  rankWith,
+  setReadonly,
+  UISchemaElement,
+} from "@jsonforms/core";
+import { MatCheckboxChange } from "@angular/material/checkbox";
+import { cloneDeep, isEmpty, startCase } from "lodash-es";
+
+@Component({
+  selector: "app-anyof-renderer",
+  styleUrls: ["./ingestor-renderer.component.scss"],
+  templateUrl: "./any-of-renderer.html",
+  standalone: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class AnyOfRendererComponent extends JsonFormsControl {
+  dataAsString: string;
+  options: string[] = [];
+  filteredOptions: string[] = [];
+  anyOfTitle: string;
+  notNullOptionSelected = false;
+  selectedTabIndex = 0; // default value
+  tabAmount = 0; // max tabs
+
+  rendererService: JsonFormsAngularService;
+
+  passedProps: ControlProps;
+
+  constructor(service: JsonFormsAngularService) {
+    super(service);
+    this.rendererService = service;
+  }
+
+  public mapAdditionalProps(props: ControlProps) {
+    this.passedProps = props;
+    this.anyOfTitle = props.label || "AnyOf";
+    this.options = props.schema.anyOf.map(
+      (option: any) => option.title || option.type || JSON.stringify(option),
+    );
+
+    if (this.options.includes("null") && !props.data) {
+      this.selectedTabIndex = this.options.indexOf("null");
+      this.notNullOptionSelected = false;
+    }
+
+    this.filteredOptions = this.options.filter((option) => option !== "null");
+    this.tabAmount = this.filteredOptions.length;
+  }
+
+  public getUISchema(tabOption: string): UISchemaElement {
+    const selectedSchema = this.getTabSchema(tabOption);
+
+    const isQuantityValue =
+      selectedSchema.title == "QuantityValue" ||
+      selectedSchema.title == "QuantitySI";
+
+    const detailUiSchema = findUISchema(
+      undefined,
+      selectedSchema,
+      this.passedProps.uischema.scope,
+      this.passedProps.path,
+      () => {
+        const newSchema = cloneDeep(selectedSchema);
+        return Generate.uiSchema(
+          newSchema,
+          isQuantityValue ? "QuantityValueLayout" : "VerticalLayout",
+          undefined,
+          this.rootSchema,
+        );
+      },
+      this.passedProps.uischema,
+      this.passedProps.rootSchema,
+    );
+    if (isEmpty(this.passedProps.path)) {
+      detailUiSchema.type = "VerticalLayout";
+    } else {
+      (detailUiSchema as GroupLayout).label = startCase(this.passedProps.path);
+    }
+    if (!this.isEnabled()) {
+      setReadonly(detailUiSchema);
+    }
+
+    return detailUiSchema;
+  }
+
+  public getTabSchema(tabOption: string): JsonSchema {
+    const selectedSchema = (this.passedProps.schema.anyOf as any).find(
+      (option: any) =>
+        option.title === tabOption ||
+        option.type === tabOption ||
+        JSON.stringify(option) === tabOption,
+    );
+
+    return selectedSchema;
+  }
+
+  public onEnableCheckboxChange(event: MatCheckboxChange) {
+    this.notNullOptionSelected = event.checked;
+
+    const updatedData =
+      this.rendererService.getState().jsonforms.core.data ?? {};
+
+    // Update the data in the correct path
+    const pathSegments = this.passedProps.path.split(".");
+    let current = updatedData ?? {};
+    for (let i = 0; i < pathSegments.length - 1; i++) {
+      current = current[pathSegments[i]];
+    }
+    current[pathSegments[pathSegments.length - 1]] = !this.notNullOptionSelected
+      ? null
+      : {};
+
+    this.rendererService.setData(updatedData);
+  }
+}
+
+export const anyOfRendererTester: RankedTester = rankWith(4, isAnyOfControl);

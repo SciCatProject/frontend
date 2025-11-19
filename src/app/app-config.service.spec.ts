@@ -212,6 +212,9 @@ const appConfig: AppConfigInterface = {
     ],
     conditions: [],
   },
+  ingestorComponent: {
+    ingestorEnabled: true,
+  },
 };
 
 describe("AppConfigService", () => {
