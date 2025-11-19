@@ -81,6 +81,7 @@ describe("1010: ConfigurableActionsComponent", () => {
   });
 
   it("0020: actions should be visible when enabled in configuration", () => {
+    mockAppConfigService.appConfig.datafilesActionsEnabled = true;
     expect(component.visible).toEqual(true);
   });
 
@@ -90,21 +91,21 @@ describe("1010: ConfigurableActionsComponent", () => {
     expect(component.visible).toEqual(false);
   });
 
-  it("0040: max file size should be the same as set in configuration, aka 10000", () => {
+  it("0040: max file size should be the same as set in configuration, aka higher limit", () => {
     mockAppConfigService.appConfig.maxDirectDownloadSize =
       higherMaxFileSizeLimit;
 
-    expect(component.maxFileSize).toEqual(10000);
+    expect(component.maxFileSize).toEqual(higherMaxFileSizeLimit);
   });
 
-  it("0050: max file size should be the same as set in configuration, aka 5000", () => {
+  it("0050: max file size should be the same as set in configuration, aka lower limit", () => {
     // const localConfig = mockAppConfigService.getConfig();
     // localConfig.maxDirectDownloadSize = lowerMaxFileSizeLimit;
     // spyOn(mockAppConfigService, "getConfig").and.returnValue(localConfig);
     mockAppConfigService.appConfig.maxDirectDownloadSize =
       lowerMaxFileSizeLimit;
 
-    expect(component.maxFileSize).toEqual(5000);
+    expect(component.maxFileSize).toEqual(lowerMaxFileSizeLimit);
   });
 
   it("0060: there should be as many actions as defined in default configuration", async () => {
