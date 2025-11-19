@@ -1,0 +1,69 @@
+@use "sass:map";
+@use "@angular/material" as mat;
+
+@mixin color($theme) {
+  $color-config: map.get($theme, "color");
+  $primary: map.get($color-config, "primary");
+  $header-1: map.get($color-config, "header-1");
+  $header-2: map.get($color-config, "header-2");
+  $header-3: map.get($color-config, "header-3");
+  $accent: map.get($color-config, "accent");
+  $warn: map.get($color-config, "warn");
+  mat-card {
+    .scicat-header {
+      background-color: mat.m2-get-color-from-palette($primary, "lighter");
+    }
+
+    .organizational-header {
+      background-color: mat.m2-get-color-from-palette($header-1, "lighter");
+    }
+
+    .sample-header {
+      background-color: mat.m2-get-color-from-palette($header-2, "lighter");
+    }
+
+    .instrument-header {
+      background-color: mat.m2-get-color-from-palette($header-3, "lighter");
+    }
+
+    .acquisition-header {
+      background-color: mat.m2-get-color-from-palette($accent, "lighter");
+    }
+  }
+
+  .error-message {
+    color: mat.m2-get-color-from-palette($warn, "default");
+  }
+
+  .error-icon {
+    color: mat.m2-get-color-from-palette($warn, "default");
+  }
+
+  .success-icon {
+    color: mat.m2-get-color-from-palette($primary, 'default');
+  }
+
+  .green-text,
+  .success-text {
+    color: mat.m2-get-color-from-palette($primary, 'default');
+  }
+
+  .last-used-facility-backends {
+    opacity: 0.6;
+  }
+
+  .ingestor-file-list .mat-list-item-hover:hover {
+    background-color: mat.m2-get-color-from-palette($primary, 'lighter', 0.1);
+  }
+
+  .ingestor-file-list .mat-list-item-hover:active {
+    background-color: mat.m2-get-color-from-palette($primary, 'lighter', 0.2);
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.m2-get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+}
