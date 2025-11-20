@@ -27,7 +27,6 @@
   "ingestManual": null,
   "jobsEnabled": true,
   "jsonMetadataEnabled": true,
-  "jupyterHubUrl": "https://jupyterhub.esss.lu.se/",
   "landingPage": "doi.ess.eu/detail/",
   "lbBaseURL": "http://127.0.0.1:3000",
   "ingestorComponent": {
@@ -70,9 +69,6 @@
   "datasetDetailsShowMissingProposalId": false,
   "notificationInterceptorEnabled": true,
   "metadataEditingUnitListDisabled": true,
-  "datasetActionsEnabled": false,
-  "datasetActions": [
-  ],
   "datafilesActionsEnabled": true,
   "datafilesActions": [
     {
@@ -272,6 +268,21 @@
       "target": "_blank"
     }
   ],
+  "datasetDetailsActionsEnabled": false,
+  "datasetDetailsActions": [],
+  "selectionActionsEnabled": true,
+  "selectionActions": [],  
+    "labelMaps": {
+    "filters": {
+      "LocationFilter": "Location",
+      "PidFilter": "Pid",
+      "GroupFilter": "Group",
+      "TypeFilter": "Type",
+      "KeywordFilter": "Keyword",
+      "DateRangeFilter": "Start Date - End Date",
+      "TextFilter": "Text"
+    }
+  },
   "defaultDatasetsListSettings": {
     "columns": [
       {

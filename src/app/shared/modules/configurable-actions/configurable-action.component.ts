@@ -388,6 +388,9 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       (_, variableName) => this.get_value_from_definition(variableName),
     );
 
+    console.log("JSON to download");
+    console.log("URL",this.actionConfig.url);
+    console.log("Method",this.actionConfig.method);
     fetch(this.actionConfig.url, {
       method: this.actionConfig.method || "POST",
       headers: {
@@ -399,6 +402,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       body: this.get_payload(),
     })
       .then((response) => {
+        console.log("Response",response);
         if (response.ok) {
           return response.blob();
         } else {
@@ -410,9 +414,12 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       })
       .then((blob) => URL.createObjectURL(blob))
       .then((url) => {
+        console.log("VFC 1");
         const a = document.createElement("a");
+        console.log("a",a);
         a.href = url;
         a.download = filename;
+        console.log
         a.click();
         URL.revokeObjectURL(url);
       })
