@@ -17,11 +17,11 @@ export class ConfigurableActionsComponent {
 
   constructor(public appConfigService: AppConfigService) {}
 
-  visible(): boolean {
+  get visible(): boolean {
     return this.appConfigService.getConfig().datafilesActionsEnabled;
   }
 
-  maxFileSize(): number {
+  get maxFileSize(): number {
     return this.appConfigService.getConfig().maxDirectDownloadSize || 0;
   }
 
