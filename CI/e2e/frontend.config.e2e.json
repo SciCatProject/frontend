@@ -224,7 +224,7 @@
       "method" : "PATCH",
       "url": "http://localhost:4200/dataset/{{ @pid }}/",
       "target": "_blank",
-      "enabled": "#datasetOwner && @isPublished",
+      "enabled": "(#datasetOwner || #userIsAdmin) && !@isPublished",
       "authorization": "#datasetOwner && !@isPublished",
       "variables" : {
         "pid": "@Dataset0Pid",
@@ -246,7 +246,7 @@
       "method" : "PATCH",
       "url": "http://localhost:4200/dataset/{{ @pid }}/",
       "target": "_blank",
-      "enabled": "#datasetOwner && !@isPublished",
+      "enabled": "(#datasetOwner || #userIsAdmin) && @isPublished",
       "authorization": "#datasetOwner && @isPublished",
       "variables" : {
         "pid": "#Dataset0Pid",
@@ -264,7 +264,7 @@
       "order": 9,
       "label": "ESS",
       "type": "link",
-      "mat_icon": "action",
+      "icon": "/assets/icons/button_ess.png",
       "url": "http://localhost:4200/external",
       "target": "_blank"
     }

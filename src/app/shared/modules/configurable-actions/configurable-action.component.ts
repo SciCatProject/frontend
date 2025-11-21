@@ -16,7 +16,7 @@ import { Store } from "@ngrx/store";
 import { updatePropertyAction } from "state-management/actions/datasets.actions";
 import { Router } from "@angular/router";
 import { AppConfigService } from "app-config.service";
-import { selectProfile } from "state-management/selectors/user.selectors";
+import { selectIsAdmin, selectProfile } from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
 import { result } from "lodash-es";
 
@@ -121,6 +121,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   @Input({ required: true }) actionItems: ActionItems;
   //@Input() files?: DataFiles_File[];
   userProfile$ = this.store.select(selectProfile);
+  isAdmin$ = this.store.select(selectIsAdmin);
 
   jwt = "";
   use_mat_icon = false;
@@ -133,6 +134,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   subscriptions: Subscription[] = [];
 
   userProfile: any = {};
+  isAdmin = false;
 
   constructor(
     private usersService: UsersService,
@@ -180,6 +182,8 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         // eslint-disable-next-line no-useless-escape
         .replace(/\#datasetOwner/g, (_) => `datasetOwner`)
         // eslint-disable-next-line no-useless-escape
+        .replace(/\#userIsAdmin/g, (_) => `isAdmin`)
+        // eslint-disable-next-line no-useless-escape
         .replace(/\@(\w+)/g, (_, variableName) => `variables.${variableName}`)
     );
   }
@@ -215,6 +219,13 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         }
       }),
     );
+    this.subscriptions.push(
+      this.isAdmin$.subscribe((isAdmin) => {
+        if (isAdmin) {
+          this.isAdmin = isAdmin;
+        }
+      }),
+    );
     this.use_mat_icon = !!this.actionConfig.mat_icon;
     this.use_icon = this.actionConfig.icon !== undefined;
     this.prepare_disabled_condition();
@@ -244,6 +255,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
           return this.userProfile.accessGroups?.includes(d.ownerGroup) || false;
         }) as Array<boolean>
       ).some(Boolean),
+      isAdmin: this.isAdmin,
     };
   }
 
@@ -251,13 +263,13 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     this.update_status();
 
     const expr = this.disabled_condition;
-
+    console.log("Disable Expr",expr);
     const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);
 
     const context = this.context;
 
     const res = fn(context);
-
+    console.log("res",res);
     return res;
   }
 
