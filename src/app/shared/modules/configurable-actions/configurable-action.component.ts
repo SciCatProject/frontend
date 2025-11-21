@@ -16,7 +16,10 @@ import { Store } from "@ngrx/store";
 import { updatePropertyAction } from "state-management/actions/datasets.actions";
 import { Router } from "@angular/router";
 import { AppConfigService } from "app-config.service";
-import { selectIsAdmin, selectProfile } from "state-management/selectors/user.selectors";
+import {
+  selectIsAdmin,
+  selectProfile,
+} from "state-management/selectors/user.selectors";
 import { Subscription } from "rxjs";
 import { result } from "lodash-es";
 
@@ -263,13 +266,9 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     this.update_status();
 
     const expr = this.disabled_condition;
-    console.log("Disable Expr",expr);
     const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);
-
     const context = this.context;
-
     const res = fn(context);
-    console.log("res",res);
     return res;
   }
 
@@ -400,9 +399,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       (_, variableName) => this.get_value_from_definition(variableName),
     );
 
-    console.log("JSON to download");
-    console.log("URL",this.actionConfig.url);
-    console.log("Method",this.actionConfig.method);
     fetch(this.actionConfig.url, {
       method: this.actionConfig.method || "POST",
       headers: {
@@ -414,7 +410,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       body: this.get_payload(),
     })
       .then((response) => {
-        console.log("Response",response);
         if (response.ok) {
           return response.blob();
         } else {
@@ -426,12 +421,9 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       })
       .then((blob) => URL.createObjectURL(blob))
       .then((url) => {
-        console.log("VFC 1");
         const a = document.createElement("a");
-        console.log("a",a);
         a.href = url;
         a.download = filename;
-        console.log
         a.click();
         URL.revokeObjectURL(url);
       })
