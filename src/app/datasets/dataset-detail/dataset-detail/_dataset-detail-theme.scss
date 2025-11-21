@@ -11,7 +11,7 @@
   $header-4: map.get($color-config, "header-4");
   mat-card {
     .general-header {
-      background-color: mat.m2-get-color-from-palette($primary, "lighter");
+      background-color: mat.m2-get-color-from-palette($header-1, "lighter");
     }
 
     .creator-header {
@@ -19,7 +19,7 @@
     }
 
     .file-header {
-      background-color: mat.m2-get-color-from-palette($accent, "lighter");
+      background-color: mat.m2-get-color-from-palette($header-1, "lighter");
     }
 
     .related-header {

@@ -411,7 +411,6 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           column.name === "scientificMetadata"
         ) {
           convertedColumn.customRender = (column, row) => {
-            // NOTE: Maybe here we should use the "scientificMetadata" as field name and not "metadata". This should be changed in the backend config.
             return this.jsonHeadPipe.transform(row["scientificMetadata"]);
           };
           convertedColumn.toExport = (row) => {
