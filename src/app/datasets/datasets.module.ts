@@ -156,7 +156,6 @@ import { OverlayModule } from "@angular/cdk/overlay";
     IngestorModule,
     MatExpansionModule,
     MatBadgeModule,
-    ConfigurableActionsModule,
     OverlayModule,
     IngestorModule,
   ],

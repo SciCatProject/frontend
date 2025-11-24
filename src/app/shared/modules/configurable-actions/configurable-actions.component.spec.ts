@@ -109,7 +109,6 @@ describe("1010: ConfigurableActionsComponent", () => {
   });
 
   it("0060: there should be as many actions as defined in default configuration", async () => {
-    component.actionsConfig = mockActionsConfig;
     expect(component.sortedActionsConfig.length).toEqual(
       mockActionsConfig.length,
     );
