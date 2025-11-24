@@ -1,10 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { MetadataValueService } from 'shared/services/metadata-value.service';
 
 @Pipe({
   name: 'metadataJson',
   standalone: false
 })
 export class MetadataJsonPipe implements PipeTransform {
+
+  constructor(private metadataValueService: MetadataValueService) {}
 
   transform(value: any): string {
     return this.formatObject(value, 0);
@@ -17,7 +20,8 @@ export class MetadataJsonPipe implements PipeTransform {
 
     // Case: object with { value, unit }
     if ('value' in obj && 'unit' in obj) {
-      const display = `${obj.value} ${obj.unit}`.trim();
+      const value = this.metadataValueService.valueFormat(obj.value);
+      const display = `${value} ${obj.unit}`.trim();
       return this.indent(indent) + display;
     }
 
@@ -28,7 +32,8 @@ export class MetadataJsonPipe implements PipeTransform {
 
       if (this.isValueUnitObject(val)) {
         // Print inline: key: value unit
-        result += `${this.indent(indent)}${key}: ${val.value} ${val.unit}\n`;
+        const value = this.metadataValueService.valueFormat(val.value);
+        result += `${this.indent(indent)}${key}: ${value} ${val.unit}\n`;
       } else if (typeof val === 'object' && val !== null) {
         // Nested block
         result += `${this.indent(indent)}${key}:\n`;

@@ -14,7 +14,7 @@ import { NewDynamicPipe } from "./newDynamicPipe.pipe";
 import { DescriptionTitlePipe } from "./description-title.pipe";
 import { FormatNumberPipe } from "./format-number.pipe";
 import { ComponentTranslatePipe } from "./component-translate.pipe";
-import { MetadataJsonPipe } from "./meatadata-json.pipe";
+import { MetadataJsonPipe } from "./metadata-json.pipe";
 @NgModule({
   declarations: [
     FileSizePipe,
