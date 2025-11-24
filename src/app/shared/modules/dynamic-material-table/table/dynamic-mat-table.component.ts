@@ -1012,6 +1012,26 @@ export class DynamicMatTableComponent<T extends TableRow>
     });
   }
 
+  getPreStyle(value: any) {
+    const defaultStyle = { fontSize: '15px', lineHeight: '16px' };
+    if (!value) {
+      return defaultStyle;
+    }
+
+    const len = JSON.stringify(value).length;
+
+    if (len > 2500) {
+      return { fontSize: '10px', lineHeight: '11px' };
+    }
+    if (len > 2000) {
+      return { fontSize: '11px', lineHeight: '12px' };
+    }
+
+    return defaultStyle;
+  }
+
+
+
   getColumnValue(data: Record<string, unknown>, column: TableField<any>) {
     const fieldName = column.name.trim();
 

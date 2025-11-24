@@ -410,6 +410,7 @@ export class DatasetTableComponent implements OnInit, OnDestroy {
           column.name === "metadata" ||
           column.name === "scientificMetadata"
         ) {
+          convertedColumn.hoverContent = true;
           convertedColumn.customRender = (column, row) => {
             return this.jsonHeadPipe.transform(row["scientificMetadata"]);
           };

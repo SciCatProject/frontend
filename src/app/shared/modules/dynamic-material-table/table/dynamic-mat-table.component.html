@@ -234,7 +234,12 @@
                   >{{ column.header || column.name | translate: localization }}
                 </mat-card-title>
                 <div mat-card-content class="hover-card-content">
-                  {{ getColumnValue(row, column) || "No content" }}
+                  <ng-container *ngIf="column.name === 'scientificMetadata'; else defaultContent">
+                    <pre [ngStyle]="getPreStyle(getColumnValue(row, column))">{{ getColumnValue(row, column) | metadataJson }}</pre>
+                  </ng-container>
+                  <ng-template #defaultContent>
+                    {{ getColumnValue(row, column) || "No content" }}
+                  </ng-template>
                 </div>
               </mat-card>
             </ng-template>
