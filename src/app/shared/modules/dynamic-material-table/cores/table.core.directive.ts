@@ -73,7 +73,7 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() localization: string;
   @Input() globalTextSearch = "";
   @Input() globalTextSearchPlaceholder =
-    "Proposal id, Title, Abstract, Name...";
+    "Search...";
   @Input() selectionIds = [];
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onTableEvent: EventEmitter<ITableEvent> = new EventEmitter();
