@@ -6,17 +6,6 @@
       </mat-card-header>
       <mat-card-content>
         <span [innerHTML]="aboutText | linky"></span>
-        <br /><br />
-        <ul>
-          <li>
-            <a
-              *ngIf="facility === 'PSI'"
-              href="{{ SciCatGitHub }}"
-              target="blank"
-              >SciCat Github Project.</a
-            >
-          </li>
-        </ul>
       </mat-card-content>
     </mat-card>
 
