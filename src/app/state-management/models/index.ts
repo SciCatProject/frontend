@@ -145,6 +145,8 @@ export interface ScientificCondition {
   rhs: string | number | number[];
   unit: string;
   unitsOptions?: string[];
+  type?: string;
+  human_name?: string;
 }
 
 export interface GenericFilters {

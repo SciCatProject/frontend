@@ -24,16 +24,75 @@
       >
         <ng-container matColumnDef="field">
           <td
+            class="cell-content"
             mat-cell
             *matCellDef="let key"
-            (click)="parametersForm.get('lhs').setValue(key); getUnits(key)"
+            (click)="
+              parametersForm.get('lhs').setValue(getHumanName(key) || key);
+              getUnits(key)
+            "
             style="cursor: pointer"
           >
-            {{ key }}
+            <div>
+              <mat-icon
+                class="cell-icon"
+                fontIcon="description"
+                #hoverOriginSpan="cdkOverlayOrigin"
+                cdkOverlayOrigin
+                (mouseenter)="hoverKey = key"
+                (mouseleave)="hoverKey = null"
+              ></mat-icon>
+            </div>
+            <div class="parameter-option">
+              <div class="human-name">
+                <span *ngIf="getHumanName(key); else metadataKey">
+                  {{ getHumanName(key) }}
+                </span>
+                <ng-template #metadataKey>
+                  <span style="font-style: italic">{{ key }}</span>
+                </ng-template>
+
+                <!-- Hover overlay -->
+                <ng-template
+                  cdkConnectedOverlay
+                  [cdkConnectedOverlayOrigin]="hoverOriginSpan"
+                  [cdkConnectedOverlayOpen]="hoverKey === key"
+                  [cdkConnectedOverlayPositions]="overlayPositions"
+                >
+                  <mat-card class="hover-card">
+                    <mat-card-title class="hover-card-title">
+                      Name Details
+                    </mat-card-title>
+                    <div mat-card-content class="hover-card-content">
+                      <ng-container *ngIf="getHumanName(key); else rawNameOnly">
+                        <strong>Human readable name: </strong>
+                        {{ getHumanName(key) }}
+                        <br />
+                        <strong>Metadata name:</strong> {{ key }}
+                      </ng-container>
+                    </div>
+                    <ng-template #rawNameOnly>
+                      <strong>Metadata name:</strong>
+                      <span style="font-style: italic">{{ key }}</span>
+                    </ng-template>
+                  </mat-card>
+                </ng-template>
+              </div>
+              <div class="raw-name" *ngIf="getHumanName(key)">
+                {{ key }}
+              </div>
+            </div>
           </td>
         </ng-container>
-        <tr mat-row *matRowDef="let row; columns: ['field']"
-        [class.selected_row]="row === parametersForm.get('lhs').value"></tr>
+        <tr
+          class="row-content"
+          mat-row
+          *matRowDef="let row; columns: ['field']"
+          [class.selected_row]="
+            (getHumanName(row) || row) === parametersForm.get('lhs').value ||
+            row === parametersForm.get('lhs').value
+          "
+        ></tr>
       </table>
     </div>
   </mat-dialog-content>

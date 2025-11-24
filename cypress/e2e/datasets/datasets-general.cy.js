@@ -108,6 +108,14 @@ describe("Datasets general", () => {
         dataFileSize: "small",
         scientificMetadata: {
           extra_entry_end_time: { type: "number", value: 2, unit: "" },
+          temperature: {
+            type: "number",
+            value: 25,
+            unit: "celsius",
+            human_name: "Temperature Human Name",
+          },
+          test_number: { type: "number", value: 5, unit: "" },
+          test_string: { type: "string", value: "hello", unit: "" },
         },
         isPublished: true,
       });
@@ -157,7 +165,7 @@ describe("Datasets general", () => {
       cy.get("mat-dialog-container").find('button[type="submit"]').click();
 
       cy.get(".snackbar-warning")
-        .should("contain", "Field already used")
+        .should("contain", "Please select a valid field from the list")
         .contains("Close")
         .click();
     });
@@ -212,6 +220,150 @@ describe("Datasets general", () => {
       cy.get('[data-cy="scientific-condition-filter-list"]')
         .find(".condition-panel")
         .should("have.length", 0);
+    });
+    // skipping for now but will be relevant when we can fetch human-readable names from metadataKeys endpoint in the future
+    it.skip("should search by human name", () => {
+      cy.visit("/datasets");
+
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('[data-cy="add-condition-button"]').click();
+      });
+
+      cy.get('input[name="lhs"]').type("Temperature Human Name");
+
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      cy.get(".condition-panel").first().click();
+
+      cy.get('[data-cy="remove-condition-button"]').click();
+    });
+
+    it("should search by metadata name", () => {
+      cy.visit("/datasets");
+
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('[data-cy="add-condition-button"]').click();
+      });
+
+      cy.get('input[name="lhs"]').type("temperature");
+
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      cy.get(".condition-panel").first().click();
+
+      cy.get('[data-cy="remove-condition-button"]').click();
+    });
+
+    it("should not be able to add invalid field", () => {
+      cy.visit("/datasets");
+
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('[data-cy="add-condition-button"]').click();
+      });
+
+      cy.get('input[name="lhs"]').type("invalid_field_name");
+
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      cy.get(".snackbar-warning")
+        .should("contain", "Please select a valid field from the list")
+        .contains("Close")
+        .click();
+    });
+
+    it("should display equal sign in condition preview", () => {
+      cy.visit("/datasets");
+
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('[data-cy="add-condition-button"]').click();
+      });
+
+      cy.get('input[name="lhs"]').type("test_number");
+
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      cy.get(".condition-panel").first().click();
+
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("mat-select").click();
+        });
+
+      cy.get("mat-option").contains("is equal to").click();
+
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("input[matInput]").eq(0).clear().type("5");
+        });
+
+      cy.get(".condition-panel")
+        .first()
+        .find("mat-panel-title")
+        .should("contain", "=")
+        .and("contain", "5");
+
+      cy.get('[data-cy="remove-condition-button"]').click();
+    });
+
+    it("should display range values correctly when switching from equal to", () => {
+      cy.visit("/datasets");
+
+      cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
+        cy.get('[data-cy="add-condition-button"]').click();
+      });
+
+      cy.get('input[name="lhs"]').type("test_number");
+
+      cy.get("mat-dialog-container").find('button[type="submit"]').click();
+
+      cy.get(".condition-panel").first().click();
+
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("mat-select").click();
+        });
+
+      cy.get("mat-option").contains("is equal to").click();
+
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("input[matInput]").eq(0).clear().type("abcdefgh");
+        });
+
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("mat-select").click();
+        });
+
+      cy.get("mat-option").contains("is in range").click();
+
+      cy.get(".condition-panel")
+        .first()
+        .within(() => {
+          cy.get("input[matInput]").eq(0).clear().type("6");
+          cy.get("input[matInput]").eq(1).clear().type("10");
+        });
+
+      // Verify that condition does not show all dataset when wrong range is given
+
+      cy.get(".condition-panel")
+        .first()
+        .find("mat-panel-title")
+        .should("contain", "6")
+        .and("contain", "<->")
+        .and("contain", "10");
+
+      cy.get('[data-cy="filter-search-button"]').click();
+
+      cy.get(".dataset-table mat-table").should("exist");
+
+        
+       cy.get('[data-cy="remove-condition-button"]').click();
     });
   });
 
@@ -433,7 +585,6 @@ describe("Datasets general", () => {
       cy.visit("/datasets");
     });
     it("should be able to add condition with scientific notation value", () => {
-
       cy.get('[data-cy="scientific-condition-filter-list"]').within(() => {
         cy.get('[data-cy="add-condition-button"]').click();
       });
@@ -464,5 +615,5 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="remove-condition-button"]').click();
     });
-  })
+  });
 });

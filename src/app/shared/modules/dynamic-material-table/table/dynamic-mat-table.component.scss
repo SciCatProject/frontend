@@ -328,16 +328,37 @@ cdk-virtual-scroll-viewport {
   color: var(--theme-warn-default) !important;
 }
 
+.cell-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px; /* space between icon and text */
+  max-width: 100%;
+}
+
+.cell-icon {
+  color: var(--theme-primary-default);
+  flex-shrink: 0; /* prevent icon from being hidden */
+  font-size: 20px;
+}
+
+.cell-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .hover-card {
   min-width: 300px;
   max-width: 620px;
 }
+
 .hover-icon {
   color: var(--theme-primary-default);
 }
 
 .hover-card-title {
-  padding: 6px 16px;
+  padding: 0 16px;
+  font-size: 14px;
   border-radius: 4px 4px 0 0;
   color: white;
   background: var(--theme-header-1-lighter);
@@ -348,6 +369,8 @@ cdk-virtual-scroll-viewport {
   background: white;
   color: var(--theme-header-1-lighter-contrast);
   border-radius: 0 0 4px 4px;
+  white-space: pre-line;
+  word-wrap: break-word;
 }
 
 /* zebra stripes */

@@ -23,8 +23,6 @@ import { startWith, map } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { ScientificMetadata } from "../scientific-metadata.module";
 import { AppConfigService } from "app-config.service";
-import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
-import { TitleCasePipe } from "@angular/common";
 import { DateTime } from "luxon";
 
 export enum MetadataTypes {
@@ -60,8 +58,6 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     private formBuilder: FormBuilder,
     private unitsService: UnitsService,
     private appConfigService: AppConfigService,
-    private replaceUnderscore: ReplaceUnderscorePipe,
-    private titleCase: TitleCasePipe,
   ) {}
 
   get formControlFields() {
@@ -299,13 +295,6 @@ export class MetadataEditComponent implements OnInit, OnChanges {
     this.items.removeAt(index);
   }
 
-  getHumanNameFieldValue(metadata: ScientificMetadata, key: string): string {
-    return (
-      metadata.human_name ||
-      this.titleCase.transform(this.replaceUnderscore.transform(key))
-    );
-  }
-
   addCurrentMetadata() {
     if (this.metadata) {
       Object.keys(this.metadata).forEach((key, index) => {
@@ -324,7 +313,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
               fieldType: this.formControlFields["fieldType"](quantityType),
               fieldName: this.formControlFields["fieldName"](key),
               fieldHumanName: this.formControlFields["fieldHumanName"](
-                this.getHumanNameFieldValue(this.metadata[key], key),
+                this.metadata[key].human_name,
               ),
               fieldValue: this.formControlFields["fieldValue"](
                 this.metadata[key]["value"],
@@ -343,7 +332,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
               ),
               fieldName: this.formControlFields["fieldName"](key),
               fieldHumanName: this.formControlFields["fieldHumanName"](
-                this.getHumanNameFieldValue(this.metadata[key], key),
+                this.metadata[key].human_name,
               ),
               fieldValue: this.formControlFields["fieldValue"](
                 Number(this.metadata[key]["value"]),
@@ -362,7 +351,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
               fieldType: this.formControlFields["fieldType"](rangeFieldType),
               fieldName: this.formControlFields["fieldName"](key),
               fieldHumanName: this.formControlFields["fieldHumanName"](
-                this.getHumanNameFieldValue(this.metadata[key], key),
+                this.metadata[key].human_name,
               ),
               fieldValue: this.formControlFields["fieldValue"](
                 this.metadata[key]["value"],
@@ -385,7 +374,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
               fieldType: fieldType,
               fieldName: this.formControlFields["fieldName"](key),
               fieldHumanName: this.formControlFields["fieldHumanName"](
-                this.getHumanNameFieldValue(this.metadata[key], key),
+                this.metadata[key].human_name,
               ),
               fieldValue: this.formControlFields["fieldValue"](
                 this.metadata[key]["value"],
@@ -409,7 +398,7 @@ export class MetadataEditComponent implements OnInit, OnChanges {
             fieldType: this.formControlFields["fieldType"](metadataType),
             fieldName: this.formControlFields["fieldName"](key),
             fieldHumanName: this.formControlFields["fieldHumanName"](
-              this.getHumanNameFieldValue(this.metadata[key], key),
+              this.metadata[key].human_name,
             ),
             fieldValue: this.formControlFields["fieldValue"](metadataValue),
             fieldUnit: this.formControlFields["fieldUnit"](""),

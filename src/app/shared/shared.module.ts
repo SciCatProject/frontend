@@ -85,6 +85,7 @@ import { TranslateModule } from "@ngx-translate/core";
     JsonFormsAngularMaterialModule,
     JsonFormsCustomRenderersModule,
     SharedFilterModule,
+    ConfigurableActionsModule,
   ],
 })
 export class SharedScicatFrontendModule {}
