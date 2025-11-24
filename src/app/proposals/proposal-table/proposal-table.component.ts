@@ -95,6 +95,8 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
 
   datasets: OutputDatasetObsoleteDto[] = [];
 
+  @Input() sideFilterCollapsed = false;
+
   @Input()
   dataSource!: BehaviorSubject<ProposalClass[]>;
 
@@ -339,6 +341,10 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
         filterType: "text",
       }),
     );
+  }
+
+  onSideFilterCollapsedChange(collapsed: boolean) {
+    this.sideFilterCollapsed = collapsed;
   }
 
   ngOnDestroy() {

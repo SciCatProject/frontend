@@ -1,6 +1,6 @@
 <div
   class="table-header-controls"
-  [class.with-side-filter]="localization === 'proposal'"
+  [class.with-side-filter]="localization === 'proposal' && sideFilterCollapsed"
 >
   <div class="global-search-wrapper" *ngIf="showGlobalTextSearch">
     <mat-form-field>

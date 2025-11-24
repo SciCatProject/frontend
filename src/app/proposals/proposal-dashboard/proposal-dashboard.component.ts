@@ -21,6 +21,7 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
   dataSource$ = new BehaviorSubject<ProposalClass[]>([]);
   params$ = this.route.queryParams;
   defaultPageSize = 10;
+  sideFilterCollapsed = false;
 
   constructor(
     private store: Store,
@@ -53,6 +54,10 @@ export class ProposalDashboardComponent implements OnInit, OnDestroy {
         this.store.dispatch(fetchFacetCountsAction());
       }),
     );
+  }
+
+  onSideFilterCollapsedChange(collapsed: boolean) {
+    this.sideFilterCollapsed = collapsed;
   }
 
   ngOnDestroy() {
