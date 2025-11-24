@@ -1,6 +1,6 @@
 import { testData } from "../../fixtures/testData";
 
-describe("Dataset datafiles", () => {
+describe("0040: Dataset datafiles", () => {
   beforeEach(() => {
     cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
       cy.intercept("GET", "**/admin/config", baseConfig).as(
@@ -17,7 +17,7 @@ describe("Dataset datafiles", () => {
     cy.removeDatasets();
   });
 
-  describe("Datafiles action test", () => {
+  describe("0010: Datafiles action test", () => {
     const actionUrl = {
       downloadSelected: "http://localhost:4200/download/selected",
       downloadAll: "http://localhost:4200/download/all",
@@ -26,7 +26,7 @@ describe("Dataset datafiles", () => {
       notebookJsonSelected: "/notebook/selected/json",
       notebookJsonAll: "/notebook/all/json",
     };
-    it("Should be able to download or notebook (form) with selected or all files", () => {
+    it("0010: Should be able to download or notebook (form) with selected or all files", () => {
       // Intercept the expected network request
       // cy.intercept('POST', 'https://zip.scicatproject.org/download/all').as('DownloadFormAll');
       // cy.intercept('POST', 'https://zip.scicatproject.org/download/selected').as('DownloadFormSelected');
@@ -83,29 +83,24 @@ describe("Dataset datafiles", () => {
       cy.get("form").eq(3).should("have.attr", "action", actionUrl.notebookFormAll);
     });
 
-    it("Should be able to download the notebook from sciwyrm with selected or all files", () => {
-      // // Intercept the expected network request
-      // cy.intercept('POST', actionUrl.notebookJsonAll, {
-      //   statusCode: 200,
-      //   body: { name: "Notebook Json All" }
-      // }).as('DownloadNotebookAll');
-      // cy.intercept('POST', actionUrl.notebookJsonSelected, {
-      //   statusCode: 200,
-      //   body: { name: "Notebook Json Select" }
-      // }).as('DownloadNotebookSelected');
+    it("0020: Should be able to download the notebook from sciwyrm with selected files", () => {
+      cy.intercept('POST', actionUrl.notebookJsonSelected, {
+        statusCode: 200,
+        body: { name: "Notebook Json Select" }
+      }).as('DownloadNotebookSelected');
 
-      cy.window().then((win) => {
-        cy.stub(win.document, 'createElement').callsFake((tag) => {
-          if (tag === 'a') {
-            // Return a spy-able anchor element
-            const a = document.createElement('a');
-            cy.spy(a, 'click').as('aClick');
-            return a;
-          }
-          return document.createElement(tag);
-        });
-        cy.stub(win.URL, 'createObjectURL').callsFake(() => 'blob:fake-url');
-      });
+      // cy.window().then((win) => {
+      //   cy.stub(win.document, 'createElement').callsFake((tag) => {
+      //     if (tag === 'a') {
+      //       // Return a spy-able anchor element
+      //       const a = document.createElement('a');
+      //       cy.spy(a, 'click').as('aClick');
+      //       return a;
+      //     }
+      //     return document.createElement(tag);
+      //   });
+      //   cy.stub(win.URL, 'createObjectURL').callsFake(() => 'blob:fake-url');
+      // });
 
       cy.createDataset({ type: "raw", dataFileSize: "small" });
 
@@ -132,26 +127,72 @@ describe("Dataset datafiles", () => {
       //cy.intercept('POST', '/your/download/url').as('downloadRequest');
 
       // Test notebook selected
-      cy.get('button:contains("Notebook Selected (Download JSON)")').click();
+      //cy.get('button:contains("Notebook Selected (Download JSON)")').click();
       // Wait for the intercepted call and assert the response
-      // cy.wait('@DownloadNotebookSelected').then((interception) => {
-      //   expect(interception.request.headers['Content-Type']).to.eq('application/json');
-      //   expect(interception.request.body.template_id).to.eq("c975455e-ede3-11ef-94fb-138c9cd51fc0");
-      // });
+      cy.wait('@DownloadNotebookSelected').then((interception) => {
+        expect(interception.request.headers['Content-Type']).to.eq('application/json');
+        expect(interception.request.body.template_id).to.eq("c975455e-ede3-11ef-94fb-138c9cd51fc0");
+      });
       // Assert anchor was created and clicked
-      cy.get('@aClick').should('have.been.called');
+      //cy.get('@aClick').should('have.been.called');
 
-      // Test notebook all
-      cy.get('button:contains("Notebook All (Download JSON)")').click();
-      // cy.wait('@DownloadNotebookAll').then((interception) => {
-      //   expect(interception.request.headers['Content-Type']).to.eq('application/json');
-      //   expect(interception.request.body.template_id).to.eq("c975455e-ede3-11ef-94fb-138c9cd51fc0");
-      // });
-      // Assert anchor was created and clicked
-      cy.get('@aClick').should('have.been.called');
     });
 
-    it("Should not be able to download selected/all files that is exceeding size limit", () => {
+    it("0030: Should be able to download the notebook from sciwyrm with all files", () => {
+      // Intercept the expected network request
+      cy.intercept('POST', actionUrl.notebookJsonSelected, {
+        statusCode: 200,
+        body: { name: "Notebook Json Select" }
+      }).as('DownloadNotebookSelected');
+
+      // cy.window().then((win) => {
+      //   cy.stub(win.document, 'createElement').callsFake((tag) => {
+      //     if (tag === 'a') {
+      //       // Return a spy-able anchor element
+      //       const a = document.createElement('a');
+      //       cy.spy(a, 'click').as('aClick');
+      //       return a;
+      //     }
+      //     return document.createElement(tag);
+      //   });
+      //   cy.stub(win.URL, 'createObjectURL').callsFake(() => 'blob:fake-url');
+      // });
+
+      cy.createDataset({ type: "raw", dataFileSize: "small" });
+
+      cy.visit("/datasets");
+
+      cy.get(".dataset-table mat-table mat-header-row").should("exist");
+
+      cy.finishedLoading();
+
+      cy.get('[data-cy="text-search"]').clear().type("Cypress");
+      cy.get('[data-cy="search-button"]').click();
+
+      cy.isLoading();
+
+      cy.get("mat-row").contains("Cypress Dataset").first().click();
+
+      cy.wait("@fetch");
+
+      cy.get(".mat-mdc-tab-link").contains("Datafiles").click();
+
+      cy.get(".mdc-checkbox__native-control").eq(1).check();
+
+
+      //cy.intercept('POST', '/your/download/url').as('downloadRequest');
+
+      // Test notebook all
+      //cy.get('button:contains("Notebook All (Download JSON)")').click();
+      cy.wait('@DownloadNotebookAll').then((interception) => {
+        expect(interception.request.headers['Content-Type']).to.eq('application/json');
+        expect(interception.request.body.template_id).to.eq("c975455e-ede3-11ef-94fb-138c9cd51fc0");
+      });
+      // Assert anchor was created and clicked
+      //cy.get('@aClick').should('have.been.called');
+    });
+
+    it("0040: Should not be able to download selected/all files that is exceeding size limit", () => {
       cy.createDataset({ type: "raw", dataFileSize: "large" });
 
       cy.visit("/datasets");
