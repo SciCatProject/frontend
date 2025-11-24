@@ -151,7 +151,7 @@
     {
       "id": "fa3ce6ee-482d-11ef-95e9-ff2c80dd50bd",
       "order": 4,
-      "label": "Notebook Selected",
+      "label": "Notebook Selected (Form)",
       "files": "selected",
       "icon": "/assets/icons/jupyter_logo.png",
       "type": "form",
@@ -160,7 +160,7 @@
       "variables" : {
         "pid": "#Dataset0Pid",
         "files": "#Dataset0SelectedFilesPath",
-        "selected": "#Dataset0SelectedFiles",
+        "selected": "#Dataset0SelectedFilesCount",
         "totalSize": "#Dataset0SelectedFilesTotalSize",
         "folder": "#Dataset0SourceFolder"
       },
@@ -171,7 +171,7 @@
         "directory[]" : "@folder",
         "files[]": "@files"
       },
-      "enabled": "@selected",
+      "enabled": "#Length(@files) > 0",
       "authorization": ["#datasetAccess", "#datasetPublic"]
     },
     {
@@ -198,11 +198,11 @@
       "description": "This action let users download jupyter notebook properly populated with dataset pid and selected files using an instance of sciwyrm",
       "order": 6,
       "label": "Notebook Selected (Download JSON)",
-      "type": "json-to-download",
+      "type": "json-download",
       "icon": "/assets/icons/jupyter_logo.png",
       "url": "https://www.sciwyrm.info/notebook",
       "target": "_blank",
-      "enabled": "@selected > 0",
+      "enabled": "#Length(@files) > 0",
       "authorization": ["#datasetAccess", "#datasetPublic"],
       "variables" : {
         "pid": "#Dataset0Pid",
@@ -210,8 +210,8 @@
         "selected": "#Dataset0SelectedFiles",
         "folder": "#Dataset0SourceFolder"
       },
-      "payload": "{\"template_id\":\"c975455e-ede3-11ef-94fb-138c9cd51fc0\",\"parameters\":{\"dataset\":\"{{ pid }}\",\"directory\":\"{{ sourceFolder }}\",\"files\": {{ files }},\"jwt\":\"{{ jwt }}\",\"scicat_url\":\"https://staging.scicat.ess.url\",\"file_server_url\":\"sftserver2.esss.dk\",\"file_server_port\":\"22\"}}",
-      "filename": "{{ uuid }}.ipynb"
+      "payload": "{\"template_id\":\"c975455e-ede3-11ef-94fb-138c9cd51fc0\",\"parameters\":{\"dataset\":\"{{ @pid }}\",\"directory\":\"{{ @folder }}\",\"files\": {{ @files[] }},\"jwt\":\"{{ #jwt }}\",\"scicat_url\":\"https://staging.scicat.ess.url\",\"file_server_url\":\"sftserver2.esss.dk\",\"file_server_port\":\"22\"}}",
+      "filename": "{{ #uuid }}.ipynb"
     },    
     {
       "id": "9c6a11b6-a526-11f0-8795-6f025b320cc3",
@@ -219,11 +219,11 @@
       "order": 7,
       "label": "Publish",
       "type": "xhr",
-      "mat_icon": "action",
+      "mat_icon": "lock_open",
       "method" : "PATCH",
       "url": "http://localhost:3000/dataset/{{ @pid }}/",
       "target": "_blank",
-      "enabled": "#datasetOwner && @isPublished",
+      "enabled": "(#datasetOwner || #userIsAdmin) && !@isPublished",
       "authorization": "#datasetOwner && !@isPublished",
       "variables" : {
         "pid": "@Dataset0Pid",
@@ -241,11 +241,11 @@
       "order": 8,
       "label": "Unpublish",
       "type": "xhr",
-      "mat_icon": "action",
+      "mat_icon": "lock",
       "method" : "PATCH",
       "url": "http://localhost:3000/dataset/{{ @pid }}/",
       "target": "_blank",
-      "enabled": "#datasetOwner && !@isPublished",
+      "enabled": "(#datasetOwner || #userIsAdmin) && @isPublished",
       "authorization": "#datasetOwner && @isPublished",
       "variables" : {
         "pid": "#Dataset0Pid",
@@ -263,7 +263,7 @@
       "order": 9,
       "label": "ESS",
       "type": "link",
-      "mat_icon": "action",
+      "icon": "/assets/icons/button_ess.png",
       "url": "https://ess.eu",
       "target": "_blank"
     }

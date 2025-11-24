@@ -23,8 +23,8 @@ describe("0040: Dataset datafiles", () => {
       downloadAll: "http://localhost:4200/download/all",
       notebookFormSelected: "http://localhost:4200/notebook/selected/form",
       notebookFormAll: "http://localhost:4200/notebook/all/form",
-      notebookJsonSelected: "/notebook/selected/json",
-      notebookJsonAll: "/notebook/all/json",
+      notebookJsonSelected: "http://localhost:5000/notebook/selected/json",
+      notebookJsonAll: "http://localhost:5000/notebook/all/json",
     };
     it("0010: Should be able to download or notebook (form) with selected or all files", () => {
       // Intercept the expected network request
@@ -123,6 +123,8 @@ describe("0040: Dataset datafiles", () => {
 
       cy.get(".mdc-checkbox__native-control").eq(1).check();
 
+      cy.get('button:contains("Notebook Selected (Download JSON)")').click();
+
 
       //cy.intercept('POST', '/your/download/url').as('downloadRequest');
 
@@ -130,7 +132,8 @@ describe("0040: Dataset datafiles", () => {
       //cy.get('button:contains("Notebook Selected (Download JSON)")').click();
       // Wait for the intercepted call and assert the response
       cy.wait('@DownloadNotebookSelected').then((interception) => {
-        expect(interception.request.headers['Content-Type']).to.eq('application/json');
+        cy.log(JSON.stringify(interception.request.headers));
+        expect(interception.request.headers['content-type']).to.include('application/json');
         expect(interception.request.body.template_id).to.eq("c975455e-ede3-11ef-94fb-138c9cd51fc0");
       });
       // Assert anchor was created and clicked
@@ -140,10 +143,10 @@ describe("0040: Dataset datafiles", () => {
 
     it("0030: Should be able to download the notebook from sciwyrm with all files", () => {
       // Intercept the expected network request
-      cy.intercept('POST', actionUrl.notebookJsonSelected, {
+      cy.intercept('POST', actionUrl.notebookJsonAll, {
         statusCode: 200,
-        body: { name: "Notebook Json Select" }
-      }).as('DownloadNotebookSelected');
+        body: { name: "Notebook Json All" }
+      }).as('DownloadNotebookAll');
 
       // cy.window().then((win) => {
       //   cy.stub(win.document, 'createElement').callsFake((tag) => {
@@ -179,13 +182,15 @@ describe("0040: Dataset datafiles", () => {
 
       cy.get(".mdc-checkbox__native-control").eq(1).check();
 
+      cy.get('button:contains("Notebook All (Download JSON)")').click();
 
       //cy.intercept('POST', '/your/download/url').as('downloadRequest');
 
       // Test notebook all
       //cy.get('button:contains("Notebook All (Download JSON)")').click();
       cy.wait('@DownloadNotebookAll').then((interception) => {
-        expect(interception.request.headers['Content-Type']).to.eq('application/json');
+        cy.log(JSON.stringify(interception.request.headers));
+        expect(interception.request.headers['content-type']).to.include('application/json');
         expect(interception.request.body.template_id).to.eq("c975455e-ede3-11ef-94fb-138c9cd51fc0");
       });
       // Assert anchor was created and clicked

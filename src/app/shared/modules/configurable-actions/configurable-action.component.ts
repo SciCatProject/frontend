@@ -172,7 +172,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         .replace(
           // eslint-disable-next-line no-useless-escape
           /\#Length\(\s*\@(\w+)\s*\)/g,
-          (_, variableName) => `variables.${variableName}.length`,
+          (_, variableName) => `(variables.${variableName}?.length ?? 0)`,
         )
         // Handle #MaxDownloadableSize({{ totalSize }})
         .replace(
@@ -186,6 +186,8 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         .replace(/\#datasetOwner/g, (_) => `datasetOwner`)
         // eslint-disable-next-line no-useless-escape
         .replace(/\#userIsAdmin/g, (_) => `isAdmin`)
+        // eslint-disable-next-line no-useless-escape
+        .replace(/\#uuid/g, (_) => v4())
         // eslint-disable-next-line no-useless-escape
         .replace(/\@(\w+)/g, (_, variableName) => `variables.${variableName}`)
     );
@@ -394,22 +396,30 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   type_json_to_download() {
+    console.log("JSON to Download");
     const filename = this.actionConfig.filename.replace(
-      /{{\s*(\w+)\s*}}/g,
+      /\{\{\s*([@#]\w+)\s*\}\}/g,
       (_, variableName) => this.get_value_from_definition(variableName),
     );
+    console.log("Filename",filename);
 
+    console.log("URL",this.actionConfig.url);
+    const method = this.actionConfig.method || "POST";
+    console.log("method",method);
+    const payload = this.get_payload();
+    console.log("Payload",payload);
     fetch(this.actionConfig.url, {
-      method: this.actionConfig.method || "POST",
+      method: method,
       headers: {
         ...{
           "Content-Type": "application/json",
         },
         ...(this.actionConfig.headers || {}),
       },
-      body: this.get_payload(),
+      body: payload,
     })
       .then((response) => {
+        console.log("Response",response);
         if (response.ok) {
           return response.blob();
         } else {
