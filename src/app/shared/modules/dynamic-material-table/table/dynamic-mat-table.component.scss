@@ -327,6 +327,7 @@ cdk-virtual-scroll-viewport {
   align-items: center;
   gap: 1rem;
   margin: 1rem 0;
+  flex-wrap: nowrap;
 
   &.with-side-filter {
     margin-left: 3rem;
@@ -335,7 +336,8 @@ cdk-virtual-scroll-viewport {
   .global-search-wrapper {
     flex: 1 1 auto;
     width: 100%;
-    max-width: 1000px;
+    max-width: 500px;
+    //min-width: 0;
 
     mat-form-field {
       width: 100%;
@@ -348,13 +350,11 @@ cdk-virtual-scroll-viewport {
       padding: 0 8px;
 
       &:hover {
-        box-shadow: 0 1px 6px var(--theme-hover-darker);
         border-color: var(--theme-primary-default);
       }
     }
 
     ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--focused {
-      box-shadow: 0 1px 6px var(--theme-hover-darker);
       border-color: var(--theme-primary-default);
     }
 
@@ -377,5 +377,6 @@ cdk-virtual-scroll-viewport {
   mat-paginator {
     flex: 1 1 auto;
     white-space: nowrap;
+    min-width: fit-content;
   }
 }
