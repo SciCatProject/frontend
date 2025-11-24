@@ -89,6 +89,7 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { MatBadgeModule } from "@angular/material/badge";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 import { ConfigurableActionsModule } from "shared/modules/configurable-actions/configurable-actions.module";
+import { OverlayModule } from "@angular/cdk/overlay";
 
 @NgModule({
   imports: [
@@ -156,6 +157,8 @@ import { ConfigurableActionsModule } from "shared/modules/configurable-actions/c
     MatExpansionModule,
     MatBadgeModule,
     ConfigurableActionsModule,
+    OverlayModule,
+    IngestorModule,
   ],
   declarations: [
     BatchViewComponent,
