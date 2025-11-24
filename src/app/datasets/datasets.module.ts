@@ -80,10 +80,13 @@ import { DatasetsFilterSettingsComponent } from "./datasets-filter/settings/data
 import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
 import { userReducer } from "state-management/reducers/user.reducer";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { JsonFormsModule } from "@jsonforms/angular";
+import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
+import { IngestorModule } from "../ingestor/ingestor.module";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatBadgeModule } from "@angular/material/badge";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
@@ -96,6 +99,8 @@ import { OverlayModule } from "@angular/cdk/overlay";
     FlexLayoutModule,
     FormsModule,
     LinkyModule,
+    JsonFormsModule,
+    JsonFormsAngularMaterialModule,
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,
@@ -149,9 +154,11 @@ import { OverlayModule } from "@angular/cdk/overlay";
     CdkDrag,
     CdkDragHandle,
     // FiltersModule,
+    IngestorModule,
     MatExpansionModule,
     MatBadgeModule,
     OverlayModule,
+    IngestorModule,
   ],
   declarations: [
     BatchViewComponent,

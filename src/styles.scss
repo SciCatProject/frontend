@@ -31,6 +31,7 @@
 @use "./app/shared/modules/shared-table/shared-table-theme" as shared-table;
 @use "./app/shared/modules/table/table-theme" as table;
 @use "./app/users/user-settings/user-settings-theme" as user-settings;
+@use "./app/ingestor/ingestor-theme" as ingestor;
 
 /* You can add global styles to this file, and also import other style files */
 @use "assets/styles/titillium-web.scss";
@@ -250,6 +251,7 @@ $theme: map.merge(
 @include shared-table.theme($theme);
 @include table.theme($theme);
 @include user-settings.theme($theme);
+@include ingestor.theme($theme);
 @include mat.button-density(0);
 @include mat.icon-button-density(0);
 

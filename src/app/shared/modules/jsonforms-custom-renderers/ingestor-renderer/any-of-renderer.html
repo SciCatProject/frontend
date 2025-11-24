@@ -1,0 +1,37 @@
+<mat-card class="anyof-group">
+  <mat-card-title
+    >{{ anyOfTitle }}
+    <span class="spacer"></span>
+    <mat-checkbox
+    *ngIf="options.includes('null')"
+    [(ngModel)]="notNullOptionSelected"
+    (change)="onEnableCheckboxChange($event)"
+    >
+    Enabled
+    </mat-checkbox>
+  </mat-card-title
+    >
+  <mat-card-content *ngIf="notNullOptionSelected">
+    <mat-tab-group *ngIf="tabAmount > 1">
+      animationDuration="0ms" [selectedIndex]="selectedTabIndex" >
+      <mat-tab *ngFor="let option of filteredOptions" label="{{ option }}">
+        <div class="mat-tab-content-renderer" *ngIf="option !== 'null'">
+          <jsonforms-outlet
+          [uischema]="getUISchema(option)"
+          [schema]="getTabSchema(option)"
+          [path]="propsPath"
+          >
+          </jsonforms-outlet>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+    <div *ngIf="tabAmount === 1">
+      <jsonforms-outlet
+      [uischema]="getUISchema(options[0])"
+      [schema]="getTabSchema(options[0])"
+      [path]="propsPath"
+      >
+      </jsonforms-outlet>
+    </div>
+  </mat-card-content>
+</mat-card>

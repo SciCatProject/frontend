@@ -1,0 +1,98 @@
+<mat-card class="dynamic-object-layout">
+  <mat-card-title class="array-layout-toolbar">
+    <h2 class="mat-h2 array-layout-title">{{ label || 'Key-Value Pairs' }}</h2>
+    <span class="spacer"></span>
+    <mat-icon
+      *ngIf="error"
+      color="warn"
+      matBadgeColor="warn"
+      [matTooltip]="error"
+      matTooltipClass="error-message-tooltip"
+    >
+      error_outline
+    </mat-icon>
+  </mat-card-title>
+
+  <mat-card-content *ngIf="keys.length === 0">
+    <p>No properties defined. Add a new property below.</p>
+  </mat-card-content>
+
+  <mat-card-content *ngFor="let key of keys; trackBy: trackByKey">
+    <mat-card class="array-item" appearance="outlined">
+      <mat-card-content>
+        <div class="key-value-row">
+          <mat-form-field class="key-field">
+            <mat-label>Key</mat-label>
+            <input
+              matInput
+              [value]="key"
+              (input)="onKeyChange(key, $event)"
+              [disabled]="!isEnabled()"
+            />
+          </mat-form-field>
+
+          <mat-form-field class="value-field">
+            <mat-label>Value</mat-label>
+            <input
+              matInput
+              [value]="data[key]"
+              (input)="onValueChange(key, $event)"
+              [disabled]="!isEnabled()"
+            />
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+      <mat-card-actions *ngIf="isEnabled()">
+        <button
+          mat-button
+          color="warn"
+          (click)="removeProperty(key)"
+          aria-label="Remove property"
+          matTooltip="Remove this property"
+          matTooltipPosition="right"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-card-content>
+
+  <mat-card-content class="add-property-section">
+    <mat-card class="add-property-card" appearance="outlined">
+      <mat-card-content>
+        <div class="key-value-row">
+          <mat-form-field class="key-field">
+            <mat-label>New Key</mat-label>
+            <input
+              matInput
+              [(ngModel)]="newKey"
+              placeholder="Enter property name"
+              [disabled]="!isEnabled()"
+            />
+          </mat-form-field>
+
+          <mat-form-field class="value-field">
+            <mat-label>New Value</mat-label>
+            <input
+              matInput
+              [(ngModel)]="newValue"
+              placeholder="Enter value"
+              [disabled]="!isEnabled()"
+            />
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button
+          mat-button
+          [disabled]="!isEnabled() || !newKey"
+          (click)="addProperty()"
+          aria-label="Add new property"
+          matTooltip="Add property"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-card-content>
+</mat-card>

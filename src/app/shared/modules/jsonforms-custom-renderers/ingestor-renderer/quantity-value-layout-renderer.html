@@ -1,0 +1,15 @@
+<div
+  [ngStyle]="{ display: hidden ? 'none' : '' }"
+  class="quantity-value-box"
+  >
+  <div
+    class="quantity-value-element"
+    *ngFor="
+    let props of uischema
+    | customLayoutChildrenRenderProps: schema : path;
+    trackBy: trackElement
+    "
+    >
+    <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
+  </div>
+</div>
