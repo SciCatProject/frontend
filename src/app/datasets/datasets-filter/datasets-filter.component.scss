@@ -1,3 +1,4 @@
+@use "@angular/material" as mat;
 mat-card {
 
   .mat-mdc-form-field {
@@ -95,16 +96,61 @@ mat-card {
 .condition-title-section {
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   .condition-field-name {
     font-weight: 500;
+    font-size: 1rem;
     margin-bottom: 0.25rem;
-    word-break: break-word;
+    display: flex;
+    align-items: center;
+
+    .cell-icon {
+      color: var(--theme-primary-default);
+      flex-shrink: 0; /* prevent icon from being hidden */
+      font-size: 19px;
+      transform: translateY(4px);
+    }
+    .field-name-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      flex: 1;
+
+      .primary-name {
+        font-size: 1rem;
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .secondary-name {
+        font-size: 0.875rem;
+        font-style: italic;
+        margin-top: 2px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
   }
 
   .condition-description {
     font-size: 0.9em;
     color: rgba(0, 0, 0, 0.6);
+
+    .condition-chip {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 2px 8px;
+      background: transparent;
+      border: 1px solid var(--theme-primary-default);
+      color: var(--theme-primary-default);
+      border-radius: 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 }
 
@@ -121,10 +167,13 @@ mat-card {
   .mat-expansion-panel-header {
     height: auto !important;
     padding: 0.5rem !important;
+    align-items: flex-start !important;
 
     .mat-expansion-panel-header-title {
       white-space: normal !important;
       overflow: visible !important;
+      flex: 1;
+      min-width: 0;
     }
     .mat-expansion-panel-header-description {
       display: none !important;
@@ -132,17 +181,17 @@ mat-card {
   }
 
   .condition-details {
-    padding: 0.5rem;
+    padding: 0.25rem;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.25rem;
 
     .condition-actions-section {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding-top: 0.5rem;
-
+      margin-top: -0.5rem;
+      margin-bottom: -0.5rem;
       .condition-toggle {
         margin: 0;
       }
@@ -169,6 +218,8 @@ mat-card {
     .condition-fields {
       margin-left: -20px;
       width: calc(100% + 40px);
+
+      @include mat.form-field-density(-5);
     }
 
     .operator-symbol {
@@ -178,4 +229,26 @@ mat-card {
       vertical-align: middle;
     }
   }
+}
+
+.hover-card {
+  min-width: 300px;
+  max-width: 620px;
+}
+
+.hover-card-title {
+  padding: 0 16px;
+  font-size: 14px;
+  border-radius: 4px 4px 0 0;
+  color: white;
+  background: var(--theme-header-1-lighter);
+}
+
+.hover-card-content {
+  padding: 10px 16px;
+  background: white;
+  color: var(--theme-header-1-lighter-contrast);
+  border-radius: 0 0 4px 4px;
+  white-space: pre-line;
+  word-wrap: break-word;
 }
