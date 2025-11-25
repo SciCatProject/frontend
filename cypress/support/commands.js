@@ -90,6 +90,7 @@ Cypress.Commands.add("removePolicies", () => {
     });
   });
 });
+
 Cypress.Commands.add("finishedLoading", (type) => {
   cy.contains("Loading")
     .should("not.exist")
@@ -98,8 +99,8 @@ Cypress.Commands.add("finishedLoading", (type) => {
 });
 
 Cypress.Commands.add("isLoading", (type) => {
-  cy.intercept("GET", `${lbBaseUrl}/**`).as("apiCall");
-  cy.wait("@apiCall");
+  cy.intercept("**", (req) => {}).as("anyRequest");
+  cy.wait("@anyRequest");
 
   cy.get('[data-cy="spinner"]').should("not.exist");
 });
