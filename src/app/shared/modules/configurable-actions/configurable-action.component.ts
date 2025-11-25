@@ -396,18 +396,13 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   type_json_to_download() {
-    console.log("JSON to Download");
     const filename = this.actionConfig.filename.replace(
       /\{\{\s*([@#]\w+)\s*\}\}/g,
       (_, variableName) => this.get_value_from_definition(variableName),
     );
-    console.log("Filename",filename);
 
-    console.log("URL",this.actionConfig.url);
     const method = this.actionConfig.method || "POST";
-    console.log("method",method);
     const payload = this.get_payload();
-    console.log("Payload",payload);
     fetch(this.actionConfig.url, {
       method: method,
       headers: {
@@ -419,7 +414,6 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       body: payload,
     })
       .then((response) => {
-        console.log("Response",response);
         if (response.ok) {
           return response.blob();
         } else {
