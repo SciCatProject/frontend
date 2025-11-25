@@ -46,7 +46,7 @@ export const mockActionsConfig: ActionConfig[] = [
     },
     enabled: "#MaxDownloadableSize(@totalSize)",
     inputs: {
-      "item[]": "@pid",
+      "dataset[]": "@pid",
       "directory[]": "@folder",
       "files[]": "@files",
     },
@@ -73,7 +73,7 @@ export const mockActionsConfig: ActionConfig[] = [
     inputs: {
       auth_token: "#tokenBearer",
       jwt: "#jwt",
-      "item[]": "@pid",
+      "dataset[]": "@pid",
       "directory[]": "@folder",
       "files[]": "@files",
     },
@@ -101,7 +101,7 @@ export const mockActionsConfig: ActionConfig[] = [
     inputs: {
       auth_token: "#token",
       jwt: "#jwt",
-      "item[]": "@pid",
+      "dataset[]": "@pid",
       "directory[]": "@folder",
       "files[]": "@files",
     },
@@ -125,7 +125,7 @@ export const mockActionsConfig: ActionConfig[] = [
     inputs: {
       auth_token: "#token",
       jwt: "#jwt",
-      "item[]": "@pid",
+      "dataset[]": "@pid",
       "directory[]": "@folder",
       "files[]": "@files",
     },
