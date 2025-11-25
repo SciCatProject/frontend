@@ -98,10 +98,8 @@ Cypress.Commands.add("finishedLoading", (type) => {
 });
 
 Cypress.Commands.add("isLoading", (type) => {
-  cy.intercept(lbBaseUrl, (req) => {
-    req.on("response", (res) => res.delay(100)); // enough delay so that spinner appears
-    cy.get('[data-cy="spinner"]');
-  });
+  cy.intercept("GET", `${lbBaseUrl}/**`).as("apiCall");
+  cy.wait("@apiCall");
 
   cy.get('[data-cy="spinner"]').should("not.exist");
 });
