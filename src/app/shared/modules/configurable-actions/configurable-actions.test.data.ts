@@ -192,7 +192,7 @@ export const mockActionsConfig: ActionConfig[] = [
       pid: "@Dataset0Pid",
       isPublished: "#Dataset[0]Field[isPublished]",
     },
-    payload: "{\"isPublished\":\"true\"}",
+    payload: '{"isPublished":"true"}',
     headers: {
       "Content-Type": "application/json",
       Authorization: "#tokenBearer",
@@ -215,7 +215,7 @@ export const mockActionsConfig: ActionConfig[] = [
       pid: "#Dataset0Pid",
       isPublished: "#Dataset[0]Field[isPublished]",
     },
-    payload: "{\"isPublished\":\"false\"}",
+    payload: '{"isPublished":"false"}',
     headers: {
       "Content-Type": "application/json",
       Authorization: "#tokenBearer",
