@@ -1,7 +1,7 @@
 <div fxLayout="row" fxLayout.xs="column" *ngIf="publishedData">
   <div fxFlex="80">
     <mat-card>
-      <mat-card-header class="status-header">
+      <mat-card-header class="publisheddata-status-header">
         <div mat-card-avatar class="section-icon">
           <mat-icon> info </mat-icon>
         </div>
@@ -57,7 +57,7 @@
     </mat-card>
 
     <mat-card>
-      <mat-card-header class="general-header">
+      <mat-card-header class="publisheddata-general-header">
         <div mat-card-avatar class="section-icon">
           <mat-icon> description </mat-icon>
         </div>
@@ -90,7 +90,7 @@
     </mat-card>
 
     <mat-card *ngIf="publishedData.metadata?.creators as creators">
-      <mat-card-header class="creator-header">
+      <mat-card-header class="publisheddata-creator-header">
         <div mat-card-avatar class="section-icon">
           <mat-icon> person </mat-icon>
         </div>
@@ -139,7 +139,7 @@
         publishedData.metadata?.dataDescription
       "
     >
-      <mat-card-header class="file-header">
+      <mat-card-header class="publisheddata-file-header">
         <div mat-card-avatar class="section-icon">
           <mat-icon> folder </mat-icon>
         </div>
@@ -180,7 +180,7 @@
     </mat-card>
 
     <mat-card>
-      <mat-card-header class="related-header">
+      <mat-card-header class="publisheddata-related-header">
         <div mat-card-avatar class="section-icon">
           <mat-icon> library_books </mat-icon>
         </div>

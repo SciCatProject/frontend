@@ -10,28 +10,32 @@
   $header-3: map.get($color-config, "header-3");
   $header-4: map.get($color-config, "header-4");
   mat-card {
-    .general-header {
+    .dataset-general-header {
       background-color: mat.m2-get-color-from-palette($primary, "lighter");
     }
 
-    .creator-header {
+    .dataset-creator-header {
       background-color: mat.m2-get-color-from-palette($header-1, "lighter");
     }
 
-    .file-header {
-      background-color: mat.m2-get-color-from-palette($accent, "lighter");
-    }
-
-    .related-header {
+    .dataset-file-header {
       background-color: mat.m2-get-color-from-palette($header-2, "lighter");
     }
 
-    .derived-header {
+    .dataset-related-header {
+      background-color: mat.m2-get-color-from-palette($accent, "lighter");
+    }
+
+    .dataset-derived-header {
       background-color: mat.m2-get-color-from-palette($header-3, "lighter");
     }
 
-    .scientific-header {
+    .dataset-links-header {
       background-color: mat.m2-get-color-from-palette($header-4, "lighter");
+    }
+
+    .dataset-scientific-header {
+      background-color: mat.m2-get-color-from-palette($header-1, "lighter");
     }
   }
 }

@@ -8,6 +8,7 @@ const initialDatasetState: DatasetState = {
   datasets: [],
   selectedSets: [],
   currentSet: dataset,
+  currentSetExternalLinks: [],
   relatedDatasets: [],
   relatedDatasetsCount: 0,
   totalCount: 0,
@@ -65,6 +66,16 @@ describe("test dataset selectors", () => {
     it("should select all selected datasets", () => {
       expect(
         fromDatasetSelectors.selectSelectedDatasets.projector(
+          initialDatasetState,
+        ),
+      ).toEqual([]);
+    });
+  });
+
+  describe("selectCurrentDatasetExternalLinks", () => {
+    it("should select external links array for current dataset", () => {
+      expect(
+        fromDatasetSelectors.selectCurrentDatasetExternalLinks.projector(
           initialDatasetState,
         ),
       ).toEqual([]);

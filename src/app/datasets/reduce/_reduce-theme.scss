@@ -6,11 +6,11 @@
   $primary: map.get($color-config, "primary");
   $accent: map.get($color-config, "accent");
   mat-card {
-    .action-header {
+    .reduce-action-header {
       background-color: mat.m2-get-color-from-palette($primary, "lighter");
     }
 
-    .derived-header {
+    .reduce-derived-header {
       background-color: mat.m2-get-color-from-palette($accent, "lighter");
     }
   }
