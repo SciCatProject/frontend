@@ -120,16 +120,6 @@ export class ProposalSideFilterComponent implements OnInit {
     this.expandedFilters[key] = !this.expandedFilters[key];
   }
 
-  hasActiveFilters(filterKey: string): boolean {
-    const value = this.activeFilters[filterKey];
-    return Array.isArray(value) && value.length > 0;
-  }
-
-  getActiveFilterCount(filterKey: string): number {
-    const value = this.activeFilters[filterKey];
-    return Array.isArray(value) ? value.length : 0;
-  }
-
   setFilter(filterKey: string, value: string[]) {
     // Text filter type is not supported for proposal side panel filters
     // This is to seperate the logic of side filter panel and top text search box

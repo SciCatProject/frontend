@@ -34,10 +34,8 @@
           (selectionChange)="selectionChange($event)"
           (checkBoxChange)="setFilter(filter.key, $event)"
           (numericRangeChange)="numericRangeChange(filter.key, $event)"
-          [badgeCount]="getActiveFilterCount(filter.key)"
-          [showBadge]="
-            !expandedFilters[filter.key] && hasActiveFilters(filter.key)
-          "
+          [filterValue]="activeFilters[filter.key]"
+          [showBadge]="!expandedFilters[filter.key]"
         ></shared-filter>
         <button class="collapse-toggle" (click)="toggleFilter(filter.key)">
           <mat-icon>{{

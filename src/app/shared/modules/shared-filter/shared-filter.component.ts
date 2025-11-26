@@ -70,7 +70,13 @@ export class SharedFilterComponent implements OnChanges {
     }
   }
 
-  @Input() badgeCount: number | null = null;
+  @Input() filterValue:
+    | string[]
+    | string
+    | INumericRange
+    | DateRange
+    | undefined
+    | null;
   @Input() showBadge = false;
 
   @Output() textChange = new EventEmitter<string>();
@@ -222,5 +228,13 @@ export class SharedFilterComponent implements OnChanges {
       );
     });
   }
+
+  get badgeCount(): number {
+    return Array.isArray(this.filterValue) ? this.filterValue.length : 0;
+  }
+  get shouldShowBadge(): boolean {
+    return this.showBadge && this.badgeCount > 0;
+  }
+
   /** Checkbox filter helpers END*/
 }

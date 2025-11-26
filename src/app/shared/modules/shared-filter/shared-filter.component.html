@@ -49,7 +49,7 @@
       <div class="filter-group">
         <mat-label class="filter-title"
           >{{ label | translate: localization }}
-          <span *ngIf="showBadge && badgeCount" class="filter-badge">{{
+          <span *ngIf="shouldShowBadge" class="filter-badge">{{
             badgeCount
           }}</span></mat-label
         >
