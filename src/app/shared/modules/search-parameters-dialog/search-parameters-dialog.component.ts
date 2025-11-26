@@ -6,6 +6,15 @@ import { map, startWith } from "rxjs/operators";
 import { UnitsService } from "shared/services/units.service";
 import { ScientificCondition } from "../../../state-management/models";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { ConnectedPosition } from "@angular/cdk/overlay";
+
+export interface SearchParametersDialogData {
+  parameterKeys: string[];
+  usedFields: string[];
+  condition?: ScientificCondition;
+  humanNameMap?: { [key: string]: string };
+}
+
 @Component({
   selector: "search-parameters-dialog",
   templateUrl: "./search-parameters-dialog.component.html",
@@ -18,6 +27,25 @@ export class SearchParametersDialogComponent {
 
   parameterKeys = this.data.parameterKeys;
   units: string[] = [];
+  humanNameMap: { [key: string]: string } = {};
+  hoverKey: string | null = null;
+
+  overlayPositions: ConnectedPosition[] = [
+    {
+      originX: "end",
+      originY: "center",
+      overlayX: "start",
+      overlayY: "center",
+      offsetX: 8,
+    },
+    {
+      originX: "center",
+      originY: "center",
+      overlayX: "end",
+      overlayY: "top",
+      offsetY: 8,
+    },
+  ];
 
   parametersForm = new FormGroup({
     lhs: new FormControl(this.data.condition?.lhs || "", [
@@ -46,21 +74,21 @@ export class SearchParametersDialogComponent {
 
   filteredKeys$ = this.parametersForm.get("lhs")?.valueChanges.pipe(
     startWith(""),
-    map((value: string) =>
-      this.parameterKeys.filter((key) =>
-        key.toLowerCase().includes(value.toLowerCase()),
-      ),
-    ),
+    map((value: string) => {
+      const searchTerm = value.toLowerCase();
+      return this.parameterKeys.filter((key) => {
+        const keyMatches = key.toLowerCase().includes(searchTerm);
+        const humanName = this.humanNameMap[key]?.toLowerCase() || "";
+        const humanNameMatches = humanName.includes(searchTerm);
+        return keyMatches || humanNameMatches;
+      });
+    }),
   );
 
   constructor(
     public appConfigService: AppConfigService,
     @Inject(MAT_DIALOG_DATA)
-    public data: {
-      parameterKeys: string[];
-      usedFields: string[];
-      condition?: ScientificCondition;
-    },
+    public data: SearchParametersDialogData,
     public dialogRef: MatDialogRef<SearchParametersDialogComponent>,
     private unitsService: UnitsService,
     private snackBar: MatSnackBar,
@@ -68,17 +96,36 @@ export class SearchParametersDialogComponent {
     if (this.data.condition?.lhs) {
       this.getUnits(this.data.condition.lhs);
     }
+    this.humanNameMap = data.humanNameMap || {};
   }
 
   add = (): void => {
     const { lhs, relation, unit } = this.parametersForm.value;
-    if (this.data.usedFields && this.data.usedFields.includes(lhs)) {
+
+    const metadataKey =
+      Object.keys(this.humanNameMap).find(
+        (key) => this.humanNameMap[key] === lhs,
+      ) || lhs;
+
+    const isValidSelection = this.parameterKeys.some(
+      (key) => key === metadataKey || this.humanNameMap[key] === lhs,
+    );
+
+    if (!isValidSelection) {
+      this.snackBar.open("Please select a valid field from the list", "Close", {
+        duration: 2000,
+        panelClass: ["snackbar-warning"],
+      });
+      return;
+    }
+
+    if (this.data.usedFields && this.data.usedFields.includes(metadataKey)) {
       this.snackBar.open("Field already used", "Close", {
         duration: 2000,
         panelClass: ["snackbar-warning"],
       });
       return;
-    } else if (!this.parameterKeys.includes(lhs)) {
+    } else if (!this.parameterKeys.includes(metadataKey)) {
       this.snackBar.open("Field does not exist", "Close", {
         duration: 2000,
         panelClass: ["snackbar-warning"],
@@ -90,7 +137,7 @@ export class SearchParametersDialogComponent {
     const rhs =
       relation === "EQUAL_TO_STRING" ? String(rawRhs) : Number(rawRhs);
     this.parametersForm.patchValue({ rhs });
-    this.dialogRef.close({ data: { lhs, relation, rhs, unit } });
+    this.dialogRef.close({ data: { lhs: metadataKey, relation, rhs, unit } });
   };
 
   cancel = (): void => this.dialogRef.close();
@@ -113,5 +160,9 @@ export class SearchParametersDialogComponent {
 
   get lhs(): string {
     return this.parametersForm.get("lhs")?.value;
+  }
+
+  getHumanName(key: string): string {
+    return this.humanNameMap[key] || "";
   }
 }

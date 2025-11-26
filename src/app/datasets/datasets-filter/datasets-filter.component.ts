@@ -30,7 +30,10 @@ import {
 import { AsyncPipe } from "@angular/common";
 import { Subscription } from "rxjs";
 import { take } from "rxjs/operators";
-import { SearchParametersDialogComponent } from "../../shared/modules/search-parameters-dialog/search-parameters-dialog.component";
+import {
+  SearchParametersDialogComponent,
+  SearchParametersDialogData,
+} from "../../shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import {
   selectMetadataKeys,
   selectDatasets,
@@ -55,7 +58,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MultiSelectFilterValue } from "shared/modules/filters/multiselect-filter.component";
 import { INumericRange } from "shared/modules/numeric-range/form/model/numeric-range-field.model";
 import { UnitsOptionsService } from "shared/services/units-options.service";
-
+import { ConnectedPosition } from "@angular/cdk/overlay";
 @Component({
   selector: "datasets-filter",
   templateUrl: "datasets-filter.component.html",
@@ -89,6 +92,24 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   fieldTypeMap: { [key: string]: string } = {};
 
+  hoverKey: string | null = null;
+
+  overlayPositions: ConnectedPosition[] = [
+    {
+      originX: "end",
+      originY: "center",
+      overlayX: "start",
+      overlayY: "center",
+      offsetX: 8,
+    },
+    {
+      originX: "center",
+      originY: "center",
+      overlayX: "end",
+      overlayY: "top",
+      offsetY: 8,
+    },
+  ];
   tempConditionValues: string[] = [];
 
   constructor(
@@ -105,6 +126,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.applyEnabledConditions();
+    this.buildMetadataMaps();
 
     this.subscriptions.push(
       this.filterConfigs$.subscribe((filterConfigs) => {
@@ -268,35 +290,40 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
 
     this.conditionConfigs$.pipe(take(1)).subscribe((conditionConfigs) => {
       const updatedConditions = (conditionConfigs || []).map((config, i) => {
+        const lhs = config.condition.lhs;
+        const baseCondition = {
+          ...config.condition,
+          type: this.fieldTypeMap[lhs],
+          human_name: this.humanNameMap[lhs],
+        };
         if (this.tempConditionValues[i] !== undefined) {
           const value = this.tempConditionValues[i];
+          const fieldType = this.fieldTypeMap[config.condition.lhs];
           const isNumeric = value !== "" && !isNaN(Number(value));
-          if (
-            config.condition.relation === "EQUAL_TO" ||
-            config.condition.relation === "EQUAL_TO_NUMERIC" ||
-            config.condition.relation === "EQUAL_TO_STRING"
-          ) {
+
+          if (config.condition.relation === "EQUAL_TO") {
             return {
               ...config,
               condition: {
-                ...config.condition,
+                ...baseCondition,
                 rhs: isNumeric ? Number(value) : value,
-                relation: isNumeric
-                  ? ("EQUAL_TO_NUMERIC" as ScientificCondition["relation"])
-                  : ("EQUAL_TO_STRING" as ScientificCondition["relation"]),
+                relation:
+                  fieldType === "string" || !isNumeric
+                    ? ("EQUAL_TO_STRING" as ScientificCondition["relation"])
+                    : ("EQUAL_TO_NUMERIC" as ScientificCondition["relation"]),
               },
             };
           } else {
             return {
               ...config,
               condition: {
-                ...config.condition,
+                ...baseCondition,
                 rhs: isNumeric ? Number(value) : value,
               },
             };
           }
         }
-        return config;
+        return { ...config, condition: baseCondition };
       });
 
       updatedConditions.forEach((oldCondition) => {
@@ -308,7 +335,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       });
 
       updatedConditions.forEach((config) => {
-        if (config.enabled && config.condition.lhs && config.condition.rhs) {
+        if (
+          config.enabled &&
+          config.condition.lhs &&
+          config.condition.rhs != null &&
+          config.condition.rhs !== ""
+        ) {
           this.store.dispatch(
             addScientificConditionAction({ condition: config.condition }),
           );
@@ -458,13 +490,37 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     return `${condition.lhs}-${index}`;
   }
 
-  getConditionDisplayText(condition: ScientificCondition): string {
-    if (!condition.lhs || !condition.rhs) return "Configure condition...";
+  getConditionDisplayText(
+    condition: ScientificCondition,
+    index?: number,
+  ): string {
+    if (condition.relation === "RANGE") {
+      if (!condition.lhs || !condition.rhs) {
+        return "Configure condition...";
+      }
+      const rangeValues = Array.isArray(condition.rhs)
+        ? condition.rhs
+        : [undefined, undefined];
+      const min = rangeValues[0] !== undefined ? rangeValues[0] : "?";
+      const max = rangeValues[1] !== undefined ? rangeValues[1] : "?";
+      const unit = condition.unit ? ` ${condition.unit}` : "";
+      return `${min} <-> ${max}${unit}`;
+    }
+
+    const rhsValue =
+      this.tempConditionValues[index] != undefined
+        ? this.tempConditionValues[index]
+        : condition.rhs;
+
+    if (!condition.lhs || rhsValue == null || rhsValue === "") {
+      return "Configure condition...";
+    }
 
     let relationSymbol = "";
     switch (condition.relation) {
       case "EQUAL_TO_NUMERIC":
       case "EQUAL_TO_STRING":
+      case "EQUAL_TO":
         relationSymbol = "=";
         break;
       case "LESS_THAN":
@@ -479,17 +535,9 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       case "LESS_THAN_OR_EQUAL":
         relationSymbol = "≤";
         break;
-      case "RANGE":
-        relationSymbol = "<->";
-        break;
       default:
         relationSymbol = "";
     }
-
-    const rhsValue =
-      condition.relation === "EQUAL_TO_STRING"
-        ? `"${condition.rhs}"`
-        : condition.rhs;
 
     const unit = condition.unit ? ` ${condition.unit}` : "";
     return `${relationSymbol} ${rhsValue}${unit}`;
@@ -522,25 +570,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   addCondition() {
-    this.datasets$.pipe(take(1)).subscribe((datasets) => {
-      if (datasets && datasets.length > 0) {
-        this.humanNameMap = {};
-        this.fieldTypeMap = {};
-
-        datasets.forEach((dataset) => {
-          const metadata = dataset.scientificMetadata;
-
-          Object.keys(metadata).forEach((key) => {
-            if (metadata[key]?.human_name) {
-              this.humanNameMap[key] = metadata[key].human_name;
-            }
-            if (metadata[key]?.type) {
-              this.fieldTypeMap[key] = metadata[key].type;
-            }
-          });
-        });
-      }
-    });
+    this.buildMetadataMaps();
 
     this.metadataKeys$.pipe(take(1)).subscribe((allKeys) => {
       this.conditionConfigs$.pipe(take(1)).subscribe((currentConditions) => {
@@ -552,13 +582,17 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
         );
 
         this.dialog
-          .open(SearchParametersDialogComponent, {
-            data: {
-              usedFields: usedFields,
-              parameterKeys: availableKeys,
+          .open<SearchParametersDialogComponent, SearchParametersDialogData>(
+            SearchParametersDialogComponent,
+            {
+              data: {
+                usedFields: usedFields,
+                parameterKeys: availableKeys,
+                humanNameMap: this.humanNameMap,
+              },
+              restoreFocus: false,
             },
-            restoreFocus: false,
-          })
+          )
           .afterClosed()
           .subscribe((res) => {
             if (res) {
@@ -568,7 +602,11 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
                 .pipe(take(1))
                 .subscribe((currentConditions) => {
                   const existingConditionIndex = currentConditions.findIndex(
-                    (config) => isEqual(config.condition, data),
+                    (config) =>
+                      isEqual(
+                        this.humanNameMap[config.condition.lhs],
+                        data.lhs,
+                      ),
                   );
                   if (existingConditionIndex !== -1) {
                     this.snackBar.open("Condition already exists", "Close", {
@@ -579,7 +617,12 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
                   }
 
                   const newCondition: ConditionConfig = {
-                    condition: data,
+                    condition: {
+                      ...data,
+                      rhs: "",
+                      type: this.fieldTypeMap[data.lhs],
+                      human_name: this.humanNameMap[data.lhs],
+                    },
                     enabled: true,
                   };
 
@@ -689,6 +732,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       condition: {
         ...conditionConfig.condition,
         ...updates,
+        type: this.fieldTypeMap[conditionConfig.condition.lhs],
+        human_name: this.humanNameMap[conditionConfig.condition.lhs],
       },
     };
 
@@ -699,6 +744,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     index: number,
     newOperator: ScientificCondition["relation"],
   ) {
+    delete this.tempConditionValues[index];
+
     const updates: Partial<ScientificCondition> = {
       relation: newOperator,
       rhs: newOperator === "RANGE" ? [undefined, undefined] : "",
@@ -752,6 +799,8 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
     // Removes the condition from the array
     updatedConditions.splice(index, 1);
 
+    this.tempConditionValues.splice(index, 1);
+
     if (condition.enabled) {
       this.store.dispatch(
         removeScientificConditionAction({ condition: condition.condition }),
@@ -775,23 +824,13 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   getHumanName(key: string): string {
-    return this.humanNameMap[key] || key;
+    return this.humanNameMap[key];
   }
 
   getAllowedOperators(key: string): string[] {
     const type = this.fieldTypeMap[key];
     if (type === "string") {
       return ["EQUAL_TO"];
-    }
-    if (type === "quantity" || type === "number") {
-      return [
-        "EQUAL_TO",
-        "GREATER_THAN",
-        "LESS_THAN",
-        "GREATER_THAN_OR_EQUAL",
-        "LESS_THAN_OR_EQUAL",
-        "RANGE",
-      ];
     }
     // Default: allow all
     return [
@@ -802,6 +841,20 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
       "LESS_THAN_OR_EQUAL",
       "RANGE",
     ];
+  }
+
+  buildMetadataMaps() {
+    this.conditionConfigs$.pipe(take(1)).subscribe((conditionConfigs) => {
+      (conditionConfigs || []).forEach((config) => {
+        const { lhs, type, human_name } = config.condition;
+        if (lhs && type) {
+          this.fieldTypeMap[lhs] = type;
+        }
+        if (lhs && human_name) {
+          this.humanNameMap[lhs] = human_name;
+        }
+      });
+    });
   }
 
   ngOnDestroy() {
