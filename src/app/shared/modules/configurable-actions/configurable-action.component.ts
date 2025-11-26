@@ -233,8 +233,12 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
     );
     this.use_mat_icon = !!this.actionConfig.mat_icon;
     this.use_icon = this.actionConfig.icon !== undefined;
-    this.prepare_disabled_condition();
-    this.update_status();
+    try {
+      this.prepare_disabled_condition();
+      this.update_status();
+    } catch (error) {
+      console.error("Configurable action error", error);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
