@@ -71,7 +71,7 @@ export class SharedFilterComponent implements OnChanges {
   }
 
   @Input() badgeCount: number | null = null;
-  @Input() showBadge: boolean = false;
+  @Input() showBadge = false;
 
   @Output() textChange = new EventEmitter<string>();
   @Output() checkBoxChange = new EventEmitter<string[]>();
