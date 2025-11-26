@@ -29,6 +29,10 @@
           [facetCounts$]="getFacetCounts$(filter.key)"
           (selectionChange)="selectionChange($event)"
           (dateRangeChange)="setDateFilter(filter.key, $event)"
+          [badgeCount]="getActiveFilterCount(filter.key)"
+          [showBadge]="
+            !expandedFilters[filter.key] && hasActiveFilters(filter.key)
+          "
         ></shared-filter>
         <button class="collapse-toggle" (click)="toggleFilter(filter.key)">
           <mat-icon>{{

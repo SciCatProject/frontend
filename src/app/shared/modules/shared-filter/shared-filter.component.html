@@ -47,9 +47,12 @@
 
     <ng-container *ngSwitchCase="'checkbox'">
       <div class="filter-group">
-        <mat-label class="filter-title">{{
-          label | translate: localization
-        }}</mat-label>
+        <mat-label class="filter-title"
+          >{{ label | translate: localization }}
+          <span *ngIf="showBadge && badgeCount" class="filter-badge">{{
+            badgeCount
+          }}</span></mat-label
+        >
         <mat-form-field
           *ngIf="showCheckboxSearch"
           appearance="outline"

@@ -161,6 +161,15 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   toggleFilter(key: string) {
     this.expandedFilters[key] = !this.expandedFilters[key];
   }
+  hasActiveFilters(filterKey: string): boolean {
+    const value = this.activeFilters[filterKey];
+    return Array.isArray(value) && value.length > 0;
+  }
+
+  getActiveFilterCount(filterKey: string): number {
+    const value = this.activeFilters[filterKey];
+    return Array.isArray(value) ? value.length : 0;
+  }
 
   applyEnabledConditions() {
     this.conditionConfigs$.pipe(take(1)).subscribe((conditionConfigs) => {
@@ -796,6 +805,7 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.store.dispatch(clearFacetsAction());
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }
