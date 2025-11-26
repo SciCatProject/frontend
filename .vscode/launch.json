@@ -2,11 +2,13 @@
     "version": "0.2.0",
     "configurations": [
       {
-        "name": "ng serve",
+        "name": "Debug SciCat frontend in Chrome",
         "type": "chrome",
         "request": "launch",
-        "url": "http://localhost:4200/#",
-        "webRoot": "${workspaceFolder}"
+        "url": "http://localhost:4200",
+        "webRoot": "${workspaceFolder}",
+        "sourceMaps": true,
+        "trace": true
       },
       {
         "name": "ng test",

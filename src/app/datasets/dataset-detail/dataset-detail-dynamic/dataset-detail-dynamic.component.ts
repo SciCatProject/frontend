@@ -30,6 +30,10 @@ import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular/m
 import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import {
+  ActionItemDataset,
+  ActionItems,
+} from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 /**
  * Component to show customizable details for a dataset, using the
@@ -64,6 +68,10 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   instrument: Instrument | undefined;
   dataset: OutputDatasetObsoleteDto | undefined;
 
+  actionItems: ActionItems = {
+    datasets: [],
+  };
+
   constructor(
     public appConfigService: AppConfigService,
     public dialog: MatDialog,
@@ -97,6 +105,10 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.dataset$.subscribe((dataset) => {
+        if (dataset) {
+          console.log("Updatding action items");
+          this.actionItems.datasets = <ActionItemDataset[]>[dataset];
+        }
         this.dataset = dataset;
       }),
     );
