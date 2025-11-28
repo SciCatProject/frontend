@@ -72,7 +72,7 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() showGlobalTextSearch = true;
   @Input() localization: string;
   @Input() globalTextSearch = "";
-  @Input() globalTextSearchPlaceholder = "Search";
+  @Input() globalTextSearchPlaceholder = "Search...";
   @Input() selectionIds = [];
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onTableEvent: EventEmitter<ITableEvent> = new EventEmitter();
@@ -85,6 +85,7 @@ export class TableCoreDirective<T extends TableRow> {
   @Output() paginationChange: EventEmitter<TablePagination> =
     new EventEmitter();
   @Output() globalTextSearchChange: EventEmitter<string> = new EventEmitter();
+  @Output() globalTextSearchApply: EventEmitter<string> = new EventEmitter();
 
   /*************************************** Expand Row *********************************/
   expandedElement: TableRow | null;

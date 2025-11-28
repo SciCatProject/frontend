@@ -1,12 +1,56 @@
-<mat-paginator
-  [pageSizeOptions]="pagination.pageSizeOptions"
-  [pageIndex]="pagination.pageIndex"
-  [length]="pagination.length"
-  [pageSize]="pagination.pageSize"
-  (page)="pagination_onChange($event)"
-  *ngIf="pagination"
+<div
+  class="table-header-controls"
+  [class.with-side-filter]="localization === 'proposal' && sideFilterCollapsed"
 >
-</mat-paginator>
+  <div class="global-search-wrapper" *ngIf="showGlobalTextSearch">
+    <mat-form-field>
+      <mat-icon matPrefix style="color: gray" *ngIf="!globalTextSearch"
+        >search</mat-icon
+      >
+      <input
+        [(ngModel)]="globalTextSearch"
+        type="text"
+        matInput
+        [placeholder]="globalTextSearchPlaceholder"
+        (ngModelChange)="this.globalSearchUpdate.next($event)"
+        (keydown.enter)="onGlobalTextSearchApply()"
+        (keydown.escape)="onGlobalTextSearchClear()"
+        data-cy="text-search"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        *ngIf="globalTextSearch"
+        (click)="onGlobalTextSearchClear()"
+        type="button"
+        matTooltip="Clear search"
+        data-cy="search-clear-button"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        matSuffix
+        *ngIf="globalTextSearch"
+        (click)="onGlobalTextSearchApply()"
+        type="button"
+        matTooltip="Apply search"
+        data-cy="search-button"
+      >
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+  <mat-paginator
+    [pageSizeOptions]="pagination.pageSizeOptions"
+    [pageIndex]="pagination.pageIndex"
+    [length]="pagination.length"
+    [pageSize]="pagination.pageSize"
+    (page)="pagination_onChange($event)"
+    *ngIf="pagination"
+  >
+  </mat-paginator>
+</div>
 <div
   #tbl
   [ngClass]="viewportClass"
@@ -302,24 +346,6 @@
         </mat-progress-bar>
       </mat-header-cell>
     </ng-container>
-
-    <ng-container matColumnDef="global-search" [stickyEnd]="true">
-      <mat-header-cell *matHeaderCellDef class="table-global-search">
-        <div class="global-search-wrapper" *ngIf="showGlobalTextSearch">
-          <mat-form-field>
-            <mat-icon matPrefix style="color: black">search</mat-icon>
-            <input
-              [(ngModel)]="globalTextSearch"
-              type="text"
-              matInput
-              [placeholder]="globalTextSearchPlaceholder"
-              (ngModelChange)="this.globalSearchUpdate.next($event)"
-            />
-          </mat-form-field>
-        </div>
-      </mat-header-cell>
-    </ng-container>
-
     <ng-container matColumnDef="placeholder-column">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
     </ng-container>
@@ -394,14 +420,6 @@
         *matRowDef="let expandRow; columns: expandColumn"
         class="detail-row"
       ></tr>
-    </ng-container>
-
-    <ng-container *ngIf="showGlobalTextSearch">
-      <mat-header-row
-        class="global-search"
-        [@tableAnimation]
-        *matHeaderRowDef="searchRowColumns; sticky: sticky"
-      ></mat-header-row>
     </ng-container>
     <mat-header-row
       class="header"
