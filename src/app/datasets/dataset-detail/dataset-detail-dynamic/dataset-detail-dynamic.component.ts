@@ -30,6 +30,10 @@ import { OutputDatasetObsoleteDto } from "@scicatproject/scicat-sdk-ts-angular/m
 import { Instrument } from "@scicatproject/scicat-sdk-ts-angular";
 import { Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import {
+  ActionItemDataset,
+  ActionItems,
+} from "shared/modules/configurable-actions/configurable-action.interfaces";
 
 /**
  * Component to show customizable details for a dataset, using the
@@ -62,6 +66,11 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
   show = false;
 
   instrument: Instrument | undefined;
+  dataset: OutputDatasetObsoleteDto | undefined;
+
+  actionItems: ActionItems = {
+    datasets: [],
+  };
 
   constructor(
     public appConfigService: AppConfigService,
@@ -91,6 +100,16 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.store.select(selectCurrentInstrument).subscribe((instrument) => {
         this.instrument = instrument;
+      }),
+    );
+
+    this.subscriptions.push(
+      this.dataset$.subscribe((dataset) => {
+        if (dataset) {
+          console.log("Updatding action items");
+          this.actionItems.datasets = <ActionItemDataset[]>[dataset];
+        }
+        this.dataset = dataset;
       }),
     );
   }
@@ -246,6 +265,16 @@ export class DatasetDetailDynamicComponent implements OnInit, OnDestroy {
 
     // Ensure the result is a valid object for metadata display
     return result && typeof result === "object" ? result : null;
+  }
+
+  emptyMetadataTable(): boolean {
+    if (this.appConfig.hideEmptyMetadataTable) {
+      return (
+        !!this.dataset?.scientificMetadata &&
+        Object.keys(this.dataset.scientificMetadata).length > 0
+      );
+    }
+    return true;
   }
 
   ngOnDestroy() {

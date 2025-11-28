@@ -73,20 +73,23 @@ import { AdminTabComponent } from "./admin-tab/admin-tab.component";
 import { instrumentsReducer } from "state-management/reducers/instruments.reducer";
 import { InstrumentEffects } from "state-management/effects/instruments.effects";
 import { RelatedDatasetsComponent } from "./related-datasets/related-datasets.component";
-import { DatafilesActionsComponent } from "./datafiles-actions/datafiles-actions.component";
-import { DatafilesActionComponent } from "./datafiles-actions/datafiles-action.component";
 import { MatMenuModule } from "@angular/material/menu";
 import { DatasetsFilterSettingsComponent } from "./datasets-filter/settings/datasets-filter-settings.component";
 import { CdkDrag, CdkDragHandle, CdkDropList } from "@angular/cdk/drag-drop";
 import { userReducer } from "state-management/reducers/user.reducer";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { JsonFormsModule } from "@jsonforms/angular";
+import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
 import { DatasetDetailDynamicComponent } from "./dataset-detail/dataset-detail-dynamic/dataset-detail-dynamic.component";
 import { DatasetDetailWrapperComponent } from "./dataset-detail/dataset-detail-wrapper.component";
 import { JsonHeadPipe } from "shared/pipes/json-head.pipe";
 import { ThumbnailPipe } from "shared/pipes/thumbnail.pipe";
+import { IngestorModule } from "../ingestor/ingestor.module";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatBadgeModule } from "@angular/material/badge";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
+import { ConfigurableActionsModule } from "shared/modules/configurable-actions/configurable-actions.module";
+import { OverlayModule } from "@angular/cdk/overlay";
 
 @NgModule({
   imports: [
@@ -95,6 +98,8 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
     FlexLayoutModule,
     FormsModule,
     LinkyModule,
+    JsonFormsModule,
+    JsonFormsAngularMaterialModule,
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,
@@ -148,8 +153,11 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
     CdkDrag,
     CdkDragHandle,
     // FiltersModule,
+    IngestorModule,
     MatExpansionModule,
     MatBadgeModule,
+    OverlayModule,
+    IngestorModule,
   ],
   declarations: [
     BatchViewComponent,
@@ -174,8 +182,6 @@ import { TitleCasePipe } from "shared/pipes/title-case.pipe";
     DatasetFileUploaderComponent,
     AdminTabComponent,
     RelatedDatasetsComponent,
-    DatafilesActionsComponent,
-    DatafilesActionComponent,
     DatasetsFilterSettingsComponent,
   ],
   providers: [

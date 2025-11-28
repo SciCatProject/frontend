@@ -2,10 +2,7 @@ import { DOCUMENT } from "@angular/common";
 import { Component, OnInit, Inject } from "@angular/core";
 import { APP_CONFIG, AppConfig } from "app-config.module";
 import { Store } from "@ngrx/store";
-import {
-  fetchCurrentUserAction,
-  logoutAction,
-} from "state-management/actions/user.actions";
+import { logoutAction } from "state-management/actions/user.actions";
 import {
   selectIsLoggedIn,
   selectCurrentUserName,
@@ -38,21 +35,13 @@ export class AppHeaderComponent implements OnInit {
       ? "scicat-header-logo-icon.png"
       : "scicat-header-logo-full.png";
   siteHeaderLogo = this.config.siteHeaderLogo ?? "site-header-logo.png";
+  ingestorEnabled = this.config.ingestorComponent?.ingestorEnabled ?? false;
 
   oAuth2Endpoints: OAuth2Endpoint[] = [];
   username$ = this.store.select(selectCurrentUserName);
   profileImage$ = this.store.select(selectThumbnailPhoto);
   inBatchIndicator$ = this.store.select(selectDatasetsInBatchIndicator);
-  // //loggedIn$ = this.store.select(selectIsLoggedIn);
-  // isLoggedIn = false;
-
-  // mainMenuConfig: MainMenuOptions | null =
-  //   this.config.mainMenu?.nonAuthenticatedUser || null;
-  // defaultMainPage: MainPageOptions = MainPageOptions.DATASETS;
-  // siteHeaderLogoUrl = "/datasets";
-  // isSiteHeaderLogoUrlExternal = false;
-
-  isLoggedIn$: Observable<boolean>;
+  isLoggedIn$ = this.store.select(selectIsLoggedIn);
   mainMenuConfig$: Observable<MainMenuOptions>;
   defaultMainPage$: Observable<string>;
   siteHeaderLogoUrl$: Observable<string>;
@@ -65,9 +54,6 @@ export class AppHeaderComponent implements OnInit {
     private store: Store,
     @Inject(DOCUMENT) public document: Document,
   ) {
-    // Select the logged-in state as an observable
-    this.isLoggedIn$ = this.store.select(selectIsLoggedIn);
-
     // Compute derived observables
     this.mainMenuConfig$ = this.isLoggedIn$.pipe(
       map((isLoggedIn) =>
@@ -118,35 +104,8 @@ export class AppHeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(fetchCurrentUserAction());
     this.oAuth2Endpoints = this.config.oAuth2Endpoints;
-
-    // this.sub = this.store.select(selectIsLoggedIn).subscribe((isLoggedIn) => {
-    //   this.isLoggedIn = isLoggedIn;
-    //   if (this.isLoggedIn) {
-    //     this.mainMenuConfig = this.config.mainMenu?.authenticatedUser || null;
-    //     this.defaultMainPage =
-    //       MainPageOptions[
-    //         this.config.defaultMainPage?.authenticatedUser || "DATASETS"
-    //       ];
-    //   } else {
-    //     this.mainMenuConfig =
-    //       this.config.mainMenu?.nonAuthenticatedUser || null;
-    //     this.defaultMainPage =
-    //       MainPageOptions[
-    //         this.config.defaultMainPage?.nonAuthenticatedUser || "DATASETS"
-    //       ];
-    //   }
-    //   this.siteHeaderLogoUrl = this.config.siteHeaderLogoUrl
-    //     ? this.config.siteHeaderLogoUrl
-    //     : this.defaultMainPage;
-    //   this.isSiteHeaderLogoUrlExternal = this.isFullUrl(this.siteHeaderLogoUrl);
-    // });
   }
-
-  // ngOnDestroy(): void {
-  //   this.sub.unsubscribe();
-  // }
 
   isFullUrl(url: string): boolean {
     return url.startsWith("http://") || url.startsWith("https://");

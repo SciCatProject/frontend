@@ -1,0 +1,251 @@
+<p *ngIf="(this.sciCatLoggedIn$ | async) === false">
+  <mat-card class="ingestor-card">
+    <mat-card-header>
+      <mat-card-title> Log in </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="ingestor-vertical-layout">
+      <p>
+        Before a transfer can be started, please
+        <a href="/login">log in to SciCat</a>.
+      </p>
+      <a href="/login"><mat-icon>login</mat-icon></a>
+    </mat-card-content>
+  </mat-card>
+</p>
+
+<div *ngIf="(this.sciCatLoggedIn$ | async) === true">
+  <p>
+    <mat-card class="ingestor-card">
+      <mat-card-header>
+        <mat-card-title>Connect to Ingestor Service</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="ingestor-vertical-layout">
+        <div *ngIf="connectingToFacilityBackend">
+          <mat-progress-spinner
+            diameter="20"
+            mode="indeterminate"
+          ></mat-progress-spinner>
+        </div>
+        <div *ngIf="!connectingToFacilityBackend">
+          <ng-container *ngIf="connectedFacilityBackend === ''">
+            <p class="confirm-message-error">Not connected</p>
+
+            <p>Please provide a valid Ingestor URL of the facility</p>
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="Ingestor URL"
+                [(ngModel)]="forwardFacilityBackend"
+              />
+            </mat-form-field>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="onClickForwardToIngestorPage(forwardFacilityBackend)"
+            >
+              Connect
+            </button>
+
+            <div
+              *ngIf="lastUsedFacilityBackends.length > 0"
+              class="last-used-facility-backends"
+            >
+              <p>Last used facilities:</p>
+              <ul>
+                <li
+                  *ngFor="let backend of lastUsedFacilityBackends"
+                  class="vertical-center-list-item"
+                >
+                  <a (click)="onClickSelectFacilityBackend(backend)">{{
+                    "- " + backend
+                  }}</a>
+
+                  <a (click)="onClickDeleteStoredFacilityBackend(backend)">
+                    <mat-icon>remove_circle</mat-icon>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="connectedFacilityBackend !== ''">
+            <div *ngIf="!authIsDisabled">
+              <mat-divider></mat-divider>
+              <div *ngIf="userInfo !== null" class="user-info">
+                <div *ngIf="userInfo.logged_in" class="user-icon-container">
+                  <mat-icon>account_circle</mat-icon>
+                  <p>Hello, {{ userInfo.name }}</p>
+                </div>
+                <div *ngIf="!userInfo.logged_in">
+                  <button mat-stroked-button (click)="openIngestorLogin()">
+                    Login
+                  </button>
+                  <br /><br />
+                  <div class="user-icon-container">
+                    <mat-icon>error</mat-icon>
+                    <p>Please log in to the Ingestor to start a transfer.</p>
+                  </div>
+                </div>
+                <div *ngIf="userInfo.logged_in">
+                  <button mat-stroked-button (click)="openIngestorLogout()">
+                    Logout
+                  </button>
+                </div>
+              </div>
+              <mat-divider class="divider-down"></mat-divider>
+            </div>
+
+            <mat-tab-group
+              animationDuration="0ms"
+              [selectedIndex]="selectedTab"
+            >
+              <mat-tab
+                [disabled]="!(authIsDisabled || userInfo?.logged_in)"
+                label="Transfers"
+              >
+                <button
+                  matTooltip="Refresh transfer list"
+                  mat-button
+                  aria-label="Refresh transfer list"
+                  (click)="doRefreshTransferList()"
+                >
+                  <mat-icon>refresh</mat-icon>
+                </button>
+                <table
+                  *ngIf="
+                    transferDataInformation &&
+                    transferDataInformation.transfers.length > 0
+                  "
+                  mat-table
+                  [dataSource]="transferDataInformation.transfers"
+                >
+                  <ng-container matColumnDef="transferId">
+                    <th mat-header-cell *matHeaderCellDef><b>ID</b></th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.transferId }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef><b>Status</b></th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.status ?? "" }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="message">
+                    <th mat-header-cell *matHeaderCellDef><b>Message</b></th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.message ?? "" }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="progress">
+                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                      <b>Progress</b>
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-right">
+                      <button
+                        mat-button
+                        aria-label="Delete transfer"
+                        (click)="onOpenDetailView(element.transferId)"
+                      >
+                        <mat-icon>info</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                      <b>Action</b>
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-right">
+                      <button
+                        mat-button
+                        aria-label="Delete transfer"
+                        (click)="onCancelTransfer(element.transferId)"
+                      >
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumns"
+                  ></tr>
+                </table>
+
+                <mat-paginator
+                  *ngIf="transferDataInformation !== null"
+                  class="transferPaginator"
+                  [length]="transferDataInformation.total"
+                  [pageSize]="transferDataPageSize"
+                  [pageSizeOptions]="transferDataPageSizeOptions"
+                  [pageIndex]="transferDataPageIndex"
+                  (page)="onTransferPageChange($event)"
+                  aria-label="Select page"
+                >
+                </mat-paginator>
+              </mat-tab>
+
+              <mat-tab label="Connection information">
+                <!-- Mat List with the most important information about the backend connection -->
+                <mat-list>
+                  <mat-list-item>
+                    <span matListItemTitle>Backend URL</span>
+                    <span matListItemLine
+                      >{{ connectedFacilityBackend }}
+                      <a (click)="onClickDisconnectIngestor()">change</a></span
+                    >
+                  </mat-list-item>
+                  <mat-list-item>
+                    <span matListItemTitle>Connection Status</span>
+                    <span matListItemLine style="color: green">Connected</span>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <span matListItemTitle>Version</span>
+                    <span matListItemLine>{{
+                      versionInfo ? (versionInfo.version ?? "") : ""
+                    }}</span>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <span matListItemTitle>Health Status</span>
+                    <span matListItemLine>{{
+                      healthInfo ? (healthInfo.status ?? "") : ""
+                    }}</span>
+                  </mat-list-item>
+                </mat-list>
+              </mat-tab>
+            </mat-tab-group>
+            <br /><br />
+          </ng-container>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </p>
+
+  <p
+    *ngIf="
+      !connectingToFacilityBackend &&
+      connectedFacilityBackend !== '' &&
+      (authIsDisabled || userInfo?.logged_in)
+    "
+  >
+    <mat-card class="ingestor-card">
+      <mat-card-header>
+        <mat-card-title>New transfer</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="ingestor-vertical-layout">
+        <button
+          mat-fab
+          aria-label="Add a new dataset transfer"
+          color="primary"
+          (click)="onClickAddIngestion()"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </p>
+</div>

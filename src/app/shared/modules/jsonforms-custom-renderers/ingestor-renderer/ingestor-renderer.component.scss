@@ -1,0 +1,121 @@
+// Spacer utility
+.spacer {
+  flex: 1 1 auto;
+}
+
+// Card styling for Material components
+mat-card {
+  margin: 0.5em;
+
+  .mat-mdc-card-title {
+    display: flex;
+    padding: 0.5em 0.75em;
+    font-weight: 600;
+    font-size: 1em;
+  }
+
+  .mat-mdc-card-content {
+    padding: 0.75em;
+  }
+}
+
+// AnyOf and Object Group renderer styling
+.anyof-group {
+  margin: 0.25em !important;
+  margin-bottom: 1em !important;
+
+  &:last-child {
+    margin-bottom: 0.25em !important;
+  }
+
+  .mat-mdc-card-title {
+    padding: 0.4em 0.6em !important;
+    font-size: 0.95em !important;
+  }
+
+  .mat-mdc-card-content {
+    padding: 0.5em !important;
+  }
+}
+
+.mat-tab-content-renderer {
+  padding: 1em 0;
+}
+
+// Array layout renderer styling
+.array-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding: 1em;
+  border-radius: 4px;
+}
+
+.array-layout-toolbar {
+  display: flex;
+  align-items: center;
+  padding-bottom: 0.5em;
+  margin-bottom: 1em;
+
+  > span {
+    flex: 1 1 auto;
+  }
+}
+
+.array-layout-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.1em;
+}
+
+.array-item {
+  padding: 1em;
+  border-radius: 4px;
+}
+
+// Owner group field renderer styling
+.custom-input-box {
+  width: 100%;
+}
+
+// Quantity value layout renderer styling
+.quantity-value-box {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1em;
+  padding: 1em;
+  border-radius: 4px;
+
+  .quantity-value-element {
+    // Individual quantity value field container
+  }
+}
+
+// Dynamic object renderer styling
+.dynamic-object-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding: 1em;
+  border-radius: 4px;
+}
+
+.key-value-row {
+  display: flex;
+  gap: 1em;
+  align-items: flex-start;
+
+  .key-field,
+  .value-field {
+    flex: 1;
+  }
+}
+
+.add-property-section {
+  margin-top: 1em;
+}
+
+.add-property-card {
+  background-color: rgba(0, 0, 0, 0.02);
+  border-style: dashed !important;
+}

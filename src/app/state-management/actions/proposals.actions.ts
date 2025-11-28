@@ -195,6 +195,13 @@ export const fetchRelatedProposalsCountFailedAction = createAction(
   "[Proposal] Fetch Related Proposals Count Failed",
 );
 
+export const setInitialProposalsFiltersAction = createAction(
+  "[Proposal] Set Initial Proposals Filters",
+  props<{
+    fields: Record<string, string | DateRange | string[]>;
+  }>(),
+);
+
 export const addProposalFilterAction = createAction(
   "[Proposal] Add Proposal Filter",
   props<{

@@ -1,0 +1,68 @@
+<div class="ingestor-dialog-header">
+  <div class="ingestor-mixed-header">
+    <h2 mat-dialog-title>Fill out user-specific metadata</h2>
+    <button
+      mat-icon-button
+      mat-dialog-close
+      aria-label="Close"
+      class="ingestor-close-button"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="ingestor-stepper-header">
+    <ingestor-dialog-stepper [activeStep]="2"></ingestor-dialog-stepper>
+  </div>
+</div>
+<mat-dialog-content class="mat-typography" disableClose="true">
+  <mat-card>
+    <mat-card-header
+      class="organizational-header"
+      (click)="toggleCardContent('scientific')"
+    >
+      <div mat-card-avatar class="section-icon">
+        <mat-icon> info </mat-icon>
+      </div>
+      <mat-card-title>Scientific Metadata</mat-card-title>
+      <mat-card-subtitle>
+        Fields in Red Are Required By The Schema. You can proceed with ingestion
+        without filling them out.
+      </mat-card-subtitle>
+      <span class="spacer"></span>
+      <mat-icon
+        [matTooltip]="isCustomMetadataOk ? 'Your input is correct.' : customMetadataErrors"
+        [ngClass]="isCustomMetadataOk ? 'success-icon' : 'error-icon'"
+        >{{ isCustomMetadataOk ? 'check_circle_outline' :
+        'error_outline'}}</mat-icon
+      >
+      <mat-icon class="toggle-icon"
+        >{{ isCardContentVisible.scientific ? 'expand_less' : 'expand_more'
+        }}</mat-icon
+      >
+    </mat-card-header>
+    <mat-card-content *ngIf="isCardContentVisible.scientific">
+      <app-metadata-editor
+        #customMetadataEditor
+        *ngIf="!updateEditorFromThirdParty"
+        [schema]="customMetadataSchema"
+        [renderView]="activeRenderView"
+        [data]="createNewTransferData.customMetaData"
+        (dataChange)="onDataChangeCustomMetadata($event)"
+        (errors)="customMetadataErrorsHandler($event)"
+      ></app-metadata-editor>
+    </mat-card-content>
+  </mat-card>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onClickBack()">Back</button>
+  <button
+    mat-button
+    color="primary"
+    cdkFocusInitial
+    [disabled]="!uiNextButtonReady"
+    (click)="onClickNext()"
+  >
+    Next
+  </button>
+</mat-dialog-actions>

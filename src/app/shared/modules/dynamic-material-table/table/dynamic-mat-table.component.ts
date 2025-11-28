@@ -257,6 +257,23 @@ export class DynamicMatTableComponent<T extends TableRow>
       offsetX: 4,
     },
   ];
+  /** Overlay positions for metadata hover */
+  metadataOverlayPositions: ConnectedPosition[] = [
+    {
+      originX: "end",
+      originY: "center",
+      overlayX: "start",
+      overlayY: "center",
+      offsetX: 8,
+    },
+    {
+      originX: "start",
+      originY: "center",
+      overlayX: "end",
+      overlayY: "center",
+      offsetX: -8,
+    },
+  ];
 
   standardDataSource: TableDataSource<T>;
 
@@ -1013,7 +1030,15 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   getColumnValue(data: Record<string, unknown>, column: TableField<any>) {
-    const fieldName = column.name;
+    const fieldName = column.name.trim();
+
+    if (fieldName.includes(",")) {
+      const fields = fieldName.split(",").map((f) => f.trim());
+      const values = fields.map((field) =>
+        this.getColumnValue(data, { name: field }),
+      );
+      return values.filter((value) => value !== "").join(", ");
+    }
 
     // get nested value if name has dots
     const value = fieldName.includes(".")
@@ -1043,6 +1068,18 @@ export class DynamicMatTableComponent<T extends TableRow>
     }
 
     return value;
+  }
+
+  metadataNameHoverContent(row: any) {
+    if (!row.human_name) {
+      return `<strong>Metadata name: </strong><span class="metadata-name">${row.name}</span>`;
+    }
+    return (
+      "<strong>Human readable name: </strong>" +
+      (row.human_name || "") +
+      "\n <strong>Metadata name: </strong>" +
+      row.name
+    );
   }
 
   /************************************ Drag & Drop Column *******************************************/

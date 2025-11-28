@@ -90,4 +90,5 @@ export interface AbstractField {
   contentIconClass?: string;
   contentIconLink?: (column: TableField<any>, row: any) => string;
   hoverContent?: boolean;
+  hoverOnCell?: boolean;
 }
