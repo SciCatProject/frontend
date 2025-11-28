@@ -12,8 +12,35 @@
 
   <mat-card-content>
     <ng-container *ngFor="let filter of filterLists">
+      <div
+        *ngIf="filter.type === 'checkbox' && filter.enabled"
+        class="collapsible-filter-wrapper"
+        [class.collapsed]="!expandedFilters[filter.key]"
+      >
+        <shared-filter
+          [key]="filter.key"
+          [label]="filter.label"
+          [clear]="clearFilters"
+          [tooltip]="filter.description"
+          [filterType]="filter.type"
+          [prefilled]="activeFilters[filter.key] || null"
+          (checkBoxChange)="setFilter(filter.key, $event)"
+          [currentFilter$]="getFilterByKey$(filter.key)"
+          [facetCounts$]="getFacetCounts$(filter.key)"
+          (selectionChange)="selectionChange($event)"
+          (dateRangeChange)="setDateFilter(filter.key, $event)"
+          [filterValue]="activeFilters[filter.key]"
+          [showBadge]="!expandedFilters[filter.key]"
+        ></shared-filter>
+        <button class="collapse-toggle" (click)="toggleFilter(filter.key)">
+          <mat-icon>{{
+            expandedFilters[filter.key] ? "expand_less" : "expand_more"
+          }}</mat-icon>
+        </button>
+      </div>
+
       <shared-filter
-        *ngIf="filter.enabled"
+        *ngIf="filter.type !== 'checkbox' && filter.enabled"
         [key]="filter.key"
         [label]="filter.label"
         [clear]="clearFilters"
