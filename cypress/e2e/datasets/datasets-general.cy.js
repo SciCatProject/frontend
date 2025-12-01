@@ -362,8 +362,7 @@ describe("Datasets general", () => {
 
       cy.get(".dataset-table mat-table").should("exist");
 
-        
-       cy.get('[data-cy="remove-condition-button"]').click();
+      cy.get('[data-cy="remove-condition-button"]').click();
     });
   });
 
@@ -647,10 +646,10 @@ describe("Datasets general", () => {
         };
 
         cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
-        cy.visit("/datasets");
-        cy.wait("@getConfig");
         cy.finishedLoading();
       });
+      cy.visit("/datasets");
+      cy.wait("@getConfig");
     });
 
     it("should collapse and expand checkbox filters", () => {
