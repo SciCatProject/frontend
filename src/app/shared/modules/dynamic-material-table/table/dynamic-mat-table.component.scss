@@ -153,17 +153,6 @@ cdk-virtual-scroll-viewport {
   }
 }
 
-// table action menu
-.table-global-search {
-  max-width: 300px;
-  min-width: initial;
-  padding: 0 !important;
-  background-color: inherit;
-
-  .global-search-wrapper {
-    width: 100%;
-  }
-}
 
 .table-menu {
   max-width: 42px;
@@ -266,32 +255,6 @@ cdk-virtual-scroll-viewport {
   margin-right: -20px;
 }
 
-/* Custom Tooltip */
-.tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom: 1px dotted black;
-}
-
-.tooltip .tooltiptext {
-  visibility: hidden;
-  min-width: 120px;
-  background-color: #e91e63;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  left: 0;
-  top: 43px;
-  margin-left: -86%;
-}
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  white-space: pre;
-}
 ::ng-deep .mat-mdc-footer-cell {
   flex-direction: column !important;
 }
@@ -380,4 +343,62 @@ cdk-virtual-scroll-viewport {
 
 .mat-mdc-table .mat-mdc-row:nth-child(odd) {
   background-color: #ffffff;
+}
+
+.table-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+  flex-wrap: nowrap;
+
+  &.with-side-filter {
+    margin-left: 3rem;
+  }
+
+  .global-search-wrapper {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 500px;
+
+    mat-form-field {
+      width: 100%;
+    }
+
+    ::ng-deep .mat-mdc-text-field-wrapper {
+      background-color: white;
+      border-radius: 24px;
+      border: 1px solid var(--theme-hover-lighter);
+      padding: 0 8px;
+
+      &:hover {
+        border-color: var(--theme-primary-default);
+      }
+    }
+
+    ::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--focused {
+      border-color: var(--theme-primary-default);
+    }
+
+    ::ng-deep .mat-mdc-form-field-underline,
+    ::ng-deep .mdc-line-ripple,
+    ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+
+    ::ng-deep .mat-mdc-form-field-infix {
+      padding: 12px 20px;
+      min-height: auto;
+    }
+
+    ::ng-deep .mat-mdc-form-field-icon-prefix .mat-icon {
+      margin-right: -30px;
+    }
+  }
+
+  mat-paginator {
+    flex: 1 1 auto;
+    white-space: nowrap;
+    min-width: fit-content;
+  }
 }

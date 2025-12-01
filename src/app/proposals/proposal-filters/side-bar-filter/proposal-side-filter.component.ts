@@ -33,6 +33,7 @@ export class ProposalSideFilterComponent implements OnInit {
   activeFilters: Record<string, string[] | DateRange> = {};
   collapsed = false;
   expandedFilters: { [key: string]: boolean } = {};
+  @Output() collapsedChange = new EventEmitter<boolean>();
 
   filterLists: FilterConfig[] = [];
 
@@ -246,6 +247,7 @@ export class ProposalSideFilterComponent implements OnInit {
 
   toggleCollapse() {
     this.collapsed = !this.collapsed;
+    this.collapsedChange.emit(this.collapsed);
   }
 
   reset() {

@@ -431,7 +431,7 @@ describe("Datasets general", () => {
 
       cy.get("mat-slide-toggle").click();
 
-      cy.get('[data-cy="search-button"]').click();
+      cy.get('[data-cy="filter-search-button"]').click();
 
       cy.get(".condition-panel").first().click();
 
@@ -610,7 +610,7 @@ describe("Datasets general", () => {
           cy.get("input[matInput]").eq(0).clear().type("3.1e4");
         });
 
-      cy.get('[data-cy="search-button"]').click();
+      cy.get('[data-cy="filter-search-button"]').click();
 
       cy.get(".dataset-table mat-table").should("exist");
 
