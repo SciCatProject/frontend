@@ -620,6 +620,8 @@ describe("Datasets general", () => {
   
   describe("Datasets collapsible filters", () => {
     beforeEach(() => {
+      cy.clearCookies();
+      cy.clearLocalStorage();
       cy.createDataset({ type: "raw" });
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
         const testConfig = {
