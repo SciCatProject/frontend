@@ -237,13 +237,17 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       this.prepare_disabled_condition();
       this.update_status();
     } catch (error) {
-      console.error("Configurable action error", error);
+      console.error("Configurable action error on init", error);
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes["actionItems"]) {
-      this.update_status();
+      try {
+        this.update_status();
+      } catch (error) {
+        console.error("Configurable action error on changes", error);
+      }
     }
   }
 
@@ -269,12 +273,17 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   get disabled() {
-    this.update_status();
+    let res = null;
+    try {
+      this.update_status();
 
-    const expr = this.disabled_condition;
-    const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);
-    const context = this.context;
-    const res = fn(context);
+      const expr = this.disabled_condition;
+      const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);
+      const context = this.context;
+      res = fn(context);
+    } catch (error) {
+      console.error("Configurable action error on get disabled", error);
+    }
     return res;
   }
 
