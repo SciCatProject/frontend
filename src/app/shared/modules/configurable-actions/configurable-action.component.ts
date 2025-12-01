@@ -427,14 +427,14 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
 
     const method = this.actionConfig.method || "POST";
     const payload = this.get_payload();
-    const headers = this.get_auth_headers(this.actionConfig.headers);
+    const headers = this.get_auth_headers(this.actionConfig.headers || {});
     fetch(this.actionConfig.url, {
       method: method,
       headers: {
         ...{
           "Content-Type": "application/json",
         },
-        ...(headers),
+        ...(headers || {}),
       },
       body: payload,
     })
@@ -475,7 +475,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
       (_, variableName) =>
         encodeURIComponent(this.get_value_from_definition(variableName)),
     );
-    const headers = this.get_auth_headers(this.actionConfig.headers);
+    const headers = this.get_auth_headers(this.actionConfig.headers || {});
 
     fetch(url, {
       method: this.actionConfig.method || "POST",
@@ -483,7 +483,7 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
         ...{
           "Content-Type": "application/json",
         },
-        ...(headers),
+        ...(headers || {}),
       },
       body: this.get_payload(),
     })
