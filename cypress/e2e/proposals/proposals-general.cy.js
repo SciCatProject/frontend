@@ -598,4 +598,53 @@ describe("Proposals general", () => {
 
     });
   });
+
+  describe("Proposals collapsible filters", () => {
+    beforeEach(() => {
+      cy.createProposal({ ...testData.proposal, proposalId: Math.floor(100000 + Math.random() * 900000).toString() });
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const testConfig = {
+          ...baseConfig,
+          defaultProposalsListSettings: {
+            ...baseConfig.defaultProposalsListSettings,
+            filters: [
+              {
+                key: "type",
+                label: "Type",
+                type: "checkbox",
+                description: "Filter by proposal type",
+                enabled: true,
+              },
+              {
+                key: "keywords",
+                label: "Keyword",
+                type: "checkbox",
+                description: "Filter by keywords in the proposal",
+                enabled: false,
+              },
+            ],
+          },
+        };
+
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+        cy.visit("/proposals");
+        cy.wait("@getConfig");
+        cy.finishedLoading();
+      });
+    });
+
+    it("should collapse and expand checkbox filters", () => {
+      cy.get(".collapsible-filter-wrapper .collapse-toggle").first().click();
+
+      cy.get(".collapsible-filter-wrapper .checkbox-list")
+        .first()
+        .should("not.be.visible");
+
+      cy.get(".collapsible-filter-wrapper .collapse-toggle").first().click();
+
+      cy.get(".collapsible-filter-wrapper .checkbox-list")
+        .first()
+        .should("be.visible");
+    });
+  });
 });
