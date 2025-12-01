@@ -618,7 +618,7 @@ describe("Datasets general", () => {
     });
   });
   
-  describe.only("Datasets collapsible filters", () => {
+  describe("Datasets collapsible filters", () => {
     beforeEach(() => {
       cy.createDataset({ type: "raw" });
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
