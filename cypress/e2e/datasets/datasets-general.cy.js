@@ -618,7 +618,7 @@ describe("Datasets general", () => {
     });
   });
   
-  describe("Datasets collapsible filters", () => {
+  describe.only("Datasets collapsible filters", () => {
     beforeEach(() => {
       cy.createDataset({ type: "raw" });
       cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
@@ -653,7 +653,6 @@ describe("Datasets general", () => {
     });
 
     it("should collapse and expand checkbox filters", () => {
-    
       cy.get(".collapsible-filter-wrapper .collapse-toggle").first().click();
 
       cy.get(".collapsible-filter-wrapper .checkbox-list")
