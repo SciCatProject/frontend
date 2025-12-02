@@ -9,6 +9,7 @@ import {
 import { take, filter } from "rxjs/operators";
 import { TitleCasePipe } from "shared/pipes/title-case.pipe";
 import { ArchViewMode } from "state-management/models";
+import { Location } from "@angular/common";
 
 interface Breadcrumb {
   label: string;
@@ -39,6 +40,7 @@ export class BreadcrumbComponent implements OnInit {
     private store: Store,
     private route: ActivatedRoute,
     private router: Router,
+    private location: Location,
   ) {}
 
   ngOnInit() {
@@ -76,7 +78,7 @@ export class BreadcrumbComponent implements OnInit {
           path: url.path,
           params: url.parameters,
           url: "/" + encodeURIComponent(url.path),
-          fallback: "/" + encodeURIComponent(url.path + "s"),
+          fallback: "/" + encodeURIComponent(url.path),
         };
         this.breadcrumbs.push(crumb);
       });
@@ -122,9 +124,7 @@ export class BreadcrumbComponent implements OnInit {
             .pipe(take(1))
             .subscribe((currentMode) => {
               filters["mode"] = setMode(currentMode);
-              this.router.navigate(["/datasets"], {
-                queryParams: { args: JSON.stringify(filters) },
-              });
+              this.location.back();
             });
         });
     } else {
