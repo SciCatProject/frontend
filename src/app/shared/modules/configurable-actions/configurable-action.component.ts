@@ -273,13 +273,13 @@ export class ConfigurableActionComponent implements OnInit, OnChanges {
   }
 
   get disabled() {
-    let res = null;
+    let res = false;
     try {
       this.update_status();
 
       const expr = this.disabled_condition;
       const fn = new Function("ctx", `with (ctx) { return (${expr}); }`);
-      const context = this.context;
+      const { context } = this;
       res = fn(context);
     } catch (error) {
       console.error("Configurable action error on get disabled", error);
