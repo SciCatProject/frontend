@@ -10,8 +10,6 @@ import { AppConfigService } from "app-config.service";
   standalone: false,
 })
 export class ConfigurableActionsComponent {
-  private _sortedActionsConfig: ActionConfig[];
-
   @Input({ required: true }) actionsConfig: ActionConfig[] = [];
   @Input({ required: true }) actionItems: ActionItems;
 
@@ -26,10 +24,11 @@ export class ConfigurableActionsComponent {
   }
 
   get sortedActionsConfig(): ActionConfig[] {
-    this._sortedActionsConfig = this.actionsConfig;
-    this.actionsConfig.sort((a: ActionConfig, b: ActionConfig) =>
+    if (!this.actionsConfig) {
+      return [];
+    }
+    return this.actionsConfig.sort((a: ActionConfig, b: ActionConfig) =>
       a.order && b.order ? a.order - b.order : 0,
     );
-    return this._sortedActionsConfig;
   }
 }
