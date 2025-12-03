@@ -10,7 +10,7 @@ import { AppConfigService } from "app-config.service";
   standalone: false,
 })
 export class ConfigurableActionsComponent {
-  @Input({ required: true }) actionsConfig: ActionConfig[];
+  @Input({ required: true }) actionsConfig: ActionConfig[] = [];
   @Input({ required: true }) actionItems: ActionItems;
 
   constructor(public appConfigService: AppConfigService) {}
