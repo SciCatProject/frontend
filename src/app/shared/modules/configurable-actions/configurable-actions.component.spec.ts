@@ -109,6 +109,9 @@ describe("1010: ConfigurableActionsComponent", () => {
   });
 
   it("0060: there should be as many actions as defined in default configuration", async () => {
+    component.actionsConfig = mockActionsConfig;
+    fixture.detectChanges();
+
     expect(component.sortedActionsConfig.length).toEqual(
       mockActionsConfig.length,
     );
@@ -120,6 +123,7 @@ describe("1010: ConfigurableActionsComponent", () => {
   it("0070: there should be 0 actions with no actions configured", async () => {
     component.actionsConfig = [];
     fixture.detectChanges();
+
     expect(component.sortedActionsConfig.length).toEqual(0);
     const htmlElement: HTMLElement = fixture.nativeElement;
     const htmlActions = htmlElement.querySelectorAll("configurable-action");

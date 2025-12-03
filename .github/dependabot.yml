@@ -21,6 +21,7 @@ updates:
       angular:
         patterns:
           - "@angular*"
+          - "ngx-cookie-service"
         update-types:
           - "minor"
           - "patch"
