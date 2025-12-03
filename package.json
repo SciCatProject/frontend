@@ -85,7 +85,7 @@
     "@types/source-map-support": "^0.5.3",
     "@typescript-eslint/eslint-plugin": "^8.32.0",
     "@typescript-eslint/parser": "^8.0.0",
-    "coveralls": "^3.0.7",
+    "coveralls": "3.1.1",
     "cypress": "^15.0.0",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.1",
@@ -106,5 +106,12 @@
     "source-map-support": "^0.5.16",
     "ts-node": "^10.9.1",
     "typescript": "^5.8.3"
+  },
+
+ "//comment": "Dependabot alert #113 ->coveralls",
+  "overrides": {
+    "coveralls": {
+      "request": "@cypress/request@3.0.9"
+    }
   }
 }
