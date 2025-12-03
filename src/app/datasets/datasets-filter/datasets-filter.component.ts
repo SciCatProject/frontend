@@ -849,7 +849,6 @@ export class DatasetsFilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.store.dispatch(clearFacetsAction());
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }
