@@ -57,6 +57,15 @@
     <div class="section-container">
       <button
         mat-raised-button
+        color="secondary"
+        class="proposal-filters-clear-all-button"
+        (click)="reset()"
+      >
+        <mat-icon>undo</mat-icon>
+        Clear
+      </button>
+      <button
+        mat-raised-button
         color="primary"
         class="proposal-filters-search-button"
         (click)="applyFilters()"
@@ -64,15 +73,6 @@
       >
         <mat-icon>search</mat-icon>
         Apply
-      </button>
-      <button
-        mat-raised-button
-        color="primary"
-        class="proposal-filters-clear-all-button"
-        (click)="reset()"
-      >
-        <mat-icon>undo</mat-icon>
-        Reset
       </button>
     </div>
   </mat-card-content>
