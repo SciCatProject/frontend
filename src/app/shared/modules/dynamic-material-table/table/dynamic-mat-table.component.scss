@@ -9,20 +9,14 @@
   overflow: hidden;
   transition: 0.3s cubic-bezier(0.46, -0.72, 0.46, 1.54);
   border: 2px rgb(0, 150, 136);
-
-  .global-search-wrapper {
-    text-align: right;
-    padding: 0 20px;
-
-    mat-form-field {
-      min-width: 30%;
-    }
-  }
 }
 
-.dynamic-table {
-  min-width: 100%;
-  width: max-content;
+::ng-deep .mat-mdc-header-cell .mat-sort-header-content {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 /* Fixed Scroll */
@@ -32,6 +26,11 @@
 
 ::ng-deep .mat-mdc-menu-panel {
   min-height: 48px;
+}
+
+.dynamic-table {
+  min-width: 100%;
+  width: max-content;
 }
 
 .label-cell {
@@ -123,6 +122,9 @@ cdk-virtual-scroll-viewport {
   font-weight: bolder;
   font-size: 14px;
   width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .header {
@@ -152,7 +154,6 @@ cdk-virtual-scroll-viewport {
     padding: 11px !important;
   }
 }
-
 
 .table-menu {
   max-width: 42px;
@@ -348,15 +349,17 @@ cdk-virtual-scroll-viewport {
 .table-header-controls {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
   gap: 1rem;
   margin: 1rem 0;
-  flex-wrap: nowrap;
 
   &.with-side-filter {
     margin-left: 3rem;
   }
 
   .global-search-wrapper {
+    padding: 0 20px;
     flex: 1 1 auto;
     width: 100%;
     max-width: 500px;
@@ -400,5 +403,10 @@ cdk-virtual-scroll-viewport {
     flex: 1 1 auto;
     white-space: nowrap;
     min-width: fit-content;
+  }
+}
+@media (max-width: 1340px) {
+  .table-header-controls .global-search-wrapper {
+    max-width: 100%;
   }
 }
