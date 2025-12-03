@@ -53,7 +53,6 @@ export class AdminTabComponent implements OnInit, OnDestroy {
               files: [],
             };
             fileObj.pid = this.dataset["pid"];
-            fileObj.files = [];
             const job: CreateJobDtoV3 = {
               emailJobInitiator: user.email,
               type: "reset",
