@@ -362,8 +362,7 @@ describe("Datasets general", () => {
 
       cy.get(".dataset-table mat-table").should("exist");
 
-        
-       cy.get('[data-cy="remove-condition-button"]').click();
+      cy.get('[data-cy="remove-condition-button"]').click();
     });
   });
 
@@ -566,7 +565,9 @@ describe("Datasets general", () => {
 
       cy.get('[data-cy="filter-search-button"]').click();
 
-      cy.get(".dataset-table mat-row").contains("Cypress Dataset").should("exist");
+      cy.get(".dataset-table mat-row")
+        .contains("Cypress Dataset")
+        .should("exist");
     });
   });
 
@@ -614,6 +615,59 @@ describe("Datasets general", () => {
       cy.get(".dataset-table mat-table").should("exist");
 
       cy.get('[data-cy="remove-condition-button"]').click();
+    });
+  });
+  
+  describe("Datasets collapsible filters", () => {
+    beforeEach(() => {
+      cy.clearLocalStorage();
+      cy.readFile("CI/e2e/frontend.config.e2e.json").then((baseConfig) => {
+        const testConfig = {
+          ...baseConfig,
+          defaultDatasetsListSettings: {
+            ...baseConfig.defaultDatasetsListSettings,
+            filters: [
+              {
+                key: "type",
+                label: "Type",
+                type: "checkbox",
+                description: "Filter by dataset type",
+                enabled: true,
+              },
+              {
+                key: "keywords",
+                label: "Keyword",
+                type: "checkbox",
+                description: "Filter by keywords in the dataset",
+                enabled: false,
+              },
+            ],
+          },
+        };
+        cy.intercept("GET", "**/admin/config", testConfig).as("getConfig");
+      });
+
+      cy.createDataset({ type: "raw" });
+
+      cy.visit("/datasets");
+
+      cy.wait("@getConfig", { timeout: 10000 });
+
+      cy.finishedLoading();
+    });
+
+    it("should collapse and expand checkbox filters", () => {
+      cy.get(".collapsible-filter-wrapper .collapse-toggle").first().click();
+
+      cy.get(".collapsible-filter-wrapper .checkbox-list")
+        .first()
+        .should("not.be.visible");
+
+      cy.get(".collapsible-filter-wrapper .collapse-toggle").first().click();
+
+      cy.get(".collapsible-filter-wrapper .checkbox-list")
+        .first()
+        .should("be.visible");
     });
   });
 });
