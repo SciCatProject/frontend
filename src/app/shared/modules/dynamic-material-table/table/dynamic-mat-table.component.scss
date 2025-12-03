@@ -20,9 +20,12 @@
   }
 }
 
-.dynamic-table {
-  min-width: 100%;
-  width: max-content;
+::ng-deep .mat-mdc-header-cell .mat-sort-header-content {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 /* Fixed Scroll */
@@ -32,6 +35,11 @@
 
 ::ng-deep .mat-mdc-menu-panel {
   min-height: 48px;
+}
+
+.dynamic-table {
+  min-width: 100%;
+  width: max-content;
 }
 
 .label-cell {
@@ -123,6 +131,9 @@ cdk-virtual-scroll-viewport {
   font-weight: bolder;
   font-size: 14px;
   width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .header {
@@ -152,7 +163,6 @@ cdk-virtual-scroll-viewport {
     padding: 11px !important;
   }
 }
-
 
 .table-menu {
   max-width: 42px;
