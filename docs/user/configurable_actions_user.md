@@ -7,7 +7,7 @@ created_on: 2024/07/29
 
 # What Are Configurable Actions?
 
-For non-technical users at ESS, **configurable actions** are custom buttons or menu options that appear in multiple location in the web interface. Currently they are used only on the dataset data file tab, but they will be soon be available on dataset details tab, datasets list and the selection.
+For non-technical users at ESS, **configurable actions** are custom buttons or menu options that appear in multiple locations in the web interface. Currently they are used only on the dataset data file tab, but they will soon be available on the dataset details tab, datasets list, and the selection.
 
 These actions make it easy to perform specific tasks with just a click. Examples include:
 
