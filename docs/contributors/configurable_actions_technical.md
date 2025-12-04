@@ -47,7 +47,7 @@ Variables (defined in the `variables` object) are user-defined values which use 
 - File lists or counts
 - System information, like user authentication token (`#jwt`, `#tokenBearer`) or auto generated uuid and more.
 
-Inputs/payloads define what are the form fields (for form actions) or the payload send upon click (for xhr and json-download actions). Variables can be injected in the inputs and payload including the variable name enclosed in double curly braces `{{ ... }}` syntax.
+Inputs/payloads define the form fields (for form actions) or the payload sent upon click (for XHR and json-download actions). Variables can be injected in the inputs and payload including the variable name enclosed in double curly braces `{{ ... }}` syntax.
 
 ### 4. Enable/Authorization Conditions
 
