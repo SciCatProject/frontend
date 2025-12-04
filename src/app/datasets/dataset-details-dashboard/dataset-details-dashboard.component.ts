@@ -12,7 +12,7 @@ import {
 } from "@scicatproject/scicat-sdk-ts-angular";
 import {
   selectCurrentDataset,
-  selectDatasetsInBatch,
+  selectIsCurrentDatasetInBatch,
 } from "state-management/selectors/datasets.selectors";
 import {
   selectIsAdmin,
@@ -236,15 +236,7 @@ export class DatasetDetailsDashboardComponent
     this.subscriptions.push(datasetSub);
     this.jwt$ = this.userService.usersControllerGetUserJWTV3();
 
-    this.isInBatch$ = combineLatest([
-      this.store.select(selectDatasetsInBatch),
-      this.dataset$,
-    ]).pipe(
-      map(
-        ([batch, dataset]) =>
-          !!dataset && batch.some((item) => item?.pid === dataset.pid),
-      ),
-    );
+    this.isInBatch$ = this.store.select(selectIsCurrentDatasetInBatch);
   }
   resetTabs() {
     Object.values(this.fetchDataActions).forEach((tab) => {

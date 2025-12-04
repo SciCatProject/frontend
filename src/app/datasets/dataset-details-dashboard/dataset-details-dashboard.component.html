@@ -9,7 +9,6 @@
       id="addToBatchButton"
       mat-button
       (click)="onAddToBatch()"
-      *ngIf="appConfig.shoppingCartEnabled"
       [disabled]="isInBatch$ | async"
       color="primary"
       class="add-batch"

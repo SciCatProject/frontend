@@ -118,8 +118,7 @@ const reducer = createReducer(
     if (!state.currentSet) {
       return state;
     }
-    const batchedPids = state.batch.map((d) => d.pid);
-    if (batchedPids.includes(state.currentSet.pid)) {
+    if (state.batch.some((d) => d.pid === state.currentSet.pid)) {
       return state;
     }
     const batch = [...state.batch, state.currentSet];
