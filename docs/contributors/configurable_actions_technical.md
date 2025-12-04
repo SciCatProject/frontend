@@ -38,7 +38,7 @@ Each configurable action is represented by an object with a well-defined schema.
 - **form**: Submits data via HTTP form POST/GET to a given endpoint (`url`), optionally opening new tabs/windows.
 - **xhr**: Sends AJAX (XHR) requests (e.g., PATCH/POST) for more complex workflows. This type of action can be used to configure a call to the BE.
 - **link**: Simple redirect to a URL.
-- **json-download**: Execute a call to a remote URL and expect a json payload that can be downloaded by the user through the browser. The action allows to define the name of the file to be downloaded.
+- **json-download**: Executes a call to a remote URL and expects a JSON payload that can be downloaded by the user through the browser. The action allows to define the name of the file to be downloaded.
 
 ### 3. Variable and Input Substitution
 
