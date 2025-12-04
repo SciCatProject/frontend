@@ -157,7 +157,7 @@ export class ProposalDatasetsComponent implements OnInit, OnDestroy {
           tableDefaultSettingsConfig,
         );
       const paginationConfig = {
-        pageSizeOptions: [5, 10, 25, 100],
+        pageSizeOptions: [5, 10, 25, 100, 500, 10000],
         pageIndex: data.currentPage || 0,
         pageSize: data.datasetsPerPage || this.defaultPageSize,
         length: data.datasetCount,
