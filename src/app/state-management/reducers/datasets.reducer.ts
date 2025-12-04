@@ -114,6 +114,17 @@ const reducer = createReducer(
     const batch = [...state.batch, ...addition];
     return { ...state, batch };
   }),
+  on(fromActions.addCurrentToBatchAction, (state) => {
+    if (!state.currentSet) {
+      return state;
+    }
+    const batchedPids = state.batch.map((d) => d.pid);
+    if (batchedPids.includes(state.currentSet.pid)) {
+      return state;
+    }
+    const batch = [...state.batch, state.currentSet];
+    return { ...state, batch };
+  }),
   on(fromActions.storeBatchAction, (state, { batch }) => ({ ...state, batch })),
   on(fromActions.removeFromBatchAction, (state, { dataset }): DatasetState => {
     const batch = state.batch.filter(

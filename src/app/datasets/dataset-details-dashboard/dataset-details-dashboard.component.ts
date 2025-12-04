@@ -10,7 +10,10 @@ import {
   OutputDatasetObsoleteDto,
   UsersService,
 } from "@scicatproject/scicat-sdk-ts-angular";
-import { selectCurrentDataset } from "state-management/selectors/datasets.selectors";
+import {
+  selectCurrentDataset,
+  selectDatasetsInBatch,
+} from "state-management/selectors/datasets.selectors";
 import {
   selectIsAdmin,
   selectIsLoading,
@@ -18,8 +21,9 @@ import {
   selectProfile,
 } from "state-management/selectors/user.selectors";
 import { ActivatedRoute, IsActiveMatchOptions } from "@angular/router";
-import { Subscription, Observable, combineLatest } from "rxjs";
-import { map, pluck } from "rxjs/operators";
+import { Subscription, Observable, combineLatest, Subject } from "rxjs";
+import { map, takeUntil } from "rxjs/operators";
+import * as fromDatasetActions from "state-management/actions/datasets.actions";
 import {
   clearCurrentDatasetStateAction,
   fetchAttachmentsAction,
@@ -111,6 +115,7 @@ export class DatasetDetailsDashboardComponent
   accessGroups$: Observable<string[]> = this.userProfile$.pipe(
     map((profile) => (profile ? profile.accessGroups : [])),
   );
+  isInBatch$: Observable<boolean>;
 
   constructor(
     public appConfigService: AppConfigService,
@@ -230,6 +235,16 @@ export class DatasetDetailsDashboardComponent
     });
     this.subscriptions.push(datasetSub);
     this.jwt$ = this.userService.usersControllerGetUserJWTV3();
+
+    this.isInBatch$ = combineLatest([
+      this.store.select(selectDatasetsInBatch),
+      this.dataset$,
+    ]).pipe(
+      map(
+        ([batch, dataset]) =>
+          !!dataset && batch.some((item) => item?.pid === dataset.pid),
+      ),
+    );
   }
   resetTabs() {
     Object.values(this.fetchDataActions).forEach((tab) => {
@@ -296,6 +311,10 @@ export class DatasetDetailsDashboardComponent
         );
       }
     }
+  }
+
+  onAddToBatch(): void {
+    this.store.dispatch(fromDatasetActions.addCurrentToBatchAction());
   }
 
   ngAfterViewChecked() {
