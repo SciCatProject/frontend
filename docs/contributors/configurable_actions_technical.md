@@ -84,7 +84,7 @@ The `authorization` field restricts actions based on user or dataset properties 
 ```
 
 This example action configures a button with label "Download All" and icon mat-icon `download`. The action is of type `form` which by default will submit a form with method POST. Internally, it defines 4 variables with name `pid`, `files`, `totalSize`, and `folder` with their values depending from the dataset fields. The variables are used to define the fields of the form.  
-When the user clicks on the button, the FE will create a form with the listed fields and submitted to the specified URL as a POST. It also show the reply in a new tab in browser.
+When the user clicks the button, the FE creates a form with the listed fields and submits it to the specified URL as a POST, then shows the reply in a new browser tab.
 
 ## Configuration Options Reference
 
