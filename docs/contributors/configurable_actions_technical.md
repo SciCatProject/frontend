@@ -106,7 +106,7 @@ When the user clicks the button, the FE creates a form with the listed fields an
 | method        | HTTP method for XHR actions                            | `"PATCH"`                                    |
 | headers       | HTTP headers object for XHR                            | `{...}`                                      |
 | enabled       | Condition expression to enable/disable action          | `"#Length(@files) > 0"`                      |
-| authorization | List or string with conditions required to access action| `["#datasetOwner"]`                         |
+| authorization | List or string with conditions required to access the action| `["#datasetOwner"]`                         |
 
 ## How to Configure
 
