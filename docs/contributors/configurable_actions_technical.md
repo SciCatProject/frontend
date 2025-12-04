@@ -42,7 +42,7 @@ Each configurable action is represented by an object with a well-defined schema.
 
 ### 3. Variable and Input Substitution
 
-Variables (defined in the `variables` object) are user defined values which use placeholders referencing runtime data, such as:
+Variables (defined in the `variables` object) are user-defined values which use placeholders referencing runtime data, such as:
 - Dataset attributes (e.g., `#Dataset0Pid`, `#Dataset0FilesPath`)
 - File lists or counts
 - System information, like user authentication token (`#jwt`, `#tokenBearer`) or auto generated uuid and more.
