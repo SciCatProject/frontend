@@ -6,11 +6,11 @@ created_on: 2024/07/29
 
 # Datafiles Action Configuration
 
-__IMPORTANT__: this file is deprecated as the datafiles are now implemented using _configurable actions_
+__IMPORTANT__: this file is deprecated as the datafiles actions are now implemented using _configurable actions_
 
 This page describes how to configure the datafiles actions.  
-They are action available to users when vieweing the list of files associated to a dataset which can be viewed under the the Datafiles tab of the dataset details page.  
-This actions are shown as button between the page header and the table listing the files.
+Datafiles actions are actions available to users when viewing the list of files associated to a dataset which can be viewed under the the Datafiles tab of the dataset details page.  
+These actions are shown as button between the page header and the table listing the files.
 
 There are two properties in the frontend configuration structure that control the datafiles actions:
 

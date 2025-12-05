@@ -47,13 +47,29 @@ Variables (defined in the `variables` object) are user-defined values which use 
 - File lists or counts
 - System information, like user authentication token (`#jwt`, `#tokenBearer`) or auto generated uuid and more.
 
-Inputs/payloads define the form fields (for form actions) or the payload sent upon click (for XHR and json-download actions). Variables can be injected in the inputs and payload including the variable name enclosed in double curly braces `{{ ... }}` syntax.
+Entries under the `inputs` field define the form fields that are dynamically created on the form that it is than submitted when the action is triggered.
+The `payload` field contains what is sent as body of the POST request when an XHR or json-download action is triggered. 
+User defined variables can be injected in the inputs and payload by including the variable name enclosed in double curly braces `{{ ... }}`.
+__Example__:
+Given the following configuration:
+```json
+{
+  "variables" : {
+    "pid" : "#Dataset0Pid"
+  },
+  "payload" : '{"datasetPid" : "{{ @pid }}}',
+}
+```
 
-### 4. Enable/Authorization Conditions
+When the action is triggered by a click on the button, the action's engine extract the pid of the first dataset listed and saves it in the internal variable named _pid_, than takes the payload string and substitute the string `{{ @pid }}` with the actual pid of the dataset contained in the `pid` variable. Than the payload is sent with the request.
+
+### 4. Enable and Authorization Conditions
 
 The `enabled` or `disabled` fields are the expression that evaluates whether the action should be enabled or disabled. Only one of them is needed, if both are present, `disabled` takes the precedence. This field supports logical operators and variable references (e.g., `#Length(@files) && #MaxDownloadableSize(@totalSize)`).
 
 The `authorization` field restricts actions based on user or dataset properties (e.g., requiring the user to be the dataset owner).
+
+Both configuration support logical operators and variables injection. More information on all the options can be found in the (reference section)[configuration_options_reference] below
 
 ## Example Configuration
 
@@ -107,6 +123,32 @@ When the user clicks the button, the FE creates a form with the listed fields an
 | headers       | HTTP headers object for XHR                            | `{...}`                                      |
 | enabled       | Condition expression to enable/disable action          | `"#Length(@files) > 0"`                      |
 | authorization | List or string with conditions required to access the action| `["#datasetOwner"]`                         |
+
+## Available operators and system variables
+This section list all the default values and operators that are available when configuring the configurable actions.
+
+| Operator | Type | Description | 
+|----------|------|-------------|
+| #Dataset0Pid | string | The pid of the first dataset passed to the action | 
+| #Dataset0FilesPath | [string] | The list of all the path for all the files in the first dataset passed to the action |
+| #Dataset0FilesTotalSize | integer | The total size of all the files of the first dataset passed to the action |
+| #Dataset0SourceFolder | string | The source folder indicated in the related field of the first dataset passed to the action |
+| #Dataset0SelectedFilesPath| [string] | The list of the paths for all the selected files of the first dataset passed to the action |
+| #Dataset0SelectedFilesCount | integer | The number of selected files of the first dataset passed to the action |
+| #Dataset0SelectedFilesTotalSize | integer | The total size of all the selected files of the first dataset passed to the action |
+| #Dataset[i]Field[f] | any | The value of field `f` of the `i`-th dataset passed to the action |
+| #DatasetsPid | [string] | The list of pids of the all datasets passed to the action | 
+| #DatasetsFilesPath | [string] | The list of all the paths for all the files of all the datasets passed to the action |
+| #DatasetsFilesTotalSize | integer | The total size of all the files of all the datasets passed to the action |
+| #DatasetsSourceFolder | [string] | The list of source folders indicated in the related field of all the datasets passed to the action |
+| #DatasetsSelectedFilesCount | integer | The number of all selected files from all the datasets passed to the action |
+| #DatasetsSelectedFilesTotalSize | integer | The total size of all the selected files from all the datasets passed to the action |
+| #DatasetsField[f] | [any] | The list of values of field `f` from all the datasets passed to the action |
+| #Length( @variable ) | integer | The number of elements in the specified variable |
+| #datasetOwner | boolean | True if the user is part of the owner group of the dataset(s) |
+| #userIsAdmin | boolean | True if the user is an admin |
+| #uuid | string | A v4 uuid generated on the fly |
+| @variable | any | replace the string with the valu eof the variable defined in the action variable |
 
 ## How to Configure
 
