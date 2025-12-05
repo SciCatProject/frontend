@@ -110,7 +110,10 @@ describe("1010: ConfigurableActionsComponent", () => {
 
   it("0060: there should be as many actions as defined in default configuration", async () => {
     component.actionsConfig = mockActionsConfig;
-    fixture.detectChanges();
+
+    fixture.detectChanges(); // start rendering
+    await fixture.whenStable(); // wait async rendering
+    fixture.detectChanges(); // refresh DOM after async work done
 
     expect(component.sortedActionsConfig.length).toEqual(
       mockActionsConfig.length,
