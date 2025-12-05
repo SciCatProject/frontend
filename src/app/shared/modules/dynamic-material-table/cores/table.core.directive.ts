@@ -74,6 +74,7 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() globalTextSearch = "";
   @Input() globalTextSearchPlaceholder = "Search...";
   @Input() selectionIds = [];
+  @Input() disableBorder: boolean;
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix
   @Output() onTableEvent: EventEmitter<ITableEvent> = new EventEmitter();
   // eslint-disable-next-line @angular-eslint/no-output-on-prefix

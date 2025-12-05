@@ -4,9 +4,6 @@ mat-sidenav-container {
     background-color: #ffffff;
     overflow-x: hidden;
 
-    :host-context(.anonymous-site) .action-column {
-      margin-top: 3.5rem;
-    }
     .action-column {
       .add-card {
         margin: 1rem 0 1rem;
