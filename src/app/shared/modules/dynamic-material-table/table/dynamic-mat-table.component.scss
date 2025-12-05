@@ -9,8 +9,8 @@
   overflow: hidden;
   transition: 0.3s cubic-bezier(0.46, -0.72, 0.46, 1.54);
 
-  box-shadow: var(--theme-side-panel-shadow);
-  border: var(--theme-side-panel-border, 1px solid rgba(153, 213, 233, 0.7));
+  box-shadow: var(--theme-table-shadow);
+  border: var(--theme-table-border, 1px solid rgba(153, 213, 233, 0.7));
   border-radius: 4px;
 
   &.disable-border {
