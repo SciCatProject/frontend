@@ -150,6 +150,30 @@ describe("DatasetsReducer", () => {
     });
   });
 
+  describe("on addCurrentToBatchAction", () => {
+    it("should add currentSet to batch when not already present", () => {
+      const stateIn = JSON.parse(JSON.stringify(initialDatasetState));
+      stateIn.currentSet = dataset;
+      stateIn.batch = [];
+
+      const action = fromActions.addCurrentToBatchAction();
+      const state = fromDatasets.datasetsReducer(stateIn, action);
+
+      expect(state.batch).toEqual([dataset]);
+    });
+
+    it("should not duplicate currentSet if already present in batch", () => {
+      const stateIn = JSON.parse(JSON.stringify(initialDatasetState));
+      stateIn.currentSet = dataset;
+      stateIn.batch = [dataset];
+
+      const action = fromActions.addCurrentToBatchAction();
+      const state = fromDatasets.datasetsReducer(stateIn, action);
+
+      expect(state.batch).toEqual([dataset]);
+    });
+  });
+
   describe("on removeFromBatchAction", () => {
     it("should remove dataset from batch", () => {
       const action = fromActions.removeFromBatchAction({ dataset });

@@ -47,16 +47,19 @@
 
     <ng-container *ngSwitchCase="'checkbox'">
       <div class="filter-group">
-        <mat-label class="filter-title">{{
-          label | translate: localization
-        }}</mat-label>
+        <mat-label class="filter-title"
+          >{{ label | translate: localization }}
+          <span *ngIf="shouldShowBadge" class="filter-badge">{{
+            badgeCount
+          }}</span></mat-label
+        >
         <mat-form-field
           *ngIf="showCheckboxSearch"
           appearance="outline"
           class="facet-search"
           floatLabel="always"
         >
-          <mat-label>Type to filter</mat-label>
+          <mat-label>Find filter</mat-label>
           <input
             matInput
             type="search"

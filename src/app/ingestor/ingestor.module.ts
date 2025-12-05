@@ -1,0 +1,119 @@
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { IngestorWrapperComponent } from "./ingestor-page/ingestor-wrapper.component";
+import { MatCardModule } from "@angular/material/card";
+import { RouterModule } from "@angular/router";
+import { IngestorMetadataEditorComponent } from "./ingestor-metadata-editor/ingestor-metadata-editor.component";
+import { MatButtonModule } from "@angular/material/button";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { FormsModule } from "@angular/forms";
+import { MatListModule } from "@angular/material/list";
+import { MatIconModule } from "@angular/material/icon";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatTableModule } from "@angular/material/table";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatSelectModule } from "@angular/material/select";
+import { MatOptionModule } from "@angular/material/core";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { JsonFormsModule } from "@jsonforms/angular";
+import { JsonFormsAngularMaterialModule } from "@jsonforms/angular-material";
+import { MatStepperModule } from "@angular/material/stepper";
+import { IngestorDialogStepperComponent } from "./ingestor-dialogs/dialog-mounting-components/ingestor.dialog-stepper.component";
+import { AnyOfRendererComponent } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/any-of-renderer";
+import { MatRadioModule } from "@angular/material/radio";
+import { ArrayLayoutRendererCustom } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/array-renderer";
+import { MatBadgeModule } from "@angular/material/badge";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { IngestorConfirmationDialogComponent } from "./ingestor-dialogs/confirmation-dialog/ingestor.confirmation-dialog.component";
+import { ExportTemplateHelperComponent } from "./ingestor-dialogs/dialog-mounting-components/ingestor.export-helper.component";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { CustomObjectControlRendererComponent } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/object-group-renderer";
+import { IngestorFileBrowserComponent } from "./ingestor-dialogs/ingestor-file-browser/ingestor.file-browser.component";
+import { MatTreeModule } from "@angular/material/tree";
+import { OwnerGroupFieldComponent } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/owner-group-field-renderer";
+import {
+  CustomLayoutChildrenRenderPropsPipe,
+  QuantityValueLayoutRendererComponent,
+} from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/quantity-value-layout-renderer";
+import { MatMenuModule } from "@angular/material/menu";
+import { EffectsModule } from "@ngrx/effects";
+import { IngestorEffects } from "state-management/effects/ingestor.effects";
+import { StoreModule } from "@ngrx/store";
+import { ingestorReducer } from "state-management/reducers/ingestor.reducer";
+import { IngestorCreationDialogBaseComponent } from "./ingestor-dialogs/creation-dialog/ingestor.creation-dialog-base.component";
+import { IngestorConfirmTransferDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.confirm-transfer-dialog-page.component";
+import { IngestorNewTransferDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.new-transfer-dialog-page.component";
+import { IngestorUserMetadataDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.user-metadata-dialog-page.component";
+import { IngestorExtractorMetadataDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.extractor-metadata-dialog-page.component";
+import { IngestorTransferViewDialogComponent } from "./ingestor-dialogs/transfer-detail-view/ingestor.transfer-detail-view-dialog.component";
+import { IngestorNoRightsDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.no-rights-dialog-page.component";
+import { IngestorTransferComponent } from "./ingestor-page/ingestor-transfer.component";
+import { IngestorCreationComponent } from "./ingestor-page/ingestor-creation.component";
+import { IngestorCustomMetadataDialogPageComponent } from "./ingestor-dialogs/creation-dialog/creation-pages/ingestor.custom-metadata-dialog-page.component";
+import { SIFieldHiderRendererComponent } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/quantity-field-renderer";
+import { DynamicObjectRendererComponent } from "shared/modules/jsonforms-custom-renderers/ingestor-renderer/dynamic-object-renderer";
+
+@NgModule({
+  declarations: [
+    IngestorWrapperComponent,
+    IngestorTransferComponent,
+    IngestorCreationComponent,
+    IngestorMetadataEditorComponent,
+    IngestorConfirmTransferDialogPageComponent,
+    IngestorNewTransferDialogPageComponent,
+    IngestorUserMetadataDialogPageComponent,
+    IngestorExtractorMetadataDialogPageComponent,
+    IngestorCreationDialogBaseComponent,
+    IngestorDialogStepperComponent,
+    AnyOfRendererComponent,
+    ArrayLayoutRendererCustom,
+    CustomObjectControlRendererComponent,
+    SIFieldHiderRendererComponent,
+    DynamicObjectRendererComponent,
+    IngestorConfirmationDialogComponent,
+    ExportTemplateHelperComponent,
+    IngestorFileBrowserComponent,
+    OwnerGroupFieldComponent,
+    QuantityValueLayoutRendererComponent,
+    CustomLayoutChildrenRenderPropsPipe,
+    IngestorTransferViewDialogComponent,
+    IngestorNoRightsDialogPageComponent,
+    IngestorCustomMetadataDialogPageComponent,
+  ],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    RouterModule,
+    MatListModule,
+    MatIconModule,
+    MatTabsModule,
+    MatTableModule,
+    MatDialogModule,
+    MatTooltipModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatStepperModule,
+    MatRadioModule,
+    MatAutocompleteModule,
+    MatCheckboxModule,
+    MatBadgeModule,
+    MatTreeModule,
+    JsonFormsModule,
+    JsonFormsAngularMaterialModule,
+    CommonModule,
+    MatPaginatorModule,
+    MatMenuModule,
+    EffectsModule.forFeature([IngestorEffects]),
+    StoreModule.forFeature("ingestor", ingestorReducer),
+  ],
+  exports: [IngestorMetadataEditorComponent, IngestorCreationComponent],
+})
+export class IngestorModule {}

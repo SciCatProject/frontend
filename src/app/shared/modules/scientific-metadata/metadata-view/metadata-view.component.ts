@@ -16,8 +16,7 @@ import { ITableSetting } from "shared/modules/dynamic-material-table/models/tabl
 import { BehaviorSubject } from "rxjs";
 import { PrintConfig } from "shared/modules/dynamic-material-table/models/print-config.model";
 import { TableSelectionMode } from "shared/modules/dynamic-material-table/models/table-row.model";
-import { ReplaceUnderscorePipe } from "shared/pipes/replace-underscore.pipe";
-import { DatePipe, TitleCasePipe } from "@angular/common";
+import { DatePipe } from "@angular/common";
 import { LinkyPipe } from "ngx-linky";
 import { PrettyUnitPipe } from "shared/pipes/pretty-unit.pipe";
 import { DateTime } from "luxon";
@@ -87,12 +86,21 @@ export class MetadataViewComponent implements OnInit, OnChanges {
             name: "human_name",
             header: "Name",
             width: 250,
-          },
-          {
-            name: "name",
-            header: "Raw property name",
-            width: 250,
-            display: "hidden",
+            hoverContent: true,
+            hoverOnCell: true,
+            customRender: (column, row) => {
+              const displayName = row.human_name || row.name || "";
+
+              if (row.human_name && row.name) {
+                return `
+                  <div class="metadata-name-wrapper">
+                    <div class="metadata-human-name">${row.human_name}</div>
+                    <div class="metadata-raw-name">${row.name}</div>
+                  </div>
+                `;
+              }
+              return `<span class="metadata-name">${displayName}</span>`;
+            },
           },
           {
             name: "value",
@@ -170,16 +178,10 @@ export class MetadataViewComponent implements OnInit, OnChanges {
 
   constructor(
     private unitsService: UnitsService,
-    private replaceUnderscore: ReplaceUnderscorePipe,
-    private titleCase: TitleCasePipe,
     private datePipe: DatePipe,
     public linkyPipe: LinkyPipe,
     public prettyUnit: PrettyUnitPipe,
   ) {}
-
-  getHumanReadableName(name: string): string {
-    return this.titleCase.transform(this.replaceUnderscore.transform(name));
-  }
 
   createMetadataArray(
     metadata: Record<string, any>,
@@ -187,8 +189,7 @@ export class MetadataViewComponent implements OnInit, OnChanges {
     const metadataArray: ScientificMetadataTableData[] = [];
     Object.keys(metadata).forEach((key) => {
       let metadataObject: ScientificMetadataTableData;
-      const humanReadableName =
-        metadata[key]["human_name"] || this.getHumanReadableName(key);
+      const humanReadableName = metadata[key]["human_name"];
 
       if (
         typeof metadata[key] === "object" &&

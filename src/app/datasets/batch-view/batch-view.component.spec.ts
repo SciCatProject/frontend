@@ -4,8 +4,9 @@ import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 
 import { BatchViewComponent } from "./batch-view.component";
 import { NO_ERRORS_SCHEMA } from "@angular/core";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import {
+  MockActivatedRoute,
   MockArchivingService,
   MockDatasetApi,
   mockDataset as dataset,
@@ -70,6 +71,7 @@ describe("BatchViewComponent", () => {
           { provide: Router, useValue: router },
           { provide: DatasetsService, useClass: MockDatasetApi },
           { provide: AppConfigService, useValue: { getConfig } },
+          { provide: ActivatedRoute, useClass: MockActivatedRoute },
         ],
       },
     });

@@ -54,6 +54,10 @@
     "--theme-hover-lighter": "#e5e5e5",
     "--theme-hover-lighter-contrast": "#000000",
     "--theme-hover-darker": "#b2b2b2",
-    "--theme-hover-darker-contrast": "#000000"
+    "--theme-hover-darker-contrast": "#000000",
+    "--theme-side-panel-border": "none",
+    "--theme-side-panel-shadow": "0px 2px 1px -1px rgba(0, 0, 0, 0.20), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)",
+    "--theme-table-border": "none",
+    "--theme-table-shadow": "0px 2px 1px -1px rgba(0, 0, 0, 0.20), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)"
   }
 }

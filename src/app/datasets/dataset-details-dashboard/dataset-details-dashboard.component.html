@@ -1,4 +1,22 @@
 <ng-template [ngIf]="dataset">
+  <div
+    fxLayout="row"
+    fxLayoutAlign="end center"
+    *ngIf="appConfig.shoppingCartEnabled"
+    class="cart-button-row"
+  >
+    <button
+      id="addToBatchButton"
+      mat-button
+      (click)="onAddToBatch()"
+      [disabled]="isInBatch$ | async"
+      color="primary"
+      class="add-batch"
+    >
+      <mat-icon>my_library_add</mat-icon>
+      Add to Selection
+    </button>
+  </div>
   <nav mat-tab-nav-bar [tabPanel]="tabPanel">
     <ng-container *ngFor="let link of navLinks">
       <a

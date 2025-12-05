@@ -15,8 +15,37 @@
 
   <mat-card-content>
     <ng-container *ngFor="let filter of filtersList">
+      <div
+        *ngIf="filter.type === 'checkbox' && filter.enabled"
+        class="collapsible-filter-wrapper"
+        [class.collapsed]="!expandedFilters[filter.key]"
+      >
+        <shared-filter
+          [key]="filter.key"
+          [label]="filter.label"
+          [clear]="clearSearchBar"
+          [tooltip]="filter.description"
+          [filterType]="filter.type"
+          [prefilled]="activeFilters[filter.key] || null"
+          [currentFilter$]="getFilterByKey$(filter.key)"
+          [facetCounts$]="getFilterFacetCounts$(filter.key)"
+          (textChange)="setFilter(filter.key, $event)"
+          (dateRangeChange)="setDateFilter(filter.key, $event)"
+          (selectionChange)="selectionChange($event)"
+          (checkBoxChange)="setFilter(filter.key, $event)"
+          (numericRangeChange)="numericRangeChange(filter.key, $event)"
+          [filterValue]="activeFilters[filter.key]"
+          [showBadge]="!expandedFilters[filter.key]"
+        ></shared-filter>
+        <button class="collapse-toggle" (click)="toggleFilter(filter.key)">
+          <mat-icon>{{
+            expandedFilters[filter.key] ? "expand_less" : "expand_more"
+          }}</mat-icon>
+        </button>
+      </div>
+
       <shared-filter
-        *ngIf="filter.enabled"
+        *ngIf="filter.type !== 'checkbox' && filter.enabled"
         [key]="filter.key"
         [label]="filter.label"
         [clear]="clearSearchBar"
@@ -66,15 +95,80 @@
             <mat-panel-title>
               <div class="condition-title-section">
                 <div class="condition-field-name">
-                  {{ getHumanName(conditionConfig.condition.lhs) }}
+                  <mat-icon
+                    class="cell-icon"
+                    fontIcon="description"
+                    #hoverOriginSpan="cdkOverlayOrigin"
+                    cdkOverlayOrigin
+                    (mouseenter)="hoverKey = conditionConfig.condition.lhs"
+                    (mouseleave)="hoverKey = null"
+                  ></mat-icon>
+                  <div class="field-name-wrapper">
+                    <ng-container
+                      *ngIf="
+                        getHumanName(conditionConfig.condition.lhs);
+                        else rawNameOnlyHeader
+                      "
+                    >
+                      <div class="primary-name">
+                        {{ getHumanName(conditionConfig.condition.lhs) }}
+                      </div>
+                      <div
+                        class="secondary-name"
+                        *ngIf="humanNameMap[conditionConfig.condition.lhs]"
+                      >
+                        {{ conditionConfig.condition.lhs }}
+                      </div>
+                    </ng-container>
+                    <ng-template #rawNameOnlyHeader>
+                      <div class="primary-name" style="font-style: italic;">
+                        {{ conditionConfig.condition.lhs }}
+                      </div>
+                    </ng-template>
+                  </div>
+
+                  <!-- Hover overlay -->
+                  <ng-template
+                    cdkConnectedOverlay
+                    [cdkConnectedOverlayOrigin]="hoverOriginSpan"
+                    [cdkConnectedOverlayOpen]="
+                      hoverKey === conditionConfig.condition.lhs
+                    "
+                    [cdkConnectedOverlayPositions]="overlayPositions"
+                  >
+                    <mat-card class="hover-card">
+                      <mat-card-title class="hover-card-title">
+                        Name Details
+                      </mat-card-title>
+                      <div mat-card-content class="hover-card-content">
+                        <ng-container
+                          *ngIf="
+                            getHumanName(conditionConfig.condition.lhs);
+                            else rawNameOnly
+                          "
+                        >
+                          <strong>Human readable name: </strong>
+                          {{ getHumanName(conditionConfig.condition.lhs) }}
+                          <br />
+                          <strong>Metadata key:</strong>
+                          {{ conditionConfig.condition.lhs }}
+                        </ng-container>
+                      </div>
+                      <ng-template #rawNameOnly>
+                        <strong>Metadata key: </strong><span style="font-style: italic;">{{ conditionConfig.condition.lhs }}</span>
+                      </ng-template>
+                    </mat-card>
+                  </ng-template>
                 </div>
                 <div class="condition-description">
-                  {{ getConditionDisplayText(conditionConfig.condition) }}
+                  <span class="condition-chip">{{
+                    getConditionDisplayText(conditionConfig.condition, i)
+                  }}</span>
                 </div>
               </div>
             </mat-panel-title>
             <mat-panel-description>
-              {{ getConditionDisplayText(conditionConfig.condition) }}
+              {{ getConditionDisplayText(conditionConfig.condition, i) }}
             </mat-panel-description>
           </mat-expansion-panel-header>
 
@@ -287,6 +381,7 @@
         class="datasets-filters-search-button"
         data-cy="filter-search-button"
         (click)="applyFilters()"
+        data-cy="filter-search-button"
       >
         <mat-icon>search</mat-icon>
         Apply

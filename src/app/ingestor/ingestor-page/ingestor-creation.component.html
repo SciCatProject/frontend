@@ -1,0 +1,48 @@
+<p *ngIf="(this.sciCatLoggedIn$ | async) === false">
+  <mat-card class="ingestor-card">
+    <mat-card-header>
+      <mat-card-title> Log in </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="ingestor-vertical-layout">
+      <p>
+        Before a dataset creation can be started, please
+        <a href="/login">log in to SciCat</a>.
+      </p>
+      <a href="/login"><mat-icon>login</mat-icon></a>
+    </mat-card-content>
+  </mat-card>
+</p>
+
+<div *ngIf="(this.sciCatLoggedIn$ | async) === true">
+  <p>
+    <mat-card class="ingestor-card">
+      <mat-card-header>
+        <mat-card-title>Ingestor - Dataset creation mode</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="ingestor-vertical-layout">
+        You can use the Ingestor to prepare SciCat datasets. The Ingestor
+        provides a simple editor to fill in metadata and scientific metadata and
+        then create a dataset envelope. The data upload must be performed
+        manually in this mode.
+      </mat-card-content>
+    </mat-card>
+  </p>
+
+  <p>
+    <mat-card class="ingestor-card">
+      <mat-card-header>
+        <mat-card-title>New dataset</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="ingestor-vertical-layout">
+        <button
+          mat-fab
+          aria-label="Add a new dataset"
+          color="primary"
+          (click)="onClickAddIngestion()"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </p>
+</div>

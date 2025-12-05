@@ -188,6 +188,9 @@ export const expandAnimation = trigger("detailExpand", [
   animations: [tableAnimation, expandAnimation],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
+  host: {
+    "[class.disable-border]": "disableBorder",
+  },
 })
 export class DynamicMatTableComponent<T extends TableRow>
   extends TableCoreDirective<T>
@@ -257,6 +260,23 @@ export class DynamicMatTableComponent<T extends TableRow>
       offsetX: 4,
     },
   ];
+  /** Overlay positions for metadata hover */
+  metadataOverlayPositions: ConnectedPosition[] = [
+    {
+      originX: "end",
+      originY: "center",
+      overlayX: "start",
+      overlayY: "center",
+      offsetX: 8,
+    },
+    {
+      originX: "start",
+      originY: "center",
+      overlayX: "end",
+      overlayY: "center",
+      offsetX: -8,
+    },
+  ];
 
   standardDataSource: TableDataSource<T>;
 
@@ -302,6 +322,7 @@ export class DynamicMatTableComponent<T extends TableRow>
 
   @Input() emptyMessage = "No data available";
   @Input() emptyIcon = "info";
+  @Input() sideFilterCollapsed = false;
 
   constructor(
     public dialog: MatDialog,
@@ -852,6 +873,18 @@ export class DynamicMatTableComponent<T extends TableRow>
     }
   }
 
+  onGlobalTextSearchApply() {
+    this.globalTextSearch_onChange(this.globalTextSearch);
+    this.globalTextSearchApply.emit(this.globalTextSearch);
+  }
+
+  onGlobalTextSearchClear() {
+    this.globalTextSearch = "";
+    this.globalSearchUpdate.next("");
+    this.globalTextSearchChange.emit("");
+    this.globalTextSearchApply.emit("");
+  }
+
   autoHeight() {
     const minHeight =
       this.headerHeight +
@@ -1051,6 +1084,18 @@ export class DynamicMatTableComponent<T extends TableRow>
     }
 
     return value;
+  }
+
+  metadataNameHoverContent(row: any) {
+    if (!row.human_name) {
+      return `<strong>Metadata name: </strong><span class="metadata-name">${row.name}</span>`;
+    }
+    return (
+      "<strong>Human readable name: </strong>" +
+      (row.human_name || "") +
+      "\n <strong>Metadata name: </strong>" +
+      row.name
+    );
   }
 
   /************************************ Drag & Drop Column *******************************************/

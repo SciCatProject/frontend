@@ -1,12 +1,56 @@
-<mat-paginator
-  [pageSizeOptions]="pagination.pageSizeOptions"
-  [pageIndex]="pagination.pageIndex"
-  [length]="pagination.length"
-  [pageSize]="pagination.pageSize"
-  (page)="pagination_onChange($event)"
-  *ngIf="pagination"
+<div
+  class="table-header-controls"
+  [class.with-side-filter]="sideFilterCollapsed"
 >
-</mat-paginator>
+  <div class="global-search-wrapper" *ngIf="showGlobalTextSearch">
+    <mat-form-field>
+      <mat-icon matPrefix style="color: gray" *ngIf="!globalTextSearch"
+        >search</mat-icon
+      >
+      <input
+        [(ngModel)]="globalTextSearch"
+        type="text"
+        matInput
+        [placeholder]="globalTextSearchPlaceholder"
+        (ngModelChange)="this.globalSearchUpdate.next($event)"
+        (keydown.enter)="onGlobalTextSearchApply()"
+        (keydown.escape)="onGlobalTextSearchClear()"
+        data-cy="text-search"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        *ngIf="globalTextSearch"
+        (click)="onGlobalTextSearchClear()"
+        type="button"
+        matTooltip="Clear search"
+        data-cy="search-clear-button"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        matSuffix
+        *ngIf="globalTextSearch"
+        (click)="onGlobalTextSearchApply()"
+        type="button"
+        matTooltip="Apply search"
+        data-cy="search-button"
+      >
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+  <mat-paginator
+    [pageSizeOptions]="pagination.pageSizeOptions"
+    [pageIndex]="pagination.pageIndex"
+    [length]="pagination.length"
+    [pageSize]="pagination.pageSize"
+    (page)="pagination_onChange($event)"
+    *ngIf="pagination"
+  >
+  </mat-paginator>
+</div>
 <div
   #tbl
   [ngClass]="viewportClass"
@@ -153,19 +197,62 @@
         <ng-template #renderColumn>
           <ng-container *ngIf="column.customRender; else regularColumnRender">
             <label
-              *ngIf="!column.dynamicCellComponent && !column.hoverContent"
+              *ngIf="
+                !column.dynamicCellComponent &&
+                (column.hoverContent ? column.hoverOnCell === true : true)
+              "
               (click)="onLabelClick($event, row, column)"
               [class.rtl-cell]="direction === 'rtl'"
               [class.ltr-cell]="direction === 'ltr'"
               [ngStyle]="ellipsis(column)"
               class="label-cell"
-              [innerHTML]="columnName(row, column)"
             >
+              <ng-container *ngIf="column.hoverOnCell; else noHoverCell">
+                <span class="cell-with-icon">
+                  <mat-icon
+                    class="cell-icon"
+                    fontIcon="description"
+                    #hoverOriginSpan="cdkOverlayOrigin"
+                    cdkOverlayOrigin
+                    (mouseenter)="hoverKey = makeKey(row, column)"
+                    (mouseleave)="hoverKey = null"
+                  ></mat-icon>
+                  <span
+                    class="cell-text"
+                    [innerHTML]="columnName(row, column)"
+                  ></span>
+                </span>
+                <ng-template
+                  cdkConnectedOverlay
+                  [cdkConnectedOverlayOrigin]="hoverOriginSpan"
+                  [cdkConnectedOverlayOpen]="hoverKey === makeKey(row, column)"
+                  [cdkConnectedOverlayPositions]="metadataOverlayPositions"
+                >
+                  <mat-card class="hover-card">
+                    <mat-card-title class="hover-card-title">
+                      {{
+                        column.header || column.name | translate: localization
+                      }}
+                    </mat-card-title>
+                    <div
+                      mat-card-content
+                      class="hover-card-content"
+                      [innerHTML]="metadataNameHoverContent(row)"
+                    ></div>
+                  </mat-card>
+                </ng-template>
+              </ng-container>
+              <ng-template #noHoverCell>
+                <span [innerHTML]="columnName(row, column)"></span>
+              </ng-template>
             </label>
           </ng-container>
           <ng-template #regularColumnRender>
             <label
-              *ngIf="!column.dynamicCellComponent && !column.hoverContent"
+              *ngIf="
+                !column.dynamicCellComponent &&
+                (column.hoverContent ? column.hoverOnCell === true : true)
+              "
               (click)="onLabelClick($event, row, column)"
               [class.rtl-cell]="direction === 'rtl'"
               [class.ltr-cell]="direction === 'ltr'"
@@ -212,8 +299,8 @@
         >
         </ng-container>
 
-        <!-- Hover Content Cell-->
-        <ng-container *ngIf="column.hoverContent">
+        <!-- Hover Content Cell for abstract and other cells -->
+        <ng-container *ngIf="column.hoverContent && !column.hoverOnCell">
           <span
             class="icon-wrapper"
             #hoverOrigin="cdkOverlayOrigin"
@@ -222,7 +309,6 @@
             (mouseleave)="hoverKey = null"
           >
             <mat-icon class="hover-icon" fontIcon="description"></mat-icon>
-
             <ng-template
               cdkConnectedOverlay
               [cdkConnectedOverlayOrigin]="hoverOrigin"
@@ -230,8 +316,8 @@
               [cdkConnectedOverlayPositions]="overlayPositions"
             >
               <mat-card class="hover-card">
-                <mat-card-title class="hover-card-title"
-                  >{{ column.header || column.name | translate: localization }}
+                <mat-card-title class="hover-card-title">
+                  {{ column.header || column.name | translate: localization }}
                 </mat-card-title>
                 <div mat-card-content class="hover-card-content">
                   {{ getColumnValue(row, column) || "No content" }}
@@ -260,24 +346,6 @@
         </mat-progress-bar>
       </mat-header-cell>
     </ng-container>
-
-    <ng-container matColumnDef="global-search" [stickyEnd]="true">
-      <mat-header-cell *matHeaderCellDef class="table-global-search">
-        <div class="global-search-wrapper" *ngIf="showGlobalTextSearch">
-          <mat-form-field>
-            <mat-icon matPrefix style="color: black">search</mat-icon>
-            <input
-              [(ngModel)]="globalTextSearch"
-              type="text"
-              matInput
-              [placeholder]="globalTextSearchPlaceholder"
-              (ngModelChange)="this.globalSearchUpdate.next($event)"
-            />
-          </mat-form-field>
-        </div>
-      </mat-header-cell>
-    </ng-container>
-
     <ng-container matColumnDef="placeholder-column">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
     </ng-container>
@@ -352,14 +420,6 @@
         *matRowDef="let expandRow; columns: expandColumn"
         class="detail-row"
       ></tr>
-    </ng-container>
-
-    <ng-container *ngIf="showGlobalTextSearch">
-      <mat-header-row
-        class="global-search"
-        [@tableAnimation]
-        *matHeaderRowDef="searchRowColumns; sticky: sticky"
-      ></mat-header-row>
     </ng-container>
     <mat-header-row
       class="header"
