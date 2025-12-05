@@ -1,0 +1,718 @@
+{
+  "schema": {
+    "type": "object",
+    "properties": {
+      "defaultMainPage": {
+        "type": "object",
+
+        "properties": {
+          "nonAuthenticatedUser": { "type": "string" },
+          "authenticatedUser": { "type": "string" }
+        }
+      },
+
+      "ingestorComponent": {
+        "type": "object",
+        "properties": {
+          "ingestorEnabled": { "type": "boolean" }
+        }
+      },
+
+      "checkBoxFilterClickTrigger": { "type": "boolean" },
+      "accessTokenPrefix": { "type": "string" },
+      "addDatasetEnabled": { "type": "boolean" },
+      "archiveWorkflowEnabled": { "type": "boolean" },
+      "datasetReduceEnabled": { "type": "boolean" },
+      "datasetJsonScientificMetadata": { "type": "boolean" },
+      "editDatasetEnabled": { "type": "boolean" },
+      "editDatasetSampleEnabled": { "type": "boolean" },
+      "editMetadataEnabled": { "type": "boolean" },
+      "addSampleEnabled": { "type": "boolean" },
+
+      "externalAuthEndpoint": { "type": "string" },
+      "facility": { "type": "string" },
+      "siteIcon": { "type": "string" },
+      "siteTitle": { "type": "string" },
+      "siteSciCatLogo": { "type": "string" },
+
+      "loginFacilityLabel": { "type": "string" },
+      "loginLdapLabel": { "type": "string" },
+      "loginLocalLabel": { "type": "string" },
+
+      "loginFacilityEnabled": { "type": "boolean" },
+      "loginLdapEnabled": { "type": "boolean" },
+      "loginLocalEnabled": { "type": "boolean" },
+
+      "fileColorEnabled": { "type": "boolean" },
+      "fileDownloadEnabled": { "type": "boolean" },
+
+      "gettingStarted": {},
+      "ingestManual": {},
+
+      "jobsEnabled": { "type": "boolean" },
+      "jsonMetadataEnabled": { "type": "boolean" },
+      "jupyterHubUrl": { "type": "string" },
+      "landingPage": { "type": "string" },
+      "lbBaseURL": { "type": "string" },
+
+      "logbookEnabled": { "type": "boolean" },
+      "loginFormEnabled": { "type": "boolean" },
+
+      "metadataPreviewEnabled": { "type": "boolean" },
+      "metadataStructure": { "type": "string" },
+
+      "multipleDownloadAction": { "type": "string" },
+      "multipleDownloadEnabled": { "type": "boolean" },
+
+      "oAuth2Endpoints": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "authURL": { "type": "string" },
+            "displayText": { "type": "string" }
+          }
+        }
+      },
+
+      "policiesEnabled": { "type": "boolean" },
+      "retrieveDestinations": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+
+      "riotBaseUrl": { "type": "string" },
+      "scienceSearchEnabled": { "type": "boolean" },
+      "scienceSearchUnitsEnabled": { "type": "boolean" },
+      "searchPublicDataEnabled": { "type": "boolean" },
+      "searchSamples": { "type": "boolean" },
+
+      "sftpHost": { "type": "string" },
+      "sourceFolder": { "type": "string" },
+
+      "maxDirectDownloadSize": { "type": "number" },
+      "maxFileSizeWarning": { "type": "string" },
+
+      "shareEnabled": { "type": "boolean" },
+      "shoppingCartEnabled": { "type": "boolean" },
+      "shoppingCartOnHeader": { "type": "boolean" },
+
+      "tableSciDataEnabled": { "type": "boolean" },
+      "datasetDetailsShowMissingProposalId": { "type": "boolean" },
+
+      "notificationInterceptorEnabled": { "type": "boolean" },
+      "metadataEditingUnitListDisabled": { "type": "boolean" },
+      "hideEmptyMetadataTable": { "type": "boolean" },
+
+      "datafilesActionsEnabled": { "type": "boolean" },
+
+      "datafilesActions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "description": { "type": "string" },
+            "order": { "type": "number" },
+            "label": { "type": "string" },
+            "files": { "type": "string" },
+            "mat_icon": { "type": "string" },
+            "url": { "type": "string" },
+            "target": { "type": "string" },
+            "enabled": { "type": "string" },
+            "authorization": { "type": "array", "items": { "type": "string" } },
+            "type": { "type": "string" },
+            "icon": { "type": "string" },
+            "payload": { "type": "string" },
+            "filename": { "type": "string" }
+          }
+        }
+      },
+
+      "defaultDatasetsListSettings": {
+        "type": "object",
+        "properties": {
+          "columns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "order": { "type": "number" },
+                "type": { "type": "string" },
+                "enabled": { "type": "boolean" }
+              }
+            }
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": { "type": "string" },
+                "label": { "type": "string" },
+                "type": { "type": "string" },
+                "description": { "type": "string" },
+                "enabled": { "type": "boolean" }
+              }
+            }
+          },
+          "conditions": {
+            "type": "array"
+          }
+        }
+      },
+
+      "defaultProposalsListSettings": {
+        "type": "object",
+        "properties": {
+          "columns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "enabled": { "type": "boolean" },
+                "width": { "type": "number" },
+                "type": { "type": "string" },
+                "format": { "type": "string" }
+              }
+            }
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": { "type": "string" },
+                "label": { "type": "string" },
+                "type": { "type": "string" },
+                "description": { "type": "string" },
+                "enabled": { "type": "boolean" }
+              }
+            }
+          }
+        }
+      },
+      "labelsLocalization": {
+        "type": "object",
+        "properties": {
+          "dataset": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": { "type": "string" },
+                "value": { "type": "string" }
+              },
+              "required": ["key", "value"]
+            }
+          },
+          "proposal": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": { "type": "string" },
+                "value": { "type": "string" }
+              },
+              "required": ["key", "value"]
+            }
+          }
+        }
+      },
+      "dateFormat": { "type": "string" },
+      "datasetDetailComponent": {
+        "type": "object",
+        "properties": {
+          "enableCustomizedComponent": { "type": "boolean" },
+
+          "customization": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": { "type": "string" },
+                "label": { "type": "string" },
+                "order": { "type": "number" },
+                "row": { "type": "number" },
+                "col": { "type": "number" },
+                "viewMode": { "type": "string" },
+
+                "options": {
+                  "type": "object",
+                  "properties": {
+                    "limit": { "type": "number" },
+                    "size": { "type": "string" }
+                  }
+                },
+
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "element": { "type": "string" },
+                      "source": { "type": "string" },
+                      "order": { "type": "number" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "mainMenu": {
+        "type": "object",
+        "properties": {
+          "nonAuthenticatedUser": {
+            "type": "object",
+            "properties": {
+              "datasets": { "type": "boolean" },
+              "files": { "type": "boolean" },
+              "instruments": { "type": "boolean" },
+              "jobs": { "type": "boolean" },
+              "policies": { "type": "boolean" },
+              "proposals": { "type": "boolean" },
+              "publishedData": { "type": "boolean" },
+              "samples": { "type": "boolean" }
+            }
+          },
+          "authenticatedUser": {
+            "type": "object",
+            "properties": {
+              "datasets": { "type": "boolean" },
+              "files": { "type": "boolean" },
+              "instruments": { "type": "boolean" },
+              "jobs": { "type": "boolean" },
+              "policies": { "type": "boolean" },
+              "proposals": { "type": "boolean" },
+              "publishedData": { "type": "boolean" },
+              "samples": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "uiSchema": {
+    "type": "VerticalLayout",
+    "elements": [
+      {
+        "type": "Group",
+        "label": "Main Page",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/defaultMainPage/properties/nonAuthenticatedUser"
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/defaultMainPage/properties/authenticatedUser"
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Ingestor Component",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/ingestorComponent/properties/ingestorEnabled"
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "General Settings",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          { "type": "Control", "scope": "#/properties/accessTokenPrefix" },
+          {
+            "type": "Control",
+            "scope": "#/properties/checkBoxFilterClickTrigger"
+          },
+          { "type": "Control", "scope": "#/properties/addDatasetEnabled" },
+          { "type": "Control", "scope": "#/properties/archiveWorkflowEnabled" },
+          { "type": "Control", "scope": "#/properties/datasetReduceEnabled" },
+          {
+            "type": "Control",
+            "scope": "#/properties/datasetJsonScientificMetadata"
+          },
+          { "type": "Control", "scope": "#/properties/editDatasetEnabled" },
+          {
+            "type": "Control",
+            "scope": "#/properties/editDatasetSampleEnabled"
+          },
+          { "type": "Control", "scope": "#/properties/editMetadataEnabled" },
+          { "type": "Control", "scope": "#/properties/addSampleEnabled" }
+        ]
+      },
+      {
+        "type": "Group",
+        "options": {
+          "expandable": true
+        },
+        "label": "Frontend Labels & URLs",
+        "elements": [
+          {
+            "type": "HorizontalLayout",
+            "elements": [
+              { "type": "Control", "scope": "#/properties/lbBaseURL" },
+              {
+                "type": "Control",
+                "scope": "#/properties/externalAuthEndpoint"
+              },
+              { "type": "Control", "scope": "#/properties/facility" },
+              { "type": "Control", "scope": "#/properties/siteIcon" },
+              { "type": "Control", "scope": "#/properties/siteTitle" },
+              { "type": "Control", "scope": "#/properties/siteSciCatLogo" }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "options": {
+          "expandable": true
+        },
+        "label": "Login Options",
+        "elements": [
+          {
+            "type": "HorizontalLayout",
+            "elements": [
+              { "type": "Control", "scope": "#/properties/loginFacilityLabel" },
+              { "type": "Control", "scope": "#/properties/loginLdapLabel" },
+              { "type": "Control", "scope": "#/properties/loginLocalLabel" }
+            ]
+          },
+          {
+            "type": "HorizontalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/loginFacilityEnabled"
+              },
+              { "type": "Control", "scope": "#/properties/loginLdapEnabled" },
+              { "type": "Control", "scope": "#/properties/loginLocalEnabled" }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "options": {
+          "expandable": true
+        },
+        "label": "File/Display Flags",
+        "elements": [
+          {
+            "type": "HorizontalLayout",
+            "elements": [
+              { "type": "Control", "scope": "#/properties/jupyterHubUrl" },
+              { "type": "Control", "scope": "#/properties/landingPage" },
+              { "type": "Control", "scope": "#/properties/metadataStructure" }
+            ]
+          },
+
+          { "type": "Control", "scope": "#/properties/fileColorEnabled" },
+          { "type": "Control", "scope": "#/properties/fileDownloadEnabled" },
+          { "type": "Control", "scope": "#/properties/jobsEnabled" },
+          { "type": "Control", "scope": "#/properties/jsonMetadataEnabled" },
+          { "type": "Control", "scope": "#/properties/logbookEnabled" },
+          { "type": "Control", "scope": "#/properties/loginFormEnabled" },
+          { "type": "Control", "scope": "#/properties/metadataPreviewEnabled" }
+        ]
+      },
+      {
+        "type": "Group",
+        "options": {
+          "expandable": true
+        },
+        "label": "Download Settings",
+        "elements": [
+          { "type": "Control", "scope": "#/properties/multipleDownloadAction" },
+          { "type": "Control", "scope": "#/properties/multipleDownloadEnabled" }
+        ]
+      },
+
+      {
+        "type": "Group",
+        "options": {
+          "expandable": true
+        },
+        "label": "OAuth2 Endpoints",
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/oAuth2Endpoints"
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "SciCat Feature Flags",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "VerticalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/retrieveDestinations"
+              },
+              { "type": "Control", "scope": "#/properties/riotBaseUrl" }
+            ]
+          },
+          { "type": "Control", "scope": "#/properties/policiesEnabled" },
+          { "type": "Control", "scope": "#/properties/scienceSearchEnabled" },
+          {
+            "type": "Control",
+            "scope": "#/properties/scienceSearchUnitsEnabled"
+          },
+          {
+            "type": "Control",
+            "scope": "#/properties/searchPublicDataEnabled"
+          },
+          { "type": "Control", "scope": "#/properties/searchSamples" }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "SFTP Host & Source Folder",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "HorizontalLayout",
+            "elements": [
+              { "type": "Control", "scope": "#/properties/sftpHost" },
+              { "type": "Control", "scope": "#/properties/sourceFolder" }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Download Limits & Warnings",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "HorizontalLayout",
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/maxDirectDownloadSize"
+              },
+              { "type": "Control", "scope": "#/properties/maxFileSizeWarning" }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Datafiles Actions",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/datafilesActions",
+            "options": {
+              "detail": {
+                "type": "VerticalLayout",
+                "elements": [
+                  { "type": "Control", "scope": "#/properties/id" },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/description"
+                  },
+                  { "type": "Control", "scope": "#/properties/order" },
+                  { "type": "Control", "scope": "#/properties/label" },
+                  { "type": "Control", "scope": "#/properties/files" },
+                  { "type": "Control", "scope": "#/properties/mat_icon" },
+                  { "type": "Control", "scope": "#/properties/url" },
+                  { "type": "Control", "scope": "#/properties/target" },
+                  { "type": "Control", "scope": "#/properties/enabled" },
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/authorization"
+                  },
+                  { "type": "Control", "scope": "#/properties/type" },
+                  { "type": "Control", "scope": "#/properties/icon" },
+                  { "type": "Control", "scope": "#/properties/payload" },
+                  { "type": "Control", "scope": "#/properties/filename" }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Localization",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Group",
+            "label": "Dataset",
+            "options": { "expandable": true },
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/labelsLocalization/properties/dataset"
+              }
+            ]
+          },
+          {
+            "type": "Group",
+            "label": "Proposal",
+            "options": { "expandable": true },
+            "elements": [
+              {
+                "type": "Control",
+                "scope": "#/properties/labelsLocalization/properties/proposal"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "label": "Dataset Detail Component",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "Control",
+            "scope": "#/properties/datasetDetailComponent/properties/enableCustomizedComponent"
+          },
+          {
+            "type": "Control",
+            "label": "Customization Configuration",
+            "scope": "#/properties/datasetDetailComponent/properties/customization",
+            "options": {
+              "detail": {
+                "type": "VerticalLayout",
+                "elements": [
+                  {
+                    "type": "HorizontalLayout",
+                    "elements": [
+                      { "type": "Control", "scope": "#/properties/type" },
+                      { "type": "Control", "scope": "#/properties/label" },
+                      { "type": "Control", "scope": "#/properties/order" },
+                      { "type": "Control", "scope": "#/properties/row" },
+                      { "type": "Control", "scope": "#/properties/col" },
+                      { "type": "Control", "scope": "#/properties/viewMode" }
+                    ]
+                  },
+                  {
+                    "type": "Group",
+                    "label": "Attachments Options",
+                    "elements": [
+                      {
+                        "type": "HorizontalLayout",
+                        "elements": [
+                          {
+                            "type": "Control",
+                            "scope": "#/properties/options/properties/limit"
+                          },
+                          {
+                            "type": "Control",
+                            "scope": "#/properties/options/properties/size"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Control",
+                    "label": "Fields",
+                    "scope": "#/properties/fields",
+                    "options": {
+                      "detail": {
+                        "type": "HorizontalLayout",
+                        "elements": [
+                          {
+                            "type": "Control",
+                            "scope": "#/properties/element"
+                          },
+                          {
+                            "type": "Control",
+                            "scope": "#/properties/source"
+                          },
+                          {
+                            "type": "Control",
+                            "scope": "#/properties/order"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "Group",
+        "options": {
+          "expandable": true
+        },
+        "elements": [
+          {
+            "type": "HorizontalLayout",
+            "elements": [
+              {
+                "type": "VerticalLayout",
+                "label": "Non Authenticated User",
+                "options": {
+                  "expandable": false
+                },
+                "elements": [
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/mainMenu/properties/nonAuthenticatedUser"
+                  }
+                ]
+              },
+              {
+                "type": "VerticalLayout",
+                "label": "Authenticated User",
+                "options": {
+                  "expandable": false
+                },
+                "elements": [
+                  {
+                    "type": "Control",
+                    "scope": "#/properties/mainMenu/properties/authenticatedUser"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      { "type": "Control", "scope": "#/properties/dateFormat" }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+<div style="display: flex; justify-content: space-between; margin-bottom: 10px">
+  <!-- LEFT -->
+  <div>
+    <button mat-button color="primary" (click)="save()">Json Preview</button>
+  </div>
+
+  <!-- RIGHT -->
+  <div>
+    <button mat-button color="primary" (click)="save()">Export</button>
+    <button mat-button color="primary" (click)="save()">Save</button>
+  </div>
+</div>
+<div>
+  <jsonforms
+    [data]="data$ | async"
+    [schema]="schema"
+    [uischema]="uiSchema"
+    [renderers]="renderers"
+    (dataChange)="onChange($event)"
+  ></jsonforms>
+  <div style="display: flex; justify-content: space-between; margin-top: 10px">
+    <!-- LEFT -->
+    <div>
+      <button mat-button color="primary" (click)="save()">Json Preview</button>
+    </div>
+
+    <!-- RIGHT -->
+    <div>
+      <button mat-button color="primary" (click)="save()">Export</button>
+      <button mat-button color="primary" (click)="save()">Save</button>
+    </div>
+  </div>
+</div>

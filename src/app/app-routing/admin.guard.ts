@@ -7,8 +7,11 @@ import {
 } from "@angular/router";
 import { Store } from "@ngrx/store";
 import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
-import { selectIsAdmin } from "state-management/selectors/user.selectors";
+import { filter, map, switchMap, tap } from "rxjs/operators";
+import {
+  selectIsAdmin,
+  selectIsLoggedIn,
+} from "state-management/selectors/user.selectors";
 
 /**
  * Ensure that the current user is admin
@@ -33,8 +36,10 @@ export class AdminGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): Observable<boolean> {
-    return this.store.select(selectIsAdmin).pipe<boolean>(
-      map((isAdmin: boolean) => {
+    return this.store.select(selectIsLoggedIn).pipe(
+      filter((isLoggedIn) => isLoggedIn),
+      switchMap(() => this.store.select(selectIsAdmin)),
+      map((isAdmin) => {
         if (!isAdmin) {
           this.router.navigate(["/401"], {
             skipLocationChange: true,
