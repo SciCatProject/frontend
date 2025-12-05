@@ -28,9 +28,9 @@ const routes: Routes = [
     path: ":id",
     component: DatasetDetailsDashboardComponent,
     loadChildren: () =>
-      import(
-        "../dataset-details-dashboard-routing/dataset-details-dashboard.feature.module"
-      ).then((m) => m.DatasetDetailsDashboardFeatureModule),
+      import("../dataset-details-dashboard-routing/dataset-details-dashboard.feature.module").then(
+        (m) => m.DatasetDetailsDashboardFeatureModule,
+      ),
   },
   {
     path: ":id/datablocks",

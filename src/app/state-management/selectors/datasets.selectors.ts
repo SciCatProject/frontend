@@ -258,6 +258,14 @@ export const selectDatasetsInBatch = createSelector(
   (state) => state.batch,
 );
 
+export const selectIsCurrentDatasetInBatch = createSelector(
+  selectDatasetState,
+  (state) => {
+    const current = state.currentSet;
+    return !!current && state.batch.some((d) => d?.pid === current.pid);
+  },
+);
+
 export const selectIsBatchNonEmpty = createSelector(
   selectDatasetsInBatch,
   (batch) => batch.length > 0,

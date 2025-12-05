@@ -247,6 +247,13 @@ describe("Dataset Actions", () => {
     });
   });
 
+  describe("addCurrentToBatchAction", () => {
+    it("should create an action", () => {
+      const action = fromActions.addCurrentToBatchAction();
+      expect({ ...action }).toEqual({ type: "[Dataset] Add Current To Batch" });
+    });
+  });
+
   describe("removeFromBatchAction", () => {
     it("should create an action", () => {
       const action = fromActions.removeFromBatchAction({ dataset });

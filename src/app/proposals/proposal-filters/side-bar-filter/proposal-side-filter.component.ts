@@ -32,6 +32,8 @@ export class ProposalSideFilterComponent implements OnInit {
   appConfig = this.appConfigService.getConfig();
   activeFilters: Record<string, string[] | DateRange> = {};
   collapsed = false;
+  expandedFilters: { [key: string]: boolean } = {};
+  @Output() collapsedChange = new EventEmitter<boolean>();
 
   filterLists: FilterConfig[] = [];
 
@@ -68,6 +70,12 @@ export class ProposalSideFilterComponent implements OnInit {
         if (filterConfigs) {
           this.filterLists =
             this.appConfig.defaultProposalsListSettings?.filters;
+
+          this.filterLists.forEach((filter) => {
+            if (filter.type === "checkbox" && filter.enabled) {
+              this.expandedFilters[filter.key] = true;
+            }
+          });
 
           const { queryParams } = this.route.snapshot;
 
@@ -107,6 +115,10 @@ export class ProposalSideFilterComponent implements OnInit {
 
     const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
     this.activeFilters = { ...searchQuery };
+  }
+
+  toggleFilter(key: string) {
+    this.expandedFilters[key] = !this.expandedFilters[key];
   }
 
   setFilter(filterKey: string, value: string[]) {
@@ -235,6 +247,7 @@ export class ProposalSideFilterComponent implements OnInit {
 
   toggleCollapse() {
     this.collapsed = !this.collapsed;
+    this.collapsedChange.emit(this.collapsed);
   }
 
   reset() {

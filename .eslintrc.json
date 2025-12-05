@@ -85,7 +85,9 @@
         "@angular-eslint/prefer-standalone": "warn",
         "@ngrx/on-function-explicit-return-type": "warn",
         "@ngrx/no-store-subscription": "warn",
-        "@angular-eslint/no-output-native": "warn"
+        "@angular-eslint/no-output-native": "warn",
+	"@angular-eslint/prefer-standalone": "off"
+
       }
     }
   ]
