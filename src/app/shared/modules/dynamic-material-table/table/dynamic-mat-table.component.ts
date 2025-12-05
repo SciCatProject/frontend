@@ -188,6 +188,9 @@ export const expandAnimation = trigger("detailExpand", [
   animations: [tableAnimation, expandAnimation],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
+  host: {
+    "[class.disable-border]": "disableBorder",
+  },
 })
 export class DynamicMatTableComponent<T extends TableRow>
   extends TableCoreDirective<T>

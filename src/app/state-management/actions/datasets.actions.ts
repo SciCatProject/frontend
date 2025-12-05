@@ -125,6 +125,9 @@ export const prefillBatchCompleteAction = createAction(
   props<{ batch: OutputDatasetObsoleteDto[] }>(),
 );
 export const addToBatchAction = createAction("[Dataset] Add To Batch");
+export const addCurrentToBatchAction = createAction(
+  "[Dataset] Add Current To Batch",
+);
 export const storeBatchAction = createAction(
   "[Dataset] Store To Batch",
   props<{ batch: OutputDatasetObsoleteDto[] }>(),
