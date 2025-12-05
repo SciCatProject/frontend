@@ -58,7 +58,6 @@ export class AdminTabComponent implements OnInit, OnDestroy {
               type: "reset",
               datasetList: [fileObj],
               jobParams: {},
-              jobStatusMessage: "jobCreated",
             };
             job.jobParams["username"] = user.username;
             this.store.dispatch(submitJobAction({ job }));
