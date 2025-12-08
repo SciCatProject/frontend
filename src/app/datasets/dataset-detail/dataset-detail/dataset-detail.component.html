@@ -398,8 +398,7 @@
                 </mat-tab>
                 <mat-tab
                   class="editTab"
-                  *ngIf="editingAllowed"
-                  [hidden]="!appConfig.editMetadataEnabled"
+                  *ngIf="editingAllowed && appConfig.editMetadataEnabled"
                 >
                   <ng-template mat-tab-label>
                     <mat-icon> edit </mat-icon> Edit
