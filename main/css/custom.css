@@ -1,0 +1,22 @@
+/* Custom styling for MkDocs Material */
+.md-header {
+    background-color: #1a3c5a;  /* Navy blue header */
+}
+
+header {
+    color: #27aae1;             /* Blue primary text color */
+}
+
+
+a, a:hover, h1, h2, h3, h4, h5, h6 {
+    color: #f15a29;              /* Burnt orange secondary color */
+}
+
+.md-header__button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
