@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  OnDestroy,
+  OnInit,
+  EventEmitter,
+} from "@angular/core";
 import { BehaviorSubject, combineLatestWith, filter, Subscription } from "rxjs";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
@@ -33,7 +40,7 @@ import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/defau
 import { TableConfigService } from "shared/services/table-config.service";
 import { AppConfigService } from "app-config.service";
 import { TableColumn } from "state-management/models";
-
+import { addProposalFilterAction } from "state-management/actions/proposals.actions";
 @Component({
   selector: "proposal-table",
   templateUrl: "./proposal-table.component.html",
@@ -88,12 +95,17 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
 
   datasets: OutputDatasetObsoleteDto[] = [];
 
+  @Input() sideFilterCollapsed = false;
+
   @Input()
   dataSource!: BehaviorSubject<ProposalClass[]>;
 
   @Input()
   defaultPageSize: number;
 
+  @Output() textSearch = new EventEmitter<string>();
+
+  globalTextSearch = "";
   constructor(
     private appConfigService: AppConfigService,
     private store: Store,
@@ -296,6 +308,43 @@ export class ProposalTableComponent implements OnInit, OnDestroy {
         queryParamsHandling: "merge",
       });
     }
+  }
+
+  onTextSearchChange(term: string) {
+    this.globalTextSearch = term;
+  }
+
+  getTextSearchParam() {
+    const { queryParams } = this.route.snapshot;
+    const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
+
+    return searchQuery.text;
+  }
+
+  onTextSearchAction() {
+    const { queryParams } = this.route.snapshot;
+    const searchQuery = JSON.parse(queryParams.searchQuery || "{}");
+    this.router.navigate([], {
+      queryParams: {
+        searchQuery: JSON.stringify({
+          ...searchQuery,
+          text: this.globalTextSearch || undefined,
+        }),
+        pageIndex: 0,
+      },
+      queryParamsHandling: "merge",
+    });
+    this.store.dispatch(
+      addProposalFilterAction({
+        key: "text",
+        value: this.globalTextSearch || undefined,
+        filterType: "text",
+      }),
+    );
+  }
+
+  onSideFilterCollapsedChange(collapsed: boolean) {
+    this.sideFilterCollapsed = collapsed;
   }
 
   ngOnDestroy() {

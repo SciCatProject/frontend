@@ -1,0 +1,183 @@
+.ingestor-metadata-editor {
+  width: 100%;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+
+// Clean card styling matching codebase standards
+mat-card {
+  margin: 1em;
+
+  .mat-mdc-card-title {
+    display: flex;
+    padding: 1em;
+    font-weight: 600;
+    font-size: 1.2em;
+  }
+
+  .mat-mdc-card-content {
+    padding: 1em;
+  }
+
+  .section-icon {
+    height: auto !important;
+    width: auto !important;
+
+    mat-icon {
+      vertical-align: middle;
+    }
+  }
+}
+
+// Simple form sections
+.form-section {
+  margin-bottom: 1.5em;
+  padding: 1.5em;
+  border-radius: 4px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Clean section headers
+.section-header {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin-bottom: 1em;
+  padding-bottom: 0.5em;
+
+  &.major-section {
+    font-size: 1.3em;
+    margin-bottom: 1.5em;
+  }
+}
+
+// Standard field groups
+.field-group {
+  padding: 1em;
+  margin-bottom: 1em;
+  border-radius: 4px;
+
+  &.related-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1em;
+    align-items: start;
+  }
+}
+
+// Standard form controls
+.jsonforms-control {
+  margin-bottom: 1em;
+
+  .mat-mdc-form-field {
+    width: 100%;
+  }
+
+  label {
+    font-weight: 500;
+    margin-bottom: 0.5em;
+    display: block;
+  }
+}
+
+// Grid layouts
+.two-column-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1em;
+  margin-bottom: 1em;
+}
+// Spacers
+.form-spacer {
+  height: 1.5em;
+}
+
+// Array layouts
+.array-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding: 1em;
+  border-radius: 4px;
+}
+
+.array-layout-toolbar {
+  display: flex;
+  align-items: center;
+  padding-bottom: 0.5em;
+  margin-bottom: 1em;
+}
+
+.array-layout-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.1em;
+}
+
+.array-layout-toolbar > span {
+  flex: 1 1 auto;
+}
+
+.array-item {
+  padding: 1em;
+  border-radius: 4px;
+}
+
+
+// Toggle styling (uses Material defaults)
+.field-view-toggle {
+  margin-bottom: 1.5em;
+  display: block;
+}
+
+// Input boxes
+.custom-input-box {
+  width: 100%;
+}
+
+// Quantity value boxes
+.quantity-value-box {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1em;
+  padding: 1em;
+  border-radius: 4px;
+}
+
+// Step indicator
+.step-indicator {
+  margin-bottom: 1.5em;
+  text-align: center;
+
+  .step-title {
+    font-size: 1.5em;
+    font-weight: 700;
+    margin-bottom: 0.5em;
+  }
+
+  .step-description {
+    font-size: 1em;
+    margin-bottom: 1em;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .form-section {
+    padding: 1em;
+    margin-bottom: 1em;
+  }
+
+  .field-group.related-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .step-indicator .step-title {
+    font-size: 1.2em;
+  }
+}

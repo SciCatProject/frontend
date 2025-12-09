@@ -125,6 +125,9 @@ export const prefillBatchCompleteAction = createAction(
   props<{ batch: OutputDatasetObsoleteDto[] }>(),
 );
 export const addToBatchAction = createAction("[Dataset] Add To Batch");
+export const addCurrentToBatchAction = createAction(
+  "[Dataset] Add Current To Batch",
+);
 export const storeBatchAction = createAction(
   "[Dataset] Store To Batch",
   props<{ batch: OutputDatasetObsoleteDto[] }>(),
@@ -150,6 +153,10 @@ export const addDatasetFailedAction = createAction(
 export const updatePropertyAction = createAction(
   "[Dataset] Update Property",
   props<{ pid: string; property: Record<string, unknown> }>(),
+);
+export const updateScientificMetadataCompleteAction = createAction(
+  "[Dataset] Update Property Complete",
+  props<{ pid: string }>(),
 );
 export const updatePropertyCompleteAction = createAction(
   "[Dataset] Update Property Complete",

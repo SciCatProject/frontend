@@ -1,0 +1,23 @@
+name: Deploy docs
+
+on:  # yamllint disable-line rule:truthy
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: SciCatProject/docs-template/.github/actions/mkdocs-pages@v0.1.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          push: ${{ github.event_name == 'push' && 'true' || '' }}
+          # if this file does not need to exist locally, the one in the action is used
+          # https://github.com/SciCatProject/docs-template/blob/v0.1.0/.github/actions/mkdocs-pages/mkdocs-nested.yml
+          docs_config: .github/mkdocs/mkdocs-nested.yml

@@ -5,6 +5,7 @@ import { firstValueFrom, of } from "rxjs";
 import { catchError, timeout } from "rxjs/operators";
 import {
   DatasetDetailComponentConfig,
+  IngestorComponentConfig,
   LabelsLocalization,
   ListSettings,
   TableColumn,
@@ -50,6 +51,7 @@ export class MainPageConfiguration {
 
 export class MainMenuOptions {
   datasets: boolean;
+  ingestor: boolean;
   files: boolean;
   instruments: boolean;
   jobs: boolean;
@@ -73,8 +75,14 @@ export interface AppConfigInterface {
   datasetJsonScientificMetadata: boolean;
   datasetReduceEnabled: boolean;
   datasetDetailsShowMissingProposalId: boolean;
+  datasetActionsEnabled: boolean;
+  datasetActions: any[];
   datafilesActionsEnabled: boolean;
   datafilesActions: any[];
+  datasetDetailsActionsEnabled: boolean;
+  datasetDetailsActions: any[];
+  datasetSelectionActionsEnabled: boolean;
+  datasetSelectionActions: any[];
   editDatasetEnabled: boolean;
   editDatasetSampleEnabled: boolean;
   editMetadataEnabled: boolean;
@@ -145,6 +153,7 @@ export interface AppConfigInterface {
   supportEmail?: string;
   checkBoxFilterClickTrigger?: boolean;
   hideEmptyMetadataTable?: boolean;
+  ingestorComponent?: IngestorComponentConfig;
 }
 
 function isMainPageConfiguration(obj: any): obj is MainPageConfiguration {

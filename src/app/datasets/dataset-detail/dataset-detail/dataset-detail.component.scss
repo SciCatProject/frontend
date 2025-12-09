@@ -1,7 +1,11 @@
 mat-card {
   margin: 1em;
 
-  .scientific-header, .related-header, .creator-header, .file-header, .general-header {
+  .scientific-header,
+  .related-header,
+  .creator-header,
+  .file-header,
+  .general-header {
     display: flex;
     align-items: center;
     padding: 1em;
@@ -63,13 +67,6 @@ mat-card {
       }
     }
   }
-}
-.jupyter-button {
-  margin: 1em 0 0 1em;
-}
-.public-toggle {
-  margin: 1em 1em 0 0;
-  float: right;
 }
 .attachment-card {
   display: flex;

@@ -1,6 +1,8 @@
 mat-card {
   margin-top: 0.5rem;
-
+  box-shadow: var(--theme-side-panel-shadow);
+  border: var(--theme-side-panel-border, 1px solid rgba(153, 213, 233, 0.7));
+  border-radius: 4px;
   &.side-gap {
     margin-right: 0.5rem;
   }
@@ -17,11 +19,11 @@ mat-card {
 
     .proposal-filters-search-button {
       width: 49%;
+      margin-left: 2%;
     }
 
     .proposal-filters-clear-all-button {
       width: 49%;
-      margin-left: 1%;
     }
   }
 
@@ -34,8 +36,41 @@ mat-card {
   position: absolute;
   z-index: 10;
   background: none;
-  top: 1.125rem;
+  top: 2.125rem;
   left: 0.625rem;
   scale: 0.9;
   background: rgba($color: #000000, $alpha: 0.05);
+}
+
+.collapsible-filter-wrapper {
+  position: relative;
+
+  .collapse-toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    color: #666;
+    height: 1.5em;
+
+    &:hover {
+      color: #333;
+    }
+  }
+
+  &.collapsed ::ng-deep shared-filter {
+    .facet-search,
+    .checkbox-list,
+    .show-more-btn,
+    .empty-text {
+      display: none !important;
+    }
+  }
 }
