@@ -17,4 +17,4 @@ jobs:
           push: true
           # if this file does not need to exist locally, the one in the action is used
           # https://github.com/SciCatProject/docs-template/blob/v0.1.0/.github/actions/mkdocs-pages/mkdocs-nested.yml
-          docs_config: .github/actions/mkdocs-pages/mkdocs-nested.yml
+          docs_config: .github/mkdocs/mkdocs-nested.yml
