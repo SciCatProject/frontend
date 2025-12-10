@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { SampleClass } from "@scicatproject/scicat-sdk-ts-angular";
 import {
@@ -8,8 +8,6 @@ import {
   setTextFilterAction,
   prefillFiltersAction,
   fetchMetadataKeysAction,
-  addCharacteristicsFilterAction,
-  removeCharacteristicsFilterAction,
 } from "state-management/actions/samples.actions";
 import { BehaviorSubject, combineLatest, Subscription } from "rxjs";
 import { selectSampleDashboardPageViewModel } from "state-management/selectors/samples.selectors";
@@ -21,7 +19,6 @@ import { SampleDialogComponent } from "samples/sample-dialog/sample-dialog.compo
 import deepEqual from "deep-equal";
 import { filter, map, distinctUntilChanged, take } from "rxjs/operators";
 import { SampleFilters } from "state-management/models";
-import { SearchParametersDialogComponent } from "shared/modules/search-parameters-dialog/search-parameters-dialog.component";
 import { AppConfigService } from "app-config.service";
 import { TableField } from "shared/modules/dynamic-material-table/models/table-field.model";
 import {
@@ -39,10 +36,19 @@ import {
   TableEventType,
   TableSelectionMode,
 } from "shared/modules/dynamic-material-table/models/table-row.model";
-import { updateUserSettingsAction } from "state-management/actions/user.actions";
+import {
+  updateConditionsConfigs,
+  updateUserSettingsAction,
+} from "state-management/actions/user.actions";
 import { Sort } from "@angular/material/sort";
 import { TableConfigService } from "shared/services/table-config.service";
 import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/default-table-settings";
+import { SharedFilterComponent } from "shared/modules/shared-filter/shared-filter.component";
+import {
+  addCharacteristicsFilterAction,
+  removeCharacteristicsFilterAction,
+} from "state-management/actions/samples.actions";
+import { ScientificCondition } from "state-management/models";
 
 @Component({
   selector: "sample-dashboard",
@@ -52,6 +58,18 @@ import { actionMenu } from "shared/modules/dynamic-material-table/utilizes/defau
 })
 export class SampleDashboardComponent implements OnInit, OnDestroy {
   vm$ = this.store.select(selectSampleDashboardPageViewModel);
+
+  @ViewChild("conditionFilter") conditionFilter: SharedFilterComponent;
+
+  addCondition = (condition: ScientificCondition) => {
+    this.store.dispatch(
+      addCharacteristicsFilterAction({ characteristic: condition }),
+    );
+  };
+
+  removeCondition = (condition: ScientificCondition) => {
+    this.store.dispatch(removeCharacteristicsFilterAction({ lhs: condition.lhs }));
+  };
 
   tableDefaultSettingsConfig: ITableSetting = {
     visibleActionMenu: actionMenu,
@@ -233,24 +251,34 @@ export class SampleDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  openSearchParametersDialog() {
-    this.dialog
-      .open(SearchParametersDialogComponent, {
-        data: { parameterKeys: this.metadataKeys },
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          const { data } = res;
-          this.store.dispatch(
-            addCharacteristicsFilterAction({ characteristic: data }),
-          );
-        }
-      });
+  applyFilters() {
+    if (this.conditionFilter) {
+      this.conditionFilter.applyConditions();
+    }
+    this.store.dispatch(fetchSamplesAction());
   }
 
-  removeCharacteristic(index: number) {
-    this.store.dispatch(removeCharacteristicsFilterAction({ index }));
+  reset() {
+    this.store.dispatch(setTextFilterAction({ text: "" }));
+    this.store.dispatch(
+      updateConditionsConfigs({
+        conditionConfigs: [],
+      }),
+    );
+    this.store.dispatch(
+      updateUserSettingsAction({
+        property: { conditions: [] },
+      }),
+    );
+
+    // Clear all characteristics
+    this.vm$.pipe(take(1)).subscribe((vm) => {
+      vm.characteristicsFilter?.forEach((c) => {
+        this.store.dispatch(removeCharacteristicsFilterAction({ lhs: c.lhs }));
+      });
+    });
+
+    this.store.dispatch(fetchSamplesAction());
   }
 
   getTableSort(): ITableSetting["tableSort"] {

@@ -98,6 +98,13 @@ export const selectSamplesPagination = createSelector(
   }),
 );
 
+export const selectHasAppliedFilters = createSelector(
+  selectFilters,
+  (filters) =>
+    filters.text !== "" ||
+    (filters.characteristics && filters.characteristics.length > 0),
+);
+
 export const selectSampleDashboardPageViewModel = createSelector(
   selectSamples,
   selectSamplesPagination,
@@ -108,6 +115,7 @@ export const selectSampleDashboardPageViewModel = createSelector(
   selectCharacteristicsFilter,
   selectTablesSettings,
   selectSamplesCount,
+  selectHasAppliedFilters,
   (
     samples,
     samplesPagination,
@@ -118,6 +126,7 @@ export const selectSampleDashboardPageViewModel = createSelector(
     characteristicsFilter,
     tableSettings,
     count,
+    hasAppliedFilters,
   ) => ({
     samples,
     samplesPagination,
@@ -128,6 +137,7 @@ export const selectSampleDashboardPageViewModel = createSelector(
     characteristicsFilter,
     tableSettings,
     count,
+    hasAppliedFilters,
   }),
 );
 
